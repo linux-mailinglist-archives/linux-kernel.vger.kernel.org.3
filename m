@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C5E4B7F9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B8A4B7F31
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344513AbiBPEnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 23:43:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43754 "EHLO
+        id S1343608AbiBPEPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 23:15:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344489AbiBPEnE (ORCPT
+        with ESMTP id S1343562AbiBPEPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 23:43:04 -0500
-Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F447F4072
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:42:52 -0800 (PST)
-Received: from unknown (HELO lgeamrelo04.lge.com) (156.147.1.127)
-        by 156.147.23.51 with ESMTP; 16 Feb 2022 13:12:52 +0900
-X-Original-SENDERIP: 156.147.1.127
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.127 with ESMTP; 16 Feb 2022 13:12:52 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        bfields@fieldses.org, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: [REPORT] net deadlock possibilities by DEPT
-Date:   Wed, 16 Feb 2022 13:12:47 +0900
-Message-Id: <1644984767-26886-1-git-send-email-byungchul.park@lge.com>
-X-Mailer: git-send-email 1.9.1
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 15 Feb 2022 23:15:05 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E136D84E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:14:53 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id B6207240002;
+        Wed, 16 Feb 2022 04:14:48 +0000 (UTC)
+Message-ID: <a0769218-c84a-a1d3-71e7-aefd40bf54fe@ghiti.fr>
+Date:   Wed, 16 Feb 2022 05:14:48 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
+Content-Language: en-US
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Aleksandr Nogikh <nogikh@google.com>,
+        linux-riscv@lists.infradead.org,
+        kasan-dev <kasan-dev@googlegroups.com>, palmer@dabbelt.com,
+        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+References: <00000000000038779505d5d8b372@google.com>
+ <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
+ <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
+ <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David, Jakub and net folks,
+Hi Dmitry,
 
-I've been developing a tool for detecting deadlock possibilities by
-tracking wait/event rather than lock(?) acquisition order to try to
-cover all synchonization machanisms. It's done on v5.17-rc1 tag.
+On 2/15/22 18:12, Dmitry Vyukov wrote:
+> On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+>> Hi Aleksandr,
+>>
+>> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+>>> Hello,
+>>>
+>>> syzbot has already not been able to fuzz its RISC-V instance for 97
+>> That's a longtime, I'll take a look more regularly.
+>>
+>>> days now because the compiled kernel cannot boot. I bisected the issue
+>>> to the following commit:
+>>>
+>>> commit 54c5639d8f507ebefa814f574cb6f763033a72a5
+>>> Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+>>> Date:   Fri Oct 29 06:59:27 2021 +0200
+>>>
+>>>      riscv: Fix asan-stack clang build
+>>>
+>>> Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
+>>> enabled. In the previous message syzbot mentions
+>>> "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
+>>> Binutils for Debian) 2.35.2", but the issue also reproduces finely on
+>>> a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
+>>> 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
+>>> For convenience, I also duplicate the .config file from the bot's
+>>> message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
+>>>
+>>> Can someone with KASAN and RISC-V expertise please take a look?
+>> I'll take a look at that today.
+>>
+>> Thanks for reporting the issue,
+>
 
-https://github.com/lgebyungchulpark/linux-dept/commits/dept1.11_on_v5.17-rc1
+I took a quick look, not enough to fix it but I know the issue comes 
+from the inline instrumentation, I have no problem with the outline 
+instrumentation. I need to find some cycles to work on this, my goal is 
+to fix this for 5.17.
 
-Benifit:
+Sorry about the delay,
 
-	0. Works with all lock primitives.
-	1. Works with wait_for_completion()/complete().
-	2. Works with 'wait' on PG_locked.
-	3. Works with 'wait' on PG_writeback.
-	4. Works with swait/wakeup.
-	5. Works with waitqueue.
-	6. Multiple reports are allowed.
-	7. Deduplication control on multiple reports.
-	8. Withstand false positives thanks to 6.
-	9. Easy to tag any wait/event.
+Alex
 
-Future work:
 
-	0. To make it more stable.
-	1. To separates Dept from Lockdep.
-	2. To improves performance in terms of time and space.
-	3. To use Dept as a dependency engine for Lockdep.
-	4. To add any missing tags of wait/event in the kernel.
-	5. To deduplicate stack trace.
-
-I've got several reports from the tool. Some of them look like false
-alarms caused by Lockdep's fake annotations added for better detection.
-However, some others look like real deadlock possibility. Because of my
-unfamiliarity of the domain, it's hard to confirm if it's a real one.
-I'd like to ask for your opinion on it and it'd be appreciated.
-
-How to interpret the report is:
-
-	1. E(event) in each context cannot be triggered because of the
-	   W(wait) that cannot be woken.
-	2. The stack trace helping find the problematic code is located
-	   in each conext's detail.
-
-Let me add the reports on this email thread.
-
----
-Thanks,
-Byungchul
-
+>
+>
+>>> --
+>>> Best Regards,
+>>> Aleksandr
+>>>
+>>>
+>>> On Tue, Jan 18, 2022 at 11:26 AM syzbot
+>>> <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com> wrote:
+>>>> Hello,
+>>>>
+>>>> syzbot found the following issue on:
+>>>>
+>>>> HEAD commit:    f6f7fbb89bf8 riscv: dts: sifive unmatched: Link the tmp451..
+>>>> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+>>>> console output: https://syzkaller.appspot.com/x/log.txt?x=1095f85bb00000
+>>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
+>>>> dashboard link: https://syzkaller.appspot.com/bug?extid=330a558d94b58f7601be
+>>>> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>>>> userspace arch: riscv64
+>>>>
+>>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>>>> Reported-by: syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

@@ -2,152 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F89F4B7B9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 01:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5514B7BBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 01:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242818AbiBPAKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 19:10:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51170 "EHLO
+        id S244980AbiBPATS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 19:19:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiBPAK3 (ORCPT
+        with ESMTP id S242073AbiBPATR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 19:10:29 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72AACD324;
-        Tue, 15 Feb 2022 16:10:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644970218; x=1676506218;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uEyOI3gBkM4gqhuOyvcPW9N22GUaDMH9evCDrwsFc+8=;
-  b=oGJskdGVR7SOFJGS955T1S1jFizlJ0zFRzsjdf8vrQL82g9BFittSvKm
-   4ZowtFu9dJx6D5kXPifQOQzJt9y3j1ibDjeAWgvN2fO8NxThrWbQ6DiT9
-   +T4DL9E5ofFfWJ2DKEoSBQESgiwiyVxbWQA2TM6qULmQfx6kVPtHs0pkK
-   032NpxMUPId/0lg5xwwdePkupLdC/lbplhwfylD1stjmC0bDexuxLJGGC
-   yV8BGTk+03IUeqwOXCeADpcZupOiMZ7u9wCX52ZPfkXdnH9URFrHn1EcI
-   iiFSuhyvqRQ//2w/zVohV/WPtY1hHGdNddrnVIN8W8EeXQZSD4b7QtgTB
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="230451553"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="230451553"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 16:10:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="704022345"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Feb 2022 16:10:16 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nK7tf-000ABK-Bg; Wed, 16 Feb 2022 00:10:15 +0000
-Date:   Wed, 16 Feb 2022 08:09:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Armin Wolf <W_Armin@gmx.de>, pali@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jdelvare@suse.com,
-        linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] hwmon: (dell-smm) Improve assembly code
-Message-ID: <202202160842.6EYIVsJn-lkp@intel.com>
-References: <20220215191113.16640-6-W_Armin@gmx.de>
+        Tue, 15 Feb 2022 19:19:17 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E14D4C84;
+        Tue, 15 Feb 2022 16:19:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644970718;
+        bh=qCM/tv58byTKuTfcOO+5ZjAIYqyDsU/7yoiNZduPVbc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=WqvGICTlO3QdrUi5MQ+zmFBuFLCQuHxsrFFnXwQ83v7S9qtTnarhV/KZ5qbNirRzp
+         1Z4dsWzpe8DWJQMJOk5h/gpkQbom8kgZQVmdNZTkEwIRfukIMFnz82oQrbdYbGJJx4
+         m12Xpz1XOFaeVipiezQgVpOxxEKfyNloiPpvPfYc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Venus.fritz.box ([149.172.237.68]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MDQeK-1nSPlY1DnS-00AaBh; Wed, 16
+ Feb 2022 01:18:38 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        u.kleine-koenig@pengutronix.de
+Cc:     linux@armlinux.org.uk, richard.genoud@gmail.com,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, lukas@wunner.de
+Subject: Move RS485 implementation from drivers to serial core
+Date:   Wed, 16 Feb 2022 01:17:54 +0100
+Message-Id: <20220216001803.637-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215191113.16640-6-W_Armin@gmx.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:WAOnSBoen9V/5Ruce80Stg/qtCneLtlKhs4Efq3WOPNDl9vx812
+ AjuNO6OVHB2qpJEhdKxARvGUBboW4QwT5JUbhIiKm870Of0oy1PrPKv11/BYFNHwFMcF1pK
+ oXTiRPgTtBfY4hf10zi3f0WB134p6/jo/q09Yw+j1Cn8cFBywvpbxiq0Hsm0RZKnU9u6nNU
+ 0wzqd8bqcWglo34rlg9xQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WciePH+zpns=:gVp0/EQtHdBFUAPDyztL58
+ a+fRvQ8NtE/l5J+sdgdB/sIa8fYt2DvHdovXuAAL4L/Vka5J3GCXVWMmHYIcCBxP+PQ5cxAk7
+ AfqI3Uld9xebHbosEKWVLnhKdM97q35K66UWrZJedNbjhlFZH+Bv7o7X/aPNOj2Bfm+iu5gCo
+ /jFPMs7kLFh9CqQOZ3bN2IUOrk+0K0cx/Euv8MK1aG4742ifU7/8swp8AJW5gvrN+aKivDhgl
+ Ltyi4h0r6YivyUI3Myv2vaKkr0YuovO/2xrPa7kSGdBK2SRMrlqaFpJk7Lm1lf/G0SMy/gWYr
+ 8YElUP1eD0i7XtqpENaUy87S+6/sAzm2lJChs50/c/yR59u/yndmuk8RNX9zUukejWrLkFBUY
+ MKrSzm1DQy+w2aVOnKyHzbjhT7Y8ar9sRwMi7le1Lc9SPBFQYYKO0layj64o9YXq8eBsnc7on
+ ZWgfLPgwPhvXNbQDPQOquUbSLQxCOSzr9LeJfPfjfAo42MCgEhzkEu5I95MVmzSrCRUJkkPM0
+ ZkOAFFwHNK8N5jKAiQ7dDYJYSc+XiCexBsqQPXE3Ky/yF6NTkMK+Ejl6bqS4huMy+7w/y2BWn
+ twjsW3N35QTEqqcCiAlvdo9AKOFzU6FF6exZ/tqUrs2Oi4OO4iIPL1rsNdK4y3yNQiw5ZIcun
+ oiXwBCcCy4gzioGKFp+bC0rCBrNfY5YbaWuMB6toYlS/vDVtTvs052domh+pcnPbGedfpoo1Q
+ TR5+hFWdv7vd9vLlVN33yRYbzGQlruN5QR9jM5YExvOMlSkoM+qkiJ+Z+2jb56AflA48Q1rYw
+ PYyJ5mhkxuInLTA8z7YZ9Kv8SGGx6Q+yzahwXs9Ejg39eW1QaBZ/n1nb32XVIyxN8xUbkm/ys
+ CLvehf234fMZQ4CuMwOvtABaD6mAedR635B2+kkG/BTWH1UkmNrlWMlR3JoBxekUxa64d9vis
+ XwI0RYTGq7utHU4a6RCusjt+sS85XFnDVd4hTxt2QGCHpH9FfyBU2OSG297aKLixX6Jvlf05D
+ vlYP7epc7dQdpRWO7HUfOzSsoOxcxKiLf6pV2EQ0OLcpQxRMzrl22K6LRWSqXaGJXTcg5TzQH
+ uKuKr0ZKa/c984=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Armin,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on next-20220215]
-[cannot apply to linus/master v5.17-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Armin-Wolf/hwmon-dell-smm-Miscellaneous-improvements/20220216-031722
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: i386-randconfig-a004-20220214 (https://download.01.org/0day-ci/archive/20220216/202202160842.6EYIVsJn-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 37f422f4ac31c8b8041c6b62065263314282dab6)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e03bd707be4885b219afdfd7a24778fb0a8129e1
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Armin-Wolf/hwmon-dell-smm-Miscellaneous-improvements/20220216-031722
-        git checkout e03bd707be4885b219afdfd7a24778fb0a8129e1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/dell-smm-hwmon.c:178:15: error: inline assembly requires more registers than available
-           asm volatile("out %%al,$0xb2\n\t"
-                        ^
-   1 error generated.
-
-
-vim +178 drivers/hwmon/dell-smm-hwmon.c
-
-   161	
-   162	/*
-   163	 * Call the System Management Mode BIOS. Code provided by Jonathan Buzzard.
-   164	 */
-   165	static int i8k_smm_func(void *par)
-   166	{
-   167		ktime_t calltime = ktime_get();
-   168		struct smm_regs *regs = par;
-   169		int eax = regs->eax;
-   170		int ebx = regs->ebx;
-   171		long long duration;
-   172		int rc;
-   173	
-   174		/* SMM requires CPU 0 */
-   175		if (smp_processor_id() != 0)
-   176			return -EBUSY;
-   177	
- > 178		asm volatile("out %%al,$0xb2\n\t"
-   179			     "out %%al,$0x84\n"
-   180			     : "=a" (regs->eax),
-   181			       "=b" (regs->ebx),
-   182			       "=c" (regs->ecx),
-   183			       "=d" (regs->edx),
-   184			       "=S" (regs->esi),
-   185			       "=D" (regs->edi),
-   186			       CC_OUT(c) (rc)
-   187			     : "a" (regs->eax),
-   188			       "b" (regs->ebx),
-   189			       "c" (regs->ecx),
-   190			       "d" (regs->edx),
-   191			       "S" (regs->esi),
-   192			       "D" (regs->edi));
-   193	
-   194		if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-   195			rc = -EINVAL;
-   196	
-   197		duration = ktime_us_delta(ktime_get(), calltime);
-   198		pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
-   199			 (rc ? 0xffff : regs->eax & 0xffff), duration);
-   200	
-   201		return rc;
-   202	}
-   203	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+VGhpcyBwYXRjaCBzZXJpZXMgaXMgYW4gYXR0ZW1wdCB0byBzaW1wbGlmeSByczQ4NSBpbXBsZW1l
+bnRhdGlvbiBpbiBkcml2ZXJzCmJ5IG1vdmluZyB0aGUgZm9sbG93aW5nIHRhc2tzIG91dCBvZiB0
+aGUgZHJpdmVycyBpbnRvIHRoZSBzZXJpYWwgY29yZToKCi0gZW5zdXJlIHNhbmUgUlRTIHNldHRp
+bmdzOiBpbiBjYXNlIG9mIGFuIGludmFsaWQgY29uZmlndXJhdGlvbiAoYm90aCBSVFMKICBhZnRl
+ciBzZW5kIGFuZCBSVFMgb24gc2VuZCBzZXQgb3IgYm90aCB1bnNldCkgZW5hYmxlIFJUUyBvbiBz
+ZW5kIGFuZAogIGRpc2FibGUgUlRTIGFmdGVyIHNlbmQKCi0gbnVsbGlmeSB0aGUgcGFkZGluZyBm
+aWVsZCBvZiB0aGUgc2VyaWFsX3JzNDg1IHN0cnVjdCBiZWZvcmUgaXQgaXMKICByZXR1cm5lZCB0
+byB1c2Vyc3BhY2UKCi0gY29weSB0aGUgY29uZmlndXJhdGlvbiBzdG9yZWQgaW4gdGhlIHNlcmlh
+bF9yczQ4NSBzdHJ1Y3QgdG8gdGhlIHBvcnQKICBjb25maWd1cmF0aW9uIGlmIHNldHRpbmcgdGhl
+IGNvbmZpZ3VyYXRpb24gaW4gdGhlIGRyaXZlciB3YXMgc3VjY2Vzc2Z1bGwKCi0gbGltaXQgdGhl
+IFJUUyBkZWxheXMgdG8gMTAwbXMKCgpSZWR1bmRhbnQgY29kZSBoYXMgYmVlbiByZW1vdmVkIGZy
+b20gdGhlIGZvbGxvd2luZyBkcml2ZXJzIGZvciBub3c6CgotIGF0bWVsCi0gZnNsX2xwdWFydAot
+IGFtYmEKLSBpbXgKLSBtYXgzMTB4Ci0gb21hcC1zZXJpYWwKLSBzYzE2aXM3eHgKLSBzdG0zMi11
+c2FydAoKVGhlIGNvZGUgaGFzIGJlZW4gdGVzdGVkIHdpdGggdGhlIGFtYmEgcGwwMTEgZHJpdmVy
+LgoKQ2hhbmdlcyBpbiB2MjoKLSB1c2UgYSBtYWtybyBmb3IgbWF4IFJUUyBkZWxheXMgYW5kIGNv
+bW1lbnQgaXQgKGFzIHJlcXVlc3RlZCBieSBKaXJpKQotIGFkZCBhIGNvbW1lbnQgY29uY2Vybmlu
+ZyB0aGUgbWVtc2V0IG9mIGEgc3RydWN0dXJlcyBwYWRkaW5nIGZpZWxkCi0gY29ycmVjdCB0eXBv
+cyBpbiB0aGUgY29tbWl0IG1lc3NhZ2UgKGZvdW5kIGJ5IFV3ZSkgCi0gcmVwaHJhc2UgYWxsIGNv
+bW1pdCBtZXNzYWdlcyB0byBtYWtlIG1vcmUgY2xlYXIgdGhhdCBmdW5jdGlvbiAKICB1YXJ0X3Nl
+dF9yczQ4NV9jb25maWcoKSBoYXMgYmVlbiBleHRlbmRlZCBieSBjaGVja3MgYW5kIG90aGVyCiAg
+ZnVuY3Rpb25hbGl0aWVzIChhcyByZXF1ZXN0ZWQgYnkgVXdlKQoKCgo=

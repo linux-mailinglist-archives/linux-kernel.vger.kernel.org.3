@@ -2,80 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2054B8774
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731944B877B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiBPMVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 07:21:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38538 "EHLO
+        id S233117AbiBPMW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:22:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiBPMU7 (ORCPT
+        with ESMTP id S232537AbiBPMWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 07:20:59 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF29295FFA;
-        Wed, 16 Feb 2022 04:20:46 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id E6CFB1F4506E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645014045;
-        bh=KGv3qi0/1qhw2Wkx1ythbjE2BIDW/ZTM/yt/IuCEiIo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=S2sr4BwbEoGrcCanT1eM0wxBbJB/89NHdwvA88lnjl9b+qfB9vro0oqb2ClhwaPh5
-         RoToC07bCpg7xRypO6+Z8TIcIs6nCGCzS9Cua4/XeJEPwF76tOYPJvGnOttMZlxrtZ
-         NRslSH1jbU5BnX7BeNImN6y3EY3Z80fREo08IzDysc2DpPFNAKl0GnzC7HiLz9wQ26
-         b8RKw86y2vqkdc0nwPe/D5s+SasjCcKsp98A+CO5EC+Yb3hQ3pM8Qhv60E63Jw4gGw
-         M56vTL1TiUdfaJC6EoKyEcvQHNovW+2xyQ4IH3UbFO6iVKMJ3KrhSypkabfZ+2JC+V
-         0fLm3RNOVAu2Q==
-Message-ID: <c041df98-fbea-bc76-75c0-42d549248dfd@collabora.com>
-Date:   Wed, 16 Feb 2022 09:20:38 -0300
+        Wed, 16 Feb 2022 07:22:53 -0500
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CE3E0ACD;
+        Wed, 16 Feb 2022 04:22:41 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id y6so5472316ybc.5;
+        Wed, 16 Feb 2022 04:22:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iyLKMy9mx/11boOTHLHDZ1fvODjQEjXMH8nu+p70vJs=;
+        b=fu7P9kBBg/MMvjWN/lY+KqPqg5ZeeTgIhKde0G5jS4IReQm1ayXYZDJIXQDu7eYx5W
+         UDzC6byGHhB+AD3r9ZJoqVe7O6CbkRwqAKncma2EVVgZxlVs14zHjsxraT6+UUcYggFF
+         JFonXefseGKRWL5X9FAaucy6a85Z4N9QkvGI1uVpC3TNWBYtCQBNK+xOEPbGEPjQow2c
+         kRw1wTu+1pukSE9JYFmy5EVxrRAzZueZmXnoJwNFkkBl3XIliQ2l/VSj6aVCTKuMKjNQ
+         PA7i2rlCMN5ZEihsll8X604d+1/3bCi/jrHcEh4OkM51ZfX2qJ3mFhVB+lHP5Tn42IMx
+         tCmw==
+X-Gm-Message-State: AOAM532OsAeIAILBZEos0gr54EgTTkJYNXDN7/ujBaq2yATtJ4qbEI72
+        B10MyvVHdZS5eNSJPtuxLXi1AZYnRJYk/13Z+xg=
+X-Google-Smtp-Source: ABdhPJyJxNNVakBSB/WLvTRdrGZ9BXqx/DQIqoqFOGeLTAEwWDJchTaLwydj6Vd4o58xgwmHfILAH+X1f5I0myuczl4=
+X-Received: by 2002:a0d:d5d6:0:b0:2d1:51e2:5a09 with SMTP id
+ x205-20020a0dd5d6000000b002d151e25a09mr2027246ywd.149.1645014161118; Wed, 16
+ Feb 2022 04:22:41 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: linux-next: build failure after merge of the spi tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220216161718.2c094b08@canb.auug.org.au>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-In-Reply-To: <20220216161718.2c094b08@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220216062615.779778-1-ztong0001@gmail.com>
+In-Reply-To: <20220216062615.779778-1-ztong0001@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Feb 2022 13:22:27 +0100
+Message-ID: <CAJZ5v0hsDVqZM=iP=4CYhGT99ScQ1xQNYHKcdJHHCscEhXOoCA@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: proactively check null ptr to avoid API misuse
+To:     Tong Zhang <ztong0001@gmail.com>
+Cc:     Robert Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Wed, Feb 16, 2022 at 7:26 AM Tong Zhang <ztong0001@gmail.com> wrote:
+>
+> There are some cases that user use acpi_ns_walk_namespace() without
+> checking acpi_disable flag. When acpi=off is provided in boot cmdline,
+> acpi_gbl_root_node is NULL and calling acpi_ns_walk_namespace() will
+> crash kernel. In order to avoid such misuse, we proactively check null ptr
+> and return an error when we know ACPI is disabled.
 
-Às 02:17 de 16/02/22, Stephen Rothwell escreveu:
-> Hi all,
-> 
-> After merging the spi tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
-> 
-> drivers/spi/spi-amd.c:333:37: error: 'spi_acpi_match' undeclared here (not in a function)
->   333 |                 .acpi_match_table = spi_acpi_match,
->       |                                     ^~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   209043554915 ("spi: amd: Add support for version AMDI0062")
-> 
-> CONFIG_ACPI is not set for this build.
-> 
-> I have reverted that commit for today.
-> 
+The issue should be fixed by this commit in the upstream ACPICA code
+base: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
 
-Thanks for input. I'll send a new series with a patch to make this
-driver depends on ACPI then. My patch touched this line, but this
-variable was there before, so I think this build breakage is happening
-for some time.
+>
+> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+> ---
+>  drivers/acpi/acpica/nswalk.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
+> index 915c2433463d..9ae45db16d86 100644
+> --- a/drivers/acpi/acpica/nswalk.c
+> +++ b/drivers/acpi/acpica/nswalk.c
+> @@ -171,6 +171,13 @@ acpi_ns_walk_namespace(acpi_object_type type,
+>                 start_node = acpi_gbl_root_node;
+>         }
+>
+> +       /* acpi_gbl_root_node is NULL when acpi=off is provided.
+> +        * We proactively check nulliness here and return an error if user call
+> +        * this function without checking acpi_disabled
+> +        */
+> +       if (start_node == NULL)
+> +               return_ACPI_STATUS(AE_ERROR);
+> +
+>         /* Null child means "get first node" */
+>
+>         parent_node = start_node;
+> --
+> 2.25.1
+>

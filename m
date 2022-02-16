@@ -2,52 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923B34B944D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6290E4B944F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbiBPXEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 18:04:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54990 "EHLO
+        id S235507AbiBPXET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 18:04:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiBPXEK (ORCPT
+        with ESMTP id S235636AbiBPXES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 18:04:10 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CDC1F3F30;
-        Wed, 16 Feb 2022 15:03:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=04yGtd4f6eZlW79JD0OqJAH/1ApQze5QxrUuo4E2UT4=; b=GKk3MtOpenGles+Y5HPX9ZzCfx
-        G/OH8YLgkJVRJ29VUNGY0DgW//NXH++WS3lxn0qlc/tfLnegf9pRwLaq1KjLuXG2U1R08ekcjHnOi
-        1euTBRcZxOv410lMH3ycK45MgoZA9S5EaTJ9tspSCL7DQZVrr1RKr4oeUmtBXGkH22J0pH4wgr1ys
-        yU68P7i1s6NnFO4c0q2PuQ72hP0Bw615HZCFyRFV6h/a2abtbcREin4Jxi/2fMv2y/WtuUgOK4ALw
-        G9fnIW9c2+azk8tGYQuL1aRZbzbkO8OzyNDHm52lNQ1mveoBn8CGmsGVkEMWeKa95O+GxBEFBTcn6
-        0F5s2nVw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKTKy-008VBD-1X; Wed, 16 Feb 2022 23:03:52 +0000
-Date:   Wed, 16 Feb 2022 15:03:52 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jessica Yu <jeyu@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        patches@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, Aaron Tomlin <atomlin@redhat.com>,
-        Vimal Agrawal <avimalin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michal Suchanek <msuchanek@suse.de>
-Subject: Modules fixes for v5.17-rc5
-Message-ID: <Yg2C2NTphV3eMkUp@bombadil.infradead.org>
+        Wed, 16 Feb 2022 18:04:18 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920CA2A2281;
+        Wed, 16 Feb 2022 15:04:02 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JzYRc1j6Rz4xmx;
+        Thu, 17 Feb 2022 10:03:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1645052636;
+        bh=8RGPcLW/e4NTCH+ITSAm3ZElmrOC11P4FBUZ5izeeIM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jSycGiFZmDRuQZdJO9o9GXgfWVXW+XMCeAVcjY0m4Sl1kIxXe8vwkyUxvRGbx0M1N
+         EMqcbshOnEXgj4UYF6jNIZW74xSWveFY4L11bVjKR5ELMI3kkl0IxhYXKSRLKmtq5V
+         PdFaFP69y83E0aiRuvY0JKIfbuVl1OZYOCJYzd6eRskVnhr9oKvKzh82JUYQEJ1+I4
+         Fg4XMLL15x0q7OER5XIPZ/nbg2kJ3Huwlgbb7GGhhfLeEHJRIvHJU501T0hL+XVpCr
+         y5IgUNg9uTdN62yH7PAqN6jbejEPtimAC0lli/G7zlQHNG4P6tDQmnY9AIQw/cdXh/
+         WernZY16RRc2g==
+Date:   Thu, 17 Feb 2022 10:03:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Al Viro <viro@ZenIV.linux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vfs tree with the arm64 tree
+Message-ID: <20220217100354.73b552d9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/yfzRquWjE+9QdguLEDZ0ubu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,44 +52,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+--Sig_/yfzRquWjE+9QdguLEDZ0ubu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-So far only one fix has trickled through for modules. It is part of this
-pull request. It's a minor build fix for when CONFIG_SYSFS=n. Let me
-know if there are any issues with this.
+Hi all,
 
-And just small heads up for v5.18 I'm actually not seeing anything quite
-ready so you may not see any pull request for me then except for fixes.
-There is quite a bit of development work for modules though, but nothing is
-quite ready, and I want to get **tons** of testing done for that. But do
-expect substantial changes for v5.19 though. There is work which you might
-see for a v5.19 from Aaron, Christophe, Vimal and Michal, in that order. I'm
-Cc'ing them just as a heads up to them as well in so far as my expectations
-and test requirements. During v5.18 I expect modules-next to carry all
-the pending changes and test the hell out of them on linux-next though.
+Today's linux-next merge of the vfs tree got a conflict in:
 
-The following changes since commit 3593030761630e09200072a4bd06468892c27be3:
+  arch/x86/um/Kconfig
 
-  tty: n_tty: do not look ahead for EOL character past the end of the buffer (2022-02-16 10:13:23 -0800)
+between commit:
 
-are available in the Git repository at:
+  b62a8486de3a ("elfcore: Replace CONFIG_{IA64, UML} checks with a new opti=
+on")
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-5.17-rc5
+from the arm64 tree and commit:
 
-for you to fetch changes up to a8e8f851e8299703a005cf23dfb9ec854a2611e5:
+  6692531df62d ("uml/x86: use x86 load_unaligned_zeropad()")
 
-  module: fix building with sysfs disabled (2022-02-16 12:51:32 -0800)
+from the vfs tree.
 
-----------------------------------------------------------------
-Fixes module decompression when CONFIG_SYSFS=n
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-The only fix trickled down for v5.17-rc cycle so far is
-the fix for module decompression when CONFIG_SYSFS=n. This
-was reported through 0-day.
+--=20
+Cheers,
+Stephen Rothwell
 
-----------------------------------------------------------------
-Dmitry Torokhov (1):
-      module: fix building with sysfs disabled
+diff --cc arch/x86/um/Kconfig
+index ead7e5b3a975,4eb47d3ba625..000000000000
+--- a/arch/x86/um/Kconfig
++++ b/arch/x86/um/Kconfig
+@@@ -8,7 -8,7 +8,8 @@@ endmen
+ =20
+  config UML_X86
+  	def_bool y
+ +	select ARCH_BINFMT_ELF_EXTRA_PHDRS if X86_32
++ 	select DCACHE_WORD_ACCESS
+ =20
+  config 64BIT
+  	bool "64-bit kernel" if "$(SUBARCH)" =3D "x86"
 
- kernel/module_decompress.c | 2 ++
- 1 file changed, 2 insertions(+)
+--Sig_/yfzRquWjE+9QdguLEDZ0ubu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmINgtoACgkQAVBC80lX
+0GzDfwf/XxOzhvPhlAuNUhKs/pYxNsWoDGzHEVMTRCI7Q4TTZBBz0HXSyS2SmrhZ
+c9qXJez76QaOECYpjAl0cQ3glx8WS1s0ZH9zypTSC656f5luqj6RIDDIzyK1vG21
+Ipztc4jKRocR6KEwVpEHSAF2TIqo5ZaHm0qjqcKD3bKsy0t8o45xOqXlCqbwenH5
+E2m5hb+LCXU/BiEPCLgNuZH45HM3A8QCdRR9QJMfOPbLYlZ/4vxvYaka+HMgbyQH
+z11uRt0TIYvxPhsupW3aHNIawQ7vaQonyheqovk3gyT1p4Qr5vxt5VayYg1tEHqC
+LsWRjouFmjsV4eA/kt8UnLdSfqXniw==
+=eyKq
+-----END PGP SIGNATURE-----
+
+--Sig_/yfzRquWjE+9QdguLEDZ0ubu--

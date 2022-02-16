@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CD64B9265
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAFB4B927F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbiBPUgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 15:36:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55534 "EHLO
+        id S232495AbiBPUgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 15:36:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiBPUfp (ORCPT
+        with ESMTP id S232424AbiBPUgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 15:35:45 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B6B2AE729
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:35:32 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so3489323pjm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:35:32 -0800 (PST)
+        Wed, 16 Feb 2022 15:36:41 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE42E0EC
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:36:28 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id d187so3092032pfa.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:36:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZiuFSTUba1ATIIXLsTWrQztSTfw4EGm3xQIUgvLL4Mk=;
-        b=YXjfl7xGUMOFGqUfuV8g8dqmpsyREkxR2ZgdxcoP9kPzp2YmCd3cfWw9AYwPKinBnf
-         gcJwe5aFs2j51u2c3EReqPEpZ2SfOf7qXc4tnTxvI2sZZl4qjbFKLZZz/kztyyRitwg8
-         YzpybCwUVrhXH9Z5tsATr5UR9Cv23DeMtqssk=
+        bh=eJd4aXWZIs0H49MCtqJDRq40asV4LB3JVz3vZfyzy20=;
+        b=OvLwuaJuN7jjsoupZQzejUUIvEYxeqr4xggnf7tf1QsjL7U4I4Sk1BL6szewkbe2B/
+         /0w8twYBe+GunMFYIdW/zex0RHhv6VkWc/yZkGVN+oySOgamBUK5CawVK2MAm7IGrXSn
+         r7nae5JYy8waRlLGEPFtqssZEk+ajbIkBAhyg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=ZiuFSTUba1ATIIXLsTWrQztSTfw4EGm3xQIUgvLL4Mk=;
-        b=WPAfCZWrrp+2k5XLWPIQNv8go7tD9cajLSKCUxfJTeOOIRjcqgrK50J+Dsgzdz2uJj
-         hdCM5rHmmEztdqlfNEEobha3oJ69cCZFSNFAljIVsg1VUPCdEjVrzZvZzPH1U7DweAPE
-         0Y0o4t+8J6/Tp1VhOvdN+Xocp2kpY20u9HGQ3d0qYXD+jJgKWdY8miMQQVOz7PAbUrat
-         ZgniveX4JzARC63V+r9LXDhEc0/DikHVbX9dB+3GHRcDriQ6PJE/2u61i5cb7Vjwp/LK
-         g8f8yILHIj9g+v+3zYnxNMXhIrly6P/XLUWRv84cJP1BHDtlOaOnaGPnhFA1AlI7rMvv
-         gM5A==
-X-Gm-Message-State: AOAM531nhvL6mqxWxCNyQBcoTWSxjdYphkavpMRciykAQHPX357NWeWY
-        9MjQS6833c4JaRKYzYX190fSAczZMqM0Ng==
-X-Google-Smtp-Source: ABdhPJwwN7eFoWkSBD6A2li7xRKGQqNGXljyJPz1+jlWuOdkrFtGLad3asl8gm9epTBPDnceOx4M1A==
-X-Received: by 2002:a17:903:281:b0:14c:f3b3:209b with SMTP id j1-20020a170903028100b0014cf3b3209bmr4129964plr.87.1645043731720;
-        Wed, 16 Feb 2022 12:35:31 -0800 (PST)
+        bh=eJd4aXWZIs0H49MCtqJDRq40asV4LB3JVz3vZfyzy20=;
+        b=6ZcFbtrqYDln4yC0RPO2zfozyndEIo7zkwcP3I0Yds3d7AZf0CxxDORIXKGW3ocaI5
+         owNeOpk2EAoH91t/Ef9dp0/fvYejKGR4x5RoFDgZjC3SAZTXWYO3MnFN6MSHHA21Sfgw
+         v4IQQRk7in7xDpnf+k6RfOLhkH2fNFrEylv4YG4/L2AjkBknQMjfgNPJSvJfzmcbSCKK
+         ymiUpIiDWn6JKeUhX5WhqnRKicTQ/fNjHip5jFvtpjj4SBoo0vJsSmNFahkKcjam7EFo
+         7Oz/NgWlQUx+ESNTY4G7rYdyEB0M6ipwGghhCd6nlqKA+X4E/C+zJs2626yNaMgZhgPd
+         unLw==
+X-Gm-Message-State: AOAM532j4yyDHvAUTsO7tKmwB8GgImuudCDFLVewHvXiU/1GUBp0sUpR
+        FmiMD+QFgQ9ujnSdnlTbMb2oHQ==
+X-Google-Smtp-Source: ABdhPJxsqD2mY2NkmwK/BmEBgmiqpQQgFKtDkVDGkFZkejCndwQ4eKwb8c4Y2tNYoyYnZCkX2Ulaqg==
+X-Received: by 2002:a63:490c:0:b0:372:c378:6686 with SMTP id w12-20020a63490c000000b00372c3786686mr3696180pga.295.1645043787861;
+        Wed, 16 Feb 2022 12:36:27 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d15sm44055299pfu.127.2022.02.16.12.35.31
+        by smtp.gmail.com with ESMTPSA id w11sm44576546pfu.50.2022.02.16.12.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 12:35:31 -0800 (PST)
-Date:   Wed, 16 Feb 2022 12:35:30 -0800
+        Wed, 16 Feb 2022 12:36:27 -0800 (PST)
+Date:   Wed, 16 Feb 2022 12:36:27 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] tw89: core.h: Replace zero-length array with
+Cc:     Cc: linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        ; Johannes Berg <johannes.berg@intel.com>
+Illegal-Object: Syntax error in Cc: address found on vger.kernel.org:
+        Cc:     ;Johannes Berg <johannes.berg@intel.com>
+                        ^-missing semicolon to end mail group, extraneous tokens in mailbox, missing end of mailbox
+Subject: Re: [PATCH] uapi: wireless: Replace zero-length array with
  flexible-array member
-Message-ID: <202202161235.0C91ED227@keescook>
-References: <20220216195047.GA904198@embeddedor>
+Message-ID: <202202161235.C593433C94@keescook>
+References: <20220216195306.GA904220@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220216195047.GA904198@embeddedor>
+In-Reply-To: <20220216195306.GA904220@embeddedor>
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -73,7 +73,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 01:50:47PM -0600, Gustavo A. R. Silva wrote:
+On Wed, Feb 16, 2022 at 01:53:06PM -0600, Gustavo A. R. Silva wrote:
 > There is a regular need in the kernel to provide a way to declare
 > having a dynamically sized set of trailing elements in a structure.
 > Kernel code should always use “flexible array members”[1] for these
@@ -85,6 +85,9 @@ On Wed, Feb 16, 2022 at 01:50:47PM -0600, Gustavo A. R. Silva wrote:
 > 
 > Link: https://github.com/KSPP/linux/issues/78
 > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+This UAPI change should be fine for any compiler that understood the
+older "[0]" syntax.
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 

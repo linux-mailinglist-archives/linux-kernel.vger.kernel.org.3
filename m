@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA4B4B7C3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4B14B7C4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245245AbiBPBCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:02:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60138 "EHLO
+        id S245252AbiBPBDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:03:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233535AbiBPBCm (ORCPT
+        with ESMTP id S233535AbiBPBDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:02:42 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB60F86E3C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:02:30 -0800 (PST)
+        Tue, 15 Feb 2022 20:03:12 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789B088792
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:03:01 -0800 (PST)
 Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220216010227epoutp0162874000d043a0c1f6547d264a980cb4~UHotGvY1y2383823838epoutp01S
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:02:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220216010227epoutp0162874000d043a0c1f6547d264a980cb4~UHotGvY1y2383823838epoutp01S
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220216010259epoutp040c5a2b1855f033cff437fce62fdca581~UHpLVmaJX1566415664epoutp04k
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:02:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220216010259epoutp040c5a2b1855f033cff437fce62fdca581~UHpLVmaJX1566415664epoutp04k
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644973347;
-        bh=6F2pv03rSyb0l3m/G1mhHi3z2iu7pZETXNe3I0pc9+k=;
+        s=mail20170921; t=1644973379;
+        bh=Awd+MxxFbtV7nsHD33wuxQC5grRtG3mHSq7dK59Ip0U=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=eK5iZZ8CSbKymNeSrOFHfJAvRTsHxzsISV2UwLebv4KmbDELMAuhFsnmbPDPHQzBt
-         hMUa9yG9nMNi6k3dAChJU6GwEV0o7ohug56Mlc+PUBlRoX8w1AOmD+5mZ8CHG1blik
-         q75rzyrNCZuY0Grs562G/pRaNGqAVYQffh82v+TI=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220216010227epcas1p2a51d4e79fd2b04e19953faf779c392a9~UHos08GNd1366313663epcas1p2P;
-        Wed, 16 Feb 2022 01:02:27 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.145]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4Jz06j0Lyyz4x9QJ; Wed, 16 Feb
-        2022 01:02:21 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        b=YTYoPDzXemWlbUSfBrrZFRu0AUkGhaitpWIx9v3p7fsIw6qIkKfeGoyv30JFkHCCL
+         YCaoP151ckgIrk7Nm+bRkuqq6vokIs3kIylAvvftI/gavBjFGFgnVeYUuLVcDJX2Ae
+         UNt+eT9DqnTtuYo5oO5/aRcwkDhU8vXPOI3TQs/8=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220216010259epcas1p42e1b1380db091eec12a4b8ea4fea3471~UHpLDJ2MX1084010840epcas1p4H;
+        Wed, 16 Feb 2022 01:02:59 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.38.236]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Jz07M5pGbz4x9Q7; Wed, 16 Feb
+        2022 01:02:55 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
         epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7C.8F.21932.C1D4C026; Wed, 16 Feb 2022 10:02:20 +0900 (KST)
+        8C.CF.21932.93D4C026; Wed, 16 Feb 2022 10:02:49 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220216010219epcas1p16a351e60d11478c3f68f23af2891b48d~UHomJm6jA2569825698epcas1p1o;
-        Wed, 16 Feb 2022 01:02:19 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        20220216010249epcas1p13569dacb88d41777a867b3c02028b3b3~UHpBpNL3o1064010640epcas1p1U;
+        Wed, 16 Feb 2022 01:02:49 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220216010219epsmtrp20f73d29c32ce3e175d0b3c9747ec3752~UHomIz0X-1789517895epsmtrp26;
-        Wed, 16 Feb 2022 01:02:19 +0000 (GMT)
-X-AuditID: b6c32a38-929ff700000255ac-73-620c4d1cc9ff
+        20220216010249epsmtrp24ea739aed7984bffc102b2560a86a860~UHpBogacL1794217942epsmtrp29;
+        Wed, 16 Feb 2022 01:02:49 +0000 (GMT)
+X-AuditID: b6c32a38-929ff700000255ac-e7-620c4d39d5b1
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7B.C3.08738.B1D4C026; Wed, 16 Feb 2022 10:02:19 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AE.A2.29871.93D4C026; Wed, 16 Feb 2022 10:02:49 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220216010219epsmtip24566ff6c979294f26fa5ea1d8492a855~UHol8aZti0549805498epsmtip2L;
-        Wed, 16 Feb 2022 01:02:19 +0000 (GMT)
-Subject: Re: [PATCH -next] extcon: Fix some kernel-doc comments
-To:     Yang Li <yang.lee@linux.alibaba.com>, myungjoo.ham@samsung.com
-Cc:     linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+        20220216010249epsmtip288660afb9f53840dc26134583062d02c~UHpBcEXZq0599805998epsmtip2i;
+        Wed, 16 Feb 2022 01:02:49 +0000 (GMT)
+Subject: Re: [PATCH 1/4] extcon: int3496: Make the driver a bit less verbose
+To:     Hans de Goede <hdegoede@redhat.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     Stephan Gerhold <stephan@gerhold.net>, linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <2bde97d8-6575-0e0f-81bb-dd98f5b60607@samsung.com>
-Date:   Wed, 16 Feb 2022 10:26:47 +0900
+Message-ID: <5c632a6c-cb85-a941-1ad3-b0ed20b2082b@samsung.com>
+Date:   Wed, 16 Feb 2022 10:27:17 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20220104084359.41051-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20211228170141.520902-1-hdegoede@redhat.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPKsWRmVeSWpSXmKPExsWy7bCmvq6sL0+SwdcYi3d7p7FZXN41h83i
-        duMKNot3jYcZHVg8dj609OjbsorR4/MmuQDmqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMz
-        A0NdQ0sLcyWFvMTcVFslF58AXbfMHKBdSgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSC
-        lJwC0wK94sTc4tK8dL281BIrQwMDI1OgwoTsjIWb9jAX9AtUXNy8mq2BcTZvFyMnh4SAicSM
-        rT1MXYxcHEICOxgl5mzuY4dwPjFKXNl4nBHC+cwo8fzmHBaYljVLe9ggErsYJc5v2wnV/55R
-        4sTdf4wgVcIC9hK/FywE6xARcJJYvm8PE4jNLOAusfTpfLA4m4CWxP4XN9hAbH4BRYmrPx6D
-        9fIK2En8/buDFcRmEVCVuLTzDViNqECYxMltLVA1ghInZz4Bm8Mp4CDxfs80doj54hK3nsyH
-        2iUvsf3tHGaQ4yQEvrJL7Nm4kRHiBReJFV+uskHYwhKvjm9hh7ClJD6/28sG0dDMKNHw4jYj
-        hNPDKHH0WR80AIwl9i+dDLSCA2iFpsT6XfoQYUWJnb/nMkJs5pN497WHFaREQoBXoqNNCKJE
-        WeLyg7tMELakxOL2TrYJjEqzkPwzC8kPs5D8MAth2QJGllWMYqkFxbnpqcWGBSbw+E7Oz93E
-        CE6JWhY7GOe+/aB3iJGJg/EQowQHs5IIb9xZziQh3pTEyqrUovz4otKc1OJDjKbAEJ7ILCWa
-        nA9Mynkl8YYmlgYmZkbGJhaGZoZK4ry9U08nCgmkJ5akZqemFqQWwfQxcXBKNTDFNFS/ZeI6
-        EN+/xa9gJbdXNceBsklqDlX7bzHmtlb29XyJX5bpW1NqOT2qf07uRIfeRfUR7UG/M4wCNvzd
-        2hXc+G3jgacLFi0N3hMaXNOROimtTm9y8KnKbd72KmUznlyvqHK1rZbe93xL6Hflujv7+uYr
-        dNxqDFpqNKtVcRvr2huSYo9uCm4V+cZ6aWZq2zVz+fUnNPTf8J+bymT/xOhO0p2IycvLZk1+
-        aneXIzuheeZX5djze5ubLgRf4MwJffGvu/PKxWMt7esyFmQseLubcWeMqrph/4Fya/G428kZ
-        J+fwv8hUPfftpldW4cHz0/UCEhwnFYY+/31/O8/3QAneNd1Fu4oinkTr9J88wqTEUpyRaKjF
-        XFScCACKAodrEgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBLMWRmVeSWpSXmKPExsWy7bCSvK60L0+SwdUeY4t3e6exWVzeNYfN
-        4nbjCjaLd42HGR1YPHY+tPTo27KK0ePzJrkA5igum5TUnMyy1CJ9uwSujIWb9jAX9AtUXNy8
-        mq2BcTZvFyMnh4SAicSapT1sXYxcHEICOxglzq4GcUASkhLTLh5l7mLkALKFJQ4fLgYJCwm8
-        ZZQ4uIITxBYWsJf4vWAhC4gtIuAksXzfHiYQm1nAXWLp0/ksEDMnM0oceXobLMEmoCWx/8UN
-        sPn8AooSV388ZgSxeQXsJP7+3cEKYrMIqEpc2vkGrEZUIExi55LHTBA1ghInZz4BW8Yp4CDx
-        fs80dohl6hJ/5l1ihrDFJW49mQ91hLzE9rdzmCcwCs9C0j4LScssJC2zkLQsYGRZxSiZWlCc
-        m55bbFhglJdarlecmFtcmpeul5yfu4kRHBlaWjsY96z6oHeIkYmD8RCjBAezkghv3FnOJCHe
-        lMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqYGCrFij4mrOHR
-        Fgvieffdx7Lw0mmX9m1BGxmVTusJfm2UNs1yjn901OF2215hIa3TAmUnvX+fu1a8f97/H5yp
-        tvEi6YIVl+aqRk6+pHB6tZ6rrehUnVzLVcdc3t7OOMgUV5GX9M9mXdm2wyzrM7UXvJpyPvjn
-        /AbWN6t0mxWntbJcXbFls8p3lcpce9X7Cw9t5TLuK64yLHnxKLnY6duuH4fbN+x7I1fBMiNW
-        qnJhp3U2f4ha+4Jkt6l33URaOjgOmb/60HD1l5LKq1NbI7h2Zs/MauU6e0h7TljuMXMtxU5p
-        JwVV9g/Xtdas817npHsoKaBE+L7imXUuD3382/7cS9kitC7hir2aHkf1Pn4lluKMREMt5qLi
-        RACs6M34+wIAAA==
-X-CMS-MailID: 20220216010219epcas1p16a351e60d11478c3f68f23af2891b48d
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkk+LIzCtJLcpLzFFi42LZdljTQNfSlyfJoPmjrsWb49OZLC7vmsNm
+        cbtxBZvFjbkmDiwebQvsPd7vu8rm0bdlFaPH501yASxR2TYZqYkpqUUKqXnJ+SmZeem2St7B
+        8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QAuVFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnF
+        JbZKqQUpOQWmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZ89p7mAouc1UcnjKbqYHxAUcXIweH
+        hICJRMf5wC5GLg4hgR2MEidfTmWDcD4xSnyeP50dwvnGKLG2fSVLFyMnWMfJ5r1MEIm9jBIf
+        pt1jhnDeM0qs6dgGViUs4COx7WYPK4gtIhAkceP7CjCbWcBd4tqkBWA1bAJaEvtf3GADsfkF
+        FCWu/njMCHITr4CdxL77/iBhFgFViWvNG9hBbFGBMImT21oYQWxeAUGJkzOfgI3hFLCSOLt/
+        PjvEeHGJW0/mM0HY8hLb384Bu01C4C+7xOrmicwQP7tItGwPhXhGWOLV8S3sELaUxOd3e9kg
+        6psZJRpe3GaEcHoYJY4+64N631hi/9LJTCCDmAU0Jdbv0ocIK0rs/D2XEWIxn8S7ryC/g+zi
+        lehoE4IoUZa4/OAuE4QtKbG4vZNtAqPSLCTvzELywiwkL8xCWLaAkWUVo1hqQXFuemqxYYEJ
+        PLKT83M3MYLTopbFDsa5bz/oHWJk4mA8xCjBwawkwht3ljNJiDclsbIqtSg/vqg0J7X4EKMp
+        MIAnMkuJJucDE3NeSbyhiaWBiZmRsYmFoZmhkjhv79TTiUIC6YklqdmpqQWpRTB9TBycUg1M
+        5Z/mLitffPuAjlLiuduVSewrtrya/ay+NrZDcfubzV19u5ofc8fynVcpfMvZUdWovFBaI2Nb
+        cmjbr3gHM8FnK1JPy+6c/9p3embIzzMCmipXp/w6bHX03LptXp+Yt8tNe1LwcSqD+aqq+Iim
+        KcK+yxYvCGBzeCm04skuaSPJu48uWmQq/hDuKPoh//u1PIutSBbjhD7DLtabRmGny77dWrli
+        5Txjr3RR9cfrY8SkP//61hK4Zk2N82GeLyZSR08s3HrYNu3Dn+03FgilblGbncrEqSLyVkZw
+        Ue/8WK3YHZqH3z5MYkz+y3pNzFTMOPKbfpLe3ditmjYTpu9Ob5y19abFhSn/VJUfyjDUsm92
+        VWIpzkg01GIuKk4EADoR8/4UBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsWy7bCSvK6lL0+SQc8JcYs3x6czWVzeNYfN
+        4nbjCjaLG3NNHFg82hbYe7zfd5XNo2/LKkaPz5vkAliiuGxSUnMyy1KL9O0SuDLmtfcwFVzm
+        qjg8ZTZTA+MDji5GTg4JAROJk817mboYuTiEBHYzStxrb2WDSEhKTLt4lLmLkQPIFpY4fLgY
+        JCwk8JZRYuaVGhBbWMBHYtvNHlYQW0QgSGLC/g3sIDazgLvEtUkLWCBm9jJKtN/dxgSSYBPQ
+        ktj/4gbYfH4BRYmrPx4zgsznFbCT2HffHyTMIqAqca0ZYo6oQJjEziWPwVp5BQQlTs58wgJi
+        cwpYSZzdPx9ql7rEn3mXmCFscYlbT+YzQdjyEtvfzmGewCg8C0n7LCQts5C0zELSsoCRZRWj
+        ZGpBcW56brFhgWFearlecWJucWleul5yfu4mRnB8aGnuYNy+6oPeIUYmDsZDjBIczEoivHFn
+        OZOEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCeWJKanZpakFoEk2Xi4JRqYKr8u930
+        /EL2tVcy046q9AnLKaZc3bHY9+SyrnSrlF/fa14nWF0/kyN085hBoGbTh81eT4/UuV17ksf3
+        o2jdy4dXzyy+NyWeQZDp8GodST2JD9dl7UoFcnPkq96W/pD4zhG7JWuFj02Zqcr5lPCTfNc0
+        Tsi/Lvrw9qTJyuaJ21c8TE3YUH9Za+++m9YGLTxugfavEh+u7im59eL1FKaOids3L/ux9d2M
+        eLuJV7kyim5P+2F3zDFrH/sB9yfxmwJ/fHnk8dU+aML7J0Ii5haPQnbOOpJyNpBR/WOFr6fd
+        TcEfx2KZE7grn23Il+jtLTpn+pdjKrf4/iXeeW2CznMTC5bMzbnx/+/Z1UkT2iREHgkqsRRn
+        JBpqMRcVJwIAMj7pL/4CAAA=
+X-CMS-MailID: 20220216010249epcas1p13569dacb88d41777a867b3c02028b3b3
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220104084415epcas1p3e904babe27a1a45ab66f3793fb68890d
-References: <CGME20220104084415epcas1p3e904babe27a1a45ab66f3793fb68890d@epcas1p3.samsung.com>
-        <20220104084359.41051-1-yang.lee@linux.alibaba.com>
+X-CMS-RootMailID: 20211228170156epcas1p2a0dea22755f2336b01c6e06b289d9583
+References: <CGME20211228170156epcas1p2a0dea22755f2336b01c6e06b289d9583@epcas1p2.samsung.com>
+        <20211228170141.520902-1-hdegoede@redhat.com>
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
@@ -118,51 +119,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 5:43 PM, Yang Li wrote:
-> Add the description of @id in extcon_sync() kernel-doc comment
-> and @edev, @id, @prop in extcon_set_property_sync() kernel-doc
-> comment to remove warnings found by running scripts/kernel-doc,
-> which is caused by using 'make W=1'.
-> drivers/extcon/extcon.c:409: warning: Function parameter or 
-> member 'id' not described in 'extcon_sync'
-> drivers/extcon/extcon.c:750: warning: Function parameter or 
-> member 'edev' not described in 'extcon_set_property_sync'
-> drivers/extcon/extcon.c:750: warning: Function parameter or 
-> member 'id' not described in 'extcon_set_property_sync'
-> drivers/extcon/extcon.c:750: warning: Function parameter or 
-> member 'prop' not described in 'extcon_set_property_sync'
+On 12/29/21 2:01 AM, Hans de Goede wrote:
+> On all devices which I have with an INT3496 ACPI device,
+> there is only an ID pin defined.
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Change the log-messages about not being able to get GPIOs for
+> "VBUS EN" and "USB MUX" to use dev_dbg().
+> 
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->  drivers/extcon/extcon.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/extcon/extcon-intel-int3496.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-> index a09e704fd0fa..1e71ad489a83 100644
-> --- a/drivers/extcon/extcon.c
-> +++ b/drivers/extcon/extcon.c
-> @@ -399,6 +399,7 @@ static ssize_t cable_state_show(struct device *dev,
->  /**
->   * extcon_sync() - Synchronize the state for an external connector.
->   * @edev:	the extcon device
-> + * @id:		the unique id indicating an external connector
->   *
->   * Note that this function send a notification in order to synchronize
->   * the state and property of an external connector.
-> @@ -736,6 +737,9 @@ EXPORT_SYMBOL_GPL(extcon_set_property);
+> diff --git a/drivers/extcon/extcon-intel-int3496.c b/drivers/extcon/extcon-intel-int3496.c
+> index fb527c23639e..df6ab4ef46f5 100644
+> --- a/drivers/extcon/extcon-intel-int3496.c
+> +++ b/drivers/extcon/extcon-intel-int3496.c
+> @@ -121,11 +121,11 @@ static int int3496_probe(struct platform_device *pdev)
 >  
->  /**
->   * extcon_set_property_sync() - Set property of an external connector with sync.
-> + * @edev:	the extcon device
-> + * @id:		the unique id indicating an external connector
-> + * @prop:	the property id indicating an extcon property
->   * @prop_val:	the pointer including the new value of extcon property
->   *
->   * Note that when setting the property value of external connector,
+>  	data->gpio_vbus_en = devm_gpiod_get(dev, "vbus", GPIOD_ASIS);
+>  	if (IS_ERR(data->gpio_vbus_en))
+> -		dev_info(dev, "can't request VBUS EN GPIO\n");
+> +		dev_dbg(dev, "can't request VBUS EN GPIO\n");
+>  
+>  	data->gpio_usb_mux = devm_gpiod_get(dev, "mux", GPIOD_ASIS);
+>  	if (IS_ERR(data->gpio_usb_mux))
+> -		dev_info(dev, "can't request USB MUX GPIO\n");
+> +		dev_dbg(dev, "can't request USB MUX GPIO\n");
+>  
+>  	/* register extcon device */
+>  	data->edev = devm_extcon_dev_allocate(dev, int3496_cable);
 > 
 
-Applied it. Thanks.
+Applied them (patch1-4). Thanks.
 
 -- 
 Best Regards,

@@ -2,52 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA2A4B936B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E9C4B9378
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235940AbiBPWAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 17:00:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55760 "EHLO
+        id S236171AbiBPWBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 17:01:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiBPWAY (ORCPT
+        with ESMTP id S232881AbiBPWBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 17:00:24 -0500
+        Wed, 16 Feb 2022 17:01:48 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ABA298AC1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:00:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D467193CC;
+        Wed, 16 Feb 2022 14:01:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23CBB61B32
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 22:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8BF17C340E8;
-        Wed, 16 Feb 2022 22:00:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0702961B32;
+        Wed, 16 Feb 2022 22:01:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70BC6C340ED;
+        Wed, 16 Feb 2022 22:01:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645048810;
-        bh=JmEd61PatmTK6FoGOB53UnpcFH/CLQQNB3/wIQwZChM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lQlu/v1Xp+qZwb8OIPLRNkbNdEk1x/JRbsRgQ8SPThA0MquXaGLcnJniV+9B1Rgd4
-         lLx16OwLMDrSBVnrHxAR4N04bwqS/HsatbChbAccHQ8Q9rc/jjACtNqf7Asow6mcTi
-         yiydwOYqNAOkKaqBXdT1dTRmdz1j0ZujWyX7bmB5j+/6i6nq2VX889POyrrDG708eJ
-         EunJyJFcTcQPDxTFuUEO54/xCFCM0tx6hCsgrao/Ad+TYiFmfiKbztNR2Ni8SaKueo
-         uNGjV5ODejH8Fx3oJPTNTPNXlyYNJBjn7I56aAhShbvGHh3j25ZO6jDsluNEJg/bSU
-         fJZkCxHFuUelQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 70249E7BB04;
-        Wed, 16 Feb 2022 22:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1645048894;
+        bh=3GAgFKFSz4rrd4LtvDFKA/i0kbB+vNidxSnLES7CC90=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PmqZtAPQ8jm+06IO3B2Rv5fRROrQMNnQvWotR0srStYZ55QvmYnwNkxoJHkIp+2JO
+         AVqNKyYOz3jKBBKy2IQjZi6kElAZ5xZKm4cstzsUcFi8OJbCDtXinwC+lBAG0Kspfv
+         j4KEB/+z/qg5rsxzJPFnhxgZkp3vlZ87N7BmFP/KZojtrFxuhABgfVyssK+XTy50tx
+         yIjZNZrmpv+d/GmxXVJtlcCXljyt9V2jjwg+cZzJg9AE7+KH14sNrO2oqwgGkshdJQ
+         dwh+m0ZaItgHQ691RkIYXHtH9hK3sSviXzH3Xv6AyuPQdc48pm/GIV1nZ7hn73HjQ7
+         oD/Q5Rjdb1ORw==
+Received: by mail-wm1-f42.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso4730824wme.5;
+        Wed, 16 Feb 2022 14:01:34 -0800 (PST)
+X-Gm-Message-State: AOAM531n5ZuqBO0v2piYou9nTuk7/+tLzxlMfLOxCmM2nW9BKme/XiWA
+        L7l4hmYXz/ji72wkDL7gM+XIQlyiabFdSQ+uvVs=
+X-Google-Smtp-Source: ABdhPJyTINkf1ZMgp+ijDiSYfGY6PCVSFYe6JpwLrHI4jPiDeP7SC/Zo0zGySiauKL0SyOBYxrfLHIczbDoJsvG/Low=
+X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id
+ l39-20020a05600c1d2700b0037c74bb2b4dmr3428429wms.82.1645048892813; Wed, 16
+ Feb 2022 14:01:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/4] platform/chrome: cros_ec_typec: Reorganize mux
- configuration
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <164504881045.7567.2664390271218928551.git-patchwork-notify@kernel.org>
-Date:   Wed, 16 Feb 2022 22:00:10 +0000
-References: <20220208184721.1697194-1-pmalani@chromium.org>
-In-Reply-To: <20220208184721.1697194-1-pmalani@chromium.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, bleung@chromium.org,
-        chrome-platform@lists.linux.dev, groeck@chromium.org
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-16-arnd@kernel.org>
+ <Yg1D08+olCSGmnYU@ravnborg.org> <Yg1FRZcrhlh5C//V@ravnborg.org>
+In-Reply-To: <Yg1FRZcrhlh5C//V@ravnborg.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 16 Feb 2022 23:01:16 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1kV=0G9WYkdjYCiBu=fuT1fbPGHVD9cgHX3ht6J3MFEw@mail.gmail.com>
+Message-ID: <CAK8P3a1kV=0G9WYkdjYCiBu=fuT1fbPGHVD9cgHX3ht6J3MFEw@mail.gmail.com>
+Subject: Re: [PATCH v2 15/18] sparc64: remove CONFIG_SET_FS support
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,34 +110,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, Feb 16, 2022 at 7:41 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+> On Wed, Feb 16, 2022 at 07:34:59PM +0100, Sam Ravnborg wrote:
 
-This series was applied to chrome-platform/linux.git (for-next)
-by Prashant Malani <pmalani@chromium.org>:
+> >
+> > I think you somehow missed the Kconfig change, and also the related
+> > sparc32 change which continue to have set_fs() after this patch.
 
-On Tue,  8 Feb 2022 18:47:16 +0000 you wrote:
-> This is a short series that reorganizes when mux configuration occurs
-> during Type C port updates. The first 2 patches are minor refactors
-> which move some of the mux update logic to within
-> cros_typec_configure_mux(). The third patch moves
-> cros_typec_configure_mux() itself to be earlier in
-> cros_typec_port_update().
-> 
-> [...]
+Right, thanks for pointing out the issue.
 
-Here is the summary with links:
-  - [v2,1/4] platform/chrome: cros_ec_typec: Move mux flag checks
-    https://git.kernel.org/chrome-platform/c/53a0023c6450
-  - [v2,2/4] platform/chrome: cros_ec_typec: Get mux state inside configure_mux
-    https://git.kernel.org/chrome-platform/c/0d8495dc0321
-  - [v2,3/4] platform/chrome: cros_ec_typec: Configure muxes at start of port update
-    https://git.kernel.org/chrome-platform/c/af34f115b3b7
-  - [v2,4/4] platform/chrome: cros_ec_typec: Update mux flags during partner removal
-    https://git.kernel.org/chrome-platform/c/b579f139e470
+> I now notice the sparc32 bits are in the last patch.
+> To avoid breaking bisect-ability on sparc64 I think you need to merge
+> the sparc32 changes with this patch, unless the sparc64 changes can
+> coexist with CONFIG_SET_FS continue to be set.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I originally had them in the reverse order and broke bisectability during my
+rebase. The end result is still fine, but now I need to move the 'select
+SET_FS' from CONFIG_SPARC to CONFIG_SPARC32 in this patch
+and then remove it again from there in the last step.
 
+I've done that in my local copy now.
 
+         Arnd

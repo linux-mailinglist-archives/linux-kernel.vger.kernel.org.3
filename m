@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E2A4B7C4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E90524B7C32
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245302AbiBPBHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:07:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53198 "EHLO
+        id S245311AbiBPBHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:07:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245264AbiBPBH2 (ORCPT
+        with ESMTP id S245277AbiBPBH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:07:28 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC9AC6836
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:07:15 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id n8so279326wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:07:15 -0800 (PST)
+        Tue, 15 Feb 2022 20:07:29 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297FBC7916
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:07:16 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v12so858415wrv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:07:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XFGZy8ThiinWc6PWDmNQOV91AZCSxdikWfRq8CGSK00=;
-        b=Oe2VFX5a6VqbAuMSKGTApfHHupl6ZEn5YQw19VEKcImEoPsXlEKA/k6+aUOa3qmy4F
-         balWvWdXFxyjcnnDeYfODF0iFpo+1jaxOXSqqWlHoPRsqqW/Kk6ThtOCZFchYB+/RhTb
-         Gh8HtjMyBW2pMX1xGIRtzFRKi9LWlNnjcp3C21P/Cmu9L4ql9nfD1jLAp2AhhQk9FQyP
-         NgxM27Lz/OwIr0jai+iVY41yqQJ9XyC70WifyJdIb/kIOLqg2R2/qCFqde4HHSZER+c3
-         oynpYnwekbQA+5ddJiIH4fII3vazsja+Tbc1fDr1/Ib9E3p1XXGih0AwouGpAuhKnYuD
-         /Q3g==
+        bh=NtCkjxp6cTPKQb+Nsysc9H27MvJPw8Uk/TMHdrWhoaw=;
+        b=Ex2ZDXWZEFayR995gPdPhFI2wO/rRpG1BRXcAlsPBqASjbxb+S0H2ZCpflbtUSTQTO
+         /fuav78AzBU+FrZ0mIlJGmGOEEdWPVLuH2tjuKHJa6N8l2FC82SFib0Sy50DfIGdyBjv
+         BZfpyjyaJB18Yps69YTpnNdsLIxZ1QUhUH8sMt29V9WU/kDcEP8ZZ2vREIPXsVJGXjTA
+         fInm0wfCE6mdmzsCYU9z6gS7g+YmGfOwOe3raSmATGQwEcx5mJT4h89j0ii6FE/ytXOZ
+         qmp1CosO07KdjVTvialjDufuAPaDRKaREXdg0fpRIog7Djj751HM6yxDQCgU6hGNeEdc
+         VZ5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XFGZy8ThiinWc6PWDmNQOV91AZCSxdikWfRq8CGSK00=;
-        b=AdtVnV8MAkJECn0hdzxA0Zw9xZk1CRMzSjwiylvaumxY9pvzp5iZbuNUVT0sjLcDTM
-         OA/H+lc0d2zQsxKtdejMAXvfX2B3k5RvNcDvJS4M4FnJ+A24ByXHwx3468AUWCDYzSOA
-         ItJiZ3u9DiF1+3xlU71ob5J1Hh1ktZcK7xT7xMp9xLSnh8CLMmBUbwUl/naLCztWVl6o
-         uvyL2sziImCTlpfuiLSgsfAuHP5y+xPK2ymkKLxQAVzEKnbiij6XdvsVPDAQgf8Ef4mp
-         /SiT748YvOzj1ZaDIrPIyAHfCPyXcNNHIUGxBf0hDhlZrwaxDGxmY0J8ia8KIHi+CcgR
-         XE3A==
-X-Gm-Message-State: AOAM531W+4nAyBgPGHsGmcigxhwy/Njfhg0f/fYkJIGIocGFslRUwUIN
-        GolmzelM9zJgiH3Dxg9wJXHa/Q==
-X-Google-Smtp-Source: ABdhPJwnRGXg/YuN9GT9HiMROuMm2eOXpmJFagCEuw3EiTFwXnVKd6Q1Q8v+dQ8CJsW7PaliUOZPwQ==
-X-Received: by 2002:a1c:7419:0:b0:37b:b96e:81a6 with SMTP id p25-20020a1c7419000000b0037bb96e81a6mr5237404wmc.8.1644973633434;
-        Tue, 15 Feb 2022 17:07:13 -0800 (PST)
+        bh=NtCkjxp6cTPKQb+Nsysc9H27MvJPw8Uk/TMHdrWhoaw=;
+        b=lM1w0x3HkglO39Cpf4QmZyPOS97erQMNDvJW+e80tRiCjP1tnWH+1j+xFBn7M53nsx
+         FJ95EISkpYEuPVAqukQajdcmGSXkHiysyz5CclJa6Rb1cuoIdVAAkGy7GNvJiMcS++6R
+         11zG/PWqTETj/48YrvLD2QOKv2rJ7VwbW90weue6S0qNenCcA1QcrkngenXRtPW3dXjx
+         fYajfimsJZT1kHsPkh54epMHS9G0ZbYEK0ODlnIpThKcqycM2gM2TAZQtuS3xuycCnf/
+         bM7f5jkRAH3R1mMWBEA4JXsF7l2vszwFXEhNDk4dJCFmwW4lKWGRpay6cT/SL5JUMJUy
+         N+UQ==
+X-Gm-Message-State: AOAM531yxnfJMJSnKIGqRUkS/gCOYFM2r3k3uqC3xYvHdIG8KbCsrWXr
+        c7LwaCBVQHtT2mi39vyJQx+E7HS2FdYv3rgp
+X-Google-Smtp-Source: ABdhPJxMhxnL2f8NkJVwZjeiVfQUFzJmIYxzvCFqXvjraU1gAWfEKQeH0Y7UUY3aDfAhhutfD5hWIw==
+X-Received: by 2002:a05:6000:1a8e:b0:1e3:8f6:dc44 with SMTP id f14-20020a0560001a8e00b001e308f6dc44mr387684wry.57.1644973634499;
+        Tue, 15 Feb 2022 17:07:14 -0800 (PST)
 Received: from localhost.localdomain (3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.1.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:df16::3])
-        by smtp.gmail.com with ESMTPSA id m8sm10551185wms.4.2022.02.15.17.07.12
+        by smtp.gmail.com with ESMTPSA id m8sm10551185wms.4.2022.02.15.17.07.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 17:07:12 -0800 (PST)
+        Tue, 15 Feb 2022 17:07:13 -0800 (PST)
 From:   Phillip Potter <phil@philpotter.co.uk>
 To:     gregkh@linuxfoundation.org
 Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
         straube.linux@gmail.com, martin@kaiser.cx,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         paskripkin@gmail.com
-Subject: [PATCH v2 03/15] staging: r8188eu: remove converted DBG_88E calls from core/rtw_mlme_ext.c
-Date:   Wed, 16 Feb 2022 01:06:57 +0000
-Message-Id: <20220216010709.791-4-phil@philpotter.co.uk>
+Subject: [PATCH v2 04/15] staging: r8188eu: remove DBG_88E calls from core subdir
+Date:   Wed, 16 Feb 2022 01:06:58 +0000
+Message-Id: <20220216010709.791-5-phil@philpotter.co.uk>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220216010709.791-1-phil@philpotter.co.uk>
 References: <20220216010709.791-1-phil@philpotter.co.uk>
@@ -71,992 +71,815 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove all the netdev_dbg/pr_debug calls that were previously converted
-from DBG_88E inside core/rtw_mlme_ext.c. Due to the sheer number of
-lines, this patch is separated out for ease of review. After some thought,
-it makes more sense to just entirely strip all of these calls, so that
-debugging code in the driver can be more consistent and useful going
-forwards.
+Remove all remaining DBG_88E calls from the core subdirectory. After some
+thought, it makes more sense to just entirely strip all of these calls,
+so that debugging code in the driver can be more consistent and useful
+going forwards.
 
 Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 283 +-------------------
- 1 file changed, 14 insertions(+), 269 deletions(-)
+ drivers/staging/r8188eu/core/rtw_fw.c        | 10 -----
+ drivers/staging/r8188eu/core/rtw_p2p.c       | 35 -----------------
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c   | 30 ++-------------
+ drivers/staging/r8188eu/core/rtw_recv.c      | 36 ++----------------
+ drivers/staging/r8188eu/core/rtw_wlan_util.c | 40 +-------------------
+ 5 files changed, 8 insertions(+), 143 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 6c354383c1d2..4c557c279818 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -315,9 +315,6 @@ static u8 init_channel_set(struct adapter *padapter, u8 ChannelPlan, struct rt_c
- 	memset(channel_set, 0, sizeof(struct rt_channel_info) * MAX_CHANNEL_NUM);
+diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
+index ce0e4e3b21f9..6d07927397de 100644
+--- a/drivers/staging/r8188eu/core/rtw_fw.c
++++ b/drivers/staging/r8188eu/core/rtw_fw.c
+@@ -191,10 +191,8 @@ static int fw_free_to_go(struct adapter *padapter)
+ 	} while (counter++ < POLLING_READY_TIMEOUT_COUNT);
  
- 	if (ChannelPlan >= RT_CHANNEL_DOMAIN_MAX && ChannelPlan != RT_CHANNEL_DOMAIN_REALTEK_DEFINE) {
--		netdev_dbg(padapter->pnetdev,
--			   "ChannelPlan ID %x error !!!!!\n",
--			   ChannelPlan);
- 		return chanset_size;
- 	}
- 
-@@ -438,9 +435,6 @@ void mgt_dispatcher(struct adapter *padapter, struct recv_frame *precv_frame)
- 		if (GetRetry(pframe)) {
- 			if (precv_frame->attrib.seq_num == psta->RxMgmtFrameSeqNum) {
- 				/* drop the duplicate management frame */
--				netdev_dbg(padapter->pnetdev,
--					   "Drop duplicate management frame with seq_num=%d.\n",
--					   precv_frame->attrib.seq_num);
- 				return;
- 			}
- 		}
-@@ -577,8 +571,6 @@ unsigned int OnProbeRsp(struct adapter *padapter, struct recv_frame *precv_frame
- 		return _SUCCESS;
- 	} else if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_ING)) {
- 		if (pwdinfo->nego_req_info.benable) {
--			netdev_dbg(padapter->pnetdev,
--				   "P2P State is GONEGO ING!\n");
- 			if (!memcmp(pwdinfo->nego_req_info.peerDevAddr, GetAddr2Ptr(pframe), ETH_ALEN)) {
- 				pwdinfo->nego_req_info.benable = false;
- 				issue_p2p_GO_request(padapter, pwdinfo->nego_req_info.peerDevAddr);
-@@ -586,8 +578,6 @@ unsigned int OnProbeRsp(struct adapter *padapter, struct recv_frame *precv_frame
- 		}
- 	} else if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_TX_INVITE_REQ)) {
- 		if (pwdinfo->invitereq_info.benable) {
--			netdev_dbg(padapter->pnetdev,
--				   "P2P_STATE_TX_INVITE_REQ!\n");
- 			if (!memcmp(pwdinfo->invitereq_info.peer_macaddr, GetAddr2Ptr(pframe), ETH_ALEN)) {
- 				pwdinfo->invitereq_info.benable = false;
- 				issue_p2p_invitation_request(padapter, pwdinfo->invitereq_info.peer_macaddr);
-@@ -717,17 +707,12 @@ unsigned int OnAuth(struct adapter *padapter, struct recv_frame *precv_frame)
- 	seq = le16_to_cpu(*(__le16 *)((size_t)pframe + WLAN_HDR_A3_LEN + 2));
- 	algorithm = le16_to_cpu(*(__le16 *)((size_t)pframe + WLAN_HDR_A3_LEN));
- 
--	netdev_dbg(padapter->pnetdev, "auth alg=%x, seq=%X\n", algorithm, seq);
--
- 	if (auth_mode == 2 && psecuritypriv->dot11PrivacyAlgrthm != _WEP40_ &&
- 	    psecuritypriv->dot11PrivacyAlgrthm != _WEP104_)
- 		auth_mode = 0;
- 
- 	if ((algorithm > 0 && auth_mode == 0) ||	/*  rx a shared-key auth but shared not enabled */
- 	    (algorithm == 0 && auth_mode == 1)) {	/*  rx a open-system auth but shared-key is enabled */
--		netdev_dbg(padapter->pnetdev,
--			   "auth rejected due to bad alg [alg=%d, auth_mib=%d] %02X%02X%02X%02X%02X%02X\n",
--			   algorithm, auth_mode, sa[0], sa[1], sa[2], sa[3], sa[4], sa[5]);
- 
- 		status = _STATS_NO_SUPP_ALG_;
- 
-@@ -742,12 +727,8 @@ unsigned int OnAuth(struct adapter *padapter, struct recv_frame *precv_frame)
- 	pstat = rtw_get_stainfo(pstapriv, sa);
- 	if (!pstat) {
- 		/*  allocate a new one */
--		netdev_dbg(padapter->pnetdev,
--			   "going to alloc stainfo for sa=%pM\n", sa);
- 		pstat = rtw_alloc_stainfo(pstapriv, sa);
- 		if (!pstat) {
--			netdev_dbg(padapter->pnetdev,
--				   "Exceed the upper limit of supported clients...\n");
- 			status = _STATS_UNABLE_HANDLE_STA_;
- 			goto auth_fail;
- 		}
-@@ -778,9 +759,6 @@ unsigned int OnAuth(struct adapter *padapter, struct recv_frame *precv_frame)
- 		pstat->expire_to = pstapriv->auth_to;
- 
- 	if ((pstat->auth_seq + 1) != seq) {
--		netdev_dbg(padapter->pnetdev,
--			   "(1)auth rejected because out of seq [rx_seq=%d, exp_seq=%d]!\n",
--			   seq, pstat->auth_seq + 1);
- 		status = _STATS_OUT_OF_AUTH_SEQ_;
- 		goto auth_fail;
- 	}
-@@ -792,9 +770,6 @@ unsigned int OnAuth(struct adapter *padapter, struct recv_frame *precv_frame)
- 			pstat->expire_to = pstapriv->assoc_to;
- 			pstat->authalg = algorithm;
- 		} else {
--			netdev_dbg(padapter->pnetdev,
--				   "(2)auth rejected because out of seq [rx_seq=%d, exp_seq=%d]!\n",
--				   seq, pstat->auth_seq + 1);
- 			status = _STATS_OUT_OF_AUTH_SEQ_;
- 			goto auth_fail;
- 		}
-@@ -808,14 +783,11 @@ unsigned int OnAuth(struct adapter *padapter, struct recv_frame *precv_frame)
- 			pstat->auth_seq = 2;
- 		} else if (seq == 3) {
- 			/* checking for challenging txt... */
--			netdev_dbg(padapter->pnetdev, "checking for challenging txt...\n");
- 
- 			p = rtw_get_ie(pframe + WLAN_HDR_A3_LEN + 4 + _AUTH_IE_OFFSET_, _CHLGETXT_IE_, (int *)&ie_len,
- 					len - WLAN_HDR_A3_LEN - _AUTH_IE_OFFSET_ - 4);
- 
- 			if (!p || ie_len <= 0) {
--				netdev_dbg(padapter->pnetdev,
--					   "auth rejected because challenge failure!(1)\n");
- 				status = _STATS_CHALLENGE_FAIL_;
- 				goto auth_fail;
- 			}
-@@ -826,15 +798,10 @@ unsigned int OnAuth(struct adapter *padapter, struct recv_frame *precv_frame)
- 				/*  challenging txt is correct... */
- 				pstat->expire_to =  pstapriv->assoc_to;
- 			} else {
--				netdev_dbg(padapter->pnetdev,
--					   "auth rejected because challenge failure!\n");
- 				status = _STATS_CHALLENGE_FAIL_;
- 				goto auth_fail;
- 			}
- 		} else {
--			netdev_dbg(padapter->pnetdev,
--				   "(3)auth rejected because out of seq [rx_seq=%d, exp_seq=%d]!\n",
--				   seq, pstat->auth_seq + 1);
- 			status = _STATS_OUT_OF_AUTH_SEQ_;
- 			goto auth_fail;
- 		}
-@@ -887,8 +854,6 @@ unsigned int OnAuthClient(struct adapter *padapter, struct recv_frame *precv_fra
- 	status	= le16_to_cpu(*(__le16 *)((size_t)pframe + WLAN_HDR_A3_LEN + offset + 4));
- 
- 	if (status != 0) {
--		netdev_dbg(padapter->pnetdev,
--			   "clnt auth fail, status: %d\n", status);
- 		if (status == 13) { /*  pmlmeinfo->auth_algo == dot11AuthAlgrthm_Auto) */
- 			if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared)
- 				pmlmeinfo->auth_algo = dot11AuthAlgrthm_Open;
-@@ -942,7 +907,7 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 	u16 capab_info;
- 	struct rtw_ieee802_11_elems elems;
- 	struct sta_info	*pstat;
--	unsigned char		reassoc, *p, *pos, *wpa_ie;
-+	unsigned char		*p, *pos, *wpa_ie;
- 	unsigned char WMM_IE[] = {0x00, 0x50, 0xf2, 0x02, 0x00, 0x01};
- 	int		i, ie_len, wpa_ie_len, left;
- 	unsigned char		supportRate[16];
-@@ -967,17 +932,12 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 
- 	frame_type = GetFrameSubType(pframe);
- 	if (frame_type == WIFI_ASSOCREQ) {
--		reassoc = 0;
- 		ie_offset = _ASOCREQ_IE_OFFSET_;
- 	} else { /*  WIFI_REASSOCREQ */
--		reassoc = 1;
- 		ie_offset = _REASOCREQ_IE_OFFSET_;
- 	}
- 
- 	if (pkt_len < IEEE80211_3ADDR_LEN + ie_offset) {
--		netdev_dbg(padapter->pnetdev,
--			   "handle_assoc(reassoc=%d) - too short payload (len=%lu)\n",
--			   reassoc, (unsigned long)pkt_len);
+ 	if (counter >= POLLING_READY_TIMEOUT_COUNT) {
+-		DBG_88E("%s: chksum report fail! REG_MCUFWDL:0x%08x\n", __func__, value32);
  		return _FAIL;
  	}
+-	DBG_88E("%s: Checksum report OK! REG_MCUFWDL:0x%08x\n", __func__, value32);
  
-@@ -1009,9 +969,6 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 	/* now parse all ieee802_11 ie to point to elems */
- 	if (rtw_ieee802_11_parse_elems(pos, left, &elems, 1) == ParseFailed ||
- 	    !elems.ssid) {
--		netdev_dbg(padapter->pnetdev,
--			   "STA %pM sent invalid association request\n",
--			   pstat->hwaddr);
- 		status = _STATS_FAILURE_;
- 		goto OnAssocReqFail;
- 	}
-@@ -1040,8 +997,6 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 	/*  check if the supported rate is ok */
- 	p = rtw_get_ie(pframe + WLAN_HDR_A3_LEN + ie_offset, _SUPPORTEDRATES_IE_, &ie_len, pkt_len - WLAN_HDR_A3_LEN - ie_offset);
- 	if (!p) {
--		netdev_dbg(padapter->pnetdev,
--			   "Rx a sta assoc-req which supported rate is empty!\n");
- 		/*  use our own rate set as statoin used */
- 		/* memcpy(supportRate, AP_BSSRATE, AP_BSSRATE_LEN); */
- 		/* supportRateNum = AP_BSSRATE_LEN; */
-@@ -1131,15 +1086,11 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 	pstat->flags &= ~(WLAN_STA_WPS | WLAN_STA_MAYBE_WPS);
- 	if (!wpa_ie) {
- 		if (elems.wps_ie) {
--			netdev_dbg(padapter->pnetdev,
--				   "STA included WPS IE in (Re)Association Request - assume WPS is used\n");
- 			pstat->flags |= WLAN_STA_WPS;
- 			/* wpabuf_free(sta->wps_ie); */
- 			/* sta->wps_ie = wpabuf_alloc_copy(elems.wps_ie + 4, */
- 			/*				elems.wps_ie_len - 4); */
- 		} else {
--			netdev_dbg(padapter->pnetdev,
--				   "STA did not include WPA/RSN IE in (Re)Association Request - possible WPS use\n");
- 			pstat->flags |= WLAN_STA_MAYBE_WPS;
- 		}
- 
-@@ -1152,8 +1103,6 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 				rtw_get_wps_attr_content(pmlmepriv->wps_beacon_ie, pmlmepriv->wps_beacon_ie_len, WPS_ATTR_SELECTED_REGISTRAR, &selected_registrar, NULL);
- 
- 				if (!selected_registrar) {
--					netdev_dbg(padapter->pnetdev,
--						   "selected_registrar is false , or AP is not ready to do WPS\n");
- 
- 					status = _STATS_UNABLE_HANDLE_STA_;
- 
-@@ -1165,9 +1114,6 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 		int copy_len;
- 
- 		if (psecuritypriv->wpa_psk == 0) {
--			netdev_dbg(padapter->pnetdev,
--				   "STA %pM: WPA/RSN IE in association request, but AP don't support WPA/RSN\n",
--				   pstat->hwaddr);
- 
- 			status = WLAN_STATUS_INVALID_IE;
- 
-@@ -1175,8 +1121,6 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 		}
- 
- 		if (elems.wps_ie) {
--			netdev_dbg(padapter->pnetdev,
--				   "STA included WPS IE in (Re)Association Request - WPS is used\n");
- 			pstat->flags |= WLAN_STA_WPS;
- 			copy_len = 0;
- 		} else {
-@@ -1261,9 +1205,6 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 	if ((pstat->flags & WLAN_STA_HT) &&
- 	    ((pstat->wpa2_pairwise_cipher & WPA_CIPHER_TKIP) ||
- 	    (pstat->wpa_pairwise_cipher & WPA_CIPHER_TKIP))) {
--		netdev_dbg(padapter->pnetdev,
--			   "HT: %pM tried to use TKIP with HT association\n",
--			   pstat->hwaddr);
- 
- 		/* status = WLAN_STATUS_CIPHER_REJECTED_PER_POLICY; */
- 		/* goto OnAssocReqFail; */
-@@ -1308,7 +1249,6 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 
- 	/* get a unique AID */
- 	if (pstat->aid > 0) {
--		netdev_dbg(padapter->pnetdev, "old AID %d\n", pstat->aid);
- 	} else {
- 		for (pstat->aid = 1; pstat->aid <= NUM_STA; pstat->aid++)
- 			if (!pstapriv->sta_aid[pstat->aid - 1])
-@@ -1318,16 +1258,11 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 		if (pstat->aid > pstapriv->max_num_sta) {
- 			pstat->aid = 0;
- 
--			netdev_dbg(padapter->pnetdev,
--				   "no room for more AIDs\n");
--
- 			status = WLAN_STATUS_AP_UNABLE_TO_HANDLE_NEW_STA;
- 
- 			goto OnAssocReqFail;
- 		} else {
- 			pstapriv->sta_aid[pstat->aid - 1] = pstat;
--			netdev_dbg(padapter->pnetdev,
--				   "allocate new AID=(%d)\n", pstat->aid);
- 		}
- 	}
- 
-@@ -1362,8 +1297,6 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 			issue_asocrsp(padapter, status, pstat, WIFI_REASSOCRSP);
- 
- 		/* 2 - report to upper layer */
--		netdev_dbg(padapter->pnetdev,
--			   "indicate_sta_join_event to upper layer - hostapd\n");
- 		rtw_indicate_sta_assoc_event(padapter, pstat);
- 
- 		/* 3-(1) report sta add event */
-@@ -1417,8 +1350,6 @@ unsigned int OnAssocRsp(struct adapter *padapter, struct recv_frame *precv_frame
- 	/* status */
- 	status = le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN + 2));
- 	if (status > 0) {
--		netdev_dbg(padapter->pnetdev,
--			   "assoc reject, status code: %d\n", status);
- 		pmlmeinfo->state = WIFI_FW_NULL_STATE;
- 		res = -4;
- 		goto report_assoc_result;
-@@ -1498,8 +1429,6 @@ unsigned int OnDeAuth(struct adapter *padapter, struct recv_frame *precv_frame)
- 
- 	reason = le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN));
- 
--	netdev_dbg(padapter->pnetdev, "Reason code(%d)\n", reason);
--
- 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
- 		struct sta_info *psta;
- 		struct sta_priv *pstapriv = &padapter->stapriv;
-@@ -1565,8 +1494,6 @@ unsigned int OnDisassoc(struct adapter *padapter, struct recv_frame *precv_frame
- 
- 	reason = le16_to_cpu(*(__le16 *)(pframe + WLAN_HDR_A3_LEN));
- 
--	netdev_dbg(padapter->pnetdev, "Reason code(%d)\n", reason);
--
- 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
- 		struct sta_info *psta;
- 		struct sta_priv *pstapriv = &padapter->stapriv;
-@@ -1652,7 +1579,7 @@ unsigned int OnAction_back(struct adapter *padapter, struct recv_frame *precv_fr
- 	struct recv_reorder_ctrl *preorder_ctrl;
- 	unsigned char		*frame_body;
- 	unsigned char		category, action;
--	unsigned short	tid, status, reason_code = 0;
-+	unsigned short	tid, status;
- 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
- 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
- 	u8 *pframe = precv_frame->rx_data;
-@@ -1678,7 +1605,6 @@ unsigned int OnAction_back(struct adapter *padapter, struct recv_frame *precv_fr
- 		if (!pmlmeinfo->HT_enable)
+ 	value32 = rtw_read32(padapter, REG_MCUFWDL);
+ 	value32 |= MCUFWDL_RDY;
+@@ -208,13 +206,11 @@ static int fw_free_to_go(struct adapter *padapter)
+ 	do {
+ 		value32 = rtw_read32(padapter, REG_MCUFWDL);
+ 		if (value32 & WINTINI_RDY) {
+-			DBG_88E("%s: Polling FW ready success!! REG_MCUFWDL:0x%08x\n", __func__, value32);
  			return _SUCCESS;
- 		action = frame_body[1];
--		netdev_dbg(padapter->pnetdev, "action=%d\n", action);
- 		switch (action) {
- 		case RTW_WLAN_ACTION_ADDBA_REQ: /* ADDBA request */
- 			memcpy(&pmlmeinfo->ADDBA_req, &frame_body[2], sizeof(struct ADDBA_request));
-@@ -1693,8 +1619,6 @@ unsigned int OnAction_back(struct adapter *padapter, struct recv_frame *precv_fr
- 			status = get_unaligned_le16(&frame_body[3]);
- 			tid = ((frame_body[5] >> 2) & 0x7);
- 			if (status == 0) {	/* successful */
--				netdev_dbg(padapter->pnetdev,
--					   "agg_enable for TID=%d\n", tid);
- 				psta->htpriv.agg_enable_bitmap |= 1 << tid;
- 				psta->htpriv.candidate_tid_bitmap &= ~BIT(tid);
- 			} else {
-@@ -1705,17 +1629,12 @@ unsigned int OnAction_back(struct adapter *padapter, struct recv_frame *precv_fr
- 			if ((frame_body[3] & BIT(3)) == 0) {
- 				psta->htpriv.agg_enable_bitmap &= ~(1 << ((frame_body[3] >> 4) & 0xf));
- 				psta->htpriv.candidate_tid_bitmap &= ~(1 << ((frame_body[3] >> 4) & 0xf));
--				reason_code = get_unaligned_le16(&frame_body[4]);
- 			} else if ((frame_body[3] & BIT(3)) == BIT(3)) {
- 				tid = (frame_body[3] >> 4) & 0x0F;
- 				preorder_ctrl =  &psta->recvreorder_ctrl[tid];
- 				preorder_ctrl->enable = false;
- 				preorder_ctrl->indicate_seq = 0xffff;
- 			}
--			netdev_dbg(padapter->pnetdev,
--				   "DELBA: %x(%x)\n",
--				   pmlmeinfo->agg_enable_bitmap,
--				   reason_code);
- 			/* todo: how to notify the host while receiving DELETE BA */
- 			break;
- 		default:
-@@ -2094,7 +2013,6 @@ static void issue_p2p_GO_response(struct adapter *padapter, u8 *raddr, u8 *frame
- 	if (!pmgntframe)
- 		return;
- 
--	netdev_dbg(padapter->pnetdev, "result=%d\n",  result);
- 	/* update attribute */
- 	pattrib = &pmgntframe->attrib;
- 	update_mgntframe_attrib(padapter, pattrib);
-@@ -3126,18 +3044,9 @@ static u8 is_matched_in_profilelist(u8 *peermacaddr, struct profile_info *profil
- {
- 	u8 i, match_result = 0;
- 
--	pr_debug("peermac=%.2X %.2X %.2X %.2X %.2X %.2X\n",
--		 peermacaddr[0], peermacaddr[1], peermacaddr[2],
--		 peermacaddr[3], peermacaddr[4], peermacaddr[5]);
--
- 	for (i = 0; i < P2P_MAX_PERSISTENT_GROUP_NUM; i++, profileinfo++) {
--		pr_debug("profileinfo_mac=%.2X %.2X %.2X %.2X %.2X %.2X\n",
--			 profileinfo->peermac[0], profileinfo->peermac[1],
--			 profileinfo->peermac[2], profileinfo->peermac[3],
--			 profileinfo->peermac[4], profileinfo->peermac[5]);
- 		if (!memcmp(peermacaddr, profileinfo->peermac, ETH_ALEN)) {
- 			match_result = 1;
--			pr_debug("Match!\n");
- 			break;
  		}
- 	}
-@@ -3689,16 +3598,10 @@ static s32 rtw_action_public_decache(struct recv_frame *recv_frame, s32 token)
- 	if (GetRetry(frame)) {
- 		if (token >= 0) {
- 			if ((seq_ctrl == mlmeext->action_public_rxseq) && (token == mlmeext->action_public_dialog_token)) {
--				netdev_dbg(adapter->pnetdev,
--					   "seq_ctrl = 0x%x, rxseq = 0x%x, token:%d\n",
--					   seq_ctrl, mlmeext->action_public_rxseq, token);
- 				return _FAIL;
- 			}
- 		} else {
- 			if (seq_ctrl == mlmeext->action_public_rxseq) {
--				netdev_dbg(adapter->pnetdev,
--					   "seq_ctrl = 0x%x, rxseq = 0x%x\n",
--					   seq_ctrl, mlmeext->action_public_rxseq);
- 				return _FAIL;
- 			}
- 		}
-@@ -3741,7 +3644,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
+ 		udelay(5);
+ 	} while (counter++ < POLLING_READY_TIMEOUT_COUNT);
  
- 	switch (frame_body[6]) { /* OUI Subtype */
- 	case P2P_GO_NEGO_REQ:
--		netdev_dbg(padapter->pnetdev, "Got GO Nego Req Frame\n");
- 		memset(&pwdinfo->groupid_info, 0x00, sizeof(struct group_id_info));
- 
- 		if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_RX_PROVISION_DIS_REQ))
-@@ -3753,9 +3655,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 			_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
- 			/*	Restore the previous p2p state */
- 			rtw_p2p_set_state(pwdinfo, rtw_p2p_pre_state(pwdinfo));
--			netdev_dbg(padapter->pnetdev,
--				   "Restore the previous p2p state to %d\n",
--				   rtw_p2p_state(pwdinfo));
- 		}
- 
- 		/*	Commented by Kurt 20110902 */
-@@ -3776,8 +3675,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 		_set_timer(&pwdinfo->restore_p2p_state_timer, 5000);
- 		break;
- 	case P2P_GO_NEGO_RESP:
--		netdev_dbg(padapter->pnetdev, "Got GO Nego Resp Frame\n");
--
- 		if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_ING)) {
- 			/*	Commented by Albert 20110425 */
- 			/*	The restore timer is enabled when issuing the nego request frame of rtw_p2p_connect function. */
-@@ -3797,12 +3694,9 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 			if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_GONEGO_FAIL))
- 				_set_timer(&pwdinfo->restore_p2p_state_timer, 5000);
- 		} else {
--			netdev_dbg(padapter->pnetdev,
--				   "Skipped GO Nego Resp Frame (p2p_state != P2P_STATE_GONEGO_ING)\n");
- 		}
- 		break;
- 	case P2P_GO_NEGO_CONF:
--		netdev_dbg(padapter->pnetdev, "Got GO Nego Confirm Frame\n");
- 		result = process_p2p_group_negotation_confirm(pwdinfo, frame_body, len);
- 		if (P2P_STATUS_SUCCESS == result) {
- 			if (rtw_p2p_role(pwdinfo) == P2P_ROLE_CLIENT) {
-@@ -3816,7 +3710,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 		/*	Added by Albert 2010/10/05 */
- 		/*	Received the P2P Invite Request frame. */
- 
--		netdev_dbg(padapter->pnetdev, "Got invite request frame!\n");
- 		p2p_ie = rtw_get_p2p_ie(frame_body + _PUBLIC_ACTION_IE_OFFSET_, len - _PUBLIC_ACTION_IE_OFFSET_, NULL, &p2p_ielen);
- 		if (p2p_ie) {
- 			/*	Parse the necessary information from the P2P Invitation Request frame. */
-@@ -3836,14 +3729,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 				/*	After having the peer interface address, the sigma can find the correct conf file for wpa_supplicant. */
- 
- 				if (attr_contentlen) {
--					netdev_dbg(padapter->pnetdev,
--						   "GO's BSSID = %.2X %.2X %.2X %.2X %.2X %.2X\n",
--						   pwdinfo->p2p_peer_interface_addr[0],
--						   pwdinfo->p2p_peer_interface_addr[1],
--						   pwdinfo->p2p_peer_interface_addr[2],
--						   pwdinfo->p2p_peer_interface_addr[3],
--						   pwdinfo->p2p_peer_interface_addr[4],
--						   pwdinfo->p2p_peer_interface_addr[5]);
- 				}
- 
- 				if (invitation_flag & P2P_INVITATION_FLAGS_PERSISTENT) {
-@@ -3891,8 +3776,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 							}
- 						}
- 					} else {
--						netdev_dbg(padapter->pnetdev,
--							   "P2P Group ID Attribute NOT FOUND!\n");
- 						status_code = P2P_STATUS_FAIL_INFO_UNAVAILABLE;
- 					}
- 				} else {
-@@ -3918,20 +3801,13 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 							status_code = P2P_STATUS_SUCCESS;
- 						}
- 					} else {
--						netdev_dbg(padapter->pnetdev,
--							   "P2P Group ID Attribute NOT FOUND!\n");
- 						status_code = P2P_STATUS_FAIL_INFO_UNAVAILABLE;
- 					}
- 				}
- 			} else {
--				netdev_dbg(padapter->pnetdev,
--					   "P2P Invitation Flags Attribute NOT FOUND!\n");
- 				status_code = P2P_STATUS_FAIL_INFO_UNAVAILABLE;
- 			}
- 
--			netdev_dbg(padapter->pnetdev,
--				   "status_code = %d\n", status_code);
--
- 			pwdinfo->inviteresp_info.token = frame_body[7];
- 			issue_p2p_invitation_response(padapter, GetAddr2Ptr(pframe), pwdinfo->inviteresp_info.token, status_code);
- 		}
-@@ -3940,15 +3816,12 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 		u8	attr_content = 0x00;
- 		u32	attr_contentlen = 0;
- 
--		netdev_dbg(padapter->pnetdev, "Got invite response frame!\n");
- 		_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
- 		p2p_ie = rtw_get_p2p_ie(frame_body + _PUBLIC_ACTION_IE_OFFSET_, len - _PUBLIC_ACTION_IE_OFFSET_, NULL, &p2p_ielen);
- 		if (p2p_ie) {
- 			rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_STATUS, &attr_content, &attr_contentlen);
- 
- 			if (attr_contentlen == 1) {
--				netdev_dbg(padapter->pnetdev,
--					   "Status = %d\n", attr_content);
- 				pwdinfo->invitereq_info.benable = false;
- 
- 				if (attr_content == P2P_STATUS_SUCCESS) {
-@@ -3982,8 +3855,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 		process_p2p_devdisc_resp(pwdinfo, pframe, len);
- 		break;
- 	case P2P_PROVISION_DISC_REQ:
--		netdev_dbg(padapter->pnetdev,
--			   "Got Provisioning Discovery Request Frame\n");
- 		process_p2p_provdisc_req(pwdinfo, pframe, len);
- 		memcpy(pwdinfo->rx_prov_disc_info.peerDevAddr, GetAddr2Ptr(pframe), ETH_ALEN);
- 
-@@ -3998,8 +3869,6 @@ static unsigned int on_action_public_p2p(struct recv_frame *precv_frame)
- 	case P2P_PROVISION_DISC_RESP:
- 		/*	Commented by Albert 20110707 */
- 		/*	Should we check the pwdinfo->tx_prov_disc_info.bsent flag here?? */
--		netdev_dbg(padapter->pnetdev,
--			   "Got Provisioning Discovery Response Frame\n");
- 		/*	Commented by Albert 20110426 */
- 		/*	The restore timer is enabled when issuing the provisioing request frame in rtw_p2p_prov_disc function. */
- 		_cancel_timer_ex(&pwdinfo->restore_p2p_state_timer);
-@@ -4154,13 +4023,11 @@ struct xmit_frame *alloc_mgtxmitframe(struct xmit_priv *pxmitpriv)
- 
- 	pmgntframe = rtw_alloc_xmitframe(pxmitpriv);
- 	if (!pmgntframe) {
--		pr_debug("alloc xmitframe fail\n");
- 		return NULL;
- 	}
- 
- 	pxmitbuf = rtw_alloc_xmitbuf_ext(pxmitpriv);
- 	if (!pxmitbuf) {
--		pr_debug("alloc xmitbuf fail\n");
- 		rtw_free_xmitframe(pxmitpriv, pmgntframe);
- 		return NULL;
- 	}
-@@ -4182,7 +4049,6 @@ void update_mgnt_tx_rate(struct adapter *padapter, u8 rate)
- 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
- 
- 	pmlmeext->tx_rate = rate;
--	netdev_dbg(padapter->pnetdev, "rate = %x\n", rate);
+-	DBG_88E("%s: Polling FW ready fail!! REG_MCUFWDL:0x%08x\n", __func__, value32);
+ 	return _FAIL;
  }
  
- void update_mgntframe_attrib(struct adapter *padapter, struct pkt_attrib *pattrib)
-@@ -4319,7 +4185,6 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
- 
- 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
- 	if (!pmgntframe) {
--		netdev_dbg(padapter->pnetdev, "alloc mgnt frame fail\n");
- 		return;
- 	}
- 	spin_lock_bh(&pmlmepriv->bcn_update_lock);
-@@ -4502,7 +4367,6 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
- 	spin_unlock_bh(&pmlmepriv->bcn_update_lock);
- 
- 	if ((pattrib->pktlen + TXDESC_SIZE) > 512) {
--		netdev_dbg(padapter->pnetdev, "beacon frame too large\n");
- 		return;
- 	}
- 
-@@ -4534,8 +4398,6 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
- 
- 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
- 	if (!pmgntframe) {
--		netdev_dbg(padapter->pnetdev,
--			   "alloc mgnt frame fail\n");
- 		return;
- 	}
- 
-@@ -4761,7 +4623,6 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
- {
- 	int ret;
- 	int i = 0;
--	u32 start = jiffies;
- 
- 	do {
- 		ret = _issue_probereq(padapter, pssid, da, wait_ms > 0);
-@@ -4783,17 +4644,9 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
- 
- 	if (try_cnt && wait_ms) {
- 		if (da)
--			netdev_dbg(padapter->pnetdev,
--				   "to %pM, ch:%u%s, %d/%d in %u ms\n",
--				   da, rtw_get_oper_ch(padapter),
--				   ret == _SUCCESS ? ", acked" : "",
--				   i, try_cnt, rtw_get_passing_time_ms(start));
-+			;
- 		else
--			netdev_dbg(padapter->pnetdev,
--				   "ch:%u%s, %d/%d in %u ms\n",
--				   rtw_get_oper_ch(padapter),
--				   ret == _SUCCESS ? ", acked" : "",
--				   i, try_cnt, rtw_get_passing_time_ms(start));
-+			;
- 	}
- exit:
- 	return ret;
-@@ -5129,9 +4982,6 @@ void issue_assocreq(struct adapter *padapter)
- 	for (i = 0; i < NDIS_802_11_LENGTH_RATES_EX; i++) {
- 		if (pmlmeinfo->network.SupportedRates[i] == 0)
+@@ -306,20 +302,14 @@ int rtl8188e_firmware_download(struct adapter *padapter)
+ 		if (ret == _SUCCESS ||
+ 		    (rtw_get_passing_time_ms(fwdl_start_time) > 500 && write_fw_retry++ >= 3))
  			break;
--		netdev_dbg(padapter->pnetdev,
--			   "network.SupportedRates[%d]=%02X\n",
--			   i, pmlmeinfo->network.SupportedRates[i]);
+-
+-		DBG_88E("%s write_fw_retry:%u, time after fwdl_start_time:%ums\n",
+-			__func__, write_fw_retry, rtw_get_passing_time_ms(fwdl_start_time)
+-		);
+ 	}
+ 	fw_download_enable(padapter, false);
+ 	if (ret != _SUCCESS) {
+-		DBG_88E("DL Firmware failed!\n");
+ 		goto exit;
  	}
  
- 	for (i = 0; i < NDIS_802_11_LENGTH_RATES_EX; i++) {
-@@ -5148,9 +4998,6 @@ void issue_assocreq(struct adapter *padapter)
- 
- 		if (j == sta_bssrate_len) {
- 			/*  the rate is not supported by STA */
--			netdev_dbg(padapter->pnetdev,
--				   "the rate[%d]=%02X is not supported by STA!\n",
--				   i, pmlmeinfo->network.SupportedRates[i]);
- 		} else {
- 			/*  the rate is supported by STA */
- 			bssrate[index++] = pmlmeinfo->network.SupportedRates[i];
-@@ -5158,7 +5005,6 @@ void issue_assocreq(struct adapter *padapter)
+ 	ret = fw_free_to_go(padapter);
+ 	if (ret != _SUCCESS) {
+-		DBG_88E("DL Firmware failed!\n");
+ 		goto exit;
  	}
  
- 	bssrate_len = index;
--	netdev_dbg(padapter->pnetdev, "bssrate_len=%d\n", bssrate_len);
- 
- 	if (bssrate_len == 0) {
- 		rtw_free_xmitbuf(pxmitpriv, pmgntframe->pxmitbuf);
-@@ -5443,7 +5289,6 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
- {
- 	int ret;
- 	int i = 0;
--	u32 start = jiffies;
- 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
- 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
- 
-@@ -5470,17 +5315,9 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
- 
- 	if (try_cnt && wait_ms) {
- 		if (da)
--			netdev_dbg(padapter->pnetdev,
--				   "to %pM, ch:%u%s, %d/%d in %u ms\n",
--				   da, rtw_get_oper_ch(padapter),
--				   ret == _SUCCESS ? ", acked" : "",
--				   i, try_cnt, rtw_get_passing_time_ms(start));
-+			;
- 		else
--			netdev_dbg(padapter->pnetdev,
--				   "ch:%u%s, %d/%d in %u ms\n",
--				   rtw_get_oper_ch(padapter),
--				   ret == _SUCCESS ? ", acked" : "",
--				   i, try_cnt, rtw_get_passing_time_ms(start));
-+			;
- 	}
- exit:
- 	return ret;
-@@ -5565,7 +5402,6 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
- {
- 	int ret;
- 	int i = 0;
--	u32 start = jiffies;
- 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
- 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
- 
-@@ -5592,17 +5428,9 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
- 
- 	if (try_cnt && wait_ms) {
- 		if (da)
--			netdev_dbg(padapter->pnetdev,
--				   "to %pM, ch:%u%s, %d/%d in %u ms\n",
--				   da, rtw_get_oper_ch(padapter),
--				   ret == _SUCCESS ? ", acked" : "",
--				   i, try_cnt, rtw_get_passing_time_ms(start));
-+			;
- 		else
--			netdev_dbg(padapter->pnetdev,
--				   "ch:%u%s, %d/%d in %u ms\n",
--				   rtw_get_oper_ch(padapter),
--				   ret == _SUCCESS ? ", acked" : "",
--				   i, try_cnt, rtw_get_passing_time_ms(start));
-+			;
- 	}
- exit:
- 	return ret;
-@@ -5673,7 +5501,6 @@ static int _issue_deauth(struct adapter *padapter, unsigned char *da, unsigned s
- 
- int issue_deauth(struct adapter *padapter, unsigned char *da, unsigned short reason)
- {
--	netdev_dbg(padapter->pnetdev, "to %pM\n", da);
- 	return _issue_deauth(padapter, da, reason, false);
- }
- 
-@@ -5682,7 +5509,6 @@ int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason, int
- {
- 	int ret;
- 	int i = 0;
--	u32 start = jiffies;
- 
- 	do {
- 		ret = _issue_deauth(padapter, da, reason, wait_ms > 0);
-@@ -5703,17 +5529,9 @@ int issue_deauth_ex(struct adapter *padapter, u8 *da, unsigned short reason, int
- 
- 	if (try_cnt && wait_ms) {
- 		if (da)
--			netdev_dbg(padapter->pnetdev,
--				   "to %pM, ch:%u%s, %d/%d in %u ms\n",
--				   da, rtw_get_oper_ch(padapter),
--				   ret == _SUCCESS ? ", acked" : "",
--				   i, try_cnt, rtw_get_passing_time_ms(start));
-+			;
- 		else
--			netdev_dbg(padapter->pnetdev,
--				   "ch:%u%s, %d/%d in %u ms\n",
--				   rtw_get_oper_ch(padapter),
--				   ret == _SUCCESS ? ", acked" : "",
--				   i, try_cnt, rtw_get_passing_time_ms(start));
-+			;
- 	}
- exit:
- 	return ret;
-@@ -5740,10 +5558,6 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
+diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
+index 50b4fca869a7..8f4bad399bc4 100644
+--- a/drivers/staging/r8188eu/core/rtw_p2p.c
++++ b/drivers/staging/r8188eu/core/rtw_p2p.c
+@@ -30,8 +30,6 @@ static u32 go_add_group_info_attr(struct wifidirect_info *pwdinfo, u8 *pbuf)
+ 	struct adapter *padapter = pwdinfo->padapter;
  	struct sta_priv *pstapriv = &padapter->stapriv;
- 	struct registry_priv *pregpriv = &padapter->registrypriv;
  
--	netdev_dbg(padapter->pnetdev,
--		   "category=%d, action=%d, status=%d\n",
--		   category, action, status);
+-	DBG_88E("%s\n", __func__);
+-
+ 	pdata_attr = kzalloc(MAX_P2P_IE_LEN, GFP_KERNEL);
+ 
+ 	pstart = pdata_attr;
+@@ -123,8 +121,6 @@ static void issue_group_disc_req(struct wifidirect_info *pwdinfo, u8 *da)
+ 	u8	oui_subtype = P2P_GO_DISC_REQUEST;
+ 	u8	dialogToken = 0;
+ 
+-	DBG_88E("[%s]\n", __func__);
 -
  	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
  	if (!pmgntframe)
  		return;
-@@ -5795,10 +5609,6 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
- 			if (psta) {
- 				start_seq = (psta->sta_xmitpriv.txseq_tid[status & 0x07] & 0xfff) + 1;
+@@ -182,8 +178,6 @@ static void issue_p2p_devdisc_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 s
+ 	u8 p2pie[8] = { 0x00 };
+ 	u32 p2pielen = 0;
  
--				netdev_dbg(padapter->pnetdev,
--					   "BA_starting_seqctrl=%d for TID=%d\n",
--					   start_seq, status & 0x07);
+-	DBG_88E("[%s]\n", __func__);
 -
- 				psta->BA_starting_seqctrl[status & 0x07] = start_seq;
- 
- 				BA_starting_seqctrl = start_seq << 4;
-@@ -5987,8 +5797,6 @@ unsigned int send_delba(struct adapter *padapter, u8 initiator, u8 *addr)
- 	if (initiator == 0) { /*  recipient */
- 		for (tid = 0; tid < MAXTID; tid++) {
- 			if (psta->recvreorder_ctrl[tid].enable) {
--				netdev_dbg(padapter->pnetdev,
--					   "rx agg disable tid(%d)\n", tid);
- 				issue_action_BA(padapter, addr, RTW_WLAN_ACTION_DELBA, (((tid << 1) | initiator) & 0x1F));
- 				psta->recvreorder_ctrl[tid].enable = false;
- 				psta->recvreorder_ctrl[tid].indicate_seq = 0xffff;
-@@ -5997,8 +5805,6 @@ unsigned int send_delba(struct adapter *padapter, u8 initiator, u8 *addr)
- 	} else if (initiator == 1) { /*  originator */
- 		for (tid = 0; tid < MAXTID; tid++) {
- 			if (psta->htpriv.agg_enable_bitmap & BIT(tid)) {
--				netdev_dbg(padapter->pnetdev,
--					   "tx agg disable tid(%d)\n", tid);
- 				issue_action_BA(padapter, addr, RTW_WLAN_ACTION_DELBA, (((tid << 1) | initiator) & 0x1F));
- 				psta->htpriv.agg_enable_bitmap &= ~BIT(tid);
- 				psta->htpriv.candidate_tid_bitmap &= ~BIT(tid);
-@@ -6031,16 +5837,13 @@ unsigned int send_beacon(struct adapter *padapter)
- 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
- 		return _FAIL;
- 	if (!bxmitok) {
--		netdev_dbg(padapter->pnetdev, "fail! %u ms\n",
--			   rtw_get_passing_time_ms(start));
- 		return _FAIL;
- 	} else {
- 		u32 passing_time = rtw_get_passing_time_ms(start);
- 
- 		if (passing_time > 100 || issue > 3)
--			netdev_dbg(padapter->pnetdev,
--				   "success, issue:%d, poll:%d, %u ms\n",
--				   issue, poll, rtw_get_passing_time_ms(start));
-+			;
-+
- 		return _SUCCESS;
- 	}
- }
-@@ -6249,16 +6052,11 @@ u8 collect_bss_info(struct adapter *padapter, struct recv_frame *precv_frame, st
- 	/*  checking SSID */
- 	p = rtw_get_ie(bssid->IEs + ie_offset, _SSID_IE_, &len, bssid->IELength - ie_offset);
- 	if (!p) {
--		netdev_dbg(padapter->pnetdev,
--			   "marc: cannot find SSID for survey event\n");
- 		return _FAIL;
- 	}
- 
- 	if (*(p + 1)) {
- 		if (len > NDIS_802_11_LENGTH_SSID) {
--			netdev_dbg(padapter->pnetdev,
--				   "IE too long (%d) for survey event\n",
--				   len);
- 			return _FAIL;
- 		}
- 		memcpy(bssid->Ssid.Ssid, (p + 2), *(p + 1));
-@@ -6274,9 +6072,6 @@ u8 collect_bss_info(struct adapter *padapter, struct recv_frame *precv_frame, st
- 	p = rtw_get_ie(bssid->IEs + ie_offset, _SUPPORTEDRATES_IE_, &len, bssid->IELength - ie_offset);
- 	if (p) {
- 		if (len > NDIS_802_11_LENGTH_RATES_EX) {
--			netdev_dbg(padapter->pnetdev,
--				   "IE too long (%d) for survey event\n",
--				   len);
- 			return _FAIL;
- 		}
- 		memcpy(bssid->SupportedRates, (p + 2), len);
-@@ -6286,9 +6081,6 @@ u8 collect_bss_info(struct adapter *padapter, struct recv_frame *precv_frame, st
- 	p = rtw_get_ie(bssid->IEs + ie_offset, _EXT_SUPPORTEDRATES_IE_, &len, bssid->IELength - ie_offset);
- 	if (p) {
- 		if (len > (NDIS_802_11_LENGTH_RATES_EX - i)) {
--			netdev_dbg(padapter->pnetdev,
--				   "IE too long (%d) for survey event\n",
--				   len);
- 			return _FAIL;
- 		}
- 		memcpy(bssid->SupportedRates + i, (p + 2), len);
-@@ -6403,7 +6195,6 @@ void start_create_ibss(struct adapter *padapter)
- 			rtw_indicate_connect(padapter);
- 		}
- 	} else {
--		netdev_dbg(padapter->pnetdev, "invalid cap:%x\n", caps);
+ 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+ 	if (!pmgntframe)
  		return;
- 	}
- 	/* update bc/mc sta_info */
-@@ -6773,9 +6564,6 @@ void report_surveydone_event(struct adapter *padapter)
- 	psurveydone_evt = (struct surveydone_event *)(pevtcmd + sizeof(struct C2HEvent_Header));
- 	psurveydone_evt->bss_cnt = pmlmeext->sitesurvey_res.bss_cnt;
+@@ -329,8 +323,6 @@ static void issue_p2p_presence_resp(struct wifidirect_info *pwdinfo, u8 *da, u8
+ 	u8 noa_attr_content[32] = { 0x00 };
+ 	u32 p2pielen = 0;
  
--	netdev_dbg(padapter->pnetdev, "survey done event(%x)\n",
--		   psurveydone_evt->bss_cnt);
+-	DBG_88E("[%s]\n", __func__);
 -
- 	rtw_enqueue_cmd(pcmdpriv, pcmd_obj);
- }
+ 	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+ 	if (!pmgntframe)
+ 		return;
+@@ -827,16 +819,13 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
+ 	p2p_ie = rtw_get_p2p_ie(ies, ies_len, NULL, &p2p_ielen);
  
-@@ -6820,8 +6608,6 @@ void report_join_res(struct adapter *padapter, int res)
- 	pjoinbss_evt->network.join_res	= res;
- 	pjoinbss_evt->network.aid = res;
- 
--	netdev_dbg(padapter->pnetdev, "res=%d\n", res);
--
- 	rtw_joinbss_event_prehandle(padapter, (u8 *)&pjoinbss_evt->network);
- 
- 	rtw_enqueue_cmd(pcmdpriv, pcmd_obj);
-@@ -6876,8 +6662,6 @@ void report_del_sta_event(struct adapter *padapter, unsigned char *MacAddr, unsi
- 
- 	pdel_sta_evt->mac_id = mac_id;
- 
--	netdev_dbg(padapter->pnetdev, "delete STA, mac_id = %d\n", mac_id);
--
- 	rtw_enqueue_cmd(pcmdpriv, pcmd_obj);
- }
- 
-@@ -6920,8 +6704,6 @@ void report_add_sta_event(struct adapter *padapter, unsigned char *MacAddr, int
- 	memcpy((unsigned char *)(&padd_sta_evt->macaddr), MacAddr, ETH_ALEN);
- 	padd_sta_evt->cam_id = cam_idx;
- 
--	netdev_dbg(padapter->pnetdev, "add STA\n");
--
- 	rtw_enqueue_cmd(pcmdpriv, pcmd_obj);
- }
- 
-@@ -7133,8 +6915,6 @@ static void _linked_rx_signal_strength_display(struct adapter *padapter)
- 	GetHalDefVar8188EUsb(padapter, HW_DEF_RA_INFO_DUMP, &mac_id);
- 
- 	GetHalDefVar8188EUsb(padapter, HAL_DEF_UNDERCORATEDSMOOTHEDPWDB, &UndecoratedSmoothedPWDB);
--	netdev_dbg(padapter->pnetdev,
--		   "UndecoratedSmoothedPWDB:%d\n", UndecoratedSmoothedPWDB);
- }
- 
- static u8 chk_ap_is_alive(struct sta_info *psta)
-@@ -7159,20 +6939,14 @@ static void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
- 	u8 fw_status;
- 
- 	if (rx_dma_status != 0x00) {
--		netdev_dbg(padapter->pnetdev, "REG_RXDMA_STATUS:0x%08x\n",
--			   rx_dma_status);
- 		rtw_write32(padapter, REG_RXDMA_STATUS, rx_dma_status);
+ 	if (!p2p_ie) {
+-		DBG_88E("[%s] P2P IE not Found!!\n", __func__);
+ 		status_code =  P2P_STATUS_FAIL_INVALID_PARAM;
+ 	} else {
+-		DBG_88E("[%s] P2P IE Found!!\n", __func__);
  	}
  
- 	fw_status = rtw_read8(padapter, REG_FMETHR);
- 	if (fw_status == 1)
--		netdev_dbg(padapter->pnetdev,
--			   "REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!\n",
--			   fw_status);
-+		;
- 	else if (fw_status == 2)
--		netdev_dbg(padapter->pnetdev,
--			   "REG_FW_STATUS (0x%02x), Condition_No_Match !!\n",
--			   fw_status);
-+		;
+ 	while (p2p_ie) {
+ 		/* Check P2P Capability ATTR */
+ 		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CAPABILITY, (u8 *)&le_tmp, (uint *)&attr_contentlen)) {
+-			DBG_88E("[%s] Got P2P Capability Attr!!\n", __func__);
+ 			cap_attr = le16_to_cpu(le_tmp);
+ 			psta->dev_cap = cap_attr & 0xff;
+ 		}
+@@ -845,7 +834,6 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
+ 
+ 		/* Check P2P Device Info ATTR */
+ 		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_DEVICE_INFO, NULL, (uint *)&attr_contentlen)) {
+-			DBG_88E("[%s] Got P2P DEVICE INFO Attr!!\n", __func__);
+ 			pattr_content = kzalloc(attr_contentlen, GFP_KERNEL);
+ 			pbuf = pattr_content;
+ 			if (pattr_content) {
+@@ -1004,7 +992,6 @@ u8 process_p2p_provdisc_req(struct wifidirect_info *pwdinfo,  u8 *pframe, uint l
+ 			issue_p2p_provision_resp(pwdinfo, GetAddr2Ptr(pframe), frame_body, uconfig_method);
+ 		}
+ 	}
+-	DBG_88E("[%s] config method = %s\n", __func__, pwdinfo->rx_prov_disc_info.strconfig_method_desc_of_prov_disc_req);
+ 	return true;
  }
  
- void linked_status_chk(struct adapter *padapter)
-@@ -7306,15 +7080,8 @@ void survey_timer_hdl(struct adapter *padapter)
- 			if (!rtw_p2p_chk_state(&padapter->wdinfo, P2P_STATE_NONE)) {
- 				rtw_p2p_findphase_ex_set(pwdinfo, P2P_FINDPHASE_EX_MAX);
- 				pmlmeext->sitesurvey_res.channel_idx = 3;
--				netdev_dbg(padapter->pnetdev,
--					   "idx:%d, cnt:%u\n",
--					   pmlmeext->sitesurvey_res.channel_idx,
--					   pwdinfo->find_phase_state_exchange_cnt);
- 			} else {
- 				pmlmeext->sitesurvey_res.channel_idx = pmlmeext->sitesurvey_res.ch_num;
--				netdev_dbg(padapter->pnetdev,
--					   "idx:%d\n",
--					   pmlmeext->sitesurvey_res.channel_idx);
+@@ -1083,7 +1070,6 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
+ 				memcpy(pwdinfo->rx_prov_disc_info.strconfig_method_desc_of_prov_disc_req, "pbc", 3);
+ 		}
+ 	} else {
+-		DBG_88E("[%s] WPS IE not Found!!\n", __func__);
+ 		result = P2P_STATUS_FAIL_INCOMPATIBLE_PARAM;
+ 		rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_FAIL);
+ 		return result;
+@@ -1101,7 +1087,6 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
+ 	p2p_ie = rtw_get_p2p_ie(ies, ies_len, NULL, &p2p_ielen);
+ 
+ 	if (!p2p_ie) {
+-		DBG_88E("[%s] P2P IE not Found!!\n", __func__);
+ 		result = P2P_STATUS_FAIL_INCOMPATIBLE_PARAM;
+ 		rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_FAIL);
+ 	}
+@@ -1119,7 +1104,6 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
+ 		rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_ING);
+ 
+ 		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_GO_INTENT, &attr_content, &attr_contentlen)) {
+-			DBG_88E("[%s] GO Intent = %d, tie = %d\n", __func__, attr_content >> 1, attr_content & 0x01);
+ 			pwdinfo->peer_intent = attr_content;	/*	include both intent and tie breaker values. */
+ 
+ 			if (pwdinfo->intent == (pwdinfo->peer_intent >> 1)) {
+@@ -1157,7 +1141,6 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
+ 			ch_num_inclusioned = rtw_p2p_ch_inclusion(&padapter->mlmeextpriv, peer_ch_list, peer_ch_num, ch_list_inclusioned);
+ 
+ 			if (ch_num_inclusioned == 0) {
+-				DBG_88E("[%s] No common channel in channel list!\n", __func__);
+ 				result = P2P_STATUS_FAIL_NO_COMMON_CH;
+ 				rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_FAIL);
+ 				break;
+@@ -1178,11 +1161,9 @@ u8 process_p2p_group_negotation_req(struct wifidirect_info *pwdinfo, u8 *pframe,
+ 						 *	Change our operating channel as peer's for compatibility.
+ 						 */
+ 						pwdinfo->operating_channel = peer_operating_ch;
+-						DBG_88E("[%s] Change op ch to %02x as peer's\n", __func__, pwdinfo->operating_channel);
+ 					} else {
+ 						/*  Take first channel of ch_list_inclusioned as operating channel */
+ 						pwdinfo->operating_channel = ch_list_inclusioned[0];
+-						DBG_88E("[%s] Change op ch to %02x\n", __func__, pwdinfo->operating_channel);
+ 					}
+ 				}
+ 			}
+@@ -1210,7 +1191,6 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
+ 
+ 	if (rtw_get_wps_ie(ies, ies_len, NULL, &wps_ielen)) {
+ 	} else {
+-		DBG_88E("[%s] WPS IE not Found!!\n", __func__);
+ 		result = P2P_STATUS_FAIL_INCOMPATIBLE_PARAM;
+ 		rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_FAIL);
+ 	}
+@@ -1233,7 +1213,6 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
+ 		while (p2p_ie) {	/*	Found the P2P IE. */
+ 			rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_STATUS, &attr_content, &attr_contentlen);
+ 			if (attr_contentlen == 1) {
+-				DBG_88E("[%s] Status = %d\n", __func__, attr_content);
+ 				if (attr_content == P2P_STATUS_SUCCESS) {
+ 					/*	Do nothing. */
+ 				} else {
+@@ -1259,7 +1238,6 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
+ 			attr_content = 0x00;
+ 			attr_contentlen = 0;
+ 			if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_GO_INTENT, &attr_content, &attr_contentlen)) {
+-				DBG_88E("[%s] GO Intent = %d, tie = %d\n", __func__, attr_content >> 1, attr_content & 0x01);
+ 				pwdinfo->peer_intent = attr_content;	/*	include both intent and tie breaker values. */
+ 
+ 				if (pwdinfo->intent == (pwdinfo->peer_intent >> 1)) {
+@@ -1297,19 +1275,16 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
+ 
+ 			attr_contentlen = 0;
+ 			if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_OPERATING_CH, operatingch_info, &attr_contentlen)) {
+-				DBG_88E("[%s] Peer's operating channel = %d\n", __func__, operatingch_info[4]);
+ 				pwdinfo->peer_operating_ch = operatingch_info[4];
  			}
  
- 			pmlmeext->scan_abort = false;/* reset */
-@@ -7344,7 +7111,6 @@ void link_timer_hdl(struct adapter *padapter)
+ 			/*	Try to get the channel list information */
+ 			if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_CH_LIST, pwdinfo->channel_list_attr, &pwdinfo->channel_list_attr_len)) {
+-				DBG_88E("[%s] channel list attribute found, len = %d\n", __func__,  pwdinfo->channel_list_attr_len);
+ 
+ 				peer_ch_num = rtw_p2p_get_peer_ch_list(pwdinfo, pwdinfo->channel_list_attr, pwdinfo->channel_list_attr_len, peer_ch_list);
+ 				ch_num_inclusioned = rtw_p2p_ch_inclusion(&padapter->mlmeextpriv, peer_ch_list, peer_ch_num, ch_list_inclusioned);
+ 
+ 				if (ch_num_inclusioned == 0) {
+-					DBG_88E("[%s] No common channel in channel list!\n", __func__);
+ 					result = P2P_STATUS_FAIL_NO_COMMON_CH;
+ 					rtw_p2p_set_state(pwdinfo, P2P_STATE_GONEGO_FAIL);
+ 					break;
+@@ -1330,16 +1305,13 @@ u8 process_p2p_group_negotation_resp(struct wifidirect_info *pwdinfo, u8 *pframe
+ 							 *	Change our operating channel as peer's for compatibility.
+ 							 */
+ 							pwdinfo->operating_channel = peer_operating_ch;
+-							DBG_88E("[%s] Change op ch to %02x as peer's\n", __func__, pwdinfo->operating_channel);
+ 						} else {
+ 							/*  Take first channel of ch_list_inclusioned as operating channel */
+ 							pwdinfo->operating_channel = ch_list_inclusioned[0];
+-							DBG_88E("[%s] Change op ch to %02x\n", __func__, pwdinfo->operating_channel);
+ 						}
+ 					}
+ 				}
+ 			} else {
+-				DBG_88E("[%s] channel list attribute not found!\n", __func__);
+ 			}
+ 
+ 			/*	Try to get the group id information if peer is GO */
+@@ -1376,7 +1348,6 @@ u8 process_p2p_group_negotation_confirm(struct wifidirect_info *pwdinfo, u8 *pfr
+ 		pwdinfo->negotiation_dialog_token = 1;
+ 		rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_STATUS, &attr_content, &attr_contentlen);
+ 		if (attr_contentlen == 1) {
+-			DBG_88E("[%s] Status = %d\n", __func__, attr_content);
+ 			result = attr_content;
+ 
+ 			if (attr_content == P2P_STATUS_SUCCESS) {
+@@ -1408,14 +1379,12 @@ u8 process_p2p_group_negotation_confirm(struct wifidirect_info *pwdinfo, u8 *pfr
+ 		attr_contentlen = 0;
+ 		memset(groupid, 0x00, 38);
+ 		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_GROUP_ID, groupid, &attr_contentlen)) {
+-			DBG_88E("[%s] Ssid = %s, ssidlen = %zu\n", __func__, &groupid[ETH_ALEN], strlen(&groupid[ETH_ALEN]));
+ 			memcpy(pwdinfo->groupid_info.go_device_addr, &groupid[0], ETH_ALEN);
+ 			memcpy(pwdinfo->groupid_info.ssid, &groupid[6], attr_contentlen - ETH_ALEN);
+ 		}
+ 
+ 		attr_contentlen = 0;
+ 		if (rtw_get_p2p_attr_content(p2p_ie, p2p_ielen, P2P_ATTR_OPERATING_CH, operatingch_info, &attr_contentlen)) {
+-			DBG_88E("[%s] Peer's operating channel = %d\n", __func__, operatingch_info[4]);
+ 			pwdinfo->peer_operating_ch = operatingch_info[4];
+ 		}
+ 
+@@ -1653,7 +1622,6 @@ void p2p_ps_wk_hdl(struct adapter *padapter, u8 p2p_ps_state)
+ 			if (pwdinfo->ctwindow > 0) {
+ 				if (pwrpriv->smart_ps != 0) {
+ 					pwrpriv->smart_ps = 0;
+-					DBG_88E("%s(): Enter CTW, change SmartPS\n", __func__);
+ 					SetHwReg8188EU(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&padapter->pwrctrlpriv.pwr_mode));
+ 				}
+ 			}
+@@ -1723,7 +1691,6 @@ static void reset_ch_sitesurvey_timer_process(struct timer_list *t)
+ 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
+ 		return;
+ 
+-	DBG_88E("[%s] In\n", __func__);
+ 	/*	Reset the operation channel information */
+ 	pwdinfo->rx_invitereq_info.operation_ch[0] = 0;
+ 	pwdinfo->rx_invitereq_info.scan_op_ch_only = 0;
+@@ -1737,7 +1704,6 @@ static void reset_ch_sitesurvey_timer_process2(struct timer_list *t)
+ 	if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
+ 		return;
+ 
+-	DBG_88E("[%s] In\n", __func__);
+ 	/*	Reset the operation channel information */
+ 	pwdinfo->p2p_info.operation_ch[0] = 0;
+ 	pwdinfo->p2p_info.scan_op_ch_only = 0;
+@@ -1778,7 +1744,6 @@ static void pre_tx_scan_timer_process(struct timer_list *t)
+ 		if (pwdinfo->invitereq_info.benable)
+ 			p2p_protocol_wk_cmd(adapter, P2P_PRE_TX_INVITEREQ_PROCESS_WK);
+ 	} else {
+-		DBG_88E("[%s] p2p_state is %d, ignore!!\n", __func__, rtw_p2p_state(pwdinfo));
+ 	}
+ 
+ 	spin_unlock_bh(&pmlmepriv->lock);
+diff --git a/drivers/staging/r8188eu/core/rtw_pwrctrl.c b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+index ff35685eaa12..db7074bf5741 100644
+--- a/drivers/staging/r8188eu/core/rtw_pwrctrl.c
++++ b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+@@ -26,7 +26,6 @@ void ips_enter(struct adapter *padapter)
+ 	pwrpriv->ips_mode = pwrpriv->ips_mode_req;
+ 
+ 	pwrpriv->ips_enter_cnts++;
+-	DBG_88E("==>ips_enter cnts:%d\n", pwrpriv->ips_enter_cnts);
+ 	if (rf_off == pwrpriv->change_rfpwrstate) {
+ 		pwrpriv->bpower_saving = true;
+ 
+@@ -55,7 +54,6 @@ int ips_leave(struct adapter *padapter)
+ 		pwrpriv->bips_processing = true;
+ 		pwrpriv->change_rfpwrstate = rf_on;
+ 		pwrpriv->ips_leave_cnts++;
+-		DBG_88E("==>ips_leave cnts:%d\n", pwrpriv->ips_leave_cnts);
+ 
+ 		result = rtw_ips_pwr_up(padapter);
+ 		if (result == _SUCCESS) {
+@@ -63,7 +61,6 @@ int ips_leave(struct adapter *padapter)
+ 		}
+ 
+ 		if ((_WEP40_ == psecuritypriv->dot11PrivacyAlgrthm) || (_WEP104_ == psecuritypriv->dot11PrivacyAlgrthm)) {
+-			DBG_88E("==>%s, channel(%d), processing(%x)\n", __func__, padapter->mlmeextpriv.cur_channel, pwrpriv->bips_processing);
+ 			set_channel_bwmode(padapter, padapter->mlmeextpriv.cur_channel, HAL_PRIME_CHNL_OFFSET_DONT_CARE, HT_CHANNEL_WIDTH_20);
+ 			for (keyid = 0; keyid < 4; keyid++) {
+ 				if (pmlmepriv->key_mask & BIT(keyid)) {
+@@ -75,7 +72,6 @@ int ips_leave(struct adapter *padapter)
+ 			}
+ 		}
+ 
+-		DBG_88E("==> ips_leave.....LED(0x%08x)...\n", rtw_read32(padapter, 0x4c));
+ 		pwrpriv->bips_processing = false;
+ 
+ 		pwrpriv->bkeepfwalive = false;
+@@ -126,7 +122,6 @@ static bool rtw_pwr_unassociated_idle(struct adapter *adapter)
+ void rtw_ps_processor(struct adapter *padapter)
+ {
+ 	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
+-	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
+ 
+ 	pwrpriv->ps_processing = true;
+ 
+@@ -140,7 +135,6 @@ void rtw_ps_processor(struct adapter *padapter)
+ 		goto exit;
+ 
+ 	if ((pwrpriv->rf_pwrstate == rf_on) && ((pwrpriv->pwr_state_check_cnts % 4) == 0)) {
+-		DBG_88E("==>%s .fw_state(%x)\n", __func__, get_fwstate(pmlmepriv));
+ 		pwrpriv->change_rfpwrstate = rf_off;
+ 
+ 		ips_enter(padapter);
+@@ -179,7 +173,6 @@ static u8 PS_RDY_CHECK(struct adapter *padapter)
+ 	if (pwrpriv->bInSuspend)
+ 		return false;
+ 	if (padapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X && !padapter->securitypriv.binstallGrpkey) {
+-		DBG_88E("Group handshake still in progress !!!\n");
+ 		return false;
+ 	}
+ 	return true;
+@@ -205,14 +198,12 @@ void rtw_set_ps_mode(struct adapter *padapter, u8 ps_mode, u8 smart_ps, u8 bcn_a
+ 	/* if (pwrpriv->pwr_mode == PS_MODE_ACTIVE) */
+ 	if (ps_mode == PS_MODE_ACTIVE) {
+ 		if (pwdinfo->opp_ps == 0) {
+-			DBG_88E("rtw_set_ps_mode: Leave 802.11 power save\n");
+ 			pwrpriv->pwr_mode = ps_mode;
+ 			SetHwReg8188EU(padapter, HW_VAR_H2C_FW_PWRMODE, (u8 *)(&ps_mode));
+ 			pwrpriv->bFwCurrentInPSMode = false;
+ 		}
+ 	} else {
+ 		if (PS_RDY_CHECK(padapter)) {
+-			DBG_88E("%s: Enter 802.11 power save\n", __func__);
+ 			pwrpriv->bFwCurrentInPSMode = true;
+ 			pwrpriv->pwr_mode = ps_mode;
+ 			pwrpriv->smart_ps = smart_ps;
+@@ -247,13 +238,11 @@ s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
+ 
+ 		if (padapter->bSurpriseRemoved) {
+ 			err = -2;
+-			DBG_88E("%s: device surprise removed!!\n", __func__);
+ 			break;
+ 		}
+ 
+ 		if (rtw_get_passing_time_ms(start_time) > delay_ms) {
+ 			err = -1;
+-			DBG_88E("%s: Wait for FW LPS leave more than %u ms!!!\n", __func__, delay_ms);
+ 			break;
+ 		}
+ 		rtw_usleep_os(100);
+@@ -278,7 +267,6 @@ void LPS_Enter(struct adapter *padapter)
+ 		if (pwrpriv->LpsIdleCount >= 2) { /*   4 Sec */
+ 			if (pwrpriv->pwr_mode == PS_MODE_ACTIVE) {
+ 				pwrpriv->bpower_saving = true;
+-				DBG_88E("%s smart_ps:%d\n", __func__, pwrpriv->smart_ps);
+ 				/* For Tenda W311R IOT issue */
+ 				rtw_set_ps_mode(padapter, pwrpriv->power_mgnt,
+ 						pwrpriv->smart_ps, 0x40);
+@@ -377,13 +365,12 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
+ 		pwrpriv->ips_deny_time = jiffies + rtw_ms_to_systime(ips_deffer_ms);
+ 
+ 	if (pwrpriv->ps_processing) {
+-		DBG_88E("%s wait ps_processing...\n", __func__);
+ 		while (pwrpriv->ps_processing && rtw_get_passing_time_ms(start) <= 3000)
+ 			msleep(10);
+ 		if (pwrpriv->ps_processing)
+-			DBG_88E("%s wait ps_processing timeout\n", __func__);
++			;
+ 		else
+-			DBG_88E("%s wait ps_processing done\n", __func__);
++			;
+ 	}
+ 
+ 	/* System suspend is not allowed to wakeup */
+@@ -393,9 +380,9 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
+ 		       (rtw_get_passing_time_ms(start) <= 500)))
+ 				msleep(10);
+ 		if (pwrpriv->bInSuspend)
+-			DBG_88E("%s wait bInSuspend timeout\n", __func__);
++			;
+ 		else
+-			DBG_88E("%s wait bInSuspend done\n", __func__);
++			;
+ 	}
+ 
+ 	/* I think this should be check in IPS, LPS, autosuspend functions... */
+@@ -404,9 +391,7 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
+ 		goto exit;
+ 	}
+ 	if (rf_off == pwrpriv->rf_pwrstate) {
+-		DBG_88E("%s call ips_leave....\n", __func__);
+ 		if (_FAIL ==  ips_leave(padapter)) {
+-			DBG_88E("======> ips_leave fail.............\n");
+ 			ret = _FAIL;
+ 			goto exit;
+ 		}
+@@ -415,11 +400,6 @@ int _rtw_pwr_wakeup(struct adapter *padapter, u32 ips_deffer_ms, const char *cal
+ 	/* TODO: the following checking need to be merged... */
+ 	if (padapter->bDriverStopped || !padapter->bup ||
+ 	    !padapter->hw_init_completed) {
+-		DBG_88E("%s: bDriverStopped=%d, bup=%d, hw_init_completed =%u\n"
+-			, caller
+-			, padapter->bDriverStopped
+-			, padapter->bup
+-			, padapter->hw_init_completed);
+ 		ret = false;
+ 		goto exit;
+ 	}
+@@ -457,11 +437,9 @@ int rtw_pm_set_ips(struct adapter *padapter, u8 mode)
+ 
+ 	if (mode == IPS_NORMAL || mode == IPS_LEVEL_2) {
+ 		rtw_ips_mode_req(pwrctrlpriv, mode);
+-		DBG_88E("%s %s\n", __func__, mode == IPS_NORMAL ? "IPS_NORMAL" : "IPS_LEVEL_2");
+ 		return 0;
+ 	} else if (mode == IPS_NONE) {
+ 		rtw_ips_mode_req(pwrctrlpriv, mode);
+-		DBG_88E("%s %s\n", __func__, "IPS_NONE");
+ 		if ((padapter->bSurpriseRemoved == 0) && (_FAIL == rtw_pwr_wakeup(padapter)))
+ 			return -EFAULT;
+ 	} else {
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index acc0dd87b62e..0f8f757de02a 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -240,7 +240,6 @@ u32 rtw_free_uc_swdec_pending_queue(struct adapter *adapter)
+ 	struct recv_frame *pending_frame;
+ 	while ((pending_frame = rtw_alloc_recvframe(&adapter->recvpriv.uc_swdec_pending_queue))) {
+ 		rtw_free_recvframe(pending_frame, &adapter->recvpriv.free_recv_queue);
+-		DBG_88E("%s: dequeue uc_swdec_pending_queue\n", __func__);
+ 		cnt++;
+ 	}
+ 
+@@ -272,7 +271,6 @@ static int recvframe_chkmic(struct adapter *adapter,  struct recv_frame *precvfr
+ 
+ 				if (!psecuritypriv) {
+ 					res = _FAIL;
+-					DBG_88E("\n recvframe_chkmic:didn't install group key!!!!!!!!!!\n");
+ 					goto exit;
+ 				}
+ 			} else {
+@@ -303,9 +301,7 @@ static int recvframe_chkmic(struct adapter *adapter,  struct recv_frame *precvfr
+ 
+ 				if ((prxattrib->bdecrypted) && (brpt_micerror)) {
+ 					rtw_handle_tkip_mic_err(adapter, (u8)is_multicast_ether_addr(prxattrib->ra));
+-					DBG_88E(" mic error :prxattrib->bdecrypted=%d\n", prxattrib->bdecrypted);
+ 				} else {
+-					DBG_88E(" mic error :prxattrib->bdecrypted=%d\n", prxattrib->bdecrypted);
+ 				}
+ 				res = _FAIL;
+ 			} else {
+@@ -336,8 +332,6 @@ static struct recv_frame *decryptor(struct adapter *padapter, struct recv_frame
+ 		prxattrib->key_index = (((iv[3]) >> 6) & 0x3);
+ 
+ 		if (prxattrib->key_index > WEP_KEYS) {
+-			DBG_88E("prxattrib->key_index(%d)>WEP_KEYS\n", prxattrib->key_index);
+-
+ 			switch (prxattrib->encrypt) {
+ 			case _WEP40_:
+ 			case _WEP104_:
+@@ -686,7 +680,6 @@ static int ap2sta_data_frame(
+ 		    !memcmp(mybssid, "\x0\x0\x0\x0\x0\x0", ETH_ALEN) ||
+ 		     (memcmp(pattrib->bssid, mybssid, ETH_ALEN))) {
+ 			if (!bmcast) {
+-				DBG_88E("issue_deauth to the nonassociated ap=%pM for the reason(7)\n", (pattrib->bssid));
+ 				issue_deauth(adapter, pattrib->bssid, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
+ 			}
+ 
+@@ -737,8 +730,6 @@ static int ap2sta_data_frame(
+ 		if (!memcmp(myhwaddr, pattrib->dst, ETH_ALEN) && (!bmcast)) {
+ 			*psta = rtw_get_stainfo(pstapriv, pattrib->bssid); /*  get sta_info */
+ 			if (!*psta) {
+-				DBG_88E("issue_deauth to the ap =%pM for the reason(7)\n", (pattrib->bssid));
+-
+ 				issue_deauth(adapter, pattrib->bssid, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
+ 			}
+ 		}
+@@ -771,8 +762,6 @@ static int sta2ap_data_frame(struct adapter *adapter,
+ 
+ 		*psta = rtw_get_stainfo(pstapriv, pattrib->src);
+ 		if (!*psta) {
+-			DBG_88E("issue_deauth to sta=%pM for the reason(7)\n", (pattrib->src));
+-
+ 			issue_deauth(adapter, pattrib->src, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
+ 
+ 			ret = RTW_RX_HANDLED;
+@@ -797,7 +786,6 @@ static int sta2ap_data_frame(struct adapter *adapter,
+ 			ret = RTW_RX_HANDLED;
+ 			goto exit;
+ 		}
+-		DBG_88E("issue_deauth to sta=%pM for the reason(7)\n", (pattrib->src));
+ 		issue_deauth(adapter, pattrib->src, WLAN_REASON_CLASS3_FRAME_FROM_NONASSOC_STA);
+ 		ret = RTW_RX_HANDLED;
+ 		goto exit;
+@@ -862,7 +850,6 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
+ 			return _FAIL;
+ 
+ 		if (psta->state & WIFI_STA_ALIVE_CHK_STATE) {
+-			DBG_88E("%s alive check-rx ps-poll\n", __func__);
+ 			psta->expire_to = pstapriv->expire_to;
+ 			psta->state ^= WIFI_STA_ALIVE_CHK_STATE;
+ 		}
+@@ -903,12 +890,9 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
+ 			} else {
+ 				if (pstapriv->tim_bitmap & BIT(psta->aid)) {
+ 					if (psta->sleepq_len == 0) {
+-						DBG_88E("no buffered packets to xmit\n");
+-
+ 						/* issue nulldata with More data bit = 0 to indicate we have no buffered packets */
+ 						issue_nulldata(padapter, psta->hwaddr, 0, 0, 0);
+ 					} else {
+-						DBG_88E("error!psta->sleepq_len=%d\n", psta->sleepq_len);
+ 						psta->sleepq_len = 0;
+ 					}
+ 
+@@ -1115,31 +1099,21 @@ static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv
+ 	GetHalDefVar8188EUsb(adapter, HAL_DEF_DBG_DUMP_RXPKT, &bDumpRxPkt);
+ 	if (bDumpRxPkt == 1) {/* dump all rx packets */
+ 		int i;
+-		DBG_88E("#############################\n");
+ 
+ 		for (i = 0; i < 64; i = i + 8)
+-			DBG_88E("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:\n", *(ptr + i),
+-				*(ptr + i + 1), *(ptr + i + 2), *(ptr + i + 3), *(ptr + i + 4), *(ptr + i + 5), *(ptr + i + 6), *(ptr + i + 7));
+-		DBG_88E("#############################\n");
++			;
+ 	} else if (bDumpRxPkt == 2) {
+ 		if (type == WIFI_MGT_TYPE) {
+ 			int i;
+-			DBG_88E("#############################\n");
+ 
+ 			for (i = 0; i < 64; i = i + 8)
+-				DBG_88E("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:\n", *(ptr + i),
+-					*(ptr + i + 1), *(ptr + i + 2), *(ptr + i + 3), *(ptr + i + 4), *(ptr + i + 5), *(ptr + i + 6), *(ptr + i + 7));
+-			DBG_88E("#############################\n");
++				;
+ 		}
+ 	} else if (bDumpRxPkt == 3) {
+ 		if (type == WIFI_DATA_TYPE) {
+ 			int i;
+-			DBG_88E("#############################\n");
+-
+ 			for (i = 0; i < 64; i = i + 8)
+-				DBG_88E("%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:\n", *(ptr + i),
+-					*(ptr + i + 1), *(ptr + i + 2), *(ptr + i + 3), *(ptr + i + 4), *(ptr + i + 5), *(ptr + i + 6), *(ptr + i + 7));
+-			DBG_88E("#############################\n");
++				;
+ 		}
+ 	}
+ 	switch (type) {
+@@ -1446,7 +1420,6 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
+ 		nSubframe_Length = RTW_GET_BE16(pdata + 12);
+ 
+ 		if (a_len < ETH_HLEN + nSubframe_Length) {
+-			DBG_88E("nRemain_Length is %d and nSubframe_Length is : %d\n", a_len, nSubframe_Length);
+ 			goto exit;
+ 		}
+ 
+@@ -1467,7 +1440,6 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
+ 				sub_skb->len = nSubframe_Length;
+ 				skb_set_tail_pointer(sub_skb, nSubframe_Length);
+ 			} else {
+-				DBG_88E("skb_clone() Fail!!! , nr_subframes=%d\n", nr_subframes);
+ 				break;
+ 			}
+ 		}
+@@ -1475,7 +1447,6 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
+ 		subframes[nr_subframes++] = sub_skb;
+ 
+ 		if (nr_subframes >= MAX_SUBFRAME_COUNT) {
+-			DBG_88E("ParseSubframe(): Too many Subframes! Packets dropped!\n");
+ 			break;
+ 		}
+ 
+@@ -1871,7 +1842,6 @@ static int recv_func(struct adapter *padapter, struct recv_frame *rframe)
+ 		     psecuritypriv->ndisauthtype == Ndis802_11AuthModeWPAPSK &&
+ 		     !psecuritypriv->busetkipkey) {
+ 			rtw_enqueue_recvframe(rframe, &padapter->recvpriv.uc_swdec_pending_queue);
+-			DBG_88E("%s: no key, enqueue uc_swdec_pending_queue\n", __func__);
+ 			if (recvpriv->free_recvframe_cnt < NR_RECVFRAME / 4) {
+ 				/* to prevent from recvframe starvation,
+ 				 * get recvframe from uc_swdec_pending_queue to
+diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
+index c6288c2d5f33..abc2386dc8d9 100644
+--- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
++++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
+@@ -335,7 +335,7 @@ void set_channel_bwmode(struct adapter *padapter, unsigned char channel, unsigne
+ 	u8 center_ch;
+ 
+ 	if (padapter->bNotifyChannelChange)
+-		DBG_88E("[%s] ch = %d, offset = %d, bwmode = %d\n", __func__, channel, channel_offset, bwmode);
++		;
+ 
+ 	if ((bwmode == HT_CHANNEL_WIDTH_20) ||
+ 	    (channel_offset == HAL_PRIME_CHNL_OFFSET_DONT_CARE)) {
+@@ -572,8 +572,6 @@ void WMMOnAssocRsp(struct adapter *padapter)
+ 			edca[XMIT_VO_QUEUE] = acParm;
+ 			break;
+ 		}
+-
+-		DBG_88E("WMM(%x): %x, %x\n", ACI, ACM, acParm);
+ 	}
+ 
+ 	if (padapter->registrypriv.acm_method == 1)
+@@ -610,7 +608,6 @@ void WMMOnAssocRsp(struct adapter *padapter)
+ 
+ 	for (i = 0; i < 4; i++) {
+ 		pxmitpriv->wmm_para_seq[i] = inx[i];
+-		DBG_88E("wmm_para_seq(%d): %d\n", i, pxmitpriv->wmm_para_seq[i]);
+ 	}
+ }
+ 
+@@ -758,8 +755,6 @@ void HTOnAssocRsp(struct adapter *padapter)
+ 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
  
- 	if (pmlmeinfo->state & WIFI_FW_AUTH_NULL) {
--		netdev_dbg(padapter->pnetdev, "no beacon while connecting\n");
- 		pmlmeinfo->state = WIFI_FW_NULL_STATE;
- 		report_join_res(padapter, -3);
- 	} else if (pmlmeinfo->state & WIFI_FW_AUTH_STATE) {
-@@ -7355,7 +7121,6 @@ void link_timer_hdl(struct adapter *padapter)
- 			return;
- 		}
- 
--		netdev_dbg(padapter->pnetdev, "auth timeout and try again\n");
- 		pmlmeinfo->auth_seq = 1;
- 		issue_auth(padapter, NULL, 0);
- 		set_link_timer(pmlmeext, REAUTH_TO);
-@@ -7367,7 +7132,6 @@ void link_timer_hdl(struct adapter *padapter)
- 			return;
- 		}
- 
--		netdev_dbg(padapter->pnetdev, "assoc timeout and try again\n");
- 		issue_assocreq(padapter);
- 		set_link_timer(pmlmeext, REASSOC_TO);
- 	}
-@@ -7558,8 +7322,6 @@ u8 join_cmd_hdl(struct adapter *padapter, u8 *pbuf)
- 						break;
- 				}
- 
--					netdev_dbg(padapter->pnetdev,
--						   "set ch/bw before connected\n");
- 				}
- 			}
- 			break;
-@@ -7812,29 +7574,16 @@ u8 set_stakey_hdl(struct adapter *padapter, u8 *pbuf)
- 		if (psta) {
- 			ctrl = (BIT(15) | ((pparm->algorithm) << 2));
- 
--			netdev_dbg(padapter->pnetdev, "enc_algorithm=%d\n",
--				   pparm->algorithm);
+-	DBG_88E("%s\n", __func__);
 -
- 			if ((psta->mac_id < 1) || (psta->mac_id > (NUM_STA - 4))) {
--				netdev_dbg(padapter->pnetdev,
--					   "set_stakey failed, mac_id(aid)=%d\n",
--					   psta->mac_id);
- 				return H2C_REJECTED;
- 			}
- 
- 			cam_id = (psta->mac_id + 3);/* 0~3 for default key, cmd_id = macid + 3, macid = aid+1; */
- 
--			netdev_dbg(padapter->pnetdev,
--				   "Write CAM, mac_addr =%x:%x:%x:%x:%x:%x, cam_entry=%d\n",
--				   pparm->addr[0], pparm->addr[1], pparm->addr[2],
--				   pparm->addr[3], pparm->addr[4], pparm->addr[5],
--				   cam_id);
--
- 			write_cam(padapter, cam_id, ctrl, pparm->addr, pparm->key);
- 
- 			return H2C_SUCCESS_RSP;
- 		} else {
--			netdev_dbg(padapter->pnetdev, "sta has been free\n");
- 			return H2C_REJECTED;
- 		}
- 	}
-@@ -7958,7 +7707,6 @@ u8 h2c_msg_hdl(struct adapter *padapter, unsigned char *pbuf)
- u8 tx_beacon_hdl(struct adapter *padapter, unsigned char *pbuf)
- {
- 	if (send_beacon(padapter) == _FAIL) {
--		netdev_dbg(padapter->pnetdev, "issue_beacon, fail!\n");
- 		return H2C_PARAMETERS_ERROR;
+ 	if ((pmlmeinfo->HT_info_enable) && (pmlmeinfo->HT_caps_enable)) {
+ 		pmlmeinfo->HT_enable = 1;
  	} else {
- 		/* tx bc/mc frames after update TIM */
-@@ -8017,9 +7765,6 @@ u8 set_ch_hdl(struct adapter *padapter, u8 *pbuf)
+@@ -858,13 +853,10 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
+ 	len = packet_len - sizeof(struct rtw_ieee80211_hdr_3addr);
  
- 	set_ch_parm = (struct set_ch_parm *)pbuf;
+ 	if (len > MAX_IE_SZ) {
+-		DBG_88E("%s IE too long for survey event\n", __func__);
+ 		return _FAIL;
+ 	}
  
--	netdev_dbg(padapter->pnetdev, "ch:%u, bw:%u, ch_offset:%u\n",
--		   set_ch_parm->ch, set_ch_parm->bw, set_ch_parm->ch_offset);
--
- 	pmlmeext->cur_channel = set_ch_parm->ch;
- 	pmlmeext->cur_ch_offset = set_ch_parm->ch_offset;
- 	pmlmeext->cur_bwmode = set_ch_parm->bw;
+ 	if (memcmp(cur_network->network.MacAddress, pbssid, 6)) {
+-		DBG_88E("Oops: rtw_check_network_encrypt linked but recv other bssid bcn\n%pM %pM\n",
+-			(pbssid), (cur_network->network.MacAddress));
+ 		return true;
+ 	}
+ 
+@@ -902,11 +894,6 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
+ 	}
+ 	if (ht_cap_info != cur_network->BcnInfo.ht_cap_info ||
+ 	    ((ht_info_infos_0 & 0x03) != (cur_network->BcnInfo.ht_info_infos_0 & 0x03))) {
+-			DBG_88E("%s bcn now: ht_cap_info:%x ht_info_infos_0:%x\n", __func__,
+-				ht_cap_info, ht_info_infos_0);
+-			DBG_88E("%s bcn link: ht_cap_info:%x ht_info_infos_0:%x\n", __func__,
+-				cur_network->BcnInfo.ht_cap_info, cur_network->BcnInfo.ht_info_infos_0);
+-			DBG_88E("%s bw mode change, disconnect\n", __func__);
+ 			/* bcn_info_update */
+ 			cur_network->BcnInfo.ht_cap_info = ht_cap_info;
+ 			cur_network->BcnInfo.ht_info_infos_0 = ht_info_infos_0;
+@@ -923,20 +910,16 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
+ 			if (pht_info) {
+ 					bcn_channel = pht_info->primary_channel;
+ 			} else { /* we don't find channel IE, so don't check it */
+-					DBG_88E("Oops: %s we don't find channel IE, so don't check it\n", __func__);
+ 					bcn_channel = Adapter->mlmeextpriv.cur_channel;
+ 			}
+ 	}
+ 	if (bcn_channel != Adapter->mlmeextpriv.cur_channel) {
+-			DBG_88E("%s beacon channel:%d cur channel:%d disconnect\n", __func__,
+-				bcn_channel, Adapter->mlmeextpriv.cur_channel);
+ 			goto _mismatch;
+ 	}
+ 
+ 	/* checking SSID */
+ 	p = rtw_get_ie(bssid->IEs + _FIXED_IE_LENGTH_, _SSID_IE_, &len, bssid->IELength - _FIXED_IE_LENGTH_);
+ 	if (!p) {
+-		DBG_88E("%s marc: cannot find SSID for survey event\n", __func__);
+ 		hidden_ssid = true;
+ 	} else {
+ 		hidden_ssid = false;
+@@ -953,7 +936,6 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
+ 	if (memcmp(bssid->Ssid.Ssid, cur_network->network.Ssid.Ssid, 32) ||
+ 	    bssid->Ssid.SsidLength != cur_network->network.Ssid.SsidLength) {
+ 		if (bssid->Ssid.Ssid[0] != '\0' && bssid->Ssid.SsidLength != 0) { /* not hidden ssid */
+-			DBG_88E("%s(), SSID is not match return FAIL\n", __func__);
+ 			goto _mismatch;
+ 		}
+ 	}
+@@ -967,7 +949,6 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
+ 		bssid->Privacy = 0;
+ 
+ 	if (cur_network->network.Privacy != bssid->Privacy) {
+-		DBG_88E("%s(), privacy is not match return FAIL\n", __func__);
+ 		goto _mismatch;
+ 	}
+ 
+@@ -983,7 +964,6 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
+ 	}
+ 
+ 	if (cur_network->BcnInfo.encryp_protocol != encryp_protocol) {
+-		DBG_88E("%s(): enctyp is not match , return FAIL\n", __func__);
+ 		goto _mismatch;
+ 	}
+ 
+@@ -999,14 +979,10 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
+ 		}
+ 
+ 		if (pairwise_cipher != cur_network->BcnInfo.pairwise_cipher || group_cipher != cur_network->BcnInfo.group_cipher) {
+-			DBG_88E("%s pairwise_cipher(%x:%x) or group_cipher(%x:%x) is not match , return FAIL\n", __func__,
+-				pairwise_cipher, cur_network->BcnInfo.pairwise_cipher,
+-				group_cipher, cur_network->BcnInfo.group_cipher);
+ 			goto _mismatch;
+ 		}
+ 
+ 		if (is_8021x != cur_network->BcnInfo.is_8021x) {
+-			DBG_88E("%s authentication is not match , return FAIL\n", __func__);
+ 			goto _mismatch;
+ 		}
+ 	}
+@@ -1257,38 +1233,29 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
+ 		case _VENDOR_SPECIFIC_IE_:
+ 			if ((!memcmp(pIE->data, ARTHEROS_OUI1, 3)) ||
+ 			    (!memcmp(pIE->data, ARTHEROS_OUI2, 3))) {
+-				DBG_88E("link to Artheros AP\n");
+ 				return HT_IOT_PEER_ATHEROS;
+ 			} else if ((!memcmp(pIE->data, BROADCOM_OUI1, 3)) ||
+ 				   (!memcmp(pIE->data, BROADCOM_OUI2, 3))) {
+-				DBG_88E("link to Broadcom AP\n");
+ 				return HT_IOT_PEER_BROADCOM;
+ 			} else if (!memcmp(pIE->data, MARVELL_OUI, 3)) {
+-				DBG_88E("link to Marvell AP\n");
+ 				return HT_IOT_PEER_MARVELL;
+ 			} else if (!memcmp(pIE->data, RALINK_OUI, 3)) {
+ 				if (!ralink_vendor_flag) {
+ 					ralink_vendor_flag = 1;
+ 				} else {
+-					DBG_88E("link to Ralink AP\n");
+ 					return HT_IOT_PEER_RALINK;
+ 				}
+ 			} else if (!memcmp(pIE->data, CISCO_OUI, 3)) {
+-				DBG_88E("link to Cisco AP\n");
+ 				return HT_IOT_PEER_CISCO;
+ 			} else if (!memcmp(pIE->data, REALTEK_OUI, 3)) {
+-				DBG_88E("link to Realtek 96B\n");
+ 				return HT_IOT_PEER_REALTEK;
+ 			} else if (!memcmp(pIE->data, AIRGOCAP_OUI, 3)) {
+-				DBG_88E("link to Airgo Cap\n");
+ 				return HT_IOT_PEER_AIRGO;
+ 			} else if (!memcmp(pIE->data, EPIGRAM_OUI, 3)) {
+ 				epigram_vendor_flag = 1;
+ 				if (ralink_vendor_flag) {
+-					DBG_88E("link to Tenda W311R AP\n");
+ 					return HT_IOT_PEER_TENDA;
+ 				} else {
+-					DBG_88E("Capture EPIGRAM_OUI\n");
+ 				}
+ 			} else {
+ 				break;
+@@ -1302,13 +1269,10 @@ unsigned char check_assoc_AP(u8 *pframe, uint len)
+ 	}
+ 
+ 	if (ralink_vendor_flag && !epigram_vendor_flag) {
+-		DBG_88E("link to Ralink AP\n");
+ 		return HT_IOT_PEER_RALINK;
+ 	} else if (ralink_vendor_flag && epigram_vendor_flag) {
+-		DBG_88E("link to Tenda W311R AP\n");
+ 		return HT_IOT_PEER_TENDA;
+ 	} else {
+-		DBG_88E("link to new AP\n");
+ 		return HT_IOT_PEER_UNKNOWN;
+ 	}
+ }
+@@ -1518,13 +1482,11 @@ int rtw_handle_dualmac(struct adapter *adapter, bool init)
+ 	if (init) {
+ 		if (!pbuddy_padapter) {
+ 			pbuddy_padapter = adapter;
+-			DBG_88E("%s(): pbuddy_padapter == NULL, Set pbuddy_padapter\n", __func__);
+ 		} else {
+ 			adapter->pbuddy_adapter = pbuddy_padapter;
+ 			pbuddy_padapter->pbuddy_adapter = adapter;
+ 			/*  clear global value */
+ 			pbuddy_padapter = NULL;
+-			DBG_88E("%s(): pbuddy_padapter exist, Exchange Information\n", __func__);
+ 		}
+ 	} else {
+ 		pbuddy_padapter = NULL;
 -- 
 2.34.1
 

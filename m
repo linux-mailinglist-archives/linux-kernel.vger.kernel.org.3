@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E4C4B8FCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B314B8FD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237398AbiBPSCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:02:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51360 "EHLO
+        id S237411AbiBPSDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:03:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237396AbiBPSCU (ORCPT
+        with ESMTP id S237402AbiBPSDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:02:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7272CCA4;
-        Wed, 16 Feb 2022 10:02:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 16 Feb 2022 13:03:13 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6A2293B62
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:03:00 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 535D361229;
-        Wed, 16 Feb 2022 18:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E00ACC340E8;
-        Wed, 16 Feb 2022 18:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645034525;
-        bh=0RPzGkqaulryzzUFTedNd/YW9tsR4nH6x1mJcKe4Kc8=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=iodmdVb7k2uEAmmaJY0bbHZN/l/i5+dv56IMwnV6KwPp1XvLGrZmLnBWb/SWFyUSZ
-         u58bn2HTu+qkLuzuswqwwLiz5NunwMAAbO5Yb8RAqmVLTfG+416+3eM42jPQWNRh3h
-         NvyrKZ91ps+qOC/Dss/r5MtiEukQ+/M7V6+iSuHj6sQgUs1wc4yPCUP1frB+vKFc8e
-         yBanqB7Mfop6YyRXID42VyRlIZrcA8/kWmQ2WSz9W6ks7sThfAagcicZGoDHiahzGq
-         C5JMWhDzU4Uw0Ymry920OB2YCUuyk2ij9b2V7t7uaBDO38ar5Xe+i6cVj/L170goOs
-         3CffTXseX/quA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20220215135139.4328-1-andriy.shevchenko@linux.intel.com>
-References: <20220215135139.4328-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 1/1] spi: intel-pci: Add support for Intel Ice Lake-N SPI serial flash
-Message-Id: <164503452464.3088984.20078715577588354.b4-ty@kernel.org>
-Date:   Wed, 16 Feb 2022 18:02:04 +0000
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 75C7F1EC0518;
+        Wed, 16 Feb 2022 19:02:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1645034575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=jBtlGm8WJFBOdlSzBUlWwC0q4z+PZ1kReU2GS1VtCzg=;
+        b=jbE12Yg54ODKlG6g3sf+XPrMSH70l35ZbFTc1OevwaYL0I99jU3mxv888vgnbJJsai/bLf
+        /XYD0BnZJ2Ch332IwqA7PoBGo4OLSA3J0xwWvzqs9ZDP7B//X5TGWpwSAzz1VRYruNuEEp
+        Wi3EUUglWkMOh4wqFo4hZTm5iVjJg1g=
+Date:   Wed, 16 Feb 2022 19:02:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jue Wang <juew@google.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] x86/mce: Add workaround for SKX/CLX/CPX spurious machine
+ checks
+Message-ID: <Yg08Uhg0fZ9xZuP2@zn.tnic>
+References: <CAPcxDJ7nriZEJHF6dMPR7tQ+dGuueyRjw1NC+4CbjxiAT_S+ZA@mail.gmail.com>
+ <20220208150945.266978-1-juew@google.com>
+ <Ygwka++3eipjQzB2@zn.tnic>
+ <YgwnqTc8FGG3orcE@agluck-desk3.sc.intel.com>
+ <YgzRsfWOmqkNiNI7@zn.tnic>
+ <CAPcxDJ4=iknzYbN=b2oQxvJyODkQ_MWEj1wkKEuGwf4HQ3aPZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPcxDJ4=iknzYbN=b2oQxvJyODkQ_MWEj1wkKEuGwf4HQ3aPZA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 15:51:39 +0200, Andy Shevchenko wrote:
-> Intel Ice Lake-N has the same SPI serial flash controller as Ice Lake-LP.
-> Add Ice Lake-N PCI ID to the driver list of supported devices.
-> 
-> The device can be found on MacBookPro16,2 [1].
-> 
-> [1]: https://linux-hardware.org/?probe=f1c5cf0c43
-> 
-> [...]
+On Wed, Feb 16, 2022 at 07:50:24AM -0800, Jue Wang wrote:
+> My slight reservation is that this suggests all use cases of "REP;
+> MOVS*" must take the _ASM_EXTABLE_ form, which is not possible;
+> considering "REP; MOVS*" can be exercised from any user space program.
 
-Applied to
+Well, we could try to decode the instructions around rIP when the #MC
+is raised and see what caused the MCE and perhaps pick apart which insn
+caused it, is it accessing behind the buffer boundaries, etc.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> If there is a way to get all users of "REP; MOVS*" to use
+> copy_mc_enhanced_fast_string, this could work. I am not sure this is
+> possible.
 
-Thanks!
+Yeah, no, this is for the copy to user direction only.
 
-[1/1] spi: intel-pci: Add support for Intel Ice Lake-N SPI serial flash
-      commit: 47b34f495b8b75475952f12c521c4c1fc2fa09b4
+-- 
+Regards/Gruss,
+    Boris.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+https://people.kernel.org/tglx/notes-about-netiquette

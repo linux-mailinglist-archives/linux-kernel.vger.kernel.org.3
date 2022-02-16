@@ -2,132 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644524B8B66
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7174B8B6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiBPO2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:28:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41236 "EHLO
+        id S235027AbiBPOaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:30:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiBPO2a (ORCPT
+        with ESMTP id S232840AbiBPOaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:28:30 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2086.outbound.protection.outlook.com [40.107.101.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE4D291FA0;
-        Wed, 16 Feb 2022 06:28:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KlsXuaQqj7wQ4YBMx3oSCr610aquPuJEL1MSO+1YeBzNzRrKUt1EMBP3yYQTK51bqypajSy/1ykWIhUKdgj0Bwnbey5IXbkxYGXT2SFpL8iETVbjy+l7XaX2ryDqZ+HgsKrvQ9Ps03Xx9q54061tx0lxAKLpEDSKN6HtbicdTdGT7agnGdDLdeySXleSEGS+lygEVE3GYZYhM+pmIkUghwaLKiqsz7ShrYFHxr3zCNaf4GqbqWEg+UuMZUDIuJc7vPkgdDKu+LrJxdk+tRJeD4ztcDjfPDniodZGLfoVKj29jTxl/MtdltSPc5woTpyxJT2e4CDVwLoB93TX/Ohu6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o1kf0aQInvkFxDkoxwF8KcP0HARpMdBUkt3/DZmM9Cs=;
- b=dqjhP3UYWA3G/3CebjsK7urysxnugw522nTZjWU2xr0EJ2sE21ZcvtoRMHyUPzMTL9Guxvqms06+Ls6ioSXjY2k51B4leNOlc4CrjX3wQ6ixwxFYPgKKY7FZwK86fLsdkhfVuW5ewK1W6INNoRQFxLrVhzuzfWVGQVUHACuKSmuEJlUfPd9GpAPy+Mmw1O/jm4tZJ3m2/wO3XZFhHLlKiZPhTrRfHOBHB1Hbl+Y6xMJVbZyAVNvYOeatJC0eiN8vxAY1M5X681+mdftLgiQkHVrVtzr6/Gqk0OSRExw3/1ZKDuLtC7mC+BT+IZCAkJkVs6KilWjUMyO/7dJgJiCVXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=gmail.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        Wed, 16 Feb 2022 09:30:01 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF160293B5C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:29:47 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id w7so2444639ioj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 06:29:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o1kf0aQInvkFxDkoxwF8KcP0HARpMdBUkt3/DZmM9Cs=;
- b=jiqND+7T5Kjntn1oS9aUMixb4Rf+yrrKX+aoQz+f6KlpsvWzDgXHFxifUZoiTyCqAzjq9D7toGhhh6GcI/U42NHDjCkQ5thyuzG1WRKKiQjs2viAGw8mXI3BIV75RArbCgBWZvRNONqzoQgOo1j/6wHaCWjhLFWeJkwT8drxVKM=
-Received: from DM3PR12CA0093.namprd12.prod.outlook.com (2603:10b6:0:55::13) by
- BL3PR02MB8148.namprd02.prod.outlook.com (2603:10b6:208:35f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15; Wed, 16 Feb
- 2022 14:28:11 +0000
-Received: from DM3NAM02FT007.eop-nam02.prod.protection.outlook.com
- (2603:10b6:0:55:cafe::6a) by DM3PR12CA0093.outlook.office365.com
- (2603:10b6:0:55::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15 via Frontend
- Transport; Wed, 16 Feb 2022 14:28:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT007.mail.protection.outlook.com (10.13.4.88) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4975.11 via Frontend Transport; Wed, 16 Feb 2022 14:28:11 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 16 Feb 2022 06:28:10 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 16 Feb 2022 06:28:10 -0800
-Envelope-to: zajec5@gmail.com,
- seanga2@gmail.com,
- robh+dt@kernel.org,
- trini@konsulko.com,
- sjg@chromium.org,
- srinivas.kandagatla@linaro.org,
- krzysztof.kozlowski@canonical.com,
- ricardo@foundries.io,
- jorge@foundries.io,
- devicetree@vger.kernel.org,
- u-boot@lists.denx.de,
- linux-kernel@vger.kernel.org,
- rafal@milecki.pl
-Received: from [10.254.241.49] (port=59506)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1nKLHu-0006fK-HH; Wed, 16 Feb 2022 06:28:10 -0800
-Message-ID: <16e788ec-28e4-11be-d1f8-5c5249a87c2d@xilinx.com>
-Date:   Wed, 16 Feb 2022 15:28:06 +0100
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8v5HTH39+llRa90u3U656HBQtObKv83Qz/IBi0xDrdw=;
+        b=xCiJQt+Iumfr5KfaOa1r2b0Lg2hAahk3LdijSDyQLXi/XSMT0dinF1pMJIkbIQu88l
+         +te4uy9oLIFVedf6nF5nCc9IgoGvqAh7xBxDFdE0564B7QH/3+usql/iogzzViX50XL5
+         oNgM2gxKURCMWmITCpjie9/th33j87m/uVX49IiwI9eKLOwuWYYajOzIZQs8eldvvDh9
+         0gRhEkSvDJUPcOzYjOOUpG9ZvEQl9NJ5UbMSkEDL+oM/tMCM0DpDPRl1eHdzsCakD2hl
+         vqwG9vIYpBbXWlxAGkv0d2m+4ZbpWcxcB/zkKwqCvMBF1JyLggeZx2yUFVvdjFX9YL9B
+         RtUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8v5HTH39+llRa90u3U656HBQtObKv83Qz/IBi0xDrdw=;
+        b=v9YcEjvK4/WyCyEybCjpvlJ3QKmK/onk6FcoWMBPTf6T52MIt1aOpCu1W6hc5+2xTB
+         KHmI9oZdkRfMOlB+6e5XQdhL96CUD9v8mDK0xw/BfFI5IUi3dSLwtId0Rhsa7e0k5Eht
+         XaRH3+3h/SlI7IvzV27NNDZm4GOxrkA0k8ktrX8mwKWulreYNyDR+owHavYSdwt7Jdg3
+         gnkgMuVgiOfKxxLP8Y8jtqQ5AJAW1+Q+sImg/fRBuLNYF8E7/hri0XddHAs1sgdkF0og
+         8/tO0biAa6KS75u5uRUG0r3ZALNr5t/wu0JTps86wlJms+E4hKgtpgqrw0saxoFuuaDd
+         dIIg==
+X-Gm-Message-State: AOAM5318Dbbx5/R0Zx97dnXFUezzekrBx3BMMvf/VKaTqLDONa7x2s1A
+        oWI8/zS+pwvTIpcfkwdKgTG4QQ==
+X-Google-Smtp-Source: ABdhPJyrUHvHZhBy3WVqJxOJk3l0PbUlId4c4S4OPZqFRn8tpIaUdls6FsO2LBoDoBlhPj/+bFEhrA==
+X-Received: by 2002:a05:6602:1594:b0:638:d61e:310e with SMTP id e20-20020a056602159400b00638d61e310emr1961432iow.165.1645021786881;
+        Wed, 16 Feb 2022 06:29:46 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id i15sm26226274iog.14.2022.02.16.06.29.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 06:29:46 -0800 (PST)
+Message-ID: <66691793-1313-3422-a98f-9a6603cc3ce0@linaro.org>
+Date:   Wed, 16 Feb 2022 08:29:44 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] dt-bindings: nvmem: add U-Boot environment variables
- binding
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 02/25] bus: mhi: Fix MHI DMA structure endianness
 Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Sean Anderson <seanga2@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tom Rini <trini@konsulko.com>, Simon Glass <sjg@chromium.org>
-CC:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ricardo Salveti <ricardo@foundries.io>,
-        Jorge Ramirez-Ortiz <jorge@foundries.io>,
-        <devicetree@vger.kernel.org>, <u-boot@lists.denx.de>,
-        <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220215134925.32691-1-zajec5@gmail.com>
- <193f9354-5e1d-def8-c8ab-fbe88d8d9b8f@xilinx.com>
- <6679b98e-f5f0-8608-a36c-c0c41fb5ea6f@gmail.com>
- <3c690660-7e23-e11b-17b8-496882f3a34e@gmail.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <3c690660-7e23-e11b-17b8-496882f3a34e@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 166b31e7-f2c1-4257-667b-08d9f1588f82
-X-MS-TrafficTypeDiagnostic: BL3PR02MB8148:EE_
-X-Microsoft-Antispam-PRVS: <BL3PR02MB81486F7BCDC3B9CEE67AC32EC6359@BL3PR02MB8148.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OQGIkCzrsivvMwjYSNNx1bfFK/YLqIwIYnRjwmFQzZMLqyEXc8aCuu3OALkIK88D/J2xE3Q+YS/1+wgJygw2zOZg923iPLcZYDsphFamHQsN7UKw9Ni7bND1Q3/N8pt8X6CsZpJFmIdocibg3WUhl/kkhWUlb7lA5FDpj8UigIRT9XZrTnNfz3efPkTVljb3mj4ArByN3u0m3eQsBjsGph0OMWIHqBPxVeWjW+vDdvUXWyF/Ajyv5ax3LyaWZ7I2zZIrsCUmNTwRWFWKSB0iOwCs22qZj8QRjsLs1+CxRdTU7+AOQ2I96lhVWphB/+FMVVVg9eMtMenxlVLwuJ05HtTflGCnbmJmHjXUsYGWEpEZ2zRVXn1hlzC6WyF3SYCQyDNoBfRIGbH6DotyTX8l9UNBZWdMQlQ/FfMC3qpaT/g+Fc1NO6lnMcdmLWSTKl6TWqXNZHADPyLo+OIzA3Ji+dbvCLpXrIj/i40Q5S61yGYE1sEVhyaoEp7lBFg/kIVIdtILsk2Wu2J2OmAjt+RYDgL+4bGLqGVd5gi/PkgAD0iIUnSiYM+1gweGQfkOh4F+MGg07lC6sX3Yv0tJjsvGiNrwwSO+jxqkUur64LxIo/cf2kX10U8i9EpwqluSezxXjhKtYz15uVXAui5xmDjONwehxcRFiFVHEbRbhpcO+adHtBN+I2Et2wFX2rr/x9lAqrfYkH1zeFjvf81xetJBtPYYGSQkrNO0PN+gLtIllGQlkzo/uMWZ3j+0TiiMgbf1KUb7C8GYLSBI4iOmnN25qaW5h0A4HQmNLdWV6+Yn7RNh0Uuvp5b+/5LG5qkkQSNJ1mnvGy+dnoxcOFSwkO8a8DgMiTT91Sri1OsC8fSjYlE=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(70586007)(2906002)(26005)(186003)(31696002)(44832011)(36860700001)(110136005)(316002)(36756003)(40460700003)(54906003)(2616005)(70206006)(8676002)(356005)(4326008)(7636003)(5660300002)(6666004)(7416002)(53546011)(426003)(336012)(47076005)(66574015)(31686004)(9786002)(8936002)(508600001)(82310400004)(83380400001)(966005)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 14:28:11.5802
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 166b31e7-f2c1-4257-667b-08d9f1588f82
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT007.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR02MB8148
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Davey <paul.davey@alliedtelesis.co.nz>,
+        stable@vger.kernel.org
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-3-manivannan.sadhasivam@linaro.org>
+ <2ddfa2c9-0e03-e4f7-e0e5-78230bef43fe@linaro.org>
+ <20220216070424.GA6225@workstation>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220216070424.GA6225@workstation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,118 +83,317 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/16/22 13:59, Rafał Miłecki wrote:
-> On 15.02.2022 15:57, Sean Anderson wrote:
->> On 2/15/22 9:02 AM, Michal Simek wrote:
+On 2/16/22 1:04 AM, Manivannan Sadhasivam wrote:
+> On Tue, Feb 15, 2022 at 02:02:01PM -0600, Alex Elder wrote:
+>> On 2/12/22 12:20 PM, Manivannan Sadhasivam wrote:
+>>> From: Paul Davey <paul.davey@alliedtelesis.co.nz>
 >>>
->>>
->>> On 2/15/22 14:49, Rafał Miłecki wrote:
->>>> From: Rafał Miłecki <rafal@milecki.pl>
->>>>
->>>> U-Boot uses environment variables for storing device setup data on
->>>> flash. That data usually needs to be accessed by a bootloader, kernel
->>>> and often user-space.
->>>>
->>>> This binding allows describing environment data location and its format
->>>> clearly. In some/many cases it should be cleaner than hardcoding &
->>>> duplicating that info in multiple places. Bootloader & kernel can share
->>>> DTS and user-space can try reading it too or just have correct data
->>>> exposed by a kernel.
->>>>
->>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->>>> ---
->>>>   .../devicetree/bindings/nvmem/u-boot,env.yaml | 58 +++++++++++++++++++
->>>>   MAINTAINERS                                   |  5 ++
->>>>   2 files changed, 63 insertions(+)
->>>>   create mode 100644 Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml 
->>>> b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
->>>> new file mode 100644
->>>> index 000000000000..a2b3a9b88eb8
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
->>>> @@ -0,0 +1,58 @@
->>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/nvmem/u-boot,env.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: U-Boot environment variables
->>>> +
->>>> +description: |
->>>> +  U-Boot uses environment variables to store device parameters and
->>>> +  configuration. They may be used for booting process, setup or keeping end 
->>>> user
->>>> +  info.
->>>> +
->>>> +  Data is stored on flash in a U-Boot specific format (header and NUL 
->>>> separated
->>>> +  key-value pairs).
->>>> +
->>>> +  This binding allows specifying data location and used format.
->>>> +
->>>> +maintainers:
->>>> +  - Rafał Miłecki <rafal@milecki.pl>
->>>> +
->>>> +allOf:
->>>> +  - $ref: nvmem.yaml#
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    oneOf:
->>>> +      - description: A standalone env data block
->>>> +        const: u-boot,env
->>>> +      - description: Two redundant blocks with active one flagged
->>>> +        const: u-boot,env-redundant-bool
->>>> +      - description: Two redundant blocks with active having higher counter
->>>> +        const: u-boot,env-redundant-count
->>>
->>> I am not convinced that this is the best way how to do it. Because in u-boot 
->>> implementation you would have to enable MTD partitions to get there.
->>> And the whole parsing will take a lot of time.
->>>
->>> I think the way how I think this can be handled is.
->>>
->>> # I don't think that discussion with Simon was finished.
->>> But for example (chosen or firmware node)
->>> chosen {
->>>      u-boot {
->>>          u-boot,env = <&qspi &part0>;
->>>          u-boot,env-redundant = <&qspi &part1>;
->>>          #or
->>>          u-boot,env = <&qspi 0 40000>;
->>>          u-boot,env-redundant = <&qspi 40000 40000>;
+>>> The MHI driver does not work on big endian architectures.  The
+>>> controller never transitions into mission mode.  This appears to be due
+>>> to the modem device expecting the various contexts and transfer rings to
+>>> have fields in little endian order in memory, but the driver constructs
+>>> them in native endianness.
 >>
->> What about when the environment is on top of UBI?
+>> Yes, this is true.
+>>
+>>> Fix MHI event, channel and command contexts and TRE handling macros to
+>>> use explicit conversion to little endian.  Mark fields in relevant
+>>> structures as little endian to document this requirement.
+>>
+>> Basically every field in the external interface whose size
+>> is greater than one byte must have its endianness noted.
+>>  From what I can tell, you did that for all of the exposed
+>> structures defined in "drivers/bus/mhi/core/internal.h",
+>> which is good.
+>>
+>> *However* some of the *constants* were defined the wrong way.
+>>
+>> Basically, all of the constant values should be expressed
+>> in host byte order.  And any needed byte swapping should be
+>> done at the time the value is read from memory--immediately.
+>> That way, we isolate that activity to the one place we
+>> interface with the possibly "foreign" format, and from then
+>> on, everything may be assumed to be in natural (CPU) byte order.
+>>
 > 
-> We can always add support for binding UBI volumes in DT. Somethig
-> more-or-less like:
-> 
-> partitions {
->      compatible = "fixed-partitions";
->      #address-cells = <1>;
->      #size-cells = <1>;
-> 
->      partition@0 {
->          compatible = "ubi";
->          label = "ubi";
->          reg = <0x0 0x1000000>;
-> 
->          env0: partition-0 {
->              volume-name = "env";
->          };
-> 
->          env1: partition-1 {
->              volume-id = <10>;
->          };
->      };
-> };
+> Well, I did think about it but I convinced myself that doing the
+> conversion in code rather in defines make the code look messy.
+> Also in some places it just makes it look complicated. More below:
 
-If this is something ack by Rob I have no problem with it. But it has to go to 
-schema.
+I thought this might the case.
 
-M
+>> I will point out what I mean, below.
+>>
+>>> Fixes: a6e2e3522f29 ("bus: mhi: core: Add support for PM state transitions")
+>>> Fixes: 6cd330ae76ff ("bus: mhi: core: Add support for ringing channel/event ring doorbells")
+>>> Signed-off-by: Paul Davey <paul.davey@alliedtelesis.co.nz>
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>> ---
+>>>    drivers/bus/mhi/core/debugfs.c  |  26 +++----
+>>>    drivers/bus/mhi/core/init.c     |  36 +++++-----
+>>>    drivers/bus/mhi/core/internal.h | 119 ++++++++++++++++----------------
+>>>    drivers/bus/mhi/core/main.c     |  22 +++---
+>>>    drivers/bus/mhi/core/pm.c       |   4 +-
+>>>    5 files changed, 104 insertions(+), 103 deletions(-)
+>>>
+> 
+> [...]
+> 
+>>> @@ -277,57 +277,58 @@ enum mhi_cmd_type {
+>>>    /* No operation command */
+>>>    #define MHI_TRE_CMD_NOOP_PTR (0)
+>>>    #define MHI_TRE_CMD_NOOP_DWORD0 (0)
+>>> -#define MHI_TRE_CMD_NOOP_DWORD1 (MHI_CMD_NOP << 16)
+>>> +#define MHI_TRE_CMD_NOOP_DWORD1 (cpu_to_le32(MHI_CMD_NOP << 16))
+>>
+>> This just looks wrong to me.  The original definition
+>> should be fine, but then where it's *used* it should
+>> be passed to cpu_to_le32().  I realize this might be
+>> a special case, where these "DWORD" values are getting
+>> written out to command ring elements, but even so, the
+>> byte swapping that's happening is important and should
+>> be made obvious in the code using these symbols.
+>>
+>> This comment applies to many more similar definitions
+>> below.  I don't know; maybe it looks cumbersome if
+>> it's done in the code, but I still think it's better to
+>> consistenly define symbols like this in CPU byte order
+>> and do the conversions explicitly only when the values
+>> are read/written to "foreign" (external interface)
+>> memory.
+>>
+> 
+> Defines like MHI_TRE_GET_CMD_CHID are making the conversion look messy
+> to me. In this we first extract the DWORD from TRE and then doing
+> shifting + masking to get the CHID.
+
+I didn't say so, but I don't really like those defines either.
+I personally would rather see the field values get extracted
+in open code rather than this, because they're actually pretty
+simple operations.  But I understand, sometimes things just
+"look complicated" if you do them certain ways (even if simple).
+
+I did it in a certain way in the IPA code and I find that
+preferable to the use of the "DWORD" definitions you're
+using.  I also stand by my belief that it's preferable to
+not hide the byte swaps in macro definitions.
+
+You use this for reading/writing the command/transfer/event
+ring elements (only) though, and you do that consistently.
+
+> So without splitting the DWORD extraction and GET_CHID macros
+> separately, we can't just do the conversion in code. And we may end up
+> doing the conversion in defines just for these special cases but that
+> will break the uniformity.
+> 
+> So IMO it looks better if we trust the defines to do the conversion itself.
+> 
+> Please let me know if you think the other way.
+
+I'm OK with it.  I'm not convinced, but I won't object...
+
+					-Alex
+
+> 
+> Thanks,
+> Mani
+> 
+>> Outside of this issue, the remainder of the patch looks
+>> OK to me.
+>>
+>> 					-Alex
+>>
+>>>    /* Channel reset command */
+>>>    #define MHI_TRE_CMD_RESET_PTR (0)
+>>>    #define MHI_TRE_CMD_RESET_DWORD0 (0)
+>>> -#define MHI_TRE_CMD_RESET_DWORD1(chid) ((chid << 24) | \
+>>> -					(MHI_CMD_RESET_CHAN << 16))
+>>> +#define MHI_TRE_CMD_RESET_DWORD1(chid) (cpu_to_le32((chid << 24) | \
+>>> +					(MHI_CMD_RESET_CHAN << 16)))
+>>>    /* Channel stop command */
+>>>    #define MHI_TRE_CMD_STOP_PTR (0)
+>>>    #define MHI_TRE_CMD_STOP_DWORD0 (0)
+>>> -#define MHI_TRE_CMD_STOP_DWORD1(chid) ((chid << 24) | \
+>>> -				       (MHI_CMD_STOP_CHAN << 16))
+>>> +#define MHI_TRE_CMD_STOP_DWORD1(chid) (cpu_to_le32((chid << 24) | \
+>>> +				       (MHI_CMD_STOP_CHAN << 16)))
+>>>    /* Channel start command */
+>>>    #define MHI_TRE_CMD_START_PTR (0)
+>>>    #define MHI_TRE_CMD_START_DWORD0 (0)
+>>> -#define MHI_TRE_CMD_START_DWORD1(chid) ((chid << 24) | \
+>>> -					(MHI_CMD_START_CHAN << 16))
+>>> +#define MHI_TRE_CMD_START_DWORD1(chid) (cpu_to_le32((chid << 24) | \
+>>> +					(MHI_CMD_START_CHAN << 16)))
+>>> -#define MHI_TRE_GET_CMD_CHID(tre) (((tre)->dword[1] >> 24) & 0xFF)
+>>> -#define MHI_TRE_GET_CMD_TYPE(tre) (((tre)->dword[1] >> 16) & 0xFF)
+>>> +#define MHI_TRE_GET_DWORD(tre, word) (le32_to_cpu((tre)->dword[(word)]))
+>>> +#define MHI_TRE_GET_CMD_CHID(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 24) & 0xFF)
+>>> +#define MHI_TRE_GET_CMD_TYPE(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 16) & 0xFF)
+>>>    /* Event descriptor macros */
+>>> -#define MHI_TRE_EV_PTR(ptr) (ptr)
+>>> -#define MHI_TRE_EV_DWORD0(code, len) ((code << 24) | len)
+>>> -#define MHI_TRE_EV_DWORD1(chid, type) ((chid << 24) | (type << 16))
+>>> -#define MHI_TRE_GET_EV_PTR(tre) ((tre)->ptr)
+>>> -#define MHI_TRE_GET_EV_CODE(tre) (((tre)->dword[0] >> 24) & 0xFF)
+>>> -#define MHI_TRE_GET_EV_LEN(tre) ((tre)->dword[0] & 0xFFFF)
+>>> -#define MHI_TRE_GET_EV_CHID(tre) (((tre)->dword[1] >> 24) & 0xFF)
+>>> -#define MHI_TRE_GET_EV_TYPE(tre) (((tre)->dword[1] >> 16) & 0xFF)
+>>> -#define MHI_TRE_GET_EV_STATE(tre) (((tre)->dword[0] >> 24) & 0xFF)
+>>> -#define MHI_TRE_GET_EV_EXECENV(tre) (((tre)->dword[0] >> 24) & 0xFF)
+>>> -#define MHI_TRE_GET_EV_SEQ(tre) ((tre)->dword[0])
+>>> -#define MHI_TRE_GET_EV_TIME(tre) ((tre)->ptr)
+>>> -#define MHI_TRE_GET_EV_COOKIE(tre) lower_32_bits((tre)->ptr)
+>>> -#define MHI_TRE_GET_EV_VEID(tre) (((tre)->dword[0] >> 16) & 0xFF)
+>>> -#define MHI_TRE_GET_EV_LINKSPEED(tre) (((tre)->dword[1] >> 24) & 0xFF)
+>>> -#define MHI_TRE_GET_EV_LINKWIDTH(tre) ((tre)->dword[0] & 0xFF)
+>>> +#define MHI_TRE_EV_PTR(ptr) (cpu_to_le64(ptr))
+>>> +#define MHI_TRE_EV_DWORD0(code, len) (cpu_to_le32((code << 24) | len))
+>>> +#define MHI_TRE_EV_DWORD1(chid, type) (cpu_to_le32((chid << 24) | (type << 16)))
+>>> +#define MHI_TRE_GET_EV_PTR(tre) (le64_to_cpu((tre)->ptr))
+>>> +#define MHI_TRE_GET_EV_CODE(tre) ((MHI_TRE_GET_DWORD(tre, 0) >> 24) & 0xFF)
+>>> +#define MHI_TRE_GET_EV_LEN(tre) (MHI_TRE_GET_DWORD(tre, 0) & 0xFFFF)
+>>> +#define MHI_TRE_GET_EV_CHID(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 24) & 0xFF)
+>>> +#define MHI_TRE_GET_EV_TYPE(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 16) & 0xFF)
+>>> +#define MHI_TRE_GET_EV_STATE(tre) ((MHI_TRE_GET_DWORD(tre, 0) >> 24) & 0xFF)
+>>> +#define MHI_TRE_GET_EV_EXECENV(tre) ((MHI_TRE_GET_DWORD(tre, 0) >> 24) & 0xFF)
+>>> +#define MHI_TRE_GET_EV_SEQ(tre) MHI_TRE_GET_DWORD(tre, 0)
+>>> +#define MHI_TRE_GET_EV_TIME(tre) (MHI_TRE_GET_EV_PTR(tre))
+>>> +#define MHI_TRE_GET_EV_COOKIE(tre) lower_32_bits(MHI_TRE_GET_EV_PTR(tre))
+>>> +#define MHI_TRE_GET_EV_VEID(tre) ((MHI_TRE_GET_DWORD(tre, 0) >> 16) & 0xFF)
+>>> +#define MHI_TRE_GET_EV_LINKSPEED(tre) ((MHI_TRE_GET_DWORD(tre, 1) >> 24) & 0xFF)
+>>> +#define MHI_TRE_GET_EV_LINKWIDTH(tre) (MHI_TRE_GET_DWORD(tre, 0) & 0xFF)
+>>>    /* Transfer descriptor macros */
+>>> -#define MHI_TRE_DATA_PTR(ptr) (ptr)
+>>> -#define MHI_TRE_DATA_DWORD0(len) (len & MHI_MAX_MTU)
+>>> -#define MHI_TRE_DATA_DWORD1(bei, ieot, ieob, chain) ((2 << 16) | (bei << 10) \
+>>> -	| (ieot << 9) | (ieob << 8) | chain)
+>>> +#define MHI_TRE_DATA_PTR(ptr) (cpu_to_le64(ptr))
+>>> +#define MHI_TRE_DATA_DWORD0(len) (cpu_to_le32(len & MHI_MAX_MTU))
+>>> +#define MHI_TRE_DATA_DWORD1(bei, ieot, ieob, chain) (cpu_to_le32((2 << 16) | (bei << 10) \
+>>> +	| (ieot << 9) | (ieob << 8) | chain))
+>>>    /* RSC transfer descriptor macros */
+>>> -#define MHI_RSCTRE_DATA_PTR(ptr, len) (((u64)len << 48) | ptr)
+>>> -#define MHI_RSCTRE_DATA_DWORD0(cookie) (cookie)
+>>> -#define MHI_RSCTRE_DATA_DWORD1 (MHI_PKT_TYPE_COALESCING << 16)
+>>> +#define MHI_RSCTRE_DATA_PTR(ptr, len) (cpu_to_le64(((u64)len << 48) | ptr))
+>>> +#define MHI_RSCTRE_DATA_DWORD0(cookie) (cpu_to_le32(cookie))
+>>> +#define MHI_RSCTRE_DATA_DWORD1 (cpu_to_le32(MHI_PKT_TYPE_COALESCING << 16))
+>>>    enum mhi_pkt_type {
+>>>    	MHI_PKT_TYPE_INVALID = 0x0,
+>>> @@ -500,7 +501,7 @@ struct state_transition {
+>>>    struct mhi_ring {
+>>>    	dma_addr_t dma_handle;
+>>>    	dma_addr_t iommu_base;
+>>> -	u64 *ctxt_wp; /* point to ctxt wp */
+>>> +	__le64 *ctxt_wp; /* point to ctxt wp */
+>>>    	void *pre_aligned;
+>>>    	void *base;
+>>>    	void *rp;
+>>> diff --git a/drivers/bus/mhi/core/main.c b/drivers/bus/mhi/core/main.c
+>>> index ffde617f93a3..85f4f7c8d7c6 100644
+>>> --- a/drivers/bus/mhi/core/main.c
+>>> +++ b/drivers/bus/mhi/core/main.c
+>>> @@ -114,7 +114,7 @@ void mhi_ring_er_db(struct mhi_event *mhi_event)
+>>>    	struct mhi_ring *ring = &mhi_event->ring;
+>>>    	mhi_event->db_cfg.process_db(mhi_event->mhi_cntrl, &mhi_event->db_cfg,
+>>> -				     ring->db_addr, *ring->ctxt_wp);
+>>> +				     ring->db_addr, le64_to_cpu(*ring->ctxt_wp));
+>>>    }
+>>>    void mhi_ring_cmd_db(struct mhi_controller *mhi_cntrl, struct mhi_cmd *mhi_cmd)
+>>> @@ -123,7 +123,7 @@ void mhi_ring_cmd_db(struct mhi_controller *mhi_cntrl, struct mhi_cmd *mhi_cmd)
+>>>    	struct mhi_ring *ring = &mhi_cmd->ring;
+>>>    	db = ring->iommu_base + (ring->wp - ring->base);
+>>> -	*ring->ctxt_wp = db;
+>>> +	*ring->ctxt_wp = cpu_to_le64(db);
+>>>    	mhi_write_db(mhi_cntrl, ring->db_addr, db);
+>>>    }
+>>> @@ -140,7 +140,7 @@ void mhi_ring_chan_db(struct mhi_controller *mhi_cntrl,
+>>>    	 * before letting h/w know there is new element to fetch.
+>>>    	 */
+>>>    	dma_wmb();
+>>> -	*ring->ctxt_wp = db;
+>>> +	*ring->ctxt_wp = cpu_to_le64(db);
+>>>    	mhi_chan->db_cfg.process_db(mhi_cntrl, &mhi_chan->db_cfg,
+>>>    				    ring->db_addr, db);
+>>> @@ -432,7 +432,7 @@ irqreturn_t mhi_irq_handler(int irq_number, void *dev)
+>>>    	struct mhi_event_ctxt *er_ctxt =
+>>>    		&mhi_cntrl->mhi_ctxt->er_ctxt[mhi_event->er_index];
+>>>    	struct mhi_ring *ev_ring = &mhi_event->ring;
+>>> -	dma_addr_t ptr = er_ctxt->rp;
+>>> +	dma_addr_t ptr = le64_to_cpu(er_ctxt->rp);
+>>>    	void *dev_rp;
+>>>    	if (!is_valid_ring_ptr(ev_ring, ptr)) {
+>>> @@ -537,14 +537,14 @@ static void mhi_recycle_ev_ring_element(struct mhi_controller *mhi_cntrl,
+>>>    	/* Update the WP */
+>>>    	ring->wp += ring->el_size;
+>>> -	ctxt_wp = *ring->ctxt_wp + ring->el_size;
+>>> +	ctxt_wp = le64_to_cpu(*ring->ctxt_wp) + ring->el_size;
+>>>    	if (ring->wp >= (ring->base + ring->len)) {
+>>>    		ring->wp = ring->base;
+>>>    		ctxt_wp = ring->iommu_base;
+>>>    	}
+>>> -	*ring->ctxt_wp = ctxt_wp;
+>>> +	*ring->ctxt_wp = cpu_to_le64(ctxt_wp);
+>>>    	/* Update the RP */
+>>>    	ring->rp += ring->el_size;
+>>> @@ -801,7 +801,7 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+>>>    	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+>>>    	u32 chan;
+>>>    	int count = 0;
+>>> -	dma_addr_t ptr = er_ctxt->rp;
+>>> +	dma_addr_t ptr = le64_to_cpu(er_ctxt->rp);
+>>>    	/*
+>>>    	 * This is a quick check to avoid unnecessary event processing
+>>> @@ -940,7 +940,7 @@ int mhi_process_ctrl_ev_ring(struct mhi_controller *mhi_cntrl,
+>>>    		mhi_recycle_ev_ring_element(mhi_cntrl, ev_ring);
+>>>    		local_rp = ev_ring->rp;
+>>> -		ptr = er_ctxt->rp;
+>>> +		ptr = le64_to_cpu(er_ctxt->rp);
+>>>    		if (!is_valid_ring_ptr(ev_ring, ptr)) {
+>>>    			dev_err(&mhi_cntrl->mhi_dev->dev,
+>>>    				"Event ring rp points outside of the event ring\n");
+>>> @@ -970,7 +970,7 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
+>>>    	int count = 0;
+>>>    	u32 chan;
+>>>    	struct mhi_chan *mhi_chan;
+>>> -	dma_addr_t ptr = er_ctxt->rp;
+>>> +	dma_addr_t ptr = le64_to_cpu(er_ctxt->rp);
+>>>    	if (unlikely(MHI_EVENT_ACCESS_INVALID(mhi_cntrl->pm_state)))
+>>>    		return -EIO;
+>>> @@ -1011,7 +1011,7 @@ int mhi_process_data_event_ring(struct mhi_controller *mhi_cntrl,
+>>>    		mhi_recycle_ev_ring_element(mhi_cntrl, ev_ring);
+>>>    		local_rp = ev_ring->rp;
+>>> -		ptr = er_ctxt->rp;
+>>> +		ptr = le64_to_cpu(er_ctxt->rp);
+>>>    		if (!is_valid_ring_ptr(ev_ring, ptr)) {
+>>>    			dev_err(&mhi_cntrl->mhi_dev->dev,
+>>>    				"Event ring rp points outside of the event ring\n");
+>>> @@ -1533,7 +1533,7 @@ static void mhi_mark_stale_events(struct mhi_controller *mhi_cntrl,
+>>>    	/* mark all stale events related to channel as STALE event */
+>>>    	spin_lock_irqsave(&mhi_event->lock, flags);
+>>> -	ptr = er_ctxt->rp;
+>>> +	ptr = le64_to_cpu(er_ctxt->rp);
+>>>    	if (!is_valid_ring_ptr(ev_ring, ptr)) {
+>>>    		dev_err(&mhi_cntrl->mhi_dev->dev,
+>>>    			"Event ring rp points outside of the event ring\n");
+>>> diff --git a/drivers/bus/mhi/core/pm.c b/drivers/bus/mhi/core/pm.c
+>>> index 4aae0baea008..c35c5ddc7220 100644
+>>> --- a/drivers/bus/mhi/core/pm.c
+>>> +++ b/drivers/bus/mhi/core/pm.c
+>>> @@ -218,7 +218,7 @@ int mhi_ready_state_transition(struct mhi_controller *mhi_cntrl)
+>>>    			continue;
+>>>    		ring->wp = ring->base + ring->len - ring->el_size;
+>>> -		*ring->ctxt_wp = ring->iommu_base + ring->len - ring->el_size;
+>>> +		*ring->ctxt_wp = cpu_to_le64(ring->iommu_base + ring->len - ring->el_size);
+>>>    		/* Update all cores */
+>>>    		smp_wmb();
+>>> @@ -420,7 +420,7 @@ static int mhi_pm_mission_mode_transition(struct mhi_controller *mhi_cntrl)
+>>>    			continue;
+>>>    		ring->wp = ring->base + ring->len - ring->el_size;
+>>> -		*ring->ctxt_wp = ring->iommu_base + ring->len - ring->el_size;
+>>> +		*ring->ctxt_wp = cpu_to_le64(ring->iommu_base + ring->len - ring->el_size);
+>>>    		/* Update to all cores */
+>>>    		smp_wmb();
+>>
+

@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB484B9117
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD60C4B90F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238092AbiBPTU7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Feb 2022 14:20:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45298 "EHLO
+        id S238027AbiBPTGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:06:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238087AbiBPTUy (ORCPT
+        with ESMTP id S235595AbiBPTGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:20:54 -0500
-X-Greylist: delayed 857 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 11:20:41 PST
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1963E2AF3C5;
-        Wed, 16 Feb 2022 11:20:40 -0800 (PST)
-Received: from [100.55.237.147] (unknown [106.121.183.245])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxvuACSw1iK0cCAA--.7848S3;
-        Thu, 17 Feb 2022 03:05:39 +0800 (CST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v8 2/3] MIPS: Loongson64: dts: update the display controller device node
-Date:   Thu, 17 Feb 2022 03:05:38 +0800
-Message-Id: <911122E5-27A8-4584-987D-A9F908351800@loongson.cn>
-References: <76e3d3f2-c457-2940-10ea-834f13e526cb@flygoat.com>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-In-Reply-To: <76e3d3f2-c457-2940-10ea-834f13e526cb@flygoat.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: iPhone Mail (18D61)
-X-CM-TRANSID: AQAAf9CxvuACSw1iK0cCAA--.7848S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3Aw43tr18AF17Jw43Jrb_yoW8XF4kpw
-        13Ca4fKFsrJF9rG3Z3tF18Wr15ZFWrArnFgFsxtw17WF9xAa1jvr45KFs8XrW3ZFy8AFWj
-        v3yrKrW7KF1UCF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-        628vn2kIc2xKxwCY02Avz4vE14v_WwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUjjYLDUUUUU==
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 16 Feb 2022 14:06:11 -0500
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3523C27019F;
+        Wed, 16 Feb 2022 11:05:59 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2d641c31776so9255867b3.12;
+        Wed, 16 Feb 2022 11:05:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yLrFIsE9bo3p9BnVIL7Uc7sprqnSKm0YOW7fBIQdERM=;
+        b=RuPu7SzNkaJd1WR9+wnB7RuMLb2/6JyYiKaOmBtWGY+4dQhlRrtGvZ6OCmGpbsWMoE
+         P6HWXArbpHHQ7o31q4rHYkzBeYrTVeQSPrCkdBec5F3RuJYRVM//BwT9telG3bmZAcoB
+         FxtlU7vncA/7M5kWQwcqyBdpk27zG/p5D5rGZq0nsDf1j034j4N9NruAlDbyjIIBOzmu
+         KbHBVnw1SI5P4hqVE2AIEQGFaF2ieMYBNUQvgI02g+e1RAX1uy1xzU6XISp25w56c5dM
+         rQeGODqdry9lEgQwF/Hg6FiJO1SoO7gDJ8o3BoJD78lW8gTuVok5Fl/klWvtUyspycM7
+         AmqA==
+X-Gm-Message-State: AOAM532jcwakILeJ+RRfPI4QyknirUMpZKArmVbmtERBQUf3YEr8M+pB
+        AOGbopeO05mizhBNkS7JDbWQ5dPD2ZUb11wOmK0=
+X-Google-Smtp-Source: ABdhPJyFOmiGOmRDkw8czUhuWEAUWZI3b6hfKAcdDSxdtm3oSTgs7z2noREt7vOvPl7JarLhxJEUxltkCz2WrL99cSU=
+X-Received: by 2002:a0d:c244:0:b0:2d1:1fbb:180d with SMTP id
+ e65-20020a0dc244000000b002d11fbb180dmr3902361ywd.196.1645038358332; Wed, 16
+ Feb 2022 11:05:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20220215174743.GA878920@embeddedor> <202202151016.C0471D6E@keescook>
+ <20220215192110.GA883653@embeddedor> <Ygv8wY75hNqS7zO6@unreal> <20220215193221.GA884407@embeddedor>
+In-Reply-To: <20220215193221.GA884407@embeddedor>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Feb 2022 20:05:47 +0100
+Message-ID: <CAJZ5v0jpAnQk+Hub6ue6t712RW+W0YBjb_gAcZZbUeuYMGv7mg@mail.gmail.com>
+Subject: Re: [PATCH][next] treewide: Replace zero-length arrays with
+ flexible-array members
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        linux-alpha@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org, linux-s390@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        coresight@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        netdev <netdev@vger.kernel.org>,
+        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        target-devel@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org, sparmaintainer@unisys.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        greybus-dev@lists.linaro.org, linux-i3c@lists.infradead.org,
+        linux-rdma@vger.kernel.org,
+        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-perf-users@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oh，sorry for that. This is what i am write for our downstream 4.19.190 kernel，I write it long time ago. It shouldn’t be included in this patch set. Please ignore that, I will remove it at next version.
+On Tue, Feb 15, 2022 at 8:24 PM Gustavo A. R. Silva
+<gustavoars@kernel.org> wrote:
+>
+> On Tue, Feb 15, 2022 at 09:19:29PM +0200, Leon Romanovsky wrote:
+> > On Tue, Feb 15, 2022 at 01:21:10PM -0600, Gustavo A. R. Silva wrote:
+> > > On Tue, Feb 15, 2022 at 10:17:40AM -0800, Kees Cook wrote:
+> > > > On Tue, Feb 15, 2022 at 11:47:43AM -0600, Gustavo A. R. Silva wrote:
+> > > >
+> > > > These all look trivially correct to me. Only two didn't have the end of
+> > > > the struct visible in the patch, and checking those showed them to be
+> > > > trailing members as well, so:
+> > > >
+> > > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > >
+> > > I'll add this to my -next tree.
+> >
+> > I would like to ask you to send mlx5 patch separately to netdev. We are working
+> > to delete that file completely and prefer to avoid from unnecessary merge conflicts.
+>
+> Oh OK. Sure thing; I will do so.
 
-I am sorry introduce “bug” again.
+Can you also send the ACPI patch separately, please?
 
-
-发自我的iPhone
-
-> 在 2022年2月17日，上午2:44，Jiaxun Yang <jiaxun.yang@flygoat.com> 写道：
-> 
-> ﻿
-> 
->> 在 2022/2/16 18:17, Sui Jingfeng 写道:
->> From: suijingfeng <suijingfeng@loongson.cn>
->> 
->> The display controller is a pci device, its PCI vendor id is 0x0014
->> its PCI device id is 0x7a06.
->> 
->> 1) In order to let the lsdc kms driver to know which chip the DC is
->>    contained in, we add different compatible for different chip.
->> 
->> 2) Add display controller device node for ls2k1000 SoC
->> 
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> ---
->>  .../loongson/loongson,display-controller.yaml | 114 ++++++++++++++++++
->>  .../display/loongson/loongson-drm.txt         |  16 +++
-> ^ Is loongson-drm.txt intentional?
-> It seems irrelevant....
-> 
-> Thanks.
->>  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 ++
->>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +-
->>  4 files changed, 140 insertions(+), 5 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson-drm.txt
-> [...]
-> - Jiaxun
-
+We would like to route it through the upstream ACPICA code base.

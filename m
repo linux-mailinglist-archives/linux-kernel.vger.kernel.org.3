@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412EB4B850F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707FF4B8512
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiBPJ7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:59:33 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47252 "EHLO
+        id S232611AbiBPKAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 05:00:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbiBPJ7b (ORCPT
+        with ESMTP id S232406AbiBPKAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:59:31 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FA6265136
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:59:19 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id p5so4302615ybd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:59:19 -0800 (PST)
+        Wed, 16 Feb 2022 05:00:06 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7CE2B623B;
+        Wed, 16 Feb 2022 01:59:55 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id bs32so1270272qkb.1;
+        Wed, 16 Feb 2022 01:59:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g6yc0CzjhZvL8asvAOjVxpZRVzWjAV26MMR3ayD0Jss=;
-        b=XGdkv5sh7wesUFoBMJy2j3M0ZGke0f+k0scopU8aYxlvCwi4vR/FyE53oliA3nse3E
-         GsEQ2lf4rd2ykfkXR34DrqI2ga7koqk5dbsQuGeuH7cfUy4adGZqDjSF3dPD0ex7Uwzi
-         DM9zTFb60MwwHYDFxNhz7o/AH6f226Pms31VGM5NbXsno/58svkXLg73g0cnzKXY7KCi
-         KUQwn8q07xqK1RpieHRGRmyz7zDGH/5/T9Rf1sT/D7sJXvytIMv6oUjLJCCu0dUYNu4A
-         GOgq+VSjs6Eat5SoNAhgOqF664kfJ/lRXA+T7/mtIrz+MWugKBILKg2OzeWPdTaHa1nn
-         HGhw==
+        bh=C76jbT5fLtK7mnPN0788Is6uC9EFS638zMWrNg3x0FI=;
+        b=Q52kIAR+jY8bAEZKyyg6SmUHa697hLuCWv4gKQeOjDH6lEf5keypJAgOF2sapK6Uml
+         0miGCpNomfcuoFzRM2kWQWQcmpRmvQKz4tNywYN7fWHPK78ektKsoP4FtA33y96CcnOR
+         mnYUSgRR65YHIjcCuaKbaasHXnuU6pDCjQkYRQ0evduxJ7MKWClu1ek/o8JNeO4zohcP
+         xHuO6Bm5ylLy2ExAWinVckyHrbke9nMhTwXMUP7G6bLWb3Df1n9i/P1kL4e+pZLA5Odm
+         jGKiW+Gn/wDMa9kQFKppB0xLDNHeJZkKV7P4r2d9NIGsswFfJDMhmjp1M90QVgnFjn8U
+         1wKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g6yc0CzjhZvL8asvAOjVxpZRVzWjAV26MMR3ayD0Jss=;
-        b=kBJ7em2DkuN0EnaaCTuY3ydaSeCBCOag+6FOekMShfnQTwGQ6DKXgDZhcZ64pGronv
-         5J+lsknqcBKucMq+0d4yEmdblDYNwz9tXS6sP1IYRt9/5NsU3In1j3JMqS1ZuuWPsg2k
-         D08tcZ6pEXru7ss1TnrWtj/jyXwLoftINPxHKqEO9NebfTU355rW5pIaRMKM9VnrOUFE
-         /2/SSP6Lg76yeUHM18quLvxmrgCzd0vzjwixm+WNZFtnUBgXFQw/I75lSQ1JbjZC1ECa
-         VvzXi+hgGNiH/i69fvgDRpJvTywws/O7RwJi9CHe6ETd2j/+KRQL6SkfcvHwXfDo9IZI
-         MG7w==
-X-Gm-Message-State: AOAM5326GBM14pcgLY5jKcqHh20pi4MhHvw6E8FH6QIR7U+Onya9oGOY
-        ITLlI2ABrk8VnoF6Lz0Ay0ivSc1DFWMc3IvKdJoJiA==
-X-Google-Smtp-Source: ABdhPJwU2OW7Do06toZ0xEFJUCUVefzB/0WZylYASkRpbaMU0drvCjN+jE7XQsJzmZgcUW8m27rMfk57hP+0LQAV3nA=
-X-Received: by 2002:a0d:ee41:0:b0:2d2:f0aa:d3ba with SMTP id
- x62-20020a0dee41000000b002d2f0aad3bamr1771660ywe.512.1645005558266; Wed, 16
- Feb 2022 01:59:18 -0800 (PST)
+        bh=C76jbT5fLtK7mnPN0788Is6uC9EFS638zMWrNg3x0FI=;
+        b=fB1LlB6SIH+qeg3hAmPy9jIV4ZBOfosyY9SxxR+X13uIHVb4vv3dTR5/yNkYpA6rm6
+         4ECulLmjx5Bjvkg1Ok5M7+hs6vp3htTst0amflCFXESpWpTnqltmqy3zJGJMlFGERSds
+         CmN1LvoeG5f5JCDXe4OoEVMCP1c8ii2wZHpXxV9hgIlHjtkKgsIiM6ebyF8AsVAW92nC
+         9JSd+E1z0vo2zBWWtkP4cvYHrj8I0CgbPvwR5w+moh51nIoRuyDWrIio/tZsi68rq9Mv
+         djIYSpkfFcCb0+9UNpyfvxB4djc8GoNVdyFQtW0quseLauxNJ+ysNQNRKKRk0ONsezQF
+         hYoQ==
+X-Gm-Message-State: AOAM531tJTQggBKUzExD/CmrXdelD8oPhE+XmOD3tjdNQamd4IEmBGsZ
+        t0n468rbdHPAz1D4dXaZcVSGFy/IN3lIpLK2kRU=
+X-Google-Smtp-Source: ABdhPJzs5q5L00qr68Kor/GBTEogted3eS1x7qznJHlftfNjefeKR+AQf/75lvTL2FVUeq59lkQb5xhb5rwjTD4YxoE=
+X-Received: by 2002:a37:af45:0:b0:47c:ddbb:b63b with SMTP id
+ y66-20020a37af45000000b0047cddbbb63bmr874780qke.42.1645005594050; Wed, 16 Feb
+ 2022 01:59:54 -0800 (PST)
 MIME-Version: 1.0
-References: <f50c5f96ef896d7936192c888b0c0a7674e33184.1644943792.git.andreyknvl@google.com>
-In-Reply-To: <f50c5f96ef896d7936192c888b0c0a7674e33184.1644943792.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 16 Feb 2022 10:59:06 +0100
-Message-ID: <CANpmjNPG2wP9xiGDJboMJzf-YD+skOO532O+bKkAz+tpvDsF=g@mail.gmail.com>
-Subject: Re: [PATCH mm] fix for "kasan, fork: reset pointer tags of vmapped stacks"
-To:     andrey.konovalov@linux.dev
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
+References: <20220213213935.2c5ef8c2@canb.auug.org.au> <CAOX2RU5NzOK+d-QEMsOiSPX85M2_B44SeJUteZepsyZny7fgnQ@mail.gmail.com>
+ <YgngMN+lKaW3fYp5@ripper>
+In-Reply-To: <YgngMN+lKaW3fYp5@ripper>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Wed, 16 Feb 2022 10:59:43 +0100
+Message-ID: <CAOX2RU5dVVb86JPc1pGkF3yDs4QejOd1rguDZz=p6FA3kacN7A@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the qcom tree
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andy Gross <agross@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,51 +69,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 17:52, <andrey.konovalov@linux.dev> wrote:
+On Mon, 14 Feb 2022 at 05:50, Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
 >
-> From: Andrey Konovalov <andreyknvl@google.com>
+> On Sun 13 Feb 03:52 PST 2022, Robert Marko wrote:
 >
-> That patch didn't update the case when a stack is retrived from
-> cached_stacks in alloc_thread_stack_node(). As cached_stacks stores
-> vm_structs and not stack pointers themselves, the pointer tag needs
-> to be reset there as well.
+> > On Sun, 13 Feb 2022 at 11:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > In commit
+> > >
+> > >   bf8f5182b8f5 ("clk: qcom: ipq8074: fix PCI-E clock oops")
+> > >
+> > > Fixes tag
+> > >
+> > >   Fixes: f0cfcf1a ("clk: qcom: ipq8074: Add missing clocks for pcie")
+> > >
+> > > has these problem(s):
+> > >
+> > >   - SHA1 should be at least 12 digits long
+> > >     Can be fixed for the future by setting core.abbrev to 12 (or more)
+> > >     or (for git v2.11 or later) just making sure it is not set (or set to
+> > >     "auto").
+> >
+> > Hi Stephen,
+> >
+> > Sorry for the short hash, don't know how this happened.
+> > Do you want me to send a v3 with the fixed hash?
+> >
 >
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> No need, I could update the commit as is. But given that I would have to
+> rebase 20 other patches I'm hesitant to fix it.
 
-Reviewed-by: Marco Elver <elver@google.com>
+Thanks,
 
-Did the test catch this? If not, can this be tested?
+I will make sure not for this not to happen again.
 
-> ---
->  kernel/fork.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+Regards
 >
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 57d624f05182..5e3ad2e7a756 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -226,15 +226,17 @@ static unsigned long *alloc_thread_stack_node(struct task_struct *tsk, int node)
->                 if (!s)
->                         continue;
+> Given that checkpatch catches this issue in commit references in the
+> message and other issues in Fixes I was expecting it to catch this one
+> as well... Will make sure to look for this going forward (or perhaps
+> figure out how to improve checkpatch...)
 >
-> -               /* Mark stack accessible for KASAN. */
-> +               /* Reset stack metadata. */
->                 kasan_unpoison_range(s->addr, THREAD_SIZE);
->
-> +               stack = kasan_reset_tag(s->addr);
-> +
->                 /* Clear stale pointers from reused stack. */
-> -               memset(s->addr, 0, THREAD_SIZE);
-> +               memset(stack, 0, THREAD_SIZE);
->
->                 tsk->stack_vm_area = s;
-> -               tsk->stack = s->addr;
-> -               return s->addr;
-> +               tsk->stack = stack;
-> +               return stack;
->         }
->
->         /*
-> --
-> 2.25.1
->
+> Thanks,
+> Bjorn

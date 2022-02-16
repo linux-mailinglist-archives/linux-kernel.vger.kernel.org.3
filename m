@@ -2,116 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD60C4B90F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3E84B9100
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238027AbiBPTGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:06:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52602 "EHLO
+        id S237949AbiBPTHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:07:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbiBPTGL (ORCPT
+        with ESMTP id S237936AbiBPTHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:06:11 -0500
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3523C27019F;
-        Wed, 16 Feb 2022 11:05:59 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2d641c31776so9255867b3.12;
-        Wed, 16 Feb 2022 11:05:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yLrFIsE9bo3p9BnVIL7Uc7sprqnSKm0YOW7fBIQdERM=;
-        b=RuPu7SzNkaJd1WR9+wnB7RuMLb2/6JyYiKaOmBtWGY+4dQhlRrtGvZ6OCmGpbsWMoE
-         P6HWXArbpHHQ7o31q4rHYkzBeYrTVeQSPrCkdBec5F3RuJYRVM//BwT9telG3bmZAcoB
-         FxtlU7vncA/7M5kWQwcqyBdpk27zG/p5D5rGZq0nsDf1j034j4N9NruAlDbyjIIBOzmu
-         KbHBVnw1SI5P4hqVE2AIEQGFaF2ieMYBNUQvgI02g+e1RAX1uy1xzU6XISp25w56c5dM
-         rQeGODqdry9lEgQwF/Hg6FiJO1SoO7gDJ8o3BoJD78lW8gTuVok5Fl/klWvtUyspycM7
-         AmqA==
-X-Gm-Message-State: AOAM532jcwakILeJ+RRfPI4QyknirUMpZKArmVbmtERBQUf3YEr8M+pB
-        AOGbopeO05mizhBNkS7JDbWQ5dPD2ZUb11wOmK0=
-X-Google-Smtp-Source: ABdhPJyFOmiGOmRDkw8czUhuWEAUWZI3b6hfKAcdDSxdtm3oSTgs7z2noREt7vOvPl7JarLhxJEUxltkCz2WrL99cSU=
-X-Received: by 2002:a0d:c244:0:b0:2d1:1fbb:180d with SMTP id
- e65-20020a0dc244000000b002d11fbb180dmr3902361ywd.196.1645038358332; Wed, 16
- Feb 2022 11:05:58 -0800 (PST)
+        Wed, 16 Feb 2022 14:07:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931AD29CB1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:07:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1F5BB81FBE
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 19:07:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE32C004E1;
+        Wed, 16 Feb 2022 19:07:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645038420;
+        bh=O6rg2EA0mmSpBoicY2+Pis/uzSG9J5E6UibqILOjyKw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=LOf5dpqk49yNupWbhM4D9S7tOGpeM38BEzumCRrduLE79xfb93b/4OpN4bMO3T9fj
+         SIKBTAWJEez+QFt2krProHGJPtVLZy8+vfg/M4Ll6JEc5UZawZ1N8USk6Ko5qBcXae
+         TvSwSfJTko/mQdZHuicQnnGN3pM1+VlbVNm2DRpOOMm6KmNVEyTDJwRniCi6kP9nXC
+         nNO9R4pgVHJaYKf8uEa/dW/H5DaQEPUs7RNhvcWeXjLMpWuAMacFSNrq8719AfbuJd
+         4xIsmr6bcuexOQZJDk2Dzb61DpCID4xMhmZ8ydIKGpiNj43A813e2naZPGRgYGptqU
+         zHjsk43fRadVg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 33F275C064D; Wed, 16 Feb 2022 11:07:00 -0800 (PST)
+Date:   Wed, 16 Feb 2022 11:07:00 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+Cc:     Tejun Heo <tj@kernel.org>, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] workqueue: Fix race in schedule and flush work
+Message-ID: <20220216190700.GL4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220210184319.25009-1-treasure4paddy@gmail.com>
+ <Ygqw+EHo//6VGs6q@slm.duckdns.org>
+ <20220216184939.GA3868@pswork>
 MIME-Version: 1.0
-References: <20220215174743.GA878920@embeddedor> <202202151016.C0471D6E@keescook>
- <20220215192110.GA883653@embeddedor> <Ygv8wY75hNqS7zO6@unreal> <20220215193221.GA884407@embeddedor>
-In-Reply-To: <20220215193221.GA884407@embeddedor>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 16 Feb 2022 20:05:47 +0100
-Message-ID: <CAJZ5v0jpAnQk+Hub6ue6t712RW+W0YBjb_gAcZZbUeuYMGv7mg@mail.gmail.com>
-Subject: Re: [PATCH][next] treewide: Replace zero-length arrays with
- flexible-array members
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        linux-alpha@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org, linux-s390@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>,
-        coresight@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        netdev <netdev@vger.kernel.org>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        target-devel@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, sparmaintainer@unisys.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        greybus-dev@lists.linaro.org, linux-i3c@lists.infradead.org,
-        linux-rdma@vger.kernel.org,
-        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216184939.GA3868@pswork>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 8:24 PM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
->
-> On Tue, Feb 15, 2022 at 09:19:29PM +0200, Leon Romanovsky wrote:
-> > On Tue, Feb 15, 2022 at 01:21:10PM -0600, Gustavo A. R. Silva wrote:
-> > > On Tue, Feb 15, 2022 at 10:17:40AM -0800, Kees Cook wrote:
-> > > > On Tue, Feb 15, 2022 at 11:47:43AM -0600, Gustavo A. R. Silva wrote:
-> > > >
-> > > > These all look trivially correct to me. Only two didn't have the end of
-> > > > the struct visible in the patch, and checking those showed them to be
-> > > > trailing members as well, so:
-> > > >
-> > > > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > >
-> > > I'll add this to my -next tree.
+On Wed, Feb 16, 2022 at 07:49:39PM +0100, Padmanabha Srinivasaiah wrote:
+> On Mon, Feb 14, 2022 at 09:43:52AM -1000, Tejun Heo wrote:
+> > Hello,
+> > 
+> > > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > > index 33f1106b4f99..a3f53f859e9d 100644
+> > > --- a/kernel/workqueue.c
+> > > +++ b/kernel/workqueue.c
+> > > @@ -3326,28 +3326,38 @@ EXPORT_SYMBOL(cancel_delayed_work_sync);
+> > >   */
+> > >  int schedule_on_each_cpu(work_func_t func)
+> > >  {
+> > > -	int cpu;
+> > >  	struct work_struct __percpu *works;
+> > > +	cpumask_var_t sched_cpumask;
+> > > +	int cpu, ret = 0;
+> > >  
+> > > -	works = alloc_percpu(struct work_struct);
+> > > -	if (!works)
+> > > +	if (!alloc_cpumask_var(&sched_cpumask, GFP_KERNEL))
+> > >  		return -ENOMEM;
+> > >  
+> > > +	works = alloc_percpu(struct work_struct);
+> > > +	if (!works) {
+> > > +		ret = -ENOMEM;
+> > > +		goto free_cpumask;
+> > > +	}
+> > > +
+> > >  	cpus_read_lock();
+> > >  
+> > > -	for_each_online_cpu(cpu) {
+> > > +	cpumask_copy(sched_cpumask, cpu_online_mask);
+> > > +	for_each_cpu_and(cpu, sched_cpumask, cpu_online_mask) {
+> > 
+> > This definitely would need a comment explaining what's going on cuz it looks
+> > weird to be copying the cpumask which is supposed to stay stable due to the
+> > cpus_read_lock().Given that it can only happen during early boot and the
+> > online cpus can only be expanding, maybe just add sth like:
+> > 
+> >         if (early_during_boot) {
+> >                 for_each_possible_cpu(cpu)
+> >                         INIT_WORK(per_cpu_ptr(works, cpu), func);
+> >         }
+> > 
+> 
+> Thanks tejun for the reply and suggestions.
+> 
+> Yes, unfortunately cpus_read_lock not keeping cpumask stable at
+> secondary boot. Not sure, may be it only gurantee 'cpu' dont go down
+> under cpus_read_[lock/unlock].
+> 
+> As suggested will tryout something like:
+> 	if (system_state != RUNNING) {
+> 		:
+> 	}
+> > BTW, who's calling schedule_on_each_cpu() that early during boot. It makes
+> > no sense to do this while the cpumasks can't be stabilized.
 > >
-> > I would like to ask you to send mlx5 patch separately to netdev. We are working
-> > to delete that file completely and prefer to avoid from unnecessary merge conflicts.
->
-> Oh OK. Sure thing; I will do so.
+> It is  implemenation of CONFIG_TASKS_RUDE_RCU.
 
-Can you also send the ACPI patch separately, please?
+Another option would be to adjust CONFIG_TASKS_RUDE_RCU based on where
+things are in the boot process.  For example:
 
-We would like to route it through the upstream ACPICA code base.
+	// Wait for one rude RCU-tasks grace period.
+	static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
+	{
+		if (num_online_cpus() <= 1)
+			return;  // Fastpath for only one CPU.
+		rtp->n_ipis += cpumask_weight(cpu_online_mask);
+		schedule_on_each_cpu(rcu_tasks_be_rude);
+	}
+
+Easy enough either way!
+
+							Thanx, Paul

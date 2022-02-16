@@ -2,119 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B0B4B84E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 10:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FBA4B8515
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbiBPJwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 04:52:39 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51992 "EHLO
+        id S232608AbiBPJ7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 04:59:18 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232577AbiBPJwc (ORCPT
+        with ESMTP id S232599AbiBPJ7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 04:52:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 202E4205FD
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:52:13 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A42BE113E;
-        Wed, 16 Feb 2022 01:52:07 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.47.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BEA4E3F718;
-        Wed, 16 Feb 2022 01:52:04 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] coresight: Drop unused 'none' enum value for each component
-Date:   Wed, 16 Feb 2022 15:21:58 +0530
-Message-Id: <1645005118-10561-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Feb 2022 04:59:17 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC36D2A4A22
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:59:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645005544; x=1676541544;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cY39gSi5BKIRpuqOFQUh3+zixEbH2O5vxI8SJ+qmhEU=;
+  b=SQ71rHjhETePAuOw9exPPx/wsAc512PRvK0+dc8oN2gO8T+ljW2jlM40
+   U4YRwgprbJISkc2NgNno3qBlh4ClrwzO8g+3hpnk1HJw2FTvuD9bdRqU3
+   EurZVHKXLkVz8Va02Xxe2tlD/7c+wFbeI7fy5/MUNqVPCygddWql6qf2Q
+   7sMs0uNVnuxGfv3Y9+PZYHIV+dc6epKvoVqWakS15keteaXdAG7ldwmjL
+   bdVoo77Sx/cpIfnFwYX92Tge7ENVNCoy0FkKE4fHYoJP3ru3SGDf+kmbq
+   tV/kXerRt36AMYB2YHzurZG8sA97sq36lFNBbhvGBHWliu18GQdF3A4Wj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="311306986"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="311306986"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:58:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="704237234"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2022 01:58:33 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKH4y-000Agt-RO; Wed, 16 Feb 2022 09:58:32 +0000
+Date:   Wed, 16 Feb 2022 17:57:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp] BUILD SUCCESS
+ 757856e8836bb03c418d2ea03a103ad12d361a69
+Message-ID: <620cca96.38WQ4pnTLc9QZnFr%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CORESIGHT_DEV_TYPE_NONE/CORESIGHT_DEV_SUBTYPE_XXXX_NONE values are not used
-any where. Actual enumeration can start from 0. Just drop these unused enum
-values.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp
+branch HEAD: 757856e8836bb03c418d2ea03a103ad12d361a69  Merge branch 'for-next/kspp-fam0' into for-next/kspp
 
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc: Mike Leach <mike.leach@linaro.org>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: coresight@lists.linaro.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+elapsed time: 763m
+
+configs tested: 158
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                            allyesconfig
+arm64                               defconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220214
+sh                 kfr2r09-romimage_defconfig
+mips                        jmr3927_defconfig
+m68k                            mac_defconfig
+sh                           se7751_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                           corgi_defconfig
+arc                      axs103_smp_defconfig
+xtensa                           alldefconfig
+microblaze                      mmu_defconfig
+m68k                       m5475evb_defconfig
+arc                         haps_hs_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                  decstation_64_defconfig
+powerpc                 mpc834x_mds_defconfig
+arm                           sunxi_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                                  defconfig
+arm                          gemini_defconfig
+powerpc                     pq2fads_defconfig
+m68k                       m5208evb_defconfig
+parisc                           alldefconfig
+arm                           h5000_defconfig
+mips                        bcm47xx_defconfig
+powerpc                    sam440ep_defconfig
+sparc64                          alldefconfig
+m68k                             alldefconfig
+arm                       aspeed_g5_defconfig
+arm                           viper_defconfig
+arm                            mps2_defconfig
+arm                      jornada720_defconfig
+openrisc                  or1klitex_defconfig
+powerpc                        warp_defconfig
+arm                        keystone_defconfig
+powerpc                        cell_defconfig
+arm                         at91_dt_defconfig
+powerpc                    klondike_defconfig
+h8300                               defconfig
+sh                             espt_defconfig
+mips                       capcella_defconfig
+arm                        cerfcube_defconfig
+mips                      loongson3_defconfig
+sh                        edosk7705_defconfig
+powerpc                 mpc834x_itx_defconfig
+m68k                        mvme16x_defconfig
+mips                            gpr_defconfig
+arm                          simpad_defconfig
+powerpc                  iss476-smp_defconfig
+arm                  randconfig-c002-20220214
+arm                  randconfig-c002-20220216
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64               randconfig-a013-20220214
+x86_64               randconfig-a014-20220214
+x86_64               randconfig-a012-20220214
+x86_64               randconfig-a015-20220214
+x86_64               randconfig-a011-20220214
+x86_64               randconfig-a016-20220214
+i386                 randconfig-a013-20220214
+i386                 randconfig-a016-20220214
+i386                 randconfig-a012-20220214
+i386                 randconfig-a015-20220214
+i386                 randconfig-a011-20220214
+i386                 randconfig-a014-20220214
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220214
+arc                  randconfig-r043-20220214
+s390                 randconfig-r044-20220214
+riscv                randconfig-r042-20220216
+arc                  randconfig-r043-20220216
+s390                 randconfig-r044-20220216
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+riscv                randconfig-c006-20220216
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220216
+arm                  randconfig-c002-20220216
+i386                          randconfig-c001
+mips                 randconfig-c004-20220216
+arm                                 defconfig
+riscv                    nommu_virt_defconfig
+powerpc                       ebony_defconfig
+hexagon                             defconfig
+x86_64               randconfig-a002-20220214
+x86_64               randconfig-a006-20220214
+x86_64               randconfig-a005-20220214
+x86_64               randconfig-a004-20220214
+x86_64               randconfig-a003-20220214
+x86_64               randconfig-a001-20220214
+i386                 randconfig-a002-20220214
+i386                 randconfig-a003-20220214
+i386                 randconfig-a001-20220214
+i386                 randconfig-a004-20220214
+i386                 randconfig-a005-20220214
+i386                 randconfig-a006-20220214
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220216
+hexagon              randconfig-r041-20220216
+hexagon              randconfig-r045-20220214
+hexagon              randconfig-r041-20220214
+
 ---
- drivers/hwtracing/coresight/coresight-core.c | 3 ---
- include/linux/coresight.h                    | 5 -----
- 2 files changed, 8 deletions(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-index 88653d1c06a4..af00dca8d1ac 100644
---- a/drivers/hwtracing/coresight/coresight-core.c
-+++ b/drivers/hwtracing/coresight/coresight-core.c
-@@ -1278,9 +1278,6 @@ static struct attribute *coresight_source_attrs[] = {
- ATTRIBUTE_GROUPS(coresight_source);
- 
- static struct device_type coresight_dev_type[] = {
--	{
--		.name = "none",
--	},
- 	{
- 		.name = "sink",
- 		.groups = coresight_sink_groups,
-diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-index 93a2922b7653..9f445f09fcfe 100644
---- a/include/linux/coresight.h
-+++ b/include/linux/coresight.h
-@@ -36,7 +36,6 @@
- extern struct bus_type coresight_bustype;
- 
- enum coresight_dev_type {
--	CORESIGHT_DEV_TYPE_NONE,
- 	CORESIGHT_DEV_TYPE_SINK,
- 	CORESIGHT_DEV_TYPE_LINK,
- 	CORESIGHT_DEV_TYPE_LINKSINK,
-@@ -46,7 +45,6 @@ enum coresight_dev_type {
- };
- 
- enum coresight_dev_subtype_sink {
--	CORESIGHT_DEV_SUBTYPE_SINK_NONE,
- 	CORESIGHT_DEV_SUBTYPE_SINK_PORT,
- 	CORESIGHT_DEV_SUBTYPE_SINK_BUFFER,
- 	CORESIGHT_DEV_SUBTYPE_SINK_SYSMEM,
-@@ -54,21 +52,18 @@ enum coresight_dev_subtype_sink {
- };
- 
- enum coresight_dev_subtype_link {
--	CORESIGHT_DEV_SUBTYPE_LINK_NONE,
- 	CORESIGHT_DEV_SUBTYPE_LINK_MERG,
- 	CORESIGHT_DEV_SUBTYPE_LINK_SPLIT,
- 	CORESIGHT_DEV_SUBTYPE_LINK_FIFO,
- };
- 
- enum coresight_dev_subtype_source {
--	CORESIGHT_DEV_SUBTYPE_SOURCE_NONE,
- 	CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
- 	CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
- 	CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
- };
- 
- enum coresight_dev_subtype_helper {
--	CORESIGHT_DEV_SUBTYPE_HELPER_NONE,
- 	CORESIGHT_DEV_SUBTYPE_HELPER_CATU,
- };
- 
--- 
-2.20.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

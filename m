@@ -2,73 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D74C4B8BA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F41D4B8BAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiBPOlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:41:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46316 "EHLO
+        id S235176AbiBPOmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:42:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiBPOlq (ORCPT
+        with ESMTP id S235167AbiBPOmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:41:46 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4072716B;
-        Wed, 16 Feb 2022 06:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645022493; x=1676558493;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=NTr5l/kjPw/+EYpzQlgU6KSNc69rhpWj63Jfbws9zPY=;
-  b=DygwmQC5pIRj564kjAiDpm98tmPYtTZom6ML5reMZWeG8FuRiusPgxAF
-   EPlkKHkDFdQK0dVFha55gKMe9Fols0CyDYbGTJgkbOM10dNEtIn94DJkP
-   udonTevDXJawwfIshfypa2Wg7HN4yCfljwFSV3boIDG6gEaYfJPBilvOr
-   Y=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 06:41:31 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 06:41:30 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 06:41:30 -0800
-Received: from [10.216.55.237] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
- 2022 06:41:24 -0800
-Subject: Re: [PATCH v6 7/7] pinctrl: qcom: Update clock voting as optional
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>
-CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1644851994-22732-1-git-send-email-quic_srivasam@quicinc.com>
- <1644851994-22732-8-git-send-email-quic_srivasam@quicinc.com>
- <a209336a-9108-f1ac-ee6d-a838df115c6d@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-Message-ID: <b663f63f-4a5a-3a2a-9be7-fa7258ce93c5@quicinc.com>
-Date:   Wed, 16 Feb 2022 20:11:21 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <a209336a-9108-f1ac-ee6d-a838df115c6d@linaro.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        Wed, 16 Feb 2022 09:42:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CDB9398A;
+        Wed, 16 Feb 2022 06:41:57 -0800 (PST)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GDleSf026894;
+        Wed, 16 Feb 2022 14:41:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=mpSbBTuH3Pq4KwaOYwK3fy0IQ81NFE67dctx3j1gzk4=;
+ b=OOixuYnVJc0eoCdQ4/yWbdUqR6tjj4M2mnL6+OirV/Vu3LTHgt+wi1vMb73V6vpGUdop
+ aZ5G4MdxvDS6mAZ/kIV448ok3048aBAv7xGBejKZOCRA9EUQiH8tZEGBVJnZh6XLw8op
+ Vu4hMAmFnRQspU3TOsTg+z+w1QcVuJQ3N1TZhBw0hOUl6IqKaRVoqTwYLgSL3q3+lvkc
+ kvCLZJ2CpDQczlxTE7tFF05hIJ72LABhiIIz4b68n64CKfIhPwKweklRgGi8W8sknEWh
+ ptFs0n/0bB/nU8laofL/5LecETcP5S2cnOMZBAnvFMpns/Bn2y8mfEcORNwXyCq+MyV7 EQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e92fdsb72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:35 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GE5gWY014712;
+        Wed, 16 Feb 2022 14:41:35 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e92fdsb6j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:35 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GESjeF006778;
+        Wed, 16 Feb 2022 14:41:33 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645k1vtd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:33 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GEV6Ou45482326
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Feb 2022 14:31:06 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A4E711C05E;
+        Wed, 16 Feb 2022 14:41:30 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 010F211C050;
+        Wed, 16 Feb 2022 14:41:28 +0000 (GMT)
+Received: from sig-9-65-92-254.ibm.com (unknown [9.65.92.254])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Feb 2022 14:41:27 +0000 (GMT)
+Message-ID: <91c18b07657bb5c68700a66cc16bde27d6ec6aea.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 07/27] ima: Move ima_htable into ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Christian Brauner <brauner@kernel.org>
+Date:   Wed, 16 Feb 2022 09:41:27 -0500
+In-Reply-To: <20220201203735.164593-8-stefanb@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-8-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: w6oG2Eh7b30jJqnDFp3xV9PwulqdUsOm
+X-Proofpoint-ORIG-GUID: D96mfGzO08ta1EKvQsV1NYDkexKSy39w
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-16_07,2022-02-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 bulkscore=0 spamscore=0 adultscore=0
+ clxscore=1015 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202160082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,88 +101,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> Move ima_htable into ima_namespace. This way a front-end like
+> securityfs can show the number of violations of an IMA namespace.
 
-On 2/16/2022 7:50 PM, Srinivas Kandagatla wrote:
-Thanks for Your Time Srini!!!
->
-> On 14/02/2022 15:19, Srinivasa Rao Mandadapu wrote:
->> Update bulk clock voting to optional voting as ADSP bypass platform 
->> doesn't
->> need macro and decodec clocks, these are maintained as power domains and
->> operated from lpass audio core cc.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c        | 16 +++++++++-------
->>   drivers/pinctrl/qcom/pinctrl-lpass-lpi.h        |  1 +
->>   drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c |  1 +
->>   3 files changed, 11 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c 
->> b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> index 8a82fd9..103f0a6c 100644
->> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> @@ -407,13 +407,15 @@ int lpi_pinctrl_probe(struct platform_device 
->> *pdev)
->>           return dev_err_probe(dev, PTR_ERR(pctrl->slew_base),
->>                        "Slew resource not provided\n");
->>   -    ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
->> -    if (ret)
->> -        return dev_err_probe(dev, ret, "Can't get clocks\n");
->> -
->> -    ret = clk_bulk_prepare_enable(MAX_LPI_NUM_CLKS, pctrl->clks);
->> -    if (ret)
->> -        return dev_err_probe(dev, ret, "Can't enable clocks\n");
->> +    if (!data->is_clk_optional) {
->> +        ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
->> +        if (ret)
->> +            return dev_err_probe(dev, ret, "Can't get clocks\n");
->> +
->> +        ret = clk_bulk_prepare_enable(MAX_LPI_NUM_CLKS, pctrl->clks);
->> +        if (ret)
->> +            return dev_err_probe(dev, ret, "Can't enable clocks\n");
->> +    }
->>         pctrl->desc.pctlops = &lpi_gpio_pinctrl_ops;
->>       pctrl->desc.pmxops = &lpi_gpio_pinmux_ops;
->> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h 
->> b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
->> index a511d72..c1079bf 100644
->> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
->> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
->> @@ -77,6 +77,7 @@ struct lpi_pinctrl_variant_data {
->>       int ngroups;
->>       const struct lpi_function *functions;
->>       int nfunctions;
->> +    int is_clk_optional;
->>   };
->>     int lpi_pinctrl_probe(struct platform_device *pdev);
->> diff --git a/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c 
->> b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
->> index 5bf30d97..4277e31 100644
->> --- a/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
->> +++ b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
->> @@ -143,6 +143,7 @@ static const struct lpi_pinctrl_variant_data 
->> sc7280_lpi_data = {
->>       .ngroups = ARRAY_SIZE(sc7280_groups),
->>       .functions = sc7280_functions,
->>       .nfunctions = ARRAY_SIZE(sc7280_functions),
->> +    .is_clk_optional = 1,
->
-> This is forcefully set assuming that sc7280 is always used in ADSP 
-> bypass mode. Which is not correct.
->
-> Can't you use devm_clk_bulk_get_optional instead?
+^can show the number of measurement records and number of violations
 
-Yes. Agreed. Initially used devm_clk_bulk_get_optional, but Bjorn 
-suggested for conditional check instead of optional.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
 
-Again Shall we go for optional clock voting?
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
->
-> --srini
->
->>   };
->>     static const struct of_device_id lpi_pinctrl_of_match[] = {

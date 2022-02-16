@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92954B8FC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E22B04B8FC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237379AbiBPR5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 12:57:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37558 "EHLO
+        id S237391AbiBPSCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:02:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiBPR5f (ORCPT
+        with ESMTP id S230424AbiBPSCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:57:35 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3955B2731CF;
-        Wed, 16 Feb 2022 09:57:23 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 75so2802653pgb.4;
-        Wed, 16 Feb 2022 09:57:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7y8q6OneMcYJn/oXpuf4sPWEGuBdMP1my8DiPVgdjX0=;
-        b=Txm8TRHo7HhSusITLNfaXifnUaXbIewk6UBdDzIMVVn0JQg4vytJWACECNn4zpZTo8
-         C/7SLPOhN/vxl6ZrOFnZbi7X4H84x+zdHJkB9aTvjUW1QedJPbv4VyFbtamx+LiSsfWe
-         UJPbnhL/X21mX7bx1BEzrTwbzPUxbiEaCy3XbJ7AHFbRnEOqKrstKHfORpF4bbmNc5l7
-         +qZr0+8BIPcqnoJH73OTu6azbFBEdjbdiHZqIVOjmqd5RIV1ad2WMS3BrERPuFWtjqp9
-         TQb69F3KzbZtcF0FPvzt8Rmn1Np/+jXqlTUVFr00CZHxkz4FUHc7PzgKOFtA8nGn2XBE
-         D9TQ==
+        Wed, 16 Feb 2022 13:02:00 -0500
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0022D1EC57;
+        Wed, 16 Feb 2022 10:01:47 -0800 (PST)
+Received: by mail-pf1-f172.google.com with SMTP id g1so2781284pfv.1;
+        Wed, 16 Feb 2022 10:01:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7y8q6OneMcYJn/oXpuf4sPWEGuBdMP1my8DiPVgdjX0=;
-        b=zo31Qu+0AQdzH6qiJ/iDY/jnkBQlVIPxTqtY8lEjWsyPVd1Cjy03/MuvgnwIWwHpcy
-         Y3HbKDvJBdEBvfFwSIRREACqrSC+o/cblJcBRvPwGRvjFDpCg7m5zJipxCEJl+w8G94c
-         ShHnPdhnvIiE5jCeSdpY3B8QW8Mo/84TnAoAh5K+uHD/sQrmhi+QEpgNuazC3F22rH7k
-         qW/Lu0fVDd5yWufWoSA8A7JOGAP+Paa0R6HJ5YCBg7FV7RSHGygkvXjbMqMrrE/LQG7K
-         dFG5PO3tSA6iK00J1eax5RRK7WzFNdM56mgnhGtG+eEpF9sEcwTO0E+PEyi6dHfDQXSx
-         jn8w==
-X-Gm-Message-State: AOAM530ImOAMgq7Vx4aP6odC/AEkwJt/VQ6GAju2dkV6mdhMO1Y7jMvE
-        uT2ZZ1c+MuGIOmCTBQbgx8nklCzDacSWcJDKv8XdMvDqf8w=
-X-Google-Smtp-Source: ABdhPJyQ83J9X1nM7p80Xvvd3VhxPrCSbOrawZLlO8Oib1ZlhChp0TbAMyetYQaCD9rPwrvsekT2vwBUaIsyugeiTkE=
-X-Received: by 2002:a63:ce54:0:b0:364:f310:6e0c with SMTP id
- r20-20020a63ce54000000b00364f3106e0cmr3223250pgi.456.1645034242701; Wed, 16
- Feb 2022 09:57:22 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EVx53SM1NvCfLrA4EvRitzfi4tzZhaUbaYRbzF2qQ08=;
+        b=oBswWGhQTsL6gU9yHBpYNCGtaRPEQxTia1/Ba1hD1669MJ5cNfMRJmkwcBXnIfKMKo
+         o2/g83CAAsme+gRSHJB4GhbOoXMZx1qOOdpdvJnV7rHpvmpN7jk2D3M/9hxWB8BV8BBE
+         oFz3dhogyLyUrgT6f1SBJ1Xlt+ALzIa29iqPTqOZzadbk0ysPEGPge4sxXrLURHCXifT
+         jqowXz8EmX1+lZcTR569jq66927sb8bz3uR8GK9ZRGZ6FKCsOKCHOycHLYMHvfOb7pDx
+         ZhZ+4ZghF5OpWLd3xHwdD6k6kww/mIWS2Kg1mm8J0Aq2e9yc1abfbYijXal9TPRz0qXQ
+         WUKw==
+X-Gm-Message-State: AOAM533EGtwq+E6JLKNeCGM378h7+Yh8THEn55W5D6n5x/Gh2vhvF2pb
+        47QYNXyss/IwPXGXXFt7VgU=
+X-Google-Smtp-Source: ABdhPJzvcW70UDpYPenN+Q7RqDmEQY5lZoXe33JAoOVcS7kSSFaIFSmzyGSeSKdn3I4YI/sHGhUdmg==
+X-Received: by 2002:a63:f94a:0:b0:372:b168:1aff with SMTP id q10-20020a63f94a000000b00372b1681affmr3190648pgk.441.1645034507207;
+        Wed, 16 Feb 2022 10:01:47 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id 11sm20449011pja.36.2022.02.16.10.01.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 10:01:46 -0800 (PST)
+Message-ID: <306b80f7-1185-17b8-fb85-7241823681d0@acm.org>
+Date:   Wed, 16 Feb 2022 10:01:43 -0800
 MIME-Version: 1.0
-References: <20220216160500.2341255-1-alvin@pqrs.dk>
-In-Reply-To: <20220216160500.2341255-1-alvin@pqrs.dk>
-From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Date:   Wed, 16 Feb 2022 14:57:11 -0300
-Message-ID: <CAJq09z6Mr7QFSyqWuM1jjm9Dis4Pa2A4yi=NJv1w4FM0WoyqtA@mail.gmail.com>
-Subject: Re: [PATCH net-next 0/2] net: dsa: realtek: fix PHY register read corruption
-To:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michael Rasmussen <mir@bang-olufsen.dk>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [RFC V2 5/6] blk-ioprio: make ioprio pluggable and modular
+Content-Language: en-US
+To:     Wang Jianchao <jianchao.wan9@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     hch@infradead.org, Josef Bacik <jbacik@fb.com>,
+        Tejun Heo <tj@kernel.org>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220215123705.58968-1-jianchao.wan9@gmail.com>
+ <20220215123705.58968-6-jianchao.wan9@gmail.com>
+ <cb5677fc-01ac-f97f-ccf8-eb91505ad0e3@acm.org>
+ <0608cd82-89c6-8fba-d06b-fdef9c53114f@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <0608cd82-89c6-8fba-d06b-fdef9c53114f@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> These two patches fix the issue reported by Ar=C4=B1n=C3=A7 where PHY reg=
-ister
-> reads sometimes return garbage data.
->
-> MAINTAINERS: Please can you help me with the targetting of these two
-> patches? This bug is present ca. 5.16, when the SMI version of the
-> rtl8365mb driver was introduced. But now in net-next we have the MDIO
-> interface from Luiz, where the issue is also present. I am sending what
-> I think is an ideal patch series, but should I split it up and send the
-> SMI-related changes to net and the MDIO changes to net-next? If so, how
-> would I go about splitting it while preventing merge conflicts and build
-> errors?
->
-> For now I am sending it to net-next so that the whole thing can be
-> reviewed. If it's applied, I would gladly backport the fix to the stable
-> tree for 5.16, but I am still confused about what to do for 5.17.
->
-> Thanks for your help.
->
->
-> Alvin =C5=A0ipraga (2):
->   net: dsa: realtek: allow subdrivers to externally lock regmap
->   net: dsa: realtek: rtl8365mb: serialize indirect PHY register access
->
->  drivers/net/dsa/realtek/realtek-mdio.c | 46 +++++++++++++++++++++-
->  drivers/net/dsa/realtek/realtek-smi.c  | 48 +++++++++++++++++++++--
->  drivers/net/dsa/realtek/realtek.h      |  2 +
->  drivers/net/dsa/realtek/rtl8365mb.c    | 54 ++++++++++++++++----------
->  4 files changed, 124 insertions(+), 26 deletions(-)
->
-> --
-> 2.35.0
->
+On 2/15/22 18:09, Wang Jianchao wrote:
+> On 2022/2/16 5:26 上午, Bart Van Assche wrote:
+>> On 2/15/22 04:37, Wang Jianchao (Kuaishou) wrote:
+>>> diff --git a/block/Makefile b/block/Makefile
+>>> index f38eaa612929..f6a3995af285 100644
+>>> --- a/block/Makefile
+>>> +++ b/block/Makefile
+>>> @@ -17,7 +17,8 @@ obj-$(CONFIG_BLK_DEV_BSGLIB)    += bsg-lib.o
+>>>    obj-$(CONFIG_BLK_CGROUP)    += blk-cgroup.o
+>>>    obj-$(CONFIG_BLK_CGROUP_RWSTAT)    += blk-cgroup-rwstat.o
+>>>    obj-$(CONFIG_BLK_DEV_THROTTLING)    += blk-throttle.o
+>>> -obj-$(CONFIG_BLK_CGROUP_IOPRIO)    += blk-ioprio.o
+>>> +io-prio-y             := blk-ioprio.o
+>>> +obj-$(CONFIG_BLK_CGROUP_IOPRIO)    += io-prio.o
+>>>    obj-$(CONFIG_BLK_CGROUP_IOLATENCY)    += blk-iolatency.o
+>>>    obj-$(CONFIG_BLK_CGROUP_IOCOST)    += blk-iocost.o
+>>>    obj-$(CONFIG_MQ_IOSCHED_DEADLINE)    += mq-deadline.o
+>>
+>> Is the above change really necessary?
+> 
+> Except for making maintaining easier on a running system, removing a
+> rqos policy module with cgroup supporting can release a blk-cgroup
+> policy slots. As BLKCG_MAX_POLS, the max slots number is fixed now.
 
-Thanks for the fix, Alvin.
+It seems like my question was not clear? What I meant is that I think 
+that the above changes are not necessary to build blk-ioprio as a kernel 
+module.
 
-I still feel like we are trying to go around a regmap limitation
-instead of fixing it there. If we control regmap lock (we can define a
-custom lock/unlock) and create new regmap_{read,write}_nolock
-variants, we'll just need to lock the regmap, do whatever you need,
-and unlock it.
+Thanks,
 
-BTW, I believe that, for realtek-mdio, a regmap custom lock mechanism
-could simply use mdio lock while realtek-smi already has priv->lock.
-
-Regards,
+Bart.

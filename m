@@ -2,413 +2,959 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86AE4B8E03
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F288A4B8E07
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236428AbiBPQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:31:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36020 "EHLO
+        id S236441AbiBPQb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:31:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236444AbiBPQax (ORCPT
+        with ESMTP id S233783AbiBPQby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:30:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E85312AED80
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:30:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645029038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dqm8te0zzHU1H5txRpXsHKM3zW9lf47xUyauRehYznU=;
-        b=EwGJ6Ofw4JN0PfkOVIev3K/2Ncp9svx2DyMBqUA63gW/fjYCMpfB1Y+tRZKnpmB41AozXR
-        q1gMYJc6xTT3LJ0TAi04MfNMZ7rJhGJgCeYSPYCTYAA4c0xLlq5DC7nKsB1sK4DdGeYwWn
-        a4GqBkJRciA12OMcqH1V6vrOvEfMxfw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-247-CI_S9XDNM8aP5rBVXvkTCg-1; Wed, 16 Feb 2022 11:30:35 -0500
-X-MC-Unique: CI_S9XDNM8aP5rBVXvkTCg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2EF7B814243;
-        Wed, 16 Feb 2022 16:30:33 +0000 (UTC)
-Received: from [10.22.11.152] (unknown [10.22.11.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 530BA8276A;
-        Wed, 16 Feb 2022 16:30:31 +0000 (UTC)
-Content-Type: multipart/mixed; boundary="------------AdyRA7Eq4tOJeY8U1AgGjX0Q"
-Message-ID: <cb03cbe5-0357-144d-0660-3ebc50c0245a@redhat.com>
-Date:   Wed, 16 Feb 2022 11:30:30 -0500
+        Wed, 16 Feb 2022 11:31:54 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445669BBB2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:31:40 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u2so3254986wrw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=NhiEE4tPxeW4Xae4oogW8IUq882siMrh4vQKK9UvR/c=;
+        b=pZDzYGz8uqYhS6wLftipeHjWBLPwIIa9/+PHsshu51mU/4FTB+H/5qJ6Hcx05qKgCR
+         CvCKdG9ArXeyvtQBIsZ4pqyGdTbiO+N7xKoUje0tx38wlQ5BphkAaKWQkUe2SkhWKkyS
+         PHmvIi72aD4Joznj5Ce2NPfAj8FAyTacvvN9NP9oLQnVZG8Ks2dM9scA4TU/sGXAY84d
+         uB1iRaSUX7q3XPp7md8AgJWuZ5nceU89/TWXk9RNt1tA/3VLx8D0jBZJjrcOWWbEniPo
+         utH7YznYgNzBzyTDV6Y4Gv2MM2Po9ntoNFouAaIjZj34G9zpRouhg8XFe6c3NVKN0oCK
+         3GQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=NhiEE4tPxeW4Xae4oogW8IUq882siMrh4vQKK9UvR/c=;
+        b=PvwAIl51cX18EgSNWCUfKFqWA7CU0XNwVvPzFUOxCts39LW1U6wDrgiFpi6JTvul8w
+         plPmD5s9m8OIuHa6f193oGbzxdX7QH7ajGrBsRtGQPKpfCN4iCZHxVFePnBczc2XDa7I
+         b9IR88YtzUXn+371AXBh913+DFH1S+Abos4xGgWBgbxKoHXdVjM3mw0vzW+qxAtbbyed
+         zn/A0miDczCeR2N/l6ZnfI3n5huTwNpmC7h5yWLHqdYJmVJrRyhhO3eLIq/wHRfXqs55
+         6FZqCmY5rBNSL+PeHfAVl5wH50tcrYfhMJBA5/6scKdr7QRhWob5ajNQcaCGJ2Hkx3Ad
+         pO4Q==
+X-Gm-Message-State: AOAM530ivXFzz7FiLfeyxTVBTkJDPN7cROu+IjjvAAPBaBdMHs6pAxuR
+        +XXbuVzsj4dgh3+r1w48kSSplQ==
+X-Google-Smtp-Source: ABdhPJxn/wHaMdS+Htnur2eIHkTutfKo7qQk7+wlEdgRsYub2Sb/qywVp42RTP2M4zq154hhpreHFg==
+X-Received: by 2002:adf:c38c:0:b0:1db:7e03:a015 with SMTP id p12-20020adfc38c000000b001db7e03a015mr2959519wrf.186.1645029098514;
+        Wed, 16 Feb 2022 08:31:38 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id p27sm22745693wms.1.2022.02.16.08.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 08:31:38 -0800 (PST)
+Date:   Wed, 16 Feb 2022 16:31:36 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     linux-ext4@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>, Dave Chinner <dchinner@redhat.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: [REPORT] kernel BUG at fs/ext4/inode.c:2620 - page_buffers()
+Message-ID: <Yg0m6IjcNmfaSokM@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5] locking/rwsem: Make handoff bit handling more
- consistent
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        chenguanyou <chenguanyou9338@gmail.com>,
-        Jaegeuk Kim <jaegeuk@google.com>
-Cc:     dave@stgolabs.net, hdanton@sina.com, linux-kernel@vger.kernel.org,
-        mazhenhua@xiaomi.com, mingo@redhat.com, peterz@infradead.org,
-        quic_aiquny@quicinc.com, will@kernel.org
-References: <20211116012912.723980-1-longman@redhat.com>
- <20220214162218.13930-1-chenguanyou@xiaomi.com> <YgtZMtgPoteJqtbB@kroah.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YgtZMtgPoteJqtbB@kroah.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------AdyRA7Eq4tOJeY8U1AgGjX0Q
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Good afternoon,
 
-On 2/15/22 02:41, Greg KH wrote:
-> On Tue, Feb 15, 2022 at 12:22:18AM +0800, chenguanyou wrote:
->>>> Hi Waiman, Greg,
->>>> This patch has been merged in branch linux-5.16.y.
->>>> Can we take it to the linux-5.10.y LTS version?
->>> What is "this patch"?
->> commit d257cc8cb8d5355ffc43a96bab94db7b5a324803 ("locking/rwsem: Make handoff bit handling more consistent")
-> Have you tested it on the 5.10.y branch to verify it actually works
-> properly for you?
->
-> If so, please provide a working backport to the stable list, as it does
-> not apply cleanly as-is.
->
-> thanks,
->
-> greg k-h
->
-I have attached the 5.10.y backport of commit 
-d257cc8cb8d5355ffc43a96bab94db7b5a324803 ("locking/rwsem: Make handoff 
-bit handling more consistent"). I also include a backport of commit 
-2f06f702925b512a95b95dca3855549c047eef58 ("locking/rwsem: Prevent 
-potential lock starvation") which I think may help Jaegeuk. I had run 
-some sanity tests and the backported patches work fine. However, I don't 
-have access to their testing environments to verify if they can fix the 
-problems seem by Chen or Jaegeuk. So please test these patches to see if 
-they can address your problems.
+After recently receiving a bug report from Syzbot [0] which was raised
+specifically against the Android v5.10 kernel, I spent some time
+trying to get to the crux.  Firstly I reproduced the issue on the
+reported kernel, then did the same using the latest release kernel
+v5.16.
 
-Cheers,
-Longman
+The full kernel trace can be seen below at [1].
 
+I managed to seemingly bisect the issue down to commit:
 
---------------AdyRA7Eq4tOJeY8U1AgGjX0Q
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-locking-rwsem-Prevent-potential-lock-starvation.patch"
-Content-Disposition: attachment;
- filename*0="0001-locking-rwsem-Prevent-potential-lock-starvation.patch"
-Content-Transfer-Encoding: base64
+  60263d5889e6d ("iomap: fall back to buffered writes for invalidation failures")
 
-RnJvbSAwZGJjN2E2MDI0NmFmZDAwNjQwZTE0ZjFkODcyYjk2ZTcxYmQ5MmIzIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBXYWltYW4gTG9uZyA8bG9uZ21hbkByZWRoYXQuY29t
-PgpEYXRlOiBUdWUsIDE1IEZlYiAyMDIyIDE2OjM2OjM4IC0wNTAwClN1YmplY3Q6IFtQQVRD
-SCAxLzJdIGxvY2tpbmcvcndzZW06IFByZXZlbnQgcG90ZW50aWFsIGxvY2sgc3RhcnZhdGlv
-bgoKY29tbWl0IDJmMDZmNzAyOTI1YjUxMmE5NWI5NWRjYTM4NTU1NDljMDQ3ZWVmNTggdXBz
-dHJlYW0uCgpUaGUgbG9jayBoYW5kb2ZmIGJpdCBpcyBhZGRlZCBpbiBjb21taXQgNGYyM2Ri
-YzFlNjU3ICgibG9ja2luZy9yd3NlbToKSW1wbGVtZW50IGxvY2sgaGFuZG9mZiB0byBwcmV2
-ZW50IGxvY2sgc3RhcnZhdGlvbiIpIHRvIGF2b2lkIGxvY2sKc3RhcnZhdGlvbi4gSG93ZXZl
-ciwgYWxsb3dpbmcgcmVhZGVycyB0byBkbyBvcHRpbWlzdGljIHNwaW5uaW5nIGRvZXMKaW50
-cm9kdWNlIGFuIHVubGlrZWx5IHNjZW5hcmlvIHdoZXJlIGxvY2sgc3RhcnZhdGlvbiBjYW4g
-aGFwcGVuLgoKVGhlIGxvY2sgaGFuZG9mZiBiaXQgbWF5IG9ubHkgYmUgc2V0IHdoZW4gYSB3
-YWl0ZXIgaXMgYmVpbmcgd29rZW4gdXAuCkluIHRoZSBjYXNlIG9mIHJlYWRlciB1bmxvY2ss
-IHdha2V1cCBoYXBwZW5zIG9ubHkgd2hlbiB0aGUgcmVhZGVyIGNvdW50CnJlYWNoZXMgMC4g
-SWYgdGhlcmUgaXMgYSBjb250aW51b3VzIHN0cmVhbSBvZiBpbmNvbWluZyByZWFkZXJzIGFj
-cXVpcmluZwpyZWFkIGxvY2sgdmlhIG9wdGltaXN0aWMgc3Bpbm5pbmcsIGl0IGlzIHBvc3Np
-YmxlIHRoYXQgdGhlIHJlYWRlciBjb3VudAptYXkgbmV2ZXIgcmVhY2ggMCBhbmQgc28gdGhl
-IGhhbmRvZmYgYml0IHdpbGwgbmV2ZXIgYmUgYXNzZXJ0ZWQuCgpPbmUgd2F5IHRvIHByZXZl
-bnQgdGhpcyBzY2VuYXJpbyBmcm9tIGhhcHBlbmluZyBpcyB0byBkaXNhbGxvdyBvcHRpbWlz
-dGljCnNwaW5uaW5nIGlmIHRoZSByd3NlbSBpcyBjdXJyZW50bHkgb3duZWQgYnkgcmVhZGVy
-cy4gSWYgdGhlIHByZXZpb3VzCm9yIGN1cnJlbnQgb3duZXIgaXMgYSB3cml0ZXIsIG9wdGlt
-aXN0aWMgc3Bpbm5pbmcgd2lsbCBiZSBhbGxvd2VkLgoKSWYgdGhlIHByZXZpb3VzIG93bmVy
-IGlzIGEgcmVhZGVyIGJ1dCB0aGUgcmVhZGVyIGNvdW50IGhhcyByZWFjaGVkIDAKYmVmb3Jl
-LCBhIHdha2V1cCBzaG91bGQgaGF2ZSBiZWVuIGlzc3VlZC4gU28gdGhlIGhhbmRvZmYgbWVj
-aGFuaXNtCndpbGwgYmUga2lja2VkIGluIHRvIHByZXZlbnQgbG9jayBzdGFydmF0aW9uLiBB
-cyBhIHJlc3VsdCwgaXQgc2hvdWxkCmJlIE9LIHRvIGRvIG9wdGltaXN0aWMgc3Bpbm5pbmcg
-aW4gdGhpcyBjYXNlLgoKVGhpcyBwYXRjaCBtYXkgaGF2ZSBzb21lIGltcGFjdCBvbiByZWFk
-ZXIgcGVyZm9ybWFuY2UgYXMgaXQgcmVkdWNlcwpyZWFkZXIgb3B0aW1pc3RpYyBzcGlubmlu
-ZyBlc3BlY2lhbGx5IGlmIHRoZSBsb2NrIGNyaXRpY2FsIHNlY3Rpb25zCmFyZSBzaG9ydCB0
-aGUgbnVtYmVyIG9mIGNvbnRlbmRpbmcgcmVhZGVycyBhcmUgc21hbGwuCgpTaWduZWQtb2Zm
-LWJ5OiBXYWltYW4gTG9uZyA8bG9uZ21hbkByZWRoYXQuY29tPgpTaWduZWQtb2ZmLWJ5OiBQ
-ZXRlciBaaWpsc3RyYSAoSW50ZWwpIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz4KUmV2aWV3ZWQt
-Ynk6IERhdmlkbG9ociBCdWVzbyA8ZGJ1ZXNvQHN1c2UuZGU+Ckxpbms6IGh0dHBzOi8vbGtt
-bC5rZXJuZWwub3JnL3IvMjAyMDExMjEwNDE0MTYuMTIyODUtMy1sb25nbWFuQHJlZGhhdC5j
-b20KLS0tCiBrZXJuZWwvbG9ja2luZy9yd3NlbS5jIHwgMTYgKysrKysrKysrKysrKystLQog
-MSBmaWxlIGNoYW5nZWQsIDE0IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZm
-IC0tZ2l0IGEva2VybmVsL2xvY2tpbmcvcndzZW0uYyBiL2tlcm5lbC9sb2NraW5nL3J3c2Vt
-LmMKaW5kZXggN2JmNDViMGExYjFkLi5kNGY1YThhNDczYjMgMTAwNjQ0Ci0tLSBhL2tlcm5l
-bC9sb2NraW5nL3J3c2VtLmMKKysrIGIva2VybmVsL2xvY2tpbmcvcndzZW0uYwpAQCAtOTk4
-LDE2ICs5OTgsMjggQEAgcndzZW1fc3Bpbl9vbl9vd25lcihzdHJ1Y3Qgcndfc2VtYXBob3Jl
-ICpzZW0sIHVuc2lnbmVkIGxvbmcgbm9uc3Bpbm5hYmxlKQogc3RhdGljIHN0cnVjdCByd19z
-ZW1hcGhvcmUgX19zY2hlZCAqCiByd3NlbV9kb3duX3JlYWRfc2xvd3BhdGgoc3RydWN0IHJ3
-X3NlbWFwaG9yZSAqc2VtLCBpbnQgc3RhdGUpCiB7Ci0JbG9uZyBjb3VudCwgYWRqdXN0bWVu
-dCA9IC1SV1NFTV9SRUFERVJfQklBUzsKKwlsb25nIGNvdW50ID0gYXRvbWljX2xvbmdfcmVh
-ZCgmc2VtLT5jb3VudCk7CisJbG9uZyBvd25lciwgYWRqdXN0bWVudCA9IC1SV1NFTV9SRUFE
-RVJfQklBUzsKKwlsb25nIHJjbnQgPSAoY291bnQgPj4gUldTRU1fUkVBREVSX1NISUZUKTsK
-IAlzdHJ1Y3QgcndzZW1fd2FpdGVyIHdhaXRlcjsKIAlERUZJTkVfV0FLRV9RKHdha2VfcSk7
-CiAJYm9vbCB3YWtlID0gZmFsc2U7CiAKKwkvKgorCSAqIFRvIHByZXZlbnQgYSBjb25zdGFu
-dCBzdHJlYW0gb2YgcmVhZGVycyBmcm9tIHN0YXJ2aW5nIGEgc2xlZXBpbmcKKwkgKiB3YWl0
-ZXIsIGRvbid0IGF0dGVtcHQgb3B0aW1pc3RpYyBzcGlubmluZyBpZiB0aGUgbG9jayBpcyBj
-dXJyZW50bHkKKwkgKiBvd25lZCBieSByZWFkZXJzLgorCSAqLworCW93bmVyID0gYXRvbWlj
-X2xvbmdfcmVhZCgmc2VtLT5vd25lcik7CisJaWYgKChvd25lciAmIFJXU0VNX1JFQURFUl9P
-V05FRCkgJiYgKHJjbnQgPiAxKSAmJgorCSAgICEoY291bnQgJiBSV1NFTV9XUklURVJfTE9D
-S0VEKSkKKwkJZ290byBxdWV1ZTsKKwogCS8qCiAJICogU2F2ZSB0aGUgY3VycmVudCByZWFk
-LW93bmVyIG9mIHJ3c2VtLCBpZiBhdmFpbGFibGUsIGFuZCB0aGUKIAkgKiByZWFkZXIgbm9u
-c3Bpbm5hYmxlIGJpdC4KIAkgKi8KLQl3YWl0ZXIubGFzdF9yb3duZXIgPSBhdG9taWNfbG9u
-Z19yZWFkKCZzZW0tPm93bmVyKTsKKwl3YWl0ZXIubGFzdF9yb3duZXIgPSBvd25lcjsKIAlp
-ZiAoISh3YWl0ZXIubGFzdF9yb3duZXIgJiBSV1NFTV9SRUFERVJfT1dORUQpKQogCQl3YWl0
-ZXIubGFzdF9yb3duZXIgJj0gUldTRU1fUkRfTk9OU1BJTk5BQkxFOwogCi0tIAoyLjI3LjAK
-Cg==
---------------AdyRA7Eq4tOJeY8U1AgGjX0Q
-Content-Type: text/x-patch; charset=UTF-8;
- name="0002-locking-rwsem-Make-handoff-bit-handling-more-consist.patch"
-Content-Disposition: attachment;
- filename*0="0002-locking-rwsem-Make-handoff-bit-handling-more-consist.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
+Although it appears to be the belief of the Filesystem community that
+this is likely not the cause of the issue and should therefore not be
+reverted.
 
-RnJvbSA1MmIyNjVlZTY5MThjNjY0MWFlOWI0NDBlNTVhN2VlZTZiOTQwMzlmIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBXYWltYW4gTG9uZyA8bG9uZ21hbkByZWRoYXQuY29t
-PgpEYXRlOiBUdWUsIDE1IEZlYiAyMDIyIDE2OjUxOjA0IC0wNTAwClN1YmplY3Q6IFtQQVRD
-SCAyLzJdIGxvY2tpbmcvcndzZW06IE1ha2UgaGFuZG9mZiBiaXQgaGFuZGxpbmcgbW9yZSBj
-b25zaXN0ZW50Cgpjb21taXQgZDI1N2NjOGNiOGQ1MzU1ZmZjNDNhOTZiYWI5NGRiN2I1YTMy
-NDgwMyB1cHN0cmVhbS4KClRoZXJlIGFyZSBzb21lIGluY29uc2lzdGVuY3kgaW4gdGhlIHdh
-eSB0aGF0IHRoZSBoYW5kb2ZmIGJpdCBpcyBiZWluZwpoYW5kbGVkIGluIHJlYWRlcnMgYW5k
-IHdyaXRlcnMgdGhhdCBsZWFkIHRvIGEgcmFjZSBjb25kaXRpb24uCgpGaXJzdGx5LCB3aGVu
-IGEgcXVldWUgaGVhZCB3cml0ZXIgc2V0IHRoZSBoYW5kb2ZmIGJpdCwgaXQgd2lsbCBjbGVh
-cgppdCB3aGVuIHRoZSB3cml0ZXIgaXMgYmVpbmcga2lsbGVkIG9yIGludGVycnVwdGVkIG9u
-IGl0cyB3YXkgb3V0CndpdGhvdXQgYWNxdWlyaW5nIHRoZSBsb2NrLiBUaGF0IGlzIG5vdCB0
-aGUgY2FzZSBmb3IgYSBxdWV1ZSBoZWFkCnJlYWRlci4gVGhlIGhhbmRvZmYgYml0IHdpbGwg
-c2ltcGx5IGJlIGluaGVyaXRlZCBieSB0aGUgbmV4dCB3YWl0ZXIuCgpTZWNvbmRseSwgaW4g
-dGhlIG91dF9ub2xvY2sgcGF0aCBvZiByd3NlbV9kb3duX3JlYWRfc2xvd3BhdGgoKSwgYm90
-aAp0aGUgd2FpdGVyIGFuZCBoYW5kb2ZmIGJpdHMgYXJlIGNsZWFyZWQgaWYgdGhlIHdhaXQg
-cXVldWUgYmVjb21lcwplbXB0eS4gIEZvciByd3NlbV9kb3duX3dyaXRlX3Nsb3dwYXRoKCks
-IGhvd2V2ZXIsIHRoZSBoYW5kb2ZmIGJpdCBpcwpub3QgY2hlY2tlZCBhbmQgY2xlYXJlZCBp
-ZiB0aGUgd2FpdCBxdWV1ZSBpcyBlbXB0eS4gVGhpcyBjYW4KcG90ZW50aWFsbHkgbWFrZSB0
-aGUgaGFuZG9mZiBiaXQgc2V0IHdpdGggZW1wdHkgd2FpdCBxdWV1ZS4KCldvcnNlLCB0aGUg
-c2l0dWF0aW9uIGluIHJ3c2VtX2Rvd25fd3JpdGVfc2xvd3BhdGgoKSByZWxpZXMgb24gd3N0
-YXRlLAphIHZhcmlhYmxlIHNldCBvdXRzaWRlIG9mIHRoZSBjcml0aWNhbCBzZWN0aW9uIGNv
-bnRhaW5pbmcgdGhlIC0+Y291bnQKbWFuaXB1bGF0aW9uLCB0aGlzIGxlYWRzIHRvIHJhY2Ug
-Y29uZGl0aW9uIHdoZXJlIFJXU0VNX0ZMQUdfSEFORE9GRgpjYW4gYmUgZG91YmxlIHN1YnRy
-YWN0ZWQsIGNvcnJ1cHRpbmcgLT5jb3VudC4KClRvIG1ha2UgdGhlIGhhbmRvZmYgYml0IGhh
-bmRsaW5nIG1vcmUgY29uc2lzdGVudCBhbmQgcm9idXN0LCBleHRyYWN0Cm91dCBoYW5kb2Zm
-IGJpdCBjbGVhcmluZyBjb2RlIGludG8gdGhlIG5ldyByd3NlbV9kZWxfd2FpdGVyKCkgaGVs
-cGVyCmZ1bmN0aW9uLiBBbHNvLCBjb21wbGV0ZWx5IGVyYWRpY2F0ZSB3c3RhdGU7IGFsd2F5
-cyBldmFsdWF0ZQpldmVyeXRoaW5nIGluc2lkZSB0aGUgc2FtZSBjcml0aWNhbCBzZWN0aW9u
-LgoKVGhlIGNvbW1vbiBmdW5jdGlvbiB3aWxsIG9ubHkgdXNlIGF0b21pY19sb25nX2FuZG5v
-dCgpIHRvIGNsZWFyIGJpdHMKd2hlbiB0aGUgd2FpdCBxdWV1ZSBpcyBlbXB0eSB0byBhdm9p
-ZCBwb3NzaWJsZSByYWNlIGNvbmRpdGlvbi4gIElmIHRoZQpmaXJzdCB3YWl0ZXIgd2l0aCBo
-YW5kb2ZmIGJpdCBzZXQgaXMga2lsbGVkIG9yIGludGVycnVwdGVkIHRvIGV4aXQgdGhlCnNs
-b3dwYXRoIHdpdGhvdXQgYWNxdWlyaW5nIHRoZSBsb2NrLCB0aGUgbmV4dCB3YWl0ZXIgd2ls
-bCBpbmhlcml0IHRoZQpoYW5kb2ZmIGJpdC4KCldoaWxlIGF0IGl0LCBzaW1wbGlmeSB0aGUg
-dHJ5bG9jayBmb3IgbG9vcCBpbgpyd3NlbV9kb3duX3dyaXRlX3Nsb3dwYXRoKCkgdG8gbWFr
-ZSBpdCBlYXNpZXIgdG8gcmVhZC4KCkZpeGVzOiA0ZjIzZGJjMWU2NTcgKCJsb2NraW5nL3J3
-c2VtOiBJbXBsZW1lbnQgbG9jayBoYW5kb2ZmIHRvIHByZXZlbnQgbG9jayBzdGFydmF0aW9u
-IikKUmVwb3J0ZWQtYnk6IFpoZW5odWEgTWEgPG1hemhlbmh1YUB4aWFvbWkuY29tPgpTdWdn
-ZXN0ZWQtYnk6IFBldGVyIFppamxzdHJhIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz4KU2lnbmVk
-LW9mZi1ieTogV2FpbWFuIExvbmcgPGxvbmdtYW5AcmVkaGF0LmNvbT4KU2lnbmVkLW9mZi1i
-eTogUGV0ZXIgWmlqbHN0cmEgKEludGVsKSA8cGV0ZXJ6QGluZnJhZGVhZC5vcmc+Ckxpbms6
-IGh0dHBzOi8vbGttbC5rZXJuZWwub3JnL3IvMjAyMTExMTYwMTI5MTIuNzIzOTgwLTEtbG9u
-Z21hbkByZWRoYXQuY29tCi0tLQoga2VybmVsL2xvY2tpbmcvcndzZW0uYyB8IDE3MSArKysr
-KysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQs
-IDg1IGluc2VydGlvbnMoKyksIDg2IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2tlcm5l
-bC9sb2NraW5nL3J3c2VtLmMgYi9rZXJuZWwvbG9ja2luZy9yd3NlbS5jCmluZGV4IGQ0ZjVh
-OGE0NzNiMy4uYzNjYjhlYTFhODJiIDEwMDY0NAotLS0gYS9rZXJuZWwvbG9ja2luZy9yd3Nl
-bS5jCisrKyBiL2tlcm5lbC9sb2NraW5nL3J3c2VtLmMKQEAgLTE0Myw5ICsxNDMsOSBAQAog
-ICogYXRvbWljX2xvbmdfY21weGNoZygpIHdpbGwgYmUgdXNlZCB0byBvYnRhaW4gd3JpdGVy
-IGxvY2suCiAgKgogICogVGhlcmUgYXJlIHRocmVlIHBsYWNlcyB3aGVyZSB0aGUgbG9jayBo
-YW5kb2ZmIGJpdCBtYXkgYmUgc2V0IG9yIGNsZWFyZWQuCi0gKiAxKSByd3NlbV9tYXJrX3dh
-a2UoKSBmb3IgcmVhZGVycy4KLSAqIDIpIHJ3c2VtX3RyeV93cml0ZV9sb2NrKCkgZm9yIHdy
-aXRlcnMuCi0gKiAzKSBFcnJvciBwYXRoIG9mIHJ3c2VtX2Rvd25fd3JpdGVfc2xvd3BhdGgo
-KS4KKyAqIDEpIHJ3c2VtX21hcmtfd2FrZSgpIGZvciByZWFkZXJzCQktLSBzZXQsIGNsZWFy
-CisgKiAyKSByd3NlbV90cnlfd3JpdGVfbG9jaygpIGZvciB3cml0ZXJzCS0tIHNldCwgY2xl
-YXIKKyAqIDMpIHJ3c2VtX2RlbF93YWl0ZXIoKQkJCS0tIGNsZWFyCiAgKgogICogRm9yIGFs
-bCB0aGUgYWJvdmUgY2FzZXMsIHdhaXRfbG9jayB3aWxsIGJlIGhlbGQuIEEgd3JpdGVyIG11
-c3QgYWxzbwogICogYmUgdGhlIGZpcnN0IG9uZSBpbiB0aGUgd2FpdF9saXN0IHRvIGJlIGVs
-aWdpYmxlIGZvciBzZXR0aW5nIHRoZSBoYW5kb2ZmCkBAIC0zNjEsNiArMzYxLDkgQEAgc3Ry
-dWN0IHJ3c2VtX3dhaXRlciB7CiAJZW51bSByd3NlbV93YWl0ZXJfdHlwZSB0eXBlOwogCXVu
-c2lnbmVkIGxvbmcgdGltZW91dDsKIAl1bnNpZ25lZCBsb25nIGxhc3Rfcm93bmVyOworCisJ
-LyogV3JpdGVyIG9ubHksIG5vdCBpbml0aWFsaXplZCBpbiByZWFkZXIgKi8KKwlib29sIGhh
-bmRvZmZfc2V0OwogfTsKICNkZWZpbmUgcndzZW1fZmlyc3Rfd2FpdGVyKHNlbSkgXAogCWxp
-c3RfZmlyc3RfZW50cnkoJnNlbS0+d2FpdF9saXN0LCBzdHJ1Y3QgcndzZW1fd2FpdGVyLCBs
-aXN0KQpAQCAtMzcxLDEyICszNzQsNiBAQCBlbnVtIHJ3c2VtX3dha2VfdHlwZSB7CiAJUldT
-RU1fV0FLRV9SRUFEX09XTkVECS8qIFdha2VyIHRocmVhZCBob2xkcyB0aGUgcmVhZCBsb2Nr
-ICovCiB9OwogCi1lbnVtIHdyaXRlcl93YWl0X3N0YXRlIHsKLQlXUklURVJfTk9UX0ZJUlNU
-LAkvKiBXcml0ZXIgaXMgbm90IGZpcnN0IGluIHdhaXQgbGlzdCAqLwotCVdSSVRFUl9GSVJT
-VCwJCS8qIFdyaXRlciBpcyBmaXJzdCBpbiB3YWl0IGxpc3QgICAgICovCi0JV1JJVEVSX0hB
-TkRPRkYJCS8qIFdyaXRlciBpcyBmaXJzdCAmIGhhbmRvZmYgbmVlZGVkICovCi19OwotCiAv
-KgogICogVGhlIHR5cGljYWwgSFogdmFsdWUgaXMgZWl0aGVyIDI1MCBvciAxMDAwLiBTbyBz
-ZXQgdGhlIG1pbmltdW0gd2FpdGluZwogICogdGltZSB0byBhdCBsZWFzdCA0bXMgb3IgMSBq
-aWZmeSAoaWYgaXQgaXMgaGlnaGVyIHRoYW4gNG1zKSBpbiB0aGUgd2FpdApAQCAtMzkyLDYg
-KzM4OSwzMSBAQCBlbnVtIHdyaXRlcl93YWl0X3N0YXRlIHsKICAqLwogI2RlZmluZSBNQVhf
-UkVBREVSU19XQUtFVVAJMHgxMDAKIAorc3RhdGljIGlubGluZSB2b2lkCityd3NlbV9hZGRf
-d2FpdGVyKHN0cnVjdCByd19zZW1hcGhvcmUgKnNlbSwgc3RydWN0IHJ3c2VtX3dhaXRlciAq
-d2FpdGVyKQoreworCWxvY2tkZXBfYXNzZXJ0X2hlbGQoJnNlbS0+d2FpdF9sb2NrKTsKKwls
-aXN0X2FkZF90YWlsKCZ3YWl0ZXItPmxpc3QsICZzZW0tPndhaXRfbGlzdCk7CisJLyogY2Fs
-bGVyIHdpbGwgc2V0IFJXU0VNX0ZMQUdfV0FJVEVSUyAqLworfQorCisvKgorICogUmVtb3Zl
-IGEgd2FpdGVyIGZyb20gdGhlIHdhaXRfbGlzdCBhbmQgY2xlYXIgZmxhZ3MuCisgKgorICog
-Qm90aCByd3NlbV9tYXJrX3dha2UoKSBhbmQgcndzZW1fdHJ5X3dyaXRlX2xvY2soKSBjb250
-YWluIGEgZnVsbCAnY29weScgb2YKKyAqIHRoaXMgZnVuY3Rpb24uIE1vZGlmeSB3aXRoIGNh
-cmUuCisgKi8KK3N0YXRpYyBpbmxpbmUgdm9pZAorcndzZW1fZGVsX3dhaXRlcihzdHJ1Y3Qg
-cndfc2VtYXBob3JlICpzZW0sIHN0cnVjdCByd3NlbV93YWl0ZXIgKndhaXRlcikKK3sKKwls
-b2NrZGVwX2Fzc2VydF9oZWxkKCZzZW0tPndhaXRfbG9jayk7CisJbGlzdF9kZWwoJndhaXRl
-ci0+bGlzdCk7CisJaWYgKGxpa2VseSghbGlzdF9lbXB0eSgmc2VtLT53YWl0X2xpc3QpKSkK
-KwkJcmV0dXJuOworCisJYXRvbWljX2xvbmdfYW5kbm90KFJXU0VNX0ZMQUdfSEFORE9GRiB8
-IFJXU0VNX0ZMQUdfV0FJVEVSUywgJnNlbS0+Y291bnQpOworfQorCiAvKgogICogaGFuZGxl
-IHRoZSBsb2NrIHJlbGVhc2Ugd2hlbiBwcm9jZXNzZXMgYmxvY2tlZCBvbiBpdCB0aGF0IGNh
-biBub3cgcnVuCiAgKiAtIGlmIHdlIGNvbWUgaGVyZSBmcm9tIHVwX3h4eHgoKSwgdGhlbiB0
-aGUgUldTRU1fRkxBR19XQUlURVJTIGJpdCBtdXN0CkBAIC00MDMsNiArNDI1LDggQEAgZW51
-bSB3cml0ZXJfd2FpdF9zdGF0ZSB7CiAgKiAgIHByZWZlcmFibHkgd2hlbiB0aGUgd2FpdF9s
-b2NrIGlzIHJlbGVhc2VkCiAgKiAtIHdva2VuIHByb2Nlc3MgYmxvY2tzIGFyZSBkaXNjYXJk
-ZWQgZnJvbSB0aGUgbGlzdCBhZnRlciBoYXZpbmcgdGFzayB6ZXJvZWQKICAqIC0gd3JpdGVy
-cyBhcmUgb25seSBtYXJrZWQgd29rZW4gaWYgZG93bmdyYWRpbmcgaXMgZmFsc2UKKyAqCisg
-KiBJbXBsaWVzIHJ3c2VtX2RlbF93YWl0ZXIoKSBmb3IgYWxsIHdva2VuIHJlYWRlcnMuCiAg
-Ki8KIHN0YXRpYyB2b2lkIHJ3c2VtX21hcmtfd2FrZShzdHJ1Y3Qgcndfc2VtYXBob3JlICpz
-ZW0sCiAJCQkgICAgZW51bSByd3NlbV93YWtlX3R5cGUgd2FrZV90eXBlLApAQCAtNTIxLDE4
-ICs1NDUsMjUgQEAgc3RhdGljIHZvaWQgcndzZW1fbWFya193YWtlKHN0cnVjdCByd19zZW1h
-cGhvcmUgKnNlbSwKIAogCWFkanVzdG1lbnQgPSB3b2tlbiAqIFJXU0VNX1JFQURFUl9CSUFT
-IC0gYWRqdXN0bWVudDsKIAlsb2NrZXZlbnRfY29uZF9pbmMocndzZW1fd2FrZV9yZWFkZXIs
-IHdva2VuKTsKKworCW9sZGNvdW50ID0gYXRvbWljX2xvbmdfcmVhZCgmc2VtLT5jb3VudCk7
-CiAJaWYgKGxpc3RfZW1wdHkoJnNlbS0+d2FpdF9saXN0KSkgewotCQkvKiBoaXQgZW5kIG9m
-IGxpc3QgYWJvdmUgKi8KKwkJLyoKKwkJICogQ29tYmluZWQgd2l0aCBsaXN0X21vdmVfdGFp
-bCgpIGFib3ZlLCB0aGlzIGltcGxpZXMKKwkJICogcndzZW1fZGVsX3dhaXRlcigpLgorCQkg
-Ki8KIAkJYWRqdXN0bWVudCAtPSBSV1NFTV9GTEFHX1dBSVRFUlM7CisJCWlmIChvbGRjb3Vu
-dCAmIFJXU0VNX0ZMQUdfSEFORE9GRikKKwkJCWFkanVzdG1lbnQgLT0gUldTRU1fRkxBR19I
-QU5ET0ZGOworCX0gZWxzZSBpZiAod29rZW4pIHsKKwkJLyoKKwkJICogV2hlbiB3ZSd2ZSB3
-b2tlbiBhIHJlYWRlciwgd2Ugbm8gbG9uZ2VyIG5lZWQgdG8gZm9yY2UKKwkJICogd3JpdGVy
-cyB0byBnaXZlIHVwIHRoZSBsb2NrIGFuZCB3ZSBjYW4gY2xlYXIgSEFORE9GRi4KKwkJICov
-CisJCWlmIChvbGRjb3VudCAmIFJXU0VNX0ZMQUdfSEFORE9GRikKKwkJCWFkanVzdG1lbnQg
-LT0gUldTRU1fRkxBR19IQU5ET0ZGOwogCX0KIAotCS8qCi0JICogV2hlbiB3ZSd2ZSB3b2tl
-biBhIHJlYWRlciwgd2Ugbm8gbG9uZ2VyIG5lZWQgdG8gZm9yY2Ugd3JpdGVycwotCSAqIHRv
-IGdpdmUgdXAgdGhlIGxvY2sgYW5kIHdlIGNhbiBjbGVhciBIQU5ET0ZGLgotCSAqLwotCWlm
-ICh3b2tlbiAmJiAoYXRvbWljX2xvbmdfcmVhZCgmc2VtLT5jb3VudCkgJiBSV1NFTV9GTEFH
-X0hBTkRPRkYpKQotCQlhZGp1c3RtZW50IC09IFJXU0VNX0ZMQUdfSEFORE9GRjsKLQogCWlm
-IChhZGp1c3RtZW50KQogCQlhdG9taWNfbG9uZ19hZGQoYWRqdXN0bWVudCwgJnNlbS0+Y291
-bnQpOwogCkBAIC01NjMsMTIgKzU5NCwxMiBAQCBzdGF0aWMgdm9pZCByd3NlbV9tYXJrX3dh
-a2Uoc3RydWN0IHJ3X3NlbWFwaG9yZSAqc2VtLAogICogcmFjZSBjb25kaXRpb25zIGJldHdl
-ZW4gY2hlY2tpbmcgdGhlIHJ3c2VtIHdhaXQgbGlzdCBhbmQgc2V0dGluZyB0aGUKICAqIHNl
-bS0+Y291bnQgYWNjb3JkaW5nbHkuCiAgKgotICogSWYgd3N0YXRlIGlzIFdSSVRFUl9IQU5E
-T0ZGLCBpdCB3aWxsIG1ha2Ugc3VyZSB0aGF0IGVpdGhlciB0aGUgaGFuZG9mZgotICogYml0
-IGlzIHNldCBvciB0aGUgbG9jayBpcyBhY3F1aXJlZCB3aXRoIGhhbmRvZmYgYml0IGNsZWFy
-ZWQuCisgKiBJbXBsaWVzIHJ3c2VtX2RlbF93YWl0ZXIoKSBvbiBzdWNjZXNzLgogICovCiBz
-dGF0aWMgaW5saW5lIGJvb2wgcndzZW1fdHJ5X3dyaXRlX2xvY2soc3RydWN0IHJ3X3NlbWFw
-aG9yZSAqc2VtLAotCQkJCQllbnVtIHdyaXRlcl93YWl0X3N0YXRlIHdzdGF0ZSkKKwkJCQkJ
-c3RydWN0IHJ3c2VtX3dhaXRlciAqd2FpdGVyKQogeworCWJvb2wgZmlyc3QgPSByd3NlbV9m
-aXJzdF93YWl0ZXIoc2VtKSA9PSB3YWl0ZXI7CiAJbG9uZyBjb3VudCwgbmV3OwogCiAJbG9j
-a2RlcF9hc3NlcnRfaGVsZCgmc2VtLT53YWl0X2xvY2spOwpAQCAtNTc3LDEzICs2MDgsMTkg
-QEAgc3RhdGljIGlubGluZSBib29sIHJ3c2VtX3RyeV93cml0ZV9sb2NrKHN0cnVjdCByd19z
-ZW1hcGhvcmUgKnNlbSwKIAlkbyB7CiAJCWJvb2wgaGFzX2hhbmRvZmYgPSAhIShjb3VudCAm
-IFJXU0VNX0ZMQUdfSEFORE9GRik7CiAKLQkJaWYgKGhhc19oYW5kb2ZmICYmIHdzdGF0ZSA9
-PSBXUklURVJfTk9UX0ZJUlNUKQotCQkJcmV0dXJuIGZhbHNlOworCQlpZiAoaGFzX2hhbmRv
-ZmYpIHsKKwkJCWlmICghZmlyc3QpCisJCQkJcmV0dXJuIGZhbHNlOworCisJCQkvKiBGaXJz
-dCB3YWl0ZXIgaW5oZXJpdHMgYSBwcmV2aW91c2x5IHNldCBoYW5kb2ZmIGJpdCAqLworCQkJ
-d2FpdGVyLT5oYW5kb2ZmX3NldCA9IHRydWU7CisJCX0KIAogCQluZXcgPSBjb3VudDsKIAog
-CQlpZiAoY291bnQgJiBSV1NFTV9MT0NLX01BU0spIHsKLQkJCWlmIChoYXNfaGFuZG9mZiB8
-fCAod3N0YXRlICE9IFdSSVRFUl9IQU5ET0ZGKSkKKwkJCWlmIChoYXNfaGFuZG9mZiB8fCAo
-IXJ0X3Rhc2sod2FpdGVyLT50YXNrKSAmJgorCQkJCQkgICAgIXRpbWVfYWZ0ZXIoamlmZmll
-cywgd2FpdGVyLT50aW1lb3V0KSkpCiAJCQkJcmV0dXJuIGZhbHNlOwogCiAJCQluZXcgfD0g
-UldTRU1fRkxBR19IQU5ET0ZGOwpAQCAtNjAwLDkgKzYzNywxNyBAQCBzdGF0aWMgaW5saW5l
-IGJvb2wgcndzZW1fdHJ5X3dyaXRlX2xvY2soc3RydWN0IHJ3X3NlbWFwaG9yZSAqc2VtLAog
-CSAqIFdlIGhhdmUgZWl0aGVyIGFjcXVpcmVkIHRoZSBsb2NrIHdpdGggaGFuZG9mZiBiaXQg
-Y2xlYXJlZCBvcgogCSAqIHNldCB0aGUgaGFuZG9mZiBiaXQuCiAJICovCi0JaWYgKG5ldyAm
-IFJXU0VNX0ZMQUdfSEFORE9GRikKKwlpZiAobmV3ICYgUldTRU1fRkxBR19IQU5ET0ZGKSB7
-CisJCXdhaXRlci0+aGFuZG9mZl9zZXQgPSB0cnVlOworCQlsb2NrZXZlbnRfaW5jKHJ3c2Vt
-X3dsb2NrX2hhbmRvZmYpOwogCQlyZXR1cm4gZmFsc2U7CisJfQogCisJLyoKKwkgKiBIYXZl
-IHJ3c2VtX3RyeV93cml0ZV9sb2NrKCkgZnVsbHkgaW1wbHkgcndzZW1fZGVsX3dhaXRlcigp
-IG9uCisJICogc3VjY2Vzcy4KKwkgKi8KKwlsaXN0X2RlbCgmd2FpdGVyLT5saXN0KTsKIAly
-d3NlbV9zZXRfb3duZXIoc2VtKTsKIAlyZXR1cm4gdHJ1ZTsKIH0KQEAgLTEwNzUsNyArMTEy
-MCw3IEBAIHJ3c2VtX2Rvd25fcmVhZF9zbG93cGF0aChzdHJ1Y3Qgcndfc2VtYXBob3JlICpz
-ZW0sIGludCBzdGF0ZSkKIAkJfQogCQlhZGp1c3RtZW50ICs9IFJXU0VNX0ZMQUdfV0FJVEVS
-UzsKIAl9Ci0JbGlzdF9hZGRfdGFpbCgmd2FpdGVyLmxpc3QsICZzZW0tPndhaXRfbGlzdCk7
-CisJcndzZW1fYWRkX3dhaXRlcihzZW0sICZ3YWl0ZXIpOwogCiAJLyogd2UncmUgbm93IHdh
-aXRpbmcgb24gdGhlIGxvY2ssIGJ1dCBubyBsb25nZXIgYWN0aXZlbHkgbG9ja2luZyAqLwog
-CWlmIChhZGp1c3RtZW50KQpAQCAtMTEyNCwxMSArMTE2OSw3IEBAIHJ3c2VtX2Rvd25fcmVh
-ZF9zbG93cGF0aChzdHJ1Y3Qgcndfc2VtYXBob3JlICpzZW0sIGludCBzdGF0ZSkKIAlyZXR1
-cm4gc2VtOwogCiBvdXRfbm9sb2NrOgotCWxpc3RfZGVsKCZ3YWl0ZXIubGlzdCk7Ci0JaWYg
-KGxpc3RfZW1wdHkoJnNlbS0+d2FpdF9saXN0KSkgewotCQlhdG9taWNfbG9uZ19hbmRub3Qo
-UldTRU1fRkxBR19XQUlURVJTfFJXU0VNX0ZMQUdfSEFORE9GRiwKLQkJCQkgICAmc2VtLT5j
-b3VudCk7Ci0JfQorCXJ3c2VtX2RlbF93YWl0ZXIoc2VtLCAmd2FpdGVyKTsKIAlyYXdfc3Bp
-bl91bmxvY2tfaXJxKCZzZW0tPndhaXRfbG9jayk7CiAJX19zZXRfY3VycmVudF9zdGF0ZShU
-QVNLX1JVTk5JTkcpOwogCWxvY2tldmVudF9pbmMocndzZW1fcmxvY2tfZmFpbCk7CkBAIC0x
-MTU2LDkgKzExOTcsNyBAQCByd3NlbV9kb3duX3dyaXRlX3Nsb3dwYXRoKHN0cnVjdCByd19z
-ZW1hcGhvcmUgKnNlbSwgaW50IHN0YXRlKQogewogCWxvbmcgY291bnQ7CiAJYm9vbCBkaXNh
-YmxlX3JzcGluOwotCWVudW0gd3JpdGVyX3dhaXRfc3RhdGUgd3N0YXRlOwogCXN0cnVjdCBy
-d3NlbV93YWl0ZXIgd2FpdGVyOwotCXN0cnVjdCByd19zZW1hcGhvcmUgKnJldCA9IHNlbTsK
-IAlERUZJTkVfV0FLRV9RKHdha2VfcSk7CiAKIAkvKiBkbyBvcHRpbWlzdGljIHNwaW5uaW5n
-IGFuZCBzdGVhbCBsb2NrIGlmIHBvc3NpYmxlICovCkBAIC0xMTgyLDE2ICsxMjIxLDEzIEBA
-IHJ3c2VtX2Rvd25fd3JpdGVfc2xvd3BhdGgoc3RydWN0IHJ3X3NlbWFwaG9yZSAqc2VtLCBp
-bnQgc3RhdGUpCiAJd2FpdGVyLnRhc2sgPSBjdXJyZW50OwogCXdhaXRlci50eXBlID0gUldT
-RU1fV0FJVElOR19GT1JfV1JJVEU7CiAJd2FpdGVyLnRpbWVvdXQgPSBqaWZmaWVzICsgUldT
-RU1fV0FJVF9USU1FT1VUOworCXdhaXRlci5oYW5kb2ZmX3NldCA9IGZhbHNlOwogCiAJcmF3
-X3NwaW5fbG9ja19pcnEoJnNlbS0+d2FpdF9sb2NrKTsKLQotCS8qIGFjY291bnQgZm9yIHRo
-aXMgYmVmb3JlIGFkZGluZyBhIG5ldyBlbGVtZW50IHRvIHRoZSBsaXN0ICovCi0Jd3N0YXRl
-ID0gbGlzdF9lbXB0eSgmc2VtLT53YWl0X2xpc3QpID8gV1JJVEVSX0ZJUlNUIDogV1JJVEVS
-X05PVF9GSVJTVDsKLQotCWxpc3RfYWRkX3RhaWwoJndhaXRlci5saXN0LCAmc2VtLT53YWl0
-X2xpc3QpOworCXJ3c2VtX2FkZF93YWl0ZXIoc2VtLCAmd2FpdGVyKTsKIAogCS8qIHdlJ3Jl
-IG5vdyB3YWl0aW5nIG9uIHRoZSBsb2NrICovCi0JaWYgKHdzdGF0ZSA9PSBXUklURVJfTk9U
-X0ZJUlNUKSB7CisJaWYgKHJ3c2VtX2ZpcnN0X3dhaXRlcihzZW0pICE9ICZ3YWl0ZXIpIHsK
-IAkJY291bnQgPSBhdG9taWNfbG9uZ19yZWFkKCZzZW0tPmNvdW50KTsKIAogCQkvKgpAQCAt
-MTIyNywxMyArMTI2MywxNiBAQCByd3NlbV9kb3duX3dyaXRlX3Nsb3dwYXRoKHN0cnVjdCBy
-d19zZW1hcGhvcmUgKnNlbSwgaW50IHN0YXRlKQogCS8qIHdhaXQgdW50aWwgd2Ugc3VjY2Vz
-c2Z1bGx5IGFjcXVpcmUgdGhlIGxvY2sgKi8KIAlzZXRfY3VycmVudF9zdGF0ZShzdGF0ZSk7
-CiAJZm9yICg7OykgewotCQlpZiAocndzZW1fdHJ5X3dyaXRlX2xvY2soc2VtLCB3c3RhdGUp
-KSB7CisJCWlmIChyd3NlbV90cnlfd3JpdGVfbG9jayhzZW0sICZ3YWl0ZXIpKSB7CiAJCQkv
-KiByd3NlbV90cnlfd3JpdGVfbG9jaygpIGltcGxpZXMgQUNRVUlSRSBvbiBzdWNjZXNzICov
-CiAJCQlicmVhazsKIAkJfQogCiAJCXJhd19zcGluX3VubG9ja19pcnEoJnNlbS0+d2FpdF9s
-b2NrKTsKIAorCQlpZiAoc2lnbmFsX3BlbmRpbmdfc3RhdGUoc3RhdGUsIGN1cnJlbnQpKQor
-CQkJZ290byBvdXRfbm9sb2NrOworCiAJCS8qCiAJCSAqIEFmdGVyIHNldHRpbmcgdGhlIGhh
-bmRvZmYgYml0IGFuZCBmYWlsaW5nIHRvIGFjcXVpcmUKIAkJICogdGhlIGxvY2ssIGF0dGVt
-cHQgdG8gc3BpbiBvbiBvd25lciB0byBhY2NlbGVyYXRlIGxvY2sKQEAgLTEyNDIsNzEgKzEy
-ODEsMzEgQEAgcndzZW1fZG93bl93cml0ZV9zbG93cGF0aChzdHJ1Y3Qgcndfc2VtYXBob3Jl
-ICpzZW0sIGludCBzdGF0ZSkKIAkJICogSW4gdGhpcyBjYXNlLCB3ZSBhdHRlbXB0IHRvIGFj
-cXVpcmUgdGhlIGxvY2sgYWdhaW4KIAkJICogd2l0aG91dCBzbGVlcGluZy4KIAkJICovCi0J
-CWlmICh3c3RhdGUgPT0gV1JJVEVSX0hBTkRPRkYgJiYKKwkJaWYgKHdhaXRlci5oYW5kb2Zm
-X3NldCAmJgogCQkgICAgcndzZW1fc3Bpbl9vbl9vd25lcihzZW0sIFJXU0VNX05PTlNQSU5O
-QUJMRSkgPT0gT1dORVJfTlVMTCkKIAkJCWdvdG8gdHJ5bG9ja19hZ2FpbjsKIAotCQkvKiBC
-bG9jayB1bnRpbCB0aGVyZSBhcmUgbm8gYWN0aXZlIGxvY2tlcnMuICovCi0JCWZvciAoOzsp
-IHsKLQkJCWlmIChzaWduYWxfcGVuZGluZ19zdGF0ZShzdGF0ZSwgY3VycmVudCkpCi0JCQkJ
-Z290byBvdXRfbm9sb2NrOwotCi0JCQlzY2hlZHVsZSgpOwotCQkJbG9ja2V2ZW50X2luYyhy
-d3NlbV9zbGVlcF93cml0ZXIpOwotCQkJc2V0X2N1cnJlbnRfc3RhdGUoc3RhdGUpOwotCQkJ
-LyoKLQkJCSAqIElmIEhBTkRPRkYgYml0IGlzIHNldCwgdW5jb25kaXRpb25hbGx5IGRvCi0J
-CQkgKiBhIHRyeWxvY2suCi0JCQkgKi8KLQkJCWlmICh3c3RhdGUgPT0gV1JJVEVSX0hBTkRP
-RkYpCi0JCQkJYnJlYWs7Ci0KLQkJCWlmICgod3N0YXRlID09IFdSSVRFUl9OT1RfRklSU1Qp
-ICYmCi0JCQkgICAgKHJ3c2VtX2ZpcnN0X3dhaXRlcihzZW0pID09ICZ3YWl0ZXIpKQotCQkJ
-CXdzdGF0ZSA9IFdSSVRFUl9GSVJTVDsKLQotCQkJY291bnQgPSBhdG9taWNfbG9uZ19yZWFk
-KCZzZW0tPmNvdW50KTsKLQkJCWlmICghKGNvdW50ICYgUldTRU1fTE9DS19NQVNLKSkKLQkJ
-CQlicmVhazsKLQotCQkJLyoKLQkJCSAqIFRoZSBzZXR0aW5nIG9mIHRoZSBoYW5kb2ZmIGJp
-dCBpcyBkZWZlcnJlZAotCQkJICogdW50aWwgcndzZW1fdHJ5X3dyaXRlX2xvY2soKSBpcyBj
-YWxsZWQuCi0JCQkgKi8KLQkJCWlmICgod3N0YXRlID09IFdSSVRFUl9GSVJTVCkgJiYgKHJ0
-X3Rhc2soY3VycmVudCkgfHwKLQkJCSAgICB0aW1lX2FmdGVyKGppZmZpZXMsIHdhaXRlci50
-aW1lb3V0KSkpIHsKLQkJCQl3c3RhdGUgPSBXUklURVJfSEFORE9GRjsKLQkJCQlsb2NrZXZl
-bnRfaW5jKHJ3c2VtX3dsb2NrX2hhbmRvZmYpOwotCQkJCWJyZWFrOwotCQkJfQotCQl9CisJ
-CXNjaGVkdWxlKCk7CisJCWxvY2tldmVudF9pbmMocndzZW1fc2xlZXBfd3JpdGVyKTsKKwkJ
-c2V0X2N1cnJlbnRfc3RhdGUoc3RhdGUpOwogdHJ5bG9ja19hZ2FpbjoKIAkJcmF3X3NwaW5f
-bG9ja19pcnEoJnNlbS0+d2FpdF9sb2NrKTsKIAl9CiAJX19zZXRfY3VycmVudF9zdGF0ZShU
-QVNLX1JVTk5JTkcpOwotCWxpc3RfZGVsKCZ3YWl0ZXIubGlzdCk7CiAJcndzZW1fZGlzYWJs
-ZV9yZWFkZXJfb3B0c3BpbihzZW0sIGRpc2FibGVfcnNwaW4pOwogCXJhd19zcGluX3VubG9j
-a19pcnEoJnNlbS0+d2FpdF9sb2NrKTsKIAlsb2NrZXZlbnRfaW5jKHJ3c2VtX3dsb2NrKTsK
-LQotCXJldHVybiByZXQ7CisJcmV0dXJuIHNlbTsKIAogb3V0X25vbG9jazoKIAlfX3NldF9j
-dXJyZW50X3N0YXRlKFRBU0tfUlVOTklORyk7CiAJcmF3X3NwaW5fbG9ja19pcnEoJnNlbS0+
-d2FpdF9sb2NrKTsKLQlsaXN0X2RlbCgmd2FpdGVyLmxpc3QpOwotCi0JaWYgKHVubGlrZWx5
-KHdzdGF0ZSA9PSBXUklURVJfSEFORE9GRikpCi0JCWF0b21pY19sb25nX2FkZCgtUldTRU1f
-RkxBR19IQU5ET0ZGLCAgJnNlbS0+Y291bnQpOwotCi0JaWYgKGxpc3RfZW1wdHkoJnNlbS0+
-d2FpdF9saXN0KSkKLQkJYXRvbWljX2xvbmdfYW5kbm90KFJXU0VNX0ZMQUdfV0FJVEVSUywg
-JnNlbS0+Y291bnQpOwotCWVsc2UKKwlyd3NlbV9kZWxfd2FpdGVyKHNlbSwgJndhaXRlcik7
-CisJaWYgKCFsaXN0X2VtcHR5KCZzZW0tPndhaXRfbGlzdCkpCiAJCXJ3c2VtX21hcmtfd2Fr
-ZShzZW0sIFJXU0VNX1dBS0VfQU5ZLCAmd2FrZV9xKTsKIAlyYXdfc3Bpbl91bmxvY2tfaXJx
-KCZzZW0tPndhaXRfbG9jayk7CiAJd2FrZV91cF9xKCZ3YWtlX3EpOwogCWxvY2tldmVudF9p
-bmMocndzZW1fd2xvY2tfZmFpbCk7Ci0KIAlyZXR1cm4gRVJSX1BUUigtRUlOVFIpOwogfQog
-Ci0tIAoyLjI3LjAKCg==
+It took quite some time, but I managed to strip down the reported
+kernel config (which was very large) down to x86_defconfig plus only a
+few additional config symbols.  Most of which are platform (qemu in
+this case) config options the other is KASAN, required to successfully
+reproduce this:
 
---------------AdyRA7Eq4tOJeY8U1AgGjX0Q--
+  CONFIG_HYPERVISOR_GUEST=y  
+  CONFIG_PARAVIRT=y          
+  CONFIG_PARAVIRT_DEBUG=y    
+  CONFIG_PARAVIRT_SPINLOCKS=y
+  CONFIG_KASAN=y
 
+The (most likely non-optimised) qemu command currently being used is:
+
+qemu-system-x86_64 -smp 8 -m 16G -enable-kvm -cpu max,migratable=off -no-reboot \
+    -kernel ${BUILDDIR}/arch/x86/boot/bzImage -nographic                        \
+    -hda ${IMAGEDIR}/wheezy-auto-repro.img                                      \                       
+    -chardev stdio,id=char0,mux=on,logfile=serial.out,signal=off                \
+    -serial chardev:char0 -mon chardev=char0                                    \
+    -append "root=/dev/sda rw console=ttyS0"                                     
+
+Darrick seems to suggest that:
+
+  "The BUG report came from page_buffers failing to find any buffer heads
+   attached to the page."
+
+If the reproducer, also massively stripped down from the original
+report, would be of any use to you, it can be found further down at
+[2].
+
+I don't how true this is, but it is my current belief that user-space
+should not be able to force the kernel to BUG.  This seems to be a
+temporary DoS issue.  So although not a critically serious security
+problem involved memory leakage or data corruption, it could
+potentially cause a nuisance if not rectified.
+
+Any well meaning help with this would be gratefully received.
+
+Kind regards,
+Lee
+
+[0] https://syzkaller.appspot.com/bug?extid=41c966bf0729a530bd8d
+
+[1]
+[   15.200920] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   15.215877] File: /syzkaller.IsS3Yc/0/bus PID: 1497 Comm: repro
+[   16.718970] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   16.734250] File: /syzkaller.IsS3Yc/5/bus PID: 1512 Comm: repro
+[   17.013871] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   17.028193] File: /syzkaller.IsS3Yc/6/bus PID: 1515 Comm: repro
+[   17.320498] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   17.336115] File: /syzkaller.IsS3Yc/7/bus PID: 1518 Comm: repro
+[   17.617921] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   17.633063] File: /syzkaller.IsS3Yc/8/bus PID: 1521 Comm: repro
+[   18.527260] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   18.544236] File: /syzkaller.IsS3Yc/11/bus PID: 1530 Comm: repro
+[   18.810347] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   18.824721] File: /syzkaller.IsS3Yc/12/bus PID: 1533 Comm: repro
+[   19.099315] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   19.114151] File: /syzkaller.IsS3Yc/13/bus PID: 1536 Comm: repro
+[   19.403882] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   19.418467] File: /syzkaller.IsS3Yc/14/bus PID: 1539 Comm: repro
+[   19.703934] Page cache invalidation failure on direct I/O.  Possible data corruption due to collision with buffered I/O!
+[   19.718400] File: /syzkaller.IsS3Yc/15/bus PID: 1542 Comm: repro
+[   26.533129] ------------[ cut here ]------------
+[   26.540473] WARNING: CPU: 1 PID: 1612 at fs/ext4/inode.c:3576 ext4_set_page_dirty+0xaf/0xc0
+[   26.553171] Modules linked in:
+[   26.557354] CPU: 1 PID: 1612 Comm: repro Not tainted 5.16.0+ #169
+[   26.565238] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[   26.576182] RIP: 0010:ext4_set_page_dirty+0xaf/0xc0
+[   26.583077] Code: 4c 89 ff e8 e3 86 e7 ff 49 f7 07 00 20 00 00 74 19 4c 89 ff 5b 41 5e 41 5f e9 8d 05 f0 ff 48 83 c0 ff 48 89 c3 e9 76 ff ff ff <0f> 0b eb e3 48 83 c0 ff 48 89 c3 eb 9e 0f 0b eb b8 55 48 89 e5 41
+[   26.607402] RSP: 0018:ffff88810f4ffa10 EFLAGS: 00010246
+[   26.614646] RAX: ffffea00043bc687 RBX: ffffea00043bc680 RCX: ffffffff9913f86d
+[   26.625115] RDX: 0000000000000000 RSI: dffffc0000000000 RDI: ffffea00043bc680
+[   26.635137] RBP: 0000000000000400 R08: dffffc0000000000 R09: fffff940008778d1
+[   26.644923] R10: fffff940008778d1 R11: 0000000000000000 R12: ffff88810e14c000
+[   26.654807] R13: ffffea00043bc680 R14: ffffea00043bc688 R15: ffffea00043bc680
+[   26.664812] FS:  00007f27c16d6640(0000) GS:ffff8883ef440000(0000) knlGS:0000000000000000
+[   26.676238] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   26.684212] CR2: 000000000049b3a8 CR3: 000000010f7a6005 CR4: 0000000000370ee0
+[   26.693896] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   26.703778] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   26.714238] Call Trace:
+[   26.717987]  <TASK>
+[   26.721105]  folio_mark_dirty+0x72/0xa0
+[   26.726455]  set_page_dirty_lock+0x4a/0x70
+[   26.732426]  unpin_user_pages_dirty_lock+0x101/0x1d0
+[   26.739369]  process_vm_rw_single_vec+0x2f4/0x3c0
+[   26.745707]  ? process_vm_rw+0x4d0/0x4d0
+[   26.751454]  ? mm_access+0xe1/0x120
+[   26.756495]  process_vm_rw+0x2fd/0x4d0
+[   26.762431]  ? __ia32_sys_process_vm_writev+0x80/0x80
+[   26.769780]  ? preempt_count_sub+0xf/0xc0
+[   26.775021]  ? folio_add_lru+0xea/0x110
+[   26.780260]  ? preempt_count_sub+0xf/0xc0
+[   26.786062]  ? _raw_spin_unlock+0x2e/0x50
+[   26.791676]  ? __handle_mm_fault+0x14a7/0x1970
+[   26.797550]  ? handle_mm_fault+0x1d0/0x1d0
+[   26.802981]  ? up_read+0x6f/0x180
+[   26.807430]  ? down_read_trylock+0x13f/0x190
+[   26.813252]  ? down_write_trylock+0x130/0x130
+[   26.818935]  ? handle_mm_fault+0x160/0x1d0
+[   26.824454]  ? do_kern_addr_fault+0x130/0x130
+[   26.830695]  __x64_sys_process_vm_writev+0x71/0x80
+[   26.837270]  do_syscall_64+0x43/0x90
+[   26.842134]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   26.848994] RIP: 0033:0x44c849
+[   26.853311] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+[   26.877911] RSP: 002b:00007f27c16d6168 EFLAGS: 00000216 ORIG_RAX: 0000000000000137
+[   26.887953] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 000000000044c849
+[   26.897571] RDX: 0000000000000001 RSI: 0000000020c22000 RDI: 0000000000000076
+[   26.907068] RBP: 00007f27c16d61a0 R08: 0000000000000001 R09: 0000000000000000
+[   26.916433] R10: 0000000020c22fa0 R11: 0000000000000216 R12: 00007ffd3062431e
+[   26.927113] R13: 00007ffd3062431f R14: 0000000000000000 R15: 00007f27c16d6640
+[   26.936755]  </TASK>
+[   26.939785] ---[ end trace 42b5bb79157828eb ]---
+[   27.160243] ------------[ cut here ]------------
+[   27.166572] kernel BUG at fs/ext4/inode.c:2620!
+[   27.173362] invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+[   27.180459] CPU: 1 PID: 1616 Comm: repro Tainted: G        W         5.16.0+ #169
+[   27.190304] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[   27.201112] RIP: 0010:mpage_prepare_extent_to_map+0x573/0x580
+[   27.208692] Code: 08 14 00 00 00 00 65 48 8b 04 25 28 00 00 00 48 3b 84 24 40 01 00 00 75 15 89 d8 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 <0f> 0b 0f 0b e8 04 39 15 01 0f 1f 40 00 55 48 89 e5 41 57 41 56 41
+[   27.232612] RSP: 0018:ffff88810f7e6b60 EFLAGS: 00010246
+[   27.239348] RAX: ffffea00043b4fc7 RBX: 0000000000000067 RCX: ffffffff9913ea61
+[   27.248720] RDX: 0000000000000000 RSI: dffffc0000000000 RDI: ffffea00043b4fc0
+[   27.257899] RBP: ffff88810f7e6cf0 R08: dffffc0000000000 R09: fffff940008769f9
+[   27.266846] R10: fffff940008769f9 R11: 0000000000000000 R12: 0000000000000000
+[   27.276050] R13: ffff88810f7e6be0 R14: ffffea00043b4fc0 R15: ffff88810f7e6f58
+[   27.285119] FS:  00007f27c16d6640(0000) GS:ffff8883ef440000(0000) knlGS:0000000000000000
+[   27.295466] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   27.302935] CR2: 0000000020002002 CR3: 000000010cb70006 CR4: 0000000000370ee0
+[   27.312837] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   27.322697] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   27.332451] Call Trace:
+[   27.336060]  <TASK>
+[   27.339164]  ? ext4_iomap_swap_activate+0x10/0x10
+[   27.346171]  ? preempt_count_sub+0xf/0xc0
+[   27.352456]  ? page_writeback_cpu_online+0x1f0/0x1f0
+[   27.359598]  ? ext4_init_io_end+0x18/0x90
+[   27.365427]  ? kmem_cache_alloc+0xf2/0x200
+[   27.371638]  ext4_writepages+0x823/0x1c50
+[   27.377047]  ? kernel_text_address+0xa8/0xc0
+[   27.382587]  ? unwind_get_return_address+0x25/0x40
+[   27.388649]  ? __rcu_read_unlock+0x8d/0x320
+[   27.394134]  ? __rcu_read_lock+0x20/0x20
+[   27.399094]  ? preempt_count_sub+0xf/0xc0
+[   27.404220]  ? ext4_readpage+0x110/0x110
+[   27.409494]  ? stack_trace_save+0x120/0x120
+[   27.414838]  ? __is_insn_slot_addr+0x58/0x60
+[   27.420186]  ? kernel_text_address+0xa8/0xc0
+[   27.425531]  ? __kernel_text_address+0x9/0x40
+[   27.431355]  ? unwind_get_return_address+0x25/0x40
+[   27.437415]  ? stack_trace_save+0xdb/0x120
+[   27.442722]  ? stack_trace_snprint+0xc0/0xc0
+[   27.448310]  do_writepages+0x20b/0x3a0
+[   27.453245]  ? __kasan_slab_alloc+0x43/0xb0
+[   27.458532]  ? filter_irq_stacks+0x3d/0x80
+[   27.463792]  ? __writepage+0xb0/0xb0
+[   27.468366]  ? __iomap_dio_rw+0x1c2/0xec0
+[   27.473579]  ? iomap_dio_rw+0x5/0x30
+[   27.478152]  ? ext4_file_write_iter+0x8a8/0xde0
+[   27.484091]  ? do_iter_readv_writev+0x2ce/0x360
+[   27.490002]  ? do_iter_write+0x109/0x370
+[   27.495400]  ? iter_file_splice_write+0x4b6/0x770
+[   27.501658]  ? direct_splice_actor+0x7b/0x90
+[   27.507225]  ? splice_direct_to_actor+0x309/0x570
+[   27.513487]  ? do_splice_direct+0x172/0x230
+[   27.519352]  ? do_sendfile+0x567/0x960
+[   27.524605]  ? __x64_sys_sendfile64+0x104/0x150
+[   27.531035]  ? do_syscall_64+0x43/0x90
+[   27.536259]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   27.543606]  ? do_syscall_64+0x43/0x90
+[   27.548942]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   27.556281]  ? _raw_spin_lock+0x120/0x120
+[   27.561984]  ? __ext4_handle_dirty_metadata+0x22d/0x510
+[   27.569186]  filemap_write_and_wait_range+0x200/0x230
+[   27.576185]  ? filemap_range_needs_writeback+0x400/0x400
+[   27.583632]  ? ext4_mark_iloc_dirty+0x66c/0x6b0
+[   27.589986]  ? kmem_cache_alloc_trace+0xe7/0x230
+[   27.596373]  ? __iomap_dio_rw+0x1c2/0xec0
+[   27.601967]  __iomap_dio_rw+0x525/0xec0
+[   27.609616]  ? jbd2_journal_stop+0x481/0x5b0
+[   27.615606]  ? iomap_dio_complete+0x2a0/0x2a0
+[   27.622054]  ? generic_update_time+0xde/0x130
+[   27.628225]  ? __mnt_drop_write_file+0xd/0x60
+[   27.634306]  ? file_update_time+0x1cd/0x210
+[   27.640161]  ? kernel_text_address+0xa8/0xc0
+[   27.646114]  ? file_remove_privs+0x2b0/0x2b0
+[   27.652278]  iomap_dio_rw+0x5/0x30
+[   27.657149]  ext4_file_write_iter+0x8a8/0xde0
+[   27.663323]  ? ext4_file_read_iter+0x1e0/0x1e0
+[   27.669800]  ? ____kasan_kmalloc+0xd1/0xf0
+[   27.675676]  ? direct_splice_actor+0x7b/0x90
+[   27.681778]  ? splice_direct_to_actor+0x309/0x570
+[   27.688357]  ? do_splice_direct+0x172/0x230
+[   27.694256]  ? do_sendfile+0x567/0x960
+[   27.699605]  ? __x64_sys_sendfile64+0x104/0x150
+[   27.706129]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   27.713462]  do_iter_readv_writev+0x2ce/0x360
+[   27.719894]  ? generic_file_rw_checks+0xd0/0xd0
+[   27.726446]  ? memcpy+0x3c/0x60
+[   27.731234]  ? security_file_permission+0x47/0x270
+[   27.738026]  do_iter_write+0x109/0x370
+[   27.743417]  iter_file_splice_write+0x4b6/0x770
+[   27.749824]  ? splice_from_pipe+0x170/0x170
+[   27.755630]  ? generic_file_splice_read+0x2d0/0x380
+[   27.765041]  ? splice_shrink_spd+0x40/0x40
+[   27.770668]  ? is_mmconf_reserved+0x240/0x240
+[   27.776487]  ? kcalloc+0x1b/0x20
+[   27.780737]  ? splice_from_pipe+0x170/0x170
+[   27.786278]  direct_splice_actor+0x7b/0x90
+[   27.791885]  splice_direct_to_actor+0x309/0x570
+[   27.797680]  ? do_splice_direct+0x230/0x230
+[   27.803067]  ? pipe_to_sendpage+0x1b0/0x1b0
+[   27.808395]  ? security_file_permission+0x47/0x270
+[   27.814761]  do_splice_direct+0x172/0x230
+[   27.819842]  ? splice_direct_to_actor+0x570/0x570
+[   27.825936]  ? security_file_permission+0x47/0x270
+[   27.832354]  do_sendfile+0x567/0x960
+[   27.837426]  ? do_pwritev+0x3d0/0x3d0
+[   27.842258]  ? __se_sys_futex+0x1b1/0x2c0
+[   27.847619]  ? restore_fpregs_from_fpstate+0xc4/0x190
+[   27.854277]  __x64_sys_sendfile64+0x104/0x150
+[   27.859919]  ? __ia32_sys_sendfile+0x170/0x170
+[   27.865622]  ? switch_fpu_return+0x97/0x120
+[   27.871204]  do_syscall_64+0x43/0x90
+[   27.875661]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   27.882673] RIP: 0033:0x44c849
+[   27.887077] Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+[   27.911882] RSP: 002b:00007f27c16d6178 EFLAGS: 00000203 ORIG_RAX: 0000000000000028
+[   27.921306] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 000000000044c849
+[   27.930587] RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000003
+[   27.939877] RBP: 00007f27c16d61a0 R08: 0000000000000000 R09: 0000000000000000
+[   27.949975] R10: 0000000080000005 R11: 0000000000000203 R12: 00007ffd3062431e
+[   27.959298] R13: 00007ffd3062431f R14: 0000000000000000 R15: 00007f27c16d6640
+[   27.968616]  </TASK>
+[   27.971668] Modules linked in:
+[   27.975922] ---[ end trace 42b5bb79157828ec ]---
+[   27.982710] RIP: 0010:mpage_prepare_extent_to_map+0x573/0x580
+[   27.990558] Code: 08 14 00 00 00 00 65 48 8b 04 25 28 00 00 00 48 3b 84 24 40 01 00 00 75 15 89 d8 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 <0f> 0b 0f 0b e8 04 39 15 01 0f 1f 40 00 55 48 89 e5 41 57 41 56 41
+[   28.015009] RSP: 0018:ffff88810f7e6b60 EFLAGS: 00010246
+[   28.021763] RAX: ffffea00043b4fc7 RBX: 0000000000000067 RCX: ffffffff9913ea61
+[   28.031325] RDX: 0000000000000000 RSI: dffffc0000000000 RDI: ffffea00043b4fc0
+[   28.040622] RBP: ffff88810f7e6cf0 R08: dffffc0000000000 R09: fffff940008769f9
+[   28.050140] R10: fffff940008769f9 R11: 0000000000000000 R12: 0000000000000000
+[   28.059313] R13: ffff88810f7e6be0 R14: ffffea00043b4fc0 R15: ffff88810f7e6f58
+[   28.068502] FS:  00007f27c16d6640(0000) GS:ffff8883ef440000(0000) knlGS:0000000000000000
+[   28.079454] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   28.087279] CR2: 0000000020002002 CR3: 000000010cb70006 CR4: 0000000000370ee0
+[   28.096763] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   28.105974] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+[2]
+// https://syzkaller.appspot.com/bug?id=906354c4596539d9561ee6cb6d8c54cda38fc3c2
+// autogenerated by syzkaller (https://github.com/google/syzkaller)
+
+#define _GNU_SOURCE
+
+#include <arpa/inet.h>
+#include <dirent.h>
+#include <endian.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <net/if.h>
+#include <net/if_arp.h>
+#include <netinet/in.h>
+#include <pthread.h>
+#include <sched.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <sys/mount.h>
+#include <sys/prctl.h>
+#include <sys/resource.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/syscall.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
+
+#include <linux/capability.h>
+#include <linux/futex.h>
+#include <linux/genetlink.h>
+#include <linux/if_addr.h>
+#include <linux/if_ether.h>
+#include <linux/if_link.h>
+#include <linux/if_tun.h>
+#include <linux/in6.h>
+#include <linux/ip.h>
+#include <linux/neighbour.h>
+#include <linux/net.h>
+#include <linux/netlink.h>
+#include <linux/rtnetlink.h>
+#include <linux/tcp.h>
+#include <linux/veth.h>
+
+static void sleep_ms(uint64_t ms)
+{
+  usleep(ms * 1000);
+}
+
+static uint64_t current_time_ms(void)
+{
+  struct timespec ts;
+  if (clock_gettime(CLOCK_MONOTONIC, &ts))
+    exit(1);
+  return (uint64_t)ts.tv_sec * 1000 + (uint64_t)ts.tv_nsec / 1000000;
+}
+
+static void use_temporary_dir(void)
+{
+  char tmpdir_template[] = "./syzkaller.XXXXXX";
+  char* tmpdir = mkdtemp(tmpdir_template);
+  if (!tmpdir)
+    exit(1);
+  if (chmod(tmpdir, 0777))
+    exit(1);
+  if (chdir(tmpdir))
+    exit(1);
+}
+
+static void thread_start(void* (*fn)(void*), void* arg)
+{
+  pthread_t th;
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  pthread_attr_setstacksize(&attr, 128 << 10);
+  int i = 0;
+  for (; i < 100; i++) {
+    if (pthread_create(&th, &attr, fn, arg) == 0) {
+      pthread_attr_destroy(&attr);
+      return;
+    }
+    if (errno == EAGAIN) {
+      usleep(50);
+      continue;
+    }
+    break;
+  }
+  exit(1);
+}
+
+typedef struct {
+  int state;
+} event_t;
+
+static void event_init(event_t* ev)
+{
+  ev->state = 0;
+}
+
+static void event_reset(event_t* ev)
+{
+  ev->state = 0;
+}
+
+static void event_set(event_t* ev)
+{
+  if (ev->state)
+    exit(1);
+  __atomic_store_n(&ev->state, 1, __ATOMIC_RELEASE);
+  syscall(SYS_futex, &ev->state, FUTEX_WAKE | FUTEX_PRIVATE_FLAG, 1000000);
+}
+
+static void event_wait(event_t* ev)
+{
+  while (!__atomic_load_n(&ev->state, __ATOMIC_ACQUIRE))
+    syscall(SYS_futex, &ev->state, FUTEX_WAIT | FUTEX_PRIVATE_FLAG, 0, 0);
+}
+
+static int event_isset(event_t* ev)
+{
+  return __atomic_load_n(&ev->state, __ATOMIC_ACQUIRE);
+}
+
+static int event_timedwait(event_t* ev, uint64_t timeout)
+{
+  uint64_t start = current_time_ms();
+  uint64_t now = start;
+  for (;;) {
+    uint64_t remain = timeout - (now - start);
+    struct timespec ts;
+    ts.tv_sec = remain / 1000;
+    ts.tv_nsec = (remain % 1000) * 1000 * 1000;
+    syscall(SYS_futex, &ev->state, FUTEX_WAIT | FUTEX_PRIVATE_FLAG, 0, &ts);
+    if (__atomic_load_n(&ev->state, __ATOMIC_ACQUIRE))
+      return 1;
+    now = current_time_ms();
+    if (now - start > timeout)
+      return 0;
+  }
+}
+
+#define IFLA_IPVLAN_FLAGS 2
+#define IPVLAN_MODE_L3S 2
+#undef IPVLAN_F_VEPA
+#define IPVLAN_F_VEPA 2
+
+#define TUN_IFACE "syz_tun"
+#define LOCAL_MAC 0xaaaaaaaaaaaa
+#define REMOTE_MAC 0xaaaaaaaaaabb
+#define LOCAL_IPV4 "172.20.20.170"
+#define REMOTE_IPV4 "172.20.20.187"
+#define LOCAL_IPV6 "fe80::aa"
+#define REMOTE_IPV6 "fe80::bb"
+
+#define IFF_NAPI 0x0010
+
+#define DEVLINK_FAMILY_NAME "devlink"
+
+#define DEVLINK_CMD_PORT_GET 5
+#define DEVLINK_ATTR_BUS_NAME 1
+#define DEVLINK_ATTR_DEV_NAME 2
+#define DEVLINK_ATTR_NETDEV_NAME 7
+
+#define DEV_IPV4 "172.20.20.%d"
+#define DEV_IPV6 "fe80::%02x"
+#define DEV_MAC 0x00aaaaaaaaaa
+
+#define WG_GENL_NAME "wireguard"
+enum wg_cmd {
+  WG_CMD_GET_DEVICE,
+  WG_CMD_SET_DEVICE,
+};
+enum wgdevice_attribute {
+  WGDEVICE_A_UNSPEC,
+  WGDEVICE_A_IFINDEX,
+  WGDEVICE_A_IFNAME,
+  WGDEVICE_A_PRIVATE_KEY,
+  WGDEVICE_A_PUBLIC_KEY,
+  WGDEVICE_A_FLAGS,
+  WGDEVICE_A_LISTEN_PORT,
+  WGDEVICE_A_FWMARK,
+  WGDEVICE_A_PEERS,
+};
+enum wgpeer_attribute {
+  WGPEER_A_UNSPEC,
+  WGPEER_A_PUBLIC_KEY,
+  WGPEER_A_PRESHARED_KEY,
+  WGPEER_A_FLAGS,
+  WGPEER_A_ENDPOINT,
+  WGPEER_A_PERSISTENT_KEEPALIVE_INTERVAL,
+  WGPEER_A_LAST_HANDSHAKE_TIME,
+  WGPEER_A_RX_BYTES,
+  WGPEER_A_TX_BYTES,
+  WGPEER_A_ALLOWEDIPS,
+  WGPEER_A_PROTOCOL_VERSION,
+};
+enum wgallowedip_attribute {
+  WGALLOWEDIP_A_UNSPEC,
+  WGALLOWEDIP_A_FAMILY,
+  WGALLOWEDIP_A_IPADDR,
+  WGALLOWEDIP_A_CIDR_MASK,
+};
+
+#define MAX_FDS 30
+
+#define XT_TABLE_SIZE 1536
+#define XT_MAX_ENTRIES 10
+
+struct xt_counters {
+  uint64_t pcnt, bcnt;
+};
+
+struct ipt_getinfo {
+  char name[32];
+  unsigned int valid_hooks;
+  unsigned int hook_entry[5];
+  unsigned int underflow[5];
+  unsigned int num_entries;
+  unsigned int size;
+};
+
+struct ipt_get_entries {
+  char name[32];
+  unsigned int size;
+  uint64_t entrytable[XT_TABLE_SIZE / sizeof(uint64_t)];
+};
+
+struct ipt_replace {
+  char name[32];
+  unsigned int valid_hooks;
+  unsigned int num_entries;
+  unsigned int size;
+  unsigned int hook_entry[5];
+  unsigned int underflow[5];
+  unsigned int num_counters;
+  struct xt_counters* counters;
+  uint64_t entrytable[XT_TABLE_SIZE / sizeof(uint64_t)];
+};
+
+struct ipt_table_desc {
+  const char* name;
+  struct ipt_getinfo info;
+  struct ipt_replace replace;
+};
+
+#define IPT_BASE_CTL 64
+#define IPT_SO_SET_REPLACE (IPT_BASE_CTL)
+#define IPT_SO_GET_INFO (IPT_BASE_CTL)
+#define IPT_SO_GET_ENTRIES (IPT_BASE_CTL + 1)
+
+struct arpt_getinfo {
+  char name[32];
+  unsigned int valid_hooks;
+  unsigned int hook_entry[3];
+  unsigned int underflow[3];
+  unsigned int num_entries;
+  unsigned int size;
+};
+
+struct arpt_get_entries {
+  char name[32];
+  unsigned int size;
+  uint64_t entrytable[XT_TABLE_SIZE / sizeof(uint64_t)];
+};
+
+struct arpt_replace {
+  char name[32];
+  unsigned int valid_hooks;
+  unsigned int num_entries;
+  unsigned int size;
+  unsigned int hook_entry[3];
+  unsigned int underflow[3];
+  unsigned int num_counters;
+  struct xt_counters* counters;
+  uint64_t entrytable[XT_TABLE_SIZE / sizeof(uint64_t)];
+};
+
+#define ARPT_BASE_CTL 96
+#define ARPT_SO_SET_REPLACE (ARPT_BASE_CTL)
+#define ARPT_SO_GET_INFO (ARPT_BASE_CTL)
+#define ARPT_SO_GET_ENTRIES (ARPT_BASE_CTL + 1)
+
+static void loop();
+
+static int wait_for_loop(int pid)
+{
+  if (pid < 0)
+    exit(1);
+  int status = 0;
+  while (waitpid(-1, &status, __WALL) != pid) {
+  }
+  return WEXITSTATUS(status);
+}
+
+static int do_sandbox_none(void)
+{
+  if (unshare(CLONE_NEWPID)) {
+  }
+  int pid = fork();
+  if (pid != 0)
+    return wait_for_loop(pid);
+
+  if (unshare(CLONE_NEWNET)) {
+  }
+  loop();
+  exit(1);
+}
+
+#define FS_IOC_SETFLAGS _IOW('f', 2, long)
+static void remove_dir(const char* dir)
+{
+  int iter = 0;
+  DIR* dp = 0;
+retry:
+  while (umount2(dir, MNT_DETACH | UMOUNT_NOFOLLOW) == 0) {
+  }
+  dp = opendir(dir);
+  if (dp == NULL) {
+    if (errno == EMFILE) {
+      exit(1);
+    }
+    exit(1);
+  }
+  struct dirent* ep = 0;
+  while ((ep = readdir(dp))) {
+    if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0)
+      continue;
+    char filename[FILENAME_MAX];
+    snprintf(filename, sizeof(filename), "%s/%s", dir, ep->d_name);
+    while (umount2(filename, MNT_DETACH | UMOUNT_NOFOLLOW) == 0) {
+    }
+    struct stat st;
+    if (lstat(filename, &st))
+      exit(1);
+    if (S_ISDIR(st.st_mode)) {
+      remove_dir(filename);
+      continue;
+    }
+    int i;
+    for (i = 0;; i++) {
+      if (unlink(filename) == 0)
+        break;
+      if (errno == EPERM) {
+        int fd = open(filename, O_RDONLY);
+        if (fd != -1) {
+          long flags = 0;
+          if (ioctl(fd, FS_IOC_SETFLAGS, &flags) == 0) {
+          }
+          close(fd);
+          continue;
+        }
+      }
+      if (errno == EROFS) {
+        break;
+      }
+      if (errno != EBUSY || i > 100)
+        exit(1);
+      if (umount2(filename, MNT_DETACH | UMOUNT_NOFOLLOW))
+        exit(1);
+    }
+  }
+  closedir(dp);
+  for (int i = 0;; i++) {
+    if (rmdir(dir) == 0)
+      break;
+    if (i < 100) {
+      if (errno == EPERM) {
+        int fd = open(dir, O_RDONLY);
+        if (fd != -1) {
+          long flags = 0;
+          if (ioctl(fd, FS_IOC_SETFLAGS, &flags) == 0) {
+          }
+          close(fd);
+          continue;
+        }
+      }
+      if (errno == EROFS) {
+        break;
+      }
+      if (errno == EBUSY) {
+        if (umount2(dir, MNT_DETACH | UMOUNT_NOFOLLOW))
+          exit(1);
+        continue;
+      }
+      if (errno == ENOTEMPTY) {
+        if (iter < 100) {
+          iter++;
+          goto retry;
+        }
+      }
+    }
+    exit(1);
+  }
+}
+
+static void kill_and_wait(int pid, int* status)
+{
+  kill(-pid, SIGKILL);
+  kill(pid, SIGKILL);
+  for (int i = 0; i < 100; i++) {
+    if (waitpid(-1, status, WNOHANG | __WALL) == pid)
+      return;
+    usleep(1000);
+  }
+  DIR* dir = opendir("/sys/fs/fuse/connections");
+  if (dir) {
+    for (;;) {
+      struct dirent* ent = readdir(dir);
+      if (!ent)
+        break;
+      if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0)
+        continue;
+      char abort[300];
+      snprintf(abort, sizeof(abort), "/sys/fs/fuse/connections/%s/abort",
+               ent->d_name);
+      int fd = open(abort, O_WRONLY);
+      if (fd == -1) {
+        continue;
+      }
+      if (write(fd, abort, 1) < 0) {
+      }
+      close(fd);
+    }
+    closedir(dir);
+  } else {
+  }
+  while (waitpid(-1, status, __WALL) != pid) {
+  }
+}
+
+static void close_fds()
+{
+  for (int fd = 3; fd < MAX_FDS; fd++)
+    close(fd);
+}
+
+struct thread_t {
+  int created, call;
+  event_t ready, done;
+};
+
+static struct thread_t threads[16];
+static void execute_call(int call);
+static int running;
+
+static void* thr(void* arg)
+{
+  struct thread_t* th = (struct thread_t*)arg;
+  for (;;) {
+    event_wait(&th->ready);
+    event_reset(&th->ready);
+    execute_call(th->call);
+    __atomic_fetch_sub(&running, 1, __ATOMIC_RELAXED);
+    event_set(&th->done);
+  }
+  return 0;
+}
+
+static void execute_one(void)
+{
+  int i, call, thread;
+  for (call = 0; call < 10; call++) {
+    for (thread = 0; thread < (int)(sizeof(threads) / sizeof(threads[0]));
+         thread++) {
+      struct thread_t* th = &threads[thread];
+      if (!th->created) {
+        th->created = 1;
+        event_init(&th->ready);
+        event_init(&th->done);
+        event_set(&th->done);
+        thread_start(thr, th);
+      }
+      if (!event_isset(&th->done))
+        continue;
+      event_reset(&th->done);
+      th->call = call;
+      __atomic_fetch_add(&running, 1, __ATOMIC_RELAXED);
+      event_set(&th->ready);
+      event_timedwait(&th->done, 50);
+      break;
+    }
+  }
+  for (i = 0; i < 100 && __atomic_load_n(&running, __ATOMIC_RELAXED); i++)
+    sleep_ms(1);
+  close_fds();
+}
+
+static void execute_one(void);
+
+#define WAIT_FLAGS __WALL
+
+static void loop(void)
+{
+  int iter = 0;
+  for (;; iter++) {
+    char cwdbuf[32];
+    sprintf(cwdbuf, "./%d", iter);
+    if (mkdir(cwdbuf, 0777))
+      exit(1);
+    int pid = fork();
+    if (pid < 0)
+	    exit(1);
+    if (pid == 0) {
+      if (chdir(cwdbuf))
+        exit(1);
+      execute_one();
+      exit(0);
+    }
+    int status = 0;
+    uint64_t start = current_time_ms();
+    for (;;) {
+       if (waitpid(-1, &status, WNOHANG | WAIT_FLAGS) == pid) {
+	 break;
+       }
+      sleep_ms(1);
+      if (current_time_ms() - start < 5000)
+        continue;
+      kill_and_wait(pid, &status);
+      break;
+    }
+    remove_dir(cwdbuf);
+  }
+}
+
+uint64_t r[5] = {0xffffffffffffffff, 0xffffffffffffffff, 0xffffffffffffffff,
+                 0xffffffffffffffff, 0x0};
+
+void execute_call(int call)
+{
+  intptr_t res = 0;
+  switch (call) {
+  case 0:
+    memcpy((void*)0x20000080, "./bus\000", 6);
+    res = syscall(__NR_open, 0x20000080ul, 0x14d842ul, 0ul);
+    if (res != -1)
+      r[0] = res;
+    break;
+  case 1:
+    memcpy((void*)0x20000000, "/proc/self/exe\000", 15);
+    res = syscall(__NR_openat, 0xffffff9c, 0x20000000ul, 0ul, 0ul);
+    if (res != -1)
+      r[1] = res;
+    break;
+  case 2:
+    memcpy((void*)0x20002000, "./bus\000", 6);
+    res = syscall(__NR_open, 0x20002000ul, 0x143042ul, 0ul);
+    if (res != -1)
+      r[2] = res;
+    break;
+  case 3:
+    syscall(__NR_ftruncate, r[2], 0x2008002ul);
+    break;
+  case 4:
+    memcpy((void*)0x20000400, "./bus\000", 6);
+    res = syscall(__NR_open, 0x20000400ul, 0x14103eul, 0ul);
+    if (res != -1)
+      r[3] = res;
+    break;
+  case 5:
+    syscall(__NR_mmap, 0x20000000ul, 0x600000ul, 0x7ffffeul, 0x11ul, r[3], 0ul);
+    break;
+  case 6:
+    syscall(__NR_sendfile, r[0], r[1], 0ul, 0x80000005ul);
+    break;
+  case 7:
+    res = syscall(__NR_gettid);
+    if (res != -1)
+      r[4] = res;
+    break;
+  case 8:
+    *(uint64_t*)0x20c22000 = 0x2034afa4;
+    *(uint64_t*)0x20c22008 = 0x1f80;
+    *(uint64_t*)0x20c22fa0 = 0x20000080;
+    *(uint64_t*)0x20c22fa8 = 0x2034afa5;
+    syscall(__NR_process_vm_writev, r[4], 0x20c22000ul, 1ul, 0x20c22fa0ul, 1ul,
+            0ul);
+    break;
+  case 9:
+    syscall(__NR_sendfile, r[0], r[1], 0ul, 0x80000005ul);
+    break;
+  }
+}
+int main(void)
+{
+  syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+  syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
+  syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+
+  use_temporary_dir();
+  do_sandbox_none();
+
+  return 0;
+}
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

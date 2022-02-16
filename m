@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8974B8281
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FB54B827B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbiBPIDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:03:32 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37632 "EHLO
+        id S231311AbiBPIDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:03:41 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiBPIDa (ORCPT
+        with ESMTP id S231296AbiBPIDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:03:30 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8439E213913
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:03:19 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id s129-20020a254587000000b00621cf68a92fso2687263yba.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:03:19 -0800 (PST)
+        Wed, 16 Feb 2022 03:03:37 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8B4213F1F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:03:23 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 2-20020a251302000000b006118f867dadso2695505ybt.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:03:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Aj1+/jvhiBhQfXtmmF+ZYOOgdJDt/Hruc8PhsRcVwMY=;
-        b=tY3DJSychOnSosHGJuYNVv6K/mGEB6lprRwn4sq/yn5KyYvZ6gOqFdtrG+Z4sS9eKf
-         dXHWLvte9O6XJ8EBuML4TIE5wVWHQj22Q+aSFK8YAd/Cq+SUQBWSqL++i9DV0ziScRDs
-         05c4WnMRtyZXppZw3+W03FFd8J73MNMSOQCO6OdKGS4cCj8rguhemCfCdFNqb+Ay3lAD
-         wPE5GAqgyOqx3EJ+QN4vSzu+khLqtvMTLY2oPl79Srmh89sJravucyzUbm+2clYEFqfx
-         yv6HqrgXe962bTLtY/aFlf1XDxnKWgqJpW5DLHHLQGMsknwr6iLSQUAYmiFCSk8z+xDU
-         Cn1w==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=QwbIJmiyLmPJsz2898M/cKW1wrJYaBVyOrGjlzPUzPM=;
+        b=QKqEMCGcSx2J3hQkVkRuvqwH+mW4FQKm+Y0JL6wkgcPIwTDVabKlRaTr/qFFPbehup
+         Ca3LeujYdXNC2VCz41ANfKgS6oBnpOEROXSNTqS3bVDU1QaF348xv3+8kkZJJotyd2V8
+         E3kIVWLjfK2kD8yg8EqixIMvSLRUg43RPHZX30hlfDiBKbzj3gsFQT9ZBZp3ZxjTqwQm
+         CUyctzVDYKtaqZBbn4xM8Pa2U1hRSYnv6YWzffTI233Go/qCJNk8FgvJz1inn3Dp7YNC
+         V/9snbueLCPDnKiuBQLE77JmbrEo2JTPgJQXJHXY4Q5zTBBvNB1+cQGjBquckXK404Fe
+         uxGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Aj1+/jvhiBhQfXtmmF+ZYOOgdJDt/Hruc8PhsRcVwMY=;
-        b=uMvg0KWCNeHsFAX3T6YhR1YwX249msjlUu75/KHzjc6766NzymHLAdB9oyd+P/3uvm
-         9qzuxvVMYKeQfh2k31C3aA/ZOSncohrgCrnggjJSloVwcQsu2lkX7ApMKxte00xQLWx6
-         tcWsiRwLiyfFwFJ+fyzOd4mBlIkt8Bjt7oAyg0SOdB1ZYRlQMTPGtYacDnDHcIiTuM0Z
-         hZHzgoxXsJ3naNh18AMAdxbh/a/iCK6xigNSNuNysqcDvHqIznyOe4ubYFWI1zkTbdW/
-         vIecdO1JaQZ93Yifaiy+oWOGRnJQc0tFPRbugMkSLADYi/HzPP40ZWgeg2aZ2tIlz7wY
-         oIkg==
-X-Gm-Message-State: AOAM533gxS59flQIqbMIUwUCoXh+pPdjx9Rk+AbqwOH0x/3zE8vFP8vl
-        hX32xjf6vom+7IVlsddtFeKPSg0MxaTB
-X-Google-Smtp-Source: ABdhPJz+Bg5yo4/Ca6COUQ6m7qreuAPv5o5yIDK3crQbt3NO/hYBuNfsGQF3FW64XTflf/HlITUqanJi+XSA
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=QwbIJmiyLmPJsz2898M/cKW1wrJYaBVyOrGjlzPUzPM=;
+        b=JI8WZNLrbzdsAp+Vw1UoMiK0HHUxAbkxTedZ1FGXAfU7MXg+e/dc++Lul5weDpALXl
+         7dZ+u3q7h1xfCpGdB2bOzU9BGEwu9HR+8V0cwdEc/E0x7/etmFOzzBkwbEyLqV2z/JOo
+         G88/hPbNBZutjt1I8d32drVmRrDBBWWHQDHlhLdiJMlHhVFvJGZM8LMZyAi1PXyz95vA
+         PSWU4VcoydYih8LeHz56KAtFm0C4hZs2L7h2b0Rk55d1pwd6GQz+GcKACqvMIFNx021z
+         rkN2JP0EDKFj9P8XK1PVOugeIG9Xhc2mXvLG7vuCJtxEVJw8h+fqokyPbm8FGpkK/Klx
+         FlfA==
+X-Gm-Message-State: AOAM531vDnOZCLI6a+WW+I7HgB2bqMlQWcCjxtmBuNiLEXBSzm5nmc91
+        7rYL9ZvRUjHnTF406Imo3qsOQVwGm4q5
+X-Google-Smtp-Source: ABdhPJz+DlHTqa1DwdMIlck0KFDFQurTMv/sTMydH+BMvolVF8Nxsj4O7axBlt5IlDG82yTYuLXvIRhG4Ygt
 X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:8ce7:5b2:9787:1a0b])
- (user=tzungbi job=sendgmr) by 2002:a25:ef47:0:b0:622:7be6:7a0 with SMTP id
- w7-20020a25ef47000000b006227be607a0mr1166508ybm.191.1644998598777; Wed, 16
- Feb 2022 00:03:18 -0800 (PST)
-Date:   Wed, 16 Feb 2022 16:03:01 +0800
-Message-Id: <20220216080306.3864163-1-tzungbi@google.com>
+ (user=tzungbi job=sendgmr) by 2002:a25:e802:0:b0:60e:94cb:dbc0 with SMTP id
+ k2-20020a25e802000000b0060e94cbdbc0mr1056681ybd.509.1644998603121; Wed, 16
+ Feb 2022 00:03:23 -0800 (PST)
+Date:   Wed, 16 Feb 2022 16:03:02 +0800
+In-Reply-To: <20220216080306.3864163-1-tzungbi@google.com>
+Message-Id: <20220216080306.3864163-2-tzungbi@google.com>
 Mime-Version: 1.0
+References: <20220216080306.3864163-1-tzungbi@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v5 0/5] platform/chrome: cros_ec: miscellaneous cleanups
+Subject: [PATCH v5 1/5] platform/chrome: cros_ec: fix error handling in cros_ec_register()
 From:   Tzung-Bi Shih <tzungbi@google.com>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, pmalani@chromium.org,
@@ -64,40 +68,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 1st patch fixes unhandled undos in error handling path.
+Fix cros_ec_register() to unregister platform devices if
+blocking_notifier_chain_register() fails.
 
-The rest of patches cleans drivers/platform/chrome/cros_ec.c.
+Also use the single exit path to handle the platform device
+unregistration.
 
+Fixes: 42cd0ab476e2 ("platform/chrome: cros_ec: Query EC protocol version if EC transitions between RO/RW")
+Reviewed-by: Prashant Malani <pmalani@chromium.org>
+Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
+---
 Changes from v4:
-(https://patchwork.kernel.org/project/chrome-platform/cover/20220216043639.3839185-1-tzungbi@google.com/)
-- Rollback the 3rd patch to older version.
+(https://patchwork.kernel.org/project/chrome-platform/patch/20220216043639.3839185-2-tzungbi@google.com/)
+- Add R-b tag.
 
 Changes from v3:
-(https://patchwork.kernel.org/project/chrome-platform/cover/20220209095703.517608-1-tzungbi@google.com/)
-- Drop "platform/chrome: cros_ec: don't initialize `err` in cros_ec_register()".
-- Rename the 3rd patch's title.
+(https://patchwork.kernel.org/project/chrome-platform/patch/20220209095703.517608-2-tzungbi@google.com/)
+- Simplify by initializing the variables at the beginning.
 
 Changes from v2:
-(https://patchwork.kernel.org/project/chrome-platform/cover/20220209045035.380615-1-tzungbi@google.com/)
-- Fix review comments in 1st and 2nd patch.
+(https://patchwork.kernel.org/project/chrome-platform/patch/20220209045035.380615-2-tzungbi@google.com/)
+- Fix grammar error in commit message.
+- Change the code that don't rely on zeroed memory.
+- Remove unnecessary `if` checks before calling platform_device_unregister().
 
 Changes from v1:
 (https://lore.kernel.org/lkml/20220125101527.1812887-1-tzungbi@google.com/T/#u)
-- Use imperative mood in commit messages.
+- Use imperative mood in commit message.
 - Use IS_ERR_OR_NULL() in 1st patch.
 
-Tzung-Bi Shih (5):
-  platform/chrome: cros_ec: fix error handling in cros_ec_register()
-  platform/chrome: cros_ec: remove unused variable `was_wake_device`
-  platform/chrome: cros_ec: determine `wake_enabled` in
-    cros_ec_suspend()
-  platform/chrome: cros_ec: sort header inclusion alphabetically
-  platform/chrome: cros_ec: append newline to all logs
+ drivers/platform/chrome/cros_ec.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
- drivers/platform/chrome/cros_ec.c           | 36 ++++++++++++---------
- include/linux/platform_data/cros_ec_proto.h |  3 --
- 2 files changed, 20 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
+index fc5aa1525d13..ff2a24b0c611 100644
+--- a/drivers/platform/chrome/cros_ec.c
++++ b/drivers/platform/chrome/cros_ec.c
+@@ -189,6 +189,8 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 	ec_dev->max_request = sizeof(struct ec_params_hello);
+ 	ec_dev->max_response = sizeof(struct ec_response_get_protocol_info);
+ 	ec_dev->max_passthru = 0;
++	ec_dev->ec = NULL;
++	ec_dev->pd = NULL;
+ 
+ 	ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
+ 	if (!ec_dev->din)
+@@ -245,18 +247,16 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 		if (IS_ERR(ec_dev->pd)) {
+ 			dev_err(ec_dev->dev,
+ 				"Failed to create CrOS PD platform device\n");
+-			platform_device_unregister(ec_dev->ec);
+-			return PTR_ERR(ec_dev->pd);
++			err = PTR_ERR(ec_dev->pd);
++			goto exit;
+ 		}
+ 	}
+ 
+ 	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
+ 		err = devm_of_platform_populate(dev);
+ 		if (err) {
+-			platform_device_unregister(ec_dev->pd);
+-			platform_device_unregister(ec_dev->ec);
+ 			dev_err(dev, "Failed to register sub-devices\n");
+-			return err;
++			goto exit;
+ 		}
+ 	}
+ 
+@@ -278,7 +278,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 		err = blocking_notifier_chain_register(&ec_dev->event_notifier,
+ 						      &ec_dev->notifier_ready);
+ 		if (err)
+-			return err;
++			goto exit;
+ 	}
+ 
+ 	dev_info(dev, "Chrome EC device registered\n");
+@@ -291,6 +291,10 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
+ 		cros_ec_irq_thread(0, ec_dev);
+ 
+ 	return 0;
++exit:
++	platform_device_unregister(ec_dev->ec);
++	platform_device_unregister(ec_dev->pd);
++	return err;
+ }
+ EXPORT_SYMBOL(cros_ec_register);
+ 
 -- 
 2.35.1.265.g69c8d7142f-goog
 

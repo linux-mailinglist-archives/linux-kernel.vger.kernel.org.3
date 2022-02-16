@@ -2,152 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FA44B9223
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813834B9227
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiBPUPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 15:15:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46140 "EHLO
+        id S230189AbiBPUQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 15:16:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiBPUPF (ORCPT
+        with ESMTP id S229773AbiBPUQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 15:15:05 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3966D235865
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:14:52 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id x11so2831762pll.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:14:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xqE2BW0tKVRqM9ZhCDPXCovwSbjof6cI+9q/oGqooSk=;
-        b=NR7TiaIkVeb6mYv4qWdPa8tE15JoCJw13yejHxDLUfmlF0RP3HlJZPJp7inuchCg3k
-         bLOz3ieHHziV0osXGKcv6SubQC2ZeptScXKgpr+t4GS9WZQjM/OHtElPdNEb4YVPKp3C
-         BgrrSZdkcsm8IgTQG6Cl2WHciGSaYcw2pV+NY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xqE2BW0tKVRqM9ZhCDPXCovwSbjof6cI+9q/oGqooSk=;
-        b=ssX9heMZwi5r9j3pwWnuOVIyHYdyHXruTHeL10mCu7QwffcGuRJMMfXglHA2PrYe0j
-         4uLfbGNep9189iZ83hrFLLaToJ1+/5scC670mW6X4SuW4oRGE4j8z5MDFDuumSVVrocY
-         8rerUMYykqFrLKsnXw1/3v0DEV15qCkG2tYe5C+0mD/GmK5FQGGtmFoes1YZ2ng15seq
-         U/4JIokIXxbLtHJMshuWMqPZP3C2hhMSMKZ+3+JO1LcfT6SpID83clFBq/Nh5A3yxKtN
-         +9X4B4oElIURA5MzP2NQh1hLTUH/d+tmIj5so+UGJ+Shue4GiCpBkesJPcvskKvk5whp
-         j3gg==
-X-Gm-Message-State: AOAM530eUtg5wGqJFtgR9YavONKLXKNzZIMLqfO8+4SKvgIg2M37Uj7H
-        IwgcrD+x7QrKppuREEhO20xnxg==
-X-Google-Smtp-Source: ABdhPJwIU2Fu/iRv2C0QJmBs5y1p/RE21NXtauVHjHeLf70sjR3+jCzd9e3ecNuE5/iHmiiSBEDwiQ==
-X-Received: by 2002:a17:90b:4004:b0:1b8:b2eb:4b83 with SMTP id ie4-20020a17090b400400b001b8b2eb4b83mr3691254pjb.149.1645042491710;
-        Wed, 16 Feb 2022 12:14:51 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t1sm5964516pgj.43.2022.02.16.12.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 12:14:51 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] usercopy: Check valid lifetime via stack depth
-Date:   Wed, 16 Feb 2022 12:14:49 -0800
-Message-Id: <20220216201449.2087956-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 16 Feb 2022 15:16:42 -0500
+Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967615FA1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:16:25 -0800 (PST)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id KQiqnsZojEuQ2KQirnMe4b; Wed, 16 Feb 2022 21:16:23 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 16 Feb 2022 21:16:23 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] net: ll_temac: Use GFP_KERNEL instead of GFP_ATOMIC when possible
+Date:   Wed, 16 Feb 2022 21:16:16 +0100
+Message-Id: <694abd65418b2b3974106a82d758e3474c65ae8f.1645042560.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2777; h=from:subject; bh=jr1yKp0UMwd5gvvB/ePD/2FkWdtbd+ZCUu7BnVQyulA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiDVs4Hh87CYY9W3rMbKqyfd7+UszuGa3FFWxH8s9m q2FNCVaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYg1bOAAKCRCJcvTf3G3AJttLD/ wNKTVOmCoYdtqtUSIlcd62hL/1Pq8cEu2EynIeBUQSn25cWzaTcMQu47PDzckY8hcz2F6ZCQSrlf2s EGpOHPUFK6E+Yk7LHpnLGg7P/NS3DzdGE7uixLZmooHCROncIbDIsvWDDpX5rKKNACSRKVf9Rx/1PI pnLyZUzDNVtwQK9XDphmrat0BKjWb3OTB7vbbtDz8bkVZnN1IS+eMSbEraPpeRY6Vl0jwktEK5jTRm q29MZlM2AB9X/EuFrzaoR6jXQ7CDtPg7klR/gSM/eQht6pH7UY6HsUqofFfbYziHjFCMzYnxMRZHf6 Cx0cXvZbjrOnzsyoVBdhM1003MSKtlEuUVT8p31J88qXf5d9uvRK/Sj9gFvBWiyxtcpV8Lwf4pOsb1 sBFN0hJ6kaIZoYi+LNf3K2QLBfXymjowRa5WKzhKzzQQxlBdTr5Gt+0UWcyyvjAK4J9IB3BEuo8sbT RAzGeMq122044mgIkhYN7M7rvd5stZnzgA0BOMpFQjvJsdSso5ovUlW46vqQYpWAxEEPhsFNKaICo8 hRnGOa70iGY7KvgyEt/0ePSl2MlN8s2gfyv5dDPGwbjmN/05WKk3zYB2hFPEjZ0uVY19Rv8G13AaMs xHMo/2VEcpc4rQd9KR0qW3usVDOF84bmQwX5tD/twu+aFsKbBov8rVBuORNg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under CONFIG_HARDENED_USERCOPY=y, when exact stack frame boundary checking
-is not available (i.e. everything except x86 with FRAME_POINTER), check
-a stack object as being at least "current depth valid", in the sense
-that any object within the stack region but not between start-of-stack
-and current_stack_pointer should be considered unavailable (i.e. its
-lifetime is from a call no longer present on the stack).
+XTE_MAX_JUMBO_FRAME_SIZE is over 9000 bytes and the default value for
+'rx_bd_num' is RX_BD_NUM_DEFAULT	(i.e. 1024)
 
-Additionally report usercopy bounds checking failures with an offset
-from current_stack_pointer, which may assist with diagnosing failures.
+So this loop allocates more than 9 Mo of memory.
 
-The LKDTM USERCOPY_STACK_FRAME_TO and USERCOPY_STACK_FRAME_FROM tests
-(once slightly adjusted in a separate patch) will pass again with
-this fixed.
+Previous memory allocations in this function already use GFP_KERNEL, so
+use __netdev_alloc_skb_ip_align() and an explicit GFP_KERNEL instead of a
+implicit GFP_ATOMIC.
 
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+This gives more opportunities of successful allocation.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- mm/usercopy.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/xilinx/ll_temac_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/mm/usercopy.c b/mm/usercopy.c
-index d0d268135d96..3846c1634dca 100644
---- a/mm/usercopy.c
-+++ b/mm/usercopy.c
-@@ -29,13 +29,20 @@
-  * Returns:
-  *	NOT_STACK: not at all on the stack
-  *	GOOD_FRAME: fully within a valid stack frame
-- *	GOOD_STACK: fully on the stack (when can't do frame-checking)
-+ *	GOOD_STACK: within the current stack (when can't frame-check exactly)
-  *	BAD_STACK: error condition (invalid stack position or bad stack frame)
-  */
- static noinline int check_stack_object(const void *obj, unsigned long len)
- {
- 	const void * const stack = task_stack_page(current);
- 	const void * const stackend = stack + THREAD_SIZE;
-+#ifndef CONFIG_STACK_GROWSUP
-+	const void * const high = stackend;
-+	const void * const low = (void *)current_stack_pointer;
-+#else
-+	const void * const high = (void *)current_stack_pointer;
-+	const void * const low = stack;
-+#endif
- 	int ret;
+diff --git a/drivers/net/ethernet/xilinx/ll_temac_main.c b/drivers/net/ethernet/xilinx/ll_temac_main.c
+index b900ab5aef2a..0547a3fde561 100644
+--- a/drivers/net/ethernet/xilinx/ll_temac_main.c
++++ b/drivers/net/ethernet/xilinx/ll_temac_main.c
+@@ -361,8 +361,9 @@ static int temac_dma_bd_init(struct net_device *ndev)
+ 		lp->rx_bd_v[i].next = cpu_to_be32(lp->rx_bd_p
+ 			+ sizeof(*lp->rx_bd_v) * ((i + 1) % lp->rx_bd_num));
  
- 	/* Object is not on the stack at all. */
-@@ -55,6 +62,12 @@ static noinline int check_stack_object(const void *obj, unsigned long len)
- 	if (ret)
- 		return ret;
+-		skb = netdev_alloc_skb_ip_align(ndev,
+-						XTE_MAX_JUMBO_FRAME_SIZE);
++		skb = __netdev_alloc_skb_ip_align(ndev,
++						  XTE_MAX_JUMBO_FRAME_SIZE,
++						  GFP_KERNEL);
+ 		if (!skb)
+ 			goto out;
  
-+	/*
-+	 * Reject: object not within current stack depth.
-+	 */
-+	if (obj < low || high < obj + len)
-+		return BAD_STACK;
-+
- 	return GOOD_STACK;
- }
- 
-@@ -280,7 +293,13 @@ void __check_object_size(const void *ptr, unsigned long n, bool to_user)
- 		 */
- 		return;
- 	default:
--		usercopy_abort("process stack", NULL, to_user, 0, n);
-+		usercopy_abort("process stack", NULL, to_user,
-+#ifndef CONFIG_STACK_GROWSUP
-+				(void *)current_stack_pointer - ptr,
-+#else
-+				ptr - (void *)current_stack_pointer,
-+#endif
-+				n);
- 	}
- 
- 	/* Check for bad heap object. */
 -- 
-2.30.2
+2.32.0
 

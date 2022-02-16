@@ -2,149 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD85B4B8634
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300614B8647
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiBPKyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 05:54:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55648 "EHLO
+        id S231258AbiBPK5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 05:57:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiBPKyp (ORCPT
+        with ESMTP id S231208AbiBPK5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 05:54:45 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109E329E97E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:54:33 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d27so2775430wrc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:54:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kynesim-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:references:in-reply-to
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=ClOLZY2s6erQ+u2yEpXcBXJSNoeGTddd6B8yRMY6wL4=;
-        b=eNEz6NhpTsFzWQBtRE9zwpW37SRHMx0YzNhudaEl0A8Z09+wrJ3160zP8mJD67kawa
-         0OfB7zz00GLJS6n7vdJFaK5d0u1kb5mc/+XwFkEmPktyNRXxcAOOyoVdSRY/fa9+dzP4
-         lBh4U4FGkicKmYQkFXAkZcmdew25LCRzweGPkPkkY+rIb7XV90ZUIlDk4yacOVYwtMhT
-         bGpudUzYg/kLEQxNpr3E+5ucBAmSHk0H4bCmqG1Gbhdn/XZzQAHd7HBCAaHJEtEhMpt7
-         lqlPPjIWU0rMTAEpShE2bpVzLCwdyX9UcwnbK4salLxhlF4jYnDb9O+IMEl458eJeOEK
-         UwGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:references
-         :in-reply-to:user-agent:mime-version:content-transfer-encoding;
-        bh=ClOLZY2s6erQ+u2yEpXcBXJSNoeGTddd6B8yRMY6wL4=;
-        b=C35y9W7Cloovd/gDUaQylZHTnPGK7sKGZ1gZNRYizWjs/ON1AiiCm4Mt4l0YOfcCbf
-         +7S4e1FkaYAbRhjKPk3sAjRRKXaQxvDbADzquHdRMi7IwKW6D9OR0/fHJS4o08U3Gbsp
-         cUHGU/isaTCiPTdMvBzXJ18S3Ewcks7eLBScYVaXHOeDhbS+YU20ekr1c+MzS4A9o+BR
-         lU6hVp5HC+noI8uDBE+aWH3NVHNmbG9YOISgkV4045MrnJpL1ezcv6sBzKo+JdiG1+dL
-         e377r8JVV7uwccPRr1Jt8uWlv9Nv1psjYbGivNi9Lg0VuhVXjf1CxMxSM40xWlxkGBq2
-         3xgQ==
-X-Gm-Message-State: AOAM530U0KyiAVQn6J9/AYMj1ALbiBG6vwyVgIvr5Xn8gjKDB1E/eSD9
-        cwNCIAlxqWEZ5+rMoMflRc/04w==
-X-Google-Smtp-Source: ABdhPJx8f0L6XdikIJB+SwJtluNj1SfqDSYDPy1RMa2dm+E0gOMPUn7l4cDxeXKEJZ0xSaU7vh1LFA==
-X-Received: by 2002:adf:f3cc:0:b0:1e7:4fd9:6fd3 with SMTP id g12-20020adff3cc000000b001e74fd96fd3mr1820954wrp.266.1645008871610;
-        Wed, 16 Feb 2022 02:54:31 -0800 (PST)
-Received: from CTHALPA.outer.uphall.net (cpc1-cmbg20-2-0-cust759.5-4.cable.virginm.net. [86.21.218.248])
-        by smtp.gmail.com with ESMTPSA id c18sm29982042wro.81.2022.02.16.02.54.30
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Wed, 16 Feb 2022 02:54:31 -0800 (PST)
-From:   John Cox <jc@kynesim.co.uk>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl,
-        jonas@kwiboo.se, nicolas@ndufresne.ca, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, knaerzche@gmail.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [RFC v2 7/8] media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
-Date:   Wed, 16 Feb 2022 10:54:29 +0000
-Message-ID: <a8lp0h15oaibdu1pqrkhsu8nh32v423tur@4ax.com>
-References: <20220215110103.241297-1-benjamin.gaignard@collabora.com> <20220215110103.241297-8-benjamin.gaignard@collabora.com>
-In-Reply-To: <20220215110103.241297-8-benjamin.gaignard@collabora.com>
-User-Agent: ForteAgent/8.00.32.1272
+        Wed, 16 Feb 2022 05:57:00 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B19659E;
+        Wed, 16 Feb 2022 02:56:48 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 87FBA1F394;
+        Wed, 16 Feb 2022 10:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645009007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=czkTwuPVNY+CGK+iaNWgAo7tiJWsOUPbMC8dAAd2acc=;
+        b=J3Y97nwkpCZ7yBjFC/lwyP8P7M39QAd1xriK7UqEWU1S4SAFOX5hHDTKY6IppSIb7v5pLE
+        YtYkKR7imTavHOTWbDb3xYh6hHquisyVI9D9jWX1PrfmGfAfIFPdBQDWqLFXQi5uUUSWB1
+        DvuPKc5K1aRC0+f/HCsc4auYBCVHABA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645009007;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=czkTwuPVNY+CGK+iaNWgAo7tiJWsOUPbMC8dAAd2acc=;
+        b=XoXSVg9x0SbI71JVqNQjmgQuHmwkjv1Dt86matdSZvHZIoNH6UqIwN7/vkuQn6Aen4DpRr
+        pd4rSLFRsHDSFxAA==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0BC1BA3B88;
+        Wed, 16 Feb 2022 10:56:47 +0000 (UTC)
+Date:   Wed, 16 Feb 2022 11:56:45 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Philipp Rudo <prudo@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>,
+        James Morse <james.morse@arm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Kairui Song <kasong@redhat.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-modules@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        stable@kernel.org, Eric Snowberg <eric.snowberg@oracle.com>
+Subject: Re: [PATCH 4/4] module, KEYS: Make use of platform keyring for
+ signature verification
+Message-ID: <20220216105645.GS3113@kunlun.suse.cz>
+References: <cover.1644953683.git.msuchanek@suse.de>
+ <840433bc93a58d6dfc4d96c34c0c3b158a0e669d.1644953683.git.msuchanek@suse.de>
+ <3e39412657a4b0839bcf38544d591959e89877b8.camel@linux.ibm.com>
+ <20220215204730.GQ3113@kunlun.suse.cz>
+ <c3f6f6c8a9db34cc1cdc1000f9272c2b36445e15.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c3f6f6c8a9db34cc1cdc1000f9272c2b36445e15.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 12:01:02 +0100, you wrote:
+On Tue, Feb 15, 2022 at 05:12:32PM -0500, Mimi Zohar wrote:
+> On Tue, 2022-02-15 at 21:47 +0100, Michal Suchánek wrote:
+> > Hello,
+> > 
+> > On Tue, Feb 15, 2022 at 03:08:18PM -0500, Mimi Zohar wrote:
+> > > [Cc'ing Eric Snowberg]
+> > > 
+> > > Hi Michal,
+> > > 
+> > > On Tue, 2022-02-15 at 20:39 +0100, Michal Suchanek wrote:
+> > > > Commit 278311e417be ("kexec, KEYS: Make use of platform keyring for signature verify")
+> > > > adds support for use of platform keyring in kexec verification but
+> > > > support for modules is missing.
+> > > > 
+> > > > Add support for verification of modules with keys from platform keyring
+> > > > as well.
+> > > 
+> > > Permission for loading the pre-OS keys onto the "platform" keyring and
+> > > using them is limited to verifying the kexec kernel image, nothing
+> > > else.
+> > 
+> > Why is the platform keyring limited to kexec, and nothing else?
+> > 
+> > It should either be used for everything or for nothing. You have the
+> > option to compile it in and then it should be used, and the option to
+> > not compile it in and then it cannot be used.
+> > 
+> > There are two basic use cases:
+> > 
+> > (1) there is a vendor key which is very hard to use so you sign
+> > something small and simple like shim with the vendor key, and sign your
+> > kernel and modules with your own key that's typically enrolled with shim
+> > MOK, and built into the kernel.
+> > 
+> > (2) you import your key into the firmware, and possibly disable the
+> > vendor key. You can load the kernel directly without shim, and then your
+> > signing key is typically in the platform keyring and built into the
+> > kernel.
+> > 
+> > In neither case do I see any reason to use some keyrings for kexec and
+> > other keyrings for modules.
+> 
+> When building your own kernel there isn't a problem.  Additional keys
+> may be built into the kernel image, which are loaded onto the
+> ".builtin_trusted_keys" keyring, and may be stored in MOK.  Normally
+> different keys are used for signing the kernel image and kernel
 
->The number of 'entry point offset' could be very variable.
->Rather than use a large static array define a v4l2 dynamic array
->of integer control.
->The number of entry point offsets is reported by the elems field.
+That's actually not normal.
 
-If we are going to support multiple slice headers in a single control
-then we are going to need to know how to split these entries between
-them as I assume that the entry point offset entries for all slice
-headers would just be catenated here.  You could add extra elements here
-or generate a completely new control but I think it would be easier to
-reinstate the num_entry_point_offsets field in the slice_params
-structure (its a field that userpace has in its hand anyway so its no
-effort for it to fill in).  num_entry_point_offsets is a field that RPi
-wants (without needing the entry points themselves) so that would help
-me.
+> modules.  Kernel modules can be signed by the build time ephemeral
+> kernel module signing key, which is built into the kernel and
+> automatically loaded onto the ".builtin_trusted_keys" keyring.
 
-Regards
+Right, there is this advice to use ephemeral key to sign modules.
 
-John Cox
+I don't think that's a sound advice in general. It covers only the
+special case when you build the kernel once, only rebuild the whole
+kernel and never just one module, don't use any 3rd party module, don't
+bother signing firmware (I am not sure that is supported right now but
+if you are into integrity and stuff you can see that it makes sense to
+sign it, too).
 
->Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->---
->version 2:
->- Define a new CID for entry point offsets parameters
-> .../userspace-api/media/v4l/ext-ctrls-codec.rst          | 9 +++++++++
-> include/uapi/linux/v4l2-controls.h                       | 1 +
-> 2 files changed, 10 insertions(+)
->
->diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst =
-b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->index c3ae97657fa7..679595e94643 100644
->--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->@@ -3101,6 +3101,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->=20
->     \normalsize
->=20
->+``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
->+    Specifies the i-th entry point offset in bytes and is represented =
-by
->+    offset_len_minus1 plus 1 bits.
->+    This control is a dynamically sized array. The number of entry =
-point
->+    offsets is reported by the ``elems`` field.
->+    This bitstream parameter is defined according to :ref:`hevc`.
->+    They are described in section 7.4.7.1 "General slice segment header
->+    semantics" of the specification.
->+
-> ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
->     Specifies the HEVC scaling matrix parameters used for the scaling =
-process
->     for transform coefficients.
->diff --git a/include/uapi/linux/v4l2-controls.h =
-b/include/uapi/linux/v4l2-controls.h
->index 27f5d272dc43..700e6cce958c 100644
->--- a/include/uapi/linux/v4l2-controls.h
->+++ b/include/uapi/linux/v4l2-controls.h
->@@ -2314,6 +2314,7 @@ struct v4l2_ctrl_vp9_compressed_hdr {
-> #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	=
-(V4L2_CID_CODEC_STATELESS_BASE + 404)
-> #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	=
-(V4L2_CID_CODEC_STATELESS_BASE + 405)
-> #define V4L2_CID_STATELESS_HEVC_START_CODE	=
-(V4L2_CID_CODEC_STATELESS_BASE + 406)
->+#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET	=
-(V4L2_CID_CODEC_STATELESS_BASE + 407)
->=20
-> enum v4l2_stateless_hevc_decode_mode {
-> 	V4L2_STATELESS_HEVC_DECODE_MODE_SLICE_BASED,
+And you need to manage the key you use for the kernel signing, anyway.
+Sure, you could use the same ephemeral key as for the modules, enroll
+it, and shred it but then it is NOT a key different from the one you use
+for modules.
+
+Or you could maintain a long-lived key for the kernel, but if you do I
+do NOT see any reason to not use it also for modules, in-tree and
+out-of-tree.
+
+> Similarly distros build the kernel module signing key into the kernel,
+> which is built into the kernel and loaded onto the
+> ".builtin_trusted_keys" keyring.  By loading the pre-OS keys onto the
+> ".platform" keyring,  kexec may verify the distro or other signed
+> kernel images.
+
+Which are signed by the same key as the modules so there is no reason to
+load the platform key at all. I don't think loading shim with kexec is
+supported.
+
+Thanks
+
+Michal

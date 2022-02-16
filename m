@@ -2,80 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813834B9227
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8284B922B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 21:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiBPUQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 15:16:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47576 "EHLO
+        id S230256AbiBPURT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 15:17:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiBPUQm (ORCPT
+        with ESMTP id S230228AbiBPURN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 15:16:42 -0500
-Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967615FA1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 12:16:25 -0800 (PST)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id KQiqnsZojEuQ2KQirnMe4b; Wed, 16 Feb 2022 21:16:23 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 16 Feb 2022 21:16:23 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] net: ll_temac: Use GFP_KERNEL instead of GFP_ATOMIC when possible
-Date:   Wed, 16 Feb 2022 21:16:16 +0100
-Message-Id: <694abd65418b2b3974106a82d758e3474c65ae8f.1645042560.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Wed, 16 Feb 2022 15:17:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DABDDF18;
+        Wed, 16 Feb 2022 12:16:59 -0800 (PST)
+Date:   Wed, 16 Feb 2022 20:16:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645042616;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LEhkf5TFb74vC//cbREjUhKy2MSk+J4YMRW+rkjHOsw=;
+        b=cTbX6PbN04iC8T8wiZ+DU8pr6pR4pvGz2oD54a1O35IsiMiaETa4C9P9lcLd6zXKynqgYr
+        ulRu3Ltxga4gUB8+e529q7y8Ffr6g5Gp8crdoLYV8eNkeu4k7z+r26yBvtxzAwtp+Rnla1
+        u+EtxCe86kF2D+zAUqXiK+hbXYQfDjmA5tdb1Z35QYxAzyKkGQk8In+aBpfi12hWvYN9eT
+        1sNWH4bukKwmJk/zITj4XUbwEKANmdZQdOerTV1rOOgUeUkbP1V/ae3WUuqjKbFIE+0sYL
+        Wokhp/qRRK/bOnJYto1R9hwm7GFPABW2mXVnaZmtXruDQk9Hs8c87ARV/GydKA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645042616;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LEhkf5TFb74vC//cbREjUhKy2MSk+J4YMRW+rkjHOsw=;
+        b=0TJgZHM/VtMcI784PqoutImJ7Wzo3sJHyjje6e9tCfp56RuP+0lxpM/kuT5yyJ3ZyEcoh9
+        8rBiUeyXEeU7KGCA==
+From:   "tip-bot2 for Mario Limonciello" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/cpu: Clear SME feature flag when not in use
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Borislav Petkov <bp@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220216034446.2430634-1-mario.limonciello@amd.com>
+References: <20220216034446.2430634-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <164504261512.16921.13135643704549193516.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-XTE_MAX_JUMBO_FRAME_SIZE is over 9000 bytes and the default value for
-'rx_bd_num' is RX_BD_NUM_DEFAULT	(i.e. 1024)
+The following commit has been merged into the x86/cpu branch of tip:
 
-So this loop allocates more than 9 Mo of memory.
+Commit-ID:     08f253ec3767bcfafc5d32617a92cee57c63968e
+Gitweb:        https://git.kernel.org/tip/08f253ec3767bcfafc5d32617a92cee57c63968e
+Author:        Mario Limonciello <mario.limonciello@amd.com>
+AuthorDate:    Tue, 15 Feb 2022 21:44:46 -06:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 16 Feb 2022 19:45:53 +01:00
 
-Previous memory allocations in this function already use GFP_KERNEL, so
-use __netdev_alloc_skb_ip_align() and an explicit GFP_KERNEL instead of a
-implicit GFP_ATOMIC.
+x86/cpu: Clear SME feature flag when not in use
 
-This gives more opportunities of successful allocation.
+Currently, the SME CPU feature flag is reflective of whether the CPU
+supports the feature but not whether it has been activated by the
+kernel.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Change this around to clear the SME feature flag if the kernel is not
+using it so userspace can determine if it is available and in use
+from /proc/cpuinfo.
+
+As the feature flag is cleared on systems where SME isn't active, use
+CPUID 0x8000001f to confirm SME availability before calling
+native_wbinvd().
+
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lore.kernel.org/r/20220216034446.2430634-1-mario.limonciello@amd.com
 ---
- drivers/net/ethernet/xilinx/ll_temac_main.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cpu/amd.c | 5 +++++
+ arch/x86/kernel/process.c | 5 ++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/xilinx/ll_temac_main.c b/drivers/net/ethernet/xilinx/ll_temac_main.c
-index b900ab5aef2a..0547a3fde561 100644
---- a/drivers/net/ethernet/xilinx/ll_temac_main.c
-+++ b/drivers/net/ethernet/xilinx/ll_temac_main.c
-@@ -361,8 +361,9 @@ static int temac_dma_bd_init(struct net_device *ndev)
- 		lp->rx_bd_v[i].next = cpu_to_be32(lp->rx_bd_p
- 			+ sizeof(*lp->rx_bd_v) * ((i + 1) % lp->rx_bd_num));
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index bad0fa4..0c0b097 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -556,6 +556,8 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+ 	 *	      the SME physical address space reduction value.
+ 	 *	      If BIOS has not enabled SME then don't advertise the
+ 	 *	      SME feature (set in scattered.c).
++	 *	      If the kernel has not enabled SME via any means then
++	 *	      don't advertise the SME feature.
+ 	 *   For SEV: If BIOS has not enabled SEV then don't advertise the
+ 	 *            SEV and SEV_ES feature (set in scattered.c).
+ 	 *
+@@ -578,6 +580,9 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+ 		if (IS_ENABLED(CONFIG_X86_32))
+ 			goto clear_all;
  
--		skb = netdev_alloc_skb_ip_align(ndev,
--						XTE_MAX_JUMBO_FRAME_SIZE);
-+		skb = __netdev_alloc_skb_ip_align(ndev,
-+						  XTE_MAX_JUMBO_FRAME_SIZE,
-+						  GFP_KERNEL);
- 		if (!skb)
- 			goto out;
- 
--- 
-2.32.0
-
++		if (!sme_me_mask)
++			setup_clear_cpu_cap(X86_FEATURE_SME);
++
+ 		rdmsrl(MSR_K7_HWCR, msr);
+ 		if (!(msr & MSR_K7_HWCR_SMMLOCK))
+ 			goto clear_sev;
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 81d8ef0..e131d71 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -765,8 +765,11 @@ void stop_this_cpu(void *dummy)
+ 	 * without the encryption bit, they don't race each other when flushed
+ 	 * and potentially end up with the wrong entry being committed to
+ 	 * memory.
++	 *
++	 * Test the CPUID bit directly because the machine might've cleared
++	 * X86_FEATURE_SME due to cmdline options.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_SME))
++	if (cpuid_eax(0x8000001f) & BIT(0))
+ 		native_wbinvd();
+ 	for (;;) {
+ 		/*

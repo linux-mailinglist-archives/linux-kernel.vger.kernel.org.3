@@ -2,169 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B204B9096
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B72F4B90A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237759AbiBPSoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:44:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35464 "EHLO
+        id S237809AbiBPSo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:44:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233985AbiBPSoe (ORCPT
+        with ESMTP id S237815AbiBPSov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:44:34 -0500
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B082B222DD9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:44:19 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 7cf017e4-8f58-11ec-baa1-0050568c148b;
-        Wed, 16 Feb 2022 18:44:35 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 3B79C194B3E;
-        Wed, 16 Feb 2022 19:44:17 +0100 (CET)
-Date:   Wed, 16 Feb 2022 19:44:13 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
-        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
-        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
-        dalias@libc.org, davem@davemloft.net, richard@nod.at,
-        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
-Message-ID: <Yg1F/VT4vRX4aHEt@ravnborg.org>
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-19-arnd@kernel.org>
+        Wed, 16 Feb 2022 13:44:51 -0500
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD3C224948;
+        Wed, 16 Feb 2022 10:44:35 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id p19so8012088ybc.6;
+        Wed, 16 Feb 2022 10:44:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5O250ZbFc6xxsVLUfdV/FJOXw/nR5fNqCdyV/14B3ag=;
+        b=mK6zaclFqkvD1f9Ca/vKA6Lw8nZXc4oq40l6z6SKDT4pthNMQQ5jn9F8BP7BMylH4L
+         w9tbdBjH8o+OlAWrMWajbOzS0KVUo3I7b7lLjwQVHsFbJl5H4Dbt/yd5BK+/4+pSFPUv
+         dUg4WxTg9a5vkHildKiEfuKfsEeTaIFJbtZmSbE96T/zH8HcbEc4AcTg6YaUvP9SSOIq
+         b18lnZZ1KdZfjLlfSUyee7FlzrPg3yVlfb27s0VL872sz+OpbaKaqjmW64x6tWbAPwf4
+         CPKA9RN3tjj2VPPwTIgK6GIVkIQf9Czl9RBpqE0Rtmz8JdNaJ2t4nakndt1IqVLgg/Rx
+         DfVw==
+X-Gm-Message-State: AOAM532+6AAVBkfyWg9rPyYNg/BdYgVBj3bMudLTauJDgbAhPiyUdTZ8
+        QOgaTLilhOCzYgdiFkqNSMqKt4FZjRBh9bIZt4M=
+X-Google-Smtp-Source: ABdhPJz0dWMy9L0KImFinDaYaMygvUl1SbDHcjdRyT+qEsarJa5kaonBjrPTHfW29kEqH5aPq9sc2TsznEJQlz8zU3E=
+X-Received: by 2002:a25:782:0:b0:61d:62ed:112d with SMTP id
+ 124-20020a250782000000b0061d62ed112dmr3384808ybh.466.1645037074491; Wed, 16
+ Feb 2022 10:44:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216131332.1489939-19-arnd@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220207191307.2903314-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20220207191307.2903314-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Feb 2022 19:44:23 +0100
+Message-ID: <CAJZ5v0gqatnkRt0VqTyHjgL8yNp40Ui3UCMv-PV8qvzefaV5HQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: admin-guide: pm: Document uncore frequency scaling
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Mon, Feb 7, 2022 at 8:13 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Added documentation to configure uncore frequency limits in Intel
+> Xeon processors.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+> Resent by adding linux-pm@vger.kernel.org
+>
+>  .../pm/intel_uncore_frequency_scaling.rst     | 56 +++++++++++++++++++
+>  .../admin-guide/pm/working-state.rst          |  1 +
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst
+>
+> diff --git a/Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst b/Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst
+> new file mode 100644
+> index 000000000000..b3519560594b
+> --- /dev/null
+> +++ b/Documentation/admin-guide/pm/intel_uncore_frequency_scaling.rst
+> @@ -0,0 +1,56 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +.. include:: <isonum.txt>
+> +
+> +==============================
+> +Intel Uncore Frequency Scaling
+> +==============================
+> +
+> +:Copyright: |copy| 2022 Intel Corporation
+> +
+> +:Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> +
+> +Introduction
+> +===========================================
 
-Fix spelling in $subject...
+There are no other sections in this file, so can the section header
+above be dropped?
 
-sparc/Kconfig b/arch/sparc/Kconfig
-> index 9f6f9bce5292..9276f321b3e3 100644
-> --- a/arch/sparc/Kconfig
-> +++ b/arch/sparc/Kconfig
-> @@ -46,7 +46,6 @@ config SPARC
->  	select LOCKDEP_SMALL if LOCKDEP
->  	select NEED_DMA_MAP_STATE
->  	select NEED_SG_DMA_LENGTH
-> -	select SET_FS
->  	select TRACE_IRQFLAGS_SUPPORT
->  
->  config SPARC32
-> @@ -101,6 +100,7 @@ config SPARC64
->  	select HAVE_SETUP_PER_CPU_AREA
->  	select NEED_PER_CPU_EMBED_FIRST_CHUNK
->  	select NEED_PER_CPU_PAGE_FIRST_CHUNK
-> +	select SET_FS
-This looks wrong - looks like some merge went wrong here.
-
->  
->  config ARCH_PROC_KCORE_TEXT
->  	def_bool y
-> diff --git a/arch/sparc/include/asm/processor_32.h b/arch/sparc/include/asm/processor_32.h
-> index 647bf0ac7beb..b26c35336b51 100644
-> --- a/arch/sparc/include/asm/processor_32.h
-> +++ b/arch/sparc/include/asm/processor_32.h
-> @@ -32,10 +32,6 @@ struct fpq {
->  };
->  #endif
->  
-> -typedef struct {
-> -	int seg;
-> -} mm_segment_t;
-> -
->  /* The Sparc processor specific thread struct. */
->  struct thread_struct {
->  	struct pt_regs *kregs;
-> @@ -50,11 +46,9 @@ struct thread_struct {
->  	unsigned long   fsr;
->  	unsigned long   fpqdepth;
->  	struct fpq	fpqueue[16];
-> -	mm_segment_t current_ds;
->  };
->  
->  #define INIT_THREAD  { \
-> -	.current_ds = KERNEL_DS, \
->  	.kregs = (struct pt_regs *)(init_stack+THREAD_SIZE)-1 \
->  }
->  
-> diff --git a/arch/sparc/include/asm/uaccess_32.h b/arch/sparc/include/asm/uaccess_32.h
-> index 367747116260..9fd6c53644b6 100644
-> --- a/arch/sparc/include/asm/uaccess_32.h
-> +++ b/arch/sparc/include/asm/uaccess_32.h
-> @@ -12,19 +12,6 @@
->  #include <linux/string.h>
->  
->  #include <asm/processor.h>
-> -
-> -/* Sparc is not segmented, however we need to be able to fool access_ok()
-> - * when doing system calls from kernel mode legitimately.
-> - *
-> - * "For historical reasons, these macros are grossly misnamed." -Linus
-> - */
-> -
-> -#define KERNEL_DS   ((mm_segment_t) { 0 })
-> -#define USER_DS     ((mm_segment_t) { -1 })
-> -
-> -#define get_fs()	(current->thread.current_ds)
-> -#define set_fs(val)	((current->thread.current_ds) = (val))
-> -
->  #include <asm-generic/access_ok.h>
->  
->  /* Uh, these should become the main single-value transfer routines..
-> diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_32.c
-> index 2dc0bf9fe62e..88c0c14aaff0 100644
-> --- a/arch/sparc/kernel/process_32.c
-> +++ b/arch/sparc/kernel/process_32.c
-> @@ -300,7 +300,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
->  		extern int nwindows;
->  		unsigned long psr;
->  		memset(new_stack, 0, STACKFRAME_SZ + TRACEREG_SZ);
-> -		p->thread.current_ds = KERNEL_DS;
->  		ti->kpc = (((unsigned long) ret_from_kernel_thread) - 0x8);
->  		childregs->u_regs[UREG_G1] = sp; /* function */
->  		childregs->u_regs[UREG_G2] = arg;
-> @@ -311,7 +310,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
->  	}
->  	memcpy(new_stack, (char *)regs - STACKFRAME_SZ, STACKFRAME_SZ + TRACEREG_SZ);
->  	childregs->u_regs[UREG_FP] = sp;
-> -	p->thread.current_ds = USER_DS;
->  	ti->kpc = (((unsigned long) ret_from_fork) - 0x8);
->  	ti->kpsr = current->thread.fork_kpsr | PSR_PIL;
->  	ti->kwim = current->thread.fork_kwim;
-
-Other than the above the sparc32 changes looks fine, and with the Kconf
-stuff fixed:
-Acked-by: Sam Ravnborg <sam@ravnborg.org> # for sparc32 changes
+> +
+> +Uncore can consume significant amount of power in Intel's Xeon servers based
+> +on the workload characteristics. To optimize total power and improve overall
+> +performance, SoC has an internal algorithm for scaling uncore frequency. These
+> +algorithms monitor workload usage of uncore and set a desirable frequency.
+> +
+> +It is possible that users have different expectations of uncore performance and
+> +want to have control over it. The objective is similar to set scaling min/max
+> +frequencies using cpufreq sysfs to improve compute performance. Users may have
+> +some latency sensitive workload where they do not want any change to uncore
+> +frequency. Also, users may have workload which requires different core and
+> +uncore performance at distinct phases and they want to use both cpufreq and
+> +uncore scaling interface to distribute power and improve overall performance.
+> +
+> +To control uncore frequency, a sysfs interface is provided in the directory:
+> +`/sys/devices/system/cpu/intel_uncore_frequency/`.
+> +
+> +There is one directory for each package and die combination as the scope of
+> +uncore scaling control is per die in multiple dies/package SoC or per
+> +package for single die per package SoC. The name represents the
+> +scope of control. For example: 'package_00_die_00' is for package id 0 and
+> +die 0 in it.
+> +
+> +Each package_*_die_* contains following attributes:
+> +
+> +``initial_max_freq_khz``
+> +       Out of reset, this attribute represent the maximum possible frequency.
+> +       This is a read only attribute. If users adjust max_freq_khz,
+> +       they can always go back to maximum using the value from this attribute.
+> +
+> +``initial_min_freq_khz``
+> +       Out of reset, this attribute represent the minimum possible frequency.
+> +       This is a read only attribute. If users adjust min_freq_khz,
+> +       they can always go back to minimum using the value from this attribute.
+> +
+> +``max_freq_khz``
+> +       This attribute is used to set the maximum uncore frequency.
+> +
+> +``min_freq_khz``
+> +       This attribute is used to set the minimum uncore frequency.
+> +
+> +``current_freq_khz``
+> +       This attribute is used to get the current uncore frequency.
+> diff --git a/Documentation/admin-guide/pm/working-state.rst b/Documentation/admin-guide/pm/working-state.rst
+> index 5d2757e2de65..ee45887811ff 100644
+> --- a/Documentation/admin-guide/pm/working-state.rst
+> +++ b/Documentation/admin-guide/pm/working-state.rst
+> @@ -15,3 +15,4 @@ Working-State Power Management
+>     cpufreq_drivers
+>     intel_epb
+>     intel-speed-select
+> +   intel_uncore_frequency_scaling
+> --
+> 2.34.1
+>

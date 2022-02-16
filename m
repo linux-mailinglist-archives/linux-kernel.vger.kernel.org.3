@@ -2,136 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3E84B9100
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5E04B9104
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 20:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237949AbiBPTHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 14:07:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55700 "EHLO
+        id S238035AbiBPTMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 14:12:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237936AbiBPTHR (ORCPT
+        with ESMTP id S237894AbiBPTMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 14:07:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931AD29CB1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 11:07:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1F5BB81FBE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 19:07:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE32C004E1;
-        Wed, 16 Feb 2022 19:07:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645038420;
-        bh=O6rg2EA0mmSpBoicY2+Pis/uzSG9J5E6UibqILOjyKw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=LOf5dpqk49yNupWbhM4D9S7tOGpeM38BEzumCRrduLE79xfb93b/4OpN4bMO3T9fj
-         SIKBTAWJEez+QFt2krProHGJPtVLZy8+vfg/M4Ll6JEc5UZawZ1N8USk6Ko5qBcXae
-         TvSwSfJTko/mQdZHuicQnnGN3pM1+VlbVNm2DRpOOMm6KmNVEyTDJwRniCi6kP9nXC
-         nNO9R4pgVHJaYKf8uEa/dW/H5DaQEPUs7RNhvcWeXjLMpWuAMacFSNrq8719AfbuJd
-         4xIsmr6bcuexOQZJDk2Dzb61DpCID4xMhmZ8ydIKGpiNj43A813e2naZPGRgYGptqU
-         zHjsk43fRadVg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 33F275C064D; Wed, 16 Feb 2022 11:07:00 -0800 (PST)
-Date:   Wed, 16 Feb 2022 11:07:00 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-Cc:     Tejun Heo <tj@kernel.org>, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] workqueue: Fix race in schedule and flush work
-Message-ID: <20220216190700.GL4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220210184319.25009-1-treasure4paddy@gmail.com>
- <Ygqw+EHo//6VGs6q@slm.duckdns.org>
- <20220216184939.GA3868@pswork>
+        Wed, 16 Feb 2022 14:12:22 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87B72B261;
+        Wed, 16 Feb 2022 11:12:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=y13SwYgPMWjW5s5tMs0L28fhHBRBkvCDSKVz5OvZIdA=; b=KHuJPkcvhkjBKYurHM60mrW7h4
+        X4MhLdNmfxhkT1RuUFSuveKlSTWuEp87Hq78reNsp4o6gyoOzfxHlGp2mA/ja1QipvrQKjGRZszsJ
+        vFDDE7zMm0MuQPjOHtVeon8UgtYTiiCCdCzVOkDtr/cm7FJsj4yF5itDhf396FtO7qe4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nKPiY-006FnC-3I; Wed, 16 Feb 2022 20:11:58 +0100
+Date:   Wed, 16 Feb 2022 20:11:58 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Cc:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michael Rasmussen <MIR@bang-olufsen.dk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/2] net: dsa: realtek: fix PHY register read
+ corruption
+Message-ID: <Yg1MfpK5PwiAbGfU@lunn.ch>
+References: <20220216160500.2341255-1-alvin@pqrs.dk>
+ <CAJq09z6Mr7QFSyqWuM1jjm9Dis4Pa2A4yi=NJv1w4FM0WoyqtA@mail.gmail.com>
+ <87k0dusmar.fsf@bang-olufsen.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216184939.GA3868@pswork>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87k0dusmar.fsf@bang-olufsen.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 07:49:39PM +0100, Padmanabha Srinivasaiah wrote:
-> On Mon, Feb 14, 2022 at 09:43:52AM -1000, Tejun Heo wrote:
-> > Hello,
-> > 
-> > > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> > > index 33f1106b4f99..a3f53f859e9d 100644
-> > > --- a/kernel/workqueue.c
-> > > +++ b/kernel/workqueue.c
-> > > @@ -3326,28 +3326,38 @@ EXPORT_SYMBOL(cancel_delayed_work_sync);
-> > >   */
-> > >  int schedule_on_each_cpu(work_func_t func)
-> > >  {
-> > > -	int cpu;
-> > >  	struct work_struct __percpu *works;
-> > > +	cpumask_var_t sched_cpumask;
-> > > +	int cpu, ret = 0;
-> > >  
-> > > -	works = alloc_percpu(struct work_struct);
-> > > -	if (!works)
-> > > +	if (!alloc_cpumask_var(&sched_cpumask, GFP_KERNEL))
-> > >  		return -ENOMEM;
-> > >  
-> > > +	works = alloc_percpu(struct work_struct);
-> > > +	if (!works) {
-> > > +		ret = -ENOMEM;
-> > > +		goto free_cpumask;
-> > > +	}
-> > > +
-> > >  	cpus_read_lock();
-> > >  
-> > > -	for_each_online_cpu(cpu) {
-> > > +	cpumask_copy(sched_cpumask, cpu_online_mask);
-> > > +	for_each_cpu_and(cpu, sched_cpumask, cpu_online_mask) {
-> > 
-> > This definitely would need a comment explaining what's going on cuz it looks
-> > weird to be copying the cpumask which is supposed to stay stable due to the
-> > cpus_read_lock().Given that it can only happen during early boot and the
-> > online cpus can only be expanding, maybe just add sth like:
-> > 
-> >         if (early_during_boot) {
-> >                 for_each_possible_cpu(cpu)
-> >                         INIT_WORK(per_cpu_ptr(works, cpu), func);
-> >         }
-> > 
-> 
-> Thanks tejun for the reply and suggestions.
-> 
-> Yes, unfortunately cpus_read_lock not keeping cpumask stable at
-> secondary boot. Not sure, may be it only gurantee 'cpu' dont go down
-> under cpus_read_[lock/unlock].
-> 
-> As suggested will tryout something like:
-> 	if (system_state != RUNNING) {
-> 		:
-> 	}
-> > BTW, who's calling schedule_on_each_cpu() that early during boot. It makes
-> > no sense to do this while the cpumasks can't be stabilized.
-> >
-> It is  implemenation of CONFIG_TASKS_RUDE_RCU.
+> Hmm OK. Actually I'm a bit confused about the mdio_lock: can you explain
+> what it's guarding against, for someone unfamiliar with MDIO?
 
-Another option would be to adjust CONFIG_TASKS_RUDE_RCU based on where
-things are in the boot process.  For example:
+The more normal use case for MDIO is for PHYs, not switches. There can
+be multiple PHYs on one MDIO bus. And these PHYs each have there own
+state machine in phylib. At any point in time, that state machine can
+request the driver to do something, like poll the PHY status, does it
+have link? To prevent two PHY drivers trying to use the MDIO bus at
+the same time, there is an MDIO lock. At the beginning of an MDIO
+transaction, the lock is taken. And the end of the transaction,
+reading or writing one register of a device on the bus, the lock is
+released.
 
-	// Wait for one rude RCU-tasks grace period.
-	static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
-	{
-		if (num_online_cpus() <= 1)
-			return;  // Fastpath for only one CPU.
-		rtp->n_ipis += cpumask_weight(cpu_online_mask);
-		schedule_on_each_cpu(rcu_tasks_be_rude);
-	}
+So the MDIO lock simply ensures there is only one user of the MDIO bus
+at one time, for a single read or write.
 
-Easy enough either way!
+For PHYs this is sufficient. For switches, sometimes you need
+additional protection. The granularity of an access might not be a
+single register read or a write. It could be you need to read or write
+a few registers in an atomic way. If that is the case, you need a lock
+at a higher level.
 
-							Thanx, Paul
+   Andrew

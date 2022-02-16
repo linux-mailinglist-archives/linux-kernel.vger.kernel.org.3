@@ -2,172 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFFF4B897C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E238C4B89B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234264AbiBPNTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:19:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34642 "EHLO
+        id S234340AbiBPNVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:21:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbiBPNSt (ORCPT
+        with ESMTP id S234617AbiBPNVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:18:49 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646EC2AC925
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:18:17 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso3730667wmj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:18:17 -0800 (PST)
+        Wed, 16 Feb 2022 08:21:12 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40F12AE072
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:19:45 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id t14so3250956ljh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:19:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=algolia.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PlNi9ciElPwEs1LJoEB8xZkE+EnHB0mIZHsYC5NhAsY=;
-        b=w0jBpzaR5vaPbYOcj2spBHJfOMj3nwWNKsycXYvill3tWXFQ4LXr+vaDsKxJLBa9Ev
-         MdZYWVsdfvgjdAXBoJdyOPeH0kafRB9UvrpwMIucZ4/rjHH/BVKe4kuVFw8Pf8OFEJLo
-         P5EU0NQTIwXw7KDM4xH/9O9Uxes+q5KPbRKtg=
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LmcqWXwseeG4I4bS/aEDRBMabNjMhuU+WWEWJ2QVP0A=;
+        b=ZKF01vsC92N6eCOjhBPsAWtAZrJ2+kiOfO1gXjHOH2Ud6qWy/xyX1OTnnvoRGaIwbP
+         5n9+MOk4PuipHjTueQ6wblFJ7cr9DYnfRB7Es3RhOPNWzroAoT+w0M0ea8XP/bRvHeJg
+         XX/xgFRS3/Ug6VnlsVKbpczbKHnaSo2spijefK0lldXkNMN4Ujsw0IL/BTKq07CiN4fp
+         ceQ4MUf3VjH1KIZ87BWGsYxp8SBqEkbEVc0ZjYjJiHezLvFbyVPmaI76doac6fvirQjd
+         jh9PDq42+MR90ozXBIP8ajeTx5uWQKohaF8G+HPze6qab35QaWxpb5/bYp9vEgx+iWNS
+         CFJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PlNi9ciElPwEs1LJoEB8xZkE+EnHB0mIZHsYC5NhAsY=;
-        b=hnOFMSxwBB2QbL/58EhMfngJWe8t2P5uF24vgFN7IrimxN9+ZCBF7YVIGrQ0GNGkr5
-         VM8NbM4cits5Sa+Zf+KFCBTnRRnF/AYPTHBQupkfzXkRR2SYnT4iTO9gicgfZ6qPzfZ1
-         k6Uwz5GNnjTpW3CVufkISdGqmwinhIbfuqV3tevEdsz4HN8VFLFZaSh8ZgIrNk4oRaTL
-         AQ5/NpjLTgLUCzzFSnvD+pRmqNEEQdfyQGsHFf1peELmkECt3jmeYw/BEjglY2wHmfjI
-         6ITJnxeIuB+AByEEB1tBBnlM0FEYfN1ZBEmqIuRlVL/ohrSNRqizjWmH0cGIY8Lh239q
-         W2hQ==
-X-Gm-Message-State: AOAM530AjU9d+xNPwhCdnyq4eIXh0rRnIB/EXAhHH21ELjt2soeTI6X2
-        fdgXsJTlj1zoZkuLrfwwprabgSuqSBJARecw
-X-Google-Smtp-Source: ABdhPJy0vRrYV6duj8pGGxIELNPUfCUwW0eEI7uQbDouSdpL6nweY9x4I6bCFDU/V85DPITDc0BgTw==
-X-Received: by 2002:a05:600c:20c7:b0:37b:b739:8177 with SMTP id y7-20020a05600c20c700b0037bb7398177mr1605527wmm.121.1645017495859;
-        Wed, 16 Feb 2022 05:18:15 -0800 (PST)
-Received: from xavier-xps ([2a01:e0a:830:d971:752e:e19b:a691:2171])
-        by smtp.gmail.com with ESMTPSA id x7sm28339793wro.21.2022.02.16.05.18.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 05:18:15 -0800 (PST)
-Date:   Wed, 16 Feb 2022 14:18:14 +0100
-From:   Xavier Roche <xavier.roche@algolia.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
-Subject: Re: race between vfs_rename and do_linkat (mv and link)
-Message-ID: <20220216131814.GA2463301@xavier-xps>
-References: <20220214210708.GA2167841@xavier-xps>
- <CAJfpegvVKWHhhXwOi9jDUOJi2BnYSDxZQrp1_RRrpVjjZ3Rs2w@mail.gmail.com>
- <YguspMvu6M6NJ1hL@zeniv-ca.linux.org.uk>
- <YgvPbljmJXsR7ESt@zeniv-ca.linux.org.uk>
- <YgvSB6CKAhF5IXFj@casper.infradead.org>
- <YgvS1XOJMn5CjQyw@zeniv-ca.linux.org.uk>
- <CAJfpegv03YpTPiDnLwbaewQX_KZws5nutays+vso2BVJ1v1+TA@mail.gmail.com>
- <YgzRwhavapo69CAn@miu.piliscsaba.redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LmcqWXwseeG4I4bS/aEDRBMabNjMhuU+WWEWJ2QVP0A=;
+        b=S8yZG6w5OrddAlZSiu54T2XJ0nDo1P5d+jQhQii0AKfRce1ZYfpsFxCfLiNtfccpV1
+         4bvf8j4XUEm9r/0qhqHbFRsgkEiYFHU9U1j7ZJApDjsX7GeCJ9dKz+THk01GRRjhq2z0
+         HrbwaeJFdX6bVCxtC/GxMaZu4TAeR3c9D+LqHM5xvy0ToeOjwLvCRsn6k3b/O8fWJKqx
+         LDccrJfejrnA55zmkGsPd0M9fkRskcKog3RjagbgVB/cYfNfcyb6+wW4UtyPo6rfjbZ9
+         V4uUykkzeUrqsma/w4++ANo8YUnmwlXuGBuAEaPs5yeaJxfZcnLXhKOY6J8pvP9pBmqa
+         cbLw==
+X-Gm-Message-State: AOAM533gkrwP+pOnyzHY+BbiVt10wKl+jUp26GKuYWJGB50l13B+r0Uo
+        1iB6I1rZU07ktmsYt+N4QFD3K6MqlveFafjzdQXf1w==
+X-Google-Smtp-Source: ABdhPJxijRjk2lC5l4XjkBcyRT5s/WpbO7OJ6wpNxbl47IfggP5IdHDdkzo4ug2pd8POaIvsmFBXc+LYvngmKOmQJ+E=
+X-Received: by 2002:a05:651c:549:b0:245:6f1:8584 with SMTP id
+ q9-20020a05651c054900b0024506f18584mr2068100ljp.474.1645017584253; Wed, 16
+ Feb 2022 05:19:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgzRwhavapo69CAn@miu.piliscsaba.redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220216090845.1278114-1-maz@kernel.org>
+In-Reply-To: <20220216090845.1278114-1-maz@kernel.org>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Wed, 16 Feb 2022 14:19:30 +0100
+Message-ID: <CAPv3WKf4RFeTDCsW+cY-Rp=2rZt1HuZSVQcmcB3oKQKNbvBtDA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] net: mvpp2: Survive CPU hotplug events
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Garry <john.garry@huawei.com>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 11:28:18AM +0100, Miklos Szeredi wrote:
-> Something like this:
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 3f1829b3ab5b..dd6908cee49d 100644
+Hi Marc,
 
-Tested-by: Xavier Roche <xavier.roche@algolia.com>
+=C5=9Br., 16 lut 2022 o 10:08 Marc Zyngier <maz@kernel.org> napisa=C5=82(a)=
+:
+>
+> I recently realised that playing with CPU hotplug on a system equiped
+> with a set of MVPP2 devices (Marvell 8040) was fraught with danger and
+> would result in a rapid lockup or panic.
+>
+> As it turns out, the per-CPU nature of the MVPP2 interrupts are
+> getting in the way. A good solution for this seems to rely on the
+> kernel's managed interrupt approach, where the core kernel will not
+> move interrupts around as the CPUs for down, but will simply disable
+> the corresponding interrupt.
+>
+> Converting the driver to this requires a bit of refactoring in the IRQ
+> subsystem to expose the required primitive, as well as a bit of
+> surgery in the driver itself.
+>
+> Note that although the system now survives such event, the driver
+> seems to assume that all queues are always active and doesn't inform
+> the device that a CPU has gone away. Someout who actually understand
+> this driver should have a look at it.
+>
+> Patches on top of 5.17-rc3, lightly tested on a McBin.
+>
 
-I confirm this completely fixes at least the specific race. Tested on a
-unpatched and then patched 5.16.5, with the trivial bash test, and then
-with a C++ torture test.
+Thank you for the patches. Can you, please, share the commands you
+used? I'd like to test it more.
 
-Before:
--------
+Best regards,
+Marcin
 
-$ time ./linkbug
-Failed after 4 with No such file or directory
-
-real	0m0,004s
-user	0m0,000s
-sys	0m0,004s
-
-After:
-------
-
-(no error after ten minutes of running the program)
-
-Torture test program:
----------------------
-
-/* Linux rename vs. linkat race condition.
- * Rationale: both (1) moving a file to a target and (2) linking the target to a file in parallel leads to a race
- * on Linux kernel.
- * Sample file courtesy of Xavier Grand at Algolia
- * g++ -pthread linkbug.c -o linkbug
- */
-
-#include <thread>
-#include <unistd.h>
-#include <assert.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <iostream>
-#include <string.h>
-
-static const char* producedDir = "/tmp";
-static const char* producedFile = "/tmp/file.txt";
-static const char* producedTmpFile = "/tmp/file.txt.tmp";
-static const char* producedThreadDir = "/tmp/tmp";
-static const char* producedThreadFile = "/tmp/file.txt.tmp.2";
-
-bool createFile(const char* path)
-{
-    const int fdOut = open(path,
-                           O_WRONLY | O_CREAT | O_TRUNC | O_EXCL | O_CLOEXEC,
-                           S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    assert(fdOut != -1);
-    assert(write(fdOut, "Foo", 4) == 4);
-    assert(close(fdOut) == 0);
-    return true;
-}
-
-void func()
-{
-    int nbSuccess = 0;
-    // Loop producedThread a hardlink of the file
-    while (true) {
-        if (link(producedFile, producedThreadFile) != 0) {
-            std::cout << "Failed after " << nbSuccess << " with " << strerror(errno) << std::endl;
-            exit(EXIT_FAILURE);
-        } else {
-            nbSuccess++;
-        }
-        assert(unlink(producedThreadFile) == 0);
-    }
-}
-
-int main()
-{
-    // Setup env
-    unlink(producedTmpFile);
-    unlink(producedFile);
-    unlink(producedThreadFile);
-    createFile(producedFile);
-    mkdir(producedThreadDir, 0777);
-
-    // Async thread doing a hardlink and moving it
-    std::thread t(func);
-    // Loop creating a .tmp and moving it
-    while (true) {
-        assert(createFile(producedTmpFile));
-        assert(rename(producedTmpFile, producedFile) == 0);
-    }
-    return 0;
-}
+> Marc Zyngier (2):
+>   genirq: Extract irq_set_affinity_masks() from
+>     devm_platform_get_irqs_affinity()
+>   net: mvpp2: Convert to managed interrupts to fix CPU HP issues
+>
+>  drivers/base/platform.c                       | 20 +-----
+>  drivers/net/ethernet/marvell/mvpp2/mvpp2.h    |  1 -
+>  .../net/ethernet/marvell/mvpp2/mvpp2_main.c   | 67 ++++++++++---------
+>  include/linux/interrupt.h                     |  8 +++
+>  kernel/irq/affinity.c                         | 27 ++++++++
+>  5 files changed, 72 insertions(+), 51 deletions(-)
+>
+> --
+> 2.30.2
+>

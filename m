@@ -2,177 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859784B8AD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AA04B8ADD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbiBPNzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:55:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37922 "EHLO
+        id S234769AbiBPN4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:56:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233506AbiBPNzN (ORCPT
+        with ESMTP id S233169AbiBPN4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:55:13 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C461EA710;
-        Wed, 16 Feb 2022 05:55:01 -0800 (PST)
+        Wed, 16 Feb 2022 08:56:36 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60057.outbound.protection.outlook.com [40.107.6.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C79222F26;
+        Wed, 16 Feb 2022 05:56:21 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NkZzc2s8TcIrO37RXMFo6XuK0nV4+3s7xqolmB8KG/S2BGkr97gyVVD3nAfNm3ceDywPsMGFxFgeC5ASk0nY/w1z2fnDXjlQQj5OPkZ4Z6lDhO9SdHPIbm+7o5AO12vderJRZ7ZnU322e2MSzphbX0HAwaF55SS7Xhe8KwnkZPP2s/hM8kP0eXu9H6RTWfuu4ZFZFASxwrYKySo4+ho28g0WpzGyTO/CebLYZ/CKSGq0672P7nkajtVAZF1+WFSgsTLb1mgvl0UJuLs/wQrTJ4tUN18UmMvjEawWhPKppduk5YJAWiRypS5XtUmHeU8VAzOKzO2Z85am1rc+ZOa7hg==
+ b=XQaJVpQTwpb5xE5C7w87oZoQVbJqPwwngjWbFoVrXjTauH0gLMI4N5CL3aoho4XwzJ/G0/vhBHxrd195axSzsH1AbfEwe7Pn445my182fSQUciVWC0VS6Mf/UYyI6taT0tWfxy8A7+96P+IBY932J0mmTWtjFFC/kFGmwPemCylRtaLMtFS5VUer3FsHusq9SR/J2h+7Ww2B5DWubH6lg7ju6CzAjKsH2gL7ovKGK/KfiF4+TDmdotZHS0c+FREZ68jYyp++aVi+ImZn6un9NXviyDk7idn6h74Ta+le2MHrUgV3Uy9TjxSTp8w17JlEJ5MCvUimG1xVWfLSqMAjQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y45mihYmFTho5NIEGydamjQBTM5g939SS8D57Km7vhk=;
- b=GHmZqBc5Z6wgMDbYbQS263fldqmi3U58EG13ZfsxpwfyY5Ur3s15neoRoDG7jI2NWRYKzBWA01/BccX7wPoO9KMFhVzVQRvtpDlfn8tOqyk23ADlJqrQMckA2LYZYEOvN6U63UJDVW7wvH/nrHMQmJomTRoYf3+cZvHxH+Y+XHLpJKz5ISCR5I+bdJVJWOkCiWMofF3PLgqIywUmt2mG7DZJcoDd5YdQQ4EHfxAwJQiooIRUoNmKqQitRfwCC2VudnaM9jGXnjwxR3AIlSsLwTaaIh0mgsrAdwm2RDy1WAggopgMNCGewYOYMfc2Vr/T1labPWLS8TpgHbXA+QwigQ==
+ bh=8/hgr9lLJfDDd/uiJyheXN8aKPgguiAOAdFWECH4rms=;
+ b=Mh/NevgYm/GWgDe1CgMlio9sSbCoPAB/a3J+hY9JD/Mca3sHNp+EgNsb138fpmxSFkeTEWEv1y0zRxWdH4KhJ+APnoxTVDY2M1ozZVvo0KBxmzY6Lv6FADA0TOcrSI1we1YkbuD8TBx6f4xl9Uny2sBoQI1q9VIJMO1BdHCq57r1QQ3yuZepZH0NMoeVoAgL/9uVILhOsKJlAmcbbg+xqFzxt26yUzGnpIyOtXgulhfrks3ysk9jzzqzaGsxJVST/bzdAHzPOmVZ9QR6Y3tox/Bt4ACh+fIEK2tXY6fysUUhHO+gzJtPXXKOCsyVZPklpdQhSg+AuBA04I9gmHsj+Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
+ dkim=pass header.d=vaisala.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y45mihYmFTho5NIEGydamjQBTM5g939SS8D57Km7vhk=;
- b=Q+Y1Io8uJLm3hHo6uXNmsyqt0mvD/8SkhWB2LQWeUZOV/rDi3gapZzo0w5j0+j2HnucXoWmTV5ykec5C/EMd2y0zsbbjgBQK6XeS2UXbnR1r96+pb9XOsTWXDwmDemx0y0St8Ap+WO1ZaR/aDd/TCqUkao1YTkUDVGKiXonr2xONP2AcwLejMxHjCGDc+5i3DSvK+Lkmbyo4XrhYVJKQSAM3/ELfquOgdVZL0UyQDPe1IwWuvKgr8wmmQ+iN9Z+hlGsQ4StJclrwz7phFGKDQKGXM6MzzRdLHnn/HjSzD4ygTlRo6y19HOOsZAPSSznN+fmTAlg2i8H9TtzvEBjEKA==
+ bh=8/hgr9lLJfDDd/uiJyheXN8aKPgguiAOAdFWECH4rms=;
+ b=Dlnd4olLLl+s+HuQGhVywkdAxmgRQyTOJVLk8XQo5PQYpsoKqsvM+vN/eKppbxMM0a9eyXlYcjI0iVFgCzUljPuK8Fa7qmLV8s65zZD76ZUjM6aQmu28hdlick/nV3bIa75siw3/GhAd/32CPBR7NGJ6dqJspI9eVE20SqI7jKGdNAj8rBEwlWsfMHT6fgzebN5hoy8cyvg9BBo4GqC3rCQzQE9lp+66fbQXJOQQSC/KrHU0kwxlkJSS/CrWrEyuLF77HuFjINAXMy5rfgd0PKPQI9zQqhhq2GYjBENU/96IFaOlILeioU2H6jC/A/Kgw+WQEPA6l7ASWWveSjN7iA==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SN6PR12MB2640.namprd12.prod.outlook.com (2603:10b6:805:6c::20) with
+ header.d=none;dmarc=none action=none header.from=vaisala.com;
+Received: from AS1PR06MB8465.eurprd06.prod.outlook.com (2603:10a6:20b:4c6::13)
+ by AM6PR0602MB3430.eurprd06.prod.outlook.com (2603:10a6:209:4::29) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Wed, 16 Feb
- 2022 13:54:59 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3%5]) with mapi id 15.20.4995.016; Wed, 16 Feb 2022
- 13:54:59 +0000
-Date:   Wed, 16 Feb 2022 09:54:58 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Stuart Yoder <stuyoder@gmail.com>,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        kvm@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH v1 3/8] iommu: Extend iommu_at[de]tach_device() for
- multi-device groups
-Message-ID: <20220216135458.GH4160@nvidia.com>
-References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
- <20220106022053.2406748-4-baolu.lu@linux.intel.com>
- <Ygo/eCRFnraY01WA@8bytes.org>
- <20220214130313.GV4160@nvidia.com>
- <Ygppub+Wjq6mQEAX@8bytes.org>
- <08e90a61-8491-acf1-ab0f-f93f97366d24@arm.com>
- <20220214154626.GF4160@nvidia.com>
- <YgtrJVI9wGMFdPWk@8bytes.org>
- <20220215134744.GO4160@nvidia.com>
- <69f26767-66d6-12df-1754-45ee1932d513@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69f26767-66d6-12df-1754-45ee1932d513@linux.intel.com>
-X-ClientProxiedBy: BL1PR13CA0076.namprd13.prod.outlook.com
- (2603:10b6:208:2b8::21) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Wed, 16 Feb
+ 2022 13:56:19 +0000
+Received: from AS1PR06MB8465.eurprd06.prod.outlook.com
+ ([fe80::d080:8a90:d939:9a54]) by AS1PR06MB8465.eurprd06.prod.outlook.com
+ ([fe80::d080:8a90:d939:9a54%7]) with mapi id 15.20.4951.019; Wed, 16 Feb 2022
+ 13:56:19 +0000
+From:   Nandor Han <nandor.han@vaisala.com>
+To:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org
+Cc:     Nandor Han <nandor.han@vaisala.com>, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] iio: core: provide a default value `label` property
+Date:   Wed, 16 Feb 2022 15:56:04 +0200
+Message-Id: <20220216135604.3435769-1-nandor.han@vaisala.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: GV3P280CA0066.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:a::9)
+ To AS1PR06MB8465.eurprd06.prod.outlook.com (2603:10a6:20b:4c6::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 86d0d7d8-eafd-4da4-1cef-08d9f153ec09
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2640:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR12MB26401A49DF31FC38EAA085B1C2359@SN6PR12MB2640.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Office365-Filtering-Correlation-Id: ce792e19-892c-4115-e5fe-08d9f1541b83
+X-MS-TrafficTypeDiagnostic: AM6PR0602MB3430:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR0602MB3430834B28A7B87E0125ABAB85359@AM6PR0602MB3430.eurprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rvv7lMGb9Z0KdAMN/A9OqxMtVKVIfkFUYTs7ZwHpFF8u7rPAQA/6TyEYe7JntFkEilqrw46o5cQgDjr9r85/LBytzjWkYLosmPeW3n1n3zGC2j9i/tzQd93ugNW49N2gnMZvs4v9Mw3dhfOSk26UQSAtqDSKg6jcN2SdrGwRl3SFLi4m9SqS/iyhPr6kpbNqlCKkiPP2NkVzfAV/UV6EkWhMhtScu6PT/eYA0Fs2L/JyaDOOYquOJhN7Gy8dx6rxlQIpHMOwtAOKI34ZSWf1GjpBGK+pXr6PkLtSFQ657vIC26d6nh/G4JrB6LJSfsO2K7uDcwliv8+jT9SWTwck7cKvvpkkhad7XK2HKkpW6Za6Elqn+YUfls7MCJ3U4w+ynJ4G5N+psrRt6KxkPrbS8Lpad1aU8W+l5yz3mSkoW4o2rD/SswNv21/LEFbD1Evw9EI7zlBrtGNFSs+y+qVeEZs1YxNOjiMJzftWDV4n4pFH2vaaxT+4DD7X4ey8dhk1tFJ1kUc4NkrmC2ulBgwANICDJce09jIAguWy6RhR2QPzzbB0g1CD3hl2XBvHS9sTo3ZYRnl71o/lMZAc1nlALLhEVDG7XRcIJlBD8Z+BfsWKQMg3bzvayZ19h57V962Z7qL9ey++++TgNzGkxtLtBA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(6506007)(8676002)(7416002)(66946007)(4326008)(66476007)(66556008)(186003)(26005)(2616005)(1076003)(2906002)(508600001)(6486002)(86362001)(33656002)(36756003)(6916009)(316002)(54906003)(5660300002)(8936002)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: RY4ZkHBQ1V0iKNPf0ZDhU+P6UHR7PTlAU+DfH9Js7fZ86bFq34SbIGnmBaqhEEU6nL8vH7wItzXgQ0Y3bXcJHtGhkCyZKuLLyO5d2XzYrLOKZncAQuOSPa+69qG5ADBtAv2dRgme+BHnN4CNN/aagb167WZJKtZ5v9XQXsDSRYUBSRzOveQ7yNB9tJGXnqBBdt3ngtsAhTicK904tirVJ7dUxYFtunLu7sSxnXB0vlbM2tL24q8n0xykaiqNUghNZaVdavykioQN7ieDdzXy5IzQif0npWloEl/AkueSbiLtaKNXDCBfcMYIQDRz9kajOF2nZJhSRaYs7sa+df8yGOxdwo26UrAd0WxTLee6sjcVkT8jkC9R9WFMF8U0XChLinE4Ul5vNfle7Wq7lIa3vc5XOelKUZx/yniKZPbxB1ImBUzH4kCo56c7mpasEioWExxkDyxVOT3u4zSVAdnz1a40IBpYx/suFgiOnUkbEuJDQ/AiH51sL33F2XIg6qh3qDq2f1RpquDUey4SvrMjjBWFMP6zO3rSRRZZXzkOUZvWkdbwTDFKcWwVzF4xAYJojJxdfTv8BI4d3+J9CLOJqAEYUsoFJ7qCwqwuyqCtyDo7ClCogYPE1/qsSUWeFtE9Cfvp5KsiwCt/D3P+OWF0f6InAMypx94aK+pyt9R+WknexLHRcOHZOpZglZp7eZRF5DjU4Jq5yfbJ1VC+Qy4SK0l5EztTMwXl866cU3bjAtc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS1PR06MB8465.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(66476007)(66556008)(66946007)(8676002)(4326008)(8936002)(44832011)(498600001)(36756003)(38350700002)(6666004)(6506007)(5660300002)(38100700002)(83380400001)(6486002)(52116002)(6512007)(186003)(2616005)(1076003)(26005)(2906002)(81973001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NCk5UuiDLBjp2KBpSna1PT7QVZ/IMrDWVaOjFFG2LmTl5PfTnTLoe5FR5OBt?=
- =?us-ascii?Q?UFmL2eECPJa61zU2enqQqVHbbIQhX0zm74wxQxKw3WPk9M2DHyyBfvd62HiB?=
- =?us-ascii?Q?udvylJoGvS8oICoMCVffkY2ZA1+peimQeDnVyozmgi9kziLRfGnvhV9bz+X3?=
- =?us-ascii?Q?SAoIlslZK8IctTHzbNwefyPBZVuZbxsXpdWj9lCP8XphKieuEHALDwYYK6Fa?=
- =?us-ascii?Q?L7Spopd9ZssfQFtj4hEsnwT8wkvIeLISZNRqSsZSDkUKWsPpvhWFmCNBqx+9?=
- =?us-ascii?Q?BVyHiUCU5XXOaZmQB7H6L4tMrwqHXiNR32feCrB2l9QkJSsLxkxw0q0HnMTk?=
- =?us-ascii?Q?sM8VHpujcBA+7giUZ5jGxlEoPuDCnjTGvDRRbmbZBJ/ZRIcD5xClNHHR2pSD?=
- =?us-ascii?Q?Xdm/EP7lMJ2bONmodSU+Wk+9Mj2rYyi1QvUjBdshzR2zmDeB4Te2DBFMfh34?=
- =?us-ascii?Q?gjyRKDOMYSKhX6JQOBG8F9euyGKPzvNtSD1fskQsXEmG78oz3CdQitzDp1zy?=
- =?us-ascii?Q?2OzaAA2i+bVYUI2cFLNmmh/uNUdghbJ+BjbL0gFkpwfkAjcOGxgGR5NgfD1l?=
- =?us-ascii?Q?4CoXABe0G5coL3btE+C7wD3sNVVwNF2gNTxt2t+H5MM6eeMLDuUW8zBpecPT?=
- =?us-ascii?Q?pcUkKGkwo8f95HicPsp5JRW6hVbljBBlTKVxHibXNwra/HYYC1qB4Zy0MMUU?=
- =?us-ascii?Q?7qvJSHwFCRDOm3yE8YPoh3FvDGc6xEEotwOA/WF8GDvcuKkg2qokiHAPuD0d?=
- =?us-ascii?Q?rFwXsKEb70MqBmUVhCfj4WaKXtP/JGho+VTviFTQHAhTbbO7tr83D6REvwBd?=
- =?us-ascii?Q?jZY3Qar9Rb8ZoB5vaofFcwe6Df775kSKQMy9Pe0wmT5V/2sh0RtYIT9e7NYN?=
- =?us-ascii?Q?l4ZioosE9NU06wAvz4ep/BoSUW5LLztJmzjPnt8rtoTMtDh3JiIOTYjr5laq?=
- =?us-ascii?Q?0zqd+pLRetbKMeMFAJq7o7ySKXrot9EZKtv6Lr7ROq2tetvy1pw32Q/fwwrR?=
- =?us-ascii?Q?dSv5Ll4r019rrXBl3IESigZYt5CWrIPkOi22U5xL0+VQCmHRE/53hwo0xCBR?=
- =?us-ascii?Q?EAXsa2tKNd8JZpynNDFc9RJhhVbJuuRftiQdTw0lpkbVLXytqoADjYDH2F2T?=
- =?us-ascii?Q?J7cKGU5xvRWA97L1nTByR631BbWFgWXFo96Oi5YGV0WsueQ5PpmLf2gC6n66?=
- =?us-ascii?Q?v7AiPYbbsi7SXLMQxAgUk+vVo0SaIPMbKTxWbs8KrkuGBoCYEqxRgnLlSUfD?=
- =?us-ascii?Q?kYKQ8J/NkPH56T8ceiPZYltXV5TmHzrdUQBjdP1FUtCf6mbEzjw8KkMzWLHw?=
- =?us-ascii?Q?BdFDfF3Su+vBjVOVJy51NgCLmJjSu9bY2S5Go279WWXwH4iHeJs3nPRttaS7?=
- =?us-ascii?Q?cWgttau45SUB3NUg+tbZCzcS7ekTJ+iQitcD4aPweqmVjUP28awr4MMZFeKp?=
- =?us-ascii?Q?WpF7iGF7kVzvy2F0+Fmv6qQ5yUKiKRRlKsazidFF+B2hspOR9cXp4sHUPBKh?=
- =?us-ascii?Q?46OUneVl16OwgkQZ1zWvqls6C+MwuWv2PzgXybwjk+oGHsCpp10tv5se9zAd?=
- =?us-ascii?Q?xggIbO1s9nPat//2X3M=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86d0d7d8-eafd-4da4-1cef-08d9f153ec09
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oUA/gzihq31CwKp6WmObdRGk3qYO8RJR5euupvJ6zVntaTBCbJDfu8/0hrxh?=
+ =?us-ascii?Q?K45Ek4jAdNCKeLeodopokdYYWnnPITBdbwwRaVj93I9X20rGDlRaDlBxOYaL?=
+ =?us-ascii?Q?bxUKf6HGCmsGj50W+FusEqHL1osWfHADqcf1JRuw8Mn5iIyeJGxEVfY79N8i?=
+ =?us-ascii?Q?vigKPDxfwILProbkw8NIo5Dl5RnZNUAg984XC9b5DPxTeNuu418wZj7/YjC3?=
+ =?us-ascii?Q?cLiIMeM0tftsz2FClzv5u4I8N6KT6ppmzQSeGxiAvKBLEqeLWpzgiBUodftQ?=
+ =?us-ascii?Q?3O2hJ8WfMjeb3ObBK7HWLr+CrwzmCxKBvAWZ/zH2ZyfS7cRrq0rZ2Xlvorgn?=
+ =?us-ascii?Q?CD4HuZ8GIKBE/pDEbja1DjHPUCJws+WZHaSmvYjxVRTgrr7AQM5XXo/dlezH?=
+ =?us-ascii?Q?JBXJ+gRborkueTQKvwu2caJzg0DI1Ph1yrHnxRF3a83N7lzMQZew3RqKfKzf?=
+ =?us-ascii?Q?WE2/BTFX1LADbC5399SRdzly1Y49qqi9KcgN0aj6zaqk5zhQQi6m5+wI+lin?=
+ =?us-ascii?Q?4VC8cwKEqWT3mWYyw+CruJ97/Y2REgOh2tP9ZrXVosqBFk0GQTbTieRYb7i+?=
+ =?us-ascii?Q?1k7PZExob+e5Xm1VoWyxAe7TDqetATUnZBLPKVL6wpys/Ig1N3XGivzAVYZU?=
+ =?us-ascii?Q?gY+1f33jbThV3DS8/HsqRhbQSf29L0l2zr36HWdhASZ/kkTNleW4lWwE9CVI?=
+ =?us-ascii?Q?31+bGKJM11je6ZYcBDs7FndlXB6W4A62pmwOfqSUoX/ez9t9n/nA8e+w2gth?=
+ =?us-ascii?Q?pv6UbsvwAWPe90dDvD+fhr3E7uUdMJmib2hevpMuSAVQNqp9e4+TDRRQPNNr?=
+ =?us-ascii?Q?eq6mHxwzCguSEOL7vjwyWQh1USeX8fA+7EkPcpvDjejFEO+KwayZhPIJMM0u?=
+ =?us-ascii?Q?+PMvwZL5qGNTNTZb7kfHfz4rYXKiaN0nt2VPY7YItRcRRjX0eJGAS2CdPqME?=
+ =?us-ascii?Q?YFGSRs/ERz+ZIU1/3pAd79xBCLCGTphhk/P+sY88RrQ2HweiUX17RBEgh0nO?=
+ =?us-ascii?Q?inHXQ3x1MBQFtQ6eymR5izFan7Hhp+YRdKucj2ZUr3EXzeK007Wij6rXvRtD?=
+ =?us-ascii?Q?/gYJNfWTdqoioTJQdGE/jYI2yhngNWoRtchHcNT/NtLydkYkUnumYV4+adpg?=
+ =?us-ascii?Q?PGIoEBWxoxwu/icuP/8Q8UWpJNDpz85YGAeNUok8bbYJsvE1tZEVHWoTWGLf?=
+ =?us-ascii?Q?/MtuMFTAin5mtSLcl2ncuJTG+4oT4Mh5UNmCAOi/zoOICbDjRS2JzS3KLppA?=
+ =?us-ascii?Q?M7wnHLgE6YuXsJT4AvAo3P0tqCGhkdNszTvI8xvV+rB+KTzxmDrvaH7TnJCC?=
+ =?us-ascii?Q?xW5P11men2gzYCTjczY7XQ0epB5bvAhV6N4K+vl7Q1r2RWkXhVmnCq05soyz?=
+ =?us-ascii?Q?0CiXrzJPiAy8i6Ar0paiRALNpcKTV7ziW1HUU6yMdJOUnxBsYjDTZzbK/goq?=
+ =?us-ascii?Q?RFCcPfyebx4O6Z51um6QBu1Yw0zAe0gJRjs9bdeVNdh4B8OqMsuUn+M5AKxx?=
+ =?us-ascii?Q?LkrYPaVpVfean4PCiME6CErgy+8OrQt/3GgijxsP6TWPv8gxRU50MkVnFX0q?=
+ =?us-ascii?Q?QQIiHXcklDGxINPGhG21KRssBG7AKrTl3k45/iJA7nebSayv32uWQYrxUwer?=
+ =?us-ascii?Q?V0IKBBf99NY4dLEuS5tCJKc=3D?=
+X-OriginatorOrg: vaisala.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce792e19-892c-4115-e5fe-08d9f1541b83
+X-MS-Exchange-CrossTenant-AuthSource: AS1PR06MB8465.eurprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 13:54:59.5797
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 13:56:19.2686
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2iPCOqwOn8IEnRqKV2gqIQBGNBIfeNNnNlfIGWxzDU/9KiyrVnqCHZq7sHiHyDDx
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2640
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: R8RT9oKSLeva1P/kenJuwNnyN4bqAiEgp756Hm+FB5sK9KxynZXPC95/nrSykQuQez0/vktsm/7WqwjNtOT5xQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0602MB3430
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 02:28:09PM +0800, Lu Baolu wrote:
+The label property is used to correctly identify the same IIO device
+over reboots. The implementation requires that a value will be provided
+through device-tree. This sometime could requires many changes to
+device-trees when multiple devices want to use the label property.
+In order to prevent this, we could use the device-tree node
+name as default value. The device-tree node name is unique and
+also reflects the device which makes it a good choice as default value.
+This change is backward compatible since doesn't affect the users that
+do configure a label using the device-tree or the ones that are not
+using the labels at all.
 
-> It seems everyone agrees that for device assignment (where the I/O
-> address is owned by the user-space application), the iommu_group-based
-> APIs should always be used. Otherwise, the isolation and protection are
-> not guaranteed.
+Use the device-tree node name as a default value for `label` property,
+in case there isn't one configured through device-tree.
 
-This group/device split is all just driven by VFIO. There is nothing
-preventing a struct device * API from being used with user-space, and
-Robin has been pushing that way. With enough fixing of VFIO we can do
-it.
+Signed-off-by: Nandor Han <nandor.han@vaisala.com>
+---
 
-eg the device-centric VFIO patches should be able to eventually work
-entirely on an iommu device API.
+Notes:
+    Testing
+    -------
+    Using mx6sxsabresd dev board with device-tree:
+    ```
+    &adc1 {
+        vref-supply = <&reg_vref_3v3>;
+        label = "adc1";
+        status = "okay";
+    };
+    
+    &adc2 {
+        vref-supply = <&reg_vref_3v3>;
+        status = "okay";
+    };
+    ```
+    1. Verify that label property is visible and readable:PASS
+    > iio:device0 # ls -la label
+    -r--r--r--    1 root     root          4096 Jan  1 00:00 label
+    > iio:device0 # cat label
+    adc1
+    ```
+    2. Verify that default label property is used for adc2 device: PASS
+    ```
+    > iio:device1 # cat label
+    adc@2284000
+    ```
 
-> Another proposal (as suggested by Joerg) is to introduce the concept of
-> "sub-group". An iommu group could have one or multiple sub-groups with
-> non-aliased devices sitting in different sub-groups and use different
-> domains.
+ drivers/iio/industrialio-core.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-I still don't see how sub groups help or really change anything here.
+diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+index e1ed44dec2ab..bd26df90ce41 100644
+--- a/drivers/iio/industrialio-core.c
++++ b/drivers/iio/industrialio-core.c
+@@ -1895,6 +1895,7 @@ int __iio_device_register(struct iio_dev *indio_dev, struct module *this_mod)
+ {
+ 	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
+ 	const char *label;
++	const char *node_name;
+ 	int ret;
+ 
+ 	if (!indio_dev->info)
+@@ -1906,8 +1907,13 @@ int __iio_device_register(struct iio_dev *indio_dev, struct module *this_mod)
+ 		indio_dev->dev.of_node = indio_dev->dev.parent->of_node;
+ 
+ 	label = of_get_property(indio_dev->dev.of_node, "label", NULL);
+-	if (label)
++	if (label) {
+ 		indio_dev->label = label;
++	} else {
++		node_name = of_node_full_name(indio_dev->dev.of_node);
++		if (node_name)
++			indio_dev->label = node_name;
++	}
+ 
+ 	ret = iio_check_unique_scan_index(indio_dev);
+ 	if (ret < 0)
+-- 
+2.34.1
 
-The API already has the concept of 'ownership' seperated from the
-concept of 'attach a domain to a device'.
-
-Ownership works on the ACS group and attach works on the 'same RID'
-group.
-
-The API can take in the struct device and select which internal group
-to use based on which action is being done.
-
-Jason

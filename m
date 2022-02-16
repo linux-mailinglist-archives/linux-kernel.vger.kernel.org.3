@@ -2,136 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9184B82F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BE14B82EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiBPI1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:27:47 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43840 "EHLO
+        id S230304AbiBPI2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:28:19 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiBPI1o (ORCPT
+        with ESMTP id S229851AbiBPI2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:27:44 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950D3CA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:27:32 -0800 (PST)
+        Wed, 16 Feb 2022 03:28:17 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079D4258448
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:28:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645000052; x=1676536052;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dA/rS+M9aCB3qdQBqlUeUkzdz4VMGgfW2hykH5H4eMU=;
-  b=BrBiPeucQcrsoeLCtGgX8qGOSdMxJTiuC/J4dgaY8ijqQj9bTb4yzjWO
-   6ey493Ft9WEi6seRzg1FjEyIXOcWDQhqLEoWLCh2PFcCg7t5LWIEw+c2L
-   LYZZo/9EEEv2AcBOdhcsNpeUCniHexJC1oUoHglGBY97gvmXkZjVNIDOb
-   zVU0aos3Dtwg6sC8OGJ2eVO9JYj/Gvn75H/vkyzxX4p1FcHLs/fyLZ1Gc
-   Q7xfTICnaBzQ2kE4KlSVAF9ZnnHepP/G1TLA4AG7gcb9ZaeZgXbcPgY7c
-   IxSpCi8odWPW6Lb1iC3zV6+NVTvgZ5m65iWaMBoQwBUCa0OxsqypK53VG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275131378"
+  t=1645000086; x=1676536086;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2+LrmiUtF0kaXsTeDT1fv1ETxMW8Mf8QVAvn6K6ovPw=;
+  b=eK54omft6UfiNYUfG/2Jf4H6GgCLEnoHG0ICcYuY/jZNyyp4gh5noctO
+   uy9+vRyMN3iYJ8F57612BlyKv1/JS3aq1bTp2F9wjg6bImFrNcvU6RFcY
+   sWJI6gC9/Gzpwvo1cGLDvrlXz04XFqggNUWlNOkRWa4jGa1YxjLKbnOd9
+   h5Lxx5+SeBlTqE3QtIWZ58AXzbuPkx2dzNpP5JpAXX4dPM35z/Bq+b8vu
+   lbcMRZ9J1EJ+1Fdiqf8CMgUpxApF4GeS7ML/pMsFmFW+qzfTeNq6isAxd
+   3UwGWeL6EMIoTEGALQxmAT7nfwLtc/p2xT07A7Lfqp66lUDepsOnwbd2j
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="234090491"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="275131378"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:27:32 -0800
+   d="scan'208";a="234090491"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:28:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="704207154"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2022 00:27:30 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKFes-000Abt-1A; Wed, 16 Feb 2022 08:27:30 +0000
-Date:   Wed, 16 Feb 2022 16:26:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arnd-playground:set_fs-2 12/17] lib/test_lockup.c:422:13: sparse:
- sparse: incorrect type in initializer (different address spaces)
-Message-ID: <202202161630.LUggdKp0-lkp@intel.com>
+   d="scan'208";a="571177621"
+Received: from shbuild999.sh.intel.com ([10.239.146.189])
+  by orsmga001.jf.intel.com with ESMTP; 16 Feb 2022 00:28:02 -0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        H Peter Anvin <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Denys Vlasenko <dvlasenk@redhat.com>,
+        Feng Tang <feng.tang@intel.com>
+Subject: [PATCH] x86, vmlinux.lds: Add debug option to force all data sections aligned
+Date:   Wed, 16 Feb 2022 16:28:02 +0800
+Message-Id: <20220216082802.96054-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git set_fs-2
-head:   cb5b88c78bb9c229c93bf11ea66d622a3ba4bf2d
-commit: 5c46fbe679aaca0b693101e743e46ba571403b7c [12/17] uaccess: fix type mismatch warnings from access_ok()
-config: mips-randconfig-s031-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161630.LUggdKp0-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?id=5c46fbe679aaca0b693101e743e46ba571403b7c
-        git remote add arnd-playground https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git
-        git fetch --no-tags arnd-playground set_fs-2
-        git checkout 5c46fbe679aaca0b693101e743e46ba571403b7c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash
+0day has reported many strange performance changes (regression or
+improvement), in which there was no obvious relation between the culprit
+commit and the benchmark at the first look, and it causes people to doubt
+the test itself is wrong.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Upon further check, many of these cases are caused by the change to the
+alignment of kernel text or data, as whole text/data of kernel are linked
+together, change in one domain can affect alignments of other domains.
 
+To help quickly identifying if the strange performance change is caused
+by _data_ alignment, add a debug option to force the data sections from
+all .o files aligned on THREAD_SIZE, so that change in one domain won't
+affect other modules' data alignment.
 
-sparse warnings: (new ones prefixed by >>)
-   command-line: note: in included file:
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
-   builtin:0:0: sparse: this was the original definition
->> lib/test_lockup.c:422:13: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected char const *__gk_ptr @@     got void [noderef] __user *ptr @@
-   lib/test_lockup.c:422:13: sparse:     expected char const *__gk_ptr
-   lib/test_lockup.c:422:13: sparse:     got void [noderef] __user *ptr
->> lib/test_lockup.c:423:13: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected char const *__gk_ptr @@     got void [noderef] __user * @@
-   lib/test_lockup.c:423:13: sparse:     expected char const *__gk_ptr
-   lib/test_lockup.c:423:13: sparse:     got void [noderef] __user *
-   lib/test_lockup.c:230:9: sparse: sparse: context imbalance in 'test_lock' - wrong count at exit
-   lib/test_lockup.c:250:25: sparse: sparse: context imbalance in 'test_unlock' - unexpected unlock
+We have used this option to check some strange kernel changes [1][2][3],
+and those performance changes were gone after enabling it, which proved
+they are data alignment related. Besides these publicly reported cases,
+recently there are other similar cases found by 0day, and this option
+has been actively used by 0Day for analyzing strange performance changes.
 
-vim +422 lib/test_lockup.c
+Similarly, there is another kernel debug option to check text alignment
+related performance changes: CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B,
+which forces all function's start address to be 64 bytes alinged.
 
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  410  
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  411  static bool test_kernel_ptr(unsigned long addr, int size)
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  412  {
-5c46fbe679aaca Arnd Bergmann         2022-02-14  413  	void __user *ptr = (void __user *)addr;
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  414  	char buf;
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  415  
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  416  	if (!addr)
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  417  		return false;
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  418  
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  419  	/* should be at least readable kernel address */
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  420  	if (access_ok(ptr, 1) ||
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  421  	    access_ok(ptr + size - 1, 1) ||
-25f12ae45fc193 Christoph Hellwig     2020-06-17 @422  	    get_kernel_nofault(buf, ptr) ||
-25f12ae45fc193 Christoph Hellwig     2020-06-17 @423  	    get_kernel_nofault(buf, ptr + size - 1)) {
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  424  		pr_err("invalid kernel ptr: %#lx\n", addr);
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  425  		return true;
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  426  	}
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  427  
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  428  	return false;
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  429  }
-30428ef5d1e8ca Konstantin Khlebnikov 2020-04-06  430  
+This option depends on CONFIG_DYNAMIC_DEBUG==n, as '__dyndbg' subsection
+of .data has a hard requirement of ALIGN(8), shown in the 'vmlinux.lds':
 
-:::::: The code at line 422 was first introduced by commit
-:::::: 25f12ae45fc1931a1dce3cc59f9989a9d87834b0 maccess: rename probe_kernel_address to get_kernel_nofault
+"
+. = ALIGN(8); __start___dyndbg = .; KEEP(*(__dyndbg)) __stop___dyndbg = .;
+"
 
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+It contains all pointers to 'struct _ddebug', and dynamic_debug_init()
+will "pointer++" to loop accessing these pointers, which will be broken
+with this option enabled.
 
+[1]. https://lore.kernel.org/lkml/20200205123216.GO12867@shao2-debian/
+[2]. https://lore.kernel.org/lkml/20200305062138.GI5972@shao2-debian/
+[3]. https://lore.kernel.org/lkml/20201112140625.GA21612@xsang-OptiPlex-9020/
+
+Signed-off-by: Feng Tang <feng.tang@intel.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changelog:
+  
+  since RFC (https://lore.kernel.org/lkml/1627456900-42743-1-git-send-email-feng.tang@intel.com/)
+  * rebase against 5.17-rc1
+  * modify the changelog adding more recent info
+
+ arch/x86/Kconfig.debug        | 13 +++++++++++++
+ arch/x86/kernel/vmlinux.lds.S |  7 ++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/Kconfig.debug b/arch/x86/Kconfig.debug
+index d3a6f74a94bd..7b8cfe9717f2 100644
+--- a/arch/x86/Kconfig.debug
++++ b/arch/x86/Kconfig.debug
+@@ -225,6 +225,19 @@ config PUNIT_ATOM_DEBUG
+ 	  The current power state can be read from
+ 	  /sys/kernel/debug/punit_atom/dev_power_state
+ 
++config DEBUG_FORCE_DATA_SECTION_ALIGNED
++	bool "Force all data sections to be THREAD_SIZE aligned"
++	depends on EXPERT && !DYNAMIC_DEBUG
++	help
++	  There are cases that a commit from one kernel domain changes
++	  data sections' alignment of other domains, as they are all
++	  linked together compactly, and cause magic performance bump
++	  (regression or improvement), which is hard to debug. Enable
++	  this option will help to verify if the bump is caused by
++	  data alignment changes.
++
++	  It is mainly for debug and performance tuning use.
++
+ choice
+ 	prompt "Choose kernel unwinder"
+ 	default UNWINDER_ORC if X86_64
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 27f830345b6f..79a631476513 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -155,7 +155,12 @@ SECTIONS
+ 	X86_ALIGN_RODATA_END
+ 
+ 	/* Data */
+-	.data : AT(ADDR(.data) - LOAD_OFFSET) {
++	.data : AT(ADDR(.data) - LOAD_OFFSET)
++#ifdef CONFIG_DEBUG_FORCE_DATA_SECTION_ALIGNED
++	/* Use the biggest alignment of below sections */
++	SUBALIGN(THREAD_SIZE)
++#endif
++	{
+ 		/* Start of data section */
+ 		_sdata = .;
+ 
+-- 
+2.27.0
+

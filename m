@@ -2,153 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF9D4B89C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEFA4B89CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233618AbiBPNZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:25:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35982 "EHLO
+        id S234068AbiBPN0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:26:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234068AbiBPNZl (ORCPT
+        with ESMTP id S233693AbiBPN0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:25:41 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767DC12779;
-        Wed, 16 Feb 2022 05:25:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645017929; x=1676553929;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=Nxttcr31p2W61Gm3SX8vHvFy59FlP2h71nyWJI7l0ak=;
-  b=Q3jmITkcMWC+vMnkK+I+xceHDqHx3vgGi6HM0jTCU7G3cRwS2r7h5ku2
-   9cS3RHVsKoEHWVfKdGeUrqGpZeZrrYBhlW8+0+BQCQDFlHI6AwaHLVPjR
-   XUF6Z0kNbd0sxr3VJoZRqdsYkeGzKf8uo5vhx1vUXbx4gU7sF582LAbZy
-   0=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Feb 2022 05:25:28 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 05:25:27 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 05:25:26 -0800
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 16 Feb 2022 05:25:20 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH] ASoC: codec: wcd938x: Update CTIA/OMTP switch control
-Date:   Wed, 16 Feb 2022 18:54:52 +0530
-Message-ID: <1645017892-12522-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 16 Feb 2022 08:26:32 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CDC1B78C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:26:17 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 545F03F1B6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 13:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645017976;
+        bh=HnLv2sgPTFeJCaPDj49F4ixfOdgITRk3XaxRkpYlXz0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=d+ytUNIq/+YlMjkBHdiOV8f4oLa5IC3GzB6jvG+C7TfcqFdyX0KOr+USFSxC9EfzW
+         gq4sf5GP+2Y9PEsc59qza/ErxG8NRKgmR8tyS5azhFwTtH329ZDBm2ITajzRbvduwY
+         djHyqSCQsWveL2va2wT/eOz4fRUQ919qHtZ2EAJMnfzUI3Wx3c6Q1V+f7+lSJTGT4Y
+         cV623To1sFST3A04oSdbBkd9Bl541P8v4XHGEujKDhUeevB7FXVse+VpePM30PDXFt
+         yGlxbJTMN8smPmt2kqJYtjVhq3t5quGgig62hqd/H4EX/8G0JdurlhhgrHXxiDxruR
+         SppoGEjyty4Fw==
+Received: by mail-ed1-f70.google.com with SMTP id l24-20020a056402231800b00410f19a3103so1560341eda.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:26:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HnLv2sgPTFeJCaPDj49F4ixfOdgITRk3XaxRkpYlXz0=;
+        b=peWA4jqdZliCMKOAMQ5mBzf+ZvOaWA2ckOqIk535E36Hb1xfv+2qQ0w2JvaDkyEXzN
+         6Ypi/IZddy6godLV+b2KhfRph/m7P4P3FP5llRaZzbQazi5Q9G81h69dPDMI04+lMKZh
+         uofuGghuiqF8WhecovcnP3k1l4y9dgD3AUoS2GSOQc9OMiY8SPU2QODfyPn88Oa5ZBkg
+         GcwEKPcHscx0oOKW9wYtSNBestXie2tJbYOeLcJIahZDqazEVCGnlB3JFBjSi2b0zmaX
+         UQ46HHStbBHhAfQCkQi90OL2d/52DzE5amyozfkBRwPnnRDBni+uuujatP4ZAjHBbbLs
+         k9Lg==
+X-Gm-Message-State: AOAM533Vo6HQ2sP4vvoc+hl0zF09qP/WyTna/CPXWk5mE2J5oYX5lZcd
+        ccBs6y8SS3+F1QxNk2jBz5zUJu/yx2LvZE6Y4oUqHCC9nvMfCm7r1ecPNQ5l3QkpiKEVtOq5GvD
+        m1T82gkFgrUsOO0qLWBzra5bBybHzgfv0mur7+e967g==
+X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id t1-20020a1709061be100b006ceb0a8017dmr2212959ejg.413.1645017975940;
+        Wed, 16 Feb 2022 05:26:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwW6N5tK5VHWBe36Bj5vHHIMzDJlCB0AOnINLyfOUpi+aCPHYXEWQjcBrraceqmA2DJkZ7r6A==
+X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id t1-20020a1709061be100b006ceb0a8017dmr2212939ejg.413.1645017975741;
+        Wed, 16 Feb 2022 05:26:15 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id qf12sm1085572ejc.54.2022.02.16.05.26.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 05:26:15 -0800 (PST)
+Message-ID: <79a47f67-bb66-bad4-b6bc-c6a8c0ef25dc@canonical.com>
+Date:   Wed, 16 Feb 2022 14:26:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: dma: Convert mtk-uart-apdma to DT schema
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, vkoul@kernel.org
+Cc:     robh+dt@kernel.org, sean.wang@mediatek.com, matthias.bgg@gmail.com,
+        long.cheng@mediatek.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220216114054.269656-1-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220216114054.269656-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert gpio api's to gpio descriptor api's in CTIA/OMTP switch control.
-Remove redundant NULL checks in swap_gnd_mic function.
+On 16/02/2022 12:40, AngeloGioacchino Del Regno wrote:
+> Convert the MediaTek UART APDMA Controller binding to DT schema.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/dma/mediatek,uart-dma.yaml       | 112 ++++++++++++++++++
+>  .../bindings/dma/mtk-uart-apdma.txt           |  56 ---------
+>  2 files changed, 112 insertions(+), 56 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/dma/mtk-uart-apdma.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+> new file mode 100644
+> index 000000000000..4583c8f535b2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dma/mediatek,uart-dma.yaml
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dma/mediatek,uart-dma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek UART APDMA controller
+> +
+> +maintainers:
+> +  - Long Cheng <long.cheng@mediatek.com>
+> +
+> +description: |
+> +  The MediaTek UART APDMA controller provides DMA capabilities
+> +  for the UART peripheral bus.
+> +
+> +allOf:
+> +  - $ref: "dma-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt2712-uart-dma
+> +              - mediatek,mt8516-uart-dma
+> +          - const: mediatek,mt6577-uart-dma
+> +      - enum:
+> +          - mediatek,mt6577-uart-dma
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 16
+> +
+> +  interrupts:
+> +    description: |
+> +      TX, RX interrupt lines for each UART APDMA channel
+> +    minItems: 1
 
-Fixes: 013cc2aea0f6 ("ASoC: codec: wcd938x: Add switch control for selecting CTIA/OMTP Headset")
+It would be useful to have an "if:" block constraining the interrupts
+(and reg array?), if the dma-requests is missing. If you need an
+example, see length of "max8997,pmic-buck1-dvs-voltage" array in
+relation to presence of max8997,pmic-buck1-uses-gpio-dvs.
+https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/regulator/maxim,max8997.yaml#L259
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
----
- sound/soc/codecs/wcd938x.c | 33 +++++++++++----------------------
- 1 file changed, 11 insertions(+), 22 deletions(-)
+The best would be to restrict number of interrupts to number of
+requests, but I think dtschema cannot express this.
 
-diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index 08d16a9..88a39e1 100644
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -6,6 +6,7 @@
- #include <linux/platform_device.h>
- #include <linux/device.h>
- #include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/kernel.h>
- #include <linux/pm_runtime.h>
- #include <linux/component.h>
-@@ -194,7 +195,7 @@ struct wcd938x_priv {
- 	int ear_rx_path;
- 	int variant;
- 	int reset_gpio;
--	int us_euro_gpio;
-+	struct gpio_desc *us_euro_gpio;
- 	u32 micb1_mv;
- 	u32 micb2_mv;
- 	u32 micb3_mv;
-@@ -4203,22 +4204,11 @@ static bool wcd938x_swap_gnd_mic(struct snd_soc_component *component, bool activ
- 
- 	struct wcd938x_priv *wcd938x;
- 
--	if (!component) {
--		dev_err(component->dev, "%s component is NULL\n", __func__);
--		return false;
--	}
--
- 	wcd938x = snd_soc_component_get_drvdata(component);
--	if (!wcd938x) {
--		dev_err(component->dev, "%s private data is NULL\n", __func__);
--		return false;
--	}
- 
--	value = gpio_get_value(wcd938x->us_euro_gpio);
-+	value = gpiod_get_value(wcd938x->us_euro_gpio);
- 
--	gpio_set_value(wcd938x->us_euro_gpio, !value);
--	/* 20us sleep required after changing the gpio state*/
--	usleep_range(20, 30);
-+	gpiod_set_value(wcd938x->us_euro_gpio, !value);
- 
- 	return true;
- }
-@@ -4236,16 +4226,15 @@ static int wcd938x_populate_dt_data(struct wcd938x_priv *wcd938x, struct device
- 		return wcd938x->reset_gpio;
- 	}
- 
--	wcd938x->us_euro_gpio = of_get_named_gpio(dev->of_node, "us-euro-gpios", 0);
--	if (wcd938x->us_euro_gpio < 0) {
--		dev_err(dev, "Failed to get us-euro-gpios gpio: err = %d\n", wcd938x->us_euro_gpio);
--	} else {
--		cfg->swap_gnd_mic = wcd938x_swap_gnd_mic;
--		gpio_direction_output(wcd938x->us_euro_gpio, 0);
--		/* 20us sleep required after pulling the reset gpio to LOW */
--		usleep_range(20, 30);
-+	wcd938x->us_euro_gpio = devm_gpiod_get_optional(dev, "us-euro",
-+						GPIOD_OUT_LOW);
-+	if (IS_ERR(wcd938x->us_euro_gpio)) {
-+		dev_err(dev, "us-euro swap Control GPIO not found\n");
-+		return PTR_ERR(wcd938x->us_euro_gpio);
- 	}
- 
-+	cfg->swap_gnd_mic = wcd938x_swap_gnd_mic;
-+
- 	wcd938x->supplies[0].supply = "vdd-rxtx";
- 	wcd938x->supplies[1].supply = "vdd-io";
- 	wcd938x->supplies[2].supply = "vdd-buck";
--- 
-2.7.4
+> +    maxItems: 32
+> +
+> +  clocks:
+> +    description: Must contain one entry for the APDMA main clock
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: apdma
+> +
+> +  "#dma-cells":
+> +    const: 1
+> +    description: |
+> +      The first cell specifies the UART APDMA channel number
+> +
+> +  dma-requests:
+> +    description: |
+> +      Number of virtual channels of the UART APDMA controller
+> +    maximum: 16
+> +
+> +  mediatek,dma-33bits:
+> +    type: boolean
+> +    description: Enable 33-bits UART APDMA support
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - "#dma-cells"
 
+No need for requiring dma-cells. It is coming from dma-common.yaml.
+
+> +
+
+Best regards,
+Krzysztof

@@ -2,142 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9224B81DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A8A4B81C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiBPHiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:38:02 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47406 "EHLO
+        id S230247AbiBPHk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:40:26 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiBPHhu (ORCPT
+        with ESMTP id S230221AbiBPHkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:37:50 -0500
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03E1174D5E;
-        Tue, 15 Feb 2022 23:37:16 -0800 (PST)
-Received: by mail-wm1-f44.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso3047147wme.5;
-        Tue, 15 Feb 2022 23:37:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fcjsuPNQ/ElKKZzWhCUTEeBa9hiEJc7LibQjJR9rEeU=;
-        b=5N719t1feMXZOgvg84T9FuHEPutLoMBmmUZsxUQD0kDpTkHHZ4Ty6oGtKxqmbIWGWR
-         WDSNOwQsgHIdF08F+ZoALZEzyhvSVtLJyK+LtWzpRYJKdOXS0m1Wu3OWJ/+NQWlB8fVS
-         bVyL1qvMEGzltoKFvfSCth7oyd0DkXYaRM2+03EL4h2tRz8tYZyZsGLF7SB/6SsCRpgA
-         amV4IL2h51nMNZQjhUlLev+qXVEKs0mfKEgoSDRRI30KFNulkwMC7FyF5Hdb2vIkIrUI
-         y0Aa8K2c0icBjYHu8UOtCWElD0w9/t93KBde8VE3AB7lDuJuYzar+xfPaHjeIz6NqLAB
-         r9gw==
-X-Gm-Message-State: AOAM530VmqNSl3/dxc4C8d7monoeo3o5Skl2LSwGefLZCzQbQh3i6dny
-        8f2SS1zeRW6H1USeNyaSpx8=
-X-Google-Smtp-Source: ABdhPJxbJNyEQzvIiDNrzD+g+pa+pXUcVq/akn8wbE/JG08QWrXf4nvoSo157dY8BbsGvojheUtgow==
-X-Received: by 2002:a05:600c:414c:b0:37b:c80e:e3dc with SMTP id h12-20020a05600c414c00b0037bc80ee3dcmr314007wmm.116.1644997009856;
-        Tue, 15 Feb 2022 23:36:49 -0800 (PST)
-Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.googlemail.com with ESMTPSA id z5sm21400842wmp.10.2022.02.15.23.36.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Feb 2022 23:36:48 -0800 (PST)
-Message-ID: <99b0e568-ee2d-bbd0-dfd0-fb0953cd556c@kernel.org>
-Date:   Wed, 16 Feb 2022 08:36:47 +0100
+        Wed, 16 Feb 2022 02:40:20 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E7F15135C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:39:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644997194; x=1676533194;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+HqDf70TozgE/3I3FqJ3BcObqEF3HqQcEJeAkAhehEk=;
+  b=HllbwrX3D9IVuSkNDKAtk6u6Yrhpm24PRH3YBfqOIPiXhR97JxN6r1QQ
+   f9UaqERLCL2M4ujrPc/r6JEtZ5u2CAhsXluWGKyYvi/geOEDKWEa27D+d
+   VrBJMR89paJnE4atyZHPGa3+DYHuDZ1DACFk4gjDw0kXjPmq9mlP9Mc3y
+   aQf6sWKIxr8kmANCw85st6HAozJK13PrZOFuU6INjHvnGm48WPc71ONWN
+   z0zmLBEwYjzDtIxCuw4kR8kUXVkjtbB/n55PK6iO5CSb2mcuM2JhypcN9
+   FzCbfaxklU8r7dVQBQxjE46lg7pBOaKl6qY8AkBJ1o/tmfE1oH2i96Dyu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250487360"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="250487360"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:38:31 -0800
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="498414830"
+Received: from yhuang6-desk2.sh.intel.com ([10.239.13.11])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:38:27 -0800
+From:   Huang Ying <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Feng Tang <feng.tang@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Subject: [PATCH -V12 0/3] NUMA balancing: optimize memory placement for memory tiering system
+Date:   Wed, 16 Feb 2022 15:38:12 +0800
+Message-Id: <20220216073815.2505536-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v20 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for
- onboard USB hub
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20220119204345.3769662-1-mka@chromium.org>
- <20220119124327.v20.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
- <YgJMkFAxjazkUDZd@kroah.com> <YgLCswtX/0THkzXT@google.com>
- <CAD=FV=WMP8M5HTRNv9_scvrytbpE0iBdUack=XaHoypGNLJeVA@mail.gmail.com>
- <Ygv3FSDS/fq1oePy@kroah.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <Ygv3FSDS/fq1oePy@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/02/2022 19:55, Greg Kroah-Hartman wrote:
-> On Tue, Feb 15, 2022 at 09:54:54AM -0800, Doug Anderson wrote:
->> Hi,
->>
->> On Tue, Feb 8, 2022 at 11:21 AM Matthias Kaehlcke <mka@chromium.org> wrote:
->>>
->>> On Tue, Feb 08, 2022 at 11:57:20AM +0100, Greg Kroah-Hartman wrote:
->>>> On Wed, Jan 19, 2022 at 12:43:45PM -0800, Matthias Kaehlcke wrote:
->>>>> Add nodes for the onboard USB hub on trogdor devices. Remove the
->>>>> 'always-on' property from the hub regulator, since the regulator
->>>>> is now managed by the onboard_usb_hub driver.
->>>>>
->>>>> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
->>>>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
->>>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->>>>> ---
->>>>
->>>> No DT maintainer approval yet?  :(
->>>
->>> Bjorn usually just picks DT changes into the QCOM tree when they are
->>> ready, so I wouldn't interpret anything into the lack of an explicit
->>> Ack.
->>
->> Right, so the expectation is that this patch wouldn't land through the
->> USB tree but would instead land through the Qualcomm tree, probably a
->> revision after the code lands in the USB tree to avoid dependency
->> problems.
-> 
-> But our tools pick up the whole series.  I can't just do "i will pick
-> patches 1-4 only" easily, and neither can any other maintainer.
+The changes since the last post are as follows,
 
-I don't have problems picking individual patches - either b4 am on each
-patch or on entire series and dropping later unneeded commits.
+- Rebased on v5.17-rc4
 
-> 
-> Why not just get their ack so that I know it can come through the USB
-> tree?  That's what normally happens for other changes like this where a
-> driver change is required first.
+- Change promotion watermark implementation per Johannes' comments
 
-DTS is a description of the hardware and we take it via separate
-branches of SoC-fami0ly repositories. These are always separated from
-the driver changes. Always. For several reasons:
-1. By convention,
-2. To be sure there is no dependency on driver code thus an ABI break,
-3. To have a nice and clean history of DTS changes, properly organized.
+- Fixes several sysctl ABI document bugs, Thanks Andrew.
 
-What is more, if this was coming via my Samsung SoC tree towards SoC
-folks, I could not take it in one branch. I would need to physically
-split it, otherwise Arnd/Olof would bounce back my pull request saying I
-am mixing DTS with driver. Of course you do not have such requirement -
-I am just saying that splitting DTS is quite common and proper way.
+--
 
+With the advent of various new memory types, some machines will have
+multiple types of memory, e.g. DRAM and PMEM (persistent memory).  The
+memory subsystem of these machines can be called memory tiering
+system, because the performance of the different types of memory are
+different.
 
-Best regards,
-Krzysztof
+After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
+for use like normal RAM"), the PMEM could be used as the
+cost-effective volatile memory in separate NUMA nodes.  In a typical
+memory tiering system, there are CPUs, DRAM and PMEM in each physical
+NUMA node.  The CPUs and the DRAM will be put in one logical node,
+while the PMEM will be put in another (faked) logical node.
+
+To optimize the system overall performance, the hot pages should be
+placed in DRAM node.  To do that, we need to identify the hot pages in
+the PMEM node and migrate them to DRAM node via NUMA migration.
+
+In the original NUMA balancing, there are already a set of existing
+mechanisms to identify the pages recently accessed by the CPUs in a
+node and migrate the pages to the node.  So we can reuse these
+mechanisms to build the mechanisms to optimize the page placement in
+the memory tiering system.  This is implemented in this patchset.
+
+At the other hand, the cold pages should be placed in PMEM node.  So,
+we also need to identify the cold pages in the DRAM node and migrate
+them to PMEM node.
+
+In commit 26aa2d199d6f ("mm/migrate: demote pages during reclaim"), a
+mechanism to demote the cold DRAM pages to PMEM node under memory
+pressure is implemented.  Based on that, the cold DRAM pages can be
+demoted to PMEM node proactively to free some memory space on DRAM
+node to accommodate the promoted hot PMEM pages.  This is implemented
+in this patchset too.
+
+We have tested the solution with the pmbench memory accessing
+benchmark with the 80:20 read/write ratio and the Gauss access address
+distribution on a 2 socket Intel server with Optane DC Persistent
+Memory Model.  The test results shows that the pmbench score can
+improve up to 95.9%.
+
+Changelog:
+
+v12:
+
+- Rebased on v5.17-rc4
+
+- Change promotion watermark implementation per Johannes' comments
+
+- Fixes several sysctl ABI document bugs, Thanks Andrew.
+
+v11:
+
+- Rebased on v5.17-rc1
+
+- Remove [4-6] from the original patchset to make it easier to be
+  reviewed.
+
+- Change the additional promotion watermark to be the high watermark / 4.
+
+v10:
+
+- Rebased on v5.16-rc1
+
+- Revise error processing for [1/6] (promotion counter) per Yang's comments
+
+- Add sysctl document for [2/6] (optimize page placement)
+
+- Reset threshold adjustment state when disable/enable tiering mode
+
+- Reset threshold when workload transition is detected.
+
+v9:
+
+- Rebased on v5.15-rc4
+
+- Make "add promotion counter" the first patch per Yang's comments
+
+v8:
+
+- Rebased on v5.15-rc1
+
+- Make user-specified threshold take effect sooner
+
+v7:
+
+- Rebased on the mmots tree of 2021-07-15.
+
+- Some minor fixes.
+
+v6:
+
+- Rebased on the latest page demotion patchset. (which bases on v5.11)
+
+v5:
+
+- Rebased on the latest page demotion patchset. (which bases on v5.10)
+
+v4:
+
+- Rebased on the latest page demotion patchset. (which bases on v5.9-rc6)
+
+- Add page promotion counter.
+
+v3:
+
+- Move the rate limit control as late as possible per Mel Gorman's
+  comments.
+
+- Revise the hot page selection implementation to store page scan time
+  in struct page.
+
+- Code cleanup.
+
+- Rebased on the latest page demotion patchset.
+
+v2:
+
+- Addressed comments for V1.
+
+- Rebased on v5.5.
+
+Best Regards,
+Huang, Ying

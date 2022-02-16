@@ -2,86 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55BE4B9479
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338964B9481
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238386AbiBPX1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 18:27:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57968 "EHLO
+        id S238442AbiBPX2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 18:28:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiBPX06 (ORCPT
+        with ESMTP id S238148AbiBPX2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 18:26:58 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081F49EBAD;
-        Wed, 16 Feb 2022 15:26:44 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3ACEA37D;
-        Wed, 16 Feb 2022 23:26:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3ACEA37D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1645054004; bh=PZQSP6R+jY8fblyRlqUqjGpfYN7XjpKYkpL8H3cbVEY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Kb2Sk70S8EhNPCcM5MR29SWBTGG4A1pIza/Ns+2ynTVGdgwtbAkwuPW5QqQVaPmvs
-         H8IDDVrYHbyKohWgYAxa0lTmEiwtRQmpsghSUYC5UHX8sR4RyemEAuaUZNTtn6RWe4
-         W58ckP4FpkbtlgdM7R93im1/qjf4pl5XCRWp4PUnf9cA87LKmuJUGGhkZIf0rODibA
-         KAEys2kzND8XkAcm81U6D6k8ihjyXfZQqdINnvLyIGZTTZ1wwWEWJmiYNqm6+wGcVS
-         60DeZwcq7R6sVfuudaM5nFS9PyK71/lY3OFf73mqFMT4LY39pRZ3sX5kr9nOlcXj65
-         YxfaX6VIdOcJw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
-Cc:     Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH v3 11/15] scripts: kernel-doc: Remove the "format of
- comments" comment block
-In-Reply-To: <20220104015946.529524-12-tomasz.warniello@gmail.com>
-References: <20220104015946.529524-1-tomasz.warniello@gmail.com>
- <20220104015946.529524-12-tomasz.warniello@gmail.com>
-Date:   Wed, 16 Feb 2022 16:26:43 -0700
-Message-ID: <87k0du2y18.fsf@meer.lwn.net>
+        Wed, 16 Feb 2022 18:28:35 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B70F515B9BE;
+        Wed, 16 Feb 2022 15:28:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7EE46D6E;
+        Wed, 16 Feb 2022 15:28:21 -0800 (PST)
+Received: from [10.57.13.238] (unknown [10.57.13.238])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 25C903F718;
+        Wed, 16 Feb 2022 15:28:19 -0800 (PST)
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+ <CAD=FV=UtQgrwPXg4zTZtBin3LWY1yTgCKQ05MmCNqK_6F5S8VA@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <adbc1cd5-7598-a0b1-629c-8dd920aac2d0@arm.com>
+Date:   Wed, 16 Feb 2022 23:28:17 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAD=FV=UtQgrwPXg4zTZtBin3LWY1yTgCKQ05MmCNqK_6F5S8VA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com> writes:
 
-> As suggested by Jani Nikula in a reply to my first version of this
-> transformation, Documentation/doc-guide/kernel-doc.rst can serve as the
-> information hub for comment formatting. The section DESCRIPTION already
-> points there, so the original comment block can just be removed.
 
-This is a relatively good *why* section - the sort of text all of the
-patches should have.
+On 2/16/22 5:21 PM, Doug Anderson wrote:
+> Hi,
+> 
+> On Tue, Feb 8, 2022 at 1:32 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>>     Another important thing is the consistent scale of the power values
+>>>     provided by the cooling devices. All of the cooling devices in a single
+>>>     thermal zone should have power values reported either in milli-Watts
+>>>     or scaled to the same 'abstract scale'.
+>>
+>> This can change. We have removed the userspace governor from kernel
+>> recently. The trend is to implement thermal policy in FW. Dealing with
+>> some intermediate configurations are causing complicated design, support
+>> of the algorithm logic is also more complex.
+> 
+> One thing that didn't get addressed is the whole "The trend is to
+> implement thermal policy in FW". I'm not sure I can get on board with
+> that trend. IMO "moving to FW" isn't a super great trend. FW is harder
+> to update than kernel and trying to keep it in sync with the kernel
+> isn't wonderful. Unless something _has_ to be in FW I personally
+> prefer it to be in the kernel.
 
-> * Transform documentation into POD (11/15)
-> See step 1 for the series details.
->
-> =3D Meta note =3D
->
-> I guess, I should use the Suggested-by tag for credits.
-> Maintainers, please correct this if I'm doing this wrong.
+There are pros and cons for both approaches (as always).
 
-"meta notes" can appear below the "---" line, that way the maintainer
-doesn't have to edit them out when the patch is applied.
+Although, there are some use cases, where the kernel is not able to
+react that fast, e.g. sudden power usage changes, which can cause
+that the power rail is not able to sustain within required conditions.
+When we are talking about tough requirements for those power & thermal
+policies, the mechanism must be fast, precised and reliable.
 
-> Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
-> Signed-off-by: Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com>
-> ---
->  scripts/kernel-doc | 115 ---------------------------------------------
->  1 file changed, 115 deletions(-)
+Here you can find Arm reference FW implementation and an IPA clone
+in there (I have been reviewing this) [1][2].
 
-Thanks,
+As you can see there is a new FW feature set:
+"MPMM, Traffic-cop and Thermal management".
 
-jon
+Apart from Arm implementation, there are already known thermal
+monitoring mechanisms in HW/FW. Like in the new Qcom SoCs which
+are using this driver code [3]. The driver receives an interrupt
+about throttling conditions and just populates the thermal pressure.
+
+> 
+> ...although now that I re-read this, I'm not sure which firmware you
+> might be talking about. Is this the AP firmware, or some companion
+> chip / coprocessor? Even so, I'd still rather see things done in the
+> kernel when possible...
+
+It's a FW run on a dedicated microprocessor. In Arm SoCs it's usually
+some Cortex-M. We communicated with it from the kernel via SCMI drivers
+(using shared memory and mailboxes). We recommend to use the SCMI
+protocol to send e.g. 'performance request' to the FW via 'fast
+channel' instead of having an implementation of PMIC and clock, and do
+the voltage & freq change in the kernel (using drivers & locking). That
+implementation allows to avoid costly locking and allows to go via
+that SCMI cpufreq driver [4] and SCMI perf layer [5] the task scheduler.
+We don't need a dedicated 'sugov' kthread in a Deadline policy to
+do that work and preempt the currently running task.
+
+IMHO the FW approach opens new opportunities.
+
+Regards,
+Lukasz
+
+[1] https://github.com/ARM-software/SCP-firmware/pull/588
+[2] 
+https://github.com/ARM-software/SCP-firmware/pull/588/commits/59c62ead5eb66353ae805c367bfa86192e28c410
+[3] 
+https://elixir.bootlin.com/linux/v5.17-rc4/source/drivers/cpufreq/qcom-cpufreq-hw.c#L287
+[4] 
+https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/scmi-cpufreq.c#L65
+[5] 
+https://elixir.bootlin.com/linux/v5.17-rc4/source/drivers/firmware/arm_scmi/perf.c#L465

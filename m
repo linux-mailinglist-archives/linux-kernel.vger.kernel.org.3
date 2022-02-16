@@ -2,60 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291F94B94B4
+	by mail.lfdr.de (Postfix) with ESMTP id C9CB04B94B6
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238614AbiBPXsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 18:48:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42850 "EHLO
+        id S238636AbiBPXs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 18:48:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiBPXsJ (ORCPT
+        with ESMTP id S237072AbiBPXsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 18:48:09 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FF1251E44
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 15:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645055276; x=1676591276;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fs4JKPq5X+QC5yD0VVUEKvyhnjnWCNRaHddlh6dhTqI=;
-  b=gU2kDXxqSWYQmS1Siqz5wSfGd32W76O/VPW/WHdk/pkyRWqZiyjb58Gw
-   z+rZKBxzRl+GyxY1YyLG5iySKSlZGqzIXGvGBKeXL0BBF0Lespg8cgkk+
-   qZDzuDmzRpTiox1N0o2OlIy3JP1rfRYV3zqy9x1Oq5uVb1cil3BuBFJI4
-   3D6469UWrMv5ukg1E0hEKKqg8SU/75DBlL9bnXk9rY3EHuGsTcVXW84+d
-   40jv41aVwI0AP0gYo97P2pn90YwPHIVr9QqS8d+1MVceyvFG09YXxprgI
-   XVf2ywxSaE7Ekk8J3g5hDgmGtkJ+Ofs4d4K6Tbax8eiJNBvcxRCS5l5oh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="250947337"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="250947337"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 15:47:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="704516440"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2022 15:47:54 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKU1Z-000BFL-P5; Wed, 16 Feb 2022 23:47:53 +0000
-Date:   Thu, 17 Feb 2022 07:47:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 31/42]
- fs/netfs/buffered_write.c:749:6: warning: variable 'spare_region' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202202170739.jOmFwlAm-lkp@intel.com>
+        Wed, 16 Feb 2022 18:48:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDE5D258478
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 15:48:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645055290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3yxXnQ8NcQVI3R2VSTCwUm2NlS2NbQO6IZlz6uxtttI=;
+        b=Fv7T04Yo/ZvA8d8RZAH/Wf+olllHI9pLdjsOPbqLAb5IjQ8N0y84saNXTivd9MI6tM5I73
+        ZSEb3BoTXAD5LxuxmU4NMrtEzhIRIhuagHHmesqs7o9/eHau66yGL+j2n6om7cTPaY01VU
+        UNUGOt2S4lmjVZfkNCe71ZaCFPcJrLE=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-9jjB_P_lOF21YU8YneimSQ-1; Wed, 16 Feb 2022 18:48:09 -0500
+X-MC-Unique: 9jjB_P_lOF21YU8YneimSQ-1
+Received: by mail-oo1-f70.google.com with SMTP id a10-20020a4a988a000000b00318bdbe9370so2212456ooj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 15:48:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=3yxXnQ8NcQVI3R2VSTCwUm2NlS2NbQO6IZlz6uxtttI=;
+        b=QcBn6XFcxP+0+bt0nl3n31vK/82kVKAaSplXmOLrp9qmTAVqDdhXjiVadO+v9+ClQg
+         M5pdw9DQT26xs+botjeDOJKJeMUFpbeRaGIlUX0PJyPI7OeTT/vg3zekw5TSjFp5PMPI
+         9mF6nnv/AeRO5RGxnyYebXLkkLGBiLipvbPaAO4pjWUiafWSAxsnTCO3hk95ikVPRoau
+         sROzK7yFEo0om5d4cfVLS0TgSRwtZCR5HiZY2o/76iCvpry9NXEqDZxpyrzAxRYQ4QyB
+         sX9HDbf2AvxeH86Qjl2Zc2VtIKwg+4CugiPKMiVc17QNRYdUiLBIfxv9YCxY5v2TCMi5
+         vgPw==
+X-Gm-Message-State: AOAM531fu1J75hSd6iriER8WYRET7H2pAw8QePwL2X0pSVI3HTpD5F8T
+        3eJ64lyu2L5ixZg2AmD3/eIue1UGhtwqb4PlSfgOaybDBUxFviZQ5PkkZMfIWEJIX+sPhyay9K0
+        ZA280TTPke543SQ03inHEJ4Zi
+X-Received: by 2002:a05:6870:4248:b0:d2:c3a4:5b4c with SMTP id v8-20020a056870424800b000d2c3a45b4cmr1378281oac.40.1645055288808;
+        Wed, 16 Feb 2022 15:48:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwHwiwa7LUVi3R9fBV+IMF/WBh/f8giV2tlCFrpwtq5zY75nHBLPRui6wwyxbqkuInjx2yxSw==
+X-Received: by 2002:a05:6870:4248:b0:d2:c3a4:5b4c with SMTP id v8-20020a056870424800b000d2c3a45b4cmr1378267oac.40.1645055288418;
+        Wed, 16 Feb 2022 15:48:08 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id x1sm15614544oto.38.2022.02.16.15.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 15:48:07 -0800 (PST)
+Date:   Wed, 16 Feb 2022 16:48:06 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     <kvm@vger.kernel.org>, Cornelia Huck <cohuck@redhat.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 1/5] vfio/pci: register vfio-pci driver with
+ runtime PM framework
+Message-ID: <20220216164806.0d391821.alex.williamson@redhat.com>
+In-Reply-To: <20220124181726.19174-2-abhsahu@nvidia.com>
+References: <20220124181726.19174-1-abhsahu@nvidia.com>
+        <20220124181726.19174-2-abhsahu@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,140 +84,331 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   5cb7f190822d09757b30cd9539e57eef72552d1f
-commit: eefdd180445e96088f4a69f0e733643e9a794b1f [31/42] netfs: Allow buffered shared-writeable mmap through netfs_page_mkwrite()
-config: hexagon-randconfig-r005-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170739.jOmFwlAm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/eefdd180445e96088f4a69f0e733643e9a794b1f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout eefdd180445e96088f4a69f0e733643e9a794b1f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/netfs/
+On Mon, 24 Jan 2022 23:47:22 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Currently, there is very limited power management support
+> available in the upstream vfio-pci driver. If there is no user of vfio-pci
+> device, then the PCI device will be moved into D3Hot state by writing
+> directly into PCI PM registers. This D3Hot state help in saving power
+> but we can achieve zero power consumption if we go into the D3cold state.
+> The D3cold state cannot be possible with native PCI PM. It requires
+> interaction with platform firmware which is system-specific.
+> To go into low power states (including D3cold), the runtime PM framework
+> can be used which internally interacts with PCI and platform firmware and
+> puts the device into the lowest possible D-States.
+> 
+> This patch registers vfio-pci driver with the runtime PM framework.
+> 
+> 1. The PCI core framework takes care of most of the runtime PM
+>    related things. For enabling the runtime PM, the PCI driver needs to
+>    decrement the usage count and needs to register the runtime
+>    suspend/resume callbacks. For vfio-pci based driver, these callback
+>    routines can be stubbed in this patch since the vfio-pci driver
+>    is not doing the PCI device initialization. All the config state
+>    saving, and PCI power management related things will be done by
+>    PCI core framework itself inside its runtime suspend/resume callbacks.
+> 
+> 2. Inside pci_reset_bus(), all the devices in bus/slot will be moved
+>    out of D0 state. This state change to D0 can happen directly without
+>    going through the runtime PM framework. So if runtime PM is enabled,
+>    then pm_runtime_resume() makes the runtime state active. Since the PCI
+>    device power state is already D0, so it should return early when it
+>    tries to change the state with pci_set_power_state(). Then
+>    pm_request_idle() can be used which will internally check for
+>    device usage count and will move the device again into the low power
+>    state.
+> 
+> 3. Inside vfio_pci_core_disable(), the device usage count always needs
+>    to be decremented which was incremented in vfio_pci_core_enable().
+> 
+> 4. Since the runtime PM framework will provide the same functionality,
+>    so directly writing into PCI PM config register can be replaced with
+>    the use of runtime PM routines. Also, the use of runtime PM can help
+>    us in more power saving.
+> 
+>    In the systems which do not support D3Cold,
+> 
+>    With the existing implementation:
+> 
+>    // PCI device
+>    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
+>    D3hot
+>    // upstream bridge
+>    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
+>    D0
+> 
+>    With runtime PM:
+> 
+>    // PCI device
+>    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
+>    D3hot
+>    // upstream bridge
+>    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
+>    D3hot
+> 
+>    So, with runtime PM, the upstream bridge or root port will also go
+>    into lower power state which is not possible with existing
+>    implementation.
+> 
+>    In the systems which support D3Cold,
+> 
+>    // PCI device
+>    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
+>    D3hot
+>    // upstream bridge
+>    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
+>    D0
+> 
+>    With runtime PM:
+> 
+>    // PCI device
+>    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
+>    D3cold
+>    // upstream bridge
+>    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
+>    D3cold
+> 
+>    So, with runtime PM, both the PCI device and upstream bridge will
+>    go into D3cold state.
+> 
+> 5. If 'disable_idle_d3' module parameter is set, then also the runtime
+>    PM will be enabled, but in this case, the usage count should not be
+>    decremented.
+> 
+> 6. vfio_pci_dev_set_try_reset() return value is unused now, so this
+>    function return type can be changed to void.
+> 
+> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> ---
+>  drivers/vfio/pci/vfio_pci.c      |  3 +
+>  drivers/vfio/pci/vfio_pci_core.c | 95 +++++++++++++++++++++++---------
+>  include/linux/vfio_pci_core.h    |  4 ++
+>  3 files changed, 75 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
+> index a5ce92beb655..c8695baf3b54 100644
+> --- a/drivers/vfio/pci/vfio_pci.c
+> +++ b/drivers/vfio/pci/vfio_pci.c
+> @@ -193,6 +193,9 @@ static struct pci_driver vfio_pci_driver = {
+>  	.remove			= vfio_pci_remove,
+>  	.sriov_configure	= vfio_pci_sriov_configure,
+>  	.err_handler		= &vfio_pci_core_err_handlers,
+> +#if defined(CONFIG_PM)
+> +	.driver.pm              = &vfio_pci_core_pm_ops,
+> +#endif
+>  };
+>  
+>  static void __init vfio_pci_fill_ids(void)
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index f948e6cd2993..c6e4fe9088c3 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -152,7 +152,7 @@ static void vfio_pci_probe_mmaps(struct vfio_pci_core_device *vdev)
+>  }
+>  
+>  struct vfio_pci_group_info;
+> -static bool vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set);
+> +static void vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set);
+>  static int vfio_pci_dev_set_hot_reset(struct vfio_device_set *dev_set,
+>  				      struct vfio_pci_group_info *groups);
+>  
+> @@ -245,7 +245,11 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
+>  	u16 cmd;
+>  	u8 msix_pos;
+>  
+> -	vfio_pci_set_power_state(vdev, PCI_D0);
+> +	if (!disable_idle_d3) {
+> +		ret = pm_runtime_resume_and_get(&pdev->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
 
-All warnings (new ones prefixed by >>):
+Sorry for the delay in review, I'm a novice in pm runtime, but I
+haven't forgotten about the remainder of this series.
 
-   fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer types ('typeof ((1UL << 14) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   unsigned int psize   = min(PAGE_SIZE - offset, size);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:95:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->from  = min(target->from, folio_pos(folio) + offset);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:96:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->to    = max(target->to,   folio_pos(folio) + offset + len);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/buffered_write.c:749:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (mas_expected_entries(&mas, 2) < 0) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:749:2: note: remove the 'if' if its condition is always false
-           if (mas_expected_entries(&mas, 2) < 0) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:746:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (folio_lock_killable(folio) < 0)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:746:2: note: remove the 'if' if its condition is always false
-           if (folio_lock_killable(folio) < 0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:743:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (folio_wait_writeback_killable(folio))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:785:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:743:2: note: remove the 'if' if its condition is always false
-           if (folio_wait_writeback_killable(folio))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:726:41: note: initialize the variable 'spare_region' to silence this warning
-           struct netfs_dirty_region *spare_region;
-                                                  ^
-                                                   = NULL
-   6 warnings generated.
+I think we're removing the unconditional wake here because we now wake
+the device in the core registration function below, but I think there
+might be a subtle dependency here on the fix to always wake devices in
+the disable function as well, otherwise I'm afraid the power state of a
+device released in D3hot could leak to the next user here.
 
+>  
+>  	/* Don't allow our initial saved state to include busmaster */
+>  	pci_clear_master(pdev);
+> @@ -405,8 +409,11 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
+>  out:
+>  	pci_disable_device(pdev);
+>  
+> -	if (!vfio_pci_dev_set_try_reset(vdev->vdev.dev_set) && !disable_idle_d3)
+> -		vfio_pci_set_power_state(vdev, PCI_D3hot);
+> +	vfio_pci_dev_set_try_reset(vdev->vdev.dev_set);
+> +
+> +	/* Put the pm-runtime usage counter acquired during enable */
+> +	if (!disable_idle_d3)
+> +		pm_runtime_put(&pdev->dev);
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_pci_core_disable);
+>  
+> @@ -1847,19 +1854,20 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>  
+>  	vfio_pci_probe_power_state(vdev);
+>  
+> -	if (!disable_idle_d3) {
+> -		/*
+> -		 * pci-core sets the device power state to an unknown value at
+> -		 * bootup and after being removed from a driver.  The only
+> -		 * transition it allows from this unknown state is to D0, which
+> -		 * typically happens when a driver calls pci_enable_device().
+> -		 * We're not ready to enable the device yet, but we do want to
+> -		 * be able to get to D3.  Therefore first do a D0 transition
+> -		 * before going to D3.
+> -		 */
+> -		vfio_pci_set_power_state(vdev, PCI_D0);
+> -		vfio_pci_set_power_state(vdev, PCI_D3hot);
+> -	}
+> +	/*
+> +	 * pci-core sets the device power state to an unknown value at
+> +	 * bootup and after being removed from a driver.  The only
+> +	 * transition it allows from this unknown state is to D0, which
+> +	 * typically happens when a driver calls pci_enable_device().
+> +	 * We're not ready to enable the device yet, but we do want to
+> +	 * be able to get to D3.  Therefore first do a D0 transition
+> +	 * before enabling runtime PM.
+> +	 */
+> +	vfio_pci_set_power_state(vdev, PCI_D0);
+> +	pm_runtime_allow(&pdev->dev);
+> +
+> +	if (!disable_idle_d3)
+> +		pm_runtime_put(&pdev->dev);
 
-vim +749 fs/netfs/buffered_write.c
+I could use some enlightenment here.  pm_runtime_allow() only does
+something if power.runtime_allow is false, in which case it sets that
+value to true and decrements power.usage_count.  runtime_allow is
+enabled by default in pm_runtime_init(), but pci_pm_init() calls
+pm_runtime_forbid() which does the reverse of pm_runtime_allow().  So
+do I understand correctly that PCI devices are probed with
+runtime_allow = false and a usage_count of 2?
 
-   719	
-   720	/*
-   721	 * Notification that a previously read-only page is about to become writable.
-   722	 * Note that the caller indicates a single page of a multipage folio.
-   723	 */
-   724	vm_fault_t netfs_page_mkwrite(struct vm_fault *vmf)
-   725	{
-   726		struct netfs_dirty_region *spare_region;
-   727		struct folio *folio = page_folio(vmf->page);
-   728		struct file *file = vmf->vma->vm_file;
-   729		struct inode *inode = file_inode(file);
-   730		struct netfs_i_context *ctx = netfs_i_context(inode);
-   731		vm_fault_t ret = VM_FAULT_RETRY;
-   732		int err;
-   733	
-   734		MA_STATE(mas, &ctx->dirty_regions, vmf->page->index, PAGE_SIZE);
-   735	
-   736		_enter("%lx", folio->index);
-   737	
-   738		if (ctx->ops->validate_for_write(inode, file) < 0)
-   739			return VM_FAULT_SIGBUS;
-   740	
-   741		sb_start_pagefault(inode->i_sb);
-   742	
-   743		if (folio_wait_writeback_killable(folio))
-   744			goto out;
-   745	
-   746		if (folio_lock_killable(folio) < 0)
-   747			goto out;
-   748	
- > 749		if (mas_expected_entries(&mas, 2) < 0) {
+>  
+>  	ret = vfio_register_group_dev(&vdev->vdev);
+>  	if (ret)
+> @@ -1868,7 +1876,9 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>  
+>  out_power:
+>  	if (!disable_idle_d3)
+> -		vfio_pci_set_power_state(vdev, PCI_D0);
+> +		pm_runtime_get_noresume(&pdev->dev);
+> +
+> +	pm_runtime_forbid(&pdev->dev);
+>  out_vf:
+>  	vfio_pci_vf_uninit(vdev);
+>  	return ret;
+> @@ -1887,7 +1897,9 @@ void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev)
+>  	vfio_pci_vga_uninit(vdev);
+>  
+>  	if (!disable_idle_d3)
+> -		vfio_pci_set_power_state(vdev, PCI_D0);
+> +		pm_runtime_get_noresume(&pdev->dev);
+> +
+> +	pm_runtime_forbid(&pdev->dev);
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_pci_core_unregister_device);
+>  
+> @@ -2093,33 +2105,62 @@ static bool vfio_pci_dev_set_needs_reset(struct vfio_device_set *dev_set)
+>   *  - At least one of the affected devices is marked dirty via
+>   *    needs_reset (such as by lack of FLR support)
+>   * Then attempt to perform that bus or slot reset.
+> - * Returns true if the dev_set was reset.
+>   */
+> -static bool vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set)
+> +static void vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set)
+>  {
+>  	struct vfio_pci_core_device *cur;
+>  	struct pci_dev *pdev;
+>  	int ret;
+>  
+>  	if (!vfio_pci_dev_set_needs_reset(dev_set))
+> -		return false;
+> +		return;
+>  
+>  	pdev = vfio_pci_dev_set_resettable(dev_set);
+>  	if (!pdev)
+> -		return false;
+> +		return;
+>  
+>  	ret = pci_reset_bus(pdev);
+>  	if (ret)
+> -		return false;
+> +		return;
+>  
+>  	list_for_each_entry(cur, &dev_set->device_list, vdev.dev_set_list) {
+>  		cur->needs_reset = false;
+> -		if (!disable_idle_d3)
+> -			vfio_pci_set_power_state(cur, PCI_D3hot);
+> +		if (!disable_idle_d3) {
+> +			/*
+> +			 * Inside pci_reset_bus(), all the devices in bus/slot
+> +			 * will be moved out of D0 state. This state change to
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+s/out of/into/?
+
+> +			 * D0 can happen directly without going through the
+> +			 * runtime PM framework. pm_runtime_resume() will
+> +			 * help make the runtime state as active and then
+> +			 * pm_request_idle() can be used which will
+> +			 * internally check for device usage count and will
+> +			 * move the device again into the low power state.
+> +			 */
+> +			pm_runtime_resume(&pdev->dev);
+> +			pm_request_idle(&pdev->dev);
+> +		}
+>  	}
+> -	return true;
+>  }
+>  
+> +#ifdef CONFIG_PM
+> +static int vfio_pci_core_runtime_suspend(struct device *dev)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int vfio_pci_core_runtime_resume(struct device *dev)
+> +{
+> +	return 0;
+> +}
+> +
+> +const struct dev_pm_ops vfio_pci_core_pm_ops = {
+> +	SET_RUNTIME_PM_OPS(vfio_pci_core_runtime_suspend,
+> +			   vfio_pci_core_runtime_resume,
+> +			   NULL)
+> +};
+> +EXPORT_SYMBOL_GPL(vfio_pci_core_pm_ops);
+> +#endif
+
+It looks like the vfio_pci_core_pm_ops implementation should all be
+moved to where we implement D3cold support, it's not necessary to
+implement stubs for any of the functionality of this patch.  Thanks,
+
+Alex
+
+> +
+>  void vfio_pci_core_set_params(bool is_nointxmask, bool is_disable_vga,
+>  			      bool is_disable_idle_d3)
+>  {
+> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+> index ef9a44b6cf5d..aafe09c9fa64 100644
+> --- a/include/linux/vfio_pci_core.h
+> +++ b/include/linux/vfio_pci_core.h
+> @@ -231,6 +231,10 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev);
+>  void vfio_pci_core_disable(struct vfio_pci_core_device *vdev);
+>  void vfio_pci_core_finish_enable(struct vfio_pci_core_device *vdev);
+>  
+> +#ifdef CONFIG_PM
+> +extern const struct dev_pm_ops vfio_pci_core_pm_ops;
+> +#endif
+> +
+>  static inline bool vfio_pci_is_vga(struct pci_dev *pdev)
+>  {
+>  	return (pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA;
+

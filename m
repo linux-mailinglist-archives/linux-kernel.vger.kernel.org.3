@@ -2,186 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C053C4B8867
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E694B886A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbiBPNFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:05:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47404 "EHLO
+        id S233621AbiBPNGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:06:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiBPNFN (ORCPT
+        with ESMTP id S231666AbiBPNGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:05:13 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBFE26120D;
-        Wed, 16 Feb 2022 05:05:01 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GC9lss011858;
-        Wed, 16 Feb 2022 13:04:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=HTeTP7s9CVxgPA/uFLEsh16EKzu/vOHVfs1RR/JoGIU=;
- b=flFbjfQMIGBjTd1tngp9Bb+OXMoUTEV7r89h9HfWKfk3Mwwa3ICuaO1PHaV8KgdHPBLj
- 4C6ahX4FrwogrRI353CBZS2103X4JtPYJQ06QkA42yjEe/4pXNMj47D8BnEkNHZzhXU/
- P0l7nhuUcLxiNwI2t7j2wTef7Ut2j116LnIERIqwL69RG86K8z7GWbnZ7xrpfDgMhvvE
- qFFERXfOH/rlxJmCEoCjIOPHkJXn2YT92mfQyK/0r94AQLOBTLCGuCgzW2Ki6SJYvZd+
- o6SQbu9G470mf7nZ5rT+ipysC1CFuvf6CCZaWkPxzBi2VGTjBQpPVCKgO4W6kVy+Ddfw ZA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e90m89yts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 13:04:28 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GCNmsu031651;
-        Wed, 16 Feb 2022 13:04:28 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e90m89ys9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 13:04:27 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GCwhg2023855;
-        Wed, 16 Feb 2022 13:04:25 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e64ha8rer-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 13:04:25 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GD4Kaw22544866
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Feb 2022 13:04:20 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA2B2AE05F;
-        Wed, 16 Feb 2022 13:04:20 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25A2BAE04D;
-        Wed, 16 Feb 2022 13:04:20 +0000 (GMT)
-Received: from osiris (unknown [9.145.42.237])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 16 Feb 2022 13:04:20 +0000 (GMT)
-Date:   Wed, 16 Feb 2022 14:04:18 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
- CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-Message-ID: <Ygz2Upu+5NiEAsDT@osiris>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
- <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
- <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
- <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
- <875ypgo0f3.fsf@mpe.ellerman.id.au>
- <1644930705.g64na2kgvd.naveen@linux.ibm.com>
- <6dc50f09-4d14-afa2-d2a1-34b72b880edf@csgroup.eu>
- <5c7b5334-6071-f131-a509-9a49ca3d628c@csgroup.eu>
- <1644941712.lqdstzo09z.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644941712.lqdstzo09z.naveen@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xPfWe2a9CZ_zddfnzSkHHE_CQIy1muU3
-X-Proofpoint-GUID: WgAt7YbUyY2z7YRGFwu0IoOj3LTfHs3H
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 16 Feb 2022 08:06:00 -0500
+Received: from outbound-smtp04.blacknight.com (outbound-smtp04.blacknight.com [81.17.249.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A9A261214
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:05:46 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp04.blacknight.com (Postfix) with ESMTPS id 4E964BED69
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 13:05:45 +0000 (GMT)
+Received: (qmail 28902 invoked from network); 16 Feb 2022 13:05:45 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 16 Feb 2022 13:05:44 -0000
+Date:   Wed, 16 Feb 2022 13:05:43 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Aaron Lu <aaron.lu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 2/5] mm/page_alloc: Track range of active PCP lists
+ during bulk free
+Message-ID: <20220216130542.GT3366@techsingularity.net>
+References: <20220215145111.27082-1-mgorman@techsingularity.net>
+ <20220215145111.27082-3-mgorman@techsingularity.net>
+ <d6f991f6-ce07-853a-e87b-5eda97a35733@suse.cz>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-16_06,2022-02-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 adultscore=0 phishscore=0 impostorscore=0 mlxscore=0
- bulkscore=0 spamscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202160076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <d6f991f6-ce07-853a-e87b-5eda97a35733@suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 09:55:52PM +0530, Naveen N. Rao wrote:
-> > > > > > > I think this is wrong. We need to differentiate
-> > > > > > > between ftrace_caller() and ftrace_regs_caller()
-> > > > > > > here, and only return pt_regs if coming in through
-> > > > > > > ftrace_regs_caller() (i.e., FL_SAVE_REGS is set).
-> > > > > > 
-> > > > > > Not sure I follow you.
-> > > > > > 
-> > > > > > This is based on 5740a7c71ab6 ("s390/ftrace: add
-> > > > > > HAVE_DYNAMIC_FTRACE_WITH_ARGS support")
-> > > > > > 
-> > > > > > It's all the point of HAVE_DYNAMIC_FTRACE_WITH_ARGS,
-> > > > > > have the regs also with ftrace_caller().
-> > > > > > 
-> > > > > > Sure you only have the params, but that's the same on
-> > > > > > s390, so what did I miss ?
-> 
-> Steven has explained the rationale for this in his other response:
-> https://lore.kernel.org/all/20220215093849.556d5444@gandalf.local.home/
-
-Thanks for this pointer, this clarifies a couple of things!
-
-> > > > It looks like s390 is special since it apparently saves all
-> > > > registers even for ftrace_caller:
-> > > > https://lore.kernel.org/all/YbipdU5X4HNDWIni@osiris/
-> > > 
-> > > It is not what I understand from their code, see https://elixir.bootlin.com/linux/v5.17-rc3/source/arch/s390/kernel/mcount.S#L37
-> > > 
-> > > 
-> > > They have a common macro called with argument 'allregs' which is set
-> > > to 0 for ftrace_caller() and 1 for ftrace_regs_caller().
-> > > When allregs == 1, the macro seems to save more.
-> > > 
-> > > But ok, I can do like x86, but I need a trick to know whether
-> > > FL_SAVE_REGS is set or not, like they do with fregs->regs.cs
-> > > Any idea what the condition can be for powerpc ?
-> 
-> We'll need to explicitly zero-out something in pt_regs in ftrace_caller().
-> We can probably use regs->msr since we don't expect it to be zero when saved
-> from ftrace_regs_caller().
+On Wed, Feb 16, 2022 at 01:02:01PM +0100, Vlastimil Babka wrote:
+> On 2/15/22 15:51, Mel Gorman wrote:
+> > free_pcppages_bulk() frees pages in a round-robin fashion. Originally,
+> > this was dealing only with migratetypes but storing high-order pages
+> > means that there can be many more empty lists that are uselessly
+> > checked. Track the minimum and maximum active pindex to reduce the
+> > search space.
 > > 
-> > Finally, it looks like this change is done  via commit 894979689d3a
-> > ("s390/ftrace: provide separate ftrace_caller/ftrace_regs_caller
-> > implementations") four hours the same day after the implementation of
-> > arch_ftrace_get_regs()
+> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> > ---
+> >  mm/page_alloc.c | 13 +++++++++++--
+> >  1 file changed, 11 insertions(+), 2 deletions(-)
 > > 
-> > They may have forgotten to change arch_ftrace_get_regs() which was added
-> > in commit 5740a7c71ab6 ("s390/ftrace: add HAVE_DYNAMIC_FTRACE_WITH_ARGS
-> > support") with the assumption that ftrace_caller and ftrace_regs_caller
-> > where identical.
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 08de32cfd9bb..c5110fdeb115 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -1450,6 +1450,8 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+> >  					struct per_cpu_pages *pcp)
+> >  {
+> >  	int pindex = 0;
+> > +	int min_pindex = 0;
+> > +	int max_pindex = NR_PCP_LISTS - 1;
+> >  	int batch_free = 0;
+> >  	int nr_freed = 0;
+> >  	unsigned int order;
+> > @@ -1478,10 +1480,17 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+> >  			if (++pindex == NR_PCP_LISTS)
 > 
-> Indeed, good find!
+> Hmm, so in the very first iteration at this point pindex is already 1. This
+> looks odd even before the patch, as order 0 MIGRATE_UNMOVABLE list is only
+> processed after all the higher orders?
+> 
 
-Thank you for bringing this up!
+Yes and this was the behaviour before and after. I don't recall why. It
+might have been to preserve UNMOVABLE pages but after the series is
+finished, the reasoning is weak. I'll add a specific check.
 
-So, the in both variants s390 provides nearly identical data. The only
-difference is that for FL_SAVE_REGS the program status word mask is
-missing; therefore it is not possible to figure out the condition code
-or if interrupts were enabled/disabled.
+> >  				pindex = 0;
+> 
+> Also shouldn't this wrap-around check also use min_index/max_index instead
+> of NR_PCP_LISTS and 0?
+> 
 
-Vasily, Sven, I think we have two options here:
+Yes, it should and it's a rebasing error from an earlier prototype that
+I missed. I'll fix it.
 
-- don't provide sane psw mask contents at all and say (again) that
-  ptregs contents are identical
+> >  			list = &pcp->lists[pindex];
+> > -		} while (list_empty(list));
+> > +			if (!list_empty(list))
+> > +				break;
+> > +
+> > +			if (pindex == max_pindex)
+> > +				max_pindex--;
+> > +			if (pindex == min_pindex)
+> 
+> So with pindex 1 and min_pindex == 0 this will not trigger until
+> (eventually) the first pindex wrap around, which seems suboptimal. But I can
+> see the later patches change things substantially anyway so it may be moot...
+> 
 
-- provide (finally) a full psw mask contents using epsw, and indicate
-  validity with a flags bit in pt_regs
+It could potentially be more optimal but at the cost of complexity which
+I wanted to avoid in this path as much as possible. Initialising
+min_pindex == pindex could result in an infinite loop if the lower lists
+need to be cleared.
 
-I would vote for the second option, even though epsw is slow. But this
-is about the third or fourth time this came up in different
-contexts. So I'd guess we should go for the slow but complete
-solution. Opinions?
+-- 
+Mel Gorman
+SUSE Labs

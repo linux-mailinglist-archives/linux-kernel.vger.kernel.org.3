@@ -2,130 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6E34B8306
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B744B8319
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbiBPIcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:32:31 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44218 "EHLO
+        id S231294AbiBPIht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:37:49 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiBPIc1 (ORCPT
+        with ESMTP id S230143AbiBPIhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:32:27 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14842BC0;
-        Wed, 16 Feb 2022 00:32:04 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JzB5Z5jMNz4xcl;
-        Wed, 16 Feb 2022 19:32:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1645000323;
-        bh=ufGu8A2k/MSBln0FGlqpfyxF+26NIwv8r7qMB2Q71QU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RiE688Asfp+eyy25fijQPwjKU7zeXAk0f/Zsz1XCozeDjdl7s5VznqrOHjkxr3zbw
-         zDCupc1fPLO/vQKtzY9W9pteV77iSapZ5A6a5FN3m/KFG1lcPzHtvfxknNUAMGBfpa
-         2SnMWRfchQVeEDLkV/up/e4Vs+J+s0v0PywJdUyE96C5eJYhTt8Xf1qhiSBuLBPnAu
-         VeCMbLBjRk77xSpdTOYqMZ/Uhtgo4DThLpGcTzbfBOMwiRwVL9P78B+G+eWOdAad3D
-         4DstD+Fb90HcSPUcd5eQX2fiAGiGT/UGSo4KeVUhR5uG429eQuiM2KQ7fQxTgizNu4
-         1zELQXDczHp5A==
-Date:   Wed, 16 Feb 2022 19:32:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     sujiaxun <sujiaxun@uniontech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: boot warning after merge of the akpm-current tree
-Message-ID: <20220216193202.28838626@canb.auug.org.au>
+        Wed, 16 Feb 2022 03:37:45 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F0F107081
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 00:37:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645000653; x=1676536653;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uxxYDP656kgJeYkBSfqI34mIkHMU4FDOWavH3rE8yKk=;
+  b=mk315v2AEb0DqY26EvbGm7iG8bz7RgzBsRxQhcTwjLnjiQmO5qGqHfYo
+   Fo8b11RDY/5xgYN9n5uB3W4RGsXMcHl924pjqWoDLgKFFVpP4EM5zPD+A
+   fgprv8uHThyAn3oTtnHhZtFeAdoCSWL40N4zqEoA0pKHUN9iBzZ70pFx3
+   OV1AuAhka1TvpdTZGC5AjLxbq4/dzZ8AY+AA/uvEANJT8o9BFRToR+gLV
+   wGvsVnfE/4C1UwEcOIFJandSGc0BE/PQJjlTiumiERxMoOJt0d3GeeuCx
+   N61Su6eE0J8fNYWwyHCEkZv7SsTe3arwhaqzyEHIg335Lkp8kFabD33d9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="250291437"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="250291437"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:37:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="636388336"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Feb 2022 00:37:30 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKFoY-000AcJ-7m; Wed, 16 Feb 2022 08:37:30 +0000
+Date:   Wed, 16 Feb 2022 16:36:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
+ no previous prototype for function '__ashldi3'
+Message-ID: <202202161633.9LcaU3Cg-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MyW5A9bQuF.s/kacwfWEYnM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MyW5A9bQuF.s/kacwfWEYnM
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi Masahiro,
 
-Hi all,
+FYI, the error/warning still remains.
 
-After merging the akpm-current tree, today's linux-next boot tests
-(qemu powerpc pseries_le_defconfig) produced these warnings:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c5d9ae265b105d9a67575fb67bd4650a6fc08e25
+commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
+date:   3 months ago
+config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20220216/202202161633.9LcaU3Cg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-  sysctl table check failed: vm/=C3=B8Ie^B Not a file
-  sysctl table check failed: vm/(efault) No proc_handler
-  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc4 #3
-  Call Trace:
-  [c0000000073e39d0] [c0000000007b8370] dump_stack_lvl+0x74/0xa8 (unreliabl=
-e)
-  [c0000000073e3a10] [c000000000577ecc] __register_sysctl_table+0x60c/0x9f0
-  [c0000000073e3b20] [c000000002043ea4] __register_sysctl_init+0x40/0x78
-  [c0000000073e3b90] [c00000000203583c] oom_init+0x6c/0x84
-  [c0000000073e3bf0] [c000000000012130] do_one_initcall+0x60/0x2d0
-  [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x3dc
-  [c0000000073e3db0] [c000000000012730] kernel_init+0x30/0x1a0
-  [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
-  failed when register_sysctl vm_oom_kill_table to vm
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Caused by commit
+All warnings (new ones prefixed by >>):
 
-  5c4a1da27403 ("mm: move oom_kill sysctls to their own file")
+   In file included from arch/mips/boot/compressed/ashldi3.c:2:
+>> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for function '__ashldi3' [-Wmissing-prototypes]
+   long long notrace __ashldi3(long long u, word_type b)
+                     ^
+   arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long long notrace __ashldi3(long long u, word_type b)
+   ^
+   static 
+   1 warning generated.
 
-I have applied the following fix patch for today.
 
-=46rom b6c6a58898ebf468ae042b3481dccd73db32c2a9 Mon Sep 17 00:00:00 2001
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 16 Feb 2022 19:20:20 +1100
-Subject: [PATCH] fix up for "mm: move oom_kill sysctls to their own file"
+vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23  8  
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
+
+:::::: The code at line 9 was first introduced by commit
+:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+
 ---
- mm/oom_kill.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 07ff90c920bc..9787e2cc51b5 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -80,7 +80,8 @@ static struct ctl_table vm_oom_kill_table[] =3D {
- 		.maxlen		=3D sizeof(sysctl_oom_dump_tasks),
- 		.mode		=3D 0644,
- 		.proc_handler	=3D proc_dointvec,
--	}
-+	},
-+	{}
- };
- #endif
-=20
---=20
-2.34.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MyW5A9bQuF.s/kacwfWEYnM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIMtoIACgkQAVBC80lX
-0Gy7jQf9HNCUXnBzl1Q4/dJdcTTP6jkgOX2h5cK/hAqZ37MXQTujrZ1bxFRdy6nk
-CX9Q9lqoNAjDLr7p92fzN392VkPvEw2LJQCVdXBivDfl4VsZW9lqxtyD1RnNkXiE
-M0NrZsqHAlAsT85LGPd4tN+SVzN3/5PARBfO3awDroi8vi0Pl/rkGjQoSZz5OEMa
-uSMK+jYBvP+hN4jOHjK1rlSv+bJXiLPwWpZibxd6AL0JzIiab0fIYhvs4nSvwn6d
-G646Lw4+2sCRT5hkUJWVYIMlL96YHJWaEA14DRcmx+7zUC8LP4ew9bOUyHWvYR31
-IMRY/4Q+FZ/zJ7npU/KEqu0vQK06sA==
-=lcTu
------END PGP SIGNATURE-----
-
---Sig_/MyW5A9bQuF.s/kacwfWEYnM--
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

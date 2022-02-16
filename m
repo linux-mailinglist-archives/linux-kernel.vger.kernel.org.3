@@ -2,346 +2,479 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED604B90C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4654B90C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237907AbiBPS40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:56:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45932 "EHLO
+        id S237917AbiBPS6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:58:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiBPS4Y (ORCPT
+        with ESMTP id S233352AbiBPS6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:56:24 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B292B0B35;
-        Wed, 16 Feb 2022 10:56:11 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d646fffcc2so9003277b3.4;
-        Wed, 16 Feb 2022 10:56:11 -0800 (PST)
+        Wed, 16 Feb 2022 13:58:10 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EAE2AC93F;
+        Wed, 16 Feb 2022 10:57:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Vk36aod0FuaMpPlJAG4bXGrtjGi+8N3zZwitdLcGJCE=;
-        b=GsNiDyjU7vKeeHiMElextmRDv+7zBHEh161NyRhRlumr3EUCVwxaOgMeBEfkHnlFI9
-         0al7J0ktpigyKvcFf14d9iQ8R8J3iyIBrKdvnToJvxgOFuksaENxRa8I3AHpcN3gy3ze
-         CBUisPu3cdEMafv/mKB9S6vISg6RNM0DL8vGnPzi/cakT3dtH+Wy6EfGajg7+9PC3bWW
-         cn6Zv0i3F35PArXGuWKlWiza6QC1GntOzYsZ36/vgXQa4jTlR6GdSvt5ZHZgteYmwyNX
-         p25URqgfih+oy9ejyWc2RdRSgVsK1LXLKnDJnWLwfTBu9wyxpVUvjgV+PlNocyKJJK7v
-         zhhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vk36aod0FuaMpPlJAG4bXGrtjGi+8N3zZwitdLcGJCE=;
-        b=8FZve7GRJgLOfWymqScR2qHgsHbV5L0pTtG+RrJmmsLiVpK21ZidyMfxWju/YTZY1C
-         3h6u3QI0c7KnDQRB9Hq7R2OSWKPzf0BBwBwPD5PLkVMf1OLUDAXw8mX9ealkR5V6nq8x
-         Y7nXcSQYle5ler1XfpP19IbDR2pW0iKLXiFjVLa2w2tOeoFsYGiHjTNM+rl2hnwG47wo
-         l7ePsTiRwqB6yxwX/Nm92zZj9nZJyvCq7uHXWM/Q1gFOLTgrEPiK37nr1i43/sPB/cn9
-         eyqckXMYf2iGk9zGWWHIGWW5/ekTYKbO5kL0FClUE2ZNS/OgiR0D7oorQzGqQyQ+jGRy
-         N5xw==
-X-Gm-Message-State: AOAM530w5Xo5I3sRDDeqOPHsYz5mbeNd7jSm7x+/cxlWlUtYzJ4ZHrHW
-        kd7hB2kOhiBLFvhVH0uI05S9AY9SdzAjzqzdCGc=
-X-Google-Smtp-Source: ABdhPJxhNdDQrZuw2YKgJX48LftVX7TGt5W+q53tlWGDCJ5jFMYi7Mhq8pHXArMmRhOUlzax/nRBUIdh9SV8JNhPuks=
-X-Received: by 2002:a0d:d4d7:0:b0:2ca:287c:6cea with SMTP id
- w206-20020a0dd4d7000000b002ca287c6ceamr3717631ywd.399.1645037770419; Wed, 16
- Feb 2022 10:56:10 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645037878; x=1676573878;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ks+hCs1ZeRf9qfuoL8lzHztroJd8En358nZs9m4jQ+A=;
+  b=ntFbyiSbnfzGzFUFMRuj7qfGq63Chb3zF4K5LrG5bEmBB0oAiedHMfAd
+   27OIJQ8IFy7HRwib59x4Cg4TXqUGQPLcyyA3YU6aNEamlNFe9SpPBg+XT
+   rGVQwhRF3oC8S21bwtZOq3ohoCYMUokB9OfFAylpihtrI0150b9twRQPM
+   E=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 10:57:57 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 10:57:57 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 16 Feb 2022 10:57:56 -0800
+Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
+ 2022 10:57:53 -0800
+Message-ID: <8de66b66-5f02-600e-aa4c-bf2dad37487f@quicinc.com>
+Date:   Wed, 16 Feb 2022 10:57:51 -0800
 MIME-Version: 1.0
-References: <8c4a69eca4d0591f30c112df59c5098c24923bd3.1644543449.git.darren@os.amperecomputing.com>
- <ec9be4eb7a0548178191edd51ddd309f@hisilicon.com> <20220215163858.GA8458@willie-the-truck>
- <YgvYZy5xv1g+u5wp@fedora> <20220215164639.GC8458@willie-the-truck>
- <CAKfTPtAFsL+uqQiGcuh+JJZB=rPrez0=kotq76CVRcBQhcPefg@mail.gmail.com>
- <YgvjtsOZuxzbgBBl@fedora> <CAKfTPtCHrZCp1Uth4odyT721wE8zoNVY3Mh+DSyuTkqPafm0Hg@mail.gmail.com>
- <CAGsJ_4yB-FOPoPjCn+T4m76tvzA6ATaz24KYM9NjBeB54nWxLA@mail.gmail.com> <Yg0bu53iACDscIC6@fedora>
-In-Reply-To: <Yg0bu53iACDscIC6@fedora>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Thu, 17 Feb 2022 07:56:00 +1300
-Message-ID: <CAGsJ_4w2r8Hp3BNOrcQYDT6JgsFWWAgVruAOXpeXrhjskJMV7w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [REPOST PATCH v4 03/13] drm/msm/disp/dpu1: Add support for DSC
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
+CC:     Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Abhinav Kumar" <abhinavk@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <dri-devel@lists.freedesktop.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <freedreno@lists.freedesktop.org>
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-4-vkoul@kernel.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220210103423.271016-4-vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 4:44 AM Darren Hart
-<darren@os.amperecomputing.com> wrote:
->
-> On Wed, Feb 16, 2022 at 08:03:40PM +1300, Barry Song wrote:
-> > On Wed, Feb 16, 2022 at 7:30 PM Vincent Guittot
-> > <vincent.guittot@linaro.org> wrote:
-> > >
-> > > On Tue, 15 Feb 2022 at 18:32, Darren Hart <darren@os.amperecomputing.com> wrote:
-> > > >
-> > > > On Tue, Feb 15, 2022 at 06:09:08PM +0100, Vincent Guittot wrote:
-> > > > > On Tue, 15 Feb 2022 at 17:46, Will Deacon <will@kernel.org> wrote:
-> > > > > >
-> > > > > > On Tue, Feb 15, 2022 at 08:44:23AM -0800, Darren Hart wrote:
-> > > > > > > On Tue, Feb 15, 2022 at 04:38:59PM +0000, Will Decon wrote:
-> > > > > > > > On Fri, Feb 11, 2022 at 03:20:51AM +0000, Song Bao Hua (Barry Song) wrote:
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > > -----Original Message-----
-> > > > > > > > > > From: Darren Hart [mailto:darren@os.amperecomputing.com]
-> > > > > > > > > > Sent: Friday, February 11, 2022 2:43 PM
-> > > > > > > > > > To: LKML <linux-kernel@vger.kernel.org>; Linux Arm
-> > > > > > > > > > <linux-arm-kernel@lists.infradead.org>
-> > > > > > > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>;
-> > > > > > > > > > Peter Zijlstra <peterz@infradead.org>; Vincent Guittot
-> > > > > > > > > > <vincent.guittot@linaro.org>; Song Bao Hua (Barry Song)
-> > > > > > > > > > <song.bao.hua@hisilicon.com>; Valentin Schneider
-> > > > > > > > > > <valentin.schneider@arm.com>; D . Scott Phillips
-> > > > > > > > > > <scott@os.amperecomputing.com>; Ilkka Koskinen
-> > > > > > > > > > <ilkka@os.amperecomputing.com>; stable@vger.kernel.org
-> > > > > > > > > > Subject: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
-> > > > > > > > > >
-> > > > > > > > > > SoCs such as the Ampere Altra define clusters but have no shared
-> > > > > > > > > > processor-side cache. As of v5.16 with CONFIG_SCHED_CLUSTER and
-> > > > > > > > > > CONFIG_SCHED_MC, build_sched_domain() will BUG() with:
-> > > > > > > > > >
-> > > > > > > > > > BUG: arch topology borken
-> > > > > > > > > >      the CLS domain not a subset of the MC domain
-> > > > > > > > > >
-> > > > > > > > > > for each CPU (160 times for a 2 socket 80 core Altra system). The MC
-> > > > > > > > > > level cpu mask is then extended to that of the CLS child, and is later
-> > > > > > > > > > removed entirely as redundant.
-> > > > > > > > > >
-> > > > > > > > > > This change detects when all cpu_coregroup_mask weights=1 and uses an
-> > > > > > > > > > alternative sched_domain_topology equivalent to the default if
-> > > > > > > > > > CONFIG_SCHED_MC were disabled.
-> > > > > > > > > >
-> > > > > > > > > > The final resulting sched domain topology is unchanged with or without
-> > > > > > > > > > CONFIG_SCHED_CLUSTER, and the BUG is avoided:
-> > > > > > > > > >
-> > > > > > > > > > For CPU0:
-> > > > > > > > > >
-> > > > > > > > > > With CLS:
-> > > > > > > > > > CLS  [0-1]
-> > > > > > > > > > DIE  [0-79]
-> > > > > > > > > > NUMA [0-159]
-> > > > > > > > > >
-> > > > > > > > > > Without CLS:
-> > > > > > > > > > DIE  [0-79]
-> > > > > > > > > > NUMA [0-159]
-> > > > > > > > > >
-> > > > > > > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > > > > > > > > > Cc: Will Deacon <will@kernel.org>
-> > > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > > > > > > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > > > > > > > > > Cc: Barry Song <song.bao.hua@hisilicon.com>
-> > > > > > > > > > Cc: Valentin Schneider <valentin.schneider@arm.com>
-> > > > > > > > > > Cc: D. Scott Phillips <scott@os.amperecomputing.com>
-> > > > > > > > > > Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> > > > > > > > > > Cc: <stable@vger.kernel.org> # 5.16.x
-> > > > > > > > > > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
-> > > > > > > > >
-> > > > > > > > > Hi Darrent,
-> > > > > > > > > What kind of resources are clusters sharing on Ampere Altra?
-> > > > > > > > > So on Altra, cpus are not sharing LLC? Each LLC is separate
-> > > > > > > > > for each cpu?
-> > > > > > > > >
-> > > > > > > > > > ---
-> > > > > > > > > >  arch/arm64/kernel/smp.c | 32 ++++++++++++++++++++++++++++++++
-> > > > > > > > > >  1 file changed, 32 insertions(+)
-> > > > > > > > > >
-> > > > > > > > > > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-> > > > > > > > > > index 27df5c1e6baa..0a78ac5c8830 100644
-> > > > > > > > > > --- a/arch/arm64/kernel/smp.c
-> > > > > > > > > > +++ b/arch/arm64/kernel/smp.c
-> > > > > > > > > > @@ -715,9 +715,22 @@ void __init smp_init_cpus(void)
-> > > > > > > > > >         }
-> > > > > > > > > >  }
-> > > > > > > > > >
-> > > > > > > > > > +static struct sched_domain_topology_level arm64_no_mc_topology[] = {
-> > > > > > > > > > +#ifdef CONFIG_SCHED_SMT
-> > > > > > > > > > +       { cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
-> > > > > > > > > > +#endif
-> > > > > > > > > > +
-> > > > > > > > > > +#ifdef CONFIG_SCHED_CLUSTER
-> > > > > > > > > > +       { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
-> > > > > > > > > > +#endif
-> > > > > > > > > > +       { cpu_cpu_mask, SD_INIT_NAME(DIE) },
-> > > > > > > > > > +       { NULL, },
-> > > > > > > > > > +};
-> > > > > > > > > > +
-> > > > > > > > > >  void __init smp_prepare_cpus(unsigned int max_cpus)
-> > > > > > > > > >  {
-> > > > > > > > > >         const struct cpu_operations *ops;
-> > > > > > > > > > +       bool use_no_mc_topology = true;
-> > > > > > > > > >         int err;
-> > > > > > > > > >         unsigned int cpu;
-> > > > > > > > > >         unsigned int this_cpu;
-> > > > > > > > > > @@ -758,6 +771,25 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
-> > > > > > > > > >
-> > > > > > > > > >                 set_cpu_present(cpu, true);
-> > > > > > > > > >                 numa_store_cpu_info(cpu);
-> > > > > > > > > > +
-> > > > > > > > > > +               /*
-> > > > > > > > > > +                * Only use no_mc topology if all cpu_coregroup_mask weights=1
-> > > > > > > > > > +                */
-> > > > > > > > > > +               if (cpumask_weight(cpu_coregroup_mask(cpu)) > 1)
-> > > > > > > > > > +                       use_no_mc_topology = false;
-> > > > > > > > >
-> > > > > > > > > This seems to be wrong? If you have 5 cpus,
-> > > > > > > > > Cpu0 has cpu_coregroup_mask(cpu)== 1, cpu1-4
-> > > > > > > > > has cpu_coregroup_mask(cpu)== 4, for cpu0, you still
-> > > > > > > > > need to remove MC, but for cpu1-4, you will need
-> > > > > > > > > CLS and MC both?
-> > > > > > > >
-> > > > > > > > What is the *current* behaviour on such a system?
-> > > > > > > >
-> > > > > > >
-> > > > > > > As I understand it, any system that uses the default topology which has
-> > > > > > > a cpus_coregroup weight of 1 and a child (cluster, smt, ...) weight > 1
-> > > > > > > will behave as described above by printing the following for each CPU
-> > > > > > > matching this criteria:
-> > > > > > >
-> > > > > > >   BUG: arch topology borken
-> > > > > > >         the [CLS,SMT,...] domain not a subset of the MC domain
-> > > > > > >
-> > > > > > > And then extend the MC domain cpumask to match that of the child and continue
-> > > > > > > on.
-> > > > > > >
-> > > > > > > That would still be the behavior for this type of system after this
-> > > > > > > patch is applied.
-> > > > > >
-> > > > > > That's what I thought, but in that case applying your patch is a net
-> > > > > > improvement: systems either get current or better behaviour.
-> > > > >
-> > > > > CLUSTER level is normally defined as a intermediate group of the MC
-> > > > > level and both levels have the scheduler flag SD_SHARE_PKG_RESOURCES
-> > > > > flag
-> > > > >
-> > > > > In the case of Ampere altra, they consider that CPUA have a CLUSTER
-> > > > > level which SD_SHARE_PKG_RESOURCES with another CPUB but the next and
-> > > > > larger MC level then says that CPUA doesn't SD_SHARE_PKG_RESOURCES
-> > > > > with CPUB which seems to be odd because the SD_SHARE_PKG_RESOURCES has
-> > > > > not disappeared Looks like there is a mismatch in topology description
-> > > >
-> > > > Hi Vincent,
-> > > >
-> > > > Agree. Where do you think this mismatch exists?
-> > >
-> > > I think that the problem comes from that the default topology order is
-> > > assumed to be :
-> > > SMT
-> > > CLUSTER shares pkg resources i.e. cache
-> > > MC
-> > > DIE
-> > > NUMA
-> > >
-> > > but in your case, you want a topology order like :
-> > > SMT
-> > > MC
-> > > CLUSTER shares SCU
-> > > DIE
-> > > NUMA
-> > >
-> > > IIUC, the cluster is defined as the 2nd (no SMT) or 3rd (SMT) level in
-> > > the PPTT table whereas the MC level is defined as the number of cache
-> > > levels. So i would say that you should compare the level to know the
-> > > ordering
-> > >
-> > > Then, there is another point:
-> > > In your case, CLUSTER level still has the flag SD_SHARE_PKG_RESOURCES
-> > > which is used to define some scheduler internal variable like
-> > > sd_llc(sched domain last level of cache) which allows fast task
-> > > migration between this cpus in this level at wakeup. In your case the
-> > > sd_llc should not be the cluster but the MC with only one CPU. But I
-> > > would not be surprised that most of perf improvement comes from this
-> > > sd_llc wrongly set to cluster instead of the single CPU
-> >
-> > I assume this "mistake" is actually what Ampere altra needs while it
-> > is wrong but getting
-> > right result? Ampere altra has already got both:
->
-> Hi Barry,
->
-> Generally yes - although I do think we're placing too much emphasis on
-> the "right" or "wrong" of a heuristic which are more fluid in
-> definition over time. (e.g. I expect this will look different in a year
-> based on what we learn from this and other non current default topologies).
->
-> > 1. Load Balance between clusters
-> > 2. wake_affine by select sibling cpu which is sharing SCU
-> >
-> > I am not sure how much 1 and 2 are helping Darren's workloads respectively.
->
-> We definitely see improvements with load balancing between clusters.
-> We're running some tests with the wake_affine patchset you pointed me to
-> (thanks for that). My initial tbench runs resulted in higher average and
-> max latencies reported. I need to collect more results and see the
-> impact to other benchmarks of interest before I have more to share on
-> that.
 
-Hi Darren,
-if you read Vincent's comments carefully, you will find it is
-pointless for you to
-test the wake_affine patchset as you have already got it. in your
-case, sd_llc_id
-is set to sd_cluster level due to PKG_RESOURCES sharing. So with my new
-patchset for wake_affine, it is completely redundant for your machine
-as it works
-with the assumption cluster-> llc. but for your case, llc=cluster, so
-it works in
-cluster->cluster. please read:
 
-static void update_top_cache_domain(int cpu)
-{
-struct sched_domain_shared *sds = NULL;
-struct sched_domain *sd;
-int id = cpu;
-int size = 1;
+On 2/10/2022 2:34 AM, Vinod Koul wrote:
+> Display Stream Compression (DSC) is one of the hw blocks in dpu, so add
+> support by adding hw blocks for DSC
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 
-sd = highest_flag_domain(cpu, SD_SHARE_PKG_RESOURCES);
-if (sd) {
-id = cpumask_first(sched_domain_span(sd));
-size = cpumask_weight(sched_domain_span(sd));
-sds = sd->shared;
-}
+Somehow second patch of this series is not showing up on patchwork in 
+your REPOST.
 
-rcu_assign_pointer(per_cpu(sd_llc, cpu), sd);
-per_cpu(sd_llc_size, cpu) = size;
-per_cpu(sd_llc_id, cpu) = id;
-rcu_assign_pointer(per_cpu(sd_llc_shared, cpu), sds);
+It jumps from 1 to 3.
 
-...
-}
+That being said, please fix the copyright to 2022 in all your files.
 
-this is also the content of Vincent's last comment:
-"
-My concern is that there are some ongoing discussion to make more
-usage of the CLUSTER level than what is currently done and it assumes
-that we have a valid LLC level after the CLUSTER one which is not your
-case and I'm afraid that it will be suboptimal for you because CLUSTER
-and LLC are wrongly the same for your case and then you will come back
-to add more exception in the generic scheduler code to cover this
-first exception"
-
-so it is incorrect for you to say you gain performance only by LB :-)
-
->
-> Thanks,
->
-> --
-> Darren Hart
-> Ampere Computing / OS and Kernel
-
-Thanks
-Barry
+> ---
+>   drivers/gpu/drm/msm/Makefile                  |   1 +
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  13 ++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c    | 210 ++++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h    |  77 +++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h   |  13 ++
+>   5 files changed, 314 insertions(+)
+>   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+>   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> 
+> diff --git a/drivers/gpu/drm/msm/Makefile b/drivers/gpu/drm/msm/Makefile
+> index 03ab55c37beb..7ec3c70c77ce 100644
+> --- a/drivers/gpu/drm/msm/Makefile
+> +++ b/drivers/gpu/drm/msm/Makefile
+> @@ -56,6 +56,7 @@ msm-y := \
+>   	disp/dpu1/dpu_formats.o \
+>   	disp/dpu1/dpu_hw_catalog.o \
+>   	disp/dpu1/dpu_hw_ctl.o \
+> +	disp/dpu1/dpu_hw_dsc.o \
+>   	disp/dpu1/dpu_hw_interrupts.o \
+>   	disp/dpu1/dpu_hw_intf.o \
+>   	disp/dpu1/dpu_hw_lm.o \
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index 31af04afda7d..5fc0888351c7 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -556,6 +556,16 @@ struct dpu_merge_3d_cfg  {
+>   	const struct dpu_merge_3d_sub_blks *sblk;
+>   };
+>   
+> +/**
+> + * struct dpu_dsc_cfg - information of DSC blocks
+> + * @id                 enum identifying this block
+> + * @base               register offset of this block
+> + * @features           bit mask identifying sub-blocks/features
+> + */
+> +struct dpu_dsc_cfg {
+> +	DPU_HW_BLK_INFO;
+> +};
+> +
+>   /**
+>    * struct dpu_intf_cfg - information of timing engine blocks
+>    * @id                 enum identifying this block
+> @@ -752,6 +762,9 @@ struct dpu_mdss_cfg {
+>   	u32 merge_3d_count;
+>   	const struct dpu_merge_3d_cfg *merge_3d;
+>   
+> +	u32 dsc_count;
+> +	struct dpu_dsc_cfg *dsc;
+> +
+>   	u32 intf_count;
+>   	const struct dpu_intf_cfg *intf;
+>   
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+> new file mode 100644
+> index 000000000000..449d6f1dad28
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+> @@ -0,0 +1,210 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2020-2021, Linaro Limited
+> + */
+> +
+> +#include "dpu_kms.h"
+> +#include "dpu_hw_catalog.h"
+> +#include "dpu_hwio.h"
+> +#include "dpu_hw_mdss.h"
+> +#include "dpu_hw_dsc.h"
+> +
+> +#define DSC_COMMON_MODE	                0x000
+> +#define DSC_ENC                         0X004
+> +#define DSC_PICTURE                     0x008
+> +#define DSC_SLICE                       0x00C
+> +#define DSC_CHUNK_SIZE                  0x010
+> +#define DSC_DELAY                       0x014
+> +#define DSC_SCALE_INITIAL               0x018
+> +#define DSC_SCALE_DEC_INTERVAL          0x01C
+> +#define DSC_SCALE_INC_INTERVAL          0x020
+> +#define DSC_FIRST_LINE_BPG_OFFSET       0x024
+> +#define DSC_BPG_OFFSET                  0x028
+> +#define DSC_DSC_OFFSET                  0x02C
+> +#define DSC_FLATNESS                    0x030
+> +#define DSC_RC_MODEL_SIZE               0x034
+> +#define DSC_RC                          0x038
+> +#define DSC_RC_BUF_THRESH               0x03C
+> +#define DSC_RANGE_MIN_QP                0x074
+> +#define DSC_RANGE_MAX_QP                0x0B0
+> +#define DSC_RANGE_BPG_OFFSET            0x0EC
+> +
+> +static void dpu_hw_dsc_disable(struct dpu_hw_dsc *dsc)
+> +{
+> +	struct dpu_hw_blk_reg_map *c = &dsc->hw;
+> +
+> +	DPU_REG_WRITE(c, DSC_COMMON_MODE, 0);
+> +}
+> +
+> +static void dpu_hw_dsc_config(struct dpu_hw_dsc *hw_dsc,
+> +			      struct msm_display_dsc_config *dsc, u32 mode)
+> +{
+> +	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
+> +	u32 data, lsb, bpp;
+> +	u32 initial_lines = dsc->initial_lines;
+> +	bool is_cmd_mode = !(mode & DSC_MODE_VIDEO);
+> +
+> +	DPU_REG_WRITE(c, DSC_COMMON_MODE, mode);
+> +
+> +	if (is_cmd_mode)
+> +		initial_lines += 1;
+> +
+> +	data = (initial_lines << 20);
+> +	data |= ((dsc->slice_last_group_size - 1) << 18);
+> +	/* bpp is 6.4 format, 4 LSBs bits are for fractional part */
+> +	data |= dsc->drm->bits_per_pixel << 12;
+> +	lsb = dsc->drm->bits_per_pixel % 4;
+> +	bpp = dsc->drm->bits_per_pixel / 4;
+> +	bpp *= 4;
+> +	bpp <<= 4;
+> +	bpp |= lsb;
+> +
+> +	data |= bpp << 8;
+> +	data |= (dsc->drm->block_pred_enable << 7);
+> +	data |= (dsc->drm->line_buf_depth << 3);
+> +	data |= (dsc->drm->simple_422 << 2);
+> +	data |= (dsc->drm->convert_rgb << 1);
+> +	data |= dsc->drm->bits_per_component;
+> +
+> +	DPU_REG_WRITE(c, DSC_ENC, data);
+> +
+> +	data = dsc->drm->pic_width << 16;
+> +	data |= dsc->drm->pic_height;
+> +	DPU_REG_WRITE(c, DSC_PICTURE, data);
+> +
+> +	data = dsc->drm->slice_width << 16;
+> +	data |= dsc->drm->slice_height;
+> +	DPU_REG_WRITE(c, DSC_SLICE, data);
+> +
+> +	data = dsc->drm->slice_chunk_size << 16;
+> +	DPU_REG_WRITE(c, DSC_CHUNK_SIZE, data);
+> +
+> +	data = dsc->drm->initial_dec_delay << 16;
+> +	data |= dsc->drm->initial_xmit_delay;
+> +	DPU_REG_WRITE(c, DSC_DELAY, data);
+> +
+> +	data = dsc->drm->initial_scale_value;
+> +	DPU_REG_WRITE(c, DSC_SCALE_INITIAL, data);
+> +
+> +	data = dsc->drm->scale_decrement_interval;
+> +	DPU_REG_WRITE(c, DSC_SCALE_DEC_INTERVAL, data);
+> +
+> +	data = dsc->drm->scale_increment_interval;
+> +	DPU_REG_WRITE(c, DSC_SCALE_INC_INTERVAL, data);
+> +
+> +	data = dsc->drm->first_line_bpg_offset;
+> +	DPU_REG_WRITE(c, DSC_FIRST_LINE_BPG_OFFSET, data);
+> +
+> +	data = dsc->drm->nfl_bpg_offset << 16;
+> +	data |= dsc->drm->slice_bpg_offset;
+> +	DPU_REG_WRITE(c, DSC_BPG_OFFSET, data);
+> +
+> +	data = dsc->drm->initial_offset << 16;
+> +	data |= dsc->drm->final_offset;
+> +	DPU_REG_WRITE(c, DSC_DSC_OFFSET, data);
+> +
+> +	data = dsc->det_thresh_flatness << 10;
+> +	data |= dsc->drm->flatness_max_qp << 5;
+> +	data |= dsc->drm->flatness_min_qp;
+> +	DPU_REG_WRITE(c, DSC_FLATNESS, data);
+> +
+> +	data = dsc->drm->rc_model_size;
+> +	DPU_REG_WRITE(c, DSC_RC_MODEL_SIZE, data);
+> +
+> +	data = dsc->drm->rc_tgt_offset_low << 18;
+> +	data |= dsc->drm->rc_tgt_offset_high << 14;
+> +	data |= dsc->drm->rc_quant_incr_limit1 << 9;
+> +	data |= dsc->drm->rc_quant_incr_limit0 << 4;
+> +	data |= dsc->drm->rc_edge_factor;
+> +	DPU_REG_WRITE(c, DSC_RC, data);
+> +}
+> +
+> +static void dpu_hw_dsc_config_thresh(struct dpu_hw_dsc *hw_dsc,
+> +				     struct msm_display_dsc_config *dsc)
+> +{
+> +	struct drm_dsc_rc_range_parameters *rc = dsc->drm->rc_range_params;
+> +	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
+> +	u32 off;
+> +	int i;
+> +
+> +	off = DSC_RC_BUF_THRESH;
+> +	for (i = 0; i < DSC_NUM_BUF_RANGES - 1 ; i++) {
+> +		DPU_REG_WRITE(c, off, dsc->drm->rc_buf_thresh[i]);
+> +		off += 4;
+> +	}
+> +
+> +	off = DSC_RANGE_MIN_QP;
+> +	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
+> +		DPU_REG_WRITE(c, off, rc[i].range_min_qp);
+> +		off += 4;
+> +	}
+> +
+> +	off = DSC_RANGE_MAX_QP;
+> +	for (i = 0; i < 15; i++) {
+> +		DPU_REG_WRITE(c, off, rc[i].range_max_qp);
+> +		off += 4;
+> +	}
+> +
+> +	off = DSC_RANGE_BPG_OFFSET;
+> +	for (i = 0; i < 15; i++) {
+> +		DPU_REG_WRITE(c, off, rc[i].range_bpg_offset);
+> +		off += 4;
+> +	}
+> +}
+> +
+> +static struct dpu_dsc_cfg *_dsc_offset(enum dpu_dsc dsc,
+> +				       struct dpu_mdss_cfg *m,
+> +				       void __iomem *addr,
+> +				       struct dpu_hw_blk_reg_map *b)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < m->dsc_count; i++) {
+> +		if (dsc == m->dsc[i].id) {
+> +			b->base_off = addr;
+> +			b->blk_off = m->dsc[i].base;
+> +			b->length = m->dsc[i].len;
+> +			b->hwversion = m->hwversion;
+> +			b->log_mask = DPU_DBG_MASK_DSC;
+> +			return &m->dsc[i];
+> +		}
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static void _setup_dsc_ops(struct dpu_hw_dsc_ops *ops,
+> +			   unsigned long cap)
+> +{
+> +	ops->dsc_disable = dpu_hw_dsc_disable;
+> +	ops->dsc_config = dpu_hw_dsc_config;
+> +	ops->dsc_config_thresh = dpu_hw_dsc_config_thresh;
+> +};
+> +
+> +struct dpu_hw_dsc *dpu_hw_dsc_init(enum dpu_dsc idx, void __iomem *addr,
+> +				   struct dpu_mdss_cfg *m)
+> +{
+> +	struct dpu_hw_dsc *c;
+> +	struct dpu_dsc_cfg *cfg;
+> +
+> +	c = kzalloc(sizeof(*c), GFP_KERNEL);
+> +	if (!c)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	cfg = _dsc_offset(idx, m, addr, &c->hw);
+> +	if (IS_ERR_OR_NULL(cfg)) {
+> +		kfree(c);
+> +		return ERR_PTR(-EINVAL);
+> +	}
+> +
+> +	c->idx = idx;
+> +	c->caps = cfg;
+> +	_setup_dsc_ops(&c->ops, c->caps->features);
+> +
+> +	return c;
+> +}
+> +
+> +void dpu_hw_dsc_destroy(struct dpu_hw_dsc *dsc)
+> +{
+> +	kfree(dsc);
+> +}
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> new file mode 100644
+> index 000000000000..648c9e4d8749
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> @@ -0,0 +1,77 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/* Copyright (c) 2020-2021, Linaro Limited */
+> +
+> +#ifndef _DPU_HW_DSC_H
+> +#define _DPU_HW_DSC_H
+> +
+> +#include <drm/drm_dsc.h>
+> +
+> +#define DSC_MODE_SPLIT_PANEL            BIT(0)
+> +#define DSC_MODE_MULTIPLEX              BIT(1)
+> +#define DSC_MODE_VIDEO                  BIT(2)
+> +
+> +struct dpu_hw_dsc;
+> +
+> +/**
+> + * struct dpu_hw_dsc_ops - interface to the dsc hardware driver functions
+> + * Assumption is these functions will be called after clocks are enabled
+> + */
+> +struct dpu_hw_dsc_ops {
+> +	/**
+> +	 * dsc_disable - disable dsc
+> +	 * @hw_dsc: Pointer to dsc context
+> +	 */
+> +	void (*dsc_disable)(struct dpu_hw_dsc *hw_dsc);
+> +
+> +	/**
+> +	 * dsc_config - configures dsc encoder
+> +	 * @hw_dsc: Pointer to dsc context
+> +	 * @dsc: panel dsc parameters
+> +	 * @mode: dsc topology mode to be set
+> +	 */
+> +	void (*dsc_config)(struct dpu_hw_dsc *hw_dsc,
+> +			   struct msm_display_dsc_config *dsc, u32 mode);
+> +
+> +	/**
+> +	 * dsc_config_thresh - programs panel thresholds
+> +	 * @hw_dsc: Pointer to dsc context
+> +	 * @dsc: panel dsc parameters
+> +	 */
+> +	void (*dsc_config_thresh)(struct dpu_hw_dsc *hw_dsc,
+> +				  struct msm_display_dsc_config *dsc);
+> +};
+> +
+> +struct dpu_hw_dsc {
+> +	struct dpu_hw_blk base;
+> +	struct dpu_hw_blk_reg_map hw;
+> +
+> +	/* dsc */
+> +	enum dpu_dsc idx;
+> +	const struct dpu_dsc_cfg *caps;
+> +
+> +	/* ops */
+> +	struct dpu_hw_dsc_ops ops;
+> +};
+> +
+> +/**
+> + * dpu_hw_dsc_init - initializes the dsc block for the passed dsc idx.
+> + * @idx:  DSC index for which driver object is required
+> + * @addr: Mapped register io address of MDP
+> + * @m:    Pointer to mdss catalog data
+> + * Returns: Error code or allocated dpu_hw_dsc context
+> + */
+> +struct dpu_hw_dsc *dpu_hw_dsc_init(enum dpu_dsc idx, void __iomem *addr,
+> +				   struct dpu_mdss_cfg *m);
+> +
+> +/**
+> + * dpu_hw_dsc_destroy - destroys dsc driver context
+> + * @dsc:   Pointer to dsc driver context returned by dpu_hw_dsc_init
+> + */
+> +void dpu_hw_dsc_destroy(struct dpu_hw_dsc *dsc);
+> +
+> +static inline struct dpu_hw_dsc *to_dpu_hw_dsc(struct dpu_hw_blk *hw)
+> +{
+> +	return container_of(hw, struct dpu_hw_dsc, base);
+> +}
+> +
+> +#endif /* _DPU_HW_DSC_H */
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> index bb9ceadeb0bb..b0ce8cb97d22 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+> @@ -97,6 +97,7 @@ enum dpu_hw_blk_type {
+>   	DPU_HW_BLK_WB,
+>   	DPU_HW_BLK_DSPP,
+>   	DPU_HW_BLK_MERGE_3D,
+> +	DPU_HW_BLK_DSC,
+>   	DPU_HW_BLK_MAX,
+>   };
+>   
+> @@ -176,6 +177,17 @@ enum dpu_ctl {
+>   	CTL_MAX
+>   };
+>   
+> +enum dpu_dsc {
+> +	DSC_NONE = 0,
+> +	DSC_0,
+> +	DSC_1,
+> +	DSC_2,
+> +	DSC_3,
+> +	DSC_4,
+> +	DSC_5,
+> +	DSC_MAX
+> +};
+> +
+>   enum dpu_pingpong {
+>   	PINGPONG_0 = 1,
+>   	PINGPONG_1,
+> @@ -437,5 +449,6 @@ struct dpu_mdss_color {
+>   #define DPU_DBG_MASK_VBIF     (1 << 8)
+>   #define DPU_DBG_MASK_ROT      (1 << 9)
+>   #define DPU_DBG_MASK_DSPP     (1 << 10)
+> +#define DPU_DBG_MASK_DSC      (1 << 11)
+>   
+>   #endif  /* _DPU_HW_MDSS_H */

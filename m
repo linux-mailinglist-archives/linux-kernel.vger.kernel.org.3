@@ -2,120 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934774B87C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C338D4B87CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 13:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233305AbiBPMe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 07:34:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53188 "EHLO
+        id S233314AbiBPMgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 07:36:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiBPMe4 (ORCPT
+        with ESMTP id S231156AbiBPMgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 07:34:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E921A1F79EC
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:34:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645014884;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fu6TzmgbMlYQuSDAMHkyuQBli3G2K2SmS218sexp9ic=;
-        b=OqMVeVekI5dJZIS5uPp2kdfQGRk8GfuHRpjZo7/AFVgxMJxiWHkbHSb71j7sTyY5hlGgNc
-        LYWgZpIL4D80ZR5qtlfYsVjH8RJDBKw2um3Nk6xeHl7epdPRUf9YBU0Acqr5tbE7OcFiN5
-        QZ5bD+hXlESFjTwmedJc30TEk2oLVMI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-368-_63-9m5qP4iyV3O7-1c3PQ-1; Wed, 16 Feb 2022 07:34:42 -0500
-X-MC-Unique: _63-9m5qP4iyV3O7-1c3PQ-1
-Received: by mail-wm1-f69.google.com with SMTP id bg23-20020a05600c3c9700b0034bb19dfdc0so203706wmb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:34:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Fu6TzmgbMlYQuSDAMHkyuQBli3G2K2SmS218sexp9ic=;
-        b=zmc2DhsloFaxjs5OIg4JmZ68N/yxib2ueo+x/IEHW9cTCHztLfZlg4eoN9Qau1PjsG
-         9d0r198HTvuWM0AdT0oEMXtVWCJWpCPG/u5Vzzc4ft0KGHiquxjT7pb5mIgt5f4MtRLA
-         l67xHI7KEGMm+SOAjocVHhqf0PROWfl8/Z1GmmBTXthjoeIbU+k9VT4NC108SpBRAmfW
-         Hpnwc0CoM8QV/JBJU2mlK9mTzoit1fWihkw4h7AySudMFLFe9kaRe84q4qlkL2QErhPe
-         pKYDXyzdzl4DAHFsfkO9pJkPbOavJ5PArueI9k9/LbfRebJyQBYSlhjLGVWap9AELmN9
-         lY+Q==
-X-Gm-Message-State: AOAM531hfAfjJOfEFZgoBysTAxhYYm/Dxyl8XGl+q3Hn8VqTF5ZMnuBd
-        k7rjd4QG2YTvUme6g+FFYpAMWiGkNb4jlmQVUwanuP4giC0E77RM2Yv9GMyjg2wrbPtfXDtbadb
-        K7yuLF6M6fDElIBpzM9d38uopxblZRDjUfLpiPV4OJ/S+uY8waHcKvqTa4fSde8W01Z5wEuvtjF
-        M=
-X-Received: by 2002:adf:f005:0:b0:1e3:1957:af07 with SMTP id j5-20020adff005000000b001e31957af07mr2203709wro.311.1645014881528;
-        Wed, 16 Feb 2022 04:34:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJww2pEBjWX6+qG9snaBEnYCCDQh6YGaz6Dcc7r7r2Rqwhne1V8moyLnyuF2IvLxEM9om9CJGQ==
-X-Received: by 2002:adf:f005:0:b0:1e3:1957:af07 with SMTP id j5-20020adff005000000b001e31957af07mr2203675wro.311.1645014881239;
-        Wed, 16 Feb 2022 04:34:41 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id l12sm32213684wrs.11.2022.02.16.04.34.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 04:34:40 -0800 (PST)
-Message-ID: <2d0e88a3-8fa2-6b21-93da-1c9e6f8e3e84@redhat.com>
-Date:   Wed, 16 Feb 2022 13:34:39 +0100
+        Wed, 16 Feb 2022 07:36:51 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B06913EA5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645014999; x=1676550999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4VVNkngBUvjf2UbRLWf5djKaS/NI5B4cK7i5F8dSJ4A=;
+  b=BHqPZMrAZo8Zpn41tUjsyzOXE9w/izmtP5xXJOnn9AwjPXaf7Kh9gmrF
+   JgSU3/dV4BcpbmLoKwHDLwlsoAGq2imBocUzcfU2FadQ1Y6pcCzJjgtV1
+   8N8i5IS+PERWlwo2MKENW439+42Qq2XSPxi9gkouHD2LpCHHbwa3VEhdG
+   dom2MantvM9XrLGIv/DMsNqDWD9OENESsjxCklNT+nrA9CWlOz3bBcWpm
+   e9NYuVzA9IHG4xsQvQNnxSXh2VqC3SVOnFE1aFniTHXJ8ShNmvLXt7f2z
+   /CesbIuUHEK4vOeKc9yrGwGG6BKJklkDlfy60jHx+Mdkl2LmzY2Y/SPFC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="234131856"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="234131856"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 04:36:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="498967815"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 16 Feb 2022 04:36:37 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKJXw-000Anc-9o; Wed, 16 Feb 2022 12:36:36 +0000
+Date:   Wed, 16 Feb 2022 20:35:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tong Zhang <ztong0001@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Tong Zhang <ztong0001@gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec: honor acpi=off
+Message-ID: <202202162047.eCFMqb2x-lkp@intel.com>
+References: <20220216062601.779690-1-ztong0001@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 0/6] drm: Add driver for Solomon SSD130x OLED displays
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org
-References: <20220214133710.3278506-1-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220214133710.3278506-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216062601.779690-1-ztong0001@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 14:37, Javier Martinez Canillas wrote:
-> This patch series adds a DRM driver for the Solomon OLED SSD1305, SSD1306,
-> SSD1307 and SSD1309 displays. It is a port of the ssd1307fb fbdev driver.
-> 
-> Using the DRM fbdev emulation, all the tests from Geert Uytterhoeven repo
-> (https://git.kernel.org/pub/scm/linux/kernel/git/geert/fbtest.git) passes.
-> 
-> I've also tested it using the display as a VT output and even though fbcon
-> seems to work, it is mostly unusable on a 128x64 SSD1306 display.
-> 
-> This is a v6 that addresses the issues pointed in v5. Thanks a lot to all
-> reviewers that gave me feedback and comments.
-> 
+Hi Tong,
 
-Pushed this series to drm-misc (drm-misc-next). Thanks all!
+Thank you for the patch! Perhaps something to improve:
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+[auto build test WARNING on chrome-platform/for-next]
+[also build test WARNING on v5.17-rc4 next-20220216]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/0day-ci/linux/commits/Tong-Zhang/platform-chrome-cros_ec-honor-acpi-off/20220216-142709
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220216/202202162047.eCFMqb2x-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0e628a783b935c70c80815db6c061ec84f884af5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/66345a4aecd6e4acba257476c6e44559fccca143
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Tong-Zhang/platform-chrome-cros_ec-honor-acpi-off/20220216-142709
+        git checkout 66345a4aecd6e4acba257476c6e44559fccca143
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/chrome/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/chrome/cros_ec_lpc.c:553:6: warning: address of function 'acpi_disable' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (acpi_disable)
+           ~~  ^~~~~~~~~~~~
+   drivers/platform/chrome/cros_ec_lpc.c:553:6: note: prefix with the address-of operator to silence this warning
+           if (acpi_disable)
+               ^
+               &
+   1 warning generated.
+
+
+vim +553 drivers/platform/chrome/cros_ec_lpc.c
+
+   547	
+   548	static int __init cros_ec_lpc_init(void)
+   549	{
+   550		int ret;
+   551		acpi_status status;
+   552	
+ > 553		if (acpi_disable)
+   554			return -ENODEV;
+   555	
+   556		status = acpi_get_devices(ACPI_DRV_NAME, cros_ec_lpc_parse_device,
+   557					  &cros_ec_lpc_acpi_device_found, NULL);
+   558		if (ACPI_FAILURE(status))
+   559			pr_warn(DRV_NAME ": Looking for %s failed\n", ACPI_DRV_NAME);
+   560	
+   561		if (!cros_ec_lpc_acpi_device_found &&
+   562		    !dmi_check_system(cros_ec_lpc_dmi_table)) {
+   563			pr_err(DRV_NAME ": unsupported system.\n");
+   564			return -ENODEV;
+   565		}
+   566	
+   567		cros_ec_lpc_mec_init(EC_HOST_CMD_REGION0,
+   568				     EC_LPC_ADDR_MEMMAP + EC_MEMMAP_SIZE);
+   569	
+   570		/* Register the driver */
+   571		ret = platform_driver_register(&cros_ec_lpc_driver);
+   572		if (ret) {
+   573			pr_err(DRV_NAME ": can't register driver: %d\n", ret);
+   574			cros_ec_lpc_mec_destroy();
+   575			return ret;
+   576		}
+   577	
+   578		if (!cros_ec_lpc_acpi_device_found) {
+   579			/* Register the device, and it'll get hooked up automatically */
+   580			ret = platform_device_register(&cros_ec_lpc_device);
+   581			if (ret) {
+   582				pr_err(DRV_NAME ": can't register device: %d\n", ret);
+   583				platform_driver_unregister(&cros_ec_lpc_driver);
+   584				cros_ec_lpc_mec_destroy();
+   585			}
+   586		}
+   587	
+   588		return ret;
+   589	}
+   590	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

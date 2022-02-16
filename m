@@ -2,71 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5365E4B8A29
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AED64B8A2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 14:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234514AbiBPNdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 08:33:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52306 "EHLO
+        id S234492AbiBPNd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 08:33:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiBPNdK (ORCPT
+        with ESMTP id S234520AbiBPNd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 08:33:10 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5B217F13F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:32:57 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id bn33so3335953ljb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 05:32:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HJNUJzZ2w9KfbDjNaVqLNvvR+3gcB5EqVbNjWDB34dM=;
-        b=k5qtB80PfvkpTvOjjPlDYkbks7d3GraoGroAvNeTe2wCI/h1xR9X/PM8do+SuHmsrV
-         Ks5AvtjFoaCXBbvMIiV/j6zb0IJKGWgwVAJ3Ttziu7hyFN43/txrW3+0KSqulB2PsMK0
-         tYkl8gMrArec04pOak6emYrh+vQdxQVCboEPU2gFFctz4DPcp4+OZuu2zwvBH+xFlQp9
-         ZTLlS0da9Wsm92DINB14pXfZt65ufAWKyqIJHOYBx4OBOoEgTlqz5Bd1dfvxESaOLtr9
-         Jrl6uM/fdxycegSKg81xYRMFkEBVNxil/tf2IBts69ojFq3vjAEWhtfdz3HfFgDsGxEs
-         BsbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HJNUJzZ2w9KfbDjNaVqLNvvR+3gcB5EqVbNjWDB34dM=;
-        b=Bv7cY3TMWGVYkI1CVCDilQq87DzeomDGCSfn8lm2nC9ZlJwLY975uYM0J+D1Xe7r5m
-         yPkXp3f4WX3ZXJ3Uabo6sMR36FmtIig6E9K6pyvnvyiOtjXMwmJkQ2Vd+AOKIrTMt0G2
-         bm7gOko1rma6nyrvPo4vJ3ZWmXLJCaKYHxmxkDq6p1nIUvpJ5g+5uvqIyNvNgj+fHJRG
-         6UNR9JrnuDdFPDpQfE24GHAcXvmNoAXr7bTWdF+yuNREWU9Aw9gJomoBJ2aEWMtMwtat
-         3kr942Sk/iHrTtJvSoqsTqRuoXAxI7WSgI0W8hoTWpEgzl8xJIz1ukG8Z561X8rMXPr4
-         6YEA==
-X-Gm-Message-State: AOAM531Hlo9CB2enQpz4NF5cMnFXKgLg090o10b5SqgEkxgv/yjQqnBj
-        wySTcEZpNU6XysqJOM58YBlQCKHrNJAI90Nw/64YCA==
-X-Google-Smtp-Source: ABdhPJziHXZzuJSN2Tfee/cC90OKw5xKamOwSF8X0Ohd9o5miqpmK9v5f1T42OU0pkaVUG2oYKvcBGP15cm60H+Y/eU=
-X-Received: by 2002:a05:651c:178c:b0:245:fd2c:2d2b with SMTP id
- bn12-20020a05651c178c00b00245fd2c2d2bmr2101671ljb.486.1645018375924; Wed, 16
- Feb 2022 05:32:55 -0800 (PST)
+        Wed, 16 Feb 2022 08:33:28 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B52228C99;
+        Wed, 16 Feb 2022 05:33:15 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 6C73468B05; Wed, 16 Feb 2022 14:33:11 +0100 (CET)
+Date:   Wed, 16 Feb 2022 14:33:11 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Markus =?iso-8859-1?Q?Bl=F6chl?= <Markus.Bloechl@ipetronik.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stefan Roese <sr@denx.de>
+Subject: Re: [RFC PATCH] nvme: prevent hang on surprise removal of NVMe disk
+Message-ID: <20220216133311.GA16154@lst.de>
+References: <20220214095107.3t5en5a3tosaeoo6@ipetronik.com> <20220215201738.GA26945@lst.de> <20220216125937.d6brzu7labgywxcg@ipetronik.com>
 MIME-Version: 1.0
-References: <20220216090845.1278114-1-maz@kernel.org> <CAPv3WKf4RFeTDCsW+cY-Rp=2rZt1HuZSVQcmcB3oKQKNbvBtDA@mail.gmail.com>
- <877d9v3po0.wl-maz@kernel.org>
-In-Reply-To: <877d9v3po0.wl-maz@kernel.org>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Wed, 16 Feb 2022 14:32:42 +0100
-Message-ID: <CAPv3WKewWHd=23MKar8_-B4YpYQbnX9fqqPH=Ti7aGe2rV6FuQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] net: mvpp2: Survive CPU hotplug events
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Garry <john.garry@huawei.com>, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216125937.d6brzu7labgywxcg@ipetronik.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,58 +42,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C5=9Br., 16 lut 2022 o 14:29 Marc Zyngier <maz@kernel.org> napisa=C5=82(a)=
-:
->
-> On Wed, 16 Feb 2022 13:19:30 +0000,
-> Marcin Wojtas <mw@semihalf.com> wrote:
-> >
-> > Hi Marc,
-> >
-> > =C5=9Br., 16 lut 2022 o 10:08 Marc Zyngier <maz@kernel.org> napisa=C5=
-=82(a):
-> > >
-> > > I recently realised that playing with CPU hotplug on a system equiped
-> > > with a set of MVPP2 devices (Marvell 8040) was fraught with danger an=
-d
-> > > would result in a rapid lockup or panic.
-> > >
-> > > As it turns out, the per-CPU nature of the MVPP2 interrupts are
-> > > getting in the way. A good solution for this seems to rely on the
-> > > kernel's managed interrupt approach, where the core kernel will not
-> > > move interrupts around as the CPUs for down, but will simply disable
-> > > the corresponding interrupt.
-> > >
-> > > Converting the driver to this requires a bit of refactoring in the IR=
-Q
-> > > subsystem to expose the required primitive, as well as a bit of
-> > > surgery in the driver itself.
-> > >
-> > > Note that although the system now survives such event, the driver
-> > > seems to assume that all queues are always active and doesn't inform
-> > > the device that a CPU has gone away. Someout who actually understand
-> > > this driver should have a look at it.
-> > >
-> > > Patches on top of 5.17-rc3, lightly tested on a McBin.
-> > >
-> >
-> > Thank you for the patches. Can you, please, share the commands you
-> > used? I'd like to test it more.
->
-> Offline CPU3:
-> # echo 0 > /sys/devices/system/cpu/cpu3/online
->
-> Online CPU3:
-> # echo 1 > /sys/devices/system/cpu/cpu3/online
->
-> Put that in a loop, using different CPUs.
->
-> On my HW, turning off CPU0 leads to odd behaviours (I wouldn't be
-> surprised if the firmware was broken in that respect, and also the
-> fact that the device keeps trying to send stuff to that CPU...).
->
+I'd do something like this, which gets us a properly documented
+interface (the del_gendisk change will be split into a separate
+patch):
 
-Thanks, I think stressing DUT with traffic during CPU hotplug will be
-a good scenario - I'll try that.
-
-Marcin
+diff --git a/block/blk-core.c b/block/blk-core.c
+index d93e3bb9a769b..15d5c5ba5bbe5 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -284,12 +284,19 @@ void blk_queue_start_drain(struct request_queue *q)
+ 	wake_up_all(&q->mq_freeze_wq);
+ }
+ 
+-void blk_set_queue_dying(struct request_queue *q)
++/**
++ * blk_set_disk_dead - mark a disk as dead
++ * @disk: disk to mark as dead
++ *
++ * Mark as disk as dead (e.g. surprise removed) and don't accept any new I/O
++ * to this disk.
++ */
++void blk_mark_disk_dead(struct gendisk *disk)
+ {
+-	blk_queue_flag_set(QUEUE_FLAG_DYING, q);
+-	blk_queue_start_drain(q);
++	set_bit(GD_DEAD, &disk->state);
++	blk_queue_start_drain(disk->queue);
+ }
+-EXPORT_SYMBOL_GPL(blk_set_queue_dying);
++EXPORT_SYMBOL_GPL(blk_mark_disk_dead);
+ 
+ /**
+  * blk_cleanup_queue - shutdown a request queue
+@@ -308,7 +315,8 @@ void blk_cleanup_queue(struct request_queue *q)
+ 	WARN_ON_ONCE(blk_queue_registered(q));
+ 
+ 	/* mark @q DYING, no new request or merges will be allowed afterwards */
+-	blk_set_queue_dying(q);
++	blk_queue_flag_set(QUEUE_FLAG_DYING, q);
++	blk_queue_start_drain(q);
+ 
+ 	blk_queue_flag_set(QUEUE_FLAG_NOMERGES, q);
+ 	blk_queue_flag_set(QUEUE_FLAG_NOXMERGES, q);
+diff --git a/block/genhd.c b/block/genhd.c
+index 626c8406f21a6..35e49b7f1112a 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -584,7 +584,8 @@ void del_gendisk(struct gendisk *disk)
+ 	blk_drop_partitions(disk);
+ 	mutex_unlock(&disk->open_mutex);
+ 
+-	fsync_bdev(disk->part0);
++	if (!test_bit(GD_DEAD, &disk->state))
++		fsync_bdev(disk->part0);
+ 	__invalidate_device(disk->part0, true);
+ 
+ 	/*
+diff --git a/drivers/block/mtip32xx/mtip32xx.c b/drivers/block/mtip32xx/mtip32xx.c
+index e6005c2323281..2b588b62cbbb2 100644
+--- a/drivers/block/mtip32xx/mtip32xx.c
++++ b/drivers/block/mtip32xx/mtip32xx.c
+@@ -4112,7 +4112,7 @@ static void mtip_pci_remove(struct pci_dev *pdev)
+ 			"Completion workers still active!\n");
+ 	}
+ 
+-	blk_set_queue_dying(dd->queue);
++	blk_mark_disk_dead(dd->disk);
+ 	set_bit(MTIP_DDF_REMOVE_PENDING_BIT, &dd->dd_flag);
+ 
+ 	/* Clean up the block layer. */
+diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+index 4203cdab8abfd..b844432bad20b 100644
+--- a/drivers/block/rbd.c
++++ b/drivers/block/rbd.c
+@@ -7185,7 +7185,7 @@ static ssize_t do_rbd_remove(struct bus_type *bus,
+ 		 * IO to complete/fail.
+ 		 */
+ 		blk_mq_freeze_queue(rbd_dev->disk->queue);
+-		blk_set_queue_dying(rbd_dev->disk->queue);
++		blk_mark_disk_dead(rbd_dev->disk);
+ 	}
+ 
+ 	del_gendisk(rbd_dev->disk);
+diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
+index ccd0dd0c6b83c..ca71a0585333f 100644
+--- a/drivers/block/xen-blkfront.c
++++ b/drivers/block/xen-blkfront.c
+@@ -2126,7 +2126,7 @@ static void blkfront_closing(struct blkfront_info *info)
+ 
+ 	/* No more blkif_request(). */
+ 	blk_mq_stop_hw_queues(info->rq);
+-	blk_set_queue_dying(info->rq);
++	blk_mark_disk_dead(info->gd);
+ 	set_capacity(info->gd, 0);
+ 
+ 	for_each_rinfo(info, rinfo, i) {
+diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+index dcbd6d201619d..997ace47bbd54 100644
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@ -2077,7 +2077,7 @@ static void __dm_destroy(struct mapped_device *md, bool wait)
+ 	set_bit(DMF_FREEING, &md->flags);
+ 	spin_unlock(&_minor_lock);
+ 
+-	blk_set_queue_dying(md->queue);
++	blk_mark_disk_dead(md->disk);
+ 
+ 	/*
+ 	 * Take suspend_lock so that presuspend and postsuspend methods
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 79005ea1a33e3..469f23186159c 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -4574,7 +4574,7 @@ static void nvme_set_queue_dying(struct nvme_ns *ns)
+ 	if (test_and_set_bit(NVME_NS_DEAD, &ns->flags))
+ 		return;
+ 
+-	blk_set_queue_dying(ns->queue);
++	blk_mark_disk_dead(ns->disk);
+ 	nvme_start_ns_queue(ns);
+ 
+ 	set_capacity_and_notify(ns->disk, 0);
+diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+index f8bf6606eb2fc..ff775235534cf 100644
+--- a/drivers/nvme/host/multipath.c
++++ b/drivers/nvme/host/multipath.c
+@@ -848,7 +848,7 @@ void nvme_mpath_remove_disk(struct nvme_ns_head *head)
+ {
+ 	if (!head->disk)
+ 		return;
+-	blk_set_queue_dying(head->disk->queue);
++	blk_mark_disk_dead(head->disk);
+ 	/* make sure all pending bios are cleaned up */
+ 	kblockd_schedule_work(&head->requeue_work);
+ 	flush_work(&head->requeue_work);
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index f35aea98bc351..16b47035e4b06 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -748,7 +748,8 @@ extern bool blk_queue_can_use_dma_map_merging(struct request_queue *q,
+ 
+ bool __must_check blk_get_queue(struct request_queue *);
+ extern void blk_put_queue(struct request_queue *);
+-extern void blk_set_queue_dying(struct request_queue *);
++
++void blk_mark_disk_dead(struct gendisk *disk);
+ 
+ #ifdef CONFIG_BLOCK
+ /*

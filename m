@@ -2,285 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6D44B7E43
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC514B7E63
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 04:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344104AbiBPDJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 22:09:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39692 "EHLO
+        id S1344090AbiBPDJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 22:09:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344074AbiBPDJZ (ORCPT
+        with ESMTP id S1344111AbiBPDJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:09:25 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E885FF65EB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:09:12 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso1179544pjj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:09:12 -0800 (PST)
+        Tue, 15 Feb 2022 22:09:44 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0D5F65EB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:09:22 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id n185so648849qke.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 19:09:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=k7acGQ+aoEgDpTruS21+hEnSk9frdpzFJnwztD0cF2g=;
-        b=hNE5p/Jo5xvwKQMU14u/yTNHol24XinfEBPd0Xnkxx8ckko4WXoFz8bpeB/FIumjPj
-         vCYmfonysPB1PYbjzSO8rGqKsshAXZl+chAocxjI/LgI+ScIrFr1zVkj9o6FHx2QLqcU
-         MZpp/uX3NB6q3uSF+zs0RUw8FgNRIDAvUDfBMb9xplYZ+DMkaUzDvPqkJ3DmUp4yxBpx
-         YHBa7WvldPJF321ZSnrRJGCNkeQFvKbacsQoZdjjc/nCNkR0TsapOD+/7ExjAEbdD3Ow
-         1+uNI99qHAm2pHuLdJuysPYCQcc2to7OVPDLrq02dFyiziZ54eFI/aIf8H3oJH307IW/
-         QIIA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3GJiORRsTVx+yI2/L1IdZTmJe+M7rTwA6x3mOQDXVmQ=;
+        b=SIjbG25UuDR5aWFLNo606A8KF9DC/7h0SWpcFFgf6fkS1OwT65cGA70qwzWHLZncEd
+         CKNlFo1bveItVQzjUhNwDqbcVe4rOA5FLW/BtpegisoNtmbFMZvB05jF0F5W7KFJLmqd
+         Mxu9sLFetgolC5CmZoneMvEknSK1AjCBGPA5ZmEEP68z0lndpEKeTxyVxfvIAp8vWzQO
+         K7xtYZj6gxoR1yt0LviOsLyd5Y87zJu/R3aT/VD7Z4G+AjeV1rF79HFB3i+BYQlVNFP3
+         OHXjRdWyuXp9MfU2z/RNMesNcgqyq5bQflChawFX2z6rCQrOCNOVXi3fSrba6EKM1RcN
+         9y2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=k7acGQ+aoEgDpTruS21+hEnSk9frdpzFJnwztD0cF2g=;
-        b=uyJAbwrDArwD50ZLoUikUJ+hMhWt4OEhdB2TWQJHcoakE3l/GgelX6DPHvF3JQk4FE
-         Medz4e0lr5QtDtoogvan9HEpZRfp2PVSc51PuGlQ1Vzq+FvdKzAU2V2hSemxCvtwrUts
-         aq7ThIOaNoSIQ5u4f4V9yQaxmnAysO+UImVLT5sCFa4+q3Lxb8B6hS13B8whywFG9y8t
-         2HmusBTbdMnfrC5oI4iEXvj0lfMuzEtJ6XkqbXn9v3AFdExs8ehcW+S9+M4hK2kkTlbF
-         dhhqKRHDEBeIv+DEmqr0qxlcJhbIQat7s0HydsliknCo55jhndbdIuT5vp76RKfpjUhB
-         YzYA==
-X-Gm-Message-State: AOAM5305+BeMegKpQXv6F3zIPxmTmaTZrQbgE2GJe3BB77qQEMI1teo4
-        AvtwPaPNf5SPXkCU3kkTDtmMf5vbtr57AiBVa7+bJg==
-X-Google-Smtp-Source: ABdhPJxAp+sSnyv767mDuMDX/8tJW2jOYmiVjf2IgQHEv02eYqaN3IQQZHeRuIl68bmli9Ok0+bdx7i1Re2Il51WFsw=
-X-Received: by 2002:a17:90a:f28d:b0:1b9:975f:1a9f with SMTP id
- fs13-20020a17090af28d00b001b9975f1a9fmr591684pjb.220.1644980952458; Tue, 15
- Feb 2022 19:09:12 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3GJiORRsTVx+yI2/L1IdZTmJe+M7rTwA6x3mOQDXVmQ=;
+        b=ImPa1EUTxZJX4fxdd6qXupvSEuMJBiU40Dg/Gvls4zS1Era3xAnrTkBRCMSSL/h1YB
+         VUEbGnKG/pcRg+4lKzDUtn57EIa6bt09WmpSBil9KDia9MmV3fLpwdVkYYisKDuhIaim
+         9yIpWpH6s/wzSLF5Os/s+4NSphu3krVBzlfzxyqHohvpDNcFuJEdPhbeW6ci5sC5qurZ
+         PltB6Li3tfRpP9XR9k1ySYnrv2ygX65sO3+pI6wCIFqX+XF6XVAH1hSCRwGgKDMNTSHy
+         V7xm5AFkcGNEUA6gqb3fZ2iiilO5GuXFmv+ePb8jL/0BgKuK+ApWEKpQtV0qwF4EWC4q
+         KDEg==
+X-Gm-Message-State: AOAM532Hi2nZCTI8K7i7DyRmiNZorNDnGvphQLGqeTtOghZ7FR5x6X5J
+        6Mxdjd67ktFueTK8OA2zZoA=
+X-Google-Smtp-Source: ABdhPJzmmNSnD5rQfwI01b677/YcsxCSxr089THSIYQVmFvMExzZkLYzsGK6DY8AnSAM7vXZeoqnBQ==
+X-Received: by 2002:a05:620a:2699:b0:47d:753c:b8ff with SMTP id c25-20020a05620a269900b0047d753cb8ffmr383744qkp.763.1644980961930;
+        Tue, 15 Feb 2022 19:09:21 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id k20sm20635330qtx.64.2022.02.15.19.09.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 19:09:21 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     jean-philippe@linaro.org
+Cc:     joro@8bytes.org, will@kernel.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drivers/iommu: use struct_size over open coded arithmetic
+Date:   Wed, 16 Feb 2022 03:09:16 +0000
+Message-Id: <20220216030916.1839742-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220127124058.1172422-1-ruansy.fnst@fujitsu.com>
- <20220127124058.1172422-10-ruansy.fnst@fujitsu.com> <CAPcyv4iTO55BX+_v2yHRBjSppPgT23JsHg-Oagb6RwHMj-W+Ug@mail.gmail.com>
- <ff0f0d8c-a4a3-6dbf-8358-67c3bb11c2d6@fujitsu.com>
-In-Reply-To: <ff0f0d8c-a4a3-6dbf-8358-67c3bb11c2d6@fujitsu.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 15 Feb 2022 19:09:01 -0800
-Message-ID: <CAPcyv4h7zVYu7K3j2JNEd7jTHJRvVDwqhhRCBbq6ru4+QGY9Hg@mail.gmail.com>
-Subject: Re: [PATCH v10 9/9] fsdax: set a CoW flag when associate reflink mappings
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 6:55 PM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrot=
-e:
->
->
->
-> =E5=9C=A8 2022/2/16 10:09, Dan Williams =E5=86=99=E9=81=93:
-> > On Thu, Jan 27, 2022 at 4:41 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> =
-wrote:
-> >>
-> >> Introduce a PAGE_MAPPING_DAX_COW flag to support association with CoW =
-file
-> >> mappings.  In this case, the dax-RMAP already takes the responsibility
-> >> to look up for shared files by given dax page.  The page->mapping is n=
-o
-> >> longer to used for rmap but for marking that this dax page is shared.
-> >> And to make sure disassociation works fine, we use page->index as
-> >> refcount, and clear page->mapping to the initial state when page->inde=
-x
-> >> is decreased to 0.
-> >>
-> >> With the help of this new flag, it is able to distinguish normal case
-> >> and CoW case, and keep the warning in normal case.
-> >>
-> >> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> >> ---
-> >>   fs/dax.c                   | 65 ++++++++++++++++++++++++++++++++----=
---
-> >>   include/linux/page-flags.h |  6 ++++
-> >>   2 files changed, 62 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/fs/dax.c b/fs/dax.c
-> >> index 250794a5b789..88879c579c1f 100644
-> >> --- a/fs/dax.c
-> >> +++ b/fs/dax.c
-> >> @@ -334,13 +334,46 @@ static unsigned long dax_end_pfn(void *entry)
-> >>          for (pfn =3D dax_to_pfn(entry); \
-> >>                          pfn < dax_end_pfn(entry); pfn++)
-> >>
-> >> +static inline void dax_mapping_set_cow_flag(struct address_space *map=
-ping)
-> >> +{
-> >> +       mapping =3D (struct address_space *)PAGE_MAPPING_DAX_COW;
-> >> +}
-> >> +
-> >> +static inline bool dax_mapping_is_cow(struct address_space *mapping)
-> >> +{
-> >> +       return (unsigned long)mapping =3D=3D PAGE_MAPPING_DAX_COW;
-> >> +}
-> >> +
-> >>   /*
-> >> - * TODO: for reflink+dax we need a way to associate a single page wit=
-h
-> >> - * multiple address_space instances at different linear_page_index()
-> >> - * offsets.
-> >> + * Set or Update the page->mapping with FS_DAX_MAPPING_COW flag.
-> >> + * Return true if it is an Update.
-> >> + */
-> >> +static inline bool dax_mapping_set_cow(struct page *page)
-> >> +{
-> >> +       if (page->mapping) {
-> >> +               /* flag already set */
-> >> +               if (dax_mapping_is_cow(page->mapping))
-> >> +                       return false;
-> >> +
-> >> +               /*
-> >> +                * This page has been mapped even before it is shared,=
- just
-> >> +                * need to set this FS_DAX_MAPPING_COW flag.
-> >> +                */
-> >> +               dax_mapping_set_cow_flag(page->mapping);
-> >> +               return true;
-> >> +       }
-> >> +       /* Newly associate CoW mapping */
-> >> +       dax_mapping_set_cow_flag(page->mapping);
-> >> +       return false;
-> >> +}
-> >> +
-> >> +/*
-> >> + * When it is called in dax_insert_entry(), the cow flag will indicat=
-e that
-> >> + * whether this entry is shared by multiple files.  If so, set the pa=
-ge->mapping
-> >> + * to be FS_DAX_MAPPING_COW, and use page->index as refcount.
-> >>    */
-> >>   static void dax_associate_entry(void *entry, struct address_space *m=
-apping,
-> >> -               struct vm_area_struct *vma, unsigned long address)
-> >> +               struct vm_area_struct *vma, unsigned long address, boo=
-l cow)
-> >>   {
-> >>          unsigned long size =3D dax_entry_size(entry), pfn, index;
-> >>          int i =3D 0;
-> >> @@ -352,9 +385,17 @@ static void dax_associate_entry(void *entry, stru=
-ct address_space *mapping,
-> >>          for_each_mapped_pfn(entry, pfn) {
-> >>                  struct page *page =3D pfn_to_page(pfn);
-> >>
-> >> -               WARN_ON_ONCE(page->mapping);
-> >> -               page->mapping =3D mapping;
-> >> -               page->index =3D index + i++;
-> >> +               if (cow) {
-> >> +                       if (dax_mapping_set_cow(page)) {
-> >> +                               /* Was normal, now updated to CoW */
-> >> +                               page->index =3D 2;
-> >> +                       } else
-> >> +                               page->index++;
-> >> +               } else {
-> >> +                       WARN_ON_ONCE(page->mapping);
-> >> +                       page->mapping =3D mapping;
-> >> +                       page->index =3D index + i++;
-> >> +               }
-> >>          }
-> >>   }
-> >>
-> >> @@ -370,7 +411,12 @@ static void dax_disassociate_entry(void *entry, s=
-truct address_space *mapping,
-> >>                  struct page *page =3D pfn_to_page(pfn);
-> >>
-> >>                  WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
-> >> -               WARN_ON_ONCE(page->mapping && page->mapping !=3D mappi=
-ng);
-> >> +               if (!dax_mapping_is_cow(page->mapping)) {
-> >> +                       /* keep the CoW flag if this page is still sha=
-red */
-> >> +                       if (page->index-- > 0)
-> >> +                               continue;
-> >> +               } else
-> >> +                       WARN_ON_ONCE(page->mapping && page->mapping !=
-=3D mapping);
-> >>                  page->mapping =3D NULL;
-> >>                  page->index =3D 0;
-> >>          }
-> >> @@ -810,7 +856,8 @@ static void *dax_insert_entry(struct xa_state *xas=
-,
-> >>                  void *old;
-> >>
-> >>                  dax_disassociate_entry(entry, mapping, false);
-> >> -               dax_associate_entry(new_entry, mapping, vmf->vma, vmf-=
->address);
-> >> +               dax_associate_entry(new_entry, mapping, vmf->vma, vmf-=
->address,
-> >> +                               false);
-> >
-> > Where is the caller that passes 'true'? Also when that caller arrives
-> > introduce a separate dax_associate_cow_entry() as that's easier to
-> > read than dax_associate_entry(..., true) in case someone does not
-> > remember what that boolean flag means.
->
-> This flag is supposed to be used when CoW support is introduced.
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-Ok, so should this patch wait and be a part of that series? It's
-otherwise confusing to introduce a new capability in a patch set and
-not take advantage of it until a separate / later patch set.
+Replace zero-length array with flexible-array member and make use
+of the struct_size() helper in kzalloc(). For example:
 
-> When
-> it is a CoW operation, which is decided by iomap & srcmap's flag, this
-> flag will be set true.
->
-> I think I should describe it in detail in the commit message.
+struct viommu_request {
+	...
+	unsigned int			len;
+	char				buf[];
+};
 
-That could help, or move it to the COW support series.
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
 
-> > However, it's not clear to me that this approach is a good idea given
-> > that the filesystem is the source of truth for how many address_spaces
-> > this page mapping might be duplicated. What about a iomap_page_ops for
-> > fsdax to ask the filesystem when it is ok to clear the mapping
-> > association for a page?
->
-> I'll think how to implement it in this way.
->
->
-> --
-> Thanks,
-> Ruan.
->
-> >
-> >>                  /*
-> >>                   * Only swap our new entry into the page cache if the=
- current
-> >>                   * entry is a zero page or an empty entry.  If a norm=
-al PTE or
-> >> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> >> index 1c3b6e5c8bfd..6370d279795a 100644
-> >> --- a/include/linux/page-flags.h
-> >> +++ b/include/linux/page-flags.h
-> >> @@ -572,6 +572,12 @@ __PAGEFLAG(Reported, reported, PF_NO_COMPOUND)
-> >>   #define PAGE_MAPPING_KSM       (PAGE_MAPPING_ANON | PAGE_MAPPING_MOV=
-ABLE)
-> >>   #define PAGE_MAPPING_FLAGS     (PAGE_MAPPING_ANON | PAGE_MAPPING_MOV=
-ABLE)
-> >>
-> >> +/*
-> >> + * Different with flags above, this flag is used only for fsdax mode.=
-  It
-> >> + * indicates that this page->mapping is now under reflink case.
-> >> + */
-> >> +#define PAGE_MAPPING_DAX_COW   0x1
-> >> +
-> >>   static __always_inline int PageMappingFlags(struct page *page)
-> >>   {
-> >>          return ((unsigned long)page->mapping & PAGE_MAPPING_FLAGS) !=
-=3D 0;
-> >> --
-> >> 2.34.1
-> >>
-> >>
-> >>
->
->
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+---
+ drivers/iommu/virtio-iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
+index f2aa34f57454..0996d9c7c358 100644
+--- a/drivers/iommu/virtio-iommu.c
++++ b/drivers/iommu/virtio-iommu.c
+@@ -231,7 +231,7 @@ static int __viommu_add_req(struct viommu_dev *viommu, void *buf, size_t len,
+ 	if (write_offset <= 0)
+ 		return -EINVAL;
+ 
+-	req = kzalloc(sizeof(*req) + len, GFP_ATOMIC);
++	req = kzalloc(struct_size(req, buf, len), GFP_ATOMIC);
+ 	if (!req)
+ 		return -ENOMEM;
+ 
+-- 
+2.25.1
+

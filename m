@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 673D54B8F4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F824B8F48
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237202AbiBPRii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 12:38:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53162 "EHLO
+        id S237198AbiBPRiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 12:38:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237201AbiBPRig (ORCPT
+        with ESMTP id S236646AbiBPRiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:38:36 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B05A9A9AA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:38:23 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bu29so5315840lfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:38:23 -0800 (PST)
+        Wed, 16 Feb 2022 12:38:12 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E69C9A9A8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:37:58 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id d187so2686083pfa.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:37:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CLGpzGzLWEEIPQa2RoBV1b48UAm//y/cN1v178XuBnY=;
-        b=YIKcsqMF3eKCVXPEAvcBo0+LNPTAgkAASeO6TNkeW/s+2ROdkA/A6HTyBI6TEk091E
-         B+exaNzlJPBcARjAcThzqD4S5H2FK9wus6v6wgaLIcKaG9xbSqNh5dr+JoMY/IeVZ6HC
-         26KBmcLh4TfDJEHR0OxdK2PearXUSrey6TC85sSCQM4kpIoBfcFgh5f7BJlHw0vEWk+s
-         cjX7wCAZPK2PEtYu3K4aHj66MVQsSX+im8nuXKCvlrMiart2SBR8er73ICykTrReN3/r
-         QEnKJtgYFY/mZbTIQCb6SI/3L5fSkEQPTmVqa4mH1IjhzaCsuObSUs93pQeBcOmqG2WH
-         ZY4w==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xKWNPErVMGQufioCW/qqLYLJrDk+7uqAfpmgky9+H0g=;
+        b=nR7qUVxsrONuU7dHcrwwAP7NQ0egh4qC86H13RFU+ZxhAzpC4G5/lZPRySMHur9UYp
+         arbZvfO/bcceCgvNfc6/+iG4AGuh6MY775KclpU42+hl27vxtkWkbHW6efL587qdbUdM
+         9oVUbu36pzLUF/g9g7mIR2OHWwWPyqgzvMuEAjgWikODdrhInuhP6OSav2y7TL+wpTVl
+         Sk1NFKXM5OJ93Fzm5RJEfImD08oU+kybm6HuGtlPAjJpzlKHZgKGRHxZ/EEOSr+Xs+/O
+         dS+qFY6PE/nlt4PmR//J4S+nfPBPNBwaTyf6ExtWHgN9pBn/dnOkifGNV6c6tRPBOvEN
+         wInA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CLGpzGzLWEEIPQa2RoBV1b48UAm//y/cN1v178XuBnY=;
-        b=PfeF3WM0VG5G9BWV2lm0tcegxTOoJQBxoAau+ahpfzLGZ4DmSw9wzpSCBR6A3DKo7R
-         mtCrlMUy4sUzEeOQ69brRH+wgfCuR3wJJ/HyW7+s3bfhSr7HTVAEPyY4yks/42RaGakO
-         xEv8sVg4VSOvtsgbr9gxzmDpOjEDY9yN0FODYdp8xwaHEPS+Fkd6ppK0yTgmhjUJjBXx
-         9FonMlGjLzCTwTV0QbDJZSkeb2b9NG8B0A9ZIMQGJ6wF4xeDgjek7XYKECQXMA5fGsIE
-         a0YkNmdypTpNrFKLabpmUI/hLL2efCaz31RFF3bQRiqSf9RHuKcK7Uom8HG7HRnQdysY
-         fcAg==
-X-Gm-Message-State: AOAM531jdUwaDDHcGPgRMSYZz37Z0rDNFyBC5wHSaoti91dW/kh0kMwW
-        g/VeCeeY2GDbG9Qtb09xC/zjdVwYMPUk9O6gy0uUCA==
-X-Google-Smtp-Source: ABdhPJwNKe5xPv9L7nEZ8pEZrE0nqEvTSQOI9uOjdLNagMGSvQN6g9gDhIb98Z/Dr0yqyNhx35ovoN+c/L+RavqRqt4=
-X-Received: by 2002:a05:6512:965:b0:443:7340:9893 with SMTP id
- v5-20020a056512096500b0044373409893mr2792075lft.119.1645033101394; Wed, 16
- Feb 2022 09:38:21 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xKWNPErVMGQufioCW/qqLYLJrDk+7uqAfpmgky9+H0g=;
+        b=LCTzoKWSEvpcZ+Th0rCpyaHr1vXmw5utUv3v5yo6o2pz4OU3dKT7GkCiaNfDwB1GZA
+         p426chKLEcMbledI1UEaAaqT/MVS4QmGnG7vcXKE59vGNRE5z+MVfMDg6Xds6x+7633Y
+         G3fbdNuiIOaiEpQJu650bKCHuyjaLWP8Lz35mXmtpbK6bKpKxZNV5AT+wsj33GTL/7wa
+         zWquBM29VKTzF2KQa+/9C8tiz+6PZcnok8FvcmIxxjnbJN6+FhOXRaAIMeiKvtupOPhB
+         MHPWrEzQ/O9WgeArR4/Ru02s+RH/fQyH6kBbPvkAHPLRwn7YAaxmVwygeiO+gWdqtoiM
+         5KFQ==
+X-Gm-Message-State: AOAM532+Y65GC+l15GIIdoJUR9s9mk2sDYMKsk2lHZ6I6SH4N4oL4VdL
+        yu7BgLTQRu67nluauO/NtOg=
+X-Google-Smtp-Source: ABdhPJxAUyUhwYWwsVuwu50HkmYt/yVB7saLqaVbzXLlqKAD8LuDwqg2pYUGRDML9SUNy5ni4StB5w==
+X-Received: by 2002:a05:6a00:21c6:b0:49f:dcb7:2bf2 with SMTP id t6-20020a056a0021c600b0049fdcb72bf2mr4104026pfj.19.1645033078197;
+        Wed, 16 Feb 2022 09:37:58 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ob12sm14203422pjb.5.2022.02.16.09.37.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 09:37:57 -0800 (PST)
+Subject: Re: [PATCH] dma-contiguous: Prioritize restricted DMA pool over
+ shared DMA pool
+To:     Robin Murphy <robin.murphy@arm.com>, linux-kernel@vger.kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
+        opendmb@gmail.com, robh@kernel.org, will@kernel.org,
+        tientzu@chromium.org, Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux-foundation.org>
+References: <20220215224344.1779145-1-f.fainelli@gmail.com>
+ <39ed2187-2345-297d-2dd3-0b0974ce8b31@arm.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <50ae9c05-2ec4-09a8-965c-0d70ea74d879@gmail.com>
+Date:   Wed, 16 Feb 2022 09:37:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211222225350.1912249-1-vipinsh@google.com> <20220105180420.GC6464@blackbody.suse.cz>
- <CAHVum0e84nUcGtdPYQaJDQszKj-QVP5gM+nteBpSTaQ2sWYpmQ@mail.gmail.com>
- <Yeclbe3GNdCMLlHz@slm.duckdns.org> <7a0bc562-9f25-392d-5c05-9dbcd350d002@redhat.com>
- <YehY0z2vHYVZk52J@slm.duckdns.org> <20220120150502.GC27269@blackbody.suse.cz>
-In-Reply-To: <20220120150502.GC27269@blackbody.suse.cz>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Wed, 16 Feb 2022 09:37:45 -0800
-Message-ID: <CAHVum0fOP-2XcUcG3PqW08DY7CmpDroG6Fcv9KoD1FqLmGpB8w@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: Move VM's worker kthreads back to the original
- cgroups before exiting.
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, seanjc@google.com,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, dmatlack@google.com,
-        jiangshanlai@gmail.com, kvm@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <39ed2187-2345-297d-2dd3-0b0974ce8b31@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,99 +79,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo, Michal
+On 2/16/22 3:13 AM, Robin Murphy wrote:
+> On 2022-02-15 22:43, Florian Fainelli wrote:
+>> Some platforms might define the same memory region to be suitable for
+>> used by a kernel supporting CONFIG_DMA_RESTRICTED_POOL while maintaining
+>> compatibility with older kernels that do not support that. This is
+>> achieved by declaring the node this way;
+> 
+> Those platforms are doing something inexplicably wrong, then.
 
-Paolo:
-Will you accept a patch which uses real_parent in
-kvm_vm_worker_thread() as suggested by Sean, while I figure out the
-recommendation from Michal about making kthread_stop() wait on
-kernel_wait()?
-        cgroup_attach_task_all(current->real_parent, current)
+Matter of perspective I guess.
 
-Michal:
+> 
+> "restricted-dma-pool" says that DMA for the device has to be bounced
+> through a dedicated pool because it can't be trusted with visibility of
+> regular OS memory. "reusable" tells the OS that it's safe to use the
+> pool as regular OS memory while it's idle. Do you see how those concepts
+> are fundamentally incompatible?
 
-On Thu, Jan 20, 2022 at 7:05 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
-:
->
-> On Wed, Jan 19, 2022 at 08:30:43AM -1000, Tejun Heo <tj@kernel.org> wrote=
-:
-> > It'd be nicer if we can make kthread_stop() waiting more regular but I
-> > couldn't find a good existing place and routing the usual parent
-> > signaling might be too complicated. Anyone has better ideas?
->
-> The regular way is pictured in Paolo's diagram already, the
-> exit_notify/do_signal_parent -> wait4 path.
->
-> Actually, I can see that there exists already kernel_wait() and is used
-> by a UMH wrapper kthread. kthreadd issues ignore_signals() so (besides
-> no well defined point of signalling a kthread) the signal notification
-> is moot and only waking up the waiter is relevant. So kthread_stop()
-> could wait via kernel_wait() based on pid (extracted from task_struct).
->
-> Have I missed an obstacle?
->
+From the perspective of the software or firmware agent that is
+responsible for setting up the appropriate protection on the reserved
+memory, it does not matter what the compatible string is, the only
+properties that matter are the base address, size, and possibly whether
+'no-map' is specified or not to set-up appropriate protection for the
+various memory controller agents (CPU, PCIe, everything else).
 
-I must admit I do not have a good understanding of kernel_wait() and
-kthread_stop() APIs. I tried making some changes in the kthread_stop()
-but I was not able to successfully use the API. I tested it by a
-writing a test module, where during the init I start a kthread which
-prints some message every few seconds and during the module exit I
-call kernel_stop(). This module worked as intended without the
-kernel_wait() changes in the kthread_stop() API.
+Everything else is just information provided to the OS in order to
+provide a different implementation keyed off the compatible string. So
+with that in mind, you can imagine that before the introduction of
+'restricted-dma-pool' in 5.15, some platforms already had such a concept
+of a reserved DMA region, that was backed by a device private CMA pool,
+they would allocate memory from that region and would create their own
+middle layer for bounce buffering if they liked to. This is obviously
+not ideal on a number of levels starting from not being done at the
+appropriate level but it was done.
 
-My changes were basically replacing wait_for_completion() with
-kernel_wait() call.
+Now that 'restricted-dma-pool' is supported, transitioning them over is
+obviously better and updating the compatible string for those specific
+regions to include the more descriptive 'restrictded-dma-pool' sounded
+to me as an acceptable way to maintain forward/backward DTB
+compatibility rather than doubly reserving these region one with the
+"old" compatible and one with the "new" compatible, not that the system
+is even capable of doing that anyway, so we would have had to
+essentially make them adjacent.
 
-@@ -645,8 +645,9 @@ int kthread_stop(struct task_struct *k)
-        set_bit(KTHREAD_SHOULD_STOP, &kthread->flags);
-        kthread_unpark(k);
-        wake_up_process(k);
--       wait_for_completion(&kthread->exited);
--       ret =3D k->exit_code;
-+       kernel_wait(k->pid, &ret);
-+//     kernel_wait(task_pid_vnr(k), &ret);
-+//     wait_for_completion(&kthread->exited);
-+//     ret =3D k->exit_code;
-        put_task_struct(k);
+And no, we are not bringing Linux version awareness to our boot loader
+mangling the Device Tree blob, that's not happening, hence this patch.
 
-I used few other combination where I put kernel_wait() call after
-put_task_struct(k) call.
+> 
+> Linux is right to reject contradictory information rather than attempt
+> to guess at what might be safe or not.
 
-Every time during the module exit, kernel was crashing like:
+The piece of contradictory information here specifically is the
+'reusable' boolean property, but as I explain the commit message
+message, if you have a "properly formed" 'restricted-dma-pool' region
+then it should not have that property in the first place, but even if it
+does, it does not harm anything to have it.
 
-[  285.014612] RIP: 0010:0xffffffffc04ed074
-[  285.018537] RSP: 0018:ffff9ccdc8365ee8 EFLAGS: 00010246
-[  285.023761] RAX: 0000000000000000 RBX: 0000000000000012 RCX: 00000000000=
-00001
-[  285.030896] RDX: 0000000000000000 RSI: 0000000000000286 RDI: ffff9cce3f7=
-d9cc0
-[  285.038028] RBP: ffff9ccdc8365ef8 R08: 0000000000000000 R09: 00000000000=
-15504
-[  285.045160] R10: 000000000000004b R11: ffffffff8dd92880 R12: 00000000000=
-00012
-[  285.052293] R13: ffff9ccdc813db90 R14: ffff9ccdc7e66240 R15: ffffffffc04=
-ed000
-[  285.059425] FS:  0000000000000000(0000) GS:ffff9cce3f7c0000(0000)
-knlGS:0000000000000000
-[  285.067510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  285.073258] CR2: ffffffffc04ed074 CR3: 000000c07f20e002 CR4: 00000000003=
-62ef0
-[  285.080390] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000000000=
-00000
-[  285.087522] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00000000000=
-00400
-[  285.094656] Call Trace:
-[  285.097112]  kthread+0x148/0x1b0
-[  285.100343]  ? kthread_blkcg+0x30/0x30
-[  285.104096]  ret_from_fork+0x3a/0x60
-[  285.107671] Code:  Bad RIP value.
-[  285.107671] IP: 0xffffffffc04ecff4:
+> 
+> Furthermore, down at the practical level, a SWIOTLB pool is used for
+> bouncing streaming DMA API mappings, while a coherent/CMA pool is used
+> for coherent DMA API allocations; they are not functionally
+> interchangeable either. If a device depends on coherent allocations
+> rather than streaming DMA, it should still have a coherent pool even
+> under a physical memory protection scheme, and if it needs both
+> streaming DMA and coherent buffers then it can have both types of pool -
+> the bindings explicitly call that out. It's true that SWIOTLB pools can
+> act as an emergency fallback for small allocations for I/O-coherent
+> devices, but that's not really intended to be relied upon heavily.
+> 
+> So no, I do not see anything wrong with the current handling of
+> nonsensical DTs here, sorry.
 
-Crash is not observed if I keep wait_for_completion(&kthread->exited)
-along with kernel_wait(), but I guess the kernel_wait() should be
-sufficient by itself if I figure out proper way to use it.
-
-Do you have any suggestions what might be the right way to use this API?
-
-Thanks
-Vipin
+There is nothing wrong in the current code, but with changes that have
+no adverse effect on "properly" constructed reserved memory entries we
+can accept both types of reservation and maintain forward/backward
+compatibility in our case. So why not?
+-- 
+Florian

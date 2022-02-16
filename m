@@ -2,141 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6B14B8EC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A624B8ECF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236875AbiBPREo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 12:04:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34930 "EHLO
+        id S236889AbiBPRFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 12:05:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiBPREn (ORCPT
+        with ESMTP id S236859AbiBPRFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:04:43 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FAA2A523F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:04:30 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id s1so511116ioe.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:04:30 -0800 (PST)
+        Wed, 16 Feb 2022 12:05:15 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062272A5984
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:05:03 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2d646fffcc2so5846397b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:05:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0ebPURKf0/zwBkSiUOG+tDveD/Pc8B6gk0N6+zX/eOg=;
-        b=caoErfXVMhneOKUMlH+nxW0INIgrQ6Nixn6Vi1TMYKcG/GLqZqDmKTDkIvgsRkeaD/
-         D23NXdh9zJO3y9F+AUOh0pdkVYWp97CEqabIdSuNSwmPY2KhgQOKl9abEnjygdbzg99P
-         E6SBxO32A89HTTbx9T25u753a5gO/G32bKzFmNSMSMmCaSiEcAZs5aFpsiN58JDbngj5
-         vnsEUBUX5yYACAWkw/+xSiUT8cNiAtZLMaI7HBppC4OMvDGzV9d505sF/S4jqimQ5ifB
-         /ow4wkKuqMsNRWj3gWER0cRP8hIeYPd5ohPLztTOaXC4IyOARvq/awhPGOlZRi72fLBz
-         NwNw==
+        bh=2juVayWDeDNiMOSl5byAk4ZO9Dz6MyJWtuklD1EzHsc=;
+        b=Me2QFmo170zKETlbtKN8PcGm3z91iWxBm8JFCZl0dLPpr6c2h9bTwnU4y756hvisXL
+         5skvfAhbQ2/kJsqmTfAtDcdB2tYVqSahp9S0T1oiUckh4F3vEepLix+KRHxWdi0DNzVj
+         HZMXcz4rL+rZujczwWkcbsXz76D1YlZkdz72pxcoMXGmQDrdom3WJgEgrU9Nr/mWLL/t
+         o9rHyGG8/Nl40QSN7F+QKxdDpTZdqHqs5LfMY1oZQEfP0oBFZIbX8e1cRux3TIC0SDx7
+         iwkZ4dOMenFdBk2po2X52T8QtHb7spTFl/9korrlnMv80YKkorD3O3NDiiQOqGosBOZI
+         NQCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0ebPURKf0/zwBkSiUOG+tDveD/Pc8B6gk0N6+zX/eOg=;
-        b=5a2kV0QX80rnYOia9rpbz4iDd8fDgS2TMMixU+nC8R1KXo7Nz1RVI9rRBQhZggyhKK
-         OlP5N1d1n+4om2m3gD+Wrv0qnikVXjKUs1N2Ud5kJVTc02+F+f+4qyoVmPCwOsLb35yP
-         vD2L2meL52oUwMyjfepqird6/FrPCM2+1MOAEHT/t+hswxVU3A5qwPPViMa2BCe1eaeG
-         kRMe9lZRQtoy+NgCVumkf/dwLNlaEhtM/B5XTtf207Vi4HFrgQMc6WnD0enpxmnk3b2d
-         y8LY47yKWS2rt+uAJMD6+Uo52aRXJsZ8ewhnaULrkUeLD0EbBHWwLIdldan8A7x+iCDy
-         NNOg==
-X-Gm-Message-State: AOAM531G1rIbbm8mWjCJT+gto/70NsVnV0TttLHhZNP9Qk5REqGBCrYH
-        tJaHqHvv9AypbhpNmPWylReH36Tw3kHx0Cp0m3k=
-X-Google-Smtp-Source: ABdhPJx1pOzGdJ0I5ZGWUdukwje0VchP9Q2Dpzte/hebLd/x02Xsa9rd474WbNtX+50nkoXg8naKRuuHmHa3wNyQnkM=
-X-Received: by 2002:a5e:8c15:0:b0:634:478e:450e with SMTP id
- n21-20020a5e8c15000000b00634478e450emr2504490ioj.56.1645031070215; Wed, 16
- Feb 2022 09:04:30 -0800 (PST)
+        bh=2juVayWDeDNiMOSl5byAk4ZO9Dz6MyJWtuklD1EzHsc=;
+        b=PfGek/vM/UctPVSmZIgiFijZ0G8MenkoAONGdi6gCwQsuOrsGU25x3PdrZPi/VXsG4
+         CJ+W+YLQPmCJmurlb0rQ76iAcTk3it2WWRGaF4iOwRYlJ0CmKtiRlduhPKJiLF118hb1
+         ZDWnaRYdhirhVV0VOXkDW+F1Cu5HcnWfJT+y7cGWev8szYtxGREmDopPovqm85cebgPH
+         1oDyXhTXurWGfQzVToFYikHGbi/wxO+YCvIJq9lTw55lKnLEb/a9B4kchracrlQ6M4Bu
+         xPB29Pv1Qerl9plCvnFcOtvp2Ppg/SVRpKCrOOFM0H5i8dBG+DzfIvJaU0ilBX+ZhJuM
+         tyuA==
+X-Gm-Message-State: AOAM533m0ufKYREBzNVGhXQ4T4y+lgrQckvhsZ5JKw65uvQHkEELwmDY
+        Wkxh9iD3vw/7Ja3Q7hibL667w0mQiG8gdp43qYNmbg==
+X-Google-Smtp-Source: ABdhPJzPZKpp/lmdiJbf1hd+uHL0HzVvyEzxKNLXdYq/W8oDUygcnnrBqzIk0QsOwf5SNcKoOsImPBIsfNXO10j6SmM=
+X-Received: by 2002:a81:993:0:b0:2d6:15f5:b392 with SMTP id
+ 141-20020a810993000000b002d615f5b392mr3246691ywj.489.1645031101716; Wed, 16
+ Feb 2022 09:05:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20220111161937.56272-1-pankaj.gupta.linux@gmail.com>
- <20220111161937.56272-2-pankaj.gupta.linux@gmail.com> <CAPcyv4jrVJ_B0N_-vtqgXaOMovUgnSLCNj228nWMRhGAC5PDhA@mail.gmail.com>
- <CAM9Jb+i0B2jZ0uCEDyiz8ujuMkioFgOA0r7Lz9wDK026Vq1Hxg@mail.gmail.com> <CAPcyv4gJGB8+acXKXbpEpMck_y=XBMR0B0c255MaSyLsH4+eZA@mail.gmail.com>
-In-Reply-To: <CAPcyv4gJGB8+acXKXbpEpMck_y=XBMR0B0c255MaSyLsH4+eZA@mail.gmail.com>
-From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-Date:   Wed, 16 Feb 2022 18:04:19 +0100
-Message-ID: <CAM9Jb+hbds3b+nY9APU40Fpd9pt4CyFuZ3SU4ZB05subnaJQvQ@mail.gmail.com>
-Subject: Re: [RFC v3 1/2] virtio-pmem: Async virtio-pmem flush
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Linux NVDIMM <nvdimm@lists.linux.dev>,
-        virtualization@lists.linux-foundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jmoyer <jmoyer@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Pankaj Gupta <pankaj.gupta@ionos.com>
+References: <20220216035426.2233808-1-imagedong@tencent.com>
+In-Reply-To: <20220216035426.2233808-1-imagedong@tencent.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 16 Feb 2022 09:04:50 -0800
+Message-ID: <CANn89i+gBxse3zf2gSvm5AU3D_2MSztGArKQxF4B2rTpWNUSwA@mail.gmail.com>
+Subject: Re: [PATCH net-next 0/9] net: add skb drop reasons to TCP packet receive
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        flyingpeng@tencent.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >
-> > > >
-> > > > Enable asynchronous flush for virtio pmem using work queue. Also,
-> > > > coalesce the flush requests when a flush is already in process.
-> > > > This functionality is copied from md/RAID code.
-> > > >
-> > > > When a flush is already in process, new flush requests wait till
-> > > > previous flush completes in another context (work queue). For all
-> > > > the requests come between ongoing flush and new flush start time, only
-> > > > single flush executes, thus adhers to flush coalscing logic. This is
-> > >
-> > > s/adhers/adheres/
-> > >
-> > > s/coalscing/coalescing/
-> > >
-> > > > important for maintaining the flush request order with request coalscing.
-> > >
-> > > s/coalscing/coalescing/
-> >
-> > o.k. Sorry for the spelling mistakes.
-> >
-> > >
-> > > >
-> > > > Signed-off-by: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-> > > > ---
-> > > >  drivers/nvdimm/nd_virtio.c   | 74 +++++++++++++++++++++++++++---------
-> > > >  drivers/nvdimm/virtio_pmem.c | 10 +++++
-> > > >  drivers/nvdimm/virtio_pmem.h | 16 ++++++++
-> > > >  3 files changed, 83 insertions(+), 17 deletions(-)
-> > > >
-> > > > diff --git a/drivers/nvdimm/nd_virtio.c b/drivers/nvdimm/nd_virtio.c
-> > > > index 10351d5b49fa..179ea7a73338 100644
-> > > > --- a/drivers/nvdimm/nd_virtio.c
-> > > > +++ b/drivers/nvdimm/nd_virtio.c
-> > > > @@ -100,26 +100,66 @@ static int virtio_pmem_flush(struct nd_region *nd_region)
-> > > >  /* The asynchronous flush callback function */
-> > > >  int async_pmem_flush(struct nd_region *nd_region, struct bio *bio)
-> > > >  {
-> > > > -       /*
-> > > > -        * Create child bio for asynchronous flush and chain with
-> > > > -        * parent bio. Otherwise directly call nd_region flush.
-> > > > +       /* queue asynchronous flush and coalesce the flush requests */
-> > > > +       struct virtio_device *vdev = nd_region->provider_data;
-> > > > +       struct virtio_pmem *vpmem  = vdev->priv;
-> > > > +       ktime_t req_start = ktime_get_boottime();
-> > > > +       int ret = -EINPROGRESS;
-> > > > +
-> > > > +       spin_lock_irq(&vpmem->lock);
-> > >
-> > > Why a new lock and not continue to use ->pmem_lock?
-> >
-> > This spinlock is to protect entry in 'wait_event_lock_irq'
-> > and the Other spinlock is to protect virtio queue data.
+On Tue, Feb 15, 2022 at 7:54 PM <menglong8.dong@gmail.com> wrote:
 >
-> Understood, but md shares the mddev->lock for both purposes, so I
-> would ask that you either document what motivates the locking split,
-> or just reuse the lock until a strong reason to split them arises.
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> In this series patches, reasons for skb drops are added to TCP layer, and
+> both TCPv4 and TCPv6 are considered.
+>
+> in this series patches, the process of packet ingress in TCP layer is
+> considered, as skb drops hardly happens in the egress path.
+>
+> However, it's a little complex for TCP state processing, as I find that
+> it's hard to report skb drop reasons to where it is freed. For example,
+> when skb is dropped in tcp_rcv_state_process(), the reason can be caused
+> by the call of tcp_v4_conn_request(), and it's hard to return a drop
+> reason from tcp_v4_conn_request(). So I just skip such case for this
+> moment.
+>
 
-O.k. Will check again if we could use same lock Or document it.
+I think you should add at least in this cover letter, or better in a
+document that can be amended,
+how this can be used on a typical TCP session.
+For someone who is having issues with TCP flows, what would they need to do.
+Think of something that we (kernel dev) could copy paste to future
+email replies.
+It might be mostly clear for some of us reviewing patches at this
+moment, but in one year we will all forget about the details.
 
-Thanks,
-Pankaj
+
+>
+> Menglong Dong (9):
+>   net: tcp: introduce tcp_drop_reason()
+>   net: tcp: add skb drop reasons to tcp_v4_rcv()
+>   net: tcp: use kfree_skb_reason() for tcp_v6_rcv()
+>   net: tcp: add skb drop reasons to tcp_v{4,6}_inbound_md5_hash()
+>   net: tcp: add skb drop reasons to tcp_add_backlog()
+>   net: tcp: use kfree_skb_reason() for tcp_v{4,6}_do_rcv()
+>   net: tcp: use tcp_drop_reason() for tcp_rcv_established()
+>   net: tcp: use tcp_drop_reason() for tcp_data_queue()
+>   net: tcp: use tcp_drop_reason() for tcp_data_queue_ofo()
+>
+>  include/linux/skbuff.h     | 28 +++++++++++++++++++++++++
+>  include/net/tcp.h          |  3 ++-
+>  include/trace/events/skb.h | 10 +++++++++
+>  net/ipv4/tcp_input.c       | 42 +++++++++++++++++++++++++++++---------
+>  net/ipv4/tcp_ipv4.c        | 36 ++++++++++++++++++++++++--------
+>  net/ipv6/tcp_ipv6.c        | 42 +++++++++++++++++++++++++++++---------
+>  6 files changed, 131 insertions(+), 30 deletions(-)
+>
+> --
+> 2.34.1
+>

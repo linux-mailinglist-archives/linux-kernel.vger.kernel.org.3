@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30154B8FE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5774B8FE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237456AbiBPSKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:10:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49734 "EHLO
+        id S237452AbiBPSKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:10:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237455AbiBPSKl (ORCPT
+        with ESMTP id S237442AbiBPSKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:10:41 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F3B2B0B1A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:28 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id f37so5354882lfv.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:27 -0800 (PST)
+        Wed, 16 Feb 2022 13:10:30 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7BA2A4A2C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:17 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so1664633oos.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:10:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IcjZSFFwvzH/2up3CoXhhR79DVF3xC2YmgnlBmig55Y=;
-        b=w0bfYwr/yIGgKsMa1Lc2zzEf7dvcqLF1kzRhwu0wytHvdRAS+simDuAOgxyM7Vwzu9
-         tlA5U3ssSqPOn3EMDTDRu2aq9oU+7vOWm6Roq0/pqSQOMdVBM3gbeduVwjmbT2DHWVMb
-         q9D5CEfQHC+J+H/Y7rnP2d/ViEGlk215M49G6LxjPZ3Yv1Gz1UZBEOmnRjhgIuqmvUgU
-         C8Eiuf2J1pQ6sjyI8nRt/GyZ2yP3Kbqx5fXJXA3lcicj7pPDK7CF//nRb9Wy/Et7Qb1y
-         iIZdq5bvjNBVYdqRcmCwQjysllfixuxZE6Oo5rcbxX4XfaY1rB9fH43GUQvoq0ccjNTB
-         HcQQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zVC5cj0z6rMQpOyPOmFfrF76NsP0MR7V60Bxrd230h8=;
+        b=q8IQlHrCXptsSphCoGIR7Lz/Qw8ySxmbDGAVRO4mPP3/HsDpbPi0dH6R3rZYb7CTbj
+         ou7qsm3xMtjsRpCI7hDfZe5dyYBshj3mDeWQC7MGXKrucSIYTX76I/w6j9ZQoglE3qxn
+         gGBRb9lbvPw3ptllWGR3TWspruFJMRtoFGJ/U0db7bpKlTWzSez5629Z3SueBg9xkBMJ
+         +GtzU0/ZCH0ySgTz3rqladIHD+XSurzIcGCEmkvvsTVYnbieK23gTzKm6ccFvlyYnoiR
+         CHg3CgJHqqg/TT5WbA3KtwepYNaqP3kJN84qNyLMIe8KnoTBReIZInqK3NGQm+bbHuW7
+         Y3wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IcjZSFFwvzH/2up3CoXhhR79DVF3xC2YmgnlBmig55Y=;
-        b=qmffeHr/gDpLUxQnD89tst+Wq1P2G99mtT/GoR+0CwnA5+zHExjvvpZcleUEc0Z272
-         kvSU8XI/8Tz1xbcnoB3no99VPX4ngIaH64hGTxbPncb8G8QEODNgsV9UBwoKt/tMPQms
-         0+LNMNZSzWE3D3Z1H9ijOo7hD4/3m5G7im6YOaUgxIUCZD0nY/hG4WRYWvHQPud/NSGE
-         xdIlGZJqWd3TVMcu6ponUl2HXReZwWquxOK5wqDON/VGoNLP7ecNHRHm6/lMYtX02eYC
-         uXUqzaGX4/ZEJqrIeFYDFiwY8m7c5NxPPlCY38uKDRO9OtZXoSTLpHM2q7lJn+C6+4dw
-         nDog==
-X-Gm-Message-State: AOAM531rTi9XU40W4MLHviROV60mNsoGIaGcJkGc9udRzZxiW6lwCt/X
-        Yf2n7A4mlvAtEDmYg7MwIhB46w==
-X-Google-Smtp-Source: ABdhPJyHHJ2z98x3FxWyYQVGxbdwLK7ZNxTg/1MKt2UFEenBVMHIcz9Wxy7OW5QZqcMRz5JB8DYs3Q==
-X-Received: by 2002:a05:6512:1507:b0:443:7e88:ce57 with SMTP id bq7-20020a056512150700b004437e88ce57mr2877346lfb.659.1645035026383;
-        Wed, 16 Feb 2022 10:10:26 -0800 (PST)
-Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id y18sm567909ljd.13.2022.02.16.10.10.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 10:10:25 -0800 (PST)
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH] arm64: dts: renesas: ulcb-kf: fix wrong comment
-Date:   Wed, 16 Feb 2022 21:10:04 +0300
-Message-Id: <20220216181003.114049-1-nikita.yoush@cogentembedded.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zVC5cj0z6rMQpOyPOmFfrF76NsP0MR7V60Bxrd230h8=;
+        b=AnaF/6Uj0oivIrNPZNMSVPA3K4vlmqz493P5oq35B0p3s0FR1dpQ0R1HZwfmNAQShh
+         CTpryBrGBa4f0nfnVphGjvvofqFobKuHcFCRGwjprRTVw7zyHl6j3EN7udKyfeNKUTIq
+         iNmZhqMWn9WnEDJPAIMR40u7LFnA/xGFTVYyJAIqOXBEaLYtEQk7eS2pn9PhhkOo1hxU
+         pRKEt57ShwLEsXpLu4CKPHYNhnCZaNhHhCu+0c8sxFwRVGcpTy4ztTaX27hinmh0tjUA
+         XkFy94GBxfd7cUNljrD2UOZoU1xQiNwH8VUQ1BMOsL/ZOowX9N8hxsjpb5ovFMgqwBZz
+         WVUQ==
+X-Gm-Message-State: AOAM53020Ik2ioyb/JOurUTmoVSoWCO7zv6DwKh4WrxJIfiTfjMp0Gjo
+        5Z5OcLv2VelFfV+8ttQuPIFp1Ub6VbWjFEELvYI5+A==
+X-Google-Smtp-Source: ABdhPJx+8UjiPN1CieY4Xi5pUk7u/5mk2xIt09T8qbul+0tYqHo1/KGJJDhsJ9CEW8caQBqx6OCrmVhxg6tElA76mdM=
+X-Received: by 2002:a4a:5596:0:b0:2dd:bb93:8800 with SMTP id
+ e144-20020a4a5596000000b002ddbb938800mr1290780oob.85.1645035016433; Wed, 16
+ Feb 2022 10:10:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220117085307.93030-1-likexu@tencent.com> <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com>
+ <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com> <CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com>
+ <7b5012d8-6ae1-7cde-a381-e82685dfed4f@linux.intel.com> <CALMp9eTOaWxQPfdwMSAn-OYAHKPLcuCyse7BpsSOM35vg5d0Jg@mail.gmail.com>
+ <e06db1a5-1b67-28ac-ee4c-34ece5857b1f@linux.intel.com> <CALMp9eSjDro169JjTXyCZn=Rf3PT0uHhdNXEifiXGYQK-Zn8LA@mail.gmail.com>
+ <d86ba87b-d98a-53a0-b2cd-5bf77b97b592@linux.intel.com> <CABOYuvZ9SZAWeRkrhhhpMM4XwzMzXv9A1WDpc6z8SUBquf0SFQ@mail.gmail.com>
+ <6afcec02-fb44-7b72-e527-6517a94855d4@linux.intel.com> <CALMp9eQ79Cnh1aqNGLR8n5MQuHTwuf=DMjJ2cTb9uXu94GGhEA@mail.gmail.com>
+ <2180ea93-5f05-b1c1-7253-e3707da29f8c@linux.intel.com> <CALMp9eQiaXtF3S0QZ=2_SWavFnv6zFHqf_zFXBrxXb9pVYh0nQ@mail.gmail.com>
+ <8d9149b5-e56f-b397-1527-9f21a26ad95b@linux.intel.com> <CALMp9eTqNyG-ke1Aq72hn0CVXER63SgVPamzXria76PmqiZvJQ@mail.gmail.com>
+ <31cd6e81-fd74-daa1-8518-8a8dfc6174d0@gmail.com>
+In-Reply-To: <31cd6e81-fd74-daa1-8518-8a8dfc6174d0@gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 16 Feb 2022 10:10:05 -0800
+Message-ID: <CALMp9eTrKmtP4BHxBNvyG9+bhOAd1jofx0rQz0rF=MtaoShb=w@mail.gmail.com>
+Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
+ perfmon_event_map[] directly
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        David Dunn <daviddunn@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix comment referencing salvator board, likely a copy-paste leftover.
+On Tue, Feb 15, 2022 at 11:36 PM Like Xu <like.xu.linux@gmail.com> wrote:
 
-ulcb-kf.dtsi has nothing to do with salvator.
+> Hardware resources will always be limited (the good news is that
+> the number of counters will increase in the future), and when we have
+> a common need for the same hardware, we should prioritize overall
+> fairness over a GUEST-first strategy.
 
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
----
- arch/arm64/boot/dts/renesas/ulcb-kf.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The bad news about the new counters on Intel is that they are less
+capable than the existing counters. SInce there is no bitmask for GP
+counters in CPUID.0AH, if you give 4 counters to the guest, then the
+host is stuck using the less capable counters.
 
-diff --git a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
-index d122e645a892..40147920bdf7 100644
---- a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
-+++ b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
-@@ -413,7 +413,7 @@ &sound_clk_pins
- 		     &sound_pcm_pins>;
- 
- 	ports {
--		/* rsnd_port0/1 are on salvator-common */
-+		/* rsnd_port0/1 are defined in ulcb.dtsi */
- 		rsnd_port2: port@2 {
- 			reg = <2>;
- 			rsnd_for_pcm3168a_play: endpoint {
--- 
-2.30.2
+Overall fairness is definitely not what we want. See the other thread,
+which has a proposal for a more configurable perf subsystem that
+should meet your needs as well as ours.
 
+Can we move all of this discussion to the other thread, BTW?

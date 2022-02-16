@@ -2,56 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CBB4B8E52
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7822E4B8E55
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 17:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbiBPQkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 11:40:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41918 "EHLO
+        id S236654AbiBPQk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 11:40:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbiBPQkH (ORCPT
+        with ESMTP id S236639AbiBPQkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:40:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25E2925D26F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 08:39:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645029591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bg4c13PG3YFA4cx/URObt9BCO2JrLpJ9gS9DNhRWcCM=;
-        b=a0rYlDCu8hfxVdinCi06FhuYg1Ay/WDuWhmZzSHucCOw//c7fhfu3OWh4f/7QBv703qUz2
-        B4gWuZJBHF+jWGg8SZQ7zsSuRKeSRsnzDIyjqWXnWfLHvcNjRA+6rE890+Viu56PwAF7tp
-        JvQ0qDo0kVtsjBZ792zXIQsCoChHjIg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-ONL6tvcJN0mMHq0_Z0wugg-1; Wed, 16 Feb 2022 11:39:50 -0500
-X-MC-Unique: ONL6tvcJN0mMHq0_Z0wugg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EE486814243;
-        Wed, 16 Feb 2022 16:39:48 +0000 (UTC)
-Received: from jlaw-desktop.redhat.com (unknown [10.22.8.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7C619753CD;
-        Wed, 16 Feb 2022 16:39:48 +0000 (UTC)
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: [RFC PATCH v6 10/12] livepatch/selftests: add __asm__ symbol renaming examples
-Date:   Wed, 16 Feb 2022 11:39:38 -0500
-Message-Id: <20220216163940.228309-11-joe.lawrence@redhat.com>
-In-Reply-To: <20220216163940.228309-1-joe.lawrence@redhat.com>
-References: <20220216163940.228309-1-joe.lawrence@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 16 Feb 2022 11:40:20 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C44725DA68;
+        Wed, 16 Feb 2022 08:40:06 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GGGPjU024471;
+        Wed, 16 Feb 2022 16:39:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=QFAT4gUY7ssHFMRKnYKL1cpcMiUM8TBsa2LK3fdhHW0=;
+ b=CHsh3LQsQlw+AlPF9ZzINxswwd+y6vEDqWW8ApcopHUcmtHE96zS0EBj/kBQ6vgEgPJe
+ 45LERF2kn+i9i5yxZ9qweO+h/r1W0PCZSAFzNROIADPRPa6PQFz6iilDQLc2HxYK8VOo
+ 5+TUcnWvyHuciBZWBhNoU/Rfz0OtoFUB5qYy9kKB/oEG4lklVA/q6z+OVpaiWCFfM4+f
+ YOlGeZvApqVEjyKl4u7n/44wulVS6MufE1ruR298tspmQc8CEaRJPB/XPRvjpXQLLSxW
+ 43ClWHUdbHD9vwRUZMu4QpozHgDxqU+opANhFcmmhYNI+k1VvA5IgIu5X6k1Cz8fa7v+ RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e94n48j4c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 16:39:48 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GGH85m029532;
+        Wed, 16 Feb 2022 16:39:48 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e94n48j3q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 16:39:47 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GGWu3o022678;
+        Wed, 16 Feb 2022 16:39:46 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3e64ha0y3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 16:39:45 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GGdgwK43385098
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Feb 2022 16:39:42 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B9DA111C064;
+        Wed, 16 Feb 2022 16:39:42 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B39011C052;
+        Wed, 16 Feb 2022 16:39:40 +0000 (GMT)
+Received: from sig-9-65-87-58.ibm.com (unknown [9.65.87.58])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Feb 2022 16:39:40 +0000 (GMT)
+Message-ID: <bf435ffa5d176213acabb8c576c159d2cbd4d395.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 06/27] ima: Move arch_policy_entry into ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Christian Brauner <brauner@kernel.org>
+Date:   Wed, 16 Feb 2022 11:39:39 -0500
+In-Reply-To: <20220201203735.164593-7-stefanb@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-7-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _kEptbkdhmHsaVrTiedogSKaxYCKIJe9
+X-Proofpoint-GUID: Pv9Dws_nJSQV-4Gm67F5Ftf7QF_YBqX_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-16_07,2022-02-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=986 suspectscore=0 phishscore=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 spamscore=0
+ adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202160097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,118 +101,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC can rename symbols like static data and optimized functions, adding
-a suffix that includes illegal C characters.  Extend the klp-convert
-examples to demonstrate how to use __asm__ renaming from C code to
-create klp-relocations to such renamed symbols.
+On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote
 
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
----
- lib/livepatch/test_klp_convert.h                    | 2 ++
- lib/livepatch/test_klp_convert1.c                   | 8 ++++++++
- lib/livepatch/test_klp_convert_mod_a.c              | 6 ++++++
- lib/livepatch/test_klp_convert_mod_b.c              | 6 ++++++
- tools/testing/selftests/livepatch/test-livepatch.sh | 4 ++++
- 5 files changed, 26 insertions(+)
+Let's update the patch description providing a bit more background
+info:
 
-diff --git a/lib/livepatch/test_klp_convert.h b/lib/livepatch/test_klp_convert.h
-index 5d97bc546d6e..42befbfd63cb 100644
---- a/lib/livepatch/test_klp_convert.h
-+++ b/lib/livepatch/test_klp_convert.h
-@@ -10,5 +10,7 @@ extern char driver_name[];
- extern char homonym_string[];
- extern const char *get_homonym_string(void);
- extern const char *test_klp_get_driver_name(void);
-+extern char klp_string_a[] __asm__("klp_string.12345");
-+extern char klp_string_b[] __asm__("klp_string.67890");
- 
- #endif
-diff --git a/lib/livepatch/test_klp_convert1.c b/lib/livepatch/test_klp_convert1.c
-index cd2d3c638258..06926cf1c609 100644
---- a/lib/livepatch/test_klp_convert1.c
-+++ b/lib/livepatch/test_klp_convert1.c
-@@ -25,6 +25,12 @@ void print_homonym_string(void)
- 	pr_info("get_homonym_string(), 1: %s\n", get_homonym_string());
- }
- 
-+void print_static_strings(void)
-+{
-+	pr_info("klp_string.12345 = %s\n", klp_string_a);
-+	pr_info("klp_string.67890 = %s\n", klp_string_b);
-+}
-+
- /* provide a sysfs handle to invoke debug functions */
- static int print_debug;
- static int print_debug_set(const char *val, const struct kernel_param *kp)
-@@ -32,6 +38,7 @@ static int print_debug_set(const char *val, const struct kernel_param *kp)
- 	print_saved_command_line();
- 	print_driver_name();
- 	print_homonym_string();
-+	print_static_strings();
- 
- 	return 0;
- }
-@@ -67,6 +74,7 @@ KLP_MODULE_RELOC(test_klp_convert_mod) test_klp_convert_mod_relocs_a[] = {
- 	KLP_SYMPOS(homonym_string, 1),
- 	KLP_SYMPOS(get_homonym_string, 1),
- 	KLP_SYMPOS(test_klp_get_driver_name, 0),
-+	KLP_SYMPOS(klp_string_b, 1),
- };
- 
- static struct klp_func funcs[] = {
-diff --git a/lib/livepatch/test_klp_convert_mod_a.c b/lib/livepatch/test_klp_convert_mod_a.c
-index ae5e911fbb9b..9af0fcab0c8d 100644
---- a/lib/livepatch/test_klp_convert_mod_a.c
-+++ b/lib/livepatch/test_klp_convert_mod_a.c
-@@ -20,6 +20,12 @@ __used static const char *get_homonym_string(void)
- 	return homonym_string;
- }
- 
-+__used static void static_string_function(void)
-+{
-+	__used static char klp_string[] __asm__("klp_string.12345") =
-+		__FILE__ " static string";
-+}
-+
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Joe Lawrence <joe.lawrence@redhat.com>");
- MODULE_DESCRIPTION("Livepatch test: klp-convert module");
-diff --git a/lib/livepatch/test_klp_convert_mod_b.c b/lib/livepatch/test_klp_convert_mod_b.c
-index 5eca8a4cae38..0a68e898fe03 100644
---- a/lib/livepatch/test_klp_convert_mod_b.c
-+++ b/lib/livepatch/test_klp_convert_mod_b.c
-@@ -11,3 +11,9 @@ __used static const char *get_homonym_string(void)
- {
- 	return homonym_string;
- }
-+
-+__used static void static_string_function(void)
-+{
-+	__used static char klp_string[] __asm__("klp_string.67890") =
-+		__FILE__ " static string";
-+}
-diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
-index bcb8b468b80a..ec3b6c919b01 100755
---- a/tools/testing/selftests/livepatch/test-livepatch.sh
-+++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-@@ -200,6 +200,8 @@ $MOD_KLP_CONVERT1: driver_name, 0: $MOD_KLP_CONVERT_MOD
- $MOD_KLP_CONVERT1: test_klp_get_driver_name(), 0: $MOD_KLP_CONVERT_MOD
- $MOD_KLP_CONVERT1: homonym_string, 1: homonym string A
- $MOD_KLP_CONVERT1: get_homonym_string(), 1: homonym string A
-+test_klp_convert1: klp_string.12345 = lib/livepatch/test_klp_convert_mod_a.c static string
-+test_klp_convert1: klp_string.67890 = lib/livepatch/test_klp_convert_mod_b.c static string
- % echo 0 > /sys/kernel/livepatch/$MOD_KLP_CONVERT1/enabled
- livepatch: '$MOD_KLP_CONVERT1': initializing unpatching transition
- livepatch: '$MOD_KLP_CONVERT1': starting unpatching transition
-@@ -265,6 +267,8 @@ $MOD_KLP_CONVERT1: driver_name, 0: $MOD_KLP_CONVERT_MOD
- $MOD_KLP_CONVERT1: test_klp_get_driver_name(), 0: $MOD_KLP_CONVERT_MOD
- $MOD_KLP_CONVERT1: homonym_string, 1: homonym string A
- $MOD_KLP_CONVERT1: get_homonym_string(), 1: homonym string A
-+test_klp_convert1: klp_string.12345 = lib/livepatch/test_klp_convert_mod_a.c static string
-+test_klp_convert1: klp_string.67890 = lib/livepatch/test_klp_convert_mod_b.c static string
- % echo 0 > /sys/kernel/livepatch/$MOD_KLP_CONVERT1/enabled
- livepatch: '$MOD_KLP_CONVERT1': initializing unpatching transition
- livepatch: '$MOD_KLP_CONVERT1': starting unpatching transition
--- 
-2.26.3
+The archictecture specific policy rules, currently defined for EFI and
+powerpc, require the kexec kernel image and kernel modules to be
+validly signed and measured, based on the system's secure boot and/or
+trusted boot mode and the IMA_ARCH_POLICY Kconfig option being enabled.
+
+> Move the arch_policy_entry pointer into ima_namespace.
+
+Perhaps include something about namespaces being allowed or not allowed
+to kexec a new kernel or load kernel modules.
+
+thanks,
+
+Mimi
+> 
+> When freeing the memory set the pointer to NULL.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 

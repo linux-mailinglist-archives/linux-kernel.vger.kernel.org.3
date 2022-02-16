@@ -2,159 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A454A4B80EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B934B81F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiBPHHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:07:20 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33564 "EHLO
+        id S230445AbiBPHqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:46:53 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiBPHHT (ORCPT
+        with ESMTP id S229468AbiBPHqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:07:19 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216271F68D9;
-        Tue, 15 Feb 2022 23:06:30 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id e16so1265402qtq.6;
-        Tue, 15 Feb 2022 23:06:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tQsez3rBBuWL5P/PS1iF/3TVpjfzLMW/EONt+f9CiMQ=;
-        b=DEQtO8Rec0/pciyxC16dz5iaxsu3WmlWt3NyB5nPzDtrs1WiDLQmd6+hlVBLEnqVpu
-         1mebox8SJRxbZTV/O6jAS12dOueg+4F90FldQTblOj89+hrNeAHr+LIeLNdAliI56beR
-         pJC3N2/CeNgNv8Gka5T210xTzD/ClYHwqrGc4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tQsez3rBBuWL5P/PS1iF/3TVpjfzLMW/EONt+f9CiMQ=;
-        b=TDjSbFRzILxTprlpKNOF0zeCQTtwkkp2mcRz1EH6RUbjk1toFcTL8A5dbtHg+2q/y4
-         wDY4okQhEFkOAfs4xuH5nKMDHJHmRUIUTt1Bf681Rt1GE5EQERGTJTWKfn6+6iPpWioU
-         441t1gVhlLAG6suFC8FcN7PAvJcKXnVUQRe70HvWykQ0yMerTmP5NYRaaICAC878t3Jz
-         gADgJHw7X6IE9UWlxmz//MzzpMCFvAmngrTgCo9hlu7eR9jsnP9di8w1/EceH/E3Qvpo
-         mEdmPRRHpjXUuD+ESAI2PoHQQq98kxuNoUK4jksHv8EKW6WyLdAbA/oy9GdkrA2ee6vq
-         WJ5Q==
-X-Gm-Message-State: AOAM532ucIQzNqt89KY4OQhtnmkEdcclFMud4oW9hV3jiMLczuKzgDt5
-        UEDOVqfsAxI1KZkxAKU1M7CUeh8Gek1UhBUNPlw=
-X-Google-Smtp-Source: ABdhPJxUrxTCwzi7Yj2+ExwwwoGmToAHQYb+adCONcmAx/DnApNmNJjP3jevLGycqiKtwihstXuDC7FCB3cmNTkPoqU=
-X-Received: by 2002:a05:622a:116:b0:2cd:5be1:3838 with SMTP id
- u22-20020a05622a011600b002cd5be13838mr1054529qtw.494.1644994936320; Tue, 15
- Feb 2022 23:02:16 -0800 (PST)
+        Wed, 16 Feb 2022 02:46:51 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C863D7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:46:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644997599; x=1676533599;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZbHq30c9suHqVxOsxPX/mZ0QzsgvzvZU/DMFUUxsqKY=;
+  b=Uzc4CMZ0YjJLpo1X9fnfMalbLubBbPs35pHrfpMzwElU7AYrqn5EeGmj
+   w/MuyhgMZ05xRIkdkMpv5u5BNS1H6ZXS661VV5O0YjKnU4lCuBZB3O8l3
+   rJnmpFZdwKCl0d+RvOzhXotY8pXkJI/q22VCSUs0dkYDKrgg6k3kgzKsX
+   tqum/mXwr5jbEX4AsopuiiYwWi/s8MlnUZyxsIq8cfLTEjNuGSgK3cwr3
+   PKEK++W24340iUocoHMyBUGJJ61FXg5rxiZVQbj3vsah7htHmgQzFZqmQ
+   4PylqSea99dWFBW7z9ZmXtfsQVhsLKI4ELbNt2muAVo5qDdYiTcncsQgk
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275118727"
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="275118727"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:03:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
+   d="scan'208";a="704179198"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 15 Feb 2022 23:03:28 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKELY-000AY1-6B; Wed, 16 Feb 2022 07:03:28 +0000
+Date:   Wed, 16 Feb 2022 15:03:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: ERROR: start_text address is c000000000000600, should be
+ c000000000000100
+Message-ID: <202202161525.m2QCBrwR-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220214094231.3753686-1-clg@kaod.org> <20220214094231.3753686-11-clg@kaod.org>
-In-Reply-To: <20220214094231.3753686-11-clg@kaod.org>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 16 Feb 2022 07:02:04 +0000
-Message-ID: <CACPK8XdvczyZ1QHtFm7JJAC7AY+QmWSx0MarUwLjUyOtC9DnSQ@mail.gmail.com>
-Subject: Re: [PATCH 10/10] spi: aspeed: Activate new spi-mem driver
-To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Feb 2022 at 09:43, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
->
-> The previous driver using the MTD SPI NOR interface is kept in case we
-> find some issues but we should remove it quickly once the new driver
-> using the spi-mem interface has been sufficiently exposed.
->
-> Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
+Hi Randy,
 
-I suggest we drop the defconfig changes from both this patch and the
-first. This way we'll always have the new driver being built, with
-less churn.
+FYI, the error/warning still remains.
 
-If you strongly prefer the way you've done it then that's fine too.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c5d9ae265b105d9a67575fb67bd4650a6fc08e25
+commit: 47c258d71ebfc832a760a1dc6540cf3c33968023 powerpc/head_check: use stdout for error messages
+date:   6 months ago
+config: powerpc64-randconfig-c004-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161525.m2QCBrwR-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47c258d71ebfc832a760a1dc6540cf3c33968023
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 47c258d71ebfc832a760a1dc6540cf3c33968023
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-> ---
->  arch/arm/configs/aspeed_g4_defconfig | 2 +-
->  arch/arm/configs/aspeed_g5_defconfig | 2 +-
->  arch/arm/configs/multi_v5_defconfig  | 2 +-
->  arch/arm/configs/multi_v7_defconfig  | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/arm/configs/aspeed_g4_defconfig b/arch/arm/configs/aspe=
-ed_g4_defconfig
-> index 964536444cd7..b4a1b2ed1a17 100644
-> --- a/arch/arm/configs/aspeed_g4_defconfig
-> +++ b/arch/arm/configs/aspeed_g4_defconfig
-> @@ -64,7 +64,7 @@ CONFIG_MTD_BLOCK=3Dy
->  CONFIG_MTD_PARTITIONED_MASTER=3Dy
->  CONFIG_MTD_SPI_NOR=3Dy
->  # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
-> +CONFIG_SPI_ASPEED_SMC=3Dy
->  CONFIG_MTD_UBI=3Dy
->  CONFIG_MTD_UBI_FASTMAP=3Dy
->  CONFIG_MTD_UBI_BLOCK=3Dy
-> diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspe=
-ed_g5_defconfig
-> index e809236ca88b..ccc4240ee4b5 100644
-> --- a/arch/arm/configs/aspeed_g5_defconfig
-> +++ b/arch/arm/configs/aspeed_g5_defconfig
-> @@ -103,7 +103,7 @@ CONFIG_MTD_BLOCK=3Dy
->  CONFIG_MTD_PARTITIONED_MASTER=3Dy
->  CONFIG_MTD_SPI_NOR=3Dy
->  # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
-> +CONFIG_SPI_ASPEED_SMC=3Dy
->  CONFIG_MTD_UBI=3Dy
->  CONFIG_MTD_UBI_FASTMAP=3Dy
->  CONFIG_MTD_UBI_BLOCK=3Dy
-> diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi=
-_v5_defconfig
-> index 49083ef05fb0..80a3ae02d759 100644
-> --- a/arch/arm/configs/multi_v5_defconfig
-> +++ b/arch/arm/configs/multi_v5_defconfig
-> @@ -103,7 +103,7 @@ CONFIG_MTD_RAW_NAND=3Dy
->  CONFIG_MTD_NAND_ATMEL=3Dy
->  CONFIG_MTD_NAND_ORION=3Dy
->  CONFIG_MTD_SPI_NOR=3Dy
-> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
-> +CONFIG_SPI_ASPEED_SMC=3Dy
->  CONFIG_MTD_UBI=3Dy
->  CONFIG_BLK_DEV_LOOP=3Dy
->  CONFIG_ATMEL_SSC=3Dm
-> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi=
-_v7_defconfig
-> index fc1b69256b64..33572998dbbe 100644
-> --- a/arch/arm/configs/multi_v7_defconfig
-> +++ b/arch/arm/configs/multi_v7_defconfig
-> @@ -217,7 +217,7 @@ CONFIG_MTD_NAND_DAVINCI=3Dy
->  CONFIG_MTD_NAND_STM32_FMC2=3Dy
->  CONFIG_MTD_NAND_PL35X=3Dy
->  CONFIG_MTD_SPI_NOR=3Dy
-> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dm
-> +CONFIG_SPI_ASPEED_SMC=3Dm
->  CONFIG_MTD_UBI=3Dy
->  CONFIG_BLK_DEV_LOOP=3Dy
->  CONFIG_BLK_DEV_RAM=3Dy
-> --
-> 2.34.1
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ERROR: start_text address is c000000000000600, should be c000000000000100
+   ERROR: try to enable LD_HEAD_STUB_CATCH config option
+   ERROR: see comments in arch/powerpc/tools/head_check.sh
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

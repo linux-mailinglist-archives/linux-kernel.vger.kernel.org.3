@@ -2,71 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171DD4B82A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 737F14B82A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbiBPILl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:11:41 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55610 "EHLO
+        id S231451AbiBPILJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:11:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbiBPIKo (ORCPT
+        with ESMTP id S230232AbiBPILG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:10:44 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB0CB0A46;
-        Wed, 16 Feb 2022 00:10:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2782A212BD;
-        Wed, 16 Feb 2022 08:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644999030; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QurIHtBhhxmg1mjCzvXV7QkVSTQDkiRDYufhRd9DHNo=;
-        b=1y08vLht/Zhp3uam1WCwEnKida6HBsxRYIDf9C8T7JS09TokvopDtD1JD/2KcNzcOfcSEy
-        LMo4ktQnmaYrOD7Va+OHVFRC1MrHKSRjKTJ2Ig+9ZcFVms111nBl3lADlVSpJJo3dib+Gs
-        YpC/kbD+vrwW14cYQNfXd92qYdprTNk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644999030;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QurIHtBhhxmg1mjCzvXV7QkVSTQDkiRDYufhRd9DHNo=;
-        b=M+wA9HXFIgtbWyJy1u1pR8V3BInARrDnOyA+bc5dge5pGSyhSspu/vOYAmbHp5mLpLY4Ra
-        mssD7WLjv57POhDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E7B1613A7C;
-        Wed, 16 Feb 2022 08:10:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CkZqN3WxDGLJRwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 16 Feb 2022 08:10:29 +0000
-Message-ID: <801579a4-4563-6ea9-1351-90ef36a0d248@suse.de>
-Date:   Wed, 16 Feb 2022 09:10:29 +0100
+        Wed, 16 Feb 2022 03:11:06 -0500
+Received: from mail-m2458.qiye.163.com (mail-m2458.qiye.163.com [220.194.24.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B784D60DB4;
+        Wed, 16 Feb 2022 00:10:50 -0800 (PST)
+Received: from localhost.localdomain (unknown [117.48.120.186])
+        by mail-m2458.qiye.163.com (Hmail) with ESMTPA id 4EE69740148;
+        Wed, 16 Feb 2022 16:10:48 +0800 (CST)
+From:   Tao Liu <thomas.liu@ucloud.cn>
+To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, edumazet@google.com, sridhar.samudrala@intel.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tao Liu <thomas.liu@ucloud.cn>
+Subject: [PATCH net v2] gso: do not skip outer ip header in case of ipip and net_failover
+Date:   Wed, 16 Feb 2022 16:10:41 +0800
+Message-Id: <20220216081041.70831-1-thomas.liu@ucloud.cn>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/3] drm: omapdrm: Fix excessive GEM buffers DMM/CMA usage
-Content-Language: en-US
-To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>, tomba@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     tony@atomide.com, merlijn@wizzup.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org
-References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------2Up8X4DZnq5QKzKgPlNDDGt0"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUlCN1dZLVlBSVdZDwkaFQgSH1lBWUNLQxpWHU1PQx9ISkhMSE
+        xPVRkRExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MAg6Kjo*MTI2Nwg2NTgJMi1K
+        Sw8aC1FVSlVKTU9PQkJCS09DTEtOVTMWGhIXVQ8TFBYaCFUXEg47DhgXFA4fVRgVRVlXWRILWUFZ
+        SkpMVU9DVUpJS1VKQ01ZV1kIAVlBT0tLSzcG
+X-HM-Tid: 0a7f01957d358c17kuqt4ee69740148
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,84 +45,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------2Up8X4DZnq5QKzKgPlNDDGt0
-Content-Type: multipart/mixed; boundary="------------Xap167iYvpqQG5Ga0GrBLDmT";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>, tomba@kernel.org,
- airlied@linux.ie, daniel@ffwll.ch
-Cc: tony@atomide.com, merlijn@wizzup.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org
-Message-ID: <801579a4-4563-6ea9-1351-90ef36a0d248@suse.de>
-Subject: Re: [PATCH 0/3] drm: omapdrm: Fix excessive GEM buffers DMM/CMA usage
-References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-In-Reply-To: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+We encounter a tcp drop issue in our cloud environment. Packet GROed in
+host forwards to a VM virtio_net nic with net_failover enabled. VM acts
+as a IPVS LB with ipip encapsulation. The full path like:
+host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
+ -> ipip encap -> net_failover tx -> virtio_net tx
 
---------------Xap167iYvpqQG5Ga0GrBLDmT
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+When net_failover transmits a ipip pkt (gso_type = 0x0103), there is no gso
+did because it supports TSO and GSO_IPXIP4. But network_header points to
+inner ip header.
 
-SGkNCg0KQW0gMTkuMDEuMjIgdW0gMTE6MjMgc2NocmllYiBJdmF5bG8gRGltaXRyb3Y6DQo+
-IFRoaXMgcGF0Y2ggc2VyaWVzIGZpeGVzIGV4Y2Vzc2l2ZSBETU0gb3IgQ01BIHVzYWdlIG9m
-IEdFTSBidWZmZXJzIGxlYWRpbmcgdG8NCj4gdmFyaW91cyBydW50aW1lIGFsbG9jYXRpb24g
-ZmFpbHVyZXMuIFRoZSBzZXJpZXMgZW5hYmxlcyBkYWlseSB1c2FnZSBvZiBkZXZpY2VzDQo+
-IHdpdGhvdXQgZXhhdXN0aW5nIGxpbWl0ZWQgcmVzb3VyY2VzIGxpa2UgQ01BIG9yIERNTSBz
-cGFjZSBpZiBHUFUgcmVuZGVyaW5nIGlzDQo+IG5lZWRlZC4NCj4gDQo+IFRoZSBmaXJzdCBw
-YXRjaCBkb2Vzbid0IGJyaW5nIGFueSBmdW5jdGlvbmFsIGNoYW5nZXMsIGl0IGp1c3QgbW92
-ZXMgc29tZQ0KPiBUSUxFUi9ETU0gcmVsYXRlZCBjb2RlIHRvIGEgc2VwYXJhdGUgZnVuY3Rp
-b24sIHRvIHNpbXBsaWZ5IHRoZSByZXZpZXcgb2YgdGhlDQo+IG5leHQgdHdvIHBhdGNoZXMu
-DQo+IA0KPiBUaGUgc2Vjb25kIHBhdGNoIGFsbG93cyBvZmYtQ1BVIHJlbmRlcmluZyB0byBu
-b24tc2Nhbm91dCBidWZmZXJzLiBXaXRob3V0IHRoYXQNCj4gcGF0Y2gsIGl0IGlzIGJhc2lj
-YWxseSBpbXBvc3NpYmxlIHRvIHVzZSB0aGUgZHJpdmVyIGFsbG9jYXRlZCBHRU0gYnVmZmVy
-cyBvbg0KPiBPTUFQMyBmb3IgYW55dGhpbmcgZWxzZSBidXQgYSBiYXNpYyBDUFUgcmVuZGVy
-ZWQgZXhhbXBsZXMgYXMgaWYgd2Ugd2FudCBHUFUNCj4gcmVuZGVyaW5nLCB3ZSBtdXN0IGFs
-bG9jYXRlIGJ1ZmZlcnMgYXMgc2Nhbm91dCBidWZmZXJzLCB3aGljaCBhcmUgQ01BIGFsbG9j
-YXRlZC4NCj4gQ01BIHNvb24gZ2V0cyBmcmFnbWVudGVkIGFuZCB3ZSBzdGFydCBzZWVpbmcg
-YWxsb2NhdGlvbiBmYWlsdXJlcy4gU3VjaCBmYWlscmVzDQo+IGluIFhvcmcgY2Fubm90IGJl
-IGhhbmRlbGVkIGdyYWNlZnVsbHksIHNvIHRoZSBzeXN0ZW0gaXMgYmFzaWNhbGx5IHVudXNh
-YmxlLg0KPiANCj4gVGhpcmQgcGF0Y2ggZml4ZXMgc2ltaWxhciBpc3N1ZSBvbiBPTUFQNC81
-LCB3aGVyZSBETU0vVElMRVIgc3BhY2VzIGdldA0KPiBmcmFnbWVudGVkIHdpdGggdGltZSwg
-bGVhZGluZyB0byBhbGxvY2F0aW9uIGZhaWx1cmVzLg0KPiANCj4gU2VyaWVzIHdlcmUgdGVz
-dGVkIG9uIE1vdG9sb2xhIERyb2lkNCBhbmQgTm9raWEgTjkwMCwgd2l0aCBPTUFQIEREWCBh
-bmQNCj4gUFZSIEVYQSBmcm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9tYWVtby1sZXN0ZS94Zjg2
-LXZpZGVvLW9tYXANCj4gDQo+IEl2YXlsbyBEaW1pdHJvdiAoMyk6DQo+ICAgIGRybTogb21h
-cGRybTogc2ltcGxpZnkgb21hcF9nZW1fcGluDQo+ICAgIGRybTogb21hcGRybTogU3VwcG9y
-dCBleHBvcnRpbmcgb2Ygbm9uLWNvbnRpZ3VvdXMgR0VNIEJPcw0KPiAgICBkcm06IG9tYXBk
-cm06IERvIG5vIGFsbG9jYXRlIG5vbi1zY2Fub3V0IEdFTXMgdGhyb3VnaCBETU0vVElMRVIN
-Cg0KV2l0aCB0aGUgbGl0dGxlIGV4cGVydGlzZSBJIGhhdmUgd2l0aCBvbWFwZHJtOg0KDQpB
-Y2tlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCj4g
-DQo+ICAgZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9nZW0uYyAgICAgICAgfCAxOTgg
-KysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL29t
-YXBkcm0vb21hcF9nZW0uaCAgICAgICAgfCAgIDMgKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0v
-b21hcGRybS9vbWFwX2dlbV9kbWFidWYuYyB8ICAgNSArLQ0KPiAgIDMgZmlsZXMgY2hhbmdl
-ZCwgMTE2IGluc2VydGlvbnMoKyksIDkwIGRlbGV0aW9ucygtKQ0KPiANCg0KLS0gDQpUaG9t
-YXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2Fy
-ZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJl
-cmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xo
-cmVyOiBJdm8gVG90ZXYNCg==
+Call Trace:
+ tcp4_gso_segment        ------> return NULL
+ inet_gso_segment        ------> inner iph, network_header points to
+ ipip_gso_segment
+ inet_gso_segment        ------> outer iph
+ skb_mac_gso_segment
 
---------------Xap167iYvpqQG5Ga0GrBLDmT--
+Afterwards virtio_net transmits the pkt, only inner ip header is modified.
+And the outer one just keeps unchanged. The pkt will be dropped in remote
+host. So we need to reset network header in this case.
 
---------------2Up8X4DZnq5QKzKgPlNDDGt0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Call Trace:
+ inet_gso_segment        ------> inner iph, outer iph is skipped
+ skb_mac_gso_segment
+ __skb_gso_segment
+ validate_xmit_skb
+ validate_xmit_skb_list
+ sch_direct_xmit
+ __qdisc_run
+ __dev_queue_xmit        ------> virtio_net
+ dev_hard_start_xmit
+ __dev_queue_xmit        ------> net_failover
+ ip_finish_output2
+ ip_output
+ iptunnel_xmit
+ ip_tunnel_xmit
+ ipip_tunnel_xmit        ------> ipip
+ dev_hard_start_xmit
+ __dev_queue_xmit
+ ip_finish_output2
+ ip_output
+ ip_forward
+ ip_rcv
+ __netif_receive_skb_one_core
+ netif_receive_skb_internal
+ napi_gro_receive
+ receive_buf
+ virtnet_poll
+ net_rx_action
 
------BEGIN PGP SIGNATURE-----
+This patch also includes ipv6_gso_segment(), considering SIT, etc.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIMsXUFAwAAAAAACgkQlh/E3EQov+DM
-5g//aMZv1ir98w2szom1Ic681tGNmQJEJ0ebFbPlh97lgZBq98Z+U8lkehzNNrU7KWscb8668xvV
-j+DIhttI8SiLVvnaKg1sKrzq4OrFtvSu6sebWzJzyuHSCEhL+zobdT+c+QZCOUENN4KZCYP7ynhZ
-fYKx2ImiqlGPNIaGbc4ItFB0GWvhDxO2RB8pmPJjjw+dneoqfF/zmWoyoy/6Uu6gZQZRj++OYeJO
-dK3uqb06IX+M7Kg3q4I+NhTzp4GLjCxJ9avvv8sM6OuIXUVN/qeXfZUAUGbXXDaU2xS/P/I6N1Ys
-Rge7JQw9xynzPZuxmahM91asGbPcurnBXQvSLM/XM4z/VEqmzqW223m0nZ5aX6Lwvain7uC+mlwY
-2MZZX28HPcTCZPxxUsB/6xsBQDWEdxuf9wQubvhpTwoJmpynpmWKLSh2uMauowuW1LAHPQImeQYN
-hqacNpYeJOlT6bEDM8IFN3GUW4barXX2553PxYKkW3HunwxuoOS5fKhWrjt4NsPaA4lqQ0puQY4A
-qJDAC43I3iTY26+h60ae6MN33O5hknpDJ+zIuap224Oe1jB1qL9kJvLlXIheUcEP0Zot4+7UO/hW
-PbNaD+igbO4KBZ+tof4e6ALTrDsKt2WpYFu025WRok0JaNmSEcH9qLClCEIt2Zb0Hzia6JtL2mVn
-6zA=
-=Dxvb
------END PGP SIGNATURE-----
+Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
+Fixes: cfc80d9a1163 ("net: Introduce net_failover driver")
+Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
+---
+ net/ipv4/af_inet.c     | 5 ++++-
+ net/ipv6/ip6_offload.c | 2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
---------------2Up8X4DZnq5QKzKgPlNDDGt0--
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 9c465ba..72fde28 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1376,8 +1376,11 @@ struct sk_buff *inet_gso_segment(struct sk_buff *skb,
+ 	}
+ 
+ 	ops = rcu_dereference(inet_offloads[proto]);
+-	if (likely(ops && ops->callbacks.gso_segment))
++	if (likely(ops && ops->callbacks.gso_segment)) {
+ 		segs = ops->callbacks.gso_segment(skb, features);
++		if (!segs)
++			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
++	}
+ 
+ 	if (IS_ERR_OR_NULL(segs))
+ 		goto out;
+diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
+index b29e9ba..5f577e2 100644
+--- a/net/ipv6/ip6_offload.c
++++ b/net/ipv6/ip6_offload.c
+@@ -114,6 +114,8 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
+ 	if (likely(ops && ops->callbacks.gso_segment)) {
+ 		skb_reset_transport_header(skb);
+ 		segs = ops->callbacks.gso_segment(skb, features);
++		if (!segs)
++			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
+ 	}
+ 
+ 	if (IS_ERR_OR_NULL(segs))
+-- 
+1.8.3.1
+

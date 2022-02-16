@@ -2,123 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EE74B7CC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A8A4B7CE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245551AbiBPBi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:38:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42184 "EHLO
+        id S245567AbiBPBja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:39:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245536AbiBPBiZ (ORCPT
+        with ESMTP id S238697AbiBPBjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:38:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E313220D3;
-        Tue, 15 Feb 2022 17:38:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEEE6B81D90;
-        Wed, 16 Feb 2022 01:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ADFFC340ED;
-        Wed, 16 Feb 2022 01:38:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644975491;
-        bh=An6Gzjiy9PJBIQlLMy16uDVBiMvq2VU/Zw/2B3HW4RI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=L8IHSnLxGXZTjON5iHPGIfxBlgRg4w88B26WdpWwClqWCPfzbiToTPhtaJXdBL+aI
-         4mDpieEpNDEHlTSZgQ3ycCOtxeStuZQ+ij7llEwle9MvOHJjPpsJTHBxDb5MOOoZLt
-         W5B4HrkjGqoql3fOoCtbIVz8xd27TH9bH1BzLpjZiaylOAvY9RQmJSg/Vls8vWO34u
-         Pxy8nGE86MfPMRQPWAHyAT5NuP3JhgV7sC3ZOtVxagrrt6DoetfV1XCsG5r+JhNMyF
-         2EBZtgQ4byhIj4nBI/m7GLKySdzbmSseZjs7EzHlOkGGNsSuLmdp5qXliP0b0dRtrT
-         XY5LDXeIDYPVw==
-Received: by mail-yb1-f181.google.com with SMTP id l125so1548946ybl.4;
-        Tue, 15 Feb 2022 17:38:11 -0800 (PST)
-X-Gm-Message-State: AOAM530ikHDzjaYWOYAUahnxyaNU0ELppBiwmrR+1/y++zItPXLWhEXK
-        hbqHxv+f8AFDVspO6tmLQ3cpHrTWeHK/z3tzGFE=
-X-Google-Smtp-Source: ABdhPJwG4XmD8gNIiQK5EY13nrv4sMK9GL27p7BaAX4IKT6t4ZKiqxEt+3aODNJP7jQrV6YWkHHpsXG5srKjVv7cme8=
-X-Received: by 2002:a0d:ebc3:0:b0:2d6:34f5:7d67 with SMTP id
- u186-20020a0debc3000000b002d634f57d67mr491346ywe.73.1644975490580; Tue, 15
- Feb 2022 17:38:10 -0800 (PST)
-MIME-Version: 1.0
-References: <00000000000073b3e805d7fed17e@google.com> <462fa505-25a8-fd3f-cc36-5860c6539664@iogearbox.net>
- <CAPhsuW6rPx3JqpPdQVdZN-YtZp1SbuW1j+SVNs48UVEYv68s1A@mail.gmail.com>
-In-Reply-To: <CAPhsuW6rPx3JqpPdQVdZN-YtZp1SbuW1j+SVNs48UVEYv68s1A@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 15 Feb 2022 17:37:59 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5JhG07TYKKHRbNVtepOLjZ2ekibePyyqCwuzhH0YoP7Q@mail.gmail.com>
-Message-ID: <CAPhsuW5JhG07TYKKHRbNVtepOLjZ2ekibePyyqCwuzhH0YoP7Q@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_jit_free
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     syzbot <syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs@googlegroups.com, Yonghong Song <yhs@fb.com>
+        Tue, 15 Feb 2022 20:39:25 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5A4237E2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:39:10 -0800 (PST)
+X-UUID: 3b3de2ad74ae4a66ac4fdbfe0b7ac8b6-20220216
+X-UUID: 3b3de2ad74ae4a66ac4fdbfe0b7ac8b6-20220216
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 718383420; Wed, 16 Feb 2022 09:39:07 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Feb 2022 09:39:06 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Feb 2022 09:39:05 +0800
+Message-ID: <d480bb5f699182694eaac0379908e10ca88ef41f.camel@mediatek.com>
+Subject: Re: [1/2] soc: mediatek: mmsys: add sw0_rst_offset in mmsys driver
+ data
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <matthias.bgg@gmail.com>
+CC:     <chunkuang.hu@kernel.org>, <jitao.shi@mediatek.com>,
+        <xinlei.lee@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 16 Feb 2022 09:39:05 +0800
+In-Reply-To: <da4b7285-1f2d-01a0-9a1d-1381b4772512@collabora.com>
+References: <20220215131952.27861-1-rex-bc.chen@mediatek.com>
+         <20220215131952.27861-2-rex-bc.chen@mediatek.com>
+         <da4b7285-1f2d-01a0-9a1d-1381b4772512@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 10:41 PM Song Liu <song@kernel.org> wrote:
->
-> On Mon, Feb 14, 2022 at 3:52 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >
-> > Song, ptal.
-> >
-> > On 2/14/22 7:45 PM, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    e5313968c41b Merge branch 'Split bpf_sk_lookup remote_port..
-> > > git tree:       bpf-next
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=10baced8700000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=2f649ec6d2eea1495a8f
+Hello Angelo,
 
-How do I run the exact same syzkaller? I am doing something like
+Thanks for yor review.
+I add reply comment below:
 
-./bin/syz-manager -config qemu.cfg
+On Tue, 2022-02-15 at 14:54 +0100, AngeloGioacchino Del Regno wrote:
+> Il 15/02/22 14:19, Rex-BC Chen ha scritto:
+> > There are different software reset registers for difference MTK
+> > SoCs.
+> > Therefore, we add a new variable "sw0_rst_offset" to control it.
+> > 
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/soc/mediatek/mt8183-mmsys.h | 2 ++
+> >   drivers/soc/mediatek/mtk-mmsys.c    | 6 ++++--
+> >   drivers/soc/mediatek/mtk-mmsys.h    | 3 +--
+> >   3 files changed, 7 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mt8183-mmsys.h
+> > b/drivers/soc/mediatek/mt8183-mmsys.h
+> > index 9dee485807c9..0c021f4b76d2 100644
+> > --- a/drivers/soc/mediatek/mt8183-mmsys.h
+> > +++ b/drivers/soc/mediatek/mt8183-mmsys.h
+> > @@ -25,6 +25,8 @@
+> >   #define MT8183_RDMA0_SOUT_COLOR0		0x1
+> >   #define MT8183_RDMA1_SOUT_DSI0			0x1
+> >   
+> > +#define MT8183_MMSYS_SW0_RST_B			0x140
+> > +
+> >   static const struct mtk_mmsys_routes mmsys_mt8183_routing_table[]
+> > = {
+> >   	{
+> >   		DDP_COMPONENT_OVL0, DDP_COMPONENT_OVL_2L0,
+> > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+> > b/drivers/soc/mediatek/mtk-mmsys.c
+> > index 0da25069ffb3..cab62c3eac05 100644
+> > --- a/drivers/soc/mediatek/mtk-mmsys.c
+> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> > @@ -49,12 +49,14 @@ static const struct mtk_mmsys_driver_data
+> > mt8173_mmsys_driver_data = {
+> >   	.clk_driver = "clk-mt8173-mm",
+> >   	.routes = mmsys_default_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
+> > +	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_driver_data
+> > mt8183_mmsys_driver_data = {
+> >   	.clk_driver = "clk-mt8183-mm",
+> >   	.routes = mmsys_mt8183_routing_table,
+> >   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
+> > +	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
+> >   };
+> >   
+> >   static const struct mtk_mmsys_driver_data
+> > mt8186_mmsys_driver_data = {
+> > @@ -128,14 +130,14 @@ static int mtk_mmsys_reset_update(struct
+> > reset_controller_dev *rcdev, unsigned l
+> >   
+> >   	spin_lock_irqsave(&mmsys->lock, flags);
+> >   
+> > -	reg = readl_relaxed(mmsys->regs + MMSYS_SW0_RST_B);
+> > +	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
+> >   
+> >   	if (assert)
+> >   		reg &= ~BIT(id);
+> >   	else
+> >   		reg |= BIT(id);
+> >   
+> > -	writel_relaxed(reg, mmsys->regs + MMSYS_SW0_RST_B);
+> > +	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
+> >   
+> >   	spin_unlock_irqrestore(&mmsys->lock, flags);
+> >   
+> > diff --git a/drivers/soc/mediatek/mtk-mmsys.h
+> > b/drivers/soc/mediatek/mtk-mmsys.h
+> > index 8b0ed05117ea..83320019b4cf 100644
+> > --- a/drivers/soc/mediatek/mtk-mmsys.h
+> > +++ b/drivers/soc/mediatek/mtk-mmsys.h
+> > @@ -78,8 +78,6 @@
+> >   #define DSI_SEL_IN_RDMA				0x1
+> >   #define DSI_SEL_IN_MASK				0x1
+> >   
+> > -#define MMSYS_SW0_RST_B				0x140
+> > -
+> >   struct mtk_mmsys_routes {
+> >   	u32 from_comp;
+> >   	u32 to_comp;
+> > @@ -92,6 +90,7 @@ struct mtk_mmsys_driver_data {
+> >   	const char *clk_driver;
+> >   	const struct mtk_mmsys_routes *routes;
+> >   	const unsigned int num_routes;
+> > +	const unsigned int sw0_rst_offset;
+> 
+> I don't think that this offset will ever be larger than 0xffff.
+> Can we use u16 here instead?
+> 
+Yes, the value of offset is enough using u16.
+I will modify this in next version.
 
-with the cfg file like:
+BRs,
+Rex
+> >   };
+> >   
+> >   /*
+> 
+> 
+> 
 
-{
-        "target": "linux/amd64",
-        "http": ":56741",
-        "workdir": "workdir",
-        "kernel_obj": "linux",
-        "image": "./pkg/mgrconfig/testdata/stretch.img",
-        "syzkaller": ".",
-        "disable_syscalls": ["keyctl", "add_key", "request_key"],
-        "suppressions": ["some known bug"],
-        "procs": 8,
-        "type": "qemu",
-        "vm": {
-                "count": 16,
-                "cpu": 2,
-                "mem": 2048,
-                "kernel": "linux/arch/x86/boot/bzImage"
-        }
-}
-
-Is this correct? I am using stretch.img from syzkaller site, and the
-.config from
-the link above.
-
-Thanks,
-Song

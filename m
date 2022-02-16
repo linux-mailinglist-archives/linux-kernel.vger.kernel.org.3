@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CB04B94B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6E64B94BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238636AbiBPXs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 18:48:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44076 "EHLO
+        id S238643AbiBPXwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 18:52:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbiBPXsZ (ORCPT
+        with ESMTP id S229820AbiBPXwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 18:48:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDE5D258478
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 15:48:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645055290;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3yxXnQ8NcQVI3R2VSTCwUm2NlS2NbQO6IZlz6uxtttI=;
-        b=Fv7T04Yo/ZvA8d8RZAH/Wf+olllHI9pLdjsOPbqLAb5IjQ8N0y84saNXTivd9MI6tM5I73
-        ZSEb3BoTXAD5LxuxmU4NMrtEzhIRIhuagHHmesqs7o9/eHau66yGL+j2n6om7cTPaY01VU
-        UNUGOt2S4lmjVZfkNCe71ZaCFPcJrLE=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-9jjB_P_lOF21YU8YneimSQ-1; Wed, 16 Feb 2022 18:48:09 -0500
-X-MC-Unique: 9jjB_P_lOF21YU8YneimSQ-1
-Received: by mail-oo1-f70.google.com with SMTP id a10-20020a4a988a000000b00318bdbe9370so2212456ooj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 15:48:09 -0800 (PST)
+        Wed, 16 Feb 2022 18:52:33 -0500
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77089F4063;
+        Wed, 16 Feb 2022 15:52:20 -0800 (PST)
+Received: by mail-il1-f181.google.com with SMTP id d3so1049538ilr.10;
+        Wed, 16 Feb 2022 15:52:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=3yxXnQ8NcQVI3R2VSTCwUm2NlS2NbQO6IZlz6uxtttI=;
-        b=QcBn6XFcxP+0+bt0nl3n31vK/82kVKAaSplXmOLrp9qmTAVqDdhXjiVadO+v9+ClQg
-         M5pdw9DQT26xs+botjeDOJKJeMUFpbeRaGIlUX0PJyPI7OeTT/vg3zekw5TSjFp5PMPI
-         9mF6nnv/AeRO5RGxnyYebXLkkLGBiLipvbPaAO4pjWUiafWSAxsnTCO3hk95ikVPRoau
-         sROzK7yFEo0om5d4cfVLS0TgSRwtZCR5HiZY2o/76iCvpry9NXEqDZxpyrzAxRYQ4QyB
-         sX9HDbf2AvxeH86Qjl2Zc2VtIKwg+4CugiPKMiVc17QNRYdUiLBIfxv9YCxY5v2TCMi5
-         vgPw==
-X-Gm-Message-State: AOAM531fu1J75hSd6iriER8WYRET7H2pAw8QePwL2X0pSVI3HTpD5F8T
-        3eJ64lyu2L5ixZg2AmD3/eIue1UGhtwqb4PlSfgOaybDBUxFviZQ5PkkZMfIWEJIX+sPhyay9K0
-        ZA280TTPke543SQ03inHEJ4Zi
-X-Received: by 2002:a05:6870:4248:b0:d2:c3a4:5b4c with SMTP id v8-20020a056870424800b000d2c3a45b4cmr1378281oac.40.1645055288808;
-        Wed, 16 Feb 2022 15:48:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwHwiwa7LUVi3R9fBV+IMF/WBh/f8giV2tlCFrpwtq5zY75nHBLPRui6wwyxbqkuInjx2yxSw==
-X-Received: by 2002:a05:6870:4248:b0:d2:c3a4:5b4c with SMTP id v8-20020a056870424800b000d2c3a45b4cmr1378267oac.40.1645055288418;
-        Wed, 16 Feb 2022 15:48:08 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id x1sm15614544oto.38.2022.02.16.15.48.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b/JXIitbDZ9HoqIJQDyG8ELeQOdY8UCMjKhFkXYelkw=;
+        b=eAKZe+Seh7P0SYBnxfLgH/sgd67U+4UQXJU/+1+vLP6bFNhtAmzjXj0e03i5X6uYCr
+         MANiweju6037zb6zhB4Vjo23/k+aaEQrHu4R06EyIL2ZVV16UoOPWXS5xbk5CdgFAXRG
+         GC3GFQiBQUWPcLt2OZdOZ2JtHQ9LDiytt0PzCCSc27pJczQgWXpngj4+8wsOSMuqEdpj
+         wIxCm8TQvHwAb3HP5qYPBRedrVDggr9JNmo+g+hycBq7mHaP8N9Ubm3QRilwdzjY0c+l
+         1vBEHpQJis/mXS1giY9IqwfOV8YbkF3c2XPFiz36kzAOsS2rxdoC5k/y79tt73amRxz6
+         0ayA==
+X-Gm-Message-State: AOAM531u1UJujwPXSE2Ywf5vAx8Fp0D7jQJJ7E00M0+EvTJeZTS5kvs0
+        jz3Gia5pEcQDbOhn6O7Pew==
+X-Google-Smtp-Source: ABdhPJzMeZBEmpkyBZ0DqYIbANVj7AN2XmgRUWyZkypg6ORTBG7lSLroGnVPeDY/yrX1DtGyrr1CDQ==
+X-Received: by 2002:a92:c567:0:b0:2b8:b4d1:ba3c with SMTP id b7-20020a92c567000000b002b8b4d1ba3cmr202018ilj.50.1645055539773;
+        Wed, 16 Feb 2022 15:52:19 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id i13sm800285ila.46.2022.02.16.15.52.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 15:48:07 -0800 (PST)
-Date:   Wed, 16 Feb 2022 16:48:06 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     <kvm@vger.kernel.org>, Cornelia Huck <cohuck@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 1/5] vfio/pci: register vfio-pci driver with
- runtime PM framework
-Message-ID: <20220216164806.0d391821.alex.williamson@redhat.com>
-In-Reply-To: <20220124181726.19174-2-abhsahu@nvidia.com>
-References: <20220124181726.19174-1-abhsahu@nvidia.com>
-        <20220124181726.19174-2-abhsahu@nvidia.com>
-Organization: Red Hat
+        Wed, 16 Feb 2022 15:52:18 -0800 (PST)
+Received: (nullmailer pid 1918923 invoked by uid 1000);
+        Wed, 16 Feb 2022 23:52:16 -0000
+Date:   Wed, 16 Feb 2022 17:52:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, alistair@alistair23.me,
+        samuel@sholland.org, josua.mayer@jm0.eu,
+        letux-kernel@openphoenux.org
+Subject: Re: [RFC PATCH 1/6] dt-bindings: display: imx: Add EPDC
+Message-ID: <Yg2OMADV6GLG6a4/@robh.at.kernel.org>
+References: <20220206080016.796556-1-andreas@kemnade.info>
+ <20220206080016.796556-2-andreas@kemnade.info>
+ <YgaE06Ktabpf2dJC@robh.at.kernel.org>
+ <20220214234517.121e1167@aktux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214234517.121e1167@aktux>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,331 +72,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Jan 2022 23:47:22 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+On Mon, Feb 14, 2022 at 11:45:17PM +0100, Andreas Kemnade wrote:
+> Hi Rob,
+> 
+> On Fri, 11 Feb 2022 09:46:27 -0600
+> Rob Herring <robh@kernel.org> wrote:
+> 
+> > On Sun, Feb 06, 2022 at 09:00:11AM +0100, Andreas Kemnade wrote:
+> > > Add a binding for the Electrophoretic Display Controller found at least
+> > > in the i.MX6.  
+> > 
+> > The first version was in i.MX50 (I helped design the register 
+> > interface). Is that version compatible?
+> > 
+> it has some differences, but that could be detected by EPDC_VERSION
+> register. I do not own such a device, so I cannot fully check. I have
+> not seen any driver with devicetree for IMX5. For now I am rejecting
+> anything which has a EPDC version which I cannot check. 
+> 
+> > > The timing subnode is directly here to avoid having display parameters
+> > > spread all over the plate.
+> > > 
+> > > Supplies are organized the same way as in the fbdev driver in the
+> > > NXP/Freescale kernel forks. The regulators used for that purpose,
+> > > like the TPS65185, the SY7636A and MAX17135 have typically a single bit to
+> > > start a bunch of regulators of higher or negative voltage with a
+> > > well-defined timing. VCOM can be handled separately, but can also be
+> > > incorporated into that single bit.
+> > > 
+> > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > > ---
+> > >  .../bindings/display/imx/fsl,mxc-epdc.yaml    | 159 ++++++++++++++++++
+> > >  1 file changed, 159 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml b/Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml
+> > > new file mode 100644
+> > > index 000000000000..7e0795cc3f70
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml
+> > > @@ -0,0 +1,159 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/display/imx/fsl,mxc-epdc.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Freescale i.MX6 EPDC
+> > > +
+> > > +maintainers:
+> > > +  - Andreas Kemnade <andreas@kemnade.info>
+> > > +
+> > > +description: |
+> > > +  The EPDC is a controller for handling electronic paper displays found in
+> > > +  i.MX6 SoCs.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - fsl,imx6sl-epdc
+> > > +      - fsl,imx6sll-epdc  
+> > 
+> > Not compatible with each other?
+> > 
+> differences are detectable by EPDC_VERSION register, so probably so
+> problem. NXP/Freescale kernel uses
+> fsl,imx6dl-epdc
+> and 
+> fsl,imx7d-epdc (used also by imx6 devices with EPDC_VERSION = 3.0)
+> in their drivers.
+> 
+> fsl,imx6dl-epdc
+> fsl,imx6sl-epdc
+> fsl,imx6sll-epdc
+> fsl,imx7d-epdc
+> in their dtsis.
+> 
+> But the general rule is to use as less as possible compatible strings
+> if differences can be probed properly, so only one should be
+> sufficient? Which one?
 
-> Currently, there is very limited power management support
-> available in the upstream vfio-pci driver. If there is no user of vfio-pci
-> device, then the PCI device will be moved into D3Hot state by writing
-> directly into PCI PM registers. This D3Hot state help in saving power
-> but we can achieve zero power consumption if we go into the D3cold state.
-> The D3cold state cannot be possible with native PCI PM. It requires
-> interaction with platform firmware which is system-specific.
-> To go into low power states (including D3cold), the runtime PM framework
-> can be used which internally interacts with PCI and platform firmware and
-> puts the device into the lowest possible D-States.
-> 
-> This patch registers vfio-pci driver with the runtime PM framework.
-> 
-> 1. The PCI core framework takes care of most of the runtime PM
->    related things. For enabling the runtime PM, the PCI driver needs to
->    decrement the usage count and needs to register the runtime
->    suspend/resume callbacks. For vfio-pci based driver, these callback
->    routines can be stubbed in this patch since the vfio-pci driver
->    is not doing the PCI device initialization. All the config state
->    saving, and PCI power management related things will be done by
->    PCI core framework itself inside its runtime suspend/resume callbacks.
-> 
-> 2. Inside pci_reset_bus(), all the devices in bus/slot will be moved
->    out of D0 state. This state change to D0 can happen directly without
->    going through the runtime PM framework. So if runtime PM is enabled,
->    then pm_runtime_resume() makes the runtime state active. Since the PCI
->    device power state is already D0, so it should return early when it
->    tries to change the state with pci_set_power_state(). Then
->    pm_request_idle() can be used which will internally check for
->    device usage count and will move the device again into the low power
->    state.
-> 
-> 3. Inside vfio_pci_core_disable(), the device usage count always needs
->    to be decremented which was incremented in vfio_pci_core_enable().
-> 
-> 4. Since the runtime PM framework will provide the same functionality,
->    so directly writing into PCI PM config register can be replaced with
->    the use of runtime PM routines. Also, the use of runtime PM can help
->    us in more power saving.
-> 
->    In the systems which do not support D3Cold,
-> 
->    With the existing implementation:
-> 
->    // PCI device
->    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
->    D3hot
->    // upstream bridge
->    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
->    D0
-> 
->    With runtime PM:
-> 
->    // PCI device
->    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
->    D3hot
->    // upstream bridge
->    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
->    D3hot
-> 
->    So, with runtime PM, the upstream bridge or root port will also go
->    into lower power state which is not possible with existing
->    implementation.
-> 
->    In the systems which support D3Cold,
-> 
->    // PCI device
->    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
->    D3hot
->    // upstream bridge
->    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
->    D0
-> 
->    With runtime PM:
-> 
->    // PCI device
->    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
->    D3cold
->    // upstream bridge
->    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
->    D3cold
-> 
->    So, with runtime PM, both the PCI device and upstream bridge will
->    go into D3cold state.
-> 
-> 5. If 'disable_idle_d3' module parameter is set, then also the runtime
->    PM will be enabled, but in this case, the usage count should not be
->    decremented.
-> 
-> 6. vfio_pci_dev_set_try_reset() return value is unused now, so this
->    function return type can be changed to void.
-> 
-> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> ---
->  drivers/vfio/pci/vfio_pci.c      |  3 +
->  drivers/vfio/pci/vfio_pci_core.c | 95 +++++++++++++++++++++++---------
->  include/linux/vfio_pci_core.h    |  4 ++
->  3 files changed, 75 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
-> index a5ce92beb655..c8695baf3b54 100644
-> --- a/drivers/vfio/pci/vfio_pci.c
-> +++ b/drivers/vfio/pci/vfio_pci.c
-> @@ -193,6 +193,9 @@ static struct pci_driver vfio_pci_driver = {
->  	.remove			= vfio_pci_remove,
->  	.sriov_configure	= vfio_pci_sriov_configure,
->  	.err_handler		= &vfio_pci_core_err_handlers,
-> +#if defined(CONFIG_PM)
-> +	.driver.pm              = &vfio_pci_core_pm_ops,
-> +#endif
->  };
->  
->  static void __init vfio_pci_fill_ids(void)
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> index f948e6cd2993..c6e4fe9088c3 100644
-> --- a/drivers/vfio/pci/vfio_pci_core.c
-> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> @@ -152,7 +152,7 @@ static void vfio_pci_probe_mmaps(struct vfio_pci_core_device *vdev)
->  }
->  
->  struct vfio_pci_group_info;
-> -static bool vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set);
-> +static void vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set);
->  static int vfio_pci_dev_set_hot_reset(struct vfio_device_set *dev_set,
->  				      struct vfio_pci_group_info *groups);
->  
-> @@ -245,7 +245,11 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
->  	u16 cmd;
->  	u8 msix_pos;
->  
-> -	vfio_pci_set_power_state(vdev, PCI_D0);
-> +	if (!disable_idle_d3) {
-> +		ret = pm_runtime_resume_and_get(&pdev->dev);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
+If you can probe all the differences, then just 'fsl,imx-epdc' is 
+sufficient. Just document that so the next time around I don't forget 
+and tell you it needs to be specific.
 
-Sorry for the delay in review, I'm a novice in pm runtime, but I
-haven't forgotten about the remainder of this series.
-
-I think we're removing the unconditional wake here because we now wake
-the device in the core registration function below, but I think there
-might be a subtle dependency here on the fix to always wake devices in
-the disable function as well, otherwise I'm afraid the power state of a
-device released in D3hot could leak to the next user here.
-
->  
->  	/* Don't allow our initial saved state to include busmaster */
->  	pci_clear_master(pdev);
-> @@ -405,8 +409,11 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
->  out:
->  	pci_disable_device(pdev);
->  
-> -	if (!vfio_pci_dev_set_try_reset(vdev->vdev.dev_set) && !disable_idle_d3)
-> -		vfio_pci_set_power_state(vdev, PCI_D3hot);
-> +	vfio_pci_dev_set_try_reset(vdev->vdev.dev_set);
-> +
-> +	/* Put the pm-runtime usage counter acquired during enable */
-> +	if (!disable_idle_d3)
-> +		pm_runtime_put(&pdev->dev);
->  }
->  EXPORT_SYMBOL_GPL(vfio_pci_core_disable);
->  
-> @@ -1847,19 +1854,20 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
->  
->  	vfio_pci_probe_power_state(vdev);
->  
-> -	if (!disable_idle_d3) {
-> -		/*
-> -		 * pci-core sets the device power state to an unknown value at
-> -		 * bootup and after being removed from a driver.  The only
-> -		 * transition it allows from this unknown state is to D0, which
-> -		 * typically happens when a driver calls pci_enable_device().
-> -		 * We're not ready to enable the device yet, but we do want to
-> -		 * be able to get to D3.  Therefore first do a D0 transition
-> -		 * before going to D3.
-> -		 */
-> -		vfio_pci_set_power_state(vdev, PCI_D0);
-> -		vfio_pci_set_power_state(vdev, PCI_D3hot);
-> -	}
-> +	/*
-> +	 * pci-core sets the device power state to an unknown value at
-> +	 * bootup and after being removed from a driver.  The only
-> +	 * transition it allows from this unknown state is to D0, which
-> +	 * typically happens when a driver calls pci_enable_device().
-> +	 * We're not ready to enable the device yet, but we do want to
-> +	 * be able to get to D3.  Therefore first do a D0 transition
-> +	 * before enabling runtime PM.
-> +	 */
-> +	vfio_pci_set_power_state(vdev, PCI_D0);
-> +	pm_runtime_allow(&pdev->dev);
-> +
-> +	if (!disable_idle_d3)
-> +		pm_runtime_put(&pdev->dev);
-
-I could use some enlightenment here.  pm_runtime_allow() only does
-something if power.runtime_allow is false, in which case it sets that
-value to true and decrements power.usage_count.  runtime_allow is
-enabled by default in pm_runtime_init(), but pci_pm_init() calls
-pm_runtime_forbid() which does the reverse of pm_runtime_allow().  So
-do I understand correctly that PCI devices are probed with
-runtime_allow = false and a usage_count of 2?
-
->  
->  	ret = vfio_register_group_dev(&vdev->vdev);
->  	if (ret)
-> @@ -1868,7 +1876,9 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
->  
->  out_power:
->  	if (!disable_idle_d3)
-> -		vfio_pci_set_power_state(vdev, PCI_D0);
-> +		pm_runtime_get_noresume(&pdev->dev);
-> +
-> +	pm_runtime_forbid(&pdev->dev);
->  out_vf:
->  	vfio_pci_vf_uninit(vdev);
->  	return ret;
-> @@ -1887,7 +1897,9 @@ void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev)
->  	vfio_pci_vga_uninit(vdev);
->  
->  	if (!disable_idle_d3)
-> -		vfio_pci_set_power_state(vdev, PCI_D0);
-> +		pm_runtime_get_noresume(&pdev->dev);
-> +
-> +	pm_runtime_forbid(&pdev->dev);
->  }
->  EXPORT_SYMBOL_GPL(vfio_pci_core_unregister_device);
->  
-> @@ -2093,33 +2105,62 @@ static bool vfio_pci_dev_set_needs_reset(struct vfio_device_set *dev_set)
->   *  - At least one of the affected devices is marked dirty via
->   *    needs_reset (such as by lack of FLR support)
->   * Then attempt to perform that bus or slot reset.
-> - * Returns true if the dev_set was reset.
->   */
-> -static bool vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set)
-> +static void vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set)
->  {
->  	struct vfio_pci_core_device *cur;
->  	struct pci_dev *pdev;
->  	int ret;
->  
->  	if (!vfio_pci_dev_set_needs_reset(dev_set))
-> -		return false;
-> +		return;
->  
->  	pdev = vfio_pci_dev_set_resettable(dev_set);
->  	if (!pdev)
-> -		return false;
-> +		return;
->  
->  	ret = pci_reset_bus(pdev);
->  	if (ret)
-> -		return false;
-> +		return;
->  
->  	list_for_each_entry(cur, &dev_set->device_list, vdev.dev_set_list) {
->  		cur->needs_reset = false;
-> -		if (!disable_idle_d3)
-> -			vfio_pci_set_power_state(cur, PCI_D3hot);
-> +		if (!disable_idle_d3) {
-> +			/*
-> +			 * Inside pci_reset_bus(), all the devices in bus/slot
-> +			 * will be moved out of D0 state. This state change to
-
-s/out of/into/?
-
-> +			 * D0 can happen directly without going through the
-> +			 * runtime PM framework. pm_runtime_resume() will
-> +			 * help make the runtime state as active and then
-> +			 * pm_request_idle() can be used which will
-> +			 * internally check for device usage count and will
-> +			 * move the device again into the low power state.
-> +			 */
-> +			pm_runtime_resume(&pdev->dev);
-> +			pm_request_idle(&pdev->dev);
-> +		}
->  	}
-> -	return true;
->  }
->  
-> +#ifdef CONFIG_PM
-> +static int vfio_pci_core_runtime_suspend(struct device *dev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int vfio_pci_core_runtime_resume(struct device *dev)
-> +{
-> +	return 0;
-> +}
-> +
-> +const struct dev_pm_ops vfio_pci_core_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(vfio_pci_core_runtime_suspend,
-> +			   vfio_pci_core_runtime_resume,
-> +			   NULL)
-> +};
-> +EXPORT_SYMBOL_GPL(vfio_pci_core_pm_ops);
-> +#endif
-
-It looks like the vfio_pci_core_pm_ops implementation should all be
-moved to where we implement D3cold support, it's not necessary to
-implement stubs for any of the functionality of this patch.  Thanks,
-
-Alex
-
-> +
->  void vfio_pci_core_set_params(bool is_nointxmask, bool is_disable_vga,
->  			      bool is_disable_idle_d3)
->  {
-> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-> index ef9a44b6cf5d..aafe09c9fa64 100644
-> --- a/include/linux/vfio_pci_core.h
-> +++ b/include/linux/vfio_pci_core.h
-> @@ -231,6 +231,10 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev);
->  void vfio_pci_core_disable(struct vfio_pci_core_device *vdev);
->  void vfio_pci_core_finish_enable(struct vfio_pci_core_device *vdev);
->  
-> +#ifdef CONFIG_PM
-> +extern const struct dev_pm_ops vfio_pci_core_pm_ops;
-> +#endif
-> +
->  static inline bool vfio_pci_is_vga(struct pci_dev *pdev)
->  {
->  	return (pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA;
-
+Rob

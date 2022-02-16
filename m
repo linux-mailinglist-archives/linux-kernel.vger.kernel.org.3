@@ -2,129 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897764B7C3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB9F4B7C86
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245287AbiBPBLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:11:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35978 "EHLO
+        id S245357AbiBPBQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:16:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245488AbiBPBK4 (ORCPT
+        with ESMTP id S245429AbiBPBQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:10:56 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0EEFA203
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:10:16 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id c6so1411228ybk.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:10:16 -0800 (PST)
+        Tue, 15 Feb 2022 20:16:00 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0D5F5411
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:15:50 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id x11so754423pll.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:15:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kEAvnISlAgpQaUg6TOaHvEbXUrTyCqH15xyEbDSJWp0=;
-        b=ZUZR+o7NNuMwO1tDYO+QNJg+NoAX33xWhrua8Z8KDMfC2GLtSZdyUBrn9hqmZc011V
-         H9AOPKO1ShSUjtslz814QmDGdWyq4XsFxbPx9NTsbv9s9VZzqH4Rb7d+mDBITNARApIB
-         ztT+jp2GyBVb3rGGQap/Dk+L7wisatjFXx0T8=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0hwZ2F3aREhpJrlJ2d2Ygxmwwu5LB/WMxQx3SAucGcc=;
+        b=Kn1kq8Z6LR/PsKUAKmu2TgN0q8KMHpYWQ0TA59BvJ8YXgNv9+VQ6HyX8RCNhpl0HKF
+         tzKXer0c/VfAgtIdWOuaqJ9PDLt7uNxv183fEXL7piAF+9HILKHrpQGzcrUpaXnhG/0B
+         b9WG14crvUmfqNnOWjcOkmRxjzAo55kSsS9JdXzianc87UOkXPI8gUoLh+11HpAuGrYz
+         7IX5mR6/cHus1ppqJYk+nXObKvxE2Q1SAmcsvAcHl8XzTLlOcPAykr0lvclKdumwAFgJ
+         leMOJyYUdIRBTySDndNDULI/vhF64kb+pDSvx9NbwomaMxjHu5FmJt3FP2Vg2fbh7XMy
+         Jkow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kEAvnISlAgpQaUg6TOaHvEbXUrTyCqH15xyEbDSJWp0=;
-        b=2iRWlLTsci7+WWENUG/tBXl4rU5fgYqlNRVZQq9wET+Gq4XECv/J3RlDX1kcDsZavz
-         faN8AnclH6gCQkmmseO6G26VqFHeRdfjT9I5n+vDJzKaLksi7dXrLfGMejKBa4yTvDHS
-         Y8Z6g7ghjqEpuHk7h2NKZFdT+xRph5HaUvqd6ZXKctej5zf2py/hIGPk13wk5iV1ww1B
-         ndWQCZMlmBVzF7PUodLrywmrd+zaB5JXhaHUWkNdJEA9Ea8e1GXk9gWRsgN11DMtVfy2
-         abqMdoZPGzgZF3vNRuLNFip3raGNKfARMeiEaYM6cUytXnygBrfBFvWaPHPPOQvSTEIZ
-         lO2g==
-X-Gm-Message-State: AOAM5331NJkM/T+huQdFu+z+2Mev8JfD/+09vwPfIBHGxFvscUfuJ3I8
-        dGqpsPd7Mj+REbm5k+RwKNSVL2hJBdPvlGr9j0qIrA==
-X-Google-Smtp-Source: ABdhPJyS++e5nIEG75PGyCAX0dVZV5d5K6bZd+I14kU4jBkU/7L3RVTaVSVHXVvfqzU4/OQusykc2yuGOrZm/jYCf0Y=
-X-Received: by 2002:a05:6902:108:b0:621:165e:5c1e with SMTP id
- o8-20020a056902010800b00621165e5c1emr307818ybh.204.1644973815876; Tue, 15 Feb
- 2022 17:10:15 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0hwZ2F3aREhpJrlJ2d2Ygxmwwu5LB/WMxQx3SAucGcc=;
+        b=J0JBj6kieCBWpEfzC/LeCRBFVPLWoyxZidoaRElt8k1vp/gA195ROIp2zr1q6Q1+Og
+         MmfcjyVJcpGuvTGKLsfxzPrLfjaQBVG12MSQ7UmPDj/JHguEabk+p215CKRlo2hsR1pU
+         NsyC3qGIpqpZTw5u/TQ3ByFfn0v108hkQGr8EQLTnwbCfPNYXS2n68uMiFgmANv3AQ+H
+         P3yH5dez5cPFtPXYaA+A/bZYzLV6OPtfp7XbEwKREhN7zVDiyvkCNh6wsnireC+moM57
+         VjwOQznXNR6QNsU9cEjtaqWOcVRVQpgQjOEjCZifQZUyr/SqZmq8zTy0K4fPQ9E4uB3P
+         UFwA==
+X-Gm-Message-State: AOAM530DTp5zP/WEg+EotvnhSgjnNcxxExoRsPRsM0CKZbxyLijS57T9
+        jOZwIkcM1zepD4QR9xh4TNY=
+X-Google-Smtp-Source: ABdhPJzObOPULx4E0kcZ0vLa3iyJhoz+Xq3kxebJsb1C6cXwwaNrpNsO/2CfAyEGSfvbGjclvdffIQ==
+X-Received: by 2002:a17:90a:734c:b0:1b9:b1fa:db6a with SMTP id j12-20020a17090a734c00b001b9b1fadb6amr191487pjs.158.1644974149433;
+        Tue, 15 Feb 2022 17:15:49 -0800 (PST)
+Received: from localhost (c-73-25-156-94.hsd1.or.comcast.net. [73.25.156.94])
+        by smtp.gmail.com with ESMTPSA id ls14sm15760824pjb.0.2022.02.15.17.15.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Feb 2022 17:15:48 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Gurchetan Singh <gurchetansingh@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Lingfeng Yang <lfy@google.com>,
+        virtualization@lists.linux-foundation.org (open list:VIRTIO GPU DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/virtio: Fix capset-id query size
+Date:   Tue, 15 Feb 2022 17:16:14 -0800
+Message-Id: <20220216011614.360451-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220214053646.3088298-1-tzungbi@google.com> <20220214053646.3088298-5-tzungbi@google.com>
-In-Reply-To: <20220214053646.3088298-5-tzungbi@google.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 15 Feb 2022 17:10:04 -0800
-Message-ID: <CACeCKac+b1Rp6bZFALn=sbh8gkJbWeKTC=8bdzp+-90pgq=wSw@mail.gmail.com>
-Subject: Re: [PATCH 4/5] platform/chrome: cros_kbd_led_backlight: support OF match
-To:     Tzung-Bi Shih <tzungbi@google.com>
-Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 9:37 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
-> ---
->  .../platform/chrome/cros_kbd_led_backlight.c    | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
-> index 814f2b74c602..ba853e55d29a 100644
-> --- a/drivers/platform/chrome/cros_kbd_led_backlight.c
-> +++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
-> @@ -10,6 +10,7 @@
->  #include <linux/kernel.h>
->  #include <linux/leds.h>
->  #include <linux/module.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->
-> @@ -128,8 +129,11 @@ static int keyboard_led_probe(struct platform_device *pdev)
->         int error;
->
->         drvdata = acpi_device_get_match_data(&pdev->dev);
-> -       if (!drvdata)
-> -               return -EINVAL;
-> +       if (!drvdata) {
-> +               drvdata = of_device_get_match_data(&pdev->dev);
-> +               if (!drvdata)
-> +                       return -EINVAL;
-> +       }
+From: Rob Clark <robdclark@chromium.org>
 
-I'm not familiar with this driver, so can't do a full review, but
-shouldn't device_get_match_data()
-from property.h [1] be able to handle both DT and ACPI cases?
+The UABI was already defined for pointer to 64b value, and all the
+userspace users of this ioctl that I could find are already using a
+uint64_t (but zeroing it out to work around kernel only copying 32b).
+Unfortunately this ioctl doesn't have a length field, so out of paranoia
+I restricted the change to copy 64b to the single 64b param that can be
+queried.
 
-[1]: https://elixir.bootlin.com/linux/v5.17-rc4/source/include/linux/property.h
+Fixes: 78aa20fa4381 ("drm/virtio: implement context init: advertise feature to userspace")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
->
->         if (drvdata->init) {
->                 error = drvdata->init(pdev);
-> @@ -161,10 +165,19 @@ static const struct acpi_device_id keyboard_led_acpi_match[] = {
->  };
->  MODULE_DEVICE_TABLE(acpi, keyboard_led_acpi_match);
->
-> +static const struct of_device_id keyboard_led_of_match[] = {
-> +       {
-> +               .compatible = "google,cros-kbd-led-backlight",
-> +       },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, keyboard_led_of_match);
-> +
->  static struct platform_driver keyboard_led_driver = {
->         .driver         = {
->                 .name   = "chromeos-keyboard-leds",
->                 .acpi_match_table = ACPI_PTR(keyboard_led_acpi_match),
-> +               .of_match_table = of_match_ptr(keyboard_led_of_match),
->         },
->         .probe          = keyboard_led_probe,
->  };
-> --
-> 2.35.1.265.g69c8d7142f-goog
->
->
+diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+index 0f2f3f54dbf9..0158d27d5645 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
++++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+@@ -269,7 +269,8 @@ static int virtio_gpu_getparam_ioctl(struct drm_device *dev, void *data,
+ {
+ 	struct virtio_gpu_device *vgdev = dev->dev_private;
+ 	struct drm_virtgpu_getparam *param = data;
+-	int value;
++	int value, ret, sz = sizeof(int);
++	uint64_t value64;
+ 
+ 	switch (param->param) {
+ 	case VIRTGPU_PARAM_3D_FEATURES:
+@@ -291,13 +292,20 @@ static int virtio_gpu_getparam_ioctl(struct drm_device *dev, void *data,
+ 		value = vgdev->has_context_init ? 1 : 0;
+ 		break;
+ 	case VIRTGPU_PARAM_SUPPORTED_CAPSET_IDs:
+-		value = vgdev->capset_id_mask;
++		value64 = vgdev->capset_id_mask;
++		sz = sizeof(value64);
+ 		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+-	if (copy_to_user(u64_to_user_ptr(param->value), &value, sizeof(int)))
+-		return -EFAULT;
++
++	if (sz == sizeof(int)) {
++		if (copy_to_user(u64_to_user_ptr(param->value), &value, sz))
++			return -EFAULT;
++	} else {
++		if (copy_to_user(u64_to_user_ptr(param->value), &value64, sz))
++			return -EFAULT;
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
+

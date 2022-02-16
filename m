@@ -2,116 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4061E4B859B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89E44B85A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 11:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiBPKaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 05:30:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39744 "EHLO
+        id S230429AbiBPKat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 05:30:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiBPKaC (ORCPT
+        with ESMTP id S230295AbiBPKal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 05:30:02 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFC9220BE2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:29:50 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B068D4060F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:29:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645007388;
-        bh=8Ae2IyDPIYtSDwfICZYtX6NpzxBQNSp7pmdTk/Ww12w=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=qSAvNyBmI6VMwGxZEohN/GJocZjYDQvs1IYOk8wTJn6z8vm5Af3PAbsGAcMliXdQk
-         TKR/C8DIIQoPpXzRH533o0DyFjstEzYIHoSG1nwPcqOWOPErUKLEMzg1e5R60vqDHe
-         Cdn6bJFq5gbPaC/gLUUpfIXRAuUj0zbaxW4GmQcCxJqVk9EpLlVED3D44asI2y9NBv
-         NWhOxZmZ1jocBZz+EzLvMN837mpZNioWd8qAhoOPBMgbmMCrkCL/x5kDqGBirNeI7g
-         46urYFi3vpEYsT6mPc8NAToOGNgAX3DkKatNO8we83PeRMALcVgqJ5n23qeayyMsFL
-         kOm0gAJJHgSKg==
-Received: by mail-ed1-f71.google.com with SMTP id f9-20020a056402354900b0040fb9c35a02so1267918edd.18
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:29:48 -0800 (PST)
+        Wed, 16 Feb 2022 05:30:41 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4162225E3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:30:29 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id o2so3003063lfd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 02:30:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y+U2blIz2bHr/Hou20K+vB8EK8yt9Gm5o6A0v/q1Ufs=;
+        b=bmaY2mTyY9evN92fL8S15FP23bwOQg175/j/w9J0MQSQPxSnTXMxBZDaWXAKWYsZ+h
+         SHp12rfwrzGOlePdMZPIDVrnCGk3OAtITljLm+pXcSXXN1VH3CklKSnRika3NENyDtEC
+         zIlceVPicu6kGBc5349Bp7IZ2FjkyV40XJ0O/DBt08q/kZleBR0bX0ZF8WnrqrI4V9sQ
+         Ug5PMGQX62KF4aO/ZrT6rR8x1hz3YRMGDk+1CerrfW5q8hSv7BFDExJ+Z0tDYDbr4hPl
+         IUZK3qKeFFUHcijTy2F2TRpctIFFTN/lgHBnUOTPFd58uVqeYuiCUUm5z8InjmRScavs
+         xuLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8Ae2IyDPIYtSDwfICZYtX6NpzxBQNSp7pmdTk/Ww12w=;
-        b=q6vklAe7P5TdEPFhWzZwZbFfvYH86L59Gpue7HH3FkG+FQGP03kOsYRvgskZ4vPwjs
-         5SlDJqslSfX4AJcpUvOL+rx0vLSnJ2ZMg8cvHnTD41h7G4Uv+KqSNfXklv1n5MnOikUZ
-         mhnbuWrJE2k39+BTXA+6XawY7nlCHiSyBP7CFn1lhNm1h22dZ67YiYk5v6nYsbqz8fP1
-         RNyFYdhO6pzBw8xXmHtcwricmhoUII6jaseIbtkWuQFqod3R01fYHWbB5RpeERL5/jow
-         QPY9mPnNg6wGgquRHep7oBOdR1JJcyxR1AXWxc0LtESmJuT4yNiElHad2JflZjbeBtJq
-         ypeQ==
-X-Gm-Message-State: AOAM532coglztSr+hmBZWpNyR1CQajAg0e1XFF790EP1YrKYTjw88Rda
-        E+8abXpvvHQ2xbSIot/FBjS5WgEL2wdkBPXT8iYlDD+e0XoCOvAyIk0AcbtvLPYkB1oJiH00mbn
-        8o+LMMg7KMM2mb/8uCUWFjBUwQp6idmhlH9RAJ/3uXA==
-X-Received: by 2002:a17:907:70c1:b0:6ce:78ff:bad4 with SMTP id yk1-20020a17090770c100b006ce78ffbad4mr1757697ejb.68.1645007388015;
-        Wed, 16 Feb 2022 02:29:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyB8SV5fiPCVTykaHtbYxxGP3rr/oFhGzeVD5CLSmaDY/7MY+BRd9s2Om9TXV6Oz9hnD0yY4A==
-X-Received: by 2002:a17:907:70c1:b0:6ce:78ff:bad4 with SMTP id yk1-20020a17090770c100b006ce78ffbad4mr1757676ejb.68.1645007387804;
-        Wed, 16 Feb 2022 02:29:47 -0800 (PST)
-Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id p25sm5037598ejn.33.2022.02.16.02.29.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 02:29:47 -0800 (PST)
-Message-ID: <2249cf46-5c54-2e59-f247-5a22f2e6e5b9@canonical.com>
-Date:   Wed, 16 Feb 2022 11:29:46 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y+U2blIz2bHr/Hou20K+vB8EK8yt9Gm5o6A0v/q1Ufs=;
+        b=3FRkVmqPDuaOkkjy/jLnbSILlx+vFk9QcCKjHMv81G6k4AzIKSwLuLIMGUc2E6dTBw
+         26yNPPEi7dkXmrnQ5NuFXC/kWnN0sEqhz1ehXqYTKgMU86PQoAnE80FI7uCR8o3DwwkX
+         9tMjVsSw3kxuWH90cfZQbnNnBjUEnq/kJxrxIcOid/tVeSSCUVEz+u/0XhSsZDnRa15V
+         H+TZ03Rz+YEHmpbEFkrGz5hHFv6WSU91HgFV8wvj49XvPfD/kDz1rxWySN4YI17I6vtN
+         btxEYhL0LnGnTs47JsINjWM9bLHzMW83igeXRgHJKo9OpS2fCeOD8CErnpcfhv6M2r7J
+         FcEg==
+X-Gm-Message-State: AOAM533zStTFJnHB3JpFQKQw4uwFRUEOOeU98j0hrOIxt1EotDNhdqSS
+        dzUZeBF54y2jCMnU6FdPLU39WiwVBZpPJq28gd92xg==
+X-Google-Smtp-Source: ABdhPJxuTx34WgTkAaui/+oWNPCJhtdpRgb8InCtADP80jomO+tijlnanWqSIZvsT7xoMawzOxj4Y0yq7BoIcfsvHcA=
+X-Received: by 2002:ac2:5de4:0:b0:443:5b80:d4c4 with SMTP id
+ z4-20020ac25de4000000b004435b80d4c4mr1505822lfq.373.1645007428152; Wed, 16
+ Feb 2022 02:30:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 5/6] dt-bindings: Document Tegra234 HDA support
-Content-Language: en-US
-To:     Mohan Kumar <mkumard@nvidia.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, robh+dt@kernel.org, thierry.reding@gmail.com,
-        tiwai@suse.com, jonathanh@nvidia.com, spujar@nvidia.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220216092240.26464-1-mkumard@nvidia.com>
- <20220216092240.26464-6-mkumard@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220216092240.26464-6-mkumard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220216055435.2335297-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20220216055435.2335297-1-kai.heng.feng@canonical.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 16 Feb 2022 11:29:52 +0100
+Message-ID: <CAPDyKFrAjT2PJBg+d00Tvekujk6Bh_dsK33121Fxr9hwHi9gLw@mail.gmail.com>
+Subject: Re: [PATCH] mmc: rtsx: Let MMC core handle runtime PM
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Hebb <tommyhebb@gmail.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2022 10:22, Mohan Kumar wrote:
-> Update binding document for HDA support on Tegra234 chip.
-> 
-> Tegra234 has max of 2 clocks and 2 resets which requires to add
-> minItems and maxItems for clocks and resets as Tegra chips can
-> now have minimum of 2 and maximum of 3 clocks and reset support.
-> 
-> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+On Wed, 16 Feb 2022 at 06:55, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+>
+> Since MMC core handles runtime PM reference counting, we can avoid doing
+> redundant runtime PM work in the driver. That means the only thing
+> commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") misses is
+> to always enable runtime PM, to let its parent driver enable ASPM in the
+> runtime idle routine.
+>
+> Fixes: 7499b529d97f ("mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM")
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+This looks good to me!
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Greg, do you want to funnel this through your tree - or should I wait
+for an rc containing 7499b529d97f and take it through my mmc tree?
+Either way works for me.
+
+Kind regards
+Uffe
+
 > ---
->  .../devicetree/bindings/sound/nvidia,tegra30-hda.yaml          | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra30-hda.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra30-hda.yaml
-> index 2c913aa44fee..12c31b4b99e1 100644
-> --- a/Documentation/devicetree/bindings/sound/nvidia,tegra30-hda.yaml
-> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra30-hda.yaml
-> @@ -23,6 +23,7 @@ properties:
->        - const: nvidia,tegra30-hda
->        - items:
->            - enum:
-> +              - nvidia,tegra234-hda
-
-Why putting it in non-alphabetical order? Although someone put
-nvidia,tegra124-hda already at the end of list... having things ordered
-is helpful to avoid conflicts and makes code easier to read.
-
-
-Best regards,
-Krzysztof
+>  drivers/mmc/host/rtsx_pci_sdmmc.c | 18 ------------------
+>  1 file changed, 18 deletions(-)
+>
+> diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> index 2a3f14afe9f83..265b3889f9d72 100644
+> --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
+> +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> @@ -823,7 +823,6 @@ static void sd_request(struct work_struct *work)
+>         }
+>
+>         mutex_lock(&pcr->pcr_mutex);
+> -       pm_runtime_get_sync(dev);
+>
+>         rtsx_pci_start_run(pcr);
+>
+> @@ -860,8 +859,6 @@ static void sd_request(struct work_struct *work)
+>                         data->bytes_xfered = data->blocks * data->blksz;
+>         }
+>
+> -       pm_runtime_mark_last_busy(dev);
+> -       pm_runtime_put_autosuspend(dev);
+>         mutex_unlock(&pcr->pcr_mutex);
+>
+>  finish:
+> @@ -1093,7 +1090,6 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+>                 return;
+>
+>         mutex_lock(&pcr->pcr_mutex);
+> -       pm_runtime_get_sync(dev);
+>
+>         rtsx_pci_start_run(pcr);
+>
+> @@ -1127,8 +1123,6 @@ static void sdmmc_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+>         rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
+>                         host->initial_mode, host->double_clk, host->vpclk);
+>
+> -       pm_runtime_mark_last_busy(dev);
+> -       pm_runtime_put_autosuspend(dev);
+>         mutex_unlock(&pcr->pcr_mutex);
+>  }
+>
+> @@ -1144,7 +1138,6 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+>                 return -ENOMEDIUM;
+>
+>         mutex_lock(&pcr->pcr_mutex);
+> -       pm_runtime_get_sync(dev);
+>
+>         rtsx_pci_start_run(pcr);
+>
+> @@ -1154,8 +1147,6 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+>         if (val & SD_WRITE_PROTECT)
+>                 ro = 1;
+>
+> -       pm_runtime_mark_last_busy(dev);
+> -       pm_runtime_put_autosuspend(dev);
+>         mutex_unlock(&pcr->pcr_mutex);
+>
+>         return ro;
+> @@ -1173,7 +1164,6 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+>                 return cd;
+>
+>         mutex_lock(&pcr->pcr_mutex);
+> -       pm_runtime_get_sync(dev);
+>
+>         rtsx_pci_start_run(pcr);
+>
+> @@ -1183,8 +1173,6 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
+>         if (val & SD_EXIST)
+>                 cd = 1;
+>
+> -       pm_runtime_mark_last_busy(dev);
+> -       pm_runtime_put_autosuspend(dev);
+>         mutex_unlock(&pcr->pcr_mutex);
+>
+>         return cd;
+> @@ -1282,7 +1270,6 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+>                 return err;
+>
+>         mutex_lock(&pcr->pcr_mutex);
+> -       pm_runtime_get_sync(dev);
+>
+>         rtsx_pci_start_run(pcr);
+>
+> @@ -1312,8 +1299,6 @@ static int sdmmc_switch_voltage(struct mmc_host *mmc, struct mmc_ios *ios)
+>         err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
+>                         SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
+>
+> -       pm_runtime_mark_last_busy(dev);
+> -       pm_runtime_put_autosuspend(dev);
+>         mutex_unlock(&pcr->pcr_mutex);
+>
+>         return err;
+> @@ -1334,7 +1319,6 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+>                 return err;
+>
+>         mutex_lock(&pcr->pcr_mutex);
+> -       pm_runtime_get_sync(dev);
+>
+>         rtsx_pci_start_run(pcr);
+>
+> @@ -1367,8 +1351,6 @@ static int sdmmc_execute_tuning(struct mmc_host *mmc, u32 opcode)
+>                 err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
+>
+>  out:
+> -       pm_runtime_mark_last_busy(dev);
+> -       pm_runtime_put_autosuspend(dev);
+>         mutex_unlock(&pcr->pcr_mutex);
+>
+>         return err;
+> --
+> 2.34.1
+>

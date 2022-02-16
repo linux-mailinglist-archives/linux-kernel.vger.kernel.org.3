@@ -2,105 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E324B907F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80E24B9083
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237748AbiBPSle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:41:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51640 "EHLO
+        id S234664AbiBPSmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:42:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237734AbiBPSl3 (ORCPT
+        with ESMTP id S234247AbiBPSmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:41:29 -0500
-Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7782AF3D1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:41:15 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx2.smtp.larsendata.com (Halon) with ESMTPS
-        id 0f791715-8f58-11ec-b2df-0050568cd888;
-        Wed, 16 Feb 2022 18:41:32 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id B2BEB194B1C;
-        Wed, 16 Feb 2022 19:41:12 +0100 (CET)
-Date:   Wed, 16 Feb 2022 19:41:09 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
-        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
-        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
-        dalias@libc.org, davem@davemloft.net, richard@nod.at,
-        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v2 15/18] sparc64: remove CONFIG_SET_FS support
-Message-ID: <Yg1FRZcrhlh5C//V@ravnborg.org>
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-16-arnd@kernel.org>
- <Yg1D08+olCSGmnYU@ravnborg.org>
+        Wed, 16 Feb 2022 13:42:04 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C271229821;
+        Wed, 16 Feb 2022 10:41:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645036911; x=1676572911;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=y3+XeowSFWQCznLshQ4ZzI6xAkO82NjDDUNQsinmY1I=;
+  b=SIaqdJuZ5VFsRgMnV3uE6YGi1rcH0zTAMN3+nlU+oc3uVRXLtVSrD7wf
+   P+EdvqwV4IED1WRHT2ELb2qJcfHLnNS5bgAGnRbYXdCwE7jPyW/tHAwCH
+   3otZun/YIcGSHmwbx0kp5R9Ry4KaBHG3XC3DyN+lgqucLzASvlUHSaQ4r
+   o=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 10:41:50 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 10:41:50 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 16 Feb 2022 10:41:49 -0800
+Received: from [10.110.84.110] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
+ 2022 10:41:48 -0800
+Message-ID: <adc1fcff-2ae8-24f0-64a4-bca60e7f4a9f@quicinc.com>
+Date:   Wed, 16 Feb 2022 10:41:47 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg1D08+olCSGmnYU@ravnborg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 1/2] drm/msm/dpu: revise timing engine programming to
+ support widebus feature
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <quic_abhinavk@quicinc.com>,
+        <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1645032840-17178-1-git-send-email-quic_khsieh@quicinc.com>
+ <1645032840-17178-2-git-send-email-quic_khsieh@quicinc.com>
+ <CAA8EJprnUuO2yd4FcPtmfcMwAmZqR3GyFJ+Cz-KV8E4O6c8R6w@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAA8EJprnUuO2yd4FcPtmfcMwAmZqR3GyFJ+Cz-KV8E4O6c8R6w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
 
-On Wed, Feb 16, 2022 at 07:34:59PM +0100, Sam Ravnborg wrote:
-> Hi Arnd.
-> 
-> On Wed, Feb 16, 2022 at 02:13:29PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > sparc64 uses address space identifiers to differentiate between kernel
-> > and user space, using ASI_P for kernel threads but ASI_AIUS for normal
-> > user space, with the option of changing between them.
-> > 
-> > As nothing really changes the ASI any more, just hardcode ASI_AIUS
-> > everywhere. Kernel threads are not allowed to access __user pointers
-> > anyway.
-> > 
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  arch/sparc/include/asm/processor_64.h   |  4 ----
-> >  arch/sparc/include/asm/switch_to_64.h   |  4 +---
-> >  arch/sparc/include/asm/thread_info_64.h |  4 +---
-> >  arch/sparc/include/asm/uaccess_64.h     | 20 +-------------------
-> >  arch/sparc/kernel/process_64.c          | 12 ------------
-> >  arch/sparc/kernel/traps_64.c            |  2 --
-> >  arch/sparc/lib/NGmemcpy.S               |  3 +--
-> >  arch/sparc/mm/init_64.c                 |  7 ++++---
-> >  8 files changed, 8 insertions(+), 48 deletions(-)
-> 
-> I think you somehow missed the Kconfig change, and also the related
-> sparc32 change which continue to have set_fs() after this patch.
-I now notice the sparc32 bits are in the last patch.
-To avoid breaking bisect-ability on sparc64 I think you need to merge
-the sparc32 changes with this patch, unless the sparc64 changes can
-coexist with CONFIG_SET_FS continue to be set.
+On 2/16/2022 9:48 AM, Dmitry Baryshkov wrote:
+> On Wed, 16 Feb 2022 at 20:34, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>> Widebus feature will transmit two pixel data per pixel clock to interface.
+>> Timing engine provides driving force for this purpose. This patch base
+>> on HPG (Hardware Programming Guide) to revise timing engine register
+>> setting to accommodate both widebus and non widebus application. Also
+>> horizontal width parameters need to be reduced by half since two pixel
+>> data are clocked out per pixel clock when widebus feature enabled.
+>>
+>> Widebus can be enabled individually at DP. However at DSI, widebus have
+>> to be enabled along with DSC to achieve pixel clock rate be scaled down
+>> with same ratio as compression ratio when 10 bits per source component.
+>> Therefore this patch add no supports of DSI related widebus and compression.
+>>
+>> Changes in v2:
+>> -- remove compression related code from timing
+>> -- remove op_info from  struct msm_drm_private
+>> -- remove unnecessary wide_bus_en variables
+>> -- pass wide_bus_en into timing configuration by struct msm_dp
+>>
+>> Changes in v3:
+>> -- split patch into 3 patches
+>>
+>> Changes in v4:
+>> -- rework timing engine to not interfere with dsi/hdmi
+>> -- cover both widebus and compression
+>>
+>> Changes in v5:
+>> -- remove supports of DSI widebus and compression
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 10 ++++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
+>>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 +++++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 63 ++++++++++++++++------
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 +
+>>   5 files changed, 76 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> index 1e648db..2b2dbb7 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> @@ -208,6 +208,8 @@ struct dpu_encoder_virt {
+>>
+>>          u32 idle_timeout;
+>>
+>> +       bool wide_bus_en;
+>> +
+>>          struct msm_dp *dp;
+>>   };
+>>
+>> @@ -217,6 +219,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>>          15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>>   };
+>>
+>> +
+>> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc)
+>> +{
+>> +       struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+>> +
+>> +       return dpu_enc->wide_bus_en;
+>> +}
+>> +
+>>   static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
+>>   {
+>>          struct dpu_hw_dither_cfg dither_cfg = { 0 };
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> index e241914..0d73550 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> @@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder *drm_enc);
+>>    */
+>>   int dpu_encoder_get_vsync_count(struct drm_encoder *drm_enc);
+>>
+>> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc);
+>> +
+>>   #endif /* __DPU_ENCODER_H__ */
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>> index ddd9d89..04ac2dc 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+>> @@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
+>>                  timing->v_back_porch += timing->v_front_porch;
+>>                  timing->v_front_porch = 0;
+>>          }
+>> +
+>> +       timing->wide_bus_en = dpu_encoder_is_widebus_enabled(phys_enc->parent);
+>> +
+>> +       /*
+>> +        * for DP, divide the horizonal parameters by 2 when
+>> +        * widebus is enabled
+>> +        */
+>> +       if (phys_enc->hw_intf->cap->type == INTF_DP && timing->wide_bus_en) {
+>> +               timing->width = timing->width >> 1;
+>> +               timing->xres = timing->xres >> 1;
+>> +               timing->h_back_porch = timing->h_back_porch >> 1;
+>> +               timing->h_front_porch = timing->h_front_porch >> 1;
+>> +               timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
+>> +       }
+>>   }
+>>
+>>   static u32 get_horizontal_total(const struct intf_timing_params *timing)
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> index 116e2b5..303bd03 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> @@ -33,6 +33,7 @@
+>>   #define INTF_TP_COLOR1                  0x05C
+>>   #define INTF_CONFIG2                    0x060
+>>   #define INTF_DISPLAY_DATA_HCTL          0x064
+>> +#define INTF_ACTIVE_DATA_HCTL           0x068
+>>   #define INTF_FRAME_LINE_COUNT_EN        0x0A8
+>>   #define INTF_FRAME_COUNT                0x0AC
+>>   #define   INTF_LINE_COUNT               0x0B0
+>> @@ -60,6 +61,14 @@
+>>
+>>   #define   INTF_MUX                      0x25C
+>>
+>> +#define INTF_CFG_ACTIVE_H_EN   BIT(29)
+>> +#define INTF_CFG_ACTIVE_V_EN   BIT(30)
+>> +
+>> +#define INTF_CFG2_DATABUS_WIDEN        BIT(0)
+>> +#define INTF_CFG2_DATA_HCTL_EN BIT(4)
+>> +#define INTF_CFG2_DCE_DATA_COMPRESS    BIT(12)
+>> +
+>> +
+>>   static const struct dpu_intf_cfg *_intf_offset(enum dpu_intf intf,
+>>                  const struct dpu_mdss_cfg *m,
+>>                  void __iomem *addr,
+>> @@ -90,15 +99,23 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>          u32 hsync_period, vsync_period;
+>>          u32 display_v_start, display_v_end;
+>>          u32 hsync_start_x, hsync_end_x;
+>> +       u32 hsync_data_start_x, hsync_data_end_x;
+>>          u32 active_h_start, active_h_end;
+>>          u32 active_v_start, active_v_end;
+>>          u32 active_hctl, display_hctl, hsync_ctl;
+>>          u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
+>>          u32 panel_format;
+>> -       u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
+>> +       u32 intf_cfg, intf_cfg2 = 0;
+>> +       u32 display_data_hctl = 0, active_data_hctl = 0;
+>> +       u32 data_width;
+>> +       bool dp_intf = false;
+>>
+>>          /* read interface_cfg */
+>>          intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
+>> +
+>> +       if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
+>> +               dp_intf = true;
+>> +
+>>          hsync_period = p->hsync_pulse_width + p->h_back_porch + p->width +
+>>          p->h_front_porch;
+>>          vsync_period = p->vsync_pulse_width + p->v_back_porch + p->height +
+>> @@ -112,7 +129,7 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>          hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
+>>          hsync_end_x = hsync_period - p->h_front_porch - 1;
+>>
+>> -       if (p->width != p->xres) {
+>> +       if (p->width != p->xres) { /* border fill added */
+>>                  active_h_start = hsync_start_x;
+>>                  active_h_end = active_h_start + p->xres - 1;
+>>          } else {
+>> @@ -120,7 +137,7 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>                  active_h_end = 0;
+>>          }
+>>
+>> -       if (p->height != p->yres) {
+>> +       if (p->height != p->yres) { /* border fill added */
+>>                  active_v_start = display_v_start;
+>>                  active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+>>          } else {
+>> @@ -130,27 +147,47 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>
+>>          if (active_h_end) {
+>>                  active_hctl = (active_h_end << 16) | active_h_start;
+>> -               intf_cfg |= BIT(29);    /* ACTIVE_H_ENABLE */
+>> +               intf_cfg |= INTF_CFG_ACTIVE_H_EN;
+>>          } else {
+>>                  active_hctl = 0;
+>>          }
+>>
+>>          if (active_v_end)
+>> -               intf_cfg |= BIT(30); /* ACTIVE_V_ENABLE */
+>> +               intf_cfg |= INTF_CFG_ACTIVE_V_EN;
+> Quoting v4:
+> Such changes can go to a separate patch. You don't have to squash
+> everything in a single patch. Quite the opposite. If each of the
+> patches is atomic, it's easier to review and accept them.
+Are you mean both INTF_CFG_ACTIVE_V_EN  and INTF_CFG_ACTIVE_H_EN should 
+be at separate patch?
+>>          hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+>>          display_hctl = (hsync_end_x << 16) | hsync_start_x;
+>>
+>> -       if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
+>> +       /*
+>> +        * DATA_HCTL_EN controls data timing which can be different from
+>> +        * video timing. It is recommended to enable it for all cases, except
+>> +        * if compression is enabled in 1 pixel per clock mode
+>> +        */
+>> +       if (p->wide_bus_en)
+>> +               intf_cfg2 |=  (INTF_CFG2_DATABUS_WIDEN | INTF_CFG2_DATA_HCTL_EN);
+>> +
+>> +       data_width = p->width;
+>> +
+>> +       hsync_data_start_x = hsync_start_x;
+>> +       hsync_data_end_x =  hsync_start_x + data_width - 1;
+>> +
+>> +       display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
+>> +
+>> +       if (dp_intf) {
+>> +               /* DP timing adjustment */
+>> +               display_v_start += p->hsync_pulse_width + p->h_back_porch;
+>> +               display_v_end   -= p->h_front_porch;
+> Quoting a question to v4:
+> So, this changes the display_v_end. Is there a mistake currently (and
+> so this change should be backported to stable kernels) or is it just
+> unoptimal?
+No, this is just code re arrangement.
+>
+>> +
+>>                  active_h_start = hsync_start_x;
+>>                  active_h_end = active_h_start + p->xres - 1;
+>>                  active_v_start = display_v_start;
+>>                  active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+>>
+>> -               display_v_start += p->hsync_pulse_width + p->h_back_porch;
+>> -
+>>                  active_hctl = (active_h_end << 16) | active_h_start;
+>>                  display_hctl = active_hctl;
+>> +
+>> +               intf_cfg |= INTF_CFG_ACTIVE_H_EN;
+>> +               intf_cfg |= INTF_CFG_ACTIVE_V_EN;
+>>          }
+>>
+>>          den_polarity = 0;
+>> @@ -180,13 +217,6 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>                                  (COLOR_8BIT << 4) |
+>>                                  (0x21 << 8));
+>>
+>> -       if (ctx->cap->features & BIT(DPU_DATA_HCTL_EN)) {
+Quoting a quesiton to v4:
+> So, we are enabling it uncoditionally even for older platforms, which
+> do not support this bit/register. I'm not a fan of writing to
+> registers which are not supported by the hardware.
 
-	Sam
+DPU_DATA_HCTL_EN should be enabled when wide bus enable.
+
+Will remove it from dpu_hw_catalog at separate patch.
+
+>
+> Another:
+> If you insist on always programming these registers, the
+> DPU_DATA_HCTL_EN becomes useless and should be removed from the
+> dpu_hw_catalog. As usual, in a separate patch.
+>
+>> -               intf_cfg2 |= BIT(4);
+>> -               display_data_hctl = display_hctl;
+>> -               DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
+>> -               DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
+>> -       }
+>> -
+>>          DPU_REG_WRITE(c, INTF_HSYNC_CTL, hsync_ctl);
+>>          DPU_REG_WRITE(c, INTF_VSYNC_PERIOD_F0, vsync_period * hsync_period);
+>>          DPU_REG_WRITE(c, INTF_VSYNC_PULSE_WIDTH_F0,
+>> @@ -204,6 +234,9 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>          DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
+>>          DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
+>>          DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
+>> +       DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
+>> +       DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
+>> +       DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
+>>   }
+>>
+>>   static void dpu_hw_intf_enable_timing_engine(
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> index 3568be8..e4a518a 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> @@ -30,6 +30,8 @@ struct intf_timing_params {
+>>          u32 border_clr;
+>>          u32 underflow_clr;
+>>          u32 hsync_skew;
+>> +
+>> +       bool wide_bus_en;
+>>   };
+>>
+>>   struct intf_prog_fetch {
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+>

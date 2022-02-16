@@ -2,137 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9154B93A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1E64B93AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 23:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236641AbiBPWJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 17:09:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55116 "EHLO
+        id S236747AbiBPWNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 17:13:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiBPWJ2 (ORCPT
+        with ESMTP id S230121AbiBPWNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 17:09:28 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2045.outbound.protection.outlook.com [40.107.93.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397E42AED80
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:09:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TkuG6O5NqqpHaxcH+cPt8Gr3hHHLB29pXkxnNz/wEApTZW3qT6z8oPfOBmxZlQDvs//eVl8/yIuTvf0jwQc5U/l072Dt31FXBKIi7wGw2wqtWUgxy8AHqWkqSPwlP6d1Ug9DpCzsMjDQcpz+EVUJ+W7cpGJfin7WQAyQs4Vu0YyOJBDiFsRf3lZX0z2ffe1L6yNt0oFs2jMhoPwhfa6XJkvLaAsUP9yjm9Zv5UgExGmrg7IDoHIvYywCqmTaiW2LVGY8LuuXTk8dfsOebj+U7XSHU9hbyAAMEjK90h7iZozNlEKAF35uL41f1twalaC4Oo1SYnX7vqg3vrwvrTpsdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1zGh3osjq9O5oNkoTtv4xRdLC0+yO4r0rzAx6ulg2EM=;
- b=dCAiJqFDTSlN5TpQVd1X0LNQCl0beXpk6bPZhOy/UglR0YzAeRCdUI2HY1qus5gugzxZezqzT+vEoX/YR25LHju0OwT9IyWCZqFZVZMpoNQqkxcF3S/ELSMcrhE7ZebU7CA+qfMO2OuTaSZuh+cYUuWwvi1EJY//4YyLBW4Cy75T1FOnxBdiU1a/XfkXPqJ4SaQnhE5hXh5CsN5iQuUDyVyY7ImfqAMV2GqB2/WTI1sdeEaPxXQjElSLk6ibJpocYeP3unyOU4uPz114JO+B5lGsdSUh4K5j52Kim2wpLCp4yfXqKr9d8zczVNNTaK6WN5NB3x0OImii5Gku6aVV6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1zGh3osjq9O5oNkoTtv4xRdLC0+yO4r0rzAx6ulg2EM=;
- b=TOlBrEZn0O0jZ6ZZHJI2YrdMSssa4XAagGiNYdXCTXfqOTpkpI0IbRJW8YH/3hIbmxiy1SWwjsHPg1mNeS7E/BjvBH/xAtTFUNzgDvg1/7JyElEE+Pb2XU6xJyff4ykivrmEDwoxXFANItqWxSOc9qNIi+/iY/lzcgYBkizz/dg=
-Received: from DS7PR03CA0272.namprd03.prod.outlook.com (2603:10b6:5:3ad::7) by
- MW4PR12MB5641.namprd12.prod.outlook.com (2603:10b6:303:186::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4995.16; Wed, 16 Feb 2022 22:09:10 +0000
-Received: from DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ad:cafe::b8) by DS7PR03CA0272.outlook.office365.com
- (2603:10b6:5:3ad::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
- Transport; Wed, 16 Feb 2022 22:09:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT041.mail.protection.outlook.com (10.13.172.98) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4995.15 via Frontend Transport; Wed, 16 Feb 2022 22:09:10 +0000
-Received: from localhost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 16 Feb
- 2022 16:09:08 -0600
-From:   Luben Tuikov <luben.tuikov@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Luben Tuikov <luben.tuikov@amd.com>,
-        Alex Deucher <Alexander.Deucher@amd.com>,
-        <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] drm/amdgpu: Fix ARM compilation warning
-Date:   Wed, 16 Feb 2022 17:08:53 -0500
-Message-ID: <20220216220853.59961-1-luben.tuikov@amd.com>
-X-Mailer: git-send-email 2.35.1.129.gb80121027d
-In-Reply-To: <202202160733.1Egjqp9Y-lkp@intel.com>
-References: <202202160733.1Egjqp9Y-lkp@intel.com>
+        Wed, 16 Feb 2022 17:13:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 469C42AED84
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:13:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645049612;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
+        b=gt5ZzQS+E8Z3cPcIVhuK8DF2rNR9fyTOuDz3K96kuuPwEroSyKNmOLex9kHvGVOJo5oiyF
+        +ywTazmMs0hwVa1svmxjp7UxiSqntfingy5+UVIe0/B8uuqkOj5LQJJvjZ5xBvHe9tIyai
+        0cH+sGqwyxebOoafOky5qYzJRNFEeos=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-361-XqZoNk50PnGIiLlt3NMvWQ-1; Wed, 16 Feb 2022 17:13:31 -0500
+X-MC-Unique: XqZoNk50PnGIiLlt3NMvWQ-1
+Received: by mail-qk1-f199.google.com with SMTP id l82-20020a37a255000000b0060dd39f5d87so901279qke.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 14:13:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
+        b=2pgnPhUyVZdiXzQ06xXygLQjNJbZNSmYJLhiac1l4gX4TnS9OFxcssWkre7GVUT/JX
+         i9S/HLzVvKCMY/MpxanXk2CRLdsKDbldDVJ/duPrwPojb0XcxBfE6qzI/pd36Jv3Cevn
+         TD+ayYXDxsxDzCMDpo0Pd0pSfhmx7R7A4cQaB2LekylRcjXSB8QLSUnmFWl6pjPiyuei
+         LqHYJYh+nx6Prb/Al6l8qhh4YAwpyocCxZfMU33zPUxCcDkuSqMzU9SCvneyXpREao7S
+         OCnJNJGasK3cbFI9CSGKE4OnJUXfjp3EFSMmhFOGd3uqMYafXKiZA+bWfatV+OJC7d53
+         hiPg==
+X-Gm-Message-State: AOAM530HZz5FpltfIYQZrPhJqaMtWugJJ+ogZZ0O2AMXdFVVks+2At+v
+        ssHoHVGm3QioSLxHa9opyroFlLUaahfWbIlEEN3XOm9XHZd5RwxXIN2UoATxLDGeEhZ+zjS+HQR
+        AqXc2jdwt2RhGav84f0B61YDx
+X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2498049qkl.227.1645049610689;
+        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJylNMRi17SxjrpZK57rI6C9v3gwc8m6LOiygd1+pTiydJMqSsqj+XSkhj9zykPsZ8CKxgwdIw==
+X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2497996qkl.227.1645049610346;
+        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id m22sm19966780qkn.35.2022.02.16.14.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 14:13:29 -0800 (PST)
+Date:   Wed, 16 Feb 2022 14:13:24 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+Message-ID: <20220216221324.4b4avd5l3qdmqfcv@treble>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+ <20220211174130.xxgjoqr2vidotvyw@treble>
+ <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+ <20220211183529.q7qi2qmlyuscxyto@treble>
+ <20220214122433.288910-1-alexandr.lobakin@intel.com>
+ <20220214181000.xln2qgyzgswjxwcz@treble>
+ <Yg1fab6h1rTjVbYO@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2dfe932a-a93b-404d-e820-08d9f198f53e
-X-MS-TrafficTypeDiagnostic: MW4PR12MB5641:EE_
-X-Microsoft-Antispam-PRVS: <MW4PR12MB56414A45A9B27A3BAC0977E699359@MW4PR12MB5641.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:758;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I/9TiwvOWLcU7KiAcA+7rlyVDcwvt2ERkdAVasJgpblu4cUBU3bYrdPE08DD9Obvj1hMVYIIkF5F6+ZTnIkdrmBuWLXc+vjs7xVx3Gl0ncbdtO3RGX2kIVrR6wpYdeFfwJdVJh/e/XFKv7LK3x3vw5QwfoZ7iWAu2qPtkZqudwAUAuzd9fYWOZbgHy1owMMf5S7LsLtQDwUNRlUZXdsGgViTsFx9Wt568LsDK91sIip+6JDUuu86cyuc/9jGelLNKcAyB+5iMA2Y9IPYDZk4ff8S05HWeUpCuhmbXcpKE58eLwmyiO3zuJJdhq/Lzu5ooyFL9rwVnlBv8Dzz6xnC7+T36QUcEBo+5zP7kAlzWZ4nnG55RGGbYu4tvLdnzvRRiHcpVEVVSpi3Xh21rfDjj4gsCpYaa2UQ6mVl1sv4tRmVJ7oPFH7PivUTHSQ0/7qTpYjYO1QH+8mF9h4esAZ9yqMQDEdmVWqID2CS/OiQKmgy2mlBDy/07nwS2TvkN8u4lghPDmrRTnZ5MWQOWLEXhqL44CRjuYZpSJRGDgr16K6W0jV3ojldLoSpsqohGqTGWWTtSwhtuYfJ2cazwjmL86okX1MYdkv+A6M0eOv5uvpWvIEP+NUfj2sLJ2FuiLyznGfgzsDvRRWtMFj6x8z87cNN/pHXsi8AtN2fPKXdMc2LegSlao3jnfqFcWwMKOna45kIhwJ0cAbVly/o/MY2cg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(36756003)(26005)(356005)(86362001)(2906002)(81166007)(70206006)(70586007)(316002)(6916009)(54906003)(508600001)(83380400001)(2616005)(8936002)(4326008)(1076003)(8676002)(82310400004)(6666004)(47076005)(5660300002)(40460700003)(36860700001)(44832011)(7696005)(426003)(16526019)(186003)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2022 22:09:10.0405
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2dfe932a-a93b-404d-e820-08d9f198f53e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5641
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yg1fab6h1rTjVbYO@redhat.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix this ARM warning:
+On Wed, Feb 16, 2022 at 03:32:41PM -0500, Joe Lawrence wrote:
+> > Right, so we'd have to abandon position-based search in favor of
+> > file+func based search.
+> > 
+> > It's not perfect because there are still a few file+func duplicates.
+> > But it might be good enough.  We would presumably just refuse to patch a
+> > duplicate.  Or we could remove them (and enforce their continued removal
+> > with tooling-based warnings).
+> > 
+> 
+> You're talking about duplicate file+func combinations as stored in the
+> symbol table?
 
-drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:664:35: warning: format '%ld'
-expects argument of type 'long int', but argument 4 has type 'size_t' {aka
-'unsigned int'} [-Wformat=]
+Right.
 
-Cc: Alex Deucher <Alexander.Deucher@amd.com>
-Cc: kbuild-all@lists.01.org
-Cc: linux-kernel@vger.kernel.org
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 7e60fbfbdc10a0 ("drm/amdgpu: Show IP discovery in sysfs")
-Signed-off-by: Luben Tuikov <luben.tuikov@amd.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ...
+>       6 OBJECT core.c::__func__.3
+>       6 OBJECT core.c::__func__.5
+>       7 OBJECT core.c::__func__.1
+>       8 OBJECT core.c::__func__.0
+>       8 OBJECT core.c::__func__.2
+> 
+> We could probably minimize the FUNC duplicates with unique names, but
+> I'm not as optimistic about the OBJECTs as most are created via macros
+> like __already_done.X.  Unless clever macro magic?
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-index ad2355b0037f52..6c3a3c74e0231f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-@@ -668,7 +668,7 @@ static int amdgpu_discovery_sysfs_ips(struct amdgpu_device *adev,
- 			    le16_to_cpu(ip->hw_id) != ii)
- 				goto next_ip;
- 
--			DRM_DEBUG("match:%d @ ip_offset:%ld", ii, ip_offset);
-+			DRM_DEBUG("match:%d @ ip_offset:%zu", ii, ip_offset);
- 
- 			/* We have a hw_id match; register the hw
- 			 * block if not yet registered.
+Good point about objects, as we rely on disambiguating them for klp
+relocations.  Luckily, the fact that most of them are created by macros
+is largely a good thing.  We consider most of those to be "special"
+static locals, which don't actually need to be correlated or referenced
+with a klp reloc.
 
-base-commit: f723076ae13011a23d9a586899e38bc68feeb6b2
+For example:
+
+- '__func__' is just the function name.  The patched function shouldn't
+  need to reference the original function's function name string.
+
+- '__already_done' is used for printk_once(); no harm in making a new
+  variable initialized to false and printing it again; or converting
+  printk_once() to just printk() to avoid an extra print.
+
+- '__key' is used by lockdep to track lock usage and validate locking
+  order.  It probably makes sense to use a new key in the patched
+  function, since the new function might have different locking
+  behavior.
+
+> Next question: what are the odds that these entries, at least the ones
+> we can't easily rename, need disambiguity for livepatching?  or
+> kpatch-build for related purposes?
+
+I would guess the odds are rather low, given the fact that there are so
+few functions, and we don't care about most of the objects on the list.
+
+If duplicates were to become problematic then we could consider adding
+tooling which warns on a duplicate file:sym pair with the goal of
+eliminating duplicates (exculding the "special" objects).
+
 -- 
-2.35.1.129.gb80121027d
+Josh
 

@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D654B7F84
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6F64B7F87
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344359AbiBPEeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 23:34:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45906 "EHLO
+        id S1344380AbiBPEhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 23:37:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbiBPEeQ (ORCPT
+        with ESMTP id S232657AbiBPEhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 23:34:16 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDADB7C6E;
-        Tue, 15 Feb 2022 20:34:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VTnUeYEN/ux3yU4giIFFK259vlfxLfwy7+DV+rNURNo=; b=AtozEhme1vnLMD/TWoB8IIDEFL
-        R6tadFetshclOhJLIVIpFqRhbxTDXTJ7BTLSDyENrf3HD4HTn3QmRnwcG/GLW315O4+X16t92795G
-        1OG6FnVToqynAjjvbbL0s2Vd8FjQ1SoK5ytLW1gqJHR4a2yOkHWiLo0g2amMEcjQ8zFlexF8qy1Zc
-        1Wsu1Fg8sk/TE9Qj3FVSmcCEDwcyx6AISbAblirEKVuEiCAE20Ea2SlUXMkPrNlY8bnxmQ/aT9U9c
-        lDbPwsVz2aXuu6UfBEQINHQFCcgXgFcEu68UHFLIRDHlSdpV/iMzBZjNJNWi8p25ZzYT38Imx3vLm
-        FWHf4KFA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKC0b-00EQi5-HP; Wed, 16 Feb 2022 04:33:41 +0000
-Date:   Wed, 16 Feb 2022 04:33:41 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        torvalds@linux-foundation.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: Report in unix_stream_read_generic()
-Message-ID: <Ygx+pRo1+b1RBLJg@casper.infradead.org>
-References: <1644984767-26886-1-git-send-email-byungchul.park@lge.com>
- <1644985024-28757-1-git-send-email-byungchul.park@lge.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644985024-28757-1-git-send-email-byungchul.park@lge.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 15 Feb 2022 23:37:05 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C325EBBAD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:36:51 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id f2-20020a17090a4a8200b001b7dac53bd6so721575pjh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:36:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=JgRTlFw8++kyf5ZSG/NEY0qnd4+2DMvg2lXX0xsMQJI=;
+        b=VG2vcH/tSu2S3ORYoluC8fi+F9edyN/vKsOjZx3LCLD6vaDPIfMq5ziR5ni6kEZADU
+         T92YVumGy29n+opxo8wtrWzxX3ACAo26qUDE0ISQffyaFtl4AO5KkjwNZetm3H9dsOeN
+         KfRA1KMhyn6ek9jVfuns3icvtU48qSCBBiqZ+59/539bA2w4O4+fwEjQW/3KTE5Vv61C
+         kc73NWY1WxnWU2B51rNCAvpLqt8kbdgmGcmfhLfMBJqUyUVw0VGY/k6CwVkYXLfOd4Ul
+         2HolZa0jVrRri93aZs2bnWL3aArfG5NuOY7wBUOkP9xapZgRnmpZYM2qAoWyysMBwoZH
+         EGCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=JgRTlFw8++kyf5ZSG/NEY0qnd4+2DMvg2lXX0xsMQJI=;
+        b=zyaagTAINKAg7CHCRtPgnOe8UMTFbP8qfTEIA/hp1ahoIvh0WewsIXVU7+nZIS92Hs
+         YjSu+T5ahdt5oPDZmHqEj+42wl1YpP9OtxgIz2Pm/az3JkEZJSG81a4SnF2KDaxIkUcs
+         jJblcwtLZPZnkvEjCLvl2g1xSMjoGsxcQbr4NzPB3NsBdQ2TBwVpRyGEF9KxS546T7jJ
+         MPPnU0RLS4nilVS+iGHmmIpQ56ThRh757j/ttIWGzsHur/SKuCMGvToK2DX2Me6JQkoY
+         FNfGBhD2lUSw/+C19/z45aX9pM71EQmZwKKnL22gggiTKg7Obay95Q7VW+JAZ+PsibC5
+         g2wg==
+X-Gm-Message-State: AOAM532Z74Bqlw/sN1xKeRC0EmKiOGxO94GnRbX51Kytf9qK32gav/+A
+        VU6zKwIWujHZhgUi9knJo4RxslQK3DJC
+X-Google-Smtp-Source: ABdhPJz6LOCv+7yHmcbOHyo1VZ93g2kOY12xH4CJ8jvUN6udfQDKwsKCW10DMS1iwib22RM6hx+Sa2W/HBLt
+X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:8ce7:5b2:9787:1a0b])
+ (user=tzungbi job=sendgmr) by 2002:a62:8c44:0:b0:4c4:8072:e588 with SMTP id
+ m65-20020a628c44000000b004c48072e588mr1244438pfd.11.1644986210942; Tue, 15
+ Feb 2022 20:36:50 -0800 (PST)
+Date:   Wed, 16 Feb 2022 12:36:34 +0800
+Message-Id: <20220216043639.3839185-1-tzungbi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH v4 0/5] platform/chrome: cros_ec: miscellaneous cleanups
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     bleung@chromium.org, groeck@chromium.org
+Cc:     chrome-platform@lists.linux.dev, tzungbi@google.com,
+        pmalani@chromium.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 01:17:03PM +0900, Byungchul Park wrote:
-> [    7.013330] ===================================================
-> [    7.013331] DEPT: Circular dependency has been detected.
-> [    7.013332] 5.17.0-rc1-00014-gcf3441bb2012 #2 Tainted: G        W        
-> [    7.013333] ---------------------------------------------------
-> [    7.013334] summary
-> [    7.013334] ---------------------------------------------------
-> [    7.013335] *** DEADLOCK ***
-> [    7.013335] 
-> [    7.013335] context A
-> [    7.013336]     [S] (unknown)(&(&ei->socket.wq.wait)->dmap:0)
-> [    7.013337]     [W] __mutex_lock_common(&u->iolock:0)
-> [    7.013338]     [E] event(&(&ei->socket.wq.wait)->dmap:0)
-> [    7.013340] 
-> [    7.013340] context B
-> [    7.013341]     [S] __raw_spin_lock(&u->lock:0)
-> [    7.013342]     [W] wait(&(&ei->socket.wq.wait)->dmap:0)
-> [    7.013343]     [E] spin_unlock(&u->lock:0)
+The 1st patch fixes unhandled undos in error handling path.
 
-This seems unlikely to be real.  We're surely not actually waiting
-while holding a spinlock; existing debug checks would catch it.
+The rest of patches cleans drivers/platform/chrome/cros_ec.c.
 
-> [    7.013407] ---------------------------------------------------
-> [    7.013407] context B's detail
-> [    7.013408] ---------------------------------------------------
-> [    7.013408] context B
-> [    7.013409]     [S] __raw_spin_lock(&u->lock:0)
-> [    7.013410]     [W] wait(&(&ei->socket.wq.wait)->dmap:0)
-> [    7.013411]     [E] spin_unlock(&u->lock:0)
-> [    7.013412] 
-> [    7.013412] [S] __raw_spin_lock(&u->lock:0):
-> [    7.013413] [<ffffffff81aa451f>] unix_stream_read_generic+0x6bf/0xb60
-> [    7.013416] stacktrace:
-> [    7.013416]       _raw_spin_lock+0x6e/0x90
-> [    7.013418]       unix_stream_read_generic+0x6bf/0xb60
+Changes from v3:
+(https://patchwork.kernel.org/project/chrome-platform/cover/20220209095703.517608-1-tzungbi@google.com/)
+- Drop "platform/chrome: cros_ec: don't initialize `err` in cros_ec_register()".
+- Rename the 3rd patch's title.
 
-It would be helpful if you'd run this through scripts/decode_stacktrace.sh
-so we could see line numbers instead of hex offsets (which arene't much
-use without the binary kernel).
+Changes from v2:
+(https://patchwork.kernel.org/project/chrome-platform/cover/20220209045035.380615-1-tzungbi@google.com/)
+- Fix review comments in 1st and 2nd patch.
 
-> [    7.013420]       unix_stream_recvmsg+0x40/0x50
-> [    7.013422]       sock_read_iter+0x85/0xd0
-> [    7.013424]       new_sync_read+0x162/0x180
-> [    7.013426]       vfs_read+0xf3/0x190
-> [    7.013428]       ksys_read+0xa6/0xc0
-> [    7.013429]       do_syscall_64+0x3a/0x90
-> [    7.013431]       entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [    7.013433] 
-> [    7.013434] [W] wait(&(&ei->socket.wq.wait)->dmap:0):
-> [    7.013434] [<ffffffff810bb017>] prepare_to_wait+0x47/0xd0
+Changes from v1:
+(https://lore.kernel.org/lkml/20220125101527.1812887-1-tzungbi@google.com/T/#u)
+- Use imperative mood in commit messages.
+- Use IS_ERR_OR_NULL() in 1st patch.
 
-... this may be the source of confusion.  Just because we prepare to
-wait doesn't mean we end up actually waiting.  For example, look at
-unix_wait_for_peer():
+Tzung-Bi Shih (5):
+  platform/chrome: cros_ec: fix error handling in cros_ec_register()
+  platform/chrome: cros_ec: remove unused variable `was_wake_device`
+  platform/chrome: cros_ec: initialize `wake_enabled` in
+    cros_ec_register()
+  platform/chrome: cros_ec: sort header inclusion alphabetically
+  platform/chrome: cros_ec: append newline to all logs
 
-        prepare_to_wait_exclusive(&u->peer_wait, &wait, TASK_INTERRUPTIBLE);
+ drivers/platform/chrome/cros_ec.c           | 35 +++++++++++----------
+ include/linux/platform_data/cros_ec_proto.h |  3 --
+ 2 files changed, 19 insertions(+), 19 deletions(-)
 
-        sched = !sock_flag(other, SOCK_DEAD) &&
-                !(other->sk_shutdown & RCV_SHUTDOWN) &&
-                unix_recvq_full(other);
-
-        unix_state_unlock(other);
-
-        if (sched)
-                timeo = schedule_timeout(timeo);
-
-        finish_wait(&u->peer_wait, &wait);
-
-We *prepare* to wait, *then* drop the lock, then actually schedule.
+-- 
+2.35.1.265.g69c8d7142f-goog
 

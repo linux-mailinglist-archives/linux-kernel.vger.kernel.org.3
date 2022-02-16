@@ -2,75 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB614B819B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DA04B8103
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiBPHfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:35:22 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36472 "EHLO
+        id S229461AbiBPHIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:08:20 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiBPHfU (ORCPT
+        with ESMTP id S229717AbiBPHIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:35:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481DE17185C;
-        Tue, 15 Feb 2022 23:35:08 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3D0651F37D;
-        Wed, 16 Feb 2022 06:39:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644993565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7GGMtEIGANtAaJZgWgs4fHi8bEqaZzSeIEHxY3YZQSM=;
-        b=m54ylZrQ963wIR6zi/BQOguiJ0LS7VKESk6EZVzEEtdNitM7NhSeOR6d8YfWns9fyd+rKO
-        JQf8TMGuCoyo6S5CNhgOtJi4Pr7kJ2boPw9pJnDQjgv+PrGMTZgLqzMGym7//FPLFmH3hz
-        GMdFeegXjZsFRhDkJm5JwTpI0ta8AIE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644993565;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7GGMtEIGANtAaJZgWgs4fHi8bEqaZzSeIEHxY3YZQSM=;
-        b=i5cHX04eaVceesCbkAEE3R3DVeOG/2Qc1y6CzyyOpK21iDbNYaNV813kGh1GjuqRkR6YDM
-        AcIAcFu6O9glNJBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0673213A1A;
-        Wed, 16 Feb 2022 06:39:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hQkqAB2cDGLUIwAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 16 Feb 2022 06:39:24 +0000
-Message-ID: <da0e1493-bdfb-f510-7cf9-ffbf4baf6159@suse.de>
-Date:   Wed, 16 Feb 2022 07:39:24 +0100
+        Wed, 16 Feb 2022 02:08:06 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921FB256EC6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:07:42 -0800 (PST)
+X-UUID: f7482e9d5ff44fd1acd5f75adc50e8b2-20220216
+X-UUID: f7482e9d5ff44fd1acd5f75adc50e8b2-20220216
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1743981165; Wed, 16 Feb 2022 14:40:53 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Feb 2022 14:40:52 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Feb
+ 2022 14:40:52 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Feb 2022 14:40:50 +0800
+Message-ID: <553286c9a2fe458f994b334c968eb9899eed892d.camel@mediatek.com>
+Subject: Re: [deller-fbdev:for-next 51/51]
+ drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:42: error: use of
+ undeclared identifier 'component_compare_dev'; did you mean
+ 'component_master_del'?
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Helge Deller <deller@gmx.de>
+CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>
+Date:   Wed, 16 Feb 2022 14:40:49 +0800
+In-Reply-To: <202202161324.Jh1OfqAf-lkp@intel.com>
+References: <202202161324.Jh1OfqAf-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH] nvme: prevent hang on surprise removal of NVMe disk
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>,
-        =?UTF-8?Q?Markus_Bl=c3=b6chl?= <markus.bloechl@ipetronik.com>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stefan Roese <sr@denx.de>
-References: <20220214095107.3t5en5a3tosaeoo6@ipetronik.com>
- <20220215191731.GB25076@lst.de>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20220215191731.GB25076@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,24 +57,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 20:17, Christoph Hellwig wrote:
-> On Mon, Feb 14, 2022 at 10:51:07AM +0100, Markus Blöchl wrote:
->> After the surprise removal of a mounted NVMe disk the pciehp task
->> reliably hangs forever with a trace similar to this one:
-> 
-> Do you have a specific reproducer? At least with doing a
-> 
-> echo 1 > /sys/.../remove
-> 
-> while running fsx on a file system I can't actually reproduce it.
+Hi Helge,
 
-You should be able to reproduce it doing a PCI hotplug from qemu.
+Thanks for apply this patch.
 
-Cheers,
+Sorry that I didn't Cc you in cover-letter. It depend on [1/23].
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+To avoid this build fail, Could you help revert this one?
+
+Thanks
+
+On Wed, 2022-02-16 at 13:31 +0800, kernel test robot wrote:
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-
+> fbdev.git for-next
+> head:   61038027aa13351c63b452a0d48c805bab1d2ce9
+> commit: 61038027aa13351c63b452a0d48c805bab1d2ce9 [51/51] video:
+> fbdev: omapfb: Make use of the helper component_compare_dev
+> config: arm-randconfig-c002-20220216 (
+> https://download.01.org/0day-ci/archive/20220216/202202161324.Jh1OfqAf-lkp@intel.com/config
+> )
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project
+> 0e628a783b935c70c80815db6c061ec84f884af5)
+> reproduce (this is a W=1 build):
+>         wget 
+> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+>  -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # 
+> https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?id=61038027aa13351c63b452a0d48c805bab1d2ce9
+>         git remote add deller-fbdev
+> git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
+>         git fetch --no-tags deller-fbdev for-next
+>         git checkout 61038027aa13351c63b452a0d48c805bab1d2ce9
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
+> W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> drivers/video/fbdev/omap2/omapfb/dss/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> > > drivers/video/fbdev/omap2/omapfb/dss/dss.c:1209:42: error: use of
+> > > undeclared identifier 'component_compare_dev'; did you mean
+> > > 'component_master_del'?
+> 
+>            component_match_add(dev->parent, match,
+> component_compare_dev, dev);
+>                                                    ^~~~~~~~~~~~~~~~~~
+> ~~~
+>                                                    component_master_d
+> el
+>    include/linux/component.h:85:6: note: 'component_master_del'
+> declared here
+>    void component_master_del(struct device *,
+>         ^
+>    1 error generated.
+> 
+> 
+> vim +1209 drivers/video/fbdev/omap2/omapfb/dss/dss.c
+> 
+>   1195	
+>   1196	static int dss_add_child_component(struct device *dev,
+> void *data)
+>   1197	{
+>   1198		struct component_match **match = data;
+>   1199	
+>   1200		/*
+>   1201		 * HACK
+>   1202		 * We don't have a working driver for rfbi, so
+> skip it here always.
+>   1203		 * Otherwise dss will never get probed
+> successfully, as it will wait
+>   1204		 * for rfbi to get probed.
+>   1205		 */
+>   1206		if (strstr(dev_name(dev), "rfbi"))
+>   1207			return 0;
+>   1208	
+> > 1209		component_match_add(dev->parent, match,
+> > component_compare_dev, dev);
+> 
+>   1210	
+>   1211		return 0;
+>   1212	}
+>   1213	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+

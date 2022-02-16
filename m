@@ -2,181 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3A44B8053
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA3F4B8048
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 06:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241261AbiBPFjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 00:39:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41010 "EHLO
+        id S1344658AbiBPFkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 00:40:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiBPFjA (ORCPT
+        with ESMTP id S1344649AbiBPFkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 00:39:00 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AC5BB0AD;
-        Tue, 15 Feb 2022 21:38:47 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jz6Fc4W95z4xcl;
-        Wed, 16 Feb 2022 16:38:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644989926;
-        bh=dYPjtCeRuoZsilIwQN5iPJw6Z/a+raiWjMK5T5Ra708=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qttjlqgPbNvvyqf9w/l3y0XzTetYrJfMTuShi/emEjpMLo+31WvBpKki9waqEXYDC
-         Qx/CMmuXFdTi2Wfdzo5fZZNdsj6Q23AjyU7ANB6wTsHUKk9PyPNKR27eK0v/sfZNeb
-         R530qmJ2aqMFLxslMgrYHHQi/ZDW7wNFp+sQCzgsgnn3p+omVm5jlBLm7vaFY9bGpX
-         oBxlHyGMDqyARZuYcPWroMAmUE39Os/zLOgPbhPHJBVTF1EtCBIpI7KKCbCHfSt7KU
-         hnZbB/iTlvP5TnDiL7HQ695uiw3F4UgymHIwGK3B9laqnEN2SM5R7YMdb1AeskfvLl
-         1n4whylYoACEQ==
-Date:   Wed, 16 Feb 2022 16:38:43 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm-current tree with the tip tree
-Message-ID: <20220216163843.5293ff58@canb.auug.org.au>
+        Wed, 16 Feb 2022 00:40:42 -0500
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8235BD2ED;
+        Tue, 15 Feb 2022 21:40:30 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id BE76C2B00296;
+        Wed, 16 Feb 2022 00:40:27 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 16 Feb 2022 00:40:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=zLCfwTEqPgbAts1m8jwlP8PVBAXIZUQ47054Ba
+        XjuWY=; b=O59SGJn7XntFau15KVosBLouNjMxmYwm8UF+WWX0P9e0EwfCoUYc1S
+        lc6YM6F5yHeRqe0ZL/mLXQu8UT8N9a8kZ52ecv7cQbYxz9FjL/lnwiVkwYMHa+CH
+        tOtqwEQybObOdBFTh0rTxwgsucQBjP0tQtj0pQ2Sf2LPCW7wk3cB17t428ag4AzB
+        /BCEkJHss6l+9XLaOCz0ADzROfvDCMzYfMjT9KdQp77iOpbjuv75bZMsiIHWHHrO
+        qkbGsGE2xRQh/SO17Cblm4nlN1TqwOAs0pOQjVVhHIBQaqOj8ceyznTKuMAb1XZR
+        5Ux/vz8GprHnlJ2pi8WpcKV83L66FWMg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=zLCfwTEqPgbAts1m8
+        jwlP8PVBAXIZUQ47054BaXjuWY=; b=Zo49S1EPi6J3CgIp82dMnuKxxk9dNijRv
+        E5HYNb6sUgMUvuO3nTdFMV+nJjj4C2gjlLYVo/4rI25261e7q9ZpSEoWh/3XI/MX
+        /Ys3NgTt1MR54NubXbpE35ZOuzJCU1nP3Cbhtc1CFAApl4HqdnZbG5FJqTZ8O5d/
+        nZfoCicWntqje+1Tq2IqMF0dV8OT+lXi9vLmvxeLTl0RZV0tSOcxinwmgyxxewhR
+        8r+NSLdimyXyUX9vS5U1XdUi9CRTKMNBSGu0Abk2ecwiyxGN00+MUBvEv+8G29wV
+        focJsVMfdBVZ+oheV3eR7BDdMRWNlY4gSwdPDeGRc+snwoUF8YfOg==
+X-ME-Sender: <xms:So4MYgnpfovLImmYJP9hZlmB8Wr48TyQrMF9IDvWoZEy8OV9IWQ75g>
+    <xme:So4MYv1qqVSWDMsEeSEKLYrJFoKdPJkqviFudCYeK_tBDx2Poio8y7Bh-ky523m_f
+    3jfCpa1rAk2v5fsY_E>
+X-ME-Received: <xmr:So4MYuoz3kCa2Ly-okMgNSANrM-nHAmwbBLRyIhuoeleES18sslH89CU-VWb1mNEGyEKi3CWCkPWzyoBkMZJ4fkULtdvCv-rE1Lh>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeehgdekfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgvthgvrhcu
+    jfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvghtqe
+    enucggtffrrghtthgvrhhnpeehhfehfffgheelgeeuudelhefgvdefveekudevjeevjeev
+    vefggefguddufeeuveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehpvghtvghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
+X-ME-Proxy: <xmx:S44MYsnC2027HY2O_ggoA7jlbwEy7k1NIZE2QRnFv0BfxbpSHHFzXQ>
+    <xmx:S44MYu1JIrPHRlPjKQl9F8LdP21A4vDI4_D4xZw9fv57c7I5p2QGeA>
+    <xmx:S44MYjsEZ0HDxq18kszsewLm2BnYv9e3lYu8XgOLEQA3SproGExS1Q>
+    <xmx:S44MYswnezxtDk4uQdE-l-FiFCTnpOB_SE6BELfR_VwttKE_lOG2qDatezM>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 16 Feb 2022 00:40:23 -0500 (EST)
+Date:   Wed, 16 Feb 2022 15:40:18 +1000
+From:   Peter Hutterer <peter.hutterer@who-t.net>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>,
+        Ping Cheng <pinglinux@gmail.com>,
+        Aaron Armstrong Skomra <skomra@gmail.com>,
+        Jason Gerecke <killertofu@gmail.com>,
+        linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 12/12] Input: docs: add more details on the use of
+ BTN_TOOL
+Message-ID: <YgyOQuN9+IEsCsoA@quokka>
+References: <20220203143226.4023622-1-benjamin.tissoires@redhat.com>
+ <20220203143226.4023622-13-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+D4MrK85CR90.IYz61zptjj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203143226.4023622-13-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+D4MrK85CR90.IYz61zptjj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 03, 2022 at 03:32:26PM +0100, Benjamin Tissoires wrote:
+> The HID core stack used to be very relaxed considering the BTN_TOOL_*
+> usage. With the recent commits, we should now enforce to have only one
+> tool at a time, meaning that we can now express that requirement in the
+> docs.
+> 
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> 
+> ---
+> 
+> changes in v2:
+> - changed to explain that switching tool in one EV_SYN report
+>   is not nice for userspace
+> ---
+>  Documentation/input/event-codes.rst | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/input/event-codes.rst b/Documentation/input/event-codes.rst
+> index b24ae7d292cc..8741d390b184 100644
+> --- a/Documentation/input/event-codes.rst
+> +++ b/Documentation/input/event-codes.rst
+> @@ -137,7 +137,11 @@ A few EV_KEY codes have special meanings:
+>      code should be set to a value of 1. When the tool is no longer interacting
+>      with the input device, the BTN_TOOL_<name> code should be reset to 0. All
+>      trackpads, tablets, and touchscreens should use at least one BTN_TOOL_<name>
+> -    code when events are generated.
+> +    code when events are generated. Likewise all trackpads, tablets, and
+> +    touchscreens should export only one BTN_TOOL_<name> at a time. To not break
 
-Hi all,
+I still think s/export/set to nonzero/ to avoid any ambiguity with setting the
+evbit on the device vs setting the value to nonzero here, but the remainder is
+good, thanks :)
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+Acked-by: Peter Hutterer <peter.hutterer@who-t.net>
 
-  Documentation/admin-guide/sysctl/kernel.rst
-
-between commit:
-
-  3624ba7b5e2a ("sched/numa-balancing: Move some document to make it consis=
-tent with the code")
-
-from the tip tree and commit:
-
-  2dc52f4f86f9 ("NUMA balancing: optimize page placement for memory tiering=
- system")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
 Cheers,
-Stephen Rothwell
+  Peter
 
-diff --cc Documentation/admin-guide/sysctl/kernel.rst
-index 8551aeca1574,59c3b4ce37cd..000000000000
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@@ -609,8 -616,56 +616,14 @@@ being accessed should be migrated to a=20
-  The unmapping of pages and trapping faults incur additional overhead that
-  ideally is offset by improved memory locality but there is no universal
-  guarantee. If the target workload is already bound to NUMA nodes then this
- -feature should be disabled. Otherwise, if the system overhead from the
- -feature is too high then the rate the kernel samples for NUMA hinting
- -faults may be controlled by the `numa_balancing_scan_period_min_ms,
- -numa_balancing_scan_delay_ms, numa_balancing_scan_period_max_ms,
- -numa_balancing_scan_size_mb`_, and numa_balancing_settle_count sysctls.
- +feature should be disabled.
- =20
-+ Or NUMA_BALANCING_MEMORY_TIERING to optimize page placement among
-+ different types of memory (represented as different NUMA nodes) to
-+ place the hot pages in the fast memory.  This is implemented based on
-+ unmapping and page fault too.
- -
- -numa_balancing_scan_period_min_ms, numa_balancing_scan_delay_ms, numa_bal=
-ancing_scan_period_max_ms, numa_balancing_scan_size_mb
- -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
- -
- -
- -Automatic NUMA balancing scans tasks address space and unmaps pages to
- -detect if pages are properly placed or if the data should be migrated to a
- -memory node local to where the task is running.  Every "scan delay" the t=
-ask
- -scans the next "scan size" number of pages in its address space. When the
- -end of the address space is reached the scanner restarts from the beginni=
-ng.
- -
- -In combination, the "scan delay" and "scan size" determine the scan rate.
- -When "scan delay" decreases, the scan rate increases.  The scan delay and
- -hence the scan rate of every task is adaptive and depends on historical
- -behaviour. If pages are properly placed then the scan delay increases,
- -otherwise the scan delay decreases.  The "scan size" is not adaptive but
- -the higher the "scan size", the higher the scan rate.
- -
- -Higher scan rates incur higher system overhead as page faults must be
- -trapped and potentially data must be migrated. However, the higher the sc=
-an
- -rate, the more quickly a tasks memory is migrated to a local node if the
- -workload pattern changes and minimises performance impact due to remote
- -memory accesses. These sysctls control the thresholds for scan delays and
- -the number of pages scanned.
- -
- -``numa_balancing_scan_period_min_ms`` is the minimum time in milliseconds=
- to
- -scan a tasks virtual memory. It effectively controls the maximum scanning
- -rate for each task.
- -
- -``numa_balancing_scan_delay_ms`` is the starting "scan delay" used for a =
-task
- -when it initially forks.
- -
- -``numa_balancing_scan_period_max_ms`` is the maximum time in milliseconds=
- to
- -scan a tasks virtual memory. It effectively controls the minimum scanning
- -rate for each task.
- -
- -``numa_balancing_scan_size_mb`` is how many megabytes worth of pages are
- -scanned for a given scan.
-+=20
-+=20
-  oops_all_cpu_backtrace
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- =20
 
---Sig_/+D4MrK85CR90.IYz61zptjj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIMjeMACgkQAVBC80lX
-0GwKqwf/fR+BJILM/wGXW4ZPsFE8d5XuiuDvYoAMxyW7wsNfFe7mTxB5iAGDGqr2
-2NMk+bP0gxF28oS0qJxWRjHA7BaRwb879uNapPHyitg9Sql3K6s12lUND/D/gX5P
-SzxaX0pBxWiQp2XGDoBY85kFN3xmOUxE5FZVkpW0naXP5Tq2qMW39Akx9BguLiA4
-Lm9iFfyEdHNiui3eT848/rn9/mTs8cBUzrzqJNlT1z79DH2ezfSbKwby91hplZpR
-O63o5QjW7mABhKOauZ3m0WCNTmJPF0yIYYOJFEYCh5cpWtvVhmS/ZTaTTWXpW+I0
-8eS1FGqSaX1qA/NOcQFT2L4uHOyduA==
-=fvfZ
------END PGP SIGNATURE-----
-
---Sig_/+D4MrK85CR90.IYz61zptjj--
+> +    existing userspace, it is recommended to not switch tool in one EV_SYN frame
+> +    but first emitting the old BTN_TOOL_<name> at 0, then emit one SYN_REPORT
+> +    and then set the new BTN_TOOL_<name> at 1.
+>  
+>  * BTN_TOUCH:
+>  
+> -- 
+> 2.33.1
+> 

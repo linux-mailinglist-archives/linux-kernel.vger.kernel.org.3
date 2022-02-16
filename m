@@ -2,163 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1066F4B90C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED604B90C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237900AbiBPSyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:54:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40430 "EHLO
+        id S237907AbiBPS40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:56:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237892AbiBPSyf (ORCPT
+        with ESMTP id S233352AbiBPS4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:54:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB8A241DBB;
-        Wed, 16 Feb 2022 10:54:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5357861723;
-        Wed, 16 Feb 2022 18:54:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E12EC004E1;
-        Wed, 16 Feb 2022 18:54:21 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 13:54:19 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: ftrace startup tests crashing due to missing rcu_synchronize()
-Message-ID: <20220216135419.01d96fe1@gandalf.local.home>
-In-Reply-To: <yt9dilte4px4.fsf@linux.ibm.com>
-References: <yt9dilte4px4.fsf@linux.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 16 Feb 2022 13:56:24 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B292B0B35;
+        Wed, 16 Feb 2022 10:56:11 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d646fffcc2so9003277b3.4;
+        Wed, 16 Feb 2022 10:56:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vk36aod0FuaMpPlJAG4bXGrtjGi+8N3zZwitdLcGJCE=;
+        b=GsNiDyjU7vKeeHiMElextmRDv+7zBHEh161NyRhRlumr3EUCVwxaOgMeBEfkHnlFI9
+         0al7J0ktpigyKvcFf14d9iQ8R8J3iyIBrKdvnToJvxgOFuksaENxRa8I3AHpcN3gy3ze
+         CBUisPu3cdEMafv/mKB9S6vISg6RNM0DL8vGnPzi/cakT3dtH+Wy6EfGajg7+9PC3bWW
+         cn6Zv0i3F35PArXGuWKlWiza6QC1GntOzYsZ36/vgXQa4jTlR6GdSvt5ZHZgteYmwyNX
+         p25URqgfih+oy9ejyWc2RdRSgVsK1LXLKnDJnWLwfTBu9wyxpVUvjgV+PlNocyKJJK7v
+         zhhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vk36aod0FuaMpPlJAG4bXGrtjGi+8N3zZwitdLcGJCE=;
+        b=8FZve7GRJgLOfWymqScR2qHgsHbV5L0pTtG+RrJmmsLiVpK21ZidyMfxWju/YTZY1C
+         3h6u3QI0c7KnDQRB9Hq7R2OSWKPzf0BBwBwPD5PLkVMf1OLUDAXw8mX9ealkR5V6nq8x
+         Y7nXcSQYle5ler1XfpP19IbDR2pW0iKLXiFjVLa2w2tOeoFsYGiHjTNM+rl2hnwG47wo
+         l7ePsTiRwqB6yxwX/Nm92zZj9nZJyvCq7uHXWM/Q1gFOLTgrEPiK37nr1i43/sPB/cn9
+         eyqckXMYf2iGk9zGWWHIGWW5/ekTYKbO5kL0FClUE2ZNS/OgiR0D7oorQzGqQyQ+jGRy
+         N5xw==
+X-Gm-Message-State: AOAM530w5Xo5I3sRDDeqOPHsYz5mbeNd7jSm7x+/cxlWlUtYzJ4ZHrHW
+        kd7hB2kOhiBLFvhVH0uI05S9AY9SdzAjzqzdCGc=
+X-Google-Smtp-Source: ABdhPJxhNdDQrZuw2YKgJX48LftVX7TGt5W+q53tlWGDCJ5jFMYi7Mhq8pHXArMmRhOUlzax/nRBUIdh9SV8JNhPuks=
+X-Received: by 2002:a0d:d4d7:0:b0:2ca:287c:6cea with SMTP id
+ w206-20020a0dd4d7000000b002ca287c6ceamr3717631ywd.399.1645037770419; Wed, 16
+ Feb 2022 10:56:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <8c4a69eca4d0591f30c112df59c5098c24923bd3.1644543449.git.darren@os.amperecomputing.com>
+ <ec9be4eb7a0548178191edd51ddd309f@hisilicon.com> <20220215163858.GA8458@willie-the-truck>
+ <YgvYZy5xv1g+u5wp@fedora> <20220215164639.GC8458@willie-the-truck>
+ <CAKfTPtAFsL+uqQiGcuh+JJZB=rPrez0=kotq76CVRcBQhcPefg@mail.gmail.com>
+ <YgvjtsOZuxzbgBBl@fedora> <CAKfTPtCHrZCp1Uth4odyT721wE8zoNVY3Mh+DSyuTkqPafm0Hg@mail.gmail.com>
+ <CAGsJ_4yB-FOPoPjCn+T4m76tvzA6ATaz24KYM9NjBeB54nWxLA@mail.gmail.com> <Yg0bu53iACDscIC6@fedora>
+In-Reply-To: <Yg0bu53iACDscIC6@fedora>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Thu, 17 Feb 2022 07:56:00 +1300
+Message-ID: <CAGsJ_4w2r8Hp3BNOrcQYDT6JgsFWWAgVruAOXpeXrhjskJMV7w@mail.gmail.com>
+Subject: Re: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
+To:     Darren Hart <darren@os.amperecomputing.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Arm <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <Catalin.Marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <Valentin.Schneider@arm.com>,
+        "D . Scott Phillips" <scott@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 19:39:03 +0100
-Sven Schnelle <svens@linux.ibm.com> wrote:
+On Thu, Feb 17, 2022 at 4:44 AM Darren Hart
+<darren@os.amperecomputing.com> wrote:
+>
+> On Wed, Feb 16, 2022 at 08:03:40PM +1300, Barry Song wrote:
+> > On Wed, Feb 16, 2022 at 7:30 PM Vincent Guittot
+> > <vincent.guittot@linaro.org> wrote:
+> > >
+> > > On Tue, 15 Feb 2022 at 18:32, Darren Hart <darren@os.amperecomputing.com> wrote:
+> > > >
+> > > > On Tue, Feb 15, 2022 at 06:09:08PM +0100, Vincent Guittot wrote:
+> > > > > On Tue, 15 Feb 2022 at 17:46, Will Deacon <will@kernel.org> wrote:
+> > > > > >
+> > > > > > On Tue, Feb 15, 2022 at 08:44:23AM -0800, Darren Hart wrote:
+> > > > > > > On Tue, Feb 15, 2022 at 04:38:59PM +0000, Will Decon wrote:
+> > > > > > > > On Fri, Feb 11, 2022 at 03:20:51AM +0000, Song Bao Hua (Barry Song) wrote:
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > > -----Original Message-----
+> > > > > > > > > > From: Darren Hart [mailto:darren@os.amperecomputing.com]
+> > > > > > > > > > Sent: Friday, February 11, 2022 2:43 PM
+> > > > > > > > > > To: LKML <linux-kernel@vger.kernel.org>; Linux Arm
+> > > > > > > > > > <linux-arm-kernel@lists.infradead.org>
+> > > > > > > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>;
+> > > > > > > > > > Peter Zijlstra <peterz@infradead.org>; Vincent Guittot
+> > > > > > > > > > <vincent.guittot@linaro.org>; Song Bao Hua (Barry Song)
+> > > > > > > > > > <song.bao.hua@hisilicon.com>; Valentin Schneider
+> > > > > > > > > > <valentin.schneider@arm.com>; D . Scott Phillips
+> > > > > > > > > > <scott@os.amperecomputing.com>; Ilkka Koskinen
+> > > > > > > > > > <ilkka@os.amperecomputing.com>; stable@vger.kernel.org
+> > > > > > > > > > Subject: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
+> > > > > > > > > >
+> > > > > > > > > > SoCs such as the Ampere Altra define clusters but have no shared
+> > > > > > > > > > processor-side cache. As of v5.16 with CONFIG_SCHED_CLUSTER and
+> > > > > > > > > > CONFIG_SCHED_MC, build_sched_domain() will BUG() with:
+> > > > > > > > > >
+> > > > > > > > > > BUG: arch topology borken
+> > > > > > > > > >      the CLS domain not a subset of the MC domain
+> > > > > > > > > >
+> > > > > > > > > > for each CPU (160 times for a 2 socket 80 core Altra system). The MC
+> > > > > > > > > > level cpu mask is then extended to that of the CLS child, and is later
+> > > > > > > > > > removed entirely as redundant.
+> > > > > > > > > >
+> > > > > > > > > > This change detects when all cpu_coregroup_mask weights=1 and uses an
+> > > > > > > > > > alternative sched_domain_topology equivalent to the default if
+> > > > > > > > > > CONFIG_SCHED_MC were disabled.
+> > > > > > > > > >
+> > > > > > > > > > The final resulting sched domain topology is unchanged with or without
+> > > > > > > > > > CONFIG_SCHED_CLUSTER, and the BUG is avoided:
+> > > > > > > > > >
+> > > > > > > > > > For CPU0:
+> > > > > > > > > >
+> > > > > > > > > > With CLS:
+> > > > > > > > > > CLS  [0-1]
+> > > > > > > > > > DIE  [0-79]
+> > > > > > > > > > NUMA [0-159]
+> > > > > > > > > >
+> > > > > > > > > > Without CLS:
+> > > > > > > > > > DIE  [0-79]
+> > > > > > > > > > NUMA [0-159]
+> > > > > > > > > >
+> > > > > > > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > > > > > > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > > > > > > > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> > > > > > > > > > Cc: Barry Song <song.bao.hua@hisilicon.com>
+> > > > > > > > > > Cc: Valentin Schneider <valentin.schneider@arm.com>
+> > > > > > > > > > Cc: D. Scott Phillips <scott@os.amperecomputing.com>
+> > > > > > > > > > Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+> > > > > > > > > > Cc: <stable@vger.kernel.org> # 5.16.x
+> > > > > > > > > > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+> > > > > > > > >
+> > > > > > > > > Hi Darrent,
+> > > > > > > > > What kind of resources are clusters sharing on Ampere Altra?
+> > > > > > > > > So on Altra, cpus are not sharing LLC? Each LLC is separate
+> > > > > > > > > for each cpu?
+> > > > > > > > >
+> > > > > > > > > > ---
+> > > > > > > > > >  arch/arm64/kernel/smp.c | 32 ++++++++++++++++++++++++++++++++
+> > > > > > > > > >  1 file changed, 32 insertions(+)
+> > > > > > > > > >
+> > > > > > > > > > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> > > > > > > > > > index 27df5c1e6baa..0a78ac5c8830 100644
+> > > > > > > > > > --- a/arch/arm64/kernel/smp.c
+> > > > > > > > > > +++ b/arch/arm64/kernel/smp.c
+> > > > > > > > > > @@ -715,9 +715,22 @@ void __init smp_init_cpus(void)
+> > > > > > > > > >         }
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > +static struct sched_domain_topology_level arm64_no_mc_topology[] = {
+> > > > > > > > > > +#ifdef CONFIG_SCHED_SMT
+> > > > > > > > > > +       { cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
+> > > > > > > > > > +#endif
+> > > > > > > > > > +
+> > > > > > > > > > +#ifdef CONFIG_SCHED_CLUSTER
+> > > > > > > > > > +       { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
+> > > > > > > > > > +#endif
+> > > > > > > > > > +       { cpu_cpu_mask, SD_INIT_NAME(DIE) },
+> > > > > > > > > > +       { NULL, },
+> > > > > > > > > > +};
+> > > > > > > > > > +
+> > > > > > > > > >  void __init smp_prepare_cpus(unsigned int max_cpus)
+> > > > > > > > > >  {
+> > > > > > > > > >         const struct cpu_operations *ops;
+> > > > > > > > > > +       bool use_no_mc_topology = true;
+> > > > > > > > > >         int err;
+> > > > > > > > > >         unsigned int cpu;
+> > > > > > > > > >         unsigned int this_cpu;
+> > > > > > > > > > @@ -758,6 +771,25 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+> > > > > > > > > >
+> > > > > > > > > >                 set_cpu_present(cpu, true);
+> > > > > > > > > >                 numa_store_cpu_info(cpu);
+> > > > > > > > > > +
+> > > > > > > > > > +               /*
+> > > > > > > > > > +                * Only use no_mc topology if all cpu_coregroup_mask weights=1
+> > > > > > > > > > +                */
+> > > > > > > > > > +               if (cpumask_weight(cpu_coregroup_mask(cpu)) > 1)
+> > > > > > > > > > +                       use_no_mc_topology = false;
+> > > > > > > > >
+> > > > > > > > > This seems to be wrong? If you have 5 cpus,
+> > > > > > > > > Cpu0 has cpu_coregroup_mask(cpu)== 1, cpu1-4
+> > > > > > > > > has cpu_coregroup_mask(cpu)== 4, for cpu0, you still
+> > > > > > > > > need to remove MC, but for cpu1-4, you will need
+> > > > > > > > > CLS and MC both?
+> > > > > > > >
+> > > > > > > > What is the *current* behaviour on such a system?
+> > > > > > > >
+> > > > > > >
+> > > > > > > As I understand it, any system that uses the default topology which has
+> > > > > > > a cpus_coregroup weight of 1 and a child (cluster, smt, ...) weight > 1
+> > > > > > > will behave as described above by printing the following for each CPU
+> > > > > > > matching this criteria:
+> > > > > > >
+> > > > > > >   BUG: arch topology borken
+> > > > > > >         the [CLS,SMT,...] domain not a subset of the MC domain
+> > > > > > >
+> > > > > > > And then extend the MC domain cpumask to match that of the child and continue
+> > > > > > > on.
+> > > > > > >
+> > > > > > > That would still be the behavior for this type of system after this
+> > > > > > > patch is applied.
+> > > > > >
+> > > > > > That's what I thought, but in that case applying your patch is a net
+> > > > > > improvement: systems either get current or better behaviour.
+> > > > >
+> > > > > CLUSTER level is normally defined as a intermediate group of the MC
+> > > > > level and both levels have the scheduler flag SD_SHARE_PKG_RESOURCES
+> > > > > flag
+> > > > >
+> > > > > In the case of Ampere altra, they consider that CPUA have a CLUSTER
+> > > > > level which SD_SHARE_PKG_RESOURCES with another CPUB but the next and
+> > > > > larger MC level then says that CPUA doesn't SD_SHARE_PKG_RESOURCES
+> > > > > with CPUB which seems to be odd because the SD_SHARE_PKG_RESOURCES has
+> > > > > not disappeared Looks like there is a mismatch in topology description
+> > > >
+> > > > Hi Vincent,
+> > > >
+> > > > Agree. Where do you think this mismatch exists?
+> > >
+> > > I think that the problem comes from that the default topology order is
+> > > assumed to be :
+> > > SMT
+> > > CLUSTER shares pkg resources i.e. cache
+> > > MC
+> > > DIE
+> > > NUMA
+> > >
+> > > but in your case, you want a topology order like :
+> > > SMT
+> > > MC
+> > > CLUSTER shares SCU
+> > > DIE
+> > > NUMA
+> > >
+> > > IIUC, the cluster is defined as the 2nd (no SMT) or 3rd (SMT) level in
+> > > the PPTT table whereas the MC level is defined as the number of cache
+> > > levels. So i would say that you should compare the level to know the
+> > > ordering
+> > >
+> > > Then, there is another point:
+> > > In your case, CLUSTER level still has the flag SD_SHARE_PKG_RESOURCES
+> > > which is used to define some scheduler internal variable like
+> > > sd_llc(sched domain last level of cache) which allows fast task
+> > > migration between this cpus in this level at wakeup. In your case the
+> > > sd_llc should not be the cluster but the MC with only one CPU. But I
+> > > would not be surprised that most of perf improvement comes from this
+> > > sd_llc wrongly set to cluster instead of the single CPU
+> >
+> > I assume this "mistake" is actually what Ampere altra needs while it
+> > is wrong but getting
+> > right result? Ampere altra has already got both:
+>
+> Hi Barry,
+>
+> Generally yes - although I do think we're placing too much emphasis on
+> the "right" or "wrong" of a heuristic which are more fluid in
+> definition over time. (e.g. I expect this will look different in a year
+> based on what we learn from this and other non current default topologies).
+>
+> > 1. Load Balance between clusters
+> > 2. wake_affine by select sibling cpu which is sharing SCU
+> >
+> > I am not sure how much 1 and 2 are helping Darren's workloads respectively.
+>
+> We definitely see improvements with load balancing between clusters.
+> We're running some tests with the wake_affine patchset you pointed me to
+> (thanks for that). My initial tbench runs resulted in higher average and
+> max latencies reported. I need to collect more results and see the
+> impact to other benchmarks of interest before I have more to share on
+> that.
 
-> Hi Steve,
-> 
-> in our CI we see the ftrace selftests crashing. It only happens
-> in rare cases - for me i can boot the kernel hundred of times and
-> it crashes only once. The oops output looks like this:
-> 
-> [    3.523720] Running postponed tracer tests:
-> [    3.524184] Testing tracer function: PASSED
-> [    3.801523] Testing dynamic ftrace: PASSED
-> [    4.068009] Testing dynamic ftrace ops #1:
-> [    4.140142] (1 0 1 0 0)
-> [    4.140149] (1 1 2 0 0)
-> [    4.200037] (2 1 3 0 822270)
-> [    4.200046] (2 2 4 0 822402)
-> [    4.232728] (3 2 4 0 1147236)
-> [    4.232740] (3 3 5 0 1147377)
-> [    4.300835] PASSED
-> [    4.300840] Testing dynamic ftrace ops #2:
-> [    4.420423] (1 0 1 582267 0)
-> [    4.420474] (1 1 2 583259 0)
-> [    4.420941] (2 1 3 1 5)
-> [    4.420947] (2 2 4 69 73)
-> [    4.458483] (3 2 4 494199 491341)
-> [    4.458616] (3 3 5 497496 494474)
-> [    4.460091] Unable to handle kernel pointer dereference in virtual kernel address space
-> [    4.460375] Failing address: 6b6b6b6b6b6b6000 TEID: 6b6b6b6b6b6b6803
-> [    4.460458] Fault in home space mode while using kernel ASCE.
-> [    4.460695] AS:000000008561c007 R3:0000000000000024
-> [    4.461143] Oops: 0038 ilc:3 [#1] PREEMPT SMP
-> [    4.461162] Modules linked in:
-> [    4.461175] CPU: 245 PID: 0 Comm: swapper/245 Not tainted 5.17.0-rc4-00051-gc5d9ae265b10-dirty #4
-> [    4.461183] Hardware name: IBM 8561 T01 701 (KVM/Linux)
+Hi Darren,
+if you read Vincent's comments carefully, you will find it is
+pointless for you to
+test the wake_affine patchset as you have already got it. in your
+case, sd_llc_id
+is set to sd_cluster level due to PKG_RESOURCES sharing. So with my new
+patchset for wake_affine, it is completely redundant for your machine
+as it works
+with the assumption cluster-> llc. but for your case, llc=cluster, so
+it works in
+cluster->cluster. please read:
 
-I this a 390?
+static void update_top_cache_domain(int cpu)
+{
+struct sched_domain_shared *sds = NULL;
+struct sched_domain *sd;
+int id = cpu;
+int size = 1;
 
-> [    4.461194] Krnl PSW : 0404e00180000000 00000000835a1fe6 (arch_ftrace_ops_list_func+0x96/0x1b0)
-> [    4.461212]            R:0 T:1 IO:0 EX:0 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
-> [    4.461226] Krnl GPRS: 0000000000000000 0000000084bbc110 0000000083496f48 00000000834061f2
-> [    4.461237]            000000008a70fa00 0000038000d0fba8 0000000000000001 fffffffffffffeff
-> [    4.461243]            00000000834061f2 0000038000d0fba8 6b6b6b6b6b6b6b6b 0000000083496f48
-> [    4.461250]            0000000000000000 0000000000000000 00000000835a209a 0000038000d0fab8
-> [    4.461269] Krnl Code: 00000000835a1fd4: e310a9380224        stg     %r1,10552(%r10)
->                           00000000835a1fda: eb0103a8006a        asi     936,1
->                          #00000000835a1fe0: c4a800b0d094        lgrl    %r10,0000000084bbc108
->                          >00000000835a1fe6: e310a0100004        lg      %r1,16(%r10)  
->                           00000000835a1fec: a7110020            tmll    %r1,32
->                           00000000835a1ff0: a7740012            brc     7,00000000835a2014
->                           00000000835a1ff4: a7114000            tmll    %r1,16384
->                           00000000835a1ff8: a7740031            brc     7,00000000835a205a
-> [    4.461383] Call Trace:
-> [    4.461388]  [<00000000835a1fe6>] arch_ftrace_ops_list_func+0x96/0x1b0
-> [    4.461395] ([<00000000835a200e>] arch_ftrace_ops_list_func+0xbe/0x1b0)
-> [    4.461401]  [<00000000841700ec>] ftrace_common+0x1c/0x20
-> [    4.461409]  [<0000000083496f4e>] preempt_count_sub+0x6/0x138
-> [    4.461418]  [<00000000834061f2>] read_tod_clock+0x4a/0xb0
-> [    4.461431]  [<0000000083530818>] ktime_get+0xb8/0x178
-> [    4.461441]  [<000000008353ec94>] clockevents_program_event+0x6c/0x138
-> [    4.461454]  [<000000008352d206>] hrtimer_start_range_ns+0xc6/0x100
-> [    4.461467]  [<0000000083541068>] tick_nohz_idle_stop_tick+0x90/0xf8
-> [    4.461479]  [<00000000834a9790>] do_idle+0xf0/0x1b0
-> [    4.461495]  [<00000000834a9ad6>] cpu_startup_entry+0x36/0x40
-> [    4.461509]  [<000000008416e48e>] restart_int_handler+0x6e/0x90
-> [    4.461521] INFO: lockdep is turned off.
-> [    4.461527] Last Breaking-Event-Address:
-> [    4.461533]  [<00000000835a2026>] arch_ftrace_ops_list_func+0xd6/0x1b0
-> [    4.461552] Kernel panic - not syncing: Fatal exception: panic_on_oops
-> 
-> The code in question is the ops loop in __ftrace_ops_list_func():
-> 
-> do_for_each_ftrace_op(op, ftrace_ops_list) {
-> /* Stub functions don't need to be called nor tested */
-> 	if (op->flags & FTRACE_OPS_FL_STUB)
-> 		continue;
-> ...
-> 
-> The register (r10) where op is stored contains 0x6b6b6b6b6b6b6b6b
-> (POISON_FREE), so it looks like the list contains a member that is
-> already freed.
-> 
-> Looking at unregister_ftrace_function(), i noticed that
-> ftrace_shutdown() is called with 0 as command. Given that the ftrace
-> function didn't change and ftrace is still enabled, the
-> rcu_synchronize() functions in ftrace_shutdown() are silently skipped.
-> So the caller frees ops already before other CPUs have gone through
-> quiesce, and may therefore use the old (now freed) list entry.
-> 
-> To fix this, i wonder whether we should change the code in
-> unregister_ftrace_function() to:
-> 
-> @@ -7827,7 +7837,7 @@ int unregister_ftrace_function(struct ftrace_ops *ops)
->         int ret;
->  
->         mutex_lock(&ftrace_lock);
-> -       ret = ftrace_shutdown(ops, 0);
-> +       ret = ftrace_shutdown(ops, FTRACE_UPDATE_TRACE_FUNC);
+sd = highest_flag_domain(cpu, SD_SHARE_PKG_RESOURCES);
+if (sd) {
+id = cpumask_first(sched_domain_span(sd));
+size = cpumask_weight(sched_domain_span(sd));
+sds = sd->shared;
+}
 
-No, the ftrace_shutdown() will add that flag if it is needed.
+rcu_assign_pointer(per_cpu(sd_llc, cpu), sd);
+per_cpu(sd_llc_size, cpu) = size;
+per_cpu(sd_llc_id, cpu) = id;
+rcu_assign_pointer(per_cpu(sd_llc_shared, cpu), sds);
 
->         mutex_unlock(&ftrace_lock);
->  
->         return ret;
-> 
-> I haven't checked whether other callsites of unregister_ftrace_function()
-> also need to be adjusted. What do you think about that 'fix'?
+...
+}
 
-But what I'm thinking is, the function is being freed but has yet to be
-removed from the list. Or that a synchronization is missed.
+this is also the content of Vincent's last comment:
+"
+My concern is that there are some ongoing discussion to make more
+usage of the CLUSTER level than what is currently done and it assumes
+that we have a valid LLC level after the CLUSTER one which is not your
+case and I'm afraid that it will be suboptimal for you because CLUSTER
+and LLC are wrongly the same for your case and then you will come back
+to add more exception in the generic scheduler code to cover this
+first exception"
 
-That is, shutdown is called, the item is removed from the list and freed,
-but something got preempted while on the ftrace trampoline, with a
-reference to the item, and then woke up and executed the item that was
-freed.
+so it is incorrect for you to say you gain performance only by LB :-)
 
-I'll look into it. Thanks for the report.
+>
+> Thanks,
+>
+> --
+> Darren Hart
+> Ampere Computing / OS and Kernel
 
--- Steve
+Thanks
+Barry

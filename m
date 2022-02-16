@@ -2,88 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA344B86A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FDD4B86AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 12:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbiBPLak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 06:30:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35652 "EHLO
+        id S231664AbiBPLcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 06:32:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiBPLag (ORCPT
+        with ESMTP id S230235AbiBPLb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 06:30:36 -0500
-Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94993E6DAA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 03:30:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1645011022;
-        bh=LRvuA6zaN/7u+UfoBDNOpb1E0+Op5j/6aZVhnErHdTs=;
-        h=From:To:Cc:Subject:Date;
-        b=RYKaB7YJeDl4zeo9ul6XPav0gGyTeLD41x2qL/6VA1l/RIUJ1fRsjqBIVw4y9VBXv
-         A1BK3tpiUiAJvbgw+9/81CaTMmVR2Xha8dpM71t2diLHQrf312KSTgtAU2ja8c+FB2
-         FbK8JPbuKNT8en4oeSVBoQfZ0cwNYtAryF7E06Z4=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
-        id 7930C48A; Wed, 16 Feb 2022 19:30:19 +0800
-X-QQ-mid: xmsmtpt1645011019tdpb7iu80
-Message-ID: <tencent_BD0AC737C546F88052FF7F11881D3350EE06@qq.com>
-X-QQ-XMAILINFO: NOIkHYnr7VzdBovMCoZOh3Dyb6OXUHZGbeNuuwU1kCDUJH+GOLSJFY1cutzjhU
-         3/nnF/y7yLMI04AWSWLj9CqusdbnzxWMwLwIuD4o6qTNR1duj/4mQG7kQu0VMh7kCqnIkMDSKPFi
-         lUMiFhR4gVOm9B41FxabktomW2oD5subWh7kUvgUwzU44L00w3dfcwxAsKuAXNU4h1QoBWfGHu+K
-         WDgyNokPNvlt6Tm9t3uDbvqlSmRfP9Dt8UNqNMSnG9nt3sjcKHzJXrhgPTSGAAW8KNF4SWOldA71
-         Ufufjsb4fenHa/egpuezFMY8XgFKly2Chj+wVIP0w+/iWzgM2UgY36qpr9n2dbhVhesoSm2OWHoF
-         6YfUJExLK8kunN7T3Oi1OEv8nZLsuYTI1LbCZp2c8+OCx6WBVFmV7MyR9oLA5Zh73KMw654yk4N0
-         9Xt07teQQYSAxoJLvvP2AtW80ZxWqBTShOxNI6Xe5fnztBV27wGAEuvvAh6JlStNKEnK//OPv+Tm
-         9QQMWgYgQic7uSeyxmfVOLIzIaeJcGoT4gmfSI8CnUofN6IEDezJZrSjfJHFMhXYltUl9HBUN67F
-         bNflc23eVNxXOx0cMT0pDCx9vSe1iryvz5Tanjv1i/dFzDu2rmFNGKNJqKY/Iq/zuXQQyeSzBNt3
-         3TjFQZVm63+Ud50SZmDPyesaX9CKvn43fw9CbCgiBPiIWs9BP0RZ5S/PBBfMunE6/pHP4QoD4qkr
-         kFFZfJiUSYB3/DRKxBUO+k1kTtdi68jxxPqvbWbstsG/i5Q8Uk6niYzstQ5YCnBzxePxMdLoT3lN
-         atyK9KnV2rNtxnvRZl6Y4dlF1GpBlLLz4xRi55yl/fMHOUMux/xbt9dl18tYTFxtepf/K7J0PWPa
-         BpBaXps6xpDS+V6ztbBW/MgYiw/4k9fg==
-From:   xkernel.wang@foxmail.com
-To:     jerome.pouiller@silabs.com, gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] staging: wfx: check the return value of devm_kmalloc()
-Date:   Wed, 16 Feb 2022 19:29:50 +0800
-X-OQ-MSGID: <20220216112950.541-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Wed, 16 Feb 2022 06:31:56 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5ED2982B;
+        Wed, 16 Feb 2022 03:31:40 -0800 (PST)
+X-UUID: 24ccf40f78b9409db20afdcc46c412ce-20220216
+X-UUID: 24ccf40f78b9409db20afdcc46c412ce-20220216
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 320886192; Wed, 16 Feb 2022 19:31:37 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Feb 2022 19:31:36 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Feb
+ 2022 19:31:36 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Feb 2022 19:31:36 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Tinghan Shen" <tinghan.shen@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Sean Wang <sean.wang@mediatek.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <ryder.lee@kernel.org>, <wenst@chromium.org>,
+        <chunfeng.yun@mediatek.com>
+Subject: [PATCH v11 0/3] Add basic SoC support for mediatek mt8195
+Date:   Wed, 16 Feb 2022 19:31:28 +0800
+Message-ID: <20220216113131.13145-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.15.GIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+This series adds basic SoC support for Mediatek's SoC MT8195.
 
-devm_kmalloc() returns a pointer to allocated memory on success, NULL
-on failure. While there is a memory allocation of devm_kmalloc()
-without proper check. It is better to check the return value of it to
-prevent wrong memory access.
-
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- drivers/staging/wfx/main.c | 2 ++
- 1 file changed, 2 insertions(+)
+Changes in v11:
+  - rebase on 5.17-rc4
+Changes in v10:
+  - clean CC list
+Changes in v9:
+  - remove duplicated cpus dt-bindings patch in v8
+Changes in v8:
+  - v7 mediatek,spi-mtk-nor.yaml patch is applied in branch for-5.17 at 
+    kernel/git/broonie/spi.git
+  - v7 pinctrl-mt8195.yaml patch is applied in branch for-next at 
+    kernel/git/linusw/linux-pinctrl.git
+  - add cortex-a78 compatible to cpus dt-bindings
+  - add mediatek,drive-strength-adv property to pinctrl dt-bindings
+  - fix evb dts
+    - remove i2c nodes with disabled status from dts
+    - fix pin properties not match pinctrl dt-bindings
+    - remove unnecessary u3port*
+  - fix dtsi
+    - fix node format
+    - reorder oscillator* nodes 
+    - fix node name of cpu idle nodes
+    - remove clock-frequency property in the timer node
+    - reorder clock and clock names in usb nodes
+Changes in v7:
+  - refine title of spi-nor dt-bindings patch
+  - refine commit message of pinctrl dt-bindings patch
+  - update pinctrl-mt8195.yaml
+    - change property pattern from 'pins' to '^pins'
+    - update examples with new property in descriptions
+    - add new example
+  - drop '_' from node names of pinctrl subnodes in mt8195-evb.dts
+Changes in v6:
+  - rebase on 5.16-rc1
+  - add new clock name to spi-nor dt-bindings
+  - add "pins" property in pinctrl dt-bindings
+  - fix fails of dtbs_checks
+    - remove "arm,armv8" not matched in yaml from cpu compatile
+    - fix node name of xhci
+    - remvoe xhci upstreaming wakeup properties
+    - remove xhci unused properties address-cells and size-cells
+    - fix node name of ufs-phy 
+    - fix node name of spi-nor
+    - fix node name and sub-nodes of pinctrl
+    - fix mmc compatible
+Changes in v5:
+  - enable basic nodes in mt8195-evb.dts
+  - remove dedicated clock nodes
+  - add mmc2 node
+  - fix interrupt number of pinctrl node
+  - update clock nodes to apply internal fixes
+  - add dt-bindings for perficfg node
 
-diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
-index 4b9fdf9..0ef9225 100644
---- a/drivers/staging/wfx/main.c
-+++ b/drivers/staging/wfx/main.c
-@@ -294,6 +294,8 @@ struct wfx_dev *wfx_init_common(struct device *dev,
- 	hw->wiphy->n_iface_combinations = ARRAY_SIZE(wfx_iface_combinations);
- 	hw->wiphy->iface_combinations = wfx_iface_combinations;
- 	hw->wiphy->bands[NL80211_BAND_2GHZ] = devm_kmalloc(dev, sizeof(wfx_band_2ghz), GFP_KERNEL);
-+	if (!hw->wiphy->bands[NL80211_BAND_2GHZ])
-+		return NULL;
- 	// FIXME: also copy wfx_rates and wfx_2ghz_chantable
- 	memcpy(hw->wiphy->bands[NL80211_BAND_2GHZ], &wfx_band_2ghz,
- 	       sizeof(wfx_band_2ghz));
+v4 thread:
+https://lore.kernel.org/all/20210922093303.23720-2-seiya.wang@mediatek.com/
+v3 thread:
+https://lore.kernel.org/all/20210601075350.31515-2-seiya.wang@mediatek.com/
+v2 thread:
+https://lore.kernel.org/all/20210319023427.16711-10-seiya.wang@mediatek.com/
+v1 thread:
+https://lore.kernel.org/all/20210316111443.3332-11-seiya.wang@mediatek.com/
+---
+
+Tinghan Shen (3):
+  dt-bindings: arm: mediatek: Add mt8195 pericfg compatible
+  dt-bindings: pinctrl: mt8195: Add mediatek,drive-strength-adv property
+  arm64: dts: Add mediatek SoC mt8195 and evaluation board
+
+ .../arm/mediatek/mediatek,pericfg.yaml        |    1 +
+ .../bindings/pinctrl/pinctrl-mt8195.yaml      |   35 +
+ arch/arm64/boot/dts/mediatek/Makefile         |    1 +
+ arch/arm64/boot/dts/mediatek/mt8195-evb.dts   |  161 +++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 1049 +++++++++++++++++
+ 5 files changed, 1247 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
+
 -- 
+2.18.0
+

@@ -2,143 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117484B7CB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7E94B7CBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245620AbiBPBrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:47:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34148 "EHLO
+        id S245589AbiBPBrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:47:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244841AbiBPBrN (ORCPT
+        with ESMTP id S237223AbiBPBrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:47:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABC22B262
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:47:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6149EB81DB2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 01:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F12EC340EB;
-        Wed, 16 Feb 2022 01:46:58 +0000 (UTC)
-Date:   Tue, 15 Feb 2022 20:46:57 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT
- configurable
-Message-ID: <20220215204657.4a7e4784@gandalf.local.home>
-In-Reply-To: <8b1d0d57-0bf7-8ca5-8b08-cd5a12f7666f@ozlabs.ru>
-References: <20220211014313.1790140-1-aik@ozlabs.ru>
-        <20220211214722.4373ca83@rorschach.local.home>
-        <8b1d0d57-0bf7-8ca5-8b08-cd5a12f7666f@ozlabs.ru>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 15 Feb 2022 20:47:31 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDCF2BB11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:47:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644976040; x=1676512040;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eYUNITBN6R4wn0hwaSp8uqSR8Q2/MSgeFBEFFWfdDBk=;
+  b=BKmR61i8OGMmG6wE5IMdmILxwnpFMQ/zKb0cJBruVkAtWltbb1Qq7Wrc
+   j25FWAr11aVfQu+Kq4zx95485ZmziN1wFGZxTjCEeEQXjzCWTZfz9Pf2N
+   dRzuyA1w2NwD0UF27xf0tuAIawgbHFPF5iX5XZECQGQtagou8xpHiaP3S
+   T6C8dtMoBn6umHeFtvfxzdGFePetV4MSSdm2M1uEItMElAgMpmXu4/rsM
+   gwG0MkV6wsaxQdDQAR2Lb6/cAvY6WHR+DGu3MnFlels7p76GWfx1kJ3zg
+   vP86ETcvhXWhlsPK0kzrlF1Q2h04BCVqWBnrM50H+9h/o9Z78ezHsk1rY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="231127117"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="231127117"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 17:47:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="636255399"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Feb 2022 17:47:18 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nK9PZ-000AFp-Pt; Wed, 16 Feb 2022 01:47:17 +0000
+Date:   Wed, 16 Feb 2022 09:47:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 0ef7c79e43d05936b83f0e6d8e33cc7cfaebaf18
+Message-ID: <620c579b.yQC747/kRGRy0S4I%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 12:19:14 +1100
-Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 0ef7c79e43d05936b83f0e6d8e33cc7cfaebaf18  Merge x86/pasid into tip/master
 
-> On 2/12/22 13:47, Steven Rostedt wrote:
-> > On Fri, 11 Feb 2022 12:43:13 +1100
-> > Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
-> >   
-> >> For whatever reason LLVM does not allow LTO (Link Time Optimization) if
-> >> FTRACE_MCOUNT_USE_RECORDMCOUNT is enabled.
-> >>
-> >> This allows disabling just this option instead of disabling all FTRACE
-> >> options.  
-> > 
-> > What FTRACE options are you talking about?  
-> 
-> LTO_CLANG_THIN => HAS_LTO_CLANG => !FTRACE_MCOUNT_USE_RECORDMCOUNT =>
-> 
-> FTRACE [=y] && !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY [=n] && 
-> !FTRACE_MCOUNT_USE_CC [=n] && !FTRACE_MCOUNT_USE_OBJTOOL [=n] && 
-> FTRACE_MCOUNT_RECORD [=y]
+elapsed time: 727m
 
-So basically, turn off FUNCTION_TRACER and STACK_TRACER.
+configs tested: 154
+configs skipped: 3
 
-> 
-> A bunch.
-> 
-> 
-> >   
-> >>
-> >> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-> >> ---
-> >>
-> >> Or disabling FTRACE is the right thing to do if HAS_LTO_CLANG=y?
-> >>
-> >> Came from arch/Kconfig:
-> >>
-> >> config HAS_LTO_CLANG
-> >>          def_bool y
-> >>          depends on CC_IS_CLANG && LD_IS_LLD && AS_IS_LLVM
-> >>          depends on $(success,$(NM) --help | head -n 1 | grep -qi llvm)
-> >>          depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
-> >>          depends on ARCH_SUPPORTS_LTO_CLANG
-> >>          depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT  <======
-> >>          depends on !KASAN || KASAN_HW_TAGS
-> >>          depends on !GCOV_KERNEL
-> >>
-> >>
-> >> ---
-> >>   kernel/trace/Kconfig | 3 ++-
-> >>   1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> >> index a5eb5e7fd624..87d82d2b0b0b 100644
-> >> --- a/kernel/trace/Kconfig
-> >> +++ b/kernel/trace/Kconfig
-> >> @@ -704,7 +704,8 @@ config FTRACE_MCOUNT_USE_OBJTOOL
-> >>   	depends on FTRACE_MCOUNT_RECORD
-> >>   
-> >>   config FTRACE_MCOUNT_USE_RECORDMCOUNT
-> >> -	def_bool y
-> >> +	bool "Enable FTRACE_MCOUNT_USE_RECORDMCOUNT"
-> >> +	default y  
-> > 
-> > I don't think this does what you think it does.  
-> 
-> Sounds like it.
-> 
-> > This is not something that should be user selectable. What exactly are
-> > you trying to accomplish here?  
-> 
-> I am trying to
-> 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index b779603978e1..91c122224f83 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -153,6 +153,8 @@ config PPC
->          select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
->          select ARCH_WANT_LD_ORPHAN_WARN
->          select ARCH_WEAK_RELEASE_ACQUIRE
-> +       select ARCH_SUPPORTS_LTO_CLANG          if PPC64
-> +       select ARCH_SUPPORTS_LTO_CLANG_THIN     if PPC64
-> 
-> 
-> to get LTO working on powerpc64le with minimal change to 
-> ppc64le_defconfig which has all these FTRACE_xxx enabled.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Well, you can add a dependency against FUNCTION_TRACER. As that's what
-turns on the RECORD_MCOUNT, as RECORD_MCOUNT is needed by it.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20220214
+mips                 randconfig-c004-20220214
+mips                      fuloong2e_defconfig
+sh                        sh7763rdp_defconfig
+arm                        realview_defconfig
+arm                          iop32x_defconfig
+arm                          simpad_defconfig
+csky                                defconfig
+mips                         rt305x_defconfig
+sh                           se7206_defconfig
+arm                         axm55xx_defconfig
+powerpc                     pq2fads_defconfig
+mips                         mpc30x_defconfig
+nios2                               defconfig
+arm                        spear6xx_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                       imx_v6_v7_defconfig
+sh                            shmin_defconfig
+powerpc                      arches_defconfig
+arm                          pxa910_defconfig
+arm                            pleb_defconfig
+mips                           xway_defconfig
+mips                          rb532_defconfig
+sh                           se7721_defconfig
+ia64                             allmodconfig
+xtensa                    xip_kc705_defconfig
+mips                         db1xxx_defconfig
+sh                            titan_defconfig
+sparc                               defconfig
+arm64                            alldefconfig
+arm                        mvebu_v7_defconfig
+sh                          kfr2r09_defconfig
+arm                            xcep_defconfig
+m68k                        stmark2_defconfig
+s390                                defconfig
+sh                        edosk7705_defconfig
+arm                         at91_dt_defconfig
+powerpc                    klondike_defconfig
+h8300                               defconfig
+sh                             espt_defconfig
+mips                       capcella_defconfig
+arm                        cerfcube_defconfig
+mips                      loongson3_defconfig
+sh                          rsk7269_defconfig
+powerpc                      ppc6xx_defconfig
+microblaze                          defconfig
+powerpc                         wii_defconfig
+powerpc                 mpc837x_mds_defconfig
+arc                        nsimosci_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                  randconfig-c002-20220214
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allmodconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a013-20220214
+x86_64               randconfig-a014-20220214
+x86_64               randconfig-a012-20220214
+x86_64               randconfig-a015-20220214
+x86_64               randconfig-a011-20220214
+x86_64               randconfig-a016-20220214
+i386                 randconfig-a013-20220214
+i386                 randconfig-a016-20220214
+i386                 randconfig-a012-20220214
+i386                 randconfig-a015-20220214
+i386                 randconfig-a011-20220214
+i386                 randconfig-a014-20220214
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220214
+arc                  randconfig-r043-20220214
+s390                 randconfig-r044-20220214
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
--- Steve
+clang tested configs:
+riscv                randconfig-c006-20220214
+i386                 randconfig-c001-20220214
+x86_64               randconfig-c007-20220214
+powerpc              randconfig-c003-20220214
+arm                  randconfig-c002-20220214
+mips                 randconfig-c004-20220214
+riscv                randconfig-c006-20220215
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220215
+arm                  randconfig-c002-20220215
+i386                          randconfig-c001
+mips                 randconfig-c004-20220215
+arm                        neponset_defconfig
+powerpc                      ppc44x_defconfig
+powerpc               mpc834x_itxgp_defconfig
+mips                          rm200_defconfig
+arm                         palmz72_defconfig
+arm                         mv78xx0_defconfig
+powerpc                     kmeter1_defconfig
+powerpc                      obs600_defconfig
+powerpc                     tqm8560_defconfig
+arm                         lpc32xx_defconfig
+mips                     cu1830-neo_defconfig
+x86_64               randconfig-a002-20220214
+x86_64               randconfig-a006-20220214
+x86_64               randconfig-a005-20220214
+x86_64               randconfig-a004-20220214
+x86_64               randconfig-a003-20220214
+x86_64               randconfig-a001-20220214
+i386                 randconfig-a004-20220214
+i386                 randconfig-a005-20220214
+i386                 randconfig-a006-20220214
+i386                 randconfig-a002-20220214
+i386                 randconfig-a003-20220214
+i386                 randconfig-a001-20220214
+hexagon              randconfig-r045-20220214
+hexagon              randconfig-r041-20220214
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

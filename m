@@ -2,148 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246704B7D39
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2064B7D45
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238776AbiBPCDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:03:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56074 "EHLO
+        id S1343518AbiBPCEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:04:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245754AbiBPCDa (ORCPT
+        with ESMTP id S242685AbiBPCEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:03:30 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD08EB93AD
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:03:18 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id z24so967155oib.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 18:03:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fyU/OTkUyEuUQG4MRg7zhhXJejHomtDIZYMm7FS8VaQ=;
-        b=SdpEypARxFwWHtRMsHtdq0Eh50pLyZ/m1DbxP1ydnXK5nbGGgQv6yWoDNeAtpo1R+6
-         f7iIqoFs8ZfQesNEFnwNAq2WjSV9cX7L4Hz8KqUZ4vqqtXwYDh/M0dIaTILiymxjILzw
-         /0DVa6p4+LvWkiE2IeHH4Du1IHnlfrqLL31RiS3t1hk7VFgzPxFzUpawof3GJC7CA2Jj
-         LEkVHrDkmB2zt5eeHJ7QfQ1wp7RRp7e4Epa0lIYAHWqJq39lmqdgLoXGq3D9irtMR7YG
-         +PL9f/jVwtVFul+w3ZOONOqWccFB8aRCjtCbpA1fUOkOoPELkL4C52tRbqnwGNNU9d9a
-         at7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fyU/OTkUyEuUQG4MRg7zhhXJejHomtDIZYMm7FS8VaQ=;
-        b=Mur0cUYKJHw+C+/gNZ2Xw2BmGZoe92B9mCjZgBIaMVJKQ9NNbVCug2jd4ylBGZMuH6
-         GZVRjB0Ks47VdRzg0TbssDzplcELGuJfPH++UDfGsaRM7ipARBcYvM8Y8Njz1S64nRWd
-         wGY2xTsLtkGjT3pj4IWSv1z3aswpxK4xU+nJGWJXjOoX03O7K2WQLGKaN2PsWsTdgaYt
-         DVVeFZ/5QLaK5R84dHUUY1Hd12ZUV+1YDblGRdXL6zA5y6wFceeRif44ArvB2Lx8bJA1
-         S3RKfsV4aAPak5/IZmZ2uuuOl1PeD6trk5tZAEe5ErujRnZ5ShQN/hoY7YvC57gdOobn
-         2iIg==
-X-Gm-Message-State: AOAM530DXjJw3ZFVn+OqSz8q6O3yUe8lv+4b7sLHDgue2OWGTaWj++La
-        MaWUtKJINOaD99rza2Z2eTDs2Mz9O0kc5w==
-X-Google-Smtp-Source: ABdhPJyGYGO4TFM0B7TvlVq7wHeMoHy+oVnJNhmBVb5bhehWE0Jkky7ehV5ykiS70CxF0BYMOvqaFQ==
-X-Received: by 2002:aca:2112:0:b0:2d3:ffce:90c4 with SMTP id 18-20020aca2112000000b002d3ffce90c4mr296649oiz.62.1644976997189;
-        Tue, 15 Feb 2022 18:03:17 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id q28sm702657ots.76.2022.02.15.18.03.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 18:03:16 -0800 (PST)
-Date:   Tue, 15 Feb 2022 20:03:14 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
-Message-ID: <YgxbYnpbBeOIkGWi@builder.lan>
-References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
- <20220215043353.1256754-2-bjorn.andersson@linaro.org>
- <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
- <Ygvisfhi0SY6XdAz@builder.lan>
- <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
- <CAA8EJprCaiPW=Kk0B69RNNwAk0xcqaxQA031sfR0ky+BfzcWKQ@mail.gmail.com>
- <ceb861e5-b1c8-d33e-c0b0-bea0b4cc0b66@quicinc.com>
- <CAA8EJppj+OBPVUgvefO38zp1RHpJw5pL0-4DCkgn3iAcPH-ptA@mail.gmail.com>
- <d0cac12e-7c03-2ba3-fb8d-aee09b72a1b1@quicinc.com>
+        Tue, 15 Feb 2022 21:04:02 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62392D5F75;
+        Tue, 15 Feb 2022 18:03:49 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V4akhAI_1644977025;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V4akhAI_1644977025)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 16 Feb 2022 10:03:47 +0800
+Date:   Wed, 16 Feb 2022 10:03:45 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     xfs <linux-xfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] xfs: introduce xfs_bremapi_from_cowfork()
+Message-ID: <Ygxbge2l2jde8Xcp@B-P7TQMD6M-0146.local>
+Mail-Followup-To: "Darrick J. Wong" <djwong@kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220209073655.22162-1-hsiangkao@linux.alibaba.com>
+ <20220209073655.22162-4-hsiangkao@linux.alibaba.com>
+ <20220216012433.GI8338@magnolia>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d0cac12e-7c03-2ba3-fb8d-aee09b72a1b1@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220216012433.GI8338@magnolia>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 15 Feb 19:34 CST 2022, Abhinav Kumar wrote:
+Hi Darrick,
 
-> 
-> 
-> On 2/15/2022 4:20 PM, Dmitry Baryshkov wrote:
-> > On Tue, 15 Feb 2022 at 23:21, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> > > On 2/15/2022 10:42 AM, Dmitry Baryshkov wrote:
-> > > > On Tue, 15 Feb 2022 at 20:42, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> > > > > On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
-> > > > > > On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
-> > > > > > > On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
-> > > > > > > > From: Rob Clark <robdclark@chromium.org>
-[..]
-> > > > (thus leading us to cases when someone would forget to add INTF_EDP
-> > > > next to INTF_DP)
-> > > > 
-> > > > Also, if we are switching from INTF_DP to INTF_EDP, should we stop
-> > > > using end-to-end numbering (like MSM_DP_CONTROLLER_2 for INTF_5) and
-> > > > add a separate numbering scheme for INTF_EDP?
-> > > > 
-> > > We should change the controller ID to match what it actually is.
-> > > 
-> > > Now that you pointed this out, this looks even more confusing to me to
-> > > say that  MSM_DP_CONTROLLER_2 is actually a EDP controller because
-> > > fundamentally and even hardware block wise they are different.
+On Tue, Feb 15, 2022 at 05:24:33PM -0800, Darrick J. Wong wrote:
+> On Wed, Feb 09, 2022 at 03:36:55PM +0800, Gao Xiang wrote:
+> > Previously, xfs_reflink_end_cow_extent() will unconditionally unmap
+> > the corresponding old extent and remap an extent from COW fork.
+> > However, it seems somewhat ineffective since the old bmbt records can
+> > be directly updated for many cases instead.
 > > 
-> > So, do we split msm_priv->dp too? It's indexed using
-> > MSM_DP_CONTROLLER_n entries.
-> > Do we want to teach drm/msm/dp code that there are priv->dp[] and
-> > priv->edp arrays?
+> > This patch uses introduced xfs_bmap_update_extent_real() in the
+> > previous patch for most extent inclusive cases or it will fall back
+> > to the old way if such replacement is not possible.
+> > 
+> > Actually, we're planing to use a modified alway-cow like atomic write
+> > approach internally, therefore it'd be nice to do some optimization
+> > to reduce some metadata overhead.
+> > 
+> > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> > ---
+> >  fs/xfs/libxfs/xfs_bmap.c | 117 ++++++++++++++++++++++++++++++++++++---
+> >  fs/xfs/libxfs/xfs_bmap.h |   3 +
+> >  fs/xfs/xfs_reflink.c     |  19 +------
+> >  3 files changed, 112 insertions(+), 27 deletions(-)
+> > 
+> > diff --git a/fs/xfs/libxfs/xfs_bmap.c b/fs/xfs/libxfs/xfs_bmap.c
+> > index a10476dee701..0e132f811f7a 100644
+> > --- a/fs/xfs/libxfs/xfs_bmap.c
+> > +++ b/fs/xfs/libxfs/xfs_bmap.c
+> > @@ -5880,6 +5880,114 @@ xfs_bmap_collapse_extents(
+> >  	return error;
+> >  }
+> >  
+> > +/* Deferred mapping is only for real extents in the data fork. */
+> > +static bool
+> > +xfs_bmap_is_update_needed(
+> > +	struct xfs_bmbt_irec	*bmap)
+> > +{
+> > +	return  bmap->br_startblock != HOLESTARTBLOCK &&
+> > +		bmap->br_startblock != DELAYSTARTBLOCK;
+> > +}
+> > +
+> > +/* del is an extent from COW fork */
+> > +int
+> > +xfs_bremapi_from_cowfork(
+> > +	struct xfs_trans	*tp,
+> > +	struct xfs_inode	*ip,
+> > +	struct xfs_bmbt_irec	*icow)
+> > +{
+> > +	int			error;
+> > +	xfs_filblks_t		rlen;
+> > +
+> > +	/* Use the old (unmap-remap) way for real-time inodes instead */
+> > +	if (!XFS_IS_REALTIME_INODE(ip) && xfs_bmap_is_update_needed(icow)) {
 > 
-> ok so now priv->dp and priv->edp arrays are also in the picture here :)
-> 
-> Actually all these questions should have probably come when we were figuring
-> out how best to re-use eDP and DP driver.
-> 
-> Either way atleast, its good we are documenting all these questions on this
-> thread so that anyone can refer this to know what all was missed out :)
-> 
-> priv->dp is of type msm_dp. When re-using DP driver for eDP and since
-> struct msm_dp is the shared struct between dpu and the msm/dp, I get your
-> point of re-using MSM_DP_CONTROLLER_* as thats being use to index.
-> 
-> So MSM_DP_CONTROLLER_* is more of an index into the DP driver and not really
-> a hardware indexing scheme.
-> 
-> If we split into two arrays, we need more changes to dpu_encoder too.
-> 
-> Too instrusive a change at this point, even though probably correct.
-> 
+> When would be be remapping a realtime file with a COW fork?
 
-I'm sorry, but performing such a split would create a whole bunch of
-duplication and I don't see the reasons yet. Can you please give me an
-example of when the DPU _code_ would benefit from being specifically
-written for EDP vs DP?
+Sorry, I missed this part, this is a necessary check.
+Thanks for pointing out this.
 
-Things where it doesn't make sense to enable certain features in
-runtime - but really have different implementation for the two interface
-types.
-
-> But are you seeing more changes required even if we just change INTF_DP to
-> INTF_eDP for the eDP entries? What are the challenges there?
 > 
+> > +		xfs_fileoff_t		start, end, max_len;
+> > +		struct xfs_bmbt_irec	got;
+> > +		struct xfs_iext_cursor	icur;
+> > +		struct xfs_btree_cur	*cur = NULL;
+> > +		struct xfs_ifork	*ifp = XFS_IFORK_PTR(ip, XFS_DATA_FORK);
+> > +		int			logflags = 0;
+> > +
+> > +		error = xfs_iread_extents(tp, ip, XFS_DATA_FORK);
+> > +		if (error)
+> > +			return error;
+> > +
+> > +		max_len = xfs_refcount_max_unmap(tp->t_log_res);
+> > +		if (max_len < icow->br_blockcount) {
+> > +			icow->br_startoff += icow->br_blockcount - max_len;
+> > +			icow->br_startblock += icow->br_blockcount - max_len;
+> > +			icow->br_blockcount = max_len;
+> > +		}
+> > +
+> > +		end = icow->br_startoff + icow->br_blockcount;
+> > +		if (!xfs_iext_count(ifp) || !xfs_iext_lookup_extent_before(ip,
+> > +				ifp, &end, &icur, &got) ||
+> > +		    isnullstartblock(got.br_startblock) ||
+> > +		    icow->br_startoff + icow->br_blockcount > got.br_startoff +
+> > +				got.br_blockcount) {
+> > +			error = -EAGAIN;
+> > +		} else {
+> > +			end = icow->br_startoff + icow->br_blockcount;
+> > +			start = XFS_FILEOFF_MAX(icow->br_startoff,
+> > +						got.br_startoff);
+> > +			ASSERT(start < end);
+> > +
+> > +			/* Trim the extent to what we need */
+> > +			xfs_trim_extent(icow, start, end - start);
+> > +			xfs_trim_extent(&got, start, end - start);
+> > +
+> > +			if (ifp->if_format == XFS_DINODE_FMT_BTREE) {
+> > +				cur = xfs_bmbt_init_cursor(tp->t_mountp, tp, ip,
+> > +							   XFS_DATA_FORK);
+> > +				cur->bc_ino.flags = 0;
+> > +			}
+> > +
+> > +			/*
+> > +			 * Free the CoW orphan record (it should be done here
+> > +			 * before updating extent due to rmapbt update)
+> > +			 */
+> > +			xfs_refcount_free_cow_extent(tp, icow->br_startblock,
+> > +						     icow->br_blockcount);
+> > +
+> > +			xfs_bmap_update_extent_real(tp, ip, XFS_DATA_FORK,
+> > +					&icur, &cur, icow, &logflags, false);
+> 
+> Hmm... are you directly updating the data fork mapping record from the
+> COW fork mapping record?  Is the performance advantage you mentioned
+> earlier a result of this code no longer logging a bmap map intent item
+> and reducing the transaction roll count by one?
 
-What are the benefits?
+Yes, roughly I think it reduces bmap again overhead.
 
-Regards,
-Bjorn
+Thanks,
+Gao Xiang
+
+> 
+> --D
+> 
+> > +
+> > +			/* Free previous referenced space */
+> > +			xfs_refcount_decrease_extent(tp, &got);
+> > +
+> > +			trace_xfs_reflink_cow_remap(ip, icow);
+> > +			error = 0;
+> > +		}
+> > +		if (cur)
+> > +			xfs_btree_del_cursor(cur, 0);
+> > +		if (logflags)
+> > +			xfs_trans_log_inode(tp, ip, logflags);
+> > +		if (!error)
+> > +			return 0;
+> > +	}
+> > +
+> > +	rlen = icow->br_blockcount;
+> > +	error = __xfs_bunmapi(tp, ip, icow->br_startoff, &rlen, 0, 1);
+> > +	if (error)
+> > +		return error;
+> > +
+> > +	/* Trim the extent to whatever got unmapped. */
+> > +	xfs_trim_extent(icow, icow->br_startoff + rlen,
+> > +			icow->br_blockcount - rlen);
+> > +	/* Free the CoW orphan record. */
+> > +	xfs_refcount_free_cow_extent(tp, icow->br_startblock,
+> > +				     icow->br_blockcount);
+> > +
+> > +	/* Map the new blocks into the data fork. */
+> > +	xfs_bmap_map_extent(tp, ip, icow);
+> > +
+> > +	/* Charge this new data fork mapping to the on-disk quota. */
+> > +	xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_DELBCOUNT,
+> > +			(long)icow->br_blockcount);
+> > +	trace_xfs_reflink_cow_remap(ip, icow);
+> > +	return 0;
+> > +}
+> > +
+> >  /* Make sure we won't be right-shifting an extent past the maximum bound. */
+> >  int
+> >  xfs_bmap_can_insert_extents(
+> > @@ -6123,15 +6231,6 @@ xfs_bmap_split_extent(
+> >  	return error;
+> >  }
+> >  
+> > -/* Deferred mapping is only for real extents in the data fork. */
+> > -static bool
+> > -xfs_bmap_is_update_needed(
+> > -	struct xfs_bmbt_irec	*bmap)
+> > -{
+> > -	return  bmap->br_startblock != HOLESTARTBLOCK &&
+> > -		bmap->br_startblock != DELAYSTARTBLOCK;
+> > -}
+> > -
+> >  /* Record a bmap intent. */
+> >  static int
+> >  __xfs_bmap_add(
+> > diff --git a/fs/xfs/libxfs/xfs_bmap.h b/fs/xfs/libxfs/xfs_bmap.h
+> > index c52ff94786e2..9da1cff41c1c 100644
+> > --- a/fs/xfs/libxfs/xfs_bmap.h
+> > +++ b/fs/xfs/libxfs/xfs_bmap.h
+> > @@ -220,6 +220,9 @@ int	xfs_bmap_update_extent_real(struct xfs_trans *tp,
+> >  		struct xfs_inode *ip, int whichfork,
+> >  		struct xfs_iext_cursor *icur, struct xfs_btree_cur **curp,
+> >  		struct xfs_bmbt_irec *new, int *logflagsp, bool convert);
+> > +int
+> > +xfs_bremapi_from_cowfork(struct xfs_trans *tp, struct xfs_inode *ip,
+> > +		struct xfs_bmbt_irec *icow);
+> >  
+> >  enum xfs_bmap_intent_type {
+> >  	XFS_BMAP_MAP = 1,
+> > diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
+> > index 276387a6a85d..75bd2e03cd5b 100644
+> > --- a/fs/xfs/xfs_reflink.c
+> > +++ b/fs/xfs/xfs_reflink.c
+> > @@ -590,7 +590,6 @@ xfs_reflink_end_cow_extent(
+> >  	struct xfs_mount	*mp = ip->i_mount;
+> >  	struct xfs_trans	*tp;
+> >  	struct xfs_ifork	*ifp = XFS_IFORK_PTR(ip, XFS_COW_FORK);
+> > -	xfs_filblks_t		rlen;
+> >  	unsigned int		resblks;
+> >  	int			error;
+> >  
+> > @@ -651,26 +650,10 @@ xfs_reflink_end_cow_extent(
+> >  		goto out_cancel;
+> >  	}
+> >  
+> > -	/* Unmap the old blocks in the data fork. */
+> > -	rlen = del.br_blockcount;
+> > -	error = __xfs_bunmapi(tp, ip, del.br_startoff, &rlen, 0, 1);
+> > +	error = xfs_bremapi_from_cowfork(tp, ip, &del);
+> >  	if (error)
+> >  		goto out_cancel;
+> >  
+> > -	/* Trim the extent to whatever got unmapped. */
+> > -	xfs_trim_extent(&del, del.br_startoff + rlen, del.br_blockcount - rlen);
+> > -	trace_xfs_reflink_cow_remap(ip, &del);
+> > -
+> > -	/* Free the CoW orphan record. */
+> > -	xfs_refcount_free_cow_extent(tp, del.br_startblock, del.br_blockcount);
+> > -
+> > -	/* Map the new blocks into the data fork. */
+> > -	xfs_bmap_map_extent(tp, ip, &del);
+> > -
+> > -	/* Charge this new data fork mapping to the on-disk quota. */
+> > -	xfs_trans_mod_dquot_byino(tp, ip, XFS_TRANS_DQ_DELBCOUNT,
+> > -			(long)del.br_blockcount);
+> > -
+> >  	/* Remove the mapping from the CoW fork. */
+> >  	xfs_bmap_del_extent_cow(ip, &icur, &got, &del);
+> >  
+> > -- 
+> > 2.24.4
+> > 

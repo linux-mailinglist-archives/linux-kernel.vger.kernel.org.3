@@ -2,68 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2564B8F5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56AE4B8F85
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 18:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237274AbiBPRlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 12:41:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35082 "EHLO
+        id S237291AbiBPRms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 12:42:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237253AbiBPRlG (ORCPT
+        with ESMTP id S237293AbiBPRmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 12:41:06 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A192B0B03
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:40:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645033253; x=1676569253;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=N7DxVTYU/yX7SlWUyaoT08jPp54TPgthkHUrjtmvhzw=;
-  b=Vi8k8pHCeGHMHzowS2PSsGe6DaLdo2aZ7I67sjsoOTxvXchy8MFKGbhO
-   ZmQb3NLstnlfUwgWyiGqd8D92k2wkw743IDwXMkMaJ59AGWtcB/HjXdyA
-   uMy02ooLs4M4Trm7gysFiqccQQIcEFtGUgM+/Se+5ZunC1lGo9QzY5Qpc
-   J728/fsu/MYXSJR8dcMr66geJcMZID8VPW1GEmPy3ZXZd6tV3E9MtM4Kj
-   CZoWtxG5n8LAB4EwyO9HDoMbbebeTuCGyFY2Gn+DN1GmR5rjNzj3IpvQI
-   godO8gbeBO9hy9/41amv2fJF56pER4ydMGLaUl2C27bPnxAFOWfHtbRHm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="250417256"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="250417256"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 09:40:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="540226601"
-Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 09:40:52 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     John Harrison <John.C.Harrison@Intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Matt Atwood <matthew.s.atwood@intel.com>
-Subject: [PATCH v3 02/16] iosys-map: Add a few more helpers
-Date:   Wed, 16 Feb 2022 09:41:33 -0800
-Message-Id: <20220216174147.3073235-3-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220216174147.3073235-1-lucas.demarchi@intel.com>
-References: <20220216174147.3073235-1-lucas.demarchi@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Wed, 16 Feb 2022 12:42:45 -0500
+Received: from mother.openwall.net (mother.openwall.net [195.42.179.200])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AAA781598E7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 09:42:29 -0800 (PST)
+Received: (qmail 28379 invoked from network); 16 Feb 2022 17:42:27 -0000
+Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
+  by localhost with SMTP; 16 Feb 2022 17:42:27 -0000
+Received: by pvt.openwall.com (Postfix, from userid 503)
+        id B379BAB88C; Wed, 16 Feb 2022 18:42:20 +0100 (CET)
+Date:   Wed, 16 Feb 2022 18:42:20 +0100
+From:   Solar Designer <solar@openwall.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        containers@lists.linux-foundation.org,
+        Michal Koutn?? <mkoutny@suse.com>, linux-api@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] rlimit: Fix RLIMIT_NPROC enforcement failure caused by capability calls in set_user
+Message-ID: <20220216174220.GA10389@openwall.com>
+References: <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org> <20220216155832.680775-1-ebiederm@xmission.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216155832.680775-1-ebiederm@xmission.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,285 +48,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First the simplest ones:
+On Wed, Feb 16, 2022 at 09:58:28AM -0600, Eric W. Biederman wrote:
+> Solar Designer <solar@openwall.com> wrote:
+> > I'm not aware of anyone actually running into this issue and reporting
+> > it.  The systems that I personally know use suexec along with rlimits
+> > still run older/distro kernels, so would not yet be affected.
+> >
+> > So my mention was based on my understanding of how suexec works, and
+> > code review.  Specifically, Apache httpd has the setting RLimitNPROC,
+> > which makes it set RLIMIT_NPROC:
+> >
+> > https://httpd.apache.org/docs/2.4/mod/core.html#rlimitnproc
+> >
+> > The above documentation for it includes:
+> >
+> > "This applies to processes forked from Apache httpd children servicing
+> > requests, not the Apache httpd children themselves. This includes CGI
+> > scripts and SSI exec commands, but not any processes forked from the
+> > Apache httpd parent, such as piped logs."
+> >
+> > In code, there are:
+> >
+> > ./modules/generators/mod_cgid.c:        ( (cgid_req.limits.limit_nproc_set) && ((rc = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC,
+> > ./modules/generators/mod_cgi.c:        ((rc = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC,
+> > ./modules/filters/mod_ext_filter.c:    rv = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC, conf->limit_nproc);
+> >
+> > For example, in mod_cgi.c this is in run_cgi_child().
+> >
+> > I think this means an httpd child sets RLIMIT_NPROC shortly before it
+> > execs suexec, which is a SUID root program.  suexec then switches to the
+> > target user and execs the CGI script.
+> >
+> > Before 2863643fb8b9, the setuid() in suexec would set the flag, and the
+> > target user's process count would be checked against RLIMIT_NPROC on
+> > execve().  After 2863643fb8b9, the setuid() in suexec wouldn't set the
+> > flag because setuid() is (naturally) called when the process is still
+> > running as root (thus, has those limits bypass capabilities), and
+> > accordingly execve() would not check the target user's process count
+> > against RLIMIT_NPROC.
+> 
+> In commit 2863643fb8b9 ("set_user: add capability check when
+> rlimit(RLIMIT_NPROC) exceeds") capable calls were added to set_user to
+> make it more consistent with fork.  Unfortunately because of call site
+> differences those capables calls were checking the credentials of the
 
-	- iosys_map_memset(): when abstracting system and I/O memory,
-	  just like the memcpy() use case, memset() also has dedicated
-	  functions to be called for using IO memory.
-	- iosys_map_memcpy_from(): we may need to copy data from I/O
-	  memory, not only to.
+s/capables/capable/
 
-In certain situations it's useful to be able to read or write to an
-offset that is calculated by having the memory layout given by a struct
-declaration. Usually we are going to read/write a u8, u16, u32 or u64.
+> user before set*id() instead of after set*id().
+> 
+> This breaks enforcement of RLIMIT_NPROC for applications that set the
+> rlimit and then call set*id() while holding a full set of
+> capabilities.  The capabilities are only changed in the new credential
+> in security_task_fix_setuid().
+> 
+> The code in apache suexec appears to follow this pattern.
+> 
+> Commit 909cc4ae86f3 ("[PATCH] Fix two bugs with process limits
+> (RLIMIT_NPROC)") where this check was added describes the targes of this
+> capability check as:
+> 
+>   2/ When a root-owned process (e.g. cgiwrap) sets up process limits and then
+>       calls setuid, the setuid should fail if the user would then be running
+>       more than rlim_cur[RLIMIT_NPROC] processes, but it doesn't.  This patch
+>       adds an appropriate test.  With this patch, and per-user process limit
+>       imposed in cgiwrap really works.
+> 
+> So the original use case also of this check also appears to match the broken
+> pattern.
 
-As a pre-requisite for the implementation, add iosys_map_memcpy_from()
-to be the equivalent of iosys_map_memcpy_to(), but in the other
-direction. Then add 2 pairs of macros:
+Duplicate "also" - drop one.
 
-	- iosys_map_rd() / iosys_map_wr()
-	- iosys_map_rd_field() / iosys_map_wr_field()
+> Restore the enforcement of RLIMIT_NPROC by removing the bad capable
+> checks added in set_user.  This unfortunately restores the
+> inconsistencies state the code has been in for the last 11 years, but
 
-The first pair takes the C-type and offset to read/write. The second
-pair uses a struct describing the layout of the mapping in order to
-calculate the offset and size being read/written.
+s/inconsistencies/inconsistent/
 
-We could use readb, readw, readl, readq and the write* counterparts,
-however due to alignment issues this may not work on all architectures.
-If alignment needs to be checked to call the right function, it's not
-possible to decide at compile-time which function to call: so just leave
-the decision to the memcpy function that will do exactly that.
+> dealing with the inconsistencies looks like a larger problem.
+> 
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/all/20210907213042.GA22626@openwall.com/
+> Link: https://lkml.kernel.org/r/20220212221412.GA29214@openwall.com
+> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+> History-Tree: https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
+>  kernel/sys.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sys.c b/kernel/sys.c
+> index ecc4cf019242..8dd938a3d2bf 100644
+> --- a/kernel/sys.c
+> +++ b/kernel/sys.c
+> @@ -480,8 +480,7 @@ static int set_user(struct cred *new)
+>  	 * failure to the execve() stage.
+>  	 */
+>  	if (is_ucounts_overlimit(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) &&
+> -			new_user != INIT_USER &&
+> -			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+> +			new_user != INIT_USER)
+>  		current->flags |= PF_NPROC_EXCEEDED;
+>  	else
+>  		current->flags &= ~PF_NPROC_EXCEEDED;
 
-Finally, in order to use the above macros with a map derived from
-another, add another initializer: IOSYS_MAP_INIT_OFFSET().
+Reviewed-by: Solar Designer <solar@openwall.com>
 
-v2:
-  - Rework IOSYS_MAP_INIT_OFFSET() so it doesn't rely on aliasing rules
-    within the union
-  - Add offset to both iosys_map_rd_field() and iosys_map_wr_field() to
-    allow the struct itself to be at an offset from the mapping
-  - Add documentation to iosys_map_rd_field() with example and expected
-    memory layout
-v3:
-  - Drop kernel.h include as it's not needed anymore
-
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Reviewed-by: Matt Atwood <matthew.s.atwood@intel.com>
----
- include/linux/iosys-map.h | 201 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 201 insertions(+)
-
-diff --git a/include/linux/iosys-map.h b/include/linux/iosys-map.h
-index edd730b1e899..e69a002d5aa4 100644
---- a/include/linux/iosys-map.h
-+++ b/include/linux/iosys-map.h
-@@ -120,6 +120,45 @@ struct iosys_map {
- 		.is_iomem = false,	\
- 	}
- 
-+/**
-+ * IOSYS_MAP_INIT_OFFSET - Initializes struct iosys_map from another iosys_map
-+ * @map_:	The dma-buf mapping structure to copy from
-+ * @offset_:	Offset to add to the other mapping
-+ *
-+ * Initializes a new iosys_map struct based on another passed as argument. It
-+ * does a shallow copy of the struct so it's possible to update the back storage
-+ * without changing where the original map points to. It is the equivalent of
-+ * doing:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	iosys_map map = other_map;
-+ *	iosys_map_incr(&map, &offset);
-+ *
-+ * Example usage:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	void foo(struct device *dev, struct iosys_map *base_map)
-+ *	{
-+ *		...
-+ *		struct iosys_map map = IOSYS_MAP_INIT_OFFSET(base_map, FIELD_OFFSET);
-+ *		...
-+ *	}
-+ *
-+ * The advantage of using the initializer over just increasing the offset with
-+ * iosys_map_incr() like above is that the new map will always point to the
-+ * right place of the buffer during its scope. It reduces the risk of updating
-+ * the wrong part of the buffer and having no compiler warning about that. If
-+ * the assignment to IOSYS_MAP_INIT_OFFSET() is forgotten, the compiler can warn
-+ * about the use of uninitialized variable.
-+ */
-+#define IOSYS_MAP_INIT_OFFSET(map_, offset_) ({				\
-+	struct iosys_map copy = *map_;					\
-+	iosys_map_incr(&copy, offset_);					\
-+	copy;								\
-+})
-+
- /**
-  * iosys_map_set_vaddr - Sets a iosys mapping structure to an address in system memory
-  * @map:	The iosys_map structure
-@@ -239,6 +278,26 @@ static inline void iosys_map_memcpy_to(struct iosys_map *dst, size_t dst_offset,
- 		memcpy(dst->vaddr + dst_offset, src, len);
- }
- 
-+/**
-+ * iosys_map_memcpy_from - Memcpy from iosys_map into system memory
-+ * @dst:	Destination in system memory
-+ * @src:	The iosys_map structure
-+ * @src_offset:	The offset from which to copy
-+ * @len:	The number of byte in src
-+ *
-+ * Copies data from a iosys_map with an offset. The dest buffer is in
-+ * system memory. Depending on the mapping location, the helper picks the
-+ * correct method of accessing the memory.
-+ */
-+static inline void iosys_map_memcpy_from(void *dst, const struct iosys_map *src,
-+					 size_t src_offset, size_t len)
-+{
-+	if (src->is_iomem)
-+		memcpy_fromio(dst, src->vaddr_iomem + src_offset, len);
-+	else
-+		memcpy(dst, src->vaddr + src_offset, len);
-+}
-+
- /**
-  * iosys_map_incr - Increments the address stored in a iosys mapping
-  * @map:	The iosys_map structure
-@@ -255,4 +314,146 @@ static inline void iosys_map_incr(struct iosys_map *map, size_t incr)
- 		map->vaddr += incr;
- }
- 
-+/**
-+ * iosys_map_memset - Memset iosys_map
-+ * @dst:	The iosys_map structure
-+ * @offset:	Offset from dst where to start setting value
-+ * @value:	The value to set
-+ * @len:	The number of bytes to set in dst
-+ *
-+ * Set value in iosys_map. Depending on the buffer's location, the helper
-+ * picks the correct method of accessing the memory.
-+ */
-+static inline void iosys_map_memset(struct iosys_map *dst, size_t offset,
-+				    int value, size_t len)
-+{
-+	if (dst->is_iomem)
-+		memset_io(dst->vaddr_iomem + offset, value, len);
-+	else
-+		memset(dst->vaddr + offset, value, len);
-+}
-+
-+/**
-+ * iosys_map_rd - Read a C-type value from the iosys_map
-+ *
-+ * @map__:	The iosys_map structure
-+ * @offset__:	The offset from which to read
-+ * @type__:	Type of the value being read
-+ *
-+ * Read a C type value from iosys_map, handling possible un-aligned accesses to
-+ * the mapping.
-+ *
-+ * Returns:
-+ * The value read from the mapping.
-+ */
-+#define iosys_map_rd(map__, offset__, type__) ({			\
-+	type__ val;							\
-+	iosys_map_memcpy_from(&val, map__, offset__, sizeof(val));	\
-+	val;								\
-+})
-+
-+/**
-+ * iosys_map_wr - Write a C-type value to the iosys_map
-+ *
-+ * @map__:	The iosys_map structure
-+ * @offset__:	The offset from the mapping to write to
-+ * @type__:	Type of the value being written
-+ * @val__:	Value to write
-+ *
-+ * Write a C-type value to the iosys_map, handling possible un-aligned accesses
-+ * to the mapping.
-+ */
-+#define iosys_map_wr(map__, offset__, type__, val__) ({			\
-+	type__ val = (val__);						\
-+	iosys_map_memcpy_to(map__, offset__, &val, sizeof(val));	\
-+})
-+
-+/**
-+ * iosys_map_rd_field - Read a member from a struct in the iosys_map
-+ *
-+ * @map__:		The iosys_map structure
-+ * @struct_offset__:	Offset from the beggining of the map, where the struct
-+ *			is located
-+ * @struct_type__:	The struct describing the layout of the mapping
-+ * @field__:		Member of the struct to read
-+ *
-+ * Read a value from iosys_map considering its layout is described by a C struct
-+ * starting at @struct_offset__. The field offset and size is calculated and its
-+ * value read handling possible un-aligned memory accesses. For example: suppose
-+ * there is a @struct foo defined as below and the value ``foo.field2.inner2``
-+ * needs to be read from the iosys_map:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	struct foo {
-+ *		int field1;
-+ *		struct {
-+ *			int inner1;
-+ *			int inner2;
-+ *		} field2;
-+ *		int field3;
-+ *	} __packed;
-+ *
-+ * This is the expected memory layout of a buffer using iosys_map_rd_field():
-+ *
-+ * +------------------------------+--------------------------+
-+ * | Address                      | Content                  |
-+ * +==============================+==========================+
-+ * | buffer + 0000                | start of mmapped buffer  |
-+ * |                              | pointed by iosys_map     |
-+ * +------------------------------+--------------------------+
-+ * | ...                          | ...                      |
-+ * +------------------------------+--------------------------+
-+ * | buffer + ``struct_offset__`` | start of ``struct foo``  |
-+ * +------------------------------+--------------------------+
-+ * | ...                          | ...                      |
-+ * +------------------------------+--------------------------+
-+ * | buffer + wwww                | ``foo.field2.inner2``    |
-+ * +------------------------------+--------------------------+
-+ * | ...                          | ...                      |
-+ * +------------------------------+--------------------------+
-+ * | buffer + yyyy                | end of ``struct foo``    |
-+ * +------------------------------+--------------------------+
-+ * | ...                          | ...                      |
-+ * +------------------------------+--------------------------+
-+ * | buffer + zzzz                | end of mmaped buffer     |
-+ * +------------------------------+--------------------------+
-+ *
-+ * Values automatically calculated by this macro or not needed are denoted by
-+ * wwww, yyyy and zzzz. This is the code to read that value:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	x = iosys_map_rd_field(&map, offset, struct foo, field2.inner2);
-+ *
-+ * Returns:
-+ * The value read from the mapping.
-+ */
-+#define iosys_map_rd_field(map__, struct_offset__, struct_type__, field__) ({	\
-+	struct_type__ *s;							\
-+	iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__),	\
-+		     typeof(s->field__));					\
-+})
-+
-+/**
-+ * iosys_map_wr_field - Write to a member of a struct in the iosys_map
-+ *
-+ * @map__:		The iosys_map structure
-+ * @struct_offset__:	Offset from the beggining of the map, where the struct
-+ *			is located
-+ * @struct_type__:	The struct describing the layout of the mapping
-+ * @field__:		Member of the struct to read
-+ * @val__:		Value to write
-+ *
-+ * Write a value to the iosys_map considering its layout is described by a C struct
-+ * starting at @struct_offset__. The field offset and size is calculated and the
-+ * @val__ is written handling possible un-aligned memory accesses. Refer to
-+ * iosys_map_rd_field() for expected usage and memory layout.
-+ */
-+#define iosys_map_wr_field(map__, struct_offset__, struct_type__, field__, val__) ({	\
-+	struct_type__ *s;								\
-+	iosys_map_wr(map__, struct_offset__ + offsetof(struct_type__, field__),		\
-+		     typeof(s->field__), val__);					\
-+})
-+
- #endif /* __IOSYS_MAP_H__ */
--- 
-2.35.1
-
+Alexander

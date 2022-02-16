@@ -2,82 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67ACC4B7F6E
+	by mail.lfdr.de (Postfix) with ESMTP id E77384B7F6F
 	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242194AbiBPEUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 23:20:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34012 "EHLO
+        id S244995AbiBPEVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 23:21:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235192AbiBPEUg (ORCPT
+        with ESMTP id S242583AbiBPEV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 23:20:36 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE1A99ECB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:20:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644985225; x=1676521225;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7TcxNdl9gK5Lcl0IKx5VtwwaioLOVFUco0qT/Cnvr+8=;
-  b=PHaHwG/+lAW4rd9CuoQ0/yudSdlnflC+DZLKj3+n2EqmQ2B7CyHpNCM+
-   hNdxnaZ1LdcYMLvyUxL+M1CJHh2ZHYrBsr4ddif3YjFrpzwhDxAavm149
-   M01970TZy9JsVuDAJ9W/P5AidhIQULaU1PndgEfY4WeM76UV3P6bRT2bX
-   7vmMEFTQyRUc5D2Od65+hkGv9mDi5vwfnfLDBdaz/0sL/Tah/Z4yuF0e6
-   XJLJU7v4PSa++8Fg++wFK+zLhpL9UuJJDC3If1cr2J/0tE4KpbVFAOkTe
-   Q5eAq3TnDOzJFp30nY7EsnNJDpijWII3e3/pSUdo3arXvTBmlddOH0bcL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="237924749"
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="237924749"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 20:20:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
-   d="scan'208";a="625204923"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Feb 2022 20:20:23 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKBnj-000AOu-81; Wed, 16 Feb 2022 04:20:23 +0000
-Date:   Wed, 16 Feb 2022 12:19:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:guest-rebased 115/133] kernel/dma/swiotlb.c:433:15-33:
- WARNING: casting value returned by memory allocation function to (struct
- io_tlb_area *) is useless.
-Message-ID: <202202161256.1zrqppDy-lkp@intel.com>
+        Tue, 15 Feb 2022 23:21:28 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA0699EE5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:21:16 -0800 (PST)
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D50B4407F6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 04:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644985274;
+        bh=HsXK+os0Bu/iWLA0AHHw/feI5UAiYSJ6PqC8mSn7924=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=eXFDmBwprg5T7C0bA5bpvqRee9gHfyNdKh5K9TwrDfDoTNq5g943eeNvHsLhRSQn+
+         +v5kPOWtpuvJDFd1z2JXnafsc+HB7LvfoWS4dRX4975oOba2JaGylep+cy7SecZROt
+         MEq9RwTMvLVoZO5h2twSzkZrTgumVGStWdxw77xGPdTNZhijErn5w/TNzd/GwpdwDY
+         NnBbXU3ChFNZtFJAPeqGHRISG7q3zDn0nOKlkEwsIEWZQyLIjyFoPd+UsycLMcDDz0
+         5h1Xt0EvXOGpQSo7SYsg81lyFC2TghEEBv4xWZoFyFWEy9MyPDomEdSjZ3gQzrHWbo
+         +uYUpSGSuU01w==
+Received: by mail-ot1-f69.google.com with SMTP id x13-20020a9d588d000000b005acfd2b77baso66160otg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 20:21:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HsXK+os0Bu/iWLA0AHHw/feI5UAiYSJ6PqC8mSn7924=;
+        b=sW7YI/HFN02kJxnoKnhFOcODxrMFTE4mDXIlli3x4DnvHxnq9+oSLYE9FqjGOn6/NA
+         dm8vsnG0J/PA0oavM5pP8ZnVVkTY4Hn+EwzQnun1dOJfhbn7TVm1mxc9cjUmdjTO0wBT
+         k71R/61HBQN9Eabc7pYX2n/W9ZL/Z8T1DdtqQmRoXRYcFxxwWz+AGI28TRxBTKwwYfsa
+         CZqkvi768OGPtuexOvtzRadzWqwtNyblvkbFcE3U99gPcUqdtx9fyzUymaWimp95dD0c
+         nVxpBl+2WSegb5rwEFewXgbV1MUQhZ4B1J3vg0S7FY46CXJaV+bMk78JcZZEQu+dwqWn
+         BY4Q==
+X-Gm-Message-State: AOAM530EHmZfno5HQGcOA4xb+D7V0BM6Q+rhN43f0lyYG0u+kTQTIhs3
+        O5pCOIQFu4jcDBeRxaP6W1NL4tajmZbMru/lcu69Yj4+gcOe2eJEcNnJS0ibHtxSYqUhAg21HpL
+        JdPQOltOBcR/im74IHkhTpFso07x7EO3u9ySvHDsPBj0cn5zOtadk4AfZag==
+X-Received: by 2002:a05:6870:134e:b0:d3:7659:e8b5 with SMTP id 14-20020a056870134e00b000d37659e8b5mr1240416oac.131.1644985273569;
+        Tue, 15 Feb 2022 20:21:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxqQr9WioccQW2rNW50BJPxIWDXzh/BNZrc3rusV/8zTVsrc7M7FzsEBHFXcP6ido7ZdOtWXBCXsG/e+zdx8wc=
+X-Received: by 2002:a05:6870:134e:b0:d3:7659:e8b5 with SMTP id
+ 14-20020a056870134e00b000d37659e8b5mr1240404oac.131.1644985273323; Tue, 15
+ Feb 2022 20:21:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
+ <20220125055010.1866563-1-kai.heng.feng@canonical.com> <CAPDyKFrtD28NKTyUAR-6Rt4PwYvkOuWcRhxZZWVAq4KcTNG7QQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFrtD28NKTyUAR-6Rt4PwYvkOuWcRhxZZWVAq4KcTNG7QQ@mail.gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 16 Feb 2022 12:21:02 +0800
+Message-ID: <CAAd53p5LxZh6-jZj274g6+PeDpAPWSiwRWXL93dgOg3xpqvu8g@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle
+ runtime PM
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linux-pm@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
+        Thomas Hebb <tommyhebb@gmail.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-rebased
-head:   36c91f6d572820e8556972fd7644bd96798e85d6
-commit: 77d5cb1c6d4fe32593d65a38b4732da6c90b8f29 [115/133] swiotlb: Split up single swiotlb lock
-config: x86_64-randconfig-c002-20220214 (https://download.01.org/0day-ci/archive/20220216/202202161256.1zrqppDy-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+On Fri, Feb 4, 2022 at 8:28 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Tue, 25 Jan 2022 at 06:50, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+> >
+> > Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't
+> > use pm_runtime_{get,put}() helpers when it should, so the RPM refcount
+> > keeps at zero, hence its parent driver, rtsx_pci, has to do lots of
+> > weird tricks to keep it from runtime suspending.
+> >
+> > So use those helpers at right places to properly manage runtime PM.
+> >
+> > Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
+> > Cc: Ricky WU <ricky_wu@realtek.com>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>
+> The runtime PM reference counting for the mmc host device is managed
+> by the mmc core. Have a look at __mmc_claim_host() and
+> mmc_release_host().
+>
+> In other words, the runtime PM reference counting should not be needed
+> in the mmc host driver, unless there are some specific cases, like for
+> example during ->probe|remove().
+>
+> So perhaps it's only the changes in the ->probe|remove() functions
+> that you need to fix the problems? No?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes you are right. Let me send a patch to remove redundant PM helpers
+from this patch.
 
+Kai-Heng
 
-cocci warnings: (new ones prefixed by >>)
->> kernel/dma/swiotlb.c:433:15-33: WARNING: casting value returned by memory allocation function to (struct io_tlb_area *) is useless.
-
-Please review and possibly fold the followup patch.
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> [...]
+>
+> Kind regards
+> Uffe

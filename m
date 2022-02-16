@@ -2,155 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDF34B8C0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B32C4B8C10
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 16:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235369AbiBPPGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 10:06:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34060 "EHLO
+        id S235375AbiBPPIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 10:08:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235343AbiBPPGl (ORCPT
+        with ESMTP id S235326AbiBPPIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:06:41 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DFE13DE6;
-        Wed, 16 Feb 2022 07:06:27 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9E6EA1F383;
-        Wed, 16 Feb 2022 15:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645023985; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3it8c4g9PmcpMm7AVyWFVcPZi877GGLsiHCyQXjAw2E=;
-        b=vUlnkrqW1PQVcaEji7C7yhlvwvbKzJFH0ouape6Cas7VyK46roEZIBVwoCVL12yr5MboGc
-        oA8WlCkpLciutCICFw3I06QebT0gG2rXBpj726aHbZEH+55lIpVbPOTfcTz05osj48HyfZ
-        M+3+xd9vqQ1oGrY59A1DsymghJzi/j0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645023985;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3it8c4g9PmcpMm7AVyWFVcPZi877GGLsiHCyQXjAw2E=;
-        b=2Qz8dy5ipnslWsHoRc2D1woM7dc2nhEm2cxygn+mfXoRXSse0FqcjMK7bCdJ8mmneVNXE+
-        WY6zm6dMxQlRAKBg==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8B9A7A3B84;
-        Wed, 16 Feb 2022 15:06:24 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 16:06:24 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-In-Reply-To: <20220211174130.xxgjoqr2vidotvyw@treble>
-Message-ID: <alpine.LSU.2.21.2202161601010.1475@pobox.suse.cz>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 16 Feb 2022 10:08:10 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94AE201933;
+        Wed, 16 Feb 2022 07:07:57 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id c14so1637550ilm.4;
+        Wed, 16 Feb 2022 07:07:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bLlHTPf7eon4BbIAezWnNI6iX8qt53HUKJyH0lHJ1kE=;
+        b=FxftwHhVSJtn4s/UQgc74G86BO3nMi1IjDBzf5aiykwhXfuYMQRDh0qTFi2WGmloAd
+         QYzv5E+G0BIW6ouvOWqhvCFaBZ1bZIVxRwwHa19bD39hNy4x9oc7GjQoxBqJHraVNf7e
+         qBEroHtGFtMV+sOO7QIzO7gbL+P05VOytvsM90yBk2751anQqUhybQGu/lbzKrqHaiGT
+         85n2w2fZmSP6Ttr8n8QAonEo2kQerVujdGjKNnWrq2gHg7uSSiFy63pwcd58z1LCEREh
+         DcP897A375D2yO+9pts5uccocLMrEhz+dby9y+xRNew/qZ/YtGWdg6gwsoUBNroc5MBd
+         +3RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bLlHTPf7eon4BbIAezWnNI6iX8qt53HUKJyH0lHJ1kE=;
+        b=XpvfrJsJEpTvKW7QnVuHzN6OFO94S2QGmW20yeHjoOqBxWdKNq6kg1EVxJTZqpRn3h
+         K54RiSP8K9IvWvkEi2J9WJ6oy1xcx/P9ppQdJ3Hj/JI7Nszwb2hVhpYF1ahbMgqllE5K
+         ZD0nV8l6G8CVNkcR/9v0AmoLTjj2ALwyf4U6far5D7JKsLKqbz/TdzuN0ZpPX6sTBgNF
+         vhXrV3MHPmpS8o++j1mkGfaFhA3uQtu6zw3XWEMYavoG/BZ5jA5macElUa1jtSd5rqb8
+         enjzH+KCs8NDrlYRfo1WBjqQ2v2XLSu8jEoWydWztXXDG96yf9ZvPyFOTeNMyRzT+lCQ
+         ktCw==
+X-Gm-Message-State: AOAM531mAL+GM8y17jBUQQpCuyi4UmN4JRFLLSNjuq6Rbv+MC26MQd3E
+        3HFEn8MBmnnINGTG7yh4JpT1/bxJsXrgnBR2IdU=
+X-Google-Smtp-Source: ABdhPJwRp/cm8AHG+LOwLkypP9TU/FUwriNxWg6yltkkZWO+mL0KK86q/TUEgAlFJp7c9ZsxM7VD6m2amC8NH+0/Zvc=
+X-Received: by 2002:a05:6e02:1985:b0:2be:1909:ede5 with SMTP id
+ g5-20020a056e02198500b002be1909ede5mr2015977ilf.151.1645024077110; Wed, 16
+ Feb 2022 07:07:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220215204947.1719516-1-ndesaulniers@google.com>
+In-Reply-To: <20220215204947.1719516-1-ndesaulniers@google.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 16 Feb 2022 16:07:45 +0100
+Message-ID: <CANiq72kKRFy6jm6L46Tvx11Jo+zwA8NO7f2Bcb17a5jV7BXUTg@mail.gmail.com>
+Subject: Re: [PATCH] Documentation/llvm: refresh docs for LLVM=1
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Yujie Liu <yujie.liu@intel.com>,
+        Philip Li <philip.li@intel.com>, julie.du@intel.com,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>, llvm@lists.linux.dev,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +++ b/kernel/livepatch/core.c
-> > @@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const char *name,
-> >  	args->count++;
-> >  
-> >  	/*
-> > -	 * Finish the search when the symbol is found for the desired position
-> > -	 * or the position is not defined for a non-unique symbol.
-> > +	 * Finish the search when unique symbol names are enabled
-> > +	 * or the symbol is found for the desired position or the
-> > +	 * position is not defined for a non-unique symbol.
-> >  	 */
-> > -	if ((args->pos && (args->count == args->pos)) ||
-> > -	    (!args->pos && (args->count > 1)))
-> > +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
-> > +	    (args->pos && args->count == args->pos) ||
-> > +	    (!args->pos && args->count > 1))
-> >  		return 1;
-> 
-> There's no real need to do this.  The code already works as-is, even if
-> there are no unique symbols.
-> 
-> Even if there are no duplicates, there's little harm in going through
-> all the symbols anyway, to check for errors just in case something
-> unexpected happened with the linking (unexpected duplicate) or the patch
-> creation (unexpected sympos).  It's not a hot path, so performance isn't
-> really a concern.
+Hi Nick,
 
-Correct.
- 
-> When the old linker versions eventually age out, we can then go strip
-> out all the sympos stuff.
+Thanks for sending this so quickly, no warnings from a quick test:
 
-Yes.
+    Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-> > @@ -169,6 +171,13 @@ static int klp_find_object_symbol(const char *objname, const char *name,
-> >  	else
-> >  		kallsyms_on_each_symbol(klp_find_callback, &args);
-> >  
-> > +	/*
-> > +	 * If the LD's `-z unique-symbol` flag is available and enabled,
-> > +	 * sympos checks are not relevant.
-> > +	 */
-> > +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
-> > +		sympos = 0;
-> > +
-> 
-> Similarly, I don't see a need for this.  If the patch is legit then
-> sympos should already be zero.  If not, an error gets reported and the
-> patch fails to load.
+A couple of nits below in case you do a v2.
 
-My concern was that if the patch is not legit (that is, sympos is > 0 for 
-some reason), the error would be really cryptic and would not help the 
-user at all. So zeroing sympos seems to be a good idea to me. There is no 
-harm and the change is very small and compact.
+On Tue, Feb 15, 2022 at 9:49 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> * Word wrap a few columns over 80 lines.
 
-On the other hand, I do not insist on this.
+Top to bottom writing? :P
 
-Regards,
-Miroslav
+> +For example: ::
+
+This may be simplified to:
+
+    For example::
+
+Similar applies elsewhere where a colon + :: marker is wanted. Not
+sure what the preferred style is, since the file uses both.
+
+Cheers,
+Miguel

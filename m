@@ -2,239 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42C64B7CCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 474214B7CD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 02:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245624AbiBPBtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 20:49:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45422 "EHLO
+        id S1343591AbiBPBvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 20:51:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236408AbiBPBtv (ORCPT
+        with ESMTP id S1343509AbiBPBu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 20:49:51 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F146B60055
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:49:39 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id v22so123341pgb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 17:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JqjP6+knVxmjPk+6TmXifMsYagmkY7dGlbu+Cp4tVhU=;
-        b=bqoqzVAheRcyp+ejCrtXym4Z2mkOqeEcWbPXTP4OrhtoSvFe6qeX8Z+qPcG8we/1WU
-         6vbAyx7hqOvrJBnqbsp1sqSNf3F5Sh0/8KdLZhBDYN+20l/T4GsRKpeDia0wfTPIn6h8
-         tAcUGMCYG7vXuKkQnHZAv8O0VoFaWE7ZhzTDN26+PdBRy2vEI0dd6kyetaKcI9xcwcOZ
-         EHP8wxlTGOhAUvtsP7NY3Th5mcnzS+6y2h696Ho+CKjG6t2zUnbt27OQo5fpX0o6+oQW
-         DarJKZu/sVNRGQqf04WmgOdeeT/+QOnl2oPtPQCo18HBMl/o7HhW9fz1Vs0mkfLOXX+D
-         Ig/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JqjP6+knVxmjPk+6TmXifMsYagmkY7dGlbu+Cp4tVhU=;
-        b=dakY8ZFV5bwVnehm1+GHA4gQ9ThFmOKblsW5U9WF+TPdzgVq92ttfAXg3Q2UKjDSXc
-         H2t6mcAe/qkPwYg5p624LLI4qM2c6GjuIDZKUEjp7H72tAS2r6ZweKHKtZAjJwRC16J4
-         h/A6ej6d38AyfSZWZfzR/q9WXMSLWnP9rQFcUq+KHSLtioi6DVxpsAFM+Pz07HqPerns
-         0IYapGhA+X8eGa20ddXXQaHknJSE2E5VJJUz2GE8XAskrAmBzXDrO5bQxyanOLuAo0Yu
-         tvThT6TG1fLTsgeXBEh9TS+XUFzUUL0S7T7bPps6mzJuHYzG0RVqOlIUcrae4+UaLLIm
-         suDg==
-X-Gm-Message-State: AOAM533ol18OqrCKswlqR1TfT7mE9Rrz2xTnXlyxP63d+xDKRCj5y6Qa
-        9c3a35J4+WKwrexc35vqRPxppGnilK44u+bV3r0qLA==
-X-Google-Smtp-Source: ABdhPJzBpx1jse2xbj8mriAE5IRH5N45DhXrywujvPaUi9rvoKWGSdtDsmmftwEW/BKqPOTy/zsrvgbsO0oqrb+xe0E=
-X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
- bk3-20020a056a02028300b00342703e1434mr411493pgb.74.1644976179422; Tue, 15 Feb
- 2022 17:49:39 -0800 (PST)
+        Tue, 15 Feb 2022 20:50:58 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229D8FABC5;
+        Tue, 15 Feb 2022 17:50:46 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V4aiK1Z_1644976244;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V4aiK1Z_1644976244)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 16 Feb 2022 09:50:44 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] HID: i2c-hid: remove unneeded semicolon
+Date:   Wed, 16 Feb 2022 09:50:42 +0800
+Message-Id: <20220216015042.113021-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220127124058.1172422-1-ruansy.fnst@fujitsu.com> <20220127124058.1172422-8-ruansy.fnst@fujitsu.com>
-In-Reply-To: <20220127124058.1172422-8-ruansy.fnst@fujitsu.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 15 Feb 2022 17:49:33 -0800
-Message-ID: <CAPcyv4h+jQcwSo-CHUhy98xVvjJzvK74-s4uH+Qu-jCr1+zKjw@mail.gmail.com>
-Subject: Re: [PATCH v10 7/9] mm: Introduce mf_dax_kill_procs() for fsdax case
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 4:41 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
->
-> This function is called at the end of RMAP routine, i.e. filesystem
-> recovery function, to collect and kill processes using a shared page of
-> DAX file.  The difference with mf_generic_kill_procs() is, it accepts
-> file's (mapping,offset) instead of struct page because different files'
-> mappings and offsets may share the same page in fsdax mode.
-> It will be called when filesystem's RMAP results are found.
->
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> ---
->  include/linux/mm.h  |  4 ++
->  mm/memory-failure.c | 91 +++++++++++++++++++++++++++++++++++++++------
->  2 files changed, 84 insertions(+), 11 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 9b1d56c5c224..0420189e4788 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3195,6 +3195,10 @@ enum mf_flags {
->         MF_SOFT_OFFLINE = 1 << 3,
->         MF_UNPOISON = 1 << 4,
->  };
-> +#if IS_ENABLED(CONFIG_FS_DAX)
-> +int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
-> +                     unsigned long count, int mf_flags);
-> +#endif /* CONFIG_FS_DAX */
->  extern int memory_failure(unsigned long pfn, int flags);
->  extern void memory_failure_queue(unsigned long pfn, int flags);
->  extern void memory_failure_queue_kick(int cpu);
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index b2d13eba1071..8d123cc4102e 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -304,10 +304,9 @@ void shake_page(struct page *p)
->  }
->  EXPORT_SYMBOL_GPL(shake_page);
->
-> -static unsigned long dev_pagemap_mapping_shift(struct page *page,
-> -               struct vm_area_struct *vma)
-> +static unsigned long dev_pagemap_mapping_shift(struct vm_area_struct *vma,
-> +               unsigned long address)
->  {
-> -       unsigned long address = vma_address(page, vma);
->         unsigned long ret = 0;
->         pgd_t *pgd;
->         p4d_t *p4d;
-> @@ -347,9 +346,8 @@ static unsigned long dev_pagemap_mapping_shift(struct page *page,
->   * Schedule a process for later kill.
->   * Uses GFP_ATOMIC allocations to avoid potential recursions in the VM.
->   */
-> -static void add_to_kill(struct task_struct *tsk, struct page *p,
-> -                      struct vm_area_struct *vma,
-> -                      struct list_head *to_kill)
-> +static void add_to_kill(struct task_struct *tsk, struct page *p, pgoff_t pgoff,
-> +                       struct vm_area_struct *vma, struct list_head *to_kill)
->  {
->         struct to_kill *tk;
->
-> @@ -360,9 +358,15 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
->         }
->
->         tk->addr = page_address_in_vma(p, vma);
-> -       if (is_zone_device_page(p))
-> -               tk->size_shift = dev_pagemap_mapping_shift(p, vma);
-> -       else
-> +       if (is_zone_device_page(p)) {
-> +               /*
-> +                * Since page->mapping is not used for fsdax, we need
-> +                * calculate the address based on the vma.
-> +                */
-> +               if (p->pgmap->type == MEMORY_DEVICE_FS_DAX)
-> +                       tk->addr = vma_pgoff_address(vma, pgoff);
-> +               tk->size_shift = dev_pagemap_mapping_shift(vma, tk->addr);
-> +       } else
->                 tk->size_shift = page_shift(compound_head(p));
->
->         /*
-> @@ -510,7 +514,7 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
->                         if (!page_mapped_in_vma(page, vma))
->                                 continue;
->                         if (vma->vm_mm == t->mm)
-> -                               add_to_kill(t, page, vma, to_kill);
-> +                               add_to_kill(t, page, 0, vma, to_kill);
->                 }
->         }
->         read_unlock(&tasklist_lock);
-> @@ -546,12 +550,40 @@ static void collect_procs_file(struct page *page, struct list_head *to_kill,
->                          * to be informed of all such data corruptions.
->                          */
->                         if (vma->vm_mm == t->mm)
-> -                               add_to_kill(t, page, vma, to_kill);
-> +                               add_to_kill(t, page, 0, vma, to_kill);
-> +               }
-> +       }
-> +       read_unlock(&tasklist_lock);
-> +       i_mmap_unlock_read(mapping);
-> +}
-> +
-> +#if IS_ENABLED(CONFIG_FS_DAX)
-> +/*
-> + * Collect processes when the error hit a fsdax page.
-> + */
-> +static void collect_procs_fsdax(struct page *page,
-> +               struct address_space *mapping, pgoff_t pgoff,
-> +               struct list_head *to_kill)
-> +{
-> +       struct vm_area_struct *vma;
-> +       struct task_struct *tsk;
-> +
-> +       i_mmap_lock_read(mapping);
-> +       read_lock(&tasklist_lock);
-> +       for_each_process(tsk) {
-> +               struct task_struct *t = task_early_kill(tsk, true);
-> +
-> +               if (!t)
-> +                       continue;
-> +               vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
-> +                       if (vma->vm_mm == t->mm)
-> +                               add_to_kill(t, page, pgoff, vma, to_kill);
->                 }
->         }
->         read_unlock(&tasklist_lock);
->         i_mmap_unlock_read(mapping);
->  }
-> +#endif /* CONFIG_FS_DAX */
->
->  /*
->   * Collect the processes who have the corrupted page mapped to kill.
-> @@ -1574,6 +1606,43 @@ static int mf_generic_kill_procs(unsigned long long pfn, int flags,
->         return 0;
->  }
->
-> +#if IS_ENABLED(CONFIG_FS_DAX)
-> +/**
-> + * mf_dax_kill_procs - Collect and kill processes who are using this file range
-> + * @mapping:   the file in use
-> + * @index:     start pgoff of the range within the file
-> + * @count:     length of the range, in unit of PAGE_SIZE
-> + * @mf_flags:  memory failure flags
-> + */
-> +int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
-> +               unsigned long count, int mf_flags)
-> +{
-> +       LIST_HEAD(to_kill);
-> +       int rc;
-> +       struct page *page;
-> +       size_t end = index + count;
-> +
-> +       mf_flags |= MF_ACTION_REQUIRED | MF_MUST_KILL;
-> +
-> +       for (; index < end; index++) {
-> +               page = NULL;
-> +               rc = dax_load_page(mapping, index, &page);
-> +               if (rc)
-> +                       return rc;
-> +               if (!page)
-> +                       continue;
-> +
-> +               SetPageHWPoison(page);
-> +
-> +               collect_procs_fsdax(page, mapping, index, &to_kill);
-> +               unmap_and_kill(&to_kill, page_to_pfn(page), mapping,
-> +                               index, mf_flags);
+Eliminate the following coccicheck warning:
+./drivers/hid/i2c-hid/i2c-hid-core.c:357:56-57: Unneeded semicolon
 
-Depending on the answer to the question in patch5 there may need to be
-a put_page() or dax_unlock_page() here.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/hid/i2c-hid/i2c-hid-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index 91b2fa0d33c7..c078f09a2318 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -354,7 +354,7 @@ static int i2c_hid_set_or_send_report(struct i2c_hid *ihid,
+ 		 * With simple "send report" all data goes into the output
+ 		 * register.
+ 		 */
+-		*(__le16 *)ihid->cmdbuf = ihid->hdesc.wOutputRegister;;
++		*(__le16 *)ihid->cmdbuf = ihid->hdesc.wOutputRegister;
+ 		length += sizeof(__le16);
+ 	}
+ 
+-- 
+2.20.1.7.g153144c
+

@@ -2,71 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4253A4B8B9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795404B8BAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 15:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235127AbiBPOjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 09:39:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44936 "EHLO
+        id S233650AbiBPOmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 09:42:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiBPOjn (ORCPT
+        with ESMTP id S235191AbiBPOmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 09:39:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255BA2A64E0;
-        Wed, 16 Feb 2022 06:39:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D284B81EC6;
-        Wed, 16 Feb 2022 14:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A58EC004E1;
-        Wed, 16 Feb 2022 14:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645022368;
-        bh=yICmxNU28lCRdCrR490KpNGJYusepKied6d/R03vGi4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fiGImpU+swl24FQ/pSJSGhxKF/6eSiYXxMzZoLhiUt4GRpFnHC+RWL8y1YNeEFn1Q
-         DLPIYbUXLnurEoj4HI2aCRxv3HYMlXh8yFWmkC5rUCEA6CLipzmXQKAYR5lQaaWfTG
-         QdM3LgJmvNWP6PRmhGsqZ+7kQ3xFtmgOApXHoRPYJP0WXvDQ+pfKo+MO0FQlJdgv46
-         wpeLwZN2cstsCq/ujP4mR0JBMmTaZkShLmGCekNOASaUQ+mP6YlqAgYGEzMj4f1Fj+
-         w/xIY9Z/S3xL2mh90ycrFdt9D01NgWSK2u5ZBeOyr77+sNRebTEViMB1vNL6d6dl30
-         bI6wUo2tnKvbA==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nKLSo-008LuX-CC; Wed, 16 Feb 2022 14:39:26 +0000
-MIME-Version: 1.0
-Date:   Wed, 16 Feb 2022 14:39:26 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] cpuidle: psci: Call cpu_cluster_pm_enter() on the
- last CPU
-In-Reply-To: <20220216132830.32490-2-shawn.guo@linaro.org>
-References: <20220216132830.32490-1-shawn.guo@linaro.org>
- <20220216132830.32490-2-shawn.guo@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <b690d382d989bd99eaf870e79f63cfb9@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+        Wed, 16 Feb 2022 09:42:18 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE365A2518;
+        Wed, 16 Feb 2022 06:42:02 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GEetZj008916;
+        Wed, 16 Feb 2022 14:41:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=ZPFyNUwqe0e7446wUJUu9M1/GNkHn2W792idSCSGZUQ=;
+ b=Xw30z5tqjw6ikX6DF0qgyxfAIgT9hDKnwNOH3cUa5XFLTUwaTaT3cm3vZfGAIosuqDFQ
+ mQeKMluQHQdWHCNndQCS8YmG3MT6eJUVHOJ5IJVOdVgetPPcCuHXA7GdNVVPsPfOJjR5
+ BCh16TsUQNTZySmoH+m6wWy4NuHKO1kKyRPJVS0urDkog6fbmRHTfr+4V7Mt09x5z3AI
+ l8Z0Yd4FyA0//f4AXsidZ+Mx4DsVaAe5vDvArLgucSAv5LhBRETngA91idmXs5txGAyc
+ 3yVB5m55B4PK727cVxXjkMFhf+dE5+DJydmp3bMMSKNQa93nPpyggeDB4pmWjd/uCtBC mQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e914sbdfw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:30 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21GEfU8g010073;
+        Wed, 16 Feb 2022 14:41:30 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e914sbdf5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:29 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GES87H014722;
+        Wed, 16 Feb 2022 14:41:27 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3e64ha03v7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 14:41:27 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GEfKfH39059870
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Feb 2022 14:41:20 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE9A8A405B;
+        Wed, 16 Feb 2022 14:41:20 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A55AA4051;
+        Wed, 16 Feb 2022 14:41:18 +0000 (GMT)
+Received: from sig-9-65-92-254.ibm.com (unknown [9.65.92.254])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Feb 2022 14:41:18 +0000 (GMT)
+Message-ID: <429010298df589687e1d1a09bac21e302d642c7e.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 05/27] ima: Define ima_namespace struct and start
+ moving variables into it
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Christian Brauner <brauner@kernel.org>
+Date:   Wed, 16 Feb 2022 09:41:17 -0500
+In-Reply-To: <20220201203735.164593-6-stefanb@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-6-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, bjorn.andersson@linaro.org, lorenzo.pieralisi@arm.com, sudeep.holla@arm.com, rafael@kernel.org, daniel.lezcano@linaro.org, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3Y04efHf54EaZ2KiR04g70xp6LkUvVRJ
+X-Proofpoint-ORIG-GUID: huv53N5hBJFREyrTajk_mUMiB4UAtsaU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-16_07,2022-02-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 impostorscore=0 spamscore=0 adultscore=0
+ mlxlogscore=999 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202160082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,73 +102,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-16 13:28, Shawn Guo wrote:
-> Make a call to cpu_cluster_pm_enter() on the last CPU going to low 
-> power
-> state (and cpu_cluster_pm_exit() on the firt CPU coming back), so that
-> platforms can be notified to set up hardware for getting into the 
-> cluster
-> low power state.
+On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> Define the ima_namespace structure and the ima_namespace variable
+> init_ima_ns for the host's IMA namespace. Implement basic functions for
+> namespacing support.
+
+Implement the basic functions - ima_ns_init()  and ima_init_namespace()
+- for namespacing support.
+
 > 
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> Move variables related to the IMA policy into the ima_namespace. This way
+> the IMA policy of an IMA namespace can be set and displayed using a
+> front-end like securityfs.
+
+> Implement ima_ns_from_file() to get the IMA namespace via the user
+> namespace of the securityfs superblock that a file belongs to.
+
+Currently, ima_ns_from_file() doesn't exist in this patch.
+
+> 
+> To get the current ima_namespace use &init_ima_ns when a function
+> that is related to a policy rule is called.
+
+In preparation for IMA namespacing, update the existing functions to
+pass the ima_namespace struct.  For now, ...
+
+> 
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
+
+After addressing the one inline comment,
+	Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> 
 > ---
->  drivers/cpuidle/cpuidle-psci.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-psci.c 
-> b/drivers/cpuidle/cpuidle-psci.c
-> index b51b5df08450..c748c1a7d7b1 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -37,6 +37,7 @@ struct psci_cpuidle_data {
->  static DEFINE_PER_CPU_READ_MOSTLY(struct psci_cpuidle_data, 
-> psci_cpuidle_data);
->  static DEFINE_PER_CPU(u32, domain_state);
->  static bool psci_cpuidle_use_cpuhp;
-> +static atomic_t cpus_in_idle;
-> 
->  void psci_set_domain_state(u32 state)
->  {
-> @@ -67,6 +68,14 @@ static int __psci_enter_domain_idle_state(struct
-> cpuidle_device *dev,
->  	if (ret)
->  		return -1;
-> 
-> +	if (atomic_inc_return(&cpus_in_idle) == num_online_cpus()) {
-> +		ret = cpu_cluster_pm_enter();
-> +		if (ret) {
-> +			ret = -1;
-> +			goto dec_atomic;
-> +		}
-> +	}
+
+>  
+> @@ -119,6 +117,17 @@ struct ima_kexec_hdr {
+>  	u64 count;
+>  };
+>  
+> +struct ima_namespace {
+> +	/* policy rules */
+> +	struct list_head ima_default_rules;
+> +	struct list_head ima_policy_rules;
+> +	struct list_head ima_temp_rules;
+
+These local policy variables weren't previously commented, but with the
+move to a structure it would be good to add comments.  For example, the
+architecture policy rules persist even after a custom policy is loaded.
+
+ima_default_rules: /* Kconfig, builtin, & arch rules */
+ima_policy_rules:  /* arch & custom rules */
+
 > +
->  	/* Do runtime PM to manage a hierarchical CPU toplogy. */
->  	rcu_irq_enter_irqson();
->  	if (s2idle)
-> @@ -88,6 +97,10 @@ static int __psci_enter_domain_idle_state(struct
-> cpuidle_device *dev,
->  		pm_runtime_get_sync(pd_dev);
->  	rcu_irq_exit_irqson();
+> +	struct list_head __rcu *ima_rules;	/* current policy */
+
+/* Pointer to the current policy */.
+
+> +	int ima_policy_flag;
+> +} __randomize_layout;
+> +extern struct ima_namespace init_ima_ns;
+> +
+>  extern const int read_idmap[];
+>  
+>  #ifdef CONFIG_HAVE_IMA_KEXEC
 > 
-> +	if (atomic_read(&cpus_in_idle) == num_online_cpus())
-> +		cpu_cluster_pm_exit();
-> +dec_atomic:
-> +	atomic_dec(&cpus_in_idle);
->  	cpu_pm_exit();
-> 
->  	/* Clear the domain state to start fresh when back from idle. */
+>  {
+> +	struct ima_namespace *ns = &init_ima_ns;
+>  	char *data;
+>  	ssize_t result;
+>  
 
-Is it just me, or does anyone else find it a bit odd that a cpuidle 
-driver
-calls back into the core cpuidle code to generate new events?
-
-Also, why is this PSCI specific? I would assume that the core cpuidle 
-code
-should be responsible for these transitions, not a random cpuidle 
-driver.
-
-Thanks,
-
-         M.
--- 
-Jazz is not dead. It just smells funny...

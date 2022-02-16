@@ -2,118 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2795F4B7F7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D654B7F84
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 05:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344167AbiBPEb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 23:31:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36806 "EHLO
+        id S1344359AbiBPEeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 23:34:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbiBPEby (ORCPT
+        with ESMTP id S232657AbiBPEeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 23:31:54 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9036813E92;
-        Tue, 15 Feb 2022 20:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644985900; x=1676521900;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=R9Ceojy+01/feljLaedmhMoOPJWYkXpoTxqx/xyeBmQ=;
-  b=BG+5MJDKCTmOD1Fjul5FrWvT2BHWI7/lHBj538tndcD2nx//CeTOA6t8
-   WU1KfKvQkFyoJJ8T2bpwuzZcmVAJPqWdSParfMeZfO2yAPjimPMiCLT0x
-   WX7Y8ttCW1EDVZlyMPNZf6HncNwckgrxadqffGOgr2IQS5MDt1JZ2gU+D
-   w=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Feb 2022 20:31:39 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 20:31:39 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Feb 2022 20:31:38 -0800
-Received: from [10.47.233.232] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
- 2022 20:31:38 -0800
-Subject: Re: [PATCH V6 2/6] dt-bindings: mfd: pm8008: Add regulators node
-To:     Satya Priya <quic_c_skakit@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <quic_collinsd@quicinc.com>, <quic_jprakash@quicinc.com>
-References: <1644915231-7308-1-git-send-email-quic_c_skakit@quicinc.com>
- <1644915231-7308-3-git-send-email-quic_c_skakit@quicinc.com>
-From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Message-ID: <e7aee447-2ef5-b9af-ea56-5c406224aa7a@quicinc.com>
-Date:   Tue, 15 Feb 2022 20:31:38 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 15 Feb 2022 23:34:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDADB7C6E;
+        Tue, 15 Feb 2022 20:34:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VTnUeYEN/ux3yU4giIFFK259vlfxLfwy7+DV+rNURNo=; b=AtozEhme1vnLMD/TWoB8IIDEFL
+        R6tadFetshclOhJLIVIpFqRhbxTDXTJ7BTLSDyENrf3HD4HTn3QmRnwcG/GLW315O4+X16t92795G
+        1OG6FnVToqynAjjvbbL0s2Vd8FjQ1SoK5ytLW1gqJHR4a2yOkHWiLo0g2amMEcjQ8zFlexF8qy1Zc
+        1Wsu1Fg8sk/TE9Qj3FVSmcCEDwcyx6AISbAblirEKVuEiCAE20Ea2SlUXMkPrNlY8bnxmQ/aT9U9c
+        lDbPwsVz2aXuu6UfBEQINHQFCcgXgFcEu68UHFLIRDHlSdpV/iMzBZjNJNWi8p25ZzYT38Imx3vLm
+        FWHf4KFA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKC0b-00EQi5-HP; Wed, 16 Feb 2022 04:33:41 +0000
+Date:   Wed, 16 Feb 2022 04:33:41 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        torvalds@linux-foundation.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report in unix_stream_read_generic()
+Message-ID: <Ygx+pRo1+b1RBLJg@casper.infradead.org>
+References: <1644984767-26886-1-git-send-email-byungchul.park@lge.com>
+ <1644985024-28757-1-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-In-Reply-To: <1644915231-7308-3-git-send-email-quic_c_skakit@quicinc.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644985024-28757-1-git-send-email-byungchul.park@lge.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 12:53 AM, Satya Priya wrote:
-> @@ -102,7 +121,7 @@ examples:
->      qupv3_se13_i2c {
->        #address-cells = <1>;
->        #size-cells = <0>;
-> -      pm8008i@8 {
-> +      pm8008_infra: pm8008@8 {
->          compatible = "qcom,pm8008";
->          reg = <0x8>;
->          #address-cells = <1>;
-> @@ -123,6 +142,26 @@ examples:
->            #interrupt-cells = <2>;
->          };
->        };
-> -    };
->  
-> +      pm8008_regulators: pm8008@9 {
-> +        compatible = "qcom,pm8008";
+On Wed, Feb 16, 2022 at 01:17:03PM +0900, Byungchul Park wrote:
+> [    7.013330] ===================================================
+> [    7.013331] DEPT: Circular dependency has been detected.
+> [    7.013332] 5.17.0-rc1-00014-gcf3441bb2012 #2 Tainted: G        W        
+> [    7.013333] ---------------------------------------------------
+> [    7.013334] summary
+> [    7.013334] ---------------------------------------------------
+> [    7.013335] *** DEADLOCK ***
+> [    7.013335] 
+> [    7.013335] context A
+> [    7.013336]     [S] (unknown)(&(&ei->socket.wq.wait)->dmap:0)
+> [    7.013337]     [W] __mutex_lock_common(&u->iolock:0)
+> [    7.013338]     [E] event(&(&ei->socket.wq.wait)->dmap:0)
+> [    7.013340] 
+> [    7.013340] context B
+> [    7.013341]     [S] __raw_spin_lock(&u->lock:0)
+> [    7.013342]     [W] wait(&(&ei->socket.wq.wait)->dmap:0)
+> [    7.013343]     [E] spin_unlock(&u->lock:0)
 
-Should this be "qcom,pm8008-regulators" ?
+This seems unlikely to be real.  We're surely not actually waiting
+while holding a spinlock; existing debug checks would catch it.
 
-> +        reg = <0x9>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        vdd_l1_l2-supply = <&vreg_s8b_1p2>;
-> +        vdd_l3_l4-supply = <&vreg_s1b_1p8>;
-> +        vdd_l5-supply = <&vreg_bob>;
-> +        vdd_l6-supply = <&vreg_bob>;
-> +        vdd_l7-supply = <&vreg_bob>;
-> +
-> +        regulators {
-> +          pm8008_l1: ldo1 {
-> +            regulator-name = "pm8008_l1";
-> +            regulator-min-microvolt = <950000>;
-> +            regulator-max-microvolt = <1300000>;
-> +          };
-> +        };
-> +      };
-> +    };
->  ...
+> [    7.013407] ---------------------------------------------------
+> [    7.013407] context B's detail
+> [    7.013408] ---------------------------------------------------
+> [    7.013408] context B
+> [    7.013409]     [S] __raw_spin_lock(&u->lock:0)
+> [    7.013410]     [W] wait(&(&ei->socket.wq.wait)->dmap:0)
+> [    7.013411]     [E] spin_unlock(&u->lock:0)
+> [    7.013412] 
+> [    7.013412] [S] __raw_spin_lock(&u->lock:0):
+> [    7.013413] [<ffffffff81aa451f>] unix_stream_read_generic+0x6bf/0xb60
+> [    7.013416] stacktrace:
+> [    7.013416]       _raw_spin_lock+0x6e/0x90
+> [    7.013418]       unix_stream_read_generic+0x6bf/0xb60
 
--Subbaraman
+It would be helpful if you'd run this through scripts/decode_stacktrace.sh
+so we could see line numbers instead of hex offsets (which arene't much
+use without the binary kernel).
+
+> [    7.013420]       unix_stream_recvmsg+0x40/0x50
+> [    7.013422]       sock_read_iter+0x85/0xd0
+> [    7.013424]       new_sync_read+0x162/0x180
+> [    7.013426]       vfs_read+0xf3/0x190
+> [    7.013428]       ksys_read+0xa6/0xc0
+> [    7.013429]       do_syscall_64+0x3a/0x90
+> [    7.013431]       entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [    7.013433] 
+> [    7.013434] [W] wait(&(&ei->socket.wq.wait)->dmap:0):
+> [    7.013434] [<ffffffff810bb017>] prepare_to_wait+0x47/0xd0
+
+... this may be the source of confusion.  Just because we prepare to
+wait doesn't mean we end up actually waiting.  For example, look at
+unix_wait_for_peer():
+
+        prepare_to_wait_exclusive(&u->peer_wait, &wait, TASK_INTERRUPTIBLE);
+
+        sched = !sock_flag(other, SOCK_DEAD) &&
+                !(other->sk_shutdown & RCV_SHUTDOWN) &&
+                unix_recvq_full(other);
+
+        unix_state_unlock(other);
+
+        if (sched)
+                timeo = schedule_timeout(timeo);
+
+        finish_wait(&u->peer_wait, &wait);
+
+We *prepare* to wait, *then* drop the lock, then actually schedule.
+

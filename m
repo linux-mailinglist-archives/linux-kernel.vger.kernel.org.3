@@ -2,96 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B934B81F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99294B8157
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiBPHqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:46:53 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46334 "EHLO
+        id S229852AbiBPHTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:19:07 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiBPHqv (ORCPT
+        with ESMTP id S229875AbiBPHTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:46:51 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C863D7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:46:39 -0800 (PST)
+        Wed, 16 Feb 2022 02:19:02 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3793DD007A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:18:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644997599; x=1676533599;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZbHq30c9suHqVxOsxPX/mZ0QzsgvzvZU/DMFUUxsqKY=;
-  b=Uzc4CMZ0YjJLpo1X9fnfMalbLubBbPs35pHrfpMzwElU7AYrqn5EeGmj
-   w/MuyhgMZ05xRIkdkMpv5u5BNS1H6ZXS661VV5O0YjKnU4lCuBZB3O8l3
-   rJnmpFZdwKCl0d+RvOzhXotY8pXkJI/q22VCSUs0dkYDKrgg6k3kgzKsX
-   tqum/mXwr5jbEX4AsopuiiYwWi/s8MlnUZyxsIq8cfLTEjNuGSgK3cwr3
-   PKEK++W24340iUocoHMyBUGJJ61FXg5rxiZVQbj3vsah7htHmgQzFZqmQ
-   4PylqSea99dWFBW7z9ZmXtfsQVhsLKI4ELbNt2muAVo5qDdYiTcncsQgk
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275118727"
+  t=1644995926; x=1676531926;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Rtxj1UDHxt0cG+aH0MjVGov4YzjQBNtjm2W/22eZowE=;
+  b=gMCjequZWMpq5/evJmRdimCoMAkaLWQto7rOWiKrhL5NL9JCs42czbJ6
+   XVIO9LcAOh9sn/8IsoTOFGdQceyM14cBhLf26DhcBjiN6Ekh/VRzkvVwI
+   1jF2kd8Kuch69LYPzB7pFAdpa0qlWNLpxmPEOalF+3n4SvOaiYVnLIGoU
+   nSbQurqnJpapJ8Doo2yVVu7ViEOQiVmHmjTeJX9XOHRjhWxqOzCxEXQ/S
+   kyuLcuF8pe2BB0SNbmJ+62DnOC+0OUqQY+QK5tmE84w7M5sz73ubkncRt
+   cB9xGXWkSsz9Mr5gMpAcJJJyfA1scDeHIG8rD7it7VtdcS8iMafMU8Use
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="230502234"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="275118727"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:03:30 -0800
+   d="scan'208";a="230502234"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 23:04:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="704179198"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Feb 2022 23:03:28 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKELY-000AY1-6B; Wed, 16 Feb 2022 07:03:28 +0000
-Date:   Wed, 16 Feb 2022 15:03:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: ERROR: start_text address is c000000000000600, should be
- c000000000000100
-Message-ID: <202202161525.m2QCBrwR-lkp@intel.com>
+   d="scan'208";a="681387754"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Feb 2022 23:04:43 -0800
+Message-ID: <ae863355-3f44-5eae-4f35-90a62cb2d89f@linux.intel.com>
+Date:   Wed, 16 Feb 2022 15:03:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 1/1] iommu/vt-d: Move intel_iommu_ops to header file
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20220207141240.8253-1-andriy.shevchenko@linux.intel.com>
+ <YgpY1IIBkFIxxjbm@8bytes.org>
+ <30e45a7e-088d-7479-a284-68effadf3cbe@linux.intel.com>
+ <Ygt3jibBVRyCn909@smile.fi.intel.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <Ygt3jibBVRyCn909@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+On 2/15/22 5:51 PM, Andy Shevchenko wrote:
+> On Tue, Feb 15, 2022 at 09:31:37AM +0800, Lu Baolu wrote:
+>> On 2/14/22 9:27 PM, Joerg Roedel wrote:
+>>> On Mon, Feb 07, 2022 at 04:12:40PM +0200, Andy Shevchenko wrote:
+> 
+> ...
+> 
+>>>> +extern const struct iommu_ops intel_iommu_ops;
+> 
+>>> The intel_iommu_ops symbol is only used in drivers/iommu/intel, so I
+>>> would prefer a header in that directory. But I leave that up to Baolu to
+>>> decide.
+>>
+>> Agreed. I also have a plan to split them out into a internal header.
+> 
+> The above change is hanging for more than a year, can we apply it and then
+> you can do a split?
+> 
 
-FYI, the error/warning still remains.
+Yeah. This is my plan. The include/linux/intel-iommu.h also keeps other
+internal only helpers. It worth a separated cleanup patch.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c5d9ae265b105d9a67575fb67bd4650a6fc08e25
-commit: 47c258d71ebfc832a760a1dc6540cf3c33968023 powerpc/head_check: use stdout for error messages
-date:   6 months ago
-config: powerpc64-randconfig-c004-20220216 (https://download.01.org/0day-ci/archive/20220216/202202161525.m2QCBrwR-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47c258d71ebfc832a760a1dc6540cf3c33968023
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 47c258d71ebfc832a760a1dc6540cf3c33968023
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ERROR: start_text address is c000000000000600, should be c000000000000100
-   ERROR: try to enable LD_HEAD_STUB_CATCH config option
-   ERROR: see comments in arch/powerpc/tools/head_check.sh
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+baolu

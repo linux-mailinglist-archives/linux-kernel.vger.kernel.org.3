@@ -2,42 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737F14B82A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41B54B829E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 09:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbiBPILJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 03:11:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57888 "EHLO
+        id S231474AbiBPIMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 03:12:07 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiBPILG (ORCPT
+        with ESMTP id S231445AbiBPIMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:11:06 -0500
-Received: from mail-m2458.qiye.163.com (mail-m2458.qiye.163.com [220.194.24.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B784D60DB4;
-        Wed, 16 Feb 2022 00:10:50 -0800 (PST)
-Received: from localhost.localdomain (unknown [117.48.120.186])
-        by mail-m2458.qiye.163.com (Hmail) with ESMTPA id 4EE69740148;
-        Wed, 16 Feb 2022 16:10:48 +0800 (CST)
-From:   Tao Liu <thomas.liu@ucloud.cn>
-To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, edumazet@google.com, sridhar.samudrala@intel.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tao Liu <thomas.liu@ucloud.cn>
-Subject: [PATCH net v2] gso: do not skip outer ip header in case of ipip and net_failover
-Date:   Wed, 16 Feb 2022 16:10:41 +0800
-Message-Id: <20220216081041.70831-1-thomas.liu@ucloud.cn>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Wed, 16 Feb 2022 03:12:06 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3B3FD30;
+        Wed, 16 Feb 2022 00:11:50 -0800 (PST)
+X-UUID: a6b76a8b6fc2411d975007c926b4c662-20220216
+X-UUID: a6b76a8b6fc2411d975007c926b4c662-20220216
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 328284359; Wed, 16 Feb 2022 16:11:44 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 16 Feb 2022 16:11:43 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Feb 2022 16:11:42 +0800
+Message-ID: <75a08f8d97e112f6c584f7b62934aa178eca8bc4.camel@mediatek.com>
+Subject: Re: [PATCH v4 08/35] iommu/mediatek: Use kmalloc for protect buffer
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Tomasz Figa <tfiga@chromium.org>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>, <xueqi.zhang@mediatek.com>,
+        <yen-chang.chen@mediatek.com>, <mingyuan.ma@mediatek.com>,
+        <yf.wang@mediatek.com>, <libo.kang@mediatek.com>,
+        <chengci.xu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Will Deacon" <will@kernel.org>
+Date:   Wed, 16 Feb 2022 16:11:42 +0800
+In-Reply-To: <CAAFQd5Cqg2xPwtzcom_EZ1tw1tOBsND_i1YAQCO4kF=+eWePBQ@mail.gmail.com>
+References: <20220125085634.17972-1-yong.wu@mediatek.com>
+         <20220125085634.17972-9-yong.wu@mediatek.com>
+         <ca47becf-adc9-f11e-5e59-03f203920344@collabora.com>
+         <d9637b40196873f392ac9cebfe369106a6f0eee7.camel@mediatek.com>
+         <CAAFQd5Cqg2xPwtzcom_EZ1tw1tOBsND_i1YAQCO4kF=+eWePBQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUlCN1dZLVlBSVdZDwkaFQgSH1lBWUNLQxpWHU1PQx9ISkhMSE
-        xPVRkRExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MAg6Kjo*MTI2Nwg2NTgJMi1K
-        Sw8aC1FVSlVKTU9PQkJCS09DTEtOVTMWGhIXVQ8TFBYaCFUXEg47DhgXFA4fVRgVRVlXWRILWUFZ
-        SkpMVU9DVUpJS1VKQ01ZV1kIAVlBT0tLSzcG
-X-HM-Tid: 0a7f01957d358c17kuqt4ee69740148
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,96 +70,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We encounter a tcp drop issue in our cloud environment. Packet GROed in
-host forwards to a VM virtio_net nic with net_failover enabled. VM acts
-as a IPVS LB with ipip encapsulation. The full path like:
-host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
- -> ipip encap -> net_failover tx -> virtio_net tx
+On Wed, 2022-02-16 at 14:59 +0900, Tomasz Figa wrote:
+> On Wed, Feb 16, 2022 at 2:55 PM Yong Wu <yong.wu@mediatek.com> wrote:
+> > 
+> > On Thu, 2022-01-27 at 12:08 +0100, AngeloGioacchino Del Regno
+> > wrote:
+> > > Il 25/01/22 09:56, Yong Wu ha scritto:
+> > > > No need zero for the protect buffer that is only accessed by
+> > > > the
+> > > > IOMMU HW
+> > > > translation fault happened.
+> > > > 
+> > > > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> > > 
+> > > I would rather keep this a devm_kzalloc instead... the cost is
+> > > very
+> > > minimal and
+> > > this will be handy when new hardware will be introduced, as it
+> > > may
+> > > require a bigger
+> > > buffer: in that case, "older" platforms will use only part of it
+> > > and
+> > > we may get
+> > > garbage data at the end.
+> > 
+> > Currently this is to avoid zero 512 bytes for all the platforms.
+> > 
+> > Sorry, I don't understand why it is unnecessary when the new
+> > hardware
+> > requires a bigger buffer. If the buffer becomes bigger, then
+> > clearing
+> > it to 0 need more cost. then this patch is more helpful?
+> > 
+> > The content in this buffer is garbage, we won't care about or
+> > analyse
+> > it.
+> 
+> I think we should zero it for security reasons regardless of any
+> other
+> aspects. With this patch it's leaking kernel data to the hardware.
+> 
+> At the same time, we're talking here about something executed just 1
+> time when the driver probes. I don't think the cost would really
+> matter.
 
-When net_failover transmits a ipip pkt (gso_type = 0x0103), there is no gso
-did because it supports TSO and GSO_IPXIP4. But network_header points to
-inner ip header.
+OK. I will remove this patch in next version.
 
-Call Trace:
- tcp4_gso_segment        ------> return NULL
- inet_gso_segment        ------> inner iph, network_header points to
- ipip_gso_segment
- inet_gso_segment        ------> outer iph
- skb_mac_gso_segment
+Thanks.
 
-Afterwards virtio_net transmits the pkt, only inner ip header is modified.
-And the outer one just keeps unchanged. The pkt will be dropped in remote
-host. So we need to reset network header in this case.
-
-Call Trace:
- inet_gso_segment        ------> inner iph, outer iph is skipped
- skb_mac_gso_segment
- __skb_gso_segment
- validate_xmit_skb
- validate_xmit_skb_list
- sch_direct_xmit
- __qdisc_run
- __dev_queue_xmit        ------> virtio_net
- dev_hard_start_xmit
- __dev_queue_xmit        ------> net_failover
- ip_finish_output2
- ip_output
- iptunnel_xmit
- ip_tunnel_xmit
- ipip_tunnel_xmit        ------> ipip
- dev_hard_start_xmit
- __dev_queue_xmit
- ip_finish_output2
- ip_output
- ip_forward
- ip_rcv
- __netif_receive_skb_one_core
- netif_receive_skb_internal
- napi_gro_receive
- receive_buf
- virtnet_poll
- net_rx_action
-
-This patch also includes ipv6_gso_segment(), considering SIT, etc.
-
-Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
-Fixes: cfc80d9a1163 ("net: Introduce net_failover driver")
-Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
----
- net/ipv4/af_inet.c     | 5 ++++-
- net/ipv6/ip6_offload.c | 2 ++
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 9c465ba..72fde28 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1376,8 +1376,11 @@ struct sk_buff *inet_gso_segment(struct sk_buff *skb,
- 	}
- 
- 	ops = rcu_dereference(inet_offloads[proto]);
--	if (likely(ops && ops->callbacks.gso_segment))
-+	if (likely(ops && ops->callbacks.gso_segment)) {
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
-+	}
- 
- 	if (IS_ERR_OR_NULL(segs))
- 		goto out;
-diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-index b29e9ba..5f577e2 100644
---- a/net/ipv6/ip6_offload.c
-+++ b/net/ipv6/ip6_offload.c
-@@ -114,6 +114,8 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
- 	if (likely(ops && ops->callbacks.gso_segment)) {
- 		skb_reset_transport_header(skb);
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
- 	}
- 
- 	if (IS_ERR_OR_NULL(segs))
--- 
-1.8.3.1
+> 
+> Best regards,
+> Tomasz
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
 

@@ -2,360 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896164B9055
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5965E4B9066
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 19:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237677AbiBPSf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 13:35:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35666 "EHLO
+        id S237690AbiBPSjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 13:39:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237688AbiBPSfs (ORCPT
+        with ESMTP id S232333AbiBPSji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 13:35:48 -0500
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C302ABD0E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 10:35:35 -0800 (PST)
-Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21GFG5b9000467;
-        Wed, 16 Feb 2022 18:35:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references; s=pps0720;
- bh=pCN+jqEdmctqLRCK7bIitZB8NHdC3107Hp/bvH4s9Sc=;
- b=OXHPIGRY8xCRx2V/0O0vVl/VX7AksB75Nai2Cg89ea10DDRx6ifFwAjkhSOwRbgp5oWR
- teYy/Qsj/0iTBPke3kk6rCKPwacWsESUNPATqj7WtWEhWAESs7vypGo/uzdHYTaUEPE/
- OxEfjGsOLRhtWAgNVCcHQZ7myqa+8KCBgKZJr/JYPj1IZ5LsAmqgZCZGAFej+y4XX6BL
- 188qojOr6eANWh9FP+54hASoqRXarnSsUrFQ6Zzm7y6FO1vLUs/BWT/TRQ9bawPOvKFX
- O2BlDXaQvQe3C4gzRFg4+Lj2QWrN1plfgPzlfduYMQ6wHu7eo3iRazrwzxdSNWqQlnDC Ew== 
-Received: from g4t3425.houston.hpe.com (g4t3425.houston.hpe.com [15.241.140.78])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3e8x4yn5bb-1
+        Wed, 16 Feb 2022 13:39:38 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D15202076;
+        Wed, 16 Feb 2022 10:39:25 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GI7F6r023013;
+        Wed, 16 Feb 2022 18:39:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=pp1;
+ bh=RONEm4xYtZ0F9pW9Y60WhRrasfvxqyCStM04T9+rsj0=;
+ b=HlV56aixEcCggoYbY8jkKHWVN1rMIU7O4g0tjsMLfrtNTkie6rRu+X44r/ed4SN7lNsg
+ /UaziNSZsDIZVuchGG1DBP+672VOp0DC7UitThxY2ehskH6AzDiyjNjAQoC30kjzpDd8
+ fuiES4VpAIl7tZPU6OTetRNtCblFBFMp1F5sO2oEmpOJhk//w7KlD7giJU/QuhW8zvMP
+ l5Xg6rwpIHH8ilpt5CY/5LXZHi501IT8KzHd228Xdceh6nKK4lofF+Ec4Zr4Z/HtFH0D
+ qLMEJmLyEnbu2gMEeZH4N6kfMrXWHt4/EtO2w+ngdrlbf840VDYr/wQZvuLogOjn8H4j Bg== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e94n4b1x9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Feb 2022 18:35:09 +0000
-Received: from hpe.com (unknown [15.115.65.69])
-        by g4t3425.houston.hpe.com (Postfix) with ESMTP id 28F10B9;
-        Wed, 16 Feb 2022 18:35:08 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     nick.hawkins@hpe.com, verdun@hpe.com
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Olof Johansson <olof@lixom.net>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] [v1] arch: arm: configs: gxp_defconfig
-Date:   Wed, 16 Feb 2022 12:36:59 -0600
-Message-Id: <20220216183704.42084-1-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <nick.hawkins@hpe.com>
-References: <nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: 2qRO2cfKgVhlM5dSoiUGOtMhxyel6xLc
-X-Proofpoint-GUID: 2qRO2cfKgVhlM5dSoiUGOtMhxyel6xLc
-X-HPE-SCL: -1
+        Wed, 16 Feb 2022 18:39:08 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21GIWj9r008045;
+        Wed, 16 Feb 2022 18:39:06 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3e64habha9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Feb 2022 18:39:06 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21GId4Ec44827048
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Feb 2022 18:39:04 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B12A4203F;
+        Wed, 16 Feb 2022 18:39:04 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E906942042;
+        Wed, 16 Feb 2022 18:39:03 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 16 Feb 2022 18:39:03 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: ftrace startup tests crashing due to missing rcu_synchronize()
+Date:   Wed, 16 Feb 2022 19:39:03 +0100
+Message-ID: <yt9dilte4px4.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hZ_CCxv9P8lepU3XyN5Ew57ehVw_NUbS
+X-Proofpoint-GUID: hZ_CCxv9P8lepU3XyN5Ew57ehVw_NUbS
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-16_08,2022-02-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- bulkscore=0 phishscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
- clxscore=1011 adultscore=0 impostorscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=550 suspectscore=0 phishscore=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 spamscore=0
+ adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2201110000 definitions=main-2202160104
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+Hi Steve,
 
-Description: Adding the configuration file for the upcoming
- hpe gxp soc.
+in our CI we see the ftrace selftests crashing. It only happens
+in rare cases - for me i can boot the kernel hundred of times and
+it crashes only once. The oops output looks like this:
 
-Note: This patch is part of a set with patches:
-  [v4] arch: arm: boot: dts: Create HPE GXP Device Tree
-  [v1] dt-bindings: timer: Add HPE GXP Timer binding
-  [v1] dt-bindings: watchdog: Add HPE GXP Watchdog timer binding
-  [v1]dt-bindings: vendor-prefixes: add HPE Prefix
-  [v1] dt-bindings: soc: Add HPE GXP SOC binding
+[    3.523720] Running postponed tracer tests:
+[    3.524184] Testing tracer function: PASSED
+[    3.801523] Testing dynamic ftrace: PASSED
+[    4.068009] Testing dynamic ftrace ops #1:
+[    4.140142] (1 0 1 0 0)
+[    4.140149] (1 1 2 0 0)
+[    4.200037] (2 1 3 0 822270)
+[    4.200046] (2 2 4 0 822402)
+[    4.232728] (3 2 4 0 1147236)
+[    4.232740] (3 3 5 0 1147377)
+[    4.300835] PASSED
+[    4.300840] Testing dynamic ftrace ops #2:
+[    4.420423] (1 0 1 582267 0)
+[    4.420474] (1 1 2 583259 0)
+[    4.420941] (2 1 3 1 5)
+[    4.420947] (2 2 4 69 73)
+[    4.458483] (3 2 4 494199 491341)
+[    4.458616] (3 3 5 497496 494474)
+[    4.460091] Unable to handle kernel pointer dereference in virtual kernel address space
+[    4.460375] Failing address: 6b6b6b6b6b6b6000 TEID: 6b6b6b6b6b6b6803
+[    4.460458] Fault in home space mode while using kernel ASCE.
+[    4.460695] AS:000000008561c007 R3:0000000000000024
+[    4.461143] Oops: 0038 ilc:3 [#1] PREEMPT SMP
+[    4.461162] Modules linked in:
+[    4.461175] CPU: 245 PID: 0 Comm: swapper/245 Not tainted 5.17.0-rc4-00051-gc5d9ae265b10-dirty #4
+[    4.461183] Hardware name: IBM 8561 T01 701 (KVM/Linux)
+[    4.461194] Krnl PSW : 0404e00180000000 00000000835a1fe6 (arch_ftrace_ops_list_func+0x96/0x1b0)
+[    4.461212]            R:0 T:1 IO:0 EX:0 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
+[    4.461226] Krnl GPRS: 0000000000000000 0000000084bbc110 0000000083496f48 00000000834061f2
+[    4.461237]            000000008a70fa00 0000038000d0fba8 0000000000000001 fffffffffffffeff
+[    4.461243]            00000000834061f2 0000038000d0fba8 6b6b6b6b6b6b6b6b 0000000083496f48
+[    4.461250]            0000000000000000 0000000000000000 00000000835a209a 0000038000d0fab8
+[    4.461269] Krnl Code: 00000000835a1fd4: e310a9380224        stg     %r1,10552(%r10)
+                          00000000835a1fda: eb0103a8006a        asi     936,1
+                         #00000000835a1fe0: c4a800b0d094        lgrl    %r10,0000000084bbc108
+                         >00000000835a1fe6: e310a0100004        lg      %r1,16(%r10)
+                          00000000835a1fec: a7110020            tmll    %r1,32
+                          00000000835a1ff0: a7740012            brc     7,00000000835a2014
+                          00000000835a1ff4: a7114000            tmll    %r1,16384
+                          00000000835a1ff8: a7740031            brc     7,00000000835a205a
+[    4.461383] Call Trace:
+[    4.461388]  [<00000000835a1fe6>] arch_ftrace_ops_list_func+0x96/0x1b0
+[    4.461395] ([<00000000835a200e>] arch_ftrace_ops_list_func+0xbe/0x1b0)
+[    4.461401]  [<00000000841700ec>] ftrace_common+0x1c/0x20
+[    4.461409]  [<0000000083496f4e>] preempt_count_sub+0x6/0x138
+[    4.461418]  [<00000000834061f2>] read_tod_clock+0x4a/0xb0
+[    4.461431]  [<0000000083530818>] ktime_get+0xb8/0x178
+[    4.461441]  [<000000008353ec94>] clockevents_program_event+0x6c/0x138
+[    4.461454]  [<000000008352d206>] hrtimer_start_range_ns+0xc6/0x100
+[    4.461467]  [<0000000083541068>] tick_nohz_idle_stop_tick+0x90/0xf8
+[    4.461479]  [<00000000834a9790>] do_idle+0xf0/0x1b0
+[    4.461495]  [<00000000834a9ad6>] cpu_startup_entry+0x36/0x40
+[    4.461509]  [<000000008416e48e>] restart_int_handler+0x6e/0x90
+[    4.461521] INFO: lockdep is turned off.
+[    4.461527] Last Breaking-Event-Address:
+[    4.461533]  [<00000000835a2026>] arch_ftrace_ops_list_func+0xd6/0x1b0
+[    4.461552] Kernel panic - not syncing: Fatal exception: panic_on_oops
 
-Additional Note: Maintainers will be updated in separate patch
- to cover all of the above patches.
+The code in question is the ops loop in __ftrace_ops_list_func():
 
-Information: GXP is the name of the HPE SoC.
- This SoC is used to implement BMC features of HPE servers
-  (all ProLiant, Synergy, and many Apollo, and Superdome machines)
-   It does support many features including:
-    ARMv7 architecture, and it is based on a Cortex A9 core
-    Use an AXI bus to which a memory controller is attached,
-    as well as multiple SPI interfaces to connect boot flash,
-    and ROM flash, a 10/100/1000 Mac engine which
-    supports SGMII (2 ports) and RMII Multiple I2C engines to
-    drive connectivity with a host infrastructure
-    A video engine which support VGA and DP, as well as
-    an hardware video encoder
-    Multiple PCIe ports
-    A PECI interface, and LPC eSPI
-    Multiple UART for debug purpose, and Virtual UART for
-    host connectivity
-    A GPIO engine.
+do_for_each_ftrace_op(op, ftrace_ops_list) {
+/* Stub functions don't need to be called nor tested */
+	if (op->flags & FTRACE_OPS_FL_STUB)
+		continue;
+...
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
----
- arch/arm/configs/gxp_defconfig | 243 +++++++++++++++++++++++++++++++++
- 1 file changed, 243 insertions(+)
- create mode 100644 arch/arm/configs/gxp_defconfig
+The register (r10) where op is stored contains 0x6b6b6b6b6b6b6b6b
+(POISON_FREE), so it looks like the list contains a member that is
+already freed.
 
-diff --git a/arch/arm/configs/gxp_defconfig b/arch/arm/configs/gxp_defconfig
-new file mode 100644
-index 000000000000..f37c6630e06d
---- /dev/null
-+++ b/arch/arm/configs/gxp_defconfig
-@@ -0,0 +1,243 @@
-+CONFIG_KERNEL_XZ=y
-+CONFIG_DEFAULT_HOSTNAME="gxp"
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BSD_PROCESS_ACCT=y
-+CONFIG_BSD_PROCESS_ACCT_V3=y
-+CONFIG_LOG_BUF_SHIFT=18
-+CONFIG_CFS_BANDWIDTH=y
-+CONFIG_RT_GROUP_SCHED=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_NAMESPACES=y
-+CONFIG_SCHED_AUTOGROUP=y
-+CONFIG_RELAY=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_EMBEDDED=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_ARCH_MULTI_V6=y
-+CONFIG_ARCH_HPE=y
-+CONFIG_ARCH_HPE_GXP=y
-+CONFIG_SECCOMP=y
-+# CONFIG_ATAGS is not set
-+CONFIG_ZBOOT_ROM_TEXT=0x0
-+CONFIG_ZBOOT_ROM_BSS=0x0
-+# CONFIG_SUSPEND is not set
-+CONFIG_JUMP_LABEL=y
-+# CONFIG_STRICT_KERNEL_RWX is not set
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+CONFIG_KSM=y
-+CONFIG_CLEANCACHE=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_PACKET_DIAG=y
-+CONFIG_UNIX=y
-+CONFIG_UNIX_DIAG=y
-+CONFIG_XFRM_USER=y
-+CONFIG_XFRM_STATISTICS=y
-+CONFIG_INET=y
-+CONFIG_VLAN_8021Q=y
-+CONFIG_NETLINK_DIAG=y
-+CONFIG_NET_NCSI=y
-+# CONFIG_WIRELESS is not set
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+# CONFIG_STANDALONE is not set
-+CONFIG_MTD=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_PHYSMAP=y
-+CONFIG_MTD_PHYSMAP_OF=y
-+CONFIG_MTD_PLATRAM=y
-+CONFIG_MTD_SPI_NOR=y
-+CONFIG_SPI_GXP_SPIFI=y
-+CONFIG_BLK_DEV_NULL_BLK=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_NBD=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_EEPROM_AT24=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
-+# CONFIG_SCSI_LOWLEVEL is not set
-+CONFIG_NETDEVICES=y
-+# CONFIG_NET_VENDOR_ALACRITECH is not set
-+# CONFIG_NET_VENDOR_AMAZON is not set
-+# CONFIG_NET_VENDOR_AQUANTIA is not set
-+# CONFIG_NET_VENDOR_ARC is not set
-+# CONFIG_NET_VENDOR_AURORA is not set
-+# CONFIG_NET_VENDOR_BROADCOM is not set
-+# CONFIG_NET_VENDOR_CADENCE is not set
-+# CONFIG_NET_VENDOR_CAVIUM is not set
-+# CONFIG_NET_VENDOR_CIRRUS is not set
-+# CONFIG_NET_VENDOR_CORTINA is not set
-+# CONFIG_NET_VENDOR_EZCHIP is not set
-+# CONFIG_NET_VENDOR_FARADAY is not set
-+# CONFIG_NET_VENDOR_GOOGLE is not set
-+# CONFIG_NET_VENDOR_HISILICON is not set
-+# CONFIG_NET_VENDOR_HUAWEI is not set
-+# CONFIG_NET_VENDOR_INTEL is not set
-+# CONFIG_NET_VENDOR_MARVELL is not set
-+# CONFIG_NET_VENDOR_MELLANOX is not set
-+# CONFIG_NET_VENDOR_MICREL is not set
-+# CONFIG_NET_VENDOR_MICROCHIP is not set
-+# CONFIG_NET_VENDOR_MICROSEMI is not set
-+# CONFIG_NET_VENDOR_NATSEMI is not set
-+# CONFIG_NET_VENDOR_NETRONOME is not set
-+# CONFIG_NET_VENDOR_NI is not set
-+# CONFIG_NET_VENDOR_QUALCOMM is not set
-+# CONFIG_NET_VENDOR_RENESAS is not set
-+# CONFIG_NET_VENDOR_ROCKER is not set
-+# CONFIG_NET_VENDOR_SAMSUNG is not set
-+# CONFIG_NET_VENDOR_SEEQ is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
-+# CONFIG_NET_VENDOR_SMSC is not set
-+# CONFIG_NET_VENDOR_SOCIONEXT is not set
-+# CONFIG_NET_VENDOR_STMICRO is not set
-+# CONFIG_NET_VENDOR_SYNOPSYS is not set
-+# CONFIG_NET_VENDOR_VIA is not set
-+# CONFIG_NET_VENDOR_WIZNET is not set
-+# CONFIG_NET_VENDOR_XILINX is not set
-+CONFIG_UMAC=y
-+# CONFIG_USB_NET_DRIVERS is not set
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_LEDS is not set
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_KEYBOARD_ATKBD is not set
-+CONFIG_KEYBOARD_GPIO=y
-+CONFIG_KEYBOARD_GPIO_POLLED=y
-+# CONFIG_INPUT_MOUSE is not set
-+CONFIG_SERIO_LIBPS2=y
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+# CONFIG_LEGACY_PTYS is not set
-+CONFIG_SERIAL_8250=y
-+# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_NR_UARTS=6
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=6
-+CONFIG_SERIAL_8250_EXTENDED=y
-+CONFIG_SERIAL_8250_SHARE_IRQ=y
-+CONFIG_SERIAL_8250_GXP_VUART=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_TTY_PRINTK=y
-+CONFIG_IPMI_HANDLER=y
-+CONFIG_IPMI_DEVICE_INTERFACE=y
-+CONFIG_IPMI_SI=y
-+CONFIG_IPMI_SSIF=y
-+CONFIG_HPE_KCS_IPMI_BMC=y
-+CONFIG_HW_RANDOM_TIMERIOMEM=y
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_GXP=y
-+CONFIG_I2C_SLAVE=y
-+CONFIG_I2C_SLAVE_EEPROM=y
-+CONFIG_SPI=y
-+CONFIG_GPIOLIB=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_GXP=y
-+CONFIG_SENSORS_EMC1403=y
-+CONFIG_SENSORS_GXP_FAN_CTRL=y
-+CONFIG_SENSORS_GXP_CORETEMP=y
-+CONFIG_SENSORS_GXP_PSU=y
-+CONFIG_SENSORS_GXP_POWER=y
-+CONFIG_WATCHDOG=y
-+CONFIG_GXP_WATCHDOG=y
-+CONFIG_MFD_SYSCON=y
-+CONFIG_FB=y
-+CONFIG_FB_THUMBNAIL=y
-+CONFIG_FB_SIMPLE=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_ROOT_HUB_TT=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_OHCI_HCD_PLATFORM=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_GADGET=y
-+CONFIG_USB_GXP_UDC=y
-+CONFIG_USB_CONFIGFS=y
-+CONFIG_USB_CONFIGFS_SERIAL=y
-+CONFIG_USB_CONFIGFS_ACM=y
-+CONFIG_USB_CONFIGFS_OBEX=y
-+CONFIG_USB_CONFIGFS_NCM=y
-+CONFIG_USB_CONFIGFS_ECM=y
-+CONFIG_USB_CONFIGFS_ECM_SUBSET=y
-+CONFIG_USB_CONFIGFS_RNDIS=y
-+CONFIG_USB_CONFIGFS_EEM=y
-+CONFIG_USB_CONFIGFS_MASS_STORAGE=y
-+CONFIG_USB_CONFIGFS_F_LB_SS=y
-+CONFIG_USB_CONFIGFS_F_FS=y
-+CONFIG_USB_CONFIGFS_F_HID=y
-+CONFIG_USB_CONFIGFS_F_PRINTER=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_TIMER=y
-+CONFIG_LEDS_TRIGGER_ONESHOT=y
-+CONFIG_LEDS_TRIGGER_MTD=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_LEDS_TRIGGER_CPU=y
-+CONFIG_LEDS_TRIGGER_GPIO=y
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
-+CONFIG_LEDS_TRIGGER_TRANSIENT=y
-+CONFIG_LEDS_TRIGGER_PANIC=y
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_HPE_GXP_XREG=y
-+CONFIG_HPE_GXP_FN2=y
-+CONFIG_HPE_GXP_CSM=y
-+CONFIG_HPE_GXP_SROM=y
-+CONFIG_FANOTIFY=y
-+CONFIG_OVERLAY_FS=y
-+CONFIG_OVERLAY_FS_REDIRECT_DIR=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_JFFS2_FS=y
-+# CONFIG_JFFS2_FS_WRITEBUFFER is not set
-+CONFIG_JFFS2_SUMMARY=y
-+CONFIG_JFFS2_FS_XATTR=y
-+# CONFIG_JFFS2_FS_POSIX_ACL is not set
-+# CONFIG_JFFS2_FS_SECURITY is not set
-+CONFIG_SQUASHFS=y
-+CONFIG_SQUASHFS_XZ=y
-+CONFIG_SQUASHFS_4K_DEVBLK_SIZE=y
-+# CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_CRYPTO_CCM=y
-+CONFIG_CRYPTO_GCM=y
-+CONFIG_CRYPTO_CRC32C=y
-+CONFIG_CRYPTO_ARC4=y
-+CONFIG_CRYPTO_DEFLATE=y
-+CONFIG_CRYPTO_LZO=y
-+CONFIG_CRYPTO_ZSTD=y
-+CONFIG_CRYPTO_USER_API_HASH=y
-+# CONFIG_CRYPTO_HW is not set
-+CONFIG_CRC16=y
-+# CONFIG_XZ_DEC_ARM is not set
-+# CONFIG_XZ_DEC_ARMTHUMB is not set
-+CONFIG_DMA_API_DEBUG=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_BOOT_PRINTK_DELAY=y
-+CONFIG_DYNAMIC_DEBUG=y
-+CONFIG_DEBUG_INFO=y
-+# CONFIG_ENABLE_MUST_CHECK is not set
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_PANIC_ON_OOPS=y
-+CONFIG_FUNCTION_PROFILER=y
-+CONFIG_STACK_TRACER=y
-+CONFIG_SCHED_TRACER=y
-+CONFIG_STRICT_DEVMEM=y
-+CONFIG_DEBUG_USER=y
-+CONFIG_DEBUG_LL=y
-+CONFIG_DEBUG_LL_UART_8250=y
-+CONFIG_DEBUG_UART_PHYS=0xC00000F0
-+CONFIG_DEBUG_UART_VIRT=0xF00000F0
-+CONFIG_DEBUG_UART_8250_SHIFT=0
-+CONFIG_EARLY_PRINTK=y
-+CONFIG_TEST_KSTRTOX=y
--- 
-2.17.1
+Looking at unregister_ftrace_function(), i noticed that
+ftrace_shutdown() is called with 0 as command. Given that the ftrace
+function didn't change and ftrace is still enabled, the
+rcu_synchronize() functions in ftrace_shutdown() are silently skipped.
+So the caller frees ops already before other CPUs have gone through
+quiesce, and may therefore use the old (now freed) list entry.
+
+To fix this, i wonder whether we should change the code in
+unregister_ftrace_function() to:
+
+@@ -7827,7 +7837,7 @@ int unregister_ftrace_function(struct ftrace_ops *ops)
+        int ret;
+ 
+        mutex_lock(&ftrace_lock);
+-       ret = ftrace_shutdown(ops, 0);
++       ret = ftrace_shutdown(ops, FTRACE_UPDATE_TRACE_FUNC);
+        mutex_unlock(&ftrace_lock);
+ 
+        return ret;
+
+I haven't checked whether other callsites of unregister_ftrace_function()
+also need to be adjusted. What do you think about that 'fix'?
+
+Thanks,
+Sven
+
+
 

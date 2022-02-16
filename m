@@ -2,123 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D4C4B80E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A454A4B80EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 08:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiBPHDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 02:03:11 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38580 "EHLO
+        id S229484AbiBPHHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 02:07:20 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiBPHDJ (ORCPT
+        with ESMTP id S229441AbiBPHHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 02:03:09 -0500
+        Wed, 16 Feb 2022 02:07:19 -0500
 Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DECA2B6D64
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:02:48 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id j12so1280457qtr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Feb 2022 23:02:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216271F68D9;
+        Tue, 15 Feb 2022 23:06:30 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id e16so1265402qtq.6;
+        Tue, 15 Feb 2022 23:06:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IV3FPtEnsUXk8oMp48bq68PERCfU0wMBWQO4LKNQXdQ=;
-        b=QIV+jlqu6fvKp1QYlRNOIShzVZOFKv9OjsVpegSb9qgT61agwFKN322mX6v+9sangF
-         w34t+f6KeN9DpwhHIf8QhPzuo9ToQw6NALxOmv3JHkV5VfLrIcivKKJxhblm5AWU9iYT
-         hRCRB/9v3rFE3yLFIIp/xYBPuZII9s25CpaxpH32gaDhA2aMJBvOZjN1kAvxJzkN7qqZ
-         N067oLE8K9u56fSV3gRRubAnlc84SmAhQTkCO7hYS2Xtz6+Cqw2Xr505Dlie9mheFg4H
-         MzfWFahN0qM8KWDPf+egZunuYdmf3xL2rOylg8k+6A9fvvmog2SclAAh0cJFTDX/qbZk
-         JcZg==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tQsez3rBBuWL5P/PS1iF/3TVpjfzLMW/EONt+f9CiMQ=;
+        b=DEQtO8Rec0/pciyxC16dz5iaxsu3WmlWt3NyB5nPzDtrs1WiDLQmd6+hlVBLEnqVpu
+         1mebox8SJRxbZTV/O6jAS12dOueg+4F90FldQTblOj89+hrNeAHr+LIeLNdAliI56beR
+         pJC3N2/CeNgNv8Gka5T210xTzD/ClYHwqrGc4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IV3FPtEnsUXk8oMp48bq68PERCfU0wMBWQO4LKNQXdQ=;
-        b=JozcigVpja2wn2HZQ30yz1+RN8ZlVR2zNVwzJ2PIEjrwLdvAtt4M0O6HLYN0WvqRXw
-         1NPg8+7YfRIONrb3d1DnSaVyC0H0bP/wgKNLLvFiFIsStezuSroC4tPJRSt2vcA1jSH3
-         Z38WuJAh/dJXwQheoZrJY5siRKT3EYpkQpzlefxNtXXgb+/Wm8JkTyPHBcpFRXNTykdA
-         nU68mZPGfW6+uIaNEgfo1OQYE0owNVY9ROuHuCy34r02c/+NPH1pZufa/sf53lCKeX++
-         8i7kUKTjdWHlq+Ql9Fzbn6Bd/cDCqD9h8dsnYD5CFs2djW0/ITVHnk9DiwxXjOcmreLy
-         qy7g==
-X-Gm-Message-State: AOAM532Os8kVV3BWFkp8ck4v5IKYN2wdoKkMPDsEOqeCCejNnv8Cutfp
-        qg7odhZezSF9haR1TCdUVv4KNDaoXsk=
-X-Google-Smtp-Source: ABdhPJy5Y5fq7G10KLe7Xka551ZsrYaR34pM3sRqhmoK2ERIiKSseTy5n1RVa47e+qktgUrP5S93JA==
-X-Received: by 2002:ac8:7f49:0:b0:2cd:a931:a423 with SMTP id g9-20020ac87f49000000b002cda931a423mr1012389qtk.650.1644994665431;
-        Tue, 15 Feb 2022 22:57:45 -0800 (PST)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id e16sm21727706qty.47.2022.02.15.22.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 22:57:44 -0800 (PST)
-Message-ID: <620ca068.1c69fb81.d3595.69fa@mx.google.com>
-X-Google-Original-Message-ID: <20220216065742.GA1864737@cgel.zte@gmail.com>
-Date:   Wed, 16 Feb 2022 06:57:42 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     hughd@google.com, mike.kravetz@oracle.com, kirill@shutemov.name,
-        songliubraving@fb.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yang.yang29@zte.com.cn,
-        wang.yong12@zte.com.cn, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] Fix shmem huge page failed to set
- F_SEAL_WRITE attribute problem
-References: <20220215073743.1769979-1-cgel.zte@gmail.com>
- <20220215141236.de1a3eca3a8a52d04507c50f@linux-foundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tQsez3rBBuWL5P/PS1iF/3TVpjfzLMW/EONt+f9CiMQ=;
+        b=TDjSbFRzILxTprlpKNOF0zeCQTtwkkp2mcRz1EH6RUbjk1toFcTL8A5dbtHg+2q/y4
+         wDY4okQhEFkOAfs4xuH5nKMDHJHmRUIUTt1Bf681Rt1GE5EQERGTJTWKfn6+6iPpWioU
+         441t1gVhlLAG6suFC8FcN7PAvJcKXnVUQRe70HvWykQ0yMerTmP5NYRaaICAC878t3Jz
+         gADgJHw7X6IE9UWlxmz//MzzpMCFvAmngrTgCo9hlu7eR9jsnP9di8w1/EceH/E3Qvpo
+         mEdmPRRHpjXUuD+ESAI2PoHQQq98kxuNoUK4jksHv8EKW6WyLdAbA/oy9GdkrA2ee6vq
+         WJ5Q==
+X-Gm-Message-State: AOAM532ucIQzNqt89KY4OQhtnmkEdcclFMud4oW9hV3jiMLczuKzgDt5
+        UEDOVqfsAxI1KZkxAKU1M7CUeh8Gek1UhBUNPlw=
+X-Google-Smtp-Source: ABdhPJxUrxTCwzi7Yj2+ExwwwoGmToAHQYb+adCONcmAx/DnApNmNJjP3jevLGycqiKtwihstXuDC7FCB3cmNTkPoqU=
+X-Received: by 2002:a05:622a:116:b0:2cd:5be1:3838 with SMTP id
+ u22-20020a05622a011600b002cd5be13838mr1054529qtw.494.1644994936320; Tue, 15
+ Feb 2022 23:02:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215141236.de1a3eca3a8a52d04507c50f@linux-foundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214094231.3753686-1-clg@kaod.org> <20220214094231.3753686-11-clg@kaod.org>
+In-Reply-To: <20220214094231.3753686-11-clg@kaod.org>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 16 Feb 2022 07:02:04 +0000
+Message-ID: <CACPK8XdvczyZ1QHtFm7JJAC7AY+QmWSx0MarUwLjUyOtC9DnSQ@mail.gmail.com>
+Subject: Re: [PATCH 10/10] spi: aspeed: Activate new spi-mem driver
+To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Cc:     linux-spi@vger.kernel.org,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-O Tue, Feb 15, 2022 at 02:12:36PM -0800, Andrew Morton wrote:
-> On Tue, 15 Feb 2022 07:37:43 +0000 cgel.zte@gmail.com wrote:
-> 
-> > From: wangyong <wang.yong12@zte.com.cn>
-> > 
-> > After enabling tmpfs filesystem to support transparent hugepage with the
-> > following command:
-> >  echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
-> > The docker program adds F_SEAL_WRITE through the following command will
-> > prompt EBUSY.
-> >  fcntl(5, F_ADD_SEALS, F_SEAL_WRITE)=-1.
-> > 
-> > It is found that in memfd_wait_for_pins function, the page_count of
-> > hugepage is 512 and page_mapcount is 0, which does not meet the
-> > conditions:
-> >  page_count(page) - page_mapcount(page) != 1.
-> > But the page is not busy at this time, therefore, the page_order of
-> > hugepage should be taken into account in the calculation.
-> 
-> What are the real-world runtime effects of this?
+On Mon, 14 Feb 2022 at 09:43, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
 >
-The problem I encounter is that the "docker-runc run busybox" command
-fails, and then the container cannot be started. The following alarm is
-prompted:
-[pid  1412] fcntl(5, F_ADD_SEALS,F_SEAL_SEAL|F_SEAL_SHRINK|F_SEAL_GROW|F_SEAL_WRITE) = -1 EBUSY (Device or resource busy)
-[pid  1412] close(5)                    = 0
-[pid  1412] write(2, "nsenter: could not ensure we are"..., 74) = 74
-...
-[pid  1491] write(3, "\33[31mERRO\33[0m[0005] container_li"..., 166) = 166
-[pid  1491] write(2, "container_linux.go:299: starting"..., 144container_linux.go:299: starting container process caused
-"process_linux.go:245: running exec setns process for init caused \"exit statu" ) = 144
+> The previous driver using the MTD SPI NOR interface is kept in case we
+> find some issues but we should remove it quickly once the new driver
+> using the spi-mem interface has been sufficiently exposed.
+>
+> Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
 
-I'm not sure how this will affect other situations.
-> Do we think that this fix (or one similar to it) should be backported
-> into -stable kernels?
-> 
-> If "yes" then Mike's 5d752600a8c373 ("mm: restructure memfd code") will
-> get in the way because it moved lots of code around.
-> 
-Yes, 4.14 does not have this patch, but 4.19 does.
-In addition, Kirill A. Shutemov's 800d8c63b2e989c2e349632d1648119bf5862f01 
-(shmem: add huge pages support) is not included in 4.4, but it is available in 4.14.
+I suggest we drop the defconfig changes from both this patch and the
+first. This way we'll always have the new driver being built, with
+less churn.
 
-> But then, that's four years old and perhaps that's far enough back in
-> time.
+If you strongly prefer the way you've done it then that's fine too.
 
-Thanks.
+> ---
+>  arch/arm/configs/aspeed_g4_defconfig | 2 +-
+>  arch/arm/configs/aspeed_g5_defconfig | 2 +-
+>  arch/arm/configs/multi_v5_defconfig  | 2 +-
+>  arch/arm/configs/multi_v7_defconfig  | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/arm/configs/aspeed_g4_defconfig b/arch/arm/configs/aspe=
+ed_g4_defconfig
+> index 964536444cd7..b4a1b2ed1a17 100644
+> --- a/arch/arm/configs/aspeed_g4_defconfig
+> +++ b/arch/arm/configs/aspeed_g4_defconfig
+> @@ -64,7 +64,7 @@ CONFIG_MTD_BLOCK=3Dy
+>  CONFIG_MTD_PARTITIONED_MASTER=3Dy
+>  CONFIG_MTD_SPI_NOR=3Dy
+>  # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
+> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
+> +CONFIG_SPI_ASPEED_SMC=3Dy
+>  CONFIG_MTD_UBI=3Dy
+>  CONFIG_MTD_UBI_FASTMAP=3Dy
+>  CONFIG_MTD_UBI_BLOCK=3Dy
+> diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspe=
+ed_g5_defconfig
+> index e809236ca88b..ccc4240ee4b5 100644
+> --- a/arch/arm/configs/aspeed_g5_defconfig
+> +++ b/arch/arm/configs/aspeed_g5_defconfig
+> @@ -103,7 +103,7 @@ CONFIG_MTD_BLOCK=3Dy
+>  CONFIG_MTD_PARTITIONED_MASTER=3Dy
+>  CONFIG_MTD_SPI_NOR=3Dy
+>  # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
+> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
+> +CONFIG_SPI_ASPEED_SMC=3Dy
+>  CONFIG_MTD_UBI=3Dy
+>  CONFIG_MTD_UBI_FASTMAP=3Dy
+>  CONFIG_MTD_UBI_BLOCK=3Dy
+> diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi=
+_v5_defconfig
+> index 49083ef05fb0..80a3ae02d759 100644
+> --- a/arch/arm/configs/multi_v5_defconfig
+> +++ b/arch/arm/configs/multi_v5_defconfig
+> @@ -103,7 +103,7 @@ CONFIG_MTD_RAW_NAND=3Dy
+>  CONFIG_MTD_NAND_ATMEL=3Dy
+>  CONFIG_MTD_NAND_ORION=3Dy
+>  CONFIG_MTD_SPI_NOR=3Dy
+> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
+> +CONFIG_SPI_ASPEED_SMC=3Dy
+>  CONFIG_MTD_UBI=3Dy
+>  CONFIG_BLK_DEV_LOOP=3Dy
+>  CONFIG_ATMEL_SSC=3Dm
+> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi=
+_v7_defconfig
+> index fc1b69256b64..33572998dbbe 100644
+> --- a/arch/arm/configs/multi_v7_defconfig
+> +++ b/arch/arm/configs/multi_v7_defconfig
+> @@ -217,7 +217,7 @@ CONFIG_MTD_NAND_DAVINCI=3Dy
+>  CONFIG_MTD_NAND_STM32_FMC2=3Dy
+>  CONFIG_MTD_NAND_PL35X=3Dy
+>  CONFIG_MTD_SPI_NOR=3Dy
+> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dm
+> +CONFIG_SPI_ASPEED_SMC=3Dm
+>  CONFIG_MTD_UBI=3Dy
+>  CONFIG_BLK_DEV_LOOP=3Dy
+>  CONFIG_BLK_DEV_RAM=3Dy
+> --
+> 2.34.1
+>

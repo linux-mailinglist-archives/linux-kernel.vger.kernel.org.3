@@ -2,118 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FB34B7DA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED004B7DD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Feb 2022 03:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343780AbiBPCgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Feb 2022 21:36:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40962 "EHLO
+        id S1343799AbiBPCic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Feb 2022 21:38:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244735AbiBPCgT (ORCPT
+        with ESMTP id S233189AbiBPCib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Feb 2022 21:36:19 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79255F5412;
-        Tue, 15 Feb 2022 18:36:07 -0800 (PST)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app2 (Coremail) with SMTP id by_KCgAX_nAGYwxi0LrrAQ--.36391S2;
-        Wed, 16 Feb 2022 10:35:55 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-hams@vger.kernel.org
-Cc:     ajk@comnets.uni-bremen.de, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] drivers: hamradio: 6pack: fix UAF bug caused by mod_timer()
-Date:   Wed, 16 Feb 2022 10:35:49 +0800
-Message-Id: <20220216023549.50223-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgAX_nAGYwxi0LrrAQ--.36391S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45Zr1rJr1DtrWxCFy3Jwb_yoW8try3pr
-        Z8Jryftw4ktrW5tw4kAFs5Wrn5uFs5J3yxCrsag3sIvFnxJr1YgFyqvryUXFW2kFZ5Aa47
-        AF4rZr9xAF15C3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
-        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
-        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
-        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwNAVZdtYEE3QAes6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 15 Feb 2022 21:38:31 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71089F5412;
+        Tue, 15 Feb 2022 18:38:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644979100; x=1676515100;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FQ+uP+zkl5dcZCZu/CtemCgpgsFeZ2X8cIcyXL+RTDI=;
+  b=CLZmPQp8zTd8fa4Ru1W1C/twMNAA6o3Ms9Q/7ClxlpxjrgPl5GqTWgzl
+   05CiGLYluHMsZxGtKFIcTpWHGtf3aQGDxbg2K56HXSZoO78/R8+d5xEuc
+   nYGwWyMfTSY2I8PZATtWKcdTtHiS3SXKlKml/cXf2Ibwi9jFoYCvIfrjf
+   Y=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 15 Feb 2022 18:38:20 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 18:38:20 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Feb 2022 18:38:19 -0800
+Received: from [10.111.168.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 15 Feb
+ 2022 18:38:17 -0800
+Message-ID: <51675806-641d-c57e-ada7-a044e37ad808@quicinc.com>
+Date:   Tue, 15 Feb 2022 18:38:15 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Add SC8180x to hw catalog
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20220215043353.1256754-1-bjorn.andersson@linaro.org>
+ <20220215043353.1256754-2-bjorn.andersson@linaro.org>
+ <be397e2e-05ab-5c18-8e2d-16c443f0a6d1@quicinc.com>
+ <Ygvisfhi0SY6XdAz@builder.lan>
+ <6a3ef247-b26b-d505-cd85-92fb277163dd@quicinc.com>
+ <YgxeCHi5AsYPTmeZ@builder.lan>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <YgxeCHi5AsYPTmeZ@builder.lan>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Although del_timer_sync() in sixpack_close() waits for the timer handler
-to finish its execution and then releases the timer, the mod_timer()
-in sp_xmit_on_air() could be called by userspace syscall such as
-ax25_sendmsg(), ax25_connect() and ax25_ioctl() and wakes up the timer
-again. If the timer uses sp_xmit_on_air() to write data on pty work queue
-that already released by unregister_netdev(), the UAF bug will happen.
 
-One of the possible race conditions is shown below:
 
-      (USE)                     |      (FREE)
-ax25_sendmsg()                  |
-  ax25_queue_xmit()             |
-    ...                         |
-    sp_encaps()                 |  sixpack_close()
-      sp_xmit_on_air()          |    del_timer_sync(&sp->tx_t)
-        mod_timer(&sp->tx_t,..) |    ...
-        (wait a while)          |    unregister_netdev(sp->dev)) //FREE
-      sp_xmit_on_air()          |    ...
-        pty_write()             |
-          queue_work_on() //USE |
+On 2/15/2022 6:14 PM, Bjorn Andersson wrote:
+> On Tue 15 Feb 11:42 CST 2022, Abhinav Kumar wrote:
+> 
+>>
+>>
+>> On 2/15/2022 9:28 AM, Bjorn Andersson wrote:
+>>> On Tue 15 Feb 11:14 CST 2022, Abhinav Kumar wrote:
+>>>
+>>>>
+>>>>
+>>>> On 2/14/2022 8:33 PM, Bjorn Andersson wrote:
+>>>>> From: Rob Clark <robdclark@chromium.org>
+>>>>>
+>>>>> Add SC8180x to the hardware catalog, for initial support for the
+>>>>> platform. Due to limitations in the DP driver only one of the four DP
+>>>>> interfaces is left enabled.
+>>>>>
+>>>>> The SC8180x platform supports the newly added DPU_INTF_WIDEBUS flag and
+>>>>> the Windows-on-Snapdragon bootloader leaves the widebus bit set, so this
+>>>>> is flagged appropriately to ensure widebus is disabled - for now.
+>>>>>
+>>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>>>>> [bjorn: Reworked intf and irq definitions]
+>>>>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>>>> ---
+>>>>>
+>>>>> Changes since v1:
+>>>>> - Dropped widebus flag
+>>>>>
+>>>>>     .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 129 ++++++++++++++++++
+>>>>>     .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
+>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
+>>>>>     drivers/gpu/drm/msm/msm_drv.c                 |   1 +
+>>>>>     4 files changed, 132 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>>> index aa75991903a6..7ac0fe32df49 100644
+>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>>> @@ -90,6 +90,17 @@
+>>>>>     			 BIT(MDP_INTF3_INTR) | \
+>>>>>     			 BIT(MDP_INTF4_INTR))
+>>>>> +#define IRQ_SC8180X_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>>> +			  BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>>> +			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>>> +			  BIT(MDP_INTF0_INTR) | \
+>>>>> +			  BIT(MDP_INTF1_INTR) | \
+>>>>> +			  BIT(MDP_INTF2_INTR) | \
+>>>>> +			  BIT(MDP_INTF3_INTR) | \
+>>>>> +			  BIT(MDP_INTF4_INTR) | \
+>>>>> +			  BIT(MDP_INTF5_INTR) | \
+>>>>> +			  BIT(MDP_AD4_0_INTR) | \
+>>>>> +			  BIT(MDP_AD4_1_INTR))
+>>>>>     #define DEFAULT_PIXEL_RAM_SIZE		(50 * 1024)
+>>>>>     #define DEFAULT_DPU_LINE_WIDTH		2048
+>>>>> @@ -225,6 +236,22 @@ static const struct dpu_caps sm8150_dpu_caps = {
+>>>>>     	.max_vdeci_exp = MAX_VERT_DECIMATION,
+>>>>>     };
+>>>>> +static const struct dpu_caps sc8180x_dpu_caps = {
+>>>>> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+>>>>> +	.max_mixer_blendstages = 0xb,
+>>>>> +	.qseed_type = DPU_SSPP_SCALER_QSEED3,
+>>>>> +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
+>>>>> +	.ubwc_version = DPU_HW_UBWC_VER_30,
+>>>>> +	.has_src_split = true,
+>>>>> +	.has_dim_layer = true,
+>>>>> +	.has_idle_pc = true,
+>>>>> +	.has_3d_merge = true,
+>>>>> +	.max_linewidth = 4096,
+>>>>> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+>>>>> +	.max_hdeci_exp = MAX_HORZ_DECIMATION,
+>>>>> +	.max_vdeci_exp = MAX_VERT_DECIMATION,
+>>>>> +};
+>>>>> +
+>>>>>     static const struct dpu_caps sm8250_dpu_caps = {
+>>>>>     	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+>>>>>     	.max_mixer_blendstages = 0xb,
+>>>>> @@ -293,6 +320,31 @@ static const struct dpu_mdp_cfg sc7180_mdp[] = {
+>>>>>     	},
+>>>>>     };
+>>>>> +static const struct dpu_mdp_cfg sc8180x_mdp[] = {
+>>>>> +	{
+>>>>> +	.name = "top_0", .id = MDP_TOP,
+>>>>> +	.base = 0x0, .len = 0x45C,
+>>>>> +	.features = 0,
+>>>>> +	.highest_bank_bit = 0x3,
+>>>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
+>>>>> +			.reg_off = 0x2AC, .bit_off = 0},
+>>>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
+>>>>> +			.reg_off = 0x2B4, .bit_off = 0},
+>>>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
+>>>>> +			.reg_off = 0x2BC, .bit_off = 0},
+>>>>> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
+>>>>> +			.reg_off = 0x2C4, .bit_off = 0},
+>>>>> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
+>>>>> +			.reg_off = 0x2AC, .bit_off = 8},
+>>>>> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
+>>>>> +			.reg_off = 0x2B4, .bit_off = 8},
+>>>>> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
+>>>>> +			.reg_off = 0x2BC, .bit_off = 8},
+>>>>> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
+>>>>> +			.reg_off = 0x2C4, .bit_off = 8},
+>>>>> +	},
+>>>>> +};
+>>>>> +
+>>>>>     static const struct dpu_mdp_cfg sm8250_mdp[] = {
+>>>>>     	{
+>>>>>     	.name = "top_0", .id = MDP_TOP,
+>>>>> @@ -861,6 +913,16 @@ static const struct dpu_intf_cfg sc7280_intf[] = {
+>>>>>     	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+>>>>>     };
+>>>>> +static const struct dpu_intf_cfg sc8180x_intf[] = {
+>>>>> +	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+>>>>> +	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+>>>>> +	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+>>>>> +	/* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
+>>>>> +	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+>>>>> +	INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
+>>>>> +	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+>>>>
+>>>> This is a continued discussion from
+>>>> https://patchwork.freedesktop.org/patch/474179/.
+>>>>
+>>>> Shouldnt INTF_5 be marked as INTF_eDP?
+>>>>
+>>>
+>>> Might be, I didn't even know we had an INTF_EDP define...
+>>>
+>>> Is there any reason to distinguish DP and EDP in the DPU?  I see sc7280
+>>> doesn't distinguish the DP and EDP interfaces.
+>>>
+>>> Regards,
+>>> Bjorn
+>>>
+>>
+>> Like I have mentioned in the other patch, I think we have enough confusion
+>> between eDP and DP with the common driver. Since DPU does have separate
+>> interfaces I think we should fix that.
+>>
+>> Regarding sc7280 using INTF_DP, I synced up with Sankeerth. He referred to
+>> your change
+>> https://patchwork.freedesktop.org/patch/457776/?series=92992&rev=5 as it was
+>> posted earlier and ended up using the same INTF_DP macro. So its turning out
+>> to be a cyclical error.
+>>
+> 
+> That made me take a second look at the HPG, and sure enough INTF_5 on
+> SC7280 is connected to a eDP/DP Combo PHY. We have the same setup in
+> SC8280XP.
+> 
+> In SC8180X, INTF_5 is documented as being connected to a eDP (only) PHY,
+> so perhaps it makes sense to do it there, but for the others its wrong.
+> 
 
-The corresponding fail log is shown below:
-===============================================================
-BUG: KASAN: use-after-free in __run_timers.part.0+0x170/0x470
-Write of size 8 at addr ffff88800a652ab8 by task swapper/2/0
-...
-Call Trace:
-  ...
-  queue_work_on+0x3f/0x50
-  pty_write+0xcd/0xe0pty_write+0xcd/0xe0
-  sp_xmit_on_air+0xb2/0x1f0
-  call_timer_fn+0x28/0x150
-  __run_timers.part.0+0x3c2/0x470
-  run_timer_softirq+0x3b/0x80
-  __do_softirq+0xf1/0x380
-  ...
+Here you are specifying the controller in the catalog. So independent of 
+the PHY thats being used, shouldnt this remain INTF_eDP?
 
-This patch add condition check in sp_xmit_on_air(). If the
-registration status of net_device is not equal to NETREG_REGISTERED,
-the sp_xmit_on_air() will not write data to pty work queue and
-return instead.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/net/hamradio/6pack.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/hamradio/6pack.c b/drivers/net/hamradio/6pack.c
-index b1fc153125d..7ee25e06915 100644
---- a/drivers/net/hamradio/6pack.c
-+++ b/drivers/net/hamradio/6pack.c
-@@ -141,7 +141,8 @@ static void sp_xmit_on_air(struct timer_list *t)
- 	struct sixpack *sp = from_timer(sp, t, tx_t);
- 	int actual, when = sp->slottime;
- 	static unsigned char random;
--
-+	if (sp->dev->reg_state !=  NETREG_REGISTERED)
-+		return;
- 	random = random * 17 + 41;
- 
- 	if (((sp->status1 & SIXP_DCD_MASK) == 0) && (random < sp->persistence)) {
--- 
-2.17.1
-
+> Regards,
+> Bjorn

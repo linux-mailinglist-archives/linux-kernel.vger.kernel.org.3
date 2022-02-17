@@ -2,99 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF9D4B9D8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCDD4B9D90
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239322AbiBQKta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:49:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42334 "EHLO
+        id S239328AbiBQKuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:50:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiBQKt2 (ORCPT
+        with ESMTP id S234328AbiBQKuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:49:28 -0500
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A651ED1DB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:49:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645094954; x=1676630954;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=4aTr7eMoH99dGdFEQX0pvGPd60mY46FyZOxXXitycb0=;
-  b=FwylsGqZIBtenajNH/9dN8kqI78dME2hG4FqlRBJPc/LpKwm7+BqzlR4
-   va1puFFjR6hsGtYjLh38lvjEI956HxcjZCBtgxbcnT7HmDs1KNYkhjwll
-   MmelQWz9FgKYHMhipFkgabtvEXBfi2aXKvzn0U6Fo5nWK9H+PxZKx+8eg
-   DG+urKB5ciZ5fM6HB2hLB1VQKQoAKVG5Dp2hjc3xSZW/xHT3cFfOD0CPW
-   fGeY30wxYgdAXvOOarHjOMc6gsNYl2CHDFcaJlXrEnTlott74pC66Tj1n
-   4Z+lSJ22p99+DBs0Nqx1dRvOwMZPXyf6srsTaZ9IrWISRDCtzqr4hTBVw
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,375,1635177600"; 
-   d="scan'208";a="297293276"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 17 Feb 2022 18:49:14 +0800
-IronPort-SDR: 7ba2i35/ZD72kvsVHd1hOdQG6KcYfiAW1esvOYI36u5sgk9n8JOOh0P28EvtNOLVY21M2mKsEU
- R3lIG7a7GvYGgafHxCNSXQCxTsFKuRrRCjQpaez1NWiO3indMXKCGnKHqWqYdsR4gtAc/jpeFL
- 5sda9um4ZjURxRVuMPa52WdYwp7DbFIaulqrltefY8wvRQUY9NPdTYQXwD2UrNra3QZmfWIBKu
- C72ph8dS6hmbis/J8cPrMEY5kmwr7hrXYxPOq3EcexTo/ptH9hcjjNAh0K8DtnlARlvyqKNlru
- oAbEnbCqHI4wtE+VHzKmXdQp
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 02:20:53 -0800
-IronPort-SDR: 4pZxlpiCFyHI7JRvb3cAuoOfxthUIkZzlL5B19tAPa3nwfQuXJ7Lffc/7rRCE/6zHWs1SgJXpd
- AU1q3bG45ml7mx4HrfnHB8gca3hNLfx7xp8S8Kl6jbTHS8zRIGf5eisEMvhAMi9HjErhdLeGTg
- e265EYk677kqLlTTkSzPc6gSl13GPnQ5JJ97aJrBcbsMt0ELinskamEhQ9wIr5rAjK0KD+uc6u
- ejILt1dPcrN6l4q3DxcxCuGioudOvt1SZrlG4atD/0zDc4V94J3kt22nZ9Al336GxURew6wXe5
- +5A=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 02:49:15 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jzs5Q01vdz1SVnx
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:49:13 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1645094953; x=1647686954; bh=4aTr7eMoH99dGdFEQX0pvGPd60mY46FyZOx
-        XXitycb0=; b=rRplEjKh2FkbC24wb/wJ3BraLnKq/2mDZyrb2IHi4gJh6OsxFhv
-        SPEAcM1G5+Dla+Be8jg2Bd05RZ3X5qrsAyrM8q0CN0tUfNLG6vsSietJmxPgVI3V
-        iH2S61Tq02Pi1JSw6SmpB9JiM05bKLF23xIuzdEdeotSeyr8gMJ9q1J/WNQL3Mtl
-        G8QTbu9igsN2RJH9P9jtZYDuzqd1zT4+Hwpfor8amAgArSFLnJQUtRU5kd+BmYtI
-        zeCK9zlqesOGErKVHj4NEQ/li5OaAhQIZHGBN4sFqhHx21jFP53qJGyyJ4MxgHbU
-        4UMwYtTrfCEjUye3EvBeOfgrPG1C00PLdWA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5WEmHjwtjf4M for <linux-kernel@vger.kernel.org>;
-        Thu, 17 Feb 2022 02:49:13 -0800 (PST)
-Received: from [10.225.163.77] (unknown [10.225.163.77])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jzs5N4YMtz1Rwrw;
-        Thu, 17 Feb 2022 02:49:12 -0800 (PST)
-Message-ID: <1d287c7e-8aff-beea-1bd6-4b2226f9f3db@opensource.wdc.com>
-Date:   Thu, 17 Feb 2022 19:49:11 +0900
+        Thu, 17 Feb 2022 05:50:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1470C1ED1E7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:50:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5E3DB82171
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:50:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F75EC340E8;
+        Thu, 17 Feb 2022 10:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645095001;
+        bh=V5/vdsYX/un8H0kUy8bihughcNy3eq6MQO+YbmfOOTs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=JCv3V8gFFGQhVmq6dxfWkx+4qDh93wxw6pGplOggWfW2jWMKWc4SQ/WS4pczozvzg
+         mSC/GrCzDyuq1Cbyl6LNwYwZzknV8jhSHtL6gLYHIh7jqpu85RdOZoewW06sOL01ZO
+         Dtk3oD5XJfk0scuSuG4eyIXC9c92cMu5VJFWHx+HSrWcwJuXftQN3Ob4M0Y9pahF+w
+         nCG0DFuPs/a/ADCoiPbK6ZQM4GLrpMHMQ0vz7ubXFuqsYDjoR0359u7P/lBFYbWNwA
+         O97i4LqWkIP3yGpqLIbVWscVGR2epy9KM9OYXDo/9LreHSlE/eb4GKOeakUc67Rdb/
+         3XtQXV7Fb070A==
+Message-ID: <ed4f4589f322bd3871f825239985410b535df30e.camel@kernel.org>
+Subject: Re: [PATCH] arm64: Do not defer reserve_crashkernel() for platforms
+ with no DMA memory zones
+From:   nicolas saenz julienne <nsaenz@kernel.org>
+To:     Vijay Balakrishna <vijayb@linux.microsoft.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Thu, 17 Feb 2022 11:49:56 +0100
+In-Reply-To: <1645056294-6509-1-git-send-email-vijayb@linux.microsoft.com>
+References: <1645056294-6509-1-git-send-email-vijayb@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RESEND v2] dm: Fix use-after-free in
- dm_cleanup_zoned_dev()
-Content-Language: en-US
-To:     Kirill Tkhai <ktkhai@virtuozzo.com>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <c64d2143-284e-7621-440c-971e3405b4d8@virtuozzo.com>
- <d209a0b1-2514-79a0-257a-22bcb372785a@virtuozzo.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <d209a0b1-2514-79a0-257a-22bcb372785a@virtuozzo.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,155 +61,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 19:13, Kirill Tkhai wrote:
+On Wed, 2022-02-16 at 16:04 -0800, Vijay Balakrishna wrote:
+> The following patches resulted in deferring crash kernel reservation to
+> mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
+> in particular Raspberry Pi 4.
 > 
-> dm_cleanup_zoned_dev() uses queue, so it must be called
-> before blk_cleanup_disk() starts its killing:
+> commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
+> commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
+> commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
+> commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required")
 > 
-> blk_cleanup_disk->blk_cleanup_queue()->kobject_put()->blk_release_queue()->
-> ->...RCU...->blk_free_queue_rcu()->kmem_cache_free()
+> Above changes introduced boot slowdown due to linear map creation for
+> all the memory banks with NO_BLOCK_MAPPINGS, see discussion[1].  The proposed
+> changes restore crash kernel reservation to earlier behavior thus avoids
+> slow boot, particularly for platforms with IOMMU (no DMA memory zones).
 > 
-> Otherwise, RCU callback may be executed first,
-> and dm_cleanup_zoned_dev() touches freed memory:
-
-Mike,
-
-Can you queue this please ?
-
+> [1] https://lore.kernel.org/all/9436d033-579b-55fa-9b00-6f4b661c2dd7@linux.microsoft.com/
 > 
->  BUG: KASAN: use-after-free in dm_cleanup_zoned_dev+0x33/0xd0
->  Read of size 8 at addr ffff88805ac6e430 by task dmsetup/681
-> 
->  CPU: 4 PID: 681 Comm: dmsetup Not tainted 5.17.0-rc2+ #6
->  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->  Call Trace:
->   <TASK>
->   dump_stack_lvl+0x57/0x7d
->   print_address_description.constprop.0+0x1f/0x150
->   ? dm_cleanup_zoned_dev+0x33/0xd0
->   kasan_report.cold+0x7f/0x11b
->   ? dm_cleanup_zoned_dev+0x33/0xd0
->   dm_cleanup_zoned_dev+0x33/0xd0
->   __dm_destroy+0x26a/0x400
->   ? dm_blk_ioctl+0x230/0x230
->   ? up_write+0xd8/0x270
->   dev_remove+0x156/0x1d0
->   ctl_ioctl+0x269/0x530
->   ? table_clear+0x140/0x140
->   ? lock_release+0xb2/0x750
->   ? remove_all+0x40/0x40
->   ? rcu_read_lock_sched_held+0x12/0x70
->   ? lock_downgrade+0x3c0/0x3c0
->   ? rcu_read_lock_sched_held+0x12/0x70
->   dm_ctl_ioctl+0xa/0x10
->   __x64_sys_ioctl+0xb9/0xf0
->   do_syscall_64+0x3b/0x90
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
->  RIP: 0033:0x7fb6dfa95c27
->  Code: 00 00 00 48 8b 05 69 92 0c 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 39 92 0c 00 f7 d8 64 89 01 48
->  RSP: 002b:00007fff882c6c28 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
->  RAX: ffffffffffffffda RBX: 00007fb6dfb73a8e RCX: 00007fb6dfa95c27
->  RDX: 00007fb6e01d7ca0 RSI: 00000000c138fd04 RDI: 0000000000000003
->  RBP: 00007fff882c6ce0 R08: 00007fb6dfbc3558 R09: 00007fff882c6a90
->  R10: 00007fb6dfbc28a2 R11: 0000000000000206 R12: 00007fb6dfbc28a2
->  R13: 00007fb6dfbc28a2 R14: 00007fb6dfbc28a2 R15: 00007fb6dfbc28a2
->   </TASK>
-> 
->  Allocated by task 673:
->   kasan_save_stack+0x1e/0x40
->   __kasan_slab_alloc+0x66/0x80
->   kmem_cache_alloc_node+0x1ca/0x460
->   blk_alloc_queue+0x33/0x4e0
->   __blk_alloc_disk+0x1b/0x60
->   dm_create+0x368/0xa20
->   dev_create+0xb9/0x170
->   ctl_ioctl+0x269/0x530
->   dm_ctl_ioctl+0xa/0x10
->   __x64_sys_ioctl+0xb9/0xf0
->   do_syscall_64+0x3b/0x90
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
->  Freed by task 0:
->   kasan_save_stack+0x1e/0x40
->   kasan_set_track+0x21/0x30
->   kasan_set_free_info+0x20/0x30
->   __kasan_slab_free+0xfb/0x130
->   slab_free_freelist_hook+0x7d/0x150
->   kmem_cache_free+0x13c/0x340
->   rcu_do_batch+0x2d9/0x820
->   rcu_core+0x3b8/0x570
->   __do_softirq+0x1c4/0x63d
-> 
->  Last potentially related work creation:
->   kasan_save_stack+0x1e/0x40
->   __kasan_record_aux_stack+0x96/0xa0
->   call_rcu+0xc4/0x8f0
->   kobject_put+0xd9/0x270
->   disk_release+0xee/0x120
->   device_release+0x59/0xf0
->   kobject_put+0xd9/0x270
->   cleanup_mapped_device+0x12b/0x1b0
->   __dm_destroy+0x26a/0x400
->   dev_remove+0x156/0x1d0
->   ctl_ioctl+0x269/0x530
->   dm_ctl_ioctl+0xa/0x10
->   __x64_sys_ioctl+0xb9/0xf0
->   do_syscall_64+0x3b/0x90
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
->  The buggy address belongs to the object at ffff88805ac6e180
->   which belongs to the cache request_queue of size 2992
->  The buggy address is located 688 bytes inside of
->   2992-byte region [ffff88805ac6e180, ffff88805ac6ed30)
->  The buggy address belongs to the page:
->  page:000000000837df3c refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x5ac68
->  head:000000000837df3c order:3 compound_mapcount:0 compound_pincount:0
->  flags: 0xfffffc0010200(slab|head|node=0|zone=1|lastcpupid=0x1fffff)
->  raw: 000fffffc0010200 0000000000000000 dead000000000122 ffff888001e58280
->  raw: 0000000000000000 00000000800a000a 00000001ffffffff 0000000000000000
->  page dumped because: kasan: bad access detected
-> 
->  Memory state around the buggy address:
->   ffff88805ac6e300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff88805ac6e380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->  >ffff88805ac6e400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                                       ^
->   ffff88805ac6e480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff88805ac6e500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->  ==================================================================
-> 
-> Fixes: bb37d77239af "dm: introduce zone append emulation"
-> Signed-off-by: Kirill Tkhai <ktkhai@virtuozzo.com>
-> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+> Cc: stable@vger.kernel.org
 > ---
-> v2: Split long commit message line and delete [xxx] time prefix from kernel output.
+> Tested changes to confirm no ~150ms boot slowdown on our SoC with IOMMU
+> and 8GB memory.  Also tested with ZONE_DMA and/or ZONE_DMA32 configs to confirm
+> no regression to deferring scheme of crash kernel memory reservation.
+> In both cases successfully collected kernel crash dump.
+> ---
+>  arch/arm64/mm/init.c | 14 +++++++++++---
+>  arch/arm64/mm/mmu.c  | 24 +++++++++++++++++++++++-
+>  2 files changed, 34 insertions(+), 4 deletions(-)
 > 
->  drivers/md/dm.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-> index dcbd6d201619..d472fe5dbc1d 100644
-> --- a/drivers/md/dm.c
-> +++ b/drivers/md/dm.c
-> @@ -1607,6 +1607,7 @@ static void cleanup_mapped_device(struct mapped_device *md)
->  		md->dax_dev = NULL;
->  	}
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index db63cc885771..f2a982c19b75 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -62,7 +62,11 @@ EXPORT_SYMBOL(memstart_addr);
+>   * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
+>   * otherwise it is empty.
+>   */
+> -phys_addr_t arm64_dma_phys_limit __ro_after_init;
+> +#if !defined(CONFIG_ZONE_DMA) && !defined(CONFIG_ZONE_DMA32)
+> +phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
+> +#else
+> +phys_addr_t __ro_after_init arm64_dma_phys_limit;
+> +#endif
 >  
-> +	dm_cleanup_zoned_dev(md);
->  	if (md->disk) {
->  		spin_lock(&_minor_lock);
->  		md->disk->private_data = NULL;
-> @@ -1627,7 +1628,6 @@ static void cleanup_mapped_device(struct mapped_device *md)
->  	mutex_destroy(&md->swap_bios_lock);
+>  #ifdef CONFIG_KEXEC_CORE
+>  /*
+> @@ -153,8 +157,6 @@ static void __init zone_sizes_init(unsigned long min, unsigned long max)
+>  	if (!arm64_dma_phys_limit)
+>  		arm64_dma_phys_limit = dma32_phys_limit;
+>  #endif
+> -	if (!arm64_dma_phys_limit)
+> -		arm64_dma_phys_limit = PHYS_MASK + 1;
+>  	max_zone_pfns[ZONE_NORMAL] = max;
 >  
->  	dm_mq_cleanup_mapped_device(md);
-> -	dm_cleanup_zoned_dev(md);
+>  	free_area_init(max_zone_pfns);
+> @@ -315,6 +317,10 @@ void __init arm64_memblock_init(void)
+>  
+>  	early_init_fdt_scan_reserved_mem();
+>  
+> +#if !defined(CONFIG_ZONE_DMA) && !defined(CONFIG_ZONE_DMA32)
+> +	reserve_crashkernel();
+> +#endif
+> +
+>  	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
 >  }
 >  
->  /*
-> 
+> @@ -357,11 +363,13 @@ void __init bootmem_init(void)
+>  	 */
+>  	dma_contiguous_reserve(arm64_dma_phys_limit);
+>  
+> +#if defined(CONFIG_ZONE_DMA) || defined(CONFIG_ZONE_DMA32)
+>  	/*
+>  	 * request_standard_resources() depends on crashkernel's memory being
+>  	 * reserved, so do it here.
+>  	 */
+>  	reserve_crashkernel();
+> +#endif
+>  
+>  	memblock_dump_all();
+>  }
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index acfae9b41cc8..e7faf5edccfc 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -517,7 +517,7 @@ static void __init map_mem(pgd_t *pgdp)
+>  	 */
+>  	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
+>  
+> -	if (can_set_direct_map() || crash_mem_map || IS_ENABLED(CONFIG_KFENCE))
+> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+>  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+>  
+>  	/*
+> @@ -528,6 +528,14 @@ static void __init map_mem(pgd_t *pgdp)
+>  	 */
+>  	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+>  
+> +#ifdef CONFIG_KEXEC_CORE
+> +	if (crash_mem_map && !crashk_res.end)
+> +		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
 
+Using IS_ENABLED(ZONE_DMA/DMA32) instead of '!crashk_res.end' would be more
+efficient and a bit more explicit IMO.
 
--- 
-Damien Le Moal
-Western Digital Research
+>  	/* map all the memory banks */
+>  	for_each_mem_range(i, &start, &end) {
+>  		if (start >= end)
+> @@ -554,6 +562,20 @@ static void __init map_mem(pgd_t *pgdp)
+>  	__map_memblock(pgdp, kernel_start, kernel_end,
+>  		       PAGE_KERNEL, NO_CONT_MAPPINGS);
+>  	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
+> +#ifdef CONFIG_KEXEC_CORE
+> +	/*
+> +	 * Use page-level mappings here so that we can shrink the region
+> +	 * in page granularity and put back unused memory to buddy system
+> +	 * through /sys/kernel/kexec_crash_size interface.
+> +	 */
+> +	if (crashk_res.end) {
+
+Same here.
+
+> +		__map_memblock(pgdp, crashk_res.start, crashk_res.end + 1,
+> +			       PAGE_KERNEL,
+> +			       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+> +		memblock_clear_nomap(crashk_res.start,
+> +				     resource_size(&crashk_res));
+> +	}
+> +#endif
+
+Now, I carefully reviewed the patch and it seems to be doing the right thing.
+But even while knowlegable on the topic, it took a good amount of effort to
+untangle the possible code paths. I suspect it's going to be painful to
+maintain. I'd suggest at least introducing a comment explaining the situation.
+
+If there approach if deemed acceptable, I'll test is on the RPi4.
+
+Regards,
+Nicolas

@@ -2,94 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF23A4BA717
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F384BA71C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243701AbiBQR1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:27:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50152 "EHLO
+        id S243710AbiBQR2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:28:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbiBQR1b (ORCPT
+        with ESMTP id S233104AbiBQR2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:27:31 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0F218461B;
-        Thu, 17 Feb 2022 09:27:16 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id j78so712627qke.2;
-        Thu, 17 Feb 2022 09:27:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5TBlHGHH+WgnstAw4WAM7waOCG5SUDRAM7hFFIagCrU=;
-        b=HLY4SPMBxh4NKJbgQKdTkOF1EKwda6K8LQMPuV36UURJxnp7c4cFUN7jKyV05Ha0JT
-         ubSD9THez92siIbroSve2L+60SunhnDrredJrG/kd8HxyGw1J6LhbEkgN3Lm+S0R8Dki
-         qwO6hj1XbpB6NkUgQ84Oy/OV+Sbji6p57xqSFrRNZ8us8dbQ8sXhvvJ8PjS6Q/dT1ksj
-         5rj3nmge7i+rX00ahzikCfer3Jv8T0UkehawWYdt12kZVJtj5akb4J+p2+UelxXYyfjI
-         SFbE5tkLerjDF+R1tj2kzFP4jmcyOL2S0NwaAgmE6YAtuO/MVsoxtyRUuV7hWoF/vyPQ
-         yzrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5TBlHGHH+WgnstAw4WAM7waOCG5SUDRAM7hFFIagCrU=;
-        b=PPvdBwa+oKJYS1FNHDC+SJLIxRjOiCzr5ntDpfSTTxRLtCNBPDdkl5Jq94XxH0LskZ
-         JWNCE/PMi9VpcDRkRqrq4SsBSkyQLtDrNFTHzjzZ9r5HbRi1CyqKCQHsAaUHLeIWaio7
-         i4VZpCYo5hNkKu634I5/LjEgZbjOzsILzA6VfHrpxb2bH9XroZk/JQL/MIAmKZKTJU8b
-         e2ReMuI1DGp4eVVoLTFS6KaQRfiZFNAwI2zV2RdFEpNaoXjpvUUN6S2y7kYyzY1zOhT0
-         SrKsEwBzzabyMx2w6UYMHNX2njI950lNyl6I5Gmpk/occ91FezVyRtjSY5zwMbyeyL2L
-         WgVw==
-X-Gm-Message-State: AOAM531V8tTMRaXWCDLlsd/YH8sEUMJD+UjCmrLp5GIJMzuEjNGlI+RW
-        RNFSRtOKOV3nyDX2XWtHtU8=
-X-Google-Smtp-Source: ABdhPJzA7isSR8GbbpDuUGZbNJH+0UydjEtjn1t9PHTbTZtMwobftpWsxxVxnjOdfRofyzr6m36xhw==
-X-Received: by 2002:a37:5345:0:b0:47b:e4b3:48ea with SMTP id h66-20020a375345000000b0047be4b348eamr2287957qkb.35.1645118835811;
-        Thu, 17 Feb 2022 09:27:15 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o17sm11404887qtv.45.2022.02.17.09.27.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 09:27:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ef1b1d99-6172-2b4d-9612-7ecbe8fc6c8b@roeck-us.net>
-Date:   Thu, 17 Feb 2022 09:27:11 -0800
+        Thu, 17 Feb 2022 12:28:35 -0500
+X-Greylist: delayed 4194 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 09:28:20 PST
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63B1255798;
+        Thu, 17 Feb 2022 09:28:19 -0800 (PST)
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 21HHRuww006618;
+        Fri, 18 Feb 2022 02:27:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 21HHRuww006618
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1645118877;
+        bh=l1TyzWfQ0jAdhokclSQdnzp8UboMTXXAhan3iI6BUk4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hvNZ4ikLbPjFV/y7ChTE5b8OQBL4g8ZAbtTOwQUZywEnlNF2G/aTi0H1hOhjyGN1C
+         NHEvmztYFCF9Dc6V+hJ5X/wHyELb7nkaACM0wtDbd1+6U7R7+rDFLUXLtZq0w84U3W
+         BVfybmzISX6N+vJbJd360lhJt+4BjRbSdwMcbxAFVXLN1dvr/KzBnHTTvkMEwi2rGw
+         1F0F3DqlPQseUBPJmjskaAJFRh4BWjbcpSq8s9JNDIlKwAPaNXW3e3v/K/zuxd+7Vj
+         l04cKXOH+QyAL/gsJtSNW0MqjhMRjyrIRZpPCWh9tKNIq0WeSu5TcRpw/ib8raCV+x
+         uk3hly0CQ39pQ==
+X-Nifty-SrcIP: [209.85.215.171]
+Received: by mail-pg1-f171.google.com with SMTP id q132so5607076pgq.7;
+        Thu, 17 Feb 2022 09:27:57 -0800 (PST)
+X-Gm-Message-State: AOAM531kh4fpiuOKOs30sCiauRibhY7cr78lCmaAEcXo9f7aMZXkKJir
+        g3WL8JHK2Mg4ZvUu6o6py3dA384kSBA95+sR4ik=
+X-Google-Smtp-Source: ABdhPJxBWdwy+sIqV6zpRtht5DZ0OmlC41IapWVAe36IX2cFMRgSnZS9d19h+BtDYudfRbxf5PEvVUO6wlOp73L12Wo=
+X-Received: by 2002:a05:6a00:a01:b0:4cc:61e5:c548 with SMTP id
+ p1-20020a056a000a0100b004cc61e5c548mr4081108pfh.68.1645118876247; Thu, 17 Feb
+ 2022 09:27:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC V2 17/21] watchdog/dev: Add tracepoints
-Content-Language: en-US
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        "Peter.Enderborg@sony.com" <Peter.Enderborg@sony.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-devel@vger.kernel.org" 
-        <linux-trace-devel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <cover.1644830251.git.bristot@kernel.org>
- <e67874c8b676ea8dfe38679efa25363889bb1e76.1644830251.git.bristot@kernel.org>
- <96f418b4-0ba8-01fe-ead0-2028bfc42560@sony.com>
- <ba924008-c0ab-4800-aac4-d9d9ae930c32@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ba924008-c0ab-4800-aac4-d9d9ae930c32@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+References: <978951d76d8cb84bab347c7623bc163e9a038452.1645100305.git.christophe.leroy@csgroup.eu>
+ <35bcd5df0fb546008ff4043dbea68836@AcuMS.aculab.com> <d38e5e1c-29b6-8cc6-7409-d0bdd5772f23@csgroup.eu>
+ <9b8ef186-c7fe-822c-35df-342c9e86cc88@csgroup.eu> <3c2b682a7d804b5e8749428b50342c82@AcuMS.aculab.com>
+ <CAK7LNASWTJ-ax9u5yOwHV9vHCBAcQTazV-oXtqVFVFedOA0Eqw@mail.gmail.com> <2e38265880db45afa96cfb51223f7418@AcuMS.aculab.com>
+In-Reply-To: <2e38265880db45afa96cfb51223f7418@AcuMS.aculab.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 18 Feb 2022 02:27:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASvBLLWMa+kb5eGJ6vpSqob_dBUxwCnpHZfL-spzRG7qA@mail.gmail.com>
+Message-ID: <CAK7LNASvBLLWMa+kb5eGJ6vpSqob_dBUxwCnpHZfL-spzRG7qA@mail.gmail.com>
+Subject: Re: [PATCH net v3] net: Force inlining of checksum functions in net/checksum.h
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,41 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 08:27, Daniel Bristot de Oliveira wrote:
-> Hi Peter
-> 
-> On 2/16/22 17:01, Peter.Enderborg@sony.com wrote:
->> On 2/14/22 11:45, Daniel Bristot de Oliveira wrote:
->>> Add a set of tracepoints, enabling the observability of the watchdog
->>> device interactions with user-space.
->>>
->>> The events are:
->>> 	watchdog:watchdog_open
->>> 	watchdog:watchdog_close
->>> 	watchdog:watchdog_start
->>> 	watchdog:watchdog_stop
->>> 	watchdog:watchdog_set_timeout
->>> 	watchdog:watchdog_ping
->>> 	watchdog:watchdog_nowayout
->>> 	watchdog:watchdog_set_keep_alive
->>> 	watchdog:watchdog_keep_alive
->>
->> Some watchdogs have a bark functionality, I think it should be event for that too.
->>
-> 
-> I understand. The problems is that I do not see the bark abstraction in the
-> watchdog_dev layer.
-> 
+On Fri, Feb 18, 2022 at 1:49 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Masahiro Yamada
+> > Sent: 17 February 2022 16:17
+> ...
+> > No.  Not that one.
+> >
+> > The commit you presumably want to revert is:
+> >
+> > a771f2b82aa2 ("[PATCH] Add a section about inlining to
+> > Documentation/CodingStyle")
+> >
+> > This is now referred to as "__always_inline disease", though.
+>
+> That description is largely fine.
+>
+> Inappropriate 'inline' ought to be removed.
+> Then 'inline' means - 'really do inline this'.
 
-I don't even know what "bark functionality" means. A new term for pretimeout ?
-Something else ?
 
-Guenter
+You cannot change "static inline" to "static"
+in header files.
 
-> In the case I am investigating (the safety_monitor/safety_app) the bark is
-> outside of the "OS" view, it is an hardware action - like. shutdown.
-> 
-> Am I missing something? Thoughts?
-> 
-> -- Daniel
+If  "static inline" meant __always_inline,
+there would be no way to negate it.
+That's why we need both inline and __always_inline.
 
+
+
+
+> Anyone remember massive 100+ line #defines being
+> used to get code inlined 'to make it faster'.
+> Sometimes being expanded several times in succession.
+> May have helped a 68020, but likely to be a loss on
+> modern cpu with large I-cache and slow memory.
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+
+
+--
+Best Regards
+Masahiro Yamada

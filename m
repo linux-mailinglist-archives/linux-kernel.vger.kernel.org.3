@@ -2,125 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E144B9849
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 06:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 207094B984D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 06:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234167AbiBQF2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 00:28:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33122 "EHLO
+        id S234221AbiBQFas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 00:30:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiBQF2V (ORCPT
+        with ESMTP id S229530AbiBQFaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 00:28:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00F3197211
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 21:28:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 17 Feb 2022 00:30:46 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E5223E5F3;
+        Wed, 16 Feb 2022 21:30:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2A4D8CE2A7E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850B9C340E9;
-        Thu, 17 Feb 2022 05:28:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645075684;
-        bh=aXp8cLS0ADIpS6ca1Hgi9yAT4TUXB1lnOG3WXfH6ABU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kE2P8DJ+dTKXt1+ildUxN86bLoEK1RGIhN/j6tMuCp9O+tbA6C9i2yDP3bgdRReqj
-         MD7tGosU5DGpKJPYzHEEp9XHc06KgoeqzdUlkSkBTrUrR3AbdcDZ3wgZwSkWah44T/
-         9460cotNv6VYsiq+FnMVwOKYuUdFXQ9XlT2hByTfO75gZ1U+oHRw7EJvTVTPUrqVmx
-         liLyeZga9+tfDiMIctlY7sTV/u5RpW/Kfb4dmiKfEQOCZ//MgItO5tjTF8DrxLQRPS
-         BgNA4mijJdnjZlYTBE1PxmGXfg8PwdUAv5ZOg5CtMEi+yqvXG02u1Q7Pr+watvOmZM
-         CM3taPvxJJmIg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3EE685C034B; Wed, 16 Feb 2022 21:28:04 -0800 (PST)
-Date:   Wed, 16 Feb 2022 21:28:04 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 2/5] rcu/nocb: Move rcu_nocb_is_setup to rcu_state
-Message-ID: <20220217052804.GA2461302@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220216154208.696069-1-frederic@kernel.org>
- <20220216154208.696069-3-frederic@kernel.org>
- <20220216213035.GA2442742@paulmck-ThinkPad-P17-Gen-1>
- <20220217015332.GA2455440@paulmck-ThinkPad-P17-Gen-1>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jzk1b1R2xz4xNq;
+        Thu, 17 Feb 2022 16:30:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1645075827;
+        bh=0yh5fKlavinMSqqtJMwS6WKa+Z9MXbMShporssLVK2o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OGFElLSqX4RyBX+SLFc+pASUNdCQzdfSIeSM7iRgT+CIeJmE2WuSqHO9TBysdKPgZ
+         Rgw2FZNTuVeL7EYaDjW1szEOWVgv+xgZ/gBCqsgjKnB3rA7jR9K2bmVmkDvJj32oN6
+         BJsPzKz3kWEA/vNaDOSO8sag6fMIQR0VkckfqM4CNMgFtmhIRG8ifo34j+ox9G9FGB
+         Nix1joDg2NRmgT20Yh7HGT0cOumT3TPsdd1L8z1O8TT3pqqbhobPnZqSAaTjcPk+mj
+         xcB/rLG/GmffGCUxmQ4im/luJMJp67vVpDeT0sRj5rVvJXEMz4qWnl5C8SDuSHo9Qv
+         Co10R9um+kdvQ==
+Date:   Thu, 17 Feb 2022 16:30:26 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ folio tree
+Message-ID: <20220217163026.5e48ccb1@canb.auug.org.au>
+In-Reply-To: <Yg1hf0iHdKcjnq6l@casper.infradead.org>
+References: <20220215180043.23879691@canb.auug.org.au>
+        <YgumpQrC+cuYe91H@casper.infradead.org>
+        <20220216172109.72fd0a38@canb.auug.org.au>
+        <Yg1hf0iHdKcjnq6l@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217015332.GA2455440@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YQBQVycjhypHJ4c/BGgbRoj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 05:53:32PM -0800, Paul E. McKenney wrote:
-> On Wed, Feb 16, 2022 at 01:30:35PM -0800, Paul E. McKenney wrote:
-> > On Wed, Feb 16, 2022 at 04:42:05PM +0100, Frederic Weisbecker wrote:
-> > > In order to avoid scattering the global RCU states, move the RCU nocb
-> > > initialization witness within rcu_state.
-> > > 
-> > > Reported-by: Paul E. McKenney <paulmck@kernel.org>
-> > > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> > > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > 
-> > Build testing for CONFIG_NO_HZ_FULL=n kernels suggested the following
-> > patch be merged into this one.  Or does this variable need to be used
-> > somewhere?  Either way, please let me know!
-> 
-> TASKS03, TREE04, and TREE07 don't like this much, according to git
-> bisect.  They are the ones with nohz_full CPUs, in case that is crucial.
-> Trying again after reverting this commit locally.
-> 
-> If that works, I would be tempted to try the modification shown below.
+--Sig_/YQBQVycjhypHJ4c/BGgbRoj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-And that does pass significant rcutorture testing, but over to you.  ;-)
+Hi Matthew,
 
-							Thanx, Paul
+On Wed, 16 Feb 2022 20:41:35 +0000 Matthew Wilcox <willy@infradead.org> wro=
+te:
+>
+> So where do we go from here?  I can see ways of resolving this if
+> Andrew switches to git, but he won't, so that's out.  Perhaps I can
+> publish a git tree of Hugh's mlock patches and Christoph's series,
+> and you can pull that before Andrew's tree so git resolves the conflicts
+> early before trying to resolve conflicts against my tree?
 
-> > ------------------------------------------------------------------------
-> > 
-> > commit 1a4f308b3b3841ef10043fe6c3dd12fc872b0400
-> > Author: Paul E. McKenney <paulmck@kernel.org>
-> > Date:   Wed Feb 16 13:27:42 2022 -0800
-> > 
-> >     squash! rcu/nocb: Move rcu_nocb_is_setup to rcu_state
-> >     
-> >     [ paulmck: Remove unused need_rcu_nocb_mask local variable. ]
-> >     
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > index 9d6d4786bc703..9d97aa1f4d6ce 100644
-> > --- a/kernel/rcu/tree_nocb.h
-> > +++ b/kernel/rcu/tree_nocb.h
-> > @@ -1154,14 +1154,8 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
-> >  void __init rcu_init_nohz(void)
-> >  {
-> >  	int cpu;
-> > -	bool need_rcu_nocb_mask = false;
-> >  	struct rcu_data *rdp;
-> >  
-> > -#if defined(CONFIG_NO_HZ_FULL)
-> > -	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
-> > -		need_rcu_nocb_mask = true;
-> 
-> 		rcu_state.nocb_is_setup = true;
-> 
-> > -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
-> > -
-> >  	if (rcu_state.nocb_is_setup) {
-> >  		if (!cpumask_available(rcu_nocb_mask)) {
-> >  			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
+My response for any other subsystem would be that you need to go
+through the maintainer's tree.  In this case that means feeding a patch
+series to Andrew and updating that patch series.
+
+Alternatively, you need to find someone (with Andrew's agreement) who
+can maintain a git tree that includes all Andrew's MM patches and any
+other topic branches and deals with all the conflicts and can feed it
+all to Linus.  Linux-next would also include that tree/branch.
+
+Andrew, do you have any comments?
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YQBQVycjhypHJ4c/BGgbRoj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIN3XIACgkQAVBC80lX
+0Gzs2wgAmWswoQpVdry1rBJIYAJRwUWUwk2ijpIUXIS5/q+iZBuwsLii/nngtfd3
+LgPtwcoCwsVUpxbfFZ5dWA0vLRxUZwJIZ1orXh6Z+OC5thO/+/Rr9fX9RMLFRl2n
+AQYrBWdIeJ356FHhJQG3e31PrYndqyN+fz+rGMv3xbf99DbqZSnvwAqtfSGNWCqC
+Qk70zdO6EfZIcoWGoZwgtJ2wVHPJk+XG4rDmeYfmZUul+SDJyrdX1IylDGeRK6GA
+6US/cqIPgWos8BcYQ7GwLg9zloIhZQ8oc4oSgVRKjnHerI84Hws6Kjg121xijGy/
+d5wD3lfrIDhUFA0CCU3XapvcEQ/lxw==
+=Sj6f
+-----END PGP SIGNATURE-----
+
+--Sig_/YQBQVycjhypHJ4c/BGgbRoj--

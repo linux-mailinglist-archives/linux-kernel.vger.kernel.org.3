@@ -2,375 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9544BAD12
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 00:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2D14BAD18
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 00:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiBQXKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 18:10:22 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45162 "EHLO
+        id S229888AbiBQXNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 18:13:16 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiBQXKU (ORCPT
+        with ESMTP id S229506AbiBQXNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 18:10:20 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9D15577D;
-        Thu, 17 Feb 2022 15:10:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645139401; x=1676675401;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=if4d4IuEQryq2xSeSq7kvbYAGlbQsoeOTWd/h53pnDI=;
-  b=azGQIZQRRHT0kO7NaPLB0LxL+GQFJXDeLEzTY/K0TInoIdoxEpt37+bA
-   F1lIdDz+1BLdO5kHwrLtgwHTa+MH1qX+Jfc/2ycuzTi9Y3UYlC5+LryBd
-   dZASmtffh9Dqyq5Ca2og3deKNfnDRMY6kuohshNRZGlTXYnsMqVU0FJa4
-   F+qMuvRoiULIPGU9SlAAcxepfXZ++dcGJ/o+cN9hcemdgOTc/wOCOwR2u
-   xfV8SkLCOtJv5rkrgb0qCi9QWvOWaMI2phUcLTw+wb95toDKTQ7iYtWB/
-   vu26okbq4St3Wa+RK033VmdlrLAgKdWO64V153UV1hK34YE6VKqmEFZUE
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="250750772"
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="250750772"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 15:10:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="503738929"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 17 Feb 2022 15:09:59 -0800
-Received: from debox1-desk4.lan (unknown [10.251.23.8])
-        by linux.intel.com (Postfix) with ESMTP id BD2AD580AA7;
-        Thu, 17 Feb 2022 15:09:59 -0800 (PST)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     hdegoede@redhat.com, david.e.box@linux.intel.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, mgross@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: [PATCH V8 2/2] selftests: sdsi: test sysfs setup
-Date:   Thu, 17 Feb 2022 15:09:58 -0800
-Message-Id: <20220217230958.259360-2-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220217230958.259360-1-david.e.box@linux.intel.com>
-References: <20220217230958.259360-1-david.e.box@linux.intel.com>
+        Thu, 17 Feb 2022 18:13:14 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587EC2DCFB4;
+        Thu, 17 Feb 2022 15:12:52 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id c10so1690991ljr.9;
+        Thu, 17 Feb 2022 15:12:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7Fv9iaLU1K6vjoxOcHxKGaRqkglRuk5iz5YNCohBSrU=;
+        b=GOo5/hBWZpSj+M0IcEV2EK7F2yNLJQiWEV9fk5VCPVNEr6VRpiCvAta1NDLzs2EbT+
+         FHWx7GmcxX770eR77ZByYi+pDUacqJZkBLkTVR/n/hAAahbwQC8G+GEu9OUPcz5c3h+F
+         q9S/IJYsEP7aJ4F8sQBiGhyAodf8waAmNfr6HZpsXM/vlR41EEElFWnkv/YLXox3uEIH
+         Ow1xBmq65TwyLQ5MjtaqRV+bpCpdCtRE0KWy9YWw92Oe2nIesIK6SuSxA+5XTRWT+Cdq
+         0orsrF42JVuFrLE6il/He/9paQue6qbR7JFuFYYe7p4UI/043u2S1ClyXgz2W0T7uSYc
+         o4Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7Fv9iaLU1K6vjoxOcHxKGaRqkglRuk5iz5YNCohBSrU=;
+        b=6D9lJKhuYygO6roGOT5aia6Q+o9lnofgpDdWGOgsQtJGC2zgzIOg7LZ8J5detGzVjn
+         9Cgg9IomvOtl7/++WFEJrda5hwo7MJ1NhG8MiXKG7LPEYtm/bHXAXH3FtD/Yvtu7yF2A
+         +LU+K/XZ1CGUqZ8uCZwU+Vj2uugxn+hC3u0PS8+LbFOkDIseedO3FjropvDyTZnXWdFo
+         RuSzYOetMciiT0qMBGBultcGSF4nx3UA31UtHiIpu0i0sP8r6K4zBDaW56KtebFVQb7+
+         MJvvuXslnKGhkiDtui7NeRVfJAszDYYK/7Zk0GRsD9cnf+nPp5OoyeZH5kKOLFRM7941
+         +ukQ==
+X-Gm-Message-State: AOAM5337SV+qy6Un4VZorUCVffJJSJf/GgU9m00v2MXF46Ub+AABWvlN
+        wAaeIroc1tgGUMjpolYa5rsbFdLcDgU=
+X-Google-Smtp-Source: ABdhPJxt562ZlKFmYJNNqARRDYwOB2vxSB+j5UTQOJY/uj2hNg5IKwjG4q9KbRm1kvzSoNK57nSbiQ==
+X-Received: by 2002:a05:651c:1a29:b0:243:c0eb:dd5f with SMTP id by41-20020a05651c1a2900b00243c0ebdd5fmr3811132ljb.323.1645139513058;
+        Thu, 17 Feb 2022 15:11:53 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id v10sm118073ljj.2.2022.02.17.15.11.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 15:11:52 -0800 (PST)
+Message-ID: <a869b705-c10e-ed0b-4119-35ef0a028311@gmail.com>
+Date:   Fri, 18 Feb 2022 02:11:51 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] PM: domains: Prevent power off for parent unless child
+ is in deepest state
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220217124950.211354-1-ulf.hansson@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220217124950.211354-1-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests file configuration and error handling of the Intel Software
-Defined Silicon sysfs ABI.
+17.02.2022 15:49, Ulf Hansson пишет:
+> A PM domain managed by genpd may support multiple idlestates (power-off
+> states). During genpd_power_off() a genpd governor may be asked to select
+> one of the idlestates based upon the dev PM QoS constraints, for example.
+> 
+> However, there is a problem with the behaviour around this in genpd. More
+> precisely, a parent-domain is allowed to be powered off, no matter of what
+> idlestate that has been selected for the child-domain.
+> 
+> For the stm32mp1 platform from STMicro, this behaviour doesn't play well.
+> Instead, the parent-domain must not be powered off, unless the deepest
+> idlestate has been selected for the child-domain. As the current behaviour
+> in genpd is quite questionable anyway, let's simply change it into what is
+> needed by the stm32mp1 platform.
+> 
+> If it surprisingly turns out that other platforms may need a different
+> behaviour from genpd, then we will have to revisit this to find a way to
+> make it configurable.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+> 
+> Changes in v2:
+> 	- Clarified commit message - based upon discussions with Dmitry.
+> 	- Updated a comment in the code, suggested by Dmitry.
+> 
+> ---
+>  drivers/base/power/domain.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 5db704f02e71..c87588c21700 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -636,6 +636,18 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+>  			atomic_read(&genpd->sd_count) > 0)
+>  		return -EBUSY;
+>  
+> +	/*
+> +	 * The children must be in their deepest (powered-off) states to allow
+> +	 * the parent to be powered off. Note that, there's no need for
+> +	 * additional locking, as powering on a child, requires the parent's
+> +	 * lock to be acquired first.
+> +	 */
+> +	list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> +		struct generic_pm_domain *child = link->child;
+> +		if (child->state_idx < child->state_count - 1)
+> +			return -EBUSY;
+> +	}
+> +
+>  	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+>  		enum pm_qos_flags_status stat;
+>  
+> @@ -1073,6 +1085,13 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+>  	    || atomic_read(&genpd->sd_count) > 0)
+>  		return;
+>  
+> +	/* Check that the children are in their deepest (powered-off) state. */
+> +	list_for_each_entry(link, &genpd->parent_links, parent_node) {
+> +		struct generic_pm_domain *child = link->child;
+> +		if (child->state_idx < child->state_count - 1)
+> +			return;
+> +	}
+> +
+>  	/* Choose the deepest state when suspending */
+>  	genpd->state_idx = genpd->state_count - 1;
+>  	if (_genpd_power_off(genpd, false))
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
-Applied on review-hans branch.
+Thank you, looks good. Although, this should be v3.
 
-V8
-  - Skip if python3 or pytest aren't installed
-  - Do not remove driver after test is run
-V7
-  - No changes.
-V6
-  - No changes.
-V5
-  - No changes.
-V4
-  - No changes.
-V3
-  - Add tests to check PCI device removal handling and to check for
-    driver memory leaks.
-V2
-  - New patch.
-
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/drivers/sdsi/sdsi.sh  |  26 ++
- .../selftests/drivers/sdsi/sdsi_test.py       | 226 ++++++++++++++++++
- 3 files changed, 253 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/sdsi/sdsi.sh
- create mode 100644 tools/testing/selftests/drivers/sdsi/sdsi_test.py
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dc3c9f271463..be2c4c63e58f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9872,6 +9872,7 @@ M:	David E. Box <david.e.box@linux.intel.com>
- S:	Supported
- F:	drivers/platform/x86/intel/sdsi.c
- F:	tools/arch/x86/intel_sdsi/
-+F:	tools/testing/selftests/drivers/sdsi/
- 
- INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
- M:	Daniel Scally <djrscally@gmail.com>
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi.sh b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-new file mode 100755
-index 000000000000..b938b1d46b04
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-@@ -0,0 +1,26 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Runs tests for the intel_sdsi driver
-+
-+if ! command -v python3 > /dev/null 2>&1; then
-+	echo "drivers/sdsi: [SKIP] python3 not installed"
-+	exit 77
-+fi
-+
-+if ! python -c "import pytest" > /dev/null 2>&1; then
-+	echo "drivers/sdsi: [SKIP] pytest module not installed"
-+	exit 77
-+fi
-+
-+if ! /sbin/modprobe -q -r intel_sdsi; then
-+	echo "drivers/sdsi: [SKIP]"
-+	exit 77
-+fi
-+
-+if /sbin/modprobe -q intel_sdsi; then
-+	python3 -m pytest sdsi_test.py
-+	echo "drivers/sdsi: [OK]"
-+else
-+	echo "drivers/sdsi: [FAIL]"
-+	exit 1
-+fi
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi_test.py b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-new file mode 100644
-index 000000000000..4922edfe461f
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-@@ -0,0 +1,226 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from struct import pack
-+from time import sleep
-+
-+import errno
-+import glob
-+import os
-+import subprocess
-+
-+try:
-+    import pytest
-+except ImportError:
-+    print("Unable to import pytest python module.")
-+    print("\nIf not already installed, you may do so with:")
-+    print("\t\tpip3 install pytest")
-+    exit(1)
-+
-+SOCKETS = glob.glob('/sys/bus/auxiliary/devices/intel_vsec.sdsi.*')
-+NUM_SOCKETS = len(SOCKETS)
-+
-+MODULE_NAME = 'sdsi'
-+DEV_PREFIX = 'intel_vsec.sdsi'
-+CLASS_DIR = '/sys/bus/auxiliary/devices'
-+GUID = "0x6dd191"
-+
-+def read_bin_file(file):
-+    with open(file, mode='rb') as f:
-+        content = f.read()
-+    return content
-+
-+def get_dev_file_path(socket, file):
-+    return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/' + file
-+
-+def kmemleak_enabled():
-+    kmemleak = "/sys/kernel/debug/kmemleak"
-+    return os.path.isfile(kmemleak)
-+
-+class TestSDSiDriver:
-+    def test_driver_loaded(self):
-+        lsmod_p = subprocess.Popen(('lsmod'), stdout=subprocess.PIPE)
-+        result = subprocess.check_output(('grep', '-q', MODULE_NAME), stdin=lsmod_p.stdout)
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiFilesClass:
-+
-+    def read_value(self, file):
-+        f = open(file, "r")
-+        value = f.read().strip("\n")
-+        return value
-+
-+    def get_dev_folder(self, socket):
-+        return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/'
-+
-+    def test_sysfs_files_exist(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        print (folder)
-+        assert os.path.isfile(folder + "guid") == True
-+        assert os.path.isfile(folder + "provision_akc") == True
-+        assert os.path.isfile(folder + "provision_cap") == True
-+        assert os.path.isfile(folder + "state_certificate") == True
-+        assert os.path.isfile(folder + "registers") == True
-+
-+    def test_sysfs_file_permissions(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        mode = os.stat(folder + "guid").st_mode & 0o777
-+        assert mode == 0o444    # Read all
-+        mode = os.stat(folder + "registers").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+        mode = os.stat(folder + "provision_akc").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "provision_cap").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "state_certificate").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+
-+    def test_sysfs_file_ownership(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        st = os.stat(folder + "guid")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "registers")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+    def test_sysfs_file_sizes(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        if self.read_value(folder + "guid") == GUID:
-+            st = os.stat(folder + "registers")
-+            assert st.st_size == 72
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_size == 4096
-+
-+    def test_no_seek_allowed(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(folder + "provision_cap", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+        f = open(folder + "provision_akc", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+    def test_registers_seek(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        # Check that the value read from an offset of the entire
-+        # file is none-zero and the same as the value read
-+        # from seeking to the same location
-+        f = open(folder + "registers", "rb")
-+        data = f.read()
-+        f.seek(64)
-+        id = f.read()
-+        assert id != bytes(0)
-+        assert data[64:] == id
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiMailboxCmdsClass:
-+    def test_provision_akc_eoverflow_1017_bytes(self, socket):
-+
-+        # The buffer for writes is 1k, of with 8 bytes must be
-+        # reserved for the command, leaving 1016 bytes max.
-+        # Check that we get an overflow error for 1017 bytes.
-+        node = get_dev_file_path(socket, "provision_akc")
-+        rand_file = bytes(os.urandom(1017))
-+
-+        f = open(node, 'wb', 0)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.EOVERFLOW
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSdsiDriverLocksClass:
-+    def test_enodev_when_pci_device_removed(self, socket):
-+        node = get_dev_file_path(socket, "provision_akc")
-+        dev_name = DEV_PREFIX + '.' + str(socket)
-+        driver_dir = CLASS_DIR + '/' + dev_name + "/driver/"
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(node, 'wb', 0)
-+        g = open(node, 'wb', 0)
-+
-+        with open(driver_dir + 'unbind', 'w') as k:
-+            print(dev_name, file = k)
-+
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ENODEV
-+
-+        with pytest.raises(OSError) as error:
-+            g.write(rand_file)
-+        assert error.value.errno == errno.ENODEV
-+
-+        f.close()
-+        g.close()
-+
-+        # Short wait needed to allow file to close before pulling driver
-+        sleep(1)
-+
-+        p = subprocess.Popen(('modprobe', '-r', 'intel_sdsi'))
-+        p.wait()
-+        p = subprocess.Popen(('modprobe', '-r', 'intel_vsec'))
-+        p.wait()
-+        p = subprocess.Popen(('modprobe', 'intel_vsec'))
-+        p.wait()
-+
-+        # Short wait needed to allow driver time to get inserted
-+        # before continuing tests
-+        sleep(1)
-+
-+    def test_memory_leak(self, socket):
-+        if not kmemleak_enabled:
-+            pytest.skip("kmemleak not enabled in kernel")
-+
-+        dev_name = DEV_PREFIX + '.' + str(socket)
-+        driver_dir = CLASS_DIR + '/' + dev_name + "/driver/"
-+
-+        with open(driver_dir + 'unbind', 'w') as k:
-+            print(dev_name, file = k)
-+
-+        sleep(1)
-+
-+        subprocess.check_output(('modprobe', '-r', 'intel_sdsi'))
-+        subprocess.check_output(('modprobe', '-r', 'intel_vsec'))
-+
-+        with open('/sys/kernel/debug/kmemleak', 'w') as f:
-+            print('scan', file = f)
-+        sleep(5)
-+
-+        assert os.stat('/sys/kernel/debug/kmemleak').st_size == 0
-+
-+        subprocess.check_output(('modprobe', 'intel_vsec'))
-+        sleep(1)
--- 
-2.25.1
-
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>

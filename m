@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07D74B979A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A6C4B979F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiBQESI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 23:18:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50102 "EHLO
+        id S233711AbiBQEUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 23:20:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiBQESG (ORCPT
+        with ESMTP id S233757AbiBQEUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 23:18:06 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7CC2172E7E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:17:52 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46B7C12FC;
-        Wed, 16 Feb 2022 20:17:52 -0800 (PST)
-Received: from [10.163.47.200] (unknown [10.163.47.200])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CAACC3F66F;
-        Wed, 16 Feb 2022 20:17:50 -0800 (PST)
-Subject: Re: [PATCH V2] arm64/hugetlb: Define __hugetlb_valid_size()
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <1644491770-16108-1-git-send-email-anshuman.khandual@arm.com>
- <20220215164851.GD8458@willie-the-truck>
- <e60802f2-dfb4-3824-9b85-7770c8fede96@arm.com>
- <20220216123048.GA9949@willie-the-truck>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <9fdb1c70-3676-6454-d990-e430f2c61010@arm.com>
-Date:   Thu, 17 Feb 2022 09:47:47 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 16 Feb 2022 23:20:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93982A416F;
+        Wed, 16 Feb 2022 20:20:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2244761DA6;
+        Thu, 17 Feb 2022 04:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F15D7C340E9;
+        Thu, 17 Feb 2022 04:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645071633;
+        bh=aufa0nh+h9c3kdylk4TIafeWU4s1oDv8HmfjdC9MZeQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OsiHFCKNC8FjTqTL2vhM1wRiRzIPkhab8+taGIvE+0q/yZXQVJtJ8QW1/yV2f/zqW
+         xRQ2bM7zPM3nIOdV2lFz+K24nunsMUNoFMN0lPK1SjCbxLBqagyi6AxLaIwjlEew6I
+         /rsjxd1uXZgtfYGg4WfsAa3K2J83xCnVvv4iTdRaoZBkGzWNsZhqYrleZP5ONZsXKJ
+         d873EMaP0IqznWNgz7Y1GplT/Kh+uB7J/EEwIQkkg/qMwDeA9L7Hb4gTQHtaT/3GsL
+         fTyI4a+gcVZ0UMWUXOI2a+k4ahuHDR+w8zALCwavXhD9JBtZhUk3uQhFqCyd3aZ2pU
+         JEYRNG/olryMw==
+Date:   Thu, 17 Feb 2022 09:50:29 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+Subject: Re: [REPOST PATCH v4 03/13] drm/msm/disp/dpu1: Add support for DSC
+Message-ID: <Yg3NDelctH5YP2jA@matsya>
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-4-vkoul@kernel.org>
+ <8de66b66-5f02-600e-aa4c-bf2dad37487f@quicinc.com>
+ <a75893b8-f868-845b-2da2-1a2840a83caa@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20220216123048.GA9949@willie-the-truck>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a75893b8-f868-845b-2da2-1a2840a83caa@linaro.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/16/22 6:00 PM, Will Deacon wrote:
-> On Wed, Feb 16, 2022 at 05:09:12AM +0530, Anshuman Khandual wrote:
->>
->>
->> On 2/15/22 10:18 PM, Will Deacon wrote:
->>> On Thu, Feb 10, 2022 at 04:46:10PM +0530, Anshuman Khandual wrote:
->>>> arch_hugetlb_valid_size() can be just factored out to create another helper
->>>> to be used in arch_hugetlb_migration_supported() as well. This just defines
->>>> __hugetlb_valid_size() for that purpose.
->>>>
->>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>> Cc: Will Deacon <will@kernel.org>
->>>> Cc: linux-arm-kernel@lists.infradead.org
->>>> Cc: linux-kernel@vger.kernel.org
->>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>> ---
->>>> This applies on v5.17-rc3
->>>>
->>>> Changes in V2:
->>>>
->>>> - s/arm64_hugetlb_valid_size/__hugetlb_valid_size per Catalin
->>>> - Restored back warning in arch_hugetlb_migration_supported() per Catalin
->>>> - Updated the commit message subject line as required
->>>>
->>>> Changes in V1:
->>>>
->>>> https://lore.kernel.org/all/1644197468-26755-1-git-send-email-anshuman.khandual@arm.com/
->>>>
->>>>  arch/arm64/mm/hugetlbpage.c | 26 +++++++++++++-------------
->>>>  1 file changed, 13 insertions(+), 13 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
->>>> index ffb9c229610a..72ed07fe2c84 100644
->>>> --- a/arch/arm64/mm/hugetlbpage.c
->>>> +++ b/arch/arm64/mm/hugetlbpage.c
->>>> @@ -56,24 +56,19 @@ void __init arm64_hugetlb_cma_reserve(void)
->>>>  }
->>>>  #endif /* CONFIG_CMA */
->>>>  
->>>> +static bool __hugetlb_valid_size(unsigned long size);
->>>
->>> Why not reorder the code to avoid this forward declaration?
->>
->> That will create more code churn, which I tried to avoid.
+On 16-02-22, 22:46, Dmitry Baryshkov wrote:
+> On 16/02/2022 21:57, Abhinav Kumar wrote:
+> > 
+> > 
+> > On 2/10/2022 2:34 AM, Vinod Koul wrote:
+> > > Display Stream Compression (DSC) is one of the hw blocks in dpu, so add
+> > > support by adding hw blocks for DSC
+> > > 
+> > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > 
+> > Somehow second patch of this series is not showing up on patchwork in
+> > your REPOST.
+> > 
+> > It jumps from 1 to 3.
 > 
-> Isn't it just moving a handful of lines further up in the file? What's
-> the problem with that?
+> patch 2: https://patchwork.freedesktop.org/patch/473356/?series=99959&rev=1
 
-No problem as such, will change and resend.
+yeah it seems to be there.. As well os arm-msm and dri-devel on k.org
+pw....Problem with QC delivery...?
+-- 
+~Vinod

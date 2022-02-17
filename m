@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2084BA753
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6F14BA70F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243781AbiBQRkF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Feb 2022 12:40:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41364 "EHLO
+        id S243685AbiBQRZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:25:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236986AbiBQRkE (ORCPT
+        with ESMTP id S236689AbiBQRZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:40:04 -0500
-Received: from svmailsar00.saren.gob.ve (200-35-77-146.static.telcel.net.ve [200.35.77.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DF26584
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:39:46 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by svmailsar00.saren.gob.ve (Postfix) with ESMTP id BD03B183D95;
-        Thu, 17 Feb 2022 12:27:02 -0400 (-04)
-Received: from svmailsar00.saren.gob.ve ([127.0.0.1])
-        by localhost (svmailsar00.saren.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id fNbqmgktVXT6; Thu, 17 Feb 2022 12:27:02 -0400 (-04)
-Received: from localhost (localhost [127.0.0.1])
-        by svmailsar00.saren.gob.ve (Postfix) with ESMTP id 55EB6183DAC;
-        Thu, 17 Feb 2022 12:27:02 -0400 (-04)
-X-Virus-Scanned: amavisd-new at saren.gob.ve
-Received: from svmailsar00.saren.gob.ve ([127.0.0.1])
-        by localhost (svmailsar00.saren.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id H48DDpGmzxIh; Thu, 17 Feb 2022 12:27:02 -0400 (-04)
-Received: from [100.69.124.46] (unknown [106.210.36.89])
-        by svmailsar00.saren.gob.ve (Postfix) with ESMTPSA id D44DD183D95;
-        Thu, 17 Feb 2022 12:26:38 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 17 Feb 2022 12:25:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23E32B04A8;
+        Thu, 17 Feb 2022 09:24:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56B18B82383;
+        Thu, 17 Feb 2022 17:24:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA6EC340E8;
+        Thu, 17 Feb 2022 17:24:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645118684;
+        bh=c7Q3U62Pgt9dUa8A3vbK3+gTpGkYI+kFP7qjwdTB5A0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SQeMyth+HB39KiTJEFABJI32AiWg8jgVWY9dPDuL11J4mYZcYvAnM+vaBRpxXQGLg
+         z/Z1jglAPo6SRk2YHiUb2B9x/V1DnQ+CF89vu9RzKjnE9JIQC3loCa+ls8kUM3iyXJ
+         aN5bAtFkUmwt/ptIT6EG0259yQ4c5m+e8DQpkcQ93Sj26q7aQVjxAAN671Gpky6MAs
+         rSB7WpOKcPqdvKec9Of6pAza0MLajXhFECfL1HmXTWxhVxzwmxLrqTzYduC0p8gHdT
+         4FrT18i0B5waFzeAz2WNRLOjpRD7GdHEjdmQMiLTWApX0/RqKWGZuv7loVui85FUos
+         e0AqXIwVfbUbA==
+Date:   Thu, 17 Feb 2022 09:24:42 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org
+Subject: Re: [PATCH net-next v1] net: Use csum_replace_... and csum_sub()
+ helpers instead of opencoding
+Message-ID: <20220217092442.4948b48c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <fe60030b6f674d9bf41f56426a4b0a8a9db0d20f.1645112415.git.christophe.leroy@csgroup.eu>
+References: <fe60030b6f674d9bf41f56426a4b0a8a9db0d20f.1645112415.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?b?QVRFTkNJw5NO?=
-To:     Recipients <np212@saren.gob.ve>
-From:   administrador <np212@saren.gob.ve>
-Date:   Thu, 17 Feb 2022 22:53:35 +0530
-Reply-To: sistemassadmins@mail2engineer.com
-Message-Id: <20220217162638.D44DD183D95@svmailsar00.saren.gob.ve>
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_99,BAYES_999,
-        FREEMAIL_FORGED_REPLYTO,KHOP_HELO_FCRDNS,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [200.35.77.146 listed in bl.score.senderscore.com]
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  0.2 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATENCIÓN;
+On Thu, 17 Feb 2022 16:43:55 +0100 Christophe Leroy wrote:
+>  static inline void nft_csum_replace(__sum16 *sum, __wsum fsum, __wsum tsum)
+>  {
+> -	*sum = csum_fold(csum_add(csum_sub(~csum_unfold(*sum), fsum), tsum));
+> +	csum_replace4(sum, fsum, tsum);
 
-Su buzón ha superado el límite de almacenamiento, que es de 5 GB definidos por el administrador, quien actualmente está ejecutando en 10.9GB, no puede ser capaz de enviar o recibir correo nuevo hasta que vuelva a validar su buzón de correo electrónico. Para revalidar su buzón de correo, envíe la siguiente información a continuación:
+Sparse says:
 
-nombre:
-Nombre de usuario:
-contraseña:
-Confirmar contraseña:
-E-mail:
-teléfono:
-
-Si usted no puede revalidar su buzón, el buzón se deshabilitará!
-
-Disculpa las molestias.
-Código de verificación:WEB.Correo.51430@2022
-Correo Soporte Técnico © 2022
-
-¡gracias
-Sistemas administrador
+net/netfilter/nft_payload.c:560:28: warning: incorrect type in argument 2 (different base types)
+net/netfilter/nft_payload.c:560:28:    expected restricted __be32 [usertype] from
+net/netfilter/nft_payload.c:560:28:    got restricted __wsum [usertype] fsum

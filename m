@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30374BAA7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07314BAA84
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245608AbiBQUBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 15:01:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47950 "EHLO
+        id S245619AbiBQUBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 15:01:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241753AbiBQUBQ (ORCPT
+        with ESMTP id S245611AbiBQUBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 15:01:16 -0500
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC971451DC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:01:00 -0800 (PST)
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id KmxUnmRTpBzeEKmxUng2RW; Thu, 17 Feb 2022 21:00:59 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 17 Feb 2022 21:00:59 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <bcd6688f-6f42-ca8f-ab9c-978eeff4f4e3@wanadoo.fr>
-Date:   Thu, 17 Feb 2022 21:00:56 +0100
+        Thu, 17 Feb 2022 15:01:45 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327FE189;
+        Thu, 17 Feb 2022 12:01:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645128090; x=1676664090;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Y878BkAU96m4bDN8k2wpI4BUoj/vtOIuveF4X6o8gqg=;
+  b=mDNhHHqApHJE1KjOdIr/+vToNHHWfAn3NdGuEv4fONiARj5oe9T7SAYr
+   lf6feUTzIaH2AMFIeOKMFKDCNr+H6TKXEyyyzq7wnbyqWnTT0B4OQvDEd
+   EEr/6K5OrNYBU6hZXBuuQACwlGGSSZN1gYN+BfcIQlGE8b+kZ1yW8oLgz
+   A=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 Feb 2022 12:01:29 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 12:01:29 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 17 Feb 2022 12:01:28 -0800
+Received: from [10.110.101.104] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 17 Feb
+ 2022 12:01:27 -0800
+Message-ID: <e01aefa4-0792-307d-caee-4fb3d2b32a23@quicinc.com>
+Date:   Thu, 17 Feb 2022 12:01:26 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] mmc: mtk-sd: use div64_u64() instead of do_div()
+Subject: Re: [PATCH v4 3/3] drm/msm/dp: replace DRM_DEBUG_DP marco with
+ drm_dbg_dp
 Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>, Qing Wang <wangqing@vivo.com>
-Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1644395927-4138-1-git-send-email-wangqing@vivo.com>
- <CAPDyKFqg5N1tCqQ2u2jt5qU0qLuDJRSJRtq_aMVDc7XNDbRvkw@mail.gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <CAPDyKFqg5N1tCqQ2u2jt5qU0qLuDJRSJRtq_aMVDc7XNDbRvkw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1645122930-23863-1-git-send-email-quic_khsieh@quicinc.com>
+ <1645122930-23863-4-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52cz6JibgsJ4MWsdGhAjxHa6en+JbyKjKHVwQDnM8-5Og@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n52cz6JibgsJ4MWsdGhAjxHa6en+JbyKjKHVwQDnM8-5Og@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 17/02/2022 à 16:39, Ulf Hansson a écrit :
-> On Wed, 9 Feb 2022 at 09:39, Qing Wang <wangqing@vivo.com> wrote:
+
+On 2/17/2022 11:36 AM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-02-17 10:35:30)
+>> Since DRM_DEBUG_DP is deprecated in favor of drm_dbg_dp(NULL, ...),
+>> this patch replace all DRM_DEBUG_DP with drm_dbg_dp().
 >>
->> From: Wang Qing <wangqing@vivo.com>
->>
->> do_div() does a 64-by-32 division.
->> When the divisor is u64, do_div() truncates it to 32 bits, this means it
->> can test non-zero and be truncated to zero for division.
->>
->> fix do_div.cocci warning:
->> do_div() does a 64-by-32 division, please consider using div64_u64 instead.
->>
->> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> 
-> Applied for next, thanks!
+>> Changes in v4:
+>> -- replace (strucr drm_dev *)NULL with drm_dev
+> Why can't the platform device be used?
+#define drm_dbg_dp(drm, fmt, ...)                                       \
+
+         drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DP, fmt, 
+##__VA_ARGS__)
+
+it looks for (drm)->dev (pointer)
+
+struct platform_device {
+         const char      *name;
+         int             id;
+         bool            id_auto;
+         struct device   dev          <== not an pointer here
 
 
-This is wrong.
 
-See [1].
-
-
-Wang Qing, you should really warn all the people you have sent such patches.
-
-CJ
-
-[1]: 
-https://lore.kernel.org/linux-kernel/19b96972-cee7-937f-21ce-c78982ed2048@linaro.org/
-
-
-> 
-> Kind regards
-> Uffe
-> 
-> 
->> ---
->>   drivers/mmc/host/mtk-sd.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
->> index 65037e1..777c9a8
->> --- a/drivers/mmc/host/mtk-sd.c
->> +++ b/drivers/mmc/host/mtk-sd.c
->> @@ -766,7 +766,7 @@ static u64 msdc_timeout_cal(struct msdc_host *host, u64 ns, u64 clks)
->>                  clk_ns  = 1000000000ULL;
->>                  do_div(clk_ns, mmc->actual_clock);
->>                  timeout = ns + clk_ns - 1;
->> -               do_div(timeout, clk_ns);
->> +               div64_u64(timeout, clk_ns);
->>                  timeout += clks;
->>                  /* in 1048576 sclk cycle unit */
->>                  timeout = DIV_ROUND_UP(timeout, BIT(20));
->> --
->> 2.7.4
->>
-> 
 

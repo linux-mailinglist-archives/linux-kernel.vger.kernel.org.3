@@ -2,209 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE434BAC90
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472B14BAC89
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241468AbiBQW00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 17:26:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49260 "EHLO
+        id S1343852AbiBQWYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 17:24:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239453AbiBQW0Y (ORCPT
+        with ESMTP id S1343846AbiBQWY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 17:26:24 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD94F1688C4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 14:26:08 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id a23so10587260eju.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 14:26:08 -0800 (PST)
+        Thu, 17 Feb 2022 17:24:29 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63282BB01
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 14:24:14 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id 4so1116805oil.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 14:24:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Hw18NUxIkws+pKv9BXQqVUxZL0gpw+nsSHJBAiFK+Tw=;
-        b=TuxlNCMAZu67yIZesw5qD2l9WluJYajpYSvf7ilkvdFkcII5B7zOSrrA1JUzqomlZ8
-         10Pki1W92fbUSBIJ10nS3MOH/QBtxY239+/IjpOoIKS/kh1J+Sn1bBO93h4HgD7QB4Yi
-         k0PvxI8CuyRgNDmVscNQkrZcnvJZ0adyLP8lcudBKiUK2i9Z2LO18ySqzS/TX5RUgJmd
-         69ljAM3WDQb9KkbfS5Q1hJmapvZHsXtShA553HRBqz3h4t0dHfYtNLSfWKH5IGn9lQ0p
-         AnJOcyId/KBm0DtJmumd+61FcdRtSK5dRbdlgCVFZOQy0Xa6G0i+gEdNLxvVhYaJCK0M
-         3s5Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/neFhOJyXKG5xSPOlx3CJHDkEqEd9BRroYvm8Izt9PU=;
+        b=sYKcZLjYBIoEo8liVjK/NRa/cSfQMrW3EijXiy4Gakbj3BtmY1jTwBXZjgSm1KwYvw
+         EUbw9qFK1Vis7+Hn8aLBdvJXtLaqo/KtJudsA5aapscIzSc+eLy9CuN27UAerGmKiZvw
+         diOIyVr9vCMyCf+4jLgVKfUqhXcVfZg3t11inoh1V2nqpb0VyfiDWvz1qPUc7JjFhPj/
+         4OmoXMJb14GlZEAzFIoUVlJPpBLSMD6w4h29JdMio6mIafyrmJJfZNjMcS5XBhBm2dGe
+         ka6IbIduW9AfZdcOCpq1ckB9ClPUd8UBs8K3gmoB1UrDwBARBlw03epOB2JJQ/inDZ/D
+         vkfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Hw18NUxIkws+pKv9BXQqVUxZL0gpw+nsSHJBAiFK+Tw=;
-        b=aLFJMgo7BlWDCFKfxqVbWsQ/rYDtA3uFxTU/ih5etxhDHDC/Rqgv3ZxMGeURUp2HJF
-         Xjsu7i/OTpkXDjOBb1jwMa9q5TxWI5LES6MAEXOlGufQ72X1WORFwTghZBeWOC+KiiuQ
-         GXNQzz6MJgkJphKKCdIva1+hW2n2N+3N+j6zjPuSD0Mu9d3O1Aq2s0yYOg/y6jrzn7JR
-         zTl9rIHh7zBXiO28ERgWQN65x3wDwED4+jsNrrV91T4Nr3csKDVhWHdbLS++SB2Pe/TR
-         vjDwek3VoluejkZmhBpLK2wqVm19claQCKdxAq1jFMNWORfaTxULl/IdOGm8kCrIsXiq
-         O46Q==
-X-Gm-Message-State: AOAM530YoiRLXYqX2+RTcYGM2SNMf3Bcjzx/TpO6xJaJjTqG4HZR89Bd
-        gTkitA7SdeO4XD/KjBvXekF3fANzrHaC6/7MaSz+
-X-Google-Smtp-Source: ABdhPJy1UezhTFruqiqe8V4twoHJGohohUqRTgPpDF29eHvN/oARbMjAkwSO8pP+EspKeeaGIvA+GMoozt/tM6avkDw=
-X-Received: by 2002:a17:906:4443:b0:6cf:6a7d:5f9b with SMTP id
- i3-20020a170906444300b006cf6a7d5f9bmr4072554ejp.12.1645136767084; Thu, 17 Feb
- 2022 14:26:07 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/neFhOJyXKG5xSPOlx3CJHDkEqEd9BRroYvm8Izt9PU=;
+        b=6ZV+vMGadPY/TwhJLN5puCgdUXPjAlHRftL8En0DUFIgLUQL83jXFt8fQTVqkoeJvT
+         2RX5Z+mo2tpRQmON7fbWizLVq+ehBq3zpYR+O26vyDBXKWLImNvg7Zz18ny13ScFtVUI
+         KYch8MjEtOLC9E7LGgOykxpAAMERGpVmRxuAy8lEby3GU32AGU+OO76VdfRBEhcox6iV
+         LjbltUG108mIWqxKkIGBAS8UY/uXjmqIkcE8B6TCOVd3xs34Xd2NZHJBsyBbM7ZThMGY
+         K6i7TBq41ILzCYV3Gxt0j0nP3ENDxv54GsRwPF09deTKZANwUKn8+kbSq3xedCghVEbk
+         85TA==
+X-Gm-Message-State: AOAM533YTxcbfsg7gBBU1IJTnfTRVbn0azodsqTl61/m+jI0Q2hc0Sff
+        354QOBybiQYGqTLXGyQDJuUUlA==
+X-Google-Smtp-Source: ABdhPJyAHPTbyHfEMbFh3qbEs6lUXgioZ89TvaZDWuHOUNgl2HglyEel/rwjbbS0NIYVNx5zst55qw==
+X-Received: by 2002:a05:6808:238f:b0:2ce:df34:1812 with SMTP id bp15-20020a056808238f00b002cedf341812mr3789990oib.147.1645136653688;
+        Thu, 17 Feb 2022 14:24:13 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id w13sm545096ooj.5.2022.02.17.14.24.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 14:24:13 -0800 (PST)
+Date:   Thu, 17 Feb 2022 14:26:20 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>, mka@chromium.org,
+        swboyd@chromium.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, satya priya <skakit@codeaurora.org>
+Subject: Re: [PATCH V3 2/4] leds: Add pm8350c support to Qualcomm LPG driver
+Message-ID: <Yg7LjJFi51cmDUQr@ripper>
+References: <1635507893-25490-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1635507893-25490-3-git-send-email-quic_c_skakit@quicinc.com>
 MIME-Version: 1.0
-References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
- <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
- <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com> <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
- <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com> <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
- <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com> <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
- <478e1651-a383-05ff-d011-6dda771b8ce8@linux.microsoft.com>
- <875ypt5zmz.fsf@defensec.nl> <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
- <CABXk95Az0V0qWyB0Cp9D+MaCKNBfcdk4=bvXRdm5EXzHdjXJJg@mail.gmail.com>
- <CAHC9VhQKuQuR1pJfa0h2Y5dCjmrpiYaGpymwxxE1sa6jR3h-bA@mail.gmail.com> <CAJ2a_Ddh8p0fzJHf7R=BwAULfS8jYq08x=H45mF9jaR1QbWTww@mail.gmail.com>
-In-Reply-To: <CAJ2a_Ddh8p0fzJHf7R=BwAULfS8jYq08x=H45mF9jaR1QbWTww@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 17 Feb 2022 17:25:53 -0500
-Message-ID: <CAHC9VhRK+VBN_VhpgNkRN=rwP+EUYMAbUT++tJ+oBzd81H9mxw@mail.gmail.com>
-Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     Demi Marie Obenour <demiobenour@gmail.com>,
-        William Roberts <bill.c.roberts@gmail.com>,
-        Dominick Grift <dominick.grift@defensec.nl>,
-        Chris PeBenito <chpebeni@linux.microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        selinux-refpolicy@vger.kernel.org,
-        Jeffrey Vander Stoep <jeffv@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1635507893-25490-3-git-send-email-quic_c_skakit@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 10:05 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
-> On Tue, 15 Feb 2022 at 21:35, Paul Moore <paul@paul-moore.com> wrote:
-> > On Mon, Feb 14, 2022 at 2:11 AM Jeffrey Vander Stoep <jeffv@google.com>=
- wrote:
-> > > On Tue, Feb 8, 2022 at 3:18 PM William Roberts <bill.c.roberts@gmail.=
-com> wrote:
-> > > >
-> > > > <snip>
-> > > >
-> > > > This is getting too long for me.
-> > > >
-> > > > > >
-> > > > > > I don't have a strong opinion either way.  If one were to allow=
- this
-> > > > > > using a policy rule, it would result in a major policy breakage=
-.  The
-> > > > > > rule would turn on extended perm checks across the entire syste=
-m,
-> > > > > > which the SELinux Reference Policy isn't written for.  I can't =
-speak
-> > > > > > to the Android policy, but I would imagine it would be the simi=
-lar
-> > > > > > problem there too.
-> > > > >
-> > > > > Excuse me if I am wrong but AFAIK adding a xperm rule does not tu=
-rn on
-> > > > > xperm checks across the entire system.
-> > > >
-> > > > It doesn't as you state below its target + class.
-> > > >
-> > > > >
-> > > > > If i am not mistaken it will turn on xperm checks only for the
-> > > > > operations that have the same source and target/target class.
-> > > >
-> > > > That's correct.
-> > > >
-> > > > >
-> > > > > This is also why i don't (with the exception TIOSCTI for termdev
-> > > > > chr_file) use xperms by default.
-> > > > >
-> > > > > 1. it is really easy to selectively filter ioctls by adding xperm=
- rules
-> > > > > for end users (and since ioctls are often device/driver specific =
-they
-> > > > > know best what is needed and what not)
-> > > >
-> > > > > >>> and FIONCLEX can be trivially bypassed unless fcntl(F_SETFD)
-> > > > >
-> > > > > 2. if you filter ioctls in upstream policy for example like i do =
-with
-> > > > > TIOSCTI using for example (allowx foo bar (ioctl chr_file (not
-> > > > > (0xXXXX)))) then you cannot easily exclude additional ioctls late=
-r where source is
-> > > > > foo and target/tclass is bar/chr_file because there is already a =
-rule in
-> > > > > place allowing the ioctl (and you cannot add rules)
-> > > >
-> > > > Currently, fcntl flag F_SETFD is never checked, it's silently allow=
-ed, but
-> > > > the equivalent FIONCLEX and FIOCLEX are checked. So if you wrote po=
-licy
-> > > > to block the FIO*CLEX flags, it would be bypassable through F_SETFD=
- and
-> > > > FD_CLOEXEC. So the patch proposed makes the FIO flags behave like
-> > > > F_SETFD. Which means upstream policy users could drop this allow, w=
-hich
-> > > > could then remove the target/class rule and allow all icotls. Which=
- is easy
-> > > > to prevent and fix you could be a rule in to allowx 0 as documented=
- in the
-> > > > wiki: https://selinuxproject.org/page/XpermRules
-> > > >
-> > > > The questions I think we have here are:
-> > > > 1. Do we agree that the behavior between SETFD and the FIO flags ar=
-e equivalent?
-> > > >   I think they are.
-> > > > 2. Do we want the interfaces to behave the same?
-> > > >   I think they should.
-> > > > 3. Do upstream users of the policy construct care?
-> > > >   The patch is backwards compat, but I don't want their to be cruft
-> > > > floating around with extra allowxperm rules.
-> > >
-> > > I think this proposed change is fine from Android's perspective. It
-> > > implements in the kernel what we've already already put in place in
-> > > our policy - that all domains are allowed to use these IOCLTs.
-> > > https://cs.android.com/android/platform/superproject/+/master:system/=
-sepolicy/public/domain.te;l=3D312
-> > >
-> > > It'll be a few years before we can clean up our policy since we need
-> > > to support older kernels, but that's fine.
-> >
-> > Thanks for the discussion everyone, it sounds like everybody is okay
-> > with the change - that's good.  However, as I said earlier in this
-> > thread I think we need to put this behind a policy capability, how
-> > does POLICYDB_CAPABILITY_IOCTL_CLOEXEC/"ioctl_skip_cloexec" sound to
-> > everyone?
->
-> May I ask why?
-> To my understanding policy capabilities exist to retain backwards
-> compatibility for older
-> policies, e.g. if a new check is introduced or a new essential class
-> or permission, which
-> would break systems running an updated kernel with a non updated policy.
-> In this case no check or class/permission is added, the xperm checks
-> against FIO(N)CLEX
-> are just dropped.  Old policies still defining related allow rules
-> continue to work.  Existing
-> polices explicitly not allowing them and relying on SELinux to block chan=
-ges on
-> the close-on-exec flag are already broken due to the bypasses via
-> fnctl(2) and dup(2).
+On Fri 29 Oct 04:44 PDT 2021, Satya Priya wrote:
 
-Policy capabilities are a general tool that we can use when we make a
-change in the kernel that could potentially have an effect on the
-policy; it allows the policy to (typically) "opt-in" to the change.
+> From: satya priya <skakit@codeaurora.org>
+> 
+> Add pm8350c compatible and lpg_data to the driver.
+> 
+> Signed-off-by: satya priya <skakit@codeaurora.org>
 
-In this particular case we are talking about removing access controls,
-which is a Very Serious Thing, and protecting this behavior with an
-opt-in policy capability seems like a good way to not surprise anyone
-with the change.  You are correct in that old policy would continue to
-load and work regardless, but I believe it is safer to create a new
-policy capability for this.
+Sorry for the OCD, but I would really like for you to capitalize 's' and
+'p' in your name.
 
---=20
-paul-moore.com
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+> Changes in V2:
+>  - Added const for lpg_channel_data[] struct.
+> 
+> Changes in V3:
+>  - Correct the num_channels and add respective base addresses.
+> 
+>  drivers/leds/rgb/leds-qcom-lpg.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
+> index 45ef4ec..ad99a9b 100644
+> --- a/drivers/leds/rgb/leds-qcom-lpg.c
+> +++ b/drivers/leds/rgb/leds-qcom-lpg.c
+> @@ -1275,9 +1275,22 @@ static const struct lpg_data pm8150l_lpg_data = {
+>  	},
+>  };
+>  
+> +static const struct lpg_data pm8350c_pwm_data = {
+> +	.pwm_9bit_mask = BIT(2),
+
+As you might have seen in v12 I dropped pwm_9bit_mask.
+
+> +
+
+Afaict there's a tri-channel current sink in pm8350c as well, so you
+should have:
+
+        .triled_base = 0xef00,
+
+And then associated .triled_mask in the relevant channels.
+
+Regards,
+Bjorn
+
+> +	.num_channels = 4,
+> +	.channels = (const struct lpg_channel_data[]) {
+> +		{ .base = 0xe800 },
+> +		{ .base = 0xe900 },
+> +		{ .base = 0xea00 },
+> +		{ .base = 0xeb00 },
+> +	},
+> +};
+> +
+>  static const struct of_device_id lpg_of_table[] = {
+>  	{ .compatible = "qcom,pm8150b-lpg", .data = &pm8150b_lpg_data },
+>  	{ .compatible = "qcom,pm8150l-lpg", .data = &pm8150l_lpg_data },
+> +	{ .compatible = "qcom,pm8350c-pwm", .data = &pm8350c_pwm_data },
+>  	{ .compatible = "qcom,pm8916-pwm", .data = &pm8916_pwm_data },
+>  	{ .compatible = "qcom,pm8941-lpg", .data = &pm8941_lpg_data },
+>  	{ .compatible = "qcom,pm8994-lpg", .data = &pm8994_lpg_data },
+> -- 
+> 2.7.4
+> 

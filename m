@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2473D4BA475
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A752F4BA47A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242552AbiBQPeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:34:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49552 "EHLO
+        id S242554AbiBQPgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:36:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbiBQPeW (ORCPT
+        with ESMTP id S229562AbiBQPgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:34:22 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B924B2B2C73
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:34:07 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        Thu, 17 Feb 2022 10:36:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF79D2B2C6F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:36:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 000831EC054E;
-        Thu, 17 Feb 2022 16:34:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645112042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UOZd9jMSsS6Cmq3P1vAhSIV9RLiEmjv6FMsfKKgwGoY=;
-        b=XiPwUs6iuCM8+PoJ/FD1ZF/y/BIViUFUSu9usW084bJIULeg23QTsdbUITKWIodTti6bE7
-        jvAfZenBlRr/NJ8dzLBPYqF7QZljQ73bXRBx3Zn/dMjKFTP536xKy0Plup93PFQP2bVoio
-        E/cB0PV1Ze960QreE8IcO+Q1c5yqQuA=
-Date:   Thu, 17 Feb 2022 16:34:07 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Kai Huang <kai.huang@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, pbonzini@redhat.com, sdeep@vmware.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCHv2 00/29] TDX Guest: TDX core support
-Message-ID: <Yg5q742GsjCRHXZL@zn.tnic>
-References: <YgOoId+vyd1VhIqQ@zn.tnic>
- <20220210004831.03dea501738bee060003d040@intel.com>
- <YgOr6tZjsooJgAi9@zn.tnic>
- <YgPwwI2+16/7jQC4@google.com>
- <YgQR/S67Fqz9PanR@zn.tnic>
- <YgQfGKXOemtXnFau@google.com>
- <YgQl6Uk9rONgv9+F@zn.tnic>
- <20220216154809.w27bt6oi3ql4ssip@black.fi.intel.com>
- <Yg5nh1RknPRwIrb8@zn.tnic>
- <20220217152613.chm4zh7564ddzijq@black.fi.intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83672B8233C
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 15:36:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94420C340E8;
+        Thu, 17 Feb 2022 15:36:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645112166;
+        bh=Zx+rgR2hkDkUpjC2HrW0GPCmiJR+q3mTUymGonHF0Kg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yJOBxsu+z07yoINNUn7hTlhwrQx5S2OlmjLojEN1iNHSjTvb1OedtTRc/vf/JKU2a
+         fybEj/ZyQodudhdIEAXMOH9ilkmqHFoYKXblPRC3ZUhOwUk+Sbd3RGXuDKa61e1aaJ
+         0LsjrY/87AevrE2eakIbiGMMcKoZQzCoD1OWqUtM=
+Date:   Thu, 17 Feb 2022 16:36:03 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     xkernel.wang@foxmail.com
+Cc:     jerome.pouiller@silabs.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: wfx: fix the error handling in wfx_init_common()
+Message-ID: <Yg5rY3Qo7dPHbLI0@kroah.com>
+References: <tencent_A552D77F0E081BB36EAE11C720455D78BD06@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220217152613.chm4zh7564ddzijq@black.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_A552D77F0E081BB36EAE11C720455D78BD06@qq.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 06:26:13PM +0300, Kirill A. Shutemov wrote:
-> Okay, so on TDX guest side I would have
+On Thu, Feb 17, 2022 at 11:29:06PM +0800, xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
 > 
-> arch/x86/kernel/tdx.c => arch/x86/coco/tdx.c
-
-Right, and to answer a previous question: if that file starts becoming
-too huge and unwieldy then we should split it, by all means. What I
-don't like is getting a bunch of small files with no good reason why.
-
-> arch/x86/kernel/tdcall.S => arch/x86/coco/tdcall.S
-> arch/x86/kernel/tdxcall.S => arch/x86/virt/tdxcall.S
+> All the error handlers of wfx_init_common() return without calling
+> ieee80211_free_hw(hw), which may result in memory leak. So I add
+> one err label to unify the error handlers.
 > 
-> The last one going to be used by TDX host as well to define SEMACALL
-> helper.
+> Suggested-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+>  drivers/staging/wfx/main.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> Looks good?
+> diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
+> index 4b9fdf9..f83df9f 100644
+> --- a/drivers/staging/wfx/main.c
+> +++ b/drivers/staging/wfx/main.c
+> @@ -309,7 +309,8 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+>  	wdev->pdata.gpio_wakeup = devm_gpiod_get_optional(dev, "wakeup",
+>  							  GPIOD_OUT_LOW);
+>  	if (IS_ERR(wdev->pdata.gpio_wakeup))
+> -		return NULL;
+> +		goto err;
+> +
+>  	if (wdev->pdata.gpio_wakeup)
+>  		gpiod_set_consumer_name(wdev->pdata.gpio_wakeup, "wfx wakeup");
+>  
+> @@ -325,9 +326,13 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+>  	wdev->force_ps_timeout = -1;
+>  
+>  	if (devm_add_action_or_reset(dev, wfx_free_common, wdev))
+> -		return NULL;
+> +		goto err;
+>  
+>  	return wdev;
+> +
+> +err:
+> +	ieee80211_free_hw(hw);
+> +	return NULL;
+>  }
+>  
+>  int wfx_probe(struct wfx_dev *wdev)
+> -- 
 
-Right, that looks neat.
+Please make this a patch series, properly numbered, and not 2 individual
+and separate patches as the second one relies on this one, yet that it
+not conveyed to anyone at all :(
 
-Thx.
+thanks,
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h

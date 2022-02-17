@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65054B9F2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA6F4B9F2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240022AbiBQLib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:38:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46408 "EHLO
+        id S240042AbiBQLiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:38:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240009AbiBQLiD (ORCPT
+        with ESMTP id S240014AbiBQLiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:38:03 -0500
+        Thu, 17 Feb 2022 06:38:25 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F142AE068;
-        Thu, 17 Feb 2022 03:37:42 -0800 (PST)
-X-UUID: 969c3fa4b4a341128a58bdfe3d59cb8e-20220217
-X-UUID: 969c3fa4b4a341128a58bdfe3d59cb8e-20220217
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B865E6E34C;
+        Thu, 17 Feb 2022 03:37:48 -0800 (PST)
+X-UUID: 95d9d8d7a03d4fe9a1c0a7e6237e0bb6-20220217
+X-UUID: 95d9d8d7a03d4fe9a1c0a7e6237e0bb6-20220217
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 660680593; Thu, 17 Feb 2022 19:37:40 +0800
+        with ESMTP id 1466255397; Thu, 17 Feb 2022 19:37:46 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 17 Feb 2022 19:37:38 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 17 Feb 2022 19:37:44 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Feb 2022 19:37:37 +0800
+ Transport; Thu, 17 Feb 2022 19:37:43 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
         "Matthias Brugger" <matthias.bgg@gmail.com>,
@@ -47,9 +47,9 @@ CC:     Robin Murphy <robin.murphy@arm.com>,
         <angelogioacchino.delregno@collabora.com>,
         <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
         <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>
-Subject: [PATCH v5 17/34] iommu/mediatek: Adjust device link when it is sub-common
-Date:   Thu, 17 Feb 2022 19:34:36 +0800
-Message-ID: <20220217113453.13658-18-yong.wu@mediatek.com>
+Subject: [PATCH v5 18/34] iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
+Date:   Thu, 17 Feb 2022 19:34:37 +0800
+Message-ID: <20220217113453.13658-19-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220217113453.13658-1-yong.wu@mediatek.com>
 References: <20220217113453.13658-1-yong.wu@mediatek.com>
@@ -65,54 +65,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For MM IOMMU, We always add device link between smi-common and IOMMU HW.
-In mt8195, we add smi-sub-common. Thus, if the node is sub-common, we still
-need find again to get smi-common, then do device link.
+Allow the type IOMMU_DOMAIN_UNMANAGED since vfio_iommu_type1.c always call
+iommu_domain_alloc. The PCIe EP works ok when going through vfio.
 
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/iommu/mtk_iommu.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ drivers/iommu/mtk_iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 1253c165daf5..8d6655ee5a54 100644
+index 8d6655ee5a54..ba9d61bec3e8 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -832,7 +832,7 @@ static const struct component_master_ops mtk_iommu_com_ops = {
- static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **match,
- 				  struct mtk_iommu_data *data)
+@@ -446,7 +446,7 @@ static struct iommu_domain *mtk_iommu_domain_alloc(unsigned type)
  {
--	struct device_node *larbnode, *smicomm_node;
-+	struct device_node *larbnode, *smicomm_node, *smi_subcomm_node;
- 	struct platform_device *plarbdev;
- 	struct device_link *link;
- 	int i, larb_nr, ret;
-@@ -872,11 +872,21 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
- 					    compare_of, larbnode);
- 	}
+ 	struct mtk_iommu_domain *dom;
  
--	/* Get smi-common dev from the last larb. */
--	smicomm_node = of_parse_phandle(larbnode, "mediatek,smi", 0);
--	if (!smicomm_node)
-+	/* Get smi-(sub)-common dev from the last larb. */
-+	smi_subcomm_node = of_parse_phandle(larbnode, "mediatek,smi", 0);
-+	if (!smi_subcomm_node)
- 		return -EINVAL;
+-	if (type != IOMMU_DOMAIN_DMA)
++	if (type != IOMMU_DOMAIN_DMA && type != IOMMU_DOMAIN_UNMANAGED)
+ 		return NULL;
  
-+	/*
-+	 * It may have two level smi-common. the node is smi-sub-common if it
-+	 * has a new mediatek,smi property. otherwise it is smi-commmon.
-+	 */
-+	smicomm_node = of_parse_phandle(smi_subcomm_node, "mediatek,smi", 0);
-+	if (smicomm_node)
-+		of_node_put(smi_subcomm_node);
-+	else
-+		smicomm_node = smi_subcomm_node;
-+
- 	plarbdev = of_find_device_by_node(smicomm_node);
- 	of_node_put(smicomm_node);
- 	data->smicomm_dev = &plarbdev->dev;
+ 	dom = kzalloc(sizeof(*dom), GFP_KERNEL);
 -- 
 2.18.0
 

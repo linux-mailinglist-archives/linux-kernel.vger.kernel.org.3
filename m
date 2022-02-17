@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A326E4BA2DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1304BA2D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241859AbiBQOWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:22:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37236 "EHLO
+        id S241867AbiBQOWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 09:22:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241834AbiBQOWN (ORCPT
+        with ESMTP id S241855AbiBQOWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:22:13 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D562B1663;
-        Thu, 17 Feb 2022 06:21:57 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id lw4so7619919ejb.12;
-        Thu, 17 Feb 2022 06:21:57 -0800 (PST)
+        Thu, 17 Feb 2022 09:22:16 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F7B294132;
+        Thu, 17 Feb 2022 06:22:01 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id m17so9839871edc.13;
+        Thu, 17 Feb 2022 06:22:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uzAjuvuRezKyO/SVp83DwWN6oZxDOTQaXqLmt6YXjzE=;
-        b=LHvSh8IaM6IhY+1/xnC7+iup0QTMkQxAnANF1Cg2sZM4XoogiBvEJSzrFxgaqKLHOe
-         lRreAZvNDUMFfAo5Pu/7jLYCUV8jlEFa4+eCGqtU+NIOuX/kUExBEd+f4Z+LZGSKe0cN
-         pU2P3cyppD2X6JkObg6kl52ZfZ/Ob5zHJnZlJ2z3yY+BJ5NiRcRRs2c2LUJyPmDiJjBv
-         C8z0NQqMgsPagkxrAJjMtmCRhmqPHAEYkYKj0FCSRYkxydFwyJNXAOqnP+U7N2hN7cSX
-         Vz5btmgnKObw7jMlGvxzRgfjp8kNsBfILB1B51ywokK1KSwWNq2644WzOh+zws/HptwS
-         2xaw==
+        bh=8lKeT6/UwWXU+14STiDc02KgAuvLL0ArwI0Frgd9EJw=;
+        b=FlvAtUwO9YvUfW2tiTjSUFjqP6r5Zvow5Jf60Yn1lt0jY6ng0M96E1qBVauRtVuYeQ
+         /G63Z/9GUdt5oPZ7aDya7mYs97HHt7vcsg/2ypUnTof0zuocG5es4bPh43yeNObQztOR
+         XaIMtzSw6kqgbKxLvSWLsM9rzl5GaWJUwzBH0cn04sbluPY+w4WGlGvDR3Qv5E/Hl/RE
+         1L9M5mrIsgRbQas2XI0lF0Xu8aAsPp32O3HvTsRmT0SyuSFhQZ9pHQ4V52ttJSgKz45D
+         oZJVHYa2nsxdtXMk+xhF4EZkok2vqBEdC24bmZje5mcfRnYHsS28rd4k/Iw8XTaNC8yE
+         WREw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uzAjuvuRezKyO/SVp83DwWN6oZxDOTQaXqLmt6YXjzE=;
-        b=GEYKwM3apSSlIieKICZfZXKQppjf948EkZ+sqARKNfU78Pts6rb4o5Bz69IDuFeoNz
-         1T+sPaGVfWooDa9auQJqpur44tux4GVhQQAkkSjLraImRAgKZMbS7bWTEfWPeCPIe6TD
-         5MgpYNWeFlE6U5eTR/VATsRsWQNVZhettBWRFVZ942na7vsQLTpZ2nUupMB91vjySjom
-         l6Tyyr7HHH4ft6lpsx/6yfrPe85I6kSxd1y6nn9LS8/77WXKhkVSjgrlp4Ok/Q+hgZ6b
-         6/BDCac6m/hOTPg690GWSb5IrwM0FyTYhHsJuRRYaWJT5TfGc/bBOM/afBf31X3F3qhj
-         /LQg==
-X-Gm-Message-State: AOAM531SP2CnG5GJzvwqL/q9Ag3h1QtMREeoc8cNqZJh1+YeSEL/h/We
-        DeCXZ9S2ZWVkJ59Z+MVnypFayfBycm97wA==
-X-Google-Smtp-Source: ABdhPJxG9vIvZ6Wb0ffgnDvshkhUw4k6RsPKnE9YL7PdUc/nsZqTnNlQBPe5tektEvwu/gC1POUfPA==
-X-Received: by 2002:a17:906:7711:b0:6ce:51b:a5a1 with SMTP id q17-20020a170906771100b006ce051ba5a1mr2464110ejm.610.1645107716221;
-        Thu, 17 Feb 2022 06:21:56 -0800 (PST)
+        bh=8lKeT6/UwWXU+14STiDc02KgAuvLL0ArwI0Frgd9EJw=;
+        b=aXq1opdrXKuM5RnlZZHUv6u1hRYIh8huQb9jtCQNwvh4W53sDof3x9cBtN7qWLJp7U
+         BuzZXLsUuLKB9Bw9+U4Ailu1bo502J/7KWYJqodQaQbMLaat0ptfCVNdgk+UaQ60nzCb
+         zWCTsEWypkckorf5RFBlS2Azk4nJ/6C0vOQsMttoPqY5yHEahEZ76ueu3+FYfWB1RnRL
+         88Qrsj92nSW0XHnC55qo3p7qWSKBNdnDeXNTmYb0yKOjwpupemxzlUhLoesqhvcHN24X
+         CqS1HzvWeEEGc4JGPv3227idaW9k+OgWH9kCPmkom8QuWvdK8c/E21Mvy1X+avSt6SFo
+         iCug==
+X-Gm-Message-State: AOAM530pYbzdneU1rKOBS03dGzTCA41CkrC1ryvJNFpZY/X5BajSWSD3
+        doCkaiMSPnablcJxdNjvKuFPPiYPbUqFzA==
+X-Google-Smtp-Source: ABdhPJzQF8YqRKaRzhqpB/+RKXKTS92zdI9LaCldl/gjxDCST/Q7SYVtCA0jA3ko98w0KRBRVpcFjA==
+X-Received: by 2002:aa7:d594:0:b0:410:ef84:f706 with SMTP id r20-20020aa7d594000000b00410ef84f706mr2767662edq.347.1645107720447;
+        Thu, 17 Feb 2022 06:22:00 -0800 (PST)
 Received: from debianHome.localdomain (dynamic-077-001-066-240.77.1.pool.telefonica.de. [77.1.66.240])
-        by smtp.gmail.com with ESMTPSA id a13sm578436edn.25.2022.02.17.06.21.55
+        by smtp.gmail.com with ESMTPSA id a13sm578436edn.25.2022.02.17.06.21.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 06:21:55 -0800 (PST)
+        Thu, 17 Feb 2022 06:22:00 -0800 (PST)
 From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 To:     selinux@vger.kernel.org
 Cc:     Paul Moore <paul@paul-moore.com>,
@@ -56,15 +56,15 @@ Cc:     Paul Moore <paul@paul-moore.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Ondrej Mosnacek <omosnace@redhat.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Austin Kim <austin.kim@lge.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
         Yang Li <yang.lee@linux.alibaba.com>,
-        Austin Kim <austin.kim@lge.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH 4/5] selinux: declare data arrays const
-Date:   Thu, 17 Feb 2022 15:21:27 +0100
-Message-Id: <20220217142133.72205-3-cgzones@googlemail.com>
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH 5/5] selinux: drop unnecessary NULL check
+Date:   Thu, 17 Feb 2022 15:21:28 +0100
+Message-Id: <20220217142133.72205-4-cgzones@googlemail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220217142133.72205-1-cgzones@googlemail.com>
 References: <20220217142133.72205-1-cgzones@googlemail.com>
@@ -81,178 +81,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arrays for the policy capability names, the initial sid identifiers
-and the class and permission names are not changed at runtime.  Declare
-them const to avoid accidental modification.
+Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
+introduced a NULL check on the context after a successful call to
+security_sid_to_context().  This is on the one hand redundant after
+checking for success and on the other hand insufficient on an actual
+NULL pointer, since the context is passed to seq_escape() leading to a
+call of strlen() on it.
 
-The build time script genheaders needs to be exempted, since it converts
-the entries to uppercase.
+Reported by Clang analyzer:
+
+    In file included from security/selinux/hooks.c:28:
+    In file included from ./include/linux/tracehook.h:50:
+    In file included from ./include/linux/memcontrol.h:13:
+    In file included from ./include/linux/cgroup.h:18:
+    ./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1st argument to string length function [unix.cstring.NullArg]
+            seq_escape_mem(m, src, strlen(src), flags, esc);
+                                   ^~~~~~~~~~~
 
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
- scripts/selinux/genheaders/genheaders.c          | 2 ++
- scripts/selinux/mdp/mdp.c                        | 4 ++--
- security/selinux/avc.c                           | 2 +-
- security/selinux/include/avc_ss.h                | 2 +-
- security/selinux/include/classmap.h              | 8 +++++++-
- security/selinux/include/initial_sid_to_string.h | 9 ++++++++-
- security/selinux/include/policycap.h             | 2 +-
- security/selinux/include/policycap_names.h       | 2 +-
- security/selinux/ss/services.c                   | 4 ++--
- 9 files changed, 25 insertions(+), 10 deletions(-)
+ security/selinux/hooks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/selinux/genheaders/genheaders.c b/scripts/selinux/genheaders/genheaders.c
-index f355b3e0e968..5f7c0b7d9260 100644
---- a/scripts/selinux/genheaders/genheaders.c
-+++ b/scripts/selinux/genheaders/genheaders.c
-@@ -15,6 +15,8 @@ struct security_class_mapping {
- 	const char *perms[sizeof(unsigned) * 8 + 1];
- };
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 1e69f88eb326..ac802b99d36c 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -1020,7 +1020,7 @@ static int show_sid(struct seq_file *m, u32 sid)
+ 	rc = security_sid_to_context(&selinux_state, sid,
+ 					     &context, &len);
+ 	if (!rc) {
+-		bool has_comma = context && strchr(context, ',');
++		bool has_comma = strchr(context, ',');
  
-+/* Allow to convert entries in mappings to uppercase */
-+#define __SELINUX_GENHEADERS__
- #include "classmap.h"
- #include "initial_sid_to_string.h"
- 
-diff --git a/scripts/selinux/mdp/mdp.c b/scripts/selinux/mdp/mdp.c
-index 105c1c31a316..1415604c3d24 100644
---- a/scripts/selinux/mdp/mdp.c
-+++ b/scripts/selinux/mdp/mdp.c
-@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
- 
- 	/* print out the class permissions */
- 	for (i = 0; secclass_map[i].name; i++) {
--		struct security_class_mapping *map = &secclass_map[i];
-+		const struct security_class_mapping *map = &secclass_map[i];
- 		fprintf(fout, "class %s\n", map->name);
- 		fprintf(fout, "{\n");
- 		for (j = 0; map->perms[j]; j++)
-@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
- #define SYSTEMLOW "s0"
- #define SYSTEMHIGH "s1:c0.c1"
- 		for (i = 0; secclass_map[i].name; i++) {
--			struct security_class_mapping *map = &secclass_map[i];
-+			const struct security_class_mapping *map = &secclass_map[i];
- 
- 			fprintf(fout, "mlsconstrain %s {\n", map->name);
- 			for (j = 0; map->perms[j]; j++)
-diff --git a/security/selinux/avc.c b/security/selinux/avc.c
-index abcd9740d10f..020985a53d8f 100644
---- a/security/selinux/avc.c
-+++ b/security/selinux/avc.c
-@@ -668,7 +668,7 @@ static void avc_audit_pre_callback(struct audit_buffer *ab, void *a)
- 	struct common_audit_data *ad = a;
- 	struct selinux_audit_data *sad = ad->selinux_audit_data;
- 	u32 av = sad->audited;
--	const char **perms;
-+	const char *const *perms;
- 	int i, perm;
- 
- 	audit_log_format(ab, "avc:  %s ", sad->denied ? "denied" : "granted");
-diff --git a/security/selinux/include/avc_ss.h b/security/selinux/include/avc_ss.h
-index 88c384c5c09e..b38974e22d81 100644
---- a/security/selinux/include/avc_ss.h
-+++ b/security/selinux/include/avc_ss.h
-@@ -18,7 +18,7 @@ struct security_class_mapping {
- 	const char *perms[sizeof(u32) * 8 + 1];
- };
- 
--extern struct security_class_mapping secclass_map[];
-+extern const struct security_class_mapping secclass_map[];
- 
- #endif /* _SELINUX_AVC_SS_H_ */
- 
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index 35aac62a662e..07ade4af85ff 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -2,6 +2,12 @@
- #include <linux/capability.h>
- #include <linux/socket.h>
- 
-+#ifdef __SELINUX_GENHEADERS__
-+# define const_qual
-+#else
-+# define const_qual const
-+#endif
-+
- #define COMMON_FILE_SOCK_PERMS "ioctl", "read", "write", "create", \
-     "getattr", "setattr", "lock", "relabelfrom", "relabelto", "append", "map"
- 
-@@ -38,7 +44,7 @@
-  * Note: The name for any socket class should be suffixed by "socket",
-  *	 and doesn't contain more than one substr of "socket".
-  */
--struct security_class_mapping secclass_map[] = {
-+const_qual struct security_class_mapping secclass_map[] = {
- 	{ "security",
- 	  { "compute_av", "compute_create", "compute_member",
- 	    "check_context", "load_policy", "compute_relabel",
-diff --git a/security/selinux/include/initial_sid_to_string.h b/security/selinux/include/initial_sid_to_string.h
-index 5d332aeb8b6c..915283cd89bd 100644
---- a/security/selinux/include/initial_sid_to_string.h
-+++ b/security/selinux/include/initial_sid_to_string.h
-@@ -1,5 +1,12 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--static const char *initial_sid_to_string[] =
-+
-+#ifdef __SELINUX_GENHEADERS__
-+# define const_qual
-+#else
-+# define const_qual const
-+#endif
-+
-+static const char *const_qual initial_sid_to_string[] =
- {
- 	NULL,
- 	"kernel",
-diff --git a/security/selinux/include/policycap.h b/security/selinux/include/policycap.h
-index 2ec038efbb03..3207a4e8c899 100644
---- a/security/selinux/include/policycap.h
-+++ b/security/selinux/include/policycap.h
-@@ -15,6 +15,6 @@ enum {
- };
- #define POLICYDB_CAPABILITY_MAX (__POLICYDB_CAPABILITY_MAX - 1)
- 
--extern const char *selinux_policycap_names[__POLICYDB_CAPABILITY_MAX];
-+extern const char *const selinux_policycap_names[__POLICYDB_CAPABILITY_MAX];
- 
- #endif /* _SELINUX_POLICYCAP_H_ */
-diff --git a/security/selinux/include/policycap_names.h b/security/selinux/include/policycap_names.h
-index b89289f092c9..51da36e37d21 100644
---- a/security/selinux/include/policycap_names.h
-+++ b/security/selinux/include/policycap_names.h
-@@ -5,7 +5,7 @@
- #include "policycap.h"
- 
- /* Policy capability names */
--const char *selinux_policycap_names[__POLICYDB_CAPABILITY_MAX] = {
-+const char *const selinux_policycap_names[__POLICYDB_CAPABILITY_MAX] = {
- 	"network_peer_controls",
- 	"open_perms",
- 	"extended_socket_class",
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index 7865926962ab..25c287324059 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -99,7 +99,7 @@ static void context_struct_compute_av(struct policydb *policydb,
- 				      struct extended_perms *xperms);
- 
- static int selinux_set_mapping(struct policydb *pol,
--			       struct security_class_mapping *map,
-+			       const struct security_class_mapping *map,
- 			       struct selinux_map *out_map)
- {
- 	u16 i, j;
-@@ -121,7 +121,7 @@ static int selinux_set_mapping(struct policydb *pol,
- 	/* Store the raw class and permission values */
- 	j = 0;
- 	while (map[j].name) {
--		struct security_class_mapping *p_in = map + (j++);
-+		const struct security_class_mapping *p_in = map + (j++);
- 		struct selinux_mapping *p_out = out_map->mapping + j;
- 
- 		/* An empty class string skips ahead */
+ 		seq_putc(m, '=');
+ 		if (has_comma)
 -- 
 2.35.1
 

@@ -2,150 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A464B9607
+	by mail.lfdr.de (Postfix) with ESMTP id 58D1E4B9606
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbiBQCqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 21:46:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47326 "EHLO
+        id S231848AbiBQCqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 21:46:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiBQCqH (ORCPT
+        with ESMTP id S229478AbiBQCqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 16 Feb 2022 21:46:07 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2138.outbound.protection.outlook.com [40.107.237.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFE52A795B
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:45:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YUqiGQ1wmYL854Vd6FN24nARCObx5SqhlJHm/fqfQaLCeFKHA7rqvvKTMhwfV0EOaDqFO71KfJRRImx3FnULQGqKqtE5cJFCVMjX5FconcxR2MXKMaEQtVR69QlXaV5eJc73PXHv9P4wGdDcDQihYD1qTwVbmd3pSxKSHsnGPQvZnvMr/wUngVLzz8ZitDs1ulBTYl3C9vOxlZudKVFXraDHnmDpNWu+5s3ga4vyOfWebhgMXCgS/+1YvgemmRmWlBXsdedZ12mcoYRhICcyalbf3dUsG7Hkp5gEcZ24MtAofn5FACfbnSrgn8r2PaiY35/WmdP0Ug8f/G5zt3uKgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z4nJOhQ/ZyOtg0M9L1d5IXn1LseoCCTHXN9jMAucXxE=;
- b=LzJHblpwA+syWLFSD5TL55gU+J2alqDfkKMbSryTYaDmnrbyv9cRuv/rOJJ8lLagDvqxbkAOAse4mAaNUU+OXMl+xpzriURW1D8Eq1gCPzfZol1XFCglaq8woUljO7ESAXbgLoGd2Z6OZKRWMq+lnPvZNmEGAYgGwKTgZp20J/jpTFTnUmWhsHTDxI8vhU2DQXZFz/7KrksSKqt2QzmCaQA8Lasrwikwryh0pI2UBzR+lRp+FpuUPZKCyCvZk5MLM+Hy8iF/csSPXpFV6lvS6EJewQAijhDVaIWncbTbcnySVqAoCnCp82xhUF7uShQgtPnevF75kkOdFtLmBAXI0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z4nJOhQ/ZyOtg0M9L1d5IXn1LseoCCTHXN9jMAucXxE=;
- b=Hh5KwYkCE7hDlfvn2RQKU1wtDv6MsuaTBw3TG6dd0adaGCnVvf/7RiZzkKrdly8oLmcni2SgPs93NuqZLAp7gHEzws8H4BUZdf4gWVk4LAXRiu0le89NewmQB+OjntVBrSoncPInYa1V1zA2UIGf7eBT4cRv5jH4UQYhm/RtXTo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by BN7PR04MB5393.namprd04.prod.outlook.com (2603:10b6:408:36::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12; Thu, 17 Feb
- 2022 02:45:47 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142%7]) with mapi id 15.20.4995.015; Thu, 17 Feb 2022
- 02:45:47 +0000
-From:   Xin Ji <xji@analogixsemi.com>
-To:     andrzej.hajda@intel.com, Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Xin Ji <xji@analogixsemi.com>
-Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
-        hsinyi@chromium.org, Xin Ji <xji@analogix.corp-partner.google.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/bridge: anx7625: Fix release wrong workqueue
-Date:   Thu, 17 Feb 2022 10:44:17 +0800
-Message-Id: <20220217024418.3780171-1-xji@analogixsemi.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK0PR01CA0065.apcprd01.prod.exchangelabs.com
- (2603:1096:203:a6::29) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074222A795F;
+        Wed, 16 Feb 2022 18:45:51 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V4fbH8I_1645065942;
+Received: from localhost(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0V4fbH8I_1645065942)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 17 Feb 2022 10:45:48 +0800
+From:   Wen Yang <simon.wy@alibaba-inc.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Wen Yang <simon.wy@alibaba-inc.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Wen Yang <wenyang@linux.alibaba.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] perf/x86: improve the event scheduling to avoid unnecessary pmu_stop/start
+Date:   Thu, 17 Feb 2022 10:45:40 +0800
+Message-Id: <20220217024540.33657-1-simon.wy@alibaba-inc.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 637a13b4-d21e-4b29-f9d7-08d9f1bf9986
-X-MS-TrafficTypeDiagnostic: BN7PR04MB5393:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR04MB53930DAADB31E1FA333BF9EFC7369@BN7PR04MB5393.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:49;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MnW/hlk5O9xG6yK9HJI6+msOXpAkbNlP73Wn1FynCs7Gzb/9fd0ITxBPBtZlPIdTOWE+abaznY6rJHouTId33D2PLKoOLUlayKLxnEUFYwEA2zrSaxJR0VFg8h046cfEl/Sy4bsxfmT3ya7BOGIzBghIF/s3wJvOvkbhg8s8vqSUzcDhXGI0qMgmFhkeXA41l/30yPN/hLrv4LlEc5Cka/XVz5qA8JR7dCnD+C7faHCakRWbziU1rkqizijStzKak1v+9+Fb0ZbrEapiyLrSMyRTDbuAt5iApU6fFk8rJ1lEN1I0MF6VGph4QkIw+wMfl3K8DoM+J7v+K6zZ8w0asaKXgzjJXnHKqGln1Q+pDgKgo3qLro1IOMG+b3HLqfvPa9fyaJYqQ55rBzCBPNhtX11G4/HWpjiok5qW0X5FiBTXncUrTVj+jMUWP+5QoTGO285NerCGAN+URgN3aXjp+QD3R9axzq7qjz4axcG2/YLSk3Z+41iIfzr+dKIOT9FOxvtZSL5UvFPme1o2hvcgtC2Vdp6ts1A4EQoPNal2Q1W5AaYOgt+jOOKysQhTaUcRJI0wYA4hZr7dhC6C6YTuBWyn1ol8IfG1zOOF4RQZXq5hvOJFyTplRyLXXTqA36k95HYpjK6mZ5xmddXnP3pMZ5NTHsHbQJ3tcLysePFJEywoSDA4eT26RJIEEzo4zJVhkguVhJaNCYyC+Iuvj+Xaxw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(316002)(6506007)(110136005)(4326008)(7049001)(86362001)(6512007)(52116002)(6666004)(6486002)(55236004)(186003)(26005)(38100700002)(38350700002)(2616005)(1076003)(83380400001)(4744005)(36756003)(7416002)(2906002)(5660300002)(8676002)(66476007)(66556008)(66946007)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FVtLy56aoqSxGQ8Hqo1iX71Xll5IaLzOPZwDrsnmWXa7GcY5oi7y2dUMwSPi?=
- =?us-ascii?Q?NF1mtqTy/ViY8jckaKq+dxgp4LcGMq5Wg3D2nevqOawbOImUP7XneccJxiNW?=
- =?us-ascii?Q?KneUT+B1Z7XiJnQIq4qgEC33zNOIAGyzIXXMG/0Xbu1IBlZ0El1Nei4yFD2e?=
- =?us-ascii?Q?u5NDCd5yqlxEzPnuMrRYlmm4lv6VqKv5w6/qSycgm+RrXHT9I23A38ltBQbu?=
- =?us-ascii?Q?7ijXsFS6Q7Rn7XxDJK5J3lcb3wF2R5klQtrgTzpCrWGY8RFwfnWVm2M2h7Y+?=
- =?us-ascii?Q?KgMNvast7ac2VRS3UGxfe4MbBVWpOJLIDTKueoR3GqWHp3qN9vVTrh8w4jIw?=
- =?us-ascii?Q?Tzj8IVMxkbM/5SEvumMhff8TqRCvmXos75lRLdkL3TvDX74LPTc8yk9WB1Nu?=
- =?us-ascii?Q?BdiPU0smO5pXZIsX464nF2IS+UOLHhXo5q63CTbmuMYQhOh5R8UrkoBg0h82?=
- =?us-ascii?Q?/7FI1xVqC02xEJx4RoDZD2zAoPajmkJ31WhZXRK5Y/DeNqL1NKQf7SYPOJzH?=
- =?us-ascii?Q?Xrh5FAuIjtNY2JBoUo8j6ysF6Ad4RJQac2xpahd3qnbM2MPBkfqPYlQs/HKI?=
- =?us-ascii?Q?9On/2nuu9zk3WsWWNHamC4bcZVL2kSAi7jpWJelu776skcQEjRB69XxWmOcN?=
- =?us-ascii?Q?zb/oo1/Et90iqkJBV3PCXt8tSY8YjB3WQHhuca3eNRuIpnooPeHePKUTSUV6?=
- =?us-ascii?Q?5vU9wBgv3IXjtMqs4F3tMMSBmQwGRUUCpb8d+hc4lNK5rtY38EEhv0EaCdgg?=
- =?us-ascii?Q?xKsVWkucJ4LpiA95bROZoQqMYshBXPEwRA8ChmR9jWuc1hkwrYgh3TyF1214?=
- =?us-ascii?Q?qYtmdV1wcQpCBVS6820ZYXV2e12YsrKIWphgnaAq6Bcjv6HGTtKzIU0nwQBQ?=
- =?us-ascii?Q?huimcfdsHnGhh1be78OgaQbv5rK/SiWRN5UkcFQA3+hL7a0nNcGt3eo3Z0Y0?=
- =?us-ascii?Q?Cw9AUtxBk4BQyUlQgY93A9EE2ckJHgR6J5F2PYyMBOz+qv4iE2OJX09/zAOA?=
- =?us-ascii?Q?pAZ+5ZXE5o5hmNaUN0nk1UNK7ullIFtNKoPw+uV/sXqotXP3ZS36qVo/pkIW?=
- =?us-ascii?Q?/Lri42BZNU5UWKEgcJRV4VXX4dg4uAPGG07kHdxk+ZMYwdmsU/tRSawPChZy?=
- =?us-ascii?Q?hW/wBrIVeVPpW6u2PMkT2zjcqW2EpBgGnSxToCyetYdf4ytKgwcFgcUPYb5M?=
- =?us-ascii?Q?iPG76r5fcWUneSSSRgcl++7KyseG/QPIgIy4PglKvCVPsixliTdOYil98GIx?=
- =?us-ascii?Q?WtDM7vaRCVCN/blSWkoZxf1lRu3g7sN20lcFm5Rly8qCGQxDbkQZqHHtHGLU?=
- =?us-ascii?Q?YaTvhE2XiLP3puqIvMY+e1doQEPgsT69ebZwqlOiFd9h5JQIQ9g6Ivh5NqE7?=
- =?us-ascii?Q?RNoJtHvGQAHGLWkQXtp8q1ZSwJLOPGszKhXD0KJtAb+xo94qrUi0Q+4iQgiD?=
- =?us-ascii?Q?9aN/6cPMzjuXCS2KL6c4CsEmUKB9fGBG+0RSIZrEXFWtRUynAyE84yrtRtO1?=
- =?us-ascii?Q?u7pGuPBeSEM+kMcwR/Csh7lmyFLI1/88Z5jG30hLJuEx1Ii6aNK0yikQcnNQ?=
- =?us-ascii?Q?Sd84jWA/Yw73C8Yj1AxATDv9TbH2QwRLLO0jr2CE7ZCOcyPHHKBjIMBs26Ng?=
- =?us-ascii?Q?2nAtl7k5VWJdJXu34NoFzIo=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 637a13b4-d21e-4b29-f9d7-08d9f1bf9986
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 02:45:47.0036
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LIP/hNiAM2eN1mAB8fN0kosdm1Yt/eyEAOc38UGcdqYF/a4O0ROLQMe3mF8pUTzW0jSDz/shQeCIXfha9/mVnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR04MB5393
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Ji <xji@analogix.corp-partner.google.com>
+This issue has been there for a long time, we could reproduce it as follows:
 
-If "hdcp_workqueue" exist, must release "hdcp_workqueue",
-not "workqueue".
+1, run a script that periodically collects perf data, eg:
+while true
+do
+    perf stat -e cache-misses,cache-misses,cache-misses -C 1 sleep 2
+    perf stat -e cache-misses -C 1 sleep 2
+    sleep 1
+done
 
-Fixes: cd1637c7e480 ("drm/bridge: anx7625: add HDCP support")
-Signed-off-by: Xin Ji <xji@analogixsemi.com>
+2, run another one to capture the IPC, eg:
+perf stat -e cycles:D,instructions:D  -C 1 -I 1000
+
+Then we could observe that the counter used by cycles:D changes frequently:
+crash> struct  cpu_hw_events.n_events,assign,event_list,events  ffff88bf7f44f420
+  n_events = 3
+  assign = {33, 1, 32, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+  event_list = {0xffff88bf77b85000, 0xffff88b72db82000, 0xffff88b72db85800, 0xffff88ff6cfcb000, 0xffff88ff609f1800, 0xffff88ff609f1800, 0xffff88ff5f46a800, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+  events = {0x0, 0xffff88b72db82000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xffff88b72db85800, 0xffff88bf77b85000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+
+crash> struct  cpu_hw_events.n_events,assign,event_list,events  ffff88bf7f44f420
+  n_events = 6
+  assign = {33, 3, 32, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+  event_list = {0xffff88bf77b85000, 0xffff88b72db82000, 0xffff88b72db85800, 0xffff88bf46c34000, 0xffff88bf46c35000, 0xffff88bf46c30000, 0xffff88ff5f46a800, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+  events = {0xffff88bf46c34000, 0xffff88bf46c35000, 0xffff88bf46c30000, 0xffff88b72db82000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xffff88b72db85800, 0xffff88bf77b85000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+
+The reason is that the NMI watchdog permanently consumes one FP
+(*cycles*). Therefore, when the above shell script obtains *cycles*
+again, only one GP can be used, and its weight is 5.
+But other events (like *cache-misses*) have a weight of 4,
+so the counter used by *cycles* will often be taken away, as in
+the raw data above:
+[1]
+  n_events = 3
+  assign = {33, 1, 32, ...}
+-->
+  n_events = 6
+  assign = {33, 3, 32, 0, 1, 2, ...}
+
+So it will cause unnecessary pmu_stop/start.
+
+The current event scheduling algorithm is more than 10 years old:
+https://lwn.net/Articles/357631/
+
+We wish it could be optimized a bit.
+In this patch, the fields cnt_mask and evt_mask are added to indicate
+currently used counters and events so that the used ones can be skipped
+in __perf_sched_find_counter and perf_sched_next_event functions to avoid
+unnecessary pmu_stop/start.
+
+[1]:
+32: INTEL_PMC_IDX_FIXED_INSTRUCTIONS
+33: INTEL_PMC_IDX_FIXED_CPU_CYCLES
+34: INTEL_PMC_IDX_FIXED_REF_CYCLES
+0,1,2,3: GP
+
+Signed-off-by: Wen Yang <simon.wy@alibaba-inc.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: Wen Yang <wenyang@linux.alibaba.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 ---
- drivers/gpu/drm/bridge/analogix/anx7625.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/events/core.c         | 40 +++++++++++++++++++++++++++++++---------
+ arch/x86/events/intel/uncore.c |  2 +-
+ arch/x86/events/perf_event.h   |  3 ++-
+ 3 files changed, 34 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 633618bafd75..9aab879a8851 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -2736,8 +2736,8 @@ static int anx7625_i2c_remove(struct i2c_client *client)
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index e686c5e..1a47e31 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -796,6 +796,8 @@ struct perf_sched {
+ 	int			max_events;
+ 	int			max_gp;
+ 	int			saved_states;
++	u64			cnt_mask;
++	u64			evt_mask;
+ 	struct event_constraint	**constraints;
+ 	struct sched_state	state;
+ 	struct sched_state	saved[SCHED_STATES_MAX];
+@@ -805,7 +807,7 @@ struct perf_sched {
+  * Initialize iterator that runs through all events and counters.
+  */
+ static void perf_sched_init(struct perf_sched *sched, struct event_constraint **constraints,
+-			    int num, int wmin, int wmax, int gpmax)
++			    int num, int wmin, int wmax, int gpmax, u64 cnt_mask, u64 evt_mask)
+ {
+ 	int idx;
  
- 	if (platform->hdcp_workqueue) {
- 		cancel_delayed_work(&platform->hdcp_work);
--		flush_workqueue(platform->workqueue);
--		destroy_workqueue(platform->workqueue);
-+		flush_workqueue(platform->hdcp_workqueue);
-+		destroy_workqueue(platform->hdcp_workqueue);
+@@ -814,6 +816,8 @@ static void perf_sched_init(struct perf_sched *sched, struct event_constraint **
+ 	sched->max_weight	= wmax;
+ 	sched->max_gp		= gpmax;
+ 	sched->constraints	= constraints;
++	sched->cnt_mask	= cnt_mask;
++	sched->evt_mask	= evt_mask;
+ 
+ 	for (idx = 0; idx < num; idx++) {
+ 		if (constraints[idx]->weight == wmin)
+@@ -822,7 +826,10 @@ static void perf_sched_init(struct perf_sched *sched, struct event_constraint **
+ 
+ 	sched->state.event	= idx;		/* start with min weight */
+ 	sched->state.weight	= wmin;
+-	sched->state.unassigned	= num;
++	sched->state.unassigned	= num - hweight_long(evt_mask);
++
++	while (sched->evt_mask & BIT_ULL(sched->state.event))
++		sched->state.event++;
+ }
+ 
+ static void perf_sched_save_state(struct perf_sched *sched)
+@@ -874,6 +881,9 @@ static bool __perf_sched_find_counter(struct perf_sched *sched)
+ 		for_each_set_bit_from(idx, c->idxmsk, X86_PMC_IDX_MAX) {
+ 			u64 mask = BIT_ULL(idx);
+ 
++			if (sched->cnt_mask & mask)
++				continue;
++
+ 			if (sched->state.used & mask)
+ 				continue;
+ 
+@@ -890,6 +900,9 @@ static bool __perf_sched_find_counter(struct perf_sched *sched)
+ 		if (c->flags & PERF_X86_EVENT_PAIR)
+ 			mask |= mask << 1;
+ 
++		if (sched->cnt_mask & mask)
++			continue;
++
+ 		if (sched->state.used & mask)
+ 			continue;
+ 
+@@ -934,7 +947,10 @@ static bool perf_sched_next_event(struct perf_sched *sched)
+ 
+ 	do {
+ 		/* next event */
+-		sched->state.event++;
++		do {
++			sched->state.event++;
++		} while (sched->evt_mask & BIT_ULL(sched->state.event));
++
+ 		if (sched->state.event >= sched->max_events) {
+ 			/* next weight */
+ 			sched->state.event = 0;
+@@ -954,11 +970,11 @@ static bool perf_sched_next_event(struct perf_sched *sched)
+  * Assign a counter for each event.
+  */
+ int perf_assign_events(struct event_constraint **constraints, int n,
+-			int wmin, int wmax, int gpmax, int *assign)
++			int wmin, int wmax, int gpmax, u64 cnt_mask, u64 evt_mask, int *assign)
+ {
+ 	struct perf_sched sched;
+ 
+-	perf_sched_init(&sched, constraints, n, wmin, wmax, gpmax);
++	perf_sched_init(&sched, constraints, n, wmin, wmax, gpmax, cnt_mask, evt_mask);
+ 
+ 	do {
+ 		if (!perf_sched_find_counter(&sched))
+@@ -978,7 +994,8 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 	struct perf_event *e;
+ 	int n0, i, wmin, wmax, unsched = 0;
+ 	struct hw_perf_event *hwc;
+-	u64 used_mask = 0;
++	u64 cnt_mask = 0;
++	u64 evt_mask = 0;
+ 
+ 	/*
+ 	 * Compute the number of events already present; see x86_pmu_add(),
+@@ -1038,10 +1055,11 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 			mask |= mask << 1;
+ 
+ 		/* not already used */
+-		if (used_mask & mask)
++		if (cnt_mask & mask)
+ 			break;
+ 
+-		used_mask |= mask;
++		cnt_mask |= mask;
++		evt_mask |= BIT_ULL(i);
+ 
+ 		if (assign)
+ 			assign[i] = hwc->idx;
+@@ -1075,7 +1093,11 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 		}
+ 
+ 		unsched = perf_assign_events(cpuc->event_constraint, n, wmin,
+-					     wmax, gpmax, assign);
++					     wmax, gpmax, cnt_mask, evt_mask, assign);
++		if (unsched) {
++			unsched = perf_assign_events(cpuc->event_constraint, n, wmin,
++					wmax, gpmax, 0, 0, assign);
++		}
  	}
  
- 	if (!platform->pdata.low_power_mode)
+ 	/*
+diff --git a/arch/x86/events/intel/uncore.c b/arch/x86/events/intel/uncore.c
+index e497da9..8afff7a 100644
+--- a/arch/x86/events/intel/uncore.c
++++ b/arch/x86/events/intel/uncore.c
+@@ -480,7 +480,7 @@ static int uncore_assign_events(struct intel_uncore_box *box, int assign[], int
+ 	/* slow path */
+ 	if (i != n)
+ 		ret = perf_assign_events(box->event_constraint, n,
+-					 wmin, wmax, n, assign);
++					 wmin, wmax, n, 0, 0, assign);
+ 
+ 	if (!assign || ret) {
+ 		for (i = 0; i < n; i++)
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 150261d..2ae1e98 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1131,7 +1131,8 @@ static inline void __x86_pmu_enable_event(struct hw_perf_event *hwc,
+ void x86_pmu_enable_all(int added);
+ 
+ int perf_assign_events(struct event_constraint **constraints, int n,
+-			int wmin, int wmax, int gpmax, int *assign);
++			int wmin, int wmax, int gpmax, u64 cnt_mask, u64 evt_mask,
++			int *assign);
+ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign);
+ 
+ void x86_pmu_stop(struct perf_event *event, int flags);
 -- 
-2.25.1
+1.8.3.1
 

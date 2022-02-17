@@ -2,333 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03C74BA57E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0554BA581
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242952AbiBQQN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:13:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34950 "EHLO
+        id S242984AbiBQQOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:14:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234027AbiBQQNW (ORCPT
+        with ESMTP id S239199AbiBQQOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:13:22 -0500
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD10416A590;
-        Thu, 17 Feb 2022 08:13:06 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id m24so6810954vsp.7;
-        Thu, 17 Feb 2022 08:13:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ch9MypWpUQnZM5wHecAMH9Z6WzfQjeMjydR9fNyA8WE=;
-        b=uTKFJVMqenpVj3i8C4IKfY1qZajwqUbnuQc/7DWfHW+WztzXnYDX9+9dscO3zogIys
-         cnecczYn7LxAvCbfTn/neGx75PxeQfMXGT2uCfqNu7aqQxLEdtny08z3tTnn4iyccRlq
-         u5JKLPCpU8Uq8FR7ziyoHTxxcQcBVugqP+LgkbpRs0j7NkfjtgnPOmD/YkfvuKPAg/7Q
-         C0oLqacCxSjw/9AEAwj7NgsyBw7B3C3eWP1PGyUPk0WKuhoRIzW9QqdEUF6QjqmH2y7g
-         Cp2K4N36AxnyS13O2sx0fVcfcvIQMxcyZX65W0FovP/CrHB/iaqgmGz8FOjKJbKpzm4K
-         SlHQ==
-X-Gm-Message-State: AOAM530RvE3J46c27pMgxxql4feqz0zJjjXLMzMKybeaZCh3ad4sDA/X
-        gtty0lXuhHuV2m9ku0GqKxDEdn6OFIC3IA==
-X-Google-Smtp-Source: ABdhPJxtdBoUf2pCT404xzsSZrmdg9BrdLxb/6yd3TibYDibQY0SMI39/y066sSVZ0RaZWFZoegLcA==
-X-Received: by 2002:a67:fa93:0:b0:31b:738f:1954 with SMTP id f19-20020a67fa93000000b0031b738f1954mr1603015vsq.87.1645114385363;
-        Thu, 17 Feb 2022 08:13:05 -0800 (PST)
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com. [209.85.221.169])
-        by smtp.gmail.com with ESMTPSA id t24sm2297934vsk.27.2022.02.17.08.13.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 08:13:04 -0800 (PST)
-Received: by mail-vk1-f169.google.com with SMTP id o129so3333054vko.7;
-        Thu, 17 Feb 2022 08:13:04 -0800 (PST)
-X-Received: by 2002:a05:6122:8c7:b0:32d:7e3:96c8 with SMTP id
- 7-20020a05612208c700b0032d07e396c8mr1649377vkg.7.1645114384535; Thu, 17 Feb
- 2022 08:13:04 -0800 (PST)
+        Thu, 17 Feb 2022 11:14:14 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C696816A5B0;
+        Thu, 17 Feb 2022 08:13:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645114439; x=1676650439;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sQtXhY9QbupAILiJZEVKHS8Itnr6Zg188RTdibPikzA=;
+  b=tkQ4H5lyjMZ3SAtVaq0caSxwH5y5Mus9D+CT/8lsjUGoN2DHqVoPjWfw
+   f15Xa77yHQpr+rttxRCd6wS3HGk/8qh2P/QUsebZJc9+BMFKOgPTvg3GJ
+   mxCEoAMZVCXZ091Wl2g7cuQSPCaNYaRxRXsu37ig7IfKcwLr+e48ND5pf
+   0=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 17 Feb 2022 08:13:59 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 08:13:59 -0800
+Received: from [10.216.25.41] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 17 Feb
+ 2022 08:13:54 -0800
+Message-ID: <5ffb2fc8-a13d-c07a-ed81-3b722e95bfd0@quicinc.com>
+Date:   Thu, 17 Feb 2022 21:43:33 +0530
 MIME-Version: 1.0
-References: <20220215165226.2738568-1-geert@linux-m68k.org>
- <20220215165226.2738568-3-geert@linux-m68k.org> <4fff0c08-adab-c1d5-4a7e-1513cb2bf7ca@suse.de>
-In-Reply-To: <4fff0c08-adab-c1d5-4a7e-1513cb2bf7ca@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 17 Feb 2022 17:12:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVK7eWfod73JQAntO=7BAMEcS-ktH4NJmDjna3zUn7giw@mail.gmail.com>
-Message-ID: <CAMuHMdVK7eWfod73JQAntO=7BAMEcS-ktH4NJmDjna3zUn7giw@mail.gmail.com>
-Subject: Re: [PATCH 2/8] drm/fb-helper: Add support for DRM_FORMAT_C[124]
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
+ incoming CPUs
+Content-Language: en-US
+To:     <paulmck@kernel.org>
+CC:     <kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
+        <rcu@vger.kernel.org>, <rostedt@goodmis.org>, <tj@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220209233811.GC557593@lothringen>
+ <20220214164435.GA2805255@paulmck-ThinkPad-P17-Gen-1>
+ <f8cff19c-5e8f-a7ed-c2ff-49a264b4e342@quicinc.com>
+ <20220215173951.GH4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20220215173951.GH4285@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
 
-Thanks for your review!
-
-On Thu, Feb 17, 2022 at 3:57 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 15.02.22 um 17:52 schrieb Geert Uytterhoeven:
-> > Add support for color-indexed frame buffer formats with two, four, and
-> > sixteen colors to the DRM framebuffer helper functions:
-> >    1. Add support for depths 1/2/4 to the damage helper,
-> >    2. For color-indexed modes, the length of the color bitfields must be
-> >       set to the color depth, else the logo code may pick a logo with too
-> >       many colors.  Drop the incorrect DAC width comment, which
-> >       originates from the i915 driver.
-> >    3. Accept C[124] modes when validating or filling in struct
-> >       fb_var_screeninfo, and  use the correct number of bits per pixel.
-> >    4. Set the visual to FB_VISUAL_PSEUDOCOLOR for all supported
-> >       color-indexed modes.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-> > --- a/drivers/gpu/drm/drm_fb_helper.c
-> > +++ b/drivers/gpu/drm/drm_fb_helper.c
-> > @@ -376,12 +376,34 @@ static void drm_fb_helper_damage_blit_real(struct drm_fb_helper *fb_helper,
-> >                                          struct iosys_map *dst)
-> >   {
-> >       struct drm_framebuffer *fb = fb_helper->fb;
-> > -     unsigned int cpp = fb->format->cpp[0];
-> > -     size_t offset = clip->y1 * fb->pitches[0] + clip->x1 * cpp;
-> > -     void *src = fb_helper->fbdev->screen_buffer + offset;
-> > -     size_t len = (clip->x2 - clip->x1) * cpp;
-> > +     size_t offset = clip->y1 * fb->pitches[0];
-> > +     size_t len = clip->x2 - clip->x1;
-> >       unsigned int y;
-> > +     void *src;
-> >
-> > +     switch (fb->format->depth) {
+On 2/15/2022 11:09 PM, Paul E. McKenney wrote:
+> On Tue, Feb 15, 2022 at 07:53:10PM +0530, Mukesh Ojha wrote:
+>> On 2/14/2022 10:14 PM, Paul E. McKenney wrote:
+>>> On Thu, Feb 10, 2022 at 12:38:11AM +0100, Frederic Weisbecker wrote:
+>>>> On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
+>>>>> Although it is usually safe to invoke synchronize_rcu_expedited() from a
+>>>>> preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
+>>>>> between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
+>>>>> invoke a workqueue handler will hang due to RCU waiting on a CPU that
+>>>>> the scheduler is not paying attention to.  This commit therefore expands
+>>>>> use of the existing workqueue-independent synchronize_rcu_expedited()
+>>>>> from early boot to also include CPUs that are being hotplugged.
+>>>>>
+>>>>> Link:https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+>>>>> Reported-by: Mukesh Ojha<quic_mojha@quicinc.com>
+>>>>> Cc: Tejun Heo<tj@kernel.org>
+>>>>> Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
+>>>> I'm surprised by this scheduler behaviour.
+>>>>
+>>>> Since sched_cpu_activate() hasn't been called yet,
+>>>> rq->balance_callback = balance_push_callback. As a result, balance_push() should
+>>>> be called at the end of schedule() when the workqueue is picked as the next task.
+>>>> Then eventually the workqueue should be immediately preempted by the stop task to
+>>>> be migrated elsewhere.
+>>>>
+>>>> So I must be missing something. For the fun, I booted the following and it
+>>>> didn't produce any issue:
+>>>>
+>>>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+>>>> index 80faf2273ce9..b1e74a508881 100644
+>>>> --- a/kernel/rcu/tree.c
+>>>> +++ b/kernel/rcu/tree.c
+>>>> @@ -4234,6 +4234,8 @@ int rcutree_online_cpu(unsigned int cpu)
+>>>>    	// Stop-machine done, so allow nohz_full to disable tick.
+>>>>    	tick_dep_clear(TICK_DEP_BIT_RCU);
+>>>> +	if (cpu != 0)
+>>>> +		synchronize_rcu_expedited();
+>>>>    	return 0;
+>>>>    }
+>>> That does seem compelling.  And others have argued that the workqueue
+>>> system's handling of offline CPUs should deal with this.
+>>>
+>>> Mukesh, was this a theoretical bug, or did you actually make it happen?
+>>> If you made it happen, as seems to have been the case given your original
+>>> email [1], could you please post your reproducer?
+>> No, it was not theoretical one. We saw this issue only once in our testing
+>> and i don't think it is easy to reproduce otherwise
+>> it would been fixed by now.
+>>
+>> When one of thread calling synchronize_expedite_rcu with timer of 20s but it
+>> did not get the exp funnel
+>> lock for 20s and there we crash it with panic() on timeout.
+>>
+>> The other thread cpuhp which was having the lock got stuck at the point
+>> mentioned at the below link.
+>>
+>> https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+> OK.  Are you able to create an in-kernel reproducer, perhaps similar to
+> Frederic's change above?
 >
-> The depth field is deprecated. It's probably better to use
-> fb->format->format and test against 4CC codes.
-
-The reason I checked for depth instead of a 4CC code is that the only
-thing that matters here is the number of bits per pixel.  Hence this
-function won't need any changes to support R1, R2, R4, and D1 later.
-When we get here, we already know that we are using a format that
-is supported by the fbdev helper code, and thus passed the 4CC
-checks elsewhere.
-
-Alternatively, we could introduce drm_format_info_bpp() earlier in
-the series, and use that?
-
+> I am worried that the patch that I am carrying might be fixing some
+> other bug by accident...
 >
-> > +     case 1:
-> > +             offset += clip->x1 / 8;
-> > +             len = DIV_ROUND_UP(len + clip->x1 % 8, 8);
-> > +             break;
-> > +
+I have started overnight test to reproduce this. let me see if we hit this.
+if not, feel free to take decision on this patch.
+
+Thanks,
+-Mukesh
+
+
+> 							Thanx, Paul
 >
-> Style: no empty lines here.
-
-OK.
-
-> > +     case 2:
-> > +             offset += clip->x1 / 4;
-> > +             len = DIV_ROUND_UP(len + clip->x1 % 4, 4);
-> > +             break;
-> > +
-> > +     case 4:
-> > +             offset += clip->x1 / 2;
-> > +             len = DIV_ROUND_UP(len + clip->x1 % 2, 2);
-> > +             break;
-> > +
->
-> Can we handle case C8 like C[124]? Seems cleaner to me.
-
-The cases above are purely to handle bpp < 8; they are not
-about color-indexed vs. truecolor modes.
-XRGB1111 mode would need to be handled above, too.
-
-> > @@ -1231,19 +1253,30 @@ static bool drm_fb_pixel_format_equal(const struct fb_var_screeninfo *var_1,
-> >   }
-> >
-> >   static void drm_fb_helper_fill_pixel_fmt(struct fb_var_screeninfo *var,
-> > -                                      u8 depth)
-> > -{
-> > -     switch (depth) {
-> > -     case 8:
-> > +                                      const struct drm_format_info *format)
-> > +{
-> > +     u8 depth = format->depth;
-> > +
-> > +     switch (format->format) {
-> > +     // FIXME Perhaps
-> > +     // #define DRM_FORMAT_C0 fourcc_code('C', '0', ' ', ' ')
->
-> What is C0?
-
-A non-existing color-indexed mode with zero colors ;-)
-Introduced purely to make a check like in the comment below work.
-What we really want to check here is if the mode is color-indexed
-or not...
-
-> > +     // if ((format & fourcc_code(0xff, 0xf8, 0xff, 0xff) == DRM_FORMAT_C0) ...
-> > +     case DRM_FORMAT_C1:
-> > +     case DRM_FORMAT_C2:
-> > +     case DRM_FORMAT_C4:
-> > +     case DRM_FORMAT_C8:
-> >               var->red.offset = 0;
-> >               var->green.offset = 0;
-> >               var->blue.offset = 0;
-> > -             var->red.length = 8; /* 8bit DAC */
-> > -             var->green.length = 8;
-> > -             var->blue.length = 8;
-> > +             var->red.length = depth;
-> > +             var->green.length = depth;
-> > +             var->blue.length = depth;
-> >               var->transp.offset = 0;
-> >               var->transp.length = 0;
-> > -             break;
-> > +             return;
-> > +     }
-> > +
-> > +     switch (depth) {
-> >       case 15:
-> >               var->red.offset = 10;
-> >               var->green.offset = 5;
-> > @@ -1298,7 +1331,9 @@ int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
-> >   {
-> >       struct drm_fb_helper *fb_helper = info->par;
-> >       struct drm_framebuffer *fb = fb_helper->fb;
-> > +     const struct drm_format_info *format = fb->format;
-> >       struct drm_device *dev = fb_helper->dev;
-> > +     unsigned int bpp;
-> >
-> >       if (in_dbg_master())
-> >               return -EINVAL;
-> > @@ -1308,22 +1343,34 @@ int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
-> >               var->pixclock = 0;
-> >       }
-> >
-> > -     if ((drm_format_info_block_width(fb->format, 0) > 1) ||
-> > -         (drm_format_info_block_height(fb->format, 0) > 1))
-> > -             return -EINVAL;
-> > +     switch (format->format) {
-> > +     case DRM_FORMAT_C1:
-> > +     case DRM_FORMAT_C2:
-> > +     case DRM_FORMAT_C4:
-> > +             bpp = format->depth;
-> > +             break;
->
-> Added C8 here would be more consistent.
-
-Again, this is not about color-indexed vs. truecolor, but about bpp.
-drm_format_info_bpp()?
-
- > +
-> > +     default:
-> > +             if ((drm_format_info_block_width(format, 0) > 1) ||
-> > +                 (drm_format_info_block_height(format, 0) > 1))
-> > +                     return -EINVAL;
-> > +
-> > +             bpp = format->cpp[0] * 8;
-> > +             break;
-> > +     }
-
-> > @@ -1680,11 +1727,20 @@ static int drm_fb_helper_single_fb_probe(struct drm_fb_helper *fb_helper,
-> >   }
-> >
-> >   static void drm_fb_helper_fill_fix(struct fb_info *info, uint32_t pitch,
-> > -                                uint32_t depth)
-> > +                                uint32_t format)
-> >   {
-> >       info->fix.type = FB_TYPE_PACKED_PIXELS;
-> > -     info->fix.visual = depth == 8 ? FB_VISUAL_PSEUDOCOLOR :
-> > -             FB_VISUAL_TRUECOLOR;
-> > +     switch (format) {
-
-This one is about color-indexed vs. truecolor.
-
-> > +     case DRM_FORMAT_C1:
-> > +     case DRM_FORMAT_C2:
-> > +     case DRM_FORMAT_C4:
-> > +     case DRM_FORMAT_C8:
-> > +             info->fix.visual = FB_VISUAL_PSEUDOCOLOR;
-> > +             break;
-> > +     default:
-> > +             info->fix.visual = FB_VISUAL_TRUECOLOR;
-> > +             break;
-> > +     }
-> >       info->fix.mmio_start = 0;
-> >       info->fix.mmio_len = 0;
-> >       info->fix.type_aux = 0;
-> > @@ -1701,19 +1757,29 @@ static void drm_fb_helper_fill_var(struct fb_info *info,
-> >                                  uint32_t fb_width, uint32_t fb_height)
-> >   {
-> >       struct drm_framebuffer *fb = fb_helper->fb;
-> > +     const struct drm_format_info *format = fb->format;
-> >
-> > -     WARN_ON((drm_format_info_block_width(fb->format, 0) > 1) ||
-> > -             (drm_format_info_block_height(fb->format, 0) > 1));
-> >       info->pseudo_palette = fb_helper->pseudo_palette;
-> >       info->var.xres_virtual = fb->width;
-> >       info->var.yres_virtual = fb->height;
-> > -     info->var.bits_per_pixel = fb->format->cpp[0] * 8;
-> > +     switch (format->format) {
-> > +     case DRM_FORMAT_C1:
-> > +     case DRM_FORMAT_C2:
-> > +     case DRM_FORMAT_C4:
-> > +             info->var.bits_per_pixel = format->depth;
-> > +             break;
->
-> C8.
-
-Again, this is not about color-indexed vs. truecolor, but about bpp.
-Here I do check the 4CC codes, as this controls which modes can be
-handled by the fbdev emulation, and we do not want to let random
-modes with depth or bpp < 8 pass.
-
-> The fbdev helpers look correct to me.  I'm not so sure about the usage
-> of the format info; especially the depth field.  The docs say that the
-> field is deprecated and should be 0. Maybe depth can be handled within
-> fbdev?
-
-Perhaps. I don't know enough about DRM to know what the depth field
-is used for.
-
-Note that true fbdev supports all values of depth < bpp (e.g. a
-32-color mode (depth = 5) where each pixel is stored in one byte).
-I do not suggest adding support for that, though ;-)
-
-> > +
-> > +     default:
-> > +             WARN_ON((drm_format_info_block_width(format, 0) > 1) ||
-> > +                     (drm_format_info_block_height(format, 0) > 1));
-
-BTW, probably this WARN_ON() (which existed before, but got moved)
-should be converted into returning an error instead.
-
-> > +             info->var.bits_per_pixel = format->cpp[0] * 8;
-> > +     }
-> >       info->var.accel_flags = FB_ACCELF_TEXT;
-> >       info->var.xoffset = 0;
-> >       info->var.yoffset = 0;
-> >       info->var.activate = FB_ACTIVATE_NOW;
-> >
-> > -     drm_fb_helper_fill_pixel_fmt(&info->var, fb->format->depth);
-> > +     drm_fb_helper_fill_pixel_fmt(&info->var, format);
-> >
-> >       info->var.xres = fb_width;
-> >       info->var.yres = fb_height;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>> e.g Below sample test in combination of many other test in parallel
+>>
+>> :loop
+>>
+>> adb shell "echo 0 > /sys/devices/system/cpu/cpu0/online"
+>>
+>> adb shell "echo 1 > /sys/devices/system/cpu/cpu0/online"
+>>
+>> adb shell "echo 0 > /sys/devices/system/cpu/cpu1/online"
+>>
+>> adb shell "echo 1 > /sys/devices/system/cpu/cpu1/online"
+>>
+>> adb shell "echo 0 > /sys/devices/system/cpu/cpu2/online"
+>>
+>> adb shell "echo 1 > /sys/devices/system/cpu/cpu2/online"
+>>
+>> adb shell "echo 0 > /sys/devices/system/cpu/cpu3/online"
+>>
+>> adb shell "echo 1 > /sys/devices/system/cpu/cpu3/online"
+>>
+>> adb shell "echo 0 > /sys/devices/system/cpu/cpu4/online"
+>>
+>> adb shell "echo 1 > /sys/devices/system/cpu/cpu4/online"
+>>
+>> adb shell "echo 0 > /sys/devices/system/cpu/cpu5/online"
+>>
+>> adb shell "echo 1 > /sys/devices/system/cpu/cpu5/online"
+>>
+>> adb shell "echo 0 > /sys/devices/system/cpu/cpu6/online"
+>>
+>> adb shell "echo 1 > /sys/devices/system/cpu/cpu6/online"
+>>
+>> adb shell "echo 0 > /sys/devices/system/cpu/cpu7/online"
+>>
+>> adb shell "echo 1 > /sys/devices/system/cpu/cpu7/online"
+>>
+>> goto loop
+>>
+>>
+>>
+>> Thanks, Mukesh
+>>
+>>> 							Thanx, Paul
+>>>
+>>> [1]https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/

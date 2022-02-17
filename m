@@ -2,70 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5314BACD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275554BACD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343955AbiBQWm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 17:42:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39728 "EHLO
+        id S1343964AbiBQWnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 17:43:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343946AbiBQWmX (ORCPT
+        with ESMTP id S245262AbiBQWnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 17:42:23 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FA21704D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 14:42:08 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id ki18-20020a17090ae91200b001b8be87e9abso6825378pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 14:42:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5mmtHfGvX3QTdzLz6j/Nu6tjim8GE4bCKl/5zpm/NAQ=;
-        b=BzfZpeq3rZdStoI1Wr0xcS8Cf55hQJ/D+7O5l60/MUPozDdqMR3PzVwSfYraa+nLNT
-         NyD7gmG5bjFJAZvQjb+UrhHZ97vZIwQxC6do5y2+9SD9RrVdz/VEfZyfLpsRW5Svhs3y
-         0aDXxqIAti6kqYHFQ6CBjV1g6soYBlxXwNrSQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5mmtHfGvX3QTdzLz6j/Nu6tjim8GE4bCKl/5zpm/NAQ=;
-        b=b44x4GjGPRfmJ54KyFGWr08SSi5E9J17EXZ+Ux9yaHGQOnk0f3IGg/aQEnvo+6moGu
-         nRmNMA7Qs3PfH3z5Mcy6VoPOq8PY24ZOKr+n7SFj8Y0z4SXiBVwENcmg7USAPwkZJtP6
-         wKPBE3+E6Uazd14znQJYTH0P2bar36oAHeTDo4r9mFRw6XvhTlqoT1+T9S1o/2+RaqX5
-         Z0TGj8t6DJbWjvOxNP5vIzE0wG5Z1elIzBr97UO3JL2Bg54CgOE89XRmydRBMnGR/jy2
-         FDxB+tAT/jscEZqIh6y/7QI+Lw9gu07ZL7quiK+qeunFLqjydMj8t58pTA2sJUZnQ9ld
-         qHig==
-X-Gm-Message-State: AOAM530qacPqcUYk+5snKxQzQKW5l+sx0pDHaLWVF5gFApRL8YgyHCJ8
-        5WWX8h3WqaaeqARwK5RqjAgJ2w==
-X-Google-Smtp-Source: ABdhPJz3bf7M0OSxfziRldKe7HpMouFMO9Ur2/1DPJi+T1EoIE3EpMv4yzP/J7CTVuwGmI1BEieWyg==
-X-Received: by 2002:a17:902:bd85:b0:14d:c29b:d534 with SMTP id q5-20020a170902bd8500b0014dc29bd534mr4651443pls.99.1645137728224;
-        Thu, 17 Feb 2022 14:42:08 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:677e:1914:4c14:1662])
-        by smtp.gmail.com with UTF8SMTPSA id 4sm574985pfh.125.2022.02.17.14.42.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 14:42:07 -0800 (PST)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Doug Anderson <dianders@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v3 2/2] drm/bridge: analogix_dp: Enable autosuspend
-Date:   Thu, 17 Feb 2022 14:41:46 -0800
-Message-Id: <20220217144136.v3.2.I48b18ab197c9b649d376cf8cfd934e59d338f86d@changeid>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-In-Reply-To: <20220217144136.v3.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
-References: <20220217144136.v3.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
+        Thu, 17 Feb 2022 17:43:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2DF6E350;
+        Thu, 17 Feb 2022 14:43:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 668EA61838;
+        Thu, 17 Feb 2022 22:43:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AED00C340E8;
+        Thu, 17 Feb 2022 22:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645137779;
+        bh=X01ZrUQvcSGn5HLOXD0ZzNYdg8VRmead+loYpD878OQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=AAuYueGKZ5PXOWzuxo39QuXwIgCJKCkJTUKT87naKNzvsei9AkZMizuNFYuBBmj/2
+         5fZe+8P06aDAJYtVah+zln39z43E7Na2YqdUdZZMa1Gq8Gan9zScG1ycs9GCPwMR0e
+         sy4QccPhp7aMi097Xpo0rODECcqC85ZxtDEuaMBvpqjg2QNBmdlxE+lx3LOpcjRrpu
+         ZqHpBZBAekYflLgGQKhBO+CCHcsTgfCEdidcj+DCp0QBKVKGheh1l3yisuzorVc8Br
+         f9VI8+63yuLub+fUCDwktQuLRjlVOKmnqK6KZ5frFmJKdjSC/O3oW6rD0Xemj76pCb
+         T+6CaNvVgdWrg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220126081236.25255-3-tdas@codeaurora.org>
+References: <20220126081236.25255-1-tdas@codeaurora.org> <20220126081236.25255-3-tdas@codeaurora.org>
+Subject: Re: [PATCH v4 2/2] clk: qcom: lpass: Add support for LPASS clock controller for SC7280
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>
+Date:   Thu, 17 Feb 2022 14:42:58 -0800
+User-Agent: alot/0.10
+Message-Id: <20220217224259.AED00C340E8@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,52 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DP AUX transactions can consist of many short operations. There's no
-need to power things up/down in short intervals.
+Quoting Taniya Das (2022-01-26 00:12:36)
+> diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lp=
+assaudiocc-sc7280.c
+> new file mode 100644
+> index 000000000000..c97ead75f02a
+> --- /dev/null
+> +++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
+> @@ -0,0 +1,838 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+[...]
+> +
+> +static int lpass_audio_cc_sc7280_probe(struct platform_device *pdev)
+> +{
+> +       const struct qcom_cc_desc *desc;
+> +       struct regmap *regmap;
+> +       int ret;
+> +
+> +       ret =3D lpassaudio_create_pm_clks(pdev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       lpass_audio_cc_sc7280_regmap_config.name =3D "lpassaudio_cc";
+> +       lpass_audio_cc_sc7280_regmap_config.max_register =3D 0x2f000;
+> +       desc =3D &lpass_audio_cc_sc7280_desc;
+> +
+> +       regmap =3D qcom_cc_map(pdev, desc);
+> +       if (IS_ERR(regmap)) {
+> +               pm_runtime_disable(&pdev->dev);
+> +               return PTR_ERR(regmap);
+> +       }
+> +
+> +       clk_zonda_pll_configure(&lpass_audio_cc_pll, regmap, &lpass_audio=
+_cc_pll_config);
+> +
+> +       ret =3D qcom_cc_really_probe(pdev, &lpass_audio_cc_sc7280_desc, r=
+egmap);
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "Failed to register LPASS AUDIO CC cl=
+ocks\n");
+> +               pm_runtime_disable(&pdev->dev);
+> +               return ret;
+> +       }
+> +
+> +       /* PLL settings */
+> +       regmap_write(regmap, 0x4, 0x3b);
+> +       regmap_write(regmap, 0x8, 0xff05);
 
-I pick an arbitrary 100ms; for the systems I'm testing (Rockchip
-RK3399), runtime-PM transitions only take a few microseconds.
+Shouldn't this be done before registering the clks? So after
+zonda_pll_configure?
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
-Changes in v3:
- - New in v3
-
- drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-index 16be279aed2c..d82a4ddf44e7 100644
---- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-+++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-@@ -1121,7 +1121,7 @@ static int analogix_dp_get_modes(struct drm_connector *connector)
- 
- 		pm_runtime_get_sync(dp->dev);
- 		edid = drm_get_edid(connector, &dp->aux.ddc);
--		pm_runtime_put(dp->dev);
-+		pm_runtime_put_autosuspend(dp->dev);
- 		if (edid) {
- 			drm_connector_update_edid_property(&dp->connector,
- 							   edid);
-@@ -1642,7 +1642,7 @@ static ssize_t analogix_dpaux_transfer(struct drm_dp_aux *aux,
- 
- 	ret = analogix_dp_transfer(dp, msg);
- out:
--	pm_runtime_put(dp->dev);
-+	pm_runtime_put_autosuspend(dp->dev);
- 
- 	return ret;
- }
-@@ -1775,6 +1775,8 @@ int analogix_dp_bind(struct analogix_dp_device *dp, struct drm_device *drm_dev)
- 	if (ret)
- 		return ret;
- 
-+	pm_runtime_use_autosuspend(dp->dev);
-+	pm_runtime_set_autosuspend_delay(dp->dev, 100);
- 	pm_runtime_enable(dp->dev);
- 
- 	ret = analogix_dp_create_bridge(drm_dev, dp);
--- 
-2.35.1.265.g69c8d7142f-goog
-
+> +
+> +       pm_runtime_mark_last_busy(&pdev->dev);
+> +       pm_runtime_put_autosuspend(&pdev->dev);
+> +       pm_runtime_put_sync(&pdev->dev);

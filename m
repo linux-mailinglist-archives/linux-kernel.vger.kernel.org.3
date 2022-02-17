@@ -2,159 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1844BA03D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C864BA044
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240471AbiBQMfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:35:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58078 "EHLO
+        id S240473AbiBQMhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:37:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237579AbiBQMfB (ORCPT
+        with ESMTP id S231514AbiBQMhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:35:01 -0500
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8636429E956
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:34:45 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id CC16C2B0039E;
-        Thu, 17 Feb 2022 07:34:43 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 17 Feb 2022 07:34:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=yxZqOhBw2SeYA0
-        cJinP5U9Ql0aV+14guz7+RfKVsZrA=; b=XaAj9u9nenf/hebmVeG2v7o5z0HhYI
-        irJeryp69aOXocxXYANTxFP5aaVXEGXobUicZpM0SqYCEYys1YT+xuzqtx/nrAp6
-        h3kTL+htxr0p3q89xC6sHPl2n82H3wKhANc4p3lwgnRErXGKydDfA3g8/vXVvqLr
-        NtdMymK0h35hqaldXgwtZMremGSh/ieKWDQ6420UH/trZCNviH1C/W3XU2mhreGm
-        xmJ+QTxZbLhbYSTR79QEh3XiedNGxHQcL6QB937b6zmSnbB+Rb/IsmN8XMcqeMWB
-        fXurcHe72XmBhGCuLNKkId0FH+ZhZqDPZkg61g4jaQ4zTj6ywuganJ8Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=yxZqOhBw2SeYA0cJinP5U9Ql0aV+14guz7+RfKVsZ
-        rA=; b=jq6NQuEktRCaUN9V56pCEL4p/lj3xA/loTUWe8L9rhH/rzaMQ0loHQi2Z
-        +uieCHZI6QfU+rZWVrNoEQwxmqv/X4+0/8hk4kBO9TuatDHo2OX0H8r7gYvjHFdS
-        mLJvC+d25wcDtXK0FK0+rBKai5D7GaqQ4PpM5qSD0PtSzKXHMe3J2XTd9uRMOk7a
-        dZ2Y8W+I1XsUJ9l9xhbstW1mvP9fOJbVjcLQkTEvtiOPO6jbvWc8FpSiEhunTs7E
-        fpwYnfsn6Xs/WwCvUhe/qYkuTK9Q9uGDguBPVXiDZLMQu9TQunz0oQO72x6VNyca
-        AaCmL8G/LIPtJIxbe/agn2HyHG9kQ==
-X-ME-Sender: <xms:4kAOYsNMMRV1XJc6nZpz0VZexcgRj8iteQhdwCwtnW2G3nudQP-PVw>
-    <xme:4kAOYi_9rnYesmH0D6IzLhD70uy1LiTQbaE_W5UjNLn9gT6trVGMt0HJhtxsewx-O
-    9U9Pq6X-foVcQ>
-X-ME-Received: <xmr:4kAOYjRfruB1wmP6tQormnwsw6KPvdEpYFox7633eB0_wdG3u4oo12x52COW_6ErPvcafzZEOwEsvF_K0U_k5lk7oNpjnLzx>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeekgdegtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtugfgjgesthekre
-    dttddtudenucfhrhhomhepfdhgrhgvgheskhhrohgrhhdrtghomhdfuceoghhrvghgsehk
-    rhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpedujefhgeejhfffuedvieeuvddtue
-    etkefhteelheejffegueduheelfefgkeekkeenucffohhmrghinhepihhnthgvlhdrtgho
-    mhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrh
-    gvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:4kAOYkutmnRnV3HUNOCZrzMYaUjfm5RPC-aLqofIq3AR9eE-H-XS8Q>
-    <xmx:4kAOYkfv9KR_edZtcS4HdCvmZLikjsgnZRfNxPZgWfDCHLgJJQSUfA>
-    <xmx:4kAOYo1HnvNuDhvDc5k3hRa3uxFCDfmt2Vq1IuzihK-ayzzNMfMwxQ>
-    <xmx:40AOYntC_uNPbMo-rcTsRfHrLnVFpa0RKa8UH7g0Kk7Gl-WT7fjGJSz19jU>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Feb 2022 07:34:42 -0500 (EST)
-Date:   Thu, 17 Feb 2022 13:34:40 +0100
-From:   "greg@kroah.com" <greg@kroah.com>
-To:     Dmitrii Okunev <xaionaro@fb.com>
-Cc:     "pavel@ucw.cz" <pavel@ucw.cz>,
-        "qiaowei.ren@intel.com" <qiaowei.ren@intel.com>,
-        "matthew.garrett@nebula.com" <matthew.garrett@nebula.com>,
-        "xiaoyan.zhang@intel.com" <xiaoyan.zhang@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "gang.wei@intel.com" <gang.wei@intel.com>,
-        Jonathan McDowell <noodles@fb.com>
-Subject: Re: [discuss] Improve and merge a driver proposed in 2013: sysfs
- interfaces to access TXT config space
-Message-ID: <Yg5A4Mupue0V9diu@kroah.com>
-References: <1368465884-14779-1-git-send-email-qiaowei.ren@intel.com>
- <1368465884-14779-3-git-send-email-qiaowei.ren@intel.com>
- <20130516160311.GA12299@amd.pavel.ucw.cz>
- <4febd50da7e5007a2797e0f4c969fa5edd0bf725.camel@fb.com>
+        Thu, 17 Feb 2022 07:37:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEDFBA8EE0;
+        Thu, 17 Feb 2022 04:37:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A4AF113E;
+        Thu, 17 Feb 2022 04:37:17 -0800 (PST)
+Received: from [10.57.17.240] (unknown [10.57.17.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6706D3F66F;
+        Thu, 17 Feb 2022 04:37:13 -0800 (PST)
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+ <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+ <53bc13ca-998f-ff83-d9f7-9a83d35b24fd@linaro.org>
+ <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
+ <1812eadf-7924-5abd-857b-22b7dfdf8f7d@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <33bd6122-b4aa-1659-6063-95175a8748b3@arm.com>
+Date:   Thu, 17 Feb 2022 12:37:11 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <1812eadf-7924-5abd-857b-22b7dfdf8f7d@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4febd50da7e5007a2797e0f4c969fa5edd0bf725.camel@fb.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 11:47:21AM +0000, Dmitrii Okunev wrote:
-> Hello!
-> 
-> As far as I see the patch wasn't merged. And I see that this is the
-> only unsolved thread in the discussion:
-> 
-> On Thu, 2013-05-16 at 18:03 +0200, Pavel Machek wrote:
-> > On Tue 2013-05-14 01:24:43, Qiaowei Ren wrote:
-> > > These interfaces are located in
-> > > /sys/devices/platform/intel_txt/config,
-> > > and including totally 37 files, providing access to Intel TXT
-> > > configuration registers.
-> > 
-> > This looks like very wrong interface... equivalent of /dev/mem.
-> 
-> As an active user of these registers I hope it will be merged, so I
-> would like to improve this patch (or rewrite it from scratch) to make
-> that happen. Otherwise one have to do hackery around `/dev/mem`, which
-> also creates problems with proper access control.
-> 
-> To be able to improve the patch, could somebody clarify why exactly
-> this is a "very wrong interface"?
-> 
-> > > +What:          /sys/devices/platform/intel_txt/config/STS_raw
-> > > +Date:          May 2013
-> > > +KernelVersion: 3.9
-> > > +Contact:       "Qiaowei Ren" <qiaowei.ren@intel.com>
-> > > +Description:   TXT.STS is the general status register. This read-
-> > > only register
-> > > +               is used by AC modules and the MLE to get the status
-> > > of various
-> > > +               Intel TXT features.
-> > 
-> > This is not enough to allow people to understand what this
-> > does/should
-> > do, nor does it allow (for example) ARM people to implement something
-> > compatible.
-> > 
-> > Is there specific reason why "better" interface is impossible?
-> 
-> I would love to reuse Intel's public documentation [1] to provide a
-> proper description (with bit layout of the value).
-> 
-> [1] https://cdrdv2.intel.com/v1/dl/getContent/315168
-> 
-> > [...], nor does it allow (for example) ARM people to
-> > implement something compatible.
-> 
-> Do I understand correctly that a proper documentation of the registers
-> solves the problem?
-> 
-> > Is there specific reason why "better" interface is impossible?
-> 
-> What are specific problems with the current interface?
 
-What do you mean by "current" here?  You are referring to an email from
-2013, 9 years ago.
 
-If you want to propose the change again, correctly update the patch and
-submit it that way.
+On 2/17/22 12:33 PM, Daniel Lezcano wrote:
+> On 17/02/2022 13:11, Lukasz Luba wrote:
+> 
+> [ ... ]
+> 
+>>> Why not make it more generic and replace the frequency by a 
+>>> performance index, so it can be used by any kind of perf limiter?
+>>
+>> For that DT array, yes, it can be an index, so effectively it could be
+>> a simple 1d array.
+>>
+>> something like:
+>>
+>> msm_gpu_energy_model: msm-gpu-energy-model {
+>> Â Â Â Â Â compatible = "energy-model"
+>> Â Â Â Â Â /* Values are sorted micro-Watts which correspond to each OPP
+>> Â Â Â Â Â Â Â  or performance state. The total amount of them must match
+>> Â Â Â Â Â Â Â  number of OPPs. */
+>> Â Â Â Â Â power-microwatt = <100000>,
+>> Â Â Â Â Â Â Â Â Â Â Â Â  <230000>,
+>> Â Â Â Â Â Â Â Â Â Â Â Â  <380000>,
+>> Â Â Â Â Â Â Â Â Â Â Â Â  <600000>;
+>> };
+>>
+>> then in gpu node instead of having 'dynamic-power-coefficient',
+>> which is useless because voltage is missing, we would have
+>> 'energy-model', like:
+>>
+>> Â Â Â Â Â energy-model = <&msm_gpu_energy_model>;
+>>
+>>
+>> If you agree to continue this topic. I will send an RFC so we could
+>> further discuss this idea. This $subject doesn't fit well.
+> 
+> Yes, definitively I agree to continue on this topic.
+> 
+> 
 
-thanks,
-
-greg k-h
+Great! I'm going to craft something...

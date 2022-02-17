@@ -2,258 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B5B4BA837
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEB14BA83B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242237AbiBQS3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:29:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43850 "EHLO
+        id S244291AbiBQSaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:30:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244307AbiBQS2v (ORCPT
+        with ESMTP id S242283AbiBQSaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:28:51 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B6138BB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:27:47 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id e3so10595084wra.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:27:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=m7i8XTKn573xDW3h00Hw3tHZvPjE6WSVbAod5YiJM20=;
-        b=tp3XN+Vk26cTI4ZXkHGYWn7fHIOWb5xAQkYnV4HJ9Tu7w0WtdV5xcv59x6DDKBSHpX
-         y58Vxv2Jd2PBlnESSVYr6m5Xm4EBnD4psyOQr5vwN4RqpBWnSN+mTZYDJV79NrH/T2Yg
-         oJnR1e64m3wW2UWeGPHirsOhwj87apeyOvRn4BNngxRzORwqTD/f3mo6XnN+DWtfr0KO
-         3kS5C/JKtoH5sLB/Uy9t6nFKA5XVwvR3CvWwgKQb7cmDO/HBzdE+fyPY3M/0HF0DpHrG
-         zsN9jm1u8qiFNVbXY6/JHUEpjU3ll6JGZCV20+x0Qnu9sUx1A+tOZ1CcvZADrAHKHlcQ
-         5zfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=m7i8XTKn573xDW3h00Hw3tHZvPjE6WSVbAod5YiJM20=;
-        b=bZpt7be4HKYusC6WwzhbaMbKv9cDTLmSOLOAX9dNY3VN5q/yuWSokJv/BxExMWT8j7
-         nVqTZwJzUeFHy54RzzNSaRoqV8+CMljle2yATnBFYgQqJsHAVaxJPL4ih3fVKqGUVLuv
-         a/osAiw9fTyN+Y4XjL3S9hjKTEi6SL09b7IPjBlyDqWnbX3G+hxjYR3YM9cwSjGvrHEW
-         M0AIvTPF0ASTy75V3zGpV1IGwZc/JND3PcIAZS4dFf85TkUHJQm6YVXYzTk76L4GfZz8
-         br7yLL8gNDfmTULikTFNuNwjWojfln4DUL9OZjqjDGKsQHfyWQ2EtCB/rHOTX/uw8J2o
-         sfJw==
-X-Gm-Message-State: AOAM530EzgB3m56aZAOZsbir8fTabkzF1iaDRIzgK4yj8IHJbC2xbHuw
-        wyW8V37Tl9ketk4JXI9Ka+M6FQ==
-X-Google-Smtp-Source: ABdhPJz6ZW2VMy9C5FA9BuqungODux4OLUkXbJvet9JtvZdITr5z+7gJAVJqV4jUUqdMjSY6sducoQ==
-X-Received: by 2002:a5d:4907:0:b0:1e3:b4c:4a66 with SMTP id x7-20020a5d4907000000b001e30b4c4a66mr3272609wrq.273.1645122465788;
-        Thu, 17 Feb 2022 10:27:45 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:5828:300b:5226:ef02? ([2a01:e34:ed2f:f020:5828:300b:5226:ef02])
-        by smtp.googlemail.com with ESMTPSA id c8sm2615013wmq.34.2022.02.17.10.27.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 10:27:45 -0800 (PST)
-Message-ID: <3651bf48-eb0f-1835-3c5e-1dbdc2730fb4@linaro.org>
-Date:   Thu, 17 Feb 2022 19:27:36 +0100
+        Thu, 17 Feb 2022 13:30:05 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406513890;
+        Thu, 17 Feb 2022 10:29:50 -0800 (PST)
+Date:   Thu, 17 Feb 2022 18:29:47 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645122588;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4mAfyT3r3b/mZeU2HWxfzCxZVwclMDOHtJIRyQNscTs=;
+        b=uLeVpMIQ+gGabaYYhXqFLzYeulU0t1F9q9KXi23j2/ysNZXu4vXkpae8Pe7q6ypaS/Z9XK
+        owx5PERg4KEZKCRR3+3C8XUQ6gtUgPqYKrFV6Hz2Prr/Vdl2TyGnthSQjozZvt69lo7ewr
+        xfhjIKKRop3XyIXVYXWyYiaHTUqbpDQ+E9wbFUM9BzTWpTu34/IxSD3gmYIqp4h0VQ4fP9
+        sw8Q2bNM+hbn8tUVygua8L4ZgF2egjoGQehuMrWxEBC3W5sJS7djqTGxvMs2ANttrTP716
+        4FlNCCHkPbJUAUXdRttCvSIMffVPL2BagKzjniyi8pZpEIMFe8pPn51zn2CRpw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645122588;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4mAfyT3r3b/mZeU2HWxfzCxZVwclMDOHtJIRyQNscTs=;
+        b=nbDwDhAgZ34ybxcHzW2B5k9sibNRVAMoFLjOKXaEQMMRCmiK761lYprmXLz3sD+ozaBYqS
+        0RHMZm6fOEglvpAQ==
+From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/sgx: Fix missing poison handling in reclaimer
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: =?utf-8?q?=3Cdcc95eb2aaefb042527ac50d0a50738c7c160dac=2E16438?=
+ =?utf-8?q?30353=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
+References: =?utf-8?q?=3Cdcc95eb2aaefb042527ac50d0a50738c7c160dac=2E164383?=
+ =?utf-8?q?0353=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        jorcrous@amazon.com, Rob Clark <robdclark@chromium.org>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
- <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
- <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
- <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
- <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164512258776.16921.11031964988584200739.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/urgent branch of tip:
 
-Adding Manaf (QCom) in the loop
+Commit-ID:     e5733d8c89c3b57c8fcd40b8acf508388fabaa42
+Gitweb:        https://git.kernel.org/tip/e5733d8c89c3b57c8fcd40b8acf508388fabaa42
+Author:        Reinette Chatre <reinette.chatre@intel.com>
+AuthorDate:    Wed, 02 Feb 2022 11:41:12 -08:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 17 Feb 2022 10:24:50 -08:00
 
-On 17/02/2022 17:37, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Feb 17, 2022 at 2:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Daniel,
->>
->> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
->>> On 16/02/2022 18:33, Doug Anderson wrote:
->>>> Hi,
->>>>
->>>> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>>
->>>>> Hi Matthias,
->>>>>
->>>>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
->>>>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
->>>>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
->>>>>>>>>
->>>>>>>>>
->>>>>
->>>>> [snip]
->>>>>
->>>>>>>>> Could you point me to those devices please?
->>>>>>>>
->>>>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
->>>>>>>>
->>>>>>>> Though as per above they shouldn't be impacted by your change,
->>>>>>>> since the
->>>>>>>> CPUs always pretend to use milli-Watts.
->>>>>>>>
->>>>>>>> [skipped some questions/answers since sc7180 isn't actually
->>>>>>>> impacted by
->>>>>>>>      the change]
->>>>>>>
->>>>>>> Thank you Matthias. I will investigate your setup to get better
->>>>>>> understanding.
->>>>>>
->>>>>> Thanks!
->>>>>>
->>>>>
->>>>> I've checked those DT files and related code.
->>>>> As you already said, this patch is safe for them.
->>>>> So we can apply it IMO.
->>>>>
->>>>>
->>>>> -------------Off-topic------------------
->>>>> Not in $subject comments:
->>>>>
->>>>> AFAICS based on two files which define thermal zones:
->>>>> sc7180-trogdor-homestar.dtsi
->>>>> sc7180-trogdor-coachz.dtsi
->>>>>
->>>>> only the 'big' cores are used as cooling devices in the
->>>>> 'skin_temp_thermal' - the CPU6 and CPU7.
->>>>>
->>>>> I assume you don't want to model at all the power usage
->>>>> from the Little cluster (which is quite big: 6 CPUs), do you?
->>>>> I can see that the Little CPUs have small dyn-power-coeff
->>>>> ~30% of the big and lower max freq, but still might be worth
->>>>> to add them to IPA. You might give them more 'weight', to
->>>>> make sure they receive more power during power split.
->>>>>
->>>>> You also don't have GPU cooling device in that thermal zone.
->>>>> Based on my experience if your GPU is a power hungry one,
->>>>> e.g. 2-4Watts, you might get better results when you model
->>>>> this 'hot' device (which impacts your temp sensor reported value).
->>>>
->>>> I think the two boards you point at (homestar and coachz) are just the
->>>> two that override the default defined in the SoC dtsi file. If you
->>>> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
->>>> map. You can also see the cooling maps for the littles.
->>>>
->>>> I guess we don't have a `dynamic-power-coefficient` for the GPU,
->>>> though? Seems like we should, but I haven't dug through all the code
->>>> here...
->>>
->>> The dynamic-power-coefficient is available for OPPs which includes
->>> CPUfreq and devfreq. As the GPU is managed by devfreq, setting the
->>> dynamic-power-coefficient makes the energy model available for it.
->>>
->>> However, the OPPs must define the frequency and the voltage. That is the
->>> case for most platforms except on QCom platform.
->>>
->>> That may not be specified as it uses a frequency index and the hardware
->>> does the voltage change in our back. The QCom cpufreq backend get the
->>> voltage table from a register (or whatever) and completes the voltage
->>> values for the OPPs, thus adding the information which is missing in the
->>> device tree. The energy model can then initializes itself and allows the
->>> usage of the Energy Aware Scheduler.
->>>
->>> However this piece of code is missing for the GPU part.
->>>
->>
->> Thank you for joining the discussion. I don't know about that Qcom
->> GPU voltage information is missing.
->>
->> If the voltage is not available (only the frequencies), there is
->> another way. There is an 'advanced' EM which uses registration function:
->> em_dev_register_perf_domain(). It uses a local driver callback to get
->> power for each found frequency. It has benefit because there is no
->> restriction to 'fit' into the math formula, instead just avg power
->> values can be feed into EM. It's called 'advanced' EM [1].
-> 
-> It seems like there _should_ be a way to get the voltage out for GPU
-> operating points, like is done with cpufreq in
-> qcom_cpufreq_hw_read_lut(), but it might need someone with Qualcomm
-> documentation to help with it. Maybe Rajendra would be able to help?
-> Adding Jordon and Rob to this conversation in case they're aware of
-> anything.
-> 
-> As you said, we could just list a power for each frequency, though.
-> 
-> I'm actually not sure which one would be more accurate across a range
-> of devices with different "corners": specifying a dynamic power
-> coefficient used for all "corners" and then using the actual voltage
-> and doing the math, or specifying a power number for each frequency
-> and ignoring the actual voltage used. In any case we're trying to get
-> ballpark numbers and not every device will be exactly the same, so
-> probably it doesn't matter that much.
-> 
-> 
->> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
->> was proposing from ~2014 this upstream, but EAS wasn't merged back
->> then):
->> where to store these power-freq values, which are then used by the
->> callback. We have the 'dynamic-power-coefficient' in DT, but
->> it has limitations. It would be good to have this simple array
->> attached to the GPU/CPU node. IMHO it meet the requirement of DT,
->> it describes the HW (it would have HZ and Watts values).
->>
->> Doug, Matthias could you have a look at that function and its
->> usage, please [1]?
->> If you guys would support me in this, I would start, with an RFC
->> proposal, a discussion on LKML.
->>
->> [1]
->> https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87
-> 
-> Matthias: I think you've spent more time on the thermal stuff than me
-> so I'll assume you'll follow-up here. If not then please yell!
-> 
-> Ideally, though, someone from Qualcomm would jump in an own this.
-> Basically it allows more intelligently throttling the GPU and CPU
-> together in tandem instead of treating them separately IIUC, right?
-> 
-> -Doug
+x86/sgx: Fix missing poison handling in reclaimer
 
+The SGX reclaimer code lacks page poison handling in its main
+free path. This can lead to avoidable machine checks if a
+poisoned page is freed and reallocated instead of being
+isolated.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+A troublesome scenario is:
+ 1. Machine check (#MC) occurs (asynchronous, !MF_ACTION_REQUIRED)
+ 2. arch_memory_failure() is eventually called
+ 3. (SGX) page->poison set to 1
+ 4. Page is reclaimed
+ 5. Page added to normal free lists by sgx_reclaim_pages()
+    ^ This is the bug (poison pages should be isolated on the
+    sgx_poison_page_list instead)
+ 6. Page is reallocated by some innocent enclave, a second (synchronous)
+    in-kernel #MC is induced, probably during EADD instruction.
+    ^ This is the fallout from the bug
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+(6) is unfortunate and can be avoided by replacing the open coded
+enclave page freeing code in the reclaimer with sgx_free_epc_page()
+to obtain support for poison page handling that includes placing the
+poisoned page on the correct list.
+
+Fixes: d6d261bded8a ("x86/sgx: Add new sgx_epc_page flag bit to mark free pages")
+Fixes: 992801ae9243 ("x86/sgx: Initial poison handling for dirty and free pages")
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Link: https://lkml.kernel.org/r/dcc95eb2aaefb042527ac50d0a50738c7c160dac.1643830353.git.reinette.chatre@intel.com
+---
+ arch/x86/kernel/cpu/sgx/main.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 4b41efc..8e4bc64 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -344,10 +344,8 @@ static void sgx_reclaim_pages(void)
+ {
+ 	struct sgx_epc_page *chunk[SGX_NR_TO_SCAN];
+ 	struct sgx_backing backing[SGX_NR_TO_SCAN];
+-	struct sgx_epc_section *section;
+ 	struct sgx_encl_page *encl_page;
+ 	struct sgx_epc_page *epc_page;
+-	struct sgx_numa_node *node;
+ 	pgoff_t page_index;
+ 	int cnt = 0;
+ 	int ret;
+@@ -418,13 +416,7 @@ skip:
+ 		kref_put(&encl_page->encl->refcount, sgx_encl_release);
+ 		epc_page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
+ 
+-		section = &sgx_epc_sections[epc_page->section];
+-		node = section->node;
+-
+-		spin_lock(&node->lock);
+-		list_add_tail(&epc_page->list, &node->free_page_list);
+-		spin_unlock(&node->lock);
+-		atomic_long_inc(&sgx_nr_free_pages);
++		sgx_free_epc_page(epc_page);
+ 	}
+ }
+ 

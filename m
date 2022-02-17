@@ -2,409 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4AC4B98F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7154B98CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235127AbiBQGKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:10:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52772 "EHLO
+        id S234854AbiBQGIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:08:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235239AbiBQGJs (ORCPT
+        with ESMTP id S234842AbiBQGI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:09:48 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E872A64EA;
-        Wed, 16 Feb 2022 22:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645078168; x=1676614168;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=ZcKucnbNB9YSWWet3y0bXU6+gmp7ruRhSjnKfH10QDg=;
-  b=tU8GVs71GrC25KTB4WN9/RK2uW5FMMg7p+n7U+VdOUR+N55Wf2YKbzmC
-   o5kCclTNcf650LKVuHaDV9MMep6uIE1maiyCcLGJasTQGXIvRUYSvqUA8
-   mX+GvQJ1CdVpiZOc/CLpzl0nTsAY2aP9A58Ri/CV0Ia63NqbdgPs9S9P+
-   0=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 22:09:28 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:09:28 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 22:09:27 -0800
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 16 Feb 2022 22:09:21 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v14 08/10] ASoC: qcom: Add lpass CPU driver for codec dma control
-Date:   Thu, 17 Feb 2022 11:37:44 +0530
-Message-ID: <1645078066-9365-9-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
+        Thu, 17 Feb 2022 01:08:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 755E4C7D6A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 22:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645078093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A1vbZxsyzMifaaJqgkhHlizU7SHJnrILT5bLrmNnzMQ=;
+        b=OZMeYcVqlq4pNdvhAGzBxH81Z0YZ8+d6IYZV24ocHZ7Da+Ei2ODTIySnJH9ejfvXEWeTOb
+        erv/7vRGIBBaFZuPJ0ntq/Lu/NLHn9jLMmlGGnx1Zq1b6mFIVU50MHR8IwP5w85IaEFUtd
+        v5yarUhFHMP68iqiJ82SF/HqprOoJ2s=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-410-6hXjHtCtP9m5i4wAPwLTrQ-1; Thu, 17 Feb 2022 01:08:12 -0500
+X-MC-Unique: 6hXjHtCtP9m5i4wAPwLTrQ-1
+Received: by mail-pj1-f69.google.com with SMTP id t16-20020a17090b019000b001b8af627800so5834347pjs.8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 22:08:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=A1vbZxsyzMifaaJqgkhHlizU7SHJnrILT5bLrmNnzMQ=;
+        b=RDqX5W1HfxEsFd6wALKoXkkQnePEZfiwMeie367FvX7C3f90AsyT+Htrl/a6QxYUOd
+         kH6GMdw2HoS0jujOw5HgEHT1p5gQUyLXMwJnPLqTDNfxNWJmqiUySjM1477szH/dr5IV
+         Gsjza/BdHlWErIhZn3dgnvfcPI/DOD2fe4Ekv/irzevNm5uqk89ctpjwnyTT7Fk7ARZm
+         fS6E4CuPhCI7yPaaV8nPi4MxtKmlSxYuk1TG25TpIj+tUc4ciNhJ6y/COKr1AaMzdG1I
+         IHcUIz4Bpgy5OPchit+8A+P7DifJMctSlNlpW5gglwhuf9C+DZwFMnBq0z40zF3ED4qz
+         WB6Q==
+X-Gm-Message-State: AOAM5322qqQCaYn0mHHO+znNhfqbI1dclt2bbJGoKGqkS+0jyh5unfN3
+        JkE7am+E6w4Vwffo9fKUxUnEdhFn300THW+7uxKVJK+QRKsT3wk3tcbyovdcrzfkTxG+elg7PN/
+        Xfxb7bAm18i0ZAu+A/CdmzjFa
+X-Received: by 2002:a17:90a:ec10:b0:1b8:9da7:3d13 with SMTP id l16-20020a17090aec1000b001b89da73d13mr1531870pjy.194.1645078091161;
+        Wed, 16 Feb 2022 22:08:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxJ+MRoSejjpjSfq3CLN/Ow3BCwyndgoRTeQRVbvX65z98rR9y1roji3xMcenHn/prKAwWNxg==
+X-Received: by 2002:a17:90a:ec10:b0:1b8:9da7:3d13 with SMTP id l16-20020a17090aec1000b001b89da73d13mr1531852pjy.194.1645078090846;
+        Wed, 16 Feb 2022 22:08:10 -0800 (PST)
+Received: from localhost.localdomain ([94.177.118.126])
+        by smtp.gmail.com with ESMTPSA id j8sm224230pjc.11.2022.02.16.22.08.06
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 16 Feb 2022 22:08:10 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>, peterx@redhat.com,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Subject: [PATCH v5 3/4] mm: Change zap_details.zap_mapping into even_cows
+Date:   Thu, 17 Feb 2022 14:07:45 +0800
+Message-Id: <20220217060746.71256-4-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220217060746.71256-1-peterx@redhat.com>
+References: <20220217060746.71256-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add lpass cpu driver to support audio over codec dma for
-ADSP bypass usecase.
+Currently we have a zap_mapping pointer maintained in zap_details, when it
+is specified we only want to zap the pages that has the same mapping with
+what the caller has specified.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+But what we want to do is actually simpler: we want to skip zapping
+private (COW-ed) pages in some cases.  It comes from unmap_mapping_pages()
+where we could have passed in different even_cows values.  The other user
+is unmap_mapping_folio() where we always want to skip private pages.
+
+According to Hugh, we used a mapping pointer for historical reason, as
+explained here:
+
+  https://lore.kernel.org/lkml/391aa58d-ce84-9d4-d68d-d98a9c533255@google.com/
+
+Quoting partly from Hugh:
+
+  Which raises the question again of why I did not just use a boolean flag
+  there originally: aah, I think I've found why.  In those days there was a
+  horrible "optimization", for better performance on some benchmark I
+  guess, which when you read from /dev/zero into a private mapping, would
+  map the zero page there (look up read_zero_pagealigned() and
+  zeromap_page_range() if you dare).  So there was another category of page
+  to be skipped along with the anon COWs, and I didn't want multiple tests
+  in the zap loop, so checking check_mapping against page->mapping did
+  both.  I think nowadays you could do it by checking for PageAnon page (or
+  genuine swap entry) instead.
+
+This patch replaced the zap_details.zap_mapping pointer into the even_cows
+boolean, then we check it against PageAnon.
+
+Suggested-by: Hugh Dickins <hughd@google.com>
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- sound/soc/qcom/lpass-cdc-dma.c | 305 +++++++++++++++++++++++++++++++++++++++++
- sound/soc/qcom/lpass.h         |   1 +
- 2 files changed, 306 insertions(+)
- create mode 100644 sound/soc/qcom/lpass-cdc-dma.c
+ mm/memory.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/sound/soc/qcom/lpass-cdc-dma.c b/sound/soc/qcom/lpass-cdc-dma.c
-new file mode 100644
-index 0000000..4429886
---- /dev/null
-+++ b/sound/soc/qcom/lpass-cdc-dma.c
-@@ -0,0 +1,305 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2021 The Linux Foundation. All rights reserved.
-+ *
-+ * lpass-cdc-dma.c -- ALSA SoC CDC DMA CPU DAI driver for QTi LPASS
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/module.h>
-+#include <linux/export.h>
-+#include <sound/soc.h>
-+#include <sound/soc-dai.h>
-+
-+#include "lpass-lpaif-reg.h"
-+#include "lpass.h"
-+
-+#define CODEC_MEM_HZ_NORMAL 153600000
-+
-+enum codec_dma_interfaces {
-+	LPASS_CDC_DMA_INTERFACE1 = 1,
-+	LPASS_CDC_DMA_INTERFACE2,
-+	LPASS_CDC_DMA_INTERFACE3,
-+	LPASS_CDC_DMA_INTERFACE4,
-+	LPASS_CDC_DMA_INTERFACE5,
-+	LPASS_CDC_DMA_INTERFACE6,
-+	LPASS_CDC_DMA_INTERFACE7,
-+	LPASS_CDC_DMA_INTERFACE8,
-+	LPASS_CDC_DMA_INTERFACE9,
-+	LPASS_CDC_DMA_INTERFACE10,
-+};
-+
-+static void __lpass_get_dmactl_handle(struct snd_pcm_substream *substream, struct snd_soc_dai *dai,
-+				      struct lpaif_dmactl **dmactl, int *id)
-+{
-+	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(soc_runtime, 0);
-+	struct lpass_data *drvdata = snd_soc_dai_get_drvdata(dai);
-+	struct snd_pcm_runtime *rt = substream->runtime;
-+	struct lpass_pcm_data *pcm_data = rt->private_data;
-+	struct lpass_variant *v = drvdata->variant;
-+	unsigned int dai_id = cpu_dai->driver->id;
-+
-+	switch (dai_id) {
-+	case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-+		*dmactl = drvdata->rxtx_rd_dmactl;
-+		*id = pcm_data->dma_ch;
-+		break;
-+	case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-+		*dmactl = drvdata->rxtx_wr_dmactl;
-+		*id = pcm_data->dma_ch - v->rxtx_wrdma_channel_start;
-+		break;
-+	case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
-+		*dmactl = drvdata->va_wr_dmactl;
-+		*id = pcm_data->dma_ch - v->va_wrdma_channel_start;
-+		break;
-+	default:
-+		dev_err(soc_runtime->dev, "invalid dai id for dma ctl: %d\n", dai_id);
-+		break;
-+	}
-+}
-+
-+static int __lpass_get_codec_dma_intf_type(int dai_id)
-+{
-+	int ret;
-+
-+	switch (dai_id) {
-+	case LPASS_CDC_DMA_RX0:
-+	case LPASS_CDC_DMA_TX0:
-+	case LPASS_CDC_DMA_VA_TX0:
-+		ret = LPASS_CDC_DMA_INTERFACE1;
-+		break;
-+	case LPASS_CDC_DMA_RX1:
-+	case LPASS_CDC_DMA_TX1:
-+	case LPASS_CDC_DMA_VA_TX1:
-+		ret = LPASS_CDC_DMA_INTERFACE2;
-+		break;
-+	case LPASS_CDC_DMA_RX2:
-+	case LPASS_CDC_DMA_TX2:
-+	case LPASS_CDC_DMA_VA_TX2:
-+		ret = LPASS_CDC_DMA_INTERFACE3;
-+		break;
-+	case LPASS_CDC_DMA_RX3:
-+	case LPASS_CDC_DMA_TX3:
-+	case LPASS_CDC_DMA_VA_TX3:
-+		ret = LPASS_CDC_DMA_INTERFACE4;
-+		break;
-+	case LPASS_CDC_DMA_RX4:
-+	case LPASS_CDC_DMA_TX4:
-+	case LPASS_CDC_DMA_VA_TX4:
-+		ret = LPASS_CDC_DMA_INTERFACE5;
-+		break;
-+	case LPASS_CDC_DMA_RX5:
-+	case LPASS_CDC_DMA_TX5:
-+	case LPASS_CDC_DMA_VA_TX5:
-+		ret = LPASS_CDC_DMA_INTERFACE6;
-+		break;
-+	case LPASS_CDC_DMA_RX6:
-+	case LPASS_CDC_DMA_TX6:
-+	case LPASS_CDC_DMA_VA_TX6:
-+		ret = LPASS_CDC_DMA_INTERFACE7;
-+		break;
-+	case LPASS_CDC_DMA_RX7:
-+	case LPASS_CDC_DMA_TX7:
-+	case LPASS_CDC_DMA_VA_TX7:
-+		ret = LPASS_CDC_DMA_INTERFACE8;
-+		break;
-+	case LPASS_CDC_DMA_RX8:
-+	case LPASS_CDC_DMA_TX8:
-+	case LPASS_CDC_DMA_VA_TX8:
-+		ret = LPASS_CDC_DMA_INTERFACE9;
-+		break;
-+	case LPASS_CDC_DMA_RX9:
-+		ret  = LPASS_CDC_DMA_INTERFACE10;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static int __lpass_platform_codec_intf_init(struct snd_soc_dai *dai,
-+					    struct snd_pcm_substream *substream)
-+{
-+	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(soc_runtime, 0);
-+	struct lpaif_dmactl *dmactl = NULL;
-+	struct device *dev = soc_runtime->dev;
-+	int ret, id, codec_intf;
-+	unsigned int dai_id = cpu_dai->driver->id;
-+
-+	codec_intf = __lpass_get_codec_dma_intf_type(dai_id);
-+	if (codec_intf < 0) {
-+		dev_err(dev, "failed to get codec_intf: %d\n", codec_intf);
-+		return codec_intf;
-+	}
-+
-+	__lpass_get_dmactl_handle(substream, dai, &dmactl, &id);
-+	if (!dmactl) {
-+		dev_err(dev, "%s: failed to get dmactl handle\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	ret = regmap_fields_write(dmactl->codec_intf, id, codec_intf);
-+	if (ret) {
-+		dev_err(dev, "error writing to dmactl codec_intf reg field: %d\n", ret);
-+		return ret;
-+	}
-+	ret = regmap_fields_write(dmactl->codec_fs_sel, id, 0x0);
-+	if (ret) {
-+		dev_err(dev, "error writing to dmactl codec_fs_sel reg field: %d\n", ret);
-+		return ret;
-+	}
-+	ret = regmap_fields_write(dmactl->codec_fs_delay, id, 0x0);
-+	if (ret) {
-+		dev_err(dev, "error writing to dmactl codec_fs_delay reg field: %d\n", ret);
-+		return ret;
-+	}
-+	ret = regmap_fields_write(dmactl->codec_pack, id, 0x1);
-+	if (ret) {
-+		dev_err(dev, "error writing to dmactl codec_pack reg field: %d\n", ret);
-+		return ret;
-+	}
-+	ret = regmap_fields_write(dmactl->codec_enable, id, LPAIF_DMACTL_ENABLE_ON);
-+	if (ret) {
-+		dev_err(dev, "error writing to dmactl codec_enable reg field: %d\n", ret);
-+		return ret;
-+	}
-+	return 0;
-+}
-+
-+static int lpass_cdc_dma_daiops_startup(struct snd_pcm_substream *substream,
-+				    struct snd_soc_dai *dai)
-+{
-+	struct lpass_data *drvdata = snd_soc_dai_get_drvdata(dai);
-+	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
-+
-+	switch (dai->id) {
-+	case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-+	case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-+		clk_set_rate(drvdata->codec_mem0, CODEC_MEM_HZ_NORMAL);
-+		clk_prepare_enable(drvdata->codec_mem0);
-+		break;
-+	case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX0:
-+		clk_set_rate(drvdata->va_mem0, CODEC_MEM_HZ_NORMAL);
-+		clk_prepare_enable(drvdata->va_mem0);
-+		break;
-+	default:
-+		dev_err(soc_runtime->dev, "%s: invalid  interface: %d\n", __func__, dai->id);
-+		break;
-+	}
-+	return 0;
-+}
-+
-+static void lpass_cdc_dma_daiops_shutdown(struct snd_pcm_substream *substream,
-+				      struct snd_soc_dai *dai)
-+{
-+	struct lpass_data *drvdata = snd_soc_dai_get_drvdata(dai);
-+	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
-+
-+	switch (dai->id) {
-+	case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-+	case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-+		clk_disable_unprepare(drvdata->codec_mem0);
-+		break;
-+	case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX0:
-+		clk_disable_unprepare(drvdata->va_mem0);
-+		break;
-+	default:
-+		dev_err(soc_runtime->dev, "%s: invalid  interface: %d\n", __func__, dai->id);
-+		break;
-+	}
-+}
-+
-+static int lpass_cdc_dma_daiops_hw_params(struct snd_pcm_substream *substream,
-+				      struct snd_pcm_hw_params *params,
-+				      struct snd_soc_dai *dai)
-+{
-+	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
-+	struct lpaif_dmactl *dmactl = NULL;
-+	unsigned int ret, regval;
-+	unsigned int channels = params_channels(params);
-+	int id;
-+
-+	switch (channels) {
-+	case 1:
-+		regval = LPASS_CDC_DMA_INTF_ONE_CHANNEL;
-+		break;
-+	case 2:
-+		regval = LPASS_CDC_DMA_INTF_TWO_CHANNEL;
-+		break;
-+	case 4:
-+		regval = LPASS_CDC_DMA_INTF_FOUR_CHANNEL;
-+		break;
-+	case 6:
-+		regval = LPASS_CDC_DMA_INTF_SIX_CHANNEL;
-+		break;
-+	case 8:
-+		regval = LPASS_CDC_DMA_INTF_EIGHT_CHANNEL;
-+		break;
-+	default:
-+		dev_err(soc_runtime->dev, "invalid PCM config\n");
-+		return -EINVAL;
-+	}
-+
-+	__lpass_get_dmactl_handle(substream, dai, &dmactl, &id);
-+	if (!dmactl) {
-+		dev_err(soc_runtime->dev, "%s: failed to get dmactl handle\n", __func__);
-+		return -EINVAL;
-+	}
-+	ret = regmap_fields_write(dmactl->codec_channel, id, regval);
-+	if (ret) {
-+		dev_err(soc_runtime->dev,
-+			"error writing to dmactl codec_channel reg field: %d\n", ret);
-+		return ret;
-+	}
-+	return 0;
-+}
-+
-+static int lpass_cdc_dma_daiops_trigger(struct snd_pcm_substream *substream,
-+				    int cmd, struct snd_soc_dai *dai)
-+{
-+	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
-+	struct lpaif_dmactl *dmactl;
-+	int ret = 0, id;
-+
-+	switch (cmd) {
-+	case SNDRV_PCM_TRIGGER_START:
-+	case SNDRV_PCM_TRIGGER_RESUME:
-+	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-+		__lpass_platform_codec_intf_init(dai, substream);
-+		break;
-+	case SNDRV_PCM_TRIGGER_STOP:
-+	case SNDRV_PCM_TRIGGER_SUSPEND:
-+	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-+		__lpass_get_dmactl_handle(substream, dai, &dmactl, &id);
-+		if (!dmactl) {
-+			dev_err(soc_runtime->dev, "%s: failed to get dmactl handle\n", __func__);
-+			return -EINVAL;
-+		}
-+		ret = regmap_fields_write(dmactl->codec_enable, id, LPAIF_DMACTL_ENABLE_OFF);
-+		if (ret) {
-+			dev_err(soc_runtime->dev,
-+				"error writing to dmactl codec_enable reg: %d\n", ret);
-+			return ret;
-+		}
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		dev_err(soc_runtime->dev, "%s: invalid %d interface\n", __func__, cmd);
-+		break;
-+	}
-+	return ret;
-+}
-+
-+const struct snd_soc_dai_ops asoc_qcom_lpass_cdc_dma_dai_ops = {
-+	.startup	= lpass_cdc_dma_daiops_startup,
-+	.shutdown	= lpass_cdc_dma_daiops_shutdown,
-+	.hw_params	= lpass_cdc_dma_daiops_hw_params,
-+	.trigger	= lpass_cdc_dma_daiops_trigger,
-+};
-+EXPORT_SYMBOL_GPL(asoc_qcom_lpass_cdc_dma_dai_ops);
-+
-+MODULE_DESCRIPTION("QTi LPASS CDC DMA Driver");
-+MODULE_LICENSE("GPL");
-diff --git a/sound/soc/qcom/lpass.h b/sound/soc/qcom/lpass.h
-index 210a099..510c176 100644
---- a/sound/soc/qcom/lpass.h
-+++ b/sound/soc/qcom/lpass.h
-@@ -408,5 +408,6 @@ int asoc_qcom_lpass_cpu_dai_probe(struct snd_soc_dai *dai);
- extern const struct snd_soc_dai_ops asoc_qcom_lpass_cpu_dai_ops;
- int lpass_cpu_pcm_new(struct snd_soc_pcm_runtime *rtd,
- 				struct snd_soc_dai *dai);
-+extern const struct snd_soc_dai_ops asoc_qcom_lpass_cdc_dma_dai_ops;
+diff --git a/mm/memory.c b/mm/memory.c
+index 3728632ea993..c2defe8a1472 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1309,8 +1309,8 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
+  * Parameter block passed down to zap_pte_range in exceptional cases.
+  */
+ struct zap_details {
+-	struct address_space *zap_mapping;	/* Check page->mapping if set */
+ 	struct folio *single_folio;	/* Locked folio to be unmapped */
++	bool even_cows;			/* Zap COWed private pages too? */
+ };
  
- #endif /* __LPASS_H__ */
+ /* Whether we should zap all COWed (private) pages too */
+@@ -1321,13 +1321,10 @@ static inline bool should_zap_cows(struct zap_details *details)
+ 		return true;
+ 
+ 	/* Or, we zap COWed pages only if the caller wants to */
+-	return !details->zap_mapping;
++	return details->even_cows;
+ }
+ 
+-/*
+- * We set details->zap_mapping when we want to unmap shared but keep private
+- * pages. Return true if we should zap this page, false otherwise.
+- */
++/* Decides whether we should zap this page with the page pointer specified */
+ static inline bool should_zap_page(struct zap_details *details, struct page *page)
+ {
+ 	/* If we can make a decision without *page.. */
+@@ -1338,7 +1335,8 @@ static inline bool should_zap_page(struct zap_details *details, struct page *pag
+ 	if (!page)
+ 		return true;
+ 
+-	return details->zap_mapping == page_rmapping(page);
++	/* Otherwise we should only zap non-anon pages */
++	return !PageAnon(page);
+ }
+ 
+ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+@@ -3398,7 +3396,7 @@ void unmap_mapping_folio(struct folio *folio)
+ 	first_index = folio->index;
+ 	last_index = folio->index + folio_nr_pages(folio) - 1;
+ 
+-	details.zap_mapping = mapping;
++	details.even_cows = false;
+ 	details.single_folio = folio;
+ 
+ 	i_mmap_lock_write(mapping);
+@@ -3427,7 +3425,7 @@ void unmap_mapping_pages(struct address_space *mapping, pgoff_t start,
+ 	pgoff_t	first_index = start;
+ 	pgoff_t	last_index = start + nr - 1;
+ 
+-	details.zap_mapping = even_cows ? NULL : mapping;
++	details.even_cows = even_cows;
+ 	if (last_index < first_index)
+ 		last_index = ULONG_MAX;
+ 
 -- 
-2.7.4
+2.32.0
 

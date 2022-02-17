@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973E34BA0E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 911554BA0EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240873AbiBQNUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:20:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42214 "EHLO
+        id S240917AbiBQNVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:21:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240864AbiBQNUH (ORCPT
+        with ESMTP id S240904AbiBQNVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:20:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2634E2AE734;
-        Thu, 17 Feb 2022 05:19:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A91D1B821AD;
-        Thu, 17 Feb 2022 13:19:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B81C340F3;
-        Thu, 17 Feb 2022 13:19:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645103990;
-        bh=rR7j4YmApToV2YRSuDP85+mXkntJiYfEZ6H5iwYSzI0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fq+3M5303bdT8nnwZwd6StHMbYmnzty+zNmXGOyZhhOgWRNaORBj6kRFGKB6dmr6+
-         6ozd59BmPk0ntm/0Np6Mmwuimuob2VS2m3st+CaS/M1GnGyJVTZsyDzYXQhyCJTy2v
-         BP1B8WihX4nTQLj7aWRzuGdm70k1rQ/5te+3AlCoO5Yvq84a61SpnshVZIV7CkhVnJ
-         YnbT7KMVJ8BinOYhglGJnTF3p0wgdcZfxuyMpRKO8V3qZCedsefEoDbLxMw+tOiAd5
-         9L8n2sDkevjRactDrAqq9On7WICoBvwjqZusCI+Ou+586bJN7d3S7kWzy6pC3SrzqM
-         j8Oxuc8ZSEhAQ==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 3/3] perf tools: Rework prologue generation code
-Date:   Thu, 17 Feb 2022 14:19:16 +0100
-Message-Id: <20220217131916.50615-4-jolsa@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220217131916.50615-1-jolsa@kernel.org>
-References: <20220217131916.50615-1-jolsa@kernel.org>
+        Thu, 17 Feb 2022 08:21:35 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CE02AED95
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:21:19 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id u20so9959944lff.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:21:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HqpYw2hU4AfMpdecnlYRUtKQoN8L8CwL4tdQrOzhrbU=;
+        b=LRBqktU2LOQCmUCWKN0qyj83PggUYqy2Lc8PnzwmA5idChQi2M2xA/M8JT/++U5Rh4
+         Hm5L9TVlVW6zdcMkm6uuV7p7mROFpt2i/CL6P9C4bSgHpuAoX+ADnWVPNO18Di0aAx9X
+         I8szoh+0W9ftm4sEBiy/zvI7g5mvWjYzbG1l7zyz8yhU7sXZSnxrPpKdrHlzv+6jeFce
+         Q4UyojvMCEyhJVpn+245RhWAWr6PbYI06qlq7ev1bEaKv7WfHpJVopOrDj52gZhYxFkh
+         LWQMBDCxNfHg4LcM2HaVS1vz3Exi6UxgnqWKi31v8Hg+vVD2q4xY3rY6nxfLkhUHPELc
+         kw4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HqpYw2hU4AfMpdecnlYRUtKQoN8L8CwL4tdQrOzhrbU=;
+        b=rRg1ZmXmTARmwKGoKhJNMPAYz91ifOvLB54yBF9mTyJ7Kf37trOtWhw1ed4sBP+EJC
+         SKH+w++V6+MoVqajK9Nn797B/g9xZPx9pOw71wtM7EYq7E4tiX25IV+XO+XE7oeUR1IA
+         TaI0AmvvEbm779w3D+Yny2crPe+zPBz/g81YN9y3PjED5KAgK53TxPpA9XIbnJX5neR/
+         OzneDUQXx2afbw2InYpNMea8ycebxPa9nO9llfa3cJlfM8SdcF0OVyQIMJ/JhChsSUQF
+         VG6P8gRty80Gn9b6kCRJ8aL72/lxxoRS/fZPlsScwcIJR1uPou3sSJ/jHCa470iUlByq
+         AjGA==
+X-Gm-Message-State: AOAM533qyFmrM5ut6deSQ7DNO3rA415dt6as/8QXXJf6yIYo6aqibwY3
+        pIwWYjVPJ9Ct328XON2vuV5lHiTu5UdRfz/uIM9RlQ==
+X-Google-Smtp-Source: ABdhPJxQJwQ1+7LNtV1FQqLhYGYhR1qKHRiyqfHQCaDjPzoi2G7bYLOg4pwG0lFVTZmnzQgRAaOCO5LhX1us6kgS5yw=
+X-Received: by 2002:a05:6512:2241:b0:441:ce2b:18ef with SMTP id
+ i1-20020a056512224100b00441ce2b18efmr2059121lfu.167.1645104077907; Thu, 17
+ Feb 2022 05:21:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220130210210.549877-1-daniel.lezcano@linaro.org> <20220130210210.549877-6-daniel.lezcano@linaro.org>
+In-Reply-To: <20220130210210.549877-6-daniel.lezcano@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 17 Feb 2022 14:20:41 +0100
+Message-ID: <CAPDyKFrX2tR_FdJ+SVJSBGso086Db8FpZiPv5m7FwQ9PLmMEEQ@mail.gmail.com>
+Subject: Re: [PATCH v1 6/7] powercap/dtpm/dtpm_cpu: Add exit function
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,251 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some functions we use now for bpf prologue generation are
-going to be deprecated, so reworking the current code not
-to use them.
+On Sun, 30 Jan 2022 at 22:02, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> Now that we can destroy the hierarchy, the code must remove what it
+> had put in place at the creation. In our case, the cpu hotplug
+> callbacks.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-We need to replace following functions/struct:
-   bpf_program__set_prep
-   bpf_program__nth_fd
-   struct bpf_prog_prep_result
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Current code uses bpf_program__set_prep to hook perf callback
-before the program is loaded and provide new instructions with
-the prologue.
+Kind regards
+Uffe
 
-We workaround this by using objects's 'unloaded' programs instructions
-for that specific program and load new ebpf programs with prologue
-using separate bpf_prog_load calls.
-
-We keep new ebpf program instances descriptors in bpf programs
-private struct.
-
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/perf/util/bpf-loader.c | 122 +++++++++++++++++++++++++++++------
- 1 file changed, 104 insertions(+), 18 deletions(-)
-
-diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-index 6f87729817ad..03f917002c00 100644
---- a/tools/perf/util/bpf-loader.c
-+++ b/tools/perf/util/bpf-loader.c
-@@ -48,6 +48,7 @@ struct bpf_prog_priv {
- 	struct bpf_insn *insns_buf;
- 	int nr_types;
- 	int *type_mapping;
-+	int *proglogue_fds;
- };
- 
- struct bpf_perf_object {
-@@ -55,6 +56,11 @@ struct bpf_perf_object {
- 	struct bpf_object *obj;
- };
- 
-+struct bpf_preproc_result {
-+	struct bpf_insn *new_insn_ptr;
-+	int new_insn_cnt;
-+};
-+
- static LIST_HEAD(bpf_objects_list);
- static struct hashmap *bpf_program_hash;
- static struct hashmap *bpf_map_hash;
-@@ -176,14 +182,31 @@ struct bpf_object *bpf__prepare_load(const char *filename, bool source)
- 	return obj;
- }
- 
-+static void close_prologue_programs(struct bpf_prog_priv *priv)
-+{
-+	struct perf_probe_event *pev;
-+	int i, fd;
-+
-+	if (!priv->need_prologue)
-+		return;
-+	pev = &priv->pev;
-+	for (i = 0; i < pev->ntevs; i++) {
-+		fd = close(priv->proglogue_fds[i]);
-+		if (fd != -1)
-+			close(fd);
-+	}
-+}
-+
- static void
- clear_prog_priv(const struct bpf_program *prog __maybe_unused,
- 		void *_priv)
- {
- 	struct bpf_prog_priv *priv = _priv;
- 
-+	close_prologue_programs(priv);
- 	cleanup_perf_probe_events(&priv->pev, 1);
- 	zfree(&priv->insns_buf);
-+	zfree(&priv->proglogue_fds);
- 	zfree(&priv->type_mapping);
- 	zfree(&priv->sys_name);
- 	zfree(&priv->evt_name);
-@@ -539,8 +562,8 @@ static int bpf__prepare_probe(void)
- 
- static int
- preproc_gen_prologue(struct bpf_program *prog, int n,
--		     struct bpf_insn *orig_insns, int orig_insns_cnt,
--		     struct bpf_prog_prep_result *res)
-+		     const struct bpf_insn *orig_insns, int orig_insns_cnt,
-+		     struct bpf_preproc_result *res)
- {
- 	struct bpf_prog_priv *priv = program_priv(prog);
- 	struct probe_trace_event *tev;
-@@ -588,7 +611,6 @@ preproc_gen_prologue(struct bpf_program *prog, int n,
- 
- 	res->new_insn_ptr = buf;
- 	res->new_insn_cnt = prologue_cnt + orig_insns_cnt;
--	res->pfd = NULL;
- 	return 0;
- 
- errout:
-@@ -696,7 +718,7 @@ static int hook_load_preprocessor(struct bpf_program *prog)
- 	struct bpf_prog_priv *priv = program_priv(prog);
- 	struct perf_probe_event *pev;
- 	bool need_prologue = false;
--	int err, i;
-+	int i;
- 
- 	if (IS_ERR_OR_NULL(priv)) {
- 		pr_debug("Internal error when hook preprocessor\n");
-@@ -727,6 +749,12 @@ static int hook_load_preprocessor(struct bpf_program *prog)
- 		return 0;
- 	}
- 
-+	/*
-+	 * Do not load programs that need prologue, because we need
-+	 * to add prologue first, check bpf_object__load_prologue.
-+	 */
-+	bpf_program__set_autoload(prog, false);
-+
- 	priv->need_prologue = true;
- 	priv->insns_buf = malloc(sizeof(struct bpf_insn) * BPF_MAXINSNS);
- 	if (!priv->insns_buf) {
-@@ -734,6 +762,13 @@ static int hook_load_preprocessor(struct bpf_program *prog)
- 		return -ENOMEM;
- 	}
- 
-+	priv->proglogue_fds = malloc(sizeof(int) * pev->ntevs);
-+	if (!priv->proglogue_fds) {
-+		pr_debug("Not enough memory: alloc prologue fds failed\n");
-+		return -ENOMEM;
-+	}
-+	memset(priv->proglogue_fds, -1, sizeof(int) * pev->ntevs);
-+
- 	priv->type_mapping = malloc(sizeof(int) * pev->ntevs);
- 	if (!priv->type_mapping) {
- 		pr_debug("Not enough memory: alloc type_mapping failed\n");
-@@ -742,13 +777,7 @@ static int hook_load_preprocessor(struct bpf_program *prog)
- 	memset(priv->type_mapping, -1,
- 	       sizeof(int) * pev->ntevs);
- 
--	err = map_prologue(pev, priv->type_mapping, &priv->nr_types);
--	if (err)
--		return err;
--
--	err = bpf_program__set_prep(prog, priv->nr_types,
--				    preproc_gen_prologue);
--	return err;
-+	return map_prologue(pev, priv->type_mapping, &priv->nr_types);
- }
- 
- int bpf__probe(struct bpf_object *obj)
-@@ -855,6 +884,66 @@ int bpf__unprobe(struct bpf_object *obj)
- 	return ret;
- }
- 
-+static int bpf_object__load_prologue(struct bpf_object *obj)
-+{
-+	const struct bpf_insn *orig_insns;
-+	struct bpf_preproc_result res;
-+	struct perf_probe_event *pev;
-+	struct bpf_program *prog;
-+	int orig_insns_cnt;
-+
-+	bpf_object__for_each_program(prog, obj) {
-+		struct bpf_prog_priv *priv = program_priv(prog);
-+		int err, i, fd;
-+
-+		if (IS_ERR_OR_NULL(priv)) {
-+			pr_debug("bpf: failed to get private field\n");
-+			return -BPF_LOADER_ERRNO__INTERNAL;
-+		}
-+
-+		if (!priv->need_prologue)
-+			continue;
-+
-+		/*
-+		 * For each program that needs prologue we do following:
-+		 *
-+		 * - take its current instructions and use them
-+		 *   to generate the new code with prologue
-+		 *
-+		 * - load new instructions with bpf_prog_load
-+		 *   and keep the fd in proglogue_fds
-+		 *
-+		 * - new fd will be used bpf__foreach_event
-+		 *   to connect this program with perf evsel
-+		 */
-+		orig_insns = bpf_program__insns(prog);
-+		orig_insns_cnt = bpf_program__insn_cnt(prog);
-+
-+		pev = &priv->pev;
-+		for (i = 0; i < pev->ntevs; i++) {
-+			err = preproc_gen_prologue(prog, i, orig_insns,
-+						   orig_insns_cnt, &res);
-+			if (err)
-+				return err;
-+
-+			fd = bpf_prog_load(bpf_program__get_type(prog),
-+					   bpf_program__name(prog), "GPL",
-+					   res.new_insn_ptr,
-+					   res.new_insn_cnt, NULL);
-+			if (fd < 0) {
-+				char bf[128];
-+
-+				libbpf_strerror(-errno, bf, sizeof(bf));
-+				pr_debug("bpf: load objects with prologue failed: err=%d: (%s)\n",
-+					 -errno, bf);
-+				return -errno;
-+			}
-+			priv->proglogue_fds[i] = fd;
-+		}
-+	}
-+	return 0;
-+}
-+
- int bpf__load(struct bpf_object *obj)
- {
- 	int err;
-@@ -866,7 +955,7 @@ int bpf__load(struct bpf_object *obj)
- 		pr_debug("bpf: load objects failed: err=%d: (%s)\n", err, bf);
- 		return err;
- 	}
--	return 0;
-+	return bpf_object__load_prologue(obj);
- }
- 
- int bpf__foreach_event(struct bpf_object *obj,
-@@ -901,13 +990,10 @@ int bpf__foreach_event(struct bpf_object *obj,
- 		for (i = 0; i < pev->ntevs; i++) {
- 			tev = &pev->tevs[i];
- 
--			if (priv->need_prologue) {
--				int type = priv->type_mapping[i];
--
--				fd = bpf_program__nth_fd(prog, type);
--			} else {
-+			if (priv->need_prologue)
-+				fd = priv->proglogue_fds[i];
-+			else
- 				fd = bpf_program__fd(prog);
--			}
- 
- 			if (fd < 0) {
- 				pr_debug("bpf: failed to get file descriptor\n");
--- 
-2.35.1
-
+> ---
+>  drivers/powercap/dtpm_cpu.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+> index 71f45d2f5a60..bca2f912d349 100644
+> --- a/drivers/powercap/dtpm_cpu.c
+> +++ b/drivers/powercap/dtpm_cpu.c
+> @@ -299,8 +299,15 @@ static int dtpm_cpu_init(void)
+>         return 0;
+>  }
+>
+> +static void dtpm_cpu_exit(void)
+> +{
+> +       cpuhp_remove_state_nocalls(CPUHP_AP_ONLINE_DYN);
+> +       cpuhp_remove_state_nocalls(CPUHP_AP_DTPM_CPU_DEAD);
+> +}
+> +
+>  struct dtpm_subsys_ops dtpm_cpu_ops = {
+>         .name = KBUILD_MODNAME,
+>         .init = dtpm_cpu_init,
+> +       .exit = dtpm_cpu_exit,
+>         .setup = dtpm_cpu_setup,
+>  };
+> --
+> 2.25.1
+>

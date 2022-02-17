@@ -2,239 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B10A4BA76E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB084BA770
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243865AbiBQRtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:49:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47942 "EHLO
+        id S243873AbiBQRtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:49:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243844AbiBQRtG (ORCPT
+        with ESMTP id S243867AbiBQRtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:49:06 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B9C291FB4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:48:51 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso4613139wmj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:48:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eA6IIhqYEfrRDuKOGshN1p14BWrOpnI8vaNPig+Er3U=;
-        b=Z7Lvy/Lu0PgnLPUDuFPsdG49Zyk4N0fWd92pQXI2BU3ytXBKNzd+AoncQRZWkjzXbZ
-         oxp4AAYZ1qPDAOmTUD4Ti47DXQMMtwT4+Qd767pUOA99nTaU6PHtqDb3tcKd0CcuVBrl
-         5KGTiHLLJEjsVcJvTXRSy49WeEQ04aBzlIPZDYzvzssbiOJ6QHjoZTgr1/mw/YibIEFp
-         PpyGXZABs9l0LsrBr4WR/YZl5zmsdVWuUGuhPDk3w4W4WWlXz+7CGL2svqs5EE5uQ+U8
-         FYSNfFI79gOtkhewdBFZLQqcYqZeFdew3rJTLJ6tDdqvqP7slTd1dNFLv2M//KNbcWct
-         X25A==
+        Thu, 17 Feb 2022 12:49:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA555291FBA
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:49:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645120145;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rRIMKHhamSqp8VeNfr4XcAxWjxGDpns0iibC3SSvphI=;
+        b=aMfXjzXNtryBJSom2IKdCB4Kx0nQJScJ+SgtzSE2BwAFIoVs+3Dfx45SgNwd6BSZFWVu+/
+        Qfq4vVbRrMA0ubr43GkU8aRlDg6X6csJo2d8T4ohl1iWnGwXofZIOUwW64F5/L/D9F4a7B
+        vpUi6BnDj8t7IHVsrhycbx5XoXnQDlY=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-QRbYLFWMOgehMRZjXjyuZw-1; Thu, 17 Feb 2022 12:49:04 -0500
+X-MC-Unique: QRbYLFWMOgehMRZjXjyuZw-1
+Received: by mail-wr1-f70.google.com with SMTP id h24-20020adfaa98000000b001e33eb81e71so2609735wrc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:49:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eA6IIhqYEfrRDuKOGshN1p14BWrOpnI8vaNPig+Er3U=;
-        b=6zozfjYArh64E8Tz56FV0xtD7r3K5Mg2yr6oLrO9spS2H8qlV1Ms4nX7CzQUJXd1Ro
-         naPgyBcJjhrADg4l0miC2Aqq790GAXQF8ehus1lXUg5txFoM5MpwtayOFfobOCFqX2TY
-         iqUq/2mQt/CY14uhjaZ98gTCLbxa2vBsrPW8b8NmZAqXlCo0rD1aXrTXm6r17s0l1oTb
-         UydCPZ02NQ4YmkqgPJvazdY454HdCeCbvXJVEz2c5ZKvFE8miyvqjCpTdrJ8iEm+Q4oL
-         O6sSXeVhx7n7sigwTG+lD5s2XH/zXhYzR/Yj6Q7E0wA3mWNxoYYCFKFxH93/VYTbjB1p
-         iqyQ==
-X-Gm-Message-State: AOAM531p6Ux3o3dnxmB6o5dwd27U6/myG2ceNH+tfXRoCBQNSFWaWY62
-        jG4dw9E+VAM65lppsnG0s8BpDRBXfBQJA8EjrXPJ1nM/IPE=
-X-Google-Smtp-Source: ABdhPJwwa3LmENnFrJD5FLhvk02XJs/Qc9bfHqvayUmoxC5bFLZFN14JD0xFcO6PeEfXXckQgirXkhtlEZYLaYPTxoI=
-X-Received: by 2002:a05:600c:1f05:b0:37b:d9aa:e210 with SMTP id
- bd5-20020a05600c1f0500b0037bd9aae210mr7242831wmb.63.1645120130134; Thu, 17
- Feb 2022 09:48:50 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rRIMKHhamSqp8VeNfr4XcAxWjxGDpns0iibC3SSvphI=;
+        b=Ic404wZItxX1UyX2DIhTR9fJgUsYIvgN7XaRxlufDeje16Dvpe+TGlhLyUtrpUofWK
+         QpUDgpK4M2FHGyf1S/0YPjMfs/piRjeGqm21XIV1VWxiY6sl4Trp8D1Se7PKiPZijCb1
+         OkkG+Q5MxyBwfSWhRDbVhFXDeFtLv68EXNv+Lo45+mKdBOXZv0GNNyUimqYuTL3JObfn
+         IOR1ZCOxDywuuozfF4KX9gKfETJ+B+M/OT3D77pmidX+GeiknKkSe42mUyz1Zh4JpSL7
+         2+JhtpxD/wMdbp13iWpuaUMr6wHkmcnGORFSMkU79e3JbtdYGzkTB0nwM/S/aTdVvAcL
+         sRag==
+X-Gm-Message-State: AOAM533QGAYu6ZDSFWZovU7+XXwnnQBqL2/ri1/wrIvjNrfjQMYuReJ8
+        taeIehlBlxbtWdi9xQVNlvLv+gJWoDS+Imb68zXDT9Bf7lHfJMgdPuLqH9yFOpm15LbUWsWneUx
+        aoZbNqKZ6h30GVftV3/cq1aYe
+X-Received: by 2002:a05:600c:35d1:b0:37c:d45c:af57 with SMTP id r17-20020a05600c35d100b0037cd45caf57mr7156012wmq.149.1645120143299;
+        Thu, 17 Feb 2022 09:49:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwZ9zXHZ9F/mtgzKSHmwW5LPeJBNm3yMLCV+v3cbCHhyApAmjEFStihyj3q0BuKaMTUhMKzIw==
+X-Received: by 2002:a05:600c:35d1:b0:37c:d45c:af57 with SMTP id r17-20020a05600c35d100b0037cd45caf57mr7155996wmq.149.1645120143067;
+        Thu, 17 Feb 2022 09:49:03 -0800 (PST)
+Received: from ?IPV6:2001:b07:646c:22c6:db53:7a2b:ef3c:adb0? ([2001:b07:646c:22c6:db53:7a2b:ef3c:adb0])
+        by smtp.gmail.com with ESMTPSA id 14sm8654293wrb.34.2022.02.17.09.49.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 09:49:02 -0800 (PST)
+Message-ID: <6c6fc4fa-6464-2dbf-40da-e3c61f322d95@redhat.com>
+Date:   Thu, 17 Feb 2022 18:49:00 +0100
 MIME-Version: 1.0
-References: <20220209105706.18852-1-quic_jinlmao@quicinc.com> <20220209105706.18852-5-quic_jinlmao@quicinc.com>
-In-Reply-To: <20220209105706.18852-5-quic_jinlmao@quicinc.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 17 Feb 2022 17:48:39 +0000
-Message-ID: <CAJ9a7ViO2S_sUCNaZ711SNDz-jmYiWxCBcBYOc-gVGkoCG-VDA@mail.gmail.com>
-Subject: Re: [PATCH v3 04/10] dt-bindings: arm: Adds CoreSight TPDM hardware definitions
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC V2 17/21] watchdog/dev: Add tracepoints
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        "Peter.Enderborg@sony.com" <Peter.Enderborg@sony.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-devel@vger.kernel.org" 
+        <linux-trace-devel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <cover.1644830251.git.bristot@kernel.org>
+ <e67874c8b676ea8dfe38679efa25363889bb1e76.1644830251.git.bristot@kernel.org>
+ <96f418b4-0ba8-01fe-ead0-2028bfc42560@sony.com>
+ <ba924008-c0ab-4800-aac4-d9d9ae930c32@kernel.org>
+ <ef1b1d99-6172-2b4d-9612-7ecbe8fc6c8b@roeck-us.net>
+From:   Gabriele Paoloni <gpaoloni@redhat.com>
+In-Reply-To: <ef1b1d99-6172-2b4d-9612-7ecbe8fc6c8b@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, 9 Feb 2022 at 10:57, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
->
-> Adds new coresight-tpdm.yaml file describing the bindings required
-> to define tpdm in the device trees.
->
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> ---
->  .../bindings/arm/coresight-tpdm.yaml          | 81 +++++++++++++++++++
->  .../devicetree/bindings/arm/coresight.txt     |  7 ++
->  MAINTAINERS                                   |  1 +
->  3 files changed, 89 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
->
-> diff --git a/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml b/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
-> new file mode 100644
-> index 000000000000..7ebc1bf7abc2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/coresight-tpdm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Trace, Profiling and Diagnostics Monitor - TPDM
-> +
-> +description: |
-> +  The TPDM or Monitor serves as data collection component for various dataset
-> +  types specified in the QPMDA spec. It covers Implementation defined ((ImplDef),
-> +  Basic Counts (BC), Tenure Counts (TC), Continuous Multi-Bit (CMB), and Discrete
-> +  Single Bit (DSB). It performs data collection in the data producing clock
-> +  domain and transfers it to the data collection time domain, generally ATB
-> +  clock domain.
-> +
-> +  The primary use case of the TPDM is to collect data from different data
-> +  sources and send it to a TPDA for packetization, timestamping, and funneling.
-> +
-> +maintainers:
-> +  - Suzuki K Poulose <suzuki.poulose@arm.com>
-> +  - Mathieu Poirier <mathieu.poirier@linaro.org>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^tpdm(@[0-9a-f]+)$"
-> +  compatible:
-> +    items:
-> +      - const: qcom,coresight-tpdm
-> +      - const: arm,primecell
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +   items:
-> +     - const: apb_pclk
-> +
-> +  out-ports:
-> +    description: |
-> +      Output connections from the TPDM to legacy CoreSight trace bus.
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    properties:
-> +      port:
-> +        description: Output connection from the TPDM to legacy CoreSight
-> +          Trace bus.
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
-
-As we discussed in patch 0/10 of this set - the TDPM actually sends
-data to TDPA - not to coresight. These descriptions should match that.
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # minimum TPDM definition.
-> +  - |
-> +    tpdm@6980000 {
-> +      compatible = "qcom,coresight-tpdm", "arm,primecell";
-> +      reg = <0x6980000 0x1000>;
-> +
-> +      clocks = <&aoss_qmp>;
-> +      clock-names = "apb_pclk";
-> +
-> +      out-ports {
-> +        port {
-> +          tpdm_turing_out_funnel_turing: endpoint {
-> +            remote-endpoint =
-> +              <&funnel_turing_in_tpdm_turing>;
-> +          };
-> +        };
-> +      };
-> +    };
-> +
-
-example looks OK, but I would like to see something of a _tdpa in the
-nameing as that is the funnel / link the tdpm sends data to.
-
-Regards
-
-Mike
-
-> +...
-> diff --git a/Documentation/devicetree/bindings/arm/coresight.txt b/Documentation/devicetree/bindings/arm/coresight.txt
-> index c68d93a35b6c..f7ce8af48574 100644
-> --- a/Documentation/devicetree/bindings/arm/coresight.txt
-> +++ b/Documentation/devicetree/bindings/arm/coresight.txt
-> @@ -52,6 +52,10 @@ its hardware characteristcs.
->                         "arm,coresight-cti", "arm,primecell";
->                         See coresight-cti.yaml for full CTI definitions.
->
-> +               - Trace, Profiling and Diagnostics Monitor (TPDM):
-> +                       "qcom,coresight-tpdm", "arm,primecell";
-> +                       See coresight-tpdm.yaml for full TPDM definitions.
-> +
->         * reg: physical base address and length of the register
->           set(s) of the component.
->
-> @@ -82,6 +86,9 @@ its hardware characteristcs.
->  * Required properties for Coresight Cross Trigger Interface (CTI)
->         See coresight-cti.yaml for full CTI definitions.
->
-> +* Required properties for Trace, Profiling and Diagnostics Monitor (TPDM)
-> +       See coresight-tpdm.yaml for full TPDM definitions.
-> +
->  * Required properties for devices that don't show up on the AMBA bus, such as
->    non-configurable replicators and non-configurable funnels:
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ea3e6c914384..434bbe98d22b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1906,6 +1906,7 @@ T:        git git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
->  F:     Documentation/ABI/testing/sysfs-bus-coresight-devices-*
->  F:     Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
->  F:     Documentation/devicetree/bindings/arm/coresight-cti.yaml
-> +F:     Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
->  F:     Documentation/devicetree/bindings/arm/coresight.txt
->  F:     Documentation/devicetree/bindings/arm/ete.yaml
->  F:     Documentation/devicetree/bindings/arm/trbe.yaml
-> --
-> 2.17.1
->
 
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+On 17/02/2022 18:27, Guenter Roeck wrote:
+> On 2/17/22 08:27, Daniel Bristot de Oliveira wrote:
+>> Hi Peter
+>>
+>> On 2/16/22 17:01, Peter.Enderborg@sony.com wrote:
+>>> On 2/14/22 11:45, Daniel Bristot de Oliveira wrote:
+>>>> Add a set of tracepoints, enabling the observability of the watchdog
+>>>> device interactions with user-space.
+>>>>
+>>>> The events are:
+>>>>     watchdog:watchdog_open
+>>>>     watchdog:watchdog_close
+>>>>     watchdog:watchdog_start
+>>>>     watchdog:watchdog_stop
+>>>>     watchdog:watchdog_set_timeout
+>>>>     watchdog:watchdog_ping
+>>>>     watchdog:watchdog_nowayout
+>>>>     watchdog:watchdog_set_keep_alive
+>>>>     watchdog:watchdog_keep_alive
+>>>
+>>> Some watchdogs have a bark functionality, I think it should be event
+>>> for that too.
+>>>
+>>
+>> I understand. The problems is that I do not see the bark abstraction
+>> in the
+>> watchdog_dev layer.
+>>
+> 
+> I don't even know what "bark functionality" means. A new term for
+> pretimeout ?
+> Something else ?
+
+From my understanding the bark timeout is actually the pretimeout
+whereas the bite timeout is the actual timeout.
+I think in the Kernel ftwdt010_wdt and qcom-wdt are bark/bite WTDs
+
+Gab
+
+
+> 
+> Guenter
+> 
+>> In the case I am investigating (the safety_monitor/safety_app) the
+>> bark is
+>> outside of the "OS" view, it is an hardware action - like. shutdown.
+>>
+>> Am I missing something? Thoughts?
+>>
+>> -- Daniel
+> 
+

@@ -2,198 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A574B964A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 04:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB814B9645
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 04:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiBQDDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 22:03:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45384 "EHLO
+        id S232237AbiBQDCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 22:02:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbiBQDDm (ORCPT
+        with ESMTP id S232212AbiBQDCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 22:03:42 -0500
-Received: from spam.unicloud.com (mx.uniclinxens.com [220.194.70.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADAD225D31;
-        Wed, 16 Feb 2022 19:03:26 -0800 (PST)
-Received: from eage.unicloud.com ([220.194.70.35])
-        by spam.unicloud.com with ESMTP id 21H30oTu032234;
-        Thu, 17 Feb 2022 11:00:50 +0800 (GMT-8)
-        (envelope-from luofei@unicloud.com)
-Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
- (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Thu, 17
- Feb 2022 11:00:49 +0800
-From:   luofei <luofei@unicloud.com>
-To:     <tony.luck@intel.com>, <bp@alien8.de>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <akpm@linux-foundation.org>,
-        <naoya.horiguchi@nec.com>
-CC:     <hpa@zytor.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        luofei <luofei@unicloud.com>
-Subject: [PATCH v2] hw/poison: Add in-use hugepage filter judgement and avoid filter page impact on mce handler
-Date:   Wed, 16 Feb 2022 22:00:38 -0500
-Message-ID: <20220217030038.1552124-1-luofei@unicloud.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 16 Feb 2022 22:02:11 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988B6ECB08;
+        Wed, 16 Feb 2022 19:01:57 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id g1so3829667pfv.1;
+        Wed, 16 Feb 2022 19:01:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9TATMg5XNmyHj9/wum7kE/N0AnlYkACa1RnuF2XMN4M=;
+        b=kEqcEz+MUy7+urrkcE2qCxwNWkajGExK8R2BRi5V9jWLLnWy+oEDn6XXMGVI3QCuPd
+         cUJvxOnNGy4ohBvk+euFQLBbY1aXq+2PdsXcP84IjpnimIUlARhtGMXmFywGP3LRdY7F
+         LElpR7I97USrY3Qkz4V8EXzwYAFamJYlOcX1Q5eLkNZuMyqItK7ZGsLhgMxfy66C4cDF
+         G7FOqD3hP+AsP5TmL5KyrYjRAQY5qh4sic/EXM5emC6Fn70sC9CdM6h46myzlm2MoFAK
+         sH3xNzq7mQWOWsLRKijzXYXhTjwpz3eELUCYN22RtxK0sX2/4oGPoo+PygpxOZV6bSo1
+         R8xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9TATMg5XNmyHj9/wum7kE/N0AnlYkACa1RnuF2XMN4M=;
+        b=CQtcX7tSTzxd+rNQZ/GiAJnVEx5zGBpmRpnbfD6kWagbfd7XoChmOX/9jecTPf80io
+         PSUv4AKzoE6JZLUhVZbgg9f+M8GIY/qFoutQjpBLncoCCHhhSpl0wP5HKt8vXOLQu0hH
+         +kSsxVM9lTmp/gE0OVDy3aStPtLJ8XqDUWHIltHJi1u/EHCvzqR3jaDDkXx6VwGAsLcL
+         B+Fm4KtkJMrzgzcI2kD6wdJTxU431SqqVTG4jKBuVICOirR/9tSzwTC7+GVSH3QXV+Zf
+         WZKs+h/carP89+TYWP8OLvg/hcq76wIbp6mSMvN/1uDfYZ02/68hRoLgj4zT/hPsOLCI
+         w4aQ==
+X-Gm-Message-State: AOAM533OiJs6nZ8+mxZ4xOn42gbNOPIt6TIHtAxT1yS33sqt5zqW9iZq
+        Ckky4JIoKYG6BgyZp0dkclV2MM3SQ5umFmp6MDI=
+X-Google-Smtp-Source: ABdhPJx4wTo4FHWG7+UM1wYSIq+HXOioKgmDaw1/TSTTMSrS7GZHt8Wg189OVUyWtSLXRgQh3qUOcTaJdbRu8NZUu7M=
+X-Received: by 2002:a05:6a00:be5:b0:4e1:9050:1e16 with SMTP id
+ x37-20020a056a000be500b004e190501e16mr892036pfu.78.1645066916960; Wed, 16 Feb
+ 2022 19:01:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.10.1.7]
-X-ClientProxiedBy: zgys-ex-mb11.Unicloud.com (10.10.0.28) To
- zgys-ex-mb09.Unicloud.com (10.10.0.24)
-X-DNSRBL: 
-X-MAIL: spam.unicloud.com 21H30oTu032234
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220216160500.2341255-1-alvin@pqrs.dk> <20220216160500.2341255-3-alvin@pqrs.dk>
+ <20220216233906.5dh67olhgfz7ji6o@skbuf>
+In-Reply-To: <20220216233906.5dh67olhgfz7ji6o@skbuf>
+From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Date:   Thu, 17 Feb 2022 00:01:45 -0300
+Message-ID: <CAJq09z6XBQUTBZoQ81Vy3nUc_5QGTF0GH8V-S3bXOw=JpYODvA@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/2] net: dsa: realtek: rtl8365mb: serialize
+ indirect PHY register access
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Michael Rasmussen <mir@bang-olufsen.dk>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After successfully obtaining the reference count of the huge
-page, it is still necessary to call hwpoison_filter() to make a
-filter judgement, otherwise the filter hugepage will be unmaped
-and the related process may be killed.
+Hi Vladimir,
 
-Also when the huge page meets the filter conditions, it should
-not be regarded as successful memory_failure() processing for
-mce handler, but should return a value to inform the caller,
-otherwise the caller regards the error page has been identified
-and isolated, which may lead to calling set_mce_nospec() to change
-page attribute, etc.
+> This implementation where the indirect PHY access blocks out every other
+> register read and write is only justified if you can prove that you can
+> stuff just about any unrelated register read or write before
+> RTL8365MB_INDIRECT_ACCESS_READ_DATA_REG, and this, in and of itself,
+> will poison what gets read back from RTL8365MB_INDIRECT_ACCESS_READ_DATA_=
+REG.
 
-Signed-off-by: luofei <luofei@unicloud.com>
----
- arch/x86/kernel/cpu/mce/core.c | 22 +++++++++++-----------
- include/linux/mm.h             |  1 +
- mm/memory-failure.c            | 25 +++++++++++++++++++++++--
- 3 files changed, 35 insertions(+), 13 deletions(-)
+I was the first one trying to fix this issue reported by Arin=C3=A7 with
+SMP devices. At first I thought it was caused by two parallel indirect
+access reads polling the interface (it was not using interrupts). With
+no lock, they will eventually collide and one reads the result of the
+other one. However, a simple lock over the indirect access didn't
+solve the issue. Alvin tested it much further to isolate that indirect
+register access is messed up by any other register read. The fails
+while polling the interface status or the other test Alvin created
+only manifests in a device with multiple cores and mine is single
+core. I do get something similar in a single core device by reading an
+unused register address but it is hard to blame Realtek when we are
+doing something we were not supposed to do. Anyway, that indicates
+that "reading a register" is not an atomic operation inside the switch
+asic.
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 5818b837fd4d..c2b99c60225f 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -612,7 +612,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
- 		return NOTIFY_DONE;
- 
- 	pfn = mce->addr >> PAGE_SHIFT;
--	if (!memory_failure(pfn, 0)) {
-+	if (!memory_failure(pfn, MF_MCE_HANDLE)) {
- 		set_mce_nospec(pfn, whole_page(mce));
- 		mce->kflags |= MCE_HANDLED_UC;
- 	}
-@@ -1286,7 +1286,7 @@ static void kill_me_now(struct callback_head *ch)
- static void kill_me_maybe(struct callback_head *cb)
- {
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
--	int flags = MF_ACTION_REQUIRED;
-+	int flags = MF_ACTION_REQUIRED | MF_MCE_HANDLE;
- 	int ret;
- 
- 	p->mce_count = 0;
-@@ -1300,14 +1300,14 @@ static void kill_me_maybe(struct callback_head *cb)
- 		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
- 		sync_core();
- 		return;
--	}
--
--	/*
--	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
--	 * to the current process with the proper error info, so no need to
--	 * send SIGBUS here again.
--	 */
--	if (ret == -EHWPOISON)
-+	} else if (ret == -EHWPOISON || ret == 1)
-+		/*
-+		 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
-+		 * to the current process with the proper error info, so no need to
-+		 * send SIGBUS here again.
-+		 *
-+		 * 1 means it's a filter page, no need to deal with.
-+		 */
- 		return;
- 
- 	pr_err("Memory error not recovered");
-@@ -1320,7 +1320,7 @@ static void kill_me_never(struct callback_head *cb)
- 
- 	p->mce_count = 0;
- 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
--	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
-+	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, MF_MCE_HANDLE))
- 		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
- }
- 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 213cc569b192..f4703f948e9a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3188,6 +3188,7 @@ enum mf_flags {
- 	MF_MUST_KILL = 1 << 2,
- 	MF_SOFT_OFFLINE = 1 << 3,
- 	MF_UNPOISON = 1 << 4,
-+	MF_MCE_HANDLE = 1 << 5,
- };
- extern int memory_failure(unsigned long pfn, int flags);
- extern void memory_failure_queue(unsigned long pfn, int flags);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 97a9ed8f87a9..1a0bd91a685b 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1526,7 +1526,10 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 				if (TestClearPageHWPoison(head))
- 					num_poisoned_pages_dec();
- 				unlock_page(head);
--				return 0;
-+				if (flags & MF_MCE_HANDLE)
-+					return 1;
-+				else
-+					return 0;
- 			}
- 			unlock_page(head);
- 			res = MF_FAILED;
-@@ -1545,6 +1548,17 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 	lock_page(head);
- 	page_flags = head->flags;
- 
-+	if (hwpoison_filter(p)) {
-+		if (TestClearPageHWPoison(head))
-+			num_poisoned_pages_dec();
-+		put_page(p);
-+		if (flags & MF_MCE_HANDLE)
-+			res = 1;
-+		else
-+			res = 0;
-+		goto out;
-+	}
-+
- 	/*
- 	 * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
- 	 * simply disable it. In order to make it work properly, we need
-@@ -1613,7 +1627,10 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
- 		goto out;
- 
- 	if (hwpoison_filter(page)) {
--		rc = 0;
-+		if (flags & MF_MCE_HANDLE)
-+			rc = 1;
-+		else
-+			rc = 0;
- 		goto unlock;
- 	}
- 
-@@ -1837,6 +1854,10 @@ int memory_failure(unsigned long pfn, int flags)
- 			num_poisoned_pages_dec();
- 		unlock_page(p);
- 		put_page(p);
-+		if (flags & MF_MCE_HANDLE)
-+			res = 1;
-+		else
-+			res = 0;
- 		goto unlock_mutex;
- 	}
- 
--- 
-2.27.0
+> rtl8365mb_mib_counter_read() doesn't seem like a particularly good
+> example to prove this, since it appears to be an indirect access
+> procedure as well. Single register reads or writes would be ideal, like
+> RTL8365MB_CPU_CTRL_REG, artificially inserted into strategic places.
+> Ideally you wouldn't even have a DSA or MDIO or PHY driver running.
+> Just a simple kernel module with access to the regmap, and try to read
+> something known, like the PHY ID of one of the internal PHYs, via an
+> open-coded function. Then add extra regmap accesses and see what
+> corrupts the indirect PHY access procedure.
 
+The MIB might be just another example where the issue happens. It was
+first noticed with a SMP device without interruptions configured. I
+believe it will always fail with that configuration.
+
+> Are Realtek aware of this and do they confirm the issue? Sounds like
+> erratum material to me, and a pretty severe one, at that. Alternatively,
+> we may simply not be understanding the hardware architecture, like for
+> example the fact that MIB indirect access and PHY indirect access may
+> share some common bus and must be sequential w.r.t. each other.
+
+The realtek "API/driver" does exactly how the driver was doing. They
+do have a lock/unlock placeholder, but only in the equivalent
+regmap_{read,write} functions. Indirect access does not use locks at
+all (in fact, there is no other mention of "lock" elsewhere), even
+being obvious that it is not thread-safe. It was just with a DSA
+driver that we started to exercise register access for real, specially
+without interruptions. And even in that case, we could only notice
+this issue in multicore devices. I believe that, if they know about
+this issue, they might not be worried because it has never affected a
+real device. It would be very interesting to hear from Realtek but I
+do not have the contacts.
+
+Regards,
+
+Luiz

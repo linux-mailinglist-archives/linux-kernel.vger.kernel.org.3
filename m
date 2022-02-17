@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C884BAB57
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8394F4BAB5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243595AbiBQU4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 15:56:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41340 "EHLO
+        id S243566AbiBQU5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 15:57:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240200AbiBQU4M (ORCPT
+        with ESMTP id S243654AbiBQU5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 15:56:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81507606E5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:55:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 170AEB824C4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 20:55:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74549C340E8;
-        Thu, 17 Feb 2022 20:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1645131354;
-        bh=/qfIvuEnZiYisePyk5Fyfjy1PkbsP8GTfWH3Fe9Xkgs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ul/yTwB0cHWwxKTGk2Xl5JxIKPJ5CQpExkPYUNYHoc221kQfQy+o4ufMUyMt2tYnV
-         sZKrHqVwa9yQuOQRLpwD1FCAlD1zT91PvSgkA6/unxLqbYsNCAlCiHVWZJEPG1qkF3
-         8YkfHGfrp3gvdNhL1JmWdJPXxhbxO5olJmnq3QuE=
-Date:   Thu, 17 Feb 2022 12:55:53 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [hnaz-mm:master 237/343]
- arch/powerpc/mm/book3s64/pgtable.c:540:15: warning: no previous prototype
- for 'memremap_compat_align'
-Message-Id: <20220217125553.88a9ce7723ea8fd39c76a199@linux-foundation.org>
-In-Reply-To: <202202172347.lJ6oYVOE-lkp@intel.com>
-References: <202202172347.lJ6oYVOE-lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 17 Feb 2022 15:57:19 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB90245AC;
+        Thu, 17 Feb 2022 12:57:04 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id A09521F46304
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645131422;
+        bh=HVDGGUKsKqIe9BO+dcKa/W+YmBbvLNbYJGuS3cf5tY8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D05Qs7dtvxBGd6jZ4EUAfV+5DDT9S6mxthr1WgUlgMtsy8y0zZkHIenNjD1PZUz/I
+         o53M+dy2+8RPxyGzEVWLlw7TNqkzJQ3ga+BGBCaawcRS7aQWnGxQOBcZZ+ugch1+LH
+         o5xWcOnleTOfI0cceVFLQMidx8J4sEK/35bUy4UwpgM1ZNomsEAQUZhrQWjCU3AZWJ
+         6zG+Ld2UFjTXz+Id47FeMA0gXS4Ok4r7CPVSUkSCdkzqWOOk4SOwPbuIGLPxbIYOsm
+         ToDrfXeW7QQ8722EjJkCtzeud2MAhBSTDwTCjYBuI8s00W10sXaCiLZal4FAxoSthY
+         5sPalScD/YjVA==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, kernelci@groups.io,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] selftests/lkdtm: add config and turn off CFI_FORWARD_PROTO
+Date:   Fri, 18 Feb 2022 01:56:19 +0500
+Message-Id: <20220217205620.2512094-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,45 +51,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 03:46:17 +0800 kernel test robot <lkp@intel.com> wrote:
+Add config options which are needed for LKDTM sub-tests.
+STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
+READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
+INIT_ON_FREE_DEFAULT_ON config.
 
-> tree:   https://github.com/hnaz/linux-mm master
-> head:   8857950589bc3b4920d69c3e0b2c06d33f445d21
-> commit: 236e08e72c118cbb20e780cc853378e2c341825c [237/343] mm: don't include <linux/memremap.h> in <linux/mm.h>
-> config: powerpc64-randconfig-m031-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172347.lJ6oYVOE-lkp@intel.com/config)
-> compiler: powerpc64le-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/hnaz/linux-mm/commit/236e08e72c118cbb20e780cc853378e2c341825c
->         git remote add hnaz-mm https://github.com/hnaz/linux-mm
->         git fetch --no-tags hnaz-mm master
->         git checkout 236e08e72c118cbb20e780cc853378e2c341825c
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/book3s64/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> arch/powerpc/mm/book3s64/pgtable.c:540:15: warning: no previous prototype for 'memremap_compat_align' [-Wmissing-prototypes]
->      540 | unsigned long memremap_compat_align(void)
->          |               ^~~~~~~~~~~~~~~~~~~~~
+CFI_FORWARD_PROTO always fails as there is no active CFI system of some
+kind. Turn it off for now by default until proper support.
 
-Thanks, I did this.
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/lkdtm/config    | 2 ++
+ tools/testing/selftests/lkdtm/tests.txt | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/powerpc/mm/book3s64/pgtable.c~mm-dont-include-linux-memremaph-in-linux-mmh-fix-2-fix
-+++ a/arch/powerpc/mm/book3s64/pgtable.c
-@@ -6,6 +6,7 @@
- #include <linux/sched.h>
- #include <linux/mm_types.h>
- #include <linux/memblock.h>
-+#include <linux/memremap.h>
- #include <linux/debugfs.h>
- #include <misc/cxl-base.h>
- 
-_
-
+diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
+index 46f39ee762086..adc9fa60057c5 100644
+--- a/tools/testing/selftests/lkdtm/config
++++ b/tools/testing/selftests/lkdtm/config
+@@ -2,8 +2,10 @@ CONFIG_LKDTM=y
+ CONFIG_DEBUG_LIST=y
+ CONFIG_SLAB_FREELIST_HARDENED=y
+ CONFIG_FORTIFY_SOURCE=y
++CONFIG_GCC_PLUGIN_STACKLEAK=y
+ CONFIG_HARDENED_USERCOPY=y
+ CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
++CONFIG_INIT_ON_FREE_DEFAULT_ON=y
+ CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+ CONFIG_UBSAN=y
+ CONFIG_UBSAN_BOUNDS=y
+diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+index 6b36b7f5dcf96..aa947b0ce1eeb 100644
+--- a/tools/testing/selftests/lkdtm/tests.txt
++++ b/tools/testing/selftests/lkdtm/tests.txt
+@@ -72,7 +72,7 @@ USERCOPY_STACK_FRAME_FROM
+ USERCOPY_STACK_BEYOND
+ USERCOPY_KERNEL
+ STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+-CFI_FORWARD_PROTO
++#CFI_FORWARD_PROTO
+ FORTIFIED_STRSCPY
+ FORTIFIED_OBJECT
+ FORTIFIED_SUBOBJECT
+-- 
+2.30.2
 

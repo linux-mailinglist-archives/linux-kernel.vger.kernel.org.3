@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099DA4B9853
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 06:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2E04B9855
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 06:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234310AbiBQFcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 00:32:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44292 "EHLO
+        id S234331AbiBQFeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 00:34:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbiBQFcU (ORCPT
+        with ESMTP id S234096AbiBQFeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 00:32:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E99EBA1BC2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 21:32:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645075926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ixaC+WveNvHaDkBhw3sVXdx9/WgsexXW9FNcptE03U=;
-        b=TG9h3pRAp1iLNw7rbW2i2S5prYavXzXoc98FHrAzr/KPVoXlTumNq8uTYzD/yFNqTTOR8W
-        1pI58GiFhSYZG+Zov4vmQipDs6nv3UDIy9nxvcg5pxCh6Xi+t6TOrcBer5XcG158UiL3DT
-        U8kbmu4Opy9QdMGUHjfN1LXsa8YTqck=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-FUzy0dpJOrG-00P97P-avg-1; Thu, 17 Feb 2022 00:31:24 -0500
-X-MC-Unique: FUzy0dpJOrG-00P97P-avg-1
-Received: by mail-oi1-f199.google.com with SMTP id bb20-20020a056808169400b002cd940d6247so1881660oib.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 21:31:24 -0800 (PST)
+        Thu, 17 Feb 2022 00:34:17 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3701713701A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 21:34:04 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id om7so4527257pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 21:34:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8D3Z6SHi9rXAcsLdfMJxmtujjPxcEwgD3tdJ3a2pda0=;
+        b=fUJFnw01k85b8Yf/4JGOZNVSLgr2asDoHVekpX9rqL5ssRwHVWW1msTEtV+tW1CTAq
+         e3MlP9xIjspIlKi55yf0pijupjcXcs2KscrAqKRfoMfL3L5TuI+4CHXz2dQHsMWiPATe
+         vWV5lC5uPbXLaHDWI3Li2csPabNBUew0oOkME=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2ixaC+WveNvHaDkBhw3sVXdx9/WgsexXW9FNcptE03U=;
-        b=csiTMHu5Y/K7lm7N/dFuDxzsB6stqAcMP8d0IlK1nzhpXuiD08dFjCtC83KZN6+WDN
-         osiHU4dCKzMqNgKl4natV8MvG6aZvr636azFpw2nTJbWneu9Hw7D401P/TbIWapzwKvk
-         YxMmzkyOPTApV299VltwpG/KZWSmyHFp9Z5Tan0/Qf+a83mm9vsPeHzeFRrCNmXtL7v0
-         2VmxEY9dfK9hVU8TrjLZGdVg0cV1KzXzQfcFc92l1+/XMDbfL/T5EJlxT7+tGLZMiYEc
-         2ifyqXRcFYc1uuCwfh2iM00wCKZqekDGBP07RWGES6Tzbq41kfcQzWIX32n2X9oUzRMx
-         6IZQ==
-X-Gm-Message-State: AOAM533329bJflRtZC9iXsLHkkpgT1z5QVcRPgci4QWpDaBkzngLNHv0
-        ixxMQQHy27K+ID//R2dmV1mXj9t+zjmTRf62X3OkN/3zC2PqgiOESsXHfpeaFUS+qnMCQwO/rMR
-        t1veMc9r9SF7fs92dm73/VPYy
-X-Received: by 2002:a05:6870:a894:b0:d3:cc7:ac28 with SMTP id eb20-20020a056870a89400b000d30cc7ac28mr491733oab.207.1645075883502;
-        Wed, 16 Feb 2022 21:31:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwgOyeDMwJ516sad84JIJ6nVrFCyP8MKFMYWt+0bMrbpBDX1hyXK+FtkMWoj/raLhQWyulXow==
-X-Received: by 2002:a05:6870:a894:b0:d3:cc7:ac28 with SMTP id eb20-20020a056870a89400b000d30cc7ac28mr491718oab.207.1645075883290;
-        Wed, 16 Feb 2022 21:31:23 -0800 (PST)
-Received: from LeoBras.redhat.com ([2804:431:c7f1:c12c:38a3:24a6:f679:3afd])
-        by smtp.gmail.com with ESMTPSA id cm18sm8571688oab.7.2022.02.16.21.31.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8D3Z6SHi9rXAcsLdfMJxmtujjPxcEwgD3tdJ3a2pda0=;
+        b=UOZHSwK3Yv3tkWuq+x75Zlpa7ZS7ZsmBcQ/scWY7ZT4WlaNaX3wr3aXbcC2DqzZszy
+         EQs46vCR4M8NzlyelLiDCAdk5Tb8//IZWbh0l1IGvftyVdI1R26zMYk8/kBBX2ulvQsP
+         DuuZYpgvnD9HRfRfyMD1tcB29eMhUBJTo/QKUMdNFPj4QBgp0IgmPqIg7wLykBwiUTdF
+         jmCaN+b1zSZT4ugYsyUrgiXlc5VHEcfXDpZgDuxN7hxI/QVrwZw6V726rvb47wWs2JPM
+         4v8j7JppCKJWJIV4bez1gAH+qW4Ngbu31PdQafyb7x1hkKEWs50VGzsZT+Qi3Nhoq62d
+         Zk1g==
+X-Gm-Message-State: AOAM531gB35khjiTJi+Gmg8EX97RPOUWTq+oTgBrZkJ12+Miaz0ZoFpM
+        xAlji0RSxig/tcKjXekPIFWF7bcoaSo7j/Za
+X-Google-Smtp-Source: ABdhPJxNkq1zuGh2gcIzqnr1K1Pj6RLPmTp8xB4jXRH0uqFrHbtSGWvrSzUJJbmb7Wp16B2MKr1/vA==
+X-Received: by 2002:a17:902:f70c:b0:14e:f1a4:d894 with SMTP id h12-20020a170902f70c00b0014ef1a4d894mr1296612plo.65.1645076043624;
+        Wed, 16 Feb 2022 21:34:03 -0800 (PST)
+Received: from wmahon.c.googlers.com.com (218.180.124.34.bc.googleusercontent.com. [34.124.180.218])
+        by smtp.gmail.com with ESMTPSA id lk11sm68115pjb.31.2022.02.16.21.34.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 21:31:22 -0800 (PST)
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        David Gilbert <dgilbert@redhat.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     Leonardo Bras <leobras@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] x86/kvm/fpu: Remove kvm_vcpu_arch.guest_supported_xcr0
-Date:   Thu, 17 Feb 2022 02:30:30 -0300
-Message-Id: <20220217053028.96432-3-leobras@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220217053028.96432-1-leobras@redhat.com>
-References: <20220217053028.96432-1-leobras@redhat.com>
+        Wed, 16 Feb 2022 21:34:03 -0800 (PST)
+From:   William Mahon <wmahon@chromium.org>
+X-Google-Original-From: William Mahon <wmahon@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     William Mahon <wmahon@google.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org
+Subject: [PATCH] HID: Add mapping for KEY_APP_LAUNCHER
+Date:   Thu, 17 Feb 2022 05:33:57 +0000
+Message-Id: <20220217053354.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,114 +68,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_vcpu_arch currently contains the guest supported features in both
-guest_supported_xcr0 and guest_fpu.fpstate->user_xfeatures field.
+The App Launcher key is used to bring up the Launcher menu.
 
-Currently both fields are set to the same value in
-kvm_vcpu_after_set_cpuid() and are not changed anywhere else after that.
+This patch adds a new key definition KEY_APP_LAUNCHER and maps 0x0c02a28
+usage code to this new keycode. Additionally hid-debug is adjusted to
+recognize this new usage code as well.
 
-Since it's not good to keep duplicated data, remove guest_supported_xcr0.
-
-To keep the code more readable, introduce kvm_guest_supported_xcr()
-and kvm_guest_supported_xfd() to replace the previous usages of
-guest_supported_xcr0.
-
-Signed-off-by: Leonardo Bras <leobras@redhat.com>
+Signed-off-by: William Mahon <wmahon@google.com>
 ---
- arch/x86/include/asm/kvm_host.h |  1 -
- arch/x86/kvm/cpuid.c            |  5 +++--
- arch/x86/kvm/x86.c              | 20 +++++++++++++++-----
- 3 files changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 6dcccb304775..ec9830d2aabf 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -703,7 +703,6 @@ struct kvm_vcpu_arch {
- 	struct fpu_guest guest_fpu;
+ drivers/hid/hid-debug.c                | 1 +
+ drivers/hid/hid-input.c                | 2 ++
+ include/uapi/linux/input-event-codes.h | 2 ++
+ 3 files changed, 5 insertions(+)
+
+diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+index 01135713e8f9..36a42ad3b7bc 100644
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -930,6 +930,7 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[KEY_SCREENSAVER] = "ScreenSaver",
+ 	[KEY_VOICECOMMAND] = "VoiceCommand",
+ 	[KEY_EMOJI_PICKER] = "EmojiPicker",
++	[KEY_APP_LAUNCHER] = "AppLauncher",
+ 	[KEY_BRIGHTNESS_MIN] = "BrightnessMin",
+ 	[KEY_BRIGHTNESS_MAX] = "BrightnessMax",
+ 	[KEY_BRIGHTNESS_AUTO] = "BrightnessAuto",
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index eccd89b5ea9f..7c89260826b2 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -1162,6 +1162,8 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
  
- 	u64 xcr0;
--	u64 guest_supported_xcr0;
+ 		case 0x29d: map_key_clear(KEY_KBD_LAYOUT_NEXT);	break;
  
- 	struct kvm_pio_request pio;
- 	void *pio_data;
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 71125291c578..b8f8d268d058 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -282,6 +282,7 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_lapic *apic = vcpu->arch.apic;
- 	struct kvm_cpuid_entry2 *best;
-+	u64 guest_supported_xcr0;
- 
- 	best = kvm_find_cpuid_entry(vcpu, 1, 0);
- 	if (best && apic) {
-@@ -293,10 +294,10 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 		kvm_apic_set_version(vcpu);
- 	}
- 
--	vcpu->arch.guest_supported_xcr0 =
-+	guest_supported_xcr0 =
- 		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
- 
--	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
-+	vcpu->arch.guest_fpu.fpstate->user_xfeatures = guest_supported_xcr0;
- 
- 	kvm_update_pv_runtime(vcpu);
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 641044db415d..92177e2ff664 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -984,6 +984,18 @@ void kvm_load_host_xsave_state(struct kvm_vcpu *vcpu)
- }
- EXPORT_SYMBOL_GPL(kvm_load_host_xsave_state);
- 
-+static inline u64 kvm_guest_supported_xcr(struct kvm_vcpu *vcpu)
-+{
-+	u64 guest_supported_xcr0 = vcpu->arch.guest_fpu.fpstate->user_xfeatures;
++		case 0x2a2: map_key_clear(KEY_APP_LAUNCHER);	break;
 +
-+	return guest_supported_xcr0;
-+}
+ 		case 0x2c7: map_key_clear(KEY_KBDINPUTASSIST_PREV);		break;
+ 		case 0x2c8: map_key_clear(KEY_KBDINPUTASSIST_NEXT);		break;
+ 		case 0x2c9: map_key_clear(KEY_KBDINPUTASSIST_PREVGROUP);		break;
+diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+index 311a57f3e01a..fdf43cf14125 100644
+--- a/include/uapi/linux/input-event-codes.h
++++ b/include/uapi/linux/input-event-codes.h
+@@ -651,6 +651,8 @@
+ #define KEY_DATA			0x277
+ #define KEY_ONSCREEN_KEYBOARD		0x278
+ 
++#define KEY_APP_LAUNCHER		0x27c
 +
-+static inline u64 kvm_guest_supported_xfd(struct kvm_vcpu *vcpu)
-+{
-+	return kvm_guest_supported_xcr(vcpu) & XFEATURE_MASK_USER_DYNAMIC;
-+}
-+
- static int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
- {
- 	u64 xcr0 = xcr;
-@@ -1003,7 +1015,7 @@ static int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
- 	 * saving.  However, xcr0 bit 0 is always set, even if the
- 	 * emulated CPU does not support XSAVE (see kvm_vcpu_reset()).
- 	 */
--	valid_bits = vcpu->arch.guest_supported_xcr0 | XFEATURE_MASK_FP;
-+	valid_bits = kvm_guest_supported_xcr(vcpu) | XFEATURE_MASK_FP;
- 	if (xcr0 & ~valid_bits)
- 		return 1;
- 
-@@ -3706,8 +3718,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		    !guest_cpuid_has(vcpu, X86_FEATURE_XFD))
- 			return 1;
- 
--		if (data & ~(XFEATURE_MASK_USER_DYNAMIC &
--			     vcpu->arch.guest_supported_xcr0))
-+		if (data & ~(kvm_guest_supported_xfd(vcpu)))
- 			return 1;
- 
- 		fpu_update_guest_xfd(&vcpu->arch.guest_fpu, data);
-@@ -3717,8 +3728,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		    !guest_cpuid_has(vcpu, X86_FEATURE_XFD))
- 			return 1;
- 
--		if (data & ~(XFEATURE_MASK_USER_DYNAMIC &
--			     vcpu->arch.guest_supported_xcr0))
-+		if (data & ~(kvm_guest_supported_xfd(vcpu)))
- 			return 1;
- 
- 		vcpu->arch.guest_fpu.xfd_err = data;
+ #define BTN_TRIGGER_HAPPY		0x2c0
+ #define BTN_TRIGGER_HAPPY1		0x2c0
+ #define BTN_TRIGGER_HAPPY2		0x2c1
 -- 
-2.35.1
+2.35.1.265.g69c8d7142f-goog
 

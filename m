@@ -2,135 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F064BA097
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DEB4BA09C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240665AbiBQNGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:06:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38466 "EHLO
+        id S240681AbiBQNHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:07:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiBQNGL (ORCPT
+        with ESMTP id S240647AbiBQNHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:06:11 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607782A8D04;
-        Thu, 17 Feb 2022 05:05:57 -0800 (PST)
+        Thu, 17 Feb 2022 08:07:15 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D50105A9D;
+        Thu, 17 Feb 2022 05:07:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645103157; x=1676639157;
-  h=date:from:to:cc:subject:message-id:references:
+  t=1645103221; x=1676639221;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
    mime-version:in-reply-to;
-  bh=y40DBqaIdT6zBhrgCBj8cBu666AKZYDew2yl1iQwfVY=;
-  b=QuaHIKK7S+ggzo9G375dg6wtprYz5TJ2NrJZqgYDGBFF8rfQElQdq99w
-   k2ChiIpvxL+fKKVWWGuLU07PA32FSlBfXEJFI4enBoqPBqrK6KIxsepoh
-   JJN1L762kRXXcGSYcgUYWjt7LidlmREFzGAEceGGdhY8WQELUgs4pi+LG
-   lNPWDYZJGGOlo1n596auJXBMXKRL9Q+x5P6hMyYPajnPdLiAmFf7f3/wc
-   oNhBdGFpVpq1mKzFIqOXWshx11IB0GPIdUnky+R6DokqbI2I8oVFwhuOr
-   51S5grlv+auv8qh4cdCQ2tpnqEoFm6U3a+q/oXDxUuTrMg4bbuwDOjZGq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="251066649"
+  bh=xA8H4mCuPL0+Y5H2RRjONOFAaibouE9qYQsummWmUDo=;
+  b=aMNw7pRa+alHrCvUlPZSDNgXHuOgdVAYpRvtWtRYfQg8WRw8AXq72jmh
+   VRbPq0FdNtsyadDd/CuUxZ9cM/bdvP6d7/HKJ0DzM1RtKNNQky/1N0kD+
+   DxNK6T172poY8G9eRhOLRqpYvavLamNNSg7P12UxRRmqj+LETEYz7zDSQ
+   7u5OrHpqUn/VFu9N8OKfipFYEOKkl18iPI9rjporPOBrow12eeHol2sll
+   eBP1h231szuwPPwTRe44InuTf7f+EUpMxoxs4Eq4pRXRKLRv9i92roUPM
+   GhKGZTjWUTlJLPeE4IATQAjT2JC9xj2DMmu5+M17tSDeOkoUjaiVsQq5B
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="230830598"
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="251066649"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:05:54 -0800
+   d="scan'208";a="230830598"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:07:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="589386402"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Feb 2022 05:05:50 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKgTl-0000D7-BO; Thu, 17 Feb 2022 13:05:49 +0000
-Date:   Thu, 17 Feb 2022 21:05:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mtd@lists.infradead.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Liang Yang <liang.yang@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH RESEND v2 1/2] mtd: rawnand: meson: discard the common
- MMC sub clock framework
-Message-ID: <202202172131.hVJG538q-lkp@intel.com>
-References: <20220217063346.21691-2-liang.yang@amlogic.com>
+   d="scan'208";a="704790168"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga005.jf.intel.com with ESMTP; 17 Feb 2022 05:06:52 -0800
+Date:   Thu, 17 Feb 2022 21:06:31 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Linux API <linux-api@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v4 01/12] mm/shmem: Introduce F_SEAL_INACCESSIBLE
+Message-ID: <20220217130631.GB32679@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <20220118132121.31388-2-chao.p.peng@linux.intel.com>
+ <619547ad-de96-1be9-036b-a7b4e99b09a6@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220217063346.21691-2-liang.yang@amlogic.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <619547ad-de96-1be9-036b-a7b4e99b09a6@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liang,
+On Fri, Feb 11, 2022 at 03:33:35PM -0800, Andy Lutomirski wrote:
+> On 1/18/22 05:21, Chao Peng wrote:
+> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > 
+> > Introduce a new seal F_SEAL_INACCESSIBLE indicating the content of
+> > the file is inaccessible from userspace through ordinary MMU access
+> > (e.g., read/write/mmap). However, the file content can be accessed
+> > via a different mechanism (e.g. KVM MMU) indirectly.
+> > 
+> > It provides semantics required for KVM guest private memory support
+> > that a file descriptor with this seal set is going to be used as the
+> > source of guest memory in confidential computing environments such
+> > as Intel TDX/AMD SEV but may not be accessible from host userspace.
+> > 
+> > At this time only shmem implements this seal.
+> > 
+> 
+> I don't dislike this *that* much, but I do dislike this. F_SEAL_INACCESSIBLE
+> essentially transmutes a memfd into a different type of object.  While this
+> can apparently be done successfully and without races (as in this code),
+> it's at least awkward.  I think that either creating a special inaccessible
+> memfd should be a single operation that create the correct type of object or
+> there should be a clear justification for why it's a two-step process.
 
-I love your patch! Yet something to improve:
+Now one justification maybe from Stever's comment to patch-00: for ARM
+usage it can be used with creating a normal memfd, (partially)populate
+it with initial guest memory content (e.g. firmware), and then
+F_SEAL_INACCESSIBLE it just before the first time lunch of the guest in
+KVM (definitely the current code needs to be changed to support that).
 
-[auto build test ERROR on mtd/nand/next]
-[also build test ERROR on mtd/mtd/next mtd/mtd/fixes robh/for-next v5.17-rc4 next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Liang-Yang/refine-the-NFC-clock-framework/20220217-145053
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-config: hexagon-randconfig-r013-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172131.hVJG538q-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d3d7ef65145346ff8212125d56afff6290a5ab68
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Liang-Yang/refine-the-NFC-clock-framework/20220217-145053
-        git checkout d3d7ef65145346ff8212125d56afff6290a5ab68
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: __clk_get_name
-   >>> referenced by meson_nand.c
-   >>> mtd/nand/raw/meson_nand.o:(meson_nfc_probe) in archive drivers/built-in.a
-   >>> referenced by meson_nand.c
-   >>> mtd/nand/raw/meson_nand.o:(meson_nfc_probe) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: clk_divider_ops
-   >>> referenced by meson_nand.c
-   >>> mtd/nand/raw/meson_nand.o:(meson_nfc_probe) in archive drivers/built-in.a
-   >>> referenced by meson_nand.c
-   >>> mtd/nand/raw/meson_nand.o:(meson_nfc_probe) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: devm_clk_register
-   >>> referenced by meson_nand.c
-   >>> mtd/nand/raw/meson_nand.o:(meson_nfc_probe) in archive drivers/built-in.a
-   >>> referenced by meson_nand.c
-   >>> mtd/nand/raw/meson_nand.o:(meson_nfc_probe) in archive drivers/built-in.a
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Chao
+> 
+> (Imagine if the way to create an eventfd would be to call timerfd_create()
+> and then do a special fcntl to turn it into an eventfd but only if it's not
+> currently armed.  This would be weird.)

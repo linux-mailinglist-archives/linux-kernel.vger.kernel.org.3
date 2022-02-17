@@ -2,93 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C685F4B98F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215F34B98F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbiBQGKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:10:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54068 "EHLO
+        id S235208AbiBQGLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:11:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235170AbiBQGKd (ORCPT
+        with ESMTP id S235194AbiBQGLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:10:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811BDC7D49;
-        Wed, 16 Feb 2022 22:10:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17570616A4;
-        Thu, 17 Feb 2022 06:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3767C340E8;
-        Thu, 17 Feb 2022 06:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645078208;
-        bh=i3fhCS7y6EEHohO6KNRuRf7uAzQv8fU9N54p/nBpQuw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nN7uM8xTOeEfeH3sIbZ7M6bnyYm46Skv29uEWZu0tUGdRPj9d2cYRFd59U2mss+oj
-         VSHFt0sASkvxbrfxBUhQQnRNiNXb/5LBFWAXHsOIIgOGNDJa3Nav9RcFkjKtSPPdBf
-         cBqQ+d194G7Yo0qUDvCTsEP4jU6LfhYiUQAr3ZYWh/g1PXHu/5Y96ncwadnOUrBLSS
-         bWDNPhJlGwX1k6tURYjZ3cMMoqSUEssSyPd0zwID91fjv6pRAYXOUBUvbnYHVTiZ/+
-         dpWKM230JCHLNqFCXbM8mwFLOT87isHWV3lwMA5s5QBI4NYLrR3k5lPxgOzEBu20Y/
-         V28W70niycPVQ==
-Date:   Thu, 17 Feb 2022 11:40:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [REPOST PATCH v4 08/13] drm/msm/disp/dpu1: Don't use DSC with
- mode_3d
-Message-ID: <Yg3mvEvqYs89dJWI@matsya>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-9-vkoul@kernel.org>
- <67006cc4-3385-fe03-bb4d-58623729a8a8@quicinc.com>
+        Thu, 17 Feb 2022 01:11:01 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DF578C7E91;
+        Wed, 16 Feb 2022 22:10:42 -0800 (PST)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Thu, 17 Feb 2022 14:10:10
+ +0800 (GMT+08:00)
+X-Originating-IP: [180.169.129.130]
+Date:   Thu, 17 Feb 2022 14:10:10 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "Jing Leng" <3090101217@zju.edu.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        "Jing Leng" <jleng@ambarella.com>, ruslan.bilovol@gmail.com,
+        jbrunet@baylibre.com, pavel.hofman@ivitera.com, pawell@cadence.com,
+        jackp@codeaurora.org, balbi@kernel.org, colin.king@intel.com
+Subject: [PATCH v3] usb: gadget: f_uac2: fix superspeed transfer
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20220217055503.8057-1-3090101217@zju.edu.cn>
+References: <YgpruynyO1AJr7bn@kroah.com>
+ <20220217055503.8057-1-3090101217@zju.edu.cn>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67006cc4-3385-fe03-bb4d-58623729a8a8@quicinc.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <258cfffe.b20d3.17f064d6977.Coremail.3090101217@zju.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: by_KCgDHzyPC5g1i7rLzAQ--.39975W
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIEBVNG3FjlrQAFsc
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-02-22, 19:11, Abhinav Kumar wrote:
-> 
-> 
-> On 2/10/2022 2:34 AM, Vinod Koul wrote:
-> > We cannot enable mode_3d when we are using the DSC. So pass
-> > configuration to detect DSC is enabled and not enable mode_3d
-> > when we are using DSC
-> > 
-> > We add a helper dpu_encoder_helper_get_dsc() to detect dsc
-> > enabled and pass this to .setup_intf_cfg()
-> > 
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> 
-> We should not use 3D mux only when we use DSC merge topology.
-> I agree that today we use only 2-2-1 topology for DSC which means its using
-> DSC merge.
-> 
-> But generalizing that 3D mux should not be used for DSC is not right.
-> 
-> You can detect DSC merge by checking if there are two encoders and one
-> interface in the topology and if so, you can disable 3D mux.
+SGkgR3JlZyBLSCwKCjEuIE9sZCB2ZXJzaW9uIGtlcm5lbCBjYW4gc3VwcG9ydCBzdXBlcnNwZWVk
+IHRyYW5zZmVyLCB0aGUgcHJvYmxlbQp3YXMgaW50cm9kdWNlZCBieSB0aGUgZm9sbG93aW5nIG1v
+ZGlmaWNhdGlvbjoKIGNvbW1pdCBlYWY2Y2JlMDk5MjA1MmE0NmQ5MzA0N2RjMTIyZmFkNTEyNmFh
+M2JkCiBBdXRob3I6IFJ1c2xhbiBCaWxvdm9sIDxydXNsYW4uYmlsb3ZvbEBnbWFpbC5jb20+CiBE
+YXRlOiAgIE1vbiBKdWwgMTIgMTQ6NTU6MjggMjAyMSArMDIwMAogCiAgICAgdXNiOiBnYWRnZXQ6
+IGZfdWFjMjogYWRkIHZvbHVtZSBhbmQgbXV0ZSBzdXBwb3J0CgoyLiBPbmx5IHNzX2VwX2ludF9k
+ZXNjIGVuZHBvaW50IGRvZXNuJ3QgaGF2ZSAnU3VwZXJTcGVlZCBFbmRwb2ludApDb21wYW5pb24g
+RGVzY3JpcHRvcicgZm9sbG93ZWQgKEFsbCBvdGhlciBlbmRwb2ludHMgaGF2ZSBpdCkuCgpTbyBp
+dCBpcyBhIGJ1Z2ZpeCByYXRoZXIgdGhhbiBhIGZlYXR1cmUuCgpUaGFua3MsCkppbmcgTGVuZw==
 
-Right now with DSC we disable that as suggested by Dmitry last time.
-Whenever we introduce merge we should revisit this, for now this should
-suffice
-
--- 
-~Vinod

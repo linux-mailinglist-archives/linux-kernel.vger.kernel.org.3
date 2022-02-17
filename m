@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748B24BA889
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235BC4BA890
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244548AbiBQSk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:40:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35930 "EHLO
+        id S244509AbiBQSmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:42:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244424AbiBQSkp (ORCPT
+        with ESMTP id S244500AbiBQSmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:40:45 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4ECD4E382
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:40:30 -0800 (PST)
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 17 Feb 2022 13:42:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A747EDFE1;
+        Thu, 17 Feb 2022 10:41:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 557D93F1D0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 18:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645123229;
-        bh=7ooOvkO5crxAahOT6RtL+CQVZ5kUZYq///EEcKWp2OU=;
-        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-         Content-Type:Date:Message-ID;
-        b=CkqDbVYmeSxzIP/DHPYvQRsrZg9pWdcKXbzGN3vNbBDomiDsOpJkwYEG7GkpORHev
-         O4OznHuKkqznrY3oquwwRbgqysjRo/GI51+a8bzlqcCgEX+F+GpzBrHntO4sXNTv5s
-         6kXgzK9CSG04vwYQeuyJqOTKBHHW4jqSoc9VV99V2SlCNdoc2Clq2R5gb/vfdGUX2i
-         D0DPi1V+QTo71zmxwCesUxw4W8KJsybjR2IrNiOir0+ZrmSTjRKtvcTLDvHZNFrjDA
-         scSwXOZKZHMNLozuwMHOjrmoomcfY4PytPZm6dAtuz1tpLlFHL27agsoNusrrqGGy7
-         tiDCWhyXyf5IQ==
-Received: by mail-pj1-f71.google.com with SMTP id j23-20020a17090a7e9700b001b8626c9170so6905910pjl.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:40:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
-         :comments:mime-version:content-id:content-transfer-encoding:date
-         :message-id;
-        bh=7ooOvkO5crxAahOT6RtL+CQVZ5kUZYq///EEcKWp2OU=;
-        b=DgKwB51OMNNPdQs52KE4ch4uJcfwH3dmeZJ/LpnxqyOHSIrj1M8+U7zaq68pqamI8s
-         X0ZmBZWinw4FdrcynRMYe3W6Ly8Dl8aZ+SDAaK6Jn47/IumhxFeZE+POuNQagheBIx1X
-         jxy76orILVMbtkbJejx8x7ZFfwXUZI+QDriKD/Auq4caR4CgFaENrdRLCt2JY6SN1+5X
-         c//vfo13x0htS2Zyw3lauMWXYIiHgAUEC3w1/zTdMgXb/sSNjFYkfo4gGsytWh89oLF8
-         sT0Dlv6yh9ojNntnuzbHdZWnVOU/0nwk8Sg4HhWovGTcQO/tNe6sLg+T9VXUbJf/V5F1
-         j1dw==
-X-Gm-Message-State: AOAM533PtLZOMZ2uXrATXviD2Gg0rSYb6nSdyIRG1R2f+JIgxc1UA+dl
-        a3eg5JiJkU4pI9Kon2PM4YHzgBUheuiUlT+JZnqGxw8QrWW9ZMioKIbFvgVmKtXrHsOfA5bEFWi
-        I8pa3rdTLqMcbUpS//Pf+5Isa2OwgXBEMKieskwriAg==
-X-Received: by 2002:a62:7c41:0:b0:4e1:3185:cb21 with SMTP id x62-20020a627c41000000b004e13185cb21mr4335306pfc.82.1645123228104;
-        Thu, 17 Feb 2022 10:40:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw1j6hRPt8S+AGRaraH0lCVlpuJ00sUt6A84+Z9qKaSDnJRW84LHgbvW3WQnWrn497XT88kXA==
-X-Received: by 2002:a62:7c41:0:b0:4e1:3185:cb21 with SMTP id x62-20020a627c41000000b004e13185cb21mr4335291pfc.82.1645123227869;
-        Thu, 17 Feb 2022 10:40:27 -0800 (PST)
-Received: from famine.localdomain ([50.125.80.157])
-        by smtp.gmail.com with ESMTPSA id n29sm8929844pgc.10.2022.02.17.10.40.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Feb 2022 10:40:27 -0800 (PST)
-Received: by famine.localdomain (Postfix, from userid 1000)
-        id AC2D960DD1; Thu, 17 Feb 2022 10:40:26 -0800 (PST)
-Received: from famine (localhost [127.0.0.1])
-        by famine.localdomain (Postfix) with ESMTP id A4DFB9FAC3;
-        Thu, 17 Feb 2022 10:40:26 -0800 (PST)
-From:   Jay Vosburgh <jay.vosburgh@canonical.com>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-cc:     Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jeff Garzik <jeff@garzik.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] bonding: force carrier update when releasing slave
-In-reply-to: <1645021088-38370-1-git-send-email-zhangchangzhong@huawei.com>
-References: <1645021088-38370-1-git-send-email-zhangchangzhong@huawei.com>
-Comments: In-reply-to Zhang Changzhong <zhangchangzhong@huawei.com>
-   message dated "Wed, 16 Feb 2022 22:18:08 +0800."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <18165.1645123226.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 17 Feb 2022 10:40:26 -0800
-Message-ID: <18166.1645123226@famine>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88D6E61B83;
+        Thu, 17 Feb 2022 18:41:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E4A13C340E8;
+        Thu, 17 Feb 2022 18:41:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645123307;
+        bh=zPXGLyQABZXQ8tHOqgxvjFHnUe5zxCmVg5uIV2tzmVM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=HLJpFpQFqC44p+gOkjYhj3CBXxxohepzPgSWp4Dh9fKM5rbV+SKmJHMXWHOsvzyUw
+         1lKghm/NYETvdDs6y9EPJmp3FtXK9c89WFlLFjk6BJpEB1J0VDtsD0iQ7zbSxm6FYW
+         s2PtyxkNYhXfvbJwjkkjWGI9vpDLUNB0mrSJ4vgohgf+roTbhpu5h3dWPIWczQp66Y
+         QjhghOqn3jDgKc3QtBxVryjBxU/VmFVAbKzCJhtaykxkqv5T9vXbZVDhxDQwBvwrac
+         uFIH1PXtF2gamA/8O3Qquleo3DQV0bQwS7af+m4s/54neXAYAwUFlU6mC5ILHpSZ+w
+         Q47lQt80quklA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1EB6E6D447;
+        Thu, 17 Feb 2022 18:41:47 +0000 (UTC)
+Subject: Re: [GIT PULL] perf tools fixes for v5.17: 2nd batch
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220217153627.308659-1-acme@kernel.org>
+References: <20220217153627.308659-1-acme@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220217153627.308659-1-acme@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.17-2022-02-17
+X-PR-Tracked-Commit-Id: 31ded1535e3182778a1d0e5c32711f55da3bc512
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2dd3a8a139082679b7a73fc32596aa667b0841d1
+Message-Id: <164512330784.3768.5230087658793621678.pr-tracker-bot@kernel.org>
+Date:   Thu, 17 Feb 2022 18:41:47 +0000
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Changbin Du <changbin.du@gmail.com>,
+        German Gomez <german.gomez@arm.com>,
+        James Clark <james.clark@arm.com>,
+        "Justin M . Forbes" <jforbes@fedoraproject.org>,
+        Kees Kook <keescook@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,55 +77,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhang Changzhong <zhangchangzhong@huawei.com> wrote:
+The pull request you sent on Thu, 17 Feb 2022 12:36:27 -0300:
 
->In __bond_release_one(), bond_set_carrier() is only called when bond
->device has no slave. Therefore, if we remove the up slave from a master
->with two slaves and keep the down slave, the master will remain up.
->
->Fix this by moving bond_set_carrier() out of if (!bond_has_slaves(bond))
->statement.
->
->Reproducer:
->$ insmod bonding.ko mode=3D0 miimon=3D100 max_bonds=3D2
->$ ifconfig bond0 up
->$ ifenslave bond0 eth0 eth1
->$ ifconfig eth0 down
->$ ifenslave -d bond0 eth1
->$ cat /proc/net/bonding/bond0
->
->Fixes: ff59c4563a8d ("[PATCH] bonding: support carrier state for master")
->Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.17-2022-02-17
 
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2dd3a8a139082679b7a73fc32596aa667b0841d1
 
+Thank you!
 
->---
-> drivers/net/bonding/bond_main.c | 5 ++---
-> 1 file changed, 2 insertions(+), 3 deletions(-)
->
->diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_m=
-ain.c
->index 238b56d..aebeb46 100644
->--- a/drivers/net/bonding/bond_main.c
->+++ b/drivers/net/bonding/bond_main.c
->@@ -2379,10 +2379,9 @@ static int __bond_release_one(struct net_device *b=
-ond_dev,
-> 		bond_select_active_slave(bond);
-> 	}
-> =
-
->-	if (!bond_has_slaves(bond)) {
->-		bond_set_carrier(bond);
->+	bond_set_carrier(bond);
->+	if (!bond_has_slaves(bond))
-> 		eth_hw_addr_random(bond_dev);
->-	}
-> =
-
-> 	unblock_netpoll_tx();
-> 	synchronize_rcu();
->-- =
-
->2.9.5
->
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

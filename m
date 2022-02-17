@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753724B98D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAC54B98D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbiBQGJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:09:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50904 "EHLO
+        id S231715AbiBQGJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:09:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235003AbiBQGJX (ORCPT
+        with ESMTP id S235027AbiBQGJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:09:23 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CA129ADF2;
-        Wed, 16 Feb 2022 22:09:06 -0800 (PST)
+        Thu, 17 Feb 2022 01:09:25 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11073C7D49;
+        Wed, 16 Feb 2022 22:09:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645078146; x=1676614146;
+  t=1645078151; x=1676614151;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=CGoveBkiGtagOkLFxTBBjwIUEuvWkhHcr6NS8Gpw0kg=;
-  b=yOYxEmL/eNT7RbjLHEgVlQqpEnaU70d41HdehPh/0XwqujLGIaNRq7Tj
-   WMNVix7DKgxbzev1iouaAmoq5Hgr4pyz3BD8198wb3G9QfHPhDHGy2Lps
-   MIwazIDaNZghTAWswDC1bpBJ8kCa63QzwrFJL+se5+Twihgc7IRzrMyTp
+  bh=QQ/2viS8Q9L2cIJS//+xhXEH9b7Enj4QgQhXozzmraA=;
+  b=zNpkDjvoIpGFqrmWyR/kZZwzbzvlncKW9i2XJPS2nzUt05F39z25SLLk
+   c7FwCu+qaqco0rItWMDsCzEOlET7VZbfSypR09y2J71XfB/dOx6MGhyHO
+   uL+/UmOMLiA/kB8OgW3fybF7hPAiJXrCsp2bKR+i/7ZzdV/4qq+onR5Gl
    8=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 22:09:06 -0800
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 22:09:11 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:09:05 -0800
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:09:10 -0800
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 22:09:03 -0800
+ 15.2.986.15; Wed, 16 Feb 2022 22:09:09 -0800
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 16 Feb 2022 22:08:57 -0800
+ 15.2.922.19; Wed, 16 Feb 2022 22:09:03 -0800
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <swboyd@chromium.org>, <judyhsiao@chromium.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v14 04/10] ASoC: qcom: Add helper function to get dma control and lpaif handle
-Date:   Thu, 17 Feb 2022 11:37:40 +0530
-Message-ID: <1645078066-9365-5-git-send-email-quic_srivasam@quicinc.com>
+Subject: [PATCH v14 05/10] ASoC: qcom: Add register definition for codec rddma and wrdma
+Date:   Thu, 17 Feb 2022 11:37:41 +0530
+Message-ID: <1645078066-9365-6-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
 References: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
@@ -70,184 +70,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support function to get dma control and lpaif handle to avoid
-repeated code in platform driver
+Add register definitions for codec read dma and write dma
+lpass interface.
 
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/lpass-platform.c | 110 +++++++++++++++++++++++-----------------
- 1 file changed, 63 insertions(+), 47 deletions(-)
+ sound/soc/qcom/lpass-lpaif-reg.h | 127 +++++++++++++++++++++++++++++++++++++--
+ sound/soc/qcom/lpass.h           |  21 +++++++
+ 2 files changed, 142 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/qcom/lpass-platform.c b/sound/soc/qcom/lpass-platform.c
-index a44162c..74ddc3f 100644
---- a/sound/soc/qcom/lpass-platform.c
-+++ b/sound/soc/qcom/lpass-platform.c
-@@ -177,6 +177,46 @@ static int lpass_platform_pcmops_close(struct snd_soc_component *component,
- 	return 0;
- }
+diff --git a/sound/soc/qcom/lpass-lpaif-reg.h b/sound/soc/qcom/lpass-lpaif-reg.h
+index 2eb03ad..6d9d9d1 100644
+--- a/sound/soc/qcom/lpass-lpaif-reg.h
++++ b/sound/soc/qcom/lpass-lpaif-reg.h
+@@ -74,6 +74,21 @@
+ #define LPAIF_IRQSTAT_REG(v, port)	LPAIF_IRQ_REG_ADDR(v, 0x4, (port))
+ #define LPAIF_IRQCLEAR_REG(v, port)	LPAIF_IRQ_REG_ADDR(v, 0xC, (port))
  
-+static void __lpass_get_lpaif_handle(const struct snd_pcm_substream *substream,
-+				     struct snd_soc_component *component,
-+				     struct lpaif_dmactl **dmactl, int *id, struct regmap **map)
-+{
-+	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
-+	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(soc_runtime, 0);
-+	struct lpass_data *drvdata = snd_soc_component_get_drvdata(component);
-+	struct snd_pcm_runtime *rt = substream->runtime;
-+	struct lpass_pcm_data *pcm_data = rt->private_data;
-+	struct lpass_variant *v = drvdata->variant;
-+	unsigned int dai_id = cpu_dai->driver->id;
-+	struct lpaif_dmactl *l_dmactl = NULL;
-+	struct regmap *l_map = NULL;
-+	int l_id = 0;
++/* LPAIF RXTX IRQ */
++#define LPAIF_RXTX_IRQ_REG_ADDR(v, addr, port) \
++		(v->rxtx_irq_reg_base + (addr) + v->rxtx_irq_reg_stride * (port))
 +
++#define LPAIF_RXTX_IRQEN_REG(v, port) LPAIF_RXTX_IRQ_REG_ADDR(v, 0x0, port)
++#define LPAIF_RXTX_IRQSTAT_REG(v, port) LPAIF_RXTX_IRQ_REG_ADDR(v, 0x4, port)
++#define LPAIF_RXTX_IRQCLEAR_REG(v, port) LPAIF_RXTX_IRQ_REG_ADDR(v, 0xC, port)
++
++/* LPAIF VA IRQ */
++#define LPAIF_VA_IRQ_REG_ADDR(v, addr, port) \
++		(v->va_irq_reg_base + (addr) + v->va_irq_reg_stride * (port))
++
++#define LPAIF_VA_IRQEN_REG(v, port) LPAIF_VA_IRQ_REG_ADDR(v, 0x0, port)
++#define LPAIF_VA_IRQSTAT_REG(v, port) LPAIF_VA_IRQ_REG_ADDR(v, 0x4, port)
++#define LPAIF_VA_IRQCLEAR_REG(v, port) LPAIF_VA_IRQ_REG_ADDR(v, 0xC, port)
+ 
+ #define LPASS_HDMITX_APP_IRQ_REG_ADDR(v, addr)  \
+ 	((v->hdmi_irq_reg_base) + (addr))
+@@ -139,12 +154,112 @@
+ 		(LPAIF_INTFDMA_REG(v, chan, reg, dai_id)) : \
+ 		LPAIF_WRDMA##reg##_REG(v, chan))
+ 
+-#define LPAIF_DMACTL_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, chan, dir, CTL, dai_id)
+-#define LPAIF_DMABASE_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, chan, dir, BASE, dai_id)
+-#define	LPAIF_DMABUFF_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, chan, dir, BUFF, dai_id)
+-#define LPAIF_DMACURR_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, chan, dir, CURR, dai_id)
+-#define	LPAIF_DMAPER_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, chan, dir, PER, dai_id)
+-#define	LPAIF_DMAPERCNT_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, chan, dir, PERCNT, dai_id)
++#define LPAIF_DMACTL_REG(v, chan, dir, dai_id) \
++	(is_cdc_dma_port(dai_id) ? \
++	__LPAIF_CDC_DMA_REG(v, chan, dir, CTL, dai_id) : \
++	__LPAIF_DMA_REG(v, chan, dir, CTL, dai_id))
++#define LPAIF_DMABASE_REG(v, chan, dir, dai_id) \
++	(is_cdc_dma_port(dai_id) ? \
++	__LPAIF_CDC_DMA_REG(v, chan, dir, BASE, dai_id) : \
++	__LPAIF_DMA_REG(v, chan, dir, BASE, dai_id))
++#define LPAIF_DMABUFF_REG(v, chan, dir, dai_id) \
++	(is_cdc_dma_port(dai_id) ? \
++	__LPAIF_CDC_DMA_REG(v, chan, dir, BUFF, dai_id) : \
++	__LPAIF_DMA_REG(v, chan, dir, BUFF, dai_id))
++#define LPAIF_DMACURR_REG(v, chan, dir, dai_id) \
++	(is_cdc_dma_port(dai_id) ? \
++	__LPAIF_CDC_DMA_REG(v, chan, dir, CURR, dai_id) : \
++	__LPAIF_DMA_REG(v, chan, dir, CURR, dai_id))
++#define LPAIF_DMAPER_REG(v, chan, dir, dai_id)  \
++	(is_cdc_dma_port(dai_id) ? \
++	__LPAIF_CDC_DMA_REG(v, chan, dir, PER, dai_id) : \
++	__LPAIF_DMA_REG(v, chan, dir, PER, dai_id))
++#define LPAIF_DMAPERCNT_REG(v, chan, dir, dai_id) \
++	(is_cdc_dma_port(dai_id) ? \
++	__LPAIF_CDC_DMA_REG(v, chan, dir, PERCNT, dai_id) : \
++	__LPAIF_DMA_REG(v, chan, dir, PERCNT, dai_id))
++
++#define LPAIF_CDC_RDMA_REG_ADDR(v, addr, chan, dai_id) \
++	(is_rxtx_cdc_dma_port(dai_id) ? \
++	(v->rxtx_rdma_reg_base + (addr) + v->rxtx_rdma_reg_stride * (chan)) : \
++	(v->va_rdma_reg_base + (addr) + v->va_rdma_reg_stride * (chan)))
++
++#define LPAIF_CDC_RXTX_RDMACTL_REG(v, chan, dai_id) \
++		LPAIF_CDC_RDMA_REG_ADDR(v, 0x00, (chan), dai_id)
++#define LPAIF_CDC_RXTX_RDMABASE_REG(v, chan, dai_id) \
++		LPAIF_CDC_RDMA_REG_ADDR(v, 0x04, (chan), dai_id)
++#define LPAIF_CDC_RXTX_RDMABUFF_REG(v, chan, dai_id) \
++		LPAIF_CDC_RDMA_REG_ADDR(v, 0x08, (chan), dai_id)
++#define LPAIF_CDC_RXTX_RDMACURR_REG(v, chan, dai_id) \
++		LPAIF_CDC_RDMA_REG_ADDR(v, 0x0C, (chan), dai_id)
++#define LPAIF_CDC_RXTX_RDMAPER_REG(v, chan, dai_id) \
++		LPAIF_CDC_RDMA_REG_ADDR(v, 0x10, (chan), dai_id)
++#define LPAIF_CDC_RXTX_RDMA_INTF_REG(v, chan, dai_id) \
++	LPAIF_CDC_RDMA_REG_ADDR(v, 0x50, (chan), dai_id)
++
++#define LPAIF_CDC_VA_RDMACTL_REG(v, chan, dai_id) LPAIF_CDC_RDMA_REG_ADDR(v, 0x00, (chan), dai_id)
++#define LPAIF_CDC_VA_RDMABASE_REG(v, chan, dai_id) LPAIF_CDC_RDMA_REG_ADDR(v, 0x04, (chan), dai_id)
++#define LPAIF_CDC_VA_RDMABUFF_REG(v, chan, dai_id) LPAIF_CDC_RDMA_REG_ADDR(v, 0x08, (chan), dai_id)
++#define LPAIF_CDC_VA_RDMACURR_REG(v, chan, dai_id) LPAIF_CDC_RDMA_REG_ADDR(v, 0x0C, (chan), dai_id)
++#define LPAIF_CDC_VA_RDMAPER_REG(v, chan, dai_id) LPAIF_CDC_RDMA_REG_ADDR(v, 0x10, (chan), dai_id)
++#define LPAIF_CDC_VA_RDMA_INTF_REG(v, chan, dai_id) \
++	LPAIF_CDC_RDMA_REG_ADDR(v, 0x50, (chan), dai_id)
++
++#define LPAIF_CDC_WRDMA_REG_ADDR(v, addr, chan, dai_id) \
++	(is_rxtx_cdc_dma_port(dai_id) ? \
++	(v->rxtx_wrdma_reg_base + (addr) + \
++		v->rxtx_wrdma_reg_stride * (chan - v->rxtx_wrdma_channel_start)) : \
++	(v->va_wrdma_reg_base + (addr) + \
++		v->va_wrdma_reg_stride * (chan - v->va_wrdma_channel_start)))
++
++#define LPAIF_CDC_RXTX_WRDMACTL_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x00, (chan), dai_id)
++#define LPAIF_CDC_RXTX_WRDMABASE_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x04, (chan), dai_id)
++#define LPAIF_CDC_RXTX_WRDMABUFF_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x08, (chan), dai_id)
++#define LPAIF_CDC_RXTX_WRDMACURR_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x0C, (chan), dai_id)
++#define LPAIF_CDC_RXTX_WRDMAPER_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x10, (chan), dai_id)
++#define LPAIF_CDC_RXTX_WRDMA_INTF_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x50, (chan), dai_id)
++
++#define LPAIF_CDC_VA_WRDMACTL_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x00, (chan), dai_id)
++#define LPAIF_CDC_VA_WRDMABASE_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x04, (chan), dai_id)
++#define LPAIF_CDC_VA_WRDMABUFF_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x08, (chan), dai_id)
++#define LPAIF_CDC_VA_WRDMACURR_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x0C, (chan), dai_id)
++#define LPAIF_CDC_VA_WRDMAPER_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x10, (chan), dai_id)
++#define LPAIF_CDC_VA_WRDMA_INTF_REG(v, chan, dai_id) \
++	LPAIF_CDC_WRDMA_REG_ADDR(v, 0x50, (chan), dai_id)
++
++#define __LPAIF_CDC_RDDMA_REG(v, chan, dir, reg, dai_id) \
++		(is_rxtx_cdc_dma_port(dai_id) ? LPAIF_CDC_RXTX_RDMA##reg##_REG(v, chan, dai_id) : \
++			LPAIF_CDC_VA_RDMA##reg##_REG(v, chan, dai_id))
++
++#define __LPAIF_CDC_WRDMA_REG(v, chan, dir, reg, dai_id) \
++		(is_rxtx_cdc_dma_port(dai_id) ? LPAIF_CDC_RXTX_WRDMA##reg##_REG(v, chan, dai_id) : \
++			LPAIF_CDC_VA_WRDMA##reg##_REG(v, chan, dai_id))
++
++#define __LPAIF_CDC_DMA_REG(v, chan, dir, reg, dai_id) \
++		((dir ==  SNDRV_PCM_STREAM_PLAYBACK) ? \
++			__LPAIF_CDC_RDDMA_REG(v, chan, dir, reg, dai_id) : \
++			__LPAIF_CDC_WRDMA_REG(v, chan, dir, reg, dai_id))
++
++#define LPAIF_CDC_INTF_REG(v, chan, dir, dai_id) \
++		((dir ==  SNDRV_PCM_STREAM_PLAYBACK) ? \
++		LPAIF_CDC_RDMA_INTF_REG(v, chan, dai_id) : \
++		LPAIF_CDC_WRDMA_INTF_REG(v, chan, dai_id))
++
++#define LPAIF_INTF_REG(v, chan, dir, dai_id) \
++		(is_cdc_dma_port(dai_id) ? \
++		LPAIF_CDC_INTF_REG(v, chan, dir, dai_id) : \
++		LPAIF_DMACTL_REG(v, chan, dir, dai_id))
+ 
+ #define LPAIF_DMACTL_BURSTEN_SINGLE	0
+ #define LPAIF_DMACTL_BURSTEN_INCR4	1
+diff --git a/sound/soc/qcom/lpass.h b/sound/soc/qcom/lpass.h
+index b3752a3..210a099 100644
+--- a/sound/soc/qcom/lpass.h
++++ b/sound/soc/qcom/lpass.h
+@@ -38,6 +38,27 @@
+ 			return -EINVAL;         \
+ 	} while (0)
+ 
++static inline bool is_cdc_dma_port(int dai_id)
++{
 +	switch (dai_id) {
-+	case MI2S_PRIMARY ... MI2S_QUINARY:
-+		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
-+			l_id = pcm_data->dma_ch;
-+			l_dmactl = drvdata->rd_dmactl;
-+		} else {
-+			l_dmactl = drvdata->wr_dmactl;
-+			l_id = pcm_data->dma_ch - v->wrdma_channel_start;
-+		}
-+		l_map = drvdata->lpaif_map;
-+		break;
-+	case LPASS_DP_RX:
-+		l_id = pcm_data->dma_ch;
-+		l_dmactl = drvdata->hdmi_rd_dmactl;
-+		l_map = drvdata->hdmiif_map;
-+		break;
++	case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
++	case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
++	case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
++		return true;
 +	}
-+	if (dmactl)
-+		*dmactl = l_dmactl;
-+	if (id)
-+		*id = l_id;
-+	if (map)
-+		*map = l_map;
++	return false;
 +}
 +
- static int lpass_platform_pcmops_hw_params(struct snd_soc_component *component,
- 					   struct snd_pcm_substream *substream,
- 					   struct snd_pcm_hw_params *params)
-@@ -191,21 +231,15 @@ static int lpass_platform_pcmops_hw_params(struct snd_soc_component *component,
- 	unsigned int channels = params_channels(params);
- 	unsigned int regval;
- 	struct lpaif_dmactl *dmactl;
--	int id, dir = substream->stream;
-+	int id;
- 	int bitwidth;
- 	int ret, dma_port = pcm_data->i2s_port + v->dmactl_audif_start;
- 	unsigned int dai_id = cpu_dai->driver->id;
- 
--	if (dir ==  SNDRV_PCM_STREAM_PLAYBACK) {
--		id = pcm_data->dma_ch;
--		if (dai_id == LPASS_DP_RX)
--			dmactl = drvdata->hdmi_rd_dmactl;
--		else
--			dmactl = drvdata->rd_dmactl;
--
--	} else {
--		dmactl = drvdata->wr_dmactl;
--		id = pcm_data->dma_ch - v->wrdma_channel_start;
-+	__lpass_get_lpaif_handle(substream, component, &dmactl, &id, NULL);
-+	if (!dmactl) {
-+		dev_err(soc_runtime->dev, "%s: failed to get dmactl handle\n", __func__);
-+		return -EINVAL;
- 	}
- 
- 	bitwidth = snd_pcm_format_width(format);
-@@ -350,10 +384,11 @@ static int lpass_platform_pcmops_hw_free(struct snd_soc_component *component,
- 	struct regmap *map;
- 	unsigned int dai_id = cpu_dai->driver->id;
- 
--	if (dai_id == LPASS_DP_RX)
--		map = drvdata->hdmiif_map;
--	else
--		map = drvdata->lpaif_map;
-+	__lpass_get_lpaif_handle(substream, component, NULL, NULL, &map);
-+	if (!map) {
-+		dev_err(soc_runtime->dev, "%s: failed to get dmactl handle\n", __func__);
-+		return -EINVAL;
++static inline bool is_rxtx_cdc_dma_port(int dai_id)
++{
++	switch (dai_id) {
++	case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
++	case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
++		return true;
 +	}
- 
- 	reg = LPAIF_DMACTL_REG(v, pcm_data->dma_ch, substream->stream, dai_id);
- 	ret = regmap_write(map, reg, 0);
-@@ -379,22 +414,12 @@ static int lpass_platform_pcmops_prepare(struct snd_soc_component *component,
- 	int ret, id, ch, dir = substream->stream;
- 	unsigned int dai_id = cpu_dai->driver->id;
- 
--
- 	ch = pcm_data->dma_ch;
--	if (dir ==  SNDRV_PCM_STREAM_PLAYBACK) {
--		if (dai_id == LPASS_DP_RX) {
--			dmactl = drvdata->hdmi_rd_dmactl;
--			map = drvdata->hdmiif_map;
--		} else {
--			dmactl = drvdata->rd_dmactl;
--			map = drvdata->lpaif_map;
--		}
- 
--		id = pcm_data->dma_ch;
--	} else {
--		dmactl = drvdata->wr_dmactl;
--		id = pcm_data->dma_ch - v->wrdma_channel_start;
--		map = drvdata->lpaif_map;
-+	__lpass_get_lpaif_handle(substream, component, &dmactl, &id, &map);
-+	if (!dmactl) {
-+		dev_err(soc_runtime->dev, "%s: failed to get dmactl handle\n", __func__);
-+		return -EINVAL;
- 	}
- 
- 	ret = regmap_write(map, LPAIF_DMABASE_REG(v, ch, dir, dai_id),
-@@ -444,25 +469,15 @@ static int lpass_platform_pcmops_trigger(struct snd_soc_component *component,
- 	struct lpaif_dmactl *dmactl;
- 	struct regmap *map;
- 	int ret, ch, id;
--	int dir = substream->stream;
- 	unsigned int reg_irqclr = 0, val_irqclr = 0;
- 	unsigned int  reg_irqen = 0, val_irqen = 0, val_mask = 0;
- 	unsigned int dai_id = cpu_dai->driver->id;
- 
- 	ch = pcm_data->dma_ch;
--	if (dir ==  SNDRV_PCM_STREAM_PLAYBACK) {
--		id = pcm_data->dma_ch;
--		if (dai_id == LPASS_DP_RX) {
--			dmactl = drvdata->hdmi_rd_dmactl;
--			map = drvdata->hdmiif_map;
--		} else {
--			dmactl = drvdata->rd_dmactl;
--			map = drvdata->lpaif_map;
--		}
--	} else {
--		dmactl = drvdata->wr_dmactl;
--		id = pcm_data->dma_ch - v->wrdma_channel_start;
--		map = drvdata->lpaif_map;
-+	__lpass_get_lpaif_handle(substream, component, &dmactl, &id, &map);
-+	if (!dmactl) {
-+		dev_err(soc_runtime->dev, "%s: failed to get dmactl handle\n", __func__);
-+		return -EINVAL;
- 	}
- 
- 	switch (cmd) {
-@@ -597,10 +612,11 @@ static snd_pcm_uframes_t lpass_platform_pcmops_pointer(
- 	struct regmap *map;
- 	unsigned int dai_id = cpu_dai->driver->id;
- 
--	if (dai_id == LPASS_DP_RX)
--		map = drvdata->hdmiif_map;
--	else
--		map = drvdata->lpaif_map;
-+	__lpass_get_lpaif_handle(substream, component, NULL, NULL, &map);
-+	if (!map) {
-+		dev_err(soc_runtime->dev, "%s: failed to get dmactl handle\n", __func__);
-+		return -EINVAL;
-+	}
- 
- 	ch = pcm_data->dma_ch;
- 
++	return false;
++}
++
+ struct lpaif_i2sctl {
+ 	struct regmap_field *loopback;
+ 	struct regmap_field *spken;
 -- 
 2.7.4
 

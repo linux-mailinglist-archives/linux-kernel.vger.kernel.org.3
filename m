@@ -2,240 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE7C4BAA1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C93B4BAA26
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245442AbiBQTrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:47:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45364 "EHLO
+        id S245394AbiBQTrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:47:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245398AbiBQTrX (ORCPT
+        with ESMTP id S231135AbiBQTrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:47:23 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C652612C;
-        Thu, 17 Feb 2022 11:47:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645127228; x=1676663228;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sa7aViPTFZW/S8PPuxk06gAREtIDLIzIrwDUB7PFnCQ=;
-  b=bmqNYrSFNVx/qUb6wbrdBckLjgIX08RKG8onjgOwTED9nYkuZjCenvBB
-   OzDjb2UMt4SOOCx2OOcFn1OZmvKBk1cDtfgVWfrSX8Xg5QsZGCwho136D
-   YJIrE5fLtmbaRZ43AwKORx2dpay61dMnus71M/HZRd94tT4KEN6KC70fR
-   m0wNZ6+QeBLl/Vw0MvoBxYapyP1PjSccEiE/WhESgG8uyrZ+LwL4vJF0s
-   Ff22rHWtED5e/9qe4F79YLzpOWA25yNrKRUmLnxPEm1j/JntbBAWTRYsy
-   QYNNfrgWi5qmaG7Q4gMopjFZwlsIvT1B/ywXv1LqObi5SH70e5E8eZO01
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="251158970"
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="251158970"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:47:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="777506669"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Feb 2022 11:47:01 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKmk1-0000U7-5o; Thu, 17 Feb 2022 19:47:01 +0000
-Date:   Fri, 18 Feb 2022 03:46:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <error27@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 1/4] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <202202180117.mOkyPaZs-lkp@intel.com>
-References: <20220217105523.1525122-2-15330273260@189.cn>
+        Thu, 17 Feb 2022 14:47:20 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825A326549
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:47:03 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2d6923bca1aso34913267b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:47:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oaFgdGApNlDvtZyiIfo82SRxAus8TF8HrqjXlvq9h8Y=;
+        b=SuxQdh+t5+fvwh5ODRCj4O0o5dFuhnXt8wycvDS/oc9U/RxDeBZ3bX5ZeesGn6+oJY
+         CgPo+r2zBBVKinwJc2jONuwupZkCPpbAswzez7svHTfufRM0UpnHc0JQysuQUpfg39SP
+         AhXLqSKJ8RK3c/iQgxWFs5sMqgai7dSUoqMso=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oaFgdGApNlDvtZyiIfo82SRxAus8TF8HrqjXlvq9h8Y=;
+        b=ropDwHzriT53P2XN4BMshlzuatgQ5ccSa0knnRtXmxtbhj4ChyS5Yp/CNGTKdNV7uT
+         igPkf0HKpqWkc2CaPrN+k50YwVNWpeyTPS6bGcjTCLtqKi65bmYMoEJfaLBb2DFQ5AAn
+         sNHrfe4ElVS50eZZ/xfdYk2scuYEszfgJupjD6pPfiuSHuCETvPs/aqxhjh5IqhcomHv
+         S2GpokAZufg8pWJY0+dyEyEdZ58EjxKKzzb5TB6pLWx3nt6uCt7BJmGnxVNZoHV/XCwy
+         6IHtLxgs/sISpVOpA/FTcShL1rKUFv5IV3T6dehTUehFtp19Wp9AL1vUVO0pQ29Nh45Q
+         +b5Q==
+X-Gm-Message-State: AOAM530jTQ3uqheFP7sIOehNw0s2I86YuG9Yy+wL6zGbkEbhXXmOco5M
+        ekwIHBDqzcUBn/E+ZaFp2V6bKL7EQi6CinPBuBmh
+X-Google-Smtp-Source: ABdhPJyYFJ0q/2SlA60syxammhFOBpSQhcIB9lrLmw/nIlWery9i8zrN9e9Vgg9W2i5AsrahmkX7VAebgSiqcHvfTL4=
+X-Received: by 2002:a81:924a:0:b0:2d6:b588:bd0e with SMTP id
+ j71-20020a81924a000000b002d6b588bd0emr2097858ywg.402.1645127222718; Thu, 17
+ Feb 2022 11:47:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217105523.1525122-2-15330273260@189.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220128045004.4843-1-sunilvl@ventanamicro.com>
+ <877d9xx14f.fsf@igel.home> <9cd9f149-d2ea-eb55-b774-8d817b9b6cc9@gmx.de>
+ <87tud1vjn4.fsf@igel.home> <49d3aeab-1fe6-8d17-bc83-78f3555109c7@gmx.de>
+ <87pmnpvh66.fsf@igel.home> <20220217105450.GA20183@sunil-ThinkPad-T490>
+In-Reply-To: <20220217105450.GA20183@sunil-ThinkPad-T490>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 17 Feb 2022 11:46:52 -0800
+Message-ID: <CAOnJCULWjCHCCS7wzTBVsYcPzWPpL9jmS7xx5LUFT2tRvAZk6w@mail.gmail.com>
+Subject: Re: [PATCH] riscv/efi_stub: Fix get_boot_hartid_from_fdt() return value
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Andreas Schwab <schwab@linux-m68k.org>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sui,
+On Thu, Feb 17, 2022 at 2:55 AM Sunil V L <sunilvl@ventanamicro.com> wrote:
+>
+> On Mon, Feb 14, 2022 at 12:09:05PM +0100, Andreas Schwab wrote:
+> > On Feb 14 2022, Heinrich Schuchardt wrote:
+> >
+> > > On 2/14/22 11:15, Andreas Schwab wrote:
+> > >> On Feb 14 2022, Heinrich Schuchardt wrote:
+> > >>
+> > >>> set_boot_hartid() implies that the caller can change the boot hart ID.
+> > >>> As this is not a case this name obviously would be a misnomer.
+> > >>
+> > >> initialize_boot_hartid would fit better.
+> > >>
+> > >
+> > > Another misnomer.
+> >
+> > But the best fit so far.
+>
+> Can we use the name init_boot_hartid_from_fdt()? While I understand
+> Heinrich's point, I think since we have "_from_fdt", this may be fine.
+>
 
-Thank you for the patch! Perhaps something to improve:
+init_boot_hartid_from_fdt or parse_boot_hartid_from_fdt
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on robh/for-next v5.17-rc4 next-20220217]
-[cannot apply to mripard/sunxi/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+are definitely much better than the current one.
 
-url:    https://github.com/0day-ci/linux/commits/Sui-Jingfeng/drm-lsdc-add-drm-driver-for-loongson-display-controller/20220217-185718
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: csky-randconfig-s032-20220217 (https://download.01.org/0day-ci/archive/20220218/202202180117.mOkyPaZs-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/822d08dcd4408130e10897446cfdd640bcd53c8a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sui-Jingfeng/drm-lsdc-add-drm-driver-for-loongson-display-controller/20220217-185718
-        git checkout 822d08dcd4408130e10897446cfdd640bcd53c8a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash drivers/gpu/drm/lsdc/
+> I didn't rename the function since it was not recommended to do multiple
+> things in a "Fix" patch. If we can consider this as not very serious
+> issue which needs a "Fix" patch, then I can combine this patch with the
+> RISCV_EFI_BOOT_PROTOCOL patch series.
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+IMHO, it is okay to include this in the RISCV_EFI_BOOT_PROTOCOL series
+as we are not going to have hartid U32_MAX in a few months :)
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/lsdc/lsdc_pll.c:168:9: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/lsdc/lsdc_pll.c: note: in included file (through arch/csky/include/asm/io.h, include/linux/io.h, include/linux/irq.h, ...):
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
-   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
-   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
+> Hi Ard, let me know your suggestion on how to proceed with this.
+>
+> Thanks
+> Sunil
+> >
+> > --
+> > Andreas Schwab, schwab@linux-m68k.org
+> > GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+> > "And now for something completely different."
 
-vim +/__iomem +168 drivers/gpu/drm/lsdc/lsdc_pll.c
 
-   158	
-   159	/**
-   160	 * lsdc_pixpll_setup - ioremap the device dependent PLL registers
-   161	 *
-   162	 * @this: point to the object which this function is called from
-   163	 */
-   164	static int lsdc_pixpll_setup(struct lsdc_pll * const this)
-   165	{
-   166		this->mmio = ioremap(this->reg_base, this->reg_size);
-   167	
- > 168		drm_dbg(this->ddev, "PIXPLL%u REG[%x, %u] map to %llx\n",
-   169			this->index, this->reg_base, this->reg_size, (u64)this->mmio);
-   170	
-   171		return 0;
-   172	}
-   173	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Regards,
+Atish

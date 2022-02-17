@@ -2,214 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4FA4B9EB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0AD4B9EC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239799AbiBQLeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:34:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34290 "EHLO
+        id S234597AbiBQLf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:35:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239782AbiBQLeQ (ORCPT
+        with ESMTP id S239802AbiBQLfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:34:16 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF68A278295
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:34:01 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id gb39so6560953ejc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:34:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LIJbkcpxWhEu+HDqv6mv/542M4vTfuWftkC1BaPuPbU=;
-        b=TbT4HVYGoCKKxlNKiPmpU3SWwZu5CDTjF38mWAh6T0DazaZgHk+5lHNO40yFFoCoTJ
-         IhX5v53CL1y0eY6Bdqq1t2Zih8HsaZ0p9WiMQHisl/7D5UNkZv20RitrLquvOEsp7uZ8
-         2UOrYUbwo+MkwjM2gosoNiJxw+R7zAXFc42lLSMGTafO8g3dSGIgRFgCj0kPS5WGaJmq
-         OGUcbMkoR6mS7EZ9CLLKNKC4g+4cwCCWM2lYGVH8WGBInhQkswKz3DmFM6AnpiEF4tr8
-         WalK7TefoPlqQBGrhd9NNSP8YyvXhC6UAYqJ2+qziFFn8PPn+bfEI9C2KIcYA2gBPfKA
-         5dKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LIJbkcpxWhEu+HDqv6mv/542M4vTfuWftkC1BaPuPbU=;
-        b=zBl0XgLIN6Iss1SfuKAsn7SU8zVSiUJgItjyEwRo4cxcUSoWZpPaJTtIkT//4CjG/+
-         AsB0jtJJ9bIpZLDKB5FEJFHq3aSnODvjN0ehsnUDq7lIjNCtGsVzz6HrMtUvuVpB0vKj
-         /eToNigWS0ZL/QS/NL8EangIVu6nSucqNInlU9X9R3w9UAua8JTBf7yZrmc3EmeGAmXA
-         3oewD5MLstlcvdQEKdlY4CuKm7Jn0JkMsmlV8TSbJ/CCasMCEvyefYBxVgOBcl928aLo
-         2zx7thsEU6lNFlD1edgLTz4mMZ2mdHSHyQ3fOKvnuckxUWsD1ShlLycgrlXu8TX1jVTh
-         /UVA==
-X-Gm-Message-State: AOAM532MWGlEWZAipWBiA2MzbwtRbX8GGx694926IrHcKg+rnSQlbfmg
-        PPJda1MmdHfHlkWJx67uZN6qTQ==
-X-Google-Smtp-Source: ABdhPJw4Erll/uCqjzTBT96QBBylhZa1svkxPBZvtY01p3v7Q1PQeyr8NcLtaKJsoJkrerC/ucp6eA==
-X-Received: by 2002:a17:906:b57:b0:6ce:e31a:524 with SMTP id v23-20020a1709060b5700b006cee31a0524mr1969824ejg.290.1645097640461;
-        Thu, 17 Feb 2022 03:34:00 -0800 (PST)
-Received: from [192.168.1.9] (hst-221-75.medicom.bg. [84.238.221.75])
-        by smtp.googlemail.com with ESMTPSA id u4sm1076625ejn.216.2022.02.17.03.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 03:33:59 -0800 (PST)
-Message-ID: <55dbdf8b-290c-85ff-235e-9e5649540b6e@linaro.org>
-Date:   Thu, 17 Feb 2022 13:33:58 +0200
+        Thu, 17 Feb 2022 06:35:25 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377562A82E6;
+        Thu, 17 Feb 2022 03:35:06 -0800 (PST)
+X-UUID: 6506b093061d4570b82df3c4bbc2e244-20220217
+X-UUID: 6506b093061d4570b82df3c4bbc2e244-20220217
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1611236504; Thu, 17 Feb 2022 19:35:01 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 17 Feb 2022 19:34:59 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Feb 2022 19:34:58 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+CC:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, <yong.wu@mediatek.com>,
+        <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
+        <xueqi.zhang@mediatek.com>, <yen-chang.chen@mediatek.com>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>
+Subject: [PATCH v5 00/34] MT8195 IOMMU SUPPORT
+Date:   Thu, 17 Feb 2022 19:34:19 +0800
+Message-ID: <20220217113453.13658-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 5/6] venus: Add a handling of QC10C compressed format
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org
-Cc:     hverkuil-cisco@xs4all.nl
-References: <20220117155559.234026-1-stanimir.varbanov@linaro.org>
- <20220117155559.234026-6-stanimir.varbanov@linaro.org>
- <4e1cc50854da4075fc7ebf71e24aa8372905c668.camel@ndufresne.ca>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-In-Reply-To: <4e1cc50854da4075fc7ebf71e24aa8372905c668.camel@ndufresne.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset adds MT8195 iommu support.
 
+MT8195 have 3 IOMMU HWs. 2 IOMMU HW is for multimedia, and 1 IOMMU HW is
+for infra-master, like PCIe/USB.
 
-On 2/16/22 18:20, Nicolas Dufresne wrote:
-> Le lundi 17 janvier 2022 à 17:55 +0200, Stanimir Varbanov a écrit :
->> This adds QC10C compressed pixel format in the Venus driver, and
->> make it possible to discover from v4l2 clients.
->>
->> Note: The QC10C format shouldn't be possible to discpver by the
-> 
-> discpver -> discover
-> 
-> It is not super clear though, did you mean to say that it won't be enumerated
-> after the header have been parsed ?
+About the 2 MM IOMMU HW, something like this:
 
-The opposite. It will be enumerable by the client only after parsing the
-header.
+        IOMMU(VDO)          IOMMU(VPP)
+           |                   |
+      SMI_COMMON(VDO)      SMI_COMMON(VPP)
+      ---------------     ----------------
+      |      |   ...      |      |     ...
+    larb0 larb2  ...    larb1 larb3    ...
 
-> 
->> client if the decoded bitstream is not 10-bits.
->>
->> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->> ---
->>  drivers/media/platform/qcom/venus/helpers.c | 26 ++++-----------------
->>  drivers/media/platform/qcom/venus/vdec.c    | 19 ++++++++++++---
->>  2 files changed, 20 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
->> index adbfa4fbe139..69a9a9471a27 100644
->> --- a/drivers/media/platform/qcom/venus/helpers.c
->> +++ b/drivers/media/platform/qcom/venus/helpers.c
->> @@ -594,6 +594,8 @@ static u32 to_hfi_raw_fmt(u32 v4l2_fmt)
->>  		return HFI_COLOR_FORMAT_NV21;
->>  	case V4L2_PIX_FMT_QC08C:
->>  		return HFI_COLOR_FORMAT_NV12_UBWC;
->> +	case V4L2_PIX_FMT_QC10C:
->> +		return HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
->>  	default:
->>  		break;
->>  	}
->> @@ -1176,7 +1178,8 @@ int venus_helper_set_format_constraints(struct venus_inst *inst)
->>  	if (!IS_V6(inst->core))
->>  		return 0;
->>  
->> -	if (inst->opb_fmt == HFI_COLOR_FORMAT_NV12_UBWC)
->> +	if (inst->opb_fmt == HFI_COLOR_FORMAT_NV12_UBWC ||
->> +	    inst->opb_fmt == HFI_COLOR_FORMAT_YUV420_TP10_UBWC)
->>  		return 0;
->>  
->>  	pconstraint.buffer_type = HFI_BUFFER_OUTPUT2;
->> @@ -1747,27 +1750,6 @@ int venus_helper_get_out_fmts(struct venus_inst *inst, u32 v4l2_fmt,
->>  	if (!caps)
->>  		return -EINVAL;
->>  
->> -	if (inst->bit_depth == VIDC_BITDEPTH_10 &&
->> -	    inst->session_type == VIDC_SESSION_TYPE_DEC) {
->> -		found_ubwc =
->> -			find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
->> -					   HFI_COLOR_FORMAT_YUV420_TP10_UBWC);
->> -		found = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT2,
->> -					   HFI_COLOR_FORMAT_NV12);
->> -		if (found_ubwc && found) {
->> -			/*
->> -			 * Hard-code DPB buffers to be 10bit UBWC and decoder
->> -			 * output buffers in 8bit NV12 until V4L2 is able to
->> -			 * expose compressed/tiled formats to applications.
->> -			 */
->> -			*out_fmt = HFI_COLOR_FORMAT_YUV420_TP10_UBWC;
->> -			*out2_fmt = HFI_COLOR_FORMAT_NV12;
->> -			return 0;
->> -		}
->> -
->> -		return -EINVAL;
->> -	}
->> -
->>  	if (ubwc) {
->>  		ubwc_fmt = fmt | HFI_COLOR_FORMAT_UBWC_BASE;
->>  		found_ubwc = find_fmt_from_caps(caps, HFI_BUFFER_OUTPUT,
->> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
->> index eb02e45a512b..c8261c6cb0fb 100644
->> --- a/drivers/media/platform/qcom/venus/vdec.c
->> +++ b/drivers/media/platform/qcom/venus/vdec.c
->> @@ -35,6 +35,10 @@ static const struct venus_format vdec_formats[] = {
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->>  	}, {
->> +		.pixfmt = V4L2_PIX_FMT_QC10C,
->> +		.num_planes = 1,
->> +		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> +	},{
->>  		.pixfmt = V4L2_PIX_FMT_NV12,
->>  		.num_planes = 1,
->>  		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
->> @@ -114,6 +118,10 @@ find_format(struct venus_inst *inst, u32 pixfmt, u32 type)
->>  	    !venus_helper_check_format(inst, fmt[i].pixfmt))
->>  		return NULL;
->>  
->> +	if (V4L2_TYPE_IS_CAPTURE(type) && fmt[i].pixfmt == V4L2_PIX_FMT_QC10C &&
->> +	    !(inst->bit_depth == VIDC_BITDEPTH_10))
->> +		return NULL;
->> +
->>  	return &fmt[i];
->>  }
->>  
->> @@ -133,11 +141,16 @@ find_format_by_index(struct venus_inst *inst, unsigned int index, u32 type)
->>  		if (fmt[i].type != type)
->>  			continue;
->>  
->> -		if (V4L2_TYPE_IS_OUTPUT(type))
->> +		if (V4L2_TYPE_IS_OUTPUT(type)) {
->>  			valid = venus_helper_check_codec(inst, fmt[i].pixfmt);
->> -		else if (V4L2_TYPE_IS_CAPTURE(type))
->> +		} else if (V4L2_TYPE_IS_CAPTURE(type)) {
->>  			valid = venus_helper_check_format(inst, fmt[i].pixfmt);
->>  
->> +			if (fmt[i].pixfmt == V4L2_PIX_FMT_QC10C &&
->> +			    !(inst->bit_depth == VIDC_BITDEPTH_10))
->> +				valid = false;
->> +		}
->> +
->>  		if (k == index && valid)
->>  			break;
->>  		if (valid)
->> @@ -1537,7 +1550,7 @@ static const struct hfi_inst_ops vdec_hfi_ops = {
->>  static void vdec_inst_init(struct venus_inst *inst)
->>  {
->>  	inst->hfi_codec = HFI_VIDEO_CODEC_H264;
->> -	inst->fmt_out = &vdec_formats[7];
->> +	inst->fmt_out = &vdec_formats[8];
->>  	inst->fmt_cap = &vdec_formats[0];
->>  	inst->width = frame_width_min(inst);
->>  	inst->height = ALIGN(frame_height_min(inst), 32);
-> 
+these two MM IOMMU HW share a pgtable.
+
+About the INFRA IOMMU, it don't have larbs, the master connects the iommu
+directly. It use a independent pgtable.
+
+Also, mt8195 IOMMU bank supports. Normally the IOMMU register size only
+is 0x1000. In this IOMMU HW, the register size is 5 * 0x1000. each 0x1000
+is a bank. the banks' register look like this:
+     ----------------------------------------
+     |bank0  | bank1 | bank2 | bank3 | bank4|
+     ----------------------------------------
+     |global |
+     |control|         null
+     |regs   |
+     -----------------------------------------
+     |bank   |bank   |bank   |bank   |bank   |
+     |regs   |regs   |regs   |regs   |regs   |
+     |       |       |       |       |       |
+     -----------------------------------------
+All the banks share some global control registers, and each bank have its
+special bank registers, like pgtable base register, tlb operation registers,
+the fault status registers.
+ 
+In mt8195, we enable this bank feature for infra iommu, We put PCIe in bank0
+and USB in bank4. they have independent pgtable.
+
+This patchset bases on next-20220216 which has already contained the smi
+clean-up v10[1] patchset and the tlb logic patchset[2] for MediaTek iommu.
+
+[1] https://lore.kernel.org/linux-iommu/20220117070510.17642-1-yong.wu@mediatek.com/
+[2] https://lore.kernel.org/linux-mediatek/20211208120744.2415-1-dafna.hirschfeld@collabora.com/
+
+Change note:
+v5:1) Base on next-20220216
+   2) Remove a patch for kmalloc for protect buffer. keep the kzalloc for it.
+   3) minor fix from AngeloGioacchino, like rename the error label name
+   (data_unlock to err_unlock).
+   Note, keep the TODO for component compare_of[26/34].
+
+v4: https://lore.kernel.org/linux-iommu/20220125085634.17972-1-yong.wu@mediatek.com/
+   1) Base on v5.16-rc1
+   2) Base on tlb logic 2 patchset, some patches in v3 has already gone
+   through that patchset.
+   3) Due to the unreadable union for v1/v2(comment in 26/33 of v3), I
+   separate mtk_iommu_data for v1 and v2 totally, then remove mtk_iommu.h.
+   please see patch[26/35][27/35].
+   4) add two mutex for the internal data. patch[6/35][7/35].
+   5) add a new flag PM_CLK_AO.
+
+v3: https://lore.kernel.org/linux-mediatek/20210923115840.17813-1-yong.wu@mediatek.com/
+    1) base on v5.15-rc1
+    2) Adjust devlink with smi-common, not use the property(sub-sommon).
+    3) Adjust tlb_flush_all flow,
+       a) Fix tlb_flush_all only is supported in bank0.
+       b) add tlb-flush-all in the resume callback.
+       c) remove the pm status checking in tlb-flush-all.
+       The reason are showed in the commit message.
+    4) Allow IOMMU_DOMAIN_UNMANAGED since PCIe VFIO use that.
+    5) Fix a clk warning and a null abort when unbind the iommu driver.
+
+v2: https://lore.kernel.org/linux-mediatek/20210813065324.29220-1-yong.wu@mediatek.com/
+    1) Base on v5.14-rc1.
+    2) Fix build fail for arm32.
+    3) Fix dt-binding issue from Rob.
+    4) Fix the bank issue when tlb flush. v1 always use bank->base.
+    5) adjust devlink with smi-common since the node may be smi-sub-common.
+    6) other changes: like reword some commit message(removing many
+       "This patch..."); seperate serveral patches.
+
+v1: https://lore.kernel.org/linux-mediatek/20210630023504.18177-1-yong.wu@mediatek.com/
+    Base on v5.13-rc1
+
+Yong Wu (34):
+  dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
+  dt-bindings: mediatek: mt8195: Add binding for infra IOMMU
+  iommu/mediatek: Fix 2 HW sharing pgtable issue
+  iommu/mediatek: Add list_del in mtk_iommu_remove
+  iommu/mediatek: Remove clk_disable in mtk_iommu_remove
+  iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
+  iommu/mediatek: Add mutex for data in the mtk_iommu_domain
+  iommu/mediatek: Adapt sharing and non-sharing pgtable case
+  iommu/mediatek: Add 12G~16G support for multi domains
+  iommu/mediatek: Add a flag DCM_DISABLE
+  iommu/mediatek: Add a flag NON_STD_AXI
+  iommu/mediatek: Remove the granule in the tlb flush
+  iommu/mediatek: Always enable output PA over 32bits in isr
+  iommu/mediatek: Add SUB_COMMON_3BITS flag
+  iommu/mediatek: Add IOMMU_TYPE flag
+  iommu/mediatek: Contain MM IOMMU flow with the MM TYPE
+  iommu/mediatek: Adjust device link when it is sub-common
+  iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
+  iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
+  iommu/mediatek: Add infra iommu support
+  iommu/mediatek: Add PCIe support
+  iommu/mediatek: Add mt8195 support
+  iommu/mediatek: Only adjust code about register base
+  iommu/mediatek: Just move code position in hw_init
+  iommu/mediatek: Separate mtk_iommu_data for v1 and v2
+  iommu/mediatek: Remove mtk_iommu.h
+  iommu/mediatek-v1: Just rename mtk_iommu to mtk_iommu_v1
+  iommu/mediatek: Add mtk_iommu_bank_data structure
+  iommu/mediatek: Initialise bank HW for each a bank
+  iommu/mediatek: Change the domid to iova_region_id
+  iommu/mediatek: Get the proper bankid for multi banks
+  iommu/mediatek: Initialise/Remove for multi bank dev
+  iommu/mediatek: Backup/restore regsiters for multi banks
+  iommu/mediatek: mt8195: Enable multi banks for infra iommu
+
+ .../bindings/iommu/mediatek,iommu.yaml        |  20 +-
+ drivers/iommu/mtk_iommu.c                     | 966 +++++++++++++-----
+ drivers/iommu/mtk_iommu.h                     | 111 --
+ drivers/iommu/mtk_iommu_v1.c                  | 243 +++--
+ .../dt-bindings/memory/mt8195-memory-port.h   | 408 ++++++++
+ include/dt-bindings/memory/mtk-memory-port.h  |   2 +
+ 6 files changed, 1264 insertions(+), 486 deletions(-)
+ delete mode 100644 drivers/iommu/mtk_iommu.h
+ create mode 100644 include/dt-bindings/memory/mt8195-memory-port.h
 
 -- 
-regards,
-Stan
+2.18.0
+
+

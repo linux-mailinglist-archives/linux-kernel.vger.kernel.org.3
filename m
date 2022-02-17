@@ -2,138 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CDB4B9D6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF52D4B9D88
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239266AbiBQKpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:45:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59858 "EHLO
+        id S239329AbiBQKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:48:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237461AbiBQKpa (ORCPT
+        with ESMTP id S233671AbiBQKsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:45:30 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2060.outbound.protection.outlook.com [40.107.22.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C25294105;
-        Thu, 17 Feb 2022 02:45:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZKlkTkzPcQKS91gumc0MPylKH+sRENLYbjdj6Kd7BiuOAZlpJ3zbhYiIhsUpdngCuTdaew+BPtrT6FDUkMyRNa7uLWCBT3VCWrJpUEcsmTbPUHmNyg6x4lgEB6BlTIwTtWHj00prltAmNsMGnRJ3eKGaFZEUp6tquPyk1tzuNyL7ThPaiJHB1aobVYdhFDXL6cJjTovu55+/Qsg/O6H5VixjJXluRI6R/incu7Em4R+0BzhSHGDetgwGqaqhUFxwGN1uQuAgaWU4piMvh/B/w4t0oc3GsVyei/KZs0XtXim/dovWX6c5jEWFpQXcx5VZPRWXVDu2bVjVdkZPggJaMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AQEKmElfesErMmpzQbzrZ26b7KyTX6t/1T9DXboo1Gw=;
- b=n7QWV8WJrvnA/Z5PJh0yt32u4/Idol7nfedMIdDqxbo9lyxPcY/jusqnYFpSBhbQKm98z/oz52HsBPa1Bk624YXY0qd/D+HPk4JXHWMoxqszWy9G2n6D2bWD9on41FmBpBMtbyWwj1X9QMjJCP3r4GZJo5YajbU8RXUNIKpxpivzy2yv8l5JbiadKlUesSrF9aKtxhA/avKPmDn2uUrF6s0UPDYRPOVzXQAg3+12A5mpUeT0C2Ycs+Mcli1XNcLdlRNbCXaB2bHF2Xlhsh8WamTR1o5yvuzNEaVkzTQ4kb0mdzKEXTCB7dgOZErnn+srsW1WwV5x2w1exEEOCnstmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AQEKmElfesErMmpzQbzrZ26b7KyTX6t/1T9DXboo1Gw=;
- b=gZPTKo91rwH3jnG2aJpBSL7/pLirwry610x/3+1XkLUTseKZJUj5FTvayW5aye81t/I4ZJMOdEbiAxQrDw+13nqlWmnOLXXWNbC6KXUUcDIqj0Qz8XRmYPN8h/kHFmzKdP5n1M+2Mq+APTFCarqiC8egKtgQ64v7wnoCPMi/FDHHgLyuhsg3Ud/eo50cnBh8nso3kuCRFud09F1sjA8nv5bcRZrR9WPepDvBNrmV18DpG6qzMzftr4s1vEWSZsFiCVjjPQUq+hCzHi6OVQKZEOmuaObW5UBSOczLcnUUOnwkNx3U/2gLTY8bPOoS8aVjGw4h7yWAUB2lIA3lYf9EDQ==
-Received: from AM4PR1001MB1378.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:200:98::12) by VI1PR10MB3309.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:803:13b::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Thu, 17 Feb
- 2022 10:45:14 +0000
-Received: from AM4PR1001MB1378.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::f909:2310:3487:4150]) by AM4PR1001MB1378.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::f909:2310:3487:4150%6]) with mapi id 15.20.4995.017; Thu, 17 Feb 2022
- 10:45:14 +0000
-From:   "Starke, Daniel" <daniel.starke@siemens.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/1] tty: n_gsm: fix encoding of control signal octet bit
- DV
-Thread-Topic: [PATCH 1/1] tty: n_gsm: fix encoding of control signal octet bit
- DV
-Thread-Index: Adgj6sm0fdOjTCg/QgK8Vejl3021pg==
-Date:   Thu, 17 Feb 2022 10:45:14 +0000
-Message-ID: <AM4PR1001MB1378023FB7411DD0E6A18CD3E0369@AM4PR1001MB1378.EURPRD10.PROD.OUTLOOK.COM>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 05e419f5-4e9a-4ff6-d20b-08d9f2029466
-x-ms-traffictypediagnostic: VI1PR10MB3309:EE_
-x-microsoft-antispam-prvs: <VI1PR10MB33092F0151A068AF2FD21E14E0369@VI1PR10MB3309.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SvMJGayQrKD8nhLaMMbvy26t0u+LBSZ/7DjyOeVqQlZ6uw0w0WH1w8iwL0eNofuw6An0ISe7IczZExQLBhLkbE1/qedIywDJ3Y1aXtxbFqz94CaD4Wt72RioINdxrgU4bH1KsJOfgZRH6j0VuYSXAxnuazBKZW1kVHYsKZz5n0JYIk6Rr8MNuCtYszW9JrxzJ2ePY1UgHvJn7Terw9AYV8OHmq1t7fNyJLXkHQiliPl7LrMKpDW1h8B8toKrg0ELGo/nCg3jSsvBZVrIz8eeWwp/fcpUBXAXzpfeKPqN2K+OZM8klLuAMxkTdjNMIuDQcqnAninyZZCQuJz1qqqV+2Mhl5hbwy6PJ4wB6MA8CYxKcoSUKb7FDmKd0rQ37igpypNz3uVtfIcz6ZVlV9H8wljNDud7UK2b3l7OeUvmUomJhiMy9Jq2BKeGW9CTnnwPOKgPqGb/Ha5qT8ZGkHrn/WjyzObuhqfp05UgTFaNZi5UzUuJugqbO80uBw1flnLo34xWfG+JGc7/BA6Zj5cALl0YCqIz2Odx6PC8L3HfT4698Bd3DTN0zynjxoey/y74jDkQ4lOxhrIogWwPsOm/4KBMagy7Syfa6LQBwfgMaAL1ZFsY59BcgsNIUWxgCSeSkOh1l0JgvUmQck89/4pF5KGoSsncG7cy47lhnzimlOx9U19/uP5CIBATHy+6EDzQ5lg7SXBknfNB/Q5AoCE/7g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR1001MB1378.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52536014)(66556008)(66476007)(66446008)(76116006)(316002)(33656002)(8936002)(54906003)(64756008)(71200400001)(8676002)(6916009)(6506007)(7696005)(4326008)(66946007)(508600001)(86362001)(55016003)(186003)(26005)(9686003)(38100700002)(55236004)(5660300002)(4744005)(38070700005)(122000001)(82960400001)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OG10UkRsTkhaemFtM0JkOTJ5aW1CbFdGSFBqc0oybTk4eGY4T1VUNVpJWENh?=
- =?utf-8?B?c1c4eHMwL1R1eW1nNEwwdlNRUWFkb2J4eVZ6eHp5aVp4TnlXV3QxSzlJeitP?=
- =?utf-8?B?U1N3SURneWluMXJKOW1VL08weEI4ZzBzT1JVODZwNEwzY05MMzV3c0FIQTZJ?=
- =?utf-8?B?cThSWXZEYnZaWlZSM3VwOW85b2tZQ1NHSUdnM0VMK3dacEtENWxvaXhWWVFV?=
- =?utf-8?B?R1MzWjc5YkV3b3d6dVNkcE5ac0ZBVTVOYUpZMVNtYzVRRXZwZzdScmNzdGpZ?=
- =?utf-8?B?VnE0M3pXSXJJYmkvbGtWd2pMN0FtZFl0TnJJN3NIb3RRaWxjeGRibkEyM1BW?=
- =?utf-8?B?YVVKTFVaemJCc3RpWmhLSmpEeWQ3Qzh1Q1dkZDViZ2RMWGRwRk9SenBqWmdR?=
- =?utf-8?B?bDFBWlRFdHN4ZXZmVGFSUzVaQm9oMERrTzYzZlFlWWxWWjRFczg0clNyMS9U?=
- =?utf-8?B?NnJsT054QjcwdVNOWWFiVXRmL3VkWGZNazFFVEU3OFNYdi9lTUE0a3pSWE45?=
- =?utf-8?B?QWJWbEs2dFhaZ0RLZ3JlcFZkSndPN2ZKUkwxQ0dlWGtIS1ViTklESFRwYmVv?=
- =?utf-8?B?ZGQ2Y2NLbndQZDB2KzVGWXVEb3hYQTVtMEtyZUlxS0hYNTVOZkhLbWdOMGRF?=
- =?utf-8?B?YkU2OUlnUUIwQ2dFNUtKeUdyVVowYkYrWmZoZ1daS0kvSXR6OEdINDJkK3dJ?=
- =?utf-8?B?dnMydFkxenBIM0FuUURBRkV3YUVTc2JFSndYY0VuVEp1UlJ4RlU2di9IdG1j?=
- =?utf-8?B?WHpiU2hxQ2JXYkpXeTJKajNRaDlMOTRWTUg0OHlhVVkwa2ZZQzFXOWx6eGhp?=
- =?utf-8?B?ckZZQVZnMUx6dkVGYzZXeTFDN1ppSEoxbVVCR2t3RDFyWGtITW1uKy9Ha1BF?=
- =?utf-8?B?SzhRcitGNFpycUR5RG94T0pwVFJwR0l1UTg5SjNjcXllMHZhM1R3bDBoRUFv?=
- =?utf-8?B?OStRWEhXemZzZ2hxYWtBRW1EeFZIcnFlN0lPVUsxVmpLejBkTGszMG5qTGEx?=
- =?utf-8?B?blJZLzFMd20zMWN3YS93ZS9lT0Vybkl1YmhYdEFxbjZ3NnRENWRlbTNmK0tP?=
- =?utf-8?B?UmFWYWFYaVJkdWlza1BwYXJFdVZmSEtSRm5hVzJDaHROY2MzLzR4U1FHaXZh?=
- =?utf-8?B?TElQRlNQODh5SHJQTHFCZjdLZWpNR1FRNCsvbjJUdThDY1JPTUMwTjNPOUo3?=
- =?utf-8?B?SjFlRUIra3dlZlNEdS9kd1lWZUJTeFFNVHB0VW1mOFpUcjBGU1dibzg2LzM3?=
- =?utf-8?B?dE0yWlNVWmtxTW5scDZ0amlkNlZVS1lONWoyVDY4SjYxajcxQnQwYVYwK1Fi?=
- =?utf-8?B?NHcvS2FSbWpwVWt6V0FVUld2SFN5b3U0clhuVVRYU3NLOW12WGFiUzBOdkdk?=
- =?utf-8?B?RE13bWVEK1ZTVnpjakpmTk82eWZKUzdjbkgzN0NIRFBKUjNvekkrN3FYMTJh?=
- =?utf-8?B?UDRPdmlrbm5NQy91RFp5NUozSTVPUHUvOTlsNnU2NEtCOFNxeXJKemRwd3I3?=
- =?utf-8?B?c2JmSXNqcXZRb0gxK0JDTnlsNkpjb3JVSmcrTHArNFIwZjRRTlJQSFN0d3ZT?=
- =?utf-8?B?QjFVbFdFdkxDNFc1WjVBeFB3MzRKNzhCOUM3b1IrQ294OTJDM0I1MXdGQ1kz?=
- =?utf-8?B?TUZlNTgwNXYyYkpQS3I1L2h6T1BFVzNDb3dHbEpUcHhKU2xxV1RWSkhJT2kw?=
- =?utf-8?B?blFQU3JQTGdicmlneEJPRDBDNGRVMjNSVDJDL1RrVExzNVFuRUIzTUlyczBM?=
- =?utf-8?B?YkNadm1wOVFRTFhUZXZOemtObjdPUkJZL2xtMkt0SFYzYWZWR3VvMm82QlpG?=
- =?utf-8?B?OTg4aHg3bWJxVWNYNU9OMDk1YlphSzFhZHJxRDlhOXNJSWs3dEFiSHpiVWhC?=
- =?utf-8?B?ZWdNQmpjUnQ4Wi9DdU5IWXc5OXk0SkZoTWpGdE9OS0VOMVVPUSt3Z1N3TFAx?=
- =?utf-8?B?MVNpZ3BHSDJQT21kK1A4aExwZCsxbjBWeHgxR0hoaUsxckdCZm9mWkczcGZY?=
- =?utf-8?B?TXczTTJhdTIwd1dxVzBsZzE1a0NSTS9oMTJMR3NtNUUxS3owdWpoS240UjVG?=
- =?utf-8?B?QVJpeUdCcDQ1K3dINGVzWUNxYURya2hWc0UxMlh0VGV4L3VKckx5cnAwUk91?=
- =?utf-8?B?ZjZWeGpDMU5uQlZscjVHUkJVQkY4L2VhVC85eXNiaEs3N2ZvRUdzRjFSUVR4?=
- =?utf-8?B?b3k5dUNZcjdqbk5oQXlVSGU4K0FteTFsd1R5UWg1M1ZyTHlLLzgxR3NMNGFn?=
- =?utf-8?B?Nnh2YjdXbnBxSTdqU1I1c1lUbllBPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 17 Feb 2022 05:48:05 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 818A229412E;
+        Thu, 17 Feb 2022 02:47:49 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24854D6E;
+        Thu, 17 Feb 2022 02:47:49 -0800 (PST)
+Received: from [10.57.17.240] (unknown [10.57.17.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0B5D3F66F;
+        Thu, 17 Feb 2022 02:47:46 -0800 (PST)
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+Date:   Thu, 17 Feb 2022 10:47:44 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM4PR1001MB1378.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05e419f5-4e9a-4ff6-d20b-08d9f2029466
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2022 10:45:14.2946
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QZSXMn80mAbjL9FzdV/txI+Lzi82A/TqyZAclaIiAoax/VFT9tS5regsvh5vWUrU0w6a3UZ8DK1CCwHYKmUrHHjD04fR/t+WnmsdHSp0Ll0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3309
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBBbGwgb2YgdGhlc2UgYXJlIHBhdGNoIDEvMSwgd2hpY2ggaXMgb2RkIDooDQo+IA0KPiBQbGVh
-c2UgcmVudW1iZXIgdGhlbSBwcm9wZXJseSBhbmQgcmVzZW5kLg0KDQpBbGwgdGhlc2UgcGF0Y2hl
-cyBhcmUgYmFzZWQgb24gdGhlIGN1cnJlbnQgdmVyc2lvbiBvZiB0dHktbmV4dCBhbmQgYXJlDQpj
-b21wbGV0ZWx5IGluZGVwZW5kZW50IGZyb20gZWFjaCBvdGhlci4gVGhlIG9ubHkgY29tbW9uIHBh
-cnQgaXMgdGhlIGZpbGUNCnRoZXkgYXBwbHkgdG8uIFRoZXJlZm9yZSwgdGhpcyBpcyBub3QgYSBw
-YXRjaCBzZXJpZXMuIFdvdWxkIHlvdSBzdGlsbA0Kc3VnZ2VzdCB0byBhcHBseSBhIGRpZmZlcmVu
-dCBudW1iZXJpbmc/DQoNCldpdGggYmVzdCByZWdhcmRzLA0KRGFuaWVsIFN0YXJrZQ0K
+Hi Daniel,
+
+On 2/17/22 10:10 AM, Daniel Lezcano wrote:
+> On 16/02/2022 18:33, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>
+>>> Hi Matthias,
+>>>
+>>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+>>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+>>>>>
+>>>>>
+>>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+>>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+>>>>>>>
+>>>>>>>
+>>>
+>>> [snip]
+>>>
+>>>>>>> Could you point me to those devices please?
+>>>>>>
+>>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+>>>>>>
+>>>>>> Though as per above they shouldn't be impacted by your change, 
+>>>>>> since the
+>>>>>> CPUs always pretend to use milli-Watts.
+>>>>>>
+>>>>>> [skipped some questions/answers since sc7180 isn't actually 
+>>>>>> impacted by
+>>>>>>     the change]
+>>>>>
+>>>>> Thank you Matthias. I will investigate your setup to get better
+>>>>> understanding.
+>>>>
+>>>> Thanks!
+>>>>
+>>>
+>>> I've checked those DT files and related code.
+>>> As you already said, this patch is safe for them.
+>>> So we can apply it IMO.
+>>>
+>>>
+>>> -------------Off-topic------------------
+>>> Not in $subject comments:
+>>>
+>>> AFAICS based on two files which define thermal zones:
+>>> sc7180-trogdor-homestar.dtsi
+>>> sc7180-trogdor-coachz.dtsi
+>>>
+>>> only the 'big' cores are used as cooling devices in the
+>>> 'skin_temp_thermal' - the CPU6 and CPU7.
+>>>
+>>> I assume you don't want to model at all the power usage
+>>> from the Little cluster (which is quite big: 6 CPUs), do you?
+>>> I can see that the Little CPUs have small dyn-power-coeff
+>>> ~30% of the big and lower max freq, but still might be worth
+>>> to add them to IPA. You might give them more 'weight', to
+>>> make sure they receive more power during power split.
+>>>
+>>> You also don't have GPU cooling device in that thermal zone.
+>>> Based on my experience if your GPU is a power hungry one,
+>>> e.g. 2-4Watts, you might get better results when you model
+>>> this 'hot' device (which impacts your temp sensor reported value).
+>>
+>> I think the two boards you point at (homestar and coachz) are just the
+>> two that override the default defined in the SoC dtsi file. If you
+>> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+>> map. You can also see the cooling maps for the littles.
+>>
+>> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+>> though? Seems like we should, but I haven't dug through all the code
+>> here...
+> 
+> The dynamic-power-coefficient is available for OPPs which includes 
+> CPUfreq and devfreq. As the GPU is managed by devfreq, setting the 
+> dynamic-power-coefficient makes the energy model available for it.
+> 
+> However, the OPPs must define the frequency and the voltage. That is the 
+> case for most platforms except on QCom platform.
+> 
+> That may not be specified as it uses a frequency index and the hardware 
+> does the voltage change in our back. The QCom cpufreq backend get the 
+> voltage table from a register (or whatever) and completes the voltage 
+> values for the OPPs, thus adding the information which is missing in the 
+> device tree. The energy model can then initializes itself and allows the 
+> usage of the Energy Aware Scheduler.
+> 
+> However this piece of code is missing for the GPU part.
+> 
+
+Thank you for joining the discussion. I don't know about that Qcom
+GPU voltage information is missing.
+
+If the voltage is not available (only the frequencies), there is
+another way. There is an 'advanced' EM which uses registration function:
+em_dev_register_perf_domain(). It uses a local driver callback to get
+power for each found frequency. It has benefit because there is no
+restriction to 'fit' into the math formula, instead just avg power
+values can be feed into EM. It's called 'advanced' EM [1].
+
+Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
+was proposing from ~2014 this upstream, but EAS wasn't merged back
+then):
+where to store these power-freq values, which are then used by the
+callback. We have the 'dynamic-power-coefficient' in DT, but
+it has limitations. It would be good to have this simple array
+attached to the GPU/CPU node. IMHO it meet the requirement of DT,
+it describes the HW (it would have HZ and Watts values).
+
+Doug, Matthias could you have a look at that function and its
+usage, please [1]?
+If you guys would support me in this, I would start, with an RFC
+proposal, a discussion on LKML.
+
+
+[1] 
+https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87

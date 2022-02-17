@@ -2,103 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4821D4BA4A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E774BA4B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242412AbiBQPmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:42:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36840 "EHLO
+        id S242653AbiBQPm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:42:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234548AbiBQPmR (ORCPT
+        with ESMTP id S242631AbiBQPmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:42:17 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58F014091
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:42:03 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id h125so5362647pgc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:42:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yVhi1vrXuuKJzKMS2sNWbuq/VeCq4utS+Vch13kpKEc=;
-        b=BmDtYDzJKXDcv8FzzThwHh1+iARxAaSrnR5xDc0jJVCXZLpzzSPjtdnyGrdVBAl/8O
-         0+9VvvmbUqOHNRGMgF/8+mSUY36IBvrtbIcOVxPwk/xZa9yW+e+lX67tzpT+8A5TftYU
-         bF0JC6mbzl69qEb329u3Lo6No2hffFEcw6y3AyK4eYZS12q3rI9xq9Nvg4nM3AmAbvjK
-         WjqwdqyXTXzPnDQfSwLlHxSuLCq5aTL3xGtoe0UegbJkh8uDat+byOzTY+922IK74YH5
-         IcqTFzpp90JR08t53vqx2gcbUQaI8fzAlI2jzSGZeis52dIyvLXJVQe8UxJu/evhpp57
-         KemA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=yVhi1vrXuuKJzKMS2sNWbuq/VeCq4utS+Vch13kpKEc=;
-        b=xCYESIad4nvHQoWiMcqijv7SZ22utzGgtkdD6TO6s1HsuxNjzj3EyILOhfcosSq+Vq
-         FCMqtvYxTKcU1a7q0/Jwj1l3WLBwMxAinjOA+N6blPtibMeRnqe7xUB24Yx0TGYShVjd
-         epIZXkW1nYDvtC939YJXFyWWlSTLqYdWr7awwM7+9kz9mwKuZ+KikKuCIps68qf1SItb
-         Z1du+wQvMrgP/CRzKGH5xaJ9n/qT8uXWTMn/Rod0XJjeFbQqqC9HM7jwXKuEptYzU1YR
-         IBRAHD6RvAVpJFiq1rUAsjRQT44VnxJ9rYq7o7B656+Zoggm5CP4InSBkVb715Klv8ku
-         /KTg==
-X-Gm-Message-State: AOAM532ahMiAiMC9QAN8phVdvjpM4XDd9aZK2HndFmCmp0jIKsGpX7PC
-        qtmWMlLIQALVYxmZa1cizHk=
-X-Google-Smtp-Source: ABdhPJycOJoy3WaWAE95XhqQ/wFO/elcT3zeYJT7ZypumKHHdW5eurfCSvZ1xV4Rn57tW9O/6M//Mg==
-X-Received: by 2002:a05:6a00:9a9:b0:4ca:c2f1:c685 with SMTP id u41-20020a056a0009a900b004cac2f1c685mr3612023pfg.12.1645112523183;
-        Thu, 17 Feb 2022 07:42:03 -0800 (PST)
-Received: from mi-HP-ProDesk-600-G5-PCI-MT.xiaomi.com ([43.224.245.244])
-        by smtp.gmail.com with ESMTPSA id y7sm11203604pfa.213.2022.02.17.07.41.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 07:42:02 -0800 (PST)
-From:   chenguanyou <chenguanyou9338@gmail.com>
-X-Google-Original-From: chenguanyou <chenguanyou@xiaomi.com>
-To:     longman@redhat.com
-Cc:     chenguanyou9338@gmail.com, dave@stgolabs.net,
-        gregkh@linuxfoundation.org, hdanton@sina.com, jaegeuk@google.com,
-        linux-kernel@vger.kernel.org, mazhenhua@xiaomi.com,
-        mingo@redhat.com, peterz@infradead.org, quic_aiquny@quicinc.com,
-        will@kernel.org
-Subject: Re:[PATCH v5] locking/rwsem: Make handoff bit handling more consistent
-Date:   Thu, 17 Feb 2022 23:41:54 +0800
-Message-Id: <20220217154154.6030-1-chenguanyou@xiaomi.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cb03cbe5-0357-144d-0660-3ebc50c0245a@redhat.com>
-References: <cb03cbe5-0357-144d-0660-3ebc50c0245a@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Feb 2022 10:42:23 -0500
+Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADB713F69
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:42:08 -0800 (PST)
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 1AFCB2042F;
+        Thu, 17 Feb 2022 15:42:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id AF56320032;
+        Thu, 17 Feb 2022 15:42:05 +0000 (UTC)
+Message-ID: <1f6cabc8b183056546571b391770e1eea8524fd3.camel@perches.com>
+Subject: Re: [PATCH net v3] net: Force inlining of checksum functions in
+ net/checksum.h
+From:   Joe Perches <joe@perches.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        netdev@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Thu, 17 Feb 2022 07:42:04 -0800
+In-Reply-To: <978951d76d8cb84bab347c7623bc163e9a038452.1645100305.git.christophe.leroy@csgroup.eu>
+References: <978951d76d8cb84bab347c7623bc163e9a038452.1645100305.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: AF56320032
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: nz9e5z1u3yz1f5rpbt3m7jkkokhucyw8
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19KaPmP/R/KoYWstS8VZiTyOYA8oslrR+Y=
+X-HE-Tag: 1645112525-592173
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> Hi Waiman, Greg,
->>>>> This patch has been merged in branch linux-5.16.y.
->>>>> Can we take it to the linux-5.10.y LTS version?
->>>> What is "this patch"?
->>> commit d257cc8cb8d5355ffc43a96bab94db7b5a324803 ("locking/rwsem: Make handoff bit handling more consistent")
->> Have you tested it on the 5.10.y branch to verify it actually works
->> properly for you?
->>
->> If so, please provide a working backport to the stable list, as it does
->> not apply cleanly as-is.
->>
->> thanks,
->>
->> greg k-h
->>
-> I have attached the 5.10.y backport of commit 
-> d257cc8cb8d5355ffc43a96bab94db7b5a324803 ("locking/rwsem: Make handoff 
-> bit handling more consistent"). I also include a backport of commit 
-> 2f06f702925b512a95b95dca3855549c047eef58 ("locking/rwsem: Prevent 
-> potential lock starvation") which I think may help Jaegeuk. I had run 
-> some sanity tests and the backported patches work fine. However, I don't 
-> have access to their testing environments to verify if they can fix the 
-> problems seem by Chen or Jaegeuk. So please test these patches to see if 
-> they can address your problems.
+On Thu, 2022-02-17 at 13:19 +0100, Christophe Leroy wrote:
+> All functions defined as static inline in net/checksum.h are
+> meant to be inlined for performance reason.
+> 
+> But since commit ac7c3e4ff401 ("compiler: enable
+> CONFIG_OPTIMIZE_INLINING forcibly") the compiler is allowed to
+> uninline functions when it wants.
+> 
+> Fair enough in the general case, but for tiny performance critical
+> checksum helpers that's counter-productive.
 
-Hi Longman,
+Thanks.  Trivial style notes:
 
-I'll do some stability testing on our 5.10 phone.
+> diff --git a/include/net/checksum.h b/include/net/checksum.h
+[]
+> @@ -22,7 +22,7 @@
+>  #include <asm/checksum.h>
+>  
+>  #ifndef _HAVE_ARCH_COPY_AND_CSUM_FROM_USER
+> -static inline
+> +static __always_inline
+>  __wsum csum_and_copy_from_user (const void __user *src, void *dst,
+>  				      int len)
+>  {
 
-thanks,
-Guanyou.Chen
+__wsum might be better placed on the previous line.
+
+[]
+
+> @@ -45,7 +45,7 @@ static __inline__ __wsum csum_and_copy_to_user
+>  #endif
+>  
+>  #ifndef _HAVE_ARCH_CSUM_AND_COPY
+> -static inline __wsum
+> +static __always_inline __wsum
+>  csum_partial_copy_nocheck(const void *src, void *dst, int len)
+
+To be consistent with the location of the __wsum return value
+when splitting the function definitions across multiple lines.
+
+(like the below)
+
+> @@ -88,42 +88,43 @@ static inline __wsum csum_shift(__wsum sum, int offset)
+>  	return sum;
+>  }
+>  
+> -static inline __wsum
+> +static __always_inline __wsum
+>  csum_block_add(__wsum csum, __wsum csum2, int offset)
+>  {
+>  	return csum_add(csum, csum_shift(csum2, offset));
+>  }
+>  
+> -static inline __wsum
+> +static __always_inline __wsum
+>  csum_block_add_ext(__wsum csum, __wsum csum2, int offset, int len)
+>  {
+>  	return csum_block_add(csum, csum2, offset);
+>  }
+>  
+> -static inline __wsum
+> +static __always_inline __wsum
+>  csum_block_sub(__wsum csum, __wsum csum2, int offset)
+>  {
+>  	return csum_block_add(csum, ~csum2, offset);
+>  }
+>  
+> -static inline __wsum csum_unfold(__sum16 n)
+> +static __always_inline __wsum csum_unfold(__sum16 n)
+>  {
+>  	return (__force __wsum)n;
+>  }
+>  
+
+[]
+
+> -static inline __wsum csum_partial_ext(const void *buff, int len, __wsum sum)
+> +static __always_inline
+> +__wsum csum_partial_ext(const void *buff, int len, __wsum sum)
+>  {
+>  	return csum_partial(buff, len, sum);
+>  }
+
+And this __wsum could be moved too.
+
+> @@ -150,15 +151,15 @@ void inet_proto_csum_replace16(__sum16 *sum, struct sk_buff *skb,
+[]
+> -static inline __wsum remcsum_adjust(void *ptr, __wsum csum,
+> +static __always_inline __wsum remcsum_adjust(void *ptr, __wsum csum,
+>  				    int start, int offset)
+>  {
+>  	__sum16 *psum = (__sum16 *)(ptr + offset);
+
+And this one could be split like the above
+
+static __always_inline __wsum
+remcsum_adjust(void *ptr, __wsum csum, int start, int offset)
+
+

@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602044BA4F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B234BA4FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242827AbiBQPtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:49:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34568 "EHLO
+        id S242856AbiBQPty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:49:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242848AbiBQPti (ORCPT
+        with ESMTP id S242832AbiBQPtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:49:38 -0500
-X-Greylist: delayed 1130 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 07:49:11 PST
-Received: from out203-205-251-66.mail.qq.com (out203-205-251-66.mail.qq.com [203.205.251.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D507816E7D5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:49:11 -0800 (PST)
+        Thu, 17 Feb 2022 10:49:39 -0500
+Received: from out203-205-251-27.mail.qq.com (out203-205-251-27.mail.qq.com [203.205.251.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02BA15C64E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:49:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1645112948;
-        bh=FihfJldaJ6r2xVuFS8/jwCVqViJT/Juw+yF0fIUwbtQ=;
-        h=From:To:Cc:Subject:Date;
-        b=PyCiiiZPyT6dc5hTGVMfwN9D6nsF+uj5OZpluMuxCAoV0rRqt3/yen8FVcbXMPrJN
-         tZ6jA/WmbJal6nTK3vbu6ytQ37l4O4swdqI3/UKxUnwEddCMsUpEdvmCmQ3/6MDLIG
-         neUnxOhDzYMLrgs2v/4WnexJ8iS1pYciKheCMVcE=
+        s=s201512; t=1645112953;
+        bh=R2T64fF012MpAvx/2pefsZbIP7UbuXf+c8VwNQhS83s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=vfHd6cjtV5/ICRSNtM3tSkXbj1FVd842jm6689ZCw9jTyt+W2gYRMoT2UXVyR2/JX
+         Rca5AUwr+UvboFhoNg7EE+4gqx4R3kNxc4656RK6dG3vJi7lN2inlOufwTFNMZY6UA
+         axYwFs5w6I1wN5tVps0oFfJ+1sQxcqHxCcVzDtWA=
 Received: from localhost.localdomain ([43.227.136.188])
         by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
         id C45B0427; Thu, 17 Feb 2022 23:49:05 +0800
-X-QQ-mid: xmsmtpt1645112945t18onsnd0
-Message-ID: <tencent_8F1C1B14CFE19C4A05FF632068CCCBB92708@qq.com>
-X-QQ-XMAILINFO: OLsBWtCIHsg697Kysr7zpcTjd0Mg8bLRDzZQyibbKfpYLc11O0ThEmPs+c8ocy
-         JVD+O9Jy3tlGls7vsqwNZrYea7gkf9n+icTWah2Emuj9H84UsrRd6jnqF3o7EQ2VBJxzPwxl0GZa
-         16y0aX9sAB3hophUTuMg/YkmPEpRzLWzvWgAZHKukE8zxk7aKUomASmvh9fZP/wc2Yy72wlRF9Z6
-         k1LZgCmrr3ogvFTMJozE0IDKDjMxdXrzemUuCepk+WvfEp0EIFghUPLahPjM/48l0MHsvBqF4sN1
-         lEu99Kp63p+eekWLUW8g/F3vlth4VyS9cCnbjZOWIyFGCshHeqtUATojGVw/e2kbn+iGiwUyDppM
-         q2w3S887pJJgUgic6fEbFAVwbqowvg7nJx6roE6w3CNhg6w4OXlstXMnjuvR9cX9DYcmoJt/hcvT
-         sGowFBiLg+j7Nxz/l9a2ndGzR2XebORDbANtoH6Kc/6a0FfEHkqSm9uwcxn5jDjWt1aFpAJ8O0GY
-         BP94XWCqPu9dIHRviNa6REaYQR3XpAWXRccKhr1BwhR9Rbd3Tg4NpiJazDsIJ3fEt1NYu4hO0Zpd
-         PwSuWNoGifLpRFs8LOTllpSHA3Rm4kStq2vXrzh1g2ApL9vjolhmQ7ugJf8KhViSnflNUUp6qbeW
-         B9fmjKyhi6/Lf902hZPKp774X4lvMWQOD0tteWVodfM6LUq5YGcVcbktq/IHclH9tldEfQKil++j
-         6cZ6fI8QUKQQsJW2T9O8QTnFKIw88anadllP1stEyFbqGK3M7xluZJj2qtKmIJs4qpTymqiwfSVl
-         W3eJiP2ulwnsK3d6bINyLGJuR0PYtVgS7/JYj6jWdxlq5Ltf5GGbq4CgygSnElbMb+PtNiJySTqH
-         8bk52Zrv9lGynKGPAz4R+jBhrDQ4ri2RcTsdipsqhF2HR6rPyf2c/ruFoMFobjvga0LetG7B+CWV
-         iuw7rhTddLXS2VzDel75gZ2zuuczhZF/RLOsM7kbS4p6JvcyKsyg==
+X-QQ-mid: xmsmtpt1645112948t4765e92p
+Message-ID: <tencent_03873F2A51FFDF808C33B3E73A717C51400A@qq.com>
+X-QQ-XMAILINFO: MbECzfofyKaSxDTk9gm8v6uGmbRVERi5ZYRBZi5Vqa7NapwMKJqFMcrAd3KsOE
+         Kry8r3SbYipGbd7g4AhNDMxrFBRcNHlzv/NY9E7RAsnFMItpDi4R+4+FMbaBnoqEw1OcBQGBDnrH
+         BXktggiepK9oAr/LBNULORqPNCHKu0pp3wWyYfXYgnBbo+47MySM7uRjF6gQbA4y+SpZOa9TQF/m
+         CVbXHm/yUTwvhCr8bH5gC240JvrInUZY+lM4xj33GvtP6Ar2ksHmBtaySaUBxK86ljjX1bMfLGYm
+         VraSpTdoT/G7IiSE8cMIGyfJwccrPusxLaUyTtqiqBRIWIDyEB2HtJotPuEUcel3/vRcgr+VEHSb
+         o8lqz00yhQgjLbDcuidrjAp9x4spzaJXo/brM+lvsDMKMkqs465VDAMCY17TDKtlpq1n5LnnAh1A
+         qtiroDr4ibdiWqGTilARTx2qzZwy1PXhQNrVoyxyH9AbQrRZ+d3ZhE2RLPte6vcuw46dCbFwbffu
+         HvUypXzDZ+iT+6BM/I1cLlDIPtossQa6j0lPpLOufE+ZaqOvJVkEzR16FqkAAqs+9t5JmcEXcgLy
+         wa3mVcmJ4vg+h0J88u/nH2wroyG5Fj1QpJQ562CZOU1x0aXuP+7rnOpSrRvUYef3Aq72INdfKHQo
+         sbpzJwJQk23R2ZyPbd9Y87IpG2cx8Y8M22vdtelGsuJ9m/FmILkoKufE2NJBDENgMgjW6ugrjRdy
+         o4+tVWGvwW2fPbWamFUu1563tBpbchaLwdj6h4pj21xAjykj/cWEd5BG2reLTtpJPLdRliKfxhKY
+         OWGkzCiSguZL3OzyY471D6yHT0dS5udV/ZqzSb3qB9NTrxO6FfXSJBqFnyu26mUic5M50uYIcfGv
+         6s+02AW2H/nRj2Cy8sdWyN+q2sqB26mJxvmouA5GT/yhOPfj+XLNiI7lh8t9/mbjJn5wA0Uq0Kpw
+         hr8L+iUrGa1+fCLR1rJL6hDf5qlqnIIHJdR63EAS0=
 From:   xkernel.wang@foxmail.com
 To:     jerome.pouiller@silabs.com, gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 1/2] staging: wfx: fix the error handling in wfx_init_common()
-Date:   Thu, 17 Feb 2022 23:47:21 +0800
-X-OQ-MSGID: <20220217154722.1226-1-xkernel.wang@foxmail.com>
+Subject: [PATCH 2/2] staging: wfx: check the return value of devm_kmalloc()
+Date:   Thu, 17 Feb 2022 23:47:22 +0800
+X-OQ-MSGID: <20220217154722.1226-2-xkernel.wang@foxmail.com>
 X-Mailer: git-send-email 2.33.0.windows.2
+In-Reply-To: <20220217154722.1226-1-xkernel.wang@foxmail.com>
+References: <20220217154722.1226-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -66,43 +66,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-All the error handlers of wfx_init_common() return without calling
-ieee80211_free_hw(hw), which may result in memory leak. So I add
-one err label to unify the error handlers.
+devm_kmalloc() returns a pointer to allocated memory on success, NULL
+on failure. While there is a memory allocation of devm_kmalloc()
+without proper check. It is better to check the return value of it to
+prevent wrong memory access.
 
-Suggested-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
 Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- drivers/staging/wfx/main.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/staging/wfx/main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
-index 4b9fdf9..f83df9f 100644
+index f83df9f..5d4fcc3 100644
 --- a/drivers/staging/wfx/main.c
 +++ b/drivers/staging/wfx/main.c
-@@ -309,7 +309,8 @@ struct wfx_dev *wfx_init_common(struct device *dev,
- 	wdev->pdata.gpio_wakeup = devm_gpiod_get_optional(dev, "wakeup",
- 							  GPIOD_OUT_LOW);
- 	if (IS_ERR(wdev->pdata.gpio_wakeup))
--		return NULL;
+@@ -294,6 +294,9 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+ 	hw->wiphy->n_iface_combinations = ARRAY_SIZE(wfx_iface_combinations);
+ 	hw->wiphy->iface_combinations = wfx_iface_combinations;
+ 	hw->wiphy->bands[NL80211_BAND_2GHZ] = devm_kmalloc(dev, sizeof(wfx_band_2ghz), GFP_KERNEL);
++	if (!hw->wiphy->bands[NL80211_BAND_2GHZ])
 +		goto err;
 +
- 	if (wdev->pdata.gpio_wakeup)
- 		gpiod_set_consumer_name(wdev->pdata.gpio_wakeup, "wfx wakeup");
- 
-@@ -325,9 +326,13 @@ struct wfx_dev *wfx_init_common(struct device *dev,
- 	wdev->force_ps_timeout = -1;
- 
- 	if (devm_add_action_or_reset(dev, wfx_free_common, wdev))
--		return NULL;
-+		goto err;
- 
- 	return wdev;
-+
-+err:
-+	ieee80211_free_hw(hw);
-+	return NULL;
- }
- 
- int wfx_probe(struct wfx_dev *wdev)
+ 	// FIXME: also copy wfx_rates and wfx_2ghz_chantable
+ 	memcpy(hw->wiphy->bands[NL80211_BAND_2GHZ], &wfx_band_2ghz,
+ 	       sizeof(wfx_band_2ghz));
 -- 

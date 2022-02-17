@@ -2,200 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA2F4BAD43
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 00:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0CA4BAE4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 01:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiBQXmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 18:42:13 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51232 "EHLO
+        id S230133AbiBRAVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 19:21:40 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiBQXmL (ORCPT
+        with ESMTP id S230061AbiBRAVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 18:42:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEA8403DE;
-        Thu, 17 Feb 2022 15:41:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9133F618DB;
-        Thu, 17 Feb 2022 23:22:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE517C340E8;
-        Thu, 17 Feb 2022 23:22:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645140175;
-        bh=NWO9XCOtwUQtF6tq1ZJYa4BZ/0zXbfe09y1GXCcdSqY=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=pmH7iPjYU2L5V0fqmszIt6z4bpsXPQYc+TfRlkpcPAK9gPc5iTPenrwdeNcZsgbq0
-         79KOwvKQsUKXT8f6X93aX4ZoNGi58wc95k+riFdrmYM8Aiy4EEDvHvrp7pNB2hl+aS
-         tzdMV9zjD7RRg35jyqs+T/10yLvQk6hTQGoxGO7QgrN3PWImApdV78fim6FdIfAEfn
-         8ryxpie1pxGdPpOWTh47r7SPWbbccRyFkii4H00WwuUJ656BFxX/AhSl8/Bi0ZX/Ud
-         ENUaXjjSDXxDhg3TB90rOQxv9/0PyufhJID4DDYfZlv0MUh+M763f7y43hkkBTawXS
-         5wf1NDIkOdadA==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 17 Feb 2022 19:21:38 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6366150;
+        Thu, 17 Feb 2022 16:21:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645143683; x=1676679683;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N32BdLCCicYvF88PVJV2JjNN97uAJo3pxS97Q2b1+KM=;
+  b=JebK25hjQclsv7jqSHiEE0DjhouD4qt1Hlweeh/N3JaaLPvOya/WDJl3
+   c2PnjKG1mJU6qLzaGAmlHipha9jFsT95Yg/4DMrb/NXTXgaR110a6iTsC
+   I8UBubYHZRc7skItWk8OucBwc0SYrc+cZxM1teB+tUxmS7XaEnnKjPz0R
+   tiosmwmc/T2cXlMHRA7YINkMxoRrRF17Mds1pXK9dWUcBmY2zjn1AYr2H
+   6llKIJQL8NOTTbuV7UzINeTx2ik026zG72tzcPOd1+4t7yyEP9JIFLQya
+   RsAY4lSZ02S62N1y8PDSqYcW4/KuivP+Yahwn6QOn7gU6P+3w2LYXcKRi
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="248595414"
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="248595414"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 15:23:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="777665220"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Feb 2022 15:23:06 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKq78-0000jQ-2C; Thu, 17 Feb 2022 23:23:06 +0000
+Date:   Fri, 18 Feb 2022 07:22:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
+        seanjc@google.com
+Cc:     kbuild-all@lists.01.org, mkoutny@suse.com, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, dmatlack@google.com,
+        jiangshanlai@gmail.com, kvm@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH v3] KVM: Move VM's worker kthreads back to the original
+ cgroup before exiting.
+Message-ID: <202202180730.AAgeOZkF-lkp@intel.com>
+References: <20220217061616.3303271-1-vipinsh@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220207185411.19118-3-bartosz.dudziak@snejp.pl>
-References: <20220207185411.19118-1-bartosz.dudziak@snejp.pl> <20220207185411.19118-3-bartosz.dudziak@snejp.pl>
-Subject: Re: [PATCH v2 2/2] clk: qcom: Add MSM8226 Multimedia Clock Controller support
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Date:   Thu, 17 Feb 2022 15:22:53 -0800
-User-Agent: alot/0.10
-Message-Id: <20220217232254.DE517C340E8@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217061616.3303271-1-vipinsh@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bartosz Dudziak (2022-02-07 10:54:11)
-> Modify the existing MSM8974 multimedia clock controller driver to
-> support the MMCC found on MSM8226 based devices. This should allow most
-> multimedia device drivers to probe and control their clocks.
->=20
-> Signed-off-by: Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-> ---
->  drivers/clk/qcom/mmcc-msm8974.c | 206 +++++++++++++++++++++++++++++++-
->  1 file changed, 201 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/clk/qcom/mmcc-msm8974.c b/drivers/clk/qcom/mmcc-msm8=
-974.c
-> index a1552b6771..f74662925a 100644
-> --- a/drivers/clk/qcom/mmcc-msm8974.c
-> +++ b/drivers/clk/qcom/mmcc-msm8974.c
-> @@ -257,6 +257,18 @@ static struct clk_rcg2 mmss_ahb_clk_src =3D {
->         },
->  };
-> =20
-> +static struct freq_tbl ftbl_mmss_axi_clk_msm8226[] =3D {
+Hi Vipin,
 
-const?
+Thank you for the patch! Perhaps something to improve:
 
-> +       F(19200000, P_XO, 1, 0, 0),
-> +       F(37500000, P_GPLL0, 16, 0, 0),
-> +       F(50000000, P_GPLL0, 12, 0, 0),
-> +       F(75000000, P_GPLL0, 8, 0, 0),
-> +       F(100000000, P_GPLL0, 6, 0, 0),
-> +       F(150000000, P_GPLL0, 4, 0, 0),
-> +       F(200000000, P_MMPLL0, 4, 0, 0),
-> +       F(266666666, P_MMPLL0, 3, 0, 0),
-> +       { }
-> +};
-> +
->  static struct freq_tbl ftbl_mmss_axi_clk[] =3D {
->         F( 19200000, P_XO, 1, 0, 0),
->         F( 37500000, P_GPLL0, 16, 0, 0),
-> @@ -364,6 +376,23 @@ static struct clk_rcg2 csi3_clk_src =3D {
->         },
->  };
-> =20
-> +static struct freq_tbl ftbl_camss_vfe_vfe0_clk_msm8226[] =3D {
+[auto build test WARNING on db6e7adf8de9b3b99a9856acb73870cc3a70e3ca]
 
-const?
+url:    https://github.com/0day-ci/linux/commits/Vipin-Sharma/KVM-Move-VM-s-worker-kthreads-back-to-the-original-cgroup-before-exiting/20220217-141723
+base:   db6e7adf8de9b3b99a9856acb73870cc3a70e3ca
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220218/202202180730.AAgeOZkF-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/1abffef71ef85b6fb8f1296e6ef38febc4f2b007
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Vipin-Sharma/KVM-Move-VM-s-worker-kthreads-back-to-the-original-cgroup-before-exiting/20220217-141723
+        git checkout 1abffef71ef85b6fb8f1296e6ef38febc4f2b007
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> +       F(37500000, P_GPLL0, 16, 0, 0),
-> +       F(50000000, P_GPLL0, 12, 0, 0),
-> +       F(60000000, P_GPLL0, 10, 0, 0),
-> +       F(80000000, P_GPLL0, 7.5, 0, 0),
-> +       F(100000000, P_GPLL0, 6, 0, 0),
-> +       F(109090000, P_GPLL0, 5.5, 0, 0),
-> +       F(133330000, P_GPLL0, 4.5, 0, 0),
-> +       F(150000000, P_GPLL0, 4, 0, 0),
-> +       F(200000000, P_GPLL0, 3, 0, 0),
-> +       F(228570000, P_MMPLL0, 3.5, 0, 0),
-> +       F(266670000, P_MMPLL0, 3, 0, 0),
-> +       F(320000000, P_MMPLL0, 2.5, 0, 0),
-> +       F(400000000, P_MMPLL0, 2, 0, 0),
-> +       { }
-> +};
-> +
->  static struct freq_tbl ftbl_camss_vfe_vfe0_1_clk[] =3D {
->         F(37500000, P_GPLL0, 16, 0, 0),
->         F(50000000, P_GPLL0, 12, 0, 0),
-> @@ -407,6 +436,18 @@ static struct clk_rcg2 vfe1_clk_src =3D {
->         },
->  };
-> =20
-> +static struct freq_tbl ftbl_mdss_mdp_clk_msm8226[] =3D {
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-const?
 
-> +       F(37500000, P_GPLL0, 16, 0, 0),
-> +       F(60000000, P_GPLL0, 10, 0, 0),
-> +       F(75000000, P_GPLL0, 8, 0, 0),
-> +       F(92310000, P_GPLL0, 6.5, 0, 0),
-> +       F(100000000, P_GPLL0, 6, 0, 0),
-> +       F(133330000, P_MMPLL0, 6, 0, 0),
-> +       F(177780000, P_MMPLL0, 4.5, 0, 0),
-> +       F(200000000, P_MMPLL0, 4, 0, 0),
-> +       { }
-> +};
-> +
->  static struct freq_tbl ftbl_mdss_mdp_clk[] =3D {
->         F(37500000, P_GPLL0, 16, 0, 0),
->         F(60000000, P_GPLL0, 10, 0, 0),
-> @@ -513,6 +554,14 @@ static struct clk_rcg2 pclk1_clk_src =3D {
->         },
->  };
-> =20
-> +static struct freq_tbl ftbl_venus0_vcodec0_clk_msm8226[] =3D {
+sparse warnings: (new ones prefixed by >>)
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c: note: in included file:
+   include/linux/kvm_host.h:1877:54: sparse: sparse: array of flexible structures
+   include/linux/kvm_host.h:1879:56: sparse: sparse: array of flexible structures
+>> arch/x86/kvm/../../../virt/kvm/kvm_main.c:5859:54: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct task_struct *from @@     got struct task_struct [noderef] __rcu *real_parent @@
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:5859:54: sparse:     expected struct task_struct *from
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:5859:54: sparse:     got struct task_struct [noderef] __rcu *real_parent
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_change_pte' - different lock contexts for basic block
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_invalidate_range_start' - different lock contexts for basic block
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_invalidate_range_end' - different lock contexts for basic block
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_clear_flush_young' - different lock contexts for basic block
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_clear_young' - different lock contexts for basic block
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_test_young' - different lock contexts for basic block
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:2522:9: sparse: sparse: context imbalance in 'hva_to_pfn_remapped' - unexpected unlock
 
-const?
+vim +5859 arch/x86/kvm/../../../virt/kvm/kvm_main.c
 
-> +       F(66700000, P_GPLL0, 9, 0, 0),
-> +       F(100000000, P_GPLL0, 6, 0, 0),
-> +       F(133330000, P_MMPLL0, 6, 0, 0),
-> +       F(160000000, P_MMPLL0, 5, 0, 0),
-> +       { }
-> +};
-> +
->  static struct freq_tbl ftbl_venus0_vcodec0_clk[] =3D {
->         F(50000000, P_GPLL0, 12, 0, 0),
->         F(100000000, P_GPLL0, 6, 0, 0),
-> @@ -593,6 +642,13 @@ static struct clk_rcg2 camss_gp1_clk_src =3D {
->         },
->  };
-> =20
-> +static struct freq_tbl ftbl_camss_mclk0_3_clk_msm8226[] =3D {
+  5805	
+  5806	static int kvm_vm_worker_thread(void *context)
+  5807	{
+  5808		/*
+  5809		 * The init_context is allocated on the stack of the parent thread, so
+  5810		 * we have to locally copy anything that is needed beyond initialization
+  5811		 */
+  5812		struct kvm_vm_worker_thread_context *init_context = context;
+  5813		struct kvm *kvm = init_context->kvm;
+  5814		kvm_vm_thread_fn_t thread_fn = init_context->thread_fn;
+  5815		uintptr_t data = init_context->data;
+  5816		int err, reattach_err;
+  5817	
+  5818		err = kthread_park(current);
+  5819		/* kthread_park(current) is never supposed to return an error */
+  5820		WARN_ON(err != 0);
+  5821		if (err)
+  5822			goto init_complete;
+  5823	
+  5824		err = cgroup_attach_task_all(init_context->parent, current);
+  5825		if (err) {
+  5826			kvm_err("%s: cgroup_attach_task_all failed with err %d\n",
+  5827				__func__, err);
+  5828			goto init_complete;
+  5829		}
+  5830	
+  5831		set_user_nice(current, task_nice(init_context->parent));
+  5832	
+  5833	init_complete:
+  5834		init_context->err = err;
+  5835		complete(&init_context->init_done);
+  5836		init_context = NULL;
+  5837	
+  5838		if (err)
+  5839			goto out;
+  5840	
+  5841		/* Wait to be woken up by the spawner before proceeding. */
+  5842		kthread_parkme();
+  5843	
+  5844		if (!kthread_should_stop())
+  5845			err = thread_fn(kvm, data);
+  5846	
+  5847	out:
+  5848		/*
+  5849		 * Move kthread back to its original cgroup to prevent it lingering in
+  5850		 * the cgroup of the VM process, after the latter finishes its
+  5851		 * execution.
+  5852		 *
+  5853		 * kthread_stop() waits on the 'exited' completion condition which is
+  5854		 * set in exit_mm(), via mm_release(), in do_exit(). However, the
+  5855		 * kthread is removed from the cgroup in the cgroup_exit() which is
+  5856		 * called after the exit_mm(). This causes the kthread_stop() to return
+  5857		 * before the kthread actually quits the cgroup.
+  5858		 */
+> 5859		reattach_err = cgroup_attach_task_all(current->real_parent, current);
+  5860		if (reattach_err) {
+  5861			kvm_err("%s: cgroup_attach_task_all failed on reattach with err %d\n",
+  5862				__func__, reattach_err);
+  5863		}
+  5864		return err;
+  5865	}
+  5866	
 
-const?
-
-> +       F(19200000, P_XO, 1, 0, 0),
-> +       F(24000000, P_GPLL0, 5, 1, 5),
-> +       F(66670000, P_GPLL0, 9, 0, 0),
-> +       { }
-> +};
-> +
->  static struct freq_tbl ftbl_camss_mclk0_3_clk[] =3D {
->         F(4800000, P_XO, 4, 0, 0),
->         F(6000000, P_GPLL0, 10, 1, 10),
-> @@ -705,6 +761,15 @@ static struct clk_rcg2 csi2phytimer_clk_src =3D {
->         },
->  };
-> =20
-> +static struct freq_tbl ftbl_camss_vfe_cpp_clk_msm8226[] =3D {
-
-const?
-
-> +       F(133330000, P_GPLL0, 4.5, 0, 0),
-> +       F(150000000, P_GPLL0, 4, 0, 0),
-> +       F(266670000, P_MMPLL0, 3, 0, 0),
-> +       F(320000000, P_MMPLL0, 2.5, 0, 0),
-> +       F(400000000, P_MMPLL0, 2, 0, 0),
-> +       { }
-> +};
-> +
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

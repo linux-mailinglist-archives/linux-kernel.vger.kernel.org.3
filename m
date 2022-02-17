@@ -2,62 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D264B9F43
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7AB4B9F80
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240108AbiBQLlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:41:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57062 "EHLO
+        id S240175AbiBQMBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:01:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240246AbiBQLk6 (ORCPT
+        with ESMTP id S236361AbiBQMBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:40:58 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2E724BF9;
-        Thu, 17 Feb 2022 03:40:44 -0800 (PST)
-X-UUID: 703c41c94143403296040a888cc5b8dd-20220217
-X-UUID: 703c41c94143403296040a888cc5b8dd-20220217
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1646086001; Thu, 17 Feb 2022 19:40:42 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 17 Feb 2022 19:40:40 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Feb 2022 19:40:39 +0800
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>, Rob Herring <robh+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, <yong.wu@mediatek.com>,
-        <youlin.pei@mediatek.com>, <anan.sun@mediatek.com>,
-        <xueqi.zhang@mediatek.com>, <yen-chang.chen@mediatek.com>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
-        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>
-Subject: [PATCH v5 34/34] iommu/mediatek: mt8195: Enable multi banks for infra iommu
-Date:   Thu, 17 Feb 2022 19:34:53 +0800
-Message-ID: <20220217113453.13658-35-yong.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220217113453.13658-1-yong.wu@mediatek.com>
-References: <20220217113453.13658-1-yong.wu@mediatek.com>
+        Thu, 17 Feb 2022 07:01:02 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4641829412D;
+        Thu, 17 Feb 2022 04:00:48 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HBddKk030523;
+        Thu, 17 Feb 2022 12:00:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=RPK02i33myDKA4bIkfBDslJjVJucaG1dFf32Qm6oCgE=;
+ b=rk1u9ymXsuEs3djR5ElAft4xFo4MRy4bFLpasvqVsK46eYuEiMBA81wE25tRWlORrpk8
+ nM3xTNqufSc02jOvf4YeleHIkMGr77nlB0NVyYuUPkKZMUcsVPmMxHb3oIFJJgvgv56g
+ AkiLu1nOZoKtjdU+CRj3WdMI0PkzJADUn90fLa4g4i/QtCcEuJRLMMsykV/jBry3vpjd
+ A3S7sTPbqyYt8mDlN+ohJ1uACV37mQxEo4Dr8OhlIvAgNNfH/nt+ooT5tg+AjyIwxGKQ
+ cTjk7iIXX+2cPATrWE2J7SfLkFn/CprV/GRw/TX94y5t/WJo1IusAuiSiUAI0+GhnHZ/ pA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9k53kyju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 12:00:10 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21HBrw4A016454;
+        Thu, 17 Feb 2022 12:00:09 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9k53kyh6-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 12:00:09 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21HBZwAv022806;
+        Thu, 17 Feb 2022 11:36:46 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 3e64ha7782-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 11:36:45 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21HBahp937028328
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Feb 2022 11:36:43 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 91A4352071;
+        Thu, 17 Feb 2022 11:36:42 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.115.39])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1E43852065;
+        Thu, 17 Feb 2022 11:36:39 +0000 (GMT)
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, <bpf@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/3] powerpc/ftrace: Reserve instructions from function entry for ftrace
+Date:   Thu, 17 Feb 2022 17:06:22 +0530
+Message-Id: <cover.1645096227.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DQ6MhTknBE0_u8Dy8aNbZyxfn4xTp6Am
+X-Proofpoint-GUID: 16gxvXOI1def_ltGAETNZW6zLj_LE4PB
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-17_04,2022-02-17_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ suspectscore=0 phishscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ mlxlogscore=564 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202170051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,34 +90,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the multi-bank functions for infra-iommu. We put PCIE in bank0
-and USB in the last bank(bank4). and we don't use the other banks
-currently, disable them.
+Previously discussed here:
+https://lore.kernel.org/20220207102454.41b1d6b5@gandalf.local.home
 
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/iommu/mtk_iommu.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+- Naveen
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index d3b6c80bf51a..d9ca9ffe404c 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -1458,8 +1458,11 @@ static const struct mtk_iommu_plat_data mt8195_data_infra = {
- 			    MTK_IOMMU_TYPE_INFRA | IFA_IOMMU_PCIE_SUPPORT,
- 	.pericfg_comp_str = "mediatek,mt8195-pericfg_ao",
- 	.inv_sel_reg      = REG_MMU_INV_SEL_GEN2,
--	.banks_num        = 1,
--	.banks_enable     = {true},
-+	.banks_num	  = 5,
-+	.banks_enable     = {true, false, false, false, true},
-+	.banks_portmsk    = {[0] = GENMASK(19, 16),     /* PCIe */
-+			     [4] = GENMASK(31, 20),     /* USB */
-+			    },
- 	.iova_region      = single_domain,
- 	.iova_region_nr   = ARRAY_SIZE(single_domain),
- };
+
+Naveen N. Rao (3):
+  powerpc/ftrace: Reserve instructions from function entry for ftrace
+  bpf/trampoline: Allow ftrace location to differ from trampoline attach
+    address
+  kprobes: Allow probing on any address belonging to ftrace
+
+ arch/powerpc/include/asm/ftrace.h  |  15 ++++
+ arch/powerpc/kernel/trace/ftrace.c | 110 ++++++++++++++++++++++++++---
+ kernel/bpf/trampoline.c            |   2 -
+ kernel/kprobes.c                   |  12 ++++
+ kernel/trace/ftrace.c              |   2 +
+ 5 files changed, 129 insertions(+), 12 deletions(-)
+
+
+base-commit: 1b43a74f255c5c00db25a5fedfd75ca0dc029022
 -- 
-2.18.0
+2.35.1
 

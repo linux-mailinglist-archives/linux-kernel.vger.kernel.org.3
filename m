@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71804BA409
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 112B44BA40E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242339AbiBQPMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:12:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38126 "EHLO
+        id S242343AbiBQPNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:13:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242337AbiBQPM1 (ORCPT
+        with ESMTP id S242341AbiBQPNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:12:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6BFFD13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:12:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CA4E60B23
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 15:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E34C340E8;
-        Thu, 17 Feb 2022 15:12:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645110730;
-        bh=KDQe45qlzMBNPOl7GlXQkYPjXodxLAhGokag+dlZ2zo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Htsc0XFIK2HdOEgDOn9Ppq1O7VCXWF1mVm/DLnbg80UCH11tmBi3Qhgw/VlDoh9nJ
-         /WxEhkdqOmCMDR5lLGMt9adBXTVTD4y+4cbC9SFRQocfSbvLpTIZs99vZ89ldtSTwX
-         3+qG/yFdRzhcEbBtprGCHBieGeE/BjWzsMWZCgkFTm6BgCm/+sHpyssV68Z5VDuw37
-         R0xN1GJku5w6CaImS+9wwuzgMMmV9/1SrdUfoQDiBClDh8/85s6bZFii08uu6plEKr
-         VVqAt8Qw/QwMDFEaQ5WkS1PKqMup2XGJN+2rSnL+LUhbmok8ck9ROcK/tVc58QZmEL
-         KXfwYS7ZZuelg==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nKiS0-008bzU-J7; Thu, 17 Feb 2022 15:12:08 +0000
+        Thu, 17 Feb 2022 10:13:41 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FED2A0D41
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:13:27 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2d07c4a0d06so35084597b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:13:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ue09UYaxTaEqS175+LfKF6ZQhoNdq+QTxAZ6/A1fP2M=;
+        b=DbdZsHSudW3XTJiY+K1xA58iiJbLUQuB5eSPGNbbgrAQPf8IlmE03xiqg1+9wuD6fz
+         prwczh4o+KUv8m47n1jAFn1qlfpy8WgmxUtJU/UkjM4IEiFhE+lKg/ImrzVwLl9cfwfr
+         2GNgce03dRItFvEmtPhz8UhPt0AuJ3S9+3H5wTMYIgsXFNpN0hjy4pN2DVvhRasuX/eq
+         0p33LNW5rO3BP2q6hlTUU+N6+1LwrNkcul1fnfrspmH5cI+FTRtcmC5a1ODWbB+hX/vG
+         PykTm84tq45e7zRH6B+axrW4X3oQ+cbMYPhhkaugixg9Db8CDpkGUKfZhEErAOW4Grp6
+         C+XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ue09UYaxTaEqS175+LfKF6ZQhoNdq+QTxAZ6/A1fP2M=;
+        b=HKx5wDAgF8B/w0mn0Njh72gptgWNYNGKv/kaRn6i/c9q5PSL2g8o5F974hf31DMm41
+         xw67mhwzsfc5ac5FUINUiWYoqUaD3/2IHSJZz/2loUy44UyiAPgZM8H+93esMJbuM0VX
+         H86vNuYHpxXS+qTBiT6yuhCw2vmYvx76JvSuehKe5mhtI2U17D5DMONbRbMn8N0s8ThG
+         JrMg3vpsquLwVc7QYmEedE6mXjflZnGSFaz3La+F4URLt5Odn/h7X5qoWVg09rI9ZdF/
+         blrhzC2KYmav4hS7w+qddWs99IfLC7GQg0gYFvu9h6NpXovlrnpfFNsFW2B0sX2ier7M
+         Lh7w==
+X-Gm-Message-State: AOAM531bkw1w9LxQZLpgFLnNJ0Yf4hMfz19Dun5WHT6XfwfbvGDqzFGD
+        XrL2l/3m4YcrMED/Kjo7L74re3sRl/pT6rwVUHlB0A==
+X-Google-Smtp-Source: ABdhPJzbG6wC2LPbv8HnQDMoclI9DH40Jr8ukHtJRt4zE8if4FlSJ1G02bARjfum6c6K95QFlyMggt7miSl+zAX9Fpc=
+X-Received: by 2002:a81:1516:0:b0:2d0:e7ca:2a5 with SMTP id
+ 22-20020a811516000000b002d0e7ca02a5mr2946109ywv.55.1645110804769; Thu, 17 Feb
+ 2022 07:13:24 -0800 (PST)
 MIME-Version: 1.0
-Date:   Thu, 17 Feb 2022 15:12:08 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] irqchip/riscv-intc: Create domain using named
- fwnode
-In-Reply-To: <20220128052505.859518-3-apatel@ventanamicro.com>
-References: <20220128052505.859518-1-apatel@ventanamicro.com>
- <20220128052505.859518-3-apatel@ventanamicro.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <063b8a5636d6372f37029946b2c3e0f4@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220217140441.1218045-1-andrzej.hajda@intel.com> <20220217140441.1218045-6-andrzej.hajda@intel.com>
+In-Reply-To: <20220217140441.1218045-6-andrzej.hajda@intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Feb 2022 07:13:13 -0800
+Message-ID: <CANn89i+nCZ6LV_1E2OnJ4qWE0XkO2FGW+A6_tkmQpdxiiEh=LQ@mail.gmail.com>
+Subject: Re: [PATCH 5/9] lib/ref_tracker: improve allocation flags
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev <netdev@vger.kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,115 +74,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-28 05:25, Anup Patel wrote:
-> We should create INTC domain using a synthetic fwnode which will allow
-> drivers (such as RISC-V SBI IPI driver, RISC-V timer driver, RISC-V
-> PMU driver, etc) not having dedicated DT/ACPI node to directly create
-> interrupt mapping for standard local interrupt numbers defined by the
-> RISC-V privileged specification.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+On Thu, Feb 17, 2022 at 6:05 AM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
+>
+> Library can be called in non-sleeping context, so it should not use
+> __GFP_NOFAIL. Instead it should calmly handle allocation fails, for
+> this __GFP_NOWARN has been added as well.
+
+Your commit changelog is misleading .
+
+The GFP_NOFAIL issue has been fixed already in
+commit c12837d1bb31032bead9060dec99ef310d5b9fb7 ("ref_tracker: use
+__GFP_NOFAIL more carefully")
+
+
+>
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
 > ---
->  arch/riscv/include/asm/irq.h      |  2 ++
->  arch/riscv/kernel/irq.c           | 13 +++++++++++++
->  drivers/clocksource/timer-clint.c | 13 +++++++------
->  drivers/clocksource/timer-riscv.c | 11 ++---------
->  drivers/irqchip/irq-riscv-intc.c  | 12 ++++++++++--
->  drivers/irqchip/irq-sifive-plic.c | 19 +++++++++++--------
->  6 files changed, 45 insertions(+), 25 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/irq.h 
-> b/arch/riscv/include/asm/irq.h
-> index e4c435509983..f85ebaf07505 100644
-> --- a/arch/riscv/include/asm/irq.h
-> +++ b/arch/riscv/include/asm/irq.h
-> @@ -12,6 +12,8 @@
-> 
->  #include <asm-generic/irq.h>
-> 
-> +extern struct fwnode_handle *riscv_intc_fwnode(void);
-> +
->  extern void __init init_IRQ(void);
-> 
->  #endif /* _ASM_RISCV_IRQ_H */
-> diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-> index 7207fa08d78f..f2fed78ab659 100644
-> --- a/arch/riscv/kernel/irq.c
-> +++ b/arch/riscv/kernel/irq.c
-> @@ -7,9 +7,22 @@
-> 
->  #include <linux/interrupt.h>
->  #include <linux/irqchip.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/module.h>
->  #include <linux/seq_file.h>
->  #include <asm/smp.h>
-> 
-> +static struct fwnode_handle *intc_fwnode;
-> +
-> +struct fwnode_handle *riscv_intc_fwnode(void)
-> +{
-> +	if (!intc_fwnode)
-> +		intc_fwnode = irq_domain_alloc_named_fwnode("RISCV-INTC");
-> +
-> +	return intc_fwnode;
-> +}
-> +EXPORT_SYMBOL_GPL(riscv_intc_fwnode);
+>  lib/ref_tracker.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
+> index 7b00bca300043..c8441ffbb058a 100644
+> --- a/lib/ref_tracker.c
+> +++ b/lib/ref_tracker.c
+> @@ -59,7 +59,7 @@ __ref_tracker_dir_pr_ostream(struct ref_tracker_dir *dir,
+>         if (list_empty(&dir->list))
+>                 return;
+>
+> -       sbuf = kmalloc(STACK_BUF_SIZE, GFP_NOWAIT);
+> +       sbuf = kmalloc(STACK_BUF_SIZE, GFP_NOWAIT | __GFP_NOWARN);
 
-Why is this created outside of the root interrupt controller driver?
-Furthermore, why do you need to create a new fwnode the first place?
-As far as I can tell, the INTC does have a node, and what you don't
-have is the firmware linkage between PMU (an others) and the INTC.
+This belongs to patch 3 in your series.
 
-what you should have instead is something like:
+>
+>         list_for_each_entry(tracker, &dir->list, head)
+>                 ++total;
+> @@ -154,11 +154,11 @@ int ref_tracker_alloc(struct ref_tracker_dir *dir,
+>         unsigned long entries[REF_TRACKER_STACK_ENTRIES];
+>         struct ref_tracker *tracker;
+>         unsigned int nr_entries;
+> -       gfp_t gfp_mask = gfp;
 
-static struct fwnode_handle *(*__get_root_intc_node)(void);
-struct fwnode_handle *riscv_get_root_intc_hwnode(void)
-{
-         if (__get_root_intc_node)
-                 return __get_root_intc_node();
+Simply change this line to : gfp_t gfp_mask = gfp | __GFP_NOFAIL;
 
-         return NULL;
-}
+> +       gfp_t gfp_mask;
+>         unsigned long flags;
+>
 
-and the corresponding registration interface.
+Then leave all this code as is ? I find current code more readable.
 
-But either way, something breaks: the INTC has one node per CPU, and
-expect one irqdomain per CPU. Having a single fwnode completely breaks
-the INTC driver (and probably the irqdomain list, as we don't check for
-duplicate entries).
+> -       if (gfp & __GFP_DIRECT_RECLAIM)
+> -               gfp_mask |= __GFP_NOFAIL;
+> +       gfp |= __GFP_NOWARN;
+> +       gfp_mask = (gfp & __GFP_DIRECT_RECLAIM) ? (gfp | __GFP_NOFAIL) : gfp;
+>         *trackerp = tracker = kzalloc(sizeof(*tracker), gfp_mask);
+>         if (unlikely(!tracker)) {
+>                 pr_err_once("memory allocation failure, unreliable refcount tracker.\n");
+> @@ -191,7 +191,8 @@ int ref_tracker_free(struct ref_tracker_dir *dir,
+>         }
+>         nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 1);
+>         nr_entries = filter_irq_stacks(entries, nr_entries);
 
-> diff --git a/drivers/irqchip/irq-riscv-intc.c 
-> b/drivers/irqchip/irq-riscv-intc.c
-> index b65bd8878d4f..26ed62c11768 100644
-> --- a/drivers/irqchip/irq-riscv-intc.c
-> +++ b/drivers/irqchip/irq-riscv-intc.c
-> @@ -112,8 +112,16 @@ static int __init riscv_intc_init(struct 
-> device_node *node,
->  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
->  		return 0;
-> 
-> -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
-> -					    &riscv_intc_domain_ops, NULL);
-> +	/*
-> +	 * Create INTC domain using a synthetic fwnode which will allow
-> +	 * drivers (such as RISC-V SBI IPI driver, RISC-V timer driver,
-> +	 * RISC-V PMU driver, etc) not having dedicated DT/ACPI node to
-> +	 * directly create interrupt mapping for standard local interrupt
-> +	 * numbers defined by the RISC-V privileged specification.
-> +	 */
-> +	intc_domain = irq_domain_create_linear(riscv_intc_fwnode(),
-> +					       BITS_PER_LONG,
-> +					       &riscv_intc_domain_ops, NULL);
+lib/ref_tracker.c got patches in net-next, your patch series is going
+to add conflicts.
 
-This is what I'm talking about. It is simply broken. So either you don't
-need a per-CPU node (and the DT was bad the first place), or you 
-absolutely need
-one (and the whole 'well-known/default domain' doesn't work at all).
-
-Either way, this patch is plain wrong.
+git log --oneline 5740d0689096..4d449bdc5b26 --no-merges -- lib/ref_tracker.c
+c2d1e3df4af59261777b39c2e47476acd4d1cbeb ref_tracker: remove
+filter_irq_stacks() call
+8fd5522f44dcd7f05454ddc4f16d0f821b676cd9 ref_tracker: add a count of
+untracked references
+e3ececfe668facd87d920b608349a32607060e66 ref_tracker: implement
+use-after-free detection
 
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+> -       stack_handle = stack_depot_save(entries, nr_entries, GFP_ATOMIC);
+> +       stack_handle = stack_depot_save(entries, nr_entries,
+> +                                       GFP_NOWAIT | __GFP_NOWARN);
+
+This is fine.
+
+>
+>         spin_lock_irqsave(&dir->lock, flags);
+>         if (tracker->dead) {
+> --
+> 2.25.1
+>

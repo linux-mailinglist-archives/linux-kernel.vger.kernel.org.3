@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9F14BAA18
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5474BAA23
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245401AbiBQTrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:47:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45066 "EHLO
+        id S245422AbiBQTra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:47:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244843AbiBQTrU (ORCPT
+        with ESMTP id S245349AbiBQTrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Feb 2022 14:47:20 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668E42654B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:47:04 -0800 (PST)
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F732654C;
+        Thu, 17 Feb 2022 11:47:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1645127224; x=1676663224;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xv6pcA5dxgACBVYnbVuiAe1cTKMxE6gTqfXo+UBD0dU=;
-  b=cjghv1UqOHj9b/c8IQKFwTrGt1rSDffBHykMioDCgcv03iOq3pmWJ5IO
-   KR/ONm2/m6MzRU/QZMdn4WmY6+EdstnPDNADHyPASyTKuwmo04rJaCUZg
-   ByH6Ic0Q+IWYK9BA+rizmT4peAuw4I63ccbO/msKkKlk+TOPOxTnWKbzR
-   DmoRjWGnrCDaH/3Tf3Wjb+tzGdX+icYrGZyNT+FcaOUqw3t3iW7rB7LtS
-   dAepnnPiTtACDpEXUSFuQ36YU7RQvcsqzto2avQP79SC/QSUEZokTKCXc
-   vo90AnfVKCJzTWXLymHa/nIvT8boOYKuUqC1b2JE+31RE7cI1wzNjCA5Q
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="337404433"
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HSCKqfDMdMI/r89h9i7FEF/tyXYo2PHT5q86Bt1G8+0=;
+  b=TqYOpVdXJ9E2l92O79IeNLH5ZMU4IVsHp/AeiVxzOOsbnIbfnCrvtlll
+   8bpZVmbLRPfvAHvvYoA83gjunRE5ven0IKXagKKdZnWwjC5VPKIyw8rbC
+   WXdzejcz/sXdX7QJJ5R2lI+ln2wi5nPOX/gwizbvfWUdS+jN9gywGScY8
+   S75l5In9dYbwQ7REyZvNcCYDlUtEBxEOcDSx258QCu9ttbo+FamVS56if
+   P+jmgo0OTxwp5hwOV1o9PtceX1G8VXbmn40r/6Dn5Y2M4v3F/GyDiLHRz
+   /HjvP4ku9oOQ2zmdw+Y3vnbiA0g6nF51LpIYW7Mv/O4HCBcTeepR+b9Q1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="249794921"
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="337404433"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:47:04 -0800
+   d="scan'208";a="249794921"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:47:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="605157230"
+   d="scan'208";a="571969855"
 Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Feb 2022 11:47:01 -0800
+  by orsmga001.jf.intel.com with ESMTP; 17 Feb 2022 11:47:01 -0800
 Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nKmk1-0000Ty-3I; Thu, 17 Feb 2022 19:47:01 +0000
-Date:   Fri, 18 Feb 2022 03:46:17 +0800
+        id 1nKmk1-0000U9-6S; Thu, 17 Feb 2022 19:47:01 +0000
+Date:   Fri, 18 Feb 2022 03:46:23 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [hnaz-mm:master 237/343] arch/powerpc/mm/book3s64/pgtable.c:540:15:
- warning: no previous prototype for 'memremap_compat_align'
-Message-ID: <202202172347.lJ6oYVOE-lkp@intel.com>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kbuild-all@lists.01.org, Nicholas Piggin <npiggin@gmail.com>,
+        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] powerpc/ftrace: Reserve instructions from function
+ entry for ftrace
+Message-ID: <202202180014.IWuzQ9al-lkp@intel.com>
+References: <8843d65ac0878232433573d10ebee30457748624.1645096227.git.naveen.n.rao@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <8843d65ac0878232433573d10ebee30457748624.1645096227.git.naveen.n.rao@linux.vnet.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/hnaz/linux-mm master
-head:   8857950589bc3b4920d69c3e0b2c06d33f445d21
-commit: 236e08e72c118cbb20e780cc853378e2c341825c [237/343] mm: don't include <linux/memremap.h> in <linux/mm.h>
-config: powerpc64-randconfig-m031-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172347.lJ6oYVOE-lkp@intel.com/config)
-compiler: powerpc64le-linux-gcc (GCC) 11.2.0
+Hi "Naveen,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on 1b43a74f255c5c00db25a5fedfd75ca0dc029022]
+
+url:    https://github.com/0day-ci/linux/commits/Naveen-N-Rao/powerpc-ftrace-Reserve-instructions-from-function-entry-for-ftrace/20220217-200314
+base:   1b43a74f255c5c00db25a5fedfd75ca0dc029022
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220218/202202180014.IWuzQ9al-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/hnaz/linux-mm/commit/236e08e72c118cbb20e780cc853378e2c341825c
-        git remote add hnaz-mm https://github.com/hnaz/linux-mm
-        git fetch --no-tags hnaz-mm master
-        git checkout 236e08e72c118cbb20e780cc853378e2c341825c
+        # https://github.com/0day-ci/linux/commit/6a1891335e377e5def312e7c182aef676f04c926
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Naveen-N-Rao/powerpc-ftrace-Reserve-instructions-from-function-entry-for-ftrace/20220217-200314
+        git checkout 6a1891335e377e5def312e7c182aef676f04c926
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/book3s64/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/trace/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/powerpc/mm/book3s64/pgtable.c:540:15: warning: no previous prototype for 'memremap_compat_align' [-Wmissing-prototypes]
-     540 | unsigned long memremap_compat_align(void)
-         |               ^~~~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kernel/trace/ftrace.c:504:5: warning: no previous prototype for 'ftrace_location_get_offset' [-Wmissing-prototypes]
+     504 | int ftrace_location_get_offset(const struct dyn_ftrace *rec)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/memremap_compat_align +540 arch/powerpc/mm/book3s64/pgtable.c
+vim +/ftrace_location_get_offset +504 arch/powerpc/kernel/trace/ftrace.c
 
-20626177c9de72 Nicholas Piggin 2021-12-02  531  
-387e220a2e5e63 Nicholas Piggin 2021-12-02  532  #if defined(CONFIG_ZONE_DEVICE) && defined(CONFIG_ARCH_HAS_MEMREMAP_COMPAT_ALIGN)
-20626177c9de72 Nicholas Piggin 2021-12-02  533  /*
-20626177c9de72 Nicholas Piggin 2021-12-02  534   * Override the generic version in mm/memremap.c.
-20626177c9de72 Nicholas Piggin 2021-12-02  535   *
-20626177c9de72 Nicholas Piggin 2021-12-02  536   * With hash translation, the direct-map range is mapped with just one
-20626177c9de72 Nicholas Piggin 2021-12-02  537   * page size selected by htab_init_page_sizes(). Consult
-20626177c9de72 Nicholas Piggin 2021-12-02  538   * mmu_psize_defs[] to determine the minimum page size alignment.
-20626177c9de72 Nicholas Piggin 2021-12-02  539  */
-20626177c9de72 Nicholas Piggin 2021-12-02 @540  unsigned long memremap_compat_align(void)
-
-:::::: The code at line 540 was first introduced by commit
-:::::: 20626177c9de726c48802c15e8635cc154645588 powerpc: make memremap_compat_align 64s-only
-
-:::::: TO: Nicholas Piggin <npiggin@gmail.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+   502	
+   503	#if defined(CONFIG_MPROFILE_KERNEL) || defined(CONFIG_PPC32)
+ > 504	int ftrace_location_get_offset(const struct dyn_ftrace *rec)
+   505	{
+   506		if (IS_ENABLED(CONFIG_MPROFILE_KERNEL))
+   507			/*
+   508			 * On ppc64le with -mprofile-kernel, function entry can have:
+   509			 *   addis r2, r12, M
+   510			 *   addi  r2, r2, N
+   511			 *   mflr  r0
+   512			 *   bl    _mcount
+   513			 *
+   514			 * The first two instructions are for TOC setup and represent the global entry
+   515			 * point for cross-module calls, and may be missing if the function is never called
+   516			 * from other modules.
+   517			 */
+   518			return ((unsigned long)rec->arch.mod & 0x1) ? FUNC_MCOUNT_OFFSET_PPC64_GEP :
+   519								      FUNC_MCOUNT_OFFSET_PPC64_LEP;
+   520		else
+   521			/*
+   522			 * On ppc32, function entry always has:
+   523			 *   mflr r0
+   524			 *   stw  r0, 4(r1)
+   525			 *   bl   _mcount
+   526			 */
+   527			return FUNC_MCOUNT_OFFSET_PPC32;
+   528	}
+   529	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

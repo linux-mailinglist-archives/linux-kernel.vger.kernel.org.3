@@ -2,106 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997CA4B9A1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01984B9A1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbiBQHuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 02:50:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52162 "EHLO
+        id S236721AbiBQHuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 02:50:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiBQHuc (ORCPT
+        with ESMTP id S236673AbiBQHuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:50:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF46A27F29A;
-        Wed, 16 Feb 2022 23:50:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 800BF61A6A;
-        Thu, 17 Feb 2022 07:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5882C340F6;
-        Thu, 17 Feb 2022 07:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645084217;
-        bh=mjFs6zWH8/AqiitYOR0rg+8IkEbypYLpH0MSBavFTDs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KcQXvGa6ufTjq00Joyx9C3HRfsSGVDhmAWnfuai4piutHWEZTONgSlJ36qJk0w305
-         PL6xOd5cUC+4mKD4d4yRE4a85vuRW7inj41M4WlJ4NLhwiKrmht5Rppfu7HTodcxxO
-         muZcHf0Avewz4g0zsaE2L3uDESfxksZnGC+zgC//UboQHkePPQNFjX0MhRIBawkNza
-         RY+2WdQoYRF2d9hYiLImoqDwMoIfh1hzRHwtwyyi2JTBlJ2aQ0EE6mUfLA+MeQEnLM
-         aWF5NyrIDLQ3IgLsmOekx21DOqzG7U0dAHBe+enVZeDpShNR7ggyHvCHaU5ZNjz0An
-         wyUChekSodH2A==
-Received: by mail-wm1-f53.google.com with SMTP id w13so2118120wmi.2;
-        Wed, 16 Feb 2022 23:50:17 -0800 (PST)
-X-Gm-Message-State: AOAM533uj+5mtx8xx/fYcrakRh/VLSDGl9gPsDwKd7mbgO29Q8oorWDZ
-        pSl+TOatIkAwiv4PyhRyC7lNrTZQbb7gc6sIzQM=
-X-Google-Smtp-Source: ABdhPJxVHiNpam6v+gNoOoH0mO2de38FsGKKulVVSeiH+uDoJW6u9JTqRXgzs52TA7IQLSGpUpbHMUpXX+Sk75rMI5w=
-X-Received: by 2002:a05:600c:2108:b0:34e:870:966e with SMTP id
- u8-20020a05600c210800b0034e0870966emr4902681wml.173.1645084215917; Wed, 16
- Feb 2022 23:50:15 -0800 (PST)
+        Thu, 17 Feb 2022 02:50:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A2E52A39EE
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 23:50:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645084237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w+SWlmqdTXW/vwpa/W1PTCZvRCAVwOXfVJtRO06yo4I=;
+        b=i2rL9DXKEnjnfpAazslJZkk1JT1YdIDASkVxmRvhTUKZt5dYgkDNB/Bu9FZroYw9pSU15+
+        R8aK81n2+S+dYOK1lhyacuaZBrvGohz4vwpA5oyVGAXzNDsCJbb+/mOSSeoZINCq5aZgrI
+        hEJcJZAwVj0Qzh1dwmMJEaMiOAnqtNc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-657-JgmgxhVUMS-urnCPLAsKrQ-1; Thu, 17 Feb 2022 02:50:35 -0500
+X-MC-Unique: JgmgxhVUMS-urnCPLAsKrQ-1
+Received: by mail-wm1-f69.google.com with SMTP id v130-20020a1cac88000000b0037e3d70e7e1so1097531wme.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 23:50:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w+SWlmqdTXW/vwpa/W1PTCZvRCAVwOXfVJtRO06yo4I=;
+        b=JbB0vl4OpS9U6qUDhkIEftmQZSqSOxXUpad4YAnxQrnj083JlrlCb50YXX0h+DEXh6
+         ujM495UVqzNO6AYpqGn1uKVuD3MMacC31lqItCnM3iNvJV9zTaJk9A0HUHvIAAj1WW/E
+         tLKFSqc6mxPD+4/FvAmurEOQyoYCq9oojidM7dKPu3OItjpAtVlbUCv1SrQGa7EpntvS
+         x3Qw0LzyzOS7SyuDimYgnCxog/KHxR6rwC9pgT4caXkmN+/WbdgNZrJhT7Ul15A4iKIb
+         ah6wAB0sEgliN1sPwGy7vTFN19NzGZaA2tsezVbrtaFBnjuspEgA2uGbcCjVXp1Q6upy
+         0n/Q==
+X-Gm-Message-State: AOAM533ueKCnhh1dxdSIezZp7KiQR6vjuF1qfJSKw8EQxJLwY2TgN5Ad
+        nkqlIQvakp2YM0ocE+gyjjDhOuVV7BqANzz++4HoNZ+B9yKmXGyjaaSLsm5rsgdKzORm9ngSw7o
+        7QJaBPZx2NnTRC0m/EirXwM+0
+X-Received: by 2002:adf:9f42:0:b0:1e7:e751:9656 with SMTP id f2-20020adf9f42000000b001e7e7519656mr1268881wrg.590.1645084233485;
+        Wed, 16 Feb 2022 23:50:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw57VwM/1catFUUkrmi2KhjRFil7J/w4QZrPWIsW6CqSvS4FYyAAEPbPH6XyQzZ/Q25yrD01w==
+X-Received: by 2002:adf:9f42:0:b0:1e7:e751:9656 with SMTP id f2-20020adf9f42000000b001e7e7519656mr1268862wrg.590.1645084233179;
+        Wed, 16 Feb 2022 23:50:33 -0800 (PST)
+Received: from redhat.com ([2.55.139.83])
+        by smtp.gmail.com with ESMTPSA id g12sm469088wmq.28.2022.02.16.23.50.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 23:50:32 -0800 (PST)
+Date:   Thu, 17 Feb 2022 02:50:29 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     syzbot <syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, syzkaller-bugs@googlegroups.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: Re: [syzbot] WARNING in vhost_dev_cleanup (2)
+Message-ID: <20220217024359-mutt-send-email-mst@kernel.org>
+References: <0000000000006f656005d82d24e2@google.com>
+ <CACGkMEsyWBBmx3g613tr97nidHd3-avMyO=WRxS8RpcEk7j2=A@mail.gmail.com>
+ <20220217023550-mutt-send-email-mst@kernel.org>
+ <CACGkMEtuL_4eRYYWd4aQj6rG=cJDQjjr86DWpid3o_N-6xvTWQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <00496df2-f9f2-2547-3ca3-7989e4713d6b@csgroup.eu>
-In-Reply-To: <00496df2-f9f2-2547-3ca3-7989e4713d6b@csgroup.eu>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 17 Feb 2022 08:49:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3_dPbjB23QffnYMtw+5ojfwChrVC8LLMQqNctU7Nh+mQ@mail.gmail.com>
-Message-ID: <CAK8P3a3_dPbjB23QffnYMtw+5ojfwChrVC8LLMQqNctU7Nh+mQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/18] clean up asm/uaccess.h, kill set_fs for good
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "dalias@libc.org" <dalias@libc.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "bcain@codeaurora.org" <bcain@codeaurora.org>,
-        "deller@gmx.de" <deller@gmx.de>, "x86@kernel.org" <x86@kernel.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "green.hu@gmail.com" <green.hu@gmail.com>,
-        "shorne@gmail.com" <shorne@gmail.com>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "nickhu@andestech.com" <nickhu@andestech.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEtuL_4eRYYWd4aQj6rG=cJDQjjr86DWpid3o_N-6xvTWQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,70 +84,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 8:20 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Le 16/02/2022 =C3=A0 14:13, Arnd Bergmann a =C3=A9crit :
+On Thu, Feb 17, 2022 at 03:39:48PM +0800, Jason Wang wrote:
+> On Thu, Feb 17, 2022 at 3:36 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 > >
-> > Christoph Hellwig and a few others spent a huge effort on removing
-> > set_fs() from most of the important architectures, but about half the
-> > other architectures were never completed even though most of them don't
-> > actually use set_fs() at all.
+> > On Thu, Feb 17, 2022 at 03:34:13PM +0800, Jason Wang wrote:
+> > > On Thu, Feb 17, 2022 at 10:01 AM syzbot
+> > > <syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com> wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > syzbot found the following issue on:
+> > > >
+> > > > HEAD commit:    c5d9ae265b10 Merge tag 'for-linus' of git://git.kernel.org..
+> > > > git tree:       upstream
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=132e687c700000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=1e3ea63db39f2b4440e0
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > >
+> > > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
+> > > >
+> > > > WARNING: CPU: 1 PID: 10828 at drivers/vhost/vhost.c:715 vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
+> > > > Modules linked in:
+> > > > CPU: 0 PID: 10828 Comm: syz-executor.0 Not tainted 5.17.0-rc4-syzkaller-00051-gc5d9ae265b10 #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > > > RIP: 0010:vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
+> > >
+> > > Probably a hint that we are missing a flush.
+> > >
+> > > Looking at vhost_vsock_stop() that is called by vhost_vsock_dev_release():
+> > >
+> > > static int vhost_vsock_stop(struct vhost_vsock *vsock)
+> > > {
+> > > size_t i;
+> > >         int ret;
+> > >
+> > >         mutex_lock(&vsock->dev.mutex);
+> > >
+> > >         ret = vhost_dev_check_owner(&vsock->dev);
+> > >         if (ret)
+> > >                 goto err;
+> > >
+> > > Where it could fail so the device is not actually stopped.
+> > >
+> > > I wonder if this is something related.
+> > >
+> > > Thanks
 > >
-> > I did a patch for microblaze at some point, which turned out to be fair=
-ly
-> > generic, and now ported it to most other architectures, using new gener=
-ic
-> > implementations of access_ok() and __{get,put}_kernel_nocheck().
 > >
-> > Three architectures (sparc64, ia64, and sh) needed some extra work,
-> > which I also completed.
+> > But then if that is not the owner then no work should be running, right?
+> 
+> Could it be a buggy user space that passes the fd to another process
+> and changes the owner just before the mutex_lock() above?
+> 
+> Thanks
+
+Maybe, but can you be a bit more explicit? what is the set of
+conditions you see that can lead to this?
+
+
 > >
-> > The final series contains extra cleanup changes that touch all
-> > architectures. Please review and test these, so we can merge them
-> > for v5.18.
->
-> As a further cleanup, have you thought about making a generic version of
-> clear_user() ? On almost all architectures, clear_user() does an
-> access_ok() then calls __clear_user() or similar.
+> >
+> > >
+> > > > Code: c7 85 90 01 00 00 00 00 00 00 e8 53 6e a2 fa 48 89 ef 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e 41 5f e9 7d d6 ff ff e8 38 6e a2 fa <0f> 0b e9 46 ff ff ff 48 8b 7c 24 10 e8 87 00 ea fa e9 75 f7 ff ff
+> > > > RSP: 0018:ffffc9000fe6fa18 EFLAGS: 00010293
+> > > > RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+> > > > RDX: ffff888021b63a00 RSI: ffffffff86d66fe8 RDI: ffff88801cc200b0
+> > > > RBP: ffff88801cc20000 R08: 0000000000000001 R09: 0000000000000001
+> > > > R10: ffffffff817f1e08 R11: 0000000000000000 R12: ffff88801cc200d0
+> > > > R13: ffff88801cc20120 R14: ffff88801cc200d0 R15: 0000000000000002
+> > > > FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: 0000001b2de25000 CR3: 000000004c9cd000 CR4: 00000000003506f0
+> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  vhost_vsock_dev_release+0x36e/0x4b0 drivers/vhost/vsock.c:771
+> > > >  __fput+0x286/0x9f0 fs/file_table.c:313
+> > > >  task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+> > > >  exit_task_work include/linux/task_work.h:32 [inline]
+> > > >  do_exit+0xb29/0x2a30 kernel/exit.c:806
+> > > >  do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+> > > >  get_signal+0x45a/0x2490 kernel/signal.c:2863
+> > > >  arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+> > > >  handle_signal_work kernel/entry/common.c:148 [inline]
+> > > >  exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+> > > >  exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+> > > >  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+> > > >  syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+> > > >  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+> > > >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > > RIP: 0033:0x7f4027a46481
+> > > > Code: Unable to access opcode bytes at RIP 0x7f4027a46457.
+> > > > RSP: 002b:00007f402808ba68 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
+> > > > RAX: fffffffffffffffc RBX: 00007f402622e700 RCX: 00007f4027a46481
+> > > > RDX: 00007f402622e9d0 RSI: 00007f402622e2f0 RDI: 00000000003d0f00
+> > > > RBP: 00007f402808bcb0 R08: 00007f402622e700 R09: 00007f402622e700
+> > > > R10: 00007f402622e9d0 R11: 0000000000000206 R12: 00007f402808bb1e
+> > > > R13: 00007f402808bb1f R14: 00007f402622e300 R15: 0000000000022000
+> > > >  </TASK>
+> > > >
+> > > >
+> > > > ---
+> > > > This report is generated by a bot. It may contain errors.
+> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > > >
+> > > > syzbot will keep track of this issue. See:
+> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > > >
+> >
 
-This already exists in include/asm-generic/uaccess.h, but that file is
-currently not as easy to use as it should be. I've previously looked into
-what it would take to get more architectures to use common code
-in that file, but I currently have no plans to work on that.
-
-> Maybe also the same with put_user() and get_user() ? After all it is
-> just access_ok() followed by __put_user() or __get_user() ? It seems
-> more tricky though, as some architectures seems to have less trivial
-> stuff there.
-
-Same here: architectures can already provide a __put_user_fn()
-and __get_user_fn(), to get the generic versions of the interface,
-but few architectures use that. You can actually get all the interfaces
-by just providing raw_copy_from_user() and raw_copy_to_user(),
-but the get_user/put_user versions you get from that are fairly
-inefficient.
-
-> I also see all architectures have a prototype for strncpy_from_user()
-> and strnlen_user(). Could be a common prototype instead when we have
-> GENERIC_STRNCPY_FROM_USER / GENERIC_STRNLEN_USER
->
-> And we have also
-> user_access_begin()/user_read_access_begin()/user_write_access_begin()
-> which call access_ok() then do the real work. Could be made generic with
-> call to some arch specific __user_access_begin() and friends after the
-> access_ok() and eventually the might_fault().
-
-In my opinion, the biggest win would be to move the type-agnostic part of
-get_user/put_user into completely generic code, this is what architectures
-get wrong the most, see patch 02/18 in this series for instance.
-
-What I'd like to see is that architectures only provide fixed-length
-versions of unsafe_get_user()/unsafe_put_user(), with the type-agnostic
-versions (get_user(), __get_user(), unsafe_get_user() and their put
-versions) all defined once in include/linux/uaccess.h based on those.
-
-I tried implementing this in the past, but unfortunately the resulting
-object code from my generalized implementation was worse than
-what we have today, so I did not continue that work.
-
-      Arnd

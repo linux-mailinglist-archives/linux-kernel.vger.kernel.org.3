@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800ED4B94EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 01:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF344B94E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 01:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiBQAXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 19:23:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36778 "EHLO
+        id S229551AbiBQAXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 19:23:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiBQAXP (ORCPT
+        with ESMTP id S229493AbiBQAX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 19:23:15 -0500
-Received: from outbound-smtp15.blacknight.com (outbound-smtp15.blacknight.com [46.22.139.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5021137005
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 16:23:00 -0800 (PST)
+        Wed, 16 Feb 2022 19:23:26 -0500
+Received: from outbound-smtp47.blacknight.com (outbound-smtp47.blacknight.com [46.22.136.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5BD1390E2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 16:23:11 -0800 (PST)
 Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp15.blacknight.com (Postfix) with ESMTPS id 3A38F1C424E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:22:59 +0000 (GMT)
-Received: (qmail 22882 invoked from network); 17 Feb 2022 00:22:58 -0000
+        by outbound-smtp47.blacknight.com (Postfix) with ESMTPS id C32E6FAE1A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:23:09 +0000 (GMT)
+Received: (qmail 23170 invoked from network); 17 Feb 2022 00:23:09 -0000
 Received: from unknown (HELO stampy.112glenside.lan) (mgorman@techsingularity.net@[84.203.17.223])
-  by 81.17.254.9 with ESMTPA; 17 Feb 2022 00:22:58 -0000
+  by 81.17.254.9 with ESMTPA; 17 Feb 2022 00:23:09 -0000
 From:   Mel Gorman <mgorman@techsingularity.net>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Aaron Lu <aaron.lu@intel.com>,
@@ -31,72 +31,135 @@ Cc:     Aaron Lu <aaron.lu@intel.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux-MM <linux-mm@kvack.org>,
         Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 2/6] mm/page_alloc: Track range of active PCP lists during bulk free
-Date:   Thu, 17 Feb 2022 00:22:23 +0000
-Message-Id: <20220217002227.5739-3-mgorman@techsingularity.net>
+Subject: [PATCH 3/6] mm/page_alloc: Simplify how many pages are selected per pcp list during bulk free
+Date:   Thu, 17 Feb 2022 00:22:24 +0000
+Message-Id: <20220217002227.5739-4-mgorman@techsingularity.net>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220217002227.5739-1-mgorman@techsingularity.net>
 References: <20220217002227.5739-1-mgorman@techsingularity.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-free_pcppages_bulk() frees pages in a round-robin fashion. Originally,
-this was dealing only with migratetypes but storing high-order pages
-means that there can be many more empty lists that are uselessly
-checked. Track the minimum and maximum active pindex to reduce the
-search space.
+free_pcppages_bulk() selects pages to free by round-robining between
+lists. Originally this was to evenly shrink pages by migratetype
+but uneven freeing is inevitable due to high pages. Simplify list
+selection by starting with a list that definitely has pages on it in
+free_unref_page_commit() and for drain, it does not matter where draining
+starts as all pages are removed.
 
 Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- mm/page_alloc.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ mm/page_alloc.c | 34 +++++++++++-----------------------
+ 1 file changed, 11 insertions(+), 23 deletions(-)
 
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 08de32cfd9bb..85cc1fe8bcc5 100644
+index 85cc1fe8bcc5..dfc347a58ea6 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -1450,6 +1450,8 @@ static void free_pcppages_bulk(struct zone *zone, int count,
- 					struct per_cpu_pages *pcp)
+@@ -1447,13 +1447,11 @@ static inline void prefetch_buddy(struct page *page, unsigned int order)
+  * count is the number of pages to free.
+  */
+ static void free_pcppages_bulk(struct zone *zone, int count,
+-					struct per_cpu_pages *pcp)
++					struct per_cpu_pages *pcp,
++					int pindex)
  {
- 	int pindex = 0;
-+	int min_pindex = 0;
-+	int max_pindex = NR_PCP_LISTS - 1;
- 	int batch_free = 0;
- 	int nr_freed = 0;
+-	int pindex = 0;
+ 	int min_pindex = 0;
+ 	int max_pindex = NR_PCP_LISTS - 1;
+-	int batch_free = 0;
+-	int nr_freed = 0;
  	unsigned int order;
-@@ -1475,13 +1477,20 @@ static void free_pcppages_bulk(struct zone *zone, int count,
- 		 */
+ 	int prefetch_nr = READ_ONCE(pcp->batch);
+ 	bool isolated_pageblocks;
+@@ -1467,16 +1465,10 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 	count = min(pcp->count, count);
+ 	while (count > 0) {
+ 		struct list_head *list;
++		int nr_pages;
+ 
+-		/*
+-		 * Remove pages from lists in a round-robin fashion. A
+-		 * batch_free count is maintained that is incremented when an
+-		 * empty list is encountered.  This is so more pages are freed
+-		 * off fuller lists instead of spinning excessively around empty
+-		 * lists
+-		 */
++		/* Remove pages from lists in a round-robin fashion. */
  		do {
- 			batch_free++;
--			if (++pindex == NR_PCP_LISTS)
--				pindex = 0;
-+			if (++pindex > max_pindex)
-+				pindex = min_pindex;
+-			batch_free++;
+ 			if (++pindex > max_pindex)
+ 				pindex = min_pindex;
  			list = &pcp->lists[pindex];
--		} while (list_empty(list));
-+			if (!list_empty(list))
-+				break;
-+
-+			if (pindex == max_pindex)
-+				max_pindex--;
-+			if (pindex == min_pindex)
-+				min_pindex++;
-+		} while (1);
+@@ -1489,18 +1481,15 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 				min_pindex++;
+ 		} while (1);
  
- 		/* This is the only non-empty list. Free them all. */
--		if (batch_free == NR_PCP_LISTS)
-+		if (batch_free >= max_pindex - min_pindex)
- 			batch_free = count;
- 
+-		/* This is the only non-empty list. Free them all. */
+-		if (batch_free >= max_pindex - min_pindex)
+-			batch_free = count;
+-
  		order = pindex_to_order(pindex);
++		nr_pages = 1 << order;
+ 		BUILD_BUG_ON(MAX_ORDER >= (1<<NR_PCP_ORDER_WIDTH));
+ 		do {
+ 			page = list_last_entry(list, struct page, lru);
+ 			/* must delete to avoid corrupting pcp list */
+ 			list_del(&page->lru);
+-			nr_freed += 1 << order;
+-			count -= 1 << order;
++			count -= nr_pages;
++			pcp->count -= nr_pages;
+ 
+ 			if (bulkfree_pcp_prepare(page))
+ 				continue;
+@@ -1524,9 +1513,8 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 				prefetch_buddy(page, order);
+ 				prefetch_nr--;
+ 			}
+-		} while (count > 0 && --batch_free && !list_empty(list));
++		} while (count > 0 && !list_empty(list));
+ 	}
+-	pcp->count -= nr_freed;
+ 
+ 	/*
+ 	 * local_lock_irq held so equivalent to spin_lock_irqsave for
+@@ -3095,7 +3083,7 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
+ 	batch = READ_ONCE(pcp->batch);
+ 	to_drain = min(pcp->count, batch);
+ 	if (to_drain > 0)
+-		free_pcppages_bulk(zone, to_drain, pcp);
++		free_pcppages_bulk(zone, to_drain, pcp, 0);
+ 	local_unlock_irqrestore(&pagesets.lock, flags);
+ }
+ #endif
+@@ -3116,7 +3104,7 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
+ 
+ 	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
+ 	if (pcp->count)
+-		free_pcppages_bulk(zone, pcp->count, pcp);
++		free_pcppages_bulk(zone, pcp->count, pcp, 0);
+ 
+ 	local_unlock_irqrestore(&pagesets.lock, flags);
+ }
+@@ -3397,7 +3385,7 @@ static void free_unref_page_commit(struct page *page, unsigned long pfn,
+ 	if (pcp->count >= high) {
+ 		int batch = READ_ONCE(pcp->batch);
+ 
+-		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch), pcp);
++		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch), pcp, pindex);
+ 	}
+ }
+ 
 -- 
 2.31.1
 

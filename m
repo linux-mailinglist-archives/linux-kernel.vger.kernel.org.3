@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055E84BAA56
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BA74BAA5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244989AbiBQTxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:53:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43154 "EHLO
+        id S245557AbiBQTx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:53:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbiBQTw7 (ORCPT
+        with ESMTP id S231487AbiBQTx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:52:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3749F12E150;
-        Thu, 17 Feb 2022 11:52:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC6CC61D6F;
-        Thu, 17 Feb 2022 19:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438EDC340F5;
-        Thu, 17 Feb 2022 19:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645127564;
-        bh=ZhQxF0tPXMlYqWyHKU+1EFwIzt/X85cBfMSyiNtLNwc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N3q7ZHzEir/9IK/PGW+3dMKawSKM3KHTVB0REMnWpIEazeg1BTxuWepTpRprIRKPI
-         XmGpqTE40xrLD8tJkBKCJxDJFOHcr6iYvTnjlBsBBXMj3UbckzYkxN/7wU5Ygx5mrk
-         ETE3YbdvQqT8R06yoKVRu6kMzrbvehESqHsLVNuR42qsb7LAj9NnFT2oA+kvsCETGt
-         ox0NZV2AZw2DzmW07UuMa2RituDxee7maP037UT/LVLYS5cSaVkI4fklqI2IhpP5+V
-         klEOQqAFRD7lzuSKdAr9w41EjgBa5tjoYjjyu/4ZNQJCNIfaK81rkYX9NflqCMGKSz
-         ykTJRqwak3lzA==
-Received: by mail-wm1-f53.google.com with SMTP id k127-20020a1ca185000000b0037bc4be8713so7014976wme.3;
-        Thu, 17 Feb 2022 11:52:44 -0800 (PST)
-X-Gm-Message-State: AOAM532172Lvk3f61e6H4Kx+ki0RC9qGprFMPFkmCPjvClzyy/VJixoa
-        VlI5RHr/tjrzpsbppEDs3iZozS4McH4D8f4BAhk=
-X-Google-Smtp-Source: ABdhPJwiemEIjRKk4frN6QbDwgyUBnVeU/8bBRkvxFxBQULsWx/seWlsMA1hduXoxyV0dNHVRWvY1oHknvGbya8Zxyg=
-X-Received: by 2002:a05:600c:3d06:b0:37b:a5ea:a61b with SMTP id
- bh6-20020a05600c3d0600b0037ba5eaa61bmr4183906wmb.32.1645127562557; Thu, 17
- Feb 2022 11:52:42 -0800 (PST)
+        Thu, 17 Feb 2022 14:53:27 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA86C12E150
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:53:12 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id v25so782950oiv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:53:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=M+doG4hOkesdbvT8ytk1W2x52hbEiy5SqUAs3PiTxWs=;
+        b=ajFOJekJGOXYKnbIR0AGefnhQdw2TLlmHA+b7uKmBRNsNq/jFc4XFF4MnK/vW7GToR
+         phKhASp9LCiozG918AR/TyIVQQ1cNfwdH9C062r2MJqEyS6n7fqiDXRB59yV1WSyqBEF
+         4Yupsavi+A8ybL/NfT6vOzUau4xa5t+rkHobQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=M+doG4hOkesdbvT8ytk1W2x52hbEiy5SqUAs3PiTxWs=;
+        b=NCickEQQHsib1hRt8K6S2qtA6wbye8inLbbE+ZpzZ3WN/+TH6G8HXm0LS1PllhdRIq
+         kPPGqzUJwl76WTILm4KgQw3fW7eLjJWIpoQb1WJbdaX5Pc3IFKTTj7SB4Hv6RodEIsGa
+         ROvN+LQRvfVrbYKXqROlw/z+ZmgC4fSn8GRj5bx0a6vjAvyldPv+SFFuMBaTBk8gdO+6
+         qa7MC2iAeMnZA9mpoSQMYFv6xAWIr5EKii//hka++lyPGU3m1QXy6YstojMRr0fpsKQM
+         ZhLfDjQr+447WsTONWBHOZs3Mg5ijvn9IxTrktsMsDqktIv02REI5JkBiRQMegE4mA5G
+         nPkA==
+X-Gm-Message-State: AOAM530dNsQe82TG15lTy3WGqeKMcPc9XUaGZHV0rfCiieoUI7ckoorG
+        9GtQxPEvM+MflSYuD76Br2NDuY9CoYvZxXLV0KZh1A==
+X-Google-Smtp-Source: ABdhPJybhDJoXr99rxvMT4dvF5Jw/4cgFw4TekjYxtOTU1Sr8MQippcgWwYJ5d2Dn0iO+AJDeH3ccP4DhPjQsb/YmBc=
+X-Received: by 2002:a05:6808:b2f:b0:2cf:9af3:1687 with SMTP id
+ t15-20020a0568080b2f00b002cf9af31687mr1800955oij.112.1645127592064; Thu, 17
+ Feb 2022 11:53:12 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 17 Feb 2022 11:53:11 -0800
 MIME-Version: 1.0
-References: <20220128045004.4843-1-sunilvl@ventanamicro.com>
- <877d9xx14f.fsf@igel.home> <9cd9f149-d2ea-eb55-b774-8d817b9b6cc9@gmx.de>
- <87tud1vjn4.fsf@igel.home> <49d3aeab-1fe6-8d17-bc83-78f3555109c7@gmx.de>
- <87pmnpvh66.fsf@igel.home> <20220217105450.GA20183@sunil-ThinkPad-T490> <CAOnJCULWjCHCCS7wzTBVsYcPzWPpL9jmS7xx5LUFT2tRvAZk6w@mail.gmail.com>
-In-Reply-To: <CAOnJCULWjCHCCS7wzTBVsYcPzWPpL9jmS7xx5LUFT2tRvAZk6w@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 17 Feb 2022 20:52:30 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFXu75cDo=rx4rG6WFwd=At+nMWRzq378EoLu7GuHU64w@mail.gmail.com>
-Message-ID: <CAMj1kXFXu75cDo=rx4rG6WFwd=At+nMWRzq378EoLu7GuHU64w@mail.gmail.com>
-Subject: Re: [PATCH] riscv/efi_stub: Fix get_boot_hartid_from_fdt() return value
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Sunil V L <sunilvl@ventanamicro.com>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        "# 3.4.x" <stable@vger.kernel.org>
+In-Reply-To: <d70291a6-7e3f-0406-2826-3a30f2d5650b@quicinc.com>
+References: <1644850708-11099-1-git-send-email-quic_srivasam@quicinc.com>
+ <1644850708-11099-9-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n52jD_BvQm4CeTkiR723-3uKC9G4fFeynFbs5Ukg_S762g@mail.gmail.com> <d70291a6-7e3f-0406-2826-3a30f2d5650b@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 17 Feb 2022 11:53:11 -0800
+Message-ID: <CAE-0n51zr2qZ4qSzsC4=3d_jCYGvSxh8_3znrEQFaNrGfRU2Gw@mail.gmail.com>
+Subject: Re: [RESEND v13 08/10] ASoC: qcom: Add lpass CPU driver for codec dma control
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, alsa-devel@alsa-project.org,
+        bgoswami@codeaurora.org, bjorn.andersson@linaro.org,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        judyhsiao@chromium.org, lgirdwood@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, quic_plai@quicinc.com, robh+dt@kernel.org,
+        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org,
+        tiwai@suse.com
+Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,52 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 at 20:47, Atish Patra <atishp@atishpatra.org> wrote:
+Quoting Srinivasa Rao Mandadapu (2022-02-16 01:42:42)
 >
-> On Thu, Feb 17, 2022 at 2:55 AM Sunil V L <sunilvl@ventanamicro.com> wrote:
-> >
-> > On Mon, Feb 14, 2022 at 12:09:05PM +0100, Andreas Schwab wrote:
-> > > On Feb 14 2022, Heinrich Schuchardt wrote:
-> > >
-> > > > On 2/14/22 11:15, Andreas Schwab wrote:
-> > > >> On Feb 14 2022, Heinrich Schuchardt wrote:
-> > > >>
-> > > >>> set_boot_hartid() implies that the caller can change the boot hart ID.
-> > > >>> As this is not a case this name obviously would be a misnomer.
-> > > >>
-> > > >> initialize_boot_hartid would fit better.
-> > > >>
-> > > >
-> > > > Another misnomer.
-> > >
-> > > But the best fit so far.
-> >
-> > Can we use the name init_boot_hartid_from_fdt()? While I understand
-> > Heinrich's point, I think since we have "_from_fdt", this may be fine.
-> >
->
-> init_boot_hartid_from_fdt or parse_boot_hartid_from_fdt
->
-> are definitely much better than the current one.
->
-> > I didn't rename the function since it was not recommended to do multiple
-> > things in a "Fix" patch. If we can consider this as not very serious
-> > issue which needs a "Fix" patch, then I can combine this patch with the
-> > RISCV_EFI_BOOT_PROTOCOL patch series.
-> >
->
-> IMHO, it is okay to include this in the RISCV_EFI_BOOT_PROTOCOL series
-> as we are not going to have hartid U32_MAX in a few months :)
->
->
-> > Hi Ard, let me know your suggestion on how to proceed with this.
-> >
+> On 2/15/2022 7:03 AM, Stephen Boyd wrote:
+> Thanks for your time Stephen!!!
+> > Quoting Srinivasa Rao Mandadapu (2022-02-14 06:58:26)
+> >> +       struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
+> >> +       struct lpaif_dmactl *dmactl;
+> >> +       int ret = 0, id;
+> >> +
+> >> +       switch (cmd) {
+> >> +       case SNDRV_PCM_TRIGGER_START:
+> >> +       case SNDRV_PCM_TRIGGER_RESUME:
+> >> +       case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+> >> +               __lpass_platform_codec_intf_init(dai, substream);
+> >> +               break;
+> >> +       case SNDRV_PCM_TRIGGER_STOP:
+> >> +       case SNDRV_PCM_TRIGGER_SUSPEND:
+> >> +       case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+> >> +               __lpass_get_dmactl_handle(substream, dai, &dmactl, &id);
+> >> +               if (!dmactl) {
+> >> +                       dev_err(soc_runtime->dev, "failed to get dmactl handle\n");
+> > This same message is in many places. I really hope it never gets printed
+> > because finding out which line it got printed at is going to be
+> > impossible.
+> Okay. Will add function name in each print.
 
-The patch is fine as it is. I agree that naming is important, but for
-a helper function that is only used a single time right in the same
-source file, it doesn't matter that much.
-
-I have queued this up now.
-
-Thanks,
-Ard.
+Are they useful prints at all? They seem like development prints that
+won't trigger after the driver is developed. Why can't we just remove
+them?

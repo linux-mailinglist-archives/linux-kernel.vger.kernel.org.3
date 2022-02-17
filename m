@@ -2,74 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F054B9F5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5CF4B9F64
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239991AbiBQLrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:47:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55592 "EHLO
+        id S238296AbiBQLu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:50:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239930AbiBQLrs (ORCPT
+        with ESMTP id S229562AbiBQLu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:47:48 -0500
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CE7282E56;
-        Thu, 17 Feb 2022 03:47:34 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 79C5F10045C15;
-        Thu, 17 Feb 2022 12:47:32 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 4D9AE2E9DD4; Thu, 17 Feb 2022 12:47:32 +0100 (CET)
-Date:   Thu, 17 Feb 2022 12:47:32 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        u.kleine-koenig@pengutronix.de, linux@armlinux.org.uk,
-        richard.genoud@gmail.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 2 4/9] serial: sc16is7xx: remove redundant check in
- rs485_config
-Message-ID: <20220217114732.GB7826@wunner.de>
-References: <20220216001803.637-1-LinoSanfilippo@gmx.de>
- <20220216001803.637-5-LinoSanfilippo@gmx.de>
+        Thu, 17 Feb 2022 06:50:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BD3A282E7D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:50:40 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C86D8113E;
+        Thu, 17 Feb 2022 03:50:39 -0800 (PST)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0A463F66F;
+        Thu, 17 Feb 2022 03:50:38 -0800 (PST)
+Date:   Thu, 17 Feb 2022 11:50:32 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Terrell <terrelln@fb.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: v5.17-rc3 compile failure on aarch64
+Message-ID: <Yg42iEZwHS//aFAj@lakrids>
+References: <85bfe02c-9432-c5b0-04e0-8096adf37b93@gmx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216001803.637-5-LinoSanfilippo@gmx.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <85bfe02c-9432-c5b0-04e0-8096adf37b93@gmx.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 01:17:58AM +0100, Lino Sanfilippo wrote:
-> --- a/drivers/tty/serial/sc16is7xx.c
-> +++ b/drivers/tty/serial/sc16is7xx.c
-> @@ -959,16 +959,6 @@ static int sc16is7xx_config_rs485(struct uart_port *port,
->  	struct sc16is7xx_one *one = to_sc16is7xx_one(port, port);
->  
->  	if (rs485->flags & SER_RS485_ENABLED) {
-> -		bool rts_during_rx, rts_during_tx;
-> -
-> -		rts_during_rx = rs485->flags & SER_RS485_RTS_AFTER_SEND;
-> -		rts_during_tx = rs485->flags & SER_RS485_RTS_ON_SEND;
-> -
-> -		if (rts_during_rx == rts_during_tx)
-> -			dev_err(port->dev,
-> -				"unsupported RTS signalling on_send:%d after_send:%d - exactly one of RS485 RTS flags should be set\n",
-> -				rts_during_tx, rts_during_rx);
-> -
+On Thu, Feb 17, 2022 at 04:37:49PM +0800, Qu Wenruo wrote:
+> Hi,
 
-Hm, patch 1 in this series doesn't emit such a message, so unlike now,
-users will no longer be warned that they passed in nonsensical settings...
+Hi,
+
+[adding LAKML so other arm/arm64 folk can chime in]
+
+> Recently I found v5.17-rc3 kernel failed to compile on my aarch64 setup,
+> it failed with the following error messages:
+> 
+>   AR      lib/zstd/built-in.a
+>   LD [M]  lib/zstd/zstd_compress.o
+> ld: __patchable_function_entries has both ordered
+> [`__patchable_function_entries' in lib/zstd/common/entropy_common.o] and
+> unordered [`__patchable_function_entries' in
+> lib/zstd/common/error_private.o] sections
+> ld: final link failed: bad value
+> make[2]: *** [scripts/Makefile.build:484: lib/zstd/zstd_compress.o] Error 1
+> make[1]: *** [scripts/Makefile.build:550: lib/zstd] Error 2
+> make: *** [Makefile:1831: lib] Error 2
+> make: *** Waiting for unfinished jobs....
+
+Uh-oh; that doesn't look good.
+
+In case this is configuration-dependent, could you share your .config?
+
+> But the same code base compiles fine inside my x86_64 VM.
+> 
+> The aarch64 environment is an VM running on RockPro64 or RPI CM4.
+> 
+> With a little older gcc (v10.2.0) and bintuils (2.35).
+
+Is this a custom-built toolchain, or one shipped by a distribution?
+
+If possible, can you see if you can reproduce this with one of the
+kernel.org cross toolchains:
+
+  https://mirrors.edge.kernel.org/pub/tools/crosstool/
+
+... because if you can, that will be much easier for someone else to
+reproduce and analyse.
+
+The closest builds are 9.3.0 and 10.3.0, for both arm64 and x86_64.
+
+FWIW, I had a go building v5.17-rc3 defconfig with ftrace and zstd bits
+eanbled with both GCC 9.3.0 and GCC 10.3.0, and I could not reproduce
+the problem.
+
+Thanks,
+Mark.
+
+> While for my x86_64 VM it has newer gcc (11.1.0) and binutiles (2.36.1)
+> 
+> I'm super happy to upgrade my tool chain for my aarch64 VM, but I'm a
+> little concerned if there is something worthy fixed.
+> 
+> Thanks,
+> Qu

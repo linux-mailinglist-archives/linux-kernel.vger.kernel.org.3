@@ -2,189 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8B24BA00B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2544BA015
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240403AbiBQMXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:23:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33602 "EHLO
+        id S240382AbiBQMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:25:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiBQMXP (ORCPT
+        with ESMTP id S233462AbiBQMZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:23:15 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003371D9657;
-        Thu, 17 Feb 2022 04:22:56 -0800 (PST)
-X-UUID: 4e8c37a3b0a849a2a1453220a8698249-20220217
-X-UUID: 4e8c37a3b0a849a2a1453220a8698249-20220217
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 65734155; Thu, 17 Feb 2022 20:22:52 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 17 Feb 2022 20:22:50 +0800
-Received: from localhost.localdomain (10.17.3.14) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Feb 2022 20:22:49 +0800
-From:   Kewei Xu <kewei.xu@mediatek.com>
-To:     <wsa@the-dreams.de>
-CC:     <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
-        <caiyu.chen@mediatek.com>, <housong.zhang@mediatek.com>,
-        <yuhan.wei@mediatek.com>, <kewei.xu@mediatek.com>,
-        <ryan-jh.yu@mediatek.com>, <david-yh.chiu@mediatek.com>
-Subject: [PATCH v10,1/1] i2c: mediatek: modify bus speed calculation formula
-Date:   Thu, 17 Feb 2022 20:22:43 +0800
-Message-ID: <1645100563-59441-2-git-send-email-kewei.xu@mediatek.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1645100563-59441-1-git-send-email-kewei.xu@mediatek.com>
-References: <1645100563-59441-1-git-send-email-kewei.xu@mediatek.com>
+        Thu, 17 Feb 2022 07:25:04 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4DB2AE07D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645100690; x=1676636690;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=evOFZE+hh5TqcN4Ay9LZSmgI4BU09Ah2EtjKEB7JYtg=;
+  b=VgFdssScRe4GUU78IbTgFCXSvjoBFbr+fnD4BeQYl931kX+Nc2K9YXJo
+   H8WGDrt001Sju/6z8Jz4FdMLDUrh1FOTXu6CVUes9vC88pTkgOjHPSZcZ
+   MEPpx9nFmzrK8xqtsiRm9wtj6PPQXyeIjLfeziXcKXkXaiauh8Sg+0SgO
+   HU3WZjImBNu4cUM4u0EJBTkp+RxwEmk56FCLahQig8wI/ReuGoevOeG1+
+   7n5KR76qhh0DaDvvEQ7Dhv2P3VtUTEJkC5USRnMCH+Efhajl0B/r00OTO
+   wa3VK14thtBmQxa7mvH6hehJTtjsbFrr0U5DJ7TfKxrxLrLv7fM7lxvyJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="250597981"
+X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
+   d="scan'208";a="250597981"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 04:24:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
+   d="scan'208";a="545567227"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 17 Feb 2022 04:24:49 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKfq4-0000Aw-EB; Thu, 17 Feb 2022 12:24:48 +0000
+Date:   Thu, 17 Feb 2022 20:23:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous
+ prototype for 'ixp4xx_pci_write'
+Message-ID: <202202172055.BVOB1ugQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When clock-div is 0 or greater than 1, the bus speed
-calculated by the old speed calculation formula will be
-larger than the target speed. So we update the formula.
+Hi Linus,
 
-Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f71077a4d84bbe8c7b91b7db7c4ef815755ac5e3
+commit: d5d9f7ac58ea1041375a028f143ca5784693ea86 ARM/ixp4xx: Make NEED_MACH_IO_H optional
+date:   8 months ago
+config: arm-randconfig-r012-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172055.BVOB1ugQ-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d5d9f7ac58ea1041375a028f143ca5784693ea86
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d5d9f7ac58ea1041375a028f143ca5784693ea86
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/arm/mach-ixp4xx/common-pci.c:94:5: warning: no previous prototype for 'ixp4xx_pci_read_errata' [-Wmissing-prototypes]
+      94 | int ixp4xx_pci_read_errata(u32 addr, u32 cmd, u32* data)
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm/mach-ixp4xx/common-pci.c:121:5: warning: no previous prototype for 'ixp4xx_pci_read_no_errata' [-Wmissing-prototypes]
+     121 | int ixp4xx_pci_read_no_errata(u32 addr, u32 cmd, u32* data)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous prototype for 'ixp4xx_pci_write' [-Wmissing-prototypes]
+     143 | int ixp4xx_pci_write(u32 addr, u32 cmd, u32 data)
+         |     ^~~~~~~~~~~~~~~~
+
+
+vim +/ixp4xx_pci_write +143 arch/arm/mach-ixp4xx/common-pci.c
+
+^1da177e4c3f41 Linus Torvalds  2005-04-16  142  
+^1da177e4c3f41 Linus Torvalds  2005-04-16 @143  int ixp4xx_pci_write(u32 addr, u32 cmd, u32 data)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  144  {    
+^1da177e4c3f41 Linus Torvalds  2005-04-16  145  	unsigned long flags;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  146  	int retval = 0;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  147  
+bd31b85960a7fc Thomas Gleixner 2009-07-03  148  	raw_spin_lock_irqsave(&ixp4xx_pci_lock, flags);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  149  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  150  	*PCI_NP_AD = addr;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  151  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  152  	/* set up the write */
+^1da177e4c3f41 Linus Torvalds  2005-04-16  153  	*PCI_NP_CBE = cmd;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  154  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  155  	/* execute the write by writing to NP_WDATA */
+^1da177e4c3f41 Linus Torvalds  2005-04-16  156  	*PCI_NP_WDATA = data;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  157  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  158  	if(check_master_abort())
+^1da177e4c3f41 Linus Torvalds  2005-04-16  159  		retval = 1;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  160  
+bd31b85960a7fc Thomas Gleixner 2009-07-03  161  	raw_spin_unlock_irqrestore(&ixp4xx_pci_lock, flags);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  162  	return retval;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  163  }
+^1da177e4c3f41 Linus Torvalds  2005-04-16  164  
+
+:::::: The code at line 143 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
 ---
- drivers/i2c/busses/i2c-mt65xx.c | 51 +++++++++++++++++++++++++++++++++--------
- 1 file changed, 41 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index aa4d218..682293e 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -67,11 +67,12 @@
- 
- #define MAX_SAMPLE_CNT_DIV		8
- #define MAX_STEP_CNT_DIV		64
--#define MAX_CLOCK_DIV			256
-+#define MAX_CLOCK_DIV_8BITS		256
-+#define MAX_CLOCK_DIV_5BITS		32
- #define MAX_HS_STEP_CNT_DIV		8
--#define I2C_STANDARD_MODE_BUFFER	(1000 / 2)
--#define I2C_FAST_MODE_BUFFER		(300 / 2)
--#define I2C_FAST_MODE_PLUS_BUFFER	(20 / 2)
-+#define I2C_STANDARD_MODE_BUFFER	(1000 / 3)
-+#define I2C_FAST_MODE_BUFFER		(300 / 3)
-+#define I2C_FAST_MODE_PLUS_BUFFER	(20 / 3)
- 
- #define I2C_CONTROL_RS                  (0x1 << 1)
- #define I2C_CONTROL_DMA_EN              (0x1 << 2)
-@@ -604,6 +605,31 @@ static int mtk_i2c_max_step_cnt(unsigned int target_speed)
- 		return MAX_STEP_CNT_DIV;
- }
- 
-+static int mtk_i2c_get_clk_div_restri(struct mtk_i2c *i2c,
-+				      unsigned int sample_cnt)
-+{
-+	int clk_div_restri = 0;
-+
-+	if (i2c->dev_comp->ltiming_adjust == 0)
-+		return 0;
-+
-+	if (sample_cnt == 1) {
-+		if (i2c->ac_timing.inter_clk_div == 0)
-+			clk_div_restri = 0;
-+		else
-+			clk_div_restri = 1;
-+	} else {
-+		if (i2c->ac_timing.inter_clk_div == 0)
-+			clk_div_restri = -1;
-+		else if (i2c->ac_timing.inter_clk_div == 1)
-+			clk_div_restri = 0;
-+		else
-+			clk_div_restri = 1;
-+	}
-+
-+	return clk_div_restri;
-+}
-+
- /*
-  * Check and Calculate i2c ac-timing
-  *
-@@ -732,6 +758,7 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	unsigned int best_mul;
- 	unsigned int cnt_mul;
- 	int ret = -EINVAL;
-+	int clk_div_restri = 0;
- 
- 	if (target_speed > I2C_MAX_HIGH_SPEED_MODE_FREQ)
- 		target_speed = I2C_MAX_HIGH_SPEED_MODE_FREQ;
-@@ -749,7 +776,8 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	 * optimizing for sample_cnt * step_cnt being minimal
- 	 */
- 	for (sample_cnt = 1; sample_cnt <= MAX_SAMPLE_CNT_DIV; sample_cnt++) {
--		step_cnt = DIV_ROUND_UP(opt_div, sample_cnt);
-+		clk_div_restri = mtk_i2c_get_clk_div_restri(i2c, sample_cnt);
-+		step_cnt = DIV_ROUND_UP(opt_div + clk_div_restri, sample_cnt);
- 		cnt_mul = step_cnt * sample_cnt;
- 		if (step_cnt > max_step_cnt)
- 			continue;
-@@ -763,7 +791,7 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 			best_mul = cnt_mul;
- 			base_sample_cnt = sample_cnt;
- 			base_step_cnt = step_cnt;
--			if (best_mul == opt_div)
-+			if (best_mul == (opt_div + clk_div_restri))
- 				break;
- 		}
- 	}
-@@ -774,7 +802,8 @@ static int mtk_i2c_calculate_speed(struct mtk_i2c *i2c, unsigned int clk_src,
- 	sample_cnt = base_sample_cnt;
- 	step_cnt = base_step_cnt;
- 
--	if ((clk_src / (2 * sample_cnt * step_cnt)) > target_speed) {
-+	if ((clk_src / (2 * (sample_cnt * step_cnt - clk_div_restri))) >
-+		target_speed) {
- 		/* In this case, hardware can't support such
- 		 * low i2c_bus_freq
- 		 */
-@@ -803,13 +832,16 @@ static int mtk_i2c_set_speed(struct mtk_i2c *i2c, unsigned int parent_clk)
- 	target_speed = i2c->speed_hz;
- 	parent_clk /= i2c->clk_src_div;
- 
--	if (i2c->dev_comp->timing_adjust)
--		max_clk_div = MAX_CLOCK_DIV;
-+	if (i2c->dev_comp->timing_adjust && i2c->dev_comp->ltiming_adjust)
-+		max_clk_div = MAX_CLOCK_DIV_5BITS;
-+	else if (i2c->dev_comp->timing_adjust)
-+		max_clk_div = MAX_CLOCK_DIV_8BITS;
- 	else
- 		max_clk_div = 1;
- 
- 	for (clk_div = 1; clk_div <= max_clk_div; clk_div++) {
- 		clk_src = parent_clk / clk_div;
-+		i2c->ac_timing.inter_clk_div = clk_div - 1;
- 
- 		if (target_speed > I2C_MAX_FAST_MODE_PLUS_FREQ) {
- 			/* Set master code speed register */
-@@ -856,7 +888,6 @@ static int mtk_i2c_set_speed(struct mtk_i2c *i2c, unsigned int parent_clk)
- 		break;
- 	}
- 
--	i2c->ac_timing.inter_clk_div = clk_div - 1;
- 
- 	return 0;
- }
--- 
-1.9.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,49 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8847D4B960D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E4F4B9615
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiBQCsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 21:48:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54638 "EHLO
+        id S231953AbiBQCsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 21:48:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbiBQCsH (ORCPT
+        with ESMTP id S231934AbiBQCsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 21:48:07 -0500
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 774CA1FFC8E;
-        Wed, 16 Feb 2022 18:47:52 -0800 (PST)
-Received: by ajax-webmail-mail-app2 (Coremail) ; Thu, 17 Feb 2022 10:47:44
- +0800 (GMT+08:00)
-X-Originating-IP: [10.192.171.246]
-Date:   Thu, 17 Feb 2022 10:47:44 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5ZGo5aSa5piO?= <duoming@zju.edu.cn>
-To:     "Jakub Kicinski" <kuba@kernel.org>
-Cc:     linux-hams@vger.kernel.org, ajk@comnets.uni-bremen.de,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] drivers: hamradio: 6pack: fix UAF bug caused by
- mod_timer()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20220215203955.7d7a3eed@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220216023549.50223-1-duoming@zju.edu.cn>
- <20220215203955.7d7a3eed@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 16 Feb 2022 21:48:32 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2236E1FFF46
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:48:19 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id d17so3842433pfl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:48:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=GyP8fkvYZ+iKZjQ0Xv0VozXuxBZdUAH14cR8iEy61TQ=;
+        b=C2AZgKZnUbnuppY2d2Z8RZKJ9xEfXrBAXmMnwNfnX1Tp/wTnpBWSpavsg74KJgpyMU
+         JUGqxBdBH5qZGujSZvUXXYgODtrGueByto7mQg2asnFoS0zLPNaokzZajZfQq7ay1Gf7
+         07jV7OMjCpnNacCZTMpqZRUf1UWa3vb0mY+Nk3gFCEFLo+JO/i74MQImch6yux8E8Cef
+         i6/x2pzWmY4C49ULGCH5kiuv0CZBNopQ0FX1pea5lFTi6Q/bTC1ONKqRlVlPjGh6OOG6
+         zLhM95NPSGOeJipQRXjybnc6oIrsskVYojMjAz8AiyubPzULwqQOOKAne1va5duXUI1C
+         7svw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=GyP8fkvYZ+iKZjQ0Xv0VozXuxBZdUAH14cR8iEy61TQ=;
+        b=abN1RN2097jKVqlxluoubyrGpSj9kk0V+etEwU0RtP5UZrnonIcemULOwx9n/VLN3f
+         pIynJVbsaCTIa5lc+QG7LZIP43rGOFDiickdQBKUGLUEPLc9ESpaur2twa7jSmRqBAaW
+         7z8ZB6veOHJkRhMBSrnXSPBv4e2I16dNxB+i7DjtLa8RPjH6jbX/UkZwZmlHIeL79jv4
+         IvmZEIMMRHFtRPmsr6Ou6znpjDRg+gO3/JlYofMwul8yio+2onRHV+4d88mOKWh1uXOG
+         8i5J7tnV4zexdSbzgf18ZfwpaCCF2JV7QOPx+VrvlYFxJLRdS8rbguNzxg9fL8g5CkWK
+         Z4tA==
+X-Gm-Message-State: AOAM531nd6Wfz8I/NCwKFGRtaSc/1Rowi6+8XcKoLVLRxALATL5+Jed8
+        130n/v+niSAUJmWZSpcebhXF+w==
+X-Google-Smtp-Source: ABdhPJyepnKKYsa9HYtmM8aTLyFXuhMuuXoW4LVxkZQ4AO7YXhcBPdhNwUCwuyAZEyBQJgLpTFoD2g==
+X-Received: by 2002:a62:8787:0:b0:4e1:b69:5ea7 with SMTP id i129-20020a628787000000b004e10b695ea7mr826287pfe.31.1645066098491;
+        Wed, 16 Feb 2022 18:48:18 -0800 (PST)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 84sm15672421pfx.181.2022.02.16.18.48.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 18:48:17 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Zhang Wensheng <zhangwensheng5@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+In-Reply-To: <20220125091938.1799001-1-zhangwensheng5@huawei.com>
+References: <20220125091938.1799001-1-zhangwensheng5@huawei.com>
+Subject: Re: [PATCH -next] block: update io_ticks when io hang
+Message-Id: <164506609748.50355.11490091116960287078.b4-ty@kernel.dk>
+Date:   Wed, 16 Feb 2022 19:48:17 -0700
 MIME-Version: 1.0
-Message-ID: <cbb5412.b171f.17f05941412.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: by_KCgDHzyNQtw1imZHyAQ--.39720W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgEEAVZdtYMQOwACsS
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWUCw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,13 +69,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpUaGFuayB5b3UgdmVyeSBtdWNoIGZvciB5b3VyIHRpbWUgYW5kIHBvaW50aW5nIG91
-dCBwcm9ibGVtcyBpbiBteSBwYXRjaC4KSSBoYXZlIHNlbnQgdGhlIG1vZGlmaWVkIHBhdGNoIGFn
-YWluIGp1c3Qgbm93LgoKV2UgdXNlIHB0eSB0byBzaW11bGF0ZSA2cGFjayBkZXZpY2UsIHRoZSBy
-ZWxlYXNlZCByZXNvdXJjZSBpcyB0dHlfc3RydWN0LT50dHlfcG9ydAppbiB0dHkgbGF5ZXIuIAoK
-VGhlIGZyZWUgdHJhY2UgaXMgc2hvd24gYXMgYmVsb3c6CnR0eV9yZWxlYXNlKCktPnR0eV9yZWxl
-YXNlX3N0cnVjdCgpLT5yZWxlYXNlX3R0eSgpLT50dHlfa3JlZl9wdXQoKS0+CnF1ZXVlX3JlbGVh
-c2Vfb25lX3R0eSgpLT5yZWxlYXNlX29uZV90dHkoKS0+cHR5X2NsZWFudXAoKS0+dHR5X3BvcnRf
-cHV0KHR0eS0+cG9ydCk7CgpUaGUgdXNlIHRyYWNlIGlzIHNob3duIGFzIGJlbG93OgpzcF94bWl0
-X29uX2FpcigpLT5wdHlfd3JpdGUoKS0+dHR5X2ZsaXBfYnVmZmVyX3B1c2goKS0+dHR5X3NjaGVk
-dWxlX2ZsaXAocG9ydCk7CgoKQmVzdCB3aXNoZXMsCkR1b21pbmcgWmhvdQoK
+On Tue, 25 Jan 2022 17:19:38 +0800, Zhang Wensheng wrote:
+> When the inflight IOs are slow and no new IOs are issued, we expect
+> iostat could manifest the IO hang problem. However after
+> commit 5b18b5a73760 ("block: delete part_round_stats and switch to less
+> precise counting"), io_tick and time_in_queue will not be updated until
+> the end of IO, and the avgqu-sz and %util columns of iostat will be zero.
+> 
+> Because it has using stat.nsecs accumulation to express time_in_queue
+> which is not suitable to change, and may %util will express the status
+> better when io hang occur. To fix io_ticks, we use update_io_ticks and
+> inflight to update io_ticks when diskstats_show and part_stat_show
+> been called.
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] block: update io_ticks when io hang
+      commit: 62847731488f59971413484005a7fb2772cb9249
+
+Best regards,
+-- 
+Jens Axboe
+
+

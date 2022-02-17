@@ -2,153 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EE04B9D69
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA8A4B9D6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239251AbiBQKm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:42:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55010 "EHLO
+        id S239257AbiBQKo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:44:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237461AbiBQKm4 (ORCPT
+        with ESMTP id S237461AbiBQKoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:42:56 -0500
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD16293B73;
-        Thu, 17 Feb 2022 02:42:42 -0800 (PST)
-Received: by mail-vk1-f171.google.com with SMTP id k128so2779607vkk.10;
-        Thu, 17 Feb 2022 02:42:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=URz3vGbBYIEN5IQJZpThn97AmYBtZHbYQoPJObvpYus=;
-        b=G3Gd/cOW9B4p+iV9e4iuBpBPl644LnwAqTqPVZetBGkmj2jYS93B83PoMV+tstJofv
-         ++k0BjCioqKsuqwInJ1BFPIw61kIAGRMBz82LEJ+BhHZVY7BPtTLH6g64Gb53TIOJqoD
-         bkFgb21fFzy66ZMKAcqNOGHD+Qw89rr+uQVPKyza0L9MabqkqKI59cpl/k1uLXnVeK94
-         t7MmqRn0dcW0gavykd8pjPpUjY6OXMGsx2cVSmRCKRvb6LbhYlULDUCBePv+kRLDTe63
-         aGuo7Jd3oq0hFn3lyvSczcIGFVGa5ahyKPlKetKXPSsZEbEm63eJUG2nJCFXONlS8wcu
-         bJLQ==
-X-Gm-Message-State: AOAM533stlObAXiB8Ny1shBVhToRl/cJaTUJTY0OKacUSmqJJP8+CWny
-        KrZaQf0ok69R/5FpCZC9WdwOstFKMrKaHw==
-X-Google-Smtp-Source: ABdhPJxnktVpuCw857SVyJr4O9PFDjXNYxsMStC78sWGoiVxBEDELRuDgXzFxOOJ3DEsGsXG2Vd1ow==
-X-Received: by 2002:a05:6122:d9e:b0:331:33da:48e5 with SMTP id bc30-20020a0561220d9e00b0033133da48e5mr584012vkb.35.1645094561145;
-        Thu, 17 Feb 2022 02:42:41 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id 17sm6720336vky.10.2022.02.17.02.42.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 02:42:40 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id g18so2449987uak.5;
-        Thu, 17 Feb 2022 02:42:40 -0800 (PST)
-X-Received: by 2002:ab0:750e:0:b0:33e:8f30:e8ec with SMTP id
- m14-20020ab0750e000000b0033e8f30e8ecmr816005uap.114.1645094560576; Thu, 17
- Feb 2022 02:42:40 -0800 (PST)
+        Thu, 17 Feb 2022 05:44:23 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EE4293B76
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:44:08 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JzrtR3XpPz1FDJ3;
+        Thu, 17 Feb 2022 18:39:43 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Feb 2022 18:44:05 +0800
+Subject: Re: [PATCH] mm/slab_common: use helper function is_power_of_2()
+To:     Vlastimil Babka <vbabka@suse.cz>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>, <penberg@kernel.org>,
+        <rientjes@google.com>, <iamjoonsoo.kim@lge.com>
+References: <20220217091609.8214-1-linmiaohe@huawei.com>
+ <8f307e8a-5f97-cf5d-0a77-1c79b05abd60@suse.cz>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5d904bee-3faf-374a-090c-ce7c99c84ea9@huawei.com>
+Date:   Thu, 17 Feb 2022 18:44:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220215165226.2738568-1-geert@linux-m68k.org>
- <20220215165226.2738568-9-geert@linux-m68k.org> <20220217121033.0fc7f6ba@eldfell>
-In-Reply-To: <20220217121033.0fc7f6ba@eldfell>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 17 Feb 2022 11:42:29 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXf3tFLb16Y=wh5C3QUYN4PdCjaYPCzMOTCye-eYS-N8w@mail.gmail.com>
-Message-ID: <CAMuHMdXf3tFLb16Y=wh5C3QUYN4PdCjaYPCzMOTCye-eYS-N8w@mail.gmail.com>
-Subject: Re: [PATCH 8/8] drm/fourcc: Add DRM_FORMAT_D1
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <8f307e8a-5f97-cf5d-0a77-1c79b05abd60@suse.cz>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pekka,
+On 2022/2/17 17:23, Vlastimil Babka wrote:
+> On 2/17/22 10:16, Miaohe Lin wrote:
+>> Use helper function is_power_of_2() to check if KMALLOC_MIN_SIZE is power
+>> of two. Minor readability improvement.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> 
+> We can try, but in case some compiler will no longer able to perform the
+> check at build-time (although is_power_of_2() looks sufficiently trivial
+> too), we'll have to revert it.
 
-On Thu, Feb 17, 2022 at 11:10 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
-> On Tue, 15 Feb 2022 17:52:26 +0100
-> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > Introduce a fourcc code for a single-channel frame buffer format with two
-> > darkness levels.  This can be used for two-level dark-on-light displays.
-> >
-> > As the number of bits per pixel is less than eight, this relies on
-> > proper block handling for the calculation of bits per pixel and pitch.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+I see. I checked the compiler in my env but there might be some compilers can't
+perform the check at build-time.
 
-> > --- a/drivers/gpu/drm/drm_fourcc.c
-> > +++ b/drivers/gpu/drm/drm_fourcc.c
-> > @@ -151,6 +151,8 @@ const struct drm_format_info *__drm_format_info(u32 format)
-> >               { .format = DRM_FORMAT_C4,              .depth = 4,  .num_planes = 1,
-> >                 .char_per_block = { 1, }, .block_w = { 2, }, .block_h = { 1, }, .hsub = 1, .vsub = 1 },
-> >               { .format = DRM_FORMAT_C8,              .depth = 8,  .num_planes = 1, .cpp = { 1, 0, 0 }, .hsub = 1, .vsub = 1 },
-> > +             { .format = DRM_FORMAT_D1,              .depth = 1,  .num_planes = 1,
-> > +               .char_per_block = { 1, }, .block_w = { 8, }, .block_h = { 1, }, .hsub = 1, .vsub = 1 },
-> >               { .format = DRM_FORMAT_R1,              .depth = 1,  .num_planes = 1,
-> >                 .char_per_block = { 1, }, .block_w = { 8, }, .block_h = { 1, }, .hsub = 1, .vsub = 1 },
-> >               { .format = DRM_FORMAT_R2,              .depth = 2,  .num_planes = 1,
-> > diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
-> > index 8605a1acc6813e6c..c15c6efcc65e5827 100644
-> > --- a/include/uapi/drm/drm_fourcc.h
-> > +++ b/include/uapi/drm/drm_fourcc.h
-> > @@ -104,6 +104,9 @@ extern "C" {
-> >  #define DRM_FORMAT_C4                fourcc_code('C', '4', ' ', ' ') /* [3:0] C */
-> >  #define DRM_FORMAT_C8                fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
-> >
-> > +/* 1 bpp Darkness */
-> > +#define DRM_FORMAT_D1                fourcc_code('D', '1', ' ', ' ') /* [0] D */
-> > +
->
-> the same comment here as for C1 and R1 formats, need to specify pixel
-> ordering inside a byte.
+Many thanks for your reply.
 
-Right, will do.
+> 
+>> ---
+>>  mm/slab_common.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/mm/slab_common.c b/mm/slab_common.c
+>> index 23f2ab0713b7..6ee64d6208b3 100644
+>> --- a/mm/slab_common.c
+>> +++ b/mm/slab_common.c
+>> @@ -807,7 +807,7 @@ void __init setup_kmalloc_cache_index_table(void)
+>>  	unsigned int i;
+>>  
+>>  	BUILD_BUG_ON(KMALLOC_MIN_SIZE > 256 ||
+>> -		(KMALLOC_MIN_SIZE & (KMALLOC_MIN_SIZE - 1)));
+>> +		!is_power_of_2(KMALLOC_MIN_SIZE));
+>>  
+>>  	for (i = 8; i < KMALLOC_MIN_SIZE; i += 8) {
+>>  		unsigned int elem = size_index_elem(i);
+> 
+> .
+> 
 
-> I think it would also be good to explain the rationale why C1 and R1
-> are not suitable for this case and we need yet another 1-bit format in
-> the commit message.
->
-> For posterity, of course. I roughly remember the discussions.
-
-C1 is color-indexed, which can be any two colors.
-R1 is light-on-dark.
-D1 is dark-on-light.
-
-> I also wonder if anyone would actually use D1. Should it be added
-> anyway? There is no rule that a pixel format must be used inside the
-> kernel AFAIK, but is there even a prospective userspace wanting this?
->
-> Exposing R1 and inverting bits while copying to hardware might be
-> enough?
-
-That's an option.  The repaper driver does that:
-
-    drm_fb_xrgb8888_to_gray8(buf, 0, cma_obj->vaddr, fb, &clip);
-    repaper_gray8_to_mono_reversed(buf, fb->width, fb->height);
-
-Can drm_framebuffer objects be backed by graphics memory, i.e.
-can they be displayed without copying?
-
-> >  /* 1 bpp Red */
-> >  #define DRM_FORMAT_R1                fourcc_code('R', '1', ' ', ' ') /* [0] R */
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

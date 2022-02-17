@@ -2,124 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28E94B991A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2321A4B9921
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235289AbiBQGQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:16:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44122 "EHLO
+        id S235316AbiBQGUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:20:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiBQGQy (ORCPT
+        with ESMTP id S229865AbiBQGUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:16:54 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06CDB9D73;
-        Wed, 16 Feb 2022 22:16:40 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 17 Feb 2022 01:20:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CA2A4A16;
+        Wed, 16 Feb 2022 22:19:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jzl2v1ZRqz4xcP;
-        Thu, 17 Feb 2022 17:16:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1645078599;
-        bh=yndhLuoCihi2mdNtpdhpTeQNtBOWIAtKU+vq2xv7kZM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OP19HA3UNVkyhBvi5gMYMXVf3XN95KH8cOwIXYqD5/JlqyRBKdn5w5BoBUv1lbxWt
-         pBWSFl82PscDb+t2AKj9PgZp8yJnp7wGXjTq7s3yITefDu3hsYCCEWeKZkBSHyAq9P
-         t45uw2KS/+gfMfv2oGBJk9+cSftfvIf2FsMqb6aL1HCG0SSAhXGJ8C+IcB7Vtq8QSA
-         i4PCfamtt0gY0GJwTrq+1WW1t67fBy7EmluoxeEXbZd9I8xsu5bD+0+hH4cdCT4DvL
-         EjLRMjjVODwpXSFuFIHQMRNivqxb0IhMjkQKs2upmVcQeyhLIl/VZfcXbLe26c2J+o
-         tpXgn75GMWsCw==
-Date:   Thu, 17 Feb 2022 17:16:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>
-Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: linux-next: manual merge of the maple tree with the memblock tree
-Message-ID: <20220217171638.084b6321@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B0D618EA;
+        Thu, 17 Feb 2022 06:19:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53737C340E8;
+        Thu, 17 Feb 2022 06:19:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645078793;
+        bh=4phkKQaKpSnplKxFP+P7GfFkUsrlVvHYQSCB/fTUT8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=STW/z4lnU6/f2WRCtmUX0HNiN4L/YsFnf8nnyyq4ePYYVMqwSVPsYbEn0lv9OyruA
+         VbliK9u/tLs/k+kMIE/LqAmZUOx7j7zxDQ4TVzfAPBdWMZTH7wa0DkhrSOdPXeK5X3
+         R7HeJgwUNW/ckIhV9djbnVBukLWuiqD3uT/uSCs/SDBtmGzPAC7dYfuq1FzPm/S+GU
+         i9bBLpxVL4CPT6Ikq7WDsktDZAu8A5Chn6pD4rZLBhydcJ1PcQEns+DRglIofZ0y/s
+         wFpuHkfC1lbdyNKGAofD9ggXD8MJpH8t8jSOQ9cUfLQ2KMBxKxnnlq4YVkqT7KNIC8
+         wl3xylhaDDIOQ==
+Date:   Thu, 17 Feb 2022 11:49:49 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org
+Subject: Re: [Freedreno] [REPOST PATCH v4 13/13] drm/msm/dsi: Add support for
+ DSC configuration
+Message-ID: <Yg3pBQkdq9WpCbVs@matsya>
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-14-vkoul@kernel.org>
+ <a59295f2-d3ba-5d10-ac96-c00e4cf90e4a@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/By0+UJL6uInXq.l0EXI+5Gw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a59295f2-d3ba-5d10-ac96-c00e4cf90e4a@quicinc.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/By0+UJL6uInXq.l0EXI+5Gw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 16-02-22, 19:44, Abhinav Kumar wrote:
+> 
+> 
+> On 2/10/2022 2:34 AM, Vinod Koul wrote:
+> > When DSC is enabled, we need to configure DSI registers accordingly and
+> > configure the respective stream compression registers.
+> > 
+> > Add support to calculate the register setting based on DSC params and
+> > timing information and configure these registers.
+> > 
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> >   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  10 +++
+> >   drivers/gpu/drm/msm/dsi/dsi_host.c | 109 ++++++++++++++++++++++++++++-
+> >   2 files changed, 118 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > index 49b551ad1bff..c1c85df58c4b 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
+> > @@ -706,4 +706,14 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
+> >   #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
+> > +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
+> > +
+> > +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL2			0x000002a0
+> > +
+> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
+> > +
+> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
+> > +
+> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL3			0x000002ac
+> > +
+> 
+> This file should not be edited manually. The updates have to be generated
+> using the headergen tool.
 
-Hi all,
+I have already send mesa patch for that. https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/14967#note_1253974
+You should chime in there as well :)
 
-Today's linux-next merge of the maple tree got a conflict in:
+I will split these and get these generated one as a separate patch..
 
-  tools/testing/radix-tree/Makefile
 
-between commit:
+> 
+> >   #endif /* DSI_XML */
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > index 438c80750682..3d8d5a1daaa3 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > @@ -908,6 +908,20 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
+> >   		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
+> >   }
+> > +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
+> > +				  int pic_width, int pic_height)
+> > +{
+> > +	if (!dsc || !pic_width || !pic_height) {
+> > +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	dsc->drm->pic_width = pic_width;
+> > +	dsc->drm->pic_height = pic_height;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >   {
+> >   	struct drm_display_mode *mode = msm_host->mode;
+> > @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >   		hdisplay /= 2;
+> >   	}
+> > +	if (msm_host->dsc) {
+> > +		struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +
+> > +		/* update dsc params with timing params */
+> > +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
+> > +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
+> > +
+> > +		/* we do the calculations for dsc parameters here so that
+> > +		 * panel can use these parameters
+> > +		 */
+> > +		dsi_populate_dsc_params(dsc);
+> > +
+> > +		/* Divide the display by 3 but keep back/font porch and
+> > +		 * pulse width same
+> > +		 */
+> > +		h_total -= hdisplay;
+> > +		hdisplay /= 3;
+> > +		h_total += hdisplay;
+> > +		ha_end = ha_start + hdisplay;
+> > +	}
+> > +
+> >   	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
+> > +		if (msm_host->dsc) {
+> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +			u32 reg, intf_width, slice_per_intf;
+> > +			u32 total_bytes_per_intf;
+> > +
+> > +			/* first calculate dsc parameters and then program
+> > +			 * compress mode registers
+> > +			 */
+> > +			intf_width = hdisplay;
+> > +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+> > +
+> > +			dsc->drm->slice_count = 1;
+> 
+> Why is this hard-coded to 1 here? Am i missing something?
+> I think I need another day to look into these calculations.
 
-  5a198c3f9b0b ("tools: Move gfp.h and slab.h from radix-tree to lib")
+Thanks for spotting this, it should be:
+                        dsc->drm->slice_count = DIV_ROUND_UP(intf_width, dsc->drm->slice_widths);
 
-from the memblock tree and commits:
+which is slice_per_intf so I will update this
 
-  4af8015a7707 ("Maple Tree: Add new data structure")
-  f6955b248f29 ("lib/test_maple_tree: Add testing for maple tree")
-
-from the maple tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/radix-tree/Makefile
-index c4ea4fbb0bfc,3e0fa6ae0e0a..000000000000
---- a/tools/testing/radix-tree/Makefile
-+++ b/tools/testing/radix-tree/Makefile
-@@@ -4,9 -4,8 +4,9 @@@ CFLAGS +=3D -I. -I../../include -g -Og -W
-  	  -fsanitize=3Dundefined
-  LDFLAGS +=3D -fsanitize=3Daddress -fsanitize=3Dundefined
-  LDLIBS+=3D -lpthread -lurcu
-- TARGETS =3D main idr-test multiorder xarray
-+ TARGETS =3D main idr-test multiorder xarray maple
- -CORE_OFILES :=3D xarray.o radix-tree.o idr.o linux.o test.o find_bit.o bi=
-tmap.o maple.o
- +CORE_OFILES :=3D xarray.o radix-tree.o idr.o linux.o test.o find_bit.o bi=
-tmap.o \
-- 			 slab.o
-++			 slab.o maple.o
-  OFILES =3D main.o $(CORE_OFILES) regression1.o regression2.o regression3.=
-o \
-  	 regression4.o tag_check.o multiorder.o idr-test.o iteration_check.o \
-  	 iteration_check_2.o benchmark.o
-
---Sig_/By0+UJL6uInXq.l0EXI+5Gw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIN6EYACgkQAVBC80lX
-0GwC0QgApRlXYu9STYCVZBWHathn2O42JttqL60cDuHYQ0hwx5tjHwN6zAU8SLZq
-HQsDMlaRvrPNVjGrV0IFspPF/EnuD+0EHcSUQVqOvU5N7rPq3oz3Sn09OlXPLiS6
-TVvhNl9Lyvvb7LmxhIbVcCcqdwFSotnafAf7F2GQ4kDRKYF8h+qUyULrlSIKQ8FO
-t+KxGNgZUZHJ3QNBP/aWcA/nKRQjqG0wv2NDtx8IQ5W6yTWO3PNqh3u3+kSl7jY0
-WawQnNPZTChnzCX/ciWFXpUMBacn7dKWi1Bu99YhMrPgXkUIUEM6XaZCs5HbimYU
-gqRNfvmV9KevFVQOW3/uITBK+w2V+Q==
-=W4U+
------END PGP SIGNATURE-----
-
---Sig_/By0+UJL6uInXq.l0EXI+5Gw--
+-- 
+~Vinod

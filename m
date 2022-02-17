@@ -2,203 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103EB4B9BC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0814B9BD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238446AbiBQJNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 04:13:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58394 "EHLO
+        id S238501AbiBQJPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 04:15:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiBQJNJ (ORCPT
+        with ESMTP id S238499AbiBQJPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:13:09 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A6317CC51;
-        Thu, 17 Feb 2022 01:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645089173; x=1676625173;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=nJRfL+8FMvnieYjfbAne5+lj3Po7u5GLKgiFxS4CnyQ=;
-  b=j7cqEOaKheWvUE1isu6lWEJABi9kq3TLg1Y889zvW4zJvsBVnNM/H723
-   dIG3isSTuzaCHtNe0DDqWFW58Sh4pvttDPpzJWXFmVCxDX7pE3Xa/iLuF
-   7JRVEr8/Mv43wmb8mGjCnv4kpZVz9oX+Nvg5Lxa+6cpjKvxup/5XfmgNm
-   Nf1t3IwwHhSP93/N5XEEiuIfswpfUaUZw22ILefUGKfBpjlbfB4cBSQv/
-   qvZy0Uthwn2TBKM9IV/ihUZKHkgp8KS4I9lEZrHnNGtHW6pGHDf1tq/m6
-   Yv+O+TMyakDKd5DN96WpIOoI5vPv1X0o4GNkuYPY11GJq9vBkMptT1mHy
-   Q==;
-IronPort-SDR: 4KNfpNkZxMfyZQvoBG6O85bxjavqodmM5BF/2XXUFQoh1PpnYRhtk47nKegEhtl0siimBWrQX8
- wIZov77xu3yVDJ0hXaFWYOvMVfFliYBplInbKfGXZNJjdut/ks9H3DmQveP26/wELqLPL4czGX
- dl+m0bVndmr1BQ+GAG6srijNALZ0o/9MWe8v3R/D+0+D3SJrauYpBrWO9nLwFF4UTmvGBfmaY6
- NTHL/F6VbVRyPM1nCo85upQcYI6wQe+7fEX4qILenp34Wa3qnYQ3R4bzFIU0dPCLzNcjI5BH+F
- B0N4W7i4AyNXxVeIAHeT1ZoX
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="153399541"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2022 02:12:52 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 17 Feb 2022 02:12:51 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Thu, 17 Feb 2022 02:12:51 -0700
+        Thu, 17 Feb 2022 04:15:45 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2075.outbound.protection.outlook.com [40.107.92.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ABF27D69E;
+        Thu, 17 Feb 2022 01:15:31 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mEL4eIrV126q+XhUYLorfWcg86+9IpmOk79KkFvZzPcYMz3SVkQ8WeO+AdoSSh0WeLZ1+34Sciw62DPtj2RLU4E+QOM/ClV8SQ5L1qrVdzruv06F93TiTmRlJPheWyk09DwvMhZrKw1BiBwZCUd76SpPlZHOFVhsaxs6XaVvxLQxWVSbTLEt0Q8xCtFqwpROWpYpA2OAH8j9oidE4HY462NA/7fYSIx6MafW7MlFcMYjvy/XULb40MPduCD5tcZ3eqzeBculMq/rTzIxLD1VGQOzh6veBI7f4SsTumOunlVl7ZFVYoaAt9jb9Fqpw/skH8J3yUGqhqWxbX7/6NMelQ==
+ b=Alo0JDL07LE94r3esJi6FQyukv4yFKTinKsei/BTI81xqnIF51jYxQtYiwBpZPh5XUiu0qMTAn3IL8h88VpmejVspSJdcKh0WauTk+AEkyctBoTtgPe0kidFn7zzf+Vi+6sxiPGwxO5NK7OOiKxSFPHmePsq0tBidhVZhrvxqGUvqv1l2ap2XK+R+EgrrtCYekzEvxijEaBh5QrfrJLR8tkZYzUASb7iiGIX+4C9XxnrwczI/nuZ+pxiIMWpsNkTZLpHHN2/Sa1dCM7T1FsTz4PkzgIxm75S8A0rGSfbnzCfjsVmLsuV/2LRBdiqHRaA5Px+sGDjVVd4a2cXu6jvCg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nJRfL+8FMvnieYjfbAne5+lj3Po7u5GLKgiFxS4CnyQ=;
- b=PpU5pRL2tFkyptEErTa/O874GZOf+u6OvXPId2N+Ix4AxyHS8yLi78q906Q1pIwiYCbwDe/0u+OG5JfP2Kp7lTHZiDEL6zMI2Bre+QuiO+JZnkL9QKqwWtqR+DmsLI+YJNPGu308xyQgF1S0xfVMJmhyECVAg4JR4YjtVNXho2EnLbOwsxDq76CP6EtjSmmoEOJFOPPkE0T1EqraJwjg7s4OWP+pMZUvOu4YAaOkAvCQ1X4t3uKAXWC+ZRiqaYNbj+D4txXTxfXm9Clt+KGKEEp01a8Q8lRamAOWxRklx6Im2iFHg1+dfLM8luuVslsL6dS59AcJZj3JQik9PmTyQQ==
+ bh=f+fvC7FmM00Fqq+W1EWsQs8CSDW2+pKsNJSKOA1c48E=;
+ b=V3rsqAo7RJ9u/wwApEcFkYcSwOzHFvE6gXwTb5XnW6dYLZ3VhdgKN9OaQQ/skhmRUNg+W6JjugR3YeA+pksWpP/crk2E9xytyJgoewTTApT6+26ufWciEoDwFvlO064kSsdXLNO/QHXGRQth4Pcu3J1qiB38bPSoK79ReSnnh3tki54zxhDcIqEbTh3z2UidE6etGmFfTL4oIG0zPWwr72f5d+3AVE+iUv1nmci4IY/xuMVihhAaT0v8EN1kHMHBp5C0UgyCINh7VXDseTjBZltKzTl8CSL69Gk2ApMPvDG4PA9Nd3Gl0/Lr+/mU9arxGS8bugLcIxOwl3nRUYjwRA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nJRfL+8FMvnieYjfbAne5+lj3Po7u5GLKgiFxS4CnyQ=;
- b=YWGjCWVtbq4mhmHH05W1C+8UYJV9JVPnGIKRvo87gTidaxqTGiwbckDs/4uNsy/gzjzOT2srpearsohXUhkLWln4jMI/tf4cyOF+dL8pRTkpsKO+sqLesB83RZN+UZJdpEPAdiWs65EzYCCY/nMdxK4ybGlu5b+hcv9aa6PUm4k=
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:91::21)
- by MWHPR11MB1952.namprd11.prod.outlook.com (2603:10b6:300:111::11) with
+ bh=f+fvC7FmM00Fqq+W1EWsQs8CSDW2+pKsNJSKOA1c48E=;
+ b=Yl21PMOUebjMnr2uL4bjGuan9ZFfqMVw3574RZqz1RBsf+BKOZyGo9q+0HwGoIomVMVTW5pm+T7cFUkHexudcCFsVQWJsP2O8kFqlBMdLZGRQ5xVVUjO9ao4QU37ya87QaB2MEbaoqY8kN4kfdd5R3E60Spfm93ajLOu3OrBVyc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BL0PR12MB2578.namprd12.prod.outlook.com (2603:10b6:207:49::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.17; Thu, 17 Feb
- 2022 09:12:46 +0000
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::b952:cac0:826c:f0be]) by CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::b952:cac0:826c:f0be%6]) with mapi id 15.20.4995.016; Thu, 17 Feb 2022
- 09:12:46 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <michael@walle.cc>, <richard.genoud@gmail.com>,
-        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tty: serial: atmel: add earlycon support
-Thread-Topic: [PATCH] tty: serial: atmel: add earlycon support
-Thread-Index: AQHYI96GfKSNmKHcpkyvSrzv/hb/hA==
-Date:   Thu, 17 Feb 2022 09:12:45 +0000
-Message-ID: <9e499fdb-19dc-9b5a-0eb7-618acfd61605@microchip.com>
-References: <20220216161822.1071245-1-michael@walle.cc>
-In-Reply-To: <20220216161822.1071245-1-michael@walle.cc>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Thu, 17 Feb
+ 2022 09:15:29 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.4995.017; Thu, 17 Feb 2022
+ 09:15:29 +0000
+Message-ID: <5d3fdd2c-e74a-49f4-2b28-32c06483236f@amd.com>
+Date:   Thu, 17 Feb 2022 10:15:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/amdgpu: check vm bo eviction valuable at last
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e08ac2ed-a2dc-4be2-b39d-08d9f1f5a969
-x-ms-traffictypediagnostic: MWHPR11MB1952:EE_
-x-microsoft-antispam-prvs: <MWHPR11MB1952EE598A6E6015529A3BF687369@MWHPR11MB1952.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2201;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uVzoQr8Yl1CouQ7v+EkdyzNxVLxQsffiJUDW9bnseOSBr3z9wkSUFebX0KX/QYMQ73b1JL8GBIF1xxos3rLcDbTMHvkFv5Wgw8Zbre+8sgUD/pFYnl3yNOTKW4QQoJ724i9aP6+LfDrdqU5r5HKkTKnW0deCCoD+Z5h5KKj9ubemC6dleljUu79hbYHpdSxTpwj24MemqxAxok7u+w7mmMT2zjU6f2yhXaPqmEfAhlFoun+wfzEfZD4aAmCYCDcNlyLraxLq2O3tsFTa07akHwZzQGqloWLgcOxr86t9/hyyHp5RAzRGIowrbx2W2hCpp3w70IJiuZE/NpNFSWWtgRSj4LG+PAJVx1gwLxymwQa9KQzz2mlFp25AmEeSbMxa3bqR6L1npfvcJWNuYWabvqZlx5+ZaWscT5IeVujlu59ezaOa4jV0bAC7Uaq5Bmc9Mcf0ZswNCO9xK8jAf0G/8jMo39k0CkmD27NDt7vLoeNQnIt+o3MnVm3KDZ4KZ6i4aj/BUpKNPIfNNYU46mKPHVNqVyrMk5258Dhrxzu4Bu+blyjeMYHxftyzmPRam7IsX49ueEqYsvd6teVXB2PZz6wVHHGbfRWQ0glL/0zpETwPxSVMrvOUGJaS5Rk7cUNqXa66iMH8ZIf0UO+mXbrSuT8jV1tkyYnctU4zELSq3ONTIem4v1VWvyjGPC0V7km2aPV8FxXgLiO7XLqVVUuByf/jfCxD+snorm+pYeaHzcEeKmgXtgeu1K0IW6ZCubrol/otXO0IQ+fIr6t1dN8JkA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(6486002)(54906003)(38070700005)(6512007)(6506007)(8936002)(316002)(122000001)(508600001)(2906002)(53546011)(38100700002)(36756003)(64756008)(86362001)(66446008)(66946007)(76116006)(66476007)(66556008)(8676002)(4326008)(91956017)(31696002)(186003)(26005)(71200400001)(2616005)(110136005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?N29Jbis5L2dCM3JWTzErM29kL3p6bEhBK0xJdXFJUjI2bEZHc2ltOUZVK21R?=
- =?utf-8?B?Mm9CYzFCWE8rbXhveVJyaVRDR1dxaVlUOU15Q0d6cGJ6aW5aT0VpaGowMmhV?=
- =?utf-8?B?TVdpaUVpcGt2aEN4bU1naENJMi9iUWFqTUVoQkc1NzZXdFFoV1JpV0UwelNV?=
- =?utf-8?B?OXZ2ekpGeW5XTFNSNHBlVm5TQmZkR0laVU1FYjFSbUhNMC8zTFFIUElEZEFr?=
- =?utf-8?B?QXNQREpZUVN5ZmppcWJ4R3oxaFRvQXA2L0ZWZ2Jkdk00WDAzdzY5SlorbHZI?=
- =?utf-8?B?MzRDVk1mY1h2TlFucFlqRnVTaUN2c1VmdktTeFhsZGhlL1FxcVYyUW1wYjRi?=
- =?utf-8?B?Nzkva3UxRmFqZlZYUDNyby80SXQ5YzdFam9ReWFueUxDSnlWZzZLcHNGZlpP?=
- =?utf-8?B?dDVTSnlDc1ovbWszejJWRk8wQU9iYjJieFlFK2JJNWNUZU9rZ2xkVGVXV1lm?=
- =?utf-8?B?TDkrbFpEL0xJZkcvV3hiY1Y4c1IvOXN4SzFvbmo2Q1ZGdUtOKyt4M3Z4VVdL?=
- =?utf-8?B?SmlnV0dKNVl1N2pKQ1Qwdy9NbUNBZzlIK1g0RlI0MTR5Y3VZT01jWTVOaXB0?=
- =?utf-8?B?ejRZaVFmbnFGajgvek82dmdDU2s2cnVvSUp4RFUvSkhZTUpPNGIwaDQ3RnRW?=
- =?utf-8?B?OGMwQTFzQ1FMMWNaMjg1UWdDZWd0eXdWTHY2cVh4VmRKbytzS1dZcDhNMndV?=
- =?utf-8?B?TmNoQ1RMWjh0YU5LR2JtdkR5OTJDVzJFaGsrNkZPenV2cWNvdnFLT3pUSEFT?=
- =?utf-8?B?amtwSjVsd0dodDBONXAreHg3MVNUTko2UnVIbytRcWVMa3VWTDA4dkpGbzFv?=
- =?utf-8?B?SEViMENFdjdmbUZFUDR6TG1xcjd4aHRmaURPQjBkTUUwbnk2RGhmTmloUjhK?=
- =?utf-8?B?dzJoekR3dDFHcjFoQVV1OTQvbE56R08zbVVOQWdMdjBJVGxhdkFkTVpzMDVq?=
- =?utf-8?B?dlc0TEFHT2J0ajk4aHR0NlFDeUZNWFFjVm9kc3dqbEtPd1h5OCthRXpCOXFW?=
- =?utf-8?B?YnU1dy9NT2VSRmZZSW9IYXgwNnBnVzVOLzNtdlExSVBGL2puTzI5Q2xCaTdw?=
- =?utf-8?B?UTh6WjF4MExxVzB1WjY2dWpHYXVEbGpQV3JoZFdMN2lrTEd4bTZxRE9XUEg2?=
- =?utf-8?B?STd2bE1sLzlEdnhPUFZwYlkvdU4zSGVCVnlWeElid3QxdGdmcnNtRVEySWRk?=
- =?utf-8?B?bS8yaE5mYjh6N09tV1o5YmZwdDdlcGRrK3VDN25VajlpQmtPZi9YN0VRWHJm?=
- =?utf-8?B?bG5MOE90RFl0U0pWaDBQMHJXbWhHUW92bUZWMGEvTDJqTVI0NHBLSHRvbUhi?=
- =?utf-8?B?RUZBaGtKSHJmVkVYKzB0WVVXR0JsMDFUV2s3a0dXazh0OHg4cEMzSGRyY1JO?=
- =?utf-8?B?eTJzM0IzYUplNENkaVBMRFFEOW5POVIvL3llcE8xRm5GWW1WLy9ibWFTVERp?=
- =?utf-8?B?ZS9xSTNHNTVPTVdmemFQSi9ES2E5LzA4SnFITnFmNnpXMXMzZkRLcW81cHY0?=
- =?utf-8?B?SkFhcXRhL1NKUjJDdnplazQzYm9QbTZuc0pMRExwWHFyM2ZGZEJQLzF1YjZ3?=
- =?utf-8?B?aC9wN296clhEZmpWVjA4UlhRazAzWFRiSWVrUkxUQk40YUw2SytvUnJpUWEx?=
- =?utf-8?B?UVF4QndkTlNxUzhrYzdENTJtTXdTQ0hLQXdUY0lwUXNCc1JDQjNDU0JZemlK?=
- =?utf-8?B?UCtNUXdGMUU4ZVBlcWdGamYxWE1yUks5VkVKNUlGWnJMSCtTUkxzZmNCUlpn?=
- =?utf-8?B?R2pqdnB5RVlOd3ROK0wzVjEwRHQrT1Y1RSs2YkoxcGNaT3JONk5LczFxcjVa?=
- =?utf-8?B?cTRwQ3RsMVpnQWlSRW5nSHpNVTlSeElUaTJIQXMwZnpJOStabVNEUTZYNHJ2?=
- =?utf-8?B?VlJSZkVxQ0pXZHl2YWNBN3pxNjU1dzcwK01kUE1WcExoVHFnR3lMc0h0V2Uy?=
- =?utf-8?B?RFp0V0ltTnRVU3BKK285cE1OMEVpeXl0eGRvM2I1RTNEd3hCRFcyaWVTOE5Z?=
- =?utf-8?B?Y0YyU2s0eGM2aWJhQjkxbUJVbG5ISU5kSUhOV2ZFekkrSEdrNUFxc242VTFQ?=
- =?utf-8?B?Vno0aHprWEJ0L0pmQ1VHMHZLa1dpY0J3ZStEbWdkMXdIOWFqTDNTdkhUK3RC?=
- =?utf-8?B?OFRsQUNYVUtabW84dnN1WGNpUE4ySXRERTFmMm9JUzlLZGtaWVJodHlZM25T?=
- =?utf-8?B?UW9DR3l2RGYyUmNTUW55NTYySTBEdjJDQ2I0Q1YvZHErNCtXRzhjbGhqNU1N?=
- =?utf-8?B?NWk4N2c4OXpsa3AvRllFSklSSUZBPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <060A5C4D83E8DE4AA99E41CC61509B5C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+To:     Qiang Yu <qiang.yu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20220217090440.4468-1-qiang.yu@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220217090440.4468-1-qiang.yu@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM6PR01CA0037.eurprd01.prod.exchangelabs.com
+ (2603:10a6:20b:e0::14) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6da0c031-69b8-4ee3-e652-08d9f1f60a9b
+X-MS-TrafficTypeDiagnostic: BL0PR12MB2578:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB25780A87749A83172A79137183369@BL0PR12MB2578.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: S+kcpARmUdPrKHB08aCCDPfP1m+srDN34dwj/KWuWgmhAe5ewImANmJ4RqycDDmgS2VpFM5/fS2KhO5+jg5jVm+EoKoh0AedBgcH/sHvtc+ReMP1s/dMWcrjN6AZZMe3eZZGTnK+Vay1saAUCsLE/KsRJvvG7b9QTj1pLvHThsBk5+MX3yX8kb0JzHWPgL6vVvl9+RXnwc8eLnIU+zUM7TgRwedN/amv5Eczfz481pHJ96WM8hYJnONvUsyvPZJ355VX8MgRhV/NE/Rb4VAosNddtXAT5KHcjKQ6d1KKH8v/8rc9KU4w9HnJcIKAjQZBz24IwA2NUP0fLPFCmFDyMH3CDzAUHh2ExL8cuihK9PN+Soyeqed/j0kl/BCsh5zyQrXQ92UdUoN3GMVGOPQ8RpvwWxn5MAQYao5xJiV+cYa+JCbG7gRPay7EDNmNeBIqi9ZlRRQbTVHJfltoo4O3uLLPfEGGnHkAbRGXqjKi6Y7BQ4DRI1BXS4+15js5Hp8fU+FLGLc6T18aidhYaMdjmemz3N/hZkh72DhwnfuqKMEJ1uR4XwzjQWWrs5ct4qIofAytLh5ZZe0DM6KD5IZWnYqsbbglhbXMA+3QSBJapX1q3haoYhJ1vCGqGQu3YRhuwJARgc6F8Y0Wc3/Rlq1Z20O3Q8bij+GVrc4DL+2XCKovIOgYM0WYPm6MIEd0h6MSmAKiP9VxlEX7MAj9aEBUzdAapDyoGxQ3m2YYFA4rIppnNwcfjhxBu5X+5Oq6pzpE
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31686004)(316002)(36756003)(6666004)(110136005)(6486002)(38100700002)(66556008)(66946007)(2906002)(8676002)(4326008)(66476007)(6512007)(2616005)(508600001)(86362001)(5660300002)(8936002)(83380400001)(186003)(6506007)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zkl2UFYwRnB1VWNvQnpkMmUxTURyTlhubGtVb0VhWnJTMldMTU92M25MK28y?=
+ =?utf-8?B?Y1pxSHFicG5vYmoyVldKdkFUOEZveGo0REFRQ3dkblRaUmlYdExFM2xBRkM0?=
+ =?utf-8?B?RWNCL0JUb0J2djRVcFVvaDhhZzVLRjM4QXFUMDRlNkhIT0QrNVZkV0w0aFlO?=
+ =?utf-8?B?bktqUkVOL2lOV1poZ3N0MDMrZ2pMempobDY5RG1tK2k3a2VQMHZ4TkJ1cENu?=
+ =?utf-8?B?a2NPdkhjZHRFNTZnaTB0dkl4bCt2QWJoclJGcFVuY1UzSUR4d3ZHa1F5empk?=
+ =?utf-8?B?U2lmby9NeDdKb1l3NGQrWWkrbU9yNklIS01LNjhFYjRRTnhJcHM1RHRieS9T?=
+ =?utf-8?B?MUNsQkVBNllTRXo5YXNOMUxpNEhWcmhnRFJWcEozZHU3SHQrNDZRYWlOYkpU?=
+ =?utf-8?B?ZGlCK0tJWi9tSGhjZld4SllZenhxOUt3OUJDMTJxOUxscm1jbmowZkNKWHYx?=
+ =?utf-8?B?Z201bnF5c1h5bVRFTlVOOFBlU0tySGlySW1jRTlGajRPejBVei9NUTh0eitE?=
+ =?utf-8?B?TzJubTVqckhjNGZHenc2Y0dBd0FURkhOZnNiREdLMlJWS0JKWFZIMGNTVlR6?=
+ =?utf-8?B?UHNrZXE5dHBMYjAyZXVCbkMzbFVSSEpnTU55UmRwVDE1VWZ4Wk1lZzJDbElx?=
+ =?utf-8?B?Nm5jOGM0M1k3Z01vV2ZoNDQwZGFyREtMM0IyTHpHWEJWSzRKcXFnWjhRZXZn?=
+ =?utf-8?B?TTl1N1NheGxRbUFwTVpEcVBWbm0xV09iRnhZQXlmVUdPNU54cXF3ejFoTEdj?=
+ =?utf-8?B?dXRHOEVxdHMrM1kxeUFMeEtmK1N1OTExd0xieGNZb0h6dWMyMjgzRm5PZWo2?=
+ =?utf-8?B?dXd2WXV2M3NTT1hVUkN4TnZiL1ZOM3lVb2JuZ0FVUWwzNGtTNlo4MzlUcHNv?=
+ =?utf-8?B?VE5sVzJocjlNZVJicksvY3lNRmp2S1JpeHRzTE9pRStSeXFDUGJRcCs5NTlo?=
+ =?utf-8?B?Z3ZSOERtcjRqaUdGS3BWZmZ4MUJKTXZrMWloSGNNc0o1cTAzcjVtenkyT0Jq?=
+ =?utf-8?B?Tk5sZWNrUUQvNWpqbnJBSjl1K1JqMnF2WVZvbHYvaXJDU2JkU25jZTJ5WkJl?=
+ =?utf-8?B?MnAxcy9KaVVxWnpiM2o1aTJOYnQvTHZEdXlpZmIzOW0rcDdQZTRtZ3d3WUgv?=
+ =?utf-8?B?dksrMnV5RGdrUDhDKzVoTTJ4TkFGZkUvd0dlZ2pSOFEveENnOVVPZWNKb1BU?=
+ =?utf-8?B?ODd5TGVBbXZMeDd5dVlLWVJQNFZMZFFqQldqaDJUMmxyR0ZwOVltUHBmTHBt?=
+ =?utf-8?B?UXV0bUh1SjZMRkVnRmorenBOQ0g1Q0VhdkV4aW5qRFQ0TmJNL0pPd3gwY1dF?=
+ =?utf-8?B?emhPNTdUSSt5UVlYWDBlaUZ2L1piY0NFVE1LN0hvbStZa3hFcHg2am53VW9a?=
+ =?utf-8?B?TFdMYks0VHlJemVwS1lEOFlMUWJvNDZsRWpYODBVL281cHlueWsrUmFXOTR3?=
+ =?utf-8?B?TFFWbncxRngvUjZ5WGU3SGJQSGJXS3VUYVlJcXZycHJRNVlUMTVWMEI3TjA1?=
+ =?utf-8?B?SnJCMDBMeUU1bit5RmpWMy9Hb0VWN25JV2Vsc1k1ZHhMR050Y1dnTzA5UHJE?=
+ =?utf-8?B?VU1naWZJL0Q5RS92bnRaYzd5eFhCU2pIK21DZFhBdThkTVZaellXdEoyRUhK?=
+ =?utf-8?B?ajJHbEw2YmI1ZkdaRGdRVlpNckVMM0N6ZnJ2dXlJU0FSNlgzWE83VUVmQWtE?=
+ =?utf-8?B?K0dQeEZaS2ZEQU9PU1JBS2RaNFcrVUNRMDZmdzZac3grbDZ1VnozVm5CRHJK?=
+ =?utf-8?B?Nkc4L2NvYlJYQ2NxN2xnY0p6VDV0cjRMbzhHR01CRFlkSm40dlhsYlJEN01t?=
+ =?utf-8?B?cVBnQ2JQbGVEMmJjZjVHSjFSR05WUjM1UHN1UXYwWmZFdjJFNkVRbkZsZVpv?=
+ =?utf-8?B?RnlVbTdWYUsyL3cwZkhPUlRCMmcxZ05TcU1OT1d0MjNSZ2lvb0I0Q1pDNzZl?=
+ =?utf-8?B?RUdvUHpOZGFXY1lpaE5EanI5SkRKUE5Oa04vOVdjWTVHY2hzYldiOTRJS1hH?=
+ =?utf-8?B?K2RjVGJodkY0L0dOaW9KbjlWRzZtZE52RWUvOHNtY1RtbFh1ZHIwRWVaZXdU?=
+ =?utf-8?B?a3dxL0RmRzY1WVoyK2JWRzQ0UVdnVmYwSCtkSlhsb3ZpNWk2Y2ZVLzkvZXEz?=
+ =?utf-8?B?Z2drNS84eGhyNjM2cVdwYkhTUFNPTUdydWE3WVVlTFJIanBwNjlkWWkrRFNE?=
+ =?utf-8?Q?Jvgojk6iLNrEbuvPyZHxYiY=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6da0c031-69b8-4ee3-e652-08d9f1f60a9b
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e08ac2ed-a2dc-4be2-b39d-08d9f1f5a969
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2022 09:12:45.9944
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 09:15:29.3280
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NnAPN3JAUbEVnCwwDh3InIY08ifk5UgQcKqhhwgpBRr8JLf3OyVj1DF2VHX2BG0wb4O/cMdmXDYGg6KsoFdvPbPPAOmnOfjG4GKOe613zzI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1952
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: siWM4/xL7zMZqtr/TjrUGAfSP1sJ74kTNS4B9aGFrLt0F0OD+W2rcyVW8/QnuaNp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2578
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWljaGVhbCwNCg0KT24gMTYuMDIuMjAyMiAxODoxOCwgTWljaGFlbCBXYWxsZSB3cm90ZToN
-Cj4gRVhURVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRz
-IHVubGVzcyB5b3Uga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBBZGQgZWFybHkgY29u
-c29sZSBzdXBwb3J0IHdoaWNoIHJlbGllcyBvbiB0aGUgYm9vdGxvYWRlciBmb3IgdGhlDQo+IGlu
-aXRpYWxpemF0aW9uIG9mIHRoZSBVQVJULg0KPiBQbGVhc2Ugbm90ZSwgdGhhdCB0aGUgY29tcGF0
-aWJsZXMgYXJlIHRha2VuIGZyb20gYXQ5MS11c2FydCBNRkQNCj4gZHJpdmVyLg0KPiANCj4gU2ln
-bmVkLW9mZi1ieTogTWljaGFlbCBXYWxsZSA8bWljaGFlbEB3YWxsZS5jYz4NCj4gLS0tDQo+ICBk
-cml2ZXJzL3R0eS9zZXJpYWwvYXRtZWxfc2VyaWFsLmMgfCAyNCArKysrKysrKysrKysrKysrKysr
-KysrKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAyNCBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jIGIvZHJpdmVycy90dHkvc2Vy
-aWFsL2F0bWVsX3NlcmlhbC5jDQo+IGluZGV4IDJkMDlhODk5NzRhMi4uNTBmYzZkNTFmZjBkIDEw
-MDY0NA0KPiAtLS0gYS9kcml2ZXJzL3R0eS9zZXJpYWwvYXRtZWxfc2VyaWFsLmMNCj4gKysrIGIv
-ZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jDQo+IEBAIC0yNjczLDYgKzI2NzMsMzAg
-QEAgc3RhdGljIHN0cnVjdCBjb25zb2xlIGF0bWVsX2NvbnNvbGUgPSB7DQo+ICAgICAgICAgLmRh
-dGEgICAgICAgICAgID0gJmF0bWVsX3VhcnQsDQo+ICB9Ow0KPiANCj4gK3N0YXRpYyB2b2lkIGF0
-bWVsX3NlcmlhbF9lYXJseV93cml0ZShzdHJ1Y3QgY29uc29sZSAqY29uLCBjb25zdCBjaGFyICpz
-LA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdW5zaWduZWQgaW50IG4p
-DQo+ICt7DQo+ICsgICAgICAgc3RydWN0IGVhcmx5Y29uX2RldmljZSAqZGV2ID0gY29uLT5kYXRh
-Ow0KPiArDQo+ICsgICAgICAgdWFydF9jb25zb2xlX3dyaXRlKCZkZXYtPnBvcnQsIHMsIG4sIGF0
-bWVsX2NvbnNvbGVfcHV0Y2hhcik7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbnQgX19pbml0IGF0
-bWVsX2Vhcmx5X2NvbnNvbGVfc2V0dXAoc3RydWN0IGVhcmx5Y29uX2RldmljZSAqZGV2aWNlLA0K
-PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnN0IGNoYXIg
-Km9wdGlvbnMpDQo+ICt7DQo+ICsgICAgICAgaWYgKCFkZXZpY2UtPnBvcnQubWVtYmFzZSkNCj4g
-KyAgICAgICAgICAgICAgIHJldHVybiAtRU5PREVWOw0KPiArDQo+ICsgICAgICAgZGV2aWNlLT5j
-b24tPndyaXRlID0gYXRtZWxfc2VyaWFsX2Vhcmx5X3dyaXRlOw0KPiArDQo+ICsgICAgICAgcmV0
-dXJuIDA7DQo+ICt9DQo+ICsNCj4gK09GX0VBUkxZQ09OX0RFQ0xBUkUoYXRtZWxzZXJpYWwsICJh
-dG1lbCxhdDkxcm05MjAwLXVzYXJ0IiwNCj4gKyAgICAgICAgICAgICAgICAgICBhdG1lbF9lYXJs
-eV9jb25zb2xlX3NldHVwKTsNCj4gK09GX0VBUkxZQ09OX0RFQ0xBUkUoYXRtZWxzZXJpYWwsICJh
-dG1lbCxhdDkxc2FtOTI2MC11c2FydCIsDQoNCg0KRm9yIGNvbnNpc3RlbmN5IHdpdGggdGhlIHJl
-c3Qgb2YgdGhlIG5hbWluZyBpbiB0aGlzIGZpbGUgY291bGQgeW91IG5hbWUgaXQNCmF0bWVsX3Nl
-cmlhbD8NCg0KQWxzbywgaXQgd291bGQgYmUgZ29vZCB0byBzZWxlY3QgU0VSSUFMX0VBUkxZQ09O
-IGluIEtjb25maWcgdG8gaGF2ZSBpdA0KYXZhaWxhYmxlIGFsc28gZm9yIHByb2R1Y3Rpb24gdy9v
-IGNoYW5naW5nIGRlZmNvbmZpZ3MuDQoNClRoYW5rIHlvdSwNCkNsYXVkaXUgQmV6bmVhDQoNCj4g
-KyAgICAgICAgICAgICAgICAgICBhdG1lbF9lYXJseV9jb25zb2xlX3NldHVwKTsNCj4gKw0KPiAg
-I2RlZmluZSBBVE1FTF9DT05TT0xFX0RFVklDRSAgICgmYXRtZWxfY29uc29sZSkNCj4gDQo+ICAj
-ZWxzZQ0KPiAtLQ0KPiAyLjMwLjINCj4gDQoNCg==
+Am 17.02.22 um 10:04 schrieb Qiang Yu:
+> Workstation application ANSA/META get this error dmesg:
+> [drm:amdgpu_gem_va_ioctl [amdgpu]] *ERROR* Couldn't update BO_VA (-16)
+>
+> This is caused by:
+> 1. create a 256MB buffer in invisible VRAM
+> 2. CPU map the buffer and access it causes vm_fault and try to move
+>     it to visible VRAM
+> 3. force visible VRAM space and traverse all VRAM bos to check if
+>     evicting this bo is valuable
+> 4. when checking a VM bo (in invisible VRAM), amdgpu_vm_evictable()
+>     will set amdgpu_vm->evicting, but latter due to not in visible
+>     VRAM, won't really evict it so not add it to amdgpu_vm->evicted
+> 5. before next CS to clear the amdgpu_vm->evicting, user VM ops
+>     ioctl will pass amdgpu_vm_ready() (check amdgpu_vm->evicted)
+>     but fail in amdgpu_vm_bo_update_mapping() (check
+>     amdgpu_vm->evicting) and get this error log
+>
+> This error won't affect functionality as next CS will finish the
+> waiting VM ops. But we'd better make the amdgpu_vm->evicting
+> correctly reflact the vm status and clear the error log.
+
+Well NAK, that is intentional behavior.
+
+The VM page tables where considered for eviction, so setting the flag is 
+correct even when the page tables later on are not actually evicted.
+
+What we should rather do is to fix amdgpu_vm_ready() to take a look at 
+the flag instead of the linked list.
+
+Regards,
+Christian.
+
+>
+> Signed-off-by: Qiang Yu <qiang.yu@amd.com>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 85 ++++++++++++++-----------
+>   1 file changed, 47 insertions(+), 38 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> index 5a32ee66d8c8..88a27911054f 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> @@ -1306,45 +1306,11 @@ uint64_t amdgpu_ttm_tt_pte_flags(struct amdgpu_device *adev, struct ttm_tt *ttm,
+>   	return flags;
+>   }
+>   
+> -/*
+> - * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
+> - * object.
+> - *
+> - * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
+> - * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
+> - * it can find space for a new object and by ttm_bo_force_list_clean() which is
+> - * used to clean out a memory space.
+> - */
+> -static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+> -					    const struct ttm_place *place)
+> +static bool amdgpu_ttm_mem_eviction_valuable(struct ttm_buffer_object *bo,
+> +					     const struct ttm_place *place)
+>   {
+>   	unsigned long num_pages = bo->resource->num_pages;
+>   	struct amdgpu_res_cursor cursor;
+> -	struct dma_resv_list *flist;
+> -	struct dma_fence *f;
+> -	int i;
+> -
+> -	/* Swapout? */
+> -	if (bo->resource->mem_type == TTM_PL_SYSTEM)
+> -		return true;
+> -
+> -	if (bo->type == ttm_bo_type_kernel &&
+> -	    !amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo)))
+> -		return false;
+> -
+> -	/* If bo is a KFD BO, check if the bo belongs to the current process.
+> -	 * If true, then return false as any KFD process needs all its BOs to
+> -	 * be resident to run successfully
+> -	 */
+> -	flist = dma_resv_shared_list(bo->base.resv);
+> -	if (flist) {
+> -		for (i = 0; i < flist->shared_count; ++i) {
+> -			f = rcu_dereference_protected(flist->shared[i],
+> -				dma_resv_held(bo->base.resv));
+> -			if (amdkfd_fence_check_mm(f, current->mm))
+> -				return false;
+> -		}
+> -	}
+>   
+>   	switch (bo->resource->mem_type) {
+>   	case AMDGPU_PL_PREEMPT:
+> @@ -1377,10 +1343,53 @@ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>   		return false;
+>   
+>   	default:
+> -		break;
+> +		return ttm_bo_eviction_valuable(bo, place);
+>   	}
+> +}
+>   
+> -	return ttm_bo_eviction_valuable(bo, place);
+> +/*
+> + * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
+> + * object.
+> + *
+> + * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
+> + * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
+> + * it can find space for a new object and by ttm_bo_force_list_clean() which is
+> + * used to clean out a memory space.
+> + */
+> +static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+> +					    const struct ttm_place *place)
+> +{
+> +	struct dma_resv_list *flist;
+> +	struct dma_fence *f;
+> +	int i;
+> +
+> +	/* Swapout? */
+> +	if (bo->resource->mem_type == TTM_PL_SYSTEM)
+> +		return true;
+> +
+> +	/* If bo is a KFD BO, check if the bo belongs to the current process.
+> +	 * If true, then return false as any KFD process needs all its BOs to
+> +	 * be resident to run successfully
+> +	 */
+> +	flist = dma_resv_shared_list(bo->base.resv);
+> +	if (flist) {
+> +		for (i = 0; i < flist->shared_count; ++i) {
+> +			f = rcu_dereference_protected(flist->shared[i],
+> +				dma_resv_held(bo->base.resv));
+> +			if (amdkfd_fence_check_mm(f, current->mm))
+> +				return false;
+> +		}
+> +	}
+> +
+> +	/* Check by different mem type. */
+> +	if (!amdgpu_ttm_mem_eviction_valuable(bo, place))
+> +		return false;
+> +
+> +	/* VM bo should be checked at last because it will mark VM evicting. */
+> +	if (bo->type == ttm_bo_type_kernel)
+> +		return amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo));
+> +
+> +	return true;
+>   }
+>   
+>   static void amdgpu_ttm_vram_mm_access(struct amdgpu_device *adev, loff_t pos,
+

@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4614BAB91
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BE84BAB9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238931AbiBQVL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 16:11:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43632 "EHLO
+        id S241852AbiBQVQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 16:16:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbiBQVLz (ORCPT
+        with ESMTP id S239098AbiBQVQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 16:11:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9A310FF4;
-        Thu, 17 Feb 2022 13:11:38 -0800 (PST)
+        Thu, 17 Feb 2022 16:16:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F43C54F9E;
+        Thu, 17 Feb 2022 13:16:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BBB9B824C4;
-        Thu, 17 Feb 2022 21:11:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEAEC340E8;
-        Thu, 17 Feb 2022 21:11:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F51261239;
+        Thu, 17 Feb 2022 21:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FAD2C340EC;
+        Thu, 17 Feb 2022 21:16:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645132296;
-        bh=CzdKQukUPaQ8IcMbLnou9OTW4H72Tf7SKjxZcmHGj9E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=a3BHLJELWH/c1d0oC/ubykhYkMmGYhinD4mFYBoruFJ5Yz7VJcf++0Jf9P8gvrUSt
-         cpWHAB/yNlPC0EBatdEtekOEW9BLmahyBElhmjqhnbsTPaAhZJyFIZOs1u2CmTGBIS
-         o78u91m/r3NNqpEqrIiGfTMUKLDtIALkH8ps6oGMIDOpD90PzZjA50nZ0ct97sWtgT
-         dDkpHwu3RQYN8UcvjhYbE0SL1HqA5zeX+pMFWaduOSsKZm/K9JE1+3FWu+/IrZ//fW
-         UaDVMNGNOBswwhUHwKHGxIQWNzMOXA7gV4uSV5RfSO3u4uHemKwSJJVRieCMn0g2dL
-         Fc7KrPYZWFyAQ==
-Date:   Thu, 17 Feb 2022 15:11:34 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v2 1/2] PCI: Add defines for normal and
- subtractive PCI bridges
-Message-ID: <20220217211134.GA305475@bhelgaas>
+        s=k20201202; t=1645132568;
+        bh=lzNUZg4/G1tEmDvLX1MFUWisYWeHMVVhEOzHv56p/jA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=d/JvqoJ9efgG0vPVIvBXF9uNOrKqRwS17mhCZnVqaUNDyYwlSzhKO6T/iigyE3MOg
+         uR6Ua+/FNCNyAS6KT6kV4aBppd+PUHAm3uvWTmml6O6DDWSnPvbY/dv7EMNt0QpS1e
+         QMpBa5oXuQDP3fKLzqv+zFyy0JSmlvhnptxi7o0bNOBRkI+EqR81rKIDLTcnxNMrLv
+         xi5zd58j3n8ZS2NCwQJxe+6X5vKDDyXNMx8D/6u7Kx5D8vySNWegAk9MW4g8Z6ZZIw
+         IxqiBBBLZw38mLqG/P59ofMP+y8P6dpS1QpvrF/KGszcMdiUUfeOvy7MchaVPFWovs
+         Vv5h7AbNfMZkQ==
+Received: by mail-ej1-f49.google.com with SMTP id p9so10225502ejd.6;
+        Thu, 17 Feb 2022 13:16:07 -0800 (PST)
+X-Gm-Message-State: AOAM530qzqtGv/AgqwqYf1QTVG9KZOPe1on9kDylvxmULpU9KLgN/7x3
+        NvOQ8oIatAUeheDRPNzE/pg94DTaTPdwCIQr0A==
+X-Google-Smtp-Source: ABdhPJxGT1q+qXGOlER4TMr4P3zf+rDyNFaqtuN2Ztb1ctT3SK7abfQtVJ1CUaJCRGYsVU+tJGD7ig20TkewoYMkPek=
+X-Received: by 2002:a17:906:a40f:b0:6c9:e255:7926 with SMTP id
+ l15-20020a170906a40f00b006c9e2557926mr3760578ejz.27.1645132566329; Thu, 17
+ Feb 2022 13:16:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220214114109.26809-1-pali@kernel.org>
+References: <20220217120856.2910-1-zajec5@gmail.com>
+In-Reply-To: <20220217120856.2910-1-zajec5@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 17 Feb 2022 15:15:54 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJjZRJCHDUK7Pia0ontdAGgvqgfPQgpu6A+UH+qovEJOQ@mail.gmail.com>
+Message-ID: <CAL_JsqJjZRJCHDUK7Pia0ontdAGgvqgfPQgpu6A+UH+qovEJOQ@mail.gmail.com>
+Subject: Re: [PATCH RFC *RFC*] dt-bindings: add U-Boot chosen for environment
+ data phandle
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tom Rini <trini@konsulko.com>,
+        Ricardo Salveti <ricardo@foundries.io>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Jorge Ramirez-Ortiz <jorge@foundries.io>,
+        U-Boot Mailing List <u-boot@lists.denx.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,20 +71,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 12:41:08PM +0100, Pali Rohár wrote:
-> Add following two new PCI class codes defines into pci_ids.h include file:
-> 
->   PCI_CLASS_BRIDGE_PCI_NORMAL
->   PCI_CLASS_BRIDGE_PCI_SUBTRACTIVE
-> 
-> And use these defines in all kernel code for describing PCI class codes for
-> normal and subtractive PCI bridges.
+On Thu, Feb 17, 2022 at 6:09 AM Rafa=C5=82 Mi=C5=82ecki <zajec5@gmail.com> =
+wrote:
+>
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>
+> This is RFC and request for a help & discussion.
+>
+> While reviewing patch for U-Boot env binding it has been mentioned that:
+>
+> 1. /Processing/ whole DT in U-Boot may be too much work
+>    Handling flash devices, partitions, their formats & NVMEM may require
+>    too many U-Boot drivers involved.
+>
+> 2. It'd be nice to have env data storage devices pointed in chosen
+>
+> I wrote this hacky PATCH to give a rough idea how it could look like.
+>
+> Please review this and let me know:
+> 1. If solution with chosen + phandles is acceptable
+> 2. How to properly name .yaml file
+> 3. Where it put it
+>
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> ---
+>  .../devicetree/bindings/u-boot,chosen.yaml    | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/u-boot,chosen.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/u-boot,chosen.yaml b/Docum=
+entation/devicetree/bindings/u-boot,chosen.yaml
+> new file mode 100644
+> index 000000000000..8369da91193d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/u-boot,chosen.yaml
+> @@ -0,0 +1,39 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/u-boot,chosen.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: U-Boot setup
+> +
+> +maintainers:
+> +  - Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> +
+> +properties:
+> +  u-boot,env:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      A list of storage volumes containing U-Boot environment data.
+> +
+> +      Env data can be stored on various kinds of storage devices, e.g.:
+> +      1. Raw flash partition
+> +      2. UBI volume
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    chosen {
+> +        u-boot,env =3D <&env>;
 
-Looks good; is this another case?
+You should look at the u-boot config support:
 
-  drivers/pci/controller/pci-mvebu.c:     dev_rev |= (PCI_CLASS_BRIDGE_PCI << 8) << 8;
-
->  static void quirk_sb1250_ht(struct pci_dev *dev)
->  {
-> -	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-> +	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
+https://github.com/devicetree-org/dt-schema/commit/0986f729eff0f40a66e85ab9=
+dfb37681bf025ac4

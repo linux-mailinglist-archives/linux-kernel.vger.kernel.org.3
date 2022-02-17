@@ -2,219 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCB14BA81C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3024BA81A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239783AbiBQSYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:24:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57880 "EHLO
+        id S244221AbiBQSXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:23:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244406AbiBQSY2 (ORCPT
+        with ESMTP id S244189AbiBQSXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:24:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCCCF3E5EF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:23:56 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C4BD15BF;
-        Thu, 17 Feb 2022 10:23:56 -0800 (PST)
-Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CDB93F718;
-        Thu, 17 Feb 2022 10:23:54 -0800 (PST)
-From:   James Morse <james.morse@arm.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        James Morse <james.morse@arm.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        Jamie Iles <jamie@nuviainc.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com
-Subject: [PATCH v3 21/21] x86/resctrl: Make resctrl_arch_rmid_read() return values in bytes
-Date:   Thu, 17 Feb 2022 18:21:10 +0000
-Message-Id: <20220217182110.7176-22-james.morse@arm.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220217182110.7176-1-james.morse@arm.com>
-References: <20220217182110.7176-1-james.morse@arm.com>
+        Thu, 17 Feb 2022 13:23:17 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A538220196;
+        Thu, 17 Feb 2022 10:23:02 -0800 (PST)
+Date:   Thu, 17 Feb 2022 18:22:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645122181;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NQfR/4Bh3Na8ZE2qdjeZClIZpmTHDnvnT8L0QQMwGfg=;
+        b=AOZz+GNDbSJLpHnoP5mVaNbFNgVNidgsGep+JcXXWBcBzvhi9HQBXYmp1KyWry5z5RUYDx
+        tOzuKvGL86bu9b0Y1gT5CnzDattNQI4YTTGvcfhOHQBT682mhlu1TTHpxnMz2KrZJNk1i9
+        6lXhXuw1r00nO68SI8szSarklUkpUEPHJUPPYbWbpctLXA17RE0sNRO3q2U5/hv9AuzIp4
+        fE6617uahQ3x3a3aAqZGRyaQgSX5TCnNaVaSq8P1Jb3bZhgYqNylMxsU+4GDkyBDyj6QpC
+        Egln65X3RF7p+VnS7/Jb3J+36+4yfVt3S8MGKs24mLpSE8JDoG6WazNEOAD+lA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645122181;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NQfR/4Bh3Na8ZE2qdjeZClIZpmTHDnvnT8L0QQMwGfg=;
+        b=YraBV9jHzeqPwWyEVejDv2H6MT9QO/tLW8wrNxMXuSQrS/hFQpOAoknZYxmucsa2jPt5Cy
+        muHisMgVx1eLlFCg==
+From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/sgx: Add poison handling to reclaimer
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: =?utf-8?q?=3Cdcc95eb2aaefb042527ac50d0a50738c7c160dac=2E16438?=
+ =?utf-8?q?30353=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
+References: =?utf-8?q?=3Cdcc95eb2aaefb042527ac50d0a50738c7c160dac=2E164383?=
+ =?utf-8?q?0353=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164512217993.16921.1720244213113719560.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-resctrl_arch_rmid_read() returns a value in chunks, as read from the
-hardware. This needs scaling to bytes by mon_scale, as provided by
-the architecture code.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Now that resctrl_arch_rmid_read() performs the overflow and corrections
-itself, it may as well return a value in bytes directly. This allows
-the accesses to the architecture specific 'hw' structure to be removed.
+Commit-ID:     f4b2a4606a14ab0b697a4e21754c9ad19d39f8ca
+Gitweb:        https://git.kernel.org/tip/f4b2a4606a14ab0b697a4e21754c9ad19d39f8ca
+Author:        Reinette Chatre <reinette.chatre@intel.com>
+AuthorDate:    Wed, 02 Feb 2022 11:41:12 -08:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 17 Feb 2022 09:12:04 -08:00
 
-Move the mon_scale conversion into resctrl_arch_rmid_read().
-mbm_bw_count() is updated to calculate bandwidth from bytes.
+x86/sgx: Add poison handling to reclaimer
 
-Signed-off-by: James Morse <james.morse@arm.com>
+The SGX reclaimer code lacks page poison handling in its main
+free path. This can lead to avoidable machine checks if a
+poisoned page is freed and reallocated instead of being
+isolated.
+
+A troublesome scenario is:
+ 1. Machine check (#MC) occurs (asynchronous, !MF_ACTION_REQUIRED)
+ 2. arch_memory_failure() is eventually called
+ 3. (SGX) page->poison set to 1
+ 4. Page is reclaimed
+ 5. Page added to normal free lists by sgx_reclaim_pages()
+    ^ This is the bug (poison pages should be isolated on the
+    sgx_poison_page_list instead)
+ 6. Page is reallocated by some innocent enclave, a second (synchronous)
+    in-kernel #MC is induced, probably during EADD instruction.
+    ^ This is the fallout from the bug
+
+(6) is unfortunate and can be avoided by replacing the open coded
+enclave page freeing code in the reclaimer with sgx_free_epc_page()
+to obtain support for poison page handling that includes placing the
+poisoned page on the correct list.
+
+Fixes: d6d261bded8a ("x86/sgx: Add new sgx_epc_page flag bit to mark free pages")
+Fixes: 992801ae9243 ("x86/sgx: Initial poison handling for dirty and free pages")
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Link: https://lkml.kernel.org/r/dcc95eb2aaefb042527ac50d0a50738c7c160dac.1643830353.git.reinette.chatre@intel.com
 ---
- arch/x86/kernel/cpu/resctrl/ctrlmondata.c |  6 ++----
- arch/x86/kernel/cpu/resctrl/internal.h    |  4 ++--
- arch/x86/kernel/cpu/resctrl/monitor.c     | 22 +++++++++-------------
- include/linux/resctrl.h                   |  2 +-
- 4 files changed, 14 insertions(+), 20 deletions(-)
+ arch/x86/kernel/cpu/sgx/main.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-index d3f7eb2ac14b..03fc91d8bc9f 100644
---- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-+++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-@@ -549,7 +549,6 @@ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
- int rdtgroup_mondata_show(struct seq_file *m, void *arg)
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 4b41efc..8e4bc64 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -344,10 +344,8 @@ static void sgx_reclaim_pages(void)
  {
- 	struct kernfs_open_file *of = m->private;
--	struct rdt_hw_resource *hw_res;
- 	u32 resid, evtid, domid;
- 	struct rdtgroup *rdtgrp;
- 	struct rdt_resource *r;
-@@ -569,8 +568,7 @@ int rdtgroup_mondata_show(struct seq_file *m, void *arg)
- 	domid = md.u.domid;
- 	evtid = md.u.evtid;
+ 	struct sgx_epc_page *chunk[SGX_NR_TO_SCAN];
+ 	struct sgx_backing backing[SGX_NR_TO_SCAN];
+-	struct sgx_epc_section *section;
+ 	struct sgx_encl_page *encl_page;
+ 	struct sgx_epc_page *epc_page;
+-	struct sgx_numa_node *node;
+ 	pgoff_t page_index;
+ 	int cnt = 0;
+ 	int ret;
+@@ -418,13 +416,7 @@ skip:
+ 		kref_put(&encl_page->encl->refcount, sgx_encl_release);
+ 		epc_page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
  
--	hw_res = &rdt_resources_all[resid];
--	r = &hw_res->r_resctrl;
-+	r = &rdt_resources_all[resid].r_resctrl;
- 	d = rdt_find_domain(r, domid, NULL);
- 	if (IS_ERR_OR_NULL(d)) {
- 		ret = -ENOENT;
-@@ -584,7 +582,7 @@ int rdtgroup_mondata_show(struct seq_file *m, void *arg)
- 	else if (rr.err == -EINVAL)
- 		seq_puts(m, "Unavailable\n");
- 	else
--		seq_printf(m, "%llu\n", rr.val * hw_res->mon_scale);
-+		seq_printf(m, "%llu\n", rr.val);
- 
- out:
- 	rdtgroup_kn_unlock(of->kn);
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index e26a4d67e204..d6ce6ce91885 100644
---- a/arch/x86/kernel/cpu/resctrl/internal.h
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -279,13 +279,13 @@ struct rftype {
- 
- /**
-  * struct mbm_state - status for each MBM counter in each domain
-- * @prev_bw_chunks: Previous chunks value read when for bandwidth calculation
-+ * @prev_bw_bytes: Previous bytes value read when for bandwidth calculation
-  * @prev_bw:	The most recent bandwidth in MBps
-  * @delta_bw:	Difference between the current and previous bandwidth
-  * @delta_comp:	Indicates whether to compute the delta_bw
-  */
- struct mbm_state {
--	u64	prev_bw_chunks;
-+	u64	prev_bw_bytes;
- 	u32	prev_bw;
- 	u32	delta_bw;
- 	bool	delta_comp;
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 3a6555f49720..437e7db77f93 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -186,7 +186,7 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
- 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
- 	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
- 	struct arch_mbm_state *am;
--	u64 msr_val;
-+	u64 msr_val, chunks;
- 
- 	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
- 		return -EINVAL;
-@@ -211,10 +211,11 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
- 	if (am) {
- 		am->chunks += mbm_overflow_count(am->prev_msr, msr_val,
- 						 hw_res->mbm_width);
--		*val = get_corrected_mbm_count(rmid, am->chunks);
-+		chunks = get_corrected_mbm_count(rmid, am->chunks);
-+		*val = chunks * hw_res->mon_scale;
- 		am->prev_msr = msr_val;
- 	} else {
--		*val = msr_val;
-+		*val = msr_val * hw_res->mon_scale;
+-		section = &sgx_epc_sections[epc_page->section];
+-		node = section->node;
+-
+-		spin_lock(&node->lock);
+-		list_add_tail(&epc_page->list, &node->free_page_list);
+-		spin_unlock(&node->lock);
+-		atomic_long_inc(&sgx_nr_free_pages);
++		sgx_free_epc_page(epc_page);
  	}
+ }
  
- 	return 0;
-@@ -229,7 +230,6 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
- void __check_limbo(struct rdt_domain *d, bool force_free)
- {
- 	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
--	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
- 	struct rmid_entry *entry;
- 	u32 crmid = 1, nrmid;
- 	bool rmid_dirty;
-@@ -252,7 +252,6 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
- 					   QOS_L3_OCCUP_EVENT_ID, &val)) {
- 			rmid_dirty = true;
- 		} else {
--			val *= hw_res->mon_scale;
- 			rmid_dirty = (val >= resctrl_rmid_realloc_threshold);
- 		}
- 
-@@ -296,7 +295,6 @@ int alloc_rmid(void)
- static void add_rmid_to_limbo(struct rmid_entry *entry)
- {
- 	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
--	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
- 	struct rdt_domain *d;
- 	int cpu, err;
- 	u64 val = 0;
-@@ -308,7 +306,6 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
- 			err = resctrl_arch_rmid_read(r, d, entry->rmid,
- 						     QOS_L3_OCCUP_EVENT_ID,
- 						     &val);
--			val *= hw_res->mon_scale;
- 			if (err || val <= resctrl_rmid_realloc_threshold)
- 				continue;
- 		}
-@@ -400,15 +397,14 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
-  */
- static void mbm_bw_count(u32 rmid, struct rmid_read *rr)
- {
--	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(rr->r);
- 	struct mbm_state *m = &rr->d->mbm_local[rmid];
--	u64 cur_bw, chunks, cur_chunks;
-+	u64 cur_bw, bytes, cur_bytes;
- 
--	cur_chunks = rr->val;
--	chunks = cur_chunks - m->prev_bw_chunks;
--	m->prev_bw_chunks = cur_chunks;
-+	cur_bytes = rr->val;
-+	bytes = cur_bytes - m->prev_bw_bytes;
-+	m->prev_bw_bytes = cur_bytes;
- 
--	cur_bw = (chunks * hw_res->mon_scale) >> 20;
-+	cur_bw = bytes >> 20;
- 
- 	if (m->delta_comp)
- 		m->delta_bw = abs(cur_bw - m->prev_bw);
-diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index fc00bf1bafa7..4e0a7a549280 100644
---- a/include/linux/resctrl.h
-+++ b/include/linux/resctrl.h
-@@ -227,7 +227,7 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
-  * @d:			domain that the counter should be read from.
-  * @rmid:		rmid of the counter to read.
-  * @eventid:		eventid to read, e.g. L3 occupancy.
-- * @val:		result of the counter read in chunks.
-+ * @val:		result of the counter read in bytes.
-  *
-  * Return:
-  * 0 on success, or -EIO, -EINVAL etc on error.
--- 
-2.30.2
-

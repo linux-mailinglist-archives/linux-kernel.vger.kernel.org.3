@@ -2,166 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07894BA347
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB864BA35B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242012AbiBQOnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:43:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41372 "EHLO
+        id S235436AbiBQOoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 09:44:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236241AbiBQOnK (ORCPT
+        with ESMTP id S232351AbiBQOoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:43:10 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A421EC078
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:42:55 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id d23so10355477lfv.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:42:55 -0800 (PST)
+        Thu, 17 Feb 2022 09:44:15 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB345207FF3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:44:00 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id q4so3512964qki.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:44:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ts6Q5aU6z5e843FkCdgAsd2jZ75V28LWR4qBK2HlY2M=;
-        b=x69GWspS+ZE02gF5g5h6YrJ5F9MOtGPAMM1aFNmmLzGQIPmxsxbzE+AEqnC7kCygvO
-         F8Ia5X3Y7Lcix98CFzbpUIeIdFEX/1NtKAFUsGNRPBhATJFDwdoCZQYKvoY4l2a1vT+Z
-         eVgNFOIp9ThT/Bffchaj5BIBM7MufXIbUQiN9bWZVan6tfpsbXXak1sj/VHeLP6OV+60
-         YgP622l5BWjozb6JAjI7X44jz23q1LSJdIcd5tbTn7n0zUAfUGhU1eJonI0NIPI0Dl+Q
-         REk0X5ye8LvInZCT0qnwbgMixmoDMNIdNi440nHFGr24GO3U242113B0OTIJmfZeAqvU
-         MRtA==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=7Dm8/9xh+wmDmQBhMFT43NJgXO5tbOXeBqNcPHzywpk=;
+        b=ZICFIWA9Sbi45aOvx4dcDKut/wdPr6VMVnR4U4cb/kJNSc5ETL1ImhYOA8svydp4va
+         RzN0pqQOm5Dq4JA7d4pON7G9eyLMCXEsZuWHjnT9Fj9mCm+TUeulRj9lF2p9y2RbrWcw
+         Zdpbnbp0nBhk0+kYOrKKXdR396nWX9LG40kL5OO0Sx5HRmFULTOjGINNiVDkIXxd4+xP
+         TOWJ3oYmeQRu60z0DluHgDjZgUZAXTPIUOGK3h/aHozSzMAyMRLTYmepfzaIg3ggnHGr
+         dP2iJfjIiPWmJy73uFUWoYnY+wyUm1t2ktREy2fqVLd/EgvXbdq9nYV+GFUVOklwgQKe
+         rgsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ts6Q5aU6z5e843FkCdgAsd2jZ75V28LWR4qBK2HlY2M=;
-        b=rFcL7TI/ZiGG7hpdPW/HMJny6uCdAcJWy2S0bWAcplEwPY6v5IPWxC+q3pzRGJUwJB
-         kVxn489ceeQb1u37EWRX8rC7v4767sE49EYNrdiGiKkbl459HpGgryK0+afanJwHz708
-         8v6exWCYlhet7AW22SeKr858EVv06mw5l0ORP8sN6quYIxVbeasaWr1Mx3dFA2qWCkbv
-         tM/N6aVC0XyQqx4AyCpQG7yBCapxJqiM1wDGz0GzflkHO0Y/F2/LAIVdJUVe9WOoVv/e
-         0wBRE9qMjIfhdexJolFwlG27FErpk51aRRbv2GgII1Do1EOYeJww6SBOjxB4LyauVY2B
-         QnQQ==
-X-Gm-Message-State: AOAM532AOZqXkWr+9IgTfszCZb7ydQyfzoNEYrB/A+fqn/3hJdEiyqcE
-        Y3cq0nkQwk1RCS/TTHRjKVUr+5p0rb6zrLVD370mmQ==
-X-Google-Smtp-Source: ABdhPJxCOV7PZ4CcfKf84sygNoWNsUkVRswd4yWyuMIsrE4HLPhKvH7e1QzsOofjNnZN240GhAnHQUqJiTKavlwY0YA=
-X-Received: by 2002:a05:6512:3604:b0:443:5d4b:3760 with SMTP id
- f4-20020a056512360400b004435d4b3760mr2220527lfs.358.1645108973676; Thu, 17
- Feb 2022 06:42:53 -0800 (PST)
-MIME-Version: 1.0
-References: <3beef2c6ae4878eb31fdb16988a1fcedc7ee143c.camel@dd-wrt.com>
-In-Reply-To: <3beef2c6ae4878eb31fdb16988a1fcedc7ee143c.camel@dd-wrt.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Feb 2022 15:42:17 +0100
-Message-ID: <CAPDyKFo5SLtcVWPuMOvhWFFYGEX8Q3PUvX-U_waX4TVjm=fEoA@mail.gmail.com>
-Subject: Re: Shutdown hang on Cavium thunderX eMMC
-To:     Daniel Danzberger <daniel@dd-wrt.com>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alcooperx@gmail.com, adrian.hunter@intel.com
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=7Dm8/9xh+wmDmQBhMFT43NJgXO5tbOXeBqNcPHzywpk=;
+        b=b+rgCkwfRi0q5MqhMXCP0IRSEHszMNHqqwG5+ZBX0yD149QlL5Xb1GqKIE+7gRXRHF
+         zD6jIValmlLJ/fdIvHFsJMHndgWvLCUKk9Z5fo5SD7G+q0+6SjuTQIzE1T2ekEaDafNR
+         LWLJUJuYR91UyDAo0PE8UreXTjhBvkvGJCoQl2IdPMXqWSFawdfvAit5iNRMv3VlF+vR
+         rqV0Z8zzGu2SIKwnH/aOkeHFmVnUqLJWYdfHps4lo0F9lIVJvyGuqIwzYStSKdb+dI6e
+         lGg0CuTrcr8FFjyVyjm+/mh1Yqso0++XMueguagtGIcZOP0U1aYi/hwet5bROX2hP89U
+         /gCQ==
+X-Gm-Message-State: AOAM531FPt9ALF/dzGJY78U1Z0VbOxuYK+MekzPwq4meFDSMtU++eQD1
+        Qqe87puLfbcV/Ki47O/Vs0fKCg==
+X-Google-Smtp-Source: ABdhPJxLj1ldRMkUKspCf3+BTfjxi/lSWLS/APEjil4eZvdWbgL26ckX1Mt84cdeQha/7dTmRgmWsw==
+X-Received: by 2002:ae9:edc6:0:b0:60c:8807:712f with SMTP id c189-20020ae9edc6000000b0060c8807712fmr1821761qkg.14.1645109039947;
+        Thu, 17 Feb 2022 06:43:59 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id h19sm13099450qtx.12.2022.02.17.06.43.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 06:43:59 -0800 (PST)
+Message-ID: <20a43338009164be793abb9fedd002f2e4c9a293.camel@ndufresne.ca>
+Subject: Re: [PATCH v6, 06/15] media: mtk-vcodec: Refactor get and put
+ capture buffer flow
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Date:   Thu, 17 Feb 2022 09:43:54 -0500
+In-Reply-To: <353328c24f92a0690c8461a9b18c62166b769a40.camel@mediatek.com>
+References: <20220122035316.18179-1-yunfei.dong@mediatek.com>
+         <20220122035316.18179-7-yunfei.dong@mediatek.com>
+         <b07ac9bebb1d2ecef8ddb1426f16f4ff3218a131.camel@ndufresne.ca>
+         <353328c24f92a0690c8461a9b18c62166b769a40.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 10:52, Daniel Danzberger <daniel@dd-wrt.com> wrote:
->
-> Hi,
->
-> the below commit causes a shutodown hang on my octeontx platforms
-> (aarch64) with Cavium ThunderX eMMC
->
-> --
-> commit 66c915d09b942fb3b2b0cb2f56562180901fba17
-> Author: Ulf Hansson <ulf.hansson@linaro.org>
-> Date:   Fri Dec 3 15:15:54 2021 +0100
->
->     mmc: core: Disable card detect during shutdown
-> --
->
-> On shutdown, the __mmc_stop_host() call blocks by waiting for
-> mmc_detect() to complete, but it never does.
-> The second stack trace below shows it's been waiting forever for an
-> mmc_send_status() request to complete.
+Le jeudi 17 février 2022 à 17:03 +0800, yunfei.dong@mediatek.com a écrit :
+> > > -	ret = vdec_if_decode(ctx, bs_src, dst_buf, &res_chg);
+> > > +	ret = vdec_if_decode(ctx, bs_src, NULL, &res_chg);
+> > >   	if (ret) {
+> > >   		mtk_v4l2_err(" <===[%d], src_buf[%d] sz=0x%zx pts=%llu
+> > > vdec_if_decode() ret=%d res_chg=%d===>",
+> > >   			     ctx->id, vb2_src->index, bs_src->size,
+> > > @@ -220,12 +266,9 @@ static void mtk_vdec_worker(struct work_struct
+> > > *work)
+> > >   		}
+> > >   	}
+> > >   
+> > > -	mtk_vdec_stateless_set_dst_payload(ctx, dst_buf);
+> > > -
+> > > -	v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx-
+> > > > m2m_ctx,
+> > > -					 ret ? VB2_BUF_STATE_ERROR :
+> > > VB2_BUF_STATE_DONE);
+> > > -
+> > > +	mtk_vdec_stateless_out_to_done(ctx, bs_src, ret);
+> > 
+> > v4l2_m2m_buf_done_and_job_finish() was specially crafted to prevent
+> > developer
+> > from implementing the signalling of the request at the wrong moment.
+> > This patch
+> > broke this strict ordering. The relevant comment in the helper
+> > function:
+> > 
+> > 
+> As we discussed in chat, please help to check whether it's possible to
+> let lat and core decode in parallel.
 
-Looks like the root to the problem is that the mmc_send_status()
-request is hanging the cavium mmc host driver.
+Thanks, Benjamin is looking into that. For the mailing list here, here's some
+prior art for a similar problem found by downstream RPi4 HEVC driver developer.
+The general problem here is that we don't want to signal the request until the
+decode have complete, yet we want to pick and run second (concurrent job) so
+that parallel decoding is made possible. For RPi4 it is not multi-core, but the
+decoding is split in 2 stages, and the decoder run both stages concurrently,
+which basically means, we need to be able to run two jobs at the same time
+whenever possible.
 
-Is that instance of the mmc host driver functional at all? I mean, it
-looks like the host driver is hanging already before the system is
-being shutdown, right?
+https://github.com/raspberrypi/linux/commit/964be1d20e2f1335915a6bf8c82a3199bfddf8ac
 
-Kind regards
-Uffe
+This introduce media_request_pin/unpin, but being able to pin a request and not
+have it bound to any other object lifetime anymore seems a bit error prone in
+comparison to the current restrictions. Comments welcome !
 
->
->
-> [  394.251271] INFO: task procd:2715 blocked for more than 153 seconds.
-> [  394.257635]       Not tainted 5.10.96 #0
-> [  394.261552] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> disables this message.
-> [  394.269389] task:procd           state:D stack:    0 pid: 2715 ppid:
-> 1 flags:0x00000000
-> [  394.277749] dump_backtrace(regs = 0000000000000000 tsk =
-> 000000003cc20742)
-> [  394.284625] Call trace:
-> [  394.287069]  __switch_to+0x80/0xc0
-> [  394.290467]  __schedule+0x1f8/0x530
-> [  394.293961]  schedule+0x48/0xd0
-> [  394.297099]  schedule_timeout+0x98/0xd0
-> [  394.300931]  __wait_for_common+0xc4/0x1c4
-> [  394.304956]  wait_for_completion+0x20/0x2c
-> [  394.309050]  __flush_work.isra.0+0x184/0x31c
-> [  394.313329]  __cancel_work_timer+0xfc/0x170
-> [  394.317510]  cancel_delayed_work_sync+0x14/0x20
-> [  394.322038]  __mmc_stop_host+0x3c/0x50
-> [  394.325799]  mmc_host_classdev_shutdown+0x14/0x24
-> [  394.330500]  device_shutdown+0x120/0x250
-> [  394.334430]  __do_sys_reboot+0x1ec/0x290
-> [  394.338350]  __arm64_sys_reboot+0x24/0x30
-> [  394.342356]  do_el0_svc+0x74/0x120
-> [  394.345765]  el0_svc+0x14/0x20
-> [  394.348817]  el0_sync_handler+0xa4/0x140
-> [  394.352736]  el0_sync+0x164/0x180
->
->
-> [  735.262749] INFO: task kworker/0:0:5 blocked for more than 614
-> seconds.
-> [  735.269363]       Not tainted 5.10.96 #0
-> [  735.273296] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-> disables this message.
-> [  735.281121] task:kworker/0:0     state:D stack:    0 pid:    5 ppid:
-> 2 flags:0x00000028
-> [  735.289490] Workqueue: events_freezable mmc_rescan
-> [  735.294288] Call trace:
-> [  735.296732]  __switch_to+0x80/0xc0
-> [  735.300131]  __schedule+0x1f8/0x530
-> [  735.303623]  schedule+0x48/0xd0
-> [  735.306761]  schedule_timeout+0x98/0xd0
-> [  735.310593]  __wait_for_common+0xc4/0x1c4
-> [  735.314606]  wait_for_completion+0x20/0x2c
-> [  735.318699]  mmc_wait_for_req_done+0x2c/0x100
-> [  735.323065]  mmc_wait_for_req+0xb0/0x100
-> [  735.326984]  mmc_wait_for_cmd+0x54/0x7c
-> [  735.330818]  mmc_send_status+0x5c/0x80
-> [  735.334573]  mmc_alive+0x18/0x24
-> [  735.337798]  _mmc_detect_card_removed+0x34/0x150
-> [  735.342412]  mmc_detect+0x28/0x90
-> [  735.345732]  mmc_rescan+0xd8/0x348
-> [  735.349132]  process_one_work+0x1d4/0x374
-> [  735.353147]  worker_thread+0x17c/0x4ec
-> [  735.356892]  kthread+0x124/0x12c
-> [  735.360117]  ret_from_fork+0x10/0x34
->
->
->
-> I only could test this with 5.10.96 for now.
->
->
-> --
-> Regards
->
-> Daniel Danzberger
-> embeDD GmbH, Alter Postplatz 2, CH-6370 Stans
+> 
+> I will continue to fix h264 issue.
+
+Thanks.
+
+> 
+> Thanks for your help.
+> 
+> Best Regards,
+> Yunfei Dong
+

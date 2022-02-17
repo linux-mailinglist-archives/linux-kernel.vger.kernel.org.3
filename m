@@ -2,166 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6074BA0B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8374F4BA0CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240746AbiBQNLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:11:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48902 "EHLO
+        id S240773AbiBQNNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:13:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiBQNLT (ORCPT
+        with ESMTP id S240715AbiBQNNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:11:19 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EBA2AE285;
-        Thu, 17 Feb 2022 05:11:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645103465; x=1676639465;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=3j1F15BrCbKN2Xpg8Gu2Cb+UfX7fWFXHLd+x9nlgm/s=;
-  b=B4TkHEmt5MSPJ9UQlPQXluKIH+UFiTk4m0rIdL97p2J6nuLfZvS56Nmb
-   hdjxUa7riYQJUN+PMZyFpGNTrbHsMecQ6ibTEnPpDVvhqxcyh5uMTXHew
-   f7c/5nxA/tw8mO+n2e2VAAu/wi3ExIXP5kSHDK4ACJiF6o9aW4qxZjPOv
-   kFId2eP8ZfSdZ9yJg4iB9FRtWD0DS8DyMABtoPrRTtZlXUZESnvOnsyPj
-   CJuOi4twDnwGOJ4uYyu3KIzi4ej1Qev3b0BYnXuhtu32NTlucr2cnXj8v
-   VyKy/U6porYWldpuFxumskQ6Uam2+o6LbY1coH4FWyL2D+5BwZoCpArbJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="248465322"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="248465322"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:11:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="704791747"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga005.jf.intel.com with ESMTP; 17 Feb 2022 05:10:57 -0800
-Date:   Thu, 17 Feb 2022 21:10:36 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v4 04/12] mm/shmem: Support memfile_notifier
-Message-ID: <20220217131036.GC32679@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
- <20220118132121.31388-5-chao.p.peng@linux.intel.com>
- <YgK2pDB34AsqCHd0@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgK2pDB34AsqCHd0@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Feb 2022 08:13:21 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDA6911A2E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:13:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD6D812FC;
+        Thu, 17 Feb 2022 05:12:51 -0800 (PST)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CC0A3F66F;
+        Thu, 17 Feb 2022 05:12:49 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
+        igor.skalkin@opensynergy.com, cristian.marussi@arm.com
+Subject: [PATCH v5 0/8] Add SCMI Virtio & Clock atomic support
+Date:   Thu, 17 Feb 2022 13:12:26 +0000
+Message-Id: <20220217131234.50328-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 08:29:56PM +0200, Mike Rapoport wrote:
-> Hi,
-> 
-> On Tue, Jan 18, 2022 at 09:21:13PM +0800, Chao Peng wrote:
-> > It maintains a memfile_notifier list in shmem_inode_info structure and
-> > implements memfile_pfn_ops callbacks defined by memfile_notifier. It
-> > then exposes them to memfile_notifier via
-> > shmem_get_memfile_notifier_info.
-> > 
-> > We use SGP_NOALLOC in shmem_get_lock_pfn since the pages should be
-> > allocated by userspace for private memory. If there is no pages
-> > allocated at the offset then error should be returned so KVM knows that
-> > the memory is not private memory.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > ---
-> >  include/linux/shmem_fs.h |  4 ++
-> >  mm/memfile_notifier.c    | 12 +++++-
-> >  mm/shmem.c               | 81 ++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 96 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-> > index 166158b6e917..461633587eaf 100644
-> > --- a/include/linux/shmem_fs.h
-> > +++ b/include/linux/shmem_fs.h
-> > @@ -9,6 +9,7 @@
-> >  #include <linux/percpu_counter.h>
-> >  #include <linux/xattr.h>
-> >  #include <linux/fs_parser.h>
-> > +#include <linux/memfile_notifier.h>
-> >  
-> >  /* inode in-kernel data */
-> >  
-> > @@ -24,6 +25,9 @@ struct shmem_inode_info {
-> >  	struct shared_policy	policy;		/* NUMA memory alloc policy */
-> >  	struct simple_xattrs	xattrs;		/* list of xattrs */
-> >  	atomic_t		stop_eviction;	/* hold when working on inode */
-> > +#ifdef CONFIG_MEMFILE_NOTIFIER
-> > +	struct memfile_notifier_list memfile_notifiers;
-> > +#endif
-> >  	struct inode		vfs_inode;
-> >  };
-> >  
-> > diff --git a/mm/memfile_notifier.c b/mm/memfile_notifier.c
-> > index 8171d4601a04..b4699cbf629e 100644
-> > --- a/mm/memfile_notifier.c
-> > +++ b/mm/memfile_notifier.c
-> > @@ -41,11 +41,21 @@ void memfile_notifier_fallocate(struct memfile_notifier_list *list,
-> >  	srcu_read_unlock(&srcu, id);
-> >  }
-> >  
-> > +#ifdef CONFIG_SHMEM
-> > +extern int shmem_get_memfile_notifier_info(struct inode *inode,
-> > +					struct memfile_notifier_list **list,
-> > +					struct memfile_pfn_ops **ops);
-> > +#endif
-> > +
-> >  static int memfile_get_notifier_info(struct inode *inode,
-> >  				     struct memfile_notifier_list **list,
-> >  				     struct memfile_pfn_ops **ops)
-> >  {
-> > -	return -EOPNOTSUPP;
-> > +	int ret = -EOPNOTSUPP;
-> > +#ifdef CONFIG_SHMEM
-> > +	ret = shmem_get_memfile_notifier_info(inode, list, ops);
-> > +#endif
-> 
-> This looks backwards. Can we have some register method for memory backing
-> store and call it from shmem.c?
+Hi,
 
-Agreed. That would be clearer.
+This small series is the tail-subset of the previous V8 series about atomic
+support in SCMI [1], whose 8-patches head-subset has now been queued on
+[2]; as such, it is based on [2] on top of tag scmi-updates-5.17:
 
-Chao
-> 
-> > +	return ret;
-> >  }
-> >  
-> >  int memfile_register_notifier(struct inode *inode,
-> 
-> -- 
-> Sincerely yours,
-> Mike.
+commit 94d0cd1da14a ("firmware: arm_scmi: Add new parameter to
+		     mark_txdone")
+
+Patch [1/8] substitute virtio-scmi ready flag and lock with a reference
+counter to keep track of vio channels lifetime while removing the need of
+a wide spinlocked section (that would cause issues with introduction of
+virtio polling support)
+
+Patch [2/8] adds a few helpers to handle the TX free_list and a dedicated
+spinlock to reduce the reliance on the main one.
+
+Patch [3/8] adds polling mode to SCMI VirtIO transport in order to support
+atomic operations on such transport.
+
+Patches [4,5/8] introduce a new optional SCMI binding, atomic-threshold-us,
+to configure a platform specific time threshold used in the following
+patches to select with a finer grain which SCMI resources should be
+eligible for atomic operations when requested.
+
+Patch [6/8] exposes new SCMI Clock protocol operations to allow an SCMI
+user to request atomic mode on clock enable commands.
+
+Patch [7/8] adds support to SCMI Clock protocol for a new clock attributes
+field which advertises typical enable latency for a specific resource.
+
+Finally patch [8/8] add support for atomic operations to the SCMI clock
+driver; the underlying logic here is that we register with the Clock
+framework atomic-capable clock resources if and only if the backing SCMI
+transport is capable of atomic operations AND the specific clock resource
+has been advertised by the SCMI platform as having:
+
+	clock_enable_latency <= atomic-threshold-us
+
+The idea is to avoid costly atomic busy-waiting for resources that have
+been advertised as 'slow' to operate upon. (i.e. a PLL vs a gating clock)
+
+To ease testing the whole series can be find at [3].
+
+Any feedback/testing welcome as usual.
+
+Thanks,
+Cristian
+
+[1]: https://lore.kernel.org/linux-arm-kernel/20211220195646.44498-1-cristian.marussi@arm.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/tag/?h=scmi-updates-5.17
+[3]: https://gitlab.arm.com/linux-arm/linux-cm/-/commits/scmi_atomic_clk_virtio_V5/
+
+---
+v4 --> v5
+- dt_bindings: fixed example and removed dtschema warnings/errors
+- dt_bindings: added 'default: 0' clause
+- introduced vio_msg refcounts and helpers to avoid premature reuse of
+  freed messages when both poling and IRQ path are active on a buffer
+- better handling of timed out polled messages on late replies using
+  new VIO_MSG_POLL_TIMEOUT state
+- fixed comments on locks
+- removed unneeded virtqueue re-enable when fail to acquire channel in
+  complete_cb
+
+V3 --> V4
+- renamed optional DT property to atomic-threshold-us
+
+V2 --> V3
+ - split out virtio_ring RFC patch into a distinct series
+ - calling virtqueue_broke_device when cleaning up channel
+ - removed RFC tags from CLK related patches
+
+V1 --> V2
+ - added vio channel refcount support patch
+ - reviewed free_list support and usage
+ - added virtio_ring RFC patch
+ - shrinked spinlocked section within virtio_poll_done to exclude
+   virtqueue_poll call
+ - removed poll_lock
+ - use vio channel refcount acquire/release logic when polling
+ - using new free_list accessors
+ - added new dedicated pending_lock to access pending_cmds_list
+ - fixed a few comments
+
+Cristian Marussi (8):
+  firmware: arm_scmi: Add a virtio channel refcount
+  firmware: arm_scmi: Review virtio free_list handling
+  firmware: arm_scmi: Add atomic mode support to virtio transport
+  dt-bindings: firmware: arm,scmi: Add atomic-threshold-us optional
+    property
+  firmware: arm_scmi: Support optional system wide atomic-threshold-us
+  firmware: arm_scmi: Add atomic support to clock protocol
+  firmware: arm_scmi: Add support for clock_enable_latency
+  clk: scmi: Support atomic clock enable/disable API
+
+ .../bindings/firmware/arm,scmi.yaml           |  10 +
+ drivers/clk/clk-scmi.c                        |  71 ++-
+ drivers/firmware/arm_scmi/Kconfig             |  15 +
+ drivers/firmware/arm_scmi/clock.c             |  34 +-
+ drivers/firmware/arm_scmi/driver.c            |  33 +-
+ drivers/firmware/arm_scmi/virtio.c            | 591 +++++++++++++++---
+ include/linux/scmi_protocol.h                 |   9 +-
+ 7 files changed, 655 insertions(+), 108 deletions(-)
+
+-- 
+2.17.1
+

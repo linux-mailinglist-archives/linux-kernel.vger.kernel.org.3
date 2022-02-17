@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D6B4BA561
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601E54BA56B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242923AbiBQQGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:06:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38990 "EHLO
+        id S236815AbiBQQJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:09:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236645AbiBQQGF (ORCPT
+        with ESMTP id S229447AbiBQQJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:06:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2905229C128
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:05:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645113950;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q8C5mBTF/zQPiu7mRTQ0V1X+3+5OQ4DWAsdzOSei6/I=;
-        b=g0/DkOjF130rSLL0p9nt5505Y/iggj+13Tzt4sfNyOz/3X4rjSLPiNKNyZFolR9QqMVaa8
-        nQ/dVp9CScKvddp+4umIV9KQELbcV7X3b81qf2qDxshcoySmCKlIMhH+Rq9tIwHYsf7pOM
-        6wc0NE72ghfjO/qbzvcwh0T/XrAnELI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-544-2RxFkUvtNtmHCL21JpLsYQ-1; Thu, 17 Feb 2022 11:05:48 -0500
-X-MC-Unique: 2RxFkUvtNtmHCL21JpLsYQ-1
-Received: by mail-wm1-f70.google.com with SMTP id b17-20020a05600c4e1100b0037cc0d56524so4460227wmq.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:05:48 -0800 (PST)
+        Thu, 17 Feb 2022 11:09:10 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0491178BC1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:08:55 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id y18so4937530plb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:08:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VD8H9XEccLJ1gEJ8HFd5QAYd/aMwLkrTq6BJhjDSisU=;
+        b=F2rnoQOUj5vrdaK05HWLiQ7Dayy2FS/VLwwppCjteGUtmVGphPSPL1yNlR/PsVhO4Q
+         SGeRoVRv5Uus+p4dn8QbXAGf80LP4h24IJAa0YKQc/bBrJA2mgvX6k6S+QaZhSinsQPe
+         o216cTDDHjXReLeUyM4oLkcXFtL1l/32drgLI8Q3Ol851JV0AFiUSkZYV96ZmH6yoaRz
+         AKOTAqvSoj03fN1c6IOu25o9+GmlKYmh8Tz/z/Z1zg3CfaJqHt1e0AWkINesw/Pf2V0l
+         g76JZRFDHXvhz1CCgn1/99do97O3lEyvZTQa1XyJAFrLSbwg3bv9oVKn+Ugr30Tfha1B
+         919w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=q8C5mBTF/zQPiu7mRTQ0V1X+3+5OQ4DWAsdzOSei6/I=;
-        b=aUkHEHnvd0dXDDlgPzWAmUVzBh2RwPfD5ILN6zR1N4L0opImG14D2DTXl4OpHEFeyS
-         guR0SLicuFo7FPhH0m8KkjjymW5bUUkXBOXH0itXZ8fmxAI/ZIOAlVLG2fZNS8yDfxgs
-         rTHE5/6c1gUiu/4wSPP/45Dbn0HCPF0wLuBegYXinrDoZXrmGflBJpjfIOTNFO8lLT45
-         ZzhneHqzdKLyRiHH4HMniwokOmQFWfIlliEQXTKSx8YSs9rN83s96TocVXEnwoKuuQUw
-         dSjty0k9gkI9QD7D8Yd0OMgzFgvpakdSwDP0QLdkW27Zmote/mVMvIa+c2Inbek4sEeW
-         6iKA==
-X-Gm-Message-State: AOAM5333tPWZYvLh4zeEXxiczrrDUthPEfx3teX5MWJXlN9k22xwWJ07
-        Vs1kwctb/6oVAvqTWDAWaFhSiE7f2OCRTuP4k/9tz/Dx/Kl4JNbqsCBTPsL9rBy9FOLlCnYD0Be
-        hnsvcpgynlZ7dlPHQR12kgspH
-X-Received: by 2002:adf:e78a:0:b0:1e6:3524:e135 with SMTP id n10-20020adfe78a000000b001e63524e135mr2961069wrm.601.1645113947653;
-        Thu, 17 Feb 2022 08:05:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzVqs24c8i2D8Lt4f9Z4iNheHvxgXvMVn69Wevb7xDbVFxS55ujEEr2K1D18VYZWPyWeX53MQ==
-X-Received: by 2002:adf:e78a:0:b0:1e6:3524:e135 with SMTP id n10-20020adfe78a000000b001e63524e135mr2961045wrm.601.1645113947428;
-        Thu, 17 Feb 2022 08:05:47 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id c17sm1579430wmh.31.2022.02.17.08.05.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 08:05:46 -0800 (PST)
-Message-ID: <3113f00a-e910-2dfb-479f-268566445630@redhat.com>
-Date:   Thu, 17 Feb 2022 17:05:45 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VD8H9XEccLJ1gEJ8HFd5QAYd/aMwLkrTq6BJhjDSisU=;
+        b=AeNas6HpI7/8Ol9jzD8NRE9EfERTGfZgKyGebecNqQaM4Q8KE2kQM66vzx3INMCNqk
+         yby76lwD7DpOmbefErTqV4vvVTNSJ6XXWCiT21FqawklnGJ3PmYbET/Qwf/o4OLK+VNR
+         ZiYi7p5m2Av6DP4l7Pm272C8z7/wya0h1RFD8DOS9hXmlgcqnZQjzqINDpw00YNyXGBh
+         IRDfiCAKPmSjz/P74hRD9Z33k9ZUu7JjG+w19N5lNclGq9eOcWzS7YgRmHjg4orlLgN2
+         Phzzvu3Ltjce0PBnFUxDsiRSFpRKI6s88T3UMwhH5DJ79mh7YbFk23NaCGaVrYbr7cMK
+         V1PA==
+X-Gm-Message-State: AOAM533uM9Uek4MnatfVHpQLFKSqRHtNae8L5M9UTVd+f8E3/7NlT0BL
+        w6viVEPyEPNJMwXBF1+XTrTF/iUu7OKmaA==
+X-Google-Smtp-Source: ABdhPJyFsjmnJxcyI3zQL+VFCRE3os2dZrHdxY5v38ChREUHcE+PvGbETp2COJG44FjB8IEmuf5tZQ==
+X-Received: by 2002:a17:90a:4dc7:b0:1b9:ca2:311e with SMTP id r7-20020a17090a4dc700b001b90ca2311emr3717927pjl.175.1645114135171;
+        Thu, 17 Feb 2022 08:08:55 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id h9sm51611pfv.135.2022.02.17.08.08.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 08:08:53 -0800 (PST)
+Date:   Thu, 17 Feb 2022 09:08:51 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     bjorn.andersson@linaro.org, matthias.bgg@gmail.com,
+        pihsun@chromium.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH] rpmsg: mtk_rpmsg: Fix circular locking dependency
+Message-ID: <20220217160851.GA474184@p14s>
+References: <20220114144737.375621-1-angelogioacchino.delregno@collabora.com>
+ <b531eeca-40e8-d759-5579-59567eb5af84@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] KVM: Move VM's worker kthreads back to the original
- cgroup before exiting.
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Vipin Sharma <vipinsh@google.com>, seanjc@google.com
-Cc:     kbuild-all@lists.01.org, mkoutny@suse.com, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, dmatlack@google.com,
-        jiangshanlai@gmail.com, kvm@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220217061616.3303271-1-vipinsh@google.com>
- <202202172046.GuW8pHQc-lkp@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <202202172046.GuW8pHQc-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b531eeca-40e8-d759-5579-59567eb5af84@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 13:34, kernel test robot wrote:
->> 5859		reattach_err = cgroup_attach_task_all(current->real_parent, current);
-
-This needs to be within rcu_dereference().
-
-Paolo
-
->    5860		if (reattach_err) {
->    5861			kvm_err("%s: cgroup_attach_task_all failed on reattach with err %d\n",
->    5862				__func__, reattach_err);
->    5863		}
->    5864		return err;
->    5865	}
->    5866	
+On Wed, Feb 16, 2022 at 05:06:22PM +0100, AngeloGioacchino Del Regno wrote:
+> Il 14/01/22 15:47, AngeloGioacchino Del Regno ha scritto:
+> > During execution of the worker that's used to register rpmsg devices
+> > we are safely locking the channels mutex but, when creating a new
+> > endpoint for such devices, we are registering a IPI on the SCP, which
+> > then makes the SCP to trigger an interrupt, lock its own mutex and in
+> > turn register more subdevices.
+> > This creates a circular locking dependency situation, as the mtk_rpmsg
+> > channels_lock will then depend on the SCP IPI lock.
+> > 
+> > [   18.014514]  Possible unsafe locking scenario:
+> > [   18.014515]        CPU0                    CPU1
+> > [   18.014517]        ----                    ----
+> > [   18.045467]   lock(&mtk_subdev->channels_lock);
+> > [   18.045474]                                lock(&scp->ipi_desc[i].lock);
+> > [   18.228399]                                lock(&mtk_subdev->channels_lock);
+> > [   18.228405]   lock(&scp->ipi_desc[i].lock);
+> > [   18.264405]
+> > 
+> > To solve this, simply unlock the channels_lock mutex before calling
+> > mtk_rpmsg_register_device() and relock it right after, as safety is
+> > still ensured by the locking mechanism that happens right after
+> > through SCP.
+> > Notably, mtk_rpmsg_register_device() does not even require locking.
+> > 
+> > Fixes: 7017996951fd ("rpmsg: add rpmsg support for mt8183 SCP.")
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+> Friendly ping for an important fix... :)
+>
 
+This seems to have slipped through the cracks...  I will take a look later
+today.
+
+Thanks,
+Mathieu
+
+> > ---
+> >   drivers/rpmsg/mtk_rpmsg.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
+> > index 5b4404b8be4c..d1213c33da20 100644
+> > --- a/drivers/rpmsg/mtk_rpmsg.c
+> > +++ b/drivers/rpmsg/mtk_rpmsg.c
+> > @@ -234,7 +234,9 @@ static void mtk_register_device_work_function(struct work_struct *register_work)
+> >   		if (info->registered)
+> >   			continue;
+> > +		mutex_unlock(&subdev->channels_lock);
+> >   		ret = mtk_rpmsg_register_device(subdev, &info->info);
+> > +		mutex_lock(&subdev->channels_lock);
+> >   		if (ret) {
+> >   			dev_err(&pdev->dev, "Can't create rpmsg_device\n");
+> >   			continue;
+> 
+> 

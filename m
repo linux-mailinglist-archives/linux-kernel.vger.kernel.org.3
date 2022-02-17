@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C687B4B9949
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E6B4B9957
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbiBQGdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:33:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41828 "EHLO
+        id S235707AbiBQGlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:41:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiBQGdn (ORCPT
+        with ESMTP id S235688AbiBQGlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:33:43 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF5923810C;
-        Wed, 16 Feb 2022 22:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645079609; x=1676615609;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8QN5Fsnwq/FedpzXHFNnaDO/buloQJ+CuQmqKeQPikk=;
-  b=tv8khUOdZaV0C/A6MDsGknQSyyQIZnDm2VIzdfBVy1+ZYjmaIUQDShLA
-   VCp6mR8HBoWxWQ7HaB7ykvabuBvNh/+2zwM41YwhttUcN7f9VJyY2bHMM
-   EOVzGrJPxwmZZTLm3xDqKEX4kbw8+O06CIopos2yht+eUf57WrWOQVHeH
-   o=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Feb 2022 22:33:29 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:33:28 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 22:33:28 -0800
-Received: from [10.111.174.92] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
- 2022 22:33:25 -0800
-Message-ID: <4b89f5fe-0752-3c6a-3fb0-192f1f2e7b9e@quicinc.com>
-Date:   Wed, 16 Feb 2022 22:33:23 -0800
+        Thu, 17 Feb 2022 01:41:05 -0500
+X-Greylist: delayed 438 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 22:40:52 PST
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D612A520E;
+        Wed, 16 Feb 2022 22:40:52 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id E55DF2B000CC;
+        Thu, 17 Feb 2022 01:33:32 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 17 Feb 2022 01:33:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=bScFzG/9Q+cvU4qTsd2N9JV5iBRYrTzK32M9S+
+        WSUno=; b=dNpR7rJSEng1YnYyzUAFQclOnlGpMpQhgSuD2dQlOQDcro6NZzDrHA
+        gOlXig0esP9AIvJGDhwkAWOHpg/N6B+rqGLPNOXC8RAzZp4z8tu9s+DCmidkrldb
+        9l1TPlH34WQ/C79QuxQNO5OXSAcb6Mj72sADxy/IoPAqtGTx1OkTRDMk40woGsr3
+        veHUnNnptlBkHP0zb4gwFGp600JmVN0QqLukkW2zS5N5tNB2VGX2U/iX7xSr8lhw
+        +pmIIyJvljMP91p8MtxKlavssumPseDP2Wv3MBHnvXs/Jh2niUwuKICWJWwAqy/G
+        qmYpXK/j6y4fDJkAZF4y/ULahA51UwAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=bScFzG/9Q+cvU4qTs
+        d2N9JV5iBRYrTzK32M9S+WSUno=; b=AE6OdSDHp7UVdsK9ejK4lM1VOrA1yhkMa
+        TEF8rTiwik6Pcz5IZ9c1hIoHXekHHU3QNKwQIJrSIthHFst2ILwcnxdGn1hFA9qo
+        ALVUf0MssJyTihBLy+qe2grX55VjD4V2qOqC9LtRouqpkqS8qgWKJXO2BZjXwbZ7
+        z3Y6u+ZLN5ylx9+AUnVxfEl8WIRxt7+EyXfm1oNasY+tVWd0gR0c+86EaNNp/sRZ
+        5p3dGnVLpJ+JaqLzpny4u65uTe/ym0Dt3YutmvkEOvSTWd3hi0nSddaWaDB4AWbj
+        CfS7u9u+lZvHUaeZWYSsf8vp8ptFxqMhwxoZXGOkMplVfgS5PhS+w==
+X-ME-Sender: <xms:O-wNYnb6EByCWVxBYBMx7R2hAkwmdIxrLP09QOBIhPfWbGWaL3hy3w>
+    <xme:O-wNYmbE_rRSAF_RpbEsPmyD9Ivg3JpsyWpEiuzmL7hu7595F_KQTbmd5KxmxDjzA
+    HuFUnb5UopIjQ>
+X-ME-Received: <xmr:O-wNYp-bVW60RkMLDC4FbQjyPn3850WcgfHJ2GZKudi4zEIZz5iYmTGez4IxiP0qarq7tLETfNXSJpKPv5eHzsMc3KvBkz0k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeejgdelhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:O-wNYtqIu4HICIEzvxWIpR7MEJNpm0V07zqOc2_7TXKOrtYhpEm36A>
+    <xmx:O-wNYirlCCvv_DIzl63CwMFPYXID2qCRJqzdg6dFYhNGs04Y3NHA2A>
+    <xmx:O-wNYjTrS4BAuihdupdDu6mn61M-wrn3Yv4ADCezZmTm-7OdxIztFA>
+    <xmx:POwNYvgVeyZlVtnYRSrR3X6tugIZhn3pEVD86fRjzplf-PhawB0mYureDmU>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Feb 2022 01:33:31 -0500 (EST)
+Date:   Thu, 17 Feb 2022 07:33:28 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Straube <straube.linux@gmail.com>
+Subject: Re: linux-next: manual merge of the staging tree with the
+ kspp-gustavo tree
+Message-ID: <Yg3sOIChxwSuI8aU@kroah.com>
+References: <20220217141603.7a0ef4ed@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [REPOST PATCH v4 08/13] drm/msm/disp/dpu1: Don't use DSC with
- mode_3d
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Rob Clark <robdclark@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-9-vkoul@kernel.org>
- <67006cc4-3385-fe03-bb4d-58623729a8a8@quicinc.com> <Yg3mvEvqYs89dJWI@matsya>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <Yg3mvEvqYs89dJWI@matsya>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217141603.7a0ef4ed@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/16/2022 10:10 PM, Vinod Koul wrote:
-> On 16-02-22, 19:11, Abhinav Kumar wrote:
->>
->>
->> On 2/10/2022 2:34 AM, Vinod Koul wrote:
->>> We cannot enable mode_3d when we are using the DSC. So pass
->>> configuration to detect DSC is enabled and not enable mode_3d
->>> when we are using DSC
->>>
->>> We add a helper dpu_encoder_helper_get_dsc() to detect dsc
->>> enabled and pass this to .setup_intf_cfg()
->>>
->>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
->>
->> We should not use 3D mux only when we use DSC merge topology.
->> I agree that today we use only 2-2-1 topology for DSC which means its using
->> DSC merge.
->>
->> But generalizing that 3D mux should not be used for DSC is not right.
->>
->> You can detect DSC merge by checking if there are two encoders and one
->> interface in the topology and if so, you can disable 3D mux.
+On Thu, Feb 17, 2022 at 02:16:03PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Right now with DSC we disable that as suggested by Dmitry last time.
-> Whenever we introduce merge we should revisit this, for now this should
-> suffice
+> Today's linux-next merge of the staging tree got a conflict in:
 > 
+>   drivers/staging/r8188eu/include/ieee80211.h
+> 
+> between commit:
+> 
+>   fbe9ccfe809d ("treewide: Replace zero-length arrays with flexible-array members")
+> 
+> from the kspp-gustavo tree and commit:
+> 
+>   6c36bcbfcef7 ("staging: r8188eu: remove unused structs from ieee80211.h")
+> 
+> from the staging tree.
+> 
+> I fixed it up (the latter removed the structs updated by the former) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
-Sorry I didnt follow.
+The merge sounds correct, thanks.
 
-The topology which you are supporting today IS DSC merge 2-2-1. I didnt 
-get what you mean by "whenever we introduce".
-
-I didnt follow Dmitry's comment either.
-
-"anybody adding support for SDE_RM_TOPOLOGY_DUALPIPE_3DMERGE_DSC handle 
-this."
-
-3D mux shouldnt be used when DSC merge is used.
-
-The topology Dmitry is referring to will not use DSC merge but you are 
-using it here and thats why you had to make this patch in the first 
-place. So I am not sure why would someone who uses 3D merge topology 
-worry about DSC merge. Your patch is the one which deals with the 
-topology in question.
-
-What I am suggesting is a small but necessary improvement to this patch.
-
-All that you have to do is in query whether DSC merge is used from the 
-topology. You can do it in multiple ways:
-
-1) Either query this from the encoder
-2) Store a bool "dsc_merge" in the intf_cfg
-
+greg k-h

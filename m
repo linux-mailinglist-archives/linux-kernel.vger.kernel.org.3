@@ -2,233 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937324BA8A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB67E4BA7A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244613AbiBQSoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:44:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49726 "EHLO
+        id S243736AbiBQSFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:05:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244600AbiBQSoP (ORCPT
+        with ESMTP id S241274AbiBQSFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:44:15 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EB3E034;
-        Thu, 17 Feb 2022 10:43:59 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21HFRpGn025799;
-        Thu, 17 Feb 2022 10:43:55 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=iF0bl4BNcK3xh3pLRBMHpz3CpOdUDg92OEq5UTQd1Sc=;
- b=S/Z2RpCY4qCsXV0u+OLVIWdWjHWYPSxCupybJn/WIaDKl4ScENoXgwxZiHPn/TkrI9Xr
- +Sa4rlIvCgEamdrVvOaeTi1lTz0ZCnCEQPMahkZA3LIUYSHtG0jVR+aqpm3y9Adz8spR
- 8h6mWHJJaLQRp2tHioD1O4IoqD1eJncLVmvuI6P92/e9nNa/geNfKOrImO6FeQBB1OCI
- 6pENnxjt4qQehAfUFJqARcTpotsiJL+A44essM6Mrn4L5zFANELEKoAZamFQr8r7PWPS
- J4PSEsg5VLcNVM4GdqiyXKBVP7xDf/0pDTokVNy0ha3sra2E8e5rBI8QLHlsgf+awkKv mA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3e9kktt9ku-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 10:43:55 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 17 Feb
- 2022 10:08:09 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 17 Feb 2022 10:08:08 -0800
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id 5FB7D3F70D5;
-        Thu, 17 Feb 2022 10:05:09 -0800 (PST)
-From:   Rakesh Babu Saladi <rsaladi2@marvell.com>
-To:     <sgoutham@marvell.com>, <gakula@marvell.com>,
-        <sbhatta@marvell.com>, <hkelam@marvell.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Naveen Mamindlapalli <naveenm@marvell.com>,
-        Rakesh Babu Saladi <rsaladi2@marvell.com>
-Subject: [net-next PATCH 3/3] octeontx2-af: cn10k: add workaround for ptp errata
-Date:   Thu, 17 Feb 2022 23:34:50 +0530
-Message-ID: <20220217180450.21721-4-rsaladi2@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220217180450.21721-1-rsaladi2@marvell.com>
-References: <20220217180450.21721-1-rsaladi2@marvell.com>
+        Thu, 17 Feb 2022 13:05:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59C1D284D21;
+        Thu, 17 Feb 2022 10:05:19 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 217B6113E;
+        Thu, 17 Feb 2022 10:05:19 -0800 (PST)
+Received: from [10.57.17.240] (unknown [10.57.17.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A1D03F718;
+        Thu, 17 Feb 2022 10:05:15 -0800 (PST)
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        jorcrous@amazon.com, Rob Clark <robdclark@chromium.org>
+References: <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+ <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+ <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
+ <Yg6CaT9iQGXXi7s2@google.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <7b51e2a9-99c3-f33c-690a-fa72692da612@arm.com>
+Date:   Thu, 17 Feb 2022 18:05:14 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: xRhkokcY11xajeDqqmiJrc8ZPqTNkUo3
-X-Proofpoint-GUID: xRhkokcY11xajeDqqmiJrc8ZPqTNkUo3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-17_07,2022-02-17_01,2021-12-02_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yg6CaT9iQGXXi7s2@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naveen Mamindlapalli <naveenm@marvell.com>
 
-This patch adds workaround for PTP errata given below.
 
-1. At the time of 1 sec rollover of nano-second counter,
-   the nano-second counter is set to 0. However, it should
-   be set to (existing counter_value - 10^9). This leads to
-   an accumulating error in the timestamp value with each sec
-   rollover.
-2. Additionally, the nano-second counter currently is rolling
-   over at 'h3B9A_C9FF. It should roll over at 'h3B9A_CA00.
+On 2/17/22 5:14 PM, Matthias Kaehlcke wrote:
+> On Thu, Feb 17, 2022 at 08:37:39AM -0800, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Thu, Feb 17, 2022 at 2:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>
+>>> Hi Daniel,
+>>>
+>>> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
+>>>> On 16/02/2022 18:33, Doug Anderson wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>>>
+>>>>>> Hi Matthias,
+>>>>>>
+>>>>>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+>>>>>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+>>>>>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>
+>>>>>> [snip]
+>>>>>>
+>>>>>>>>>> Could you point me to those devices please?
+>>>>>>>>>
+>>>>>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+>>>>>>>>>
+>>>>>>>>> Though as per above they shouldn't be impacted by your change,
+>>>>>>>>> since the
+>>>>>>>>> CPUs always pretend to use milli-Watts.
+>>>>>>>>>
+>>>>>>>>> [skipped some questions/answers since sc7180 isn't actually
+>>>>>>>>> impacted by
+>>>>>>>>>      the change]
+>>>>>>>>
+>>>>>>>> Thank you Matthias. I will investigate your setup to get better
+>>>>>>>> understanding.
+>>>>>>>
+>>>>>>> Thanks!
+>>>>>>>
+>>>>>>
+>>>>>> I've checked those DT files and related code.
+>>>>>> As you already said, this patch is safe for them.
+>>>>>> So we can apply it IMO.
+>>>>>>
+>>>>>>
+>>>>>> -------------Off-topic------------------
+>>>>>> Not in $subject comments:
+>>>>>>
+>>>>>> AFAICS based on two files which define thermal zones:
+>>>>>> sc7180-trogdor-homestar.dtsi
+>>>>>> sc7180-trogdor-coachz.dtsi
+>>>>>>
+>>>>>> only the 'big' cores are used as cooling devices in the
+>>>>>> 'skin_temp_thermal' - the CPU6 and CPU7.
+>>>>>>
+>>>>>> I assume you don't want to model at all the power usage
+>>>>>> from the Little cluster (which is quite big: 6 CPUs), do you?
+>>>>>> I can see that the Little CPUs have small dyn-power-coeff
+>>>>>> ~30% of the big and lower max freq, but still might be worth
+>>>>>> to add them to IPA. You might give them more 'weight', to
+>>>>>> make sure they receive more power during power split.
+>>>>>>
+>>>>>> You also don't have GPU cooling device in that thermal zone.
+>>>>>> Based on my experience if your GPU is a power hungry one,
+>>>>>> e.g. 2-4Watts, you might get better results when you model
+>>>>>> this 'hot' device (which impacts your temp sensor reported value).
+>>>>>
+>>>>> I think the two boards you point at (homestar and coachz) are just the
+>>>>> two that override the default defined in the SoC dtsi file. If you
+>>>>> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+>>>>> map. You can also see the cooling maps for the littles.
+>>>>>
+>>>>> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+>>>>> though? Seems like we should, but I haven't dug through all the code
+>>>>> here...
+>>>>
+>>>> The dynamic-power-coefficient is available for OPPs which includes
+>>>> CPUfreq and devfreq. As the GPU is managed by devfreq, setting the
+>>>> dynamic-power-coefficient makes the energy model available for it.
+>>>>
+>>>> However, the OPPs must define the frequency and the voltage. That is the
+>>>> case for most platforms except on QCom platform.
+>>>>
+>>>> That may not be specified as it uses a frequency index and the hardware
+>>>> does the voltage change in our back. The QCom cpufreq backend get the
+>>>> voltage table from a register (or whatever) and completes the voltage
+>>>> values for the OPPs, thus adding the information which is missing in the
+>>>> device tree. The energy model can then initializes itself and allows the
+>>>> usage of the Energy Aware Scheduler.
+>>>>
+>>>> However this piece of code is missing for the GPU part.
+>>>>
+>>>
+>>> Thank you for joining the discussion. I don't know about that Qcom
+>>> GPU voltage information is missing.
+>>>
+>>> If the voltage is not available (only the frequencies), there is
+>>> another way. There is an 'advanced' EM which uses registration function:
+>>> em_dev_register_perf_domain(). It uses a local driver callback to get
+>>> power for each found frequency. It has benefit because there is no
+>>> restriction to 'fit' into the math formula, instead just avg power
+>>> values can be feed into EM. It's called 'advanced' EM [1].
+>>
+>> It seems like there _should_ be a way to get the voltage out for GPU
+>> operating points, like is done with cpufreq in
+>> qcom_cpufreq_hw_read_lut(), but it might need someone with Qualcomm
+>> documentation to help with it. Maybe Rajendra would be able to help?
+>> Adding Jordon and Rob to this conversation in case they're aware of
+>> anything.
+>>
+>> As you said, we could just list a power for each frequency, though.
+>>
+>> I'm actually not sure which one would be more accurate across a range
+>> of devices with different "corners": specifying a dynamic power
+>> coefficient used for all "corners" and then using the actual voltage
+>> and doing the math, or specifying a power number for each frequency
+>> and ignoring the actual voltage used. In any case we're trying to get
+>> ballpark numbers and not every device will be exactly the same, so
+>> probably it doesn't matter that much.
+>>
+>>
+>>> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
+>>> was proposing from ~2014 this upstream, but EAS wasn't merged back
+>>> then):
+>>> where to store these power-freq values, which are then used by the
+>>> callback. We have the 'dynamic-power-coefficient' in DT, but
+>>> it has limitations. It would be good to have this simple array
+>>> attached to the GPU/CPU node. IMHO it meet the requirement of DT,
+>>> it describes the HW (it would have HZ and Watts values).
+>>>
+>>> Doug, Matthias could you have a look at that function and its
+>>> usage, please [1]?
+>>> If you guys would support me in this, I would start, with an RFC
+>>> proposal, a discussion on LKML.
+>>>
+>>> [1]
+>>> https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87
+>>
+>> Matthias: I think you've spent more time on the thermal stuff than me
+>> so I'll assume you'll follow-up here. If not then please yell!
+>>
+>> Ideally, though, someone from Qualcomm would jump in an own this.
+>> Basically it allows more intelligently throttling the GPU and CPU
+>> together in tandem instead of treating them separately IIUC, right?
+> 
+> Yes, I think for the em_dev_register_perf_domain() route support from
+> Qualcomm would be needed since "Drivers must provide a callback
+> function returning <frequency, power> tuples for each performance
+> state. ".
+> 
 
-The workaround for issue #1 is to speed up the ptp clock by
-adjusting PTP_CLOCK_COMP register to the desired value to
-compensate for the nanoseconds lost per each second.
+Not necessarily. It might be done 'generically' by fwk.
 
-The workaround for issue #2 is to slow down the ptp clock
-such that the rollover occurs at ~1sec.
+There are other benefits of this 'energy-model' entry in the DT.
+I'll list them in the cover letter. Let me send an RFC, so we could
+discuss there.
 
-Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
-Signed-off-by: Rakesh Babu Saladi <rsaladi2@marvell.com>
----
- .../net/ethernet/marvell/octeontx2/af/ptp.c   | 87 +++++++++++++++++--
- 1 file changed, 80 insertions(+), 7 deletions(-)
+Thanks guys!
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-index 6f5e1a5d957f..faf8f34421f3 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-@@ -51,9 +51,19 @@
- #define PTP_TIMESTAMP				0xF20ULL
- #define PTP_CLOCK_SEC				0xFD0ULL
- 
-+#define CYCLE_MULT				1000
-+
- static struct ptp *first_ptp_block;
- static const struct pci_device_id ptp_id_table[];
- 
-+static bool cn10k_ptp_errata(struct ptp *ptp)
-+{
-+	if (ptp->pdev->subsystem_device == PCI_SUBSYS_DEVID_CN10K_A_PTP ||
-+	    ptp->pdev->subsystem_device == PCI_SUBSYS_DEVID_CNF10K_A_PTP)
-+		return true;
-+	return false;
-+}
-+
- static bool is_ptp_tsfmt_sec_nsec(struct ptp *ptp)
- {
- 	if (ptp->pdev->subsystem_device == PCI_SUBSYS_DEVID_CN10K_A_PTP ||
-@@ -86,6 +96,58 @@ static u64 read_ptp_tstmp_nsec(struct ptp *ptp)
- 	return readq(ptp->reg_base + PTP_CLOCK_HI);
- }
- 
-+static u64 ptp_calc_adjusted_comp(u64 ptp_clock_freq)
-+{
-+	u64 comp, adj = 0, cycles_per_sec, ns_drift = 0;
-+	u32 ptp_clock_nsec, cycle_time;
-+	int cycle;
-+
-+	/* Errata:
-+	 * Issue #1: At the time of 1 sec rollover of the nano-second counter,
-+	 * the nano-second counter is set to 0. However, it should be set to
-+	 * (existing counter_value - 10^9).
-+	 *
-+	 * Issue #2: The nano-second counter rolls over at 0x3B9A_C9FF.
-+	 * It should roll over at 0x3B9A_CA00.
-+	 */
-+
-+	/* calculate ptp_clock_comp value */
-+	comp = ((u64)1000000000ULL << 32) / ptp_clock_freq;
-+	/* use CYCLE_MULT to avoid accuracy loss due to integer arithmetic */
-+	cycle_time = NSEC_PER_SEC * CYCLE_MULT / ptp_clock_freq;
-+	/* cycles per sec */
-+	cycles_per_sec = ptp_clock_freq;
-+
-+	/* check whether ptp nanosecond counter rolls over early */
-+	cycle = cycles_per_sec - 1;
-+	ptp_clock_nsec = (cycle * comp) >> 32;
-+	while (ptp_clock_nsec < NSEC_PER_SEC) {
-+		if (ptp_clock_nsec == 0x3B9AC9FF)
-+			goto calc_adj_comp;
-+		cycle++;
-+		ptp_clock_nsec = (cycle * comp) >> 32;
-+	}
-+	/* compute nanoseconds lost per second when nsec counter rolls over */
-+	ns_drift = ptp_clock_nsec - NSEC_PER_SEC;
-+	/* calculate ptp_clock_comp adjustment */
-+	if (ns_drift > 0) {
-+		adj = comp * ns_drift;
-+		adj = adj / 1000000000ULL;
-+	}
-+	/* speed up the ptp clock to account for nanoseconds lost */
-+	comp += adj;
-+	return comp;
-+
-+calc_adj_comp:
-+	/* slow down the ptp clock to not rollover early */
-+	adj = comp * cycle_time;
-+	adj = adj / 1000000000ULL;
-+	adj = adj / CYCLE_MULT;
-+	comp -= adj;
-+
-+	return comp;
-+}
-+
- struct ptp *ptp_get(void)
- {
- 	struct ptp *ptp = first_ptp_block;
-@@ -113,8 +175,8 @@ void ptp_put(struct ptp *ptp)
- static int ptp_adjfine(struct ptp *ptp, long scaled_ppm)
- {
- 	bool neg_adj = false;
--	u64 comp;
--	u64 adj;
-+	u32 freq, freq_adj;
-+	u64 comp, adj;
- 	s64 ppb;
- 
- 	if (scaled_ppm < 0) {
-@@ -136,15 +198,22 @@ static int ptp_adjfine(struct ptp *ptp, long scaled_ppm)
- 	 * where tbase is the basic compensation value calculated
- 	 * initialy in the probe function.
- 	 */
--	comp = ((u64)1000000000ull << 32) / ptp->clock_rate;
- 	/* convert scaled_ppm to ppb */
- 	ppb = 1 + scaled_ppm;
- 	ppb *= 125;
- 	ppb >>= 13;
--	adj = comp * ppb;
--	adj = div_u64(adj, 1000000000ull);
--	comp = neg_adj ? comp - adj : comp + adj;
- 
-+	if (cn10k_ptp_errata(ptp)) {
-+		/* calculate the new frequency based on ppb */
-+		freq_adj = (ptp->clock_rate * ppb) / 1000000000ULL;
-+		freq = neg_adj ? ptp->clock_rate + freq_adj : ptp->clock_rate - freq_adj;
-+		comp = ptp_calc_adjusted_comp(freq);
-+	} else {
-+		comp = ((u64)1000000000ull << 32) / ptp->clock_rate;
-+		adj = comp * ppb;
-+		adj = div_u64(adj, 1000000000ull);
-+		comp = neg_adj ? comp - adj : comp + adj;
-+	}
- 	writeq(comp, ptp->reg_base + PTP_CLOCK_COMP);
- 
- 	return 0;
-@@ -220,7 +289,11 @@ void ptp_start(struct ptp *ptp, u64 sclk, u32 ext_clk_freq, u32 extts)
- 	writeq(0x1dcd650000000000, ptp->reg_base + PTP_PPS_HI_INCR);
- 	writeq(0x1dcd650000000000, ptp->reg_base + PTP_PPS_LO_INCR);
- 
--	clock_comp = ((u64)1000000000ull << 32) / ptp->clock_rate;
-+	if (cn10k_ptp_errata(ptp))
-+		clock_comp = ptp_calc_adjusted_comp(ptp->clock_rate);
-+	else
-+		clock_comp = ((u64)1000000000ull << 32) / ptp->clock_rate;
-+
- 	/* Initial compensation value to start the nanosecs counter */
- 	writeq(clock_comp, ptp->reg_base + PTP_CLOCK_COMP);
- }
--- 
-2.17.1
-
+Regards,
+Lukasz

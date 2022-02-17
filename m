@@ -2,194 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571754B95C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4719C4B95C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:01:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiBQCBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 21:01:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53704 "EHLO
+        id S231463AbiBQCBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 21:01:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiBQCBL (ORCPT
+        with ESMTP id S231440AbiBQCBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 21:01:11 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2552A97F5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:00:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645063258; x=1676599258;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8P5/T4CCEOd0foutAYwZgeIWheYPgdUwiFeNe1L+/10=;
-  b=hBX/5AcsZbTyaXajwtF1eqJyjOSaFGG/c43VWkjFHVpy2cog784/+tfC
-   Ufl0C/aYT6eTkKx1OV0XyjFTPQtZVYbEIMYak9mR6bMbX0z8MJLVZmu4s
-   /WNc9SExFDrpsIiWCUfysES9xXEy3geDD7qApxcdVWDvrMz53lhjkyvyb
-   ZKVUFFK9JBIMFx8rcTiu4xECbqiGGHGkg3YfGCvCpSpPCnttlmHVb1+5b
-   8zbmyMqks4bpq1ShTOFlmDrz3U9NbTrlD8sNRZkCvUinynX6jnLn49XJk
-   HjO+VacN1mATuN7MCbCzL/UdQTfR3BuWh8K4bCsLmzIhwOFoDmbb1Co1k
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="248366097"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="248366097"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 18:00:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="487656599"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 16 Feb 2022 18:00:56 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKW6J-000BJi-Hw; Thu, 17 Feb 2022 02:00:55 +0000
-Date:   Thu, 17 Feb 2022 09:59:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kees:for-next/lkdtm 3/4] drivers/misc/lkdtm/usercopy.c:74:46:
- error: 'current_stack_pointer' undeclared; did you mean
- 'user_stack_pointer'?
-Message-ID: <202202170944.e2X9PAcw-lkp@intel.com>
+        Wed, 16 Feb 2022 21:01:34 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9552AA38A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:01:20 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id m15-20020a924b0f000000b002be43428493so1100049ilg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:01:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=l8hz6zbgdfZZuicmk3dNuptsWpUXXP72nyKQpZLqpbs=;
+        b=Vxhbr7Y1WRXpgP9QqH8Ib3mfeOL46eOOMMe73DBDSzf8umkbq96uKmOV8Bfm7hbJFl
+         qGXeZsmfLWEmv3RiBVaGzip4PJLn1MaPYNaHT2y6/QR4rr8liVr1pstIs7+9Dn0XgZpp
+         ZGN09eTswPvll3bQKUK8G4qn75UGnOnd0ulpyPDl1++SijEhHdjM0dvORiojbdo8cgQ6
+         c48Np+cnepYFIFWIHKPKAg6xptzac0KvKCvFFcJRQlOcrHDDjJSbkjzIR5njiB9XE9Su
+         MzqTnDHB56O4pHEalWQu0GR+WBK/HadkeYdzh+UzhKAv8cBO5llMbb6e4mwB+wZFWXj/
+         qjAA==
+X-Gm-Message-State: AOAM530nR+0RoZryKHoMWsW4lhTVS8XIQaBo7Dt6tnIveABo6sjm/j8i
+        51RPEll6leJqTVc0HojVAHUm5HHluok7GJn6RZXTkDe7otYy
+X-Google-Smtp-Source: ABdhPJxD7S/rF937d7D/q41kVwB6Pw+QP3TF2Uxtcc5e2nxGImnT4aHG7lw4g9fBuqMOQ9Fl/jq/gmuhR+Uk4ghL97dF+ZcnlhDn
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1526:b0:2bb:faba:4d77 with SMTP id
+ i6-20020a056e02152600b002bbfaba4d77mr484362ilu.231.1645063279960; Wed, 16 Feb
+ 2022 18:01:19 -0800 (PST)
+Date:   Wed, 16 Feb 2022 18:01:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006f656005d82d24e2@google.com>
+Subject: [syzbot] WARNING in vhost_dev_cleanup (2)
+From:   syzbot <syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com>
+To:     jasowang@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/lkdtm
-head:   2223f39d57e495531165ed5bf1d94bf4f1be7963
-commit: d89624a74df284274743400bb318dba7246250a4 [3/4] lkdtm/usercopy: Expand size of "out of frame" object
-config: openrisc-randconfig-r004-20220216 (https://download.01.org/0day-ci/archive/20220217/202202170944.e2X9PAcw-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=d89624a74df284274743400bb318dba7246250a4
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees for-next/lkdtm
-        git checkout d89624a74df284274743400bb318dba7246250a4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/misc/lkdtm/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All errors (new ones prefixed by >>):
+HEAD commit:    c5d9ae265b10 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=132e687c700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
+dashboard link: https://syzkaller.appspot.com/bug?extid=1e3ea63db39f2b4440e0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-   In file included from include/linux/kernel.h:29,
-                    from drivers/misc/lkdtm/lkdtm.h:7,
-                    from drivers/misc/lkdtm/usercopy.c:6:
-   drivers/misc/lkdtm/usercopy.c: In function 'do_usercopy_stack':
->> drivers/misc/lkdtm/usercopy.c:74:46: error: 'current_stack_pointer' undeclared (first use in this function); did you mean 'user_stack_pointer'?
-      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/linux/printk.h:519:9: note: in expansion of macro 'printk'
-     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/misc/lkdtm/usercopy.c:74:9: note: in expansion of macro 'pr_info'
-      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
-         |         ^~~~~~~
-   drivers/misc/lkdtm/usercopy.c:74:46: note: each undeclared identifier is reported only once for each function it appears in
-      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/linux/printk.h:519:9: note: in expansion of macro 'printk'
-     519 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~
-   drivers/misc/lkdtm/usercopy.c:74:9: note: in expansion of macro 'pr_info'
-      74 |         pr_info("stack     : %px\n", (void *)current_stack_pointer);
-         |         ^~~~~~~
+Unfortunately, I don't have any reproducer for this issue yet.
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
 
-vim +74 drivers/misc/lkdtm/usercopy.c
+WARNING: CPU: 1 PID: 10828 at drivers/vhost/vhost.c:715 vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
+Modules linked in:
+CPU: 0 PID: 10828 Comm: syz-executor.0 Not tainted 5.17.0-rc4-syzkaller-00051-gc5d9ae265b10 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
+Code: c7 85 90 01 00 00 00 00 00 00 e8 53 6e a2 fa 48 89 ef 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e 41 5f e9 7d d6 ff ff e8 38 6e a2 fa <0f> 0b e9 46 ff ff ff 48 8b 7c 24 10 e8 87 00 ea fa e9 75 f7 ff ff
+RSP: 0018:ffffc9000fe6fa18 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: ffff888021b63a00 RSI: ffffffff86d66fe8 RDI: ffff88801cc200b0
+RBP: ffff88801cc20000 R08: 0000000000000001 R09: 0000000000000001
+R10: ffffffff817f1e08 R11: 0000000000000000 R12: ffff88801cc200d0
+R13: ffff88801cc20120 R14: ffff88801cc200d0 R15: 0000000000000002
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2de25000 CR3: 000000004c9cd000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vhost_vsock_dev_release+0x36e/0x4b0 drivers/vhost/vsock.c:771
+ __fput+0x286/0x9f0 fs/file_table.c:313
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xb29/0x2a30 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ get_signal+0x45a/0x2490 kernel/signal.c:2863
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f4027a46481
+Code: Unable to access opcode bytes at RIP 0x7f4027a46457.
+RSP: 002b:00007f402808ba68 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
+RAX: fffffffffffffffc RBX: 00007f402622e700 RCX: 00007f4027a46481
+RDX: 00007f402622e9d0 RSI: 00007f402622e2f0 RDI: 00000000003d0f00
+RBP: 00007f402808bcb0 R08: 00007f402622e700 R09: 00007f402622e700
+R10: 00007f402622e9d0 R11: 0000000000000206 R12: 00007f402808bb1e
+R13: 00007f402808bb1f R14: 00007f402622e300 R15: 0000000000022000
+ </TASK>
 
-    53	
-    54	static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
-    55	{
-    56		unsigned long user_addr;
-    57		unsigned char good_stack[32];
-    58		unsigned char *bad_stack;
-    59		int i;
-    60	
-    61		/* Exercise stack to avoid everything living in registers. */
-    62		for (i = 0; i < sizeof(good_stack); i++)
-    63			good_stack[i] = test_text[i % sizeof(test_text)];
-    64	
-    65		/* This is a pointer to outside our current stack frame. */
-    66		if (bad_frame) {
-    67			bad_stack = do_usercopy_stack_callee((uintptr_t)&bad_stack);
-    68		} else {
-    69			/* Put start address just inside stack. */
-    70			bad_stack = task_stack_page(current) + THREAD_SIZE;
-    71			bad_stack -= sizeof(unsigned long);
-    72		}
-    73	
-  > 74		pr_info("stack     : %px\n", (void *)current_stack_pointer);
-    75		pr_info("good_stack: %px-%px\n", good_stack, good_stack + sizeof(good_stack));
-    76		pr_info("bad_stack : %px-%px\n", bad_stack, bad_stack + sizeof(good_stack));
-    77	
-    78		user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
-    79				    PROT_READ | PROT_WRITE | PROT_EXEC,
-    80				    MAP_ANONYMOUS | MAP_PRIVATE, 0);
-    81		if (user_addr >= TASK_SIZE) {
-    82			pr_warn("Failed to allocate user memory\n");
-    83			return;
-    84		}
-    85	
-    86		if (to_user) {
-    87			pr_info("attempting good copy_to_user of local stack\n");
-    88			if (copy_to_user((void __user *)user_addr, good_stack,
-    89					 unconst + sizeof(good_stack))) {
-    90				pr_warn("copy_to_user failed unexpectedly?!\n");
-    91				goto free_user;
-    92			}
-    93	
-    94			pr_info("attempting bad copy_to_user of distant stack\n");
-    95			if (copy_to_user((void __user *)user_addr, bad_stack,
-    96					 unconst + sizeof(good_stack))) {
-    97				pr_warn("copy_to_user failed, but lacked Oops\n");
-    98				goto free_user;
-    99			}
-   100		} else {
-   101			/*
-   102			 * There isn't a safe way to not be protected by usercopy
-   103			 * if we're going to write to another thread's stack.
-   104			 */
-   105			if (!bad_frame)
-   106				goto free_user;
-   107	
-   108			pr_info("attempting good copy_from_user of local stack\n");
-   109			if (copy_from_user(good_stack, (void __user *)user_addr,
-   110					   unconst + sizeof(good_stack))) {
-   111				pr_warn("copy_from_user failed unexpectedly?!\n");
-   112				goto free_user;
-   113			}
-   114	
-   115			pr_info("attempting bad copy_from_user of distant stack\n");
-   116			if (copy_from_user(bad_stack, (void __user *)user_addr,
-   117					   unconst + sizeof(good_stack))) {
-   118				pr_warn("copy_from_user failed, but lacked Oops\n");
-   119				goto free_user;
-   120			}
-   121		}
-   122	
-   123	free_user:
-   124		vm_munmap(user_addr, PAGE_SIZE);
-   125	}
-   126	
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,106 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208904B9B2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C67934B9B2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237750AbiBQIeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 03:34:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57430 "EHLO
+        id S237779AbiBQIek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 03:34:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiBQIed (ORCPT
+        with ESMTP id S237748AbiBQIeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 03:34:33 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC6D25BD72
+        Thu, 17 Feb 2022 03:34:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 907CE25BD72
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:34:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645086861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hhpl+rzufZ4HpgJzL8RSu4UiBBIjnQJwZAboaAQxVZk=;
+        b=hIAEWrjEeXKKMptXcYm/rCTGzm8SYJTN6AN+es9WFPGuNdvFEBnHCQ2Iwq2p3ht7LcITzZ
+        f5ZyWUAKE4+0akaSRqSe8XHo4s/b9+RbGAWYjcc8WdE+XtyyJU/x7vdLimdsw9OB17zchq
+        WIC/2SrIzSqcH3Q3g94BP6+C7pPoe5o=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-AbSPl1B-NcevVGvwdEqZZQ-1; Thu, 17 Feb 2022 03:34:19 -0500
+X-MC-Unique: AbSPl1B-NcevVGvwdEqZZQ-1
+Received: by mail-ed1-f71.google.com with SMTP id e10-20020a056402190a00b00410f20467abso3089510edz.14
         for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:34:19 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id l125so11543534ybl.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:34:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cc4rMQf7EbxLBLzlXV5lN5a8DRDh8qHMeBBzvLwYYRc=;
-        b=nVlka0LVsB/xIOy+y+dajGvldFEaJNx4Fx+VZ39xe/wtqSXrBu6G9RkD0oaorGK/pr
-         Q5zNdYb98K1RQiN4m6l48WulTSBJrzt3EwrQNftMXEbnt2krkFrpkliAA2dT/nmXHa09
-         scfyI3nHYNVNEfBt8Gi3qeG4IYo0LNzO5S7G1CFHabv5hO+m0S4o3RG6wXWKTLW9MFtk
-         ruNGntO3mLx1Vv1UQi79lKPG0r1S8ws5IhlhSsmNrPQSFwuFMzQ+8T9leqKOWwz1Osub
-         28o6I/AJI0hbxGKi55rgkyKXcdkAPsXH5Bj+g01VxekgolwOQZLslev+XDxB7YiTDo79
-         pTcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cc4rMQf7EbxLBLzlXV5lN5a8DRDh8qHMeBBzvLwYYRc=;
-        b=t2/pFGu5G86JYlrNZA2EbRhWCH0yXavWyIyxw1XXMWAoZkdNWs0mAYeR/yjxMZML74
-         jGVs5HrGWLt3gw43D5TfmK7gpWZsdC3FCYQD9xcz6DUnnEFU3BPuE85ANFD5T9Ca5DXX
-         Yl47KG8AkOYLPj92v3mjPMOD8kJs0Q+5BwRCKz79pZ/xtbQYQTTerGJD4RDwwGSdnEw6
-         rOSgMjLY4TIBFkZ4k0hn+XurVXoQblRiDLGlma+ItowjHJgvKmm2Oh+v7+xwKU4XycOA
-         fi7okfPIlR/GXDy+uDu173XcOd12Pt1EVJueCA7/vhrNGbfQhGSzA2SQwNKdx75NTwWX
-         D3kw==
-X-Gm-Message-State: AOAM532xm1cZYZLTB1B1OH7nSHB4plscdLqmgokN7qHd8sNACofsxv3k
-        D5sbGyPf+0MRpBSyhhCynZHn19tX95MDs5kOPYOfsw==
-X-Google-Smtp-Source: ABdhPJzVFZgEWRXqN5476Uw90FS862JCIudM/72ymeg8OCLat3/sq7kCQiFXqtrXXfR8pLbsgxJ3Vn+neQ2sRA+Ewac=
-X-Received: by 2002:a25:3412:0:b0:623:a267:9d18 with SMTP id
- b18-20020a253412000000b00623a2679d18mr1429754yba.236.1645086858024; Thu, 17
- Feb 2022 00:34:18 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Hhpl+rzufZ4HpgJzL8RSu4UiBBIjnQJwZAboaAQxVZk=;
+        b=sGEYiA4YY1vsGdB4yTuHbkz+m4f24k+BUEt1J5qVPurOdJMGh06veJ8tAuyNKltPTQ
+         I+xbxWFNWLloy3kGcTh2EQxUkMOd/eKi4pYsyRVBAwBUo27fk+9+yB8ceqgsHL9S2RRt
+         L8Pe7ujRaEHyyf4fXflLgBUmSmW3BE08snkEwL/cpAeSQ4D89vy00NJz9pt/5Ofk9nm8
+         TfLLKabnVRgLKXBGRvvCTjXLqmjNn3wU6spM731PpkDHJrabBWPcIqK6ELgwAm4jgUIc
+         RoTg3Ai9yCtijC0S3c744k7HW+B6Y9XSubIfYGY60YksMXXqWHLfUK6XHowsfsQ+rBSt
+         tvjQ==
+X-Gm-Message-State: AOAM533MU9pXag9FjVKpXNqOX9Nty3+fKKbhlM0+y1NHVaBJV5daDapF
+        6sOJy19Z0tMFzKzVGWcTFFwa+/whw+njTbPtVv+qDNLWDRa/VnqqJBf0ROO/tw3ZUbpLndf79aw
+        gLj7QFT8FD8T8s+0KdPGl1VJb
+X-Received: by 2002:a17:906:2bd7:b0:6cd:f89d:c828 with SMTP id n23-20020a1709062bd700b006cdf89dc828mr1535794ejg.232.1645086858354;
+        Thu, 17 Feb 2022 00:34:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzWeBziOjg1wr7D46Vg3PrFPzezNZQTlS0tbQ74/7RcIcGsZSR6aR8D0exZ1cCEkVQvZNAJMQ==
+X-Received: by 2002:a17:906:2bd7:b0:6cd:f89d:c828 with SMTP id n23-20020a1709062bd700b006cdf89dc828mr1535783ejg.232.1645086858124;
+        Thu, 17 Feb 2022 00:34:18 -0800 (PST)
+Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id b4sm926960ejv.108.2022.02.17.00.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 00:34:17 -0800 (PST)
+Date:   Thu, 17 Feb 2022 09:34:11 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Seth Forshee <sforshee@digitalocean.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vsock: remove vsock from connected table when connect is
+ interrupted by a signal
+Message-ID: <20220217083411.rjb2em2vf6hcgo64@sgarzare-redhat>
+References: <20220216143222.1614690-1-sforshee@digitalocean.com>
+ <20220216161122.eacdfgljg2c6yeby@sgarzare-redhat>
+ <20220216201459.5a5b58e9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-References: <20220217004204.99773-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20220217004204.99773-1-yang.lee@linux.alibaba.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 17 Feb 2022 09:34:06 +0100
-Message-ID: <CANpmjNNhbdr6gsQ-za=7mUH2etXqQ3voWncd2mg3fcdiEWWnnQ@mail.gmail.com>
-Subject: Re: [PATCH -next] kernel/fork: Remove duplicated include in kernel/fork.c
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, ebiederm@xmission.com, eb@emlix.com,
-        linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        Borislav Petkov <bp@suse.de>, fenghua.yu@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220216201459.5a5b58e9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 at 01:42, Yang Li <yang.lee@linux.alibaba.com> wrote:
+On Wed, Feb 16, 2022 at 08:14:59PM -0800, Jakub Kicinski wrote:
+>On Wed, 16 Feb 2022 17:11:22 +0100 Stefano Garzarella wrote:
+>> On Wed, Feb 16, 2022 at 08:32:22AM -0600, Seth Forshee wrote:
+>> >vsock_connect() expects that the socket could already be in the
+>> >TCP_ESTABLISHED state when the connecting task wakes up with a signal
+>> >pending. If this happens the socket will be in the connected table, and
+>> >it is not removed when the socket state is reset. In this situation it's
+>> >common for the process to retry connect(), and if the connection is
+>> >successful the socket will be added to the connected table a second
+>> >time, corrupting the list.
+>> >
+>> >Prevent this by calling vsock_remove_connected() if a signal is received
+>> >while waiting for a connection. This is harmless if the socket is not in
+>> >the connected table, and if it is in the table then removing it will
+>> >prevent list corruption from a double add.
+>> >
+>> >Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+>> >---
+>> > net/vmw_vsock/af_vsock.c | 1 +
+>> > 1 file changed, 1 insertion(+)
+>> >
+>> >diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>> >index 3235261f138d..38baeb189d4e 100644
+>> >--- a/net/vmw_vsock/af_vsock.c
+>> >+++ b/net/vmw_vsock/af_vsock.c
+>> >@@ -1401,6 +1401,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+>> > 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+>> > 			sock->state = SS_UNCONNECTED;
+>> > 			vsock_transport_cancel_pkt(vsk);
+>> >+			vsock_remove_connected(vsk);
+>> > 			goto out_wait;
+>> > 		} else if (timeout == 0) {
+>> > 			err = -ETIMEDOUT;
+>>
+>> Thanks for this fix! The patch LGTM:
+>>
+>> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+>>
+>>
+>> @Dave, @Jakub, since we need this also in stable branches, I was going
+>> to suggest adding a Fixes tag, but I'm a little confused: the issue
+>> seems to have always been there, so from commit d021c344051a ("VSOCK:
+>> Introduce VM Sockets"), but to use vsock_remove_connected() as we are
+>> using in this patch, we really need commit d5afa82c977e ("vsock: correct
+>> removal of socket from the list").
+>>
+>> Commit d5afa82c977e was introduces in v5.3 and it was backported in
+>> v4.19 and v4.14, but not in v4.9.
+>> So if we want to backport this patch also for v4.9, I think we need
+>> commit d5afa82c977e as well.
 >
-> Fix following includecheck warning:
-> ./kernel/fork.c: linux/sched/mm.h is included more than once.
+>The fixes tag sounds good. Dunno what's the best way to handle this
+>case. We can add a mention of the dependency to the patch description.
+>Personally I'd keep things simple, add the Fixes tag and keep an eye
+>on the backports, if 4.9 doesn't get it - email Greg and explain.
 >
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-This looks like a reasonable fix -- but why is this "To" me? At the
-very least you'd have to get the email of the original author that
-added that line and perhaps the committer. Cc'd the right people.
+Okay, I'll keep an eye on this patch for 4.9.
 
-Looks like another robot sent the exact same fix:
-https://lore.kernel.org/all/20220217015348.1900270-1-deng.changcheng@zte.com.cn/
+@Seth, can you send a v2 mentioning the dependency with commit 
+d5afa82c977e ("vsock: correct removal of socket from the list") and 
+adding the following fixes tag?
 
-Too many robots sending the same things will be interesting...
+     Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
 
-> ---
->  kernel/fork.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 64dbfb9426fd..2bfc74c2d2e3 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -97,7 +97,6 @@
->  #include <linux/scs.h>
->  #include <linux/io_uring.h>
->  #include <linux/bpf.h>
-> -#include <linux/sched/mm.h>
->
->  #include <asm/pgalloc.h>
->  #include <linux/uaccess.h>
-> --
-> 2.20.1.7.g153144c
->
+Thanks,
+Stefano
+

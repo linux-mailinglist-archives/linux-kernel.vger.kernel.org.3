@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FAD04BA4A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1014BA4A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242651AbiBQPko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:40:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33214 "EHLO
+        id S242656AbiBQPls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:41:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242627AbiBQPkl (ORCPT
+        with ESMTP id S240350AbiBQPlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:40:41 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A61D2B2E19
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:40:26 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id a42so8907227ljq.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:40:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dtHuVZsN9dq8Ef87/aHczhTpVzC+pvWaYD+ZfU02gIo=;
-        b=DI03Q5WXZVS9ul6CojxIkkW4nz0ZO8uejIIb6VmNzipMI4NSLJuTUuNVVF8WnOFPAk
-         ETS6C8BnZIusFEeLd24/3GcTkvUN/KMupJrzeOYeA7tKvdIomQivWL/B3zy0zY/tPlWx
-         qZd8OE4OY3XIcUeT56fXQg7Hw3ayHOmVCKvDHuwxw4crgO4MVGVUQrERnwTHeExrETVI
-         5SmD7k91ENizvCB6TkQp/RzxY1OH9FxQ24PYKDpYCZa7+veM6B71vzU3wVeuJytFMcjb
-         NcYwsjepH5AqvNSOFhYwssoKWSW7LOjr9PgcAHHYaWL9iU46/fTADC/Xvtya3WEZDAsS
-         +HSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dtHuVZsN9dq8Ef87/aHczhTpVzC+pvWaYD+ZfU02gIo=;
-        b=1Z+0nWsB/+S0hI65YG8sNn6W0j7R2LHW1xj5JsD367pPkt+hx2XS07eA9jiWvTQ4Oc
-         wOUv3t+80iL1EMbyUKmKUD40jXb4y/C8Ct9MpRLx8FrJB59dOlZhKTg4idi8kGUiklwC
-         +U3NFntHwyUK6+2pyC99Tu88nLv4CFjs8f5+rQoY5eHLkMIh2gnDeUwsdctkCUKfoKT/
-         j7mdgUQ+E+zaTxJ+K/O/PtVJ9vIJ/JMUS6elCr6oTB+q8Swvp1oryOqKT80tih7RJT60
-         PY02VqGIPo5yEFFV1Bu+e0B0rfiPcN5yHUeG0M1jBk20Q885ygUBMoBlUL2eTOnbp/Tm
-         c5DQ==
-X-Gm-Message-State: AOAM533vB6F8UKaaWSQXTBRJePELiGZ15R0uaKu/N174WvG8LTSeLp9U
-        FuaVR1SjJjFio/uD6AL6JiUKPODkPX8DQFAAVJ4F8g==
-X-Google-Smtp-Source: ABdhPJzS1HsQQFljNPEfdzoowpGZXeJXTbt7Iuq1OuK3MM2rhphn87bPRKA7/KY2OrtWgxD7W1s9ZurapEW2QYPSaeM=
-X-Received: by 2002:a05:651c:c7:b0:244:f9d7:7c48 with SMTP id
- 7-20020a05651c00c700b00244f9d77c48mr2735695ljr.300.1645112424989; Thu, 17 Feb
- 2022 07:40:24 -0800 (PST)
+        Thu, 17 Feb 2022 10:41:46 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09EE11C32;
+        Thu, 17 Feb 2022 07:41:30 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21HFfP9l008238;
+        Thu, 17 Feb 2022 09:41:25 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645112485;
+        bh=TsXm2kt6xmnCwysfV2TKJiVFF5ZtAGYWb/89Es0VQfA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=V90BLV6sKzw+CCSt2hgZ7Q64PFqZg0qgja8CtFatgra2Wj0MIxAw5iovTeRhiCul6
+         VRxuUqUbH8l8vd2T/hFSTv2hfbKKoMgXRle9uT24s/Ro46Bgm1diKUYbPUV7O88c9/
+         MD+TH/mlNmcgx5HTHyg2gHoq7/UZltc+bWVV+Des=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21HFfPbs020341
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 17 Feb 2022 09:41:25 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 17
+ Feb 2022 09:41:24 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 17 Feb 2022 09:41:24 -0600
+Received: from [10.250.233.137] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21HFfKe1084567;
+        Thu, 17 Feb 2022 09:41:21 -0600
+Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2-mcu-wakeup: Fix the
+ interrupt-parent for wkup_gpioX instances
+To:     Aswath Govindraju <a-govindraju@ti.com>
+CC:     Keerthy <j-keerthy@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220203132647.11314-1-a-govindraju@ti.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <4b75db14-6e1b-4dc8-0089-1a714ecdac53@ti.com>
+Date:   Thu, 17 Feb 2022 21:11:20 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <1644395927-4138-1-git-send-email-wangqing@vivo.com>
-In-Reply-To: <1644395927-4138-1-git-send-email-wangqing@vivo.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Feb 2022 16:39:48 +0100
-Message-ID: <CAPDyKFqg5N1tCqQ2u2jt5qU0qLuDJRSJRtq_aMVDc7XNDbRvkw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: mtk-sd: use div64_u64() instead of do_div()
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220203132647.11314-1-a-govindraju@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 at 09:39, Qing Wang <wangqing@vivo.com> wrote:
->
-> From: Wang Qing <wangqing@vivo.com>
->
-> do_div() does a 64-by-32 division.
-> When the divisor is u64, do_div() truncates it to 32 bits, this means it
-> can test non-zero and be truncated to zero for division.
->
-> fix do_div.cocci warning:
-> do_div() does a 64-by-32 division, please consider using div64_u64 instead.
->
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-
-Applied for next, thanks!
-
-Kind regards
-Uffe
 
 
+On 03/02/22 6:56 pm, Aswath Govindraju wrote:
+> From: Keerthy <j-keerthy@ti.com>
+> 
+> The interrupt-parent for wkup_gpioX instances are wrongly assigned as
+> main_gpio_intr instead of wkup_gpio_intr. Fix it.
+> 
+> Fixes: b8545f9d3a54 ("arm64: dts: ti: Add initial support for J721S2 SoC")
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+
+Reviewed-by: Kishon Vijay Abraham I <kishon@ti.com>
 > ---
->  drivers/mmc/host/mtk-sd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> index 65037e1..777c9a8
-> --- a/drivers/mmc/host/mtk-sd.c
-> +++ b/drivers/mmc/host/mtk-sd.c
-> @@ -766,7 +766,7 @@ static u64 msdc_timeout_cal(struct msdc_host *host, u64 ns, u64 clks)
->                 clk_ns  = 1000000000ULL;
->                 do_div(clk_ns, mmc->actual_clock);
->                 timeout = ns + clk_ns - 1;
-> -               do_div(timeout, clk_ns);
-> +               div64_u64(timeout, clk_ns);
->                 timeout += clks;
->                 /* in 1048576 sclk cycle unit */
->                 timeout = DIV_ROUND_UP(timeout, BIT(20));
-> --
-> 2.7.4
->
+>  arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> index 7521963719ff..6c5c02edb375 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+> @@ -108,7 +108,7 @@
+>  		reg = <0x00 0x42110000 0x00 0x100>;
+>  		gpio-controller;
+>  		#gpio-cells = <2>;
+> -		interrupt-parent = <&main_gpio_intr>;
+> +		interrupt-parent = <&wkup_gpio_intr>;
+>  		interrupts = <103>, <104>, <105>, <106>, <107>, <108>;
+>  		interrupt-controller;
+>  		#interrupt-cells = <2>;
+> @@ -124,7 +124,7 @@
+>  		reg = <0x00 0x42100000 0x00 0x100>;
+>  		gpio-controller;
+>  		#gpio-cells = <2>;
+> -		interrupt-parent = <&main_gpio_intr>;
+> +		interrupt-parent = <&wkup_gpio_intr>;
+>  		interrupts = <112>, <113>, <114>, <115>, <116>, <117>;
+>  		interrupt-controller;
+>  		#interrupt-cells = <2>;
+> 

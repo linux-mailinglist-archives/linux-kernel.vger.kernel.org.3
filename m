@@ -2,182 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2321A4B9921
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBB54B9923
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235316AbiBQGUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:20:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59464 "EHLO
+        id S235351AbiBQGWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:22:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiBQGUI (ORCPT
+        with ESMTP id S229865AbiBQGWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:20:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CA2A4A16;
-        Wed, 16 Feb 2022 22:19:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 17 Feb 2022 01:22:32 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD608120F7F;
+        Wed, 16 Feb 2022 22:22:18 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B0D618EA;
-        Thu, 17 Feb 2022 06:19:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53737C340E8;
-        Thu, 17 Feb 2022 06:19:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645078793;
-        bh=4phkKQaKpSnplKxFP+P7GfFkUsrlVvHYQSCB/fTUT8o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=STW/z4lnU6/f2WRCtmUX0HNiN4L/YsFnf8nnyyq4ePYYVMqwSVPsYbEn0lv9OyruA
-         VbliK9u/tLs/k+kMIE/LqAmZUOx7j7zxDQ4TVzfAPBdWMZTH7wa0DkhrSOdPXeK5X3
-         R7HeJgwUNW/ckIhV9djbnVBukLWuiqD3uT/uSCs/SDBtmGzPAC7dYfuq1FzPm/S+GU
-         i9bBLpxVL4CPT6Ikq7WDsktDZAu8A5Chn6pD4rZLBhydcJ1PcQEns+DRglIofZ0y/s
-         wFpuHkfC1lbdyNKGAofD9ggXD8MJpH8t8jSOQ9cUfLQ2KMBxKxnnlq4YVkqT7KNIC8
-         wl3xylhaDDIOQ==
-Date:   Thu, 17 Feb 2022 11:49:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [Freedreno] [REPOST PATCH v4 13/13] drm/msm/dsi: Add support for
- DSC configuration
-Message-ID: <Yg3pBQkdq9WpCbVs@matsya>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-14-vkoul@kernel.org>
- <a59295f2-d3ba-5d10-ac96-c00e4cf90e4a@quicinc.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jzl9K5xxsz4xZ2;
+        Thu, 17 Feb 2022 17:22:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1645078934;
+        bh=uKWNm3J+WC7L/u81wG0mBLFfBOhF1YJaiPHErcbfWSE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CYzOlECFm6db9nftI75S9LCIJvuAPuRyy3yKU0WmdYsqcjsjAmWs3ml8sVT1+VB08
+         F2l6lUhvNpPwvya80cNm7J16sn9ywZZt+mvW3HGT8HzkcaxraeoQx5HRBrowILFkdD
+         2IOMPHfalK5PiJ30eIo+lhOfIXzuvcVJLBABWmyL3mKAUgZ+9HJbXjdYEXeUTDKpmK
+         c9uYRtoKJYHg9FEx2o7igPAp+0wLlq+yTBBlNbwDD35pbatcv8Hf9O/tFMUwUG/AV+
+         eHsv85sSKbAXFaYRynoUVob2Kn7Mxgm42RLIcaIVUpsfvOXIPbIXf48hXejO4cygq8
+         rQWPj3R8jpj7A==
+Date:   Thu, 17 Feb 2022 17:22:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the maple tree with the memblock tree
+Message-ID: <20220217172213.355ca4f5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a59295f2-d3ba-5d10-ac96-c00e4cf90e4a@quicinc.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/hvt/4DAfGD6OLjPgp=HGPgj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-02-22, 19:44, Abhinav Kumar wrote:
-> 
-> 
-> On 2/10/2022 2:34 AM, Vinod Koul wrote:
-> > When DSC is enabled, we need to configure DSI registers accordingly and
-> > configure the respective stream compression registers.
-> > 
-> > Add support to calculate the register setting based on DSC params and
-> > timing information and configure these registers.
-> > 
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  10 +++
-> >   drivers/gpu/drm/msm/dsi/dsi_host.c | 109 ++++++++++++++++++++++++++++-
-> >   2 files changed, 118 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > index 49b551ad1bff..c1c85df58c4b 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> > @@ -706,4 +706,14 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
-> >   #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
-> > +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
-> > +
-> > +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL2			0x000002a0
-> > +
-> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
-> > +
-> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
-> > +
-> > +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL3			0x000002ac
-> > +
-> 
-> This file should not be edited manually. The updates have to be generated
-> using the headergen tool.
+--Sig_/hvt/4DAfGD6OLjPgp=HGPgj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I have already send mesa patch for that. https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/14967#note_1253974
-You should chime in there as well :)
+Hi all,
 
-I will split these and get these generated one as a separate patch..
+Today's linux-next merge of the maple tree got a conflict in:
 
+  tools/testing/radix-tree/linux.c
 
-> 
-> >   #endif /* DSI_XML */
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > index 438c80750682..3d8d5a1daaa3 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > @@ -908,6 +908,20 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
-> >   		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
-> >   }
-> > +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
-> > +				  int pic_width, int pic_height)
-> > +{
-> > +	if (!dsc || !pic_width || !pic_height) {
-> > +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	dsc->drm->pic_width = pic_width;
-> > +	dsc->drm->pic_height = pic_height;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >   {
-> >   	struct drm_display_mode *mode = msm_host->mode;
-> > @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >   		hdisplay /= 2;
-> >   	}
-> > +	if (msm_host->dsc) {
-> > +		struct msm_display_dsc_config *dsc = msm_host->dsc;
-> > +
-> > +		/* update dsc params with timing params */
-> > +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
-> > +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
-> > +
-> > +		/* we do the calculations for dsc parameters here so that
-> > +		 * panel can use these parameters
-> > +		 */
-> > +		dsi_populate_dsc_params(dsc);
-> > +
-> > +		/* Divide the display by 3 but keep back/font porch and
-> > +		 * pulse width same
-> > +		 */
-> > +		h_total -= hdisplay;
-> > +		hdisplay /= 3;
-> > +		h_total += hdisplay;
-> > +		ha_end = ha_start + hdisplay;
-> > +	}
-> > +
-> >   	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> > +		if (msm_host->dsc) {
-> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> > +			u32 reg, intf_width, slice_per_intf;
-> > +			u32 total_bytes_per_intf;
-> > +
-> > +			/* first calculate dsc parameters and then program
-> > +			 * compress mode registers
-> > +			 */
-> > +			intf_width = hdisplay;
-> > +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
-> > +
-> > +			dsc->drm->slice_count = 1;
-> 
-> Why is this hard-coded to 1 here? Am i missing something?
-> I think I need another day to look into these calculations.
+between commit:
 
-Thanks for spotting this, it should be:
-                        dsc->drm->slice_count = DIV_ROUND_UP(intf_width, dsc->drm->slice_widths);
+  5a198c3f9b0b ("tools: Move gfp.h and slab.h from radix-tree to lib")
 
-which is slice_per_intf so I will update this
+from the memblock tree and commit:
 
--- 
-~Vinod
+  3a77b4e41d4f ("radix tree test suite: Add support for slab bulk APIs")
+
+from the maple tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/radix-tree/linux.c
+index 81539f543954,3383d748c650..000000000000
+--- a/tools/testing/radix-tree/linux.c
++++ b/tools/testing/radix-tree/linux.c
+@@@ -77,6 -118,97 +117,71 @@@ void kmem_cache_free(struct kmem_cache=20
+  	pthread_mutex_unlock(&cachep->lock);
+  }
+ =20
++ void kmem_cache_free_bulk(struct kmem_cache *cachep, size_t size, void **=
+list)
++ {
++ 	if (kmalloc_verbose)
++ 		pr_debug("Bulk free %p[0-%lu]\n", list, size - 1);
++=20
++ 	pthread_mutex_lock(&cachep->lock);
++ 	for (int i =3D 0; i < size; i++)
++ 		kmem_cache_free_locked(cachep, list[i]);
++ 	pthread_mutex_unlock(&cachep->lock);
++ }
++=20
++ int kmem_cache_alloc_bulk(struct kmem_cache *cachep, gfp_t gfp, size_t si=
+ze,
++ 			  void **p)
++ {
++ 	size_t i;
++=20
++ 	if (kmalloc_verbose)
++ 		pr_debug("Bulk alloc %lu\n", size);
++=20
++ 	if (!(gfp & __GFP_DIRECT_RECLAIM)) {
++ 		if (cachep->non_kernel < size)
++ 			return 0;
++=20
++ 		cachep->non_kernel -=3D size;
++ 	}
++=20
++ 	pthread_mutex_lock(&cachep->lock);
++ 	if (cachep->nr_objs >=3D size) {
++ 		struct radix_tree_node *node;
++=20
++ 		for (i =3D 0; i < size; i++) {
++ 			node =3D cachep->objs;
++ 			cachep->nr_objs--;
++ 			cachep->objs =3D node->parent;
++ 			p[i] =3D node;
++ 			node->parent =3D NULL;
++ 		}
++ 		pthread_mutex_unlock(&cachep->lock);
++ 	} else {
++ 		pthread_mutex_unlock(&cachep->lock);
++ 		for (i =3D 0; i < size; i++) {
++ 			if (cachep->align) {
++ 				posix_memalign(&p[i], cachep->align,
++ 					       cachep->size * size);
++ 			} else {
++ 				p[i] =3D malloc(cachep->size * size);
++ 			}
++ 			if (cachep->ctor)
++ 				cachep->ctor(p[i]);
++ 			else if (gfp & __GFP_ZERO)
++ 				memset(p[i], 0, cachep->size);
++ 		}
++ 	}
++=20
++ 	for (i =3D 0; i < size; i++) {
++ 		uatomic_inc(&nr_allocated);
++ 		uatomic_inc(&cachep->nr_allocated);
++ 		uatomic_inc(&cachep->nr_tallocated);
++ 		if (kmalloc_verbose)
++ 			printf("Allocating %p from slab\n", p[i]);
++ 	}
++=20
++ 	return size;
++ }
++=20
+ -void *kmalloc(size_t size, gfp_t gfp)
+ -{
+ -	void *ret;
+ -
+ -	if (!(gfp & __GFP_DIRECT_RECLAIM))
+ -		return NULL;
+ -
+ -	ret =3D malloc(size);
+ -	uatomic_inc(&nr_allocated);
+ -	if (kmalloc_verbose)
+ -		printf("Allocating %p from malloc\n", ret);
+ -	if (gfp & __GFP_ZERO)
+ -		memset(ret, 0, size);
+ -	return ret;
+ -}
+ -
+ -void kfree(void *p)
+ -{
+ -	if (!p)
+ -		return;
+ -	uatomic_dec(&nr_allocated);
+ -	if (kmalloc_verbose)
+ -		printf("Freeing %p to malloc\n", p);
+ -	free(p);
+ -}
+ -
+  struct kmem_cache *
+  kmem_cache_create(const char *name, unsigned int size, unsigned int align,
+  		unsigned int flags, void (*ctor)(void *))
+
+--Sig_/hvt/4DAfGD6OLjPgp=HGPgj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIN6ZUACgkQAVBC80lX
+0GzMDgf/XF8wAJxcZUeeD/W8mIqhuldt3LiU2Z0ZMvvnvoGhcWEdEazf93m93tN8
+PfCPeRfA3B8AsUSN32ehlPZsb8NCMg5/YFHe5WTQmcZyMzs+qeF3x3DZprVqHvON
+WNM/qtld8oFxFIn4tu/4jw7nrIQOLsJE32swrYGxaxrDvthIerabspveWidKLpx4
+iGYMGr/U944ighDVubkPYe3nvm7v2qfPQ2YmbdPXut7AQUt12nM8Bo3gdfEXXn0i
+x2w3XX6DbttFp8QFkMjo0Z8HqYEX4cIiGxKNRTqmqFrFBuQi4c9Z/6Lnq3FvuGCV
+WU9GjbylRByCk8AovNIPIfTQJ4KvZA==
+=qPM/
+-----END PGP SIGNATURE-----
+
+--Sig_/hvt/4DAfGD6OLjPgp=HGPgj--

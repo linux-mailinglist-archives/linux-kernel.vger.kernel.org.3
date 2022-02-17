@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217374BA594
+	by mail.lfdr.de (Postfix) with ESMTP id 70B864BA595
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243003AbiBQQUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:20:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59614 "EHLO
+        id S243026AbiBQQUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:20:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242990AbiBQQUE (ORCPT
+        with ESMTP id S243000AbiBQQUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:20:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1171D273741
+        Thu, 17 Feb 2022 11:20:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E200327374B
         for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:19:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD78CB8235B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 16:19:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A67C340EC;
-        Thu, 17 Feb 2022 16:19:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94C09B8235C
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 16:19:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B20C3C340F3;
+        Thu, 17 Feb 2022 16:19:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645114787;
-        bh=P6kUoPILhYhj1H1ifaqC4pebGTsEc9wuH7gl6nlprR0=;
+        s=k20201202; t=1645114788;
+        bh=86/d0xi9LNikqugSFOyNSfFep2UlHDk2g/2oy5k4oEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V1o9wlMo51/L2Ub2in/MXvW7QvA5HncVdVd9OnlEDQPukvom+zickh53AgQj7UPXE
-         L79GqSD0lEoH9wJ6l5DL8q8mrrO/j3pUm1xuGhIrmn7Brhu7l5nB2EkZzNtmurxvC6
-         PYPDC3oGWXHZmd9+slxhFJ174enwgLZs7Bq9RVigY/LlDqADZ8zpfPZnXA0jDVEh4J
-         r45nLVx+keh8Ss8PRQuHC7vOgD4W4KdmEzHJqu8/Nq9gUqbrXYtUgi1XBpa9dCEwvP
-         wna1wZ211U6q72OcpV7n+x0Ve7dLU9ya+PjJYX0snfsapeAAdGn6rISb00KDcfUQbY
-         tlb8DP3cTxOVg==
+        b=eEk1KP0P1Ru7nw3eTQhYjXWvpF2DTvf7W1pMSZs/zqUJGjp0e/VnEskIvolzcBV4T
+         tNqpoWqrdv97UM7fZR5E4nbWaBA/Dums9OYKbqHzsjsRUIm0u7+plWVOFSK/8kyjm2
+         xikQexBGTgbH1868dxj3O5B958yvTEW1YhBlPyeqNLSPP+02SvrteDRL9Nxf2fFVDl
+         q1v+mWARrsMnqJxqWHsVydvX5RvPIJ6/ChqQmRhjMFXSd5La+y9aQk5O/ApcTH0ufG
+         CN+cMWTM0aWjP+mDh0CohnqWCO9HxlsYK/QJ2NXIU4p49FBuNtHYq3mmGZ4HrS90nt
+         CvdTI/uiVFp5Q==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     rientjes@google.com, xhao@linux.alibaba.com,
         linux-damon@amazon.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [RFC PATCH 2/4] mm/damon/core: Allow non-exclusive DAMON start/stop
-Date:   Thu, 17 Feb 2022 16:19:36 +0000
-Message-Id: <20220217161938.8874-3-sj@kernel.org>
+Subject: [RFC PATCH 3/4] mm/damon/sysfs: Link DAMON to 'state' file read/write functions
+Date:   Thu, 17 Feb 2022 16:19:37 +0000
+Message-Id: <20220217161938.8874-4-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220217161938.8874-1-sj@kernel.org>
 References: <20220217161938.8874-1-sj@kernel.org>
@@ -53,131 +53,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid interference between DAMON users, current start/stop functions
-of DAMON allows only exclusive groups.  This makes use of DAMON a little
-bit restrictive.  Meanwhile, admins could somehow aware each DAMON usage
-and therefore could address the interference on their own.  This commit
-hence allows callers of the functions to specify if the contexts should
-run in an exclusive mode or not.
+This commit implements 'state' DAMON sysfs interface file read/write
+functions.  In detail, writing 'on' or 'off' to the 'state' file turns
+DAMON for the context on or off, accordingly.  Reading the file shows
+the state.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- include/linux/damon.h |  2 +-
- mm/damon/core.c       | 22 ++++++++++++++++------
- mm/damon/dbgfs.c      |  2 +-
- mm/damon/reclaim.c    |  2 +-
- 4 files changed, 19 insertions(+), 9 deletions(-)
+ mm/damon/sysfs.c | 166 +++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 162 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index 49c4a11ecf20..f8e99e47d747 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -508,7 +508,7 @@ int damon_nr_running_ctxs(void);
- int damon_register_ops(struct damon_operations *ops);
- int damon_select_ops(struct damon_ctx *ctx, enum damon_ops_id id);
+diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+index 59bdc7268dc6..721ee086265f 100644
+--- a/mm/damon/sysfs.c
++++ b/mm/damon/sysfs.c
+@@ -793,18 +793,176 @@ static void damon_sysfs_kdamond_rm_dirs(struct damon_sysfs_kdamond *kdamond)
+ 	kobject_put(&kdamond->contexts->kobj);
+ }
  
--int damon_start(struct damon_ctx **ctxs, int nr_ctxs);
-+int damon_start(struct damon_ctx **ctxs, int nr_ctxs, bool exclusive);
- int damon_stop(struct damon_ctx **ctxs, int nr_ctxs);
- 
- #endif	/* CONFIG_DAMON */
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 82e0a4620c4f..08c5e4dd2ed9 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -24,6 +24,7 @@
- 
- static DEFINE_MUTEX(damon_lock);
- static int nr_running_ctxs;
-+static bool running_exclusive_ctxs;
- 
- static DEFINE_MUTEX(damon_ops_lock);
- static struct damon_operations damon_registered_ops[NR_DAMON_OPS];
-@@ -434,22 +435,25 @@ static int __damon_start(struct damon_ctx *ctx)
-  * damon_start() - Starts the monitorings for a given group of contexts.
-  * @ctxs:	an array of the pointers for contexts to start monitoring
-  * @nr_ctxs:	size of @ctxs
-+ * @exclusive:	exclusiveness of this contexts group
-  *
-  * This function starts a group of monitoring threads for a group of monitoring
-  * contexts.  One thread per each context is created and run in parallel.  The
-- * caller should handle synchronization between the threads by itself.  If a
-- * group of threads that created by other 'damon_start()' call is currently
-- * running, this function does nothing but returns -EBUSY.
-+ * caller should handle synchronization between the threads by itself.  If
-+ * @exclusive is true and a group of threads that created by other
-+ * 'damon_start()' call is currently running, this function does nothing but
-+ * returns -EBUSY.
-  *
-  * Return: 0 on success, negative error code otherwise.
-  */
--int damon_start(struct damon_ctx **ctxs, int nr_ctxs)
-+int damon_start(struct damon_ctx **ctxs, int nr_ctxs, bool exclusive)
++static bool damon_sysfs_ctx_running(struct damon_ctx *ctx)
++{
++	bool running;
++
++	mutex_lock(&ctx->kdamond_lock);
++	running = ctx->kdamond != NULL;
++	mutex_unlock(&ctx->kdamond_lock);
++	return running;
++}
++
+ static ssize_t damon_sysfs_kdamond_state_show(struct kobject *kobj,
+ 		struct kobj_attribute *attr, char *buf)
  {
- 	int i;
- 	int err = 0;
- 
- 	mutex_lock(&damon_lock);
--	if (nr_running_ctxs) {
-+	if ((exclusive && nr_running_ctxs) ||
-+			(!exclusive && running_exclusive_ctxs)) {
- 		mutex_unlock(&damon_lock);
- 		return -EBUSY;
- 	}
-@@ -460,13 +464,15 @@ int damon_start(struct damon_ctx **ctxs, int nr_ctxs)
- 			break;
- 		nr_running_ctxs++;
- 	}
-+	if (exclusive && nr_running_ctxs)
-+		running_exclusive_ctxs = true;
- 	mutex_unlock(&damon_lock);
- 
- 	return err;
+-	/* TODO: Link with DAMON */
+-	return sysfs_emit(buf, "off\n");
++	struct damon_sysfs_kdamond *kdamond = container_of(kobj,
++			struct damon_sysfs_kdamond, kobj);
++	struct damon_ctx *ctx = kdamond->damon_ctx;
++	bool running;
++
++	if (!ctx)
++		running = false;
++	else
++		running = damon_sysfs_ctx_running(ctx);
++
++	return sysfs_emit(buf, "%s\n", running ? "on" : "off");
++}
++
++static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
++{
++	struct damon_target *t, *next;
++
++	damon_for_each_target_safe(t, next, ctx) {
++		if (ctx->ops.id == DAMON_OPS_VADDR)
++			put_pid(t->pid);
++		damon_destroy_target(t);
++	}
++}
++
++static int damon_sysfs_set_targets(struct damon_ctx *ctx,
++		struct damon_sysfs_context *sysfs_ctx)
++{
++	struct damon_sysfs_targets *targets = sysfs_ctx->targets;
++	int i;
++
++	for (i = 0; i < targets->nr_targets; i++) {
++		struct damon_target *t;
++
++		t = damon_new_target();
++		if (!t) {
++			damon_sysfs_destroy_targets(ctx);
++			return -ENOMEM;
++		}
++		if (ctx->ops.id == DAMON_OPS_VADDR) {
++			t->pid = find_get_pid(targets->targets_arr[i]->pid);
++			if (!t->pid) {
++				damon_sysfs_destroy_targets(ctx);
++				return -EINVAL;
++			}
++		}
++		damon_add_target(ctx, t);
++	}
++	return 0;
++}
++
++static inline bool target_has_pid(const struct damon_ctx *ctx)
++{
++	return ctx->ops.id == DAMON_OPS_VADDR;
++}
++
++static void damon_sysfs_before_terminate(struct damon_ctx *ctx)
++{
++	struct damon_target *t, *next;
++
++	if (!target_has_pid(ctx))
++		return;
++
++	mutex_lock(&ctx->kdamond_lock);
++	damon_for_each_target_safe(t, next, ctx) {
++		put_pid(t->pid);
++		damon_destroy_target(t);
++	}
++	mutex_unlock(&ctx->kdamond_lock);
++}
++
++static struct damon_ctx *damon_sysfs_build_ctx(
++		struct damon_sysfs_context *sys_ctx)
++{
++	struct damon_ctx *ctx = damon_new_ctx();
++	struct damon_sysfs_attrs *sys_attrs = sys_ctx->attrs;
++	struct damon_sysfs_ul_range *sys_nr_regions = sys_attrs->nr_regions;
++	struct damon_sysfs_intervals *sys_intervals = sys_attrs->intervals;
++	int err;
++
++	if (!ctx)
++		return ERR_PTR(-ENOMEM);
++
++	err = damon_select_ops(ctx, sys_ctx->ops_id);
++	if (err)
++		goto out;
++
++	err = damon_set_attrs(ctx, sys_intervals->sample_us,
++			sys_intervals->aggr_us, sys_intervals->update_us,
++			sys_nr_regions->min, sys_nr_regions->max);
++	if (err)
++		goto out;
++	err = damon_sysfs_set_targets(ctx, sys_ctx);
++	if (err)
++		goto out;
++	ctx->callback.before_terminate = damon_sysfs_before_terminate;
++	return ctx;
++
++out:
++	damon_destroy_ctx(ctx);
++	return ERR_PTR(err);
  }
  
- /*
-- * __damon_stop() - Stops monitoring of given context.
-+ * __damon_stop() - Stops monitoring of a given context.
-  * @ctx:	monitoring context
-  *
-  * Return: 0 on success, negative error code otherwise.
-@@ -506,6 +512,10 @@ int damon_stop(struct damon_ctx **ctxs, int nr_ctxs)
- 		if (err)
- 			return err;
- 	}
-+	mutex_lock(&damon_lock);
-+	if (!nr_running_ctxs && running_exclusive_ctxs)
-+		running_exclusive_ctxs = false;
-+	mutex_unlock(&damon_lock);
- 
- 	return err;
+ static ssize_t damon_sysfs_kdamond_state_store(struct kobject *kobj,
+ 		struct kobj_attribute *attr, const char *buf, size_t count)
+ {
+-	/* TODO: Link with DAMON */
+-	return count;
++	struct damon_sysfs_kdamond *kdamond = container_of(kobj,
++			struct damon_sysfs_kdamond, kobj);
++	struct damon_ctx *ctx;
++	ssize_t ret;
++
++	if (!mutex_trylock(&damon_sysfs_lock))
++		return -EBUSY;
++	if (!strncmp(buf, "on\n", count)) {
++		if (kdamond->damon_ctx &&
++				damon_sysfs_ctx_running(kdamond->damon_ctx)) {
++			ret = -EBUSY;
++			goto out;
++		}
++		if (kdamond->contexts->nr != 1) {
++			ret = -EINVAL;
++			goto out;
++		}
++
++		if (kdamond->damon_ctx)
++			damon_destroy_ctx(kdamond->damon_ctx);
++		kdamond->damon_ctx = NULL;
++
++		ctx = damon_sysfs_build_ctx(
++				kdamond->contexts->contexts_arr[0]);
++		if (IS_ERR(ctx)) {
++			ret = PTR_ERR(ctx);
++			goto out;
++		}
++		ret = damon_start(&ctx, 1, false);
++		if (ret) {
++			damon_destroy_ctx(ctx);
++			goto out;
++		}
++		kdamond->damon_ctx = ctx;
++	} else if (!strncmp(buf, "off\n", count)) {
++		if (!kdamond->damon_ctx) {
++			ret = -EINVAL;
++			goto out;
++		}
++		ret = damon_stop(&kdamond->damon_ctx, 1);
++		/*
++		 * kdamond->damon_ctx will be freed in next on, or
++		 * kdamonds_nr_store()
++		 */
++	} else {
++		ret = -EINVAL;
++	}
++out:
++	mutex_unlock(&damon_sysfs_lock);
++	if (!ret)
++		ret = count;
++	return ret;
  }
-diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-index 05b574cbcea8..a0dab8b5e45f 100644
---- a/mm/damon/dbgfs.c
-+++ b/mm/damon/dbgfs.c
-@@ -967,7 +967,7 @@ static ssize_t dbgfs_monitor_on_write(struct file *file,
- 				return -EINVAL;
- 			}
- 		}
--		ret = damon_start(dbgfs_ctxs, dbgfs_nr_ctxs);
-+		ret = damon_start(dbgfs_ctxs, dbgfs_nr_ctxs, true);
- 	} else if (!strncmp(kbuf, "off", count)) {
- 		ret = damon_stop(dbgfs_ctxs, dbgfs_nr_ctxs);
- 	} else {
-diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index b53d9c22fad1..e34c4d0c4d93 100644
---- a/mm/damon/reclaim.c
-+++ b/mm/damon/reclaim.c
-@@ -330,7 +330,7 @@ static int damon_reclaim_turn(bool on)
- 	if (err)
- 		goto free_scheme_out;
  
--	err = damon_start(&ctx, 1);
-+	err = damon_start(&ctx, 1, true);
- 	if (!err) {
- 		kdamond_pid = ctx->kdamond->pid;
- 		return 0;
+ static ssize_t damon_sysfs_kdamond_pid_show(struct kobject *kobj,
 -- 
 2.17.1
 

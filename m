@@ -2,114 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BA54B9B20
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816834B9B24
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237768AbiBQIbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 03:31:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42308 "EHLO
+        id S236069AbiBQIbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 03:31:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiBQIbN (ORCPT
+        with ESMTP id S230322AbiBQIbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 03:31:13 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F87324CDC7;
-        Thu, 17 Feb 2022 00:30:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645086659; x=1676622659;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4IaBxTCiW4IYAN8h9khdUrEJ7yUralv1XQeZfmtbiNs=;
-  b=lnvShajUDlLr/rxo9H4RWPExvLC3Uf3OggJU4Hv3OZAuHSmQpzxg/f3B
-   RKNl6A524g3jdZqwnpggtXImryyPcCPS3bjjIeWZjRKojBAPzUTez7hZf
-   EGXq4wb0/lKU/feTy2WUgtlnrvGNYpwl/M2dLYGBZAAAvi17odDusAzzF
-   EBQxNORfo8FtwlGakqbuVlCLhml/TtP4e6lcqq48HbqWz1Odab0dWqQ6c
-   3S7dxpDpzw1M6+SB0PBAPKWRHEHTUFiIgCIChovxXj7hfLyBPNO+eutnS
-   tmYBH8zJiGq/zkkdfmssxThT5UUpG4ImLuT4f6+lTcfxRYc9VIqOngP5i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249660342"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="249660342"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 00:30:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="681860947"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 17 Feb 2022 00:30:56 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 17 Feb 2022 10:30:56 +0200
-Date:   Thu, 17 Feb 2022 10:30:56 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [PATCH] tps6598x: clear int mask on probe failure
-Message-ID: <Yg4HwO2SKGDvOASz@kuha.fi.intel.com>
-References: <e6b80669-20f3-06e7-9ed5-8951a9c6db6f@kernel.dk>
-MIME-Version: 1.0
+        Thu, 17 Feb 2022 03:31:45 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2123.outbound.protection.outlook.com [40.107.244.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB88A62CE
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:31:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a9lPLHGbfW5b4NjkHP8uPEprwM5/G3El3jmhTATw/UxhLLk1hrlmmediy6vhECwfdZOGufvjpSGMe2H/WYXnauPyvlHY6ga6SQ/tRLr5Z5f5uNBRhrinArcKTd+V4Kilu0at55/+VTOO4O4jPwm4qyqkEL/BlG3h1g4eB/Ka0r7GL6MUe88oT9PRmC3ORBBmpK407jUbjHTMtTFwtVL1yW1TxZOOWcZMt4drkkRUCNEEhpK3Sek3NLdetCNYL6X6H6cqrfhVh/mpAkK4ZikuXwSTUZqc3XsPOWdxBUygOOpdQs+SP0/nMgkRkrQRoKsNUzJUknMukdhZxyEaxE0O0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q9Fjbh9JIHv+FK38T2CLcKvUjK68V4R4ZZSD5skhbCc=;
+ b=cEWkxcfS1jQktvsSXHj1Gx0OpiC0rNbZJBgqnqenDOtQ4jy6XxakypWpFd/KdLgzwLMNr64T/q79vx0usitPk9jToG06IA7bBPJ3zTefZkueJcD6V0tAleDEM4kTVnmz+s82zOCIw60xuAwJQk6ncp+7DdG9SFLXvfN+5GJ+AX+yW9C+b0okwFjFQKrq9hkOuzVnVtq8pC9sIPy3C8BlIUU4nvPR3SF9pyDX+nMQJ0SDi1gZ50hS06wQGSyr4xqYyFOu5xZHMtryziBtkvDimfrK05FxRwcDPnC+3C8NkSwfi5G/Clyml7JaTGy2Jqavf7FUcefmQCHSK6JffZFpIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q9Fjbh9JIHv+FK38T2CLcKvUjK68V4R4ZZSD5skhbCc=;
+ b=3vWr09H1pdGNPMgggZTWyj9MKYf1AV1E2jm3EwEFgSDDqNq1V0+G5UKTPkrWJHG6Z+5uhEf7WkueQIXLzdoHY1lFz7x567XBLvbg0MfhWMyayiYLWWnoZmfX2uy3cqE9LEGQbxCX3hOeZDFd0SdizKqL/bCYRx5+kKnia6Qc7Hw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by CY4PR0401MB3697.namprd04.prod.outlook.com (2603:10b6:910:8a::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Thu, 17 Feb
+ 2022 08:31:25 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142%7]) with mapi id 15.20.4995.015; Thu, 17 Feb 2022
+ 08:31:24 +0000
+Date:   Thu, 17 Feb 2022 16:31:19 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Subject: Re: [PATCH v2] drm/bridge: Clear the DP_AUX_I2C_MOT bit passed in
+ aux read command.
+Message-ID: <20220217083119.GA3781632@anxtwsw-Precision-3640-Tower>
+References: <20220217082224.1823916-1-hsinyi@chromium.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e6b80669-20f3-06e7-9ed5-8951a9c6db6f@kernel.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220217082224.1823916-1-hsinyi@chromium.org>
+X-ClientProxiedBy: HK2PR04CA0086.apcprd04.prod.outlook.com
+ (2603:1096:202:15::30) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 31049ef0-5f24-4211-6451-08d9f1efe21f
+X-MS-TrafficTypeDiagnostic: CY4PR0401MB3697:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR0401MB3697ACEFC631FADDCFFD50A2C7369@CY4PR0401MB3697.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LESsctow/xH+9lIMqkXWIigupe7invfhuCNXYjjMFqvjMqQRk/mF/BV7iOnFB8tb71x7Qt4bXi1T6965/NhmgLqNYEwWD5v6w42WFsFnL1YL88Hqi8DV68FpNfPjxvu5uqkXFwR490MhxKBkuZjTy2ETzgPiboQXaVd92B1Q6YQeqnLyOx4CJaewOGm3FtDuT+0VicbVeDuCpQmYyq0t7v6+W9x+8V2kzFQlB1lRDgbCtqL72U3rJ2ZaqtcO2FBBNfFct3uxYnhnB5sjJOVsYDyyIkw8NfuO7ZYLpjGok9JELnvLJGj48A/hTHDmGCe9cLdIPpM0wAsr6jk+ju/sFx0LkV6qn4GQGGUr/J7lDVEVjDFPBxYyowKNiF7v+9vvrPEshlvAlomzgZlNNVnm9u3O1oXTlfu+x0fph3xbP87nDCGH0Fm90AlMsV3TDFsdD41QvF283n4CW+byS51GyTqHQZsEYXxuVxFxufjQKpA1xQ3yTPENYxUdKhhG2Xkh0OOuc4lgW0XAIP1sdjNeKIkFvLmPcy8BNX+D8KSRcY90gZHXi0AKikfaYcpSyxzqiqc4GB5uUS7DMhxhbj+RuYka9/zYYeKK8VYWR3xqwDFW2ChDcMovK1U0S5tMXAf88vU+hzbA5vjBNEmso9g2B2FGDpycFPzN57BCgeZN15uijLPOWM+cALLZlCiKFPVpQQDocVMG5h/Ab7BOTK55ylJzgcTKPbFmzf9z3CR0Fh4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(1076003)(6916009)(26005)(6666004)(186003)(55236004)(6506007)(52116002)(6512007)(8676002)(9686003)(316002)(66476007)(66946007)(8936002)(66556008)(33716001)(508600001)(86362001)(6486002)(54906003)(83380400001)(4326008)(38350700002)(38100700002)(2906002)(33656002)(5660300002)(70780200001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bvNxYgzE8YMT/qAhi/AQpf2eyME6hxtwN+c29MJ5l30m6f2lmomVGPVEopa9?=
+ =?us-ascii?Q?hCaEm0SemZlcFnKhf04KwJvo+Jy+YlZjXdwsLBGqHbRkxjp3zMRrsTZM0aKa?=
+ =?us-ascii?Q?yxioy1UqA/+rdrmzueTfC3iGbQhVuGS2al/y35I2vT/kubFtq2kqw5y44iOC?=
+ =?us-ascii?Q?Ei5LHjgdmH0xPhdjBIGTERlLXl+aOuW1Nb8AWtpYTbxwW9AglkYdJf1XddP1?=
+ =?us-ascii?Q?58yP+cGt2yrARida70/OVnWyHZKO8EVwPfFs1XiGEYjlZRCajkWdtVvhUgo4?=
+ =?us-ascii?Q?Dspl0IvOwGpqr6xomrUR5VdEq2RY95jKE7ac1RkAWeFl0yzHrotcrNtnuR/i?=
+ =?us-ascii?Q?JmVLvzLEPijHQEF1P1+CZ/PaWgmzL95I/hyZaIbguyiCl8M1IaDVFsrZXPsN?=
+ =?us-ascii?Q?5QW9q1RPeKUvEu8pFcAGPteXv+znE2zztxihprLMmEgDSf380HWwaxCWU47Z?=
+ =?us-ascii?Q?VMjQcPir3BgyfzauvK+6ys7K6rJFC5eB6mahzW4NRgdjivaZMeSNJRucYg6H?=
+ =?us-ascii?Q?ptFMZ0Py4LK6sFITuO7KTl7GTKBggCwL8mxUovG2x8IBehGxKsWgaxSdDOQP?=
+ =?us-ascii?Q?zDWdsAeXxRes0XSEvh3TmBSTahy3Hz+8paQ8Ss44aC9ksSiZJ4l0/FUE0Bty?=
+ =?us-ascii?Q?ittrRv7xNclnGgOslKDPkxefAfd7u34rZcCtZ4cBTVugCMmKyuYscWb8yldk?=
+ =?us-ascii?Q?bDNbhZD4edSxXZnV6QVoUBOhVmD4LgqPVHRlbrRFsp3Zp5nwoC+IbtOKmhHP?=
+ =?us-ascii?Q?HrxFHBN7XuW59AfuL0VXlLGf5VJxxZAoOeyMCUrU600PyS4HbLfML/5mWh//?=
+ =?us-ascii?Q?ACpwccZMhVcxaWIK8weFdnXUn+U+jhmNBj3jhYoCUD39yvWxX3cauX6pSGvM?=
+ =?us-ascii?Q?XwcdBR9LbGl5/aDO2/lxnlcWXWoSEh+FBHZkwEQEueV4r2NGD0e8EE2vBwlZ?=
+ =?us-ascii?Q?NBC9M5AutKMCSb7qwVD/1u7m7rZqCidi1Qy09sdCNafYMAA4KYHTio624G8D?=
+ =?us-ascii?Q?HEmsFa8V6eLnDvrr+LbZVfCp2R+uXEFPkdti2F0kvx6DTinv3FNR17PiNTbL?=
+ =?us-ascii?Q?Nd7umM7kC4zz9qAMeBEWKk6TGBPiX0QulSce6niE9Lk3Fz0j01nJzK1VZPT9?=
+ =?us-ascii?Q?20mgwNFOSY/X2+sixCwOcQXBQ0InEm0mSQz839Yn3AtZfTULRcyOXrkughYj?=
+ =?us-ascii?Q?rpc5u5rDj7VOUB6Gz9RiaK2Ca9hheDHMzVZnZid0tEk3pQllKd3pqOk6hVA1?=
+ =?us-ascii?Q?KTi4mTDbpHlYwwPnUXEbewEAowkSf7v/KdwZqCsiPjnQCCBK3EU4SbjOC/S7?=
+ =?us-ascii?Q?E51O+1mERGhw+wP3lNyLrPwWaH1RS4xnW5Mpntcd2+Ae0ZJrTrGviE3iqLCY?=
+ =?us-ascii?Q?wk3om7H2Hrrb+J2hI54UN0/vUUj4QtLKAAd/1NJnXpe8nACrPKtR5nj4l2ke?=
+ =?us-ascii?Q?hMQBvNnbZgIlXDR/lEahAuX8rOHz7TgpGsx0bjrSGGSWrUV6KHoMy91QWWTQ?=
+ =?us-ascii?Q?cLDzf6/s7L1c0a3rnIYI/6IHlr2hC0A2Z9GDRjXRA3T/IyCbPv9FU+GZgj1k?=
+ =?us-ascii?Q?Z7mdhgltCyZ2lTG6dpclBFVT7vSyHv69ocy4utZP3oSZb9AP1ZBiGEQE7LeY?=
+ =?us-ascii?Q?b/h4hCjT6MCOhh1t4mm5QZ4=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31049ef0-5f24-4211-6451-08d9f1efe21f
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 08:31:24.5945
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LpSr51ToepN4SNsGt/UH2GjjZ/wVE2Ce5h+ttmh5F8zeZj6EKVKIyGMMTlGUEAmw/HJAMQQVqh7sxztMXZRv3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR0401MB3697
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 11:22:04AM -0700, Jens Axboe wrote:
-> The interrupt mask is enabled before any potential failure points in
-> the driver, which can leave a failure path where we exit with
-> interrupts enabled but the device not live. This causes an infinite
-> stream of interrupts on an Apple M1 Pro laptop on USB-C.
+On Thu, Feb 17, 2022 at 04:22:25PM +0800, Hsin-Yi Wang wrote:
+> If the previous transfer didn't end with a command without DP_AUX_I2C_MOT,
+> the next read trasnfer will miss the first byte. But if the command in
+> previous transfer is requested with length 0, it's a no-op to anx7625
+> since it can't process this command. anx7625 requires the last command
+> to be read command with length > 0.
 > 
-> Add a failure label that's used post enabling interrupts, where we
-> mask them again before returning an error.
+> It's observed that if we clear the DP_AUX_I2C_MOT in read transfer, we
+> can still get correct data. Clear the read commands with DP_AUX_I2C_MOT
+> bit to fix this issue.
+
+Hi Hsin-Yi, thanks for the patch!
+
+Reviewed-by: Xin Ji <xji@analogixsemi.com>
+
+Thanks,
+Xin
 > 
-> Suggested-by: Sven Peter <sven@svenpeter.dev>
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
-Should this be marked as a fix?
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid through aux channel")
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 > ---
->  drivers/usb/typec/tipd/core.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> v1->v2: Offline discussed with Xin Ji, it's better to clear the bit on
+> read commands only.
+> ---
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 6d27a5b5e3ca..7ffcda94d323 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -761,12 +761,12 @@ static int tps6598x_probe(struct i2c_client *client)
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 633618bafd75d3..2805e9bed2c2f4 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -253,6 +253,8 @@ static int anx7625_aux_trans(struct anx7625_data *ctx, u8 op, u32 address,
+>  	addrm = (address >> 8) & 0xFF;
+>  	addrh = (address >> 16) & 0xFF;
 >  
->  	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
->  	if (ret < 0)
-> -		return ret;
-> +		goto err_clear_mask;
->  	trace_tps6598x_status(status);
+> +	if (!is_write)
+> +		op &= ~DP_AUX_I2C_MOT;
+>  	cmd = DPCD_CMD(len, op);
 >  
->  	ret = tps6598x_read32(tps, TPS_REG_SYSTEM_CONF, &conf);
->  	if (ret < 0)
-> -		return ret;
-> +		goto err_clear_mask;
->  
->  	/*
->  	 * This fwnode has a "compatible" property, but is never populated as a
-> @@ -855,7 +855,8 @@ static int tps6598x_probe(struct i2c_client *client)
->  	usb_role_switch_put(tps->role_sw);
->  err_fwnode_put:
->  	fwnode_handle_put(fwnode);
-> -
-> +err_clear_mask:
-> +	tps6598x_write64(tps, TPS_REG_INT_MASK1, 0);
->  	return ret;
->  }
-
--- 
-heikki
+>  	/* Set command and length */
+> -- 
+> 2.35.1.265.g69c8d7142f-goog

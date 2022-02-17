@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A664B977C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9884B977E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbiBQEPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 23:15:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42790 "EHLO
+        id S233635AbiBQEPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 23:15:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiBQEPQ (ORCPT
+        with ESMTP id S233612AbiBQEPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 23:15:16 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D21C23BF20
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:15:02 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso8362579pjg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:15:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BRHU4NCvA1m6DIbfwfpUmCjUvEI/go7HDCOPtiKRhmc=;
-        b=dTea0karGoH15VfGMhYIdEcGiwWUIWlc/eo1WR+H35bX7vY0rDVD3Lkx2V1qAtpdO1
-         ja8r8JuR2RJ+M0TyvpfrFM9ZpSD3+vwVFfF5uFowGn2ZxILyznfNpk4SuxJHjQoNRrly
-         OeDHjx0LG/G7Sr24OhNHu99llWvtlcFeJcSIY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BRHU4NCvA1m6DIbfwfpUmCjUvEI/go7HDCOPtiKRhmc=;
-        b=V7X9v2T2AIEGXlD+ldNkYJ52rHZPSIbTqfm8xmOLY5wUmGEwXavbKXuJmrtWOM6or6
-         ylNHcAzy66LIJKGdGbSVaH6J9+jcOVATpwLbnlV4llzxuH2V/Se6EiuyHlvg2WHo5SE/
-         rdyR8CHySZtQ6dzS/+fQU7VhDmXE+rtqdc+a5CCV5RZNovnOnDSl5vWtm0j9PJs1CJdj
-         XaBW/3sbLZTXIhW4xm1M2bUmVtO74I92h5Kj1kqA1mvC1wseul+hoNO2ok2Xy8Pdt37e
-         nUbewTCzu5uAH0Qrw+3f4fIgHwjhR7+1e69sA1F7/FZlA85wGuDMKHkPnleSpPEyU9eY
-         psXw==
-X-Gm-Message-State: AOAM533pcQQxM0n/b79GE6t9PNfJMaeduwQvA92awKRRjEGUEt86Wn4F
-        UpvPIwRovD6dkBjwuKk0qX8hghDFXtimopFSgeY=
-X-Google-Smtp-Source: ABdhPJwss8wPAzsmd4U3EfXcPIeBemJt2rbGFEBB1rkzGcoGin7giL9qpLJAP3moWmNPsZXKJzI1fg==
-X-Received: by 2002:a17:90a:9408:b0:1b5:3908:d3d1 with SMTP id r8-20020a17090a940800b001b53908d3d1mr1179743pjo.188.1645071301635;
-        Wed, 16 Feb 2022 20:15:01 -0800 (PST)
-Received: from wmahon.c.googlers.com.com (218.180.124.34.bc.googleusercontent.com. [34.124.180.218])
-        by smtp.gmail.com with ESMTPSA id p9sm5519360pfo.97.2022.02.16.20.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 20:15:01 -0800 (PST)
-From:   William Mahon <wmahon@chromium.org>
-X-Google-Original-From: William Mahon <wmahon@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     William Mahon <wmahon@google.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org
-Subject: [PATCH] HID: Add mapping for KEY_DICTATE
-Date:   Thu, 17 Feb 2022 04:14:54 +0000
-Message-Id: <20220217041427.1.I5dbf50eb1a7a6734ee727bda4a8573358c6d3ec0@changeid>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+        Wed, 16 Feb 2022 23:15:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD9123BF21;
+        Wed, 16 Feb 2022 20:15:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B4D3B81133;
+        Thu, 17 Feb 2022 04:15:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7628C340E9;
+        Thu, 17 Feb 2022 04:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645071301;
+        bh=YRRLpw0VKlcqtm9MnJNQWnaNd7iJ03Cx31KvjzoR9Z4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pamwRqLxudVb4gak4TrKQxoID4pOFctV7GraLEY0TbnuLdcaupVd5/9BvQqYSoCvS
+         GS1GnktWxFONFJUfZH90R6DwgQIMVjnFjbrb6G94j/QoG3cJsSFUC1oQwNbrcsLDQF
+         t53SkrM53tcxveN8Aeyh0PjKNgU9OO4tbKPq0h03hCxz+RKBUTK2WapEhoT7gkXEEY
+         uW+KAH0QDohW99PonSbAOgCOcMfpf1A2GFYVLri9nvaoBwJHxOUTa1eeCW1ILiBBlu
+         wn+FtYmXBvCAk/W6h3xC0Yq4kIh+CwhjyfRMo9Zq15z9SGt86g4TYB/tKviBUGYAhN
+         XlCqfUN1s5mLQ==
+Date:   Wed, 16 Feb 2022 20:14:59 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Seth Forshee <sforshee@digitalocean.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vsock: remove vsock from connected table when connect
+ is interrupted by a signal
+Message-ID: <20220216201459.5a5b58e9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220216161122.eacdfgljg2c6yeby@sgarzare-redhat>
+References: <20220216143222.1614690-1-sforshee@digitalocean.com>
+        <20220216161122.eacdfgljg2c6yeby@sgarzare-redhat>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,58 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Numerous keyboards are adding dicate keys which allows for text
-messages to be dicated by a microphone.
+On Wed, 16 Feb 2022 17:11:22 +0100 Stefano Garzarella wrote:
+> On Wed, Feb 16, 2022 at 08:32:22AM -0600, Seth Forshee wrote:
+> >vsock_connect() expects that the socket could already be in the
+> >TCP_ESTABLISHED state when the connecting task wakes up with a signal
+> >pending. If this happens the socket will be in the connected table, and
+> >it is not removed when the socket state is reset. In this situation it's
+> >common for the process to retry connect(), and if the connection is
+> >successful the socket will be added to the connected table a second
+> >time, corrupting the list.
+> >
+> >Prevent this by calling vsock_remove_connected() if a signal is received
+> >while waiting for a connection. This is harmless if the socket is not in
+> >the connected table, and if it is in the table then removing it will
+> >prevent list corruption from a double add.
+> >
+> >Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+> >---
+> > net/vmw_vsock/af_vsock.c | 1 +
+> > 1 file changed, 1 insertion(+)
+> >
+> >diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> >index 3235261f138d..38baeb189d4e 100644
+> >--- a/net/vmw_vsock/af_vsock.c
+> >+++ b/net/vmw_vsock/af_vsock.c
+> >@@ -1401,6 +1401,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+> > 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+> > 			sock->state = SS_UNCONNECTED;
+> > 			vsock_transport_cancel_pkt(vsk);
+> >+			vsock_remove_connected(vsk);
+> > 			goto out_wait;
+> > 		} else if (timeout == 0) {
+> > 			err = -ETIMEDOUT;
+> 
+> Thanks for this fix! The patch LGTM:
+> 
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> 
+> 
+> @Dave, @Jakub, since we need this also in stable branches, I was going 
+> to suggest adding a Fixes tag, but I'm a little confused: the issue 
+> seems to have always been there, so from commit d021c344051a ("VSOCK: 
+> Introduce VM Sockets"), but to use vsock_remove_connected() as we are 
+> using in this patch, we really need commit d5afa82c977e ("vsock: correct 
+> removal of socket from the list").
+> 
+> Commit d5afa82c977e was introduces in v5.3 and it was backported in 
+> v4.19 and v4.14, but not in v4.9.
+> So if we want to backport this patch also for v4.9, I think we need 
+> commit d5afa82c977e as well.
 
-This patch adds a new key definition KEY_DICTATE and maps 0x0c/0x0d8
-usage code to this new keycode. Additionally hid-debug is adjusted to
-recognize this new usage code as well.
-
-Signed-off-by: William Mahon <wmahon@google.com>
----
-
- drivers/hid/hid-debug.c                | 1 +
- drivers/hid/hid-input.c                | 1 +
- include/uapi/linux/input-event-codes.h | 2 ++
- 3 files changed, 4 insertions(+)
-
-diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
-index 26c31d759914..8aa68416b1d7 100644
---- a/drivers/hid/hid-debug.c
-+++ b/drivers/hid/hid-debug.c
-@@ -969,6 +969,7 @@ static const char *keys[KEY_MAX + 1] = {
- 	[KEY_ASSISTANT] = "Assistant",
- 	[KEY_KBD_LAYOUT_NEXT] = "KbdLayoutNext",
- 	[KEY_EMOJI_PICKER] = "EmojiPicker",
-+	[KEY_DICTATE] = "Dictate",
- 	[KEY_BRIGHTNESS_MIN] = "BrightnessMin",
- 	[KEY_BRIGHTNESS_MAX] = "BrightnessMax",
- 	[KEY_BRIGHTNESS_AUTO] = "BrightnessAuto",
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 112901d2d8d2..0c6c6db942ca 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -992,6 +992,7 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 		case 0x0cd: map_key_clear(KEY_PLAYPAUSE);	break;
- 		case 0x0cf: map_key_clear(KEY_VOICECOMMAND);	break;
- 
-+		case 0x0d8: map_key_clear(KEY_DICTATE);	break;
- 		case 0x0d9: map_key_clear(KEY_EMOJI_PICKER);	break;
- 
- 		case 0x0e0: map_abs_clear(ABS_VOLUME);		break;
-diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
-index 225ec87d4f22..12246594891c 100644
---- a/include/uapi/linux/input-event-codes.h
-+++ b/include/uapi/linux/input-event-codes.h
-@@ -735,6 +735,8 @@
- #define KEY_KBD_LCD_MENU4		0x2bb
- #define KEY_KBD_LCD_MENU5		0x2bc
- 
-+#define KEY_DICTATE 			0x27b
-+
- #define BTN_TRIGGER_HAPPY		0x2c0
- #define BTN_TRIGGER_HAPPY1		0x2c0
- #define BTN_TRIGGER_HAPPY2		0x2c1
--- 
-2.35.1.265.g69c8d7142f-goog
-
+The fixes tag sounds good. Dunno what's the best way to handle this
+case. We can add a mention of the dependency to the patch description.
+Personally I'd keep things simple, add the Fixes tag and keep an eye
+on the backports, if 4.9 doesn't get it - email Greg and explain.

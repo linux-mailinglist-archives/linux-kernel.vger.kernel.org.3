@@ -2,92 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7804BA378
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEADA4BA38C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242081AbiBQOso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:48:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34038 "EHLO
+        id S242061AbiBQOtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 09:49:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242061AbiBQOsj (ORCPT
+        with ESMTP id S239719AbiBQOtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:48:39 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE7A160FDE;
-        Thu, 17 Feb 2022 06:48:24 -0800 (PST)
+        Thu, 17 Feb 2022 09:49:09 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88008165C02;
+        Thu, 17 Feb 2022 06:48:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645109304; x=1676645304;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/a6kPOmK1R4gkycE4EvBWHz/vCQFwiKnu48Rd4yVAA0=;
-  b=jWvXhL/tYb5RneHsiRe+5oH5OXHrywj/8+8/8+dn8J4/zL7gdN0tlFMT
-   wB/J1oROE8H67ZgfLknjFU6/8xGnaTCPhAL/Yov66tbzcTWP11i6SVuKQ
-   Tc67vsgaGcOPVWzdDW6IMNqzmpv63XbgGgoLP6lOts8hpWmKLXe2pJU47
-   4Wo0ggmJxfBZADNqfkj1j00tQGTocHoLQLU1G1+0xx9hVFYz8nJ1bwERQ
-   x2msxu/jQrVQwZgFPUtvA1HayXhYw9pdFJLysytBSLxswxKbR/cugR+jm
-   6wVFm/27Y2YeweFM8Qg01LZe4xdZaPcXVaqg+ow+8WQzVCFoKLkJuLCrC
+  t=1645109335; x=1676645335;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KJwcvMoVWYzSvXk8gggEbeaq4OR5k43plCA9oRGkcUE=;
+  b=n/jWqSN7Wkj97X26J0b4lm6BKYhdMUSq+B7pvWmORtY2ZVzXvU/Cyr/4
+   4uecPGT4PodbSOf2id/UCHTD72Ox9hzpBH/MGGQupNrDGznJ1SR/j9HiX
+   HWWrfzY3ZAIGFwG7pTPDdX7fw6nLdN5/n2p9TrXKjDn51w35BqmH+qLtX
+   P3lEfgDA2bfnUILaBihEFZT9FE2On4cDkSW32fEpM5ZpIsExy+1D86KN9
+   O9u8jgTAnTz42Vkmi2e8IX+dPSQumznY1wwmmSkAeVPmOB8fC3ysEJa/7
+   w21XHZlSgbTHa89gp0XfEqiD71ZMcwZLW//ZQIz9tzalaFOLFJtBe7tZc
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249722768"
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275477578"
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="249722768"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 06:48:12 -0800
+   d="scan'208";a="275477578"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 06:48:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="502480195"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.151])
-  by orsmga006.jf.intel.com with SMTP; 17 Feb 2022 06:48:06 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Thu, 17 Feb 2022 16:48:05 +0200
-Date:   Thu, 17 Feb 2022 16:48:05 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, netdev <netdev@vger.kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: [Intel-gfx] [PATCH 6/9] drm/i915: Separate wakeref tracking
-Message-ID: <Yg5gJfSJCCaY5JYs@intel.com>
-References: <20220217140441.1218045-1-andrzej.hajda@intel.com>
- <20220217140441.1218045-7-andrzej.hajda@intel.com>
+   d="scan'208";a="545641327"
+Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
+  by orsmga008.jf.intel.com with ESMTP; 17 Feb 2022 06:48:51 -0800
+Message-ID: <b9099ac3-a5fa-1aba-92a3-05a7212525ab@linux.intel.com>
+Date:   Thu, 17 Feb 2022 16:48:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.1
+Subject: Re: [PATCH] counter: Stop using dev_get_drvdata() to get the counter
+ device
+Content-Language: en-US
+To:     William Breathitt Gray <vilhelm.gray@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-iio@vger.kernel.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-kernel@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Jonathan Cameron <jic23@kernel.org>
+References: <YfzPcyusGwAOkys6@shinobu>
+ <20220204082556.370348-1-u.kleine-koenig@pengutronix.de>
+ <YgHKekl9rJ2jH5j4@shinobu>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <YgHKekl9rJ2jH5j4@shinobu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220217140441.1218045-7-andrzej.hajda@intel.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 03:04:38PM +0100, Andrzej Hajda wrote:
-> -static noinline depot_stack_handle_t
-> +static intel_wakeref_t
->  track_intel_runtime_pm_wakeref(struct intel_runtime_pm *rpm)
->  {
-> -	depot_stack_handle_t stack, *stacks;
-> -	unsigned long flags;
-> -
-> -	if (rpm->no_wakeref_tracking)
-> -		return -1;
-> -
-> -	stack = __save_depot_stack();
-> -	if (!stack)
-> +	if (!rpm->available)
->  		return -1;
+Hi
 
-no_wakeref_tracking != available
+On 2/8/22 03:42, William Breathitt Gray wrote:
+> On Fri, Feb 04, 2022 at 09:25:56AM +0100, Uwe Kleine-KÃ¶nig wrote:
+>> dev_get_drvdata() returns NULL since commit b56346ddbd82 ("counter: Use
+>> container_of instead of drvdata to track counter_device") which wrongly
+>> claimed there were no users of drvdata. Convert to container_of() to
+>> fix a null pointer dereference.
+>>
+>> Reported-by: Oleksij Rempel <o.rempel@pengutronix.de>
+>> Fixes: b56346ddbd82 ("counter: Use container_of instead of drvdata to track counter_device")
+>> Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+> 
+> I'll pick this up and apply it to my tree.
+> 
+Perhaps late but I hit this same issue, patch here fixes it and I wanted 
+to confirm it.
 
--- 
-Ville Syrjälä
-Intel
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>

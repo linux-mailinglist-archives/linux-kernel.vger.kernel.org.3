@@ -2,137 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75EF4B99FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E74DE4B9A03
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236492AbiBQHok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 02:44:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35322 "EHLO
+        id S236524AbiBQHqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 02:46:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiBQHoj (ORCPT
+        with ESMTP id S230237AbiBQHqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:44:39 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E63423A1A7;
-        Wed, 16 Feb 2022 23:44:24 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=bo.liu@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V4gpSp6_1645083855;
-Received: from rsjd01523.et2sqa(mailfrom:bo.liu@linux.alibaba.com fp:SMTPD_---0V4gpSp6_1645083855)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 17 Feb 2022 15:44:20 +0800
-Date:   Thu, 17 Feb 2022 15:44:15 +0800
-From:   Liu Bo <bo.liu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/22] fscache: export fscache_end_operation()
-Message-ID: <20220217074414.GA85627@rsjd01523.et2sqa>
-Reply-To: bo.liu@linux.alibaba.com
-References: <20220209060108.43051-1-jefflexu@linux.alibaba.com>
- <20220209060108.43051-2-jefflexu@linux.alibaba.com>
+        Thu, 17 Feb 2022 02:46:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A00E23A1A8;
+        Wed, 16 Feb 2022 23:45:47 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C4B591F37D;
+        Thu, 17 Feb 2022 07:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645083945; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N1Bwkgc0b1NsSzA+goLBbyLYnuFpjvP2ZA623nZPeoU=;
+        b=LMzvITKL+HRLw4P7XofOjk1T99l49Svs+bIG968ShkCNoMHbk4iFHhRC/+aSeIWvQXhVj4
+        IUWURCieN1XSygVBt+Oo0ERi/4JQeNKE8hwXaYdSwW7+QWRjqLQ8wyIPo1sQSujPmsKUfA
+        xvUKJPohu4obUX4yyl8TAjblL2pnEms=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645083945;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N1Bwkgc0b1NsSzA+goLBbyLYnuFpjvP2ZA623nZPeoU=;
+        b=sA66tyj6hGa43RzOunBJ54EjO34EwRWPSAqD7VXSJ/ifWqAqw8zyPNB71MS1Z0JeTybQOl
+        6qqR0AaRmeM7F0Dw==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3F741A3B91;
+        Thu, 17 Feb 2022 07:45:44 +0000 (UTC)
+Date:   Thu, 17 Feb 2022 08:45:44 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+In-Reply-To: <20220216195738.vhlot4udoqga4ndm@treble>
+Message-ID: <alpine.LSU.2.21.2202170841240.29121@pobox.suse.cz>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble> <alpine.LSU.2.21.2202161601010.1475@pobox.suse.cz> <20220216195738.vhlot4udoqga4ndm@treble>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209060108.43051-2-jefflexu@linux.alibaba.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 02:00:47PM +0800, Jeffle Xu wrote:
-> Export fscache_end_operation() to avoid code duplication.
+On Wed, 16 Feb 2022, Josh Poimboeuf wrote:
+
+> On Wed, Feb 16, 2022 at 04:06:24PM +0100, Miroslav Benes wrote:
+> > > > +	/*
+> > > > +	 * If the LD's `-z unique-symbol` flag is available and enabled,
+> > > > +	 * sympos checks are not relevant.
+> > > > +	 */
+> > > > +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
+> > > > +		sympos = 0;
+> > > > +
+> > > 
+> > > Similarly, I don't see a need for this.  If the patch is legit then
+> > > sympos should already be zero.  If not, an error gets reported and the
+> > > patch fails to load.
+> > 
+> > My concern was that if the patch is not legit (that is, sympos is > 0 for 
+> > some reason), the error would be really cryptic and would not help the 
+> > user at all. So zeroing sympos seems to be a good idea to me. There is no 
+> > harm and the change is very small and compact.
 > 
-> Besides, considering the paired fscache_begin_read_operation() is
-> already exported, it shall make sense to also export
-> fscache_end_operation().
->
+> But wouldn't a cryptic error be better than no error at all?  A bad
+> sympos might be indicative of some larger issue, like the wrong symbol
+> getting patched.
 
-Looks reasonable to me.
+Maybe you are right. I do not feel confident enough to decide it. So 
+either way would be fine, I guess.
 
-Reviewed-by: Liu Bo <bo.liu@linux.alibaba.com>
-
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-> ---
->  fs/fscache/internal.h   | 11 -----------
->  fs/nfs/fscache.c        |  8 --------
->  include/linux/fscache.h | 14 ++++++++++++++
->  3 files changed, 14 insertions(+), 19 deletions(-)
-> 
-> diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
-> index f121c21590dc..ed1c9ed737f2 100644
-> --- a/fs/fscache/internal.h
-> +++ b/fs/fscache/internal.h
-> @@ -70,17 +70,6 @@ static inline void fscache_see_cookie(struct fscache_cookie *cookie,
->  			     where);
->  }
->  
-> -/*
-> - * io.c
-> - */
-> -static inline void fscache_end_operation(struct netfs_cache_resources *cres)
-> -{
-> -	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
-> -
-> -	if (ops)
-> -		ops->end_operation(cres);
-> -}
-> -
->  /*
->   * main.c
->   */
-> diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
-> index cfe901650ab0..39654ca72d3d 100644
-> --- a/fs/nfs/fscache.c
-> +++ b/fs/nfs/fscache.c
-> @@ -249,14 +249,6 @@ void nfs_fscache_release_file(struct inode *inode, struct file *filp)
->  	}
->  }
->  
-> -static inline void fscache_end_operation(struct netfs_cache_resources *cres)
-> -{
-> -	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
-> -
-> -	if (ops)
-> -		ops->end_operation(cres);
-> -}
-> -
->  /*
->   * Fallback page reading interface.
->   */
-> diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-> index 296c5f1d9f35..d2430da8aa67 100644
-> --- a/include/linux/fscache.h
-> +++ b/include/linux/fscache.h
-> @@ -456,6 +456,20 @@ int fscache_begin_read_operation(struct netfs_cache_resources *cres,
->  	return -ENOBUFS;
->  }
->  
-> +/**
-> + * fscache_end_operation - End the read operation for the netfs lib
-> + * @cres: The cache resources for the read operation
-> + *
-> + * Clean up the resources at the end of the read request.
-> + */
-> +static inline void fscache_end_operation(struct netfs_cache_resources *cres)
-> +{
-> +	const struct netfs_cache_ops *ops = fscache_operation_valid(cres);
-> +
-> +	if (ops)
-> +		ops->end_operation(cres);
-> +}
-> +
->  /**
->   * fscache_read - Start a read from the cache.
->   * @cres: The cache resources to use
-> -- 
-> 2.27.0
+Miroslav

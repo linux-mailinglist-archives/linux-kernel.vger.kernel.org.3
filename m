@@ -2,150 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67934B9B2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06F24B9B32
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237779AbiBQIek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 03:34:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57630 "EHLO
+        id S237787AbiBQIgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 03:36:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237748AbiBQIeh (ORCPT
+        with ESMTP id S237579AbiBQIgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 03:34:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 907CE25BD72
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:34:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645086861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hhpl+rzufZ4HpgJzL8RSu4UiBBIjnQJwZAboaAQxVZk=;
-        b=hIAEWrjEeXKKMptXcYm/rCTGzm8SYJTN6AN+es9WFPGuNdvFEBnHCQ2Iwq2p3ht7LcITzZ
-        f5ZyWUAKE4+0akaSRqSe8XHo4s/b9+RbGAWYjcc8WdE+XtyyJU/x7vdLimdsw9OB17zchq
-        WIC/2SrIzSqcH3Q3g94BP6+C7pPoe5o=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-322-AbSPl1B-NcevVGvwdEqZZQ-1; Thu, 17 Feb 2022 03:34:19 -0500
-X-MC-Unique: AbSPl1B-NcevVGvwdEqZZQ-1
-Received: by mail-ed1-f71.google.com with SMTP id e10-20020a056402190a00b00410f20467abso3089510edz.14
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:34:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Hhpl+rzufZ4HpgJzL8RSu4UiBBIjnQJwZAboaAQxVZk=;
-        b=sGEYiA4YY1vsGdB4yTuHbkz+m4f24k+BUEt1J5qVPurOdJMGh06veJ8tAuyNKltPTQ
-         I+xbxWFNWLloy3kGcTh2EQxUkMOd/eKi4pYsyRVBAwBUo27fk+9+yB8ceqgsHL9S2RRt
-         L8Pe7ujRaEHyyf4fXflLgBUmSmW3BE08snkEwL/cpAeSQ4D89vy00NJz9pt/5Ofk9nm8
-         TfLLKabnVRgLKXBGRvvCTjXLqmjNn3wU6spM731PpkDHJrabBWPcIqK6ELgwAm4jgUIc
-         RoTg3Ai9yCtijC0S3c744k7HW+B6Y9XSubIfYGY60YksMXXqWHLfUK6XHowsfsQ+rBSt
-         tvjQ==
-X-Gm-Message-State: AOAM533MU9pXag9FjVKpXNqOX9Nty3+fKKbhlM0+y1NHVaBJV5daDapF
-        6sOJy19Z0tMFzKzVGWcTFFwa+/whw+njTbPtVv+qDNLWDRa/VnqqJBf0ROO/tw3ZUbpLndf79aw
-        gLj7QFT8FD8T8s+0KdPGl1VJb
-X-Received: by 2002:a17:906:2bd7:b0:6cd:f89d:c828 with SMTP id n23-20020a1709062bd700b006cdf89dc828mr1535794ejg.232.1645086858354;
-        Thu, 17 Feb 2022 00:34:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzWeBziOjg1wr7D46Vg3PrFPzezNZQTlS0tbQ74/7RcIcGsZSR6aR8D0exZ1cCEkVQvZNAJMQ==
-X-Received: by 2002:a17:906:2bd7:b0:6cd:f89d:c828 with SMTP id n23-20020a1709062bd700b006cdf89dc828mr1535783ejg.232.1645086858124;
-        Thu, 17 Feb 2022 00:34:18 -0800 (PST)
-Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
-        by smtp.gmail.com with ESMTPSA id b4sm926960ejv.108.2022.02.17.00.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 00:34:17 -0800 (PST)
-Date:   Thu, 17 Feb 2022 09:34:11 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Seth Forshee <sforshee@digitalocean.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vsock: remove vsock from connected table when connect is
- interrupted by a signal
-Message-ID: <20220217083411.rjb2em2vf6hcgo64@sgarzare-redhat>
-References: <20220216143222.1614690-1-sforshee@digitalocean.com>
- <20220216161122.eacdfgljg2c6yeby@sgarzare-redhat>
- <20220216201459.5a5b58e9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Thu, 17 Feb 2022 03:36:09 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E78129A568
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:35:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645086955; x=1676622955;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bo9zcbgqbS7YT3gnI/qvruhzWKSfHvFO876SwoeW3XE=;
+  b=L0U1U3ktkx3THV0oKN5muakH/5f4Mgke+uHa/cO86+90d06/FhUeqLRZ
+   kPm0CbpnDvjfH49iz3c9GXHj+ny1Z68JBwtapOBgeUu5o2z6OQ3qVGQjT
+   6h2C0lH5O7TZ8oEmWVSzkLjquZk+C4eKhPeZ4Dgtg+v3bYyt2t1Fa+gE1
+   0=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 17 Feb 2022 00:35:55 -0800
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 17 Feb 2022 00:35:53 -0800
+X-QCInternal: smtphost
+Received: from hu-pkumpatl-hyd.qualcomm.com (HELO hu-maiyas-hyd.qualcomm.com) ([10.213.109.81])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 17 Feb 2022 14:05:44 +0530
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 3914174)
+        id 81EE55001C2; Thu, 17 Feb 2022 14:05:43 +0530 (+0530)
+From:   Prasad Kumpatla <quic_pkumpatl@quicinc.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Prasad Kumpatla <quic_pkumpatl@quicinc.com>
+Subject: [PATCH v2] regmap-irq: Update interrupt clear register for proper reset
+Date:   Thu, 17 Feb 2022 14:05:28 +0530
+Message-Id: <20220217083528.30026-1-quic_pkumpatl@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220216201459.5a5b58e9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 08:14:59PM -0800, Jakub Kicinski wrote:
->On Wed, 16 Feb 2022 17:11:22 +0100 Stefano Garzarella wrote:
->> On Wed, Feb 16, 2022 at 08:32:22AM -0600, Seth Forshee wrote:
->> >vsock_connect() expects that the socket could already be in the
->> >TCP_ESTABLISHED state when the connecting task wakes up with a signal
->> >pending. If this happens the socket will be in the connected table, and
->> >it is not removed when the socket state is reset. In this situation it's
->> >common for the process to retry connect(), and if the connection is
->> >successful the socket will be added to the connected table a second
->> >time, corrupting the list.
->> >
->> >Prevent this by calling vsock_remove_connected() if a signal is received
->> >while waiting for a connection. This is harmless if the socket is not in
->> >the connected table, and if it is in the table then removing it will
->> >prevent list corruption from a double add.
->> >
->> >Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
->> >---
->> > net/vmw_vsock/af_vsock.c | 1 +
->> > 1 file changed, 1 insertion(+)
->> >
->> >diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->> >index 3235261f138d..38baeb189d4e 100644
->> >--- a/net/vmw_vsock/af_vsock.c
->> >+++ b/net/vmw_vsock/af_vsock.c
->> >@@ -1401,6 +1401,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
->> > 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
->> > 			sock->state = SS_UNCONNECTED;
->> > 			vsock_transport_cancel_pkt(vsk);
->> >+			vsock_remove_connected(vsk);
->> > 			goto out_wait;
->> > 		} else if (timeout == 0) {
->> > 			err = -ETIMEDOUT;
->>
->> Thanks for this fix! The patch LGTM:
->>
->> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
->>
->>
->> @Dave, @Jakub, since we need this also in stable branches, I was going
->> to suggest adding a Fixes tag, but I'm a little confused: the issue
->> seems to have always been there, so from commit d021c344051a ("VSOCK:
->> Introduce VM Sockets"), but to use vsock_remove_connected() as we are
->> using in this patch, we really need commit d5afa82c977e ("vsock: correct
->> removal of socket from the list").
->>
->> Commit d5afa82c977e was introduces in v5.3 and it was backported in
->> v4.19 and v4.14, but not in v4.9.
->> So if we want to backport this patch also for v4.9, I think we need
->> commit d5afa82c977e as well.
->
->The fixes tag sounds good. Dunno what's the best way to handle this
->case. We can add a mention of the dependency to the patch description.
->Personally I'd keep things simple, add the Fixes tag and keep an eye
->on the backports, if 4.9 doesn't get it - email Greg and explain.
->
+With the existing logic where clear_ack is true (HW doesn’t support
+auto clear for ICR), interrupt clear register reset is not handled
+properly. Due to this only the first interrupts get processed properly
+and further interrupts are blocked due to not resetting interrupt
+clear register.
 
-Okay, I'll keep an eye on this patch for 4.9.
+Example for issue case where Invert_ack is false and clear_ack is true:
 
-@Seth, can you send a v2 mentioning the dependency with commit 
-d5afa82c977e ("vsock: correct removal of socket from the list") and 
-adding the following fixes tag?
+    Say Default ISR=0x00 & ICR=0x00 and ISR is triggered with 2
+    interrupts making ISR = 0x11.
 
-     Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
+    Step 1: Say ISR is set 0x11 (store status_buff = ISR). ISR needs to
+            be cleared with the help of ICR once the Interrupt is processed.
 
-Thanks,
-Stefano
+    Step 2: Write ICR = 0x11 (status_buff), this will clear the ISR to 0x00.
+
+    Step 3: Issue - In the existing code, ICR is written with ICR =
+            ~(status_buff) i.e ICR = 0xEE -> This will block all the interrupts
+            from raising except for interrupts 0 and 4. So expectation here is to
+            reset ICR, which will unblock all the interrupts.
+
+            if (chip->clear_ack) {
+                 if (chip->ack_invert && !ret)
+                  ........
+                 else if (!ret)
+                     ret = regmap_write(map, reg,
+                            ~data->status_buf[i]);
+
+So writing 0 and 0xff (when ack_invert is true) should have no effect, other
+than clearing the ACKs just set.
+
+Fixes: 3a6f0fb7b8eb ("regmap: irq: Add support to clear ack registers")
+Signed-off-by: Prasad Kumpatla <quic_pkumpatl@quicinc.com>
+---
+ drivers/base/regmap/regmap-irq.c | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index d2656581a608..22b4c98bc026 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -189,11 +189,9 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
+ 				ret = regmap_write(map, reg, d->mask_buf[i]);
+ 			if (d->chip->clear_ack) {
+ 				if (d->chip->ack_invert && !ret)
+-					ret = regmap_write(map, reg,
+-							   d->mask_buf[i]);
++					ret = regmap_write(map, reg, 0xff);
+ 				else if (!ret)
+-					ret = regmap_write(map, reg,
+-							   ~d->mask_buf[i]);
++					ret = regmap_write(map, reg, 0x00);
+ 			}
+ 			if (ret != 0)
+ 				dev_err(d->map->dev, "Failed to ack 0x%x: %d\n",
+@@ -556,11 +554,9 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
+ 						data->status_buf[i]);
+ 			if (chip->clear_ack) {
+ 				if (chip->ack_invert && !ret)
+-					ret = regmap_write(map, reg,
+-							data->status_buf[i]);
++					ret = regmap_write(map, reg, 0xff);
+ 				else if (!ret)
+-					ret = regmap_write(map, reg,
+-							~data->status_buf[i]);
++					ret = regmap_write(map, reg, 0x00);
+ 			}
+ 			if (ret != 0)
+ 				dev_err(map->dev, "Failed to ack 0x%x: %d\n",
+@@ -817,13 +813,9 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 					d->status_buf[i] & d->mask_buf[i]);
+ 			if (chip->clear_ack) {
+ 				if (chip->ack_invert && !ret)
+-					ret = regmap_write(map, reg,
+-						(d->status_buf[i] &
+-						 d->mask_buf[i]));
++					ret = regmap_write(map, reg, 0xff);
+ 				else if (!ret)
+-					ret = regmap_write(map, reg,
+-						~(d->status_buf[i] &
+-						  d->mask_buf[i]));
++					ret = regmap_write(map, reg, 0x00);
+ 			}
+ 			if (ret != 0) {
+ 				dev_err(map->dev, "Failed to ack 0x%x: %d\n",
+-- 
+2.17.1
 

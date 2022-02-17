@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1724BA512
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1254BA52C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242862AbiBQPvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:51:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38500 "EHLO
+        id S239081AbiBQPvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:51:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242947AbiBQPu3 (ORCPT
+        with ESMTP id S242620AbiBQPvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:50:29 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07AE2B3565
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:50:14 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id p7so8971447qvk.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:50:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TrDQU0wSmJ6gbE5qWNC2HspX1mTvA/w61hnKamurULY=;
-        b=Bjc0C/P8P3VM61dFTCNftf1IoTERJSFiCh6cp97oIk7fgWzNuZ+688kiVF8wS89ArW
-         PJSElY9F/Ndstf4E4cCqluq6d9+x/aV27fLitAhzwSn6dFRPhvcuGsU4MLfBrcZAWlFP
-         Qa/adfQ0pmzUCOSE9s1QwHPmMa9/XxEEMWTaW06DY+f8JM3AAuLlssbqGmD0TG6hY93v
-         kwwJVBmVImOHKpQryqXIbBN0Yz/I237/xO87gxOdwFzslFRjnS+FYJIQcTvG9HiGb+WX
-         H0uN4X6GofFaAemkyoi2WGP9NWfs+YB/Hu9HXd5/wdRKDVBjZ2PpLWEfkfRrJJFpU6kd
-         QW9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TrDQU0wSmJ6gbE5qWNC2HspX1mTvA/w61hnKamurULY=;
-        b=XCGWIvURetOc7HClPWMg/JkUM2bTV+/cQ1+FZSJcbv8/zXqJrvX1kMG++cWxyW7cT6
-         0TwaCcYM+Xj3jgvgZVsAZGwHcJG7uXD7nO86FjBC6D+hyZEzWjFVhfIqHW+oF4Z0y7k2
-         h2WGLLwiAg+HSFdhy4Bip9uRU0QPvwdYVJNDYL6ZpjYKYLbssEngltaNWZ+hPO7QPfp3
-         gcE0H0VJAEBPTalOFs723aVokcbtvbg/K6FHfWSblB+OOmv2oVq8+s8OTfMpzfxA7nsz
-         8kV599hveQbFigna2ADU954KGAEAdsiuYkMfhIOnt95gyF6mTf5z2oDsvnxs0lBz1s0H
-         U9kw==
-X-Gm-Message-State: AOAM530I1C0A6tGa5pjM0xgJ/kvY/0Kvygxa0VD8dDuBnqNJ4iU1UfCh
-        gHR2ax2FN6Y7j1m4QHNljsBHcqTzB97lDQ==
-X-Google-Smtp-Source: ABdhPJzPCX/BmaO5y5ccTenFCqI0tT7p3C7WedWxRly8fWyyPG9Kcsrdkf1zkVyjGuUFHnnYJ6inHQ==
-X-Received: by 2002:a05:6214:5a3:b0:42c:2c13:759c with SMTP id by3-20020a05621405a300b0042c2c13759cmr2687720qvb.20.1645113014138;
-        Thu, 17 Feb 2022 07:50:14 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id m5sm20092682qkp.132.2022.02.17.07.50.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 07:50:13 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nKj2q-0060gp-E5; Thu, 17 Feb 2022 11:50:12 -0400
-Date:   Thu, 17 Feb 2022 11:50:12 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/mmu_notifiers: use helper function
- mmu_notifier_synchronize()
-Message-ID: <20220217155012.GC1037534@ziepe.ca>
-References: <20220217110948.35477-1-linmiaohe@huawei.com>
+        Thu, 17 Feb 2022 10:51:36 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DE52B31BE;
+        Thu, 17 Feb 2022 07:51:06 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id EF95C210E3;
+        Thu, 17 Feb 2022 15:51:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645113064; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LKo/E9dyb7NvEEgMEIwh2cqUg6haJPksCBJCLqhDMjU=;
+        b=ouf+0/gMjnsv+G2TpNUu6NnOIcZYJuLjYA0H9ZFhuPjY66j1QWkTaRJpH5G1keqmO+9fzO
+        E9lzwz4lAHn5f5DGNHBMW/lQX1jO0VLkkfd0NBhvPktDEyxkEh0HplQrqhVqfPb53gANvY
+        qpZ47QsnmDeclIGjIetSU3j6z+Io2Jk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645113064;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LKo/E9dyb7NvEEgMEIwh2cqUg6haJPksCBJCLqhDMjU=;
+        b=AZY+n4sYyu3MEaw+aR/zNxThVPo665c7de5umURlu3dqC622zsI1ArRdJL+PJQ17Ii+LET
+        nOY6/dyN1LebGwDA==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 82D05A3B84;
+        Thu, 17 Feb 2022 15:51:04 +0000 (UTC)
+Date:   Thu, 17 Feb 2022 16:51:04 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Aaron Tomlin <atomlin@redhat.com>
+cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "ghalat@redhat.com" <ghalat@redhat.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "void@manifault.com" <void@manifault.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+Subject: Re: [PATCH v5 13/13] module: Move version support into a separate
+ file
+In-Reply-To: <CANfR36gVY+1k7YJy0fn1z+mGv-LqEmZJSvSHXn_BFR4WC+oJrQ@mail.gmail.com>
+Message-ID: <alpine.LSU.2.21.2202171648590.29121@pobox.suse.cz>
+References: <20220209171118.3269581-1-atomlin@redhat.com> <20220209171118.3269581-3-atomlin@redhat.com> <14a1678f-0c56-1237-c5c7-4ca1bac4b42a@csgroup.eu> <CANfR36gVY+1k7YJy0fn1z+mGv-LqEmZJSvSHXn_BFR4WC+oJrQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217110948.35477-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 07:09:48PM +0800, Miaohe Lin wrote:
-> Use helper function mmu_notifier_synchronize() to ensure all mmu_notifiers
-> are freed. Minor readability improvement.
+> > > +struct symsearch {
+> > > +    const struct kernel_symbol *start, *stop;
+> > > +    const s32 *crcs;
+> > > +    enum mod_license {
+> > > +        NOT_GPL_ONLY,
+> > > +        GPL_ONLY,
+> > > +    } license;
+> > > +};
+> >
+> > Why don't leave this in main.c ?
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/mmu_notifier.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+> Yes, struct 'symsearch' is not used outside of kernel/module/main.c.
 
-I'm not keen on this, the internal synchronize_srcu's don't have the
-same usage model as described in the comment for
-mmu_notifier_synchronize(). Instead they are doing what their comments
-say.
+It is not, but "struct find_symbol_arg", which you moved, uses "enum 
+mod_license" defined above, so you can either leave it as it is, or carve 
+"enum mod_license" definition out.
 
-Yes, it is the same code, but the purpose is different.
-
-Jason
+Miroslav

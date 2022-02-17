@@ -2,158 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EAE4B9BAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8654B9BB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238426AbiBQJGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 04:06:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39940 "EHLO
+        id S238408AbiBQJHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 04:07:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbiBQJGA (ORCPT
+        with ESMTP id S229824AbiBQJHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:06:00 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3907423DCFA;
-        Thu, 17 Feb 2022 01:05:47 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id p8so588348pfh.8;
-        Thu, 17 Feb 2022 01:05:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=USatb+AiRveRUIEu8ru5AbhgkcCKRQncgwcir0ybSxM=;
-        b=lP+xhGn4MzLMLL9Y04k8MQJY2LVZow/+7PJsY5hMqwwbzmuTj2+KFKdFfZfLL7Fqo7
-         Klsr4BK0ubgehql2kbCbTdM0x1Freq8XVzQYmDql1lnjmqnOOHw9WlyLRQvNjFV/6FzR
-         LDV7QEOD8jVBOlTU/bNrs4s+ZUyw9jLclZfOBv0gSAsIXwfHRoProZ11w0xxK9eZ287M
-         E0KNgwKWkbQE7QJ9xXKoTWYFhTzQ7S6p8mtx0b76ZBRii7rOTIFeZNeHy4Xh4WZfrxpx
-         qIHBWG8AnrWeWd9Jk6++3teQMMiJRXa3vk/jCH9DlW97BviwUZVy++orXOKV0VVYW8Do
-         r2sw==
+        Thu, 17 Feb 2022 04:07:19 -0500
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F83D3DA5D;
+        Thu, 17 Feb 2022 01:07:04 -0800 (PST)
+Received: by mail-pj1-f42.google.com with SMTP id k60-20020a17090a4cc200b001b932781f3eso5947774pjh.0;
+        Thu, 17 Feb 2022 01:07:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=USatb+AiRveRUIEu8ru5AbhgkcCKRQncgwcir0ybSxM=;
-        b=zQF6NWiZGUx8QgOfpo/se0dFn0pF4vAxW9QEDbfPP8d14pHCZXnEuzdMMfcB6Trgo2
-         gwtuRgVN+hS7QMRxbKC4UgsKfqdej+XXoyBTQO4arlUQCRanx8cVou2qJeD5U6u9Ew62
-         g2vuYoAV/cHT3jSYQ3biEg9NQoedg3nkRUJ2w0JrbiNABUb3O3PG1Sg1bBN8VcT9arnG
-         nDzZK/Aooc5uzjNTQlksF0WhXRZ7zx2MFXJwJ9otkSdbpUsUYK7FopQNvR3URyt6KFnQ
-         KsD/p9/nJfXxECEWLtjFQTMd4NBsp9NyJejvWUrN5tt9TnajfSeCA1kvu/c7etpGuVcw
-         4o4A==
-X-Gm-Message-State: AOAM532frbdhEOiQX6g6bpWHhEKpIdMnj9H9KhkjFHJyiRbZ1/q65Xd3
-        85ic9uBIn7K+JS2+Nt+lGUA=
-X-Google-Smtp-Source: ABdhPJw6ulGrJMLX8IlMQbeBsPM0OhoUXLbX/CMSV+maYTY7VemkFMRS5s82MFBgWQgiGnc7/xFAgQ==
-X-Received: by 2002:a63:e411:0:b0:342:a17:cad1 with SMTP id a17-20020a63e411000000b003420a17cad1mr1654903pgi.457.1645088746767;
-        Thu, 17 Feb 2022 01:05:46 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id 69sm7644601pgc.61.2022.02.17.01.05.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 01:05:46 -0800 (PST)
-Message-ID: <ebd57e6b-c4c4-cdd5-6bd0-c872f2e0382d@gmail.com>
-Date:   Thu, 17 Feb 2022 17:05:36 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH] KVM: x86/pmu: Distinguish EVENTSEL bitmasks for uniform
- event creation and filtering
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iHftRf/7i/XmxskSM/K/WPxANSIYGKixjpKz8MmDajM=;
+        b=vuV+ddM1WnKP/zToSazgQWPJkDnrkaTz2i/9W3bfVVNDfTCDXDVggn0lXY9Rfju1VB
+         PzMQthvj8FieqS/5RPprlIx5HmrVpanH1Oww4C3Ai6BpU+UbIW31dYiDxwzmp6b5zrTz
+         DJ1BigRjtEIj227Nh0QBEg5ZixFMJpbqXKHHGGaoKCcF9PIxwsX7VZ2tjGJh+L4Ml2s6
+         4KTyZwoDEcPZMKP3U+/xmXyriW/A1zPmsuPKoUv0THVFLqpXUpa73eUWdc4Vozz6LhOD
+         Qax6Pk4wwqvp+rzO34CcS2bcZ/gGJ9+erzkue2RXCOHEJ9wFE28cKXML4TfAjmcXl/kZ
+         RNIg==
+X-Gm-Message-State: AOAM5306rBSzja531hfpdY8T3NaVF9spkiosNdsMmblDNVYott+KeCCc
+        N6KlhzmH+pltFA2Lt5ZsRNk=
+X-Google-Smtp-Source: ABdhPJxA+Rn13F9gCou6v9WFyZVsRSarvAMjLejSWsOqgAvmd/WPGnRZiUrXO0c5nvf+XVq5Joo3eQ==
+X-Received: by 2002:a17:903:1c4:b0:14e:def5:e6bb with SMTP id e4-20020a17090301c400b0014edef5e6bbmr2015834plh.154.1645088823823;
+        Thu, 17 Feb 2022 01:07:03 -0800 (PST)
+Received: from garbanzo (136-24-173-63.cab.webpass.net. [136.24.173.63])
+        by smtp.gmail.com with ESMTPSA id n37sm7970590pgl.48.2022.02.17.01.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 01:07:03 -0800 (PST)
+Date:   Thu, 17 Feb 2022 01:07:00 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nitesh Shetty <nj.shetty@samsung.com>, hch@lst.de
+Cc:     javier@javigon.com, chaitanyak@nvidia.com,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, axboe@kernel.dk,
+        msnitzer@redhat.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, hare@suse.de, kbusch@kernel.org,
+        Frederick.Knight@netapp.com, osandov@fb.com,
+        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
+        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
+        jack@suse.com, joshi.k@samsung.com, arnav.dawn@samsung.com,
+        nitheshshetty@gmail.com, SelvaKumar S <selvakuma.s1@samsung.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-kernel@vger.kernel.org
-References: <20220210102603.42764-1-likexu@tencent.com>
- <CALMp9eQBzWUk2UBz3EP-YJizEypOnpL0whrmb1ttnFA8TNuspA@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <CALMp9eQBzWUk2UBz3EP-YJizEypOnpL0whrmb1ttnFA8TNuspA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 02/10] block: Introduce queue limits for copy-offload
+ support
+Message-ID: <20220217090700.b7n33vbkx5s4qbfq@garbanzo>
+References: <20220214080002.18381-1-nj.shetty@samsung.com>
+ <CGME20220214080605epcas5p16868dae515a6355cf9fecf22df4f3c3d@epcas5p1.samsung.com>
+ <20220214080002.18381-3-nj.shetty@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214080002.18381-3-nj.shetty@samsung.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/2/2022 10:09 pm, Jim Mattson wrote:
-> On Thu, Feb 10, 2022 at 2:26 AM Like Xu <like.xu.linux@gmail.com> wrote:
->>
->> From: Like Xu <likexu@tencent.com>
->>
->> The current usage of EVENTSEL_* macro is a mess in the KVM context. Partly
->> because we have a conceptual ambiguity when choosing to create a RAW or
->> HARDWARE event: when bits other than HARDWARE_EVENT_MASK are set,
->> the pmc_reprogram_counter() will use the RAW type.
->>
->> By introducing the new macro AMD64_EXTRA_EVENTSEL_EVENT to simplify,
->> the following three issues can be addressed in one go:
->>
->> - the 12 selection bits are used as comparison keys for allow or deny;
->> - NON_HARDWARE_EVENT_MASK is only used to determine if a HARDWARE
->>    event is programmed or not, a 12-bit selected event will be a RAW event;
->>    (jmattson helped report this issue)
->> - by reusing AMD64_RAW_EVENT_MASK, the extra 4 selection bits (if set) are
->>    passed to the perf correctly and not filtered out by X86_RAW_EVENT_MASK;.
->>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->>   arch/x86/include/asm/perf_event.h |  3 ++-
->>   arch/x86/kvm/pmu.c                | 11 ++++-------
->>   arch/x86/kvm/pmu.h                |  6 ++++++
->>   3 files changed, 12 insertions(+), 8 deletions(-)
->>
->> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
->> index 8fc1b5003713..bd068fd19043 100644
->> --- a/arch/x86/include/asm/perf_event.h
->> +++ b/arch/x86/include/asm/perf_event.h
->> @@ -43,8 +43,9 @@
->>   #define AMD64_EVENTSEL_INT_CORE_SEL_MASK               \
->>          (0xFULL << AMD64_EVENTSEL_INT_CORE_SEL_SHIFT)
->>
->> +#define AMD64_EXTRA_EVENTSEL_EVENT                             (0x0FULL << 32)
->>   #define AMD64_EVENTSEL_EVENT   \
->> -       (ARCH_PERFMON_EVENTSEL_EVENT | (0x0FULL << 32))
->> +       (ARCH_PERFMON_EVENTSEL_EVENT | AMD64_EXTRA_EVENTSEL_EVENT)
->>   #define INTEL_ARCH_EVENT_MASK  \
->>          (ARCH_PERFMON_EVENTSEL_UMASK | ARCH_PERFMON_EVENTSEL_EVENT)
->>
->> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
->> index 2c98f3ee8df4..99426a8d7f18 100644
->> --- a/arch/x86/kvm/pmu.c
->> +++ b/arch/x86/kvm/pmu.c
->> @@ -198,7 +198,8 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
->>
->>          filter = srcu_dereference(kvm->arch.pmu_event_filter, &kvm->srcu);
->>          if (filter) {
->> -               __u64 key = eventsel & AMD64_RAW_EVENT_MASK_NB;
->> +               __u64 key = eventsel & (INTEL_ARCH_EVENT_MASK |
->> +                                       AMD64_EXTRA_EVENTSEL_EVENT);
->>
->>                  if (bsearch(&key, filter->events, filter->nevents,
->>                              sizeof(__u64), cmp_u64))
->> @@ -209,18 +210,14 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
->>          if (!allow_event)
->>                  return;
->>
->> -       if (!(eventsel & (ARCH_PERFMON_EVENTSEL_EDGE |
->> -                         ARCH_PERFMON_EVENTSEL_INV |
->> -                         ARCH_PERFMON_EVENTSEL_CMASK |
->> -                         HSW_IN_TX |
->> -                         HSW_IN_TX_CHECKPOINTED))) {
->> +       if (!(eventsel & NON_HARDWARE_EVENT_MASK)) {
-> 
-> I still don't understand why we even bother doing this lookup in the
-> first place. What's wrong with simply requesting PERF_TYPE_RAW every
-> time?
+The subject says limits for copy-offload...
 
-Thanks for the constant chasing, I finally got a reply from Peterz:
-"think so; the HARDWARE is just a convenience wrapper over RAW IIRC".
+On Mon, Feb 14, 2022 at 01:29:52PM +0530, Nitesh Shetty wrote:
+> Add device limits as sysfs entries,
+>         - copy_offload (RW)
+>         - copy_max_bytes (RW)
+>         - copy_max_hw_bytes (RO)
+>         - copy_max_range_bytes (RW)
+>         - copy_max_range_hw_bytes (RO)
+>         - copy_max_nr_ranges (RW)
+>         - copy_max_nr_ranges_hw (RO)
 
-Let me take this step and clean it up a bit.
+Some of these seem like generic... and also I see a few more max_hw ones
+not listed above...
+
+> --- a/block/blk-settings.c
+> +++ b/block/blk-settings.c
+> +/**
+> + * blk_queue_max_copy_sectors - set max sectors for a single copy payload
+> + * @q:  the request queue for the device
+> + * @max_copy_sectors: maximum number of sectors to copy
+> + **/
+> +void blk_queue_max_copy_sectors(struct request_queue *q,
+> +		unsigned int max_copy_sectors)
+> +{
+> +	q->limits.max_hw_copy_sectors = max_copy_sectors;
+> +	q->limits.max_copy_sectors = max_copy_sectors;
+> +}
+> +EXPORT_SYMBOL(blk_queue_max_copy_sectors);
+
+Please use EXPORT_SYMBOL_GPL() for all new things.
+
+Why is this setting both? The documentation does't seem to say.
+What's the point?
+
+> +
+> +/**
+> + * blk_queue_max_copy_range_sectors - set max sectors for a single range, in a copy payload
+> + * @q:  the request queue for the device
+> + * @max_copy_range_sectors: maximum number of sectors to copy in a single range
+> + **/
+> +void blk_queue_max_copy_range_sectors(struct request_queue *q,
+> +		unsigned int max_copy_range_sectors)
+> +{
+> +	q->limits.max_hw_copy_range_sectors = max_copy_range_sectors;
+> +	q->limits.max_copy_range_sectors = max_copy_range_sectors;
+> +}
+> +EXPORT_SYMBOL(blk_queue_max_copy_range_sectors);
+
+Same here.
+
+> +/**
+> + * blk_queue_max_copy_nr_ranges - set max number of ranges, in a copy payload
+> + * @q:  the request queue for the device
+> + * @max_copy_nr_ranges: maximum number of ranges
+> + **/
+> +void blk_queue_max_copy_nr_ranges(struct request_queue *q,
+> +		unsigned int max_copy_nr_ranges)
+> +{
+> +	q->limits.max_hw_copy_nr_ranges = max_copy_nr_ranges;
+> +	q->limits.max_copy_nr_ranges = max_copy_nr_ranges;
+> +}
+> +EXPORT_SYMBOL(blk_queue_max_copy_nr_ranges);
+
+Same.
+
+> +
+>  /**
+>   * blk_queue_max_write_same_sectors - set max sectors for a single write same
+>   * @q:  the request queue for the device
+> @@ -541,6 +592,14 @@ int blk_stack_limits(struct queue_limits *t, struct queue_limits *b,
+>  	t->max_segment_size = min_not_zero(t->max_segment_size,
+>  					   b->max_segment_size);
+>  
+> +	t->max_copy_sectors = min(t->max_copy_sectors, b->max_copy_sectors);
+> +	t->max_hw_copy_sectors = min(t->max_hw_copy_sectors, b->max_hw_copy_sectors);
+> +	t->max_copy_range_sectors = min(t->max_copy_range_sectors, b->max_copy_range_sectors);
+> +	t->max_hw_copy_range_sectors = min(t->max_hw_copy_range_sectors,
+> +						b->max_hw_copy_range_sectors);
+> +	t->max_copy_nr_ranges = min(t->max_copy_nr_ranges, b->max_copy_nr_ranges);
+> +	t->max_hw_copy_nr_ranges = min(t->max_hw_copy_nr_ranges, b->max_hw_copy_nr_ranges);
+> +
+>  	t->misaligned |= b->misaligned;
+>  
+>  	alignment = queue_limit_alignment_offset(b, start);
+> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+> index 9f32882ceb2f..9ddd07f142d9 100644
+> --- a/block/blk-sysfs.c
+> +++ b/block/blk-sysfs.c
+> @@ -212,6 +212,129 @@ static ssize_t queue_discard_zeroes_data_show(struct request_queue *q, char *pag
+>  	return queue_var_show(0, page);
+>  }
+>  
+> +static ssize_t queue_copy_offload_show(struct request_queue *q, char *page)
+> +{
+> +	return queue_var_show(blk_queue_copy(q), page);
+> +}
+> +
+> +static ssize_t queue_copy_offload_store(struct request_queue *q,
+> +				       const char *page, size_t count)
+> +{
+> +	unsigned long copy_offload;
+> +	ssize_t ret = queue_var_store(&copy_offload, page, count);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (copy_offload && !q->limits.max_hw_copy_sectors)
+> +		return -EINVAL;
+
+
+If the kernel schedules, copy_offload may still be true and
+max_hw_copy_sectors may be set to 0. Is that an issue?
+
+> +
+> +	if (copy_offload)
+> +		blk_queue_flag_set(QUEUE_FLAG_COPY, q);
+> +	else
+> +		blk_queue_flag_clear(QUEUE_FLAG_COPY, q);
+
+The flag may be set but the queue flag could be set. Is that an issue?
+
+> @@ -597,6 +720,14 @@ QUEUE_RO_ENTRY(queue_nr_zones, "nr_zones");
+>  QUEUE_RO_ENTRY(queue_max_open_zones, "max_open_zones");
+>  QUEUE_RO_ENTRY(queue_max_active_zones, "max_active_zones");
+>  
+> +QUEUE_RW_ENTRY(queue_copy_offload, "copy_offload");
+> +QUEUE_RO_ENTRY(queue_copy_max_hw, "copy_max_hw_bytes");
+> +QUEUE_RW_ENTRY(queue_copy_max, "copy_max_bytes");
+> +QUEUE_RO_ENTRY(queue_copy_range_max_hw, "copy_max_range_hw_bytes");
+> +QUEUE_RW_ENTRY(queue_copy_range_max, "copy_max_range_bytes");
+> +QUEUE_RO_ENTRY(queue_copy_nr_ranges_max_hw, "copy_max_nr_ranges_hw");
+> +QUEUE_RW_ENTRY(queue_copy_nr_ranges_max, "copy_max_nr_ranges");
+
+Seems like you need to update Documentation/ABI/stable/sysfs-block.
+
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index efed3820cbf7..792e6d556589 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -254,6 +254,13 @@ struct queue_limits {
+>  	unsigned int		discard_alignment;
+>  	unsigned int		zone_write_granularity;
+>  
+> +	unsigned long		max_hw_copy_sectors;
+> +	unsigned long		max_copy_sectors;
+> +	unsigned int		max_hw_copy_range_sectors;
+> +	unsigned int		max_copy_range_sectors;
+> +	unsigned short		max_hw_copy_nr_ranges;
+> +	unsigned short		max_copy_nr_ranges;
+
+Before limits start growing more.. I wonder if we should just
+stuff hw offload stuff to its own struct within queue_limits.
+
+Christoph?
+
+  Luis

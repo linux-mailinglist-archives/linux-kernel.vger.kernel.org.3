@@ -2,46 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01E64BAB5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B8B4BAB62
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243706AbiBQU7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 15:59:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51848 "EHLO
+        id S243796AbiBQVAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 16:00:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbiBQU7H (ORCPT
+        with ESMTP id S234111AbiBQVAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 15:59:07 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DD637BC2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:58:52 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id EDD991C0B7F; Thu, 17 Feb 2022 21:58:50 +0100 (CET)
-Date:   Thu, 17 Feb 2022 21:58:50 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Daniel Wagner <wagi@monom.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Pavel Machek <pavel@denx.de>
-Subject: Re: [ANNOUNCE] 4.4.302-rt232 (END OF LIFE)
-Message-ID: <20220217205850.GA21437@duo.ucw.cz>
-References: <164396730424.21109.15121913505546223213@beryllium.lan>
+        Thu, 17 Feb 2022 16:00:12 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A29143AC9;
+        Thu, 17 Feb 2022 12:59:57 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HKlaip001166;
+        Thu, 17 Feb 2022 20:59:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=sXxrg1nnA6V/+9tvPqjzYCuForvG+Pxuis9Zb8uZPVo=;
+ b=ROSu79jrqHiAQu6G7CniKEMvVO4Q9XiiYhNZERcG7dOXH5CnJqsDzq1t+YfpHveWQd4q
+ QoEL/uqS1scMoGv2OiCISofLG0HK+obQ+i/MjAGaC532mqhuDmewcvE08k7PBeiGUiZL
+ 0ksu+ej5cOHLJpEaWs2ZwKk61fXV1s12Vzix1lkwPNEiUovEl1vLqwmJtKYtOce1XBik
+ +u2wHLb7kDrwLTPwa1OtvpRJFpFtHptuO8WQ8Hiu4NdSYXbi10fT1TeqJ4fhbvLrTCQM
+ gQUsaSMOk8cxKTO2YSTAcUQR14xBA9zU2LGpeViWU1gEIY8SPApweQuUfQB2yyBXAP8x Jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e9wq986b3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 20:59:38 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21HKxcJj008044;
+        Thu, 17 Feb 2022 20:59:38 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e9wq986ap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 20:59:38 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21HKwUnT012424;
+        Thu, 17 Feb 2022 20:59:37 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03dal.us.ibm.com with ESMTP id 3e64hd9j5g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 20:59:37 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21HKxYAP39321996
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Feb 2022 20:59:34 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 540F278063;
+        Thu, 17 Feb 2022 20:59:34 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A21497805E;
+        Thu, 17 Feb 2022 20:59:31 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Feb 2022 20:59:31 +0000 (GMT)
+Message-ID: <95a9eb64-654b-8d34-12c7-1dd7666e3420@linux.ibm.com>
+Date:   Thu, 17 Feb 2022 15:59:31 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="EeQfGwPcQSOJBaQU"
-Content-Disposition: inline
-In-Reply-To: <164396730424.21109.15121913505546223213@beryllium.lan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 11/27] ima: Move ima_lsm_policy_notifier into
+ ima_namespace
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+ <20220201203735.164593-12-stefanb@linux.ibm.com>
+ <62f946ec160296b6b20bee98986b2bafb8427718.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <62f946ec160296b6b20bee98986b2bafb8427718.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rZdlAmARqLRt4rmnC_GLL3UJ5QGadeEV
+X-Proofpoint-ORIG-GUID: oYsipj6pGyMGcY9bOtEd_CZzHrqr7wPh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-17_08,2022-02-17_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 phishscore=0 clxscore=1015 mlxlogscore=999
+ impostorscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202170093
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,55 +104,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---EeQfGwPcQSOJBaQU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2/17/22 15:30, Mimi Zohar wrote:
+> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+>
+> The builtin IMA policy rules are broad and may be constrained by
+> loading a custom policy, which could be defined in terms of LSM labels.
+> When an LSM policy is loaded, existing LSM labels might be affected or
+> even removed.  In either case, IMA policy rules based on LSM
+> labels, need to reflect these changes.  If an LSM label is removed,
+> instead of deleting the IMA policy rule based on the LSM label, the IMA
+> policy rule is made inactive.
 
-Hi!
+Ok, so I take this paragraph for the patch description.
 
-> This is an update to the v4.4 stable update[1]. No RT specific changes.
->=20
-> The v4.4-rt branch is END OF LIFE. There wont be any v4.4-rt updates
-> from the stable-rt community anymore as the stable v4.4 branch reached
-> END OF LIFE as well. As Greg indicated the CIP project is considering to
-> support v4.4 a bit longer.
 
-That's correct. We'll maintain 4.4 and 4.4-rt going forward, at least
-on hardware our members care about.
+>
+>> Move the ima_lsm_policy_notifier into the ima_namespace. Each IMA
+>> namespace can now register its own LSM policy change notifier callback.
+>> The policy change notifier for the init_ima_ns still remains in init_ima()
+>> and therefore handle the registration of the callback for all other
+>> namespaces in init_ima_namespace().
+>>
+>> Suppress the kernel warning 'rule for LSM <label> is undefined` for all
+>> other IMA namespaces than the init_ima_ns.
+> Instead of ignoring the warnings totally, perhaps use either the
+> "ratelimited" or "once" function options for non init_ima_ns.  It would
+> be nice if these functions could be namespace aware, so that each
+> affected IMA namespace would contain at least one warning.
 
-CIP project is committed to maintain 4.4.x kernel till January of 2027
-[1]. We are maintaining -cip branch [2], that is stable kernel with about
-1000 of patches to support our reference hardware [3] and -cip-rt
-branch, with is merge of -rt and -cip trees.
+The problem is that any user can now repeatedly create user namespaces 
+and with that IMA namespaces and cause the kernel log to fill up with 
+these messages and also flood the audit log -- I guess one could 
+describe it as an unwanted side-effect. I am afraid that for as long as 
+the kernel log is not namespaced it's probably best to just turn them 
+off for non-init_ima_ns.
 
-If you for some reason need 4.4.x with bug and security fixes, and are
-running similar hardware to our reference hardware (x86-64 and armv7),
--cip tree may be good base for that work. Testing of the -cip tree is
-welcome, as is joining the CIP project.
 
-[1] https://wiki.linuxfoundation.org/civilinfrastructureplatform/start
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/log/?=
-h=3Dlinux-4.4.y-cip-rt
-[3] https://wiki.linuxfoundation.org/civilinfrastructureplatform/ciptesting=
-/cipreferencehardware
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Thanks.
+>
+>> ---
+>> v10:
+>>   - Only call pr_warn('rule for LSM <label> is undefined`) for init_ima_ns
+>> ---
+>>   security/integrity/ima/ima.h             |  2 ++
+>>   security/integrity/ima/ima_init_ima_ns.c | 14 ++++++++++++++
+>>   security/integrity/ima/ima_main.c        |  6 +-----
+>>   security/integrity/ima/ima_policy.c      | 16 ++++++++++------
+>>   4 files changed, 27 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index 94c6e3a4d666..fb6bd054d899 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -144,6 +144,8 @@ struct ima_namespace {
+>>   	int valid_policy;
+>>   
+>>   	struct dentry *ima_policy;
+>> +
+>> +	struct notifier_block ima_lsm_policy_notifier;
+>>   } __randomize_layout;
+>>   extern struct ima_namespace init_ima_ns;
+>>   
+>> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
+>> index 425eed1c6838..1cba545ae477 100644
+>> --- a/security/integrity/ima/ima_init_ima_ns.c
+>> +++ b/security/integrity/ima/ima_init_ima_ns.c
+>> @@ -10,6 +10,8 @@
+>>   
+>>   static int ima_init_namespace(struct ima_namespace *ns)
+>>   {
+>> +	int rc;
+>> +
+> There's no right or wrong, but the newer IMA code uses 'ret'.
 
-?
 
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+I don't mind to change it. I will take your Reviewed-by, though :-)
 
---EeQfGwPcQSOJBaQU
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYg63CgAKCRAw5/Bqldv6
-8qJLAJ4i2mB1+SbWVVhqYU1RViC7+vcHFwCgnL0nNMSa73k8Sx9y/4krYpVNDcw=
-=MqB2
------END PGP SIGNATURE-----
-
---EeQfGwPcQSOJBaQU--
+>
+>>   	INIT_LIST_HEAD(&ns->ima_default_rules);
+>>   	INIT_LIST_HEAD(&ns->ima_policy_rules);
+>>   	INIT_LIST_HEAD(&ns->ima_temp_rules);

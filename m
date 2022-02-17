@@ -2,200 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01984B9A1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD5E4B9A23
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbiBQHuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 02:50:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52364 "EHLO
+        id S236724AbiBQHve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 02:51:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236673AbiBQHuw (ORCPT
+        with ESMTP id S233057AbiBQHvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:50:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A2E52A39EE
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 23:50:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645084237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w+SWlmqdTXW/vwpa/W1PTCZvRCAVwOXfVJtRO06yo4I=;
-        b=i2rL9DXKEnjnfpAazslJZkk1JT1YdIDASkVxmRvhTUKZt5dYgkDNB/Bu9FZroYw9pSU15+
-        R8aK81n2+S+dYOK1lhyacuaZBrvGohz4vwpA5oyVGAXzNDsCJbb+/mOSSeoZINCq5aZgrI
-        hEJcJZAwVj0Qzh1dwmMJEaMiOAnqtNc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-JgmgxhVUMS-urnCPLAsKrQ-1; Thu, 17 Feb 2022 02:50:35 -0500
-X-MC-Unique: JgmgxhVUMS-urnCPLAsKrQ-1
-Received: by mail-wm1-f69.google.com with SMTP id v130-20020a1cac88000000b0037e3d70e7e1so1097531wme.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 23:50:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w+SWlmqdTXW/vwpa/W1PTCZvRCAVwOXfVJtRO06yo4I=;
-        b=JbB0vl4OpS9U6qUDhkIEftmQZSqSOxXUpad4YAnxQrnj083JlrlCb50YXX0h+DEXh6
-         ujM495UVqzNO6AYpqGn1uKVuD3MMacC31lqItCnM3iNvJV9zTaJk9A0HUHvIAAj1WW/E
-         tLKFSqc6mxPD+4/FvAmurEOQyoYCq9oojidM7dKPu3OItjpAtVlbUCv1SrQGa7EpntvS
-         x3Qw0LzyzOS7SyuDimYgnCxog/KHxR6rwC9pgT4caXkmN+/WbdgNZrJhT7Ul15A4iKIb
-         ah6wAB0sEgliN1sPwGy7vTFN19NzGZaA2tsezVbrtaFBnjuspEgA2uGbcCjVXp1Q6upy
-         0n/Q==
-X-Gm-Message-State: AOAM533ueKCnhh1dxdSIezZp7KiQR6vjuF1qfJSKw8EQxJLwY2TgN5Ad
-        nkqlIQvakp2YM0ocE+gyjjDhOuVV7BqANzz++4HoNZ+B9yKmXGyjaaSLsm5rsgdKzORm9ngSw7o
-        7QJaBPZx2NnTRC0m/EirXwM+0
-X-Received: by 2002:adf:9f42:0:b0:1e7:e751:9656 with SMTP id f2-20020adf9f42000000b001e7e7519656mr1268881wrg.590.1645084233485;
-        Wed, 16 Feb 2022 23:50:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw57VwM/1catFUUkrmi2KhjRFil7J/w4QZrPWIsW6CqSvS4FYyAAEPbPH6XyQzZ/Q25yrD01w==
-X-Received: by 2002:adf:9f42:0:b0:1e7:e751:9656 with SMTP id f2-20020adf9f42000000b001e7e7519656mr1268862wrg.590.1645084233179;
-        Wed, 16 Feb 2022 23:50:33 -0800 (PST)
-Received: from redhat.com ([2.55.139.83])
-        by smtp.gmail.com with ESMTPSA id g12sm469088wmq.28.2022.02.16.23.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 23:50:32 -0800 (PST)
-Date:   Thu, 17 Feb 2022 02:50:29 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     syzbot <syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com>,
-        kvm <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, syzkaller-bugs@googlegroups.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [syzbot] WARNING in vhost_dev_cleanup (2)
-Message-ID: <20220217024359-mutt-send-email-mst@kernel.org>
-References: <0000000000006f656005d82d24e2@google.com>
- <CACGkMEsyWBBmx3g613tr97nidHd3-avMyO=WRxS8RpcEk7j2=A@mail.gmail.com>
- <20220217023550-mutt-send-email-mst@kernel.org>
- <CACGkMEtuL_4eRYYWd4aQj6rG=cJDQjjr86DWpid3o_N-6xvTWQ@mail.gmail.com>
+        Thu, 17 Feb 2022 02:51:31 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7772A39DC;
+        Wed, 16 Feb 2022 23:51:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=u1UboIw5kGkVdPuUhtG8b4T+LJ8PQWL40XhaSlt14m4=; b=pNOfS7XsMhXEaBeAwnafjh5qsU
+        JlN5Qe8tsXihYVnxPMYIAr3y6MKoCWQ4EWPGuJSxmVxc0zPwTiQLD9m9pAZogLBXbcs8HsFZ/r6Gv
+        wxdYHrQ3QWM/VTK7CF0FFu9uFc+gX5SF0kto5pJllOistfG7YwrEluKs/SFz5TUWMK5Wv6vMEQDNO
+        sTOkjFz4B02Ib2PfAr9V9c5GSswKJxWUcDKVgdr65lh1Kn+g8QvOZ6AcYOcq1D1/l4QTW/hPUZ8zv
+        NCFmpvdMHO86sYCflSeFHa9R56ZF/CI/G1Ntp7UKjJ/RBVfjsVo9GMeaDSJTYudElSjbY+G8Uohd1
+        AQiqKc5A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKbZE-009GtV-Ss; Thu, 17 Feb 2022 07:51:08 +0000
+Date:   Wed, 16 Feb 2022 23:51:08 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Zhen Ni <nizhen@uniontech.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>
+Subject: Re: [PATCH v3 0/8] sched: Move a series of sysctls starting with
+ sys/kernel/sched_*
+Message-ID: <Yg3+bAQKVX+Dj317@bombadil.infradead.org>
+References: <20220215114604.25772-1-nizhen@uniontech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACGkMEtuL_4eRYYWd4aQj6rG=cJDQjjr86DWpid3o_N-6xvTWQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220215114604.25772-1-nizhen@uniontech.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 03:39:48PM +0800, Jason Wang wrote:
-> On Thu, Feb 17, 2022 at 3:36 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Thu, Feb 17, 2022 at 03:34:13PM +0800, Jason Wang wrote:
-> > > On Thu, Feb 17, 2022 at 10:01 AM syzbot
-> > > <syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    c5d9ae265b10 Merge tag 'for-linus' of git://git.kernel.org..
-> > > > git tree:       upstream
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=132e687c700000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=1e3ea63db39f2b4440e0
-> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > >
-> > > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > >
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
-> > > >
-> > > > WARNING: CPU: 1 PID: 10828 at drivers/vhost/vhost.c:715 vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
-> > > > Modules linked in:
-> > > > CPU: 0 PID: 10828 Comm: syz-executor.0 Not tainted 5.17.0-rc4-syzkaller-00051-gc5d9ae265b10 #0
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > > > RIP: 0010:vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
-> > >
-> > > Probably a hint that we are missing a flush.
-> > >
-> > > Looking at vhost_vsock_stop() that is called by vhost_vsock_dev_release():
-> > >
-> > > static int vhost_vsock_stop(struct vhost_vsock *vsock)
-> > > {
-> > > size_t i;
-> > >         int ret;
-> > >
-> > >         mutex_lock(&vsock->dev.mutex);
-> > >
-> > >         ret = vhost_dev_check_owner(&vsock->dev);
-> > >         if (ret)
-> > >                 goto err;
-> > >
-> > > Where it could fail so the device is not actually stopped.
-> > >
-> > > I wonder if this is something related.
-> > >
-> > > Thanks
-> >
-> >
-> > But then if that is not the owner then no work should be running, right?
-> 
-> Could it be a buggy user space that passes the fd to another process
-> and changes the owner just before the mutex_lock() above?
-> 
-> Thanks
+On Tue, Feb 15, 2022 at 07:45:56PM +0800, Zhen Ni wrote:
+> move a series of sysctls starting with sys/kernel/sched_* and use the
+> new register_sysctl_init() to register the sysctl interface.
 
-Maybe, but can you be a bit more explicit? what is the set of
-conditions you see that can lead to this?
+Peter, Andrew,
 
+I'm starting to get more sysctl patches under kernel/ other than the
+scheduler. To avoid low quality patches, try to see proactively what
+conflicts may lie ahead, ensure everything is applies on linux-next,
+and to ensure all this gets baked through 0-day for a while, I'm
+going to shove all pending patches into a sysctl-next branch based on
+Linus' tree.
 
-> >
-> >
-> > >
-> > > > Code: c7 85 90 01 00 00 00 00 00 00 e8 53 6e a2 fa 48 89 ef 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e 41 5f e9 7d d6 ff ff e8 38 6e a2 fa <0f> 0b e9 46 ff ff ff 48 8b 7c 24 10 e8 87 00 ea fa e9 75 f7 ff ff
-> > > > RSP: 0018:ffffc9000fe6fa18 EFLAGS: 00010293
-> > > > RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-> > > > RDX: ffff888021b63a00 RSI: ffffffff86d66fe8 RDI: ffff88801cc200b0
-> > > > RBP: ffff88801cc20000 R08: 0000000000000001 R09: 0000000000000001
-> > > > R10: ffffffff817f1e08 R11: 0000000000000000 R12: ffff88801cc200d0
-> > > > R13: ffff88801cc20120 R14: ffff88801cc200d0 R15: 0000000000000002
-> > > > FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > CR2: 0000001b2de25000 CR3: 000000004c9cd000 CR4: 00000000003506f0
-> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > Call Trace:
-> > > >  <TASK>
-> > > >  vhost_vsock_dev_release+0x36e/0x4b0 drivers/vhost/vsock.c:771
-> > > >  __fput+0x286/0x9f0 fs/file_table.c:313
-> > > >  task_work_run+0xdd/0x1a0 kernel/task_work.c:164
-> > > >  exit_task_work include/linux/task_work.h:32 [inline]
-> > > >  do_exit+0xb29/0x2a30 kernel/exit.c:806
-> > > >  do_group_exit+0xd2/0x2f0 kernel/exit.c:935
-> > > >  get_signal+0x45a/0x2490 kernel/signal.c:2863
-> > > >  arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
-> > > >  handle_signal_work kernel/entry/common.c:148 [inline]
-> > > >  exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
-> > > >  exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
-> > > >  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
-> > > >  syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
-> > > >  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
-> > > >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > > RIP: 0033:0x7f4027a46481
-> > > > Code: Unable to access opcode bytes at RIP 0x7f4027a46457.
-> > > > RSP: 002b:00007f402808ba68 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
-> > > > RAX: fffffffffffffffc RBX: 00007f402622e700 RCX: 00007f4027a46481
-> > > > RDX: 00007f402622e9d0 RSI: 00007f402622e2f0 RDI: 00000000003d0f00
-> > > > RBP: 00007f402808bcb0 R08: 00007f402622e700 R09: 00007f402622e700
-> > > > R10: 00007f402622e9d0 R11: 0000000000000206 R12: 00007f402808bb1e
-> > > > R13: 00007f402808bb1f R14: 00007f402622e300 R15: 0000000000022000
-> > > >  </TASK>
-> > > >
-> > > >
-> > > > ---
-> > > > This report is generated by a bot. It may contain errors.
-> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > > >
-> > > > syzbot will keep track of this issue. See:
-> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > >
-> >
+I think it doesn't make sense now to just say, do this for sched for one
+release. I think we need to get these more widely tested in a faster
+way, and to get conflicts ironed out faster too.
 
+Are you folks OK if say Stephen adds a sysctl-next for linux-next so
+we can beat on these there too?
+
+FWIW queued on sysctl-next [0].
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-next
+
+  Luis

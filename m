@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D094BA737
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBD54BA734
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242565AbiBQRfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:35:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52994 "EHLO
+        id S243753AbiBQRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:33:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242741AbiBQRfa (ORCPT
+        with ESMTP id S243739AbiBQRd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:35:30 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03452B04A8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:35:14 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id d27so10321252wrb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:35:14 -0800 (PST)
+        Thu, 17 Feb 2022 12:33:56 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F41732F3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:33:41 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id i5so383252oih.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:33:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oRCdZMkcIxUVwSBHB2GWnc1ofQ7iJSL4NNdZG9r2K80=;
-        b=yVPMfbJXCzijsV9omxwJJqtvi55kkbE7UpdaTvDW2xNhDj8fj5VM+6It4OPqheRa7a
-         030lFLNJ8Re36ILZ29C136bNfxln+msk91I3OaFUo+LUcU6o+BOdA7pHZZSM7r3MACLT
-         I4CCkfC1w4W61vwgtPoCrSKiAJs9EDIEKI+oGLqtPB4jPjbhUsdvL0GXSRk43hEN+Ily
-         kY6MaFUim0MSFQlvbazbsfGmkHNXDUzXg7mfAm/gTll9PtYQyyHXmR/XhJY972oVvTHz
-         Qqm+LLEDge1qzecchv1h5lefsAkZLWswGIUANIN4Sn8pOagJWgFVH7zeLd2ZDbmZhydD
-         s7Ug==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cHjzJ4tu0iwWERzLvjnOhK3bm3Iy4LFFoOV9TvsEMeo=;
+        b=nrmepXRcU1iuIEYOOb/8DbGk26nvYN+q39+L6353I7F1sNluHZiARO+PnrTMRyzkKC
+         3trnT3Kwex55q3fhQe/HiF2jHqC+2xqPpXyFFkVLlApay/uCAux1lEuNF2L3S32+d5m5
+         LE5Ss4YYW2KCQPK4AgPTNe9Yuf8D+LNzyg3omuayIGLgbsm47fi5wl+DDTJOAf8HPF83
+         FxCYviAThgU93iw8jyYf617FeOuVbBdKuE406v+E2OJiABXa75S5sNqVD6g0dkjD9bXP
+         BQaQdNiQJqtXAEVeksTq0VK/QqHZfVJi4mtyv9EHVXZ+GAdLs00BHqytZgu2uXhIWyOw
+         leDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oRCdZMkcIxUVwSBHB2GWnc1ofQ7iJSL4NNdZG9r2K80=;
-        b=v3HKMg8RyP4Sf543cILZ92/b/Jx48xBageMF42NsM8hG6Etw3XDFh1YAJpyE99tBRm
-         iRaVc8SEixYBnSmRYCeLbnMaSvzkcyax5lCN0zQeayD1RLwVGCRlwrw30+ov3xs+E6yh
-         EjHpR4jKpVd4IbeEPEFL1zp3kYMmVmyfUZQuzxciGFQekhhNxf4OWuUNiVNjtJEBW4Sj
-         UMaFIQxtPeqCqbbymJx7IbL8hpIKV1RXA6vWG3oC5W/tKZkgYRYY8InIBqCxZzPMaBgF
-         uvt7k0S3rRTlX4GclvnaF3T8EX8MDv/EIEp+0hpzvaL8KXvRRC8YhsYKC74KJ0u1nsXa
-         zbDA==
-X-Gm-Message-State: AOAM533DoLSo7rIlFKJKlyGNJU8wTw0VOJKAzLghgtSyn4DvNDlxWLlQ
-        UrbQRz3LA7Q+V7OSbSqgRZ3N6jQMOtLwfXgQmF6hNA==
-X-Google-Smtp-Source: ABdhPJwV2rypE1JfqTqxxGZ7Jeeva6Vt8AVtID5UxRkwrmKUUJ7vpDOvWrVUiMg4nt9wYvuOunxceOUvKIlTpzlqVek=
-X-Received: by 2002:adf:d4c7:0:b0:1e3:31ae:fd49 with SMTP id
- w7-20020adfd4c7000000b001e331aefd49mr3059989wrk.519.1645119313382; Thu, 17
- Feb 2022 09:35:13 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cHjzJ4tu0iwWERzLvjnOhK3bm3Iy4LFFoOV9TvsEMeo=;
+        b=KqVxJY6JZ/eLpYGsjQEk0WKnjBIxOvI928xV3U2M5KX1oFX6gw+kvcYpHsIdbucIiJ
+         bsezPzdmoD5RImrpUSYQZIl/yhfSeNd4Jsq02/vpM0uyXKdzNL3zhnXbN/dDmoiHc3+k
+         AHXsvGGtArU3jgrQkREtCOFN05Z7gfuxH0XfqrAtVwQdIyQ2C8IAJ/NDUCv1K93Nalyx
+         t/iyUuHmhB66gwPY0PF509tbCjvx60GRQ4+U5WBkVCE7GZImKDu1mSMtoFUF+gctL7Ig
+         V/8XIBMeWHmgXiGIQopsqNs8CeHrYxrHrQ6lUKPp/Wv8MywqOqP10j8ru2zPCgbYqhXH
+         GD2Q==
+X-Gm-Message-State: AOAM531/kzW9sM9SkvxjUye/3O3666EFKPqiTxLltOPaCDG1MjFsVPew
+        i+vYpS+5sK7eoImw3mTU0HmSXg==
+X-Google-Smtp-Source: ABdhPJx4+RwrrWNNQzsWdj2ES3Ot+nHFgEONSR6Dy57JbnogPDlZoiTE2j/fuilrFVHCHUlDAHRIvA==
+X-Received: by 2002:aca:5a86:0:b0:2ce:6ee7:2caa with SMTP id o128-20020aca5a86000000b002ce6ee72caamr3158348oib.216.1645119220870;
+        Thu, 17 Feb 2022 09:33:40 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id 128sm163526oor.15.2022.02.17.09.33.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 09:33:40 -0800 (PST)
+Date:   Thu, 17 Feb 2022 09:35:47 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Minnekhanov <alexeymin@postmarketos.org>
+Subject: Re: [PATCH v5] i2c: qcom-geni: Add support for GPI DMA
+Message-ID: <Yg6Hc2pT8DFKS2dT@ripper>
+References: <20220131120403.2481995-1-vkoul@kernel.org>
 MIME-Version: 1.0
-References: <20220209105706.18852-1-quic_jinlmao@quicinc.com> <20220209105706.18852-3-quic_jinlmao@quicinc.com>
-In-Reply-To: <20220209105706.18852-3-quic_jinlmao@quicinc.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 17 Feb 2022 17:35:02 +0000
-Message-ID: <CAJ9a7Vj2eZOD-2v5Y+CPgBZiDsAw39N8YFK3xX4sozc1Rs1D=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 02/10] coresight: Use bitmap to assign trace id to the sources
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131120403.2481995-1-vkoul@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,164 +74,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon 31 Jan 04:04 PST 2022, Vinod Koul wrote:
 
-On Wed, 9 Feb 2022 at 10:57, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
->
-> Except from STM and ETM/ETE, there could be other sources. Each
-> source needs a unique trace id. Define a bitmap for the trace ids.
-> The position of each bit represents trace id of the source.
->
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> QUP Serial engines supports data transfers thru FIFO mode, SE DMA mode and
+> lastly GPI DMA mode. Former two are already supported and this adds supports the
+> last mode.
+> 
+> In GPI DMA mode, the firmware is issued commands by driver to perform DMA
+> and setup the serial port.
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > ---
->  drivers/hwtracing/coresight/coresight-core.c | 48 ++++++++++++++++++++
->  include/linux/coresight-pmu.h                | 11 +++++
->  2 files changed, 59 insertions(+)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index a90097f88425..6cb55c3f41d5 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -16,6 +16,7 @@
->  #include <linux/mutex.h>
+> 
+> Changes since v4:
+>  - Fix buildbot warn
+>  - Fix flase warn reported by Alexey
+>  - Fix feedback from Bjorn and cleanup the probe code and add more details
+>    in changelog
+> 
+> Changes since v3:
+>  - remove separate tx and rx function for gsi dma and make a common one
+>  - remove global structs and use local variables instead
+> 
+>  drivers/i2c/busses/i2c-qcom-geni.c | 300 ++++++++++++++++++++++++++---
+>  1 file changed, 273 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 6d635a7c104c..696253d178a6 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -3,7 +3,9 @@
+>  
+>  #include <linux/acpi.h>
 >  #include <linux/clk.h>
->  #include <linux/coresight.h>
-> +#include <linux/coresight-pmu.h>
-
-see my comment below about using coresigh-priv.h
-
->  #include <linux/of_platform.h>
->  #include <linux/delay.h>
->  #include <linux/pm_runtime.h>
-> @@ -25,8 +26,11 @@
->  #include "coresight-syscfg.h"
->
->  static DEFINE_MUTEX(coresight_mutex);
-> +static DEFINE_MUTEX(coresight_id_mutex);
->  static DEFINE_PER_CPU(struct coresight_device *, csdev_sink);
->
-> +static DECLARE_BITMAP(coresight_trace_id, CORESIGHT_TRACE_ID_NUM);
+> +#include <linux/dmaengine.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/dma/qcom-gpi-dma.h>
+>  #include <linux/err.h>
+>  #include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+> @@ -48,6 +50,9 @@
+>  #define LOW_COUNTER_SHFT	10
+>  #define CYCLE_COUNTER_MSK	GENMASK(9, 0)
+>  
+> +#define I2C_PACK_TX		BIT(0)
+> +#define I2C_PACK_RX		BIT(1)
 > +
->  /*
->   * Use IDR to map the hash length of the source's device name
->   * to the pointer of path for the source
-> @@ -51,6 +55,48 @@ struct coresight_node {
->  const u32 coresight_barrier_pkt[4] = {0x7fffffff, 0x7fffffff, 0x7fffffff, 0x7fffffff};
->  EXPORT_SYMBOL_GPL(coresight_barrier_pkt);
->
-> +/* Init the coresight_trace_id bit map. */
-> +static void coresight_init_trace_id(void)
-> +{
-> +       int i;
-> +
-> +       /* Trace id 0 is invalid. */
-> +       set_bit(CORESIGHT_TRACE_ID_0, coresight_trace_id);
-> +       /* Trace id 1 is fixed for STM. */
-> +       set_bit(CORESIGHT_TRACE_ID_1, coresight_trace_id);
-> +       /* Trace id from 112 to 127 are reserved. */
-> +       for (i = CORESIGHT_TRACE_ID_112; i <= CORESIGHT_TRACE_ID_127; i++)
-> +               set_bit(i, coresight_trace_id);
-> +       /* Skip the trace ids of ETM/ETE. */
-> +       for (i = 0; i <= cpumask_last(cpu_possible_mask); i++)
-> +               set_bit(coresight_get_trace_id(i), coresight_trace_id);
-> +
-> +}
-> +
-> +/*
-> + * Return the first zero bit position of bitmap coresight_trace_id
-> + * as source's trace id.
-> + *
-> + */
-> +int coresight_get_system_trace_id(void)
-> +{
-> +       int id;
-> +
-> +       mutex_lock(&coresight_id_mutex);
-> +       id = find_first_zero_bit(coresight_trace_id, CORESIGHT_TRACE_ID_NUM);
-> +       /* If no zero bit is found, return error value. */
-> +       if (id == CORESIGHT_TRACE_ID_NUM) {
-> +               mutex_unlock(&coresight_id_mutex);
-> +               return -EINVAL;
-> +       }
-> +
-> +       set_bit(id, coresight_trace_id);
-> +       mutex_unlock(&coresight_id_mutex);
-> +
-> +       return id;
-> +}
-> +EXPORT_SYMBOL(coresight_get_system_trace_id);
-> +
->  static const struct cti_assoc_op *cti_assoc_ops;
->
->  void coresight_set_cti_ops(const struct cti_assoc_op *cti_op)
-> @@ -1750,6 +1796,8 @@ static int __init coresight_init(void)
->                 return 0;
->
->         etm_perf_exit();
-> +
-> +       coresight_init_trace_id();
->  exit_bus_unregister:
->         bus_unregister(&coresight_bustype);
->         return ret;
-> diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
-> index 4ac5c081af93..1e2c5ca4c6e6 100644
-> --- a/include/linux/coresight-pmu.h
-> +++ b/include/linux/coresight-pmu.h
-> @@ -32,6 +32,14 @@
->  #define ETM4_CFG_BIT_RETSTK    12
->  #define ETM4_CFG_BIT_VMID_OPT  15
->
-
-The following additional defines and function should appear in coresight-priv.h
-The coresight-pmu.h file contains data for the interface between the
-drivers and perf.
-
-
-> +/* Coresight component supports 7 bits trace id. */
-
-additional comment here to explain that 0, 0x70- 0x7F IDs are reserved
-by the architecture, 1 is default for STM
-
-> +#define CORESIGHT_TRACE_ID_NUM 128
-> +
-> +#define CORESIGHT_TRACE_ID_0   0
-> +#define CORESIGHT_TRACE_ID_1   1
-> +#define CORESIGHT_TRACE_ID_112 112
-> +#define CORESIGHT_TRACE_ID_127 127
-> +
-
-can we have these names a little more descriptive -
-e.g.
-CORESIGHT_TRACE_ID_0_RES 0
-CORESIGHT_TRACE_ID_STM  1
-CORESIGHT_TRACE_ID_RANGE_LO_RES 0x70
-CORESIGHT_TRACE_ID_RANGE_HI_RES  0x7F
-
-Additionally - now we are declaring a #define for the STM ID - it
-would be better to use that in coresight-stm.c stm_init_default_data()
-to set the trace id for the STM.
-
-Regards
-
-Mike
-
->  static inline int coresight_get_trace_id(int cpu)
->  {
->         /*
-> @@ -43,4 +51,7 @@ static inline int coresight_get_trace_id(int cpu)
->         return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
+>  enum geni_i2c_err_code {
+>  	GP_IRQ0,
+>  	NACK,
+> @@ -89,6 +94,9 @@ struct geni_i2c_dev {
+>  	void *dma_buf;
+>  	size_t xfer_len;
+>  	dma_addr_t dma_addr;
+> +	struct dma_chan *tx_c;
+> +	struct dma_chan *rx_c;
+> +	bool gpi_mode;
+>  };
+>  
+>  struct geni_i2c_err_log {
+> @@ -456,12 +464,199 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
+>  	return gi2c->err;
 >  }
->
-> +/* Get the trace id for the sources except from STM, ETM/ETE. */
-> +extern int coresight_get_system_trace_id(void);
+>  
+> +static void i2c_gpi_cb_result(void *cb, const struct dmaengine_result *result)
+> +{
+> +	struct geni_i2c_dev *gi2c = cb;
 > +
->  #endif
-> --
-> 2.17.1
->
+> +	if (result->result != DMA_TRANS_NOERROR) {
+> +		dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
 
+Iiuc the API the expectation is that if we get !NOERROR we shouldn't
+expect to get NOERROR after that.
 
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+If so we're just returning here and leaving geni_i2c_gpi_xfer() to just
+timeout in a HZ or so. Given that xfer happens under the adaptor lock,
+how about carrying an error in geni_i2c_dev and complete(&done) here as
+well?
+
+> +		return;
+> +	}
+> +
+> +	if (result->residue)
+> +		dev_dbg(gi2c->se.dev, "DMA xfer has pending: %d\n", result->residue);
+> +
+> +	complete(&gi2c->done);
+> +}
+> +
+[..]
+> +
+> +static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], int num)
+> +{
+> +	struct dma_slave_config config = {};
+> +	struct gpi_i2c_config peripheral = {};
+> +	int i, ret = 0, timeout;
+> +	dma_addr_t tx_addr, rx_addr;
+> +	void *tx_buf = NULL, *rx_buf = NULL;
+> +	const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
+> +
+> +	config.peripheral_config = &peripheral;
+> +	config.peripheral_size = sizeof(peripheral);
+> +
+> +	peripheral.pack_enable = I2C_PACK_TX | I2C_PACK_RX;
+> +	peripheral.cycle_count = itr->t_cycle_cnt;
+> +	peripheral.high_count = itr->t_high_cnt;
+> +	peripheral.low_count = itr->t_low_cnt;
+> +	peripheral.clk_div = itr->clk_div;
+> +	peripheral.set_config = 1;
+> +	peripheral.multi_msg = false;
+> +
+> +	for (i = 0; i < num; i++) {
+> +		gi2c->cur = &msgs[i];
+> +		dev_dbg(gi2c->se.dev, "msg[%d].len:%d\n", i, gi2c->cur->len);
+> +
+> +		peripheral.stretch = 0;
+> +		if (i < num - 1)
+> +			peripheral.stretch = 1;
+> +
+> +		peripheral.addr = msgs[i].addr;
+> +
+> +		if (msgs[i].flags & I2C_M_RD) {
+> +			ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
+> +			if (ret)
+> +				goto err;
+> +		}
+> +
+> +		ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
+> +		if (ret)
+> +			goto err;
+> +
+> +		if (msgs[i].flags & I2C_M_RD)
+> +			dma_async_issue_pending(gi2c->rx_c);
+> +		dma_async_issue_pending(gi2c->tx_c);
+> +
+> +		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+> +		if (!timeout) {
+> +			dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d addr:0x%x\n",
+> +				gi2c->cur->flags, gi2c->cur->addr);
+> +			ret = gi2c->err = -ETIMEDOUT;
+> +			goto err;
+> +		}
+> +
+> +		geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
+> +	}
+> +
+> +	return 0;
+> +
+> +err:
+> +	dmaengine_terminate_sync(gi2c->rx_c);
+> +	dmaengine_terminate_sync(gi2c->tx_c);
+> +	geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
+> +	return ret;
+> +}
+[..]
+> +static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
+> +{
+> +	int ret;
+> +
+> +	geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
+> +	gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
+> +	if (IS_ERR(gi2c->tx_c)) {
+> +		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->tx_c),
+> +				    "Failed to get tx DMA ch\n");
+> +		if (ret < 0)
+> +			goto err_tx;
+> +	}
+> +
+> +	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
+> +	if (IS_ERR(gi2c->rx_c)) {
+> +		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->rx_c),
+> +				    "Failed to get rx DMA ch\n");
+> +		if (ret < 0)
+> +			goto err_rx;
+> +	}
+> +
+> +	dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
+> +	return 0;
+> +
+> +err_rx:
+> +	dma_release_channel(gi2c->tx_c);
+> +	gi2c->tx_c = NULL;
+
+You're not accessing tx_c or rx_c again when returning an error here. So
+I don't think there's a reason to clear them.
+
+> +err_tx:
+> +	gi2c->rx_c = NULL;
+> +	return ret;
+> +}
+> +
+[..]
+>  static int geni_i2c_remove(struct platform_device *pdev)
+>  {
+>  	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
+>  
+> +	release_gpi_dma(gi2c);
+
+Your i2c devices aren't torn down until i2c_del_adapter(), so you might
+still end up trying to use the two channels here, after releasing them.
+
+In other words, I think you should reorder these.
+
+Regards,
+Bjorn

@@ -2,175 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6304BA446
+	by mail.lfdr.de (Postfix) with ESMTP id 1074A4BA445
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242445AbiBQPYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:24:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55194 "EHLO
+        id S237484AbiBQPYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:24:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242426AbiBQPYD (ORCPT
+        with ESMTP id S242410AbiBQPYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:24:03 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB932B103D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:23:43 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2d62593ad9bso35432887b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eHgl2T651ZUAY0dUPlPE7t+ZMJITI1iQLNfhsdAOi9A=;
-        b=OyyGSpGsXoRUMe1+VpsE32Jzw9pC/T/sEcDlrwAfqTzFtyGDBuqSpPNuEl6SeVR0Qs
-         AFKDV5ZQ+hSEpEmAZEquWsQhiHVRa+51dPltVToyoWlHiWM3F05pRItVl0UKT0SKGTD6
-         Gnd0oITi7nX9dnvZedukOqsSj7dQH0gNGnogTJVu7dGl1enSylVzxd6sIOsMS/AB86YP
-         A/Bue505Xt+429q5JQ96dXyKTLgWr3e0sJXowp398lVnEJS7amIKej8Lhrr6MbHdPkmV
-         V1EDN4J9TgejynO66RlqTRvfaiuXkOCZFK/K+elmI9ZrPXgNaVLtbF1hH+O9ZN5vseEv
-         BpKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eHgl2T651ZUAY0dUPlPE7t+ZMJITI1iQLNfhsdAOi9A=;
-        b=TOarCXMpHuHKSETr6gA6gY5gTNgICgQigYgz6UAw3Jb/x9xc2zIfO1AIYZkualTlKf
-         5Lb9bRAM90cPVdTH9S++TnGrTO0dPhSrdx1hFXDb6CWG8LVluUFbxeuDPYQK4c4Mw1As
-         ltfaXV/3MqTjQSMh3BU611tmyZ5dTXmiiXEj/9vjkn29rgW9h8a/h3SmRkhOJhfThYU+
-         fQhkvt/m3NHKv8oEV2esl+1Sz2wrxJhhntHAxySVZxpMBnv96EoIswrxBvUhnwPLa74P
-         fA4UH76tJL6GPBSD1VzHsxEsK9taE22db8rf21R9C59FopS1+jKI1pC9zQmP8XwkjMbS
-         n+Ug==
-X-Gm-Message-State: AOAM531m3Q6IYH9xPGoEw4eSu3zms8+Crhib9afKQ81Omcil3FooNAqT
-        uDEHWzNwWUkkeF3/2EqxFEzEDPRDnqfCWYlExUjPKA==
-X-Google-Smtp-Source: ABdhPJxz5oowmiHJjEfemLbZOdX9nQtJEvLXg9XI3jQCQQwFJ1+9KfpYgOqyvfPS/LNFkEGjad8EoMOsgMFm6yB5kso=
-X-Received: by 2002:a81:91d2:0:b0:2d6:af3d:c93 with SMTP id
- i201-20020a8191d2000000b002d6af3d0c93mr1481740ywg.467.1645111422161; Thu, 17
- Feb 2022 07:23:42 -0800 (PST)
+        Thu, 17 Feb 2022 10:24:19 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041C42B0B2E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:24:04 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 73E411EC054E;
+        Thu, 17 Feb 2022 16:23:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1645111439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=vxtl5Qfckm7wf75ytDBuGeQbcw5DoZ2bN0ho+rxm0YE=;
+        b=g8EDvadqROvjBUDOPX2RSRQ6jKFOsZIe5OGEygGD5FzWSnaJddx5qpktQYX3gL60Xxn98x
+        4iwG475gMn9XxhmzZ+jw0ptpKOztFYRQHwuoExF3dh9Iakjbr1ikXG92IF/y6xN1XUDd1M
+        +AtahF6T01dyGO+Pdu8lVJtEYJ6KD+0=
+Date:   Thu, 17 Feb 2022 16:24:05 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 22/29] x86/tdx: Make pages shared in ioremap()
+Message-ID: <Yg5olU6u6jmPRmrR@zn.tnic>
+References: <YgFWpGQfA84Y0mW/@zn.tnic>
+ <20220214220926.fjwlyieatwjhcpij@black.fi.intel.com>
+ <f1dfc268-7b2f-9980-27ce-0b5bb1aea962@amd.com>
+ <20220215154118.ldpvvk5seljntl44@black.fi.intel.com>
+ <dd21e54a-a431-4d6f-47b7-ab1a3e8e0cc8@amd.com>
+ <20220215162722.cvzik5r57spr2krz@black.fi.intel.com>
+ <52e34ee2-e6a8-5b5c-41f9-5fcf21902a25@intel.com>
+ <20220215173321.lwvfl6rxifrkcoit@black.fi.intel.com>
+ <YgzKymHnbAUAVSMT@zn.tnic>
+ <20220216153703.42wnvgxcvshgpkj2@black.fi.intel.com>
 MIME-Version: 1.0
-References: <20220217140441.1218045-1-andrzej.hajda@intel.com> <20220217140441.1218045-3-andrzej.hajda@intel.com>
-In-Reply-To: <20220217140441.1218045-3-andrzej.hajda@intel.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 17 Feb 2022 07:23:31 -0800
-Message-ID: <CANn89iKgzztLA3y6V+vw3RiyoScC3K=1Z1_gajj8H56wGWDw6A@mail.gmail.com>
-Subject: Re: [PATCH 2/9] lib/ref_tracker: compact stacktraces before printing
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev <netdev@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220216153703.42wnvgxcvshgpkj2@black.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 6:05 AM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
->
-> In cases references are taken alternately on multiple exec paths leak
-> report can grow substantially, sorting and grouping leaks by stack_handle
-> allows to compact it.
->
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> Reviewed-by: Chris Wilson <chris.p.wilson@intel.com>
-> ---
->  lib/ref_tracker.c | 35 +++++++++++++++++++++++++++--------
->  1 file changed, 27 insertions(+), 8 deletions(-)
->
-> diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
-> index 1b0c6d645d64a..0e9c7d2828ccb 100644
-> --- a/lib/ref_tracker.c
-> +++ b/lib/ref_tracker.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  #include <linux/export.h>
-> +#include <linux/list_sort.h>
->  #include <linux/ref_tracker.h>
->  #include <linux/slab.h>
->  #include <linux/stacktrace.h>
-> @@ -14,23 +15,41 @@ struct ref_tracker {
->         depot_stack_handle_t    free_stack_handle;
->  };
->
-> +static int ref_tracker_cmp(void *priv, const struct list_head *a, const struct list_head *b)
-> +{
-> +       const struct ref_tracker *ta = list_entry(a, const struct ref_tracker, head);
-> +       const struct ref_tracker *tb = list_entry(b, const struct ref_tracker, head);
-> +
-> +       return ta->alloc_stack_handle - tb->alloc_stack_handle;
-> +}
-> +
->  void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
->                            unsigned int display_limit)
->  {
-> +       unsigned int i = 0, count = 0;
->         struct ref_tracker *tracker;
-> -       unsigned int i = 0;
-> +       depot_stack_handle_t stack;
->
->         lockdep_assert_held(&dir->lock);
->
-> +       if (list_empty(&dir->list))
-> +               return;
-> +
-> +       list_sort(NULL, &dir->list, ref_tracker_cmp);
+On Wed, Feb 16, 2022 at 06:37:03PM +0300, Kirill A. Shutemov wrote:
+> 	bool cc_platform_has(enum cc_attr attr)
+> 	{
+> 		if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> 			return intel_cc_platform_has(attr);
+> 		else if (cc_mask)
+> 			return amd_cc_platform_has(attr);
 
-What is going to be the cost of sorting a list with 1,000,000 items in it ?
+It is exactly stuff like that I'd like to avoid because that is
+dependent on the order the test happens.
 
-I just want to make sure we do not trade printing at most ~10 references
-(from netdev_wait_allrefs()) to a soft lockup :/ with no useful info
-if something went terribly wrong.
+It would be a lot more robust if this did:
 
-I suggest that you do not sort a potential big list, and instead
-attempt to allocate an array of @display_limits 'struct stack_counts'
+	switch (cc_vendor) {
+	case INTEL:  return intel_cc_platform_has(attr);
+	case AMD:    return amd_cc_platform_has(attr);
+	case HYPERV: return hyperv_cc_platform_has(attr);
+	default: return false;
+	}
 
-I suspect @display_limits will always be kept to a reasonable value
-(less than 100 ?)
+-- 
+Regards/Gruss,
+    Boris.
 
-struct stack_counts {
-    depot_stack_handle_t stack_handle;
-    unsigned int count;
-}
-
-Then, iterating the list and update the array (that you can keep
-sorted by ->stack_handle)
-
-Then after iterating, print the (at_most) @display_limits handles
-found in the temp array.
-
-> +
->         list_for_each_entry(tracker, &dir->list, head) {
-> -               if (i < display_limit) {
-> -                       pr_err("leaked reference.\n");
-> -                       if (tracker->alloc_stack_handle)
-> -                               stack_depot_print(tracker->alloc_stack_handle);
-> -                       i++;
-> -               } else {
-> +               if (i++ >= display_limit)
->                         break;
-> -               }
-> +               if (!count++)
-> +                       stack = tracker->alloc_stack_handle;
-> +               if (stack == tracker->alloc_stack_handle &&
-> +                   !list_is_last(&tracker->head, &dir->list))
-> +                       continue;
-> +
-> +               pr_err("leaked %d references.\n", count);
-> +               if (stack)
-> +                       stack_depot_print(stack);
-> +               count = 0;
->         }
->  }
->  EXPORT_SYMBOL(__ref_tracker_dir_print);
-> --
-> 2.25.1
->
+https://people.kernel.org/tglx/notes-about-netiquette

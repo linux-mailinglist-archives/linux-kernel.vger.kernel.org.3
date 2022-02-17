@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE2A4B950A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 01:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304444B950C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 01:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiBQA1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 19:27:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47002 "EHLO
+        id S229797AbiBQA1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 19:27:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiBQA1I (ORCPT
+        with ESMTP id S229779AbiBQA1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 19:27:08 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1990124C2C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 16:26:54 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id y18so3287611plb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 16:26:54 -0800 (PST)
+        Wed, 16 Feb 2022 19:27:21 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD64618D9F2;
+        Wed, 16 Feb 2022 16:27:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YHx/xJYQk1JNIJZetMC/+JPrg4nbDjgeFqBB4S61lu8=;
-        b=FleV49LY25DWgQdH1bP9FI3lP0QStIhDTqZTBx1u9XW6IY2AJf3/Qksv6w0huu50o/
-         LYZUfUJjgNlNspT/aWUQ6yDpYEtpoL2lujVHRrK0jBUwA53Rr9Ef+g/9QG94IHNuUf/N
-         nAj435sc/2vmIBQu3ey/dbUf619TvAkCO76XQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YHx/xJYQk1JNIJZetMC/+JPrg4nbDjgeFqBB4S61lu8=;
-        b=AkB728OQkzaRwEKY0VqArNEYK9BJwgyS3wFAhAzI7D33GPvSsSOdsHOmWkojQ2JsNv
-         5/faMTNZPKwIPeEBOPi606iRDo2wybsi+/Hg8OBbynobZ9mLTp4QnuoBfQupGuv6jDpw
-         N4UGyv/2a0W/eol0y9jtB4ThLDCYlWarhXLmZybHlWpSiwzWk/fPpkfIg/XrfTBWmfTw
-         WGDRerG31sVM6CyWLX1YGOeGUFJscZYriDpk6lGlkTSIbpYkbn6UqwYOtDuHHweMEzTJ
-         E0WMR8eR6dVfYCS8UUdlx9nxJW0C2jyoMKXLn5OUiKf8bO2j0ySy3MoHo5hixo1wmvI2
-         RWzg==
-X-Gm-Message-State: AOAM530tLaMUjR6wGep2TniOGPq8iK8tFTJ2+w1F/RjQQvAjoT+a/txq
-        BbDhPrrvB7m0KAFVVaMJtitwttGS2Fai4Q==
-X-Google-Smtp-Source: ABdhPJzXbnU2U9IqpTd6OXXwmzlx8TMIqYIEHM05tKeIUJ3OQEsB10xaAJq8vc0H0YKzSpHoAeOnSA==
-X-Received: by 2002:a17:90a:ab17:b0:1b9:b61a:aadb with SMTP id m23-20020a17090aab1700b001b9b61aaadbmr379604pjq.77.1645057614218;
-        Wed, 16 Feb 2022 16:26:54 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:20:e0d2:8c14:1e68])
-        by smtp.gmail.com with UTF8SMTPSA id f16sm48441853pfa.147.2022.02.16.16.26.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 16:26:53 -0800 (PST)
-Date:   Wed, 16 Feb 2022 16:26:51 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-Message-ID: <Yg2WSys4uxONzSSl@google.com>
-References: <20220207073036.14901-2-lukasz.luba@arm.com>
- <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
- <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
- <YgQ9XLcto9v0fyTf@google.com>
- <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
- <Yg13JoHLmeFGPOAW@google.com>
- <e9ae0530-64bd-3684-1f7d-b496d65d9e70@arm.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645057628; x=1676593628;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5PVdiB2tCTktZM9TnHRDaSdcjaUKK7T/KCy0M9sHFuU=;
+  b=BD6xYV26mMpwAk2qG/Phu8Cf33xsC1S9754NiKxR0o0f6OIEYkNqn1pX
+   DNuQI7eANhniwNW+2AIU6IVdid2EO1cokVfS67h35g4ScMoGMQeGbGuTv
+   L5xwDb+FG3B7MexY3GwAjd8+MhHZ+Aceh2xfbQUa89mO8VcHKeAPJaQNM
+   I=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 16:27:08 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 16:27:07 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 16 Feb 2022 16:27:06 -0800
+Received: from [10.111.174.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
+ 2022 16:27:04 -0800
+Message-ID: <35696c4b-cb84-610d-96de-73126aa6810b@quicinc.com>
+Date:   Wed, 16 Feb 2022 16:27:02 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e9ae0530-64bd-3684-1f7d-b496d65d9e70@arm.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [REPOST PATCH v4 02/13] drm/msm/dsi: Pass DSC params to drm_panel
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-3-vkoul@kernel.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220210103423.271016-3-vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,107 +74,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 10:43:34PM +0000, Lukasz Luba wrote:
-> 
-> 
-> On 2/16/22 10:13 PM, Matthias Kaehlcke wrote:
-> > On Wed, Feb 16, 2022 at 09:33:50AM -0800, Doug Anderson wrote:
-> > > Hi,
-> > > 
-> > > On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> > > > 
-> > > > Hi Matthias,
-> > > > 
-> > > > On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
-> > > > > On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
-> > > > > > 
-> > > > > > 
-> > > > > > On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
-> > > > > > > On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
-> > > > > > > > 
-> > > > > > > > 
-> > > > 
-> > > > [snip]
-> > > > 
-> > > > > > > > Could you point me to those devices please?
-> > > > > > > 
-> > > > > > > arch/arm64/boot/dts/qcom/sc7180-trogdor-*
-> > > > > > > 
-> > > > > > > Though as per above they shouldn't be impacted by your change, since the
-> > > > > > > CPUs always pretend to use milli-Watts.
-> > > > > > > 
-> > > > > > > [skipped some questions/answers since sc7180 isn't actually impacted by
-> > > > > > >     the change]
-> > > > > > 
-> > > > > > Thank you Matthias. I will investigate your setup to get better
-> > > > > > understanding.
-> > > > > 
-> > > > > Thanks!
-> > > > > 
-> > > > 
-> > > > I've checked those DT files and related code.
-> > > > As you already said, this patch is safe for them.
-> > > > So we can apply it IMO.
-> > > > 
-> > > > 
-> > > > -------------Off-topic------------------
-> > > > Not in $subject comments:
-> > > > 
-> > > > AFAICS based on two files which define thermal zones:
-> > > > sc7180-trogdor-homestar.dtsi
-> > > > sc7180-trogdor-coachz.dtsi
-> > > > 
-> > > > only the 'big' cores are used as cooling devices in the
-> > > > 'skin_temp_thermal' - the CPU6 and CPU7.
-> > > > 
-> > > > I assume you don't want to model at all the power usage
-> > > > from the Little cluster (which is quite big: 6 CPUs), do you?
-> > > > I can see that the Little CPUs have small dyn-power-coeff
-> > > > ~30% of the big and lower max freq, but still might be worth
-> > > > to add them to IPA. You might give them more 'weight', to
-> > > > make sure they receive more power during power split.
-> > 
-> > In experiments we saw that including the little cores as cooling
-> > devices for 'skin_temp_thermal' didn't have a significant impact on
-> > thermals, so we left them out.
-> > 
-> > > > You also don't have GPU cooling device in that thermal zone.
-> > > > Based on my experience if your GPU is a power hungry one,
-> > > > e.g. 2-4Watts, you might get better results when you model
-> > > > this 'hot' device (which impacts your temp sensor reported value).
-> > > 
-> > > I think the two boards you point at (homestar and coachz) are just the
-> > > two that override the default defined in the SoC dtsi file. If you
-> > > look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
-> > > map. You can also see the cooling maps for the littles.
-> > 
-> > Yep, plus thermal zones with cooling maps for the big cores.
-> > 
-> > > I guess we don't have a `dynamic-power-coefficient` for the GPU,
-> > > though? Seems like we should, but I haven't dug through all the code
-> > > here...
-> > 
-> > To my knowledge the SC7x80 GPU doesn't register an energy model, which is
-> > one of the reasons the GPU wasn't included as cooling device for
-> > 'skin_temp_thermal'.
-> > 
-> 
-> You can give it a try by editing the DT and adding in the
-> GPU node the 'dynamic-power-coefficient' + probably
-> small modification in the driver code.
-> 
-> If the GPU driver registers the cooling device in the new way, you
-> would also get EM registered thanks to the devfreq cooling new code
-> (commit: 84e0d87c9944eb36ae6037a).
-> 
-> You can check an example from Panfrost GPU driver [1].
 
-Ah, I missed that, thanks for the pointer!
 
-> I can see some upstream MSM GPU driver, but I don't know if that is
-> your GPU driver. It registers the 'old' way the devfreq cooling [2]
-> but it would be easy to change to use the new function.
-> The GPU driver would use the same dev_pm_opp_of_register_em() as
-> your CPUs do, so EM would be in 'milli-Watts' (so should be fine).
-
-Yep, that's whay we are using.
+On 2/10/2022 2:34 AM, Vinod Koul wrote:
+> When DSC is enabled, we need to pass the DSC parameters to panel driver
+> as well, so add a dsc parameter in panel and set it when DSC is enabled
+> 
+> Also, fetch and pass DSC configuration for DSI panels to DPU encoder,
+> which will enable and configure DSC hardware blocks accordingly.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c |  2 ++
+>   drivers/gpu/drm/msm/dsi/dsi.c           |  5 +++++
+>   drivers/gpu/drm/msm/dsi/dsi.h           |  1 +
+>   drivers/gpu/drm/msm/dsi/dsi_host.c      | 22 ++++++++++++++++++++++
+>   drivers/gpu/drm/msm/msm_drv.h           |  8 ++++++++
+>   include/drm/drm_panel.h                 |  7 +++++++
+>   6 files changed, 45 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 47fe11a84a77..ef6ddac22767 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -578,6 +578,8 @@ static int _dpu_kms_initialize_dsi(struct drm_device *dev,
+>   			MSM_DISPLAY_CAP_CMD_MODE :
+>   			MSM_DISPLAY_CAP_VID_MODE;
+>   
+> +		info.dsc = msm_dsi_get_dsc_config(priv->dsi[i]);
+> +
+>   		if (msm_dsi_is_bonded_dsi(priv->dsi[i]) && priv->dsi[other]) {
+>   			rc = msm_dsi_modeset_init(priv->dsi[other], dev, encoder);
+>   			if (rc) {
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
+> index 052548883d27..3aeac15e7421 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi.c
+> @@ -20,6 +20,11 @@ bool msm_dsi_is_cmd_mode(struct msm_dsi *msm_dsi)
+>   	return !(host_flags & MIPI_DSI_MODE_VIDEO);
+>   }
+>   
+> +struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi)
+> +{
+> +	return msm_dsi_host_get_dsc_config(msm_dsi->host);
+> +}
+> +
+>   static int dsi_get_phy(struct msm_dsi *msm_dsi)
+>   {
+>   	struct platform_device *pdev = msm_dsi->pdev;
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi.h b/drivers/gpu/drm/msm/dsi/dsi.h
+> index c8dedc95428c..16cd9b2fce86 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi.h
+> +++ b/drivers/gpu/drm/msm/dsi/dsi.h
+> @@ -152,6 +152,7 @@ int dsi_calc_clk_rate_v2(struct msm_dsi_host *msm_host, bool is_bonded_dsi);
+>   int dsi_calc_clk_rate_6g(struct msm_dsi_host *msm_host, bool is_bonded_dsi);
+>   void msm_dsi_host_snapshot(struct msm_disp_state *disp_state, struct mipi_dsi_host *host);
+>   void msm_dsi_host_test_pattern_en(struct mipi_dsi_host *host);
+> +struct msm_display_dsc_config *msm_dsi_host_get_dsc_config(struct mipi_dsi_host *host);
+>   
+>   /* dsi phy */
+>   struct msm_dsi_phy;
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 27553194f9fa..7e9913eff724 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -2059,9 +2059,24 @@ int msm_dsi_host_modeset_init(struct mipi_dsi_host *host,
+>   {
+>   	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
+>   	const struct msm_dsi_cfg_handler *cfg_hnd = msm_host->cfg_hnd;
+> +	struct drm_panel *panel;
+>   	int ret;
+>   
+>   	msm_host->dev = dev;
+> +	panel = msm_dsi_host_get_panel(&msm_host->base);
+> +
+> +	if (panel && panel->dsc) {
+> +		struct msm_display_dsc_config *dsc = msm_host->dsc;
+> +
+> +		if (!dsc) {
+> +			dsc = devm_kzalloc(&msm_host->pdev->dev, sizeof(*dsc), GFP_KERNEL);
+> +			if (!dsc)
+> +				return -ENOMEM;
+> +			dsc->drm = panel->dsc;
+> +			msm_host->dsc = dsc;
+> +		}
+> +	}
+> +
+>   	ret = cfg_hnd->ops->tx_buf_alloc(msm_host, SZ_4K);
+>   	if (ret) {
+>   		pr_err("%s: alloc tx gem obj failed, %d\n", __func__, ret);
+> @@ -2626,3 +2641,10 @@ void msm_dsi_host_test_pattern_en(struct mipi_dsi_host *host)
+>   		dsi_write(msm_host, REG_DSI_TEST_PATTERN_GEN_CMD_STREAM0_TRIGGER,
+>   				DSI_TEST_PATTERN_GEN_CMD_STREAM0_TRIGGER_SW_TRIGGER);
+>   }
+> +
+> +struct msm_display_dsc_config *msm_dsi_host_get_dsc_config(struct mipi_dsi_host *host)
+> +{
+> +	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
+> +
+> +	return msm_host->dsc;
+> +}
+> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+> index 384f9bad4760..e7a312edfe67 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.h
+> +++ b/drivers/gpu/drm/msm/msm_drv.h
+> @@ -119,6 +119,7 @@ struct msm_display_topology {
+>    *                      based on num_of_h_tiles
+>    * @is_te_using_watchdog_timer:  Boolean to indicate watchdog TE is
+>    *				 used instead of panel TE in cmd mode panels
+> + * @dsc:		DSC configuration data for DSC-enabled displays
+>    */
+>   struct msm_display_info {
+>   	int intf_type;
+> @@ -126,6 +127,7 @@ struct msm_display_info {
+>   	uint32_t num_of_h_tiles;
+>   	uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
+>   	bool is_te_using_watchdog_timer;
+> +	struct msm_display_dsc_config *dsc;
+>   };
+>   
+>   /* Commit/Event thread specific structure */
+> @@ -365,6 +367,7 @@ void msm_dsi_snapshot(struct msm_disp_state *disp_state, struct msm_dsi *msm_dsi
+>   bool msm_dsi_is_cmd_mode(struct msm_dsi *msm_dsi);
+>   bool msm_dsi_is_bonded_dsi(struct msm_dsi *msm_dsi);
+>   bool msm_dsi_is_master_dsi(struct msm_dsi *msm_dsi);
+> +struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi);
+>   #else
+>   static inline void __init msm_dsi_register(void)
+>   {
+> @@ -393,6 +396,11 @@ static inline bool msm_dsi_is_master_dsi(struct msm_dsi *msm_dsi)
+>   {
+>   	return false;
+>   }
+> +
+> +static inline struct msm_display_dsc_config *msm_dsi_get_dsc_config(struct msm_dsi *msm_dsi)
+> +{
+> +	return NULL;
+> +}
+>   #endif
+>   
+>   #ifdef CONFIG_DRM_MSM_DP
+> diff --git a/include/drm/drm_panel.h b/include/drm/drm_panel.h
+> index 4602f833eb51..eb8ae9bf32ed 100644
+> --- a/include/drm/drm_panel.h
+> +++ b/include/drm/drm_panel.h
+> @@ -171,6 +171,13 @@ struct drm_panel {
+>   	 * Panel entry in registry.
+>   	 */
+>   	struct list_head list;
+> +
+> +	/**
+> +	 * @dsc:
+> +	 *
+> +	 * Panel DSC pps payload to be sent
+> +	 */
+> +	struct drm_dsc_config *dsc;
+>   };
+>   
+>   void drm_panel_init(struct drm_panel *panel, struct device *dev,

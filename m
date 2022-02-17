@@ -2,144 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABCD4B9CAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FF24B9CB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238971AbiBQKER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:04:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42810 "EHLO
+        id S238976AbiBQKFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:05:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233260AbiBQKEP (ORCPT
+        with ESMTP id S230434AbiBQKFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:04:15 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A59AEEA7C;
-        Thu, 17 Feb 2022 02:04:00 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id u2so6889668wrw.1;
-        Thu, 17 Feb 2022 02:04:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=meJGBOtEnLdfoDm8EYIbdOA16spw/euuzJMtqF+WBis=;
-        b=pVySiP6mJ5FxXyjyFW+t9ZnwOouOKwiw87S40ccwEKhBH916hm2UrUNmFMcIRHVdl5
-         TR6L0ZX5tGjk8D6muyusTKBHo6SQOvUbqpPw01QqpZavmn5E0tMndzWjHXQg7FAtLxSi
-         gQ/worNo0DMHTGNIjY47/Ot/UcyXpZ0Bpvwg0jXVYPrd/3rBzINe5TA41Wa/9eBXb295
-         a34NlSlDJkKoITkZLHtgIjIMLuEyd/KLJsFi92IFkFIzaa2tZt7B6UgNY4FJENi1P+Zq
-         F94dLtTgukS7MhdxLGrJp5UQMdZu024LKTsJzLC4QZRs437h6uxEeujj4KKkMqlw8Ga2
-         4MWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=meJGBOtEnLdfoDm8EYIbdOA16spw/euuzJMtqF+WBis=;
-        b=srkJ1g7yvfDQrsmrc2BScfYQS91jazMfZH2zC2kZBsN2QrJBrrEEJnvuARotxe0A/Y
-         WZg4phSlEiJgGtQnN4s7N1qAE7fk4p+5jAlWPJlfAkpP23JOlqyRVYoy7iY+mcM5PoyV
-         VfmhjgPITmSahf/jCOOCWUkK+u9Y8wf1r6anB9HEADjoZtjDqXcLRxsaqW9cJ+mKa1NO
-         e2LvMQ03nY1qitI5UZla3kJDq1QcYiWWcPJygEMkE1D9ABXxsIUtDP3gT909B4ZCpR1n
-         giJbx0BU3OaU4UQusEQcm0NmkNaTSg/BiX34HULHO6UULSxIC/EuxrhvdP5/86v6lG1M
-         5wEg==
-X-Gm-Message-State: AOAM531QwtHDPHugoVQx+xFFyK6LiIyqzSelIXdPnMHv7CxgzYP5vRaL
-        +CkbDCsEpwWuEAR5LODNpzg=
-X-Google-Smtp-Source: ABdhPJxyOiz0T2pKxrlwMmUNxTuxOagK7yClAldWgq19nau4JhvuP1VmSsYHGbvi/xK/Q+/jdW9YcQ==
-X-Received: by 2002:a05:6000:1a8f:b0:1e8:3301:1273 with SMTP id f15-20020a0560001a8f00b001e833011273mr1667525wry.707.1645092239051;
-        Thu, 17 Feb 2022 02:03:59 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:181:90d0:6ce1:d6aa:6a23:353b? ([2a01:e0a:181:90d0:6ce1:d6aa:6a23:353b])
-        by smtp.gmail.com with ESMTPSA id ay34sm732313wmb.29.2022.02.17.02.03.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 02:03:58 -0800 (PST)
-Message-ID: <7d257438-b6cc-8a57-e8e4-b6fd6d0b4cac@gmail.com>
-Date:   Thu, 17 Feb 2022 11:03:58 +0100
+        Thu, 17 Feb 2022 05:05:41 -0500
+Received: from outbound-smtp21.blacknight.com (outbound-smtp21.blacknight.com [81.17.249.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8D21D685C
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:05:27 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp21.blacknight.com (Postfix) with ESMTPS id B2186CCD29
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:05:25 +0000 (GMT)
+Received: (qmail 29878 invoked from network); 17 Feb 2022 10:05:25 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 17 Feb 2022 10:05:25 -0000
+Date:   Thu, 17 Feb 2022 10:05:24 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     peterz@infradead.org, aubrey.li@linux.intel.com, efault@gmx.de,
+        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
+        mingo@kernel.org, song.bao.hua@hisilicon.com,
+        srikar@linux.vnet.ibm.com, valentin.schneider@arm.com,
+        vincent.guittot@linaro.org
+Subject: Re: [PATCH v4] sched/fair: Consider cpu affinity when allowing NUMA
+ imbalance in find_idlest_group
+Message-ID: <20220217100523.GV3366@techsingularity.net>
+References: <20220217055408.28151-1-kprateek.nayak@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] tty: serial: atmel: add earlycon support
-Content-Language: fr-FR
-To:     Michael Walle <michael@walle.cc>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220217094620.1148571-1-michael@walle.cc>
-From:   Richard Genoud <richard.genoud@gmail.com>
-In-Reply-To: <20220217094620.1148571-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20220217055408.28151-1-kprateek.nayak@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks Prateek,
 
-
-Le 17/02/2022 à 10:46, Michael Walle a écrit :
-> Add early console support which relies on the bootloader for the
-> initialization of the UART.
-> Please note, that the compatibles are taken from at91-usart MFD
-> driver.
+On Thu, Feb 17, 2022 at 11:24:08AM +0530, K Prateek Nayak wrote:
+> In AMD Zen like systems which contains multiple LLCs per socket,
+> users want to spread bandwidth hungry applications across multiple
+> LLCs. Stream is one such representative workload where the best
+> performance is obtained by limiting one stream thread per LLC. To
+> ensure this, users are known to pin the tasks to a specify a subset of
+> the CPUs consisting of one CPU per LLC while running such bandwidth
+> hungry tasks.
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-Acked-by: Richard Genoud <richard.genoud@gmail.com>
-
-> ---
->   drivers/tty/serial/Kconfig        |  1 +
->   drivers/tty/serial/atmel_serial.c | 24 ++++++++++++++++++++++++
->   2 files changed, 25 insertions(+)
+> Suppose we kickstart a multi-threaded task like stream with 8 threads
+> using taskset or numactl to run on a subset of CPUs on a 2 socket Zen3
+> server where each socket contains 128 CPUs
+> (0-63,128-191 in one socket, 64-127,192-255 in another socket)
 > 
-> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> index 0e5ccb25bdb1..407a98ec0791 100644
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -139,6 +139,7 @@ config SERIAL_ATMEL_CONSOLE
->   	bool "Support for console on AT91 serial port"
->   	depends on SERIAL_ATMEL=y
->   	select SERIAL_CORE_CONSOLE
-> +	select SERIAL_EARLYCON
->   	help
->   	  Say Y here if you wish to use an on-chip UART on a Atmel
->   	  AT91 processor as the system console (the system
-> diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-> index 2d09a89974a2..73d43919898d 100644
-> --- a/drivers/tty/serial/atmel_serial.c
-> +++ b/drivers/tty/serial/atmel_serial.c
-> @@ -2673,6 +2673,30 @@ static struct console atmel_console = {
->   	.data		= &atmel_uart,
->   };
->   
-> +static void atmel_serial_early_write(struct console *con, const char *s,
-> +				     unsigned int n)
-> +{
-> +	struct earlycon_device *dev = con->data;
-> +
-> +	uart_console_write(&dev->port, s, n, atmel_console_putchar);
-> +}
-> +
-> +static int __init atmel_early_console_setup(struct earlycon_device *device,
-> +					    const char *options)
-> +{
-> +	if (!device->port.membase)
-> +		return -ENODEV;
-> +
-> +	device->con->write = atmel_serial_early_write;
-> +
-> +	return 0;
-> +}
-> +
-> +OF_EARLYCON_DECLARE(atmel_serial, "atmel,at91rm9200-usart",
-> +		    atmel_early_console_setup);
-> +OF_EARLYCON_DECLARE(atmel_serial, "atmel,at91sam9260-usart",
-> +		    atmel_early_console_setup);
-> +
->   #define ATMEL_CONSOLE_DEVICE	(&atmel_console)
->   
->   #else
-Thanks !
+> Eg: numactl -C 0,16,32,48,64,80,96,112 ./stream8
+> 
+
+In this case the stream threads can use any CPU of the subset, presumably
+this is parallelised with OpenMP without specifying spread or bind
+directives.
+
+> stream-5045    [032] d..2.   167.914699: sched_wakeup_new: comm=stream pid=5047 prio=120 target_cpu=048
+> stream-5045    [032] d..2.   167.914746: sched_wakeup_new: comm=stream pid=5048 prio=120 target_cpu=000
+> stream-5045    [032] d..2.   167.914846: sched_wakeup_new: comm=stream pid=5049 prio=120 target_cpu=016
+> stream-5045    [032] d..2.   167.914891: sched_wakeup_new: comm=stream pid=5050 prio=120 target_cpu=032
+> stream-5045    [032] d..2.   167.914928: sched_wakeup_new: comm=stream pid=5051 prio=120 target_cpu=032
+> stream-5045    [032] d..2.   167.914976: sched_wakeup_new: comm=stream pid=5052 prio=120 target_cpu=032
+> stream-5045    [032] d..2.   167.915011: sched_wakeup_new: comm=stream pid=5053 prio=120 target_cpu=032
+> 
+
+Resulting in some stacking with the baseline
+
+> stream-4733    [032] d..2.   116.017980: sched_wakeup_new: comm=stream pid=4735 prio=120 target_cpu=048
+> stream-4733    [032] d..2.   116.018032: sched_wakeup_new: comm=stream pid=4736 prio=120 target_cpu=000
+> stream-4733    [032] d..2.   116.018127: sched_wakeup_new: comm=stream pid=4737 prio=120 target_cpu=064
+> stream-4733    [032] d..2.   116.018185: sched_wakeup_new: comm=stream pid=4738 prio=120 target_cpu=112
+> stream-4733    [032] d..2.   116.018235: sched_wakeup_new: comm=stream pid=4739 prio=120 target_cpu=096
+> stream-4733    [032] d..2.   116.018289: sched_wakeup_new: comm=stream pid=4740 prio=120 target_cpu=016
+> stream-4733    [032] d..2.   116.018334: sched_wakeup_new: comm=stream pid=4741 prio=120 target_cpu=080
+> 
+
+And no stacking with your patch. So far so good.
+
+> <SNIP>
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 5c4bfffe8c2c..6e875f1f34e2 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9130,6 +9130,8 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+>  
+>  	case group_has_spare:
+>  		if (sd->flags & SD_NUMA) {
+> +			struct cpumask *cpus;
+> +			int imb;
+>  #ifdef CONFIG_NUMA_BALANCING
+>  			int idlest_cpu;
+>  			/*
+> @@ -9147,10 +9149,15 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+>  			 * Otherwise, keep the task close to the wakeup source
+>  			 * and improve locality if the number of running tasks
+>  			 * would remain below threshold where an imbalance is
+> -			 * allowed. If there is a real need of migration,
+> -			 * periodic load balance will take care of it.
+> +			 * allowed while accounting for the possibility the
+> +			 * task is pinned to a subset of CPUs. If there is a
+> +			 * real need of migration, periodic load balance will
+> +			 * take care of it.
+>  			 */
+> -			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, sd->imb_numa_nr))
+> +			cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+> +			cpumask_and(cpus, sched_group_span(local), p->cpus_ptr);
+> +			imb = min(cpumask_weight(cpus), sd->imb_numa_nr);
+> +			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, imb))
+>  				return NULL;
+
+One concern I have is that we incur a cpumask setup and cpumask_weight
+cost on every clone whether a restricted CPU mask is used or not.  Peter,
+is it acceptable to avoid the cpumask check if there is no restrictions
+on allowed cpus like this?
+
+	imb = sd->imb_numa_nr;
+	if (p->nr_cpus_allowed != num_online_cpus())
+		struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+
+		cpumask_and(cpus, sched_group_span(local), p->cpus_ptr);
+		imb = min(cpumask_weight(cpus), imb);
+	}
+
+It's not perfect as a hotplug event could occur but that would be a fairly
+harmless race with a limited impact (race with hotplug during clone may
+stack for a short interval before LB intervenes).
+
+-- 
+Mel Gorman
+SUSE Labs

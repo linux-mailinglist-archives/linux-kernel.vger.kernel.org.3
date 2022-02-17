@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A184BA45D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9333B4BA467
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242495AbiBQP3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:29:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38706 "EHLO
+        id S242531AbiBQPbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:31:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242461AbiBQP3T (ORCPT
+        with ESMTP id S242528AbiBQPby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:29:19 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CAA2B103D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:29:05 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id c4so5234032pfl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=v3PZTYCZtAw5vPUwO4Uq8xdQCoMiI5xDnErBT8ttkLk=;
-        b=TQ/dBtFIbcKmtvuPVxScTZxmhDqYbufa0jGlagp21kUsyB694jxg6WQagCAVZI2TGA
-         zYGAIOV6IMgCd7GpMgwmdJsNLdAdXnrqQ504wI5Xee6OQEXgWHSPw27oPTetGLUufW5u
-         vA2H7uVuXzXa73Z/0Nu4L3t0WiwWK83IhTIlEYTr0fEMD1QcAI/ZrhboHIPgFu4Z7l3E
-         mMG1dp6dmGSIpVmVblZ04mY03B3jVmxL2t3cHDftbPce7XqBNVGDlYSoN3S+GY3i3iFw
-         u//+gKc1/PM/sw1darf0UguaEhe38/P/NEGw1EzPUiTOLSW532B32OOjDjDmv7cODxPl
-         A7fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v3PZTYCZtAw5vPUwO4Uq8xdQCoMiI5xDnErBT8ttkLk=;
-        b=S3jqZ0ORB5lmcecUKMFpCRdUVbjcuoDtO+WheTLM48vSVejFCkcqllFComnn8R7K36
-         Aj3iuS4Y83GThMTdykBqSgVefnRuH2JXbqVZpdT/rkHBGAt+1bymzTtrAfkI1HKRj8Dd
-         7sZd5iMo4EezwX2JgcHpdsjpqu0jplhh+X14DmXh3RNHDlJ5mgBAzypGZzCbguYubKms
-         Db3jw8BeplxGcrCCMqQSpLfHWYoG1PSS2z0HCAcgxc8agzzGCwGfTKJ3Wknw73fBR2HG
-         keFI9jGs+0dzQ+TKVta3EUMiETOXyK6rPaLT6q79mJy2SNG2MgMjnIfo0nDa8smW2vdq
-         GHrg==
-X-Gm-Message-State: AOAM533C9Crf1eWsujuCoCyYsi+T6WByyVTTLlWkKp7kauFqXokY8l4s
-        9usNoEqZKUSRSmYlA5zUZC2cvA==
-X-Google-Smtp-Source: ABdhPJzG+UEGctEp/dAIN2I+Mwgu+h36V/CqR71UBm6VYavQqzvx+n2gMw4CaFEs2mvncaNmZJnJlg==
-X-Received: by 2002:a63:6441:0:b0:372:c9d1:ea90 with SMTP id y62-20020a636441000000b00372c9d1ea90mr2850128pgb.249.1645111744467;
-        Thu, 17 Feb 2022 07:29:04 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q94sm2070913pja.27.2022.02.17.07.29.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 07:29:03 -0800 (PST)
-Date:   Thu, 17 Feb 2022 15:29:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, pbonzini@redhat.com, sdeep@vmware.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCHv2 00/29] TDX Guest: TDX core support
-Message-ID: <Yg5pvO1nXo6qQP9C@google.com>
-References: <20220210003033.e57c2925b69bab5cfabf7292@intel.com>
- <YgOoId+vyd1VhIqQ@zn.tnic>
- <20220210004831.03dea501738bee060003d040@intel.com>
- <YgOr6tZjsooJgAi9@zn.tnic>
- <YgPwwI2+16/7jQC4@google.com>
- <YgQR/S67Fqz9PanR@zn.tnic>
- <YgQfGKXOemtXnFau@google.com>
- <YgQl6Uk9rONgv9+F@zn.tnic>
- <20220216154809.w27bt6oi3ql4ssip@black.fi.intel.com>
- <Yg5nh1RknPRwIrb8@zn.tnic>
+        Thu, 17 Feb 2022 10:31:54 -0500
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E83DEF7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:31:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1645111891;
+        bh=FihfJldaJ6r2xVuFS8/jwCVqViJT/Juw+yF0fIUwbtQ=;
+        h=From:To:Cc:Subject:Date;
+        b=EEMDUMO6rPmbsPDc77JEeADLmFBW80Cke9UFh0rjyBm+jucSVBvpOSoD3lSsCbvk9
+         OyOgXfqHy5jDiXfnd2e12B+mp9IOcxxb5YcLlc+O31wafa4UCdhmRXoaMIpzRzXgzj
+         M2z5QPTYtNX91rEk9NiG+xVM5XpjBgxrrGP1D4gk=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc10.qq.com (NewEsmtp) with SMTP
+        id 78DB94C8; Thu, 17 Feb 2022 23:30:13 +0800
+X-QQ-mid: xmsmtpt1645111813t42y1perq
+Message-ID: <tencent_A552D77F0E081BB36EAE11C720455D78BD06@qq.com>
+X-QQ-XMAILINFO: NOIkHYnr7VzdBovMCoZOh3CgEwz50dkDvRc6BZyxzTCU3rAJPriHHKsqJamEwf
+         VdPGYFBsRcZoPeYLk8uLvbaJZ0wFt5irk6lV4nYWFpFSbHk9wK8V6LkC5Ml65QlyybE6k8KEwBXD
+         XJBsdH/FZglrztGCURRy6n8/R+JiaI0SpO2SZPLkyrB+AnwMfAcA1F7avwZnbosFvCgv6b7jMFN/
+         nLyQW600y5Aukd1l1k9+c4NGfCIJGIj9/tM/Ytt7z0YFl8QEVzXs5gj/TI7uF3s211UQfKtAUVPu
+         0cxVc4D9L8gUKC7Fnvcg7L0JUyDiPpRWb2Hzq2NHB3Yn8t2GKGx+/qLSzmNKtPqES4FJoto9RtPu
+         SRsCJ+JVczQ/b3dXnGyGPNPXCrCsn42KmdpnB8A3cHQVE+in/vTePGMtK3LDTXJmfkkk4/vGdSQD
+         jcOrmhI6vB8w8peswhimI4T2lhmthG6NbgtT0pxoS6uVSyCRjMSaG6+eyIS75lBn/ogdEAAYn7g+
+         Fe3AgeKI6RJ8SHlbcVaVDPng2/Z5UH6MlRbPyhMprsWA3CxqNbDNY8AxlxxrRaWfciwIB0PBlsnW
+         rqFP4mJ9/0oWy3NWYJupuLRy9GaUTT3lnmQ2pBobQmJDBW0zA2ttD3Vs56KCLfjEBa5ZgiafoJz/
+         sp9XjjgmPXmMHAYEyigWV/aEn2Rpn+gdINQgQ4klxaInAqMAdU5fhcr7cAKaIS704DNhlNR3Zlmu
+         WSdEAjnuDt2XPtN6qs4vO+ruimDrYga49LD9oldbxJqML0IF0QbMr+GvJJLfoY/lujK/wmZMLebz
+         0yT0XxAbJ0Bqgi5R6RdD21BjDBMLCMZRTzmiUg3YdmM8Gy3dxHgLkbRu1pcrJR+O3w3EK0EIOPjh
+         T4hMlluvs13xUgt6UJczUpukrEUJnogqGmIAbd478pzui1o7Xg+sEiFTPcRJM0cz75Ev2sFj6W
+From:   xkernel.wang@foxmail.com
+To:     jerome.pouiller@silabs.com, gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] staging: wfx: fix the error handling in wfx_init_common()
+Date:   Thu, 17 Feb 2022 23:29:06 +0800
+X-OQ-MSGID: <20220217152906.1029-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg5nh1RknPRwIrb8@zn.tnic>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022, Borislav Petkov wrote:
-> On Wed, Feb 16, 2022 at 06:48:09PM +0300, Kirill A. Shutemov wrote:
-> > So, any conclusion?
-> 
-> Lemme type the whole thing here again so that we have it all summed up
-> in one place - I think we all agree by now:
-> 
-> - confidential computing guest stuff: arch/x86/coco/{sev,tdx}
-> - generic host virtualization stuff: arch/x86/virt/
-> - coco host stuff: arch/x86/virt/vmx/{tdx,vmx}.c and arch/x86/virt/svm/sev*.c
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-LGTM
+All the error handlers of wfx_init_common() return without calling
+ieee80211_free_hw(hw), which may result in memory leak. So I add
+one err label to unify the error handlers.
 
-> New stuff goes to the new paths - i.e., TDX guest, host, etc - old stuff
-> - AMD SEV/SNP will get moved gradually so that development doesn't get
-> disrupted. Or we can do a flag day, right before -rc1 or so, and move it
-> all so in one go. We'll see.
+Suggested-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/staging/wfx/main.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-FWIW, I don't think there's much existing SEV host virtualization stuff that can
-be moved without first extracting and decoupling it from KVM, which will be
-non-trivial.  I do want to do that some day, but it definitely shouldn't hold up
-merging SNP.
+diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
+index 4b9fdf9..f83df9f 100644
+--- a/drivers/staging/wfx/main.c
++++ b/drivers/staging/wfx/main.c
+@@ -309,7 +309,8 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+ 	wdev->pdata.gpio_wakeup = devm_gpiod_get_optional(dev, "wakeup",
+ 							  GPIOD_OUT_LOW);
+ 	if (IS_ERR(wdev->pdata.gpio_wakeup))
+-		return NULL;
++		goto err;
++
+ 	if (wdev->pdata.gpio_wakeup)
+ 		gpiod_set_consumer_name(wdev->pdata.gpio_wakeup, "wfx wakeup");
+ 
+@@ -325,9 +326,13 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+ 	wdev->force_ps_timeout = -1;
+ 
+ 	if (devm_add_action_or_reset(dev, wfx_free_common, wdev))
+-		return NULL;
++		goto err;
+ 
+ 	return wdev;
++
++err:
++	ieee80211_free_hw(hw);
++	return NULL;
+ }
+ 
+ int wfx_probe(struct wfx_dev *wdev)
+-- 

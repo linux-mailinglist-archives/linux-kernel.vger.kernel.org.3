@@ -2,216 +2,720 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF994BA644
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4344BA632
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243393AbiBQQlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:41:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51574 "EHLO
+        id S243400AbiBQQmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:42:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243396AbiBQQlo (ORCPT
+        with ESMTP id S234978AbiBQQmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:41:44 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BC1AC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:41:23 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id k20-20020a5d91d4000000b0061299fad2fdso2494653ior.21
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:41:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=nqAPwEEhwPR0Pv3AXtCJI0o79dEiYFLyRlAR6waSNts=;
-        b=TjXVr91gjcqjcSzb29HPowwf0lY65To0mZuPnxWax1b2pJGCnlxq40ZbuR7Nu+5OuX
-         VPuI8QE+KuKXl/igcNHhRWShGs7ZKW26YP+np03Pvz823sm/YZ3oSS1E2/VQFIgahjX/
-         2RGqHIbDiMRIE5odtKwBshJaCryQg5OTEJxDtDEBVaowypzoYlqfrEUgGf1wmdeOcZRo
-         znUYOvWC2y6JKiz2bI0D2Wj5MWICDCDDcQo9/4Z61yJ+/XGjCsyp/1HpGCQn9XavPjfu
-         0JNRh3iUqypEGebd5JNkW/zoxWiFubmPQbfDvyW+It3X+v9FzmMgZmSYn1bvPyxwOUWd
-         qiNA==
-X-Gm-Message-State: AOAM533uePiiMFoGy6s41yjUo6nN3yeAumDY03i5DjqEi8TsgbGDBile
-        7tU3Dx5pDu0Y+C6RSPJQrcQfOw1dXRpxeOqFGmzROwbArF+O
-X-Google-Smtp-Source: ABdhPJzi2uSOJET/qIt8gik3yCeeRZab/iPkcQghp1KpFihPA8CNzTSywhz9uvEfe3jJVjNXMHcYmjLOy0cNzv1xnB6cRloCtYG+
-MIME-Version: 1.0
-X-Received: by 2002:a02:3c01:0:b0:314:37ed:233 with SMTP id
- m1-20020a023c01000000b0031437ed0233mr2380641jaa.118.1645116082579; Thu, 17
- Feb 2022 08:41:22 -0800 (PST)
-Date:   Thu, 17 Feb 2022 08:41:22 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b772b805d8396f14@google.com>
-Subject: [syzbot] BUG: sleeping function called from invalid context in smc_pnet_apply_ib
-From:   syzbot <syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com>
-To:     jgg@ziepe.ca, liangwenpeng@huawei.com,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        liweihang@huawei.com, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Thu, 17 Feb 2022 11:42:06 -0500
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36B92B355A;
+        Thu, 17 Feb 2022 08:41:49 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id 36EAF1E95;
+        Thu, 17 Feb 2022 17:41:48 +0100 (CET)
+Authentication-Results: ext-mx-out001.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:content-type:content-type:in-reply-to
+        :references:from:from:content-language:subject:subject
+        :mime-version:date:date:message-id:received:received:received;
+         s=dkim20160331; t=1645116106; x=1646930507; bh=tVkcBU8GWaQ+6tqv
+        FM7Q/5tmZEKJG88hL+ArwuTAS3o=; b=oJAf+Z/L6ompx826q2muU1/dl7cHuLue
+        apzL6heTqzmXnKv+GBh0XaixN+7j11GmcmWsCnCYldrC6gMtKQ7GiamYyGhESsSS
+        yF2ckzYvJElZDZs8P27f2DLN5v8NoMlcTBPpshci4YurO6NNwUZOZLLciio41YPA
+        MeITR2h8EtfH+N7MR+G9qGanzFhd9e2zrQwT62u1smzwBu3y8SmzkV1i/E8gspRE
+        PnyfCO3c+KCfcQUsSSO1izgRi26LTdnBtWIba2vojalWmpFrofWZ91GydeE+EGpl
+        xekB7ytEf+eYCYtSqicp0fWMqb5cZVQ86AisCpf9d4b7iAoTMEDmotEoyt54q6hj
+        KbBTaicbC9aXuzrQrMXmArJzsvKKBf2DF+9BJzuW2NRDRdCdOmF58/tAQWpKIjII
+        mWWdNmICR424kmdRfo1hdnNw+cla8y98xp0MfjX6Uyxly7X9s4hm/iUAiVkk+/ED
+        6evQKNtpwm9V3hTLJ4Xuk/HDFJM1ll7+4MO0Fjf23wypJyAMe08oOm5ZRC1C4F6N
+        UWeRZvFCveRla5BM3N8DVqUJBeVn7tPDcvU5iznTBDgQyPMjewYw4dkxNHIC2ouz
+        +3Spb435sEye6qySrC/CVzqQnbR0mSjn8jMwzAieq4tDMIfgTsLRV/iFMRalP06U
+        y0U174wvHKY=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Score: -1.899
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id vyLoJLefJzwg; Thu, 17 Feb 2022 17:41:46 +0100 (CET)
+Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
+        by mx.kolabnow.com (Postfix) with ESMTPS id 438A71C62;
+        Thu, 17 Feb 2022 17:41:46 +0100 (CET)
+Received: from ext-subm001.mykolab.com (unknown [10.9.6.1])
+        by int-mx001.mykolab.com (Postfix) with ESMTPS id B011E1262;
+        Thu, 17 Feb 2022 17:41:44 +0100 (CET)
+Message-ID: <a2a7f05d-0cac-fa81-89fc-b88b066d32ca@hansg.org>
+Date:   Thu, 17 Feb 2022 17:41:41 +0100
+MIME-Version: 1.0
+Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
+Content-Language: en-US
+From:   Hans de Goede <hans@hansg.org>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        platform-driver-x86@vger.kernel.org
+Cc:     Mark Gross <markgross@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
+ <f5189aa3-77e1-f976-ac4b-5d1293dfa1b2@hansg.org>
+In-Reply-To: <f5189aa3-77e1-f976-ac4b-5d1293dfa1b2@hansg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi All,
 
-syzbot found the following issue on:
+On 2/17/22 17:26, Hans de Goede wrote:
+> Hi Andrey,
+> 
+> On 2/6/22 03:20, Andrey Smirnov wrote:
+>> Add a driver exposing various bits and pieces of functionality
+>> provided by Steam Deck specific VLV0100 device presented by EC
+>> firmware. This includes but not limited to:
+>>
+>>     - CPU/device's fan control
+>>     - Read-only access to DDIC registers
+>>     - Battery tempreature measurements
+>>     - Various display related control knobs
+>>     - USB Type-C connector event notification
+>>
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> Cc: Mark Gross <markgross@kernel.org>
+>> Cc: Jean Delvare <jdelvare@suse.com>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> Cc: linux-kernel@vger.kernel.org (open list)
+>> Cc: platform-driver-x86@vger.kernel.org
+>> Cc: linux-hwmon@vger.kernel.org
+>> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> 
+> The .c file says: "Copyright (C) 2021-2022 Valve Corporation"
+> yet you are using a personal email address. This is not really
+> an issue, but it does look a bit weird.
+> 
+>> ---
+>>
+>> This driver is really a kitchen sink of various small bits. Maybe it
+>> is worth splitting into an MFD + child drivers/devices?
+> 
+> Yes with the extcon thing I think you should definitely go for
+> a MFD device. In which case the main driver registering the
+> regmap + the cells would go under drivers/mfd and most of the
+> other drivers would go in their own subsystems.
+> 
+> And as the drivers/platform/x86/ subsystem maintainer I guess
+> that means I don't have to do much with this driver :)
+> 
+> I would still be happy to take any bits which don't fit
+> anywhere else attaching to say a "misc" MFD cell.
+> 
+> Regards,
+> 
+> Hans
 
-HEAD commit:    c832962ac972 net: bridge: multicast: notify switchdev driv..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=16b157bc700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-dashboard link: https://syzkaller.appspot.com/bug?extid=4f322a6d84e991c38775
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Sorry for sending an almost identical mail twice, at first
+I thought my email-client (thunderbird) somehow ate this one,
+as it did not show in my send folder.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+But now I see that I somehow accidentally changed from which
+account I send the reply.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
+Regards,
 
-infiniband syz1: set down
-infiniband syz1: added lo
-RDS/IB: syz1: added
-smc: adding ib device syz1 with port count 1
-BUG: sleeping function called from invalid context at kernel/locking/mutex.c:577
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 17974, name: syz-executor.3
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-6 locks held by syz-executor.3/17974:
- #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma_nl_rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
- #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink+0x25d/0x560 drivers/infiniband/core/nldev.c:1707
- #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_and_get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
- #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_and_get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
- #4: ffff8880482c85c0 (&device->client_data_rwsem){++++}-{3:3}, at: add_client_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
- #5: ffff8880230a4118 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_by_table_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 1 PID: 17974 Comm: syz-executor.3 Not tainted 5.17.0-rc3-syzkaller-00170-gc832962ac972 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9576
- __mutex_lock_common kernel/locking/mutex.c:577 [inline]
- __mutex_lock+0x9f/0x12f0 kernel/locking/mutex.c:733
- smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
- smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
- smc_ib_add_dev+0x4d7/0x900 net/smc/smc_ib.c:940
- add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:720
- enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1331
- ib_register_device drivers/infiniband/core/device.c:1419 [inline]
- ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1365
- rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1146
- rxe_add+0x1331/0x1710 drivers/infiniband/sw/rxe/rxe.c:246
- rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:538
- rxe_newlink drivers/infiniband/sw/rxe/rxe.c:268 [inline]
- rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:249
- nldev_newlink+0x30a/0x560 drivers/infiniband/core/nldev.c:1717
- rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
- rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
- rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2413
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f909305f059
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f90919d4168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f9093171f60 RCX: 00007f909305f059
-RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000004
-RBP: 00007f90930b908d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff171c256f R14: 00007f90919d4300 R15: 0000000000022000
- </TASK>
-
-=============================
-[ BUG: Invalid wait context ]
-5.17.0-rc3-syzkaller-00170-gc832962ac972 #0 Tainted: G        W        
------------------------------
-syz-executor.3/17974 is trying to lock:
-ffffffff8d710098 (smc_ib_devices.mutex){+.+.}-{3:3}, at: smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
-other info that might help us debug this:
-context-{4:4}
-6 locks held by syz-executor.3/17974:
- #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma_nl_rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
- #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink+0x25d/0x560 drivers/infiniband/core/nldev.c:1707
- #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_and_get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
- #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_and_get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
- #4: ffff8880482c85c0 (&device->client_data_rwsem){++++}-{3:3}, at: add_client_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
- #5: ffff8880230a4118 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_by_table_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
-stack backtrace:
-CPU: 1 PID: 17974 Comm: syz-executor.3 Tainted: G        W         5.17.0-rc3-syzkaller-00170-gc832962ac972 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_lock_invalid_wait_context kernel/locking/lockdep.c:4678 [inline]
- check_wait_context kernel/locking/lockdep.c:4739 [inline]
- __lock_acquire.cold+0x213/0x3ab kernel/locking/lockdep.c:4977
- lock_acquire kernel/locking/lockdep.c:5639 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
- __mutex_lock_common kernel/locking/mutex.c:600 [inline]
- __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
- smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
- smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
- smc_ib_add_dev+0x4d7/0x900 net/smc/smc_ib.c:940
- add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:720
- enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1331
- ib_register_device drivers/infiniband/core/device.c:1419 [inline]
- ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1365
- rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1146
- rxe_add+0x1331/0x1710 drivers/infiniband/sw/rxe/rxe.c:246
- rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:538
- rxe_newlink drivers/infiniband/sw/rxe/rxe.c:268 [inline]
- rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:249
- nldev_newlink+0x30a/0x560 drivers/infiniband/core/nldev.c:1717
- rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
- rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
- rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2413
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f909305f059
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f90919d4168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f9093171f60 RCX: 00007f909305f059
-RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000004
-RBP: 00007f90930b908d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff171c256f R14: 00007f90919d4300 R15: 0000000000022000
- </TASK>
-smc:    ib device syz1 port 1 has pnetid SYZ2 (user defined)
-lo speed is unknown, defaulting to 1000
-lo speed is unknown, defaulting to 1000
-lo speed is unknown, defaulting to 1000
-lo speed is unknown, defaulting to 1000
-lo speed is unknown, defaulting to 1000
-lo speed is unknown, defaulting to 1000
+Hans
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+> 
+> 
+> 
+>>
+>>  drivers/platform/x86/Kconfig     |  15 +
+>>  drivers/platform/x86/Makefile    |   2 +
+>>  drivers/platform/x86/steamdeck.c | 523 +++++++++++++++++++++++++++++++
+>>  3 files changed, 540 insertions(+)
+>>  create mode 100644 drivers/platform/x86/steamdeck.c
+>>
+>> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+>> index c23612d98126..86f014e78a6e 100644
+>> --- a/drivers/platform/x86/Kconfig
+>> +++ b/drivers/platform/x86/Kconfig
+>> @@ -1136,6 +1136,21 @@ config SIEMENS_SIMATIC_IPC
+>>  	  To compile this driver as a module, choose M here: the module
+>>  	  will be called simatic-ipc.
+>>
+>> +config STEAMDECK
+>> +       tristate "Valve Steam Deck platform driver"
+>> +       depends on X86_64
+>> +       help
+>> +         Driver exposing various bits and pieces of functionality
+>> +	 provided by Steam Deck specific VLV0100 device presented by
+>> +	 EC firmware. This includes but not limited to:
+>> +	     - CPU/device's fan control
+>> +	     - Read-only access to DDIC registers
+>> +	     - Battery tempreature measurements
+>> +	     - Various display related control knobs
+>> +	     - USB Type-C connector event notification
+>> +
+>> +	 Say N unless you are running on a Steam Deck.
+>> +
+>>  endif # X86_PLATFORM_DEVICES
+>>
+>>  config PMC_ATOM
+>> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+>> index c12a9b044fd8..2eb965e14ced 100644
+>> --- a/drivers/platform/x86/Makefile
+>> +++ b/drivers/platform/x86/Makefile
+>> @@ -129,3 +129,5 @@ obj-$(CONFIG_PMC_ATOM)			+= pmc_atom.o
+>>
+>>  # Siemens Simatic Industrial PCs
+>>  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
+>> +
+>> +obj-$(CONFIG_STEAMDECK)			+= steamdeck.o
+>> diff --git a/drivers/platform/x86/steamdeck.c b/drivers/platform/x86/steamdeck.c
+>> new file mode 100644
+>> index 000000000000..77a6677ec19e
+>> --- /dev/null
+>> +++ b/drivers/platform/x86/steamdeck.c
+>> @@ -0,0 +1,523 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +
+>> +/*
+>> + * Steam Deck ACPI platform driver
+>> + *
+>> + * Copyright (C) 2021-2022 Valve Corporation
+>> + *
+>> + */
+>> +#include <linux/acpi.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/extcon-provider.h>
+>> +
+>> +#define ACPI_STEAMDECK_NOTIFY_STATUS	0x80
+>> +
+>> +/* 0 - port connected, 1 -port disconnected */
+>> +#define ACPI_STEAMDECK_PORT_CONNECT	BIT(0)
+>> +/* 0 - Upstream Facing Port, 1 - Downdstream Facing Port */
+>> +#define ACPI_STEAMDECK_CUR_DATA_ROLE	BIT(3)
+>> +/*
+>> + * Debouncing delay to allow negotiation process to settle. 2s value
+>> + * was arrived at via trial and error.
+>> + */
+>> +#define STEAMDECK_ROLE_SWITCH_DELAY	(msecs_to_jiffies(2000))
+>> +
+>> +struct steamdeck {
+>> +	struct acpi_device *adev;
+>> +	struct device *hwmon;
+>> +	void *regmap;
+>> +	long fan_target;
+>> +	struct delayed_work role_work;
+>> +	struct extcon_dev *edev;
+>> +	struct device *dev;
+>> +};
+>> +
+>> +static ssize_t
+>> +steamdeck_simple_store(struct device *dev, const char *buf, size_t count,
+>> +		       const char *method,
+>> +		       unsigned long upper_limit)
+>> +{
+>> +	struct steamdeck *fan = dev_get_drvdata(dev);
+>> +	unsigned long value;
+>> +
+>> +	if (kstrtoul(buf, 10, &value) || value >= upper_limit)
+>> +		return -EINVAL;
+>> +
+>> +	if (ACPI_FAILURE(acpi_execute_simple_method(fan->adev->handle,
+>> +						    (char *)method, value)))
+>> +		return -EIO;
+>> +
+>> +	return count;
+>> +}
+>> +
+>> +#define STEAMDECK_ATTR_WO(_name, _method, _upper_limit)			\
+>> +	static ssize_t _name##_store(struct device *dev,		\
+>> +				     struct device_attribute *attr,	\
+>> +				     const char *buf, size_t count)	\
+>> +	{								\
+>> +		return steamdeck_simple_store(dev, buf, count,		\
+>> +					    _method,			\
+>> +					    _upper_limit);		\
+>> +	}								\
+>> +	static DEVICE_ATTR_WO(_name)
+>> +
+>> +STEAMDECK_ATTR_WO(target_cpu_temp, "STCT", U8_MAX / 2);
+>> +STEAMDECK_ATTR_WO(gain, "SGAN", U16_MAX);
+>> +STEAMDECK_ATTR_WO(ramp_rate, "SFRR", U8_MAX);
+>> +STEAMDECK_ATTR_WO(hysteresis, "SHTS",  U16_MAX);
+>> +STEAMDECK_ATTR_WO(maximum_battery_charge_rate, "CHGR", U16_MAX);
+>> +STEAMDECK_ATTR_WO(recalculate, "SCHG", U16_MAX);
+>> +
+>> +STEAMDECK_ATTR_WO(led_brightness, "CHBV", U8_MAX);
+>> +STEAMDECK_ATTR_WO(content_adaptive_brightness, "CABC", U8_MAX);
+>> +STEAMDECK_ATTR_WO(gamma_set, "GAMA", U8_MAX);
+>> +STEAMDECK_ATTR_WO(display_brightness, "WDBV", U8_MAX);
+>> +STEAMDECK_ATTR_WO(ctrl_display, "WCDV", U8_MAX);
+>> +STEAMDECK_ATTR_WO(cabc_minimum_brightness, "WCMB", U8_MAX);
+>> +STEAMDECK_ATTR_WO(memory_data_access_control, "MDAC", U8_MAX);
+>> +
+>> +#define STEAMDECK_ATTR_WO_NOARG(_name, _method)				\
+>> +	static ssize_t _name##_store(struct device *dev,		\
+>> +				     struct device_attribute *attr,	\
+>> +				     const char *buf, size_t count)	\
+>> +	{								\
+>> +		struct steamdeck *fan = dev_get_drvdata(dev);		\
+>> +									\
+>> +		if (ACPI_FAILURE(acpi_evaluate_object(fan->adev->handle, \
+>> +						      _method, NULL, NULL))) \
+>> +			return -EIO;					\
+>> +									\
+>> +		return count;						\
+>> +	}								\
+>> +	static DEVICE_ATTR_WO(_name)
+>> +
+>> +STEAMDECK_ATTR_WO_NOARG(power_cycle_display, "DPCY");
+>> +STEAMDECK_ATTR_WO_NOARG(display_normal_mode_on, "NORO");
+>> +STEAMDECK_ATTR_WO_NOARG(display_inversion_off, "INOF");
+>> +STEAMDECK_ATTR_WO_NOARG(display_inversion_on, "INON");
+>> +STEAMDECK_ATTR_WO_NOARG(idle_mode_on, "WRNE");
+>> +
+>> +#define STEAMDECK_ATTR_RO(_name, _method)				\
+>> +	static ssize_t _name##_show(struct device *dev,			\
+>> +				    struct device_attribute *attr,	\
+>> +				    char *buf)				\
+>> +	{								\
+>> +		struct steamdeck *jup = dev_get_drvdata(dev);		\
+>> +		unsigned long long val;					\
+>> +									\
+>> +		if (ACPI_FAILURE(acpi_evaluate_integer(			\
+>> +					 jup->adev->handle,		\
+>> +					 _method, NULL, &val)))		\
+>> +			return -EIO;					\
+>> +									\
+>> +		return sprintf(buf, "%llu\n", val);			\
+>> +	}								\
+>> +	static DEVICE_ATTR_RO(_name)
+>> +
+>> +STEAMDECK_ATTR_RO(firmware_version, "PDFW");
+>> +STEAMDECK_ATTR_RO(board_id, "BOID");
+>> +STEAMDECK_ATTR_RO(pdcs, "PDCS");
+>> +
+>> +static umode_t
+>> +steamdeck_is_visible(struct kobject *kobj, struct attribute *attr, int index)
+>> +{
+>> +	return attr->mode;
+>> +}
+>> +
+>> +static struct attribute *steamdeck_attributes[] = {
+>> +	&dev_attr_target_cpu_temp.attr,
+>> +	&dev_attr_gain.attr,
+>> +	&dev_attr_ramp_rate.attr,
+>> +	&dev_attr_hysteresis.attr,
+>> +	&dev_attr_maximum_battery_charge_rate.attr,
+>> +	&dev_attr_recalculate.attr,
+>> +	&dev_attr_power_cycle_display.attr,
+>> +
+>> +	&dev_attr_led_brightness.attr,
+>> +	&dev_attr_content_adaptive_brightness.attr,
+>> +	&dev_attr_gamma_set.attr,
+>> +	&dev_attr_display_brightness.attr,
+>> +	&dev_attr_ctrl_display.attr,
+>> +	&dev_attr_cabc_minimum_brightness.attr,
+>> +	&dev_attr_memory_data_access_control.attr,
+>> +
+>> +	&dev_attr_display_normal_mode_on.attr,
+>> +	&dev_attr_display_inversion_off.attr,
+>> +	&dev_attr_display_inversion_on.attr,
+>> +	&dev_attr_idle_mode_on.attr,
+>> +
+>> +	&dev_attr_firmware_version.attr,
+>> +	&dev_attr_board_id.attr,
+>> +	&dev_attr_pdcs.attr,
+>> +
+>> +	NULL
+>> +};
+>> +
+>> +static const struct attribute_group steamdeck_group = {
+>> +	.attrs = steamdeck_attributes,
+>> +	.is_visible = steamdeck_is_visible,
+>> +};
+>> +
+>> +static const struct attribute_group *steamdeck_groups[] = {
+>> +	&steamdeck_group,
+>> +	NULL
+>> +};
+>> +
+>> +static int steamdeck_read_fan_speed(struct steamdeck *jup, long *speed)
+>> +{
+>> +	unsigned long long val;
+>> +
+>> +	if (ACPI_FAILURE(acpi_evaluate_integer(jup->adev->handle,
+>> +					       "FANR", NULL, &val)))
+>> +		return -EIO;
+>> +
+>> +	*speed = val;
+>> +	return 0;
+>> +}
+>> +
+>> +static int
+>> +steamdeck_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>> +		     u32 attr, int channel, long *out)
+>> +{
+>> +	struct steamdeck *sd = dev_get_drvdata(dev);
+>> +	unsigned long long val;
+>> +
+>> +	switch (type) {
+>> +	case hwmon_temp:
+>> +		if (attr != hwmon_temp_input)
+>> +			return -EOPNOTSUPP;
+>> +
+>> +		if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
+>> +						       "BATT", NULL, &val)))
+>> +			return -EIO;
+>> +		/*
+>> +		 * Assuming BATT returns deg C we need to mutiply it
+>> +		 * by 1000 to convert to mC
+>> +		 */
+>> +		*out = val * 1000;
+>> +		break;
+>> +	case hwmon_fan:
+>> +		switch (attr) {
+>> +		case hwmon_fan_input:
+>> +			return steamdeck_read_fan_speed(sd, out);
+>> +		case hwmon_fan_target:
+>> +			*out = sd->fan_target;
+>> +			break;
+>> +		case hwmon_fan_fault:
+>> +			if (ACPI_FAILURE(acpi_evaluate_integer(
+>> +						 sd->adev->handle,
+>> +						 "FANC", NULL, &val)))
+>> +				return -EIO;
+>> +			/*
+>> +			 * FANC (Fan check):
+>> +			 * 0: Abnormal
+>> +			 * 1: Normal
+>> +			 */
+>> +			*out = !val;
+>> +			break;
+>> +		default:
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +		break;
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int
+>> +steamdeck_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
+>> +			    u32 attr, int channel, const char **str)
+>> +{
+>> +	switch (type) {
+>> +	case hwmon_temp:
+>> +		*str = "Battery Temp";
+>> +		break;
+>> +	case hwmon_fan:
+>> +		*str = "System Fan";
+>> +		break;
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int
+>> +steamdeck_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>> +		      u32 attr, int channel, long val)
+>> +{
+>> +	struct steamdeck *sd = dev_get_drvdata(dev);
+>> +
+>> +	if (type != hwmon_fan ||
+>> +	    attr != hwmon_fan_target)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	if (val > U16_MAX)
+>> +		return -EINVAL;
+>> +
+>> +	sd->fan_target = val;
+>> +
+>> +	if (ACPI_FAILURE(acpi_execute_simple_method(sd->adev->handle,
+>> +						    "FANS", val)))
+>> +		return -EIO;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static umode_t
+>> +steamdeck_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
+>> +			   u32 attr, int channel)
+>> +{
+>> +	if (type == hwmon_fan &&
+>> +	    attr == hwmon_fan_target)
+>> +		return 0644;
+>> +
+>> +	return 0444;
+>> +}
+>> +
+>> +static const struct hwmon_channel_info *steamdeck_info[] = {
+>> +	HWMON_CHANNEL_INFO(temp,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+>> +	HWMON_CHANNEL_INFO(fan,
+>> +			   HWMON_F_INPUT | HWMON_F_LABEL |
+>> +			   HWMON_F_TARGET | HWMON_F_FAULT),
+>> +	NULL
+>> +};
+>> +
+>> +static const struct hwmon_ops steamdeck_hwmon_ops = {
+>> +	.is_visible = steamdeck_hwmon_is_visible,
+>> +	.read = steamdeck_hwmon_read,
+>> +	.read_string = steamdeck_hwmon_read_string,
+>> +	.write = steamdeck_hwmon_write,
+>> +};
+>> +
+>> +static const struct hwmon_chip_info steamdeck_chip_info = {
+>> +	.ops = &steamdeck_hwmon_ops,
+>> +	.info = steamdeck_info,
+>> +};
+>> +
+>> +#define STEAMDECK_STA_OK			\
+>> +	(ACPI_STA_DEVICE_ENABLED |		\
+>> +	 ACPI_STA_DEVICE_PRESENT |		\
+>> +	 ACPI_STA_DEVICE_FUNCTIONING)
+>> +
+>> +static int
+>> +steamdeck_ddic_reg_read(void *context, unsigned int reg, unsigned int *val)
+>> +{
+>> +	union acpi_object obj = { .type = ACPI_TYPE_INTEGER };
+>> +	struct acpi_object_list arg_list = { .count = 1, .pointer = &obj, };
+>> +	struct steamdeck *sd = context;
+>> +	unsigned long long _val;
+>> +
+>> +	obj.integer.value = reg;
+>> +
+>> +	if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
+>> +					       "RDDI", &arg_list, &_val)))
+>> +		return -EIO;
+>> +
+>> +	*val = _val;
+>> +	return 0;
+>> +}
+>> +
+>> +static int steamdeck_read_pdcs(struct steamdeck *sd, unsigned long long *pdcs)
+>> +{
+>> +	acpi_status status;
+>> +
+>> +	status = acpi_evaluate_integer(sd->adev->handle, "PDCS", NULL, pdcs);
+>> +	if (ACPI_FAILURE(status)) {
+>> +		dev_err(sd->dev, "PDCS evaluation failed: %s\n",
+>> +			acpi_format_exception(status));
+>> +		return -EIO;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void steamdeck_usb_role_work(struct work_struct *work)
+>> +{
+>> +	struct steamdeck *sd =
+>> +		container_of(work, struct steamdeck, role_work.work);
+>> +	unsigned long long pdcs;
+>> +	bool usb_host;
+>> +
+>> +	if (steamdeck_read_pdcs(sd, &pdcs))
+>> +		return;
+>> +
+>> +	/*
+>> +	 * We only care about these two
+>> +	 */
+>> +	pdcs &= ACPI_STEAMDECK_PORT_CONNECT | ACPI_STEAMDECK_CUR_DATA_ROLE;
+>> +
+>> +	/*
+>> +	 * For "connect" events our role is determined by a bit in
+>> +	 * PDCS, for "disconnect" we switch to being a gadget
+>> +	 * unconditionally. The thinking for the latter is we don't
+>> +	 * want to start acting as a USB host until we get
+>> +	 * confirmation from the firmware that we are a USB host
+>> +	 */
+>> +	usb_host = (pdcs & ACPI_STEAMDECK_PORT_CONNECT) ?
+>> +		pdcs & ACPI_STEAMDECK_CUR_DATA_ROLE : false;
+>> +
+>> +	WARN_ON(extcon_set_state_sync(sd->edev, EXTCON_USB_HOST,
+>> +				      usb_host));
+>> +	dev_dbg(sd->dev, "USB role is %s\n", usb_host ? "host" : "device");
+>> +}
+>> +
+>> +static void steamdeck_notify(acpi_handle handle, u32 event, void *context)
+>> +{
+>> +	struct device *dev = context;
+>> +	struct steamdeck *sd = dev_get_drvdata(dev);
+>> +	unsigned long long pdcs;
+>> +	unsigned long delay;
+>> +
+>> +	switch (event) {
+>> +	case ACPI_STEAMDECK_NOTIFY_STATUS:
+>> +		if (steamdeck_read_pdcs(sd, &pdcs))
+>> +			return;
+>> +		/*
+>> +		 * We process "disconnect" events immediately and
+>> +		 * "connect" events with a delay to give the HW time
+>> +		 * to settle. For example attaching USB hub (at least
+>> +		 * for HW used for testing) will generate intermediary
+>> +		 * event with "host" bit not set, followed by the one
+>> +		 * that does have it set.
+>> +		 */
+>> +		delay = (pdcs & ACPI_STEAMDECK_PORT_CONNECT) ?
+>> +			STEAMDECK_ROLE_SWITCH_DELAY : 0;
+>> +
+>> +		queue_delayed_work(system_long_wq, &sd->role_work, delay);
+>> +		break;
+>> +	default:
+>> +		dev_err(dev, "Unsupported event [0x%x]\n", event);
+>> +	}
+>> +}
+>> +
+>> +static void steamdeck_remove_notify_handler(void *data)
+>> +{
+>> +	struct steamdeck *sd = data;
+>> +
+>> +	acpi_remove_notify_handler(sd->adev->handle, ACPI_DEVICE_NOTIFY,
+>> +				   steamdeck_notify);
+>> +	cancel_delayed_work_sync(&sd->role_work);
+>> +}
+>> +
+>> +static const unsigned int steamdeck_extcon_cable[] = {
+>> +	EXTCON_USB,
+>> +	EXTCON_USB_HOST,
+>> +	EXTCON_CHG_USB_SDP,
+>> +	EXTCON_CHG_USB_CDP,
+>> +	EXTCON_CHG_USB_DCP,
+>> +	EXTCON_CHG_USB_ACA,
+>> +	EXTCON_NONE,
+>> +};
+>> +
+>> +static int steamdeck_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct steamdeck *sd;
+>> +	acpi_status status;
+>> +	unsigned long long sta;
+>> +	int ret;
+>> +
+>> +	static const struct regmap_config regmap_config = {
+>> +		.reg_bits = 8,
+>> +		.val_bits = 8,
+>> +		.max_register = 255,
+>> +		.cache_type = REGCACHE_NONE,
+>> +		.reg_read = steamdeck_ddic_reg_read,
+>> +	};
+>> +
+>> +	sd = devm_kzalloc(dev, sizeof(*sd), GFP_KERNEL);
+>> +	if (!sd)
+>> +		return -ENOMEM;
+>> +	sd->adev = ACPI_COMPANION(&pdev->dev);
+>> +	sd->dev = dev;
+>> +	platform_set_drvdata(pdev, sd);
+>> +	INIT_DELAYED_WORK(&sd->role_work, steamdeck_usb_role_work);
+>> +
+>> +	status = acpi_evaluate_integer(sd->adev->handle, "_STA",
+>> +				       NULL, &sta);
+>> +	if (ACPI_FAILURE(status)) {
+>> +		dev_err(dev, "Status check failed (0x%x)\n", status);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if ((sta & STEAMDECK_STA_OK) != STEAMDECK_STA_OK) {
+>> +		dev_err(dev, "Device is not ready\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	/*
+>> +	 * Our ACPI interface doesn't expose a method to read current
+>> +	 * fan target, so we use current fan speed as an
+>> +	 * approximation.
+>> +	 */
+>> +	if (steamdeck_read_fan_speed(sd, &sd->fan_target))
+>> +		dev_warn(dev, "Failed to read fan speed");
+>> +
+>> +	sd->hwmon = devm_hwmon_device_register_with_info(dev,
+>> +							 "steamdeck",
+>> +							 sd,
+>> +							 &steamdeck_chip_info,
+>> +							 steamdeck_groups);
+>> +	if (IS_ERR(sd->hwmon)) {
+>> +		dev_err(dev, "Failed to register HWMON device");
+>> +		return PTR_ERR(sd->hwmon);
+>> +	}
+>> +
+>> +	sd->regmap = devm_regmap_init(dev, NULL, sd, &regmap_config);
+>> +	if (IS_ERR(sd->regmap))
+>> +		dev_err(dev, "Failed to register REGMAP");
+>> +
+>> +	sd->edev = devm_extcon_dev_allocate(dev, steamdeck_extcon_cable);
+>> +	if (IS_ERR(sd->edev))
+>> +		return -ENOMEM;
+>> +
+>> +	ret = devm_extcon_dev_register(dev, sd->edev);
+>> +	if (ret < 0) {
+>> +		dev_err(dev, "Failed to register extcon device: %d\n", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	/*
+>> +	 * Set initial role value
+>> +	 */
+>> +	queue_delayed_work(system_long_wq, &sd->role_work, 0);
+>> +	flush_delayed_work(&sd->role_work);
+>> +
+>> +	status = acpi_install_notify_handler(sd->adev->handle,
+>> +					     ACPI_DEVICE_NOTIFY,
+>> +					     steamdeck_notify,
+>> +					     dev);
+>> +	if (ACPI_FAILURE(status)) {
+>> +		dev_err(dev, "Error installing ACPI notify handler\n");
+>> +		return -EIO;
+>> +	}
+>> +
+>> +	ret = devm_add_action_or_reset(dev, steamdeck_remove_notify_handler,
+>> +				       sd);
+>> +	return ret;
+>> +}
+>> +
+>> +static const struct acpi_device_id steamdeck_device_ids[] = {
+>> +	{ "VLV0100", 0 },
+>> +	{ "", 0 },
+>> +};
+>> +MODULE_DEVICE_TABLE(acpi, steamdeck_device_ids);
+>> +
+>> +static struct platform_driver steamdeck_driver = {
+>> +	.probe = steamdeck_probe,
+>> +	.driver = {
+>> +		.name = "steamdeck",
+>> +		.acpi_match_table = steamdeck_device_ids,
+>> +	},
+>> +};
+>> +module_platform_driver(steamdeck_driver);
+>> +
+>> +MODULE_AUTHOR("Andrey Smirnov <andrew.smirnov@gmail.com>");
+>> +MODULE_DESCRIPTION("Steam Deck ACPI platform driver");
+>> +MODULE_LICENSE("GPL");
+>> --
+>> 2.25.1
+>>
+> 
+

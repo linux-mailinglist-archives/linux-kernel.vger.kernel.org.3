@@ -2,159 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD3A4B9980
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3FD4B9982
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235886AbiBQGzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:55:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48958 "EHLO
+        id S235973AbiBQGz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:55:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235843AbiBQGzN (ORCPT
+        with ESMTP id S235941AbiBQGzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:55:13 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD99727F296
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 22:54:59 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id m7so4754912pjk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 22:54:59 -0800 (PST)
+        Thu, 17 Feb 2022 01:55:22 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF462A64F2;
+        Wed, 16 Feb 2022 22:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=fbkjSAH5zzjT9bdkUEcfX+58XyqQCYr3PakKI23mckw=;
-        b=jCBnYGr0FwYAETE7VlgSz7COIhTuOqqXUvkcjf30rbfBPxuuk08YKvaOQPVYt4UgHb
-         FfNHWqxTe9rEjj3Qzmo5dVaJ9VS0shIflUfCiEbFtokKMjLM6qxMrkNcnR7AU50HiHxx
-         GP5KznxEUasfAj7zlqi0aMCfJ8H9WPHdB4/HalHPmbR0v4Ywo07XT2+LHLYOk3OotlmA
-         rZ+5JVE9CC4QqauK7OrfjE4N6aGvdyORyjg1WMtXhfMcIJeIElpgSoFGC5GR7ae4nlRr
-         eMizuvpnlNy1C8kSJaGVN1jJtgPa5P+RFPeYgpvdXqPLWJWVwdX/kadRBxOsAMOookYq
-         0aqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fbkjSAH5zzjT9bdkUEcfX+58XyqQCYr3PakKI23mckw=;
-        b=iakQWAMnzcKk/GEGxz926HV6tbPw92rKGpoVEDUReXFTo/5rENZSkCp/moNpWVdZF5
-         zOMucJ1JlVPoTeT6FNKsP7HLNBVtcMYRKBvwTJlE2l1g5Y7naOkvfR3RuEGD6+mY698a
-         69zk55gSpQRorHxdSCsR053WG2xpVN/tu+7N6RT6HySkakdIsMS8LosXtaYhCbLbCm4k
-         Gadpv+CRmfiNlz6kf9b0jzPZ0RKyNGlVckkzSCesQfjrROuoAV5ONjAT3f8ikrJnQVVr
-         umAzXEfaG6S2pAOvDPXm1Rjtu0C12t9OLQPImGlVaJnAaZVHjqVgpDe4Vqe9Hjo46eKv
-         G/qQ==
-X-Gm-Message-State: AOAM530FtAM6H7RAKz2Gqep7itQebioYrl0zdkDS08zOvXY0TyJ7RMI3
-        bmqccdr9xOc2kidqO9WnPQh5cQ==
-X-Google-Smtp-Source: ABdhPJyqT03tuQIizkw4NKuvMZCvYLmZOsIsuxvYN+JoBxu4Jal7bx4bH0PuqPgLP0/Oyt4zx3RGjw==
-X-Received: by 2002:a17:90b:360e:b0:1b9:d9f0:b37 with SMTP id ml14-20020a17090b360e00b001b9d9f00b37mr1634420pjb.111.1645080899225;
-        Wed, 16 Feb 2022 22:54:59 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id 8sm10115763pfl.164.2022.02.16.22.54.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 16 Feb 2022 22:54:58 -0800 (PST)
-Date:   Thu, 17 Feb 2022 14:54:51 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: Re: [PATCH v5 2/3] dt-bindings: interrupt-controller: Add Qualcomm
- MPM support
-Message-ID: <20220217065447.GC31965@dragon>
-References: <20220216132830.32490-1-shawn.guo@linaro.org>
- <20220216132830.32490-3-shawn.guo@linaro.org>
- <1645070363.942246.2266021.nullmailer@robh.at.kernel.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645080908; x=1676616908;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iiY2PO/JlVTcTTJYCV13zjAdSX9XMCbVDBhDj/sXH0k=;
+  b=fkUTLT5vjhWjwUGBGz/zpaWt4UZgqC3IsKYLIeq7C1pEElvd/KfKyuz9
+   1Z4pqFL+54M02K6BTUc4zDgFQp7RYWNteFsvViXu9BN1/5CDo9CmmFxxQ
+   fKwlVCy+9CJ7yDuhUFMM6embbU6tWhoOqg4o8smuESgnS43MHmtGNtI2H
+   8=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 16 Feb 2022 22:55:08 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:55:07 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 16 Feb 2022 22:55:07 -0800
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 16 Feb 2022 22:55:06 -0800
+Date:   Wed, 16 Feb 2022 22:55:05 -0800
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/3] usb: typec: ucsi: Register USB Power Delivery
+ Capabilities
+Message-ID: <20220217065452.GD13801@jackp-linux.qualcomm.com>
+References: <20220203144657.16527-1-heikki.krogerus@linux.intel.com>
+ <20220203144657.16527-4-heikki.krogerus@linux.intel.com>
+ <20220210075611.GC13801@jackp-linux.qualcomm.com>
+ <YgudomUruecCdS4M@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1645070363.942246.2266021.nullmailer@robh.at.kernel.org>
+In-Reply-To: <YgudomUruecCdS4M@kuha.fi.intel.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 09:59:23PM -0600, Rob Herring wrote:
-> On Wed, 16 Feb 2022 21:28:29 +0800, Shawn Guo wrote:
-> > It adds DT binding support for Qualcomm MPM interrupt controller.
+On Tue, Feb 15, 2022 at 02:33:38PM +0200, Heikki Krogerus wrote:
+> Hi,
+> 
+> On Wed, Feb 09, 2022 at 11:56:11PM -0800, Jack Pham wrote:
+> > Hi Heikki,
 > > 
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > ---
-> >  .../interrupt-controller/qcom,mpm.yaml        | 94 +++++++++++++++++++
-> >  1 file changed, 94 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+> > On Thu, Feb 03, 2022 at 05:46:57PM +0300, Heikki Krogerus wrote:
+> > > UCSI allows the USB PD capabilities to be read with the
+> > > GET_PDO command. This will register those capabilities, and
+> > > that way make them visible to the user space.
+> > > 
+> > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > ---
+> > >  drivers/usb/typec/ucsi/ucsi.c | 128 +++++++++++++++++++++++++++++++---
+> > >  drivers/usb/typec/ucsi/ucsi.h |   8 +++
+> > >  2 files changed, 125 insertions(+), 11 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > index f0c2fa19f3e0f..5149001093c7f 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > @@ -568,8 +568,8 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
+> > >  	}
+> > >  }
+> > >  
+> > > -static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+> > > -			 u32 *pdos, int offset, int num_pdos)
+> > > +static int ucsi_read_pdos(struct ucsi_connector *con, enum typec_role role, int is_partner,
+> > > +			  u32 *pdos, int offset, int num_pdos)
+> > >  {
+> > >  	struct ucsi *ucsi = con->ucsi;
+> > >  	u64 command;
+> > > @@ -579,7 +579,7 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+> > >  	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+> > >  	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+> > >  	command |= UCSI_GET_PDOS_NUM_PDOS(num_pdos - 1);
+> > > -	command |= UCSI_GET_PDOS_SRC_PDOS;
+> > > +	command |= is_source(role) ? UCSI_GET_PDOS_SRC_PDOS : 0;
+> > >  	ret = ucsi_send_command(ucsi, command, pdos + offset,
+> > >  				num_pdos * sizeof(u32));
+> > >  	if (ret < 0 && ret != -ETIMEDOUT)
+> > > @@ -590,26 +590,39 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+> > >  	return ret;
+> > >  }
+> > >  
+> > > -static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> > > +static int ucsi_get_pdos(struct ucsi_connector *con, enum typec_role role,
+> > > +			 int is_partner, u32 *pdos)
+> > >  {
+> > > +	u8 num_pdos;
+> > >  	int ret;
+> > >  
+> > >  	/* UCSI max payload means only getting at most 4 PDOs at a time */
+> > > -	ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+> > > +	ret = ucsi_read_pdos(con, role, is_partner, pdos, 0, UCSI_MAX_PDOS);
+> > >  	if (ret < 0)
+> > >  		return ret;
+> > >  
+> > > -	con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> > > -	if (con->num_pdos < UCSI_MAX_PDOS)
+> > > -		return 0;
+> > > +	num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> > > +	if (num_pdos < UCSI_MAX_PDOS)
+> > > +		return num_pdos;
+> > >  
+> > >  	/* get the remaining PDOs, if any */
+> > > -	ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+> > > -			    PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> > > +	ret = ucsi_read_pdos(con, role, is_partner, pdos, UCSI_MAX_PDOS,
+> > > +			     PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	return ret / sizeof(u32) + num_pdos;
+> > > +}
+> > > +
+> > > +static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, con->src_pdos);
 > > 
+> > This issues the GET_PDOS command to PPM to get the source PDOs of the
+> > partner...
+> > 
+> > >  	if (ret < 0)
+> > >  		return ret;
+> > >  
+> > > -	con->num_pdos += ret / sizeof(u32);
+> > > +	con->num_pdos += ret;
+> > >  
+> > >  	ucsi_port_psy_changed(con);
+> > >  
+> > > @@ -638,6 +651,60 @@ static int ucsi_check_altmodes(struct ucsi_connector *con)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > +static int ucsi_register_partner_pdos(struct ucsi_connector *con)
+> > > +{
+> > > +	struct pd_desc desc = { con->ucsi->cap.pd_version };
+> > > +	struct pd_capabilities *cap;
+> > > +	struct pd_caps_desc caps;
+> > > +	int ret;
+> > > +
+> > > +	con->partner_pd = typec_partner_register_pd(con->partner, &desc);
+> > > +	if (IS_ERR(con->partner_pd))
+> > > +		return PTR_ERR(con->partner_pd);
+> > > +
+> > > +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, caps.pdo);
+> > 
+> > ... and also here.
+> > 
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	if (ret < PDO_MAX_OBJECTS)
+> > > +		caps.pdo[ret] = 0;
+> > > +	caps.role = TYPEC_SOURCE;
+> > > +
+> > > +	cap = pd_register_capabilities(con->partner_pd, &caps);
+> > > +	if (IS_ERR(cap))
+> > > +		return PTR_ERR(cap);
+> > > +
+> > > +	ret = typec_partner_set_pd_capabilities(con->partner, cap);
+> > > +	if (ret) {
+> > > +		pd_unregister_capabilities(cap);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	con->partner_source_caps = cap;
+> > > +
+> > > +	ret = ucsi_get_pdos(con, TYPEC_SINK, 1, caps.pdo);
+> > > +	if (ret <= 0)
+> > > +		return ret;
+> > > +
+> > > +	if (ret < PDO_MAX_OBJECTS)
+> > > +		caps.pdo[ret] = 0;
+> > > +	caps.role = TYPEC_SINK;
+> > > +
+> > > +	cap = pd_register_capabilities(con->partner_pd, &caps);
+> > > +	if (IS_ERR(cap))
+> > > +		return PTR_ERR(cap);
+> > > +
+> > > +	ret = typec_partner_set_pd_capabilities(con->partner, cap);
+> > > +	if (ret) {
+> > > +		pd_unregister_capabilities(cap);
+> > > +		return ret;
+> > > +	}
+> > > +
+> > > +	con->partner_sink_caps = cap;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >  static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+> > >  {
+> > >  	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
+> > > @@ -646,6 +713,7 @@ static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+> > >  		typec_set_pwr_opmode(con->port, TYPEC_PWR_MODE_PD);
+> > >  		ucsi_partner_task(con, ucsi_get_src_pdos, 30, 0);
+> > >  		ucsi_partner_task(con, ucsi_check_altmodes, 30, 0);
+> > > +		ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
+> > 
+> > And, both ucsi_get_src_pdos() and ucsi_register_partner_pdos() are
+> > scheduled to run here...
+> > 
+> > >  		break;
+> > >  	case UCSI_CONSTAT_PWR_OPMODE_TYPEC1_5:
+> > >  		con->rdo = 0;
+> > > @@ -704,6 +772,17 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
+> > >  	if (!con->partner)
+> > >  		return;
+> > >  
+> > > +	typec_partner_unset_pd_capabilities(con->partner, TYPEC_SINK);
+> > > +	pd_unregister_capabilities(con->partner_sink_caps);
+> > > +	con->partner_sink_caps = NULL;
+> > > +
+> > > +	typec_partner_unset_pd_capabilities(con->partner, TYPEC_SOURCE);
+> > > +	pd_unregister_capabilities(con->partner_source_caps);
+> > > +	con->partner_source_caps = NULL;
+> > > +
+> > > +	typec_partner_unregister_pd(con->partner);
+> > > +	con->partner_pd = NULL;
+> > > +
+> > >  	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
+> > >  	typec_unregister_partner(con->partner);
+> > >  	con->partner = NULL;
+> > > @@ -1037,6 +1116,8 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+> > >  	u64 command;
+> > >  	char *name;
+> > >  	int ret;
+> > > +	struct pd_desc desc = { ucsi->cap.pd_version };
+> > > +	struct pd_caps_desc caps;
+> > >  
+> > >  	name = kasprintf(GFP_KERNEL, "%s-con%d", dev_name(ucsi->dev), con->num);
+> > >  	if (!name)
+> > > @@ -1103,6 +1184,24 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+> > >  		goto out;
+> > >  	}
+> > >  
+> > > +	con->pd = typec_port_register_pd(con->port, &desc);
+> > > +
+> > > +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 0, caps.pdo);
+> > > +	if (ret > 0) {
+> > > +		caps.pdo[ret] = 0;
+> > > +		caps.role = TYPEC_SOURCE;
+> > > +		con->source_caps = pd_register_capabilities(con->pd, &caps);
+> > > +		typec_port_set_pd_capabilities(con->port, con->source_caps);
+> > > +	}
+> > > +
+> > > +	ret = ucsi_get_pdos(con, TYPEC_SINK, 0, caps.pdo);
+> > > +	if (ret > 0) {
+> > > +		caps.pdo[ret] = 0;
+> > > +		caps.role = TYPEC_SINK;
+> > > +		con->sink_caps = pd_register_capabilities(con->pd, &caps);
+> > > +		typec_port_set_pd_capabilities(con->port, con->sink_caps);
+> > > +	}
+> > > +
+> > >  	/* Alternate modes */
+> > >  	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_CON);
+> > >  	if (ret) {
+> > > @@ -1169,6 +1268,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+> > >  	    UCSI_CONSTAT_PWR_OPMODE_PD) {
+> > >  		ucsi_get_src_pdos(con);
+> > >  		ucsi_check_altmodes(con);
+> > > +		ucsi_register_partner_pdos(con);
+> > 
+> > ... as well as here.
+> > 
+> > So wouldn't this result in the PPM issuing the same PD Get_Source_Cap
+> > message twice to the port partner (in either case of initial port
+> > registration or op mode change)?  Could we just consolidate them to just
+> > issue GET_PDOS only once and take care of populating the partner's
+> > Source Caps for both the pd_capabilties as well as power_supply purposes
+> > from a single helper?
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> Yes. I tried create as little impact on existing code with this as
+> possible, so I just duplicated that part, but I probable should not
+> have done that.
+> 
+> > Another aside, thinking back to a previous patch [1] I had proposed a
+> > few months ago, another question I had is whether it is proper to even
+> > issue a Get_Source_Cap message to sink-only devices, as we did encounter
+> > certain DisplayPort adapters that don't like when that happens.
+> > Wondering if it could be possible to limit calling the GET_PDOS command
+> > unless we know the partner is capable of operating in that particular
+> > power role.  e.g. don't call get_src_pdos() if partner is sink-only.
+> > Or is this the kind of thing that the PPM is supposed to be able to
+> > figure out and allow OPM to naively issue the command regardless, and
+> > just get an error/empty return?
+> 
+> Well, in many cases we simply can not rely on the PPM, but I think we
+> should be able rely on it with the role.
+> 
+> What you are proposing probable would make sense. Do you want to work
+> on those improvements? I don't have to modify this driver now with
+> this series. I also can first register the sysfs attributes from
+> tcpm.c.
 
-I ran dt_binding_check without DT_CHECKER_FLAGS=-m.  Will re-test and
-fix.
+Sure Heikki.  I'll revise the earlier patch I had sent previously and
+update it to determine whether the partner is source-capable before
+before allowing ucsi_get_src_pdos() to be called.
 
-Shawn
-
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml: properties:qcom,mpm-pin-count: 'oneOf' conditional failed, one must be fixed:
-> 	'type' is a required property
-> 		hint: A vendor boolean property can use "type: boolean"
-> 	Additional properties are not allowed ('maxItems' was unexpected)
-> 		hint: A vendor boolean property can use "type: boolean"
-> 	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml: properties:qcom,mpm-pin-count: 'oneOf' conditional failed, one must be fixed:
-> 		'enum' is a required property
-> 		'const' is a required property
-> 		hint: A vendor string property with exact values has an implicit type
-> 		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-> 	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml: properties:qcom,mpm-pin-count: 'oneOf' conditional failed, one must be fixed:
-> 		'$ref' is a required property
-> 		'allOf' is a required property
-> 		hint: A vendor property needs a $ref to types.yaml
-> 		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-> 	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-> 	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml: properties:qcom,mpm-pin-map: 'oneOf' conditional failed, one must be fixed:
-> 	'type' is a required property
-> 		hint: A vendor boolean property can use "type: boolean"
-> 	'description' is a required property
-> 		hint: A vendor boolean property can use "type: boolean"
-> 	Additional properties are not allowed ('$ref', 'items' were unexpected)
-> 		hint: A vendor boolean property can use "type: boolean"
-> 	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml: properties:qcom,mpm-pin-map: 'oneOf' conditional failed, one must be fixed:
-> 		'enum' is a required property
-> 		'const' is a required property
-> 		hint: A vendor string property with exact values has an implicit type
-> 		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-> 	'/schemas/types.yaml#/definitions/uint32-matrix' does not match '^#/(definitions|$defs)/'
-> 		hint: A vendor property can have a $ref to a a $defs schema
-> 	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-> 	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml: ignoring, error in schema: properties: qcom,mpm-pin-count
-> Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.example.dt.yaml:0:0: /example-0/interrupt-controller@45f01b8: failed to match any schema with compatible: ['qcom,qcm2290-mpm']
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/1593741
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+Thanks,
+Jack

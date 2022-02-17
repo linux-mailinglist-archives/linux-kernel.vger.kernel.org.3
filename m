@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B5F4BA204
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0274BA1F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240804AbiBQNxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:53:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60104 "EHLO
+        id S241373AbiBQNwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:52:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241334AbiBQNxZ (ORCPT
+        with ESMTP id S241338AbiBQNwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:53:25 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A2523DCE6;
-        Thu, 17 Feb 2022 05:53:09 -0800 (PST)
-X-UUID: 7508a21f15cf42f68e8bd0d4720c2844-20220217
-X-UUID: 7508a21f15cf42f68e8bd0d4720c2844-20220217
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 553058100; Thu, 17 Feb 2022 21:53:04 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 17 Feb 2022 21:53:03 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Feb 2022 21:53:02 +0800
-Message-ID: <4958e2ad25f4940a0c0bbbf23ea027e7bdaf5ac7.camel@mediatek.com>
-Subject: Re: [PATCH 10/15] ASoC: mediatek: mt8186: add platform driver
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <lgirdwood@gmail.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <perex@perex.cz>,
-        <p.zabel@pengutronix.de>, <geert+renesas@glider.be>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <zhangqilong3@huawei.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Thu, 17 Feb 2022 21:51:57 +0800
-In-Reply-To: <YgaK4hiRjEJi9wQ4@sirena.org.uk>
-References: <20220211103818.8266-1-jiaxin.yu@mediatek.com>
-         <20220211103818.8266-11-jiaxin.yu@mediatek.com>
-         <YgaK4hiRjEJi9wQ4@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 17 Feb 2022 08:52:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3BD24F34
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:52:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1F964CE2B13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 13:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 001A6C340EC;
+        Thu, 17 Feb 2022 13:52:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645105934;
+        bh=1FBELcGmNgV6WPqnzG9KqZxFGr79RBS+xeX0XZJnkjo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ACYy3WFkE3PdBBIvnhvya7apXL70pWr/FmXq6xHs5Mbn90yrrQshiL4/n6/d+eyXO
+         KA+oAOmGfIAZZTA9+/dZZN/Y17zbtwuYggX9YM37Dj3yRre9No8JuDPSo48qNI2Mal
+         bg+Ufy8Cjla9JPYzFgZ7OEvDMoc8AEuTr/lPAWlI5tMHu6eifavy7DoHpIm3of8VQ5
+         FlxH+mlTEcJ11WJ0Nekb70Zc6Iah3oPV651xkKYM8TEoo0L3koyc8iFSX05QICRP4k
+         JcJ2VJwox2b4f2LRbcVke1fNHhPIp0/EAwZ+kmTMjpRG+AguUTEfWCqn0WfE69ma/3
+         xGdB6keScQ9gA==
+Date:   Thu, 17 Feb 2022 14:52:11 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
+        bp@alien8.de, catalin.marinas@arm.com, dave.hansen@linux.intel.com,
+        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, tglx@linutronix.de,
+        valentin.schneider@arm.com, will@kernel.org
+Subject: Re: [PATCH v4 0/7] arm64 / sched/preempt: support PREEMPT_DYNAMIC
+ with static keys
+Message-ID: <20220217135211.GA745330@lothringen>
+References: <20220214165216.2231574-1-mark.rutland@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214165216.2231574-1-mark.rutland@arm.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,30 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-11 at 16:12 +0000, Mark Brown wrote:
-> On Fri, Feb 11, 2022 at 06:38:13PM +0800, Jiaxin Yu wrote:
+On Mon, Feb 14, 2022 at 04:52:09PM +0000, Mark Rutland wrote:
+> This series enables PREEMPT_DYNAMIC on arm64. To do so, it adds a new
+> mechanism allowing the preemption functions to be enabled/disabled using
+> static keys rather than static calls, with architectures selecting
+> whether they use static calls or static keys.
 > 
-> >  sound/soc/mediatek/Kconfig                    |   44 +
-> >  sound/soc/mediatek/Makefile                   |    1 +
-> >  sound/soc/mediatek/mt8186/Makefile            |   21 +
-> >  sound/soc/mediatek/mt8186/mt8186-afe-clk.c    |  719 ++++
-> >  sound/soc/mediatek/mt8186/mt8186-afe-clk.h    |  210 +
-> >  sound/soc/mediatek/mt8186/mt8186-afe-common.h |  245 ++
-> >  .../soc/mediatek/mt8186/mt8186-afe-control.c  |  262 ++
-> >  sound/soc/mediatek/mt8186/mt8186-afe-gpio.c   |  211 +
-> >  sound/soc/mediatek/mt8186/mt8186-afe-gpio.h   |   19 +
-> >  sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    | 3030
-> > +++++++++++++++
-> >  .../mediatek/mt8186/mt8186-interconnection.h  |   69 +
-> >  .../soc/mediatek/mt8186/mt8186-misc-control.c | 1729 +++++++++
-> >  sound/soc/mediatek/mt8186/mt8186-reg.h        | 3433
-> > +++++++++++++++++
+> With non-inline static calls, each function call results in a call to
+> the (out-of-line) trampoline which either tail-calls its associated
+> callee or performs an early return.
 > 
-> I know it's already a long series but perhaps the clock and GPIO bits
-> could be split out into separate patches?  This one patch is over
-> 300K
-> which is a bit much in one go, especially when it's not just all big
-> tables.
+> The key idea is that where we're only enabling/disabling a single
+> callee, we can inline this trampoline into the start of the callee,
+> using a static key to decide whether to return early, and leaving the
+> remaining codegen to the compiler. The overhead should be similar to
+> (and likely lower than) using a static call trampoline. Since most
+> codegen is up to the compiler, we sidestep a number of implementation
+> pain-points (e.g. things like CFI should "just work" as well as they do
+> for any other functions).
+> 
+> The bulk of the diffstat for kernel/sched/core.c is shuffling the
+> PREEMPT_DYNAMIC code later in the file, and the actual additions are
+> fairly trivial.
+> 
+> I've given this very light build+boot testing so far.
 
-Ok, I see. I've split them out into separate patches in v2 version.
+Acked-by: Frederic Weisbecker <frederic@kernel.org>
 
+Thanks!

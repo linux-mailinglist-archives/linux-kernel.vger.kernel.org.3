@@ -2,235 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB67E4BA7A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A32764BA7AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243736AbiBQSFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:05:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54346 "EHLO
+        id S243982AbiBQSFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:05:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241274AbiBQSFe (ORCPT
+        with ESMTP id S240373AbiBQSFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:05:34 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59C1D284D21;
-        Thu, 17 Feb 2022 10:05:19 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 217B6113E;
-        Thu, 17 Feb 2022 10:05:19 -0800 (PST)
-Received: from [10.57.17.240] (unknown [10.57.17.240])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A1D03F718;
-        Thu, 17 Feb 2022 10:05:15 -0800 (PST)
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        jorcrous@amazon.com, Rob Clark <robdclark@chromium.org>
-References: <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
- <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
- <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
- <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
- <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
- <Yg6CaT9iQGXXi7s2@google.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <7b51e2a9-99c3-f33c-690a-fa72692da612@arm.com>
-Date:   Thu, 17 Feb 2022 18:05:14 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 17 Feb 2022 13:05:51 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3F3291F9A;
+        Thu, 17 Feb 2022 10:05:36 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso6815238wmj.2;
+        Thu, 17 Feb 2022 10:05:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cwhqG4PjSxyhdk9byzTdeRpRASQMOOB/h+pJH2F1Kq8=;
+        b=mI91NydIzkJr/9KH744xMRolPpdWlzjEtP/2fNTiN8HHiXv84ojx5RPXGw/NqDtnAW
+         ZCKplfo4rI1K+8ISmP8YnOI8qSJXpC4zBiaRDO4iHqSMG8K9o0ZvNY+1KPbOZ/2oJyej
+         CbD5wuPYVSGfPAMbwFbKZ+NILx5iQsqMJ82MchbGTOy/XWHgu63T2ZdM4BvcFc7uSTpY
+         fGh6m+U2U/hXez1sUdlByHIDuhBKtkWsdeuacMAg4cAnf4YRzzEBJe9Zm2j6s8wzKTy6
+         odjxg1SG0edDnPl109MAwVmkIIRBcHwcOBX1KTYO0cH9A1F91bbSn1YYJx0QrS0zbOG4
+         UPnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cwhqG4PjSxyhdk9byzTdeRpRASQMOOB/h+pJH2F1Kq8=;
+        b=mgG6jrlgrFxB5DSc4qxXUOfd0b6fzC0rIC/m/m+CADQhYJzoj1V5VdyatgPFI2X+U9
+         7ksDuBSw2R0FowDj0uvpKCiXK3XTnd6HYHygPkv1F1G7yRU9KZmUusux7clOer/5rMZj
+         Nhyl6qPVkFWGrvgC1Mx8rKJxQIQGU4HJj5GiSM/lv2Ffh4HxkMOjy9oaOnNeOvah9ITu
+         gzH1GWWPuLGRNSSLPcLK73/yktQMqee2HemH1k0WkojIP5gc0v0qOpXcpvJMHu5/ZH2P
+         HPYEPRpL9YuzGkDGjq4Bquh6hBRhTG70vnFIcWtTlRnBsZcktiMggku1rAzD+nCPcIyg
+         8IuQ==
+X-Gm-Message-State: AOAM5316ghVGIgmIoNQ1Vb5Em8QZOpWOBeV6T8kXj6wznDsLCy2Kn+w3
+        rT+zicIetX4tkIl4cXnO+DE=
+X-Google-Smtp-Source: ABdhPJwn1QIrnHyMXL8TMdqKzqGKaJNhuLDgBAUXEvdBpoyu0KVG2M0M6Ms35TmBdJetxJ2PhOTReA==
+X-Received: by 2002:a05:600c:19ce:b0:37c:6fe:68b6 with SMTP id u14-20020a05600c19ce00b0037c06fe68b6mr7074209wmq.90.1645121135151;
+        Thu, 17 Feb 2022 10:05:35 -0800 (PST)
+Received: from leap.localnet (host-79-27-0-81.retail.telecomitalia.it. [79.27.0.81])
+        by smtp.gmail.com with ESMTPSA id d6sm38754441wrs.85.2022.02.17.10.05.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 10:05:34 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     jgg@ziepe.ca, liangwenpeng@huawei.com,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        liweihang@huawei.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Cc:     syzbot <syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in smc_pnet_apply_ib
+Date:   Thu, 17 Feb 2022 19:05:31 +0100
+Message-ID: <2691692.BEx9A2HvPv@leap>
+In-Reply-To: <000000000000b772b805d8396f14@google.com>
+References: <000000000000b772b805d8396f14@google.com>
 MIME-Version: 1.0
-In-Reply-To: <Yg6CaT9iQGXXi7s2@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On gioved=C3=AC 17 febbraio 2022 17:41:22 CET syzbot wrote:
+> Hello,
+>=20
+> syzbot found the following issue on:
+>=20
+> HEAD commit:    c832962ac972 net: bridge: multicast: notify switchdev dri=
+v..
+> git tree:       net
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D16b157bc700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D266de9da75c71=
+a45
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D4f322a6d84e991c=
+38775
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+>=20
+> Unfortunately, I don't have any reproducer for this issue yet.
+>=20
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
+>=20
+> infiniband syz1: set down
+> infiniband syz1: added lo
+> RDS/IB: syz1: added
+> smc: adding ib device syz1 with port count 1
+> BUG: sleeping function called from invalid context at kernel/locking/mute=
+x.c:577
+> in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 17974, name: syz-e=
+xecutor.3
+> preempt_count: 1, expected: 0
+> RCU nest depth: 0, expected: 0
+> 6 locks held by syz-executor.3/17974:
+>  #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma_nl_=
+rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
+>  #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink+0x2=
+5d/0x560 drivers/infiniband/core/nldev.c:1707
+>  #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_and_=
+get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
+>  #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_and_=
+get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
+>  #4: ffff8880482c85c0 (&device->client_data_rwsem){++++}-{3:3}, at: add_c=
+lient_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
+>  #5: ffff8880230a4118 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_by_t=
+able_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
+> Preemption disabled at:
+> [<0000000000000000>] 0x0
+> CPU: 1 PID: 17974 Comm: syz-executor.3 Not tainted 5.17.0-rc3-syzkaller-0=
+0170-gc832962ac972 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 01/01/2011
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9576
+>  __mutex_lock_common kernel/locking/mutex.c:577 [inline]
+>  __mutex_lock+0x9f/0x12f0 kernel/locking/mutex.c:733
+>  smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
+>  smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
+
+If I recall it well, read_lock() disables preemption.=20
+
+smc_pnetid_by_table_ib() uses read_lock() and then it calls smc_pnet_apply_=
+ib()=20
+which, in turn, calls mutex_lock(&smc_ib_devices.mutex). Therefore the code=
+=20
+acquires a mutex while in atomic and we get a SAC bug.
+
+Actually, even if my argument is correct(?), I don't know if the read_lock(=
+)=20
+in smc_pnetid_by_table_ib() can be converted to a sleeping lock like a mute=
+x or=20
+a semaphore.
+
+Any comment?=20
+
+Thanks,
+
+=46abio M. De Francesco
 
 
-On 2/17/22 5:14 PM, Matthias Kaehlcke wrote:
-> On Thu, Feb 17, 2022 at 08:37:39AM -0800, Doug Anderson wrote:
->> Hi,
->>
->> On Thu, Feb 17, 2022 at 2:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>
->>> Hi Daniel,
->>>
->>> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
->>>> On 16/02/2022 18:33, Doug Anderson wrote:
->>>>> Hi,
->>>>>
->>>>> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>>>
->>>>>> Hi Matthias,
->>>>>>
->>>>>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
->>>>>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
->>>>>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
->>>>>>>>>>
->>>>>>>>>>
->>>>>>
->>>>>> [snip]
->>>>>>
->>>>>>>>>> Could you point me to those devices please?
->>>>>>>>>
->>>>>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
->>>>>>>>>
->>>>>>>>> Though as per above they shouldn't be impacted by your change,
->>>>>>>>> since the
->>>>>>>>> CPUs always pretend to use milli-Watts.
->>>>>>>>>
->>>>>>>>> [skipped some questions/answers since sc7180 isn't actually
->>>>>>>>> impacted by
->>>>>>>>>      the change]
->>>>>>>>
->>>>>>>> Thank you Matthias. I will investigate your setup to get better
->>>>>>>> understanding.
->>>>>>>
->>>>>>> Thanks!
->>>>>>>
->>>>>>
->>>>>> I've checked those DT files and related code.
->>>>>> As you already said, this patch is safe for them.
->>>>>> So we can apply it IMO.
->>>>>>
->>>>>>
->>>>>> -------------Off-topic------------------
->>>>>> Not in $subject comments:
->>>>>>
->>>>>> AFAICS based on two files which define thermal zones:
->>>>>> sc7180-trogdor-homestar.dtsi
->>>>>> sc7180-trogdor-coachz.dtsi
->>>>>>
->>>>>> only the 'big' cores are used as cooling devices in the
->>>>>> 'skin_temp_thermal' - the CPU6 and CPU7.
->>>>>>
->>>>>> I assume you don't want to model at all the power usage
->>>>>> from the Little cluster (which is quite big: 6 CPUs), do you?
->>>>>> I can see that the Little CPUs have small dyn-power-coeff
->>>>>> ~30% of the big and lower max freq, but still might be worth
->>>>>> to add them to IPA. You might give them more 'weight', to
->>>>>> make sure they receive more power during power split.
->>>>>>
->>>>>> You also don't have GPU cooling device in that thermal zone.
->>>>>> Based on my experience if your GPU is a power hungry one,
->>>>>> e.g. 2-4Watts, you might get better results when you model
->>>>>> this 'hot' device (which impacts your temp sensor reported value).
->>>>>
->>>>> I think the two boards you point at (homestar and coachz) are just the
->>>>> two that override the default defined in the SoC dtsi file. If you
->>>>> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
->>>>> map. You can also see the cooling maps for the littles.
->>>>>
->>>>> I guess we don't have a `dynamic-power-coefficient` for the GPU,
->>>>> though? Seems like we should, but I haven't dug through all the code
->>>>> here...
->>>>
->>>> The dynamic-power-coefficient is available for OPPs which includes
->>>> CPUfreq and devfreq. As the GPU is managed by devfreq, setting the
->>>> dynamic-power-coefficient makes the energy model available for it.
->>>>
->>>> However, the OPPs must define the frequency and the voltage. That is the
->>>> case for most platforms except on QCom platform.
->>>>
->>>> That may not be specified as it uses a frequency index and the hardware
->>>> does the voltage change in our back. The QCom cpufreq backend get the
->>>> voltage table from a register (or whatever) and completes the voltage
->>>> values for the OPPs, thus adding the information which is missing in the
->>>> device tree. The energy model can then initializes itself and allows the
->>>> usage of the Energy Aware Scheduler.
->>>>
->>>> However this piece of code is missing for the GPU part.
->>>>
->>>
->>> Thank you for joining the discussion. I don't know about that Qcom
->>> GPU voltage information is missing.
->>>
->>> If the voltage is not available (only the frequencies), there is
->>> another way. There is an 'advanced' EM which uses registration function:
->>> em_dev_register_perf_domain(). It uses a local driver callback to get
->>> power for each found frequency. It has benefit because there is no
->>> restriction to 'fit' into the math formula, instead just avg power
->>> values can be feed into EM. It's called 'advanced' EM [1].
->>
->> It seems like there _should_ be a way to get the voltage out for GPU
->> operating points, like is done with cpufreq in
->> qcom_cpufreq_hw_read_lut(), but it might need someone with Qualcomm
->> documentation to help with it. Maybe Rajendra would be able to help?
->> Adding Jordon and Rob to this conversation in case they're aware of
->> anything.
->>
->> As you said, we could just list a power for each frequency, though.
->>
->> I'm actually not sure which one would be more accurate across a range
->> of devices with different "corners": specifying a dynamic power
->> coefficient used for all "corners" and then using the actual voltage
->> and doing the math, or specifying a power number for each frequency
->> and ignoring the actual voltage used. In any case we're trying to get
->> ballpark numbers and not every device will be exactly the same, so
->> probably it doesn't matter that much.
->>
->>
->>> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
->>> was proposing from ~2014 this upstream, but EAS wasn't merged back
->>> then):
->>> where to store these power-freq values, which are then used by the
->>> callback. We have the 'dynamic-power-coefficient' in DT, but
->>> it has limitations. It would be good to have this simple array
->>> attached to the GPU/CPU node. IMHO it meet the requirement of DT,
->>> it describes the HW (it would have HZ and Watts values).
->>>
->>> Doug, Matthias could you have a look at that function and its
->>> usage, please [1]?
->>> If you guys would support me in this, I would start, with an RFC
->>> proposal, a discussion on LKML.
->>>
->>> [1]
->>> https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87
->>
->> Matthias: I think you've spent more time on the thermal stuff than me
->> so I'll assume you'll follow-up here. If not then please yell!
->>
->> Ideally, though, someone from Qualcomm would jump in an own this.
->> Basically it allows more intelligently throttling the GPU and CPU
->> together in tandem instead of treating them separately IIUC, right?
-> 
-> Yes, I think for the em_dev_register_perf_domain() route support from
-> Qualcomm would be needed since "Drivers must provide a callback
-> function returning <frequency, power> tuples for each performance
-> state. ".
-> 
 
-Not necessarily. It might be done 'generically' by fwk.
-
-There are other benefits of this 'energy-model' entry in the DT.
-I'll list them in the cover letter. Let me send an RFC, so we could
-discuss there.
-
-Thanks guys!
-
-Regards,
-Lukasz

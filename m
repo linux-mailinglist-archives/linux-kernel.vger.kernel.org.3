@@ -2,80 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DEB4BA09C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865604BA0A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240681AbiBQNHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:07:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40832 "EHLO
+        id S240694AbiBQNHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:07:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240647AbiBQNHP (ORCPT
+        with ESMTP id S238898AbiBQNHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:07:15 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D50105A9D;
-        Thu, 17 Feb 2022 05:07:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645103221; x=1676639221;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=xA8H4mCuPL0+Y5H2RRjONOFAaibouE9qYQsummWmUDo=;
-  b=aMNw7pRa+alHrCvUlPZSDNgXHuOgdVAYpRvtWtRYfQg8WRw8AXq72jmh
-   VRbPq0FdNtsyadDd/CuUxZ9cM/bdvP6d7/HKJ0DzM1RtKNNQky/1N0kD+
-   DxNK6T172poY8G9eRhOLRqpYvavLamNNSg7P12UxRRmqj+LETEYz7zDSQ
-   7u5OrHpqUn/VFu9N8OKfipFYEOKkl18iPI9rjporPOBrow12eeHol2sll
-   eBP1h231szuwPPwTRe44InuTf7f+EUpMxoxs4Eq4pRXRKLRv9i92roUPM
-   GhKGZTjWUTlJLPeE4IATQAjT2JC9xj2DMmu5+M17tSDeOkoUjaiVsQq5B
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="230830598"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="230830598"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:07:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="704790168"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga005.jf.intel.com with ESMTP; 17 Feb 2022 05:06:52 -0800
-Date:   Thu, 17 Feb 2022 21:06:31 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Linux API <linux-api@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v4 01/12] mm/shmem: Introduce F_SEAL_INACCESSIBLE
-Message-ID: <20220217130631.GB32679@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
- <20220118132121.31388-2-chao.p.peng@linux.intel.com>
- <619547ad-de96-1be9-036b-a7b4e99b09a6@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <619547ad-de96-1be9-036b-a7b4e99b09a6@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Thu, 17 Feb 2022 08:07:38 -0500
+Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E71D1EA72D;
+        Thu, 17 Feb 2022 05:07:24 -0800 (PST)
+Received: from smtpclient.apple (p4fefcd07.dip0.t-ipconnect.de [79.239.205.7])
+        by mail.holtmann.org (Postfix) with ESMTPSA id C8101CECDE;
+        Thu, 17 Feb 2022 14:07:22 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH v2 2/2] Bluetooth: mediatek: fix the conflict between mtk
+ and msft vendor event
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <5f5f1e801432af9318bc604c54a6c15dcd8ab036.1644342794.git.objelf@gmail.com>
+Date:   Thu, 17 Feb 2022 14:07:22 +0100
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        =?utf-8?B?Ik1hcmstWVcgQ2hlbiAo6Zmz5o+a5paHKSI=?= 
+        <Mark-YW.Chen@mediatek.com>, Soul.Huang@mediatek.com,
+        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
+        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
+        km.lin@mediatek.com, robin.chiu@mediatek.com,
+        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
+        posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
+        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <075A0FD1-8145-43E0-A4C2-13AF0436C08C@holtmann.org>
+References: <d328920a9abaaaedafc8c4922cdeb5935f6d64c3.1644342794.git.objelf@gmail.com>
+ <5f5f1e801432af9318bc604c54a6c15dcd8ab036.1644342794.git.objelf@gmail.com>
+To:     Sean Wang <sean.wang@mediatek.com>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,39 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 03:33:35PM -0800, Andy Lutomirski wrote:
-> On 1/18/22 05:21, Chao Peng wrote:
-> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > 
-> > Introduce a new seal F_SEAL_INACCESSIBLE indicating the content of
-> > the file is inaccessible from userspace through ordinary MMU access
-> > (e.g., read/write/mmap). However, the file content can be accessed
-> > via a different mechanism (e.g. KVM MMU) indirectly.
-> > 
-> > It provides semantics required for KVM guest private memory support
-> > that a file descriptor with this seal set is going to be used as the
-> > source of guest memory in confidential computing environments such
-> > as Intel TDX/AMD SEV but may not be accessible from host userspace.
-> > 
-> > At this time only shmem implements this seal.
-> > 
-> 
-> I don't dislike this *that* much, but I do dislike this. F_SEAL_INACCESSIBLE
-> essentially transmutes a memfd into a different type of object.  While this
-> can apparently be done successfully and without races (as in this code),
-> it's at least awkward.  I think that either creating a special inaccessible
-> memfd should be a single operation that create the correct type of object or
-> there should be a clear justification for why it's a two-step process.
+Hi Sean,
 
-Now one justification maybe from Stever's comment to patch-00: for ARM
-usage it can be used with creating a normal memfd, (partially)populate
-it with initial guest memory content (e.g. firmware), and then
-F_SEAL_INACCESSIBLE it just before the first time lunch of the guest in
-KVM (definitely the current code needs to be changed to support that).
-
-Thanks,
-Chao
+> There is a conflict between MediaTek wmt event and msft vendor extension
+> logic in the core layer since 145373cb1b1f ("Bluetooth: Add framework for
+> Microsoft vendor extension") was introduced because we changed the type of
+> mediatek wmt event to the type of msft vendor event in the driver.
 > 
-> (Imagine if the way to create an eventfd would be to call timerfd_create()
-> and then do a special fcntl to turn it into an eventfd but only if it's not
-> currently armed.  This would be weird.)
+> But the purpose we reported mediatek event to the core layer is for the
+> diagnostic purpose with that we are able to see the full packet trace via
+> monitoring socket with btmon. Thus, it is harmless we keep the original
+> type of mediatek vendor event here to avoid breaking the msft extension
+> function especially they can be supported by Mediatek chipset like MT7921
+> , MT7922 devices and future devices.
+> 
+> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> ---
+> v2: fix the warning: variable 'hdr' set but not used
+> ---
+> drivers/bluetooth/btmtk.h     | 1 +
+> drivers/bluetooth/btmtksdio.c | 9 +--------
+> drivers/bluetooth/btusb.c     | 8 --------
+> 3 files changed, 2 insertions(+), 16 deletions(-)
+
+patch has been applied to bluetooth-next tree.
+
+Regards
+
+Marcel
+

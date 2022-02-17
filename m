@@ -2,61 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B234BA4FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCF24BA4DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242856AbiBQPty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:49:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33844 "EHLO
+        id S242726AbiBQPsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:48:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242832AbiBQPtj (ORCPT
+        with ESMTP id S242582AbiBQPsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:49:39 -0500
-Received: from out203-205-251-27.mail.qq.com (out203-205-251-27.mail.qq.com [203.205.251.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02BA15C64E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1645112953;
-        bh=R2T64fF012MpAvx/2pefsZbIP7UbuXf+c8VwNQhS83s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=vfHd6cjtV5/ICRSNtM3tSkXbj1FVd842jm6689ZCw9jTyt+W2gYRMoT2UXVyR2/JX
-         Rca5AUwr+UvboFhoNg7EE+4gqx4R3kNxc4656RK6dG3vJi7lN2inlOufwTFNMZY6UA
-         axYwFs5w6I1wN5tVps0oFfJ+1sQxcqHxCcVzDtWA=
-Received: from localhost.localdomain ([43.227.136.188])
-        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
-        id C45B0427; Thu, 17 Feb 2022 23:49:05 +0800
-X-QQ-mid: xmsmtpt1645112948t4765e92p
-Message-ID: <tencent_03873F2A51FFDF808C33B3E73A717C51400A@qq.com>
-X-QQ-XMAILINFO: MbECzfofyKaSxDTk9gm8v6uGmbRVERi5ZYRBZi5Vqa7NapwMKJqFMcrAd3KsOE
-         Kry8r3SbYipGbd7g4AhNDMxrFBRcNHlzv/NY9E7RAsnFMItpDi4R+4+FMbaBnoqEw1OcBQGBDnrH
-         BXktggiepK9oAr/LBNULORqPNCHKu0pp3wWyYfXYgnBbo+47MySM7uRjF6gQbA4y+SpZOa9TQF/m
-         CVbXHm/yUTwvhCr8bH5gC240JvrInUZY+lM4xj33GvtP6Ar2ksHmBtaySaUBxK86ljjX1bMfLGYm
-         VraSpTdoT/G7IiSE8cMIGyfJwccrPusxLaUyTtqiqBRIWIDyEB2HtJotPuEUcel3/vRcgr+VEHSb
-         o8lqz00yhQgjLbDcuidrjAp9x4spzaJXo/brM+lvsDMKMkqs465VDAMCY17TDKtlpq1n5LnnAh1A
-         qtiroDr4ibdiWqGTilARTx2qzZwy1PXhQNrVoyxyH9AbQrRZ+d3ZhE2RLPte6vcuw46dCbFwbffu
-         HvUypXzDZ+iT+6BM/I1cLlDIPtossQa6j0lPpLOufE+ZaqOvJVkEzR16FqkAAqs+9t5JmcEXcgLy
-         wa3mVcmJ4vg+h0J88u/nH2wroyG5Fj1QpJQ562CZOU1x0aXuP+7rnOpSrRvUYef3Aq72INdfKHQo
-         sbpzJwJQk23R2ZyPbd9Y87IpG2cx8Y8M22vdtelGsuJ9m/FmILkoKufE2NJBDENgMgjW6ugrjRdy
-         o4+tVWGvwW2fPbWamFUu1563tBpbchaLwdj6h4pj21xAjykj/cWEd5BG2reLTtpJPLdRliKfxhKY
-         OWGkzCiSguZL3OzyY471D6yHT0dS5udV/ZqzSb3qB9NTrxO6FfXSJBqFnyu26mUic5M50uYIcfGv
-         6s+02AW2H/nRj2Cy8sdWyN+q2sqB26mJxvmouA5GT/yhOPfj+XLNiI7lh8t9/mbjJn5wA0Uq0Kpw
-         hr8L+iUrGa1+fCLR1rJL6hDf5qlqnIIHJdR63EAS0=
-From:   xkernel.wang@foxmail.com
-To:     jerome.pouiller@silabs.com, gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 2/2] staging: wfx: check the return value of devm_kmalloc()
-Date:   Thu, 17 Feb 2022 23:47:22 +0800
-X-OQ-MSGID: <20220217154722.1226-2-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
-In-Reply-To: <20220217154722.1226-1-xkernel.wang@foxmail.com>
-References: <20220217154722.1226-1-xkernel.wang@foxmail.com>
+        Thu, 17 Feb 2022 10:48:52 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A6015C672;
+        Thu, 17 Feb 2022 07:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=C64EWtN/f9bCsY8A/y864AzqVeE3CzsItNdn/gVkzik=; b=jCfaIcxlLYVA6BVbQUUqoq9vs3
+        ttepisGsE54fuHbaxe7EZGo8aY4x5XyqA0Gq3DycWRmaSI47gwocc9MsqKRASysh54GhMwhY1GLwk
+        gceCtl3pqUzVV9ADo9SxQCcFaLuNdArZwG8Ijbx6Avbpczu5T8YWM6dloPLyr0hYmuIISBTyrVnOM
+        DYRhGWt1EwNRQ22wwnIC5imtDAx4Qo9i/eYZybjnEaVhoWoAE+p8ckk98ByTUVWS9uvTcdkBhKlKN
+        aIxNyleEJsc4zglXLG3+zbpoXIgldXFi59/lpjrt3hTRbacTXZTR3p/PzcCfgqle0FgaWes7/niLS
+        EBD2gAZQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKj1F-00BL4C-UU; Thu, 17 Feb 2022 15:48:33 +0000
+Date:   Thu, 17 Feb 2022 07:48:33 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "Wang Jianchao (Kuaishou)" <jianchao.wan9@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] blk: do rq_qos_exit in blk_cleanup_queue
+Message-ID: <Yg5uUeMONPn4jnng@infradead.org>
+References: <20220216113212.83000-1-jianchao.wan9@gmail.com>
+ <Yg392sqFydj9p3My@infradead.org>
+ <96deb063-f4ef-fadd-543b-e905495898f6@kernel.dk>
+ <Yg5VnRtsrrQX4mFG@infradead.org>
+ <eb8e2477-d8f6-b032-6177-8ce187de12ab@kernel.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eb8e2477-d8f6-b032-6177-8ce187de12ab@kernel.dk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,30 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Thu, Feb 17, 2022 at 07:55:16AM -0700, Jens Axboe wrote:
+> > from Jan 22.  Although it would need a rebase so it can be applied
+> > without the preceding patches.
+> 
+> Can someone respin that for 5.17 then?
 
-devm_kmalloc() returns a pointer to allocated memory on success, NULL
-on failure. While there is a memory allocation of devm_kmalloc()
-without proper check. It is better to check the return value of it to
-prevent wrong memory access.
+I looked at it and it I don't think we can do that without a lot of
+the prep patches.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/wfx/main.c | 3 +++
- 1 file changed, 3 insertions(+)
+That being said I think this version of the patch also is buggy, we
+want the policies shut down in del_gendisk with the queue frozen for
+normal operation.
 
-diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
-index f83df9f..5d4fcc3 100644
---- a/drivers/staging/wfx/main.c
-+++ b/drivers/staging/wfx/main.c
-@@ -294,6 +294,9 @@ struct wfx_dev *wfx_init_common(struct device *dev,
- 	hw->wiphy->n_iface_combinations = ARRAY_SIZE(wfx_iface_combinations);
- 	hw->wiphy->iface_combinations = wfx_iface_combinations;
- 	hw->wiphy->bands[NL80211_BAND_2GHZ] = devm_kmalloc(dev, sizeof(wfx_band_2ghz), GFP_KERNEL);
-+	if (!hw->wiphy->bands[NL80211_BAND_2GHZ])
-+		goto err;
-+
- 	// FIXME: also copy wfx_rates and wfx_2ghz_chantable
- 	memcpy(hw->wiphy->bands[NL80211_BAND_2GHZ], &wfx_band_2ghz,
- 	       sizeof(wfx_band_2ghz));
--- 
+I guess until we can move the initialization and teardown entirely
+to the gendisk as in Ming's more complex series we need to keep the
+call in del_gendisk and also do it in blk_cleanup_queue.  For the
+normal shutdown on disk that were life del_gendisk does the all the
+work on the frozen queue, while for queues that never had a disk
+blk_cleanup_queue will clean up the unused rq_qos.

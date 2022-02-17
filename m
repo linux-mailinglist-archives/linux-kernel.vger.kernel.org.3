@@ -2,79 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204724BA063
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632E04BA068
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240565AbiBQMwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:52:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33628 "EHLO
+        id S240574AbiBQMxu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Feb 2022 07:53:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbiBQMwt (ORCPT
+        with ESMTP id S230462AbiBQMxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:52:49 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A25811177;
-        Thu, 17 Feb 2022 04:52:31 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id DDB722198B;
-        Thu, 17 Feb 2022 12:52:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645102349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tyHPwCNPfq65pA6srXtfqfI8xME48EMpMVy56Z9fhpg=;
-        b=NSPTIcx1ySv0mzLL75TzejXYcjjtBLleLqzl3Q9+3taChEadXpWRIvIRJbmoB8nQbRUl2z
-        MEEWvG0fvHydt7n+1ddS0ycXFPEgLFuJR7vfiZmSnl+Qc2IHCH6V2uHqbULFD76zwNVWGD
-        BsAhfOokdB7Jd16e9SCfekm8cRKIKF4=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DCB07A3B83;
-        Thu, 17 Feb 2022 12:52:28 +0000 (UTC)
-Date:   Thu, 17 Feb 2022 13:52:25 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wang Qing <wangqing@vivo.com>, Tejun Heo <tj@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>, rcu@vger.kernel.org
-Subject: Re: [PATCH printk v1 09/13] printk: add functions to allow direct
- printing
-Message-ID: <Yg5FCVF5c1jDo116@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-10-john.ogness@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207194323.273637-10-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        Thu, 17 Feb 2022 07:53:47 -0500
+Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77D1610FD9;
+        Thu, 17 Feb 2022 04:53:32 -0800 (PST)
+Received: from smtpclient.apple (p4fefcd07.dip0.t-ipconnect.de [79.239.205.7])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 4E357CECDE;
+        Thu, 17 Feb 2022 13:53:31 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH v4 2/3] Bluetooth: btintel: surface Intel telemetry events
+ through mgmt
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <20220215213519.v4.2.I63681490281b2392aa1ac05dff91a126394ab649@changeid>
+Date:   Thu, 17 Feb 2022 13:53:30 +0100
+Cc:     BlueZ <linux-bluetooth@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Joseph Hwang <josephsih@google.com>,
+        Archie Pusaka <apusaka@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <FCAB9F47-39D4-4564-A0E6-530F79AF5B5B@holtmann.org>
+References: <20220215213519.v4.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
+ <20220215213519.v4.2.I63681490281b2392aa1ac05dff91a126394ab649@changeid>
+To:     Joseph Hwang <josephsih@chromium.org>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,132 +51,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-07 20:49:19, John Ogness wrote:
-> Once kthread printing is introduced, console printing will no longer
-> occur in the context of the printk caller. However, there are some
-> special contexts where it is desirable for the printk caller to
-> directly print out kernel messages. Using pr_flush() to wait for
-> threaded printers is only possible if the caller is in a sleepable
-> context and the kthreads are active. That is not always the case.
+Hi Jospeh,
+
+> When receiving a HCI vendor event, the kernel checks if it is an
+> Intel telemetry event. If yes, the event is sent to bluez user
+> space through the mgmt socket.
 > 
-> Introduce printk_direct_enter() and printk_direct_exit() functions
-> to explicitly (and globally) activate/deactivate direct console
-> printing.
-
-We should make it more clear what direct console printing means.
-
-It is just the best effort to print messages on consoles when
-they are unused at the moment. By other words, it is the legacy
-mode that uses trylock to get access to consoles.
-
-> Activate direct printing for:
->  - sysrq
->  - emergency reboot/shutdown
->  - cpu and rcu stalls
->  - hard and soft lockups
->  - hung tasks
->  - stack dumps
-
-It would be great to mention what rules of thumb were used to choose
-these locations, see below.
-
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Signed-off-by: Joseph Hwang <josephsih@chromium.org>
+> Reviewed-by: Archie Pusaka <apusaka@chromium.org>
 > ---
->  drivers/tty/sysrq.c     |  2 ++
->  include/linux/printk.h  | 11 +++++++++++
->  kernel/hung_task.c      | 11 ++++++++++-
->  kernel/printk/printk.c  | 39 ++++++++++++++++++++++++++++++++++++++-
->  kernel/rcu/tree_stall.h |  2 ++
->  kernel/reboot.c         | 14 +++++++++++++-
->  kernel/watchdog.c       |  4 ++++
->  kernel/watchdog_hld.c   |  4 ++++
->  lib/dump_stack.c        |  2 ++
->  lib/nmi_backtrace.c     |  2 ++
->  10 files changed, 88 insertions(+), 3 deletions(-)
 > 
-> --- a/drivers/tty/sysrq.c
-> +++ b/drivers/tty/sysrq.c
-> @@ -594,9 +594,11 @@ void __handle_sysrq(int key, bool check_mask)
->  		 * should not) and is the invoked operation enabled?
->  		 */
->  		if (!check_mask || sysrq_on_mask(op_p->enable_mask)) {
-> +			printk_direct_enter();
->  			pr_info("%s\n", op_p->action_msg);
->  			console_loglevel = orig_log_level;
->  			op_p->handler(key);
-> +			printk_direct_exit();
->  		} else {
->  			pr_info("This sysrq operation is disabled.\n");
->  			console_loglevel = orig_log_level;
+> (no changes since v3)
+> 
+> Changes in v3:
+> - Move intel_vendor_evt() from hci_event.c to the btintel driver.
+> 
+> Changes in v2:
+> - Drop the pull_quality_report_data function from hci_dev.
+>  Do not bother hci_dev with it. Do not bleed the details
+>  into the core.
+> 
+> drivers/bluetooth/btintel.c      | 37 +++++++++++++++++++++++++++++++-
+> drivers/bluetooth/btintel.h      |  7 ++++++
+> include/net/bluetooth/hci_core.h |  2 ++
+> net/bluetooth/hci_event.c        | 12 +++++++++++
+> 4 files changed, 57 insertions(+), 1 deletion(-)
 
-We should handle all messages the same way, including "This sysrq operation
-is disabled" and "HELP:" section. @suppress_printk is disabled
-for all these messages as well.
+I don’t like intermixing core additions with driver implementations of it. I thought that I have mentioned this a few times, but maybe I missed that in the last review round. So first introduce the callbacks and the handling in hci_core etc. and then provide a patch for the driver using it.
 
-
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3333,9 +3359,15 @@ static void wake_up_klogd_work_func(struct irq_work *irq_work)
->  	int pending = __this_cpu_xchg(printk_pending, 0);
->  
->  	if (pending & PRINTK_PENDING_OUTPUT) {
-> +		if (pending & PRINTK_DIRECT_OUTPUT)
-> +			printk_direct_enter();
+> 
+> diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
+> index 06514ed66022..c7732da2752f 100644
+> --- a/drivers/bluetooth/btintel.c
+> +++ b/drivers/bluetooth/btintel.c
+> @@ -2401,9 +2401,12 @@ static int btintel_setup_combined(struct hci_dev *hdev)
+> 	set_bit(HCI_QUIRK_SIMULTANEOUS_DISCOVERY, &hdev->quirks);
+> 	set_bit(HCI_QUIRK_NON_PERSISTENT_DIAG, &hdev->quirks);
+> 
+> -	/* Set up the quality report callback for Intel devices */
+> +	/* Set up the quality report callbacks for Intel devices */
+> 	hdev->set_quality_report = btintel_set_quality_report;
+> 
+> +	/* Set up the vendor specific callback for Intel devices */
+> +	hdev->vendor_evt = btintel_vendor_evt;
 > +
->  		/* If trylock fails, someone else is doing the printing */
->  		if (console_trylock())
->  			console_unlock();
+> 	/* For Legacy device, check the HW platform value and size */
+> 	if (skb->len == sizeof(ver) && skb->data[1] == 0x37) {
+> 		bt_dev_dbg(hdev, "Read the legacy Intel version information");
+> @@ -2650,6 +2653,38 @@ void btintel_secure_send_result(struct hci_dev *hdev,
+> }
+> EXPORT_SYMBOL_GPL(btintel_secure_send_result);
+> 
+> +#define INTEL_PREFIX		0x8087
+> +#define TELEMETRY_CODE		0x03
 > +
-> +		if (pending & PRINTK_DIRECT_OUTPUT)
-> +			printk_direct_exit();
->  	}
+> +struct intel_prefix_evt_data {
+> +	__le16 vendor_prefix;
+> +	__u8 code;
+> +	__u8 data[];   /* a number of struct intel_tlv subevents */
+> +} __packed;
+> +
+> +static bool is_quality_report_evt(struct sk_buff *skb)
+> +{
+> +	struct intel_prefix_evt_data *ev;
+> +	u16 vendor_prefix;
+> +
+> +	if (skb->len < sizeof(struct intel_prefix_evt_data))
+> +		return false;
+> +
+> +	ev = (struct intel_prefix_evt_data *)skb->data;
+> +	vendor_prefix = __le16_to_cpu(ev->vendor_prefix);
+> +
+> +	return vendor_prefix == INTEL_PREFIX && ev->code == TELEMETRY_CODE;
+> +}
+> +
+> +void btintel_vendor_evt(struct hci_dev *hdev,  void *data, struct sk_buff *skb)
+> +{
+> +	/* Only interested in the telemetry event for now. */
+> +	if (hdev->set_quality_report && is_quality_report_evt(skb))
+> +		mgmt_quality_report(hdev, skb->data, skb->len,
+> +				    QUALITY_SPEC_INTEL_TELEMETRY);
 
-I want to be sure that we are on the same page.
+You can not do that. Keep the interaction with hci_dev as limited as possible. I think it would be best to introduce a hci_recv_quality_report function that drivers can call.
 
-This is a good example where the direct output is used in a
-non-preemtive context. It means that it might cause soft or
-live-lockups. And it might break RT guarantees.
+And really don’t bother with all these check. Dissect the vendor event, if it is a quality report, then just report it via that callback. And you should be stripping off the prefix etc. Just report the plain data.
 
-It might be worth it when the system already is in big troubles
-and RT guarantees are already broken. This might be true for:
+> +}
+> +EXPORT_SYMBOL_GPL(btintel_vendor_evt);
+> +
+> MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+> MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSION);
+> MODULE_VERSION(VERSION);
+> diff --git a/drivers/bluetooth/btintel.h b/drivers/bluetooth/btintel.h
+> index e0060e58573c..82dc278b09eb 100644
+> --- a/drivers/bluetooth/btintel.h
+> +++ b/drivers/bluetooth/btintel.h
+> @@ -211,6 +211,7 @@ void btintel_bootup(struct hci_dev *hdev, const void *ptr, unsigned int len);
+> void btintel_secure_send_result(struct hci_dev *hdev,
+> 				const void *ptr, unsigned int len);
+> int btintel_set_quality_report(struct hci_dev *hdev, bool enable);
+> +void btintel_vendor_evt(struct hci_dev *hdev,  void *data, struct sk_buff *skb);
+> #else
+> 
+> static inline int btintel_check_bdaddr(struct hci_dev *hdev)
+> @@ -306,4 +307,10 @@ static inline int btintel_set_quality_report(struct hci_dev *hdev, bool enable)
+> {
+> 	return -ENODEV;
+> }
+> +
+> +static inline void btintel_vendor_evt(struct hci_dev *hdev,  void *data,
 
-    + emergency reboot/shutdown
+Double space here.
 
-We probably should use it also when @suppress_printk is already
-disabled:
+> +				      struct sk_buff *skb)
+> +{
+> +}
+> +
+> #endif
+> diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+> index ea83619ac4de..3505ffe20779 100644
+> --- a/include/net/bluetooth/hci_core.h
+> +++ b/include/net/bluetooth/hci_core.h
+> @@ -635,6 +635,8 @@ struct hci_dev {
+> 	void (*cmd_timeout)(struct hci_dev *hdev);
+> 	bool (*wakeup)(struct hci_dev *hdev);
+> 	int (*set_quality_report)(struct hci_dev *hdev, bool enable);
+> +	void (*vendor_evt)(struct hci_dev *hdev, void *data,
+> +			   struct sk_buff *skb);
 
-    + sysrq
+So I do not understand the void *data portion. Just hand down the skb.
 
-But I am not sure about situations where only a particular process
-or CPU is in troubles:
+> 	int (*get_data_path_id)(struct hci_dev *hdev, __u8 *data_path);
+> 	int (*get_codec_config_data)(struct hci_dev *hdev, __u8 type,
+> 				     struct bt_codec *codec, __u8 *vnd_len,
+> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> index 6468ea0f71bd..e34dea0f0c2e 100644
+> --- a/net/bluetooth/hci_event.c
+> +++ b/net/bluetooth/hci_event.c
+> @@ -4250,6 +4250,7 @@ static void hci_num_comp_blocks_evt(struct hci_dev *hdev, void *data,
+>  *       space to avoid collision.
+>  */
+> static unsigned char AOSP_BQR_PREFIX[] = { 0x58 };
+> +static unsigned char INTEL_PREFIX[] = { 0x87, 0x80 };
 
-    + cpu and rcu stalls
-    + hard and soft lockups
-    + hung tasks
-    + "generic" stack dumps
+This really bugs me. Intel specifics can not be here. I think we really have to push all vendor events down to the driver.
 
+> 
+> /* Some vendor prefixes are fixed values and lengths. */
+> #define FIXED_EVT_PREFIX(_prefix, _vendor_func)				\
+> @@ -4273,6 +4274,16 @@ static unsigned char AOSP_BQR_PREFIX[] = { 0x58 };
+> 	.get_prefix_len = _prefix_len_func,				\
+> }
+> 
+> +/* Every vendor that handles particular vendor events in its driver should
+> + * 1. set up the vendor_evt callback in its driver and
+> + * 2. add an entry in struct vendor_event_prefix.
+> + */
+> +static void vendor_evt(struct hci_dev *hdev,  void *data, struct sk_buff *skb)
+> +{
+> +	if (hdev->vendor_evt)
+> +		hdev->vendor_evt(hdev, data, skb);
+> +}
+> +
+> /* Every distinct vendor specification must have a well-defined vendor
+>  * event prefix to determine if a vendor event meets the specification.
+>  * If an event prefix is fixed, it should be delcared with FIXED_EVT_PREFIX.
+> @@ -4287,6 +4298,7 @@ struct vendor_event_prefix {
+> 	__u8 (*get_prefix_len)(struct hci_dev *hdev);
+> } evt_prefixes[] = {
+> 	FIXED_EVT_PREFIX(AOSP_BQR_PREFIX, aosp_quality_report_evt),
+> +	FIXED_EVT_PREFIX(INTEL_PREFIX, vendor_evt),
+> 	DYNAMIC_EVT_PREFIX(get_msft_evt_prefix, get_msft_evt_prefix_len,
+> 			   msft_vendor_evt),
 
-The risks:
+Regards
 
-On one hand, I like that it is a conservative approach. It reduces
-the risk of bad user experience with switching to printk kthreads.
+Marcel
 
-On the other hand, it means that the problem with soft/live-lockups
-will still be there. Also the direct output is global and affects
-any messages. It means that we will still need to keep and maintain
-printk_deferred() for scheduler, NMI, console drivers, ...
-
-
-My preferences:
-
-I prefer to do the changes proposed by this patch (with updated sysrq
-handling) in the 1st stage. It is more conservative. The switch to
-kthreads in most other situations will be big enough step.
-
-But I think that we might go even further in the future. After all,
-the plan was to use the direct printing only when the system is about
-to die. This might eventually allow to remove printk_deferred()
-and all the possible soft/live-lockups.
-
-Best Regards,
-Petr

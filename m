@@ -2,166 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B024B9D63
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EE04B9D69
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239250AbiBQKky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:40:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50162 "EHLO
+        id S239251AbiBQKm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:42:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239244AbiBQKkw (ORCPT
+        with ESMTP id S237461AbiBQKm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:40:52 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39848284D1C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:40:38 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 581411F4560C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645094437;
-        bh=a4kVXcts5RYYnYTz5xCDykmha1OtLX+CuQebEarzxD4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PILuS0FjWxb32OJHPC9LFsuDVR2N2f8T1T47E8XjDZYH4g/Qdf9Ys1kjJL1nPJFZf
-         0HCZnyJ2jttRNd/7uL54TZOwi8FNIoQxm/rHjQdH7o+aSkXC2rNq11KKxzp7fDiLRd
-         j0MNWb2YrLuAIzsbfjoXnM4UmnCw4SCXlXhGRAL0DiaIPR/rDn0115FZAhoDauUl7c
-         XJCJCEJJfeS+r1AuvnwXPyAc+WGolhB/mO8sgBUfFSASYRVKk4Khj2wvlZWOpa8DSU
-         hCDnCYyLXHXuUbZU9hyrcoYc7KjABQL1sEyOpI6AXMRSlrzaGRN2JDOLh7uSjDIWwF
-         pnJ2kUPw5uxgQ==
-Message-ID: <e93b12d6-5c7b-2ad6-47e5-c1311d95cba2@collabora.com>
-Date:   Thu, 17 Feb 2022 11:40:34 +0100
+        Thu, 17 Feb 2022 05:42:56 -0500
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD16293B73;
+        Thu, 17 Feb 2022 02:42:42 -0800 (PST)
+Received: by mail-vk1-f171.google.com with SMTP id k128so2779607vkk.10;
+        Thu, 17 Feb 2022 02:42:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=URz3vGbBYIEN5IQJZpThn97AmYBtZHbYQoPJObvpYus=;
+        b=G3Gd/cOW9B4p+iV9e4iuBpBPl644LnwAqTqPVZetBGkmj2jYS93B83PoMV+tstJofv
+         ++k0BjCioqKsuqwInJ1BFPIw61kIAGRMBz82LEJ+BhHZVY7BPtTLH6g64Gb53TIOJqoD
+         bkFgb21fFzy66ZMKAcqNOGHD+Qw89rr+uQVPKyza0L9MabqkqKI59cpl/k1uLXnVeK94
+         t7MmqRn0dcW0gavykd8pjPpUjY6OXMGsx2cVSmRCKRvb6LbhYlULDUCBePv+kRLDTe63
+         aGuo7Jd3oq0hFn3lyvSczcIGFVGa5ahyKPlKetKXPSsZEbEm63eJUG2nJCFXONlS8wcu
+         bJLQ==
+X-Gm-Message-State: AOAM533stlObAXiB8Ny1shBVhToRl/cJaTUJTY0OKacUSmqJJP8+CWny
+        KrZaQf0ok69R/5FpCZC9WdwOstFKMrKaHw==
+X-Google-Smtp-Source: ABdhPJxnktVpuCw857SVyJr4O9PFDjXNYxsMStC78sWGoiVxBEDELRuDgXzFxOOJ3DEsGsXG2Vd1ow==
+X-Received: by 2002:a05:6122:d9e:b0:331:33da:48e5 with SMTP id bc30-20020a0561220d9e00b0033133da48e5mr584012vkb.35.1645094561145;
+        Thu, 17 Feb 2022 02:42:41 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id 17sm6720336vky.10.2022.02.17.02.42.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 02:42:40 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id g18so2449987uak.5;
+        Thu, 17 Feb 2022 02:42:40 -0800 (PST)
+X-Received: by 2002:ab0:750e:0:b0:33e:8f30:e8ec with SMTP id
+ m14-20020ab0750e000000b0033e8f30e8ecmr816005uap.114.1645094560576; Thu, 17
+ Feb 2022 02:42:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2] soc: mediatek: mtk-infracfg: Disable ACP on MT8192
-Content-Language: en-US
-To:     Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        linux-mediatek@lists.infradead.org
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nick Fan <Nick.Fan@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>
-References: <20220215184651.12168-1-alyssa.rosenzweig@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220215184651.12168-1-alyssa.rosenzweig@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220215165226.2738568-1-geert@linux-m68k.org>
+ <20220215165226.2738568-9-geert@linux-m68k.org> <20220217121033.0fc7f6ba@eldfell>
+In-Reply-To: <20220217121033.0fc7f6ba@eldfell>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 17 Feb 2022 11:42:29 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXf3tFLb16Y=wh5C3QUYN4PdCjaYPCzMOTCye-eYS-N8w@mail.gmail.com>
+Message-ID: <CAMuHMdXf3tFLb16Y=wh5C3QUYN4PdCjaYPCzMOTCye-eYS-N8w@mail.gmail.com>
+Subject: Re: [PATCH 8/8] drm/fourcc: Add DRM_FORMAT_D1
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/02/22 19:46, Alyssa Rosenzweig ha scritto:
-> MT8192 contains an experimental Accelerator Coherency Port
-> implementation, which does not work correctly but was unintentionally
-> enabled by default. For correct operation of the GPU, we must set a
-> chicken bit disabling ACP on MT8192.
-> 
-> Adapted from the following downstream change to the out-of-tree, legacy
-> Mali GPU driver:
-> 
-> https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/2781271/5
-> 
-> Note this change is required for both Panfrost and the legacy kernel
-> driver.
+Hi Pekka,
 
-Hello Alyssa,
-the v2 note should not get inside the commit message, even though they should be
-on the patch to provide context.
-Look at the example...
+On Thu, Feb 17, 2022 at 11:10 AM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+> On Tue, 15 Feb 2022 17:52:26 +0100
+> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > Introduce a fourcc code for a single-channel frame buffer format with two
+> > darkness levels.  This can be used for two-level dark-on-light displays.
+> >
+> > As the number of bits per pixel is less than eight, this relies on
+> > proper block handling for the calculation of bits per pixel and pitch.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-> 
-> v2: Move the change from clk-mt8192.c to mtk-infracfg.c (Robin).
-> Although it does not make sense to add this platform-specific hack to
-> the GPU driver, it has nothing to do with clocks. We already have
-> mtk-infracfg.c to manage other infracfg bits; the ACP disable should
-> live there too.
-> 
-> Co-developed-by: Robin Murphy <robin.murphy@arm.com>
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> Signed-off-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-> Cc: Nick Fan <Nick.Fan@mediatek.com>
-> Cc: Nicolas Boichat <drinkcat@chromium.org>
-> Cc: Chen-Yu Tsai <wenst@chromium.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
+> > --- a/drivers/gpu/drm/drm_fourcc.c
+> > +++ b/drivers/gpu/drm/drm_fourcc.c
+> > @@ -151,6 +151,8 @@ const struct drm_format_info *__drm_format_info(u32 format)
+> >               { .format = DRM_FORMAT_C4,              .depth = 4,  .num_planes = 1,
+> >                 .char_per_block = { 1, }, .block_w = { 2, }, .block_h = { 1, }, .hsub = 1, .vsub = 1 },
+> >               { .format = DRM_FORMAT_C8,              .depth = 8,  .num_planes = 1, .cpp = { 1, 0, 0 }, .hsub = 1, .vsub = 1 },
+> > +             { .format = DRM_FORMAT_D1,              .depth = 1,  .num_planes = 1,
+> > +               .char_per_block = { 1, }, .block_w = { 8, }, .block_h = { 1, }, .hsub = 1, .vsub = 1 },
+> >               { .format = DRM_FORMAT_R1,              .depth = 1,  .num_planes = 1,
+> >                 .char_per_block = { 1, }, .block_w = { 8, }, .block_h = { 1, }, .hsub = 1, .vsub = 1 },
+> >               { .format = DRM_FORMAT_R2,              .depth = 2,  .num_planes = 1,
+> > diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+> > index 8605a1acc6813e6c..c15c6efcc65e5827 100644
+> > --- a/include/uapi/drm/drm_fourcc.h
+> > +++ b/include/uapi/drm/drm_fourcc.h
+> > @@ -104,6 +104,9 @@ extern "C" {
+> >  #define DRM_FORMAT_C4                fourcc_code('C', '4', ' ', ' ') /* [3:0] C */
+> >  #define DRM_FORMAT_C8                fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
+> >
+> > +/* 1 bpp Darkness */
+> > +#define DRM_FORMAT_D1                fourcc_code('D', '1', ' ', ' ') /* [0] D */
+> > +
+>
+> the same comment here as for C1 and R1 formats, need to specify pixel
+> ordering inside a byte.
 
-v2: Move the change from clk-mt8192.c to mtk-infracfg.c (Robin).
+Right, will do.
 
-^^^ put it here, after the "---" :)
+> I think it would also be good to explain the rationale why C1 and R1
+> are not suitable for this case and we need yet another 1-bit format in
+> the commit message.
+>
+> For posterity, of course. I roughly remember the discussions.
 
-Anyway,
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+C1 is color-indexed, which can be any two colors.
+R1 is light-on-dark.
+D1 is dark-on-light.
 
->   drivers/soc/mediatek/mtk-infracfg.c   | 19 +++++++++++++++++++
->   include/linux/soc/mediatek/infracfg.h |  3 +++
->   2 files changed, 22 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-infracfg.c b/drivers/soc/mediatek/mtk-infracfg.c
-> index 0590b68e0d78..2acf19676af2 100644
-> --- a/drivers/soc/mediatek/mtk-infracfg.c
-> +++ b/drivers/soc/mediatek/mtk-infracfg.c
-> @@ -6,6 +6,7 @@
->   #include <linux/export.h>
->   #include <linux/jiffies.h>
->   #include <linux/regmap.h>
-> +#include <linux/mfd/syscon.h>
->   #include <linux/soc/mediatek/infracfg.h>
->   #include <asm/processor.h>
->   
-> @@ -72,3 +73,21 @@ int mtk_infracfg_clear_bus_protection(struct regmap *infracfg, u32 mask,
->   
->   	return ret;
->   }
-> +
-> +static int __init mtk_infracfg_init(void)
-> +{
-> +	struct regmap *infracfg;
-> +
-> +	/*
-> +	 * MT8192 has an experimental path to route GPU traffic to the DSU's
-> +	 * Accelerator Coherency Port, which is inadvertently enabled by
-> +	 * default. It turns out not to work, so disable it to prevent spurious
-> +	 * GPU faults.
-> +	 */
-> +	infracfg = syscon_regmap_lookup_by_compatible("mediatek,mt8192-infracfg");
-> +	if (!IS_ERR(infracfg))
-> +		regmap_set_bits(infracfg, MT8192_INFRA_CTRL,
-> +				MT8192_INFRA_CTRL_DISABLE_MFG2ACP);
-> +	return 0;
-> +}
-> +postcore_initcall(mtk_infracfg_init);
-> diff --git a/include/linux/soc/mediatek/infracfg.h b/include/linux/soc/mediatek/infracfg.h
-> index d858e0bab7a2..fcbbd0dd5e55 100644
-> --- a/include/linux/soc/mediatek/infracfg.h
-> +++ b/include/linux/soc/mediatek/infracfg.h
-> @@ -229,6 +229,9 @@
->   #define INFRA_TOPAXI_PROTECTEN_SET		0x0260
->   #define INFRA_TOPAXI_PROTECTEN_CLR		0x0264
->   
-> +#define MT8192_INFRA_CTRL			0x290
-> +#define MT8192_INFRA_CTRL_DISABLE_MFG2ACP	BIT(9)
-> +
->   #define REG_INFRA_MISC				0xf00
->   #define F_DDR_4GB_SUPPORT_EN			BIT(13)
->   
+> I also wonder if anyone would actually use D1. Should it be added
+> anyway? There is no rule that a pixel format must be used inside the
+> kernel AFAIK, but is there even a prospective userspace wanting this?
+>
+> Exposing R1 and inverting bits while copying to hardware might be
+> enough?
 
+That's an option.  The repaper driver does that:
 
--- 
-AngeloGioacchino Del Regno
-Software Engineer
+    drm_fb_xrgb8888_to_gray8(buf, 0, cma_obj->vaddr, fb, &clip);
+    repaper_gray8_to_mono_reversed(buf, fb->width, fb->height);
 
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
+Can drm_framebuffer objects be backed by graphics memory, i.e.
+can they be displayed without copying?
+
+> >  /* 1 bpp Red */
+> >  #define DRM_FORMAT_R1                fourcc_code('R', '1', ' ', ' ') /* [0] R */
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

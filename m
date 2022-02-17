@@ -2,177 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A014B9CBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AE14B9CC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiBQKKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:10:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48086 "EHLO
+        id S239027AbiBQKL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:11:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239001AbiBQKKw (ORCPT
+        with ESMTP id S239013AbiBQKL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:10:52 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC7A2AAB0C;
-        Thu, 17 Feb 2022 02:10:37 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id o2so9001969lfd.1;
-        Thu, 17 Feb 2022 02:10:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version;
-        bh=wsBm9GlF6QBk+ga6odvG4D+yJfesdCIhGI6Qr588TUo=;
-        b=TrKDmwEnnG2m5f31bp3dJe99wKxPtwM+R3St+7DDbnp8bsJwZvieAD4m6QSKUpDEvZ
-         3cSAg+gssaRQ/+Gw9D1aU9LRUhFdKboR/ANIhPzFX6OUcnMEbJIuzfPTmDgiJLBALBcl
-         JhqWI7VIFp0x4d1jgalEpySbMm+KnKatTU04d811m2kFqVa+LPYLtxwn91j21CokyUi+
-         qBwibqLLsfDxDfPZpyC1aXZbSAImySOYF597S9wxB6+dfZuwuL8QqV67Auq/8N2P7i7V
-         IyKcRQ16+nW3tY7Iu1bQ8/4yR4zGGguDqLSTRttHWyFbFoB+pNoi/QXafGKhGLjQcJGb
-         qFZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version;
-        bh=wsBm9GlF6QBk+ga6odvG4D+yJfesdCIhGI6Qr588TUo=;
-        b=SMVIaXYh5uVkkcR/XQQ4IoqsfqlT8rThv1OCtyqB73FcruiNxEhewFx1w53B3BNwcD
-         y6EobGRm8J8YYVAzT4Nbgwp2UxdqWpIsS+Dk1zpAo8gUxUg9JKiHn5xgqKHX26jCLBq5
-         5EmFIm+UQKhv3b/jmIL1BopgjUBNHgPBkX2WAFD2sGa7w4vqhcjh7YSYW9iUyXS6xOFI
-         cznyNUUF7CDEbXU3iOzrCxtO5f2pXIaI9pGLU9jwvrxpGJvSmey595NqfKHfXl6l1Jhy
-         W97PIPEjeAxCbNiotWi0oQAgzfZvZY0WziWj0L+I9ge7qiRP1YBLV3NnigYXthG2hnNa
-         VOsQ==
-X-Gm-Message-State: AOAM5329cFmRtPTV8Af9RiCxrh7PyGGtqD61HQs6OsbCTiAe2RKjjAUm
-        OPifvygZwRpF1D2m4omlc6U=
-X-Google-Smtp-Source: ABdhPJw6d1Xx03VBy4x0vM44wpr0/W0ibQpAYvHtY4+JhKJFclWHt/sAdUZmSM5sc0c5Qyto8ako3w==
-X-Received: by 2002:a05:6512:3710:b0:43a:12aa:cb68 with SMTP id z16-20020a056512371000b0043a12aacb68mr1622061lfr.280.1645092636121;
-        Thu, 17 Feb 2022 02:10:36 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id i3sm5094012lfj.144.2022.02.17.02.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 02:10:35 -0800 (PST)
-Date:   Thu, 17 Feb 2022 12:10:33 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, linux-m68k@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 8/8] drm/fourcc: Add DRM_FORMAT_D1
-Message-ID: <20220217121033.0fc7f6ba@eldfell>
-In-Reply-To: <20220215165226.2738568-9-geert@linux-m68k.org>
-References: <20220215165226.2738568-1-geert@linux-m68k.org>
-        <20220215165226.2738568-9-geert@linux-m68k.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 17 Feb 2022 05:11:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6507F2AAB3D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:11:14 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 23C581F383;
+        Thu, 17 Feb 2022 10:11:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645092673; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyUregw8hAXko0ZRmaRWn7Astnni7nXWdxjsvYQJs/4=;
+        b=e8i0Bm1Ax5TGlX4yqI0sNNIIXDYo1UGJuNGmPaHp9NVtUgjkBypLOsEtKUiGy5yP+ycgmS
+        yZRoaPG3syvfeyYSgDDI0/GNPj+ofGHW/MEKdjXYlTARN7xfE+m5xqgj4wFbR4agmxeLJa
+        gvT1HwNvuV09xG5RpqHUC0sET0wLGcU=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D75D9A3B87;
+        Thu, 17 Feb 2022 10:11:12 +0000 (UTC)
+Date:   Thu, 17 Feb 2022 11:11:12 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v1 08/13] printk: add pr_flush()
+Message-ID: <Yg4fQHlli5L/zLQ6@alley>
+References: <20220207194323.273637-1-john.ogness@linutronix.de>
+ <20220207194323.273637-9-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nO3MwzHd32JIR23_QdrLEwe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207194323.273637-9-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/nO3MwzHd32JIR23_QdrLEwe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon 2022-02-07 20:49:18, John Ogness wrote:
+> Provide a might-sleep function to allow waiting for threaded console
+> printers to catch up to the latest logged message.
+> 
+> Use pr_flush() whenever it is desirable to get buffered messages
+> printed before continuing: suspend_console(), resume_console(),
+> console_stop(), console_start(), console_unblank().
+> 
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index 02bde45c1149..1e80fd052bd5 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2449,6 +2449,7 @@ void suspend_console(void)
+>  	if (!console_suspend_enabled)
+>  		return;
+>  	pr_info("Suspending console(s) (use no_console_suspend to debug)\n");
+> +	pr_flush(1000, true);
+>  	console_lock();
+>  	console_suspended = 1;
+>  	up_console_sem();
+> @@ -2461,6 +2462,7 @@ void resume_console(void)
+>  	down_console_sem();
+>  	console_suspended = 0;
+>  	console_unlock();
+> +	pr_flush(1000, true);
+>  }
+>  
+>  /**
+> @@ -2802,8 +2804,10 @@ void console_unblank(void)
+>  	if (oops_in_progress) {
+>  		if (down_trylock_console_sem() != 0)
+>  			return;
+> -	} else
+> +	} else {
+> +		pr_flush(1000, true);
 
-On Tue, 15 Feb 2022 17:52:26 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+It would make more sense to flush the consoles after they are
+unblanked. I mean to move this to the end of the function.
 
-> Introduce a fourcc code for a single-channel frame buffer format with two
-> darkness levels.  This can be used for two-level dark-on-light displays.
->=20
-> As the number of bits per pixel is less than eight, this relies on
-> proper block handling for the calculation of bits per pixel and pitch.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
->  drivers/gpu/drm/drm_fourcc.c  | 2 ++
->  include/uapi/drm/drm_fourcc.h | 3 +++
->  2 files changed, 5 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
-> index c12e48ecb1ab8aad..d00ce5d8d1fb9dd3 100644
-> --- a/drivers/gpu/drm/drm_fourcc.c
-> +++ b/drivers/gpu/drm/drm_fourcc.c
-> @@ -151,6 +151,8 @@ const struct drm_format_info *__drm_format_info(u32 f=
-ormat)
->  		{ .format =3D DRM_FORMAT_C4,		.depth =3D 4,  .num_planes =3D 1,
->  		  .char_per_block =3D { 1, }, .block_w =3D { 2, }, .block_h =3D { 1, }=
-, .hsub =3D 1, .vsub =3D 1 },
->  		{ .format =3D DRM_FORMAT_C8,		.depth =3D 8,  .num_planes =3D 1, .cpp =
-=3D { 1, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
-> +		{ .format =3D DRM_FORMAT_D1,		.depth =3D 1,  .num_planes =3D 1,
-> +		  .char_per_block =3D { 1, }, .block_w =3D { 8, }, .block_h =3D { 1, }=
-, .hsub =3D 1, .vsub =3D 1 },
->  		{ .format =3D DRM_FORMAT_R1,		.depth =3D 1,  .num_planes =3D 1,
->  		  .char_per_block =3D { 1, }, .block_w =3D { 8, }, .block_h =3D { 1, }=
-, .hsub =3D 1, .vsub =3D 1 },
->  		{ .format =3D DRM_FORMAT_R2,		.depth =3D 2,  .num_planes =3D 1,
-> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
-> index 8605a1acc6813e6c..c15c6efcc65e5827 100644
-> --- a/include/uapi/drm/drm_fourcc.h
-> +++ b/include/uapi/drm/drm_fourcc.h
-> @@ -104,6 +104,9 @@ extern "C" {
->  #define DRM_FORMAT_C4		fourcc_code('C', '4', ' ', ' ') /* [3:0] C */
->  #define DRM_FORMAT_C8		fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
-> =20
-> +/* 1 bpp Darkness */
-> +#define DRM_FORMAT_D1		fourcc_code('D', '1', ' ', ' ') /* [0] D */
+Also it is not obvious why this is not called when oops_in_progress
+is set. I guess that it is because trylock is needed in this case.
+It should be handled inside pr_flush().
+
+I mean that pr_flush() should internally use trylock when
+@oops_in_progress is set. It will make it safe even in this
+mode.
+
+
+>  		console_lock();
+> +	}
+>  
+>  	console_locked = 1;
+>  	console_may_schedule = 0;
+> @@ -2869,6 +2873,7 @@ struct tty_driver *console_device(int *index)
+>   */
+>  void console_stop(struct console *console)
+>  {
+> +	pr_flush(1000, true);
+
+It would be enough to flush just the given @console.
+
+It might be possible to take over the job from the related
+kthread and flush it in this context. Well, I am not sure if
+it is a good idea.
+
+>  	console_lock();
+>  	console->flags &= ~CON_ENABLED;
+>  	console_unlock();
+> @@ -2880,6 +2885,7 @@ void console_start(struct console *console)
+>  	console_lock();
+>  	console->flags |= CON_ENABLED;
+>  	console_unlock();
+> +	pr_flush(1000, true);
+
+Same here.
+
+>  }
+>  EXPORT_SYMBOL(console_start);
+>  
+> @@ -3249,6 +3255,71 @@ static int __init printk_late_init(void)
+>  late_initcall(printk_late_init);
+>  
+>  #if defined CONFIG_PRINTK
+> +/**
+> + * pr_flush() - Wait for printing threads to catch up.
+> + *
+
+Alternative solution would be to take over the job from the kthreads
+and flush the consoles in this context. Well, I am not sure
+if it is a good idea or not.
+
+> + * @timeout_ms:        The maximum time (in ms) to wait.
+> + * @reset_on_progress: Reset the timeout if forward progress is seen.
+> + *
+> + * A value of 0 for @timeout_ms means no waiting will occur. A value of -1
+> + * represents infinite waiting.
+> + *
+> + * If @reset_on_progress is true, the timeout will be reset whenever any
+> + * printer has been seen to make some forward progress.
+> + *
+> + * Context: Process context. May sleep while acquiring console lock.
+> + * Return: true if all enabled printers are caught up.
+> + */
+> +bool pr_flush(int timeout_ms, bool reset_on_progress)
+> +{
+> +	int remaining = timeout_ms;
+> +	struct console *con;
+> +	u64 last_diff = 0;
+> +	u64 printk_seq;
+> +	u64 diff;
+> +	u64 seq;
 > +
+> +	might_sleep();
+> +
+> +	seq = prb_next_seq(prb);
+> +
+> +	for (;;) {
+> +		diff = 0;
+> +
+> +		console_lock();
+> +		for_each_console(con) {
+> +			if (!console_is_usable(con))
+> +				continue;
+> +			printk_seq = con->seq;
+> +			if (printk_seq < seq)
+> +				diff += seq - printk_seq;
+> +		}
+> +		console_unlock();
+> +
+> +		if (diff != last_diff && reset_on_progress)
+> +			remaining = timeout_ms;
+> +
+> +		if (diff == 0 || remaining == 0)
+> +			break;
+> +
+> +		if (remaining < 0) {
+> +			/* no timeout limit */
+> +			msleep(100);
+> +		} else if (remaining < 100) {
+> +			msleep(remaining);
+> +			remaining = 0;
+> +		} else {
+> +			msleep(100);
+> +			remaining -= 100;
+> +		}
+> +
+> +		last_diff = diff;
+> +	}
+> +
+> +	return (diff == 0);
+> +}
+> +EXPORT_SYMBOL(pr_flush);
 
-Hi Geert,
+Summary:
 
-the same comment here as for C1 and R1 formats, need to specify pixel
-ordering inside a byte.
+The pr_flush() API and the optional timeout look reasonable to me.
 
-I think it would also be good to explain the rationale why C1 and R1
-are not suitable for this case and we need yet another 1-bit format in
-the commit message.
+Please, handle oops_in_progress in pr_flush() and make it safe in this
+mode. It will allow to move it at the end of console_unblank() where
+it makes more sense.
 
-For posterity, of course. I roughly remember the discussions.
+I do not resist on flushing only the given consoles in console_stop()
+and console_start(). It is nice to have and can be done later.
 
-I also wonder if anyone would actually use D1. Should it be added
-anyway? There is no rule that a pixel format must be used inside the
-kernel AFAIK, but is there even a prospective userspace wanting this?
+Also I do not resist on doing the flush in the context of the caller.
+I am not even sure if it is a good idea. We could play with it
+later when there are some problems with the current approach
+in practice.
 
-Exposing R1 and inverting bits while copying to hardware might be
-enough?
-
-
-Thanks,
-pq
-
->  /* 1 bpp Red */
->  #define DRM_FORMAT_R1		fourcc_code('R', '1', ' ', ' ') /* [0] R */
-> =20
-
-
---Sig_/nO3MwzHd32JIR23_QdrLEwe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmIOHxkACgkQI1/ltBGq
-qqfxtQ//cB5PpnZOZOuy1vfa4m+SVmb/OfNz3ra6mqw9akiOfUbA4cT/0vTDCtGl
-KzNEJaKvg1zt27R+FxRqUupLRBX30d0sCm83/eMCziS7+2BmfBm2Q03nsJxo3zW6
-CJXfT/O+cOMiBsJWEAd0kefgH7e5Ea1s3H5yDvMWr/VKg8R58M+OzYhtMlDRto/e
-VSsL2RlTp+tPJfUvrWX0sqCtH8KKAJVvIRAILJBCN6CA+qp50INFTZNTJ1rs293p
-KGmErPfLWStT0KFQPdzdBE/fC18xsjS5jCORvRmQMtlrcFZRJq6q3UTg7K7SiVKx
-1nJCl7b4RG9zNaAnwIFh8e629NpVaPewzpT1aXfWQ6afCCgebYoqbK+aR7Q9E3zX
-2iR0GJRVOrm6Xe8nVgOPNjNkb8HwhREfLoE7AYxDUgX3/4nfKvu8ElrcaeKenbM/
-6EcD5u5CVO2PINa5Dp2qXcgiC4u+pS4nko8yc+a0Zr+gP0BwM5FiQ2/mbZeP+0Ka
-aqYIntktyOsK5ppgJDaCHPnIQmPoJNJp7/JN05Se7Gg6ZyEv/zKRvOsjpACxKwFL
-fc+R38/3nG94r2h9O01qC35vXxr1CYSBtxSD861Nwpg+omICPh4WzQ8JWevT4mch
-x4aulQlxkRJmqe+oRk6urYTjDvR9KsYPWDn5sKCgMdAAIFgpSdM=
-=5ycp
------END PGP SIGNATURE-----
-
---Sig_/nO3MwzHd32JIR23_QdrLEwe--
+Best Regards,
+Petr

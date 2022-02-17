@@ -2,152 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C2A4BAB49
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC874BAB50
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243395AbiBQUwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 15:52:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55312 "EHLO
+        id S243416AbiBQUwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 15:52:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiBQUwL (ORCPT
+        with ESMTP id S231586AbiBQUwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 15:52:11 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F0A255B3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:51:53 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id c10so1246960ljr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:51:53 -0800 (PST)
+        Thu, 17 Feb 2022 15:52:53 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57D0606D6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:52:37 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d11b6259adso23893277b3.19
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:52:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+ZiDUkCYJFO1OHRaVO1/kwEux4anXgQqPRU7RhCvElE=;
-        b=jMdlK5xyQg0PxJfQGKnYHUnmQoVNafMhSFPxDOLfSTKJCLlq4b3yJDSJ5vlCPDvqqo
-         tZRG8DbXjXRbAqsOHyAxpCpqLwz9Cjr8tW/+xNghgW0pqxILNg+x9G1d3tJjrLpD54xK
-         mmmPX8e8HM+qg5T6vA6XqWQ5dPnz7e0UgCQHkUssv+jacs2ClE74WVaSWxntSVY+tF+H
-         uE1tiyVLO9ER9aC/ldRQkf/0F9rHL7+/xZQe/nkLseI9BAIkrqQmmpn3m07xmRxNDP1R
-         6+3TSubyIraHVx2dgIjNlEI06rGh9lJAbyqtSjmYa4i1B6l3TtU33srUBcZYzH4qJbQf
-         74dw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dXZ88eAMDfwar4flZwsv+0VQlp1BfXAwBS19QSjW6e8=;
+        b=Oxm18ISxi+ZPYDl/60bnw8L9ZtUKS/pHPdOCTMHLJn/8IdCoq30zdpjgqk1oGeBtQu
+         kKuqpHMgoDSISAaIQD6AZbPs9rKS69UGKO/VBQaQ6V4R36XpRiwkQShXt28nIO7GFVhO
+         rK2TPeFj2gHA+jO4z/OAxg0F4uBBOh1mYHNPfxQyFNdpXAULn8BVi0vyCgenE6fUB4gA
+         QBBWYMsh7u6X+5p7CKyhJx8ITF0UrYj0VOiuOcTGeJAOHwyqEGHvuTy4Fm9BiFAl3lqt
+         4lYpYp2do0CzN/yZLCJAGR9kvT+CrGw7tO/Kv25LWU62NhSXNpdfD7YTKTPuzeCfuNQ9
+         wXiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+ZiDUkCYJFO1OHRaVO1/kwEux4anXgQqPRU7RhCvElE=;
-        b=AmGtgD7+JaV6v6RzrJqJbaUlfS4vuSiJ81YRP2tX76F9BGVT8KCt4HZDG2Zsl+R8C7
-         QRzbB+RWfB47sbIqdy0dR+q9KU4DIAzjad5Tp+Yk/VNSOa90SAVtrBgwH7h74TjZEt4s
-         59TyIB04ml8hKgOUJj3IXznrxNN7IfoE1hYZnz2kT3H8QDAN7zJGvGkI9IEYMl+uIs4o
-         sFh+PDrH45pcnK7jAeNdB9ii/IzJHqAmfoiuXCjYLcyKOeTWwRkXFVJJ+Aj5sWJtu4n/
-         Lcc3jvy5jFnzToMSsYsUIufT6zOx1JPLBe/FGBP/susZwjYP/mYmPuMAnKGjHcGKrSN1
-         9gaQ==
-X-Gm-Message-State: AOAM5331UrKFXHZRPgPoDB1BkEtAA6snVqjIIHOvCRhS95p2cxf6PBWZ
-        BCgoIWXAgJj7OL/k4vRlVxYZeE3sSuM9SixM
-X-Google-Smtp-Source: ABdhPJzdI5/FgG6Qac5fqy66PTplck6g3JrVarPKz4VuW/5CEH3YItG5A4KZnGatg8oS1YHYlfgNRw==
-X-Received: by 2002:a05:651c:1594:b0:239:9df5:f447 with SMTP id h20-20020a05651c159400b002399df5f447mr3361080ljq.463.1645131111631;
-        Thu, 17 Feb 2022 12:51:51 -0800 (PST)
-Received: from TebraArch.. ([81.198.232.185])
-        by smtp.gmail.com with ESMTPSA id e16sm66319lfs.67.2022.02.17.12.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 12:51:51 -0800 (PST)
-From:   =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>
-Subject: [PATCH] dmaengine: fix dma_issue_pending_all to work with async channel removal
-Date:   Thu, 17 Feb 2022 22:51:47 +0200
-Message-Id: <20220217205147.35586-1-davispuh@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dXZ88eAMDfwar4flZwsv+0VQlp1BfXAwBS19QSjW6e8=;
+        b=Ba+OU97h04ehG5lx8cpo0ZAdyO9xFAz3zr86GycwEbDMD01iU3wOhFpXoMgewzF/GJ
+         OvhXhugo2Rw0PfhlICkqF/NiMLPto1Bx3H+Bm2hz6BB1hOIR2+ZNlPTruXU0Qmm0YTAk
+         7Kb7m9mRyhlqTw9F5itEwjvyn2bayqxT8LW1K1KBUgALXXX90u5sXNUgdySwrlInS3qH
+         Nehef/RFtEctw/Q2SYs45FLlEIJXgEtBoyYPAy05D/fQ0iiqn+T+r454MXGPSiNPvTJl
+         LanPp4MWluIXLLBV5SQyEN+N7hD2L1pNoZ+CA+/bxSaZuON7QkM4LsmFE+yIPfMutKjp
+         YRPw==
+X-Gm-Message-State: AOAM531KDLqn7XDVEpU6q7q/6vYcqkyjKsGd3kBv/4llzv4Ld9SlHKVX
+        6hq6NEwOXy2yoWAZ7LLKWZriPxfwDkddQA==
+X-Google-Smtp-Source: ABdhPJzzYU3teBRLayZvyQuTnK5mTuMVlHS4CiXz14vHh1ugV53dl5JsmpPHJKJp7LlHGwaBuB5nMfWQsSgpmQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1d37:446c:f8bc:463])
+ (user=dlatypov job=sendgmr) by 2002:a25:3814:0:b0:623:a445:a40a with SMTP id
+ f20-20020a253814000000b00623a445a40amr4563052yba.80.1645131156960; Thu, 17
+ Feb 2022 12:52:36 -0800 (PST)
+Date:   Thu, 17 Feb 2022 12:52:25 -0800
+Message-Id: <20220217205227.4098452-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH 1/3] kunit: tool: readability tweaks in KernelCI json
+ generation logic
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma channels can be removed asynchronously while we iterate over them so fix that.
+Use a more idiomatic check that a list is non-empty (`if mylist:`) and
+sinmplify the function body by dedenting and using a dict to map between
+the kunit TestStatus enum => KernelCI json status string.
 
-Without this fix we would dereference null pointer when dma_issue_pending_all
-is invoked while some different device is being unloaded.
+The dict hopefully makes it less likely to have bugs like commit
+9a6bb30a8830 ("kunit: tool: fix --json output for skipped tests").
 
-kernel: BUG: kernel NULL pointer dereference, address: 0000000000000018
-kernel: #PF: supervisor read access in kernel mode
-kernel: #PF: error_code(0x0000) - not-present page
-kernel: PGD 0 P4D 0
-kernel: Oops: 0000 [#1] PREEMPT SMP NOPTI
-kernel: RIP: 0010:dma_issue_pending_all (drivers/dma/dmaengine.c:562)
-All code
-========
-   0:   48 8b 45 20             mov    0x20(%rbp),%rax
-   4:   48 8d 68 e0             lea    -0x20(%rax),%rbp
-   8:   48 3d 60 36 35 bc       cmp    $0xffffffffbc353660,%rax
-   e:   74 4d                   je     0x5d
-  10:   48 8b 45 48             mov    0x48(%rbp),%rax
-  14:   f6 c4 02                test   $0x2,%ah
-  17:   75 e7                   jne    0x0
-  19:   48 8b 45 10             mov    0x10(%rbp),%rax
-  1d:   4c 8d 65 10             lea    0x10(%rbp),%r12
-  21:   48 8d 58 c8             lea    -0x38(%rax),%rbx
-  25:   49 39 c4                cmp    %rax,%r12
-  28:   74 d6                   je     0x0
-  2a:*  8b 43 50                mov    0x50(%rbx),%eax          <-- trapping instruction
-  2d:   85 c0                   test   %eax,%eax
-  2f:   74 0f                   je     0x40
-  31:   48 8b 85 88 01 00 00    mov    0x188(%rbp),%rax
-  38:   48 89 df                mov    %rbx,%rdi
-  3b:   0f ae e8                lfence
-  3e:   ff d0                   call   *%rax
-
-kernel: RSP: 0018:ffffbc5004897de8 EFLAGS: 00010282
-kernel: RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: 0000000000000000
-kernel: RDX: ffff9c2300e36a28 RSI: 0000000000000202 RDI: ffff9c2300e36a10
-kernel: RBP: ffff9c24473a3970 R08: 0000000000000001 R09: 0000000000000000
-kernel: R10: ffff9c23ab165ea9 R11: 0000000000000000 R12: ffff9c24473a3980
-kernel: R13: ffff9c2367bca000 R14: ffff9c23112ae000 R15: 0000000000000000
-kernel: FS:  0000000000000000(0000) GS:ffff9c2a5d500000(0000) knlGS:0000000000000000
-kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-kernel: CR2: 0000000000000018 CR3: 0000000700d0a000 CR4: 00000000003506e0
-kernel: Call Trace:
-kernel:  <TASK>
-kernel: raid5d (drivers/md/raid5.c:6563) raid456
-kernel: ? schedule (arch/x86/include/asm/preempt.h:85 (discriminator 1) kernel/sched/core.c:6370 (discriminator 1))
-kernel: md_thread (drivers/md/md.c:7923) md_mod
-kernel: ? do_wait_intr (kernel/sched/wait.c:415)
-kernel: ? md_submit_bio (drivers/md/md.c:7887) md_mod
-kernel: kthread (kernel/kthread.c:377)
-kernel: ? kthread_complete_and_exit (kernel/kthread.c:332)
-kernel: ret_from_fork (arch/x86/entry/entry_64.S:301)
-kernel:  </TASK>
-
-Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- drivers/dma/dmaengine.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
-index 2cfa8458b51b..9465dc89b945 100644
---- a/drivers/dma/dmaengine.c
-+++ b/drivers/dma/dmaengine.c
-@@ -553,13 +553,13 @@ EXPORT_SYMBOL(dma_find_channel);
- void dma_issue_pending_all(void)
- {
- 	struct dma_device *device;
--	struct dma_chan *chan;
-+	struct dma_chan *chan, *n;
+Note: this series is based on my earlier set of kunit tool cleanups for
+5.18, https://lore.kernel.org/linux-kselftest/20220118190922.1557074-1-dlatypov@google.com/
+
+There's no interesting semantic dependency, just some boring merge
+conflicts, specifically with patch #4 there, https://lore.kernel.org/linux-kselftest/20220118190922.1557074-5-dlatypov@google.com/
+
+---
+ tools/testing/kunit/kunit_json.py | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
+index 24d103049bca..14a480d3308a 100644
+--- a/tools/testing/kunit/kunit_json.py
++++ b/tools/testing/kunit/kunit_json.py
+@@ -16,24 +16,24 @@ from typing import Any, Dict
  
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(device, &dma_device_list, global_node) {
- 		if (dma_has_cap(DMA_PRIVATE, device->cap_mask))
- 			continue;
--		list_for_each_entry(chan, &device->channels, device_node)
-+		list_for_each_entry_safe(chan, n, &device->channels, device_node)
- 			if (chan->client_count)
- 				device->device_issue_pending(chan);
- 	}
+ JsonObj = Dict[str, Any]
+ 
++_status_map: Dict[TestStatus, str] = {
++	TestStatus.SUCCESS: "PASS",
++	TestStatus.SKIPPED: "SKIP",
++	TestStatus.TEST_CRASHED: "ERROR",
++}
++
+ def _get_group_json(test: Test, def_config: str, build_dir: str) -> JsonObj:
+ 	sub_groups = []  # List[JsonObj]
+ 	test_cases = []  # List[JsonObj]
+ 
+ 	for subtest in test.subtests:
+-		if len(subtest.subtests):
++		if subtest.subtests:
+ 			sub_group = _get_group_json(subtest, def_config,
+ 				build_dir)
+ 			sub_groups.append(sub_group)
+-		else:
+-			test_case = {"name": subtest.name, "status": "FAIL"}
+-			if subtest.status == TestStatus.SUCCESS:
+-				test_case["status"] = "PASS"
+-			elif subtest.status == TestStatus.SKIPPED:
+-				test_case["status"] = "SKIP"
+-			elif subtest.status == TestStatus.TEST_CRASHED:
+-				test_case["status"] = "ERROR"
+-			test_cases.append(test_case)
++			continue
++		status = _status_map.get(subtest.status, "FAIL")
++		test_cases.append({"name": subtest.name, "status": status})
+ 
+ 	test_group = {
+ 		"name": test.name,
 -- 
-2.35.1
+2.35.1.473.g83b2b277ed-goog
 

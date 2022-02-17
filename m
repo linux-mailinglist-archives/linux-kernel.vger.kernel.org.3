@@ -2,88 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEB04B9C9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203064B9C94
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238941AbiBQJ7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 04:59:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48470 "EHLO
+        id S238917AbiBQJ5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 04:57:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238357AbiBQJ7a (ORCPT
+        with ESMTP id S234564AbiBQJ5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:59:30 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597245F56
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 01:59:16 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id k1so7990155wrd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 01:59:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xZlo/aob1wQ1ZSgYV63PX8q9CXH4pQq9F49K4TeXUXw=;
-        b=GEns6dn/YbDEzl3bRSfaT+gisuZkkud+dTQxuIVa6g8u70lM1pOC35pnNo8mj1W9RM
-         8jNwkADAGmiyi/A4YMcX6f7f83TzurPWrExlFckkbpF2wfi9SgefQaMSTzFkq+Q/HGCJ
-         Zg0B3BvXCXFvQWZZxN8IEiiAZGm0kF80hxpKC/Z9Qsg2kUlOHI8cAGKmvU+c/rahKg8i
-         66gr/WcDqP5tmzB+2ffiWNrCDYArPqHQR6g2uB6Zf1hluF4NwtUFbDapGCpfy49iEca2
-         gMgmWUnojRAH48FOSmGmOfRZtq+SIOe3cwOz3fYpL8G2rj4K74hiLAjZA0ORxapwRwZz
-         TikQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xZlo/aob1wQ1ZSgYV63PX8q9CXH4pQq9F49K4TeXUXw=;
-        b=p2zIy+1VythKu37tA7hJaGqIhJWalP+TTgljfrcjlE8az5HRotPHhjlvYgBtMH0Odw
-         HqjDdFz5ihdLriC/octJI0Z1k3tsDE/n1FiqHGYTC5dDA5+pQmSOXqBaR4MPVq0HzMPu
-         Q2kwlKB1FyPwcr2kGCiPYl7Kc02bF6iuT42aEjEEJFp02BsbaZ3UlsKnmvbVCOYXjFEE
-         cmXtA6oDPYyNaSuTXRZyOX4ur1tVDRwxGSy1iRZPYhkoH+6FQoulpndcj66GzdLkjREn
-         qLOi/sEdGRdZTGot+WeIvJkbFRmIWN7NxJ/pRnOjl2CzaOLU/8qQxqvFSHz+UA9vjh0Z
-         TGDg==
-X-Gm-Message-State: AOAM5328txMJAYy0tjZhTnp9qNkLDvE+F8NtiS/V1KYVa6s3pqHTTYEC
-        qOEnbuNjXl0Pq06IKwGN0U5wDg==
-X-Google-Smtp-Source: ABdhPJzKK88cFW+h7mO7FwylKHW/WRcpFsyNhKBg95CEVZX7X43qBQ/2gLhSty2TTcxIszwdeoshbQ==
-X-Received: by 2002:adf:e811:0:b0:1e4:bf57:7754 with SMTP id o17-20020adfe811000000b001e4bf577754mr1741498wrm.224.1645091954811;
-        Thu, 17 Feb 2022 01:59:14 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
-        by smtp.googlemail.com with ESMTPSA id k3sm1351468wrm.69.2022.02.17.01.59.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 01:59:14 -0800 (PST)
-Message-ID: <bfd33bfe-025e-bfba-04f2-e3c39822d68e@linaro.org>
-Date:   Thu, 17 Feb 2022 10:59:12 +0100
+        Thu, 17 Feb 2022 04:57:31 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C465F56;
+        Thu, 17 Feb 2022 01:57:17 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21H8kAdt009839;
+        Thu, 17 Feb 2022 09:57:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=e0/vzfS1t4CjBCHf0WsLr/hXN/E5z9rydlFbYlAVCk8=;
+ b=iXrwUzSJvsGEA5LwtLL+U5f8Zxu1ucKaisLY6rarvMfcpH1zizZaDphtOq41zTrNFo7X
+ iH0OwyJU6b48dGeoiULaif6Y9/D1c6v8WoxxMFujR2K7XnCL/mFcfm3G0Sp2BiLs0lBc
+ 5FThlTvtPSf0xpOGZKcW1hWdbiXgSIgcJtNqHlvxTaf0sJQrLd87yCkDw+XQX/s5RvzO
+ AkRGfXZxM/HmpvSHUetWAEJLV7ae2TAzKVIhmR0x2SG367ugKsTbzjJplLXsOaLQb2JP
+ ptqvATpQPeYTEgNoG6ggX2BBIcK8KDPMQ+UW+eRB98uAed8wGGWbM3zZqqjKexTWrMuw Ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9k53hc7u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 09:57:16 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21H9tpnq031342;
+        Thu, 17 Feb 2022 09:57:16 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9k53hc77-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 09:57:15 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21H9u1kh029961;
+        Thu, 17 Feb 2022 09:57:14 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3e64haeb0t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 09:57:13 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21H9vAIK26804530
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Feb 2022 09:57:10 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB2B5A4053;
+        Thu, 17 Feb 2022 09:57:10 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ED3CBA4040;
+        Thu, 17 Feb 2022 09:57:09 +0000 (GMT)
+Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.42.121])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Feb 2022 09:57:09 +0000 (GMT)
+From:   Pierre Morel <pmorel@linux.ibm.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, pmorel@linux.ibm.com,
+        wintera@linux.ibm.com, seiden@linux.ibm.com, nrb@linux.ibm.com
+Subject: [PATCH v7 0/1] s390x: KVM: CPU Topology
+Date:   Thu, 17 Feb 2022 10:59:22 +0100
+Message-Id: <20220217095923.114489-1-pmorel@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
- <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
- <Yg13JoHLmeFGPOAW@google.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Yg13JoHLmeFGPOAW@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: X7TduB7pMtF7m4TXqbylTVqDkkpt5qeI
+X-Proofpoint-GUID: wOI_yo9VyCV1mmzm1utuVMEZg5v-GNPz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-17_03,2022-02-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ suspectscore=0 phishscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202170042
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,105 +91,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2022 23:13, Matthias Kaehlcke wrote:
-> On Wed, Feb 16, 2022 at 09:33:50AM -0800, Doug Anderson wrote:
->> Hi,
->>
->> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>
->>> Hi Matthias,
->>>
->>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
->>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
->>>>>
->>>>>
->>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
->>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
->>>>>>>
->>>>>>>
->>>
->>> [snip]
->>>
->>>>>>> Could you point me to those devices please?
->>>>>>
->>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
->>>>>>
->>>>>> Though as per above they shouldn't be impacted by your change, since the
->>>>>> CPUs always pretend to use milli-Watts.
->>>>>>
->>>>>> [skipped some questions/answers since sc7180 isn't actually impacted by
->>>>>>     the change]
->>>>>
->>>>> Thank you Matthias. I will investigate your setup to get better
->>>>> understanding.
->>>>
->>>> Thanks!
->>>>
->>>
->>> I've checked those DT files and related code.
->>> As you already said, this patch is safe for them.
->>> So we can apply it IMO.
->>>
->>>
->>> -------------Off-topic------------------
->>> Not in $subject comments:
->>>
->>> AFAICS based on two files which define thermal zones:
->>> sc7180-trogdor-homestar.dtsi
->>> sc7180-trogdor-coachz.dtsi
->>>
->>> only the 'big' cores are used as cooling devices in the
->>> 'skin_temp_thermal' - the CPU6 and CPU7.
->>>
->>> I assume you don't want to model at all the power usage
->>> from the Little cluster (which is quite big: 6 CPUs), do you?
->>> I can see that the Little CPUs have small dyn-power-coeff
->>> ~30% of the big and lower max freq, but still might be worth
->>> to add them to IPA. You might give them more 'weight', to
->>> make sure they receive more power during power split.
-> 
-> In experiments we saw that including the little cores as cooling
-> devices for 'skin_temp_thermal' didn't have a significant impact on
-> thermals, so we left them out.
+Hi all,
 
-I agree, that was also my conclusion after doing some measurements.
+This is only a new rebase to keep on sync with Linux development.
 
-Basically, the little cores are always cold and are victims of the big 
-cores heat dissipation.
+This new series add the implementation of interpretation for
+the PTF instruction.
 
-They of course contribute a bit to the heat but capping their 
-performance does not change the temperature trend of the whole.
-
-That is less true with silver-gold were it is the same micro-arch but 
-different frequencies.
+The series provides:
+1- interception of the STSI instruction forwarding the CPU topology
+2- interpretation of the PTF instruction
+3- a KVM capability for the userland hypervisor to ask KVM to 
+   setup PTF interpretation.
 
 
->>> You also don't have GPU cooling device in that thermal zone.
->>> Based on my experience if your GPU is a power hungry one,
->>> e.g. 2-4Watts, you might get better results when you model
->>> this 'hot' device (which impacts your temp sensor reported value).
->>
->> I think the two boards you point at (homestar and coachz) are just the
->> two that override the default defined in the SoC dtsi file. If you
->> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
->> map. You can also see the cooling maps for the littles.
-> 
-> Yep, plus thermal zones with cooling maps for the big cores.
-> 
->> I guess we don't have a `dynamic-power-coefficient` for the GPU,
->> though? Seems like we should, but I haven't dug through all the code
->> here...
-> 
-> To my knowledge the SC7x80 GPU doesn't register an energy model, which is
-> one of the reasons the GPU wasn't included as cooling device for
-> 'skin_temp_thermal'.
+0- Foreword
+
+The S390 CPU topology is reported using two instructions:
+- PTF, to get information if the CPU topology did change since last
+  PTF instruction or a subsystem reset.
+- STSI, to get the topology information, consisting of the topology
+  of the CPU inside the sockets, of the sockets inside the books etc.
+
+The PTF(2) instruction report a change if the STSI(15.1.2) instruction
+will report a difference with the last STSI(15.1.2) instruction*.
+With the SIE interpretation, the PTF(2) instruction will report a
+change to the guest if the host sets the SCA.MTCR bit.
+
+*The STSI(15.1.2) instruction reports:
+- The cores address within a socket
+- The polarization of the cores
+- The CPU type of the cores
+- If the cores are dedicated or not
+
+We decided to implement the CPU topology for S390 in several steps:
+
+- first we report CPU hotplug
+- modification of the CPU mask inside sockets
+
+In future development we will provide:
+
+- handling of shared CPUs
+- reporting of the CPU Type
+- reporting of the polarization
 
 
+1- Interception of STSI
 
+To provide Topology information to the guest through the STSI
+instruction, we forward STSI with Function Code 15 to the
+userland hypervisor which will take care to provide the right
+information to the guest.
+
+To let the guest use both the PTF instruction  to check if a topology
+change occurred and sthe STSI_15.x.x instruction we add a new KVM
+capability to enable the topology facility.
+
+2- Interpretation of PTF with FC(2)
+
+The PTF instruction will report a topology change if there is any change
+with a previous STSI(15.1.2) SYSIB.
+Changes inside a STSI(15.1.2) SYSIB occur if CPU bits are set or clear
+inside the CPU Topology List Entry CPU mask field, which happens with
+changes in CPU polarization, dedication, CPU types and adding or
+removing CPUs in a socket.
+
+The reporting to the guest is done using the Multiprocessor
+Topology-Change-Report (MTCR) bit of the utility entry of the guest's
+SCA which will be cleared during the interpretation of PTF.
+
+To check if the topology has been modified we use a new field of the
+arch vCPU prev_cpu, to save the previous real CPU ID at the end of a
+schedule and verify on next schedule that the CPU used is in the same
+socket, this field is initialized to -1 on vCPU creation.
+
+
+Regards,
+Pierre
+
+Pierre Morel (1):
+  s390x: KVM: guest support for topology function
+
+ Documentation/virt/kvm/api.rst   | 16 +++++++++++
+ arch/s390/include/asm/kvm_host.h | 12 ++++++--
+ arch/s390/kvm/kvm-s390.c         | 48 +++++++++++++++++++++++++++++++-
+ arch/s390/kvm/kvm-s390.h         | 25 +++++++++++++++++
+ arch/s390/kvm/priv.c             | 14 +++++++---
+ arch/s390/kvm/vsie.c             |  3 ++
+ include/uapi/linux/kvm.h         |  1 +
+ 7 files changed, 111 insertions(+), 8 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.27.0
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

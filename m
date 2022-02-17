@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081304B958E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 02:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BEF4B958F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 02:39:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiBQBif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 20:38:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40608 "EHLO
+        id S230499AbiBQBjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 20:39:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiBQBie (ORCPT
+        with ESMTP id S229569AbiBQBjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 20:38:34 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28251FFF53;
-        Wed, 16 Feb 2022 17:38:19 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R341e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V4fb5iR_1645061895;
-Received: from 30.225.140.32(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V4fb5iR_1645061895)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 17 Feb 2022 09:38:16 +0800
-Message-ID: <641b3e71-211d-bb48-52c3-e34eef28e508@linux.alibaba.com>
-Date:   Thu, 17 Feb 2022 09:38:15 +0800
+        Wed, 16 Feb 2022 20:39:36 -0500
+Received: from smtpproxy21.qq.com (smtpbg702.qq.com [203.205.195.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB57201907
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 17:39:21 -0800 (PST)
+X-QQ-mid: bizesmtp74t1645061956t7o1oboe
+Received: from localhost.localdomain (unknown [123.114.60.34])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 17 Feb 2022 09:39:14 +0800 (CST)
+X-QQ-SSF: 01400000000000B0L000B00A0000000
+X-QQ-FEAT: fJqvVtUVYmkallprhQe0Dx3esin4KVp2QI1g1AdnEcg/6TbqNPwrgmEFDyb57
+        ZtWu4QrJcTourjp1cY9f3k3wkAJd8WsKSKRtXMWf1R7MN48QyCNqq4mjd2/GSNlBJ+X/5QS
+        oDnVG/+JIy3JTr4qsY/2yDwmf9Ast98WvgcYorceqYKSWR5kxUL9T8dO+WvxgtDuDMToXOu
+        28M5CZrg44cin4YziVUbG0jRrgZ+WcbpQTzAxCTsvHxLZ0DY4GQRHr7ztwwGWJee4ESWwUk
+        EO9xYzZFG5O3663tZJBVFv7hLnhcyrtnKFILt2P9FJDn5Jp2vn7C1pzI9fRpbGXSqAPfx0C
+        BsGBlmzLvtXMqx+OeQ=
+X-QQ-GoodBg: 2
+From:   zhaoxiao <zhaoxiao@uniontech.com>
+To:     dmitry.torokhov@gmail.com
+Cc:     support.opensource@diasemi.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH v2] input: da7280: Make use of the helper function dev_err_probe()
+Date:   Thu, 17 Feb 2022 09:39:12 +0800
+Message-Id: <20220217013912.7228-1-zhaoxiao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [Issue report] drivers/ftgmac100: DHCP occasionally fails during
- boot up or link down/up
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Dylan Hung <dylan_hung@aspeedtech.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <0e456c4d-aa22-4e7f-9b2c-3059fe840cb9@linux.alibaba.com>
- <YgwSAjGN2eWUpamo@lunn.ch>
-From:   Heyi Guo <guoheyi@linux.alibaba.com>
-In-Reply-To: <YgwSAjGN2eWUpamo@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign7
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your advice; I'll take try :)
+devm_pwm_get() can return -EPROBE_DEFER if the pwm regulator is not
+ready yet. Use dev_err_probe() for pwm regulator resources
+to indicate the deferral reason when waiting for the
+resource to come up.
 
-Heyi
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+---
+ v2:Remove the redundant brackets '}'
+ drivers/input/misc/da7280.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/input/misc/da7280.c b/drivers/input/misc/da7280.c
+index b08610d6e575..65f3e0251b23 100644
+--- a/drivers/input/misc/da7280.c
++++ b/drivers/input/misc/da7280.c
+@@ -1165,13 +1165,9 @@ static int da7280_probe(struct i2c_client *client,
+ 
+ 	if (haptics->const_op_mode == DA7280_PWM_MODE) {
+ 		haptics->pwm_dev = devm_pwm_get(dev, NULL);
+-		error = PTR_ERR_OR_ZERO(haptics->pwm_dev);
+-		if (error) {
+-			if (error != -EPROBE_DEFER)
+-				dev_err(dev, "Unable to request PWM: %d\n",
+-					error);
+-			return error;
+-		}
++		if (IS_ERR(haptics->pwm_dev))
++			return dev_err_probe(dev, PTR_ERR(haptics->pwm_dev),
++					"Unable to request PWM\n");
+ 
+ 		/* Sync up PWM state and ensure it is off. */
+ 		pwm_init_state(haptics->pwm_dev, &state);
+-- 
+2.20.1
 
 
-在 2022/2/16 上午4:50, Andrew Lunn 写道:
-> On Tue, Feb 15, 2022 at 02:38:51PM +0800, Heyi Guo wrote:
->> Hi,
->>
->> We are using Aspeed 2600 and found DHCP occasionally fails during boot up or
->> link down/up. The DHCP client is systemd 247.6 networkd. Our network device
->> is 2600 MAC4 connected to a RGMII PHY module.
->>
->> Current investigation shows the first DHCP discovery packet sent by
->> systemd-networkd might be corrupted, and sysmtemd-networkd will continue to
->> send DHCP discovery packets with the same XID, but no other packets, as
->> there is no IP obtained at the moment. However the server side will not
->> respond with this serial of DHCP requests, until it receives some other
->> packets. This situation can be recovered by another link down/up, or a "ping
->> -I eth0 xxx.xxx.xxx.xxx" command to insert some other TX packets.
->>
->> Navigating the driver code ftgmac.c, I've some question about the work flow
->> from link down to link up. I think the flow is as below:
->>
->> 1. ftgmac100_open() will enable net interface with ftgmac100_init_all(), and
->> then call phy_start()
->>
->> 2. When PHY is link up, it will call netif_carrier_on() and then adjust_link
->> interface, which is ftgmac100_adjust_link() for ftgmac100
-> The order there is questionable. Maybe it should first call the adjust
-> link callback, and then the netif_carrier_on(). However...
->
->> 3. In ftgmac100_adjust_link(), it will schedule the reset work
->> (ftgmac100_reset_task)
->>
->> 4. ftgmac100_reset_task() will then reset the MAC
-> Because of this delayed reset, changing the order will not help this
-> driver.
->
->> I found networkd will start to send DHCP request immediately after
->> netif_carrier_on() called in step 2, but step 4 will reset the MAC, which
->> may potentially corrupt the sending packet.
-> What is not clear to my is why it is scheduling the work rather than
-> just doing it. At least for adjust_link, it is in a context it can
-> sleep. ftgmac100_set_ringparam() should also be able to
-> sleep. ftgmac100_interrupt() cannot sleep, so it does need to schedule
-> work.
->
-> I would suggest you refactor ftgmac100_reset_task() into a function
-> that actually does the reset, and a wrapper which takes a
-> work_struct. adjust_link can then directly do the reset, which
-> probably solves your problem.
 
-> 	 Andrew

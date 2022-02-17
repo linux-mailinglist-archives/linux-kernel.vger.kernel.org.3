@@ -2,84 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F0B4B9C8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DDB4B9C90
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238893AbiBQJz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 04:55:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58084 "EHLO
+        id S238932AbiBQJ4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 04:56:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237274AbiBQJzZ (ORCPT
+        with ESMTP id S238925AbiBQJ4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:55:25 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAE0D205B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 01:55:11 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3C53B40931
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:55:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645091710;
-        bh=xqg/Xc9CYuc87DkKuqIherW4tETRFmrI7ZElb+EIvLo=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=GAORvpRRPrf+vkRusRc1QHGiTjSY2YIwdOg8Bx25a6357VBpJ15+MWJvxnX5f6smz
-         f0i31p/nEyEfIjWxcH27J4JRq0G0VV2hPYzJKXe1Z6COWXZw2OxuX9ZD0d+VN624xH
-         /03upjP8G+6lJmg7nosEzLz6V+5bpYXqh4KEujTg57bEwIvShqcikNS1Bk/xrZ42W9
-         619hfaDTKYO9RoTFKUJPeC3PgEyF8AFRUiG+msaImy6JGXNRZxCU3kHNnjDtly4/Lk
-         m4BGkHUPTf26rlDQuQ7TV+8w67/vT5WqtVG0/SgOF1nA0rG0hxiMSslGqviPcD5J+s
-         A9A7s37j/kNsQ==
-Received: by mail-ej1-f72.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so1256830ejk.16
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 01:55:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xqg/Xc9CYuc87DkKuqIherW4tETRFmrI7ZElb+EIvLo=;
-        b=Fmp2IizWIguOSqo4B0Oy6AhvJzkmumx8525mgerQr+I7Q8jrC7bI02uwbkOvp4sSK3
-         TRQezwSMnatio5cMzjGSLiSS/7C5UHMsS7qoY1sIlQe8Qy7jhBrueQhGMN0ngNnXPzvk
-         OTpg7/bd1jmRZSmogwVYv+nALC9ZeGhEgKIfxlSzPSoLkONpAIusoA5KzzFGcgm2Mx5y
-         0GyTa3DS6Tz9mA+v2i0HQe++4jEiRh84RQl3ZMmJfiKArulOgjXKIuOyv4LYss/lOPZU
-         hUsvh4xutJiVS9iYQIb2QVOh1JANEl7S0vdf3ZCKfUNEpUu9ePFVkDpNYi3BdNlb4kJI
-         cfhw==
-X-Gm-Message-State: AOAM533LjRXkLe81aImjDxwrcNnZX62HUvf9L74oQKkU9+t4ALQ1lDUD
-        cPaG+l2/MFtp+UB7+6ksfN2i4F/+MaODtLQs7S5TApWybGiuHB327hqO4AwA4Wb3azC00GbI+j5
-        cKADlT+2IxzJUS+u/Il7oYDRhdW9DwIAdSaM+eVtIJQ==
-X-Received: by 2002:a05:6402:1d51:b0:412:86c3:7580 with SMTP id dz17-20020a0564021d5100b0041286c37580mr1702414edb.353.1645091709889;
-        Thu, 17 Feb 2022 01:55:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyVqiLRT5dbOU5Ly6LY4l8kChFX+8DIMSGvlA48+vjFgCFmMOBcgpltkyZQ5jhMw4Nm2YxMLw==
-X-Received: by 2002:a05:6402:1d51:b0:412:86c3:7580 with SMTP id dz17-20020a0564021d5100b0041286c37580mr1702390edb.353.1645091709625;
-        Thu, 17 Feb 2022 01:55:09 -0800 (PST)
-Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id 1sm964379ejm.186.2022.02.17.01.55.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 01:55:08 -0800 (PST)
-Message-ID: <535d7d37-c2c5-d0e9-85af-ae91cbccd0d2@canonical.com>
-Date:   Thu, 17 Feb 2022 10:55:08 +0100
+        Thu, 17 Feb 2022 04:56:09 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6089D14FBE3;
+        Thu, 17 Feb 2022 01:55:54 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V4iq.VG_1645091744;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V4iq.VG_1645091744)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 17 Feb 2022 17:55:51 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     xfs <linux-xfs@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH] xfs: add missing cmap->br_state = XFS_EXT_NORM update
+Date:   Thu, 17 Feb 2022 17:55:42 +0800
+Message-Id: <20220217095542.68085-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] dt-bindings: dma: Convert mtk-uart-apdma to DT schema
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, vkoul@kernel.org
-Cc:     robh+dt@kernel.org, sean.wang@mediatek.com, matthias.bgg@gmail.com,
-        long.cheng@mediatek.com, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220217095242.13761-1-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220217095242.13761-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,20 +39,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/02/2022 10:52, AngeloGioacchino Del Regno wrote:
-> Convert the MediaTek UART APDMA Controller binding to DT schema.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
-> v3: Removed anyOf condition
-> v2: Fixed interrupt maxItems to 16, added interrupts/reg maxItems constraint
->     to 8 when the dma-requests property is not present
-> 
+COW extents are already converted into written real extents after
+xfs_reflink_convert_cow_locked(), therefore cmap->br_state should
+reflect it.
 
-Awesome, thanks!
+Otherwise, there is another necessary unwritten convertion
+triggered in xfs_dio_write_end_io() for direct I/O cases.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+From the logic itself and runtime tracing, IMO, it seems true.
+Kindly correct me here if my understanding is wrong.
 
+ fs/xfs/xfs_reflink.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
+index 75bd2e03cd5b..5f0a364739a5 100644
+--- a/fs/xfs/xfs_reflink.c
++++ b/fs/xfs/xfs_reflink.c
+@@ -424,7 +424,10 @@ xfs_reflink_allocate_cow(
+ 	if (!convert_now || cmap->br_state == XFS_EXT_NORM)
+ 		return 0;
+ 	trace_xfs_reflink_convert_cow(ip, cmap);
+-	return xfs_reflink_convert_cow_locked(ip, offset_fsb, count_fsb);
++	error = xfs_reflink_convert_cow_locked(ip, offset_fsb, count_fsb);
++	if (!error)
++		cmap->br_state = XFS_EXT_NORM;
++	return error;
+ 
+ out_trans_cancel:
+ 	xfs_trans_cancel(tp);
+-- 
+2.24.4
+

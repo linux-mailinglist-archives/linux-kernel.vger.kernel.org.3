@@ -2,135 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB7A4BA414
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C199F4BA417
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242353AbiBQPPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:15:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51698 "EHLO
+        id S242360AbiBQPQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:16:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238461AbiBQPPa (ORCPT
+        with ESMTP id S238461AbiBQPQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:15:30 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C0DD2AE2B4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:15:15 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-93-EQ4SPIr8P7WTnj341oLK3g-1; Thu, 17 Feb 2022 15:15:13 +0000
-X-MC-Unique: EQ4SPIr8P7WTnj341oLK3g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 17 Feb 2022 15:15:12 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 17 Feb 2022 15:15:12 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net v3] net: Force inlining of checksum functions in
- net/checksum.h
-Thread-Topic: [PATCH net v3] net: Force inlining of checksum functions in
- net/checksum.h
-Thread-Index: AQHYI/ioJk+yETn/QkyN152xjKaZ96yXvR4wgAAXuo+AAALtMA==
-Date:   Thu, 17 Feb 2022 15:15:11 +0000
-Message-ID: <3c2b682a7d804b5e8749428b50342c82@AcuMS.aculab.com>
-References: <978951d76d8cb84bab347c7623bc163e9a038452.1645100305.git.christophe.leroy@csgroup.eu>
- <35bcd5df0fb546008ff4043dbea68836@AcuMS.aculab.com>
- <d38e5e1c-29b6-8cc6-7409-d0bdd5772f23@csgroup.eu>
- <9b8ef186-c7fe-822c-35df-342c9e86cc88@csgroup.eu>
-In-Reply-To: <9b8ef186-c7fe-822c-35df-342c9e86cc88@csgroup.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 17 Feb 2022 10:16:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBB22A228B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:16:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E0ADB822A4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 15:16:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEB3C340E9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 15:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645110962;
+        bh=ltIrHZ5kE+koRIY5ZxoTB2ezjOerynjz7q6O20tGhjk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mN5wEfgIdmp7WvMgItg/375+CzWUq3y/DG1UoUgNxSar3uCXmNRFT1j0ytnIPknj3
+         Lvz7VjBLwb41kdBaQFcz30Je3OwD6x6f4Lfm3XVIvrpGH40riEzhRWs0mHPbRIpQ2n
+         GPEcLYzKiXl/0uCxgOTVhogzjVZUxJy4JkqF6DcpPwaeNY6s8ykkTpA0tttHxipDP8
+         Ix9ZmdMa1PjJBtJCGTQMQ8Ffre1IegmkFirwrDl1LLuTcGOF/nNss45Sm054rEhMSi
+         UciSy5cfk+LdIXEzJPi3+yC2nXKJdw0f7+4AfYC+LL/30b5XL+/V+AwRuXmMYX2pac
+         VAwRZ/S5cLwrw==
+Received: by mail-ej1-f53.google.com with SMTP id qx21so7987568ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:16:01 -0800 (PST)
+X-Gm-Message-State: AOAM531v6XjszMtQmtrjPeZAtW4IRc8rMyMJRecD8QtgMeLPmYVOOd6r
+        l6MyMmR01Pgr1YRw1o+lH1MPhMOwieqQVsGeGw==
+X-Google-Smtp-Source: ABdhPJwWhmmbYUMUpT41cY1OCQWwTtA0ZK/OW2pNlNGzpnqu/sg0IPf8wGGwkq3V2cNbK5F8ACQlP6EYpC31RW+Gb1k=
+X-Received: by 2002:a17:906:8143:b0:6cf:73c1:8a0 with SMTP id
+ z3-20020a170906814300b006cf73c108a0mr2822909ejw.406.1645110960294; Thu, 17
+ Feb 2022 07:16:00 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214092742.3461587-1-jstephan@baylibre.com> <0a331caa-7578-60f5-cbd8-f6c8c29a629f@collabora.com>
+In-Reply-To: <0a331caa-7578-60f5-cbd8-f6c8c29a629f@collabora.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Thu, 17 Feb 2022 23:15:47 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_82E2BK1cxwbsDsj5DURrY245Xnd-04N=4vevCRMjkZpw@mail.gmail.com>
+Message-ID: <CAAOTY_82E2BK1cxwbsDsj5DURrY245Xnd-04N=4vevCRMjkZpw@mail.gmail.com>
+Subject: Re: [PATCH v4] drm/mediatek: allow commands to be sent during video mode
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Julien STEPHAN <jstephan@baylibre.com>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:DRM DRIVERS FOR MEDIATEK" 
+        <dri-devel@lists.freedesktop.org>,
+        "moderated list:DRM DRIVERS FOR MEDIATEK" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAxNyBGZWJydWFyeSAyMDIyIDE0OjU1DQo+
-IA0KPiBMZSAxNy8wMi8yMDIyIMOgIDE1OjUwLCBDaHJpc3RvcGhlIExlcm95IGEgw6ljcml0wqA6
-DQo+ID4gQWRkaW5nIEluZ28sIEFuZHJldyBhbmQgTmljayBhcyB0aGV5IHdlcmUgaW52b2x2ZWQg
-aW4gdGhlIHN1YmpldCwNCj4gPg0KPiA+IExlIDE3LzAyLzIwMjIgw6AgMTQ6MzYsIERhdmlkIExh
-aWdodCBhIMOpY3JpdMKgOg0KPiA+PiBGcm9tOiBDaHJpc3RvcGhlIExlcm95DQo+ID4+PiBTZW50
-OiAxNyBGZWJydWFyeSAyMDIyIDEyOjE5DQo+ID4+Pg0KPiA+Pj4gQWxsIGZ1bmN0aW9ucyBkZWZp
-bmVkIGFzIHN0YXRpYyBpbmxpbmUgaW4gbmV0L2NoZWNrc3VtLmggYXJlDQo+ID4+PiBtZWFudCB0
-byBiZSBpbmxpbmVkIGZvciBwZXJmb3JtYW5jZSByZWFzb24uDQo+ID4+Pg0KPiA+Pj4gQnV0IHNp
-bmNlIGNvbW1pdCBhYzdjM2U0ZmY0MDEgKCJjb21waWxlcjogZW5hYmxlDQo+ID4+PiBDT05GSUdf
-T1BUSU1JWkVfSU5MSU5JTkcgZm9yY2libHkiKSB0aGUgY29tcGlsZXIgaXMgYWxsb3dlZCB0bw0K
-PiA+Pj4gdW5pbmxpbmUgZnVuY3Rpb25zIHdoZW4gaXQgd2FudHMuDQo+ID4+Pg0KPiA+Pj4gRmFp
-ciBlbm91Z2ggaW4gdGhlIGdlbmVyYWwgY2FzZSwgYnV0IGZvciB0aW55IHBlcmZvcm1hbmNlIGNy
-aXRpY2FsDQo+ID4+PiBjaGVja3N1bSBoZWxwZXJzIHRoYXQncyBjb3VudGVyLXByb2R1Y3RpdmUu
-DQo+ID4+DQo+ID4+IFRoZXJlIGlzbid0IGEgcmVhbCBqdXN0aWZpY2F0aW9uIGZvciBhbGxvd2lu
-ZyB0aGUgY29tcGlsZXINCj4gPj4gdG8gJ25vdCBpbmxpbmUnIGZ1bmN0aW9ucyBpbiB0aGF0IGNv
-bW1pdC4NCj4gPg0KPiA+IERvIHlvdSBtZWFuIHRoYXQgdGhlIHR3byBmb2xsb3dpbmcgY29tbWl0
-cyBzaG91bGQgYmUgcmV2ZXJ0ZWQ6DQo+ID4NCj4gPiAtIDg4OWIzYzEyNDVkZSAoImNvbXBpbGVy
-OiByZW1vdmUgQ09ORklHX09QVElNSVpFX0lOTElOSU5HIGVudGlyZWx5IikNCj4gPiAtIDRjNGUy
-NzZmNjQ5MSAoIm5ldDogRm9yY2UgaW5saW5pbmcgb2YgY2hlY2tzdW0gZnVuY3Rpb25zIGluDQo+
-ID4gbmV0L2NoZWNrc3VtLmgiKQ0KPiANCj4gT2YgY291cnNlIG5vdCB0aGUgYWJvdmUgb25lIChj
-b3B5L3Bhc3RlIGVycm9yKSwgYnV0Og0KPiAtIGFjN2MzZTRmZjQwMSAoImNvbXBpbGVyOiBlbmFi
-bGUgQ09ORklHX09QVElNSVpFX0lOTElOSU5HIGZvcmNpYmx5IikNCg0KVGhhdCdzIHRoZSBvbmUg
-SSBsb29rZWQgYXQuDQoNCj4gPj4gSXQgcmF0aGVyIHNlZW1zIGJhY2t3YXJkcy4NCj4gPj4gVGhl
-IGtlcm5lbCBzb3VyY2VzIGRvbid0IHJlYWxseSBoYXZlIGFueXRoaW5nIG1hcmtlZCAnaW5saW5l
-Jw0KPiA+PiB0aGF0IHNob3VsZG4ndCBhbHdheXMgYmUgaW5saW5lZC4NCj4gPj4gSWYgdGhlcmUg
-YXJlIGFueSBzdWNoIGZ1bmN0aW9ucyB0aGV5IGFyZSBmZXcgYW5kIGZhciBiZXR3ZWVuLg0KPiA+
-Pg0KPiA+PiBJJ3ZlIGhhZCBlbm91Z2ggdHJvdWJsZSAoZWxzZXdoZXJlKSBnZXR0aW5nIGdjYyB0
-byBpbmxpbmUNCj4gPj4gc3RhdGljIGZ1bmN0aW9ucyB0aGF0IGFyZSBvbmx5IGNhbGxlZCBvbmNl
-Lg0KPiA+PiBJIGVuZGVkIHVwIHVzaW5nICdhbHdheXNfaW5saW5lJy4NCj4gPj4gKFRoYXQgaXMg
-NGsgb2YgZW1iZWRkZWQgb2JqZWN0IGNvZGUgdGhhdCB3aWxsIGJlIHRvbyBzbG93DQo+ID4+IGlm
-IGl0IGV2ZXIgc3BpbGxzIGEgcmVnaXN0ZXIgdG8gc3RhY2suKQ0KPiA+Pg0KPiA+DQo+ID4gSSBh
-Z3JlZSB3aXRoIHlvdSB0aGF0IHRoYXQgY2hhbmdlIGlzIGEgbmlnaHRtYXJlIHdpdGggbWFueSBz
-bWFsbA0KPiA+IGZ1bmN0aW9ucyB0aGF0IHdlIHJlYWxseSB3YW50IGlubGluZWQsIGFuZCB3aGVu
-IHdlIGZvcmNlIGlubGluaW5nIHdlDQo+ID4gbW9zdCBvZiB0aGUgdGltZSBnZXQgYSBzbWFsbGVy
-IGJpbmFyeS4NCj4gPg0KPiA+IEFuZCBpdCBiZWNvbWVzIGV2ZW4gbW9yZSBwcm9ibGVtYXRpYyB3
-aGVuIHdlIHN0YXJ0IGFkZGluZw0KPiA+IGluc3RydW1lbnRhdGlvbiBsaWtlIHN0YWNrIHByb3Rl
-Y3Rvci4NCj4gPg0KPiA+IEFjY29yZGluZyB0byB0aGUgb3JpZ2luYWwgY29tbWl0cyBob3dldmVy
-IHRoaXMgd2FzIHN1cHBvc2VkIHRvIHByb3ZpZGUNCj4gPiByZWFsIGJlbmVmaXQ6DQo+ID4NCj4g
-PiAtIDYwYTNjZGQwNjM5NCAoIng4NjogYWRkIG9wdGltaXplZCBpbmxpbmluZyIpDQo+ID4gLSA5
-MDEyZDAxMTY2MGUgKCJjb21waWxlcjogYWxsb3cgYWxsIGFyY2hlcyB0byBlbmFibGUNCj4gPiBD
-T05GSUdfT1BUSU1JWkVfSU5MSU5JTkciKQ0KPiA+DQo+ID4gQnV0IHdoZW4gSSBidWlsZCBwcGM2
-NGxlX2RlZmNvbmZpZyArIENPTkZJR19DQ19PUFRJTUlTRV9GT1JfU0laRSBJIGdldDoNCj4gPiAg
-wqDCoMKgIDExMiB0aW1lc8KgIHF1ZXVlZF9zcGluX3VubG9jaygpDQo+ID4gIMKgwqDCoCAxMjIg
-dGltZXPCoCBtbWlvd2Jfc3Bpbl91bmxvY2soKQ0KPiA+ICDCoMKgwqAgMTUxIHRpbWVzwqAgY3B1
-X29ubGluZSgpDQo+ID4gIMKgwqDCoCAyMjUgdGltZXPCoCBfX3Jhd19zcGluX3VubG9jaygpDQoN
-ClllcywgeW91IGVpdGhlciB3YW50IHRoZW0gaW5saW5lZCwgb3IgYSBzaW5nbGUgY29weSBvZiB0
-aGUgcmVhbCBmdW5jdGlvbi4NCkkgaGF2ZSBzZWVuIGEgbGlua2VyIGRlLWR1cGxpY2F0ZSBmdW5j
-dGlvbnMgd2l0aCBpZGVudGljYWwgYm9kaWVzLg0KQnV0IEkgZG9uJ3QgdGhhdCBnbGQgZG9lcyB0
-aGF0IGZvciB0aGUga2VybmVsLg0KKFdhcyBjb25mdXNpbmcgYmVjYXVzZSBib3RoIGRpZCBzdHJ1
-Y3R1cmUtPm1lbWJlciA9IDAgYnV0IGZvciBlbnRpcmVseQ0KZGlmZmVyZW50IHR5cGVzLikNCg0K
-PiA+IFNvIEkgd2FzIHdvbmRlcmluZywgd291bGQgd2UgaGF2ZSBhIHdheSB0byBmb3JjZSBpbmxp
-bmluZyBvZiBmdW5jdGlvbnMNCj4gPiBtYXJrZWQgaW5saW5lIGluIGhlYWRlciBmaWxlcyB3aGls
-ZSBsZWF2aW5nIEdDQyBoYW5kbGluZyB0aGUgb25lcyBpbiBDDQo+ID4gZmlsZXMgdGhlIHdheSBp
-dCB3YW50cyA/DQoNClRoZSB2aWV3IGZvciB0aG9zZSAoaW4gbmV0ZGV2IGF0IGxlYXN0KSBpcyBq
-dXN0IG5vdCB0byBtYXJrIHRoZSBpbmxpbmUNCmFuZCBsZXQgdGhlIGNvbXBpbGVyIGRlY2lkZS4N
-CkFsdGhvdWdoLCBJTUhPLCBpdCB0ZW5kcyB0byBnZXQgaXQgd3JvbmcgcXVpdGUgb2Z0ZW4uDQpP
-ZnRlbiBiZWNhdXNlIGl0IGRlY2lkZXMgbm90IHRvIGlubGluZSBiZWZvcmUgdGhlIG9wdGltaXNl
-cg0KcmVtb3ZlcyBhbGwgdGhlIGNvbnN0YW50IGNvbmRpdGlvbmFscy4NCg0KS2VybmVsIGRldmVs
-b3BlcnMgb3VnaHQgdG8gYmUgY2xldmVyIGVub3VnaCB0byBub3QgaW5saW5lDQpmdW5jdGlvbnMg
-dGhhdCBhcmUgYmlnLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRl
-LCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpS
-ZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+ [1Hi, Julien:
 
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
+=BC
+2022=E5=B9=B42=E6=9C=8814=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=885:4=
+3=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Il 14/02/22 10:27, Julien STEPHAN ha scritto:
+> > Mipi dsi panel drivers can use mipi_dsi_dcs_{set,get}_display_brightnes=
+s()
+> > to request backlight changes.
+> >
+> > This can be done during panel initialization (dsi is in command mode)
+> > or afterwards (dsi is in Video Mode).
+> >
+> > When the DSI is in Video Mode, all commands are rejected.
+> >
+> > Detect current DSI mode in mtk_dsi_host_transfer() and switch modes
+> > temporarily to allow commands to be sent.
+
+Applied to mediatek-drm-next [1], thanks.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
+
+Regards,
+Chun-Kuang.
+
+> >
+> > Signed-off-by: Julien STEPHAN <jstephan@baylibre.com>
+> > Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+>
+> Please, next time, don't drop the tags that reviewers are giving to you, =
+unless
+> the patch changes radically.
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+>
+> > ---
+> > Changes in v4:
+> >      - fix missing space:  "ret : recv_cnt;"
+> > Changes in v3:
+> >      - increase readability of code and use correct return variable (se=
+e
+> >        comment
+> > https://lore.kernel.org/linux-mediatek/4907bdc1-b4a6-e9ad-5cfa-266fc20c=
+0bec@collabora.com/)
+> >
+> > Changes in v2:
+> >      - update commit message to be more descriptive
+> >
+> >   drivers/gpu/drm/mediatek/mtk_dsi.c | 33 ++++++++++++++++++++++-------=
+-
+> >   1 file changed, 24 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/media=
+tek/mtk_dsi.c
+> > index 5d90d2eb0019..abdd9cdebd86 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > @@ -891,24 +891,33 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_=
+dsi_host *host,
+> >       u8 read_data[16];
+> >       void *src_addr;
+> >       u8 irq_flag =3D CMD_DONE_INT_FLAG;
+> > +     u32 dsi_mode;
+> > +     int ret;
+> >
+> > -     if (readl(dsi->regs + DSI_MODE_CTRL) & MODE) {
+> > -             DRM_ERROR("dsi engine is not command mode\n");
+> > -             return -EINVAL;
+> > +     dsi_mode =3D readl(dsi->regs + DSI_MODE_CTRL);
+> > +     if (dsi_mode & MODE) {
+> > +             mtk_dsi_stop(dsi);
+> > +             ret =3D mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG,=
+ 500);
+> > +             if (ret)
+> > +                     goto restore_dsi_mode;
+> >       }
+> >
+> >       if (MTK_DSI_HOST_IS_READ(msg->type))
+> >               irq_flag |=3D LPRX_RD_RDY_INT_FLAG;
+> >
+> > -     if (mtk_dsi_host_send_cmd(dsi, msg, irq_flag) < 0)
+> > -             return -ETIME;
+> > +     ret =3D mtk_dsi_host_send_cmd(dsi, msg, irq_flag);
+> > +     if (ret)
+> > +             goto restore_dsi_mode;
+> >
+> > -     if (!MTK_DSI_HOST_IS_READ(msg->type))
+> > -             return 0;
+> > +     if (!MTK_DSI_HOST_IS_READ(msg->type)) {
+> > +             recv_cnt =3D 0;
+> > +             goto restore_dsi_mode;
+> > +     }
+> >
+> >       if (!msg->rx_buf) {
+> >               DRM_ERROR("dsi receive buffer size may be NULL\n");
+> > -             return -EINVAL;
+> > +             ret =3D -EINVAL;
+> > +             goto restore_dsi_mode;
+> >       }
+> >
+> >       for (i =3D 0; i < 16; i++)
+> > @@ -933,7 +942,13 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_d=
+si_host *host,
+> >       DRM_INFO("dsi get %d byte data from the panel address(0x%x)\n",
+> >                recv_cnt, *((u8 *)(msg->tx_buf)));
+> >
+> > -     return recv_cnt;
+> > +restore_dsi_mode:
+> > +     if (dsi_mode & MODE) {
+> > +             mtk_dsi_set_mode(dsi);
+> > +             mtk_dsi_start(dsi);
+> > +     }
+> > +
+> > +     return ret < 0 ? ret : recv_cnt;
+> >   }
+> >
+> >   static const struct mipi_dsi_host_ops mtk_dsi_ops =3D {
+> > --
+> > 2.35.1
+> >
+>
+>
+>

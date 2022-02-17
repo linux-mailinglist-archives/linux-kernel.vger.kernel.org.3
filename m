@@ -2,193 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456D84BA42C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B7C4BA42E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242371AbiBQPVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:21:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46520 "EHLO
+        id S242380AbiBQPWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:22:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242392AbiBQPVG (ORCPT
+        with ESMTP id S235002AbiBQPWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:21:06 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B582C2B0B1F;
-        Thu, 17 Feb 2022 07:20:50 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id f19so8840133qvb.6;
-        Thu, 17 Feb 2022 07:20:50 -0800 (PST)
+        Thu, 17 Feb 2022 10:22:04 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332352B27C
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:21:49 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id m7so5925192pjk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:21:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=TI2smanOEAYT6fFDA4KrImbVgLMdEfrg2gnIoR3JBRk=;
-        b=aMyQaIyk5ux/FZNLJsplph8869hwBnK1++VrLh9mfWm2gl0HEVkfNaD2u7b1FL/RFZ
-         BUdtDOG620vPVFNulZk1NRhIpKmvM3whrs9UUUyG2mTyp/Q82CifBhVg1QWkM0/gK/d4
-         zdpVgD4tA0tgFFca799zRufNE9FU3KAzad41+pfYvT6O9kmFoo2xkon+jtM5NvkoAjee
-         LHJMQOS/CMKGNs/XvXJWkEdogSqYmj8hp86STCr1r+I8fn3AlhHEzIjHBHHPdk8THbBz
-         +R2WWf0V6kvrGOri85ITw16jMjrBOrK9DhUocwxnexk/xblmEy4gcpVsXqz4ewQI/R0F
-         tWqA==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=xvrtpuEdChu4zmY5pxDKJcpytgU8SZKtEI7T38tIF1Q=;
+        b=HIqawdTnzu9QWVZv9D//pXWPonRKf1EG345n+o4AAbsIAVSazocVTjTpqhrCWdbfQp
+         DHwzx/yLcNPiOgVbbFndi8wVnrz9kb/v3EwdiKDJm8ZTT5nMqA5FfFeJ5USyTW8X4L3Z
+         jJVZDR2ZB/QRCg+gc31BqRllbsLdp1NQogSYQNv2EHcdA9c+Lbv9g5c36T3NAUPTynxc
+         r1EhTVlYcJ0TrC8xpEkXna1LHMs4NKEEku27D1wEN51ccfbbFlEaI/08racYuDPtIM/r
+         IHiIrwuhkCBy+cGqMX8gsubOUl0jVDRiw206ud3DInJLZ/I7PBZitEjOP/P9kpv5pMX+
+         rfHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=TI2smanOEAYT6fFDA4KrImbVgLMdEfrg2gnIoR3JBRk=;
-        b=eJKWjGQUmTJZJD5UoY6OirwQmvAksHEqS0RMABF60RtenY6hnpYXqwrboyaeC+6Er1
-         DsfqCLtQvd0Rg06E5LLS7aI1KzRAqyt9OK4UUo6sGLXr2pOOyfU6Mt2BuKiT4emUOFNl
-         MN2yei+eNOQgss4ekO1dYFO21DWjhzGyIDtOeN3io6hJ5otEDGpmKTP0/yLkgKc0W1gF
-         J6Er4j5nOz/2UxWYsPfoCZrFCz/E4qjEskenzjYRcztkmz846Bwrxu9dqFkj5ne/gvBc
-         uoniwGxGTWJ2KnN/TB5TgxiNd7y633rdpk+x3cAMm7jf3U37b2GlC7IEPPYIQZL4QUoa
-         tcEQ==
-X-Gm-Message-State: AOAM530MvIkAIBSQQXC2UcPvWvjuY22tma7gLZQPFok6YCAYzusST2Ar
-        irWzec1UX3DFNZph42TOpkI/QNlHwED5+Q==
-X-Google-Smtp-Source: ABdhPJx/Z10ciW/Wo0fbtuiaLR7Gv++pHUbanbOr8+bsTeZlmrboNXApv4NGSy3EGsJM9aKjrIQkAw==
-X-Received: by 2002:a05:6214:2581:b0:42c:945e:4c17 with SMTP id fq1-20020a056214258100b0042c945e4c17mr2373696qvb.25.1645111249671;
-        Thu, 17 Feb 2022 07:20:49 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e16sm24213691qty.47.2022.02.17.07.20.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 07:20:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f1e13a4e-2e86-1d53-f34d-a04838e8e8f9@roeck-us.net>
-Date:   Thu, 17 Feb 2022 07:20:47 -0800
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=xvrtpuEdChu4zmY5pxDKJcpytgU8SZKtEI7T38tIF1Q=;
+        b=SSXa9Kown9DHrgSlEZBQbYjasRN1UvtwJijFnXZ8Sjlk6NavsjNJWPsBBsHHy12v2v
+         0R/49zCEFPXAY7lLj9lN3ePnUU+O3Oay9zhUl1jUSSTJfmHBfJV1os9Wf4AISWDcX2T7
+         s/HYgdHda8RV2J893fYqKUQVW+Tt1wCAKBaAsXYiuUVXlNXMBQDaBy799sAQxA/9XKrf
+         FDfeWsOOGdU2Jv71TYUqntenxeubbi3qHsGUzQULcnkXZSrz52KcjdKBiGUFYwa7YxMc
+         lRSaOpDZqMatb8i9G+8neYWAGsMRkNoGZpqdgaVKaQSHdzMgknsj8y9zzIfE/Yob8Guk
+         uqZg==
+X-Gm-Message-State: AOAM530PuS0q6F6ZbDPWgBcvY5PphGHnZFD7Q7BvW7b4ewm7V3+avCsT
+        gQ/t9k8d4yRtA6FhwW0KCiB9K4gaYKX00ni6jig=
+X-Google-Smtp-Source: ABdhPJwgTincad1Z9DWJsoJtLClxg+LYoprDDkmagiAeLI5l0iLhdEyh4vxPBUb0k3agP0z6YIIOzWd7H78Sq1kagZ8=
+X-Received: by 2002:a17:90b:4ad2:b0:1b8:e050:c7e3 with SMTP id
+ mh18-20020a17090b4ad200b001b8e050c7e3mr7828327pjb.83.1645111308686; Thu, 17
+ Feb 2022 07:21:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Marcello Sylvester Bauer <sylv@sylv.io>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-doc@vger.kernel.org
-References: <cover.1645108566.git.sylv@sylv.io>
- <6103836f1116a045a25919ae3e5c18dfdc485902.1645108566.git.sylv@sylv.io>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/3] hwmon (xdpe12284): Add support for xdpe11280
-In-Reply-To: <6103836f1116a045a25919ae3e5c18dfdc485902.1645108566.git.sylv@sylv.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:6796:0:0:0:0 with HTTP; Thu, 17 Feb 2022 07:21:48
+ -0800 (PST)
+Reply-To: bettyrawlings3@gmail.com
+From:   "Mrs. Betty Rawlings" <unitedbankforafricau7@gmail.com>
+Date:   Thu, 17 Feb 2022 07:21:48 -0800
+Message-ID: <CA+9JZ9+1K6ObVkvkTq7iQbwgAJ6hyOf0LHW=OSBAx08zgRBi6A@mail.gmail.com>
+Subject: =?UTF-8?Q?DOBRE_WIE=C5=9ACI?=
+To:     ikechukwu4125 <ikechukwu4125@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 06:41, Marcello Sylvester Bauer wrote:
-> Add support for another family of Infineon Multi-phase controllers.
-> The xdpe11280 uses linear instead of vid data format for VOUT.
-> Add the required logic to detect VOUT_MODE during identification,
-> and set the format accordingly.
-> 
-This talks about the chip, but ...
+PRZECZYTAJ I ZROZUM PRAWD=C4=98 O SWOICH FUNDUSZACH.
 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> ---
->   Documentation/hwmon/xdpe12284.rst | 10 +++++++---
->   drivers/hwmon/pmbus/xdpe12284.c   | 17 ++++++++++++++++-
->   2 files changed, 23 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/xdpe12284.rst b/Documentation/hwmon/xdpe12284.rst
-> index 67d1f87808e5..e9a5a19b0c3d 100644
-> --- a/Documentation/hwmon/xdpe12284.rst
-> +++ b/Documentation/hwmon/xdpe12284.rst
-> @@ -5,6 +5,10 @@ Kernel driver xdpe122
->   
->   Supported chips:
->   
-> +  * Infineon XDPE11280
-> +
-> +    Prefix: 'xdpe11280'
-> +
->     * Infineon XDPE12254
->   
->       Prefix: 'xdpe12254'
-> @@ -20,9 +24,9 @@ Authors:
->   Description
->   -----------
->   
-> -This driver implements support for Infineon Multi-phase XDPE122 family
-> -dual loop voltage regulators.
-> -The family includes XDPE12284 and XDPE12254 devices.
-> +This driver implements support for Infineon Multi-phase XDPE112 and XDPE122
-> +family dual loop voltage regulators.
-> +These families include XDPE11280, XDPE12284 and XDPE12254 devices.
->   The devices from this family complaint with:
+Dzie=C5=84 dobry Szanowny Panie/Szanowna Pani.
+Jestem pani Betty Rawlings, jestem obywatelk=C4=85 USA, mam 48 lat.
+Mieszkam tutaj, w New Braunfels w Teksasie. M=C3=B3j adres zamieszkania
+jest nast=C4=99puj=C4=85cy. 108 S=C4=85d Crocketta. Mieszkanie 303, Chicago=
+, Stany
+Zjednoczone. My=C5=9Bl=C4=99 o przeprowadzce, poniewa=C5=BC jestem teraz bo=
+gata.
+Jestem jednym z tych, kt=C3=B3rzy przed laty brali udzia=C5=82 w odszkodowa=
+niu w
+Afryce i odm=C3=B3wiono mi wyp=C5=82aty, zap=C5=82aci=C5=82em ponad 52 000 =
+dolar=C3=B3w podczas
+pobytu w Stanach Zjednoczonych, pr=C3=B3buj=C4=85c uzyska=C4=87 moj=C4=85 w=
+yp=C5=82at=C4=99,
+wszystko bezskutecznie.
 
-Hmm, s/complaint/compliant/.
+Zdecydowa=C5=82em si=C4=99 pojecha=C4=87 do Afryki, Togo ze wszystkimi doku=
+mentami
+odszkodowawczymi i zosta=C5=82em poinstruowany, aby spotka=C4=87 si=C4=99 z
+prawnikiem Oscarem Luisem (obywatel Wielkiej Brytanii), kt=C3=B3ry jest
+przewodnicz=C4=85cym KOMITETU DS. ODSZKODOWANIA, skontaktowa=C5=82em si=C4=
+=99 z nim i
+wszystko mi wyja=C5=9Bni=C5=82. Powiedzia=C5=82, =C5=BCe ci, kt=C3=B3rzy sk=
+ontaktowali si=C4=99 ze
+mn=C4=85 przez e-mail, s=C4=85 fa=C5=82szywi, poniewa=C5=BC ustawa o dziedz=
+iczeniu /
+odszkodowaniu wyra=C5=BAnie stanowi, =C5=BCe
+beneficjent/odbiorca jest zwolniony z ponoszenia jakichkolwiek op=C5=82at
+lub prowizji z w=C5=82asnej kieszeni w celu otrzymania takich =C5=9Brodk=C3=
+=B3w.
 
-Anyway, is it still correct that the XDPE11280 is compliant with the
-Intel specifications ? The datasheet isn't public, so I can not check myself
-what the chip actually supports.
+Prawnik Oscar Louis zabra=C5=82 mnie do Banku P=C5=82atniczego, gdzie
+przedstawi=C5=82 wszystkie dokumenty, kt=C3=B3re mi odpowiada=C5=82y. W tej=
+ chwili
+jestem najszcz=C4=99=C5=9Bliwsz=C4=85 kobiet=C4=85 na =C5=9Bwiecie, poniewa=
+=C5=BC otrzyma=C5=82em =C5=9Brodki
+kompensacyjne w wysoko=C5=9Bci (950 000 USD) Dodatkowo prawnik Oscar Luis
+pokaza=C5=82 mi pe=C5=82ne informacje o tych, kt=C3=B3rzy jeszcze nie otrzy=
+mali
+swoich wp=C5=82at i zobaczy=C5=82em ich nazwisko i adres e-mail jako jeden =
+z
+beneficjent=C3=B3w, dlatego postanowi=C5=82 wys=C5=82a=C4=87 Ci e-mail, aby=
+ przesta=C4=87
+zajmowa=C4=87 si=C4=99 tymi osobami, nie s=C4=85 z Twoimi =C5=9Brodkami, ty=
+lko z Tob=C4=85
+zarabiaj=C4=85.
+Radz=C4=99 skontaktowa=C4=87 si=C4=99 bezpo=C5=9Brednio z adwokatem Oscarem=
+ Luisem,
+korzystaj=C4=85c z poni=C5=BCszych informacji.
 
->   
->   - Intel VR13 and VR13HC rev 1.3, IMVP8 rev 1.2 and IMPVP9 rev 1.3 DC-DC
-> diff --git a/drivers/hwmon/pmbus/xdpe12284.c b/drivers/hwmon/pmbus/xdpe12284.c
-> index b07da06a40c9..ec947c697670 100644
-> --- a/drivers/hwmon/pmbus/xdpe12284.c
-> +++ b/drivers/hwmon/pmbus/xdpe12284.c
-> @@ -27,6 +27,9 @@ static int xdpe122_read_word_data(struct i2c_client *client, int page,
->   	s32 mantissa;
->   	int ret;
->   
-> +	if (info->format[PSC_VOLTAGE_OUT] == linear)
-> +		return -ENODATA;
-> +
->   	switch (reg) {
->   	case PMBUS_VOUT_OV_FAULT_LIMIT:
->   	case PMBUS_VOUT_UV_FAULT_LIMIT:
-> @@ -75,9 +78,19 @@ static int xdpe122_read_word_data(struct i2c_client *client, int page,
->   static int xdpe122_identify(struct i2c_client *client,
->   			    struct pmbus_driver_info *info)
->   {
-> -	u8 vout_params;
-> +	u8 vout_mode, vout_params;
->   	int i, ret;
->   
-> +	ret = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	vout_mode = ret >> 5;
-> +	if (vout_mode == 0) {
-> +		info->format[PSC_VOLTAGE_OUT] = linear;
-> +		return 0;
-> +	}
+DOM NAGRODY ODSZKODOWANIA
 
-.... the code above is not chip dependent but this code checks the
-mode register on page 0. At the very least this is confusing.
+Imi=C4=99 i nazwisko: prawnik =C3=93scar Luis
+E-mail: britishtreasuryau@gmail.com
 
-What the driver should do instead is to check the chip type during
-probe and make the necessary changes there, ie set the output format
-for xdpe11280 to linear and drop the pointers to the .identify
-and .read_word_data.
+Poni=C5=BCej wymienione s=C4=85 nazwy mafii i bank=C3=B3w stoj=C4=85cych za=
+ nie publikacj=C4=85
+ich fundusze, kt=C3=B3re uda=C5=82o mi si=C4=99 wymkn=C4=85=C4=87 dla twoje=
+go mi=C5=82ego przejrzenia.
 
-Guenter
+1) Jan Kofi
+2) Andy Misra
+3) Rosa Ibrahim
+4) Wielebny Eric Smith
+5) Susan Robinson
+6) Tomas Adeniran itp.
 
-> +
->   	for (i = 0; i < XDPE122_PAGE_NUM; i++) {
->   		/* Read the register with VOUT scaling value.*/
->   		ret = pmbus_read_byte_data(client, i, PMBUS_VOUT_MODE);
-> @@ -140,6 +153,7 @@ static int xdpe122_probe(struct i2c_client *client)
->   }
->   
->   static const struct i2c_device_id xdpe122_id[] = {
-> +	{"xdpe11280", 0},
->   	{"xdpe12254", 0},
->   	{"xdpe12284", 0},
->   	{}
-> @@ -148,6 +162,7 @@ static const struct i2c_device_id xdpe122_id[] = {
->   MODULE_DEVICE_TABLE(i2c, xdpe122_id);
->   
->   static const struct of_device_id __maybe_unused xdpe122_of_match[] = {
-> +	{.compatible = "infineon,xdpe11280"},
->   	{.compatible = "infineon,xdpe12254"},
->   	{.compatible = "infineon,xdpe12284"},
->   	{}
+Jedyne pieni=C4=85dze, jakie zap=C5=82aci=C5=82em po spotkaniu z adwokatem =
+Oscarem
+Luisem, to tylko 290 USD za podpisanie i opiecz=C4=99towanie dokument=C3=B3=
+w
+oraz op=C5=82aty za konsultacje adwokata, odnotuj to.
 
+UWAGA: POWTARZAM JEDYNE PIENI=C4=84DZE, KT=C3=93RE MUSISZ ZAP=C5=81ACI=C4=
+=86 I KT=C3=93RE
+ZAP=C5=81ACI=C5=81EM R=C3=93WNIE=C5=BB TO 290 USD ZA WYSY=C5=81K=C4=98 OP=
+=C5=81ATY NA=C5=81O=C5=BBONE PRZEZ RZ=C4=84D NA
+ICH FUNDUSZ.
+
+Jeszcze raz przesta=C5=84 kontaktowa=C4=87 si=C4=99 z osobami z licznymi
+roszczeniami/p=C5=82atno=C5=9Bciami, radz=C4=99 skontaktowa=C4=87 si=C4=99 =
+z adwokatem Oscarem
+Luis, aby m=C3=B3g=C5=82 dostarczy=C4=87 od niego =C5=9Brodki, zamiast zajm=
+owa=C4=87 si=C4=99
+k=C5=82amcami, kt=C3=B3rzy poprosz=C4=85 go o r=C3=B3=C5=BCne rodzaje pieni=
+=C4=99dzy, aby
+sfinalizowa=C4=87 transakcj=C4=99.
+
+Dzi=C4=99kuj=C4=99 i nadal b=C4=85d=C5=BA b=C5=82ogos=C5=82awiony.
+
+Pani Betty Rawlings.

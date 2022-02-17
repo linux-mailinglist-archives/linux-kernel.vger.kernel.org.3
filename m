@@ -2,98 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DC74B98BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55354B98CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiBQGFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:05:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37318 "EHLO
+        id S234898AbiBQGI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:08:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbiBQGFS (ORCPT
+        with ESMTP id S234859AbiBQGIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:05:18 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32452295FC2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 22:05:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645077905; x=1676613905;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zygUgPf43rBuaeOOUEfw172EFYT3eiqn7l95DhRFbO4=;
-  b=FWFmccdHjHaftRt71C6Y8QrK/m8U9a449NMAeX5Z9N3L4keWXkp4ugAs
-   bh53Po/bskd9+kSdLovvqZfBUDiiEtiX9CtsPWiaQXqCMd2ZQR36uuVHR
-   Tor9c27BmtsBYtqNLUGChCapTMMZQY1ef22ODSGv3cjoAGI4jvtTeN86O
-   uW2+q00cCgHjlCpsq23tY24CQV1gg+obkxRyKuoqSjYJoOLvba10KDd2u
-   EDwIxtE7Wihh3+ayhwD2dFQpaOJLEBKFFtvt/G+I3bgygpimkh/0N4ZQg
-   Hc3RP0wg4dEAQv9+qx7FJxQMqoljiA0hQqxj1TOyTm4JeDMKqGCR1ja98
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275390114"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="275390114"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:05:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="636912964"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 16 Feb 2022 22:05:03 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKZuY-000BW0-BG; Thu, 17 Feb 2022 06:05:02 +0000
-Date:   Thu, 17 Feb 2022 14:04:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     kbuild-all@lists.01.org, Mike Rapoport <rppt@kernel.org>,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
-Subject: [rppt:cet/kvm 32/49] <stdin>:1565:2: warning: #warning syscall
- map_shadow_stack not implemented
-Message-ID: <202202171454.SfEDJ0Yv-lkp@intel.com>
+        Thu, 17 Feb 2022 01:08:54 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B3AC7D49;
+        Wed, 16 Feb 2022 22:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645078121; x=1676614121;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=n2g+52Mf0BmgpwBL96nY3BEsYRnC6C1I5ruB2Zqy098=;
+  b=a3q0p5BiQ/bMBNA2h4MieYsjYF/Eslxl/zP6wA37LUeknDOiXLDIow1G
+   knTCKb0FXQ2E+ZUmQjn4GOsnCuFydCa+9KcDJZuiI8d9N/JCmVKwz8LIs
+   tJtj4a/oAhJ/DdH/lZ5bwbN3KJkj7L61gdUx9c/8BdIbDcCH0E7xmaEur
+   g=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 22:08:40 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:08:40 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 16 Feb 2022 22:08:40 -0800
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 16 Feb 2022 22:08:34 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
+        <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v14 00/10] Add support for audio on SC7280 based targets
+Date:   Thu, 17 Feb 2022 11:37:36 +0530
+Message-ID: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
-head:   e2f9808bd7530f44cd5d95332036bb660b66b8db
-commit: 987299ad58376fc09a3bc884b55c07c2e5d80245 [32/49] x86/cet/shstk: Introduce map_shadow_stack syscall
-config: sh-randconfig-m031-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171454.SfEDJ0Yv-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=987299ad58376fc09a3bc884b55c07c2e5d80245
-        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
-        git fetch --no-tags rppt cet/kvm
-        git checkout 987299ad58376fc09a3bc884b55c07c2e5d80245
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh prepare
+This patch set is to add support for Audio over wcd codec,
+digital mics, through digital codecs and without ADSP.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Changes Since V13:
+    -- Change bulk cdc clock voting to individual clock voting.
+    -- Remove redundant code, conditional check and prints.
+    -- Fix typo errors.
+Changes Since V12:
+    -- Fix arguments type mismatch.
+Changes Since V11:
+    -- Fix kernel robot issue on arguments type mismatch.
+Changes Since V10:
+    -- Split bulk clock voting to individual clock voting as per use case in cdc-dma driver.
+    -- Add missing codec dma clocks.
+    -- Update rxtx lpm buffer size.
+Changes Since V9:
+    -- Change individual clock voting to bulk clock voting of lpass-sc7280 platform driver.
+    -- Remove redundant clocks in lpass variant structure.
+    -- Add mclk for MI2S based headset path.
+    -- Remove unused lpass variant structure members in lpass header.
+Changes Since V8:
+    -- Fix errors in sc7280 lpass cpu dt-bindings.
+    -- Move to quicinc domain email id's.
+Changes Since V7:
+    -- Fix indentation errors.
+    -- Bisect patches to avoid interdependency.
+Changes Since V6:
+    -- Split cdc dma regmap config macros.
+    -- Add write dma reg fields for i2s path.
+    -- Add helper function to distinguish rxtx and va dma ports.
+    -- Optimizing clock and reg name in cpu dt-bindings.
+    -- Update buffer management for cdc dma path.
+    -- Remove Kconfig fields of machine driver.
+Changes Since V5:
+    -- Include MI2S primary node to snd_soc_dai_driver in lpass-sc7280 platform driver.
+    -- Move dependency patch list to corresponding patch.
+    -- Add support for missing cdc-dma ports.
+    -- Change if/else conditional statements to switch cases.
+    -- Add missing error handlings.
+    -- Typo errors fix.
+Changes Since V4:
+    -- Remove unused variable in lpass-sc7280 platform driver.
+Changes Since V3:
+    -- Remove redundant power domain controls. As power domains can be configured from dtsi.
+Changes Since V2:
+    -- Split lpass sc7280 cpu driver patch and create regmap config patch.
+    -- Create patches based on latest kernel tip.
+    -- Add helper function to get dma control and lpaif handle.
+    -- Remove unused variables.
+Changes Since V1:
+    -- Typo errors fix
+    -- CPU driver readable/writable apis optimization.
+    -- Add Missing config patch
+    -- Add Common api for repeated dmactl initialization.
 
-All warnings (new ones prefixed by >>):
+Srinivasa Rao Mandadapu (10):
+  ASoC: qcom: SC7280: Update config for building codec dma drivers
+  ASoC: qcom: Move lpass_pcm_data structure to lpass header
+  ASoC: qcom: lpass: Add dma fields for codec dma lpass interface
+  ASoC: qcom: Add helper function to get dma control and lpaif handle
+  ASoC: qcom: Add register definition for codec rddma and wrdma
+  ASoC: qcom: Add regmap config support for codec dma driver
+  ASoC: qcom: Add support for codec dma driver
+  ASoC: qcom: Add lpass CPU driver for codec dma control
+  ASoC: dt-bindings: Add SC7280 lpass cpu bindings
+  ASoC: qcom: lpass-sc7280: Add platform driver for lpass audio
 
-   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->> <stdin>:1565:2: warning: #warning syscall map_shadow_stack not implemented [-Wcpp]
---
-   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->> <stdin>:1565:2: warning: #warning syscall map_shadow_stack not implemented [-Wcpp]
---
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->> <stdin>:1565:2: warning: #warning syscall map_shadow_stack not implemented [-Wcpp]
+ .../devicetree/bindings/sound/qcom,lpass-cpu.yaml  |  75 ++-
+ sound/soc/qcom/Kconfig                             |  11 +
+ sound/soc/qcom/Makefile                            |   4 +
+ sound/soc/qcom/lpass-cdc-dma.c                     | 305 +++++++++++
+ sound/soc/qcom/lpass-cpu.c                         | 252 ++++++++-
+ sound/soc/qcom/lpass-lpaif-reg.h                   | 127 ++++-
+ sound/soc/qcom/lpass-platform.c                    | 601 ++++++++++++++++++---
+ sound/soc/qcom/lpass-sc7280.c                      | 447 +++++++++++++++
+ sound/soc/qcom/lpass.h                             | 143 +++++
+ 9 files changed, 1881 insertions(+), 84 deletions(-)
+ create mode 100644 sound/soc/qcom/lpass-cdc-dma.c
+ create mode 100644 sound/soc/qcom/lpass-sc7280.c
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+2.7.4
+

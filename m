@@ -2,191 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A17D4B9F9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C724B9F99
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240207AbiBQMCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:02:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51756 "EHLO
+        id S240210AbiBQMC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:02:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240189AbiBQMCS (ORCPT
+        with ESMTP id S240243AbiBQMCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:02:18 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F121C62D1;
-        Thu, 17 Feb 2022 04:02:03 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V4keWL7_1645099319;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V4keWL7_1645099319)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 17 Feb 2022 20:02:00 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com
-Cc:     xiang@kernel.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, willy@infradead.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v3 4/4] cachefiles: detect backing file size in on-demand read mode
-Date:   Thu, 17 Feb 2022 20:01:54 +0800
-Message-Id: <20220217120154.16658-5-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220217120154.16658-1-jefflexu@linux.alibaba.com>
-References: <20220217120154.16658-1-jefflexu@linux.alibaba.com>
+        Thu, 17 Feb 2022 07:02:51 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD2E2AE285
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:02:34 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4Jztjt0h4Tz9sS8;
+        Thu, 17 Feb 2022 13:02:26 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7QMqHOalYBL3; Thu, 17 Feb 2022 13:02:26 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4Jztjr3TVvz9sST;
+        Thu, 17 Feb 2022 13:02:24 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 617998B783;
+        Thu, 17 Feb 2022 13:02:24 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id O7UuHt6ePd_a; Thu, 17 Feb 2022 13:02:24 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.225])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1D0678B77E;
+        Thu, 17 Feb 2022 13:02:24 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21HC2FRo400833
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 13:02:15 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21HC2DQ2400831;
+        Thu, 17 Feb 2022 13:02:13 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v1 1/4] powerpc/ftrace: Don't use lmw/stmw in ftrace_regs_caller()
+Date:   Thu, 17 Feb 2022 13:01:56 +0100
+Message-Id: <ec286d2cc6989668a96f14543275437d2f3f0e3a.1645099283.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645099315; l=1304; s=20211009; h=from:subject:message-id; bh=a5SXTmNHRsDZErob3HMcylE9GgHIQeQ3cYBbiuJRKcM=; b=8Oh2uOKVAafJJtp/3RQH3Fu4bQdEy/Mtn9S0Ci0nQbZ71PBpU474m891U2vwRTcnBwT4IPKABOPH AtDhi4VKAPe85OOsIGUukp2AvVH3OPZWxeQ9v6YAT0X8NYK7MdiB
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fscache/cachefiles used to serve as a local cache for remote fs. The
-following patches will introduce a new use case, in which local
-read-only fs could implement on-demand reading with fscache. Then in
-this case, the upper read-only fs may has no idea on the size of the
-backed file.
+For the same reason as commit a85c728cb5e1 ("powerpc/32: Don't use
+lmw/stmw for saving/restoring non volatile regs"), don't use
+lmw/stmw in ftrace_regs_caller().
 
-It is worth nothing that, in this scenario, user daemon is responsible
-for preparing all backing files with correct file size in the first
-beginning. (Backing files are all sparse files in this case). And since
-it's read-only, we can get the backing file size at runtime as the
-object size.
+Use the same macros for PPC32 and PPC64.
 
-This patch also adds one flag bit to distinguish the new introduced
-on-demand read mode from the original mode. The following patch will
-introduce a user configures it.
-
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- fs/cachefiles/Kconfig    | 13 +++++++++
- fs/cachefiles/internal.h |  1 +
- fs/cachefiles/namei.c    | 60 +++++++++++++++++++++++++++++++++++++++-
- 3 files changed, 73 insertions(+), 1 deletion(-)
+ arch/powerpc/kernel/trace/ftrace_mprofile.S | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/fs/cachefiles/Kconfig b/fs/cachefiles/Kconfig
-index 719faeeda168..cef412cfd127 100644
---- a/fs/cachefiles/Kconfig
-+++ b/fs/cachefiles/Kconfig
-@@ -26,3 +26,16 @@ config CACHEFILES_ERROR_INJECTION
- 	help
- 	  This permits error injection to be enabled in cachefiles whilst a
- 	  cache is in service.
-+
-+config CACHEFILES_ONDEMAND
-+	bool "Support for on-demand reading"
-+	depends on CACHEFILES
-+	default n
-+	help
-+	  This permits on-demand read mode of cachefiles. In this mode, when
-+	  cache miss, the cachefiles backend instead of the upper fs using
-+	  fscache is responsible for fetching data, e.g. through user daemon.
-+	  Then after the data's ready, upper fs can reinitiate a read from the
-+	  cache.
-+
-+	  If unsure, say N.
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index c793d33b0224..6473634c41a9 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -98,6 +98,7 @@ struct cachefiles_cache {
- #define CACHEFILES_DEAD			1	/* T if cache dead */
- #define CACHEFILES_CULLING		2	/* T if cull engaged */
- #define CACHEFILES_STATE_CHANGED	3	/* T if state changed (poll trigger) */
-+#define CACHEFILES_ONDEMAND_MODE	4	/* T if in on-demand read mode */
- 	char				*rootdirname;	/* name of cache root directory */
- 	char				*secctx;	/* LSM security context */
- 	char				*tag;		/* cache binding tag */
-diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
-index f256c8aff7bb..abe75b4b955f 100644
---- a/fs/cachefiles/namei.c
-+++ b/fs/cachefiles/namei.c
-@@ -510,15 +510,69 @@ struct file *cachefiles_create_tmpfile(struct cachefiles_object *object)
- 	return file;
- }
+diff --git a/arch/powerpc/kernel/trace/ftrace_mprofile.S b/arch/powerpc/kernel/trace/ftrace_mprofile.S
+index 89639e64acd1..76dab07fd8fd 100644
+--- a/arch/powerpc/kernel/trace/ftrace_mprofile.S
++++ b/arch/powerpc/kernel/trace/ftrace_mprofile.S
+@@ -43,18 +43,16 @@ _GLOBAL(ftrace_regs_caller)
  
-+#ifdef CONFIG_CACHEFILES_ONDEMAND
-+static inline bool cachefiles_can_create_file(struct cachefiles_cache *cache)
-+{
-+	/*
-+	 * On-demand read mode requires that backing files have been prepared
-+	 * with correct file size under corresponding directory in the very
-+	 * first begginning. We can get here when the backing file doesn't exist
-+	 * under corresponding directory, or the file size is unexpected 0.
-+	 */
-+	return !test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags);
-+
-+}
-+
-+/*
-+ * Fs using fscache for on-demand reading may have no idea of the file size of
-+ * backing files. Thus the on-demand read mode requires that backing files shall
-+ * be prepared with correct file size under corresponding directory by the user
-+ * daemon in the first beginning. Then the backend is responsible for taking the
-+ * file size of the backing file as the object size at runtime.
-+ */
-+static int cachefiles_recheck_size(struct cachefiles_object *object,
-+				   struct file *file)
-+{
-+	loff_t size;
-+	struct cachefiles_cache *cache = object->volume->cache;
-+
-+	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
-+		return 0;
-+
-+	size = i_size_read(file_inode(file));
-+	if (!size)
-+		return -EINVAL;
-+
-+	object->cookie->object_size = size;
-+	return 0;
-+}
-+#else
-+static inline bool cachefiles_can_create_file(struct cachefiles_cache *cache)
-+{
-+	return true;
-+}
-+
-+static inline int cachefiles_recheck_size(struct cachefiles_object *object,
-+					  struct file *file)
-+{
-+	return 0;
-+}
+ 	/* Save all gprs to pt_regs */
+ 	SAVE_GPR(0, r1)
+-#ifdef CONFIG_PPC64
+ 	SAVE_GPRS(2, 11, r1)
+ 
++#ifdef CONFIG_PPC64
+ 	/* Ok to continue? */
+ 	lbz	r3, PACA_FTRACE_ENABLED(r13)
+ 	cmpdi	r3, 0
+ 	beq	ftrace_no_trace
 +#endif
-+
-+
- /*
-  * Create a new file.
-  */
- static bool cachefiles_create_file(struct cachefiles_object *object)
- {
-+	struct cachefiles_cache *cache = object->volume->cache;
- 	struct file *file;
- 	int ret;
  
--	ret = cachefiles_has_space(object->volume->cache, 1, 0,
-+	if (!cachefiles_can_create_file(cache))
-+		return false;
-+
-+	ret = cachefiles_has_space(cache, 1, 0,
- 				   cachefiles_has_space_for_create);
- 	if (ret < 0)
- 		return false;
-@@ -573,6 +627,10 @@ static bool cachefiles_open_file(struct cachefiles_object *object,
- 	}
- 	_debug("file -> %pd positive", dentry);
+ 	SAVE_GPRS(12, 31, r1)
+-#else
+-	stmw	r2, GPR2(r1)
+-#endif
  
-+	ret = cachefiles_recheck_size(object, file);
-+	if (ret < 0)
-+		goto check_failed;
-+
- 	ret = cachefiles_check_auxdata(object, file);
- 	if (ret < 0)
- 		goto check_failed;
+ 	/* Save previous stack pointer (r1) */
+ 	addi	r8, r1, SWITCH_FRAME_SIZE
+@@ -120,11 +118,7 @@ ftrace_regs_call:
+ #endif
+ 
+ 	/* Restore gprs */
+-#ifdef CONFIG_PPC64
+ 	REST_GPRS(2, 31, r1)
+-#else
+-	lmw	r2, GPR2(r1)
+-#endif
+ 
+ 	/* Restore possibly modified LR */
+ 	PPC_LL	r0, _LINK(r1)
 -- 
-2.27.0
+2.34.1
 

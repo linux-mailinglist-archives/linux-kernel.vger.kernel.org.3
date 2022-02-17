@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695884B98C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C874B98DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiBQGJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:09:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49296 "EHLO
+        id S234987AbiBQGJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:09:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234922AbiBQGJA (ORCPT
+        with ESMTP id S234970AbiBQGJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:09:00 -0500
+        Thu, 17 Feb 2022 01:09:13 -0500
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C054EC7D49;
-        Wed, 16 Feb 2022 22:08:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFC4C7E5B;
+        Wed, 16 Feb 2022 22:08:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645078126; x=1676614126;
+  t=1645078139; x=1676614139;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=tcOOcXbMcQCIhLOkKxdXC7A1Ua+4uPLUo6c+5ryCqco=;
-  b=IMqhZyW3Npmv9j2ZQ2csgLxlwx2lT6ZMBUqQMauIqt9sCDo0TB5TGRdc
-   eo/sSvyXShbin/F5ZA8TYiUvYHtPgyhq27SQhdeoFKZ4WuPzl4qu7Z0FA
-   QraKiGWy+/O4dby7Mf375YdlQsvIAMvKTMNBLrqhmWTuOnIpruB+TRdBo
-   o=;
+  bh=55r7vcOOWbj/oXy8k3YYhpmLfRt+lwKbKv2++d6u+g8=;
+  b=adOtjPG6eNNsyMa3butJTzWVQh9UZPgmUBekdW0xC7u8qUKz9WqNzDGh
+   XmjBwpc4QyV5gnryGvHbWciFAsxPJ4K9IisUu6tjMvERJDaQL2iZTcyBa
+   CafnZK1wN83f3hHLPZNj7uP+ghn5/Yd7T+UfzEkSqsnxhtWr+rjvWHuq9
+   s=;
 Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 22:08:46 -0800
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 22:08:52 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:08:46 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:08:52 -0800
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 22:08:45 -0800
+ 15.2.986.15; Wed, 16 Feb 2022 22:08:51 -0800
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 16 Feb 2022 22:08:40 -0800
+ 15.2.922.19; Wed, 16 Feb 2022 22:08:46 -0800
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <swboyd@chromium.org>, <judyhsiao@chromium.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v14 01/10] ASoC: qcom: SC7280: Update config for building codec dma drivers
-Date:   Thu, 17 Feb 2022 11:37:37 +0530
-Message-ID: <1645078066-9365-2-git-send-email-quic_srivasam@quicinc.com>
+Subject: [PATCH v14 02/10] ASoC: qcom: Move lpass_pcm_data structure to lpass header
+Date:   Thu, 17 Feb 2022 11:37:38 +0530
+Message-ID: <1645078066-9365-3-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
 References: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
@@ -70,72 +70,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add configuration for building SC7280 audio codec dma drivers.
+Declare lpass_pcm_data structure in lpass header file instead of
+platform source file to make common use of it by other drivers
 
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/Kconfig  | 11 +++++++++++
- sound/soc/qcom/Makefile |  4 ++++
- 2 files changed, 15 insertions(+)
+ sound/soc/qcom/lpass-platform.c | 5 -----
+ sound/soc/qcom/lpass.h          | 5 +++++
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/qcom/Kconfig b/sound/soc/qcom/Kconfig
-index dd5949e..52db003 100644
---- a/sound/soc/qcom/Kconfig
-+++ b/sound/soc/qcom/Kconfig
-@@ -20,6 +20,10 @@ config SND_SOC_LPASS_PLATFORM
- 	tristate
- 	select REGMAP_MMIO
+diff --git a/sound/soc/qcom/lpass-platform.c b/sound/soc/qcom/lpass-platform.c
+index a59e9d2..a44162c 100644
+--- a/sound/soc/qcom/lpass-platform.c
++++ b/sound/soc/qcom/lpass-platform.c
+@@ -18,11 +18,6 @@
  
-+config SND_SOC_LPASS_CDC_DMA
-+	tristate
-+	select REGMAP_MMIO
+ #define DRV_NAME "lpass-platform"
+ 
+-struct lpass_pcm_data {
+-	int dma_ch;
+-	int i2s_port;
+-};
+-
+ #define LPASS_PLATFORM_BUFFER_SIZE	(24 *  2 * 1024)
+ #define LPASS_PLATFORM_PERIODS		2
+ 
+diff --git a/sound/soc/qcom/lpass.h b/sound/soc/qcom/lpass.h
+index c0f0247..f0d21cd 100644
+--- a/sound/soc/qcom/lpass.h
++++ b/sound/soc/qcom/lpass.h
+@@ -257,6 +257,11 @@ struct lpass_variant {
+ 	int num_clks;
+ };
+ 
++struct lpass_pcm_data {
++	int dma_ch;
++	int i2s_port;
++};
 +
- config SND_SOC_LPASS_IPQ806X
- 	tristate
- 	select SND_SOC_LPASS_CPU
-@@ -36,6 +40,13 @@ config SND_SOC_LPASS_SC7180
- 	select SND_SOC_LPASS_PLATFORM
- 	select SND_SOC_LPASS_HDMI
- 
-+config SND_SOC_LPASS_SC7280
-+	tristate
-+	select SND_SOC_LPASS_CPU
-+	select SND_SOC_LPASS_PLATFORM
-+	select SND_SOC_LPASS_HDMI
-+	select SND_SOC_LPASS_CDC_DMA
-+
- config SND_SOC_STORM
- 	tristate "ASoC I2S support for Storm boards"
- 	depends on GPIOLIB
-diff --git a/sound/soc/qcom/Makefile b/sound/soc/qcom/Makefile
-index 625aec6..8b7b876 100644
---- a/sound/soc/qcom/Makefile
-+++ b/sound/soc/qcom/Makefile
-@@ -1,18 +1,22 @@
- # SPDX-License-Identifier: GPL-2.0
- # Platform
- snd-soc-lpass-cpu-objs := lpass-cpu.o
-+snd-soc-lpass-cdc-dma-objs := lpass-cdc-dma.o
- snd-soc-lpass-hdmi-objs := lpass-hdmi.o
- snd-soc-lpass-platform-objs := lpass-platform.o
- snd-soc-lpass-ipq806x-objs := lpass-ipq806x.o
- snd-soc-lpass-apq8016-objs := lpass-apq8016.o
- snd-soc-lpass-sc7180-objs := lpass-sc7180.o
-+snd-soc-lpass-sc7280-objs := lpass-sc7280.o
- 
- obj-$(CONFIG_SND_SOC_LPASS_CPU) += snd-soc-lpass-cpu.o
-+obj-$(CONFIG_SND_SOC_LPASS_CDC_DMA) += snd-soc-lpass-cdc-dma.o
- obj-$(CONFIG_SND_SOC_LPASS_HDMI) += snd-soc-lpass-hdmi.o
- obj-$(CONFIG_SND_SOC_LPASS_PLATFORM) += snd-soc-lpass-platform.o
- obj-$(CONFIG_SND_SOC_LPASS_IPQ806X) += snd-soc-lpass-ipq806x.o
- obj-$(CONFIG_SND_SOC_LPASS_APQ8016) += snd-soc-lpass-apq8016.o
- obj-$(CONFIG_SND_SOC_LPASS_SC7180) += snd-soc-lpass-sc7180.o
-+obj-$(CONFIG_SND_SOC_LPASS_SC7280) += snd-soc-lpass-sc7280.o
- 
- # Machine
- snd-soc-storm-objs := storm.o
+ /* register the platform driver from the CPU DAI driver */
+ int asoc_qcom_lpass_platform_register(struct platform_device *);
+ int asoc_qcom_lpass_cpu_platform_remove(struct platform_device *pdev);
 -- 
 2.7.4
 

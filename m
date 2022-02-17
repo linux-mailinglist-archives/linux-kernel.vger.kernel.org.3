@@ -2,115 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498FB4BA4BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71904BA4B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242689AbiBQPon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:44:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46762 "EHLO
+        id S240440AbiBQPob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:44:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242677AbiBQPog (ORCPT
+        with ESMTP id S236162AbiBQPo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:44:36 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B9C2B1025;
-        Thu, 17 Feb 2022 07:44:21 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Jzzdp0n13z9sSQ;
-        Thu, 17 Feb 2022 16:44:14 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YORT1PJT__e6; Thu, 17 Feb 2022 16:44:14 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Jzzdn72n8z9sQx;
-        Thu, 17 Feb 2022 16:44:13 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D9A6A8B77C;
-        Thu, 17 Feb 2022 16:44:13 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id EOIxpR6cf71e; Thu, 17 Feb 2022 16:44:13 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.239])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A8D7D8B763;
-        Thu, 17 Feb 2022 16:44:13 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21HFi4WD603563
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 16:44:04 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21HFi2uT603562;
-        Thu, 17 Feb 2022 16:44:02 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Subject: [PATCH net-next v1] net: Use csum_replace_... and csum_sub() helpers instead of opencoding
-Date:   Thu, 17 Feb 2022 16:43:55 +0100
-Message-Id: <fe60030b6f674d9bf41f56426a4b0a8a9db0d20f.1645112415.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Feb 2022 10:44:26 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A538CB5614
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:44:10 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id n19-20020a17090ade9300b001b9892a7bf9so9773094pjv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:44:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hqy86u0ZED7OARERFcnhUlvL2Y04xjEjeUymkxasBiY=;
+        b=Gi59zsKpQWCuQ8PG4x+ntVYtg08eJIxcxHORdNGwl2egrvFw37UZFLiBzZpZX+kvPh
+         tJbTwrrgbSxjLuNTjwDfmaA20GFMKmnjbBzYkX0zS1IFEN8t51fxojs2VRpM9dYXrVDH
+         BZ8M59n6no58m19G1PPUle0A53Z2AO/jsWytEoDoUg9A0O89168esUXGbSloHqU+t/x+
+         fDLMyl4j8+/LzL89hi7+4o7xz2MpxAcgepNu+JgglTQssxfbOo/7RPyjFiGrjjHni+QO
+         CxjkM8/KmDD5PfWmv0nVmI8Bo0VI7bMTf+45OgrHrkzLp3VUaa9dDzX4AvMUv6eJfp4e
+         W/Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hqy86u0ZED7OARERFcnhUlvL2Y04xjEjeUymkxasBiY=;
+        b=txrSl4omgT2vcnWEJMWTXrkwYhggYwRzKyIryCN8JCYY7plnqislpudRK0CtKcNnCA
+         mW4e9GgzqIBjSCxO3Bd9TE2V+3zSI0hbBp0gst5h1N6ZvvZ6loyReSClBCEO0Wk5e7TG
+         eko1YznDAl5t2DGX/8pUPXhOFzLB6l96wf1p+qbmIOrNGi7Csp/tUKxLlVJXsHN2K90p
+         NgpoZW24pzaVgGlowBe5zAU0x+amYY+/KZsVxa00VN7jWCvROzFE2MUk4K1BWbeAVKAG
+         AmQgs88rqmXz7JWhcHsm+AAiDP940ozSxfuPiqnvEFe9x90aJRLGjylwu1xl+3jGcPwo
+         bXAA==
+X-Gm-Message-State: AOAM531qY2KdIbGjk1/iy2oBqwylUwb8MLobMu4fooJuqG91FRaAxAF+
+        CFkye3FMPb1SNUyngJgOO3FV8tGav2b9Fw==
+X-Google-Smtp-Source: ABdhPJzKttrc/PFvdleVMEu31pvkyr0W9SeNPZwkyZKM/c1e4rzsRpdyQ4+kYlgk6ibnOC5d5OvKqQ==
+X-Received: by 2002:a17:902:c443:b0:14d:a756:b1f2 with SMTP id m3-20020a170902c44300b0014da756b1f2mr3247673plm.94.1645112650146;
+        Thu, 17 Feb 2022 07:44:10 -0800 (PST)
+Received: from localhost.localdomain ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id s6sm24108pfk.86.2022.02.17.07.44.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Feb 2022 07:44:09 -0800 (PST)
+From:   Abel Wu <wuyun.abel@bytedance.com>
+To:     Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/5] introduce sched-idle balancing
+Date:   Thu, 17 Feb 2022 23:43:56 +0800
+Message-Id: <20220217154403.6497-1-wuyun.abel@bytedance.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645112634; l=1582; s=20211009; h=from:subject:message-id; bh=qDaGxyd/pqGG9s1E0j72Fi43hJ/XYgHZbSIbmrxq7S0=; b=aKRMITAt6QN7aUpMRIAs5kbGVOO1OkfwH/B12QUYMkgfwVp4huQwNbORsqVKepw3y6j8zXnWa9a9 9pHC23uNA0ruYXBUcQZ/+bEpYn3OqXO9TCCKlDT2+/gN74V6ylxF
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a couple places, open coded calculation can be avoided
-and replaced by the equivalent csum_replace4() and
-csum_replace_by_diff().
+Current load balancing is mainly based on cpu capacity
+and task util, which makes sense in the POV of overall
+throughput. While there still might be some improvement
+can be done by reducing number of overloaded cfs rqs if
+sched-idle or idle rq exists.
 
-There's also one place where csum_sub() should be used instead of
-csum_add().
+An CFS runqueue is considered overloaded when there are
+more than one pullable non-idle tasks on it (since sched-
+idle cpus are treated as idle cpus). And idle tasks are
+counted towards rq->cfs.idle_h_nr_running, that is either
+assigned SCHED_IDLE policy or placed under idle cgroups.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- net/core/utils.c            | 4 ++--
- net/netfilter/nft_payload.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The overloaded cfs rqs can cause performance issues to
+both task types:
 
-diff --git a/net/core/utils.c b/net/core/utils.c
-index 1f31a39236d5..938495bc1d34 100644
---- a/net/core/utils.c
-+++ b/net/core/utils.c
-@@ -476,9 +476,9 @@ void inet_proto_csum_replace_by_diff(__sum16 *sum, struct sk_buff *skb,
- 				     __wsum diff, bool pseudohdr)
- {
- 	if (skb->ip_summed != CHECKSUM_PARTIAL) {
--		*sum = csum_fold(csum_add(diff, ~csum_unfold(*sum)));
-+		csum_replace_by_diff(sum, diff);
- 		if (skb->ip_summed == CHECKSUM_COMPLETE && pseudohdr)
--			skb->csum = ~csum_add(diff, ~skb->csum);
-+			skb->csum = ~csum_sub(diff, skb->csum);
- 	} else if (pseudohdr) {
- 		*sum = ~csum_fold(csum_add(diff, csum_unfold(*sum)));
- 	}
-diff --git a/net/netfilter/nft_payload.c b/net/netfilter/nft_payload.c
-index 5cc06aef4345..b6cfd0759bc5 100644
---- a/net/netfilter/nft_payload.c
-+++ b/net/netfilter/nft_payload.c
-@@ -557,7 +557,7 @@ const struct nft_expr_ops nft_payload_fast_ops = {
- 
- static inline void nft_csum_replace(__sum16 *sum, __wsum fsum, __wsum tsum)
- {
--	*sum = csum_fold(csum_add(csum_sub(~csum_unfold(*sum), fsum), tsum));
-+	csum_replace4(sum, fsum, tsum);
- 	if (*sum == 0)
- 		*sum = CSUM_MANGLED_0;
- }
+  - for latency critical tasks like SCHED_NORMAL,
+    time of waiting in the rq will increase and
+    result in higher pct99 latency, and
+
+  - batch tasks may not be able to make full use
+    of cpu capacity if sched-idle rq exists, thus
+    presents poorer throughput.
+
+So in short, the goal of the sched-idle balancing is to
+let the *non-idle tasks* make full use of cpu resources.
+To achieve that, we mainly do two things:
+
+  - pull non-idle tasks for sched-idle or idle rqs
+    from the overloaded ones, and
+
+  - prevent pulling the last non-idle task in an rq
+
+The mask of overloaded cpus is updated in periodic tick
+and the idle path at the LLC domain basis. This cpumask
+will also be used in SIS as a filter, improving idle cpu
+searching.
+
+Tests are done in an Intel Xeon E5-2650 v4 server with
+2 NUMA nodes each of which has 12 cores, and with SMT2
+enabled, so 48 CPUs in total. Test results are listed
+as follows.
+
+  - we used perf messaging test to test throughput
+    at different load (groups).
+
+      perf bench sched messaging -g [N] -l 40000
+
+	N	w/o	w/	diff
+	1	2.897	2.834	-2.17%
+	3	5.156	4.904	-4.89%
+	5	7.850	7.617	-2.97%
+	10	15.140	14.574	-3.74%
+	20	29.387	27.602	-6.07%
+
+    the result shows approximate 2~6% improvement.
+
+  - and schbench to test latency performance in two
+    scenarios: quiet and noisy. In quiet test, we
+    run schbench in a normal cpu cgroup in a quiet
+    system, while the noisy test additionally runs
+    perf messaging workload inside an idle cgroup
+    as nosie.
+
+      schbench -m 2 -t 24 -i 60 -r 60
+      perf bench sched messaging -g 1 -l 4000000
+
+	[quiet]
+			w/o	w/
+	50.0th		31	31
+	75.0th		45	45
+	90.0th		55	55
+	95.0th		62	61
+	*99.0th		85	86
+	99.5th		565	318
+	99.9th		11536	10992
+	max		13029	13067
+
+	[nosiy]
+			w/o	w/
+	50.0th		34	32
+	75.0th		48	45
+	90.0th		58	55
+	95.0th		65	61
+	*99.0th		2364	208
+	99.5th		6696	2068
+	99.9th		12688	8816
+	max		15209	14191
+
+    it can be seen that the quiet test results are
+    quite similar, but the p99 latency is greatly
+    improved in the nosiy test.
+
+Comments and tests are appreciated!
+
+Abel Wu (5):
+  sched/fair: record overloaded cpus
+  sched/fair: introduce sched-idle balance
+  sched/fair: add stats for sched-idle balancing
+  sched/fair: filter out overloaded cpus in sis
+  sched/fair: favor cpu capacity for idle tasks
+
+ include/linux/sched/idle.h     |   1 +
+ include/linux/sched/topology.h |  15 ++++
+ kernel/sched/core.c            |   1 +
+ kernel/sched/fair.c            | 187 ++++++++++++++++++++++++++++++++++++++++-
+ kernel/sched/sched.h           |   6 ++
+ kernel/sched/stats.c           |   5 +-
+ kernel/sched/topology.c        |   4 +-
+ 7 files changed, 215 insertions(+), 4 deletions(-)
+
 -- 
-2.34.1
+2.11.0
 

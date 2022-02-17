@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42CA4BA93B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D05B4BA922
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244977AbiBQTHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:07:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41862 "EHLO
+        id S244904AbiBQTBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:01:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244976AbiBQTG7 (ORCPT
+        with ESMTP id S230046AbiBQTBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:06:59 -0500
-X-Greylist: delayed 6358 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 11:06:43 PST
-Received: from msr9.hinet.net (msr9.hinet.net [168.95.4.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8632B254
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:06:43 -0800 (PST)
-Received: from laptop.lan (111-253-217-22.dynamic-ip.hinet.net [111.253.217.22])
-        by msr9.hinet.net (8.15.2/8.15.2) with ESMTP id 21HG6WIc096094;
-        Fri, 18 Feb 2022 00:06:32 +0800
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-input@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Lin, Meng-Bo" <linmengbo0689@protonmail.com>, Lin@protonmail.com
-Subject: [PATCH] input: stmfts: #define STMFTS_RETRY_COUNT 3
-Date:   Fri, 18 Feb 2022 01:06:24 +0900
-Message-Id: <20220217160624.20936-1-linmengbo0689@protonmail.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 17 Feb 2022 14:01:52 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29E6255BC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:01:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=O1RmJQ4+/rNFA1R+TyKH53CJVcOd/47slAnlWECEgOc=; b=LWidQFgc11v+5dzkaXqGMicPMo
+        QMP+d79iNwJe1OoEeTPZneWLCtEQtXAqcxqsPFHHYnA3ZcFp6WDCGdtS6D686kWBuoOXc9P04XI1P
+        fqkSRQ2LzXpyk0uKtPe+ggP5clDP4ZHxN/L77Ty8olGe0hCUYpfPX1wO2pljUy1AFssgdW8V6E4M6
+        2tdXrYondaSR8bU8upPaQL1seLHVojaj7slsEg8S97YoDCPBhYyRqobLHLxWSVAaF7nad/2HREYnl
+        KjSeFbDxwzmm/+Ai5hHo9a40SSueNbnhU4KQMKB9xa3BALgEO2aXV/CHfP7nDWQB8wm08IeYOgZIk
+        SYgV5t+A==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKm23-00Fs5Z-R9; Thu, 17 Feb 2022 19:01:36 +0000
+Message-ID: <e8dd8298-1a2c-c541-2e69-1e7278a0070e@infradead.org>
+Date:   Thu, 17 Feb 2022 11:01:32 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.4 cv=Xvg/hXJ9 c=1 sm=1 tr=0 ts=620e728a
-        a=QmhVwYW7bC54/XG34QDJIg==:117 a=QmhVwYW7bC54/XG34QDJIg==:17
-        a=sfOm8-O8AAAA:8 a=fnsQhsnqeVFlupmvOtAA:9 a=TvTJqdcANYtsRzA46cdi:22
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,
-        SPOOFED_FREEMAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] nds32: add a Kconfig symbol for LOCKDEP_SUPPORT
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alan Kao <alankao@andestech.com>, kclin@andestech.com
+References: <20210517031354.9646-1-rdunlap@infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20210517031354.9646-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add #define STMFTS_RETRY_COUNT 3 to retry stmfts_command() 3 times.
-Without it, STMFTS_SYSTEM_RESET or STMFTS_SLEEP_OUT may return -110 to
-failed attempt due to no event received for completion.
+Add Alan and KC.
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
----
- drivers/input/touchscreen/stmfts.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+On 5/16/21 20:13, Randy Dunlap wrote:
+> Each architecture (arch/) should define its own LOCKDEP_SUPPORT
+> Kconfig symbol (if it is needed). arch/nds32/ is the only one
+> that does "select LOCKDEP_SUPPORT", which is basically a no-op
+> since the symbol is not defined. (It might be nice for kconfig
+> to warn about that.)
+> 
+> Add a "config LOCKDEP_SUPPORT" to arch/nds32/Kconfig to correct
+> this issue.
+> 
+> Since the current Kconfig file selects LOCKDEP_SUPPORT unconditionally,
+> use "def_bool y" to set/enable it always.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Nick Hu <nickhu@andestech.com>
+> Cc: Greentime Hu <green.hu@gmail.com>
+> Cc: Vincent Chen <deanbo422@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  arch/nds32/Kconfig |    4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> --- linux-next-20210514.orig/arch/nds32/Kconfig
+> +++ linux-next-20210514/arch/nds32/Kconfig
+> @@ -36,7 +36,6 @@ config NDS32
+>  	select HAVE_REGS_AND_STACK_ACCESS_API
+>  	select HAVE_PERF_EVENTS
+>  	select IRQ_DOMAIN
+> -	select LOCKDEP_SUPPORT
+>  	select MODULES_USE_ELF_RELA
+>  	select OF
+>  	select OF_EARLY_FLATTREE
+> @@ -64,6 +63,9 @@ config GENERIC_LOCKBREAK
+>  	def_bool y
+>  	depends on PREEMPTION
+>  
+> +config LOCKDEP_SUPPORT
+> +	def_bool y
+> +
+>  config TRACE_IRQFLAGS_SUPPORT
+>  	def_bool y
+>  
 
-diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
-index bc11203c9cf7..d36be85a980e 100644
---- a/drivers/input/touchscreen/stmfts.c
-+++ b/drivers/input/touchscreen/stmfts.c
-@@ -68,6 +68,7 @@
- #define STMFTS_DATA_MAX_SIZE	(STMFTS_EVENT_SIZE * STMFTS_STACK_DEPTH)
- #define STMFTS_MAX_FINGERS	10
- #define STMFTS_DEV_NAME		"stmfts"
-+#define STMFTS_RETRY_COUNT	3
- 
- enum stmfts_regulators {
- 	STMFTS_REGULATOR_VDD,
-@@ -317,19 +318,20 @@ static irqreturn_t stmfts_irq_handler(int irq, void *dev)
- 
- static int stmfts_command(struct stmfts_data *sdata, const u8 cmd)
- {
--	int err;
-+	int err, retry;
- 
- 	reinit_completion(&sdata->cmd_done);
- 
--	err = i2c_smbus_write_byte(sdata->client, cmd);
--	if (err)
--		return err;
--
--	if (!wait_for_completion_timeout(&sdata->cmd_done,
--					 msecs_to_jiffies(1000)))
--		return -ETIMEDOUT;
-+	for (retry = 0; retry < STMFTS_RETRY_COUNT; retry++) {
-+		err = i2c_smbus_write_byte(sdata->client, cmd);
-+		if (err)
-+			return err;
- 
--	return 0;
-+		if (wait_for_completion_timeout(&sdata->cmd_done,
-+						msecs_to_jiffies(1000)))
-+			return 0;
-+	}
-+	return -ETIMEDOUT;
- }
- 
- static int stmfts_input_open(struct input_dev *dev)
+Anybody out there for Andes?
+
 -- 
-2.30.2
-
+~Randy

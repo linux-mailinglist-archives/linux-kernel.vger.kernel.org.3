@@ -2,119 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D694BA736
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF614BA735
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243737AbiBQRd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:33:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43852 "EHLO
+        id S243743AbiBQRd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:33:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiBQRd0 (ORCPT
+        with ESMTP id S232550AbiBQRdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:33:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087A515F353
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:33:11 -0800 (PST)
-Date:   Thu, 17 Feb 2022 18:33:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645119188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g46W2ujMzZ0SbZmNOAXSHQ2Kv0SmQ9Y1FWBTwikBicA=;
-        b=wRZEerD+adqSR/+xcb9EvZcSBM/QVOiCFzR7BoBpPdygu+sGYrXbnnOPidqSLhnw/qGxu0
-        uRIRqBQDjcC2GRl7MuYdoo1lKa4lSdPu9xowRDXjwYTx6MKi6p/vFhCXOMoyNPd56v0poe
-        WEh1H7BP0/0pQvL8DRMup0hFeIE/FEmH08hJh+XPG96j5XPCPjlWw1A2nBYiNriMNQC2Gv
-        DeHdEhu2fSs7ZMAD767TyKd4IOOddTvzG0EP09Y1If5MJeohKmTuezWSNYMtluzfv9DamJ
-        xnTse5y7x3Jb/oPS1XSjaUn72laui2gFJewyGCQRy5lhUSXZ3Jm09UfiK1FRQA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645119188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g46W2ujMzZ0SbZmNOAXSHQ2Kv0SmQ9Y1FWBTwikBicA=;
-        b=lcoMp3hftWA+yXVSqoHe+fD5HGlbPTHdTHa10wrGiw6nhwwCJlz2TSWoTd2EDwYhV1heiu
-        a2HgKToD99OgJgDQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Jann Horn <jannh@google.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v3] random: remove batched entropy locking
-Message-ID: <Yg6G08tFN5kjamG2@linutronix.de>
-References: <CAHmME9pO41uwYExSROc5X2+RE=a5tZfE=c=bAxVbhCHfa7=zSA@mail.gmail.com>
- <20220204155142.56419-1-Jason@zx2c4.com>
- <Yf1M3YGVq71oC9BM@linutronix.de>
- <CAG48ez1ucJikx_6GzK2XUfCGoTeL+R418riTn+ECj_ud5BSFow@mail.gmail.com>
- <CAHmME9q6bm_pXer0aVq907-RevtH8nLPH=Uo2UU6gEKU6GaFwA@mail.gmail.com>
+        Thu, 17 Feb 2022 12:33:55 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE1316040B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:33:41 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id p8so253599pfh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:33:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=1+wuSPGqInJTXF1WSMnW5S9JPVd8nQUvsA9MXOgLl5Y=;
+        b=Wkc2oSrjSh4TA0XpeyKv0Bm4R4h/s30wRvOf8CT4gKf6jVrd4pDNFrIVpJM4DeIXrb
+         ZLfuIXPRjPP3BnxrFR95/39P48/R4v+Od/x83dS9YbbBmyRaKZJoWb5DagXVHMsVAF7z
+         8A27B+FqTyQTJuxibjSTuA+WKhsu6p6Ysx6hdyAEe0iIYcWiDR0iHJ1081+iPFmvsEdA
+         OKDnPIfvEyumyRef/6hPzkS3YsSGEn6gWPGzjPO/upatf1OMOcyJpVCT0Nyze7Utpzux
+         G5TRfWhBqD1sOgTGRslQEVt9nRyKsk3J5w6sTBWi++cg3f55nEelbLonP9+4B708D6aI
+         +GOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=1+wuSPGqInJTXF1WSMnW5S9JPVd8nQUvsA9MXOgLl5Y=;
+        b=sZ5ScrpjWnUh/7bf/xP9G+i6xWzmL7sf46sZRxEM4PK1umHweH5Won+SMtgs2F2Dkb
+         rYzU+nVEz/MurfAGx17CBpj21UZyTrmGqwqzICwDdBDB/1UGMJp8eE5S7Qq04QumbNTA
+         Bq1F+kQwpvLl9H3e/7nVAG6pY8BpXt/PKeFfNJiDvNvcx50aMXm7cFX9INN0MAHRn/N8
+         RmaSP+bLw/ryswMeZlTgMzF96dGJ4o5KnTyxXsk0Le7Uz8BQTDosX3O3ExxwqHoth8Wv
+         rYc9VCuvNzbcJ8ssyuDMk789pjR4BWfGrb9/A32CWwdOGAPXBb4lTVFk5qV6C4BTMXh1
+         ecQg==
+X-Gm-Message-State: AOAM533RcX5LoQzu8qeIbU0adHBFQFJzwKKq2sFshbH4t4ay4RFsJPVn
+        1c0iymhMmvBBzbFK58Gmb5xoWw==
+X-Google-Smtp-Source: ABdhPJze4gieq0ct1TT7Ps/SdFLgZ8xxBvl3uLHHh/hPaULz3jZY14KfmoWmBaWhGUX5Y5kj1PqEcw==
+X-Received: by 2002:a63:2ac4:0:b0:373:6cfb:fc77 with SMTP id q187-20020a632ac4000000b003736cfbfc77mr3231847pgq.529.1645119220927;
+        Thu, 17 Feb 2022 09:33:40 -0800 (PST)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id q4sm8854188pgn.42.2022.02.17.09.33.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 09:33:40 -0800 (PST)
+Message-ID: <d9b6c79b-3bd9-579d-59f4-bd1f0e9eaa4c@linaro.org>
+Date:   Thu, 17 Feb 2022 09:33:39 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9q6bm_pXer0aVq907-RevtH8nLPH=Uo2UU6gEKU6GaFwA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Borislav Petkov <bp@suse.de>, x86-ml <x86@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>, zhangqiao22@huawei.com,
+        tj@kernel.org, dietmar.eggemann@arm.com
+References: <Ygj7feK+vdtPw6zj@zn.tnic>
+ <CAHk-=wiHUWHHcPLCvyXQKf2wbL3L1SOQSGVuCdf-py6QZGnuqQ@mail.gmail.com>
+ <YgoWoh6pIzlsQx6d@hirez.programming.kicks-ass.net>
+ <YgoeCbwj5mbCR0qA@hirez.programming.kicks-ass.net>
+ <Yg4MdYLBqiw8zFaF@hirez.programming.kicks-ass.net>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH] sched: Fix yet more sched_fork() races
+In-Reply-To: <Yg4MdYLBqiw8zFaF@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-16 21:58:14 [+0100], Jason A. Donenfeld wrote:
-> > Why raw_cpu_ptr? include/linux/percpu-defs.h says about raw_*() operations:
-> >
-> >  * Operations for contexts where we do not want to do any checks for
-> >  * preemptions.  Unless strictly necessary, always use [__]this_cpu_*()
-> >  * instead.
-> >
-> > So when I see a raw_*() percpu thing, I read it as "it is expected
-> > that we can migrate after this point (or we're in some really weird
-> > context where the normal context check doesn't work)". Is that
-> > incorrect?
+On 2/17/22 00:51, Peter Zijlstra wrote:
+> On Mon, Feb 14, 2022 at 10:16:57AM +0100, Peter Zijlstra wrote:
+>> Zhang, Tadeusz, TJ, how does this look?
 > 
-> If it says "contexts where we do not want to do any checks for
-> preemptions", then that would apply here I would think? We're taking a
-> local lock, which means afterwards there are no preemptions. For
-> context, the code that got committed after Sebastian's final review
-> is:
+> *sigh* I was hoping for some Tested-by, since I've no idea how to
+> operate this cgroup stuff properly.
 > 
->         local_lock_irqsave(&batched_entropy_u32.lock, flags);
->         batch = raw_cpu_ptr(&batched_entropy_u32);
-> 
-> However, I think most other code uses this_cpu_ptr() instead? So not sure.
+> Anyway, full patch below. I'll go stick it in sched/urgent.
 
-It depends what you are looking for.
-raw_cpu_ptr(&batched_entropy_u32) give you the pointer to
-&batched_entropy_u32 of _this_ CPU - the CPU you are currently running.
-this_cpu_ptr() does the same except that it has smp_processor_id() in
-it. smp_processor_id() will yell at you (given you enabled
-CONFIG_DEBUG_PREEMPT) if the code can migrate to another CPU.
-So it will yell at you unless:
-- you disable preemption / migration so code can't migrate
-- you run on a per-CPU thread i.e. a thread which is bound to a single
-  CPU and therefore can't migrate to another.
+Just tested it on 5.17.0-rc4 and it looks ok.
 
-The local_lock_irqsave() acquires a lock / disables interrupt and
-therefore can't migrate. So I suggested to use raw_cpu_ptr() as an
-optimisation in the debug-case.
+Tested-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-If you disable preemption before accessing a per-CPU variable with
-this_cpu_ptr() then you _need_ to ensure that nobody is accessing the
-variable from in-IRQ context. Nobody will yell at you. But if you use a
-local-lock then you get lockdep annotation and lockdep will complain if
-you use that variable always in process context and sometimes in-IRQ.
-
-> Jason
-
-Sebastian
+-- 
+Thanks,
+Tadeusz

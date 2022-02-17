@@ -2,853 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7FE4B9FB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548494B9FC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240242AbiBQMHo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Feb 2022 07:07:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38330 "EHLO
+        id S240270AbiBQMIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:08:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiBQMHl (ORCPT
+        with ESMTP id S240256AbiBQMIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:07:41 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C1E5FFA;
-        Thu, 17 Feb 2022 04:07:25 -0800 (PST)
-Received: from dggeme711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JztpH4XZBzbkQT;
-        Thu, 17 Feb 2022 20:06:15 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggeme711-chm.china.huawei.com (10.1.199.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Thu, 17 Feb 2022 20:07:22 +0800
-Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
- dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2308.021;
- Thu, 17 Feb 2022 20:07:22 +0800
-From:   "Gonglei (Arei)" <arei.gonglei@huawei.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>,
-        "mst@redhat.com" <mst@redhat.com>
-CC:     "jasowang@redhat.com" <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        kernel test robot <lkp@intel.com>
-Subject: RE: [PATCH v2 3/3] virtio-crypto: implement RSA algorithm
-Thread-Topic: [PATCH v2 3/3] virtio-crypto: implement RSA algorithm
-Thread-Index: AQHYHyNdmQ1PUS7bOkm8+NDZ9iI5BayXq8sQ
-Date:   Thu, 17 Feb 2022 12:07:22 +0000
-Message-ID: <c9144b0d82e34566a960f210ddc32696@huawei.com>
-References: <20220211084108.1254218-1-pizhenwei@bytedance.com>
- <20220211084108.1254218-4-pizhenwei@bytedance.com>
-In-Reply-To: <20220211084108.1254218-4-pizhenwei@bytedance.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.149.11]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 17 Feb 2022 07:08:37 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31256378;
+        Thu, 17 Feb 2022 04:08:20 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HBjht2021438;
+        Thu, 17 Feb 2022 12:07:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=nKpPv/o/oIGYZJ/IhGUMA9JZVd1tqItJCW+GQKKHDV0=;
+ b=njHQUQrSZXusS7QUiosIjAWKRHZEl5zehsUCc8XGNmm9OJwkF4KauSsXwXUPmco/nA02
+ d/exocelk2sKC9rb857nQsmVlSlLG5aNQHaQO1oHvGV7KrN2++cPYEhPo24Mw3ZbRtzU
+ LeekSThp+omaoaiOxeLefNUqlixKm5TQJCjyc+tAZOOJzcalZTUhOicNLg6XvW7mSOqK
+ 8/fwA5ojAvfW/6t+2uXYIGpLKYObkedRCbmvjgV8ACiwfieing20VyVoqHOpwfSzeOnW
+ bH+PFANNQxLlS70+OzGh6HwGbEI7MqCSV52PMf81xeJt9XWyubC/n9BH6ahovO/7eWiO KQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e8n3fd6a7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Feb 2022 12:07:42 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21HC0dLs163585;
+        Thu, 17 Feb 2022 12:07:41 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2172.outbound.protection.outlook.com [104.47.58.172])
+        by aserp3030.oracle.com with ESMTP id 3e9brc9wc6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Feb 2022 12:07:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QrbhRyfg8ydOc/n/tKYM/WbMb4Kpu1qDmdsfG+pUxB8Bh20WDuUIlGmDKvrcOQ3HqplPsLOrFK/Ig3jwauFwOpUUXcqhEaSj+1WYVw9XP55xUMODmMO6N4+Gd9cPNkEkXtaBThuKkvKAoT+tCZKTX952CmmBIER2WnZ5QwPzPIVOvjPp9walEtOsS2ebFoQ2cARE93V+N7Jg1nzudWG15J0iV0gi4brzl1Uzawi92MeVBBo+kHD7XdNqZZ6SmwhHnkKZy9lLAJT9s4GhNMM6J0h4sXMrelxVqBAH73FBdnIYzm+I0nyBHCx/UJAoTa/CoEi8uor2XQYCQgUcbdSrIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nKpPv/o/oIGYZJ/IhGUMA9JZVd1tqItJCW+GQKKHDV0=;
+ b=fyUqixjJW1z22J9fggaBChQSPNxxtgeBJRmA5zwD6ghLGel/xIWTJwm+95ds8Gb8jYvrpjFYR5Yt/7zvfXkh8F1v2tCz0WHRhie/xdnrpCtTwscb/kkZTwJUlS1cwqvh0LANBbwIVo8fEbgYKNXMbK4bNh0+5Q1n1n/UdfOPYCgwAzucfURm1AMe6NFPiTaDiBpxnwI2J9KW2CSpGsiHm36MxdCieKs6GjuGIS/5CTrlViP1kKJisVPEwbrGK7IgL795bR+cUsElGe+INFot74JTLFwBnH+yM+hEP9DH7r5Xa8EAurIyKlpnuCMtDC9/e8aVzMo0TuG1UKUB6lhOxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nKpPv/o/oIGYZJ/IhGUMA9JZVd1tqItJCW+GQKKHDV0=;
+ b=oFgA5oLiOF90qIyJ9GeKjGU7I3jMnH+vc1mZ2i86lMj+kxHYn+Y6RFdt9cUbhnpg4g5J11VoP8BfRsVPZMqmsFYd6cNXd3XXFtfPNOxrDUX28FDscoJLY6xHC0J0KjfozfCA4kWDBGEGf/XFnoMSxz53/4pDKiPFMi5jTc2lem4=
+Received: from DS7PR10MB4926.namprd10.prod.outlook.com (2603:10b6:5:3ac::20)
+ by MN2PR10MB3533.namprd10.prod.outlook.com (2603:10b6:208:118::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15; Thu, 17 Feb
+ 2022 12:07:39 +0000
+Received: from DS7PR10MB4926.namprd10.prod.outlook.com
+ ([fe80::e429:a820:ef6e:98d9]) by DS7PR10MB4926.namprd10.prod.outlook.com
+ ([fe80::e429:a820:ef6e:98d9%6]) with mapi id 15.20.4995.017; Thu, 17 Feb 2022
+ 12:07:39 +0000
+From:   David Edmondson <david.edmondson@oracle.com>
+To:     Leonardo Bras <leobras@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        David Gilbert <dgilbert@redhat.com>,
+        Peter Xu <peterx@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] x86/kvm/fpu: Mask guest fpstate->xfeatures with
+ guest_supported_xcr0
+References: <20220217053028.96432-1-leobras@redhat.com>
+        <20220217053028.96432-2-leobras@redhat.com>
+Date:   Thu, 17 Feb 2022 12:07:32 +0000
+In-Reply-To: <20220217053028.96432-2-leobras@redhat.com> (Leonardo Bras's
+        message of "Thu, 17 Feb 2022 02:30:29 -0300")
+Message-ID: <cunmtippugr.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0232.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a6::21) To DS7PR10MB4926.namprd10.prod.outlook.com
+ (2603:10b6:5:3ac::20)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f2ff970e-ec1c-4656-7e08-08d9f20e17b2
+X-MS-TrafficTypeDiagnostic: MN2PR10MB3533:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR10MB3533F1E51A1F190427AF2F3288369@MN2PR10MB3533.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sw7+vLA31CpI/dvgnumKJ0ltZpDQSGhI/kp5bVf7Ny0iPBLQB+cuUHIbBsSlB3WJ/bx8QFm/ckeeJt+0yNAwI0OkHp5RZsOIeINoCUFkPygcodPzx+bZDRrARIS143aS5oeWDb706mu6STZ9GFFr6MwIdBFvq0T0MO9sMm5Z44NdcKfAamgF3lpW9AJ3HJNKMv1Z3yXjgdHvKTHg0RlHLZNEAyj3/NBb+7iLHuDv0C8HuodJ3TrM9REOgOrm0/dTfWgxP7wktEK+Lo/NgazCjXGMIRlDkvLLH5LIHyCcW1b4JZRmOAx/iVLIz3BJ3sVEF07+i59ikMvBx5oAibaF+9PUgCFfNr4NSSmHaYKDBLwUyDoLGdWixIBRHP/PNduL6ldVc6O9Q2xcdZVa3tlW3g/TWACzzpWk0Vqzis/HGLdclOgRPDLG1GY7ekBnUTFY+Uyv0T/Mc2Q7J/nhiohkLlME0TvC9Ai+8uzUM/YzXbjuCXVNONDsI4+oNhVhhAdPmDx/t2nI62mBVilx3ngXbAZagBtRgl4myR8T0q3lW7PKlFAspepYvdyBUuaABKWxHoCfq/Z/LQgM4LCt5LCb7aJs5AB9D2JFKDuL804n46MSf2AYCRqjXg2zenQ0nvhhKuiqHf5ZNWDJ6RIQjxI1WlDVCK4BrayXL7PDvRuwdDh3CbGaVJH5noM513ohUQXH3wfs87FUoSIm0n6BDZYmnA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB4926.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(83380400001)(6512007)(6506007)(52116002)(66476007)(2906002)(38100700002)(36756003)(66946007)(66556008)(8936002)(6666004)(86362001)(7416002)(44832011)(5660300002)(2616005)(8676002)(6916009)(6486002)(316002)(508600001)(4326008)(54906003)(4226005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YXdbABjnHPd+yjw1eWNlOUYfrD4z1K3SMBIEiFBi9BzxFyIZwP2Tn90ZlvS1?=
+ =?us-ascii?Q?+qwddDeHLYJnvt2+DXBPk/lQkZckMNyyRjC3nK7XbZaHtYFwCRUxp+UvMJ9S?=
+ =?us-ascii?Q?c7ix5WI/ufzo2Oe8TrTj/VUveOEnfXoby8p9F9RaWqjWQIw21rMcy9wLxvNV?=
+ =?us-ascii?Q?3wCB//fQ5zksxbbb75ZbPmEcWOoAbnUhbDlvkXJSFioUwsbXyR+eZeoXdjoG?=
+ =?us-ascii?Q?El06AHy3dCQ12cy4sg2RBCeB6FrB84aa2LNMb1zw7JWEuDdTuBOx3v2GmvfY?=
+ =?us-ascii?Q?Z9nABw9MO3ePV5UnUdnsFm8JXTsHNgvGjQCcgvlEPM/x7kjQwbT2CtI8ccUY?=
+ =?us-ascii?Q?beZ5kp8BGrqiD90MVtKOR8CeHP/fUYyDa0ZIYwVPhPoK01dqBDkIfqmxR0sE?=
+ =?us-ascii?Q?nvp+1cbwfeYps4QawqPd/pb5mQA1wJxCp6Ypn3miHa2upyCfOPXUkYfvyFCU?=
+ =?us-ascii?Q?NObHQgNJkgNvsqBtYZOPswwYDePJ3xHuLqDo8IMKglKc1CRs4u093W5lB2s3?=
+ =?us-ascii?Q?HqLrRsK2DlIchEH3agJ2QqLsm+aAnEyNowHtWeAN/23wMIAz3Kr4JMgxI8/I?=
+ =?us-ascii?Q?hRkHP0FtCO9B25U4EjKLs9w4zzFAI85H4rZ1pdQATCOrMophTJR55UlN0Gu6?=
+ =?us-ascii?Q?Jt7j4fpoYVtCNNUNmR5kkSrKrsnhmrRJgAF8vXOHIM+KUKliwhjZPepQuOvH?=
+ =?us-ascii?Q?EyhjlyKYtOfNrbdk2r9PQ5/hBh2mo32VWT+MA3w4oQvVcf0U8agywv/4eypb?=
+ =?us-ascii?Q?ULRMdd6hjECSr0yaxfMgp5cjo2TLFpkIneK1Mrs0CbnrxoTPqNgsblWC9gu8?=
+ =?us-ascii?Q?rseMDwXMI+1zAYmW41mTBlsOMgqZNwP2frxqnsomN3VVQOB3TrDJyq+5elsV?=
+ =?us-ascii?Q?E9FaHIa3QWui/TkMCSBA6JcMvBmTzCraZVbkHPbl5CwlBlgsIo0omt29rnZF?=
+ =?us-ascii?Q?2TPKF0AMAuamiY6XXItWQp/1X2XQVSs8OAFsT14Q+1BT6G3vcLpeRsQ456tW?=
+ =?us-ascii?Q?aO2EBwB90cVgc/mSlZoTTh1C/uFVRX8/wRWVCgZzLRzUXRoceju3/5qRCUh3?=
+ =?us-ascii?Q?SNXUwiXz/pYpAbQys/ReUH4RF8ws4ymuOkaB5MiWmMtMpOH61qYFLa6do0Rc?=
+ =?us-ascii?Q?OEce7ojV0I09Nw/wN6xCztJ9wOHNAKcIhCUgBEZPmDKDlTBnQNGwMVBLH4N5?=
+ =?us-ascii?Q?0lRLowdOaNK1SE5OQa2Ng8KFhAOOm2ZgbpbJWbUEfVMU8CHvi8WY/jpMHNWV?=
+ =?us-ascii?Q?RAVr5sTcceiWWytPYP5YZOgFuAzczQujlNX3BuAeyJtnOp1Nmjy3t0v99HMV?=
+ =?us-ascii?Q?CCuWDkHrwKHnMcm8r2nYXihzIh3lN4X4df1r6vgcsDJiOirEKlKyTn9x5x3+?=
+ =?us-ascii?Q?hteeiv8IY2+fWldc5sUQjZxDWOzavd3EKKXjSBXfhcPZL26zyhQ9FedHTAVi?=
+ =?us-ascii?Q?BfYZKEMn/Cck9MU6EjVn+7X6XVO7ezPlLn09jNRSXHTmiebLUU1C978i7NZE?=
+ =?us-ascii?Q?rHZ4+4qQjlfuTa+WjVOyRW1cV+r8oRuHgzh9yfrbcT2UmB3S3ldMmw6IvllI?=
+ =?us-ascii?Q?VLJpXr2kWHqVN6cVRnKR1IWZxNdP7meajYtVjxpG81GFQcpSdOT52eo4Bgf4?=
+ =?us-ascii?Q?/hCXzpT9QehIa23jXuuTazmerYKSef0Yd0Z3F/YYizKNM2h5ekOp0rVe9bHU?=
+ =?us-ascii?Q?EBVvPZt0MQV1a5m8WCsNqYy8QdY3NUax2AXCh849zLQpwvao?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2ff970e-ec1c-4656-7e08-08d9f20e17b2
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB4926.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 12:07:39.1923
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yjJT4ljho7+EpqFSPvfJeUH+BYrf9tBFF/okj4s0tlk87P76Sztp8SVrzfyKOTBWt9h3B+7MXmMKXONvGGdBl/znFTUSH0GWZdkxVGB36Bc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3533
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10260 signatures=675971
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202170054
+X-Proofpoint-GUID: 29Npygn_LMhsaU-a3UmgljZjRHiERJmW
+X-Proofpoint-ORIG-GUID: 29Npygn_LMhsaU-a3UmgljZjRHiERJmW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The single line summary is now out of date - there's no new masking.
 
+On Thursday, 2022-02-17 at 02:30:29 -03, Leonardo Bras wrote:
 
-> -----Original Message-----
-> From: zhenwei pi [mailto:pizhenwei@bytedance.com]
-> Sent: Friday, February 11, 2022 4:41 PM
-> To: Gonglei (Arei) <arei.gonglei@huawei.com>; mst@redhat.com
-> Cc: jasowang@redhat.com; virtualization@lists.linux-foundation.org;
-> linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org;
-> helei.sig11@bytedance.com; herbert@gondor.apana.org.au; zhenwei pi
-> <pizhenwei@bytedance.com>; kernel test robot <lkp@intel.com>
-> Subject: [PATCH v2 3/3] virtio-crypto: implement RSA algorithm
-> 
-> Support rsa & pkcs1pad(rsa,sha1) with priority 150.
-> 
-> Test with QEMU built-in backend, it works fine.
-> 1, The self-test framework of crypto layer works fine in guest kernel 2, Test with
-> Linux guest(with asym support), the following script test(note that pkey_XXX is
-> supported only in a newer version of keyutils):
->   - both public key & private key
->   - create/close session
->   - encrypt/decrypt/sign/verify basic driver operation
->   - also test with kernel crypto layer(pkey add/query)
-> 
-> All the cases work fine.
-> 
-> rm -rf *.der *.pem *.pfx
-> modprobe pkcs8_key_parser # if CONFIG_PKCS8_PRIVATE_KEY_PARSER=m rm
-> -rf /tmp/data dd if=/dev/random of=/tmp/data count=1 bs=226
-> 
-> openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -subj
-> "/C=CN/ST=BJ/L=HD/O=qemu/OU=dev/CN=qemu/emailAddress=qemu@qemu
-> .org"
-> openssl pkcs8 -in key.pem -topk8 -nocrypt -outform DER -out key.der openssl
-> x509 -in cert.pem -inform PEM -outform DER -out cert.der
-> 
-> PRIV_KEY_ID=`cat key.der | keyctl padd asymmetric test_priv_key @s` echo "priv
-> key id = "$PRIV_KEY_ID PUB_KEY_ID=`cat cert.der | keyctl padd asymmetric
-> test_pub_key @s` echo "pub key id = "$PUB_KEY_ID
-> 
-> keyctl pkey_query $PRIV_KEY_ID 0
-> keyctl pkey_query $PUB_KEY_ID 0
-> 
-> echo "Enc with priv key..."
-> keyctl pkey_encrypt $PRIV_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.priv echo
-> "Dec with pub key..."
-> keyctl pkey_decrypt $PRIV_KEY_ID 0 /tmp/enc.priv enc=pkcs1 >/tmp/dec cmp
-> /tmp/data /tmp/dec
-> 
-> echo "Sign with priv key..."
-> keyctl pkey_sign $PRIV_KEY_ID 0 /tmp/data enc=pkcs1 hash=sha1 > /tmp/sig
-> echo "Verify with pub key..."
-> keyctl pkey_verify $PRIV_KEY_ID 0 /tmp/data /tmp/sig enc=pkcs1 hash=sha1
-> 
-> echo "Enc with pub key..."
-> keyctl pkey_encrypt $PUB_KEY_ID 0 /tmp/data enc=pkcs1 >/tmp/enc.pub echo
-> "Dec with priv key..."
-> keyctl pkey_decrypt $PRIV_KEY_ID 0 /tmp/enc.pub enc=pkcs1 >/tmp/dec cmp
-> /tmp/data /tmp/dec
-> 
-> echo "Verify with pub key..."
-> keyctl pkey_verify $PUB_KEY_ID 0 /tmp/data /tmp/sig enc=pkcs1 hash=sha1
-> 
-> [1 compiling warning during development]
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> Co-developed-by: lei he <helei.sig11@bytedance.com>
-> Signed-off-by: lei he <helei.sig11@bytedance.com>
-> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+> During host/guest switch (like in kvm_arch_vcpu_ioctl_run()), the kernel
+> swaps the fpu between host/guest contexts, by using fpu_swap_kvm_fpstate().
+>
+> When xsave feature is available, the fpu swap is done by:
+> - xsave(s) instruction, with guest's fpstate->xfeatures as mask, is used
+>   to store the current state of the fpu registers to a buffer.
+> - xrstor(s) instruction, with (fpu_kernel_cfg.max_features &
+>   XFEATURE_MASK_FPSTATE) as mask, is used to put the buffer into fpu regs.
+>
+> For xsave(s) the mask is used to limit what parts of the fpu regs will
+> be copied to the buffer. Likewise on xrstor(s), the mask is used to
+> limit what parts of the fpu regs will be changed.
+>
+> The mask for xsave(s), the guest's fpstate->xfeatures, is defined on
+> kvm_arch_vcpu_create(), which (in summary) sets it to all features
+> supported by the cpu which are enabled on kernel config.
+>
+> This means that xsave(s) will save to guest buffer all the fpu regs
+> contents the cpu has enabled when the guest is paused, even if they
+> are not used.
+>
+> This would not be an issue, if xrstor(s) would also do that.
+>
+> xrstor(s)'s mask for host/guest swap is basically every valid feature
+> contained in kernel config, except XFEATURE_MASK_PKRU.
+> Accordingto kernel src, it is instead switched in switch_to() and
+> flush_thread().
+>
+> Then, the following happens with a host supporting PKRU starts a
+> guest that does not support it:
+> 1 - Host has XFEATURE_MASK_PKRU set. 1st switch to guest,
+> 2 - xsave(s) fpu regs to host fpustate (buffer has XFEATURE_MASK_PKRU)
+> 3 - xrstor(s) guest fpustate to fpu regs (fpu regs have XFEATURE_MASK_PKRU)
+> 4 - guest runs, then switch back to host,
+> 5 - xsave(s) fpu regs to guest fpstate (buffer now have XFEATURE_MASK_PKRU)
+> 6 - xrstor(s) host fpstate to fpu regs.
+> 7 - kvm_vcpu_ioctl_x86_get_xsave() copy guest fpstate to userspace (with
+>     XFEATURE_MASK_PKRU, which should not be supported by guest vcpu)
+>
+> On 5, even though the guest does not support PKRU, it does have the flag
+> set on guest fpstate, which is transferred to userspace via vcpu ioctl
+> KVM_GET_XSAVE.
+>
+> This becomes a problem when the user decides on migrating the above guest
+> to another machine that does not support PKRU:
+> The new host restores guest's fpu regs to as they were before (xrstor(s)),
+> but since the new host don't support PKRU, a general-protection exception
+> ocurs in xrstor(s) and that crashes the guest.
+>
+> This can be solved by making the guest's fpstate->user_xfeatures hold
+> a copy of guest_supported_xcr0. This way, on 7 the only flags copied to
+> userspace will be the ones compatible to guest requirements, and thus
+> there will be no issue during migration.
+>
+> As a bonus, it will also fail if userspace tries to set fpu features
+> that are not compatible to the guest configuration. (KVM_SET_XSAVE ioctl)
+>
+> Also, since kvm_vcpu_after_set_cpuid() now sets fpstate->user_xfeatures,
+> there is not need to set it in kvm_check_cpuid(). So, change
+> fpstate_realloc() so it does not touch fpstate->user_xfeatures if a
+> non-NULL guest_fpu is passed, which is the case when kvm_check_cpuid()
+> calls it.
+>
+> Signed-off-by: Leonardo Bras <leobras@redhat.com>
 > ---
->  drivers/crypto/virtio/Makefile                |   1 +
->  .../virtio/virtio_crypto_akcipher_algo.c      | 584 ++++++++++++++++++
->  drivers/crypto/virtio/virtio_crypto_common.h  |   3 +
->  drivers/crypto/virtio/virtio_crypto_core.c    |   6 +-
->  drivers/crypto/virtio/virtio_crypto_mgr.c     |  11 +
->  5 files changed, 604 insertions(+), 1 deletion(-)  create mode 100644
-> drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
-> 
-> diff --git a/drivers/crypto/virtio/Makefile b/drivers/crypto/virtio/Makefile index
-> cbfccccfa135..06b23c5e784e 100644
-> --- a/drivers/crypto/virtio/Makefile
-> +++ b/drivers/crypto/virtio/Makefile
-> @@ -2,5 +2,6 @@
->  obj-$(CONFIG_CRYPTO_DEV_VIRTIO) += virtio_crypto.o  virtio_crypto-objs :=
-> \
->  	virtio_crypto_algs.o \
-> +	virtio_crypto_akcipher_algo.o \
->  	virtio_crypto_mgr.o \
->  	virtio_crypto_core.o
-> diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
-> b/drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
-> new file mode 100644
-> index 000000000000..2b3f8780b755
-> --- /dev/null
-> +++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
-> @@ -0,0 +1,584 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> + /* Asymmetric algorithms supported by virtio crypto device
-> +  *
-> +  * Authors: zhenwei pi <pizhenwei@bytedance.com>
-> +  *          lei he <helei.sig11@bytedance.com>
-> +  *
-> +  * Copyright 2022 Bytedance CO., LTD.
-> +  */
-> +
-> +#include <linux/mpi.h>
-> +#include <linux/scatterlist.h>
-> +#include <crypto/algapi.h>
-> +#include <crypto/internal/akcipher.h>
-> +#include <crypto/internal/rsa.h>
-> +#include <linux/err.h>
-> +#include <crypto/scatterwalk.h>
-> +#include <linux/atomic.h>
-> +
-> +#include <uapi/linux/virtio_crypto.h>
-> +#include "virtio_crypto_common.h"
-> +
-> +struct virtio_crypto_rsa_ctx {
-> +	MPI n;
-> +};
-> +
-> +struct virtio_crypto_akcipher_ctx {
-> +	struct crypto_engine_ctx enginectx;
-> +	struct virtio_crypto *vcrypto;
-> +	struct crypto_akcipher *tfm;
-> +	bool session_valid;
-> +	__u64 session_id;
-> +	union {
-> +		struct virtio_crypto_rsa_ctx rsa_ctx;
-> +	};
-> +};
-> +
-> +struct virtio_crypto_akcipher_request {
-> +	struct virtio_crypto_request base;
-> +	struct virtio_crypto_akcipher_ctx *akcipher_ctx;
-> +	struct akcipher_request *akcipher_req;
-> +	void *src_buf;
-> +	void *dst_buf;
-> +	uint32_t opcode;
-> +};
-> +
-> +struct virtio_crypto_akcipher_algo {
-> +	uint32_t algonum;
-> +	uint32_t service;
-> +	unsigned int active_devs;
-> +	struct akcipher_alg algo;
-> +};
-> +
-> +static DEFINE_MUTEX(algs_lock);
-> +
-> +static void virtio_crypto_akcipher_finalize_req(
-> +	struct virtio_crypto_akcipher_request *vc_akcipher_req,
-> +	struct akcipher_request *req, int err) {
-> +	virtcrypto_clear_request(&vc_akcipher_req->base);
-> +
-> +	crypto_finalize_akcipher_request(vc_akcipher_req->base.dataq->engine,
-> +req, err); }
-> +
-> +static void virtio_crypto_dataq_akcipher_callback(struct
-> +virtio_crypto_request *vc_req, int len) {
-> +	struct virtio_crypto_akcipher_request *vc_akcipher_req =
-> +		container_of(vc_req, struct virtio_crypto_akcipher_request, base);
-> +	struct akcipher_request *akcipher_req;
-> +	int error;
-> +
-> +	switch (vc_req->status) {
-> +	case VIRTIO_CRYPTO_OK:
-> +		error = 0;
-> +		break;
-> +	case VIRTIO_CRYPTO_INVSESS:
-> +	case VIRTIO_CRYPTO_ERR:
-> +		error = -EINVAL;
-> +		break;
-> +	case VIRTIO_CRYPTO_BADMSG:
-> +		error = -EBADMSG;
-> +		break;
-> +
-> +	case VIRTIO_CRYPTO_KEY_REJECTED:
-> +		error = -EKEYREJECTED;
-> +		break;
-> +
-> +	default:
-> +		error = -EIO;
-> +		break;
-> +	}
-> +
-> +	akcipher_req = vc_akcipher_req->akcipher_req;
-> +	sg_copy_from_buffer(akcipher_req->dst, sg_nents(akcipher_req->dst),
-> +			    vc_akcipher_req->dst_buf, akcipher_req->dst_len);
-> +	virtio_crypto_akcipher_finalize_req(vc_akcipher_req, akcipher_req,
-> +error); }
-> +
-> +static int virtio_crypto_alg_akcipher_init_session(struct
-> virtio_crypto_akcipher_ctx *ctx,
-> +		struct virtio_crypto_ctrl_header *header, void *para,
-> +		const uint8_t *key, unsigned int keylen) {
-> +	struct scatterlist outhdr_sg, key_sg, inhdr_sg, *sgs[3];
-> +	struct virtio_crypto *vcrypto = ctx->vcrypto;
-> +	uint8_t *pkey;
-> +	unsigned int inlen;
-> +	int err;
-> +	unsigned int num_out = 0, num_in = 0;
-> +
-> +	pkey = kmemdup(key, keylen, GFP_ATOMIC);
-> +	if (!pkey)
-> +		return -ENOMEM;
-> +
-> +	spin_lock(&vcrypto->ctrl_lock);
-> +	memcpy(&vcrypto->ctrl.header, header, sizeof(vcrypto->ctrl.header));
-> +	memcpy(&vcrypto->ctrl.u, para, sizeof(vcrypto->ctrl.u));
-> +	vcrypto->input.status = cpu_to_le32(VIRTIO_CRYPTO_ERR);
-> +
-> +	sg_init_one(&outhdr_sg, &vcrypto->ctrl, sizeof(vcrypto->ctrl));
-> +	sgs[num_out++] = &outhdr_sg;
-> +
-> +	sg_init_one(&key_sg, pkey, keylen);
-> +	sgs[num_out++] = &key_sg;
-> +
-> +	sg_init_one(&inhdr_sg, &vcrypto->input, sizeof(vcrypto->input));
-> +	sgs[num_out + num_in++] = &inhdr_sg;
-> +
-> +	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, num_out, num_in, vcrypto,
-> GFP_ATOMIC);
-> +	if (err < 0)
-> +		goto out;
-> +
-> +	virtqueue_kick(vcrypto->ctrl_vq);
-> +	while (!virtqueue_get_buf(vcrypto->ctrl_vq, &inlen) &&
-> +	       !virtqueue_is_broken(vcrypto->ctrl_vq))
-> +		cpu_relax();
-> +
-> +	if (le32_to_cpu(vcrypto->input.status) != VIRTIO_CRYPTO_OK) {
-> +		err = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	ctx->session_id = le64_to_cpu(vcrypto->input.session_id);
-> +	ctx->session_valid = true;
-> +	err = 0;
-> +
-> +out:
-> +	spin_unlock(&vcrypto->ctrl_lock);
-> +	kfree_sensitive(pkey);
-> +
-> +	if (err < 0)
-> +		pr_err("virtio_crypto: Create session failed status: %u\n",
-> +			le32_to_cpu(vcrypto->input.status));
-> +
-> +	return err;
-> +}
-> +
-> +static int virtio_crypto_alg_akcipher_close_session(struct
-> +virtio_crypto_akcipher_ctx *ctx) {
-> +	struct scatterlist outhdr_sg, inhdr_sg, *sgs[2];
-> +	struct virtio_crypto_destroy_session_req *destroy_session;
-> +	struct virtio_crypto *vcrypto = ctx->vcrypto;
-> +	unsigned int num_out = 0, num_in = 0, inlen;
-> +	int err;
-> +
-> +	spin_lock(&vcrypto->ctrl_lock);
-> +	if (!ctx->session_valid) {
-> +		err = 0;
-> +		goto out;
-> +	}
-> +	vcrypto->ctrl_status.status = VIRTIO_CRYPTO_ERR;
-> +	vcrypto->ctrl.header.opcode =
-> cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_DESTROY_SESSION);
-> +	vcrypto->ctrl.header.queue_id = 0;
-> +
-> +	destroy_session = &vcrypto->ctrl.u.destroy_session;
-> +	destroy_session->session_id = cpu_to_le64(ctx->session_id);
-> +
-> +	sg_init_one(&outhdr_sg, &vcrypto->ctrl, sizeof(vcrypto->ctrl));
-> +	sgs[num_out++] = &outhdr_sg;
-> +
-> +	sg_init_one(&inhdr_sg, &vcrypto->ctrl_status.status,
-> sizeof(vcrypto->ctrl_status.status));
-> +	sgs[num_out + num_in++] = &inhdr_sg;
-> +
-> +	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, num_out, num_in, vcrypto,
-> GFP_ATOMIC);
-> +	if (err < 0)
-> +		goto out;
-> +
-> +	virtqueue_kick(vcrypto->ctrl_vq);
-> +	while (!virtqueue_get_buf(vcrypto->ctrl_vq, &inlen) &&
-> +	       !virtqueue_is_broken(vcrypto->ctrl_vq))
-> +		cpu_relax();
-> +
-> +	if (vcrypto->ctrl_status.status != VIRTIO_CRYPTO_OK) {
-> +		err = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	err = 0;
-> +	ctx->session_valid = false;
-> +
-> +out:
-> +	spin_unlock(&vcrypto->ctrl_lock);
-> +	if (err < 0) {
-> +		pr_err("virtio_crypto: Close session failed status: %u, session_id:
-> 0x%llx\n",
-> +			vcrypto->ctrl_status.status, destroy_session->session_id);
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +static int __virtio_crypto_akcipher_do_req(struct
-> virtio_crypto_akcipher_request *vc_akcipher_req,
-> +		struct akcipher_request *req, struct data_queue *data_vq) {
-> +	struct virtio_crypto_akcipher_ctx *ctx = vc_akcipher_req->akcipher_ctx;
-> +	struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
-> +	struct virtio_crypto *vcrypto = ctx->vcrypto;
-> +	struct virtio_crypto_op_data_req *req_data = vc_req->req_data;
-> +	struct scatterlist *sgs[4], outhdr_sg, inhdr_sg, srcdata_sg, dstdata_sg;
-> +	void *src_buf = NULL, *dst_buf = NULL;
-> +	unsigned int num_out = 0, num_in = 0;
-> +	int node = dev_to_node(&vcrypto->vdev->dev);
-> +	unsigned long flags;
-> +	int ret = -ENOMEM;
-> +	bool verify = vc_akcipher_req->opcode ==
-> VIRTIO_CRYPTO_AKCIPHER_VERIFY;
-> +	unsigned int src_len = verify ? req->src_len + req->dst_len :
-> +req->src_len;
-> +
-> +	/* out header */
-> +	sg_init_one(&outhdr_sg, req_data, sizeof(*req_data));
-> +	sgs[num_out++] = &outhdr_sg;
-> +
-> +	/* src data */
-> +	src_buf = kcalloc_node(src_len, 1, GFP_KERNEL, node);
-> +	if (!src_buf)
-> +		goto err;
-> +
-> +	if (verify) {
-> +		/* for verify operation, both src and dst data work as OUT direction */
-> +		sg_copy_to_buffer(req->src, sg_nents(req->src), src_buf, src_len);
-> +		sg_init_one(&srcdata_sg, src_buf, src_len);
-> +		sgs[num_out++] = &srcdata_sg;
-> +	} else {
-> +		sg_copy_to_buffer(req->src, sg_nents(req->src), src_buf, src_len);
-> +		sg_init_one(&srcdata_sg, src_buf, src_len);
-> +		sgs[num_out++] = &srcdata_sg;
-> +
-> +		/* dst data */
-> +		dst_buf = kcalloc_node(req->dst_len, 1, GFP_KERNEL, node);
-> +		if (!dst_buf)
-> +			goto err;
-> +
-> +		sg_init_one(&dstdata_sg, dst_buf, req->dst_len);
-> +		sgs[num_out + num_in++] = &dstdata_sg;
-> +	}
-> +
-> +	/* in header */
-> +	sg_init_one(&inhdr_sg, &vc_req->status, sizeof(vc_req->status));
-> +	sgs[num_out + num_in++] = &inhdr_sg;
-> +
-> +	spin_lock_irqsave(&data_vq->lock, flags);
-> +	ret = virtqueue_add_sgs(data_vq->vq, sgs, num_out, num_in, vc_req,
-> GFP_ATOMIC);
-> +	virtqueue_kick(data_vq->vq);
-> +	spin_unlock_irqrestore(&data_vq->lock, flags);
-> +	if (ret)
-> +		goto err;
-> +
-> +	vc_akcipher_req->src_buf = src_buf;
-> +	vc_akcipher_req->dst_buf = dst_buf;
-> +
-> +	return 0;
-> +
-> +err:
-> +	kfree(src_buf);
-> +	kfree(dst_buf);
-> +
-> +	return -ENOMEM;
-> +}
-> +
-> +static int virtio_crypto_rsa_do_req(struct crypto_engine *engine, void
-> +*vreq) {
-> +	struct akcipher_request *req = container_of(vreq, struct akcipher_request,
-> base);
-> +	struct virtio_crypto_akcipher_request *vc_akcipher_req =
-> akcipher_request_ctx(req);
-> +	struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
-> +	struct virtio_crypto_akcipher_ctx *ctx = vc_akcipher_req->akcipher_ctx;
-> +	struct virtio_crypto *vcrypto = ctx->vcrypto;
-> +	struct data_queue *data_vq = vc_req->dataq;
-> +	struct virtio_crypto_op_header *header;
-> +	struct virtio_crypto_akcipher_data_req *akcipher_req;
-> +	int ret;
-> +
-> +	vc_req->sgs = NULL;
-> +	vc_req->req_data = kzalloc_node(sizeof(*vc_req->req_data),
-> +		GFP_KERNEL, dev_to_node(&vcrypto->vdev->dev));
-> +	if (!vc_req->req_data)
-> +		return -ENOMEM;
-> +
-> +	/* build request header */
-> +	header = &vc_req->req_data->header;
-> +	header->opcode = cpu_to_le32(vc_akcipher_req->opcode);
-> +	header->algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
-> +	header->session_id = cpu_to_le64(ctx->session_id);
-> +
-> +	/* build request akcipher data */
-> +	akcipher_req = &vc_req->req_data->u.akcipher_req;
-> +	akcipher_req->para.src_data_len = cpu_to_le32(req->src_len);
-> +	akcipher_req->para.dst_data_len = cpu_to_le32(req->dst_len);
-> +
-> +	ret = __virtio_crypto_akcipher_do_req(vc_akcipher_req, req, data_vq);
-> +	if (ret < 0) {
-> +		kfree_sensitive(vc_req->req_data);
-> +		vc_req->req_data = NULL;
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int virtio_crypto_rsa_req(struct akcipher_request *req, uint32_t
-> +opcode) {
-> +	struct crypto_akcipher *atfm = crypto_akcipher_reqtfm(req);
-> +	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(atfm);
-> +	struct virtio_crypto_akcipher_request *vc_akcipher_req =
-> akcipher_request_ctx(req);
-> +	struct virtio_crypto_request *vc_req = &vc_akcipher_req->base;
-> +	struct virtio_crypto *vcrypto = ctx->vcrypto;
-> +	/* Use the first data virtqueue as default */
-> +	struct data_queue *data_vq = &vcrypto->data_vq[0];
-> +
-> +	vc_req->dataq = data_vq;
-> +	vc_req->alg_cb = virtio_crypto_dataq_akcipher_callback;
-> +	vc_akcipher_req->akcipher_ctx = ctx;
-> +	vc_akcipher_req->akcipher_req = req;
-> +	vc_akcipher_req->opcode = opcode;
-> +
-> +	return crypto_transfer_akcipher_request_to_engine(data_vq->engine,
-> +req); }
-> +
-> +static int virtio_crypto_rsa_encrypt(struct akcipher_request *req) {
-> +	return virtio_crypto_rsa_req(req, VIRTIO_CRYPTO_AKCIPHER_ENCRYPT); }
-> +
-> +static int virtio_crypto_rsa_decrypt(struct akcipher_request *req) {
-> +	return virtio_crypto_rsa_req(req, VIRTIO_CRYPTO_AKCIPHER_DECRYPT); }
-> +
-> +static int virtio_crypto_rsa_sign(struct akcipher_request *req) {
-> +	return virtio_crypto_rsa_req(req, VIRTIO_CRYPTO_AKCIPHER_SIGN); }
-> +
-> +static int virtio_crypto_rsa_verify(struct akcipher_request *req) {
-> +	return virtio_crypto_rsa_req(req, VIRTIO_CRYPTO_AKCIPHER_VERIFY); }
-> +
-> +static int virtio_crypto_rsa_set_key(struct crypto_akcipher *tfm,
-> +				     const void *key,
-> +				     unsigned int keylen,
-> +				     bool private,
-> +				     int padding_algo,
-> +				     int hash_algo)
-> +{
-> +	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
-> +	struct virtio_crypto_rsa_ctx *rsa_ctx = &ctx->rsa_ctx;
-> +	struct virtio_crypto *vcrypto;
-> +	struct virtio_crypto_ctrl_header header;
-> +	struct virtio_crypto_akcipher_session_para para;
-> +	struct rsa_key rsa_key = {0};
-> +	int node = virtio_crypto_get_current_node();
-> +	uint32_t keytype;
-> +	int ret;
-> +
-> +	/* mpi_free will test n, just free it. */
-> +	mpi_free(rsa_ctx->n);
-> +	rsa_ctx->n = NULL;
-> +
-> +	if (private) {
-> +		keytype = VIRTIO_CRYPTO_AKCIPHER_KEY_TYPE_PRIVATE;
-> +		ret = rsa_parse_priv_key(&rsa_key, key, keylen);
-> +	} else {
-> +		keytype = VIRTIO_CRYPTO_AKCIPHER_KEY_TYPE_PUBLIC;
-> +		ret = rsa_parse_pub_key(&rsa_key, key, keylen);
-> +	}
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	rsa_ctx->n = mpi_read_raw_data(rsa_key.n, rsa_key.n_sz);
-> +	if (!rsa_ctx->n)
-> +		return -ENOMEM;
-> +
-> +	if (!ctx->vcrypto) {
-> +		vcrypto = virtcrypto_get_dev_node(node,
-> VIRTIO_CRYPTO_SERVICE_AKCIPHER,
-> +						VIRTIO_CRYPTO_AKCIPHER_RSA);
-> +		if (!vcrypto) {
-> +			pr_err("virtio_crypto: Could not find a virtio device in the system
-> or unsupported algo\n");
-> +			return -ENODEV;
-> +		}
-> +
-> +		ctx->vcrypto = vcrypto;
-> +	} else {
-> +		virtio_crypto_alg_akcipher_close_session(ctx);
-> +	}
-> +
-> +	/* set ctrl header */
-> +	header.opcode =
-> 	cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_CREATE_SESSION);
-> +	header.algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
-> +	header.queue_id = 0;
-> +
-> +	/* set RSA para */
-> +	para.algo = cpu_to_le32(VIRTIO_CRYPTO_AKCIPHER_RSA);
-> +	para.keytype = cpu_to_le32(keytype);
-> +	para.keylen = cpu_to_le32(keylen);
-> +	para.u.rsa.padding_algo = cpu_to_le32(padding_algo);
-> +	para.u.rsa.hash_algo = cpu_to_le32(hash_algo);
-> +
-> +	return virtio_crypto_alg_akcipher_init_session(ctx, &header, &para,
-> +key, keylen); }
-> +
-> +static int virtio_crypto_rsa_raw_set_priv_key(struct crypto_akcipher *tfm,
-> +					      const void *key,
-> +					      unsigned int keylen)
-> +{
-> +	return virtio_crypto_rsa_set_key(tfm, key, keylen, 1,
-> +					 VIRTIO_CRYPTO_RSA_RAW_PADDING,
-> +					 VIRTIO_CRYPTO_RSA_NO_HASH);
-> +}
-> +
-> +
-> +static int virtio_crypto_p1pad_rsa_sha1_set_priv_key(struct crypto_akcipher
-> *tfm,
-> +						     const void *key,
-> +						     unsigned int keylen)
-> +{
-> +	return virtio_crypto_rsa_set_key(tfm, key, keylen, 1,
-> +					 VIRTIO_CRYPTO_RSA_PKCS1_PADDING,
-> +					 VIRTIO_CRYPTO_RSA_SHA1);
-> +}
-> +
-> +static int virtio_crypto_rsa_raw_set_pub_key(struct crypto_akcipher *tfm,
-> +					     const void *key,
-> +					     unsigned int keylen)
-> +{
-> +	return virtio_crypto_rsa_set_key(tfm, key, keylen, 0,
-> +					 VIRTIO_CRYPTO_RSA_RAW_PADDING,
-> +					 VIRTIO_CRYPTO_RSA_NO_HASH);
-> +}
-> +
-> +static int virtio_crypto_p1pad_rsa_sha1_set_pub_key(struct crypto_akcipher
-> *tfm,
-> +						    const void *key,
-> +						    unsigned int keylen)
-> +{
-> +	return virtio_crypto_rsa_set_key(tfm, key, keylen, 0,
-> +					 VIRTIO_CRYPTO_RSA_PKCS1_PADDING,
-> +					 VIRTIO_CRYPTO_RSA_SHA1);
-> +}
-> +
-> +static unsigned int virtio_crypto_rsa_max_size(struct crypto_akcipher
-> +*tfm) {
-> +	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
-> +	struct virtio_crypto_rsa_ctx *rsa_ctx = &ctx->rsa_ctx;
-> +
-> +	return mpi_get_size(rsa_ctx->n);
-> +}
-> +
-> +static int virtio_crypto_rsa_init_tfm(struct crypto_akcipher *tfm) {
-> +	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
-> +
-> +	ctx->tfm = tfm;
-> +	ctx->enginectx.op.do_one_request = virtio_crypto_rsa_do_req;
-> +	ctx->enginectx.op.prepare_request = NULL;
-> +	ctx->enginectx.op.unprepare_request = NULL;
-> +
-> +	return 0;
-> +}
-> +
-> +static void virtio_crypto_rsa_exit_tfm(struct crypto_akcipher *tfm) {
-> +	struct virtio_crypto_akcipher_ctx *ctx = akcipher_tfm_ctx(tfm);
-> +	struct virtio_crypto_rsa_ctx *rsa_ctx = &ctx->rsa_ctx;
-> +
-> +	virtio_crypto_alg_akcipher_close_session(ctx);
-> +	virtcrypto_dev_put(ctx->vcrypto);
-> +	mpi_free(rsa_ctx->n);
-> +	rsa_ctx->n = NULL;
-> +}
-> +
-> +static struct virtio_crypto_akcipher_algo virtio_crypto_akcipher_algs[] = {
-> +	{
-> +		.algonum = VIRTIO_CRYPTO_AKCIPHER_RSA,
-> +		.service = VIRTIO_CRYPTO_SERVICE_AKCIPHER,
-> +		.algo = {
-> +			.encrypt = virtio_crypto_rsa_encrypt,
-> +			.decrypt = virtio_crypto_rsa_decrypt,
-> +			.set_pub_key = virtio_crypto_rsa_raw_set_pub_key,
-> +			.set_priv_key = virtio_crypto_rsa_raw_set_priv_key,
-> +			.max_size = virtio_crypto_rsa_max_size,
-> +			.init = virtio_crypto_rsa_init_tfm,
-> +			.exit = virtio_crypto_rsa_exit_tfm,
-> +			.reqsize = sizeof(struct virtio_crypto_akcipher_request),
-> +			.base = {
-> +				.cra_name = "rsa",
-> +				.cra_driver_name = "virtio-crypto-rsa",
-> +				.cra_priority = 150,
-> +				.cra_module = THIS_MODULE,
-> +				.cra_ctxsize = sizeof(struct virtio_crypto_akcipher_ctx),
-> +			},
-> +		},
-> +	},
-> +	{
-> +		.algonum = VIRTIO_CRYPTO_AKCIPHER_RSA,
-> +		.service = VIRTIO_CRYPTO_SERVICE_AKCIPHER,
-> +		.algo = {
-> +			.encrypt = virtio_crypto_rsa_encrypt,
-> +			.decrypt = virtio_crypto_rsa_decrypt,
-> +			.sign = virtio_crypto_rsa_sign,
-> +			.verify = virtio_crypto_rsa_verify,
-> +			.set_pub_key = virtio_crypto_p1pad_rsa_sha1_set_pub_key,
-> +			.set_priv_key = virtio_crypto_p1pad_rsa_sha1_set_priv_key,
-> +			.max_size = virtio_crypto_rsa_max_size,
-> +			.init = virtio_crypto_rsa_init_tfm,
-> +			.exit = virtio_crypto_rsa_exit_tfm,
-> +			.reqsize = sizeof(struct virtio_crypto_akcipher_request),
-> +			.base = {
-> +				.cra_name = "pkcs1pad(rsa,sha1)",
-> +				.cra_driver_name = "virtio-pkcs1-rsa-with-sha1",
-> +				.cra_priority = 150,
-> +				.cra_module = THIS_MODULE,
-> +				.cra_ctxsize = sizeof(struct virtio_crypto_akcipher_ctx),
-> +			},
-> +		},
-> +	},
-> +};
-> +
-> +int virtio_crypto_akcipher_algs_register(struct virtio_crypto *vcrypto)
-> +{
-> +	int ret = 0;
-> +	int i = 0;
-> +
-> +	mutex_lock(&algs_lock);
-> +
-> +	for (i = 0; i < ARRAY_SIZE(virtio_crypto_akcipher_algs); i++) {
-> +		uint32_t service = virtio_crypto_akcipher_algs[i].service;
-> +		uint32_t algonum = virtio_crypto_akcipher_algs[i].algonum;
-> +
-> +		if (!virtcrypto_algo_is_supported(vcrypto, service, algonum))
-> +			continue;
-> +
-> +		if (virtio_crypto_akcipher_algs[i].active_devs == 0) {
-> +			ret =
-> crypto_register_akcipher(&virtio_crypto_akcipher_algs[i].algo);
-> +			if (ret)
-> +				goto unlock;
-> +		}
-> +
-> +		virtio_crypto_akcipher_algs[i].active_devs++;
-> +		dev_info(&vcrypto->vdev->dev, "Registered akcipher algo %s\n",
-> +			 virtio_crypto_akcipher_algs[i].algo.base.cra_name);
-> +	}
-> +
-> +unlock:
-> +	mutex_unlock(&algs_lock);
-> +	return ret;
-> +}
-> +
-> +void virtio_crypto_akcipher_algs_unregister(struct virtio_crypto
-> +*vcrypto) {
-> +	int i = 0;
-> +
-> +	mutex_lock(&algs_lock);
-> +
-> +	for (i = 0; i < ARRAY_SIZE(virtio_crypto_akcipher_algs); i++) {
-> +		uint32_t service = virtio_crypto_akcipher_algs[i].service;
-> +		uint32_t algonum = virtio_crypto_akcipher_algs[i].algonum;
-> +
-> +		if (virtio_crypto_akcipher_algs[i].active_devs == 0 ||
-> +		    !virtcrypto_algo_is_supported(vcrypto, service, algonum))
-> +			continue;
-> +
-> +		if (virtio_crypto_akcipher_algs[i].active_devs == 1)
-> +
-> 	crypto_unregister_akcipher(&virtio_crypto_akcipher_algs[i].algo);
-> +
-> +		virtio_crypto_akcipher_algs[i].active_devs--;
-> +	}
-> +
-> +	mutex_unlock(&algs_lock);
-> +}
+>  arch/x86/kernel/fpu/xstate.c | 5 ++++-
+>  arch/x86/kvm/cpuid.c         | 2 ++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index 02b3ddaf4f75..7c7824ae7862 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1558,7 +1558,10 @@ static int fpstate_realloc(u64 xfeatures, unsigned int ksize,
+>  		fpregs_restore_userregs();
+>
+>  	newfps->xfeatures = curfps->xfeatures | xfeatures;
+> -	newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+> +
+> +	if (!guest_fpu)
+> +		newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+> +
+>  	newfps->xfd = curfps->xfd & ~xfeatures;
+>
+>  	/* Do the final updates within the locked region */
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 494d4d351859..71125291c578 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -296,6 +296,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>  	vcpu->arch.guest_supported_xcr0 =
+>  		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
+>
+> +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
+> +
+>  	kvm_update_pv_runtime(vcpu);
+>
+>  	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
 
-Why don't you reuse the virtio_crypto_algs_register/unregister functions? 
-The current code is too repetitive. Maybe we don't need create the new file virtio_crypto_akcipher_algo.c
-because we had virtio_crypto_algs.c which includes all algorithms.
-
-> diff --git a/drivers/crypto/virtio/virtio_crypto_common.h
-> b/drivers/crypto/virtio/virtio_crypto_common.h
-> index a24f85c589e7..214f9a6fcf84 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_common.h
-> +++ b/drivers/crypto/virtio/virtio_crypto_common.h
-> @@ -56,6 +56,7 @@ struct virtio_crypto {
->  	u32 mac_algo_l;
->  	u32 mac_algo_h;
->  	u32 aead_algo;
-> +	u32 akcipher_algo;
-> 
->  	/* Maximum length of cipher key */
->  	u32 max_cipher_key_len;
-> @@ -131,5 +132,7 @@ static inline int virtio_crypto_get_current_node(void)
-> 
->  int virtio_crypto_algs_register(struct virtio_crypto *vcrypto);  void
-> virtio_crypto_algs_unregister(struct virtio_crypto *vcrypto);
-> +int virtio_crypto_akcipher_algs_register(struct virtio_crypto
-> +*vcrypto); void virtio_crypto_akcipher_algs_unregister(struct
-> +virtio_crypto *vcrypto);
-> 
->  #endif /* _VIRTIO_CRYPTO_COMMON_H */
-> diff --git a/drivers/crypto/virtio/virtio_crypto_core.c
-> b/drivers/crypto/virtio/virtio_crypto_core.c
-> index 8e977b7627cb..c6f482db0bc0 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_core.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_core.c
-> @@ -297,6 +297,7 @@ static int virtcrypto_probe(struct virtio_device *vdev)
->  	u32 mac_algo_l = 0;
->  	u32 mac_algo_h = 0;
->  	u32 aead_algo = 0;
-> +	u32 akcipher_algo = 0;
->  	u32 crypto_services = 0;
-> 
->  	if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1)) @@ -348,6 +349,9 @@
-> static int virtcrypto_probe(struct virtio_device *vdev)
->  			mac_algo_h, &mac_algo_h);
->  	virtio_cread_le(vdev, struct virtio_crypto_config,
->  			aead_algo, &aead_algo);
-> +	if (crypto_services & (1 << VIRTIO_CRYPTO_SERVICE_AKCIPHER))
-> +		virtio_cread_le(vdev, struct virtio_crypto_config,
-> +				akcipher_algo, &akcipher_algo);
-> 
->  	/* Add virtio crypto device to global table */
->  	err = virtcrypto_devmgr_add_dev(vcrypto);
-> @@ -374,7 +378,7 @@ static int virtcrypto_probe(struct virtio_device *vdev)
->  	vcrypto->mac_algo_h = mac_algo_h;
->  	vcrypto->hash_algo = hash_algo;
->  	vcrypto->aead_algo = aead_algo;
-> -
-> +	vcrypto->akcipher_algo = akcipher_algo;
-> 
->  	dev_info(&vdev->dev,
->  		"max_queues: %u, max_cipher_key_len: %u, max_auth_key_len: %u,
-> max_size 0x%llx\n", diff --git a/drivers/crypto/virtio/virtio_crypto_mgr.c
-> b/drivers/crypto/virtio/virtio_crypto_mgr.c
-> index 6860f8180c7c..1cb92418b321 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_mgr.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_mgr.c
-> @@ -242,6 +242,12 @@ int virtcrypto_dev_start(struct virtio_crypto *vcrypto)
->  		return -EFAULT;
->  	}
-> 
-> +	if (virtio_crypto_akcipher_algs_register(vcrypto)) {
-> +		pr_err("virtio_crypto: Failed to register crypto akcipher algs\n");
-> +		virtio_crypto_algs_unregister(vcrypto);
-> +		return -EFAULT;
-> +	}
-> +
-
-If so, the above codes can be removed too.
-
->  	return 0;
->  }
-> 
-> @@ -258,6 +264,7 @@ int virtcrypto_dev_start(struct virtio_crypto *vcrypto)
-> void virtcrypto_dev_stop(struct virtio_crypto *vcrypto)  {
->  	virtio_crypto_algs_unregister(vcrypto);
-> +	virtio_crypto_akcipher_algs_unregister(vcrypto);
->  }
-> 
->  /*
-> @@ -312,6 +319,10 @@ bool virtcrypto_algo_is_supported(struct virtio_crypto
-> *vcrypto,
->  	case VIRTIO_CRYPTO_SERVICE_AEAD:
->  		algo_mask = vcrypto->aead_algo;
->  		break;
-> +
-> +	case VIRTIO_CRYPTO_SERVICE_AKCIPHER:
-> +		algo_mask = vcrypto->akcipher_algo;
-> +		break;
->  	}
-> 
->  	if (!(algo_mask & (1u << algo)))
-> --
-> 2.20.1
-
-Regards,
--Gonglei
+dme.
+-- 
+All those lines and circles, to me, a mystery.

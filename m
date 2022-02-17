@@ -2,67 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCBF4BAB27
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027E04BAB38
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242182AbiBQUhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 15:37:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41852 "EHLO
+        id S243147AbiBQUnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 15:43:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiBQUho (ORCPT
+        with ESMTP id S229923AbiBQUna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 15:37:44 -0500
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106081029C1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:37:28 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 77042c1d-9031-11ec-baa1-0050568c148b;
-        Thu, 17 Feb 2022 20:37:46 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 5205B194B4A;
-        Thu, 17 Feb 2022 21:37:28 +0100 (CET)
-Date:   Thu, 17 Feb 2022 21:37:24 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, linux-m68k@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] drm: Add support for low-color frame buffer formats
-Message-ID: <Yg6yBOVTEqyPqRUc@ravnborg.org>
-References: <20220215165226.2738568-1-geert@linux-m68k.org>
+        Thu, 17 Feb 2022 15:43:30 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D64415C9D3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:43:15 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id x5so11757384edd.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:43:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R4HSynY+GXD3vvbZ57eqLTHLNIFY/JTbAe+61rsZUWQ=;
+        b=mjICA68i4LOmyP3tUQUOzGui3EbhuY2aprlcHIZSLWaJ8jt6kABk6AtxAMqpFqkL6J
+         RCe98mtXnoqQAId+IK8SZl23y6FH7hnNd1Jt0qFqnhvTSiljon62CD+CwbMnEZZ1EDr7
+         ruYj8FBZJPGOuN3oJRjLgKEZl37/fJ4k8X6VJTi6RccFlrU2+LkCDfwT1/1JTAQUZhbJ
+         4Q7grk7QjB5dpjpNFD1XuIKDk22hQVGh4HpbqV6AeWkMNjC+Z5oBNXRyxIToFdsu2Uxw
+         9Da9QNEffTjNLeMS9ys69pi9L+Zlv64vlf36ZjyjLL0aXHAs7+c1I3Rtt8Y8nwoP7dA/
+         evng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R4HSynY+GXD3vvbZ57eqLTHLNIFY/JTbAe+61rsZUWQ=;
+        b=fswWoQ/UrooX8b+s3tEK2o6Lc8yP03s8Uu6lUgWj584ypFZt8NwxmmVq2IjsiAxnNP
+         Bbo5K2a1jRlOESITmCQX1YCxhdc7Y+cdPG21SEwWOQGp33QEdARaQOLt1dLH3Ru+4nJL
+         Ya0fFthZYstP7smuR5cguuMi4nxcaoQCjO8OmTbHYgI5UkwO8+KTslJpTPvEBteuKEsh
+         WDj5XNJZBvQlkOwueRh49jAh6UI2vefJHzjsBknaoTu6ajI4RgTKyMGVIq/OSDqP4XTk
+         mYs2CiylILwotwUKV5XbLPm3ldE5ZccciNX5iXe8341HZUIe+NzbZdNfxYfEEvOti9tH
+         rvuQ==
+X-Gm-Message-State: AOAM530Cr8G/G4lacLdS2IMTGQkyMrgBuXMiu+o2gnmqM3czo9jru5iP
+        iZYkrrtKjHpfDGDMrPkWZTr1iHgRJADNxaN0lDQcsQ==
+X-Google-Smtp-Source: ABdhPJyTQgO7iqJkUzWAlSYB5GmLHbjB1cEU2G7w8HQE52DlkjhI7q7pXYTwU8IHj4uk1jbdjTkF8ILDYYnw9KskAM8=
+X-Received: by 2002:aa7:cd81:0:b0:410:d64e:aa31 with SMTP id
+ x1-20020aa7cd81000000b00410d64eaa31mr4594705edv.167.1645130593426; Thu, 17
+ Feb 2022 12:43:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215165226.2738568-1-geert@linux-m68k.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
+ <20220215192233.8717-1-bgeffon@google.com> <YgwCuGcg6adXAXIz@kroah.com>
+ <CADyq12wByWhsHNOnokrSwCDeEhPdyO6WNJNjpHE1ORgKwwwXgg@mail.gmail.com>
+ <YgzMTrVMCVt+n7cE@kroah.com> <fc86d51c-7aa2-6379-5f26-ad533c762da3@intel.com>
+ <CADyq12yGvqbb3+hp6f39RqyEM3Mu896yY6ik7Lh39W=o44bYbA@mail.gmail.com> <dbe8b78e-bc55-c796-358f-a93e0eac87d1@intel.com>
+In-Reply-To: <dbe8b78e-bc55-c796-358f-a93e0eac87d1@intel.com>
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Thu, 17 Feb 2022 15:42:37 -0500
+Message-ID: <CADyq12y8eG63C5Fs4q8-HmjYzTRQaiNZKMoVDA6qtBnvAqsgfg@mail.gmail.com>
+Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate inconsistency
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Willis Kung <williskung@google.com>,
+        Guenter Roeck <groeck@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "# v4 . 10+" <stable@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Thu, Feb 17, 2022 at 11:44 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 2/17/22 05:31, Brian Geffon wrote:
+> > How would you and Greg KH like to proceed with this? I'm happy to help
+> > however I can.
+>
+> If I could wave a magic wand, I'd just apply the whole FPU rewrite to
+> stable.
+>
+> My second choice would be to stop managing PKRU with XSAVE.
+> x86_pkru_load() uses WRPKRU instead of XSAVE and keeps the task's PKRU
+> in task->pkru instead of the XSAVE buffer.  Doing that will take some
+> care, including pulling XFEATURE_PKRU out of the feature mask (RFBM) at
+> XRSTOR.  I _think_ that can be done in a manageable set of patches which
+>  will keep stable close to mainline.  I recognize that more bugs might
+> get introduced in the process which are unique to stable.
 
-On Tue, Feb 15, 2022 at 05:52:18PM +0100, Geert Uytterhoeven wrote:
-> 	Hi all,
-> 
-> A long outstanding issue with the DRM subsystem has been the lack of
-> support for low-color displays, as used typically on older desktop
-> systems and small embedded displays.
+Hi Dave,
+I did take some time to look through that series and pick out what I
+think is the minimum set that would pull out PKRU from xstate, that
+list is:
 
-This is one of the pieces missing for a long time - great to see
-something done here. Thanks Geert!
+   9782a712eb  x86/fpu: Add PKRU storage outside of task XSAVE buffer
+   784a46618f   x86/pkeys: Move read_pkru() and write_pkru()
+   ff7ebff47c59  x86/pkru: Provide pkru_write_default()
+   739e2eec0f   x86/pkru: Provide pkru_get_init_value()
+   fa8c84b77a   x86/cpu: Write the default PKRU value when enabling PKE
+   72a6c08c44  x86/pkru: Remove xstate fiddling from write_pkru()
+   2ebe81c6d8  x86/fpu: Dont restore PKRU in fpregs_restore_userspace()
+   71ef453355   x86/kvm: Avoid looking up PKRU in XSAVE buffer
+   954436989c  x86/fpu: Remove PKRU handling from switch_fpu_finish()
+   e84ba47e31  x86/fpu: Hook up PKRU into ptrace()
+   30a304a138  x86/fpu: Mask PKRU from kernel XRSTOR[S] operations
+   0e8c54f6b2c  x86/fpu: Don't store PKRU in xstate in fpu_reset_fpstate()
 
-	Sam
+The majority of these don't apply cleanly to 5.4, and there are some
+other patches we'd have to pull back too that moved code and some of
+the those won't be needed for 5.10 though. TBH, I'm not sure it makes
+sense to try to do this just given the fact that most do not cleanly
+apply.
+
+Brian
+
+>
+> If you give that a shot and realize that it's not feasible to do a
+> subset, then we can fall back to the minimal fix.  I'm not asking for a
+> multi-month engineering effort here.  Maybe an hour or two to see if
+> it's really as scary as it looks.

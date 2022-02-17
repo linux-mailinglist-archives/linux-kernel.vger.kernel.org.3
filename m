@@ -2,181 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099504BA66A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0749D4BA66D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243449AbiBQQuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:50:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43034 "EHLO
+        id S243448AbiBQQwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:52:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243451AbiBQQup (ORCPT
+        with ESMTP id S233980AbiBQQwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:50:45 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84150293B60
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:50:30 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id a23so8732049eju.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:50:30 -0800 (PST)
+        Thu, 17 Feb 2022 11:52:18 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8F512AAF;
+        Thu, 17 Feb 2022 08:52:02 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id a8so8712312ejc.8;
+        Thu, 17 Feb 2022 08:52:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fssx3Pq7Tr5cTG95P9U3gymWGu1RTV70KnA/iD+IHis=;
-        b=kt8mhFozEB46tD+PCNcah6OB4+XA4FrhtNEFeKlGHfYdVpejelqKjEk+Qa2QgmOo4T
-         s6JEU1UbCmrxLoxmhRt/aBZ2FTjOCMEifcXWfuXzHq70twphIanZ9Sm7JzCcNb/XIk9F
-         WreIJKO8P8v36EHwnR/MHlJJHcSHS+tyi8g+U=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QW98ZAnaTyeOi8FPTz8x8h5/4COyBHutpkvvD0kXcq4=;
+        b=PzaFH60CnXlgEaw+MxGzPZX3CggnAQDxzzLHy3lf+PPzdG8ixNd3wuulyE14lhShvP
+         zAg4AhZSNQ7FFdr9xKrlMSUuUCCa4alb8k3z6K1W3CbhHAHMLcq53cO5kiLMFlzm4eA2
+         0vv2C0dX9OIWTk8uo7ZE01T5ih1gofBVyaD3eiFyahEQqsT3WoOhiu/wI3hUjoF1xQSs
+         RPpBon5nT2d9OhQTzE+u9ZyVIDAbOUUfNnSilnLC410GVksT4kThujYO4D11TsQZrkxM
+         re1o8jZr/nqZgGHITpKH94voCsERAtRlOxr7uLk7wZTipXP/D53s1kzZKk1HyutE2lqs
+         kAGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fssx3Pq7Tr5cTG95P9U3gymWGu1RTV70KnA/iD+IHis=;
-        b=fZ66qoYQ7AxCSb1kvsgUaY/kwEMqr20iLgeQMQxSAgHMzXKlhblv11nQrZOSnlT7OF
-         Ift4S0MzcB33tUFeg0nAv27Zwv5WZM+S1z50UFDu9H8BEmkrG0McKdqfagC0pll2tvku
-         g8SyFH6UTR7Lgq2Di9vRgyT6ldUYmco422vjiOO28/JUZkxPlNgkCnAz0bTeLJi1Eytz
-         pzf5uv0MFNkSrDMBzupSNMaUThlTbs27H29zTEW5hHHWjarWEa+KM6jlbETfgB0Gvu/Z
-         VJKx5309AIEAOSwE2JeAjXf180nE8LO9qMABFNakacvn223PbP5swls7mslMmhng+t8d
-         Ei/g==
-X-Gm-Message-State: AOAM5330HbmRGJmI1FpJKbMPwV7xLplAKFwwT+LGg2IRYpiPxOWzdXeO
-        TGsnsNWTXsr5wZwfL75FereyaXQwMJKbW4B21JA=
-X-Google-Smtp-Source: ABdhPJzMXU3HuMpdf+B7sdA6ASwjx5h5rnPxFb7nzjLKCGFh/Qz6n8Yd5zmkNnBr193hAyk8Y9FKOw==
-X-Received: by 2002:a17:906:6693:b0:6cf:3cb:89c9 with SMTP id z19-20020a170906669300b006cf03cb89c9mr3135733ejo.23.1645116629147;
-        Thu, 17 Feb 2022 08:50:29 -0800 (PST)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id u3sm1389337ejz.99.2022.02.17.08.50.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 08:50:28 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id u2so8957517wrw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:50:28 -0800 (PST)
-X-Received: by 2002:a5d:64ef:0:b0:1e3:1e05:d042 with SMTP id
- g15-20020a5d64ef000000b001e31e05d042mr2888765wri.679.1645116628087; Thu, 17
- Feb 2022 08:50:28 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QW98ZAnaTyeOi8FPTz8x8h5/4COyBHutpkvvD0kXcq4=;
+        b=B7vIZF6SNdKETdiFVsCQVIFVrm6TdHdKqSOSY45MHfYZM10vEJA2r8qcyf++/2/EUu
+         0PPTHgot4RK13XuelP/yBbBQPiI/vMNDzVzpamAEDMsp595ebrprnnGTABbVof8BIl+i
+         xpjbtCmWE3A631RZrC61v52di1M9nIQeCf82FefIGrRd4YIZLq+yD5G3nXv+xzMDWxe0
+         5Sw4dsHBebCoYxwhH0KX6Q+jSJpqPJ24GdBpgQ0sszYHu7gWFKNlUlH4JDcBoFvTaLh2
+         FGW9TyKjgQTIi/kauA4pI1wrrZE28uROEWJIjEP0j/qfsVSVOEGlVU808ZkslXyVd6ap
+         y/vw==
+X-Gm-Message-State: AOAM530OvmftMTzJApWQJrRrZWH9z+9e56/tjhBcv+61m2RtYp/oypyK
+        nA3LF+S26iByNkCK3h8VlAo=
+X-Google-Smtp-Source: ABdhPJwtEn3D5+cKd8hP6JIr/8eyP8k8OBrxb52ozeiZGn6A/SKZI9bw35zidvnok2uRY4Rfp+w7nA==
+X-Received: by 2002:a17:906:1e0c:b0:6cf:d014:e454 with SMTP id g12-20020a1709061e0c00b006cfd014e454mr3080164ejj.583.1645116721507;
+        Thu, 17 Feb 2022 08:52:01 -0800 (PST)
+Received: from debian64.daheim (pd9e29561.dip0.t-ipconnect.de. [217.226.149.97])
+        by smtp.gmail.com with ESMTPSA id eg42sm1594303edb.79.2022.02.17.08.52.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 08:52:01 -0800 (PST)
+Received: from localhost.daheim ([127.0.0.1])
+        by debian64.daheim with esmtp (Exim 4.95)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1nKj3j-001iGV-5S;
+        Thu, 17 Feb 2022 17:52:00 +0100
+Message-ID: <c9bb90ef-86fd-609a-0b55-896350602996@gmail.com>
+Date:   Thu, 17 Feb 2022 17:52:00 +0100
 MIME-Version: 1.0
-References: <20220207073036.14901-1-lukasz.luba@arm.com> <20220207073036.14901-2-lukasz.luba@arm.com>
- <YgG+TmLrCSXX4Bvt@google.com> <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
- <CAD=FV=UtQgrwPXg4zTZtBin3LWY1yTgCKQ05MmCNqK_6F5S8VA@mail.gmail.com> <adbc1cd5-7598-a0b1-629c-8dd920aac2d0@arm.com>
-In-Reply-To: <adbc1cd5-7598-a0b1-629c-8dd920aac2d0@arm.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 17 Feb 2022 08:50:10 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XzTSxg9sAtUcDhoLnY736u1qGKJy4OwLKp56_ruSUUvQ@mail.gmail.com>
-Message-ID: <CAD=FV=XzTSxg9sAtUcDhoLnY736u1qGKJy4OwLKp56_ruSUUvQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH][next] carl9170: Replace zero-length arrays with
+ flexible-array members
+Content-Language: de-DE
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220216194955.GA904126@embeddedor>
+From:   Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <20220216194955.GA904126@embeddedor>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 16/02/2022 20:49, Gustavo A. R. Silva wrote:
+> There is a regular need in the kernel to provide a way to declare
+> having a dynamically sized set of trailing elements in a structure.
+> Kernel code should always use “flexible array members”[1] for these
+> cases. The older style of one-element or zero-length arrays should
+> no longer be used[2].
+> 
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Link: https://github.com/KSPP/linux/issues/78
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-On Wed, Feb 16, 2022 at 3:28 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> On 2/16/22 5:21 PM, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Tue, Feb 8, 2022 at 1:32 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >>>     Another important thing is the consistent scale of the power values
-> >>>     provided by the cooling devices. All of the cooling devices in a single
-> >>>     thermal zone should have power values reported either in milli-Watts
-> >>>     or scaled to the same 'abstract scale'.
-> >>
-> >> This can change. We have removed the userspace governor from kernel
-> >> recently. The trend is to implement thermal policy in FW. Dealing with
-> >> some intermediate configurations are causing complicated design, support
-> >> of the algorithm logic is also more complex.
-> >
-> > One thing that didn't get addressed is the whole "The trend is to
-> > implement thermal policy in FW". I'm not sure I can get on board with
-> > that trend. IMO "moving to FW" isn't a super great trend. FW is harder
-> > to update than kernel and trying to keep it in sync with the kernel
-> > isn't wonderful. Unless something _has_ to be in FW I personally
-> > prefer it to be in the kernel.
->
-> There are pros and cons for both approaches (as always).
->
-> Although, there are some use cases, where the kernel is not able to
-> react that fast, e.g. sudden power usage changes, which can cause
-> that the power rail is not able to sustain within required conditions.
-> When we are talking about tough requirements for those power & thermal
-> policies, the mechanism must be fast, precised and reliable.
->
-> Here you can find Arm reference FW implementation and an IPA clone
-> in there (I have been reviewing this) [1][2].
->
-> As you can see there is a new FW feature set:
-> "MPMM, Traffic-cop and Thermal management".
->
-> Apart from Arm implementation, there are already known thermal
-> monitoring mechanisms in HW/FW. Like in the new Qcom SoCs which
-> are using this driver code [3]. The driver receives an interrupt
-> about throttling conditions and just populates the thermal pressure.
+Acked-by: Christian Lamparter <chunkeey@gmail.com>
 
-Yeah, this has come up in another context recently too. Right on on
-the Qcom SoCs I'm working with (sc7180 on Chromebooks) we've
-essentially disabled all the HW/FW throttling (LMH), preferring to let
-Linux manage things. We chose to do it this way with the assumption
-that Linux would be able to make better decisions than the firmware
-and it was easier to understand / update than an opaque
-vendor-provided blob. LMH is still there with super high limits in
-case Linux goofs up (we don't want to damage the CPU) but it's not the
-primary means of throttling.
+(I've also applied it to the firmware source)
 
-As you said, Linux reacts a bit slower, though I've heard that might
-be fixed soon-ish? So far on sc7180 Chromebooks it hasn't been a
-problem because we have more total thermal mass and the CPUs in sc7180
-don't actually generate that much heat compared to other CPUs. We also
-have thermal interrupts enabled, which helps. That being said,
-improvements are certainly welcome!
-
-
-> > ...although now that I re-read this, I'm not sure which firmware you
-> > might be talking about. Is this the AP firmware, or some companion
-> > chip / coprocessor? Even so, I'd still rather see things done in the
-> > kernel when possible...
->
-> It's a FW run on a dedicated microprocessor. In Arm SoCs it's usually
-> some Cortex-M. We communicated with it from the kernel via SCMI drivers
-> (using shared memory and mailboxes). We recommend to use the SCMI
-> protocol to send e.g. 'performance request' to the FW via 'fast
-> channel' instead of having an implementation of PMIC and clock, and do
-> the voltage & freq change in the kernel (using drivers & locking). That
-> implementation allows to avoid costly locking and allows to go via
-> that SCMI cpufreq driver [4] and SCMI perf layer [5] the task scheduler.
-> We don't need a dedicated 'sugov' kthread in a Deadline policy to
-> do that work and preempt the currently running task.
->
-> IMHO the FW approach opens new opportunities.
->
-> Regards,
-> Lukasz
->
-> [1] https://github.com/ARM-software/SCP-firmware/pull/588
-> [2]
-> https://github.com/ARM-software/SCP-firmware/pull/588/commits/59c62ead5eb66353ae805c367bfa86192e28c410
-> [3]
-> https://elixir.bootlin.com/linux/v5.17-rc4/source/drivers/cpufreq/qcom-cpufreq-hw.c#L287
-> [4]
-> https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/scmi-cpufreq.c#L65
-> [5]
-> https://elixir.bootlin.com/linux/v5.17-rc4/source/drivers/firmware/arm_scmi/perf.c#L465

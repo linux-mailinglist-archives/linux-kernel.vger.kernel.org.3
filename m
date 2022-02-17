@@ -2,178 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0CA4BAE4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 01:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050B44BADBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 01:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiBRAVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 19:21:40 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35634 "EHLO
+        id S229838AbiBRAAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 19:00:50 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiBRAVi (ORCPT
+        with ESMTP id S229630AbiBRAAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 19:21:38 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6366150;
-        Thu, 17 Feb 2022 16:21:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645143683; x=1676679683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N32BdLCCicYvF88PVJV2JjNN97uAJo3pxS97Q2b1+KM=;
-  b=JebK25hjQclsv7jqSHiEE0DjhouD4qt1Hlweeh/N3JaaLPvOya/WDJl3
-   c2PnjKG1mJU6qLzaGAmlHipha9jFsT95Yg/4DMrb/NXTXgaR110a6iTsC
-   I8UBubYHZRc7skItWk8OucBwc0SYrc+cZxM1teB+tUxmS7XaEnnKjPz0R
-   tiosmwmc/T2cXlMHRA7YINkMxoRrRF17Mds1pXK9dWUcBmY2zjn1AYr2H
-   6llKIJQL8NOTTbuV7UzINeTx2ik026zG72tzcPOd1+4t7yyEP9JIFLQya
-   RsAY4lSZ02S62N1y8PDSqYcW4/KuivP+Yahwn6QOn7gU6P+3w2LYXcKRi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="248595414"
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="248595414"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 15:23:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="777665220"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Feb 2022 15:23:06 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKq78-0000jQ-2C; Thu, 17 Feb 2022 23:23:06 +0000
-Date:   Fri, 18 Feb 2022 07:22:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        seanjc@google.com
-Cc:     kbuild-all@lists.01.org, mkoutny@suse.com, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, dmatlack@google.com,
-        jiangshanlai@gmail.com, kvm@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH v3] KVM: Move VM's worker kthreads back to the original
- cgroup before exiting.
-Message-ID: <202202180730.AAgeOZkF-lkp@intel.com>
-References: <20220217061616.3303271-1-vipinsh@google.com>
+        Thu, 17 Feb 2022 19:00:48 -0500
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D43346B1E;
+        Thu, 17 Feb 2022 16:00:19 -0800 (PST)
+Received: by mail-pg1-f171.google.com with SMTP id h125so6370985pgc.3;
+        Thu, 17 Feb 2022 16:00:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SoRwOTnJQj6kK0mSNjv2umu6XpU3nx+Y+EN/LPgrWOM=;
+        b=oAEH/A2SUmkuegDHSU+evXjiiRrYm7AJJRBw+6z/TXNww7IxnrM/8be8CT/tOuaZE9
+         82KJD2vn194/DdkQixDilMYSF51xQ9YjRrDKS2BZQH6BiumXMHWPANG3jTwtRPmmggqM
+         w9U+mmtP3vKswLOvGB3XEkJJfDVHgxrB9hO5+OT7Mh6Mahzv5+hpuAAdwN+T+CUX1TtD
+         tIe7D1klA4KrpFDHjOu81c6Q3YpiNpws5hQ9+Ak4Qc0UX01jZ3frQJJjrC6aYj0VHGfc
+         ZOL1cRf8bHa+fYzKyQvlx66iXXpA8JGR4uG2r5RkZkLF6h6kA86Wq3HM2dubhxexy0i/
+         xb1A==
+X-Gm-Message-State: AOAM53259reHT90rmIdVhN3a0QXp2hf8AjqZ5F/P46SDz3bK1TdVd1Ng
+        cenZ/J5i5E4njkC9MJkeLsCJC0hcvg==
+X-Google-Smtp-Source: ABdhPJw/kmEhnBfh2GFirjwVXPImHpsMauK1etqmp7WpKmzDJ+NCY4z+VfpN7NxiRwz0dTmGV2nSkw==
+X-Received: by 2002:a92:c610:0:b0:2bf:b493:3425 with SMTP id p16-20020a92c610000000b002bfb4933425mr3441704ilm.166.1645140240853;
+        Thu, 17 Feb 2022 15:24:00 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id r13sm2810676ilb.35.2022.02.17.15.23.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 15:24:00 -0800 (PST)
+Received: (nullmailer pid 3964338 invoked by uid 1000);
+        Thu, 17 Feb 2022 23:23:58 -0000
+Date:   Thu, 17 Feb 2022 17:23:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     jassisinghbrar@gmail.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski@canonical.com, daniel.baluta@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V3 2/5] dt-bindings: mailbox: imx-mu: add i.MX93 S4 MU
+ support
+Message-ID: <Yg7ZDoH1HBkOZvIH@robh.at.kernel.org>
+References: <20220211060301.1852772-1-peng.fan@oss.nxp.com>
+ <20220211060301.1852772-3-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220217061616.3303271-1-vipinsh@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220211060301.1852772-3-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vipin,
+On Fri, Feb 11, 2022 at 02:02:58PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Similar to i.MX8ULP S4 MU, i.MX93 MU is dedicated for communication
+> between Sentinel and Cortex-A cores from hardware design, it could not be
+> reused for other purpose.
+> 
+> However i.MX93 S4 MU use separate tx/rx interrupt, so update
+> interrupts and add interrupt-names property.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/mailbox/fsl,mu.yaml   | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/fsl,mu.yaml b/Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
+> index 6d056d5e16bf..f0a7e693ebf8 100644
+> --- a/Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/fsl,mu.yaml
+> @@ -29,6 +29,7 @@ properties:
+>        - const: fsl,imx8ulp-mu
+>        - const: fsl,imx8-mu-scu
+>        - const: fsl,imx8-mu-seco
+> +      - const: fsl,imx93-mu-s4
+>        - const: fsl,imx8ulp-mu-s4
+>        - items:
+>            - const: fsl,imx93-mu
+> @@ -57,6 +58,12 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: txirq
+> +      - const: rxirq
 
-Thank you for the patch! Perhaps something to improve:
+'irq' is redundant. Drop.
 
-[auto build test WARNING on db6e7adf8de9b3b99a9856acb73870cc3a70e3ca]
+> +
+>    "#mbox-cells":
+>      description: |
+>        <&phandle type channel>
+> @@ -90,6 +97,20 @@ required:
+>    - interrupts
+>    - "#mbox-cells"
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - fsl,imx93-mu-s4
+> +    then:
+> +      properties:
+> +        interrupt-names:
+> +          minItems: 2
+> +          maxItems: 2
 
-url:    https://github.com/0day-ci/linux/commits/Vipin-Sharma/KVM-Move-VM-s-worker-kthreads-back-to-the-original-cgroup-before-exiting/20220217-141723
-base:   db6e7adf8de9b3b99a9856acb73870cc3a70e3ca
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220218/202202180730.AAgeOZkF-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/1abffef71ef85b6fb8f1296e6ef38febc4f2b007
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Vipin-Sharma/KVM-Move-VM-s-worker-kthreads-back-to-the-original-cgroup-before-exiting/20220217-141723
-        git checkout 1abffef71ef85b6fb8f1296e6ef38febc4f2b007
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+minItems is enough.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> +        interrupts:
+> +          maxItems: 2
 
+You haven't tested this with 2 items. It will fail because the main 
+section has a limit of 1 item.
 
-sparse warnings: (new ones prefixed by >>)
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c: note: in included file:
-   include/linux/kvm_host.h:1877:54: sparse: sparse: array of flexible structures
-   include/linux/kvm_host.h:1879:56: sparse: sparse: array of flexible structures
->> arch/x86/kvm/../../../virt/kvm/kvm_main.c:5859:54: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct task_struct *from @@     got struct task_struct [noderef] __rcu *real_parent @@
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:5859:54: sparse:     expected struct task_struct *from
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:5859:54: sparse:     got struct task_struct [noderef] __rcu *real_parent
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_change_pte' - different lock contexts for basic block
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_invalidate_range_start' - different lock contexts for basic block
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_invalidate_range_end' - different lock contexts for basic block
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_clear_flush_young' - different lock contexts for basic block
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_clear_young' - different lock contexts for basic block
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:538:9: sparse: sparse: context imbalance in 'kvm_mmu_notifier_test_young' - different lock contexts for basic block
-   arch/x86/kvm/../../../virt/kvm/kvm_main.c:2522:9: sparse: sparse: context imbalance in 'hva_to_pfn_remapped' - unexpected unlock
-
-vim +5859 arch/x86/kvm/../../../virt/kvm/kvm_main.c
-
-  5805	
-  5806	static int kvm_vm_worker_thread(void *context)
-  5807	{
-  5808		/*
-  5809		 * The init_context is allocated on the stack of the parent thread, so
-  5810		 * we have to locally copy anything that is needed beyond initialization
-  5811		 */
-  5812		struct kvm_vm_worker_thread_context *init_context = context;
-  5813		struct kvm *kvm = init_context->kvm;
-  5814		kvm_vm_thread_fn_t thread_fn = init_context->thread_fn;
-  5815		uintptr_t data = init_context->data;
-  5816		int err, reattach_err;
-  5817	
-  5818		err = kthread_park(current);
-  5819		/* kthread_park(current) is never supposed to return an error */
-  5820		WARN_ON(err != 0);
-  5821		if (err)
-  5822			goto init_complete;
-  5823	
-  5824		err = cgroup_attach_task_all(init_context->parent, current);
-  5825		if (err) {
-  5826			kvm_err("%s: cgroup_attach_task_all failed with err %d\n",
-  5827				__func__, err);
-  5828			goto init_complete;
-  5829		}
-  5830	
-  5831		set_user_nice(current, task_nice(init_context->parent));
-  5832	
-  5833	init_complete:
-  5834		init_context->err = err;
-  5835		complete(&init_context->init_done);
-  5836		init_context = NULL;
-  5837	
-  5838		if (err)
-  5839			goto out;
-  5840	
-  5841		/* Wait to be woken up by the spawner before proceeding. */
-  5842		kthread_parkme();
-  5843	
-  5844		if (!kthread_should_stop())
-  5845			err = thread_fn(kvm, data);
-  5846	
-  5847	out:
-  5848		/*
-  5849		 * Move kthread back to its original cgroup to prevent it lingering in
-  5850		 * the cgroup of the VM process, after the latter finishes its
-  5851		 * execution.
-  5852		 *
-  5853		 * kthread_stop() waits on the 'exited' completion condition which is
-  5854		 * set in exit_mm(), via mm_release(), in do_exit(). However, the
-  5855		 * kthread is removed from the cgroup in the cgroup_exit() which is
-  5856		 * called after the exit_mm(). This causes the kthread_stop() to return
-  5857		 * before the kthread actually quits the cgroup.
-  5858		 */
-> 5859		reattach_err = cgroup_attach_task_all(current->real_parent, current);
-  5860		if (reattach_err) {
-  5861			kvm_err("%s: cgroup_attach_task_all failed on reattach with err %d\n",
-  5862				__func__, reattach_err);
-  5863		}
-  5864		return err;
-  5865	}
-  5866	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Rob

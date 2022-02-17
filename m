@@ -2,118 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E919D4BAA09
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A72754BAA0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244156AbiBQTmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:42:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60624 "EHLO
+        id S239095AbiBQTnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:43:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234831AbiBQTmg (ORCPT
+        with ESMTP id S231827AbiBQTnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:42:36 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D44D41FB5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:42:20 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id o8-20020a056e0214c800b002bc2f9cffffso2614002ilk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:42:20 -0800 (PST)
+        Thu, 17 Feb 2022 14:43:42 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D492241FB1;
+        Thu, 17 Feb 2022 11:43:27 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id m17so11467196edc.13;
+        Thu, 17 Feb 2022 11:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+wgvtN1ZQc+diRsoquyOr2biiBOjENYGILhh+mveGGk=;
+        b=MMdX0VU2f6zUULyNzRYU0JwT0hCkCl5ZhwG4mPmWLugNGLY1WmUKENJnyLzGWjsEuR
+         AVqI20TT8TkXKt8Q3eMrvV0+3VjUK9duBRBPiTpRpp/8WreaiHMEvOiyJeqyAl2blXD/
+         WCODTJwM//2GGTx5B+xRHKT5axMJOQhx5tLuqjyMruNIT2VA6+KvvQOAMJaN0TdTD1IL
+         JP8vUJqQ3aRoU6hbv85qOSwOPocLHuTmSixEkGgH2EIIHX+xsragidbEWdr7LabZJJUn
+         xW4EcYpH2k2HxUQcMIlABqoLaDi3cBXroAWKEB8lJ77zuQuPSo9+uNi7rHfeD0zG1yK/
+         VAJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=oHZ6M7Lv0xuBWWdM74RtqU4sI7szp5blC1rto5K947I=;
-        b=ugP29rPDMkVsrn0zYl18m4Pk9wR7nTI91jt9b+ysTQuEmdsU+K++v2xVouX2jLYyG6
-         xxSYxphZ5EMQauTZJsn0SvZBexX3sPlHDmH99lOARbDhP9DxLohSUEm6EbgLJlaj/q9B
-         8pHDhvc9b5vC0/EeqgAjDINF+31UDEnRcRb0qklBwCxqUoycUIaaU3dJCpavk89Y3Ga4
-         TZl2FEmyQNJ6zcsXakIQL3gm9DZwGk4RSX+76WPtXqM4t15Tj/HvIWTnOZcaNyMyuc0X
-         6MQWAC3r9jgcEPeJCR3SMAzCTTz2SpOgnZ5yiZOxOp5FDJFh8LCYyqGIsE+TQSL7vhF8
-         y8rQ==
-X-Gm-Message-State: AOAM533cO+u39jTS5MEE82AyT14ifKB0MK7WfaxE/ksyejBdqWxQe95X
-        oV7p3WEKG8l/x9BfNISoFgRId77FGW+inW1B1ZO1UHWuGHNq
-X-Google-Smtp-Source: ABdhPJz80SQnywFdQpEy2KPPfyvmcjGVpbH06ipurJKOMxu+9rhn0L8anGUqkCCss4kOZoABcZfafMgtuGZ9h3hRhpmWPTg4bSZD
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+wgvtN1ZQc+diRsoquyOr2biiBOjENYGILhh+mveGGk=;
+        b=VNMVFpg/m1GS9vUTnPHIgUXLrQFSS/SDTpDflmcu95FSNvfPo0nHRoXwTEMSp9QvlO
+         aFbQ5kbUvYwv63g/j6MRhNTp7bagN0g0uXY4C+mC/O3rBVipxj4t0pyTJpFyfH4/JH2E
+         J1UNC45gg+xRgpsvXkRkp+ae4Fd309clloh5hU5ALkxIbZ2tPVCcYNE5QI6EMhLUU0Jm
+         D+p/+yf9LWCRBqynnzgNnD5i9KpV8YjfAxkmKP1mpQR9xqMk1/tt0Fauu7m93Is5ECB/
+         DiHEd6AKvQWJSCFMpzqzONUCq6HmXE+eiTWXDfCG1gyFuwo2biFsRB2qPhqkx3Jq0yht
+         lGqA==
+X-Gm-Message-State: AOAM532FYplsveuwpguXQpJyXDs+titHhcnaoazKqse6P3bYF5E8P8Wt
+        OW3SRZyiQLeTL/X1n7b8YuACoytZqkQ=
+X-Google-Smtp-Source: ABdhPJyyBVWBdAUXDvSrh5BxAuXTnKmP9jEDL4E5JsMAwx0E1RbtDMwO234OqWUh3nrrZ2F4W2DSWg==
+X-Received: by 2002:a50:cd59:0:b0:410:ac25:e570 with SMTP id d25-20020a50cd59000000b00410ac25e570mr4302197edj.252.1645127006235;
+        Thu, 17 Feb 2022 11:43:26 -0800 (PST)
+Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
+        by smtp.googlemail.com with ESMTPSA id c11sm3950409edx.42.2022.02.17.11.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 11:43:25 -0800 (PST)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (asus-ec-sensors) do not print from .probe()
+Date:   Thu, 17 Feb 2022 20:43:18 +0100
+Message-Id: <20220217194318.2960472-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:54e:b0:2be:8108:c0dc with SMTP id
- i14-20020a056e02054e00b002be8108c0dcmr3083780ils.65.1645126939755; Thu, 17
- Feb 2022 11:42:19 -0800 (PST)
-Date:   Thu, 17 Feb 2022 11:42:19 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000daca5605d83bf62b@google.com>
-Subject: [syzbot] WARNING in ext4_evict_inode (3)
-From:   syzbot <syzbot+8c7921ce857a731af281@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Remove the call to dev_info() from the board detection function, which
+is called from probe(), not only to be in line with hwmon driver rules, but
+also because the message duplicates the error code returned from probe()
+for that case (ENODEV).
 
-syzbot found the following issue on:
+Changes in:
+ - v2: add missing newline (style).
 
-HEAD commit:    42964a18f81c Merge tag 'objtool_urgent_for_v5.17_rc4' of g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1008ed74700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
-dashboard link: https://syzkaller.appspot.com/bug?extid=8c7921ce857a731af281
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8c7921ce857a731af281@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 2 PID: 3682 at fs/ext4/inode.c:231 ext4_evict_inode+0xf9a/0x1950 fs/ext4/inode.c:231
-Modules linked in:
-CPU: 2 PID: 3682 Comm: syz-executor.2 Not tainted 5.17.0-rc3-syzkaller-00329-g42964a18f81c #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:ext4_evict_inode+0xf9a/0x1950 fs/ext4/inode.c:231
-Code: 28 41 bc 01 00 00 00 48 89 04 24 e9 62 f6 ff ff c7 44 24 24 06 00 00 00 c7 44 24 20 06 00 00 00 e9 e1 f6 ff ff e8 36 25 63 ff <0f> 0b e9 c8 f5 ff ff e8 fa 23 aa ff e9 60 f1 ff ff 48 89 cf e8 ed
-RSP: 0018:ffffc9000276fc98 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 1ffff920004edf99 RCX: 0000000000000000
-RDX: ffff88805e45e2c0 RSI: ffffffff8214ddea RDI: 0000000000000003
-RBP: ffff8880235bf6a0 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff8214d3b0 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000001 R14: ffff88801acac830 R15: ffff888026d92728
-FS:  00005555566dc400(0000) GS:ffff88802cb00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005555565fb708 CR3: 000000005e443000 CR4: 0000000000150ee0
-Call Trace:
- <TASK>
- evict+0x2ed/0x6b0 fs/inode.c:664
- iput_final fs/inode.c:1744 [inline]
- iput.part.0+0x562/0x820 fs/inode.c:1770
- iput+0x58/0x70 fs/inode.c:1760
- do_unlinkat+0x418/0x650 fs/namei.c:4225
- __do_sys_unlink fs/namei.c:4266 [inline]
- __se_sys_unlink fs/namei.c:4264 [inline]
- __x64_sys_unlink+0xc6/0x110 fs/namei.c:4264
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f1762356997
-Code: 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 57 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffca9eba208 EFLAGS: 00000206 ORIG_RAX: 0000000000000057
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1762356997
-RDX: 00007ffca9eba240 RSI: 00007ffca9eba240 RDI: 00007ffca9eba2d0
-RBP: 00007ffca9eba2d0 R08: 0000000000000001 R09: 00007ffca9eba0a0
-R10: 00005555566dd903 R11: 0000000000000206 R12: 00007f17623b01ea
-R13: 00007ffca9ebb390 R14: 00005555566dd810 R15: 00007ffca9ebb3d0
- </TASK>
-
-
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/hwmon/asus-ec-sensors.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 0701ade16227..b5cf0136360c 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -597,18 +597,12 @@ static struct hwmon_chip_info asus_ec_chip_info = {
+ 	.ops = &asus_ec_hwmon_ops,
+ };
+ 
+-static unsigned long __init
+-get_board_sensors(const struct device *dev)
++static unsigned long __init get_board_sensors(void)
+ {
+-	const struct dmi_system_id *dmi_entry;
++	const struct dmi_system_id *dmi_entry =
++		dmi_first_match(asus_ec_dmi_table);
+ 
+-	dmi_entry = dmi_first_match(asus_ec_dmi_table);
+-	if (!dmi_entry) {
+-		dev_info(dev, "Unsupported board");
+-		return 0;
+-	}
+-
+-	return (unsigned long)dmi_entry->driver_data;
++	return dmi_entry ? (unsigned long)dmi_entry->driver_data : 0;
+ }
+ 
+ static int __init asus_ec_probe(struct platform_device *pdev)
+@@ -625,7 +619,7 @@ static int __init asus_ec_probe(struct platform_device *pdev)
+ 	struct device *hwdev;
+ 	unsigned int i;
+ 
+-	board_sensors = get_board_sensors(dev);
++	board_sensors = get_board_sensors();
+ 	if (!board_sensors)
+ 		return -ENODEV;
+ 
+-- 
+2.35.1
+

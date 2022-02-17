@@ -2,172 +2,498 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67114B9808
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 06:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E373F4B981C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 06:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbiBQFMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 00:12:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44994 "EHLO
+        id S234214AbiBQFUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 00:20:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiBQFMb (ORCPT
+        with ESMTP id S234157AbiBQFUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 00:12:31 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150075.outbound.protection.outlook.com [40.107.15.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1903E119410;
-        Wed, 16 Feb 2022 21:12:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NcLOx3tu+5ZwaGyWCJjSSqcIWIdHtZLJ1x3IhFGHEMRbkVpPVAkPHkPND9AQZ4bwQ+6dlX3ZkZsNrZfyIHNhZ5f2NpgWZOWcoura+IDt/XpQkLADu3iDnh9Z5LVRJXahX7onFHIXx/Wp09RuXyb27w+doHR9O6RYX6wcI6clkmoVl70ENmNIn4Au7O5QrU85J8lPeCLCtD3cOAGuNLsq+05ign4cWqXKBa7K8ylJNMZVJvVLr2RYWmCBKd5SKFdbIRulZ+CwcXVo77v0jP4LefslafmL0qPi5QNro43MwDuxMnAWPa1+FiHmdfSmW32MBLCT9dFMufMWVG9gYmaAMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XFRdHBEvuiR/+q4/jO80+42UyFoxc1pVrRqJeCCUabc=;
- b=UahJ8VJtJCy1xc0m8I4GRdYWFGjlsydTVdOJ9aYaePJOVGJzZlBMtvwpzqitNv1tb4r0S3iBwL7isupZcQe0u573vqhVqbnoUO7pWLpuEsLGw2lfYRt9LAedjcX9XcziSeH4riQAhUkJ9UxwWRU2kzah+1gQrgAZ/ZEK61ZbHXQ9W4jQUpzYjriOYIWNUMQ1znNpuf6edDt8qo567+SGGF6tqVz1802OHtd8tZMtlSu0MoXk9j0lGg4cJ2QLcU0Cr/oZ0GAKKSzpOhWhNSABrbesuQePEjnGd++nEfsmsR6ZyhH3jo8zd4m1T6glwSK0bfmpz1yH/Gu7485K8A+YWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XFRdHBEvuiR/+q4/jO80+42UyFoxc1pVrRqJeCCUabc=;
- b=q45NnZRJ728PjTXrPnt5H5xYOmVEHnlLJ02uXdpXimDGaWGkryC1Gvz2z7cdItMB19HyFe7yEIZ5Hz7iQB/I43xZNfKTWbfGjXocUnXzZhHAhMhtLvLyBbN6SUMZ6L5OWccOsjef5+WdNBNCPNhMv0+tAraAHSLAAN74rZWM/zg=
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
- DB8PR03MB5962.eurprd03.prod.outlook.com (2603:10a6:10:e9::28) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4995.16; Thu, 17 Feb 2022 05:12:14 +0000
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::fd01:86fc:2baf:1ac4]) by HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::fd01:86fc:2baf:1ac4%6]) with mapi id 15.20.4975.012; Thu, 17 Feb 2022
- 05:12:14 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Peter Rosin <peda@axentia.se>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [RFCv3 2/6] i2c: add I2C Address Translator (ATR) support
-Thread-Topic: [RFCv3 2/6] i2c: add I2C Address Translator (ATR) support
-Thread-Index: AQHYG1EY4H87Ne8uH02ywQ7La/LVCqyJhBcAgAxm7QCAAVgygA==
-Date:   Thu, 17 Feb 2022 05:12:14 +0000
-Message-ID: <9327df42-a4db-e2dc-b02f-0430310d551c@fi.rohmeurope.com>
-References: <20220206115939.3091265-1-luca@lucaceresoli.net>
- <20220206115939.3091265-3-luca@lucaceresoli.net>
- <CAHp75Vejw86kLUJfwXR_kUn+=UCaixbcy=epO8Foe=9S2LqXTQ@mail.gmail.com>
- <f412980a-4e41-54c7-f000-f826e015f6d2@lucaceresoli.net>
-In-Reply-To: <f412980a-4e41-54c7-f000-f826e015f6d2@lucaceresoli.net>
-Accept-Language: fi-FI, en-US
-Content-Language: fi-FI
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f8691d16-3016-42a2-bf95-08d9f1d40f6e
-x-ms-traffictypediagnostic: DB8PR03MB5962:EE_
-x-microsoft-antispam-prvs: <DB8PR03MB59622749A985E300478AC633AD369@DB8PR03MB5962.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Z9dmzqjUrvU9GBzUFpPwrujssH17Tek49Y1D5VEBLr3ix4ltkKenoKOrhZNzYJ/BpWAn/4+DyBiAsgxGEqF8EVig0o14dNQbZUeeX6AMKoDl+KQ5X5QUwAR+Lvrs6LhjjJYSVnFIVgvVgoYzb36sQy13gRdZvTQAtW4IMps9ydjXldtWsiQd8C6i0aT3ou1yiRfDaMzopTTbciMr78j4E9QRM1KIxsgWfG3JyeqoMeQwsD1amsm9gYMstmRnn5az5EPTmliHzGX6FSii12BUaBiSoAlHlx0Sn3/TxJacQ8WIAk5WRQOvYyXEzMrVZBG+EBeZkUbRsbK0FMaNKedEKvES0oC+ECjsLmA1dNX2f948SpXWPHxl3z9z6KmJqHlJRsFJgjChib5jnr3U6uVBQ4QuqfQe7xX7aHXzp/Ndz/+wyyI2rObykTQjW5Teloe9KNwNYmOQVx5HHXORHVoUag/rQDBhGkT2+C2Izh+OWClOZEJMt2ijFStiiTI5+QzpfqjAgw7qZHYFZpSmiDsLuHXaNtkZe8ydQSB8xjmgrc9ScaDavvzFUdob2iozH2tLDvaV8KPLbExNcWfhAV988N4LD5uo8+mSIWSaCPUcs2vJ5vhu/VttqINCftBt/wwySpyW6X53P1HM48YRhWL1w/lj50LGfF/unuJU4G1Fc0c0a9993GBZd+CVQPG/1/53Lm/tm8FqDE+uGoUmceMy1qOON9F76sbHd74X8ehhZRzcSxxi592zTY3hV6lRDp7kqqY0xi2yzqSwca0FkM7vHA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(83380400001)(8936002)(186003)(71200400001)(316002)(7416002)(2616005)(4744005)(8676002)(76116006)(4326008)(66556008)(64756008)(66946007)(66446008)(66476007)(31696002)(38070700005)(86362001)(2906002)(122000001)(54906003)(31686004)(110136005)(5660300002)(53546011)(6512007)(6486002)(6506007)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZlNkY1NzYnNMaHJuQTJKaGN6OG50TW1RSWh3aVNnaXQvVE1adW4rYU0wMDA0?=
- =?utf-8?B?MWI3VFNYYlhUQ2VuaUIwc1QvcjJCdXJMSDNCRWtVQmpsYjJ5dVBNL0kyR0h3?=
- =?utf-8?B?b2RmdDVNTzMzQ3J4Rm9mSDNUbnpvNVBad0NUYUE3M3VvcHBFc04zTmg3di9l?=
- =?utf-8?B?MERRT25VbW15MWdIUHNKckhpN1lxNWdqNVZJQ1VMUXQ0eWhKTzZVZlc2SWM4?=
- =?utf-8?B?YTcyNnRTK0t5Z3RFT3hXeW01VFlRT2xwNUFscjN3Tjd2U25OOG1CTjdmam9n?=
- =?utf-8?B?VkdFS2drU0ZtQnRSYzhERlN3dUFKVU5udEl5VERQOGRqeVBTYTBvY3R1bE96?=
- =?utf-8?B?V1p2WDZ6SXUvRE1saDlMditSV2FFMS9oSzdUMlYxQ2dwUFB3VTFCZEJla0Vk?=
- =?utf-8?B?TXNSc0MvV3FvcmhHSENIQ3pudTljVWl0a2FjajhiUWc5SWRtenVMeDN2U3lM?=
- =?utf-8?B?bUpBV0x5ejNvR3M0eUd6QmhMSXE1OGNQWFRLQU03S1JzbHIvRUc0MnIrbmJv?=
- =?utf-8?B?VFJTeWwzT3hwb1JCY1lXaFUwdmVkQzBvT3NnQXlhR0IvRTcraG9YN2ZtQzUx?=
- =?utf-8?B?eE9INU11enUyQW1qb0UvNUFJcG9kdnVScERnblNIMVpqc04rTExvb1UwRlUz?=
- =?utf-8?B?anJVRWJGVTdJaDZSdEdvTXU1VUhaKzhCVCsySTdKb0swWDhVVGU4UVlhYU5O?=
- =?utf-8?B?bkYraTNCazNUWjF3WW1XZVdYSmpvcXArUlYwVUNONmQwZE8rS2NpUXpRWnd1?=
- =?utf-8?B?QmpSVnRTYUpUU0NMUEU2RElZdmN2SEVaUnNXUDBaaXhFV2NGbkcrYjY4b1Rl?=
- =?utf-8?B?MXEwQ1oxVkVBMnBWbytCUmFCV0RBZlFCaHlmS28rd0JjcXVUZGdBaVYrb2s3?=
- =?utf-8?B?Rnl6OFZ0dlYrSHRwaFRSYUI3Z3UzdElyRVhQMXpDdFRaYSsyQ1NQR2VDSWtx?=
- =?utf-8?B?Vk5oaE5Sc2JTTHVPTEZBOGlIa3Q2RmxLRWZxZHVpejBueEVhVkNXM0R1SVp3?=
- =?utf-8?B?UlZaVE11R3BBN1pvMXY5NVE1dTRZc0tiWnNMMzZPM3RSd01COTBET2k0b3Uz?=
- =?utf-8?B?cFAxVGZ1bFZFcUE0aEtjdGZ0YjZTeTFXWWRiNHBub1RCZ2g3MDJjWURLZ2FM?=
- =?utf-8?B?N2pCVHBHWGVMbmJlQkU3NndoQ1Zsb0IrWi9Cem1OVS8xb0VXcUFVTC9CU2JD?=
- =?utf-8?B?ay91Mk5LakN6OG5JNm40QS9sbVRBOWh3MUhqUlNiQlpjQTh5SHVGcXl0WVVt?=
- =?utf-8?B?anpaN1ZHU3loN1FJYUNBQ2o5R2p0NFZ1Z1FQYzdOR0xiZTBIeEZ4cThCdmc0?=
- =?utf-8?B?VHZCa2JHa0pSYVlRL3VKR0wrazFhYW4wN09maE1QRE1wK2Q4NURRcFYxRDh1?=
- =?utf-8?B?M3VldW5wcnlCQVFCeHVMZ0RwWU9ySklqU2JveEltTkNBak1aMFdWZmpxU2Q0?=
- =?utf-8?B?R2MyN3dwKzg2ZGNyUlJNVUpaS25vMDMvVnkyQ1E3NHI4NXc2R0xBa1h5Vmh2?=
- =?utf-8?B?M200NXErc3NLeUR1ZlRoa0dKWGlyVjdvbWlyWjM5R3hDNzJBSXBGNDNpbGh1?=
- =?utf-8?B?NzJpbGR6OTAvSGxVMnVuTFVna0Zab1NnMHFjbStSU1k4a0lMOEp0VXh0Zlpw?=
- =?utf-8?B?S0RRM2VJUnc4QnNubXljWmQwVjdJWHFHcktjWU4za213ZUtVRE9xTElsRWRY?=
- =?utf-8?B?QmoxN3J4YjFIaFRPdmVPVGNqQzZnbENPZ0g0QjUvaFEwVkI5UldXdjJsclFl?=
- =?utf-8?B?Y09GWVBuM1R4eTJrc3F4VTVEbUtiaVJUUWRNSzlTWjUvRHpDL0s5QmdmSXBk?=
- =?utf-8?B?UTNRMEpMQmc2WUF6RmRmSm4waUlpZkRqeG1haUJrRzdrZEJleU0vdzRHdWE0?=
- =?utf-8?B?L3g4UTcxbzk3amFJNisxM1h3Rk1wTHpkcnJWK3B6MzYyWldicVBja09uMVNs?=
- =?utf-8?B?ZTR4MzdmanhNakoreXFTR1VSZHVIRnluUUNsdnJ2cmpzWTJxenExRUR3Y3F3?=
- =?utf-8?B?QjBZK0U5WUtIT1NjYW56MmtFMStSc0s5dk15VWdmbVJxeWNRb1JabTI2VVNr?=
- =?utf-8?B?TTVJSitoRmVHUEFIVFFnejlJY2Y4dE50c3hLWXU4ai9YSnVOUXFQTDFScXkr?=
- =?utf-8?B?N2RNYlM3SnFaM09lbjZhOVpucWNkbCtPZUJyVTF6NW0vdXRjaEVPYnNLUFRp?=
- =?utf-8?B?VldiQjFFNmVrZkdaaGw2ZWZ4ZmoyMTN3UVJ1a09TOTdvMGJKcGQ4Vjd5amJl?=
- =?utf-8?B?Qit0VkU5Q0R0Q09ldU1rQlpTQXNlZmdBV282N2hLM3M1ZlBhY1lDVWxDT3lz?=
- =?utf-8?B?c1EyWDU2ZGx4YjIwaFhraXJaRVN4RlVGbWI3b2hKb2FvQmFTcmpVdz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AB72978407EC2D46AA84CFF4B67ED32B@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 17 Feb 2022 00:20:36 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4372E2A598B;
+        Wed, 16 Feb 2022 21:20:18 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app4 (Coremail) with SMTP id cS_KCgCXD4P52g1i4jM9CQ--.26372S2;
+        Thu, 17 Feb 2022 13:19:59 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     gregkh@linuxfoundation.org, balbi@kernel.org,
+        pavel.hofman@ivitera.com, ruslan.bilovol@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH v4] usb: gadget: f_uac1: add different speed transfers support
+Date:   Thu, 17 Feb 2022 13:19:51 +0800
+Message-Id: <20220217051951.7466-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <649b6b8a.a6d4b.17f06169537.Coremail.3090101217@zju.edu.cn>
+References: <649b6b8a.a6d4b.17f06169537.Coremail.3090101217@zju.edu.cn>
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8691d16-3016-42a2-bf95-08d9f1d40f6e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2022 05:12:14.2506
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xd31xuX+WhON1nSksZPYXApUgS8GVf9PCzTQcwnC54ZeCXlGmoChRi5fq303/gF6bXYYc/VX201W1LxO5XCgLRJw/ixYJXHJ97ZC3SvM0f1VQNaJZupyiUXRt+B7tvfg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR03MB5962
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cS_KCgCXD4P52g1i4jM9CQ--.26372S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3CrW7JF4fAw4fZF43Xr4fZrb_yoW8Ww15Zo
+        WDJFsYy34FqF1UXry8GF18WF18ZF1xCFsxXry5Jr9xZ3yI934Y9asrC3WDWa13JF1fC3WD
+        Wa4UWa1DZa97Gr48n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYt7k0a2IF6w4kM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
+        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
+        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0
+        I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWlnxkEFVCFx7IYxxCE
+        VcI25VAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxkIecxEwVAFwVW8WwCF04
+        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b5WrAUUUUU=
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIEBVNG3FjlrQADsa
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMi8xNi8yMiAxMDo0MCwgTHVjYSBDZXJlc29saSB3cm90ZToNCj4gT24gMDgvMDIvMjIgMTI6
-MTYsIEFuZHkgU2hldmNoZW5rbyB3cm90ZToNCj4+IE9uIE1vbiwgRmViIDcsIDIwMjIgYXQgNzo1
-NSBQTSBMdWNhIENlcmVzb2xpIDxsdWNhQGx1Y2FjZXJlc29saS5uZXQ+IHdyb3RlOg0KPj4+ICtj
-b25maWcgSTJDX0FUUg0KPj4+ICsgICAgICAgdHJpc3RhdGUgIkkyQyBBZGRyZXNzIFRyYW5zbGF0
-b3IgKEFUUikgc3VwcG9ydCINCj4+PiArICAgICAgIGhlbHANCj4+PiArICAgICAgICAgRW5hYmxl
-IHN1cHBvcnQgZm9yIEkyQyBBZGRyZXNzIFRyYW5zbGF0b3IgKEFUUikgY2hpcHMuDQo+Pj4gKw0K
-Pj4+ICsgICAgICAgICBBbiBBVFIgYWxsb3dzIGFjY2Vzc2luZyBtdWx0aXBsZSBJMkMgYnVzc2Vz
-IGZyb20gYSBzaW5nbGUNCj4+PiArICAgICAgICAgcGh5c2ljYWwgYnVzIHZpYSBhZGRyZXNzIHRy
-YW5zbGF0aW9uIGluc3RlYWQgb2YgYnVzIHNlbGVjdGlvbiBhcw0KPj4+ICsgICAgICAgICBpMmMt
-bXV4ZXMgZG8uDQo+Pg0KPj4gV2hhdCB3b3VsZCBiZSB0aGUgbW9kdWxlIG5hbWU/DQo+IA0KPiBJ
-c24ndCB0aGUgbW9kdWxlIG5hbWUgd3JpdHRlbiBpbiBLY29uZmlnIGZpbGVzIGp1c3QgdG8gYXZv
-aWQgY2hlY2twYXRjaA0KPiBjb21wbGFpbiBhYm91dCAidG9vIGZldyBkb2MgbGluZXMiPyA6KSBP
-b29rLCBpdCdzIGkycy1hdHIgYW55d2F5Lg0KDQpUaGFua3MgTHVjYSEgSSBoYXZlIGFsd2F5cyB3
-b25kZXJlZCB3aHkgcGVvcGxlIGtlZXAgYWRkaW5nIHRoaXMgDQpzZWVtaW5nbHkgdW5uZWNlc3Nh
-cnkgYm9pbGVycGxhdGUuIE5vdyBJIGZpbmFsbHkgZ2V0IHRoZSBwdXJwb3NlIQ0KDQotLU1hdHRp
-DQoNCi0tIA0KVGhlIExpbnV4IEtlcm5lbCBndXkgYXQgUk9ITSBTZW1pY29uZHVjdG9ycw0KDQpN
-YXR0aSBWYWl0dGluZW4sIExpbnV4IGRldmljZSBkcml2ZXJzDQpST0hNIFNlbWljb25kdWN0b3Jz
-LCBGaW5sYW5kIFNXREMNCktpdmloYXJqdW5sZW5ra2kgMUUNCjkwMjIwIE9VTFUNCkZJTkxBTkQN
-Cg0Kfn4gdGhpcyB5ZWFyIGlzIHRoZSB5ZWFyIG9mIGEgc2lnbmF0dXJlIHdyaXRlcnMgYmxvY2sg
-fn4NCg==
+From: Jing Leng <jleng@ambarella.com>
+
+On page 61 of the UAC1 specification (
+https://www.usb.org/sites/default/files/audio10.pdf),
+bInterval is interval for polling endpoint for data transfers
+expressed in milliseconds, must be set to 1.
+
+On page 47 of the USB2.0 specification (
+https://www.usb.org/sites/default/files/usb_20_20211008.zip),
+An isochronous endpoint must specify its required bus access period.
+Full-/high-speed endpoints must specify a desired period as
+(2^(bInterval-1)) x F, where bInterval is in the range one to
+(and including) 16 and F is 125 μs for high-speed and 1ms for full-speed.
+
+On page 362 of the USB3.2 specification (
+https://usb.org/sites/default/files/usb_32_20210125.zip),
+The 'SuperSpeed Endpoint Companion Descriptor' shall only be
+returned by Enhanced SuperSpeed devices that are operating at Gen X speed.
+Each endpoint described in an interface is followed by a 'SuperSpeed
+Endpoint Companion Descriptor'.
+
+Currently uac1 driver doesn't set bInterval to 1 in full speed transfer
+and doesn't have a 'SuperSpeed Endpoint Companion Descriptor' behind
+'Standard Endpoint Descriptor'.
+
+So we should set bInterval to 1 in full speed transfer and set it to 4
+in other speed transfers, and we should add 'SuperSpeed Endpoint Companion
+Descriptor' behind 'Standard Endpoint Descriptor' for superspeed transfer.
+
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ChangeLog v3->v4:
+- Remove static variables which are explicitly initialized to 0
+ChangeLog v2->v3:
+- Add 'static' before 'struct usb_ss_ep_comp_descriptor ac_int_ep_desc_comp'.
+ChangeLog v1->v2:
+- Modify the title of the PATCH
+- Update more detailed description of the PATCH
+---
+ drivers/usb/gadget/function/f_uac1.c | 269 ++++++++++++++++++++++-----
+ 1 file changed, 219 insertions(+), 50 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 03f50643fbba..d03d4ce048b6 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -123,6 +123,15 @@ static struct uac_feature_unit_descriptor *in_feature_unit_desc;
+ static struct uac_feature_unit_descriptor *out_feature_unit_desc;
+ 
+ /* AC IN Interrupt Endpoint */
++static struct usb_endpoint_descriptor fs_int_ep_desc = {
++	.bLength = USB_DT_ENDPOINT_SIZE,
++	.bDescriptorType = USB_DT_ENDPOINT,
++	.bEndpointAddress = USB_DIR_IN,
++	.bmAttributes = USB_ENDPOINT_XFER_INT,
++	.wMaxPacketSize = cpu_to_le16(2),
++	.bInterval = 1,
++};
++
+ static struct usb_endpoint_descriptor ac_int_ep_desc = {
+ 	.bLength = USB_DT_ENDPOINT_SIZE,
+ 	.bDescriptorType = USB_DT_ENDPOINT,
+@@ -132,6 +141,12 @@ static struct usb_endpoint_descriptor ac_int_ep_desc = {
+ 	.bInterval = 4,
+ };
+ 
++static struct usb_ss_ep_comp_descriptor ac_int_ep_desc_comp = {
++	.bLength = sizeof(ac_int_ep_desc_comp),
++	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
++	.wBytesPerInterval = cpu_to_le16(2),
++};
++
+ /* B.4.1  Standard AS Interface Descriptor */
+ static struct usb_interface_descriptor as_out_interface_alt_0_desc = {
+ 	.bLength =		USB_DT_INTERFACE_SIZE,
+@@ -201,6 +216,16 @@ static struct uac_format_type_i_discrete_descriptor_1 as_out_type_i_desc = {
+ };
+ 
+ /* Standard ISO OUT Endpoint Descriptor */
++static struct usb_endpoint_descriptor fs_out_ep_desc  = {
++	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
++	.bDescriptorType =	USB_DT_ENDPOINT,
++	.bEndpointAddress =	USB_DIR_OUT,
++	.bmAttributes =		USB_ENDPOINT_SYNC_ADAPTIVE
++				| USB_ENDPOINT_XFER_ISOC,
++	.wMaxPacketSize	=	cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
++	.bInterval =		1,
++};
++
+ static struct usb_endpoint_descriptor as_out_ep_desc  = {
+ 	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
+ 	.bDescriptorType =	USB_DT_ENDPOINT,
+@@ -211,6 +236,12 @@ static struct usb_endpoint_descriptor as_out_ep_desc  = {
+ 	.bInterval =		4,
+ };
+ 
++static struct usb_ss_ep_comp_descriptor as_out_ep_desc_comp = {
++	.bLength		= sizeof(as_out_ep_desc_comp),
++	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
++	.wBytesPerInterval	= cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
++};
++
+ /* Class-specific AS ISO OUT Endpoint Descriptor */
+ static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
+ 	.bLength =		UAC_ISO_ENDPOINT_DESC_SIZE,
+@@ -231,7 +262,17 @@ static struct uac_format_type_i_discrete_descriptor_1 as_in_type_i_desc = {
+ 	.bSamFreqType =		1,
+ };
+ 
+-/* Standard ISO OUT Endpoint Descriptor */
++/* Standard ISO IN Endpoint Descriptor */
++static struct usb_endpoint_descriptor fs_in_ep_desc  = {
++	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
++	.bDescriptorType =	USB_DT_ENDPOINT,
++	.bEndpointAddress =	USB_DIR_IN,
++	.bmAttributes =		USB_ENDPOINT_SYNC_ASYNC
++				| USB_ENDPOINT_XFER_ISOC,
++	.wMaxPacketSize	=	cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
++	.bInterval =		1,
++};
++
+ static struct usb_endpoint_descriptor as_in_ep_desc  = {
+ 	.bLength =		USB_DT_ENDPOINT_AUDIO_SIZE,
+ 	.bDescriptorType =	USB_DT_ENDPOINT,
+@@ -242,6 +283,12 @@ static struct usb_endpoint_descriptor as_in_ep_desc  = {
+ 	.bInterval =		4,
+ };
+ 
++static struct usb_ss_ep_comp_descriptor as_in_ep_desc_comp = {
++	.bLength		= sizeof(as_in_ep_desc_comp),
++	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
++	.wBytesPerInterval	= cpu_to_le16(UAC1_OUT_EP_MAX_PACKET_SIZE),
++};
++
+ /* Class-specific AS ISO OUT Endpoint Descriptor */
+ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+ 	.bLength =		UAC_ISO_ENDPOINT_DESC_SIZE,
+@@ -252,7 +299,75 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+ 	.wLockDelay =		0,
+ };
+ 
+-static struct usb_descriptor_header *f_audio_desc[] = {
++static struct usb_descriptor_header *fs_audio_desc[] = {
++	(struct usb_descriptor_header *)&ac_interface_desc,
++	(struct usb_descriptor_header *)&ac_header_desc,
++
++	(struct usb_descriptor_header *)&usb_out_it_desc,
++	(struct usb_descriptor_header *)&io_out_ot_desc,
++	(struct usb_descriptor_header *)&out_feature_unit_desc,
++
++	(struct usb_descriptor_header *)&io_in_it_desc,
++	(struct usb_descriptor_header *)&usb_in_ot_desc,
++	(struct usb_descriptor_header *)&in_feature_unit_desc,
++
++	(struct usb_descriptor_header *)&fs_int_ep_desc,
++
++	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
++	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
++	(struct usb_descriptor_header *)&as_out_header_desc,
++
++	(struct usb_descriptor_header *)&as_out_type_i_desc,
++
++	(struct usb_descriptor_header *)&fs_out_ep_desc,
++	(struct usb_descriptor_header *)&as_iso_out_desc,
++
++	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
++	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
++	(struct usb_descriptor_header *)&as_in_header_desc,
++
++	(struct usb_descriptor_header *)&as_in_type_i_desc,
++
++	(struct usb_descriptor_header *)&fs_in_ep_desc,
++	(struct usb_descriptor_header *)&as_iso_in_desc,
++	NULL,
++};
++
++static struct usb_descriptor_header *hs_audio_desc[] = {
++	(struct usb_descriptor_header *)&ac_interface_desc,
++	(struct usb_descriptor_header *)&ac_header_desc,
++
++	(struct usb_descriptor_header *)&usb_out_it_desc,
++	(struct usb_descriptor_header *)&io_out_ot_desc,
++	(struct usb_descriptor_header *)&out_feature_unit_desc,
++
++	(struct usb_descriptor_header *)&io_in_it_desc,
++	(struct usb_descriptor_header *)&usb_in_ot_desc,
++	(struct usb_descriptor_header *)&in_feature_unit_desc,
++
++	(struct usb_descriptor_header *)&ac_int_ep_desc,
++
++	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
++	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
++	(struct usb_descriptor_header *)&as_out_header_desc,
++
++	(struct usb_descriptor_header *)&as_out_type_i_desc,
++
++	(struct usb_descriptor_header *)&as_out_ep_desc,
++	(struct usb_descriptor_header *)&as_iso_out_desc,
++
++	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
++	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
++	(struct usb_descriptor_header *)&as_in_header_desc,
++
++	(struct usb_descriptor_header *)&as_in_type_i_desc,
++
++	(struct usb_descriptor_header *)&as_in_ep_desc,
++	(struct usb_descriptor_header *)&as_iso_in_desc,
++	NULL,
++};
++
++static struct usb_descriptor_header *ss_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&ac_interface_desc,
+ 	(struct usb_descriptor_header *)&ac_header_desc,
+ 
+@@ -265,6 +380,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&in_feature_unit_desc,
+ 
+ 	(struct usb_descriptor_header *)&ac_int_ep_desc,
++	(struct usb_descriptor_header *)&ac_int_ep_desc_comp,
+ 
+ 	(struct usb_descriptor_header *)&as_out_interface_alt_0_desc,
+ 	(struct usb_descriptor_header *)&as_out_interface_alt_1_desc,
+@@ -273,6 +389,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&as_out_type_i_desc,
+ 
+ 	(struct usb_descriptor_header *)&as_out_ep_desc,
++	(struct usb_descriptor_header *)&as_out_ep_desc_comp,
+ 	(struct usb_descriptor_header *)&as_iso_out_desc,
+ 
+ 	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
+@@ -282,6 +399,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&as_in_type_i_desc,
+ 
+ 	(struct usb_descriptor_header *)&as_in_ep_desc,
++	(struct usb_descriptor_header *)&as_in_ep_desc_comp,
+ 	(struct usb_descriptor_header *)&as_iso_in_desc,
+ 	NULL,
+ };
+@@ -329,6 +447,89 @@ static struct usb_gadget_strings *uac1_strings[] = {
+ 	NULL,
+ };
+ 
++/* Use macro to overcome line length limitation */
++#define USBDHDR(p) ((struct usb_descriptor_header *)(p))
++
++static void setup_headers(struct f_uac1_opts *opts,
++			  struct usb_descriptor_header **headers,
++			  enum usb_device_speed speed)
++{
++	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
++	struct usb_endpoint_descriptor *epout_desc;
++	struct usb_endpoint_descriptor *epin_desc;
++	struct usb_endpoint_descriptor *ep_int_desc;
++	int i;
++
++	switch (speed) {
++	case USB_SPEED_FULL:
++		epout_desc = &fs_out_ep_desc;
++		epin_desc = &fs_in_ep_desc;
++		ep_int_desc = &fs_int_ep_desc;
++		break;
++	case USB_SPEED_HIGH:
++		epout_desc = &as_out_ep_desc;
++		epin_desc = &as_in_ep_desc;
++		ep_int_desc = &ac_int_ep_desc;
++		break;
++	default:
++		epout_desc = &as_out_ep_desc;
++		epout_desc_comp = &as_out_ep_desc_comp;
++		epin_desc = &as_in_ep_desc;
++		epin_desc_comp = &as_in_ep_desc_comp;
++		ep_int_desc = &ac_int_ep_desc;
++		ep_int_desc_comp = &ac_int_ep_desc_comp;
++		break;
++	}
++
++	i = 0;
++	headers[i++] = USBDHDR(&ac_interface_desc);
++	headers[i++] = USBDHDR(ac_header_desc);
++
++	if (EPOUT_EN(opts)) {
++		headers[i++] = USBDHDR(&usb_out_it_desc);
++		headers[i++] = USBDHDR(&io_out_ot_desc);
++		if (FUOUT_EN(opts))
++			headers[i++] = USBDHDR(out_feature_unit_desc);
++	}
++
++	if (EPIN_EN(opts)) {
++		headers[i++] = USBDHDR(&io_in_it_desc);
++		headers[i++] = USBDHDR(&usb_in_ot_desc);
++		if (FUIN_EN(opts))
++			headers[i++] = USBDHDR(in_feature_unit_desc);
++	}
++
++	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
++		headers[i++] = USBDHDR(ep_int_desc);
++		if (ep_int_desc_comp)
++			headers[i++] = USBDHDR(ep_int_desc_comp);
++	}
++
++	if (EPOUT_EN(opts)) {
++		headers[i++] = USBDHDR(&as_out_interface_alt_0_desc);
++		headers[i++] = USBDHDR(&as_out_interface_alt_1_desc);
++		headers[i++] = USBDHDR(&as_out_header_desc);
++		headers[i++] = USBDHDR(&as_out_type_i_desc);
++		headers[i++] = USBDHDR(epout_desc);
++		if (epout_desc_comp)
++			headers[i++] = USBDHDR(epout_desc_comp);
++		headers[i++] = USBDHDR(&as_iso_out_desc);
++	}
++	if (EPIN_EN(opts)) {
++		headers[i++] = USBDHDR(&as_in_interface_alt_0_desc);
++		headers[i++] = USBDHDR(&as_in_interface_alt_1_desc);
++		headers[i++] = USBDHDR(&as_in_header_desc);
++		headers[i++] = USBDHDR(&as_in_type_i_desc);
++		headers[i++] = USBDHDR(epin_desc);
++		if (epin_desc_comp)
++			headers[i++] = USBDHDR(epin_desc_comp);
++		headers[i++] = USBDHDR(&as_iso_in_desc);
++	}
++	headers[i] = NULL;
++}
++
+ /*
+  * This function is an ALSA sound card following USB Audio Class Spec 1.0.
+  */
+@@ -957,9 +1158,6 @@ uac1_ac_header_descriptor *build_ac_header_desc(struct f_uac1_opts *opts)
+ 	return ac_desc;
+ }
+ 
+-/* Use macro to overcome line length limitation */
+-#define USBDHDR(p) (struct usb_descriptor_header *)(p)
+-
+ static void setup_descriptor(struct f_uac1_opts *opts)
+ {
+ 	/* patch descriptors */
+@@ -1015,44 +1213,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		ac_header_desc->wTotalLength = cpu_to_le16(len);
+ 	}
+ 
+-	i = 0;
+-	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+-	f_audio_desc[i++] = USBDHDR(ac_header_desc);
+-
+-	if (EPOUT_EN(opts)) {
+-		f_audio_desc[i++] = USBDHDR(&usb_out_it_desc);
+-		f_audio_desc[i++] = USBDHDR(&io_out_ot_desc);
+-		if (FUOUT_EN(opts))
+-			f_audio_desc[i++] = USBDHDR(out_feature_unit_desc);
+-	}
+-
+-	if (EPIN_EN(opts)) {
+-		f_audio_desc[i++] = USBDHDR(&io_in_it_desc);
+-		f_audio_desc[i++] = USBDHDR(&usb_in_ot_desc);
+-		if (FUIN_EN(opts))
+-			f_audio_desc[i++] = USBDHDR(in_feature_unit_desc);
+-	}
+-
+-	if (FUOUT_EN(opts) || FUIN_EN(opts))
+-		f_audio_desc[i++] = USBDHDR(&ac_int_ep_desc);
+-
+-	if (EPOUT_EN(opts)) {
+-		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_0_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_out_interface_alt_1_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_out_header_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
+-	}
+-	if (EPIN_EN(opts)) {
+-		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_1_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_in_header_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_in_type_i_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_in_ep_desc);
+-		f_audio_desc[i++] = USBDHDR(&as_iso_in_desc);
+-	}
+-	f_audio_desc[i] = NULL;
++	setup_headers(opts, fs_audio_desc, USB_SPEED_FULL);
++	setup_headers(opts, hs_audio_desc, USB_SPEED_HIGH);
++	setup_headers(opts, ss_audio_desc, USB_SPEED_SUPER);
+ }
+ 
+ static int f_audio_validate_opts(struct g_audio *audio, struct device *dev)
+@@ -1264,7 +1427,6 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		if (!ep)
+ 			goto err_free_fu;
+ 		uac1->int_ep = ep;
+-		uac1->int_ep->desc = &ac_int_ep_desc;
+ 
+ 		ac_interface_desc.bNumEndpoints = 1;
+ 	}
+@@ -1275,7 +1437,6 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		if (!ep)
+ 			goto err_free_fu;
+ 		audio->out_ep = ep;
+-		audio->out_ep->desc = &as_out_ep_desc;
+ 	}
+ 
+ 	if (EPIN_EN(audio_opts)) {
+@@ -1283,19 +1444,27 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		if (!ep)
+ 			goto err_free_fu;
+ 		audio->in_ep = ep;
+-		audio->in_ep->desc = &as_in_ep_desc;
+ 	}
+ 
++	/* FS endpoint addresses are copied from autoconfigured HS descriptors */
++	fs_int_ep_desc.bEndpointAddress = ac_int_ep_desc.bEndpointAddress;
++	fs_out_ep_desc.bEndpointAddress = as_out_ep_desc.bEndpointAddress;
++	fs_in_ep_desc.bEndpointAddress = as_in_ep_desc.bEndpointAddress;
++
+ 	setup_descriptor(audio_opts);
+ 
+ 	/* copy descriptors, and track endpoint copies */
+-	status = usb_assign_descriptors(f, f_audio_desc, f_audio_desc, NULL,
+-					NULL);
++	status = usb_assign_descriptors(f, fs_audio_desc, hs_audio_desc,
++					ss_audio_desc, ss_audio_desc);
+ 	if (status)
+ 		goto err_free_fu;
+ 
+-	audio->out_ep_maxpsize = le16_to_cpu(as_out_ep_desc.wMaxPacketSize);
+-	audio->in_ep_maxpsize = le16_to_cpu(as_in_ep_desc.wMaxPacketSize);
++	audio->out_ep_maxpsize = max_t(u16,
++				le16_to_cpu(fs_out_ep_desc.wMaxPacketSize),
++				le16_to_cpu(as_out_ep_desc.wMaxPacketSize));
++	audio->in_ep_maxpsize = max_t(u16,
++				le16_to_cpu(fs_in_ep_desc.wMaxPacketSize),
++				le16_to_cpu(as_in_ep_desc.wMaxPacketSize));
+ 	audio->params.c_chmask = audio_opts->c_chmask;
+ 	audio->params.c_srate = audio_opts->c_srate;
+ 	audio->params.c_ssize = audio_opts->c_ssize;
+-- 
+2.17.1
+

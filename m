@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E46B4BADAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 01:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B5C4BADE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 01:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiBQX7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 18:59:39 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38046 "EHLO
+        id S230021AbiBQX7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 18:59:41 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiBQX7c (ORCPT
+        with ESMTP id S229960AbiBQX7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 18:59:32 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9435C2D1EA;
-        Thu, 17 Feb 2022 15:59:09 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso5190820wmj.2;
-        Thu, 17 Feb 2022 15:59:09 -0800 (PST)
+        Thu, 17 Feb 2022 18:59:38 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3111622BD7;
+        Thu, 17 Feb 2022 15:59:13 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id f3so11510261wrh.7;
+        Thu, 17 Feb 2022 15:59:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=PFiamB+cQuNEgEgXc6/10rnSWlRi//qQSXDSvXdnqAc=;
-        b=ho6SgGCoEgJu+iPaF2fCNtdUrhIzB5uVrqyl9XJicxf8Mhgo1yCZ46rX3HfZ9yOgFR
-         r7OCozkdPw/BCRBHh9ZuO0y0pwbXHlTT3pEU6Alfo9jogLecbEqPoiMYpk9vJVMDTbqL
-         ++exPUpfnuwPfJS6mPT/+uMINI0zDU7frLoevW5ZTlBGGErSgb+FD2xiVTmmtSjOaPtz
-         DcBG5knS2HnZoBheuvp8NH6qQOTLNUEtToN7nM5dAba8Ax7zPmP9PikfliueQ2ucTJj8
-         P6dZXrGyrpFj6WAeym75jFhDS0mL+NMCLBILcH8UVq1EBlAS1/hhaQOFfJoAjmDCizMQ
-         4UVw==
+        bh=vT22BNhvWNrWcIFz/SRqR6yLshzUpgXQgOLovMBptOU=;
+        b=bM8B6vC/eHIfkdXvjvjzL0Io3HKiXs0BA7aifVkhBrtTk4ngyHOIZvcyuEmvV5LwQm
+         WdSUq34wTE1tqEtkkTraje0lPl/0xUcdLe/MPHjIFT3TOh0mh6qpGRBvKxg3sfSiafcF
+         sS9XjOeXcMgD/UlM3mXU69hTehlbVxtFN2KholoVF331OQ8Kvp4O5RrpQ363kuNOHu6e
+         qiTZD6vXY8pW9GadBxHwCgNNH5/1qO2a+d2jJmJgPg6U1G91vdLgRqGwwpNUjYx1CTWZ
+         WE3xy81vHrKJg3Yq+lH+7f90WCoIQp/WT97uRz2+JhM3fMr9xhtPmYd3T078Mk76szBc
+         +cwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PFiamB+cQuNEgEgXc6/10rnSWlRi//qQSXDSvXdnqAc=;
-        b=lgU8/F2tAP2rBi+1byZZK2jR0/z98itKr0by4rYnwdFu7uCdcA/EUUjmBcMk0yNtkO
-         641ojx8QDniz6MKgEorEwiOaN0eule/gLBsVRxc8RGzOuzBTDRCaSoT/GBuf+QzYe+EL
-         89x6dzoN/uTyi3PyVGtAKLOrGR52629rcxTCdlwlv8VLpWM2W+9TQCml0azJgmklm+lB
-         HZLKgVQVoPg86Ko6OyUpfOvqrJqDragNL5wtHXGQrN18BwiKF3uSb3yipHHnWxSwdAor
-         qIPa9RjyaatGz1jYoTqpww2+onifj0vaReuqSRO5DkpI8VU5beJMvuuVHC71OTJlc8rS
-         ZjIA==
-X-Gm-Message-State: AOAM533rhCO35mg9/mGddThcb5ROOu98svJacNDEE+Puza4IdCOkGRwX
-        bFdLs+ipqV/bCCrTmrR8+PQ=
-X-Google-Smtp-Source: ABdhPJxuXPGS4hJI4sRtS9hGAP7ZhWuE5bRs1Rg+VYCkmRtbj/crMfMw+G09dA8DhtZmunKSUnVYbA==
-X-Received: by 2002:a05:600c:3ba0:b0:37b:b86a:5d30 with SMTP id n32-20020a05600c3ba000b0037bb86a5d30mr8091645wms.136.1645142237518;
-        Thu, 17 Feb 2022 15:57:17 -0800 (PST)
+        bh=vT22BNhvWNrWcIFz/SRqR6yLshzUpgXQgOLovMBptOU=;
+        b=q/SXee97kJPaH8qqGAwWhbB0Hzw9tnqmpB7Kx+SUP5+r+Zf5h64DS1E8YFgjhgnppC
+         Ztrl0/+gkX4fXoOcFFdBc6wUlplU40M26iPsInfyEXYGUDVQZAKLMveEuAKuV9NXBddP
+         2m5mlpX/1JTZnKq50DQtAzZcKFO6Ah689x40+ssRZbr0thZkuKWGqRA2lL21bx4/Aw1F
+         kHMucbG6m249LPZbPq3YuJBeHudbDhPtCNccruQAQMs2CQ3nG3I99T15GM5cFXYdcG47
+         vo6lqLHUrijeUMZN48zXUpjxVpX9VbWfNPfbZNtbX+z+knA6j2Kd6YdnDdvJqDPkUTN3
+         YHfw==
+X-Gm-Message-State: AOAM530IkaYPXL7quSIKUam8hAYZqGPRPWBPvAjYFbIvIE/XoaWo7Aro
+        PexeJ6lau7H7FROpy/n49vI=
+X-Google-Smtp-Source: ABdhPJx0o0QEWI6rJv/9wEUhc/aYF1XXdO7EAOnqwF9+/FebyqXIwWI2GYV49YBmfR5KWqyhwgGkqQ==
+X-Received: by 2002:a5d:6292:0:b0:1e7:8afb:73ea with SMTP id k18-20020a5d6292000000b001e78afb73eamr3944853wru.149.1645142238476;
+        Thu, 17 Feb 2022 15:57:18 -0800 (PST)
 Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id r2sm3691694wmq.24.2022.02.17.15.57.16
+        by smtp.googlemail.com with ESMTPSA id r2sm3691694wmq.24.2022.02.17.15.57.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 15:57:17 -0800 (PST)
+        Thu, 17 Feb 2022 15:57:18 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 13/16] clk: qcom: gcc-ipq806x: add CryptoEngine clocks
-Date:   Fri, 18 Feb 2022 00:57:00 +0100
-Message-Id: <20220217235703.26641-14-ansuelsmth@gmail.com>
+Subject: [PATCH v4 14/16] dt-bindings: reset: add ipq8064 ce5 resets
+Date:   Fri, 18 Feb 2022 00:57:01 +0100
+Message-Id: <20220217235703.26641-15-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220217235703.26641-1-ansuelsmth@gmail.com>
 References: <20220217235703.26641-1-ansuelsmth@gmail.com>
@@ -77,303 +77,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing CryptoEngine clocks and pll11 required clock.
+Add ipq8064 ce5 resets needed for CryptoEngine gcc driver.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq806x.c | 244 +++++++++++++++++++++++++++++++++
- 1 file changed, 244 insertions(+)
+ include/dt-bindings/reset/qcom,gcc-ipq806x.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-index 0912abc3af32..e2b310fbc7c0 100644
---- a/drivers/clk/qcom/gcc-ipq806x.c
-+++ b/drivers/clk/qcom/gcc-ipq806x.c
-@@ -256,6 +256,24 @@ static struct clk_pll pll18 = {
- 	},
- };
+diff --git a/include/dt-bindings/reset/qcom,gcc-ipq806x.h b/include/dt-bindings/reset/qcom,gcc-ipq806x.h
+index 26b6f9200620..020c9cf18751 100644
+--- a/include/dt-bindings/reset/qcom,gcc-ipq806x.h
++++ b/include/dt-bindings/reset/qcom,gcc-ipq806x.h
+@@ -163,5 +163,10 @@
+ #define NSS_CAL_PRBS_RST_N_RESET			154
+ #define NSS_LCKDT_RST_N_RESET				155
+ #define NSS_SRDS_N_RESET				156
++#define CRYPTO_ENG1_RESET				157
++#define CRYPTO_ENG2_RESET				158
++#define CRYPTO_ENG3_RESET				159
++#define CRYPTO_ENG4_RESET				160
++#define CRYPTO_AHB_RESET				161
  
-+static struct clk_pll pll11 = {
-+	.l_reg = 0x3184,
-+	.m_reg = 0x3188,
-+	.n_reg = 0x318c,
-+	.config_reg = 0x3194,
-+	.mode_reg = 0x3180,
-+	.status_reg = 0x3198,
-+	.status_bit = 16,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "pll11",
-+		.parent_data = &(const struct clk_parent_data){
-+			.fw_name = "pxo",
-+		},
-+		.num_parents = 1,
-+		.ops = &clk_pll_ops,
-+	},
-+};
-+
- enum {
- 	P_PXO,
- 	P_PLL8,
-@@ -264,6 +282,7 @@ enum {
- 	P_CXO,
- 	P_PLL14,
- 	P_PLL18,
-+	P_PLL11,
- };
- 
- static const struct parent_map gcc_pxo_pll8_map[] = {
-@@ -331,6 +350,44 @@ static const struct clk_parent_data gcc_pxo_pll8_pll14_pll18_pll0[] = {
- 	{ .hw = &pll18.clkr.hw },
- };
- 
-+static const struct parent_map gcc_pxo_pll8_pll0_pll14_pll18_pll11_map[] = {
-+	{ P_PXO, 0 },
-+	{ P_PLL8, 4 },
-+	{ P_PLL0, 2 },
-+	{ P_PLL14, 5 },
-+	{ P_PLL18, 1 },
-+	{ P_PLL11, 3 },
-+};
-+
-+static const struct clk_parent_data gcc_pxo_pll8_pll0_pll14_pll18_pll11[] = {
-+	{ .fw_name = "pxo" },
-+	{ .hw = &pll8_vote.hw },
-+	{ .hw = &pll0_vote.hw },
-+	{ .hw = &pll14.clkr.hw },
-+	{ .hw = &pll18.clkr.hw },
-+	{ .hw = &pll11.clkr.hw },
-+
-+};
-+
-+static const struct parent_map gcc_pxo_pll3_pll0_pll14_pll18_pll11_map[] = {
-+	{ P_PXO, 0 },
-+	{ P_PLL3, 6 },
-+	{ P_PLL0, 2 },
-+	{ P_PLL14, 5 },
-+	{ P_PLL18, 1 },
-+	{ P_PLL11, 3 },
-+};
-+
-+static const struct clk_parent_data gcc_pxo_pll3_pll0_pll14_pll18_pll11[] = {
-+	{ .fw_name = "pxo" },
-+	{ .hw = &pll3.clkr.hw },
-+	{ .hw = &pll0_vote.hw },
-+	{ .hw = &pll14.clkr.hw },
-+	{ .hw = &pll18.clkr.hw },
-+	{ .hw = &pll11.clkr.hw },
-+
-+};
-+
- static struct freq_tbl clk_tbl_gsbi_uart[] = {
- 	{  1843200, P_PLL8, 2,  6, 625 },
- 	{  3686400, P_PLL8, 2, 12, 625 },
-@@ -2818,6 +2875,186 @@ static struct clk_dyn_rcg ubi32_core2_src_clk = {
- 	},
- };
- 
-+static const struct freq_tbl clk_tbl_ce5_core[] = {
-+	{ 150000000, P_PLL3, 8, 1, 1 },
-+	{ 213200000, P_PLL11, 5, 1, 1 },
-+	{ }
-+};
-+
-+static struct clk_dyn_rcg ce5_core_src = {
-+	.ns_reg[0] = 0x36C4,
-+	.ns_reg[1] = 0x36C8,
-+	.bank_reg = 0x36C0,
-+	.s[0] = {
-+		.src_sel_shift = 0,
-+		.parent_map = gcc_pxo_pll3_pll0_pll14_pll18_pll11_map,
-+	},
-+	.s[1] = {
-+		.src_sel_shift = 0,
-+		.parent_map = gcc_pxo_pll3_pll0_pll14_pll18_pll11_map,
-+	},
-+	.p[0] = {
-+		.pre_div_shift = 3,
-+		.pre_div_width = 4,
-+	},
-+	.p[1] = {
-+		.pre_div_shift = 3,
-+		.pre_div_width = 4,
-+	},
-+	.mux_sel_bit = 0,
-+	.freq_tbl = clk_tbl_ce5_core,
-+	.clkr = {
-+		.enable_reg = 0x36C0,
-+		.enable_mask = BIT(1),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "ce5_core_src",
-+			.parent_data = gcc_pxo_pll3_pll0_pll14_pll18_pll11,
-+			.num_parents = ARRAY_SIZE(gcc_pxo_pll3_pll0_pll14_pll18_pll11),
-+			.ops = &clk_dyn_rcg_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch ce5_core_clk = {
-+	.halt_reg = 0x2FDC,
-+	.halt_bit = 5,
-+	.hwcg_reg = 0x36CC,
-+	.hwcg_bit = 6,
-+	.clkr = {
-+		.enable_reg = 0x36CC,
-+		.enable_mask = BIT(4),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "ce5_core_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&ce5_core_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch_ops,
-+			.flags = CLK_SET_RATE_PARENT,
-+		},
-+	},
-+};
-+
-+static const struct freq_tbl clk_tbl_ce5_a_clk[] = {
-+	{ 160000000, P_PLL0, 5, 1, 1 },
-+	{ 213200000, P_PLL11, 5, 1, 1 },
-+	{ }
-+};
-+
-+static struct clk_dyn_rcg ce5_a_clk_src = {
-+	.ns_reg[0] = 0x3d84,
-+	.ns_reg[1] = 0x3d88,
-+	.bank_reg = 0x3d80,
-+	.s[0] = {
-+		.src_sel_shift = 0,
-+		.parent_map = gcc_pxo_pll8_pll0_pll14_pll18_pll11_map,
-+	},
-+	.s[1] = {
-+		.src_sel_shift = 0,
-+		.parent_map = gcc_pxo_pll8_pll0_pll14_pll18_pll11_map,
-+	},
-+	.p[0] = {
-+		.pre_div_shift = 3,
-+		.pre_div_width = 4,
-+	},
-+	.p[1] = {
-+		.pre_div_shift = 3,
-+		.pre_div_width = 4,
-+	},
-+	.mux_sel_bit = 0,
-+	.freq_tbl = clk_tbl_ce5_a_clk,
-+	.clkr = {
-+		.enable_reg = 0x3d80,
-+		.enable_mask = BIT(1),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "ce5_a_clk_src",
-+			.parent_data = gcc_pxo_pll8_pll0_pll14_pll18_pll11,
-+			.num_parents = ARRAY_SIZE(gcc_pxo_pll8_pll0_pll14_pll18_pll11),
-+			.ops = &clk_dyn_rcg_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch ce5_a_clk = {
-+	.halt_reg = 0x3c20,
-+	.halt_bit = 12,
-+	.hwcg_reg = 0x3d8c,
-+	.hwcg_bit = 6,
-+	.clkr = {
-+		.enable_reg = 0x3d8c,
-+		.enable_mask = BIT(4),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "ce5_a_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&ce5_a_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch_ops,
-+			.flags = CLK_SET_RATE_PARENT,
-+		},
-+	},
-+};
-+
-+static const struct freq_tbl clk_tbl_ce5_h_clk[] = {
-+	{ 160000000, P_PLL0, 5, 1, 1 },
-+	{ 213200000, P_PLL11, 5, 1, 1 },
-+	{ }
-+};
-+
-+static struct clk_dyn_rcg ce5_h_clk_src = {
-+	.ns_reg[0] = 0x3c64,
-+	.ns_reg[1] = 0x3c68,
-+	.bank_reg = 0x3c60,
-+	.s[0] = {
-+		.src_sel_shift = 0,
-+		.parent_map = gcc_pxo_pll8_pll0_pll14_pll18_pll11_map,
-+	},
-+	.s[1] = {
-+		.src_sel_shift = 0,
-+		.parent_map = gcc_pxo_pll8_pll0_pll14_pll18_pll11_map,
-+	},
-+	.p[0] = {
-+		.pre_div_shift = 3,
-+		.pre_div_width = 4,
-+	},
-+	.p[1] = {
-+		.pre_div_shift = 3,
-+		.pre_div_width = 4,
-+	},
-+	.mux_sel_bit = 0,
-+	.freq_tbl = clk_tbl_ce5_h_clk,
-+	.clkr = {
-+		.enable_reg = 0x3c60,
-+		.enable_mask = BIT(1),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "ce5_h_clk_src",
-+			.parent_data = gcc_pxo_pll8_pll0_pll14_pll18_pll11,
-+			.num_parents = ARRAY_SIZE(gcc_pxo_pll8_pll0_pll14_pll18_pll11),
-+			.ops = &clk_dyn_rcg_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch ce5_h_clk = {
-+	.halt_reg = 0x3c20,
-+	.halt_bit = 11,
-+	.hwcg_reg = 0x3c6c,
-+	.hwcg_bit = 6,
-+	.clkr = {
-+		.enable_reg = 0x3c6c,
-+		.enable_mask = BIT(4),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "ce5_h_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&ce5_h_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_branch_ops,
-+			.flags = CLK_SET_RATE_PARENT,
-+		},
-+	},
-+};
-+
- static struct clk_regmap *gcc_ipq806x_clks[] = {
- 	[PLL0] = &pll0.clkr,
- 	[PLL0_VOTE] = &pll0_vote,
-@@ -2825,6 +3062,7 @@ static struct clk_regmap *gcc_ipq806x_clks[] = {
- 	[PLL4_VOTE] = &pll4_vote,
- 	[PLL8] = &pll8.clkr,
- 	[PLL8_VOTE] = &pll8_vote,
-+	[PLL11] = &pll11.clkr,
- 	[PLL14] = &pll14.clkr,
- 	[PLL14_VOTE] = &pll14_vote,
- 	[PLL18] = &pll18.clkr,
-@@ -2939,6 +3177,12 @@ static struct clk_regmap *gcc_ipq806x_clks[] = {
- 	[PLL9] = &hfpll0.clkr,
- 	[PLL10] = &hfpll1.clkr,
- 	[PLL12] = &hfpll_l2.clkr,
-+	[CE5_A_CLK_SRC] = &ce5_a_clk_src.clkr,
-+	[CE5_A_CLK] = &ce5_a_clk.clkr,
-+	[CE5_H_CLK_SRC] = &ce5_h_clk_src.clkr,
-+	[CE5_H_CLK] = &ce5_h_clk.clkr,
-+	[CE5_CORE_CLK_SRC] = &ce5_core_src.clkr,
-+	[CE5_CORE_CLK] = &ce5_core_clk.clkr,
- };
- 
- static const struct qcom_reset_map gcc_ipq806x_resets[] = {
+ #endif
 -- 
 2.34.1
 

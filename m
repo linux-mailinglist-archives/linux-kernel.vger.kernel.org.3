@@ -2,172 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997724B9766
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A254B976C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbiBQEES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 23:04:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36202 "EHLO
+        id S233469AbiBQEGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 23:06:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiBQEEQ (ORCPT
+        with ESMTP id S233413AbiBQEGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 23:04:16 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A3D2A22AD
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645070641; x=1676606641;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zhFXlAR4H63qsxXD7MCMTe1kjTBib/DCLsYseU4m9/8=;
-  b=IvG5xHN6ROdJX87afMqFeE9JFSX6XdGVKKtwx8AGawZSAN6cmoe0Zaw+
-   4QRKQ1pKMeUThDVZPIBgi+Z8mpnAqC6q2VyiCSpbbUyzjpBO1diKmA1gG
-   LJsphmPu5a6EjQVbq8Hnbs7ZlKZFD5Pf5g0WPscj18B2cxD6NY+HLNBLb
-   kRW1XOaglm+Cz1VXul19EBY9xAkfWuSELBoaF6s2KWBrEV6MQ8upqbtvi
-   HFhsp07PELdOcfAIUxMyP0Gy1jDwcfUY6L1wAt2SG+3vF6jX3KW3hajUU
-   CnNd9zT1g2QbDYNKsQ4O2fTzguwjzPoiJ37iJW8wgj1uYG2GOtxY1nv5H
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249619844"
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="249619844"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 20:04:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
-   d="scan'208";a="625777194"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Feb 2022 20:04:00 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKY1P-000BRQ-RH; Thu, 17 Feb 2022 04:03:59 +0000
-Date:   Thu, 17 Feb 2022 12:03:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [kees:for-next/lkdtm 3/4] drivers/misc/lkdtm/usercopy.c:74:39:
- error: use of undeclared identifier 'current_stack_pointer'
-Message-ID: <202202171116.tFKzkUFI-lkp@intel.com>
+        Wed, 16 Feb 2022 23:06:34 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F6321FC7C;
+        Wed, 16 Feb 2022 20:06:21 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id h5so2247997ioj.3;
+        Wed, 16 Feb 2022 20:06:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QUSoUHSjJMmplw4ZjLL+BTqGLSZGqO8tdAI7uDdrahY=;
+        b=UYiGhdWEhgHiJjsOB0bDbRCJ1zOUL1OgbrBA5OeIavQp6/7KKSDbRu5Uo4BdZ1mHq0
+         ebZxyXZEYOMa7GBZcnqcaUMdxjsejCMGpG7WwQqGSLKPRL+y5KtR3A77UKxDKeIZBaWs
+         AVha5oqKOLU9YYWM+7owD97Xo7Xq3XBSxXyHgzpUgDWNVQHfEqqtgqQCynB8Ko/wvsgJ
+         mdEjnQ2ncNqqCfwlmzV9+cIyXduBmz8uDizsLg6qkytymfVz8xnU44SJawU6oM+ToC3e
+         iAM7NGTggh8L/Gb8NTrl+cYl2TWrTpYfGOREen19/6qyfvMckBrrzlCKKaLjgLbGmo53
+         TwAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QUSoUHSjJMmplw4ZjLL+BTqGLSZGqO8tdAI7uDdrahY=;
+        b=15SuEp3I7ACQtqXD/hC4W+h88SOlaAN/fbkbBMBl2uKhpr8VnDLPvXhrv8KPnxMrcw
+         yf3yRVx6g72zBeHw3/rvMCatd/0i7YqgY3yjocOTK/dslbBO60g1QAgJK2vPSVaJqDbH
+         fbqiZgNFGb2axVAllIuRhZWi4wcP8qfh3VWzMZiT82J7rPIE+GnAAJETw7vJzdmtnhNz
+         zMLccpto9xM5gfUxjJOAEIrM+sAi00Bthzce0PoYrqOse1YcLWVBqfDQzkjpKyxV5flp
+         jGpkeSSJ2+OB+n72VhbvabvhDpdsNi9aEZnyyQJa4SFrtxqbc8OCx3gAxsuUWVufqH3O
+         ZalA==
+X-Gm-Message-State: AOAM531Ftmm2NqU0rJYd+ALZYNx8WuZ3d2AvrZHButmIROPR/1evBta2
+        yFz9+4EqDJI6oTqGefIb1lKyYWPj/XdjWfzUnzWdIZIYMvo1Ms31FHY=
+X-Google-Smtp-Source: ABdhPJx187pKc6+DoMP2EEChkSUVbFdwtcAYM42qX69rLIAIylW4QfCWKbxmGNW6de2pHCO2YXluGQ+nWYcuShjy6gM=
+X-Received: by 2002:a02:b903:0:b0:30e:49cb:e65c with SMTP id
+ v3-20020a02b903000000b0030e49cbe65cmr750449jan.164.1645070780775; Wed, 16 Feb
+ 2022 20:06:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220211001345.3429572-1-gch981213@gmail.com> <20220216195423.GA17551@alpha.franken.de>
+In-Reply-To: <20220216195423.GA17551@alpha.franken.de>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Thu, 17 Feb 2022 12:06:09 +0800
+Message-ID: <CAJsYDVJw2DJX97cRwoAofzq_jL0GhyaC5j7UuT6OzC=Lp8WkSQ@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Rui Salvaterra <rsalvaterra@gmail.com>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/lkdtm
-head:   2223f39d57e495531165ed5bf1d94bf4f1be7963
-commit: d89624a74df284274743400bb318dba7246250a4 [3/4] lkdtm/usercopy: Expand size of "out of frame" object
-config: riscv-randconfig-r004-20220216 (https://download.01.org/0day-ci/archive/20220217/202202171116.tFKzkUFI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=d89624a74df284274743400bb318dba7246250a4
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees for-next/lkdtm
-        git checkout d89624a74df284274743400bb318dba7246250a4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/lkdtm/
+Hi!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Feb 17, 2022 at 3:57 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Fri, Feb 11, 2022 at 08:13:44AM +0800, Chuanhong Guo wrote:
+> > It's reported that current memory detection code occasionally detects
+> > larger memory under some bootloaders.
+> > Current memory detection code tests whether address space wraps around
+> > on KSEG0, which is unreliable because it's cached.
+> >
+> > Rewrite memory size detection to perform the same test on KSEG1 instead.
+> > While at it, this patch also does the following two things:
+> > 1. use a fixed pattern instead of a random function pointer as the magic
+> >    value.
+> > 2. add an additional memory write and a second comparison as part of the
+> >    test to prevent possible smaller memory detection result due to
+> >    leftover values in memory.
+> >
+> > Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
+> > Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
+> > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> > ---
+> >  arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
+> >  1 file changed, 23 insertions(+), 13 deletions(-)
+>
+> applied to mips-fixes.
 
-All errors (new ones prefixed by >>):
+Oops.
 
->> drivers/misc/lkdtm/usercopy.c:74:39: error: use of undeclared identifier 'current_stack_pointer'
-           pr_info("stack     : %px\n", (void *)current_stack_pointer);
-                                                ^
-   1 error generated.
+As I mentioned in a previous mail, this patch has two cosmetic problems:
+1. misplaced bracket in commit message "Fixes" tag
+2. incorrect second test pattern: I meant to flip all the bits in the
+first pattern,
+   but I used "!" instead of "~". Any value will work just fine but it
+looks weird
+   to construct a zero using !MT7621_MEM_TEST_PATTERN.
 
+Should I send a second patch to fix this patch or send a v2 of the
+original patch?
 
-vim +/current_stack_pointer +74 drivers/misc/lkdtm/usercopy.c
-
-    53	
-    54	static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
-    55	{
-    56		unsigned long user_addr;
-    57		unsigned char good_stack[32];
-    58		unsigned char *bad_stack;
-    59		int i;
-    60	
-    61		/* Exercise stack to avoid everything living in registers. */
-    62		for (i = 0; i < sizeof(good_stack); i++)
-    63			good_stack[i] = test_text[i % sizeof(test_text)];
-    64	
-    65		/* This is a pointer to outside our current stack frame. */
-    66		if (bad_frame) {
-    67			bad_stack = do_usercopy_stack_callee((uintptr_t)&bad_stack);
-    68		} else {
-    69			/* Put start address just inside stack. */
-    70			bad_stack = task_stack_page(current) + THREAD_SIZE;
-    71			bad_stack -= sizeof(unsigned long);
-    72		}
-    73	
-  > 74		pr_info("stack     : %px\n", (void *)current_stack_pointer);
-    75		pr_info("good_stack: %px-%px\n", good_stack, good_stack + sizeof(good_stack));
-    76		pr_info("bad_stack : %px-%px\n", bad_stack, bad_stack + sizeof(good_stack));
-    77	
-    78		user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
-    79				    PROT_READ | PROT_WRITE | PROT_EXEC,
-    80				    MAP_ANONYMOUS | MAP_PRIVATE, 0);
-    81		if (user_addr >= TASK_SIZE) {
-    82			pr_warn("Failed to allocate user memory\n");
-    83			return;
-    84		}
-    85	
-    86		if (to_user) {
-    87			pr_info("attempting good copy_to_user of local stack\n");
-    88			if (copy_to_user((void __user *)user_addr, good_stack,
-    89					 unconst + sizeof(good_stack))) {
-    90				pr_warn("copy_to_user failed unexpectedly?!\n");
-    91				goto free_user;
-    92			}
-    93	
-    94			pr_info("attempting bad copy_to_user of distant stack\n");
-    95			if (copy_to_user((void __user *)user_addr, bad_stack,
-    96					 unconst + sizeof(good_stack))) {
-    97				pr_warn("copy_to_user failed, but lacked Oops\n");
-    98				goto free_user;
-    99			}
-   100		} else {
-   101			/*
-   102			 * There isn't a safe way to not be protected by usercopy
-   103			 * if we're going to write to another thread's stack.
-   104			 */
-   105			if (!bad_frame)
-   106				goto free_user;
-   107	
-   108			pr_info("attempting good copy_from_user of local stack\n");
-   109			if (copy_from_user(good_stack, (void __user *)user_addr,
-   110					   unconst + sizeof(good_stack))) {
-   111				pr_warn("copy_from_user failed unexpectedly?!\n");
-   112				goto free_user;
-   113			}
-   114	
-   115			pr_info("attempting bad copy_from_user of distant stack\n");
-   116			if (copy_from_user(bad_stack, (void __user *)user_addr,
-   117					   unconst + sizeof(good_stack))) {
-   118				pr_warn("copy_from_user failed, but lacked Oops\n");
-   119				goto free_user;
-   120			}
-   121		}
-   122	
-   123	free_user:
-   124		vm_munmap(user_addr, PAGE_SIZE);
-   125	}
-   126	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Regards,
+Chuanhong Guo

@@ -2,128 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFD54B9510
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 01:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 486054B9514
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 01:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiBQAec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 19:34:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43844 "EHLO
+        id S229833AbiBQAhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 19:37:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiBQAea (ORCPT
+        with ESMTP id S229461AbiBQAhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 19:34:30 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AD7296900
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 16:34:17 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id d10so3025955eje.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 16:34:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=32dF3wm+g52NnE8DQB91PZHPpwomq5mRNnLyxvWUNLQ=;
-        b=JbKRy81VTIkdZzhMQDMTPYqb445XGaPdvUkBXz3BrJBistMYZbkg+llEJ08x6Hr2jl
-         zfQow6BTfc/FQx5ZDbPsBTF2TRX7/+f15uuBg71NiACV37+bFgKqnlBYAtTey+gQbRVV
-         Q93AL8PN5GJIsIpmDFu0QztHw38YG3y4JjM1YOXw6cw9epvKqq7qvUfNzmqCqzikDtSM
-         ev5uIVYkWJJk+DlS0B2Wj+PSUDoOoFK1g9wYL+J3aONhyLSV+P/OGPUHV0QtmHw15Q7d
-         sMSth8O5Q55dp3mN7gBKgDgpQ7o2tunosV1NQiFJTp7V09xbEhfflLaJIU5oYrSel3nk
-         3O8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=32dF3wm+g52NnE8DQB91PZHPpwomq5mRNnLyxvWUNLQ=;
-        b=gZE+jTx/3FmvEjngUfggjdoWjAaDHk3O9PUy4jCa+lu9hbd2v6HkHVWG7R9ClSaxyX
-         7C9y8S86IJNWE54rN0KraWFH7zTonHeJyAHFXC2NgxGmmw4NFgQgycHozJQYbzAXu70r
-         P7vTYzc+BYBpWBnqlHBY/BRLpzQcGQxTNG8aTVfg3lXQIjqq2H4evc9DUNckA2eA5Cof
-         BoUxv/Jumc33W0wM8289uh1rhWQrdX1+Y5/AvwNPxrt4GvvAnwp6pIIEQiVAyH6tjIur
-         LwhmcvKtn5FcRRJmw1bIfYLTE2fQPf1YG1Bg9wVaBRiZwkWDjOoBA9JoPMhWhihAoEpO
-         RYEA==
-X-Gm-Message-State: AOAM531vaNq5bMMo/E83oSxZ7K62328gMsQpXXsdgDwAvr8VSYXmOSpE
-        lzfb4/fQ+VuZ6CnoeHcgMgo=
-X-Google-Smtp-Source: ABdhPJx1XEP3KL5vKq8o8WcWLV89sp98c5B85McoH873G4uGa9a1VnbgKgQDxwyXsZzwXXcD2+dA4w==
-X-Received: by 2002:a17:906:858e:b0:6cf:d198:37a1 with SMTP id v14-20020a170906858e00b006cfd19837a1mr398091ejx.545.1645058055999;
-        Wed, 16 Feb 2022 16:34:15 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a11sm2383994edu.61.2022.02.16.16.34.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 16 Feb 2022 16:34:15 -0800 (PST)
-Date:   Thu, 17 Feb 2022 00:34:14 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Wei Yang <richard.weiyang@gmail.com>, peterz@infradead.org,
-        vbabka@suse.cz, will@kernel.org, linyunsheng@huawei.com,
-        aarcange@redhat.com, feng.tang@intel.com, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
- folio->lru
-Message-ID: <20220217003414.jmrdpv5ytoklz6yb@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220106235254.19190-1-richard.weiyang@gmail.com>
- <Yde6hZ41agqa2zs3@casper.infradead.org>
- <20220107134059.flxr2hcd6ilb6vt7@master>
- <Ydi6iMbSZ/FewYPT@casper.infradead.org>
- <20220107160825.13c71fdd871d7d5611d116b9@linux-foundation.org>
- <YdjfsbAR0UlwyC6b@casper.infradead.org>
+        Wed, 16 Feb 2022 19:37:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52368E6D91;
+        Wed, 16 Feb 2022 16:37:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E142161C55;
+        Thu, 17 Feb 2022 00:37:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F37CC004E1;
+        Thu, 17 Feb 2022 00:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645058239;
+        bh=Jse37Gv/FnjBWQ3ysuSP5HtMYEFNEpKn11Uwq/2SITw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RQDBnsc2JFAmf6I3DvnJry/b1qFlhqSRrrFtSBB3uQgkYn8rLSjH4TmDwEgspboEp
+         ZYudBDEFFc/d0gunx8OYqyarmMB1WqTd/UF43t/syGPIMCThVcK/ZLk8fULXkRP08p
+         3XHnOniUr6envfAoU3S/pPlak535axWtN5PvsXi4VSPMKZO+Z6kg2PCetkkmQdQu0A
+         pfe/5pcoFCmw9oyifU6HBc1wJ3N7LiF+6FpkC49SzJZT3h71FCKc54zM+NQpOqELCV
+         uozqEDiyNmqF6/Shv33feDH8lF1+c0386LCaq5iOiwBEakHU6NYUMGUnw772yjAyRJ
+         QMe4TbQBOfXHw==
+Date:   Wed, 16 Feb 2022 17:37:13 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] um: Allow builds with Clang
+Message-ID: <Yg2YubZxvYvx7/nm@dev-arch.archlinux-ax161>
+References: <20220217002843.2312603-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdjfsbAR0UlwyC6b@casper.infradead.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220217002843.2312603-1-keescook@chromium.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 12:49:53AM +0000, Matthew Wilcox wrote:
->On Fri, Jan 07, 2022 at 04:08:25PM -0800, Andrew Morton wrote:
->> On Fri, 7 Jan 2022 22:11:20 +0000 Matthew Wilcox <willy@infradead.org> wrote:
->> 
-[...]
->> > > Hi, Matthew
->> > > 
->> > > Would you mind sharing some insight on this check?
->> > 
->> > It's right there in the comments.
->> 
->> Well I can't figure out which comment you're referring to?
->
->         * WARNING: bit 0 of the first word is used for PageTail(). That
->         * means the other users of this union MUST NOT use the bit to
->         * avoid collision and false-positive PageTail().
->
->> > If you can't be bothered to read, why should I write?
->> 
+On Wed, Feb 16, 2022 at 04:28:43PM -0800, Kees Cook wrote:
+> Add x86-64 target for Clang+um and update user-offsets.c to use
+> Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
 
-Hi, Matthew
+Clang-friendly assembly?
 
-This change is introduced in commit 1d798ca3f164 'mm: make compound_head()
-robust'.
+> ("kbuild: fix asm-offset generation to work with clang").
+> 
+> This lets me run KUnit tests with Clang:
+> 
+> $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> ...
+> $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> ...
+> 
+> Cc: Jeff Dike <jdike@addtoit.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-As mentioned in the changelog.
+I am not super familiar with UML but this seems reasonable.
 
-```
-    That means page->compound_head shares storage space with:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-    - page->lru.next;
-    - page->next;
-    - page->rcu_head.next;
-```
+One small nit below if you have to send a v2, not sure it is worth it
+otherwise.
 
-We need to make sure those fields in page don't use bit 0 of the word.
+> ---
+>  arch/x86/um/user-offsets.c | 4 ++--
+>  scripts/Makefile.clang     | 1 +
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> index bae61554abcc..d9071827b515 100644
+> --- a/arch/x86/um/user-offsets.c
+> +++ b/arch/x86/um/user-offsets.c
+> @@ -10,10 +10,10 @@
+>  #include <asm/types.h>
+>  
+>  #define DEFINE(sym, val) \
+> -	asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> +	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+>  
+>  #define DEFINE_LONGS(sym, val) \
+> -	asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> +	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+>  
+>  void foo(void)
+>  {
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 51fc23e2e9e5..857b23de51c6 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
+>  CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
+> +CLANG_TARGET_FLAGS_um		:= x86_64-linux-gnu
 
-So this is an internal guarantee in struct page. I don't see the reason to
-compare page->compound_head and folio->lru here.
+It might be nice to keep this in alphabetical order.
 
-Maybe I miss something. If you would explain a little, I would appreciate
-much.
-
--- 
-Wei Yang
-Help you, Help me
+>  CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>  
+>  ifeq ($(CROSS_COMPILE),)
+> -- 
+> 2.30.2
+> 
+> 

@@ -2,49 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523BB4BA8B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D8A4BA8DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244617AbiBQStf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:49:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41912 "EHLO
+        id S237347AbiBQSz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:55:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbiBQStc (ORCPT
+        with ESMTP id S244807AbiBQSzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:49:32 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FFA51338;
-        Thu, 17 Feb 2022 10:49:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=KT4HnucK16+RSYEwIMlsvOnUYi1BdaERlrwptdyeMjo=; b=W3EHhcKTCdUOlRZ/wcV0jHM1Am
-        4aQR4HvOJ4ThXsATD0GwyVAq60dvKepEue/zVecj5a+aeaN7t/jI+T7eEuEocCi7QP47FHXT22IK9
-        h31WbwqR0VabAr5xHINL7Pox9r7In89Eo75AtNLPoXsL4BE9aQs7wVKcyaoVy5oRhAEaLq72ebUgy
-        u04JPlT7Eddy8bX3aep5nbkiz7sE4/vT2V/uBVg6H759vdfc3BfqIuCqjbTrfacjeaYW1qsJ2DeVL
-        O/F1Os2zG9jiRnSYe9aI6IxqHQ7h783v1zYzn0Wo/AGHgBa7cBWUNOUXtNkSm8GAVHkDuTdvC90gc
-        HYVfB1hw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKlq2-00FrJn-SJ; Thu, 17 Feb 2022 18:49:11 +0000
-Message-ID: <078be2a1-707c-2e18-4b93-27dce25b1c46@infradead.org>
-Date:   Thu, 17 Feb 2022 10:49:07 -0800
+        Thu, 17 Feb 2022 13:55:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8655035DD7;
+        Thu, 17 Feb 2022 10:54:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DB9561BA2;
+        Thu, 17 Feb 2022 18:54:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C209C340E8;
+        Thu, 17 Feb 2022 18:54:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645124044;
+        bh=MbQrC0DuaWykssEif2K4UqZMoBje0xkc2CHA1AW/mCQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NjSS2Q5EN57kgvz4emp31Dem8VSFUDRlJbHR0ti3/oFEUsBIeMZvaqtXfrmtKxtvL
+         /iDhzP9teLQ/OyQsD0/BRt6wdmeZT6As3aJKyWMuHqHXlqDrZXE8MS+5CCiLhCKsPP
+         QPA2K4/9E5TNxWY3B/SONimiUDq1p2kZ62jUB5+kXmsmpI7S+HDI1TLTpnMaydEHgB
+         T4VHNAOD8W6wWRAR8YZSpO4IP5q+HFUvcGGlWKYbtuquILJ5zUTxburt6tb5YFwdq8
+         gmt7e647ISqChh7af6TPp0QuC4g2c6SBegOQWxeMVA1KomMkfP0f6Na1ukFJMnOzt3
+         zA0AJhgSr3vXQ==
+Date:   Thu, 17 Feb 2022 10:54:02 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        "coreteam@netfilter.org" <coreteam@netfilter.org>
+Subject: Re: [PATCH net-next v1] net: Use csum_replace_... and csum_sub()
+ helpers instead of opencoding
+Message-ID: <20220217105402.302a2d20@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <a7fe3817-a9ed-fb48-c3ab-1d17e8961e7f@csgroup.eu>
+References: <fe60030b6f674d9bf41f56426a4b0a8a9db0d20f.1645112415.git.christophe.leroy@csgroup.eu>
+        <20220217092442.4948b48c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <13805dc8-4f96-9621-3b8b-4ec5ea6aeffe@csgroup.eu>
+        <20220217101442.0a2805b6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <a7fe3817-a9ed-fb48-c3ab-1d17e8961e7f@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] dma: ti: cleanup comments
-Content-Language: en-US
-To:     trix@redhat.com, vkoul@kernel.org, peter.ujfalusi@gmail.com
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220217182546.3266909-1-trix@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220217182546.3266909-1-trix@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,34 +65,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 17 Feb 2022 18:39:07 +0000 Christophe Leroy wrote:
+> Le 17/02/2022 =C3=A0 19:14, Jakub Kicinski a =C3=A9crit=C2=A0:
+> > On Thu, 17 Feb 2022 18:11:58 +0000 Christophe Leroy wrote: =20
+> >> Looks like csum_replace4() expects __be32 inputs, I'll look at it but
+> >> I'm not inclined at adding force cast, so will probably leave
+> >> nft_csum_replace() as is. =20
+> >=20
+> > That may imply also leaving it in your tree.. =20
+>=20
+> By "leave as is" I meant I'll drop the change.
+>=20
+> I'll send v2 without this hunk.
 
-
-On 2/17/22 10:25, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Remove the second 'the'
-> 
-> Replacements
-> completetion to completion
-> seens to seen
-> pendling to pending
-> atleast to at least
-> tranfer to transfer
-> multibple to a multiple
-> transfering to transferring
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-thanks.
-
-> ---
->  drivers/dma/ti/cppi41.c   |  6 +++---
->  drivers/dma/ti/edma.c     | 10 +++++-----
->  drivers/dma/ti/omap-dma.c |  2 +-
->  3 files changed, 9 insertions(+), 9 deletions(-)
-
-
--- 
-~Randy
+Thanks, sorry for the snarky comment, I read it as "take it or leave
+it". I've heard too many of those lately.

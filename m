@@ -2,146 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DB04BA831
+	by mail.lfdr.de (Postfix) with ESMTP id 142F84BA830
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244372AbiBQS0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:26:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41788 "EHLO
+        id S244353AbiBQS1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:27:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiBQS0b (ORCPT
+        with ESMTP id S244384AbiBQS0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:26:31 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6551A33351
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:26:16 -0800 (PST)
-Received: from [192.168.4.54] (cpe-70-95-196-11.san.res.rr.com [70.95.196.11])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6417420BE580;
-        Thu, 17 Feb 2022 10:26:15 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6417420BE580
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1645122375;
-        bh=M5mtPIPM0j89LYQrp63Y0RDZN8FfF+oH71W+YVr1EAg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZkSaFxck2/vs6ydzKP+M0Vwdxo3z9RLR4b/doO3dwzRWM79cluxNtJXvtFZIeh0mG
-         OZryPCMcrDKN/rMuZNVGd2F/1wwU4zgQnn5If+KUOspP/jtbCOXH9+HTPwRzlYgFs0
-         P35lWg9V09Qvn1zsp5zps+G/NOArhl2Fio5iyDWo=
-Message-ID: <a22c9bed-3cc3-e2c0-7eb2-1a19d64af574@linux.microsoft.com>
-Date:   Thu, 17 Feb 2022 10:26:14 -0800
+        Thu, 17 Feb 2022 13:26:51 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF7B63E0;
+        Thu, 17 Feb 2022 10:26:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645122397; x=1676658397;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=k332e9GjAKrmUyxR7c5L2ox5oku2avcOBT6oCrMU0Co=;
+  b=GvhOsnK/Ji9Mg8bUR9D3sk1EJIOTe6OiCtbgkcjxGKp1SfdFo41DTBCD
+   r033af0M4xywpp2oyBwfdLdCOjZNV5TBeWCdOd8qf56ohgB5SdJbe7TyA
+   JH+s7d6NzPDIEGmLF2J6gNW/Ky3SxxgE1YeeCMOA+M+JzUMcKF0FYqahE
+   cNdyVnQsJgFwVPFqrCNZP7MuH2H1ZjtcYEnszwHQLL7iExEkY2b2wU9OR
+   6L5adV+H6586MJeYeEi7VWs4/YHqRCxLmmoo4cY3P4VRjcDf72xGDm2C1
+   cuPUZ9t65SOrc/LuplbeM45GTwL/mfClWBWGsBkR3SnNcNoP4tpWp0u6u
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="230905265"
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="230905265"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 10:26:36 -0800
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="530420110"
+Received: from drichard-mobl2.amr.corp.intel.com (HELO [10.209.21.238]) ([10.209.21.238])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 10:26:36 -0800
+Message-ID: <cec52989-04b0-5d5f-06ef-334abec10d14@intel.com>
+Date:   Thu, 17 Feb 2022 10:26:34 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] arm64: Do not defer reserve_crashkernel() for platforms
- with no DMA memory zones
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Content-Language: en-US
-To:     nicolas saenz julienne <nsaenz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <1645056294-6509-1-git-send-email-vijayb@linux.microsoft.com>
- <ed4f4589f322bd3871f825239985410b535df30e.camel@kernel.org>
-From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
-In-Reply-To: <ed4f4589f322bd3871f825239985410b535df30e.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
+        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <dcc95eb2aaefb042527ac50d0a50738c7c160dac.1643830353.git.reinette.chatre@intel.com>
+ <91fd3b35-b791-af37-6663-9c37055f339e@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH V3] x86/sgx: Add poison handling to reclaimer
+In-Reply-To: <91fd3b35-b791-af37-6663-9c37055f339e@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/16/22 16:25, Reinette Chatre wrote:
+>> Fixes: d6d261bded8a ("x86/sgx: Add new sgx_epc_page flag bit to mark free pages")
+>> Fixes: 992801ae9243 ("x86/sgx: Initial poison handling for dirty and free pages")
+>> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> Could you please consider this fix for inclusion?
 
+Thanks for the reminder.  It's merged here:
 
-On 2/17/2022 2:49 AM, nicolas saenz julienne wrote:
-> On Wed, 2022-02-16 at 16:04 -0800, Vijay Balakrishna wrote:
->> The following patches resulted in deferring crash kernel reservation to
->> mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
->> in particular Raspberry Pi 4.
->>
->> commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
->> commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
->> commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
-..
->> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
->> index acfae9b41cc8..e7faf5edccfc 100644
->> --- a/arch/arm64/mm/mmu.c
->> +++ b/arch/arm64/mm/mmu.c
->> @@ -517,7 +517,7 @@ static void __init map_mem(pgd_t *pgdp)
->>   	 */
->>   	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
->>   
->> -	if (can_set_direct_map() || crash_mem_map || IS_ENABLED(CONFIG_KFENCE))
->> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
->>   		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
->>   
->>   	/*
->> @@ -528,6 +528,14 @@ static void __init map_mem(pgd_t *pgdp)
->>   	 */
->>   	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
->>   
->> +#ifdef CONFIG_KEXEC_CORE
->> +	if (crash_mem_map && !crashk_res.end)
->> +		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-> 
-> Using IS_ENABLED(ZONE_DMA/DMA32) instead of '!crashk_res.end' would be more
-> efficient and a bit more explicit IMO.
-
-Sure, I will make change in a follow up submission.
-
-> 
->>   	/* map all the memory banks */
->>   	for_each_mem_range(i, &start, &end) {
->>   		if (start >= end)
->> @@ -554,6 +562,20 @@ static void __init map_mem(pgd_t *pgdp)
->>   	__map_memblock(pgdp, kernel_start, kernel_end,
->>   		       PAGE_KERNEL, NO_CONT_MAPPINGS);
->>   	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
->> +#ifdef CONFIG_KEXEC_CORE
->> +	/*
->> +	 * Use page-level mappings here so that we can shrink the region
->> +	 * in page granularity and put back unused memory to buddy system
->> +	 * through /sys/kernel/kexec_crash_size interface.
->> +	 */
->> +	if (crashk_res.end) {
-> 
-> Same here.
-
-Yes.
-
-> 
->> +		__map_memblock(pgdp, crashk_res.start, crashk_res.end + 1,
->> +			       PAGE_KERNEL,
->> +			       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
->> +		memblock_clear_nomap(crashk_res.start,
->> +				     resource_size(&crashk_res));
->> +	}
->> +#endif
-> 
-> Now, I carefully reviewed the patch and it seems to be doing the right thing.
-> But even while knowlegable on the topic, it took a good amount of effort to
-> untangle the possible code paths. I suspect it's going to be painful to
-> maintain. I'd suggest at least introducing a comment explaining the situation.
-
-I appreciate your review.  Yes, it took a good amount of time for me 
-(new here) too and glad for your notice.  Let me take a shot at 
-explaining in my next revision.
-> 
-> If there approach if deemed acceptable, I'll test is on the RPi4.
-
-Please, your testing on RPi4 would be valuable.
-
-Thanks,
-Vijay
-
-> 
-> Regards,
-> Nicolas
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/urgent&id=e5733d8c89c3b5

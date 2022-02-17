@@ -2,202 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718BC4BA7DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C70D14BA7E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244118AbiBQSNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:13:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51804 "EHLO
+        id S244126AbiBQSOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:14:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235384AbiBQSNf (ORCPT
+        with ESMTP id S234260AbiBQSOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:13:35 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D79E1C4550
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:13:20 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id g15-20020a92520f000000b002bec6a02012so2415832ilb.18
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:13:20 -0800 (PST)
+        Thu, 17 Feb 2022 13:14:36 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BB320A897;
+        Thu, 17 Feb 2022 10:14:21 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id c14so9874257qvl.12;
+        Thu, 17 Feb 2022 10:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=K49iyUfP87GUSWjSsQDrw9184z8W1wX9twPD7fJ5DdI=;
+        b=bjgBJHKoVTIzjZh3TmK6la8r3vIUyGMNAK24MTaOPb6docls8lRqvD/AFi3e5NyXKK
+         TCmevyglQ7g2F+IgIKqpwf2V03nQF7ZYx/2bbI5ANGBUOvEj6r7kkCOaxKMSaJ54VmV4
+         zSf1LBF4o4KnEon7TGh3bpCsrjUVq4L8zOoQKnArLV+7gihJNitVkreWa62ch2IcbGsW
+         dl4tYq3tA8CN5ZNC9W7eTZy01p0d8u0VSek5TbY+n7krrC5zO2DZNUA7qlTfLzocbpYY
+         CIgRnEv1xGZNwHcQ1Ux8m5OCFxxdcd5WoGljDECICzITVLL1o9rX9HB1O2J2XynHQiFg
+         Kdjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Cx4MR5VyxaiDEMU1/9O/zHtFiqyQWEfm2JdWtbVvSCw=;
-        b=Y7kHPq52DWbVh6Rlma4GRoiPVPiC4y+9toYZaCLoqpkO2ollkRn2xl+Hyo24NHcXdy
-         uIfZrj2qu7JdW6XBKSlCNOUBUHAXZKnzplLYvvg6XQZnXCx4KNqLv+IGVFOm+pGENd2d
-         kDt/q69RscxQo8T5W8chbE8e+HNQ259Zyh+jZbcJTHCxwzqNpOaBQx4+XTRMed3/rvzo
-         GFuaNZ4OgTvX4C88m/ho2AKbdU56nKIaPkTvcOddL/91ytbw0H8Q51C9n1+PMyPNFcce
-         U8fPZN1MgKhQ8Y5Y/0L2UlULv0+bGMb3p5tk5LRIPxg0YcjCa3rtSKmwFFQRaCEpm+Jl
-         c+ZQ==
-X-Gm-Message-State: AOAM530SA8vWShA8QzkKdvPBl9VuzfMCyo3B+Pceb1fMxaYH4tZPnirX
-        vDBN8usc/eCQ1DzKvZoclLhJ3xskUPQzKeGq4Lc5Chi+t+3J
-X-Google-Smtp-Source: ABdhPJxUp3q5WGkqjiKQy3ufRuQ3Ddm00MFvhI9yNQBC8jrbSCVMRLJQd+3w7MA21GGDnP1Yp1hJQ1ethxQJRoBwpVfuPUEJHnIG
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=K49iyUfP87GUSWjSsQDrw9184z8W1wX9twPD7fJ5DdI=;
+        b=tbkW6j3BKOK2TdX5pz16K4zuLMHADRgbr1iSTbV+fHFpdm+JWb79i2PdWijxAMTOgs
+         H9IA1Cz8PPhLH/SUxm3307mK+jLB0NjI2qJUxDVyRiDurrNHHqatoU8ge/CeVuZrMe/n
+         NfaYuv0bIMqeIcnBlmbyHQ/X2axAGe87IxDHYVWD/wLdHTxMqVs2yWdh4ZQeumkAK1f8
+         XCoUDZPPfkV3RqZ8xZcjOI2su56lvJi6JMI23VJmndq6GHq3pmaWBT6jKJXu1aQRpgxW
+         oQt75bNL82DTTZ31GNr4pjKEkNF9eB05TimHq2h3W/2a1g3p6Dghi7HYGaaIOhJIDCeI
+         b20g==
+X-Gm-Message-State: AOAM533+pqIm+HbPmVwheJiAgVvVB81IJXDTNLPual3m7tlhu2ADQQaM
+        +vlcV+0hza6H4aG2Vy0ZnDM=
+X-Google-Smtp-Source: ABdhPJx9Kr9K7CaT4uf99J5p6k4IB7qjpuwkNpxc9I74+w8uJKlDLM85H41UC8A+sKnvawNpUmdEKQ==
+X-Received: by 2002:a05:622a:1007:b0:2d6:5ac4:6b78 with SMTP id d7-20020a05622a100700b002d65ac46b78mr3534147qte.668.1645121661036;
+        Thu, 17 Feb 2022 10:14:21 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y5sm20490979qkp.37.2022.02.17.10.14.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 10:14:20 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5b0b69cf-5688-3679-dd77-49179e0b17bb@roeck-us.net>
+Date:   Thu, 17 Feb 2022 10:14:18 -0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b4c:b0:2be:aaec:271c with SMTP id
- f12-20020a056e020b4c00b002beaaec271cmr2854972ilu.219.1645121599425; Thu, 17
- Feb 2022 10:13:19 -0800 (PST)
-Date:   Thu, 17 Feb 2022 10:13:19 -0800
-In-Reply-To: <000000000000b772b805d8396f14@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008bcf6e05d83ab885@google.com>
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in smc_pnet_apply_ib
-From:   syzbot <syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com>
-To:     fmdefrancesco@gmail.com, jgg@ziepe.ca, liangwenpeng@huawei.com,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        liweihang@huawei.com, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/4] misc: Add power-efuse driver
+Content-Language: en-US
+To:     Zev Weiss <zev@bewilderbeest.net>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     openbmc@lists.ozlabs.org, Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+References: <20220217104444.7695-1-zev@bewilderbeest.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220217104444.7695-1-zev@bewilderbeest.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 2/17/22 02:44, Zev Weiss wrote:
+> Hello,
+> 
+> This patch series is another incarnation of some previous efforts [0]
+> at enabling userspace access to the OPERATION state (and now status
+> flags) of PMBus devices, specifically with respect to efuses
+> protecting general-purpose power outputs.  This functionality is an
+> important component enabling a port of OpenBMC to the Delta AHE-50DC
+> Open19 power shelf [1].
+> 
+> The first patch extends the pmbus core's regulator support with an
+> implementation of the .get_error_flags() operation, mapping PMBus
+> status flags to REGULATOR_ERROR_* flags where possible, and the second
+> patch adds regulator support for the lm25066 driver.  These two
+> patches are essentially independent of the power-efuse driver (and
+> each other) and could potentially be applicable individually, but are
+> necessary for the power-efuse driver to be useful on the AHE-50DC.
+> 
 
-HEAD commit:    5740d0689096 net: sched: limit TC_ACT_REPEAT loops
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=1474360e700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=88e226f0197aeba5
-dashboard link: https://syzkaller.appspot.com/bug?extid=4f322a6d84e991c38775
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13dd93f2700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16a497e2700000
+Nevertheless, the first two patches are orthogonal to the remaining
+two patches and should be separate.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
+Guenter
 
-infiniband syz1: set active
-infiniband syz1: added lo
-RDS/IB: syz1: added
-smc: adding ib device syz1 with port count 1
-BUG: sleeping function called from invalid context at kernel/locking/mutex.c:577
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3589, name: syz-executor180
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-6 locks held by syz-executor180/3589:
- #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma_nl_rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
- #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink+0x25d/0x560 drivers/infiniband/core/nldev.c:1707
- #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_and_get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
- #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_and_get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
- #4: ffff8880790445c0 (&device->client_data_rwsem){++++}-{3:3}, at: add_client_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
- #5: ffff88814a29c818 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_by_table_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 0 PID: 3589 Comm: syz-executor180 Not tainted 5.17.0-rc3-syzkaller-00174-g5740d0689096 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9576
- __mutex_lock_common kernel/locking/mutex.c:577 [inline]
- __mutex_lock+0x9f/0x12f0 kernel/locking/mutex.c:733
- smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
- smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
- smc_ib_add_dev+0x4d7/0x900 net/smc/smc_ib.c:940
- add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:720
- enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1331
- ib_register_device drivers/infiniband/core/device.c:1419 [inline]
- ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1365
- rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1146
- rxe_add+0x1331/0x1710 drivers/infiniband/sw/rxe/rxe.c:246
- rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:538
- rxe_newlink drivers/infiniband/sw/rxe/rxe.c:268 [inline]
- rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:249
- nldev_newlink+0x30a/0x560 drivers/infiniband/core/nldev.c:1717
- rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
- rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
- rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2413
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f7ef25bed59
-Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcd0ce91d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7ef25bed59
-RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000005
-RBP: 00007f7ef25827c0 R08: 0000000000000014 R09: 0000000000000000
-R10: 0000000000000041 R11: 0000000000000246 R12: 00007f7ef2582850
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-=============================
-[ BUG: Invalid wait context ]
-5.17.0-rc3-syzkaller-00174-g5740d0689096 #0 Tainted: G        W        
------------------------------
-syz-executor180/3589 is trying to lock:
-ffffffff8d7100d8 (smc_ib_devices.mutex){+.+.}-{3:3}, at: smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
-other info that might help us debug this:
-context-{4:4}
-6 locks held by syz-executor180/3589:
- #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma_nl_rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
- #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink+0x25d/0x560 drivers/infiniband/core/nldev.c:1707
- #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_and_get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
- #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_and_get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
- #4: ffff8880790445c0 (&device->client_data_rwsem){++++}-{3:3}, at: add_client_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
- #5: ffff88814a29c818 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_by_table_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
-stack backtrace:
-CPU: 0 PID: 3589 Comm: syz-executor180 Tainted: G        W         5.17.0-rc3-syzkaller-00174-g5740d0689096 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_lock_invalid_wait_context kernel/locking/lockdep.c:4678 [inline]
- check_wait_context kernel/locking/lockdep.c:4739 [inline]
- __lock_acquire.cold+0x213/0x3ab kernel/locking/lockdep.c:4977
- lock_acquire kernel/locking/lockdep.c:5639 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
- __mutex_lock_common kernel/locking/mutex.c:600 [inline]
- __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
- smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
- smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
- smc_ib_add_dev+0x4d7/0x900 net/smc/smc_ib.c:940
- add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:720
- enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1331
- ib_register_device drivers/infiniband/core/device.c:1419 [inline]
- ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1365
- rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1146
- rxe_add+0x1331/0x1710 drivers/infiniband/sw/rxe/rxe.c:246
- rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:538
- rxe_newlink drivers/infiniband/sw/rxe/rxe.c:268 [inline]
- rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:249
- nldev_newlink+0x30a/0x560 drivers/infiniband/core/nldev.c:1717
- rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
- rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
- rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2413
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f7ef25bed59
-Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcd0ce91d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7ef25bed59
-RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000005
-RBP: 00007f7ef25827c0 R08: 0000000000000014 R09: 0000000000000000
-R10: 0000000000000041 R11: 0000000000000246 R12: 00007f7ef2582850
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-smc:    ib device syz1 port 1 has pnetid SYZ2 (user defined)
+> The third and fourth patches add dt-bindings and the implementation of
+> the power-efuse driver, respectively.  The driver is fairly simple; it
+> merely provides a sysfs interface to enable, disable, and retrieve
+> error flags from an underlying regulator.
+> 
+> There is one aspect of its usage of the regulator API I'm a bit
+> uncertain about, however: this driver seems like a case where an
+> exclusive 'get' of the regulator (i.e. devm_regulator_get_exclusive()
+> instead of devm_regulator_get() in efuse_probe()) would be
+> appropriate, since in the intended usage no other device should be
+> using an efuse's regulator.  With an exclusive get though, the
+> regulator's use_count and the consumer's enable_count don't balance
+> out properly to allow the enable/disable operations to work properly
+> (the former ending up one more than the latter, leading to
+> enable_count underflows on attempts to disable the regulator).  So at
+> least for now it's using a non-exclusive get -- I'd be happy to hear
+> any pointers on a way to allow an exclusive get to work here, though.
+> 
+> 
+> Thanks,
+> Zev
+> 
+> [0] https://lore.kernel.org/openbmc/YGLepYLvtlO6Ikzs@hatter.bewilderbeest.net/
+> [1] https://www.open19.org/marketplace/delta-16kw-power-shelf/
+> 
+> Zev Weiss (4):
+>    hwmon: (pmbus) Add get_error_flags support to regulator ops
+>    hwmon: (pmbus) lm25066: Add regulator support
+>    dt-bindings: Add power-efuse binding
+>    misc: Add power-efuse driver
+> 
+>   .../devicetree/bindings/misc/power-efuse.yaml |  37 +++
+>   MAINTAINERS                                   |   5 +
+>   drivers/hwmon/pmbus/Kconfig                   |   7 +
+>   drivers/hwmon/pmbus/lm25066.c                 |  14 ++
+>   drivers/hwmon/pmbus/pmbus_core.c              |  97 ++++++++
+>   drivers/misc/Kconfig                          |  15 ++
+>   drivers/misc/Makefile                         |   1 +
+>   drivers/misc/power-efuse.c                    | 221 ++++++++++++++++++
+>   8 files changed, 397 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
+>   create mode 100644 drivers/misc/power-efuse.c
+> 
 

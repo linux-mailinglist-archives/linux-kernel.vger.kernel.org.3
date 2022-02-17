@@ -2,160 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76ADC4BA8B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 948124BA8BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244600AbiBQSrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:47:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34452 "EHLO
+        id S244628AbiBQSuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:50:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235553AbiBQSrv (ORCPT
+        with ESMTP id S231906AbiBQSuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:47:51 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2550E3CFCD;
-        Thu, 17 Feb 2022 10:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645123656; x=1676659656;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=vs50ltVaGLoFEBqxiXWMJKJ2QTs9h3WvZNh7saWvcug=;
-  b=AqLwRV7vV88rSwG24bnSKFoRe/vRhtZSTGex5o1reQA+fbACwB3hk0ru
-   yQs9JAH7Y/H0JeSBB8AAFMBBvfU+Nq1xSjvWXTAGKsTsUhR7iwNbl6hpq
-   PWr095f8KuA2ha3a83V6/q+tD1HPHZ3FWOK4ZX9teQNKOX+Fnb+G7nKpu
-   GZAWozEzEaDWdhzKJT9dNE7h9J9D8tyob9YcfsRUnZBHtxITiZhEAZOX+
-   vsz0gAn+jqOxvBKfuZB7IQ5acOJYQpo5BFkOEv4IBpoTIAkj6EHZ+jYrO
-   e6qnZ/C0s/UNqX2lK1yw5ijfkuAotsSIydMf40vlZ04ppqcVfPt0msyQJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="314212438"
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="314212438"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 10:47:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="530433241"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 17 Feb 2022 10:47:32 -0800
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 17 Feb 2022 10:47:31 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Thu, 17 Feb 2022 10:47:31 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.170)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Thu, 17 Feb 2022 10:47:31 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZZX6Y4sd80sssetYvLZZClF5ksid+SQfnfmnvepUiENV9x3WoPK4a5Fsx2Z5Qxe8IuJ/sNo1sq9y6bFyBnlf9gxSCfQDExRqnLLxUIcXp1Vy4H1Urlv9+gUT47kkeert/xVTfaEZrcWY1pPy+vSYBkVj6HnCPOwZ/93JP9Q65aHJOAhS5fQCdt2PeMqQnOPuxAIC2lUzyENTikEuFjcALixbIJ/Iqmyt5WFwdeOhqY6T1d0g6jJmRg1HpABXnXaRdS4KKQ2i1UPp3xbzmYUI8BadQ4+B42v9eCxkghOFLmOw7ib/P+wh/63TPrkU6NESKHGjXOxa3Yy8N0kx5r0wkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HYrTr5pFa/KkGxGKHOWK0MrBCPRATZ5cwZk5qj9rBgM=;
- b=hZBmD91R0y2k20IWECQwFWibHEwNiXcyV17epKr+H6bFcXCuqVnQOmJttNqPcSJunpJ2Ttba8QrPePJQRq5uJCD2shKqfVAtA3811lfZfbJCJMeJon/rdNTUngr1kUs6BPbdoeJTFO25g18OAZiNRzcC6XRoAt0qihRzXpmrLkYOqL9Ghhtm3956Pb70gPaWw0uVsKf7T5jWE4AE4xxLodGzD9njTFeNjVZlUL5csfhycRsElqaeAX2izdanSlIAp3jF19u4tEYbjWw08YTGMV5tRlrNM6RM5OzsPZo9ZCHDlBbvdKS+OErBB1rMFH/E+lj4r+S/FXBf0ezwUnHeGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by DM5PR1101MB2217.namprd11.prod.outlook.com (2603:10b6:4:52::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Thu, 17 Feb
- 2022 18:47:29 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::55e4:9a32:8e6f:4774]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::55e4:9a32:8e6f:4774%4]) with mapi id 15.20.4995.016; Thu, 17 Feb 2022
- 18:47:29 +0000
-Message-ID: <870ed4bd-814f-cf0a-01a6-25807f59f6c1@intel.com>
-Date:   Thu, 17 Feb 2022 10:47:25 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.0
-Subject: Re: [PATCH V3] x86/sgx: Add poison handling to reclaimer
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, <tony.luck@intel.com>,
-        <dave.hansen@linux.intel.com>, <jarkko@kernel.org>,
-        <tglx@linutronix.de>, <bp@alien8.de>, <luto@kernel.org>,
-        <mingo@redhat.com>, <linux-sgx@vger.kernel.org>, <x86@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-References: <dcc95eb2aaefb042527ac50d0a50738c7c160dac.1643830353.git.reinette.chatre@intel.com>
- <91fd3b35-b791-af37-6663-9c37055f339e@intel.com>
- <cec52989-04b0-5d5f-06ef-334abec10d14@intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <cec52989-04b0-5d5f-06ef-334abec10d14@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW2PR16CA0046.namprd16.prod.outlook.com
- (2603:10b6:907:1::23) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+        Thu, 17 Feb 2022 13:50:06 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24E45133D;
+        Thu, 17 Feb 2022 10:49:50 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id i11so9656334eda.9;
+        Thu, 17 Feb 2022 10:49:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1KLsOXFQmHt2Ndcx44uMZzlDaAUhgjoshtkxgzU1bcE=;
+        b=m6sS5ABWEL2d8zqr78X8sQTm1wLF4+wr0yfKJtR9BQASzlk3S+wf7qI5SsghWBYpES
+         fIPaOCiTe01gLceW2tOW6HmX7nZynH9u5lqDqjmmLGkvGmv+kgeIZsjQ5mquBNmOuj37
+         HBKutI6wjWB01Dd8kpei7/oA0QoKoWWKxF08G7NBSka0UWTQAJtSiY9wVoWdbwCs/e6Y
+         aTR6/mQSrSIP8fEoAhr1mFXPks8VDtUcZvFdBVZ9qYtHeexNf16vwMPImYxKq9JriClY
+         r90k3fGEbniaVaRS/Qd0D1xrnRGmJ0iitYIx0ul6TLki5M5rydrACwJTDKDIiMX5RfpO
+         EDGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1KLsOXFQmHt2Ndcx44uMZzlDaAUhgjoshtkxgzU1bcE=;
+        b=b7Ij8/m0vvOZudZ+7RyUnmCFCfDoWfwMABEp8g8x6yKTyBhYDJZDQc5XLIkR9pP5Dz
+         41KedFsMO8foMobfZaCR68saQiNsG4BiP2ePIQ2ef3OxDpGDFWKc0ymKN15WPxou0mPw
+         0ow/j4LlnsgQXr0ZFvsoObKwSron0hdQKHo/n/407nfpyvsxkBmuYVIKuunzuJS225OK
+         W2cZq7gOXqL5EzuAzAqUZ8lz4djDSCHsZVT+jn72XFSOo89LHnTZxK1KqRQcYBxTnJbh
+         dq5lDiA028NRhr8fu+WrDx9OYefA9ktw1KPEwZmhx/45VYYs87owIC3rcLTaPGBSxnUQ
+         MgZA==
+X-Gm-Message-State: AOAM531hR4qaO8+O27q8W+Cdm6kUE/z3Q40i7d8vWXJiqkaAk79SIiB3
+        hm7p5zNZAl+csIZQv5Tb7n4=
+X-Google-Smtp-Source: ABdhPJx57ErqeoSoN1HNG4bKqWqmerC0ClES8rpEmtzCOWCMeGyDp900eCjZISw8zvTbT1icmyJZig==
+X-Received: by 2002:a05:6402:2922:b0:40f:7241:74d4 with SMTP id ee34-20020a056402292200b0040f724174d4mr4230943edb.43.1645123789005;
+        Thu, 17 Feb 2022 10:49:49 -0800 (PST)
+Received: from localhost.localdomain (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
+        by smtp.googlemail.com with ESMTPSA id q7sm3493268edv.93.2022.02.17.10.49.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 10:49:48 -0800 (PST)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
+Subject: [RFC PATCH 00/13] Proposal for speculative safe list iterator
+Date:   Thu, 17 Feb 2022 19:48:16 +0100
+Message-Id: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c3427801-da54-4c3a-5734-08d9f245f2ed
-X-MS-TrafficTypeDiagnostic: DM5PR1101MB2217:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM5PR1101MB2217749D31BBD653CCC54329F8369@DM5PR1101MB2217.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2733;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zfwbOPPnOAOyU2Qknc1V+NdHtTbfFP8RibPS/hzmdE7qaNyynfcwxj4wplbJ5HDd8xICa6mMTBlpHlDBD68GG855FDPB45rPwHMpbH3SzO+ajCgiYSPXvIQb2eNzc3aF36klcXbE/v6R4Llec8xgb+aiNZPQbSNVmi67LcH2HPZZqhrzTipjk8i27VcOH4te8h7k2reYT34qacOgNfpamtf0viT7Edyt+TYlV7gWhGypgSqFES75HECdAQPEww81xj+Wsl5mARRL0VEgOGEmJ14oQWPdAYSZtiAHF/0q9hslpbNUsfqwgLgOoI9RQhr7aHSezxQNsSCUfOsqAQE+LatSkDgEZ96B5PUEUAxxNQwRbX4Eqn52jRPMpI4zDZZKipKu4FPgfBROcT9LEBoLhOjzjI4PrFMYArA7tiBI9fb9+Hb6TDT9udW4MTg6F6XJ05SBKQ2VOViSAcuJJtTQRCjroAnVJohl8oKTEnKVdYAaK/4ANdsCMXdLs0ZXTBjJ4DEZA94QXdvneCt7qQg+qbG398PPkUGdwfZ+rXXYOC6T/MlIdVwWrdofZn4h7qrkuDWpoF4hZ8qU2fWLNV1QVf8wGU3Fqe6DxTSaB01PE9Go+ZuVujQr0Xhz4lD05K3/h+y7KszdEO8HAVYm7fQ8E1awTZx4EBFC+eekQs3OvmUaU9AXV2gzOzJd4GRZgtrBi+TLpKx806NVxhNtbzOkbdjNrHo6TQR1ykNEMv0Q3nRIUeo+osW/uFqbvQKmZixngUNxjiNpSSbpRDrkAIzhWBYItwGAhktl672erBfHlhixzSil37F0BLPSu2+RMSpV0tmG0UKe2RKJ4pvAhe0AAQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(82960400001)(8676002)(66946007)(186003)(66476007)(66556008)(921005)(31686004)(2616005)(26005)(53546011)(4326008)(8936002)(5660300002)(4744005)(83380400001)(38100700002)(36756003)(6512007)(44832011)(316002)(6506007)(31696002)(966005)(6486002)(6666004)(86362001)(508600001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnV0Zll5dTd5R0dEMVRCOEpMOW5jYk5DWGlKZE5lRzNFSmJYcmFDSGFTLzA5?=
- =?utf-8?B?N2poOFJvVGFmZHhSNFMwNitwTlF0UHJLbUxscnF0djVkMVdvclBVZGZZd0R5?=
- =?utf-8?B?V0xnazdyblFPR0pldWZIYUJKQ3A0bXNKL1ZxSWJvd0M0TEFtR2U2Y3hGWWV0?=
- =?utf-8?B?clhTNTRxZ2xDY1dLSng1bjZhd0tGbFVXNTVyNnArbHg3UWFZckNtalFJK0JS?=
- =?utf-8?B?Ry9UVVljUHE4aHVlUkMrUHJDWWxFTU5xZ2wxWGdFYlBaWlk3S2ZxaWd4ZmZP?=
- =?utf-8?B?eFRwZHRXRG55em9pNGt2NWx6UVUrZHhyVlczZFMwREZlYVhTT3RMSlM0WUNI?=
- =?utf-8?B?SDAzNVVMWjRsVEI5R2VLUjFmUGhaUEJDS3Nvait3Ny93dXhtdzFpQWVmRnVn?=
- =?utf-8?B?U3MwZzJSUnlvb1RiTFZRZFRFRmdsZ2dDT1ZNbjVqTkdLckpONGY5enFyWW9s?=
- =?utf-8?B?MTB0T1pPMlRUd2RYN0JVZmZHYlJsZEVvOWxyMHlJZXk2MlN4eE9GenhPdkts?=
- =?utf-8?B?Z1BMOE42cXh6NHFTemdSYWcyaWUyTXBFTGZyNHJreExucDlHOFVCcE13bmVO?=
- =?utf-8?B?UWRRNC9LOGt6TzIxeGZ4SjJOVUN6MXVtQWs2aDdRMW9vNytlMGVGZjRYT05W?=
- =?utf-8?B?Sks1dnRrRERZZjFDQ3JTZGszdTAyNURTYmtwMEhWcW8xQWlJUUZOZUVNR25S?=
- =?utf-8?B?M3pCWDdlTkU2MUlYS2Zhd2o0bzVGWDAxaVRDU0lKT1hGeTVOMlNaTFR1THJ5?=
- =?utf-8?B?dTR0M2d0aVpPK2YvQ2x3REJiQnNocjFndlhoNnBxcWVQSXo4QUVyczRBcURC?=
- =?utf-8?B?RDMwQ0pHY2Z4Mmx4YURZTGZiY3NCSVdHUyt5OExtUDh6K1p1cWJpTWU1TEhv?=
- =?utf-8?B?NytrcDdiUElKV1JUNGFnZTVkTWhMNVpSQlJYb3pmT29QMUxuTnBCTWdRTzRn?=
- =?utf-8?B?S2RMUnkwQjlZRUNCdWExUFNZWUNMOGlSYXlSbkhFbHdQZlEwZUYyS3NOeGRE?=
- =?utf-8?B?N3FQT3BvVG12M2tLSGN3end5UmxrY1VuYVJuOHhCUnR3aWp3TzVibXNZclZR?=
- =?utf-8?B?clZCNTI5SU1XUWR5aUZ6azRoYTlXcU5GWmhIK2MwbjJFaWVqMmJydnZiZklo?=
- =?utf-8?B?UnZzcHJ1WTRvUVBnTnlmajhqNFNUR1RBeUQvdXMzTkIyMWJxUURwTE9helFn?=
- =?utf-8?B?NjBER29zOUttanBtaEJmWjJ0WWNUdWo0UWw0YlJ5eWJ5NEdmaCtkTHowdGxm?=
- =?utf-8?B?bWk1UGVBK2FEUG5jd0xUUXY4MzdVdEhBemJCTzlqTzJMZy9MZkpkQWo2M3V3?=
- =?utf-8?B?a0lTdXNXbmNuVXVyTWxRd2ZQeElackxOT0RLY09vdkE1bm54SmRDTDBUZTFR?=
- =?utf-8?B?YXo1L2xQcnF6eWFwbm9sVzYxMWhJb0YyYkw0UWZmQS9kOEhjeFBIZXF2eUp1?=
- =?utf-8?B?QzNhYkh2TnlyNU83R1ZmM3h6M25vQnJxMGQrdlhvUkpqcENHYjdzWllqVW02?=
- =?utf-8?B?RzhtbnZBR3A1TXF1TEpBUDRFWkVwWndyTElkVTlwdEVmTkxwTitiVk0zaGNl?=
- =?utf-8?B?WnpoOVdRaTVjUTQ1KzFmSzJBZUFENUZKVzVGZzdqcTZKb3Jzc0MxT2Y4Q2Qr?=
- =?utf-8?B?cHpnekMzUWdsVkJxUnVTblU2ZG5maVZnWjYyNDJqc0xRYjVnZFZiMCtiQ2pX?=
- =?utf-8?B?T3FNOCtTTE1RM0lScktXRGg3RjVVejl5Sit3cWJrUFNmNEx6NTliUXkyc2dp?=
- =?utf-8?B?SG01Tm5GUWFLaFRkWnNocUdUTUZEM0ZmejJwUUxjek4zNWZpOC9jODdtTGVG?=
- =?utf-8?B?MU9SMHgvSXl3Q2JaT3J6OGdZVkVWRlVqWHJVRTNNWHY4UjA5OHV2U0Znc2lE?=
- =?utf-8?B?dG0vVWlWVU4xWG5Pak9CZ3hLdERqUXRZSlNFbW5Sb0NJb0xMR1EydklSZUY1?=
- =?utf-8?B?aGZDaTBPbUkwYStZNWNZZHZNa09LRTlKa2czY25DNXQwUTNoNEtDcUdWOXNn?=
- =?utf-8?B?ZDFrdGY5Vm40bGZ6cVhJaHBEYk1FdmtDR2YxUW5YM2tWc3dKcEdxOXF0eDY0?=
- =?utf-8?B?OWRseGR6akpUME9OeEZ2Mm9neXlKVzRYTEszWG85OEpjc0NQYktYS1p0YnNs?=
- =?utf-8?B?NHNtbTh3TnhWMktMRXdad2Vqai9nbGxKRTVUL01CYlFqM0pPa05LV3dIWGVG?=
- =?utf-8?B?cTNDMjVzS0ZycVAvYlBXVWxNTGFLckp5VVVrS1gyUDU5ZXRKazdLOU80WXF1?=
- =?utf-8?Q?5stLNp9J9pntC+uSyQPDAYTiSKTmEkuqdJdbXFNo1Q=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3427801-da54-4c3a-5734-08d9f245f2ed
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 18:47:29.4128
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zO45XgF5aF+1e1hGCx/puiYVLfR6/g2Bh6jvUhMEyFzWtHHeIJdCScAgWHhgBNiLLvH3DLzr52Y8fEaECjpWd4sBIg9/V8JQNfxEnRHZJEA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2217
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,19 +79,333 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kasper (https://vusec.net/projects/kasper/) has shown that using the
+list_for_each_entry() iterator is security critical with transient
+execution in mind.
 
-On 2/17/2022 10:26 AM, Dave Hansen wrote:
-> On 2/16/22 16:25, Reinette Chatre wrote:
->>> Fixes: d6d261bded8a ("x86/sgx: Add new sgx_epc_page flag bit to mark free pages")
->>> Fixes: 992801ae9243 ("x86/sgx: Initial poison handling for dirty and free pages")
->>> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
->> Could you please consider this fix for inclusion?
-> 
-> Thanks for the reminder.  It's merged here:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/urgent&id=e5733d8c89c3b5
+list_for_each_entry() iterates through a list until the terminating
+condition is met where pos, the iterator value, reaches the head element.
+The head is usually not within the struct of the list elements and either
+stands on its own or is included within a struct of an other type.
+Therefore using `container_of` on the head element to retrieve the iterator
+value is invalid and therefore a type confusion.
 
-Thank you very much. Also thank you for improving the patch subject.
+If the terminating condition does not hold in transient execution and is
+mispredicted, the iterator infered from the head is used in the additional
+transient iteration of the loop body. Depending on the struct members
+accessed within the loop an attacker can inject own values turning it into
+a transient gadget. In the paper we have showed such a case in
+find_keyring_by_name().
 
-Reinette
+We patched list_for_each_entry() to ensure that pos is not pointing to an
+invalid head element in the transient iteration of the loop. It uses
+branchless logic to set pos to NULL when the terminating condition is met,
+making it unusable in transient execution.
+
+Unfortunately there are several locations in the kernel where the list
+iterator is used after the loop that break with such a change. Luckily
+there is the use_after_iter.cocci script that can be used to identify such
+code locations. I had to adapt the script slightly since it reduces false
+positives in the original use case but those are relevant for this patch.
+
+A large range of reported code locations only use the list iterator after
+the loop if there was an early exit (break/goto) and are therefore not
+relevant.
+
+However there is still ~200 occurrences that would break with the nospec
+implementation of list_for_each_entry().
+
+I have categorized them into certain categories where some are more trivial
+to patch than others. I have included reference patches for the first case
+of the categories that are trivial or almost trivial to patch. When
+everything is clear I will go through the list to fix the other cases
+according to the reference patch.
+
+head pos will reference to the case where pos is not actually pointing to
+the element of the list but is derived from the head.
+
+I'd especially appreciate comments on how to deal with category 10.
+For those cases it is not clear that head pos is not used incorrectly. It
+either relies on implict constraints that ensure that the list iteration
+exits early or is an actual bug.
+Since non of those cases should use pos if the break was not hit they
+should not be affected by the speculative list iterator.
+I just want to make sure, since changing the list iterator will turn them
+from a type confusion into a null pointer dereference (+ some offset
+depending on the struct member).
+
+All line numbers are based on commit f71077a4d84bbe8c7b91b7db7c4ef815755ac5e3.
+
+
+Category 1: &pos->other_member is used to determine if a certain element was found
+drivers/usb/gadget/udc/gr_udc.c:1717
+drivers/usb/gadget/udc/net2280.c:1273
+drivers/usb/gadget/udc/atmel_usba_udc.c:877
+drivers/usb/gadget/udc/lpc32xx_udc.c:1847
+drivers/usb/gadget/udc/pxa25x_udc.c:983
+drivers/usb/gadget/udc/aspeed-vhub/epn.c:481
+drivers/usb/gadget/udc/fsl_qe_udc.c:1793
+drivers/usb/gadget/udc/net2272.c:946
+drivers/usb/gadget/udc/s3c-hsudc.c:893
+drivers/usb/gadget/udc/mv_udc_core.c:800
+drivers/usb/gadget/udc/at91_udc.c:724
+drivers/usb/gadget/udc/mv_u3d_core.c:868
+drivers/usb/gadget/udc/udc-xilinx.c:1149
+drivers/usb/gadget/udc/bdc/bdc_ep.c:1779
+drivers/usb/gadget/udc/fsl_udc_core.c:947
+drivers/usb/gadget/udc/omap_udc.c:1019
+
+Category 2: pos is used to determine if a certain element was found
+drivers/vfio/mdev/mdev_core.c:349
+drivers/usb/gadget/udc/tegra-xudc.c:1427
+drivers/usb/gadget/udc/max3420_udc.c:1062
+drivers/thermal/thermal_core.c:1085
+drivers/thermal/thermal_core.c:645
+drivers/thermal/thermal_core.c:1349
+drivers/usb/gadget/configfs.c:435
+drivers/usb/gadget/configfs.c:893
+drivers/usb/mtu3/mtu3_gadget.c:343
+drivers/usb/musb/musb_gadget.c:1285
+arch/x86/kernel/cpu/sgx/encl.c:466
+drivers/scsi/scsi_transport_sas.c:1075
+
+Category 3: pos is used to determine if the list is empty (shouldn't need fixing)
+drivers/perf/xgene_pmu.c:1487
+drivers/media/pci/saa7134/saa7134-alsa.c:1232
+arch/powerpc/sysdev/fsl_gtm.c:106
+drivers/staging/greybus/audio_helper.c:135
+drivers/misc/fastrpc.c:1363
+drivers/dma/ppc4xx/adma.c:3048
+drivers/dma/ppc4xx/adma.c:3060
+
+Category 4: pos is used to determine if the break/goto was hit and the list is not empty
+arch/arm/mach-mmp/sram.c:54
+arch/arm/plat-pxa/ssp.c:54
+arch/arm/plat-pxa/ssp.c:78
+drivers/block/drbd/drbd_req.c:344
+drivers/block/drbd/drbd_req.c:370
+drivers/block/drbd/drbd_req.c:396
+drivers/counter/counter-chrdev.c:145
+drivers/counter/counter-chrdev.c:555
+drivers/crypto/cavium/nitrox/nitrox_main.c:280
+drivers/dma/ppc4xx/adma.c:954
+drivers/firewire/core-transaction.c:93
+drivers/firewire/core-transaction.c:963
+drivers/firewire/sbp2.c:446
+drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:2458
+drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:2466
+drivers/gpu/drm/drm_memory.c:79
+drivers/gpu/drm/drm_mm.c:938
+drivers/gpu/drm/drm_vm.c:160
+drivers/gpu/drm/i915/gem/i915_gem_context.c:128
+drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c:2471
+drivers/gpu/drm/i915/gt/intel_ring.c:211
+drivers/gpu/drm/nouveau/nvkm/subdev/fb/ramgk104.c:1168
+drivers/gpu/drm/panfrost/panfrost_mmu.c:200
+drivers/gpu/drm/scheduler/sched_main.c:1111
+drivers/gpu/drm/ttm/ttm_bo.c:702
+drivers/gpu/drm/vmwgfx/vmwgfx_kms.c:2600
+drivers/gpu/drm/vmwgfx/vmwgfx_kms.c:2624
+drivers/infiniband/hw/hfi1/tid_rdma.c:1280
+drivers/infiniband/hw/hfi1/tid_rdma.c:1280
+drivers/infiniband/hw/mlx4/main.c:1933
+drivers/media/dvb-frontends/mxl5xx.c:505
+drivers/media/v4l2-core/v4l2-ctrls-api.c:1002
+drivers/media/v4l2-core/v4l2-ctrls-api.c:986
+drivers/misc/mei/interrupt.c:432
+drivers/net/ethernet/mellanox/mlx4/alloc.c:273
+drivers/net/ethernet/mellanox/mlx4/alloc.c:273
+drivers/net/wireless/intel/ipw2x00/libipw_rx.c:1569
+drivers/scsi/lpfc/lpfc_bsg.c:1218
+drivers/staging/rtl8192e/rtl819x_TSProc.c:256
+drivers/staging/rtl8192e/rtllib_rx.c:2638
+drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c:2370
+drivers/staging/rtl8192u/ieee80211/rtl819x_TSProc.c:255
+drivers/usb/gadget/composite.c:2050
+fs/proc/kcore.c:495
+kernel/power/snapshot.c:637
+kernel/power/snapshot.c:637
+kernel/trace/ftrace.c:4570
+kernel/trace/ftrace.c:4722
+kernel/trace/trace_events.c:2285
+
+drivers/net/ethernet/qlogic/qede/qede_filter.c:843
+drivers/gpu/drm/gma500/oaktrail_lvds.c:120
+drivers/power/supply/cpcap-battery.c:802
+fs/cifs/smb2misc.c:161
+kernel/debug/kdb/kdb_main.c:1031
+kernel/debug/kdb/kdb_main.c:1038
+kernel/debug/kdb/kdb_main.c:795
+kernel/trace/trace_eprobe.c:670
+net/9p/trans_xen.c:131
+net/xfrm/xfrm_ipcomp.c:244
+sound/soc/intel/catpt/pcm.c:362
+sound/soc/sprd/sprd-mcdt.c:880
+
+Category 5: legitimately uses head pos for cmp
+net/ipv4/udp_tunnel_nic.c:849
+drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c:487
+drivers/scsi/wd719x.c:691
+fs/f2fs/segment.c:368
+net/tipc/socket.c:3752
+net/tipc/name_table.c:970
+
+Category 6: legitimately uses pos->member
+drivers/net/dsa/sja1105/sja1105_vl.c:43
+drivers/staging/android/ashmem.c:730
+net/core/gro.c:38
+fs/fs-writeback.c:437
+mm/hugetlb.c:446
+mm/compaction.c:1473
+fs/locks.c:1130
+drivers/net/ethernet/mellanox/mlx4/alloc.c:373
+drivers/dma/at_xdmac.c:1583
+
+arch/arm/mm/ioremap.c:107
+arch/x86/kvm/mtrr.c:368
+block/blk-mq.c:4466
+drivers/dma/mv_xor.c:316
+drivers/dma/mv_xor_v2.c:366
+drivers/gpu/drm/nouveau/nvkm/core/mm.c:77
+drivers/gpu/drm/nouveau/nvkm/subdev/timer/base.c:127
+drivers/infiniband/hw/usnic/usnic_uiom.c:527
+drivers/iommu/iommu.c:448
+drivers/iommu/virtio-iommu.c:509
+drivers/irqchip/irq-gic-v3-its.c:2093
+drivers/md/dm-snap.c:542
+drivers/net/ethernet/mellanox/mlx4/alloc.c:393
+drivers/net/ethernet/sfc/rx_common.c:601
+drivers/net/ethernet/ti/netcp_core.c:491
+drivers/net/ethernet/ti/netcp_core.c:491
+drivers/net/ethernet/ti/netcp_core.c:540
+drivers/net/ethernet/ti/netcp_core.c:540
+drivers/nvdimm/namespace_devs.c:1933
+drivers/s390/char/tape_core.c:349
+drivers/s390/cio/cmf.c:469
+drivers/scsi/fcoe/fcoe.c:1885
+drivers/scsi/lpfc/lpfc_sli.c:3498
+drivers/target/target_core_user.c:400
+drivers/usb/host/uhci-q.c:463
+rivers/video/fbdev/core/fb_defio.c:139
+drivers/xen/events/events_base.c:602
+fs/dlm/lock.c:1315
+fs/dlm/lock.c:1315
+fs/f2fs/segment.c:4185
+fs/locks.c:1238
+fs/locks.c:1250
+kernel/padata.c:397
+kernel/trace/trace_output.c:717
+net/tipc/group.c:392
+net/tipc/monitor.c:416
+sound/core/seq/seq_ports.c:152
+sound/core/timer.c:1052
+
+
+drivers/block/drbd/drbd_main.c:230
+fs/locks.c:1130
+drivers/gpu/drm/vc4/vc4_dsi.c:768
+
+drivers/dma/ppc4xx/adma.c:2733
+drivers/iio/industrialio-buffer.c:1128
+drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:535
+drivers/net/ethernet/mellanox/mlxsw/spectrum_mr.c:655
+drivers/net/ipvlan/ipvlan_main.c:47
+drivers/staging/media/atomisp/pci/atomisp_acc.c:514
+fs/gfs2/lops.c:681
+fs/gfs2/lops.c:696
+kernel/padata.c:656
+net/netfilter/nf_tables_api.c:8291
+
+
+arch/powerpc/platforms/cell/spufs/sched.c:387
+drivers/dma/ppc4xx/adma.c:1436
+
+
+drivers/net/wireless/ath/ath6kl/htc_mbox.c:107
+drivers/dma/dw-edma/dw-edma-core.c:139
+drivers/dma/dw-edma/dw-edma-core.c:159
+drivers/net/ethernet/intel/i40e/i40e_ethtool.c:3966
+drivers/scsi/lpfc/lpfc_sli.c:21042
+
+
+drivers/net/ethernet/intel/ice/ice_sched.c:2808
+drivers/net/ethernet/intel/ice/ice_sched.c:2811
+drivers/net/wireless/st/cw1200/queue.c:120
+arch/powerpc/kvm/book3s_hv_uvmem.c:370
+drivers/gpu/drm/tilcdc/tilcdc_external.c:69
+drivers/gpu/drm/stm/ltdc.c:559
+sound/isa/cs423x/cs4236.c:520
+drivers/media/usb/uvc/uvc_v4l2.c:896
+drivers/iommu/msm_iommu.c:627
+
+drivers/firmware/stratix10-svc.c:953
+drivers/opp/debugfs.c:200
+
+drivers/md/dm-mpath.c:1503
+drivers/dma/ppc4xx/adma.c:3071
+drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c:111
+drivers/net/wireless/ath/ath10k/mac.c:510
+drivers/s390/char/tty3270.c:1151
+drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c:281
+
+drivers/net/ethernet/intel/i40e/i40e_main.c:7590
+drivers/staging/media/atomisp/pci/atomisp_cmd.c:959
+drivers/staging/media/atomisp/pci/atomisp_cmd.c:979
+drivers/staging/media/atomisp/pci/atomisp_cmd.c:998
+drivers/watchdog/watchdog_pretimeout.c:215
+fs/jfs/jfs_logmgr.c:892
+kernel/workqueue.c:2946
+drivers/media/usb/uvc/uvc_v4l2.c:885
+drivers/gpu/drm/gma500/oaktrail_crtc.c:428
+drivers/virt/acrn/ioreq.c:243
+drivers/net/ethernet/mellanox/mlx5/core/eq.c:986
+drivers/gpu/drm/omapdrm/omap_encoder.c:109
+drivers/scsi/dc395x.c:3598
+drivers/staging/media/atomisp/pci/atomisp_acc.c:508
+
+drivers/net/dsa/bcm_sf2_cfp.c:577
+drivers/perf/qcom_l2_pmu.c:764
+drivers/gpu/drm/gma500/psb_intel_display.c:545
+drivers/firmware/efi/vars.c:1092
+
+
+drivers/staging/greybus/audio_codec.c:603
+drivers/scsi/mpt3sas/mpt3sas_base.c:2016
+
+Jakob Koschel (13):
+  list: introduce speculative safe list_for_each_entry()
+  scripts: coccinelle: adapt to find list_for_each_entry nospec issues
+  usb: remove the usage of the list iterator after the loop
+  vfio/mdev: remove the usage of the list iterator after the loop
+  drivers/perf: remove the usage of the list iterator after the loop
+  ARM: mmp: remove the usage of the list iterator after the loop
+  udp_tunnel: remove the usage of the list iterator after the loop
+  net: dsa: future proof usage of list iterator after the loop
+  drbd: future proof usage of list iterator after the loop
+  powerpc/spufs: future proof usage of list iterator after the loop
+  ath6kl: remove use of list iterator after the loop
+  staging: greybus: audio: Remove usage of list iterator after the loop
+  scsi: mpt3sas: comment about invalid usage of the list iterator
+
+ arch/arm/mach-mmp/sram.c                      |  7 ++++--
+ arch/powerpc/platforms/cell/spufs/sched.c     |  2 ++
+ arch/x86/include/asm/barrier.h                | 12 ++++++++++
+ drivers/block/drbd/drbd_main.c                |  2 ++
+ drivers/net/dsa/sja1105/sja1105_vl.c          |  2 ++
+ drivers/net/wireless/ath/ath6kl/htc_mbox.c    |  2 +-
+ drivers/perf/xgene_pmu.c                      |  5 ++--
+ drivers/scsi/mpt3sas/mpt3sas_base.c           |  2 +-
+ drivers/staging/greybus/audio_codec.c         |  4 ++--
+ drivers/usb/gadget/udc/gr_udc.c               |  7 ++++--
+ drivers/vfio/mdev/mdev_core.c                 |  7 ++++--
+ include/linux/list.h                          |  3 ++-
+ include/linux/nospec.h                        | 16 +++++++++++++
+ net/ipv4/udp_tunnel_nic.c                     |  7 ++++--
+ .../coccinelle/iterators/use_after_iter.cocci | 24 -------------------
+ 15 files changed, 63 insertions(+), 39 deletions(-)
+
+
+base-commit: f71077a4d84bbe8c7b91b7db7c4ef815755ac5e3
+--
+2.25.1
+

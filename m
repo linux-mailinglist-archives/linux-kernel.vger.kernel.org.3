@@ -2,94 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D374B96DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 04:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7554B96E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 04:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233002AbiBQDqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 22:46:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35540 "EHLO
+        id S232979AbiBQDsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 22:48:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232979AbiBQDqV (ORCPT
+        with ESMTP id S229831AbiBQDsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 22:46:21 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA19329C139;
-        Wed, 16 Feb 2022 19:46:05 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id z2so2190601iow.8;
-        Wed, 16 Feb 2022 19:46:05 -0800 (PST)
+        Wed, 16 Feb 2022 22:48:50 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6302C0506
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 19:48:36 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id a26so2204793iot.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 19:48:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1R18AGiSwApI4eXpLjrh2DkJUUPo0dvzIC8FGVasZV8=;
-        b=U93OEC24yCY+TYbpRhYFv3MLRWeYS/xvEGaG3K2WR/v0Ri51LipUDhJ+9GbRhmj96s
-         IMWECK+n6E8kizMKTtzjmQkfH2fGBnMOJm8QnkG84irEbetsHPr/kYcFziyuMWQI+U/h
-         7+JHCHMic4ev8BnfQ+6ijHHeaPh1ltCu95V6kavnR2JA82W9pLKds6AXx+5BiLFgfXTh
-         Fz8xInOwnJLxlJNcsR75Mi9zX+m2hEB2UoHe1JdZujaQ1FT2Z/qyH95NULY7wrdTzFb1
-         ty9nNfSVWKTjdc3FrMscCmvrR3w3XxoIDl6oq6VAyK32rtBWHNn1ino280+mzFxmeUed
-         XtCQ==
+        bh=WX6MJz/RVmu5KU05M8p6pw0cbdiL13QxNy+cJ91otYI=;
+        b=d4W6T2hoWi2DLEPWhP29U01f7jjXpO4/jxusulpHAFgBnZJxEhulxoG73pLteKLv37
+         A6Kn/eoMG2/dmrz3GmCi0UlCls1b1zotKBOdUG+LGBu8tRssVfmRMz9hYnOjFhHdZYX1
+         rTGjsGMetAi3icEEes4488Yy9smVgBBYU+F2k5ckupGqYYYeFYUJkqTGvLku1cfzL4+E
+         HL6Ocww7mMvh1aDzPezp19by7fjpAYeDzGTAqepvgPqUHaZMs2ZjcbKmjJ1gN+FFcmLL
+         bH5y1D488kTn3eBtI+ilfKEqDsC5nLMbIwgkUVFbKaxulzzRCyFlfucOa2JHpjKRZdit
+         ABYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1R18AGiSwApI4eXpLjrh2DkJUUPo0dvzIC8FGVasZV8=;
-        b=UM7nSVBZOCOem9MyKtkbBvWWaYGtLR9erKw/lw9nWu59baZRdfyNLZgV/H2i2hjUSb
-         DWtNyM6JuvGYvEfSXbeEzlpXxn1c13KKMFhoqkrcnS4Iqgip792dCDnxDYpqMWm//lND
-         Gsj7NX9Fd90ETUIU/QKPoxyC3pFLFRnSMdbU/z4tPe/2S4kmh/hGtpdiPWw/AobQBw8s
-         +TfyT/TCdzm9cgdI2DpxxmmTu/FCJAmpU6RgHXNNCn7GOHSRlw41GRw3vbXqcxKgZ0GS
-         QeL8AQiJF7jvcYDalSM977wv34qG6SP16a8+zdGoGSeCFErYsUVMh59NKx/n1u+ygApO
-         xHRw==
-X-Gm-Message-State: AOAM530KRtcFhtwE0qhR1s+WfmZfhbURZJ5rLJ/Q/cIlgvDvqkUEkpaO
-        ED+LpxPFBBUmh2WIBMGKF+Q=
-X-Google-Smtp-Source: ABdhPJxydsb8QgECa8OdKaLf9RgsF/uPX/mwnXlNZwPmZrP6DEgMUFV+HSXGKqZ33NEaYXLcxt9Puw==
-X-Received: by 2002:a05:6638:d91:b0:30e:345:a0d2 with SMTP id l17-20020a0566380d9100b0030e0345a0d2mr698768jaj.257.1645069564564;
-        Wed, 16 Feb 2022 19:46:04 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id u8sm1048601ilb.39.2022.02.16.19.46.02
+        bh=WX6MJz/RVmu5KU05M8p6pw0cbdiL13QxNy+cJ91otYI=;
+        b=3c7IT/TWLOsz7dA26tbVWua0xezag6LrlAYxgEnB1X8Uz1yRHNSzzKtI211aoARsg4
+         qv8an8Gr9F1R6JiqEokKIO8dFOT5hJehoWNNfoDwGPg10gb65FxjeTXmW4IYrSuPaF4F
+         IEAkTatXNbV4XVZZjg6QKav0KcYdfniKDc57zD84rPaQ5guUdLZ68FLIDQjxsXpduG6u
+         FBtfvDjGCd6ZwTQ6F6auhDgeznYCHnLJ0mWrPt4cvkovQHbj1WFFoWvToxILuJBnG7bR
+         OqZwQHDXVlx4OWBIdwrDLo0VJdmfw6Px9E0137WdtAelGYCYrjCZp+MY4j5RPqHPaItu
+         yYHQ==
+X-Gm-Message-State: AOAM530Z3iBatU42mH2fEKywoPb4j3WktSzwr7Gl+uRkoZWxxGKVBXnR
+        Qb7xEwoTzDPgT58trMdSFqc=
+X-Google-Smtp-Source: ABdhPJxyyYVp2cpU+u+Brn6vc+Sa2k3avtGDvXSzA1PMgl1XvLDtup0SaBDOqBlcJQLSAvD+iRZDHw==
+X-Received: by 2002:a02:7163:0:b0:314:3b74:525a with SMTP id n35-20020a027163000000b003143b74525amr701416jaf.260.1645069715755;
+        Wed, 16 Feb 2022 19:48:35 -0800 (PST)
+Received: from frodo.hsd1.co.comcast.net ([2601:284:8204:2010::1b19])
+        by smtp.googlemail.com with ESMTPSA id l16sm1127874ilc.54.2022.02.16.19.48.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 19:46:03 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id F164427C0054;
-        Wed, 16 Feb 2022 22:46:01 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 16 Feb 2022 22:46:01 -0500
-X-ME-Sender: <xms:-cQNYmwDbjMZhTZ3BbO6vgmRjiiDxmttyR_ziHBClg3Lxu1Znb1Z4w>
-    <xme:-cQNYiSZcNT9nyj2OWYBO_CJgWnfce0Of6cgjrs8AiiMUKr9LPDVSeujs_OE-wzHw
-    WasUAhcyWkkI4byFQ>
-X-ME-Received: <xmr:-cQNYoXkF_pIy_cSFCZoEXOFrYdv2Bng3rZndwOptIiU-y6MRWZaG7zM9Aw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeejgdeiudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcuhfgv
-    nhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrh
-    hnpeeijefhledvtdegudfhffeugeetveeluefgkeevhfeuudeuudfgveevhfetvdeuvden
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquh
-    hnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudej
-    jeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrd
-    hnrghmvg
-X-ME-Proxy: <xmx:-cQNYsg2-zjlemF-5_R56w1ArtLl2ds_v1Igf6ZRal6qD5c3VjskLA>
-    <xmx:-cQNYoDH0SKSzN37qAwvnR0OHUdfgU_qQtVwBT9cWmu2OFaYXyRavA>
-    <xmx:-cQNYtKNdbe-lpXSbTmnlEy0aWHvymfQr7-oOUBTkvHUPAXRbomHUg>
-    <xmx:-cQNYk58wSyNGHCQLUdr7UAFgpqXvmxpDpBRhJ8XFqiTkQ0PDKDsvRH2OaM>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 16 Feb 2022 22:45:59 -0500 (EST)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Wei Liu <wei.liu@kernel.org>
-Cc:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2] PCI: hv: Avoid the retarget interrupt hypercall in irq_unmask() on ARM64
-Date:   Thu, 17 Feb 2022 11:45:19 +0800
-Message-Id: <20220217034525.1687678-1-boqun.feng@gmail.com>
+        Wed, 16 Feb 2022 19:48:35 -0800 (PST)
+From:   Jim Cromie <jim.cromie@gmail.com>
+To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org
+Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
+        linux@rasmusvillemoes.dk, joe@perches.com,
+        Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH 00/12] use dynamic-debug under drm.debug api
+Date:   Wed, 16 Feb 2022 20:48:16 -0700
+Message-Id: <20220217034829.64395-1-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -103,285 +72,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ARM64 Hyper-V guests, SPIs are used for the interrupts of virtual PCI
-devices, and SPIs can be managed directly via GICD registers. Therefore
-the retarget interrupt hypercall is not needed on ARM64.
+drm.debug api provides ~23 macros to issue 10 categories of debug
+messages, each enabled by a bit in /sys/module/drm/parameters/debug.
+drm_debug_enabled(category) tests these bits at runtime; while cheap
+individually, the costs accumulate.
 
-An arch-specific interface hv_arch_irq_unmask() is introduced to handle
-the architecture level differences on this. For x86, the behavior
-remains unchanged, while for ARM64 no hypercall is invoked when
-unmasking an irq for virtual PCI devices.
+For CONFIG_DRM_USE_DYNAMIC_DEBUG=y, this patchset obsoletes those
+runtime tests (inside drm_*dbg) by wrapping the 2 fns in one of the
+dynamic_func_call* Factory macros.  The config dependence is due to
+the .data footprint cost of the tables; AMDGPU has ~4k callsites, at
+56 bytes each.
 
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
-v1 -> v2:
+This creates entries in /proc/dynamic_debug/control for each callsite,
+and each has .class_id = macros'-category.  This, and a new query
+keyword, allow (1st):
 
-*	Introduce arch-specific interface hv_arch_irq_unmask() as
-	suggested by Bjorn
+  # 1=DRM_UT_KMS (iirc)
+  #> echo "module drm class 1 +p  > /proc/dynamic_debug/control
 
- drivers/pci/controller/pci-hyperv.c | 233 +++++++++++++++-------------
- 1 file changed, 122 insertions(+), 111 deletions(-)
+Then equivalently:
+  # except it also clears other flags
+  #> echo 0x01 > /sys/module/drm/parameters/debug
 
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index 20ea2ee330b8..2a1481a52489 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -616,6 +616,121 @@ static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
- {
- 	return pci_msi_prepare(domain, dev, nvec, info);
- }
-+
-+/**
-+ * hv_arch_irq_unmask() - "Unmask" the IRQ by setting its current
-+ * affinity.
-+ * @data:	Describes the IRQ
-+ *
-+ * Build new a destination for the MSI and make a hypercall to
-+ * update the Interrupt Redirection Table. "Device Logical ID"
-+ * is built out of this PCI bus's instance GUID and the function
-+ * number of the device.
-+ */
-+static void hv_arch_irq_unmask(struct irq_data *data)
-+{
-+	struct msi_desc *msi_desc = irq_data_get_msi_desc(data);
-+	struct hv_retarget_device_interrupt *params;
-+	struct hv_pcibus_device *hbus;
-+	struct cpumask *dest;
-+	cpumask_var_t tmp;
-+	struct pci_bus *pbus;
-+	struct pci_dev *pdev;
-+	unsigned long flags;
-+	u32 var_size = 0;
-+	int cpu, nr_bank;
-+	u64 res;
-+
-+	dest = irq_data_get_effective_affinity_mask(data);
-+	pdev = msi_desc_to_pci_dev(msi_desc);
-+	pbus = pdev->bus;
-+	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
-+
-+	spin_lock_irqsave(&hbus->retarget_msi_interrupt_lock, flags);
-+
-+	params = &hbus->retarget_msi_interrupt_params;
-+	memset(params, 0, sizeof(*params));
-+	params->partition_id = HV_PARTITION_ID_SELF;
-+	params->int_entry.source = HV_INTERRUPT_SOURCE_MSI;
-+	hv_set_msi_entry_from_desc(&params->int_entry.msi_entry, msi_desc);
-+	params->device_id = (hbus->hdev->dev_instance.b[5] << 24) |
-+			   (hbus->hdev->dev_instance.b[4] << 16) |
-+			   (hbus->hdev->dev_instance.b[7] << 8) |
-+			   (hbus->hdev->dev_instance.b[6] & 0xf8) |
-+			   PCI_FUNC(pdev->devfn);
-+	params->int_target.vector = hv_msi_get_int_vector(data);
-+
-+	/*
-+	 * Honoring apic->delivery_mode set to APIC_DELIVERY_MODE_FIXED by
-+	 * setting the HV_DEVICE_INTERRUPT_TARGET_MULTICAST flag results in a
-+	 * spurious interrupt storm. Not doing so does not seem to have a
-+	 * negative effect (yet?).
-+	 */
-+
-+	if (hbus->protocol_version >= PCI_PROTOCOL_VERSION_1_2) {
-+		/*
-+		 * PCI_PROTOCOL_VERSION_1_2 supports the VP_SET version of the
-+		 * HVCALL_RETARGET_INTERRUPT hypercall, which also coincides
-+		 * with >64 VP support.
-+		 * ms_hyperv.hints & HV_X64_EX_PROCESSOR_MASKS_RECOMMENDED
-+		 * is not sufficient for this hypercall.
-+		 */
-+		params->int_target.flags |=
-+			HV_DEVICE_INTERRUPT_TARGET_PROCESSOR_SET;
-+
-+		if (!alloc_cpumask_var(&tmp, GFP_ATOMIC)) {
-+			res = 1;
-+			goto exit_unlock;
-+		}
-+
-+		cpumask_and(tmp, dest, cpu_online_mask);
-+		nr_bank = cpumask_to_vpset(&params->int_target.vp_set, tmp);
-+		free_cpumask_var(tmp);
-+
-+		if (nr_bank <= 0) {
-+			res = 1;
-+			goto exit_unlock;
-+		}
-+
-+		/*
-+		 * var-sized hypercall, var-size starts after vp_mask (thus
-+		 * vp_set.format does not count, but vp_set.valid_bank_mask
-+		 * does).
-+		 */
-+		var_size = 1 + nr_bank;
-+	} else {
-+		for_each_cpu_and(cpu, dest, cpu_online_mask) {
-+			params->int_target.vp_mask |=
-+				(1ULL << hv_cpu_number_to_vp_number(cpu));
-+		}
-+	}
-+
-+	res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
-+			      params, NULL);
-+
-+exit_unlock:
-+	spin_unlock_irqrestore(&hbus->retarget_msi_interrupt_lock, flags);
-+
-+	/*
-+	 * During hibernation, when a CPU is offlined, the kernel tries
-+	 * to move the interrupt to the remaining CPUs that haven't
-+	 * been offlined yet. In this case, the below hv_do_hypercall()
-+	 * always fails since the vmbus channel has been closed:
-+	 * refer to cpu_disable_common() -> fixup_irqs() ->
-+	 * irq_migrate_all_off_this_cpu() -> migrate_one_irq().
-+	 *
-+	 * Suppress the error message for hibernation because the failure
-+	 * during hibernation does not matter (at this time all the devices
-+	 * have been frozen). Note: the correct affinity info is still updated
-+	 * into the irqdata data structure in migrate_one_irq() ->
-+	 * irq_do_set_affinity() -> hv_set_affinity(), so later when the VM
-+	 * resumes, hv_pci_restore_msi_state() is able to correctly restore
-+	 * the interrupt with the correct affinity.
-+	 */
-+	if (!hv_result_success(res) && hbus->state != hv_pcibus_removing)
-+		dev_err(&hbus->hdev->device,
-+			"%s() failed: %#llx", __func__, res);
-+}
- #elif defined(CONFIG_ARM64)
- /*
-  * SPI vectors to use for vPCI; arch SPIs range is [32, 1019], but leaving a bit
-@@ -839,6 +954,12 @@ static struct irq_domain *hv_pci_get_root_domain(void)
- {
- 	return hv_msi_gic_irq_domain;
- }
-+
-+/*
-+ * SPIs are used for interrupts of PCI devices and SPIs is managed via GICD
-+ * registers which Hyper-V already supports, so no hypercall needed.
-+ */
-+static void hv_arch_irq_unmask(struct irq_data *data) { }
- #endif /* CONFIG_ARM64 */
- 
- /**
-@@ -1456,119 +1577,9 @@ static void hv_irq_mask(struct irq_data *data)
- 		irq_chip_mask_parent(data);
- }
- 
--/**
-- * hv_irq_unmask() - "Unmask" the IRQ by setting its current
-- * affinity.
-- * @data:	Describes the IRQ
-- *
-- * Build new a destination for the MSI and make a hypercall to
-- * update the Interrupt Redirection Table. "Device Logical ID"
-- * is built out of this PCI bus's instance GUID and the function
-- * number of the device.
-- */
- static void hv_irq_unmask(struct irq_data *data)
- {
--	struct msi_desc *msi_desc = irq_data_get_msi_desc(data);
--	struct hv_retarget_device_interrupt *params;
--	struct hv_pcibus_device *hbus;
--	struct cpumask *dest;
--	cpumask_var_t tmp;
--	struct pci_bus *pbus;
--	struct pci_dev *pdev;
--	unsigned long flags;
--	u32 var_size = 0;
--	int cpu, nr_bank;
--	u64 res;
--
--	dest = irq_data_get_effective_affinity_mask(data);
--	pdev = msi_desc_to_pci_dev(msi_desc);
--	pbus = pdev->bus;
--	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
--
--	spin_lock_irqsave(&hbus->retarget_msi_interrupt_lock, flags);
--
--	params = &hbus->retarget_msi_interrupt_params;
--	memset(params, 0, sizeof(*params));
--	params->partition_id = HV_PARTITION_ID_SELF;
--	params->int_entry.source = HV_INTERRUPT_SOURCE_MSI;
--	hv_set_msi_entry_from_desc(&params->int_entry.msi_entry, msi_desc);
--	params->device_id = (hbus->hdev->dev_instance.b[5] << 24) |
--			   (hbus->hdev->dev_instance.b[4] << 16) |
--			   (hbus->hdev->dev_instance.b[7] << 8) |
--			   (hbus->hdev->dev_instance.b[6] & 0xf8) |
--			   PCI_FUNC(pdev->devfn);
--	params->int_target.vector = hv_msi_get_int_vector(data);
--
--	/*
--	 * Honoring apic->delivery_mode set to APIC_DELIVERY_MODE_FIXED by
--	 * setting the HV_DEVICE_INTERRUPT_TARGET_MULTICAST flag results in a
--	 * spurious interrupt storm. Not doing so does not seem to have a
--	 * negative effect (yet?).
--	 */
--
--	if (hbus->protocol_version >= PCI_PROTOCOL_VERSION_1_2) {
--		/*
--		 * PCI_PROTOCOL_VERSION_1_2 supports the VP_SET version of the
--		 * HVCALL_RETARGET_INTERRUPT hypercall, which also coincides
--		 * with >64 VP support.
--		 * ms_hyperv.hints & HV_X64_EX_PROCESSOR_MASKS_RECOMMENDED
--		 * is not sufficient for this hypercall.
--		 */
--		params->int_target.flags |=
--			HV_DEVICE_INTERRUPT_TARGET_PROCESSOR_SET;
--
--		if (!alloc_cpumask_var(&tmp, GFP_ATOMIC)) {
--			res = 1;
--			goto exit_unlock;
--		}
--
--		cpumask_and(tmp, dest, cpu_online_mask);
--		nr_bank = cpumask_to_vpset(&params->int_target.vp_set, tmp);
--		free_cpumask_var(tmp);
--
--		if (nr_bank <= 0) {
--			res = 1;
--			goto exit_unlock;
--		}
--
--		/*
--		 * var-sized hypercall, var-size starts after vp_mask (thus
--		 * vp_set.format does not count, but vp_set.valid_bank_mask
--		 * does).
--		 */
--		var_size = 1 + nr_bank;
--	} else {
--		for_each_cpu_and(cpu, dest, cpu_online_mask) {
--			params->int_target.vp_mask |=
--				(1ULL << hv_cpu_number_to_vp_number(cpu));
--		}
--	}
--
--	res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
--			      params, NULL);
--
--exit_unlock:
--	spin_unlock_irqrestore(&hbus->retarget_msi_interrupt_lock, flags);
--
--	/*
--	 * During hibernation, when a CPU is offlined, the kernel tries
--	 * to move the interrupt to the remaining CPUs that haven't
--	 * been offlined yet. In this case, the below hv_do_hypercall()
--	 * always fails since the vmbus channel has been closed:
--	 * refer to cpu_disable_common() -> fixup_irqs() ->
--	 * irq_migrate_all_off_this_cpu() -> migrate_one_irq().
--	 *
--	 * Suppress the error message for hibernation because the failure
--	 * during hibernation does not matter (at this time all the devices
--	 * have been frozen). Note: the correct affinity info is still updated
--	 * into the irqdata data structure in migrate_one_irq() ->
--	 * irq_do_set_affinity() -> hv_set_affinity(), so later when the VM
--	 * resumes, hv_pci_restore_msi_state() is able to correctly restore
--	 * the interrupt with the correct affinity.
--	 */
--	if (!hv_result_success(res) && hbus->state != hv_pcibus_removing)
--		dev_err(&hbus->hdev->device,
--			"%s() failed: %#llx", __func__, res);
-+	hv_arch_irq_unmask(data);
- 
- 	if (data->parent_data->chip->irq_unmask)
- 		irq_chip_unmask_parent(data);
+dyndbg:
+ - fixes a bug in dyndbg static_key toggling, @stable cc'd
+ - adds support for distinct classes to dyndbg (new,unused feature)
+ - add DECLARE_DYNAMIC_DEBUG_CLASSBITS macro and callbacks
+   to implement bitmap -> classid sysfs knob
+dyndbg:
+ - drops exported fn: dynamic_debug_exec_queries()
+   any potential users would just use macro, or a tweak on it.
+ - improve info-msg to print both "old -> new" flags
+drm:
+ - adapts drm to use that support (link category to class_id)
+ - wraps drm_*dbg() in a dyndbg Factory macro to get NOOP optimized debugs
+   this disconnects drm.debug sysfs knob
+ - uses DECLARE_DYNAMIC_DEBUG_CLASSBITS macro
+   this reconnects sysfs knob
+
+This could be -v12, but the focus and subject has wandered a bit, and
+patchwork CI had multiple different notions of the version.
+Noteworthy changes:
+
+- no tracefs stuff here, refocus
+  split out already, needs maturation, more attention.
+  its competing with a diet plan, to reduce 56 bytes/callsite. RFC.
+
+Previous drm.debug approach:
+
+- avoided drm_dbg & drm_devdbg by splicing in pr_debug & dev_dbg
+  this preserved the optional decorations: module:function:line:
+
+- used DRM_UT_CORE => "drm:core:" prefix-string, cpp cat'd to formats
+  this made sites selectable by matching to that format prefix
+
+This version:
+
+- .class_id is easier to explain, and no config/format-string diffs
+
+- wraps drm_dbg & drm_devdbg callsites for jumplabel enablement
+  efficiency was original goal.
+
+- loses the optional decorations.
+  drm has its own logmsg standards, doesnt need decorations slapped on
+  later: could recast flags for drm specific decorations
+
+This is based on 5.17-rc4
+
+Its also here: in (dd-drm branch)
+  ghlinux-ro	https://github.com/jimc/linux.git (fetch)
+
+I'll push further fixes there as they come.
+
+Jim Cromie (13):
+  dyndbg: fix static_branch manipulation @stable
+  dyndbg: add class_id field and query support
+  dyndbg: add DEFINE_DYNAMIC_DEBUG_CLASSBITS macro and callbacks
+  dyndbg: drop EXPORTed dynamic_debug_exec_queries
+  dyndbg: improve change-info to have old and new
+  dyndbg: abstract dyndbg_site_is_printing
+  drm_print: condense enum drm_debug_category
+  drm_print: interpose drm_*dbg with forwarding macros
+  drm_print: wrap drm_*_dbg in dyndbg jumplabel
+  drm_print: refine drm_debug_enabled for dyndbg+jump-label
+  drm_print: prefer bare printk KERN_DEBUG on generic fn
+  drm_print: add _ddebug desc to drm_*dbg prototypes
+  drm_print: use DEFINE_DYNAMIC_DEBUG_CLASSBITS for drm.debug
+
+ .../admin-guide/dynamic-debug-howto.rst       |   7 +
+ drivers/gpu/drm/Kconfig                       |  12 ++
+ drivers/gpu/drm/Makefile                      |   2 +
+ drivers/gpu/drm/drm_print.c                   |  56 ++++---
+ include/drm/drm_print.h                       |  80 +++++++---
+ include/linux/dynamic_debug.h                 | 113 +++++++++++---
+ lib/dynamic_debug.c                           | 140 ++++++++++++++----
+ 7 files changed, 323 insertions(+), 87 deletions(-)
+
 -- 
 2.35.1
 

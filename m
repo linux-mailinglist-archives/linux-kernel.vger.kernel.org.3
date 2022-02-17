@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5474BAA23
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95344BAA1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245422AbiBQTra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:47:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45068 "EHLO
+        id S245451AbiBQTrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:47:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245349AbiBQTrU (ORCPT
+        with ESMTP id S245402AbiBQTrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:47:20 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F732654C;
-        Thu, 17 Feb 2022 11:47:04 -0800 (PST)
+        Thu, 17 Feb 2022 14:47:24 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6C226549;
+        Thu, 17 Feb 2022 11:47:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645127224; x=1676663224;
+  t=1645127229; x=1676663229;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HSCKqfDMdMI/r89h9i7FEF/tyXYo2PHT5q86Bt1G8+0=;
-  b=TqYOpVdXJ9E2l92O79IeNLH5ZMU4IVsHp/AeiVxzOOsbnIbfnCrvtlll
-   8bpZVmbLRPfvAHvvYoA83gjunRE5ven0IKXagKKdZnWwjC5VPKIyw8rbC
-   WXdzejcz/sXdX7QJJ5R2lI+ln2wi5nPOX/gwizbvfWUdS+jN9gywGScY8
-   S75l5In9dYbwQ7REyZvNcCYDlUtEBxEOcDSx258QCu9ttbo+FamVS56if
-   P+jmgo0OTxwp5hwOV1o9PtceX1G8VXbmn40r/6Dn5Y2M4v3F/GyDiLHRz
-   /HjvP4ku9oOQ2zmdw+Y3vnbiA0g6nF51LpIYW7Mv/O4HCBcTeepR+b9Q1
+  bh=WYl42eI4HYLz25VSfvzg7qJMtNusab7DF8CglpN8QQE=;
+  b=P14ifbhDmv3+7yV1aYSWImV5iz7xj3A8Ef7qCFnKLDcOdxkhSu1clDVn
+   12Eg2dnBHl7Ql3NFL7PoKZlmZT1Niibn+pj1Ldd7WLLczTA8g6jZR8hAW
+   TfoOj40Bpwebpbpyy9t4huttgDheS6I8m1pw+xzjzo5WZqhLqNY9Q+GxC
+   eDB5/5b0qldLOUxmQntVPpe8jdX+GD2k6A2AQoJlvtdYO5IpzzjnUtyW4
+   whFl3UJkaIEqodOnCOe9seNu/UV6SLQmFTlz0nRcZpl/vLOuAtSSdZlIP
+   XpPgNZsaix5MU9JrGMWXoyxMgAWhiL+bKMNQEjaYt6iAENzGvsFUB1OPF
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="249794921"
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="231586439"
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="249794921"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:47:04 -0800
+   d="scan'208";a="231586439"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:47:09 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="571969855"
+   d="scan'208";a="774876619"
 Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Feb 2022 11:47:01 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 17 Feb 2022 11:47:02 -0800
 Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nKmk1-0000U9-6S; Thu, 17 Feb 2022 19:47:01 +0000
-Date:   Fri, 18 Feb 2022 03:46:23 +0800
+        id 1nKmk1-0000UD-7a; Thu, 17 Feb 2022 19:47:01 +0000
+Date:   Fri, 18 Feb 2022 03:46:26 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     kbuild-all@lists.01.org, Nicholas Piggin <npiggin@gmail.com>,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] powerpc/ftrace: Reserve instructions from function
- entry for ftrace
-Message-ID: <202202180014.IWuzQ9al-lkp@intel.com>
-References: <8843d65ac0878232433573d10ebee30457748624.1645096227.git.naveen.n.rao@linux.vnet.ibm.com>
+To:     Byungchul Park <byungchul.park@lge.com>,
+        torvalds@linux-foundation.org
+Cc:     kbuild-all@lists.01.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org
+Subject: Re: [PATCH 07/16] dept: Apply Dept to
+ wait_for_completion()/complete()
+Message-ID: <202202180000.zICbPUhq-lkp@intel.com>
+References: <1645095472-26530-8-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8843d65ac0878232433573d10ebee30457748624.1645096227.git.naveen.n.rao@linux.vnet.ibm.com>
+In-Reply-To: <1645095472-26530-8-git-send-email-byungchul.park@lge.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -71,67 +76,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Naveen,
+Hi Byungchul,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on 1b43a74f255c5c00db25a5fedfd75ca0dc029022]
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on linux/master linus/master v5.17-rc4]
+[cannot apply to tip/locking/core hnaz-mm/master next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Naveen-N-Rao/powerpc-ftrace-Reserve-instructions-from-function-entry-for-ftrace/20220217-200314
-base:   1b43a74f255c5c00db25a5fedfd75ca0dc029022
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220218/202202180014.IWuzQ9al-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
+url:    https://github.com/0day-ci/linux/commits/Byungchul-Park/DEPT-Dependency-Tracker/20220217-190040
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 3624ba7b5e2acc02b01301ea5fd3534971eb9896
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220218/202202180000.zICbPUhq-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6a1891335e377e5def312e7c182aef676f04c926
+        # https://github.com/0day-ci/linux/commit/8ef6cb09cb67a0c5cd7ba4f25f4825d0a5b269b0
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Naveen-N-Rao/powerpc-ftrace-Reserve-instructions-from-function-entry-for-ftrace/20220217-200314
-        git checkout 6a1891335e377e5def312e7c182aef676f04c926
+        git fetch --no-tags linux-review Byungchul-Park/DEPT-Dependency-Tracker/20220217-190040
+        git checkout 8ef6cb09cb67a0c5cd7ba4f25f4825d0a5b269b0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/scsi/qla2xxx/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> arch/powerpc/kernel/trace/ftrace.c:504:5: warning: no previous prototype for 'ftrace_location_get_offset' [-Wmissing-prototypes]
-     504 | int ftrace_location_get_offset(const struct dyn_ftrace *rec)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/qla2xxx/qla_dfs.c: In function 'qla2x00_dfs_tgt_port_database_show':
+>> drivers/scsi/qla2xxx/qla_dfs.c:227:1: warning: the frame size of 1028 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+     227 | }
+         | ^
 
 
-vim +/ftrace_location_get_offset +504 arch/powerpc/kernel/trace/ftrace.c
+vim +227 drivers/scsi/qla2xxx/qla_dfs.c
 
-   502	
-   503	#if defined(CONFIG_MPROFILE_KERNEL) || defined(CONFIG_PPC32)
- > 504	int ftrace_location_get_offset(const struct dyn_ftrace *rec)
-   505	{
-   506		if (IS_ENABLED(CONFIG_MPROFILE_KERNEL))
-   507			/*
-   508			 * On ppc64le with -mprofile-kernel, function entry can have:
-   509			 *   addis r2, r12, M
-   510			 *   addi  r2, r2, N
-   511			 *   mflr  r0
-   512			 *   bl    _mcount
-   513			 *
-   514			 * The first two instructions are for TOC setup and represent the global entry
-   515			 * point for cross-module calls, and may be missing if the function is never called
-   516			 * from other modules.
-   517			 */
-   518			return ((unsigned long)rec->arch.mod & 0x1) ? FUNC_MCOUNT_OFFSET_PPC64_GEP :
-   519								      FUNC_MCOUNT_OFFSET_PPC64_LEP;
-   520		else
-   521			/*
-   522			 * On ppc32, function entry always has:
-   523			 *   mflr r0
-   524			 *   stw  r0, 4(r1)
-   525			 *   bl   _mcount
-   526			 */
-   527			return FUNC_MCOUNT_OFFSET_PPC32;
-   528	}
-   529	
+36c7845282eef01 Quinn Tran       2016-02-04  174  
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  175  static int
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  176  qla2x00_dfs_tgt_port_database_show(struct seq_file *s, void *unused)
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  177  {
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  178  	scsi_qla_host_t *vha = s->private;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  179  	struct qla_hw_data *ha = vha->hw;
+4e5a05d1ecd92ce Arun Easi        2020-09-03  180  	struct gid_list_info *gid_list;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  181  	dma_addr_t gid_list_dma;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  182  	fc_port_t fc_port;
+4e5a05d1ecd92ce Arun Easi        2020-09-03  183  	char *id_iter;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  184  	int rc, i;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  185  	uint16_t entries, loop_id;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  186  
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  187  	seq_printf(s, "%s\n", vha->host_str);
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  188  	gid_list = dma_alloc_coherent(&ha->pdev->dev,
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  189  				      qla2x00_gid_list_size(ha),
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  190  				      &gid_list_dma, GFP_KERNEL);
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  191  	if (!gid_list) {
+83548fe2fcbb78a Quinn Tran       2017-06-02  192  		ql_dbg(ql_dbg_user, vha, 0x7018,
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  193  		       "DMA allocation failed for %u\n",
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  194  		       qla2x00_gid_list_size(ha));
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  195  		return 0;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  196  	}
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  197  
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  198  	rc = qla24xx_gidlist_wait(vha, gid_list, gid_list_dma,
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  199  				  &entries);
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  200  	if (rc != QLA_SUCCESS)
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  201  		goto out_free_id_list;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  202  
+4e5a05d1ecd92ce Arun Easi        2020-09-03  203  	id_iter = (char *)gid_list;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  204  
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  205  	seq_puts(s, "Port Name	Port ID		Loop ID\n");
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  206  
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  207  	for (i = 0; i < entries; i++) {
+4e5a05d1ecd92ce Arun Easi        2020-09-03  208  		struct gid_list_info *gid =
+4e5a05d1ecd92ce Arun Easi        2020-09-03  209  			(struct gid_list_info *)id_iter;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  210  		loop_id = le16_to_cpu(gid->loop_id);
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  211  		memset(&fc_port, 0, sizeof(fc_port_t));
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  212  
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  213  		fc_port.loop_id = loop_id;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  214  
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  215  		rc = qla24xx_gpdb_wait(vha, &fc_port, 0);
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  216  		seq_printf(s, "%8phC  %02x%02x%02x  %d\n",
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  217  			   fc_port.port_name, fc_port.d_id.b.domain,
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  218  			   fc_port.d_id.b.area, fc_port.d_id.b.al_pa,
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  219  			   fc_port.loop_id);
+4e5a05d1ecd92ce Arun Easi        2020-09-03  220  		id_iter += ha->gid_list_info_size;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  221  	}
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  222  out_free_id_list:
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  223  	dma_free_coherent(&ha->pdev->dev, qla2x00_gid_list_size(ha),
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  224  			  gid_list, gid_list_dma);
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  225  
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  226  	return 0;
+c423437e3ff41b8 Himanshu Madhani 2017-03-15 @227  }
+c423437e3ff41b8 Himanshu Madhani 2017-03-15  228  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

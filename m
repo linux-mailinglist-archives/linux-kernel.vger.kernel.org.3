@@ -2,82 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C2F4BA96F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC5A4BA99A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245035AbiBQTPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:15:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36236 "EHLO
+        id S245089AbiBQTS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:18:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245052AbiBQTPj (ORCPT
+        with ESMTP id S236437AbiBQTSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:15:39 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E6090FD6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:15:24 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id a23so9598291eju.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:15:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+RZ8CAgnGa1bk5gBxds4oezzFjZLQMV+wOvrmesI1Hw=;
-        b=aC4vKGs+W+TwIvfSuol31sXb0DdwmBd+7ynpizLCKhXxCJFdEAZpxJvcWGa/FztIyE
-         kaM//DxAJXCDh5aNx4GSOgCqArnp/pPXpeZOwL6NCOz09LePB9aHf9rLmhVNdEQhmOfG
-         zcHXwBp2FYlRXI6tXnhZ/KCBgXws1BhNZED9tFrHvUNz3V476fnXQSLMeM+Shpqaev6m
-         W07DvhrokY4sorGqrqwhi0S/cnzs7UTqO0cIGR6WWEAN8VmZadQ9VO/+zsTblOwHPeWg
-         SsUN3Cw66rH7ga20AFYG5KTR6BdWsnByVkv9VANJJ9bhC1jZcqQ2NhN41BgDZLcdhMyk
-         TY3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+RZ8CAgnGa1bk5gBxds4oezzFjZLQMV+wOvrmesI1Hw=;
-        b=IkEuIRxs7BJc8ZhdW2a8xvSMQbBcqjj94Ptt42ZgrNUboIDjLzxKGsadWCzdmdzpT7
-         RKJeI1S7Sb0k/0vZ0RWmqlX9G+rv1dDKT6DhGFsUCWX8qTOHpWZVYjmDqN26eR0MZ1W8
-         TakgvJB3S2AcY0OsasaMLKsTbSwruuPbXk57dswzSgh9neIylKCQkYWNNrkGY+xGlkvM
-         rgHI+vqK+7e4hgAvIb5L2QjRmO6j2mIDM69lVT4qPsis0S/mNxNPEb3U9YrmgwlWePmT
-         5e1MouSzlaahbCq3bmvnJ/t1raU0JHtVM/UqK4WQ1qTv+Tuse820R5+M9Y/P3mnUBvGZ
-         lNQg==
-X-Gm-Message-State: AOAM533AaWTfx+hcZEO7AaefWT5bpuMiTFh2PLEWYQSG2vsLwWb8gUPi
-        U4iUbm+zdsBf01UGFdxmTwUeA+pCqGwLhjIa/f2Ucw==
-X-Google-Smtp-Source: ABdhPJw48Oadf8QR2zY/o5TdRU0UiMjXS1n08+Rvo/jef0cepMooOXBMnDr3m4SH0a9wsDyMLo89s3cuvktj12QRONA=
-X-Received: by 2002:a17:906:4b52:b0:6cd:3863:b35e with SMTP id
- j18-20020a1709064b5200b006cd3863b35emr3488094ejv.415.1645125322737; Thu, 17
- Feb 2022 11:15:22 -0800 (PST)
+        Thu, 17 Feb 2022 14:18:25 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851EDC2E4B;
+        Thu, 17 Feb 2022 11:18:10 -0800 (PST)
+Date:   Thu, 17 Feb 2022 20:18:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645125489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sCin5ygrpBsE7zD6si65r+YVbvKS66A/QsQ3ZrIRoDs=;
+        b=wj84dHxGq//td/JnJiGIo4OlkBeb1iUsbSKmW6uLZttVdxPQe03if76JU8kfvO3y4YKnMU
+        SBwOiqJ5AdoTADdWJKTKHXtmJ/1PMk5zTindMBUitjAb3X7u3vsqtax8/Qw9U0VLrM90ya
+        wb41+lNNARsWwB2EytlOEUEj7/etV1vCl/WQlHItTO20FyN51z+Yw9qVC/4sdbcp1ULA8c
+        DRRxHTK1ZntmebTgQFCPbI/KskIskO/zP961yfdpK13fGOG95DUdrNMuPF1MTUSYInhDSl
+        C+uYvto6wBR7OwcZ6+mIf+2aKHpsvps+XMjaWxtdHPprFBLxEQYmEZ6Xij9Olg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645125489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sCin5ygrpBsE7zD6si65r+YVbvKS66A/QsQ3ZrIRoDs=;
+        b=Q3jXS0qCLOJg66uNIW2rqKiNczEgml33xjYY4HpHu57a/nPliLYmEYuHR0vXv7kxumTseQ
+        EcPkbmZ/+m4ikoAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v6] random: clear fast pool, crng, and batches in cpuhp
+ bring up
+Message-ID: <Yg6fbwtNghu76z2V@linutronix.de>
+References: <CAHmME9prO9dop7iBRwN54=GMtLH7amS3m_VqGUzL44G1h=R+2A@mail.gmail.com>
+ <20220217180409.13151-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-14-arnd@kernel.org>
-In-Reply-To: <20220216131332.1489939-14-arnd@kernel.org>
-From:   Andy Lutomirski <luto@amacapital.net>
-Date:   Thu, 17 Feb 2022 11:15:11 -0800
-Message-ID: <CALCETrVOvYPN4_6hS8wpm2v9bGZupZ5x4=vZAseG57OUgvLGfw@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] uaccess: generalize access_ok()
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
-        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
-        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
-        dalias@libc.org, davem@davemloft.net, richard@nod.at,
-        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220217180409.13151-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,37 +62,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 5:19 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> There are many different ways that access_ok() is defined across
-> architectures, but in the end, they all just compare against the
-> user_addr_max() value or they accept anything.
->
-> Provide one definition that works for most architectures, checking
-> against TASK_SIZE_MAX for user processes or skipping the check inside
-> of uaccess_kernel() sections.
->
-> For architectures without CONFIG_SET_FS(), this should be the fastest
-> check, as it comes down to a single comparison of a pointer against a
-> compile-time constant, while the architecture specific versions tend to
-> do something more complex for historic reasons or get something wrong.
+On 2022-02-17 19:04:09 [+0100], Jason A. Donenfeld wrote:
+> For the irq randomness fast pool, rather than having to use expensive
+> atomics, which were visibly the most expensive thing in the entire irq
+> handler, simply take care of the extreme edge case of resetting count to
+> zero in the cpuhp online handler, just after workqueues have been
+> reenabled. This simplifies the code a bit and lets us use vanilla
+> variables rather than atomics, and performance should be improved.
+> 
+> As well, very early on when the CPU comes up, while interrupts are still
+> disabled, we clear out the per-cpu crng and its batches, so that it
+> always starts with fresh randomness.
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+> v6 improves the comments around each of the cpuhp functions, as
+> requested.
 
-This isn't actually optimal.  On x86, TASK_SIZE_MAX is a bizarre
-constant that has a very specific value to work around a bug^Wdesign
-error^Wfeature of Intel CPUs.  TASK_SIZE_MAX is the maximum address at
-which userspace is permitted to allocate memory, but there is a huge
-gap between user and kernel addresses, and any value in the gap would
-be adequate for the comparison.  If we wanted to optimize this, simply
-checking the high bit (which x86 can do without any immediate
-constants at all) would be sufficient and, for an access known to fit
-in 32 bits, one could get even fancier and completely ignore the size
-of the access.  (For accesses not known to fit in 32 bits, I suspect
-some creativity could still come up with a construction that's
-substantially faster than the one in your patch.)
+Perfect thank you.
+Did you miss my question regarding cross-CPU init in
+random_prepare_cpu()?
 
-So there's plenty of room for optimization here.
-
-(This is not in any respect a NAK -- it's just an observation that
-this could be even better.)
+Sebastian

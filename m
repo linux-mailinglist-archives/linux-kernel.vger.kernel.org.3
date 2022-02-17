@@ -2,148 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7DF4BA95F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AFD4BA970
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245031AbiBQTOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:14:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60654 "EHLO
+        id S245070AbiBQTPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:15:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242994AbiBQTOE (ORCPT
+        with ESMTP id S245052AbiBQTPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:14:04 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553C68D697
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:13:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Slyaqa+LAiQa0jGtv7Mh1+rPVXd9IwiWq5lH5xrcQ2E=; b=h8bg3H/YhM6oc3YW53+uUUiRCc
-        s6kKrckB3U6vJnzxanw8IRHc8qm00QPjmrNyCXy2EJRRy4WvqeL8CxTHlNUDjvG/YRGepoJopWW00
-        PoswY64UhJFr9/WRo474O2S9ucHYviJf+gk5fPMPbU7ktFJNkmoNaU48HCp/LGQORbgtxqnmzbl3H
-        +9rVyATOvCqmRwiIrBpne08/VvwnwDxTqtPahTe4CbN6hP64Lb/4UDxC4MYcd4Vew2sSUGrz+8feF
-        W9oEYE8lw7aTUR4R0/dZeNw8n6enMNuiNGyJX2tNy2BvPZcOs9U4XOUZM/RGsj3fyhdm3hvjNFAV6
-        dowzj+lg==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKmDr-00Br3x-Nx; Thu, 17 Feb 2022 19:13:47 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Alan Kao <alankao@andestech.com>, KC <kclin@andestech.com>
-Subject: [PATCH v2] NDS32: export __trace_hardirqs_on/_offf for entry/exit
-Date:   Thu, 17 Feb 2022 11:13:47 -0800
-Message-Id: <20220217191347.13480-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Feb 2022 14:15:02 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F234F90265;
+        Thu, 17 Feb 2022 11:14:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nxgVq/qWQt5HMdLdcHq04K1PGvWJLL07iRxJwyfdbA1sOv2t19VFtpSK0FvMPOTOubYXnmRDaV/88Z4uDjif/Y3umkXq3xmnUmHAdUEUD6XwyhSXsa7ybTMF2yY3tsrfYJ7S20dHQ0jggDohJH6D9o3ijRCYLpMQ5SZqnUZBcHFcdbI7SSMC9iqZvZHmgVzRuomQHheIT2PVQLclSW/8DWpaABE7Ql4ypTiaUzKFyWE5T4xR2eFwY+6L8oT35jvDuppf6ccTS7iwMOOg6tmmNz5l/o/2K6rDE9ZLOJ6hL8LUsGFcBhEWtBD1P+G3ofYKo3lrN9HMEpaMsNWU+FPnvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CuT+Fxx/s+iFZhmctPLI+eHNZRpiHpVzj6HCIZt7iNQ=;
+ b=ir4iWs+3lskrU3HmDVoTwo6V8Jj7R1p+YbO2NeSG0M/PMn7O4UeHlyvFySK6ErAs+mmFT6hNUuujfpSw46n6l9UFCrWssUfNpgltFVGl/7nGGmigb/haAyQFCYYtvcNwBfARM5cNuZ+D7iyRD3LAKg98BUr4k+84L9Y6dsFp6vRfYzCW1V339Jc9LDzNODnGhAZBKp5VpLGDIfIFLz5i1NuRyQVmFPL0DR64M88iwj0Y9DPsxxdJkSUVrA/0Zbpa0a4abMH9tzfM7ZVGNds7QkQ+wsxFHKRLvJf26RSyXnUQOBHfp2fVXltgx2Nn6cam8JoTgc0ONlJkSr/uZIMLVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=gondor.apana.org.au
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CuT+Fxx/s+iFZhmctPLI+eHNZRpiHpVzj6HCIZt7iNQ=;
+ b=sFpMXoDa4jRaGUTKrlhuBXr6YPpypZAFrNCXoBzzhcWKU8yIET+2MI+j77xUD24AudHQp1errAjuKKplvW8Atapubyj4r6gxnMp8BbPeCpAGUbk0rwzFPxPkz5jqb/LcQr0GxR3U2926Rq6J0V+7nSMVJvXICZ+iyQjDE4hU6+U=
+Received: from SA9P221CA0020.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:25::25)
+ by CY4PR02MB3253.namprd02.prod.outlook.com (2603:10b6:910:80::37) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Thu, 17 Feb
+ 2022 19:14:45 +0000
+Received: from SN1NAM02FT0003.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:25:cafe::18) by SA9P221CA0020.outlook.office365.com
+ (2603:10b6:806:25::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
+ Transport; Thu, 17 Feb 2022 19:14:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0003.mail.protection.outlook.com (10.97.4.80) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4975.11 via Frontend Transport; Thu, 17 Feb 2022 19:14:44 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 17 Feb 2022 11:14:29 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 17 Feb 2022 11:14:29 -0800
+Envelope-to: git@xilinx.com,
+ herbert@gondor.apana.org.au,
+ davem@davemloft.net,
+ linux-crypto@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Received: from [10.140.6.15] (port=57270 helo=xhdharshah40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <harsha.harsha@xilinx.com>)
+        id 1nKmEW-0002nF-K3; Thu, 17 Feb 2022 11:14:29 -0800
+From:   Harsha <harsha.harsha@xilinx.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <michals@xilinx.com>
+CC:     <saratcha@xilinx.com>, <harshj@xilinx.com>, <git@xilinx.com>,
+        Harsha <harsha.harsha@xilinx.com>
+Subject: [PATCH V2 0/4] crypto: Add Xilinx ZynqMP SHA3 driver support
+Date:   Fri, 18 Feb 2022 00:44:20 +0530
+Message-ID: <1645125264-11033-1-git-send-email-harsha.harsha@xilinx.com>
+X-Mailer: git-send-email 1.8.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 54292213-ebd0-496a-c962-08d9f249c16b
+X-MS-TrafficTypeDiagnostic: CY4PR02MB3253:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR02MB3253AB6A73585C652CB3B730DE369@CY4PR02MB3253.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 81TqV9NdDqrumSoeyAzoi7O7McW0D070C+Aoi4j7+/15h7quAi+qLxwi+dT5prq9H3eyPZzeCVfKk08SFepaPYI9qGTdx2v7QSUMVCqlvln3lVRqmlpWCSUIjnecr8+ajtHgeLx0SOrT0rrPP10EUvcrjyIlo4M8yGzSX80owNg3gw8uzPGW/4XYkT4qYmGuY5oBJ1C+eTvDd7BySv+KiakwM8mzOTKDNFUfLuY2ozKZlw/Q7H6bxzrr6BqRryKbMnKz8MHIdjEyN9up6w6B+z7mqCbn65qQaVQcOKHskmTuQLpHwPx9FnlHHtF5JxWaLxEvHvmLGcSaFiBDWiEBTWLyU/WWpHiskTI3u2Mlfv91RFRkwxPn24cx72LsqquUzwpXPPGQCxcQORJAtsZ0CHsuv6utW5lpF15M2tJ/Gq4m68snvpPyoWDv+EDIUGyxClVD2ysZUNoiBMc34ovJrJo6490Rzu8RMxSWM3exdsyrzjlJoIJd8xzHT9ijVRTBiyRcgFhlSTtPNCd6whPVqSDPD/zruoZbRtBSpez/VXGj6juAEoXI2h7AE5mVdSJPztYew+kN9SmEUUvtkfOj+rpron+WxnjMHD3LU23qi9kwIpYOCnQKjmUcF6EIH+bHZWzqYzhiIZlJjQaDUxmjzraDwDCW9zLohpOCXIal6DBFdS2ebnASk1ysxqhZQZmQBIPHGbzTgKpwyZdIzAyfQPP8oUMVloMKdQ14ayms++E=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(336012)(40460700003)(508600001)(26005)(2616005)(186003)(7696005)(426003)(82310400004)(6666004)(107886003)(83380400001)(7636003)(356005)(2906002)(36756003)(47076005)(36860700001)(110136005)(54906003)(8676002)(5660300002)(4326008)(8936002)(6636002)(9786002)(70586007)(70206006)(316002)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 19:14:44.0455
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54292213-ebd0-496a-c962-08d9f249c16b
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0003.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB3253
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add exports for __trace_hardirqs_on/_off and use them in
-kernel/ex-entry.S and kernel/ex-exit.S to fix build/linker errors.
+This patch set does the following:
+  - Updates the Makefile for xilinx subdirectory
+  - Adds communication layer support for sha_hash in zynqmp.c
+  - Adds Xilinx ZynqMP driver for SHA3 Algorithm
+  - Updates the list of MAINTAINERS
 
-nds32le-linux-ld: arch/nds32/kernel/ex-entry.o: in function `fucop_ctl_done':
-(.text+0x12a): undefined reference to `__trace_hardirqs_off'
-nds32le-linux-ld: arch/nds32/kernel/ex-exit.o: in function `no_work_pending':
-(.text+0xea): undefined reference to `__trace_hardirqs_off'
-nds32le-linux-ld: (.text+0xee): undefined reference to `__trace_hardirqs_off'
-nds32le-linux-ld: (.text+0xf2): undefined reference to `__trace_hardirqs_on'
-nds32le-linux-ld: (.text+0xf6): undefined reference to `__trace_hardirqs_on'
+V2 changes:
+- Removed dependency on COMPILE_TEST in 3/4
+- Rebased this patchset on latest Cryptodev-2.6 tree which fixed
+below kernel robot warning
+   In file included from ./arch/s390/include/generated/asm/cacheflush.h:1,
+                    from drivers/crypto/xilinx/zynqmp-sha.c:6:
+include/asm-generic/cacheflush.h:53:46: warning: 'struct folio' declared
+inside parameter list will not be visible outside of this definition
+or declaration
+      53 | static inline void flush_dcache_folio(struct folio *folio) { }
+         |
+- Included linux/cacheflush.h instead of asm/cacheflush.h in 3/4
+ 
 
-Fixes: 0cde56e0280d ("nds32: Fix a kernel panic issue because of wrong frame pointer access.")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Nick Hu <nickhu@andestech.com>
-Cc: Vincent Chen <deanbo422@gmail.com>
-Cc: Alan Kao <alankao@andestech.com>
-Cc: KC <kclin@andestech.com>
----
-v2: move the functions from ftrace.c to irq.c;
-    #include <asm/irqflags.h> instead of <asm/ftrace.h>;
-#Cc: Greentime Hu <green.hu@gmail.com>
+V1 changes:
+- Converted RFC patch to PATCH
+- Updated zynqmp-sha driver so that it can be self discovered 
+- Removed patch 3/6 and 4/6 as they added support for device tree
+- Substituted hw with hardware in drivers/crypto/Kconfig
 
- arch/nds32/include/asm/irqflags.h |    3 +++
- arch/nds32/kernel/ex-entry.S      |    1 +
- arch/nds32/kernel/ex-exit.S       |    2 +-
- arch/nds32/kernel/ftrace.c        |   12 ------------
- arch/nds32/kernel/irq.c           |   14 ++++++++++++++
- 5 files changed, 19 insertions(+), 13 deletions(-)
+Harsha (4):
+  drivers: crypto: Updated Makefile for xilinx subdirectory
+  firmware: xilinx: Add ZynqMP SHA API for SHA3 functionality
+  crypto: xilinx: Add Xilinx SHA3 driver
+  MAINTAINERS: Add maintainer for Xilinx ZynqMP SHA3 driver
 
---- linux-next-20220216.orig/arch/nds32/kernel/ftrace.c
-+++ linux-next-20220216/arch/nds32/kernel/ftrace.c
-@@ -264,15 +264,3 @@ int ftrace_disable_ftrace_graph_caller(v
- #endif /* CONFIG_DYNAMIC_FTRACE */
- 
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
--
--
--#ifdef CONFIG_TRACE_IRQFLAGS
--noinline void __trace_hardirqs_off(void)
--{
--	trace_hardirqs_off();
--}
--noinline void __trace_hardirqs_on(void)
--{
--	trace_hardirqs_on();
--}
--#endif /* CONFIG_TRACE_IRQFLAGS */
---- linux-next-20220216.orig/arch/nds32/kernel/ex-entry.S
-+++ linux-next-20220216/arch/nds32/kernel/ex-entry.S
-@@ -8,6 +8,7 @@
- #include <asm/asm-offsets.h>
- #include <asm/page.h>
- #include <asm/fpu.h>
-+#include <asm/irqflags.h>
- 
- #ifdef CONFIG_HWZOL
- 	.macro push_zol
---- linux-next-20220216.orig/arch/nds32/kernel/ex-exit.S
-+++ linux-next-20220216/arch/nds32/kernel/ex-exit.S
-@@ -9,7 +9,7 @@
- #include <asm/thread_info.h>
- #include <asm/current.h>
- #include <asm/fpu.h>
--
-+#include <asm/irqflags.h>
- 
- 
- #ifdef CONFIG_HWZOL
---- linux-next-20220216.orig/arch/nds32/include/asm/irqflags.h
-+++ linux-next-20220216/arch/nds32/include/asm/irqflags.h
-@@ -39,3 +39,6 @@ static inline int arch_irqs_disabled(voi
- {
- 	return arch_irqs_disabled_flags(arch_local_save_flags());
- }
-+
-+void __trace_hardirqs_off(void);
-+void __trace_hardirqs_on(void);
---- linux-next-20220216.orig/arch/nds32/kernel/irq.c
-+++ linux-next-20220216/arch/nds32/kernel/irq.c
-@@ -7,3 +7,17 @@ void __init init_IRQ(void)
- {
- 	irqchip_init();
- }
-+
-+#ifdef CONFIG_TRACE_IRQFLAGS
-+noinline void __trace_hardirqs_off(void)
-+{
-+	trace_hardirqs_off();
-+}
-+EXPORT_SYMBOL(__trace_hardirqs_off);
-+
-+noinline void __trace_hardirqs_on(void)
-+{
-+	trace_hardirqs_on();
-+}
-+EXPORT_SYMBOL(__trace_hardirqs_on);
-+#endif /* CONFIG_TRACE_IRQFLAGS */
+ MAINTAINERS                          |   5 +
+ drivers/crypto/Kconfig               |  10 ++
+ drivers/crypto/Makefile              |   2 +-
+ drivers/crypto/xilinx/Makefile       |   1 +
+ drivers/crypto/xilinx/zynqmp-sha.c   | 285 +++++++++++++++++++++++++++++++++++
+ drivers/firmware/xilinx/zynqmp.c     |  26 ++++
+ include/linux/firmware/xlnx-zynqmp.h |   8 +
+ 7 files changed, 336 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/crypto/xilinx/zynqmp-sha.c
+
+-- 
+1.8.2.1
+

@@ -2,168 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8264BAC20
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFD64BAC1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343734AbiBQVy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 16:54:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57862 "EHLO
+        id S1343742AbiBQVzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 16:55:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242253AbiBQVy4 (ORCPT
+        with ESMTP id S242080AbiBQVzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 16:54:56 -0500
-X-Greylist: delayed 44848 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 13:54:41 PST
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7501680A4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 13:54:40 -0800 (PST)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 5D3673F801;
-        Thu, 17 Feb 2022 22:54:38 +0100 (CET)
-Date:   Thu, 17 Feb 2022 22:54:37 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v3 03/13] drm/msm/disp/dpu1: Add support for DSC in
- pingpong block
-Message-ID: <20220217215437.gvxmfjgfqzljactz@SoMainline.org>
-References: <20211116062256.2417186-1-vkoul@kernel.org>
- <20211116062256.2417186-4-vkoul@kernel.org>
+        Thu, 17 Feb 2022 16:55:40 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518C21680A4;
+        Thu, 17 Feb 2022 13:55:25 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id q8so5411092iod.2;
+        Thu, 17 Feb 2022 13:55:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jzGHEeXu8qLa160V5UZX2UopdW7xy02LCvRanuKe4aA=;
+        b=Su1vjtXg2FKoyFSL416m7D0PGEXJQemZAFUvAm2KSIh4CjFOEYsdtdDYLVrwqNf+FO
+         mMdkBAvlPio3IM7jN86ukcAQCfxgv/nrG5MQDO8qU7jbj5wAqD+VgTTPKU2hXZ2oMizz
+         8sMzM8GRQMHNlvClufoIyp7IcbIYowFFVxWNTbUEAvsPO0WU8zAfrecnL7wNIjA3qTBo
+         rrMn/PWeUpeifbP9PKToLXnPqqXy1goqx7jYY2fvlSE5Dwuz8s4tsiqF2M3mQxCOTD3u
+         lwAk3t8zB2aJqAqQVlKHnlYIb/a7+eA0jCh7kQ0Dzec6uGs/pwarPTx1UJcBKO2JraVw
+         0lAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jzGHEeXu8qLa160V5UZX2UopdW7xy02LCvRanuKe4aA=;
+        b=31oySHvg9PztjCe8f9/4MZedCv6J96WAKalhJ29NujW2dwLEfhHsFRJWlsBrQuI7gk
+         mWVR1goD01FnQF1VnD+bMUz2WaDp3Fjt0gADmHQWlNmE1O9a/aKthAbk/1XUGOyagwZ8
+         IJPTwaPPLgsVAQhw6rcSWEqKJEWU8DFMm6EujVbrC+3oWgutZEi6msupYik+/P+z+E9g
+         hXY996dVwAbZxwlqqADppntf3KSsSNVlyU5hHdR3he13IaUYdNf5jsI5ROGi9SKo2DHZ
+         jjUMoIiK7CtLD5kFagLkJtntnQMkOapTXyrepSKv4a5EW+SB/5dXsFYBER8B/aqO/zMl
+         5fBw==
+X-Gm-Message-State: AOAM532IaPfRPhMdMz3fzXRZnd/VcrkwcvU5zeWcBZL9x+c74IzfxuIf
+        cw2ShEr+85iqNGVEZp0CId5C3CnvFdyuGvbAKpU=
+X-Google-Smtp-Source: ABdhPJw7wiutofbKqAgsHlE9hG5ZQ/cLRNXVIQDjG9ngh81dBu0Y1TaMM4hTVZ9x4c/KCdVDdLYplTTogMOwSV1SfVA=
+X-Received: by 2002:a05:6638:2656:b0:30d:23ec:fcbf with SMTP id
+ n22-20020a056638265600b0030d23ecfcbfmr3439041jat.103.1645134924694; Thu, 17
+ Feb 2022 13:55:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211116062256.2417186-4-vkoul@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220217131916.50615-1-jolsa@kernel.org>
+In-Reply-To: <20220217131916.50615-1-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 17 Feb 2022 13:55:13 -0800
+Message-ID: <CAEf4BzY+_3vjtN3dJjU4deVR131=Dz-9adYQ+mntVqgAOfh4RA@mail.gmail.com>
+Subject: Re: [PATCHv2 0/3] perf/bpf: Replace deprecated code
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-11-16 11:52:46, Vinod Koul wrote:
-> In SDM845, DSC can be enabled by writing to pingpong block registers, so
-> add support for DSC in hw_pp
-
-Nit: I don't think the ", so add support for DSC in XXX" part in this
-and other commit messages add anything.  You've already stated that in
-the title, the commit body is just extra justification (and can perhaps
-be filled with extra details about the patch contents instead).
-
-> Reviewed-by: Abhinav Kumar <abhinavk@codeaurora.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+On Thu, Feb 17, 2022 at 5:19 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> hi,
+> the original patchset [1] removed the whole perf functionality
+> with the hope nobody's using that. But it turned out there's
+> actually bpf script using prologue functionality, so there
+> might be users of this.
+>
+> This patchset gets rid of and adds workaround (and keeps the
+> current functionality) for following deprecated libbpf
+> functions/struct:
+>
+>   bpf_program__set_priv
+>   bpf_program__priv
+>   bpf_map__set_priv
+>   bpf_map__priv
+>   bpf_program__set_prep
+>   bpf_program__nth_fd
+>   struct bpf_prog_prep_result
+>
+> Basically it implements workarounds suggested by Andrii in [2].
+>
+> I tested with script from examples/bpf that are working for me:
+>
+>   examples/bpf/hello.c
+>   examples/bpf/5sec.c
+>
+> The rest seem to fail for various reasons even without this
+> change..  they seem unmaintained for some time now, but I might
+> have wrong setup.
+>
+> Also available in here:
+>   git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+>   perf/depre
+>
+> thanks,
+> jirka
+>
+>
+> [1] https://lore.kernel.org/linux-perf-users/YgoPxhE3OEEmZqla@krava/T/#t
+> [2] https://lore.kernel.org/linux-perf-users/YgoPxhE3OEEmZqla@krava/T/#md3ccab9fe70a4583e94603b1a562e369bd67b17d
 > ---
->  .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 32 +++++++++++++++++++
->  .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++++++
->  2 files changed, 46 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> index 55766c97c4c8..47c6ab6caf95 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> @@ -28,6 +28,9 @@
->  #define PP_FBC_MODE                     0x034
->  #define PP_FBC_BUDGET_CTL               0x038
->  #define PP_FBC_LOSSY_MODE               0x03C
-> +#define PP_DSC_MODE                     0x0a0
-> +#define PP_DCE_DATA_IN_SWAP             0x0ac
+> Jiri Olsa (3):
+>       perf tools: Remove bpf_program__set_priv/bpf_program__priv usage
+>       perf tools: Remove bpf_map__set_priv/bpf_map__priv usage
+>       perf tools: Rework prologue generation code
+>
 
-This enum does not seem used here, is it used in another patch?
+It's great that you are deprecating these, thanks a lot for that! I
+suggest to also doing libbpf_set_strict_mode(LIBBPF_STRICT_ALL) to
+check that libbpf 1.0 won't break anything. For example, you'll need
+to use a custom SEC() handler to handle those quirky sections that
+perf allows. This patch set has landed in bpf-next, so you should be
+good to go.
 
-> +#define PP_DCE_DATA_OUT_SWAP            0x0c8
->  
->  #define PP_DITHER_EN			0x000
->  #define PP_DITHER_BITDEPTH		0x004
-> @@ -245,6 +248,32 @@ static u32 dpu_hw_pp_get_line_count(struct dpu_hw_pingpong *pp)
->  	return line;
->  }
->  
-> +static int dpu_hw_pp_dsc_enable(struct dpu_hw_pingpong *pp)
-> +{
-> +	struct dpu_hw_blk_reg_map *c = &pp->hw;
-> +
-> +	DPU_REG_WRITE(c, PP_DSC_MODE, 1);
-> +	return 0;
-> +}
-> +
-> +static void dpu_hw_pp_dsc_disable(struct dpu_hw_pingpong *pp)
-> +{
-> +	struct dpu_hw_blk_reg_map *c = &pp->hw;
-> +
-> +	DPU_REG_WRITE(c, PP_DSC_MODE, 0);
-> +}
-> +
-> +static int dpu_hw_pp_setup_dsc(struct dpu_hw_pingpong *pp)
-> +{
-> +	struct dpu_hw_blk_reg_map *pp_c = &pp->hw;
-> +	int data;
-> +
-> +	data = DPU_REG_READ(pp_c, PP_DCE_DATA_OUT_SWAP);
-> +	data |= BIT(18); /* endian flip */
-> +	DPU_REG_WRITE(pp_c, PP_DCE_DATA_OUT_SWAP, data);
-> +	return 0;
-> +}
-> +
->  static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
->  				unsigned long features)
->  {
-> @@ -256,6 +285,9 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
->  	c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
->  	c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
->  	c->ops.get_line_count = dpu_hw_pp_get_line_count;
-> +	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
-> +	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
-> +	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
->  
->  	if (test_bit(DPU_PINGPONG_DITHER, &features))
->  		c->ops.setup_dither = dpu_hw_pp_setup_dither;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-> index 89d08a715c16..12758468d9ca 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-> @@ -124,6 +124,20 @@ struct dpu_hw_pingpong_ops {
->  	 */
->  	void (*setup_dither)(struct dpu_hw_pingpong *pp,
->  			struct dpu_hw_dither_cfg *cfg);
-> +	/**
-> +	 * Enable DSC
-> +	 */
-> +	int (*enable_dsc)(struct dpu_hw_pingpong *pp);
-> +
-> +	/**
-> +	 * Disable DSC
-> +	 */
-> +	void (*disable_dsc)(struct dpu_hw_pingpong *pp);
 
-It looks like most other callbacks in dpu1 use an `enable` function with
-a boolean, instead of having a separate disable function.  That should
-simplify the implementation down to a single ternary-if, too.  Would
-that be desired to use here?
-
-- Marijn
-
-> +
-> +	/**
-> +	 * Setup DSC
-> +	 */
-> +	int (*setup_dsc)(struct dpu_hw_pingpong *pp);
->  };
->  
->  struct dpu_hw_merge_3d;
-> -- 
-> 2.31.1
-> 
+>  tools/perf/util/bpf-loader.c | 267 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
+>  1 file changed, 230 insertions(+), 37 deletions(-)

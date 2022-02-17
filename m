@@ -2,127 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DE84BA2A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 583F04BA30A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241759AbiBQOM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:12:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46602 "EHLO
+        id S241888AbiBQOdG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Feb 2022 09:33:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241353AbiBQOM4 (ORCPT
+        with ESMTP id S236096AbiBQOdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:12:56 -0500
-Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F922905BD;
-        Thu, 17 Feb 2022 06:12:40 -0800 (PST)
-Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 21HECbON027478
-        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Thu, 17 Feb 2022 06:12:37 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 21HECbwB022537
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Feb 2022 06:12:37 -0800 (PST)
-Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 17 Feb 2022 06:12:36 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 17 Feb 2022 06:12:36 -0800
-Received: from pek-lpd-ccm3.wrs.com (128.224.156.163) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Thu, 17 Feb 2022 06:12:35 -0800
-From:   Yun Zhou <yun.zhou@windriver.com>
-To:     <broonie@kernel.org>, <yun.zhou@windriver.com>
-CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ying.xue@windriver.com>, <richard.danter@windriver.com>
-Subject: [v2][PATCH] spi: use specific last_cs instead of last_cs_enable
-Date:   Thu, 17 Feb 2022 22:12:34 +0800
-Message-ID: <20220217141234.72737-1-yun.zhou@windriver.com>
-X-Mailer: git-send-email 2.26.1
+        Thu, 17 Feb 2022 09:33:05 -0500
+X-Greylist: delayed 1201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 06:32:48 PST
+Received: from hp0.cmnvpo.sbs (unknown [165.227.5.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BDA11C22
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:32:48 -0800 (PST)
+From:   IBM <ti@cfep.org.br>
+To:     linux-kernel@vger.kernel.org
+Subject: Please Read
+Date:   17 Feb 2022 14:12:45 +0000
+Message-ID: <20220217141245.802F0706C7A78AA1@cfep.org.br>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_FAIL,SPF_HELO_NONE,TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DEAR_FRIEND,
+        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,RCVD_IN_SBL_CSS,RCVD_IN_XBL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [165.227.5.116 listed in zen.spamhaus.org]
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *  0.0 RCVD_IN_MSPIKE_L4 RBL: Bad reputation (-4)
+        *      [165.227.5.116 listed in bl.mailspike.net]
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blacklisted
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d40f0b6f2e21 instroduced last_cs_enable to avoid setting
-chipselect if it's not necessary, but it also introduces a bug. The
-chipselect may not be set correctly on multi-device SPI busses. The
-reason is that we can't judge the chipselect by bool last_cs_enable,
-since chipselect may be modified after other devices were accessed.
+Dear friend,
 
-So we should record the specific state of chipselect in case of
-confusion.
+I write to know if you’ve received the email I sent to you 
+regarding investing in your business? Kindly check and get back 
+to me via my private email at marek@ibmglobalmanagement.com .
 
-Signed-off-by: Yun Zhou <yun.zhou@windriver.com>
----
- drivers/spi/spi.c       | 8 ++++++--
- include/linux/spi/spi.h | 5 +++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+Best Regards,
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 4599b121d744..d054229ffdda 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -936,13 +936,14 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
- 	 * Avoid calling into the driver (or doing delays) if the chip select
- 	 * isn't actually changing from the last time this was called.
- 	 */
--	if (!force && (spi->controller->last_cs_enable == enable) &&
-+	if (!force && ((enable && spi->controller->last_cs == spi->chip_select) ||
-+				(!enable && spi->controller->last_cs != spi->chip_select)) &&
- 	    (spi->controller->last_cs_mode_high == (spi->mode & SPI_CS_HIGH)))
- 		return;
- 
- 	trace_spi_set_cs(spi, activate);
- 
--	spi->controller->last_cs_enable = enable;
-+	spi->controller->last_cs = enable ? spi->chip_select : -1;
- 	spi->controller->last_cs_mode_high = spi->mode & SPI_CS_HIGH;
- 
- 	if ((spi->cs_gpiod || gpio_is_valid(spi->cs_gpio) ||
-@@ -2980,6 +2981,9 @@ int spi_register_controller(struct spi_controller *ctlr)
- 		goto free_bus_id;
- 	}
- 
-+	/* setting last_cs to -1 means no chip selected */
-+	ctlr->last_cs = -1;
-+
- 	status = device_add(&ctlr->dev);
- 	if (status < 0)
- 		goto free_bus_id;
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 7ab3fed7b804..5a54ea354053 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -373,7 +373,8 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-  * @cur_msg_prepared: spi_prepare_message was called for the currently
-  *                    in-flight message
-  * @cur_msg_mapped: message has been mapped for DMA
-- * @last_cs_enable: was enable true on the last call to set_cs.
-+ * @last_cs: the last chip_select that is recorded by set_cs, -1 on non chip
-+ *           selected
-  * @last_cs_mode_high: was (mode & SPI_CS_HIGH) true on the last call to set_cs.
-  * @xfer_completion: used by core transfer_one_message()
-  * @busy: message pump is busy
-@@ -611,7 +612,7 @@ struct spi_controller {
- 	bool				auto_runtime_pm;
- 	bool                            cur_msg_prepared;
- 	bool				cur_msg_mapped;
--	bool				last_cs_enable;
-+	char				last_cs;
- 	bool				last_cs_mode_high;
- 	bool                            fallback;
- 	struct completion               xfer_completion;
--- 
-2.26.1
+Mr. Marek Kozlowski
 
+IBM GLOBAL MANAGEMENT
+marek@ibmglobalmanagement.com

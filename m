@@ -2,111 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BCE4BA5FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0444BA600
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241940AbiBQQc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:32:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53768 "EHLO
+        id S241071AbiBQQcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:32:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiBQQc0 (ORCPT
+        with ESMTP id S242494AbiBQQcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:32:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECFE80203
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:32:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 17 Feb 2022 11:32:45 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BD527FB8F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:32:29 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83867B82373
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 16:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C56EC340E8;
-        Thu, 17 Feb 2022 16:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645115528;
-        bh=NqMULm1c4evCoSC3Y43MlpFu52DjIZpoMiHrQmzmVgE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HQBFigvNbuCaaSAq8YongVPEWhC9BvwTNk+Jc+QNNrBHPxfCyKAXElmXJv12qInKQ
-         JmCPMv5TOMKA7gHM1EJtDlru9KRg4Eebe6+ae/YUAs44A7tFkOxkNNXeZKbyoZFW+r
-         vrFU40lmIi/DvuKhNEuf4zUB/2CJzwPzhPShjhzDccX7gU4Ufqb7zoH+RLMurlWemW
-         tCzQJCpZFxI3TOgtVNt8tX1vsV666Jf9UNIkUwcVZa+qBd7CCvVEAMk9UdwLS+n5/P
-         vgQg04RXal4WmRbOq7s8FyG8DPGAHVWSbiFIcAhVtjig3/rmKqpf2CMqJTiAadMZDw
-         EI8aUcapgfVBA==
-Date:   Thu, 17 Feb 2022 17:32:05 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Aaron Tomlin <atomlin@atomlin.com>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Christoph Lameter <cl@linux.com>, tglx@linutronix.de,
-        mingo@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH] tick/sched: Ensure quiet_vmstat() is called when the
- idle tick was stopped too
-Message-ID: <20220217163205.GA748087@lothringen>
-References: <20220203214339.1889971-1-atomlin@redhat.com>
- <20220217124729.GA743618@lothringen>
- <20220217142615.xqtiydixvnumyvei@ava.usersys.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 746691EC05B0;
+        Thu, 17 Feb 2022 17:32:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1645115544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=/nqpxuKQfkVRRZMI1eQzAvlMUmMPIQh98Y37rBXs1N4=;
+        b=V9f9Gm5+7Z8IlfaI2QMYqf/flC3ioiNAe47MZUZ6N1b8UC9zWot1N8Sf8afGYUDMM28C0L
+        7tq9MtpCGrbCm5zOo5trrYZb8vRb0B0sHvk0quboehColjPpIjpytfRkR3pJALKdCAwVd+
+        FVDk7pCAU/waSsic4Xl0mYuKxxY+Oes=
+Date:   Thu, 17 Feb 2022 17:32:30 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jue Wang <juew@google.com>
+Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] x86/mce: work around an erratum on fast string copy
+ instructions.
+Message-ID: <Yg54nse5qNQO3sbW@zn.tnic>
+References: <CAPcxDJ5t47M-+Bn_D+Vj7zbJTxhjrx=HsLX=iQj-EF_h2oVTsg@mail.gmail.com>
+ <20220216215313.1707663-1-juew@google.com>
+ <Yg54QYeiAtwJN/qU@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220217142615.xqtiydixvnumyvei@ava.usersys.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yg54QYeiAtwJN/qU@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 02:26:15PM +0000, Aaron Tomlin wrote:
-> On Thu 2022-02-17 13:47 +0100, Frederic Weisbecker wrote:
-> > So, to make sure I understand, the issue is that with nohz_full, we may
-> > well enter into the idle loop with the tick already stopped. We may also
-> > exit from idle without restarting the tick (again only with nohz_full). And
-> > so this can cause the vmstat to not be flushed upon idle entry. Right?
-> 
-> Hi Frederic,
-> 
-> Yes - this is exactly it.
-> 
-> > > A customer provided some evidence which indicates that the idle tick was
-> > > stopped; albeit, CPU-specific vmstat counters still remained populated.
-> > > Thus one can only assume quiet_vmstat() was not invoked on return to the
-> > > idle loop.
-> > > 
-> > > Unfortunately, I suspect this divergence might erroneously prevent a
-> > > reclaim attempt by kswapd. If the number of zone specific free pages are
-> > > below their per-cpu drift value then zone_page_state_snapshot() is used to
-> > > compute a more accurate view of the aforementioned statistic.
-> > > Thus any task blocked on the NUMA node specific pfmemalloc_wait queue will
-> > > be unable to make significant progress via direct reclaim unless it is
-> > > killed after being woken up by kswapd (see throttle_direct_reclaim()).
-> > > That being said, eventually reclaim should give up if the conditions are
-> > > correct, no?
-> 
-> > Now if quiet_vmstat() isn't called, the vmstat_work should fix this later,
-> > right? Or does that happen too late perhaps?
-> 
-> If I understand correctly, in the context of nohz_full, since such work is
-> deferred, it will only be handled in a scenario when the periodic/or
-> scheduling-clock tick is enabled i.e. the timer was reprogrammed on exit
-> from idle.
+Also, when sending a new one, pls use this fixed up version where I've
+cleaned a bunch of minor things:
 
-Oh I see, it's a deferrable delayed work...
-Then I can see two other issues:
+---
+From: Jue Wang <juew@google.com>
+Date: Wed, 16 Feb 2022 13:53:13 -0800
+Subject: [PATCH] x86/mce: Work around an erratum with fast string copy instructions
 
-1) Can an interrupt in idle modify the vmstat and thus trigger the need to
-   flush it? I believe it's the case and then the problem goes beyond nohz_full
-   because if the idle interrupt fired while the tick is stopped and didn't set
-   TIF_RESCHED, we go back to sleep without calling quiet_vmstat().
+A rare kernel panic scenario can happen when the following conditions
+are met due to an erratum on fast string copy instructions:
 
-2) What if we are running task A in kernel mode while the tick is stopped
-   (nohz_full). Task A modifies the vmstat and goes to userspace for a long
-   while.
+1) An uncorrected error.
+2) That error must be in first cache line of a page.
+3) Kernel must execute page_copy from the page immediately before that
+page.
 
-Your patch fixes case 1) but not case 2). The problem is that TIMER_DEFERRABLE
-should really be about dynticks-idle only and not dynticks-full. I've always
-been afraid about enforcing that rule though because that would break old
-noise-free setups. But perhaps I should...
+The fast string copy instructions ("REP; MOVS*") could consume an
+uncorrectable memory error in the cache line _right after_ the desired
+region to copy and raise an MCE.
+
+Bit 0 of MSR_IA32_MISC_ENABLE can be cleared to disable fast string
+copy and will avoid such spurious machine checks. However, that is less
+preferable due to the permanent performance impact. Considering memory
+poison is rare, it's desirable to keep fast string copy enabled until an
+MCE is seen.
+
+Intel has confirmed the following:
+1. The CPU erratum of fast string copy only applies to Skylake,
+Cascade Lake and Cooper Lake generations.
+
+Directly return from the MCE handler:
+2. Will result in complete execution of the "REP; MOVS*" with no data
+loss or corruption.
+3. Will not result in another MCE firing on the next poisoned cache line
+due to "REP; MOVS*".
+4. Will resume execution from a correct point in code.
+5. Will result in the same instruction that triggered the MCE firing a
+second MCE immediately for any other software recoverable data fetch
+errors.
+6. Is not safe without disabling the fast string copy, as the next fast
+string copy of the same buffer on the same CPU would result in a PANIC
+MCE.
+
+This should mitigate the erratum completely with the only caveat that
+the fast string copy is disabled on the affected hyper thread thus
+performance degradation.
+
+This is still better than the OS crashing on MCEs raised on an
+irrelevant process due to "REP; MOVS*' accesses in a kernel context,
+e.g., copy_page.
+
+Tested:
+
+Injected errors on 1st cache line of 8 anonymous pages of process
+'proc1' and observed MCE consumption from 'proc2' with no panic
+(directly returned).
+
+Without the fix, the host panicked within a few minutes on a
+random 'proc2' process due to kernel access from copy_page.
+
+  [ bp: Fix comment style + touch ups. ]
+
+Signed-off-by: Jue Wang <juew@google.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/kernel/cpu/mce/core.c     | 57 ++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/mce/internal.h |  5 ++-
+ 2 files changed, 61 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 0e7147430ec0..f7179a103d30 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -814,6 +814,53 @@ quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
+ 	m->cs = regs->cs;
+ }
+ 
++/*
++ * Disable fast string copy and return from the MCE handler upon the first SRAR
++ * MCE on bank 1 due to a CPU erratum on Intel Skylake/Cascade Lake/Cooper Lake
++ * CPUs.
++ * The fast string copy instructions ("REP; MOVS*") could consume an
++ * uncorrectable memory error in the cache line _right after_ the desired region
++ * to copy and raise an MCE with RIP pointing to the instruction _after_ the
++ * "REP; MOVS*".
++ * This mitigation addresses the issue completely with the caveat of performance
++ * degradation on the CPU affected. This is still better than the OS crashing on
++ * MCEs raised on an irrelevant process due to "REP; MOVS*" accesses from a
++ * kernel context (e.g., copy_page).
++ *
++ * Returns true when fast string copy on CPU has been disabled.
++ */
++static noinstr bool quirk_skylake_repmov(void)
++{
++	u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
++	u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
++
++	/*
++	 * Apply the quirk only to local machine checks, i.e., no broadcast
++	 * sync is needed.
++	 */
++	if ((mcgstatus & MCG_STATUS_LMCES) &&
++	    unlikely(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
++		u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
++
++		/* Check for a software-recoverable data fetch error. */
++		if ((mc1_status &
++		     (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
++		      MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
++		      MCI_STATUS_AR | MCI_STATUS_S)) ==
++		     (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
++		      MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
++		      MCI_STATUS_AR | MCI_STATUS_S)) {
++			msr_clear_bit(MSR_IA32_MISC_ENABLE,
++				      MSR_IA32_MISC_ENABLE_FAST_STRING_BIT);
++			mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
++			mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
++			pr_err_once("Errata detected, disable fast string copy instructions.\n");
++			return true;
++		}
++	}
++	return false;
++}
++
+ /*
+  * Do a quick check if any of the events requires a panic.
+  * This decides if we keep the events around or clear them.
+@@ -1383,6 +1430,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 	else if (unlikely(!mca_cfg.initialized))
+ 		return unexpected_machine_check(regs);
+ 
++	if (mce_flags.skx_repmov_quirk && quirk_skylake_repmov())
++		return;
++
+ 	/*
+ 	 * Establish sequential order between the CPUs entering the machine
+ 	 * check handler.
+@@ -1838,6 +1888,13 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 
+ 		if (c->x86 == 6 && c->x86_model == 45)
+ 			mce_flags.snb_ifu_quirk = 1;
++
++		/*
++		 * Skylake, Cascacde Lake and Cooper Lake require a quirk on
++		 * rep movs.
++		 */
++		if (c->x86 == 6 && c->x86_model == INTEL_FAM6_SKYLAKE_X)
++			mce_flags.skx_repmov_quirk = 1;
+ 	}
+ 
+ 	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index a04b61e27827..a80b8fed3489 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -170,7 +170,10 @@ struct mce_vendor_flags {
+ 	/* SandyBridge IFU quirk */
+ 	snb_ifu_quirk		: 1,
+ 
+-	__reserved_0		: 57;
++	/* Skylake, Cascade Lake, Cooper Lake REP; MOVS* quirk */
++	skx_repmov_quirk	: 1,
++
++	__reserved_0		: 56;
+ };
+ 
+ extern struct mce_vendor_flags mce_flags;
+-- 
+2.29.2
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

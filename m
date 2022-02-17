@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C934B9CF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12C64B9D11
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239116AbiBQKWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:22:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53428 "EHLO
+        id S239283AbiBQKZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:25:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238618AbiBQKWs (ORCPT
+        with ESMTP id S239280AbiBQKZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:22:48 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E93B156978
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:22:33 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 5EC421F45794
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645093351;
-        bh=6fqFuZojVUYVXXUD1KRc2VutIordrlsMnM7KNiCoQFU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VqwpEX6Eh2cwyV+sQ23j3Ni4uG/ZsAUwXHUa8Cy7qmZjnaza9BEaPAfr6vCOuZaaZ
-         NOVkD89cyw64wvGQI+plwdDJrqsaLcnpGipqxZ3z3WFaFuksYLhwC+CSOEo6Hi8NXv
-         2dGpXmqIkYugU46zCZxmP9orMm9kOEfx+mdA64FtgrfP5kWG2gZcLWbjglfDnu/TH+
-         /YN6OnC8O58mW3eOiP86/V+Xv6iGyPZyusaOlH9vcu7dOX2KudBNuxrkC1jRxnSVkz
-         q7agJKQa9ZvipGb6P3PHXzgzSkKUWKWhHI9nhiR0byl8vdMnLyJTa/eAF/Bg7tPbl0
-         9RMv1URoX1Mug==
-Message-ID: <6e78e57f-c0fa-9618-37d1-cd6ec354cc61@collabora.com>
-Date:   Thu, 17 Feb 2022 11:22:29 +0100
+        Thu, 17 Feb 2022 05:25:16 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FC127C211;
+        Thu, 17 Feb 2022 02:24:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645093490; x=1676629490;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BqvXLH+FOW688ZuI3rFKDQQKxHsIk9sojfRvijbhbPY=;
+  b=IWeExx0Gfisac10ZiFYvSS6KU3Xw+sTfAcu51EZ5pCCKIkvR1ZXHR/VN
+   K/OmFk1djk81EJeIdFadQdLY6PP0UP4JOaQP0bWvCDPJLZxHKb/DGltbj
+   AR9Q2jh8ezKhSKHxgQjROCfFCUiMLgziTVz2tg8AxStXcXVpjQweKinkm
+   w=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 Feb 2022 02:24:46 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 02:24:46 -0800
+Received: from [10.216.32.231] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 17 Feb
+ 2022 02:24:41 -0800
+Message-ID: <6d161f6d-3776-07da-2c09-13e5b10abe29@quicinc.com>
+Date:   Thu, 17 Feb 2022 15:53:13 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2,1/2] soc: mediatek: mmsys: add sw0_rst_offset in mmsys
- driver data
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2] PCI: qcom: Add system PM support
 Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, matthias.bgg@gmail.com
-Cc:     chunkuang.hu@kernel.org, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220217082626.15728-1-rex-bc.chen@mediatek.com>
- <20220217082626.15728-2-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220217082626.15728-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_vbadigan@quicinc.com>, <quic_ramkri@quicinc.com>,
+        <swboyd@chromium.org>
+References: <1643738876-18572-1-git-send-email-quic_pmaliset@quicinc.com>
+ <20220211091409.GB3223@thinkpad>
+From:   Prasad Malisetty <quic_pmaliset@quicinc.com>
+In-Reply-To: <20220211091409.GB3223@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,87 +67,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/02/22 09:26, Rex-BC Chen ha scritto:
-> There are different software reset registers for difference MTK SoCs.
-> Therefore, we add a new variable "sw0_rst_offset" to control it.
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Hi Mani,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Thanks for the review and comments.
 
-> ---
->   drivers/soc/mediatek/mt8183-mmsys.h | 2 ++
->   drivers/soc/mediatek/mtk-mmsys.c    | 6 ++++--
->   drivers/soc/mediatek/mtk-mmsys.h    | 3 +--
->   3 files changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mt8183-mmsys.h b/drivers/soc/mediatek/mt8183-mmsys.h
-> index 9dee485807c9..0c021f4b76d2 100644
-> --- a/drivers/soc/mediatek/mt8183-mmsys.h
-> +++ b/drivers/soc/mediatek/mt8183-mmsys.h
-> @@ -25,6 +25,8 @@
->   #define MT8183_RDMA0_SOUT_COLOR0		0x1
->   #define MT8183_RDMA1_SOUT_DSI0			0x1
->   
-> +#define MT8183_MMSYS_SW0_RST_B			0x140
-> +
->   static const struct mtk_mmsys_routes mmsys_mt8183_routing_table[] = {
->   	{
->   		DDP_COMPONENT_OVL0, DDP_COMPONENT_OVL_2L0,
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-> index 0da25069ffb3..cab62c3eac05 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -49,12 +49,14 @@ static const struct mtk_mmsys_driver_data mt8173_mmsys_driver_data = {
->   	.clk_driver = "clk-mt8173-mm",
->   	.routes = mmsys_default_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_default_routing_table),
-> +	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
->   };
->   
->   static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
->   	.clk_driver = "clk-mt8183-mm",
->   	.routes = mmsys_mt8183_routing_table,
->   	.num_routes = ARRAY_SIZE(mmsys_mt8183_routing_table),
-> +	.sw0_rst_offset = MT8183_MMSYS_SW0_RST_B,
->   };
->   
->   static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
-> @@ -128,14 +130,14 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
->   
->   	spin_lock_irqsave(&mmsys->lock, flags);
->   
-> -	reg = readl_relaxed(mmsys->regs + MMSYS_SW0_RST_B);
-> +	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
->   
->   	if (assert)
->   		reg &= ~BIT(id);
->   	else
->   		reg |= BIT(id);
->   
-> -	writel_relaxed(reg, mmsys->regs + MMSYS_SW0_RST_B);
-> +	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
->   
->   	spin_unlock_irqrestore(&mmsys->lock, flags);
->   
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.h b/drivers/soc/mediatek/mtk-mmsys.h
-> index 8b0ed05117ea..77f37f8c715b 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.h
-> +++ b/drivers/soc/mediatek/mtk-mmsys.h
-> @@ -78,8 +78,6 @@
->   #define DSI_SEL_IN_RDMA				0x1
->   #define DSI_SEL_IN_MASK				0x1
->   
-> -#define MMSYS_SW0_RST_B				0x140
-> -
->   struct mtk_mmsys_routes {
->   	u32 from_comp;
->   	u32 to_comp;
-> @@ -92,6 +90,7 @@ struct mtk_mmsys_driver_data {
->   	const char *clk_driver;
->   	const struct mtk_mmsys_routes *routes;
->   	const unsigned int num_routes;
-> +	const u16 sw0_rst_offset;
->   };
->   
->   /*
+I updated my mail client. sending the same responses. I will post the 
+new patch version.
+
+Testing is in progress.
+
+Thanks
+
+-Prasad
+
+On 2/11/2022 2:44 PM, Manivannan Sadhasivam wrote:
+> On top of Bjorn's review:
+>
+> On Tue, Feb 01, 2022 at 11:37:56PM +0530, Prasad Malisetty wrote:
+>> Add suspend_noirq and resume_noirq callbacks to handle
+>> System suspend and resume in dwc pcie controller driver.
+>>
+>> When system suspends, send PME turnoff message to enter
+>> link into L2 state. Along with powerdown the PHY, disable
+>> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
+>> supported and disable the pcie clocks, regulators.
+>>
+>> When system resumes, PCIe link will be re-established and
+>> setup rc settings.
+>>
+>> Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> ---
+>> Changes since v1:
+>> 	- Removed unnecessary logs and modified log level suggested by Manivannan.
+>> 	- Removed platform specific callbacks as PM support is generic.
+> This is not still generic... Please see below.
+>
+>> ---
+>>   drivers/pci/controller/dwc/pcie-qcom.c | 97 ++++++++++++++++++++++++++++++++++
+>>   1 file changed, 97 insertions(+)
+>>
+>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+>> index c19cd506..d1dd6c7 100644
+>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>> @@ -73,6 +73,8 @@
+>>   
+>>   #define PCIE20_PARF_Q2A_FLUSH			0x1AC
+>>   
+>> +#define PCIE20_PARF_PM_STTS                     0x24
+>> +
+>>   #define PCIE20_MISC_CONTROL_1_REG		0x8BC
+>>   #define DBI_RO_WR_EN				1
+>>   
+>> @@ -1616,6 +1618,100 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>>   	return ret;
+>>   }
+>>   
+>> +static int qcom_pcie_send_pme_turnoff_msg(struct qcom_pcie *pcie)
+>> +{
+>> +	int ret = 0;
+>> +	u32 val = 0, poll_val = 0;
+>> +	u64 l23_rdy_poll_timeout = 100000;
+>> +	struct dw_pcie *pci = pcie->pci;
+>> +	struct device *dev = pci->dev;
+>> +
+>> +	val = readl(pcie->elbi + PCIE20_ELBI_SYS_CTRL);
+>> +	val |= BIT(4);
+> Define BIT(4)
+Sure, I will update in next patch version.
+>
+>> +	writel(val, pcie->elbi + PCIE20_ELBI_SYS_CTRL);
+>> +
+>> +	ret = readl_poll_timeout((pcie->parf + PCIE20_PARF_PM_STTS), poll_val,
+>> +			(poll_val & BIT(5)), 10000, l23_rdy_poll_timeout);
+> Define BIT(5)
+Sure, I will update in next patch version.
+>
+>> +	if (!ret)
+>> +		dev_info(dev, "PM_Enter_L23 is received\n");
+> Maybe print, "Device entered L23_Ready state"? Also this should be dev_dbg().
+>
+>> +	else
+>> +		dev_err(dev, "PM_Enter_L23 is NOT received.PARF_PM_STTS 0x%x\n",
+> Maybe print, "Device failed to enter L23_Ready state"?
+Agree, I will update in next patch version.
+>
+>> +			readl_relaxed(pcie->parf + PCIE20_PARF_PM_STTS));
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static void qcom_pcie_host_disable(struct qcom_pcie *pcie)
+>> +{
+>> +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>> +
+> As Bjorn said this would only work for platforms supporting v2.7.0 ops. Please
+> make it generic.
+I removed platform specific code but forgot to remove above one. will 
+update in next patch version.
+>> +	/* Assert the reset of endpoint */
+>> +	qcom_ep_reset_assert(pcie);
+>> +
+>> +	/* Put PHY into POWER DOWN state */
+>> +	phy_power_off(pcie->phy);
+>> +
+>> +	writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
+> Define "1".
+Sure, I will update in next patch version.
+>
+> Thanks,
+> Mani

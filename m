@@ -2,141 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC124BA487
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 789604BA48A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242576AbiBQPhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:37:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55108 "EHLO
+        id S242580AbiBQPjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:39:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242562AbiBQPhf (ORCPT
+        with ESMTP id S233981AbiBQPi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:37:35 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E22B2B2E11;
-        Thu, 17 Feb 2022 07:37:21 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21HFbC6x007434;
-        Thu, 17 Feb 2022 09:37:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645112232;
-        bh=MXh5Ng0xjFA6lpgTkmnOyicU8T+ED+2XZNQZN38DXlg=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=uNeX8Q4bVJB6Cviq8td3cYWENPBcM57rtZjgQFKXjVygHyKRpvwhZSR4Rgs8Z+hxO
-         hkjWe2y0X5iQBUS1VtfUK3oBgVscCVE96RbuRPDU6bc7I5dHyJfyvEMK+UtfZHKsVn
-         8Y/xBwy4sUOJ6DSKARx/jozxZnMLakfzi2EbMXRU=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21HFbCl7118845
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Feb 2022 09:37:12 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 17
- Feb 2022 09:37:12 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 17 Feb 2022 09:37:12 -0600
-Received: from [10.250.233.137] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21HFb8AH077363;
-        Thu, 17 Feb 2022 09:37:09 -0600
-Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721e-common-proc-board: Enable
- PCIe + QSGMII multilink configuration
-To:     Aswath Govindraju <a-govindraju@ti.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220202043944.11351-1-a-govindraju@ti.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <20ceb422-8464-4f12-0b46-ad5c4d43da3c@ti.com>
-Date:   Thu, 17 Feb 2022 21:07:08 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 17 Feb 2022 10:38:58 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C304A2B2E11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:38:43 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id e140so13798638ybh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4hk+t9STd/ohkaxKw6p1lqAArc9u/s8Q8z69HF6aLfE=;
+        b=dBmphIBTKJBbLyOdiwSe3VTvN12HETj4nWMgwdynneUZO8D6nWfrB0f/GBiBA+3Bxp
+         KF+/tApD9j+7MjLO3Ima8cJs2VlPrUd+bMIOWVDaUKtszaSMlEIYrw48DABbvIYL682H
+         LD3Re5r4ZXG6jQyafj0JwoDngXYlOewmr0UptZZQLVEVKpRXF4dO5Q3Fr9x91aj6oUXd
+         96t9ShajgD7echn30nWeEsEzrNMv7O0d1/NniWqwsF6bsxZCyVn/SdWtu7ldYpWcF8mJ
+         knB2bt7Gwyyutk12bI8gZwTL++yweig6tJrG/t4tq1ZgywAGwg/HukZsUJV77AyM7/eP
+         Sv3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4hk+t9STd/ohkaxKw6p1lqAArc9u/s8Q8z69HF6aLfE=;
+        b=AH0LlJSpGOafRyrTYgOx4TUicRIa3Yg+DT65s91NAVfxbajthGAug45L70r+QPMKx0
+         0a1WYEpekhHaTt1/D3vk4b/0H/+Lu4FXRWrDH5GbUq5BGe9rpmp1YQdcv7b8Rk/zqBF5
+         8IU/3Y7ln9VvhHs0o7Zt7YIUhZ3K7T9UCfnVLxCrIiI+J3/03qQ/xKOZCliQd6kxtG+L
+         lnAhUWaEqc1bbDRJLeNwP872lMEYVtF+OO5SeOuYaJkU1KpMi1svNR4U6Zn1Vb1PKPtV
+         QIPXg1McGehuCLuAgKQYSdyswDsMbE1dSLBvtXc3VTswoUgQW6oyNcmpMdFatkfYG52r
+         4wQQ==
+X-Gm-Message-State: AOAM5329uuod/MB7BdZ7/WLEJg0aE1txfwsyTP8WuRRYIbFMumYhIID1
+        d43KYS8jftflO8YCPp1NwBm8n6r+9dhgCtYtSV/bHQ==
+X-Google-Smtp-Source: ABdhPJxO+ysMqjMYL+p/uFIKcRWnnodcM/TI1tWk7b39KPn14CMGckpJP4fv4wEzgLTuLSCx3ej7mggJkgIO+uDduuk=
+X-Received: by 2002:a25:a28d:0:b0:623:fa1b:3eb7 with SMTP id
+ c13-20020a25a28d000000b00623fa1b3eb7mr2918043ybi.387.1645112322577; Thu, 17
+ Feb 2022 07:38:42 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220202043944.11351-1-a-govindraju@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220217140441.1218045-1-andrzej.hajda@intel.com> <20220217140441.1218045-4-andrzej.hajda@intel.com>
+In-Reply-To: <20220217140441.1218045-4-andrzej.hajda@intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Feb 2022 07:38:31 -0800
+Message-ID: <CANn89iJ3W3ioVUaBJikCpFdCa9o_APpqyb0FmK9AmYPtgOeC7w@mail.gmail.com>
+Subject: Re: [PATCH 3/9] lib/ref_tracker: __ref_tracker_dir_print improve printing
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev <netdev@vger.kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aswath, Swapnil,
-
-On 02/02/22 10:09 am, Aswath Govindraju wrote:
-> From: Swapnil Jakhade <sjakhade@cadence.com>
-> 
-> The zeroth instance of SerDes on J721E common processor board will be
-> shared between PCIe and QSGMII. Therefore, add support for enabling this.
-> 
-> Signed-off-by: Swapnil Jakhade <sjakhade@cadence.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+On Thu, Feb 17, 2022 at 6:05 AM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
+>
+> To improve readibility of ref_tracker printing following changes
+> have been performed:
+> - added display name for ref_tracker_dir,
+> - stack trace is printed indented, in the same printk call,
+> - total number of references is printed every time,
+> - print info about dropped references.
+>
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> Reviewed-by: Chris Wilson <chris.p.wilson@intel.com>
 > ---
-> 
-> changes since v1:
-> - Fixed the commit message.
-> 
->  .../boot/dts/ti/k3-j721e-common-proc-board.dts    | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> index 2d7596911b27..157d86dc2824 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> @@ -431,7 +431,7 @@
+>  include/linux/ref_tracker.h | 15 ++++++++++++---
+>  lib/ref_tracker.c           | 28 ++++++++++++++++++++++------
+>  2 files changed, 34 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/linux/ref_tracker.h b/include/linux/ref_tracker.h
+> index b9c968a716483..090230e5b485d 100644
+> --- a/include/linux/ref_tracker.h
+> +++ b/include/linux/ref_tracker.h
+> @@ -15,18 +15,26 @@ struct ref_tracker_dir {
+>         refcount_t              untracked;
+>         struct list_head        list; /* List of active trackers */
+>         struct list_head        quarantine; /* List of dead trackers */
+> +       char                    name[32];
+>  #endif
 >  };
->  
->  &serdes_ln_ctrl {
-> -	idle-states = <J721E_SERDES0_LANE0_PCIE0_LANE0>, <J721E_SERDES0_LANE1_PCIE0_LANE1>,
-> +	idle-states = <J721E_SERDES0_LANE0_PCIE0_LANE0>, <J721E_SERDES0_LANE1_QSGMII_LANE2>,
->  		      <J721E_SERDES1_LANE0_PCIE1_LANE0>, <J721E_SERDES1_LANE1_PCIE1_LANE1>,
->  		      <J721E_SERDES2_LANE0_PCIE2_LANE0>, <J721E_SERDES2_LANE1_PCIE2_LANE1>,
->  		      <J721E_SERDES3_LANE0_USB3_0_SWAP>, <J721E_SERDES3_LANE1_USB3_0>,
-
-This change will kick-in errata i2183
-https://www.ti.com/lit/er/sprz455a/sprz455a.pdf
-
-This will break PCIe endpoint mode. Let's get the errata workaround merged
-before this.
-
-Thanks,
-Kishon
-
-> @@ -757,8 +757,8 @@
->  };
->  
->  &serdes0 {
-> -	assigned-clocks = <&serdes0 CDNS_SIERRA_PLL_CMNLC>;
-> -	assigned-clock-parents = <&wiz0_pll1_refclk>;
-> +	assigned-clocks = <&serdes0 CDNS_SIERRA_PLL_CMNLC>, <&serdes0 CDNS_SIERRA_PLL_CMNLC1>;
-> +	assigned-clock-parents = <&wiz0_pll1_refclk>, <&wiz0_pll1_refclk>;
->  
->  	serdes0_pcie_link: phy@0 {
->  		reg = <0>;
-> @@ -767,6 +767,15 @@
->  		cdns,phy-type = <PHY_TYPE_PCIE>;
->  		resets = <&serdes_wiz0 1>;
->  	};
+>
+>  #ifdef CONFIG_REF_TRACKER
+> -static inline void ref_tracker_dir_init(struct ref_tracker_dir *dir,
+> -                                       unsigned int quarantine_count)
 > +
-> +	serdes0_qsgmii_link: phy@1 {
-> +		reg = <1>;
-> +		cdns,num-lanes = <1>;
-> +		#phy-cells = <0>;
-> +		cdns,phy-type = <PHY_TYPE_QSGMII>;
-> +		resets = <&serdes_wiz0 2>;
-> +	};
+> +// Temporary allow two and three arguments, until consumers are converted
+> +#define ref_tracker_dir_init(_d, _q, args...) _ref_tracker_dir_init(_d, _q, ##args, #_d)
+> +#define _ref_tracker_dir_init(_d, _q, _n, ...) __ref_tracker_dir_init(_d, _q, _n)
 > +
->  };
->  
->  &serdes1 {
-> 
+> +static inline void __ref_tracker_dir_init(struct ref_tracker_dir *dir,
+> +                                       unsigned int quarantine_count,
+> +                                       const char *name)
+>  {
+>         INIT_LIST_HEAD(&dir->list);
+>         INIT_LIST_HEAD(&dir->quarantine);
+>         spin_lock_init(&dir->lock);
+>         dir->quarantine_avail = quarantine_count;
+>         refcount_set(&dir->untracked, 1);
+> +       strlcpy(dir->name, name, sizeof(dir->name));
+>         stack_depot_init();
+>  }
+>
+> @@ -47,7 +55,8 @@ int ref_tracker_free(struct ref_tracker_dir *dir,
+>  #else /* CONFIG_REF_TRACKER */
+>
+>  static inline void ref_tracker_dir_init(struct ref_tracker_dir *dir,
+> -                                       unsigned int quarantine_count)
+> +                                       unsigned int quarantine_count,
+> +                                       ...)
+>  {
+>  }
+>
+> diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
+> index 0e9c7d2828ccb..943cff08110e3 100644
+> --- a/lib/ref_tracker.c
+> +++ b/lib/ref_tracker.c
+> @@ -1,4 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +#define pr_fmt(fmt) "ref_tracker: " fmt
+> +
+>  #include <linux/export.h>
+>  #include <linux/list_sort.h>
+>  #include <linux/ref_tracker.h>
+> @@ -7,6 +10,7 @@
+>  #include <linux/stackdepot.h>
+>
+>  #define REF_TRACKER_STACK_ENTRIES 16
+> +#define STACK_BUF_SIZE 1024
+
+
+>
+>  struct ref_tracker {
+>         struct list_head        head;   /* anchor into dir->list or dir->quarantine */
+> @@ -26,31 +30,43 @@ static int ref_tracker_cmp(void *priv, const struct list_head *a, const struct l
+>  void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
+>                            unsigned int display_limit)
+>  {
+> -       unsigned int i = 0, count = 0;
+> +       unsigned int i = 0, count = 0, total = 0;
+>         struct ref_tracker *tracker;
+>         depot_stack_handle_t stack;
+> +       char *sbuf;
+>
+>         lockdep_assert_held(&dir->lock);
+>
+>         if (list_empty(&dir->list))
+>                 return;
+>
+> +       sbuf = kmalloc(STACK_BUF_SIZE, GFP_NOWAIT);
+> +
+> +       list_for_each_entry(tracker, &dir->list, head)
+> +               ++total;
+
+Another iteration over a potential long list.
+
+You can count the @skipped number in the following iteration just fine.
+
+int skipped = 0;
+
+> +
+>         list_sort(NULL, &dir->list, ref_tracker_cmp);
+>
+>         list_for_each_entry(tracker, &dir->list, head) {
+> -               if (i++ >= display_limit)
+> -                       break;
+>                 if (!count++)
+>                         stack = tracker->alloc_stack_handle;
+>                 if (stack == tracker->alloc_stack_handle &&
+>                     !list_is_last(&tracker->head, &dir->list))
+>                         continue;
+> +               if (i++ >= display_limit)
+
+                            skipped++;
+> +                       continue;
+>
+> -               pr_err("leaked %d references.\n", count);
+> -               if (stack)
+> -                       stack_depot_print(stack);
+> +               if (sbuf && !stack_depot_snprint(stack, sbuf, STACK_BUF_SIZE, 4))
+> +                       sbuf[0] = 0;
+> +               pr_err("%s@%pK has %d/%d users at\n%s\n",
+> +                      dir->name, dir, count, total, sbuf);
+>                 count = 0;
+>         }
+> +       if (i > display_limit)
+> +               pr_err("%s@%pK skipped %d/%d reports with %d unique stacks.\n",
+> +                      dir->name, dir, count, total, i - display_limit);
+> +
+> +       kfree(sbuf);
+>  }
+>  EXPORT_SYMBOL(__ref_tracker_dir_print);
+>
+> --
+> 2.25.1
+>

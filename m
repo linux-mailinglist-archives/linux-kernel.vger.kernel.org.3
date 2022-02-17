@@ -2,81 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9F64B9772
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3FC4B9779
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbiBQEHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 23:07:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46262 "EHLO
+        id S233580AbiBQEOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 23:14:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233438AbiBQEHw (ORCPT
+        with ESMTP id S230210AbiBQEOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 23:07:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B2A1C55BE;
-        Wed, 16 Feb 2022 20:07:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5D8761CDD;
-        Thu, 17 Feb 2022 04:07:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31EE6C340E9;
-        Thu, 17 Feb 2022 04:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645070858;
-        bh=fjwJWdGcrJSh0sn00v3pJAb/p+s41R0CKDbnX5GLN60=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nODLIADC+4RLaWWzC6VtH1zpkqXVh7/G/gNPgosBuD2l6IxwxlhTEj+XgmrJknumo
-         QhaEtJ4g4vD0AzYXmY1CSNWxk1AcxLVG6j2UB+eJank2hkio2Y92DqCo/yGOFrrchi
-         Y93p4XbwGdbro9wq+PoIiTtzPc5kQCoyPzU1Qaj+2jjQMSlnOovk/cAke/orOJ9b1j
-         KI90LBklm3ZADt26SvfKKFMiW+oGLUG+AMHt7d72bAIzkmCE3KfJfvbWSKkFgiEuah
-         2ZJIYM2EMnoBs4nj/otcpYm/m1bIEfpV++43h/qf6a1XjhCZFK7v6I9632XjvvUHuE
-         27dIsinZlwcRA==
-Message-ID: <244fae2e-bd5b-a46a-20ea-b294d45763ff@kernel.org>
-Date:   Wed, 16 Feb 2022 21:07:34 -0700
+        Wed, 16 Feb 2022 23:14:16 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E63E23BF15
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:14:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645071242; x=1676607242;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wrvAXSqA4m7vddYjUfMHkBtnDE7gjSQf3zl8IaPbKlQ=;
+  b=F/oydi5Vi+230+dWyo7oOImP7QZ5kjpHk2HWEIeUKwOHWpntsZCve+9P
+   v/sfa9HqjCPN87WFQgeheHACQKXeCBLwmZ3GAm3q5avLv+KxS3VB8nQpf
+   vBsHRd0wsPhABoF9ULd1G9A598VDPwgB+EHZnkeTataBNxQwiLcU0Hv5q
+   hE/W5l5/DgdmuILXfVjr6Dl/4RQ9uwJjeDJUnj7ZoWav1w+z9JEVELM/g
+   Lq91hw7A/QSTAZXh4d5jzut8dhL9+x8AVC056hZmHJQ43NcGtlY6lOpC/
+   UjKmksK+atr9fu9TXxfIpIfkxbU/ZybxI/Ql0+2e5UsROaBRfN/0+aXOn
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249621033"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="249621033"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 20:14:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="704596857"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 16 Feb 2022 20:14:00 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKYB5-000BRi-TJ; Thu, 17 Feb 2022 04:13:59 +0000
+Date:   Thu, 17 Feb 2022 12:13:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [rppt:cet/kvm 32/49] <stdin>:1565:2: warning: syscall
+ map_shadow_stack not implemented
+Message-ID: <202202171218.HfuxKGxm-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH net-next 3/9] net: tcp: use kfree_skb_reason() for
- tcp_v6_rcv()
-Content-Language: en-US
-To:     menglong8.dong@gmail.com, kuba@kernel.org
-Cc:     edumazet@google.com, davem@davemloft.net, rostedt@goodmis.org,
-        mingo@redhat.com, yoshfuji@linux-ipv6.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        imagedong@tencent.com, talalahmad@google.com,
-        keescook@chromium.org, ilias.apalodimas@linaro.org, alobakin@pm.me,
-        memxor@gmail.com, atenart@kernel.org, bigeasy@linutronix.de,
-        pabeni@redhat.com, linyunsheng@huawei.com, arnd@arndb.de,
-        yajun.deng@linux.dev, roopa@nvidia.com, willemb@google.com,
-        vvs@virtuozzo.com, cong.wang@bytedance.com,
-        luiz.von.dentz@intel.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, flyingpeng@tencent.com
-References: <20220216035426.2233808-1-imagedong@tencent.com>
- <20220216035426.2233808-4-imagedong@tencent.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220216035426.2233808-4-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 8:54 PM, menglong8.dong@gmail.com wrote:
-> @@ -1779,13 +1789,17 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff *skb)
->  	return ret ? -1 : 0;
->  
->  no_tcp_socket:
-> -	if (!xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb))
-> +	drop_reason = SKB_DROP_REASON_NO_SOCKET;
-> +	if (!xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb)) {
-> +		drop_reason = SKB_DROP_REASON_XFRM_POLICY;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
+head:   e2f9808bd7530f44cd5d95332036bb660b66b8db
+commit: 987299ad58376fc09a3bc884b55c07c2e5d80245 [32/49] x86/cet/shstk: Introduce map_shadow_stack syscall
+config: hexagon-buildonly-randconfig-r005-20220216 (https://download.01.org/0day-ci/archive/20220217/202202171218.HfuxKGxm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=987299ad58376fc09a3bc884b55c07c2e5d80245
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt cet/kvm
+        git checkout 987299ad58376fc09a3bc884b55c07c2e5d80245
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
 
-same here. First failure takes precedence.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+   <stdin>:1517:2: warning: syscall clone3 not implemented [-W#warnings]
+   #warning syscall clone3 not implemented
+    ^
+>> <stdin>:1565:2: warning: syscall map_shadow_stack not implemented [-W#warnings]
+   #warning syscall map_shadow_stack not implemented
+    ^
+   2 warnings generated.
+--
+   <stdin>:1517:2: warning: syscall clone3 not implemented [-W#warnings]
+   #warning syscall clone3 not implemented
+    ^
+>> <stdin>:1565:2: warning: syscall map_shadow_stack not implemented [-W#warnings]
+   #warning syscall map_shadow_stack not implemented
+    ^
+   2 warnings generated.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

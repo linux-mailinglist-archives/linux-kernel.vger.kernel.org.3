@@ -2,210 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4B84BAA4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3FBE4BAA50
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245545AbiBQTut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:50:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34034 "EHLO
+        id S245556AbiBQTvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:51:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245540AbiBQTur (ORCPT
+        with ESMTP id S245548AbiBQTvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:50:47 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56B0151694
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:50:31 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id p206-20020a4a2fd7000000b0031bfec11983so836698oop.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:50:31 -0800 (PST)
+        Thu, 17 Feb 2022 14:51:40 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DC2B36
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:51:25 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id c6so15271852ybk.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:51:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=eWaEdeMD4Xv456vmrRGc9qq+PbUbRsqsTAjVK+O/A3k=;
-        b=PQ/+IxLufKEfZw3+3BxKwa39k5Der0KnGqK9LOeDgyvMzu+9rYUbaXvDW5F2sDCK9i
-         rHPE+pmib/x+k9+D9i9Y2t5i4znFUgb3PS9gS6vVcNu/X78T5zEaV8RnW8dYBHe5ADrl
-         33JqjY3PS+zvUy8ZV8YPmX2cw56SZNWHf5DW4=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jryiGjlume1avE0nsXsIbeMADBBTK4iBFr1fN/zx7xI=;
+        b=LFHKSYbQ9j0BjbMyECpe/4RG1CjldG5NAOliAwmo3RNkBPKYZYRDdAGFmmA6wdc/W5
+         tJZIQ1tmRqq8g5hYkbHjr5lYGWY4GUkP6J3xRaZIWsERyOcXejpwykgcoytap+t6bqdW
+         bNh8vEDbkOkesymqFCZ/O/vFmBPBVepfWwEA0ZNe5qNfMonm2T+B3sSFiT2sLsBMrzIZ
+         LRE9iBINIXSIb0Pf6TEL5CDBGLYB1mHukbxfL/tZkCoSBbXVUqCd/yVtfDbANAcp9Fg7
+         cEFxjT/ZQLxnqwwvKuSgAbrXxUKIlH8ljzNM9vXTPgWD6FNfGKcvR54Ba6wEezji+4Aa
+         ze1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=eWaEdeMD4Xv456vmrRGc9qq+PbUbRsqsTAjVK+O/A3k=;
-        b=L52jXXu0tyhJ4rMnGIxx3evY9XY1P/uQIYkV+jq/18AkeNpuWfasunIbak7VMhJWM/
-         oezQwtujfF2qT8vIUIWGCo6OOZWjfj50Ve9uFIHVIfbdrVHbzT+i87cQ6vYCfwH/OBUN
-         B/t6elhghZxvOB+gorLtbSWT+pBZ0WYAqx+OOJkXYUdzZVmlMZzJve9vm9xyXWIS4Uo6
-         nsL0CEU43g+xzuONKoFQdCSVtpkTh7ZO0JUwqWGWOSZT9jdY5jhJy9agHI4eqMeiocjj
-         gTmuE+Tivh6N0HB8xIaUTZbTHeh2N/Tomj2CTsbvIg90Q6Ply11aRrHtGbwdsOy5CIX6
-         NuuA==
-X-Gm-Message-State: AOAM533ak5VPWppLO8X1ktAJF0t/8ExSatVWHM16lhHWag534t1C7eKr
-        pbLkiDY1fZpdkSqnQ8nR+E/yP7NuD1LhHcltKxpfGA==
-X-Google-Smtp-Source: ABdhPJygWUf+9oy/v+5ILtSSdP1c6aKp1Fl/1GiMiljIGiyPEsgSm7xOdBhhbwj67EUli0MEDgFysnA46NQ92dSAXMk=
-X-Received: by 2002:a05:6870:5829:b0:c8:9f42:f919 with SMTP id
- r41-20020a056870582900b000c89f42f919mr1722376oap.54.1645127431001; Thu, 17
- Feb 2022 11:50:31 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 17 Feb 2022 11:50:30 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jryiGjlume1avE0nsXsIbeMADBBTK4iBFr1fN/zx7xI=;
+        b=oWGoFeAm0+qZdHd7IOIh5wm/VSFBJ16BFR1ZnAfxGdfWIw5hXh9X3gvGBFXDVLTtZ7
+         5782SLwRdNZ7FB1PrDf8POoPHQ7pJPs/1s57I6KL+mNDVp5SEqU1gf0SW3kGxnQafB+M
+         AR5JUa6nh0cp1KiUU+mBz4IyRDeyfkiySWAXG1Gro1+/4LazPXB8zfUeXK+z1L4y9jo5
+         SRWnUWKeXZ3WnZbx06Zk3Jmnfs0Uwmc8Tt+lKMF66UGiRBkCbKXQig6icFKuK+qjcg0I
+         mwGi8DY6HW1gz+aFxrGz5xMKBpSjqg2ihrddBi4eB3gmaT3dJr5SElKt+9p7NBGuOYkK
+         uyxA==
+X-Gm-Message-State: AOAM530x2P96eToQnvKFA+/sPwWu5OS7EKsj4GVi6Q8iUDZ8AnnpKlqj
+        VCKRq5GRc+oiyuDzlqP4AovKzFDvcLK3O2msvmT5HA==
+X-Google-Smtp-Source: ABdhPJzxqPn7mNSisAbwdIqP5U+zn0Q5PNQ+IylCM2XJgBzLg5RLl3By0J7TMxLu1CTI2t95zvvvpYUiIg+Wa64ZwBc=
+X-Received: by 2002:a25:d986:0:b0:624:ddc:ff9 with SMTP id q128-20020a25d986000000b006240ddc0ff9mr3896252ybg.509.1645127484367;
+ Thu, 17 Feb 2022 11:51:24 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <0093b56c-95a0-7344-1480-2473f790db90@quicinc.com>
-References: <1644850708-11099-1-git-send-email-quic_srivasam@quicinc.com>
- <1644850708-11099-8-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n507RB89eoTPGUemdWh4cbcXtWkxKLt_0nCy8xGeJhb1sA@mail.gmail.com> <0093b56c-95a0-7344-1480-2473f790db90@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 17 Feb 2022 11:50:30 -0800
-Message-ID: <CAE-0n52+r5nN6HC6KQt-Yioh3r+9bgY_V-KA1yQ071-zY7qfEQ@mail.gmail.com>
-Subject: Re: [RESEND v13 07/10] ASoC: qcom: Add support for codec dma driver
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, alsa-devel@alsa-project.org,
-        bgoswami@codeaurora.org, bjorn.andersson@linaro.org,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        judyhsiao@chromium.org, lgirdwood@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        perex@perex.cz, quic_plai@quicinc.com, robh+dt@kernel.org,
-        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org,
-        tiwai@suse.com
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <20220215201922.1908156-1-surenb@google.com> <YgytzntIfx6Toom2@dhcp22.suse.cz>
+In-Reply-To: <YgytzntIfx6Toom2@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 17 Feb 2022 11:51:13 -0800
+Message-ID: <CAJuCfpFL9AQxNsjKxDHhu7UgMGETs+h9Avi6o1mQkvZ4N7CTRw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: fix use-after-free bug when mm->mmap is reused
+ after being freed
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, shy828301@gmail.com,
+        rientjes@google.com, willy@infradead.org, hannes@cmpxchg.org,
+        guro@fb.com, riel@surriel.com, minchan@kernel.org,
+        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
+        christian@brauner.io, hch@infradead.org, oleg@redhat.com,
+        david@redhat.com, jannh@google.com, shakeelb@google.com,
+        luto@kernel.org, christian.brauner@ubuntu.com, fweimer@redhat.com,
+        jengelh@inai.de, timmurray@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-02-15 22:53:11)
+On Tue, Feb 15, 2022 at 11:54 PM Michal Hocko <mhocko@suse.com> wrote:
 >
-> On 2/15/2022 6:57 AM, Stephen Boyd wrote:
-> Thanks for your time and valuable review comments Stephen!!!
-> > Quoting Srinivasa Rao Mandadapu (2022-02-14 06:58:25)
-> >> diff --git a/sound/soc/qcom/lpass-platform.c b/sound/soc/qcom/lpass-platform.c
-> >> index 5d77240..12b8d40 100644
-> >> --- a/sound/soc/qcom/lpass-platform.c
-> >> +++ b/sound/soc/qcom/lpass-platform.c
-[...]
+> On Tue 15-02-22 12:19:22, Suren Baghdasaryan wrote:
+> > After exit_mmap frees all vmas in the mm, mm->mmap needs to be reset,
+> > otherwise it points to a vma that was freed and when reused leads to
+> > a use-after-free bug.
+>
+> OK, so I have dived into this again. exit_mmap doesn't reset mmap
+> indeed.  That doesn't really matter for _oom victims_. Both the oom reaper and
+> mrelease do check for MMF_OOM_SKIP before calling __oom_reap_task_mm.
+> exit_mmap still sets MMF_OOM_SKIP before taking the mmap_lock for oom
+> victims so those paths should be still properly synchronized.  I have
+> proposed to get rid of this
+> http://lkml.kernel.org/r/YbHIaq9a0CtqRulE@dhcp22.suse.cz but we haven't
+> agreed on that.
+>
+> mrelease path is broken because it doesn't mark the process oom_victim
+> and so the MMF_OOM_SKIP synchronization doesn't work. So we really need
+> this.
+>
+> I would propose to rephrase the changelog to be more specific because I
+> do not want to remember all those details later on.
+> What about
+> "
+> oom reaping (__oom_reap_task_mm) relies on a 2 way synchronization with
+> exit_mmap. First it relies on the mmap_lock to exclude from unlock
+> path[1], page tables tear down (free_pgtables) and vma destruction.
+> This alone is not sufficient because mm->mmap is never reset. For
+> historical reasons[2] the lock is taken there is also MMF_OOM_SKIP set
+> for oom victims before.
+>
+> The oom reaper only ever looks at oom victims so the whole scheme works
+> properly but process_mrelease can opearate on any task (with fatal
+> signals pending) which doesn't really imply oom victims. That means that
+> the MMF_OOM_SKIP part of the synchronization doesn't work and it can
+> see a task after the whole address space has been demolished and
+> traverse an already released mm->mmap list. This leads to use after free
+> as properly caught up by KASAN report.
+>
+> Fix the issue by reseting mm->mmap so that MMF_OOM_SKIP synchronization
+> is not needed anymore. The MMF_OOM_SKIP is not removed from exit_mmap
+> yet but it acts mostly as an optimization now.
+>
+> [1] 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap,
+> v3")
+> [2] 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run
+> concurrently")
+> "
+
+This changelog is very detailed and I support switching to it. Andrew,
+please let me know if I should re-post the patch with this description
+or you will just amend the one in your tree.
+
+>
+> I really have to say that I hate how complex this has grown in the name
+> of optimizations. This has backfired several times already resulting in
+> 2 security issues. I really hope to get read any note of the oom reaper
+> from exit_mmap.
+
+Agree. I want to take another stab at removing __oom_reap_task_mm from
+exit_mmap. Now that Hugh made changes to mlock mechanisms and
+__oom_reap_task_mm does not skip locked vmas I think that should be
+possible. Planning to look into that sometimes next week.
+
+>
+> > Reported-by: syzbot+2ccf63a4bd07cf39cab0@syzkaller.appspotmail.com
+> > Suggested-by: Michal Hocko <mhocko@suse.com>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+
+Thanks!
+
+>
+> Thanks!
+> > ---
+> >  mm/mmap.c | 1 +
+> >  1 file changed, 1 insertion(+)
 > >
-> >> +       if (ret)
-> >> +               return ret;
-> >> +
-> >> +       buf = &substream->dma_buffer;
-> >> +       buf->dev.dev = pcm->card->dev;
-> >> +       buf->private_data = NULL;
-> >> +
-> >> +       /* Assign Codec DMA buffer pointers */
-> >> +       buf->dev.type = SNDRV_DMA_TYPE_CONTINUOUS;
-> >> +
-> >> +       switch (dai_id) {
-> >> +       case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-> >> +               buf->bytes = lpass_platform_rxtx_hardware.buffer_bytes_max;
-> >> +               buf->addr = drvdata->rxtx_cdc_dma_lpm_buf;
-> >> +               break;
-> >> +       case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-> >> +               buf->bytes = lpass_platform_rxtx_hardware.buffer_bytes_max;
-> >> +               buf->addr = drvdata->rxtx_cdc_dma_lpm_buf + LPASS_RXTX_CDC_DMA_LPM_BUFF_SIZE;
-> >> +               break;
-> >> +       case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
-> >> +               buf->bytes = lpass_platform_va_hardware.buffer_bytes_max;
-> >> +               buf->addr = drvdata->va_cdc_dma_lpm_buf;
-> >> +               break;
-> >> +       default:
-> >> +               break;
-> >> +       }
-> >> +
-> >> +       buf->area = (unsigned char * __force)ioremap(buf->addr, buf->bytes);
-> > Why aren't we using the DMA mapping framework?
-> Here, Need to use hardware memory, that is LPASS LPM region for codec DMA.
-
-It does not look like iomem, so the usage of ioremap() is wrong. I
-understand that it is some place inside the audio subsystem used to DMA.
-ioremap() memory should be accessed through the io accessors,
-readl/writel, ioread/iowrite.
-
-> >> @@ -827,6 +1207,31 @@ static int lpass_platform_pcmops_resume(struct snd_soc_component *component)
-> >>          return regcache_sync(map);
-> >>   }
-> >>
-> >> +static int lpass_platform_copy(struct snd_soc_component *component,
-> >> +                              struct snd_pcm_substream *substream, int channel,
-> >> +                              unsigned long pos, void __user *buf, unsigned long bytes)
-> >> +{
-> >> +       struct snd_pcm_runtime *rt = substream->runtime;
-> >> +       unsigned int dai_id = component->id;
-> >> +       int ret = 0;
-> >> +
-> >> +       void __iomem *dma_buf = rt->dma_area + pos +
-> >> +                               channel * (rt->dma_bytes / rt->channels);
-> >> +
-> >> +       if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
-> >> +               if (is_cdc_dma_port(dai_id))
-> >> +                       ret = copy_from_user_toio(dma_buf, buf, bytes);
-> >> +               else
-> >> +                       ret = copy_from_user((void __force *)dma_buf, buf, bytes);
-> >> +       } else if (substream->stream == SNDRV_PCM_STREAM_CAPTURE) {
-> >> +               if (is_cdc_dma_port(dai_id))
-> >> +                       ret = copy_to_user_fromio(buf, dma_buf, bytes);
-> >> +               else
-> >> +                       ret = copy_to_user(buf, (void __force *)dma_buf, bytes);
-> > Having __force in here highlights the lack of DMA API usage. I guess
-> > there's a sound dma wrapper library in sound/core/memalloc.c? Why can't
-> > that be used?
-> Didn't see any memcopy wrapper functions in memalloc.c. Could You please
-> elaborate or share some example.
-
-Can you add some memcpy wrappers to memalloc.c? Or implement the copy
-wrapper you need?
-
-> >
-> >> +       }
-> >> +
-> >> +       return ret;
-> >> +}
-> >>
-> >>   static const struct snd_soc_component_driver lpass_component_driver = {
-> >>          .name           = DRV_NAME,
-> >> @@ -837,9 +1242,11 @@ static const struct snd_soc_component_driver lpass_component_driver = {
-> >>          .prepare        = lpass_platform_pcmops_prepare,
-> >>          .trigger        = lpass_platform_pcmops_trigger,
-> >>          .pointer        = lpass_platform_pcmops_pointer,
-> >> +       .mmap           = lpass_platform_pcmops_mmap,
-> >>          .pcm_construct  = lpass_platform_pcm_new,
-> >>          .suspend                = lpass_platform_pcmops_suspend,
-> >>          .resume                 = lpass_platform_pcmops_resume,
-> >> +       .copy_user              = lpass_platform_copy,
-> >>
-> >>   };
-> >>
-> >> @@ -877,6 +1284,60 @@ int asoc_qcom_lpass_platform_register(struct platform_device *pdev)
-> >>                  return ret;
-> >>          }
-> >>
-> >> +       if (drvdata->codec_dma_enable) {
-> >> +               ret = regmap_write(drvdata->rxtx_lpaif_map,
-> >> +                       LPAIF_RXTX_IRQEN_REG(v, LPAIF_IRQ_PORT_HOST), 0x0);
-> >> +               if (ret) {
-> >> +                       dev_err(&pdev->dev, "error writing to rxtx irqen reg: %d\n", ret);
-> >> +                       return ret;
-> >> +               }
-> >> +               ret = regmap_write(drvdata->va_lpaif_map,
-> >> +                       LPAIF_VA_IRQEN_REG(v, LPAIF_IRQ_PORT_HOST), 0x0);
-> >> +               if (ret) {
-> >> +                       dev_err(&pdev->dev, "error writing to rxtx irqen reg: %d\n", ret);
-> >> +                       return ret;
-> >> +               }
-> >> +               drvdata->rxtxif_irq = platform_get_irq_byname(pdev, "lpass-irq-rxtxif");
-> >> +               if (drvdata->rxtxif_irq < 0)
-> >> +                       return -ENODEV;
-> >> +
-> >> +               ret = devm_request_irq(&pdev->dev, drvdata->rxtxif_irq,
-> >> +                               lpass_platform_rxtxif_irq, IRQF_TRIGGER_RISING,
-> > Drop flags and get it from firmware please.
-> Same is followed in existing for other i2s and HDMI interrupts. Could
-> You please give some example if it's really matters?
-
-It matters in the case that the hardware team decides to change the pin
-to falling. DT already has the flags encoded, so having a zero here
-avoids conflicting with what DT has set and also alleviates us from
-having to set different flags on different devices. Everyone wins. Look
-around for drivers that pass 0 in place of IRQF_TRIGGER_RISING, there
-are many examples.
+> > diff --git a/mm/mmap.c b/mm/mmap.c
+> > index 1e8fdb0b51ed..d445c1b9d606 100644
+> > --- a/mm/mmap.c
+> > +++ b/mm/mmap.c
+> > @@ -3186,6 +3186,7 @@ void exit_mmap(struct mm_struct *mm)
+> >               vma = remove_vma(vma);
+> >               cond_resched();
+> >       }
+> > +     mm->mmap = NULL;
+> >       mmap_write_unlock(mm);
+> >       vm_unacct_memory(nr_accounted);
+> >  }
+> > --
+> > 2.35.1.265.g69c8d7142f-goog
+>
+> --
+> Michal Hocko
+> SUSE Labs

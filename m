@@ -2,71 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642E14BA642
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC8C4BA636
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243354AbiBQQkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:40:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49598 "EHLO
+        id S243330AbiBQQkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:40:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbiBQQkV (ORCPT
+        with ESMTP id S239518AbiBQQkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:40:21 -0500
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2122B31A2;
-        Thu, 17 Feb 2022 08:40:06 -0800 (PST)
-Received: by mail-il1-f172.google.com with SMTP id f13so2670281ilq.5;
-        Thu, 17 Feb 2022 08:40:06 -0800 (PST)
+        Thu, 17 Feb 2022 11:40:13 -0500
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A972B2FFE;
+        Thu, 17 Feb 2022 08:39:58 -0800 (PST)
+Received: by mail-il1-f181.google.com with SMTP id c14so2673811ilm.4;
+        Thu, 17 Feb 2022 08:39:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=42YgXKsYX5OZqyMF3kRdlVgh0yrlkJ5vHS9c6U9AXD8=;
-        b=uvSwjivzanb29+kwl7fByzsu2bthAzwtX9G0+k6erRNYnedtGile3qSm4dcBaVk02t
-         h3DOJRelgu5E93hFd/lcPQPHXvT9Li/y0R15YTOhuOuUEDXDgsvGVnIIhWp8TDxH/wSJ
-         y86DWQqZ4WzcnBONBx2y76mUjC/htlIWbhjM6G3LrVNzssS8eKwJyF23xClrXtngNDQM
-         SJ0FMnqgb0Rzz3WbuvsoObx+POXSxCpsgqVVcK8QUaepzjyvqxpbVxzIyKsxsNt1KAfj
-         irAEzUFHyogxTfHIEexHj3GMp9kD8UL27TlNceY7emP/mOcMIHUhzFoHSqmciC+HHpuL
-         cwOw==
-X-Gm-Message-State: AOAM532zubg56qQ4v7tw41pHrexG10glqJ1hRksJ5YCctclcPP7HOrDo
-        1RvhSOtOUVw9Oygla+V14w==
-X-Google-Smtp-Source: ABdhPJzblA3h4h2T4K+K98Bdy6EvTCXy87z0Zrx38haaMlOdtIg1+JWX6SDxGNwnl4O1+t+hZSC20A==
-X-Received: by 2002:a05:6e02:2168:b0:2c1:a436:d18c with SMTP id s8-20020a056e02216800b002c1a436d18cmr499762ilv.49.1645116005928;
-        Thu, 17 Feb 2022 08:40:05 -0800 (PST)
+        bh=/j/oL7B6VpVuxaUPOtNjyB5enKb3oFuW0hBLhdLu0mk=;
+        b=Tvnb1L4BWdKRqK4CzusFUzgZgn3FrCCU5raNq57ZDtiBS3rdV/rlBX5v7r7rsklYcL
+         UDXjpTBD7b3YHBmrtcTE2+yU9DUXL0U9xepK6qEX9andwAzKCkpDVwNwo4SYZmRE76n4
+         JzNTXrRyECsBXe3Y3Iu9UYNsbvgHK7W8x0JNQ5Z3TO+9kIbQKbf/XQQyAjXlm+pFWfwT
+         kINKBaSYcwuf1HoMDC7iPIp/IflUsYlNKteGk0vBOuFvMX1hvJEaKiwbxXOQ8hA7XNNP
+         L/wjvIs6oDWHBeYpkZZuScVOFBbUzFow2tUqk7hiXZ7F4aTIvXOziAkgkujlg2xQV/gy
+         kGvQ==
+X-Gm-Message-State: AOAM530e98q7cT3NiOUTgfTe6Uo42PUzQv7N/cYNZSDA/44xYyb421Fl
+        4KGkDpHNT2stSeF/e4ESmA==
+X-Google-Smtp-Source: ABdhPJz6ShYnm8au8sy+zdCys28kffvuQrBgybBe54H3/FKN33f3cmhGisStfQpgdHyWSVLZ7X+yPw==
+X-Received: by 2002:a05:6e02:216c:b0:2be:f54b:987b with SMTP id s12-20020a056e02216c00b002bef54b987bmr2588240ilv.254.1645115997609;
+        Thu, 17 Feb 2022 08:39:57 -0800 (PST)
 Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id a19sm2309825iot.35.2022.02.17.08.40.03
+        by smtp.gmail.com with ESMTPSA id a6sm2410552iow.22.2022.02.17.08.39.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 08:40:05 -0800 (PST)
-Received: (nullmailer pid 3365323 invoked by uid 1000);
+        Thu, 17 Feb 2022 08:39:56 -0800 (PST)
+Received: (nullmailer pid 3365320 invoked by uid 1000);
         Thu, 17 Feb 2022 16:39:55 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>, Li Yi <liyi@loongson.cn>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Zack Rusin <zackr@vmware.com>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Ilia Mirkin <imirkin@alum.mit.edu>
-In-Reply-To: <20220216181712.1493400-3-15330273260@189.cn>
-References: <20220216181712.1493400-1-15330273260@189.cn> <20220216181712.1493400-3-15330273260@189.cn>
-Subject: Re: [PATCH v8 2/3] MIPS: Loongson64: dts: update the display controller device node
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220216181434.41682-1-nick.hawkins@hpe.com>
+References: <nick.hawkins@hpe.com> <20220216181434.41682-1-nick.hawkins@hpe.com>
+Subject: Re: [PATCH] dt-bindings: soc: Add HPE GXP SOC binding
 Date:   Thu, 17 Feb 2022 10:39:55 -0600
-Message-Id: <1645115995.354636.3365322.nullmailer@robh.at.kernel.org>
+Message-Id: <1645115995.339005.3365319.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -78,27 +59,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 02:17:11 +0800, Sui Jingfeng wrote:
-> From: suijingfeng <suijingfeng@loongson.cn>
+On Wed, 16 Feb 2022 12:14:33 -0600, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> The display controller is a pci device, its PCI vendor id is 0x0014
-> its PCI device id is 0x7a06.
+> Description: This binding will be used in creating the HPE GXP
+>  architecture. GXP is the name of the HPE SoC.
+> This SoC is used to implement BMC features of HPE servers
+> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
+> It does support many features including:
+>         ARMv7 architecture, and it is based on a Cortex A9 core
+>         Use an AXI bus to which
+>                 a memory controller is attached, as well as
+>                  multiple SPI interfaces to connect boot flash,
+>                  and ROM flash, a 10/100/1000 Mac engine which
+>                  supports SGMII (2 ports) and RMII
+>                 Multiple I2C engines to drive connectivity with a
+> 				 host infrastructure
+>                 A video engine which support VGA and DP, as well as
+>                  an hardware video encoder
+>                 Multiple PCIe ports
+>                 A PECI interface, and LPC eSPI
+>                 Multiple UART for debug purpose, and Virtual UART for
+>                  host connectivity
+>                 A GPIO engine.
 > 
-> 1) In order to let the lsdc kms driver to know which chip the DC is
->    contained in, we add different compatible for different chip.
-> 
-> 2) Add display controller device node for ls2k1000 SoC
-> 
-> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
-> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 > ---
->  .../loongson/loongson,display-controller.yaml | 114 ++++++++++++++++++
->  .../display/loongson/loongson-drm.txt         |  16 +++
->  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 ++
->  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +-
->  4 files changed, 140 insertions(+), 5 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson-drm.txt
+>  .../devicetree/bindings/soc/hpe/gxp.yaml      | 35 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++++
+>  2 files changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/hpe/gxp.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -107,17 +97,15 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
-Error: Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dts:22.30-31 syntax error
+Error: Documentation/devicetree/bindings/soc/hpe/gxp.example.dts:22.27-28 syntax error
 FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dt.yaml] Error 1
+make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/soc/hpe/gxp.example.dt.yaml] Error 1
 make[1]: *** Waiting for unfinished jobs....
 make: *** [Makefile:1398: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1593886
+See https://patchwork.ozlabs.org/patch/1593884
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

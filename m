@@ -2,174 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628094BABCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 047D84BABD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239982AbiBQVgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 16:36:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60092 "EHLO
+        id S245730AbiBQVg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 16:36:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiBQVgu (ORCPT
+        with ESMTP id S229694AbiBQVgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 16:36:50 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897666622F;
-        Thu, 17 Feb 2022 13:36:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645133771;
-        bh=sh1DPaASGW9V2zkfziMd7+l7s/QlEn4SX5JpX6nJ3v0=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Sv9dWkeaeIzH6NL8B8qO33aTGzXF3HAl1zMMXwbQNLdhi71L+zlgBC6dtaKPZUpFx
-         xzOZwnQuqLJNu1Wdknq3ofxY0lqbUeC/Sz8teI9J5qNLX3AcU6AUrjTK/8DGdejZps
-         pMc152GcOaHIrSnBodvvbrxqxqmWpNBiK56mQ3KU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.78] ([149.172.237.68]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M6UZv-1nNGDq1hlJ-006vSG; Thu, 17
- Feb 2022 22:36:11 +0100
-Subject: Re: [PATCH 2 1/9] serial: core: move RS485 configuration tasks from
- drivers into core
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        u.kleine-koenig@pengutronix.de, linux@armlinux.org.uk,
-        richard.genoud@gmail.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20220216001803.637-1-LinoSanfilippo@gmx.de>
- <20220216001803.637-2-LinoSanfilippo@gmx.de>
- <20220217113354.GA7826@wunner.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <03604709-fcc5-f528-c5cf-5b8c2d0abfd0@gmx.de>
-Date:   Thu, 17 Feb 2022 22:36:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 17 Feb 2022 16:36:54 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6E813FB6;
+        Thu, 17 Feb 2022 13:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645133799; x=1676669799;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yB4+2qoMQ9jzb08mZ+ScfZ64ApyU5Uo5M7VdvfRZWlY=;
+  b=uGWiobsUg3cHxpWAG3FWFKrTSegiCIw6S4cCAwQ4dZCHQkV1POSBkVwz
+   UYEuw4dIyfM9eP6LDtDPbhMTca348uIGWUDmNnGBPQfwe/07418u7KIOr
+   9rC94g49N1L49TUI3ydYOIR9C0fQclnZNQgLO0YSR69feE/ypkdHaGCjw
+   g=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 Feb 2022 13:36:38 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 13:36:38 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 17 Feb 2022 13:36:37 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 17 Feb 2022 13:36:37 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 0/2]  drm/msm/dpu: enable widebus feature base on chip hardware revision
+Date:   Thu, 17 Feb 2022 13:36:24 -0800
+Message-ID: <1645133788-5057-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <20220217113354.GA7826@wunner.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:PcdHdcVTNQnY7ZlbLSzK1FYNltMg8wlri9F+ts0o/nBFWnhsy/c
- Hlc15FyNnhioUoOXzxbM8tXwQoeXFbMUBz1tsYOT4YJoUK0jxiliABFzWMk9sHnGe7vPSB1
- OyL/7wbDzgYfoW1TZ1NlBmTePPoZTBDHT1dpysRDSix2U1GGAnFYItw5L+7q9SUsjEuzSNS
- YPgzJx7tkshMeWH06iKaw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xXdSJIbiOW0=:L/EqqrP/p+Od95kAdJz4ji
- PkLd8shzbwi6IeBHYYnj1MpaKOEH7qWPcUeLnr0TWq6flKTKD8XLn9GGoJIhRJrSNXXVSH95c
- 12s98dOcePln5dU0gyx9Q9xBDG8q4JWPEkz7DP2UgxIuuDQlaug4yvZZtDVctcvxznyRVS42n
- QsZPDSAtmdWHZURFupjPukhALS3V6wgpaKE80LMMFVrHQtqib6mgr3Jau5yC53RiHjxNfNY/w
- Pa5rYvJe9DJZJHo7kL5tWE6J7N9m7lCY/RKIqp6LooTJ2dLlY+sDA71Nm/tsqVoScG4XqY9VE
- E7TfCN/ySf7sySMWgYE7q0fRZ40V+F5u+LG69UCiYTrQQk5330n9WmE8u18qoyvkbNrTyr6DR
- KbIQBYYMeueM3iENiL93ITWMV3sQtCdnOXTxepFwLspvdfy2aTxKriuptJe4eEv9jwhJDMKwk
- l1IEW1UWsOAr6g3Z+mSGl7URXYU/lIenXz6/D0YsBRi3z04bkMYupb1h1XfaBMd8KZuMnLWsK
- Lloj6OGuzpsSlC4fMe/Eua2+aTDfVN1Nbre7ytJI66S6DeB8Fs4xYkMjX6cK2Vl42rb3ip5Jy
- yaV0m0g3CohOJqHAiHaj7Uo0/hlhDa3svNBrohCs3wi10iSzwF5ISuZKmkkIM8vegnqDpsOXD
- WMhpDWmJUHbhvxehZq3vVQsqG6/mIclu4ZkKCbeeuQ+NDgxp2iI7YGxBalUcwZPnpHnTAt2m7
- HlAFYgdKT/v37sQzewNVPb9JaByjNFW7n3/Dls4G/QKwzt8l4FBveKuFkmSuvaoYWQIyrLuIi
- giW9tw65el1SK9hvIHR5lC5178r1nZvxQuG/4MGiFdt+0PGCTvETeHJ29Ag/bQJIx88ZfzgpR
- mM2DkCdmhNOflrjfl7q9A2HnfLGbcR1Z5KLdv2YOojDJnk2/gzwDc/SS6kSmPQVCcK1J9utq9
- HfxbOdlA7FK4ffiIjW5/BdC+JOplPo7udayLSrdLc24EBoatBHeuFC2c4jtm4qXeHLR73yg7a
- 5oW4SXhSpUxDU5Xwv+nVeXxTequntWXJqZE+Htr5k5y2CYnOG3mzoUamUmcXp1+Cyga4die2g
- ZCASi7QtpGgsNU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+revise widebus timing engine programming and enable widebus feature base on chip
 
-Hi,
+Kuogee Hsieh (4):
+  drm/msm/dpu: adjust display_v_end for eDP and DP
+  drm/msm/dpu: replace BIT(x) with correspond marco define string
+  drm/msm/dpu:  revise timing engine programming to support widebus
+    feature
+  drm/msm/dp: enable widebus feature for display port
 
-On 17.02.22 at 12:33, Lukas Wunner wrote:
-> On Wed, Feb 16, 2022 at 01:17:55AM +0100, Lino Sanfilippo wrote:
->> --- a/drivers/tty/serial/serial_core.c
->> +++ b/drivers/tty/serial/serial_core.c
->> @@ -1282,8 +1282,26 @@ static int uart_set_rs485_config(struct uart_por=
-t *port,
->>  	if (copy_from_user(&rs485, rs485_user, sizeof(*rs485_user)))
->>  		return -EFAULT;
->>
->> +	/* pick sane settings if the user hasn't */
->> +	if (!(rs485.flags & SER_RS485_RTS_ON_SEND) =3D=3D
->> +	    !(rs485.flags & SER_RS485_RTS_AFTER_SEND)) {
->> +		rs485.flags |=3D SER_RS485_RTS_ON_SEND;
->> +		rs485.flags &=3D ~SER_RS485_RTS_AFTER_SEND;
->> +	}
->
-> The policy you're enforcing here is:  If settings are nonsensical,
-> always default to active-high polarity.
->
-> However some drivers currently enforce a completely different policy:
-> E.g. with 8250_lpc18xx.c, if SER_RS485_RTS_ON_SEND is set, use active-hi=
-gh
-> (and fix up SER_RS485_RTS_AFTER_SEND), else use active-low polarity.
-> This yields a different result compared to your policy in case both bits
-> are cleared.
->> Similarly, sc16is7xx.c defaults to active-low if SER_RS485_RTS_AFTER_SE=
-ND
-> is set, else active-high polarity.  This yields a different result compa=
-red
-> to your policy in case both bits are set.
->
-> You risk breaking existing user space applications with this change
-> if those applications specify nonsensical polarity settings.
->
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 14 ++++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 +++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 63 ++++++++++++++++------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 +
+ drivers/gpu/drm/msm/dp/dp_catalog.c                | 34 +++++++++++-
+ drivers/gpu/drm/msm/dp/dp_catalog.h                |  3 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   | 13 +++--
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |  1 +
+ drivers/gpu/drm/msm/dp/dp_display.c                | 30 +++++++++++
+ drivers/gpu/drm/msm/dp/dp_display.h                |  2 +
+ drivers/gpu/drm/msm/dp/dp_panel.c                  |  4 +-
+ drivers/gpu/drm/msm/dp/dp_panel.h                  |  2 +-
+ drivers/gpu/drm/msm/msm_drv.h                      |  6 +++
+ 14 files changed, 164 insertions(+), 26 deletions(-)
 
-Ok, but IMHO this is a very small risk. I cannot imagine that there
-are many (or any at all) userspace applications that do not
-specify any RTS setting and then rely on a driver specific fallback
-implementation. I would not like to remove the RTS check from
-uart_set_rs485_config() only because of that.
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
->
-> I happen to have created a similar commit to this one a month ago
-> and I came to the conclusion that all one can do is offer a library
-> function uart_sanitize_rs485_mode() which drivers may elect to call
-> if that helper's policy is identical to what they're doing now:
->
-> https://github.com/l1k/linux/commit/637984111e42
->>
->> +
->> +	rs485.delay_rts_before_send =3D min_t(unsigned int,
->> +					    rs485.delay_rts_before_send,
->> +					    SER_RS485_MAX_RTS_DELAY);
->> +	rs485.delay_rts_after_send =3D min_t(unsigned int,
->> +					   rs485.delay_rts_after_send,
->> +					   SER_RS485_MAX_RTS_DELAY);
->
-> Nonsensical delays may not only be passed in from user space via ioctl()=
-,
-> but through the device tree.  That's another reason to use a library
-> function:  It can be called both from the ioctl() as well as after (or i=
-n)
-> uart_get_rs485_mode().
->
-
-The idea of my patch set is actually to provide a common behavior for the
-RS485 configuration by userspace similar to what uart_get_rs485_mode()
-provides for the configuration by device tree.
-
-However with the solution you propose sanity checks for userspace
-configuration are still up to each single driver and thus can vary
-from driver to driver or not be implemented at all. I dont think that
-this is the better approach in the long term.
-
-
->
->> +	/* Return clean padding area to userspace */
->> +	memset(rs485.padding, 0, sizeof(rs485.padding));
->
-> Unlike the polarity and delay handling, this one makes sense.
->
-> Thanks,
->
-> Lukas
->
-
-Regards,
-Lino

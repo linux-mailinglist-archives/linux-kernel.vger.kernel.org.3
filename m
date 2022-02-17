@@ -2,222 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F534BA7E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AED14BA7DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241523AbiBQSL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:11:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44252 "EHLO
+        id S243244AbiBQSMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:12:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234842AbiBQSLx (ORCPT
+        with ESMTP id S244095AbiBQSME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:11:53 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396928A32E;
-        Thu, 17 Feb 2022 10:11:37 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id f19so9888140qvb.6;
-        Thu, 17 Feb 2022 10:11:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=3t297Rve1SDESxxbDGkaeisi7qQ51HM6w5VO3bA4J1g=;
-        b=IZjNG4hPlrHwMT/EWpsO8lqY9zm+3+5Tm9vgRFRSf35NJ+/gd3v1bIWzxNojEW6H4q
-         BTnKQZADrGVhJZJWee1TQ5duZxae93aqpLa9aB3AsSjPac7wKu+m9n5ozeJeOB9lYzlg
-         iFtQpCLu3vWnXl7t+nVqY1x1sZDI9/z2d1+8e5yU8mHjkeD4eYGazh+KCzlvRb+uAQop
-         wGiyQIZ0wP7ubH1SI3Ze95u4KO7QXU11rgOwcNHHdTgikr2c6KxFKlBmF1d27Fik8rJ9
-         QCJD7pN/0jOeS1uEYiaXt1S08lXMgTAhyDitEHaR2sX4jKxHolHwPbMlNs1mZLp/YIAq
-         5LoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=3t297Rve1SDESxxbDGkaeisi7qQ51HM6w5VO3bA4J1g=;
-        b=4ftAnYU/zMFYt6a8yNiYn01HlJ/dncC1wdcyY46iow9TPcM9fHOuKN0y3HHalQPX6v
-         AgmOcha0n3l+4mIBJ/9lcqGBcB6y+SgguLfx8tB1araAp+9BeAfpjrIYOYwAYVEvVsEx
-         OydpPTAqsgaQo/0W45IU/aBAsrJGzst0a1axtFwpwy/zYBTZsMNCwwcAzsxmrgcnaZyA
-         NqkxVjDaHWnOuKBufCqhcGEu1QG1OzWF37GkIBhjZfwMcTw0xvb0AvrXg6POAToRYLTL
-         CLkQr8Z9e79Fsq91Gr/NMIpV49s6rstRztgw0/1GGOhT6hCY/SQzV/xfRnx9WpSHBmuu
-         48vQ==
-X-Gm-Message-State: AOAM533dSB3oZKkjC1rzVfDIm/x6o38+E+vQQsWbeqjfOXGzJcsXX2zP
-        3pko4CaSQgmW/an4RoHJ6mc=
-X-Google-Smtp-Source: ABdhPJx+ebTDBhR5QvBJpvCX9RSFtsRiXT+CPPQevdr/8LGjuLuR2P8JmblxuxUzHNHYZJRPw62JIw==
-X-Received: by 2002:a05:622a:1444:b0:2d5:b8f9:aa3c with SMTP id v4-20020a05622a144400b002d5b8f9aa3cmr3570975qtx.664.1645121496345;
-        Thu, 17 Feb 2022 10:11:36 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p14sm2462019qtn.93.2022.02.17.10.11.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 10:11:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b22ca322-c8f2-d17c-75ff-54ee26b0041b@roeck-us.net>
-Date:   Thu, 17 Feb 2022 10:11:32 -0800
+        Thu, 17 Feb 2022 13:12:04 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396079ADA1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:11:44 -0800 (PST)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K02vP2ZGtz67lLL;
+        Fri, 18 Feb 2022 02:11:13 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Thu, 17 Feb 2022 19:11:41 +0100
+Received: from [10.47.86.67] (10.47.86.67) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Feb
+ 2022 18:11:41 +0000
+Message-ID: <28ac81fe-3c8c-0469-45c5-a2b4c6a730f7@huawei.com>
+Date:   Thu, 17 Feb 2022 18:11:39 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-References: <20220217104444.7695-1-zev@bewilderbeest.net>
- <20220217104444.7695-2-zev@bewilderbeest.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/4] hwmon: (pmbus) Add get_error_flags support to
- regulator ops
-In-Reply-To: <20220217104444.7695-2-zev@bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 1/2] drivers/perf: hisi: Add Support for CPA PMU
+To:     "liuqi (BA)" <liuqi115@huawei.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Zhangshaokun <zhangshaokun@hisilicon.com>
+References: <20220214114228.40859-1-liuqi115@huawei.com>
+ <20220214114228.40859-2-liuqi115@huawei.com>
+ <6c7c9366-91e1-3b8e-8249-dec7973f3f98@huawei.com>
+ <edefd1ea-10d5-0aaf-8235-27766afa2e75@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <edefd1ea-10d5-0aaf-8235-27766afa2e75@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.86.67]
+X-ClientProxiedBy: lhreml714-chm.china.huawei.com (10.201.108.65) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 02:44, Zev Weiss wrote:
-> The various PMBus status bits don't all map perfectly to the more
-> limited set of REGULATOR_ERROR_* flags, but there's a reasonable
-> number where they correspond well enough.
+On 16/02/2022 03:16, liuqi (BA) wrote:
+>>>
+>>> +    name = devm_kasprintf(&pdev->dev, GFP_KERNEL, 
+>>> "hisi_sicl%d_cpa%u", cpa_pmu->sccl_id - 1,
+>>
+>> why subtract 1? Looks dangerous if sccl_id == 0
+> As CPA PMU is on SICL, and id of SICL is 1 smaller than id of adjacent 
+> SCCL. SCCL id in our Hip09 platform is set as 1, 3.... so, a reasonable 
+> sccl-id will never be 0.
+
+I think that you need to view the HW IP independent of the SoC, and not 
+get into the practice of relying on these things. Anyway, doesn't the 
+sccl_id come from ACPI DSD (so we can set as we want)?
+
 > 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->   drivers/hwmon/pmbus/pmbus_core.c | 97 ++++++++++++++++++++++++++++++++
->   1 file changed, 97 insertions(+)
+> Parameters sccl_id is read from ACPI, and is checked in 
+> hisi_pmu_cpu_is_associated_pmu(), so we could make sure that sccl_id 
+> here is reasonable and is not 0.
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 776ee2237be2..a274e8e524a5 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2417,10 +2417,107 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
->   	return _pmbus_regulator_on_off(rdev, 0);
->   }
->   
-> +/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
-> +struct pmbus_regulator_status_assoc {
-> +	int pflag, rflag;
-> +};
-> +
-> +/* PMBus->regulator bit mappings for a PMBus status register */
-> +struct pmbus_regulator_status_category {
-> +	int func;
-> +	int reg;
-> +	const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
-> +};
-> +
-> +static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
-> +	{
-> +		.func = PMBUS_HAVE_STATUS_VOUT,
-> +		.reg = PMBUS_STATUS_VOUT,
-> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> +			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
-> +			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
-> +			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
-> +			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
-> +			{ },
-> +		},
-> +	}, {
-> +		.func = PMBUS_HAVE_STATUS_IOUT,
-> +		.reg = PMBUS_STATUS_IOUT,
-> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> +			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
-> +			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
-> +			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
-> +			{ },
-> +		},
-> +	}, {
-> +		.func = PMBUS_HAVE_STATUS_TEMP,
-> +		.reg = PMBUS_STATUS_TEMPERATURE,
-> +		.bits = (const struct pmbus_regulator_status_assoc[]) {
-> +			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
-> +			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
-> +			{ },
-> +		},
-> +	},
-> +};
-> +
-> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +{
-> +	int i, status, statusreg;
-> +	const struct pmbus_regulator_status_category *cat;
-> +	const struct pmbus_regulator_status_assoc *bit;
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int func = data->info->func[page];
-> +
-> +	*flags = 0;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
-> +		cat = &pmbus_regulator_flag_map[i];
-> +		if (!(func & cat->func))
-> +			continue;
-> +
-> +		status = pmbus_read_byte_data(client, page, cat->reg);
-> +		if (status < 0)
-> +			return status;
-> +
-> +		for (bit = cat->bits; bit->pflag; bit++) {
-> +			if (status & bit->pflag)
-> +				*flags |= bit->rflag;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Map what bits of STATUS_{WORD,BYTE} we can to REGULATOR_ERROR_*
-> +	 * bits.  Some of the other bits are tempting (especially for cases
-> +	 * where we don't have the relevant PMBUS_HAVE_STATUS_*
-> +	 * functionality), but there's an unfortunate ambiguity in that
-> +	 * they're defined as indicating a fault *or* a warning, so we can't
-> +	 * easily determine whether to report REGULATOR_ERROR_<foo> or
-> +	 * REGULATOR_ERROR_<foo>_WARN.
-> +	 */
-> +	statusreg = data->has_status_word ? PMBUS_STATUS_WORD : PMBUS_STATUS_BYTE;
-> +	status = pmbus_get_status(client, page, statusreg);
-> +
+> 
+>>
+>>> +                  cpa_pmu->index_id);
+>>> +
+>>> +    cpa_pmu->pmu = (struct pmu) {
+>>> +        .name        = name,
+>>> +        .module        = THIS_MODULE,
+>>> +        .task_ctx_nr    = perf_invalid_context,
+>>> +        .event_init    = hisi_uncore_pmu_event_init,
+>>> +        .pmu_enable    = hisi_uncore_pmu_enable,
+>>> +        .pmu_disable    = hisi_uncore_pmu_disable,
+>>> +        .add        = hisi_uncore_pmu_add,
+>>> +        .del        = hisi_uncore_pmu_del,
+>>> +        .start        = hisi_uncore_pmu_start,
+>>> +        .stop        = hisi_uncore_pmu_stop,
+>>> +        .read        = hisi_uncore_pmu_read,
+>>> +        .attr_groups    = cpa_pmu->pmu_events.attr_groups,
+>>> +        .capabilities    = PERF_PMU_CAP_NO_EXCLUDE,
+>>> +    };
+>>> +
+>>> +    ret = perf_pmu_register(&cpa_pmu->pmu, name, -1);
+>>> +    if (ret) {
+>>> +        dev_err(cpa_pmu->dev, "CPA PMU register failed\n");
+>>> +        cpuhp_state_remove_instance_nocalls(
+>>> +            CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE, &cpa_pmu->node);
+>>> +    }
+>>> +
+>>> +    return ret;
+>>> +}
+>>> +
+>>> +static int hisi_cpa_pmu_remove(struct platform_device *pdev)
+>>> +{
+>>> +    struct hisi_pmu *cpa_pmu = platform_get_drvdata(pdev);
+>>> +
+>>> +    perf_pmu_unregister(&cpa_pmu->pmu);
+>>> + cpuhp_state_remove_instance_nocalls(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+>>> +                        &cpa_pmu->node);
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static struct platform_driver hisi_cpa_pmu_driver = {
+>>> +    .driver = {
+>>> +        .name = "hisi_cpa_pmu",
+>>> +        .acpi_match_table = ACPI_PTR(hisi_cpa_pmu_acpi_match),
+>>> +        .suppress_bind_attrs = true,
+>>> +    },
+>>> +    .probe = hisi_cpa_pmu_probe,
+>>> +    .remove = hisi_cpa_pmu_remove,
+>>> +};
+>>> +
+>>> +static int __init hisi_cpa_pmu_module_init(void)
+>>> +{
+>>> +    int ret;
+>>> +
+>>> +    ret = cpuhp_setup_state_multi(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+>>> +                      "AP_PERF_ARM_HISI_CPA_ONLINE",
+>>> +                      hisi_uncore_pmu_online_cpu,
+>>> +                      hisi_uncore_pmu_offline_cpu);
+>>> +    if (ret) {
+>>> +        pr_err("CPA PMU: setup hotplug: %d\n", ret);
+>>> +        return ret;
+>>> +    }
+>>> +
+>>> +    ret = platform_driver_register(&hisi_cpa_pmu_driver);
+>>> +    if (ret)
+>>> +        cpuhp_remove_multi_state(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE);
+>>
+>> I am not being totally serious, but this pattern of registering a CPU 
+>> hotplug handler and then a driver is so common that we could nearly 
+>> add a wrapper for it.
+>>
+> 
+> Hi John, do you mean somthing like this?
+> 
+> in hisi_uncore_pmu.c:
+> 
+> int hisi_uncore_pmu_module_init(enum cpuhp_state state, const char 
+> *name, struct platform_driver *drv)
+> {
+>      int ret;
+> 
+>      ret = cpuhp_setup_state_multi(state, name, hisi_uncore_pmu_online_cpu,
+>                        hisi_uncore_pmu_offline_cpu);
+>      if (ret) {
+>          pr_err("%s: setup hotplug: %d\n", drv->driver.name, ret);
+>          return ret;
+>      }
+> 
+>      ret = platform_driver_register(drv);
+>      if (ret)
+>          cpuhp_remove_multi_state(state);
+> 
+>      return ret;
+> }
+> 
+> in hisi_uncore_cpa_pmu.c:
+> 
+> static int __init hisi_cpa_pmu_module_init(void)
+> {
+>      int ret;
+> 
+>      ret = hisi_uncore_pmu_module_init(CPUHP_AP_PERF_ARM_HISI_CPA_ONLINE,
+>                        "AP_PERF_ARM_HISI_CPA_ONLINE",
+>                        &hisi_cpa_pmu_driver);
+> 
+>      return ret;
+> }
+> module_init(hisi_cpa_pmu_module_init);
 
-pmbus_get_status() calls data->read_status if PMBUS_STATUS_WORD is provided
-as parameter, and data->read_status is set to pmbus_read_status_byte()
-if reading the word status is not supported. Given that, why not just call
-pmbus_get_status(client, page, PMBUS_STATUS_WORD) ?
+Sure, but I'm talking about going further and having this as 
+drivers/perf or even platform_device.h helper:
 
-> +	if (status < 0)
-> +		return status;
-> +
-> +	if (pmbus_regulator_is_enabled(rdev) && (status & PB_STATUS_OFF))
-> +		*flags |= REGULATOR_ERROR_FAIL;
-> +	if (status & PB_STATUS_IOUT_OC)
-> +		*flags |= REGULATOR_ERROR_OVER_CURRENT;
+diff --git a/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c 
+b/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
+index 62299ab5a9be..22f635260a5f 100644
+--- a/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
++++ b/drivers/perf/hisilicon/hisi_uncore_ddrc_pmu.c
+@@ -562,26 +562,11 @@ static struct platform_driver hisi_ddrc_pmu_driver = {
+  	.remove = hisi_ddrc_pmu_remove,
+  };
 
-If the current status register is supported, this effectively means that
-an overcurrent warning is always reported as both REGULATOR_ERROR_OVER_CURRENT
-and REGULATOR_ERROR_OVER_CURRENT_WARN. Is that intentional ?
+-static int __init hisi_ddrc_pmu_module_init(void)
+-{
+-	int ret;
+-
+-	ret = cpuhp_setup_state_multi(CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE,
+-				      "AP_PERF_ARM_HISI_DDRC_ONLINE",
+-				      hisi_uncore_pmu_online_cpu,
+-				      hisi_uncore_pmu_offline_cpu);
+-	if (ret) {
+-		pr_err("DDRC PMU: setup hotplug, ret = %d\n", ret);
+-		return ret;
+-	}
+-
+-	ret = platform_driver_register(&hisi_ddrc_pmu_driver);
+-	if (ret)
+-		cpuhp_remove_multi_state(CPUHP_AP_PERF_ARM_HISI_DDRC_ONLINE);
++module_platform_driver_cpu_hotplug(hisi_ddrc_pmu_driver,
++				AP_PERF_ARM_HISI_DDRC_ONLINE,
++				hisi_uncore_pmu_online_cpu,
++				hisi_uncore_pmu_online_cpu);
+
+-	return ret;
+-}
+-module_init(hisi_ddrc_pmu_module_init);
+
+  static void __exit hisi_ddrc_pmu_module_exit(void)
+  {
+diff --git a/include/linux/platform_device.h 
+b/include/linux/platform_device.h
+index 7c96f169d274..d0816dfc0637 100644
+--- a/include/linux/platform_device.h
++++ b/include/linux/platform_device.h
+@@ -261,6 +261,28 @@ static inline void platform_set_drvdata(struct 
+platform_device *pdev,
+  #define builtin_platform_driver(__platform_driver) \
+  	builtin_driver(__platform_driver, platform_driver_register)
+
++#define module_platform_driver_cpu_hotplug(__platform_driver, 
+cpuhp_state, online, offline) \
++static int __init __module_platform_driver_cpu_hotplug##_init(void)		\
++{										\
++	int ret;								\
++	ret = cpuhp_setup_state_multi(CPUHP_##cpuhp_state,			\
++				      "##cpuhp_state",				\
++				      online,					\
++				      offline);					\
++	if (ret) {								\
++		pr_err("setup hotplug, ret = %d\n", ret);		\
++		return ret;							\
++	}									\
++										\
++	ret = platform_driver_register(&__platform_driver);			\
++	if (ret)								\
++		cpuhp_remove_multi_state(CPUHP_##cpuhp_state);			\
++										\
++	return ret;								\
++}										\
++module_init(__module_platform_driver_cpu_hotplug##_init);
++
++
+  /* module_platform_driver_probe() - Helper macro for drivers that don't do
+   * anything special in module init/exit.  This eliminates a lot of
+   * boilerplate.  Each module may only use this macro once, and
+-- 
+2.26.2
 
 
-> +	if (status & PB_STATUS_VOUT_OV)
-> +		*flags |= REGULATOR_ERROR_REGULATION_OUT;
+but only a half serious suggestion :)
 
-Same for voltage. On the other side, temperature limit violations are not
-reported at all unless the temperature status register exists.
-That seems to be a bit inconsistent to me.
-
-> +
-> +	return 0;
-> +}
-> +
->   const struct regulator_ops pmbus_regulator_ops = {
->   	.enable = pmbus_regulator_enable,
->   	.disable = pmbus_regulator_disable,
->   	.is_enabled = pmbus_regulator_is_enabled,
-> +	.get_error_flags = pmbus_regulator_get_error_flags,
->   };
->   EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
->   
-
+Thanks,
+John

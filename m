@@ -2,109 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734CF4BA0F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A83F4BA106
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239643AbiBQNW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:22:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46722 "EHLO
+        id S240896AbiBQNYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:24:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiBQNWY (ORCPT
+        with ESMTP id S240597AbiBQNYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:22:24 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E9611C24
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:22:10 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id g39so9910177lfv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:22:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9EY4j+oM8cn7vYGKtEF2tzpVEZCHYXK2JURuNjwopTw=;
-        b=kduzqmfEqxbHDUgUXrQclE3JtdsvXWr75nwItngZZiLOGjCqOKwB2nRX1DL5iG6r7B
-         /vGvr/TNVkOLxlBxhGRGCl3glo5yvXcxU6c7dd/s+CQoVhC14Tih0jGSWU7bKCV759N9
-         0QhAU4c57O7IqgStPym1LrlxNUBcMBHwnCrLGVfowoxhj3LHmQ07Z6lHOcOFTwJ5ISL/
-         QK37rfZo7xGmCvkAySuKzKu/KNjYL/UkuB//MdfnmWspBpYG2Fj9t/0Ww4Ttul5XwlqF
-         CCSyBF/G3XjKV7/wQW/P3dAODzMdMCuMm6eTXefuxHtbkh2iP8gHRMv2RAWNFu9+TN1/
-         8HLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9EY4j+oM8cn7vYGKtEF2tzpVEZCHYXK2JURuNjwopTw=;
-        b=ltcHYsKzPm9ZPHK039nUkrBBmpR5ilfg0XMJ/tto/G49UQ5A3uJir6gwKhw805d22L
-         NRWkURpf/itLEEDDzoORT8SgzYb0DYa07fvJrDsgJLauvkRY1H/d3zoS7y2QQ/L9CAUO
-         rvJ2uuhns8tL0yxMMnQKmxgdgKIg5bCvosmojnvxXPlnlSWGqgDMHDwuTeM8tDD8B0MJ
-         GdMPFiKLOzw63LK5cXBYJurLyJ88jEfYrrDFMTT/4X+bn9VwaVlMW/UwPQFurIsENGh9
-         OG9CCSp274IONpsAQHy+GBa+269FxDiheQ6vYC/gVPsCkORkdZ2vINpxCmfo4kEI7wyS
-         LkLg==
-X-Gm-Message-State: AOAM531SGUQN3Ttvq01q4CnfS6OSSEvn3CszfTF9vRtzuRsezRnv8Iz2
-        u+9EXtX8a/cq/HZGkArJXVi2RSszOORiiKou5wOh+g==
-X-Google-Smtp-Source: ABdhPJzafXtiHCJClXvfvyVdYWtrkRnjKKOAEEPES+t05l2rICWKILqPgTORWYqMCiCakdRFT7+ODuiTJ6cX/7YSM/k=
-X-Received: by 2002:a05:6512:3604:b0:443:5d4b:3760 with SMTP id
- f4-20020a056512360400b004435d4b3760mr2018666lfs.358.1645104128404; Thu, 17
- Feb 2022 05:22:08 -0800 (PST)
+        Thu, 17 Feb 2022 08:24:14 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7BDB10BE;
+        Thu, 17 Feb 2022 05:24:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645104240; x=1676640240;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=7ROqYA+WyEzn2lj20W8JxFtIkCz3sbVl7IBm5h9FArM=;
+  b=mCHOM8EOULjGU6gJsE7XAkjPWxh1VNf63ZXksMOwwdEdVT35KgHC/esN
+   fV4TwLVVYhWqDyztrAH0l8w6Nyl63Km6A3Y+Lx+LLIv2VpbMCWdmhi3jA
+   +LIXlLEqlN7SYidQ0SP6Bv78CiqUBH9arSqn3nQ57JFGLDcda628Eigq5
+   qU57Im/ulAnLZ8d2r/+k6bYv4BXqtw0Y2PHIL3hp1tnwR3+i1zmtjJviN
+   RpwLbsRww6snDbhGqStFySo+dUt4GnLP4iBqaLJTyEIixM/NQHgriW+sC
+   v9n0EVgyYkk73qC0bvy9yKkbTlo6FrQeZIYk2m/w8wm5iksJ4Zgs7iwqS
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="337315731"
+X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
+   d="scan'208";a="337315731"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:23:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
+   d="scan'208";a="681959596"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Feb 2022 05:23:47 -0800
+Date:   Thu, 17 Feb 2022 21:23:25 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v4 04/12] mm/shmem: Support memfile_notifier
+Message-ID: <20220217132325.GD32679@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <20220118132121.31388-5-chao.p.peng@linux.intel.com>
+ <314affa4-fbcb-2cb9-deb7-f61a2ac99260@kernel.org>
 MIME-Version: 1.0
-References: <20220130210210.549877-1-daniel.lezcano@linaro.org> <20220130210210.549877-7-daniel.lezcano@linaro.org>
-In-Reply-To: <20220130210210.549877-7-daniel.lezcano@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Feb 2022 14:21:31 +0100
-Message-ID: <CAPDyKFqY+UhY-dXN9E4cL9Me50BgUcMvCKz1_naZ7AbA_ak4kg@mail.gmail.com>
-Subject: Re: [PATCH v1 7/7] dtpm/soc/rk3399: Add the ability to unload the module
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <314affa4-fbcb-2cb9-deb7-f61a2ac99260@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 30 Jan 2022 at 22:02, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> The dtpm hierarchy can now be removed with the
-> dtpm_destroy_hierarchy() function. Add the module_exit() callback so
-> the module can be unloaded by removing the previously created
-> hierarchy.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Fri, Feb 11, 2022 at 03:40:09PM -0800, Andy Lutomirski wrote:
+> On 1/18/22 05:21, Chao Peng wrote:
+> > It maintains a memfile_notifier list in shmem_inode_info structure and
+> > implements memfile_pfn_ops callbacks defined by memfile_notifier. It
+> > then exposes them to memfile_notifier via
+> > shmem_get_memfile_notifier_info.
+> > 
+> > We use SGP_NOALLOC in shmem_get_lock_pfn since the pages should be
+> > allocated by userspace for private memory. If there is no pages
+> > allocated at the offset then error should be returned so KVM knows that
+> > the memory is not private memory.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> 
+> >   static int memfile_get_notifier_info(struct inode *inode,
+> >   				     struct memfile_notifier_list **list,
+> >   				     struct memfile_pfn_ops **ops)
+> >   {
+> > -	return -EOPNOTSUPP;
+> > +	int ret = -EOPNOTSUPP;
+> > +#ifdef CONFIG_SHMEM
+> > +	ret = shmem_get_memfile_notifier_info(inode, list, ops);
+> > +#endif
+> > +	return ret;
+> >   }
+> 
+> > +int shmem_get_memfile_notifier_info(struct inode *inode,
+> > +				    struct memfile_notifier_list **list,
+> > +				    struct memfile_pfn_ops **ops)
+> > +{
+> > +	struct shmem_inode_info *info;
+> > +
+> > +	if (!shmem_mapping(inode->i_mapping))
+> > +		return -EINVAL;
+> > +
+> > +	info = SHMEM_I(inode);
+> > +	*list = &info->memfile_notifiers;
+> > +	if (ops)
+> > +		*ops = &shmem_pfn_ops;
+> > +
+> > +	return 0;
+> 
+> I can't wrap my head around exactly who is supposed to call these functions
+> and when, but there appears to be a missing check that the inode is actually
+> a shmem inode.
+> 
+> What is this code trying to do?  It's very abstract.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+This is to be called by memfile_(un)register_notifier in patch-03 to
+allow shmem to be connected to memfile_notifer. But as Mike pointed out,
+probably introducing a memfile_notifier_register_backing_store() sounds
+better so backing store (e.g. shmem) can register itself to
+memfile_notifier.
 
-Kind regards
-Uffe
-
-> ---
->  drivers/soc/rockchip/dtpm.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/soc/rockchip/dtpm.c b/drivers/soc/rockchip/dtpm.c
-> index ebebb748488b..5a23784b5221 100644
-> --- a/drivers/soc/rockchip/dtpm.c
-> +++ b/drivers/soc/rockchip/dtpm.c
-> @@ -52,6 +52,12 @@ static int __init rockchip_dtpm_init(void)
->  }
->  module_init(rockchip_dtpm_init);
->
-> +static void __exit rockchip_dtpm_exit(void)
-> +{
-> +       return dtpm_destroy_hierarchy();
-> +}
-> +module_exit(rockchip_dtpm_exit);
-> +
->  MODULE_SOFTDEP("pre: panfrost cpufreq-dt");
->  MODULE_DESCRIPTION("Rockchip DTPM driver");
->  MODULE_LICENSE("GPL");
-> --
-> 2.25.1
->
+Chao

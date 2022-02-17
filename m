@@ -2,128 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489244BA0D7
+	by mail.lfdr.de (Postfix) with ESMTP id DFE604BA0D9
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240809AbiBQNSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:18:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39348 "EHLO
+        id S240803AbiBQNR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:17:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiBQNSG (ORCPT
+        with ESMTP id S231520AbiBQNR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:18:06 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95A52AE2B4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:17:51 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id c15so8226105ljf.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:17:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YAdbmEH0mn4WGWopSU8BAttfUYajicOMG3/as3ZGlQU=;
-        b=KfGxNkjcBo+fiSnn7LEh10U18s9kJA31PoOfLXylizg3JiSY+lFKHfvbrm81+a2VPw
-         dnEsOoQ375qiNdKocKXSGBRsVfKHx2Z/3kQB4d7U6hateE6QJ+iarDW/qn4sYOEYbax8
-         Sdy3oaT32eXalaMSy/TjEgKKLyE6yrcBv9iO9cQrvesAomi7kdD6Pj9EmaP3WP4inqr9
-         yZrUkK2BpGM1CwiFC8cGX57Fhu5kKVmf4bLk9eZy8QDg2tMXPTvNbyxs0CwCvH2pb6qu
-         UQBi29wLjVkxYUAhzmlH/QOcSk9GPb4J5on8Qo4JjD/LBLYhUIydVXk8cUe80Aurn4Ka
-         vdiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YAdbmEH0mn4WGWopSU8BAttfUYajicOMG3/as3ZGlQU=;
-        b=6oHY7VkH2D5T34tJz/ROMdYSj0k+E9bsKCnEMyONHkvNUhrJtu4Zr7x2xDiVEcaGOp
-         2xfGIbrHjIq1lrTf/RZ4P1W/nGkJmJ/eiRlvbQH/yXwvSwYGoSn3kRAtPU+ff5q0l1g3
-         CwajAretBB6xUs6HjFmkFkl+DTq2tX+BGLdIExnf45/cI1yRSOuMHoBJRi+IFUfq672W
-         s7YFJcofN5ra8LrctQPtMuDhjUqtxAsW1Ysvf1EZTdSpS+ngXuzr6j6JECz6100IPdPH
-         h7ZBLwU27r2bysFpqJqI3JTwLfdbcndsAwgO6fwg6PQe/VxkUpOeVxSOLty4LBlYVtso
-         s1VA==
-X-Gm-Message-State: AOAM533CejnpftOL0UOMIIWG1+61TBG9x1+1cOfWow5ciuLvKr1dNJxD
-        /GJ7jI/hOhy1UrejCGgiBVeF3vNMICK44CmQzsLfKXGeP8fR7Q==
-X-Google-Smtp-Source: ABdhPJyzr8lHFKbkYO2QBge2HdgGajKl7q78dW6j8wdAuUHiEE+yg4TJlxSQPhjLaWnpybmN9ZYAOd6hA3bYEzWK1dE=
-X-Received: by 2002:a05:651c:1594:b0:239:9df5:f447 with SMTP id
- h20-20020a05651c159400b002399df5f447mr2107899ljq.463.1645103870304; Thu, 17
- Feb 2022 05:17:50 -0800 (PST)
+        Thu, 17 Feb 2022 08:17:57 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4827E62C7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:17:43 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21H6Pe7P024602;
+        Thu, 17 Feb 2022 07:17:35 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=PODMain02222019;
+ bh=2/2QWMVQZuOrEboq7TUrZ8hnD0NRdcbNcRPzzJbzT9E=;
+ b=c4GZHKc8TDgn0mkT7E5V7rRePL7qpURwfH/sqxkyZxkbnl0aK3izfSCGCzQb671EhxQ6
+ 5AzwNT6yzZUVFVErtxNBG0f2B6ur2rda0n6IYCpIDVZdxa/TRLGTQ8UQ/P805bCRu1BS
+ W1fMYF7a2v0ANyl8np2XWNBFFYRCVi8hDiOJLrMq5LArQH5yuMqMuYT39lKBuC/DFeOD
+ VoNZf4am1+8hKBys5W3JL+YyjnoPvbsGZU3dlB0CjxCYyjfP5HSFYs8HS6M3FbHGSuy7
+ Fa3JMAsIQxeK+bx8+ZV9ooG3GJ79AAkJSNRuJ2ZQWvVEbor2U/aHEkZ9qZJBYci4ln+7 kA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3e8nraj7tq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 17 Feb 2022 07:17:35 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 17 Feb
+ 2022 13:17:33 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 17 Feb 2022 13:17:33 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5961D11DC;
+        Thu, 17 Feb 2022 13:17:33 +0000 (UTC)
+Date:   Thu, 17 Feb 2022 13:17:33 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Prasad Kumpatla <quic_pkumpatl@quicinc.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH v3] regmap-irq: Update interrupt clear register for
+ proper reset
+Message-ID: <20220217131733.GH38351@ediswmail.ad.cirrus.com>
+References: <20220217085007.30218-1-quic_pkumpatl@quicinc.com>
 MIME-Version: 1.0
-References: <20220130210210.549877-1-daniel.lezcano@linaro.org>
- <20220130210210.549877-3-daniel.lezcano@linaro.org> <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
- <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org>
-In-Reply-To: <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Feb 2022 14:17:13 +0100
-Message-ID: <CAPDyKFr8Ycr2cbiD5MM9FSPc1qea+Yp9=cottcGAo7HmFR9Eaw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/7] powercap/dtpm: Fixup kfree for virtual node
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220217085007.30218-1-quic_pkumpatl@quicinc.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: WGJGyZmZCTyhZc9SHxtslOVB1tpT9C0j
+X-Proofpoint-GUID: WGJGyZmZCTyhZc9SHxtslOVB1tpT9C0j
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 at 19:10, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 16/02/2022 17:22, Ulf Hansson wrote:
-> > On Sun, 30 Jan 2022 at 22:02, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> When the node is virtual there is no release function associated which
-> >> can free the memory.
-> >>
-> >> Free the memory when no 'ops' exists.
-> >>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> ---
-> >>   drivers/powercap/dtpm.c | 4 ++--
-> >>   1 file changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> >> index 0b0121c37a1b..7bddd25a6767 100644
-> >> --- a/drivers/powercap/dtpm.c
-> >> +++ b/drivers/powercap/dtpm.c
-> >> @@ -181,12 +181,12 @@ int dtpm_release_zone(struct powercap_zone *pcz)
-> >>
-> >>          if (dtpm->ops)
-> >>                  dtpm->ops->release(dtpm);
-> >> +       else
-> >> +               kfree(dtpm);
-> >>
-> >
-> > This doesn't look correct. Below you check dtpm against "root", which
-> > may be after its memory has been freed.
-> >
-> > If the ->release() function should be responsible for freeing the
-> > dtpm, it needs to be called after the check below.
->
-> It is harmless, 'root' is not dereferenced but used as an ID
->
-> Moreover, in the patch 5/7 it is moved out this function.
+On Thu, Feb 17, 2022 at 02:20:07PM +0530, Prasad Kumpatla wrote:
 
-Right. It just looks a bit odd here.
++ Marek Szyprowski, as the old version of the patch was causing
+problems on his system.
 
->
->
-> >>          if (root == dtpm)
-> >>                  root = NULL;
-> >>
-> >> -       kfree(dtpm);
+> With the existing logic where clear_ack is true (HW doesn’t support
+> auto clear for ICR), interrupt clear register reset is not handled
+> properly. Due to this only the first interrupts get processed properly
+> and further interrupts are blocked due to not resetting interrupt
+> clear register.
+> 
+> Example for issue case where Invert_ack is false and clear_ack is true:
+> 
+>     Say Default ISR=0x00 & ICR=0x00 and ISR is triggered with 2
+>     interrupts making ISR = 0x11.
+> 
+>     Step 1: Say ISR is set 0x11 (store status_buff = ISR). ISR needs to
+>             be cleared with the help of ICR once the Interrupt is processed.
+> 
+>     Step 2: Write ICR = 0x11 (status_buff), this will clear the ISR to 0x00.
+> 
+>     Step 3: Issue - In the existing code, ICR is written with ICR =
+>             ~(status_buff) i.e ICR = 0xEE -> This will block all the interrupts
+>             from raising except for interrupts 0 and 4. So expectation here is to
+>             reset ICR, which will unblock all the interrupts.
+> 
+>             if (chip->clear_ack) {
+>                  if (chip->ack_invert && !ret)
+>                   ........
+>                  else if (!ret)
+>                      ret = regmap_write(map, reg,
+>                             ~data->status_buf[i]);
+> 
+> So writing 0 and 0xff (when ack_invert is true) should have no effect, other
+> than clearing the ACKs just set.
+> 
+> Fixes: 3a6f0fb7b8eb ("regmap: irq: Add support to clear ack registers")
+> Signed-off-by: Prasad Kumpatla <quic_pkumpatl@quicinc.com>
+> ---
 
-So then why doesn't this kfree do the job already?
+I think this version looks like it should work to me.
 
-kfree(NULL) works fine, if dtpm->ops->release(dtpm) already freed the data.
+Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-> >> -
-> >>          return 0;
-> >>   }
-> >>
+Thanks,
+Charles
 
-Kind regards
-Uffe
+>  drivers/base/regmap/regmap-irq.c | 20 ++++++--------------
+>  1 file changed, 6 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+> index d2656581a608..4a446259a184 100644
+> --- a/drivers/base/regmap/regmap-irq.c
+> +++ b/drivers/base/regmap/regmap-irq.c
+> @@ -189,11 +189,9 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
+>  				ret = regmap_write(map, reg, d->mask_buf[i]);
+>  			if (d->chip->clear_ack) {
+>  				if (d->chip->ack_invert && !ret)
+> -					ret = regmap_write(map, reg,
+> -							   d->mask_buf[i]);
+> +					ret = regmap_write(map, reg, UINT_MAX);
+>  				else if (!ret)
+> -					ret = regmap_write(map, reg,
+> -							   ~d->mask_buf[i]);
+> +					ret = regmap_write(map, reg, 0);
+>  			}
+>  			if (ret != 0)
+>  				dev_err(d->map->dev, "Failed to ack 0x%x: %d\n",
+> @@ -556,11 +554,9 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
+>  						data->status_buf[i]);
+>  			if (chip->clear_ack) {
+>  				if (chip->ack_invert && !ret)
+> -					ret = regmap_write(map, reg,
+> -							data->status_buf[i]);
+> +					ret = regmap_write(map, reg, UINT_MAX);
+>  				else if (!ret)
+> -					ret = regmap_write(map, reg,
+> -							~data->status_buf[i]);
+> +					ret = regmap_write(map, reg, 0);
+>  			}
+>  			if (ret != 0)
+>  				dev_err(map->dev, "Failed to ack 0x%x: %d\n",
+> @@ -817,13 +813,9 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+>  					d->status_buf[i] & d->mask_buf[i]);
+>  			if (chip->clear_ack) {
+>  				if (chip->ack_invert && !ret)
+> -					ret = regmap_write(map, reg,
+> -						(d->status_buf[i] &
+> -						 d->mask_buf[i]));
+> +					ret = regmap_write(map, reg, UINT_MAX);
+>  				else if (!ret)
+> -					ret = regmap_write(map, reg,
+> -						~(d->status_buf[i] &
+> -						  d->mask_buf[i]));
+> +					ret = regmap_write(map, reg, 0);
+>  			}
+>  			if (ret != 0) {
+>  				dev_err(map->dev, "Failed to ack 0x%x: %d\n",
+> -- 
+> 2.17.1
+> 

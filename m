@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBD64BA75A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006004BA760
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243794AbiBQRmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:42:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47180 "EHLO
+        id S243804AbiBQRnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:43:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241845AbiBQRmB (ORCPT
+        with ESMTP id S231926AbiBQRns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:42:01 -0500
+        Thu, 17 Feb 2022 12:43:48 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3C321819;
-        Thu, 17 Feb 2022 09:41:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2891C5F1D;
+        Thu, 17 Feb 2022 09:43:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9051FB820C2;
-        Thu, 17 Feb 2022 17:41:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467FFC340E8;
-        Thu, 17 Feb 2022 17:41:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F4E5B8219B;
+        Thu, 17 Feb 2022 17:43:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5FE8C340E8;
+        Thu, 17 Feb 2022 17:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645119703;
-        bh=8pbZj/3cVuW2vQLaHmXTlBvSAEOnHZPHPU8EvjwJvmY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lICo15JaGIZ/+wRcv2OoGVinuJEdNg3fOgujgAyrExKrBVNZWnseGROU0F8zsi3XY
-         SwZR4kNdyhOIKqUv8y+gsMfXk8TBoQPckN91MTym3WTpQB1X7VLe8CL/u5O+Pf9x9a
-         UxRJvr1+jg2PvqdiG+nBI0C+x2ZyLUiI3nyUguqk62WvzsT2+H3tL3JabPWuJXf4cU
-         AKOkKRnJBf9FTiqOTbx2N6qVW5b2iVuCWLutJcz2kv473EmYc2TlKYMhu4n1/gj0d9
-         1TjxBU5O4nVFT1ikddcrYzGZ55h/hVIr4rQws6yNoehya20EIeOGWhPPzUpR1bL+Nv
-         XQ6Bz+csenJuw==
-Date:   Thu, 17 Feb 2022 10:41:37 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
-        llvm@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] um: Allow builds with Clang
-Message-ID: <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
-References: <20220217002843.2312603-1-keescook@chromium.org>
- <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
+        s=k20201202; t=1645119810;
+        bh=rEAfQkusxAoavZdqEpbc4cQorttL34GHv8wpMcmjGNI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=SY4W5WuvL7btv2EwJe39KvDYL5ytvUY/HlOy5A3XcBUtWH47dr5Z6aljf2OyZxUP0
+         YU8OGWpHKkC/iCKsM9uibts3ZnA4BasP+o/14XhCzxVmHX2P3YQh8gHEUIUosl0HYp
+         UN83lrRE13ELQi5XGrqt+RumLIgbQOuvoni1NfanzC0zCCxtVypojsprZL5uD/V8vM
+         38ZFMuVeSyQdXAV8hnqBb9SQ9RI3mWX6SgsAq8uF2YmLu0Tkof3eL2ngUz12tuLTTm
+         iLFfJLIT3S4kpyjHSYEeJfS/ysxhf8/4cUkUCl05cNgGZmLN2UF6xJwLImgEQghvDI
+         xEPPQkLSrM55Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7A9FA5C03DB; Thu, 17 Feb 2022 09:43:30 -0800 (PST)
+Date:   Thu, 17 Feb 2022 09:43:30 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+Cc:     josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] rcu-tasks: Fix race in schedule and flush work
+Message-ID: <20220217174330.GR4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220217152520.18972-1-treasure4paddy@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
+In-Reply-To: <20220217152520.18972-1-treasure4paddy@gmail.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,112 +61,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 01:54:58PM +0900, Masahiro Yamada wrote:
-> On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Add x86-64 target for Clang+um and update user-offsets.c to use
-> > Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
-> > ("kbuild: fix asm-offset generation to work with clang").
-> >
-> > This lets me run KUnit tests with Clang:
-> >
-> > $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
-> > ...
-> > $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
-> > ...
-> >
-> > Cc: Jeff Dike <jdike@addtoit.com>
-> > Cc: Richard Weinberger <richard@nod.at>
-> > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: David Gow <davidgow@google.com>
-> > Cc: linux-um@lists.infradead.org
-> > Cc: linux-kbuild@vger.kernel.org
-> > Cc: linux-kselftest@vger.kernel.org
-> > Cc: kunit-dev@googlegroups.com
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  arch/x86/um/user-offsets.c | 4 ++--
-> >  scripts/Makefile.clang     | 1 +
-> >  2 files changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
-> > index bae61554abcc..d9071827b515 100644
-> > --- a/arch/x86/um/user-offsets.c
-> > +++ b/arch/x86/um/user-offsets.c
-> > @@ -10,10 +10,10 @@
-> >  #include <asm/types.h>
-> >
-> >  #define DEFINE(sym, val) \
-> > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
-> > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
-> >
-> >  #define DEFINE_LONGS(sym, val) \
-> > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
-> > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
-> >
-> >  void foo(void)
-> >  {
-> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> > index 51fc23e2e9e5..857b23de51c6 100644
-> > --- a/scripts/Makefile.clang
-> > +++ b/scripts/Makefile.clang
-> > @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
-> >  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
-> >  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
-> >  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
-> > +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+On Thu, Feb 17, 2022 at 04:25:19PM +0100, Padmanabha Srinivasaiah wrote:
+> While booting secondary CPUs, cpus_read_[lock/unlock] not keeping online
+> cpumask stable. The transient online mask results in below calltrace.
 > 
+> [    0.324121] CPU1: Booted secondary processor 0x0000000001 [0x410fd083]
+> [    0.346652] Detected PIPT I-cache on CPU2
+> [    0.347212] CPU2: Booted secondary processor 0x0000000002 [0x410fd083]
+> [    0.377255] Detected PIPT I-cache on CPU3
+> [    0.377823] CPU3: Booted secondary processor 0x0000000003 [0x410fd083]
+> [    0.379040] ------------[ cut here ]------------
+> [    0.383662] WARNING: CPU: 0 PID: 10 at kernel/workqueue.c:3084 __flush_work+0x12c/0x138
+> [    0.384850] Modules linked in:
+> [    0.385403] CPU: 0 PID: 10 Comm: rcu_tasks_rude_ Not tainted 5.17.0-rc3-v8+ #13
+> [    0.386473] Hardware name: Raspberry Pi 4 Model B Rev 1.4 (DT)
+> [    0.387289] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    0.388308] pc : __flush_work+0x12c/0x138
+> [    0.388970] lr : __flush_work+0x80/0x138
+> [    0.389620] sp : ffffffc00aaf3c60
+> [    0.390139] x29: ffffffc00aaf3d20 x28: ffffffc009c16af0 x27: ffffff80f761df48
+> [    0.391316] x26: 0000000000000004 x25: 0000000000000003 x24: 0000000000000100
+> [    0.392493] x23: ffffffffffffffff x22: ffffffc009c16b10 x21: ffffffc009c16b28
+> [    0.393668] x20: ffffffc009e53861 x19: ffffff80f77fbf40 x18: 00000000d744fcc9
+> [    0.394842] x17: 000000000000000b x16: 00000000000001c2 x15: ffffffc009e57550
+> [    0.396016] x14: 0000000000000000 x13: ffffffffffffffff x12: 0000000100000000
+> [    0.397190] x11: 0000000000000462 x10: ffffff8040258008 x9 : 0000000100000000
+> [    0.398364] x8 : 0000000000000000 x7 : ffffffc0093c8bf4 x6 : 0000000000000000
+> [    0.399538] x5 : 0000000000000000 x4 : ffffffc00a976e40 x3 : ffffffc00810444c
+> [    0.400711] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
+> [    0.401886] Call trace:
+> [    0.402309]  __flush_work+0x12c/0x138
+> [    0.402941]  schedule_on_each_cpu+0x228/0x278
+> [    0.403693]  rcu_tasks_rude_wait_gp+0x130/0x144
+> [    0.404502]  rcu_tasks_kthread+0x220/0x254
+> [    0.405264]  kthread+0x174/0x1ac
+> [    0.405837]  ret_from_fork+0x10/0x20
+> [    0.406456] irq event stamp: 102
+> [    0.406966] hardirqs last  enabled at (101): [<ffffffc0093c8468>] _raw_spin_unlock_irq+0x78/0xb4
+> [    0.408304] hardirqs last disabled at (102): [<ffffffc0093b8270>] el1_dbg+0x24/0x5c
+> [    0.409410] softirqs last  enabled at (54): [<ffffffc0081b80c8>] local_bh_enable+0xc/0x2c
+> [    0.410645] softirqs last disabled at (50): [<ffffffc0081b809c>] local_bh_disable+0xc/0x2c
+> [    0.411890] ---[ end trace 0000000000000000 ]---
+> [    0.413000] smp: Brought up 1 node, 4 CPUs
+> [    0.413762] SMP: Total of 4 processors activated.
+> [    0.414566] CPU features: detected: 32-bit EL0 Support
+> [    0.415414] CPU features: detected: 32-bit EL1 Support
+> [    0.416278] CPU features: detected: CRC32 instructions
+> [    0.447021] Callback from call_rcu_tasks_rude() invoked.
+> [    0.506693] Callback from call_rcu_tasks() invoked.
 > 
-> Does this work for the i386 host?
-> 
-> UML supports i386 and x86_64 as the host architecture as of now,
-> but this always compiles UML for x86_64?
+> Link: https://lore.kernel.org/lkml/20220210184319.25009-1-treasure4paddy@gmail.com/T/
+> Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> Signed-off-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
 
-I think the current code will work because arch/x86/Makefile.um includes
--m32 for CONFIG_X86_32, which will implicitly change x86_64-linux-gnu
-into a 32-bit target triple:
+Thank you, Padmanabha!  I have queued this with additional explanation
+in the commit log as shown below.
 
-$ echo | clang --target=x86_64-linux-gnu -x c -c -o test.o -
+If you have not already tested this by repeatedly rebooting, for
+example continuously in an overnight test, could you please do so?
+(I am assuming that your system can do an automated reboot loop, so no,
+I am not asking you to stay up all night!)
 
-$ file test.o
-test.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+Should this somehow recur with larger systems, in which the call starts
+with (say) five CPUs online but has trouble with the sixth CPU, there
+are several ways to address it:
 
-$ echo | clang --target=x86_64-linux-gnu -m32 -x c -c -o test.o -
+1.	Make cpus_read_lock() act as expected.
 
-$ file test.o
-test.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), not stripped
+2.	Make the first for_each_online_cpu() in schedule_on_each_cpu()
+	instead be for_each_possible_cpu(), always do the INIT_WORK(),
+	but invoke schedule_work_on() only if cpu_online(cpu).
 
-In fact, we rely on this for ARCH=i386 LLVM=1 right now, as it uses
-x86_64-linux-gnu for the target flag.
+3.	Other ideas here, when and if.
 
-While UML only supports x86, maybe it is worth using SUBARCH instead of
-hardcoding the triple? No strong opinion around that though.
+							Thanx, Paul
 
-diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-index 51fc23e2e9e5..87285b76adb2 100644
---- a/scripts/Makefile.clang
-+++ b/scripts/Makefile.clang
-@@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
- CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
- CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
- CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
-+CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
- CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
- 
- ifeq ($(CROSS_COMPILE),)
+------------------------------------------------------------------------
 
-> >  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
-> >
-> >  ifeq ($(CROSS_COMPILE),)
-> > --
-> > 2.30.2
-> >
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
+commit f6823834aa2e2e581ca627238fa3ad3e0a727c08
+Author: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+Date:   Thu Feb 17 16:25:19 2022 +0100
+
+    rcu-tasks: Fix race in schedule and flush work
+    
+    While booting secondary CPUs, cpus_read_[lock/unlock] is not keeping
+    online cpumask stable. The transient online mask results in below
+    calltrace.
+    
+    [    0.324121] CPU1: Booted secondary processor 0x0000000001 [0x410fd083]
+    [    0.346652] Detected PIPT I-cache on CPU2
+    [    0.347212] CPU2: Booted secondary processor 0x0000000002 [0x410fd083]
+    [    0.377255] Detected PIPT I-cache on CPU3
+    [    0.377823] CPU3: Booted secondary processor 0x0000000003 [0x410fd083]
+    [    0.379040] ------------[ cut here ]------------
+    [    0.383662] WARNING: CPU: 0 PID: 10 at kernel/workqueue.c:3084 __flush_work+0x12c/0x138
+    [    0.384850] Modules linked in:
+    [    0.385403] CPU: 0 PID: 10 Comm: rcu_tasks_rude_ Not tainted 5.17.0-rc3-v8+ #13
+    [    0.386473] Hardware name: Raspberry Pi 4 Model B Rev 1.4 (DT)
+    [    0.387289] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+    [    0.388308] pc : __flush_work+0x12c/0x138
+    [    0.388970] lr : __flush_work+0x80/0x138
+    [    0.389620] sp : ffffffc00aaf3c60
+    [    0.390139] x29: ffffffc00aaf3d20 x28: ffffffc009c16af0 x27: ffffff80f761df48
+    [    0.391316] x26: 0000000000000004 x25: 0000000000000003 x24: 0000000000000100
+    [    0.392493] x23: ffffffffffffffff x22: ffffffc009c16b10 x21: ffffffc009c16b28
+    [    0.393668] x20: ffffffc009e53861 x19: ffffff80f77fbf40 x18: 00000000d744fcc9
+    [    0.394842] x17: 000000000000000b x16: 00000000000001c2 x15: ffffffc009e57550
+    [    0.396016] x14: 0000000000000000 x13: ffffffffffffffff x12: 0000000100000000
+    [    0.397190] x11: 0000000000000462 x10: ffffff8040258008 x9 : 0000000100000000
+    [    0.398364] x8 : 0000000000000000 x7 : ffffffc0093c8bf4 x6 : 0000000000000000
+    [    0.399538] x5 : 0000000000000000 x4 : ffffffc00a976e40 x3 : ffffffc00810444c
+    [    0.400711] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
+    [    0.401886] Call trace:
+    [    0.402309]  __flush_work+0x12c/0x138
+    [    0.402941]  schedule_on_each_cpu+0x228/0x278
+    [    0.403693]  rcu_tasks_rude_wait_gp+0x130/0x144
+    [    0.404502]  rcu_tasks_kthread+0x220/0x254
+    [    0.405264]  kthread+0x174/0x1ac
+    [    0.405837]  ret_from_fork+0x10/0x20
+    [    0.406456] irq event stamp: 102
+    [    0.406966] hardirqs last  enabled at (101): [<ffffffc0093c8468>] _raw_spin_unlock_irq+0x78/0xb4
+    [    0.408304] hardirqs last disabled at (102): [<ffffffc0093b8270>] el1_dbg+0x24/0x5c
+    [    0.409410] softirqs last  enabled at (54): [<ffffffc0081b80c8>] local_bh_enable+0xc/0x2c
+    [    0.410645] softirqs last disabled at (50): [<ffffffc0081b809c>] local_bh_disable+0xc/0x2c
+    [    0.411890] ---[ end trace 0000000000000000 ]---
+    [    0.413000] smp: Brought up 1 node, 4 CPUs
+    [    0.413762] SMP: Total of 4 processors activated.
+    [    0.414566] CPU features: detected: 32-bit EL0 Support
+    [    0.415414] CPU features: detected: 32-bit EL1 Support
+    [    0.416278] CPU features: detected: CRC32 instructions
+    [    0.447021] Callback from call_rcu_tasks_rude() invoked.
+    [    0.506693] Callback from call_rcu_tasks() invoked.
+    
+    This commit therefore fixes this issue by applying a single-CPU
+    optimization to the RCU Tasks Rude grace-period process.  The key point
+    here is that the purpose of this RCU flavor is to force a schedule on
+    each online CPU since some past event.  But the rcu_tasks_rude_wait_gp()
+    function runs in the context of the RCU Tasks Rude's grace-period kthread,
+    so there must already have been a context switch on the current CPU since
+    the call to either synchronize_rcu_tasks_rude() or call_rcu_tasks_rude().
+    So if there is only a single CPU online, RCU Tasks Rude's grace-period
+    kthread does not need to anything at all.
+    
+    It turns out that the rcu_tasks_rude_wait_gp() function's call to
+    schedule_on_each_cpu() causes problems during early boot.  During that
+    time, there is only one online CPU, namely the boot CPU.  Therefore,
+    applying this single-CPU optimization fixes early-boot instances of
+    this problem.
+    
+    Link: https://lore.kernel.org/lkml/20220210184319.25009-1-treasure4paddy@gmail.com/T/
+    Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+    Signed-off-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index d73e32d803438..f7fdb349f8b8e 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -955,6 +955,9 @@ static void rcu_tasks_be_rude(struct work_struct *work)
+ // Wait for one rude RCU-tasks grace period.
+ static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
+ {
++	if (num_online_cpus() <= 1)
++		return;	// Fastpath for only one CPU.
++
+ 	rtp->n_ipis += cpumask_weight(cpu_online_mask);
+ 	schedule_on_each_cpu(rcu_tasks_be_rude);
+ }

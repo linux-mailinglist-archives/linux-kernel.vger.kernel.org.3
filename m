@@ -2,149 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6A04BA835
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF314BA82D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244435AbiBQS2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:28:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43850 "EHLO
+        id S232414AbiBQS1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:27:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244466AbiBQS1o (ORCPT
+        with ESMTP id S244375AbiBQS1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:27:44 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791DC1FA60
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:27:16 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id 10so5255294plj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:27:16 -0800 (PST)
+        Thu, 17 Feb 2022 13:27:00 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B890FD0B;
+        Thu, 17 Feb 2022 10:26:45 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id o5so9976879qvm.3;
+        Thu, 17 Feb 2022 10:26:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O7XAdhfqnK4iH4EoLafYbReQ6dbwtazRaihHUR1ZOE0=;
-        b=aOQEOW87par6/hUQsWI+atBymO6HJq3KNqivVuk3LN53R/lXy0VZ1sMi9cb4Ezfu0k
-         YcuA89dLFp6bwGyZBL0DWx0DNjvezBlAXmwcfKGPnFpt4zv+aWbt6ruHafRLZERyKDdg
-         /ywSUhrnG7+TlBxdXQhUEjmKNDiJBIy4H4nAaiF2OPGqwZNNQkUMp1Yd1HVkzcfNQREr
-         dhU+0IEc9tV0eofRN/OrDTJrycEHvvTySUNYqRbsJiA6fK2xbcn4vFEzHk5G2535nsn1
-         ibXnD79AQeOqK0rNYxPUuGKn7BVsj01prmiRItpZYCW9GkCaeB5OrPA/sZrA6GFkBsMx
-         zHXA==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=MMOEkIqPd1GFJyB2Iu2RQtVB2AJeO/QpJFoJ7mGMrXA=;
+        b=lylzI3Jz7qhGeRMG6kHWouq6A9rI6JMcfy8RRpNKlJ6iqMiTrHWImTIw7Tl2OkJNAL
+         FnXv4khs6J7dlM2ENloaTxYg+qZoK7RgJZnpz8kdYRfxyzYMa+7bobgEhNHAaxwvK0FS
+         rA1sTiMy03cII0lGyHRvtqtmfVzvKWOMIWC9sOP+SeZ7rY0DKTUKlGzaSaxDCrcMkSU1
+         jGmZtm3QErNogH3Dbg9hf1F+3J46J+1rOMX/b4QpRlULs6xpMyAUyPh29BJz+4Km9gxy
+         NDRgaRLyOHbOWBNLhJbwgZUtQoYg1jORZK4E6io+w5NClKliVIzdv9oxA/DT38HilmpL
+         HD1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O7XAdhfqnK4iH4EoLafYbReQ6dbwtazRaihHUR1ZOE0=;
-        b=z8tR6MCkAcp5M4NeKNZK3PVRGTYsLWbTfHsXTM6qCIQAua73S0Sxzd3nqfXjjHT0Gw
-         h7nNp6mZsxG+pPOs9Cx5Eiew6d3tiKvDm+YbK3eMWw0rmLeaDfeT1YwTjhhg34Mx+vLc
-         1Q9lgwmt3SyfrBe61Oegpsh5v8DUfeWTXENf1i8W0C5MENP/LScCyS5l9IdOrNbA8bix
-         elbHZJvNQBpRpUq8b4pg7D4cciTlf3Vgk8h7sNPTPt87I1HNRyXPMsrQuDLTPwIE/WNv
-         5YWSTr1YQvlcQfI+3WnhPjSjfjhVe6260lnLdpzoh0iVvzbk1Vz9wQNkaosN4QYv+Iqu
-         3bjw==
-X-Gm-Message-State: AOAM5309/4iX8bTjh56LBhmGEu2+anL72BCNBJhV5Zo1nAMyJ1A7MBoI
-        exICTJ2t7LPef+saefKWfr84Oru6VISIlH88YjLHJLlgIv0=
-X-Google-Smtp-Source: ABdhPJzzl6/RD71m50k6jNfthMXlVrq4MNqDsnsfYDglBmZQcAKm9mTqZVD6H3aTVEzCKDs8r6vPYnr60mSzdBH2T10=
-X-Received: by 2002:a17:902:ba96:b0:14c:8407:8e4b with SMTP id
- k22-20020a170902ba9600b0014c84078e4bmr3841382pls.135.1645122435705; Thu, 17
- Feb 2022 10:27:15 -0800 (PST)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=MMOEkIqPd1GFJyB2Iu2RQtVB2AJeO/QpJFoJ7mGMrXA=;
+        b=EaooKzVzcjRsxaSwyIKoUGlftC4ZlvTDh+XoAeuUmZTF4HlTz2SyfW+REVcX4HLkVu
+         WZmq8w3xD5FzPRWLig3U9XHLM6Zqz3lVM2Xaf4TyI0RGkHqBPW9niSH+RFLUEvAgToiY
+         PccvwhR80ICBgOKU3wIc/Oh8dLNJW7pw5/UpmuRU0Pn6Fnwa9n/IxGSnFX9G8X9YkImA
+         67mZhO/vxdf92ujHD+j6TUPiNSO0BaUUwNhi8kid6dBUt6GRHglH4B9cXW+R3irKC38N
+         3HciVqdfZguy6wX+9hihIMnP8G94v8Udrw8k6iNpa2c6Nj1HsnXjx12YkrWxoDiiyQ9C
+         polg==
+X-Gm-Message-State: AOAM532+Ia95CGl4LnDT3yoLhbPbIXKQBgJ3j2Wmy7D69d/kHpszPDpF
+        qNZ0jk4urYI+aP/xv04o9Kc=
+X-Google-Smtp-Source: ABdhPJyKX7TgIu3p4sKaHKL9k0lsYrXDoCyiEEFlrq6MGLGg7g6x1FBr/xl+JpiUjvRG3sUT9/C4WA==
+X-Received: by 2002:a05:6214:c82:b0:42c:c5f3:b162 with SMTP id r2-20020a0562140c8200b0042cc5f3b162mr3226713qvr.116.1645122404767;
+        Thu, 17 Feb 2022 10:26:44 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x13sm21686688qko.114.2022.02.17.10.26.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 10:26:44 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net>
+Date:   Thu, 17 Feb 2022 10:26:42 -0800
 MIME-Version: 1.0
-References: <20220216220541.1635665-1-rajatja@google.com> <Yg3oNkwS3XSzmJAu@kroah.com>
-In-Reply-To: <Yg3oNkwS3XSzmJAu@kroah.com>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Thu, 17 Feb 2022 10:26:39 -0800
-Message-ID: <CACK8Z6GvXw_V_R5YKyB-mLnLXG08v-HpcPbe5LxrS=Z7N+pffQ@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: ACPI: Support Microsoft's "DmaProperty"
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
+In-Reply-To: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2/16/22 23:23, Eugene Shalygin wrote:
+> Remove the call to dev_info() from the board detection function, which
+> is called from probe(), not only to be in line with hwmon driver rules, but
+> also because the message duplicates the error code returned from probe()
+> for that case (ENODEV).
+> 
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> ---
+>   drivers/hwmon/asus-ec-sensors.c | 17 +++++------------
+>   1 file changed, 5 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 0701ade16227..cbe1b987144a 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -597,18 +597,11 @@ static struct hwmon_chip_info asus_ec_chip_info = {
+>   	.ops = &asus_ec_hwmon_ops,
+>   };
+>   
+> -static unsigned long __init
+> -get_board_sensors(const struct device *dev)
+> +static unsigned long __init get_board_sensors(void)
+>   {
+> -	const struct dmi_system_id *dmi_entry;
+> -
+> -	dmi_entry = dmi_first_match(asus_ec_dmi_table);
+> -	if (!dmi_entry) {
+> -		dev_info(dev, "Unsupported board");
+> -		return 0;
+> -	}
+> -
+> -	return (unsigned long)dmi_entry->driver_data;
+> +	const struct dmi_system_id *dmi_entry =
+> +		dmi_first_match(asus_ec_dmi_table);
+> +	return dmi_entry ? (unsigned long)dmi_entry->driver_data : 0;
 
-On Wed, Feb 16, 2022 at 10:16 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Feb 16, 2022 at 02:05:41PM -0800, Rajat Jain wrote:
-> > The "DmaProperty" is supported and documented by Microsoft here:
-> > https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
-> > They use this property for DMA protection:
-> > https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
-> >
-> > Support the "DmaProperty" with the same semantics. Windows documents the
-> > property to apply to PCIe root ports only. Extend it to apply to any
-> > PCI device. This is useful for internal PCI devices that do not hang off
-> > a PCIe rootport, but offer an attack surface for DMA attacks (e.g.
-> > internal network devices).
-> >
-> > Signed-off-by: Rajat Jain <rajatja@google.com>
-> > ---
-> > v3: * Use Microsoft's documented property "DmaProperty"
-> >     * Resctrict to ACPI only
-> >
-> >  drivers/pci/pci-acpi.c | 18 ++++++++++++++++++
-> >  1 file changed, 18 insertions(+)
-> >
-> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > index a42dbf448860..660baa60c040 100644
-> > --- a/drivers/pci/pci-acpi.c
-> > +++ b/drivers/pci/pci-acpi.c
-> > @@ -1350,12 +1350,30 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
-> >               dev->external_facing = 1;
-> >  }
-> >
-> > +static void pci_acpi_check_for_dma_protection(struct pci_dev *dev)
-> > +{
-> > +     u8 val;
-> > +
-> > +     /*
-> > +      * Microsoft Windows uses this property, and is documented here:
-> > +      * https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
-> > +      * While Microsoft documents this property as only applicable to PCIe
-> > +      * root ports, we expand it to be applicable to any PCI device.
-> > +      */
-> > +     if (device_property_read_u8(&dev->dev, "DmaProperty", &val))
-> > +             return;
->
-> Why not continue to only do this for PCIe devices like it is actually
-> being used for?  Why expand it?
+Looks like you did not run checkpatch.
 
-Because devices hanging off of PCIe root ports are not the only ones
-that may need DMA protection. There may be internal PCI devices (that
-don't hang off a PCIe root port) that may need DMA protection.
-Examples include internal network controllers that may offer an attack
-surface by handling network data or running vendor firmware.
+Either case, I think you should just drop this function In probe:
 
->
-> And what driver/device is going to use this?
+	const struct dmi_system_id *dmi_entry = dmi_first_match(asus_ec_dmi_table);
 
-This is already used by PCI subsystem to enforce stricter ACS
-settings, and IOMMU drivers to enforce stricter IOMMU settings.
+	...
+	if (!dmi_entry)
+		return -ENODEV;
+	...
+	ec_data->board_sensors = (unsigned long)dmi_entry->driver_data;
 
-Thanks & Best Regards,
+Guenter
 
-Rajat
+>   }
+>   
+>   static int __init asus_ec_probe(struct platform_device *pdev)
+> @@ -625,7 +618,7 @@ static int __init asus_ec_probe(struct platform_device *pdev)
+>   	struct device *hwdev;
+>   	unsigned int i;
+>   
+> -	board_sensors = get_board_sensors(dev);
+> +	board_sensors = get_board_sensors();
+>   	if (!board_sensors)
+>   		return -ENODEV;
+>   
 
->
-> thanks,
->
-> greg k-h

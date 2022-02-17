@@ -2,257 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48194B9E67
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3AA4B9E75
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237428AbiBQLO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:14:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38608 "EHLO
+        id S239637AbiBQLR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:17:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbiBQLOY (ORCPT
+        with ESMTP id S230203AbiBQLR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:14:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906D521390B;
-        Thu, 17 Feb 2022 03:14:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DCD661E55;
-        Thu, 17 Feb 2022 11:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5612C340E8;
-        Thu, 17 Feb 2022 11:14:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645096448;
-        bh=sUUPTJjfLHjOGF2eWJ1HghPbL6lCvNajLfAeb7DI2L4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iKaTi0YTVg3Ees0YAqBQura/K2ZWvXfSf2oGTiE6vFgfGDTkJuTS5dHjEUD7BkNwu
-         379qSFuYvoD1UIVf3RfLluxvPBguzT0hq4VQzEn98Gys87JcLNYOE2CLaaQkrr+8j+
-         XWk4yNGidvsm9riMhuRSdmzZKjCmwX61HVlWVChOUegbL5kOE4G1WTswJ9GZ+obsTC
-         mJtWxUF1CjnHutWpIGDHEPuI/i9RtWHDg4L7Ulf4oUxM4FbfXYZlWu8EWdi9ZTyK+Z
-         T57nofBRZmgd45uxxSzkpIweuWUXAx8F30qT7LCCYt1Ghb+7zXiUkCMneKt90bh4qa
-         VyQEGIl2I7rjw==
-Date:   Thu, 17 Feb 2022 16:44:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Jonathan Marek <jonathan@marek.ca>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: [Freedreno] [PATCH v3 12/13] drm/msm/dsi: Add support for DSC
- configuration
-Message-ID: <Yg4t/G3tgcmkswHg@matsya>
-References: <20211116062256.2417186-1-vkoul@kernel.org>
- <20211116062256.2417186-13-vkoul@kernel.org>
- <20211211000315.pavmcc7cc73ilb6l@SoMainline.org>
+        Thu, 17 Feb 2022 06:17:27 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07F6E6852;
+        Thu, 17 Feb 2022 03:17:12 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id t21so8989962edd.3;
+        Thu, 17 Feb 2022 03:17:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=iAwAjreqNN5/7jHoMpNX4jUGyuVnstEZXc1OH4l/j5c=;
+        b=lhfiVoPGt3+tB4No4NSpDLJVtciSQlPV5dhT6LQwEVEkTbfoBfpWpipBM68JyTi6t9
+         UGwunu7m7G8CG4rD1mShcJckdIK+j5JT7wYesflHzswfLiueGHrkB5LDf18Y01lV56/Y
+         GwNFhcSD2BCQoMKkTB3wJA/Vpz+h3hawYljGyHstx1bHle8qH7hEq6sSFKI4bJxcU3Oj
+         +2eQKenpeRZMpk7CgVIKSGO8qHSyQOaxdky2U8yTw6Fp05Y8k5BYMrM1MiSiyKZxhmww
+         wXX6YvTL49y5U7+SMzn3mLu0O3W+UtEP2ckobvRMOvOvG9goMKwFaRqrHrsKWYgXxsGL
+         WkVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=iAwAjreqNN5/7jHoMpNX4jUGyuVnstEZXc1OH4l/j5c=;
+        b=ZyU4H/C7kPnwxxdyqYluO+KePwfUKeuUQJtxbB3/TnjIQd2F4h2KQO6Byvm/XTKGUG
+         B+bRAJ1aSlQCZMLC1Q+w/9j5CMbXJAVeQPUpFZS3z+rYYMfI5JtbcgxWi3/pZdRDTjID
+         HbvYXqo9WM9oybM+sSU05VFBb0+m6PQMxf2wcFH3NztqiRXPz2llpTdktjYxqm3g3yE/
+         qrcGyZMiAmPCoFiy2U8sO8lukqptYS5blre0KmtcO7QNHB4o4GiwV0c9/NRYc1GCkGkc
+         w5QB+RtH33uaNFAHZKISQal3KA9ZqoqWqjiCOtTbOn+Q2wEP/D5GPzAwyuL5w/zY/Rj3
+         6YTQ==
+X-Gm-Message-State: AOAM533IYNFyuN/ZH3U1AXCgStr68HNxddwxRay3da7GxSfWxVxTHrTM
+        KzFeJKjO7sb7S1IoJu+i2xk=
+X-Google-Smtp-Source: ABdhPJz2scZzsYUbLdn8Zpj6keBiRjktQyQ00Bi93ld531lh2q8vzox/EPcsGbmiw98xj8i70Bz6jw==
+X-Received: by 2002:a05:6402:51ca:b0:410:a0d1:c6e9 with SMTP id r10-20020a05640251ca00b00410a0d1c6e9mr2078396edd.200.1645096631004;
+        Thu, 17 Feb 2022 03:17:11 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id h21sm2966464edt.26.2022.02.17.03.17.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 03:17:10 -0800 (PST)
+Date:   Thu, 17 Feb 2022 13:17:09 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Cc:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Michael Rasmussen <MIR@bang-olufsen.dk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 2/2] net: dsa: realtek: rtl8365mb: serialize
+ indirect PHY register access
+Message-ID: <20220217111709.x5g6alnhz3njo4t2@skbuf>
+References: <20220216160500.2341255-1-alvin@pqrs.dk>
+ <20220216160500.2341255-3-alvin@pqrs.dk>
+ <20220216233906.5dh67olhgfz7ji6o@skbuf>
+ <874k4yrlcj.fsf@bang-olufsen.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211211000315.pavmcc7cc73ilb6l@SoMainline.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <874k4yrlcj.fsf@bang-olufsen.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marijn,
-
-On 11-12-21, 01:03, Marijn Suijten wrote:
-
-> > +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
-> > +				  int pic_width, int pic_height)
+On Thu, Feb 17, 2022 at 07:41:32AM +0000, Alvin Šipraga wrote:
+> Vladimir Oltean <olteanv@gmail.com> writes:
 > 
-> This function - adopted from downstream - does not seem to perform a
-> whole lot, especially without the modulo checks against the slice size.
-> Perhaps it can be inlined?
-
-Most of the code here is :)
-
-This was split from downstream code to check and update dimension. We
-can inline this, or should we leave that to compiler. I am not a very
-big fan of inlining...
-
+> > On Wed, Feb 16, 2022 at 05:05:00PM +0100, Alvin Šipraga wrote:
+> >> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+> >> 
+> >> Realtek switches in the rtl8365mb family can access the PHY registers of
+> >> the internal PHYs via the switch registers. This method is called
+> >> indirect access. At a high level, the indirect PHY register access
+> >> method involves reading and writing some special switch registers in a
+> >> particular sequence. This works for both SMI and MDIO connected
+> >> switches.
+> >> 
+> >> Currently the rtl8365mb driver does not take any care to serialize the
+> >> aforementioned access to the switch registers. In particular, it is
+> >> permitted for other driver code to access other switch registers while
+> >> the indirect PHY register access is ongoing. Locking is only done at the
+> >> regmap level. This, however, is a bug: concurrent register access, even
+> >> to unrelated switch registers, risks corrupting the PHY register value
+> >> read back via the indirect access method described above.
+> >> 
+> >> Arınç reported that the switch sometimes returns nonsense data when
+> >> reading the PHY registers. In particular, a value of 0 causes the
+> >> kernel's PHY subsystem to think that the link is down, but since most
+> >> reads return correct data, the link then flip-flops between up and down
+> >> over a period of time.
+> >> 
+> >> The aforementioned bug can be readily observed by:
+> >> 
+> >>  1. Enabling ftrace events for regmap and mdio
+> >>  2. Polling BSMR PHY register for a connected port;
+> >>     it should always read the same (e.g. 0x79ed)
+> >>  3. Wait for step 2 to give a different value
+> >> 
+> >> Example command for step 2:
+> >> 
+> >>     while true; do phytool read swp2/2/0x01; done
+> >> 
+> >> On my i.MX8MM, the above steps will yield a bogus value for the BSMR PHY
+> >> register within a matter of seconds. The interleaved register access it
+> >> then evident in the trace log:
+> >> 
+> >>  kworker/3:4-70      [003] .......  1927.139849: regmap_reg_write: ethernet-switch reg=1004 val=bd
+> >>      phytool-16816   [002] .......  1927.139979: regmap_reg_read: ethernet-switch reg=1f01 val=0
+> >>  kworker/3:4-70      [003] .......  1927.140381: regmap_reg_read: ethernet-switch reg=1005 val=0
+> >>      phytool-16816   [002] .......  1927.140468: regmap_reg_read: ethernet-switch reg=1d15 val=a69
+> >>  kworker/3:4-70      [003] .......  1927.140864: regmap_reg_read: ethernet-switch reg=1003 val=0
+> >>      phytool-16816   [002] .......  1927.140955: regmap_reg_write: ethernet-switch reg=1f02 val=2041
+> >>  kworker/3:4-70      [003] .......  1927.141390: regmap_reg_read: ethernet-switch reg=1002 val=0
+> >>      phytool-16816   [002] .......  1927.141479: regmap_reg_write: ethernet-switch reg=1f00 val=1
+> >>  kworker/3:4-70      [003] .......  1927.142311: regmap_reg_write: ethernet-switch reg=1004 val=be
+> >>      phytool-16816   [002] .......  1927.142410: regmap_reg_read: ethernet-switch reg=1f01 val=0
+> >>  kworker/3:4-70      [003] .......  1927.142534: regmap_reg_read: ethernet-switch reg=1005 val=0
+> >>      phytool-16816   [002] .......  1927.142618: regmap_reg_read: ethernet-switch reg=1f04 val=0
+> >>      phytool-16816   [002] .......  1927.142641: mdio_access: SMI-0 read  phy:0x02 reg:0x01 val:0x0000 <- ?!
+> >>  kworker/3:4-70      [003] .......  1927.143037: regmap_reg_read: ethernet-switch reg=1001 val=0
+> >>  kworker/3:4-70      [003] .......  1927.143133: regmap_reg_read: ethernet-switch reg=1000 val=2d89
+> >>  kworker/3:4-70      [003] .......  1927.143213: regmap_reg_write: ethernet-switch reg=1004 val=be
+> >>  kworker/3:4-70      [003] .......  1927.143291: regmap_reg_read: ethernet-switch reg=1005 val=0
+> >>  kworker/3:4-70      [003] .......  1927.143368: regmap_reg_read: ethernet-switch reg=1003 val=0
+> >>  kworker/3:4-70      [003] .......  1927.143443: regmap_reg_read: ethernet-switch reg=1002 val=6
+> >> 
+> >> The kworker here is polling MIB counters for stats, as evidenced by the
+> >> register 0x1004 that we are writing to (RTL8365MB_MIB_ADDRESS_REG). This
+> >> polling is performed every 3 seconds, but is just one example of such
+> >> unsynchronized access.
+> >> 
+> >> Further investigation reveals the underlying problem: if we read from an
+> >> arbitrary register A and this read coincides with the indirect access
+> >> method in rtl8365mb_phy_ocp_read, then the final read from
+> >> RTL8365MB_INDIRECT_ACCESS_READ_DATA_REG will always return the value in
+> >> register A. The value read back can be readily poisoned by repeatedly
+> >> reading back the value of another register A via debugfs in a busy loop
+> >> via the dd utility or similar.
+> >> 
+> >> This issue appears to be unique to the indirect PHY register access
+> >> pattern. In particular, it does not seem to impact similar sequential
+> >> register operations such MIB counter access.
+> >> 
+> >> To fix this problem, one must guard against exactly the scenario seen in
+> >> the above trace. In particular, other parts of the driver using the
+> >> regmap API must not be permitted to access the switch registers until
+> >> the PHY register access is complete. Fix this by using the newly
+> >> introduced "nolock" regmap in all PHY-related functions, and by aquiring
+> >> the regmap mutex at the top level of the PHY register access callbacks.
+> >> Although no issue has been observed with PHY register _writes_, this
+> >> change also serializes the indirect access method there. This is done
+> >> purely as a matter of convenience.
+> >> 
+> >> Fixes: 4af2950c50c8 ("net: dsa: realtek-smi: add rtl8365mb subdriver for RTL8365MB-VC")
+> >> Link: https://lore.kernel.org/netdev/CAJq09z5FCgG-+jVT7uxh1a-0CiiFsoKoHYsAWJtiKwv7LXKofQ@mail.gmail.com/
+> >> Reported-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> >> Reported-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+> >> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+> >> ---
+> >
+> > This implementation where the indirect PHY access blocks out every other
+> > register read and write is only justified if you can prove that you can
+> > stuff just about any unrelated register read or write before
+> > RTL8365MB_INDIRECT_ACCESS_READ_DATA_REG, and this, in and of itself,
+> > will poison what gets read back from RTL8365MB_INDIRECT_ACCESS_READ_DATA_REG.
 > 
-> > +{
-> > +	if (!dsc || !pic_width || !pic_height) {
-> > +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	dsc->drm->pic_width = pic_width;
-> > +	dsc->drm->pic_height = pic_height;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >  {
-> >  	struct drm_display_mode *mode = msm_host->mode;
-> > @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >  		hdisplay /= 2;
-> >  	}
-> >  
-> > +	if (msm_host->dsc) {
-> > +		struct msm_display_dsc_config *dsc = msm_host->dsc;
-> > +
-> > +		/* update dsc params with timing params */
-> > +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
-> > +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
+> I (at least treied to) state that clearly here:
 > 
-> This seems to be pretty non-standard and perhaps unnecessary debug code,
-> with a stray dash in there.  Is is needed here, and if so how about
-> using %dx%d\n to format width and height?
-
-I can update that, sure...
-
+> >> Further investigation reveals the underlying problem: if we read from an
+> >> arbitrary register A and this read coincides with the indirect access
+> >> method in rtl8365mb_phy_ocp_read, then the final read from
+> >> RTL8365MB_INDIRECT_ACCESS_READ_DATA_REG will always return the value in
+> >> register A. The value read back can be readily poisoned by repeatedly
+> >> reading back the value of another register A via debugfs in a busy loop
+> >> via the dd utility or similar.
 > 
-> > +
-> > +		/* we do the calculations for dsc parameters here so that
-> > +		 * panel can use these parameters
-> > +		 */
-> > +		dsi_populate_dsc_params(dsc);
-> > +
-> > +		/* Divide the display by 3 but keep back/font porch and
-> > +		 * pulse width same
-> > +		 */
+> That is, I used regmap debugfs to spam reads of switch registers like,
+> for example, this one:
 > 
-> A more general nit on the comments in this patch series: it is
-> appreciated if comments explain the rationale rather than - or in
-> addition to - merely paraphrasing the code that follows.
-
-Yes it might be the case here, but in this case I wanted to explicitly
-point out hat we need to divide display by 3...
-
+> #define RTL8365MB_CFG0_MAX_LEN_REG	0x088C
 > 
-> > +		h_total -= hdisplay;
-> > +		hdisplay /= 3;
-> > +		h_total += hdisplay;
-> > +		ha_end = ha_start + hdisplay;
-> > +	}
-> > +
-> >  	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> > +		if (msm_host->dsc) {
-> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> > +			u32 reg, intf_width, slice_per_intf;
-> > +			u32 total_bytes_per_intf;
-> > +
-> > +			/* first calculate dsc parameters and then program
-> > +			 * compress mode registers
-> > +			 */
-> > +			intf_width = hdisplay;
-> > +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
-> > +
-> > +			dsc->drm->slice_count = 1;
-> > +			dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * 8, 8);
+> ... which controls the MTU of the switch. This is something we set up
+> just once to be 0x600 and then it is never touched again. Now in the
+> above example, let A = 0x088C. Spamming the read of A phytool command
+> described above, I would expect to read a value 0x79c9 out of my BSMR
+> PHY register with phytool. But in cases where the read of switch
+> register A coincides with the indirect access procedure, I end up
+> reading back 0x600 from the PHY register. This is specifically because
+> the read of A (=0x600) then poisons the value in
+> RTL8365MB_INDIRECT_ACCESS_READ_DATA_REG (should be 0x79c9, but is
+> 0x600).
+
+Yes, well, that was a bit handwavy, you didn't mention any other
+specific register, you just stated a rule which appeared to be inferred
+from little evidence.
+
+> > rtl8365mb_mib_counter_read() doesn't seem like a particularly good
+> > example to prove this, since it appears to be an indirect access
+> > procedure as well. Single register reads or writes would be ideal, like
+> > RTL8365MB_CPU_CTRL_REG, artificially inserted into strategic places.
+> > Ideally you wouldn't even have a DSA or MDIO or PHY driver running.
 > 
-> If I am not mistaken this is the same value as dsc->drm->slice_width,
-> since a multiple of 8 is inherently "a multiple of 8" and hence needs no
-> rounding when divided by 8 again.
-
-Yes this doesnt look right, I will update
-
-> Also note that the cmdmode variant below uses bits_per_pixel here; is
-> that discrepancy intended?
-
-Nope both should use bits_per_pixel..
-
-> > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
-> > +
-> > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-> > +			dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
-> > +			dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
-> > +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
-> > +
-> > +			reg = dsc->bytes_per_pkt << 16;
-> > +			reg |= (0x0b << 8);    /* dtype of compressed image */
-> > +
-> > +			/* pkt_per_line:
-> > +			 * 0 == 1 pkt
-> > +			 * 1 == 2 pkt
-> > +			 * 2 == 4 pkt
-> > +			 * 3 pkt is not supported
-> > +			 * above translates to ffs() - 1
-> > +			 */
-> > +			reg |= (ffs(dsc->pkt_per_line) - 1) << 6;
-> > +
-> > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> I hope it is clear from my above explanation that I did show this, if
+> you agree that RTL8365MB_CFG0_MAX_LEN_REG is just as arbitrary as
+> RTL8365MB_CPU_CTRL_REG.
 > 
-> This was already calculated and assigned just a couple lines above.
-
-Yup, dropped now.
-
+> What I meant to say here:
 > 
-> > +			reg |= dsc->eol_byte_num << 4;
-> > +			reg |= 1;
+> >> This issue appears to be unique to the indirect PHY register access
+> >> pattern. In particular, it does not seem to impact similar sequential
+> >> register operations such MIB counter access.
 > 
-> Note that the XML register file exists to map out the layout of these
-> registers, including bit offset, size, and (enum) constant values.  It
-> is appreciated if you can replace all these magical shifts and magic
-> flags/bits with the appropriate enum constants and constructor
-> functions, after mapping them out in the XML file.
-
-Yeah I am trying to get those details, if I manage to get it, will
-update for sure as Dmitry already pointed in MESA PR.
-
-> > +
-> > +			dsi_write(msm_host,
-> > +				  REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
-> > +		}
-> > +
-> >  		dsi_write(msm_host, REG_DSI_ACTIVE_H,
-> >  			DSI_ACTIVE_H_START(ha_start) |
-> >  			DSI_ACTIVE_H_END(ha_end));
-> > @@ -959,8 +1034,40 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >  			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
-> >  			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
-> >  	} else {		/* command mode */
-> > +		if (msm_host->dsc) {
-> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> > +			u32 reg, reg_ctrl, reg_ctrl2;
-> > +			u32 slice_per_intf, bytes_in_slice, total_bytes_per_intf;
-> > +
-> > +			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
-> > +			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+> ... about MIB counter access (which is also indirect as you point out),
+> is that it does _not_ suffer from the above problem. The way I checked
+> this was with ethtool -S, while again spamming regmap_read of an
+> unrelated switch register like CPU_CTRL or CFG0_MAX_LEN. In this case
+> the counter values always seem sane, and I can't detect the poisoned
+> value getting read back (like 0x600 in the above example).
 > 
-> Shouldn't old values be masked out first, before writing new bits or
-> values below?  The video-mode variant doesn't read back old register
-> values.
-
-This follows downstream where the registers are read, modified and
-written back
-
-> > +
-> > +			slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
-> > +			bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
-> > +						      dsc->drm->bits_per_pixel, 8);
-> > +			dsc->drm->slice_chunk_size = bytes_in_slice;
-> > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
-> > +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
-> > +
-> > +			reg = 0x39 << 8;
+> > Just a simple kernel module with access to the regmap, and try to read
+> > something known, like the PHY ID of one of the internal PHYs, via an
+> > open-coded function. Then add extra regmap accesses and see what
+> > corrupts the indirect PHY access procedure.
 > 
-> Same comment about moving magic constants and shifts into the XML file.
-
-yes if we get details of bits
-
+> The switch is generally idle and I did my testing with the periodic MIB
+> counter disabled, so I think what you describe is not far off from what
+> I did. The only difference is that the switch was already configured and
+> switching packets. I used ftrace events to verify the phenomenon.
 > 
-> > +			reg |= ffs(dsc->pkt_per_line) << 6;
+> If you are still not persuaded, just write me back here, and I will go
+> ahead and implement such a test module. But it seems like you
+> misunderstood my initial commit message, so perhaps I just need to
+> rephrase it?
+
+If the problem you've identified is correct, then this simple test
+module would yield the exact same result, yet would eliminate beyond any
+doubt the timing and other circumstantial factors, and you could also
+do better testing of the PHY write sequence, and MIB counter reads.
+And if simply inserting a stray register access in the middle of the PHY
+read procedure doesn't produce the same result, this would be new
+information. It shouldn't even be too hard to do.
+
+> > Are Realtek aware of this and do they confirm the issue? Sounds like
+> > erratum material to me, and a pretty severe one, at that. Alternatively,
+> > we may simply not be understanding the hardware architecture, like for
+> > example the fact that MIB indirect access and PHY indirect access may
+> > share some common bus and must be sequential w.r.t. each other.
 > 
-> Doesn't the calculation need -1 here just like video mode?
+> The thing is that Realtek's vendor driver takes a common lock around
+> every public API call. One of those APIs is "read phy register" and
+> there it will take a lock around the whole procedure. At the same time
+> it will also take the same lock for something like "read switch MTU" or
+> "read CPU tag position", etc. So I don't believe their driver will
+> suffer from this issue.
+> 
+> In any case it was on my list to write them a mail about this, so let's
+> see what they say.
+> 
+> Kind regards,
+> Alvin
 
-yes will update now
-
--- 
-~Vinod
+I have little to no problem with the workaround you've implemented, it's
+just that extraordinary claims require extraordinary proof. Having a
+standalone kernel module that can deterministically and not statistically
+reproduce the bug would go a long way.

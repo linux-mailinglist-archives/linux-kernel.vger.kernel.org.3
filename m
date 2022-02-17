@@ -2,223 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDF54BA6DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3791D4BA6DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243627AbiBQRRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:17:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41672 "EHLO
+        id S243635AbiBQRRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:17:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243623AbiBQRRY (ORCPT
+        with ESMTP id S243632AbiBQRRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:17:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43706E364;
-        Thu, 17 Feb 2022 09:17:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6060D616CB;
-        Thu, 17 Feb 2022 17:17:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE57BC340E8;
-        Thu, 17 Feb 2022 17:17:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645118228;
-        bh=LKs9Cab54oNbBx1eoHnPqkl7xwmuTx9HwsajuytsITM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ml7XZ6y1q47yafLRWlx8Fhac3ysMBnc28QMcWPPps1ReBu9za68WN+foQub4XLarp
-         qjkWiE3kWuTavFV1jqIwtk2k8F6MhLd2lSnQ3Isr5MfEt9xKt/JTcRM0JHnAKA8pyY
-         Xl8bGLK0heH2zHgEuiIZ4h5Tl5/SnMTVJzGXn/xjsNml8Bqeqw4Ptv2OfSK3tlCPIX
-         kA8LUm3Mc8S6TNYRXlQwRIE3ZLrYYFtkYeqo+4VvFhDpDaTazA53zZgAeCqGkKXsI+
-         67RVkkey0JTMkcF6fc0pln2KIAoU9tPPGBlAjPnEXwULJLbRB+g/srB0KXzCWsf2kv
-         35LiW6hhwvDPQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nKkOw-008dvO-KN; Thu, 17 Feb 2022 17:17:06 +0000
+        Thu, 17 Feb 2022 12:17:36 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8CE15C9E0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:17:22 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id 13so281230oiz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:17:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k9zgQPfz8LOJwvyN9TkCqdRl9MbRaNDX/aR5wunJ990=;
+        b=DINAnzkZ3yxrbaFtDAYZmhpuXrR/mzBHe+vr2DEiBG3ftwzLyGNCDwNo0aWdundMlY
+         sYYPRo2ua/mUlkwsglmxpqxr04T8gzaIFbZPVILJZWFtt6KG8gOjF3ltKVAs7NB4Ll5A
+         EYztNyGCg/NYX3KCvFPleeQ8mjTULOIut+sofWlAJbUmSJoGUrcL1hBg30XDPTzG2P4w
+         UWMCShLbWEJwlle7OziBionFS3Twi3vfDUcs+1sPf0IUcWblXibpCNNarLcSJGdhlNIm
+         72+weM6Yxvsi1mB0VDx+GRhGhoxE3g+vEl5TjBcOqh2X+IF/XQmtQZkwcqnFb9FB84W5
+         fZfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k9zgQPfz8LOJwvyN9TkCqdRl9MbRaNDX/aR5wunJ990=;
+        b=m7/zfREmn0REqbuf1m6lRjyrYZ+TK+nubEwDEusHDNTF2jOmAclDIXfCmFaRUqHORe
+         XjG+BPQbBXjHTTNJDdoZ95CQSeE0O/ki856a6VyvvDr1d2cQeTpI3I3QLblK837CGpnC
+         Wxk13ibCI86rMnsj7TRZ9rIn++/++DxAbFZBY2SRfW45qTcPnI+B/NtUhJx1JYqrraSG
+         ZRR/LbJsxXzetnd/xjapvUBHX4GaOoiOSoQ4eNB+DGNIhxkC0RHvmeNMufmvz/giAepe
+         K4oycRrGYDLLQJhZMWR4tBQACAcOawqpvg4LDkm3MepdYcLYIKwUwDnxbzcWj239eMCY
+         rcLA==
+X-Gm-Message-State: AOAM531efRAa6574YxHmdIZWpBJmaq2CMl9r+EnW7iPt3ad+in99AfuB
+        Y1x/+ewj1C8mC3S5LwkhXDmfnIBJD2ZCb18BdPE=
+X-Google-Smtp-Source: ABdhPJw6jj/QGKAkol2tdthTwTYyyoP4CDqrp37TKDAO46tPjdL6fNFaDwTVUFznUtAy4H33vyaax1MFxyQNLygI+KE=
+X-Received: by 2002:a05:6808:f8b:b0:2ce:6ee7:2c99 with SMTP id
+ o11-20020a0568080f8b00b002ce6ee72c99mr3309777oiw.199.1645118241433; Thu, 17
+ Feb 2022 09:17:21 -0800 (PST)
 MIME-Version: 1.0
-Date:   Thu, 17 Feb 2022 17:17:06 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com
-Subject: Re: [PATCH 1/2] genirq: Extract irq_set_affinity_masks() from
- devm_platform_get_irqs_affinity()
-In-Reply-To: <bdfe935b-6ee0-b588-e1e8-776d85f91813@huawei.com>
-References: <20220216090845.1278114-1-maz@kernel.org>
- <20220216090845.1278114-2-maz@kernel.org>
- <bdfe935b-6ee0-b588-e1e8-776d85f91813@huawei.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <b502141b201a68eb4896c1653b67663a@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: john.garry@huawei.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, gregkh@linuxfoundation.org, mw@semihalf.com, linux@armlinux.org.uk, davem@davemloft.net, kuba@kernel.org, tglx@linutronix.de, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217164110.3258269-1-trix@redhat.com>
+In-Reply-To: <20220217164110.3258269-1-trix@redhat.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 17 Feb 2022 12:17:10 -0500
+Message-ID: <CADnq5_OasHZ=P_tkZrSSA87HACHJhQ49oMGSdFxzQ5g7GhjWMw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdkfd: fix typo in setting enum value
+To:     Tom Rix <trix@redhat.com>
+Cc:     "Kuehling, Felix" <Felix.Kuehling@amd.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Kim, Jonathan" <jonathan.kim@amd.com>, llvm@lists.linux.dev,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
+Nathan just sent out the same patch and I already applied it.  Thanks!
 
-On 2022-02-17 17:07, John Garry wrote:
-> On 16/02/2022 09:08, Marc Zyngier wrote:
-> 
-> Hi Marc,
-> 
->> In order to better support drivers that deal with interrupts in a more
->> "hands-on" way, extract the core of devm_platform_get_irqs_affinity()
->> and expose it as irq_set_affinity_masks().
->> 
->> This helper allows a driver to provide a set of wired interrupts that
->> are to be configured as managed interrupts. As with the original 
->> helper,
->> this is exported as EXPORT_SYMBOL_GPL.
-> 
-> I know you mentioned it in 2/2, but it would be interesting to see how
-> network controller drivers can handle the problem of missing in-flight
-> IO completions for managed irq shutdown. For storage controllers this
-> is all now safely handled in the block layer.
+Alex
 
-Do you have a pointer to this? It'd be interesting to see if there is
-a common pattern.
-
-> 
->> 
->> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> 
-> Just a small comment, below.
-> 
-> Tested-by: John Garry <john.garry@huawei.com> #D05
-> 
-> Thanks,
-> John
-> 
->> ---
->>   drivers/base/platform.c   | 20 +++-----------------
->>   include/linux/interrupt.h |  8 ++++++++
->>   kernel/irq/affinity.c     | 27 +++++++++++++++++++++++++++
->>   3 files changed, 38 insertions(+), 17 deletions(-)
->> 
->> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
->> index 6cb04ac48bf0..b363cf6ce5be 100644
->> --- a/drivers/base/platform.c
->> +++ b/drivers/base/platform.c
->> @@ -335,7 +335,6 @@ int devm_platform_get_irqs_affinity(struct 
->> platform_device *dev,
->>   				    int **irqs)
->>   {
->>   	struct irq_affinity_devres *ptr;
->> -	struct irq_affinity_desc *desc;
->>   	size_t size;
->>   	int i, ret, nvec;
->>   @@ -376,31 +375,18 @@ int devm_platform_get_irqs_affinity(struct 
->> platform_device *dev,
->>   		ptr->irq[i] = irq;
->>   	}
->>   -	desc = irq_create_affinity_masks(nvec, affd);
->> -	if (!desc) {
->> -		ret = -ENOMEM;
->> +	ret = irq_set_affinity_masks(affd, ptr->irq, nvec);
->> +	if (ret) {
->> +		dev_err(&dev->dev, "failed to update affinity descriptors (%d)\n", 
->> ret);
->>   		goto err_free_devres;
->>   	}
->>   -	for (i = 0; i < nvec; i++) {
->> -		ret = irq_update_affinity_desc(ptr->irq[i], &desc[i]);
->> -		if (ret) {
->> -			dev_err(&dev->dev, "failed to update irq%d affinity descriptor 
->> (%d)\n",
->> -				ptr->irq[i], ret);
->> -			goto err_free_desc;
->> -		}
->> -	}
->> -
->>   	devres_add(&dev->dev, ptr);
->>   -	kfree(desc);
->> -
->>   	*irqs = ptr->irq;
->>     	return nvec;
->>   -err_free_desc:
->> -	kfree(desc);
->>   err_free_devres:
->>   	devres_free(ptr);
->>   	return ret;
->> diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
->> index 9367f1cb2e3c..6bfce96206f8 100644
->> --- a/include/linux/interrupt.h
->> +++ b/include/linux/interrupt.h
->> @@ -381,6 +381,8 @@ irq_create_affinity_masks(unsigned int nvec, 
->> struct irq_affinity *affd);
->>   unsigned int irq_calc_affinity_vectors(unsigned int minvec, unsigned 
->> int maxvec,
->>   				       const struct irq_affinity *affd);
->>   +int irq_set_affinity_masks(struct irq_affinity *affd, int *irqs, 
->> int nvec);
->> +
->>   #else /* CONFIG_SMP */
->>     static inline int irq_set_affinity(unsigned int irq, const struct 
->> cpumask *m)
->> @@ -443,6 +445,12 @@ irq_calc_affinity_vectors(unsigned int minvec, 
->> unsigned int maxvec,
->>   	return maxvec;
->>   }
->>   +static inline int
->> +irq_set_affinity_masks(struct irq_affinity *affd, int *irqs, int 
->> nvec)
->> +{
->> +	return -EINVAL;
->> +}
->> +
->>   #endif /* CONFIG_SMP */
->>     /*
->> diff --git a/kernel/irq/affinity.c b/kernel/irq/affinity.c
->> index f7ff8919dc9b..c0f868cd5b87 100644
->> --- a/kernel/irq/affinity.c
->> +++ b/kernel/irq/affinity.c
->> @@ -512,3 +512,30 @@ unsigned int irq_calc_affinity_vectors(unsigned 
->> int minvec, unsigned int maxvec,
->>     	return resv + min(set_vecs, maxvec - resv);
->>   }
->> +
->> +/*
->> + * irq_set_affinity_masks - Set the affinity masks of a number of 
->> interrupts
->> + *                          for multiqueue spreading
->> + * @affd:	Description of the affinity requirements
->> + * @irqs:	An array of interrupt numbers
->> + * @nvec:	The total number of interrupts
->> + */
->> +int irq_set_affinity_masks(struct irq_affinity *affd, int *irqs, int 
->> nvec)
->> +{
->> +	struct irq_affinity_desc *desc;
->> +	int i, err = 0;
-> 
-> nit: it might be worth doing something similar to how
-> pci_alloc_irq_vectors_affinity() handles sets with no pre- and
-> post-vectors with msi_default_affd
-
-Yes, good point. This would probably simplify most callers of this code.
-
-Thanks,
-
-           M.
--- 
-Jazz is not dead. It just smells funny...
+On Thu, Feb 17, 2022 at 11:41 AM <trix@redhat.com> wrote:
+>
+> From: Tom Rix <trix@redhat.com>
+>
+> Clang build fails with
+> kfd_packet_manager_v9.c:267:3: error: implicit conversion
+>   from enumeration type 'enum mes_map_queues_extended_engine_sel_enum'
+>   to different enumeration type
+>   'enum mes_unmap_queues_extended_engine_sel_enum'
+>    extended_engine_sel__mes_map_queues__sdma0_to_7_sel :
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> This looks like a typo, the function is _unmap_, the enum
+> extended_engine_sel__mes_map_queues__sdma0_to_7_sel  is _map_.
+> To match the packet->bitfields2.extended_engine_set type
+> it should be extended_engine_sel__mes_unmap_queues__sdma0_to_7_sel.
+>
+> Fixes: 009e9a158505 ("drm/amdkfd: navi2x requires extended engines to map and unmap sdma queues")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c b/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
+> index 806a03566a24..18250845a989 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
+> @@ -264,7 +264,7 @@ static int pm_unmap_queues_v9(struct packet_manager *pm, uint32_t *buffer,
+>                                         sizeof(struct pm4_mes_unmap_queues));
+>
+>         packet->bitfields2.extended_engine_sel = pm_use_ext_eng(pm->dqm->dev) ?
+> -               extended_engine_sel__mes_map_queues__sdma0_to_7_sel :
+> +               extended_engine_sel__mes_unmap_queues__sdma0_to_7_sel :
+>                 extended_engine_sel__mes_unmap_queues__legacy_engine_sel;
+>
+>         packet->bitfields2.engine_sel =
+> --
+> 2.26.3
+>

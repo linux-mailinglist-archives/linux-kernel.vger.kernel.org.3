@@ -2,153 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D854BAD42
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 00:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C694BAD53
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 00:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiBQXjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 18:39:40 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38442 "EHLO
+        id S229543AbiBQXrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 18:47:17 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiBQXjj (ORCPT
+        with ESMTP id S229481AbiBQXrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 18:39:39 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F0D353742
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 15:39:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645141149; x=1676677149;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TRKiPX3hDotMG4QNJzX8Q8QFFFUAgodi9q4LNypUsiY=;
-  b=R6q7sPqyHrrMvZF3OM+a2n+o8/2UaJFV92m9YsO/i8WY7AiAoOXjKV09
-   AEu5n7zU3HeySt3j572oAQgjrWC6+9sNEc9X3YqxAfmGB3r/tl1GSfDc+
-   pN6l8WSAa3Set2DoZHUykj0gNnAgQavIXQlR8qbZYs+sWOvY5ZkenuF1Y
-   jQD+jQGCilJro42zFBzZMg43kN0l1bQsZlLUrTnGs/BiX4Gyx4wpblfhV
-   vBDwlo85gF4ilELYefQZgV/4gYeQE7Nojyom8MA/tTjPloI0WPbWAVtGe
-   g9FU444dANc/JG38MrPtmlvc3zNUfRkzS23011/ndTgAvKhuop/nGjIiU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="337446912"
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="337446912"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 15:34:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="637445350"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2022 15:34:06 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKqHm-0000jl-3z; Thu, 17 Feb 2022 23:34:06 +0000
-Date:   Fri, 18 Feb 2022 07:33:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Amit Cohen <amcohen@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:ubridge 29/50]
- drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:458:12: warning: stack
- frame size (1092) exceeds limit (1024) in
- 'mlxsw_sp_fid_erif_eport_to_vid_map'
-Message-ID: <202202180705.ObvKcGBW-lkp@intel.com>
+        Thu, 17 Feb 2022 18:47:14 -0500
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4EF3789A0;
+        Thu, 17 Feb 2022 15:46:51 -0800 (PST)
+Received: by mail-pf1-f170.google.com with SMTP id i21so939768pfd.13;
+        Thu, 17 Feb 2022 15:46:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xm42ne/yx6DvrOIo44WYfwHLPMbmJuqV1Ps8LARJTg0=;
+        b=H+dTq15llSlKJFUTyysK8buzf1UY/R/dWEnAGV6wFiKNm+DAAiNOyh5TX2p0AQSNQO
+         I5nX6mxXvKRNC90vTu0d14ESglyV+7piK1JnAz/0UKg/6WHmPB7dNcnPGBbCbRrLiYNq
+         41rOAkjO3sR+4XPvvxzRqmjxR2DqwE8ds01gZHfr0SbBz5YfPcVuuv4IVoMrXaLU1Yg8
+         CaHmzbUxzH9NYfRLOP9mQoqVieRaZKmZziJD0aL675J2BSGdbOS63UWZz3zUr/zy7jv0
+         aawSGUebyQ1uksnzTx/y+u+aHjJrrN8jtQufrH9Yd+L55JkD8jLIXn+yQUdcQbsbKHMW
+         tpHg==
+X-Gm-Message-State: AOAM531kbpISpdo1nBP1WGgucm0zET+cwt13FwPDdVFqJZFBu4nUUC5e
+        M90dEcN4UMW8R8/kYOtNTQGz2ctFOQ==
+X-Google-Smtp-Source: ABdhPJxD8QKqedbaM8B85/N5a9Ch5XWS/O2G9CW6yZJmUpw5h1tALWl4e6jUtYAj1TZYlIJAspvzqA==
+X-Received: by 2002:a05:6e02:5c8:b0:2be:186c:1684 with SMTP id l8-20020a056e0205c800b002be186c1684mr3579262ils.199.1645140852153;
+        Thu, 17 Feb 2022 15:34:12 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id w19sm3433302iov.16.2022.02.17.15.34.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 15:34:11 -0800 (PST)
+Received: (nullmailer pid 3979773 invoked by uid 1000);
+        Thu, 17 Feb 2022 23:34:09 -0000
+Date:   Thu, 17 Feb 2022 17:34:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        damien.lemoal@opensource.wdc.com, robh+dt@kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        krzysztof.kozlowski@canonical.com, linux-ide@vger.kernel.org
+Subject: Re: [PATCH v4] dt-bindings: convert ata/cortina,gemini-sata-bridge
+ to yaml
+Message-ID: <Yg7bcTWAnLJPym50@robh.at.kernel.org>
+References: <20220211120157.3385145-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220211120157.3385145-1-clabbe@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw ubridge
-head:   a9a4f2bd50dde60a52d9dda03d38875255fe0b9c
-commit: e6f8d1542cdc497206db6e9cd460cba6ca34e9a3 [29/50] mlxsw: spectrum_fid: Configure layer 3 egress VID classification
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220218/202202180705.ObvKcGBW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/e6f8d1542cdc497206db6e9cd460cba6ca34e9a3
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw ubridge
-        git checkout e6f8d1542cdc497206db6e9cd460cba6ca34e9a3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
+On Fri, 11 Feb 2022 12:01:57 +0000, Corentin Labbe wrote:
+> This patch converts ata/cortina,gemini-sata-bridge binding to yaml
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+> Change since v1:
+> - fixed cosmetic nits reported by Damien Le Moal
+> Changes since v2:
+> - Added blank lines between properties
+> - Removed useless quotes and label
+> - Re-indented description
+> Change since v3:
+> - removed MaxItems from syscon
+> 
+>  .../ata/cortina,gemini-sata-bridge.txt        |  55 ---------
+>  .../ata/cortina,gemini-sata-bridge.yaml       | 109 ++++++++++++++++++
+>  2 files changed, 109 insertions(+), 55 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:458:12: warning: stack frame size (1092) exceeds limit (1024) in 'mlxsw_sp_fid_erif_eport_to_vid_map' [-Wframe-larger-than]
-   static int mlxsw_sp_fid_erif_eport_to_vid_map(struct mlxsw_sp_fid *fid,
-              ^
-   drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c:705:12: warning: stack frame size (1124) exceeds limit (1024) in '__mlxsw_sp_fid_port_vid_map' [-Wframe-larger-than]
-   static int __mlxsw_sp_fid_port_vid_map(const struct mlxsw_sp_fid *fid,
-              ^
-   2 warnings generated.
-
-
-vim +/mlxsw_sp_fid_erif_eport_to_vid_map +458 drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c
-
-   457	
- > 458	static int mlxsw_sp_fid_erif_eport_to_vid_map(struct mlxsw_sp_fid *fid,
-   459						      u16 rif_index, bool valid)
-   460	{
-   461		struct mlxsw_sp *mlxsw_sp = fid->fid_family->mlxsw_sp;
-   462		struct mlxsw_sp_fid_port_vid *port_vid, *tmp;
-   463		char reiv_pl[MLXSW_REG_REIV_LEN] = {};
-   464		bool records_to_write = false;
-   465		u8 rec_num, current_page = 0;
-   466		u16 last_local_port;
-   467		int err;
-   468	
-   469		mlxsw_reg_reiv_pack(reiv_pl, current_page, rif_index);
-   470		last_local_port = current_page * MLXSW_REG_REIV_REC_MAX_COUNT +
-   471				  MLXSW_REG_REIV_REC_MAX_COUNT - 1;
-   472	
-   473		list_for_each_entry_safe(port_vid, tmp, &fid->port_vid_list, list) {
-   474			/* The list is sorted by local_port. */
-   475			if (port_vid->local_port > last_local_port)
-   476				goto reg_write;
-   477	
-   478	new_record_fill:
-   479			rec_num = port_vid->local_port % MLXSW_REG_REIV_REC_MAX_COUNT;
-   480			mlxsw_reg_reiv_rec_update_set(reiv_pl, rec_num, true);
-   481			mlxsw_reg_reiv_rec_evid_set(reiv_pl, rec_num,
-   482						    valid ? port_vid->vid : 0);
-   483			records_to_write = true;
-   484			goto next_list_node;
-   485	
-   486	reg_write:
-   487		err = mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(reiv), reiv_pl);
-   488		if (err)
-   489			return err;
-   490	
-   491		records_to_write = false;
-   492		current_page++;
-   493		memset(reiv_pl, 0, MLXSW_REG_REIV_LEN);
-   494		mlxsw_reg_reiv_pack(reiv_pl, current_page, rif_index);
-   495		last_local_port = current_page * MLXSW_REG_REIV_REC_MAX_COUNT +
-   496				  MLXSW_REG_REIV_REC_MAX_COUNT - 1;
-   497		goto new_record_fill;
-   498	
-   499	next_list_node:
-   500			continue;
-   501		}
-   502	
-   503		if (records_to_write)
-   504			return mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(reiv),
-   505					       reiv_pl);
-   506		return 0;
-   507	}
-   508	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Applied, thanks!

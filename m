@@ -2,127 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8614B9985
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 886934B999C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235838AbiBQG4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:56:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50044 "EHLO
+        id S235988AbiBQHIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 02:08:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiBQG4T (ORCPT
+        with ESMTP id S235949AbiBQHIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:56:19 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE66727F298;
-        Wed, 16 Feb 2022 22:56:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645080965; x=1676616965;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nbe4Fwiyx8rYqaNPl7hAoUCmlKv54SDhqXwRa/L9Toc=;
-  b=hTdE9UcvGinkNDmcXWf3TcmLw/9RbIRb9Tux8Js3HTMFleG4kwJAHjB1
-   ryD5tnsywx06DLTMp0X1wBnzl2GvRA7Z3qAVoZoQKGM1V8HB4+2agrcxx
-   ZVmlIHaQjBJHOB4crOCkslkyi2Q2CrwuMHhmPMf9Q0uW4X9H/XkVBL2Jy
-   1kax8RMf3bBWzGjQACqBt8tb4wvcKF3OD7GvMVKupmZv9s3NQ5ngx0+NN
-   gEAXxvse09ccffUyP2jyufp4EYmy7nZQtRueIcBIkIovSIDjpv2dSHFO9
-   VMwWXy04ouhCuZMg3VMDgZZjNtKhBTOs1NWYCow0hqKBIFg3etK2k+3le
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="231432854"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="231432854"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:56:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="625853020"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Feb 2022 22:56:03 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKahu-000BXe-RS; Thu, 17 Feb 2022 06:56:02 +0000
-Date:   Thu, 17 Feb 2022 14:55:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guixin Liu <kanie@linux.alibaba.com>, gregkh@linuxfoundation.org,
-        bostroesser@gmail.com, martin.petersen@oracle.com
-Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiaoguang.wang@linux.alibaba.com, xlpang@linux.alibaba.com
-Subject: Re: [PATCH 1/2] uio: add ioctl to uio
-Message-ID: <202202171444.RSO1up2n-lkp@intel.com>
-References: <1645064962-94123-1-git-send-email-kanie@linux.alibaba.com>
+        Thu, 17 Feb 2022 02:08:00 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5EF28ADA2;
+        Wed, 16 Feb 2022 23:07:41 -0800 (PST)
+X-UUID: a549484970ab4c659dbf3a1fca61e35b-20220217
+X-UUID: a549484970ab4c659dbf3a1fca61e35b-20220217
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <lina.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1352216927; Thu, 17 Feb 2022 15:07:34 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 17 Feb 2022 15:07:33 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Feb 2022 15:07:32 +0800
+From:   Lina Wang <lina.wang@mediatek.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+CC:     Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        bpf <bpf@vger.kernel.org>,
+        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v3] net: fix wrong network header length
+Date:   Thu, 17 Feb 2022 15:01:39 +0800
+Message-ID: <20220217070139.30028-1-lina.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <CAADnVQK78PN8N6c6u_O2BAxdyXwH_HVYMV_x3oGgyfT50a6ymg@mail.gmail.com>
+References: <CAADnVQK78PN8N6c6u_O2BAxdyXwH_HVYMV_x3oGgyfT50a6ymg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1645064962-94123-1-git-send-email-kanie@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="y"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guixin,
+On Wed, 2022-02-16 at 19:05 -0800, Alexei Starovoitov wrote:
+> On Tue, Feb 15, 2022 at 11:37 PM Lina Wang <lina.wang@mediatek.com>
+> wrote:
+> > 
+> > When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is
+> > enable,
+> > several skbs are gathered in skb_shinfo(skb)->frag_list. The first
+> > skb's
+> > ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+> > network_header\transport_header\mac_header have been updated as
+> > ipv4 acts,
+> > but other skbs in frag_list didnot update anything, just ipv6
+> > packets.
+> 
+> Please add a test that demonstrates the issue and verifies the fix.
 
-Thank you for the patch! Perhaps something to improve:
+I used iperf udp test to verify the patch, server peer enabled -d to debug
+received packets.
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on mkp-scsi/for-next linux/master linus/master v5.17-rc4 next-20220216]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+192.0.0.4 is clatd interface ip, corresponding ipv6 addr is 
+2000:1:1:1:afca:1b1f:1a9:b367, server peer ip is 1.1.1.1,
+whose ipv6 is 2004:1:1:1::101:101.
 
-url:    https://github.com/0day-ci/linux/commits/Guixin-Liu/uio-add-ioctl-to-uio/20220217-103120
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git e6cb9c167eeb8f90ab924666c573e69e85e700a0
-config: arc-randconfig-r035-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171444.RSO1up2n-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/8786f129af888d844bc38ed78db7a6788e45655c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Guixin-Liu/uio-add-ioctl-to-uio/20220217-103120
-        git checkout 8786f129af888d844bc38ed78db7a6788e45655c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/uio/
+Without the patch, when udp length 2840 packets received, iperf shows:
+pcount 1 packet_count 0
+pcount 27898727 packet_count 1
+pcount 3 packet_count 27898727
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+pcount should be 2, but is 27898727(0x1a9b367) , which is 20 bytes put 
+forward. 
 
-All warnings (new ones prefixed by >>):
+12:08:02.680299	Unicast to us 2004:1:1:1::101:101   2000:1:1:1:afca:1b1f:1a9:b367 UDP 51196 → 5201 Len=2840
+0000   20 00 00 01 00 01 00 01 af ca 1b 1f 01 a9 b3 67   ipv6 dst address
+0000   c7 fc 14 51 0b 20 c7 ab                           udp header
+0000   00 00 00 ab 00 0e f3 49 00 00 00 01 08 06 69 d2   00000001 is pcount
+12:08:02.682084	Unicast to us	1.1.1.1	                 192.0.0.4 	 	  UDP 51196 → 5201 Len=2840
 
->> drivers/uio/uio.c:818:6: warning: no previous prototype for 'uio_ioctl' [-Wmissing-prototypes]
-     818 | long uio_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
-         |      ^~~~~~~~~
+After applied the patch, there is no OOO, pcount acted in order.
 
-
-vim +/uio_ioctl +818 drivers/uio/uio.c
-
-   817	
- > 818	long uio_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
-   819	{
-   820		struct uio_listener *listener = filep->private_data;
-   821		struct uio_device *idev = listener->dev;
-   822		long retval = 0;
-   823	
-   824		mutex_lock(&idev->info_lock);
-   825		if (!idev->info || !idev->info->ioctl) {
-   826			retval = -EINVAL;
-   827			goto out;
-   828		}
-   829	
-   830		retval = idev->info->ioctl(idev->info, cmd, arg);
-   831	out:
-   832		mutex_unlock(&idev->info_lock);
-   833		return retval;
-   834	}
-   835	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks!

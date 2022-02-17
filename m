@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7609D4BB119
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 06:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E14C14BB111
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 06:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiBRFBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 00:01:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47810 "EHLO
+        id S230151AbiBRFBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 00:01:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbiBRFBO (ORCPT
+        with ESMTP id S230369AbiBRFAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 00:01:14 -0500
+        Fri, 18 Feb 2022 00:00:55 -0500
 Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE742BC05E;
-        Thu, 17 Feb 2022 21:00:46 -0800 (PST)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220218050045epoutp02c83876128818ae25395bb57d6abea6ff~UyLWH7WAW2920729207epoutp02i;
-        Fri, 18 Feb 2022 05:00:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220218050045epoutp02c83876128818ae25395bb57d6abea6ff~UyLWH7WAW2920729207epoutp02i
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153682BAA03;
+        Thu, 17 Feb 2022 21:00:38 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220218050036epoutp023b79452c35d4668bac8b1525c55b5a1d~UyLNr7NGA2938129381epoutp02W;
+        Fri, 18 Feb 2022 05:00:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220218050036epoutp023b79452c35d4668bac8b1525c55b5a1d~UyLNr7NGA2938129381epoutp02W
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1645160445;
-        bh=ynd2eDxDUnwe6F3ojujuTTawvN0c+2nk4kTWnIu/dlQ=;
+        s=mail20170921; t=1645160436;
+        bh=mh7UWvxwuvE8bNedSZzRwEQXl6IWDs4xsiiBLIhUrJs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=preDF4sdme9KivomaANav12YBXH4hmpjkSNO7FcMAzUz+tLDV5JQJS6dGzJJWfquo
-         RbFkKbnV/2WEXiYegV011cUym40GHA211szifeEdkVdyscKykI+ZKnt4nAKChHd+zx
-         yLcoVcp1GLCo9WeisnN+u5wLzWsu+oguD89b3ICA=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220218050045epcas5p268ef3f00ae6635c8035d5bfbcb14a2ca~UyLVV-p3W2406724067epcas5p2u;
-        Fri, 18 Feb 2022 05:00:45 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4K0KJl21lBz4x9Q0; Fri, 18 Feb
-        2022 05:00:39 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B5.F7.05590.6F72F026; Fri, 18 Feb 2022 14:00:38 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220217130715epcas5p2159ed983a5d32b04709d44b6c155e12e~UlK08gd8s1495614956epcas5p22;
-        Thu, 17 Feb 2022 13:07:15 +0000 (GMT)
+        b=eFzp0kt8fRy4Ejk62NXpYAstnS2EQvs2AoO3NjISQEPM4evhbiMX3MPmTEV6P4IBX
+         mwnaSmebWFvVDnOmS+PTFbezpTdZXWZOjn98xMDVAVovbmTckvlvV6OjsaT5Sca/QO
+         glvyySR+b0aMvqITc0DDZF5osxu1Mx9/oKC8VeHA=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220218050036epcas5p47dc1325db6e412d1dd5615722cab2134~UyLNRTZzn0649606496epcas5p4F;
+        Fri, 18 Feb 2022 05:00:36 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.180]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4K0KJV622Hz4x9Pv; Fri, 18 Feb
+        2022 05:00:26 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C1.F4.06423.9E72F026; Fri, 18 Feb 2022 14:00:25 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220217133547epcas5p305c93f10e815e275374ca2f41d75a2aa~Uljuy6HZZ1991119911epcas5p3t;
+        Thu, 17 Feb 2022 13:35:47 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220217130715epsmtrp106f09d07c77a34cb19ee343b972efdf0~UlK06Jz2_1226812268epsmtrp17;
-        Thu, 17 Feb 2022 13:07:15 +0000 (GMT)
-X-AuditID: b6c32a4b-739ff700000015d6-47-620f27f65a47
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220217133547epsmtrp21569afdc8d19e716eab1f6cdac5f9309~UljuxENvs1692816928epsmtrp2j;
+        Thu, 17 Feb 2022 13:35:47 +0000 (GMT)
+X-AuditID: b6c32a49-b13ff70000001917-2a-620f27e94992
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2E.9C.29871.3884E026; Thu, 17 Feb 2022 22:07:15 +0900 (KST)
-Received: from test-zns (unknown [107.110.206.5]) by epsmtip1.samsung.com
+        F0.3F.29871.23F4E026; Thu, 17 Feb 2022 22:35:46 +0900 (KST)
+Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20220217130710epsmtip197f0af2b21b2d267e9a7e52f7935cd7f~UlKwioze70271602716epsmtip1S;
-        Thu, 17 Feb 2022 13:07:10 +0000 (GMT)
-Date:   Thu, 17 Feb 2022 18:32:15 +0530
+        20220217133542epsmtip2abd6e670ac9ebfdb75c8f643565fcf05~UljqV5HGc2615626156epsmtip2J;
+        Thu, 17 Feb 2022 13:35:42 +0000 (GMT)
+Date:   Thu, 17 Feb 2022 19:00:46 +0530
 From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Dave Chinner <david@fromorbit.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     javier@javigon.com, chaitanyak@nvidia.com,
         linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
         dm-devel@redhat.com, linux-nvme@lists.infradead.org,
@@ -65,70 +65,72 @@ Cc:     javier@javigon.com, chaitanyak@nvidia.com,
         lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
         josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
         jack@suse.com, joshi.k@samsung.com, arnav.dawn@samsung.com,
-        nitheshshetty@gmail.com, Alasdair Kergon <agk@redhat.com>,
+        nitheshshetty@gmail.com, SelvaKumar S <selvakuma.s1@samsung.com>,
+        Alasdair Kergon <agk@redhat.com>,
         Mike Snitzer <snitzer@redhat.com>,
         Sagi Grimberg <sagi@grimberg.me>,
         James Smart <james.smart@broadcom.com>,
         Chaitanya Kulkarni <kch@nvidia.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] Add Copy offload support
-Message-ID: <20220217130215.GB3781@test-zns>
+Subject: Re: [PATCH v3 01/10] block: make bio_map_kern() non static
+Message-ID: <20220217133046.GA13770@test-zns>
 MIME-Version: 1.0
-In-Reply-To: <20220214220741.GB2872883@dread.disaster.area>
+In-Reply-To: <20220217083631.34ii6gqdrknrmufv@garbanzo>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TazBcZxjOd87u2SWDY4N8NJnoarUi2A22n7hURmpOKz+0mWmnmWRYnMFg
-        d7NLJG1nECJFZZE20ZXEJVpxGUow29hNGopx60qFEreoS9OktUik7mr3SJt/z/vM87zXebk4
-        b4Rjx42WxNNyiTiWT5iyGlucnFxevGURJnhcw0M1nW040gw9Y6PKUSWBLs8t40h/b5KN8pT5
-        HFTfNgZQ35Q50s4WsFHvUgqGJus2MaQpycNQeWUrhv4ouwFQU/E8hjK6ejG0NiFErZt/Eyiv
-        eQCg6X4VhrQPnZFG28FCfbevEqjw+2kOyvpNTaA7T7U4KmvfwNAvqjUCqadSAGoZ62eh6qd6
-        FkqvXQTo/FfLHKRbb2f786m+B0GUaryHoHJTZzlUZwmkflSNcijdWC2LSi0aYVF9PQlUXUUG
-        Qd0qTaIuDZYBqmkomaDOdbfiVP7Cc4LKTp0lqPnph6zg3cdjfKJocQQtt6cl4dKIaEmkLz/o
-        WEhAiKdIIHQReqF3+PYScRztyz9yNNglMDp2a318+9Pi2IQtKlisUPDd/Hzk0oR42j5Kqoj3
-        5dOyiFiZh8xVIY5TJEgiXSV0/CGhQHDQc0sYGhM1sDgMZHk2Z3qUNslAb5kJTLiQ9IANfRUg
-        E5hyeWQTgMruNIwJFgDMqhvZDl4AWDe3yskEXKPl1ypnhtcCWLjyNWFIxSNnALyvTDBgFvkm
-        bJ1oZxn0BOkMuza5BtqKdIR5eWrc4MXJbgIWpH9p9O4iRTCz4SowYDPyAOxYv8hhsCXs+HaK
-        ZcAmpDe8rl42aqxJB/hTY7uxOUheM4XZ4xWAmecIrK0uwxi8Cz5pr+cw2A7+qUznMIYsAJe6
-        x7fd+QCm5qQSjOpdeF+zjhnaxskoOHorkKH3wm86q41JcdIcZq9ObRcwg+rrL7EDrKop2k5j
-        Cwf+SSGYbVFwMeMEs627AD67scTOAftUrwyn+r8aA51gzW03lbHYPpjaUIAz9GuwbIP7iqII
-        EBXAlpYp4iJphafMXUIn/nf5cGlcHTC+2f4gNfj90ZxrM8C4oBlALs63Mpu7ZxbGM4sQn/2M
-        lktD5AmxtKIZeG6dLRe3sw6Xbv2pJD5E6OEl8BCJRB5e7iIhf7dZZ+QPYh4ZKY6nY2haRstf
-        +jCuiV0yllTS3/tB2mZA0sfnl+uqdra10uURzRasx9NnnFQFJ7qQ+DtovqDLeb0wcNZyeGnd
-        666+ssMPn3b2c4wmvWuG11omuzi81S8u6XoPhY7MmITErV0Ix9Mz8qcLd+pOXxhjC1rCPLSl
-        YTamgZKJjcQ9Rccbr2yAIqrfd8enQe/Vfxgbp3VvukyPDQxWk/NpDqOamxvtpxoPnNItgWFs
-        Jn3donjHJ+H16frS993OYr4BMyT7IH7n0efW4cUBiaIaevBahD7/2MpJvqPi3JBp9Rt/0W9v
-        +qt9y0NtFYI076N7lT7Wh61yrZ+4XWm4+KC01P8jDf7zc//qTXXJzJ5Kp5M3V7L4LEWUWLgf
-        lyvE/wIvcgCf7wQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTVxjHd+49vb2UVO+KykEzzeoLwwqDuM2TaJzZgjvGKMtmYuLctOgV
-        69qCLSjyYcMV5ygio74EK1ZaiCgghiJQgSq0Qi3oRAsOyMQ4XsxGdkEYiyCFrbBlfPvl/8/z
-        e54PD0vLykSLWZU2mddplWo5I4HVbvnSSAOZFx89YXkL32hppnF916gIlz7NYfD54XEaDzX2
-        irApJ0+Mbzb3AOzrm4edwkURbnt1nMK99mkK19tMFL5W2kThF8WFANdZX1I4s7WNwpPPY3DT
-        9B8MNrmeANzfYaaws1uB651eiH21+Qy+fKVfjLN+djD49qCTxsWeKQr/ZJ5ksKPvOMDung6I
-        yweHIP6+YgzgE6fGxfih3yPaJCe+9q3E/OwBQ3INgpi02BC5ZX4qJg97KiAxFPwCie9BCrGX
-        ZDKksuhbcqazGJC6rnSGfHe/iSZ5I38yJNsgMORlfzf8NHSXZMN+Xq06wuve3bhXcrDb5aWT
-        KkNSG8ZyQTq4Pt8IWBZx76HHZQojkLAyrg6gUqsTGEHQP3kYuuK/S89yCLo29UIcYBnXB5Bl
-        TBtgyK1ETc89MOBhOAVqnWYD8QJuFTKZHHTASXNtDPrB72ACRQj3ATJW5c/4pdwa5PWfFs8u
-        vgNQ0a+//1u8ibwX+mCAaS4cTVoe04EFNLcEFU+xs/EyZKi6OHNbELceWRzjM6MLueWoodpD
-        /Qhk5jkm8xyT+X+TeY6pAMASEMYn6TUJGn1MUoyWPxqlV2r0KdqEqH2JGjuYeajVEQ5QUzIc
-        5QIUC1wAsbR8gXS4URovk+5XHkvjdYl7dClqXu8CS1goD5W2Gb17ZFyCMpn/mueTeN1/LcUG
-        LU6njNvj+zdPTBQNHF6na4UZ9+9mRNxzhi4M39f5vsL/WhMUe2ADyQPBKvuxdhu7LVbkq+1U
-        FaYyb6+QbX8tLSzsdQtx608vOjW0dliRVtP+RtWmUNtK1Hwo4vO1ruzN0ugV1w9rLkFT7lGb
-        IsP9YUOzYF+6xQCfKKfd1orLR+rOFCAh2nr73PJImbDoq7hlVZWSgo4WPmM0e+TViGndlm+o
-        6vxPIqU5936zfXRix+7auNHg/KKuVMTxseFrvoh4JGRt/SvNc7K8wvRlze6rzDuDEzuyVIK2
-        0dPRkBiSefNkZdmt+VA94HnWIg62Jm+EndvU4zmPLGd3ugbCPoPVN8o/lkP9QWXMalqnV/4N
-        ksnh0b8DAAA=
-X-CMS-MailID: 20220217130715epcas5p2159ed983a5d32b04709d44b6c155e12e
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHc+69vS246h1QdmTKWJvFqRRa5XHYQJbozPWxDffIFpMNL3Bt
+        FWibPhwj2aTijIhoYYNAZQ63uW5gAME5oJRJHTBEVEQQVF6jzEyhPHwACnQtrYv/fX6/8/29
+        c3i4z21uAG+PQsuqFUyKkPQmzl9cvUr876plCZKG1mBUcakZR/W9DziorO84iQomZnE03jjM
+        QXnHC7mo07YUWewnOOjajB5Dw1UODNX/kIehX8uaMHTX9CNA5lOTGMpqu4ahuSEpanKMkSjP
+        2g3QSJcRQ5Zba1G9pZVAnXXFJPr+5xEuyr5ZQ6KG+xYcmVoWMNRjGAHoinGORDU2PUAX+7sI
+        VH5/nED3Z1pJdOjsI4C+PjrLRVfnWzhviejOG9to40A7Sedm2rl0rbGPS1/tP0vQmSV3CLqz
+        XUdXlWaRdPVP++lvekyANvdmkPSBy004XTj1kKRzMu0kPTlyi6DHG7rIOP+dydFylkli1UGs
+        IlGZtEchixFu+yB+Y3x4hEQqlkahSGGQgkllY4SbtseJN+9JcS5RGLSPSdE5XXGMRiMM3RCt
+        Vuq0bJBcqdHGCFlVUooqTBWiYVI1OoUsRMFq35BKJOvCncJdyfKC2XKgqiXTnnzXTWSAKs4R
+        4MWDVBjsHysijwBvng9lBtCe8afHmALw9JM8wm08BrAjewJ7FtIyN8FxP1gAPHj9AO42/gHw
+        jvUg7lIR1GtwtqrUmYvHI6m1sM3Bc7n9qNdhgyFnMRFOPSKhvjLUxb7URljssHFdzKfE0Hh7
+        CLj5RdhaZCNc7EVFwqdt5xY1AkoEL5xvwVx1IZXvDU+P9gNXLUhtgqZ6tbtRX3ivxa2HVAB8
+        YLeQbn02gDOXBzzBhQBmGjJJtyoWdtTPe7qTQ8tMvmfklTD/UrnHvxTmPLV5/HxYc/IZi+CZ
+        ihJPnuWwe1rvYRrWDUx79jgKYHWOiTCAV4zPTWd8rp6bg2GJeYo0OgfCqZehaYHnxtWwoi60
+        BHBKwXJWpUmVsZpwlVTBfv7/yROVqVVg8Zet2VID+gYnQqwA4wErgDxc6MefaOQn+PCTmC/S
+        WbUyXq1LYTVWEO48Vi4eIEhUOr+pQhsvDYuShEVERIRFrY+QCl/it8kqGR9KxmjZZJZVsepn
+        cRjPKyAD2+vN7JMd7m2P+f2C1eivGzrqM18WAmeTRCtOXz+Jr/uqlhGs/+z97k8NXyZEDjh2
+        H+pM/6s79spHZ2qXCSO38reX7XxnSan+gHLrx4Gn+NF8xy/5d94Ujw3V2ScDE9d1mP2zRvG3
+        ewcDCgSs8pi6790Z9blmETmwP91UUTT4mCq67hu5sXH3ZXlN4IqF4B2vzr1H4nJxdVT8ldvD
+        az55YfPwLr1ZJIjawZ1bkisgTfAPv6wtem/s7/GbGut63+jGNK2m9TBdgjZ8e+OeSTIZu2q+
+        uG9lz8PmcotBVwSSHSpHqXj6w7NxdSFDOb/tHT9xNVkwPBY6X9nOq7blpln7o+82CwmNnJGu
+        wdUa5j+jLjDh7gQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SX0xTZxjG951zenro1ua0MvwAM7K6GaWIQ9n2ZWHqsgsOEqMXBg2ZQJXT
+        QoDa9IBTErdixYx/EatbpDpxQCAUkYkGcLSNLbIOu45GRIoDFmI7hh1tcWPaAGUrbJl3T97n
+        +f2uXgqXXObFUYWqUlajkhdLSQHRMyBN2Lp9n+jIO8333kNd97/HkWn8Dx7qmDxHoq+CIRwF
+        rE94SH/uEh+NeETI7L/MQ64XFRh60r2CIVOTHkPtHYMYmmlrBqj/m3kMVTlcGFqaTkGDK3Mk
+        0tseAeQdNWDI/FiGTOYhAo18d4VEja1ePqoZ6yORxWfGUZs9jCF3vRegnwxLJOrzVAA0MDVK
+        oBu+AIF8L4ZIdPbmAkCVtSE+Gl6283ZvZEYeZjKGX5wkc17n5zN3DJN8ZnjqJsHork0QzIiz
+        jOk2VpHMrZbPmQvuNsD0j2tJ5vSPgzhz6dmfJFOn85PMvPcxwQQso+T+mGxBWj5bXHic1Wzb
+        mScoGGi4T6hD+ImBmueEFtTg1SCKgnQqtC8FedVAQEnofgB7z/vItSIWti7f+3e0DraHZ/hr
+        Iw+AU5W/YZGCoN+GoW7jPwBFkbQMOlaoyDma3gwt9XVYZI/TiyT06hdWRevoj+GVFQ8/koX0
+        Vmj4eRpEsoT+HUCHJ23tLoZDDR4iknE6EbrDs1jEj9PxsC286o+i34eLjturmtfpjfBujx2r
+        B2LDS7ThJdrwP30N4EYQy6q5EmUJl6JOUbGfJnPyEq5MpUw+eqykG6z+T+KWPtBrDCbbAEYB
+        G4AULo0WBq3CIxJhvvxkOas5lqspK2Y5G4inCOl6oat6KFdCK+WlbBHLqlnNfy1GRcVpsc/w
+        1CSbe/8hYP1Qedr10dyGtFD+00Xngz2ST6YDS/qE7WarNlZxfffzJHWaYlMjripIqKUPps8t
+        y75W3j7QfOPo/FNFk+ZiI7dNGOO35pfKWi2db3wR1IWrCPNr4zmppUmmQ8Ge6eN/dc74xh4y
+        lXcyXy3qbErNNs0Krg7vTFC0SB7ZLWepdy/kqpQXK2K4hTx8Ii66K+eUqyPr6r7huCJxRuDb
+        nHi/usvTcvLLtyYaMvf+oMrY5a7VKURqerLO+asoe3TXm69UbZDJ19/d+yxvh1Ee5ZDv6NX6
+        Dp85k16+eJDJmidnnbnlqqz0A36X+MGpwrET7VkfZIgH9RmJIinBFchTEnENJ/8blpJWdq4D
+        AAA=
+X-CMS-MailID: 20220217133547epcas5p305c93f10e815e275374ca2f41d75a2aa
 X-Msg-Generator: CA
 Content-Type: multipart/mixed;
-        boundary="----7Im1L.vKorTl163deO4rxYDAHxkziUWsBhtki-3JrW1s26Hg=_8dd40_"
+        boundary="----Fq-YzQe-sCxQ_.ALiW-8FMdnFblVNc8pE5kaYAan9Jc7INV.=_8df09_"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220214080551epcas5p201d4d85e9d66077f97585bb3c64517c0
-References: <CGME20220214080551epcas5p201d4d85e9d66077f97585bb3c64517c0@epcas5p2.samsung.com>
-        <20220214080002.18381-1-nj.shetty@samsung.com>
-        <20220214220741.GB2872883@dread.disaster.area>
+X-CMS-RootMailID: 20220214080558epcas5p17c1fb3b659b956908ff7215a61bcc0c9
+References: <20220214080002.18381-1-nj.shetty@samsung.com>
+        <CGME20220214080558epcas5p17c1fb3b659b956908ff7215a61bcc0c9@epcas5p1.samsung.com>
+        <20220214080002.18381-2-nj.shetty@samsung.com>
+        <20220217083631.34ii6gqdrknrmufv@garbanzo>
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -139,77 +141,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------7Im1L.vKorTl163deO4rxYDAHxkziUWsBhtki-3JrW1s26Hg=_8dd40_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+------Fq-YzQe-sCxQ_.ALiW-8FMdnFblVNc8pE5kaYAan9Jc7INV.=_8df09_
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 
- Tue, Feb 15, 2022 at 09:08:12AM +1100, Dave Chinner wrote:
-> On Mon, Feb 14, 2022 at 01:29:50PM +0530, Nitesh Shetty wrote:
-> > The patch series covers the points discussed in November 2021 virtual call
-> > [LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
-> > We have covered the Initial agreed requirements in this patchset.
-> > Patchset borrows Mikulas's token based approach for 2 bdev
-> > implementation.
+On Thu, Feb 17, 2022 at 12:36:31AM -0800, Luis Chamberlain wrote:
+> On Mon, Feb 14, 2022 at 01:29:51PM +0530, Nitesh Shetty wrote:
+> > From: SelvaKumar S <selvakuma.s1@samsung.com>
 > > 
-> > Overall series supports –
+> > Make bio_map_kern() non static
 > > 
-> > 1. Driver
-> > - NVMe Copy command (single NS), including support in nvme-target (for
-> > 	block and file backend)
-> > 
-> > 2. Block layer
-> > - Block-generic copy (REQ_COPY flag), with interface accommodating
-> > 	two block-devs, and multi-source/destination interface
-> > - Emulation, when offload is natively absent
-> > - dm-linear support (for cases not requiring split)
-> > 
-> > 3. User-interface
-> > - new ioctl
-> > 
-> > 4. In-kernel user
-> > - dm-kcopyd
+> > Signed-off-by: SelvaKumar S <selvakuma.s1@samsung.com>
+> > Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
 > 
-> The biggest missing piece - and arguably the single most useful
-> piece of this functionality for users - is hooking this up to the
-> copy_file_range() syscall so that user file copies can be offloaded
-> to the hardware efficiently.
+> This patch makes no sense on its own. I'd just merge it with
+> its first user.
 > 
-> This seems like it would relatively easy to do with an fs/iomap iter
-> loop that maps src + dst file ranges and issues block copy offload
-> commands on the extents. We already do similar "read from source,
-> write to destination" operations in iomap, so it's not a huge
-> stretch to extent the iomap interfaces to provide an copy offload
-> mechanism using this infrastructure.
-> 
-> Also, hooking this up to copy-file-range() will also get you
-> immediate data integrity testing right down to the hardware via fsx
-> in fstests - it uses copy_file_range() as one of it's operations and
-> it will find all the off-by-one failures in both the linux IO stack
-> implementation and the hardware itself.
-> 
-> And, in reality, I wouldn't trust a block copy offload mechanism
-> until it is integrated with filesystems, the page cache and has
-> solid end-to-end data integrity testing available to shake out all
-> the bugs that will inevitably exist in this stack....
-> 
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
+>   Luis
 >
 
-We had planned copy_file_range (CFR) in next phase of copy offload patch series.
-Thinking that we will get to CFR when everything else is robust.
-But if that is needed to make things robust, will start looking into that.
+acked. I will do it next version.
 
 --
-Nitesh Shetty
+Nitesh
 
-------7Im1L.vKorTl163deO4rxYDAHxkziUWsBhtki-3JrW1s26Hg=_8dd40_
+------Fq-YzQe-sCxQ_.ALiW-8FMdnFblVNc8pE5kaYAan9Jc7INV.=_8df09_
 Content-Type: text/plain; charset="utf-8"
 
 
-------7Im1L.vKorTl163deO4rxYDAHxkziUWsBhtki-3JrW1s26Hg=_8dd40_--
+------Fq-YzQe-sCxQ_.ALiW-8FMdnFblVNc8pE5kaYAan9Jc7INV.=_8df09_--

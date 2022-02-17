@@ -2,104 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD9E4B962D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A056C4B9632
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbiBQC6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 21:58:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56768 "EHLO
+        id S232131AbiBQC75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 21:59:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiBQC6g (ORCPT
+        with ESMTP id S232102AbiBQC7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 21:58:36 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B37E5D76E3;
-        Wed, 16 Feb 2022 18:58:19 -0800 (PST)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 17 Feb 2022 10:57:55
- +0800 (GMT+08:00)
-X-Originating-IP: [180.169.129.130]
-Date:   Thu, 17 Feb 2022 10:57:55 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Jing Leng" <3090101217@zju.edu.cn>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     balbi@kernel.org, jleng@ambarella.com,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: f_uvc: fix superspeedplus transfer
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <YgzUdO92gzgkqB/9@kroah.com>
-References: <Ygow+EB1P84VflBb@kroah.com>
- <20220215021647.4316-1-3090101217@zju.edu.cn> <Yguzht2JJtF+8N76@kroah.com>
- <6ca9a5a8.ae1fb.17f0061243d.Coremail.3090101217@zju.edu.cn>
- <YgzUdO92gzgkqB/9@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 16 Feb 2022 21:59:55 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD9511798C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:59:40 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id az26-20020a05600c601a00b0037c078db59cso2965254wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:59:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kn/LDmM7Giwjd+26mVkordTjd0rTELciFT9tMQUQryk=;
+        b=dWYR8YZqLKZ1D9hrocyg1i5E9iNSh/XcwYZebZxs9WfuI9Sl7AygXFIFYUMFUXqIJh
+         pPbd8D/CkRFc8HH/K545+Tbh/NYjfFaULbpvsJE+48r5suK21FhMQr600kF6cpiEOcEZ
+         hIq/U2UIY81GUxg6sSz98GnrqGo+D6i0eHGQCce1Fw5LHFFvWaF0i7THTe8T7j5pukIU
+         wx150gJpCocGcbtZ+MKWyC4ROneXRgDrLmnESdpsdJEV6BnA2CCco2PnLFTqEeB7Tzxt
+         ynRfxGJ0bhcYRWmGKDxdm0AvrAOVx0wdS8lF/7V/pL6d/3usyVZpzwUd9RQwMzZvOZS9
+         5AKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kn/LDmM7Giwjd+26mVkordTjd0rTELciFT9tMQUQryk=;
+        b=XV5qtegrBmZ7as8AiWlFWPSRZ954fPPD+OjzSM1+00vRFrARYDJHkJAOJXPkoZyyxk
+         asy23zWaF13/IX9ps1KvBXNTXrWicdvseFD55YQFGBbWBtrO0ximpmtnpfoaBwEtA7rl
+         1ta9kq9i4rXI9i0su+AXVW+33ndyDL2l2BQxsHJDHnc/DBQovVQpYAwb/w8yCEie8wXW
+         rUooEhLPHrdTeemiB1A90UEV/c+RWSdzBT0dJPUOHt1O083WUVz99UhiT2AKuqamodKx
+         TNB83ScJEzwr1MhlvZMGQOhIjc78tezGdJ240Ryu59CuoIr1nazo65AeRMyPHdwY+6g7
+         +oQw==
+X-Gm-Message-State: AOAM532gXYzfcPgvC77VNNbqsc+Xj9UWcQ1URbwOtUB3Gum6HiiN2DRP
+        RthMCSAuY6GLsXWORu81SSyvfauLn+4C8ZTBfGTyxQ==
+X-Google-Smtp-Source: ABdhPJxsqZZCrzn79f6VaiQDnruwqgTNUuolyn2u2fWhw0sOJzG8OE9y9rTC7L0UD/I193BapB+nkoPAnfmCl744MM0=
+X-Received: by 2002:a05:600c:1da4:b0:37c:729:f84d with SMTP id
+ p36-20020a05600c1da400b0037c0729f84dmr4139433wms.131.1645066779319; Wed, 16
+ Feb 2022 18:59:39 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <e3311c8.a65f5.17f059d63df.Coremail.3090101217@zju.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: cC_KCgBXV2yzuQ1iNWBjDQ--.14180W
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIEBVNG3FjlrQAAsZ
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220217002843.2312603-1-keescook@chromium.org>
+In-Reply-To: <20220217002843.2312603-1-keescook@chromium.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 17 Feb 2022 10:59:27 +0800
+Message-ID: <CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com>
+Subject: Re: [PATCH] um: Allow builds with Clang
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kbuild@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        x86@kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgR3JlZyBLSCwKClNvcnJ5IGZvciB0aGUgY29uZnVzaW9uLgoKSSB0ZXN0ZWQgdGhlIGZlYXR1
-cmUgb24gbGludXgtNS4xMCwgaXQgd2lsbCBjYXVzZSBPb3BzLgpUaGUgT29wcyBpcyBhcyBmb2xs
-b3dzOgogVW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlIGF0
-IHZpcnR1YWwgYWRkcmVzcyAwMDAwMDAwMDAwMDAwMDAwCiBNZW0gYWJvcnQgaW5mbzoKICAgRVNS
-ID0gMHg5NjAwMDAwNQogICBFQyA9IDB4MjU6IERBQlQgKGN1cnJlbnQgRUwpLCBJTCA9IDMyIGJp
-dHMKICAgU0VUID0gMCwgRm5WID0gMAogICBFQSA9IDAsIFMxUFRXID0gMAogRGF0YSBhYm9ydCBp
-bmZvOgogICBJU1YgPSAwLCBJU1MgPSAweDAwMDAwMDA1CiAgIENNID0gMCwgV25SID0gMAogdXNl
-ciBwZ3RhYmxlOiA0ayBwYWdlcywgMzktYml0IFZBcywgcGdkcD0wMDAwMDAwMWIxMmNmMDAwCiBb
-MDAwMDAwMDAwMDAwMDAwMF0gcGdkPTAwMDAwMDAwMDAwMDAwMDAsIHA0ZD0wMDAwMDAwMDAwMDAw
-MDAwLCBwdWQ9MDAwMDAwMDAwMDAwMDAwMAogSW50ZXJuYWwgZXJyb3I6IE9vcHM6IDk2MDAwMDA1
-IFsjMV0gUFJFRU1QVCBTTVAKIE1vZHVsZXMgbGlua2VkIGluOiAuLi4KIENQVTogMCBQSUQ6IDYx
-OSBDb21tOiBpcnEvOTUtMjAyMDAwODAgVGFpbnRlZDogRyAgICAgICAgICAgTyAgICAgIDUuMTAu
-NjEgIzIKIEhhcmR3YXJlIG5hbWU6IEFtYmFyZWxsYSBDVjUgVElNTiBCb2FyZCAoRFQpCiBwc3Rh
-dGU6IDIwYzAwMDg1IChuekN2IGRhSWYgK1BBTiArVUFPIC1UQ08gQlRZUEU9LS0pCiBwYyA6IGNv
-bmZpZ19lcF9ieV9zcGVlZF9hbmRfYWx0KzB4M2MvMHgyYTAgW2xpYmNvbXBvc2l0ZV0KIGxyIDog
-Y29uZmlnX2VwX2J5X3NwZWVkKzB4MTQvMHgyMCBbbGliY29tcG9zaXRlXQogc3AgOiBmZmZmZmZj
-MDExZGJiYWMwCiB4Mjk6IGZmZmZmZmMwMTFkYmJhYzAgeDI4OiAwMDAwMDAwMDAwMDAwMDAxCiB4
-Mjc6IGZmZmZmZjgxYjNlYjE5MjAgeDI2OiAwMDAwMDAwMDAwMDAwMDAwCiB4MjU6IGZmZmZmZjgx
-YjY4MDg1ZTggeDI0OiBmZmZmZmY4MWIzZWU0YzAwCiB4MjM6IGZmZmZmZjgxYjNkNzFjNDAgeDIy
-OiAwMDAwMDAwMDAwMDAwMDAwCiB4MjE6IDAwMDAwMDAwMDAwMDAwMDAgeDIwOiBmZmZmZmY4MWI2
-ODA4NWU4CiB4MTk6IGZmZmZmZjgxYjY4MDgwMDAgeDE4OiBmZmZmZmZjMDkxZGJiNzM3CiB4MTc6
-IDAwMDAwMDAwMDAwMDAwMTcgeDE2OiAwMDAwMDAwMDAwMDAwMDBhCiB4MTU6IDAwMDAwMDAwMDAw
-MDAwMDYgeDE0OiBmZmZmZmZjMDExZGJiNzNmCiB4MTM6IDAwMDAwMDAwMDAwMDAwMDEgeDEyOiBm
-ZmZmZmZjMDEwOWM5N2U4CiB4MTE6IDAwMDAwMDAwMDAwMDA2NTIgeDEwOiAwMDAwMDAwMDAwMGU1
-YTY1CiB4OSA6IGZmZmZmZmMwMTA5Yzk3ZTggeDggOiAwMDAwMDAwMGZmZmZmN2ZmCiB4NyA6IDAw
-MDAwMDAwMDAwMDE3ZmQgeDYgOiAwMDAwMDAwMDAwMDAwMDAxCiB4NSA6IGZmZmZmZjgxZmI1OTc2
-YTggeDQgOiAwMDAwMDAwMDAwMDAwMDA2CiB4MyA6IDAwMDAwMDAwMDAwMDAwMDAgeDIgOiBmZmZm
-ZmY4MWI2ODM4NzE4CiB4MSA6IDAwMDAwMDAwMDAwMDAwMDAgeDAgOiBmZmZmZmY4MWI2ODM4MDA4
-CiBDYWxsIHRyYWNlOgogIGNvbmZpZ19lcF9ieV9zcGVlZF9hbmRfYWx0KzB4M2MvMHgyYTAgW2xp
-YmNvbXBvc2l0ZV0KICB1dmNfZnVuY3Rpb25fc2V0X2FsdCsweGQ0LzB4MmU4IFt1c2JfZl91dmNd
-CiAgc2V0X2NvbmZpZy5jb25zdHByb3AuMCsweDE1NC8weDNhMCBbbGliY29tcG9zaXRlXQogIGNv
-bXBvc2l0ZV9zZXR1cCsweDMxNC8weGI0NCBbbGliY29tcG9zaXRlXQogIGNvbmZpZ2ZzX2NvbXBv
-c2l0ZV9zZXR1cCsweDg0LzB4YjAgW2xpYmNvbXBvc2l0ZV0KICBjZG5zcF9lcDBfc3RkX3JlcXVl
-c3QrMHgyNWMvMHg0NzAgW2NkbnMzXQogIGNkbnNwX3NldHVwX2FuYWx5emUrMHg5NC8weDI1YyBb
-Y2RuczNdCiAgY2Ruc3BfaGFuZGxlX2V2ZW50KzB4ZTgvMHgyM2MgW2NkbnMzXQogIGNkbnNwX3Ro
-cmVhZF9pcnFfaGFuZGxlcisweDU4LzB4ZTggW2NkbnMzXQogIGlycV90aHJlYWRfZm4rMHgyYy8w
-eGEwCiAgaXJxX3RocmVhZCsweDE2NC8weDI4MAogIGt0aHJlYWQrMHgxMjgvMHgxMzQKICByZXRf
-ZnJvbV9mb3JrKzB4MTAvMHg0MAogQ29kZTogNzEwMDBjOWYgNTQwMDBiNjAgZjk0MDA4MjEgNTI4
-MDAwMDYgKGY5NDAwMDI0KQogLS0tWyBlbmQgdHJhY2UgN2QzMDY1YjgxODFkZTdhNiBdLS0tCiBu
-b3RlOiBpcnEvOTUtMjAyMDAwODBbNjE5XSBleGl0ZWQgd2l0aCBwcmVlbXB0X2NvdW50IDIKIGdl
-bmlycTogZXhpdGluZyB0YXNrICJpcnEvOTUtMjAyMDAwODAiICg2MTkpIGlzIGFuIGFjdGl2ZSBJ
-UlEgdGhyZWFkIChpcnEgOTUpCgpCdXQgdGhlIE9vcHMgaXMgZml4ZWQgaW4gdGhlIGxhdGVzdCBr
-ZXJuZWwgYnkgdGhlIGZvbGxvd2luZyBjb21taXQ6CiBjb21taXQgMTZkNDI3NTkyMDdmYzNkMWJm
-ZjdjZmQzMzBhMDhhMjI1ZTQ3MGJhMAogQXV0aG9yOiBRaWhhbmcgSHUgPGh1cWloYW5nQG9wcG8u
-Y29tPgogRGF0ZTogICBXZWQgTm92IDEwIDE4OjExOjI5IDIwMjEgKzA4MDAKCiAgICAgdXNiOiBn
-YWRnZXQ6IGNvbXBvc2l0ZTogU2hvdyB3YXJuaW5nIGlmIGZ1bmN0aW9uIGRyaXZlcidzIGRlc2Ny
-aXB0b3JzIGFyZSBpbmNvbXBsZXRlLgoKVGhlcmUgYXJlIHNvbWUgcHJvYmxlbXMgd2l0aCBteSBw
-cmV2aW91cyB1bmRlcnN0YW5kaW5nLApzbyB0aGUgcGF0Y2ggaXMgYSBmZWF0dXJlIGJ1dCBub3Qg
-YSBidWcsIEkgd2lsbCBtb2RpZnkgdGhlCnRpdGxlIGFuZCBkZXNjcmlwdGlvbiBvZiB0aGUgcGF0
-Y2ggYW5kIHJlc2VuZCBpdC4gCgpUaGFua3MKSmluZyBMZW5nCg==
+On Thu, Feb 17, 2022 at 8:28 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Add x86-64 target for Clang+um and update user-offsets.c to use
+> Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
+> ("kbuild: fix asm-offset generation to work with clang").
+>
+> This lets me run KUnit tests with Clang:
+>
+> $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> ...
+> $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> ...
+>
+> Cc: Jeff Dike <jdike@addtoit.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+
+Thanks, this worked fine for me, with one small note:
+
+I get the following warning with clang (13.0.1) under UML (but not
+under x86_64):
+clang: warning: argument unused during compilation:
+'-mno-global-merge' [-Wunused-command-line-argument]
+
+It's not really a problem unless -Werror is enabled, though, so this
+is still definitely an improvement over clang not working at all.
+
+With that caveat, this is:
+Tested-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  arch/x86/um/user-offsets.c | 4 ++--
+>  scripts/Makefile.clang     | 1 +
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> index bae61554abcc..d9071827b515 100644
+> --- a/arch/x86/um/user-offsets.c
+> +++ b/arch/x86/um/user-offsets.c
+> @@ -10,10 +10,10 @@
+>  #include <asm/types.h>
+>
+>  #define DEFINE(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+>
+>  #define DEFINE_LONGS(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+>
+>  void foo(void)
+>  {
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 51fc23e2e9e5..857b23de51c6 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+>  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+>  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>
+>  ifeq ($(CROSS_COMPILE),)
+> --
+> 2.30.2
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220217002843.2312603-1-keescook%40chromium.org.

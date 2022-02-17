@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8C14BA832
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DB04BA831
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243879AbiBQS0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:26:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40646 "EHLO
+        id S244372AbiBQS0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:26:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiBQS0P (ORCPT
+        with ESMTP id S232414AbiBQS0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:26:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B69333A2A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:26:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645122359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=e0k61bWKoEdgCZKiT1/ArMJBvBOZzkgfosoEUmRiXDo=;
-        b=GinFhDlWlw+j7X1ctcvC1ioDc0hH2PBzkJ48PY0LeUv5YPYB/P6fmlMAXxskmx/RbHrLaG
-        QqA4AnvVlYSTHBZ+8dISBxbkdlZ4/BsJhNmH9NzIgeVrSOjih5uTrGCXbkReRan9uS1Nzt
-        vu3Pf7gnDT51ycUamEX4zMZpb3K47vQ=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-G9lfG6d-OdykW6PmRpTU_A-1; Thu, 17 Feb 2022 13:25:58 -0500
-X-MC-Unique: G9lfG6d-OdykW6PmRpTU_A-1
-Received: by mail-oi1-f199.google.com with SMTP id bx17-20020a0568081b1100b002d2e2df9e60so187395oib.22
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:25:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e0k61bWKoEdgCZKiT1/ArMJBvBOZzkgfosoEUmRiXDo=;
-        b=AKUPKzxnUluXH1eNCXaTeMA30NtwRtLES8NVIfjQRO542xOw5O4F5QLfY8upuHUHDB
-         /3qOEO0s88VH7MeekcqcMcycwZPgwDZ+tI4jT0LvxvC5n2WCJ3i8Nlz6feiD66XnV/7E
-         XarD2fqYk4j2Lx0xxkWhWtiaOQTui4Fj3+bmY2RNw4CBN6lXsIV7h6TVj17MXWEGka/G
-         +LPoVKq48rf8AzKT8M3vSrJesay4yveVvJR2ETwi663npwT9jRehhrgsyQXBKh7OLySD
-         5clJ28R9tAQCBmOrJ1x1UVOZJaoDQzhWPQYoFne1Boj9ETA700wtC+CcfuRulqNg/8w0
-         oOYw==
-X-Gm-Message-State: AOAM531ah3nvhDJpq/GhowCHR6CPAc5GbV8jlv01eQ7kvD5yHMiP1lLN
-        o0HfveUqKlPKMThwroyTQW1vTeHI9qW42FE1BJbbSqMzfKYrqVNkvfdLZ3GXRo9JPyHWSOL7Uvd
-        jTYSdAFnBqm1B9xj5AcEyeA/Y
-X-Received: by 2002:a9d:4d98:0:b0:5ac:e4ba:27a6 with SMTP id u24-20020a9d4d98000000b005ace4ba27a6mr1351163otk.334.1645122357556;
-        Thu, 17 Feb 2022 10:25:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyCwbZbDciz2AYCTeRHeNW502dpeRN+vDb4rWM50eiSxkFPNnA38L0B5o4I9cXETuQE3tb77g==
-X-Received: by 2002:a9d:4d98:0:b0:5ac:e4ba:27a6 with SMTP id u24-20020a9d4d98000000b005ace4ba27a6mr1351152otk.334.1645122357293;
-        Thu, 17 Feb 2022 10:25:57 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w7sm320674oiv.8.2022.02.17.10.25.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 10:25:56 -0800 (PST)
-From:   trix@redhat.com
-To:     vkoul@kernel.org, peter.ujfalusi@gmail.com
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] dma: ti: cleanup comments
-Date:   Thu, 17 Feb 2022 10:25:46 -0800
-Message-Id: <20220217182546.3266909-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Thu, 17 Feb 2022 13:26:31 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6551A33351
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:26:16 -0800 (PST)
+Received: from [192.168.4.54] (cpe-70-95-196-11.san.res.rr.com [70.95.196.11])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6417420BE580;
+        Thu, 17 Feb 2022 10:26:15 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6417420BE580
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1645122375;
+        bh=M5mtPIPM0j89LYQrp63Y0RDZN8FfF+oH71W+YVr1EAg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZkSaFxck2/vs6ydzKP+M0Vwdxo3z9RLR4b/doO3dwzRWM79cluxNtJXvtFZIeh0mG
+         OZryPCMcrDKN/rMuZNVGd2F/1wwU4zgQnn5If+KUOspP/jtbCOXH9+HTPwRzlYgFs0
+         P35lWg9V09Qvn1zsp5zps+G/NOArhl2Fio5iyDWo=
+Message-ID: <a22c9bed-3cc3-e2c0-7eb2-1a19d64af574@linux.microsoft.com>
+Date:   Thu, 17 Feb 2022 10:26:14 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] arm64: Do not defer reserve_crashkernel() for platforms
+ with no DMA memory zones
+Content-Language: en-US
+To:     nicolas saenz julienne <nsaenz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <1645056294-6509-1-git-send-email-vijayb@linux.microsoft.com>
+ <ed4f4589f322bd3871f825239985410b535df30e.camel@kernel.org>
+From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
+In-Reply-To: <ed4f4589f322bd3871f825239985410b535df30e.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,114 +59,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
 
-Remove the second 'the'
 
-Replacements
-completetion to completion
-seens to seen
-pendling to pending
-atleast to at least
-tranfer to transfer
-multibple to a multiple
-transfering to transferring
+On 2/17/2022 2:49 AM, nicolas saenz julienne wrote:
+> On Wed, 2022-02-16 at 16:04 -0800, Vijay Balakrishna wrote:
+>> The following patches resulted in deferring crash kernel reservation to
+>> mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
+>> in particular Raspberry Pi 4.
+>>
+>> commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
+>> commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
+>> commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
+..
+>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+>> index acfae9b41cc8..e7faf5edccfc 100644
+>> --- a/arch/arm64/mm/mmu.c
+>> +++ b/arch/arm64/mm/mmu.c
+>> @@ -517,7 +517,7 @@ static void __init map_mem(pgd_t *pgdp)
+>>   	 */
+>>   	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
+>>   
+>> -	if (can_set_direct_map() || crash_mem_map || IS_ENABLED(CONFIG_KFENCE))
+>> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+>>   		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+>>   
+>>   	/*
+>> @@ -528,6 +528,14 @@ static void __init map_mem(pgd_t *pgdp)
+>>   	 */
+>>   	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+>>   
+>> +#ifdef CONFIG_KEXEC_CORE
+>> +	if (crash_mem_map && !crashk_res.end)
+>> +		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> 
+> Using IS_ENABLED(ZONE_DMA/DMA32) instead of '!crashk_res.end' would be more
+> efficient and a bit more explicit IMO.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/dma/ti/cppi41.c   |  6 +++---
- drivers/dma/ti/edma.c     | 10 +++++-----
- drivers/dma/ti/omap-dma.c |  2 +-
- 3 files changed, 9 insertions(+), 9 deletions(-)
+Sure, I will make change in a follow up submission.
 
-diff --git a/drivers/dma/ti/cppi41.c b/drivers/dma/ti/cppi41.c
-index 8c2f7ebe998c..062bd9bd4de0 100644
---- a/drivers/dma/ti/cppi41.c
-+++ b/drivers/dma/ti/cppi41.c
-@@ -315,7 +315,7 @@ static irqreturn_t cppi41_irq(int irq, void *data)
- 		val = cppi_readl(cdd->qmgr_mem + QMGR_PEND(i));
- 		if (i == QMGR_PENDING_SLOT_Q(first_completion_queue) && val) {
- 			u32 mask;
--			/* set corresponding bit for completetion Q 93 */
-+			/* set corresponding bit for completion Q 93 */
- 			mask = 1 << QMGR_PENDING_BIT_Q(first_completion_queue);
- 			/* not set all bits for queues less than Q 93 */
- 			mask--;
-@@ -703,7 +703,7 @@ static int cppi41_tear_down_chan(struct cppi41_channel *c)
- 	 * transfer descriptor followed by TD descriptor. Waiting seems not to
- 	 * cause any difference.
- 	 * RX seems to be thrown out right away. However once the TearDown
--	 * descriptor gets through we are done. If we have seens the transfer
-+	 * descriptor gets through we are done. If we have seen the transfer
- 	 * descriptor before the TD we fetch it from enqueue, it has to be
- 	 * there waiting for us.
- 	 */
-@@ -747,7 +747,7 @@ static int cppi41_stop_chan(struct dma_chan *chan)
- 		struct cppi41_channel *cc, *_ct;
- 
- 		/*
--		 * channels might still be in the pendling list if
-+		 * channels might still be in the pending list if
- 		 * cppi41_dma_issue_pending() is called after
- 		 * cppi41_runtime_suspend() is called
- 		 */
-diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-index 08e47f44d325..3ea8ef7f57df 100644
---- a/drivers/dma/ti/edma.c
-+++ b/drivers/dma/ti/edma.c
-@@ -118,10 +118,10 @@
- 
- /*
-  * Max of 20 segments per channel to conserve PaRAM slots
-- * Also note that MAX_NR_SG should be atleast the no.of periods
-+ * Also note that MAX_NR_SG should be at least the no.of periods
-  * that are required for ASoC, otherwise DMA prep calls will
-  * fail. Today davinci-pcm is the only user of this driver and
-- * requires atleast 17 slots, so we setup the default to 20.
-+ * requires at least 17 slots, so we setup the default to 20.
-  */
- #define MAX_NR_SG		20
- #define EDMA_MAX_SLOTS		MAX_NR_SG
-@@ -976,7 +976,7 @@ static int edma_config_pset(struct dma_chan *chan, struct edma_pset *epset,
- 		 * and quotient respectively of the division of:
- 		 * (dma_length / acnt) by (SZ_64K -1). This is so
- 		 * that in case bcnt over flows, we have ccnt to use.
--		 * Note: In A-sync tranfer only, bcntrld is used, but it
-+		 * Note: In A-sync transfer only, bcntrld is used, but it
- 		 * only applies for sg_dma_len(sg) >= SZ_64K.
- 		 * In this case, the best way adopted is- bccnt for the
- 		 * first frame will be the remainder below. Then for
-@@ -1203,7 +1203,7 @@ static struct dma_async_tx_descriptor *edma_prep_dma_memcpy(
- 		 * slot2: the remaining amount of data after slot1.
- 		 *	  ACNT = full_length - length1, length2 = ACNT
- 		 *
--		 * When the full_length is multibple of 32767 one slot can be
-+		 * When the full_length is a multiple of 32767 one slot can be
- 		 * used to complete the transfer.
- 		 */
- 		width = array_size;
-@@ -1814,7 +1814,7 @@ static void edma_issue_pending(struct dma_chan *chan)
-  * This limit exists to avoid a possible infinite loop when waiting for proof
-  * that a particular transfer is completed. This limit can be hit if there
-  * are large bursts to/from slow devices or the CPU is never able to catch
-- * the DMA hardware idle. On an AM335x transfering 48 bytes from the UART
-+ * the DMA hardware idle. On an AM335x transferring 48 bytes from the UART
-  * RX-FIFO, as many as 55 loops have been seen.
-  */
- #define EDMA_MAX_TR_WAIT_LOOPS 1000
-diff --git a/drivers/dma/ti/omap-dma.c b/drivers/dma/ti/omap-dma.c
-index 7cb577e6587b..8e52a0dc1f78 100644
---- a/drivers/dma/ti/omap-dma.c
-+++ b/drivers/dma/ti/omap-dma.c
-@@ -1442,7 +1442,7 @@ static int omap_dma_pause(struct dma_chan *chan)
- 	 * A source-synchronised channel is one where the fetching of data is
- 	 * under control of the device. In other words, a device-to-memory
- 	 * transfer. So, a destination-synchronised channel (which would be a
--	 * memory-to-device transfer) undergoes an abort if the the CCR_ENABLE
-+	 * memory-to-device transfer) undergoes an abort if the CCR_ENABLE
- 	 * bit is cleared.
- 	 * From 16.1.4.20.4.6.2 Abort: "If an abort trigger occurs, the channel
- 	 * aborts immediately after completion of current read/write
--- 
-2.26.3
+> 
+>>   	/* map all the memory banks */
+>>   	for_each_mem_range(i, &start, &end) {
+>>   		if (start >= end)
+>> @@ -554,6 +562,20 @@ static void __init map_mem(pgd_t *pgdp)
+>>   	__map_memblock(pgdp, kernel_start, kernel_end,
+>>   		       PAGE_KERNEL, NO_CONT_MAPPINGS);
+>>   	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
+>> +#ifdef CONFIG_KEXEC_CORE
+>> +	/*
+>> +	 * Use page-level mappings here so that we can shrink the region
+>> +	 * in page granularity and put back unused memory to buddy system
+>> +	 * through /sys/kernel/kexec_crash_size interface.
+>> +	 */
+>> +	if (crashk_res.end) {
+> 
+> Same here.
 
+Yes.
+
+> 
+>> +		__map_memblock(pgdp, crashk_res.start, crashk_res.end + 1,
+>> +			       PAGE_KERNEL,
+>> +			       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+>> +		memblock_clear_nomap(crashk_res.start,
+>> +				     resource_size(&crashk_res));
+>> +	}
+>> +#endif
+> 
+> Now, I carefully reviewed the patch and it seems to be doing the right thing.
+> But even while knowlegable on the topic, it took a good amount of effort to
+> untangle the possible code paths. I suspect it's going to be painful to
+> maintain. I'd suggest at least introducing a comment explaining the situation.
+
+I appreciate your review.  Yes, it took a good amount of time for me 
+(new here) too and glad for your notice.  Let me take a shot at 
+explaining in my next revision.
+> 
+> If there approach if deemed acceptable, I'll test is on the RPi4.
+
+Please, your testing on RPi4 would be valuable.
+
+Thanks,
+Vijay
+
+> 
+> Regards,
+> Nicolas

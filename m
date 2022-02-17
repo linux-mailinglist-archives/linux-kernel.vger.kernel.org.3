@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6170B4B94FE
+	by mail.lfdr.de (Postfix) with ESMTP id B24DE4B94FF
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 01:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiBQA0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 19:26:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44882 "EHLO
+        id S229763AbiBQA0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 19:26:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiBQA0S (ORCPT
+        with ESMTP id S229658AbiBQA02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 19:26:18 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248CB2AA3A5;
-        Wed, 16 Feb 2022 16:26:02 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 21H0PmYF2001412, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 21H0PmYF2001412
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 17 Feb 2022 08:25:48 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 17 Feb 2022 08:25:47 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 16:25:47 -0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
- RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
- 15.01.2308.020; Thu, 17 Feb 2022 08:25:47 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-CC:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH][next] tw89: core.h: Replace zero-length array with flexible-array member
-Thread-Topic: [PATCH][next] tw89: core.h: Replace zero-length array with
- flexible-array member
-Thread-Index: AQHYI21xs7IWblHw1kuwBXNwuuxMCKyWHIIAgADGQ2A=
-Date:   Thu, 17 Feb 2022 00:25:47 +0000
-Message-ID: <36638534535441fb8faf587305acfa78@realtek.com>
-References: <20220216195047.GA904198@embeddedor>
- <202202161235.0C91ED227@keescook>
-In-Reply-To: <202202161235.0C91ED227@keescook>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzIvMTYg5LiL5Y2IIDEwOjE4OjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 16 Feb 2022 19:26:28 -0500
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B882AA3A5;
+        Wed, 16 Feb 2022 16:26:15 -0800 (PST)
+Received: by mail-il1-f176.google.com with SMTP id h11so1099013ilq.9;
+        Wed, 16 Feb 2022 16:26:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C6PzgH9pozHS/vASy5sehliUW75Ia88kd3NPde72uEc=;
+        b=5zzTwB0R6IsUZvu36sYkg/9lG8zUzjb50r8Mu7yi7Ms/c98cr9Rmfy1Slqtcgm2ri+
+         TVHVUP0h0m5wUUr0kziZH4er7lNst3BEy5DQLQVs+WRLRz78pdwmJMRVU6BHVWlo8i7M
+         DbMbV9OJaKYy/wAIcql6M7wbnglZbMnNYm+vVpV0cVugWcacsFfuhtMOFPGbPoLqA9dM
+         4WdX22VaXq/Xu+4LcwTyJHrzpEE3cwKnBRJWD1SYP3QpcAeRn7uImb47re31eEZeV0fP
+         UBOarostp1D8gFYIuejoy0IRA8/cHWpHK4NQ0TRON5XQiPo59FgIkpKSaWW8LRPnEobx
+         +2Mw==
+X-Gm-Message-State: AOAM532flFGVy9CNfiTodbSv9pCeaJLW+naCJ0cY+iakPSMQPsj19Pr6
+        /H14miQrpgVrhG3G2fH74w==
+X-Google-Smtp-Source: ABdhPJxgFrm4Lh1Md07b/SJUVFX/T7aLxRNb8EIC+WQXPrLXe9qa/iqyaQg4aFNR6a8/a7QCdkLncQ==
+X-Received: by 2002:a05:6e02:1b04:b0:2ba:7f04:f117 with SMTP id i4-20020a056e021b0400b002ba7f04f117mr264481ilv.74.1645057574745;
+        Wed, 16 Feb 2022 16:26:14 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id k9sm909544ilv.31.2022.02.16.16.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 16:26:14 -0800 (PST)
+Received: (nullmailer pid 1967160 invoked by uid 1000);
+        Thu, 17 Feb 2022 00:26:12 -0000
+Date:   Wed, 16 Feb 2022 18:26:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] dt-bindings: arm: at91: add Kontron's new KSwitches
+Message-ID: <Yg2WJE170FDvALn8@robh.at.kernel.org>
+References: <20220210131817.484922-1-michael@walle.cc>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210131817.484922-1-michael@walle.cc>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEtlZXMgQ29vayA8a2Vlc2Nv
-b2tAY2hyb21pdW0ub3JnPg0KPiBTZW50OiBUaHVyc2RheSwgRmVicnVhcnkgMTcsIDIwMjIgNDoz
-NiBBTQ0KPiBUbzogR3VzdGF2byBBLiBSLiBTaWx2YSA8Z3VzdGF2b2Fyc0BrZXJuZWwub3JnPg0K
-PiBDYzogUGtzaGloIDxwa3NoaWhAcmVhbHRlay5jb20+OyBLYWxsZSBWYWxvIDxrdmFsb0BrZXJu
-ZWwub3JnPjsgRGF2aWQgUy4gTWlsbGVyIDxkYXZlbUBkYXZlbWxvZnQubmV0PjsNCj4gSmFrdWIg
-S2ljaW5za2kgPGt1YmFAa2VybmVsLm9yZz47IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9y
-ZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgtaGFyZGVuaW5nQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENI
-XVtuZXh0XSB0dzg5OiBjb3JlLmg6IFJlcGxhY2UgemVyby1sZW5ndGggYXJyYXkgd2l0aCBmbGV4
-aWJsZS1hcnJheSBtZW1iZXINCj4gDQo+IE9uIFdlZCwgRmViIDE2LCAyMDIyIGF0IDAxOjUwOjQ3
-UE0gLTA2MDAsIEd1c3Rhdm8gQS4gUi4gU2lsdmEgd3JvdGU6DQo+ID4gVGhlcmUgaXMgYSByZWd1
-bGFyIG5lZWQgaW4gdGhlIGtlcm5lbCB0byBwcm92aWRlIGEgd2F5IHRvIGRlY2xhcmUNCj4gPiBo
-YXZpbmcgYSBkeW5hbWljYWxseSBzaXplZCBzZXQgb2YgdHJhaWxpbmcgZWxlbWVudHMgaW4gYSBz
-dHJ1Y3R1cmUuDQo+ID4gS2VybmVsIGNvZGUgc2hvdWxkIGFsd2F5cyB1c2Ug4oCcZmxleGlibGUg
-YXJyYXkgbWVtYmVyc+KAnVsxXSBmb3IgdGhlc2UNCj4gPiBjYXNlcy4gVGhlIG9sZGVyIHN0eWxl
-IG9mIG9uZS1lbGVtZW50IG9yIHplcm8tbGVuZ3RoIGFycmF5cyBzaG91bGQNCj4gPiBubyBsb25n
-ZXIgYmUgdXNlZFsyXS4NCj4gPg0KPiA+IFsxXSBodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lr
-aS9GbGV4aWJsZV9hcnJheV9tZW1iZXINCj4gPiBbMl0gaHR0cHM6Ly93d3cua2VybmVsLm9yZy9k
-b2MvaHRtbC92NS4xNi9wcm9jZXNzL2RlcHJlY2F0ZWQuaHRtbCN6ZXJvLWxlbmd0aC1hbmQtb25l
-LWVsZW1lbnQtYXJyYXlzDQo+ID4NCj4gPiBMaW5rOiBodHRwczovL2dpdGh1Yi5jb20vS1NQUC9s
-aW51eC9pc3N1ZXMvNzgNCj4gPiBTaWduZWQtb2ZmLWJ5OiBHdXN0YXZvIEEuIFIuIFNpbHZhIDxn
-dXN0YXZvYXJzQGtlcm5lbC5vcmc+DQo+IA0KPiBSZXZpZXdlZC1ieTogS2VlcyBDb29rIDxrZWVz
-Y29va0BjaHJvbWl1bS5vcmc+DQoNCkFja2VkLWJ5OiBQaW5nLUtlIFNoaWggPHBrc2hpaEByZWFs
-dGVrLmNvbT4NCg0KLS0NClBpbmctS2UNCg0K
+On Thu, 10 Feb 2022 14:18:17 +0100, Michael Walle wrote:
+> The Kontron KSwitch D10 MMT series ethernet switches features a LAN9668
+> SoC with either 8 copper ports or 6 copper port and two SFP cages.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> changes since v1:
+>  - just use one entry with an enum, thanks Krzysztof
+> 
+>  Documentation/devicetree/bindings/arm/atmel-at91.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>

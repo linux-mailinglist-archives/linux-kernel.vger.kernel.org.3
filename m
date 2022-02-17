@@ -2,204 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA044B9C5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5804B9C5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiBQJqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 04:46:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57256 "EHLO
+        id S238842AbiBQJq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 04:46:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234504AbiBQJqo (ORCPT
+        with ESMTP id S238824AbiBQJqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:46:44 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B84DF4C;
-        Thu, 17 Feb 2022 01:46:30 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id n24so7374597ljj.10;
-        Thu, 17 Feb 2022 01:46:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version;
-        bh=HcorFhl/CKANEYKOlL5BhoEnFeIHTHQOS2F7iJiHPnE=;
-        b=dvJXR0Glhlz5X26JKYpehPOhu+MuwIVPwOlU7CZ+qombV/ktFcB6JwekETZNvw+wzq
-         bZ++m7o2Fqw4/3K0AGd+WefGiTXyAiA8s+SLbz5sxq3Wy20NAtO8x2H1J7Esl/xT0AAT
-         fv8Zucd+VGgDH4k8KWAAdRsX1ZPPbHS81gZJlXyJo+ZCik4RtCiaE+S3qWgiFzfblWdH
-         h8pyNKcjajaQEC/jmBXhJZHZ7uuaM6hPTj0UKbudcMzJTyXRNLK3tyyeGJIPnDRv1icX
-         y3BAtYZ2iAsGdUv/N/bsGcxeoYXWFXz2ejeImKoWxHlLYcwB5YUAY8BdiR15PY22DPpY
-         2ptQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version;
-        bh=HcorFhl/CKANEYKOlL5BhoEnFeIHTHQOS2F7iJiHPnE=;
-        b=Y99Dc2PG/r/RbKO419fz1jiad+XmtJgSWYAYRxGGOXkaRjujrE7gJ5ksRoSDttYvnH
-         +Spce52viRpwkGT7Aikp9kgTiYsbFVEbjlpenpnyy5nkLyI6Al3aPHeG3/Mygx5xMzqY
-         j7fqr01ZkNRXNdlPAvKVebgaEc6RsODBQovhP1s0PvOUGZSnSRogdYLjqcejd8pKEa9P
-         1iF36HjKdyNP8X/Y8iYo0mJieIevikxiruyRHwZo9WlBABHLoAqogwdIdurk+tZlMeGl
-         pX5LvmZCVuJfXQ9iILiTDXxFIS/RLf6B9gbWhIUvHKOJ+MliXb04l2i4Zmd1JcCK0PEz
-         a0Aw==
-X-Gm-Message-State: AOAM533uhXWo0HDoJJi1nKxuBs2f6M7HrKvY1ZBBodsx4V73eatLnqNk
-        yui9k0Iz7qySnpNRySNtcMc=
-X-Google-Smtp-Source: ABdhPJz1DxZT+ySvf4y6si2qjIZqvjAZBM53rG/UUK8KNz7Usv+PrxlQb40NVymujmTOs6Kv5J0iug==
-X-Received: by 2002:a2e:b5a1:0:b0:244:d3b4:dc24 with SMTP id f1-20020a2eb5a1000000b00244d3b4dc24mr1611829ljn.83.1645091188340;
-        Thu, 17 Feb 2022 01:46:28 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id f17sm461508lfk.221.2022.02.17.01.46.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 01:46:27 -0800 (PST)
-Date:   Thu, 17 Feb 2022 11:46:17 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, linux-m68k@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/8] drm/fourcc: Add DRM_FORMAT_C[124]
-Message-ID: <20220217114617.582c3b7d@eldfell>
-In-Reply-To: <20220215165226.2738568-2-geert@linux-m68k.org>
-References: <20220215165226.2738568-1-geert@linux-m68k.org>
-        <20220215165226.2738568-2-geert@linux-m68k.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 17 Feb 2022 04:46:45 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2261B62EF;
+        Thu, 17 Feb 2022 01:46:31 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 3513622205;
+        Thu, 17 Feb 2022 10:46:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1645091188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uMIY4q1dw2g0DupncXTpW6aZDCSYaQ0ItOC+2/6KcXc=;
+        b=bea5cxY1s+igLLttFbfWazshFuoO8SPXLgg3V6oVbn8Mazj+rV3b3D/bmuCxFiqYSkGzXD
+        +7AHgj2bvdEQh78V5Ge0Q5ltrCRXl8ongEHltbH9s7g7iYL++5SMO02GwYB5hvn372Mqu7
+        OaO0Y0uUHxIX4rUo6oPxxb3Lb/mUv5A=
+From:   Michael Walle <michael@walle.cc>
+To:     Richard Genoud <richard.genoud@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
+Subject: [PATCH v2] tty: serial: atmel: add earlycon support
+Date:   Thu, 17 Feb 2022 10:46:20 +0100
+Message-Id: <20220217094620.1148571-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3iRivHF=QF0GVYji/QgBxGk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/3iRivHF=QF0GVYji/QgBxGk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Add early console support which relies on the bootloader for the
+initialization of the UART.
+Please note, that the compatibles are taken from at91-usart MFD
+driver.
 
-On Tue, 15 Feb 2022 17:52:19 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/tty/serial/Kconfig        |  1 +
+ drivers/tty/serial/atmel_serial.c | 24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
 
-> Introduce fourcc codes for color-indexed frame buffer formats with two,
-> four, and sixteen color, and provide a suitable mapping from bit per
-> pixel and depth to fourcc codes.
->=20
-> As the number of bits per pixel is less than eight, these rely on proper
-> block handling for the calculation of bits per pixel and pitch.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> Do we want to keep the rounding down if depth < bpp, or insist on depth
-> =3D=3D bpp? I don't think the rounding down will still be needed after
-> "[PATCH 4/8] drm/client: Use actual bpp when allocating frame buffers".
-> ---
->  drivers/gpu/drm/drm_fourcc.c  | 18 ++++++++++++++++++
->  include/uapi/drm/drm_fourcc.h |  3 +++
->  2 files changed, 21 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
-> index 07741b678798b0f1..60ce63d728b8e308 100644
-> --- a/drivers/gpu/drm/drm_fourcc.c
-> +++ b/drivers/gpu/drm/drm_fourcc.c
-> @@ -46,6 +46,18 @@ uint32_t drm_mode_legacy_fb_format(uint32_t bpp, uint3=
-2_t depth)
->  	case 8:
->  		if (depth =3D=3D 8)
->  			fmt =3D DRM_FORMAT_C8;
-> +		fallthrough;
-> +	case 4:
-> +		if (depth =3D=3D 4)
-> +			fmt =3D DRM_FORMAT_C4;
-> +		fallthrough;
-> +	case 2:
-> +		if (depth =3D=3D 2)
-> +			fmt =3D DRM_FORMAT_C2;
-> +		fallthrough;
-> +	case 1:
-> +		if (depth =3D=3D 1)
-> +			fmt =3D DRM_FORMAT_C1;
->  		break;
-> =20
->  	case 16:
-> @@ -132,6 +144,12 @@ EXPORT_SYMBOL(drm_driver_legacy_fb_format);
->  const struct drm_format_info *__drm_format_info(u32 format)
->  {
->  	static const struct drm_format_info formats[] =3D {
-> +		{ .format =3D DRM_FORMAT_C1,		.depth =3D 1,  .num_planes =3D 1,
-> +		  .char_per_block =3D { 1, }, .block_w =3D { 8, }, .block_h =3D { 1, }=
-, .hsub =3D 1, .vsub =3D 1 },
-> +		{ .format =3D DRM_FORMAT_C2,		.depth =3D 2,  .num_planes =3D 1,
-> +		  .char_per_block =3D { 1, }, .block_w =3D { 4, }, .block_h =3D { 1, }=
-, .hsub =3D 1, .vsub =3D 1 },
-> +		{ .format =3D DRM_FORMAT_C4,		.depth =3D 4,  .num_planes =3D 1,
-> +		  .char_per_block =3D { 1, }, .block_w =3D { 2, }, .block_h =3D { 1, }=
-, .hsub =3D 1, .vsub =3D 1 },
->  		{ .format =3D DRM_FORMAT_C8,		.depth =3D 8,  .num_planes =3D 1, .cpp =
-=3D { 1, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
->  		{ .format =3D DRM_FORMAT_R8,		.depth =3D 8,  .num_planes =3D 1, .cpp =
-=3D { 1, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
->  		{ .format =3D DRM_FORMAT_R10,		.depth =3D 10, .num_planes =3D 1, .cpp =
-=3D { 2, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
-> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
-> index fc0c1454d2757d5d..3f09174670b3cce6 100644
-> --- a/include/uapi/drm/drm_fourcc.h
-> +++ b/include/uapi/drm/drm_fourcc.h
-> @@ -99,6 +99,9 @@ extern "C" {
->  #define DRM_FORMAT_INVALID	0
-> =20
->  /* color index */
-> +#define DRM_FORMAT_C1		fourcc_code('C', '1', ' ', ' ') /* [0] C */
-> +#define DRM_FORMAT_C2		fourcc_code('C', '2', ' ', ' ') /* [1:0] C */
-> +#define DRM_FORMAT_C4		fourcc_code('C', '4', ' ', ' ') /* [3:0] C */
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 0e5ccb25bdb1..407a98ec0791 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -139,6 +139,7 @@ config SERIAL_ATMEL_CONSOLE
+ 	bool "Support for console on AT91 serial port"
+ 	depends on SERIAL_ATMEL=y
+ 	select SERIAL_CORE_CONSOLE
++	select SERIAL_EARLYCON
+ 	help
+ 	  Say Y here if you wish to use an on-chip UART on a Atmel
+ 	  AT91 processor as the system console (the system
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index 2d09a89974a2..73d43919898d 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -2673,6 +2673,30 @@ static struct console atmel_console = {
+ 	.data		= &atmel_uart,
+ };
+ 
++static void atmel_serial_early_write(struct console *con, const char *s,
++				     unsigned int n)
++{
++	struct earlycon_device *dev = con->data;
++
++	uart_console_write(&dev->port, s, n, atmel_console_putchar);
++}
++
++static int __init atmel_early_console_setup(struct earlycon_device *device,
++					    const char *options)
++{
++	if (!device->port.membase)
++		return -ENODEV;
++
++	device->con->write = atmel_serial_early_write;
++
++	return 0;
++}
++
++OF_EARLYCON_DECLARE(atmel_serial, "atmel,at91rm9200-usart",
++		    atmel_early_console_setup);
++OF_EARLYCON_DECLARE(atmel_serial, "atmel,at91sam9260-usart",
++		    atmel_early_console_setup);
++
+ #define ATMEL_CONSOLE_DEVICE	(&atmel_console)
+ 
+ #else
+-- 
+2.30.2
 
-Hi Geert,
-
-generally this looks fine to me though I'm not familiar with the
-code. The thing I'm missing here is a more precise description of the
-new pixel formats.
-
->  #define DRM_FORMAT_C8		fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
-
-This description of C8 is a little vague maybe, but presumably one
-pixel being one byte, the address of pixel x is just &bytes[x].
-
-C4, C2 and C1 should also specify the pixel order within the byte.
-There is some precedent of that in with some YUV formats in this file.=20
-
-Maybe something like:=20
-
-C2 /* [7:0] c0:c1:c2:c3 2:2:2:2 four pixels per byte */
-
-or the other way around, which ever your ordering is?
-
-
-Thanks,
-pq
-
---Sig_/3iRivHF=QF0GVYji/QgBxGk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmIOGWkACgkQI1/ltBGq
-qqe5Sg//Uh9D3UOI0B4aI3SQxsqXUnJGJmcpyK0wfxKijz0p+CZDTBnK6109x4pP
-8ohxSFY/IQZJQttfakRdby1kX6gmF7KmE+q+fSa0BLIL0MUMW1mOGIES62GprGMz
-qEkKgajOrGsleVcPwXQm9vICVDeO7lTmWAXh9AI2xqQhKti5BytynvQHvzHnO21L
-THab1x2sat/TeuPGeS08ibxPztZLgH1HDO0jMaUZwEY2kMsCFDGgmTJRV8u3ff5m
-fDPqHUTp6KFItDowMpB5pHh+9/tWGEJz1qr0WOPKBkaq4cz1nkXPc9t4m0YJyVYQ
-JLfFiFqqkiBsMC5iitJuCagrI2ZoVIPZ0wBGJwZ4im8Lz2cf2pXlhs1C5gf8z6ac
-/8nia6+mfeg6vH4iWXlwFGsZAmbbl9LG+Ca7qDy1u9zI2v5z+c6XvIY9+bL6VEh3
-FdGXKrYOOpS2iurD7L0kMdHs1wRlGknrWP20WNOF2ImD90W48y/4BNtWw+Z1fnkI
-Y3KAGqHCXwUR5Gx3o4LvLaF9RWBAoU0hSsE0t5yAR4wp8iug864ijLOxQej9MevO
-V8zagQkTQpTCw9uDos1zWKjNv70s3r2an3Uecp+Un1fpjUOfH47MM7fN8nNiickM
-/fcSpNfFZVoozBtan5wrI0CsjsXR4HIe3kz3/3heK7z8mzNtspg=
-=Rcp/
------END PGP SIGNATURE-----
-
---Sig_/3iRivHF=QF0GVYji/QgBxGk--

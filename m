@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFA44BA8FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AEF64BA905
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244649AbiBQS44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:56:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37776 "EHLO
+        id S236186AbiBQS5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:57:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242730AbiBQS4r (ORCPT
+        with ESMTP id S244657AbiBQS5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:56:47 -0500
+        Thu, 17 Feb 2022 13:57:01 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81E71139;
-        Thu, 17 Feb 2022 10:56:28 -0800 (PST)
-Date:   Thu, 17 Feb 2022 18:56:25 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7150A5C85B;
+        Thu, 17 Feb 2022 10:56:46 -0800 (PST)
+Date:   Thu, 17 Feb 2022 18:56:43 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645124187;
+        s=2020; t=1645124205;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RxMgh3IDNwIzEm2KVoQUUi/pn3xQij1vRbLpdOlGqPQ=;
-        b=YrwDHAdB3pB4qq5VzBCqsL0iVNRuAmB3rR6wZpMssviSOzeWdJCHr0imGnig6fV/XXeiOm
-        87w7VKZU55o/S7/WqetQP0phlMwHr1qJJ0AEeEAzXnsgRJivf5Iprvf8YP+MCLSbi6p7TV
-        5IIWlVQir/12GV4tOpK+NoKLWamzYM0Nq1BqTEt/4FEZ7vxj+4GIvHVpegfzcZgffi9KYw
-        Zq69sg1CZrNDCWKKK/bzZR3AU4z/UhtwR95Z/pbSKY025azTEh+4qWt7Py15Ga1qTB295g
-        O+hBrHtRTOOHxGevi3xVLtkoM7+sGwDUa4+0nRJdi2sgJ1tOybcnxVMjb8K//w==
+        bh=an+uuknNOI4I1L34/wn1zm9vIZR0T0TDAOSVeXtTsoA=;
+        b=nGTt2QX05CfqEprHtTzmZqQ1P2AADQ6QScGd46IVKjwwdurOw5TrCKd7Hyvzhv2fPTgT3H
+        ayGz9NV+9tRPTBL03CWt4aokyVDeONh2QSn1kFqfczfrvQmaehjxGBJQM3702bi0ZZblVD
+        iJAXPwHKBUp1no6FOCckQTVG5ooNvfCeq/qDwkqWtPtSniMovvr0gxMQN91AuH/iPrKalD
+        gQ/ar4O3mZF7y9DRkZ//+vKNk7M3HbRX0mQPm1rzoj8syLWz3fY7ybix5JPozAcTs5d0Oh
+        glUeUKEPS9iGKYSFh9qDxNgRhWrB7lWEePvBOzVZRTy87Dl/MxzmCwOVU1AysQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645124187;
+        s=2020e; t=1645124205;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RxMgh3IDNwIzEm2KVoQUUi/pn3xQij1vRbLpdOlGqPQ=;
-        b=NP8AlD7DUeIYg3Iwjzo2RxqCxhNskhSoyLWSo/qEpQvkR6fCvUvSeMd8cbAgM1UjHJgrAI
-        7RSmK5gRJfbJ/kAw==
-From:   "tip-bot2 for Waiman Long" <tip-bot2@linutronix.de>
+        bh=an+uuknNOI4I1L34/wn1zm9vIZR0T0TDAOSVeXtTsoA=;
+        b=jdNm7FZdr6km7Vzf+xv5t14+bDNhPPOKNRCSqqGl71PkM+Licjbo9+hv/GJ21nLvahaN8C
+        PRA6zmBo2OTw1iDg==
+From:   "tip-bot2 for Frederic Weisbecker" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/lockdep: Iterate lock_classes directly
- when reading lockdep files
-Cc:     Waiman Long <longman@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] sched/isolation: Split housekeeping cpumask per
+ isolation features
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220211035526.1329503-2-longman@redhat.com>
-References: <20220211035526.1329503-2-longman@redhat.com>
+In-Reply-To: <20220207155910.527133-9-frederic@kernel.org>
+References: <20220207155910.527133-9-frederic@kernel.org>
 MIME-Version: 1.0
-Message-ID: <164512418573.16921.10863107150064972616.tip-bot2@tip-bot2>
+Message-ID: <164512420399.16921.15928789351536425713.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,255 +68,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     fb7275acd6fb988313dddd8d3d19efa70d9015ad
-Gitweb:        https://git.kernel.org/tip/fb7275acd6fb988313dddd8d3d19efa70d9015ad
-Author:        Waiman Long <longman@redhat.com>
-AuthorDate:    Thu, 10 Feb 2022 22:55:26 -05:00
+Commit-ID:     ed3b362d54f0038cafc985248350d301af7af686
+Gitweb:        https://git.kernel.org/tip/ed3b362d54f0038cafc985248350d301af7af686
+Author:        Frederic Weisbecker <frederic@kernel.org>
+AuthorDate:    Mon, 07 Feb 2022 16:59:10 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 16 Feb 2022 15:57:58 +01:00
+CommitterDate: Wed, 16 Feb 2022 15:57:56 +01:00
 
-locking/lockdep: Iterate lock_classes directly when reading lockdep files
+sched/isolation: Split housekeeping cpumask per isolation features
 
-When dumping lock_classes information via /proc/lockdep, we can't take
-the lockdep lock as the lock hold time is indeterminate. Iterating
-over all_lock_classes without holding lock can be dangerous as there
-is a slight chance that it may branch off to other lists leading to
-infinite loop or even access invalid memory if changes are made to
-all_lock_classes list in parallel.
+To prepare for supporting each housekeeping feature toward cpuset, split
+the global housekeeping cpumask per HK_TYPE_* entry.
 
-To avoid this problem, iteration of lock classes is now done directly
-on the lock_classes array itself. The lock_classes_in_use bitmap is
-checked to see if the lock class is being used. To avoid iterating
-the full array all the times, a new max_lock_class_idx value is added
-to track the maximum lock_class index that is currently being used.
+This will later allow, for example, to runtime modify the cpulist passed
+through "isolcpus=", "nohz_full=" and "rcu_nocbs=" kernel boot
+parameters.
 
-We can theoretically take the lockdep lock for iterating all_lock_classes
-when other lockdep files (lockdep_stats and lock_stat) are accessed as
-the lock hold time will be shorter for them. For consistency, they are
-also modified to iterate the lock_classes array directly.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220211035526.1329503-2-longman@redhat.com
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Reviewed-by: Phil Auld <pauld@redhat.com>
+Link: https://lore.kernel.org/r/20220207155910.527133-9-frederic@kernel.org
 ---
- kernel/locking/lockdep.c           | 14 +++++---
- kernel/locking/lockdep_internals.h |  6 ++-
- kernel/locking/lockdep_proc.c      | 51 ++++++++++++++++++++++++-----
- 3 files changed, 56 insertions(+), 15 deletions(-)
+ kernel/sched/isolation.c | 91 ++++++++++++++++++++++++++-------------
+ 1 file changed, 62 insertions(+), 29 deletions(-)
 
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 2e6892e..50036c1 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -183,11 +183,9 @@ static DECLARE_BITMAP(list_entries_in_use, MAX_LOCKDEP_ENTRIES);
- static struct hlist_head lock_keys_hash[KEYHASH_SIZE];
- unsigned long nr_lock_classes;
- unsigned long nr_zapped_classes;
--#ifndef CONFIG_DEBUG_LOCKDEP
--static
--#endif
-+unsigned long max_lock_class_idx;
- struct lock_class lock_classes[MAX_LOCKDEP_KEYS];
--static DECLARE_BITMAP(lock_classes_in_use, MAX_LOCKDEP_KEYS);
-+DECLARE_BITMAP(lock_classes_in_use, MAX_LOCKDEP_KEYS);
+diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+index 883eee9..b4d1081 100644
+--- a/kernel/sched/isolation.c
++++ b/kernel/sched/isolation.c
+@@ -23,12 +23,17 @@ enum hk_flags {
  
- static inline struct lock_class *hlock_class(struct held_lock *hlock)
+ DEFINE_STATIC_KEY_FALSE(housekeeping_overridden);
+ EXPORT_SYMBOL_GPL(housekeeping_overridden);
+-static cpumask_var_t housekeeping_mask;
+-static unsigned int housekeeping_flags;
++
++struct housekeeping {
++	cpumask_var_t cpumasks[HK_TYPE_MAX];
++	unsigned long flags;
++};
++
++static struct housekeeping housekeeping;
+ 
+ bool housekeeping_enabled(enum hk_type type)
  {
-@@ -338,7 +336,7 @@ static inline void lock_release_holdtime(struct held_lock *hlock)
-  * elements. These elements are linked together by the lock_entry member in
-  * struct lock_class.
-  */
--LIST_HEAD(all_lock_classes);
-+static LIST_HEAD(all_lock_classes);
- static LIST_HEAD(free_lock_classes);
- 
- /**
-@@ -1252,6 +1250,7 @@ register_lock_class(struct lockdep_map *lock, unsigned int subclass, int force)
- 	struct lockdep_subclass_key *key;
- 	struct hlist_head *hash_head;
- 	struct lock_class *class;
-+	int idx;
- 
- 	DEBUG_LOCKS_WARN_ON(!irqs_disabled());
- 
-@@ -1317,6 +1316,9 @@ register_lock_class(struct lockdep_map *lock, unsigned int subclass, int force)
- 	 * of classes.
- 	 */
- 	list_move_tail(&class->lock_entry, &all_lock_classes);
-+	idx = class - lock_classes;
-+	if (idx > max_lock_class_idx)
-+		max_lock_class_idx = idx;
- 
- 	if (verbose(class)) {
- 		graph_unlock();
-@@ -6000,6 +6002,8 @@ static void zap_class(struct pending_free *pf, struct lock_class *class)
- 		WRITE_ONCE(class->name, NULL);
- 		nr_lock_classes--;
- 		__clear_bit(class - lock_classes, lock_classes_in_use);
-+		if (class - lock_classes == max_lock_class_idx)
-+			max_lock_class_idx--;
- 	} else {
- 		WARN_ONCE(true, "%s() failed for class %s\n", __func__,
- 			  class->name);
-diff --git a/kernel/locking/lockdep_internals.h b/kernel/locking/lockdep_internals.h
-index ecb8662..bbe9000 100644
---- a/kernel/locking/lockdep_internals.h
-+++ b/kernel/locking/lockdep_internals.h
-@@ -121,7 +121,6 @@ static const unsigned long LOCKF_USED_IN_IRQ_READ =
- 
- #define MAX_LOCKDEP_CHAIN_HLOCKS (MAX_LOCKDEP_CHAINS*5)
- 
--extern struct list_head all_lock_classes;
- extern struct lock_chain lock_chains[];
- 
- #define LOCK_USAGE_CHARS (2*XXX_LOCK_USAGE_STATES + 1)
-@@ -151,6 +150,10 @@ extern unsigned int nr_large_chain_blocks;
- 
- extern unsigned int max_lockdep_depth;
- extern unsigned int max_bfs_queue_depth;
-+extern unsigned long max_lock_class_idx;
-+
-+extern struct lock_class lock_classes[MAX_LOCKDEP_KEYS];
-+extern unsigned long lock_classes_in_use[];
- 
- #ifdef CONFIG_PROVE_LOCKING
- extern unsigned long lockdep_count_forward_deps(struct lock_class *);
-@@ -205,7 +208,6 @@ struct lockdep_stats {
- };
- 
- DECLARE_PER_CPU(struct lockdep_stats, lockdep_stats);
--extern struct lock_class lock_classes[MAX_LOCKDEP_KEYS];
- 
- #define __debug_atomic_inc(ptr)					\
- 	this_cpu_inc(lockdep_stats.ptr);
-diff --git a/kernel/locking/lockdep_proc.c b/kernel/locking/lockdep_proc.c
-index b8d9a05..15fdc7f 100644
---- a/kernel/locking/lockdep_proc.c
-+++ b/kernel/locking/lockdep_proc.c
-@@ -24,14 +24,33 @@
- 
- #include "lockdep_internals.h"
- 
-+/*
-+ * Since iteration of lock_classes is done without holding the lockdep lock,
-+ * it is not safe to iterate all_lock_classes list directly as the iteration
-+ * may branch off to free_lock_classes or the zapped list. Iteration is done
-+ * directly on the lock_classes array by checking the lock_classes_in_use
-+ * bitmap and max_lock_class_idx.
-+ */
-+#define iterate_lock_classes(idx, class)				\
-+	for (idx = 0, class = lock_classes; idx <= max_lock_class_idx;	\
-+	     idx++, class++)
-+
- static void *l_next(struct seq_file *m, void *v, loff_t *pos)
- {
--	return seq_list_next(v, &all_lock_classes, pos);
-+	struct lock_class *class = v;
-+
-+	++class;
-+	*pos = class - lock_classes;
-+	return (*pos > max_lock_class_idx) ? NULL : class;
+-	return !!(housekeeping_flags & BIT(type));
++	return !!(housekeeping.flags & BIT(type));
  }
+ EXPORT_SYMBOL_GPL(housekeeping_enabled);
  
- static void *l_start(struct seq_file *m, loff_t *pos)
- {
--	return seq_list_start_head(&all_lock_classes, *pos);
-+	unsigned long idx = *pos;
-+
-+	if (idx > max_lock_class_idx)
-+		return NULL;
-+	return lock_classes + idx;
- }
+@@ -37,12 +42,12 @@ int housekeeping_any_cpu(enum hk_type type)
+ 	int cpu;
  
- static void l_stop(struct seq_file *m, void *v)
-@@ -57,14 +76,16 @@ static void print_name(struct seq_file *m, struct lock_class *class)
+ 	if (static_branch_unlikely(&housekeeping_overridden)) {
+-		if (housekeeping_flags & BIT(type)) {
+-			cpu = sched_numa_find_closest(housekeeping_mask, smp_processor_id());
++		if (housekeeping.flags & BIT(type)) {
++			cpu = sched_numa_find_closest(housekeeping.cpumasks[type], smp_processor_id());
+ 			if (cpu < nr_cpu_ids)
+ 				return cpu;
  
- static int l_show(struct seq_file *m, void *v)
- {
--	struct lock_class *class = list_entry(v, struct lock_class, lock_entry);
-+	struct lock_class *class = v;
- 	struct lock_list *entry;
- 	char usage[LOCK_USAGE_CHARS];
-+	int idx = class - lock_classes;
- 
--	if (v == &all_lock_classes) {
-+	if (v == lock_classes)
- 		seq_printf(m, "all lock classes:\n");
-+
-+	if (!test_bit(idx, lock_classes_in_use))
- 		return 0;
--	}
- 
- 	seq_printf(m, "%p", class->key);
- #ifdef CONFIG_DEBUG_LOCKDEP
-@@ -220,8 +241,11 @@ static int lockdep_stats_show(struct seq_file *m, void *v)
- 
- #ifdef CONFIG_PROVE_LOCKING
- 	struct lock_class *class;
-+	unsigned long idx;
- 
--	list_for_each_entry(class, &all_lock_classes, lock_entry) {
-+	iterate_lock_classes(idx, class) {
-+		if (!test_bit(idx, lock_classes_in_use))
-+			continue;
- 
- 		if (class->usage_mask == 0)
- 			nr_unused++;
-@@ -254,6 +278,7 @@ static int lockdep_stats_show(struct seq_file *m, void *v)
- 
- 		sum_forward_deps += lockdep_count_forward_deps(class);
+-			return cpumask_any_and(housekeeping_mask, cpu_online_mask);
++			return cpumask_any_and(housekeeping.cpumasks[type], cpu_online_mask);
+ 		}
  	}
-+
- #ifdef CONFIG_DEBUG_LOCKDEP
- 	DEBUG_LOCKS_WARN_ON(debug_atomic_read(nr_unused_locks) != nr_unused);
- #endif
-@@ -345,6 +370,8 @@ static int lockdep_stats_show(struct seq_file *m, void *v)
- 	seq_printf(m, " max bfs queue depth:           %11u\n",
- 			max_bfs_queue_depth);
- #endif
-+	seq_printf(m, " max lock class index:          %11lu\n",
-+			max_lock_class_idx);
- 	lockdep_stats_debug_show(m);
- 	seq_printf(m, " debug_locks:                   %11u\n",
- 			debug_locks);
-@@ -622,12 +649,16 @@ static int lock_stat_open(struct inode *inode, struct file *file)
- 	if (!res) {
- 		struct lock_stat_data *iter = data->stats;
- 		struct seq_file *m = file->private_data;
-+		unsigned long idx;
+ 	return smp_processor_id();
+@@ -52,8 +57,8 @@ EXPORT_SYMBOL_GPL(housekeeping_any_cpu);
+ const struct cpumask *housekeeping_cpumask(enum hk_type type)
+ {
+ 	if (static_branch_unlikely(&housekeeping_overridden))
+-		if (housekeeping_flags & BIT(type))
+-			return housekeeping_mask;
++		if (housekeeping.flags & BIT(type))
++			return housekeeping.cpumasks[type];
+ 	return cpu_possible_mask;
+ }
+ EXPORT_SYMBOL_GPL(housekeeping_cpumask);
+@@ -61,40 +66,53 @@ EXPORT_SYMBOL_GPL(housekeeping_cpumask);
+ void housekeeping_affine(struct task_struct *t, enum hk_type type)
+ {
+ 	if (static_branch_unlikely(&housekeeping_overridden))
+-		if (housekeeping_flags & BIT(type))
+-			set_cpus_allowed_ptr(t, housekeeping_mask);
++		if (housekeeping.flags & BIT(type))
++			set_cpus_allowed_ptr(t, housekeeping.cpumasks[type]);
+ }
+ EXPORT_SYMBOL_GPL(housekeeping_affine);
  
--		list_for_each_entry(class, &all_lock_classes, lock_entry) {
-+		iterate_lock_classes(idx, class) {
-+			if (!test_bit(idx, lock_classes_in_use))
-+				continue;
- 			iter->class = class;
- 			iter->stats = lock_stats(class);
- 			iter++;
+ bool housekeeping_test_cpu(int cpu, enum hk_type type)
+ {
+ 	if (static_branch_unlikely(&housekeeping_overridden))
+-		if (housekeeping_flags & BIT(type))
+-			return cpumask_test_cpu(cpu, housekeeping_mask);
++		if (housekeeping.flags & BIT(type))
++			return cpumask_test_cpu(cpu, housekeeping.cpumasks[type]);
+ 	return true;
+ }
+ EXPORT_SYMBOL_GPL(housekeeping_test_cpu);
+ 
+ void __init housekeeping_init(void)
+ {
+-	if (!housekeeping_flags)
++	enum hk_type type;
++
++	if (!housekeeping.flags)
+ 		return;
+ 
+ 	static_branch_enable(&housekeeping_overridden);
+ 
+-	if (housekeeping_flags & HK_FLAG_TICK)
++	if (housekeeping.flags & HK_FLAG_TICK)
+ 		sched_tick_offload_init();
+ 
+-	/* We need at least one CPU to handle housekeeping work */
+-	WARN_ON_ONCE(cpumask_empty(housekeeping_mask));
++	for_each_set_bit(type, &housekeeping.flags, HK_TYPE_MAX) {
++		/* We need at least one CPU to handle housekeeping work */
++		WARN_ON_ONCE(cpumask_empty(housekeeping.cpumasks[type]));
++	}
++}
++
++static void __init housekeeping_setup_type(enum hk_type type,
++					   cpumask_var_t housekeeping_staging)
++{
++
++	alloc_bootmem_cpumask_var(&housekeeping.cpumasks[type]);
++	cpumask_copy(housekeeping.cpumasks[type],
++		     housekeeping_staging);
+ }
+ 
+-static int __init housekeeping_setup(char *str, enum hk_flags flags)
++static int __init housekeeping_setup(char *str, unsigned long flags)
+ {
+ 	cpumask_var_t non_housekeeping_mask, housekeeping_staging;
+ 	int err = 0;
+ 
+-	if ((flags & HK_FLAG_TICK) && !(housekeeping_flags & HK_FLAG_TICK)) {
++	if ((flags & HK_FLAG_TICK) && !(housekeeping.flags & HK_FLAG_TICK)) {
+ 		if (!IS_ENABLED(CONFIG_NO_HZ_FULL)) {
+ 			pr_warn("Housekeeping: nohz unsupported."
+ 				" Build with CONFIG_NO_HZ_FULL\n");
+@@ -115,26 +133,41 @@ static int __init housekeeping_setup(char *str, enum hk_flags flags)
+ 	if (!cpumask_intersects(cpu_present_mask, housekeeping_staging)) {
+ 		__cpumask_set_cpu(smp_processor_id(), housekeeping_staging);
+ 		__cpumask_clear_cpu(smp_processor_id(), non_housekeeping_mask);
+-		if (!housekeeping_flags) {
++		if (!housekeeping.flags) {
+ 			pr_warn("Housekeeping: must include one present CPU, "
+ 				"using boot CPU:%d\n", smp_processor_id());
+ 		}
+ 	}
+ 
+-	if (!housekeeping_flags) {
+-		alloc_bootmem_cpumask_var(&housekeeping_mask);
+-		cpumask_copy(housekeeping_mask, housekeeping_staging);
++	if (!housekeeping.flags) {
++		/* First setup call ("nohz_full=" or "isolcpus=") */
++		enum hk_type type;
++
++		for_each_set_bit(type, &flags, HK_TYPE_MAX)
++			housekeeping_setup_type(type, housekeeping_staging);
+ 	} else {
+-		if (!cpumask_equal(housekeeping_staging, housekeeping_mask)) {
+-			pr_warn("Housekeeping: nohz_full= must match isolcpus=\n");
+-			goto free_housekeeping_staging;
++		/* Second setup call ("nohz_full=" after "isolcpus=" or the reverse) */
++		enum hk_type type;
++		unsigned long iter_flags = flags & housekeeping.flags;
++
++		for_each_set_bit(type, &iter_flags, HK_TYPE_MAX) {
++			if (!cpumask_equal(housekeeping_staging,
++					   housekeeping.cpumasks[type])) {
++				pr_warn("Housekeeping: nohz_full= must match isolcpus=\n");
++				goto free_housekeeping_staging;
++			}
  		}
 +
- 		data->iter_end = iter;
- 
- 		sort(data->stats, data->iter_end - data->stats,
-@@ -645,6 +676,7 @@ static ssize_t lock_stat_write(struct file *file, const char __user *buf,
- 			       size_t count, loff_t *ppos)
- {
- 	struct lock_class *class;
-+	unsigned long idx;
- 	char c;
- 
- 	if (count) {
-@@ -654,8 +686,11 @@ static ssize_t lock_stat_write(struct file *file, const char __user *buf,
- 		if (c != '0')
- 			return count;
- 
--		list_for_each_entry(class, &all_lock_classes, lock_entry)
-+		iterate_lock_classes(idx, class) {
-+			if (!test_bit(idx, lock_classes_in_use))
-+				continue;
- 			clear_lock_stats(class);
-+		}
++		iter_flags = flags & ~housekeeping.flags;
++
++		for_each_set_bit(type, &iter_flags, HK_TYPE_MAX)
++			housekeeping_setup_type(type, housekeeping_staging);
  	}
- 	return count;
- }
+ 
+-	if ((flags & HK_FLAG_TICK) && !(housekeeping_flags & HK_FLAG_TICK))
++	if ((flags & HK_FLAG_TICK) && !(housekeeping.flags & HK_FLAG_TICK))
+ 		tick_nohz_full_setup(non_housekeeping_mask);
+ 
+-	housekeeping_flags |= flags;
++	housekeeping.flags |= flags;
+ 	err = 1;
+ 
+ free_housekeeping_staging:
+@@ -147,7 +180,7 @@ free_non_housekeeping_mask:
+ 
+ static int __init housekeeping_nohz_full_setup(char *str)
+ {
+-	unsigned int flags;
++	unsigned long flags;
+ 
+ 	flags = HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER | HK_FLAG_RCU |
+ 		HK_FLAG_MISC | HK_FLAG_KTHREAD;
+@@ -158,7 +191,7 @@ __setup("nohz_full=", housekeeping_nohz_full_setup);
+ 
+ static int __init housekeeping_isolcpus_setup(char *str)
+ {
+-	unsigned int flags = 0;
++	unsigned long flags = 0;
+ 	bool illegal = false;
+ 	char *par;
+ 	int len;

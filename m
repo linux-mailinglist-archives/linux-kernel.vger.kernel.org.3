@@ -2,306 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D47A4B9CBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272CD4B9CB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239007AbiBQKLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:11:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48130 "EHLO
+        id S238986AbiBQKKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:10:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238992AbiBQKKz (ORCPT
+        with ESMTP id S230039AbiBQKKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:10:55 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723382AAB0A;
-        Thu, 17 Feb 2022 02:10:39 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4JzrDt2Pclz9sT6;
-        Thu, 17 Feb 2022 11:10:38 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id praua7vPF23R; Thu, 17 Feb 2022 11:10:38 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4JzrDc04DCz9sT7;
-        Thu, 17 Feb 2022 11:10:24 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id EA7DB8B77A;
-        Thu, 17 Feb 2022 11:10:23 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id QPhJSFFg6W1H; Thu, 17 Feb 2022 11:10:23 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.225])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id ADC428B763;
-        Thu, 17 Feb 2022 11:10:23 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21HAAEIp395970
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 11:10:14 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21HAACu3395969;
-        Thu, 17 Feb 2022 11:10:12 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        netdev@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Subject: [PATCH] net: Force inlining of checksum functions in net/checksum.h
-Date:   Thu, 17 Feb 2022 11:10:05 +0100
-Message-Id: <8a1278500231505b5eaf8b207802ebc5bae1717b.1645092478.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Feb 2022 05:10:35 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD5A2AAB08
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:10:20 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id i19so2814198wmq.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:10:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HZ3xx7nOObpTBizjK9Ap+q6jN7YiR6tkSPh0F4AEvbk=;
+        b=B4LzfsYd6UtfWmB4hzFJeBBZNHrYCODNkBeV7muYuBP71kZZtn49U3I5zip102+u41
+         oOv1IvlE26JcXr0+//taSTg+ag48U2kj0FyZt9/wnipEyez08m/0qVS2/zYo7wzofueZ
+         EedbCJSrTHDwQnkSpEmWhG0QjryuO3sVaAAK/oiy/rTUhsz3/VatR/OgVbEGn2C8B9Z1
+         ln5pX7Kjh5CyJgGRrmVm6x/xNCBNnydkE44w3dOptSP2SBsdxuqrE/WAUwqN+2dJSfFC
+         +//fG4+fHFDSPsU5qe2gqses07Tkpcnne/A4E+Y6NLjCw7OYQtKGlWCMrq4E04RFv6vE
+         AyJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HZ3xx7nOObpTBizjK9Ap+q6jN7YiR6tkSPh0F4AEvbk=;
+        b=Uc89pbhcyNC9qU7If3HNe6umlqE5xUGfo+NIniQp8VnIHccYWByDKIQiTXrQiWVUtI
+         FX67pLqJX+luYjRvjK8JCdlvFJtkgIcPxIEblsBG/NTCZRyp4NQVMJzVBXE7oKxy0+S/
+         YKwG1wr7Q9yuoIdzVEmvMmhIGGgFrnGFXpFB0QU7ov0ToMb/KlAY5yRPY+cvxnEg7RBq
+         JP3sHH5ZXOHZTbuACKH2ojlYMKSmP4J0gjMBGyMarEo56UnFC2AHX33hKKWvVRVIpLWO
+         j6Ki8m9u5BUqvBR3dSjHnsxlGoUvYiQxvyFazbnoRKeq78zOzQ1Tavvh3zmQPQcPiQQH
+         lh6A==
+X-Gm-Message-State: AOAM530HmBr+QRJ+uj0X0VkyjcHfaBeSBKp3je/CSLRsnzBRLfREkU4l
+        PHgk4dPTygD+rwwlEmhWFszVkA==
+X-Google-Smtp-Source: ABdhPJxiEWRtJUXJQNHQW2Rh2mFrrdYXAobg2tct8ua7KeWK3BcwdMClUGRaNlGrRuqQEbIfifzdBA==
+X-Received: by 2002:a05:600c:3503:b0:345:858e:cbe8 with SMTP id h3-20020a05600c350300b00345858ecbe8mr5333733wmq.73.1645092618930;
+        Thu, 17 Feb 2022 02:10:18 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
+        by smtp.googlemail.com with ESMTPSA id f14sm885951wmq.3.2022.02.17.02.10.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 02:10:18 -0800 (PST)
+Message-ID: <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+Date:   Thu, 17 Feb 2022 11:10:16 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645092604; l=7956; s=20211009; h=from:subject:message-id; bh=bPgs7KPwwbliZibxb/OK7E+BJYoJBOKMtwFreQoMAiQ=; b=ytxfObuW/eVbODboIgrI7UVjcxSetXta+cHKPTrRt1+pxi1qn6uA+yeSf3uzmzo+W83AGaoTEggj JgyuXJheCH9HYm/CsHuqtXhQz8Qufg0JPdWf3VZjMLfJ1ctLN4u/
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All functions defined as static inline in net/checksum.h are
-meant to be inlined for performance reason.
+On 16/02/2022 18:33, Doug Anderson wrote:
+> Hi,
+> 
+> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi Matthias,
+>>
+>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+>>>>
+>>>>
+>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+>>>>>>
+>>>>>>
+>>
+>> [snip]
+>>
+>>>>>> Could you point me to those devices please?
+>>>>>
+>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+>>>>>
+>>>>> Though as per above they shouldn't be impacted by your change, since the
+>>>>> CPUs always pretend to use milli-Watts.
+>>>>>
+>>>>> [skipped some questions/answers since sc7180 isn't actually impacted by
+>>>>>     the change]
+>>>>
+>>>> Thank you Matthias. I will investigate your setup to get better
+>>>> understanding.
+>>>
+>>> Thanks!
+>>>
+>>
+>> I've checked those DT files and related code.
+>> As you already said, this patch is safe for them.
+>> So we can apply it IMO.
+>>
+>>
+>> -------------Off-topic------------------
+>> Not in $subject comments:
+>>
+>> AFAICS based on two files which define thermal zones:
+>> sc7180-trogdor-homestar.dtsi
+>> sc7180-trogdor-coachz.dtsi
+>>
+>> only the 'big' cores are used as cooling devices in the
+>> 'skin_temp_thermal' - the CPU6 and CPU7.
+>>
+>> I assume you don't want to model at all the power usage
+>> from the Little cluster (which is quite big: 6 CPUs), do you?
+>> I can see that the Little CPUs have small dyn-power-coeff
+>> ~30% of the big and lower max freq, but still might be worth
+>> to add them to IPA. You might give them more 'weight', to
+>> make sure they receive more power during power split.
+>>
+>> You also don't have GPU cooling device in that thermal zone.
+>> Based on my experience if your GPU is a power hungry one,
+>> e.g. 2-4Watts, you might get better results when you model
+>> this 'hot' device (which impacts your temp sensor reported value).
+> 
+> I think the two boards you point at (homestar and coachz) are just the
+> two that override the default defined in the SoC dtsi file. If you
+> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+> map. You can also see the cooling maps for the littles.
+> 
+> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+> though? Seems like we should, but I haven't dug through all the code
+> here...
 
-But since commit ac7c3e4ff401 ("compiler: enable
-CONFIG_OPTIMIZE_INLINING forcibly") the compiler is allowed to
-uninline functions when it wants.
+The dynamic-power-coefficient is available for OPPs which includes 
+CPUfreq and devfreq. As the GPU is managed by devfreq, setting the 
+dynamic-power-coefficient makes the energy model available for it.
 
-Fair enough in the general case, but for tiny performance critical
-checksum helpers that's counter-productive.
+However, the OPPs must define the frequency and the voltage. That is the 
+case for most platforms except on QCom platform.
 
-The problem mainly arises when selecting CONFIG_CC_OPTIMISE_FOR_SIZE,
-Those helpers being 'static inline' in header files you suddenly find
-them duplicated many times in the resulting vmlinux.
+That may not be specified as it uses a frequency index and the hardware 
+does the voltage change in our back. The QCom cpufreq backend get the 
+voltage table from a register (or whatever) and completes the voltage 
+values for the OPPs, thus adding the information which is missing in the 
+device tree. The energy model can then initializes itself and allows the 
+usage of the Energy Aware Scheduler.
 
-Here is a typical exemple when building powerpc pmac32_defconfig
-with CONFIG_CC_OPTIMISE_FOR_SIZE. csum_sub() appears 4 times:
+However this piece of code is missing for the GPU part.
 
-	c04a23cc <csum_sub>:
-	c04a23cc:	7c 84 20 f8 	not     r4,r4
-	c04a23d0:	7c 63 20 14 	addc    r3,r3,r4
-	c04a23d4:	7c 63 01 94 	addze   r3,r3
-	c04a23d8:	4e 80 00 20 	blr
-		...
-	c04a2ce8:	4b ff f6 e5 	bl      c04a23cc <csum_sub>
-		...
-	c04a2d2c:	4b ff f6 a1 	bl      c04a23cc <csum_sub>
-		...
-	c04a2d54:	4b ff f6 79 	bl      c04a23cc <csum_sub>
-		...
-	c04a754c <csum_sub>:
-	c04a754c:	7c 84 20 f8 	not     r4,r4
-	c04a7550:	7c 63 20 14 	addc    r3,r3,r4
-	c04a7554:	7c 63 01 94 	addze   r3,r3
-	c04a7558:	4e 80 00 20 	blr
-		...
-	c04ac930:	4b ff ac 1d 	bl      c04a754c <csum_sub>
-		...
-	c04ad264:	4b ff a2 e9 	bl      c04a754c <csum_sub>
-		...
-	c04e3b08 <csum_sub>:
-	c04e3b08:	7c 84 20 f8 	not     r4,r4
-	c04e3b0c:	7c 63 20 14 	addc    r3,r3,r4
-	c04e3b10:	7c 63 01 94 	addze   r3,r3
-	c04e3b14:	4e 80 00 20 	blr
-		...
-	c04e5788:	4b ff e3 81 	bl      c04e3b08 <csum_sub>
-		...
-	c04e65c8:	4b ff d5 41 	bl      c04e3b08 <csum_sub>
-		...
-	c0512d34 <csum_sub>:
-	c0512d34:	7c 84 20 f8 	not     r4,r4
-	c0512d38:	7c 63 20 14 	addc    r3,r3,r4
-	c0512d3c:	7c 63 01 94 	addze   r3,r3
-	c0512d40:	4e 80 00 20 	blr
-		...
-	c0512dfc:	4b ff ff 39 	bl      c0512d34 <csum_sub>
-		...
-	c05138bc:	4b ff f4 79 	bl      c0512d34 <csum_sub>
-		...
 
-Restore the expected behaviour by using __always_inline for all
-functions defined in net/checksum.h
 
-vmlinux size is even reduced by 256 bytes with this patch:
-
-	   text	   data	    bss	    dec	    hex	filename
-	6980022	2515362	 194384	9689768	 93daa8	vmlinux.before
-	6979862	2515266	 194384	9689512	 93d9a8	vmlinux.now
-
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- include/net/checksum.h | 40 ++++++++++++++++++++--------------------
- 1 file changed, 20 insertions(+), 20 deletions(-)
-
-diff --git a/include/net/checksum.h b/include/net/checksum.h
-index 9badcd5532ef..2ad8ef6b0ce2 100644
---- a/include/net/checksum.h
-+++ b/include/net/checksum.h
-@@ -22,7 +22,7 @@
- #include <asm/checksum.h>
- 
- #ifndef _HAVE_ARCH_COPY_AND_CSUM_FROM_USER
--static inline
-+static __always_inline
- __wsum csum_and_copy_from_user (const void __user *src, void *dst,
- 				      int len)
- {
-@@ -33,7 +33,7 @@ __wsum csum_and_copy_from_user (const void __user *src, void *dst,
- #endif
- 
- #ifndef HAVE_CSUM_COPY_USER
--static __inline__ __wsum csum_and_copy_to_user
-+static __always_inline __wsum csum_and_copy_to_user
- (const void *src, void __user *dst, int len)
- {
- 	__wsum sum = csum_partial(src, len, ~0U);
-@@ -45,7 +45,7 @@ static __inline__ __wsum csum_and_copy_to_user
- #endif
- 
- #ifndef _HAVE_ARCH_CSUM_AND_COPY
--static inline __wsum
-+static __always_inline __wsum
- csum_partial_copy_nocheck(const void *src, void *dst, int len)
- {
- 	memcpy(dst, src, len);
-@@ -54,7 +54,7 @@ csum_partial_copy_nocheck(const void *src, void *dst, int len)
- #endif
- 
- #ifndef HAVE_ARCH_CSUM_ADD
--static inline __wsum csum_add(__wsum csum, __wsum addend)
-+static __always_inline __wsum csum_add(__wsum csum, __wsum addend)
- {
- 	u32 res = (__force u32)csum;
- 	res += (__force u32)addend;
-@@ -62,12 +62,12 @@ static inline __wsum csum_add(__wsum csum, __wsum addend)
- }
- #endif
- 
--static inline __wsum csum_sub(__wsum csum, __wsum addend)
-+static __always_inline __wsum csum_sub(__wsum csum, __wsum addend)
- {
- 	return csum_add(csum, ~addend);
- }
- 
--static inline __sum16 csum16_add(__sum16 csum, __be16 addend)
-+static __always_inline __sum16 csum16_add(__sum16 csum, __be16 addend)
- {
- 	u16 res = (__force u16)csum;
- 
-@@ -75,53 +75,53 @@ static inline __sum16 csum16_add(__sum16 csum, __be16 addend)
- 	return (__force __sum16)(res + (res < (__force u16)addend));
- }
- 
--static inline __sum16 csum16_sub(__sum16 csum, __be16 addend)
-+static __always_inline __sum16 csum16_sub(__sum16 csum, __be16 addend)
- {
- 	return csum16_add(csum, ~addend);
- }
- 
--static inline __wsum csum_shift(__wsum sum, int offset)
-+static __always_inline __wsum csum_shift(__wsum sum, int offset)
- {
- 	/* rotate sum to align it with a 16b boundary */
- 	return (__force __wsum)rol32((__force u32)sum, (offset & 1) << 3);
- }
- 
--static inline __wsum
-+static __always_inline __wsum
- csum_block_add(__wsum csum, __wsum csum2, int offset)
- {
- 	return csum_add(csum, csum_shift(csum2, offset));
- }
- 
--static inline __wsum
-+static __always_inline __wsum
- csum_block_add_ext(__wsum csum, __wsum csum2, int offset, int len)
- {
- 	return csum_block_add(csum, csum2, offset);
- }
- 
--static inline __wsum
-+static __always_inline __wsum
- csum_block_sub(__wsum csum, __wsum csum2, int offset)
- {
- 	return csum_block_add(csum, ~csum2, offset);
- }
- 
--static inline __wsum csum_unfold(__sum16 n)
-+static __always_inline __wsum csum_unfold(__sum16 n)
- {
- 	return (__force __wsum)n;
- }
- 
--static inline __wsum csum_partial_ext(const void *buff, int len, __wsum sum)
-+static __always_inline __wsum csum_partial_ext(const void *buff, int len, __wsum sum)
- {
- 	return csum_partial(buff, len, sum);
- }
- 
- #define CSUM_MANGLED_0 ((__force __sum16)0xffff)
- 
--static inline void csum_replace_by_diff(__sum16 *sum, __wsum diff)
-+static __always_inline void csum_replace_by_diff(__sum16 *sum, __wsum diff)
- {
- 	*sum = csum_fold(csum_add(diff, ~csum_unfold(*sum)));
- }
- 
--static inline void csum_replace4(__sum16 *sum, __be32 from, __be32 to)
-+static __always_inline void csum_replace4(__sum16 *sum, __be32 from, __be32 to)
- {
- 	__wsum tmp = csum_sub(~csum_unfold(*sum), (__force __wsum)from);
- 
-@@ -134,7 +134,7 @@ static inline void csum_replace4(__sum16 *sum, __be32 from, __be32 to)
-  *  m : old value of a 16bit field
-  *  m' : new value of a 16bit field
-  */
--static inline void csum_replace2(__sum16 *sum, __be16 old, __be16 new)
-+static __always_inline void csum_replace2(__sum16 *sum, __be16 old, __be16 new)
- {
- 	*sum = ~csum16_add(csum16_sub(~(*sum), old), new);
- }
-@@ -148,7 +148,7 @@ void inet_proto_csum_replace16(__sum16 *sum, struct sk_buff *skb,
- void inet_proto_csum_replace_by_diff(__sum16 *sum, struct sk_buff *skb,
- 				     __wsum diff, bool pseudohdr);
- 
--static inline void inet_proto_csum_replace2(__sum16 *sum, struct sk_buff *skb,
-+static __always_inline void inet_proto_csum_replace2(__sum16 *sum, struct sk_buff *skb,
- 					    __be16 from, __be16 to,
- 					    bool pseudohdr)
- {
-@@ -156,7 +156,7 @@ static inline void inet_proto_csum_replace2(__sum16 *sum, struct sk_buff *skb,
- 				 (__force __be32)to, pseudohdr);
- }
- 
--static inline __wsum remcsum_adjust(void *ptr, __wsum csum,
-+static __always_inline __wsum remcsum_adjust(void *ptr, __wsum csum,
- 				    int start, int offset)
- {
- 	__sum16 *psum = (__sum16 *)(ptr + offset);
-@@ -173,12 +173,12 @@ static inline __wsum remcsum_adjust(void *ptr, __wsum csum,
- 	return delta;
- }
- 
--static inline void remcsum_unadjust(__sum16 *psum, __wsum delta)
-+static __always_inline void remcsum_unadjust(__sum16 *psum, __wsum delta)
- {
- 	*psum = csum_fold(csum_sub(delta, (__force __wsum)*psum));
- }
- 
--static inline __wsum wsum_negate(__wsum val)
-+static __always_inline __wsum wsum_negate(__wsum val)
- {
- 	return (__force __wsum)-((__force u32)val);
- }
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

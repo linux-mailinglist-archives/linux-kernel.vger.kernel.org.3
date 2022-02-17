@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCFB4B9B42
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D3C4B9B43
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237886AbiBQIih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 03:38:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40868 "EHLO
+        id S235282AbiBQIiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 03:38:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236739AbiBQIif (ORCPT
+        with ESMTP id S229653AbiBQIiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 03:38:35 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F541FEBC3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:38:21 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id b22so4039495qkk.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:38:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PzuXVPjFmcUUVHKwIXrte3HBX8BURJUEg5zzn+5s7Jo=;
-        b=Ise/Swb+ARooHxbiRSox9+sw6KLNtydJTX0M6dQcI25siZd8JVYqvquyJI5t4UNADq
-         yw8/lpuxmUnit/Wbs8z7BIXczRHusoe5qb2rLiQ60uIScDNNY0zOOy/NBPBYNcF2EDEj
-         cwOs9Qmp7Ctyi1QSZfS5BLq06hrIIwhXtls51OUb708RhZGUvXGu/E5NVJnUxQ25iswA
-         uyRy12qCzJX6oZtr5VlAnrEFbikoIe9im6FHw2q3U1xKf4Iqt0YVa/8Qowg5IsMLGili
-         EbaoLbv+LSTiPK5n9EAMwXQx56Y5jBRoZu06PEt90eyLrYGrW3bnRBew/XPPoEukcgKq
-         65Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PzuXVPjFmcUUVHKwIXrte3HBX8BURJUEg5zzn+5s7Jo=;
-        b=6PJv0a0U8tCJtoI+Eq+aqOtERhJ/hNGiTJjgxang1sJt4nCLqYjjH1VRtPP+Z9Rnqo
-         3K6BVVYKOIrsNXH16PKrHyQh6trv3wLUIysRyM8sO+rLo+fiXbcUn2sFwK8b732/YaG4
-         TFTysXTtGGEXVlFR+pz3Wdew+/+oPiBSbl905w5huQamCmwTrroaUUYBIks4/lU3kCuB
-         3bT8cTlUJiS/q6L90gKJ5dRHZrQdqgYtM1xZYtObcJvCkuhCSDm4edyfdFXsnj3ypHOD
-         r0JOc+4uCKkz3EMfeD742fn/7asXzlnHz6WL/s+EKC5cfG4/9S6kQr9xQs08jwtkZaeG
-         /mLA==
-X-Gm-Message-State: AOAM531sUG0wXvAxChqy+snUz5IIyZFQgmNn5lA8bVh+T2JBFeUe3bt+
-        NkH7x6kEOCPgdCGokunGElF0VCpDcEU=
-X-Google-Smtp-Source: ABdhPJzMsVEHQOcswCAu08XNscGj5ji3sFyM2YXVu1Kmsvbqnei4CzbjdjbAYIznLrlUXM7d3nZBuw==
-X-Received: by 2002:a37:9102:0:b0:5f1:8c87:1dda with SMTP id t2-20020a379102000000b005f18c871ddamr910945qkd.37.1645087100966;
-        Thu, 17 Feb 2022 00:38:20 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x7sm1582146qto.42.2022.02.17.00.38.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 00:38:20 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: si.hao@zte.com.cn
-To:     catalin.marinas@arm.com, will@kernel.org,
-        pasha.tatashin@soleen.com, si.hao@zte.com.cn,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        yang.yang29@zte.com.cn, zealci@zte.com.cn
-Subject: [PATCH v2] arm64: kexec: Support the case of VA_BITS=39 in trans_pgd_idmap_page()
-Date:   Thu, 17 Feb 2022 08:37:34 +0000
-Message-Id: <20220217083734.1903109-1-si.hao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 17 Feb 2022 03:38:12 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEE71FCBC4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:37:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645087074;
+        bh=4mhqX1evkQ31sV+XbtD3eomF6rseIEg3D3FtMSelXhc=;
+        h=X-UI-Sender-Class:Date:To:From:Subject;
+        b=VpEWqqm9NurKDw8bRdEeBK+lpb3bBon+7hRLdWMMFhKRFK1phEsm7fdX49DQi2WLx
+         YScQjvgHdj610sRFszN2DlR+/VFuxSSE3yJRNnpdDAzNXm0RbogsAgEcEX9n61ORSx
+         9eEQ0LfqqbPKZFukGoHthlxqt2wLCX05lLqYbEm4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx005
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1Mel3n-1nt8AW065t-00akQ1; Thu, 17
+ Feb 2022 09:37:53 +0100
+Message-ID: <85bfe02c-9432-c5b0-04e0-8096adf37b93@gmx.com>
+Date:   Thu, 17 Feb 2022 16:37:49 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Content-Language: en-US
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Terrell <terrelln@fb.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: v5.17-rc3 compile failure on aarch64
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:s0tc8KYPnkKgjOezLzbEi5WUCje+CbW1vcyMNQDiZx3oO58OXbO
+ rhHS5Dx0345kL0vGiY91JGUtGnskAXnS40FArZx2jErx9eO1f8Z+8ZX6695cnlQ7hihnrW2
+ LKrBsl4S1dt2T1uIupZ+nHQVDVe+U8g7uI7T2uKvzjwo1JK/hUnosJQ5JvHU0uo7LNzRfQU
+ uqHmYGZrxss16kDaLyGIQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+TgRwgr3BIk=:1LNpqw630lMB6ajaHvKhfk
+ zzcRPupr92TqatyPodSU97pBjQrJAiMcBLmpmT0UVxuwPL3HrEm+CcvNgPWzmdSUSoDGFNDbt
+ ShpxVLymuPr3DI9gRzwpR7hnitRDjY1K19pBKYZxrvTdaPZHaWXf28cGdvFoI6tm+4Ox0GPSG
+ elJVWqgo2QQRUwjQ1AtM8mgh1T1UFpdTalJf/P7jw1hskXppQe/ZnMe9IsO7bPc2slZpEajse
+ RZ0s029ihQXfikfRPX8RRQjFNSrW3EEAh1maH3VwBY66WxgHHwwcQGo6Vk+TkaJHLh04aSgqL
+ u6yIPV9Cx9/e0JePQoQ6pQ7N3CUpcMdXDyDcdg8RwGLgrxuRDvrILPZE44cqgodCs7HpalYgb
+ nLlKzLGc8gwAcqSnJGi2BGb+Gs7hAK6Cz4OaKFuy18ga+XdhahzcUt/tC8GNCN9MUhYoT+r1r
+ j7SCkOc5rv1jQ9cuHY+PkFkaf9QIU5Fzoau/2FIaqfMYzZWRXanilVNW9EUjOuHoVY/SYlRiH
+ g1Se8vOj/Qv6/5veEaoYuJjsJ2OPK56Z/ZgwvGZa9eO3azxBv/toTPS9LMP5BNlUE6zBxkM4G
+ B+Ld8Nuls4ZJZroG8BOzCcN5UjUMB99dKlb7jPAbWNk7EGNiL4MhGy2XfcifGXtEd6Wu16V5l
+ PCgOXOlrP2Z5hYQtll64DaLW0m2TOqAoDKTKYmMHmgrSEyh57YZ1bdj9W3xu1Ec5gUdHXvsdF
+ yakngkgWtxPAzqY+nrGAYETG8DqyY4MlAyQq8sCrfct31kZ90lU5GB1jVSx1l7r00wRwZkz22
+ yrepvzugKeBlY0hNLk13c9pKnsIHdXfFWOf4Pkc6YDO9GaFgQq5PJxU3dtkcxMOVLM41EsOnM
+ r4jY3mnUdEdOhQqDaGE5Hf3BrY3Hd8T/4hyq61P4orkdZruR5lYvqW6QYZ9VjtbRQ/JqK6anh
+ hW+eAmS0duQvRqAVn4jiblmLFhzklcxf+aufrDqt4VihK9QxJLh7QmhCPEwVDGPrm1e6EYr+c
+ i2ITb/5rlmRsoswLiEDX1HUk5Kx9A2Yl/PytoQ7y9nGRvPUrsX3IJQ80WsahqMv//ag76dRvd
+ eROwho5e9iDjz8=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: sihao <si.hao@zte.com.cn>
+Hi,
 
-fsl64() may get different values due to different physical addresses. Is
-it possible to confirm the value of max_msb with CONFIG_ARM64_VA_BITS?
+Recently I found v5.17-rc3 kernel failed to compile on my aarch64 setup,
+it failed with the following error messages:
 
-Reported-by: sihao <si.hao@zte.com.cn>
-Signed-off-by: sihao <si.hao@zte.com.cn>
-Reviewed-by: CatalinMarinas <catalin.marinas@arm.com>
----
-Changes in V1:
+   AR      lib/zstd/built-in.a
+   LD [M]  lib/zstd/zstd_compress.o
+ld: __patchable_function_entries has both ordered
+[`__patchable_function_entries' in lib/zstd/common/entropy_common.o] and
+unordered [`__patchable_function_entries' in
+lib/zstd/common/error_private.o] sections
+ld: final link failed: bad value
+make[2]: *** [scripts/Makefile.build:484: lib/zstd/zstd_compress.o] Error =
+1
+make[1]: *** [scripts/Makefile.build:550: lib/zstd] Error 2
+make: *** [Makefile:1831: lib] Error 2
+make: *** Waiting for unfinished jobs....
 
-Refer to: https://lore.kernel.org/lkml/20220121065216.1001021-1-si.hao@zte.com.cn/
+But the same code base compiles fine inside my x86_64 VM.
 
-When the values of CONFIG_ARM64_VA_BITS and CONFIG_ARM64_PA_BITS are not
-equal, the following panic occurs when kexec is executed. 
-This happens because trans_pgd_idmap_page() does not support VA_BITS=39.
-So the patch supports the case of VA_BITS=39.
+The aarch64 environment is an VM running on RockPro64 or RPI CM4.
 
- arch/arm64/mm/trans_pgd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+With a little older gcc (v10.2.0) and bintuils (2.35).
 
-diff --git a/arch/arm64/mm/trans_pgd.c b/arch/arm64/mm/trans_pgd.c
-index d7da8ca40d2e..23c74f9c5790 100644
---- a/arch/arm64/mm/trans_pgd.c
-+++ b/arch/arm64/mm/trans_pgd.c
-@@ -232,7 +232,7 @@ int trans_pgd_idmap_page(struct trans_pgd_info *info, phys_addr_t *trans_ttbr0,
- {
- 	phys_addr_t dst_addr = virt_to_phys(page);
- 	unsigned long pfn = __phys_to_pfn(dst_addr);
--	int max_msb = (dst_addr & GENMASK(52, 48)) ? 51 : 47;
-+	int max_msb = VA_BITS - 1;
- 	int bits_mapped = PAGE_SHIFT - 4;
- 	unsigned long level_mask, prev_level_entry, *levels[4];
- 	int this_level, index, level_lsb, level_msb;
--- 
-2.25.1
+While for my x86_64 VM it has newer gcc (11.1.0) and binutiles (2.36.1)
 
+I'm super happy to upgrade my tool chain for my aarch64 VM, but I'm a
+little concerned if there is something worthy fixed.
+
+Thanks,
+Qu

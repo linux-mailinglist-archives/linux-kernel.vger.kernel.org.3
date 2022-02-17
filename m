@@ -2,101 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886934B999C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AD24B9998
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235988AbiBQHIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 02:08:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59734 "EHLO
+        id S235941AbiBQHHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 02:07:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235949AbiBQHIA (ORCPT
+        with ESMTP id S229483AbiBQHHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:08:00 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5EF28ADA2;
-        Wed, 16 Feb 2022 23:07:41 -0800 (PST)
-X-UUID: a549484970ab4c659dbf3a1fca61e35b-20220217
-X-UUID: a549484970ab4c659dbf3a1fca61e35b-20220217
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <lina.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1352216927; Thu, 17 Feb 2022 15:07:34 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 17 Feb 2022 15:07:33 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Feb 2022 15:07:32 +0800
-From:   Lina Wang <lina.wang@mediatek.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-CC:     Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        bpf <bpf@vger.kernel.org>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v3] net: fix wrong network header length
-Date:   Thu, 17 Feb 2022 15:01:39 +0800
-Message-ID: <20220217070139.30028-1-lina.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <CAADnVQK78PN8N6c6u_O2BAxdyXwH_HVYMV_x3oGgyfT50a6ymg@mail.gmail.com>
-References: <CAADnVQK78PN8N6c6u_O2BAxdyXwH_HVYMV_x3oGgyfT50a6ymg@mail.gmail.com>
+        Thu, 17 Feb 2022 02:07:19 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839EE1B8FE4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 23:07:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645081625; x=1676617625;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/CMRxxgpYFcN8OCyhrZweqdmJFVzeDxEGk4XSaM1dvY=;
+  b=euzoQOwYei9TldU2jeIsI9hezV9hrQDiFHQSf/ArNtVxFZlHUzgUQf9b
+   RursNdGFwa97UqwgHI5mkvr4YTXWhqyUEvAi7CC1vcaiTwNMeHpwnPkz5
+   8dXA52VOAceqxXcUQ1NYlhF/tZXLpFzqZPnNNloTx16qSCg5nAEi0Lz7O
+   ZmMTFgH30HpQ2sxS58tu2bmIvsSSQm2VfoiS9bVUHj3pyFLX8r32vYmWL
+   MfLj+E2e8O7KMbfKGkYchuXn+owtj5DA5xTmzeYT6GtE/2afcifBUnx97
+   R174Sbv5MfZTX4mh0Jv15yEpdHa7ihbjbBOvwNFcxt4Z683MemN/gRHnc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="275398746"
+X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
+   d="scan'208";a="275398746"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 23:07:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
+   d="scan'208";a="529998525"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Feb 2022 23:07:03 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKasZ-000BYH-1T; Thu, 17 Feb 2022 07:07:03 +0000
+Date:   Thu, 17 Feb 2022 15:06:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Rich Felker <dalias@libc.org>
+Subject: arch/sh/kernel/traps_32.c:574:9: sparse: sparse: incorrect type in
+ initializer (different address spaces)
+Message-ID: <202202171504.3sm5Zvhs-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-02-16 at 19:05 -0800, Alexei Starovoitov wrote:
-> On Tue, Feb 15, 2022 at 11:37 PM Lina Wang <lina.wang@mediatek.com>
-> wrote:
-> > 
-> > When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is
-> > enable,
-> > several skbs are gathered in skb_shinfo(skb)->frag_list. The first
-> > skb's
-> > ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
-> > network_header\transport_header\mac_header have been updated as
-> > ipv4 acts,
-> > but other skbs in frag_list didnot update anything, just ipv6
-> > packets.
-> 
-> Please add a test that demonstrates the issue and verifies the fix.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f71077a4d84bbe8c7b91b7db7c4ef815755ac5e3
+commit: ca42bc4b7bda7c6d68f1cc97c27fc8ff7385c4c7 sh: fix trivial misannotations
+date:   5 months ago
+config: sh-randconfig-s032-20220217 (https://download.01.org/0day-ci/archive/20220217/202202171504.3sm5Zvhs-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ca42bc4b7bda7c6d68f1cc97c27fc8ff7385c4c7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ca42bc4b7bda7c6d68f1cc97c27fc8ff7385c4c7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash arch/sh/kernel/
 
-I used iperf udp test to verify the patch, server peer enabled -d to debug
-received packets.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-192.0.0.4 is clatd interface ip, corresponding ipv6 addr is 
-2000:1:1:1:afca:1b1f:1a9:b367, server peer ip is 1.1.1.1,
-whose ipv6 is 2004:1:1:1::101:101.
 
-Without the patch, when udp length 2840 packets received, iperf shows:
-pcount 1 packet_count 0
-pcount 27898727 packet_count 1
-pcount 3 packet_count 27898727
+sparse warnings: (new ones prefixed by >>)
+>> arch/sh/kernel/traps_32.c:574:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected unsigned short const [noderef] __user *__gu_addr @@     got unsigned short * @@
+   arch/sh/kernel/traps_32.c:574:9: sparse:     expected unsigned short const [noderef] __user *__gu_addr
+   arch/sh/kernel/traps_32.c:574:9: sparse:     got unsigned short *
+   arch/sh/kernel/traps_32.c:563:5: sparse: sparse: symbol 'is_dsp_inst' was not declared. Should it be static?
 
-pcount should be 2, but is 27898727(0x1a9b367) , which is 20 bytes put 
-forward. 
+vim +574 arch/sh/kernel/traps_32.c
 
-12:08:02.680299	Unicast to us 2004:1:1:1::101:101   2000:1:1:1:afca:1b1f:1a9:b367 UDP 51196 → 5201 Len=2840
-0000   20 00 00 01 00 01 00 01 af ca 1b 1f 01 a9 b3 67   ipv6 dst address
-0000   c7 fc 14 51 0b 20 c7 ab                           udp header
-0000   00 00 00 ab 00 0e f3 49 00 00 00 01 08 06 69 d2   00000001 is pcount
-12:08:02.682084	Unicast to us	1.1.1.1	                 192.0.0.4 	 	  UDP 51196 → 5201 Len=2840
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  558  
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  559  #ifdef CONFIG_SH_DSP
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  560  /*
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  561   *	SH-DSP support gerg@snapgear.com.
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  562   */
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  563  int is_dsp_inst(struct pt_regs *regs)
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  564  {
+882c12c4e1a95e arch/sh/kernel/traps.c Paul Mundt     2007-05-14  565  	unsigned short inst = 0;
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  566  
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  567  	/*
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  568  	 * Safe guard if DSP mode is already enabled or we're lacking
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  569  	 * the DSP altogether.
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  570  	 */
+11c1965687b0a4 arch/sh/kernel/traps.c Paul Mundt     2006-12-25  571  	if (!(current_cpu_data.flags & CPU_HAS_DSP) || (regs->sr & SR_DSP))
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  572  		return 0;
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  573  
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16 @574  	get_user(inst, ((unsigned short *) regs->pc));
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  575  
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  576  	inst &= 0xf000;
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  577  
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  578  	/* Check for any type of DSP or support instruction */
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  579  	if ((inst == 0xf000) || (inst == 0x4000))
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  580  		return 1;
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  581  
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  582  	return 0;
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  583  }
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  584  #else
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  585  #define is_dsp_inst(regs)	(0)
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  586  #endif /* CONFIG_SH_DSP */
+^1da177e4c3f41 arch/sh/kernel/traps.c Linus Torvalds 2005-04-16  587  
 
-After applied the patch, there is no OOO, pcount acted in order.
+:::::: The code at line 574 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-Thanks!
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

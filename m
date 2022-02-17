@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5314BA5A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E74C04BA5A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243077AbiBQQXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:23:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40562 "EHLO
+        id S237400AbiBQQXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:23:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243079AbiBQQW7 (ORCPT
+        with ESMTP id S243087AbiBQQXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:22:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F32225BD4D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:22:43 -0800 (PST)
+        Thu, 17 Feb 2022 11:23:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9D91D9A81;
+        Thu, 17 Feb 2022 08:22:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C2A860F2E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 16:22:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B331C340E9;
-        Thu, 17 Feb 2022 16:22:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C36DB8236B;
+        Thu, 17 Feb 2022 16:22:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CD63C340E8;
+        Thu, 17 Feb 2022 16:22:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645114962;
-        bh=xfdhzSsjj/DTtlqONlbnm01z3Tz7AvHFA5SCuYuWvYw=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=QQbOk1qQ0tF9tKv+D3HjuPPNRu4RHLbTJC7w+LPZF0izCZdeU/QQyMvLakArAHRmT
-         hBgfF4BLtjqnW8AW0vvJJSfwca1xrlxXZnYsoSbxebt757v3EeP9q5ATonCPeK4oGC
-         s/2gIVZ5sEn+Osz6nXzCXDOOImTG5CfXrzPT5a//WIXQ4hi/03R7q34z1tLNpghaat
-         xwMOynTJ8mXbd91z3Hi4fkFLLRuK/I0ghHPWJfn+K+Xd0iqm01DzAumLIRdeMlBCih
-         uWkeFGV/VQ4cbZANR+1WxmPq9VWSKtxk52/EZ7g5QdpI224njNlodzh1eepFIYAOHL
-         LRaUv/YMaiA5g==
+        s=k20201202; t=1645114967;
+        bh=WdbxnQytOJyFGKv/5Vdo8JVuxQQcHwb/2yJR9P+3OUU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=MQGFC60n2jBDWLwIZ3rq3bUFlfWZHDDeM04QnUnmEq3EZy4AT4bVB2yAK8tINWZRX
+         5yyZoymrJIp3YKQIsYEadHe5ug8dYbReYeKcU04c5fHo9pRqp1ul+pAyVO+T7DRdVH
+         ocSIHsTV7PXwKPdkbG3FoLs+aTqhwNvaPXJz/pjypPjkQsLPvVWd98OH127aCNzx7F
+         HoCuKqJnea7b39bJMd34xDSFb0UwwPPxtB+4HfiXf8AMYDHhuVL/dxnh7sGiGO3utF
+         fBf+DZ4hQ2LHut0+L0iCChPA9EAWoUAj/OfjNC3nG6CoVX7DbO9jBNppE48w7WnGsO
+         4+FZY1qhknxKQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-In-Reply-To: <20220217085007.30218-1-quic_pkumpatl@quicinc.com>
-References: <20220217085007.30218-1-quic_pkumpatl@quicinc.com>
-Subject: Re: [PATCH v3] regmap-irq: Update interrupt clear register for proper reset
-Message-Id: <164511496093.1843761.5184860429642885960.b4-ty@kernel.org>
-Date:   Thu, 17 Feb 2022 16:22:40 +0000
+To:     Jon Lin <jon.lin@rock-chips.com>
+Cc:     heiko@sntech.de, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220216014028.8123-1-jon.lin@rock-chips.com>
+References: <20220216014028.8123-1-jon.lin@rock-chips.com>
+Subject: Re: (subset) [PATCH v3 0/6] New support and problem adjustment of SPI rockchip
+Message-Id: <164511496635.1843820.10942141701559024729.b4-ty@kernel.org>
+Date:   Thu, 17 Feb 2022 16:22:46 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,25 +55,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 14:20:07 +0530, Prasad Kumpatla wrote:
-> With the existing logic where clear_ack is true (HW doesn’t support
-> auto clear for ICR), interrupt clear register reset is not handled
-> properly. Due to this only the first interrupts get processed properly
-> and further interrupts are blocked due to not resetting interrupt
-> clear register.
+On Wed, 16 Feb 2022 09:40:22 +0800, Jon Lin wrote:
+> Changes in v3:
+> - Support clear the bits of configure bits filed
 > 
-> Example for issue case where Invert_ack is false and clear_ack is true:
+> Changes in v2:
+> - Fix patches should be at the start of the series
+> - Fix patches should be at the start of the series
+> - Delete useless messages
+> - Limit cs-high presetting to the chip select n <= 1
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-linus
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
 
 Thanks!
 
-[1/1] regmap-irq: Update interrupt clear register for proper reset
-      commit: d04ad245d67a3991dfea5e108e4c452c2ab39bac
+[1/6] spi: rockchip: Fix error in getting num-cs property
+      commit: 9382df0a98aad5bbcd4d634790305a1d786ad224
+[2/6] spi: rockchip: terminate dma transmission when slave abort
+      commit: 80808768e41324d2e23de89972b5406c1020e6e4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

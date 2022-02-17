@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12A74BA407
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71804BA409
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242334AbiBQPMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:12:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36334 "EHLO
+        id S242339AbiBQPMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:12:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242193AbiBQPMC (ORCPT
+        with ESMTP id S242337AbiBQPM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:12:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CA1DFE1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:11:45 -0800 (PST)
+        Thu, 17 Feb 2022 10:12:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6BFFD13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:12:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DE0CB8229C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 15:11:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B1FC340E8;
-        Thu, 17 Feb 2022 15:11:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CA4E60B23
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 15:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E34C340E8;
+        Thu, 17 Feb 2022 15:12:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645110703;
-        bh=Be2tUvZR6yPdtG05snazPwksuSsRAFMaTvHSuXMuECg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kCxMBsjJTV9tzvOu02w2kS3WrpEqHZNQsqKwZv2i2KxRrS0voMtToXy6Uenqa4nQ6
-         3XMGu2AAyGUU+qFt32jdrbpfJrY4qjXHjY1bGqONdxupIEUdW792CxnrxkTSF7G/FB
-         jxKf6QAhLp7/kHlKqn5ykQw88t5Z9877AfJI+n+sCd4hEsF5wyvz3Jd69Ju1Oux0V/
-         1C1/oDrLJL0A1re8wzejZ4q+7SbszS4eDusaTpfHAkcooN2xz/rjhrdy+X344lnUmn
-         FxeUyUjECvI3lmEB6J3muJpkOrz1UiGcMBJ3JcVsrPewVYa+F6JoYa6s8EUZJYR3+P
-         ET0LvdtmyOOQQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 087DA5C017D; Thu, 17 Feb 2022 07:11:43 -0800 (PST)
-Date:   Thu, 17 Feb 2022 07:11:43 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 2/5] rcu/nocb: Move rcu_nocb_is_setup to rcu_state
-Message-ID: <20220217151143.GQ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220216154208.696069-1-frederic@kernel.org>
- <20220216154208.696069-3-frederic@kernel.org>
- <20220216213035.GA2442742@paulmck-ThinkPad-P17-Gen-1>
- <20220217015332.GA2455440@paulmck-ThinkPad-P17-Gen-1>
- <20220217052804.GA2461302@paulmck-ThinkPad-P17-Gen-1>
- <20220217113012.GB742892@lothringen>
+        s=k20201202; t=1645110730;
+        bh=KDQe45qlzMBNPOl7GlXQkYPjXodxLAhGokag+dlZ2zo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Htsc0XFIK2HdOEgDOn9Ppq1O7VCXWF1mVm/DLnbg80UCH11tmBi3Qhgw/VlDoh9nJ
+         /WxEhkdqOmCMDR5lLGMt9adBXTVTD4y+4cbC9SFRQocfSbvLpTIZs99vZ89ldtSTwX
+         3+qG/yFdRzhcEbBtprGCHBieGeE/BjWzsMWZCgkFTm6BgCm/+sHpyssV68Z5VDuw37
+         R0xN1GJku5w6CaImS+9wwuzgMMmV9/1SrdUfoQDiBClDh8/85s6bZFii08uu6plEKr
+         VVqAt8Qw/QwMDFEaQ5WkS1PKqMup2XGJN+2rSnL+LUhbmok8ck9ROcK/tVc58QZmEL
+         KXfwYS7ZZuelg==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nKiS0-008bzU-J7; Thu, 17 Feb 2022 15:12:08 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217113012.GB742892@lothringen>
+Date:   Thu, 17 Feb 2022 15:12:08 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] irqchip/riscv-intc: Create domain using named
+ fwnode
+In-Reply-To: <20220128052505.859518-3-apatel@ventanamicro.com>
+References: <20220128052505.859518-1-apatel@ventanamicro.com>
+ <20220128052505.859518-3-apatel@ventanamicro.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <063b8a5636d6372f37029946b2c3e0f4@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,128 +74,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 12:30:12PM +0100, Frederic Weisbecker wrote:
-> On Wed, Feb 16, 2022 at 09:28:04PM -0800, Paul E. McKenney wrote:
-> > On Wed, Feb 16, 2022 at 05:53:32PM -0800, Paul E. McKenney wrote:
-> > > On Wed, Feb 16, 2022 at 01:30:35PM -0800, Paul E. McKenney wrote:
-> > > > On Wed, Feb 16, 2022 at 04:42:05PM +0100, Frederic Weisbecker wrote:
-> > > > > In order to avoid scattering the global RCU states, move the RCU nocb
-> > > > > initialization witness within rcu_state.
-> > > > > 
-> > > > > Reported-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > > > > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> > > > > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > > > > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > > > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > > > 
-> > > > Build testing for CONFIG_NO_HZ_FULL=n kernels suggested the following
-> > > > patch be merged into this one.  Or does this variable need to be used
-> > > > somewhere?  Either way, please let me know!
-> > > 
-> > > TASKS03, TREE04, and TREE07 don't like this much, according to git
-> > > bisect.  They are the ones with nohz_full CPUs, in case that is crucial.
-> > > Trying again after reverting this commit locally.
-> > > 
-> > > If that works, I would be tempted to try the modification shown below.
-> > 
-> > And that does pass significant rcutorture testing, but over to you.  ;-)
+On 2022-01-28 05:25, Anup Patel wrote:
+> We should create INTC domain using a synthetic fwnode which will allow
+> drivers (such as RISC-V SBI IPI driver, RISC-V timer driver, RISC-V
+> PMU driver, etc) not having dedicated DT/ACPI node to directly create
+> interrupt mapping for standard local interrupt numbers defined by the
+> RISC-V privileged specification.
 > 
-> Ah no we still need that variable, but I screwed up and wrongly converted
-> need_rcu_nocb_mask to rcu_state.nocb_is_setup somewhere.
-> 
-> Here is the v2 of the culprit patch (sorry):
-
-Been there, done that!  ;-)
-
-I pulled this one in and I will let you know how it goes.
-
-							Thanx, Paul
-
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
-> From: Frederic Weisbecker <frederic@kernel.org>
-> Date: Mon, 14 Feb 2022 14:23:39 +0100
-> Subject: [PATCH] rcu/nocb: Move rcu_nocb_is_setup to rcu_state
+>  arch/riscv/include/asm/irq.h      |  2 ++
+>  arch/riscv/kernel/irq.c           | 13 +++++++++++++
+>  drivers/clocksource/timer-clint.c | 13 +++++++------
+>  drivers/clocksource/timer-riscv.c | 11 ++---------
+>  drivers/irqchip/irq-riscv-intc.c  | 12 ++++++++++--
+>  drivers/irqchip/irq-sifive-plic.c | 19 +++++++++++--------
+>  6 files changed, 45 insertions(+), 25 deletions(-)
 > 
-> In order to avoid scattering the global RCU states, move the RCU nocb
-> initialization witness within rcu_state.
+> diff --git a/arch/riscv/include/asm/irq.h 
+> b/arch/riscv/include/asm/irq.h
+> index e4c435509983..f85ebaf07505 100644
+> --- a/arch/riscv/include/asm/irq.h
+> +++ b/arch/riscv/include/asm/irq.h
+> @@ -12,6 +12,8 @@
 > 
-> Reported-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> ---
->  kernel/rcu/tree.h      |  1 +
->  kernel/rcu/tree_nocb.h | 13 +++++--------
->  2 files changed, 6 insertions(+), 8 deletions(-)
+>  #include <asm-generic/irq.h>
 > 
-> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-> index 19fc9acce3ce..735fc410d76a 100644
-> --- a/kernel/rcu/tree.h
-> +++ b/kernel/rcu/tree.h
-> @@ -368,6 +368,7 @@ struct rcu_state {
->  	arch_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
->  						/* Synchronize offline with */
->  						/*  GP pre-initialization. */
-> +	int nocb_is_setup;			/* nocb is setup from boot */
->  };
->  
->  /* Values for rcu_state structure's gp_flags field. */
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index 02e1d05a11fc..3c00240833d6 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -60,9 +60,6 @@ static inline bool rcu_current_is_nocb_kthread(struct rcu_data *rdp)
->   * Parse the boot-time rcu_nocb_mask CPU list from the kernel parameters.
->   * If the list is invalid, a warning is emitted and all CPUs are offloaded.
->   */
-> -
-> -static bool rcu_nocb_is_setup;
-> -
->  static int __init rcu_nocb_setup(char *str)
->  {
->  	alloc_bootmem_cpumask_var(&rcu_nocb_mask);
-> @@ -72,7 +69,7 @@ static int __init rcu_nocb_setup(char *str)
->  			cpumask_setall(rcu_nocb_mask);
->  		}
->  	}
-> -	rcu_nocb_is_setup = true;
-> +	rcu_state.nocb_is_setup = true;
->  	return 1;
->  }
->  __setup("rcu_nocbs", rcu_nocb_setup);
-> @@ -1172,10 +1169,10 @@ void __init rcu_init_nohz(void)
->  				return;
->  			}
->  		}
-> -		rcu_nocb_is_setup = true;
-> +		rcu_state.nocb_is_setup = true;
->  	}
->  
-> -	if (!rcu_nocb_is_setup)
-> +	if (!rcu_state.nocb_is_setup)
->  		return;
->  
->  #if defined(CONFIG_NO_HZ_FULL)
-> @@ -1233,7 +1230,7 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
->  	struct task_struct *t;
->  	struct sched_param sp;
->  
-> -	if (!rcu_scheduler_fully_active || !rcu_nocb_is_setup)
-> +	if (!rcu_scheduler_fully_active || !rcu_state.nocb_is_setup)
->  		return;
->  
->  	/* If there already is an rcuo kthread, then nothing to do. */
-> @@ -1279,7 +1276,7 @@ static void __init rcu_spawn_nocb_kthreads(void)
->  {
->  	int cpu;
->  
-> -	if (rcu_nocb_is_setup) {
-> +	if (rcu_state.nocb_is_setup) {
->  		for_each_online_cpu(cpu)
->  			rcu_spawn_cpu_nocb_kthread(cpu);
->  	}
-> -- 
-> 2.25.1
+> +extern struct fwnode_handle *riscv_intc_fwnode(void);
+> +
+>  extern void __init init_IRQ(void);
+> 
+>  #endif /* _ASM_RISCV_IRQ_H */
+> diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+> index 7207fa08d78f..f2fed78ab659 100644
+> --- a/arch/riscv/kernel/irq.c
+> +++ b/arch/riscv/kernel/irq.c
+> @@ -7,9 +7,22 @@
+> 
+>  #include <linux/interrupt.h>
+>  #include <linux/irqchip.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/module.h>
+>  #include <linux/seq_file.h>
+>  #include <asm/smp.h>
+> 
+> +static struct fwnode_handle *intc_fwnode;
+> +
+> +struct fwnode_handle *riscv_intc_fwnode(void)
+> +{
+> +	if (!intc_fwnode)
+> +		intc_fwnode = irq_domain_alloc_named_fwnode("RISCV-INTC");
+> +
+> +	return intc_fwnode;
+> +}
+> +EXPORT_SYMBOL_GPL(riscv_intc_fwnode);
+
+Why is this created outside of the root interrupt controller driver?
+Furthermore, why do you need to create a new fwnode the first place?
+As far as I can tell, the INTC does have a node, and what you don't
+have is the firmware linkage between PMU (an others) and the INTC.
+
+what you should have instead is something like:
+
+static struct fwnode_handle *(*__get_root_intc_node)(void);
+struct fwnode_handle *riscv_get_root_intc_hwnode(void)
+{
+         if (__get_root_intc_node)
+                 return __get_root_intc_node();
+
+         return NULL;
+}
+
+and the corresponding registration interface.
+
+But either way, something breaks: the INTC has one node per CPU, and
+expect one irqdomain per CPU. Having a single fwnode completely breaks
+the INTC driver (and probably the irqdomain list, as we don't check for
+duplicate entries).
+
+> diff --git a/drivers/irqchip/irq-riscv-intc.c 
+> b/drivers/irqchip/irq-riscv-intc.c
+> index b65bd8878d4f..26ed62c11768 100644
+> --- a/drivers/irqchip/irq-riscv-intc.c
+> +++ b/drivers/irqchip/irq-riscv-intc.c
+> @@ -112,8 +112,16 @@ static int __init riscv_intc_init(struct 
+> device_node *node,
+>  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
+>  		return 0;
+> 
+> -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
+> -					    &riscv_intc_domain_ops, NULL);
+> +	/*
+> +	 * Create INTC domain using a synthetic fwnode which will allow
+> +	 * drivers (such as RISC-V SBI IPI driver, RISC-V timer driver,
+> +	 * RISC-V PMU driver, etc) not having dedicated DT/ACPI node to
+> +	 * directly create interrupt mapping for standard local interrupt
+> +	 * numbers defined by the RISC-V privileged specification.
+> +	 */
+> +	intc_domain = irq_domain_create_linear(riscv_intc_fwnode(),
+> +					       BITS_PER_LONG,
+> +					       &riscv_intc_domain_ops, NULL);
+
+This is what I'm talking about. It is simply broken. So either you don't
+need a per-CPU node (and the DT was bad the first place), or you 
+absolutely need
+one (and the whole 'well-known/default domain' doesn't work at all).
+
+Either way, this patch is plain wrong.
+
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...

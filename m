@@ -2,169 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552C54BA648
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1F94BA627
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243390AbiBQQkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:40:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49688 "EHLO
+        id S243322AbiBQQkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:40:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243374AbiBQQkb (ORCPT
+        with ESMTP id S239518AbiBQQkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:40:31 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A8C2B2FFE;
-        Thu, 17 Feb 2022 08:40:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=CiWUvZ5366lvIGhETsSSEgnHPIlanXaVnZLtS1TTtsI=; b=QsoogWw/JVCdBKfTtTDfPkNwuS
-        hwTOkgQ0FzqnYrFza/hSa2oOK6BUHsw8hJShqzZ6POFid6nIrZIGyMEqRpSmrVYxLgrOagTmOWvDs
-        Iw+o/gznG5u+fEHDG/2ZiEFcO9tPT1rcoGWG1hUn51Pt0ytcskrKkzYir76AHEJc5kXGpa8KPjF75
-        rf6rco1DHi0m+gL+7CWEj+T2U5XsW6xa3PGmehMMpAXnHOj4t02oYVlAu2r9LAKYJtStWOLI/hN9U
-        rj7+kekdZ9ahS+Rjb6tOrutggtlAPJlbr9M5CJvWr2WufB9EdhP0dcEuyN6P4dF2ZOXZ7FhkTegkC
-        QzMZ9g3g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKjoq-00Fm3P-Az; Thu, 17 Feb 2022 16:39:48 +0000
-Message-ID: <a9c40409-a72d-276c-777f-c7b1863e4537@infradead.org>
-Date:   Thu, 17 Feb 2022 08:39:41 -0800
+        Thu, 17 Feb 2022 11:40:06 -0500
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E842B2FD7;
+        Thu, 17 Feb 2022 08:39:50 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4K00sw4FKDz9sYX;
+        Thu, 17 Feb 2022 17:39:48 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1645115986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VKMYfIYEKaO/AzJDq7YrqWp6caWHvpKI3f237QWlRnk=;
+        b=qJ7CRQ26R9aRwRfGUMDqGnjIbKh5IktR3F3AfNPngw9wmBwuwYd/GNRq/AL1EtOeAZYo4Z
+        JzcY0KZyDU4YwShOTaVEE2UQbQCbrRIZd2LiBXCqKP15W6fEICl7H0US8IzKLGBJtonSsw
+        HHwR97z2TB8mNmmufhu2lkuJ1H1ZoLJsbfB2KsiOGFionLdtKqkU7cbhbijvBzhMSafvVd
+        jqdo0vLCujR4oqP0HPJg2BFdt9EXhn5WxcbQ0SRwrnW/nl6o+IpPfpEeSss9u/2ROyHEnd
+        8hZDGqmlGfzHNwcVjuOq0g0k4WmfQ9dsAU28Yr5MVFXihqW1P7oclEdb+Ps7Tw==
+Message-ID: <246de83631dd5e165f95904d7f1628502f030e02.camel@sylv.io>
+Subject: Re: [PATCH v2 2/3] hwmon (xdpe12284): Add support for xdpe11280
+From:   sylv <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-doc@vger.kernel.org
+Date:   Thu, 17 Feb 2022 17:39:41 +0100
+In-Reply-To: <f1e13a4e-2e86-1d53-f34d-a04838e8e8f9@roeck-us.net>
+References: <cover.1645108566.git.sylv@sylv.io>
+         <6103836f1116a045a25919ae3e5c18dfdc485902.1645108566.git.sylv@sylv.io>
+         <f1e13a4e-2e86-1d53-f34d-a04838e8e8f9@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2] net: ethernet: xilinx: cleanup comments
-Content-Language: en-US
-To:     trix@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        michal.simek@xilinx.com, radhey.shyam.pandey@xilinx.com,
-        esben@geanix.com, arnd@arndb.de, huangguangbin2@huawei.com,
-        chenhao288@hisilicon.com, moyufeng@huawei.com, michael@walle.cc,
-        yuehaibing@huawei.com, prabhakar.mahadev-lad.rj@bp.renesas.com
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220217160518.3255003-1-trix@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220217160518.3255003-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-02-17 at 07:20 -0800, Guenter Roeck wrote:
+> On 2/17/22 06:41, Marcello Sylvester Bauer wrote:
+> > Add support for another family of Infineon Multi-phase controllers.
+> > The xdpe11280 uses linear instead of vid data format for VOUT.
+> > Add the required logic to detect VOUT_MODE during identification,
+> > and set the format accordingly.
+> > 
+> This talks about the chip, but ...
 
+Oh, sure. I should be more clear that it is a chip of a different
+family.
 
-On 2/17/22 08:05, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
 > 
-> Remove the second 'the'.
-> Replacements:
-> endiannes to endianness
-> areconnected to are connected
-> Mamagement to Management
-> undoccumented to undocumented
-> Xilink to Xilinx
-> strucutre to structure
+> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > ---
+> >   Documentation/hwmon/xdpe12284.rst | 10 +++++++---
+> >   drivers/hwmon/pmbus/xdpe12284.c   | 17 ++++++++++++++++-
+> >   2 files changed, 23 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/Documentation/hwmon/xdpe12284.rst
+> > b/Documentation/hwmon/xdpe12284.rst
+> > index 67d1f87808e5..e9a5a19b0c3d 100644
+> > --- a/Documentation/hwmon/xdpe12284.rst
+> > +++ b/Documentation/hwmon/xdpe12284.rst
+> > @@ -5,6 +5,10 @@ Kernel driver xdpe122
+> >   
+> >   Supported chips:
+> >   
+> > +  * Infineon XDPE11280
+> > +
+> > +    Prefix: 'xdpe11280'
+> > +
+> >     * Infineon XDPE12254
+> >   
+> >       Prefix: 'xdpe12254'
+> > @@ -20,9 +24,9 @@ Authors:
+> >   Description
+> >   -----------
+> >   
+> > -This driver implements support for Infineon Multi-phase XDPE122
+> > family
+> > -dual loop voltage regulators.
+> > -The family includes XDPE12284 and XDPE12254 devices.
+> > +This driver implements support for Infineon Multi-phase XDPE112
+> > and XDPE122
+> > +family dual loop voltage regulators.
+> > +These families include XDPE11280, XDPE12284 and XDPE12254 devices.
+> >   The devices from this family complaint with:
 > 
-> Change kernel-doc comment style to c style for
-> /* Management ...
+> Hmm, s/complaint/compliant/.
+
+ack
+
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> Reviewed-by: Michal Simek <michal.simek@xilinx.com>
+> Anyway, is it still correct that the XDPE11280 is compliant with the
+> Intel specifications ? The datasheet isn't public, so I can not check
+> myself
+> what the chip actually supports.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+The hardware we are testing on is an Intel Cascade Lake, which uses
+this chip. The datasheet tells us it is compliant:
 
-thanks.
+```
+The XDPE11280B implements a fully compliant Intel® VR 13, VR12, VR
+12.5, VR13.HC, and IMVP8 Serial VID (SVID)
+interface.
+```
 
-> ---
-> v2: Change the /** to /* 
->     Add Michal's Reviewed-by: tag
 > 
->  drivers/net/ethernet/xilinx/Kconfig               | 2 +-
->  drivers/net/ethernet/xilinx/ll_temac.h            | 4 ++--
->  drivers/net/ethernet/xilinx/ll_temac_main.c       | 2 +-
->  drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 2 +-
->  drivers/net/ethernet/xilinx/xilinx_emaclite.c     | 2 +-
->  5 files changed, 6 insertions(+), 6 deletions(-)
+> >   
+> >   - Intel VR13 and VR13HC rev 1.3, IMVP8 rev 1.2 and IMPVP9 rev 1.3
+> > DC-DC
+> > diff --git a/drivers/hwmon/pmbus/xdpe12284.c
+> > b/drivers/hwmon/pmbus/xdpe12284.c
+> > index b07da06a40c9..ec947c697670 100644
+> > --- a/drivers/hwmon/pmbus/xdpe12284.c
+> > +++ b/drivers/hwmon/pmbus/xdpe12284.c
+> > @@ -27,6 +27,9 @@ static int xdpe122_read_word_data(struct
+> > i2c_client *client, int page,
+> >         s32 mantissa;
+> >         int ret;
+> >   
+> > +       if (info->format[PSC_VOLTAGE_OUT] == linear)
+> > +               return -ENODATA;
+> > +
+> >         switch (reg) {
+> >         case PMBUS_VOUT_OV_FAULT_LIMIT:
+> >         case PMBUS_VOUT_UV_FAULT_LIMIT:
+> > @@ -75,9 +78,19 @@ static int xdpe122_read_word_data(struct
+> > i2c_client *client, int page,
+> >   static int xdpe122_identify(struct i2c_client *client,
+> >                             struct pmbus_driver_info *info)
+> >   {
+> > -       u8 vout_params;
+> > +       u8 vout_mode, vout_params;
+> >         int i, ret;
+> >   
+> > +       ret = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
+> > +       if (ret < 0)
+> > +               return ret;
+> > +
+> > +       vout_mode = ret >> 5;
+> > +       if (vout_mode == 0) {
+> > +               info->format[PSC_VOLTAGE_OUT] = linear;
+> > +               return 0;
+> > +       }
 > 
-> diff --git a/drivers/net/ethernet/xilinx/Kconfig b/drivers/net/ethernet/xilinx/Kconfig
-> index 911b5ef9e680..0014729b8865 100644
-> --- a/drivers/net/ethernet/xilinx/Kconfig
-> +++ b/drivers/net/ethernet/xilinx/Kconfig
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  #
-> -# Xilink device configuration
-> +# Xilinx device configuration
->  #
->  
->  config NET_VENDOR_XILINX
-> diff --git a/drivers/net/ethernet/xilinx/ll_temac.h b/drivers/net/ethernet/xilinx/ll_temac.h
-> index 4a73127e10a6..c6395c406418 100644
-> --- a/drivers/net/ethernet/xilinx/ll_temac.h
-> +++ b/drivers/net/ethernet/xilinx/ll_temac.h
-> @@ -271,7 +271,7 @@ This option defaults to enabled (set) */
->  
->  #define XTE_TIE_OFFSET			0x000003A4 /* Interrupt enable */
->  
-> -/**  MII Mamagement Control register (MGTCR) */
-> +/* MII Management Control register (MGTCR) */
->  #define XTE_MGTDR_OFFSET		0x000003B0 /* MII data */
->  #define XTE_MIIMAI_OFFSET		0x000003B4 /* MII control */
->  
-> @@ -283,7 +283,7 @@ This option defaults to enabled (set) */
->  
->  #define STS_CTRL_APP0_ERR         (1 << 31)
->  #define STS_CTRL_APP0_IRQONEND    (1 << 30)
-> -/* undoccumented */
-> +/* undocumented */
->  #define STS_CTRL_APP0_STOPONEND   (1 << 29)
->  #define STS_CTRL_APP0_CMPLT       (1 << 28)
->  #define STS_CTRL_APP0_SOP         (1 << 27)
-> diff --git a/drivers/net/ethernet/xilinx/ll_temac_main.c b/drivers/net/ethernet/xilinx/ll_temac_main.c
-> index b900ab5aef2a..7171b5cdec26 100644
-> --- a/drivers/net/ethernet/xilinx/ll_temac_main.c
-> +++ b/drivers/net/ethernet/xilinx/ll_temac_main.c
-> @@ -1008,7 +1008,7 @@ static void ll_temac_recv(struct net_device *ndev)
->  		    (skb->len > 64)) {
->  
->  			/* Convert from device endianness (be32) to cpu
-> -			 * endiannes, and if necessary swap the bytes
-> +			 * endianness, and if necessary swap the bytes
->  			 * (back) for proper IP checksum byte order
->  			 * (be16).
->  			 */
-> diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-> index de0a6372ae0e..6eeaab77fbe0 100644
-> --- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-> +++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-> @@ -537,7 +537,7 @@ static int __axienet_device_reset(struct axienet_local *lp)
->   * This function is called to reset and initialize the Axi Ethernet core. This
->   * is typically called during initialization. It does a reset of the Axi DMA
->   * Rx/Tx channels and initializes the Axi DMA BDs. Since Axi DMA reset lines
-> - * areconnected to Axi Ethernet reset lines, this in turn resets the Axi
-> + * are connected to Axi Ethernet reset lines, this in turn resets the Axi
->   * Ethernet core. No separate hardware reset is done for the Axi Ethernet
->   * core.
->   * Returns 0 on success or a negative error number otherwise.
-> diff --git a/drivers/net/ethernet/xilinx/xilinx_emaclite.c b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-> index 519599480b15..f65a638b7239 100644
-> --- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-> +++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-> @@ -498,7 +498,7 @@ static void xemaclite_update_address(struct net_local *drvdata,
->   * @dev:	Pointer to the network device instance
->   * @address:	Void pointer to the sockaddr structure
->   *
-> - * This function copies the HW address from the sockaddr strucutre to the
-> + * This function copies the HW address from the sockaddr structure to the
->   * net_device structure and updates the address in HW.
->   *
->   * Return:	Error if the net device is busy or 0 if the addr is set
+> .... the code above is not chip dependent but this code checks the
+> mode register on page 0. At the very least this is confusing.
+> 
+> What the driver should do instead is to check the chip type during
+> probe and make the necessary changes there, ie set the output format
+> for xdpe11280 to linear and drop the pointers to the .identify
+> and .read_word_data.
 
--- 
-~Randy
+Sgtm. This sounds like a better approach indeed.
+
+Thanks,
+Marcello
+
+> 
+> Guenter
+> 
+> > +
+> >         for (i = 0; i < XDPE122_PAGE_NUM; i++) {
+> >                 /* Read the register with VOUT scaling value.*/
+> >                 ret = pmbus_read_byte_data(client, i,
+> > PMBUS_VOUT_MODE);
+> > @@ -140,6 +153,7 @@ static int xdpe122_probe(struct i2c_client
+> > *client)
+> >   }
+> >   
+> >   static const struct i2c_device_id xdpe122_id[] = {
+> > +       {"xdpe11280", 0},
+> >         {"xdpe12254", 0},
+> >         {"xdpe12284", 0},
+> >         {}
+> > @@ -148,6 +162,7 @@ static const struct i2c_device_id xdpe122_id[]
+> > = {
+> >   MODULE_DEVICE_TABLE(i2c, xdpe122_id);
+> >   
+> >   static const struct of_device_id __maybe_unused
+> > xdpe122_of_match[] = {
+> > +       {.compatible = "infineon,xdpe11280"},
+> >         {.compatible = "infineon,xdpe12254"},
+> >         {.compatible = "infineon,xdpe12284"},
+> >         {}
+> 
+

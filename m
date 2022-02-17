@@ -2,184 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7154B98CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F984B98E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234854AbiBQGIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:08:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46366 "EHLO
+        id S235286AbiBQGKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:10:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234842AbiBQGI2 (ORCPT
+        with ESMTP id S235361AbiBQGJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:08:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 755E4C7D6A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 22:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645078093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A1vbZxsyzMifaaJqgkhHlizU7SHJnrILT5bLrmNnzMQ=;
-        b=OZMeYcVqlq4pNdvhAGzBxH81Z0YZ8+d6IYZV24ocHZ7Da+Ei2ODTIySnJH9ejfvXEWeTOb
-        erv/7vRGIBBaFZuPJ0ntq/Lu/NLHn9jLMmlGGnx1Zq1b6mFIVU50MHR8IwP5w85IaEFUtd
-        v5yarUhFHMP68iqiJ82SF/HqprOoJ2s=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-410-6hXjHtCtP9m5i4wAPwLTrQ-1; Thu, 17 Feb 2022 01:08:12 -0500
-X-MC-Unique: 6hXjHtCtP9m5i4wAPwLTrQ-1
-Received: by mail-pj1-f69.google.com with SMTP id t16-20020a17090b019000b001b8af627800so5834347pjs.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 22:08:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=A1vbZxsyzMifaaJqgkhHlizU7SHJnrILT5bLrmNnzMQ=;
-        b=RDqX5W1HfxEsFd6wALKoXkkQnePEZfiwMeie367FvX7C3f90AsyT+Htrl/a6QxYUOd
-         kH6GMdw2HoS0jujOw5HgEHT1p5gQUyLXMwJnPLqTDNfxNWJmqiUySjM1477szH/dr5IV
-         Gsjza/BdHlWErIhZn3dgnvfcPI/DOD2fe4Ekv/irzevNm5uqk89ctpjwnyTT7Fk7ARZm
-         fS6E4CuPhCI7yPaaV8nPi4MxtKmlSxYuk1TG25TpIj+tUc4ciNhJ6y/COKr1AaMzdG1I
-         IHcUIz4Bpgy5OPchit+8A+P7DifJMctSlNlpW5gglwhuf9C+DZwFMnBq0z40zF3ED4qz
-         WB6Q==
-X-Gm-Message-State: AOAM5322qqQCaYn0mHHO+znNhfqbI1dclt2bbJGoKGqkS+0jyh5unfN3
-        JkE7am+E6w4Vwffo9fKUxUnEdhFn300THW+7uxKVJK+QRKsT3wk3tcbyovdcrzfkTxG+elg7PN/
-        Xfxb7bAm18i0ZAu+A/CdmzjFa
-X-Received: by 2002:a17:90a:ec10:b0:1b8:9da7:3d13 with SMTP id l16-20020a17090aec1000b001b89da73d13mr1531870pjy.194.1645078091161;
-        Wed, 16 Feb 2022 22:08:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxJ+MRoSejjpjSfq3CLN/Ow3BCwyndgoRTeQRVbvX65z98rR9y1roji3xMcenHn/prKAwWNxg==
-X-Received: by 2002:a17:90a:ec10:b0:1b8:9da7:3d13 with SMTP id l16-20020a17090aec1000b001b89da73d13mr1531852pjy.194.1645078090846;
-        Wed, 16 Feb 2022 22:08:10 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.126])
-        by smtp.gmail.com with ESMTPSA id j8sm224230pjc.11.2022.02.16.22.08.06
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 16 Feb 2022 22:08:10 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>, peterx@redhat.com,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>
-Subject: [PATCH v5 3/4] mm: Change zap_details.zap_mapping into even_cows
-Date:   Thu, 17 Feb 2022 14:07:45 +0800
-Message-Id: <20220217060746.71256-4-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220217060746.71256-1-peterx@redhat.com>
-References: <20220217060746.71256-1-peterx@redhat.com>
+        Thu, 17 Feb 2022 01:09:49 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8712A4A10;
+        Wed, 16 Feb 2022 22:09:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645078175; x=1676614175;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=kbjwhiK2tTRbM4zrwUQx7sOHj8zt1NylUTymteyHln0=;
+  b=nzrAenCYGVjMEu3IjM8vwALPl4GVLdKKHhBkRWgUL8zBMLGby/y4jyAM
+   CFnhCC9+P/Hx8bOiiicW926BUQB5f+uEb7hVuL++rotJK9C35cGlXU3wH
+   b2mZDc1WKf4zlj/MKO/1TvbdVkq/981FVdyDDMdhsy07OQHtzgv1BRN7E
+   k=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Feb 2022 22:09:35 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 22:09:33 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 16 Feb 2022 22:09:33 -0800
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 16 Feb 2022 22:09:27 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
+        <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
+Subject: [PATCH v14 09/10] ASoC: dt-bindings: Add SC7280 lpass cpu bindings
+Date:   Thu, 17 Feb 2022 11:37:45 +0530
+Message-ID: <1645078066-9365-10-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1645078066-9365-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently we have a zap_mapping pointer maintained in zap_details, when it
-is specified we only want to zap the pages that has the same mapping with
-what the caller has specified.
+Add bindings for sc7280 lpass cpu driver which supports
+audio over i2s based speaker, soundwire based headset, msm dmics
+and HDMI Port.
 
-But what we want to do is actually simpler: we want to skip zapping
-private (COW-ed) pages in some cases.  It comes from unmap_mapping_pages()
-where we could have passed in different even_cows values.  The other user
-is unmap_mapping_folio() where we always want to skip private pages.
-
-According to Hugh, we used a mapping pointer for historical reason, as
-explained here:
-
-  https://lore.kernel.org/lkml/391aa58d-ce84-9d4-d68d-d98a9c533255@google.com/
-
-Quoting partly from Hugh:
-
-  Which raises the question again of why I did not just use a boolean flag
-  there originally: aah, I think I've found why.  In those days there was a
-  horrible "optimization", for better performance on some benchmark I
-  guess, which when you read from /dev/zero into a private mapping, would
-  map the zero page there (look up read_zero_pagealigned() and
-  zeromap_page_range() if you dare).  So there was another category of page
-  to be skipped along with the anon COWs, and I didn't want multiple tests
-  in the zap loop, so checking check_mapping against page->mapping did
-  both.  I think nowadays you could do it by checking for PageAnon page (or
-  genuine swap entry) instead.
-
-This patch replaced the zap_details.zap_mapping pointer into the even_cows
-boolean, then we check it against PageAnon.
-
-Suggested-by: Hugh Dickins <hughd@google.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- mm/memory.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ .../devicetree/bindings/sound/qcom,lpass-cpu.yaml  | 75 +++++++++++++++++++---
+ 1 file changed, 67 insertions(+), 8 deletions(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 3728632ea993..c2defe8a1472 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1309,8 +1309,8 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
-  * Parameter block passed down to zap_pte_range in exceptional cases.
-  */
- struct zap_details {
--	struct address_space *zap_mapping;	/* Check page->mapping if set */
- 	struct folio *single_folio;	/* Locked folio to be unmapped */
-+	bool even_cows;			/* Zap COWed private pages too? */
- };
+diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
+index 1e23c0e..2c81efb 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
++++ b/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
+@@ -22,35 +22,41 @@ properties:
+       - qcom,lpass-cpu
+       - qcom,apq8016-lpass-cpu
+       - qcom,sc7180-lpass-cpu
++      - qcom,sc7280-lpass-cpu
  
- /* Whether we should zap all COWed (private) pages too */
-@@ -1321,13 +1321,10 @@ static inline bool should_zap_cows(struct zap_details *details)
- 		return true;
+   reg:
+-    maxItems: 2
++    minItems: 2
++    maxItems: 6
+     description: LPAIF core registers
  
- 	/* Or, we zap COWed pages only if the caller wants to */
--	return !details->zap_mapping;
-+	return details->even_cows;
- }
+   reg-names:
+-    maxItems: 2
++    minItems: 2
++    maxItems: 6
  
--/*
-- * We set details->zap_mapping when we want to unmap shared but keep private
-- * pages. Return true if we should zap this page, false otherwise.
-- */
-+/* Decides whether we should zap this page with the page pointer specified */
- static inline bool should_zap_page(struct zap_details *details, struct page *page)
- {
- 	/* If we can make a decision without *page.. */
-@@ -1338,7 +1335,8 @@ static inline bool should_zap_page(struct zap_details *details, struct page *pag
- 	if (!page)
- 		return true;
+   clocks:
+     minItems: 3
+-    maxItems: 6
++    maxItems: 7
  
--	return details->zap_mapping == page_rmapping(page);
-+	/* Otherwise we should only zap non-anon pages */
-+	return !PageAnon(page);
- }
+   clock-names:
+     minItems: 3
+-    maxItems: 6
++    maxItems: 7
  
- static unsigned long zap_pte_range(struct mmu_gather *tlb,
-@@ -3398,7 +3396,7 @@ void unmap_mapping_folio(struct folio *folio)
- 	first_index = folio->index;
- 	last_index = folio->index + folio_nr_pages(folio) - 1;
+   interrupts:
+-    maxItems: 2
++    minItems: 2
++    maxItems: 4
+     description: LPAIF DMA buffer interrupt
  
--	details.zap_mapping = mapping;
-+	details.even_cows = false;
- 	details.single_folio = folio;
+   interrupt-names:
+-    maxItems: 2
++    minItems: 2
++    maxItems: 4
  
- 	i_mmap_lock_write(mapping);
-@@ -3427,7 +3425,7 @@ void unmap_mapping_pages(struct address_space *mapping, pgoff_t start,
- 	pgoff_t	first_index = start;
- 	pgoff_t	last_index = start + nr - 1;
+   qcom,adsp:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: Phandle for the audio DSP node
  
--	details.zap_mapping = even_cows ? NULL : mapping;
-+	details.even_cows = even_cows;
- 	if (last_index < first_index)
- 		last_index = ULONG_MAX;
+   iommus:
+-    maxItems: 2
++    minItems: 2
++    maxItems: 3
+     description: Phandle to apps_smmu node with sid mask
  
+   power-domains:
+@@ -69,7 +75,7 @@ patternProperties:
+   "^dai-link@[0-9a-f]$":
+     type: object
+     description: |
+-      LPASS CPU dai node for each I2S device. Bindings of each node
++      LPASS CPU dai node for each I2S device or Soundwire device. Bindings of each node
+       depends on the specific driver providing the functionality and
+       properties.
+     properties:
+@@ -174,6 +180,59 @@ allOf:
+         - iommus
+         - power-domains
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: qcom,sc7280-lpass-cpu
++
++    then:
++      properties:
++        clock-names:
++          oneOf:
++            - items:   #for I2S
++                - const: aon_cc_audio_hm_h
++                - const: core_cc_sysnoc_mport_core
++                - const: core_cc_ext_if1_ibit
++            - items:   #for Soundwire
++                - const: aon_cc_audio_hm_h
++                - const: audio_cc_codec_mem0
++                - const: audio_cc_codec_mem1
++                - const: audio_cc_codec_mem2
++            - items:   #for HDMI
++                - const: aon_cc_audio_hm_h
++
++        reg-names:
++          anyOf:
++            - items:   #for I2S
++                - const: lpass-lpaif
++            - items:   #for I2S and HDMI
++                - const: lpass-hdmiif
++                - const: lpass-lpaif
++            - items:   #for I2S, soundwire and HDMI
++                - const: lpass-hdmiif
++                - const: lpass-lpaif
++                - const: lpass-rxtx-cdc-dma-lpm
++                - const: lpass-rxtx-lpaif
++                - const: lpass-va-lpaif
++                - const: lpass-va-cdc-dma-lpm
++        interrupt-names:
++          anyOf:
++            - items:   #for I2S
++                - const: lpass-irq-lpaif
++            - items:   #for I2S and HDMI
++                - const: lpass-irq-lpaif
++                - const: lpass-irq-hdmi
++            - items:   #for I2S, soundwire and HDMI
++                - const: lpass-irq-lpaif
++                - const: lpass-irq-hdmi
++                - const: lpass-irq-vaif
++                - const: lpass-irq-rxtxif
++
++      required:
++        - iommus
++        - power-domains
++
+ examples:
+   - |
+     #include <dt-bindings/sound/sc7180-lpass.h>
 -- 
-2.32.0
+2.7.4
 

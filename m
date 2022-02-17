@@ -2,123 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72754BAA0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E5B4BAA55
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239095AbiBQTnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:43:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37126 "EHLO
+        id S245571AbiBQTv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:51:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiBQTnm (ORCPT
+        with ESMTP id S245557AbiBQTvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:43:42 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D492241FB1;
-        Thu, 17 Feb 2022 11:43:27 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id m17so11467196edc.13;
-        Thu, 17 Feb 2022 11:43:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+wgvtN1ZQc+diRsoquyOr2biiBOjENYGILhh+mveGGk=;
-        b=MMdX0VU2f6zUULyNzRYU0JwT0hCkCl5ZhwG4mPmWLugNGLY1WmUKENJnyLzGWjsEuR
-         AVqI20TT8TkXKt8Q3eMrvV0+3VjUK9duBRBPiTpRpp/8WreaiHMEvOiyJeqyAl2blXD/
-         WCODTJwM//2GGTx5B+xRHKT5axMJOQhx5tLuqjyMruNIT2VA6+KvvQOAMJaN0TdTD1IL
-         JP8vUJqQ3aRoU6hbv85qOSwOPocLHuTmSixEkGgH2EIIHX+xsragidbEWdr7LabZJJUn
-         xW4EcYpH2k2HxUQcMIlABqoLaDi3cBXroAWKEB8lJ77zuQuPSo9+uNi7rHfeD0zG1yK/
-         VAJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+wgvtN1ZQc+diRsoquyOr2biiBOjENYGILhh+mveGGk=;
-        b=VNMVFpg/m1GS9vUTnPHIgUXLrQFSS/SDTpDflmcu95FSNvfPo0nHRoXwTEMSp9QvlO
-         aFbQ5kbUvYwv63g/j6MRhNTp7bagN0g0uXY4C+mC/O3rBVipxj4t0pyTJpFyfH4/JH2E
-         J1UNC45gg+xRgpsvXkRkp+ae4Fd309clloh5hU5ALkxIbZ2tPVCcYNE5QI6EMhLUU0Jm
-         D+p/+yf9LWCRBqynnzgNnD5i9KpV8YjfAxkmKP1mpQR9xqMk1/tt0Fauu7m93Is5ECB/
-         DiHEd6AKvQWJSCFMpzqzONUCq6HmXE+eiTWXDfCG1gyFuwo2biFsRB2qPhqkx3Jq0yht
-         lGqA==
-X-Gm-Message-State: AOAM532FYplsveuwpguXQpJyXDs+titHhcnaoazKqse6P3bYF5E8P8Wt
-        OW3SRZyiQLeTL/X1n7b8YuACoytZqkQ=
-X-Google-Smtp-Source: ABdhPJyyBVWBdAUXDvSrh5BxAuXTnKmP9jEDL4E5JsMAwx0E1RbtDMwO234OqWUh3nrrZ2F4W2DSWg==
-X-Received: by 2002:a50:cd59:0:b0:410:ac25:e570 with SMTP id d25-20020a50cd59000000b00410ac25e570mr4302197edj.252.1645127006235;
-        Thu, 17 Feb 2022 11:43:26 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
-        by smtp.googlemail.com with ESMTPSA id c11sm3950409edx.42.2022.02.17.11.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 11:43:25 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (asus-ec-sensors) do not print from .probe()
-Date:   Thu, 17 Feb 2022 20:43:18 +0100
-Message-Id: <20220217194318.2960472-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 17 Feb 2022 14:51:54 -0500
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 11:51:38 PST
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AB747544
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=PLV4LWdDj/u4ldrwNJYwwtOs/CoI
+        lUCOXcXS6q9IYUo=; b=fJL2ikFxTOLyTXIRNVEYrWc0XWEN34j1CyPK4lhiH+rY
+        /9XQ8S2Qp7qxN2GdupIvJ9LbAX7m59ina+JE/ZcEyS5CZF1Rn+mY3j966OJwrHW7
+        QrJ87kXFw2LIK0RqAefXtu3QnG5iYSKr1/gCLMZLk3dyVUK74zEoUh8h8SwMmuQ=
+Received: (qmail 507920 invoked from network); 17 Feb 2022 20:44:54 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Feb 2022 20:44:54 +0100
+X-UD-Smtp-Session: l3s3148p1@9M/h/zvY1uogAQnoAFSyAKtB1T4Nf0Bd
+Date:   Thu, 17 Feb 2022 20:44:51 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Andrew Gabbasov <andrew_gabbasov@mentor.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+Subject: Re: [PATCH v2] i2c: rcar: add SMBus block read support
+Message-ID: <Yg6ls0zyTDe7LQbK@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+References: <20210922160649.28449-1-andrew_gabbasov@mentor.com>
+ <CAMuHMdVVDpBAQR+H1TAnpf65aVbAL0Mm0km7Z9L7+1JuF6n1gQ@mail.gmail.com>
+ <000001d7badd$a8512d30$f8f38790$@mentor.com>
+ <20211006182314.10585-1-andrew_gabbasov@mentor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2acm5ptTzxcRBe88"
+Content-Disposition: inline
+In-Reply-To: <20211006182314.10585-1-andrew_gabbasov@mentor.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the call to dev_info() from the board detection function, which
-is called from probe(), not only to be in line with hwmon driver rules, but
-also because the message duplicates the error code returned from probe()
-for that case (ENODEV).
 
-Changes in:
- - v2: add missing newline (style).
+--2acm5ptTzxcRBe88
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Hi Andrew,
+
+first sorry that it took so long. The reason here is that my original
+plan was to add 256-byte support to RECV_LEN in the I2C core and enable
+it on R-Car afterwards. Sadly, I never found the time to drive this
+forward. So, all RECV_LEN things got stuck for a while :(
+
+> This patch (adapted) was tested with v4.14, but due to lack of real
+> hardware with SMBus block read operations support, using "simulation",
+> that is manual analysis of data, read from plain I2C devices with
+> SMBus block read request.
+
+You could wire up two R-Car I2C instances, set up one as an I2C slave
+handled by the I2C testunit and then use the other instance with
+SMBUS_BLOCK_PROC_CALL which also needs RECV_LEN. Check
+Documentation/i2c/slave-testunit-backend.rst for details.
+
+I wonder a bit about the complexity of your patch. In my WIP-branch for
+256-byte transfers, I have the following patch. It is only missing the
+range check for the received byte, but that it easy to add. Do you see
+anything else missing? If not, I prefer this simpler version because it
+is less intrusive and the state machine is a bit fragile (due to HW
+issues with old HW).
+
+=46rom: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Date: Sun, 2 Aug 2020 00:24:52 +0200
+Subject: [PATCH] i2c: rcar: add support for I2C_M_RECV_LEN
+
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/hwmon/asus-ec-sensors.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/i2c/busses/i2c-rcar.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 0701ade16227..b5cf0136360c 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -597,18 +597,12 @@ static struct hwmon_chip_info asus_ec_chip_info = {
- 	.ops = &asus_ec_hwmon_ops,
- };
- 
--static unsigned long __init
--get_board_sensors(const struct device *dev)
-+static unsigned long __init get_board_sensors(void)
+diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+index 217def2d7cb4..e473f5c0a708 100644
+--- a/drivers/i2c/busses/i2c-rcar.c
++++ b/drivers/i2c/busses/i2c-rcar.c
+@@ -528,6 +528,7 @@ static void rcar_i2c_irq_send(struct rcar_i2c_priv *pri=
+v, u32 msr)
+ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *priv, u32 msr)
  {
--	const struct dmi_system_id *dmi_entry;
-+	const struct dmi_system_id *dmi_entry =
-+		dmi_first_match(asus_ec_dmi_table);
- 
--	dmi_entry = dmi_first_match(asus_ec_dmi_table);
--	if (!dmi_entry) {
--		dev_info(dev, "Unsupported board");
--		return 0;
--	}
--
--	return (unsigned long)dmi_entry->driver_data;
-+	return dmi_entry ? (unsigned long)dmi_entry->driver_data : 0;
- }
- 
- static int __init asus_ec_probe(struct platform_device *pdev)
-@@ -625,7 +619,7 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 	struct device *hwdev;
- 	unsigned int i;
- 
--	board_sensors = get_board_sensors(dev);
-+	board_sensors = get_board_sensors();
- 	if (!board_sensors)
- 		return -ENODEV;
- 
--- 
-2.35.1
+ 	struct i2c_msg *msg =3D priv->msg;
++	bool recv_len_init =3D priv->pos =3D=3D 0 && msg->flags & I2C_M_RECV_LEN;
+=20
+ 	/* FIXME: sometimes, unknown interrupt happened. Do nothing */
+ 	if (!(msr & MDR))
+@@ -542,11 +543,13 @@ static void rcar_i2c_irq_recv(struct rcar_i2c_priv *p=
+riv, u32 msr)
+ 	} else if (priv->pos < msg->len) {
+ 		/* get received data */
+ 		msg->buf[priv->pos] =3D rcar_i2c_read(priv, ICRXTX);
++		if (recv_len_init)
++			msg->len +=3D msg->buf[0];
+ 		priv->pos++;
+ 	}
+=20
+ 	/* If next received data is the _LAST_, go to new phase. */
+-	if (priv->pos + 1 =3D=3D msg->len) {
++	if (priv->pos + 1 =3D=3D msg->len && !recv_len_init) {
+ 		if (priv->flags & ID_LAST_MSG) {
+ 			rcar_i2c_write(priv, ICMCR, RCAR_BUS_PHASE_STOP);
+ 		} else {
+@@ -889,7 +892,7 @@ static u32 rcar_i2c_func(struct i2c_adapter *adap)
+ 	 * I2C_M_IGNORE_NAK (automatically sends STOP after NAK)
+ 	 */
+ 	u32 func =3D I2C_FUNC_I2C | I2C_FUNC_SLAVE |
+-		   (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
++		   (I2C_FUNC_SMBUS_EMUL_ALL & ~I2C_FUNC_SMBUS_QUICK);
+=20
+ 	if (priv->flags & ID_P_HOST_NOTIFY)
+ 		func |=3D I2C_FUNC_SMBUS_HOST_NOTIFY;
 
+Happy hacking,
+
+   Wolfram
+
+
+--2acm5ptTzxcRBe88
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIOpa8ACgkQFA3kzBSg
+KbbOpw/6AytfzBlrI+AZSPjgcsIAOV/p95TJu+PcUIgOeKtyleBeoMzd2r29bfuV
+1hrMdmU145BUZHmpiwGOqILZwihZa7TKoZvHB+ZZfSI/5qvCCv5jNyLEx3u8MiOX
+sl0CT5YcMPYCyfDO3AsPAN9Oxq0VdDTbpPv2TZ9MBycl62UDoFbGfYPHfxyKy3CQ
+Bp6QxT05cWiw1yRRK2hF89nGb4oeWeD1EV3ELIkJAIQtQSunJmu0lymr+lJJR8uz
+j03LeikTmgoU2hgW23Y6GLQJe85LyAiQZhGT6g2kXabsJQJv9Fu1YLTwJvcb5+Np
+wQ9daniG9wsqjTvpOkVlPzrAQCyoAZ0veQwkKd9FrCgZZ3K+hXdujkAMY/tHGmvC
+9/kW07yO6a0UlJ1S2QD86Byc5R8+t3WI9xU6y0fQgHKxcUoMfxrnapOMATLb0kEm
+w/Q5RQzgLKaj/71SGf/92/tc57D1Li1i+uG6rVmNLPHHGbqOfSInRDkut8Ac/TJh
+AUft/52hdAVQPgaj2vDXlw43gwfgfrouwBEwjn6thjJ27BQlp+onwkwjuThop8zP
+8erJycPp5fqqSh7hObVQSzZjBljVAuWNIyDM76/TcTtekR+s3AkHmt1D9Z9WeyJS
++zRaqQD016MwwX/r/oKO03y47DzCDg+Vee3h3caQjAVXlLFWmtk=
+=QVKF
+-----END PGP SIGNATURE-----
+
+--2acm5ptTzxcRBe88--

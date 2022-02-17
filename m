@@ -2,104 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B464BA901
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20C24BA916
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244849AbiBQS6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:58:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46854 "EHLO
+        id S244855AbiBQTAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:00:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244739AbiBQS6o (ORCPT
+        with ESMTP id S244846AbiBQTAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:58:44 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785287F6DF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:58:18 -0800 (PST)
+        Thu, 17 Feb 2022 14:00:20 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFA27CDD9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:00:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=3c8gsxVyshN7DNqcUKV3eYIjofR6fuN2OJG+/j462X4=; b=O1RHzOSfz8BykUwE/Rt/ZP3lIN
-        6yLuD4PdBfEcUjz+pW8l4/jT+mavv9XZ828Gt+wKExJgHae6q2ljeaxOfL3EiWKsqOUnPXNGHqLVh
-        LNKCHSNTE2OzqsuQXkafaxWnCl5RwFvFeHVw2AtNEFxAL6/Sc5TU89P5T09QSEFsW9L5m5zuiyajM
-        b2ITsYXS8kyXQAjaiUhxcZKy3TMsH1MYl3OaYF+Drobe5RQuwjr02j94tqn7ZkLAcJfkdiR1b/08p
-        cu87MB2/VHNed3dRQERmAsJTGOhCVqc5KvLecCXECprc945u9wgBnQNeWuz565lDtTOkw3MBMW46+
-        x5AbVtSA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKlyk-00FrsG-U5; Thu, 17 Feb 2022 18:58:12 +0000
-Message-ID: <4f00105a-2f21-852f-d7c2-1aaf11fa3e74@infradead.org>
-Date:   Thu, 17 Feb 2022 10:58:07 -0800
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UWn3wm9TVCSHhL7UPOPCJKsvepwt2cwCUefjLexbQSU=; b=qHPwK3ECHG0Bg7ZB+29LUFCV3w
+        zUZoiR9GT0XiXSfA4OFoQQwH98+mNisfSGku2M+FaCxTaCcCkA5ILvJa21UhDaBFbsvXUbHonzuTR
+        aKhbxPPuTpUKe8jyhQ6dSMNlzTCoRbEA05GOM95uC8vJe9SBRJyiW27hZeqWge50TOx/PtqDLRxfs
+        KYrFpcwiVweyCLuTIL/iKUi7G1yMO27h3jhB2Uj+DnQ/UVv2ffQIlsmZ/G23YaH2lJrcycfY5Mpa7
+        9yA68FjdRHEC+ofOP+UYX8llkAYgQusbfVNQqUkrSk0nsZKYpWrqTPBm02SU4lNmanjzg5yuxVEoa
+        ciOHg1jw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKm0L-00AdqK-HS; Thu, 17 Feb 2022 18:59:49 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 972BC986224; Thu, 17 Feb 2022 19:59:47 +0100 (CET)
+Date:   Thu, 17 Feb 2022 19:59:47 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
+        bp@alien8.de, catalin.marinas@arm.com, dave.hansen@linux.intel.com,
+        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        tglx@linutronix.de, valentin.schneider@arm.com, will@kernel.org
+Subject: Re: [PATCH v4 0/7] arm64 / sched/preempt: support PREEMPT_DYNAMIC
+ with static keys
+Message-ID: <20220217185947.GE23216@worktop.programming.kicks-ass.net>
+References: <20220214165216.2231574-1-mark.rutland@arm.com>
+ <20220217135211.GA745330@lothringen>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] NDS32: perf_event_cpu: fix 2 build errors
-Content-Language: en-US
-To:     Greentime Hu <green.hu@gmail.com>, Alan Kao <alankao@andestech.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nickhu <nickhu@andestech.com>,
-        Vincent Chen <deanbo422@gmail.com>, kclin@andestech.com
-References: <20210926055817.24352-1-rdunlap@infradead.org>
- <CAEbi=3dmw4nTkU1cF4atXDE6Go-tujqseRKjdX7rmPaid_3D3w@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAEbi=3dmw4nTkU1cF4atXDE6Go-tujqseRKjdX7rmPaid_3D3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217135211.GA745330@lothringen>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
-
-On 9/27/21 03:06, Greentime Hu wrote:
-> Randy Dunlap <rdunlap@infradead.org> 於 2021年9月26日 週日 下午1:58寫道：
->>
->> ../arch/nds32/kernel/perf_event_cpu.c: In function 'unwind_frame_kernel':
->> ../arch/nds32/include/asm/current.h:10:13: error: '$r25' undeclared (first use in this function)
->>    10 | #define tsk $r25
->> ../arch/nds32/kernel/perf_event_cpu.c:1255:50: note: in expansion of macro 'tsk'
->>  1255 |                                                 (tsk, &graph, frame->lp, NULL);
->>
->> ../arch/nds32/kernel/perf_event_cpu.c:1257:27: error: assignment to 'long unsigned int' from 'long unsigned int *' makes integer from pointer without a cast [-Werror=int-conversion]
->>  1257 |                 frame->sp = ((unsigned long *)frame->sp) + 1;
->>
->> For $r25, use the register function for current() instead.
->>
->> Fixes: c8b34461705e ("nds32: Add perf call-graph support.")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Nickhu <nickhu@andestech.com>
->> Cc: Greentime Hu <green.hu@gmail.com>
->> Cc: Vincent Chen <deanbo422@gmail.com>
->> ---
->> Please check the frame->sp cast/arithmetic.
->>
->>  arch/nds32/kernel/perf_event_cpu.c |    4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> --- linux-next-20210917.orig/arch/nds32/kernel/perf_event_cpu.c
->> +++ linux-next-20210917/arch/nds32/kernel/perf_event_cpu.c
->> @@ -1252,9 +1252,9 @@ static int unwind_frame_kernel(struct st
->>                  */
->>                 if (__kernel_text_address(frame->lp))
->>                         frame->lp = ftrace_graph_ret_addr
->> -                                               (tsk, &graph, frame->lp, NULL);
->> +                                       (current, &graph, frame->lp, NULL);
->>
->> -               frame->sp = ((unsigned long *)frame->sp) + 1;
->> +               frame->sp = (unsigned long)(((unsigned long *)frame->sp)) + 1;
->>
->>                 return 0;
->>         } else {
+On Thu, Feb 17, 2022 at 02:52:11PM +0100, Frederic Weisbecker wrote:
+> On Mon, Feb 14, 2022 at 04:52:09PM +0000, Mark Rutland wrote:
+> > This series enables PREEMPT_DYNAMIC on arm64. To do so, it adds a new
+> > mechanism allowing the preemption functions to be enabled/disabled using
+> > static keys rather than static calls, with architectures selecting
+> > whether they use static calls or static keys.
+> > 
+> > With non-inline static calls, each function call results in a call to
+> > the (out-of-line) trampoline which either tail-calls its associated
+> > callee or performs an early return.
+> > 
+> > The key idea is that where we're only enabling/disabling a single
+> > callee, we can inline this trampoline into the start of the callee,
+> > using a static key to decide whether to return early, and leaving the
+> > remaining codegen to the compiler. The overhead should be similar to
+> > (and likely lower than) using a static call trampoline. Since most
+> > codegen is up to the compiler, we sidestep a number of implementation
+> > pain-points (e.g. things like CFI should "just work" as well as they do
+> > for any other functions).
+> > 
+> > The bulk of the diffstat for kernel/sched/core.c is shuffling the
+> > PREEMPT_DYNAMIC code later in the file, and the actual additions are
+> > fairly trivial.
+> > 
+> > I've given this very light build+boot testing so far.
 > 
-> Loop in Alan and KC.
+> Acked-by: Frederic Weisbecker <frederic@kernel.org>
 
-Ping.  Does anybody care?
-
--- 
-~Randy
+I'll go stick them in sched/core then... :-)

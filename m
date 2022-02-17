@@ -2,105 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D05B4BA922
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F2C4BA927
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244904AbiBQTBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:01:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58696 "EHLO
+        id S244908AbiBQTC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:02:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiBQTBw (ORCPT
+        with ESMTP id S243700AbiBQTC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:01:52 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29E6255BC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:01:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=O1RmJQ4+/rNFA1R+TyKH53CJVcOd/47slAnlWECEgOc=; b=LWidQFgc11v+5dzkaXqGMicPMo
-        QMP+d79iNwJe1OoEeTPZneWLCtEQtXAqcxqsPFHHYnA3ZcFp6WDCGdtS6D686kWBuoOXc9P04XI1P
-        fqkSRQ2LzXpyk0uKtPe+ggP5clDP4ZHxN/L77Ty8olGe0hCUYpfPX1wO2pljUy1AFssgdW8V6E4M6
-        2tdXrYondaSR8bU8upPaQL1seLHVojaj7slsEg8S97YoDCPBhYyRqobLHLxWSVAaF7nad/2HREYnl
-        KjSeFbDxwzmm/+Ai5hHo9a40SSueNbnhU4KQMKB9xa3BALgEO2aXV/CHfP7nDWQB8wm08IeYOgZIk
-        SYgV5t+A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKm23-00Fs5Z-R9; Thu, 17 Feb 2022 19:01:36 +0000
-Message-ID: <e8dd8298-1a2c-c541-2e69-1e7278a0070e@infradead.org>
-Date:   Thu, 17 Feb 2022 11:01:32 -0800
+        Thu, 17 Feb 2022 14:02:28 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F9C8021E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:02:13 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id p15so9464238ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:02:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9ikRVBzBT/FT2DEDw+8BeKqhzPIo0bpn2iXDMO301p4=;
+        b=qFy+upxzo8ujjI4h3pWNkOcceHresXDg4chqjvXmO1gJOLQHTOmQiJp9M5nXqQA0i6
+         Y3AsL9Njs1xcoOEJDj02riua7dj8JMXn6+iHKCY4cpnREFJvlGan+/lVQTNvysmjIAp0
+         B7vTNa07K6DD5yVU7uB21jCxB0K+s0VlSQe0dAM8bhWsdtCi4eaK+VhVcwMl5fMvqqxY
+         MLhQChU0xlQdzq2e+4ypchsozEWXWcq7m+Oe1ZyA8wSCDIcqbDo0QEOPebT4SbhwBtQy
+         9RmQ/FuXGoT2+ISuAQt1b3yLDoeaDwYp4j1sAq54DIjMiH9CRk5wG5q2nZi0QVUnNYS2
+         uxaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9ikRVBzBT/FT2DEDw+8BeKqhzPIo0bpn2iXDMO301p4=;
+        b=eqrJ0Y6cGsFjrKPXifkgljEpoE2xc1VX7tWSUbAF7aq3vkH5BPsDJJO9kUaATNWzK+
+         md0f8eJRD23W2cC7SeDnoSVXH94+aBWtGgcTT/HhauQ0pEmu+eyYJW6XN0xseMIqUCPU
+         U4Cwy7OkvvpyI/P5/A7s1QOlDrsDEGatMaw6Evb3+99irvO6u+KRlzgLdMRVLNDmGIrj
+         baWdGcOx+K6bzu/msfeHo7GQ9+C0P/559Xbk/CIGbhnFwhWleuO+RPe1fvQcpkYylGVV
+         A6upFrY+fmAFhu/zicsa5oCUuFt50q8m1MNllNA2qOtOZmnBUFdJGGsBoLZhdGlInsfT
+         FviA==
+X-Gm-Message-State: AOAM532XH3DGlRmjtBzUnQLapfgWAYtZLFz6iTyY+VopRfCKXWGgrv0N
+        HbV9OBQY4PoMbqdtYsfAbZFe2ZMVQMkJlOhWwQLYvi4L9rg=
+X-Google-Smtp-Source: ABdhPJyi9cQ8LbwZQgUUVctT0gJzfoA9B70Zeo1OeZWEXAfLo3b+lmQnPmAQzcOMYohHi1PnV3R1uS0lxC0Ac0YgBxc=
+X-Received: by 2002:a17:906:ce23:b0:6cf:7203:ded6 with SMTP id
+ sd3-20020a170906ce2300b006cf7203ded6mr3412467ejb.170.1645124531438; Thu, 17
+ Feb 2022 11:02:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] nds32: add a Kconfig symbol for LOCKDEP_SUPPORT
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alan Kao <alankao@andestech.com>, kclin@andestech.com
-References: <20210517031354.9646-1-rdunlap@infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20210517031354.9646-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220216224153.2242451-1-keescook@chromium.org>
+ <CAGS_qxoOYjOtX6BQm-ozcarnazyED2vocd4iV+VdDVnMWpjWjg@mail.gmail.com> <202202170903.E39554DF@keescook>
+In-Reply-To: <202202170903.E39554DF@keescook>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 17 Feb 2022 11:01:59 -0800
+Message-ID: <CAGS_qxpQGcJJQ9qT-rEXO8Qo_vq5R0hhdHAtBMTSbBbyhas_wg@mail.gmail.com>
+Subject: Re: [PATCH] lib: overflow: Convert to Kunit
+To:     Kees Cook <keescook@chromium.org>
+Cc:     David Gow <davidgow@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Alan and KC.
+On Thu, Feb 17, 2022 at 9:09 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Feb 16, 2022 at 02:57:12PM -0800, Daniel Latypov wrote:
+> > On Wed, Feb 16, 2022 at 2:42 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Convert overflow unit tests to KUnit, for better integration into the
+> > > kernel self test framework. Includes a rename of test_overflow.c to
+> > > overflow_kunit.c, and CONFIG_TEST_OVERFLOW to CONFIG_OVERFLOW_KUNIT_TEST.
+> > >
+> > > $ ./tools/testing/kunit/kunit.py config
+> > > ...
+> > > $ ./tools/testing/kunit/kunit.py run overflow
+> >
+> > JFYI, you can run this as a one-liner via
+> >
+> > $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
+> > CONFIG_KUNIT=y
+> > CONFIG_TEST_OVERFLOW=y
+> > EOF
+> >
+> > The above is taken from my own duplicate version of this patch
+> > [1] https://lore.kernel.org/linux-kselftest/20210503211536.1384578-1-dlatypov@google.com/
+>
+> Ah-ha! I thought I remembered this conversion being proposed before but
+> I totally failed to find it. Thank you! I'll compare/adjust this patch
+> and add you as Co-developed-by.
 
-On 5/16/21 20:13, Randy Dunlap wrote:
-> Each architecture (arch/) should define its own LOCKDEP_SUPPORT
-> Kconfig symbol (if it is needed). arch/nds32/ is the only one
-> that does "select LOCKDEP_SUPPORT", which is basically a no-op
-> since the symbol is not defined. (It might be nice for kconfig
-> to warn about that.)
-> 
-> Add a "config LOCKDEP_SUPPORT" to arch/nds32/Kconfig to correct
-> this issue.
-> 
-> Since the current Kconfig file selects LOCKDEP_SUPPORT unconditionally,
-> use "def_bool y" to set/enable it always.
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Nick Hu <nickhu@andestech.com>
-> Cc: Greentime Hu <green.hu@gmail.com>
-> Cc: Vincent Chen <deanbo422@gmail.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> ---
->  arch/nds32/Kconfig |    4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> --- linux-next-20210514.orig/arch/nds32/Kconfig
-> +++ linux-next-20210514/arch/nds32/Kconfig
-> @@ -36,7 +36,6 @@ config NDS32
->  	select HAVE_REGS_AND_STACK_ACCESS_API
->  	select HAVE_PERF_EVENTS
->  	select IRQ_DOMAIN
-> -	select LOCKDEP_SUPPORT
->  	select MODULES_USE_ELF_RELA
->  	select OF
->  	select OF_EARLY_FLATTREE
-> @@ -64,6 +63,9 @@ config GENERIC_LOCKBREAK
->  	def_bool y
->  	depends on PREEMPTION
->  
-> +config LOCKDEP_SUPPORT
-> +	def_bool y
-> +
->  config TRACE_IRQFLAGS_SUPPORT
->  	def_bool y
->  
+There's a lot that's already identical line for line.
+I think I pointed to all the places where they differed in any
+meaningful way down below.
+So you can probably save yourself the time of looking over.
 
-Anybody out there for Andes?
+And yeah, I vaguely remembered that Vitor had worked on it, but
+somehow failed to find that as well.
+Something about this test :)
 
--- 
-~Randy
+>
+> > > ...
+> > > [14:33:51] Starting KUnit Kernel (1/1)...
+> > > [14:33:51] ============================================================
+> > > [14:33:51] ================== overflow (11 subtests) ==================
+> > > [14:33:51] [PASSED] u8_overflow_test
+> > > [14:33:51] [PASSED] s8_overflow_test
+> > > [14:33:51] [PASSED] u16_overflow_test
+> > > [14:33:51] [PASSED] s16_overflow_test
+> > > [14:33:51] [PASSED] u32_overflow_test
+> > > [14:33:51] [PASSED] s32_overflow_test
+> > > [14:33:51] [PASSED] u64_overflow_test
+> > > [14:33:51] [PASSED] s64_overflow_test
+> > > [14:33:51] [PASSED] overflow_shift_test
+> > > [14:33:51] [PASSED] overflow_allocation_test
+> > > [14:33:51] [PASSED] overflow_size_helpers_test
+> > > [14:33:51] ==================== [PASSED] overflow =====================
+> > > [14:33:51] ============================================================
+> > > [14:33:51] Testing complete. Passed: 11, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
+> > > [14:33:51] Elapsed time: 12.525s total, 0.001s configuring, 12.402s building, 0.101s running
+> > >
+> > > Cc: David Gow <davidgow@google.com>
+> > > Cc: Vitor Massaru Iha <vitor@massaru.org>
+> > > Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
+> > > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> > > Link: https://lore.kernel.org/lkml/20200720224418.200495-1-vitor@massaru.org/
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> >
+> > Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> >
+> > Looks good to me, some minor nits/suggestions wrt KUnit usage.
+> > Nice to see this test converted over!
+>
+> Thanks!
+>
+> > [...]
+> > > index f6530fce799d..4cc27b9926a1 100644
+> > > --- a/lib/test_overflow.c
+> > > +++ b/lib/overflow_kunit.c
+> > > @@ -1,9 +1,13 @@
+> > >  // SPDX-License-Identifier: GPL-2.0 OR MIT
+> > >  /*
+> > > - * Test cases for arithmetic overflow checks.
+> > > + * Test cases for arithmetic overflow checks. See:
+> > > + * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-tool.html#configuring-building-and-running-tests
+> > > + *     ./tools/testing/kunit/kunit.py config
+> > > + *     ./tools/testing/kunit/kunit.py run overflow [--raw_output]
+> > >   */
+> > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> >
+> > We can drop the pr_fmt now, I think
+>
+> My instinct is to leave these in place just so that anything weird that
+> gets inlined and sneaks a pr_*() call into the code will have a
+> meaningful prefix.
+
+Ack, sounds good.
+We've historically dropped it and assumed we'd use kunit_info() for
+all the pr_*()'s we cared about.
+
+But there's definitely concern that some macro might use it to print
+an important and relevant message, hmm.

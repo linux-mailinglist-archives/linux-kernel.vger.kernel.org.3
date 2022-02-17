@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32594BA63B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3896B4BA5F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243378AbiBQQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:40:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49644 "EHLO
+        id S241629AbiBQQcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:32:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243351AbiBQQkY (ORCPT
+        with ESMTP id S239801AbiBQQb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:40:24 -0500
-X-Greylist: delayed 365 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 08:40:07 PST
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15002B31AD;
-        Thu, 17 Feb 2022 08:40:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1645116004;
-        bh=vZHyIaB0slu3WY2+M5adIWUPjoqNW/g6UPXYOZPH+W0=;
-        h=From:To:Cc:Subject:Date;
-        b=e5RJKxd851Xv+y82Ccip64yzIUAI3cAf22Vd0225ImPYpk8oqgV4T8CKRi9EVCFp6
-         XTilB8Y2PQ0qsHN3/OtTUaxEXe2nyazqQSOBjWgnqH76yYjKeSvpl3bddcP84UQiyv
-         hHdY7sKG3B+v3ts5w8sAK+sOoH6hoAExlKoTxaa0=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id 81DBFECA; Fri, 18 Feb 2022 00:32:29 +0800
-X-QQ-mid: xmsmtpt1645115549t0wnhrx3m
-Message-ID: <tencent_CA4766945C568E210AA2701525957F041007@qq.com>
-X-QQ-XMAILINFO: MpO6L0LObisWdGDmM3VSWCKvJsFc6smgvimLPwIWMErLSncFgHXfLbE4sEhSOa
-         P9y3hLZ1tlwsHt5Raloh5SLWbUPV6D9zU2sfAbqXmsoE1ASbNO58Tg7oDro7mm6XB4osedgpwPHF
-         ECXEVZWvEu62xrVea7uvUzSqHnPRkV7axY52IW9lwezdOK2FWSN15PTY5I7zNpx1NoQbOtjZCZ4e
-         mQ02m4o4R6UW2q/MCx92uD1c1YEIsW3/y9Ahcei/lL8F9f8HlJ5xY8n2BlVGAJcfcdcu1Pb5qj6q
-         db4J7HbN+qnRL9MuaQqXONArGRVfO/Nifuv0KfcadnlYD9hIi7P4UIhsH0eyHICO45yKFHXfZwqz
-         XxBS2gLqPq+k67jndYCePnDkpnnmQ1D32dpXW90cPbLHDDSsJHkZEIM9kP9S2XDe7bqwxco59hqz
-         UsnrjXnSLCyZ8JaTt37HB+uAQcTVE+HB5UPHTZ6hbazOurXYbrvFyGivjE7To6xgmOvch3AlMgVJ
-         rckeXpGMpIrZq4CoApSFUURXXBJSc6HDvEz3Ht0CsgkFEzo+UaI42K59KFSgUKgasnjdpQZJCkTy
-         lwGt0xDRFVzBxrcKhDgtWWQhzHvE0/aIts1tHqIRn3akVSMhLXgyK/PrqgubC03CQXF87CawYMZ9
-         4uTqcnb3Yki33Lyvdj3Y40wVls8zkVQl/Vy2GwgynOT9DpcD1DMm9ds7AAMzQp/Bgiube49swzqs
-         Ct6wTRQttInxW4Dtr+BI/CYvrSiobKMiZU6ipnBX0eBzUniAN446Shn5L2vKZtIZrJ369CYkJtra
-         30vNuHWr38oR5rD7u8O/G0E4OAjMOEU+GRCgjYhdVR3LEP88zmomuMcvB7TNgSl1AZ+wSItyxVQL
-         vSB+s7U9Q4DZXBREK6TLc=
-From:   xkernel.wang@foxmail.com
-To:     kishon@ti.com
-Cc:     lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] PCI: endpoint: functions/pci-epf-test: fix a potential memory leak
-Date:   Fri, 18 Feb 2022 00:31:24 +0800
-X-OQ-MSGID: <20220217163123.1314-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Thu, 17 Feb 2022 11:31:57 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBCA1A3AD
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:31:42 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id p15so181264oip.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:31:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bElm5YilB/9jblKEU64fD/ESvy8c+wLEV4cgX1XhWn4=;
+        b=Eq1tUKgqg59a4QA5ulUqAVWGJmM7UV+1lWzQXL+zegdCS5/d4qsDlC5deH1OCwWstU
+         +C+uqqiZW2o3xKjbO23EnJl0d5uDvEe0lBrIH9PC5UwZ/u7Ts/hHBW7kzkx3yt4hxJ2M
+         rw3a0q7ng+L5mm+KXKUAhVfwJoa1z3hmwUV7t8JtlBRa9fIOEL68OVNeV4kmYlgnkITW
+         EO5lyysg+u3N2lBo8T8NUN78/kNWlDRnW35krNMGCsbBxLBuhxTgjQcvYJZ0rVp2HesJ
+         QStSRNSpghG4F6RXqxSrxcLIbzpF0KewldPbmspmkxAT1On4cwLlW2PHhXBBIHEFLBVn
+         5PNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bElm5YilB/9jblKEU64fD/ESvy8c+wLEV4cgX1XhWn4=;
+        b=E2gs3v1A8/8qfoFObOYve2h4kUz8fXNl23L/JbZsrbgvp20s4l7B/nLWCN/aFdtY3M
+         Ge8AEzjUVh/5jm+YAxhqg//U0MmXjPgapZIuDoZXU0oieFlxE7BpVQcdEufy9eQxlbfR
+         hN/zAg7tgY3fqQoevXLYldvtelSi1jX4plWVe7YV1SZjRCe+MuXFN1NPpOke1J/r92pP
+         lN8k4JvvWb0KT3TO+vPw3ZPR4wkXA1xG5pvaTMqxrWhEOp0Kz+zlF354EGDRoG+7ztua
+         rSXJJh1nNZLNHgwVgDqja5VCBDMRho5OCg4cHBOEyhA4RWSrNPllAEEMYd/hf7duJwc4
+         PC5A==
+X-Gm-Message-State: AOAM531DufcP8gVzXfsdIh9tfET2N7gMWnLtVfQjPQNks60YOcsRbIwI
+        d9xsUntirHAFIfamQBuNlrtyt4Zd9BgFX6x33ESPMwek
+X-Google-Smtp-Source: ABdhPJx6a+RRNxIK4nxCa4AWmBuTIaxNxYd6UitmMWxs/iXH4phTUwHGWoWwQkdU27X2KXRi4tD18lfFTVADnZA347A=
+X-Received: by 2002:a05:6808:f8b:b0:2ce:6ee7:2c99 with SMTP id
+ o11-20020a0568080f8b00b002ce6ee72c99mr3205163oiw.199.1645115501464; Thu, 17
+ Feb 2022 08:31:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20220217162142.1828990-1-nathan@kernel.org>
+In-Reply-To: <20220217162142.1828990-1-nathan@kernel.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 17 Feb 2022 11:31:30 -0500
+Message-ID: <CADnq5_PmT3aWqGR7fAYxAvgAv7875kGjKo5tAQyGKeYuRrvAZg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdkfd: Use proper enum in pm_unmap_queues_v9()
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Jonathan Kim <jonathan.kim@amd.com>, llvm@lists.linux.dev,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Thu, Feb 17, 2022 at 11:22 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Clang warns:
+>
+>   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_packet_manager_v9.c:267:3:
+>   error: implicit conversion from enumeration type 'enum
+>   mes_map_queues_extended_engine_sel_enum' to different enumeration type
+>   'enum mes_unmap_queues_extended_engine_sel_enum'
+>   [-Werror,-Wenum-conversion]
+>                   extended_engine_sel__mes_map_queues__sdma0_to_7_sel :
+>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   1 error generated.
+>
+> Use 'extended_engine_sel__mes_unmap_queues__sdma0_to_7_sel' to eliminate
+> the warning, which is the same numeric value of the proper type.
+>
+> Fixes: 009e9a158505 ("drm/amdkfd: navi2x requires extended engines to map and unmap sdma queues")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1596
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-In pci_epf_test_write(), there is an error path does not properly
-release 'buf' which is allocated by kzalloc(). It is better to release
-it by changing the target label of goto statement.
+Applied.  Thanks!
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/pci/endpoint/functions/pci-epf-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Alex
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index 90d84d3..41227dd 100644
---- a/drivers/pci/endpoint/functions/pci-epf-test.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -441,7 +441,7 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
- 		if (!epf_test->dma_supported) {
- 			dev_err(dev, "Cannot transfer data using DMA\n");
- 			ret = -EINVAL;
--			goto err_map_addr;
-+			goto err_dma_map;
- 		}
- 
- 		src_phys_addr = dma_map_single(dma_dev, buf, reg->size,
--- 
+> ---
+>  drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c b/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
+> index 806a03566a24..18250845a989 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_packet_manager_v9.c
+> @@ -264,7 +264,7 @@ static int pm_unmap_queues_v9(struct packet_manager *pm, uint32_t *buffer,
+>                                         sizeof(struct pm4_mes_unmap_queues));
+>
+>         packet->bitfields2.extended_engine_sel = pm_use_ext_eng(pm->dqm->dev) ?
+> -               extended_engine_sel__mes_map_queues__sdma0_to_7_sel :
+> +               extended_engine_sel__mes_unmap_queues__sdma0_to_7_sel :
+>                 extended_engine_sel__mes_unmap_queues__legacy_engine_sel;
+>
+>         packet->bitfields2.engine_sel =
+>
+> base-commit: 3c30cf91b5ecc7272b3d2942ae0505dd8320b81c
+> --
+> 2.35.1
+>

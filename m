@@ -2,178 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9401A4BA3A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB024BA39E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242183AbiBQOvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:51:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44840 "EHLO
+        id S239497AbiBQOuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 09:50:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242167AbiBQOuv (ORCPT
+        with ESMTP id S234718AbiBQOuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:50:51 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BF22B2C6F;
-        Thu, 17 Feb 2022 06:50:35 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id qx21so7800480ejb.13;
-        Thu, 17 Feb 2022 06:50:35 -0800 (PST)
+        Thu, 17 Feb 2022 09:50:24 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1DA29E94E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:50:09 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id s20so342363ioe.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:50:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bX4TrrpbZWiTDtSIiT+79S67gmaAnm5bGwmVO1NuSaM=;
-        b=INiSgLKiZpd7dkFaBTgJO5utgSFoQdXv4fgSV9t8ZaT0Aa4oE8no3YEP0fG0z87iP6
-         0neFvpN6KRJaAgF7vHhHZgilrvEAg1ujDmhaU0aBe/zbnRaiCDGgsWqERRjGbz6lzmA/
-         M5/z+urnhGk/sNEsVFVP8L5xp1uM2O9v/XlZIFF/MYUubGAl3paCezVSNmdIheyiR5dz
-         4BQW3IfODw9WJSASxFdJ+ZRvvYYcHKZAmfgbsO94ReZgKARUBeW6tPT9fQ4H2Iu6B715
-         V95114focf3bSh6vfrpYGa5hdJDKkqe56stHtsTZu3oIcuvpmX3na3MGV9sZtli5icWv
-         t+7A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BB2sDvKYuJ4OLXpcVUGPxnotzFekLMPB3gl02E+RGsM=;
+        b=YiEwitx6YvoB2nLcFD8bvXs7jZb3EykcXZmD7fGnXJ62QfN2Yn6CVFt4RdwWssx2KC
+         dYoKA5BRbuFUaYUc0lWFTViyLS/tKHsiTwvaJTXxoqhp+UbIFWgR3DsuLjYujvXsK4+L
+         iYKOsW6iphIC3oCHcdqoTdJSeHmYt2TXAdZfJA3N8jEbmY4ngcKM1DtFQnGcQKbz/FTN
+         1SysA6Dqjq6au3OA26TkTt981TV/iENjZKyVxNnYikqzBDKKME3POcalIrzUemOIuP+F
+         wgLo0vnfYDHl2Dsd8ty/kO0axIPJ2hGoCIB8R6C0Bkjbn3xx7FuZfBEk149pUrr6YNyd
+         Nw1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bX4TrrpbZWiTDtSIiT+79S67gmaAnm5bGwmVO1NuSaM=;
-        b=yDhqVP0X8++vzP3prPMKkjN+8eYiTafWngNQnxag1FI/faG3DtPRjbMsP+no7EWMFC
-         WQaCL714C0W/ntlPReELamQJJAYM2LykE4EYbJeRJwhsQhA190WUzqPRGYwgrgJknV8y
-         O3Mm01IiHhp2Z/66eyWcDww3hw1CmLxqMN3BNpU4pfoywZ/RF9ncL8/HzZHKnYJCWd77
-         KHUk4flxd/S1Xpf2AgS3WyoSOBZpH45kKPGHZFZKrKexIo6ULOo9XNloW4U9CutC2rAE
-         5leukRfl19HKaBfmuanhhs5OdVLBi6GfIyMUCp8t/0SwesERepKAC2HDGPIAiMC2QD7s
-         joSw==
-X-Gm-Message-State: AOAM533dcP+HTWzDTvbDBjM0UR8ozeGpjOcurpgrMLDxQ5HvRvsS9CGL
-        yWyPtZAS3FUeD5iPDMnZHLH0vd0dTyMrQQ==
-X-Google-Smtp-Source: ABdhPJwpRuHRfCrHVQHWKpujlie3WcZ/GvHjEtRFarRLhOXe19/veEIQOXoHV7bx7XTQb50KV2pzBA==
-X-Received: by 2002:a17:906:c405:b0:6ce:7100:8cf1 with SMTP id u5-20020a170906c40500b006ce71008cf1mr2795143ejz.722.1645109433610;
-        Thu, 17 Feb 2022 06:50:33 -0800 (PST)
-Received: from debianHome.localdomain (dynamic-077-001-066-240.77.1.pool.telefonica.de. [77.1.66.240])
-        by smtp.gmail.com with ESMTPSA id c11sm3580270edx.42.2022.02.17.06.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 06:50:33 -0800 (PST)
-From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-To:     selinux@vger.kernel.org
-Cc:     Serge Hallyn <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/2] capability: add capable_or to test for multiple caps with exactly one audit message
-Date:   Thu, 17 Feb 2022 15:49:55 +0100
-Message-Id: <20220217145003.78982-2-cgzones@googlemail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220217145003.78982-1-cgzones@googlemail.com>
-References: <20220217145003.78982-1-cgzones@googlemail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BB2sDvKYuJ4OLXpcVUGPxnotzFekLMPB3gl02E+RGsM=;
+        b=GlavAWVP6ZDcH7lLvl9D+Dl8+YTlYa3RnBAHixWy1pwdR5fXo+EdLCIM59xN7WTEeC
+         7LYVzjUnAVvsLGqYrFIgn6WaMQZRUFno786SQAo/dkUD8stoBLjDGJ1HAJKNSn4IgBoQ
+         aRgxST4ct0sPMRP+qEx6Pi5Fa92NwcgPjJuCTvsktVLQbo/1qmdjrtNoHMkyRwFjxxzG
+         GfEzRCDXtfT5EHshfVHM3JVXu3SFpxSmz+Yf1TF7Xl7hYNaAO1Z+V/NvboM7F3KkAwpW
+         2/O+OwTZCIIqCYVcnZepHC3hzLls5GNfdHSy1T/HEK5eMBveosxUJWGmJU+d+7NrqNNM
+         Ny9g==
+X-Gm-Message-State: AOAM530f6+PB7tJqqpgOK3fd8H/Ujm5Fn6gpcNIuqZVLzNlqQYCdvIiI
+        p4dBoOhKfzsOlV1tFhThL1ULuZs964liuw0b
+X-Google-Smtp-Source: ABdhPJyMLeE45HvinoisFgWKSjp6PKe7sDpN4NNHmMEA8u9XTMVU1hPsnC7IB6GtHV9pPqbHeyxaCA==
+X-Received: by 2002:a05:6602:1485:b0:635:213f:abd2 with SMTP id a5-20020a056602148500b00635213fabd2mr2158395iow.8.1645109408688;
+        Thu, 17 Feb 2022 06:50:08 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id z23sm2016397iol.11.2022.02.17.06.50.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 06:50:08 -0800 (PST)
+Message-ID: <c0b89a9e-156c-c56a-c387-5d9ee2c83871@linaro.org>
+Date:   Thu, 17 Feb 2022 08:50:07 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 09/25] bus: mhi: ep: Add support for registering MHI
+ endpoint client drivers
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-10-manivannan.sadhasivam@linaro.org>
+ <94abdf83-5749-14b1-7a57-ceceb1b27167@linaro.org>
+ <20220217102038.GB11964@workstation>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220217102038.GB11964@workstation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the interface `capable_or()` as an alternative to or multiple
-`capable()` calls, like `capable_or(CAP_SYS_NICE, CAP_SYS_ADMIN)`
-instead of `capable(CAP_SYS_NICE) || capable(CAP_SYS_ADMIN)`.
-`capable_or()` will in particular generate exactly one audit message,
-either for the left most capability in effect or, if the task has none,
-the first one.
-This is especially helpful with regard to SELinux, where each audit
-message about a not allowed capability will create an avc denial.
-Using this function with the least invasive capability as left most
-argument (e.g. CAP_SYS_NICE before CAP_SYS_ADMIN) enables policy writers
-to only allow the least invasive one and SELinux domains pass this check
-with only capability:sys_nice or capability:sys_admin allowed without
-any avc denial message.
+On 2/17/22 4:20 AM, Manivannan Sadhasivam wrote:
+> On Tue, Feb 15, 2022 at 02:02:50PM -0600, Alex Elder wrote:
+> 
+> [...]
+> 
+>>> +static int mhi_ep_driver_remove(struct device *dev)
+>>> +{
+>>> +	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
+>>> +	struct mhi_ep_driver *mhi_drv = to_mhi_ep_driver(dev->driver);
+>>> +	struct mhi_result result = {};
+>>> +	struct mhi_ep_chan *mhi_chan;
+>>> +	int dir;
+>>> +
+>>> +	/* Skip if it is a controller device */
+>>> +	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
+>>> +		return 0;
+>>> +
+>>
+>> It would be my preference to encapsulate the body of the
+>> following loop into a called function, then call that once
+>> for the UL channel and once for the DL channel.
+>>
+> 
+> This follows the host stack, so I'd like to keep it the same.
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
----
- include/linux/capability.h |  6 +++++
- kernel/capability.c        | 48 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
+I think you should change both, but I'll leave that up to you.
 
-diff --git a/include/linux/capability.h b/include/linux/capability.h
-index 65efb74c3585..5c55687a9a05 100644
---- a/include/linux/capability.h
-+++ b/include/linux/capability.h
-@@ -207,6 +207,8 @@ extern bool has_ns_capability(struct task_struct *t,
- extern bool has_capability_noaudit(struct task_struct *t, int cap);
- extern bool has_ns_capability_noaudit(struct task_struct *t,
- 				      struct user_namespace *ns, int cap);
-+#define capable_or(...) _capable_or_impl((sizeof((int[]){__VA_ARGS__}) / sizeof(int)), __VA_ARGS__)
-+extern bool _capable_or_impl(int count, ...);
- extern bool capable(int cap);
- extern bool ns_capable(struct user_namespace *ns, int cap);
- extern bool ns_capable_noaudit(struct user_namespace *ns, int cap);
-@@ -230,6 +232,10 @@ static inline bool has_ns_capability_noaudit(struct task_struct *t,
- {
- 	return true;
- }
-+static inline bool capable_or(int first_cap, ...)
-+{
-+	return true;
-+}
- static inline bool capable(int cap)
- {
- 	return true;
-diff --git a/kernel/capability.c b/kernel/capability.c
-index 46a361dde042..5b73a58b914e 100644
---- a/kernel/capability.c
-+++ b/kernel/capability.c
-@@ -434,6 +434,54 @@ bool ns_capable_setid(struct user_namespace *ns, int cap)
- }
- EXPORT_SYMBOL(ns_capable_setid);
- 
-+/**
-+ * _capable_or - Determine if the current task has one of multiple superior capabilities in effect
-+ * @cap: The capabilities to be tested for
-+ *
-+ * Return true if the current task has at least one of the given superior capabilities currently
-+ * available for use, false if not.
-+ *
-+ * In contrast to or'ing capable() this call will create exactly one audit message, either for the
-+ * left most capability in effect or (if the task has none of the tested capabilities) the first
-+ * capabilit in the test list.
-+ *
-+ * The capabilities should be ordered from least to most invasive, i.e. CAP_SYS_ADMIN last.
-+ *
-+ * This sets PF_SUPERPRIV on the task if the capability is available on the
-+ * assumption that it's about to be used.
-+ */
-+bool _capable_or_impl(int count, ...)
-+{
-+	va_list args;
-+	const struct cred *cred = current_cred();
-+	int cap, first_cap, i;
-+
-+	BUG_ON(count < 1);
-+	BUG_ON(count > CAP_LAST_CAP);
-+
-+	va_start(args, count);
-+
-+	for (i = 0; i < count; i++) {
-+		int ret;
-+
-+		cap = va_arg(args, int);
-+		if (i == 0)
-+			first_cap = cap;
-+
-+		ret = security_capable(cred, &init_user_ns, cap, CAP_OPT_NOAUDIT);
-+		if (ret == 0)
-+			goto out;
-+	}
-+
-+	/* if none of the capabilities was allowed, create an audit event for the first one */
-+	cap = first_cap;
-+
-+out:
-+	va_end(args);
-+	return ns_capable(&init_user_ns, cap);
-+}
-+EXPORT_SYMBOL(_capable_or_impl);
-+
- /**
-  * capable - Determine if the current task has a superior capability in effect
-  * @cap: The capability to be tested for
--- 
-2.35.1
+>>> +	/* Disconnect the channels associated with the driver */
+>>> +	for (dir = 0; dir < 2; dir++) {
+>>> +		mhi_chan = dir ? mhi_dev->ul_chan : mhi_dev->dl_chan;
+>>> +
+>>> +		if (!mhi_chan)
+>>> +			continue;
+>>> +
+>>> +		mutex_lock(&mhi_chan->lock);
+>>> +		/* Send channel disconnect status to the client driver */
+>>> +		if (mhi_chan->xfer_cb) {
+>>> +			result.transaction_status = -ENOTCONN;
+>>> +			result.bytes_xferd = 0;
+>>> +			mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
+>>
+>> It appears the result is ignored here.  If so, can we
+>> define the xfer_cb() function so that a NULL pointer may
+>> be supplied by the caller in cases like this?
+>>
+> 
+> result is not ignored, only the bytes_xfered. "transaction_status" will
+> be used by the client drivers for error handling.
+
+Sorry, I was looking at the code *after* the call, and was
+ignoring that it was information being passed in...  My
+mistake.
+
+>>> +		}
+>>> +
+>>> +		/* Set channel state to DISABLED */
+>>
+>> That comment is a little tautological.  Just omit it.
+>>
+>>> +		mhi_chan->state = MHI_CH_STATE_DISABLED;
+>>> +		mhi_chan->xfer_cb = NULL;
+>>> +		mutex_unlock(&mhi_chan->lock);
+>>> +	}
+>>> +
+>>> +	/* Remove the client driver now */
+>>> +	mhi_drv->remove(mhi_dev);
+>>> +
+>>> +	return 0;
+>>> +}
+> 
+> [...]
+> 
+>>> +struct mhi_ep_driver {
+>>> +	const struct mhi_device_id *id_table;
+>>> +	struct device_driver driver;
+>>> +	int (*probe)(struct mhi_ep_device *mhi_ep,
+>>> +		     const struct mhi_device_id *id);
+>>> +	void (*remove)(struct mhi_ep_device *mhi_ep);
+>>
+>> I get confused by the "ul" versus "dl" naming scheme here.
+>> Is "ul" from the perspective of the host, meaning upload
+>> is from the host toward the WWAN network (and therefore
+>> toward the SDX AP), and download is from the WWAN toward
+>> the host?  Somewhere this should be stated clearly in
+>> comments; maybe I just missed it.
+>>
+> 
+> Yes UL and DL are as per host context. I didn't state this explicitly
+> since this is the MHI host stack behaviour but I'll add a comment for
+> clarity
+
+Sounds good, thanks.
+
+					-Alex
+
+> 
+> Thanks,
+> Mani
 

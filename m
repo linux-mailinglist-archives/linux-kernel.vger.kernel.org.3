@@ -2,184 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448474BA10B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7E34BA11A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240915AbiBQNYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:24:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58458 "EHLO
+        id S240902AbiBQN2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:28:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240597AbiBQNYk (ORCPT
+        with ESMTP id S240486AbiBQN2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:24:40 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F80D3AEB;
-        Thu, 17 Feb 2022 05:24:26 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HBOBs6021455;
-        Thu, 17 Feb 2022 13:24:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=4XwWi/6r4TVRkfQopBnDlrI4GX+cUUnBCvfDnYg99Mo=;
- b=EMMNH2zmLnkadZeBkhMgNz5G2dnwh1y2ntxY9dWmSa8JiW6dUQUNl0Glo7su8Kx3Vi2w
- 2t18J6wpehPCnw7bo59QVxtRio13Ogbo/vlJRc4a30TRqCOZ6WqR1qXmoOpNDw8P6nLw
- g+k6r9ypLGtoSw5IMQpxmMVS39Gl4AF8GZY52dWTpg4FjR+92c/FD2vn7y8/+g8S/L7h
- rXaMGNfq98mQcBkXL6c+PF/sV1hVwjOhs2FEKxI5p9fQFwMP4K8UnRFV67abKv2WkC0D
- BkFej+VhiD28Q1xGn0eq8E/YiZqNSCVkuU6RmmSzOihaH6ip0335w/lR5msoKX6pP30s 2g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e8n3fdd09-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Feb 2022 13:24:18 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21HDCGkv157356;
-        Thu, 17 Feb 2022 13:24:17 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by aserp3020.oracle.com with ESMTP id 3e8nvtuuqf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Feb 2022 13:24:17 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YB/xhKjjct3cTPKUWHbsEcneNmnW7hd80tkR3SFh2AEYOeR4zKd4EKWCFjrEYXIaB2+2ktMnIaT5rwSPn/JoHzKYFwrHMIeHdIeGqFj0Yco4A4oJ19Ui51bY8ni0/174X8lNPOXMqcrjFEQKkPvOSFYOhC8qddjlQMbX9Kqo5b94iaC1nPSUsGDyeKc74Ziw3yelkV/Fhq1npIWeJpMVf1a2bWqrpCKITwTH3pflhtWg19ksfJdDcrQ44GxUrg+x9eV03xqz2vWkL//swut9eHL6jLh7tOZybqY9UCAe535oqmwCGq6o38GiaI76eZhFCqL9RygRUXre4SVaUD+8kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4XwWi/6r4TVRkfQopBnDlrI4GX+cUUnBCvfDnYg99Mo=;
- b=lBdz46q3nt5Oqe7P5fXcTd6B0D6vF3MGXPhHn3IB72nS3KA1zP1w53WnQhcZiI+nWrZ0g3urwfMiDF+mu8OWlK+ycEav9D8m/I7Tor7ZVkPlBOy486mb3F3Unx1B5DkEFpcIJSwGJCRG+2j5rVZcf76zdSTbjQR3Iqn56XHwfZuyGLKX+N2zhU3IAe4Qf3B8/yNoHrwI7o3CgB45gwHAkuS5ZZF2HLKm0+zqlQZH9ChwwmZYwpghVVLo1rJ5bkkrgdky1QKcQpVHwyRw7MM8uVACl063o36qHhLsLUf+eY235kJf1gGA9hycm1tZ3JgxKpi4dpleURqp1hokXqtx7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4XwWi/6r4TVRkfQopBnDlrI4GX+cUUnBCvfDnYg99Mo=;
- b=WBjJIz0KEJxgE1uTmAkF9kCbzTrkEXYvtnJ7kbYSVIRN2lpLfAp1FrL53iiWbQxRfRG1DPplANLr8W1ZzugIHdFRlQ4C3l+JoLcAccxNMQGxfM92ocf8bkwQ4J2c0qkmD93pUrlVsB22/Gx3dqxAbj9kQrN1r6Dj0zVfo6CNvoA=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by PH0PR10MB5466.namprd10.prod.outlook.com
- (2603:10b6:510:e2::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.17; Thu, 17 Feb
- 2022 13:24:14 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%3]) with mapi id 15.20.4975.019; Thu, 17 Feb 2022
- 13:24:13 +0000
-Date:   Thu, 17 Feb 2022 16:23:52 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kbuild@lists.01.org, Jiri Slaby <jirislaby@kernel.org>,
-        lkp@intel.com, kbuild-all@lists.01.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Mike Skoog <mskoog@endruntechnologies.com>,
-        Mike Korreng <mkorreng@endruntechnologies.com>,
-        info@endruntechnologies.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] serial: 8250: Add proper clock handling for
- OxSemi PCIe devices
-Message-ID: <20220217132352.GC2467@kadam>
-References: <202202130027.ZKBCgtm5-lkp@intel.com>
- <alpine.DEB.2.21.2202171009440.34636@angie.orcam.me.uk>
+        Thu, 17 Feb 2022 08:28:13 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AD61AE733;
+        Thu, 17 Feb 2022 05:27:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mP4mYKtq70+ShGRf5quFoI/R+rvs29MJfH/eQ3IbnHk=; b=JKDwYOcgcvd+Obw9Dv8Z2E21GJ
+        uFLITVmqgAit67dPk51n+BCX1oGDw/6nRIjHQrp/huhmV2BkeV8ILF1NMhBJdo25TsiSve3rS9Ztq
+        ngzuo42XQCdfMwF0xTg6orlVW9wT7NV7RzZaEv7T1VojfuC6zp0UQHNHXn46GlAGuQXA/4lKInLXv
+        mlHiIOb73utWZyZPmq6weSsZ0K/hzX8xuMBq+6KIOLG2TLe7FmIVA6944A0uBz4ZSq8tgw/gybTdv
+        XcfCewPjowxth6ZW+HdiEE5BzoOKfgFcVt08z+qljOWDXRZzO5hFtqiZ4IBybCp4fEOpE/CZI+OHU
+        l5gYnK0w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKgow-00Fdgd-Ou; Thu, 17 Feb 2022 13:27:42 +0000
+Date:   Thu, 17 Feb 2022 13:27:42 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 1 in ext4 and journal based on v5.17-rc1
+Message-ID: <Yg5NTs2RlhdTmSQj@casper.infradead.org>
+References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-1-git-send-email-byungchul.park@lge.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2202171009440.34636@angie.orcam.me.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JN2P275CA0001.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:3::13)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b6f9cf05-1a6d-455b-8b24-08d9f218c9a6
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5466:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR10MB5466E7FB5D5EA2792507414F8E369@PH0PR10MB5466.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: szQputNnfo9YaWmftRkbmqeq/QvTTcsg43WhXNEWi025Y95TJWhuryxjpUrBAeMs8PndxQ/KfK6qXJ+0QTd9TmfDu5pZi+zRsvLy8j7U+xAm0FMsZ640omgv+eqJhs9JoL80RiPgN7YFbg83ACV8nAvtS0tLeusK3ZQulNkQ/cV/ChtCUCCED5nX30SHSnBAS72oTwDSa9/eLPH8AdEdg81Y0Q/uw+wOcdxkAN0mbaSnIZ3/wQhNO+xzlJr1p3FXRDJka3T9cPzdgsWt01RJZ9tk+XQNRzeHDOeOoZ96Zjo9JG1ACo+qLlKuBfe7/8qY8IjgK4/JHLRCCcxGTijZ89DInBfMDUku4l9yFzb0w4lEEclMRZZmYVwika7VQ60MgVQAY2dpEcK4bu6l6P9jovdIPKN7uejlAsjvL8zUSXk8yXJpMAf3SbZyDFPWfZUU6NZzCzicux6V3yXLIdBX6Jfik/nEjmGCsBGCJpF5BSZbrahTx1chN4DG6NEyKdglJMv4nboR58qmMT7Wz/Z30l0AMOnxnTLJyOLcXDYtGNMcsH2T5B0zTP6XVdSa+YX0NTUWdwQHzY5s0vUXQe6wUmNxZgynyFEzMHzThQBA0KAv3TfOUnYt9uLrdDG9IJW/cy32jQEX9/v12sFpqhbgD+/cM7t+S18C8Vqp8ULCBhgaic/oYh8a550jfyuwFQxcpDXy6JbXPIUo5zN7/k92tfYrbfmHwEPpcJ8Yq1SWlmS6x9ZkCeH+jtECMLM5h4hdr1yGSoayZrRgInmq2yqP+4upOBcPeIeFX4BI+rANrz61l7MfZVGqBSRCoHi538OTu1XjRnTNcsuYWbkclfyxtQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(6029001)(7916004)(366004)(7416002)(52116002)(6506007)(83380400001)(2906002)(5660300002)(508600001)(6486002)(6666004)(966005)(44832011)(86362001)(4326008)(38100700002)(38350700002)(8676002)(66476007)(66556008)(66946007)(8936002)(54906003)(33716001)(1076003)(6916009)(186003)(26005)(33656002)(6512007)(316002)(9686003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oi0FxpSHjEkuXoka2pvV6htIsMY9YXE+RGcUmaQB0hPT5pGI6IXGvwSyadtF?=
- =?us-ascii?Q?QCRCtUt7ts1DYWq3ECXi02pDhfrPqpl6JEgivbOLALInSmMlsLPxtBpu681F?=
- =?us-ascii?Q?YWtczq8Kk2oGfTiqk3KnuxSmsZNdjftt/7FvDfBKa66BeRGkeRMAmOv1KEim?=
- =?us-ascii?Q?Pd9Lyby+ZX9nV8amrIf7c7cZ5UoUQir4lwj1YoYfB+wTBYSQu7HzvDGeMit+?=
- =?us-ascii?Q?3KYyhSvdqBl8jFx+3xT/FJ1gVKjefP7JAi1bRZgyADZ5bVEw4mA7Y86k2P2A?=
- =?us-ascii?Q?/vHpUF3tSsLhOo5vRvs7dvqI+I/ZdEe0OdrFrzcmXaeCA4UmAvHSCCW1i6pn?=
- =?us-ascii?Q?UkF49q2DCvTVmp4OMiIXBqwDqQ/v5NAQrzxfw16xbjlxE3v0M0IMUtg4OZeM?=
- =?us-ascii?Q?CBNIPbkwZMrItj4oEsPWXBQU/A8BfESAy1jkC4kqCHJmHnSyL/g9kktKfv1I?=
- =?us-ascii?Q?pFsEXHlYoRwB5Y++VnLQPtmqK6gadPBMwlHhve+5zwCjpwLoO8h6I6Zbg4Ko?=
- =?us-ascii?Q?w0DUf0hddAWXWaWS3TP4Z93WRrHcRr2V7g+B0n5PKl0qYJSu9EQTGQqTJx76?=
- =?us-ascii?Q?MwZz6zZgBSZa+f4JW457/ksCnCzcFG7MW003N+xp49Ry01X/cPhDzyMekUAf?=
- =?us-ascii?Q?Gc6m0u2G4uf+wH7AkTLia1S5zuPwyKNHk+UMYc6ZzgupbLiExAUVFuJ7PkSW?=
- =?us-ascii?Q?pMskDTNX32uo0lfnc41EyeEgZla4sq3D+LPjxrUPodGWmPg13AQqrBVC3+eX?=
- =?us-ascii?Q?AQrHrUEvs2KbaKDGl4RwNWjG7BZEl/ThiaRXpjgZHSaSJV5vF0G++HBABJpN?=
- =?us-ascii?Q?6yA3KSCttfgyEFU0PR2HqBL7fLjIK6t8TO4fhpU1/6DXcHptAeUcQlnf7zrk?=
- =?us-ascii?Q?yj3IXWen4hHeyEVi3q6cyyzpDzymb6A6h5q4Cnd0tbxRdf0lKcZx0/Gi4pKM?=
- =?us-ascii?Q?vxDAujV5SmnwT0T7IiQcDtyipcwVQuvomfb1CNMDQe3dWTGTQAaqIHnCEonN?=
- =?us-ascii?Q?jU9hSUixQwCwM4XKhGb5Y8dQZY1iArslEZw/a7K0c5WGJGzTUkZ6H10+jl8W?=
- =?us-ascii?Q?Ot2fVBBKLBvKF58pnoH23Sf7HWa7S73AvENv6tOeYEonO6K9SOOCqxPwC6fO?=
- =?us-ascii?Q?rYtAg7/Iuz853mXJAc3B03ROjim2dtv0AXhlxSupI3EggVzNbf6+aEJFByJl?=
- =?us-ascii?Q?56xurIuSuMEPXL45Em/Ma3hjo+EkekvK98nte8pxmcWh6mESEZq9aZLmIAh9?=
- =?us-ascii?Q?YX4lElHCivC4b/akwnDhvcWzVZZ6WCspplVK85Jjkon5+hsKpZhByGhUyKL1?=
- =?us-ascii?Q?TUuwcTHpP1lxKVYdsxAtl2fvBsZkPMVkCQwQ3IAZ4dgadNMF52VmqNSJITGE?=
- =?us-ascii?Q?dRZiARF4pEWjBOkjhUNjInCYLaEdpTazVuqlHA87h9A5ad8aT4wTuK88+SUe?=
- =?us-ascii?Q?upYB6pkm7r4Haa9wQS6cyCNZ63UqEIeu702bgKTKKwl5vxzi4O7IoYycuhpo?=
- =?us-ascii?Q?gCft3CulrLpaopD0UyONiEhQhjOPWXTV3NUUFlYjI5BzVViziiA8mpfoIySC?=
- =?us-ascii?Q?jNdvfSgHKq/3sS9+PRuJjwU0D2VRk7wguyQ9lUslRNxGfZ1Xw1Xz7jPP1wA2?=
- =?us-ascii?Q?4sAnjOcAfvbqSs1Q1fLldTgw1V93LWFU+2PkiuJx8Ia76m7g5oVQOQBg9jnj?=
- =?us-ascii?Q?hiKFeQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6f9cf05-1a6d-455b-8b24-08d9f218c9a6
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 13:24:13.8406
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zgVoiocbqkirlaUt0Yl1LLat9c+emHXFIcSFeDNsaR//bskSlZM/RLDz2WyZQkWNY/xaZJZyMxPt3etBLMih8tmB8p9cDZ0wBp26/PmHmb0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5466
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10260 signatures=675971
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202170060
-X-Proofpoint-GUID: 69Bm3NKNMVMF4j0S4dhR6BMDR_r0dJci
-X-Proofpoint-ORIG-GUID: 69Bm3NKNMVMF4j0S4dhR6BMDR_r0dJci
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1645096204-31670-1-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 12:05:58PM +0000, Maciej W. Rozycki wrote:
-> On Thu, 17 Feb 2022, Dan Carpenter wrote:
+On Thu, Feb 17, 2022 at 08:10:03PM +0900, Byungchul Park wrote:
+> [    7.009608] ===================================================
+> [    7.009613] DEPT: Circular dependency has been detected.
+> [    7.009614] 5.17.0-rc1-00014-g8a599299c0cb-dirty #30 Tainted: G        W
+> [    7.009616] ---------------------------------------------------
+> [    7.009617] summary
+> [    7.009618] ---------------------------------------------------
+> [    7.009618] *** DEADLOCK ***
+> [    7.009618]
+> [    7.009619] context A
+> [    7.009619]     [S] (unknown)(&(bit_wait_table + i)->dmap:0)
+
+Why is the context unknown here?  I don't see a way to debug this
+without knowing where we acquired the bit wait lock.
+
+> [    7.009621]     [W] down_write(&ei->i_data_sem:0)
+> [    7.009623]     [E] event(&(bit_wait_table + i)->dmap:0)
+> [    7.009624]
+> [    7.009625] context B
+> [    7.009625]     [S] down_read(&ei->i_data_sem:0)
+> [    7.009626]     [W] wait(&(bit_wait_table + i)->dmap:0)
+> [    7.009627]     [E] up_read(&ei->i_data_sem:0)
+> [    7.009628]
+> [    7.009629] [S]: start of the event context
+> [    7.009629] [W]: the wait blocked
+> [    7.009630] [E]: the event not reachable
+> [    7.009631] ---------------------------------------------------
+> [    7.009631] context A's detail
+> [    7.009632] ---------------------------------------------------
+> [    7.009632] context A
+> [    7.009633]     [S] (unknown)(&(bit_wait_table + i)->dmap:0)
+> [    7.009634]     [W] down_write(&ei->i_data_sem:0)
+> [    7.009635]     [E] event(&(bit_wait_table + i)->dmap:0)
+> [    7.009636]
+> [    7.009636] [S] (unknown)(&(bit_wait_table + i)->dmap:0):
+> [    7.009638] (N/A)
+> [    7.009638]
+> [    7.009639] [W] down_write(&ei->i_data_sem:0):
+> [    7.009639] ext4_truncate (fs/ext4/inode.c:4187) 
+> [    7.009645] stacktrace:
+> [    7.009646] down_write (kernel/locking/rwsem.c:1514) 
+> [    7.009648] ext4_truncate (fs/ext4/inode.c:4187) 
+> [    7.009650] ext4_da_write_begin (./include/linux/fs.h:827 fs/ext4/truncate.h:23 fs/ext4/inode.c:2963) 
+> [    7.009652] generic_perform_write (mm/filemap.c:3784) 
+> [    7.009654] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> [    7.009657] ext4_file_write_iter (fs/ext4/file.c:677) 
+> [    7.009659] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> [    7.009662] vfs_write (fs/read_write.c:590) 
+> [    7.009663] ksys_write (fs/read_write.c:644) 
+> [    7.009664] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    7.009667] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> [    7.009669]
+> [    7.009670] [E] event(&(bit_wait_table + i)->dmap:0):
+> [    7.009671] __wake_up_common (kernel/sched/wait.c:108) 
+> [    7.009673] stacktrace:
+> [    7.009674] dept_event (kernel/dependency/dept.c:2337) 
+> [    7.009677] __wake_up_common (kernel/sched/wait.c:109) 
+> [    7.009678] __wake_up_common_lock (./include/linux/spinlock.h:428 (discriminator 1) kernel/sched/wait.c:141 (discriminator 1)) 
+> [    7.009679] __wake_up_bit (kernel/sched/wait_bit.c:127) 
+> [    7.009681] ext4_orphan_del (fs/ext4/orphan.c:282) 
+> [    7.009683] ext4_truncate (fs/ext4/inode.c:4212) 
+> [    7.009685] ext4_da_write_begin (./include/linux/fs.h:827 fs/ext4/truncate.h:23 fs/ext4/inode.c:2963) 
+> [    7.009687] generic_perform_write (mm/filemap.c:3784) 
+> [    7.009688] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> [    7.009690] ext4_file_write_iter (fs/ext4/file.c:677) 
+> [    7.009692] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> [    7.009694] vfs_write (fs/read_write.c:590) 
+> [    7.009695] ksys_write (fs/read_write.c:644) 
+> [    7.009696] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    7.009698] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> [    7.009700] ---------------------------------------------------
+> [    7.009700] context B's detail
+> [    7.009701] ---------------------------------------------------
+> [    7.009702] context B
+> [    7.009702]     [S] down_read(&ei->i_data_sem:0)
+> [    7.009703]     [W] wait(&(bit_wait_table + i)->dmap:0)
+> [    7.009704]     [E] up_read(&ei->i_data_sem:0)
+> [    7.009705]
+> [    7.009706] [S] down_read(&ei->i_data_sem:0):
+> [    7.009707] ext4_map_blocks (./arch/x86/include/asm/bitops.h:207 ./include/asm-generic/bitops/instrumented-non-atomic.h:135 fs/ext4/ext4.h:1918 fs/ext4/inode.c:562) 
+> [    7.009709] stacktrace:
+> [    7.009709] down_read (kernel/locking/rwsem.c:1461) 
+> [    7.009711] ext4_map_blocks (./arch/x86/include/asm/bitops.h:207 ./include/asm-generic/bitops/instrumented-non-atomic.h:135 fs/ext4/ext4.h:1918 fs/ext4/inode.c:562) 
+> [    7.009712] ext4_getblk (fs/ext4/inode.c:851) 
+> [    7.009714] ext4_bread (fs/ext4/inode.c:903) 
+> [    7.009715] __ext4_read_dirblock (fs/ext4/namei.c:117) 
+> [    7.009718] dx_probe (fs/ext4/namei.c:789) 
+> [    7.009720] ext4_dx_find_entry (fs/ext4/namei.c:1721) 
+> [    7.009722] __ext4_find_entry (fs/ext4/namei.c:1571) 
+> [    7.009723] ext4_lookup (fs/ext4/namei.c:1770) 
+> [    7.009725] lookup_open (./include/linux/dcache.h:361 fs/namei.c:3310) 
+> [    7.009727] path_openat (fs/namei.c:3401 fs/namei.c:3605) 
+> [    7.009729] do_filp_open (fs/namei.c:3637) 
+> [    7.009731] do_sys_openat2 (fs/open.c:1215) 
+> [    7.009732] do_sys_open (fs/open.c:1231) 
+> [    7.009734] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    7.009736] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> [    7.009738]
+> [    7.009738] [W] wait(&(bit_wait_table + i)->dmap:0):
+> [    7.009739] prepare_to_wait (kernel/sched/wait.c:275) 
+> [    7.009741] stacktrace:
+> [    7.009741] __schedule (kernel/sched/sched.h:1318 kernel/sched/sched.h:1616 kernel/sched/core.c:6213) 
+> [    7.009743] schedule (kernel/sched/core.c:6373 (discriminator 1)) 
+> [    7.009744] io_schedule (./arch/x86/include/asm/current.h:15 kernel/sched/core.c:8392 kernel/sched/core.c:8418) 
+> [    7.009745] bit_wait_io (./arch/x86/include/asm/current.h:15 kernel/sched/wait_bit.c:210) 
+> [    7.009746] __wait_on_bit (kernel/sched/wait_bit.c:49) 
+> [    7.009748] out_of_line_wait_on_bit (kernel/sched/wait_bit.c:65) 
+> [    7.009749] ext4_read_bh (./arch/x86/include/asm/bitops.h:207 ./include/asm-generic/bitops/instrumented-non-atomic.h:135 ./include/linux/buffer_head.h:120 fs/ext4/super.c:201) 
+> [    7.009752] __read_extent_tree_block (fs/ext4/extents.c:545) 
+> [    7.009754] ext4_find_extent (fs/ext4/extents.c:928) 
+> [    7.009756] ext4_ext_map_blocks (fs/ext4/extents.c:4099) 
+> [    7.009757] ext4_map_blocks (fs/ext4/inode.c:563) 
+> [    7.009759] ext4_getblk (fs/ext4/inode.c:851) 
+> [    7.009760] ext4_bread (fs/ext4/inode.c:903) 
+> [    7.009762] __ext4_read_dirblock (fs/ext4/namei.c:117) 
+> [    7.009764] dx_probe (fs/ext4/namei.c:789) 
+> [    7.009765] ext4_dx_find_entry (fs/ext4/namei.c:1721) 
+> [    7.009767]
+> [    7.009768] [E] up_read(&ei->i_data_sem:0):
+> [    7.009769] ext4_map_blocks (fs/ext4/inode.c:593) 
+> [    7.009771] stacktrace:
+> [    7.009771] up_read (kernel/locking/rwsem.c:1556) 
+> [    7.009774] ext4_map_blocks (fs/ext4/inode.c:593) 
+> [    7.009775] ext4_getblk (fs/ext4/inode.c:851) 
+> [    7.009777] ext4_bread (fs/ext4/inode.c:903) 
+> [    7.009778] __ext4_read_dirblock (fs/ext4/namei.c:117) 
+> [    7.009780] dx_probe (fs/ext4/namei.c:789) 
+> [    7.009782] ext4_dx_find_entry (fs/ext4/namei.c:1721) 
+> [    7.009784] __ext4_find_entry (fs/ext4/namei.c:1571) 
+> [    7.009786] ext4_lookup (fs/ext4/namei.c:1770) 
+> [    7.009788] lookup_open (./include/linux/dcache.h:361 fs/namei.c:3310) 
+> [    7.009789] path_openat (fs/namei.c:3401 fs/namei.c:3605) 
+> [    7.009791] do_filp_open (fs/namei.c:3637) 
+> [    7.009792] do_sys_openat2 (fs/open.c:1215) 
+> [    7.009794] do_sys_open (fs/open.c:1231) 
+> [    7.009795] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    7.009797] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> [    7.009799] ---------------------------------------------------
+> [    7.009800] information that might be helpful
+> [    7.009800] ---------------------------------------------------
+> [    7.009801] CPU: 0 PID: 611 Comm: rs:main Q:Reg Tainted: G        W         5.17.0-rc1-00014-g8a599299c0cb-dirty #30
+> [    7.009804] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+> [    7.009805] Call Trace:
+> [    7.009806]  <TASK>
+> [    7.009807] dump_stack_lvl (lib/dump_stack.c:107) 
+> [    7.009809] print_circle (./arch/x86/include/asm/atomic.h:108 ./include/linux/atomic/atomic-instrumented.h:258 kernel/dependency/dept.c:157 kernel/dependency/dept.c:762) 
+> [    7.009812] ? print_circle (kernel/dependency/dept.c:1086) 
+> [    7.009814] cb_check_dl (kernel/dependency/dept.c:1104) 
+> [    7.009815] bfs (kernel/dependency/dept.c:860) 
+> [    7.009818] add_dep (kernel/dependency/dept.c:1423) 
+> [    7.009820] do_event.isra.25 (kernel/dependency/dept.c:1650) 
+> [    7.009822] ? __wake_up_common (kernel/sched/wait.c:108) 
+> [    7.009824] dept_event (kernel/dependency/dept.c:2337) 
+> [    7.009826] __wake_up_common (kernel/sched/wait.c:109) 
+> [    7.009828] __wake_up_common_lock (./include/linux/spinlock.h:428 (discriminator 1) kernel/sched/wait.c:141 (discriminator 1)) 
+> [    7.009830] __wake_up_bit (kernel/sched/wait_bit.c:127) 
+> [    7.009832] ext4_orphan_del (fs/ext4/orphan.c:282) 
+> [    7.009835] ? dept_ecxt_exit (./arch/x86/include/asm/current.h:15 kernel/dependency/dept.c:241 kernel/dependency/dept.c:999 kernel/dependency/dept.c:1043 kernel/dependency/dept.c:2478) 
+> [    7.009837] ext4_truncate (fs/ext4/inode.c:4212) 
+> [    7.009839] ext4_da_write_begin (./include/linux/fs.h:827 fs/ext4/truncate.h:23 fs/ext4/inode.c:2963) 
+> [    7.009842] generic_perform_write (mm/filemap.c:3784) 
+> [    7.009845] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> [    7.009848] ext4_file_write_iter (fs/ext4/file.c:677) 
+> [    7.009851] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> [    7.009854] vfs_write (fs/read_write.c:590) 
+> [    7.009856] ksys_write (fs/read_write.c:644) 
+> [    7.009857] ? trace_hardirqs_on (kernel/trace/trace_preemptirq.c:65) 
+> [    7.009860] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    7.009862] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> [    7.009865] RIP: 0033:0x7f3b160b335d
+> [ 7.009867] Code: e1 20 00 00 75 10 b8 01 00 00 00 0f 05 48 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 ce fa ff ff 48 89 04 24 b8 01 00 00 00 0f 05 <48> 8b 3c 24 48 89 c2 e8 17 fb ff ff 48 89 d0 48 83 c4 08 48 3d 01
+> All code
+> ========
+>    0:	e1 20                	loope  0x22
+>    2:	00 00                	add    %al,(%rax)
+>    4:	75 10                	jne    0x16
+>    6:	b8 01 00 00 00       	mov    $0x1,%eax
+>    b:	0f 05                	syscall 
+>    d:	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax
+>   13:	73 31                	jae    0x46
+>   15:	c3                   	retq   
+>   16:	48 83 ec 08          	sub    $0x8,%rsp
+>   1a:	e8 ce fa ff ff       	callq  0xfffffffffffffaed
+>   1f:	48 89 04 24          	mov    %rax,(%rsp)
+>   23:	b8 01 00 00 00       	mov    $0x1,%eax
+>   28:	0f 05                	syscall 
+>   2a:*	48 8b 3c 24          	mov    (%rsp),%rdi		<-- trapping instruction
+>   2e:	48 89 c2             	mov    %rax,%rdx
+>   31:	e8 17 fb ff ff       	callq  0xfffffffffffffb4d
+>   36:	48 89 d0             	mov    %rdx,%rax
+>   39:	48 83 c4 08          	add    $0x8,%rsp
+>   3d:	48                   	rex.W
+>   3e:	3d                   	.byte 0x3d
+>   3f:	01                   	.byte 0x1
 > 
-> > url:    https://github.com/0day-ci/linux/commits/Maciej-W-Rozycki/serial-8250-Fixes-for-Oxford-Semiconductor-950-UARTs/20220212-164255 
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git  tty-testing
-> > config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220213/202202130027.ZKBCgtm5-lkp@intel.com/config )
-> > compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > 
-> > New smatch warnings:
-> > drivers/tty/serial/8250/8250_pci.c:1171 pci_oxsemi_tornado_get_divisor() error: uninitialized symbol 'tcr'.
-> > drivers/tty/serial/8250/8250_pci.c:1172 pci_oxsemi_tornado_get_divisor() error: uninitialized symbol 'quot'.
-> > drivers/tty/serial/8250/8250_pci.c:1180 pci_oxsemi_tornado_get_divisor() error: uninitialized symbol 'cpr'.
-> 
->  These variables do get assigned to in the first iteration of the loop, 
-> because the deviation calculated (`srem') is normalised to the range of 
-> [0,spre/2] and that divided by the original divisor (`spre') always works 
-> out at within [0,0.5], so `squot' will be within [0,32768].  I guess the 
-> static analyser is too dumb to figure it out, so I'll see how to paper it 
-> over unless someone has a better proposal.
-
-These emails are a one time email so it's okay to ignore them if you
-want.
-
-regards,
-dan carpenter
-
+> Code starting with the faulting instruction
+> ===========================================
+>    0:	48 8b 3c 24          	mov    (%rsp),%rdi
+>    4:	48 89 c2             	mov    %rax,%rdx
+>    7:	e8 17 fb ff ff       	callq  0xfffffffffffffb23
+>    c:	48 89 d0             	mov    %rdx,%rax
+>    f:	48 83 c4 08          	add    $0x8,%rsp
+>   13:	48                   	rex.W
+>   14:	3d                   	.byte 0x3d
+>   15:	01                   	.byte 0x1
+> [    7.009869] RSP: 002b:00007f3b1340f180 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
+> [    7.009871] RAX: ffffffffffffffda RBX: 00007f3b040010a0 RCX: 00007f3b160b335d
+> [    7.009873] RDX: 0000000000000300 RSI: 00007f3b040010a0 RDI: 0000000000000001
+> [    7.009874] RBP: 0000000000000000 R08: fffffffffffffa15 R09: fffffffffffffa05
+> [    7.009875] R10: 0000000000000000 R11: 0000000000000293 R12: 00007f3b04000df0
+> [    7.009876] R13: 00007f3b1340f1a0 R14: 0000000000000220 R15: 0000000000000300
+> [    7.009879]  </TASK>

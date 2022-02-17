@@ -2,107 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1284A4B9A4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470734B9A78
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236751AbiBQH6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 02:58:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41488 "EHLO
+        id S237024AbiBQH6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 02:58:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236795AbiBQH5u (ORCPT
+        with ESMTP id S236913AbiBQH6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:57:50 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C940B9A4E8;
-        Wed, 16 Feb 2022 23:57:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JznH53slgz4xcY;
-        Thu, 17 Feb 2022 18:57:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1645084641;
-        bh=fRCJEuT2NNqbc+8BttfsxPBdr1n25ZCNmIXyN/Q2BvM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kDcsGSnYL+Mwe2moZ85DIr9l+ob7ZkreaMMtirHog8y3AhnGRBR3hpkqT61/qW0D5
-         xtLIaoX6Tpwuvq+x+dTcXdTs5L39X5fOAYXPxe1XlSKGkl1ls0e8J2ukNQnmTvrFPZ
-         9R7zScYJYk88SWz63r2Cd/i87m7EGVVaHkDAIsxeMFMIxXdNkXz9Eq7nGntdV86j8t
-         Sz5MgLAaWr89WCyoOj8yem2OQuhkhISwC5++pm9A1kdXdHfh34ZPmVU2pyqRc2HcKW
-         /H9pxW3iPxdm/1+y/ZxpCVgsp2KOYxuu7nfI+946AUbnvc80aR1doJ3e7pAPtcsXi6
-         GGTGX3mhFE1cQ==
-Date:   Thu, 17 Feb 2022 18:57:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the maple tree
-Message-ID: <20220217185720.4b2f5923@canb.auug.org.au>
-In-Reply-To: <20220217185602.78adebeb@canb.auug.org.au>
-References: <20220217185602.78adebeb@canb.auug.org.au>
+        Thu, 17 Feb 2022 02:58:31 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A773522F76F;
+        Wed, 16 Feb 2022 23:58:11 -0800 (PST)
+X-UUID: 44cc14644aa44e369589316b65bcf842-20220217
+X-UUID: 44cc14644aa44e369589316b65bcf842-20220217
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 885734443; Thu, 17 Feb 2022 15:58:06 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 17 Feb 2022 15:58:05 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Feb 2022 15:58:03 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v3, 0/7] support mt8195 decoder
+Date:   Thu, 17 Feb 2022 15:57:51 +0800
+Message-ID: <20220217075758.11369-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zgsd5i/zVPG=Ec44pLba63m";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zgsd5i/zVPG=Ec44pLba63m
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Firstly, add mt8195 soc lat hardware and compatible, then add documents.
+For vp8 only support MM21 mode, H264/vp9 support MT21C, need to separate
+them. Lastly, enable H264 inner racing mode to reduce hardware latency.
 
-Hi Stephen,
+Patch 1~4 add mt8195 soc lat hardware and compatible, then add documents.
+Patch 5 using different format for different codecs.
+Patch 6 prevent kernel crash when scp reboot.
+Patch 7 enable H264 inner racing mode to reduce hardware latency.
+---
+This patch depends on "support mt8186 decoder"[1]
 
-On Thu, 17 Feb 2022 18:56:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Hi all,
->=20
-> After merging the maple tree, today's linux-next build (i386 defconfig)
-> produced this warning:
->=20
-> lib/maple_tree.c: In function 'mas_wr_spanning_store.isra':
-> lib/maple_tree.c:3941:1: warning: the frame size of 1040 bytes is larger =
-than 1024 bytes [-Wframe-larger-than=3D]
->  3941 | }
->       | ^
->=20
-> Introduced by commit
->=20
->   4af8015a7707 ("Maple Tree: Add new data structure")
+[1]  https://patchwork.kernel.org/project/linux-mediatek/cover/20220122075606.19373-1-yunfei.dong@mediatek.com
+---
+changed with v2:
+- add detail explanation for lat soc hardware for patch 1.
 
-Also
+changed with v1:
+- separate "Init VP9 stateless decode params" patch and remove it to another one.
+- add reviewed-by in patch v3/v4/v6
+---
+Tinghan Shen (1):
+  media: mtk-vcodec: prevent kernel crash when scp ipi timeout
 
-lib/maple_tree.c: In function 'mas_wr_modify':
-lib/maple_tree.c:4249:1: warning: the frame size of 1040 bytes is larger th=
-an 1024 bytes [-Wframe-larger-than=3D]
- 4249 | }
-      | ^
+Yunfei Dong (6):
+  dt-bindings: media: mtk-vcodec: Adds decoder dt-bindings for lat soc
+  media: mtk-vcodec: Add to support lat soc hardware
+  dt-bindings: media: mtk-vcodec: Adds decoder dt-bindings for mt8195
+  media: mtk-vcodec: Adds compatible for mt8195
+  media: mtk-vcodec: Different codec using different capture format
+  media: mtk-vcodec: Add to support H264 inner racing mode
 
---=20
-Cheers,
-Stephen Rothwell
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 52 +++++++++++++------
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      | 41 +++++++++++++++
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |  8 +++
+ .../platform/mtk-vcodec/mtk_vcodec_dec_hw.c   | 12 +++--
+ .../platform/mtk-vcodec/mtk_vcodec_dec_hw.h   |  2 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 50 ++++++++++++++++++
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      | 11 ++++
+ .../mtk-vcodec/vdec/vdec_h264_req_multi_if.c  | 23 ++++++--
+ .../media/platform/mtk-vcodec/vdec_vpu_if.c   |  5 ++
+ 9 files changed, 180 insertions(+), 24 deletions(-)
 
---Sig_/zgsd5i/zVPG=Ec44pLba63m
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIN/+AACgkQAVBC80lX
-0GzecAf+InS5pge23TqjtT6wGTy0YUEvQyo8YofCCqtC9lka34/h0+ZEvbqQkZyA
-A21oLhhUMoDBR/5Cml9LCgxscD98brBVAvuUbVpIU3LjuaJrBTCXk/yxNWxBFQrO
-FCdTf7A94a0moaeidNEzytpL2W4JoXMXhaOAvjJrK/M2OkWJYdOutZw334S1vOio
-kGL+9iiJldk/VYjgqtYBonPUqGYinBolfczxvsrhQKMHOj/Mz+oZB9iRyte96b8P
-tBh0Jz2B5AEwntdfvAuMe1h9PMvshiqItdZx5Z7Tb0QihV+/PrWpF7azPNbnYpJI
-j7C6plZ0OBxwUW+qMlBH1EgTDV0mXw==
-=oDUc
------END PGP SIGNATURE-----
-
---Sig_/zgsd5i/zVPG=Ec44pLba63m--

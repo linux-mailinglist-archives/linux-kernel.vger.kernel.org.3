@@ -2,270 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E3F4BA6BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D178F4BA6C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243585AbiBQRI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:08:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41194 "EHLO
+        id S243594AbiBQRJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:09:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237119AbiBQRI1 (ORCPT
+        with ESMTP id S237119AbiBQRJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:08:27 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7127B171286
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:08:12 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id q20so2149788ioi.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:08:12 -0800 (PST)
+        Thu, 17 Feb 2022 12:09:48 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8097822ED41
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:09:31 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id i6so192694pfc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:09:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M11Cv6Sf/j5dBAWER/x//EgaASJgRbtSRPsqwYtb7M4=;
-        b=AQ/k55OjpjGBB1pLkNFlC+B4Rqjq1fFpYg5CWkuHo4cjDdAbCAo3Lc79LQGsvtj/RF
-         rDW48u3nVT+DhEbuxVoUB8m6H25pvVyJICHiCp1Aw41/bpjCeoe0T4oces4UdzEB+tMD
-         7rIPNu/QXKZttNEFVzZn+psJ0FHqQV+FbrCxEGPtGOKHloBGt/HoRprd9lUGW1k2Pdy4
-         FUhDkepXMh/hblE2VOmrhVy1ZlyjDYgOwNkzPsWc0aauENwk24GT8UD4SypDWGKX26Sl
-         1NKFiSXKBflQPL/NtcN1Llc1XlrcmvxRs1DDRH/YOuTt714XkvP67ZUsoCIBGP5DQt+v
-         2F5w==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Dwl+mjTsdeEYTair1mMTtpTeImSMgOp5wqm/i7EaMZI=;
+        b=lNySuXZi9PWkDCsEsWA5s/aDCn9Q/P8U8/jOf7kIj9+WZlTrw0XTUtwDzbDdbxDwO9
+         BJBqc9xisgsq/b9T8j/intX7fb0d6zc0IlUKFGOgqy3TbxmlWXOhe/kPZmPr24ts2Ztc
+         /FcQQy83RJSzbTteBPxJMPVcPvhLFdO8nuB+g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M11Cv6Sf/j5dBAWER/x//EgaASJgRbtSRPsqwYtb7M4=;
-        b=UN/wqa3pxWXx0B6vug2KlY2pKfOp9V2YIXbwwipZFTADIuKNL+HAgazjGLPAOJQiTc
-         NSOdgXMdHLHVX/6KixEzoSfQhhjLA3WO8Z4gl1v611fTXX2we+PmZ0sC2Dh7U87uuy1d
-         7f2k10XzmJ6uzu4eSMQJDd421BY1QSAv2UeA9i8FAVHhKHIgA6Yzyq8t4p2HxwUB76l5
-         HcM9Ce+hzBgHRAgzzo1eErhtLWBJSEa9sOgMwZq0Va35wQ5d+mnqK+bJC4MiOvmFGwnK
-         0PCy1WLG1iNDtwlXY826Po5expNqFm1UcNqCKxHreM0NKwVinadtylUmVoYel7+BD3U6
-         /9Zg==
-X-Gm-Message-State: AOAM533zZPQXtP85zKbb24B6TYOStsRMVB2HvK5Pg8wO88adxqtw8t+M
-        FglCPQ6eAmjpdLk2mDZB/BaINRdFl8bNDhh8myEHvQ==
-X-Google-Smtp-Source: ABdhPJyilzR9QVcWD7iWcOH8FJUnoZ1sJLTQbCGDblWFfwASjChV0x5rcZZZLRppbnsEtWInlhUNc/BOGQygTfvfwLM=
-X-Received: by 2002:a02:6308:0:b0:30e:7e14:848b with SMTP id
- j8-20020a026308000000b0030e7e14848bmr2446771jac.139.1645117690194; Thu, 17
- Feb 2022 09:08:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Dwl+mjTsdeEYTair1mMTtpTeImSMgOp5wqm/i7EaMZI=;
+        b=10xUUikInl+eg7BiDBzeUUX10/wJqHY7Z9fQQ/YKOtwrNhIT52nFCAAjRF6u2+U9LB
+         4GIxBs96JQzc99aPlJaqRUrtWO0tMbz68gvBiOrXvDTSiCaSILOG35go//S0Xj3TG3mB
+         t14bHgv180hJfH+y9dS0k3b7I9c7a9MnpYx5lMXcuEQ6e8JGNAyIhFq4Yua/k5xJ8YvB
+         UHAXlLNIOmNHYAQ+zm+qopN5VTq8HTrUdesOH51iEz/t2DL12vgTONDjl5HdyKzpLkVi
+         CyxgMNL9djIZiOIkM+fbwEjG+3H5x3F1uxJOv2fqztvTBr7khsd/GNuX6cBnsyKi8R4g
+         T+lQ==
+X-Gm-Message-State: AOAM533mBIUfQx0GxQpmFY5yjOgwbH1TJZRnUXdqcABc/9byGC0j8U+d
+        clC1loW0ypsxtPx0mADxB+mllA==
+X-Google-Smtp-Source: ABdhPJyr3MX+FeVZJm0oiiflOCd+a89srZf+enZRLXqPokyQb9O/C1bMU/eIoKQY1G0xgMvqtUJhEA==
+X-Received: by 2002:a63:d252:0:b0:363:271c:fe63 with SMTP id t18-20020a63d252000000b00363271cfe63mr3180632pgi.524.1645117770920;
+        Thu, 17 Feb 2022 09:09:30 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p10sm132876pfo.209.2022.02.17.09.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 09:09:30 -0800 (PST)
+Date:   Thu, 17 Feb 2022 09:09:29 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lib: overflow: Convert to Kunit
+Message-ID: <202202170903.E39554DF@keescook>
+References: <20220216224153.2242451-1-keescook@chromium.org>
+ <CAGS_qxoOYjOtX6BQm-ozcarnazyED2vocd4iV+VdDVnMWpjWjg@mail.gmail.com>
 MIME-Version: 1.0
-References: <00000000000038779505d5d8b372@google.com> <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
- <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
- <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
- <a0769218-c84a-a1d3-71e7-aefd40bf54fe@ghiti.fr> <CANp29Y4WMhsE_-VWvNbwq18+qvb1Qc-ES80h_j_G-N_hcAnRAw@mail.gmail.com>
- <CANp29Y4ujmz901aE9oiBDx9dYWHti4-Jw=6Ewtotm6ck6MN9FQ@mail.gmail.com>
- <CACT4Y+ZvStiHLYBOcPDoAJnk8hquXwm9BgjQTv=APwh7AvgEUQ@mail.gmail.com>
- <CANp29Y56Or0V1AG7rzBfV_ZTph2Crg4JKKHiuw1kcGFFxeWqiQ@mail.gmail.com>
- <CANp29Y5+MuhKAzVxzEDb_k9voXmKWrUFx8k4wnW5=2+5enVFVA@mail.gmail.com>
- <CA+zEjCtvaT0YsxxUgnEGM+V4b5sWuCAs3=3J+Xocf580uT3t1g@mail.gmail.com> <CA+zEjCs1FEUTcM+pgV+_MZnixSO5c2hexZFxGxuCQWc2ZMQiRg@mail.gmail.com>
-In-Reply-To: <CA+zEjCs1FEUTcM+pgV+_MZnixSO5c2hexZFxGxuCQWc2ZMQiRg@mail.gmail.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Thu, 17 Feb 2022 18:07:59 +0100
-Message-ID: <CANp29Y4rDSjrfTOxcQqwh+Qm+ocR0v6Oxr7EkFxScf+24M1tNA@mail.gmail.com>
-Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        linux-riscv@lists.infradead.org,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGS_qxoOYjOtX6BQm-ozcarnazyED2vocd4iV+VdDVnMWpjWjg@mail.gmail.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+On Wed, Feb 16, 2022 at 02:57:12PM -0800, Daniel Latypov wrote:
+> On Wed, Feb 16, 2022 at 2:42 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Convert overflow unit tests to KUnit, for better integration into the
+> > kernel self test framework. Includes a rename of test_overflow.c to
+> > overflow_kunit.c, and CONFIG_TEST_OVERFLOW to CONFIG_OVERFLOW_KUNIT_TEST.
+> >
+> > $ ./tools/testing/kunit/kunit.py config
+> > ...
+> > $ ./tools/testing/kunit/kunit.py run overflow
+> 
+> JFYI, you can run this as a one-liner via
+> 
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
+> CONFIG_KUNIT=y
+> CONFIG_TEST_OVERFLOW=y
+> EOF
+> 
+> The above is taken from my own duplicate version of this patch
+> [1] https://lore.kernel.org/linux-kselftest/20210503211536.1384578-1-dlatypov@google.com/
 
-On Thu, Feb 17, 2022 at 5:53 PM Alexandre Ghiti
-<alexandre.ghiti@canonical.com> wrote:
->
-> Aleksandr,
->
-> On Wed, Feb 16, 2022 at 5:58 PM Alexandre Ghiti
-> <alexandre.ghiti@canonical.com> wrote:
-> >
-> > First, thank you for working on this.
-> >
-> > On Wed, Feb 16, 2022 at 5:17 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > >
-> > > If I use just defconfig + DEBUG_VIRTUAL, without any KASAN, it begins
-> > > to boot, but overwhelms me with tons of `virt_to_phys used for
-> > > non-linear address:` errors.
-> > >
-> > > Like that
-> > >
-> > > [    2.701271] virt_to_phys used for non-linear address:
-> > > 00000000b59e31b6 (0xffffffff806c2000)
-> > > [    2.701727] WARNING: CPU: 0 PID: 1 at arch/riscv/mm/physaddr.c:16
-> > > __virt_to_phys+0x7e/0x86
-> > > [    2.702207] Modules linked in:
-> > > [    2.702393] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W
-> > >   5.17.0-rc1 #1
-> > > [    2.702806] Hardware name: riscv-virtio,qemu (DT)
-> > > [    2.703051] epc : __virt_to_phys+0x7e/0x86
-> > > [    2.703298]  ra : __virt_to_phys+0x7e/0x86
-> > > [    2.703547] epc : ffffffff80008448 ra : ffffffff80008448 sp :
-> > > ffff8f800021bde0
-> > > [    2.703977]  gp : ffffffff80ed9b30 tp : ffffaf8001230000 t0 :
-> > > ffffffff80eea56f
-> > > [    2.704704]  t1 : ffffffff80eea560 t2 : 0000000000000000 s0 :
-> > > ffff8f800021be00
-> > > [    2.705153]  s1 : ffffffff806c2000 a0 : 000000000000004f a1 :
-> > > ffffffff80e723d8
-> > > [    2.705555]  a2 : 0000000000000010 a3 : fffffffffffffffe a4 :
-> > > 0000000000000000
-> > > [    2.706027]  a5 : 0000000000000000 a6 : 0000000000000005 a7 :
-> > > ffffffffffffffff
-> > > [    2.706474]  s2 : ffffffff80b80b08 s3 : 00000000000000c2 s4 :
-> > > ffffffff806c2000
-> > > [    2.706891]  s5 : ffffffff80edba10 s6 : ffffffff80edb960 s7 :
-> > > 0000000000000001
-> > > [    2.707290]  s8 : 00000000000000ff s9 : ffffffff80b80b40 s10:
-> > > 00000000000000cc
-> > > [    2.707689]  s11: ffffaf807e1fcf00 t3 : 0000000000000076 t4 :
-> > > ffffffffffffffff
-> > > [    2.708092]  t5 : 00000000000001f2 t6 : ffff8f800021bb48
-> > > [    2.708433] status: 0000000000000120 badaddr: 0000000000000000
-> > > cause: 0000000000000003
-> > > [    2.708919] [<ffffffff8011416a>] free_reserved_area+0x72/0x19a
-> > > [    2.709296] [<ffffffff80003a5a>] free_initmem+0x6c/0x7c
-> > > [    2.709648] [<ffffffff805f60c8>] kernel_init+0x3a/0x10a
-> > > [    2.709993] [<ffffffff80002fda>] ret_from_exception+0x0/0xc
-> > > [    2.710310] ---[ end trace 0000000000000000 ]---
-> > >
-> >
-> > I was able to reproduce this: the first one regarding init_zero_pfn is
-> > legit but not wrong, I have to check when it was introduced and how to
-> > fix this.
-> > Regarding the huge batch that follows, at first sight, I would say
-> > this is linked to my sv48 patchset but that does not seem important as
-> > the address is a kernel mapping address so the use of virt_to_phys is
-> > right.
-> >
-> > > On Wed, Feb 16, 2022 at 5:09 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > >
-> > > > On Wed, Feb 16, 2022 at 12:56 PM Dmitry Vyukov <dvyukov@google.com> wrote:
-> > > > >
-> > > > > On Wed, 16 Feb 2022 at 12:47, Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > >
-> > > > > > On Wed, Feb 16, 2022 at 11:37 AM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > > >
-> > > > > > > Hi Alex,
-> > > > > > >
-> > > > > > > On Wed, Feb 16, 2022 at 5:14 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
-> > > > > > > >
-> > > > > > > > Hi Dmitry,
-> > > > > > > >
-> > > > > > > > On 2/15/22 18:12, Dmitry Vyukov wrote:
-> > > > > > > > > On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
-> > > > > > > > > <alexandre.ghiti@canonical.com> wrote:
-> > > > > > > > >> Hi Aleksandr,
-> > > > > > > > >>
-> > > > > > > > >> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > > > > >>> Hello,
-> > > > > > > > >>>
-> > > > > > > > >>> syzbot has already not been able to fuzz its RISC-V instance for 97
-> > > > > > > > >> That's a longtime, I'll take a look more regularly.
-> > > > > > > > >>
-> > > > > > > > >>> days now because the compiled kernel cannot boot. I bisected the issue
-> > > > > > > > >>> to the following commit:
-> > > > > > > > >>>
-> > > > > > > > >>> commit 54c5639d8f507ebefa814f574cb6f763033a72a5
-> > > > > > > > >>> Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> > > > > > > > >>> Date:   Fri Oct 29 06:59:27 2021 +0200
-> > > > > > > > >>>
-> > > > > > > > >>>      riscv: Fix asan-stack clang build
-> > > > > > > > >>>
-> > > > > > > > >>> Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
-> > > > > > > > >>> enabled. In the previous message syzbot mentions
-> > > > > > > > >>> "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
-> > > > > > > > >>> Binutils for Debian) 2.35.2", but the issue also reproduces finely on
-> > > > > > > > >>> a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
-> > > > > > > > >>> 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
-> > > > > > > > >>> For convenience, I also duplicate the .config file from the bot's
-> > > > > > > > >>> message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
-> > > > > > > > >>>
-> > > > > > > > >>> Can someone with KASAN and RISC-V expertise please take a look?
-> > > > > > > > >> I'll take a look at that today.
-> > > > > > > > >>
-> > > > > > > > >> Thanks for reporting the issue,
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > I took a quick look, not enough to fix it but I know the issue comes
-> > > > > > > > from the inline instrumentation, I have no problem with the outline
-> > > > > > > > instrumentation. I need to find some cycles to work on this, my goal is
-> > > > > > > > to fix this for 5.17.
-> > > > > > >
-> > > > > > > Thanks for the update!
-> > > > > > >
-> > > > > > > Can you please share the .config with which you tested the outline
-> > > > > > > instrumentation?
-> > > > > > > I updated the syzbot config to use KASAN_OUTLINE instead of KASAN_INLINE,
-> > > > > > > but it still does not boot :(
-> > > > > > >
-> > > > > > > Here's what I used:
-> > > > > > > https://gist.github.com/a-nogikh/279c85c2d24f47efcc3e865c08844138
-> > > > > >
-> > > > > > Update: it doesn't boot with that big config, but boots if I generate
-> > > > > > a simple one with KASAN_OUTLINE:
-> > > > > >
-> > > > > > make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > > ./scripts/config -e KASAN -e KASAN_OUTLINE
-> > > > > > make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > >
-> > > > > > And it indeed doesn't work if I use KASAN_INLINE.
-> > > > >
-> > > > > It may be an issue with code size. Full syzbot config + KASAN + KCOV
-> > > > > produce hugely massive .text. It may be hitting some limitation in the
-> > > > > bootloader/kernel bootstrap code.
-> >
-> > I took a quick glance and it traps on a KASAN address that is not
-> > mapped, either because it is too soon or because the mapping failed
-> > somehow.
-> >
-> > I'll definitely dive into that tomorrow, sorry for being slow here and
-> > thanks again for all your work, that helps a lot.
-> >
-> > Thanks,
-> >
-> > Alex
-> >
-> > > >
-> > > > I bisected the difference between the config we use on syzbot and the
-> > > > simple one that was generated like I described above.
-> > > > Turns out that it's the DEBUG_VIRTUAL config that makes the difference.
-> > > >
-> > > > make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > ./scripts/config -e KASAN -e KASAN_OUTLINE -e DEBUG_VIRTUAL
-> > > > make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > >
-> > > > And the resulting kernel does not boot.
-> > > > My env: the `riscv/fixes` branch, commit
-> > > > 6df2a016c0c8a3d0933ef33dd192ea6606b115e3, qemu 6.2.0.
->
-> I fixed a few things today: KASAN + SPARSE_VMEMMAP, DEBUG_VIRTUAL and
-> maybe KASAN  + KCOV.
->
-> With those small fixes, I was able to boot your large dotconfig with
-> KASAN_OUTLINE, the inline version still fails, this is my next target
-> :)
-> I'll push that tomorrow!
+Ah-ha! I thought I remembered this conversion being proposed before but
+I totally failed to find it. Thank you! I'll compare/adjust this patch
+and add you as Co-developed-by.
 
-Awesome, thank you very much!
-Looking forward to finally seeing the instance run :)
+> > ...
+> > [14:33:51] Starting KUnit Kernel (1/1)...
+> > [14:33:51] ============================================================
+> > [14:33:51] ================== overflow (11 subtests) ==================
+> > [14:33:51] [PASSED] u8_overflow_test
+> > [14:33:51] [PASSED] s8_overflow_test
+> > [14:33:51] [PASSED] u16_overflow_test
+> > [14:33:51] [PASSED] s16_overflow_test
+> > [14:33:51] [PASSED] u32_overflow_test
+> > [14:33:51] [PASSED] s32_overflow_test
+> > [14:33:51] [PASSED] u64_overflow_test
+> > [14:33:51] [PASSED] s64_overflow_test
+> > [14:33:51] [PASSED] overflow_shift_test
+> > [14:33:51] [PASSED] overflow_allocation_test
+> > [14:33:51] [PASSED] overflow_size_helpers_test
+> > [14:33:51] ==================== [PASSED] overflow =====================
+> > [14:33:51] ============================================================
+> > [14:33:51] Testing complete. Passed: 11, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
+> > [14:33:51] Elapsed time: 12.525s total, 0.001s configuring, 12.402s building, 0.101s running
+> >
+> > Cc: David Gow <davidgow@google.com>
+> > Cc: Vitor Massaru Iha <vitor@massaru.org>
+> > Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
+> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> > Link: https://lore.kernel.org/lkml/20200720224418.200495-1-vitor@massaru.org/
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> 
+> Looks good to me, some minor nits/suggestions wrt KUnit usage.
+> Nice to see this test converted over!
 
---
-Best Regards,
-Aleksandr
+Thanks!
 
->
-> Thanks again,
->
-> Alex
+> [...]
+> > index f6530fce799d..4cc27b9926a1 100644
+> > --- a/lib/test_overflow.c
+> > +++ b/lib/overflow_kunit.c
+> > @@ -1,9 +1,13 @@
+> >  // SPDX-License-Identifier: GPL-2.0 OR MIT
+> >  /*
+> > - * Test cases for arithmetic overflow checks.
+> > + * Test cases for arithmetic overflow checks. See:
+> > + * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-tool.html#configuring-building-and-running-tests
+> > + *     ./tools/testing/kunit/kunit.py config
+> > + *     ./tools/testing/kunit/kunit.py run overflow [--raw_output]
+> >   */
+> >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> 
+> We can drop the pr_fmt now, I think
+
+My instinct is to leave these in place just so that anything weird that
+gets inlined and sneaks a pr_*() call into the code will have a
+meaningful prefix.
+
+> [...]
+> > @@ -510,30 +477,28 @@ static int __init test_ ## func (void *arg)                               \
+> >                                                                         \
+> >         /* Tiny allocation test. */                                     \
+> >         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg, 1);\
+> > -       if (!ptr) {                                                     \
+> > -               pr_warn(#func " failed regular allocation?!\n");        \
+> > -               return 1;                                               \
+> > -       }                                                               \
+> > +       KUNIT_EXPECT_FALSE_MSG(test, !ptr,                              \
+> > +                           #func " failed regular allocation?!\n");    \
+> 
+> Optional: we can consider using KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG() here.
+> It's a more heavy handed than just a `return` on failure, but if the
+> regular allocation failed, we're probably justified in bailing out on
+> the whole test case.
+
+Yeah, I think it might work here. Earlier I hadn't figured out how to
+convert each test separately, but now an ASSERT makes sense.
+
+> 
+> > +       if (!ptr)                                                       \
+> > +               return;                                                 \
+> >         free ## want_arg (free_func, arg, ptr);                         \
+> >                                                                         \
+> >         /* Wrapped allocation test. */                                  \
+> >         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg,    \
+> >                                                           a * b);       \
+> > -       if (!ptr) {                                                     \
+> > -               pr_warn(#func " unexpectedly failed bad wrapping?!\n"); \
+> > -               return 1;                                               \
+> > -       }                                                               \
+> > +       KUNIT_EXPECT_FALSE_MSG(test, !ptr,                              \
+> > +                           #func " unexpectedly failed bad wrapping?!\n"); \
+> > +       if (!ptr)                                                       \
+> > +               return;                                                 \
+> >         free ## want_arg (free_func, arg, ptr);                         \
+> >                                                                         \
+> >         /* Saturated allocation test. */                                \
+> >         ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg,    \
+> >                                                    array_size(a, b));   \
+> > -       if (ptr) {                                                      \
+> > -               pr_warn(#func " missed saturation!\n");                 \
+> > +       KUNIT_EXPECT_FALSE_MSG(test, ptr,                               \
+> > +                           #func " missed saturation!\n");             \
+> > +       if (ptr)                                                        \
+> 
+> We can instead do
+> 
+> if (ptr) {
+>   KUNIT_FAIL(test, #func "missed saturation!");
+>  free...()
+> }
+> 
+> IMO, it's a bit easier to read that way, but not that important.
+
+Ah yes, good. That's much better.
+
+I will respin and resend...
+
+-- 
+Kees Cook

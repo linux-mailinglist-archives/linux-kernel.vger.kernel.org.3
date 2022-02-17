@@ -2,720 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4344BA632
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49894BA651
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243400AbiBQQmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:42:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53012 "EHLO
+        id S241430AbiBQQof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:44:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234978AbiBQQmG (ORCPT
+        with ESMTP id S229501AbiBQQod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:42:06 -0500
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36B92B355A;
-        Thu, 17 Feb 2022 08:41:49 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 36EAF1E95;
-        Thu, 17 Feb 2022 17:41:48 +0100 (CET)
-Authentication-Results: ext-mx-out001.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        content-transfer-encoding:content-type:content-type:in-reply-to
-        :references:from:from:content-language:subject:subject
-        :mime-version:date:date:message-id:received:received:received;
-         s=dkim20160331; t=1645116106; x=1646930507; bh=tVkcBU8GWaQ+6tqv
-        FM7Q/5tmZEKJG88hL+ArwuTAS3o=; b=oJAf+Z/L6ompx826q2muU1/dl7cHuLue
-        apzL6heTqzmXnKv+GBh0XaixN+7j11GmcmWsCnCYldrC6gMtKQ7GiamYyGhESsSS
-        yF2ckzYvJElZDZs8P27f2DLN5v8NoMlcTBPpshci4YurO6NNwUZOZLLciio41YPA
-        MeITR2h8EtfH+N7MR+G9qGanzFhd9e2zrQwT62u1smzwBu3y8SmzkV1i/E8gspRE
-        PnyfCO3c+KCfcQUsSSO1izgRi26LTdnBtWIba2vojalWmpFrofWZ91GydeE+EGpl
-        xekB7ytEf+eYCYtSqicp0fWMqb5cZVQ86AisCpf9d4b7iAoTMEDmotEoyt54q6hj
-        KbBTaicbC9aXuzrQrMXmArJzsvKKBf2DF+9BJzuW2NRDRdCdOmF58/tAQWpKIjII
-        mWWdNmICR424kmdRfo1hdnNw+cla8y98xp0MfjX6Uyxly7X9s4hm/iUAiVkk+/ED
-        6evQKNtpwm9V3hTLJ4Xuk/HDFJM1ll7+4MO0Fjf23wypJyAMe08oOm5ZRC1C4F6N
-        UWeRZvFCveRla5BM3N8DVqUJBeVn7tPDcvU5iznTBDgQyPMjewYw4dkxNHIC2ouz
-        +3Spb435sEye6qySrC/CVzqQnbR0mSjn8jMwzAieq4tDMIfgTsLRV/iFMRalP06U
-        y0U174wvHKY=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.899
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vyLoJLefJzwg; Thu, 17 Feb 2022 17:41:46 +0100 (CET)
-Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
-        by mx.kolabnow.com (Postfix) with ESMTPS id 438A71C62;
-        Thu, 17 Feb 2022 17:41:46 +0100 (CET)
-Received: from ext-subm001.mykolab.com (unknown [10.9.6.1])
-        by int-mx001.mykolab.com (Postfix) with ESMTPS id B011E1262;
-        Thu, 17 Feb 2022 17:41:44 +0100 (CET)
-Message-ID: <a2a7f05d-0cac-fa81-89fc-b88b066d32ca@hansg.org>
-Date:   Thu, 17 Feb 2022 17:41:41 +0100
-MIME-Version: 1.0
-Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
+        Thu, 17 Feb 2022 11:44:33 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2070a.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::70a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA13AC;
+        Thu, 17 Feb 2022 08:44:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Shkuyn7kcK5W9A3nkw3EXMPapBPYN3Samqsmj4nhgbbeZh9JWmnQ5cDYP1FU3FolyHusfs75X03O7HIOWbBhpmyB9zmTtNZfusJoyEz6XHeZ1TeIlFUKo0LHsFmkveUyPoy1YuiHlkH6vV5LVdXRtmv7ZrmPnCxw9j9uGWreUmojH1kqCpdrk5zItQ3/M9UE6bIhglsKUNuu9oZC0yKsrjcPgaB5welR6nH2SxeuB0mAKI0OwbQveLcrfXh77wr8uPwj+Xuyyn8LhrOKLHxH1B/qQnuFCQT0Y1KsiS+rXHfjajpUMqjjJM1OZzbJR5GAdW1q/KpH5hhYZm2cGQAFMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9Pv9uIdekkIMb8S85Kxm2R0YqYVcKW25TQ4CkWw4X/E=;
+ b=Ji5rl6m6iavSmeu7j0ZCJqczN6/Fv+Z0KlRvbfqnCFH+BiHiPDJtYDlLk4iO7DWdRZEv0OpKlNPOXw0SlAJXu1y3XKZAkuAJqFneO2+/UUuFgWqkqBiZwio9puHvfP6N3UyKhdgpR+vXuY0bdVPP/dCVMBiirY4zkIFdsuVU1/WH/slsUN0HkS1qnD3dy0/TS9ZW/y5TdXwz2TmD4NfJ8d0cHZjjcBsEtHCzMfIP4UGkBPp57+onrwzYz6TRbslszbnvvPanAy1ijD6UOt/SU9cw2JRKUAyov4AEcOj22F5Y31PndEpxotf+DzqWSaFPQ+5mghWXQyiiDcUI22DWoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9Pv9uIdekkIMb8S85Kxm2R0YqYVcKW25TQ4CkWw4X/E=;
+ b=c6wNdMUKZO5uonFsnbmAKY7Fo2Tz6H2fagjdHOmprq6YhTVJ3GgYbnLxpJIi+KyU9bEsc9jwAf4zRad588zHj0M/ev1hvFRhz1u/csEoLWinm82XW3PergBM77W/jEBnUkZ4yjqDelJ5o1yhzhgoW0DBXFmm989ZKw1HlEwPPk0=
+Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
+ by CY4PR21MB1587.namprd21.prod.outlook.com (2603:10b6:910:91::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.10; Thu, 17 Feb
+ 2022 16:44:13 +0000
+Received: from MWHPR21MB1593.namprd21.prod.outlook.com
+ ([fe80::ad12:1420:5435:34e4]) by MWHPR21MB1593.namprd21.prod.outlook.com
+ ([fe80::ad12:1420:5435:34e4%5]) with mapi id 15.20.5017.009; Thu, 17 Feb 2022
+ 16:44:13 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
+CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] drivers: hv: log when enabling crash_kexec_post_notifiers
+Thread-Topic: [PATCH] drivers: hv: log when enabling
+ crash_kexec_post_notifiers
+Thread-Index: AQHYIgympyDoJIn0jEOJRMc1uX9nZayX9IWw
+Date:   Thu, 17 Feb 2022 16:44:13 +0000
+Message-ID: <MWHPR21MB1593EAD0167AA9EC4139042AD7369@MWHPR21MB1593.namprd21.prod.outlook.com>
+References: <20220215013735.358327-1-stephen.s.brennan@oracle.com>
+In-Reply-To: <20220215013735.358327-1-stephen.s.brennan@oracle.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Hans de Goede <hans@hansg.org>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        platform-driver-x86@vger.kernel.org
-Cc:     Mark Gross <markgross@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
- <f5189aa3-77e1-f976-ac4b-5d1293dfa1b2@hansg.org>
-In-Reply-To: <f5189aa3-77e1-f976-ac4b-5d1293dfa1b2@hansg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=3ffdb1fd-c82a-4029-8393-d58b4452847a;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-02-17T16:35:01Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 488fb92a-0e63-402c-a000-08d9f234bae1
+x-ms-traffictypediagnostic: CY4PR21MB1587:EE_
+x-ms-exchange-atpmessageproperties: SA|SL
+x-microsoft-antispam-prvs: <CY4PR21MB1587C6FA7264B2ECA0DF2D22D7369@CY4PR21MB1587.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3513;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IrnyBaJ9b+1XsQC0uBnaD/I4fWE1YTyqf8RpJMgU3bUvEPxTUYks9Ii5rAZW0YkzaVXigjExlH8Q/3x8QVU2FN/h2S2SJ2GEpDF2oHwzH1os7zzLCvU7niG4+WlCx2OSNiYSpJH4ux0esj2mw/8I/poOfFskz5aHhG9I1+Kuj/K7Tivp9keTo8CHlur9BdnnW1AGtUXLaMM7uctn0vIX6ULgEA2BevD3Zb3dCDKUTb0AKOXbFhT+ffTIFsoyTrjTR2U9vr4vWFLNrdTO1lSb7+UK86UNW/X8jwViEoHsBuUvCzaY4z1XgvR0dKT9EA3jE7wBX8OXK2wUBl+o16GsoS9qcDAVlLul6IB+waXkE2qQhT6+15XZsqrkRQdm6+WnlGb8Ie65E5zNHcLKdo5WsXAtoAmcSir+PiQLZJAJmTqBE1xy9lzFJvkq/LRpD26m5Iy5zMBzNabi0qEIYVCRtmn8i96SW//ndd1csZdmVxSh3OfEUBZunKBl5mikipIDvSmwuBuJlge9xUvK/PWRmxphjSBKdrNWezIgUaPeCSOn99pk8wq9tIS5/RFpO0AYzi3RRU8XtQI78B35XJeerNdccQ3fStcYwhH0Q2tvVXcMmLDyJrLiPel2Zew5Dt3FB+mURMElEX2NVmM8pqhsQZvdq/MsqQo+3Ic6W3+gqoMbpOAEU1NQ7dKg4mjlOkYWoHdKf/t6tu39CGZZJaOK00rZ7LFR31hZPA9X+KBsuTjRb7ScLJxldI+8Q07V8eL50fteYWbWA6/NWQoj1+KGsOpCIrI7AkHx7WdUdDgLtWENpESi6PFAOAmPiaIh1yBkDHObMw8acCWNvl1VhTy8dg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(110136005)(2906002)(8990500004)(82950400001)(82960400001)(86362001)(316002)(33656002)(6636002)(38100700002)(83380400001)(10290500003)(55016003)(508600001)(71200400001)(8676002)(66446008)(66946007)(76116006)(66476007)(66556008)(64756008)(38070700005)(6506007)(9686003)(186003)(966005)(4326008)(8936002)(26005)(52536014)(122000001)(7696005)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZBNhj8TrQ+qr/5bbzGBs5Enps1gcRdiTAu57y9rwgLKliSXcmfO7HK5FmpWz?=
+ =?us-ascii?Q?/cv0ere38a4wM92kIxkw1e2T4l3FSVTq/YcM4VGjRxEhXmateYHW56FD+MF4?=
+ =?us-ascii?Q?eni+3HfSMevLzZfnTJ5kylB28+kVFRi6GpGtL0Dse5bst1nmmuPg17C/EXOt?=
+ =?us-ascii?Q?sRDDHgCVGEx//EVigN22k/kyW0ujKMStsBmkVO2RbZ+iTm8LUPl4eu1pedkW?=
+ =?us-ascii?Q?envUpa10pBY5ohTqLmVP4Lo2dHC4VIzRxgUsOhRlL89q4HlCsDMekYUjpMbT?=
+ =?us-ascii?Q?TKgJZc4AGpnFYacmRmWlyHBUWvChVWx1ly0vEbi0V25Mtr3DTP736OO1BpQ8?=
+ =?us-ascii?Q?I8rAvRIGAeFzJwTCy9visuTqnOHjePiI6mQ79kOycK7ladEE+7sED0SEuiTZ?=
+ =?us-ascii?Q?Kttk6vBP3YfmyBxlX6CQBMsIA822UN2cbBxc0iPwtt7Fu93CvfEp9q6YrgoZ?=
+ =?us-ascii?Q?7p/d44y122pCJXIegnawiF741lkEEBhVtmpIglV8n97iks6poLx/FfzaeQvt?=
+ =?us-ascii?Q?Xk7l1un9Wflk1v7njYrdxX25+utopKWEm1+UU+5FnEi06hf7nBGsaBFep1Uy?=
+ =?us-ascii?Q?CUO+cjPfZXQPSr8ejr9YsH0pImKBqaZ0yZqJ5+hpFbYs7jPd5HPis4mfh5nR?=
+ =?us-ascii?Q?6OoZLWH1VGR7TH5tUgiQMRgnF8xUjZSNxhisxzcjLYrXUY8G4+bqE2KWZC9T?=
+ =?us-ascii?Q?TK97EYdk0KzKIXRBFC5g63OZyOJGi8L6OBfBf3x4yz5EqCtihBFy+vQcEmWJ?=
+ =?us-ascii?Q?PX+ip5gfZPcUHOqkDo4+mQ2iH/2kTVOQOGfiyZOdpfaT0MtTKV2dpsrtVMic?=
+ =?us-ascii?Q?eCDloPLALEflqpG/c8PxTZunZ9cFTMNbX4l9zhK0XabqgfxTWMMOM4Km7axb?=
+ =?us-ascii?Q?mxi7BXRqVTa2qrS/NjuE+xESMt4ISHiW2KdZCZ3H0IAzGppF53ru0i5dC7Wc?=
+ =?us-ascii?Q?RX68jM8Iiy7EWCMbTSC1vBzsVHcaK1EJVc7X11mIGOcoRiq8Ie2EAXFF0cV+?=
+ =?us-ascii?Q?ZBe6NpB2rXRMBvSgXNr41fVq47lmZoyVmFFLSsRUJ/1Bdtef0UaXLXeMVjwj?=
+ =?us-ascii?Q?VkZMmyXAgjalRsArXk3V3R0KYWvLuSttmmG1Rod2/8LZnXaveAKgHhR6VmQi?=
+ =?us-ascii?Q?YkafN2bI4CPIgJYqx9eNN9dTwBhNk5KVSsFJVPaUZPm7o7OHJB58j2VTybu0?=
+ =?us-ascii?Q?X8OXcoUMv0fEjtKMM3KMEvejpHgQ4MW/aYa/KEdkqsHygziG5Sz6FGbp/mr6?=
+ =?us-ascii?Q?FKHXvp1yBYunJ+g847F9FqpEAFNH1Bp7vtXx/fiQOcLobxenPTOue4s0fwo0?=
+ =?us-ascii?Q?ofL3sqdWzSgHqtD3nTjUrjrS4jmBRpA+wWMfCO9XjRZqEf3l54Z3GSqGcukv?=
+ =?us-ascii?Q?28F0qDS6ULKjxPHC6/2RcUNJ35ea44FhAwVsIgAG0qTt4qZb6/mpYvPR7b8Y?=
+ =?us-ascii?Q?/GACBVYndSjbGwNGXEdXy2DbMXAGlVwHyWFabbM4Lzyc7EkMbliyWeo0wqIq?=
+ =?us-ascii?Q?7Vkm+0G5C/ITWv6ieIrCpYtkPLlFhs9G9NZRDR8GpcRxTM3vv9NOHmkjCfkK?=
+ =?us-ascii?Q?D/Vh4kLslf1jBRdR6wI8DmayhWEpudCl31iuln8T2JU+jTItL/qZ/KAgV+UK?=
+ =?us-ascii?Q?SI5OSV7gDP6vkOu6nBaPDqlJvwgZXujW4JAx3gD2MCPKd3e15BHuQIZxHuHq?=
+ =?us-ascii?Q?dPdw6w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 488fb92a-0e63-402c-a000-08d9f234bae1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2022 16:44:13.4555
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3Uu40z/aGFWj7AhCS2waPZ6GSQIIN7TXwGLuTnkv5YrKw+pFZly9Xp3uIdAT7WnqhW023xxFANeENoP7xRGn0A+CIgGzq8OflGPN/TzbX64=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR21MB1587
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+From: Stephen Brennan <stephen.s.brennan@oracle.com> Sent: Monday, February=
+ 14, 2022 5:38 PM
+>=20
+> Recently I went down a rabbit hole looking at a race condition in
+> panic() on a Hyper-V guest. I assumed, since it was missing from the
+> command line, that crash_kexec_post_notifiers was disabled. Only after
+> a rather long reproduction and analysis process did I learn that Hyper-V
+> actually enables this setting unconditionally.
+>=20
+> Users and debuggers alike would like to know when these things happen. I
+> think it would be good to print a message to the kernel log when this
+> happens, so that a grep for "crash_kexec_post_notifiers" shows relevant
+> results.
 
-On 2/17/22 17:26, Hans de Goede wrote:
-> Hi Andrey,
-> 
-> On 2/6/22 03:20, Andrey Smirnov wrote:
->> Add a driver exposing various bits and pieces of functionality
->> provided by Steam Deck specific VLV0100 device presented by EC
->> firmware. This includes but not limited to:
->>
->>     - CPU/device's fan control
->>     - Read-only access to DDIC registers
->>     - Battery tempreature measurements
->>     - Various display related control knobs
->>     - USB Type-C connector event notification
->>
->> Cc: Hans de Goede <hdegoede@redhat.com>
->> Cc: Mark Gross <markgross@kernel.org>
->> Cc: Jean Delvare <jdelvare@suse.com>
->> Cc: Guenter Roeck <linux@roeck-us.net>
->> Cc: linux-kernel@vger.kernel.org (open list)
->> Cc: platform-driver-x86@vger.kernel.org
->> Cc: linux-hwmon@vger.kernel.org
->> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> 
-> The .c file says: "Copyright (C) 2021-2022 Valve Corporation"
-> yet you are using a personal email address. This is not really
-> an issue, but it does look a bit weird.
-> 
->> ---
->>
->> This driver is really a kitchen sink of various small bits. Maybe it
->> is worth splitting into an MFD + child drivers/devices?
-> 
-> Yes with the extcon thing I think you should definitely go for
-> a MFD device. In which case the main driver registering the
-> regmap + the cells would go under drivers/mfd and most of the
-> other drivers would go in their own subsystems.
-> 
-> And as the drivers/platform/x86/ subsystem maintainer I guess
-> that means I don't have to do much with this driver :)
-> 
-> I would still be happy to take any bits which don't fit
-> anywhere else attaching to say a "misc" MFD cell.
-> 
-> Regards,
-> 
-> Hans
+I'm OK with adding this output line.  However, you have probably
+seen the two other LKML threads [1] and [2] about reorganizing the
+panic notifiers to clearly distinguish between notifiers that always run
+vs. those controlled by "crash_kexec_post_notifiers".  If the changes
+proposed in those threads are submitted and accepted, it is likely that
+the kernel log message in this patch would become unnecessary.
+But since we don't know when those proposed changes might come
+to fruition, adding the message for now makes sense.
 
-Sorry for sending an almost identical mail twice, at first
-I thought my email-client (thunderbird) somehow ate this one,
-as it did not show in my send folder.
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
-But now I see that I somehow accidentally changed from which
-account I send the reply.
+[1] https://lore.kernel.org/lkml/20220108153451.195121-1-gpiccoli@igalia.co=
+m/
+[2] https://lore.kernel.org/lkml/20220114183046.428796-1-gpiccoli@igalia.co=
+m/
 
-Regards,
-
-Hans
-
-
-
-
-> 
-> 
-> 
->>
->>  drivers/platform/x86/Kconfig     |  15 +
->>  drivers/platform/x86/Makefile    |   2 +
->>  drivers/platform/x86/steamdeck.c | 523 +++++++++++++++++++++++++++++++
->>  3 files changed, 540 insertions(+)
->>  create mode 100644 drivers/platform/x86/steamdeck.c
->>
->> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
->> index c23612d98126..86f014e78a6e 100644
->> --- a/drivers/platform/x86/Kconfig
->> +++ b/drivers/platform/x86/Kconfig
->> @@ -1136,6 +1136,21 @@ config SIEMENS_SIMATIC_IPC
->>  	  To compile this driver as a module, choose M here: the module
->>  	  will be called simatic-ipc.
->>
->> +config STEAMDECK
->> +       tristate "Valve Steam Deck platform driver"
->> +       depends on X86_64
->> +       help
->> +         Driver exposing various bits and pieces of functionality
->> +	 provided by Steam Deck specific VLV0100 device presented by
->> +	 EC firmware. This includes but not limited to:
->> +	     - CPU/device's fan control
->> +	     - Read-only access to DDIC registers
->> +	     - Battery tempreature measurements
->> +	     - Various display related control knobs
->> +	     - USB Type-C connector event notification
->> +
->> +	 Say N unless you are running on a Steam Deck.
->> +
->>  endif # X86_PLATFORM_DEVICES
->>
->>  config PMC_ATOM
->> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
->> index c12a9b044fd8..2eb965e14ced 100644
->> --- a/drivers/platform/x86/Makefile
->> +++ b/drivers/platform/x86/Makefile
->> @@ -129,3 +129,5 @@ obj-$(CONFIG_PMC_ATOM)			+= pmc_atom.o
->>
->>  # Siemens Simatic Industrial PCs
->>  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
->> +
->> +obj-$(CONFIG_STEAMDECK)			+= steamdeck.o
->> diff --git a/drivers/platform/x86/steamdeck.c b/drivers/platform/x86/steamdeck.c
->> new file mode 100644
->> index 000000000000..77a6677ec19e
->> --- /dev/null
->> +++ b/drivers/platform/x86/steamdeck.c
->> @@ -0,0 +1,523 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +
->> +/*
->> + * Steam Deck ACPI platform driver
->> + *
->> + * Copyright (C) 2021-2022 Valve Corporation
->> + *
->> + */
->> +#include <linux/acpi.h>
->> +#include <linux/hwmon.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/regmap.h>
->> +#include <linux/extcon-provider.h>
->> +
->> +#define ACPI_STEAMDECK_NOTIFY_STATUS	0x80
->> +
->> +/* 0 - port connected, 1 -port disconnected */
->> +#define ACPI_STEAMDECK_PORT_CONNECT	BIT(0)
->> +/* 0 - Upstream Facing Port, 1 - Downdstream Facing Port */
->> +#define ACPI_STEAMDECK_CUR_DATA_ROLE	BIT(3)
->> +/*
->> + * Debouncing delay to allow negotiation process to settle. 2s value
->> + * was arrived at via trial and error.
->> + */
->> +#define STEAMDECK_ROLE_SWITCH_DELAY	(msecs_to_jiffies(2000))
->> +
->> +struct steamdeck {
->> +	struct acpi_device *adev;
->> +	struct device *hwmon;
->> +	void *regmap;
->> +	long fan_target;
->> +	struct delayed_work role_work;
->> +	struct extcon_dev *edev;
->> +	struct device *dev;
->> +};
->> +
->> +static ssize_t
->> +steamdeck_simple_store(struct device *dev, const char *buf, size_t count,
->> +		       const char *method,
->> +		       unsigned long upper_limit)
->> +{
->> +	struct steamdeck *fan = dev_get_drvdata(dev);
->> +	unsigned long value;
->> +
->> +	if (kstrtoul(buf, 10, &value) || value >= upper_limit)
->> +		return -EINVAL;
->> +
->> +	if (ACPI_FAILURE(acpi_execute_simple_method(fan->adev->handle,
->> +						    (char *)method, value)))
->> +		return -EIO;
->> +
->> +	return count;
->> +}
->> +
->> +#define STEAMDECK_ATTR_WO(_name, _method, _upper_limit)			\
->> +	static ssize_t _name##_store(struct device *dev,		\
->> +				     struct device_attribute *attr,	\
->> +				     const char *buf, size_t count)	\
->> +	{								\
->> +		return steamdeck_simple_store(dev, buf, count,		\
->> +					    _method,			\
->> +					    _upper_limit);		\
->> +	}								\
->> +	static DEVICE_ATTR_WO(_name)
->> +
->> +STEAMDECK_ATTR_WO(target_cpu_temp, "STCT", U8_MAX / 2);
->> +STEAMDECK_ATTR_WO(gain, "SGAN", U16_MAX);
->> +STEAMDECK_ATTR_WO(ramp_rate, "SFRR", U8_MAX);
->> +STEAMDECK_ATTR_WO(hysteresis, "SHTS",  U16_MAX);
->> +STEAMDECK_ATTR_WO(maximum_battery_charge_rate, "CHGR", U16_MAX);
->> +STEAMDECK_ATTR_WO(recalculate, "SCHG", U16_MAX);
->> +
->> +STEAMDECK_ATTR_WO(led_brightness, "CHBV", U8_MAX);
->> +STEAMDECK_ATTR_WO(content_adaptive_brightness, "CABC", U8_MAX);
->> +STEAMDECK_ATTR_WO(gamma_set, "GAMA", U8_MAX);
->> +STEAMDECK_ATTR_WO(display_brightness, "WDBV", U8_MAX);
->> +STEAMDECK_ATTR_WO(ctrl_display, "WCDV", U8_MAX);
->> +STEAMDECK_ATTR_WO(cabc_minimum_brightness, "WCMB", U8_MAX);
->> +STEAMDECK_ATTR_WO(memory_data_access_control, "MDAC", U8_MAX);
->> +
->> +#define STEAMDECK_ATTR_WO_NOARG(_name, _method)				\
->> +	static ssize_t _name##_store(struct device *dev,		\
->> +				     struct device_attribute *attr,	\
->> +				     const char *buf, size_t count)	\
->> +	{								\
->> +		struct steamdeck *fan = dev_get_drvdata(dev);		\
->> +									\
->> +		if (ACPI_FAILURE(acpi_evaluate_object(fan->adev->handle, \
->> +						      _method, NULL, NULL))) \
->> +			return -EIO;					\
->> +									\
->> +		return count;						\
->> +	}								\
->> +	static DEVICE_ATTR_WO(_name)
->> +
->> +STEAMDECK_ATTR_WO_NOARG(power_cycle_display, "DPCY");
->> +STEAMDECK_ATTR_WO_NOARG(display_normal_mode_on, "NORO");
->> +STEAMDECK_ATTR_WO_NOARG(display_inversion_off, "INOF");
->> +STEAMDECK_ATTR_WO_NOARG(display_inversion_on, "INON");
->> +STEAMDECK_ATTR_WO_NOARG(idle_mode_on, "WRNE");
->> +
->> +#define STEAMDECK_ATTR_RO(_name, _method)				\
->> +	static ssize_t _name##_show(struct device *dev,			\
->> +				    struct device_attribute *attr,	\
->> +				    char *buf)				\
->> +	{								\
->> +		struct steamdeck *jup = dev_get_drvdata(dev);		\
->> +		unsigned long long val;					\
->> +									\
->> +		if (ACPI_FAILURE(acpi_evaluate_integer(			\
->> +					 jup->adev->handle,		\
->> +					 _method, NULL, &val)))		\
->> +			return -EIO;					\
->> +									\
->> +		return sprintf(buf, "%llu\n", val);			\
->> +	}								\
->> +	static DEVICE_ATTR_RO(_name)
->> +
->> +STEAMDECK_ATTR_RO(firmware_version, "PDFW");
->> +STEAMDECK_ATTR_RO(board_id, "BOID");
->> +STEAMDECK_ATTR_RO(pdcs, "PDCS");
->> +
->> +static umode_t
->> +steamdeck_is_visible(struct kobject *kobj, struct attribute *attr, int index)
->> +{
->> +	return attr->mode;
->> +}
->> +
->> +static struct attribute *steamdeck_attributes[] = {
->> +	&dev_attr_target_cpu_temp.attr,
->> +	&dev_attr_gain.attr,
->> +	&dev_attr_ramp_rate.attr,
->> +	&dev_attr_hysteresis.attr,
->> +	&dev_attr_maximum_battery_charge_rate.attr,
->> +	&dev_attr_recalculate.attr,
->> +	&dev_attr_power_cycle_display.attr,
->> +
->> +	&dev_attr_led_brightness.attr,
->> +	&dev_attr_content_adaptive_brightness.attr,
->> +	&dev_attr_gamma_set.attr,
->> +	&dev_attr_display_brightness.attr,
->> +	&dev_attr_ctrl_display.attr,
->> +	&dev_attr_cabc_minimum_brightness.attr,
->> +	&dev_attr_memory_data_access_control.attr,
->> +
->> +	&dev_attr_display_normal_mode_on.attr,
->> +	&dev_attr_display_inversion_off.attr,
->> +	&dev_attr_display_inversion_on.attr,
->> +	&dev_attr_idle_mode_on.attr,
->> +
->> +	&dev_attr_firmware_version.attr,
->> +	&dev_attr_board_id.attr,
->> +	&dev_attr_pdcs.attr,
->> +
->> +	NULL
->> +};
->> +
->> +static const struct attribute_group steamdeck_group = {
->> +	.attrs = steamdeck_attributes,
->> +	.is_visible = steamdeck_is_visible,
->> +};
->> +
->> +static const struct attribute_group *steamdeck_groups[] = {
->> +	&steamdeck_group,
->> +	NULL
->> +};
->> +
->> +static int steamdeck_read_fan_speed(struct steamdeck *jup, long *speed)
->> +{
->> +	unsigned long long val;
->> +
->> +	if (ACPI_FAILURE(acpi_evaluate_integer(jup->adev->handle,
->> +					       "FANR", NULL, &val)))
->> +		return -EIO;
->> +
->> +	*speed = val;
->> +	return 0;
->> +}
->> +
->> +static int
->> +steamdeck_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
->> +		     u32 attr, int channel, long *out)
->> +{
->> +	struct steamdeck *sd = dev_get_drvdata(dev);
->> +	unsigned long long val;
->> +
->> +	switch (type) {
->> +	case hwmon_temp:
->> +		if (attr != hwmon_temp_input)
->> +			return -EOPNOTSUPP;
->> +
->> +		if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
->> +						       "BATT", NULL, &val)))
->> +			return -EIO;
->> +		/*
->> +		 * Assuming BATT returns deg C we need to mutiply it
->> +		 * by 1000 to convert to mC
->> +		 */
->> +		*out = val * 1000;
->> +		break;
->> +	case hwmon_fan:
->> +		switch (attr) {
->> +		case hwmon_fan_input:
->> +			return steamdeck_read_fan_speed(sd, out);
->> +		case hwmon_fan_target:
->> +			*out = sd->fan_target;
->> +			break;
->> +		case hwmon_fan_fault:
->> +			if (ACPI_FAILURE(acpi_evaluate_integer(
->> +						 sd->adev->handle,
->> +						 "FANC", NULL, &val)))
->> +				return -EIO;
->> +			/*
->> +			 * FANC (Fan check):
->> +			 * 0: Abnormal
->> +			 * 1: Normal
->> +			 */
->> +			*out = !val;
->> +			break;
->> +		default:
->> +			return -EOPNOTSUPP;
->> +		}
->> +		break;
->> +	default:
->> +		return -EOPNOTSUPP;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int
->> +steamdeck_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
->> +			    u32 attr, int channel, const char **str)
->> +{
->> +	switch (type) {
->> +	case hwmon_temp:
->> +		*str = "Battery Temp";
->> +		break;
->> +	case hwmon_fan:
->> +		*str = "System Fan";
->> +		break;
->> +	default:
->> +		return -EOPNOTSUPP;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int
->> +steamdeck_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
->> +		      u32 attr, int channel, long val)
->> +{
->> +	struct steamdeck *sd = dev_get_drvdata(dev);
->> +
->> +	if (type != hwmon_fan ||
->> +	    attr != hwmon_fan_target)
->> +		return -EOPNOTSUPP;
->> +
->> +	if (val > U16_MAX)
->> +		return -EINVAL;
->> +
->> +	sd->fan_target = val;
->> +
->> +	if (ACPI_FAILURE(acpi_execute_simple_method(sd->adev->handle,
->> +						    "FANS", val)))
->> +		return -EIO;
->> +
->> +	return 0;
->> +}
->> +
->> +static umode_t
->> +steamdeck_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
->> +			   u32 attr, int channel)
->> +{
->> +	if (type == hwmon_fan &&
->> +	    attr == hwmon_fan_target)
->> +		return 0644;
->> +
->> +	return 0444;
->> +}
->> +
->> +static const struct hwmon_channel_info *steamdeck_info[] = {
->> +	HWMON_CHANNEL_INFO(temp,
->> +			   HWMON_T_INPUT | HWMON_T_LABEL),
->> +	HWMON_CHANNEL_INFO(fan,
->> +			   HWMON_F_INPUT | HWMON_F_LABEL |
->> +			   HWMON_F_TARGET | HWMON_F_FAULT),
->> +	NULL
->> +};
->> +
->> +static const struct hwmon_ops steamdeck_hwmon_ops = {
->> +	.is_visible = steamdeck_hwmon_is_visible,
->> +	.read = steamdeck_hwmon_read,
->> +	.read_string = steamdeck_hwmon_read_string,
->> +	.write = steamdeck_hwmon_write,
->> +};
->> +
->> +static const struct hwmon_chip_info steamdeck_chip_info = {
->> +	.ops = &steamdeck_hwmon_ops,
->> +	.info = steamdeck_info,
->> +};
->> +
->> +#define STEAMDECK_STA_OK			\
->> +	(ACPI_STA_DEVICE_ENABLED |		\
->> +	 ACPI_STA_DEVICE_PRESENT |		\
->> +	 ACPI_STA_DEVICE_FUNCTIONING)
->> +
->> +static int
->> +steamdeck_ddic_reg_read(void *context, unsigned int reg, unsigned int *val)
->> +{
->> +	union acpi_object obj = { .type = ACPI_TYPE_INTEGER };
->> +	struct acpi_object_list arg_list = { .count = 1, .pointer = &obj, };
->> +	struct steamdeck *sd = context;
->> +	unsigned long long _val;
->> +
->> +	obj.integer.value = reg;
->> +
->> +	if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
->> +					       "RDDI", &arg_list, &_val)))
->> +		return -EIO;
->> +
->> +	*val = _val;
->> +	return 0;
->> +}
->> +
->> +static int steamdeck_read_pdcs(struct steamdeck *sd, unsigned long long *pdcs)
->> +{
->> +	acpi_status status;
->> +
->> +	status = acpi_evaluate_integer(sd->adev->handle, "PDCS", NULL, pdcs);
->> +	if (ACPI_FAILURE(status)) {
->> +		dev_err(sd->dev, "PDCS evaluation failed: %s\n",
->> +			acpi_format_exception(status));
->> +		return -EIO;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static void steamdeck_usb_role_work(struct work_struct *work)
->> +{
->> +	struct steamdeck *sd =
->> +		container_of(work, struct steamdeck, role_work.work);
->> +	unsigned long long pdcs;
->> +	bool usb_host;
->> +
->> +	if (steamdeck_read_pdcs(sd, &pdcs))
->> +		return;
->> +
->> +	/*
->> +	 * We only care about these two
->> +	 */
->> +	pdcs &= ACPI_STEAMDECK_PORT_CONNECT | ACPI_STEAMDECK_CUR_DATA_ROLE;
->> +
->> +	/*
->> +	 * For "connect" events our role is determined by a bit in
->> +	 * PDCS, for "disconnect" we switch to being a gadget
->> +	 * unconditionally. The thinking for the latter is we don't
->> +	 * want to start acting as a USB host until we get
->> +	 * confirmation from the firmware that we are a USB host
->> +	 */
->> +	usb_host = (pdcs & ACPI_STEAMDECK_PORT_CONNECT) ?
->> +		pdcs & ACPI_STEAMDECK_CUR_DATA_ROLE : false;
->> +
->> +	WARN_ON(extcon_set_state_sync(sd->edev, EXTCON_USB_HOST,
->> +				      usb_host));
->> +	dev_dbg(sd->dev, "USB role is %s\n", usb_host ? "host" : "device");
->> +}
->> +
->> +static void steamdeck_notify(acpi_handle handle, u32 event, void *context)
->> +{
->> +	struct device *dev = context;
->> +	struct steamdeck *sd = dev_get_drvdata(dev);
->> +	unsigned long long pdcs;
->> +	unsigned long delay;
->> +
->> +	switch (event) {
->> +	case ACPI_STEAMDECK_NOTIFY_STATUS:
->> +		if (steamdeck_read_pdcs(sd, &pdcs))
->> +			return;
->> +		/*
->> +		 * We process "disconnect" events immediately and
->> +		 * "connect" events with a delay to give the HW time
->> +		 * to settle. For example attaching USB hub (at least
->> +		 * for HW used for testing) will generate intermediary
->> +		 * event with "host" bit not set, followed by the one
->> +		 * that does have it set.
->> +		 */
->> +		delay = (pdcs & ACPI_STEAMDECK_PORT_CONNECT) ?
->> +			STEAMDECK_ROLE_SWITCH_DELAY : 0;
->> +
->> +		queue_delayed_work(system_long_wq, &sd->role_work, delay);
->> +		break;
->> +	default:
->> +		dev_err(dev, "Unsupported event [0x%x]\n", event);
->> +	}
->> +}
->> +
->> +static void steamdeck_remove_notify_handler(void *data)
->> +{
->> +	struct steamdeck *sd = data;
->> +
->> +	acpi_remove_notify_handler(sd->adev->handle, ACPI_DEVICE_NOTIFY,
->> +				   steamdeck_notify);
->> +	cancel_delayed_work_sync(&sd->role_work);
->> +}
->> +
->> +static const unsigned int steamdeck_extcon_cable[] = {
->> +	EXTCON_USB,
->> +	EXTCON_USB_HOST,
->> +	EXTCON_CHG_USB_SDP,
->> +	EXTCON_CHG_USB_CDP,
->> +	EXTCON_CHG_USB_DCP,
->> +	EXTCON_CHG_USB_ACA,
->> +	EXTCON_NONE,
->> +};
->> +
->> +static int steamdeck_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct steamdeck *sd;
->> +	acpi_status status;
->> +	unsigned long long sta;
->> +	int ret;
->> +
->> +	static const struct regmap_config regmap_config = {
->> +		.reg_bits = 8,
->> +		.val_bits = 8,
->> +		.max_register = 255,
->> +		.cache_type = REGCACHE_NONE,
->> +		.reg_read = steamdeck_ddic_reg_read,
->> +	};
->> +
->> +	sd = devm_kzalloc(dev, sizeof(*sd), GFP_KERNEL);
->> +	if (!sd)
->> +		return -ENOMEM;
->> +	sd->adev = ACPI_COMPANION(&pdev->dev);
->> +	sd->dev = dev;
->> +	platform_set_drvdata(pdev, sd);
->> +	INIT_DELAYED_WORK(&sd->role_work, steamdeck_usb_role_work);
->> +
->> +	status = acpi_evaluate_integer(sd->adev->handle, "_STA",
->> +				       NULL, &sta);
->> +	if (ACPI_FAILURE(status)) {
->> +		dev_err(dev, "Status check failed (0x%x)\n", status);
->> +		return -EINVAL;
->> +	}
->> +
->> +	if ((sta & STEAMDECK_STA_OK) != STEAMDECK_STA_OK) {
->> +		dev_err(dev, "Device is not ready\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	/*
->> +	 * Our ACPI interface doesn't expose a method to read current
->> +	 * fan target, so we use current fan speed as an
->> +	 * approximation.
->> +	 */
->> +	if (steamdeck_read_fan_speed(sd, &sd->fan_target))
->> +		dev_warn(dev, "Failed to read fan speed");
->> +
->> +	sd->hwmon = devm_hwmon_device_register_with_info(dev,
->> +							 "steamdeck",
->> +							 sd,
->> +							 &steamdeck_chip_info,
->> +							 steamdeck_groups);
->> +	if (IS_ERR(sd->hwmon)) {
->> +		dev_err(dev, "Failed to register HWMON device");
->> +		return PTR_ERR(sd->hwmon);
->> +	}
->> +
->> +	sd->regmap = devm_regmap_init(dev, NULL, sd, &regmap_config);
->> +	if (IS_ERR(sd->regmap))
->> +		dev_err(dev, "Failed to register REGMAP");
->> +
->> +	sd->edev = devm_extcon_dev_allocate(dev, steamdeck_extcon_cable);
->> +	if (IS_ERR(sd->edev))
->> +		return -ENOMEM;
->> +
->> +	ret = devm_extcon_dev_register(dev, sd->edev);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to register extcon device: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	/*
->> +	 * Set initial role value
->> +	 */
->> +	queue_delayed_work(system_long_wq, &sd->role_work, 0);
->> +	flush_delayed_work(&sd->role_work);
->> +
->> +	status = acpi_install_notify_handler(sd->adev->handle,
->> +					     ACPI_DEVICE_NOTIFY,
->> +					     steamdeck_notify,
->> +					     dev);
->> +	if (ACPI_FAILURE(status)) {
->> +		dev_err(dev, "Error installing ACPI notify handler\n");
->> +		return -EIO;
->> +	}
->> +
->> +	ret = devm_add_action_or_reset(dev, steamdeck_remove_notify_handler,
->> +				       sd);
->> +	return ret;
->> +}
->> +
->> +static const struct acpi_device_id steamdeck_device_ids[] = {
->> +	{ "VLV0100", 0 },
->> +	{ "", 0 },
->> +};
->> +MODULE_DEVICE_TABLE(acpi, steamdeck_device_ids);
->> +
->> +static struct platform_driver steamdeck_driver = {
->> +	.probe = steamdeck_probe,
->> +	.driver = {
->> +		.name = "steamdeck",
->> +		.acpi_match_table = steamdeck_device_ids,
->> +	},
->> +};
->> +module_platform_driver(steamdeck_driver);
->> +
->> +MODULE_AUTHOR("Andrey Smirnov <andrew.smirnov@gmail.com>");
->> +MODULE_DESCRIPTION("Steam Deck ACPI platform driver");
->> +MODULE_LICENSE("GPL");
->> --
->> 2.25.1
->>
-> 
+>=20
+> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+> ---
+>  drivers/hv/hv_common.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> index 181d16bbf49d..c1dd21d0d7ef 100644
+> --- a/drivers/hv/hv_common.c
+> +++ b/drivers/hv/hv_common.c
+> @@ -79,8 +79,10 @@ int __init hv_common_init(void)
+>  	 * calling crash enlightment interface before running kdump
+>  	 * kernel.
+>  	 */
+> -	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE)
+> +	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
+>  		crash_kexec_post_notifiers =3D true;
+> +		pr_info("Hyper-V: enabling crash_kexec_post_notifiers\n");
+> +	}
+>=20
+>  	/*
+>  	 * Allocate the per-CPU state for the hypercall input arg.
+> --
+> 2.30.2
 

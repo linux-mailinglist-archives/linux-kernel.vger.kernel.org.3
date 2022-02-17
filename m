@@ -2,67 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0E94B9F97
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A17D4B9F9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240138AbiBQMCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:02:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51954 "EHLO
+        id S240207AbiBQMCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:02:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240210AbiBQMCY (ORCPT
+        with ESMTP id S240189AbiBQMCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:02:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4246305
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:02:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D568A612D1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F390C340E9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:02:08 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BorPETqJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645099325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nCRtd9pKms2My+4fOdrY97sIPH9oqF8HF91XcKL/ML8=;
-        b=BorPETqJnKcA2ZaG6Dd0heLU3Uw1v4lq0ptLs8emoe9Hax8xPVho8wbXhlLBYIeoQI4ez3
-        cyFbWvG7QNkiMPEGPF9B7z5DVl0KyyZR6g+hjDCIO9i4LzJEATS1Is7+/fiScq9cvJo8qW
-        Mt2wEEpL+l0VMXT69nSojPn8FaNS4O0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 22c7d7c1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Thu, 17 Feb 2022 12:02:05 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id j12so12508965ybh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:02:05 -0800 (PST)
-X-Gm-Message-State: AOAM532izqWFD78u0trhsx/pR6Mz/PIuXJLjGJwoVSpDFx8exEuwR72/
-        +c/QN1rI6XSpJzG/wHwN8fhXRGlGNWh7JTRmUOY=
-X-Google-Smtp-Source: ABdhPJxqV4CruHjyDFnQhvVF5c53pQ5L7IK+pVx9YR4U6Y4OL7sR35z1LgqYdFsXMSHCqeiaOq2jR5n9jnixhfs3BvU=
-X-Received: by 2002:a05:6902:102a:b0:614:105b:33a6 with SMTP id
- x10-20020a056902102a00b00614105b33a6mr2066427ybt.457.1645099324181; Thu, 17
- Feb 2022 04:02:04 -0800 (PST)
+        Thu, 17 Feb 2022 07:02:18 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F121C62D1;
+        Thu, 17 Feb 2022 04:02:03 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V4keWL7_1645099319;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V4keWL7_1645099319)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 17 Feb 2022 20:02:00 +0800
+From:   Jeffle Xu <jefflexu@linux.alibaba.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com
+Cc:     xiang@kernel.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, willy@infradead.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v3 4/4] cachefiles: detect backing file size in on-demand read mode
+Date:   Thu, 17 Feb 2022 20:01:54 +0800
+Message-Id: <20220217120154.16658-5-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220217120154.16658-1-jefflexu@linux.alibaba.com>
+References: <20220217120154.16658-1-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220215212255.273253-1-Jason@zx2c4.com> <20220215212255.273253-2-Jason@zx2c4.com>
-In-Reply-To: <20220215212255.273253-2-Jason@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 17 Feb 2022 13:01:53 +0100
-X-Gmail-Original-Message-ID: <CAHmME9q6gv8mseUUsYvj7t=m6h0cCfzj7TvFBJW-MSpV8L4fcQ@mail.gmail.com>
-Message-ID: <CAHmME9q6gv8mseUUsYvj7t=m6h0cCfzj7TvFBJW-MSpV8L4fcQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] random: set fast pool count to zero in cpuhp prepare
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sultan Alsawaf <sultan@kerneltoast.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,7 +45,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alas I've finally realized the rollback logic makes this inoperable
-too, in which those workers are unbound at one phase, but then we
-never hit this stage, so we never zero them back. So, a v5 is coming
-up, where I'll implement basically your exact suggestion from before.
+Fscache/cachefiles used to serve as a local cache for remote fs. The
+following patches will introduce a new use case, in which local
+read-only fs could implement on-demand reading with fscache. Then in
+this case, the upper read-only fs may has no idea on the size of the
+backed file.
+
+It is worth nothing that, in this scenario, user daemon is responsible
+for preparing all backing files with correct file size in the first
+beginning. (Backing files are all sparse files in this case). And since
+it's read-only, we can get the backing file size at runtime as the
+object size.
+
+This patch also adds one flag bit to distinguish the new introduced
+on-demand read mode from the original mode. The following patch will
+introduce a user configures it.
+
+Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+---
+ fs/cachefiles/Kconfig    | 13 +++++++++
+ fs/cachefiles/internal.h |  1 +
+ fs/cachefiles/namei.c    | 60 +++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 73 insertions(+), 1 deletion(-)
+
+diff --git a/fs/cachefiles/Kconfig b/fs/cachefiles/Kconfig
+index 719faeeda168..cef412cfd127 100644
+--- a/fs/cachefiles/Kconfig
++++ b/fs/cachefiles/Kconfig
+@@ -26,3 +26,16 @@ config CACHEFILES_ERROR_INJECTION
+ 	help
+ 	  This permits error injection to be enabled in cachefiles whilst a
+ 	  cache is in service.
++
++config CACHEFILES_ONDEMAND
++	bool "Support for on-demand reading"
++	depends on CACHEFILES
++	default n
++	help
++	  This permits on-demand read mode of cachefiles. In this mode, when
++	  cache miss, the cachefiles backend instead of the upper fs using
++	  fscache is responsible for fetching data, e.g. through user daemon.
++	  Then after the data's ready, upper fs can reinitiate a read from the
++	  cache.
++
++	  If unsure, say N.
+diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+index c793d33b0224..6473634c41a9 100644
+--- a/fs/cachefiles/internal.h
++++ b/fs/cachefiles/internal.h
+@@ -98,6 +98,7 @@ struct cachefiles_cache {
+ #define CACHEFILES_DEAD			1	/* T if cache dead */
+ #define CACHEFILES_CULLING		2	/* T if cull engaged */
+ #define CACHEFILES_STATE_CHANGED	3	/* T if state changed (poll trigger) */
++#define CACHEFILES_ONDEMAND_MODE	4	/* T if in on-demand read mode */
+ 	char				*rootdirname;	/* name of cache root directory */
+ 	char				*secctx;	/* LSM security context */
+ 	char				*tag;		/* cache binding tag */
+diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
+index f256c8aff7bb..abe75b4b955f 100644
+--- a/fs/cachefiles/namei.c
++++ b/fs/cachefiles/namei.c
+@@ -510,15 +510,69 @@ struct file *cachefiles_create_tmpfile(struct cachefiles_object *object)
+ 	return file;
+ }
+ 
++#ifdef CONFIG_CACHEFILES_ONDEMAND
++static inline bool cachefiles_can_create_file(struct cachefiles_cache *cache)
++{
++	/*
++	 * On-demand read mode requires that backing files have been prepared
++	 * with correct file size under corresponding directory in the very
++	 * first begginning. We can get here when the backing file doesn't exist
++	 * under corresponding directory, or the file size is unexpected 0.
++	 */
++	return !test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags);
++
++}
++
++/*
++ * Fs using fscache for on-demand reading may have no idea of the file size of
++ * backing files. Thus the on-demand read mode requires that backing files shall
++ * be prepared with correct file size under corresponding directory by the user
++ * daemon in the first beginning. Then the backend is responsible for taking the
++ * file size of the backing file as the object size at runtime.
++ */
++static int cachefiles_recheck_size(struct cachefiles_object *object,
++				   struct file *file)
++{
++	loff_t size;
++	struct cachefiles_cache *cache = object->volume->cache;
++
++	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
++		return 0;
++
++	size = i_size_read(file_inode(file));
++	if (!size)
++		return -EINVAL;
++
++	object->cookie->object_size = size;
++	return 0;
++}
++#else
++static inline bool cachefiles_can_create_file(struct cachefiles_cache *cache)
++{
++	return true;
++}
++
++static inline int cachefiles_recheck_size(struct cachefiles_object *object,
++					  struct file *file)
++{
++	return 0;
++}
++#endif
++
++
+ /*
+  * Create a new file.
+  */
+ static bool cachefiles_create_file(struct cachefiles_object *object)
+ {
++	struct cachefiles_cache *cache = object->volume->cache;
+ 	struct file *file;
+ 	int ret;
+ 
+-	ret = cachefiles_has_space(object->volume->cache, 1, 0,
++	if (!cachefiles_can_create_file(cache))
++		return false;
++
++	ret = cachefiles_has_space(cache, 1, 0,
+ 				   cachefiles_has_space_for_create);
+ 	if (ret < 0)
+ 		return false;
+@@ -573,6 +627,10 @@ static bool cachefiles_open_file(struct cachefiles_object *object,
+ 	}
+ 	_debug("file -> %pd positive", dentry);
+ 
++	ret = cachefiles_recheck_size(object, file);
++	if (ret < 0)
++		goto check_failed;
++
+ 	ret = cachefiles_check_auxdata(object, file);
+ 	if (ret < 0)
+ 		goto check_failed;
+-- 
+2.27.0
+

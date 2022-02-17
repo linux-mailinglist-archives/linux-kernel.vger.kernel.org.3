@@ -2,43 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7F24B9A61
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C66614B9A70
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237011AbiBQH7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 02:59:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47744 "EHLO
+        id S237158AbiBQIAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 03:00:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237415AbiBQH7Z (ORCPT
+        with ESMTP id S237307AbiBQH7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:59:25 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68FEF258625;
-        Wed, 16 Feb 2022 23:58:54 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nKbgi-0000vy-00; Thu, 17 Feb 2022 08:58:52 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0B097C250A; Thu, 17 Feb 2022 08:58:30 +0100 (CET)
-Date:   Thu, 17 Feb 2022 08:58:29 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mips@vger.kernel.org, Rui Salvaterra <rsalvaterra@gmail.com>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
-Message-ID: <20220217075829.GA5185@alpha.franken.de>
-References: <20220211001345.3429572-1-gch981213@gmail.com>
- <20220216195423.GA17551@alpha.franken.de>
- <CAJsYDVJw2DJX97cRwoAofzq_jL0GhyaC5j7UuT6OzC=Lp8WkSQ@mail.gmail.com>
+        Thu, 17 Feb 2022 02:59:43 -0500
+Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A18F22604DF;
+        Wed, 16 Feb 2022 23:59:24 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by ha.nfschina.com (Postfix) with ESMTP id 16B4E1E80D5E;
+        Thu, 17 Feb 2022 15:54:59 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha.nfschina.com ([127.0.0.1])
+        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lt9QN165Z2-3; Thu, 17 Feb 2022 15:54:56 +0800 (CST)
+Received: from [172.30.12.152] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by ha.nfschina.com (Postfix) with ESMTPA id 8BA321E80CB5;
+        Thu, 17 Feb 2022 15:54:56 +0800 (CST)
+Subject: Re: [PATCH] mm: fix dereference a null pointer in
+ migrate[_huge]_page_move_mapping()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220217063808.42018-1-liqiong@nfschina.com>
+ <Yg35UXjB7RpqVCOI@kroah.com>
+From:   =?UTF-8?B?5p2O5Yqb55C8?= <liqiong@nfschina.com>
+Message-ID: <64157952-22d7-b21b-1b08-c784b8eed1fe@nfschina.com>
+Date:   Thu, 17 Feb 2022 15:59:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJsYDVJw2DJX97cRwoAofzq_jL0GhyaC5j7UuT6OzC=Lp8WkSQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
+In-Reply-To: <Yg35UXjB7RpqVCOI@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,52 +52,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 12:06:09PM +0800, Chuanhong Guo wrote:
-> Hi!
-> 
-> On Thu, Feb 17, 2022 at 3:57 AM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > On Fri, Feb 11, 2022 at 08:13:44AM +0800, Chuanhong Guo wrote:
-> > > It's reported that current memory detection code occasionally detects
-> > > larger memory under some bootloaders.
-> > > Current memory detection code tests whether address space wraps around
-> > > on KSEG0, which is unreliable because it's cached.
-> > >
-> > > Rewrite memory size detection to perform the same test on KSEG1 instead.
-> > > While at it, this patch also does the following two things:
-> > > 1. use a fixed pattern instead of a random function pointer as the magic
-> > >    value.
-> > > 2. add an additional memory write and a second comparison as part of the
-> > >    test to prevent possible smaller memory detection result due to
-> > >    leftover values in memory.
-> > >
-> > > Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
-> > > Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
-> > > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> > > ---
-> > >  arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
-> > >  1 file changed, 23 insertions(+), 13 deletions(-)
-> >
-> > applied to mips-fixes.
-> 
-> Oops.
-> 
-> As I mentioned in a previous mail, this patch has two cosmetic problems:
-> 1. misplaced bracket in commit message "Fixes" tag
-> 2. incorrect second test pattern: I meant to flip all the bits in the
-> first pattern,
->    but I used "!" instead of "~". Any value will work just fine but it
-> looks weird
->    to construct a zero using !MT7621_MEM_TEST_PATTERN.
-> 
-> Should I send a second patch to fix this patch or send a v2 of the
-> original patch?
+Hi Greg,
 
-a second patch please.
+Upstream replaces migrate_page_move_mapping() with folio_migrate_mapping(),
+does not use radix tree any more. So, the upstream don't have the null
+pointer bug.
 
-Thomas.
+We found and fix this bug on '4.19.191'.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+在 2022/2/17 下午3:29, Greg KH 写道:
+> On Thu, Feb 17, 2022 at 02:38:08PM +0800, liqiong wrote:
+>> Upstream has no this bug.
+> What do you mean by this?
+>
+> confused,
+>
+> greg k-h

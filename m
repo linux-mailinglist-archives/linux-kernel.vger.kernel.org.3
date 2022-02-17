@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EEF4BA572
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D6B4BA561
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242975AbiBQQJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:09:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52724 "EHLO
+        id S242923AbiBQQGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:06:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242774AbiBQQJk (ORCPT
+        with ESMTP id S236645AbiBQQGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:09:40 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16A0184E47;
-        Thu, 17 Feb 2022 08:09:25 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id hw13so8391657ejc.9;
-        Thu, 17 Feb 2022 08:09:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ys6GvyIzdvZ2LM1dv7bCYtsjMt7DVaFxpDK/D/m+fNU=;
-        b=YDO2Cbqp2Xy7UnC16BUrgaQPd5JEadXK7LanbBRM5YeIKheT3amK7MoTd4JmC38IKB
-         z4rcD4YqFOifcMVee9ahjOLLL1eQOVledHublXzvHQ8XNFh46ZBesQGSNWjc38muCiWp
-         J1KUfC5yzWchQO4uPxrcgQzBaFlbI5Cx9sc2jQjSzBd+b4uRE2MJdXwnCzUO4vpsJub5
-         cSAya6YewswZpgAqpW2yQqqg6hkj/Nf2x2hQ9IB1QAuyGwRU8MT5EVeC2rKNFJKwMNPs
-         ZVBYpsk4SCYjroN7ax4cR20GELreh9yom4/fRE0Ls2lSkr9U3bDIqnw8YNMuhfvEIZqZ
-         VP9Q==
+        Thu, 17 Feb 2022 11:06:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2905229C128
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:05:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645113950;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q8C5mBTF/zQPiu7mRTQ0V1X+3+5OQ4DWAsdzOSei6/I=;
+        b=g0/DkOjF130rSLL0p9nt5505Y/iggj+13Tzt4sfNyOz/3X4rjSLPiNKNyZFolR9QqMVaa8
+        nQ/dVp9CScKvddp+4umIV9KQELbcV7X3b81qf2qDxshcoySmCKlIMhH+Rq9tIwHYsf7pOM
+        6wc0NE72ghfjO/qbzvcwh0T/XrAnELI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-544-2RxFkUvtNtmHCL21JpLsYQ-1; Thu, 17 Feb 2022 11:05:48 -0500
+X-MC-Unique: 2RxFkUvtNtmHCL21JpLsYQ-1
+Received: by mail-wm1-f70.google.com with SMTP id b17-20020a05600c4e1100b0037cc0d56524so4460227wmq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:05:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ys6GvyIzdvZ2LM1dv7bCYtsjMt7DVaFxpDK/D/m+fNU=;
-        b=pCsKuq3F4isqdw1TYihzmHSp3YbA07PVd2xbe+mGgBHb0GEEtkWGqrbKZjpavfYBaE
-         175PxoSwljH0VFvnZRGKP0KAk3mv6xh0wbJ9MLYJxh0YALDvrrQrfzZAh76W0BOrVYVp
-         OB8aG6/nOndsXfmAj0u8p94YWmCxZxOJmQtSP3upO+UEuppKpDv/GqWCsdtkzZ6SwWH9
-         4npTskoNMo9bzyJf7OYAsWGDSvR+3L2BuPfiz+WHuKQAHFupS2uIzCO5A2iaIWCiVsUr
-         GIYGU1EWof90frgAzkXmEEa4/aVUhP4H6voxgoyZmtbTOU9IKLlkWSm/0Gb2CQJcD1Af
-         g+BQ==
-X-Gm-Message-State: AOAM531Q216dk9/gp+sSf1aGzH5rY8ryncSvcnBYrpt+ggftlotYHg8n
-        IvcnkJTQ+aiB//bMQzqx5Co=
-X-Google-Smtp-Source: ABdhPJwhJqSZriQ8pKdVyIFUxb22KfdZARIqPdmMVBQLpozLElaV3GDU7fVmun2Jej0brrbH76hIOg==
-X-Received: by 2002:a17:906:d0ce:b0:6cf:37f0:2718 with SMTP id bq14-20020a170906d0ce00b006cf37f02718mr2947116ejb.224.1645114164144;
-        Thu, 17 Feb 2022 08:09:24 -0800 (PST)
-Received: from hw-dev-vm01.evs.tv ([212.222.125.68])
-        by smtp.gmail.com with ESMTPSA id x14sm3568194edd.63.2022.02.17.08.09.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 08:09:23 -0800 (PST)
-From:   Fred Lefranc <hardware.evs@gmail.com>
-Cc:     Fred Lefranc <hardware.evs@gmail.com>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] net/fsl: fman dt binding: add fsl,max-frm-sz & fsl,rx-extra-headroom properties.
-Date:   Thu, 17 Feb 2022 17:05:27 +0100
-Message-Id: <20220217160528.2662513-2-hardware.evs@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220217160528.2662513-1-hardware.evs@gmail.com>
-References: <20220217160528.2662513-1-hardware.evs@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q8C5mBTF/zQPiu7mRTQ0V1X+3+5OQ4DWAsdzOSei6/I=;
+        b=aUkHEHnvd0dXDDlgPzWAmUVzBh2RwPfD5ILN6zR1N4L0opImG14D2DTXl4OpHEFeyS
+         guR0SLicuFo7FPhH0m8KkjjymW5bUUkXBOXH0itXZ8fmxAI/ZIOAlVLG2fZNS8yDfxgs
+         rTHE5/6c1gUiu/4wSPP/45Dbn0HCPF0wLuBegYXinrDoZXrmGflBJpjfIOTNFO8lLT45
+         ZzhneHqzdKLyRiHH4HMniwokOmQFWfIlliEQXTKSx8YSs9rN83s96TocVXEnwoKuuQUw
+         dSjty0k9gkI9QD7D8Yd0OMgzFgvpakdSwDP0QLdkW27Zmote/mVMvIa+c2Inbek4sEeW
+         6iKA==
+X-Gm-Message-State: AOAM5333tPWZYvLh4zeEXxiczrrDUthPEfx3teX5MWJXlN9k22xwWJ07
+        Vs1kwctb/6oVAvqTWDAWaFhSiE7f2OCRTuP4k/9tz/Dx/Kl4JNbqsCBTPsL9rBy9FOLlCnYD0Be
+        hnsvcpgynlZ7dlPHQR12kgspH
+X-Received: by 2002:adf:e78a:0:b0:1e6:3524:e135 with SMTP id n10-20020adfe78a000000b001e63524e135mr2961069wrm.601.1645113947653;
+        Thu, 17 Feb 2022 08:05:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzVqs24c8i2D8Lt4f9Z4iNheHvxgXvMVn69Wevb7xDbVFxS55ujEEr2K1D18VYZWPyWeX53MQ==
+X-Received: by 2002:adf:e78a:0:b0:1e6:3524:e135 with SMTP id n10-20020adfe78a000000b001e63524e135mr2961045wrm.601.1645113947428;
+        Thu, 17 Feb 2022 08:05:47 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id c17sm1579430wmh.31.2022.02.17.08.05.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 08:05:46 -0800 (PST)
+Message-ID: <3113f00a-e910-2dfb-479f-268566445630@redhat.com>
+Date:   Thu, 17 Feb 2022 17:05:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] KVM: Move VM's worker kthreads back to the original
+ cgroup before exiting.
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        Vipin Sharma <vipinsh@google.com>, seanjc@google.com
+Cc:     kbuild-all@lists.01.org, mkoutny@suse.com, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, dmatlack@google.com,
+        jiangshanlai@gmail.com, kvm@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220217061616.3303271-1-vipinsh@google.com>
+ <202202172046.GuW8pHQc-lkp@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <202202172046.GuW8pHQc-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describes two additional parameters that could be optionally added
-in devicetree.
+On 2/17/22 13:34, kernel test robot wrote:
+>> 5859		reattach_err = cgroup_attach_task_all(current->real_parent, current);
 
-Signed-off-by: Fred Lefranc <hardware.evs@gmail.com>
----
- .../devicetree/bindings/net/fsl-fman.txt      | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+This needs to be within rcu_dereference().
 
-diff --git a/Documentation/devicetree/bindings/net/fsl-fman.txt b/Documentation/devicetree/bindings/net/fsl-fman.txt
-index 020337f3c05f..bcd0cf8ca9e9 100644
---- a/Documentation/devicetree/bindings/net/fsl-fman.txt
-+++ b/Documentation/devicetree/bindings/net/fsl-fman.txt
-@@ -117,6 +117,26 @@ PROPERTIES
- 		erratum A050385 which indicates that DMA transactions that are
- 		split can result in a FMan lock.
- 
-+- fsl,max-frm-sz
-+		Usage: optional
-+		Value type: <u32>
-+		Definition: Max frame size, across all interfaces.
-+ 		Must be large enough to accommodate the network MTU, but small enough
-+ 		to avoid wasting skb memory.
-+		1522 by default.
-+
-+- fsl,rx-extra-headroom
-+		Usage: optional
-+		Value type: <u32>
-+		Definition: Extra headroom for Rx buffers.
-+ 		FMan is instructed to allocate, on the Rx path, this amount of
-+		space at the beginning of a data buffer, beside the DPA private
-+		data area and the IC fields.
-+		Does not impact Tx buffer layout.
-+		64 by default, it's needed on
-+		particular forwarding scenarios that add extra headers to the
-+		forwarded frame.
-+
- =============================================================================
- FMan MURAM Node
- 
--- 
-2.25.1
+Paolo
+
+>    5860		if (reattach_err) {
+>    5861			kvm_err("%s: cgroup_attach_task_all failed on reattach with err %d\n",
+>    5862				__func__, reattach_err);
+>    5863		}
+>    5864		return err;
+>    5865	}
+>    5866	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 

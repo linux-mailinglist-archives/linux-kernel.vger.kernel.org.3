@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1254BA52C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CF84BA528
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239081AbiBQPvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:51:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41044 "EHLO
+        id S239591AbiBQPvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:51:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242620AbiBQPvg (ORCPT
+        with ESMTP id S241539AbiBQPvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:51:36 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DE52B31BE;
-        Thu, 17 Feb 2022 07:51:06 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EF95C210E3;
-        Thu, 17 Feb 2022 15:51:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645113064; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LKo/E9dyb7NvEEgMEIwh2cqUg6haJPksCBJCLqhDMjU=;
-        b=ouf+0/gMjnsv+G2TpNUu6NnOIcZYJuLjYA0H9ZFhuPjY66j1QWkTaRJpH5G1keqmO+9fzO
-        E9lzwz4lAHn5f5DGNHBMW/lQX1jO0VLkkfd0NBhvPktDEyxkEh0HplQrqhVqfPb53gANvY
-        qpZ47QsnmDeclIGjIetSU3j6z+Io2Jk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645113064;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LKo/E9dyb7NvEEgMEIwh2cqUg6haJPksCBJCLqhDMjU=;
-        b=AZY+n4sYyu3MEaw+aR/zNxThVPo665c7de5umURlu3dqC622zsI1ArRdJL+PJQ17Ii+LET
-        nOY6/dyN1LebGwDA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 82D05A3B84;
-        Thu, 17 Feb 2022 15:51:04 +0000 (UTC)
-Date:   Thu, 17 Feb 2022 16:51:04 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Aaron Tomlin <atomlin@redhat.com>
-cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Subject: Re: [PATCH v5 13/13] module: Move version support into a separate
- file
-In-Reply-To: <CANfR36gVY+1k7YJy0fn1z+mGv-LqEmZJSvSHXn_BFR4WC+oJrQ@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2202171648590.29121@pobox.suse.cz>
-References: <20220209171118.3269581-1-atomlin@redhat.com> <20220209171118.3269581-3-atomlin@redhat.com> <14a1678f-0c56-1237-c5c7-4ca1bac4b42a@csgroup.eu> <CANfR36gVY+1k7YJy0fn1z+mGv-LqEmZJSvSHXn_BFR4WC+oJrQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 17 Feb 2022 10:51:41 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27F0185542;
+        Thu, 17 Feb 2022 07:51:15 -0800 (PST)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21HFp9vA004055
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 10:51:10 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 4815815C34C8; Thu, 17 Feb 2022 10:51:09 -0500 (EST)
+Date:   Thu, 17 Feb 2022 10:51:09 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: [PATCH 00/16] DEPT(Dependency Tracker)
+Message-ID: <Yg5u7dzUxL3Vkncg@mit.edu>
+References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > +struct symsearch {
-> > > +    const struct kernel_symbol *start, *stop;
-> > > +    const s32 *crcs;
-> > > +    enum mod_license {
-> > > +        NOT_GPL_ONLY,
-> > > +        GPL_ONLY,
-> > > +    } license;
-> > > +};
-> >
-> > Why don't leave this in main.c ?
+On Thu, Feb 17, 2022 at 07:57:36PM +0900, Byungchul Park wrote:
 > 
-> Yes, struct 'symsearch' is not used outside of kernel/module/main.c.
+> I've got several reports from the tool. Some of them look like false
+> alarms and some others look like real deadlock possibility. Because of
+> my unfamiliarity of the domain, it's hard to confirm if it's a real one.
+> Let me add the reports on this email thread.
 
-It is not, but "struct find_symbol_arg", which you moved, uses "enum 
-mod_license" defined above, so you can either leave it as it is, or carve 
-"enum mod_license" definition out.
+The problem is we have so many potentially invalid, or
+so-rare-as-to-be-not-worth-the-time-to-investigate-in-the-
+grand-scheme-of-all-of-the-fires-burning-on-maintainers laps that it's
+really not reasonable to ask maintainers to determine whether
+something is a false alarm or not.  If I want more of these unreliable
+potential bug reports to investigate, there is a huge backlog in
+Syzkaller.  :-)
 
-Miroslav
+Looking at the second ext4 report, it doesn't make any sense.  Context
+A is the kjournald thread.  We don't do a commit until (a) the timeout
+expires, or (b) someone explicitly requests that a commit happen
+waking up j_wait_commit.  I'm guessing that complaint here is that
+DEPT thinks nothing is explicitly requesting a wake up.  But note that
+after 5 seconds (or whatever journal->j_commit_interval) is configured
+to be we *will* always start a commit.  So ergo, there can't be a deadlock.
+
+At a higher level of discussion, it's an unfair tax on maintainer's
+times to ask maintainers to help you debug DEPT for you.  Tools like
+Syzkaller and DEPT are useful insofar as they save us time in making
+our subsystems better.  But until you can prove that it's not going to
+be a massive denial of service attack on maintainer's time, at the
+*very* least keep an RFC on the patch, or add massive warnings that
+more often than not DEPT is going to be sending maintainers on a wild
+goose chase.
+
+If you know there there "appear to be false positives", you need to
+make sure you've tracked them all down before trying to ask that this
+be merged.
+
+You may also want to add some documentation about why we should trust
+this; in particular for wait channels, when a process calls schedule()
+there may be multiple reasons why the thread will wake up --- in the
+worst case, such as in the select(2) or epoll(2) system call, there
+may be literally thousands of reasons (one for every file desriptor
+the select is waiting on) --- why the process will wake up and thus
+resolve the potential "deadlock" that DEPT is worrying about.  How is
+DEPT going to handle those cases?  If the answer is that things need
+to be tagged, then at least disclose potential reasons why DEPT might
+be untrustworthy to save your reviewers time.
+
+I know that you're trying to help us, but this tool needs to be far
+better than Lockdep before we should think about merging it.  Even if
+it finds 5% more potential deadlocks, if it creates 95% more false
+positive reports --- and the ones it finds are crazy things that
+rarely actually happen in practice, are the costs worth the benefits?
+And who is bearing the costs, and who is receiving the benefits?
+
+Regards,
+
+					- Ted

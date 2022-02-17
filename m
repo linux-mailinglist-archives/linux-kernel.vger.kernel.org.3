@@ -2,127 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6E64BAA78
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798164BAA7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245588AbiBQT6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:58:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36276 "EHLO
+        id S245602AbiBQUAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 15:00:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiBQT6f (ORCPT
+        with ESMTP id S242729AbiBQUAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:58:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7086D289A4;
-        Thu, 17 Feb 2022 11:58:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C62CB821B4;
-        Thu, 17 Feb 2022 19:58:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA72C340E8;
-        Thu, 17 Feb 2022 19:58:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645127897;
-        bh=tIS1dG2zy1RRVA9bGHHwQ8vHAQt589WIAKZ0K8nnK9w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GQ2o3jDKhjfTmO1B8QNxXTbawirq/JvPaNVCKbG/1MmnLnvEBGkZjQtv5qcwXDefX
-         EDxAs9yAq3rt4vjzibnccRr1nTecBADIjqqzN2dx8XGeILA3w/ELpZ73JPWVjI9HOy
-         f3Y5Ia3wBxh1DZGlzT9SzGERZVvTb2m3nru6INvtl5lBO1lyT+fgI6yqr6edmpmYRE
-         Yjvj4SVfJKwTKt1WSjyuYSE8u+dq3+bGbwK8u0eMv+1bou9m4Z2g1oVNof6xiWHf9c
-         nxQGVullUol7/LIVSinq9JecwyEPmgZkJ7M2MkFCVTb54T/R8/cwopRLJOMNXn9uCU
-         u8OgfNrE8rzIA==
-Date:   Thu, 17 Feb 2022 20:58:52 +0100
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
-Message-ID: <Yg6o/ARtOIwuBFsW@iki.fi>
-References: <20210712170313.884724-1-mic@digikod.net>
- <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
- <YcGVZitNa23PCSFV@iki.fi>
- <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net>
- <Ydc/E3S2vmtDOnpw@iki.fi>
- <YddADJJNLDlQAYRW@iki.fi>
- <86c5010e-a926-023a-8915-d6605cfc4f0a@digikod.net>
- <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
+        Thu, 17 Feb 2022 15:00:10 -0500
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BBD29CBA;
+        Thu, 17 Feb 2022 11:59:55 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2d07ae0b1c4so44194027b3.11;
+        Thu, 17 Feb 2022 11:59:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ibo+ljOZltOHxbfiowmfbU4E0+eJxT2hqrSRwf9WFds=;
+        b=8QZY6lI3jXqcmpyxtXp6jocIXp+NaqQEOdv82LkssGAMEw33X5Xb1fBc9U7Ou9MwG5
+         L+PO0aAH9NNHqQ8igYgC+8x/sU4mVB3dwiNnptt39uQCSlqOrODomZBc61dMe2+taNa/
+         QzHmVoMu9S3EEopnFpBp9TIcNLbRcpVuN/Yoa9eV1vWCxm9fTo0S8AaURnpG6K72SFKF
+         YpxQB+s4RRI0Ae0hK8mL8/tbBmP8ZIs+j0g2WeBMJwNg49FkNcoEYr5y38PhvINNWGhH
+         qcqBGIpH042TRKsR3HFNGaL22FX3F8a/ry+xwJWFRwg5lcw5/eERA4y4z8M1cG65SbJa
+         D/xg==
+X-Gm-Message-State: AOAM530Wmm/qm4FgcZzPd6Wv0rRtwjQop4Bzh7zB2nXDqy7teYYZXKKa
+        fY98kaWUZYOnU5sf2glz4a3fjK1oJdKJ2zeI98Q=
+X-Google-Smtp-Source: ABdhPJwlk5R6MoRUjz/JC7Tw0qXkBl+ocvndg0AZSGM/zqGcn1E5R+qvJ84SwxiZUzksJsAeR9TK1MS/AgCsiy5JmKk=
+X-Received: by 2002:a81:1cd8:0:b0:2d6:b74b:5b55 with SMTP id
+ c207-20020a811cd8000000b002d6b74b5b55mr1649314ywc.149.1645127994670; Thu, 17
+ Feb 2022 11:59:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220215035553.102315-1-ilkka@os.amperecomputing.com> <20220215035553.102315-2-ilkka@os.amperecomputing.com>
+In-Reply-To: <20220215035553.102315-2-ilkka@os.amperecomputing.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 17 Feb 2022 20:59:43 +0100
+Message-ID: <CAJZ5v0h7hCQLQP7-uF+Zh6Yx11AxxYK3rjLS17XHfA17z8fR0Q@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] ACPI: tables: Add AGDI to the list of known table signatures
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patches@amperecomputing.com, scott@os.amperecomputing.com,
+        darren@os.amperecomputing.com, James Morse <james.morse@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 12:33:51PM +0100, Mickaël Salaün wrote:
-> 
-> On 07/01/2022 13:14, Mickaël Salaün wrote:
-> > 
-> > On 06/01/2022 20:16, Jarkko Sakkinen wrote:
-> > > On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
-> > > > On Tue, Jan 04, 2022 at 04:56:36PM +0100, Mickaël Salaün wrote:
-> > > > > 
-> > > > > On 21/12/2021 09:50, Jarkko Sakkinen wrote:
-> > > > > > On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
-> > > > > > > Hi Jarkko,
-> > > > > > > 
-> > > > > > > Since everyone seems OK with this and had plenty of
-> > > > > > > time to complain, could
-> > > > > > > you please take this patch series in your tree? It still applies on
-> > > > > > > v5.16-rc5 and it is really important to us. Please
-> > > > > > > let me know if you need
-> > > > > > > something more.
-> > > > > > > 
-> > > > > > > Regards,
-> > > > > > >    Mickaël
-> > > > > > 
-> > > > > > I'm off-work up until end of the year, i.e. I will
-> > > > > > address only important
-> > > > > > bug fixes and v5.16 up until that.
-> > > > > > 
-> > > > > > If any of the patches is yet missing my ack, feel free to
-> > > > > > 
-> > > > > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > > 
-> > > > > Thanks Jarkko. Can you please take it into your tree?
-> > > > 
-> > > > I can yes, as I need to anyway do a revised PR for v5.17, as one commit
-> > > > in my first trial had a truncated fixes tag.
-> > > 
-> > > Please check:
-> > > 
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-> > > 
-> > > /Jarkko
-> > 
-> > Great, thanks!
-> 
-> Hi Jarkko,
-> 
-> I noticed your commits https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=3ec9c3a0531ac868422be3b12fc17310ed8c07dc
-> are no more referenced in your tree. Is there an issue?
+On Tue, Feb 15, 2022 at 4:56 AM Ilkka Koskinen
+<ilkka@os.amperecomputing.com> wrote:
+>
+> Add AGDI to the list of known ACPI table signatures to allow the
+> kernel to recognize it when upgrading tables via initrd.
+>
+> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-This must be some sort of mistake I've made. I'll re-apply the patches.
-Sorry about this.
+This is fine with me and please route the series through arm64.  Thanks!
 
-BR, Jarkko
+> ---
+>  drivers/acpi/tables.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
+> index 2d7ed7126faa..ae29b13b8774 100644
+> --- a/drivers/acpi/tables.c
+> +++ b/drivers/acpi/tables.c
+> @@ -545,7 +545,7 @@ static const char table_sigs[][ACPI_NAMESEG_SIZE] __initconst = {
+>         ACPI_SIG_WDDT, ACPI_SIG_WDRT, ACPI_SIG_DSDT, ACPI_SIG_FADT,
+>         ACPI_SIG_PSDT, ACPI_SIG_RSDT, ACPI_SIG_XSDT, ACPI_SIG_SSDT,
+>         ACPI_SIG_IORT, ACPI_SIG_NFIT, ACPI_SIG_HMAT, ACPI_SIG_PPTT,
+> -       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT };
+> +       ACPI_SIG_NHLT, ACPI_SIG_AEST, ACPI_SIG_CEDT, ACPI_SIG_AGDI };
+>
+>  #define ACPI_HEADER_SIZE sizeof(struct acpi_table_header)
+>
+> --
+> 2.17.1
+>

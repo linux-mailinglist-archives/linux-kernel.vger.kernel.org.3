@@ -2,172 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DD74BAAA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 313B54BAAB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245729AbiBQUMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 15:12:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56118 "EHLO
+        id S245691AbiBQUTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 15:19:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243775AbiBQUMT (ORCPT
+        with ESMTP id S231553AbiBQUTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 15:12:19 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF34A9E27;
-        Thu, 17 Feb 2022 12:12:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1645128703;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=Message-Id:To:Cc:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=/ncdnXpbY4SFFS0er1tKwPrwjg499WQ61cmVGx8FfzE=;
-    b=i0oHJm1x9dwBejUmyWB+pi02WpJ2jLG6/kipDEZSa5Abus1VKAJGH5U3c7X03Dh1Cw
-    L37QWgHPMmr/Wl9HVFyd0pCaVADPqutNu3aTi7EuigNdOxy5Fb8WfS5sSn7/njlFTvPz
-    4hrh/M6r7e7o7EQ3LFl9CmI2BwsSZ6nBw5ArCbQ3cgd4HjFyrsAX732yWB8umwZNmngS
-    QWdKCTy9k3ZOeKEWRlNBit1D3mKAo3svSkkKC624E02zqUfiXGhdgmuopcTKMgI0ouTI
-    WxxHwZkjuakJD3bo2JKIwuPaTvbmFEkRBbFl2hK829cXuf297uxH3a5Qha+yaThnj1v3
-    RjVg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4SA"
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.39.2 DYNA|AUTH)
-    with ESMTPSA id Rb8524y1HKBh0LP
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 17 Feb 2022 21:11:43 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Date:   Thu, 17 Feb 2022 21:11:40 +0100
-Subject: [BUG] mmc: core: adjust polling interval for CMD1
-Cc:     Jean Rene Dawin <jdawin@math.uni-bielefeld.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Tony Lindgren <tony@atomide.com>
-To:     Huijin Park <huijin.park@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Message-Id: <27DDB061-1235-4F4C-B6A8-F035D77AC9CF@goldelico.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Feb 2022 15:19:22 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5615D189;
+        Thu, 17 Feb 2022 12:19:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645129148; x=1676665148;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yh8fUoXh79fS9tMsEOb8wgZoSRTMtMmtTdQN/QJbHJA=;
+  b=G2wOtGc/yDDNsBnNq96FTXOCZpP/zfbI5iOFJ6LIHbhTTgz1CEOQSi37
+   2gSpqcVz9CdEjcs37ww8p6K415QeMnfox2D6xw1td7QMlMUlhXHbwqSC9
+   SDRMwDLS/RKuyzjopJa0qCz4/UAC4K4zm/sIG0XGc1aahrPbGtfAizNny
+   EoxHiSObeYndx+T/vcDcnwUsfhWDuiU4m1yL/xP/uIleXDgdvGzxvaiF/
+   pzSEtnueAxqnU5jx65JFA1pphepgc2v/hXGi8vrq7MctlEcKRbTm5cLkb
+   iHr8NTEMwJS9Y775lhom4RT+u9Zqnvgyv1joBrumB8Y6JLCDUOLh9Nm8U
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="234497386"
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="234497386"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 12:19:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="589718320"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Feb 2022 12:19:03 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKnF0-0000bi-KF; Thu, 17 Feb 2022 20:19:02 +0000
+Date:   Fri, 18 Feb 2022 04:18:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
+        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, rohitkr@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org
+Cc:     kbuild-all@lists.01.org,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH] ASoC: codecs: Add power domains support in digital macro
+ codecs
+Message-ID: <202202180450.f9HRZqEk-lkp@intel.com>
+References: <1645108786-25990-1-git-send-email-quic_srivasam@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645108786-25990-1-git-send-email-quic_srivasam@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-Jean Rene Dawin did report to me a problem on the Beagle Bone Black =
-starting
-with our disto kernel based on v5.17-rc1:
+Hi Srinivasa,
 
->> since kernel 5.17-rc1 I noticed slower emmc performance on Beaglebone
->> Black, but didn't check the logs.
->> When I tried to run 5.17.0-rc3-letux+ it booted fine, but during IO
->> traffic there were messages like
->>=20
->> [  662.529584] mmc1: error -110 doing runtime resume
->> [  669.293590] mmc1: Card stuck being busy! __mmc_poll_for_busy
->>=20
->> [  739.076072] mmc1: Timeout waiting for hardware interrupt.
->> [  739.145676] mmc1: sdhci: =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
-SDHCI REGISTER DUMP =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> [  739.231053] mmc1: sdhci: Sys addr:  0x00000000 | Version:  =
-0x00003101
->> [  739.316472] mmc1: sdhci: Blk size:  0x00000200 | Blk cnt:  =
-0x00000400
->> [  739.401937] mmc1: sdhci: Argument:  0x00342d30 | Trn mode: =
-0x00000023
->> [  739.487439] mmc1: sdhci: Present:   0x01f70000 | Host ctl: =
-0x00000000
->> [  739.573007] mmc1: sdhci: Power:     0x0000000f | Blk gap:  =
-0x00000000
->> [  739.658609] mmc1: sdhci: Wake-up:   0x00000000 | Clock:    =
-0x00003c07
->> [  739.744224] mmc1: sdhci: Timeout:   0x00000007 | Int stat: =
-0x00000002
->> [  739.829896] mmc1: sdhci: Int enab:  0x027f000b | Sig enab: =
-0x027f000b
->> [  739.915623] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: =
-0x00000001
->> [  740.001394] mmc1: sdhci: Caps:      0x07e10080 | Caps_1:   =
-0x00000000
->> [  740.087208] mmc1: sdhci: Cmd:       0x0000193a | Max curr: =
-0x00000000
->> [  740.173051] mmc1: sdhci: Resp[0]:   0x00000900 | Resp[1]:  =
-0x00000000
->> [  740.258928] mmc1: sdhci: Resp[2]:   0x00000000 | Resp[3]:  =
-0x00000000
->> [  740.344854] mmc1: sdhci: Host ctl2: 0x00000000
->> [  740.402796] mmc1: sdhci: =
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->>=20
->> and finally IO errors and a corrupted filesystem.
->>=20
->> 5.17.0-rc4-letux+ shows the same behaviour.
+Thank you for the patch! Yet something to improve:
 
-I checked with my BeagleBoard Black (am3358) and can confirm this =
-observation.
-It happens only with the integrated eMMC but not with the =C2=B5SD =
-connected to
-the other mmc interface.
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on next-20220217]
+[cannot apply to v5.17-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-A git bisect found:
+url:    https://github.com/0day-ci/linux/commits/Srinivasa-Rao-Mandadapu/ASoC-codecs-Add-power-domains-support-in-digital-macro-codecs/20220217-224032
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+config: nios2-randconfig-r014-20220217 (https://download.01.org/0day-ci/archive/20220218/202202180450.f9HRZqEk-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/a1e8b5e6a2baa8ce5b2373bfbdfce5a771132448
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Srinivasa-Rao-Mandadapu/ASoC-codecs-Add-power-domains-support-in-digital-macro-codecs/20220217-224032
+        git checkout a1e8b5e6a2baa8ce5b2373bfbdfce5a771132448
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-76bfc7ccc2fa9d382576f6013b57a0ef93d5a722 is the first bad commit
-commit 76bfc7ccc2fa9d382576f6013b57a0ef93d5a722
-Author: Huijin Park <huijin.park@samsung.com>
-Date:   Thu Nov 4 15:32:31 2021 +0900
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  mmc: core: adjust polling interval for CMD1
+All errors (new ones prefixed by >>):
 
-  In mmc_send_op_cond(), loops are continuously performed at the same
-  interval of 10 ms.  However the behaviour is not good for some eMMC
-  which can be out from a busy state earlier than 10 ms if normal.
+   nios2-linux-ld: sound/soc/codecs/lpass-va-macro.o: in function `va_macro_probe':
+>> lpass-va-macro.c:(.text+0x918): undefined reference to `lpass_macro_pds_init'
+   lpass-va-macro.c:(.text+0x918): relocation truncated to fit: R_NIOS2_CALL26 against `lpass_macro_pds_init'
+   nios2-linux-ld: sound/soc/codecs/lpass-va-macro.o: in function `va_macro_remove':
+>> lpass-va-macro.c:(.text+0xec0): undefined reference to `lpass_macro_pds_exit'
+   lpass-va-macro.c:(.text+0xec0): relocation truncated to fit: R_NIOS2_CALL26 against `lpass_macro_pds_exit'
+   nios2-linux-ld: sound/soc/codecs/lpass-rx-macro.o: in function `rx_macro_probe':
+>> lpass-rx-macro.c:(.text+0x1cb8): undefined reference to `lpass_macro_pds_init'
+   lpass-rx-macro.c:(.text+0x1cb8): relocation truncated to fit: R_NIOS2_CALL26 against `lpass_macro_pds_init'
+   nios2-linux-ld: sound/soc/codecs/lpass-rx-macro.o: in function `rx_macro_remove':
+>> lpass-rx-macro.c:(.text+0x2188): undefined reference to `lpass_macro_pds_exit'
+   lpass-rx-macro.c:(.text+0x2188): relocation truncated to fit: R_NIOS2_CALL26 against `lpass_macro_pds_exit'
+   nios2-linux-ld: net/core/sock.o: in function `sk_destruct':
+   sock.c:(.text+0x23bc): undefined reference to `__sk_defer_free_flush'
+   sock.c:(.text+0x23bc): relocation truncated to fit: R_NIOS2_CALL26 against `__sk_defer_free_flush'
 
-  Rather than fixing about the interval time in mmc_send_op_cond(),
-  let's instead convert into using the common __mmc_poll_for_busy().
-
-  The reason for adjusting the interval time is that it is important
-  to reduce the eMMC initialization time, especially in devices that
-  use eMMC as rootfs.
-
-  Test log(eMMC:KLM8G1GETF-B041):
-
-  before: 12 ms (0.311016 - 0.298729)
-  [    0.295823] mmc0: starting CMD0 arg 00000000 flags 000000c0
-  [    0.298729] mmc0: starting CMD1 arg 40000080 flags 000000e1<-start
-  [    0.311016] mmc0: starting CMD1 arg 40000080 flags 000000e1<-finish
-  [    0.311336] mmc0: starting CMD2 arg 00000000 flags 00000007
-
-  after: 2 ms (0.301270 - 0.298762)
-  [    0.295862] mmc0: starting CMD0 arg 00000000 flags 000000c0
-  [    0.298762] mmc0: starting CMD1 arg 40000080 flags 000000e1<-start
-  [    0.299067] mmc0: starting CMD1 arg 40000080 flags 000000e1
-  [    0.299441] mmc0: starting CMD1 arg 40000080 flags 000000e1
-  [    0.299879] mmc0: starting CMD1 arg 40000080 flags 000000e1
-  [    0.300446] mmc0: starting CMD1 arg 40000080 flags 000000e1
-  [    0.301270] mmc0: starting CMD1 arg 40000080 flags 000000e1<-finish
-  [    0.301572] mmc0: starting CMD2 arg 00000000 flags 00000007
-
-  Signed-off-by: Huijin Park <huijin.park@samsung.com>
-  Link: =
-https://lore.kernel.org/r/20211104063231.2115-3-huijin.park@samsung.com
-  Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Reverting this makes v5.17-rc[1-4] work.
-
-Any suggestions or fixes?
-
-BR and thanks,
-Nikolaus Schaller
-
-Reported-by: jdawin@math.uni-bielefeld.de
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,82 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38424BA611
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7B14BA624
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243271AbiBQQfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:35:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38688 "EHLO
+        id S243318AbiBQQiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:38:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243265AbiBQQfc (ORCPT
+        with ESMTP id S243039AbiBQQiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:35:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 857B02B2E13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:35:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645115716;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c2fq/Ny4lMJaIMatRd00hK6MYEHazev14fwhUdBFReI=;
-        b=f/ASZwQzKkhi9PI2IXiMlOH/VWH/XCCGOs7VRLaxRB5AN9aakkft+FdRpXXYfKevAeRNEW
-        ERKS8xVi0c0Md21jYZVdHZgwONevVFkcFFq7y3qpMfp0ph+urYmKwnVjtwXCdv/hRQVjxJ
-        I98EZGKbeJy/vS4J7pGdB6/QaIuVxWE=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-9-MRBC2VlhNbiV0sNNsG689Q-1; Thu, 17 Feb 2022 11:35:15 -0500
-X-MC-Unique: MRBC2VlhNbiV0sNNsG689Q-1
-Received: by mail-ej1-f72.google.com with SMTP id hc39-20020a17090716a700b006ce88cf89dfso1763832ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:35:14 -0800 (PST)
+        Thu, 17 Feb 2022 11:38:15 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1402B3191
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:38:00 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id q17so10715844edd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UONcOwfoMw9pDe0rAm3joCYRBAlJSecwdegwEBnOH94=;
+        b=BtDO6RRgSUv6ucKn+TGhcqPblYqbEYF7TwKvQNAFwkl2M7GjGv8hef8O/yBTGEHQPq
+         P/sbxxp3UcCm26QbSnlduFWQh7o0rjHbP6Y3novYM+F8S6LDHRWACDrnYUcNJfsOAFQa
+         KqvWJsy8MTLOwCtpGXPEDjeAQUGhIaQqPHS2Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c2fq/Ny4lMJaIMatRd00hK6MYEHazev14fwhUdBFReI=;
-        b=CJatP58AdTwWeeX5BXkW6FSctyj9ojLhpEIAaDaP68ki0WNCfzUD+kso9Y1agGGb5Z
-         T7YAlGIKHkRn2c+N69EU6QH+W8bpzvcToubZyk548jWa1I3ZQ+jnSgFlE21GT1bJi5Y0
-         bVcXx3micWCVcwkRWPFk31w/iPedNuoBIIWupUWyd23HyOEarJGVEtQCvzfeSNPJ/XEv
-         pOj9RfNqI7ABZGpOXjTFWdDdMKUErw8aToeVJe/3y8R76Vky1oP9EEInjO226rBrWP1i
-         bU7OCarFHA/QxwwsL17qi18BzJDOkywNanaqZYwCSlpnlko7wFSQJOdqN7LVYSlLgJ+X
-         vtmg==
-X-Gm-Message-State: AOAM533PRBj4N7D9Qscf1JU8XaMUWDmBndM02H7FMj8PqDBSy1eSmrjK
-        ihwtnrEwCZXpx4lFi7EIUOv1Y188KASAbXm9AycUADhCNwdZawwIOcIAAen01X5oEsRtdasyJ5H
-        eQJniYt567sYsK/U4PiACw2By
-X-Received: by 2002:a50:d79d:0:b0:410:82a0:5d76 with SMTP id w29-20020a50d79d000000b0041082a05d76mr3531290edi.130.1645115713910;
-        Thu, 17 Feb 2022 08:35:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwy1XOj60hZ2Xgf9leB0ov3CtVqqw7iUj8h3GXaY1TNAUOjvJWy/8ifdMYStkE127/Ixy5g6A==
-X-Received: by 2002:a50:d79d:0:b0:410:82a0:5d76 with SMTP id w29-20020a50d79d000000b0041082a05d76mr3531272edi.130.1645115713760;
-        Thu, 17 Feb 2022 08:35:13 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id q5sm1319255ejc.115.2022.02.17.08.35.13
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UONcOwfoMw9pDe0rAm3joCYRBAlJSecwdegwEBnOH94=;
+        b=kpSbz/aJ0MMIjChbc1HgJc60Sc+C8yTU/63fU30IEEUh7kbAFQNTbZhfhA4Jh32ktB
+         squgh4+GjEKVJFsbUDLIFM6xVB9bJFB7Ugp7sAzqNr5YHJdqzLEuY5me4wt0yRVdV/LL
+         AokyOaVYUGIUO1ghT+YWZj3ZRrMItX2/8iKfAKDpU++M/OKEcc816DhaqRvfywcK+Q/q
+         sUSvi9TA6XYc/8I4NYure+0Th5lc5ZAXbhC6htHq6rF9/LPIfpLkV8m0YAJA9eX1xqIp
+         RxNj8y3Mny322psCSiWa6GAeMulrQH9y92ntyuClHII3dvqPheTnDZkR9gzHjn6iH7av
+         sC/A==
+X-Gm-Message-State: AOAM533r7/hR2KrwidGUDtfVr9c3nCf7nNnSRXOYpWWHUgamynBA3K80
+        bmMz7mD1dOWrgtJrai60ZFN87zAoyI/x9eBD2Mc=
+X-Google-Smtp-Source: ABdhPJwuLbin9B5YUBaqDf7f2+n8dqbSHTNQeP21b6HVA6hyQyZjp76AwlwUNJl0/dgf2qJ6pBQCJg==
+X-Received: by 2002:a05:6402:1d49:b0:412:8cf5:73fa with SMTP id dz9-20020a0564021d4900b004128cf573famr3563338edb.334.1645115878720;
+        Thu, 17 Feb 2022 08:37:58 -0800 (PST)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id f22sm1361112ejl.46.2022.02.17.08.37.55
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 08:35:13 -0800 (PST)
-Message-ID: <2482eae0-ad8c-3fda-1d0e-f8794c50192d@redhat.com>
-Date:   Thu, 17 Feb 2022 17:35:12 +0100
+        Thu, 17 Feb 2022 08:37:56 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id w11so10049815wra.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:37:55 -0800 (PST)
+X-Received: by 2002:a5d:4c48:0:b0:1e4:aeab:c77e with SMTP id
+ n8-20020a5d4c48000000b001e4aeabc77emr2927222wrt.342.1645115875087; Thu, 17
+ Feb 2022 08:37:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
-Content-Language: en-US
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        platform-driver-x86@vger.kernel.org
-Cc:     Mark Gross <markgross@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220206022023.376142-1-andrew.smirnov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220207073036.14901-1-lukasz.luba@arm.com> <20220207073036.14901-2-lukasz.luba@arm.com>
+ <YgG+TmLrCSXX4Bvt@google.com> <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+ <YgKnnFl7Gp8AS30X@google.com> <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
+ <YgQ9XLcto9v0fyTf@google.com> <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org> <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+In-Reply-To: <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 17 Feb 2022 08:37:39 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
+Message-ID: <CAD=FV=WMaMP84YLZxBZbj4DJSgcDLVkSHf4QdDwtFfp8UbyE7A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        jorcrous@amazon.com, Rob Clark <robdclark@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,64 +93,150 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 2/6/22 03:20, Andrey Smirnov wrote:
-> Add a driver exposing various bits and pieces of functionality
-> provided by Steam Deck specific VLV0100 device presented by EC
-> firmware. This includes but not limited to:
-> 
->     - CPU/device's fan control
->     - Read-only access to DDIC registers
->     - Battery tempreature measurements
->     - Various display related control knobs
->     - USB Type-C connector event notification
-> 
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-kernel@vger.kernel.org (open list)
-> Cc: platform-driver-x86@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+On Thu, Feb 17, 2022 at 2:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Daniel,
+>
+> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
+> > On 16/02/2022 18:33, Doug Anderson wrote:
+> >> Hi,
+> >>
+> >> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>>
+> >>> Hi Matthias,
+> >>>
+> >>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+> >>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+> >>>>>
+> >>>>>
+> >>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+> >>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+> >>>>>>>
+> >>>>>>>
+> >>>
+> >>> [snip]
+> >>>
+> >>>>>>> Could you point me to those devices please?
+> >>>>>>
+> >>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+> >>>>>>
+> >>>>>> Though as per above they shouldn't be impacted by your change,
+> >>>>>> since the
+> >>>>>> CPUs always pretend to use milli-Watts.
+> >>>>>>
+> >>>>>> [skipped some questions/answers since sc7180 isn't actually
+> >>>>>> impacted by
+> >>>>>>     the change]
+> >>>>>
+> >>>>> Thank you Matthias. I will investigate your setup to get better
+> >>>>> understanding.
+> >>>>
+> >>>> Thanks!
+> >>>>
+> >>>
+> >>> I've checked those DT files and related code.
+> >>> As you already said, this patch is safe for them.
+> >>> So we can apply it IMO.
+> >>>
+> >>>
+> >>> -------------Off-topic------------------
+> >>> Not in $subject comments:
+> >>>
+> >>> AFAICS based on two files which define thermal zones:
+> >>> sc7180-trogdor-homestar.dtsi
+> >>> sc7180-trogdor-coachz.dtsi
+> >>>
+> >>> only the 'big' cores are used as cooling devices in the
+> >>> 'skin_temp_thermal' - the CPU6 and CPU7.
+> >>>
+> >>> I assume you don't want to model at all the power usage
+> >>> from the Little cluster (which is quite big: 6 CPUs), do you?
+> >>> I can see that the Little CPUs have small dyn-power-coeff
+> >>> ~30% of the big and lower max freq, but still might be worth
+> >>> to add them to IPA. You might give them more 'weight', to
+> >>> make sure they receive more power during power split.
+> >>>
+> >>> You also don't have GPU cooling device in that thermal zone.
+> >>> Based on my experience if your GPU is a power hungry one,
+> >>> e.g. 2-4Watts, you might get better results when you model
+> >>> this 'hot' device (which impacts your temp sensor reported value).
+> >>
+> >> I think the two boards you point at (homestar and coachz) are just the
+> >> two that override the default defined in the SoC dtsi file. If you
+> >> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+> >> map. You can also see the cooling maps for the littles.
+> >>
+> >> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+> >> though? Seems like we should, but I haven't dug through all the code
+> >> here...
+> >
+> > The dynamic-power-coefficient is available for OPPs which includes
+> > CPUfreq and devfreq. As the GPU is managed by devfreq, setting the
+> > dynamic-power-coefficient makes the energy model available for it.
+> >
+> > However, the OPPs must define the frequency and the voltage. That is the
+> > case for most platforms except on QCom platform.
+> >
+> > That may not be specified as it uses a frequency index and the hardware
+> > does the voltage change in our back. The QCom cpufreq backend get the
+> > voltage table from a register (or whatever) and completes the voltage
+> > values for the OPPs, thus adding the information which is missing in the
+> > device tree. The energy model can then initializes itself and allows the
+> > usage of the Energy Aware Scheduler.
+> >
+> > However this piece of code is missing for the GPU part.
+> >
+>
+> Thank you for joining the discussion. I don't know about that Qcom
+> GPU voltage information is missing.
+>
+> If the voltage is not available (only the frequencies), there is
+> another way. There is an 'advanced' EM which uses registration function:
+> em_dev_register_perf_domain(). It uses a local driver callback to get
+> power for each found frequency. It has benefit because there is no
+> restriction to 'fit' into the math formula, instead just avg power
+> values can be feed into EM. It's called 'advanced' EM [1].
 
-The .c file says: "Copyright (C) 2021-2022 Valve Corporation", yet
-you use a personal email address here. This is not really a problem,
-but it does look a bit weird.
+It seems like there _should_ be a way to get the voltage out for GPU
+operating points, like is done with cpufreq in
+qcom_cpufreq_hw_read_lut(), but it might need someone with Qualcomm
+documentation to help with it. Maybe Rajendra would be able to help?
+Adding Jordon and Rob to this conversation in case they're aware of
+anything.
 
-> ---
-> 
-> This driver is really a kitchen sink of various small bits. Maybe it
-> is worth splitting into an MFD + child drivers/devices?
+As you said, we could just list a power for each frequency, though.
 
-With the extcon stuff thrown in the mix I think you definitely should
-go for using MFD here.
-
-Then you can submit a MFD driver under drivers/mfd for registering the
-regmap + the cells + separate extcon + LED + backlight + hwmon drivers to
-their resp. subsystems.
-
-As drivers/platform/x86/ maintainer I would be happy to take a driver
-for a "misc" cell for any remaining bits if there are any...
-
-<snip>
-
-> +struct steamdeck {
-> +	struct acpi_device *adev;
-> +	struct device *hwmon;
-> +	void *regmap;
-
-That should be:
-
-	struct regmap *regmap;
+I'm actually not sure which one would be more accurate across a range
+of devices with different "corners": specifying a dynamic power
+coefficient used for all "corners" and then using the actual voltage
+and doing the math, or specifying a power number for each frequency
+and ignoring the actual voltage used. In any case we're trying to get
+ballpark numbers and not every device will be exactly the same, so
+probably it doesn't matter that much.
 
 
-> +	long fan_target;
-> +	struct delayed_work role_work;
-> +	struct extcon_dev *edev;
-> +	struct device *dev;
-> +};
+> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
+> was proposing from ~2014 this upstream, but EAS wasn't merged back
+> then):
+> where to store these power-freq values, which are then used by the
+> callback. We have the 'dynamic-power-coefficient' in DT, but
+> it has limitations. It would be good to have this simple array
+> attached to the GPU/CPU node. IMHO it meet the requirement of DT,
+> it describes the HW (it would have HZ and Watts values).
+>
+> Doug, Matthias could you have a look at that function and its
+> usage, please [1]?
+> If you guys would support me in this, I would start, with an RFC
+> proposal, a discussion on LKML.
+>
+> [1]
+> https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87
 
-Regards,
+Matthias: I think you've spent more time on the thermal stuff than me
+so I'll assume you'll follow-up here. If not then please yell!
 
-Hans
+Ideally, though, someone from Qualcomm would jump in an own this.
+Basically it allows more intelligently throttling the GPU and CPU
+together in tandem instead of treating them separately IIUC, right?
 
+-Doug

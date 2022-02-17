@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B684BA032
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 943AF4BA034
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240442AbiBQMdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:33:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47352 "EHLO
+        id S240455AbiBQMdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:33:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239347AbiBQMdC (ORCPT
+        with ESMTP id S240447AbiBQMdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:33:02 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD07E2604DA
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:32:46 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2d62593ad9bso29731687b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:32:46 -0800 (PST)
+        Thu, 17 Feb 2022 07:33:20 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B4029C131
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:33:05 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id c192so3070472wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:33:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=ywnpXw+FYV24U6JkELut8aLwZlHVlN4ozgsA3QnjwlU=;
-        b=zfEBuYqlqXgQVCPU+O37vu6MDj90eOlxT+j7Y4sSkc5xB9GWNAJOUVAS0Y/6l2Rn4S
-         PV3/tYKph8agacASAxrW92I9pPp4bZTo5MKsKX+Q6sA/WU910AIwSPoF4CvXOSa9M7ur
-         nc10TpPHBBA0e9cgPxai0fMMPOXP6B61uLUvNGlW/BjtH3sRpRMPuYRR7fNz6/hnG0Gu
-         rTgdhkYcG/kDJnv4eLPK8xLrL6HiNsMgR4OUGfjwWNYTVbvOI93HWR+yqdlWyvBPPKUv
-         oKmfvcT8SUMXrCeRTFJHFs42uS2ldpMzjgiq8mgEaNkOgU+4ZUMGop1lm5tPOwpr+TPL
-         v0fA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=A4ihWqAWL7//p3iQK7YSrjmSgIx/TozBvgFAto3VfAQ=;
+        b=GRRRiTCv8hnisiN6ONs5tg3v4oOGWeum3t6YczSfOgdpj32PYEEQ3pgnZHAzmHMl2j
+         9boNdFP3Ytw5MPqHAQR09XKakYJQlbNnAKRJXHXet7dN9YYx0WAMV91BinoBkraGbD4n
+         JulGmRM1LGwObP99Znw7L0m4svYFJIf3AjqenZVQF4k2st7439nWOsrBfvoB2CVu5Gh2
+         72BPoGHOEUmp1I6LCQ+kmR7C0M3B80ZM7Aa1ICxJ60F5JOYi6bI/hh4P8Gm3pl0o+uaw
+         aBYaxe5IJzzbzbuJvrhl4yHEAiziqsiIJSd8LMB+QJ0AWgr8yOmsS7HyB6abT2XMUebj
+         1TQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ywnpXw+FYV24U6JkELut8aLwZlHVlN4ozgsA3QnjwlU=;
-        b=imo+2bNhkbNFK27Hi9hwGWU44kfP4k6virTxStmPboKTntfVKc+E7pCzAr1lKrSQK0
-         6UCnqBin5SAM3knnVRORjFJV2wjVOOKOLHqVvNmCb6qt7r1gLbEQF1ITP58GKfFdvhqs
-         ZMHk/VWk/EJESbTeSbauTOVAfmDuqAJuBBuree7JWb7PIeYSDbkFgD5hVGDz7aDs/iFM
-         DNI6tj0XB7kXa3i/VwiAwc8VvbRk2e7RBfoQhgqfSFufpTkwemlTu83j5UzBlwPwIIs1
-         off/Hst+detn2n8MhywxpY7xvA4v+M4LXFeySauj5fsDEOMmKHVJa3XnZSaZl3D8p5Wx
-         oEiA==
-X-Gm-Message-State: AOAM532lbJmJPA5dvgo/zoa/p8Srfwa2Bos2bS+FqaMmwq9jsTx4RVUT
-        mXLzTtcyWuHvv+5/+l3x9QagVVdxO9gcGOJGsHSHfA==
-X-Google-Smtp-Source: ABdhPJxMPcjIoro8tE2e0XS/Kkhx0mMiNFnkSbLs+j1dHHrzmhC/rOSLQaFamMtzFi/RV7tfMa0AaYO2sfvS1G0iXnk=
-X-Received: by 2002:a81:a148:0:b0:2d0:7177:5f2b with SMTP id
- y69-20020a81a148000000b002d071775f2bmr2308558ywg.182.1645101165834; Thu, 17
- Feb 2022 04:32:45 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A4ihWqAWL7//p3iQK7YSrjmSgIx/TozBvgFAto3VfAQ=;
+        b=F6dDXcprZtnBlzJtSXBU3vfpv7JYgUl2PNhwhf2R067K0gy67BWQ1KrypKJxynNK/t
+         lEIMlfYFkqcOVZBxbAlk+m02HoDcmzIuFqhCTWNo1DRUIQe5XmfvbLittWqpN4UOLsOh
+         XRABteAsqKhO1ci1ybQ0Icw79cpzmeKnJpJbVw2XLX8HncxzCMe3bj+5AFHAaDUjQgv0
+         Gk4s6odimhKUsyFYE2ssopYc8+VYYDMmnNUn4JZdelHUJq81Ppb0ZfbvX/c++E8RGiK8
+         ws6QMNpn1UOUsmiOBCphta1mxNdoyl5arIxxJF8WdnY/xgSVCNk9kL4/xG9MFEUI+Nvi
+         1zDQ==
+X-Gm-Message-State: AOAM532QucarnuhTI9+eZ+hACEUvKg8u75aROsIKltnKcgY08OGb4xX2
+        KY3UBA6Scl2JfDFzJCCd7yu9jYYlMGbdIA==
+X-Google-Smtp-Source: ABdhPJxvbN6HhDAxUcts16g8LubGTeE4b5UaecyshENrZUvfY7vE8uQXOBVGVSEd04+4ProFuDJACw==
+X-Received: by 2002:a05:600c:4e46:b0:37b:ea0d:35f0 with SMTP id e6-20020a05600c4e4600b0037bea0d35f0mr5804146wmq.181.1645101183622;
+        Thu, 17 Feb 2022 04:33:03 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
+        by smtp.googlemail.com with ESMTPSA id ay38sm1779946wmb.3.2022.02.17.04.33.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 04:33:03 -0800 (PST)
+Message-ID: <1812eadf-7924-5abd-857b-22b7dfdf8f7d@linaro.org>
+Date:   Thu, 17 Feb 2022 13:33:00 +0100
 MIME-Version: 1.0
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Thu, 17 Feb 2022 13:32:35 +0100
-Message-ID: <CADYN=9L0g4yizcEM_4oXqhPphhRX6ZVD-JEm=E+=KMh-XOL8mw@mail.gmail.com>
-Subject: Re: drm/msm/gpu: Cancel idle/boost work on suspend
-To:     robdclark@chromium.org, robdclark@gmail.com
-Cc:     sean@poorly.run, quic_abhinavk@quicinc.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+ <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+ <53bc13ca-998f-ff83-d9f7-9a83d35b24fd@linaro.org>
+ <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 17/02/2022 13:11, Lukasz Luba wrote:
 
-While booting Linux mainline on arm64 qcom db410c device the following
-kernel NULL pointer dereference noticed due to this commit [1]
-6aa89ae1fb04 ("drm/msm/gpu: Cancel idle/boost work on suspend")
+[ ... ]
 
- [   17.207382] Unable to handle kernel NULL pointer dereference at
- virtual address 0000000000000010
- [   17.207755] Mem abort info:
- [   17.215915]   ESR = 0x96000004
- [   17.217903]   EC = 0x25: DABT (current EL), IL = 32 bits
- [   17.225033]   SET = 0, FnV = 0
- [   17.226501]   EA = 0, S1PTW = 0
- [   17.233147]   FSC = 0x04: level 0 translation fault
- [   17.233332] Data abort info:
- [   17.238135]   ISV = 0, ISS = 0x00000004
- [   17.240720]   CM = 0, WnR = 0
- [   17.244061] user pgtable: 4k pages, 48-bit VAs, pgdp=000000008e7b9000
- [   17.247323] [0000000000000010] pgd=080000008e790003,
- p4d=080000008e790003, pud=080000008c2aa003, pmd=0000000000000000
- [   17.254369] Internal error: Oops: 96000004 [#1] PREEMPT SMP
- [   17.264042] Modules linked in: crct10dif_ce qcom_wcnss_pil
- adv7511(+) cec qcom_pon rtc_pm8xxx qcom_spmi_temp_alarm qcom_spmi_vadc
- qcom_vadc_common snd_soc_msm8916_digital snd_soc_msm8916_analog
- qcom_camss snd_soc_apq8016_sbc snd_soc_lpass_apq8016 snd_soc_lpass_cpu
- qcom_q6v5_mss qcom_pil_info snd_soc_lpass_platform qcom_q6v5
- snd_soc_qcom_common msm videobuf2_dma_sg qcom_sysmon venus_core
- qcom_common v4l2_fwnode qcom_rng qcom_glink_smem v4l2_async
- v4l2_mem2mem qmi_helpers qnoc_msm8916 gpu_sched mdt_loader
- videobuf2_memops qcom_stats videobuf2_v4l2 videobuf2_common
- i2c_qcom_cci display_connector icc_smd_rpm drm_kms_helper rpmsg_char
- socinfo rfkill rmtfs_mem drm qrtr fuse
- [   17.306825] CPU: 2 PID: 67 Comm: kworker/2:2 Not tainted 5.17.0-rc1 #1
- [   17.328796] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
- [   17.335137] Workqueue: pm pm_runtime_work
- [   17.341979] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- [   17.345896] pc : hrtimer_active+0x14/0x80
- [   17.352652] lr : hrtimer_cancel+0x28/0x70
+>> Why not make it more generic and replace the frequency by a 
+>> performance index, so it can be used by any kind of perf limiter?
+> 
+> For that DT array, yes, it can be an index, so effectively it could be
+> a simple 1d array.
+> 
+> something like:
+> 
+> msm_gpu_energy_model: msm-gpu-energy-model {
+>      compatible = "energy-model"
+>      /* Values are sorted micro-Watts which correspond to each OPP
+>         or performance state. The total amount of them must match
+>         number of OPPs. */
+>      power-microwatt = <100000>,
+>              <230000>,
+>              <380000>,
+>              <600000>;
+> };
+> 
+> then in gpu node instead of having 'dynamic-power-coefficient',
+> which is useless because voltage is missing, we would have
+> 'energy-model', like:
+> 
+>      energy-model = <&msm_gpu_energy_model>;
+> 
+> 
+> If you agree to continue this topic. I will send an RFC so we could
+> further discuss this idea. This $subject doesn't fit well.
 
- Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
- Reported-by: Anders Roxell <anders.roxell@linaro.org>
+Yes, definitively I agree to continue on this topic.
 
- kernel crash log links [2][3].
 
-Cheers,
-Anders
-[1] https://lore.kernel.org/all/20220108180913.814448-3-robdclark@gmail.com/
-[2] https://lkft.validation.linaro.org/scheduler/job/4422191#L2360
-[3] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.17-rc1-230-g145d9b498fc8/testrun/7713584/suite/linux-log-parser/test/check-kernel-oops-4422047/log
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

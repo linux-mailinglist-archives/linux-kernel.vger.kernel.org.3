@@ -2,216 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2994BA2F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D96A4BA2F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241195AbiBQO26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:28:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54924 "EHLO
+        id S241575AbiBQO3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 09:29:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiBQO24 (ORCPT
+        with ESMTP id S229623AbiBQO32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:28:56 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3971B7C6;
-        Thu, 17 Feb 2022 06:28:36 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id e5so10309593lfr.9;
-        Thu, 17 Feb 2022 06:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version;
-        bh=4MKpLBniRMlqG6xVPFK9q4G3y/c7z5bTRHjFHWC+P4E=;
-        b=Uy6d1+1v/EBtwZzJi39zq3TyOxWSyR5iHwV6iO3mImOW3+vwe7WoqrcF0u+1PjyrqH
-         zl9e3aull8w4Ztz/ojHp9VbbrkRCD15XGgtmmJs1u978PpPS0bFBxd1hk03dN0De0Ynl
-         DQ33PEczicbd8IkN3LmgBMKKr5Nyvl4pb84hCqpAWybhC069Q1xNMehx/K4x1ImB82c5
-         d2M6hGvhDYHodFJwGk7rQRJPl6AALxC0tjE33QwNN3yCiY8WPzQGSwlAQdvqWLzLCHv8
-         RwozCIkbe9r1pDi0kOpy/ucbtLVeElwjXzKDPK0jrtS6oFJ516nkqnQjy+ja4H/Jygyx
-         PXVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version;
-        bh=4MKpLBniRMlqG6xVPFK9q4G3y/c7z5bTRHjFHWC+P4E=;
-        b=AY6iaE/kR6Yw5bPXFrdM918MLvhVhiix4tqFnoAiEDajS/Ya1MS/5qy2UpsN9HdFYR
-         XO+rsnalrHm1NlJ0DK1fcIE5W34silnp9ou1oPtGNd4e9jhq+A4SwgYsI0h3rKypIIQi
-         MN1Zs2WVq3bKbu/f+MqpoFfjX9J3/3rQDiwj0qj7zj3Mxxrw6U+ZRfO9uzBRhCR7GLsK
-         YFZ50BjlsiRhicXDdOmeKTRq4wzOpZZW118n9sO/Wk9MEOaAgXSctAU3LSEQCizBgNXw
-         nANYVb3bN8XnrjvcGljcPH60cvb2JkfAIvKZhLIcVl7ITr3iDZ2pL+NJiHYFl5Lp2lBl
-         YeWQ==
-X-Gm-Message-State: AOAM530Jd8/WOVNW5GGKyH9kxRwUimPO3wFOELKtYFvOUOdZUi6VRORX
-        QG2VicpTN/kj9CAL2iTUY2E=
-X-Google-Smtp-Source: ABdhPJz/W8nv0L2P36NgY3LW3RvMJOTOdlfzWd7ykJLCxUVZUhimcLIF83QfvVzC1IMQ/NgU+wmilQ==
-X-Received: by 2002:ac2:528c:0:b0:443:58fe:f154 with SMTP id q12-20020ac2528c000000b0044358fef154mr2202421lfm.598.1645108114989;
-        Thu, 17 Feb 2022 06:28:34 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id f21sm1562023ljn.76.2022.02.17.06.28.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 06:28:34 -0800 (PST)
-Date:   Thu, 17 Feb 2022 16:28:23 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 8/8] drm/fourcc: Add DRM_FORMAT_D1
-Message-ID: <20220217162823.050d5f17@eldfell>
-In-Reply-To: <CAMuHMdXf3tFLb16Y=wh5C3QUYN4PdCjaYPCzMOTCye-eYS-N8w@mail.gmail.com>
-References: <20220215165226.2738568-1-geert@linux-m68k.org>
-        <20220215165226.2738568-9-geert@linux-m68k.org>
-        <20220217121033.0fc7f6ba@eldfell>
-        <CAMuHMdXf3tFLb16Y=wh5C3QUYN4PdCjaYPCzMOTCye-eYS-N8w@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 17 Feb 2022 09:29:28 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE212B167D;
+        Thu, 17 Feb 2022 06:29:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645108154; x=1676644154;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+R1AK/gkRyoYr+8UNtwo0B5YbNI0hu+NA3H6Pu/+d1c=;
+  b=loA/krPHMJXzFmSTthy/MKwV7mebxl8rZIibsxOvXARcZQBUswmV8FTA
+   9ggiAjMIRB+d4+VVNpc8pbWxywdlQYDqB6q8s39fnk+Zcw7/n1OlPyfif
+   VjDfWCaCAjCwpOr+CQJGEglOQVqCw7EZWjWpGGB2ppfqCE77IaIq1Kyeh
+   QJcDJMzCm4TAFQviS7nA7g6p42h6f4oqGzjjMVWqWi5+Tmeae9Fdspr+z
+   xDZtVO6pfV2saQH1SJJZI9ngYy2QNuNwTwiOWB4f46g0yWaYI4RccELUQ
+   xYht6MwbhgRZpygt8qfm1t3IutFk/rym8VuMzmY+GyVOKVzUHYoO0V1vf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="311627099"
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="311627099"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 06:29:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="488309143"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2022 06:28:51 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKhm6-0000Gj-SC; Thu, 17 Feb 2022 14:28:50 +0000
+Date:   Thu, 17 Feb 2022 22:28:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: Re: [PATCH v1 3/3] hwmon (xdpe12284): Add regulator support
+Message-ID: <202202172254.TL5ZxxMO-lkp@intel.com>
+References: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nF0r/04lkj2eLx2H.hlGio4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c8a38efa0b61e3ba8de023f56f59043b99e5947.1645088804.git.sylv@sylv.io>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/nF0r/04lkj2eLx2H.hlGio4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Marcello,
 
-On Thu, 17 Feb 2022 11:42:29 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Thank you for the patch! Perhaps something to improve:
 
-> Hi Pekka,
->=20
-> On Thu, Feb 17, 2022 at 11:10 AM Pekka Paalanen <ppaalanen@gmail.com> wro=
-te:
-> > On Tue, 15 Feb 2022 17:52:26 +0100
-> > Geert Uytterhoeven <geert@linux-m68k.org> wrote: =20
-> > > Introduce a fourcc code for a single-channel frame buffer format with=
- two
-> > > darkness levels.  This can be used for two-level dark-on-light displa=
-ys.
-> > >
-> > > As the number of bits per pixel is less than eight, this relies on
-> > > proper block handling for the calculation of bits per pixel and pitch.
-> > >
-> > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org> =20
->=20
-> > > --- a/drivers/gpu/drm/drm_fourcc.c
-> > > +++ b/drivers/gpu/drm/drm_fourcc.c
-> > > @@ -151,6 +151,8 @@ const struct drm_format_info *__drm_format_info(u=
-32 format)
-> > >               { .format =3D DRM_FORMAT_C4,              .depth =3D 4,=
-  .num_planes =3D 1,
-> > >                 .char_per_block =3D { 1, }, .block_w =3D { 2, }, .blo=
-ck_h =3D { 1, }, .hsub =3D 1, .vsub =3D 1 },
-> > >               { .format =3D DRM_FORMAT_C8,              .depth =3D 8,=
-  .num_planes =3D 1, .cpp =3D { 1, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
-> > > +             { .format =3D DRM_FORMAT_D1,              .depth =3D 1,=
-  .num_planes =3D 1,
-> > > +               .char_per_block =3D { 1, }, .block_w =3D { 8, }, .blo=
-ck_h =3D { 1, }, .hsub =3D 1, .vsub =3D 1 },
-> > >               { .format =3D DRM_FORMAT_R1,              .depth =3D 1,=
-  .num_planes =3D 1,
-> > >                 .char_per_block =3D { 1, }, .block_w =3D { 8, }, .blo=
-ck_h =3D { 1, }, .hsub =3D 1, .vsub =3D 1 },
-> > >               { .format =3D DRM_FORMAT_R2,              .depth =3D 2,=
-  .num_planes =3D 1,
-> > > diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fou=
-rcc.h
-> > > index 8605a1acc6813e6c..c15c6efcc65e5827 100644
-> > > --- a/include/uapi/drm/drm_fourcc.h
-> > > +++ b/include/uapi/drm/drm_fourcc.h
-> > > @@ -104,6 +104,9 @@ extern "C" {
-> > >  #define DRM_FORMAT_C4                fourcc_code('C', '4', ' ', ' ')=
- /* [3:0] C */
-> > >  #define DRM_FORMAT_C8                fourcc_code('C', '8', ' ', ' ')=
- /* [7:0] C */
-> > >
-> > > +/* 1 bpp Darkness */
-> > > +#define DRM_FORMAT_D1                fourcc_code('D', '1', ' ', ' ')=
- /* [0] D */
-> > > + =20
-> >
-> > the same comment here as for C1 and R1 formats, need to specify pixel
-> > ordering inside a byte. =20
->=20
-> Right, will do.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linux/master linus/master v5.17-rc4 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Btw. does endianess of anything have any effect on these pixel formats?
+url:    https://github.com/0day-ci/linux/commits/Marcello-Sylvester-Bauer/Support-XDPE112/20220217-172831
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: s390-randconfig-r044-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172254.TL5ZxxMO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/7d607e48fd68499470da6630cff4d23f43f29aa9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Marcello-Sylvester-Bauer/Support-XDPE112/20220217-172831
+        git checkout 7d607e48fd68499470da6630cff4d23f43f29aa9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/hwmon/pmbus/
 
-That's probably a weird question, but I recall Pixman (the pixel
-handling library of the X server nowadays known as Xorg) having pixel
-formats where CPU endianess affects whether the first pixel in a byte
-is found at the MSB or LSB.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > I think it would also be good to explain the rationale why C1 and R1
-> > are not suitable for this case and we need yet another 1-bit format in
-> > the commit message.
-> >
-> > For posterity, of course. I roughly remember the discussions. =20
->=20
-> C1 is color-indexed, which can be any two colors.
-> R1 is light-on-dark.
-> D1 is dark-on-light.
->=20
-> > I also wonder if anyone would actually use D1. Should it be added
-> > anyway? There is no rule that a pixel format must be used inside the
-> > kernel AFAIK, but is there even a prospective userspace wanting this?
-> >
-> > Exposing R1 and inverting bits while copying to hardware might be
-> > enough? =20
->=20
-> That's an option.  The repaper driver does that:
->=20
->     drm_fb_xrgb8888_to_gray8(buf, 0, cma_obj->vaddr, fb, &clip);
->     repaper_gray8_to_mono_reversed(buf, fb->width, fb->height);
->=20
-> Can drm_framebuffer objects be backed by graphics memory, i.e.
-> can they be displayed without copying?
+All warnings (new ones prefixed by >>):
 
-Yes, they can. That is actually their primary purpose. So the invert
-bits approach only works with drivers that need to manually shovel the
-data, but not with direct hardware scanout.
-
-D1 might be useful on hardware that:
-- can scanout the buffer directly, and
-- does not have an optional inverter in its hardware pipeline, and
-- does not benefit from a shadow buffer.
-
-Do you happen to know any that fits the description?
+>> drivers/hwmon/pmbus/xdpe12284.c:125:36: warning: unused variable 'xdpe122_reg_desc' [-Wunused-const-variable]
+   static const struct regulator_desc xdpe122_reg_desc[] = {
+                                      ^
+   1 warning generated.
 
 
-Thanks,
-pq
+vim +/xdpe122_reg_desc +125 drivers/hwmon/pmbus/xdpe12284.c
 
---Sig_/nF0r/04lkj2eLx2H.hlGio4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+   124	
+ > 125	static const struct regulator_desc xdpe122_reg_desc[] = {
+   126		PMBUS_REGULATOR("vout", 0),
+   127		PMBUS_REGULATOR("vout", 1),
+   128	};
+   129	
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmIOW4cACgkQI1/ltBGq
-qqcovw//d/aAaCnYydXVNuiEcQVH+irHPcaqSE0I2UfelKYQCaUPq8wc98P3Izji
-Gv4dhy3bbtwnT0q2wWNCsEhuBFRs23upZlFqZdxhqx2XM4kLIs4vspYMa5N3om8v
-BhkHXftAQy51fA5lHOe7DYf07lgDMWDezRrqZ2kSr+b4CNdsJPiJ4lgMnWGRu1SO
-92wBcdJNVm7bFb9qbVQiSitNr74ONQ7qS2AG5Z2nwLyzgvbZLg0+42+BL5IOxHGc
-42vg4ds95UljaSPMCgFiIQpnTUwHkLiSDhMkXdoZbeNaq8CmfajMC0NNYrlo6E9i
-thk0s7zgYoXVUuc0SyLhx9K7NyAWewOlvdGaKBscDTRcAjuGuvQrZJh108R2c+my
-RG/WIR8flX9Ki3mDzEpHmKYZ1WhYAp2Cus4/IbsM4isKLf8Vt+Fl0cqzUv3jBX7p
-wi2bdDTBxdLOlcUpk8ENyAFm99J5TuGOndHqPSvebuEjuGJJ96TD3pVZ6pIRe8UQ
-PB1PyTUyaW4Z21oPFVQN2NFsD9d3tQHOtVXQ8tiKbp9BO0pPKGtF4pr2HUzUT6eg
-exzQe6QATZTsTlzQZMh+oy6O0QZKNjPF09BTONL4I+jHMrRWgjWNgjSKCP7F0BsI
-1pNlnW+CMUjRvTLEPe6Bh0f2rX/TFu1XTenp1t+7QjTmDkj8PYk=
-=FgZf
------END PGP SIGNATURE-----
-
---Sig_/nF0r/04lkj2eLx2H.hlGio4--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

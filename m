@@ -2,52 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4719C4B95C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B1E4B95CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 03:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiBQCBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 21:01:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53850 "EHLO
+        id S231490AbiBQCLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 21:11:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiBQCBe (ORCPT
+        with ESMTP id S229925AbiBQCLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 21:01:34 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9552AA38A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:01:20 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id m15-20020a924b0f000000b002be43428493so1100049ilg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:01:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=l8hz6zbgdfZZuicmk3dNuptsWpUXXP72nyKQpZLqpbs=;
-        b=Vxhbr7Y1WRXpgP9QqH8Ib3mfeOL46eOOMMe73DBDSzf8umkbq96uKmOV8Bfm7hbJFl
-         qGXeZsmfLWEmv3RiBVaGzip4PJLn1MaPYNaHT2y6/QR4rr8liVr1pstIs7+9Dn0XgZpp
-         ZGN09eTswPvll3bQKUK8G4qn75UGnOnd0ulpyPDl1++SijEhHdjM0dvORiojbdo8cgQ6
-         c48Np+cnepYFIFWIHKPKAg6xptzac0KvKCvFFcJRQlOcrHDDjJSbkjzIR5njiB9XE9Su
-         MzqTnDHB56O4pHEalWQu0GR+WBK/HadkeYdzh+UzhKAv8cBO5llMbb6e4mwB+wZFWXj/
-         qjAA==
-X-Gm-Message-State: AOAM530nR+0RoZryKHoMWsW4lhTVS8XIQaBo7Dt6tnIveABo6sjm/j8i
-        51RPEll6leJqTVc0HojVAHUm5HHluok7GJn6RZXTkDe7otYy
-X-Google-Smtp-Source: ABdhPJxD7S/rF937d7D/q41kVwB6Pw+QP3TF2Uxtcc5e2nxGImnT4aHG7lw4g9fBuqMOQ9Fl/jq/gmuhR+Uk4ghL97dF+ZcnlhDn
+        Wed, 16 Feb 2022 21:11:11 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F2F27AA24
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 18:10:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645063857; x=1676599857;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nITptgXpuhXyOJm3BD4dZdDkSkJedyIZl3ZF/x2QsiY=;
+  b=ZfA27pwdSocG+6qgbIPwJ8o7mfpbIv1Yz74RbJ5m+vok2drk6SJ/7o2e
+   wb+nDMX9AodGfowYa2/ISy9e5+HPtVzs5lwCEq2lxCr5Y4H0DxZlV3FG8
+   jUjhyfPU70G4ru47n1ucKK/qO8eqyRabcr56bu7O88VSk2qtLBSrcjOk8
+   AWgB15NqkHctw4SQJUSJHlAcsCEtMizSFKI6VbIclAt/3EAbGAkj4DVyH
+   KD1kg+vlj1AqdoycLGx3tEJoOHMGcv6SDIkFXOZKFbJS/8Me5bsfWcIfo
+   RWGQEl7QTX0pj43GK+3pTaKCUtZpyxhYve+P9FI1h1QXruFft9o7ofKbC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="337212886"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="337212886"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 18:10:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="776790974"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Feb 2022 18:10:56 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKWFz-000BJs-Kg; Thu, 17 Feb 2022 02:10:55 +0000
+Date:   Thu, 17 Feb 2022 10:10:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 29/42]
+ fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer
+ types ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and
+ 'typeof (size) *' (aka 'unsigned int *'))
+Message-ID: <202202171009.cJVDSV3U-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1526:b0:2bb:faba:4d77 with SMTP id
- i6-20020a056e02152600b002bbfaba4d77mr484362ilu.231.1645063279960; Wed, 16 Feb
- 2022 18:01:19 -0800 (PST)
-Date:   Wed, 16 Feb 2022 18:01:19 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006f656005d82d24e2@google.com>
-Subject: [syzbot] WARNING in vhost_dev_cleanup (2)
-From:   syzbot <syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com>
-To:     jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,71 +65,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   5cb7f190822d09757b30cd9539e57eef72552d1f
+commit: 261cd621bd0477d43de460dea6c7bf7fa81824be [29/42] netfs: Implement buffered writes through netfs_file_write_iter()
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220217/202202171009.cJVDSV3U-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0bad7cb56526f2572c74449fcf97c1fcda42b41d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/261cd621bd0477d43de460dea6c7bf7fa81824be
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 261cd621bd0477d43de460dea6c7bf7fa81824be
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
-syzbot found the following issue on:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-HEAD commit:    c5d9ae265b10 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=132e687c700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
-dashboard link: https://syzkaller.appspot.com/bug?extid=1e3ea63db39f2b4440e0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+All warnings (new ones prefixed by >>):
 
-Unfortunately, I don't have any reproducer for this issue yet.
+>> fs/netfs/buffered_write.c:28:26: warning: comparison of distinct pointer types ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+                   unsigned int psize   = min(PAGE_SIZE - offset, size);
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:95:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
+           target->from  = min(target->from, folio_pos(folio) + offset);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   fs/netfs/buffered_write.c:96:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
+           target->to    = max(target->to,   folio_pos(folio) + offset + len);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:52:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   3 warnings generated.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
 
-WARNING: CPU: 1 PID: 10828 at drivers/vhost/vhost.c:715 vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
-Modules linked in:
-CPU: 0 PID: 10828 Comm: syz-executor.0 Not tainted 5.17.0-rc4-syzkaller-00051-gc5d9ae265b10 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
-Code: c7 85 90 01 00 00 00 00 00 00 e8 53 6e a2 fa 48 89 ef 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e 41 5f e9 7d d6 ff ff e8 38 6e a2 fa <0f> 0b e9 46 ff ff ff 48 8b 7c 24 10 e8 87 00 ea fa e9 75 f7 ff ff
-RSP: 0018:ffffc9000fe6fa18 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: ffff888021b63a00 RSI: ffffffff86d66fe8 RDI: ffff88801cc200b0
-RBP: ffff88801cc20000 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff817f1e08 R11: 0000000000000000 R12: ffff88801cc200d0
-R13: ffff88801cc20120 R14: ffff88801cc200d0 R15: 0000000000000002
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2de25000 CR3: 000000004c9cd000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- vhost_vsock_dev_release+0x36e/0x4b0 drivers/vhost/vsock.c:771
- __fput+0x286/0x9f0 fs/file_table.c:313
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:32 [inline]
- do_exit+0xb29/0x2a30 kernel/exit.c:806
- do_group_exit+0xd2/0x2f0 kernel/exit.c:935
- get_signal+0x45a/0x2490 kernel/signal.c:2863
- arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f4027a46481
-Code: Unable to access opcode bytes at RIP 0x7f4027a46457.
-RSP: 002b:00007f402808ba68 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
-RAX: fffffffffffffffc RBX: 00007f402622e700 RCX: 00007f4027a46481
-RDX: 00007f402622e9d0 RSI: 00007f402622e2f0 RDI: 00000000003d0f00
-RBP: 00007f402808bcb0 R08: 00007f402622e700 R09: 00007f402622e700
-R10: 00007f402622e9d0 R11: 0000000000000206 R12: 00007f402808bb1e
-R13: 00007f402808bb1f R14: 00007f402622e300 R15: 0000000000022000
- </TASK>
+vim +28 fs/netfs/buffered_write.c
 
+    18	
+    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
+    20						  unsigned int offset, size_t size,
+    21						  struct iov_iter *i)
+    22	{
+    23		size_t copied = 0, n;
+    24	
+    25		do {
+    26			unsigned int index   = offset / PAGE_SIZE;
+    27			unsigned int poffset = offset % PAGE_SIZE;
+  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
+    29	
+    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
+    31						       poffset, psize, i);
+    32			copied += n;
+    33			if (n < psize)
+    34				break;
+    35			size -= n;
+    36		} while (size);
+    37		return copied;
+    38	}
+    39	
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

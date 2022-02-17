@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17824B9CA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E5F4B9CAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238942AbiBQKC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:02:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33946 "EHLO
+        id S238964AbiBQKDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:03:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiBQKCX (ORCPT
+        with ESMTP id S231721AbiBQKDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:02:23 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40270ECC53;
-        Thu, 17 Feb 2022 02:02:08 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id o2so8962005lfd.1;
-        Thu, 17 Feb 2022 02:02:08 -0800 (PST)
+        Thu, 17 Feb 2022 05:03:17 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AECECC76;
+        Thu, 17 Feb 2022 02:03:03 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id f37so8898362lfv.8;
+        Thu, 17 Feb 2022 02:03:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=D3X8rMgm33sZ6wTcPzoDFpEXwE3MFqExpXhdRt0yiFQ=;
-        b=AeJIn95gvIWGLukrM5ykGOhMP8W1wLPsenoB1x1jggE0ez5lyVtTmOQgIOt2jo6gO+
-         xc6RasYc7by1eSNu+xs9B8Mc8OmRre4vRSsZzqykr90Sj2v+IvzOeUt9Tk+NVHouIqdJ
-         lAW4AP5jSdSo5EsVrdCfHCi1VVgKNE9r1M/GyojphGSrul66r9aEORrrY6frhUVLlGVT
-         Lbybnaa0HCUlBnEkrWNAnQNHWpMv9IymOoJt39CND6Z7yFba/8azm91pveIVG4ZJgeO6
-         8LwJnNEaJbEMQjfSapkEphuZGEBJESkLgfg6oqNqEh/ae6Ydvg0VOcar7fkNIT6FV6bb
-         gYkA==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version;
+        bh=RoOTB3vZkQwzYPRZAgiyvvTVPRhf8OFRTaGI84Fbjro=;
+        b=LnNVrxyRvAOtmCIOaUu+98tC35/2ib+27Z3s05eSMUxQUEW+kXDdSAYGkXCHAstvNE
+         nnLBdEL2keD7bbdKJsikieb9zdYr99fwChFpbUlbz9TNY/byhScBOR5wVnjOo6QIzSK6
+         z9x6qknR1sJC9nwV3d+7C+atFhHp/Eqr2lAABkyQW9qcjbvwmGQ+tQf6Lb7GOz80WIQM
+         K8ju26q5xc9rJFdDj/TfE7/zwY0ddGEmSzNt4/t3RTA8yInTM3OV9YsO9r+fpBA/QENG
+         hp6qlv93rj8A2h5eRVOke6y912QLnvOUBsOf8sx0wSzgGL6ghSEAn6W93AvfEO2hkfIM
+         +s5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D3X8rMgm33sZ6wTcPzoDFpEXwE3MFqExpXhdRt0yiFQ=;
-        b=Js2CaVTQ6YW+fItmWC9gVAIFOfeSisZjhrW4Fac6leCthX5wDf5B2wHMDtBUQKH9H3
-         MMn/izBBvYczLnbGYCgE7qwkGWPcwjwFXQ1UbsksY8HTM+1t9ImcIjHkBK/muFGBLZDj
-         NXOzQKVJ9jc7rJCZOy+8xmTf2TLJ1T2yM9goX37+lQ7pjmHTL1DgDlpMJY5WUAC96Bp8
-         9EKHG7QjJwce8xNLwCNW5HAhDEyu3CcGtxYRYpZKuyfRiRF8UPTp1pWJktLLEc9MEWSC
-         RlAlrYAox5ztaqQhUY+PAvzPVorYL0v+M4Z5d9gk+FJqDfs/B/5HeXVbadx9Q+c3qi6N
-         laww==
-X-Gm-Message-State: AOAM531mMWd1C3bwEwnZE2WSdabEKZ/7idjStmmrhycBxIr8gyI4YLXL
-        XqPUKBdUqWyqv/Y+qJMsOPx5zVt+9HI=
-X-Google-Smtp-Source: ABdhPJzKVcD/hmeNm8ckSOZQj7wx+t4sqGoDxbDPgGa07YSUE85Apun4esTP5QR3d/yiue2mQ/aDkA==
-X-Received: by 2002:a19:710a:0:b0:443:ad21:dcc0 with SMTP id m10-20020a19710a000000b00443ad21dcc0mr399015lfc.688.1645092126455;
-        Thu, 17 Feb 2022 02:02:06 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id v11sm1643799lfr.3.2022.02.17.02.02.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 02:02:05 -0800 (PST)
-Message-ID: <25e6658c-3241-198b-4240-1055c8a6c630@gmail.com>
-Date:   Thu, 17 Feb 2022 13:02:04 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version;
+        bh=RoOTB3vZkQwzYPRZAgiyvvTVPRhf8OFRTaGI84Fbjro=;
+        b=hwUMfjcdPVi/JAGziBqVakhn7UuUwpzzbSfYhcxGt1f+j/TWLWl5isPDpYIohQqREP
+         fAUNG4znZNUP5egIPFS+/NZVIUJAGNGTlJ8r2b8N75zi1hi6BIjT4BqPLuzRxfn9qF3E
+         YAEmo1WF3tXXRzCzvoAGE5m10BToOu4ochuhCcsY1+Nzl6JCOQPT04QyFgcVyI9r8iYK
+         vODvC3ytL+sSTsE2benwswC3Qtlz/WiCqN3J4togznDJtXA/k767dHdK1sIbQBXzdPe4
+         omg4R8Ee8LTU2/lWDTk+1uJlXUi7VcpVxh3EjmYpKU/i9/zehkYiZNDsWir751ykqpGo
+         dRuw==
+X-Gm-Message-State: AOAM530dbaYTjojIi3Sk+BvoDrxkvVVKuDLjm8x2ryPlnoDO3sRV6hIa
+        lUnZlaET+1Hq5DBfFJSMnzU=
+X-Google-Smtp-Source: ABdhPJyHyBSPz0zviYWjFjR0JBinOyr3nCfiuhwyjA+aVFjHKiUoVmaPTr/VjgPeN0WeLb4fsHLoPA==
+X-Received: by 2002:a05:6512:2622:b0:442:bd44:8af8 with SMTP id bt34-20020a056512262200b00442bd448af8mr1606991lfb.317.1645092181858;
+        Thu, 17 Feb 2022 02:03:01 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id e10sm5110323ljk.30.2022.02.17.02.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 02:03:01 -0800 (PST)
+Date:   Thu, 17 Feb 2022 12:02:58 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-fbdev@vger.kernel.org, linux-m68k@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/8] drm/fourcc: Add DRM_FORMAT_R[124]
+Message-ID: <20220217120258.0ee53dd8@eldfell>
+In-Reply-To: <20220215165226.2738568-8-geert@linux-m68k.org>
+References: <20220215165226.2738568-1-geert@linux-m68k.org>
+        <20220215165226.2738568-8-geert@linux-m68k.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] PM: domains: Prevent power off for parent unless child
- is in deepest state
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-kernel@vger.kernel.org
-References: <20220204101657.233723-1-ulf.hansson@linaro.org>
- <dd7d0ebd-7bd8-9f2e-e212-5b597ec729d5@gmail.com>
- <CAPDyKFoDP-LT9nKwa0oKF0jW9DD3tZh4+v9zE0uS_KpJeFC-MQ@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <CAPDyKFoDP-LT9nKwa0oKF0jW9DD3tZh4+v9zE0uS_KpJeFC-MQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/Jt_VVbdBEiI1p4OibkFRGE0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,43 +78,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-16.02.2022 12:45, Ulf Hansson пишет:
-> On Tue, 15 Feb 2022 at 22:49, Dmitry Osipenko <digetx@gmail.com> wrote:
->>
->> 04.02.2022 13:16, Ulf Hansson пишет:
->>> A PM domain managed by genpd may support multiple idlestates. During
->>> genpd_power_off() a genpd governor may be asked to select one of the
->>> idlestates based upon the dev PM QoS constraints, for example.
->>>
->>> However, there is a problem with the behaviour around this in genpd. More
->>> precisely, a parent-domain is allowed to be powered off, no matter of what
->>> idlestate that has been selected for the child-domain.
->>>
->>> So far, we have not received any reports about errors from the current
->>> behaviour. However, there is an STMicro platform that is being worked on,
->>> which can't cope with this.
->>
->> Could you please provide some technical info about why STMicro platform
->> can't cope with that?
-> 
-> There is a parent domain with one power-off state. The parent domain
-> has a few devices attached to it, which means they need to be managed
-> to together. The parent domain is controlling a shared power rail.
-> 
-> The child domain, which has multiple idle states to choose from, also
-> has some devices attached to it. The child domain is controlling a
-> system clock, but also relies on the shared power rail that is managed
-> by the parent domain.
-> 
-> Obviously, these idle states are managed by firmware.
-> 
-> I hope that made it a bit more clear?
+--Sig_/Jt_VVbdBEiI1p4OibkFRGE0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, I see now what this patch does.
+On Tue, 15 Feb 2022 17:52:25 +0100
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-So "deepest state" in the code's comment means powered off state. Maybe
-the comment could clarify it better a tad.
+> Introduce fourcc codes for single-channel frame buffer formats with two,
+> four, and sixteen intensity levels.  Traditionally, the first channel
+> has been called the "red" channel, but the fourcc can also be used for
+> other light-on-dark displays.
+>=20
+> As the number of bits per pixel is less than eight, these rely on proper
+> block handling for the calculation of bits per pixel and pitch.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  drivers/gpu/drm/drm_fourcc.c  | 6 ++++++
+>  include/uapi/drm/drm_fourcc.h | 9 +++++++++
+>  2 files changed, 15 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
+> index 5c77ce10f53e3a64..c12e48ecb1ab8aad 100644
+> --- a/drivers/gpu/drm/drm_fourcc.c
+> +++ b/drivers/gpu/drm/drm_fourcc.c
+> @@ -151,6 +151,12 @@ const struct drm_format_info *__drm_format_info(u32 =
+format)
+>  		{ .format =3D DRM_FORMAT_C4,		.depth =3D 4,  .num_planes =3D 1,
+>  		  .char_per_block =3D { 1, }, .block_w =3D { 2, }, .block_h =3D { 1, }=
+, .hsub =3D 1, .vsub =3D 1 },
+>  		{ .format =3D DRM_FORMAT_C8,		.depth =3D 8,  .num_planes =3D 1, .cpp =
+=3D { 1, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
+> +		{ .format =3D DRM_FORMAT_R1,		.depth =3D 1,  .num_planes =3D 1,
+> +		  .char_per_block =3D { 1, }, .block_w =3D { 8, }, .block_h =3D { 1, }=
+, .hsub =3D 1, .vsub =3D 1 },
+> +		{ .format =3D DRM_FORMAT_R2,		.depth =3D 2,  .num_planes =3D 1,
+> +		  .char_per_block =3D { 1, }, .block_w =3D { 4, }, .block_h =3D { 1, }=
+, .hsub =3D 1, .vsub =3D 1 },
+> +		{ .format =3D DRM_FORMAT_R4,		.depth =3D 4,  .num_planes =3D 1,
+> +		  .char_per_block =3D { 1, }, .block_w =3D { 2, }, .block_h =3D { 1, }=
+, .hsub =3D 1, .vsub =3D 1 },
+>  		{ .format =3D DRM_FORMAT_R8,		.depth =3D 8,  .num_planes =3D 1, .cpp =
+=3D { 1, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
+>  		{ .format =3D DRM_FORMAT_R10,		.depth =3D 10, .num_planes =3D 1, .cpp =
+=3D { 2, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
+>  		{ .format =3D DRM_FORMAT_R12,		.depth =3D 12, .num_planes =3D 1, .cpp =
+=3D { 2, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
+> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+> index 3f09174670b3cce6..8605a1acc6813e6c 100644
+> --- a/include/uapi/drm/drm_fourcc.h
+> +++ b/include/uapi/drm/drm_fourcc.h
+> @@ -104,6 +104,15 @@ extern "C" {
+>  #define DRM_FORMAT_C4		fourcc_code('C', '4', ' ', ' ') /* [3:0] C */
+>  #define DRM_FORMAT_C8		fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
+> =20
+> +/* 1 bpp Red */
+> +#define DRM_FORMAT_R1		fourcc_code('R', '1', ' ', ' ') /* [0] R */
+> +
+> +/* 2 bpp Red */
+> +#define DRM_FORMAT_R2		fourcc_code('R', '2', ' ', ' ') /* [1:0] R */
+> +
+> +/* 4 bpp Red */
+> +#define DRM_FORMAT_R4		fourcc_code('R', '4', ' ', ' ') /* [3:0] R */
+> +
+>  /* 8 bpp Red */
+>  #define DRM_FORMAT_R8		fourcc_code('R', '8', ' ', ' ') /* [7:0] R */
+> =20
 
-- * The children must be in their deepest states to allow the parent to
-+ * The children must be in their deepest (powered-off) states to allow
-the parent to
+Hi Geert,
+
+I have the same comment here as for C1/C2/C4: these need to specify the
+ordering inside a byte. Otherwise this reads as one byte of storage per
+pixel, but using only 1/2/4 bits of each byte.
+
+The idea of having Cx and Rx formats separately sounds good to me.
+
+
+Thanks,
+pq
+
+--Sig_/Jt_VVbdBEiI1p4OibkFRGE0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmIOHVIACgkQI1/ltBGq
+qqepcA/+LL865J5CZJYZEBDBIYPLhUz/FNe6EH1lYd+zALvj8tkr+/ERUpIYrVo6
+syM+GRsn9ZmHtBhvurgkSXnjHQ36oK2EYjOc/o4G5Oa0EkmA38SHlNe+WPL3IVsC
+fWKCupfuYHnPT6/WFd50KDv5BAN/FRtguuRByXgp8WopMnlaSGdJ5Q57UliLJNQX
+z8S4Zm2WiJ6b55Qb3qfUpSwMt0ScJ/8nmKkXnWlNyEEjxIlFC4vv/EmNJscZn98e
+YGiQxlnlzMAIBGIZGZ1iVdzsAtG77UvhpL36W5qcDbPS3R38dyotSEWTEAGzowO2
+EuudkRiJVsEmUvuXgPlN1gqo3JKqGXUe/9VXjSZIxnmh6n6pbNdfov1zfFWbipn9
+SRJIRy+9Zywuo8xvxIt+XzrKOu000hoEKAkNR5kPMKRFBW0gJlqAldYP5BwxkBjQ
+r7eIwzqjuYshHcmcvTTpy88zFR24noSuDIkLpR6PGt+Js1PPzBQdLcqqS7nQfVBl
+1mEVZCvtkts92Za17HPwTwTCHBpHXjXtKxb0or83mgaeeWbKVz+sU6FAGuymYvEa
+H4pFSBsMkUEPaCkqBY6CB9LKzJgboRNcwkaIaI+Chsrx3JfpI5VkvUlSEcb4fwSi
+RksMQvVivoRpEbAcuPX3wVae6WT0ZhZcuPmKSEroBgv9KYBoiOY=
+=oi2B
+-----END PGP SIGNATURE-----
+
+--Sig_/Jt_VVbdBEiI1p4OibkFRGE0--

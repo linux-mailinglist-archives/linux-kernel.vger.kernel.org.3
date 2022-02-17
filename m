@@ -2,136 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DAF4BA9CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5C14BA9DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245190AbiBQT3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:29:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48380 "EHLO
+        id S245204AbiBQTd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:33:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbiBQT3c (ORCPT
+        with ESMTP id S230171AbiBQTdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:29:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3DE129BB2;
-        Thu, 17 Feb 2022 11:29:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD70A61CFC;
-        Thu, 17 Feb 2022 19:29:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37C5C340E8;
-        Thu, 17 Feb 2022 19:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645126156;
-        bh=kHigbTssltdpECsVACXjUmCjoYc8nJe1TohCmnF/uDk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O0uHw0H9e1BKIXKJ2/u7FYUc5Y24CS+0asyxuvN2f7vHivb+GQMOmznT82N8OROTl
-         ciHE8TSSR3HCcxH1cGTveCtkMFi00xnkQIuCZGRvpvN4TDSGie2q4rtWDyUu6b8fyb
-         CpZGKfeAyYH2IRlf3sjYb6ycq76erMuPHJklVVz4=
-Date:   Thu, 17 Feb 2022 20:29:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [RFC PATCH 01/13] list: introduce speculative safe
- list_for_each_entry()
-Message-ID: <Yg6iCS0XZB6EtMP7@kroah.com>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-2-jakobkoschel@gmail.com>
+        Thu, 17 Feb 2022 14:33:24 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C8F1598FF;
+        Thu, 17 Feb 2022 11:33:08 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id a19so10331836qvm.4;
+        Thu, 17 Feb 2022 11:33:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=rBxmT3+5CTt9IdhylIa0a5TlmY8jTHgnD/JXk7m1eDE=;
+        b=Do8oVw2kp2yEl4I8UGBfELOtUezWrLbMjFLltSg307aAXy5a21BwcnrRlAUNOwgrpp
+         lUrxx06H40fwQBf/AE3F02b7I/sH+MmnTUQzbbR6gvlj5rHYV5fCDnVUv3FeRRJjVx6L
+         8kRammeTn3TLN0gbUzBCnaP2ZlgRXHBCgfYiBxMFesT24QFN1DK83jirH+dk2OghHw0R
+         1rt4H2SByGWOmb+HIrSudTg+JxOcKboecm68cGS3dfqPzd7m3Vj3mvfnbeoYQCtxOquB
+         5ym/3iSV06R6sxy5R5vILvQZ8JnWDcBjRDqFDNFtcTtlv4bZF0y25XV5V5Ad6p4FYedW
+         xDlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=rBxmT3+5CTt9IdhylIa0a5TlmY8jTHgnD/JXk7m1eDE=;
+        b=VicuAaZBww6Dlel/DW7mIqAb5xPs4YPgGCVWuqyoL4sy2f5gLG1H7Sd8V5sTUavovU
+         XYqFezVwKRu07cG0wnIo132MvmsEuP7HGjYbmaupR3vcER1KYaYA1PO2t16QYLoDHOMo
+         NN0J2th3YuTYhAwN6HRzw5MhEsamGa3wR6iiInDRTg4a94O6VvDPzANRJK0cN54rk8ix
+         Guc4hox5zLfl5ZsOHMuPCVpWbi2qaIJluwu9sR0gDKR74r4EXLpR4CxbpagSiAjinlyW
+         I8zrr2nz2Zd0VyfCIJaiZGx4PA0pL+LJwHc3CShEQrja1S35t/nC29wYwrNpgDH6ziC7
+         dOsA==
+X-Gm-Message-State: AOAM5302PfxlmxYJoBSHdyqHEBae2WTJzOo6hNLP5x3ITFPFI4k8Dhfq
+        NVLI4xfrprDOeUQXYy8f2RBUwRsPUISgDw==
+X-Google-Smtp-Source: ABdhPJzCwNOh0o4gHu5fbDAM9egA9v84qNxeFoF+LbuJQYWgydkUFjf+wf5ljJbSERkA55PYYM3a1A==
+X-Received: by 2002:a05:6214:581:b0:42d:7ccf:220b with SMTP id bx1-20020a056214058100b0042d7ccf220bmr3222930qvb.9.1645126387949;
+        Thu, 17 Feb 2022 11:33:07 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j14sm22031729qko.10.2022.02.17.11.33.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 11:33:07 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a8e9e6f1-e7a0-d40d-8065-b72f60c72a32@roeck-us.net>
+Date:   Thu, 17 Feb 2022 11:33:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217184829.1991035-2-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220217072340.2472987-1-eugene.shalygin@gmail.com>
+ <bf18f96a-b9ee-43f0-8b53-fc7d4aa6cf39@roeck-us.net>
+ <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) do not print from .probe()
+In-Reply-To: <CAB95QASiF=mXcUoBsOwKvtZ8KmVYgNd1bP-5+e0WYifcEzK55w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 07:48:17PM +0100, Jakob Koschel wrote:
-> list_for_each_entry() selects either the correct value (pos) or a safe
-> value for the additional mispredicted iteration (NULL) for the list
-> iterator.
-> list_for_each_entry() calls select_nospec(), which performs
-> a branch-less select.
+On 2/17/22 10:43, Eugene Shalygin wrote:
+> On Thu, 17 Feb 2022 at 19:26, Guenter Roeck <linux@roeck-us.net> wrote:
+>> Looks like you did not run checkpatch.
 > 
-> On x86, this select is performed via a cmov. Otherwise, it's performed
-> via various shift/mask/etc. operations.
+> I did (0 errors/warnings/checks). What needs to be corrected?
 > 
-> Kasper Acknowledgements: Jakob Koschel, Brian Johannesmeyer, Kaveh
-> Razavi, Herbert Bos, Cristiano Giuffrida from the VUSec group at VU
-> Amsterdam.
+
+Interesting. It appears that the continuation line in the declaration
+confuses it. Otherwise you would get:
+
+WARNING: Missing a blank line after declarations
+
+>> Either case, I think you should just drop this function In probe:
 > 
-> Co-developed-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
-> Signed-off-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  arch/x86/include/asm/barrier.h | 12 ++++++++++++
->  include/linux/list.h           |  3 ++-
->  include/linux/nospec.h         | 16 ++++++++++++++++
->  3 files changed, 30 insertions(+), 1 deletion(-)
+> Yes, currently that function is tiny, but some tests with motherboards
+> from other families are done by users and if I add other families, the
+> information required for each board model will grow and in that case
+> I'd switch from dmi_system_id array to a custom struct to define all
+> the board-related data at at the same place, and to save some space in
+> the module binary, as unused parts of the dmi_system_id array already
+> take a quarter of the total binary size. So, the function will likely
+> get some more code soon.
 > 
-> diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
-> index 35389b2af88e..722797ad74e2 100644
-> --- a/arch/x86/include/asm/barrier.h
-> +++ b/arch/x86/include/asm/barrier.h
-> @@ -48,6 +48,18 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
->  /* Override the default implementation from linux/nospec.h. */
->  #define array_index_mask_nospec array_index_mask_nospec
->  
-> +/* Override the default implementation from linux/nospec.h. */
-> +#define select_nospec(cond, exptrue, expfalse)				\
-> +({									\
-> +	typeof(exptrue) _out = (exptrue);				\
-> +									\
-> +	asm volatile("test %1, %1\n\t"					\
-> +	    "cmove %2, %0"						\
-> +	    : "+r" (_out)						\
-> +	    : "r" (cond), "r" (expfalse));				\
-> +	_out;								\
-> +})
-> +
->  /* Prevent speculative execution past this barrier. */
->  #define barrier_nospec() alternative("", "lfence", X86_FEATURE_LFENCE_RDTSC)
->  
-> diff --git a/include/linux/list.h b/include/linux/list.h
-> index dd6c2041d09c..1a1b39fdd122 100644
-> --- a/include/linux/list.h
-> +++ b/include/linux/list.h
-> @@ -636,7 +636,8 @@ static inline void list_splice_tail_init(struct list_head *list,
->   */
->  #define list_for_each_entry(pos, head, member)				\
->  	for (pos = list_first_entry(head, typeof(*pos), member);	\
-> -	     !list_entry_is_head(pos, head, member);			\
-> +	    ({ bool _cond = !list_entry_is_head(pos, head, member);	\
-> +	     pos = select_nospec(_cond, pos, NULL); _cond; }); \
->  	     pos = list_next_entry(pos, member))
->  
 
-You are not "introducing" a new macro for this, you are modifying the
-existing one such that all users of it now have the select_nospec() call
-in it.
+Hmm, ok. Wouldn't you still need some kind of dmi match ?
 
-Is that intentional?  This is going to hit a _lot_ of existing entries
-that probably do not need it at all.
+Thanks,
+Guenter
 
-Why not just create list_for_each_entry_nospec()?
+> Regards,
+> Eugene
 
-thanks,
-
-greg k-h

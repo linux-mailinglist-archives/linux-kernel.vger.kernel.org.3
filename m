@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F384BA71C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9884BA71A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243710AbiBQR2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:28:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54902 "EHLO
+        id S243705AbiBQR22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:28:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbiBQR2f (ORCPT
+        with ESMTP id S233104AbiBQR2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:28:35 -0500
-X-Greylist: delayed 4194 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 09:28:20 PST
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63B1255798;
-        Thu, 17 Feb 2022 09:28:19 -0800 (PST)
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 21HHRuww006618;
-        Fri, 18 Feb 2022 02:27:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 21HHRuww006618
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1645118877;
-        bh=l1TyzWfQ0jAdhokclSQdnzp8UboMTXXAhan3iI6BUk4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hvNZ4ikLbPjFV/y7ChTE5b8OQBL4g8ZAbtTOwQUZywEnlNF2G/aTi0H1hOhjyGN1C
-         NHEvmztYFCF9Dc6V+hJ5X/wHyELb7nkaACM0wtDbd1+6U7R7+rDFLUXLtZq0w84U3W
-         BVfybmzISX6N+vJbJd360lhJt+4BjRbSdwMcbxAFVXLN1dvr/KzBnHTTvkMEwi2rGw
-         1F0F3DqlPQseUBPJmjskaAJFRh4BWjbcpSq8s9JNDIlKwAPaNXW3e3v/K/zuxd+7Vj
-         l04cKXOH+QyAL/gsJtSNW0MqjhMRjyrIRZpPCWh9tKNIq0WeSu5TcRpw/ib8raCV+x
-         uk3hly0CQ39pQ==
-X-Nifty-SrcIP: [209.85.215.171]
-Received: by mail-pg1-f171.google.com with SMTP id q132so5607076pgq.7;
-        Thu, 17 Feb 2022 09:27:57 -0800 (PST)
-X-Gm-Message-State: AOAM531kh4fpiuOKOs30sCiauRibhY7cr78lCmaAEcXo9f7aMZXkKJir
-        g3WL8JHK2Mg4ZvUu6o6py3dA384kSBA95+sR4ik=
-X-Google-Smtp-Source: ABdhPJxBWdwy+sIqV6zpRtht5DZ0OmlC41IapWVAe36IX2cFMRgSnZS9d19h+BtDYudfRbxf5PEvVUO6wlOp73L12Wo=
-X-Received: by 2002:a05:6a00:a01:b0:4cc:61e5:c548 with SMTP id
- p1-20020a056a000a0100b004cc61e5c548mr4081108pfh.68.1645118876247; Thu, 17 Feb
- 2022 09:27:56 -0800 (PST)
+        Thu, 17 Feb 2022 12:28:25 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F52124CCF9;
+        Thu, 17 Feb 2022 09:28:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645118891; x=1676654891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R3RAa0snBFN25UYoIFfCG9a4yp7xLIu18JkBJbhdzeQ=;
+  b=FGRyJFo4LvwrxRM1ZhF12tPBiUfa2s0fiedcBnzAkFVmCD17POgzk61E
+   0cmvjZCCHPFAlA4HXoYOFiQI+XC44Sq2aoahB5ewWgnqYTHo8ATRtkvMv
+   y83zFePyIn8IjBL0ok2EDVratAbPa+Jt5SwCCJs2EhbGBubK45i9CwNa2
+   XiWcbvI5lTIQ5n64Hb4TIAJPHYPaGGG/kxcPyUfvLBZ6uFUt39DXsL/PU
+   nOBf6ldhb//WJYLBAqTEyPCGPcjqGlzLWrc73B8eEI4++rdSjKrXiqyKY
+   PaiyomSLWHCX5FhDeE7JE6rjXuB+AuUBk1IK5qvL110lauc+vJBImdQgX
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="314193666"
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="314193666"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 09:28:10 -0800
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="530382515"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 09:28:10 -0800
+Date:   Thu, 17 Feb 2022 09:28:09 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [RFC PATCH 1/2] x86/mce: Handle AMD threshold interrupt storms
+Message-ID: <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
+References: <20220217141609.119453-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220217141609.119453-2-Smita.KoralahalliChannabasappa@amd.com>
 MIME-Version: 1.0
-References: <978951d76d8cb84bab347c7623bc163e9a038452.1645100305.git.christophe.leroy@csgroup.eu>
- <35bcd5df0fb546008ff4043dbea68836@AcuMS.aculab.com> <d38e5e1c-29b6-8cc6-7409-d0bdd5772f23@csgroup.eu>
- <9b8ef186-c7fe-822c-35df-342c9e86cc88@csgroup.eu> <3c2b682a7d804b5e8749428b50342c82@AcuMS.aculab.com>
- <CAK7LNASWTJ-ax9u5yOwHV9vHCBAcQTazV-oXtqVFVFedOA0Eqw@mail.gmail.com> <2e38265880db45afa96cfb51223f7418@AcuMS.aculab.com>
-In-Reply-To: <2e38265880db45afa96cfb51223f7418@AcuMS.aculab.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 18 Feb 2022 02:27:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASvBLLWMa+kb5eGJ6vpSqob_dBUxwCnpHZfL-spzRG7qA@mail.gmail.com>
-Message-ID: <CAK7LNASvBLLWMa+kb5eGJ6vpSqob_dBUxwCnpHZfL-spzRG7qA@mail.gmail.com>
-Subject: Re: [PATCH net v3] net: Force inlining of checksum functions in net/checksum.h
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217141609.119453-2-Smita.KoralahalliChannabasappa@amd.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 1:49 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Masahiro Yamada
-> > Sent: 17 February 2022 16:17
-> ...
-> > No.  Not that one.
-> >
-> > The commit you presumably want to revert is:
-> >
-> > a771f2b82aa2 ("[PATCH] Add a section about inlining to
-> > Documentation/CodingStyle")
-> >
-> > This is now referred to as "__always_inline disease", though.
->
-> That description is largely fine.
->
-> Inappropriate 'inline' ought to be removed.
-> Then 'inline' means - 'really do inline this'.
+On Thu, Feb 17, 2022 at 08:16:08AM -0600, Smita Koralahalli wrote:
+> Extend the logic of handling CMCI storms to AMD threshold interrupts.
+> 
+> Similar to CMCI storm handling, keep track of the rate at which each
+> processor sees interrupts. If it exceeds threshold, disable interrupts
+> and switch to polling of machine check banks.
 
+I've been sitting on some partially done patches to re-work
+storm handling for Intel ... which rips out all the existing
+storm bits and replaces with something all new. I'll post the
+2-part series as replies to this.
 
-You cannot change "static inline" to "static"
-in header files.
+Two-part motivation:
 
-If  "static inline" meant __always_inline,
-there would be no way to negate it.
-That's why we need both inline and __always_inline.
+1) Disabling CMCI globally is an overly big hammer (as you note
+in your patches which to a more gentle per-CPU disable.
 
+2) Intel signals some UNCORRECTED errors using CMCI (yes, turns
+out that was a poorly chosen name given the later evolution of
+the architecture). Since we don't want to miss those, the proposed
+storm code just bumps the threshold to (almost) maximum to mitigate,
+but not eliminate the storm. Note that the threshold only applies
+to corrected errors.
 
-
-
-> Anyone remember massive 100+ line #defines being
-> used to get code inlined 'to make it faster'.
-> Sometimes being expanded several times in succession.
-> May have helped a 68020, but likely to be a loss on
-> modern cpu with large I-cache and slow memory.
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-
-
---
-Best Regards
-Masahiro Yamada
+-Tony

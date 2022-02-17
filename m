@@ -2,87 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CCAF4BABA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEBB4BABAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243851AbiBQVWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 16:22:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46920 "EHLO
+        id S244443AbiBQVXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 16:23:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242293AbiBQVWE (ORCPT
+        with ESMTP id S242293AbiBQVXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 16:22:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97B680203;
-        Thu, 17 Feb 2022 13:21:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84CA461257;
-        Thu, 17 Feb 2022 21:21:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C75F3C340E8;
-        Thu, 17 Feb 2022 21:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645132909;
-        bh=7wRGQ9XUjUEObWwDI/pOFW5a3xf50Zwu7W8VBniCA4A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MlGbtVRJwew4w65b0/yRW3mxGNMD7ByyGXhc5REppHbx4FdCb5ysmtZinrxuB8qYo
-         qIfFfynKrObf6KP+FknPb+Qr4N33gx32K4sDI/ceitc5U4SFmmuW0sVQNuQZLyCLZx
-         1uNowKlUVdCCW2VVsjCI5GanpA88/t5O4N42zVo/wJgNoNQvGqnb9sWXj+qcICvq/X
-         xjpsB0YKvAmwap+0XpvOi3L2XkfVbt2TTj99tSPFuTEZ0owmi/j2mu0OdQd6+5ORnp
-         O6z3ps7s0gC6BNBgCr0HzZEDD285hecuPgB7LAkIE+ey+sL5A85+N2/UqvwQFX+iZw
-         Lmfrf7JZ3HC9g==
-Received: by pali.im (Postfix)
-        id DEDFB1187; Thu, 17 Feb 2022 22:21:45 +0100 (CET)
-Date:   Thu, 17 Feb 2022 22:21:45 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v2 1/2] PCI: Add defines for normal and
- subtractive PCI bridges
-Message-ID: <20220217212145.fvwc2axp6nyeqs36@pali>
-References: <20220214114109.26809-1-pali@kernel.org>
- <20220217211134.GA305475@bhelgaas>
+        Thu, 17 Feb 2022 16:23:33 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF6F8020D;
+        Thu, 17 Feb 2022 13:23:18 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id u5so5573380ple.3;
+        Thu, 17 Feb 2022 13:23:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8z3d63SHqcR3mVKHY24fDb7BLgrlDasVQnpnwy2k9bA=;
+        b=Or2EAeF7OG9Y0jkZlUMw5eiIyDn8Jn5IMGBUKJoepqo9VcwlEbh8Yn0VEqKAvAmFhT
+         weo8hKHvvJN5o7MM62XT02IsvY5YteZJPBb7J3YFTGPwuZCqFBJXEuYeAqpJY2/cG1zO
+         4NScJxRj9PJlK+5xsDVSZGFx+4qjQLiuKF9UsNSKnk8ezGfJGSDX6iaZ2uQK0ppjOql+
+         r1IAAizitkSMZLuWFOXlvRuESmn2Pm+L/vBj0hwGqd8tUhYl9PYSvGZfX5dtDDRH45og
+         th84ud2vVbyEwrL+IOWOmpnN0VDSJkWS3eroA+bMqUXYjVH1PwPUNhcLi8VSB23yQCus
+         asNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8z3d63SHqcR3mVKHY24fDb7BLgrlDasVQnpnwy2k9bA=;
+        b=gLRB57uW2G706lxGZWXYMOR8vqlCmDYs/TdPKoz0nkectmhxjXiknpQ5N7yRwR52wQ
+         oW/SbBU4xeHWwe5ytIXQsDSw9ptlvJw/OQJ03DGsXdB9YGnqabaoYM1Ibb6MSXmryE+j
+         1IBQaCyTJkmh/DLkx6b/MQF8m53m8s0ayQh22PBBncjkYwKyIsn4k5xZ/I4YJgG/WtYF
+         lnd3DM3H7aEgBXZydsxDMPhgyEVEfDL1AckAUtvmgDOT95qV6GBkMPy4Frt7aeydSgJJ
+         JjSX+il66x9lAbarbOc+E6Bg0glshHKWWcLPgzM4L+9qdtRrHbm90Wo+7g4sMzDg+XF+
+         coVQ==
+X-Gm-Message-State: AOAM5323Y7IuTQnRYp7QOJqTxj8uoLHcnKYP5yV5Uvbpole15FB/Hph1
+        6x1JQjFsYrhD3mvlBkwNtYI=
+X-Google-Smtp-Source: ABdhPJyFjH22s7GuFlRHTSHAsxZp5MToH7MfkJjgeqx06xX0SCyD6FKiRXcYAxzgw+IPq9OocGqd8A==
+X-Received: by 2002:a17:90a:f409:b0:1b8:b6fe:5adf with SMTP id ch9-20020a17090af40900b001b8b6fe5adfmr4873749pjb.49.1645132997692;
+        Thu, 17 Feb 2022 13:23:17 -0800 (PST)
+Received: from jeffreyji1.c.googlers.com.com (180.145.227.35.bc.googleusercontent.com. [35.227.145.180])
+        by smtp.gmail.com with ESMTPSA id s2sm520899pfk.3.2022.02.17.13.23.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 13:23:16 -0800 (PST)
+From:   Jeffrey Ji <jeffreyjilinux@gmail.com>
+X-Google-Original-From: Jeffrey Ji <jeffreyji@google.com>
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        jeffreyji <jeffreyji@google.com>
+Subject: [PATCH v2 net-next] teaming: deliver link-local packets with the link they arrive on
+Date:   Thu, 17 Feb 2022 21:23:12 +0000
+Message-Id: <20220217212312.2827792-1-jeffreyji@google.com>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220217211134.GA305475@bhelgaas>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 17 February 2022 15:11:34 Bjorn Helgaas wrote:
-> On Mon, Feb 14, 2022 at 12:41:08PM +0100, Pali Rohár wrote:
-> > Add following two new PCI class codes defines into pci_ids.h include file:
-> > 
-> >   PCI_CLASS_BRIDGE_PCI_NORMAL
-> >   PCI_CLASS_BRIDGE_PCI_SUBTRACTIVE
-> > 
-> > And use these defines in all kernel code for describing PCI class codes for
-> > normal and subtractive PCI bridges.
-> 
-> Looks good; is this another case?
-> 
->   drivers/pci/controller/pci-mvebu.c:     dev_rev |= (PCI_CLASS_BRIDGE_PCI << 8) << 8;
+From: jeffreyji <jeffreyji@google.com>
 
-Yes! It is.
+skb is ignored if team port is disabled. We want the skb to be delivered
+if it's an link layer packet.
 
-> >  static void quirk_sb1250_ht(struct pci_dev *dev)
-> >  {
-> > -	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-> > +	dev->class = PCI_CLASS_BRIDGE_PCI_NORMAL;
+Issue is already fixed for bonding in
+commit b89f04c61efe ("bonding: deliver link-local packets with skb->dev set to link that packets arrived on")
+
+changelog:
+
+v2: change LLDP -> link layer in comments/commit descrip, comment format
+
+Signed-off-by: jeffreyji <jeffreyji@google.com>
+---
+ drivers/net/team/team.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/team/team.c b/drivers/net/team/team.c
+index 8b2adc56b92a..b07dde6f0abf 100644
+--- a/drivers/net/team/team.c
++++ b/drivers/net/team/team.c
+@@ -734,6 +734,11 @@ static rx_handler_result_t team_handle_frame(struct sk_buff **pskb)
+ 	port = team_port_get_rcu(skb->dev);
+ 	team = port->team;
+ 	if (!team_port_enabled(port)) {
++		if (is_link_local_ether_addr(eth_hdr(skb)->h_dest))
++			/* link-local packets are mostly useful when stack receives them
++			 * with the link they arrive on.
++			 */
++			return RX_HANDLER_PASS;
+ 		/* allow exact match delivery for disabled ports */
+ 		res = RX_HANDLER_EXACT;
+ 	} else {
+-- 
+2.35.1.265.g69c8d7142f-goog
+

@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B6D4BA721
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E334BA726
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243715AbiBQR3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:29:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59026 "EHLO
+        id S243727AbiBQRaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:30:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiBQR3c (ORCPT
+        with ESMTP id S232550AbiBQRaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:29:32 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93E226A2C9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:29:16 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id w20so5104785plq.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:29:16 -0800 (PST)
+        Thu, 17 Feb 2022 12:30:21 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ECD272D8F;
+        Thu, 17 Feb 2022 09:30:06 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id y11so251228pfa.6;
+        Thu, 17 Feb 2022 09:30:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GGqa2dUUjBxrMHhzGOK6UxPbD0noYUoQJRB1vqXsV8Q=;
-        b=BvptpOqFENbCnYy2v0SFJ3RtUpZRORi7aifdATrLbrZ/tFc7pqTsYmbttEpgguIZ0u
-         jZMfrZJzdCiUm1MYvf32LwQcrqEetXjYXRpbJi+iUc+0++vnSlP6W2Pkm51Mjpbhct0U
-         cbxyaoqYxK/d9S/gQrgG+RsyCQWU/rZOV4l+E=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=S0mP+gQItL0EexL5aPknfQRXrpjtE7gE4U7C9cJtgV0=;
+        b=Kz/FLUFB0NDlTmKj99fKKrcnTQeB/fx9Uqw/jTCu6dHipjcBAFoLfekUWSdzw4Hlui
+         CIfb35ZI/EwZc2w1inhb02y4CQmXICjByqCDQ2BPY44irZEmjAnMtl3PWbfi8VQoVeYW
+         NNLg6pvOxgWyAJbwxhYDOXyVikHxZj++z4AslfVm9w/r1swFlA72K1beNxhQd9MxeUNr
+         qWTks3mHfsqk3XVu625gH7iVX2+ueUNpqoR1jinzv9zi69TqHYBbrfdNz8EMwaF8wl/v
+         3xupzVGdpvX0kikiXxrfSgYXS5obqL3a9/UCQF33LpHpSfZ7Ev78EK2brmSlLMVF6mz6
+         ZOww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GGqa2dUUjBxrMHhzGOK6UxPbD0noYUoQJRB1vqXsV8Q=;
-        b=N31Ta8SKp5Da9EZGfvzpWWwL5fyA9ZYxUlgNbaKGCmWOQyDv8vlC5gY0gnew1nZU1v
-         /sroiXZMWR5udIWRDcUekdfJplHMgqxWnh0dNAnkQLPTL05vM6Tod1YmlMtBsBBRGtm1
-         z5mHLG0mjWhFndw91pDE3Pm1tyrFH7KLC52FDvg5suMaWAHUsdC0OKcoViK5cAd9m+58
-         Trr4kz7S52rjJNsR3pI2hWSPKCIbgTyZ8Yct6/9ICDPyISum9ZW7PwNy3hNFxKOX42sO
-         TOeA6Qz2c7chsn93jg3Dg2JsxRkJYaaZnyQ3+ksGsmMGd0BHfLfeydIVihGNCkwpykt8
-         EqVA==
-X-Gm-Message-State: AOAM531zd3lfi4qvVP8/PmjF/Jo48lb7YyHlGxCSxthMc8RDy+0ubOK/
-        nKoo/gaJ3a9HXGYdwu3324xd8Q==
-X-Google-Smtp-Source: ABdhPJyJQiP7APGWLovv/1NEYmHF6Vt3hq6S6WQdSy5kF3kArgSgJhYGCOtQO/pSPyyQKpqMAmzySA==
-X-Received: by 2002:a17:90a:d243:b0:1b9:cbac:a775 with SMTP id o3-20020a17090ad24300b001b9cbaca775mr4155225pjw.196.1645118956169;
-        Thu, 17 Feb 2022 09:29:16 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 16sm8894041pgz.76.2022.02.17.09.29.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 09:29:15 -0800 (PST)
-Date:   Thu, 17 Feb 2022 09:29:14 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, x86@kernel.org,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] um: Cleanup syscall_handler_t definition/cast, fix
- warning
-Message-ID: <202202170928.F02D6F41@keescook>
-References: <20220210034353.1065703-1-davidgow@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=S0mP+gQItL0EexL5aPknfQRXrpjtE7gE4U7C9cJtgV0=;
+        b=fayBswHwBkUvy+Ywk9aRXWjUYyq7veoLKX4xn6vIJ72gin5bkdLumm0HOMrovzG0R+
+         qCr9Lkqk/Py6VzoylKX9+uS9AYr+9Y024cZ49DxSTqW47ga8EdaFdC1FR/JhUMifMzok
+         2Huk5tb3ruOjS8REWvSo/wxX3BZlHBSi/7HQ8zYWNaGi8qS9ymxHgJtJWoIvnhyKzozJ
+         GNZxHkUx0mX28YiDG9ILfcEIsKOsCA8p7lIypg7s7tjw0UkF5gd/eLdvqLbrn0bzqrpi
+         tPnN73oyrhRElV3Xzz6ov27LZ9viGzyyH5JwozP8BT3CfvftomlBvTHryZeRK+5MBza+
+         QvQQ==
+X-Gm-Message-State: AOAM533TA2fklPpHkv8SlpBiEeZf8F0wj/y8V8x1wnvqNFwAaJb0bKqM
+        8qT7bDbFGZB/tE1IDTu0utsyfRVTNsZ8sr1LWP4=
+X-Google-Smtp-Source: ABdhPJyN1tP+rIxNtkLNTBcv8VhNYwdGPrE+6Ix9rpxGp0PA6bghC6wpL1IbAlkx+BCS5PTp2fOUYtendkuCPisvovw=
+X-Received: by 2002:a63:f711:0:b0:373:585d:2fd4 with SMTP id
+ x17-20020a63f711000000b00373585d2fd4mr3184332pgh.287.1645119005789; Thu, 17
+ Feb 2022 09:30:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220210034353.1065703-1-davidgow@google.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217145003.78982-1-cgzones@googlemail.com>
+In-Reply-To: <20220217145003.78982-1-cgzones@googlemail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 17 Feb 2022 09:29:54 -0800
+Message-ID: <CAADnVQJKkrWosMo3S1Ua15_on0S5FWYqUgETi6gqccVOibvEAg@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] capability: use new capable_or functionality
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Serge Hallyn <serge@hallyn.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Du Cheng <ducheng2@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Rolf Eike Beer <eb@emlix.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Colin Cross <ccross@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Xiaofeng Cao <cxfcosmos@gmail.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Alistair Delva <adelva@google.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 11:43:53AM +0800, David Gow wrote:
-> The syscall_handler_t type for x86_64 was defined as 'long (*)(void)',
-> but always cast to 'long (*)(long, long, long, long, long, long)' before
-> use. This now triggers a warning (see below).
-> 
-> Define syscall_handler_t as the latter instead, and remove the cast.
-> This simplifies the code, and fixes the warning.
-> 
-> Warning:
-> In file included from ../arch/um/include/asm/processor-generic.h:13
->                  from ../arch/x86/um/asm/processor.h:41
->                  from ../include/linux/rcupdate.h:30
->                  from ../include/linux/rculist.h:11
->                  from ../include/linux/pid.h:5
->                  from ../include/linux/sched.h:14
->                  from ../include/linux/ptrace.h:6
->                  from ../arch/um/kernel/skas/syscall.c:7:
-> ../arch/um/kernel/skas/syscall.c: In function ‘handle_syscall’:
-> ../arch/x86/um/shared/sysdep/syscalls_64.h:18:11: warning: cast between incompatible function types from ‘long int (*)(void)’ to ‘long int (*)(long int,  long int,  long int,  long int,  long int,  long int)’ [
-> -Wcast-function-type]
->    18 |         (((long (*)(long, long, long, long, long, long)) \
->       |           ^
-> ../arch/x86/um/asm/ptrace.h:36:62: note: in definition of macro ‘PT_REGS_SET_SYSCALL_RETURN’
->    36 | #define PT_REGS_SET_SYSCALL_RETURN(r, res) (PT_REGS_AX(r) = (res))
->       |                                                              ^~~
-> ../arch/um/kernel/skas/syscall.c:46:33: note: in expansion of macro ‘EXECUTE_SYSCALL’
->    46 |                                 EXECUTE_SYSCALL(syscall, regs));
->       |                                 ^~~~~~~~~~~~~~~
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
+On Thu, Feb 17, 2022 at 6:50 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> Use the new added capable_or macro in appropriate cases, where a task
+> is required to have any of two capabilities.
+>
+> Reorder CAP_SYS_ADMIN last.
+>
+> TODO: split into subsystem patches.
 
-Thanks for this! I was just about to go figure this out too. :)
+Yes. Please.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Kees Cook <keescook@chromium.org>
+The bpf side picked the existing order because we were aware
+of that selinux issue.
+Looks like there is no good order that works for all.
+So the new helper makes a lot of sense.
 
--- 
-Kees Cook
+> Fixes: 94c4b4fd25e6 ("block: Check ADMIN before NICE for IOPRIO_CLASS_RT"=
+)

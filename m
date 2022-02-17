@@ -2,196 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317704B9D3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973074B9D8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239117AbiBQKe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:34:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40798 "EHLO
+        id S239078AbiBQKsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:48:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234080AbiBQKey (ORCPT
+        with ESMTP id S230033AbiBQKsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:34:54 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B011A1389;
-        Thu, 17 Feb 2022 02:34:39 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A59FE1F45962
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645094078;
-        bh=SVtmAhjbCcfy60glzhGufZJi/SGBEgXxMHHvfrInk78=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Hir6ZAzP5xKsuWQJOkhmD4vmeuRqOSqkuXfR5V6cDif2zWwrK1EiCJKXbHqjUymQv
-         hK3JJK7UtdpfXb6vWnjhQLk5DT5SogIyZjUq+3Mddf8u/+Bws8877ifRtK0VKf96oV
-         vtH/MoPn4acGO0u0QFn9vpZZzTvXlC52V/QwXAruED9l3UfddfbfMdG4h18XC3bTOM
-         NLisby2js2QXmSlS9eqEwBncQIGW8OVIUkVMKBjK2rw7L/y3dfTVkTXPKjdew6n7g5
-         NNSZ93bQiuyKWMlWMtyRz4k7RcRR3R4k5AvgR9zp9KZ27EhkO3ahufxwORHUxSvPS+
-         TsdLmKayGDXIQ==
-Message-ID: <0c91da54-190f-7039-ca5d-414e397f7a95@collabora.com>
-Date:   Thu, 17 Feb 2022 11:34:35 +0100
+        Thu, 17 Feb 2022 05:48:50 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505581ED1DB;
+        Thu, 17 Feb 2022 02:48:35 -0800 (PST)
+Received: from relay10.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::230])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 8FCBAC5625;
+        Thu, 17 Feb 2022 10:35:31 +0000 (UTC)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 08D12240006;
+        Thu, 17 Feb 2022 10:35:24 +0000 (UTC)
+Message-ID: <93e5dc0bbeb0b44c9b225946b3ab81d3af3a1789.camel@hadess.net>
+Subject: Re: [PATCH] HID: Add mapping for KEY_APP_LAUNCHER
+From:   Bastien Nocera <hadess@hadess.net>
+To:     William Mahon <wmahon@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     William Mahon <wmahon@google.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org
+Date:   Thu, 17 Feb 2022 11:35:24 +0100
+In-Reply-To: <20220217053354.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid>
+References: <20220217053354.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2] arm64: dts: mediatek: Add Mediatek mt8192 cpufreq
- device nodes
-Content-Language: en-US
-To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-References: <1609223471-24325-1-git-send-email-andrew-sh.cheng@mediatek.com>
- <20220210144659.2vkuuh74xagic3ud@notapiano>
- <20220210185603.lmgf4ppppe3ccscj@notapiano>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220210185603.lmgf4ppppe3ccscj@notapiano>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/02/22 19:56, Nícolas F. R. A. Prado ha scritto:
-> Hi again,
-> please see my comment below.
+On Thu, 2022-02-17 at 05:33 +0000, William Mahon wrote:
+> The App Launcher key is used to bring up the Launcher menu.
 > 
-> On Thu, Feb 10, 2022 at 09:47:04AM -0500, Nícolas F. R. A. Prado wrote:
->> Hi Andrew,
->>
->> On Tue, Dec 29, 2020 at 02:31:11PM +0800, Andrew-sh.Cheng wrote:
->>> From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
->>>
->>> Correct dts node name in patch v1: performance-domain
->>> This patch depends on [1] and [2].
->>>
->>> [1]http://lists.infradead.org/pipermail/linux-mediatek/2020-November/019378.html
->>> [2]https://patchwork.kernel.org/project/linux-mediatek/patch/1607586516-6547-3-git-send-email-hector.yuan@mediatek.com/
->>
->> Those two series are now merged, so no dependencies missing for this patch any
->> longer.
->>
->> Please rebase this patch, as there are some conflicts. I've already verified it,
->> and after you rebase I can send a reviewed-by.
->>
->> Thanks,
->> Nícolas
->>
->>>
->>> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
->>> ---
->>>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 14 ++++++++++++++
->>>   1 file changed, 14 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> index 69d45c7b31f1..a907ee7e650a 100644
->>> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
->>> @@ -39,6 +39,7 @@
->>>   			compatible = "arm,cortex-a55";
->>>   			reg = <0x000>;
->>>   			enable-method = "psci";
->>> +			performance-domains = <&performance 0>;
->>>   			clock-frequency = <1701000000>;
->>>   			next-level-cache = <&l2_0>;
->>>   			capacity-dmips-mhz = <530>;
->>> @@ -49,6 +50,7 @@
->>>   			compatible = "arm,cortex-a55";
->>>   			reg = <0x100>;
->>>   			enable-method = "psci";
->>> +			performance-domains = <&performance 0>;
->>>   			clock-frequency = <1701000000>;
->>>   			next-level-cache = <&l2_0>;
->>>   			capacity-dmips-mhz = <530>;
->>> @@ -59,6 +61,7 @@
->>>   			compatible = "arm,cortex-a55";
->>>   			reg = <0x200>;
->>>   			enable-method = "psci";
->>> +			performance-domains = <&performance 0>;
->>>   			clock-frequency = <1701000000>;
->>>   			next-level-cache = <&l2_0>;
->>>   			capacity-dmips-mhz = <530>;
->>> @@ -69,6 +72,7 @@
->>>   			compatible = "arm,cortex-a55";
->>>   			reg = <0x300>;
->>>   			enable-method = "psci";
->>> +			performance-domains = <&performance 0>;
->>>   			clock-frequency = <1701000000>;
->>>   			next-level-cache = <&l2_0>;
->>>   			capacity-dmips-mhz = <530>;
->>> @@ -79,6 +83,7 @@
->>>   			compatible = "arm,cortex-a76";
->>>   			reg = <0x400>;
->>>   			enable-method = "psci";
->>> +			performance-domains = <&performance 1>;
->>>   			clock-frequency = <2171000000>;
->>>   			next-level-cache = <&l2_1>;
->>>   			capacity-dmips-mhz = <1024>;
->>> @@ -89,6 +94,7 @@
->>>   			compatible = "arm,cortex-a76";
->>>   			reg = <0x500>;
->>>   			enable-method = "psci";
->>> +			performance-domains = <&performance 1>;
->>>   			clock-frequency = <2171000000>;
->>>   			next-level-cache = <&l2_1>;
->>>   			capacity-dmips-mhz = <1024>;
->>> @@ -99,6 +105,7 @@
->>>   			compatible = "arm,cortex-a76";
->>>   			reg = <0x600>;
->>>   			enable-method = "psci";
->>> +			performance-domains = <&performance 1>;
->>>   			clock-frequency = <2171000000>;
->>>   			next-level-cache = <&l2_1>;
->>>   			capacity-dmips-mhz = <1024>;
->>> @@ -109,6 +116,7 @@
->>>   			compatible = "arm,cortex-a76";
->>>   			reg = <0x700>;
->>>   			enable-method = "psci";
->>> +			performance-domains = <&performance 1>;
->>>   			clock-frequency = <2171000000>;
->>>   			next-level-cache = <&l2_1>;
->>>   			capacity-dmips-mhz = <1024>;
->>> @@ -194,6 +202,12 @@
->>>   		compatible = "simple-bus";
->>>   		ranges;
->>>   
->>> +		performance: performance-controller@0011bc00 {
-> 
-> Actually there is a warning being introduced here on dtbs_check:
-> 
-> 	soc: 'performance-controller@0011bc00' does not match any of the regexes: '@(0|[1-9a-f][0-9a-f]*)$', '^[^@]+$', 'pinctrl-[0-9]+'
-> 		From schema: [...]/dtschema/schemas/simple-bus.yaml
-> 
-> So you should also change the address to not start with zeros: 11bc00
-> 
-> Thanks,
-> Nícolas
-> 
->>> +			compatible = "mediatek,cpufreq-hw";
->>> +			reg = <0 0x0011bc10 0 0x120>, <0 0x0011bd30 0 0x120>;
->>> +			#performance-domain-cells = <1>;
->>> +		};
->>> +
->>>   		gic: interrupt-controller@c000000 {
->>>   			compatible = "arm,gic-v3";
->>>   			#interrupt-cells = <4>;
->>> -- 
->>> 2.12.5
+> This patch adds a new key definition KEY_APP_LAUNCHER and maps
+> 0x0c02a28
+ 
+Is this a typo? It's not the same format as in your other patch.
 
-Hello Andrew,
+KEY_DASHBOARD as used in the Mac keyboard drivers looks like a good
+match for KEY_APP_LAUNCHER. If not, it would be good to explain why in
+the commit message.
 
-are you still interested in upstreaming this patch?
-If you are, please update it with the suggested changes.
+See 437184ae8bd1ef923a40b009e37801deae66ad55 for the KEY_DASHBOARD
+addition.
 
-Thank you,
-Angelo
+> usage code to this new keycode. Additionally hid-debug is adjusted to
+> recognize this new usage code as well.
+> 
+> Signed-off-by: William Mahon <wmahon@google.com>
+> ---
+> 
+>  drivers/hid/hid-debug.c                | 1 +
+>  drivers/hid/hid-input.c                | 2 ++
+>  include/uapi/linux/input-event-codes.h | 2 ++
+>  3 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+> index 01135713e8f9..36a42ad3b7bc 100644
+> --- a/drivers/hid/hid-debug.c
+> +++ b/drivers/hid/hid-debug.c
+> @@ -930,6 +930,7 @@ static const char *keys[KEY_MAX + 1] = {
+>         [KEY_SCREENSAVER] = "ScreenSaver",
+>         [KEY_VOICECOMMAND] = "VoiceCommand",
+>         [KEY_EMOJI_PICKER] = "EmojiPicker",
+> +       [KEY_APP_LAUNCHER] = "AppLauncher",
+>         [KEY_BRIGHTNESS_MIN] = "BrightnessMin",
+>         [KEY_BRIGHTNESS_MAX] = "BrightnessMax",
+>         [KEY_BRIGHTNESS_AUTO] = "BrightnessAuto",
+> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+> index eccd89b5ea9f..7c89260826b2 100644
+> --- a/drivers/hid/hid-input.c
+> +++ b/drivers/hid/hid-input.c
+> @@ -1162,6 +1162,8 @@ static void hidinput_configure_usage(struct
+> hid_input *hidinput, struct hid_fiel
+>  
+>                 case 0x29d:
+> map_key_clear(KEY_KBD_LAYOUT_NEXT); break;
+>  
+> +               case 0x2a2:
+> map_key_clear(KEY_APP_LAUNCHER);    break;
+> +
+>                 case 0x2c7:
+> map_key_clear(KEY_KBDINPUTASSIST_PREV);             break;
+>                 case 0x2c8:
+> map_key_clear(KEY_KBDINPUTASSIST_NEXT);             break;
+>                 case 0x2c9:
+> map_key_clear(KEY_KBDINPUTASSIST_PREVGROUP);                break;
+> diff --git a/include/uapi/linux/input-event-codes.h
+> b/include/uapi/linux/input-event-codes.h
+> index 311a57f3e01a..fdf43cf14125 100644
+> --- a/include/uapi/linux/input-event-codes.h
+> +++ b/include/uapi/linux/input-event-codes.h
+> @@ -651,6 +651,8 @@
+>  #define KEY_DATA                       0x277
+>  #define KEY_ONSCREEN_KEYBOARD          0x278
+>  
+> +#define KEY_APP_LAUNCHER               0x27c
+> +
+>  #define BTN_TRIGGER_HAPPY              0x2c0
+>  #define BTN_TRIGGER_HAPPY1             0x2c0
+>  #define BTN_TRIGGER_HAPPY2             0x2c1
+

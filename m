@@ -2,81 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093B04B9E6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48194B9E67
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239657AbiBQLNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:13:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33646 "EHLO
+        id S237428AbiBQLO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:14:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239762AbiBQLN1 (ORCPT
+        with ESMTP id S232600AbiBQLOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:13:27 -0500
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921B61E8BD1;
-        Thu, 17 Feb 2022 03:13:10 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R281e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V4kN2Gv_1645096387;
-Received: from 30.225.28.137(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0V4kN2Gv_1645096387)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 17 Feb 2022 19:13:08 +0800
-Message-ID: <bc301d7d-49a7-8523-0bd4-f7f2a2fbfa81@linux.alibaba.com>
-Date:   Thu, 17 Feb 2022 19:13:07 +0800
+        Thu, 17 Feb 2022 06:14:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906D521390B;
+        Thu, 17 Feb 2022 03:14:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DCD661E55;
+        Thu, 17 Feb 2022 11:14:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5612C340E8;
+        Thu, 17 Feb 2022 11:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645096448;
+        bh=sUUPTJjfLHjOGF2eWJ1HghPbL6lCvNajLfAeb7DI2L4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iKaTi0YTVg3Ees0YAqBQura/K2ZWvXfSf2oGTiE6vFgfGDTkJuTS5dHjEUD7BkNwu
+         379qSFuYvoD1UIVf3RfLluxvPBguzT0hq4VQzEn98Gys87JcLNYOE2CLaaQkrr+8j+
+         XWk4yNGidvsm9riMhuRSdmzZKjCmwX61HVlWVChOUegbL5kOE4G1WTswJ9GZ+obsTC
+         mJtWxUF1CjnHutWpIGDHEPuI/i9RtWHDg4L7Ulf4oUxM4FbfXYZlWu8EWdi9ZTyK+Z
+         T57nofBRZmgd45uxxSzkpIweuWUXAx8F30qT7LCCYt1Ghb+7zXiUkCMneKt90bh4qa
+         VyQEGIl2I7rjw==
+Date:   Thu, 17 Feb 2022 16:44:04 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Jonathan Marek <jonathan@marek.ca>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: [Freedreno] [PATCH v3 12/13] drm/msm/dsi: Add support for DSC
+ configuration
+Message-ID: <Yg4t/G3tgcmkswHg@matsya>
+References: <20211116062256.2417186-1-vkoul@kernel.org>
+ <20211116062256.2417186-13-vkoul@kernel.org>
+ <20211211000315.pavmcc7cc73ilb6l@SoMainline.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH 2/2] scsi:target:tcmu: reduce once copy by using uio ioctl
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Guixin Liu <kanie@linux.alibaba.com>
-Cc:     bostroesser@gmail.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xlpang@linux.alibaba.com
-References: <1645064962-94123-1-git-send-email-kanie@linux.alibaba.com>
- <1645064962-94123-2-git-send-email-kanie@linux.alibaba.com>
- <Yg4gL1tL7yJELNL2@kroah.com>
-From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-In-Reply-To: <Yg4gL1tL7yJELNL2@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211211000315.pavmcc7cc73ilb6l@SoMainline.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi,
+Hi Marijn,
 
-> On Thu, Feb 17, 2022 at 10:29:22AM +0800, Guixin Liu wrote:
->> --- a/include/uapi/linux/target_core_user.h
->> +++ b/include/uapi/linux/target_core_user.h
->> @@ -185,4 +185,13 @@ enum tcmu_genl_attr {
->>   };
->>   #define TCMU_ATTR_MAX (__TCMU_ATTR_MAX - 1)
->>   
->> +struct tcmu_data_xfer {
->> +	unsigned short cmd_id;
->> +	unsigned long iov_cnt;
->> +	struct iovec __user *iovec;
->> +};
-> That is no way to define a structure that crosses the user/kernel
-> boundry, it just will not work at all, even if we wanted it to :(
-Sorry, I don't quite understand your comments well, can you explain more 
-why this structure
-does not work, except that "unsigned short" or "unsigned long" here 
-isn't correct, should use
-u16 or u32.
-Syscalls, such as readv/preadv also pass a struct iovec from user to 
-kernel, thanks.
+On 11-12-21, 01:03, Marijn Suijten wrote:
 
+> > +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
+> > +				  int pic_width, int pic_height)
+> 
+> This function - adopted from downstream - does not seem to perform a
+> whole lot, especially without the modulo checks against the slice size.
+> Perhaps it can be inlined?
 
-Regards,
-Xiaoguang Wang
->
-> sorry,
->
-> greg k-h
+Most of the code here is :)
 
+This was split from downstream code to check and update dimension. We
+can inline this, or should we leave that to compiler. I am not a very
+big fan of inlining...
+
+> 
+> > +{
+> > +	if (!dsc || !pic_width || !pic_height) {
+> > +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	dsc->drm->pic_width = pic_width;
+> > +	dsc->drm->pic_height = pic_height;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >  {
+> >  	struct drm_display_mode *mode = msm_host->mode;
+> > @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >  		hdisplay /= 2;
+> >  	}
+> >  
+> > +	if (msm_host->dsc) {
+> > +		struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +
+> > +		/* update dsc params with timing params */
+> > +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
+> > +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
+> 
+> This seems to be pretty non-standard and perhaps unnecessary debug code,
+> with a stray dash in there.  Is is needed here, and if so how about
+> using %dx%d\n to format width and height?
+
+I can update that, sure...
+
+> 
+> > +
+> > +		/* we do the calculations for dsc parameters here so that
+> > +		 * panel can use these parameters
+> > +		 */
+> > +		dsi_populate_dsc_params(dsc);
+> > +
+> > +		/* Divide the display by 3 but keep back/font porch and
+> > +		 * pulse width same
+> > +		 */
+> 
+> A more general nit on the comments in this patch series: it is
+> appreciated if comments explain the rationale rather than - or in
+> addition to - merely paraphrasing the code that follows.
+
+Yes it might be the case here, but in this case I wanted to explicitly
+point out hat we need to divide display by 3...
+
+> 
+> > +		h_total -= hdisplay;
+> > +		hdisplay /= 3;
+> > +		h_total += hdisplay;
+> > +		ha_end = ha_start + hdisplay;
+> > +	}
+> > +
+> >  	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
+> > +		if (msm_host->dsc) {
+> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +			u32 reg, intf_width, slice_per_intf;
+> > +			u32 total_bytes_per_intf;
+> > +
+> > +			/* first calculate dsc parameters and then program
+> > +			 * compress mode registers
+> > +			 */
+> > +			intf_width = hdisplay;
+> > +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+> > +
+> > +			dsc->drm->slice_count = 1;
+> > +			dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * 8, 8);
+> 
+> If I am not mistaken this is the same value as dsc->drm->slice_width,
+> since a multiple of 8 is inherently "a multiple of 8" and hence needs no
+> rounding when divided by 8 again.
+
+Yes this doesnt look right, I will update
+
+> Also note that the cmdmode variant below uses bits_per_pixel here; is
+> that discrepancy intended?
+
+Nope both should use bits_per_pixel..
+
+> > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
+> > +
+> > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> > +			dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
+> > +			dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
+> > +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> > +
+> > +			reg = dsc->bytes_per_pkt << 16;
+> > +			reg |= (0x0b << 8);    /* dtype of compressed image */
+> > +
+> > +			/* pkt_per_line:
+> > +			 * 0 == 1 pkt
+> > +			 * 1 == 2 pkt
+> > +			 * 2 == 4 pkt
+> > +			 * 3 pkt is not supported
+> > +			 * above translates to ffs() - 1
+> > +			 */
+> > +			reg |= (ffs(dsc->pkt_per_line) - 1) << 6;
+> > +
+> > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> 
+> This was already calculated and assigned just a couple lines above.
+
+Yup, dropped now.
+
+> 
+> > +			reg |= dsc->eol_byte_num << 4;
+> > +			reg |= 1;
+> 
+> Note that the XML register file exists to map out the layout of these
+> registers, including bit offset, size, and (enum) constant values.  It
+> is appreciated if you can replace all these magical shifts and magic
+> flags/bits with the appropriate enum constants and constructor
+> functions, after mapping them out in the XML file.
+
+Yeah I am trying to get those details, if I manage to get it, will
+update for sure as Dmitry already pointed in MESA PR.
+
+> > +
+> > +			dsi_write(msm_host,
+> > +				  REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
+> > +		}
+> > +
+> >  		dsi_write(msm_host, REG_DSI_ACTIVE_H,
+> >  			DSI_ACTIVE_H_START(ha_start) |
+> >  			DSI_ACTIVE_H_END(ha_end));
+> > @@ -959,8 +1034,40 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >  			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
+> >  			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
+> >  	} else {		/* command mode */
+> > +		if (msm_host->dsc) {
+> > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > +			u32 reg, reg_ctrl, reg_ctrl2;
+> > +			u32 slice_per_intf, bytes_in_slice, total_bytes_per_intf;
+> > +
+> > +			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
+> > +			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+> 
+> Shouldn't old values be masked out first, before writing new bits or
+> values below?  The video-mode variant doesn't read back old register
+> values.
+
+This follows downstream where the registers are read, modified and
+written back
+
+> > +
+> > +			slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
+> > +			bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
+> > +						      dsc->drm->bits_per_pixel, 8);
+> > +			dsc->drm->slice_chunk_size = bytes_in_slice;
+> > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
+> > +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> > +
+> > +			reg = 0x39 << 8;
+> 
+> Same comment about moving magic constants and shifts into the XML file.
+
+yes if we get details of bits
+
+> 
+> > +			reg |= ffs(dsc->pkt_per_line) << 6;
+> 
+> Doesn't the calculation need -1 here just like video mode?
+
+yes will update now
+
+-- 
+~Vinod

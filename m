@@ -2,136 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191A84B9FCF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C544B9FD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240335AbiBQMLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:11:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44128 "EHLO
+        id S240245AbiBQMLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:11:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240271AbiBQMLI (ORCPT
+        with ESMTP id S232094AbiBQMLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:11:08 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2068.outbound.protection.outlook.com [40.107.93.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52AC6378;
-        Thu, 17 Feb 2022 04:10:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L3E2SjYLFcwdRrVb0gTPvxMvFcIHro7JqoCv3+wER2zt2YY11jQJJMCD9iEdLYFeoCCY3rnxc2X420KjCZatkEtT5Ubn86qm9Ai+BHyd2tfFKWI0enH/VBOJm0hvqkCYFIeAWZWkhv+AId7NhfoB7g8AcZ4saOfjelVj6h1HBk9Gk2o1mdLUTLNI+8pasAFj5eTaK5rydsMUHX65x0zJs57HLxJa3x+VnSaImIGlpVCjcehnXAVdLgJcvxGEB/vNwXRBlk5CW5m0DTgo/s4clvWTPNl30AJjKlH1YEPx4aAix8OVGkl8KYqFI0al6Ha/Oh/b/yjT6SYGBKidgIYr5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=165sruYtvtKB7IkZNmKvWNhHuqP/A0QQXNs8JUrHhio=;
- b=TXPTX4riznf4GBbeLDwkq8335CPjOPNrXCwx5wL9qOU/AhqI3bvC62IHCBVaIP6DseZuB1gagqM4AcYCFRh8Xd6R/IxREEJDP/XUGeu+O3nRWCaozs8y5I1KOrzNqPvWEOhnMFlbUVqfVdQ1JwxNVWRrF6JhTz6TJ6D8XOMdaeiDKc/a4k3upOkSVUqTfOH6g05CTfxyqlJXBMJsy1Q9gMlTymNsJ3g27K8NngXmdyT9wd6E9J2qClscp3j/YLT7xVBjRDQtPppzz287/z5Fqf9TIaWaspgQ5Nh3XbOyjhF//hbEm1uDL8d0+NHtQ6hkM/bYhd6pRVmUnju7M8gv5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=165sruYtvtKB7IkZNmKvWNhHuqP/A0QQXNs8JUrHhio=;
- b=S9AQuBXKuHkkqyBzhGAY2nuefrOgRqZkv1vG/r1dpakkt3mbtvIte+vJJGqXuE4P2Mp11BiiJe8TtRRaA0uF8/3WovuWXZkTBOsyVffVxNosSe2zsJCr4SreCxuDmdoe1/awKpIA9MEcDvtOMQcJX/Dq9ImC2YvCp+dK2kLXtGVg+OG4ATlKgOkKma3EbY2jqV8uBt7WciRsyrEO3Ez4t8wTdWq4eT0xAFcSu0EPtkImchdtQarcGNxopmeV0cCEg2aA5I8mdQGw31aDXfVwC7Uz1u33uRBoM9Okhfi2/rvYztsY9G1GO5lyGeqx8nY4pspJMq49P2Gfx43rSSIXMA==
-Received: from DM6PR08CA0035.namprd08.prod.outlook.com (2603:10b6:5:80::48) by
- BN9PR12MB5322.namprd12.prod.outlook.com (2603:10b6:408:103::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Thu, 17 Feb
- 2022 12:10:51 +0000
-Received: from DM6NAM11FT026.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:80:cafe::f0) by DM6PR08CA0035.outlook.office365.com
- (2603:10b6:5:80::48) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.17 via Frontend
- Transport; Thu, 17 Feb 2022 12:10:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT026.mail.protection.outlook.com (10.13.172.161) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4995.15 via Frontend Transport; Thu, 17 Feb 2022 12:10:50 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 17 Feb
- 2022 12:10:32 +0000
-Received: from [172.27.11.82] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Thu, 17 Feb 2022
- 04:10:24 -0800
-Message-ID: <a196d40f-d96f-3fb2-2189-a3906b340d95@nvidia.com>
-Date:   Thu, 17 Feb 2022 14:10:21 +0200
+        Thu, 17 Feb 2022 07:11:48 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CFBF1116A;
+        Thu, 17 Feb 2022 04:11:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F37D6113E;
+        Thu, 17 Feb 2022 04:11:32 -0800 (PST)
+Received: from [10.57.17.240] (unknown [10.57.17.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6EB33F66F;
+        Thu, 17 Feb 2022 04:11:29 -0800 (PST)
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+ <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+ <53bc13ca-998f-ff83-d9f7-9a83d35b24fd@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <97ecc29b-13a9-fa15-4e88-21c8612ebb7f@arm.com>
+Date:   Thu, 17 Feb 2022 12:11:27 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101
- Thunderbird/98.0
-Subject: Re: [PATCH net-next v2 1/2] net: flow_offload: add tc police action
- parameters
+In-Reply-To: <53bc13ca-998f-ff83-d9f7-9a83d35b24fd@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Baowen Zheng <baowen.zheng@corigine.com>,
-        Jianbo Liu <jianbol@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-CC:     "olteanv@gmail.com" <olteanv@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "rajur@chelsio.com" <rajur@chelsio.com>,
-        "claudiu.manoil@nxp.com" <claudiu.manoil@nxp.com>,
-        "sgoutham@marvell.com" <sgoutham@marvell.com>,
-        "gakula@marvell.com" <gakula@marvell.com>,
-        "sbhatta@marvell.com" <sbhatta@marvell.com>,
-        "hkelam@marvell.com" <hkelam@marvell.com>,
-        "saeedm@nvidia.com" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "petrm@nvidia.com" <petrm@nvidia.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        "jhs@mojatatu.com" <jhs@mojatatu.com>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        "louis.peens@netronome.com" <louis.peens@netronome.com>,
-        Nole Zhang <peng.zhang@corigine.com>,
-        oss-drivers <oss-drivers@corigine.com>
-References: <20220217082803.3881-1-jianbol@nvidia.com>
- <20220217082803.3881-2-jianbol@nvidia.com>
- <DM5PR1301MB2172C0F6E86850B5646DAB84E7369@DM5PR1301MB2172.namprd13.prod.outlook.com>
-From:   Roi Dayan <roid@nvidia.com>
-In-Reply-To: <DM5PR1301MB2172C0F6E86850B5646DAB84E7369@DM5PR1301MB2172.namprd13.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cdb29a2b-bfea-41bf-72df-08d9f20e8a1b
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5322:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB53222BF43E2FF711762A5AC0B8369@BN9PR12MB5322.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DXq1pOmGKhvkCYcycp2uJLkYFacqfvoBm8x70bf73GOs3WVtpLIxGw7rJ3W99KV8E97RNvLoNFixi+2oVVFq3P8fShcH/1H8kOZf4QNwcyleVWFqonK8QN64LMzq6dRBkcbRTPZWgiCok5zIspZx7JeHiNrW3dJNzOrHQnea2PwHaTWMigWGCUCghtlNj8ht9Qs8f6BgS33kYNw+rX+FN9d5iJZpY1AH2gzKITxtTkvvMXSxZa25QIQ8GbkYYGQWv0wAYrwT7YcIox9TtgE2wZ3BsABYrBfXfxQu2K4z6zLlUNtrkhoFbW3R3h9J0ENqIHccGfFTeAOPiQ8k6oUIJIoBWf77I8nnDkk8UsxiI9SquOrZbj32bJWeU1xyY330jzE/i3t/w0Rgx86Ilcf6y67UH4+/TsQ1lApBOZ/2aMlUr4mdW6ePiyfN4YNYY30Nvt07qeb/4bFIf4tD6SDkpLNFjCn0k3LRrhAzYyCE4g2ARV1paeNVgV6xvHdlv3JEgvKQzmnu712Se5Rxq3q3/yyb95n/qVbITUUbRxlUUTY7IgY8NJrXstXg/ytBHdhUxQh47mWke+h+XlhVDy4l7NeGo5wau6EGIknNE//QgbVPQ8GZ5fhhvjMw5hUp7KbjtZZFKDFOI+dF//QnzW/en/fhJyb9KgO9tSUrDkK3fNxtXx8BBgXNbJEu1TXi8HaY8bliXtkYa9Ld2zJRv4E/JUmjB7RlS/tqmULAP6EQWCpQQU4xLW/84Agx782CR11t
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(356005)(31686004)(36756003)(36860700001)(47076005)(40460700003)(7416002)(5660300002)(8936002)(81166007)(4326008)(86362001)(31696002)(6666004)(426003)(336012)(8676002)(70586007)(70206006)(54906003)(16576012)(26005)(16526019)(82310400004)(83380400001)(316002)(186003)(110136005)(2616005)(2906002)(508600001)(53546011)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 12:10:50.8748
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cdb29a2b-bfea-41bf-72df-08d9f20e8a1b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT026.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5322
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -140,184 +67,145 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022-02-17 12:25 PM, Baowen Zheng wrote:
-> On February 17, 2022 4:28 PM, Jianbo wrote:
->> The current police offload action entry is missing exceed/notexceed actions
->> and parameters that can be configured by tc police action.
->> Add the missing parameters as a pre-step for offloading police actions to
->> hardware.
+On 2/17/22 11:28 AM, Daniel Lezcano wrote:
+> On 17/02/2022 11:47, Lukasz Luba wrote:
+>> Hi Daniel,
 >>
->> Signed-off-by: Jianbo Liu <jianbol@nvidia.com>
->> Signed-off-by: Roi Dayan <roid@nvidia.com>
->> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
->> ---
->> include/net/flow_offload.h     | 13 ++++++++++
->> include/net/tc_act/tc_police.h | 30 ++++++++++++++++++++++
->> net/sched/act_police.c         | 46 ++++++++++++++++++++++++++++++++++
->> 3 files changed, 89 insertions(+)
+>> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
+>>> On 16/02/2022 18:33, Doug Anderson wrote:
+>>>> Hi,
+>>>>
+>>>> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> 
+>>>> wrote:
+>>>>>
+>>>>> Hi Matthias,
+>>>>>
+>>>>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+>>>>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+>>>>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+>>>>>>>>>
+>>>>>>>>>
+>>>>>
+>>>>> [snip]
+>>>>>
+>>>>>>>>> Could you point me to those devices please?
+>>>>>>>>
+>>>>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+>>>>>>>>
+>>>>>>>> Though as per above they shouldn't be impacted by your change, 
+>>>>>>>> since the
+>>>>>>>> CPUs always pretend to use milli-Watts.
+>>>>>>>>
+>>>>>>>> [skipped some questions/answers since sc7180 isn't actually 
+>>>>>>>> impacted by
+>>>>>>>>     the change]
+>>>>>>>
+>>>>>>> Thank you Matthias. I will investigate your setup to get better
+>>>>>>> understanding.
+>>>>>>
+>>>>>> Thanks!
+>>>>>>
+>>>>>
+>>>>> I've checked those DT files and related code.
+>>>>> As you already said, this patch is safe for them.
+>>>>> So we can apply it IMO.
+>>>>>
+>>>>>
+>>>>> -------------Off-topic------------------
+>>>>> Not in $subject comments:
+>>>>>
+>>>>> AFAICS based on two files which define thermal zones:
+>>>>> sc7180-trogdor-homestar.dtsi
+>>>>> sc7180-trogdor-coachz.dtsi
+>>>>>
+>>>>> only the 'big' cores are used as cooling devices in the
+>>>>> 'skin_temp_thermal' - the CPU6 and CPU7.
+>>>>>
+>>>>> I assume you don't want to model at all the power usage
+>>>>> from the Little cluster (which is quite big: 6 CPUs), do you?
+>>>>> I can see that the Little CPUs have small dyn-power-coeff
+>>>>> ~30% of the big and lower max freq, but still might be worth
+>>>>> to add them to IPA. You might give them more 'weight', to
+>>>>> make sure they receive more power during power split.
+>>>>>
+>>>>> You also don't have GPU cooling device in that thermal zone.
+>>>>> Based on my experience if your GPU is a power hungry one,
+>>>>> e.g. 2-4Watts, you might get better results when you model
+>>>>> this 'hot' device (which impacts your temp sensor reported value).
+>>>>
+>>>> I think the two boards you point at (homestar and coachz) are just the
+>>>> two that override the default defined in the SoC dtsi file. If you
+>>>> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+>>>> map. You can also see the cooling maps for the littles.
+>>>>
+>>>> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+>>>> though? Seems like we should, but I haven't dug through all the code
+>>>> here...
+>>>
+>>> The dynamic-power-coefficient is available for OPPs which includes 
+>>> CPUfreq and devfreq. As the GPU is managed by devfreq, setting the 
+>>> dynamic-power-coefficient makes the energy model available for it.
+>>>
+>>> However, the OPPs must define the frequency and the voltage. That is 
+>>> the case for most platforms except on QCom platform.
+>>>
+>>> That may not be specified as it uses a frequency index and the 
+>>> hardware does the voltage change in our back. The QCom cpufreq 
+>>> backend get the voltage table from a register (or whatever) and 
+>>> completes the voltage values for the OPPs, thus adding the 
+>>> information which is missing in the device tree. The energy model can 
+>>> then initializes itself and allows the usage of the Energy Aware 
+>>> Scheduler.
+>>>
+>>> However this piece of code is missing for the GPU part.
+>>>
 >>
->> diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h index
->> 5b8c54eb7a6b..94cde6bbc8a5 100644
->> --- a/include/net/flow_offload.h
->> +++ b/include/net/flow_offload.h
->> @@ -148,6 +148,8 @@ enum flow_action_id {
->> 	FLOW_ACTION_MPLS_MANGLE,
->> 	FLOW_ACTION_GATE,
->> 	FLOW_ACTION_PPPOE_PUSH,
->> +	FLOW_ACTION_JUMP,
->> +	FLOW_ACTION_PIPE,
->> 	NUM_FLOW_ACTIONS,
->> };
+>> Thank you for joining the discussion. I don't know about that Qcom
+>> GPU voltage information is missing.
 >>
->> @@ -235,9 +237,20 @@ struct flow_action_entry {
->> 		struct {				/* FLOW_ACTION_POLICE */
->> 			u32			burst;
->> 			u64			rate_bytes_ps;
->> +			u64			peakrate_bytes_ps;
->> +			u32			avrate;
->> +			u16			overhead;
->> 			u64			burst_pkt;
->> 			u64			rate_pkt_ps;
->> 			u32			mtu;
->> +			struct {
->> +				enum flow_action_id     act_id;
->> +				u32                     index;
->> +			} exceed;
->> +			struct {
->> +				enum flow_action_id     act_id;
->> +				u32                     index;
->> +			} notexceed;
-> It seems exceed and notexceed use the same format struct, will it be more simpler to define as:
-> 			struct {
-> 				enum flow_action_id     act_id;
-> 				u32                     index;
-> 			} exceed, notexceed;
-
-right. it can be.
-
+>> If the voltage is not available (only the frequencies), there is
+>> another way. There is an 'advanced' EM which uses registration function:
+>> em_dev_register_perf_domain(). It uses a local driver callback to get
+>> power for each found frequency. It has benefit because there is no
+>> restriction to 'fit' into the math formula, instead just avg power
+>> values can be feed into EM. It's called 'advanced' EM [1].
+>>
+>> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
+>> was proposing from ~2014 this upstream, but EAS wasn't merged back
+>> then):
+>> where to store these power-freq values, which are then used by the
+>> callback. 
 > 
->> 		} police;
->> 		struct {				/* FLOW_ACTION_CT */
->> 			int action;
->> diff --git a/include/net/tc_act/tc_police.h b/include/net/tc_act/tc_police.h
->> index 72649512dcdd..283bde711a42 100644
->> --- a/include/net/tc_act/tc_police.h
->> +++ b/include/net/tc_act/tc_police.h
->> @@ -159,4 +159,34 @@ static inline u32 tcf_police_tcfp_mtu(const struct
->> tc_action *act)
->> 	return params->tcfp_mtu;
->> }
->>
->> +static inline u64 tcf_police_peakrate_bytes_ps(const struct tc_action
->> +*act) {
->> +	struct tcf_police *police = to_police(act);
->> +	struct tcf_police_params *params;
->> +
->> +	params = rcu_dereference_protected(police->params,
->> +					   lockdep_is_held(&police->tcf_lock));
->> +	return params->peak.rate_bytes_ps;
->> +}
->> +
->> +static inline u32 tcf_police_tcfp_ewma_rate(const struct tc_action
->> +*act) {
->> +	struct tcf_police *police = to_police(act);
->> +	struct tcf_police_params *params;
->> +
->> +	params = rcu_dereference_protected(police->params,
->> +					   lockdep_is_held(&police->tcf_lock));
->> +	return params->tcfp_ewma_rate;
->> +}
->> +
->> +static inline u16 tcf_police_rate_overhead(const struct tc_action *act)
->> +{
->> +	struct tcf_police *police = to_police(act);
->> +	struct tcf_police_params *params;
->> +
->> +	params = rcu_dereference_protected(police->params,
->> +					   lockdep_is_held(&police->tcf_lock));
->> +	return params->rate.overhead;
->> +}
->> +
->> #endif /* __NET_TC_POLICE_H */
->> diff --git a/net/sched/act_police.c b/net/sched/act_police.c index
->> 0923aa2b8f8a..0457b6c9c4e7 100644
->> --- a/net/sched/act_police.c
->> +++ b/net/sched/act_police.c
->> @@ -405,20 +405,66 @@ static int tcf_police_search(struct net *net, struct
->> tc_action **a, u32 index)
->> 	return tcf_idr_search(tn, a, index);
->> }
->>
->> +static int tcf_police_act_to_flow_act(int tc_act, int *index) {
->> +	int act_id = -EOPNOTSUPP;
->> +
->> +	if (!TC_ACT_EXT_OPCODE(tc_act)) {
->> +		if (tc_act == TC_ACT_OK)
->> +			act_id = FLOW_ACTION_ACCEPT;
->> +		else if (tc_act ==  TC_ACT_SHOT)
->> +			act_id = FLOW_ACTION_DROP;
->> +		else if (tc_act == TC_ACT_PIPE)
->> +			act_id = FLOW_ACTION_PIPE;
->> +	} else if (TC_ACT_EXT_CMP(tc_act, TC_ACT_GOTO_CHAIN)) {
->> +		act_id = FLOW_ACTION_GOTO;
->> +		*index = tc_act & TC_ACT_EXT_VAL_MASK;
-> For the TC_ACT_GOTO_CHAIN  action, the goto_chain information is missing from software to hardware, is it useful for hardware to check?
-> 
+> Why not make it more generic and replace the frequency by a performance 
+> index, so it can be used by any kind of perf limiter?
 
-what information do you mean?
+For that DT array, yes, it can be an index, so effectively it could be
+a simple 1d array.
 
->> +	} else if (TC_ACT_EXT_CMP(tc_act, TC_ACT_JUMP)) {
->> +		act_id = FLOW_ACTION_JUMP;
->> +		*index = tc_act & TC_ACT_EXT_VAL_MASK;
->> +	}
->> +
->> +	return act_id;
->> +}
->> +
->> static int tcf_police_offload_act_setup(struct tc_action *act, void *entry_data,
->> 					u32 *index_inc, bool bind)
->> {
->> 	if (bind) {
->> 		struct flow_action_entry *entry = entry_data;
->> +		struct tcf_police *police = to_police(act);
->> +		struct tcf_police_params *p;
->> +		int act_id;
->> +
->> +		p = rcu_dereference_protected(police->params,
->> +					      lockdep_is_held(&police->tcf_lock));
->>
->> 		entry->id = FLOW_ACTION_POLICE;
->> 		entry->police.burst = tcf_police_burst(act);
->> 		entry->police.rate_bytes_ps =
->> 			tcf_police_rate_bytes_ps(act);
->> +		entry->police.peakrate_bytes_ps =
->> tcf_police_peakrate_bytes_ps(act);
->> +		entry->police.avrate = tcf_police_tcfp_ewma_rate(act);
->> +		entry->police.overhead = tcf_police_rate_overhead(act);
->> 		entry->police.burst_pkt = tcf_police_burst_pkt(act);
->> 		entry->police.rate_pkt_ps =
->> 			tcf_police_rate_pkt_ps(act);
->> 		entry->police.mtu = tcf_police_tcfp_mtu(act);
->> +
->> +		act_id = tcf_police_act_to_flow_act(police->tcf_action,
->> +						    &entry-
->>> police.exceed.index);
->> +		if (act_id < 0)
->> +			return act_id;
->> +
->> +		entry->police.exceed.act_id = act_id;
->> +
->> +		act_id = tcf_police_act_to_flow_act(p->tcfp_result,
->> +						    &entry-
->>> police.notexceed.index);
->> +		if (act_id < 0)
->> +			return act_id;
->> +
->> +		entry->police.notexceed.act_id = act_id;
->> +
->> 		*index_inc = 1;
->> 	} else {
->> 		struct flow_offload_action *fl_action = entry_data;
->> --
->> 2.26.2
-> 
+something like:
+
+msm_gpu_energy_model: msm-gpu-energy-model {
+	compatible = "energy-model"
+	/* Values are sorted micro-Watts which correspond to each OPP
+	   or performance state. The total amount of them must match
+	   number of OPPs. */
+	power-microwatt = <100000>,
+			<230000>,
+			<380000>,
+			<600000>;
+};
+
+then in gpu node instead of having 'dynamic-power-coefficient',
+which is useless because voltage is missing, we would have
+'energy-model', like:
+
+	energy-model = <&msm_gpu_energy_model>;
+
+
+If you agree to continue this topic. I will send an RFC so we could
+further discuss this idea. This $subject doesn't fit well.
+
+Thank you again for your feedback Daniel!

@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899B34BACB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730BB4BACC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343913AbiBQWh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 17:37:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56922 "EHLO
+        id S1343918AbiBQWjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 17:39:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343912AbiBQWhx (ORCPT
+        with ESMTP id S238033AbiBQWjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 17:37:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1942E169235;
-        Thu, 17 Feb 2022 14:37:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 17 Feb 2022 17:39:31 -0500
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DE7811B9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 14:39:15 -0800 (PST)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D84F61755;
-        Thu, 17 Feb 2022 22:37:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC2EC340E8;
-        Thu, 17 Feb 2022 22:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645137457;
-        bh=nYXGEcTwGIOXhjX/wlgdLjWw4uZu5iED6zGc9Z3ENc0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=UreO/S9roUEZ7rVE6PFiepDoLKeV+CwRaOXY0jDafGSpUVhFxfdHhwOjjyK3UfdUY
-         UcCnJYF9rftREVlZeXtxoj+TPIb7M0boQB5vBXtgoH2UhhGq2fq4NIt3SQQ34M2OLs
-         9flfR6lWIHfIAeZLAHfYtcVow/62H+y8W1UdhJ4aDMt2JFpDgJ2I+niSNItAWznwOh
-         Jc0D1rOq7jB/mx/sgy863esaG6n62VFH2azV7VcEgFq5fc0VoCv4u+L3EvStSVCBXx
-         BpkfXjFn0n26VdJiqmXSZDMrcuqpFq+qvHMxIwNMboXcORwfwBKOQKL8k/nMLYFDsC
-         bt2IwtlLOvhBg==
-Content-Type: text/plain; charset="utf-8"
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D04AB3F777;
+        Thu, 17 Feb 2022 23:39:13 +0100 (CET)
+Date:   Thu, 17 Feb 2022 23:39:12 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v3 03/13] drm/msm/disp/dpu1: Add support for DSC in
+ pingpong block
+Message-ID: <20220217223912.xl5ofq3aoy44p4vv@SoMainline.org>
+References: <20211116062256.2417186-1-vkoul@kernel.org>
+ <20211116062256.2417186-4-vkoul@kernel.org>
+ <20220217215437.gvxmfjgfqzljactz@SoMainline.org>
+ <643681f1-0887-ad61-2686-2f4408f56637@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <cc4241105bfd2249c1c309a4efa2e6aa@trvn.ru>
-References: <20211209163720.106185-1-nikita@trvn.ru> <20211209163720.106185-2-nikita@trvn.ru> <20220108005209.5140EC36AEB@smtp.kernel.org> <991533e0fddd6999c8a06a536ae57999@trvn.ru> <20220110201452.2B3E4C36AE3@smtp.kernel.org> <cc4241105bfd2249c1c309a4efa2e6aa@trvn.ru>
-Subject: Re: [PATCH 1/4] clk: qcom: clk-rcg2: Fail Duty-Cycle configuration if MND divider is not enabled.
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linus.walleij@linaro.org, mturquette@baylibre.com,
-        bjorn.andersson@linaro.org, agross@kernel.org, tdas@codeaurora.org,
-        svarbanov@mm-sol.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-To:     Nikita Travkin <nikita@trvn.ru>
-Date:   Thu, 17 Feb 2022 14:37:35 -0800
-User-Agent: alot/0.10
-Message-Id: <20220217223736.DFC2EC340E8@smtp.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <643681f1-0887-ad61-2686-2f4408f56637@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,84 +55,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Nikita Travkin (2022-01-26 07:14:21)
-> Stephen Boyd =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 11.01.2022 01:14:
-> > Quoting Nikita Travkin (2022-01-07 23:25:19)
-> >> Hi,
+On 2022-02-18 01:12:02, Dmitry Baryshkov wrote:
+> On 18/02/2022 00:54, Marijn Suijten wrote:
+> > On 2021-11-16 11:52:46, Vinod Koul wrote:
+> >> In SDM845, DSC can be enabled by writing to pingpong block registers, so
+> >> add support for DSC in hw_pp
+> > 
+> > Nit: I don't think the ", so add support for DSC in XXX" part in this
+> > and other commit messages add anything.  You've already stated that in
+> > the title, the commit body is just extra justification (and can perhaps
+> > be filled with extra details about the patch contents instead).
+> > 
+> >> Reviewed-by: Abhinav Kumar <abhinavk@codeaurora.org>
+> >> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> >> ---
+> >>   .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 32 +++++++++++++++++++
+> >>   .../gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++++++
+> >>   2 files changed, 46 insertions(+)
 > >>
-> >> Stephen Boyd =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 08.01.2022 05:52:
-> >> > Quoting Nikita Travkin (2021-12-09 08:37:17)
-> >> I'm adding this error here primarily to bring attention of the
-> >> user (e.g. developer enabling some peripheral that needs
-> >> duty cycle control) who might have to change their clock tree
-> >> to make this control effective. So, assuming that if someone
-> >> sets the duty cycle to 50% then they might set it to some other
-> >> value later, it makes sense to fail the first call anyway.
-> >>
-> >> If you think there are some other possibilities for this call
-> >> to happen specifically with 50% duty cycle (e.g. some
-> >> preparations or cleanups in the clk subsystem or some drivers
-> >> that I'm not aware of) then I can make an exemption in the check
-> >> for that.
-> >>
-> >=20
-> > I don't see anywhere in clk_set_duty_cycle() where it would bail out
-> > early if the duty cycle was set to what it already is. The default for
-> > these clks is 50%, so I worry that some driver may try to set the duty
-> > cycle to 50% and then fail now. Either we need to check the duty cycle
-> > in the core before calling down into the driver or we need to check it
-> > here in the driver. Can you send a patch to check the current duty cycle
-> > in the core before calling down into the clk ops?
->=20
-> Hi, sorry for a rather delayed response,
-> I spent a bit of time looking at how to make the clk core be
-> careful with ineffective duty-cycle calls and I can't find a
-> nice way to do this... My idea was something like this:
->=20
-> static int clk_core_set_duty_cycle_nolock(struct clk_core *core,
->                                           struct clk_duty *duty)
-> {       /* ... */
->=20
->         /* Update core->duty values */
->         clk_core_update_duty_cycle_nolock(core);
->=20
->         if ( /* duty doesn't match core->duty */ ) {
->                 ret =3D core->ops->set_duty_cycle(core->hw, duty);
->         /* ... */
-> }
->=20
-> However there seem to be drawbacks to any variant of the
-> comparison that I could come up with:
->=20
-> Naive one would be to do
->     if (duty->num !=3D core->duty->num || duty->den !=3D core->duty->den)
-> but it won't correctly compare e.g. 1/2 and 10/20.
->=20
-> Other idea was to do
->     if (duty->den / duty->num !=3D core->duty->den / core->duty->num)
-> but it will likely fail with very close values (e.g. 100/500 and 101/500)
->=20
-> I briefly thought of some more sophisticated math but I don't
-> like the idea of complicating this too far.
->=20
-> I briefly grepped the kernel sources for duty-cycle related methods
-> and I saw only one user of the clk_set_duty_cycle:
->     sound/soc/meson/axg-tdm-interface.c
-> Notably it sets the cycle to 1/2 in some cases, though it seems to
-> be tied to the drivers/clk/meson/sclk-div.c clock driver by being
-> the blocks of the same SoC.
+> >> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> >> index 55766c97c4c8..47c6ab6caf95 100644
+> >> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> >> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> >> @@ -28,6 +28,9 @@
+> >>   #define PP_FBC_MODE                     0x034
+> >>   #define PP_FBC_BUDGET_CTL               0x038
+> >>   #define PP_FBC_LOSSY_MODE               0x03C
+> >> +#define PP_DSC_MODE                     0x0a0
+> >> +#define PP_DCE_DATA_IN_SWAP             0x0ac
+> > 
+> > This enum does not seem used here, is it used in another patch?
+> > 
+> >> +#define PP_DCE_DATA_OUT_SWAP            0x0c8
+> >>   
+> >>   #define PP_DITHER_EN			0x000
+> >>   #define PP_DITHER_BITDEPTH		0x004
+> >> @@ -245,6 +248,32 @@ static u32 dpu_hw_pp_get_line_count(struct dpu_hw_pingpong *pp)
+> >>   	return line;
+> >>   }
+> >>   
+> >> +static int dpu_hw_pp_dsc_enable(struct dpu_hw_pingpong *pp)
+> >> +{
+> >> +	struct dpu_hw_blk_reg_map *c = &pp->hw;
+> >> +
+> >> +	DPU_REG_WRITE(c, PP_DSC_MODE, 1);
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +static void dpu_hw_pp_dsc_disable(struct dpu_hw_pingpong *pp)
+> >> +{
+> >> +	struct dpu_hw_blk_reg_map *c = &pp->hw;
+> >> +
+> >> +	DPU_REG_WRITE(c, PP_DSC_MODE, 0);
+> >> +}
+> >> +
+> >> +static int dpu_hw_pp_setup_dsc(struct dpu_hw_pingpong *pp)
+> >> +{
+> >> +	struct dpu_hw_blk_reg_map *pp_c = &pp->hw;
+> >> +	int data;
+> >> +
+> >> +	data = DPU_REG_READ(pp_c, PP_DCE_DATA_OUT_SWAP);
+> >> +	data |= BIT(18); /* endian flip */
+> >> +	DPU_REG_WRITE(pp_c, PP_DCE_DATA_OUT_SWAP, data);
+> >> +	return 0;
+> >> +}
+> >> +
+> >>   static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
+> >>   				unsigned long features)
+> >>   {
+> >> @@ -256,6 +285,9 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
+> >>   	c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
+> >>   	c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
+> >>   	c->ops.get_line_count = dpu_hw_pp_get_line_count;
+> >> +	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+> >> +	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+> >> +	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> >>   
+> >>   	if (test_bit(DPU_PINGPONG_DITHER, &features))
+> >>   		c->ops.setup_dither = dpu_hw_pp_setup_dither;
+> >> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
+> >> index 89d08a715c16..12758468d9ca 100644
+> >> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
+> >> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
+> >> @@ -124,6 +124,20 @@ struct dpu_hw_pingpong_ops {
+> >>   	 */
+> >>   	void (*setup_dither)(struct dpu_hw_pingpong *pp,
+> >>   			struct dpu_hw_dither_cfg *cfg);
+> >> +	/**
+> >> +	 * Enable DSC
+> >> +	 */
+> >> +	int (*enable_dsc)(struct dpu_hw_pingpong *pp);
+> >> +
+> >> +	/**
+> >> +	 * Disable DSC
+> >> +	 */
+> >> +	void (*disable_dsc)(struct dpu_hw_pingpong *pp);
+> > 
+> > It looks like most other callbacks in dpu1 use an `enable` function with
+> > a boolean, instead of having a separate disable function.  That should
+> > simplify the implementation down to a single ternary-if, too.  Would
+> > that be desired to use here?
+> 
+> Just my 2c. I personally hate the unified functions with the boolean 
+> argument. One of the reasons being the return value. Typically you do 
+> not expect that the disable function can fail (or return an error). But 
+> the unified function provides an error (to be handled) even in the 
+> disable case.
+> 
+> Last, but not least, overall the kernel API is biased towards separate 
+> enable and disable calls.
 
-Indeed, so this patch is untested? I doubt the qcom driver is being used
-with the one caller of clk_set_duty_cycle() in the kernel.
+Fair enough, we should replace the other functions then.  Or perhaps
+drop the return argument entirely, it's always zero for enable_dsc
+anyway.  I doubt we'll ever add additional checks here?  If we do,
+things can be split again.
 
->=20
-> Thinking of it a bit more, I saw another approach to the problem
-> I want to solve: Since I just want to make developers aware of the
-> hardware quirk, maybe I don't need to fail the set but just put a
-> WARN or even WARN_ONCE there? This way the behavior will be unchanged.
->=20
-
-I don't like the idea of a WARN or a WARN_ONCE as most likely nobody is
-going to read it or do anything about it. Returning an error should be
-fine then. If the duty cycle call fails for 50% then that's something we
-have to live with.
+- Marijn

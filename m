@@ -2,278 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBD54BA734
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25B64BA738
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243753AbiBQRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:33:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46248 "EHLO
+        id S243028AbiBQRgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:36:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243739AbiBQRd4 (ORCPT
+        with ESMTP id S242741AbiBQRgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:33:56 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F41732F3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:33:41 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id i5so383252oih.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:33:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cHjzJ4tu0iwWERzLvjnOhK3bm3Iy4LFFoOV9TvsEMeo=;
-        b=nrmepXRcU1iuIEYOOb/8DbGk26nvYN+q39+L6353I7F1sNluHZiARO+PnrTMRyzkKC
-         3trnT3Kwex55q3fhQe/HiF2jHqC+2xqPpXyFFkVLlApay/uCAux1lEuNF2L3S32+d5m5
-         LE5Ss4YYW2KCQPK4AgPTNe9Yuf8D+LNzyg3omuayIGLgbsm47fi5wl+DDTJOAf8HPF83
-         FxCYviAThgU93iw8jyYf617FeOuVbBdKuE406v+E2OJiABXa75S5sNqVD6g0dkjD9bXP
-         BQaQdNiQJqtXAEVeksTq0VK/QqHZfVJi4mtyv9EHVXZ+GAdLs00BHqytZgu2uXhIWyOw
-         leDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cHjzJ4tu0iwWERzLvjnOhK3bm3Iy4LFFoOV9TvsEMeo=;
-        b=KqVxJY6JZ/eLpYGsjQEk0WKnjBIxOvI928xV3U2M5KX1oFX6gw+kvcYpHsIdbucIiJ
-         bsezPzdmoD5RImrpUSYQZIl/yhfSeNd4Jsq02/vpM0uyXKdzNL3zhnXbN/dDmoiHc3+k
-         AHXsvGGtArU3jgrQkREtCOFN05Z7gfuxH0XfqrAtVwQdIyQ2C8IAJ/NDUCv1K93Nalyx
-         t/iyUuHmhB66gwPY0PF509tbCjvx60GRQ4+U5WBkVCE7GZImKDu1mSMtoFUF+gctL7Ig
-         V/8XIBMeWHmgXiGIQopsqNs8CeHrYxrHrQ6lUKPp/Wv8MywqOqP10j8ru2zPCgbYqhXH
-         GD2Q==
-X-Gm-Message-State: AOAM531/kzW9sM9SkvxjUye/3O3666EFKPqiTxLltOPaCDG1MjFsVPew
-        i+vYpS+5sK7eoImw3mTU0HmSXg==
-X-Google-Smtp-Source: ABdhPJx4+RwrrWNNQzsWdj2ES3Ot+nHFgEONSR6Dy57JbnogPDlZoiTE2j/fuilrFVHCHUlDAHRIvA==
-X-Received: by 2002:aca:5a86:0:b0:2ce:6ee7:2caa with SMTP id o128-20020aca5a86000000b002ce6ee72caamr3158348oib.216.1645119220870;
-        Thu, 17 Feb 2022 09:33:40 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 128sm163526oor.15.2022.02.17.09.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 09:33:40 -0800 (PST)
-Date:   Thu, 17 Feb 2022 09:35:47 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Minnekhanov <alexeymin@postmarketos.org>
-Subject: Re: [PATCH v5] i2c: qcom-geni: Add support for GPI DMA
-Message-ID: <Yg6Hc2pT8DFKS2dT@ripper>
-References: <20220131120403.2481995-1-vkoul@kernel.org>
+        Thu, 17 Feb 2022 12:36:10 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3642B354D;
+        Thu, 17 Feb 2022 09:35:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645119354; x=1676655354;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aU/8SfkG919KRJzLHsaCXMfHVYiGCXEE9NRnWmAuidE=;
+  b=BQnITPVAMXc6aF4udLFwIetwHJt7VFuTZxUIdQOOs/0N2TT+F99yOhfJ
+   jEvNKQmtRpMWGx/zzMpMQywOAeOaWEtnDo9K7B4oE4EFRgcOiY1z9Yah/
+   NgmazUhF/io405Q0Rrfg9sLkzrB8FeFDSD7x8cg2olfeMMtVVHonWxzZj
+   EVE/4OQQ2hdufbsqbo4HWnro0rJ87dhhtIYEs+vlR1OfcCe5E+Gaa7M3y
+   BfB77AcmaAkVkosgbAZGzyWYkCy6sPMo8W2MsAe2VPx1KLvxTrcEkiY75
+   9JeYMHq+4ywiMwniiYDdTF1EfaQMPMQ7KS99TmrQFEUbP59a20fLQk1bE
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="238335073"
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="238335073"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 09:35:53 -0800
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="502904931"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.60])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 09:35:53 -0800
+Date:   Thu, 17 Feb 2022 09:35:52 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH 1/2] x86/mce: Remove old CMCI storm mitigation code
+Message-ID: <Yg6HeKIn0FCRDk22@agluck-desk3.sc.intel.com>
+References: <20220217141609.119453-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220217141609.119453-2-Smita.KoralahalliChannabasappa@amd.com>
+ <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131120403.2481995-1-vkoul@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yg6FqR2cMZDwdBdi@agluck-desk3.sc.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 31 Jan 04:04 PST 2022, Vinod Koul wrote:
+When a "storm" of CMCI is detected this code mitigates by
+disabling CMCI interrupt signalling from all of the banks
+owned by the CPU that saw the storm.
 
-> QUP Serial engines supports data transfers thru FIFO mode, SE DMA mode and
-> lastly GPI DMA mode. Former two are already supported and this adds supports the
-> last mode.
-> 
-> In GPI DMA mode, the firmware is issued commands by driver to perform DMA
-> and setup the serial port.
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
-> 
-> Changes since v4:
->  - Fix buildbot warn
->  - Fix flase warn reported by Alexey
->  - Fix feedback from Bjorn and cleanup the probe code and add more details
->    in changelog
-> 
-> Changes since v3:
->  - remove separate tx and rx function for gsi dma and make a common one
->  - remove global structs and use local variables instead
-> 
->  drivers/i2c/busses/i2c-qcom-geni.c | 300 ++++++++++++++++++++++++++---
->  1 file changed, 273 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 6d635a7c104c..696253d178a6 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -3,7 +3,9 @@
->  
->  #include <linux/acpi.h>
->  #include <linux/clk.h>
-> +#include <linux/dmaengine.h>
->  #include <linux/dma-mapping.h>
-> +#include <linux/dma/qcom-gpi-dma.h>
->  #include <linux/err.h>
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
-> @@ -48,6 +50,9 @@
->  #define LOW_COUNTER_SHFT	10
->  #define CYCLE_COUNTER_MSK	GENMASK(9, 0)
->  
-> +#define I2C_PACK_TX		BIT(0)
-> +#define I2C_PACK_RX		BIT(1)
-> +
->  enum geni_i2c_err_code {
->  	GP_IRQ0,
->  	NACK,
-> @@ -89,6 +94,9 @@ struct geni_i2c_dev {
->  	void *dma_buf;
->  	size_t xfer_len;
->  	dma_addr_t dma_addr;
-> +	struct dma_chan *tx_c;
-> +	struct dma_chan *rx_c;
-> +	bool gpi_mode;
->  };
->  
->  struct geni_i2c_err_log {
-> @@ -456,12 +464,199 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->  	return gi2c->err;
->  }
->  
-> +static void i2c_gpi_cb_result(void *cb, const struct dmaengine_result *result)
-> +{
-> +	struct geni_i2c_dev *gi2c = cb;
-> +
-> +	if (result->result != DMA_TRANS_NOERROR) {
-> +		dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
+There are problems with this approach:
 
-Iiuc the API the expectation is that if we get !NOERROR we shouldn't
-expect to get NOERROR after that.
+1) It is very coarse grained. In all liklihood only one of the
+banks was geenrating the interrupts, but CMCI is disabled for all.
+This means Linux may delay seeing and processing errors logged
+from other banks.
 
-If so we're just returning here and leaving geni_i2c_gpi_xfer() to just
-timeout in a HZ or so. Given that xfer happens under the adaptor lock,
-how about carrying an error in geni_i2c_dev and complete(&done) here as
-well?
+2) Although CMCI stands for Corrected Machine Check Interrupt, it
+is also used to signal when an uncorrected error is logged. This
+is a problem because these errors should be handled in a timely
+manner.
 
-> +		return;
-> +	}
-> +
-> +	if (result->residue)
-> +		dev_dbg(gi2c->se.dev, "DMA xfer has pending: %d\n", result->residue);
-> +
-> +	complete(&gi2c->done);
-> +}
-> +
-[..]
-> +
-> +static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], int num)
-> +{
-> +	struct dma_slave_config config = {};
-> +	struct gpi_i2c_config peripheral = {};
-> +	int i, ret = 0, timeout;
-> +	dma_addr_t tx_addr, rx_addr;
-> +	void *tx_buf = NULL, *rx_buf = NULL;
-> +	const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
-> +
-> +	config.peripheral_config = &peripheral;
-> +	config.peripheral_size = sizeof(peripheral);
-> +
-> +	peripheral.pack_enable = I2C_PACK_TX | I2C_PACK_RX;
-> +	peripheral.cycle_count = itr->t_cycle_cnt;
-> +	peripheral.high_count = itr->t_high_cnt;
-> +	peripheral.low_count = itr->t_low_cnt;
-> +	peripheral.clk_div = itr->clk_div;
-> +	peripheral.set_config = 1;
-> +	peripheral.multi_msg = false;
-> +
-> +	for (i = 0; i < num; i++) {
-> +		gi2c->cur = &msgs[i];
-> +		dev_dbg(gi2c->se.dev, "msg[%d].len:%d\n", i, gi2c->cur->len);
-> +
-> +		peripheral.stretch = 0;
-> +		if (i < num - 1)
-> +			peripheral.stretch = 1;
-> +
-> +		peripheral.addr = msgs[i].addr;
-> +
-> +		if (msgs[i].flags & I2C_M_RD) {
-> +			ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
-> +			if (ret)
-> +				goto err;
-> +		}
-> +
-> +		ret =  geni_i2c_gpi(gi2c, &msgs[i], &config, &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
-> +		if (ret)
-> +			goto err;
-> +
-> +		if (msgs[i].flags & I2C_M_RD)
-> +			dma_async_issue_pending(gi2c->rx_c);
-> +		dma_async_issue_pending(gi2c->tx_c);
-> +
-> +		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
-> +		if (!timeout) {
-> +			dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d addr:0x%x\n",
-> +				gi2c->cur->flags, gi2c->cur->addr);
-> +			ret = gi2c->err = -ETIMEDOUT;
-> +			goto err;
-> +		}
-> +
-> +		geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
-> +	}
-> +
-> +	return 0;
-> +
-> +err:
-> +	dmaengine_terminate_sync(gi2c->rx_c);
-> +	dmaengine_terminate_sync(gi2c->tx_c);
-> +	geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
-> +	return ret;
-> +}
-[..]
-> +static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
-> +{
-> +	int ret;
-> +
-> +	geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
-> +	gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
-> +	if (IS_ERR(gi2c->tx_c)) {
-> +		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->tx_c),
-> +				    "Failed to get tx DMA ch\n");
-> +		if (ret < 0)
-> +			goto err_tx;
-> +	}
-> +
-> +	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
-> +	if (IS_ERR(gi2c->rx_c)) {
-> +		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->rx_c),
-> +				    "Failed to get rx DMA ch\n");
-> +		if (ret < 0)
-> +			goto err_rx;
-> +	}
-> +
-> +	dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
-> +	return 0;
-> +
-> +err_rx:
-> +	dma_release_channel(gi2c->tx_c);
-> +	gi2c->tx_c = NULL;
+Delete all this code in preparation for a finer grained solution.
 
-You're not accessing tx_c or rx_c again when returning an error here. So
-I don't think there's a reason to clear them.
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/kernel/cpu/mce/core.c     |  20 +---
+ arch/x86/kernel/cpu/mce/intel.c    | 145 -----------------------------
+ arch/x86/kernel/cpu/mce/internal.h |   6 --
+ 3 files changed, 1 insertion(+), 170 deletions(-)
 
-> +err_tx:
-> +	gi2c->rx_c = NULL;
-> +	return ret;
-> +}
-> +
-[..]
->  static int geni_i2c_remove(struct platform_device *pdev)
->  {
->  	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
->  
-> +	release_gpi_dma(gi2c);
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 6ed365337a3b..4f9abb66520d 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1510,13 +1510,6 @@ static unsigned long check_interval = INITIAL_CHECK_INTERVAL;
+ static DEFINE_PER_CPU(unsigned long, mce_next_interval); /* in jiffies */
+ static DEFINE_PER_CPU(struct timer_list, mce_timer);
+ 
+-static unsigned long mce_adjust_timer_default(unsigned long interval)
+-{
+-	return interval;
+-}
+-
+-static unsigned long (*mce_adjust_timer)(unsigned long interval) = mce_adjust_timer_default;
+-
+ static void __start_timer(struct timer_list *t, unsigned long interval)
+ {
+ 	unsigned long when = jiffies + interval;
+@@ -1539,15 +1532,9 @@ static void mce_timer_fn(struct timer_list *t)
+ 
+ 	iv = __this_cpu_read(mce_next_interval);
+ 
+-	if (mce_available(this_cpu_ptr(&cpu_info))) {
++	if (mce_available(this_cpu_ptr(&cpu_info)))
+ 		machine_check_poll(0, this_cpu_ptr(&mce_poll_banks));
+ 
+-		if (mce_intel_cmci_poll()) {
+-			iv = mce_adjust_timer(iv);
+-			goto done;
+-		}
+-	}
+-
+ 	/*
+ 	 * Alert userspace if needed. If we logged an MCE, reduce the polling
+ 	 * interval, otherwise increase the polling interval.
+@@ -1557,7 +1544,6 @@ static void mce_timer_fn(struct timer_list *t)
+ 	else
+ 		iv = min(iv * 2, round_jiffies_relative(check_interval * HZ));
+ 
+-done:
+ 	__this_cpu_write(mce_next_interval, iv);
+ 	__start_timer(t, iv);
+ }
+@@ -1887,7 +1873,6 @@ static void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c)
+ 
+ 	intel_init_cmci();
+ 	intel_init_lmce();
+-	mce_adjust_timer = cmci_intel_adjust_timer;
+ }
+ 
+ static void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
+@@ -1900,7 +1885,6 @@ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
+ 	switch (c->x86_vendor) {
+ 	case X86_VENDOR_INTEL:
+ 		mce_intel_feature_init(c);
+-		mce_adjust_timer = cmci_intel_adjust_timer;
+ 		break;
+ 
+ 	case X86_VENDOR_AMD: {
+@@ -2559,8 +2543,6 @@ static void mce_reenable_cpu(void)
+ 
+ static int mce_cpu_dead(unsigned int cpu)
+ {
+-	mce_intel_hcpu_update(cpu);
+-
+ 	/* intentionally ignoring frozen here */
+ 	if (!cpuhp_tasks_frozen)
+ 		cmci_rediscover();
+diff --git a/arch/x86/kernel/cpu/mce/intel.c b/arch/x86/kernel/cpu/mce/intel.c
+index bb9a46a804bf..cee9d989f791 100644
+--- a/arch/x86/kernel/cpu/mce/intel.c
++++ b/arch/x86/kernel/cpu/mce/intel.c
+@@ -41,15 +41,6 @@
+  */
+ static DEFINE_PER_CPU(mce_banks_t, mce_banks_owned);
+ 
+-/*
+- * CMCI storm detection backoff counter
+- *
+- * During storm, we reset this counter to INITIAL_CHECK_INTERVAL in case we've
+- * encountered an error. If not, we decrement it by one. We signal the end of
+- * the CMCI storm when it reaches 0.
+- */
+-static DEFINE_PER_CPU(int, cmci_backoff_cnt);
+-
+ /*
+  * cmci_discover_lock protects against parallel discovery attempts
+  * which could race against each other.
+@@ -57,21 +48,6 @@ static DEFINE_PER_CPU(int, cmci_backoff_cnt);
+ static DEFINE_RAW_SPINLOCK(cmci_discover_lock);
+ 
+ #define CMCI_THRESHOLD		1
+-#define CMCI_POLL_INTERVAL	(30 * HZ)
+-#define CMCI_STORM_INTERVAL	(HZ)
+-#define CMCI_STORM_THRESHOLD	15
+-
+-static DEFINE_PER_CPU(unsigned long, cmci_time_stamp);
+-static DEFINE_PER_CPU(unsigned int, cmci_storm_cnt);
+-static DEFINE_PER_CPU(unsigned int, cmci_storm_state);
+-
+-enum {
+-	CMCI_STORM_NONE,
+-	CMCI_STORM_ACTIVE,
+-	CMCI_STORM_SUBSIDED,
+-};
+-
+-static atomic_t cmci_storm_on_cpus;
+ 
+ static int cmci_supported(int *banks)
+ {
+@@ -127,124 +103,6 @@ static bool lmce_supported(void)
+ 	return tmp & FEAT_CTL_LMCE_ENABLED;
+ }
+ 
+-bool mce_intel_cmci_poll(void)
+-{
+-	if (__this_cpu_read(cmci_storm_state) == CMCI_STORM_NONE)
+-		return false;
+-
+-	/*
+-	 * Reset the counter if we've logged an error in the last poll
+-	 * during the storm.
+-	 */
+-	if (machine_check_poll(0, this_cpu_ptr(&mce_banks_owned)))
+-		this_cpu_write(cmci_backoff_cnt, INITIAL_CHECK_INTERVAL);
+-	else
+-		this_cpu_dec(cmci_backoff_cnt);
+-
+-	return true;
+-}
+-
+-void mce_intel_hcpu_update(unsigned long cpu)
+-{
+-	if (per_cpu(cmci_storm_state, cpu) == CMCI_STORM_ACTIVE)
+-		atomic_dec(&cmci_storm_on_cpus);
+-
+-	per_cpu(cmci_storm_state, cpu) = CMCI_STORM_NONE;
+-}
+-
+-static void cmci_toggle_interrupt_mode(bool on)
+-{
+-	unsigned long flags, *owned;
+-	int bank;
+-	u64 val;
+-
+-	raw_spin_lock_irqsave(&cmci_discover_lock, flags);
+-	owned = this_cpu_ptr(mce_banks_owned);
+-	for_each_set_bit(bank, owned, MAX_NR_BANKS) {
+-		rdmsrl(MSR_IA32_MCx_CTL2(bank), val);
+-
+-		if (on)
+-			val |= MCI_CTL2_CMCI_EN;
+-		else
+-			val &= ~MCI_CTL2_CMCI_EN;
+-
+-		wrmsrl(MSR_IA32_MCx_CTL2(bank), val);
+-	}
+-	raw_spin_unlock_irqrestore(&cmci_discover_lock, flags);
+-}
+-
+-unsigned long cmci_intel_adjust_timer(unsigned long interval)
+-{
+-	if ((this_cpu_read(cmci_backoff_cnt) > 0) &&
+-	    (__this_cpu_read(cmci_storm_state) == CMCI_STORM_ACTIVE)) {
+-		mce_notify_irq();
+-		return CMCI_STORM_INTERVAL;
+-	}
+-
+-	switch (__this_cpu_read(cmci_storm_state)) {
+-	case CMCI_STORM_ACTIVE:
+-
+-		/*
+-		 * We switch back to interrupt mode once the poll timer has
+-		 * silenced itself. That means no events recorded and the timer
+-		 * interval is back to our poll interval.
+-		 */
+-		__this_cpu_write(cmci_storm_state, CMCI_STORM_SUBSIDED);
+-		if (!atomic_sub_return(1, &cmci_storm_on_cpus))
+-			pr_notice("CMCI storm subsided: switching to interrupt mode\n");
+-
+-		fallthrough;
+-
+-	case CMCI_STORM_SUBSIDED:
+-		/*
+-		 * We wait for all CPUs to go back to SUBSIDED state. When that
+-		 * happens we switch back to interrupt mode.
+-		 */
+-		if (!atomic_read(&cmci_storm_on_cpus)) {
+-			__this_cpu_write(cmci_storm_state, CMCI_STORM_NONE);
+-			cmci_toggle_interrupt_mode(true);
+-			cmci_recheck();
+-		}
+-		return CMCI_POLL_INTERVAL;
+-	default:
+-
+-		/* We have shiny weather. Let the poll do whatever it thinks. */
+-		return interval;
+-	}
+-}
+-
+-static bool cmci_storm_detect(void)
+-{
+-	unsigned int cnt = __this_cpu_read(cmci_storm_cnt);
+-	unsigned long ts = __this_cpu_read(cmci_time_stamp);
+-	unsigned long now = jiffies;
+-	int r;
+-
+-	if (__this_cpu_read(cmci_storm_state) != CMCI_STORM_NONE)
+-		return true;
+-
+-	if (time_before_eq(now, ts + CMCI_STORM_INTERVAL)) {
+-		cnt++;
+-	} else {
+-		cnt = 1;
+-		__this_cpu_write(cmci_time_stamp, now);
+-	}
+-	__this_cpu_write(cmci_storm_cnt, cnt);
+-
+-	if (cnt <= CMCI_STORM_THRESHOLD)
+-		return false;
+-
+-	cmci_toggle_interrupt_mode(false);
+-	__this_cpu_write(cmci_storm_state, CMCI_STORM_ACTIVE);
+-	r = atomic_add_return(1, &cmci_storm_on_cpus);
+-	mce_timer_kick(CMCI_STORM_INTERVAL);
+-	this_cpu_write(cmci_backoff_cnt, INITIAL_CHECK_INTERVAL);
+-
+-	if (r == 1)
+-		pr_notice("CMCI storm detected: switching to poll mode\n");
+-	return true;
+-}
+-
+ /*
+  * The interrupt handler. This is called on every event.
+  * Just call the poller directly to log any events.
+@@ -253,9 +111,6 @@ static bool cmci_storm_detect(void)
+  */
+ static void intel_threshold_interrupt(void)
+ {
+-	if (cmci_storm_detect())
+-		return;
+-
+ 	machine_check_poll(MCP_TIMESTAMP, this_cpu_ptr(&mce_banks_owned));
+ }
+ 
+diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
+index acd61c41846c..f01d6cbeb809 100644
+--- a/arch/x86/kernel/cpu/mce/internal.h
++++ b/arch/x86/kernel/cpu/mce/internal.h
+@@ -41,18 +41,12 @@ struct dentry *mce_get_debugfs_dir(void);
+ extern mce_banks_t mce_banks_ce_disabled;
+ 
+ #ifdef CONFIG_X86_MCE_INTEL
+-unsigned long cmci_intel_adjust_timer(unsigned long interval);
+-bool mce_intel_cmci_poll(void);
+-void mce_intel_hcpu_update(unsigned long cpu);
+ void cmci_disable_bank(int bank);
+ void intel_init_cmci(void);
+ void intel_init_lmce(void);
+ void intel_clear_lmce(void);
+ bool intel_filter_mce(struct mce *m);
+ #else
+-# define cmci_intel_adjust_timer mce_adjust_timer_default
+-static inline bool mce_intel_cmci_poll(void) { return false; }
+-static inline void mce_intel_hcpu_update(unsigned long cpu) { }
+ static inline void cmci_disable_bank(int bank) { }
+ static inline void intel_init_cmci(void) { }
+ static inline void intel_init_lmce(void) { }
+-- 
+2.35.1
 
-Your i2c devices aren't torn down until i2c_del_adapter(), so you might
-still end up trying to use the two channels here, after releasing them.
-
-In other words, I think you should reorder these.
-
-Regards,
-Bjorn

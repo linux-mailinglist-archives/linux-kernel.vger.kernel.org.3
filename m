@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E084B965C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 04:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 826714B9661
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 04:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbiBQDJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 22:09:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36540 "EHLO
+        id S232404AbiBQDLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 22:11:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbiBQDJM (ORCPT
+        with ESMTP id S231329AbiBQDLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 22:09:12 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8C2158E9D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 19:08:58 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id f8so3806279pgc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 19:08:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Anr52g04+AVHtEhsIJzL+W2iG28YfG2faiyY/MF3S1Q=;
-        b=07TZlRToCc/AdEf2OdPUHwVs6g+ZsE6t5ADSClYQD4YtLyHDVtCXrw0tbUm5v86EPN
-         OcyUz4BPpxlWcNwlAG/jJ4TFq8G31s73PHQlBhy433SC8RI/KBQO0Gkws+BdbEE/vCP5
-         uunMezkromTerPmrToxjiF43VMZj6JgV+Lp1m+ekN058H3KyHKdIGzREZe7VFg8MQC+a
-         WCmwQ3PofM6Oe/FkqsfB2Dx8ro75SLsNUHeoFaNVgJX2gEypTIFOWshmUMn2J51B1eTG
-         BcxZbdvjOZptcd3Hm9Hrqlc3/uXKMStobZyt42V3TWV+wy1/3/QJnRUERHVyTeXFFoqz
-         YhVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Anr52g04+AVHtEhsIJzL+W2iG28YfG2faiyY/MF3S1Q=;
-        b=f8O3RaOH1YWG6jVhYVUxGPoKyRQfXjQKoVGisEJ2PYg+RpfaEyUrpQHIXZucEKgBhP
-         /2YlxzD5UfzTCbLvP5+Xy5kC4E3NheragDm2Mns+/8Xg8MhlhuctWTfj5Sz+8W32T3Q5
-         uoqsZrb7Dn/CLpIkHsIeDP+Sn9IcgYRMScBDOV+iPwskSqgnW6KJa4jxQTGoYzlFv8yK
-         9/rhcdijoU0HdwjkhbsGqehvogMs/SzC3xE+I0R3C/zwQFLAtMISmRXzk3vfe64qoTE1
-         ZKm2IdJYprPGU8tJ9hTt4V48FXkOOXNJIVBgH+SqvpUiiH8LO2uDwp/tV448huftZ0wI
-         Agog==
-X-Gm-Message-State: AOAM531YvXjt3K+WUJBC8xC4tyXNa6lkXSEdicF7x59JC2xohnBGGHE4
-        ZK4IejlmPbn8pbe2kTbfGaSy/ZM63Yy17w==
-X-Google-Smtp-Source: ABdhPJxl3am8omzitpxin/MQKTLxfv3srfGyqtpva7Sci8tI20hniUCP5Uj33Vt824nPP+nacT26Eg==
-X-Received: by 2002:a62:1d07:0:b0:4bf:3782:22e3 with SMTP id d7-20020a621d07000000b004bf378222e3mr1145580pfd.52.1645067338250;
-        Wed, 16 Feb 2022 19:08:58 -0800 (PST)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id s1sm404329pjr.56.2022.02.16.19.08.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 19:08:57 -0800 (PST)
-Message-ID: <5e633f42-817a-1861-524f-8659e7340351@kernel.dk>
-Date:   Wed, 16 Feb 2022 20:08:56 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH -next] block: update io_ticks when io hang
-Content-Language: en-US
-To:     "zhangwensheng (E)" <zhangwensheng5@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-References: <20220125091938.1799001-1-zhangwensheng5@huawei.com>
- <164506609748.50355.11490091116960287078.b4-ty@kernel.dk>
- <1998c61c-c3d9-8050-be43-16aba2d6e09f@huawei.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <1998c61c-c3d9-8050-be43-16aba2d6e09f@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Wed, 16 Feb 2022 22:11:14 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 35AAE23D5D9;
+        Wed, 16 Feb 2022 19:10:58 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app2 (Coremail) with SMTP id by_KCgBHTISsvA1itbXyAQ--.43101S2;
+        Thu, 17 Feb 2022 11:10:42 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     gregkh@linuxfoundation.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Jing Leng <jleng@ambarella.com>
+Subject: [PATCH v3] usb: gadget: f_uvc: add superspeed plus transfer support
+Date:   Thu, 17 Feb 2022 11:10:35 +0800
+Message-Id: <20220217031035.6150-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <e3311c8.a65f5.17f059d63df.Coremail.3090101217@zju.edu.cn>
+References: <e3311c8.a65f5.17f059d63df.Coremail.3090101217@zju.edu.cn>
+X-CM-TRANSID: by_KCgBHTISsvA1itbXyAQ--.43101S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFyftw4DZw17ZF45GFyUJrb_yoW5Xw4Upa
+        15A3Z5Ary5JFn5J34UJan5Cry3XF4SvayDKFZFq3yY9rW3tas5Ar9Fyr1rKa47XFsxZr40
+        yFnrA3yIkw10krJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBSb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
+        xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+        Av7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4kE6xkIj40Ew7xC0wCY02Avz4vE14v_Gr4l42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
+        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
+        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxeHqDUUUU
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwIEBVNG3FjlrQABsY
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 8:07 PM, zhangwensheng (E) wrote:
-> hi, Jens:
-> 
-> I am sorry that there are some problems with the patch below:
-> 
-> 
-> @@ -913,12 +913,14 @@ ssize_t part_stat_show(struct device *dev,
->       struct disk_stats stat;
->       unsigned int inflight;
->   -    part_stat_read_all(bdev, &stat);
->       if (queue_is_mq(q))
->           inflight = blk_mq_in_flight(q, bdev);
->       else
->           inflight = part_in_flight(bdev);
->   +    if (inflight)
-> +        update_io_ticks(bdev, jiffies, true);
-> +    part_stat_read_all(bdev, &stat);
->       return sprintf(buf,
->           "%8lu %8lu %8llu %8u "
->           "%8lu %8lu %8llu %8u "
-> 
-> It shoule use part_stat_lock() & part_stat_unlock() to protect update_io_ticks(),
-> 
-> because it operates on per-cpu variables.  And I will fix it in V2.
+From: Jing Leng <jleng@ambarella.com>
 
-I'll drop it, please resend a fixed and tested one.
+UVC driver doesn't set ssp_descriptors in struct usb_function,
+it doesn't support USB_SPEED_SUPER_PLUS transfer. So we can
+refer to USB_SPEED_SUPER to realize the support of
+USB_SPEED_SUPER_PLUS.
 
+If users use a USB device controller that speed can be up to
+USB_SPEED_SUPER_PLUS (10 Gbps), downgrading to USB_SPEED_SUPER
+(5 Gbps) is not a good performance. In addition, it triggers a
+warning "configfs-gadget gadget: uvc doesn't hold the descriptors
+for current speed".
+
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ChangeLog v2->v3:
+- Modify the title and description of the PATCH
+- It is a feature but not a bug
+ChangeLog v1->v2:
+- Update more detailed description of the PATCH
+---
+ drivers/usb/gadget/function/f_uvc.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 71bb5e477dba..8fc9b035481e 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -478,6 +478,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	void *mem;
+ 
+ 	switch (speed) {
++	case USB_SPEED_SUPER_PLUS:
+ 	case USB_SPEED_SUPER:
+ 		uvc_control_desc = uvc->desc.ss_control;
+ 		uvc_streaming_cls = uvc->desc.ss_streaming;
+@@ -521,7 +522,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	      + uvc_control_ep.bLength + uvc_control_cs_ep.bLength
+ 	      + uvc_streaming_intf_alt0.bLength;
+ 
+-	if (speed == USB_SPEED_SUPER) {
++	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS) {
+ 		bytes += uvc_ss_control_comp.bLength;
+ 		n_desc = 6;
+ 	} else {
+@@ -565,7 +566,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
+ 	uvc_control_header->baInterfaceNr[0] = uvc->streaming_intf;
+ 
+ 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_ep);
+-	if (speed == USB_SPEED_SUPER)
++	if (speed == USB_SPEED_SUPER || speed == USB_SPEED_SUPER_PLUS)
+ 		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_control_comp);
+ 
+ 	UVC_COPY_DESCRIPTOR(mem, dst, &uvc_control_cs_ep);
+@@ -727,6 +728,15 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
+ 		}
+ 	}
+ 
++	if (gadget_is_superspeed_plus(c->cdev->gadget)) {
++		f->ssp_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_SUPER_PLUS);
++		if (IS_ERR(f->ssp_descriptors)) {
++			ret = PTR_ERR(f->ssp_descriptors);
++			f->ssp_descriptors = NULL;
++			goto error;
++		}
++	}
++
+ 	/* Preallocate control endpoint request. */
+ 	uvc->control_req = usb_ep_alloc_request(cdev->gadget->ep0, GFP_KERNEL);
+ 	uvc->control_buf = kmalloc(UVC_MAX_REQUEST_SIZE, GFP_KERNEL);
 -- 
-Jens Axboe
+2.17.1
 

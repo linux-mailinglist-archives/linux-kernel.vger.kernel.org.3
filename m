@@ -2,78 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6AC4BA3F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7844BA3FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242307AbiBQPFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:05:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40730 "EHLO
+        id S242189AbiBQPHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:07:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242310AbiBQPF2 (ORCPT
+        with ESMTP id S234684AbiBQPHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:05:28 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE676196A3C;
-        Thu, 17 Feb 2022 07:05:10 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id r27so6145019oiw.4;
-        Thu, 17 Feb 2022 07:05:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f2MPqTgNhkg8dMnyXCAFH3rR3QSJvQ1vPpxCo+MKOj8=;
-        b=Cx9RS+kG97Yi9fZNROZ4ELjN6xaw3IgW5PlUcROxWJAyZXPTpUrH7LSQiY+r8oBHrU
-         Zg1uc69eNVPqLjDBZgBYFiO7oxO9wIm8hjoBa3uUwHZe0op2/9wJ1d069pF0+9GmEaCM
-         jxDT7pCm5XfHskXuGHOcpP/O1IeXReO1gjpqJq+OkywIFtmzxbdNyHUqBYZvkffIHbDg
-         1THozygIzmLyf58iiULG7km+V0Jo7x58ckme8BnCTx5FqLV0qZp2DKHk6CIc5//O2sCs
-         8aTjRIpNqE930fa4bk14F3ve3JwFhgIWGJ9aq5ng0Yy4iTmCijoNPHCQHXqew8Y8/kTG
-         gGeA==
+        Thu, 17 Feb 2022 10:07:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 892B725B2D6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:07:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645110439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qFSOR5Tcp5Zr84hEbE+k+4Qy9iD42HSTK7sgtEU/6PM=;
+        b=Os8rOc5eqWVn6A2qtwojoQOFZ+O56RtWNTIx5bU1pz9iQjBQLMx61y09mzC7bIw3ax2ruO
+        tM7jfTsEsX4lE/DpCEm/Y/R2+k8DAJntRn0CkYM9ynsPCwdjqjJTiDqiiw0acyx5ut/VMi
+        lEfIwLcSkzNZXd9DUq9SkgFroDOTK7c=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-652-LH346JF0MhChqwqVxc3FGA-1; Thu, 17 Feb 2022 10:07:18 -0500
+X-MC-Unique: LH346JF0MhChqwqVxc3FGA-1
+Received: by mail-ed1-f71.google.com with SMTP id l3-20020a50cbc3000000b0041083c11173so3704339edi.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:07:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f2MPqTgNhkg8dMnyXCAFH3rR3QSJvQ1vPpxCo+MKOj8=;
-        b=S0AIhFFbMJdV9HK+oiygFaPtL8hQSweIdFcs0rVPVw7uwuTta70quiml1h+8gQ3G7Z
-         f6h8r4/3IWW6N7KgE1tRXcxeEAe1mhhZA+FFcgU02/cZL4wi5eRdN87se2SFUtIFa7Tc
-         hZFKYXDHstY8lNUg/Zpfhd7gp1G2HKLxRxp2I9QW6GqW0npURUbLyz9F/6OmaGQSyLZ4
-         HokxlGISBhuMybeRfymzE9apogmEv0v8XO2lXnqoArd/88t1oOkxY6KDbZIpX4b4wwJa
-         GZdQsOJ8oqSa9HbMfkDLadm5t/nzAf6zhGt+vjgBko9jgLzlgudWqo+GItcTB2CvrF8b
-         CQqQ==
-X-Gm-Message-State: AOAM531EQyF2lLGY8R4nDEabCyFY03EtQchyiRNk+2s2eacw86NSDUuk
-        YktKAdHT0gh4mjtExmPkahmHkYcdIvZA8re01vs=
-X-Google-Smtp-Source: ABdhPJzHv7jbTD21TTWxDCpiC4x/P9oo3FqS6Kvl2GIeQ/+Bb7O5aFLF5cj7AiplebmaHPOwWdAjJIcJ5tQSeJdvaXo=
-X-Received: by 2002:aca:5b45:0:b0:2bc:8362:b053 with SMTP id
- p66-20020aca5b45000000b002bc8362b053mr2789910oib.36.1645110309954; Thu, 17
- Feb 2022 07:05:09 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qFSOR5Tcp5Zr84hEbE+k+4Qy9iD42HSTK7sgtEU/6PM=;
+        b=wqD1JNmb4g1SS5e6lq2pSnRht4c7GoVh+Yt5KDYTdVznKCxj3aSwGIQjvb8f0as/jd
+         zvUMuFIxS/7rpdgMOgf7izhDXIrzR63MCSKc+UIciWKuBfB8fH9fA8sv3JiUfWdNHcxy
+         1AsGzlMrxfFYrA3Xi4wt4kir56aUbFbkgBA9vt2M7qmYm65dH3d8+9m+GqPCOl17kdRb
+         kjzfuiLHT0Yn5NwOJEOECMVUmKO1wbF5KXdl53W4+TqEobe1AvLrbMdMvnONQDuwYAFV
+         DGYWWE7nXjaJCSJcatpzpr89O8JK5DMYzMawCC0XZUnikuXMPiENS3dqFsjEpnAUDj8o
+         Efgg==
+X-Gm-Message-State: AOAM531gWPoFR1cfMPV9Z9SAOHLxpaK/gpMFiuXH+HSK08E+ObWWB/uF
+        Y5OtgOTALsu9f/cQpxU10g8X30PS6Le15xXxSPA+GpctK+jtNE96GTa/WGF4visPpYtryExf7Jm
+        BhWzhXSF6ZHdnQgmPJu0DfkSK
+X-Received: by 2002:a17:906:3104:b0:6ce:6b85:ecc9 with SMTP id 4-20020a170906310400b006ce6b85ecc9mr2636476ejx.339.1645110437081;
+        Thu, 17 Feb 2022 07:07:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzANKo7hcVxixfL7sOwJBypOhLvl1k3r71hqgukS7AJAyKh1nYcS5xz9etrTRJFPRrNrgRSxA==
+X-Received: by 2002:a17:906:3104:b0:6ce:6b85:ecc9 with SMTP id 4-20020a170906310400b006ce6b85ecc9mr2636451ejx.339.1645110436820;
+        Thu, 17 Feb 2022 07:07:16 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id m4sm1295147ejl.45.2022.02.17.07.07.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 07:07:15 -0800 (PST)
+Message-ID: <f9b79015-1d5c-565e-ccf9-3d81592c17e5@redhat.com>
+Date:   Thu, 17 Feb 2022 16:07:14 +0100
 MIME-Version: 1.0
-References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
- <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
- <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com> <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
- <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com> <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
- <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com> <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
- <478e1651-a383-05ff-d011-6dda771b8ce8@linux.microsoft.com>
- <875ypt5zmz.fsf@defensec.nl> <CAFftDdo9JmbyPzPWRjOYgZBOS9b5d+OGKKf8egS8_ysbbWW87Q@mail.gmail.com>
- <CABXk95Az0V0qWyB0Cp9D+MaCKNBfcdk4=bvXRdm5EXzHdjXJJg@mail.gmail.com> <CAHC9VhQKuQuR1pJfa0h2Y5dCjmrpiYaGpymwxxE1sa6jR3h-bA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQKuQuR1pJfa0h2Y5dCjmrpiYaGpymwxxE1sa6jR3h-bA@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Date:   Thu, 17 Feb 2022 16:04:58 +0100
-Message-ID: <CAJ2a_Ddh8p0fzJHf7R=BwAULfS8jYq08x=H45mF9jaR1QbWTww@mail.gmail.com>
-Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Demi Marie Obenour <demiobenour@gmail.com>,
-        William Roberts <bill.c.roberts@gmail.com>,
-        Dominick Grift <dominick.grift@defensec.nl>,
-        Chris PeBenito <chpebeni@linux.microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        selinux-refpolicy@vger.kernel.org,
-        Jeffrey Vander Stoep <jeffv@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 1/2] x86/kvm/fpu: Mask guest fpstate->xfeatures with
+ guest_supported_xcr0
+Content-Language: en-US
+To:     David Edmondson <david.edmondson@oracle.com>,
+        Leonardo Bras <leobras@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        David Gilbert <dgilbert@redhat.com>,
+        Peter Xu <peterx@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220217053028.96432-1-leobras@redhat.com>
+ <20220217053028.96432-2-leobras@redhat.com> <cunmtippugr.fsf@oracle.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <cunmtippugr.fsf@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,98 +96,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Feb 2022 at 21:35, Paul Moore <paul@paul-moore.com> wrote:
->
-> On Mon, Feb 14, 2022 at 2:11 AM Jeffrey Vander Stoep <jeffv@google.com> wrote:
-> > On Tue, Feb 8, 2022 at 3:18 PM William Roberts <bill.c.roberts@gmail.com> wrote:
-> > >
-> > > <snip>
-> > >
-> > > This is getting too long for me.
-> > >
-> > > > >
-> > > > > I don't have a strong opinion either way.  If one were to allow this
-> > > > > using a policy rule, it would result in a major policy breakage.  The
-> > > > > rule would turn on extended perm checks across the entire system,
-> > > > > which the SELinux Reference Policy isn't written for.  I can't speak
-> > > > > to the Android policy, but I would imagine it would be the similar
-> > > > > problem there too.
-> > > >
-> > > > Excuse me if I am wrong but AFAIK adding a xperm rule does not turn on
-> > > > xperm checks across the entire system.
-> > >
-> > > It doesn't as you state below its target + class.
-> > >
-> > > >
-> > > > If i am not mistaken it will turn on xperm checks only for the
-> > > > operations that have the same source and target/target class.
-> > >
-> > > That's correct.
-> > >
-> > > >
-> > > > This is also why i don't (with the exception TIOSCTI for termdev
-> > > > chr_file) use xperms by default.
-> > > >
-> > > > 1. it is really easy to selectively filter ioctls by adding xperm rules
-> > > > for end users (and since ioctls are often device/driver specific they
-> > > > know best what is needed and what not)
-> > >
-> > > > >>> and FIONCLEX can be trivially bypassed unless fcntl(F_SETFD)
-> > > >
-> > > > 2. if you filter ioctls in upstream policy for example like i do with
-> > > > TIOSCTI using for example (allowx foo bar (ioctl chr_file (not
-> > > > (0xXXXX)))) then you cannot easily exclude additional ioctls later where source is
-> > > > foo and target/tclass is bar/chr_file because there is already a rule in
-> > > > place allowing the ioctl (and you cannot add rules)
-> > >
-> > > Currently, fcntl flag F_SETFD is never checked, it's silently allowed, but
-> > > the equivalent FIONCLEX and FIOCLEX are checked. So if you wrote policy
-> > > to block the FIO*CLEX flags, it would be bypassable through F_SETFD and
-> > > FD_CLOEXEC. So the patch proposed makes the FIO flags behave like
-> > > F_SETFD. Which means upstream policy users could drop this allow, which
-> > > could then remove the target/class rule and allow all icotls. Which is easy
-> > > to prevent and fix you could be a rule in to allowx 0 as documented in the
-> > > wiki: https://selinuxproject.org/page/XpermRules
-> > >
-> > > The questions I think we have here are:
-> > > 1. Do we agree that the behavior between SETFD and the FIO flags are equivalent?
-> > >   I think they are.
-> > > 2. Do we want the interfaces to behave the same?
-> > >   I think they should.
-> > > 3. Do upstream users of the policy construct care?
-> > >   The patch is backwards compat, but I don't want their to be cruft
-> > > floating around with extra allowxperm rules.
-> >
-> > I think this proposed change is fine from Android's perspective. It
-> > implements in the kernel what we've already already put in place in
-> > our policy - that all domains are allowed to use these IOCLTs.
-> > https://cs.android.com/android/platform/superproject/+/master:system/sepolicy/public/domain.te;l=312
-> >
-> > It'll be a few years before we can clean up our policy since we need
-> > to support older kernels, but that's fine.
->
-> Thanks for the discussion everyone, it sounds like everybody is okay
-> with the change - that's good.  However, as I said earlier in this
-> thread I think we need to put this behind a policy capability, how
-> does POLICYDB_CAPABILITY_IOCTL_CLOEXEC/"ioctl_skip_cloexec" sound to
-> everyone?
+On 2/17/22 13:07, David Edmondson wrote:
+> The single line summary is now out of date - there's no new masking.
 
-May I ask why?
-To my understanding policy capabilities exist to retain backwards
-compatibility for older
-policies, e.g. if a new check is introduced or a new essential class
-or permission, which
-would break systems running an updated kernel with a non updated policy.
-In this case no check or class/permission is added, the xperm checks
-against FIO(N)CLEX
-are just dropped.  Old policies still defining related allow rules
-continue to work.  Existing
-polices explicitly not allowing them and relying on SELinux to block changes on
-the close-on-exec flag are already broken due to the bypasses via
-fnctl(2) and dup(2).
+Thanks for the review, I made the adjustments and pushed to master.
 
->
-> Demi, are you able to respin this patch with policy capability changes?
->
-> --
-> paul-moore.com
+Paolo
+
+> On Thursday, 2022-02-17 at 02:30:29 -03, Leonardo Bras wrote:
+> 
+>> During host/guest switch (like in kvm_arch_vcpu_ioctl_run()), the kernel
+>> swaps the fpu between host/guest contexts, by using fpu_swap_kvm_fpstate().
+>>
+>> When xsave feature is available, the fpu swap is done by:
+>> - xsave(s) instruction, with guest's fpstate->xfeatures as mask, is used
+>>    to store the current state of the fpu registers to a buffer.
+>> - xrstor(s) instruction, with (fpu_kernel_cfg.max_features &
+>>    XFEATURE_MASK_FPSTATE) as mask, is used to put the buffer into fpu regs.
+>>
+>> For xsave(s) the mask is used to limit what parts of the fpu regs will
+>> be copied to the buffer. Likewise on xrstor(s), the mask is used to
+>> limit what parts of the fpu regs will be changed.
+>>
+>> The mask for xsave(s), the guest's fpstate->xfeatures, is defined on
+>> kvm_arch_vcpu_create(), which (in summary) sets it to all features
+>> supported by the cpu which are enabled on kernel config.
+>>
+>> This means that xsave(s) will save to guest buffer all the fpu regs
+>> contents the cpu has enabled when the guest is paused, even if they
+>> are not used.
+>>
+>> This would not be an issue, if xrstor(s) would also do that.
+>>
+>> xrstor(s)'s mask for host/guest swap is basically every valid feature
+>> contained in kernel config, except XFEATURE_MASK_PKRU.
+>> Accordingto kernel src, it is instead switched in switch_to() and
+>> flush_thread().
+>>
+>> Then, the following happens with a host supporting PKRU starts a
+>> guest that does not support it:
+>> 1 - Host has XFEATURE_MASK_PKRU set. 1st switch to guest,
+>> 2 - xsave(s) fpu regs to host fpustate (buffer has XFEATURE_MASK_PKRU)
+>> 3 - xrstor(s) guest fpustate to fpu regs (fpu regs have XFEATURE_MASK_PKRU)
+>> 4 - guest runs, then switch back to host,
+>> 5 - xsave(s) fpu regs to guest fpstate (buffer now have XFEATURE_MASK_PKRU)
+>> 6 - xrstor(s) host fpstate to fpu regs.
+>> 7 - kvm_vcpu_ioctl_x86_get_xsave() copy guest fpstate to userspace (with
+>>      XFEATURE_MASK_PKRU, which should not be supported by guest vcpu)
+>>
+>> On 5, even though the guest does not support PKRU, it does have the flag
+>> set on guest fpstate, which is transferred to userspace via vcpu ioctl
+>> KVM_GET_XSAVE.
+>>
+>> This becomes a problem when the user decides on migrating the above guest
+>> to another machine that does not support PKRU:
+>> The new host restores guest's fpu regs to as they were before (xrstor(s)),
+>> but since the new host don't support PKRU, a general-protection exception
+>> ocurs in xrstor(s) and that crashes the guest.
+>>
+>> This can be solved by making the guest's fpstate->user_xfeatures hold
+>> a copy of guest_supported_xcr0. This way, on 7 the only flags copied to
+>> userspace will be the ones compatible to guest requirements, and thus
+>> there will be no issue during migration.
+>>
+>> As a bonus, it will also fail if userspace tries to set fpu features
+>> that are not compatible to the guest configuration. (KVM_SET_XSAVE ioctl)
+>>
+>> Also, since kvm_vcpu_after_set_cpuid() now sets fpstate->user_xfeatures,
+>> there is not need to set it in kvm_check_cpuid(). So, change
+>> fpstate_realloc() so it does not touch fpstate->user_xfeatures if a
+>> non-NULL guest_fpu is passed, which is the case when kvm_check_cpuid()
+>> calls it.
+>>
+>> Signed-off-by: Leonardo Bras <leobras@redhat.com>
+>> ---
+>>   arch/x86/kernel/fpu/xstate.c | 5 ++++-
+>>   arch/x86/kvm/cpuid.c         | 2 ++
+>>   2 files changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+>> index 02b3ddaf4f75..7c7824ae7862 100644
+>> --- a/arch/x86/kernel/fpu/xstate.c
+>> +++ b/arch/x86/kernel/fpu/xstate.c
+>> @@ -1558,7 +1558,10 @@ static int fpstate_realloc(u64 xfeatures, unsigned int ksize,
+>>   		fpregs_restore_userregs();
+>>
+>>   	newfps->xfeatures = curfps->xfeatures | xfeatures;
+>> -	newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+>> +
+>> +	if (!guest_fpu)
+>> +		newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+>> +
+>>   	newfps->xfd = curfps->xfd & ~xfeatures;
+>>
+>>   	/* Do the final updates within the locked region */
+>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>> index 494d4d351859..71125291c578 100644
+>> --- a/arch/x86/kvm/cpuid.c
+>> +++ b/arch/x86/kvm/cpuid.c
+>> @@ -296,6 +296,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>>   	vcpu->arch.guest_supported_xcr0 =
+>>   		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
+>>
+>> +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
+>> +
+>>   	kvm_update_pv_runtime(vcpu);
+>>
+>>   	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
+> 
+> dme.
+

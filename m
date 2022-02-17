@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC444BAD3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 00:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA2F4BAD43
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 00:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiBQX0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 18:26:52 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49020 "EHLO
+        id S229572AbiBQXmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 18:42:13 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiBQX0u (ORCPT
+        with ESMTP id S229484AbiBQXmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 18:26:50 -0500
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF4B41611;
-        Thu, 17 Feb 2022 15:26:26 -0800 (PST)
-Received: by mail-il1-f175.google.com with SMTP id p11so3442997ils.1;
-        Thu, 17 Feb 2022 15:26:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CBVOwnbmoloPGwFVKHueD8/Nvd+YkNpZVKFIo7AUGX4=;
-        b=1QoJJ3D2ZVHbwof5Qn52tUC3P2WZmOrXhhoGf4Yw0cCK12N7Dz8bit6FS+g7l4fNyG
-         7KXyF9faIp+iV5na5ust02Qp8DQVtoypjxneZVUhr663SpAfnl1S1DqARxkaW7ZyumQG
-         vgjAZcJbd75q2y5W3T9HKja09KuXIGxs8mxWtCPrZKmkV7/cnKXM0L2QadJbRjECzDPT
-         GO2zr9a+xdDwID0m2bB5R4FDFMaK3PsWiAVihXcA07gElbQ2HyewqgzPllIk2611o3vs
-         ZlpLJp9xdFifpnnklBk0LnsshYB3RYJwmHZVNZB5ZhtQhQ8LNc9vpcxpTU97jja8b5tk
-         Ld+g==
-X-Gm-Message-State: AOAM533gGiqss9dgEFp1jR/FrCF2EEL4TCBcTD6Ln2ApN9vaPFirnYVx
-        573k0oJ7DSbkHQhAvVM2fg==
-X-Google-Smtp-Source: ABdhPJwQxPC3TlRejg4SvaZFmO7PuTEZVo1/PtrrdUYbJhGod1dUI9GyuRnKaU6J8NWm0/aTzDK6Yw==
-X-Received: by 2002:a05:6e02:164b:b0:2be:4119:bc6d with SMTP id v11-20020a056e02164b00b002be4119bc6dmr3486017ilu.30.1645140086894;
-        Thu, 17 Feb 2022 15:21:26 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id s13sm2495950iln.69.2022.02.17.15.21.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 15:21:26 -0800 (PST)
-Received: (nullmailer pid 3960587 invoked by uid 1000);
-        Thu, 17 Feb 2022 23:21:24 -0000
-Date:   Thu, 17 Feb 2022 17:21:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        festevam@gmail.com, jassisinghbrar@gmail.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, daniel.baluta@nxp.com,
-        krzysztof.kozlowski@canonical.com, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V3 1/5] dt-bindings: mailbox: imx-mu: add i.MX93 MU
-Message-ID: <Yg7YdNvkXaJ7F914@robh.at.kernel.org>
-References: <20220211060301.1852772-1-peng.fan@oss.nxp.com>
- <20220211060301.1852772-2-peng.fan@oss.nxp.com>
+        Thu, 17 Feb 2022 18:42:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEA8403DE;
+        Thu, 17 Feb 2022 15:41:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9133F618DB;
+        Thu, 17 Feb 2022 23:22:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE517C340E8;
+        Thu, 17 Feb 2022 23:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645140175;
+        bh=NWO9XCOtwUQtF6tq1ZJYa4BZ/0zXbfe09y1GXCcdSqY=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=pmH7iPjYU2L5V0fqmszIt6z4bpsXPQYc+TfRlkpcPAK9gPc5iTPenrwdeNcZsgbq0
+         79KOwvKQsUKXT8f6X93aX4ZoNGi58wc95k+riFdrmYM8Aiy4EEDvHvrp7pNB2hl+aS
+         tzdMV9zjD7RRg35jyqs+T/10yLvQk6hTQGoxGO7QgrN3PWImApdV78fim6FdIfAEfn
+         8ryxpie1pxGdPpOWTh47r7SPWbbccRyFkii4H00WwuUJ656BFxX/AhSl8/Bi0ZX/Ud
+         ENUaXjjSDXxDhg3TB90rOQxv9/0PyufhJID4DDYfZlv0MUh+M763f7y43hkkBTawXS
+         5wf1NDIkOdadA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211060301.1852772-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220207185411.19118-3-bartosz.dudziak@snejp.pl>
+References: <20220207185411.19118-1-bartosz.dudziak@snejp.pl> <20220207185411.19118-3-bartosz.dudziak@snejp.pl>
+Subject: Re: [PATCH v2 2/2] clk: qcom: Add MSM8226 Multimedia Clock Controller support
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Bartosz Dudziak <bartosz.dudziak@snejp.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Date:   Thu, 17 Feb 2022 15:22:53 -0800
+User-Agent: alot/0.10
+Message-Id: <20220217232254.DE517C340E8@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,16 +62,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 14:02:57 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add bindings for i.MX93 MU which derived from i.MX8ULP
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Quoting Bartosz Dudziak (2022-02-07 10:54:11)
+> Modify the existing MSM8974 multimedia clock controller driver to
+> support the MMCC found on MSM8226 based devices. This should allow most
+> multimedia device drivers to probe and control their clocks.
+>=20
+> Signed-off-by: Bartosz Dudziak <bartosz.dudziak@snejp.pl>
 > ---
->  Documentation/devicetree/bindings/mailbox/fsl,mu.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+>  drivers/clk/qcom/mmcc-msm8974.c | 206 +++++++++++++++++++++++++++++++-
+>  1 file changed, 201 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/clk/qcom/mmcc-msm8974.c b/drivers/clk/qcom/mmcc-msm8=
+974.c
+> index a1552b6771..f74662925a 100644
+> --- a/drivers/clk/qcom/mmcc-msm8974.c
+> +++ b/drivers/clk/qcom/mmcc-msm8974.c
+> @@ -257,6 +257,18 @@ static struct clk_rcg2 mmss_ahb_clk_src =3D {
+>         },
+>  };
+> =20
+> +static struct freq_tbl ftbl_mmss_axi_clk_msm8226[] =3D {
 
-Acked-by: Rob Herring <robh@kernel.org>
+const?
+
+> +       F(19200000, P_XO, 1, 0, 0),
+> +       F(37500000, P_GPLL0, 16, 0, 0),
+> +       F(50000000, P_GPLL0, 12, 0, 0),
+> +       F(75000000, P_GPLL0, 8, 0, 0),
+> +       F(100000000, P_GPLL0, 6, 0, 0),
+> +       F(150000000, P_GPLL0, 4, 0, 0),
+> +       F(200000000, P_MMPLL0, 4, 0, 0),
+> +       F(266666666, P_MMPLL0, 3, 0, 0),
+> +       { }
+> +};
+> +
+>  static struct freq_tbl ftbl_mmss_axi_clk[] =3D {
+>         F( 19200000, P_XO, 1, 0, 0),
+>         F( 37500000, P_GPLL0, 16, 0, 0),
+> @@ -364,6 +376,23 @@ static struct clk_rcg2 csi3_clk_src =3D {
+>         },
+>  };
+> =20
+> +static struct freq_tbl ftbl_camss_vfe_vfe0_clk_msm8226[] =3D {
+
+const?
+
+> +       F(37500000, P_GPLL0, 16, 0, 0),
+> +       F(50000000, P_GPLL0, 12, 0, 0),
+> +       F(60000000, P_GPLL0, 10, 0, 0),
+> +       F(80000000, P_GPLL0, 7.5, 0, 0),
+> +       F(100000000, P_GPLL0, 6, 0, 0),
+> +       F(109090000, P_GPLL0, 5.5, 0, 0),
+> +       F(133330000, P_GPLL0, 4.5, 0, 0),
+> +       F(150000000, P_GPLL0, 4, 0, 0),
+> +       F(200000000, P_GPLL0, 3, 0, 0),
+> +       F(228570000, P_MMPLL0, 3.5, 0, 0),
+> +       F(266670000, P_MMPLL0, 3, 0, 0),
+> +       F(320000000, P_MMPLL0, 2.5, 0, 0),
+> +       F(400000000, P_MMPLL0, 2, 0, 0),
+> +       { }
+> +};
+> +
+>  static struct freq_tbl ftbl_camss_vfe_vfe0_1_clk[] =3D {
+>         F(37500000, P_GPLL0, 16, 0, 0),
+>         F(50000000, P_GPLL0, 12, 0, 0),
+> @@ -407,6 +436,18 @@ static struct clk_rcg2 vfe1_clk_src =3D {
+>         },
+>  };
+> =20
+> +static struct freq_tbl ftbl_mdss_mdp_clk_msm8226[] =3D {
+
+const?
+
+> +       F(37500000, P_GPLL0, 16, 0, 0),
+> +       F(60000000, P_GPLL0, 10, 0, 0),
+> +       F(75000000, P_GPLL0, 8, 0, 0),
+> +       F(92310000, P_GPLL0, 6.5, 0, 0),
+> +       F(100000000, P_GPLL0, 6, 0, 0),
+> +       F(133330000, P_MMPLL0, 6, 0, 0),
+> +       F(177780000, P_MMPLL0, 4.5, 0, 0),
+> +       F(200000000, P_MMPLL0, 4, 0, 0),
+> +       { }
+> +};
+> +
+>  static struct freq_tbl ftbl_mdss_mdp_clk[] =3D {
+>         F(37500000, P_GPLL0, 16, 0, 0),
+>         F(60000000, P_GPLL0, 10, 0, 0),
+> @@ -513,6 +554,14 @@ static struct clk_rcg2 pclk1_clk_src =3D {
+>         },
+>  };
+> =20
+> +static struct freq_tbl ftbl_venus0_vcodec0_clk_msm8226[] =3D {
+
+const?
+
+> +       F(66700000, P_GPLL0, 9, 0, 0),
+> +       F(100000000, P_GPLL0, 6, 0, 0),
+> +       F(133330000, P_MMPLL0, 6, 0, 0),
+> +       F(160000000, P_MMPLL0, 5, 0, 0),
+> +       { }
+> +};
+> +
+>  static struct freq_tbl ftbl_venus0_vcodec0_clk[] =3D {
+>         F(50000000, P_GPLL0, 12, 0, 0),
+>         F(100000000, P_GPLL0, 6, 0, 0),
+> @@ -593,6 +642,13 @@ static struct clk_rcg2 camss_gp1_clk_src =3D {
+>         },
+>  };
+> =20
+> +static struct freq_tbl ftbl_camss_mclk0_3_clk_msm8226[] =3D {
+
+const?
+
+> +       F(19200000, P_XO, 1, 0, 0),
+> +       F(24000000, P_GPLL0, 5, 1, 5),
+> +       F(66670000, P_GPLL0, 9, 0, 0),
+> +       { }
+> +};
+> +
+>  static struct freq_tbl ftbl_camss_mclk0_3_clk[] =3D {
+>         F(4800000, P_XO, 4, 0, 0),
+>         F(6000000, P_GPLL0, 10, 1, 10),
+> @@ -705,6 +761,15 @@ static struct clk_rcg2 csi2phytimer_clk_src =3D {
+>         },
+>  };
+> =20
+> +static struct freq_tbl ftbl_camss_vfe_cpp_clk_msm8226[] =3D {
+
+const?
+
+> +       F(133330000, P_GPLL0, 4.5, 0, 0),
+> +       F(150000000, P_GPLL0, 4, 0, 0),
+> +       F(266670000, P_MMPLL0, 3, 0, 0),
+> +       F(320000000, P_MMPLL0, 2.5, 0, 0),
+> +       F(400000000, P_MMPLL0, 2, 0, 0),
+> +       { }
+> +};
+> +

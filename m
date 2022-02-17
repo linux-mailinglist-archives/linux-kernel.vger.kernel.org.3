@@ -2,74 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DDB4B9C90
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6714B9C92
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiBQJ4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 04:56:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33816 "EHLO
+        id S238908AbiBQJ5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 04:57:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238925AbiBQJ4J (ORCPT
+        with ESMTP id S232603AbiBQJ5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:56:09 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6089D14FBE3;
-        Thu, 17 Feb 2022 01:55:54 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V4iq.VG_1645091744;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V4iq.VG_1645091744)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 17 Feb 2022 17:55:51 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     xfs <linux-xfs@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH] xfs: add missing cmap->br_state = XFS_EXT_NORM update
-Date:   Thu, 17 Feb 2022 17:55:42 +0800
-Message-Id: <20220217095542.68085-1-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
+        Thu, 17 Feb 2022 04:57:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FD2DF01;
+        Thu, 17 Feb 2022 01:56:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0D0761D48;
+        Thu, 17 Feb 2022 09:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F001EC340E8;
+        Thu, 17 Feb 2022 09:56:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645091806;
+        bh=Y6DSt3eMZhMvFqHFms72snpahxDJvYRjgVffayLpLvY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PPfq2q1N0wBrSByJLPrhR7fIJOiiav9xPzbH7NlKbtFDYZokVO8TNX9YDxOe4WiA2
+         v/iX5ew/3wQO1SGhiq+95GXh2xfV1Y0qHioiLNZXD51iOInWNTjlsxL9JR0xU5Fa1M
+         aO7sxKJ2R3dLW0w8vS63wl0XPS3R9giII67JqyvM=
+Date:   Thu, 17 Feb 2022 10:56:42 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     daniel.starke@siemens.com
+Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] tty: n_gsm: fix encoding of control signal octet bit
+ DV
+Message-ID: <Yg4b2hks0/LglHK5@kroah.com>
+References: <20220217080555.5387-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217080555.5387-1-daniel.starke@siemens.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-COW extents are already converted into written real extents after
-xfs_reflink_convert_cow_locked(), therefore cmap->br_state should
-reflect it.
+On Thu, Feb 17, 2022 at 12:05:49AM -0800, daniel.starke@siemens.com wrote:
+> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+> the newer 27.010 here. Chapter 5.4.6.3.7 describes the encoding of the
+> control signal octet used by the MSC (modem status command). The same
+> encoding is also used in convergence layer type 2 as described in chapter
+> 5.5.2. Table 7 and 24 both require the DV (data valid) bit to be set 1 for
+> outgoing control signal octets sent by the DTE (data terminal equipment),
+> i.e. for the initiator side.
+> Currently, the DV bit is only set if CD (carrier detect) is on, regardless
+> of the side.
+> 
+> This patch fixes this behavior by setting the DV bit on the initiator side
+> unconditionally.
+> 
+> Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+>  drivers/tty/n_gsm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index 0b1808e3a912..e199315a158e 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -439,7 +439,7 @@ static u8 gsm_encode_modem(const struct gsm_dlci *dlci)
+>  		modembits |= MDM_RTR;
+>  	if (dlci->modem_tx & TIOCM_RI)
+>  		modembits |= MDM_IC;
+> -	if (dlci->modem_tx & TIOCM_CD)
+> +	if (dlci->modem_tx & TIOCM_CD || dlci->gsm->initiator)
+>  		modembits |= MDM_DV;
+>  	return modembits;
+>  }
+> -- 
+> 2.25.1
+> 
 
-Otherwise, there is another necessary unwritten convertion
-triggered in xfs_dio_write_end_io() for direct I/O cases.
+All of these are patch 1/1, which is odd :(
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
-From the logic itself and runtime tracing, IMO, it seems true.
-Kindly correct me here if my understanding is wrong.
+Please renumber them properly and resend.
 
- fs/xfs/xfs_reflink.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+thanks,
 
-diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
-index 75bd2e03cd5b..5f0a364739a5 100644
---- a/fs/xfs/xfs_reflink.c
-+++ b/fs/xfs/xfs_reflink.c
-@@ -424,7 +424,10 @@ xfs_reflink_allocate_cow(
- 	if (!convert_now || cmap->br_state == XFS_EXT_NORM)
- 		return 0;
- 	trace_xfs_reflink_convert_cow(ip, cmap);
--	return xfs_reflink_convert_cow_locked(ip, offset_fsb, count_fsb);
-+	error = xfs_reflink_convert_cow_locked(ip, offset_fsb, count_fsb);
-+	if (!error)
-+		cmap->br_state = XFS_EXT_NORM;
-+	return error;
- 
- out_trans_cancel:
- 	xfs_trans_cancel(tp);
--- 
-2.24.4
-
+greg k-h

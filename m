@@ -2,207 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7844BA3FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963FF4BA406
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242189AbiBQPHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:07:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47424 "EHLO
+        id S242328AbiBQPME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:12:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234684AbiBQPHf (ORCPT
+        with ESMTP id S235746AbiBQPMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:07:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 892B725B2D6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645110439;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qFSOR5Tcp5Zr84hEbE+k+4Qy9iD42HSTK7sgtEU/6PM=;
-        b=Os8rOc5eqWVn6A2qtwojoQOFZ+O56RtWNTIx5bU1pz9iQjBQLMx61y09mzC7bIw3ax2ruO
-        tM7jfTsEsX4lE/DpCEm/Y/R2+k8DAJntRn0CkYM9ynsPCwdjqjJTiDqiiw0acyx5ut/VMi
-        lEfIwLcSkzNZXd9DUq9SkgFroDOTK7c=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-LH346JF0MhChqwqVxc3FGA-1; Thu, 17 Feb 2022 10:07:18 -0500
-X-MC-Unique: LH346JF0MhChqwqVxc3FGA-1
-Received: by mail-ed1-f71.google.com with SMTP id l3-20020a50cbc3000000b0041083c11173so3704339edi.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:07:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qFSOR5Tcp5Zr84hEbE+k+4Qy9iD42HSTK7sgtEU/6PM=;
-        b=wqD1JNmb4g1SS5e6lq2pSnRht4c7GoVh+Yt5KDYTdVznKCxj3aSwGIQjvb8f0as/jd
-         zvUMuFIxS/7rpdgMOgf7izhDXIrzR63MCSKc+UIciWKuBfB8fH9fA8sv3JiUfWdNHcxy
-         1AsGzlMrxfFYrA3Xi4wt4kir56aUbFbkgBA9vt2M7qmYm65dH3d8+9m+GqPCOl17kdRb
-         kjzfuiLHT0Yn5NwOJEOECMVUmKO1wbF5KXdl53W4+TqEobe1AvLrbMdMvnONQDuwYAFV
-         DGYWWE7nXjaJCSJcatpzpr89O8JK5DMYzMawCC0XZUnikuXMPiENS3dqFsjEpnAUDj8o
-         Efgg==
-X-Gm-Message-State: AOAM531gWPoFR1cfMPV9Z9SAOHLxpaK/gpMFiuXH+HSK08E+ObWWB/uF
-        Y5OtgOTALsu9f/cQpxU10g8X30PS6Le15xXxSPA+GpctK+jtNE96GTa/WGF4visPpYtryExf7Jm
-        BhWzhXSF6ZHdnQgmPJu0DfkSK
-X-Received: by 2002:a17:906:3104:b0:6ce:6b85:ecc9 with SMTP id 4-20020a170906310400b006ce6b85ecc9mr2636476ejx.339.1645110437081;
-        Thu, 17 Feb 2022 07:07:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzANKo7hcVxixfL7sOwJBypOhLvl1k3r71hqgukS7AJAyKh1nYcS5xz9etrTRJFPRrNrgRSxA==
-X-Received: by 2002:a17:906:3104:b0:6ce:6b85:ecc9 with SMTP id 4-20020a170906310400b006ce6b85ecc9mr2636451ejx.339.1645110436820;
-        Thu, 17 Feb 2022 07:07:16 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id m4sm1295147ejl.45.2022.02.17.07.07.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 07:07:15 -0800 (PST)
-Message-ID: <f9b79015-1d5c-565e-ccf9-3d81592c17e5@redhat.com>
-Date:   Thu, 17 Feb 2022 16:07:14 +0100
+        Thu, 17 Feb 2022 10:12:01 -0500
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681C3DFBE;
+        Thu, 17 Feb 2022 07:11:45 -0800 (PST)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 966EC3F74E;
+        Thu, 17 Feb 2022 16:11:43 +0100 (CET)
+Date:   Thu, 17 Feb 2022 16:11:42 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Jonathan Marek <jonathan@marek.ca>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: [Freedreno] [PATCH v3 12/13] drm/msm/dsi: Add support for DSC
+ configuration
+Message-ID: <20220217151142.sbp6wslxbxeohsgf@SoMainline.org>
+References: <20211116062256.2417186-1-vkoul@kernel.org>
+ <20211116062256.2417186-13-vkoul@kernel.org>
+ <20211211000315.pavmcc7cc73ilb6l@SoMainline.org>
+ <Yg4t/G3tgcmkswHg@matsya>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/2] x86/kvm/fpu: Mask guest fpstate->xfeatures with
- guest_supported_xcr0
-Content-Language: en-US
-To:     David Edmondson <david.edmondson@oracle.com>,
-        Leonardo Bras <leobras@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        David Gilbert <dgilbert@redhat.com>,
-        Peter Xu <peterx@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220217053028.96432-1-leobras@redhat.com>
- <20220217053028.96432-2-leobras@redhat.com> <cunmtippugr.fsf@oracle.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <cunmtippugr.fsf@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yg4t/G3tgcmkswHg@matsya>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 13:07, David Edmondson wrote:
-> The single line summary is now out of date - there's no new masking.
+Hi Vinod,
 
-Thanks for the review, I made the adjustments and pushed to master.
+Thanks for taking time to go through this review, please find some
+clarifications below.
 
-Paolo
-
-> On Thursday, 2022-02-17 at 02:30:29 -03, Leonardo Bras wrote:
+On 2022-02-17 16:44:04, Vinod Koul wrote:
+> Hi Marijn,
 > 
->> During host/guest switch (like in kvm_arch_vcpu_ioctl_run()), the kernel
->> swaps the fpu between host/guest contexts, by using fpu_swap_kvm_fpstate().
->>
->> When xsave feature is available, the fpu swap is done by:
->> - xsave(s) instruction, with guest's fpstate->xfeatures as mask, is used
->>    to store the current state of the fpu registers to a buffer.
->> - xrstor(s) instruction, with (fpu_kernel_cfg.max_features &
->>    XFEATURE_MASK_FPSTATE) as mask, is used to put the buffer into fpu regs.
->>
->> For xsave(s) the mask is used to limit what parts of the fpu regs will
->> be copied to the buffer. Likewise on xrstor(s), the mask is used to
->> limit what parts of the fpu regs will be changed.
->>
->> The mask for xsave(s), the guest's fpstate->xfeatures, is defined on
->> kvm_arch_vcpu_create(), which (in summary) sets it to all features
->> supported by the cpu which are enabled on kernel config.
->>
->> This means that xsave(s) will save to guest buffer all the fpu regs
->> contents the cpu has enabled when the guest is paused, even if they
->> are not used.
->>
->> This would not be an issue, if xrstor(s) would also do that.
->>
->> xrstor(s)'s mask for host/guest swap is basically every valid feature
->> contained in kernel config, except XFEATURE_MASK_PKRU.
->> Accordingto kernel src, it is instead switched in switch_to() and
->> flush_thread().
->>
->> Then, the following happens with a host supporting PKRU starts a
->> guest that does not support it:
->> 1 - Host has XFEATURE_MASK_PKRU set. 1st switch to guest,
->> 2 - xsave(s) fpu regs to host fpustate (buffer has XFEATURE_MASK_PKRU)
->> 3 - xrstor(s) guest fpustate to fpu regs (fpu regs have XFEATURE_MASK_PKRU)
->> 4 - guest runs, then switch back to host,
->> 5 - xsave(s) fpu regs to guest fpstate (buffer now have XFEATURE_MASK_PKRU)
->> 6 - xrstor(s) host fpstate to fpu regs.
->> 7 - kvm_vcpu_ioctl_x86_get_xsave() copy guest fpstate to userspace (with
->>      XFEATURE_MASK_PKRU, which should not be supported by guest vcpu)
->>
->> On 5, even though the guest does not support PKRU, it does have the flag
->> set on guest fpstate, which is transferred to userspace via vcpu ioctl
->> KVM_GET_XSAVE.
->>
->> This becomes a problem when the user decides on migrating the above guest
->> to another machine that does not support PKRU:
->> The new host restores guest's fpu regs to as they were before (xrstor(s)),
->> but since the new host don't support PKRU, a general-protection exception
->> ocurs in xrstor(s) and that crashes the guest.
->>
->> This can be solved by making the guest's fpstate->user_xfeatures hold
->> a copy of guest_supported_xcr0. This way, on 7 the only flags copied to
->> userspace will be the ones compatible to guest requirements, and thus
->> there will be no issue during migration.
->>
->> As a bonus, it will also fail if userspace tries to set fpu features
->> that are not compatible to the guest configuration. (KVM_SET_XSAVE ioctl)
->>
->> Also, since kvm_vcpu_after_set_cpuid() now sets fpstate->user_xfeatures,
->> there is not need to set it in kvm_check_cpuid(). So, change
->> fpstate_realloc() so it does not touch fpstate->user_xfeatures if a
->> non-NULL guest_fpu is passed, which is the case when kvm_check_cpuid()
->> calls it.
->>
->> Signed-off-by: Leonardo Bras <leobras@redhat.com>
->> ---
->>   arch/x86/kernel/fpu/xstate.c | 5 ++++-
->>   arch/x86/kvm/cpuid.c         | 2 ++
->>   2 files changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
->> index 02b3ddaf4f75..7c7824ae7862 100644
->> --- a/arch/x86/kernel/fpu/xstate.c
->> +++ b/arch/x86/kernel/fpu/xstate.c
->> @@ -1558,7 +1558,10 @@ static int fpstate_realloc(u64 xfeatures, unsigned int ksize,
->>   		fpregs_restore_userregs();
->>
->>   	newfps->xfeatures = curfps->xfeatures | xfeatures;
->> -	newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
->> +
->> +	if (!guest_fpu)
->> +		newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
->> +
->>   	newfps->xfd = curfps->xfd & ~xfeatures;
->>
->>   	/* Do the final updates within the locked region */
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index 494d4d351859..71125291c578 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -296,6 +296,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->>   	vcpu->arch.guest_supported_xcr0 =
->>   		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
->>
->> +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
->> +
->>   	kvm_update_pv_runtime(vcpu);
->>
->>   	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
+> On 11-12-21, 01:03, Marijn Suijten wrote:
 > 
-> dme.
+> > > +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
+> > > +				  int pic_width, int pic_height)
+> > 
+> > This function - adopted from downstream - does not seem to perform a
+> > whole lot, especially without the modulo checks against the slice size.
+> > Perhaps it can be inlined?
+> 
+> Most of the code here is :)
+> 
+> This was split from downstream code to check and update dimension. We
+> can inline this, or should we leave that to compiler. I am not a very
+> big fan of inlining...
 
+It doesn't seem beneficial to code readability to have this function,
+which is only called just once and also has the same struct members read
+in a `DBG()` directly, abstracted away to a function.  Not really
+concerned about generated code/performance FWIW.
+
+Also note that the caller isn't checking the `-EINVAL` result...
+
+> > 
+> > > +{
+> > > +	if (!dsc || !pic_width || !pic_height) {
+> > > +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	dsc->drm->pic_width = pic_width;
+> > > +	dsc->drm->pic_height = pic_height;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >  static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> > >  {
+> > >  	struct drm_display_mode *mode = msm_host->mode;
+> > > @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> > >  		hdisplay /= 2;
+> > >  	}
+> > >  
+> > > +	if (msm_host->dsc) {
+> > > +		struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > > +
+> > > +		/* update dsc params with timing params */
+> > > +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
+
+That is, the result code here should be checked (or function inlined).
+
+> > > +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
+> > 
+> > This seems to be pretty non-standard and perhaps unnecessary debug code,
+> > with a stray dash in there.  Is is needed here, and if so how about
+> > using %dx%d\n to format width and height?
+> 
+> I can update that, sure...
+> 
+> > 
+> > > +
+> > > +		/* we do the calculations for dsc parameters here so that
+> > > +		 * panel can use these parameters
+> > > +		 */
+> > > +		dsi_populate_dsc_params(dsc);
+> > > +
+> > > +		/* Divide the display by 3 but keep back/font porch and
+> > > +		 * pulse width same
+> > > +		 */
+> > 
+> > A more general nit on the comments in this patch series: it is
+> > appreciated if comments explain the rationale rather than - or in
+> > addition to - merely paraphrasing the code that follows.
+> 
+> Yes it might be the case here, but in this case I wanted to explicitly
+> point out hat we need to divide display by 3...
+
+The main point here is justifying _why_ there's a division by 3 for the
+active portion of the signal, I presume that's the compression ratio
+(having not read into the DSC compression standard yet at all)?
+
+> > 
+> > > +		h_total -= hdisplay;
+> > > +		hdisplay /= 3;
+> > > +		h_total += hdisplay;
+> > > +		ha_end = ha_start + hdisplay;
+> > > +	}
+> > > +
+> > >  	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
+> > > +		if (msm_host->dsc) {
+> > > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > > +			u32 reg, intf_width, slice_per_intf;
+> > > +			u32 total_bytes_per_intf;
+> > > +
+> > > +			/* first calculate dsc parameters and then program
+> > > +			 * compress mode registers
+> > > +			 */
+> > > +			intf_width = hdisplay;
+> > > +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+> > > +
+> > > +			dsc->drm->slice_count = 1;
+> > > +			dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * 8, 8);
+> > 
+> > If I am not mistaken this is the same value as dsc->drm->slice_width,
+> > since a multiple of 8 is inherently "a multiple of 8" and hence needs no
+> > rounding when divided by 8 again.
+> 
+> Yes this doesnt look right, I will update
+> 
+> > Also note that the cmdmode variant below uses bits_per_pixel here; is
+> > that discrepancy intended?
+> 
+> Nope both should use bits_per_pixel..
+> 
+> > > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
+> > > +
+> > > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> > > +			dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
+> > > +			dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
+> > > +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> > > +
+> > > +			reg = dsc->bytes_per_pkt << 16;
+> > > +			reg |= (0x0b << 8);    /* dtype of compressed image */
+> > > +
+> > > +			/* pkt_per_line:
+> > > +			 * 0 == 1 pkt
+> > > +			 * 1 == 2 pkt
+> > > +			 * 2 == 4 pkt
+> > > +			 * 3 pkt is not supported
+> > > +			 * above translates to ffs() - 1
+> > > +			 */
+> > > +			reg |= (ffs(dsc->pkt_per_line) - 1) << 6;
+> > > +
+> > > +			dsc->eol_byte_num = total_bytes_per_intf % 3;
+> > 
+> > This was already calculated and assigned just a couple lines above.
+> 
+> Yup, dropped now.
+> 
+> > 
+> > > +			reg |= dsc->eol_byte_num << 4;
+> > > +			reg |= 1;
+> > 
+> > Note that the XML register file exists to map out the layout of these
+> > registers, including bit offset, size, and (enum) constant values.  It
+> > is appreciated if you can replace all these magical shifts and magic
+> > flags/bits with the appropriate enum constants and constructor
+> > functions, after mapping them out in the XML file.
+> 
+> Yeah I am trying to get those details, if I manage to get it, will
+> update for sure as Dmitry already pointed in MESA PR.
+
+That'd be lovely.  In any case, even if you can't get the meaning for
+all these bits, offsets and constants, it's still desired to at least
+add them to the XML as "unknown" or something (including offset in the
+name).  Then perhaps the details can be filled in over time while
+keeping the driver free of magic constants.  See for example how some of
+the Adreno register XML descriptions set this up.
+
+For example, without those details we can already state that
+`eol_byte_num` has an offset of 4 in the MODE_CTL register, and probably
+a size of 2 bits since its value is always modulo 3.  Likewise
+pkt_per_line can be turned into an `<enum>` and so on for the other
+segments that build up this register.  Let me know in the mesa MR if you
+need assistance/suggestions for mapping out the registers in XML.
+
+> > > +
+> > > +			dsi_write(msm_host,
+> > > +				  REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
+> > > +		}
+> > > +
+> > >  		dsi_write(msm_host, REG_DSI_ACTIVE_H,
+> > >  			DSI_ACTIVE_H_START(ha_start) |
+> > >  			DSI_ACTIVE_H_END(ha_end));
+> > > @@ -959,8 +1034,40 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> > >  			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
+> > >  			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
+> > >  	} else {		/* command mode */
+> > > +		if (msm_host->dsc) {
+> > > +			struct msm_display_dsc_config *dsc = msm_host->dsc;
+> > > +			u32 reg, reg_ctrl, reg_ctrl2;
+> > > +			u32 slice_per_intf, bytes_in_slice, total_bytes_per_intf;
+> > > +
+> > > +			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
+> > > +			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+> > 
+> > Shouldn't old values be masked out first, before writing new bits or
+> > values below?  The video-mode variant doesn't read back old register
+> > values.
+> 
+> This follows downstream where the registers are read, modified and
+> written back
+
+Are you sure about this?  The register values are never cleared, meaning
+that only bits get added through the `|=` below but never unset - unless
+downstream clears these registers elsewhere before ending up in (their
+equivalent of) dsi_timing_setup.
+
+> > > +
+> > > +			slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
+> > > +			bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
+> > > +						      dsc->drm->bits_per_pixel, 8);
+> > > +			dsc->drm->slice_chunk_size = bytes_in_slice;
+> > > +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
+> > > +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> > > +
+> > > +			reg = 0x39 << 8;
+> > 
+> > Same comment about moving magic constants and shifts into the XML file.
+> 
+> yes if we get details of bits
+
+As mentioned above, even without those details this constant can be
+represented in the XML, as belonging to offset `8` of the register.
+
+> > 
+> > > +			reg |= ffs(dsc->pkt_per_line) << 6;
+> > 
+> > Doesn't the calculation need -1 here just like video mode?
+> 
+> yes will update now
+
+Thanks.  I forgot to mention: there seem to be a lot of similarities
+between the video and commandmode computations, can those possibly be
+factored out of the if-else to save on duplication and accidental
+mismatches like these?
+
+- Marijn

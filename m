@@ -2,113 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A254B976C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DCB4B976F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbiBQEGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 23:06:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41488 "EHLO
+        id S233484AbiBQEGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 23:06:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbiBQEGe (ORCPT
+        with ESMTP id S233441AbiBQEGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 23:06:34 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F6321FC7C;
-        Wed, 16 Feb 2022 20:06:21 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id h5so2247997ioj.3;
-        Wed, 16 Feb 2022 20:06:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QUSoUHSjJMmplw4ZjLL+BTqGLSZGqO8tdAI7uDdrahY=;
-        b=UYiGhdWEhgHiJjsOB0bDbRCJ1zOUL1OgbrBA5OeIavQp6/7KKSDbRu5Uo4BdZ1mHq0
-         ebZxyXZEYOMa7GBZcnqcaUMdxjsejCMGpG7WwQqGSLKPRL+y5KtR3A77UKxDKeIZBaWs
-         AVha5oqKOLU9YYWM+7owD97Xo7Xq3XBSxXyHgzpUgDWNVQHfEqqtgqQCynB8Ko/wvsgJ
-         mdEjnQ2ncNqqCfwlmzV9+cIyXduBmz8uDizsLg6qkytymfVz8xnU44SJawU6oM+ToC3e
-         iAM7NGTggh8L/Gb8NTrl+cYl2TWrTpYfGOREen19/6qyfvMckBrrzlCKKaLjgLbGmo53
-         TwAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QUSoUHSjJMmplw4ZjLL+BTqGLSZGqO8tdAI7uDdrahY=;
-        b=15SuEp3I7ACQtqXD/hC4W+h88SOlaAN/fbkbBMBl2uKhpr8VnDLPvXhrv8KPnxMrcw
-         yf3yRVx6g72zBeHw3/rvMCatd/0i7YqgY3yjocOTK/dslbBO60g1QAgJK2vPSVaJqDbH
-         fbqiZgNFGb2axVAllIuRhZWi4wcP8qfh3VWzMZiT82J7rPIE+GnAAJETw7vJzdmtnhNz
-         zMLccpto9xM5gfUxjJOAEIrM+sAi00Bthzce0PoYrqOse1YcLWVBqfDQzkjpKyxV5flp
-         jGpkeSSJ2+OB+n72VhbvabvhDpdsNi9aEZnyyQJa4SFrtxqbc8OCx3gAxsuUWVufqH3O
-         ZalA==
-X-Gm-Message-State: AOAM531Ftmm2NqU0rJYd+ALZYNx8WuZ3d2AvrZHButmIROPR/1evBta2
-        yFz9+4EqDJI6oTqGefIb1lKyYWPj/XdjWfzUnzWdIZIYMvo1Ms31FHY=
-X-Google-Smtp-Source: ABdhPJx187pKc6+DoMP2EEChkSUVbFdwtcAYM42qX69rLIAIylW4QfCWKbxmGNW6de2pHCO2YXluGQ+nWYcuShjy6gM=
-X-Received: by 2002:a02:b903:0:b0:30e:49cb:e65c with SMTP id
- v3-20020a02b903000000b0030e49cbe65cmr750449jan.164.1645070780775; Wed, 16 Feb
- 2022 20:06:20 -0800 (PST)
+        Wed, 16 Feb 2022 23:06:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2632DAE4E;
+        Wed, 16 Feb 2022 20:06:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8651561DA4;
+        Thu, 17 Feb 2022 04:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E796EC340E9;
+        Thu, 17 Feb 2022 04:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645070788;
+        bh=/5gq54EHd5uDDlMUAQpNiGLfpy7vF+5N3geE0AGsy6U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d9x3AqAVXGSwqLO/VIK2akk51+iXl2lzC+Qx5CHPuIrbez2RHPojBnXcKIxFlr9PN
+         8S9O8gP/VGFJNPvr8NtUW3CCmAcIbQB2/uM9sACaZpLRKY2EHB4tn806IXRHtaxAkm
+         97R3zpEKPqxWFhE+W2hgitxi9hNXkpxq9FmvFiGpKW+YY2VM62m29JIX6+VXBX0GRU
+         LaUB4VO1zPwcq3+gPpgEzH26KHEbR8gxv3e7jjOVpkOooYnoJ12/JBcFWb/XbtDc4u
+         JR8LmD5AKdOL6kPRW3C0xA2WDmAG5WXXfecjGDImuoIiokyGBR5M7AxOKrQlwQ2aGH
+         /0BN2EC1g1Www==
+Message-ID: <fb8a11f9-3799-d43a-cc5a-2419254c47e5@kernel.org>
+Date:   Wed, 16 Feb 2022 21:06:23 -0700
 MIME-Version: 1.0
-References: <20220211001345.3429572-1-gch981213@gmail.com> <20220216195423.GA17551@alpha.franken.de>
-In-Reply-To: <20220216195423.GA17551@alpha.franken.de>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Thu, 17 Feb 2022 12:06:09 +0800
-Message-ID: <CAJsYDVJw2DJX97cRwoAofzq_jL0GhyaC5j7UuT6OzC=Lp8WkSQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Rui Salvaterra <rsalvaterra@gmail.com>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH net-next 2/9] net: tcp: add skb drop reasons to
+ tcp_v4_rcv()
+Content-Language: en-US
+To:     menglong8.dong@gmail.com, kuba@kernel.org
+Cc:     edumazet@google.com, davem@davemloft.net, rostedt@goodmis.org,
+        mingo@redhat.com, yoshfuji@linux-ipv6.org, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        imagedong@tencent.com, talalahmad@google.com,
+        keescook@chromium.org, ilias.apalodimas@linaro.org, alobakin@pm.me,
+        memxor@gmail.com, atenart@kernel.org, bigeasy@linutronix.de,
+        pabeni@redhat.com, linyunsheng@huawei.com, arnd@arndb.de,
+        yajun.deng@linux.dev, roopa@nvidia.com, willemb@google.com,
+        vvs@virtuozzo.com, cong.wang@bytedance.com,
+        luiz.von.dentz@intel.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, flyingpeng@tencent.com
+References: <20220216035426.2233808-1-imagedong@tencent.com>
+ <20220216035426.2233808-3-imagedong@tencent.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220216035426.2233808-3-imagedong@tencent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On 2/15/22 8:54 PM, menglong8.dong@gmail.com wrote:
+> @@ -2137,8 +2141,10 @@ int tcp_v4_rcv(struct sk_buff *skb)
+>  
+>  no_tcp_socket:
+>  	drop_reason = SKB_DROP_REASON_NO_SOCKET;
+> -	if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb))
+> +	if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb)) {
+> +		drop_reason = SKB_DROP_REASON_XFRM_POLICY;
 
-On Thu, Feb 17, 2022 at 3:57 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Fri, Feb 11, 2022 at 08:13:44AM +0800, Chuanhong Guo wrote:
-> > It's reported that current memory detection code occasionally detects
-> > larger memory under some bootloaders.
-> > Current memory detection code tests whether address space wraps around
-> > on KSEG0, which is unreliable because it's cached.
-> >
-> > Rewrite memory size detection to perform the same test on KSEG1 instead.
-> > While at it, this patch also does the following two things:
-> > 1. use a fixed pattern instead of a random function pointer as the magic
-> >    value.
-> > 2. add an additional memory write and a second comparison as part of the
-> >    test to prevent possible smaller memory detection result due to
-> >    leftover values in memory.
-> >
-> > Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
-> > Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
-> > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> > ---
-> >  arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
-> >  1 file changed, 23 insertions(+), 13 deletions(-)
->
-> applied to mips-fixes.
+no socket reason trumps the xfrm failure; it was first.
 
-Oops.
-
-As I mentioned in a previous mail, this patch has two cosmetic problems:
-1. misplaced bracket in commit message "Fixes" tag
-2. incorrect second test pattern: I meant to flip all the bits in the
-first pattern,
-   but I used "!" instead of "~". Any value will work just fine but it
-looks weird
-   to construct a zero using !MT7621_MEM_TEST_PATTERN.
-
-Should I send a second patch to fix this patch or send a v2 of the
-original patch?
-
--- 
-Regards,
-Chuanhong Guo
+>  		goto discard_it;
+> +	}
+>  
+>  	tcp_v4_fill_cb(skb, iph, th);
+>  

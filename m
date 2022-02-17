@@ -2,249 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8CE4B9FFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360CB4BA007
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240368AbiBQMWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:22:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55464 "EHLO
+        id S240182AbiBQMWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:22:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240372AbiBQMWL (ORCPT
+        with ESMTP id S232805AbiBQMWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:22:11 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2070.outbound.protection.outlook.com [40.107.237.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1451A1D9657;
-        Thu, 17 Feb 2022 04:21:56 -0800 (PST)
+        Thu, 17 Feb 2022 07:22:50 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2055.outbound.protection.outlook.com [40.107.96.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781F41CC287;
+        Thu, 17 Feb 2022 04:22:35 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QvwFSf4L6NylwrLhBw7YS39Ga2n+08qq4G5UNHLhAOML5R+W0PzLdBwcl4/8Z5RVEXD3o+ttL7Mzyb83iInY6/mB20MKIt+bt8fBB3ZmXi0IUMtFZy71b8PkuCUxqCvt7vJkEektI3c6AzqGj+82XIkX/4YUlgSlLJmKZGQxKMoOHNt7/xSUzCvDUX74047rK2BSCAZhZIfrawgmaL4tlHBia6EM7p4863rgj0ZgWc7soVkRTDpKvRF9dy3p+Dqb1N+DG/GlxY8W7UdEBPjtICRStmFpHi2a40Iqq1/mzCzXkXAALRAy4IHq1v5TQu5wtXUvMZeTqnz8oSu+oY4GpA==
+ b=R155Mwu9aZdcf+55UJqme94HxyiR5NOD19F4lacdHqMZ/k+/lq3BrPIrsj7TlVbCVgt11M+C1dPfI1n1e1ECQN/wlf0DtnhiAANdAnWkeTvqYWXuSSC/F5SakmiZpdY8aiuKjO8H2o0fgSnXozCXj5dgvKkJKcujaKB9V3eIPxL0LCsqJxhcrqmq8jUQ1Y+FrRNwj4aBFFyP9kwPU+k78S55aazQg1cE27OYcJMqvljPJ0kkwnUrMfq4NGLdbrcrHhB9M8wtO8ARqGYDWwAt0Cw2RAK/AVc+wS6VWq/XouR4u16yj9kQa5M4Fs9/2OBrhWYYje7HsKaNS5QPnGHfAg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zbul8SlZoyULh/7AZW6F4+X/7Sr4ZclfduAXJB1lLt4=;
- b=VmvuIG5cySYyDghpmNTpR7lAQHUxEbp9SCeqRzQ2STAR7y4FesaR/7n6+/FjHtwhppREfh0ZoHXkYWrkKvYNFrT4kJHX99hny2v6h/KCKA6Aqwi+yNnu0RtiJTBS2KzG+mGrRGduEkBygbHMxO5MVhmn3hdVAQ7eC8sAEpYwalLfWG53d83/fiaaZ22gYjr/Pvy1xxhAhywG70EJ2hbRpC3UJ871snVgNxDgDJeiU8eZKk2rPhkJRUrUs7h7rGxOFI0DLNf4rNCepsYm62kT+9MFO6w7qqD9GOBVwweIuCV/BmnJ3Lkm2bNtVga/zmYceG9Fe1CDv+QLMYyZAXnaDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=q3zcdJPCJOstr98GMCTNjmDXCHX9DFbXjseFSjDGSj4=;
+ b=ItWyLyV/IxZ0ai1um0ef9tM4ManGUxXP11BaKHHjxAvGBT1m3tbfGDkqw3Q/sPCoCZtRk2XPAdek1kuW6/kDArukDD60mRkQUZGhf88lTore9kl9ckjRwGw5oq6b3BNCTYLl+Ntg0gCOZQi5D1semiKdSIPTIeS5z4DldNqi6mJk6ZqnKZ3OMm4bBqysKpekJs6wgYcIKJ0QDvqYEE5Qf0McEmUdex50Av9Q9lS1zh/0sDbdSgd0JIQqDkBdTdhvhlTmNcopia7yaSRB0Ud7faqne6rxNOPWJFQMnVz5kBBN+tsVd1YlPqrUrk1eycMzu+SqUMxWMPQBb3S8YSScRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zbul8SlZoyULh/7AZW6F4+X/7Sr4ZclfduAXJB1lLt4=;
- b=T/VmiBqj+pJC1J0cXvL6G03tL0SCiox9lwLKfFdvgPF4ClH6xfe5OxuRCXiO+mCb9jKgBMds9q4qCuISgN4wHYPqXCm7AUfJs1SkOAFEa0PcDc9kn56wAzU5yNCN+Ad45iYXLpCXCtPyZpqWR1w3CWUKl4Zrljt6CM0nOdkNzAqZN3VM66oFMLZEAXQgnZrp3apLafGw2W4QQq3CJKrZ37h0oT1MDIjzYwht3lIVi071t0QJRNbufj7m1SBZngAj5Y+Sr+pacTwX6eR+aNoVEql1J/TTpTxlKfrNelR4cOMxiTvD0S/lLWQQrgEKRmt9XsNCleRU0/1DZDTPTJaL6A==
-Received: from DS7PR03CA0085.namprd03.prod.outlook.com (2603:10b6:5:3bb::30)
- by DM6PR12MB3916.namprd12.prod.outlook.com (2603:10b6:5:1ca::21) with
+ bh=q3zcdJPCJOstr98GMCTNjmDXCHX9DFbXjseFSjDGSj4=;
+ b=kH0f5jyPmAqgYrNMubOn6li3FcOdTC8Q9nGhjOo9fNkhehlsHpWbIxhvcr1Ym/v/V+T2/IX3Rr2WFrC5UQpVvNm8hs89gMzPlCuOnluHso8p/2Py0sEc5NlqFbyQKUxvch5XiXt8KySAggpUyhNpu6g368uXeb765igldSV0LFQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM5PR12MB1146.namprd12.prod.outlook.com (2603:10b6:3:73::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Thu, 17 Feb
- 2022 12:21:53 +0000
-Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3bb:cafe::e) by DS7PR03CA0085.outlook.office365.com
- (2603:10b6:5:3bb::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
- Transport; Thu, 17 Feb 2022 12:21:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4995.15 via Frontend Transport; Thu, 17 Feb 2022 12:21:53 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 17 Feb
- 2022 12:21:34 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Thu, 17 Feb 2022
- 04:21:33 -0800
-Received: from nvidia-Inspiron-15-7510.nvidia.com (10.127.8.9) by
- mail.nvidia.com (10.129.68.8) with Microsoft SMTP Server id 15.2.986.9 via
- Frontend Transport; Thu, 17 Feb 2022 04:21:29 -0800
-From:   Abhishek Sahu <abhsahu@nvidia.com>
-To:     <kvm@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>
-CC:     Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, Abhishek Sahu <abhsahu@nvidia.com>
-Subject: [PATCH v3 2/2] vfio/pci: wake-up devices around reset functions
-Date:   Thu, 17 Feb 2022 17:51:07 +0530
-Message-ID: <20220217122107.22434-3-abhsahu@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220217122107.22434-1-abhsahu@nvidia.com>
-References: <20220217122107.22434-1-abhsahu@nvidia.com>
-X-NVConfidentiality: public
+ 2022 12:22:29 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.4995.018; Thu, 17 Feb 2022
+ 12:22:29 +0000
+Message-ID: <6711073b-8771-5750-33f7-b72333b411c6@amd.com>
+Date:   Thu, 17 Feb 2022 13:22:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/amdgpu: check vm bo eviction valuable at last
+Content-Language: en-US
+To:     Qiang Yu <yuq825@gmail.com>
+Cc:     Qiang Yu <qiang.yu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220217090440.4468-1-qiang.yu@amd.com>
+ <5d3fdd2c-e74a-49f4-2b28-32c06483236f@amd.com>
+ <CAKGbVbtLTBJPF5eTu4rABUTBa8eqjQvqjo1AEUrzgPgYgCREuA@mail.gmail.com>
+ <dac70c05-e712-d2e3-2267-278380895f1e@amd.com>
+ <CAKGbVbvtLbDiKrX80-dMnipdLkTE+FP=g_mx37e12fuMtA1Y4Q@mail.gmail.com>
+ <ca27a9c6-f390-a938-dd66-ac23f3b44dc4@amd.com>
+ <CAKGbVbv4UFCybS_OFj5UkDgevbrB5qe3pv+0nHv9WdefYhy6Ww@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAKGbVbv4UFCybS_OFj5UkDgevbrB5qe3pv+0nHv9WdefYhy6Ww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS9PR06CA0308.eurprd06.prod.outlook.com
+ (2603:10a6:20b:45b::28) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ac969d76-57d5-47af-97ae-08d9f21014db
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3916:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3916F883A89025488D0CB871CC369@DM6PR12MB3916.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Office365-Filtering-Correlation-Id: 2be9605a-a226-44dc-dbce-08d9f2102a1e
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1146:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB114686648A49D4A4485FC3E783369@DM5PR12MB1146.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fUHKHnpB4h4VV9S7u3DEcd4NbWY97hw3ltYTicXrHYfn5NyO8eX4saUJLl0XbzE/q7++m/X1wA6UE8aeYdiUAfXOxUDEaQEZymX62aRWeMCguUWwFtTONNBUOPcID7L5O6E1VMhDPiSDfTsJAN31HFW5S4ExW1t+fe43BuxSAUZDMXP4qtKYjUqZEW2Ew2QcVFZg4ohxhA54TSoCa/U0Iv4B5DlY3MDvgeO4nQ9QCNP4ox47ECe0gjWHSqiPW/baD+VX32sb64i56jDi6jkft5bbIOT7Qnet/ZFdx5Uyxljr2FvI71S6pJosLiVIFkiErdbNz6h4U+NG76DMiEfoMWEqRAhuVmJgKSSyUQz/TMGZ7zWoykw4CSWjiCMfrru42YRTKbRVWSPtFiH92uDuuJLsHYfgrkeEAzFt+WymQMrfMDJhmiUVJDtlgcSb2uCsI4OUN+Gkk6X+UqDbhaDLlL/aYWfPpoj9AzDJdxoM6IQUdoLXiJG0WzScV0L7t67oJbFiyqnCZuGPaHVyucPVErMFpG3rl6z1Bf6dEB0DtBZPFYHsBsbZUhviAL6/jAciiyGBdL/6308SURMrnJ8zPHaMBUF9+LuCuLg7aGVQCj8OeTdKpDTrURVwRahnoCGzcGSyzRQqOPOhC1kpnFeKET9SP5aSw1tZ+eb+0VWZ2EI9UqVpCo6H+8s8fpKRvoNW/qi+vHKv5Vf9NCpdHu3UaQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(36860700001)(83380400001)(7696005)(2616005)(36756003)(107886003)(5660300002)(47076005)(186003)(26005)(1076003)(336012)(426003)(2906002)(81166007)(8936002)(316002)(356005)(8676002)(6666004)(4326008)(40460700003)(54906003)(110136005)(86362001)(70586007)(70206006)(508600001)(82310400004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 12:21:53.1407
+X-Microsoft-Antispam-Message-Info: eKi6BcOTnRzMQRi2jWxt7ffOpirWmtWdDmffcmNEuwMRneJT8YvVNI0bEy7L0STQ+gbBqRazwwe00NJ4+VEMpk92K8dFRKgky5Agj/gDEwb11H2ufbvnlizR6XXwlJSFtbXdFaGoRG5hOdF64V+FnCyOLlo2sJK7t3SW9h2WK9Q+/z43Zhb1LmIIgeLP+vx4ovtqQc5dFoTGS7ejDKxLRsTAGr8ECFXlJUzij20EFbnGST2DBxGo19s5udTNYsY3jj7d7RVNY4jqMNBoQUd1atAlpYigpmJrOFzfBmXfkfDDoup6hsPbReSms7JiB1owoLZdvpjQqpOdKjytBaHpnnXk463yf6S50mjxV80cwoJaaMXKJiIu178BM7d2fFZcJaXCW8IgOu9e7zyoyZ0OtgFEG3v9c3TU8HWYzd/dhZoEqbNvrVmCB39UR8WgsTcXHraMEblzM5wge2Z+WRxSiDOfLgWDfr7HEb0Cd/Q/uYlBqYSqJm2kR1YCUghipEQjqC3wbKao9YQ4vwqTqyiBMkNG/D7+CBWE1kxeGkykOu6ZbHOgVxEwtMa3AyGdwz8MXknhAhBJxK0uAsjjdl8+jgUTNlMVJxJ5rhoM9uSHLPsCQSl1BhpvFuof2dupQMy6B+43AsiI7eiaCN6vF8EyTbzDFbS1yJstPopwPg8WjJQFbRd2WZWVC6Cq+2bsRxIsNCGq8KcMSbZbpXsJZ5G8Aym42SraA80KTI61eV4kIDU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(66476007)(66574015)(66946007)(6916009)(83380400001)(66556008)(8676002)(4326008)(53546011)(6512007)(86362001)(31686004)(6506007)(38100700002)(6666004)(2906002)(5660300002)(31696002)(6486002)(186003)(2616005)(8936002)(508600001)(316002)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YXRUc0RvU3p2TUozYVpwS25OTTBEL3MyVnh3Z3ljWkJ1ZUFFRTNDK3cxRnMx?=
+ =?utf-8?B?Q1ZTSlhHSTdVNTJ5cnVhaWFlNm5mNjFtTEJyTEZJMG5GaVorcUxpNEd4VW5L?=
+ =?utf-8?B?RVYvelVwQmNSYnZNSmRHdGI1RWhXREtnMENhU2NkeEN6RHh2M00vNndrT0t6?=
+ =?utf-8?B?UEhhaEk0T3ZPRnhsRGpGR2Y0UEVkVERiamhOU1hZWjNSRHNhdWtmS2w0T1Na?=
+ =?utf-8?B?S3I3b1JsWm9TanhhL0NmcGFOOVk1S0VaVytDL3BjN1I4K2NucFE2VHhNbXg5?=
+ =?utf-8?B?RHl5ajlUK2doRytzOUJTbVdqMEdnRHdsS1hzTnZVWVRTUVB3SGJDQldVQ2FC?=
+ =?utf-8?B?K2lCekhSZWdSdmdrMkllSGVoWTRjbXVXMkxsKzE5YUo2dC8zYkZqWVJOOEEx?=
+ =?utf-8?B?Q3lPY2llUkluWlpUcDR1WHV6Szd0aUNpZ21ZL0xHcnBOSkNEYlIzWUIzNVBF?=
+ =?utf-8?B?K1FEVW9IN3RiVWdudHZxWkYvYUlEN2FlWFN5Y1RmNVZPdERoY25KOVZqN2NH?=
+ =?utf-8?B?c1I4d3g2anFNRkV1K0Eyd3pnNkZ2VDAwTDJBYkthZUNpbEhkTUZqNUVzYkhs?=
+ =?utf-8?B?Z21OM213N1hnMklsZ0wvcmwvMWpZcDg5WndBWVk1N0FpTTViSG96WmRQaUtr?=
+ =?utf-8?B?dit5a3RmYXQ4ZTU5NUVZakZJaHZpcTlzd1BSZU53bjYrUklqSTVNaGh0VGVD?=
+ =?utf-8?B?a0VQb2RmUVNtUWJGaE9mVVhHdFA3OWQrZ3dhSVdsaXBjSzdKM24rc3RDTk9G?=
+ =?utf-8?B?Tjh1cUE5NGNOb2p6OGZ3TWtDektTeWduTG1lVjdWeXZQVXhhL0EwVmlydEs5?=
+ =?utf-8?B?SUpKbWlDU0dQMGo0bGpqZ2JCdlFlb3RHa1loemhTWGlyQzFXNWswanRCK1Bp?=
+ =?utf-8?B?S3czL2pYa28wdkU5U2xEc0RabUpmcUF2aWxaaHU1YkdFaGlQMFFzc1R3V205?=
+ =?utf-8?B?UHNlY3o0ZkNWeHMrWGR6R0w2a3dmaGZYMTFObEtuV213THlPQm9sTEZVN2Zo?=
+ =?utf-8?B?OXZBZUxRdWl1OXRUWjNWUEdPZlduTGZhQ3lvcWkwclVRanRTcEs1WFFNVGRW?=
+ =?utf-8?B?bmplaTl3UklBaFJXZE1henZJcm04QVJQQWdzOGdXSVdXQnpiNEpIQlNBZ3h1?=
+ =?utf-8?B?VHpUWjlXQ2J2ZGFrSFRYNUErYlJudVEvM3Y0T3lobmdxK1VPSFFBdnZLcnhv?=
+ =?utf-8?B?bVB0V21UaWNtUWxWTFVrbzhJMUZ5WlNVWXZVSkVUOUtSU2hOc0ZpRzFhSVc2?=
+ =?utf-8?B?aW44NFZCQUVhWk14UFQwZzFCTHFHZTVaNGllWm5IelRhVnR5aFgxdTZrRHRl?=
+ =?utf-8?B?eHZkd1RoL1pRSWozR3hpaGZQUzNibGlJVlVtTzBMUytEVStMV1lmaFZoejF0?=
+ =?utf-8?B?aXE2eUMzaUV6OFg5bG5ENzBrb1IwUC9tM1ZEV3dnNVRqT1lYN2hCOWdZRjIy?=
+ =?utf-8?B?VVlmMmJkbW5PYjFIeFg4eWNhcGpJTklZcHdZb3lVZ3FQUzZXbW9xZ1JpQmUx?=
+ =?utf-8?B?MDFXQTJBNUgyeTFzbk0wZVNUMXpTM0xxOWpaRFNvcXV4ZXNPbzA5eVVsYm5N?=
+ =?utf-8?B?WEFiMXBjMUM4SnFWYWMwVG1IcEdHUnJKd2tBQlFCODMyc1U2dU9Pc2REV0JX?=
+ =?utf-8?B?b1pKanFMSzZNQmtsczdSa3Y3L0RHYkF4dFRvemNVUzMrWTNXVXF4bUE1Wk5s?=
+ =?utf-8?B?V0NLdUxPdFVONCticXZNZjRVMGx3N1hldjIwZEZhNTUzek12eFZNWUhsYXdV?=
+ =?utf-8?B?NlVUeGtvWnp2U0lCRkl4MDRmd1Z6OXFmSjlXUnVwNG5IMVFhbVZib2VpTi92?=
+ =?utf-8?B?eEdwZE51c1lHbStweWpLNjFwRUdhM2czMHJYd05lcCtxS0dia0hUVW45d2F5?=
+ =?utf-8?B?d1V2Nm5aWit6elQ1Zjl5bUxDUkJlTWlWKzNyajJrL3Q1bVB4YVR3TjRQRmhZ?=
+ =?utf-8?B?STlUM1Y4TDcwRWdJVlVRdHhsbUFCL3FjUkIxNm5icERqME9VRnowRkhlT3Rr?=
+ =?utf-8?B?c2hrRzBwNUM2YzFkSUo1ckdlOHdSS01GckZMN3BXZ0I0ekJHL3k3dDh5Rmhx?=
+ =?utf-8?B?VFVNVE81ZG0ya1FkMG92dWlQaWFocXNhcnVmaTBNSHJ5bE5VTmtrN2VYdExu?=
+ =?utf-8?B?YWFYV0sxZDRRQUdaWkFaWnY3SE5mdjRjcXlub2ZoQ2NQODg5bjdlUmVVa2h1?=
+ =?utf-8?Q?BuF8NH1ER+0mYxCHF0Nj5iU=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2be9605a-a226-44dc-dbce-08d9f2102a1e
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 12:22:29.2824
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac969d76-57d5-47af-97ae-08d9f21014db
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3916
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Pvzjqc+M37MD5gHfMmLj5meTcObIcvaD88fMFz9GJZZZEXj8J4wc2rbl6Whj9AkB
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1146
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If 'vfio_pci_core_device::needs_pm_restore' is set (PCI device does
-not have No_Soft_Reset bit set in its PMCSR config register), then the
-current PCI state will be saved locally in
-'vfio_pci_core_device::pm_save' during D0->D3hot transition and same
-will be restored back during D3hot->D0 transition. For reset-related
-functionalities, vfio driver uses PCI reset API's. These
-API's internally change the PCI power state back to D0 first if
-the device power state is non-D0. This state change to D0 will happen
-without the involvement of vfio driver.
+Am 17.02.22 um 11:58 schrieb Qiang Yu:
+> On Thu, Feb 17, 2022 at 6:39 PM Christian König
+> <christian.koenig@amd.com> wrote:
+>>
+>>
+>> Am 17.02.22 um 11:13 schrieb Qiang Yu:
+>>> On Thu, Feb 17, 2022 at 5:46 PM Christian König
+>>> <christian.koenig@amd.com> wrote:
+>>>> Am 17.02.22 um 10:40 schrieb Qiang Yu:
+>>>>> On Thu, Feb 17, 2022 at 5:15 PM Christian König
+>>>>> <christian.koenig@amd.com> wrote:
+>>>>>> Am 17.02.22 um 10:04 schrieb Qiang Yu:
+>>>>>>> Workstation application ANSA/META get this error dmesg:
+>>>>>>> [drm:amdgpu_gem_va_ioctl [amdgpu]] *ERROR* Couldn't update BO_VA (-16)
+>>>>>>>
+>>>>>>> This is caused by:
+>>>>>>> 1. create a 256MB buffer in invisible VRAM
+>>>>>>> 2. CPU map the buffer and access it causes vm_fault and try to move
+>>>>>>>        it to visible VRAM
+>>>>>>> 3. force visible VRAM space and traverse all VRAM bos to check if
+>>>>>>>        evicting this bo is valuable
+>>>>>>> 4. when checking a VM bo (in invisible VRAM), amdgpu_vm_evictable()
+>>>>>>>        will set amdgpu_vm->evicting, but latter due to not in visible
+>>>>>>>        VRAM, won't really evict it so not add it to amdgpu_vm->evicted
+>>>>>>> 5. before next CS to clear the amdgpu_vm->evicting, user VM ops
+>>>>>>>        ioctl will pass amdgpu_vm_ready() (check amdgpu_vm->evicted)
+>>>>>>>        but fail in amdgpu_vm_bo_update_mapping() (check
+>>>>>>>        amdgpu_vm->evicting) and get this error log
+>>>>>>>
+>>>>>>> This error won't affect functionality as next CS will finish the
+>>>>>>> waiting VM ops. But we'd better make the amdgpu_vm->evicting
+>>>>>>> correctly reflact the vm status and clear the error log.
+>>>>>> Well NAK, that is intentional behavior.
+>>>>>>
+>>>>>> The VM page tables where considered for eviction, so setting the flag is
+>>>>>> correct even when the page tables later on are not actually evicted.
+>>>>>>
+>>>>> But this will unnecessarily stop latter user VM ops in ioctl before CS
+>>>>> even when the VM bos are not evicted.
+>>>>> Won't this have any negative effect when could do better?
+>>>> No, this will have a positive effect. See the VM was already considered
+>>>> for eviction because it is idle.
+>>>>
+>>>> Updating it immediately doesn't necessarily make sense, we should wait
+>>>> with that until its next usage.
+>>>>
+>>>> Additional to that this patch doesn't really fix the problem, it just
+>>>> mitigates it.
+>>>>
+>>>> Eviction can fail later on for a couple of reasons and we absolutely
+>>>> need to check the flag instead of the list in amdgpu_vm_ready().
+>>> The flag only for both flag and list? Looks like should be both as
+>>> the list indicate some vm page table need to be updated and could
+>>> delay the user update with the same logic as you described above.
+>> I think checking the flag should be enough. The issue is that the list
+>> was there initially, but to avoid race conditions we added the flag with
+>> separate lock protection later on.
+>>
+> But list and flag does not align always, there are cases like
+> list-empty/flag-set (this problem) and list-non-empty/flag-unset (non-vm bo
+> eviction). If only check flag list-non-empty/flag-unset change behavior.
 
-Let's consider the following example:
+Yeah, but I think that the flag unset list-non-empty case would be 
+correctly handled if we only test the flag.
 
-1. The device is in D3hot.
-2. User invokes VFIO_DEVICE_RESET ioctl.
-3. pci_try_reset_function() will be called which internally
-   invokes pci_dev_save_and_disable().
-4. pci_set_power_state(dev, PCI_D0) will be called first.
-5. pci_save_state() will happen then.
+In other words we can update the page tables as long as they are not 
+partially or fully evicted and that's not the case when non-vm BOs are 
+evicted.
 
-Now, for the devices which has NoSoftRst-, the pci_set_power_state()
-can trigger soft reset and the original PCI config state will be lost
-at step (4) and this state cannot be restored again. This original PCI
-state can include any setting which is performed by SBIOS or host
-linux kernel (for example LTR, ASPM L1 substates, etc.). When this
-soft reset will be triggered, then all these settings will be reset,
-and the device state saved at step (5) will also have this setting
-cleared so it cannot be restored. Since the vfio driver only exposes
-limited PCI capabilities to its user, so the vfio driver user also
-won't have the option to save and restore these capabilities state
-either and these original settings will be permanently lost.
+Regards,
+Christian.
 
-For pci_reset_bus() also, we can have the above situation.
-The other functions/devices can be in D3hot and the reset will change
-the power state of all devices to D0 without the involvement of vfio
-driver.
-
-So, before calling any reset-related API's, we need to make sure that
-the device state is D0. This is mainly to preserve the state around
-soft reset.
-
-For vfio_pci_core_disable(), we use __pci_reset_function_locked()
-which internally can use pci_pm_reset() for the function reset.
-pci_pm_reset() requires the device power state to be in D0, otherwise
-it returns error.
-
-This patch changes the device power state to D0 by invoking
-vfio_pci_set_power_state() explicitly before calling any reset related
-API's.
-
-Fixes: 51ef3a004b1e ("vfio/pci: Restore device state on PM transition")
-Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
----
- drivers/vfio/pci/vfio_pci_core.c | 48 ++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index 87b288affc13..2e6409cc11ad 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -335,6 +335,17 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
- 	/* For needs_reset */
- 	lockdep_assert_held(&vdev->vdev.dev_set->lock);
- 
-+	/*
-+	 * This function can be invoked while the power state is non-D0.
-+	 * This function calls __pci_reset_function_locked() which internally
-+	 * can use pci_pm_reset() for the function reset. pci_pm_reset() will
-+	 * fail if the power state is non-D0. Also, for the devices which
-+	 * have NoSoftRst-, the reset function can cause the PCI config space
-+	 * reset without restoring the original state (saved locally in
-+	 * 'vdev->pm_save').
-+	 */
-+	vfio_pci_set_power_state(vdev, PCI_D0);
-+
- 	/* Stop the device from further DMA */
- 	pci_clear_master(pdev);
- 
-@@ -934,6 +945,19 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
- 			return -EINVAL;
- 
- 		vfio_pci_zap_and_down_write_memory_lock(vdev);
-+
-+		/*
-+		 * This function can be invoked while the power state is non-D0.
-+		 * If pci_try_reset_function() has been called while the power
-+		 * state is non-D0, then pci_try_reset_function() will
-+		 * internally set the power state to D0 without vfio driver
-+		 * involvement. For the devices which have NoSoftRst-, the
-+		 * reset function can cause the PCI config space reset without
-+		 * restoring the original state (saved locally in
-+		 * 'vdev->pm_save').
-+		 */
-+		vfio_pci_set_power_state(vdev, PCI_D0);
-+
- 		ret = pci_try_reset_function(vdev->pdev);
- 		up_write(&vdev->memory_lock);
- 
-@@ -2068,6 +2092,18 @@ static int vfio_pci_dev_set_hot_reset(struct vfio_device_set *dev_set,
- 	}
- 	cur_mem = NULL;
- 
-+	/*
-+	 * The pci_reset_bus() will reset all the devices in the bus.
-+	 * The power state can be non-D0 for some of the devices in the bus.
-+	 * For these devices, the pci_reset_bus() will internally set
-+	 * the power state to D0 without vfio driver involvement.
-+	 * For the devices which have NoSoftRst-, the reset function can
-+	 * cause the PCI config space reset without restoring the original
-+	 * state (saved locally in 'vdev->pm_save').
-+	 */
-+	list_for_each_entry(cur, &dev_set->device_list, vdev.dev_set_list)
-+		vfio_pci_set_power_state(cur, PCI_D0);
-+
- 	ret = pci_reset_bus(pdev);
- 
- err_undo:
-@@ -2121,6 +2157,18 @@ static bool vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set)
- 	if (!pdev)
- 		return false;
- 
-+	/*
-+	 * The pci_reset_bus() will reset all the devices in the bus.
-+	 * The power state can be non-D0 for some of the devices in the bus.
-+	 * For these devices, the pci_reset_bus() will internally set
-+	 * the power state to D0 without vfio driver involvement.
-+	 * For the devices which have NoSoftRst-, the reset function can
-+	 * cause the PCI config space reset without restoring the original
-+	 * state (saved locally in 'vdev->pm_save').
-+	 */
-+	list_for_each_entry(cur, &dev_set->device_list, vdev.dev_set_list)
-+		vfio_pci_set_power_state(cur, PCI_D0);
-+
- 	ret = pci_reset_bus(pdev);
- 	if (ret)
- 		return false;
--- 
-2.17.1
+>
+> Regards,
+> Qiang
+>
+>> Regards,
+>> Christian.
+>>
+>>> Regards,
+>>> Qiang
+>>>
+>>>> Regards,
+>>>> Christian.
+>>>>
+>>>>> Regards,
+>>>>> Qiang
+>>>>>
+>>>>>> What we should rather do is to fix amdgpu_vm_ready() to take a look at
+>>>>>> the flag instead of the linked list.
+>>>>>>
+>>>>>> Regards,
+>>>>>> Christian.
+>>>>>>
+>>>>>>> Signed-off-by: Qiang Yu <qiang.yu@amd.com>
+>>>>>>> ---
+>>>>>>>      drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 85 ++++++++++++++-----------
+>>>>>>>      1 file changed, 47 insertions(+), 38 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>> index 5a32ee66d8c8..88a27911054f 100644
+>>>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>> @@ -1306,45 +1306,11 @@ uint64_t amdgpu_ttm_tt_pte_flags(struct amdgpu_device *adev, struct ttm_tt *ttm,
+>>>>>>>          return flags;
+>>>>>>>      }
+>>>>>>>
+>>>>>>> -/*
+>>>>>>> - * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
+>>>>>>> - * object.
+>>>>>>> - *
+>>>>>>> - * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
+>>>>>>> - * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
+>>>>>>> - * it can find space for a new object and by ttm_bo_force_list_clean() which is
+>>>>>>> - * used to clean out a memory space.
+>>>>>>> - */
+>>>>>>> -static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>> -                                         const struct ttm_place *place)
+>>>>>>> +static bool amdgpu_ttm_mem_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>> +                                          const struct ttm_place *place)
+>>>>>>>      {
+>>>>>>>          unsigned long num_pages = bo->resource->num_pages;
+>>>>>>>          struct amdgpu_res_cursor cursor;
+>>>>>>> -     struct dma_resv_list *flist;
+>>>>>>> -     struct dma_fence *f;
+>>>>>>> -     int i;
+>>>>>>> -
+>>>>>>> -     /* Swapout? */
+>>>>>>> -     if (bo->resource->mem_type == TTM_PL_SYSTEM)
+>>>>>>> -             return true;
+>>>>>>> -
+>>>>>>> -     if (bo->type == ttm_bo_type_kernel &&
+>>>>>>> -         !amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo)))
+>>>>>>> -             return false;
+>>>>>>> -
+>>>>>>> -     /* If bo is a KFD BO, check if the bo belongs to the current process.
+>>>>>>> -      * If true, then return false as any KFD process needs all its BOs to
+>>>>>>> -      * be resident to run successfully
+>>>>>>> -      */
+>>>>>>> -     flist = dma_resv_shared_list(bo->base.resv);
+>>>>>>> -     if (flist) {
+>>>>>>> -             for (i = 0; i < flist->shared_count; ++i) {
+>>>>>>> -                     f = rcu_dereference_protected(flist->shared[i],
+>>>>>>> -                             dma_resv_held(bo->base.resv));
+>>>>>>> -                     if (amdkfd_fence_check_mm(f, current->mm))
+>>>>>>> -                             return false;
+>>>>>>> -             }
+>>>>>>> -     }
+>>>>>>>
+>>>>>>>          switch (bo->resource->mem_type) {
+>>>>>>>          case AMDGPU_PL_PREEMPT:
+>>>>>>> @@ -1377,10 +1343,53 @@ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>                  return false;
+>>>>>>>
+>>>>>>>          default:
+>>>>>>> -             break;
+>>>>>>> +             return ttm_bo_eviction_valuable(bo, place);
+>>>>>>>          }
+>>>>>>> +}
+>>>>>>>
+>>>>>>> -     return ttm_bo_eviction_valuable(bo, place);
+>>>>>>> +/*
+>>>>>>> + * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
+>>>>>>> + * object.
+>>>>>>> + *
+>>>>>>> + * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
+>>>>>>> + * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
+>>>>>>> + * it can find space for a new object and by ttm_bo_force_list_clean() which is
+>>>>>>> + * used to clean out a memory space.
+>>>>>>> + */
+>>>>>>> +static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>> +                                         const struct ttm_place *place)
+>>>>>>> +{
+>>>>>>> +     struct dma_resv_list *flist;
+>>>>>>> +     struct dma_fence *f;
+>>>>>>> +     int i;
+>>>>>>> +
+>>>>>>> +     /* Swapout? */
+>>>>>>> +     if (bo->resource->mem_type == TTM_PL_SYSTEM)
+>>>>>>> +             return true;
+>>>>>>> +
+>>>>>>> +     /* If bo is a KFD BO, check if the bo belongs to the current process.
+>>>>>>> +      * If true, then return false as any KFD process needs all its BOs to
+>>>>>>> +      * be resident to run successfully
+>>>>>>> +      */
+>>>>>>> +     flist = dma_resv_shared_list(bo->base.resv);
+>>>>>>> +     if (flist) {
+>>>>>>> +             for (i = 0; i < flist->shared_count; ++i) {
+>>>>>>> +                     f = rcu_dereference_protected(flist->shared[i],
+>>>>>>> +                             dma_resv_held(bo->base.resv));
+>>>>>>> +                     if (amdkfd_fence_check_mm(f, current->mm))
+>>>>>>> +                             return false;
+>>>>>>> +             }
+>>>>>>> +     }
+>>>>>>> +
+>>>>>>> +     /* Check by different mem type. */
+>>>>>>> +     if (!amdgpu_ttm_mem_eviction_valuable(bo, place))
+>>>>>>> +             return false;
+>>>>>>> +
+>>>>>>> +     /* VM bo should be checked at last because it will mark VM evicting. */
+>>>>>>> +     if (bo->type == ttm_bo_type_kernel)
+>>>>>>> +             return amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo));
+>>>>>>> +
+>>>>>>> +     return true;
+>>>>>>>      }
+>>>>>>>
+>>>>>>>      static void amdgpu_ttm_vram_mm_access(struct amdgpu_device *adev, loff_t pos,
 

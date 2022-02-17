@@ -2,98 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB4F4B9AE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 789944B9AE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237573AbiBQI1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 03:27:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58104 "EHLO
+        id S237569AbiBQI2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 03:28:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237592AbiBQI1m (ORCPT
+        with ESMTP id S233554AbiBQI2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 03:27:42 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8AD1F6B87;
-        Thu, 17 Feb 2022 00:27:25 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jznxl4tSnz4xZq;
-        Thu, 17 Feb 2022 19:27:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1645086443;
-        bh=bApq11IKYHzDfTSJ/UX5xND0Jryd27YhT1z48powltU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Yl2fgvnVDft4zBJLzP+NaHDL9x5N5268chjYMlSSWO7esD2axln6QU/g5NmL/fiVw
-         nG93jNhwj2pkKVYRlpPFrF/eoRxg5QJjvT+WqOrkANBRY3qj6ESIP4STcm5jjFJZVE
-         OL4FK8wjJEQV0ueWbcHabSsZum5wGXrKA5tUmtXxpUCsgFklaDB9nSZUgM068sG2Xd
-         JWz85fqTiUGvxyOiXN5NpeqXlqIBT2EmnrfrtiadmC+U1cCCQ6OgHO839rCK+qk4hP
-         TgozynyJwEv6mW/uHoGpivNj8dbuDBx3vvFCyryBjtMsWMsD1xDri/LRaqPTmFROCK
-         AsUX2RmYiQ6Pw==
-Date:   Thu, 17 Feb 2022 19:27:22 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the maple tree
-Message-ID: <20220217192722.1447f4a9@canb.auug.org.au>
+        Thu, 17 Feb 2022 03:28:46 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EF91F3F01;
+        Thu, 17 Feb 2022 00:28:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E3GHyDgYQEXkjjcjSg5K61opBcjQ4m2xulsd6ozi8lMR2VR/ceH898GglcYFIOxGkFehV2xyRSxOpg23kwshwJC6Tb5bXO7s0U0pj/1JJtRfSRlWvjYnjwaF8AO87nhjnfso24G/GxOnk3ksX0tpUTffeQAwN3FDTNEPqDZkFAnvFL+1lmwIss6ZY+Y9BW3qHUwOmtiwqzYysSRQFF1wLjfpvEcxaRkasjIq1jlzixSjwJuZY6PSzeutyWK4Jmey577tzo4fvfggxdakleQm0uh1xxQMDJJCch3fzpYDZsgUkh87yuXRN5ZCiUPqT3IfnPfx+tlWFBAR+O09cvCSRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c6r44nGTqTFWDgZRiwhFVjss+bih3touwgbapVPUqkw=;
+ b=e17791RYGwTWGWMaW/vW39ywaXFyxnXp1QRZqTm0mWLKQnRrDb5rYKod5vEKJmzxEUjjktHJcUysnk6KixxS+UqC4MZ9Kn7CUeo0Ka7D4Qo66VQEkYScecErrEKGtFIY6nhFI36JbX4JBO7sFYF1syWncKdiKFkS7YWDYG6ZyMMEAH4g1areH3wsAuH6jwu5brdEsNeijcgx6YumUvdTwriIxUcj7i+vBQLn1wIhgIBMJbKnPkb/iq3I6vojEDBbe7cAtjexxjUK/+IQDBxNRdejIvPF1kLCxvWr1mJzilTDQcDuQoTY0Mi5j/HzUF7UHdA0H8/7Lkey6Voj4WHQ3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=chelsio.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c6r44nGTqTFWDgZRiwhFVjss+bih3touwgbapVPUqkw=;
+ b=k2OTT1mihzZs/Bo9rJagZ8OARkf5B4L/O5RvlLMYZU7iW+tTNDIjvMfupgAf9CWcVK5hXD2q15j0IWWxT84/p2XNRHEjeY9EkcrCzjBDbbsRx78+LTmQasxsVhJhJOK5p34p0cYJJ6e88gU1Hx3W8fW59RSV+6VKBm63hUqEGaJLOMMEVTE3nwT1LzaobEsEeTIgE1ojI0qapZlTiAgUUmAMNAWDdSPsaCDVt4poDAXpN+n1VyjykxQPZOfCYeV5du+FIERuPwyar3TIzCRGl6Ees7NNnZ/R2NDOoGNfzAdCO4Yt5LHbqGfBITD94AKp25c+DZwKC0kzmlwAYRYXSA==
+Received: from BN6PR17CA0005.namprd17.prod.outlook.com (2603:10b6:404:65::15)
+ by MW3PR12MB4508.namprd12.prod.outlook.com (2603:10b6:303:5b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Thu, 17 Feb
+ 2022 08:28:31 +0000
+Received: from BN8NAM11FT014.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:65:cafe::49) by BN6PR17CA0005.outlook.office365.com
+ (2603:10b6:404:65::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19 via Frontend
+ Transport; Thu, 17 Feb 2022 08:28:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT014.mail.protection.outlook.com (10.13.177.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4995.15 via Frontend Transport; Thu, 17 Feb 2022 08:28:30 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 17 Feb
+ 2022 08:28:24 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Thu, 17 Feb 2022
+ 00:28:24 -0800
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server id 15.2.986.9 via Frontend Transport; Thu, 17 Feb
+ 2022 00:28:17 -0800
+From:   Jianbo Liu <jianbol@nvidia.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>
+CC:     <olteanv@gmail.com>, <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <rajur@chelsio.com>, <claudiu.manoil@nxp.com>,
+        <sgoutham@marvell.com>, <gakula@marvell.com>,
+        <sbhatta@marvell.com>, <hkelam@marvell.com>, <saeedm@nvidia.com>,
+        <leon@kernel.org>, <idosch@nvidia.com>, <petrm@nvidia.com>,
+        <alexandre.belloni@bootlin.com>, <UNGLinuxDriver@microchip.com>,
+        <simon.horman@corigine.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <baowen.zheng@corigine.com>, <louis.peens@netronome.com>,
+        <peng.zhang@corigine.com>, <oss-drivers@corigine.com>,
+        <roid@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>
+Subject: [PATCH net-next v2 0/2] flow_offload: add tc police parameters
+Date:   Thu, 17 Feb 2022 08:28:01 +0000
+Message-ID: <20220217082803.3881-1-jianbol@nvidia.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/to3ae14.n114hFdfGdKn2D4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 92b16e2b-9378-4ffe-086d-08d9f1ef7a81
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4508:EE_
+X-Microsoft-Antispam-PRVS: <MW3PR12MB450862A84FEBC6B1257DA580C5369@MW3PR12MB4508.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O7FkOElQuwwWAHhSELDKxmThyq4vYON4g7HpDH3PpFes+dZ3ljQP0NDCINA2CBpq6aZXPPBlK0r0H1NC6vwWQuaPmSijD2HBqkEeS1RA6xJrPk9+jddcyWv4SDxvIZgonJFJjSMwYvB86Ujy1AL1LklvHEolGHi5RffIBhuZ5mkgVpCkd09mS65HsFmcyoOk3whIkHA+5QtM/DJCQO/vVF2WKmHK68RFOJega5EuVoX5moh/7wL+IVjQOSpUP5Dpi/U+1l8IcEtbk35YDXvzF3Xgn87Gs0OiNADikiQDr/ldZITRs5F66gfa8Wr1cxmc3bJ7tD2sRtrixpD9x8JBVOkwYHO6xKUA+avQl0OfV4AdvKAczuaz1CIibR5GV1zRvyVcjZ43J8k73VQZfIXZ0apmc/Fp/t8OgDYac/C05FvKwPkTPdSGc5SN5/2ERONWFCGkZIcMetwwPkQmTTqSUZ3r4relcqssnhEvz9GvfEKYMT2bZ9ytLJhcgSSCgVr73is5lC6k4hwQ8PLj/D5juYIEEIOc9CVo/UBQRi0OX0J+9uA0Yp3Box9FSOYbi1/F08efEfsqylSvaFbgx3KQhfT5Qa9gcwVglSAgcnUa8SU5BZy0dSQetZY+/6jrqo2uapMV8Azc4NPmL891oPlDpGQ95TFGyNCd7roKAk6RbnyNxWTaRMfsAho3uWl69KpNgr1iJp21IfI7YZR0QziVNQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(336012)(83380400001)(40460700003)(508600001)(426003)(36756003)(186003)(26005)(7696005)(6666004)(2906002)(86362001)(82310400004)(356005)(7416002)(5660300002)(316002)(1076003)(110136005)(107886003)(2616005)(4326008)(47076005)(36860700001)(81166007)(70586007)(70206006)(8936002)(54906003)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 08:28:30.2827
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92b16e2b-9378-4ffe-086d-08d9f1ef7a81
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT014.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4508
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/to3ae14.n114hFdfGdKn2D4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+As a preparation for more advanced police offload in mlx5 (e.g.,
+jumping to another chain when bandwidth is not exceeded), extend the
+flow offload API with more tc-police parameters. Adjust existing
+drivers to reject unsupported configurations.
 
-Hi all,
+Changes since v1:
+  * Add one more strict validation for the control of drop/ok.
 
-After merging the maple tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+Jianbo Liu (2):
+  net: flow_offload: add tc police action parameters
+  flow_offload: reject offload for all drivers with invalid police
+    parameters
 
-In file included from /home/sfr/next/next/mm/damon/vaddr.c:762:
-/home/sfr/next/next/mm/damon/vaddr-test.h: In function 'damon_test_three_re=
-gions_in_vmas':
-/home/sfr/next/next/mm/damon/vaddr-test.h:85:1: error: the frame size of 27=
-20 bytes is larger than 2048 bytes [-Werror=3Dframe-larger-than=3D]
-   85 | }
-      | ^
-cc1: all warnings being treated as errors
+ drivers/net/dsa/sja1105/sja1105_flower.c      | 27 +++++++++
+ .../chelsio/cxgb4/cxgb4_tc_matchall.c         | 55 +++++++++++++++++++
+ .../net/ethernet/freescale/enetc/enetc_qos.c  | 31 +++++++++++
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  | 54 ++++++++++++++++++
+ .../net/ethernet/mellanox/mlx5/core/en_tc.c   | 27 +++++++++
+ .../ethernet/mellanox/mlxsw/spectrum_flower.c | 27 +++++++++
+ drivers/net/ethernet/mscc/ocelot_flower.c     | 28 ++++++++++
+ drivers/net/ethernet/mscc/ocelot_net.c        | 27 +++++++++
+ .../ethernet/netronome/nfp/flower/qos_conf.c  | 28 ++++++++++
+ include/net/flow_offload.h                    | 19 +++++++
+ include/net/tc_act/tc_police.h                | 30 ++++++++++
+ net/sched/act_police.c                        | 46 ++++++++++++++++
+ 12 files changed, 399 insertions(+)
 
-Caused by commit
+-- 
+2.26.2
 
-  42672fae77a4 ("damon: Convert __damon_va_three_regions to use the VMA ite=
-rator")
-
-I have dropped the maple tree for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/to3ae14.n114hFdfGdKn2D4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIOBuoACgkQAVBC80lX
-0GzArgf/WP3eX4I0DJEIlR6DlPa/ZepBq3CEw4wPHdoszDZ6g/JqUKkMqzjaCSw9
-+AIiTqqu8i2Ckq3kO/O1dTkYkWhcyjkwSF4wC1GqZ+mpIk51mPhPyxMY4v18v32q
-c7corp9UMwXzn4fXiwe0hpz0UjJBCTnRtL44enyO1Mu84k/WIdQPkf+LzcRdd03I
-7OqafppnC2febRbGd7/Ut4e9elNVOaxN1ac1SOjoeq+RY+rUCuKSHmDfg3J8AQ0Z
-JYLHzJuuSGxot9VcDwxmdgKc4bO97PGe5dBqh6ofNBSs2IDMQLWRU/hyAbmmGA6Z
-/0j7u/0DDo7IRWjWr05ofjwYJHjj9g==
-=Ytvz
------END PGP SIGNATURE-----
-
---Sig_/to3ae14.n114hFdfGdKn2D4--

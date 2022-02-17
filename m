@@ -2,129 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC294BA80F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F8C4BA79B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244180AbiBQSVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:21:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48392 "EHLO
+        id S243947AbiBQR65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:58:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiBQSV3 (ORCPT
+        with ESMTP id S240904AbiBQR6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:21:29 -0500
-X-Greylist: delayed 1463 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 10:21:15 PST
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFAB1712AC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:21:15 -0800 (PST)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 7B20A9D0E80
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:56:52 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id Kl1QnOOMnHnotKl1QnIGXq; Thu, 17 Feb 2022 11:56:52 -0600
-X-Authority-Reason: nr=8
-Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:34154 helo=[10.0.0.45])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1nKl1O-001Zrd-AE; Thu, 17 Feb 2022 11:56:50 -0600
-Message-ID: <ca674409-34bb-69b2-0df5-e01b6facee88@kernel.org>
-Date:   Thu, 17 Feb 2022 18:56:44 +0100
+        Thu, 17 Feb 2022 12:58:55 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F036A15C665;
+        Thu, 17 Feb 2022 09:58:40 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B713B113E;
+        Thu, 17 Feb 2022 09:58:40 -0800 (PST)
+Received: from [10.57.17.240] (unknown [10.57.17.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51CB13F718;
+        Thu, 17 Feb 2022 09:58:38 -0800 (PST)
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
+ <CAD=FV=UtQgrwPXg4zTZtBin3LWY1yTgCKQ05MmCNqK_6F5S8VA@mail.gmail.com>
+ <adbc1cd5-7598-a0b1-629c-8dd920aac2d0@arm.com>
+ <CAD=FV=XzTSxg9sAtUcDhoLnY736u1qGKJy4OwLKp56_ruSUUvQ@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <5445b77b-f730-4b01-b60b-223514629e5a@arm.com>
+Date:   Thu, 17 Feb 2022 17:58:36 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC V2 17/21] watchdog/dev: Add tracepoints
+In-Reply-To: <CAD=FV=XzTSxg9sAtUcDhoLnY736u1qGKJy4OwLKp56_ruSUUvQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Gabriele Paoloni <gpaoloni@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Peter.Enderborg@sony.com" <Peter.Enderborg@sony.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-devel@vger.kernel.org" 
-        <linux-trace-devel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <cover.1644830251.git.bristot@kernel.org>
- <e67874c8b676ea8dfe38679efa25363889bb1e76.1644830251.git.bristot@kernel.org>
- <96f418b4-0ba8-01fe-ead0-2028bfc42560@sony.com>
- <ba924008-c0ab-4800-aac4-d9d9ae930c32@kernel.org>
- <ef1b1d99-6172-2b4d-9612-7ecbe8fc6c8b@roeck-us.net>
- <6c6fc4fa-6464-2dbf-40da-e3c61f322d95@redhat.com>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <6c6fc4fa-6464-2dbf-40da-e3c61f322d95@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 95.232.30.176
-X-Source-L: No
-X-Exim-ID: 1nKl1O-001Zrd-AE
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:34154
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 3
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 18:49, Gabriele Paoloni wrote:
+
+
+On 2/17/22 4:50 PM, Doug Anderson wrote:
+> Hi,
 > 
-> On 17/02/2022 18:27, Guenter Roeck wrote:
->> On 2/17/22 08:27, Daniel Bristot de Oliveira wrote:
->>> Hi Peter
+> On Wed, Feb 16, 2022 at 3:28 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> On 2/16/22 5:21 PM, Doug Anderson wrote:
+>>> Hi,
 >>>
->>> On 2/16/22 17:01, Peter.Enderborg@sony.com wrote:
->>>> On 2/14/22 11:45, Daniel Bristot de Oliveira wrote:
->>>>> Add a set of tracepoints, enabling the observability of the watchdog
->>>>> device interactions with user-space.
->>>>>
->>>>> The events are:
->>>>>     watchdog:watchdog_open
->>>>>     watchdog:watchdog_close
->>>>>     watchdog:watchdog_start
->>>>>     watchdog:watchdog_stop
->>>>>     watchdog:watchdog_set_timeout
->>>>>     watchdog:watchdog_ping
->>>>>     watchdog:watchdog_nowayout
->>>>>     watchdog:watchdog_set_keep_alive
->>>>>     watchdog:watchdog_keep_alive
->>>> Some watchdogs have a bark functionality, I think it should be event
->>>> for that too.
+>>> On Tue, Feb 8, 2022 at 1:32 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >>>>
->>> I understand. The problems is that I do not see the bark abstraction
->>> in the
->>> watchdog_dev layer.
+>>>>>      Another important thing is the consistent scale of the power values
+>>>>>      provided by the cooling devices. All of the cooling devices in a single
+>>>>>      thermal zone should have power values reported either in milli-Watts
+>>>>>      or scaled to the same 'abstract scale'.
+>>>>
+>>>> This can change. We have removed the userspace governor from kernel
+>>>> recently. The trend is to implement thermal policy in FW. Dealing with
+>>>> some intermediate configurations are causing complicated design, support
+>>>> of the algorithm logic is also more complex.
 >>>
->> I don't even know what "bark functionality" means. A new term for
->> pretimeout ?
->> Something else ?
-> From my understanding the bark timeout is actually the pretimeout
-> whereas the bite timeout is the actual timeout.
+>>> One thing that didn't get addressed is the whole "The trend is to
+>>> implement thermal policy in FW". I'm not sure I can get on board with
+>>> that trend. IMO "moving to FW" isn't a super great trend. FW is harder
+>>> to update than kernel and trying to keep it in sync with the kernel
+>>> isn't wonderful. Unless something _has_ to be in FW I personally
+>>> prefer it to be in the kernel.
+>>
+>> There are pros and cons for both approaches (as always).
+>>
+>> Although, there are some use cases, where the kernel is not able to
+>> react that fast, e.g. sudden power usage changes, which can cause
+>> that the power rail is not able to sustain within required conditions.
+>> When we are talking about tough requirements for those power & thermal
+>> policies, the mechanism must be fast, precised and reliable.
+>>
+>> Here you can find Arm reference FW implementation and an IPA clone
+>> in there (I have been reviewing this) [1][2].
+>>
+>> As you can see there is a new FW feature set:
+>> "MPMM, Traffic-cop and Thermal management".
+>>
+>> Apart from Arm implementation, there are already known thermal
+>> monitoring mechanisms in HW/FW. Like in the new Qcom SoCs which
+>> are using this driver code [3]. The driver receives an interrupt
+>> about throttling conditions and just populates the thermal pressure.
+> 
+> Yeah, this has come up in another context recently too. Right on on
+> the Qcom SoCs I'm working with (sc7180 on Chromebooks) we've
+> essentially disabled all the HW/FW throttling (LMH), preferring to let
+> Linux manage things. We chose to do it this way with the assumption
+> that Linux would be able to make better decisions than the firmware
+> and it was easier to understand / update than an opaque
+> vendor-provided blob. LMH is still there with super high limits in
+> case Linux goofs up (we don't want to damage the CPU) but it's not the
+> primary means of throttling.
+> 
+> As you said, Linux reacts a bit slower, though I've heard that might
+> be fixed soon-ish? So far on sc7180 Chromebooks it hasn't been a
+> problem because we have more total thermal mass and the CPUs in sc7180
+> don't actually generate that much heat compared to other CPUs. We also
+> have thermal interrupts enabled, which helps. That being said,
+> improvements are certainly welcome!
+> 
 
-So, what Peter wants is tracepoints for the pretimeout actions?
+Thanks Doug for sharing this with me. I'll keep this in mind, your
+requirements, configuration and usage.
+I've learned recently that some SoCs start throttling very early during
+boot, even before the cpumask is available. That was causing
+kernel to blow up (deference of a cpumask NULL pointer in that LMH [1]).
 
--- Daniel
+[1] 
+https://lore.kernel.org/linux-pm/20220128032554.155132-2-bjorn.andersson@linaro.org/

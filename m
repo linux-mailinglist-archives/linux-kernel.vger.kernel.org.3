@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05EA4BA24A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0324BA23F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241595AbiBQOBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:01:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36916 "EHLO
+        id S241620AbiBQOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 09:01:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241660AbiBQOA6 (ORCPT
+        with ESMTP id S241694AbiBQOBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:00:58 -0500
+        Thu, 17 Feb 2022 09:01:01 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AF42B0B08;
-        Thu, 17 Feb 2022 06:00:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018162B101B;
+        Thu, 17 Feb 2022 06:00:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645106422; x=1676642422;
+  t=1645106442; x=1676642442;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WMo3A0FXzl8kVU3sLYwWm3RXrK0Q37aqF1ExPiMbpJs=;
-  b=WeszXtQ3TCA1atMu3P50wwQm1K4oVTr1a6d1Gp/jXy8+DSKfE3Qv5qMi
-   p8EUngEpJzlYjsyggzOeAGyxFJWWj7fyGb9/E+Px73Xhmdf28YfNQPbuh
-   A0DQh4BFdAqTRDLB6wsic20cevqeZpmnnoVE5uHuLph9JhRb7CNvkYleN
-   A7Z24WQG0a+fhrIVK3NTO4zeI/gmyynYyLnuVcex8oLiLRsCUx9NlDkuL
-   +6heV4x5I13X5bxF37kmZNVwTCJVu09faC/S17gtRww2tcNsu7nWlvkae
-   1zpLZjDj367SFeUuDpab3ifGgb4rZ8UN2TqWdPXd0e7/g/vY729Gsc1x6
-   A==;
-IronPort-SDR: ZHvn6cQkHfF5xdWBh+AVqWkLPLUHQIfwcmXtyvYD3ahlqRKceEzmIFQaUD1fEHztg7Vw5AULu8
- P367lOF1pVOY7hsjE1yBMyDMrmAIm+AGP+YNokojZv7vdsr8jbBY3Ll15CCdj7cWSm4ZZ/Duk7
- Dqz0kgmwFmlRjhJUHHDQg4DGdvf5qeqZJWqKDA6dlTuLAbtPWX1whj/85VF9FA/FseuYrAbgSb
- rGa5RZ/BK7WdBTjpbphQTGW5ScBnmDAmMG5sWoVb2mkIBmHoJsMfiaNPRJXx+qObZ3BcFpYBC2
- gtDCOLuVfiseKlspHDo+YPzY
+  bh=U/CKKh3POM+OwTtOgQF4Jp8Ls8i/luVYOEHzUs8doLs=;
+  b=1xz39sK3DDobDrjxNIoUr1AID1yvrT+wGOWF/MCqYen84oiI9nuV+MnK
+   c9uq1k1QeXdaCjUcG10R4emD+lMxMwXVI2lF9pnXTvrq3NlN7oSxWC9gp
+   7nZwgB4qhp18bNzKuCBMMcZBfLT4Pf8muoW8xIXui3Y6HFrHn8N6Yeqky
+   3pTt6D00PboahkQn71FVRSAn+UZWr9vEvHowSr6B3yeHrh4PLRwlU5TbK
+   pqG3QnmIaTvbcLOnFvInXeyViYYBvEfZzMvud+C/7RQDo6W5LMi0tLEGr
+   ELDBhN+bntynb1Jh8zy5pCH5xakWFdAyXsa5oeOhxgCbtlEdcM4twsF/L
+   Q==;
+IronPort-SDR: /HLd2XTUhR5gJQslo8ozSBGqhqh95+cUP8yEg1/kJVLpyiF1W1fqdM7QzM3W0TCOW54oA5DkWa
+ L7TcK6876CGiGPUsPR7J0GBnvmsBwavJhZSRr1nFEvwWoBrRjcsE5Z1dqXQf2sqM9JEVKJ/qr7
+ Pll8iVLGoBn6Hw44uFjPmN824wzJLLtOgxCW7gsrfflt/VK81jESKL8uQp7NP/h0jRQgqU0RCG
+ oS9j4rOZJCnMozGlzWCmszHBbfpXxDniDZzCVEJSNQVEn1iZ20E6hfPWkIMJSC7PFiL2w8uNc4
+ rZb41lUV0kzXukxQk4GkuqR+
 X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="146333777"
+   d="scan'208";a="149064476"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2022 07:00:21 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2022 07:00:41 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 17 Feb 2022 07:00:21 -0700
+ 15.1.2375.17; Thu, 17 Feb 2022 07:00:41 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 17 Feb 2022 06:59:58 -0700
+ 15.1.2375.17 via Frontend Transport; Thu, 17 Feb 2022 07:00:21 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>,
         <hverkuil-cisco@xs4all.nl>, <nicolas.ferre@microchip.com>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <claudiu.beznea@microchip.com>,
-        "Eugen Hristev" <eugen.hristev@microchip.com>
-Subject: [PATCH v5 09/13] media: atmel: atmel-sama7g5-isc: remove stray line
-Date:   Thu, 17 Feb 2022 15:56:41 +0200
-Message-ID: <20220217135645.1427466-10-eugen.hristev@microchip.com>
+        "Eugen Hristev" <eugen.hristev@microchip.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 10/13] dt-bindings: media: microchip,xisc: add bus-width of 14
+Date:   Thu, 17 Feb 2022 15:56:42 +0200
+Message-ID: <20220217135645.1427466-11-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220217135645.1427466-1-eugen.hristev@microchip.com>
 References: <20220217135645.1427466-1-eugen.hristev@microchip.com>
@@ -70,25 +71,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove stray line from formats struct.
+The Microchip XISC supports a bus width of 14 bits.
+Add it to the supported bus widths.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-sama7g5-isc.c | 1 -
- 1 file changed, 1 deletion(-)
+ Documentation/devicetree/bindings/media/microchip,xisc.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-index a0d60cfdba7b..638af8da2694 100644
---- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-@@ -225,7 +225,6 @@ static struct isc_format sama7g5_formats_list[] = {
- 		.mbus_code	= MEDIA_BUS_FMT_Y10_1X10,
- 		.pfe_cfg0_bps	= ISC_PFG_CFG0_BPS_TEN,
- 	},
--
- };
+diff --git a/Documentation/devicetree/bindings/media/microchip,xisc.yaml b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
+index 086e1430af4f..3be8f64c3e21 100644
+--- a/Documentation/devicetree/bindings/media/microchip,xisc.yaml
++++ b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
+@@ -67,7 +67,7 @@ properties:
+           remote-endpoint: true
  
- static void isc_sama7g5_config_csc(struct isc_device *isc)
+           bus-width:
+-            enum: [8, 9, 10, 11, 12]
++            enum: [8, 9, 10, 11, 12, 14]
+             default: 12
+ 
+           hsync-active:
 -- 
 2.25.1
 

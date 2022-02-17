@@ -2,156 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB864BA35B
+	by mail.lfdr.de (Postfix) with ESMTP id 404BB4BA35A
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235436AbiBQOoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:44:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46824 "EHLO
+        id S242027AbiBQOow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 09:44:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbiBQOoP (ORCPT
+        with ESMTP id S242017AbiBQOou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:44:15 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB345207FF3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:44:00 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id q4so3512964qki.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:44:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=7Dm8/9xh+wmDmQBhMFT43NJgXO5tbOXeBqNcPHzywpk=;
-        b=ZICFIWA9Sbi45aOvx4dcDKut/wdPr6VMVnR4U4cb/kJNSc5ETL1ImhYOA8svydp4va
-         RzN0pqQOm5Dq4JA7d4pON7G9eyLMCXEsZuWHjnT9Fj9mCm+TUeulRj9lF2p9y2RbrWcw
-         Zdpbnbp0nBhk0+kYOrKKXdR396nWX9LG40kL5OO0Sx5HRmFULTOjGINNiVDkIXxd4+xP
-         TOWJ3oYmeQRu60z0DluHgDjZgUZAXTPIUOGK3h/aHozSzMAyMRLTYmepfzaIg3ggnHGr
-         dP2iJfjIiPWmJy73uFUWoYnY+wyUm1t2ktREy2fqVLd/EgvXbdq9nYV+GFUVOklwgQKe
-         rgsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=7Dm8/9xh+wmDmQBhMFT43NJgXO5tbOXeBqNcPHzywpk=;
-        b=b+rgCkwfRi0q5MqhMXCP0IRSEHszMNHqqwG5+ZBX0yD149QlL5Xb1GqKIE+7gRXRHF
-         zD6jIValmlLJ/fdIvHFsJMHndgWvLCUKk9Z5fo5SD7G+q0+6SjuTQIzE1T2ekEaDafNR
-         LWLJUJuYR91UyDAo0PE8UreXTjhBvkvGJCoQl2IdPMXqWSFawdfvAit5iNRMv3VlF+vR
-         rqV0Z8zzGu2SIKwnH/aOkeHFmVnUqLJWYdfHps4lo0F9lIVJvyGuqIwzYStSKdb+dI6e
-         lGg0CuTrcr8FFjyVyjm+/mh1Yqso0++XMueguagtGIcZOP0U1aYi/hwet5bROX2hP89U
-         /gCQ==
-X-Gm-Message-State: AOAM531FPt9ALF/dzGJY78U1Z0VbOxuYK+MekzPwq4meFDSMtU++eQD1
-        Qqe87puLfbcV/Ki47O/Vs0fKCg==
-X-Google-Smtp-Source: ABdhPJxLj1ldRMkUKspCf3+BTfjxi/lSWLS/APEjil4eZvdWbgL26ckX1Mt84cdeQha/7dTmRgmWsw==
-X-Received: by 2002:ae9:edc6:0:b0:60c:8807:712f with SMTP id c189-20020ae9edc6000000b0060c8807712fmr1821761qkg.14.1645109039947;
-        Thu, 17 Feb 2022 06:43:59 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id h19sm13099450qtx.12.2022.02.17.06.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 06:43:59 -0800 (PST)
-Message-ID: <20a43338009164be793abb9fedd002f2e4c9a293.camel@ndufresne.ca>
-Subject: Re: [PATCH v6, 06/15] media: mtk-vcodec: Refactor get and put
- capture buffer flow
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Thu, 17 Feb 2022 09:43:54 -0500
-In-Reply-To: <353328c24f92a0690c8461a9b18c62166b769a40.camel@mediatek.com>
-References: <20220122035316.18179-1-yunfei.dong@mediatek.com>
-         <20220122035316.18179-7-yunfei.dong@mediatek.com>
-         <b07ac9bebb1d2ecef8ddb1426f16f4ff3218a131.camel@ndufresne.ca>
-         <353328c24f92a0690c8461a9b18c62166b769a40.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Feb 2022 09:44:50 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8A021D09A;
+        Thu, 17 Feb 2022 06:44:36 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HEdom6018081;
+        Thu, 17 Feb 2022 14:44:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=spMY1+f5fzaepG3IJUmW+zDHj/gJnfmPPnGFIgIiXsU=;
+ b=fi7jlNKXVPhmSjf6OqwffLzNHGvgqY7Hrx1kckDn2tONEp7A6FWR7I1SQU6sdtFwEmQU
+ NilIRGopIoR5X2zQb/5O/Hgr2Q5sd6K4RAiP3BEeZ7uzBTXYHqsImJRYw5TSc6vXxeDv
+ A9hkaQ069E5XjYjsw9M9n8I0p1mAn0yT5U+kaGSRzlbQZMB2asPt2SBMPx5POjDvqdEd
+ TIdzvip9RLLYOaAh4yrOjJuVv/3t3n2Mvup5THoXlEV2lLc08ooiWlmpDTn1082blwqV
+ 82xlpQsUtoeYiho80Z8aVygFwdnHCK8eITdikR8fceGftOGYxajznaHGCg6meUKbRVOW DA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9q3ma170-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 14:44:18 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21HEfKqe025294;
+        Thu, 17 Feb 2022 14:44:17 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e9q3ma167-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 14:44:17 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21HEXpFX028151;
+        Thu, 17 Feb 2022 14:44:15 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 3e64hah6hm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 14:44:15 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21HEXkR949807794
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Feb 2022 14:33:46 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE5C6A4060;
+        Thu, 17 Feb 2022 14:44:11 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 64CFFA4054;
+        Thu, 17 Feb 2022 14:44:09 +0000 (GMT)
+Received: from sig-9-65-66-221.ibm.com (unknown [9.65.66.221])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Feb 2022 14:44:09 +0000 (GMT)
+Message-ID: <ee5b683e3d52b5aa9d5e7e0895d5d80c108c225c.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 09/27] ima: Move some IMA policy and filesystem
+ related variables into ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Christian Brauner <brauner@kernel.org>
+Date:   Thu, 17 Feb 2022 09:44:08 -0500
+In-Reply-To: <20220201203735.164593-10-stefanb@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-10-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 32RtK33s3oHJjgIoU6A-VViWq2h7QBOH
+X-Proofpoint-ORIG-GUID: PH3FBFc87FnJIVlNd-xDURjIEiw_IVVK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-17_05,2022-02-17_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 malwarescore=0
+ suspectscore=0 mlxscore=0 spamscore=0 adultscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202170066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 17 février 2022 à 17:03 +0800, yunfei.dong@mediatek.com a écrit :
-> > > -	ret = vdec_if_decode(ctx, bs_src, dst_buf, &res_chg);
-> > > +	ret = vdec_if_decode(ctx, bs_src, NULL, &res_chg);
-> > >   	if (ret) {
-> > >   		mtk_v4l2_err(" <===[%d], src_buf[%d] sz=0x%zx pts=%llu
-> > > vdec_if_decode() ret=%d res_chg=%d===>",
-> > >   			     ctx->id, vb2_src->index, bs_src->size,
-> > > @@ -220,12 +266,9 @@ static void mtk_vdec_worker(struct work_struct
-> > > *work)
-> > >   		}
-> > >   	}
-> > >   
-> > > -	mtk_vdec_stateless_set_dst_payload(ctx, dst_buf);
-> > > -
-> > > -	v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx-
-> > > > m2m_ctx,
-> > > -					 ret ? VB2_BUF_STATE_ERROR :
-> > > VB2_BUF_STATE_DONE);
-> > > -
-> > > +	mtk_vdec_stateless_out_to_done(ctx, bs_src, ret);
-> > 
-> > v4l2_m2m_buf_done_and_job_finish() was specially crafted to prevent
-> > developer
-> > from implementing the signalling of the request at the wrong moment.
-> > This patch
-> > broke this strict ordering. The relevant comment in the helper
-> > function:
-> > 
-> > 
-> As we discussed in chat, please help to check whether it's possible to
-> let lat and core decode in parallel.
-
-Thanks, Benjamin is looking into that. For the mailing list here, here's some
-prior art for a similar problem found by downstream RPi4 HEVC driver developer.
-The general problem here is that we don't want to signal the request until the
-decode have complete, yet we want to pick and run second (concurrent job) so
-that parallel decoding is made possible. For RPi4 it is not multi-core, but the
-decoding is split in 2 stages, and the decoder run both stages concurrently,
-which basically means, we need to be able to run two jobs at the same time
-whenever possible.
-
-https://github.com/raspberrypi/linux/commit/964be1d20e2f1335915a6bf8c82a3199bfddf8ac
-
-This introduce media_request_pin/unpin, but being able to pin a request and not
-have it bound to any other object lifetime anymore seems a bit error prone in
-comparison to the current restrictions. Comments welcome !
-
+On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> Move the variables ima_write_mutex, ima_fs_flag, and valid_policy, which
+> are related to updating the IMA policy, into the ima_namespace. This way
+> each IMA namespace can set these variables independently in its instance
+> of securityfs.
 > 
-> I will continue to fix h264 issue.
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
 
-Thanks.
+Thanks,
 
-> 
-> Thanks for your help.
-> 
-> Best Regards,
-> Yunfei Dong
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 

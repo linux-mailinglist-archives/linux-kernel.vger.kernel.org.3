@@ -2,122 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FA44BAA79
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6E64BAA78
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245595AbiBQT7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:59:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39790 "EHLO
+        id S245588AbiBQT6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:58:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245590AbiBQT7U (ORCPT
+        with ESMTP id S229803AbiBQT6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:59:20 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487C528E35
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:59:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645127945; x=1676663945;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T/dy5bFV0hFt5PA339JCU431TnB8St9YIJsJ095SE54=;
-  b=OKLJG2k2ZLmkG6z8A0kanEytjHmDGjFNKa+ateshcAI4GAB70UXRmO2K
-   CKv3ix+fR9FaNQj2tJgChyixMv5enTidi4Ok/9uu68F3/kb3lLIpVNPFT
-   7cguxlN84J484noDBtWPZWkGOWu5OsRgZxcyw5OunxL8OmwlBXjjrEZsD
-   2RPsJ3G61tU5tLUakoe7wLTAEjsIHKhAyDUQUIJ6o+xTosJGftpffMGrI
-   sue0dKkUryEAK+dtLcpUeSrgy0MJ9+yRzo9VZ7S+5ZKrYiYWZaqeIk+Xv
-   vN2uB4jM/bJsw1mJ00U1qEXJ536KalsX4WviVt99SvzeJpGtCa7G5DcLm
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="250704140"
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="250704140"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:59:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="488646551"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2022 11:59:02 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKmvd-0000aO-W2; Thu, 17 Feb 2022 19:59:01 +0000
-Date:   Fri, 18 Feb 2022 03:58:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [ulfh-mmc:next 20/24] drivers/memstick/core/ms_block.c:158:6: error:
- implicit declaration of function 'bitmap_weight_eq'
-Message-ID: <202202180327.nT5gZudK-lkp@intel.com>
+        Thu, 17 Feb 2022 14:58:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7086D289A4;
+        Thu, 17 Feb 2022 11:58:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C62CB821B4;
+        Thu, 17 Feb 2022 19:58:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA72C340E8;
+        Thu, 17 Feb 2022 19:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645127897;
+        bh=tIS1dG2zy1RRVA9bGHHwQ8vHAQt589WIAKZ0K8nnK9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GQ2o3jDKhjfTmO1B8QNxXTbawirq/JvPaNVCKbG/1MmnLnvEBGkZjQtv5qcwXDefX
+         EDxAs9yAq3rt4vjzibnccRr1nTecBADIjqqzN2dx8XGeILA3w/ELpZ73JPWVjI9HOy
+         f3Y5Ia3wBxh1DZGlzT9SzGERZVvTb2m3nru6INvtl5lBO1lyT+fgI6yqr6edmpmYRE
+         Yjvj4SVfJKwTKt1WSjyuYSE8u+dq3+bGbwK8u0eMv+1bou9m4Z2g1oVNof6xiWHf9c
+         nxQGVullUol7/LIVSinq9JecwyEPmgZkJ7M2MkFCVTb54T/R8/cwopRLJOMNXn9uCU
+         u8OgfNrE8rzIA==
+Date:   Thu, 17 Feb 2022 20:58:52 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
+Message-ID: <Yg6o/ARtOIwuBFsW@iki.fi>
+References: <20210712170313.884724-1-mic@digikod.net>
+ <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
+ <YcGVZitNa23PCSFV@iki.fi>
+ <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net>
+ <Ydc/E3S2vmtDOnpw@iki.fi>
+ <YddADJJNLDlQAYRW@iki.fi>
+ <86c5010e-a926-023a-8915-d6605cfc4f0a@digikod.net>
+ <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
-head:   4b67100bafbb3f60e6eecf87631e4d400d9b6f17
-commit: 5f8d171cd8a93ff425556e7fde5d59fefc677bf7 [20/24] memstick: replace bitmap_weight with bitmap_weight_eq where appropriate
-config: hexagon-randconfig-r045-20220217 (https://download.01.org/0day-ci/archive/20220218/202202180327.nT5gZudK-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git/commit/?id=5f8d171cd8a93ff425556e7fde5d59fefc677bf7
-        git remote add ulfh-mmc git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git
-        git fetch --no-tags ulfh-mmc next
-        git checkout 5f8d171cd8a93ff425556e7fde5d59fefc677bf7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/memstick/core/
+On Mon, Jan 31, 2022 at 12:33:51PM +0100, Mickaël Salaün wrote:
+> 
+> On 07/01/2022 13:14, Mickaël Salaün wrote:
+> > 
+> > On 06/01/2022 20:16, Jarkko Sakkinen wrote:
+> > > On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
+> > > > On Tue, Jan 04, 2022 at 04:56:36PM +0100, Mickaël Salaün wrote:
+> > > > > 
+> > > > > On 21/12/2021 09:50, Jarkko Sakkinen wrote:
+> > > > > > On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
+> > > > > > > Hi Jarkko,
+> > > > > > > 
+> > > > > > > Since everyone seems OK with this and had plenty of
+> > > > > > > time to complain, could
+> > > > > > > you please take this patch series in your tree? It still applies on
+> > > > > > > v5.16-rc5 and it is really important to us. Please
+> > > > > > > let me know if you need
+> > > > > > > something more.
+> > > > > > > 
+> > > > > > > Regards,
+> > > > > > >    Mickaël
+> > > > > > 
+> > > > > > I'm off-work up until end of the year, i.e. I will
+> > > > > > address only important
+> > > > > > bug fixes and v5.16 up until that.
+> > > > > > 
+> > > > > > If any of the patches is yet missing my ack, feel free to
+> > > > > > 
+> > > > > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > > 
+> > > > > Thanks Jarkko. Can you please take it into your tree?
+> > > > 
+> > > > I can yes, as I need to anyway do a revised PR for v5.17, as one commit
+> > > > in my first trial had a truncated fixes tag.
+> > > 
+> > > Please check:
+> > > 
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> > > 
+> > > /Jarkko
+> > 
+> > Great, thanks!
+> 
+> Hi Jarkko,
+> 
+> I noticed your commits https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=3ec9c3a0531ac868422be3b12fc17310ed8c07dc
+> are no more referenced in your tree. Is there an issue?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This must be some sort of mistake I've made. I'll re-apply the patches.
+Sorry about this.
 
-All errors (new ones prefixed by >>):
-
->> drivers/memstick/core/ms_block.c:158:6: error: implicit declaration of function 'bitmap_weight_eq' [-Werror,-Wimplicit-function-declaration]
-           if (bitmap_weight_eq(msb->used_blocks_bitmap, msb->block_count,
-               ^
-   drivers/memstick/core/ms_block.c:158:6: note: did you mean 'bitmap_weight'?
-   include/linux/bitmap.h:399:28: note: 'bitmap_weight' declared here
-   static __always_inline int bitmap_weight(const unsigned long *src, unsigned int nbits)
-                              ^
-   1 error generated.
-
-
-vim +/bitmap_weight_eq +158 drivers/memstick/core/ms_block.c
-
-   145	
-   146	/* Debug test to validate free block counts */
-   147	static int msb_validate_used_block_bitmap(struct msb_data *msb)
-   148	{
-   149		int total_free_blocks = 0;
-   150		int i;
-   151	
-   152		if (!debug)
-   153			return 0;
-   154	
-   155		for (i = 0; i < msb->zone_count; i++)
-   156			total_free_blocks += msb->free_block_count[i];
-   157	
- > 158		if (bitmap_weight_eq(msb->used_blocks_bitmap, msb->block_count,
-   159					msb->block_count - total_free_blocks))
-   160			return 0;
-   161	
-   162		pr_err("BUG: free block counts don't match the bitmap");
-   163		msb->read_only = true;
-   164		return -EINVAL;
-   165	}
-   166	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+BR, Jarkko

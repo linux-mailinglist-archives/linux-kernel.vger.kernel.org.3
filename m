@@ -2,237 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8863F4B9E85
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4E34B9E88
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239736AbiBQL2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:28:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44816 "EHLO
+        id S239745AbiBQL2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:28:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbiBQL2M (ORCPT
+        with ESMTP id S236858AbiBQL2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:28:12 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A61123F08C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:27:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645097278; x=1676633278;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=H2XGrjT+rRqAeNBiu3e4fRodsZVvJc9mwNNndzrleFo=;
-  b=THcCE3qtcuOkQbw72m3prIwKDty/nbVhYR1wL8VZX471ZG+1O0kk57bS
-   e6RR0APPRnBu2oZpyWWSDy6iuMTxccOVhlRw9h80hXOCD9OIabXJ+Y5al
-   ni7HLAAANN8EH4eK2WhrE12wXMxd4ZKHNj0mY1mejtqv39BG8r4xVFpaP
-   s1Y1318Ax1PJapCi9N1Nz0TF2F3v5jkixVbhVKY1E8ELhTKM2/2WyMFpO
-   9zy8dRiRTSuXZ9a8tN2ixxppWG9jjqNKv8074mPJVYZPhKsunp3uDQaAw
-   T6/U/oyqS2i6CYK8qm+DARGXPSaX9qY6JHmR9Z5V90FeSE9ltHvOIfujZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="249689027"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="249689027"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 03:27:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="589314268"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Feb 2022 03:27:46 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKewr-00007N-U8; Thu, 17 Feb 2022 11:27:45 +0000
-Date:   Thu, 17 Feb 2022 19:27:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- 08f253ec3767bcfafc5d32617a92cee57c63968e
-Message-ID: <620e311e.7foValu4gZnt0Ohq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 17 Feb 2022 06:28:50 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7922560FE
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:28:35 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id o24so8461435wro.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zMMzA/SJejtAnz4Xeh9XatHLOiRgnEFhPdGxao5IDeA=;
+        b=f1Bx5KL2/vQLi+kWfRFFBdZQdFexUjteZMCUNSbOUkcyPmOrcou1/BQ8xL0NForbys
+         F9vgRpuBGvf4Poec1i0MXy1v1IZSly+dF4TVA8Svrrn370Eb/Lpk9lLYxqPK54XqP9a+
+         0N7sE85BtRHONJ2A32eAmSjpu//PWWrxw2EhmzTb3u0iXRy7rQCuZHr60hLva8F4exTz
+         Sa7JY3l978gZr936NfRlahQtNkCphUxrQ6zt17uSQJ6NGZlgx9yLpxC69LmCMBU+zoig
+         juiz4QFlN5HmPfjXpV75XJQNZH7zzEhWr703guEe15AWNH7Rh0C2tbtp4RK5MCAgowll
+         PPww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zMMzA/SJejtAnz4Xeh9XatHLOiRgnEFhPdGxao5IDeA=;
+        b=8CitUgslBdJBc7XqVMyiU+RBRlquNxAJeh7IZa8FpWOFRYMZ1H+h7XLPSphwbYD/5j
+         24kXrQ9ZuiGU7BEv18st7ACoRJD2I5czDJMS69B1kmVlHISver8xSuHMDoI9LTm2xNhD
+         mrEnTM8Qagslb7P9BPWYnrzOvF8YjeTtbXYXnqI8+pe2IdweGS7YfzmeHvoiZEpILOsa
+         Dh4buZPyx0o9oHSLn9A9mww+OYzHkYs3ugnZIpM1vHxIXEHAyY8pCzojeFWKY4RLSjwT
+         mdctimmCZKVdMt+bFNFvFbYkDrrOv4v+MkSqWTmsbf6jpa/5/oQG00QwC7MjVh9XGo6s
+         KuEw==
+X-Gm-Message-State: AOAM533phxUfplp0JkZotGwhtQQGVOgaY6xChngAv2N1lszJRBu/0eSQ
+        6VyofKoBZI8CvIPrhNXOtdsSLg==
+X-Google-Smtp-Source: ABdhPJzyY9xvEpyxFo+cnknYt+wnynlF+0CGU1WnFS/3X3baqntQ9xaM7X+xvmw4JPWOBKLYn273dg==
+X-Received: by 2002:a05:6000:15cc:b0:1a2:fd8a:829a with SMTP id y12-20020a05600015cc00b001a2fd8a829amr2015913wry.147.1645097313818;
+        Thu, 17 Feb 2022 03:28:33 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
+        by smtp.googlemail.com with ESMTPSA id g20sm1210307wmq.17.2022.02.17.03.28.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 03:28:33 -0800 (PST)
+Message-ID: <53bc13ca-998f-ff83-d9f7-9a83d35b24fd@linaro.org>
+Date:   Thu, 17 Feb 2022 12:28:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        amit daniel kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
+ <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
+ <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
+ <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
+ <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
+ <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
+ <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: 08f253ec3767bcfafc5d32617a92cee57c63968e  x86/cpu: Clear SME feature flag when not in use
+On 17/02/2022 11:47, Lukasz Luba wrote:
+> Hi Daniel,
+> 
+> On 2/17/22 10:10 AM, Daniel Lezcano wrote:
+>> On 16/02/2022 18:33, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> Hi Matthias,
+>>>>
+>>>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
+>>>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
+>>>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>
+>>>> [snip]
+>>>>
+>>>>>>>> Could you point me to those devices please?
+>>>>>>>
+>>>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
+>>>>>>>
+>>>>>>> Though as per above they shouldn't be impacted by your change, 
+>>>>>>> since the
+>>>>>>> CPUs always pretend to use milli-Watts.
+>>>>>>>
+>>>>>>> [skipped some questions/answers since sc7180 isn't actually 
+>>>>>>> impacted by
+>>>>>>>     the change]
+>>>>>>
+>>>>>> Thank you Matthias. I will investigate your setup to get better
+>>>>>> understanding.
+>>>>>
+>>>>> Thanks!
+>>>>>
+>>>>
+>>>> I've checked those DT files and related code.
+>>>> As you already said, this patch is safe for them.
+>>>> So we can apply it IMO.
+>>>>
+>>>>
+>>>> -------------Off-topic------------------
+>>>> Not in $subject comments:
+>>>>
+>>>> AFAICS based on two files which define thermal zones:
+>>>> sc7180-trogdor-homestar.dtsi
+>>>> sc7180-trogdor-coachz.dtsi
+>>>>
+>>>> only the 'big' cores are used as cooling devices in the
+>>>> 'skin_temp_thermal' - the CPU6 and CPU7.
+>>>>
+>>>> I assume you don't want to model at all the power usage
+>>>> from the Little cluster (which is quite big: 6 CPUs), do you?
+>>>> I can see that the Little CPUs have small dyn-power-coeff
+>>>> ~30% of the big and lower max freq, but still might be worth
+>>>> to add them to IPA. You might give them more 'weight', to
+>>>> make sure they receive more power during power split.
+>>>>
+>>>> You also don't have GPU cooling device in that thermal zone.
+>>>> Based on my experience if your GPU is a power hungry one,
+>>>> e.g. 2-4Watts, you might get better results when you model
+>>>> this 'hot' device (which impacts your temp sensor reported value).
+>>>
+>>> I think the two boards you point at (homestar and coachz) are just the
+>>> two that override the default defined in the SoC dtsi file. If you
+>>> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
+>>> map. You can also see the cooling maps for the littles.
+>>>
+>>> I guess we don't have a `dynamic-power-coefficient` for the GPU,
+>>> though? Seems like we should, but I haven't dug through all the code
+>>> here...
+>>
+>> The dynamic-power-coefficient is available for OPPs which includes 
+>> CPUfreq and devfreq. As the GPU is managed by devfreq, setting the 
+>> dynamic-power-coefficient makes the energy model available for it.
+>>
+>> However, the OPPs must define the frequency and the voltage. That is 
+>> the case for most platforms except on QCom platform.
+>>
+>> That may not be specified as it uses a frequency index and the 
+>> hardware does the voltage change in our back. The QCom cpufreq backend 
+>> get the voltage table from a register (or whatever) and completes the 
+>> voltage values for the OPPs, thus adding the information which is 
+>> missing in the device tree. The energy model can then initializes 
+>> itself and allows the usage of the Energy Aware Scheduler.
+>>
+>> However this piece of code is missing for the GPU part.
+>>
+> 
+> Thank you for joining the discussion. I don't know about that Qcom
+> GPU voltage information is missing.
+> 
+> If the voltage is not available (only the frequencies), there is
+> another way. There is an 'advanced' EM which uses registration function:
+> em_dev_register_perf_domain(). It uses a local driver callback to get
+> power for each found frequency. It has benefit because there is no
+> restriction to 'fit' into the math formula, instead just avg power
+> values can be feed into EM. It's called 'advanced' EM [1].
+> 
+> Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
+> was proposing from ~2014 this upstream, but EAS wasn't merged back
+> then):
+> where to store these power-freq values, which are then used by the
+> callback. 
 
-elapsed time: 733m
+Why not make it more generic and replace the frequency by a performance 
+index, so it can be used by any kind of perf limiter?
 
-configs tested: 152
-configs skipped: 4
+> We have the 'dynamic-power-coefficient' in DT, but
+> it has limitations. It would be good to have this simple array
+> attached to the GPU/CPU node. IMHO it meet the requirement of DT,
+> it describes the HW (it would have HZ and Watts values).
+> 
+> Doug, Matthias could you have a look at that function and its
+> usage, please [1]?
+> If you guys would support me in this, I would start, with an RFC
+> proposal, a discussion on LKML.
+> 
+> 
+> [1] 
+> https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87 
+> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-powerpc                 mpc8540_ads_defconfig
-m68k                       m5208evb_defconfig
-sparc                       sparc32_defconfig
-mips                            gpr_defconfig
-m68k                          hp300_defconfig
-powerpc                      cm5200_defconfig
-powerpc                      makalu_defconfig
-powerpc                    amigaone_defconfig
-sh                               alldefconfig
-sh                          r7780mp_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                  iss476-smp_defconfig
-xtensa                  audio_kc705_defconfig
-arm                           h5000_defconfig
-xtensa                       common_defconfig
-powerpc                     stx_gp3_defconfig
-ia64                             alldefconfig
-powerpc64                           defconfig
-mips                            ar7_defconfig
-arc                           tb10x_defconfig
-powerpc                     asp8347_defconfig
-arm                             rpc_defconfig
-arc                              alldefconfig
-sh                           se7619_defconfig
-nds32                            alldefconfig
-mips                       bmips_be_defconfig
-xtensa                          iss_defconfig
-mips                           ci20_defconfig
-arm                        multi_v7_defconfig
-nios2                            alldefconfig
-nds32                             allnoconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                           gcw0_defconfig
-sh                          sdk7786_defconfig
-sh                     sh7710voipgw_defconfig
-powerpc                 mpc85xx_cds_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                         mpc30x_defconfig
-arm                          exynos_defconfig
-sh                        sh7785lcr_defconfig
-arm                         nhk8815_defconfig
-openrisc                  or1klitex_defconfig
-mips                    maltaup_xpa_defconfig
-arm                           viper_defconfig
-ia64                         bigsur_defconfig
-powerpc64                        alldefconfig
-m68k                            q40_defconfig
-h8300                            alldefconfig
-s390                       zfcpdump_defconfig
-mips                           jazz_defconfig
-sh                            migor_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                   sh7724_generic_defconfig
-sh                           se7712_defconfig
-arm                  randconfig-c002-20220217
-arm                  randconfig-c002-20220216
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-clang tested configs:
-riscv                randconfig-c006-20220217
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220217
-arm                  randconfig-c002-20220217
-i386                          randconfig-c001
-mips                 randconfig-c004-20220217
-mips                           ip27_defconfig
-mips                     loongson1c_defconfig
-arm                          ixp4xx_defconfig
-arm                        neponset_defconfig
-arm                     davinci_all_defconfig
-mips                        workpad_defconfig
-mips                     loongson2k_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                          allmodconfig
-powerpc                     mpc5200_defconfig
-powerpc                   microwatt_defconfig
-arm                        magician_defconfig
-powerpc                     ppa8548_defconfig
-mips                           ip22_defconfig
-arm                          imote2_defconfig
-powerpc                 mpc836x_mds_defconfig
-mips                  cavium_octeon_defconfig
-mips                     cu1830-neo_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                          allyesconfig
-arm                          pcm027_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-hexagon              randconfig-r045-20220216
-hexagon              randconfig-r041-20220216
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

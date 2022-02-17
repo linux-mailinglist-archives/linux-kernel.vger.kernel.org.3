@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118784B97EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFA64B97EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234057AbiBQEzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 23:55:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52188 "EHLO
+        id S234077AbiBQE4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 23:56:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiBQEzU (ORCPT
+        with ESMTP id S229952AbiBQE4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 23:55:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 361891F227D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:55:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645073706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RMv0nYd6lGK+0myXiREIWX1spcR5nFtehllxBFTPu1Y=;
-        b=ffx0aL2DMQ/sOBmuC+mhThf6r7EOAbvnIwvZ+J4rAyjPZ2Vg6mBXoAra+KxHtbFLctvYh1
-        popFGxhi/W/lri+LoKXG3VEzOax+J5qa3oAxcTpieGWkUDgJy97z8TIUsr56ageP5z70qh
-        1ek5lNLO0InrhPtIXizLE8RNo/3MTeI=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-591-a5CmAR7wPKaaK16uHKXlEg-1; Wed, 16 Feb 2022 23:55:04 -0500
-X-MC-Unique: a5CmAR7wPKaaK16uHKXlEg-1
-Received: by mail-pj1-f69.google.com with SMTP id jf17-20020a17090b175100b001b90cf26a4eso2701489pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:55:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RMv0nYd6lGK+0myXiREIWX1spcR5nFtehllxBFTPu1Y=;
-        b=MULFo6cfSXUqdwOvTKsWcXuMIfGEhWVLYPCbceFV168uOmaLDU4C6mJvKsZOu+uGYU
-         r9bTowEALeC4JXoYd3OSidA8e8+zvI5kRGevi7C54SzbtTYoKMnYNZXdNn7PGsEC/YvI
-         J1tz7+D5N0mydTp+eHqEtkb+ZzoMCk7NMML/DthVLQF1nKWIWWQ7NJnndbghZbaXjMyW
-         RsepPG/TriFZcdioM23AtLIbrU+r9/HpD564m0QZo4jVEZy7Pam6x2yFywOd9Z1xAePm
-         EuohHpvd5put+Ry2osevEnnFc3nsQMkhZPy7gj85d4eBBbjG7AUR0sDg8aiiYKBBeRoW
-         Yu2g==
-X-Gm-Message-State: AOAM5301sLmBuTGl6cK+XRADBJXFTc7UNALfCSIOxuvSSvB6grl6otAn
-        VjkYtJol9iIfsY8X2hT5rKkKJ7iIjUiQH6GIUtYxNerDq66tiSZOAip+LFOY276xwHceALukLvb
-        OQRB9O7WkWR4Lji61Zs/vfQO6
-X-Received: by 2002:a63:64c5:0:b0:34d:3d6c:31d2 with SMTP id y188-20020a6364c5000000b0034d3d6c31d2mr1058953pgb.499.1645073703666;
-        Wed, 16 Feb 2022 20:55:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyWkBcDi1skevakW2rDEWyLhv5w6//N3woI9hMgQrmqsdqWPUoZgA2KY0t4hPceD8oDm7tX7Q==
-X-Received: by 2002:a63:64c5:0:b0:34d:3d6c:31d2 with SMTP id y188-20020a6364c5000000b0034d3d6c31d2mr1058930pgb.499.1645073703415;
-        Wed, 16 Feb 2022 20:55:03 -0800 (PST)
-Received: from xz-m1.local ([94.177.118.126])
-        by smtp.gmail.com with ESMTPSA id j15sm48731086pfj.102.2022.02.16.20.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 20:55:02 -0800 (PST)
-Date:   Thu, 17 Feb 2022 12:54:54 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH v4 4/4] mm: Rework swap handling of zap_pte_range
-Message-ID: <Yg3VHr28m0739GQE@xz-m1.local>
-References: <20220216094810.60572-1-peterx@redhat.com>
- <20220216094810.60572-5-peterx@redhat.com>
- <b04fabea-6216-3808-44e8-0a2125bf0230@nvidia.com>
+        Wed, 16 Feb 2022 23:56:11 -0500
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BB51F227D;
+        Wed, 16 Feb 2022 20:55:57 -0800 (PST)
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 21H4tb7b030427;
+        Thu, 17 Feb 2022 13:55:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 21H4tb7b030427
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1645073738;
+        bh=XT+hixO3OHzRLvB8+uXJ8rcVlX1aTroBtBRh2n+1zQY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=y7dYjnFd4wsC3TTZW1BdEoNjB4sXAHPx0oJ8ABx+P0g3nx4tKIj8RHnGp5PTqxZxP
+         F/NwszPL7gcDNXn8C95gahpJKOuhawN36TQNiyqpII8iJ7j1obZhq9H1Jm8mU4AoDo
+         tYEsoc19rtHNgG0UMiUzgfJi6rdU5DmfXuNc6rgFuhRYpHfhA52pBSeYa4fofhQDYN
+         ARoDDn05/6oJ8613UFpkQwaDNAV3QbUGSNTBVmLB+VEJ/3eyMmAXbAvyCJOZ4ZvD2i
+         sKEiwUEm3utUkypeph7bZ8SWyRkIahSFZHZrsY4kepFKduHoMAgcYGBF7Vz4YdhaHP
+         qCnjo7q5wYCSQ==
+X-Nifty-SrcIP: [209.85.216.43]
+Received: by mail-pj1-f43.google.com with SMTP id ki18-20020a17090ae91200b001b8be87e9abso5284343pjb.1;
+        Wed, 16 Feb 2022 20:55:37 -0800 (PST)
+X-Gm-Message-State: AOAM533LyphR5LuoChSI1L6v+i1cwCPDBAuuII6YV7H09qcfrQ7TkJV3
+        ShZ+OC17RNuDYpHam+P0DZCUBnvvY/L5IuGNDW4=
+X-Google-Smtp-Source: ABdhPJxFswrX5ZhULOVqkkTeNUddZz5GKFlBSh38FlNOFO45DNJA/a61t3Ziez+i+J+9QUNCxhaseXwszlPu87Vxsso=
+X-Received: by 2002:a17:902:e8d7:b0:149:3b5d:2b8b with SMTP id
+ v23-20020a170902e8d700b001493b5d2b8bmr1173473plg.162.1645073737215; Wed, 16
+ Feb 2022 20:55:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b04fabea-6216-3808-44e8-0a2125bf0230@nvidia.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217002843.2312603-1-keescook@chromium.org>
+In-Reply-To: <20220217002843.2312603-1-keescook@chromium.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 17 Feb 2022 13:54:58 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
+Message-ID: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
+Subject: Re: [PATCH] um: Allow builds with Clang
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 07:25:14PM -0800, John Hubbard wrote:
-> On 2/16/22 1:48 AM, Peter Xu wrote:
-> > Clean the code up by merging the device private/exclusive swap entry handling
-> > with the rest, then we merge the pte clear operation too.
-> 
-> Maybe also mention that you reduced the code duplication in the 
-> is_device_private_entry() area, by letting it fall through to the common
-> pte_clear_not_present_full() at the end of the loop? Since you're listing
-> the other changes, that one seems worth mentioning.
+On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Add x86-64 target for Clang+um and update user-offsets.c to use
+> Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
+> ("kbuild: fix asm-offset generation to work with clang").
+>
+> This lets me run KUnit tests with Clang:
+>
+> $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> ...
+> $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> ...
+>
+> Cc: Jeff Dike <jdike@addtoit.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/x86/um/user-offsets.c | 4 ++--
+>  scripts/Makefile.clang     | 1 +
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> index bae61554abcc..d9071827b515 100644
+> --- a/arch/x86/um/user-offsets.c
+> +++ b/arch/x86/um/user-offsets.c
+> @@ -10,10 +10,10 @@
+>  #include <asm/types.h>
+>
+>  #define DEFINE(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+>
+>  #define DEFINE_LONGS(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+>
+>  void foo(void)
+>  {
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 51fc23e2e9e5..857b23de51c6 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+>  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
 
-Isn't that the "we merge the pte clear operation" part? :)
 
-I can add another sentence to it, if it looks better to you:
+Does this work for the i386 host?
 
----8<---
-Clean the code up by merging the device private/exclusive swap entry
-handling with the rest, then we merge the pte clear operation too.  We do
-it by letting the private/exclusive block fall through to the last call to
-pte_clear_not_present_full().
----8<---
+UML supports i386 and x86_64 as the host architecture as of now,
+but this always compiles UML for x86_64?
 
-Thanks for the review,
+
+
+
+
+
+
+>  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>
+>  ifeq ($(CROSS_COMPILE),)
+> --
+> 2.30.2
+>
+
 
 -- 
-Peter Xu
-
+Best Regards
+Masahiro Yamada

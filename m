@@ -2,302 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE60C4B9BDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D74F4B9BE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238515AbiBQJRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 04:17:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43144 "EHLO
+        id S238555AbiBQJVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 04:21:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiBQJRR (ORCPT
+        with ESMTP id S238531AbiBQJVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:17:17 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594B71954ED;
-        Thu, 17 Feb 2022 01:17:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645089421; x=1676625421;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=oUrBOOhUtVa5tBC0AGFI7A9amW5osL3J4YgUSZTAuO0=;
-  b=rJOiQeqRq8DdNPymW5K5LOiv4pe4GoHRTmq0qQxheMh60jE91bur9PHY
-   MPYLn8l/R4BztVukimpGtILEx91U3BHlumhuxN/W9JBIHEoQjsFLWdghk
-   LgoPJ/B0pZiOeauU5zC0Rn5LJIrv6fwrk2Lmb9UxuW+FGoPPICO37qOyA
-   Q=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 17 Feb 2022 01:17:00 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 01:17:00 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 17 Feb 2022 01:16:59 -0800
-Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 17 Feb
- 2022 01:16:41 -0800
-Message-ID: <ab88b2b2-e44b-e783-3372-d23f56ce24e9@quicinc.com>
-Date:   Thu, 17 Feb 2022 17:16:23 +0800
+        Thu, 17 Feb 2022 04:21:33 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AEF27DF30
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 01:21:19 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C201340333
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645089677;
+        bh=iGUMpZLTiOK0bpy2WJNAycUkijWoscQeYWckgRO2kR4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+         In-Reply-To:Content-Type;
+        b=o2u2y3Xs0yA65LfBb785cCqW8zzomnKX4ItGUOOsSuaBhD4qBuaWIGKTvCGzLw6Ns
+         rWjVLo3DzUmkN/vvf6uL2JxjZrGW6sqAqcJCuWPODxhxjK9b4/SXWuDmIkVj6wd/uO
+         ub4XpLidJT8ZcTuN+K+6hNae5eMzVgrr+VNJ52EinqNt2KKC2Bx2pG6NQcLG434zdF
+         xlpNlPMM2TG3TSm/SEGhzKSzZzkkSQ7hZJw3yKMl2tMNYqftNROBPMYeIZP+Q7jJah
+         GPWfn6Ji+obE29/S7GSETtU6vbJWQJJjtMFoKn5/V+Xy4RPHY9WUn+2myHO71l25mV
+         QvHqHeFov3nqw==
+Received: by mail-ed1-f71.google.com with SMTP id d11-20020a50c88b000000b00410ba7a14acso3167291edh.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 01:21:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iGUMpZLTiOK0bpy2WJNAycUkijWoscQeYWckgRO2kR4=;
+        b=0Qt3WhAWgVy64LJfuxHmenCcUlzr5BWhSL+NU22N2PV/WLXSlLbfAOgZAuNL0fdrXs
+         SPzJZFdHJom7znRNqN8GwLK02G3HRIGKTVjrwZaoS5JRPEzqX/ZOH/lBnmsbaTOgmlFI
+         FDrLNgXbLW1eqoek1Ug6fzW2It798N9StEiqke0yaN7+8wvud5t/NVMzOjmkdukVY9W+
+         +OEVjXfuI/CrV67Ja8DXUoYFk+wH5UTx8TFbmXsUpwbIGToDKkhNU37LrXn8Kk0XpqzJ
+         WRdKGXkRPEB5XStaVQgVLMUykVv1/nTgDwCGnMSu1+rjRBWaE0LXVJsGjzryjSWyOkS/
+         KnYw==
+X-Gm-Message-State: AOAM530xiypvyza7SrUvuQrGfXXEKNjZa6Yi2H3kFgzlf7E7Yhwz9PtN
+        a2QvpvF29rotvhywzNxWk4ZedGs9XERY8rz3jujxd5BSMreYsSb1924jXVTKP8TdKZK7g/oc0jV
+        +jfRdKjTfRudaYTdZ14KD++zL2VKlWSEW7T3f0dCALg==
+X-Received: by 2002:a17:906:6d09:b0:6b9:2e0e:5bdd with SMTP id m9-20020a1709066d0900b006b92e0e5bddmr1550155ejr.246.1645089677440;
+        Thu, 17 Feb 2022 01:21:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwrSkSRiW1n+S2aXKQGX6pReGWI5bN2uBCxC4z+CWEqBvQjNv71P/WiSARBLKend/Tl14hoJg==
+X-Received: by 2002:a17:906:6d09:b0:6b9:2e0e:5bdd with SMTP id m9-20020a1709066d0900b006b92e0e5bddmr1550138ejr.246.1645089677191;
+        Thu, 17 Feb 2022 01:21:17 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id h11sm956107ejg.109.2022.02.17.01.21.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 01:21:16 -0800 (PST)
+Message-ID: <36445c86-036e-0942-a9a4-919595886c67@canonical.com>
+Date:   Thu, 17 Feb 2022 10:21:15 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 00/10] Coresight: Add support for TPDM and TPDA
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH 1/6] dt-bindings: display: imx: Add EPDC
 Content-Language: en-US
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-To:     Mike Leach <mike.leach@linaro.org>
-CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20220209105706.18852-1-quic_jinlmao@quicinc.com>
- <CAJ9a7VhZtNrj9S4T=dNDOWT9fEcnm1qqtp+4h3EqytidDwEd5Q@mail.gmail.com>
- <0c87c995-142c-9c8f-5a9a-02e3a1119cce@quicinc.com>
-In-Reply-To: <0c87c995-142c-9c8f-5a9a-02e3a1119cce@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Andreas Kemnade <andreas@kemnade.info>, p.zabel@pengutronix.de,
+        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, alistair@alistair23.me,
+        samuel@sholland.org, josua.mayer@jm0.eu,
+        letux-kernel@openphoenux.org
+References: <20220206080016.796556-1-andreas@kemnade.info>
+ <20220206080016.796556-2-andreas@kemnade.info>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220206080016.796556-2-andreas@kemnade.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/2022 12:17 PM, Jinlong Mao wrote:
->
-> On 2/10/2022 6:30 PM, Mike Leach wrote:
->> Hello  Mao,
->>
->> I have looked through this set and have a few general questions.
->>
->> My understanding based on the information in the code is that the TPDM
->> devices will always send data to the TPDA device, the TPDM is not
->> capable of directly driving the ATB itself?
->> The TPDA device  will then packetize the inputs and output these to
->> the ATB over the normal CoreSight architecture to a standard ETR / ETF
->> for collection.
->>
->> Looking at the TPDM driver - it is assigned a trace ID but never
->> actually uses it in the hardware. My assumption here is that this is
->> used purely to satisfy the requirement that the CoreSight core has
->> that all sources have a unique trace id?
->>
->> For the TPDA driver you assign an ATID as an attribute in device tree,
->> and then program this into the devices control register.
->>
->> The trace IDs in ETM / ETE / STM, are programmed into the hardware and
->> these values drive the ATID value on the trace bus. So assigning an
->> ATID value to the TPDA driver through device tree will lead to clashes
->> with the assignment of trace IDs in the other driver software.
->>
->> The topology here appears to me that you have multiple  "data source"
->> devices TPDM, supplying a TPDA - which is the real CoreSight "trace
->> source" from the viewpoint of the trace bus and CoreSight
->> infrastructure.
->> To get this to work in the current CoreSight driver stack, you have
->> assigned the TPDM as a source type, and the TPDA as a link to ensure
->> that when a TPDM is started, all the components on the path to the
->> sink are activated.
->> This is fine.
->>
->> If my assumptions above are all accurate I suggest the following 
->> improvements
->>
->> For TPDA drop the device tree assignment of ATID and instead use the
->> coresight_get_system_trace_id() function you introduce in the 2nd
->> patch in this set.
->>
->> For TPDM you have assigned a unique source sub-type
->> CORESIGHT_DEV_SUBTYPE_SOURCE_SYS.- this could become
->> CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY. If the trace ID assigned to
->> this device is only to satisfy the unique ID requirement and is not
->> used elsewhere, then the sub type could become
->> CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY. We can agree that this sub
->> type does not need a unique ID and acts as none ATB a source for
->> another component, The core code can be altered to drop the
->> requirement for this sub-type and trace ID can be dropped for this
->> component.
->>
->> You should be aware that we are in the process of re-designed how
->> trace IDs are allocated. The current mechanism does not scale for
->> large multi-core systems (currently broken for any system > 46 cores),
->> and as you have discovered there is a need for additional allocation
->> of IDs. Also the ETE / TRBE combination does not need a trace ID.  A
->> dynamic allocation system is being proposed.
->>
->> Regards
->>
->> Mike
->
->
-> Hi  Mike,
->
-> Your assumptions above are all correct.
-> TPDMs connect to the same TPDA will share the atid of the TPDA.
-> We have a PC tool to parse the TPDM trace data. It needs the fixed 
-> atid for each TPDA to identify the data.
-> So we configure the atid for TPDA in device tree with fixed ids.
-> I will discuss with internal tool team to see if TPDA's id can become 
-> dynamic when parse the data.
->
-> Apart from the TPDA's atid, we also have some other sources with fixed 
-> id in HW on our internal device.
-> Do you have any suggestion to how to allocate the IDs for the source 
-> with fixed id in HW ?
->
-> Thanks
-> Jinlong Mao
->
-Hi Mike & Mathieu & Suzuki,
+On 06/02/2022 09:00, Andreas Kemnade wrote:
+> Add a binding for the Electrophoretic Display Controller found at least
+> in the i.MX6.
+> The timing subnode is directly here to avoid having display parameters
+> spread all over the plate.
+> 
+> Supplies are organized the same way as in the fbdev driver in the
+> NXP/Freescale kernel forks. The regulators used for that purpose,
+> like the TPS65185, the SY7636A and MAX17135 have typically a single bit to
+> start a bunch of regulators of higher or negative voltage with a
+> well-defined timing. VCOM can be handled separately, but can also be
+> incorporated into that single bit.
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>  .../bindings/display/imx/fsl,mxc-epdc.yaml    | 159 ++++++++++++++++++
+>  1 file changed, 159 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml b/Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml
+> new file mode 100644
+> index 000000000000..7e0795cc3f70
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml
+> @@ -0,0 +1,159 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/imx/fsl,mxc-epdc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale i.MX6 EPDC
+> +
+> +maintainers:
+> +  - Andreas Kemnade <andreas@kemnade.info>
+> +
+> +description: |
+> +  The EPDC is a controller for handling electronic paper displays found in
+> +  i.MX6 SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,imx6sl-epdc
+> +      - fsl,imx6sll-epdc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Bus clock
+> +      - description: Pixel clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: axi
+> +      - const: pix
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  vscan-holdoff:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+
+Except what Rob already said, all these are not arrays, so maxItems is
+not appropriate. You can define minimum/maximum values instead.
+
+> +
+> +  sdoed-width:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  sdoed-delay:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  sdoez-width:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  sdoez-delay:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  gdclk-hp-offs:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  gdsp-offs:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  gdoe-offs:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  gdclk-offs:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  num-ce:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +  timing:
+> +    $ref: /display/panel/panel-timing.yaml#
+> +
+> +  DISPLAY-supply:
+> +    description:
+> +      A couple of +/- voltages automatically powered on in a defintive order
+
+Typo, definitive?
+
+> +
+> +  VCOM-supply:
+> +    description: compensation voltage
+> +
+> +  V3P3-supply:
+
+All of supplies names - lowercase.
+
+> +    description: V3P3 supply
+> +
+> +  epd-thermal-zone:
+> +    description:
+> +      Zone to get temperature of the EPD from, practically ambient temperature.
+
+Is it a phandle?
+
+> +
+> +
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - vscan-holdoff
+> +  - sdoed-width
+> +  - sdoed-delay
+> +  - sdoez-width
+> +  - sdoez-delay
+> +  - gdclk-hp-offs
+> +  - gdsp-offs
+> +  - gdoe-offs
+> +  - gdclk-offs
+> +  - num-ce
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx6sl-clock.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    epdc: epdc@20f4000 {
+
+Generic node name, e.g. display-controller
+
+> +        compatible = "fsl,imx6sl-epdc";
+> +        reg = <0x020f4000 0x4000>;
+> +        interrupts = <0 97 IRQ_TYPE_LEVEL_HIGH>;
+
+s/0/GIC_SPI/
+
+> +        clocks = <&clks IMX6SL_CLK_EPDC_AXI>, <&clks IMX6SL_CLK_EPDC_PIX>;
+> +        clock-names = "axi", "pix";
+> +
 
 
-Could you please help to review the other patches while we are 
-discussing with internal tool team about the trace_id change ?
-
-
-Thanks
-
-Jinlong Mao
-
-
->
->>
->>
->> On Wed, 9 Feb 2022 at 10:57, Mao Jinlong <quic_jinlmao@quicinc.com> 
->> wrote:
->>> This series adds support for the trace performance monitoring and
->>> diagnostics hardware (TPDM and TPDA). It is composed of two major
->>> elements.
->>> a) Changes for original coresight framework to support for TPDM and 
->>> TPDA.
->>> b) Add driver code for TPDM and TPDA.
->>>
->>> Introduction of changes for original coresight framework
->>> Support TPDM as new coresight source.
->>> Since only STM and ETM are supported as coresight source originally.
->>> TPDM is a newly added coresight source. We need to change
->>> the original way of saving coresight path to support more types source
->>> for coresight driver.
->>> The following patch is to add support more coresight sources.
->>>      Use IDR to maintain all the enabled sources' paths.
->>>      coresight: Use bitmap to assign trace id to the sources
->>>
->>> Introduction of TPDM and TPDA
->>> TPDM - The trace performance monitoring and diagnostics monitor or 
->>> TPDM in
->>> short serves as data collection component for various dataset types
->>> specified in the QPMDA(Qualcomm performance monitoring and diagnostics
->>> architecture) spec. The primary use case of the TPDM is to collect data
->>> from different data sources and send it to a TPDA for packetization,
->>> timestamping and funneling.
->>>      Coresight: Add coresight TPDM source driver
->>>      dt-bindings: arm: Adds CoreSight TPDM hardware definitions
->>>      coresight-tpdm: Add DSB dataset support
->>>      coresight-tpdm: Add integration test support
->>>      docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
->>>
->>> TPDA - The trace performance monitoring and diagnostics aggregator or
->>> TPDA in short serves as an arbitration and packetization engine for the
->>> performance monitoring and diagnostics network as specified in the 
->>> QPMDA
->>> (Qualcomm performance monitoring and diagnostics architecture)
->>> specification. The primary use case of the TPDA is to provide
->>> packetization, funneling and timestamping of Monitor data as specified
->>> in the QPMDA specification.
->>> The following patch is to add driver for TPDA.
->>>      Coresight: Add TPDA link driver
->>>      dt-bindings: arm: Adds CoreSight TPDA hardware definitions
->>>
->>> The last patch of this series is a device tree modification, which add
->>> the TPDM and TPDA configuration to device tree for validating.
->>>      ARM: dts: msm: Add coresight components for SM8250
->>>
->>> Once this series patches are applied properly, the tpdm and tpda nodes
->>> should be observed at the coresight path /sys/bus/coresight/devices
->>> e.g.
->>> /sys/bus/coresight/devices # ls -l | grep tpd
->>> tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
->>> tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
->>>
->>> We can use the commands are similar to the below to validate TPDMs.
->>> Enable coresight sink first.
->>>
->>> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
->>> echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
->>> echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
->>> echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
->>> The test data will be collected in the coresight sink which is enabled.
->>> If rwp register of the sink is keeping updating when do
->>> integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
->>> generated from TPDM to sink.
->>>
->>> Changes from V2:
->>> 1. Use bitmap to assign the trace id. (Mathieu Poirier)
->>>
->>> Mao Jinlong (10):
->>>    Use IDR to maintain all the enabled sources' paths.
->>>    coresight: Use bitmap to assign trace id to the sources
->>>    Coresight: Add coresight TPDM source driver
->>>    dt-bindings: arm: Adds CoreSight TPDM hardware definitions
->>>    coresight-tpdm: Add DSB dataset support
->>>    coresight-tpdm: Add integration test support
->>>    docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
->>>    Coresight: Add TPDA link driver
->>>    dt-bindings: arm: Adds CoreSight TPDA hardware definitions
->>>    ARM: dts: msm: Add coresight components for SM8250
->>>
->>>   .../testing/sysfs-bus-coresight-devices-tpdm  |   6 +
->>>   .../bindings/arm/coresight-tpda.yaml          | 129 ++++
->>>   .../bindings/arm/coresight-tpdm.yaml          |  81 ++
->>>   .../devicetree/bindings/arm/coresight.txt     |   7 +
->>>   MAINTAINERS                                   |   1 +
->>>   .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 690 
->>> ++++++++++++++++++
->>>   arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +
->>>   drivers/hwtracing/coresight/Kconfig           |  33 +
->>>   drivers/hwtracing/coresight/Makefile          |   2 +
->>>   drivers/hwtracing/coresight/coresight-core.c  | 127 ++--
->>>   drivers/hwtracing/coresight/coresight-tpda.c  | 193 +++++
->>>   drivers/hwtracing/coresight/coresight-tpda.h  |  32 +
->>>   drivers/hwtracing/coresight/coresight-tpdm.c  | 270 +++++++
->>>   drivers/hwtracing/coresight/coresight-tpdm.h  |  57 ++
->>>   include/linux/coresight-pmu.h                 |  11 +
->>>   include/linux/coresight.h                     |   1 +
->>>   16 files changed, 1592 insertions(+), 50 deletions(-)
->>>   create mode 100644 
->>> Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/arm/coresight-tpda.yaml
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
->>>   create mode 100644 arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
->>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
->>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
->>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
->>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
->>>
->>> -- 
->>> 2.17.1
->>>
->>
->> -- 
->> Mike Leach
->> Principal Engineer, ARM Ltd.
->> Manchester Design Centre. UK
+Best regards,
+Krzysztof

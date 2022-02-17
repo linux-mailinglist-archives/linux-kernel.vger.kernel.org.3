@@ -2,214 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7EE4BA53C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE934BA53F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242673AbiBQP6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:58:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36688 "EHLO
+        id S242815AbiBQP6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:58:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiBQP6A (ORCPT
+        with ESMTP id S242690AbiBQP6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:58:00 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2051.outbound.protection.outlook.com [40.107.93.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC3E16202B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:57:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JJjgNfkusBhobFpKtgpP7ezlH5gcC3sDWgjsVl5NvaUJYTfQeSHOEGEg6iiycHmPqoTiexWCuVuiU6HPmqiLlh9l8K4gnelIIJFcncswyKzunz7bD1H4ERo3bLqTpquHZ6+cbiwi0WdUQfXBdkAsqVJ6j3XvNa60U6+TLAh/bUSiM8k7/zxN/VPoSt8NqXL4KO1Z1LV+JCGJWZhTCB3eA8SyRF710dqOkvhrxQx7TjLMMqHde43m2C8CfeoWeEbfalU70EgCMCxwy+f4PLj8P97U7OtqyTEpam0DfJmp2bPtG2o/soN0vFgC3/M6OXWg5GFQpIhNwnOWWmG4RFmovQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q+i6bECYWWQjty61Gx1DCW2U19UxTafa6Jkq7rfmavE=;
- b=Bo2HSecTTUBrWihBxuwdfa8PMZFFDzxqU6p0DJVTfu77iFChLD00l9Ndm9XY94XPXV38lIf7N+bQ7MMJ4akz78G+vdCG4LFrjcxuTuHFPaxis6yO78m1Z1YRJ7bbY8yoy2pOMBUbBmHQD5NM+mewknUtdNWQi97Xz5xFmf3esTVW/2i+Bj67yIy0Lp6UBPl2U50weNpm7rwTKLmvRpzHtOxGJ0FkJomy+k0oTxUWpKeVThP0L0HdRrLEOsBA+/kYPS0F6HRwnUx9vOBa/y9fofALKaSkBQSY1vQ28331HzOVWEzNZVfz8EYdI0Cry6hiQ48VfpRLQKq660APZiy90w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q+i6bECYWWQjty61Gx1DCW2U19UxTafa6Jkq7rfmavE=;
- b=M8gqBp8tJakP4Yb+tcywl8G2tZCyh3YoCVH2M7lVuxGoloDA3+bE4OKhkwNbXorcr4Ps/YlY1VYZANLKfpHWMnuvU71Pre4nxMGzItO1ZisxrjFJep2y0jVRfdLbIPAmOEJ6SJCH2U2/UBQxVXnw+x3SbRlZpWbq5cFX3TeK9Pg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- MN2PR12MB4143.namprd12.prod.outlook.com (2603:10b6:208:1d0::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Thu, 17 Feb
- 2022 15:57:34 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::7587:626e:3703:9db8]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::7587:626e:3703:9db8%6]) with mapi id 15.20.4995.016; Thu, 17 Feb 2022
- 15:57:34 +0000
-Message-ID: <51018469-3bab-e56d-7407-b16170b5d74c@amd.com>
-Date:   Thu, 17 Feb 2022 10:57:28 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] drm/amdgpu: fix amdgpu_ras_block_late_init error handler
-Content-Language: en-CA
-To:     trix@redhat.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
-        Hawking.Zhang@amd.com, john.clements@amd.com, tao.zhou1@amd.com,
-        YiPeng.Chai@amd.com, Stanley.Yang@amd.com, Dennis.Li@amd.com,
-        mukul.joshi@amd.com, nirmoy.das@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220217153842.3252424-1-trix@redhat.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-In-Reply-To: <20220217153842.3252424-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT1PR01CA0106.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2c::15) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Thu, 17 Feb 2022 10:58:18 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6772165C33;
+        Thu, 17 Feb 2022 07:58:02 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HFBiWr023294;
+        Thu, 17 Feb 2022 15:57:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=a5/7ZJgfDgRTzPXVszZ9i+2QWdGJyJCI02Tv650OlsU=;
+ b=Hps5UrmIXZfgper5e3WTcBi45vF6Ds7/0AQ8zfp+1fu/QdlrWs62v6pGnC0X0v1n4fqz
+ rm3SitBOWgQzuEJ914v7eXIAmJb4GL7FTAzEExmvEF9ez1X+8n2J2mUbANHcXLo/hXrX
+ VRtGte1snyHPiqTKu1xill77zUKwE0bKv7LE6z6At7X+LtOW4uHeWS9NrkbS0LZVT/hH
+ PC1NSnGZYoWCtzFqT4zwmUQXKFWI8GuwTZysGA816nkNe6JgsFKpOiJ2PHnbJnxgHAYF
+ cWB5RU3/FTQcInmdCL1ADkOpmDAdPOhk8355rfkpxBapplB3zkimOeEHRVJlGwrd8kKt Eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e9rsqh53j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 15:57:56 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21HFstKx031899;
+        Thu, 17 Feb 2022 15:57:56 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e9rsqh51n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 15:57:55 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21HFrXnd029067;
+        Thu, 17 Feb 2022 15:57:53 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645kc3ny-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Feb 2022 15:57:53 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21HFvp8R45744414
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Feb 2022 15:57:51 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 07D3B42041;
+        Thu, 17 Feb 2022 15:57:51 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E25C4204B;
+        Thu, 17 Feb 2022 15:57:50 +0000 (GMT)
+Received: from localhost (unknown [9.43.3.130])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Feb 2022 15:57:50 +0000 (GMT)
+Date:   Thu, 17 Feb 2022 21:27:49 +0530
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+To:     harshad shirwadkar <harshadshirwadkar@gmail.com>
+Cc:     Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC 1/1] ext4: Improve fast_commit performance and scalability
+Message-ID: <20220217155749.fyknvedbhmfqbir2@riteshh-domain>
+References: <cover.1644809996.git.riteshh@linux.ibm.com>
+ <a2dcc8dbedfd221b90ff02cdb0dfb3c6a7ef2ae9.1644809996.git.riteshh@linux.ibm.com>
+ <CAD+ocbzzUXJ7qk7Yx2NGuXVKOAKv0yyxo+95o5+6krcAsGmOpA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cd575a32-4c9c-4d36-9d5e-08d9f22e363d
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4143:EE_
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4143517FAF62DD654FABC16399369@MN2PR12MB4143.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JhGP4cxzDQqImneR3dDbpcuNtLraoYiFx1kmEOUFTLO4qh+tJ1n9D9tFdaeHHWMEVcBTOJKj8W5cO39TQ34jo4r92sSYEtuP2XKdkc+1qVh+GBEfsSkfhw3pj2i2n33XpxEsTqOgVd7PS3jFmDPu/Cj9a+LfH7sO7V9iq/Zvp/vvSwrw47ok6NcH9OAoABAsaPBpouD4FrpRHtiE80wcI27yTt063HSkpsVZ9bFfYYo9X+ednANmTH5qpMYFK6xCgP6Jb2Fc4xVQdBSd0Hs9mkEa+XXOWsd8bRJWuOo6Aas98aCa+7aWlHrthQcJNsf+Hu+wr4VnCxjepaFVQNB2VODzbEzuZy8Zn5AeEDcdYJrmlM+8MXdTLSa8birOK29Op3BNwTgD0muMZIjxZM78Y+zNr5e6a09p04Ov4qVZXYpce6VEotoipeUA7jo4D+myId0jvTDZe7UN1Ex3M9sA5MyZcWArq0yC5lc4DQk2iyfl/JKcSmNGjo/q+kqkrlCGGqXwoJT9A2MWWn/BHBBcjeV722b6eqAVibQQFgCwKrsL4ss1eehHPgBNsp//rDW1wO/qpvbjT6lvnzRqa+qwc2B66zNKOCZ46HLlBFmRnqi4ZE4TGNf6QrxsMYov31jsyQp+0pGyAGuYn9IUbbKGafw86yFqyEWJ70YldqGyIbzPo4wIcuwBSOqrnwiiKr/2sRJ5KCX1rE3Ee71ONXgp7PWuDwGlTJicUjpyZ8/PRbpWvM94IhGdwhdAvJCReItO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(53546011)(26005)(2616005)(38100700002)(6506007)(6512007)(6666004)(186003)(4326008)(8676002)(66556008)(66476007)(2906002)(66946007)(5660300002)(8936002)(44832011)(921005)(31686004)(86362001)(31696002)(6486002)(316002)(6636002)(36756003)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXc2aXMzK0xMVmhhMDY3YmE0OFhMajhrVUtYeTlseVBxZ2xXZUtmalJwN09D?=
- =?utf-8?B?bXpiK0NZWUtBVHkzbVNVa1RqaEc1K1NObmg2YzB1MmVRVHg4RFdzY0lvcVRU?=
- =?utf-8?B?dVJZcjMrZXBXc1pHN05IWmt1TkNnZ0JndkhDbWdNRzh0ZXFybVpiT3hMQndP?=
- =?utf-8?B?aVlrOVhZd0pJa05oZmJlZDNLZjd4K2EvaUU5TDkyQTd3UWdrZVMyc09uTkVM?=
- =?utf-8?B?d2VveEZTM01aQWNHbVdpY2ttNTVZekQ2K28yL3c1bzhOZ1dwc1RaNFlyNzhw?=
- =?utf-8?B?WHpCTHhiMnVLdENCVS9Nc3lUS0NhdUxNUjhQNHV6TmpVUHNvdXFIeU9INmt0?=
- =?utf-8?B?QWJSc2huQnpycmx3eUJRbUtyMVZJbldvOEFVZnF4WW9ON1kyaWRlSUhQdEdJ?=
- =?utf-8?B?Y1UrMUswRXBlWVZCS0dtVmw1bzJXS3p6bEVDSDRrVmxxdjRCdmdUV1F4WGx6?=
- =?utf-8?B?b2ErL29DRzdidVF5dEhXQUxPVWFkODZOczFpOGx2bHZkZHJFd0tmeVZpZVNu?=
- =?utf-8?B?cE13aGJSOWx4Y0ZXam1CNmI3cEk2QXF0cHoveHJHZkdzMDNQU0lFNnN2NEJo?=
- =?utf-8?B?T2xSS0xDL2U0RCt2NjlJbTJ6TVhBc0p1L1psZlZQU2h0amhyRU1EdE0xUWkx?=
- =?utf-8?B?ZENEYTlPSzU1TThwQVkzQjlGQm1iekVlTDRJQTYwNEwzZnNzS0RZbGp6WkM5?=
- =?utf-8?B?NU9UalJ4Z3hJQWtuUXJtdVFJd1NKdXpZa24vQnR4aXNtMUgzTFhFbXljWGdL?=
- =?utf-8?B?ODgrMk5HWUtBSU4vNEEzN1VaSjRxU1VsY2NmUHhDZTVDRy9VNDdWbytpamxM?=
- =?utf-8?B?TWMvL2hHSzExYVc3YitLenBPTXF1YzJFQ21GbmdNMGVPaStUMENGMTNnUllM?=
- =?utf-8?B?U29nOFp6UmZmWXcrcWsrMzZYYy8xNVBIanJqSmZWeU84clNtQTI2T2x1MG5l?=
- =?utf-8?B?SVQyUW9UYklBZlVTZzBHTHc0RDRmZUdPZGh2UzlLTml4dWx6RGpncWdPZWFp?=
- =?utf-8?B?S2c4SFpzaFFWaUVGR1FHMkpGTktjWmUzTjlXZWR1MFlqTndTZUphY3VwVWM3?=
- =?utf-8?B?MkNEZjNYc09xNnhudGkxamhvRXpodEpKbUVYaCtmdTFHL3lXcFRDakpDZlRo?=
- =?utf-8?B?cTY3Nk11Qm9kQU42eGczK3RNd2xmNHNkajUyVi9WQTZocVlDeng0NVhQWXE0?=
- =?utf-8?B?a011WWlkaGFjNktDLzBFeDZmT01nb1FwTmhVT1duUkJud1pTcUdzMzM2N2pC?=
- =?utf-8?B?NWxsYTQ5UlQ0R2drVGtDNlNyakhyNkQ1TVkwWXZqdmxoWVNHdURBVGJmSUtk?=
- =?utf-8?B?RVlYOXIrRUdsUmM5RXdSRi9FOXBVRWtsYTRsWmdPSDNUUW8vbkdMTGlEWEx2?=
- =?utf-8?B?WlR1N2tHaVl2YnIrRDErT3JWQThEYm1wcEQxNFN5dVFOSnk2cjdzK09OZ1Jo?=
- =?utf-8?B?UEdpWjVtMnRBVGJkMlZZOGZSajJsVzc2VjFYbzFTTTZORXRzK2gzb29WZ2Va?=
- =?utf-8?B?NXZsTk5EVzdUMFdzVmxHaS8vN3BwM0YzNnIvdGp4NVo0eFc3T0R6dUowZ2hG?=
- =?utf-8?B?ckk0eGpJZmdkck05aWcrV09NNUpOamR6RWttMzIyZnF5WEswbE12NHJKYWRL?=
- =?utf-8?B?N0IzaG1ueGdvYkpxelpkZTYzWSthU2czN3pQRXBnWkJBbWFLQUJsdU1nSFpo?=
- =?utf-8?B?ZnB4UFc0ajJic1VWOFZUNnF2ZnV6YlFpKzZ1MDlUMTN4dWQxMmV3Vm95d29t?=
- =?utf-8?B?cHUxdHB0NGxuZ200dnNid1ZBdU0yZ3VQTy8wdldBUTNSZHdBS1VwL1RDdGk2?=
- =?utf-8?B?ZTduckxFT3M0aXRtMDdVd2NJV1V3OTNyWVltVjJqK0RhNWxNTWNSSk5vWE5L?=
- =?utf-8?B?K1lwU0tMQ3RwenBVR0p4eEFFQWEyVWpoSXE5V1RDNmlZMnQ0bk1KNkVwU2Qr?=
- =?utf-8?B?S3FLbElQUU43VzltUFF0SGtGbFBHNDVMNG5NL3E4aUN1VGdQQkFNQkZoN0sx?=
- =?utf-8?B?REZuZEN2dlFBM2w0aFNHcy9DWmR6RTFWemt0OWZvRFNRZjRhYzhNc3U5THRF?=
- =?utf-8?B?Q0lEeTQ1ajNyWnRlT1NNY0NycUw3cGxXcVhKcDFGamNYUU9nQlgrZGtieUJR?=
- =?utf-8?Q?/EBI=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd575a32-4c9c-4d36-9d5e-08d9f22e363d
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 15:57:34.4560
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CiHVWl3PS1NsXqqsX4Cpd8QsQVG0CGQr6OvDMo1Rqm9gjoYGTmzQEcGazLcYAg+s
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4143
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD+ocbzzUXJ7qk7Yx2NGuXVKOAKv0yyxo+95o5+6krcAsGmOpA@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8FonwDPcH6T3ZDo89Lf-uWyhuuBsQMrc
+X-Proofpoint-GUID: VLacuyhthjhmmZ0XBlLEWwJtjxbNhjS9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-17_06,2022-02-17_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ priorityscore=1501 mlxlogscore=999 malwarescore=0 bulkscore=0
+ clxscore=1015 impostorscore=0 phishscore=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202170069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for catching this.
+On 22/02/16 03:25PM, harshad shirwadkar wrote:
+> Thanks for the patch Ritesh. Some questions / comments inlined:
 
-Reviewed-by: Luben Tuikov <luben.tuikov@amd.com>
+Thanks a lot for reviewing this :)
 
-Regards,
-Luben
+>
+> On Sun, 13 Feb 2022 at 19:57, Ritesh Harjani <riteshh@linux.ibm.com> wrote:
+> >
+> > Currently ext4_fc_commit_dentry_updates() is of quadratic time
+> > complexity, which is causing performance bottlenecks with high
+> > threads/file/dir count with fs_mark.
+> >
+> > This patch makes commit dentry updates (and hence ext4_fc_commit()) path
+> > to linear time complexity. Hence improves the performance of workloads
+> > which does fsync on multiple threads/open files one-by-one.
+> >
+> > Absolute numbers in avg file creates per sec (from fs_mark in 1K order)
+> > =======================================================================
+> > no.     Order   without-patch(K)   with-patch(K)   Diff(%)
+> > 1       1        16.90              17.51           +3.60
+> > 2       2,2      32.08              31.80           -0.87
+> > 3       3,3      53.97              55.01           +1.92
+> > 4       4,4      78.94              76.90           -2.58
+> > 5       5,5      95.82              95.37           -0.46
+> > 6       6,6      87.92              103.38          +17.58
+> > 7       6,10      0.73              126.13          +17178.08
+> > 8       6,14      2.33              143.19          +6045.49
+> >
+> > workload type
+> > ==============
+> > For e.g. 7th row order of 6,10 (2^6 == 64 && 2^10 == 1024)
+> > echo /run/riteshh/mnt/{1..64} |sed -E 's/[[:space:]]+/ -d /g' \
+> >   | xargs -I {} bash -c "sudo fs_mark -L 100 -D 1024 -n 1024 -s0 -S5 -d {}"
+> >
+> > Perf profile
+> > (w/o patches)
+> > =============================
+> > 87.15%  [kernel]  [k] ext4_fc_commit           --> Heavy contention/bottleneck
+> >  1.98%  [kernel]  [k] perf_event_interrupt
+> >  0.96%  [kernel]  [k] power_pmu_enable
+> >  0.91%  [kernel]  [k] update_sd_lb_stats.constprop.0
+> >  0.67%  [kernel]  [k] ktime_get
+> >
+> > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> > ---
+> >  fs/ext4/ext4.h        |  2 ++
+> >  fs/ext4/fast_commit.c | 64 +++++++++++++++++++++++++++++++------------
+> >  fs/ext4/fast_commit.h |  1 +
+> >  3 files changed, 50 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> > index bcd3b9bf8069..25242648d8c9 100644
+> > --- a/fs/ext4/ext4.h
+> > +++ b/fs/ext4/ext4.h
+> > @@ -1046,6 +1046,8 @@ struct ext4_inode_info {
+> >
+> >         /* Fast commit related info */
+> >
+> > +       /* For tracking dentry create updates */
+> > +       struct list_head i_fc_dilist;
+> The only case in which this list will have multiple entries if hard
+> links are created on this inode right? I think that's probably a very
 
-On 2022-02-17 10:38, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Clang build fails with
-> amdgpu_ras.c:2416:7: error: variable 'ras_obj' is used uninitialized
->   whenever 'if' condition is true
->   if (adev->in_suspend || amdgpu_in_reset(adev)) {
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> amdgpu_ras.c:2453:6: note: uninitialized use occurs here
->  if (ras_obj->ras_cb)
->      ^~~~~~~
-> 
-> There is a logic error in the error handler's labels.
-> ex/ The sysfs: is the last goto label in the normal code but
-> is the middle of error handler.  Rework the error handler.
-> 
-> cleanup: is the first error, so it's handler should be last.
-> 
-> interrupt: is the second error, it's handler is next.  interrupt:
-> handles the failure of amdgpu_ras_interrupt_add_hander() by
-> calling amdgpu_ras_interrupt_remove_handler().  This is wrong,
-> remove() assumes the interrupt has been setup, not torn down by
-> add().  Change the goto label to cleanup.
-> 
-> sysfs is the last error, it's handler should be first.  sysfs:
-> handles the failure of amdgpu_ras_sysfs_create() by calling
-> amdgpu_ras_sysfs_remove().  But when the create() fails there
-> is nothing added so there is nothing to remove.  This error
-> handler is not needed. Remove the error handler and change
-> goto label to interrupt.
-> 
-> Fixes: b293e891b057 ("drm/amdgpu: add helper function to do common ras_late_init/fini (v3)")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-> index b5cd21cb6e58..c5c8a666110f 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
-> @@ -2432,12 +2432,12 @@ int amdgpu_ras_block_late_init(struct amdgpu_device *adev,
->  	if (ras_obj->ras_cb) {
->  		r = amdgpu_ras_interrupt_add_handler(adev, ras_block);
->  		if (r)
-> -			goto interrupt;
-> +			goto cleanup;
->  	}
->  
->  	r = amdgpu_ras_sysfs_create(adev, ras_block);
->  	if (r)
-> -		goto sysfs;
-> +		goto interrupt;
->  
->  	/* Those are the cached values at init.
->  	 */
-> @@ -2447,12 +2447,11 @@ int amdgpu_ras_block_late_init(struct amdgpu_device *adev,
->  	}
->  
->  	return 0;
-> -cleanup:
-> -	amdgpu_ras_sysfs_remove(adev, ras_block);
-> -sysfs:
-> +
-> +interrupt:
->  	if (ras_obj->ras_cb)
->  		amdgpu_ras_interrupt_remove_handler(adev, ras_block);
-> -interrupt:
-> +cleanup:
->  	amdgpu_ras_feature_enable(adev, ras_block, 0);
->  	return r;
->  }
+So I too had this thought on my mind later. But then I ended up coding the old way
+only.
 
+Ok, so it seems it is only when the first time an inode is created we
+will have a EXT4_FC_TAG_CREAT. When we are creating a hard link that's actually
+a EXT4_FC_TAG_LINK.
+So I think there shouldn't be any case where we have more than one fc_dentry for
+the same inode. Your thoughts?
+
+
+> rare scenario and we can just fallback to full commits. That might
+> simplify this patch a bit. Basically if you do that then fc_dentry
+> would directly store a pointer to the inode and the inode can store a
+> pointer to the "CREAT" fc_dentry object. That way we don't have to do
+> list traversals in fc_del and fc_commit. But barring a few fixes, what
+> you have here is fine too. So I'll leave it up to you to decide what
+> you want to do.
+
+Yes, you are right. If there is only a single fc_dentry object for any given
+inode, then we can store back pointers in each of those to point to their
+respective inode and fc_dentry objects.
+
+I will try and change this in next revision then.
+
+> >         struct list_head i_fc_list;     /*
+> >                                          * inodes that need fast commit
+> >                                          * protected by sbi->s_fc_lock.
+> > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> > index 7964ee34e322..f2bee4cf5648 100644
+> > --- a/fs/ext4/fast_commit.c
+> > +++ b/fs/ext4/fast_commit.c
+> > @@ -199,6 +199,7 @@ void ext4_fc_init_inode(struct inode *inode)
+> >         ext4_fc_reset_inode(inode);
+> >         ext4_clear_inode_state(inode, EXT4_STATE_FC_COMMITTING);
+> >         INIT_LIST_HEAD(&ei->i_fc_list);
+> > +       INIT_LIST_HEAD(&ei->i_fc_dilist);
+> >         init_waitqueue_head(&ei->i_fc_wait);
+> >         atomic_set(&ei->i_fc_updates, 0);
+> >  }
+> > @@ -279,6 +280,8 @@ void ext4_fc_stop_update(struct inode *inode)
+> >  void ext4_fc_del(struct inode *inode)
+> >  {
+> >         struct ext4_inode_info *ei = EXT4_I(inode);
+> > +       struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+> > +       struct ext4_fc_dentry_update *fc_dentry, *fc_dentry_n;
+> >
+> >         if (!test_opt2(inode->i_sb, JOURNAL_FAST_COMMIT) ||
+> >             (EXT4_SB(inode->i_sb)->s_mount_state & EXT4_FC_REPLAY))
+> > @@ -286,7 +289,7 @@ void ext4_fc_del(struct inode *inode)
+> >
+> >  restart:
+> >         spin_lock(&EXT4_SB(inode->i_sb)->s_fc_lock);
+> > -       if (list_empty(&ei->i_fc_list)) {
+> > +       if (list_empty(&ei->i_fc_list) && list_empty(&ei->i_fc_dilist)) {
+> >                 spin_unlock(&EXT4_SB(inode->i_sb)->s_fc_lock);
+> >                 return;
+> >         }
+> > @@ -295,7 +298,26 @@ void ext4_fc_del(struct inode *inode)
+> >                 ext4_fc_wait_committing_inode(inode);
+> >                 goto restart;
+> >         }
+> > -       list_del_init(&ei->i_fc_list);
+> > +
+> > +       if (!list_empty(&ei->i_fc_list))
+> > +               list_del_init(&ei->i_fc_list);
+> > +
+> > +       /*
+> > +        * Since this inode is getting removed, let's also remove all FC
+> > +        * dentry create references, since it is not needed to log it anyways.
+> > +        */
+> > +       list_for_each_entry_safe(fc_dentry, fc_dentry_n, &ei->i_fc_dilist, fcd_dilist) {
+> > +               WARN_ON(fc_dentry->fcd_op != EXT4_FC_TAG_CREAT);
+> > +               list_del_init(&fc_dentry->fcd_list);
+> > +               list_del_init(&fc_dentry->fcd_dilist);
+> > +               spin_unlock(&sbi->s_fc_lock);
+> > +
+> > +               if (fc_dentry->fcd_name.name &&
+> > +                       fc_dentry->fcd_name.len > DNAME_INLINE_LEN)
+> > +                       kfree(fc_dentry->fcd_name.name);
+> > +               kmem_cache_free(ext4_fc_dentry_cachep, fc_dentry);
+> > +               return;
+> Shouldn't we continue and remove all nodes in ei->i_fc_dilist?
+
+Yes, I guess this survived, since we anyway have only one entry in the list
+always. But thanks for catching.
+
+> > +       }
+> >         spin_unlock(&EXT4_SB(inode->i_sb)->s_fc_lock);
+> >  }
+> >
+> > @@ -427,7 +449,7 @@ static int __track_dentry_update(struct inode *inode, void *arg, bool update)
+> >                 node->fcd_name.name = node->fcd_iname;
+> >         }
+> >         node->fcd_name.len = dentry->d_name.len;
+> > -
+> > +       INIT_LIST_HEAD(&node->fcd_dilist);
+> >         spin_lock(&sbi->s_fc_lock);
+> >         if (sbi->s_journal->j_flags & JBD2_FULL_COMMIT_ONGOING ||
+> >                 sbi->s_journal->j_flags & JBD2_FAST_COMMIT_ONGOING)
+> > @@ -435,6 +457,18 @@ static int __track_dentry_update(struct inode *inode, void *arg, bool update)
+> >                                 &sbi->s_fc_dentry_q[FC_Q_STAGING]);
+> >         else
+> >                 list_add_tail(&node->fcd_list, &sbi->s_fc_dentry_q[FC_Q_MAIN]);
+> > +
+> > +       /*
+> > +        * This helps us keep a track of all fc_dentry updates which is part of
+> > +        * this ext4 inode. So in case the inode is getting unlinked, before
+> > +        * even we get a chance to fsync, we could remove all fc_dentry
+> > +        * references while evicting the inode in ext4_fc_del().
+> > +        * Also with this, we don't need to loop over all the inodes in
+> > +        * sbi->s_fc_q to get the corresponding inode in
+> > +        * ext4_fc_commit_dentry_updates().
+> > +        */
+> > +       if (dentry_update->op == EXT4_FC_TAG_CREAT)
+> > +               list_add_tail(&node->fcd_dilist, &ei->i_fc_dilist);
+> >         spin_unlock(&sbi->s_fc_lock);
+> >         mutex_lock(&ei->i_fc_lock);
+> >
+> > @@ -954,7 +988,7 @@ __releases(&sbi->s_fc_lock)
+> >         struct ext4_sb_info *sbi = EXT4_SB(sb);
+> >         struct ext4_fc_dentry_update *fc_dentry, *fc_dentry_n;
+> >         struct inode *inode;
+> > -       struct ext4_inode_info *ei, *ei_n;
+> > +       struct ext4_inode_info *ei;
+> >         int ret;
+> >
+> >         if (list_empty(&sbi->s_fc_dentry_q[FC_Q_MAIN]))
+> > @@ -970,21 +1004,16 @@ __releases(&sbi->s_fc_lock)
+> >                         spin_lock(&sbi->s_fc_lock);
+> >                         continue;
+> >                 }
+> > -
+> > -               inode = NULL;
+> > -               list_for_each_entry_safe(ei, ei_n, &sbi->s_fc_q[FC_Q_MAIN],
+> > -                                        i_fc_list) {
+> > -                       if (ei->vfs_inode.i_ino == fc_dentry->fcd_ino) {
+> > -                               inode = &ei->vfs_inode;
+> > -                               break;
+> > -                       }
+> > -               }
+> >                 /*
+> > -                * If we don't find inode in our list, then it was deleted,
+> > -                * in which case, we don't need to record it's create tag.
+> > +                * With fcd_dilist we need not loop in sbi->s_fc_q to get the
+> > +                * corresponding inode pointer
+> >                  */
+> > -               if (!inode)
+> > -                       continue;
+> > +               WARN_ON(list_empty(&fc_dentry->fcd_dilist));
+> > +               ei = list_entry(fc_dentry->fcd_dilist.next,
+> > +                               struct ext4_inode_info, i_fc_dilist);
+> I think we want "fc_dentry->fcd_ilist.prev" here right? We are
+> sequentially traversing all the nodes in the list from first to last.
+> Given that I think the inode is the prev of any node that you
+> encounter in the list.
+
+Not that this will be relevant in the next iteration. But doesn't matter right,
+next and prev both will have pointer to inode (since it is a circular doubly
+linked list)? And we are talking about fcd_dilist right?
+
+-ritesh
+
+>
+> - Harshad
+> > +               inode = &ei->vfs_inode;
+> > +               WARN_ON(inode->i_ino != fc_dentry->fcd_ino);
+> > +
+> >                 spin_unlock(&sbi->s_fc_lock);
+> >
+> >                 /*
+> > @@ -1228,6 +1257,7 @@ static void ext4_fc_cleanup(journal_t *journal, int full, tid_t tid)
+> >                                              struct ext4_fc_dentry_update,
+> >                                              fcd_list);
+> >                 list_del_init(&fc_dentry->fcd_list);
+> > +               list_del_init(&fc_dentry->fcd_dilist);
+> >                 spin_unlock(&sbi->s_fc_lock);
+> >
+> >                 if (fc_dentry->fcd_name.name &&
+> > diff --git a/fs/ext4/fast_commit.h b/fs/ext4/fast_commit.h
+> > index 083ad1cb705a..02afa52e8e41 100644
+> > --- a/fs/ext4/fast_commit.h
+> > +++ b/fs/ext4/fast_commit.h
+> > @@ -109,6 +109,7 @@ struct ext4_fc_dentry_update {
+> >         struct qstr fcd_name;   /* Dirent name */
+> >         unsigned char fcd_iname[DNAME_INLINE_LEN];      /* Dirent name string */
+> >         struct list_head fcd_list;
+> > +       struct list_head fcd_dilist;
+> >  };
+> >
+> >  struct ext4_fc_stats {
+> > --
+> > 2.31.1
+> >

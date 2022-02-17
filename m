@@ -2,102 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E114B9BAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EAE4B9BAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 10:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238374AbiBQJFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 04:05:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39618 "EHLO
+        id S238426AbiBQJGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 04:06:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238283AbiBQJF3 (ORCPT
+        with ESMTP id S236272AbiBQJGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 04:05:29 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2058.outbound.protection.outlook.com [40.107.237.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6456323DCF6;
-        Thu, 17 Feb 2022 01:05:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U/LJavLhnBAGZXSR1yIb0NUT83JlqdN5ICabm5Yl4khFxz3q7aY6+gTOkKN4aelDtIZPBQ7NDoemzVSjrlVBiD+yDbYs9qG59D/nfJw7CLPD1/BX6fGw00VI+spNtakZ/TQdIZ4wi1EL5Ze6eq89scRc6RSk7tsyXJN7S3LQ9plcsBe3J8FMicLgVE1R0d00l2y/jdiNLMURkVvSNgUvrvGkwWfN1znPdLna8Q788mfPJLJSZSoWHykxMY5KvRo7ijEUwM0n/PqiQ/jvTO4AJIezoKzxSrFpgroO8E8yyTBwevoXG/i/QrVMPag7G/t5sW3H1ODGwFRMbiPby9K3hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=StHzjCXPDIh1RmTRrJTpZuB5CrJBaEqQAEe5wHy8V/E=;
- b=Z7xAgIggt+1tl0Los6aR7Oz4v0OIBNdCbzpXvh9tlvgfAXl1N0CuksUonv7QoIFsvki+F1hm477hLH5/La5FlwighkPjv6BRvpByVDDI7wYoka35V0dpzn2KSPAvCTMYqWnwJDY8kYBjReR9B4OJtVnfpM635v7aoloP+0c9qHGKaFoXlXoBCY4oXMSxbPfnEIl6XR5VW9twKyao8m69qxnVjYOxpN9xnx6SPCO+2+xBtIJg8NdMXUrRIExNUwEK942rxyQuecSlvCU/Y2BhBFUpCcwF3ESnJpL4zMiAgMl4rEwMxGGSnhjGAeZqHLDejxKg8j+w9O+CJk3zVezz5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=StHzjCXPDIh1RmTRrJTpZuB5CrJBaEqQAEe5wHy8V/E=;
- b=k+A88yK0X8fni6rNzxh3vqRw0uG4onAigMpwD3egPc79J1e1uEy9mxuONQGIz/dxzId819+oFEGQPs/uBDxrCOlzOW+q5d5UUyyqwTdJ3MK3PdgXPp+O4qoqT92Wu1Ddb63TzGNi8z4Tf2Kg9rHyIV8wO/JBtgv7TImleDfySyA=
-Received: from MW4PR03CA0358.namprd03.prod.outlook.com (2603:10b6:303:dc::33)
- by BY5PR12MB3858.namprd12.prod.outlook.com (2603:10b6:a03:1a7::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Thu, 17 Feb
- 2022 09:05:09 +0000
-Received: from CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::47) by MW4PR03CA0358.outlook.office365.com
- (2603:10b6:303:dc::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
- Transport; Thu, 17 Feb 2022 09:05:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT016.mail.protection.outlook.com (10.13.175.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4995.15 via Frontend Transport; Thu, 17 Feb 2022 09:05:09 +0000
-Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 17 Feb
- 2022 03:05:01 -0600
-From:   Qiang Yu <qiang.yu@amd.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-CC:     Qiang Yu <qiang.yu@amd.com>, <amd-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>
-Subject: [PATCH] drm/amdgpu: check vm bo eviction valuable at last
-Date:   Thu, 17 Feb 2022 17:04:40 +0800
-Message-ID: <20220217090440.4468-1-qiang.yu@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 17 Feb 2022 04:06:00 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3907423DCFA;
+        Thu, 17 Feb 2022 01:05:47 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id p8so588348pfh.8;
+        Thu, 17 Feb 2022 01:05:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=USatb+AiRveRUIEu8ru5AbhgkcCKRQncgwcir0ybSxM=;
+        b=lP+xhGn4MzLMLL9Y04k8MQJY2LVZow/+7PJsY5hMqwwbzmuTj2+KFKdFfZfLL7Fqo7
+         Klsr4BK0ubgehql2kbCbTdM0x1Freq8XVzQYmDql1lnjmqnOOHw9WlyLRQvNjFV/6FzR
+         LDV7QEOD8jVBOlTU/bNrs4s+ZUyw9jLclZfOBv0gSAsIXwfHRoProZ11w0xxK9eZ287M
+         E0KNgwKWkbQE7QJ9xXKoTWYFhTzQ7S6p8mtx0b76ZBRii7rOTIFeZNeHy4Xh4WZfrxpx
+         qIHBWG8AnrWeWd9Jk6++3teQMMiJRXa3vk/jCH9DlW97BviwUZVy++orXOKV0VVYW8Do
+         r2sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=USatb+AiRveRUIEu8ru5AbhgkcCKRQncgwcir0ybSxM=;
+        b=zQF6NWiZGUx8QgOfpo/se0dFn0pF4vAxW9QEDbfPP8d14pHCZXnEuzdMMfcB6Trgo2
+         gwtuRgVN+hS7QMRxbKC4UgsKfqdej+XXoyBTQO4arlUQCRanx8cVou2qJeD5U6u9Ew62
+         g2vuYoAV/cHT3jSYQ3biEg9NQoedg3nkRUJ2w0JrbiNABUb3O3PG1Sg1bBN8VcT9arnG
+         nDzZK/Aooc5uzjNTQlksF0WhXRZ7zx2MFXJwJ9otkSdbpUsUYK7FopQNvR3URyt6KFnQ
+         KsD/p9/nJfXxECEWLtjFQTMd4NBsp9NyJejvWUrN5tt9TnajfSeCA1kvu/c7etpGuVcw
+         4o4A==
+X-Gm-Message-State: AOAM532frbdhEOiQX6g6bpWHhEKpIdMnj9H9KhkjFHJyiRbZ1/q65Xd3
+        85ic9uBIn7K+JS2+Nt+lGUA=
+X-Google-Smtp-Source: ABdhPJw6ulGrJMLX8IlMQbeBsPM0OhoUXLbX/CMSV+maYTY7VemkFMRS5s82MFBgWQgiGnc7/xFAgQ==
+X-Received: by 2002:a63:e411:0:b0:342:a17:cad1 with SMTP id a17-20020a63e411000000b003420a17cad1mr1654903pgi.457.1645088746767;
+        Thu, 17 Feb 2022 01:05:46 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id 69sm7644601pgc.61.2022.02.17.01.05.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 01:05:46 -0800 (PST)
+Message-ID: <ebd57e6b-c4c4-cdd5-6bd0-c872f2e0382d@gmail.com>
+Date:   Thu, 17 Feb 2022 17:05:36 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6e408c89-bb10-4a9e-9248-08d9f1f49946
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3858:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB38584CBACA7582C99EC849908F369@BY5PR12MB3858.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pd3LYVcYFLpZwCSiUZpmHN0+UWsIRwJwVhUaX8PztcnS984npCdqc0ZFysAUIBN01H7dGcnalLWDuzkMCdbIZgsbzDzEOsY1jQaSo5eW1WF97EnIb1TypXlBDA1XcNxL+gODHAe4k3RQcI2UPy474YJSR/FGqZ4Qjr1+t79fGI2pNzFmVLDwzZNs5kCbdOiEk/etxYxfGDfCgN7rEPA1Wyih80mhRxwe4v/PZkUHyaqb4Hzfkj7qmRPUsBs+21ACFb5UitnT2noVhn3pJO5nB518SekU61IOyWLHu1jFE7vRxSCJVAM5KNQUs+N5/ZOgSCPnt+ClldlCZ87TCA7Sdqql029yJ+dOJLpyOFO7NCuWMgWKolLnwqKUxCfMrIwwHe5uXP73jThTO9e5qnZlHSYdvUXK70xvn9SkLqrLbKl69PtH/I+qUB0+pHhahj03IwJeYncjdJe+7+bdZEQKWtY2skEHS7JcLiCHLD5Hj/xZOQ7MSuuoTeL12pFXuFFkQxEclLe1gHr6NvZMm867yvTXerdfVnVG3ycDoh/ilzBaFDeY4v5QGnBwSinkp+DwBziwSNseiQbyfxZ2ZsQRDjF2wG7jtwESGNPw545zUtVcDBSY5JyB4z2k+ff2tffbcjGUcow1K47q2AMQLNaXhYnyGzRUQAfFS4BLkZH4jnpoy7VZIpSE6B8luZ7JDVI3yBmfyEtj2LN2rXTVqHdTZA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(356005)(316002)(8936002)(110136005)(54906003)(16526019)(5660300002)(26005)(426003)(1076003)(83380400001)(186003)(2616005)(2906002)(6666004)(36756003)(40460700003)(47076005)(70586007)(44832011)(336012)(36860700001)(82310400004)(8676002)(81166007)(70206006)(508600001)(4326008)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 09:05:09.3614
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e408c89-bb10-4a9e-9248-08d9f1f49946
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3858
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH] KVM: x86/pmu: Distinguish EVENTSEL bitmasks for uniform
+ event creation and filtering
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220210102603.42764-1-likexu@tencent.com>
+ <CALMp9eQBzWUk2UBz3EP-YJizEypOnpL0whrmb1ttnFA8TNuspA@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <CALMp9eQBzWUk2UBz3EP-YJizEypOnpL0whrmb1ttnFA8TNuspA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,140 +82,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Workstation application ANSA/META get this error dmesg:
-[drm:amdgpu_gem_va_ioctl [amdgpu]] *ERROR* Couldn't update BO_VA (-16)
+On 10/2/2022 10:09 pm, Jim Mattson wrote:
+> On Thu, Feb 10, 2022 at 2:26 AM Like Xu <like.xu.linux@gmail.com> wrote:
+>>
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> The current usage of EVENTSEL_* macro is a mess in the KVM context. Partly
+>> because we have a conceptual ambiguity when choosing to create a RAW or
+>> HARDWARE event: when bits other than HARDWARE_EVENT_MASK are set,
+>> the pmc_reprogram_counter() will use the RAW type.
+>>
+>> By introducing the new macro AMD64_EXTRA_EVENTSEL_EVENT to simplify,
+>> the following three issues can be addressed in one go:
+>>
+>> - the 12 selection bits are used as comparison keys for allow or deny;
+>> - NON_HARDWARE_EVENT_MASK is only used to determine if a HARDWARE
+>>    event is programmed or not, a 12-bit selected event will be a RAW event;
+>>    (jmattson helped report this issue)
+>> - by reusing AMD64_RAW_EVENT_MASK, the extra 4 selection bits (if set) are
+>>    passed to the perf correctly and not filtered out by X86_RAW_EVENT_MASK;.
+>>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+>>   arch/x86/include/asm/perf_event.h |  3 ++-
+>>   arch/x86/kvm/pmu.c                | 11 ++++-------
+>>   arch/x86/kvm/pmu.h                |  6 ++++++
+>>   3 files changed, 12 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+>> index 8fc1b5003713..bd068fd19043 100644
+>> --- a/arch/x86/include/asm/perf_event.h
+>> +++ b/arch/x86/include/asm/perf_event.h
+>> @@ -43,8 +43,9 @@
+>>   #define AMD64_EVENTSEL_INT_CORE_SEL_MASK               \
+>>          (0xFULL << AMD64_EVENTSEL_INT_CORE_SEL_SHIFT)
+>>
+>> +#define AMD64_EXTRA_EVENTSEL_EVENT                             (0x0FULL << 32)
+>>   #define AMD64_EVENTSEL_EVENT   \
+>> -       (ARCH_PERFMON_EVENTSEL_EVENT | (0x0FULL << 32))
+>> +       (ARCH_PERFMON_EVENTSEL_EVENT | AMD64_EXTRA_EVENTSEL_EVENT)
+>>   #define INTEL_ARCH_EVENT_MASK  \
+>>          (ARCH_PERFMON_EVENTSEL_UMASK | ARCH_PERFMON_EVENTSEL_EVENT)
+>>
+>> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+>> index 2c98f3ee8df4..99426a8d7f18 100644
+>> --- a/arch/x86/kvm/pmu.c
+>> +++ b/arch/x86/kvm/pmu.c
+>> @@ -198,7 +198,8 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+>>
+>>          filter = srcu_dereference(kvm->arch.pmu_event_filter, &kvm->srcu);
+>>          if (filter) {
+>> -               __u64 key = eventsel & AMD64_RAW_EVENT_MASK_NB;
+>> +               __u64 key = eventsel & (INTEL_ARCH_EVENT_MASK |
+>> +                                       AMD64_EXTRA_EVENTSEL_EVENT);
+>>
+>>                  if (bsearch(&key, filter->events, filter->nevents,
+>>                              sizeof(__u64), cmp_u64))
+>> @@ -209,18 +210,14 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+>>          if (!allow_event)
+>>                  return;
+>>
+>> -       if (!(eventsel & (ARCH_PERFMON_EVENTSEL_EDGE |
+>> -                         ARCH_PERFMON_EVENTSEL_INV |
+>> -                         ARCH_PERFMON_EVENTSEL_CMASK |
+>> -                         HSW_IN_TX |
+>> -                         HSW_IN_TX_CHECKPOINTED))) {
+>> +       if (!(eventsel & NON_HARDWARE_EVENT_MASK)) {
+> 
+> I still don't understand why we even bother doing this lookup in the
+> first place. What's wrong with simply requesting PERF_TYPE_RAW every
+> time?
 
-This is caused by:
-1. create a 256MB buffer in invisible VRAM
-2. CPU map the buffer and access it causes vm_fault and try to move
-   it to visible VRAM
-3. force visible VRAM space and traverse all VRAM bos to check if
-   evicting this bo is valuable
-4. when checking a VM bo (in invisible VRAM), amdgpu_vm_evictable()
-   will set amdgpu_vm->evicting, but latter due to not in visible
-   VRAM, won't really evict it so not add it to amdgpu_vm->evicted
-5. before next CS to clear the amdgpu_vm->evicting, user VM ops
-   ioctl will pass amdgpu_vm_ready() (check amdgpu_vm->evicted)
-   but fail in amdgpu_vm_bo_update_mapping() (check
-   amdgpu_vm->evicting) and get this error log
+Thanks for the constant chasing, I finally got a reply from Peterz:
+"think so; the HARDWARE is just a convenience wrapper over RAW IIRC".
 
-This error won't affect functionality as next CS will finish the
-waiting VM ops. But we'd better make the amdgpu_vm->evicting
-correctly reflact the vm status and clear the error log.
-
-Signed-off-by: Qiang Yu <qiang.yu@amd.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 85 ++++++++++++++-----------
- 1 file changed, 47 insertions(+), 38 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 5a32ee66d8c8..88a27911054f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -1306,45 +1306,11 @@ uint64_t amdgpu_ttm_tt_pte_flags(struct amdgpu_device *adev, struct ttm_tt *ttm,
- 	return flags;
- }
- 
--/*
-- * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
-- * object.
-- *
-- * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
-- * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
-- * it can find space for a new object and by ttm_bo_force_list_clean() which is
-- * used to clean out a memory space.
-- */
--static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
--					    const struct ttm_place *place)
-+static bool amdgpu_ttm_mem_eviction_valuable(struct ttm_buffer_object *bo,
-+					     const struct ttm_place *place)
- {
- 	unsigned long num_pages = bo->resource->num_pages;
- 	struct amdgpu_res_cursor cursor;
--	struct dma_resv_list *flist;
--	struct dma_fence *f;
--	int i;
--
--	/* Swapout? */
--	if (bo->resource->mem_type == TTM_PL_SYSTEM)
--		return true;
--
--	if (bo->type == ttm_bo_type_kernel &&
--	    !amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo)))
--		return false;
--
--	/* If bo is a KFD BO, check if the bo belongs to the current process.
--	 * If true, then return false as any KFD process needs all its BOs to
--	 * be resident to run successfully
--	 */
--	flist = dma_resv_shared_list(bo->base.resv);
--	if (flist) {
--		for (i = 0; i < flist->shared_count; ++i) {
--			f = rcu_dereference_protected(flist->shared[i],
--				dma_resv_held(bo->base.resv));
--			if (amdkfd_fence_check_mm(f, current->mm))
--				return false;
--		}
--	}
- 
- 	switch (bo->resource->mem_type) {
- 	case AMDGPU_PL_PREEMPT:
-@@ -1377,10 +1343,53 @@ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
- 		return false;
- 
- 	default:
--		break;
-+		return ttm_bo_eviction_valuable(bo, place);
- 	}
-+}
- 
--	return ttm_bo_eviction_valuable(bo, place);
-+/*
-+ * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
-+ * object.
-+ *
-+ * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
-+ * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
-+ * it can find space for a new object and by ttm_bo_force_list_clean() which is
-+ * used to clean out a memory space.
-+ */
-+static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
-+					    const struct ttm_place *place)
-+{
-+	struct dma_resv_list *flist;
-+	struct dma_fence *f;
-+	int i;
-+
-+	/* Swapout? */
-+	if (bo->resource->mem_type == TTM_PL_SYSTEM)
-+		return true;
-+
-+	/* If bo is a KFD BO, check if the bo belongs to the current process.
-+	 * If true, then return false as any KFD process needs all its BOs to
-+	 * be resident to run successfully
-+	 */
-+	flist = dma_resv_shared_list(bo->base.resv);
-+	if (flist) {
-+		for (i = 0; i < flist->shared_count; ++i) {
-+			f = rcu_dereference_protected(flist->shared[i],
-+				dma_resv_held(bo->base.resv));
-+			if (amdkfd_fence_check_mm(f, current->mm))
-+				return false;
-+		}
-+	}
-+
-+	/* Check by different mem type. */
-+	if (!amdgpu_ttm_mem_eviction_valuable(bo, place))
-+		return false;
-+
-+	/* VM bo should be checked at last because it will mark VM evicting. */
-+	if (bo->type == ttm_bo_type_kernel)
-+		return amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo));
-+
-+	return true;
- }
- 
- static void amdgpu_ttm_vram_mm_access(struct amdgpu_device *adev, loff_t pos,
--- 
-2.25.1
-
+Let me take this step and clean it up a bit.

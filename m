@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1C54BAA52
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 055E84BAA56
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245564AbiBQTvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:51:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37694 "EHLO
+        id S244989AbiBQTxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:53:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245557AbiBQTvo (ORCPT
+        with ESMTP id S231487AbiBQTw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:51:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B08F2654;
-        Thu, 17 Feb 2022 11:51:29 -0800 (PST)
+        Thu, 17 Feb 2022 14:52:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3749F12E150;
+        Thu, 17 Feb 2022 11:52:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE285B8248F;
-        Thu, 17 Feb 2022 19:51:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA79C340ED;
-        Thu, 17 Feb 2022 19:51:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC6CC61D6F;
+        Thu, 17 Feb 2022 19:52:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438EDC340F5;
+        Thu, 17 Feb 2022 19:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645127486;
-        bh=/NFtdyrs3BJgpD2REyVQg/DN9thDV5F68ByXwMqbQK4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fAol09cx2V5HD/NOwK0NoT07qqSHZ0DiCSCeC8Qah+ZlPoop2O7GvoM+bw3toKZ7f
-         QyqPrVr7tVq/t2KHv7+K7dRMbt031yzAh37mV6JN+P66GkQJkTe9AkdTypCrK/2N5u
-         EfMt7OiE1v2TB/9K/IMPnWJAyQWjg5gL8Dv3/HqjYUjPtrpAlNNXsTPWkYYUvFXiBj
-         rPy5i16hDDfHAxxbj9GDZ1e6B7NcfP/PBo+BD4hqLeuc+g+Q/0eJ6XMmeA57Nn6K7j
-         LnzcH+FHz/BOH8bz6cGIwXTNi5t74PQ2rPKnQAGCHsph8wSVwoklJ0jLeJ5zRdiWWS
-         2k/ifJvd/2Wgg==
-Date:   Thu, 17 Feb 2022 20:51:22 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] i2c: riic: Simplify reset handling
-Message-ID: <Yg6nOnzDrBfYQ/J6@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220209232232.18461-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        s=k20201202; t=1645127564;
+        bh=ZhQxF0tPXMlYqWyHKU+1EFwIzt/X85cBfMSyiNtLNwc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=N3q7ZHzEir/9IK/PGW+3dMKawSKM3KHTVB0REMnWpIEazeg1BTxuWepTpRprIRKPI
+         XmGpqTE40xrLD8tJkBKCJxDJFOHcr6iYvTnjlBsBBXMj3UbckzYkxN/7wU5Ygx5mrk
+         ETE3YbdvQqT8R06yoKVRu6kMzrbvehESqHsLVNuR42qsb7LAj9NnFT2oA+kvsCETGt
+         ox0NZV2AZw2DzmW07UuMa2RituDxee7maP037UT/LVLYS5cSaVkI4fklqI2IhpP5+V
+         klEOQqAFRD7lzuSKdAr9w41EjgBa5tjoYjjyu/4ZNQJCNIfaK81rkYX9NflqCMGKSz
+         ykTJRqwak3lzA==
+Received: by mail-wm1-f53.google.com with SMTP id k127-20020a1ca185000000b0037bc4be8713so7014976wme.3;
+        Thu, 17 Feb 2022 11:52:44 -0800 (PST)
+X-Gm-Message-State: AOAM532172Lvk3f61e6H4Kx+ki0RC9qGprFMPFkmCPjvClzyy/VJixoa
+        VlI5RHr/tjrzpsbppEDs3iZozS4McH4D8f4BAhk=
+X-Google-Smtp-Source: ABdhPJwiemEIjRKk4frN6QbDwgyUBnVeU/8bBRkvxFxBQULsWx/seWlsMA1hduXoxyV0dNHVRWvY1oHknvGbya8Zxyg=
+X-Received: by 2002:a05:600c:3d06:b0:37b:a5ea:a61b with SMTP id
+ bh6-20020a05600c3d0600b0037ba5eaa61bmr4183906wmb.32.1645127562557; Thu, 17
+ Feb 2022 11:52:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NlfEvZBT2OGmyrz4"
-Content-Disposition: inline
-In-Reply-To: <20220209232232.18461-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220128045004.4843-1-sunilvl@ventanamicro.com>
+ <877d9xx14f.fsf@igel.home> <9cd9f149-d2ea-eb55-b774-8d817b9b6cc9@gmx.de>
+ <87tud1vjn4.fsf@igel.home> <49d3aeab-1fe6-8d17-bc83-78f3555109c7@gmx.de>
+ <87pmnpvh66.fsf@igel.home> <20220217105450.GA20183@sunil-ThinkPad-T490> <CAOnJCULWjCHCCS7wzTBVsYcPzWPpL9jmS7xx5LUFT2tRvAZk6w@mail.gmail.com>
+In-Reply-To: <CAOnJCULWjCHCCS7wzTBVsYcPzWPpL9jmS7xx5LUFT2tRvAZk6w@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 17 Feb 2022 20:52:30 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFXu75cDo=rx4rG6WFwd=At+nMWRzq378EoLu7GuHU64w@mail.gmail.com>
+Message-ID: <CAMj1kXFXu75cDo=rx4rG6WFwd=At+nMWRzq378EoLu7GuHU64w@mail.gmail.com>
+Subject: Re: [PATCH] riscv/efi_stub: Fix get_boot_hartid_from_fdt() return value
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Sunil V L <sunilvl@ventanamicro.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        "# 3.4.x" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,134 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 17 Feb 2022 at 20:47, Atish Patra <atishp@atishpatra.org> wrote:
+>
+> On Thu, Feb 17, 2022 at 2:55 AM Sunil V L <sunilvl@ventanamicro.com> wrote:
+> >
+> > On Mon, Feb 14, 2022 at 12:09:05PM +0100, Andreas Schwab wrote:
+> > > On Feb 14 2022, Heinrich Schuchardt wrote:
+> > >
+> > > > On 2/14/22 11:15, Andreas Schwab wrote:
+> > > >> On Feb 14 2022, Heinrich Schuchardt wrote:
+> > > >>
+> > > >>> set_boot_hartid() implies that the caller can change the boot hart ID.
+> > > >>> As this is not a case this name obviously would be a misnomer.
+> > > >>
+> > > >> initialize_boot_hartid would fit better.
+> > > >>
+> > > >
+> > > > Another misnomer.
+> > >
+> > > But the best fit so far.
+> >
+> > Can we use the name init_boot_hartid_from_fdt()? While I understand
+> > Heinrich's point, I think since we have "_from_fdt", this may be fine.
+> >
+>
+> init_boot_hartid_from_fdt or parse_boot_hartid_from_fdt
+>
+> are definitely much better than the current one.
+>
+> > I didn't rename the function since it was not recommended to do multiple
+> > things in a "Fix" patch. If we can consider this as not very serious
+> > issue which needs a "Fix" patch, then I can combine this patch with the
+> > RISCV_EFI_BOOT_PROTOCOL patch series.
+> >
+>
+> IMHO, it is okay to include this in the RISCV_EFI_BOOT_PROTOCOL series
+> as we are not going to have hartid U32_MAX in a few months :)
+>
+>
+> > Hi Ard, let me know your suggestion on how to proceed with this.
+> >
 
---NlfEvZBT2OGmyrz4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The patch is fine as it is. I agree that naming is important, but for
+a helper function that is only used a single time right in the same
+source file, it doesn't matter that much.
 
-On Wed, Feb 09, 2022 at 11:22:32PM +0000, Lad Prabhakar wrote:
-> Read reset phandle as optional instead of exclusive so that all the DT's
-> passing the reset phandle can be used to assert/deassert the reset line.
-> With this change we don't have to differentiate the RZ/G2L SoC.
->=20
-> With the above changes we no longer need the "renesas,riic-r9a07g044"
-> compatible string, so drop it from riic_i2c_dt_ids[]. No changes are
-> required to the r9a07g044.dtsi as we already have "renesas,riic-rz" as a
-> fallback compatible string.
->=20
-> While at it, check the return code of reset_control_deassert() as it might
-> fail and also add a devres action to assert the reset line.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+I have queued this up now.
 
-Looks good to me. Chris, Philipp what do you think?
-
-> ---
->  drivers/i2c/busses/i2c-riic.c | 34 +++++++++++++++++-----------------
->  1 file changed, 17 insertions(+), 17 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-> index 8dfd27dc6149..cded77e06670 100644
-> --- a/drivers/i2c/busses/i2c-riic.c
-> +++ b/drivers/i2c/busses/i2c-riic.c
-> @@ -88,11 +88,6 @@
-> =20
->  #define RIIC_INIT_MSG	-1
-> =20
-> -enum riic_type {
-> -	RIIC_RZ_A,
-> -	RIIC_RZ_G2L,
-> -};
-> -
->  struct riic_dev {
->  	void __iomem *base;
->  	u8 *buf;
-> @@ -396,6 +391,11 @@ static struct riic_irq_desc riic_irqs[] =3D {
->  	{ .res_num =3D 5, .isr =3D riic_tend_isr, .name =3D "riic-nack" },
->  };
-> =20
-> +static void riic_reset_control_assert(void *data)
-> +{
-> +	reset_control_assert(data);
-> +}
-> +
->  static int riic_i2c_probe(struct platform_device *pdev)
->  {
->  	struct riic_dev *riic;
-> @@ -404,7 +404,6 @@ static int riic_i2c_probe(struct platform_device *pde=
-v)
->  	struct i2c_timings i2c_t;
->  	struct reset_control *rstc;
->  	int i, ret;
-> -	enum riic_type type;
-> =20
->  	riic =3D devm_kzalloc(&pdev->dev, sizeof(*riic), GFP_KERNEL);
->  	if (!riic)
-> @@ -421,16 +420,18 @@ static int riic_i2c_probe(struct platform_device *p=
-dev)
->  		return PTR_ERR(riic->clk);
->  	}
-> =20
-> -	type =3D (enum riic_type)of_device_get_match_data(&pdev->dev);
-> -	if (type =3D=3D RIIC_RZ_G2L) {
-> -		rstc =3D devm_reset_control_get_exclusive(&pdev->dev, NULL);
-> -		if (IS_ERR(rstc)) {
-> -			dev_err(&pdev->dev, "Error: missing reset ctrl\n");
-> -			return PTR_ERR(rstc);
-> -		}
-> +	rstc =3D devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
-> +	if (IS_ERR(rstc))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(rstc),
-> +				     "Error: missing reset ctrl\n");
-> =20
-> -		reset_control_deassert(rstc);
-> -	}
-> +	ret =3D reset_control_deassert(rstc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D devm_add_action_or_reset(&pdev->dev, riic_reset_control_assert,=
- rstc);
-> +	if (ret)
-> +		return ret;
-> =20
->  	for (i =3D 0; i < ARRAY_SIZE(riic_irqs); i++) {
->  		ret =3D platform_get_irq(pdev, riic_irqs[i].res_num);
-> @@ -492,8 +493,7 @@ static int riic_i2c_remove(struct platform_device *pd=
-ev)
->  }
-> =20
->  static const struct of_device_id riic_i2c_dt_ids[] =3D {
-> -	{ .compatible =3D "renesas,riic-r9a07g044", .data =3D (void *)RIIC_RZ_G=
-2L },
-> -	{ .compatible =3D "renesas,riic-rz", .data =3D (void *)RIIC_RZ_A },
-> +	{ .compatible =3D "renesas,riic-rz", },
->  	{ /* Sentinel */ },
->  };
-> =20
-> --=20
-> 2.17.1
->=20
-
---NlfEvZBT2OGmyrz4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIOpzoACgkQFA3kzBSg
-KbZeFBAAlX76TELnyAE9XeU5PGPYHfSg060hOluvc/aD1maXj+ceqDh+jtd1WUjl
-VAR+R3/SgbfVnVBYDNAeHD1HlqiByor3T/7PuY3e5I4ZlPfAJi4QhgweWRtC9/EY
-tuElUGXHI8Xfz6vAiDAZ9Rp96XodVrlSGUQhou/ymFsooSqhKyJsYEczomhF2LU4
-siunHjake88vN13RE5Wg9ugguLMgr29UdGWAqXzgVUlRDXBj+qe644Q9cC5rRFLu
-vQEPglSemeGbfA0vRhRvjGYJWLwkqW9qLXc5kBDlHUuolBttvBwA1iFPSBJpK+cU
-/H19/jTrCWciqpO/w/O/PBZq4v16q4j77PXTu1gGbp4HQjBCE04hKBgGwfowV7QZ
-r/WKIfCTpBhfk+NWJQ7GlFtktyUTTlhhbDwZwjZeuAXLMS4zYpin1xNfJXXNYHHm
-2CS1mU2FhqcQJGD6pNRrsEob9aNAV06hLValJpHneJFIVjoKnES6BvBMqzJ8qmQE
-uOtwlXkSp7nii42NmB8BRc+vpDbxzR67lAxmN2cQqrpFIyuqpQGIZBti2NO4xFI6
-0rFEvxG0ob7lVuusiZ24QQqnQLPJ1jkeFxwDmOoCpLj0dkhL3ZLI0O0W1FaLUqpP
-MLVWl+sEnYnee99MHLB5R+uul5kDnNNXcKwCnV4biCw49f4r1Aw=
-=1hEL
------END PGP SIGNATURE-----
-
---NlfEvZBT2OGmyrz4--
+Thanks,
+Ard.

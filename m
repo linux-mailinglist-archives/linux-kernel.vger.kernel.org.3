@@ -2,249 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D46C4B9537
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 02:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8C84B9544
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 02:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiBQBBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 20:01:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37176 "EHLO
+        id S230061AbiBQBNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 20:13:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiBQBBN (ORCPT
+        with ESMTP id S229854AbiBQBNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 20:01:13 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B633A279935
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 17:00:59 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21GNtaMW021455;
-        Thu, 17 Feb 2022 01:00:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=JFJ4kL7SXijJN3oG1sWTZLHxSTd5A6JiZHl1Lxxa+Cw=;
- b=kMKp9WyyWZ5lclpdq8ckdCr264nlrxv1i3jxd7Y59ORMZ9DLPqs+Zl56MadI2B8kw0uL
- wtaEwacc1XSaWuis1o2RlGx3b5F1h3nZcchB/c7CC23vhouJYoSitRN4oEkGLRW7pWdh
- pdsTrESl6JPxbpxPqZ6rPPdziIOUjB23R1+nL6THwoT5c+SM1DVdcVCY+TLVysmGmGuN
- g6wmjbvU+B07qBKpNhcmsusPYH7SwvicE13Z++WBGh00ctcVIsHZhbQ7cb6Xap71mNAb
- mNy4OuOjDRxelOZZDD9WF5E/ckwFtMb7PdDisBjJ5jjG1amIZUkAFtH0pLuMItMFFslN 4w== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e8n3fbr6h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Feb 2022 01:00:51 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21H0qc9h172044;
-        Thu, 17 Feb 2022 01:00:50 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2041.outbound.protection.outlook.com [104.47.57.41])
-        by aserp3030.oracle.com with ESMTP id 3e9brbrqnk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Feb 2022 01:00:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VDwV3FHosGiHuP1ZLe6cfLOX4/o+at6v/JytS519MGgGHoqMpQjapkwjIAtTzv+ksxWYg5iulLzT8emyw9OC5Nt6fsGma1O11/WxVY5/mBUyK2DNcFDC9ayGNJm+CrcVhLT9d/e5+Su7UbwIsW26fCyjcBvMrhYNhYvBD4P5lUMirLBau0LoN121tTwPejGu6ACQAl3U0cVOOuLsXtpq3vYybrTEQQBhCgGcp0n1u7Lf73LDPa2H+G7hDbV63BHZXpovertesmWTawa6lUyOlT74hIItSPFtpiMUp2b+mc3mJxiYySXYJ/C//CzAKqhbUuppE0Cap5lh8UJaxfkk2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JFJ4kL7SXijJN3oG1sWTZLHxSTd5A6JiZHl1Lxxa+Cw=;
- b=ZcTA6rSfDRpWLmplAoAhA/k7la0YXOOpsS3EBP9nHxS7bMjj12mk4MbuEX9rBwl/m3pR0d9pvvkIZKmEG+bqUjZFy7lGqdw6A5xwNoVmDmlBpPums+JBgi9fews0+ZQ+u0aGcWjw0BR/p0bNS+MfT57J0HlV7yB9gN789OoNy/WMvVqTLVYOQ2X4aSBiKBtnA9FAK6XJvHnMzbyz4jG+Ud2NJrjM1eo2IxW5RkB/Isau23vxqG4fE/XN2zRW3Vtfw/igVWlHlATTYubpOMLjxenTXliBHmtqbbneQufhkCceHuPdoonHfWmhPYQ8UlGewiqNvFDgjGOOztKebWGaSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 16 Feb 2022 20:13:15 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2BC24F04
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 17:13:00 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id t14so5943384ljh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 17:13:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JFJ4kL7SXijJN3oG1sWTZLHxSTd5A6JiZHl1Lxxa+Cw=;
- b=bWJ9y24PV4Y3CBMAaHfUsj1tAsUxGI0ghVwsOtTpLjiD1ninowjlzbqm8K/R/DM7Cs6nT1W09/lak26keh7+tKDPmEFDUYo/oImodC6m+pakSfEI6MGU+PuqQ7b4kAImmE+4aO1MMUFNV8Qisk0a+beOVjg/Y6WX8GPCu3aCnzw=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by MWHPR10MB1934.namprd10.prod.outlook.com (2603:10b6:300:113::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Thu, 17 Feb
- 2022 01:00:48 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::11f6:860e:575a:e6f1]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::11f6:860e:575a:e6f1%5]) with mapi id 15.20.4995.014; Thu, 17 Feb 2022
- 01:00:48 +0000
-Message-ID: <1f486393-3829-4618-39a1-931afc580835@oracle.com>
-Date:   Wed, 16 Feb 2022 17:00:46 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH linux-next] Fix shmem huge page failed to set F_SEAL_WRITE
- attribute problem
-Content-Language: en-US
-To:     cgel.zte@gmail.com, hughd@google.com, kirill@shutemov.name,
-        songliubraving@fb.com, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        yang.yang29@zte.com.cn, wang.yong12@zte.com.cn,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220215073743.1769979-1-cgel.zte@gmail.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-In-Reply-To: <20220215073743.1769979-1-cgel.zte@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR2201CA0041.namprd22.prod.outlook.com
- (2603:10b6:301:16::15) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Tmtpl0AbZecSHMm8IZEt8YMKXM9Alo4sDPM/uRA5w+s=;
+        b=nNzxrNdphUe3vVZTvMJ0kuHImuYO2Yqu2lu87JgDF/CYKZZYO94Wr90QxHat/+P8KT
+         3Z0H/R4OqKrxk41H60i2FH1Fdo76VTz9aGewj8MiIVNpxHclSNZRHWuyqehZWIYUDE3L
+         BdGgoUZvEBPU1werIb6BuO4tgULRODaphQUrUm+YVAtRt2AKwQiUEAFUPrcUhBCBrC0R
+         mO1SIl38GSFx55ZppXKGS+V4AC/ohvzCEMiZAplIixnNmXgQpHwd442QDeH+y7RMNsdx
+         xLa9sFWeOhSmo3ODETzKjyBHceVZCq7gtQf1i9nbV+Fa2CPvbTWAymf1NVfCGBkPopzP
+         G9gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Tmtpl0AbZecSHMm8IZEt8YMKXM9Alo4sDPM/uRA5w+s=;
+        b=ZGbD7Y1Qx3yiSUgRcCeKbRH9SXMoclb+ktfgy8G/PJ6oMOtD2duicUeaI5khpsEJcn
+         Lwae51yOvR+L7nJ7DvzwZQ+rpD+nJW+XZ4lXyUZwA+R2vFh6obG3rILN1SubSA6w32LW
+         okfpsWfFcb75A9HyFdwLLBP9M/Dn+N6cTIIG5E4fa7iLH2Skl0AzVOoc5Rm1p9Dk8Ej6
+         3GPep8N57r+4Ou88tdEq5hFw/2+4ELW4EYRPzu4Ek8kk3zwVBYPl6g8ADE1uCjYrU7Ob
+         scC4tUdFqLBejS1w1OqTG2U8mtqCiK/ac/k1QB4HCH3ieDaexAP8ZYsWY/vBM8VYD9sj
+         UWdA==
+X-Gm-Message-State: AOAM532Nvdgfsll2mb9yPPGJ1tIAZxx6VYebtXIjXoB9Cz43SYv4A0np
+        lc9xzYpcPugX/ZtskgQsXcZby36fzyeIow==
+X-Google-Smtp-Source: ABdhPJxw6LYAVH39y4cXLHEacyNL7bI+7n7CZ9QWjggY3M6duuviy5HpyWy9LlF45ErbUgKI86Uf1Q==
+X-Received: by 2002:a05:651c:311:b0:246:1250:d6f with SMTP id a17-20020a05651c031100b0024612500d6fmr499834ljp.455.1645060378553;
+        Wed, 16 Feb 2022 17:12:58 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id s21sm654434lfs.37.2022.02.16.17.12.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 17:12:57 -0800 (PST)
+Message-ID: <064a42eb-bdeb-a689-de25-07c393cb6580@linaro.org>
+Date:   Thu, 17 Feb 2022 04:12:57 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 74aaa3c6-63a8-4cdf-2aea-08d9f1b0ef22
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1934:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1934D38AC4222CAB7712217BE2369@MWHPR10MB1934.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z9JQltIeXzIYqxN6vflJtqy9JFFJig1AjTmZazmrlloziKQSop6YwiJw+e9nlUdEB+JUnYLQZ3kpcbl8l7UIzyGesQyopgA6tdrLT8sHCcuv6T2fcuOhEPFHr7IGNCMi9bwVEuK9/ydVb3qqXqa5TqFE9dUEbMc3fAgQSlr7twaJy3e57M1kYLzuHVmBdVWomXEfdp31FR/qkb0o/mroI/tP1DF+kv3IBcHMS9Y93Pb7It3vN2uqOVARBuryX1aOjKv3rDZJ6bCLLDs76IGD7WbnVoxpfj3DvXYymW1bmeFchKy9LckPG+j/nQLdHBJqTXaQk7CGHbN6pAuNVksMKG1dmGmUKqrt3WtTZEMgHpLQol/OzZ2+0R1nTuy8De3qgfX/4geM6Imb8iAe10h9Ewkp1LP59GOzI+KPTA0dH3CInWvtySIxz7c/h1+PLCiZpU4jjm5cA+6R7EVAWJ6c2JHKckrnn5qajDeHqE0i9driVD6UWSuwOFTCbFqY99dhV7HXUsZb/A4D7HIpJIW414hdXItyOA2fxU3PnCqQkAVUI/ejLLen5kQVq6w7fTk+L0hO2YNZkT2kBFVXTGzpHK6vbMCN7yM4kDRH1l6nO9y2Qcl/4LFtcQC0/zqaoBIwCo9KVtVWOoiWiz0s9EraoV34ul7Zbh69Axf8UN8NMiJDB53856GbRVtC3Km93UBqTF5alLOj7Y6uzgnsndppy2gNW81Q6OmNWFGDT4GPx6qkIkBTsM3UbCJ2gIXzcDVq003XOSHT2n6GHp9zwZlyajY3p0EFKNI6ry/FQvN2p74=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(6506007)(52116002)(83380400001)(6486002)(508600001)(316002)(8936002)(2616005)(6512007)(7416002)(44832011)(5660300002)(2906002)(31686004)(36756003)(38100700002)(86362001)(31696002)(186003)(38350700002)(26005)(66556008)(66476007)(66946007)(4326008)(8676002)(14583001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NkpaYnhGV2ZoY3pUS0tUTm9sK0RQUlpKR3ord3lvNi8vUVVPb0NEWWlpWDhU?=
- =?utf-8?B?MG9XdFJ3R1RPcnRvNklET0UvMnloTG5UMEVZek1pVnBPVFFBaDZOOXNseVoy?=
- =?utf-8?B?cmUrNXBhR0xZNngxSFFaY3Q2VE9UYW9idk54NDBTa2ZtMkFRRmFjUDFMMDlE?=
- =?utf-8?B?TmJkOFJLRmFqMll4N1VGWU9JYTQ5MC9Tb25FODRhL3hZakowQy93YzRtT0lW?=
- =?utf-8?B?TDRJMGN6VDBOcUhYbzVlRlFBTUQraVc3ZHlGME5YNjh4V3R6MHlHSk16aGhr?=
- =?utf-8?B?M3QrSHp6UlBCWlpMUEdSSjFkOHJMbUZFTkJRV1VENDQvcjFFaWNWeERKVi80?=
- =?utf-8?B?aG5TTWZaa09mTnlKNzhIbC9Qem1xOW9PWk5xN1NwWWJETUhrY2ZkVzYrUDJz?=
- =?utf-8?B?cTcyeUpaelB4VUZzTmVDRkJod1lXRndlb0l5T090NGZmWGordG14citKTkRi?=
- =?utf-8?B?NHdMNFFqYURQbTR0bXdkNGFjVE9meUdFQXdBOHNpMXZETnYxVVdOKzNtRkNB?=
- =?utf-8?B?UmZiYW5GSHNCcTVxcnUxWTk4K2hvbUhwL2RhUGIvdFZpRU9mclgvQWQ5ZlJx?=
- =?utf-8?B?eDNwVDdScG9FUnAxcGFLZlVFK0MxMHdpVEJjaGE2ZGpmenNGbFRTL1hhM2Mw?=
- =?utf-8?B?MmJXMkVBaElrSGltdWc3bkFXY3g1T09RUnVMLzdGZUVnbnBFRitDR01ObWdv?=
- =?utf-8?B?UE9CWG9abkhmU0xkL3hhbE9PemNHYXJVcHA3SzRXZllFZ1J3a3A4WHMyemxp?=
- =?utf-8?B?UzJsYnJHdzBwY2JZV2lGODA4VUg3Z0EwRjdRRjZOSGhXWXU3NzJBMzlXdkZw?=
- =?utf-8?B?ODV1ZlpUakJLTU0vam1jSlpxNHl0eUhzMnh2ZDZyTkZBVStvMG9sY0tOTFAx?=
- =?utf-8?B?L2hoalJSQlQ5QU9Za29pKzluazk1SHZIU1V2NUlVa0NYTTRMSnFuV1lWM0xp?=
- =?utf-8?B?STVIbCtNcjZNYU9oOUc3dXg0VXpMcmVTbjJZRndaR29nTSt0Z1EzY1hhU1RY?=
- =?utf-8?B?VTZzWTJ2cXg1QjUwMHoxS0loMVBpU2MyTy9WbTc5MURFT1ZYdGpZZGc5bStn?=
- =?utf-8?B?bGVVOHBjL1dLem8wd2hSeEhLT0xYNjZiamZtc3BBNFRiMm1WZ3lEa0dtRnli?=
- =?utf-8?B?U1cxZ3pXZjZzYUtjcFhvTlZnOTJ1d3owRzJmYUdTWW0ycHlxczVvNlFuWmpk?=
- =?utf-8?B?VndvQXQxZGt2SGxGdlY5T2xmeUdiNk50di9VbnpqcW5xSGpUM1BHYUZPMEhK?=
- =?utf-8?B?SUNWMGtCQ0JvNllvdzJvWU5URXlTNThKaElOR3ZOUjdLcklZbWsrY2RKWGY4?=
- =?utf-8?B?c2ZxdDZyazNOR1dVZkNJMjQxVWlIR0tBRlQ5eHd1OTBvdUpuY2ZvWHRET2gz?=
- =?utf-8?B?LytldC8xdGFkSlM2eEhrODJ0dGw5ekRWK2JURDMxTlFadTEvOVlCOWtDb3Jv?=
- =?utf-8?B?ak9rNFRpMlU0MGFiUWRwVUJ3OW5vcXRGNDRpVDNEQmM5eXF5VllNTk9MQzN3?=
- =?utf-8?B?RVJvK3ZuMUFiVStGTzhDMWhzSXhnN0dQTS9PWCttQ2FVaWhGSWJ6ZEhCOHl5?=
- =?utf-8?B?S25nODdiLy9uc0c2NXAxQ3pxUUsxa0NwNGFkbGxNMjl4TkpuWHF4emJSWERX?=
- =?utf-8?B?bjFvajNpd1pVZ29RcVJyL2hBNUt6Y0MyQU1KbmszUEFQUXJudDJEVWE2a3NE?=
- =?utf-8?B?d1orYXFIeUJvcnpYUkxyVFRJanlmNGwxMkhvKzZxR05NRmIwbDJwOVRBZjVZ?=
- =?utf-8?B?eVpjNlFSRFMxMWJGcmhXZVByOW1hTHkzYTMvSkZCbkF0ZXVKUjNiNHNVY2U1?=
- =?utf-8?B?MDBCd2FOMXpxa2h1RS93c2tTUk5QV1ZtNG5HdUNRNDFONEdnTHptNEpSM2pw?=
- =?utf-8?B?NTVYUThmTC9oNFprRUEySmplbVJqMDRQdEtSQ0w0ek9Tck1lcHhEVTlDMkZ0?=
- =?utf-8?B?S1ArSTROUE9jUVN4Wmo0Ynl5a2d2TWdnaC9MUUJsVjZUekZSZ2dyb2o3a2Zn?=
- =?utf-8?B?Q0NHMkJMYVZCaEY2YnUrSkdqNjA2a2J2OWpScmxOa0pyZFFHK3V2QlNZTjUr?=
- =?utf-8?B?SVRlTVJOOFJrRzU3VUxiTFhmNFR5V0ZHZU9aakdwOFJpOFdsNXV5TE84UjE4?=
- =?utf-8?B?Z1E1aHFvMmlxejZ0T3d6TXU4WEJNdy8zWGk1Y0dSY3NiNjdhRU5leVkvWUYr?=
- =?utf-8?Q?KthwPsGXoEr6lm7rPviMJMw=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74aaa3c6-63a8-4cdf-2aea-08d9f1b0ef22
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 01:00:48.2229
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zf+MnZvbiLWCi6SMscGUTxK8Ole09OZKTH7HpRRm2GTdSvKINthmvHyYeBWW9rxDpUYQ1bdYKsCn6FGkiGFvNg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1934
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10260 signatures=675971
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202170002
-X-Proofpoint-GUID: 2S4xlBg_z8n1Jk_N23LfYXxCDk5DwpC4
-X-Proofpoint-ORIG-GUID: 2S4xlBg_z8n1Jk_N23LfYXxCDk5DwpC4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] drm/msm/dpu: Disable boot loader configured data paths
+Content-Language: en-GB
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220215043708.1256854-1-bjorn.andersson@linaro.org>
+ <460e0036-74b5-bccd-c11c-2573290012ae@linaro.org> <YgvDrXoK4a0+HLpz@yoga>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <YgvDrXoK4a0+HLpz@yoga>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 23:37, cgel.zte@gmail.com wrote:
-> From: wangyong <wang.yong12@zte.com.cn>
+On 15/02/2022 18:15, Bjorn Andersson wrote:
+> On Tue 15 Feb 08:44 CST 2022, Dmitry Baryshkov wrote:
 > 
-> After enabling tmpfs filesystem to support transparent hugepage with the
-> following command:
->  echo always > /sys/kernel/mm/transparent_hugepage/shmem_enabled
-> The docker program adds F_SEAL_WRITE through the following command will
-> prompt EBUSY.
->  fcntl(5, F_ADD_SEALS, F_SEAL_WRITE)=-1.
+>> On 15/02/2022 07:37, Bjorn Andersson wrote:
+>>> It's typical for the bootloader to configure CTL_0 for the boot splash
+>>> or EFIFB, but for non-DSI use cases the DPU driver tend to pick another
+>>> CTL and the system might end up with two configured data paths producing
+>>> data on the same INTF. In particular as the IOMMU configuration isn't
+>>> retained from the bootloader one of the data paths will push underflow
+>>> color, resulting in screen flickering.
+>>>
+>>> Naturally the end goal would be to inherit the bootloader's
+>>> configuration and provide the user with a glitch-free handover from the
+>>> boot configuration to a running DPU.
+>>>
+>>> But such effort will affect clocks, regulators, power-domains etc, and
+>>> will take time to implement. So in the meantime this patch simply
+>>> disables all the data paths, on platforms that has CTL_FETCH_ACTIVE, to
+>>> avoid the graphical artifacts.
+>>>
+>>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>> ---
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 13 +++++++++++++
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h |  6 ++++++
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c    |  2 ++
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c     | 17 +++++++++++++++++
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h     |  8 ++++++++
+>>>    5 files changed, 46 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>> index 02da9ecf71f1..69d4849484fa 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>>> @@ -357,6 +357,18 @@ static void dpu_hw_ctl_clear_all_blendstages(struct dpu_hw_ctl *ctx)
+>>>    	DPU_REG_WRITE(c, CTL_FETCH_PIPE_ACTIVE, 0);
+>>>    }
+>>> +static void dpu_hw_ctl_disable_boot_config(struct dpu_hw_ctl *ctx)
+>>> +{
+>>> +	if (ctx->caps->features & BIT(DPU_CTL_FETCH_ACTIVE)) {
+>>
+>> I see that you are changing only CTL_FETCH_PIPE_ACTIVE. However it still
+>> seems like a hack.
 > 
-> It is found that in memfd_wait_for_pins function, the page_count of
-> hugepage is 512 and page_mapcount is 0, which does not meet the
-> conditions:
->  page_count(page) - page_mapcount(page) != 1.
-> But the page is not busy at this time, therefore, the page_order of
-> hugepage should be taken into account in the calculation.
+> You're not wrong, it certainly seems a little bit hacky.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: wangyong <wang.yong12@zte.com.cn>
-> ---
->  mm/memfd.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
+> I think that it would be more appropriate to try to inherit the
+> bootloader configuration. So the proposal here is, in my view, a
+> stop-gap until we start to look at "continuous splash".
 > 
-> diff --git a/mm/memfd.c b/mm/memfd.c
-> index 9f80f162791a..26d1d390a22a 100644
-> --- a/mm/memfd.c
-> +++ b/mm/memfd.c
-> @@ -31,6 +31,7 @@
->  static void memfd_tag_pins(struct xa_state *xas)
->  {
->  	struct page *page;
-> +	int count = 0;
->  	unsigned int tagged = 0;
->  
->  	lru_add_drain();
-> @@ -39,8 +40,12 @@ static void memfd_tag_pins(struct xa_state *xas)
->  	xas_for_each(xas, page, ULONG_MAX) {
->  		if (xa_is_value(page))
->  			continue;
-> +
->  		page = find_subpage(page, xas->xa_index);
-> -		if (page_count(page) - page_mapcount(page) > 1)
-> +		count = page_count(page);
-> +		if (PageTransCompound(page))
+>> What if instead we always disable boot config for all paths except CTL_0 (or
+>> CTL_0 and CTL_1)?
+>>
+> 
+> On my laptop the bootloader sets up efifb using CTL_0. When Linux brings
+> up the eDP interface it seems to skip DPU_CTL_SPLIT_DISPLAY ctls and
+> picks CTL_2.
+> 
+> As mentioned in the message, I now have both CTL_0 and CTL_2 pushing
+> data to the one interface; resulting in flickering.
 
-PageTransCompound() is true for hugetlb pages as well as THP.  And, hugetlb
-pages will not have a ref per subpage as THP does.  So, I believe this will
-break hugetlb seal usage.
+Ah, I thought, it's the other way.
 
-I was trying to do some testing via the memfd selftests, but those have some
-other issues for hugetlb that need to be fixed. :(
+Yep, the SPLIT_DISPLAY CTLs are precious, ideally they should be used 
+only when required.
+
+> 
+>>> +		/*
+>>> +		 * Disable the pipe fetch and trigger a start, to disable the
+>>> +		 * data path
+>>> +		 */
+>>> +		DPU_REG_WRITE(&ctx->hw, CTL_FETCH_PIPE_ACTIVE, 0);
+>>> +		DPU_REG_WRITE(&ctx->hw, CTL_START, 0x1);
+>>
+>> What about video vs cmd modes?
+>>
+> 
+> Initially I was resetting a whole bunch of properties in the CTL, but
+> all I want to do is stop the data flow. It's my expectation that the
+> steps to follow will reset the interfaces and configure the actual data
+> paths anew.
+> 
+> Perhaps I'm missing some steps here, the documentation is not clear and
+> this has the expected visual outcome...
+
+CTL_START is used only for WB and DSI command mode. Thus I'm surprised 
+that you need it for the eDP (which should be using video mode).
+
+> 
+> Regards,
+> Bjorn
+> 
+>>> +	}
+>>> +}
+>>> +
+>>>    static void dpu_hw_ctl_setup_blendstage(struct dpu_hw_ctl *ctx,
+>>>    	enum dpu_lm lm, struct dpu_hw_stage_cfg *stage_cfg)
+>>>    {
+>>> @@ -590,6 +602,7 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
+>>>    	ops->trigger_pending = dpu_hw_ctl_trigger_pending;
+>>>    	ops->reset = dpu_hw_ctl_reset_control;
+>>>    	ops->wait_reset_status = dpu_hw_ctl_wait_reset_status;
+>>> +	ops->disable_boot_config = dpu_hw_ctl_disable_boot_config;
+>>>    	ops->clear_all_blendstages = dpu_hw_ctl_clear_all_blendstages;
+>>>    	ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
+>>>    	ops->get_bitmask_sspp = dpu_hw_ctl_get_bitmask_sspp;
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>>> index 806c171e5df2..c2734f6ab760 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>>> @@ -159,6 +159,12 @@ struct dpu_hw_ctl_ops {
+>>>    	 */
+>>>    	void (*clear_all_blendstages)(struct dpu_hw_ctl *ctx);
+>>> +	/**
+>>> +	 * Disable the configuration setup by the bootloader
+>>> +	 * @ctx	      : ctl path ctx pointer
+>>> +	 */
+>>> +	void (*disable_boot_config)(struct dpu_hw_ctl *ctx);
+>>> +
+>>>    	/**
+>>>    	 * Configure layer mixer to pipe configuration
+>>>    	 * @ctx       : ctl path ctx pointer
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> index cedc631f8498..eef2f017031a 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> @@ -1107,6 +1107,8 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
+>>>    	dpu_kms->rm_init = true;
+>>> +	dpu_rm_clear_boot_config(&dpu_kms->rm, dpu_kms->catalog);
+>>> +
+>>>    	dpu_kms->hw_mdp = dpu_hw_mdptop_init(MDP_TOP, dpu_kms->mmio,
+>>>    					     dpu_kms->catalog);
+>>>    	if (IS_ERR(dpu_kms->hw_mdp)) {
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+>>> index f9c83d6e427a..3365c5e41e28 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+>>> @@ -4,6 +4,7 @@
+>>>     */
+>>>    #define pr_fmt(fmt)	"[drm:%s] " fmt, __func__
+>>> +#include <linux/delay.h>
+>>>    #include "dpu_kms.h"
+>>>    #include "dpu_hw_lm.h"
+>>>    #include "dpu_hw_ctl.h"
+>>> @@ -229,6 +230,22 @@ int dpu_rm_init(struct dpu_rm *rm,
+>>>    	return rc ? rc : -EFAULT;
+>>>    }
+>>> +void dpu_rm_clear_boot_config(struct dpu_rm *rm, struct dpu_mdss_cfg *cat)
+>>> +{
+>>> +	struct dpu_hw_ctl *ctl;
+>>> +	int i;
+>>> +
+>>> +	for (i = CTL_0; i < CTL_MAX; i++) {
+>>> +		if (!rm->ctl_blks[i - CTL_0])
+>>> +			continue;
+>>> +
+>>> +		DPU_DEBUG("disabling ctl%d boot configuration\n", i - CTL_0);
+>>> +
+>>> +		ctl = to_dpu_hw_ctl(rm->ctl_blks[i - CTL_0]);
+>>> +		ctl->ops.disable_boot_config(ctl);
+>>> +	}
+>>> +}
+>>> +
+>>>    static bool _dpu_rm_needs_split_display(const struct msm_display_topology *top)
+>>>    {
+>>>    	return top->num_intf > 1;
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
+>>> index 1f12c8d5b8aa..d3e084541e67 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.h
+>>> @@ -88,5 +88,13 @@ void dpu_rm_release(struct dpu_global_state *global_state,
+>>>    int dpu_rm_get_assigned_resources(struct dpu_rm *rm,
+>>>    	struct dpu_global_state *global_state, uint32_t enc_id,
+>>>    	enum dpu_hw_blk_type type, struct dpu_hw_blk **blks, int blks_size);
+>>> +
+>>> +/**
+>>> + * dpu_rm_clear_boot_config() - Tear down any data paths configured by boot
+>>> + * @rm: DPU Resource Manager handle
+>>> + * @cat: Pointer to hardware catalog
+>>> + */
+>>> +void dpu_rm_clear_boot_config(struct dpu_rm *rm, struct dpu_mdss_cfg *cat);
+>>> +
+>>>    #endif /* __DPU_RM_H__ */
+>>
+>>
+>> -- 
+>> With best wishes
+>> Dmitry
+
+
 -- 
-Mike Kravetz
-
-> +			count -= (1 << compound_order(compound_head(page))) - 1;
-> +		if (count - page_mapcount(page) > 1)
->  			xas_set_mark(xas, MEMFD_TAG_PINNED);
->  
->  		if (++tagged % XA_CHECK_SCHED)
-> @@ -67,11 +72,12 @@ static int memfd_wait_for_pins(struct address_space *mapping)
->  {
->  	XA_STATE(xas, &mapping->i_pages, 0);
->  	struct page *page;
-> -	int error, scan;
-> +	int error, scan, count;
->  
->  	memfd_tag_pins(&xas);
->  
->  	error = 0;
-> +	count = 0;
->  	for (scan = 0; scan <= LAST_SCAN; scan++) {
->  		unsigned int tagged = 0;
->  
-> @@ -89,8 +95,12 @@ static int memfd_wait_for_pins(struct address_space *mapping)
->  			bool clear = true;
->  			if (xa_is_value(page))
->  				continue;
-> +
->  			page = find_subpage(page, xas.xa_index);
-> -			if (page_count(page) - page_mapcount(page) != 1) {
-> +			count = page_count(page);
-> +			if (PageTransCompound(page))
-> +				count -= (1 << compound_order(compound_head(page))) - 1;
-> +			if (count - page_mapcount(page) != 1) {
->  				/*
->  				 * On the last scan, we clean up all those tags
->  				 * we inserted; but make a note that we still
-
-
+With best wishes
+Dmitry

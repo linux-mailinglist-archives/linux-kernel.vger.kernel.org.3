@@ -2,143 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C3F4BA8E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D494BA855
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239541AbiBQSzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:55:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60402 "EHLO
+        id S244488AbiBQSee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:34:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237519AbiBQSza (ORCPT
+        with ESMTP id S244498AbiBQSe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:55:30 -0500
-X-Greylist: delayed 1351 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 10:55:15 PST
-Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.45.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38AA55BD4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:55:15 -0800 (PST)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 29888400C74A1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:32:43 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id Kla7nN4wvdx86Kla7nyNXB; Thu, 17 Feb 2022 12:32:43 -0600
-X-Authority-Reason: nr=8
-Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:34156 helo=[10.0.0.45])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1nKla5-002U7P-7e; Thu, 17 Feb 2022 12:32:41 -0600
-Message-ID: <7f227281-a5c8-ba55-ed75-6ce2c4d423e3@kernel.org>
-Date:   Thu, 17 Feb 2022 19:32:34 +0100
+        Thu, 17 Feb 2022 13:34:26 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08912C138
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:32:55 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id 9so2206442ily.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:32:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5szz1MBv04IhvJQTuicCFg9n79Ee81Ajv+vxZc2S/PM=;
+        b=Ps04vo2SWQavePQsV73gJIC/NPh2WNLyzcfayq16ntkFlSX2GTe8l3tSz+/ZOQ9rwr
+         zjo01q4nEDnBnAhJlmw5sXQNDj2G1pcjNSlcwU7ttHkcHvmigK5ilr4BpG1+9IQPOz5g
+         78kgbQznhJGSMhqaf5gQWhN18EQZoyYiT7n6vBB1NslIhm3kX6QNzUpi9z4YP3tV5dfK
+         4eBktFr9Auh9VJDfwDeGIjXDGaKeCUpoPmXQdPIsXDrTo7wljGR1K0YRvfL8pIe6WcD+
+         Vg00xInx0qnd6EqlKxcFdmMFNd1MtCh9blhKdzrCGvgbv6W0sq3zhGc8LZruaHc47DWE
+         ZnPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5szz1MBv04IhvJQTuicCFg9n79Ee81Ajv+vxZc2S/PM=;
+        b=PqR7hbiIi9od0CGayeRe/5i7luZ08HEtuIDUuns+EnJxSdjlS3NYUM1oq2tmjujUpV
+         rUsHXKd8VHSFoGBu+K68huV0chWGII67v+SEcksfn3AInh1P24Qocxd5J0jb3JhIK2T+
+         81PWUgMp6Gt+Yv0xGZ7kR7b8cbVLLcRm9NfnhEyVHI+EO8dyttp7gjPcw8SzyvWdKFuB
+         7vSIRBxyZOZj8sVqh+CLU4c3HJH4Yuljswd6NMTnAj3CeK0h0nyU6T/l0u+CVNvX66sN
+         IADzKj4YUQBG+L5O6lnlXH15v98JZLs9G+3e1PGV8yKr0n9gwUPOhaKoPgfVW8ypykL4
+         V8+Q==
+X-Gm-Message-State: AOAM530X+zZ+60nxRD0z9U7Gyvu3wI+v174H/u0fkbjn3/ZMHryLCdww
+        YGAydi3A7OYcmrPRqsTS7v2WlmTiwpWh3kfEv8h3WA==
+X-Google-Smtp-Source: ABdhPJxQ+YQ+5rUSAu8FuSrPRvVUDrwPDiJ0gRVMwUHY6yjrAD08IqApzeUOhk0e4FuIDC6MRxrp88SyyUw6El+2EaI=
+X-Received: by 2002:a05:6e02:1c04:b0:2be:4c61:20f4 with SMTP id
+ l4-20020a056e021c0400b002be4c6120f4mr2814376ilh.245.1645122774541; Thu, 17
+ Feb 2022 10:32:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC V2 17/21] watchdog/dev: Add tracepoints
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        "Peter.Enderborg@sony.com" <Peter.Enderborg@sony.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-devel@vger.kernel.org" 
-        <linux-trace-devel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <cover.1644830251.git.bristot@kernel.org>
- <e67874c8b676ea8dfe38679efa25363889bb1e76.1644830251.git.bristot@kernel.org>
- <96f418b4-0ba8-01fe-ead0-2028bfc42560@sony.com>
- <ba924008-c0ab-4800-aac4-d9d9ae930c32@kernel.org>
- <ef1b1d99-6172-2b4d-9612-7ecbe8fc6c8b@roeck-us.net>
- <6c6fc4fa-6464-2dbf-40da-e3c61f322d95@redhat.com>
- <b59155c2-81c1-b2d8-c8d9-a97e3166cee3@roeck-us.net>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <b59155c2-81c1-b2d8-c8d9-a97e3166cee3@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 95.232.30.176
-X-Source-L: No
-X-Exim-ID: 1nKla5-002U7P-7e
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:34156
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 3
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <00000000000073b3e805d7fed17e@google.com> <462fa505-25a8-fd3f-cc36-5860c6539664@iogearbox.net>
+ <CAPhsuW6rPx3JqpPdQVdZN-YtZp1SbuW1j+SVNs48UVEYv68s1A@mail.gmail.com>
+ <CAPhsuW5JhG07TYKKHRbNVtepOLjZ2ekibePyyqCwuzhH0YoP7Q@mail.gmail.com>
+ <CANp29Y64wUeARFUn8Z0fjk7duxaZ3bJM2uGuVug_0ZmhGG_UTA@mail.gmail.com> <CAPhsuW6YOv_xjvknt_FPGwDhuCuG5s=7Xt1t-xL2+F6UKsJf-w@mail.gmail.com>
+In-Reply-To: <CAPhsuW6YOv_xjvknt_FPGwDhuCuG5s=7Xt1t-xL2+F6UKsJf-w@mail.gmail.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Thu, 17 Feb 2022 19:32:43 +0100
+Message-ID: <CANp29Y4YC_rSKAgkYTaPV1gcN4q4WeGMvs61P2wnMQEv=kiu8A@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_jit_free
+To:     Song Liu <song@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        syzbot <syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs@googlegroups.com, Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 19:17, Guenter Roeck wrote:
-> On 2/17/22 09:49, Gabriele Paoloni wrote:
->>
->>
->> On 17/02/2022 18:27, Guenter Roeck wrote:
->>> On 2/17/22 08:27, Daniel Bristot de Oliveira wrote:
->>>> Hi Peter
->>>>
->>>> On 2/16/22 17:01, Peter.Enderborg@sony.com wrote:
->>>>> On 2/14/22 11:45, Daniel Bristot de Oliveira wrote:
->>>>>> Add a set of tracepoints, enabling the observability of the watchdog
->>>>>> device interactions with user-space.
->>>>>>
->>>>>> The events are:
->>>>>>      watchdog:watchdog_open
->>>>>>      watchdog:watchdog_close
->>>>>>      watchdog:watchdog_start
->>>>>>      watchdog:watchdog_stop
->>>>>>      watchdog:watchdog_set_timeout
->>>>>>      watchdog:watchdog_ping
->>>>>>      watchdog:watchdog_nowayout
->>>>>>      watchdog:watchdog_set_keep_alive
->>>>>>      watchdog:watchdog_keep_alive
->>>>>
->>>>> Some watchdogs have a bark functionality, I think it should be event
->>>>> for that too.
->>>>>
->>>>
->>>> I understand. The problems is that I do not see the bark abstraction
->>>> in the
->>>> watchdog_dev layer.
->>>>
->>>
->>> I don't even know what "bark functionality" means. A new term for
->>> pretimeout ?
->>> Something else ?
->>
->>> From my understanding the bark timeout is actually the pretimeout
->> whereas the bite timeout is the actual timeout.
->> I think in the Kernel ftwdt010_wdt and qcom-wdt are bark/bite WTDs
->>
-> 
-> If that is the case, I would prefer if we could stick to existing
-> terminology to avoid issues like "I do not see the bark abstraction".
+Hi Song,
 
-I agree! I am using the terminology from watchdog dev. Like, I hear the term
-"pet" for the "ping", I used "ping."
+On Wed, Feb 16, 2022 at 5:27 PM Song Liu <song@kernel.org> wrote:
+>
+> Hi Aleksandr,
+>
+> Thanks for your kind reply!
+>
+> On Wed, Feb 16, 2022 at 1:38 AM Aleksandr Nogikh <nogikh@google.com> wrote:
+> >
+> > Hi Song,
+> >
+> > Is syzkaller not doing something you expect it to do with this config?
+>
+> I fixed sshkey in the config, and added a suppression for hsr_node_get_first.
+> However, I haven't got a repro overnight.
 
--- Daniel
+Oh, that's unfortunately not a very reliable thing. The bug has so far
+happened only once on syzbot, so it must be pretty rare. Maybe you'll
+have more luck with your local setup :)
+
+You can try to run syz-repro on the log file that is available on the
+syzbot dashboard:
+https://github.com/google/syzkaller/blob/master/tools/syz-repro/repro.go
+Syzbot has already done it and apparently failed to succeed, but this
+is also somewhat probabilistic, especially when the bug is due to some
+rare race condition. So trying it several times might help.
+
+Also you might want to hack your local syzkaller copy a bit:
+https://github.com/google/syzkaller/blob/master/syz-manager/manager.go#L804
+Here you can drop the limit on the maximum number of repro attempts
+and make needLocalRepro only return true if crash.Title matches the
+title of this particular bug. With this change your local syzkaller
+instance won't waste time reproducing other bugs.
+
+There's also a way to focus syzkaller on some specific kernel
+functions/source files:
+https://github.com/google/syzkaller/blob/master/pkg/mgrconfig/config.go#L125
+
+--
+Best Regards,
+Aleksandr
+
+>
+> >
+> > On Wed, Feb 16, 2022 at 2:38 AM Song Liu <song@kernel.org> wrote:
+> > >
+> > > On Mon, Feb 14, 2022 at 10:41 PM Song Liu <song@kernel.org> wrote:
+> > > >
+> > > > On Mon, Feb 14, 2022 at 3:52 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> > > > >
+> > > > > Song, ptal.
+> > > > >
+> > > > > On 2/14/22 7:45 PM, syzbot wrote:
+> > > > > > Hello,
+> > > > > >
+> > > > > > syzbot found the following issue on:
+> > > > > >
+> > > > > > HEAD commit:    e5313968c41b Merge branch 'Split bpf_sk_lookup remote_port..
+> > > > > > git tree:       bpf-next
+> > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=10baced8700000
+> > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
+> > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=2f649ec6d2eea1495a8f
+> > >
+> > > How do I run the exact same syzkaller? I am doing something like
+> > >
+> > > ./bin/syz-manager -config qemu.cfg
+> > >
+> > > with the cfg file like:
+> > >
+> > > {
+> > >         "target": "linux/amd64",
+> > >         "http": ":56741",
+> > >         "workdir": "workdir",
+> > >         "kernel_obj": "linux",
+> > >         "image": "./pkg/mgrconfig/testdata/stretch.img",
+> >
+> > This image location looks suspicious - we store some dummy data for
+> > tests in that folder.
+> > Instances now run on buildroot-based images, generated with
+> > https://github.com/google/syzkaller/blob/master/tools/create-buildroot-image.sh
+>
+> Thanks for the information. I will give it a try.
+>
+> >
+> > >         "syzkaller": ".",
+> > >         "disable_syscalls": ["keyctl", "add_key", "request_key"],
+> >
+> > For our bpf instances, instead of disable_syscalls we use enable_syscalls:
+> >
+> > "enable_syscalls": [
+> > "bpf", "mkdir", "mount$bpf", "unlink", "close",
+> > "perf_event_open*", "ioctl$PERF*", "getpid", "gettid",
+> > "socketpair", "sendmsg", "recvmsg", "setsockopt$sock_attach_bpf",
+> > "socket$kcm", "ioctl$sock_kcm*", "syz_clone",
+> > "mkdirat$cgroup*", "openat$cgroup*", "write$cgroup*",
+> > "openat$tun", "write$tun", "ioctl$TUN*", "ioctl$SIOCSIFHWADDR",
+> > "openat$ppp", "syz_open_procfs$namespace"
+> > ]
+>
+> I will try with the same list. Thanks!
+>
+> Song
+>
+> >
+> > >         "suppressions": ["some known bug"],
+> > >         "procs": 8,
+> >
+> > We usually run with "procs": 6, but it's not that important.
+> >
+> > >         "type": "qemu",
+> > >         "vm": {
+> > >                 "count": 16,
+> > >                 "cpu": 2,
+> > >                 "mem": 2048,
+> > >                 "kernel": "linux/arch/x86/boot/bzImage"
+> > >         }
+> > > }
+> >
+> > Otherwise I don't see any really significant differences.
+> >
+> > --
+> > Best Regards
+> > Aleksandr
+> >
+> > >
+> > > Is this correct? I am using stretch.img from syzkaller site, and the
+> > > .config from
+> > > the link above.
+> > >
+> > > Thanks,
+> > > Song
+> > >

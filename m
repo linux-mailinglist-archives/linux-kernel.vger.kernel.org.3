@@ -2,134 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9984BACAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF2E4BACB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbiBQWfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 17:35:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51762 "EHLO
+        id S1343898AbiBQWhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 17:37:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiBQWfa (ORCPT
+        with ESMTP id S232023AbiBQWhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 17:35:30 -0500
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3EC1688E4;
-        Thu, 17 Feb 2022 14:35:15 -0800 (PST)
-Received: by mail-io1-f49.google.com with SMTP id e79so5457101iof.13;
-        Thu, 17 Feb 2022 14:35:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QJCJJkJqtOsQ/CSbeUuObYQcThTPRTm035a09VI6ZJ4=;
-        b=f/9n2LwuAs550FqOKTRMdD/7R0l2o+0y6+sk7ZCzkiymb5Fk/hXL5cbeM813WdhnKL
-         cpj2/GwWukiAIRyYncpjrxqDWCZRbCy4TXk2L5nWjq2OeNsLV4e4ORxk527gYk1bTx3Q
-         2IoXoiWwwVIpYd0eIZfmUFDFUJprPVym/Q5uvlEE1oAldkLgF1DkW02rtOdp83yN5lZm
-         T95Gn87NQ/g7Ia365IFRBUcSy72mn5w48lqNkk8jJ6oaAS5AD3ViNQbj/K7KRnTmiBdm
-         9rmWN0HWm0J/Bp7dYOMPeSAKgYqnWPdd/q48jz6iMLY0DUWzo11ExOYcwijc9YA1bj0f
-         Rqfw==
-X-Gm-Message-State: AOAM530IBrfaH9/9K70Ofq2iU01V4wWoP6rhWn4isjHzU/Hn1CMBeP+o
-        ZqEkXUPQsy8V/yKyuoH0VQ==
-X-Google-Smtp-Source: ABdhPJy0BMvl0r/0X5Zc06+9xSfxyHJxRc8f8yEbFq5HYdWl/tpmNswA1NCuOnIwtqi5NIlgpfhMVw==
-X-Received: by 2002:a02:7a16:0:b0:313:f2f9:2ebc with SMTP id a22-20020a027a16000000b00313f2f92ebcmr3370002jac.136.1645137315031;
-        Thu, 17 Feb 2022 14:35:15 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id u15sm2891106ill.75.2022.02.17.14.35.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 14:35:14 -0800 (PST)
-Received: (nullmailer pid 3892127 invoked by uid 1000);
-        Thu, 17 Feb 2022 22:35:12 -0000
-Date:   Thu, 17 Feb 2022 16:35:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: Add power-efuse binding
-Message-ID: <Yg7NoLzC7zt2oihV@robh.at.kernel.org>
-References: <20220217104444.7695-1-zev@bewilderbeest.net>
- <20220217104444.7695-4-zev@bewilderbeest.net>
+        Thu, 17 Feb 2022 17:37:18 -0500
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341D7811B9;
+        Thu, 17 Feb 2022 14:36:55 -0800 (PST)
+Received: from in02.mta.xmission.com ([166.70.13.52]:48942)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nKpOJ-001bK3-23; Thu, 17 Feb 2022 15:36:47 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:32906 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nKpOG-00GKIm-Md; Thu, 17 Feb 2022 15:36:46 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, akpm@linux-foundation.org,
+        ardb@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org
+References: <20220216131332.1489939-1-arnd@kernel.org>
+        <20220216131332.1489939-19-arnd@kernel.org>
+Date:   Thu, 17 Feb 2022 16:36:20 -0600
+In-Reply-To: <20220216131332.1489939-19-arnd@kernel.org> (Arnd Bergmann's
+        message of "Wed, 16 Feb 2022 14:13:32 +0100")
+Message-ID: <8735khi0ij.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217104444.7695-4-zev@bewilderbeest.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nKpOG-00GKIm-Md;;;mid=<8735khi0ij.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/V+0C7NWKuSkdwXmdluwhE5ZIu3hq7L5I=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Arnd Bergmann <arnd@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1733 ms - load_scoreonly_sql: 0.07 (0.0%),
+        signal_user_changed: 12 (0.7%), b_tie_ro: 10 (0.6%), parse: 1.27
+        (0.1%), extract_message_metadata: 18 (1.0%), get_uri_detail_list: 2.3
+        (0.1%), tests_pri_-1000: 25 (1.4%), tests_pri_-950: 1.37 (0.1%),
+        tests_pri_-900: 1.22 (0.1%), tests_pri_-90: 280 (16.2%), check_bayes:
+        278 (16.0%), b_tokenize: 12 (0.7%), b_tok_get_all: 173 (10.0%),
+        b_comp_prob: 2.8 (0.2%), b_tok_touch_all: 86 (5.0%), b_finish: 0.97
+        (0.1%), tests_pri_0: 1377 (79.4%), check_dkim_signature: 0.66 (0.0%),
+        check_dkim_adsp: 2.6 (0.2%), poll_dns_idle: 0.47 (0.0%), tests_pri_10:
+        3.3 (0.2%), tests_pri_500: 10 (0.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 02:44:43AM -0800, Zev Weiss wrote:
-> This can be used to describe a power output supplied by a regulator
-> device that the system controls.
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Arnd Bergmann <arnd@kernel.org> writes:
+
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> There are no remaining callers of set_fs(), so CONFIG_SET_FS
+> can be removed globally, along with the thread_info field and
+> any references to it.
+>
+> This turns access_ok() into a cheaper check against TASK_SIZE_MAX.
+>
+> With CONFIG_SET_FS gone, so drop all remaining references to
+> set_fs()/get_fs(), mm_segment_t and uaccess_kernel().
+
+For the bits I have looked at recently, and think I understand.
+
+Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  .../devicetree/bindings/misc/power-efuse.yaml | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/misc/power-efuse.yaml b/Documentation/devicetree/bindings/misc/power-efuse.yaml
-> new file mode 100644
-> index 000000000000..cadce15d2ce7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/power-efuse.yaml
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/misc/power-efuse.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic power efuse device
-
-No idea what this is, but I doubt any such generic device exists. This 
-needs sufficient description to be convincing that it is indeed generic.
-
-> +
-> +maintainers:
-> + - Zev Weiss <zev@bewilderbeest.net>
-> +
-> +properties:
-> +  compatible:
-> +    const: power-efuse
-> +
-> +  vout-supply:
-> +    description:
-> +      phandle to the regulator providing power for the efuse
-> +
-> +  error-flags-cache-ttl-ms:
-> +    description:
-> +      The number of milliseconds the vout-supply regulator's error
-> +      flags should be cached before re-fetching them.
-
-What are 'error flags'? Not something I've heard with respect to 
-regulators.
-
-> +
-> +required:
-> +  - compatible
-> +  - vout-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    efuse {
-> +        compatible = "power-efuse";
-> +        vout-supply = <&efuse_reg>;
-> +        error-flags-cache-ttl-ms = <500>;
-> +    };
-> -- 
-> 2.35.1
-> 
-> 
+>  fs/exec.c                                 |  6 --
+>  kernel/exit.c                             | 14 -----
+>  kernel/kthread.c                          |  5 --
+>
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 79f2c9483302..bc68a0c089ac 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1303,12 +1303,6 @@ int begin_new_exec(struct linux_binprm * bprm)
+>  	if (retval)
+>  		goto out_unlock;
+>  
+> -	/*
+> -	 * Ensure that the uaccess routines can actually operate on userspace
+> -	 * pointers:
+> -	 */
+> -	force_uaccess_begin();
+> -
+>  	if (me->flags & PF_KTHREAD)
+>  		free_kthread_struct(me);
+>  	me->flags &= ~(PF_RANDOMIZE | PF_FORKNOEXEC | PF_KTHREAD |
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index b00a25bb4ab9..0884a75bc2f8 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -737,20 +737,6 @@ void __noreturn do_exit(long code)
+>  
+>  	WARN_ON(blk_needs_flush_plug(tsk));
+>  
+> -	/*
+> -	 * If do_dead is called because this processes oopsed, it's possible
+> -	 * that get_fs() was left as KERNEL_DS, so reset it to USER_DS before
+> -	 * continuing. Amongst other possible reasons, this is to prevent
+> -	 * mm_release()->clear_child_tid() from writing to a user-controlled
+> -	 * kernel address.
+> -	 *
+> -	 * On uptodate architectures force_uaccess_begin is a noop.  On
+> -	 * architectures that still have set_fs/get_fs in addition to handling
+> -	 * oopses handles kernel threads that run as set_fs(KERNEL_DS) by
+> -	 * default.
+> -	 */
+> -	force_uaccess_begin();
+> -
+>  	kcov_task_exit(tsk);
+>  
+>  	coredump_task_exit(tsk);
+> diff --git a/kernel/kthread.c b/kernel/kthread.c
+> index 38c6dd822da8..16c2275d4b50 100644
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -55,7 +55,6 @@ struct kthread {
+>  	int result;
+>  	int (*threadfn)(void *);
+>  	void *data;
+> -	mm_segment_t oldfs;
+>  	struct completion parked;
+>  	struct completion exited;
+>  #ifdef CONFIG_BLK_CGROUP
+> @@ -1441,8 +1440,6 @@ void kthread_use_mm(struct mm_struct *mm)
+>  		mmdrop(active_mm);
+>  	else
+>  		smp_mb();
+> -
+> -	to_kthread(tsk)->oldfs = force_uaccess_begin();
+>  }
+>  EXPORT_SYMBOL_GPL(kthread_use_mm);
+>  
+> @@ -1457,8 +1454,6 @@ void kthread_unuse_mm(struct mm_struct *mm)
+>  	WARN_ON_ONCE(!(tsk->flags & PF_KTHREAD));
+>  	WARN_ON_ONCE(!tsk->mm);
+>  
+> -	force_uaccess_end(to_kthread(tsk)->oldfs);
+> -
+>  	task_lock(tsk);
+>  	/*
+>  	 * When a kthread stops operating on an address space, the loop

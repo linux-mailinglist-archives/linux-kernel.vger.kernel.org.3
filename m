@@ -2,141 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9764E4BAA66
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40FA44BAA79
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 20:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245580AbiBQTya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 14:54:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49678 "EHLO
+        id S245595AbiBQT7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 14:59:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbiBQTy1 (ORCPT
+        with ESMTP id S245590AbiBQT7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 14:54:27 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E09F12E150
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:54:12 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2d625082ae2so44056547b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:54:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CY03vuKHIipPaIy4G74R9XCKkPzAcd7M3s3fpInivhA=;
-        b=Zqu/g+7VZQJs9deYRXvrVTIVbE6RVmPdkzUvltXlnz/pz9eh/v39w8IhGUv4Cp9OYM
-         OSSYDblf2WSUnxCXIj3sYpyW6W6Px7mtt0zpTdNjI91ONX3PKpSwtWRD/X9w7kixghv+
-         hBJ/7gf2GQlJeU28ZtrDTtI+VFGee+BV8WL/SOkL8lrIww97jp4oJKdKT+4e+3pB+WOP
-         o1MDBIvwyaDSUP7piAgCiHzZ7GQGfqft+Ze5D750C96dWtJllyKG3D7ao0uzpJ1mScze
-         WoJsTVgqfCwPFqRJQy0uthHG8ywFUm9WfGEWfAB7vVDE/v7iTtwmsI3+5w5+1vBxb62h
-         0sog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CY03vuKHIipPaIy4G74R9XCKkPzAcd7M3s3fpInivhA=;
-        b=0AT0izEyJG6DAev9UUmi9yoF00cobLGl9EG0newe2M1gTw3/JGrLwri1WNyGMm8V22
-         wj6nByXpi5eeh8IpoDyCoQYAUPLzzgnQFKQ8gsP1R8Ko3tqXIh8t2teyPtr8Sl6IrVEx
-         kA8ThxL/+b8R1Ouy2Ra1vN+tJCK0s06rC67syTotmUwDJBeK59Q9Pss9tZhAeoHmG+yK
-         LAGISf1gTfraq61srbsrgNBc8amIP2ZJw59hStC1dFxUAOumBp5Flt8tW9jDAUywY7Au
-         YVwWufrYJiREkAPg2SsOPghg/bLy5UEeQCHdrct0mivmtECwoGJy2OwhuO40PqfDl/He
-         byIQ==
-X-Gm-Message-State: AOAM532lqso8u7xX6Xbtf1Bi4HJAP7lG5tT4eXJfrtEQjF0GEtDDQ20P
-        LMRWwekHhm5wTPbjpTJxI96ESffz/puM5lJNf+q7Cg==
-X-Google-Smtp-Source: ABdhPJyT2mtE7BfLv9CuhSal0ghswn//AN1A619CSO+rB8TDmoZHs2sOAvPmEG3am2YYXgZHn1fzVIRvSUZumnflswc=
-X-Received: by 2002:a81:334e:0:b0:2d0:aeef:fcd2 with SMTP id
- z75-20020a81334e000000b002d0aeeffcd2mr4216866ywz.180.1645127651380; Thu, 17
- Feb 2022 11:54:11 -0800 (PST)
+        Thu, 17 Feb 2022 14:59:20 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487C528E35
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 11:59:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645127945; x=1676663945;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=T/dy5bFV0hFt5PA339JCU431TnB8St9YIJsJ095SE54=;
+  b=OKLJG2k2ZLmkG6z8A0kanEytjHmDGjFNKa+ateshcAI4GAB70UXRmO2K
+   CKv3ix+fR9FaNQj2tJgChyixMv5enTidi4Ok/9uu68F3/kb3lLIpVNPFT
+   7cguxlN84J484noDBtWPZWkGOWu5OsRgZxcyw5OunxL8OmwlBXjjrEZsD
+   2RPsJ3G61tU5tLUakoe7wLTAEjsIHKhAyDUQUIJ6o+xTosJGftpffMGrI
+   sue0dKkUryEAK+dtLcpUeSrgy0MJ9+yRzo9VZ7S+5ZKrYiYWZaqeIk+Xv
+   vN2uB4jM/bJsw1mJ00U1qEXJ536KalsX4WviVt99SvzeJpGtCa7G5DcLm
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="250704140"
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="250704140"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:59:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="488646551"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2022 11:59:02 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKmvd-0000aO-W2; Thu, 17 Feb 2022 19:59:01 +0000
+Date:   Fri, 18 Feb 2022 03:58:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [ulfh-mmc:next 20/24] drivers/memstick/core/ms_block.c:158:6: error:
+ implicit declaration of function 'bitmap_weight_eq'
+Message-ID: <202202180327.nT5gZudK-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220211013032.623763-1-surenb@google.com> <YgvONKdZ2T0PB2/0@dhcp22.suse.cz>
- <YgwDa6rMHRdRTnzB@dhcp22.suse.cz> <YgwHhTN4P5yyZqBz@dhcp22.suse.cz>
- <CAJuCfpGG9zwbvfH5UZkt6cG=woeO0RGE7QxjEpXn=gFhiaDdmQ@mail.gmail.com> <YgywnF8l4Zu0aLtF@dhcp22.suse.cz>
-In-Reply-To: <YgywnF8l4Zu0aLtF@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 17 Feb 2022 11:54:00 -0800
-Message-ID: <CAJuCfpFOy_oRp=WWqtzE7bJR7p51FzzBPtbKhWeTGOKC-n41Cg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] mm: fix use-after-free when anon vma name is used
- after vma is freed
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Colin Cross <ccross@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Christian Brauner <brauner@kernel.org>, legion@kernel.org,
-        ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Peter Collingbourne <pcc@google.com>, caoxiaofeng@yulong.com,
-        David Hildenbrand <david@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 15-02-22 15:02:54, Suren Baghdasaryan wrote:
-> > On Tue, Feb 15, 2022 at 12:05 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > One thing I was considering is to check agains ref counte overflo (a
-> > > deep process chain with many vmas could grow really high. ref_count
-> > > interface doesn't provide any easy way to check for overflows as far as
-> > > I could see from a quick glance so I gave up there but the logic would
-> > > be really straightforward. We just create a new anon_vma_name with the same
-> > > content and use it when duplicating if the usage grow really
-> > > (arbitrarily) high.
-> >
-> > I went over proposed changes. I see a couple small required fixes
-> > (resetting the name to NULL seems to be missing and I think
-> > dup_vma_anon_name needs some tweaking) but overall quite
-> > straight-forward.
->
-> OK, great that this makes sense to you. As I've said I didn't really go
-> into details, not even dared to boot that to test. So it will very
-> likely need some more work but I do not expect this to grow much.
->
-> > I'll post a separate patch to do this refactoring.
-> > The original patch is fixing the UAF issue, so I don't want to mix it
-> > with refactoring. Please let me know if you see an issue with
-> > separating it that way.
->
-> Well, I am not sure TBH. Look at diffstats. Your fix
-> 2 files changed, 63 insertions(+), 17 deletions(-)
-> the refactoring which should fix this and potentially others that might
-> be still lurking there (because mixing shared pointers and their internal
-> objects just begs for problems) is
-> 7 files changed, 63 insertions(+), 86 deletions(-)
->
-> more files touched for sure but the net result is much more clear and a
-> much more code removed.
-> The overflow logic would make it bigger but I guess the existing scheme
-> needs it as well.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
+head:   4b67100bafbb3f60e6eecf87631e4d400d9b6f17
+commit: 5f8d171cd8a93ff425556e7fde5d59fefc677bf7 [20/24] memstick: replace bitmap_weight with bitmap_weight_eq where appropriate
+config: hexagon-randconfig-r045-20220217 (https://download.01.org/0day-ci/archive/20220218/202202180327.nT5gZudK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git/commit/?id=5f8d171cd8a93ff425556e7fde5d59fefc677bf7
+        git remote add ulfh-mmc git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git
+        git fetch --no-tags ulfh-mmc next
+        git checkout 5f8d171cd8a93ff425556e7fde5d59fefc677bf7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/memstick/core/
 
-Ok, I'll see how to slice it after it's complete and tested.
-Thanks for the input!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> I would also claim that both approaches are really painful to review
-> because the existing model spreads into several areas and it is not
-> really clear you caught them all just by staring into the diff so both
-> will be rather painful to backport to older kernels. Fortunately this
-> would be only 5.17.
-> --
-> Michal Hocko
-> SUSE Labs
+All errors (new ones prefixed by >>):
+
+>> drivers/memstick/core/ms_block.c:158:6: error: implicit declaration of function 'bitmap_weight_eq' [-Werror,-Wimplicit-function-declaration]
+           if (bitmap_weight_eq(msb->used_blocks_bitmap, msb->block_count,
+               ^
+   drivers/memstick/core/ms_block.c:158:6: note: did you mean 'bitmap_weight'?
+   include/linux/bitmap.h:399:28: note: 'bitmap_weight' declared here
+   static __always_inline int bitmap_weight(const unsigned long *src, unsigned int nbits)
+                              ^
+   1 error generated.
+
+
+vim +/bitmap_weight_eq +158 drivers/memstick/core/ms_block.c
+
+   145	
+   146	/* Debug test to validate free block counts */
+   147	static int msb_validate_used_block_bitmap(struct msb_data *msb)
+   148	{
+   149		int total_free_blocks = 0;
+   150		int i;
+   151	
+   152		if (!debug)
+   153			return 0;
+   154	
+   155		for (i = 0; i < msb->zone_count; i++)
+   156			total_free_blocks += msb->free_block_count[i];
+   157	
+ > 158		if (bitmap_weight_eq(msb->used_blocks_bitmap, msb->block_count,
+   159					msb->block_count - total_free_blocks))
+   160			return 0;
+   161	
+   162		pr_err("BUG: free block counts don't match the bitmap");
+   163		msb->read_only = true;
+   164		return -EINVAL;
+   165	}
+   166	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

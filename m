@@ -2,85 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972764B94C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 00:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0C24B94CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 01:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238648AbiBPX7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 18:59:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51670 "EHLO
+        id S238625AbiBQAF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 19:05:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiBPX7r (ORCPT
+        with ESMTP id S229820AbiBQAF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 18:59:47 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCED141E00;
-        Wed, 16 Feb 2022 15:59:33 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id m3so681717eda.10;
-        Wed, 16 Feb 2022 15:59:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ew3Xa6gAkKuI3fbgTzfugwZyLwcI+iWPyFMlpPcJqSU=;
-        b=lzLlxHdlUXuCNjAZXfB7KIiUyR2VTKiPDBb2e3w1ic5GAMa6RADuUnSP235pHdBE0S
-         Y6pXgEkpSSXGh0Dkv6ZE1kH8yj86StQ67CgwCsBEOJeRSGKM/gmV/8lssmfONoQscBBm
-         WIrmEO6Gp5zFC+SXIPw7oj8xPKAro+stJenE2hYACXdsQyOWwORnFtpoiPN5nGaUHUtc
-         O8E4RBYmNk9gD/9B5IVPqdDlQ3c8NCl9jmnK6oNffNzBHyGs1y+HkWIKlvN0qdoz/AeS
-         XqfIX54VIXdHZeExVT5ryY+Hi9+/SXuIET46jMer/Ly5kfp0bVeQns0y6MsUFeJMfNl9
-         KfYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ew3Xa6gAkKuI3fbgTzfugwZyLwcI+iWPyFMlpPcJqSU=;
-        b=X7rq7YYoEWIcrUsIZ+bLPAF2je7Fn8lY47JdlnJxQQI90N5gTP4/30E1ZXNuNM7qaY
-         OacuCNKHR5KSm2qMFpt2kY4u6KLHdSeSEVXridqJhWPxNZclcT9AvzbiIsyMapm6vnbv
-         YAyhzRdQPt3tsE9iCraMh+255CxTOY4PKv1usy5CeCwLrvjN5XaDNFzIjsiuIkNFw/cC
-         Ml/PMGV9uMl+JOt0sd/juqbDzgjcfBv5npVi36EaOslx24cgPaY7N3Ap/XrbXqZEblwg
-         V4MUMzwHExdBnHrtUtU23Rp+H+YwWZiWenwDsQJq70B1XGa2KOPoawUY2fzlPAfhMVrr
-         pZcA==
-X-Gm-Message-State: AOAM5329Dg4hD2n/Ya0AcWqEaL47vd/oz/G3Vvi7T2WrojJN2hrU8JVy
-        EcSfrHCDs0przem7A6giBpQ=
-X-Google-Smtp-Source: ABdhPJzxhRAKn6gfWozQLlVghwYgV9gcYOil6MNq6epB4uIe7Pt8jH6Viqbhd7wo8j6FCloc0Das2Q==
-X-Received: by 2002:a05:6402:27c7:b0:412:80f9:18af with SMTP id c7-20020a05640227c700b0041280f918afmr181405ede.127.1645055971842;
-        Wed, 16 Feb 2022 15:59:31 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id h8sm2453908edk.14.2022.02.16.15.59.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 15:59:31 -0800 (PST)
-Date:   Thu, 17 Feb 2022 01:59:30 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Mans Rullgard <mans@mansr.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Juergen Borleis <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: dsa: lan9303: add VLAN IDs to master device
-Message-ID: <20220216235930.q2l3lr7p7pf5hozo@skbuf>
-References: <20220216204818.28746-1-mans@mansr.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216204818.28746-1-mans@mansr.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Feb 2022 19:05:28 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C4A029C10C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 16:05:14 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9F4C920BCFD5;
+        Wed, 16 Feb 2022 16:05:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9F4C920BCFD5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1645056313;
+        bh=F3AN2ic/8lzp1pIxcJQUmsKv75Hq/rfeI9BL68XqI/w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gmeDVDf7XVsqJ2qcB7c4ATQ9zEj4zSlFYa8xDqDOHv/4Wgj703Ri8GoSQLboIn1Zs
+         7X9WjZJoR8JNlQXOmadafsNad79w7rruIQKqM5rkmdi36t7HhqA8v1d5p2zeI5heIY
+         rKN18Mg1JCYQ6ji9AE0+fYYU8qff6stDMRrr4Ecw=
+From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Vijay Balakrishna <vijayb@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones
+Date:   Wed, 16 Feb 2022 16:04:54 -0800
+Message-Id: <1645056294-6509-1-git-send-email-vijayb@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 08:48:18PM +0000, Mans Rullgard wrote:
-> If the master device does VLAN filtering, the IDs used by the switch
-> must be added for any frames to be received.  Do this in the
-> port_enable() function, and remove them in port_disable().
-> 
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
-> ---
+The following patches resulted in deferring crash kernel reservation to
+mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
+in particular Raspberry Pi 4.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
+commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
+commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
+commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required")
+
+Above changes introduced boot slowdown due to linear map creation for
+all the memory banks with NO_BLOCK_MAPPINGS, see discussion[1].  The proposed
+changes restore crash kernel reservation to earlier behavior thus avoids
+slow boot, particularly for platforms with IOMMU (no DMA memory zones).
+
+[1] https://lore.kernel.org/all/9436d033-579b-55fa-9b00-6f4b661c2dd7@linux.microsoft.com/
+
+Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+Cc: stable@vger.kernel.org
+---
+Tested changes to confirm no ~150ms boot slowdown on our SoC with IOMMU
+and 8GB memory.  Also tested with ZONE_DMA and/or ZONE_DMA32 configs to confirm
+no regression to deferring scheme of crash kernel memory reservation.
+In both cases successfully collected kernel crash dump.
+---
+ arch/arm64/mm/init.c | 14 +++++++++++---
+ arch/arm64/mm/mmu.c  | 24 +++++++++++++++++++++++-
+ 2 files changed, 34 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index db63cc885771..f2a982c19b75 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -62,7 +62,11 @@ EXPORT_SYMBOL(memstart_addr);
+  * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
+  * otherwise it is empty.
+  */
+-phys_addr_t arm64_dma_phys_limit __ro_after_init;
++#if !defined(CONFIG_ZONE_DMA) && !defined(CONFIG_ZONE_DMA32)
++phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
++#else
++phys_addr_t __ro_after_init arm64_dma_phys_limit;
++#endif
+ 
+ #ifdef CONFIG_KEXEC_CORE
+ /*
+@@ -153,8 +157,6 @@ static void __init zone_sizes_init(unsigned long min, unsigned long max)
+ 	if (!arm64_dma_phys_limit)
+ 		arm64_dma_phys_limit = dma32_phys_limit;
+ #endif
+-	if (!arm64_dma_phys_limit)
+-		arm64_dma_phys_limit = PHYS_MASK + 1;
+ 	max_zone_pfns[ZONE_NORMAL] = max;
+ 
+ 	free_area_init(max_zone_pfns);
+@@ -315,6 +317,10 @@ void __init arm64_memblock_init(void)
+ 
+ 	early_init_fdt_scan_reserved_mem();
+ 
++#if !defined(CONFIG_ZONE_DMA) && !defined(CONFIG_ZONE_DMA32)
++	reserve_crashkernel();
++#endif
++
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+@@ -357,11 +363,13 @@ void __init bootmem_init(void)
+ 	 */
+ 	dma_contiguous_reserve(arm64_dma_phys_limit);
+ 
++#if defined(CONFIG_ZONE_DMA) || defined(CONFIG_ZONE_DMA32)
+ 	/*
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
+ 	 */
+ 	reserve_crashkernel();
++#endif
+ 
+ 	memblock_dump_all();
+ }
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index acfae9b41cc8..e7faf5edccfc 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -517,7 +517,7 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
+ 
+-	if (can_set_direct_map() || crash_mem_map || IS_ENABLED(CONFIG_KFENCE))
++	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+ 		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+ 
+ 	/*
+@@ -528,6 +528,14 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+ 
++#ifdef CONFIG_KEXEC_CORE
++	if (crash_mem_map && !crashk_res.end)
++		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
++
++	if (crashk_res.end)
++		memblock_mark_nomap(crashk_res.start,
++				    resource_size(&crashk_res));
++#endif
+ 	/* map all the memory banks */
+ 	for_each_mem_range(i, &start, &end) {
+ 		if (start >= end)
+@@ -554,6 +562,20 @@ static void __init map_mem(pgd_t *pgdp)
+ 	__map_memblock(pgdp, kernel_start, kernel_end,
+ 		       PAGE_KERNEL, NO_CONT_MAPPINGS);
+ 	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
++#ifdef CONFIG_KEXEC_CORE
++	/*
++	 * Use page-level mappings here so that we can shrink the region
++	 * in page granularity and put back unused memory to buddy system
++	 * through /sys/kernel/kexec_crash_size interface.
++	 */
++	if (crashk_res.end) {
++		__map_memblock(pgdp, crashk_res.start, crashk_res.end + 1,
++			       PAGE_KERNEL,
++			       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
++		memblock_clear_nomap(crashk_res.start,
++				     resource_size(&crashk_res));
++	}
++#endif
+ }
+ 
+ void mark_rodata_ro(void)
+-- 
+2.35.1
+

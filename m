@@ -2,229 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447284B9E7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1934C4B9E7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239692AbiBQLV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:21:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47242 "EHLO
+        id S239695AbiBQLX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:23:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiBQLVz (ORCPT
+        with ESMTP id S232210AbiBQLX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:21:55 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 595F1260B;
-        Thu, 17 Feb 2022 03:21:37 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.31:59904.1315278447
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 60DFA1002A9;
-        Thu, 17 Feb 2022 19:21:33 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 45689aa60f704e2f9cd7547de120f433 for krzk@kernel.org;
-        Thu, 17 Feb 2022 19:21:35 CST
-X-Transaction-ID: 45689aa60f704e2f9cd7547de120f433
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <f75be7e3-bf14-77f5-4885-df9786951348@189.cn>
-Date:   Thu, 17 Feb 2022 19:21:33 +0800
+        Thu, 17 Feb 2022 06:23:27 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E4B1285B5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:23:10 -0800 (PST)
+Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21HBMWwN049591;
+        Thu, 17 Feb 2022 20:22:32 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
+ Thu, 17 Feb 2022 20:22:32 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21HBMWDC049588
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 17 Feb 2022 20:22:32 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <2f887679-c783-bf18-a2aa-aa9a709bfb38@I-love.SAKURA.ne.jp>
+Date:   Thu, 17 Feb 2022 20:22:30 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v9 3/4] Documentation/dt: Add descriptions for loongson
- display controller
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: [PATCH v2] workqueue: Warn flush attempt using system-wide workqueues
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220217105523.1525122-1-15330273260@189.cn>
- <20220217105523.1525122-4-15330273260@189.cn>
- <0ed34852-990d-af07-afd7-1d8ce3a2baf9@kernel.org>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <0ed34852-990d-af07-afd7-1d8ce3a2baf9@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Bart Van Assche <bvanassche@acm.org>, jgg@ziepe.ca,
+        linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Haakon Bugge <haakon.bugge@oracle.com>
+References: <0000000000005975a605d7aef05e@google.com>
+ <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+ <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+ <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
+ <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
+ <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
+ <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
+ <YgnQGZWT/n3VAITX@slm.duckdns.org>
+ <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
+ <YgqSsuSN5C7StvKx@slm.duckdns.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <YgqSsuSN5C7StvKx@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot found a circular locking dependency which is caused by flushing
+system_long_wq WQ [1]. Tejun Heo commented that it makes no sense at all
+to call flush_workqueue() on the shared workqueues as the caller has no
+idea what it's gonna end up waiting for.
 
-On 2022/2/17 18:57, Krzysztof Kozlowski wrote:
-> On 17/02/2022 11:55, Sui Jingfeng wrote:
->> From: suijingfeng <suijingfeng@loongson.cn>
->>
->> Add DT documentation for loongson display controller found in
->> LS2K1000, LS2K0500, LS7A1000 and LS7A2000.
->>
->> v2: DT binding docs and includes should be a separate patch,
->>      fix a warnning because of that.
->>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> ---
->>   .../loongson/loongson,display-controller.yaml | 114 ++++++++++++++++++
->>   1 file changed, 114 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> new file mode 100644
->> index 000000000000..94229519022a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> @@ -0,0 +1,114 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/loongson,display-controller.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson LS7A2000/LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
->> +
->> +maintainers:
->> +  - Sui Jingfeng <suijingfeng@loongson.cn>
->> +
->> +description: |+
->> +
->> +  Loongson display controllers are simple which require scanout buffers
->> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
->> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
->> +  with a dedicated video ram which is 64MB or more.
->> +
->> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
->> +  located at the DC register space. They are used to emulate two way i2c,
->> +  One for DVO0, another for DVO1.
->> +
->> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
->> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
->> +
->> +  LSDC has two display pipes, each way has a DVO interface which provide
->> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
->> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
->> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
->> +
->> +  LSDC's display pipeline have several components as below description,
->> +
->> +  The display controller in LS7A1000:
->> +    ___________________                                     _________
->> +    |            -------|                                   |         |
->> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monotor |
->> +    |  _   _     -------|        ^             ^            |_________|
->> +    | | | | |    -------|        |             |
->> +    | |_| |_|    | i2c0 <--------+-------------+
->> +    |            -------|
->> +    |   DC IN LS7A1000  |
->> +    |  _   _     -------|
->> +    | | | | |    | i2c1 <--------+-------------+
->> +    | |_| |_|    -------|        |             |             _________
->> +    |            -------|        |             |            |         |
->> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->> +    |            -------|                                   |_________|
->> +    |___________________|
->> +
->> +  Simple usage of LS7A1000 with LS3A4000 CPU:
->> +
->> +    +------+            +-----------------------------------+
->> +    | DDR4 |            |  +-------------------+            |
->> +    +------+            |  | PCIe Root complex |   LS7A1000 |
->> +       || MC0           |  +--++---------++----+            |
->> +  +----------+  HT 3.0  |     ||         ||                 |
->> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
->> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
->> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
->> +       || MC1           +---------------|--|----------------+
->> +    +------+                            |  |
->> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->> +                      +-------+                      +------+
->> +
->> +  The display controller in LS2K1000/LS2K0500:
->> +     ___________________                                     _________
->> +    |            -------|                                   |         |
->> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monotor |
->> +    |  _   _     -------|        ^              ^           |_________|
->> +    | | | | |           |        |              |
->> +    | |_| |_|           |     +------+          |
->> +    |                   <---->| i2c0 |<---------+
->> +    |   DC IN LS2K1000  |     +------+
->> +    |  _   _            |     +------+
->> +    | | | | |           <---->| i2c1 |----------+
->> +    | |_| |_|           |     +------+          |            _________
->> +    |            -------|        |              |           |         |
->> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->> +    |            -------|                                   |_________|
->> +    |___________________|
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - loongson,ls7a2000-dc
->> +      - loongson,ls7a1000-dc
->> +      - loongson,ls2k1000-dc
->> +      - loongson,ls2k0500-dc
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    minItems: 1
-> No need for minItems, if you have maxItems:1.
->
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    lsdc: display-controller@6,1 {
->> +        compatible = "loongson,ls7a1000-dc";
->> +        reg = <0x3100 0x0 0x0 0x0 0x0>;
->> +        interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
->> +        interrupt-parent = <&pic>;
->> +    };
-> I still do not think you actually tested it with dt_bindings_check...
->
->
-> Best regards,
-> Krzysztof
+Although there is flush_scheduled_work() which flushes system_wq WQ with
+"Think twice before calling this function! It's very easy to get into
+trouble if you don't take great care." warning message, it will be too
+difficult to guarantee that all users safely flush system-wide WQs.
 
-I'm hurry to fix a few error in the v8 of this patch set, to avoid
-reviewers get angry about those mistake in my patch.
-   
-I come cross a few problems when running make dt_bindings_check,
-i am confusing about that, writing DT discpription of PCI display
-controller is not as easy as platform one. I will fix it at next version,
-thanks you.
+Therefore, let's change the direction to that developers had better use
+their own WQs if flushing is inevitable. To give developers time to update
+their modules, for now just emit a warning message when flush_workqueue()
+or flush_work() is called on system-wide WQs. We will eventually convert
+this warning message into WARN_ON() and kill flush_scheduled_work().
+
+Link: https://syzkaller.appspot.com/bug?extid=831661966588c802aae9 [1]
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+---
+Changes in v2:
+  Removed #ifdef CONFIG_PROVE_LOCKING=y check.
+  Also check flush_work() attempt.
+  Shorten warning message.
+  Introduced a public WQ_ flag, which is initially meant for use by
+  only system-wide WQs, but allows private WQs used by built-in modules
+  to use this flag for detecting unexpected flush attempts if they want.
+
+ include/linux/workqueue.h | 26 +++++++++++++------------
+ kernel/workqueue.c        | 41 ++++++++++++++++++++++++++++-----------
+ 2 files changed, 44 insertions(+), 23 deletions(-)
+
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 7fee9b6cfede..4b698917b9d5 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -335,6 +335,18 @@ enum {
+ 	 */
+ 	WQ_POWER_EFFICIENT	= 1 << 7,
+ 
++	/*
++	 * Since flush operation synchronously waits for completion, flushing
++	 * system-wide workqueues (e.g. system_wq) or a work on a system-wide
++	 * workqueue might introduce possibility of deadlock due to unexpected
++	 * locking dependency.
++	 *
++	 * This flag emits warning if flush operation is attempted. Don't set
++	 * this flag on user-defined workqueues, for destroy_workqueue() will
++	 * involve flush operation.
++	 */
++	WQ_WARN_FLUSH_ATTEMPT   = 1 << 8,
++
+ 	__WQ_DRAINING		= 1 << 16, /* internal: workqueue is draining */
+ 	__WQ_ORDERED		= 1 << 17, /* internal: workqueue is ordered */
+ 	__WQ_LEGACY		= 1 << 18, /* internal: create*_workqueue() */
+@@ -569,18 +581,8 @@ static inline bool schedule_work(struct work_struct *work)
+  * Forces execution of the kernel-global workqueue and blocks until its
+  * completion.
+  *
+- * Think twice before calling this function!  It's very easy to get into
+- * trouble if you don't take great care.  Either of the following situations
+- * will lead to deadlock:
+- *
+- *	One of the work items currently on the workqueue needs to acquire
+- *	a lock held by your code or its caller.
+- *
+- *	Your code is running in the context of a work routine.
+- *
+- * They will be detected by lockdep when they occur, but the first might not
+- * occur very often.  It depends on what work items are on the workqueue and
+- * what locks they need, which you have no control over.
++ * Please stop calling this function. If you need to flush, please use your
++ * own workqueue.
+  *
+  * In most situations flushing the entire workqueue is overkill; you merely
+  * need to know that a particular work item isn't queued and isn't running.
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 33f1106b4f99..8e6e64372441 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -2618,6 +2618,20 @@ static int rescuer_thread(void *__rescuer)
+ 	goto repeat;
+ }
+ 
++static void warn_flush_attempt(struct workqueue_struct *wq)
++{
++	static DEFINE_RATELIMIT_STATE(flush_warn_rs, 600 * HZ, 1);
++
++
++	/* Use ratelimit for now in order not to flood warning messages. */
++	ratelimit_set_flags(&flush_warn_rs, RATELIMIT_MSG_ON_RELEASE);
++	if (!__ratelimit(&flush_warn_rs))
++		return;
++	/* Don't use WARN_ON() for now in order not to break kernel testing. */
++	pr_warn("Please do not flush %s WQ.\n", wq->name);
++	dump_stack();
++}
++
+ /**
+  * check_flush_dependency - check for flush dependency sanity
+  * @target_wq: workqueue being flushed
+@@ -2635,6 +2649,9 @@ static void check_flush_dependency(struct workqueue_struct *target_wq,
+ 	work_func_t target_func = target_work ? target_work->func : NULL;
+ 	struct worker *worker;
+ 
++	if (unlikely(target_wq->flags & WQ_WARN_FLUSH_ATTEMPT))
++		warn_flush_attempt(target_wq);
++
+ 	if (target_wq->flags & WQ_MEM_RECLAIM)
+ 		return;
+ 
+@@ -6054,18 +6071,20 @@ void __init workqueue_init_early(void)
+ 		ordered_wq_attrs[i] = attrs;
+ 	}
+ 
+-	system_wq = alloc_workqueue("events", 0, 0);
+-	system_highpri_wq = alloc_workqueue("events_highpri", WQ_HIGHPRI, 0);
+-	system_long_wq = alloc_workqueue("events_long", 0, 0);
+-	system_unbound_wq = alloc_workqueue("events_unbound", WQ_UNBOUND,
++	system_wq = alloc_workqueue("events", WQ_WARN_FLUSH_ATTEMPT, 0);
++	system_highpri_wq = alloc_workqueue("events_highpri",
++					    WQ_WARN_FLUSH_ATTEMPT | WQ_HIGHPRI, 0);
++	system_long_wq = alloc_workqueue("events_long", WQ_WARN_FLUSH_ATTEMPT, 0);
++	system_unbound_wq = alloc_workqueue("events_unbound", WQ_WARN_FLUSH_ATTEMPT | WQ_UNBOUND,
+ 					    WQ_UNBOUND_MAX_ACTIVE);
+-	system_freezable_wq = alloc_workqueue("events_freezable",
+-					      WQ_FREEZABLE, 0);
+-	system_power_efficient_wq = alloc_workqueue("events_power_efficient",
+-					      WQ_POWER_EFFICIENT, 0);
+-	system_freezable_power_efficient_wq = alloc_workqueue("events_freezable_power_efficient",
+-					      WQ_FREEZABLE | WQ_POWER_EFFICIENT,
+-					      0);
++	system_freezable_wq =
++		alloc_workqueue("events_freezable", WQ_WARN_FLUSH_ATTEMPT | WQ_FREEZABLE, 0);
++	system_power_efficient_wq =
++		alloc_workqueue("events_power_efficient",
++				WQ_WARN_FLUSH_ATTEMPT | WQ_POWER_EFFICIENT, 0);
++	system_freezable_power_efficient_wq =
++		alloc_workqueue("events_freezable_power_efficient",
++				WQ_WARN_FLUSH_ATTEMPT | WQ_FREEZABLE | WQ_POWER_EFFICIENT, 0);
+ 	BUG_ON(!system_wq || !system_highpri_wq || !system_long_wq ||
+ 	       !system_unbound_wq || !system_freezable_wq ||
+ 	       !system_power_efficient_wq ||
+-- 
+2.32.0
+
 

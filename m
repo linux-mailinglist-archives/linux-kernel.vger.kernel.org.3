@@ -2,101 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0AC4BA850
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C3F4BA8E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244401AbiBQSdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:33:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59102 "EHLO
+        id S239541AbiBQSzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:55:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244490AbiBQSd3 (ORCPT
+        with ESMTP id S237519AbiBQSza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:33:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB0D38A0;
-        Thu, 17 Feb 2022 10:32:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C4A161B01;
-        Thu, 17 Feb 2022 18:32:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266F8C340E8;
-        Thu, 17 Feb 2022 18:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645122748;
-        bh=8YextsepZgUr4+oe5f01LRtpOeJxsq+lsISRRrHwJn0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=VNBraLvw8tzhp5HQKFZZQSD/eEBmA9GYmGDGvVdYGnsnSsO4hMlTzHp8ezULp/NLk
-         h7CPFgftAYTLPNyj3edHai5GLyuHYAjLYbMroo6G6AvP4gKXYxxSTkH2BQzpOX63/C
-         vuRkB0sdMBQOZRaBPa8ElUHxUVBxqAky1tvm1UkCt2YKRg0qCC3TEPT6v92SD0zqiy
-         OeCX8+5JHLVdBgIHsHtg+1e5Cfl1REQXfB018lH2tCaqMm6UAYDJrMAn5EW4TnhdV0
-         iUztK2QZBL6h8tvOPfVqOp03wTgeLulMk54ltLJV5eFFkPaVOztdyqnrducnSFHq0n
-         /Di2Lbd1EjYnQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jon Lin <jon.lin@rock-chips.com>
-Cc:     linux-spi@vger.kernel.org, heiko@sntech.de,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220216014028.8123-1-jon.lin@rock-chips.com>
-References: <20220216014028.8123-1-jon.lin@rock-chips.com>
-Subject: Re: (subset) [PATCH v3 0/6] New support and problem adjustment of SPI rockchip
-Message-Id: <164512274685.3993181.4255845764381770585.b4-ty@kernel.org>
-Date:   Thu, 17 Feb 2022 18:32:26 +0000
+        Thu, 17 Feb 2022 13:55:30 -0500
+X-Greylist: delayed 1351 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 10:55:15 PST
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.45.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38AA55BD4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:55:15 -0800 (PST)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 29888400C74A1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:32:43 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id Kla7nN4wvdx86Kla7nyNXB; Thu, 17 Feb 2022 12:32:43 -0600
+X-Authority-Reason: nr=8
+Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:34156 helo=[10.0.0.45])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1nKla5-002U7P-7e; Thu, 17 Feb 2022 12:32:41 -0600
+Message-ID: <7f227281-a5c8-ba55-ed75-6ce2c4d423e3@kernel.org>
+Date:   Thu, 17 Feb 2022 19:32:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC V2 17/21] watchdog/dev: Add tracepoints
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        "Peter.Enderborg@sony.com" <Peter.Enderborg@sony.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-devel@vger.kernel.org" 
+        <linux-trace-devel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <cover.1644830251.git.bristot@kernel.org>
+ <e67874c8b676ea8dfe38679efa25363889bb1e76.1644830251.git.bristot@kernel.org>
+ <96f418b4-0ba8-01fe-ead0-2028bfc42560@sony.com>
+ <ba924008-c0ab-4800-aac4-d9d9ae930c32@kernel.org>
+ <ef1b1d99-6172-2b4d-9612-7ecbe8fc6c8b@roeck-us.net>
+ <6c6fc4fa-6464-2dbf-40da-e3c61f322d95@redhat.com>
+ <b59155c2-81c1-b2d8-c8d9-a97e3166cee3@roeck-us.net>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <b59155c2-81c1-b2d8-c8d9-a97e3166cee3@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 95.232.30.176
+X-Source-L: No
+X-Exim-ID: 1nKla5-002U7P-7e
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:34156
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 3
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 09:40:22 +0800, Jon Lin wrote:
-> Changes in v3:
-> - Support clear the bits of configure bits filed
+On 2/17/22 19:17, Guenter Roeck wrote:
+> On 2/17/22 09:49, Gabriele Paoloni wrote:
+>>
+>>
+>> On 17/02/2022 18:27, Guenter Roeck wrote:
+>>> On 2/17/22 08:27, Daniel Bristot de Oliveira wrote:
+>>>> Hi Peter
+>>>>
+>>>> On 2/16/22 17:01, Peter.Enderborg@sony.com wrote:
+>>>>> On 2/14/22 11:45, Daniel Bristot de Oliveira wrote:
+>>>>>> Add a set of tracepoints, enabling the observability of the watchdog
+>>>>>> device interactions with user-space.
+>>>>>>
+>>>>>> The events are:
+>>>>>>      watchdog:watchdog_open
+>>>>>>      watchdog:watchdog_close
+>>>>>>      watchdog:watchdog_start
+>>>>>>      watchdog:watchdog_stop
+>>>>>>      watchdog:watchdog_set_timeout
+>>>>>>      watchdog:watchdog_ping
+>>>>>>      watchdog:watchdog_nowayout
+>>>>>>      watchdog:watchdog_set_keep_alive
+>>>>>>      watchdog:watchdog_keep_alive
+>>>>>
+>>>>> Some watchdogs have a bark functionality, I think it should be event
+>>>>> for that too.
+>>>>>
+>>>>
+>>>> I understand. The problems is that I do not see the bark abstraction
+>>>> in the
+>>>> watchdog_dev layer.
+>>>>
+>>>
+>>> I don't even know what "bark functionality" means. A new term for
+>>> pretimeout ?
+>>> Something else ?
+>>
+>>> From my understanding the bark timeout is actually the pretimeout
+>> whereas the bite timeout is the actual timeout.
+>> I think in the Kernel ftwdt010_wdt and qcom-wdt are bark/bite WTDs
+>>
 > 
-> Changes in v2:
-> - Fix patches should be at the start of the series
-> - Fix patches should be at the start of the series
-> - Delete useless messages
-> - Limit cs-high presetting to the chip select n <= 1
-> 
-> [...]
+> If that is the case, I would prefer if we could stick to existing
+> terminology to avoid issues like "I do not see the bark abstraction".
 
-Applied to
+I agree! I am using the terminology from watchdog dev. Like, I hear the term
+"pet" for the "ping", I used "ping."
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[3/6] spi: rockchip: Stop spi slave dma receiver when cs inactive
-      commit: 869f2c94db92f0f1d6acd0dff1c1ebb8160f5e29
-[4/6] spi: rockchip: Preset cs-high and clk polarity in setup progress
-      commit: 3a4bf922d42efa4e9a3dc803d1fd786d43e8a501
-[5/6] spi: rockchip: Suspend and resume the bus during NOIRQ_SYSTEM_SLEEP_PM ops
-      commit: e882575efc771f130a24322377dc1033551da11d
-[6/6] spi: rockchip: clear interrupt status in error handler
-      commit: 2fcdde56c44fe1cd13ce328128f509bbda2cdb41
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- Daniel

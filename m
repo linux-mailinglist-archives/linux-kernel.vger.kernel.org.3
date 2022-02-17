@@ -2,128 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4324BA06E
+	by mail.lfdr.de (Postfix) with ESMTP id BC5C34BA06F
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240584AbiBQM5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:57:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48844 "EHLO
+        id S240593AbiBQM5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:57:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiBQM5k (ORCPT
+        with ESMTP id S230462AbiBQM5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:57:40 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C48C1C1ED8;
-        Thu, 17 Feb 2022 04:57:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645102646; x=1676638646;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=muUyZFkT/XUwYXtZ4KuQ8w3WazrYqWNDm8XTjig5hYY=;
-  b=F7D2plqBiebEWhtvkoEXTBnA3L6AYMfMXFNOK5/owrT7D0+8/8WarGyo
-   thv5scP73eVRxho+FXBa+xcJZVkPPjfiumPk3YsuFbywYnKuGUAOMPEAH
-   SqXGGd2tGSTHlUtRAufUMdwLpZjs39ocTCYhE/wlZUi1nyWrVQ45KccoH
-   2XLydaH5uvVa3bqqQMUD8fVgRnfkc/z0kwuY91RN/WBYFvhtL9jfqX/t6
-   w7OlcYSIlv5SJuJ+FVUnaGjwR4oGFYfPg0+0eAC4flZ9oztza57RXzA2Q
-   +2Gx4b+2tW34XOvQfl5tESnm6Z7s30EtLnEGzbtKV/vV3Lq6zfYwr4yNT
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="251064855"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="251064855"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 04:57:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="704785987"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga005.jf.intel.com with ESMTP; 17 Feb 2022 04:57:18 -0800
-Date:   Thu, 17 Feb 2022 20:56:57 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v4 01/12] mm/shmem: Introduce F_SEAL_INACCESSIBLE
-Message-ID: <20220217125656.GA32679@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
- <20220118132121.31388-2-chao.p.peng@linux.intel.com>
- <64407833-1387-0c46-c569-8b6a3db8e88c@suse.cz>
+        Thu, 17 Feb 2022 07:57:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C37273746
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:57:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 994A1B82176
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:57:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE58DC340E8;
+        Thu, 17 Feb 2022 12:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645102654;
+        bh=kgjS5WxgVrvPzinoXteH3mXgOP0TCfzBtzDNqiGy1Eg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TvrdZQFBn72v6oLTS1g5ytXiKTh95tIKNQZlXZ2P10HtrbAc2lpx/rdcUUe1xbkNG
+         ukX1M8e6U3zK1Fsdv7439Y6HsyLUjag80AEhMaYaw2ZnjmCIdT8h52X6FI5FN8d/A3
+         gCYELIsnagHOkwsj5gE/6YFBVvg3FS0ppr1WZ8k43gXNJKfux+jVpsPY47aYEY3MlJ
+         TMbrY+F3GrrQKuHh/0T/Z8jCEd/wxAexZSbPMvB7lMxS+tmZz0LUYRREvfthWT8pkh
+         LNiuTNT5M963ntdoV11HXHABnQZiiuJbuo+BPaNMn5SQBRVdUYLaFhTQkRJMfeo2q8
+         lZCE8Ss+H1UMw==
+Date:   Thu, 17 Feb 2022 13:57:31 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Phil Auld <pauld@redhat.com>, tglx@linutronix.de, mingo@kernel.org,
+        mingo@redhat.com, atomlin@atomlin.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH] tick/sched: Ensure quiet_vmstat() is called when the
+ idle tick was stopped too
+Message-ID: <20220217125731.GA744754@lothringen>
+References: <20220203214339.1889971-1-atomlin@redhat.com>
+ <YfxVpEO+UJTC+a9e@lorien.usersys.redhat.com>
+ <20220216143412.dwxjlkq4w2zeweld@ava.usersys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <64407833-1387-0c46-c569-8b6a3db8e88c@suse.cz>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220216143412.dwxjlkq4w2zeweld@ava.usersys.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 01:24:42PM +0100, Vlastimil Babka wrote:
-> On 1/18/22 14:21, Chao Peng wrote:
-> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > 
-> >  /*
-> > diff --git a/mm/shmem.c b/mm/shmem.c
-> > index 18f93c2d68f1..72185630e7c4 100644
-> > --- a/mm/shmem.c
-> > +++ b/mm/shmem.c
-> > @@ -1098,6 +1098,13 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
-> >  		    (newsize > oldsize && (info->seals & F_SEAL_GROW)))
-> >  			return -EPERM;
-> >  
-> > +		if (info->seals & F_SEAL_INACCESSIBLE) {
-> > +			if(i_size_read(inode))
+On Wed, Feb 16, 2022 at 02:34:12PM +0000, Aaron Tomlin wrote:
+> On Thu 2022-02-03 17:22 -0500, Phil Auld wrote:
+> > As I said earlier, I don't think you want to call quiet_vmstat()
+> > unconditionally. And I don't think this will catch the cases you are
+> > trying to fix. Once the tick is stopped tick_nohz_stop_tick should not be
+> > getting called again until it's been restarted.
 > 
-> Is this needed? The rest of the function seems to trust oldsize obtained by
-> plain reading inode->i_size well enough, so why be suddenly paranoid here?
+> Phil,
+> 
+> Sorry about the delay. If I understand correctly, I see a scenario by which
+> tick_nohz_stop_tick() can be called on transition/or exit from idle (e.g.
+> default_idle_call()):
+> 
+> 	1.	The idle/or scheduling-clock was previously
+> 		stopped
+> 
+> 	2.	It is considered safe for the scheduling-clock
+> 	        tick to remain "stopped"/or omitted; no need to
+> 		reprogram and enable a periodic tick
+> 		(e.g. no queued/or expired pending timer)
+> 
+> 	  ...
+>             do_idle
+> 	      cpuidle_idle_call
+> 	      {
+> 
+> 		...
+> 
+> 	.--     default_idle_call
+> 	|         arch_cpu_idle
+> 	|         goto exit_idle
+>         |
+>         |       exit_idle:
+> 	|         __current_set_polling()
+>         |
+> 	|     }
+>         |     tick_nohz_idle_exit()
+>         |     {
+>         |
+>         |       tick_stopped = ts->tick_stopped
+>         |
+>         |       if (tick_stopped)
+>         |         tick_nohz_idle_update_tick(ts, now)
+>         |           if (tick_nohz_full_cpu(smp_processor_id()))
+>         |             __tick_nohz_full_update_tick(ts, now)
+>         |             {
+>         |               int cpu = smp_processor_id()
+>         |
+>         |               if (can_stop_full_tick(cpu, ts))
+>         |                 tick_nohz_stop_sched_tick(ts, cpu)
+>         |                   if (tick_nohz_next_event(ts, cpu))
+>         '--                   tick_nohz_stop_tick(ts, cpu)
+>                       }
+>               }
+> 
+> If I understand correctly, __tick_nohz_full_update_tick() can return with
+> no changes to the current tick (e.g. expire time == KTIME_MAX), no?
 
-oldsize sounds enough here, unless kirill has different mind.
+Hmm, but does it matter? The issue seem to be that we can enter in idle loop without
+flushing vmstat. Or am I missing something else?
+
+Thanks.
 
 > 
-> > +				return -EPERM;
-> > +			if (newsize & ~PAGE_MASK)
-> > +				return -EINVAL;
-> > +		}
-> > +
-> >  		if (newsize != oldsize) {
-> >  			error = shmem_reacct_size(SHMEM_I(inode)->flags,
-> > +		if ((info->seals & F_SEAL_INACCESSIBLE) &&
-> > +		    (offset & ~PAGE_MASK || len & ~PAGE_MASK)) {
 > 
-> Could we use PAGE_ALIGNED()?
-
-Yes, definitely, thanks.
-
-Chao
+> Kind regards,
 > 
-> > +			error = -EINVAL;
-> > +			goto out;
-> > +		}
-> > +
-> >  		shmem_falloc.waitq = &shmem_falloc_waitq;
-> >  		shmem_falloc.start = (u64)unmap_start >> PAGE_SHIFT;
-> >  		shmem_falloc.next = (unmap_end + 1) >> PAGE_SHIFT;
+> -- 
+> Aaron Tomlin
+> 

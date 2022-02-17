@@ -2,137 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC0D4B9E9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A434B9EA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbiBQLbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:31:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52900 "EHLO
+        id S239768AbiBQLcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:32:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238750AbiBQLbr (ORCPT
+        with ESMTP id S234361AbiBQLcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:31:47 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3145E1121;
-        Thu, 17 Feb 2022 03:31:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XSxGqHqB4CD4ItwJiT094IbgEYiep/ZGxuAGK8hdbFM=; b=YeqARtQqVs/62u66byIearze8r
-        IE4wuo5lqu2F8ITDkDR5OCNYH1cs8gMHNndNEPY2TfwZkLCO2zhKSl/sAr4oNL1q8eDVZf/TDaxeP
-        k9ZllKSSEZRWRJY3+ukIdU5ynnBZl4oifiNPFAi3PmkX4RtRmRIlhewWGCzV98Kw9KY8=;
-Received: from p200300ccff1474001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff14:7400:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1nKf0D-0006cT-8F; Thu, 17 Feb 2022 12:31:13 +0100
-Date:   Thu, 17 Feb 2022 12:31:12 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, alistair@alistair23.me,
-        samuel@sholland.org, josua.mayer@jm0.eu,
-        letux-kernel@openphoenux.org
-Subject: Re: [RFC PATCH 1/6] dt-bindings: display: imx: Add EPDC
-Message-ID: <20220217123112.3ba70000@aktux>
-In-Reply-To: <36445c86-036e-0942-a9a4-919595886c67@canonical.com>
-References: <20220206080016.796556-1-andreas@kemnade.info>
-        <20220206080016.796556-2-andreas@kemnade.info>
-        <36445c86-036e-0942-a9a4-919595886c67@canonical.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 17 Feb 2022 06:32:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D53139CC2;
+        Thu, 17 Feb 2022 03:32:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F1D4B82174;
+        Thu, 17 Feb 2022 11:32:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B4FC340E8;
+        Thu, 17 Feb 2022 11:32:23 +0000 (UTC)
+Message-ID: <6908801a-75ac-8845-dd0e-33cd59ceb42e@xs4all.nl>
+Date:   Thu, 17 Feb 2022 12:32:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] media: stm32-dcmi: create video dev once sensor is binded
+Content-Language: en-US
+To:     Alain Volmat <alain.volmat@foss.st.com>,
+        hugues.fruchet@foss.st.com, mchehab@kernel.org
+Cc:     mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220127111802.976275-1-alain.volmat@foss.st.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220127111802.976275-1-alain.volmat@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 10:21:15 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+Hi Alain,
 
-> On 06/02/2022 09:00, Andreas Kemnade wrote:
-> > Add a binding for the Electrophoretic Display Controller found at least
-> > in the i.MX6.
-> > The timing subnode is directly here to avoid having display parameters
-> > spread all over the plate.
-> > 
-> > Supplies are organized the same way as in the fbdev driver in the
-> > NXP/Freescale kernel forks. The regulators used for that purpose,
-> > like the TPS65185, the SY7636A and MAX17135 have typically a single bit to
-> > start a bunch of regulators of higher or negative voltage with a
-> > well-defined timing. VCOM can be handled separately, but can also be
-> > incorporated into that single bit.
-> > 
-> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > ---
-> >  .../bindings/display/imx/fsl,mxc-epdc.yaml    | 159 ++++++++++++++++++
-> >  1 file changed, 159 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/display/imx/fsl,mxc-epdc.yaml
-> > 
-[..]
+Some comments below:
 
-> > +
-> > +  DISPLAY-supply:
-> > +    description:
-> > +      A couple of +/- voltages automatically powered on in a defintive order  
+On 27/01/2022 12:18, Alain Volmat wrote:
+> In case of an error during the initialization of the sensor,
+> the video device is still available since created at the
+> probe of the dcmi driver. Moreover the device wouldn't
+> be released even when removing the module since the release
+> is performed as part of the notifier unbind callback
+> (not called if no sensor is properly initialized).
 > 
-> Typo, definitive?
+> This patch move the video device creation with the v4l2 notifier
+> complete handler in order to avoid having a video device created when
+> an error happen during the pipe (dcmi - sensor) initialization.
 > 
-yes, of course.
+> This also makes the video device creation symmetric with the
+> release which is already done within the notifier unbind handler.
+> 
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> ---
+> v1: this patch is the replacement patch of a previous attempt [1]
+> to move the register within the bound callback.
+> 
+> [1] https://lore.kernel.org/linux-media/31ca9ccc-77d4-4368-1024-db70e8e1e7f2@xs4all.nl/
+>  drivers/media/platform/stm32/stm32-dcmi.c | 69 ++++++++++++-----------
+>  1 file changed, 35 insertions(+), 34 deletions(-)
+> 
+> diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
+> index e1b17c05229c..80d0fbeabb4f 100644
+> --- a/drivers/media/platform/stm32/stm32-dcmi.c
+> +++ b/drivers/media/platform/stm32/stm32-dcmi.c
+> @@ -134,6 +134,7 @@ struct stm32_dcmi {
+>  	struct video_device		*vdev;
+>  	struct v4l2_async_notifier	notifier;
+>  	struct v4l2_subdev		*source;
+> +	struct v4l2_subdev		*remote;
+>  	struct v4l2_format		fmt;
+>  	struct v4l2_rect		crop;
+>  	bool				do_crop;
+> @@ -579,9 +580,9 @@ static void dcmi_buf_queue(struct vb2_buffer *vb)
+>  	spin_unlock_irq(&dcmi->irqlock);
+>  }
+>  
+> -static struct media_entity *dcmi_find_source(struct stm32_dcmi *dcmi)
+> +static struct media_entity *dcmi_find_source(struct v4l2_subdev *subdev)
+>  {
+> -	struct media_entity *entity = &dcmi->vdev->entity;
+> +	struct media_entity *entity = &subdev->entity;
+>  	struct media_pad *pad;
+>  
+>  	/* Walk searching for entity having no sink */
+> @@ -1721,6 +1722,7 @@ static int dcmi_framesizes_init(struct stm32_dcmi *dcmi)
+>  static int dcmi_graph_notify_complete(struct v4l2_async_notifier *notifier)
+>  {
+>  	struct stm32_dcmi *dcmi = notifier_to_dcmi(notifier);
+> +	int src_pad;
+>  	int ret;
+>  
+>  	/*
+> @@ -1728,7 +1730,7 @@ static int dcmi_graph_notify_complete(struct v4l2_async_notifier *notifier)
+>  	 * we search for the source subdevice
+>  	 * in order to expose it through V4L2 interface
+>  	 */
+> -	dcmi->source = media_entity_to_v4l2_subdev(dcmi_find_source(dcmi));
+> +	dcmi->source = media_entity_to_v4l2_subdev(dcmi_find_source(dcmi->remote));
+>  	if (!dcmi->source) {
+>  		dev_err(dcmi->dev, "Source subdevice not found\n");
+>  		return -ENODEV;
+> @@ -1768,6 +1770,34 @@ static int dcmi_graph_notify_complete(struct v4l2_async_notifier *notifier)
+>  		return ret;
+>  	}
+>  
+> +	ret = video_register_device(dcmi->vdev, VFL_TYPE_VIDEO, -1);
+> +	if (ret) {
+> +		dev_err(dcmi->dev, "Failed to register video device\n");
+> +		return ret;
+> +	}
 
-> > +
-> > +  VCOM-supply:
-> > +    description: compensation voltage
-> > +
-> > +  V3P3-supply:  
-> 
-> All of supplies names - lowercase.
-> 
-> > +    description: V3P3 supply
-> > +
-> > +  epd-thermal-zone:
-> > +    description:
-> > +      Zone to get temperature of the EPD from, practically ambient temperature.  
-> 
-> Is it a phandle?
-> 
-a string used in
-       of_property_read_string(priv->drm.dev->of_node,
-                                "epd-thermal-zone", &thermal);
-        if (thermal) {
-                priv->thermal = thermal_zone_get_zone_by_name(thermal);
-                if (IS_ERR(priv->thermal))
-                        return dev_err_probe(priv->drm.dev, PTR_ERR(priv->thermal),
-                                             "unable to get thermal");
-        }
+This is the right place, but it's not quite sufficient. You also need to allocate
+the vdev here. I.e. move the whole allocation/initialization of vdev from probe()
+to here.
 
-[...]
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/imx6sl-clock.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +    epdc: epdc@20f4000 {  
-> 
-> Generic node name, e.g. display-controller
-> 
-hmm, does IHMO not make too much sense here. E.g. in the imx6sll.dtsi
-we have lcd-controller next to it. So having epd-controller? But that
-is exactly what epdc stands for.
+If the vdev is allocated in probe(), and the subdev is never bound, then vdev is
+never freed in the current code.
 
 Regards,
-Andreas
+
+	Hans
+
+> +
+> +	dev_dbg(dcmi->dev, "Device registered as %s\n",
+> +		video_device_node_name(dcmi->vdev));
+> +
+> +	/*
+> +	 * Link remote sub-device to DCMI, it could be
+> +	 * a parallel camera sensor or a bridge
+> +	 */
+> +	src_pad = media_entity_get_fwnode_pad(&dcmi->remote->entity,
+> +					      dcmi->remote->fwnode,
+> +					      MEDIA_PAD_FL_SOURCE);
+> +
+> +	ret = media_create_pad_link(&dcmi->remote->entity, src_pad,
+> +				    &dcmi->vdev->entity, 0,
+> +				    MEDIA_LNK_FL_IMMUTABLE |
+> +				    MEDIA_LNK_FL_ENABLED);
+> +	if (ret)
+> +		dev_err(dcmi->dev, "Failed to create media pad link with subdev \"%s\"\n",
+> +			dcmi->remote->name);
+> +	else
+> +		dev_dbg(dcmi->dev, "DCMI is now linked to \"%s\"\n",
+> +			dcmi->remote->name);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1788,31 +1818,11 @@ static int dcmi_graph_notify_bound(struct v4l2_async_notifier *notifier,
+>  				   struct v4l2_async_subdev *asd)
+>  {
+>  	struct stm32_dcmi *dcmi = notifier_to_dcmi(notifier);
+> -	unsigned int ret;
+> -	int src_pad;
+>  
+>  	dev_dbg(dcmi->dev, "Subdev \"%s\" bound\n", subdev->name);
+> +	dcmi->remote = subdev;
+>  
+> -	/*
+> -	 * Link this sub-device to DCMI, it could be
+> -	 * a parallel camera sensor or a bridge
+> -	 */
+> -	src_pad = media_entity_get_fwnode_pad(&subdev->entity,
+> -					      subdev->fwnode,
+> -					      MEDIA_PAD_FL_SOURCE);
+> -
+> -	ret = media_create_pad_link(&subdev->entity, src_pad,
+> -				    &dcmi->vdev->entity, 0,
+> -				    MEDIA_LNK_FL_IMMUTABLE |
+> -				    MEDIA_LNK_FL_ENABLED);
+> -	if (ret)
+> -		dev_err(dcmi->dev, "Failed to create media pad link with subdev \"%s\"\n",
+> -			subdev->name);
+> -	else
+> -		dev_dbg(dcmi->dev, "DCMI is now linked to \"%s\"\n",
+> -			subdev->name);
+> -
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static const struct v4l2_async_notifier_operations dcmi_graph_notify_ops = {
+> @@ -2008,15 +2018,6 @@ static int dcmi_probe(struct platform_device *pdev)
+>  	}
+>  	dcmi->vdev->entity.flags |= MEDIA_ENT_FL_DEFAULT;
+>  
+> -	ret = video_register_device(dcmi->vdev, VFL_TYPE_VIDEO, -1);
+> -	if (ret) {
+> -		dev_err(dcmi->dev, "Failed to register video device\n");
+> -		goto err_media_entity_cleanup;
+> -	}
+> -
+> -	dev_dbg(dcmi->dev, "Device registered as %s\n",
+> -		video_device_node_name(dcmi->vdev));
+> -
+>  	/* Buffer queue */
+>  	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+>  	q->io_modes = VB2_MMAP | VB2_READ | VB2_DMABUF;
+

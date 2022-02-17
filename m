@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3054BA828
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E50F4BA81E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244298AbiBQSX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:23:57 -0500
+        id S244324AbiBQSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:24:17 -0500
 Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244275AbiBQSXv (ORCPT
+        with ESMTP id S244241AbiBQSXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:23:51 -0500
+        Thu, 17 Feb 2022 13:23:55 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6B273879F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:23:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1C9E38BDA
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 10:23:26 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B47701597;
-        Thu, 17 Feb 2022 10:23:23 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9FEF915A1;
+        Thu, 17 Feb 2022 10:23:26 -0800 (PST)
 Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 84AE23F718;
-        Thu, 17 Feb 2022 10:23:21 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F4F53F718;
+        Thu, 17 Feb 2022 10:23:24 -0800 (PST)
 From:   James Morse <james.morse@arm.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
 Cc:     Fenghua Yu <fenghua.yu@intel.com>,
@@ -35,9 +35,9 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         D Scott Phillips OS <scott@os.amperecomputing.com>,
         lcherian@marvell.com, bobo.shaobowang@huawei.com,
         tan.shaopeng@fujitsu.com
-Subject: [PATCH v3 10/21] x86/resctrl: Abstract and use supports_mba_mbps()
-Date:   Thu, 17 Feb 2022 18:20:59 +0000
-Message-Id: <20220217182110.7176-11-james.morse@arm.com>
+Subject: [PATCH v3 11/21] x86/resctrl: Allow update_mba_bw() to update controls directly
+Date:   Thu, 17 Feb 2022 18:21:00 +0000
+Message-Id: <20220217182110.7176-12-james.morse@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220217182110.7176-1-james.morse@arm.com>
 References: <20220217182110.7176-1-james.morse@arm.com>
@@ -52,75 +52,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To determine whether the mba_MBps option to resctrl should be supported,
-resctrl tests the boot CPUs' x86_vendor.
+update_mba_bw() calculates a new control value for the MBA resource
+based on the user provided mbps_val and the current measured
+bandwidth. Some control values need remapping by delay_bw_map().
 
-This isn't portable, and needs abstracting behind a helper so this check
-can be part of the filesystem code that moves to /fs/.
+It does this by calling wrmsrl() directly. This needs splitting
+up to be done by an architecture specific helper, so that the
+remainder can eventually be moved to /fs/.
 
-Re-use the tests set_mba_sc() does to determine if the mba_sc is supported
-on this system. An 'alloc_capable' test is added so that support for the
-controls isn't implied by the 'delay_linear' property, which is always
-true for MPAM.
+Add resctrl_arch_update_one() to apply one configuration value
+to the provided resource and domain. This avoids the staging
+and cross-calling that is only needed with changes made by
+user-space. delay_bw_map() moves to be part of the arch code,
+to maintain the 'percentage control' view of MBA resources
+in resctrl.
 
-Reviewed-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
+Chagnes since v2:
+ * Call msr_update() directly from resctrl_arch_update_one().
+
 Changes since v1:
  * Capitalisation
- * Added MPAM example in commit message
- * Fixed supports_mba_mbps() logic error in rdt_parse_param()
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ arch/x86/kernel/cpu/resctrl/core.c        |  2 +-
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 21 +++++++++++++++++++++
+ arch/x86/kernel/cpu/resctrl/internal.h    |  1 -
+ arch/x86/kernel/cpu/resctrl/monitor.c     | 13 ++++---------
+ include/linux/resctrl.h                   |  8 ++++++++
+ 5 files changed, 34 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 22ebfdb4472d..7ec089d72ab7 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -1922,11 +1922,21 @@ static void mba_sc_domain_destroy(struct rdt_resource *r,
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index f0e2820af475..90ebb7d71af2 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -296,7 +296,7 @@ mba_wrmsr_amd(struct rdt_domain *d, struct msr_param *m, struct rdt_resource *r)
+  * that can be written to QOS_MSRs.
+  * There are currently no SKUs which support non linear delay values.
+  */
+-u32 delay_bw_map(unsigned long bw, struct rdt_resource *r)
++static u32 delay_bw_map(unsigned long bw, struct rdt_resource *r)
+ {
+ 	if (r->membw.delay_linear)
+ 		return MAX_MBA_BW - bw;
+diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+index 9f45207a6c74..ece3a1e0e6f2 100644
+--- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
++++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+@@ -282,6 +282,27 @@ static bool apply_config(struct rdt_hw_domain *hw_dom,
+ 	return false;
  }
  
- /*
-- * Enable or disable the MBA software controller
-- * which helps user specify bandwidth in MBps.
-  * MBA software controller is supported only if
-  * MBM is supported and MBA is in linear scale.
-  */
-+static bool supports_mba_mbps(void)
++int resctrl_arch_update_one(struct rdt_resource *r, struct rdt_domain *d,
++			    u32 closid, enum resctrl_conf_type t, u32 cfg_val)
 +{
-+	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_MBA].r_resctrl;
++	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
++	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
++	u32 idx = get_config_index(closid, t);
++	struct msr_param msr_param;
 +
-+	return (is_mbm_enabled() &&
-+		r->alloc_capable && is_mba_linear());
++	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
++		return -EINVAL;
++
++	hw_dom->ctrl_val[idx] = cfg_val;
++
++	msr_param.res = r;
++	msr_param.low = idx;
++	msr_param.high = idx + 1;
++	hw_res->msr_update(d, &msr_param, r);
++
++	return 0;
 +}
 +
-+/*
-+ * Enable or disable the MBA software controller
-+ * which helps user specify bandwidth in MBps.
-+ */
- static int set_mba_sc(bool mba_sc)
+ int resctrl_arch_update_domains(struct rdt_resource *r, u32 closid)
  {
- 	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_MBA].r_resctrl;
-@@ -1934,8 +1944,7 @@ static int set_mba_sc(bool mba_sc)
- 	struct rdt_domain *d;
- 	int i;
+ 	struct resctrl_staged_config *cfg;
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+index 373aaba53ecd..3b9e43ba7590 100644
+--- a/arch/x86/kernel/cpu/resctrl/internal.h
++++ b/arch/x86/kernel/cpu/resctrl/internal.h
+@@ -527,7 +527,6 @@ void mbm_setup_overflow_handler(struct rdt_domain *dom,
+ void mbm_handle_overflow(struct work_struct *work);
+ void __init intel_rdt_mbm_apply_quirk(void);
+ bool is_mba_sc(struct rdt_resource *r);
+-u32 delay_bw_map(unsigned long bw, struct rdt_resource *r);
+ void cqm_setup_limbo_handler(struct rdt_domain *dom, unsigned long delay_ms);
+ void cqm_handle_limbo(struct work_struct *work);
+ bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d);
+diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+index 5cc1e6b229d4..ac1a2e8998bb 100644
+--- a/arch/x86/kernel/cpu/resctrl/monitor.c
++++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+@@ -420,10 +420,8 @@ void mon_event_count(void *info)
+  */
+ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
+ {
+-	u32 closid, rmid, cur_msr, cur_msr_val, new_msr_val;
++	u32 closid, rmid, cur_msr_val, new_msr_val;
+ 	struct mbm_state *pmbm_data, *cmbm_data;
+-	struct rdt_hw_resource *hw_r_mba;
+-	struct rdt_hw_domain *hw_dom_mba;
+ 	u32 cur_bw, delta_bw, user_bw;
+ 	struct rdt_resource *r_mba;
+ 	struct rdt_domain *dom_mba;
+@@ -433,8 +431,8 @@ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
+ 	if (!is_mbm_local_enabled())
+ 		return;
  
--	if (!is_mbm_enabled() || !is_mba_linear() ||
--	    mba_sc == is_mba_sc(r))
-+	if (!supports_mba_mbps() || mba_sc == is_mba_sc(r))
- 		return -EINVAL;
+-	hw_r_mba = &rdt_resources_all[RDT_RESOURCE_MBA];
+-	r_mba = &hw_r_mba->r_resctrl;
++	r_mba = &rdt_resources_all[RDT_RESOURCE_MBA].r_resctrl;
++
+ 	closid = rgrp->closid;
+ 	rmid = rgrp->mon.rmid;
+ 	pmbm_data = &dom_mbm->mbm_local[rmid];
+@@ -444,7 +442,6 @@ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
+ 		pr_warn_once("Failure to get domain for MBA update\n");
+ 		return;
+ 	}
+-	hw_dom_mba = resctrl_to_arch_dom(dom_mba);
  
- 	r->membw.mba_sc = mba_sc;
-@@ -2295,7 +2304,7 @@ static int rdt_parse_param(struct fs_context *fc, struct fs_parameter *param)
- 		ctx->enable_cdpl2 = true;
- 		return 0;
- 	case Opt_mba_mbps:
--		if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
-+		if (!supports_mba_mbps())
- 			return -EINVAL;
- 		ctx->enable_mba_mbps = true;
- 		return 0;
+ 	cur_bw = pmbm_data->prev_bw;
+ 	user_bw = dom_mba->mbps_val[closid];
+@@ -486,9 +483,7 @@ static void update_mba_bw(struct rdtgroup *rgrp, struct rdt_domain *dom_mbm)
+ 		return;
+ 	}
+ 
+-	cur_msr = hw_r_mba->msr_base + closid;
+-	wrmsrl(cur_msr, delay_bw_map(new_msr_val, r_mba));
+-	hw_dom_mba->ctrl_val[closid] = new_msr_val;
++	resctrl_arch_update_one(r_mba, dom_mba, closid, CDP_NONE, new_msr_val);
+ 
+ 	/*
+ 	 * Delta values are updated dynamically package wise for each
+diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
+index 46ab9fb5562e..84e815cb3be6 100644
+--- a/include/linux/resctrl.h
++++ b/include/linux/resctrl.h
+@@ -197,6 +197,14 @@ struct resctrl_schema {
+ /* The number of closid supported by this resource regardless of CDP */
+ u32 resctrl_arch_get_num_closid(struct rdt_resource *r);
+ int resctrl_arch_update_domains(struct rdt_resource *r, u32 closid);
++
++/*
++ * Update the ctrl_val and apply this config right now.
++ * Must be called on one of the domain's CPUs.
++ */
++int resctrl_arch_update_one(struct rdt_resource *r, struct rdt_domain *d,
++			    u32 closid, enum resctrl_conf_type t, u32 cfg_val);
++
+ u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
+ 			    u32 closid, enum resctrl_conf_type type);
+ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
 -- 
 2.30.2
 

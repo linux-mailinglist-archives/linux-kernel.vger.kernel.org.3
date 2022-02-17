@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E3F4B9A94
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE7D4B9A95
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237137AbiBQIHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 03:07:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45256 "EHLO
+        id S237160AbiBQIH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 03:07:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236433AbiBQIHQ (ORCPT
+        with ESMTP id S236654AbiBQIHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 03:07:16 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 00:07:02 PST
-Received: from mta-65-228.siemens.flowmailer.net (mta-65-228.siemens.flowmailer.net [185.136.65.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B464527DF3C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:07:02 -0800 (PST)
-Received: by mta-65-228.siemens.flowmailer.net with ESMTPSA id 20220217080557ca41ad077441f459a7
+        Thu, 17 Feb 2022 03:07:17 -0500
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 00:07:03 PST
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC58E27F284
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 00:07:03 -0800 (PST)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 202202170805581c68e5c7bcb121dc76
         for <linux-kernel@vger.kernel.org>;
         Thu, 17 Feb 2022 09:05:58 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=F+BlRq60XbUp67HLkZ4sGGjzRXyVOCRM3ka7rW5wSAU=;
- b=ZO10HjJooR03WNL9aiBSwYoD9qjYk2bhZXBogRMnsduAAJ3bW45nbx4rpxGL9Z3Fhb1YkG
- 0OCelm4G77UzZYfWshGi9QEavc6NXelCutn0dErL70V+bM0SSyabCz2pW9JOJtyKHuZvHFEL
- KP1mLqUAxYViyp1iA7+aiguF7L+ok=;
+ bh=EBXVVXzuqxQZpJ7v89UZdV7W1f/O/+KXI4n9OYKaozE=;
+ b=Gvc0xaBa8FpmkroLJNMovvXkAUeiHmCYQDYbp8W33fqx4D4pYK1uyjV8f8Wuo7DaUWMN0u
+ 6DgcRh0Qp7Y8PxJPOOYEPb+6ZFLQISgXMV8RGRpB8HV5imlRrELZTJ/h+ykDUHDLBbWOmamK
+ jpAIEPzaYf6SFB684Mv24Ed4nnUOo=;
 From:   daniel.starke@siemens.com
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 1/1] tty: n_gsm: fix encoding of command/response bit
-Date:   Thu, 17 Feb 2022 00:05:50 -0800
-Message-Id: <20220217080555.5387-2-daniel.starke@siemens.com>
+Subject: [PATCH 1/1] tty: n_gsm: fix proper link termination after failed open
+Date:   Thu, 17 Feb 2022 00:05:51 -0800
+Message-Id: <20220217080555.5387-3-daniel.starke@siemens.com>
 In-Reply-To: <20220217080555.5387-1-daniel.starke@siemens.com>
 References: <20220217080555.5387-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
@@ -43,108 +43,42 @@ Feedback-ID: 519:519-7517:519-21489:flowmailer
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.2.1.2 describes the encoding of the
-C/R (command/response) bit. Table 1 shows that the actual encoding of the
-C/R bit is inverted if the associated frame is sent by the responder.
+Trying to open a DLCI by sending a SABM frame may fail with a timeout.
+The link is closed on the initiator side without informing the responder
+about this event. The responder assumes the link is open after sending a
+UA frame to answer the SABM frame. The link gets stuck in a half open
+state.
 
-The referenced commit fixed here further broke the internal meaning of this
-bit in the outgoing path by always setting the C/R bit regardless of the
-frame type.
+This patch fixes this by initiating the proper link termination procedure
+after link setup timeout instead of silently closing it down.
 
-This patch fixes both by setting the C/R bit always consistently for
-command (1) and response (0) frames and inverting it later for the
-responder where necessary. The meaning of this bit in the debug output
-is being preserved and shows the bit as if it was encoded by the initiator.
-This reflects only the frame type rather than the encoded combination of
-communication side and frame type.
-
-Fixes: cc0f42122a7e ("tty: n_gsm: Modify CR,PF bit when config requester")
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
 Cc: stable@vger.kernel.org
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ drivers/tty/n_gsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 0b1808e3a912..c012733e0402 100644
+index 0b1808e3a912..52224a3494a0 100644
 --- a/drivers/tty/n_gsm.c
 +++ b/drivers/tty/n_gsm.c
-@@ -448,7 +448,7 @@ static u8 gsm_encode_modem(const struct gsm_dlci *dlci)
-  *	gsm_print_packet	-	display a frame for debug
-  *	@hdr: header to print before decode
-  *	@addr: address EA from the frame
-- *	@cr: C/R bit from the frame
-+ *	@cr: C/R bit seen as initiator
-  *	@control: control including PF bit
-  *	@data: following data bytes
-  *	@dlen: length of data
-@@ -548,7 +548,7 @@ static int gsm_stuff_frame(const u8 *input, u8 *output, int len)
-  *	gsm_send	-	send a control frame
-  *	@gsm: our GSM mux
-  *	@addr: address for control frame
-- *	@cr: command/response bit
-+ *	@cr: command/response bit seen as initiator
-  *	@control:  control byte including PF bit
-  *
-  *	Format up and transmit a control frame. These do not go via the
-@@ -563,11 +563,15 @@ static void gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
- 	int len;
- 	u8 cbuf[10];
- 	u8 ibuf[3];
-+	int ocr;
-+
-+	/* toggle C/R coding if not initiator */
-+	ocr = cr ^ (gsm->initiator ? 0 : 1);
+@@ -1514,7 +1514,7 @@ static void gsm_dlci_t1(struct timer_list *t)
+ 			dlci->mode = DLCI_MODE_ADM;
+ 			gsm_dlci_open(dlci);
+ 		} else {
+-			gsm_dlci_close(dlci);
++			gsm_dlci_begin_close(dlci); /* prevent half open link */
+ 		}
  
- 	switch (gsm->encoding) {
- 	case 0:
- 		cbuf[0] = GSM0_SOF;
--		cbuf[1] = (addr << 2) | (cr << 1) | EA;
-+		cbuf[1] = (addr << 2) | (ocr << 1) | EA;
- 		cbuf[2] = control;
- 		cbuf[3] = EA;	/* Length of data = 0 */
- 		cbuf[4] = 0xFF - gsm_fcs_add_block(INIT_FCS, cbuf + 1, 3);
-@@ -577,7 +581,7 @@ static void gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
- 	case 1:
- 	case 2:
- 		/* Control frame + packing (but not frame stuffing) in mode 1 */
--		ibuf[0] = (addr << 2) | (cr << 1) | EA;
-+		ibuf[0] = (addr << 2) | (ocr << 1) | EA;
- 		ibuf[1] = control;
- 		ibuf[2] = 0xFF - gsm_fcs_add_block(INIT_FCS, ibuf, 2);
- 		/* Stuffing may double the size worst case */
-@@ -611,7 +615,7 @@ static void gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
- 
- static inline void gsm_response(struct gsm_mux *gsm, int addr, int control)
- {
--	gsm_send(gsm, addr, 1, control);
-+	gsm_send(gsm, addr, 0, control);
- }
- 
- /**
-@@ -1800,10 +1804,10 @@ static void gsm_queue(struct gsm_mux *gsm)
- 		goto invalid;
- 
- 	cr = gsm->address & 1;		/* C/R bit */
-+	cr ^= gsm->initiator ? 0 : 1;	/* Flip so 1 always means command */
- 
- 	gsm_print_packet("<--", address, cr, gsm->control, gsm->buf, gsm->len);
- 
--	cr ^= 1 - gsm->initiator;	/* Flip so 1 always means command */
- 	dlci = gsm->dlci[address];
- 
- 	switch (gsm->control) {
+ 		break;
 -- 
 2.25.1
 

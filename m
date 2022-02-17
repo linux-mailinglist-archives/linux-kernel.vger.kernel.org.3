@@ -2,127 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5774BA142
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565B84BA148
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240927AbiBQNcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:32:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50684 "EHLO
+        id S240948AbiBQNcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:32:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240966AbiBQNcF (ORCPT
+        with ESMTP id S240936AbiBQNcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:32:05 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE614ECB0C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:31:50 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id z22so9667397edd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B0M/IeDIZGDcjbJ+9jtwyMZRbiHqmRKaJeE0g2p7LE4=;
-        b=EcO/f6Ht5+dpl6IvTJTBMSv3SiVfR0UbSXtnhj76Rm8qfUeUWKPvAkaw/yX3GVPcs4
-         VkU/hBPdgZxB448qYxGahx6hEj2NnLDW5/8WRTE50C6q6pDcanFpnv0Sn8iHqQhouK2U
-         8/QJuyK0Pv9MSmWICgutOvhlLrDv2++0a9EIPsKFss6wpT9YPqVAzfRDK4pEp39DIfBe
-         guhZsQxb2H8l56cLwclMKHaerODFXqdEoInf2OQZFwggBDthun7OJg4H6UQjrNQyGXEQ
-         cxJG+bfK96XlCfJ4nZDusI7G3GtmGsm4NL2m8CdHG/s+vhvF8RjwApKeWa3gidQW3iYd
-         qezw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B0M/IeDIZGDcjbJ+9jtwyMZRbiHqmRKaJeE0g2p7LE4=;
-        b=Qxz8alxDoldo/k6AW1rWer+lj0Xc7Xq/nUnDomA7U+Gu4mwdTJt8sHYVEWg3KEvXvF
-         8Ap6IAt6evPzgKQxakNjtC8laDVPX0USvBEPgwRFmFTYFozGj6VJcCwFLvzSF4ZlCNbh
-         fmd99vcGCoooWJCpJA2q2uTHQJX+xZnXZRRPSBrnz6aws7KD/ooQ2CCBoqtBUyjtjcr5
-         xGniF58eKnuvXHyECkm7yHna6uIhbbLZJ6jkCrZjFJ7XJaPneO152yG0V0bn5b0tEKB9
-         aCNoXvKsmv//PgVYAlQKfxk3T5cRwiL31HRI5XeFkVMm+8Aln/m3Kg08DF7U7yxOvVwP
-         gE0w==
-X-Gm-Message-State: AOAM530gn3IdxuiPJCMOxOvemQSn76xNrMiJIDyWT4PBuLkjpDsXupg6
-        6CUPq6XhLaqjlutMax9gRRIfvP34MsZhTLAZKkEC7g==
-X-Google-Smtp-Source: ABdhPJy2VS2aswdOO3DumeVi/SW/abrgycj4jXJPEjtyYzCgFJSj6xjCtQrAxiqrFht8TNaoQkT6V6rZJhZEgXHrFF4=
-X-Received: by 2002:aa7:d8cb:0:b0:406:3135:51c7 with SMTP id
- k11-20020aa7d8cb000000b00406313551c7mr2504206eds.233.1645104709080; Thu, 17
- Feb 2022 05:31:49 -0800 (PST)
+        Thu, 17 Feb 2022 08:32:36 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F281D4213;
+        Thu, 17 Feb 2022 05:32:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=z1q+PPoygA80lRFmhMSW1T+Gpqj/0Q4oQCOQD+/QCAU=; b=eBIPu7ab4R1QeKCzhqgGZ4ej2u
+        h6iTruoEzP+w8PDWKwK4B3mmk+YQ/I0Ca56oKB5SYYV37uxAlPc5Ots068mt2dqUcjSAv9mXO55Hf
+        2Nf9rVdQoVIRNZj7y0OsuAILrfheAwEDCq7HXR2EIlA4FXqkxWK9bRTP0DlH/ggKle/Y=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nKgtH-006MoH-1V; Thu, 17 Feb 2022 14:32:11 +0100
+Date:   Thu, 17 Feb 2022 14:32:11 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Cc:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michael Rasmussen <MIR@bang-olufsen.dk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 0/2] net: dsa: realtek: fix PHY register read
+ corruption
+Message-ID: <Yg5OW03cPFTMhcmw@lunn.ch>
+References: <20220216160500.2341255-1-alvin@pqrs.dk>
+ <CAJq09z6Mr7QFSyqWuM1jjm9Dis4Pa2A4yi=NJv1w4FM0WoyqtA@mail.gmail.com>
+ <87k0dusmar.fsf@bang-olufsen.dk>
+ <Yg1MfpK5PwiAbGfU@lunn.ch>
+ <878ruasjd8.fsf@bang-olufsen.dk>
+ <Yg47o5619InYrs9x@lunn.ch>
+ <877d9tr66o.fsf@bang-olufsen.dk>
 MIME-Version: 1.0
-References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
- <20220215192233.8717-1-bgeffon@google.com> <YgwCuGcg6adXAXIz@kroah.com>
- <CADyq12wByWhsHNOnokrSwCDeEhPdyO6WNJNjpHE1ORgKwwwXgg@mail.gmail.com>
- <YgzMTrVMCVt+n7cE@kroah.com> <fc86d51c-7aa2-6379-5f26-ad533c762da3@intel.com>
-In-Reply-To: <fc86d51c-7aa2-6379-5f26-ad533c762da3@intel.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Thu, 17 Feb 2022 08:31:12 -0500
-Message-ID: <CADyq12yGvqbb3+hp6f39RqyEM3Mu896yY6ik7Lh39W=o44bYbA@mail.gmail.com>
-Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate inconsistency
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877d9tr66o.fsf@bang-olufsen.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 10:16 AM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 2/16/22 02:05, Greg KH wrote:
-> >>> How was this tested, and what do the maintainers of this subsystem
-> >>> think?  And will you be around to fix the bugs in this when they are
-> >>> found?
-> >> This has been trivial to reproduce, I've used a small repro which I've
-> >> put here: https://gist.github.com/bgaff/9f8cbfc8dd22e60f9492e4f0aff8f04f
-> >> , I also was able to reproduce this using the protection_keys self
-> >> tests on a 11th Gen Core i5-1135G7. I'm happy to commit to addressing
-> >> any bugs that may appear. I'll see what the maintainers say, but there
-> >> is also a smaller fix that just involves using this_cpu_read() in
-> >> switch_fpu_finish() for this specific issue, although that approach
-> >> isn't as clean.
-> > Can you add the test to the in-kernel tests so that we make sure it is
-> > fixed and never comes back?
->
-> It would be great if Brian could confirm this.  But, I'm 99% sure that
-> this can be reproduced in the vm/protection_keys.c selftest, if you run
-> it for long enough.
+> If you have the patience to answer a few more questions:
+> 
+> 1. You mentioned in an earlier mail that the mdio_lock is used mostly by
+> PHY drivers to synchronize their access to the MDIO bus, for a single
+> read or write. You also mentioned that for switches which have a more
+> involved access pattern (for instance to access switch management
+> registers), a higher lock is required. In realtek-mdio this is the case:
+> we do a couple of reads and writes over the MDIO bus to access the
+> switch registers. Moreover, the mdio_lock is held for the duration of
+> these MDIO bus reads/writes. Do you mean to say that one should rather
+> take a higher-level lock and only lock/unlock the mdio_lock on a
+> per-read or per-write basis? Put another way, should this:
+> 
+> static int realtek_mdio_read(void *ctx, u32 reg, u32 *val)
+> {
+> 	/* ... */
+>         
+> 	mutex_lock(&bus->mdio_lock);
+> 
+> 	bus->write(bus, priv->mdio_addr, ...);
 
-Hi Dave,
-Yes, this is reproduced by the protection keys selfs tests. If your
-kernel was compiled in a way which caches current_task when read via
-this_cpu_read_stable(), then when switching from a kernel thread to a
-user thread you will observe this behavior, so the only situation
-where it's timing related is waiting for that switch from a kernel to
-user thread. If your kernel is compiled in a way which does not cache
-the value of current_task then you will never observe this behavior.
-My understanding is that this is perfectly valid for the compiler to
-produce that code.
+It would be better to use __mdiobus_write()
 
->
-> The symptom here is corruption of the PKRU register.  I created *lots*
-> of bugs like this during protection keys development so the selftest
-> keeps a shadow copy of the register to specifically watch for corruption.
->
-> It's _plausible_ that no one ever ran the pkey selftests with a
-> clang-compiled kernel for long enough to hit this issue.
+> 	bus->write(bus, priv->mdio_addr, ...);
+> 	bus->write(bus, priv->mdio_addr, ...);
+> 	bus->read(bus, priv->mdio_addr, ...);
 
-For ChromeOS we use clang and when I tested a vanilla 5.10 kernel
-_built with clang_ it also reproduced, so I suspect you're right that
-the self tests just haven't been run against clang built kernels all
-that often.
+__mdiobus_read()
 
-How would you and Greg KH like to proceed with this? I'm happy to help
-however I can.
+> 	/* ... */
+> 
+> 	mutex_unlock(&bus->mdio_lock);
+> 
+> 	return ret;
+> }
 
-Brian
+You can do this.
+
+
+> rather look like this?:
+> 
+> static int realtek_mdio_read(void *ctx, u32 reg, u32 *val)
+> {
+> 	/* ... */
+>         
+> 	mutex_lock(&my_realtek_driver_lock); /* synchronize concurrent realtek_mdio_{read,write} */
+> 
+> 	mdiobus_write(bus, priv->mdio_addr, ...); /* mdio_lock locked/unlocked here */
+> 	mdiobus_write(bus, priv->mdio_addr, ...); /* ditto */
+> 	mdiobus_write(bus, priv->mdio_addr, ...); /* ditto */
+> 	mdiobus_read(bus, priv->mdio_addr, ...);  /* ditto */
+> 
+> 	/* ... */
+> 
+> 	mutex_unlock(&my_realtek_driver_lock);
+> 
+> 	return ret;
+> }
+
+This would also work. The advantage of this is when you have multiple
+switches on one MDIO bus, you can allow parallel operations on those
+switches. Also, if there are PHYs on the MDIO bus as well as the
+switch, the PHYs can be accessed as well. If you are only doing 3
+writes and read, it probably does not matter. If you are going to do a
+lot of accesses, maybe read all the MIB values, allowing access to the
+PHYs at the same time would be nice.
+
+> 2. Is the nested locking only relevant for DSA switches which offer
+> another MDIO bus? Or should all switch drivers do this, on the basis
+> that, feasibly, one could connect my Realtek switch to the MDIO bus of a
+> mv88e6xxx switch? In that case, and assuming the latter form of
+> raeltek_mdio_read above, should one use the mdiobus_{read,write}_nested
+> functions instead?
+
+I would suggest you start with plain mdiobus_{read,write}. Using the
+_nested could potentially hide a deadlock. If somebody does build
+hardware with this sort of chaining, we can change to the _nested
+calls.
+
+	Andrew

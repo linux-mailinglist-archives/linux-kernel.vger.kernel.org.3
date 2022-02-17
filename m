@@ -2,238 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752EC4BA16D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 923E94BA174
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 14:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241010AbiBQNiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 08:38:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52030 "EHLO
+        id S240296AbiBQNjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 08:39:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241000AbiBQNiV (ORCPT
+        with ESMTP id S241038AbiBQNjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:38:21 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E2115E6EB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:38:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645105086; x=1676641086;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sG7JVp6thBdfzLc9RXJr4KwIPgLVdLfwW5g5pnYJyqM=;
-  b=IqBmR/uJIM5T6iU3U/7qlCeT9xxKA9xLQBZHHykoDZl3plUCyb6I8Nt6
-   rOccb2CTMH6Wo0oFOIFb8BC5ylatcqHI8yi70tlMicJAn5VTLe2Mj5/wb
-   tNDOV/QiBJaE2nKhsysmix9Sg1+gRqBeYgVuVvKA6E1sQNiVJ9hthdh6c
-   hQ3Q8YCfWikHqRwrK9oL3cTQMhCmPZUwD3jE1js5gML1zuh/fOrNJKWnm
-   tEVg8URtHUYPZ1aAij3yF3UnpQ7o2wxPOJpeZLUITRQvYidJ0Q0hKkIVf
-   CYjOOBYyC6GrJFNUydKibEpMq4aQQcIinJJOkYNL9LZfLbD9sqkhxHxzA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="248469859"
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="248469859"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:37:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,375,1635231600"; 
-   d="scan'208";a="604952283"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Feb 2022 05:37:50 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKgyj-0000ES-Rk; Thu, 17 Feb 2022 13:37:49 +0000
-Date:   Thu, 17 Feb 2022 21:37:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.02.14a] BUILD SUCCESS
- 1a4f308b3b3841ef10043fe6c3dd12fc872b0400
-Message-ID: <620e4f94.1PfvCJJs6s7k1/nv%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 17 Feb 2022 08:39:52 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0D02AF91B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:39:37 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id f10so511743qkg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 05:39:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=yrcvHz2XUZ1aK+nJEnwTAP7QQGaydiJXeFH1EG3kH+k=;
+        b=eLF3rbZJDOgpiNirfFEJD7DaNVLTwtfTyT7T0S0+26OJ2OPU838MS+AzesjjmC0Z3L
+         sENNtXhp25twgFgWjoD0gg+pXkTHlc/HBBn6sz/YVpOjorESqqCIODUBivgOj0Dtr1xh
+         1dxNJc4wh1hnxM1j5ugZAYz1s9pBlG1NcnqXRK4XI/EMWrWIdomoNyXI2Ct5yj0IfQPw
+         hMZHDSkqVXQvcDMvx6fE5oZ8IA7wZnl/xGdjgsma3u4Qh007hCEIklllP2+u3by9d2RV
+         lg4smSnVeMRIRa6FrRpva6dlOzecNHwOhCsv0nMH6IMlZXM1ZRo0aP8Nea4BDNSimy2d
+         VfRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=yrcvHz2XUZ1aK+nJEnwTAP7QQGaydiJXeFH1EG3kH+k=;
+        b=aH7TZtbShvPCv4SUlVkq+443+VAfEqOuoLFwJcbJTMoDiyPWj1ntEFPAr+M0YBTxL5
+         FQ7xqsw+XxxrplIbf3W2qcKTjvnxuZfqi/V8dwlNo+3wqVU3PU+Ok1ksTl+MFRUFH6om
+         5WExpVwgY6pdKCqUiuGvTwGDyBpQpMRmCV/uo3mXHS7YRzblDNZLp044i6s4P55aRLR+
+         EKcFDSMIgp2jYJGb/K2Iqz0n25OVPzpGvoCO7S3S7Cjpo5owdfiDCsPE9MKhWxT/ZdLz
+         y4l2Mky9ABlD9YfSoU6x6GcvoV0Kj+WvZ0qdBcaA9BRIdSF6d+MXoHEcYoziFbJtymvK
+         KeaA==
+X-Gm-Message-State: AOAM531Laf3hh3jX5tqta0nkSZytuVXTjcjj+5zN60R2D1HQGbfGvqPi
+        884LkhFZrECEtm517uOmyojBt7Y7sQwzu4qWRRY=
+X-Google-Smtp-Source: ABdhPJzgJMpmGLiMX9YDGUTkuOq2BiG35r4+G7VOaALP7dtt95XsQApQ/slsAAN2Of0meq1mUsZth+BL2N93ZINvvfc=
+X-Received: by 2002:a05:620a:1724:b0:477:b038:75cc with SMTP id
+ az36-20020a05620a172400b00477b03875ccmr1514196qkb.573.1645105176338; Thu, 17
+ Feb 2022 05:39:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: drrhamasalam8@gmail.com
+Received: by 2002:a05:6214:623:0:0:0:0 with HTTP; Thu, 17 Feb 2022 05:39:35
+ -0800 (PST)
+From:   MS VICKY WYNSLOW <wynslowvicky@gmail.com>
+Date:   Thu, 17 Feb 2022 05:39:35 -0800
+X-Google-Sender-Auth: ilta8vVZ4zLSDTXszuH5pkCtHEI
+Message-ID: <CALomdBYSBpeB7GazCe0_e+jHZJV-TVm7nUqvospTiGoN=PTywg@mail.gmail.com>
+Subject: I NEED YOUR URGENT HELP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,GUARANTEED_100_PERCENT,LOTS_OF_MONEY,MONEY_FORM_SHORT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:72e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5515]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [wynslowvicky[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [drrhamasalam8[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.7 GUARANTEED_100_PERCENT BODY: One hundred percent guaranteed
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  0.8 MONEY_FORM_SHORT Lots of money if you fill out a short form
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.02.14a
-branch HEAD: 1a4f308b3b3841ef10043fe6c3dd12fc872b0400  squash! rcu/nocb: Move rcu_nocb_is_setup to rcu_state
+Greetings to you,
 
-elapsed time: 803m
+How are you and your family??  i hope i can trust you But first, I
+want to say thanks for your response and I will like to use this
+opportunity to let you know about me, I am WYNSLOW VICKY serving in
+U.S Military Base in Syria after we pullout from Afghanistan, and I
+have a total sum of $5.9 Million US dollars I wish to use the funds
+for investments that is why I seek for your assistance to be my
+partner. I have contacted you in good heart and the main reason why I
+have decided to entrust all this funds to you is because I am a
+military officer, we are not permitted to transact business that is
+why I request that you help me to invest the fund, I want us to use
+the total fund for our investment with you while you take control of
+all investments. I am offering you 30% share of the total funds, I
+will be coming to meet with you later as soon as I have a
+vacation,although I have more interest on real estates.
 
-configs tested: 154
-configs skipped: 4
+Note that the whole process is very simple and we must keep a low
+profile until you receive it confirm. I will be free to Travel to meet
+you on end of my Foreign Service by February vacation I look forward
+to your reply and co-operation. But before then, I will need to send
+my funds to you from where it is so once I arrive, I will go into
+invest straight away. Like i narrated to you about my proposal to help
+received the amount I sheared. This issue I told you is 100% risk free
+and its success is 100% guaranteed.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+i want to move this money to you over there in your address because
+his money is not safe where it is kept  and the procedure is for you
+to send me your details such as :.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-arm                        cerfcube_defconfig
-arm                          exynos_defconfig
-arc                          axs103_defconfig
-arm                           corgi_defconfig
-powerpc                      ep88xc_defconfig
-sh                ecovec24-romimage_defconfig
-sh                        dreamcast_defconfig
-powerpc                 mpc85xx_cds_defconfig
-xtensa                generic_kc705_defconfig
-arc                      axs103_smp_defconfig
-m68k                          hp300_defconfig
-powerpc                      cm5200_defconfig
-powerpc                      makalu_defconfig
-powerpc                    amigaone_defconfig
-sh                               alldefconfig
-sh                          r7780mp_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                  iss476-smp_defconfig
-arc                 nsimosci_hs_smp_defconfig
-mips                  maltasmvp_eva_defconfig
-ia64                      gensparse_defconfig
-sh                            migor_defconfig
-xtensa                  audio_kc705_defconfig
-arm                           h5000_defconfig
-xtensa                       common_defconfig
-powerpc                     stx_gp3_defconfig
-ia64                             alldefconfig
-nios2                            alldefconfig
-sh                  sh7785lcr_32bit_defconfig
-m68k                          sun3x_defconfig
-sh                           se7619_defconfig
-mips                         mpc30x_defconfig
-sh                        sh7785lcr_defconfig
-arm                         nhk8815_defconfig
-mips                    maltaup_xpa_defconfig
-arc                           tb10x_defconfig
-arm                           viper_defconfig
-mips                           gcw0_defconfig
-openrisc                  or1klitex_defconfig
-arc                          axs101_defconfig
-sh                            shmin_defconfig
-ia64                         bigsur_defconfig
-powerpc64                        alldefconfig
-m68k                            q40_defconfig
-h8300                            alldefconfig
-s390                       zfcpdump_defconfig
-mips                           jazz_defconfig
-sparc                       sparc32_defconfig
-powerpc                 canyonlands_defconfig
-m68k                        stmark2_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                   sh7724_generic_defconfig
-sh                           se7712_defconfig
-arm                  randconfig-c002-20220217
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-s390                 randconfig-r044-20220216
-riscv                randconfig-r042-20220216
-arc                  randconfig-r043-20220216
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+Your Full Name........................
 
-clang tested configs:
-riscv                randconfig-c006-20220217
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220217
-arm                  randconfig-c002-20220217
-i386                          randconfig-c001
-mips                 randconfig-c004-20220217
-mips                           ip27_defconfig
-mips                     loongson1c_defconfig
-arm                          ixp4xx_defconfig
-arm                        neponset_defconfig
-mips                          malta_defconfig
-arm                     davinci_all_defconfig
-mips                        workpad_defconfig
-mips                     loongson2k_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                      ppc44x_defconfig
-x86_64                           allyesconfig
-powerpc                     ppa8548_defconfig
-mips                           ip22_defconfig
-arm                          imote2_defconfig
-arm                       aspeed_g4_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-hexagon              randconfig-r045-20220217
-hexagon              randconfig-r041-20220217
-riscv                randconfig-r042-20220217
-hexagon              randconfig-r045-20220216
-hexagon              randconfig-r041-20220216
+Your Full Address.....................
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Your Mobile Number..................
+
+Your Home Address..................
+
+P O Box ......................................
+
+Please send me  your address as I required so I can forward to the DHL
+Express agent who can post my package to your address safety as it was
+been register as a family goods and convered by red cross sign.
+Please hurry up now and get back to me due to time factor  will be
+waiting soonest I am hoping to see you in nearest future.
+
+I wil send to you my photos on whatsapp as soon as i get your response
+with informations details.
+
+
+Thanking You .
+Faithfuly
+Sgt Wynslow Vicky

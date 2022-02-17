@@ -2,248 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A1D4B9FCA
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5264B9FCB
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 13:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240278AbiBQMJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 07:09:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43016 "EHLO
+        id S240295AbiBQMJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 07:09:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240288AbiBQMJN (ORCPT
+        with ESMTP id S240286AbiBQMJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 07:09:13 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE8D2ABD06
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 04:08:56 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Jztr330t9zbkVd;
-        Thu, 17 Feb 2022 20:07:47 +0800 (CST)
-Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 17 Feb 2022 20:08:54 +0800
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 17 Feb 2022 20:08:54 +0800
-Message-ID: <e181c469-2f03-6a09-bb9a-68cc1076b5d3@huawei.com>
-Date:   Thu, 17 Feb 2022 20:08:54 +0800
+        Thu, 17 Feb 2022 07:09:19 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99976378;
+        Thu, 17 Feb 2022 04:09:04 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id d23so9485474lfv.13;
+        Thu, 17 Feb 2022 04:09:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o61zkZsaE0vJ73sO4uibEGQryzO/LSOJ+6q66VT7/0s=;
+        b=U+ehdluwKGz6WTZzeethEyl9CiEaqVsJUllKJVE7EakT4m/rsuE6oVApqbWAINtIMd
+         f/A1S//YnRgPtDFTEsEPl2hAzuwYq8/vhpzf3MCq9Bnl8arbv5etqZKKeHLfM0b8AIhP
+         qD7SotQBhlY0uVPf3WW+gJGmOK4kI614sLxbe9VnZ0MpjzrPZcs3OQ0M73+t3KmGhTXG
+         JItv68B1Ap2AyASWGXkdLpf/ptd9myAsXCM1UC+mQ5P0yAk2Sobpg0sBY3KCdS19+Bud
+         6o+PNUC9iaWxRU+a1jMj3vX5lAHHMShbdSovnoSa9cwveWhHw4Ow3O2UTYBgOAWrQmr9
+         20KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o61zkZsaE0vJ73sO4uibEGQryzO/LSOJ+6q66VT7/0s=;
+        b=q6JkT4LJbhDAnWDCWFHMJsg3UQCvxWDORIS2v8hJp7qUjro6SKUAICYWmiUJC6fD97
+         XXp1+qdh/BQbajIkLO0qYm68akElZEVYnPOTYsuXiXPuhJbcXU/av2OlCF4fJLBwMomD
+         dQvM15lAVSe7m8HgO45BYo89EdXrEccZsHPolyFviaiBg89RBixjgFPpOFH/SlYqH6sk
+         5EygWSwQopbe6Q8tyHrtYShaPvJJ9cZNoP01N7ay86o98PggX/cMoT+innjAHjBWEzp3
+         CvSY6bAP+PVJKUfdzz88UX5donqeUG4iTDld3/ijdTMq7A9vOssz3jy1bNm/9ZAol9UN
+         zaIQ==
+X-Gm-Message-State: AOAM531An8pf6PyhQA6dO1zIuSmH8kqecKi6FswV2J7TChGoaXHSScjv
+        WzzcYUf1Ie/alDsFyuOalJY=
+X-Google-Smtp-Source: ABdhPJxSdQt17vUP+C9eEr/kMKsTaGB2mrogkx4RsuJLkwn5hr9mf8Cb16I1wO92LK9/rkn0r+BKaw==
+X-Received: by 2002:ac2:5fb2:0:b0:443:14a8:d89b with SMTP id s18-20020ac25fb2000000b0044314a8d89bmr1868860lfe.6.1645099742985;
+        Thu, 17 Feb 2022 04:09:02 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id t4sm1106625ljh.67.2022.02.17.04.09.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 04:09:02 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rini <trini@konsulko.com>,
+        Ricardo Salveti <ricardo@foundries.io>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Jorge Ramirez-Ortiz <jorge@foundries.io>, u-boot@lists.denx.de,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH RFC *RFC*] dt-bindings: add U-Boot chosen for environment data phandle
+Date:   Thu, 17 Feb 2022 13:08:56 +0100
+Message-Id: <20220217120856.2910-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH] sched: Fix yet more sched_fork() races
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Borislav Petkov <bp@suse.de>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        <tj@kernel.org>, <dietmar.eggemann@arm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <Ygj7feK+vdtPw6zj@zn.tnic>
- <CAHk-=wiHUWHHcPLCvyXQKf2wbL3L1SOQSGVuCdf-py6QZGnuqQ@mail.gmail.com>
- <YgoWoh6pIzlsQx6d@hirez.programming.kicks-ass.net>
- <YgoeCbwj5mbCR0qA@hirez.programming.kicks-ass.net>
- <Yg4MdYLBqiw8zFaF@hirez.programming.kicks-ass.net>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <Yg4MdYLBqiw8zFaF@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rafał Miłecki <rafal@milecki.pl>
 
+This is RFC and request for a help & discussion.
 
-在 2022/2/17 16:51, Peter Zijlstra 写道:
-> On Mon, Feb 14, 2022 at 10:16:57AM +0100, Peter Zijlstra wrote:
->> Zhang, Tadeusz, TJ, how does this look?Sorry for not noticing the emails.
+While reviewing patch for U-Boot env binding it has been mentioned that:
 
-> 
-> *sigh* I was hoping for some Tested-by, since I've no idea how to
+1. /Processing/ whole DT in U-Boot may be too much work
+   Handling flash devices, partitions, their formats & NVMEM may require
+   too many U-Boot drivers involved.
 
+2. It'd be nice to have env data storage devices pointed in chosen
 
-I'll apply this patch and run the previous test suite.
+I wrote this hacky PATCH to give a rough idea how it could look like.
 
---
+Please review this and let me know:
+1. If solution with chosen + phandles is acceptable
+2. How to properly name .yaml file
+3. Where it put it
 
-Qiao.
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../devicetree/bindings/u-boot,chosen.yaml    | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/u-boot,chosen.yaml
 
-> operate this cgroup stuff properly.
-> 
-> Anyway, full patch below. I'll go stick it in sched/urgent.
-> 
-> ---
-> Subject: sched: Fix yet more sched_fork() races
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Mon, 14 Feb 2022 10:16:57 +0100
-> 
-> Where commit 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an
-> invalid sched_task_group") fixed a fork race vs cgroup, it opened up a
-> race vs syscalls by not placing the task on the runqueue before it
-> gets exposed through the pidhash.
-> 
-> Commit 13765de8148f ("sched/fair: Fix fault in reweight_entity") is
-> trying to fix a single instance of this, instead fix the whole class
-> of issues, effectively reverting this commit.
-> 
-> Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
-> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/linux/sched/task.h |    4 ++--
->  kernel/fork.c              |   13 ++++++++++++-
->  kernel/sched/core.c        |   34 +++++++++++++++++++++-------------
->  3 files changed, 35 insertions(+), 16 deletions(-)
-> 
-> --- a/include/linux/sched/task.h
-> +++ b/include/linux/sched/task.h
-> @@ -54,8 +54,8 @@ extern asmlinkage void schedule_tail(str
->  extern void init_idle(struct task_struct *idle, int cpu);
->  
->  extern int sched_fork(unsigned long clone_flags, struct task_struct *p);
-> -extern void sched_post_fork(struct task_struct *p,
-> -			    struct kernel_clone_args *kargs);
-> +extern void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs);
-> +extern void sched_post_fork(struct task_struct *p);
->  extern void sched_dead(struct task_struct *p);
->  
->  void __noreturn do_task_dead(void);
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2266,6 +2266,17 @@ static __latent_entropy struct task_stru
->  		goto bad_fork_put_pidfd;
->  
->  	/*
-> +	 * Now that the cgroups are pinned, re-clone the parent cgroup and put
-> +	 * the new task on the correct runqueue. All this *before* the task
-> +	 * becomes visible.
-> +	 *
-> +	 * This isn't part of ->can_fork() because while the re-cloning is
-> +	 * cgroup specific, it unconditionally needs to place the task on a
-> +	 * runqueue.
-> +	 */
-> +	sched_cgroup_fork(p, args);
-> +
-> +	/*
->  	 * From this point on we must avoid any synchronous user-space
->  	 * communication until we take the tasklist-lock. In particular, we do
->  	 * not want user-space to be able to predict the process start-time by
-> @@ -2375,7 +2386,7 @@ static __latent_entropy struct task_stru
->  	write_unlock_irq(&tasklist_lock);
->  
->  	proc_fork_connector(p);
-> -	sched_post_fork(p, args);
-> +	sched_post_fork(p);
->  	cgroup_post_fork(p, args);
->  	perf_event_fork(p);
->  
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1215,9 +1215,8 @@ int tg_nop(struct task_group *tg, void *
->  }
->  #endif
->  
-> -static void set_load_weight(struct task_struct *p)
-> +static void set_load_weight(struct task_struct *p, bool update_load)
->  {
-> -	bool update_load = !(READ_ONCE(p->__state) & TASK_NEW);
->  	int prio = p->static_prio - MAX_RT_PRIO;
->  	struct load_weight *load = &p->se.load;
->  
-> @@ -4408,7 +4407,7 @@ int sched_fork(unsigned long clone_flags
->  			p->static_prio = NICE_TO_PRIO(0);
->  
->  		p->prio = p->normal_prio = p->static_prio;
-> -		set_load_weight(p);
-> +		set_load_weight(p, false);
->  
->  		/*
->  		 * We don't need the reset flag anymore after the fork. It has
-> @@ -4426,6 +4425,7 @@ int sched_fork(unsigned long clone_flags
->  
->  	init_entity_runnable_average(&p->se);
->  
-> +
->  #ifdef CONFIG_SCHED_INFO
->  	if (likely(sched_info_on()))
->  		memset(&p->sched_info, 0, sizeof(p->sched_info));
-> @@ -4441,18 +4441,23 @@ int sched_fork(unsigned long clone_flags
->  	return 0;
->  }
->  
-> -void sched_post_fork(struct task_struct *p, struct kernel_clone_args *kargs)
-> +void sched_cgroup_fork(struct task_struct *p, struct kernel_clone_args *kargs)
->  {
->  	unsigned long flags;
-> -#ifdef CONFIG_CGROUP_SCHED
-> -	struct task_group *tg;
-> -#endif
->  
-> +	/*
-> +	 * Because we're not yet on the pid-hash, p->pi_lock isn't strictly
-> +	 * required yet, but lockdep gets upset if rules are violated.
-> +	 */
->  	raw_spin_lock_irqsave(&p->pi_lock, flags);
->  #ifdef CONFIG_CGROUP_SCHED
-> -	tg = container_of(kargs->cset->subsys[cpu_cgrp_id],
-> -			  struct task_group, css);
-> -	p->sched_task_group = autogroup_task_group(p, tg);
-> +	if (1) {
-> +		struct task_group *tg;
-> +		tg = container_of(kargs->cset->subsys[cpu_cgrp_id],
-> +				  struct task_group, css);
-> +		tg = autogroup_task_group(p, tg);
-> +		p->sched_task_group = tg;
-> +	}
->  #endif
->  	rseq_migrate(p);
->  	/*
-> @@ -4463,7 +4468,10 @@ void sched_post_fork(struct task_struct
->  	if (p->sched_class->task_fork)
->  		p->sched_class->task_fork(p);
->  	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-> +}
->  
-> +void sched_post_fork(struct task_struct *p)
-> +{
->  	uclamp_post_fork(p);
->  }
->  
-> @@ -6923,7 +6931,7 @@ void set_user_nice(struct task_struct *p
->  		put_prev_task(rq, p);
->  
->  	p->static_prio = NICE_TO_PRIO(nice);
-> -	set_load_weight(p);
-> +	set_load_weight(p, true);
->  	old_prio = p->prio;
->  	p->prio = effective_prio(p);
->  
-> @@ -7214,7 +7222,7 @@ static void __setscheduler_params(struct
->  	 */
->  	p->rt_priority = attr->sched_priority;
->  	p->normal_prio = normal_prio(p);
-> -	set_load_weight(p);
-> +	set_load_weight(p, true);
->  }
->  
->  /*
-> @@ -9447,7 +9455,7 @@ void __init sched_init(void)
->  #endif
->  	}
->  
-> -	set_load_weight(&init_task);
-> +	set_load_weight(&init_task, false);
->  
->  	/*
->  	 * The boot idle thread does lazy MMU switching as well:
-> 
-> .
-> 
+diff --git a/Documentation/devicetree/bindings/u-boot,chosen.yaml b/Documentation/devicetree/bindings/u-boot,chosen.yaml
+new file mode 100644
+index 000000000000..8369da91193d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/u-boot,chosen.yaml
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/u-boot,chosen.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: U-Boot setup
++
++maintainers:
++  - Rafał Miłecki <rafal@milecki.pl>
++
++properties:
++  u-boot,env:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      A list of storage volumes containing U-Boot environment data.
++
++      Env data can be stored on various kinds of storage devices, e.g.:
++      1. Raw flash partition
++      2. UBI volume
++
++additionalProperties: true
++
++examples:
++  - |
++    chosen {
++        u-boot,env = <&env>;
++    };
++
++    partitions {
++        compatible = "fixed-partitions";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        env: partition@0 {
++            reg = <0x0000000 0x1000>;
++            label = "u-boot-env";
++        };
++    };
+-- 
+2.34.1
+

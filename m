@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC264B97D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C1F4B97E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 05:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbiBQEkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 23:40:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34096 "EHLO
+        id S233996AbiBQEv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 23:51:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233582AbiBQEk1 (ORCPT
+        with ESMTP id S233052AbiBQEvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 23:40:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C269A284225;
-        Wed, 16 Feb 2022 20:40:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70AA9B820FA;
-        Thu, 17 Feb 2022 04:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3779DC340EF;
-        Thu, 17 Feb 2022 04:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645072810;
-        bh=iVmhDKR8iD6al2fm45Ji8pYosNaaGy8hMBSl2CX/dmg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XwnHwsHuIb2p3FISax614iWcqv1DSyO7IR1RstLZG9y9zz4ltzroeVsMBrnrV3Vjv
-         jrNFD8HWjs7uQ8AeOSb0NqM6ftzDaxeNDXgQZw3VFVCVdI+znoo/MkamKR8NE4zhHs
-         6+GrcDDfyYEUGb40rg9fKhm2giXG6fvy5O2uC6/QNqfHVKRrAUk7P4nJBX3NZrzq7Y
-         4jsTZSMUi1mfFN3J+ZIgKcEvfBMBAXPgwCAs96d81+VZm1Zt1E45EFW0x0LfsE4g5J
-         O+cQDKcBlsvvJ1IynEA/L1faZpIP9LEr56emJIgnt5pyoyki0IttL5wxRbzsNNzISh
-         094ou5nyNTxpg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 264D7E7BB07;
-        Thu, 17 Feb 2022 04:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Feb 2022 23:51:54 -0500
+X-Greylist: delayed 589 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 20:51:38 PST
+Received: from gw2.atmark-techno.com (gw2.atmark-techno.com [35.74.137.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2215D1D306
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:51:37 -0800 (PST)
+Received: from gw2.atmark-techno.com (localhost [127.0.0.1])
+        by gw2.atmark-techno.com (Postfix) with ESMTP id 54A0F20D68
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 13:41:48 +0900 (JST)
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+        by gw2.atmark-techno.com (Postfix) with ESMTPS id 5716F20D5E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 13:41:47 +0900 (JST)
+Received: by mail-pl1-f199.google.com with SMTP id y3-20020a1709029b8300b0014c8bcb70a1so2021560plp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 20:41:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BKsjr+x4bYzy8xFM4/3x570D+BJpN9nVsFl77PyeRNg=;
+        b=MbjQ3OiCzYS13uJeEGzKMv4vaR1N/O4Hw4D7s9VsPs/zDw3MraT6T9oB6x0INuqIWF
+         NtBIAmN+03ZVeAx5xSgeVhWGR6FCTiOURhNtrOuFv2jzKFtyTgkwZSYSFem6V5DHzc1P
+         UrEUUebK0bXeh0wBW6AHAio7X5mRDWLUnlQvYAVLJh7o3vayrzWQAo9JSWV7g/DUP7Gs
+         XJ5Mudao0E0i5aMs5V8EHs9di3Qis6RCOn+a9IwE1qWunmOOoDhwuR0IQvXRCGGACSpa
+         RbmV9Mt8boJW4m2NKbDkbV15AWuKjdwSEbxWGMrzrQumjT+tCjzdmx/HlrPle672kTk2
+         ri6Q==
+X-Gm-Message-State: AOAM533qKQLejF/91O7JE1XzyQUPpQy3XRwu2MZx1WE40CCkULHvP90J
+        moJ7fKf4amkD7nstBLQfREynMQJ7sOyxBwK0JunxcREOfHE9pJNDkS2e54eYcNfBI3+Iz/6KAjx
+        doSIRFsi+JDabkLsTq7Te7yxZvg==
+X-Received: by 2002:a17:902:9a8e:b0:14d:ae35:19f9 with SMTP id w14-20020a1709029a8e00b0014dae3519f9mr1269991plp.66.1645072906408;
+        Wed, 16 Feb 2022 20:41:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyYHbGg95GLg8jdxKJTeG6Rw5yCJLRLB3wzOYl/Ms2jX2K8wdo8xn1KWLpPl3U31H77CuOH3A==
+X-Received: by 2002:a17:902:9a8e:b0:14d:ae35:19f9 with SMTP id w14-20020a1709029a8e00b0014dae3519f9mr1269975plp.66.1645072906139;
+        Wed, 16 Feb 2022 20:41:46 -0800 (PST)
+Received: from pc-0115 (35.112.198.104.bc.googleusercontent.com. [104.198.112.35])
+        by smtp.gmail.com with ESMTPSA id j15sm48674401pfj.102.2022.02.16.20.41.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 16 Feb 2022 20:41:45 -0800 (PST)
+Received: from martinet by pc-0115 with local (Exim 4.95)
+        (envelope-from <martinet@pc-0115>)
+        id 1nKYbv-008JBg-6L;
+        Thu, 17 Feb 2022 13:41:43 +0900
+From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Petr=20Bene=C5=A1?= <petr.benes@ysoft.com>,
+        Dominique Martinet <dominique.martinet@atmark-techno.com>
+Subject: [PATCH] thermal/drivers/imx: add missing pm_runtime_put on error path
+Date:   Thu, 17 Feb 2022 13:41:32 +0900
+Message-Id: <20220217044132.1980370-1-dominique.martinet@atmark-techno.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211117103426.81813-1-o.rempel@pengutronix.de>
+References: <20211117103426.81813-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: hns3: Remove unused inline function
- hclge_is_reset_pending()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164507281015.19778.12365831478687327546.git-patchwork-notify@kernel.org>
-Date:   Thu, 17 Feb 2022 04:40:10 +0000
-References: <20220216113507.22368-1-yuehaibing@huawei.com>
-In-Reply-To: <20220216113507.22368-1-yuehaibing@huawei.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     yisen.zhuang@huawei.com, salil.mehta@huawei.com,
-        davem@davemloft.net, kuba@kernel.org, wangjie125@huawei.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+We took a reference so need to put it back when imx_get_temp() returns
+EAGAIN.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Fixes: 4cf2ddf16e17 ("thermal/drivers/imx: Implement runtime PM support")
+Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
+---
+stumbled upon this merging our stable tree, but I don't actually use
+imx-thermal so haven't tested it.
 
-On Wed, 16 Feb 2022 19:35:07 +0800 you wrote:
-> This is unused since commit 8e2288cad6cb ("net: hns3: refactor PF
-> cmdq init and uninit APIs with new common APIs").
-> 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h | 5 -----
->  1 file changed, 5 deletions(-)
+ drivers/thermal/imx_thermal.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Here is the summary with links:
-  - [net-next] net: hns3: Remove unused inline function hclge_is_reset_pending()
-    https://git.kernel.org/netdev/net-next/c/8aa69d348261
-
-You are awesome, thank you!
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index 16663373b682..641f90f9c750 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -265,6 +265,7 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+ 
+ 	if ((val & soc_data->temp_valid_mask) == 0) {
+ 		dev_dbg(&tz->device, "temp measurement never finished\n");
++		pm_runtime_put(data->dev);
+ 		return -EAGAIN;
+ 	}
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 

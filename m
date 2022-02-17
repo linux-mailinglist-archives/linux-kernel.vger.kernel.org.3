@@ -2,82 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E6B4B9957
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092AE4B9974
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 07:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbiBQGlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 01:41:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34106 "EHLO
+        id S235759AbiBQGtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 01:49:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235688AbiBQGlF (ORCPT
+        with ESMTP id S229984AbiBQGtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:41:05 -0500
-X-Greylist: delayed 438 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 22:40:52 PST
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D612A520E;
-        Wed, 16 Feb 2022 22:40:52 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id E55DF2B000CC;
-        Thu, 17 Feb 2022 01:33:32 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 17 Feb 2022 01:33:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=bScFzG/9Q+cvU4qTsd2N9JV5iBRYrTzK32M9S+
-        WSUno=; b=dNpR7rJSEng1YnYyzUAFQclOnlGpMpQhgSuD2dQlOQDcro6NZzDrHA
-        gOlXig0esP9AIvJGDhwkAWOHpg/N6B+rqGLPNOXC8RAzZp4z8tu9s+DCmidkrldb
-        9l1TPlH34WQ/C79QuxQNO5OXSAcb6Mj72sADxy/IoPAqtGTx1OkTRDMk40woGsr3
-        veHUnNnptlBkHP0zb4gwFGp600JmVN0QqLukkW2zS5N5tNB2VGX2U/iX7xSr8lhw
-        +pmIIyJvljMP91p8MtxKlavssumPseDP2Wv3MBHnvXs/Jh2niUwuKICWJWwAqy/G
-        qmYpXK/j6y4fDJkAZF4y/ULahA51UwAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=bScFzG/9Q+cvU4qTs
-        d2N9JV5iBRYrTzK32M9S+WSUno=; b=AE6OdSDHp7UVdsK9ejK4lM1VOrA1yhkMa
-        TEF8rTiwik6Pcz5IZ9c1hIoHXekHHU3QNKwQIJrSIthHFst2ILwcnxdGn1hFA9qo
-        ALVUf0MssJyTihBLy+qe2grX55VjD4V2qOqC9LtRouqpkqS8qgWKJXO2BZjXwbZ7
-        z3Y6u+ZLN5ylx9+AUnVxfEl8WIRxt7+EyXfm1oNasY+tVWd0gR0c+86EaNNp/sRZ
-        5p3dGnVLpJ+JaqLzpny4u65uTe/ym0Dt3YutmvkEOvSTWd3hi0nSddaWaDB4AWbj
-        CfS7u9u+lZvHUaeZWYSsf8vp8ptFxqMhwxoZXGOkMplVfgS5PhS+w==
-X-ME-Sender: <xms:O-wNYnb6EByCWVxBYBMx7R2hAkwmdIxrLP09QOBIhPfWbGWaL3hy3w>
-    <xme:O-wNYmbE_rRSAF_RpbEsPmyD9Ivg3JpsyWpEiuzmL7hu7595F_KQTbmd5KxmxDjzA
-    HuFUnb5UopIjQ>
-X-ME-Received: <xmr:O-wNYp-bVW60RkMLDC4FbQjyPn3850WcgfHJ2GZKudi4zEIZz5iYmTGez4IxiP0qarq7tLETfNXSJpKPv5eHzsMc3KvBkz0k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeejgdelhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhm
-X-ME-Proxy: <xmx:O-wNYtqIu4HICIEzvxWIpR7MEJNpm0V07zqOc2_7TXKOrtYhpEm36A>
-    <xmx:O-wNYirlCCvv_DIzl63CwMFPYXID2qCRJqzdg6dFYhNGs04Y3NHA2A>
-    <xmx:O-wNYjTrS4BAuihdupdDu6mn61M-wrn3Yv4ADCezZmTm-7OdxIztFA>
-    <xmx:POwNYvgVeyZlVtnYRSrR3X6tugIZhn3pEVD86fRjzplf-PhawB0mYureDmU>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Feb 2022 01:33:31 -0500 (EST)
-Date:   Thu, 17 Feb 2022 07:33:28 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Straube <straube.linux@gmail.com>
-Subject: Re: linux-next: manual merge of the staging tree with the
- kspp-gustavo tree
-Message-ID: <Yg3sOIChxwSuI8aU@kroah.com>
-References: <20220217141603.7a0ef4ed@canb.auug.org.au>
+        Thu, 17 Feb 2022 01:49:10 -0500
+X-Greylist: delayed 904 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 22:48:56 PST
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C25625D261;
+        Wed, 16 Feb 2022 22:48:56 -0800 (PST)
+Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Thu, 17 Feb 2022
+ 14:33:50 +0800
+From:   Liang Yang <liang.yang@amlogic.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-mtd@lists.infradead.org>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH RESEND v2 0/2] refine the NFC clock framework
+Date:   Thu, 17 Feb 2022 14:33:44 +0800
+Message-ID: <20220217063346.21691-1-liang.yang@amlogic.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217141603.7a0ef4ed@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.21]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,30 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 02:16:03PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the staging tree got a conflict in:
-> 
->   drivers/staging/r8188eu/include/ieee80211.h
-> 
-> between commit:
-> 
->   fbe9ccfe809d ("treewide: Replace zero-length arrays with flexible-array members")
-> 
-> from the kspp-gustavo tree and commit:
-> 
->   6c36bcbfcef7 ("staging: r8188eu: remove unused structs from ieee80211.h")
-> 
-> from the staging tree.
-> 
-> I fixed it up (the latter removed the structs updated by the former) and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+Background firstly, 
+EMMC and NAND has the same clock control register named 'SD_EMMC_CLOCK' which is
+defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is the divider and
+bit6~7 is the mux for fix pll and xtal.
+Previously a common MMC sub clock framework is implemented and shared by EMMC and
+NAND, but that is coupling the EMMC and NAND, although EMMC and NAND is mutually
+exclusive. see the link:
+[https://lore.kernel.org/all/1jy23226sa.fsf@starbuckisacylon.baylibre.com/]
+Now we plan to abandon common mmc sub clock framework and recovery the series.
 
-The merge sounds correct, thanks.
+Changes since v1 [2]
+ - use clk_parent_data instead of parent_names
+ - define a reg resource instead of sd_emmc_c_clkc 
+ 
+[1]
+https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
+https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
+Liang Yang (2):
+  mtd: rawnand: meson: discard the common MMC sub clock framework
+  dt-bindings: nand: meson: refine Amlogic NAND controller driver
 
-greg k-h
+ .../bindings/mtd/amlogic,meson-nand.txt       |  60 ----------
+ .../bindings/mtd/amlogic,meson-nand.yaml      |  70 ++++++++++++
+ drivers/mtd/nand/raw/meson_nand.c             | 107 ++++++++++--------
+ 3 files changed, 131 insertions(+), 106 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+
+-- 
+2.34.1
+

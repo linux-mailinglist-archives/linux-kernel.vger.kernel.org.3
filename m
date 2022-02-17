@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB2B4BA783
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB3B4BA786
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243909AbiBQRww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:52:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54712 "EHLO
+        id S243925AbiBQRx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:53:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243307AbiBQRwt (ORCPT
+        with ESMTP id S243922AbiBQRx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:52:49 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B17294135;
-        Thu, 17 Feb 2022 09:52:34 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id bn33so593701ljb.6;
-        Thu, 17 Feb 2022 09:52:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=odal8DH5pq4vSKy8tZSfPA+PF6EZNhV2ZjcnGJCW6aw=;
-        b=FEQtUlzEqs4JH4nRW0z84i6cKotJD4Wy5qjTbbgz811YfzovswR7InsAo9d8fncgDi
-         jZ1RzFmE9zZEjMf04CIVEqbnorx7HIyft8mMPmDeaXdpTYnCdYPYndtzBAkKfYgUtJNq
-         oH6v6+lgvDOzE7H/zduVedPvtOUGJCO2UnIZX+PqNdLoPvy3xgd1w5vlu0XXwd+v+REX
-         Ypj7lyd2mvp0CJ2K0ziAYKoPLrzBeqn7BrNGNp4SQjOe2mPSOmZ7UGOsRKvU8w47iugT
-         e15/ye1m8INw9AzALYjDNHc1AQR/WQ1eZnlFzcQLtTsODkNrpSvaUDc/PzuMZRClE8Kk
-         wSyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=odal8DH5pq4vSKy8tZSfPA+PF6EZNhV2ZjcnGJCW6aw=;
-        b=qcFUqz3FThutI7t4hXfvPY9ognRuvDAoF08XMSs3wnSqeWH7PTfE22IprQmBLxd6bc
-         1MofmzPZWA0GwZ31sqlQ5KNTVs+mdrK1HvC292g0yJkyBNSwIXL2D3LZb4qE6JKA7IJw
-         Cu4pSgyCUNyRKtv3bFrLePlLHL+8WNj0Q/P+RmdwWEY2NgPthDG+HQF5uZuYq1dUEBQo
-         Rg1KPQF//3jjtKkKuH6qvWB1KlzfoSPT7sLISiZCqnxIGvfRqedp58k7v113FjsZxbxB
-         NppYDDxc6cH/1WRF9SUrxlQjXtkgDgKO4+x0ByihYiw3kr/XPvko0LUkPN9MQAB3B26L
-         OIcQ==
-X-Gm-Message-State: AOAM530TMYLdJVX2GdqSCJSfG4U5Lr+LCOXoRMQkr4RrLmBkcS9hjKgD
-        WfZQJDGVve9TkrH3kDjG3mQ=
-X-Google-Smtp-Source: ABdhPJzIpumdgpKYKZdpvSS42smT5+JGOqe04EHV949NqkDTnxLaXe0V7OI4rDbw4/jBJ+K3L/Ud5Q==
-X-Received: by 2002:a05:651c:202:b0:244:c45d:102 with SMTP id y2-20020a05651c020200b00244c45d0102mr2881890ljn.29.1645120352742;
-        Thu, 17 Feb 2022 09:52:32 -0800 (PST)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id c11sm26512lfm.32.2022.02.17.09.52.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 09:52:32 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Thu, 17 Feb 2022 18:52:30 +0100
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Axtens <dja@axtens.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraju@codeaurora.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>
-Subject: Re: [PATCH 1/1] rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
-Message-ID: <Yg6LXv+XS85TXoEb@pc638.lan>
-References: <20220216135209.3070-1-urezki@gmail.com>
- <20220216195508.GM4285@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 17 Feb 2022 12:53:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C7E2B1033;
+        Thu, 17 Feb 2022 09:53:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DD66B8219B;
+        Thu, 17 Feb 2022 17:53:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8512AC340EB;
+        Thu, 17 Feb 2022 17:53:37 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="d95IjEti"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645120415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ltIhEjP8MkERFRDCje13DRgSd1zx0v44Y95lOeSSlxs=;
+        b=d95IjEti/GmZaCb2ieIwox7inQMDHNChvL4VyRCRbuL9b//+a94/oVY+f5T2r5xqbT1/JM
+        cO7FOhhi4lJkImbH8hE/sWGWcq4ibkwZ4lV5PfJxlQUSUgX3leVXlQX4fQ5pKimQTxDfAL
+        bLwExwPr63m12JByDLrgxOtRALI3PEA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8728cd42 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 17 Feb 2022 17:53:35 +0000 (UTC)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2d62593ad9bso40490317b3.8;
+        Thu, 17 Feb 2022 09:53:34 -0800 (PST)
+X-Gm-Message-State: AOAM531vU+p+J3otGZpOAart+ef+VlKZnwTGJtEFRII7WJdV2ML0zIM7
+        ORpc8N5A4YqRrSwopsB3RtfqmtVFc8xiGH6tbsc=
+X-Google-Smtp-Source: ABdhPJyDY+aB0zc1eZeuWdQvZFuCUuOBNuWI3d+Np8EtdMjkN5bR41noa0Xtt6HCtBIB8szQmJ9EdrcgxgRSVUbZ/nQ=
+X-Received: by 2002:a81:e203:0:b0:2d0:194d:81fd with SMTP id
+ p3-20020a81e203000000b002d0194d81fdmr3814901ywl.396.1645120413430; Thu, 17
+ Feb 2022 09:53:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216195508.GM4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220217122729.227908-1-Jason@zx2c4.com> <Yg6JhauWYkazt1kJ@linutronix.de>
+In-Reply-To: <Yg6JhauWYkazt1kJ@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 17 Feb 2022 18:53:22 +0100
+X-Gmail-Original-Message-ID: <CAHmME9prO9dop7iBRwN54=GMtLH7amS3m_VqGUzL44G1h=R+2A@mail.gmail.com>
+Message-ID: <CAHmME9prO9dop7iBRwN54=GMtLH7amS3m_VqGUzL44G1h=R+2A@mail.gmail.com>
+Subject: Re: [PATCH v5] random: clear fast pool, crng, and batches in cpuhp
+ bring up
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,48 +71,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 11:55:08AM -0800, Paul E. McKenney wrote:
-> On Wed, Feb 16, 2022 at 02:52:09PM +0100, Uladzislau Rezki (Sony) wrote:
-> > From: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> > 
-> > Currently for both expedited and regular grace periods stall
-> > warnings are emitted based on one timeout value that is defined
-> > in seconds. The problem is that, a stall timeout in seconds for
-> > expedited grace period is a way long.
-> > 
-> > The idea of expedited grace period is to force CPUs to report
-> > their quiescent states as fast as possible. If in RCU read-side
-> > critical section, it will request the next rcu_read_unlock() to
-> > record the quiescent state. If not either it reports immediately
-> > or set TIF_NEED_RESCHED to initiate the task switch.
-> > 
-> > Therefore introduce the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT kernel
-> > configuration that is set to 20 msec. It also can be changed in
-> > run-time via: /sys/.../parameters/rcu_exp_cpu_stall_timeout.
-> > 
-> > Signed-off-by: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> 
-> Nice, thank you!
-> 
-> I have queued this, with the usual wordsmithing.
-> 
-> I also changed the CONFIG_RCU_EXP_CPU_STALL_TIMEOUT kconfig option's
-> default to be 20 milliseconds only no CONFIG_ANDROID=y kernel builds.  For
-> one, rcutorture gets expedited stall warnings even at 200 milliseconds,
-> and for another, larger systems often have longer-running readers.
-> It might be a very good thing to decrease the non-Android default
-> expedited stall warning timeout, but 20 milliseconds is not likely the
-> place to start that effort.  Though it would be one way to find out
-> when in the process large-system users started testing.  ;-)
-> 
-> My guess is that this change will result in some breakage even on Android,
-> and that adjustments will be needed.  Once that effort is complete,
-> it would probably make sense to take another look at the non-Android
-> default for CONFIG_RCU_EXP_CPU_STALL_TIMEOUT.
-> 
-Yep, totally agree. There will be needed an addition adjustment later on to
-find some better floor value :) 
+Hi Sebastian,
 
---
-Vlad Rezki
+Thank you for finding the time to review this v5.
+
+On Thu, Feb 17, 2022 at 6:44 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> So I think this is the latest, right?
+
+Yes.
+
+> What do you think about this small comment update? :)
+
+I can improve the comments for v6 of this patch, yes. I won't use your
+text exactly, as there are other errors in it, but I'll synthesize its
+meaning.
+
+> > +#ifdef CONFIG_SMP
+> > +/*
+> > + * This function is called by the cpuhp system, wired up via the large
+> > + * static array in kernel/cpu.c, with the entry CPUHP_RANDOM_PREPARE.
+> > + */
+> > +int random_prepare_cpu(unsigned int cpu)
+> > +{
+> > +     /*
+> > +      * When the cpu comes back online, immediately invalidate both
+> > +      * the per-cpu crng and all batches, so that we serve fresh
+> > +      * randomness.
+> > +      */
+> > +     per_cpu_ptr(&crngs, cpu)->generation = ULONG_MAX;
+> > +     per_cpu_ptr(&batched_entropy_u32, cpu)->position = UINT_MAX;
+> > +     per_cpu_ptr(&batched_entropy_u64, cpu)->position = UINT_MAX;
+>
+> This runs before the CPU is up. Could you do the initialisation right
+> now?
+
+That wouldn't accomplish anything. See below.
+
+> My problem here is that if this (get_random_u32()) is used between
+> CPUHP_AP_IDLE_DEAD and CPUHP_TEARDOWN_CPU then the initialisation will
+> happen on the target CPU with disabled interrupts. And will acquire a
+> sleeping lock (batched_entropy_u32.lock).
+
+That is not a legitimate problem to be addressed in any way at all by
+this patchset. The batches may well be already depleted and the crng
+already old, and therefore the "problem" you note is the same both
+before and after this patch. If you want to address that, send a
+separate patch for it.
+
+> You could perform the initialization cross CPU without the lock because
+> the CPU itself isn't ready yet. Something like
+>          batch = per_cpu_ptr(&batched_entropy_u32, cpu);
+>          _get_random_bytes(batch->entropy_u32, sizeof(batch->entropy_u32));
+>          batch->position = 0;
+>          batch->generation = next_gen;
+
+I guess, but it wouldn't solve anything. The entire batch could be
+filled and then subsequently emptied out before irqs are up, and your
+problem will just repeat itself. I'm not going to make any changes
+related to that in this patch.
+
+If you find out that there are actual users of get_random_{...} during
+that window, and think that this represents a real problem, please
+send a patch and we can discuss that then.
+
+I'll send a v6 with comments fixed to your liking. I hope that you can ack it.
+
+Jason

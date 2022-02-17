@@ -2,67 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB464BA46E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9FA4BA473
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 16:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242535AbiBQPdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 10:33:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46970 "EHLO
+        id S242543AbiBQPdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 10:33:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiBQPdM (ORCPT
+        with ESMTP id S242542AbiBQPdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 10:33:12 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77CB7562F;
-        Thu, 17 Feb 2022 07:32:57 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id h18so10322482edb.7;
-        Thu, 17 Feb 2022 07:32:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JJul3CaBYsl6nxRMJrhyxqC7q1zMq+Fji1s2Sr14IjM=;
-        b=qO7ucopXVA0140FEKclf5DeAHDXRZg2WvIL4kSr+QOStgl0ypy7Op6gTJcWQyUv07W
-         a3Gj8wzldoEVmmcQw/yK2h0+etBA5bAhTTKcCEmU3RVqniyFzmjNRqVlR35SOLBcyoBc
-         i0xpbcjf3IxzKoIggvt5jqCzihXyjvVNIl7UUwsIDMFXU5B1mtVzTZtTYSu+ZPwAPkFP
-         tzp9gKTP98OESBY3Z1cKrjcyjnDRHk1zjiFC7mYsBVE672GWtTYYvTLvIBrdc3ibGJfE
-         0pWhg4XlV56EqgI6j3lPxnke4dZhgoYblggBT716bj9S5cnq2ViJMQIK4dRw8SPHXJyS
-         NK6w==
+        Thu, 17 Feb 2022 10:33:33 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D090F2B2E0E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:33:16 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 163153F1D0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 15:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645111995;
+        bh=f8RJ9ZvEOTgzqEro3GrpnsJLMjzjR+1XY4wUnry5/k0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+         In-Reply-To:Content-Type;
+        b=HuILPATTIKQp9pALuiRrkvCncdSm4tolwZSOD6Ad2DoyfChlJ2IxCNNOJ7Gm/dzT+
+         ae4EUNdnfKc0ZD39zPm6UDOq0xLfNdYSZfVcfi5qU46A6VdfFwyfu546Bz2vD3YEwr
+         BqknqG7xjvymLl944cgb/ALNCH1LfGE/Y9uEGjjKfVqCnLnJtMjxWZ+qnu/9H4EQn8
+         bvewquzbueMeLzfPjtxUSoPbEvuFEZPEtwvmUhUfSp3wwr3oiRnWwrRWpnPlYBHell
+         jCp3kT1ElhKA7KJq5qWLVMZ449Wy8NY0zhDvKi/F3MMQNhbVThpWewVTl7U9xQrHMN
+         jMO3nOMCle2Iw==
+Received: by mail-ej1-f69.google.com with SMTP id nb1-20020a1709071c8100b006d03c250b6fso1571655ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 07:33:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JJul3CaBYsl6nxRMJrhyxqC7q1zMq+Fji1s2Sr14IjM=;
-        b=dKhs5Jma0snQRm84rI6Q6t9P9q/ZwG8hTlFognnMXTRE12WT86Fs+6+NDShLCLKpkE
-         Ys9xTpbUPUZ3cGXtieB/WAfahfSCG9A2p08dkKN/huzArZ/5cM8wbkQzIWdKKzhEU1Xc
-         7qnf79SqL45WncsyTEFqHMqsTDqCPjzso/cp4hpT4umkDgIoBPX92petzrOXxJnpFBF6
-         MBnB6AuJFxoc1PF9VvUTnHFlUkCTc63rZ/hxHwtIdq6R8S34J2myGGZV3bpuK7d++Wqg
-         ZZnaRLxDvdSUH851q6XgNmu4mgHdfZpCdpBfWFLMu5Q7V/14WeuIRTFHPvwAIbjJl5BW
-         eveA==
-X-Gm-Message-State: AOAM531TGMOynu6WM6r7KT2uixpD0huYZ/tdbQ6U9UmWpKQISXz9iytA
-        QqKffu0ZcEDMjDcOXddI/QXl44DLMdg=
-X-Google-Smtp-Source: ABdhPJy0NbBdUIk/yAuqmUFrTVkCrzL5DtrdlvxOiEWJxydiZhDgzxfv4ropItP6pHSm5uJYpN6jhA==
-X-Received: by 2002:aa7:cf93:0:b0:40d:e8eb:1dd2 with SMTP id z19-20020aa7cf93000000b0040de8eb1dd2mr3221057edx.441.1645111976298;
-        Thu, 17 Feb 2022 07:32:56 -0800 (PST)
-Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id bv2sm1287863ejb.155.2022.02.17.07.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 07:32:56 -0800 (PST)
-Date:   Thu, 17 Feb 2022 16:32:47 +0100
-From:   Tomasz =?UTF-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC] scripts: kernel-doc: Major kernel-doc rework
-Message-ID: <20220217163247.03e37c9b@fuji.fritz.box>
-In-Reply-To: <8735ki2x62.fsf@meer.lwn.net>
-References: <20220205233945.7a4d22d8@fuji.fritz.box>
-        <8735ki2x62.fsf@meer.lwn.net>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=f8RJ9ZvEOTgzqEro3GrpnsJLMjzjR+1XY4wUnry5/k0=;
+        b=5IQpQcJEuubYclJ3qxNTaDbohwwrsEXqZjBnjBDCao1aIzKN4OaSDooty/kQT2FDPP
+         lb7i5hV/asFaO8uuLm73qIs7zZF3WnxtDvGceXo6XQ0iHv/UArGw9xQoaZtEX6/eMD//
+         xRlJWfAhDAZAmFK37lhX+88Qz2THpH6ej9NIlzGMz2S+chTq2Z93st3UwHnrq3nF1qD2
+         GwmmGViGKzOnblnOkl+RZh/fJzukIpTkP7RZ+QHfirccpwL9DUM9TsnuQ7vciPUIL+Va
+         /3n+Nt+/yaW6UvikoWuuym+1XMrw+s9BtlG9jU8QHbqEnVXTvQzMQH1o+dEGxr8AchdN
+         NvfA==
+X-Gm-Message-State: AOAM530VZbB+PKPixclu6HvrsEc/FakF6E3H3tqW0IsIDtsSrM7swWGM
+        EvMx80CEKc1k1IeQesu+5Lv+m5allIFGsubB558xpJFZYz8RIHhJKNatRm3AP4WCQizLYG2jzrN
+        cMiZK18MCkZllBsvmZO4xCsCrE+T1uoZR2fC6CGxffQ==
+X-Received: by 2002:a17:906:ce52:b0:6cf:54e5:df6 with SMTP id se18-20020a170906ce5200b006cf54e50df6mr2743297ejb.740.1645111994835;
+        Thu, 17 Feb 2022 07:33:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxa+SoeeHCMT2UErUzJD23/gC5RtP3QKzZdUD5ZpN1mTlXYoJCzw9X3mOX2wyJb60OWuYUl4w==
+X-Received: by 2002:a17:906:ce52:b0:6cf:54e5:df6 with SMTP id se18-20020a170906ce5200b006cf54e50df6mr2743285ejb.740.1645111994698;
+        Thu, 17 Feb 2022 07:33:14 -0800 (PST)
+Received: from [192.168.0.112] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id m17sm1292986ejn.118.2022.02.17.07.33.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 07:33:14 -0800 (PST)
+Message-ID: <974dc037-b63d-8337-bf4c-687851796c18@canonical.com>
+Date:   Thu, 17 Feb 2022 16:33:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/3] iio: add meter subdirectory
+Content-Language: en-US
+To:     chegbeli <ciprian.hegbeli@analog.com>, jic23@kernel.org,
+        robh+dt@kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220217135140.5658-1-ciprian.hegbeli@analog.com>
+ <20220217135140.5658-2-ciprian.hegbeli@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220217135140.5658-2-ciprian.hegbeli@analog.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,69 +84,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 16:45:25 -0700
-Jonathan Corbet <corbet@lwn.net> wrote:
-
-> Some overall thoughts:
+On 17/02/2022 14:51, chegbeli wrote:
+> For IIO devices which are designed to measure and process power
+> readings.
 > 
->  - Work like this needs to be broken up into digestible batches.  Let's
->    start with the POD stuff that I've (finally) commented on; other
->    stuff can come later.
+> Signed-off-by: chegbeli <ciprian.hegbeli@analog.com>
 
-I will prepare the POD part. As for the rest, you will need a porter if you
-decide this is the way to go. I could help with explanations if something is
-unclear and as long as the questions come soon. The winter is almost over and
-I need to switch to other activities like earning money.
+Here and in other commits - please use full name in "From:" and
+Signed-off-by.
 
->  - The coding style in the new work is very unkernellike; that will make
->    it harder to get this work merged.
-
-Yes. I can only add a thought: it seems unnatural to me to have the same style
-for various languages.
-
->  - But let's take a step back and ask: why are we doing all of this work
->    in the first place?  What is the benefit to the kernel community from
->    all this churn, and a growth of the kernel-doc script by over 2,000
->    lines (even if an awful lot of them are blank)?
-
-My motivation was just climbing this mountain, nothing else. I don't even
-know, how important this script is to whom. I can only guess. Neither am I
-a C programmer, nor want to become one. So this question is to another part
-of the community.
-
-I could though think of the benefits to the maintainers. In this respect I've
-moved things forward quite a bit, I gather.
-
-As for the blank lines, they are just one character each and trivial to get
-rid of.
-
-> I'm serious about that last question; do we really want to invest that
-> kind of effort into this nasty old script?  Or, if we're going to do
-> such a thing, should we maybe start with Markus's rewrite into Python
-> instead?  If we're going to thrash the code and make it unrecognizable,
-> perhaps we should move to a language that is consistent with the rest of
-> the docs build system and which, I believe, is easier for more kernel
-> developers to deal with?
-
-I understand. I didn't know there was a rewrite. I'm not into Python, but
-if you could post a link, I'd take a look out of curiosity.
-
-If the community prefers Python, what can I say about this? Their choice.
-
-Personally, I'd rather play with translating this script to Raku (aka Perl 6).
-I also wonder, how Perl 5 will transition to Perl 7. A question to Perl
-experts.
-
-> I am *not* saying that this work cannot be accepted, and I certainly do
-> not want to alienate somebody who is actually able to look at kernel-doc
-> and not have their eyes bleed out.  But I am saying that, before
-> launching into a hundreds-of-patches journey, we should know where we're
-> going and why we are doing it.
-
-I agree.
-
-> See what I'm getting at?
-
-Yes. Thanks.
-
-Tomasz
+Best regards,
+Krzysztof

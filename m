@@ -2,76 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8DE4BA303
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422684BA307
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 15:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241927AbiBQOat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 09:30:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55822 "EHLO
+        id S241746AbiBQObw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 09:31:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241885AbiBQOar (ORCPT
+        with ESMTP id S236096AbiBQObt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:30:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25E342B167A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645108231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I8Mg0Zawzb8iLXTRP4iGXQx+ghVFngEDKpSNR36LONs=;
-        b=LYg5ArmGSoygiQScLCIpxLnH28tKaVpUV9IIMc3zpNvFJiNLxJBJ60BV6mq02N+Tk8vOeh
-        97ZwkOW80qeAbrZCss4YW01Dl0eXulkkfPJaf9L++5I3Wj0XY2VXdGU9xwp+Iq0L6wL+pp
-        VA1trxUXrsiKFc3UzUAtxPSkeHi8A7w=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-503-W1CpDhCSOw-K0-iJQ8hAiQ-1; Thu, 17 Feb 2022 09:30:28 -0500
-X-MC-Unique: W1CpDhCSOw-K0-iJQ8hAiQ-1
-Received: by mail-qk1-f199.google.com with SMTP id l82-20020a37a255000000b0060dd39f5d87so2752722qke.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:30:28 -0800 (PST)
+        Thu, 17 Feb 2022 09:31:49 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A726C2AF906
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:31:33 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id a19so8530282qvm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 06:31:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=gI+nCpVbhWVWoSuzKKcmxXUkDQLKBhWZzNkH22Esq50=;
+        b=Khw66a/Q4Y+wWN3sh7jBR4s7qF1EsS8vDjcDh0vt+Y/ugPDLWUCOmRVYDQ21HdJaBo
+         NHsywABcmEBI0teBgdDPH2JVmzgiXbnRkN0E8oKAAMHA9+PbmzJIr15HnmTmvPSmpbP4
+         a2LQ5xjhm/57J/8VnOPpfhLwJ/9tM4ymIos0s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I8Mg0Zawzb8iLXTRP4iGXQx+ghVFngEDKpSNR36LONs=;
-        b=cmqwLsWKGD1rqFhOyAn9xLVIwVful9Pf20bb30Y851y3rzFQrsoauZZgQUq64AAsg4
-         6ZkHggChaKN3XcCOuME5p7cDoSxKc2NPLzhgAl46Y7QFn8PdzvpfYQNGHdXVCKtG1wuA
-         Op4Xk0hy8lMoiG+gS4CuRbY62XIZV4dmY9Vnm6uh0hJnIkHAwKgblT42xhDlYyYAGrNv
-         0a/3vHQ8DTpQ3sJzOXcu4t88JUmKS89f5RmieUpUqjaxO6xZ/29BFs7kLyvha9LwKu1P
-         cOPSzRyKWqGUEYpLZNxldaK3+NDONVeht098GX6IILsI7yRLbCEelYMBQyR5FQoxu8sz
-         dLgg==
-X-Gm-Message-State: AOAM530EgL6QdquChCJzeFPOudu0Don/G5ym5lFaf90dpHIVE9m6RqSK
-        l8pbvm89eLIzuAmt2cd3WAfZ4fT+E3WzsJeeS7Id/+YmDK9J7835c2gT2eHNzwXxD0J36TOnFgq
-        2NlYMw6Buc2KOO6wpY33bmB6q
-X-Received: by 2002:a05:6214:e6e:b0:42c:47ae:3fc6 with SMTP id jz14-20020a0562140e6e00b0042c47ae3fc6mr2236851qvb.17.1645108227683;
-        Thu, 17 Feb 2022 06:30:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwOTVuqdLPw6ZhB/cmq9wC9kbP+29WSlDiHADWZpzLBvhvaL8RlSP+/TYxFvL4euXWKUsFqUA==
-X-Received: by 2002:a05:6214:e6e:b0:42c:47ae:3fc6 with SMTP id jz14-20020a0562140e6e00b0042c47ae3fc6mr2236825qvb.17.1645108227355;
-        Thu, 17 Feb 2022 06:30:27 -0800 (PST)
-Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
-        by smtp.gmail.com with ESMTPSA id bl34sm18072851qkb.15.2022.02.17.06.30.25
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=gI+nCpVbhWVWoSuzKKcmxXUkDQLKBhWZzNkH22Esq50=;
+        b=YCpgztWYfwMeDKwtvCr8jsbrPjBgv0BzwpQnDjqXXQ4Tec38vtg2eV9Nm0YehXDgoE
+         hJDSogyQRbr55kGqWwmI6QG05j+OJ7PidAshF5wviTqaqMu55p2Ubr+Y72CUqYV/pxyT
+         U/YNzSAA8J86D5nUIqe40aHHso6AssoZ5UxB9KdMhSm+MvDVnUHWlJRe1n8ls1q5d3cb
+         KbcRW91BYhVcNlKfgComIeT/Ph23eiDDWyPbOVAK3NmzXy2pw90hMWMq1CLHMEyT4fEq
+         GJQhSjDSSBE6sOLJMtHa/vwUIOt6Yy7Zl6dkoaQiDAINVB7Ngw98NXi7xgMQmmf1Glgh
+         gobQ==
+X-Gm-Message-State: AOAM5325HIl5f2ULgziBL9udb1/nnxnaRXmtNiK9wkMv8qwoWRvxELWH
+        +mZkrRLE92ZmvDOwSsIHjryVd7nZLlKgeg==
+X-Google-Smtp-Source: ABdhPJwb9rv4S/d3e3Bgp1OoBsT6N9IkdIat62p8GhFWJ1KXMFHMUkZ6O5yyIncjzpgLvjJL9EMHmw==
+X-Received: by 2002:a05:6214:21ef:b0:42c:b910:a61e with SMTP id p15-20020a05621421ef00b0042cb910a61emr2277975qvj.34.1645108292644;
+        Thu, 17 Feb 2022 06:31:32 -0800 (PST)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-127.dsl.bell.ca. [216.209.220.127])
+        by smtp.gmail.com with ESMTPSA id bp18sm14906202qtb.72.2022.02.17.06.31.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 06:30:26 -0800 (PST)
-Date:   Thu, 17 Feb 2022 15:30:21 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Seth Forshee <sforshee@digitalocean.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] vsock: remove vsock from connected table when connect
- is interrupted by a signal
-Message-ID: <20220217143021.ylu2ymjytrwdmwmu@sgarzare-redhat>
-References: <20220217141312.2297547-1-sforshee@digitalocean.com>
+        Thu, 17 Feb 2022 06:31:32 -0800 (PST)
+Date:   Thu, 17 Feb 2022 09:31:30 -0500
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Removing unsupported branches into stable-historic.git
+Message-ID: <20220217143130.ie63qha4ghaqx4sp@meerkat.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220217141312.2297547-1-sforshee@digitalocean.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,47 +62,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 08:13:12AM -0600, Seth Forshee wrote:
->vsock_connect() expects that the socket could already be in the
->TCP_ESTABLISHED state when the connecting task wakes up with a signal
->pending. If this happens the socket will be in the connected table, and
->it is not removed when the socket state is reset. In this situation it's
->common for the process to retry connect(), and if the connection is
->successful the socket will be added to the connected table a second
->time, corrupting the list.
->
->Prevent this by calling vsock_remove_connected() if a signal is received
->while waiting for a connection. This is harmless if the socket is not in
->the connected table, and if it is in the table then removing it will
->prevent list corruption from a double add.
->
->Note for backporting: this patch requires d5afa82c977e ("vsock: correct
->removal of socket from the list"), which is in all current stable trees
->except 4.9.y.
->
->Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
->Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
->---
->v2: Add Fixes tag and backporting notes.
->---
-> net/vmw_vsock/af_vsock.c | 1 +
-> 1 file changed, 1 insertion(+)
->
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index 3235261f138d..38baeb189d4e 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -1401,6 +1401,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
-> 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
-> 			sock->state = SS_UNCONNECTED;
-> 			vsock_transport_cancel_pkt(vsk);
->+			vsock_remove_connected(vsk);
-> 			goto out_wait;
-> 		} else if (timeout == 0) {
-> 			err = -ETIMEDOUT;
->-- 
->2.32.0
->
+Hi, all:
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+What do you think about deleting unsupported linux-x.x.y branches from the
+stable/linux.git repository (perhaps by moving them into stable-historic.git).
+These branches hold a lot of git objects that are now largely dead weight but
+are still shipped around every time stable/linux.git is cloned.
 
+According to my cursory tests, dropping unsupported branches would remove
+1.1GB of obsolete objects, dropping the repository size from 3.5GB to 2.4GB
+(sizes may vary in your tests due to compression, window size, etc). That's
+1.1GB less traffic for each stable/linux.git clone.
+
+Thoughts?
+
+-Konstantin

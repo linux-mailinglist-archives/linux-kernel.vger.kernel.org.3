@@ -2,186 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0554BA581
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9567A4BA588
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242984AbiBQQOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:14:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38848 "EHLO
+        id S243050AbiBQQQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:16:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbiBQQOO (ORCPT
+        with ESMTP id S242892AbiBQQQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:14:14 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C696816A5B0;
-        Thu, 17 Feb 2022 08:13:59 -0800 (PST)
+        Thu, 17 Feb 2022 11:16:45 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71FF63EF
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:16:25 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id p15so131561oip.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:16:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645114439; x=1676650439;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sQtXhY9QbupAILiJZEVKHS8Itnr6Zg188RTdibPikzA=;
-  b=tkQ4H5lyjMZ3SAtVaq0caSxwH5y5Mus9D+CT/8lsjUGoN2DHqVoPjWfw
-   f15Xa77yHQpr+rttxRCd6wS3HGk/8qh2P/QUsebZJc9+BMFKOgPTvg3GJ
-   mxCEoAMZVCXZ091Wl2g7cuQSPCaNYaRxRXsu37ig7IfKcwLr+e48ND5pf
-   0=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 17 Feb 2022 08:13:59 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 08:13:59 -0800
-Received: from [10.216.25.41] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 17 Feb
- 2022 08:13:54 -0800
-Message-ID: <5ffb2fc8-a13d-c07a-ed81-3b722e95bfd0@quicinc.com>
-Date:   Thu, 17 Feb 2022 21:43:33 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ytu0Gx4Ee/+5dkAxsCITxVC/7yyCoOiEqzDXQO8bwEE=;
+        b=hW00c6ROWmn+snifswDQ5zvWgLKzzxTtorrsLYKzTPfbkWCSd8nyY5XFmOjZtuo6aT
+         Kb0uJN4PiZPTx5bTQss59vSLEEKuDJNp0vp0AntkMIY+3uwLlIUrtLWF08DmkLa+pL0D
+         PYt+YrKPtMIBECkSHxbiHGZCLRem4t6yfvaZlP30y8DUrl2+a4DZPydmZaG156nI43gq
+         HHHmphpOUhIW41BwTVq6fSGOy9RX3CCGX2cGAhzE6dNSOFxz4RiDWTAyZ0a9ADCQCgjP
+         FsIjuJjChETAP8qXmGZGN4GbfLSwe6lsutCPAs7zv3Qig/epukDh/XeewpqjoaUIxsSo
+         OmiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ytu0Gx4Ee/+5dkAxsCITxVC/7yyCoOiEqzDXQO8bwEE=;
+        b=blhn4OB6+at8DW0if6hdBFQqMaVSp8sPwxrUGgxjhUj+7bnP61xUtPV3MdX2ltKfbP
+         vD0uJYdctOyElSW3fqrhny53hIUSqBVYfQ1XkH4bqBnQXBab7kTNLgmrTV8kvPSRWPX2
+         dFJylVjohXtWU/d/uzmAnix+POdXenQiolnCYpQwMan1Qr0FgFS4Pnbr0voQTcTzNasu
+         ucjmcITTgImdTb6nheDJy/+tIwAR36jOPCFP5DWaGdBDlkS6gfDZUluBpkO9c4Tn6OYz
+         fyv2av2TmusDeQvw10qev/jYOVyhdEUKge9BPsTi3+5bLCE/uKxurqYZVUcRly3GNb1v
+         2hMQ==
+X-Gm-Message-State: AOAM532oyYysNZzz/7V5FUBaFt8T8xKvuN3OfxPISo+OMZtOJhNrIKrz
+        2JJm3O6gTxD3h+/ToLgxrpsp9hiJKFRvccGHmQ4=
+X-Google-Smtp-Source: ABdhPJx8wTyezWB9AK6JyxubX/zJkOWu5At1AfwaOAntEheYpYTl183pwdekUGsijpPNoomOiHIueXChIM2l1XK/Q7s=
+X-Received: by 2002:aca:ab4c:0:b0:2d4:7c7d:606e with SMTP id
+ u73-20020acaab4c000000b002d47c7d606emr1147310oie.132.1645114585339; Thu, 17
+ Feb 2022 08:16:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
- incoming CPUs
-Content-Language: en-US
-To:     <paulmck@kernel.org>
-CC:     <kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
-        <rcu@vger.kernel.org>, <rostedt@goodmis.org>, <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20220209233811.GC557593@lothringen>
- <20220214164435.GA2805255@paulmck-ThinkPad-P17-Gen-1>
- <f8cff19c-5e8f-a7ed-c2ff-49a264b4e342@quicinc.com>
- <20220215173951.GH4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20220215173951.GH4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217153842.3252424-1-trix@redhat.com> <51018469-3bab-e56d-7407-b16170b5d74c@amd.com>
+In-Reply-To: <51018469-3bab-e56d-7407-b16170b5d74c@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 17 Feb 2022 11:16:14 -0500
+Message-ID: <CADnq5_OGEURo76mzc4Sb2Jar465Xt4vkSMECDi5jCMH332zUAg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: fix amdgpu_ras_block_late_init error handler
+To:     Luben Tuikov <luben.tuikov@amd.com>
+Cc:     Tom Rix <trix@redhat.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        John Clements <john.clements@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        "Chai, Thomas" <YiPeng.Chai@amd.com>,
+        "Stanley.Yang" <Stanley.Yang@amd.com>,
+        Dennis Li <Dennis.Li@amd.com>,
+        "Joshi, Mukul" <mukul.joshi@amd.com>,
+        Nirmoy Das <nirmoy.das@amd.com>, llvm@lists.linux.dev,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Applied.  Thanks!
 
-On 2/15/2022 11:09 PM, Paul E. McKenney wrote:
-> On Tue, Feb 15, 2022 at 07:53:10PM +0530, Mukesh Ojha wrote:
->> On 2/14/2022 10:14 PM, Paul E. McKenney wrote:
->>> On Thu, Feb 10, 2022 at 12:38:11AM +0100, Frederic Weisbecker wrote:
->>>> On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
->>>>> Although it is usually safe to invoke synchronize_rcu_expedited() from a
->>>>> preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
->>>>> between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
->>>>> invoke a workqueue handler will hang due to RCU waiting on a CPU that
->>>>> the scheduler is not paying attention to.  This commit therefore expands
->>>>> use of the existing workqueue-independent synchronize_rcu_expedited()
->>>>> from early boot to also include CPUs that are being hotplugged.
->>>>>
->>>>> Link:https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
->>>>> Reported-by: Mukesh Ojha<quic_mojha@quicinc.com>
->>>>> Cc: Tejun Heo<tj@kernel.org>
->>>>> Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
->>>> I'm surprised by this scheduler behaviour.
->>>>
->>>> Since sched_cpu_activate() hasn't been called yet,
->>>> rq->balance_callback = balance_push_callback. As a result, balance_push() should
->>>> be called at the end of schedule() when the workqueue is picked as the next task.
->>>> Then eventually the workqueue should be immediately preempted by the stop task to
->>>> be migrated elsewhere.
->>>>
->>>> So I must be missing something. For the fun, I booted the following and it
->>>> didn't produce any issue:
->>>>
->>>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
->>>> index 80faf2273ce9..b1e74a508881 100644
->>>> --- a/kernel/rcu/tree.c
->>>> +++ b/kernel/rcu/tree.c
->>>> @@ -4234,6 +4234,8 @@ int rcutree_online_cpu(unsigned int cpu)
->>>>    	// Stop-machine done, so allow nohz_full to disable tick.
->>>>    	tick_dep_clear(TICK_DEP_BIT_RCU);
->>>> +	if (cpu != 0)
->>>> +		synchronize_rcu_expedited();
->>>>    	return 0;
->>>>    }
->>> That does seem compelling.  And others have argued that the workqueue
->>> system's handling of offline CPUs should deal with this.
->>>
->>> Mukesh, was this a theoretical bug, or did you actually make it happen?
->>> If you made it happen, as seems to have been the case given your original
->>> email [1], could you please post your reproducer?
->> No, it was not theoretical one. We saw this issue only once in our testing
->> and i don't think it is easy to reproduce otherwise
->> it would been fixed by now.
->>
->> When one of thread calling synchronize_expedite_rcu with timer of 20s but it
->> did not get the exp funnel
->> lock for 20s and there we crash it with panic() on timeout.
->>
->> The other thread cpuhp which was having the lock got stuck at the point
->> mentioned at the below link.
->>
->> https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
-> OK.  Are you able to create an in-kernel reproducer, perhaps similar to
-> Frederic's change above?
+Alex
+
+On Thu, Feb 17, 2022 at 10:57 AM Luben Tuikov <luben.tuikov@amd.com> wrote:
 >
-> I am worried that the patch that I am carrying might be fixing some
-> other bug by accident...
+> Thanks for catching this.
 >
-I have started overnight test to reproduce this. let me see if we hit this.
-if not, feel free to take decision on this patch.
-
-Thanks,
--Mukesh
-
-
-> 							Thanx, Paul
+> Reviewed-by: Luben Tuikov <luben.tuikov@amd.com>
 >
->> e.g Below sample test in combination of many other test in parallel
->>
->> :loop
->>
->> adb shell "echo 0 > /sys/devices/system/cpu/cpu0/online"
->>
->> adb shell "echo 1 > /sys/devices/system/cpu/cpu0/online"
->>
->> adb shell "echo 0 > /sys/devices/system/cpu/cpu1/online"
->>
->> adb shell "echo 1 > /sys/devices/system/cpu/cpu1/online"
->>
->> adb shell "echo 0 > /sys/devices/system/cpu/cpu2/online"
->>
->> adb shell "echo 1 > /sys/devices/system/cpu/cpu2/online"
->>
->> adb shell "echo 0 > /sys/devices/system/cpu/cpu3/online"
->>
->> adb shell "echo 1 > /sys/devices/system/cpu/cpu3/online"
->>
->> adb shell "echo 0 > /sys/devices/system/cpu/cpu4/online"
->>
->> adb shell "echo 1 > /sys/devices/system/cpu/cpu4/online"
->>
->> adb shell "echo 0 > /sys/devices/system/cpu/cpu5/online"
->>
->> adb shell "echo 1 > /sys/devices/system/cpu/cpu5/online"
->>
->> adb shell "echo 0 > /sys/devices/system/cpu/cpu6/online"
->>
->> adb shell "echo 1 > /sys/devices/system/cpu/cpu6/online"
->>
->> adb shell "echo 0 > /sys/devices/system/cpu/cpu7/online"
->>
->> adb shell "echo 1 > /sys/devices/system/cpu/cpu7/online"
->>
->> goto loop
->>
->>
->>
->> Thanks, Mukesh
->>
->>> 							Thanx, Paul
->>>
->>> [1]https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+> Regards,
+> Luben
+>
+> On 2022-02-17 10:38, trix@redhat.com wrote:
+> > From: Tom Rix <trix@redhat.com>
+> >
+> > Clang build fails with
+> > amdgpu_ras.c:2416:7: error: variable 'ras_obj' is used uninitialized
+> >   whenever 'if' condition is true
+> >   if (adev->in_suspend || amdgpu_in_reset(adev)) {
+> >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > amdgpu_ras.c:2453:6: note: uninitialized use occurs here
+> >  if (ras_obj->ras_cb)
+> >      ^~~~~~~
+> >
+> > There is a logic error in the error handler's labels.
+> > ex/ The sysfs: is the last goto label in the normal code but
+> > is the middle of error handler.  Rework the error handler.
+> >
+> > cleanup: is the first error, so it's handler should be last.
+> >
+> > interrupt: is the second error, it's handler is next.  interrupt:
+> > handles the failure of amdgpu_ras_interrupt_add_hander() by
+> > calling amdgpu_ras_interrupt_remove_handler().  This is wrong,
+> > remove() assumes the interrupt has been setup, not torn down by
+> > add().  Change the goto label to cleanup.
+> >
+> > sysfs is the last error, it's handler should be first.  sysfs:
+> > handles the failure of amdgpu_ras_sysfs_create() by calling
+> > amdgpu_ras_sysfs_remove().  But when the create() fails there
+> > is nothing added so there is nothing to remove.  This error
+> > handler is not needed. Remove the error handler and change
+> > goto label to interrupt.
+> >
+> > Fixes: b293e891b057 ("drm/amdgpu: add helper function to do common ras_late_init/fini (v3)")
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c | 11 +++++------
+> >  1 file changed, 5 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+> > index b5cd21cb6e58..c5c8a666110f 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+> > @@ -2432,12 +2432,12 @@ int amdgpu_ras_block_late_init(struct amdgpu_device *adev,
+> >       if (ras_obj->ras_cb) {
+> >               r = amdgpu_ras_interrupt_add_handler(adev, ras_block);
+> >               if (r)
+> > -                     goto interrupt;
+> > +                     goto cleanup;
+> >       }
+> >
+> >       r = amdgpu_ras_sysfs_create(adev, ras_block);
+> >       if (r)
+> > -             goto sysfs;
+> > +             goto interrupt;
+> >
+> >       /* Those are the cached values at init.
+> >        */
+> > @@ -2447,12 +2447,11 @@ int amdgpu_ras_block_late_init(struct amdgpu_device *adev,
+> >       }
+> >
+> >       return 0;
+> > -cleanup:
+> > -     amdgpu_ras_sysfs_remove(adev, ras_block);
+> > -sysfs:
+> > +
+> > +interrupt:
+> >       if (ras_obj->ras_cb)
+> >               amdgpu_ras_interrupt_remove_handler(adev, ras_block);
+> > -interrupt:
+> > +cleanup:
+> >       amdgpu_ras_feature_enable(adev, ras_block, 0);
+> >       return r;
+> >  }
+>

@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D244BA8D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523BB4BA8B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 19:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244871AbiBQSuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 13:50:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45700 "EHLO
+        id S244617AbiBQStf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 13:49:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244649AbiBQSu0 (ORCPT
+        with ESMTP id S231906AbiBQStc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 13:50:26 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6775522F1;
-        Thu, 17 Feb 2022 10:50:11 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id p9so9428087ejd.6;
-        Thu, 17 Feb 2022 10:50:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zM+Hp2WVjXIaMPVWa2mQUV9ISK0HqYCrHac37DPF8pw=;
-        b=BolWhcpS/6HTOxCBDIDuBl/h5hPvE9JkG/muCPtASmFx6+y5sndVaFYhkOPuPssfkn
-         N+WkOdD+19aO763ei3Eu2WU9ftQN1kp2LK8+YjHnTP+d1bzQRvVcFvzir84VaaZy28qh
-         snuYfFYT79MuLmapUWJYpxEHds4dVHjeyRv0d+6T2s9RwEDKe+ZQu7lgo9gpCtIbQU/4
-         3A+2aUTEa797Akyg/0hLzZ8eZn+p9LnYhoJV8TN3b6tuVbcogD/UXwv+tlWJ9SDzZCrg
-         +P8c0Giv0WWtwBFlUZ0Oq0JXsY7DLui47NCMGSowRFKP1k4VtDZGpz5Ldv6bL7JB4BA9
-         14Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zM+Hp2WVjXIaMPVWa2mQUV9ISK0HqYCrHac37DPF8pw=;
-        b=lAJM+uUNMVavKbvgr28gZUaExTKc9uT1rHYnMG69Fhw0oJBm7L2q0ivNkcFybxExHh
-         LR4uRJTpQNdFOtvUDnIzrj0AmoyICsyE4ChUrbm9fOeeEQTE+lUG2eYRJzRnVb6ft14j
-         SucmcA9lwClWjVtJw92O1ayd7gx8UTeuuU8Ak9sitMhooQHeP1rDGwBtfmhWpB8GS0z3
-         M8IRzh937gDGCMla1rYyEr2LDXWvXICDZcKbdbPihNsTHUjtuNd5wBV53rJ3wkVBQo3K
-         7Gx1P+82R7x3kx5yWnYIVcnUOQ84zkhnC6rCZwOE+DDZ8QRQ53i4JhD1IFtbC9s+oWU+
-         DLKQ==
-X-Gm-Message-State: AOAM533hD4jvIIYgmzjWvGha5J/zTEofD4EJhVCDlgGJulOfsyK9ykFh
-        QSZ209r1ahSqWVAniECldU32OKfK9Aj1Ok0bZmrk0Q==
-X-Google-Smtp-Source: ABdhPJxAa77nD+43PdtywudpGPQcktl4VzQxfGah+xpGfQDtyZvDMsYlyiTUJn8yQjbvV3UEVOkWiA==
-X-Received: by 2002:a17:906:82c4:b0:6b7:e0fc:c9e0 with SMTP id a4-20020a17090682c400b006b7e0fcc9e0mr3507573ejy.555.1645123810477;
-        Thu, 17 Feb 2022 10:50:10 -0800 (PST)
-Received: from localhost.localdomain (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.googlemail.com with ESMTPSA id q7sm3493268edv.93.2022.02.17.10.50.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 10:50:10 -0800 (PST)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [RFC PATCH 13/13] scsi: mpt3sas: comment about invalid usage of the list iterator
-Date:   Thu, 17 Feb 2022 19:48:29 +0100
-Message-Id: <20220217184829.1991035-14-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220217184829.1991035-1-jakobkoschel@gmail.com>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+        Thu, 17 Feb 2022 13:49:32 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FFA51338;
+        Thu, 17 Feb 2022 10:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=KT4HnucK16+RSYEwIMlsvOnUYi1BdaERlrwptdyeMjo=; b=W3EHhcKTCdUOlRZ/wcV0jHM1Am
+        4aQR4HvOJ4ThXsATD0GwyVAq60dvKepEue/zVecj5a+aeaN7t/jI+T7eEuEocCi7QP47FHXT22IK9
+        h31WbwqR0VabAr5xHINL7Pox9r7In89Eo75AtNLPoXsL4BE9aQs7wVKcyaoVy5oRhAEaLq72ebUgy
+        u04JPlT7Eddy8bX3aep5nbkiz7sE4/vT2V/uBVg6H759vdfc3BfqIuCqjbTrfacjeaYW1qsJ2DeVL
+        O/F1Os2zG9jiRnSYe9aI6IxqHQ7h783v1zYzn0Wo/AGHgBa7cBWUNOUXtNkSm8GAVHkDuTdvC90gc
+        HYVfB1hw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKlq2-00FrJn-SJ; Thu, 17 Feb 2022 18:49:11 +0000
+Message-ID: <078be2a1-707c-2e18-4b93-27dce25b1c46@infradead.org>
+Date:   Thu, 17 Feb 2022 10:49:07 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] dma: ti: cleanup comments
+Content-Language: en-US
+To:     trix@redhat.com, vkoul@kernel.org, peter.ujfalusi@gmail.com
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220217182546.3266909-1-trix@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220217182546.3266909-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the list iteration never exists early, reply_q is guaranteed to
-be an invalid variable and should not be used within
-_base_process_reply_queue(). Since I'm not sure what this code was
-supposed to do, I just marked this with this comment.
 
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 511726f92d9a..a6746e124226 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -2013,7 +2013,7 @@ mpt3sas_base_sync_reply_irqs(struct MPT3SAS_ADAPTER *ioc, u8 poll)
- 		}
- 	}
- 	if (poll)
--		_base_process_reply_queue(reply_q);
-+		_base_process_reply_queue(reply_q); // COMMENT
- }
- 
- /**
+On 2/17/22 10:25, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Remove the second 'the'
+> 
+> Replacements
+> completetion to completion
+> seens to seen
+> pendling to pending
+> atleast to at least
+> tranfer to transfer
+> multibple to a multiple
+> transfering to transferring
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+thanks.
+
+> ---
+>  drivers/dma/ti/cppi41.c   |  6 +++---
+>  drivers/dma/ti/edma.c     | 10 +++++-----
+>  drivers/dma/ti/omap-dma.c |  2 +-
+>  3 files changed, 9 insertions(+), 9 deletions(-)
+
+
 -- 
-2.25.1
-
+~Randy

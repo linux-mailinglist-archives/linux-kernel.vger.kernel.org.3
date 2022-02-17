@@ -2,65 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C314B9B55
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CDE44B9B57
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 09:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbiBQInb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 03:43:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57500 "EHLO
+        id S237930AbiBQInZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 03:43:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237909AbiBQInX (ORCPT
+        with ESMTP id S237053AbiBQInW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 03:43:23 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98E9222DC9;
+        Thu, 17 Feb 2022 03:43:22 -0500
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8E92221B2;
         Thu, 17 Feb 2022 00:43:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=srOPsA2UG/DyG90LXGGf2coqIfcpStSnhfATvzutOpo=; b=Oi0y9I30bfF8XTa3KuI8sK89ov
-        Db1xrUrYgQ3MvGtT9SGZrjouxcnZR4obZFG9Oynu8WSAjGon5BgzYF0IddnJtDkPknFPhyEGCrAhg
-        IAYH+oh5OVt1k/pa4wnP7ELans2RzRVZJXewnuzu9FkGgbubxsfTsGUsCGgz4QU4sPOre7ITEcl+E
-        5gsjiHpYf5jcZgkJwAv/mQm1kjRCztwdTdNQIZHz6G+XsRwVyIYzWie7L/X3hTZPiUliIi9Y5HgfT
-        pbEmBI629DkZ/COtR/fVQtRzj3mv+WbLP83gscr1yVg7JBRqRQKoyGlJr8ei00wUPvBbmF1NNGuOq
-        MU5o5UOQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKcNT-009X9N-Qc; Thu, 17 Feb 2022 08:43:03 +0000
-Date:   Thu, 17 Feb 2022 00:43:03 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Wang Jianchao (Kuaishou)" <jianchao.wan9@gmail.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <jbacik@fb.com>,
-        Tejun Heo <tj@kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC V4 0/6] blk: make blk-rq-qos policies pluggable and modular
-Message-ID: <Yg4Kl6EHWS5N3WoH@infradead.org>
-References: <20220217031349.98561-1-jianchao.wan9@gmail.com>
+Received: by mail-ej1-f51.google.com with SMTP id a23so5439625eju.3;
+        Thu, 17 Feb 2022 00:43:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IxAqI07yw/RNtyVS6JIMaXpsffDUL/C6yQlcRg0URz4=;
+        b=tpe567QAJ9yZ0cxeB4tBLTDO6rkRlTmBfLCqaMQHN+SK3iI3w8kUld8Pz4x5heoi+g
+         N6tJ3NhQVepCbdUZ6mW8ApxE0knWtQaJ+NdExLb2xG2caZRdzlodaP2AMYBqyMPnx64X
+         bv7A+6VncRDZ+sWLXxvdDa4qMRFe3xDUSqgykE5lHTjzTVJJJxoiyYCD+1hxbqtFNVlF
+         63JAA4Anx3JzPeLdDo3PncBgbR81neSb58/w1Xk7uTq6rzEReHZwsH6fqWwa/YUiZfWX
+         l3DmUyoZu+/JNrObDD1LSS5lkQoqSWxrU+tvjq4Q/+0OY6sXqzuNp77AWLqqPN587aP0
+         2Rmg==
+X-Gm-Message-State: AOAM530ybd640A2zN9n/crNU+H4fgefE7ZJAI8iERiG6Qgd43lx79U0K
+        zEnoHQvSY1uSONQ6/oZ1RRs=
+X-Google-Smtp-Source: ABdhPJz1JKK35XckyAQsD3r5VBtAh9SirVsICqcP9TUKLaKx2lNl05HnpKC+PF3FVcGYT6qHknUJUg==
+X-Received: by 2002:a17:906:bf1:b0:6cd:186:9ffa with SMTP id z17-20020a1709060bf100b006cd01869ffamr1482647ejg.506.1645087386473;
+        Thu, 17 Feb 2022 00:43:06 -0800 (PST)
+Received: from [192.168.0.110] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.googlemail.com with ESMTPSA id z8sm917438ejc.151.2022.02.17.00.43.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 00:43:05 -0800 (PST)
+Message-ID: <cdad7f26-dd4f-4120-c88a-b1cbbb9a56d7@kernel.org>
+Date:   Thu, 17 Feb 2022 09:43:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217031349.98561-1-jianchao.wan9@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8 3/3] MAINTAINERS: add maintainers for DRM LSDC driver
+Content-Language: en-US
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220216181712.1493400-1-15330273260@189.cn>
+ <20220216181712.1493400-4-15330273260@189.cn>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220216181712.1493400-4-15330273260@189.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 11:13:43AM +0800, Wang Jianchao (Kuaishou) wrote:
-> Hi Jens
+On 16/02/2022 19:17, Sui Jingfeng wrote:
+> From: suijingfeng <suijingfeng@loongson.cn>
 > 
-> blk-rq-qos is a standalone framework out of io-sched and can be used to
-> control or observe the IO progress in block-layer with hooks. blk-rq-qos
-> is a great design but right now, it is totally fixed and built-in and shut
-> out peoples who want to use it with external module.
+> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> ---
+>  MAINTAINERS | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ea3e6c914384..3f5e13a6358b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6453,6 +6453,15 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+>  F:	drivers/gpu/drm/lima/
+>  F:	include/uapi/drm/lima_drm.h
+>  
+> +DRM DRIVERS FOR LOONGSON
+> +M:	Sui Jingfeng <suijingfeng@loongson.cn>
+> +L:	dri-devel@lists.freedesktop.org
+> +S:	Maintained
+> +W:	https://www.loongson.cn/
+> +T:	git git://anongit.freedesktop.org/drm/drm-misc
+> +F:	drivers/gpu/drm/lsdc/
+> +F:	Documentation/devicetree/bindings/display/loongson/
+> +
 
-And that's got.  External modules do not matter.
+Did you run checkpatch?
 
-That being said this series has a bunch of nice cleanups, but we really
-do not need the exports and modular build.
+
+Best regards,
+Krzysztof

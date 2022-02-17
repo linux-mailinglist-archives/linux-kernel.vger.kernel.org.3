@@ -2,143 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3195F4BA5DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2E84BA5C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243246AbiBQQ2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:28:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32972 "EHLO
+        id S242940AbiBQQ3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:29:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243182AbiBQQ1z (ORCPT
+        with ESMTP id S243209AbiBQQ26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:27:55 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934ABB2E08;
-        Thu, 17 Feb 2022 08:27:37 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id d10so8516236eje.10;
-        Thu, 17 Feb 2022 08:27:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=x0CAWbNuIuDfQpbJainmJSxgl05KS6pI1nwvw77TVRY=;
-        b=XYjjMpDhaV3y4guUdwjcp7pgm0CCJvpxAYqNX/uRe1b80YfpnK0ARRNBQuuarUXsmt
-         IuoP9UGADm0phg5YjhICWB2TYsr8Q15w9dvHc8shFxuizpjNbhIo8BnklYElCvt1LVfH
-         aHEjCRuS/wUZhdmJDKGXCXZH2MeGUT5QgqowghefD1jO/9ZYE8o3eZGL/FRNKnJPk8ni
-         ky4p5t2DWKWEzWnNXX/Q+f4T3nvBS9CpocYX9sHIJdlvOprs79hV9JmszQBdz25z9bUi
-         Q2t7B+W8f1RiL4+buQH0S5DKRQ9D5BHYgteg7ctM8Z1DIkqdwZjesChIj/808a++1E4J
-         cu2A==
+        Thu, 17 Feb 2022 11:28:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5CADB2E21
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:28:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645115316;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OJgq/KDxxDOjnZUJexh0KDqV30PHIV148TQLzey+mso=;
+        b=dEam0yCRoCsB7y58Z0FKG4PO3Vz6SMIWpTVWYScmXpV1TOXf4b+FL9m5b1kgf4GUrpcNIm
+        WOVGpz1NSoOHyysIGG7+WO4B8iU28APiabSJR50jNsLT+elxnjyCQzsxxIq8KoRoQIR/Nj
+        HSOcRGjWNPeC8qZw5ltnxgR4TXPim8M=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-251-o8jw3VtdMjWT0pJqmG--Pg-1; Thu, 17 Feb 2022 11:28:34 -0500
+X-MC-Unique: o8jw3VtdMjWT0pJqmG--Pg-1
+Received: by mail-ej1-f70.google.com with SMTP id m12-20020a1709062acc00b006cfc98179e2so1765928eje.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 08:28:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=x0CAWbNuIuDfQpbJainmJSxgl05KS6pI1nwvw77TVRY=;
-        b=5v4SbT74eWBvdrpKEuR6C2yACdN6GvJI9LmPptnr80C4XKH56j6k/94iC/fPG0kybQ
-         im6aGSLxQh6uBYqXTxJKmmQtRqO8SNfiSh6xLxyxsSS+Y7jxYXFmHtdhWCrU9c+Sc00p
-         W9FtU3qCKZbP2L0M0GkrqGc/FbJz1XZS7jznZjLfueLvgrKQXi7ddoxlFerWoiEO+W+q
-         DfJhkweC42W6z6eNGN2qZwp5lJpNmhsqJ75Hd7D3hBRDCrDZ1b1Q+6hiHfZese3VHmAl
-         BY8rszViXilMVzRnQ/t8CSYNGgOKTl4kpYoT+Usp9L0nF0fComXmwOQt2Rj0w2+Sduwf
-         eT0Q==
-X-Gm-Message-State: AOAM533VpJkhagUH9xAj/OKI/SxuLha4CIW8r+BTobfJMbVOCANbwcPT
-        6W5KizBWCro6mrguGc04n14=
-X-Google-Smtp-Source: ABdhPJzlwfwiOWxf+goTzxLgaAJ6/r/qIVfSm0JJTyMJULqZyhZQz20H7AUpWOyqFSUm3xkOn6AE4Q==
-X-Received: by 2002:a17:907:2bf6:b0:6b9:725e:4e1f with SMTP id gv54-20020a1709072bf600b006b9725e4e1fmr2943906ejc.527.1645115256153;
-        Thu, 17 Feb 2022 08:27:36 -0800 (PST)
-Received: from poker.lan (static.2-229-210-222.ip198.fastwebnet.it. [2.229.210.222])
-        by smtp.gmail.com with ESMTPSA id j13sm3653742edw.24.2022.02.17.08.27.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 08:27:35 -0800 (PST)
-From:   Andrea Merello <andrea.merello@gmail.com>
-To:     jic23@kernel.org, mchehab+huawei@kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
-        matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
-        jacopo@jmondi.org, Andrea Merello <andrea.merello@gmail.com>,
-        Andrea Merello <andrea.merello@iit.it>
-Subject: [v3 13/13] docs: iio: add documentation for BNO055 driver
-Date:   Thu, 17 Feb 2022 17:27:10 +0100
-Message-Id: <20220217162710.33615-14-andrea.merello@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220217162710.33615-1-andrea.merello@gmail.com>
-References: <20220217162710.33615-1-andrea.merello@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OJgq/KDxxDOjnZUJexh0KDqV30PHIV148TQLzey+mso=;
+        b=WkZ8suRA7d92IkR0jXXe2HfkCmLcRsHXP+e/D78ErnkPv6HbCQX7nKjbyWT+Dyymin
+         s3088au1L5P8SaOgymy/oYGtQW/VJRj0SiCNSFI0YjypP5q52EkQK+M5L3OAL5JhhGJe
+         LrV+BEgkSPmJPrNX3U6RPeuKev0Au4vbei66KtTjHfYZ/Nq5u18AQ2TpSSRFJQZmKekp
+         EwJAPUi/cCweP5j7haDemNT/IUnsCLIpQpPDZeUfZtpqBaOAlMRfRHyLvFMfIar0FdV8
+         UAVOeLMzqvUcjxqQ4C0SIxCJjTl7nTq2eg34b/22Oo1UfAFuoalX3eTM3ql05RjeENLF
+         EhGw==
+X-Gm-Message-State: AOAM5330rw2xW8HoN7bMbb2IUX8nrzLuwozFqqIfhcRaR/EvyRc44nf+
+        frJ1ciZdNQgsqp8fVtSTIu521YkcRzX5YL1IqPAw3Slh819OGfwTIyi2CWC3x6WXatQzwjnvUDE
+        1QD5/biaQL2LZ2wTDwfKi58d6
+X-Received: by 2002:a17:907:70c1:b0:6ce:78ff:bad4 with SMTP id yk1-20020a17090770c100b006ce78ffbad4mr2958946ejb.68.1645115313579;
+        Thu, 17 Feb 2022 08:28:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzHk0mBIn5UH4jO+7vKeoLKOM8666LODusd64tZnougD4T+k/q3YUvhnxrSBAizbwwT0+edxw==
+X-Received: by 2002:a17:907:70c1:b0:6ce:78ff:bad4 with SMTP id yk1-20020a17090770c100b006ce78ffbad4mr2958934ejb.68.1645115313445;
+        Thu, 17 Feb 2022 08:28:33 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id ee30sm3403540edb.4.2022.02.17.08.28.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 08:28:32 -0800 (PST)
+Message-ID: <84de2a98-3051-82ec-6686-ef4161535d23@redhat.com>
+Date:   Thu, 17 Feb 2022 17:28:32 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
+Content-Language: en-US
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>
+Cc:     platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
+ <gfQUxZHzyr7uH4TwqJwXGsxCIYa-VvrN955036G3kKr6ligJYTAI3dqhf-FJddyHVBomp3JUUBNFMmmR8rwm7WzSxprlclT9Cbkrr2dknP0=@protonmail.com>
+ <CAHQ1cqF5HCJVsmyMHMxU85Uwv_Yd8qoAUVMz7R_zo0S9_pFZfg@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHQ1cqF5HCJVsmyMHMxU85Uwv_Yd8qoAUVMz7R_zo0S9_pFZfg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Andrea Merello <andrea.merello@iit.it>
----
- Documentation/iio/bno055.rst | 53 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 Documentation/iio/bno055.rst
+Hi,
 
-diff --git a/Documentation/iio/bno055.rst b/Documentation/iio/bno055.rst
-new file mode 100644
-index 000000000000..4bb185075325
---- /dev/null
-+++ b/Documentation/iio/bno055.rst
-@@ -0,0 +1,53 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+==============================
-+BNO055 driver
-+==============================
-+
-+1. Overview
-+===========
-+
-+This driver supports Bosch BNO055 IMUs (on both serial and I2C busses).
-+
-+Accelerometer, magnetometer and gyroscope measures are always provided.
-+When "fusion_enable" sysfs attribute is set to 1, orientation (both Euler
-+angles and quaternion), linear velocity and gravity vector are also
-+provided, but some sensor settings (e.g. low pass filtering and range)
-+became locked (the IMU firmware controls them).
-+
-+IIO attributes for unavailable measurements (e.g. Euler angles when fusion
-+mode is disabled) just read zero.
-+
-+This driver supports also IIO buffers.
-+
-+2. Calibration
-+==============
-+
-+The IMU continuously performs an autocalibration procedure if (and only if)
-+operating in fusion mode. The magnetometer autocalibration can however be
-+disabled writing 0 in the sysfs in_magn_calibration_fast_enable attribute.
-+
-+The driver provides access to autocalibration flags (i.e. you can known if
-+the IMU has successfully autocalibrated) and to the calibration data blob.
-+
-+The user can save this blob in a firmware file (i.e. in /lib/firmware) that
-+the driver looks for at probe time. If found, then the IMU is initialized
-+with this calibration data. This saves the user from performing the
-+calibration procedure every time (which consist of moving the IMU in
-+various way).
-+
-+The driver looks for calibration data file using two different names: first
-+a file whose name is suffixed with the IMU unique ID (exposed in sysfs as
-+serial_number) is searched for; this is useful when there is more than one
-+IMU instance. If this file is not found, then a "generic" calibration file
-+is searched for (which can be used when only one IMU is present, without
-+struggling with fancy names, that change on each device).
-+
-+Valid calibration file names would be e.g.
-+ bno055-caldata-0e7c26a33541515120204a35342b04ff.dat
-+ bno055-caldata.dat
-+
-+In non-fusion mode the IIO 'offset' attributes provide access to the
-+offsets from calibration data (if any), so that the user can apply them to
-+the accel, angvel and magn IIO attributes. In fusion mode they are not
-+needed (the IMU firmware internally applies those corrections) and they
-+read as zero.
--- 
-2.17.1
+On 2/13/22 00:30, Andrey Smirnov wrote:
+
+<snip>
+
+>>> +static struct attribute *steamdeck_attributes[] = {
+>>> +     &dev_attr_target_cpu_temp.attr,
+>>> +     &dev_attr_gain.attr,
+>>> +     &dev_attr_ramp_rate.attr,
+>>> +     &dev_attr_hysteresis.attr,
+>>> +     &dev_attr_maximum_battery_charge_rate.attr,
+>>> +     &dev_attr_recalculate.attr,
+>>> +     &dev_attr_power_cycle_display.attr,
+>>> +
+>>> +     &dev_attr_led_brightness.attr,
+>>
+>> Have you considered using a led class device instead? I think that should
+>> work even without the ability to query the brightness.
+>>
+> 
+> Not very seriously. Will take another look.
+> 
+>>
+>>> +     &dev_attr_content_adaptive_brightness.attr,
+>>> +     &dev_attr_gamma_set.attr,
+>>> +     &dev_attr_display_brightness.attr,
+>>
+>> Have you considered using a backlight class device?
+>>
+> 
+> Ditto.
+
+Note that for both of these I would go a bit further then
+"have you considered?". Since you are implementing standardized
+userspace APIs here you *must* use the shared subsystem code
+for registering a LED resp backlight class device here so that
+everything is guaranteed to behave as expected by userspace.
+
+Regards,
+
+Hans
 

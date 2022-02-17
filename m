@@ -2,146 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4CD04BA713
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF23A4BA717
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243694AbiBQRZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:25:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43796 "EHLO
+        id S243701AbiBQR1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:27:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243687AbiBQRZC (ORCPT
+        with ESMTP id S233104AbiBQR1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:25:02 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BEB2B3544
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:24:47 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id q20so2211252ioi.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 09:24:47 -0800 (PST)
+        Thu, 17 Feb 2022 12:27:31 -0500
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0F218461B;
+        Thu, 17 Feb 2022 09:27:16 -0800 (PST)
+Received: by mail-qk1-x733.google.com with SMTP id j78so712627qke.2;
+        Thu, 17 Feb 2022 09:27:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7fIcF7s81zkutMwfNwbf5zubVlDI9OaU5K9fy74Q9B4=;
-        b=CbjKEehp+SO97pE4gjqRCL2QIc1uqC9YLBDOV46DzEWiC3Sqbnz4CABRm+m/ca4Eqv
-         buTZ31TloBpK6VM7Z587Ywiyaf6uTxjFAEhwDX5nJSV1CS2+0w6L72L7j8WSQi53hABT
-         4QAI7u4+Ju3wP+USmHOrd0+P76dMc+h6l4SO0=
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5TBlHGHH+WgnstAw4WAM7waOCG5SUDRAM7hFFIagCrU=;
+        b=HLY4SPMBxh4NKJbgQKdTkOF1EKwda6K8LQMPuV36UURJxnp7c4cFUN7jKyV05Ha0JT
+         ubSD9THez92siIbroSve2L+60SunhnDrredJrG/kd8HxyGw1J6LhbEkgN3Lm+S0R8Dki
+         qwO6hj1XbpB6NkUgQ84Oy/OV+Sbji6p57xqSFrRNZ8us8dbQ8sXhvvJ8PjS6Q/dT1ksj
+         5rj3nmge7i+rX00ahzikCfer3Jv8T0UkehawWYdt12kZVJtj5akb4J+p2+UelxXYyfjI
+         SFbE5tkLerjDF+R1tj2kzFP4jmcyOL2S0NwaAgmE6YAtuO/MVsoxtyRUuV7hWoF/vyPQ
+         yzrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=7fIcF7s81zkutMwfNwbf5zubVlDI9OaU5K9fy74Q9B4=;
-        b=W32Z9j2alWwXaXXoQ0KkwGiFAejfZEA01/Fi4rAN8LrvAhPYEBmGcAb/dzJwo6k3EA
-         gUkhEd3h09oApG7RBnkH4a5GeTaYj4o9x8mKDvqXurulQHeyeMdzoaAOgf9edPTPMeIH
-         t+XxOE123LwtsjA3KlJZZwmTaZjWKyyKoeN2T2uOEof2PY0Iobi2+q2svTg3Lp56ctnL
-         Yt3aeJcx5cnKeIa0DxorIlUsQQnWiepT3IX3TZI6NKE64IGona+KV+ajxHseD1fXrad0
-         TfFKlv/oOgG8/wASwi5L71belJoq0PxqYdYzKkXKaIKFg/Uu/s9D7WcU3EL3hffuuDSe
-         94WQ==
-X-Gm-Message-State: AOAM530CECXpuMzCyXjROLJJmAHaGQQZcS0K0GOZY4pv7cWZU6VkYq3u
-        BYiaNXL+tlQCfamTZz08W+YuQA==
-X-Google-Smtp-Source: ABdhPJwTbgrJwmhagULfptTjSGm9yEX+5FBRDBMNvfShq/9n6pwvePv1NzgE2fojGGA2T6QifJdoQA==
-X-Received: by 2002:a02:700e:0:b0:2ff:7cac:bd09 with SMTP id f14-20020a02700e000000b002ff7cacbd09mr2696324jac.32.1645118685905;
-        Thu, 17 Feb 2022 09:24:45 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id y7sm2105136ila.7.2022.02.17.09.24.44
+        bh=5TBlHGHH+WgnstAw4WAM7waOCG5SUDRAM7hFFIagCrU=;
+        b=PPvdBwa+oKJYS1FNHDC+SJLIxRjOiCzr5ntDpfSTTxRLtCNBPDdkl5Jq94XxH0LskZ
+         JWNCE/PMi9VpcDRkRqrq4SsBSkyQLtDrNFTHzjzZ9r5HbRi1CyqKCQHsAaUHLeIWaio7
+         i4VZpCYo5hNkKu634I5/LjEgZbjOzsILzA6VfHrpxb2bH9XroZk/JQL/MIAmKZKTJU8b
+         e2ReMuI1DGp4eVVoLTFS6KaQRfiZFNAwI2zV2RdFEpNaoXjpvUUN6S2y7kYyzY1zOhT0
+         SrKsEwBzzabyMx2w6UYMHNX2njI950lNyl6I5Gmpk/occ91FezVyRtjSY5zwMbyeyL2L
+         WgVw==
+X-Gm-Message-State: AOAM531V8tTMRaXWCDLlsd/YH8sEUMJD+UjCmrLp5GIJMzuEjNGlI+RW
+        RNFSRtOKOV3nyDX2XWtHtU8=
+X-Google-Smtp-Source: ABdhPJzA7isSR8GbbpDuUGZbNJH+0UydjEtjn1t9PHTbTZtMwobftpWsxxVxnjOdfRofyzr6m36xhw==
+X-Received: by 2002:a37:5345:0:b0:47b:e4b3:48ea with SMTP id h66-20020a375345000000b0047be4b348eamr2287957qkb.35.1645118835811;
+        Thu, 17 Feb 2022 09:27:15 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o17sm11404887qtv.45.2022.02.17.09.27.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 09:24:45 -0800 (PST)
-Subject: Re: [PATCH] lib: overflow: Convert to Kunit
-To:     Kees Cook <keescook@chromium.org>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216224153.2242451-1-keescook@chromium.org>
- <CAGS_qxoOYjOtX6BQm-ozcarnazyED2vocd4iV+VdDVnMWpjWjg@mail.gmail.com>
- <202202170903.E39554DF@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <68057bea-7bf7-afb9-4c99-aa3b2c024133@linuxfoundation.org>
-Date:   Thu, 17 Feb 2022 10:24:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 17 Feb 2022 09:27:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ef1b1d99-6172-2b4d-9612-7ecbe8fc6c8b@roeck-us.net>
+Date:   Thu, 17 Feb 2022 09:27:11 -0800
 MIME-Version: 1.0
-In-Reply-To: <202202170903.E39554DF@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC V2 17/21] watchdog/dev: Add tracepoints
 Content-Language: en-US
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        "Peter.Enderborg@sony.com" <Peter.Enderborg@sony.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-devel@vger.kernel.org" 
+        <linux-trace-devel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <cover.1644830251.git.bristot@kernel.org>
+ <e67874c8b676ea8dfe38679efa25363889bb1e76.1644830251.git.bristot@kernel.org>
+ <96f418b4-0ba8-01fe-ead0-2028bfc42560@sony.com>
+ <ba924008-c0ab-4800-aac4-d9d9ae930c32@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <ba924008-c0ab-4800-aac4-d9d9ae930c32@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 10:09 AM, Kees Cook wrote:
-> On Wed, Feb 16, 2022 at 02:57:12PM -0800, Daniel Latypov wrote:
->> On Wed, Feb 16, 2022 at 2:42 PM Kees Cook <keescook@chromium.org> wrote:
->>>
->>> Convert overflow unit tests to KUnit, for better integration into the
->>> kernel self test framework. Includes a rename of test_overflow.c to
->>> overflow_kunit.c, and CONFIG_TEST_OVERFLOW to CONFIG_OVERFLOW_KUNIT_TEST.
->>>
->>> $ ./tools/testing/kunit/kunit.py config
->>> ...
->>> $ ./tools/testing/kunit/kunit.py run overflow
->>
->> JFYI, you can run this as a one-liner via
->>
->> $ ./tools/testing/kunit/kunit.py run --kunitconfig /dev/stdin <<EOF
->> CONFIG_KUNIT=y
->> CONFIG_TEST_OVERFLOW=y
->> EOF
->>
->> The above is taken from my own duplicate version of this patch
->> [1] https://lore.kernel.org/linux-kselftest/20210503211536.1384578-1-dlatypov@google.com/
+On 2/17/22 08:27, Daniel Bristot de Oliveira wrote:
+> Hi Peter
 > 
-> Ah-ha! I thought I remembered this conversion being proposed before but
-> I totally failed to find it. Thank you! I'll compare/adjust this patch
-> and add you as Co-developed-by.
-> 
->>> ...
->>> [14:33:51] Starting KUnit Kernel (1/1)...
->>> [14:33:51] ============================================================
->>> [14:33:51] ================== overflow (11 subtests) ==================
->>> [14:33:51] [PASSED] u8_overflow_test
->>> [14:33:51] [PASSED] s8_overflow_test
->>> [14:33:51] [PASSED] u16_overflow_test
->>> [14:33:51] [PASSED] s16_overflow_test
->>> [14:33:51] [PASSED] u32_overflow_test
->>> [14:33:51] [PASSED] s32_overflow_test
->>> [14:33:51] [PASSED] u64_overflow_test
->>> [14:33:51] [PASSED] s64_overflow_test
->>> [14:33:51] [PASSED] overflow_shift_test
->>> [14:33:51] [PASSED] overflow_allocation_test
->>> [14:33:51] [PASSED] overflow_size_helpers_test
->>> [14:33:51] ==================== [PASSED] overflow =====================
->>> [14:33:51] ============================================================
->>> [14:33:51] Testing complete. Passed: 11, Failed: 0, Crashed: 0, Skipped: 0, Errors: 0
->>> [14:33:51] Elapsed time: 12.525s total, 0.001s configuring, 12.402s building, 0.101s running
+> On 2/16/22 17:01, Peter.Enderborg@sony.com wrote:
+>> On 2/14/22 11:45, Daniel Bristot de Oliveira wrote:
+>>> Add a set of tracepoints, enabling the observability of the watchdog
+>>> device interactions with user-space.
 >>>
->>> Cc: David Gow <davidgow@google.com>
->>> Cc: Vitor Massaru Iha <vitor@massaru.org>
->>> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->>> Cc: Nick Desaulniers <ndesaulniers@google.com>
->>> Co-developed-by: Vitor Massaru Iha <vitor@massaru.org>
->>> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
->>> Link: https://lore.kernel.org/lkml/20200720224418.200495-1-vitor@massaru.org/
->>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>>> The events are:
+>>> 	watchdog:watchdog_open
+>>> 	watchdog:watchdog_close
+>>> 	watchdog:watchdog_start
+>>> 	watchdog:watchdog_stop
+>>> 	watchdog:watchdog_set_timeout
+>>> 	watchdog:watchdog_ping
+>>> 	watchdog:watchdog_nowayout
+>>> 	watchdog:watchdog_set_keep_alive
+>>> 	watchdog:watchdog_keep_alive
 >>
->> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+>> Some watchdogs have a bark functionality, I think it should be event for that too.
 >>
+> 
+> I understand. The problems is that I do not see the bark abstraction in the
+> watchdog_dev layer.
+> 
 
-Looks good to me. I recall reviewing this when Vitor was working on this.
-Glad to this happen.
+I don't even know what "bark functionality" means. A new term for pretimeout ?
+Something else ?
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Guenter
 
-thanks,
--- Shuah
+> In the case I am investigating (the safety_monitor/safety_app) the bark is
+> outside of the "OS" view, it is an hardware action - like. shutdown.
+> 
+> Am I missing something? Thoughts?
+> 
+> -- Daniel
+

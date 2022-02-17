@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E57A4B9D78
+	by mail.lfdr.de (Postfix) with ESMTP id A9B7E4B9D79
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239286AbiBQKq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:46:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60354 "EHLO
+        id S239304AbiBQKqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:46:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239270AbiBQKqZ (ORCPT
+        with ESMTP id S239265AbiBQKqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Feb 2022 05:46:25 -0500
 Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A0729410F
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3D9294111
         for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:46:10 -0800 (PST)
 Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id E2F3FB10;
-        Thu, 17 Feb 2022 02:46:09 -0800 (PST)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 3C96CB98;
+        Thu, 17 Feb 2022 02:46:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
         s=thorn; t=1645094770;
-        bh=k2uD7BYduSjipdEcL2Koh9IwXWlXmu34APxpIgOo/M0=;
+        bh=SQvjKarSQnVSfGUf/SQbGhZom4+CH6pepOFEZVx59+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ETB8cvRO/ymbjLAvw0i90ILe/BawTknLjnIdlNuS+l0LHklhq+EER5ANvTDfokZBP
-         DJmFLVZTD+CnF1S4y7NOr01Oitch4Ho5x3sFJOM4Vp8sKh5BHxo7+IpRKPwoexW9Sz
-         f4PXv2y5yy/WzxvILlg3isIO2A3PurYgpD73mFto=
+        b=jciqh0otGJbTdn+SOnWBhWfeeNq0M5QiC59ykWAB5/I4N9BHwU3qvZE+ICRe/6NtL
+         F267ucv4WMc0vCp9PeTavnmTGzo0j0nRi1buS1qFw/vIhAtbRm6/egmp79dtr4aN5v
+         3XLOOP1UKHTYX8t/hIGm50smYUaB9fwWLYgxJA/0=
 From:   Zev Weiss <zev@bewilderbeest.net>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     Zev Weiss <zev@bewilderbeest.net>, openbmc@lists.ozlabs.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>
-Subject: [PATCH 1/4] hwmon: (pmbus) Add get_error_flags support to regulator ops
-Date:   Thu, 17 Feb 2022 02:44:41 -0800
-Message-Id: <20220217104444.7695-2-zev@bewilderbeest.net>
+Subject: [PATCH 2/4] hwmon: (pmbus) lm25066: Add regulator support
+Date:   Thu, 17 Feb 2022 02:44:42 -0800
+Message-Id: <20220217104444.7695-3-zev@bewilderbeest.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220217104444.7695-1-zev@bewilderbeest.net>
 References: <20220217104444.7695-1-zev@bewilderbeest.net>
@@ -53,126 +53,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The various PMBus status bits don't all map perfectly to the more
-limited set of REGULATOR_ERROR_* flags, but there's a reasonable
-number where they correspond well enough.
+While these chips aren't strictly advertised as voltage regulators per
+se, they (aside from the lm25056) support the PMBus OPERATION command
+to enable and disable their outputs and have status bits for reporting
+various warnings and faults, and can hence usefully support all the
+pmbus_regulator_ops operations.
 
 Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 97 ++++++++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
+ drivers/hwmon/pmbus/Kconfig   |  7 +++++++
+ drivers/hwmon/pmbus/lm25066.c | 14 ++++++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be2..a274e8e524a5 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2417,10 +2417,107 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
- 	return _pmbus_regulator_on_off(rdev, 0);
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 41f6cbf96d3b..4acf63fd69b2 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -174,6 +174,13 @@ config SENSORS_LM25066
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called lm25066.
+ 
++config SENSORS_LM25066_REGULATOR
++	bool "Regulator support for LM25066 and compatibles"
++	depends on SENSORS_LM25066 && REGULATOR
++	help
++	  If you say yes here you get regulator support for National
++	  Semiconductor LM25066, LM5064, and LM5066.
++
+ config SENSORS_LTC2978
+ 	tristate "Linear Technologies LTC2978 and compatibles"
+ 	help
+diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+index 8402b41520eb..09792cd03d9f 100644
+--- a/drivers/hwmon/pmbus/lm25066.c
++++ b/drivers/hwmon/pmbus/lm25066.c
+@@ -435,6 +435,12 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
+ 	return ret;
  }
  
-+/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
-+struct pmbus_regulator_status_assoc {
-+	int pflag, rflag;
++#if IS_ENABLED(CONFIG_SENSORS_LM25066_REGULATOR)
++static const struct regulator_desc lm25066_reg_desc[] = {
++	PMBUS_REGULATOR("vout", 0),
 +};
++#endif
 +
-+/* PMBus->regulator bit mappings for a PMBus status register */
-+struct pmbus_regulator_status_category {
-+	int func;
-+	int reg;
-+	const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
-+};
-+
-+static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
-+	{
-+		.func = PMBUS_HAVE_STATUS_VOUT,
-+		.reg = PMBUS_STATUS_VOUT,
-+		.bits = (const struct pmbus_regulator_status_assoc[]) {
-+			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
-+			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
-+			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
-+			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
-+			{ },
-+		},
-+	}, {
-+		.func = PMBUS_HAVE_STATUS_IOUT,
-+		.reg = PMBUS_STATUS_IOUT,
-+		.bits = (const struct pmbus_regulator_status_assoc[]) {
-+			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
-+			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
-+			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
-+			{ },
-+		},
-+	}, {
-+		.func = PMBUS_HAVE_STATUS_TEMP,
-+		.reg = PMBUS_STATUS_TEMPERATURE,
-+		.bits = (const struct pmbus_regulator_status_assoc[]) {
-+			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
-+			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
-+			{ },
-+		},
-+	},
-+};
-+
-+static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-+{
-+	int i, status, statusreg;
-+	const struct pmbus_regulator_status_category *cat;
-+	const struct pmbus_regulator_status_assoc *bit;
-+	struct device *dev = rdev_get_dev(rdev);
-+	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
-+	u8 page = rdev_get_id(rdev);
-+	int func = data->info->func[page];
-+
-+	*flags = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
-+		cat = &pmbus_regulator_flag_map[i];
-+		if (!(func & cat->func))
-+			continue;
-+
-+		status = pmbus_read_byte_data(client, page, cat->reg);
-+		if (status < 0)
-+			return status;
-+
-+		for (bit = cat->bits; bit->pflag; bit++) {
-+			if (status & bit->pflag)
-+				*flags |= bit->rflag;
-+		}
+ static const struct i2c_device_id lm25066_id[] = {
+ 	{"lm25056", lm25056},
+ 	{"lm25066", lm25066},
+@@ -545,6 +551,14 @@ static int lm25066_probe(struct i2c_client *client)
+ 	info->m[PSC_CURRENT_IN] = info->m[PSC_CURRENT_IN] * shunt / 1000;
+ 	info->m[PSC_POWER] = info->m[PSC_POWER] * shunt / 1000;
+ 
++#if IS_ENABLED(CONFIG_SENSORS_LM25066_REGULATOR)
++	/* LM25056 doesn't support OPERATION */
++	if (data->id != lm25056) {
++		info->num_regulators = ARRAY_SIZE(lm25066_reg_desc);
++		info->reg_desc = lm25066_reg_desc;
 +	}
++#endif
 +
-+	/*
-+	 * Map what bits of STATUS_{WORD,BYTE} we can to REGULATOR_ERROR_*
-+	 * bits.  Some of the other bits are tempting (especially for cases
-+	 * where we don't have the relevant PMBUS_HAVE_STATUS_*
-+	 * functionality), but there's an unfortunate ambiguity in that
-+	 * they're defined as indicating a fault *or* a warning, so we can't
-+	 * easily determine whether to report REGULATOR_ERROR_<foo> or
-+	 * REGULATOR_ERROR_<foo>_WARN.
-+	 */
-+	statusreg = data->has_status_word ? PMBUS_STATUS_WORD : PMBUS_STATUS_BYTE;
-+	status = pmbus_get_status(client, page, statusreg);
-+
-+	if (status < 0)
-+		return status;
-+
-+	if (pmbus_regulator_is_enabled(rdev) && (status & PB_STATUS_OFF))
-+		*flags |= REGULATOR_ERROR_FAIL;
-+	if (status & PB_STATUS_IOUT_OC)
-+		*flags |= REGULATOR_ERROR_OVER_CURRENT;
-+	if (status & PB_STATUS_VOUT_OV)
-+		*flags |= REGULATOR_ERROR_REGULATION_OUT;
-+
-+	return 0;
-+}
-+
- const struct regulator_ops pmbus_regulator_ops = {
- 	.enable = pmbus_regulator_enable,
- 	.disable = pmbus_regulator_disable,
- 	.is_enabled = pmbus_regulator_is_enabled,
-+	.get_error_flags = pmbus_regulator_get_error_flags,
- };
- EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+ 	return pmbus_do_probe(client, info);
+ }
  
 -- 
 2.35.1

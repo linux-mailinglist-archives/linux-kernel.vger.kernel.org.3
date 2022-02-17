@@ -2,152 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3872B4BACE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBF34BACE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 23:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiBQWuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 17:50:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52166 "EHLO
+        id S229843AbiBQWx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 17:53:28 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiBQWuv (ORCPT
+        with ESMTP id S229496AbiBQWx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 17:50:51 -0500
-Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2D621F1CA
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 14:50:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1645138232; bh=T6iIX5BaPc7gwjH/n3Sbd0FM25joVDFZqzT9x9ttF1A=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=o0PDKaXSivRXm1uIaeyxwcI0b5GGTlwZW6W5VhE13K57+EXDEItvi6daI6I92FXJ8f+tAopcDSqp6PI7ZoxLkof3gdVsKiuxD3/o2sBcKtmVkZPwNfKIhavbGHiGB4mpwmJIHsSWc3jVKFXNIFudK3N8EKmB55HMTLtJuekERoF3NrPLkxyRm6QaZ8HO9xaD/kG93y+3r2AE43noZnfOOnmYWqJay6yMgkxXCzTagw0fPJajn2KMcDlbp4+HVZp00VksZA6DR0s7p5DiEC1KQDrV4lsJ2JBbTVKG7v61Jtz6MwhQW14mldJ3/1Dy0T1YXcSj4gPNO8uVUFablAG3rA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1645138232; bh=udXRKLBL3VoowDWNGoLAdXT0d+BUivcwM4F4nnEYUuk=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=qIc+AU5ASGYMdt1cEEVjZLMCwiunyHqxjW6yrzw6zvpKlNJyW6R0n7QQg/ywr8hG08DRohPHgoAxzHt0DVgwH+8adfmV8x7zwJdgVEWOYNe5tQ/8pNgzPi0xFzd617tmtcG8wWkyfbDz954bZSd2bOAl/92qayGHmXLRFkQ0Hq83vmhsJ29luPBwdOcxjaeATCYPmoXlGOVUuANMrdV2TcEP1TZW++yO4JTExeR9kp7FBYWBfH5L06p236Cw3DmW6cUwL/XhZtulIFTveKYxntxhDvuhAIHOySnOf5eyrLQ+RkvRBFbl+2Dn6OE8GmB9ff0NmZMkdlzyyHY6HEC5iQ==
-X-YMail-OSG: 3bFJBTMVM1ksQUwkRIKxlkVJegxkUYJhhcojlviV55Z6Aj9L7HHtTN2kwAzivmB
- S4kI78bKp9Wzzxcmyz4TUVoLn5gjmphv.BI6jdEEo7jCxdS1kN0np3R_4L0e4qOI75uhXZ5JP7nO
- 5.l4IqRsZ0zbO97q6OjDkxPtFHp5OAaMhdfuMyHJVsiNQEMXsn5rxJiTtR5jSXvV7fegKL2G1sA7
- 7mpLZ2dZPZx.9pF8Do6UJANCZ3juCEk4e81298bGVDzYU73KpXTfjRJF1I36P8vz9ZH9bF_kP4GB
- l6mBBEf2Oydj2yobqN_56.eHJOwp_uxpHE9MC8CRw08tpvVf3389u_TrLv7g4Y30k7K8WBrn7Qfk
- T9wrmQmN4rphgT4cAhe0ZaDj8YDXNrgSiZCDtTelSXt8gEa1Clk4qe0_ZRjzhqjcjftNkTsQlX08
- 1kCgRXiDBMWhshHx4zxdlm1EQ3t0kaonG7UIC46MlmZ5dIh7TW2X8SXAm04JaiTq8_5C5mmRI58R
- ikdNruq7enSeASxkocSLtoz3nlR5YJiwoGY4.s8gKE7ESy901cS66L_1H_yHyVzxHUwZfw8sAVv2
- Bp1GMpV6uRDFy9.j5m6VESB2_ZxdfP6.sd_v6KvjtlbzlnQhxihcL36ltc2PSzdTWCcjhbCbL.KY
- Q5Z.R8SmvuRAogp6m.e4DRdkDyfGRj7gVzNShB0jE5OyJaTT50Yvm.5zzUsfVit3BEbCKRvX9JQB
- CzW13N84btSlc79FdaegHfih9ViaYI1.QP7VMan9pLOplRFJ.7s5FLqQNJacoHUYP3UtDAO.tqB6
- 8yrfeGA9IuflGKsO.Y5OkDhTk.11inNyGCpciyWnVcqoJ3vS0ymkH.r3PvDd_E2oxvyq.SD8NuYm
- EqicHJLBot723GRjix6fMfVUiF5mEzxFcVUWr5hu6IauB22sZMPc5esr.oMEsq_sWukd6ur.ZjrW
- Y6NyAj7F8CH3vFh8b7IkumdaoYOQt.Fs9YeUbDGJYQcuLN6AdIMt_rPqlsJ6awek2v8MCfFn0F27
- etSgEZSBSwHaU.VqXTh1CsdT4pxQN5iiOAjwQMJTnV0OOVYsO99jWcj2D1h1103gjmU1KVLzcgF1
- 9LxFprBQfS0cjk_cNM5wm4JhZ.SZdyhjU9.b2vx4bBQS4qUUt0twT08ec5Swj4VDiAmKmcmc7puT
- Z5XC_eBy4x4.ofs4Fp.eEvYr1bG1Y5xv7qo4bOKsrroWBcBCX0tGLouQNI8eecnebcoZx71As.As
- jCFRkYew6uNT08nIYEXAmgy0d9FLwTV0sKTImIXXeYGRfruNovKM9mGOOTjRl.4LK3JMSOi9U2v7
- a4C1oZdh18cakEP3RuuX4gEdWFo0I_wyDcr9wokpfZ80Q3rSXHB0Wu9FxbRiCMKCRkuWVNgXUWZ_
- OsDpHCyiTM3yqESXZaypmEYaF7XvC6KsS0lMkkJFoJqYFuCfupCdsA6LgI2mrOoCV9A1Dgd4ERQ.
- Rn6h91G66yVt_bidnVtN3b8J5aC3S6t4UggoUaHEYh1G9V5x3MJzPYuRV16G92eYp2AjMfk.PMcg
- L.ztd.0LPP_5od7nXXAn.t8ioLelnfXzybONSTwKDZtZkXmZuAeh32RkQndLyT4rUeUmDB9RIaUJ
- sUlna_FCLmshZZK_D87JswQYsDRe5yFhTsXghvflOzroRjWYtA8I6JpPhSYR3CaPOzdDp4Nku2Gs
- fCG.HZ7RLpDKWeYGW6Uc2.R_fL.NEtc9bOOstg6IwIcMbFy46j0v_pT_25UU.QpokBokrYsfHfAU
- kBZJ14EKRwyC.fM0uUYXP4PobYH3IHl2N6dn7Qkh_shSmSVDduxvpQfmP_GdcbQsWuT867DpiR5H
- sJGKPM2dSuGIij8K7CbYbbsq4BzGHHZ36wHQV0wHkU11SYn9aB0BY8N4y44qhRlnQNN4CfETFvTL
- k6WEZxk67lnihW7vqYtZyIM66t6dv7sToSOOpWFDnkJisXdMewDlqXyfFuQfGxmwmwbBkKVYFBK1
- 7hy2OkAxondz_AZqUxSna0s5gYY57JjAx1g_kNV.HFRSw4sTaL1ai_j0NRkG65bW1E9NHDpFoTCU
- CgVEc9DXnz8dwuCi_QaDLGLMMoRayGToLHapN.JmEbiwarEsAcN6PcIVQXkdDS_AlWhxzSJv2c9t
- D1owhCNtA0wf6D3KGH_5EHfdINHi_SA5MXkfXs_qI6QYv_Gv9COPD0wvymbCiaeRPKbIn.os8j2T
- yJBa.ZSofirfn.8sBex07_yguwLBDiVeDbQc6.tCjuxVRLIkRQUhKWEpCSdCBSNxoCBBIiY1m9Gp
- Ny445
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Thu, 17 Feb 2022 22:50:32 +0000
-Received: by kubenode518.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 6b34b34f702f3dd48a8606ae65e940d1;
-          Thu, 17 Feb 2022 22:50:26 +0000 (UTC)
-Message-ID: <41224e84-2da7-3f69-0fdb-bb309ad6a3d4@schaufler-ca.com>
-Date:   Thu, 17 Feb 2022 14:50:25 -0800
+        Thu, 17 Feb 2022 17:53:26 -0500
+X-Greylist: delayed 43618 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 14:53:09 PST
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F8A23DCDA;
+        Thu, 17 Feb 2022 14:53:07 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 33630135;
+        Thu, 17 Feb 2022 14:53:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1645138387;
+        bh=gsGOhGOSIrd2TnMwqmAf0sh/rDGx85EFzHmU1R2GuEY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Okz+HmpY2hSRXYk1CG2EDSf7mwPTN38T1+l5FX0ot1hIp06jzc/AQ2+e8vTSJG48X
+         AUQnVBUlqcUDWVj9MLIGwKU8vIcNZ2ZJtMqn9W1k4CSaOBOfmGLLV7uNLoCekrolzH
+         fWTwfLJOP30HRxGve5FiDDrNojOczppPfrbkAJYo=
+Date:   Thu, 17 Feb 2022 14:53:04 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH 4/4] misc: Add power-efuse driver
+Message-ID: <Yg7R0PtS4oyyZFC/@hatter.bewilderbeest.net>
+References: <20220217104444.7695-1-zev@bewilderbeest.net>
+ <20220217104444.7695-5-zev@bewilderbeest.net>
+ <Yg5PALyUv6qHPz//@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] security: declare member holding string literal const
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
-        selinux@vger.kernel.org
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        Todd Kjos <tkjos@google.com>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, llvm@lists.linux.dev,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220217141858.71281-1-cgzones@googlemail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220217141858.71281-1-cgzones@googlemail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.19797 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Yg5PALyUv6qHPz//@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/2022 6:18 AM, Christian Göttsche wrote:
-> The struct security_hook_list member lsm is assigned in
-> security_add_hooks() with string literals passed from the individual
-> security modules.  Declare the function parameter and the struct member
-> const to signal their immutability.
+On Thu, Feb 17, 2022 at 05:34:56AM PST, Greg Kroah-Hartman wrote:
+>On Thu, Feb 17, 2022 at 02:44:44AM -0800, Zev Weiss wrote:
+>> This driver provides a sysfs interface to access the on/off state and
+>> error flags of a regulator supplying a power output controlled by the
+>> system.
+>>
+>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> ---
+>>  MAINTAINERS                |   5 +
+>>  drivers/misc/Kconfig       |  15 +++
+>>  drivers/misc/Makefile      |   1 +
+>>  drivers/misc/power-efuse.c | 221 +++++++++++++++++++++++++++++++++++++
+>>  4 files changed, 242 insertions(+)
+>>  create mode 100644 drivers/misc/power-efuse.c
 >
-> Reported by Clang [-Wwrite-strings]:
+>You add sysfs files, yet have no Documentation/ABI/ entry updates
+>documenting what those sysfs files do?  Please fix.
 >
->      security/selinux/hooks.c:7388:63: error: passing 'const char [8]' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->              security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hooks), selinux);
->                                                                           ^~~~~~~~~
->      ./include/linux/lsm_hooks.h:1629:11: note: passing argument to parameter 'lsm' here
->                                      char *lsm);
->                                            ^
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index fca970a46e77..d1153a0389d2 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -7064,6 +7064,11 @@ S:	Orphan
+>>  W:	http://aeschi.ch.eu.org/efs/
+>>  F:	fs/efs/
+>>
+>> +POWER EFUSE DRIVER
+>> +M:	Zev Weiss <zev@bewilderbeest.net>
+>> +S:	Maintained
+>> +F:	drivers/misc/power-efuse.c
+>> +
+>>  EHEA (IBM pSeries eHEA 10Gb ethernet adapter) DRIVER
+>>  M:	Douglas Miller <dougmill@linux.ibm.com>
+>>  L:	netdev@vger.kernel.org
+>> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+>> index 0f5a49fc7c9e..45fc3e8ad35d 100644
+>> --- a/drivers/misc/Kconfig
+>> +++ b/drivers/misc/Kconfig
+>> @@ -470,6 +470,21 @@ config HISI_HIKEY_USB
+>>  	  switching between the dual-role USB-C port and the USB-A host ports
+>>  	  using only one USB controller.
+>>
+>> +config POWER_EFUSE
+>> +	tristate "Power efuse driver support"
+>> +	depends on OF && REGULATOR
+>> +	help
+>> +	  This driver supports a regulator device functioning as a
+>> +	  power efuse, with status bits and an on/off switch available
+>> +	  via sysfs.
+>> +
+>> +	  A typical use for this would be for an efuse controlling a
+>> +	  generic power output for supplying power to devices external
+>> +	  to the system running this driver (such as in the management
+>> +	  controller of a "smart" PDU or similar), allowing the
+>> +	  operator to manually turn the output on and off, check if
+>> +	  the efuse has tripped due to overload, etc.
+>> +
+>>  source "drivers/misc/c2port/Kconfig"
+>>  source "drivers/misc/eeprom/Kconfig"
+>>  source "drivers/misc/cb710/Kconfig"
+>> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+>> index a086197af544..7bd784b89ef8 100644
+>> --- a/drivers/misc/Makefile
+>> +++ b/drivers/misc/Makefile
+>> @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
+>>  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+>>  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+>>  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+>> +obj-$(CONFIG_POWER_EFUSE)	+= power-efuse.o
+>> diff --git a/drivers/misc/power-efuse.c b/drivers/misc/power-efuse.c
+>> new file mode 100644
+>> index 000000000000..e974dde57615
+>> --- /dev/null
+>> +++ b/drivers/misc/power-efuse.c
+>> @@ -0,0 +1,221 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * This module provides a thin wrapper around a regulator device that exposes
+>> + * status bits and on/off state via sysfs.
+>> + *
+>> + * Copyright (C) 2022 Zev Weiss <zev@bewilderbeest.net>
+>> + */
+>> +
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regulator/consumer.h>
+>> +
+>> +struct efuse {
+>> +	struct regulator *reg;
+>> +	struct {
+>> +		unsigned int cache;
+>> +		unsigned long ttl;
+>> +		unsigned long fetch_time;
+>> +		struct mutex lock;
+>> +	} error_flags;
+>> +};
+>> +
+>> +/* Ensure that the next error_flags access fetches them from the device */
+>> +static void efuse_invalidate_error_flags(struct efuse *efuse)
+>> +{
+>> +	mutex_lock(&efuse->error_flags.lock);
+>> +	efuse->error_flags.fetch_time = 0;
+>> +	mutex_unlock(&efuse->error_flags.lock);
+>> +}
+>> +
+>> +static ssize_t efuse_show_operstate(struct device *dev, struct device_attribute *attr,
+>> +				    char *buf)
+>> +{
+>> +	struct efuse *efuse = dev_get_drvdata(dev);
+>> +	int status = regulator_is_enabled(efuse->reg);
+>> +
+>> +	if (status < 0)
+>> +		return status;
+>> +
+>> +	return sysfs_emit(buf, "%s\n", status ? "on" : "off");
+>> +}
+>> +
+>> +static ssize_t efuse_set_operstate(struct device *dev, struct device_attribute *attr,
+>> +				   const char *buf, size_t count)
+>> +{
+>> +	int status, wantstate;
+>> +	struct efuse *efuse = dev_get_drvdata(dev);
+>> +	struct regulator *reg = efuse->reg;
+>> +
+>> +	if (sysfs_streq(buf, "on"))
+>> +		wantstate = 1;
+>> +	else if (sysfs_streq(buf, "off"))
+>> +		wantstate = 0;
+>> +	else
+>> +		return -EINVAL;
+>> +
+>> +	status = regulator_is_enabled(reg);
+>> +
+>> +	/*
+>> +	 * We need to ensure our enable/disable calls don't get imbalanced, so
+>> +	 * bail if we can't determine the current state.
+>> +	 */
+>> +	if (status < 0)
+>> +		return status;
+>> +
+>> +	/* Return early if we're already in the desired state */
+>> +	if (!!status == wantstate)
+>> +		return count;
+>> +
+>> +	if (wantstate)
+>> +		status = regulator_enable(reg);
+>> +	else
+>> +		status = regulator_disable(reg);
+>> +
+>> +	/*
+>> +	 * Toggling operstate can reset latched status flags, so invalidate
+>> +	 * the cached value.
+>> +	 */
+>> +	efuse_invalidate_error_flags(efuse);
+>> +
+>> +	if (!status && regulator_is_enabled(reg) != wantstate) {
+>> +		/*
+>> +		 * We could do
+>> +		 *
+>> +		 *   if (!wantstate)
+>> +		 *     regulator_force_disable(reg);
+>> +		 *
+>> +		 * here, but it's likely to leave it such that it can't then
+>> +		 * be re-enabled, so we'll just report the error and leave it
+>> +		 * as it is (and hopefully as long as our enable/disable calls
+>> +		 * remain balanced and nobody registers another consumer for
+>> +		 * the same supply we won't end up in this situation anyway).
+>> +		 */
+>> +		dev_err(dev, "regulator_%sable() didn't take effect\n", wantstate ? "en" : "dis");
+>> +		status = -EIO;
+>> +	}
+>> +
+>> +	return status ? : count;
+>> +}
+>> +
+>> +static int efuse_update_error_flags(struct efuse *efuse)
+>> +{
+>> +	int status = 0;
+>> +	unsigned long cache_expiry;
+>> +
+>> +	mutex_lock(&efuse->error_flags.lock);
+>> +
+>> +	cache_expiry = efuse->error_flags.fetch_time + efuse->error_flags.ttl;
+>> +
+>> +	if (!efuse->error_flags.ttl || !efuse->error_flags.fetch_time ||
+>> +	    time_after(jiffies, cache_expiry)) {
+>> +		status = regulator_get_error_flags(efuse->reg, &efuse->error_flags.cache);
+>> +		if (!status)
+>> +			efuse->error_flags.fetch_time = jiffies;
+>> +	}
+>> +
+>> +	mutex_unlock(&efuse->error_flags.lock);
+>> +
+>> +	return status;
+>> +}
+>> +
+>> +static DEVICE_ATTR(operstate, 0644, efuse_show_operstate, efuse_set_operstate);
+>> +
+>> +#define EFUSE_ERROR_ATTR(name, bit)							    \
+>> +	static ssize_t efuse_show_##name(struct device *dev, struct device_attribute *attr, \
+>> +					 char *buf)                                         \
+>> +	{                                                                                   \
+>> +		struct efuse *efuse = dev_get_drvdata(dev);                                 \
+>> +		int status = efuse_update_error_flags(efuse);                               \
+>> +		if (status)                                                                 \
+>> +			return status;                                                      \
+>> +		return sysfs_emit(buf, "%d\n", !!(efuse->error_flags.cache & bit));         \
+>> +	}                                                                                   \
+>> +	static DEVICE_ATTR(name, 0444, efuse_show_##name, NULL)
+>> +
+>> +EFUSE_ERROR_ATTR(under_voltage, REGULATOR_ERROR_UNDER_VOLTAGE);
+>> +EFUSE_ERROR_ATTR(over_current, REGULATOR_ERROR_OVER_CURRENT);
+>> +EFUSE_ERROR_ATTR(regulation_out, REGULATOR_ERROR_REGULATION_OUT);
+>> +EFUSE_ERROR_ATTR(fail, REGULATOR_ERROR_FAIL);
+>> +EFUSE_ERROR_ATTR(over_temp, REGULATOR_ERROR_OVER_TEMP);
+>> +EFUSE_ERROR_ATTR(under_voltage_warn, REGULATOR_ERROR_UNDER_VOLTAGE_WARN);
+>> +EFUSE_ERROR_ATTR(over_current_warn, REGULATOR_ERROR_OVER_CURRENT_WARN);
+>> +EFUSE_ERROR_ATTR(over_voltage_warn, REGULATOR_ERROR_OVER_VOLTAGE_WARN);
+>> +EFUSE_ERROR_ATTR(over_temp_warn, REGULATOR_ERROR_OVER_TEMP_WARN);
+>> +
+>> +static struct attribute *attributes[] = {
+>> +	&dev_attr_operstate.attr,
+>> +	&dev_attr_under_voltage.attr,
+>> +	&dev_attr_over_current.attr,
+>> +	&dev_attr_regulation_out.attr,
+>> +	&dev_attr_fail.attr,
+>> +	&dev_attr_over_temp.attr,
+>> +	&dev_attr_under_voltage_warn.attr,
+>> +	&dev_attr_over_current_warn.attr,
+>> +	&dev_attr_over_voltage_warn.attr,
+>> +	&dev_attr_over_temp_warn.attr,
+>> +	NULL,
+>> +};
+>> +
+>> +static const struct attribute_group attr_group = {
+>> +	.attrs = attributes,
+>> +};
 >
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+>ATTRIBUTE_GROUPS()?
+>
+>> +
+>> +static int efuse_probe(struct platform_device *pdev)
+>> +{
+>> +	int status;
+>> +	struct regulator *reg;
+>> +	struct efuse *efuse;
+>> +	u32 cache_ttl_ms;
+>> +
+>> +	reg = devm_regulator_get(&pdev->dev, "vout");
+>> +	if (IS_ERR(reg))
+>> +		return PTR_ERR(reg);
+>> +
+>> +	status = regulator_enable(reg);
+>> +	if (status) {
+>> +		dev_err(&pdev->dev, "failed to enable regulator\n");
+>> +		return status;
+>> +	}
+>> +
+>> +	efuse = devm_kzalloc(&pdev->dev, sizeof(*efuse), GFP_KERNEL);
+>> +	if (!efuse)
+>> +		return -ENOMEM;
+>> +
+>> +	efuse->reg = reg;
+>> +	mutex_init(&efuse->error_flags.lock);
+>> +
+>> +	if (!of_property_read_u32(pdev->dev.of_node, "error-flags-cache-ttl-ms", &cache_ttl_ms))
+>> +		efuse->error_flags.ttl = msecs_to_jiffies(cache_ttl_ms);
+>> +
+>> +	platform_set_drvdata(pdev, efuse);
+>> +
+>> +	return sysfs_create_group(&pdev->dev.kobj, &attr_group);
+>
+>You just raced with userspace and lost :(
+>
+>Set the default groups for your platform driver and then the driver core
+>will automatically create/remove them for you, no need for you to do
+>anything directly with them at all.
+>
 
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+Ack, thanks for the review -- I'll fix all three points in v2.
 
-> ---
->   include/linux/lsm_hooks.h | 4 ++--
->   security/security.c       | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 419b5febc3ca..47cdf3fbecef 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -1595,7 +1595,7 @@ struct security_hook_list {
->   	struct hlist_node		list;
->   	struct hlist_head		*head;
->   	union security_list_options	hook;
-> -	char				*lsm;
-> +	const char			*lsm;
->   } __randomize_layout;
->   
->   /*
-> @@ -1630,7 +1630,7 @@ extern struct security_hook_heads security_hook_heads;
->   extern char *lsm_names;
->   
->   extern void security_add_hooks(struct security_hook_list *hooks, int count,
-> -				char *lsm);
-> +				const char *lsm);
->   
->   #define LSM_FLAG_LEGACY_MAJOR	BIT(0)
->   #define LSM_FLAG_EXCLUSIVE	BIT(1)
-> diff --git a/security/security.c b/security/security.c
-> index 9663ffcca4b0..a48eb3badfdd 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -478,7 +478,7 @@ static int lsm_append(const char *new, char **result)
->    * Each LSM has to register its hooks with the infrastructure.
->    */
->   void __init security_add_hooks(struct security_hook_list *hooks, int count,
-> -				char *lsm)
-> +				const char *lsm)
->   {
->   	int i;
->   
+
+Zev
+

@@ -2,94 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7302E4BA650
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400F64BA61B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 17:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243157AbiBQQol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 11:44:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60592 "EHLO
+        id S243305AbiBQQhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 11:37:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242697AbiBQQog (ORCPT
+        with ESMTP id S241477AbiBQQhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:44:36 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA549AC;
-        Thu, 17 Feb 2022 08:44:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645116261; x=1676652261;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=XqrJSESx4co6rylkuJdM9NA+JNlPqfIB9lAf1Ua1BBA=;
-  b=IG1/OdJJG4CmrkH8uJ+hXfvapFyTqIXRmcbr1EbRLcqrzbGd+hj/phJk
-   2zddSoTlBaD8EiPuiilzq1XKShZjA4BQSEHZZ5vREOsNSObXiNndzEKxq
-   Efsu1vy23Zr4Ph2EEfabKjkgUtiGK7uB7HTR+GAUVebcEvFSaK4+fNPUU
-   vgm/EbgjJVHa5YxUYf3Mx8ZeqmlW32mH5TikpaqPVq7xuTWLsxzGiXdRZ
-   pZqs2Gs89wJaqcMps35jB6tPjY02/RuV7xF9ZQpkKYtA2um3e/pt0u6FF
-   jLjjKK5IL0EKfb/6H0oqePU+GUKniLzh+nLYdU5uL9DZKh5aYVM3xqOR5
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="314181323"
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="314181323"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 08:44:21 -0800
-X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
-   d="scan'208";a="530351502"
-Received: from drichard-mobl2.amr.corp.intel.com (HELO [10.209.21.238]) ([10.209.21.238])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 08:44:21 -0800
-Message-ID: <dbe8b78e-bc55-c796-358f-a93e0eac87d1@intel.com>
-Date:   Thu, 17 Feb 2022 08:44:17 -0800
+        Thu, 17 Feb 2022 11:37:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9FE1DA0EE;
+        Thu, 17 Feb 2022 08:37:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38AB06169D;
+        Thu, 17 Feb 2022 16:37:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790FAC340E8;
+        Thu, 17 Feb 2022 16:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645115837;
+        bh=Uh7SxgDiyle9Pt/1uKaz13Cdta+fG3LaUxSIrP3UDS4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oEfugztLGZ7KhKwtqEn9223T5MTF3xJxhO3dM2rtP9knaPDX97ekj22/Z1Ab70pBN
+         4YNpm1mvWitXZ54ygxOgXm4QD0J1YXv3SX5zTMAws+LvFC99vaz3nRr3GjzFrsAqSZ
+         /RpkNgGF8xxDs1g4J1ziT97ggzP23ySrpk5wwnGzl2eutVtCIZIDVyqvwyvfd6EuML
+         TxPJ3n2XK3XEwexOe24bDRnFFV9jvNSNLPW8QiMAQiVG9KlwkTWiAsItK8E4chdWRH
+         tzV+xyCwVuO1ULuUZkMv2495aU5ht22ip6UyTRrMOKgsp3VuD1nKzReRfrAqum4E9y
+         pgosy2BeSWmeg==
+Date:   Thu, 17 Feb 2022 10:44:58 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        sound-open-firmware@alsa-project.org,
+        linux-hardening@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] ASoC: SOF: Replace zero-length array with flexible-array
+ member
+Message-ID: <20220217164458.GA932472@embeddedor>
+References: <20220217132755.1786130-1-steve@sk2.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "# v4 . 10+" <stable@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
- <20220215192233.8717-1-bgeffon@google.com> <YgwCuGcg6adXAXIz@kroah.com>
- <CADyq12wByWhsHNOnokrSwCDeEhPdyO6WNJNjpHE1ORgKwwwXgg@mail.gmail.com>
- <YgzMTrVMCVt+n7cE@kroah.com> <fc86d51c-7aa2-6379-5f26-ad533c762da3@intel.com>
- <CADyq12yGvqbb3+hp6f39RqyEM3Mu896yY6ik7Lh39W=o44bYbA@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate
- inconsistency
-In-Reply-To: <CADyq12yGvqbb3+hp6f39RqyEM3Mu896yY6ik7Lh39W=o44bYbA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217132755.1786130-1-steve@sk2.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 05:31, Brian Geffon wrote:
-> How would you and Greg KH like to proceed with this? I'm happy to help
-> however I can.
+On Thu, Feb 17, 2022 at 02:27:55PM +0100, Stephen Kitt wrote:
+> There is a regular need in the kernel to provide a way to declare having
+> a dynamically sized set of trailing elements in a structure. Kernel code
+> should always use "flexible array members"[1] for these cases. The older
+> style of one-element or zero-length arrays should no longer be used[2].
+> 
+> This helps with the ongoing efforts to globally enable -Warray-bounds
+> and get us closer to being able to tighten the FORTIFY_SOURCE routines
+> on memcpy().
+> 
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Link: https://github.com/KSPP/linux/issues/78
+> Link: https://github.com/KSPP/linux/issues/180
+> Suggested-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 
-If I could wave a magic wand, I'd just apply the whole FPU rewrite to
-stable.
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-My second choice would be to stop managing PKRU with XSAVE.
-x86_pkru_load() uses WRPKRU instead of XSAVE and keeps the task's PKRU
-in task->pkru instead of the XSAVE buffer.  Doing that will take some
-care, including pulling XFEATURE_PKRU out of the feature mask (RFBM) at
-XRSTOR.  I _think_ that can be done in a manageable set of patches which
- will keep stable close to mainline.  I recognize that more bugs might
-get introduced in the process which are unique to stable.
+Thanks!
+--
+Gustavo
 
-If you give that a shot and realize that it's not feasible to do a
-subset, then we can fall back to the minimal fix.  I'm not asking for a
-multi-month engineering effort here.  Maybe an hour or two to see if
-it's really as scary as it looks.
+> ---
+>  include/sound/sof/topology.h | 2 +-
+>  sound/soc/sof/topology.c     | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/sound/sof/topology.h b/include/sound/sof/topology.h
+> index d12736e14b69..adee6afd1490 100644
+> --- a/include/sound/sof/topology.h
+> +++ b/include/sound/sof/topology.h
+> @@ -237,7 +237,7 @@ struct sof_ipc_comp_process {
+>  	/* reserved for future use */
+>  	uint32_t reserved[7];
+>  
+> -	uint8_t data[0];
+> +	uint8_t data[];
+>  } __packed;
+>  
+>  /* frees components, buffers and pipelines
+> diff --git a/sound/soc/sof/topology.c b/sound/soc/sof/topology.c
+> index e72dcae5e7ee..1d119d1dd69d 100644
+> --- a/sound/soc/sof/topology.c
+> +++ b/sound/soc/sof/topology.c
+> @@ -2164,7 +2164,7 @@ static int sof_process_load(struct snd_soc_component *scomp, int index,
+>  	 */
+>  	if (ipc_data_size) {
+>  		for (i = 0; i < widget->num_kcontrols; i++) {
+> -			memcpy(&process->data + offset,
+> +			memcpy(&process->data[offset],
+>  			       wdata[i].pdata->data,
+>  			       wdata[i].pdata->size);
+>  			offset += wdata[i].pdata->size;
+> 
+> base-commit: f71077a4d84bbe8c7b91b7db7c4ef815755ac5e3
+> -- 
+> 2.27.0
+> 

@@ -2,186 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272CD4B9CB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A014B9CBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238986AbiBQKKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:10:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47154 "EHLO
+        id S231255AbiBQKKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:10:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiBQKKf (ORCPT
+        with ESMTP id S239001AbiBQKKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 05:10:35 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD5A2AAB08
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:10:20 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id i19so2814198wmq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 02:10:20 -0800 (PST)
+        Thu, 17 Feb 2022 05:10:52 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC7A2AAB0C;
+        Thu, 17 Feb 2022 02:10:37 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id o2so9001969lfd.1;
+        Thu, 17 Feb 2022 02:10:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HZ3xx7nOObpTBizjK9Ap+q6jN7YiR6tkSPh0F4AEvbk=;
-        b=B4LzfsYd6UtfWmB4hzFJeBBZNHrYCODNkBeV7muYuBP71kZZtn49U3I5zip102+u41
-         oOv1IvlE26JcXr0+//taSTg+ag48U2kj0FyZt9/wnipEyez08m/0qVS2/zYo7wzofueZ
-         EedbCJSrTHDwQnkSpEmWhG0QjryuO3sVaAAK/oiy/rTUhsz3/VatR/OgVbEGn2C8B9Z1
-         ln5pX7Kjh5CyJgGRrmVm6x/xNCBNnydkE44w3dOptSP2SBsdxuqrE/WAUwqN+2dJSfFC
-         +//fG4+fHFDSPsU5qe2gqses07Tkpcnne/A4E+Y6NLjCw7OYQtKGlWCMrq4E04RFv6vE
-         AyJw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version;
+        bh=wsBm9GlF6QBk+ga6odvG4D+yJfesdCIhGI6Qr588TUo=;
+        b=TrKDmwEnnG2m5f31bp3dJe99wKxPtwM+R3St+7DDbnp8bsJwZvieAD4m6QSKUpDEvZ
+         3cSAg+gssaRQ/+Gw9D1aU9LRUhFdKboR/ANIhPzFX6OUcnMEbJIuzfPTmDgiJLBALBcl
+         JhqWI7VIFp0x4d1jgalEpySbMm+KnKatTU04d811m2kFqVa+LPYLtxwn91j21CokyUi+
+         qBwibqLLsfDxDfPZpyC1aXZbSAImySOYF597S9wxB6+dfZuwuL8QqV67Auq/8N2P7i7V
+         IyKcRQ16+nW3tY7Iu1bQ8/4yR4zGGguDqLSTRttHWyFbFoB+pNoi/QXafGKhGLjQcJGb
+         qFZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HZ3xx7nOObpTBizjK9Ap+q6jN7YiR6tkSPh0F4AEvbk=;
-        b=Uc89pbhcyNC9qU7If3HNe6umlqE5xUGfo+NIniQp8VnIHccYWByDKIQiTXrQiWVUtI
-         FX67pLqJX+luYjRvjK8JCdlvFJtkgIcPxIEblsBG/NTCZRyp4NQVMJzVBXE7oKxy0+S/
-         YKwG1wr7Q9yuoIdzVEmvMmhIGGgFrnGFXpFB0QU7ov0ToMb/KlAY5yRPY+cvxnEg7RBq
-         JP3sHH5ZXOHZTbuACKH2ojlYMKSmP4J0gjMBGyMarEo56UnFC2AHX33hKKWvVRVIpLWO
-         j6Ki8m9u5BUqvBR3dSjHnsxlGoUvYiQxvyFazbnoRKeq78zOzQ1Tavvh3zmQPQcPiQQH
-         lh6A==
-X-Gm-Message-State: AOAM530HmBr+QRJ+uj0X0VkyjcHfaBeSBKp3je/CSLRsnzBRLfREkU4l
-        PHgk4dPTygD+rwwlEmhWFszVkA==
-X-Google-Smtp-Source: ABdhPJxiEWRtJUXJQNHQW2Rh2mFrrdYXAobg2tct8ua7KeWK3BcwdMClUGRaNlGrRuqQEbIfifzdBA==
-X-Received: by 2002:a05:600c:3503:b0:345:858e:cbe8 with SMTP id h3-20020a05600c350300b00345858ecbe8mr5333733wmq.73.1645092618930;
-        Thu, 17 Feb 2022 02:10:18 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:6165:d98a:b553:c3c1? ([2a01:e34:ed2f:f020:6165:d98a:b553:c3c1])
-        by smtp.googlemail.com with ESMTPSA id f14sm885951wmq.3.2022.02.17.02.10.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 02:10:18 -0800 (PST)
-Message-ID: <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
-Date:   Thu, 17 Feb 2022 11:10:16 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version;
+        bh=wsBm9GlF6QBk+ga6odvG4D+yJfesdCIhGI6Qr588TUo=;
+        b=SMVIaXYh5uVkkcR/XQQ4IoqsfqlT8rThv1OCtyqB73FcruiNxEhewFx1w53B3BNwcD
+         y6EobGRm8J8YYVAzT4Nbgwp2UxdqWpIsS+Dk1zpAo8gUxUg9JKiHn5xgqKHX26jCLBq5
+         5EmFIm+UQKhv3b/jmIL1BopgjUBNHgPBkX2WAFD2sGa7w4vqhcjh7YSYW9iUyXS6xOFI
+         cznyNUUF7CDEbXU3iOzrCxtO5f2pXIaI9pGLU9jwvrxpGJvSmey595NqfKHfXl6l1Jhy
+         W97PIPEjeAxCbNiotWi0oQAgzfZvZY0WziWj0L+I9ge7qiRP1YBLV3NnigYXthG2hnNa
+         VOsQ==
+X-Gm-Message-State: AOAM5329cFmRtPTV8Af9RiCxrh7PyGGtqD61HQs6OsbCTiAe2RKjjAUm
+        OPifvygZwRpF1D2m4omlc6U=
+X-Google-Smtp-Source: ABdhPJw6d1Xx03VBy4x0vM44wpr0/W0ibQpAYvHtY4+JhKJFclWHt/sAdUZmSM5sc0c5Qyto8ako3w==
+X-Received: by 2002:a05:6512:3710:b0:43a:12aa:cb68 with SMTP id z16-20020a056512371000b0043a12aacb68mr1622061lfr.280.1645092636121;
+        Thu, 17 Feb 2022 02:10:36 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id i3sm5094012lfj.144.2022.02.17.02.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 02:10:35 -0800 (PST)
+Date:   Thu, 17 Feb 2022 12:10:33 +0200
+From:   Pekka Paalanen <ppaalanen@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-fbdev@vger.kernel.org, linux-m68k@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 8/8] drm/fourcc: Add DRM_FORMAT_D1
+Message-ID: <20220217121033.0fc7f6ba@eldfell>
+In-Reply-To: <20220215165226.2738568-9-geert@linux-m68k.org>
+References: <20220215165226.2738568-1-geert@linux-m68k.org>
+        <20220215165226.2738568-9-geert@linux-m68k.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
- <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/nO3MwzHd32JIR23_QdrLEwe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2022 18:33, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Matthias,
->>
->> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
->>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
->>>>
->>>>
->>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
->>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
->>>>>>
->>>>>>
->>
->> [snip]
->>
->>>>>> Could you point me to those devices please?
->>>>>
->>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
->>>>>
->>>>> Though as per above they shouldn't be impacted by your change, since the
->>>>> CPUs always pretend to use milli-Watts.
->>>>>
->>>>> [skipped some questions/answers since sc7180 isn't actually impacted by
->>>>>     the change]
->>>>
->>>> Thank you Matthias. I will investigate your setup to get better
->>>> understanding.
->>>
->>> Thanks!
->>>
->>
->> I've checked those DT files and related code.
->> As you already said, this patch is safe for them.
->> So we can apply it IMO.
->>
->>
->> -------------Off-topic------------------
->> Not in $subject comments:
->>
->> AFAICS based on two files which define thermal zones:
->> sc7180-trogdor-homestar.dtsi
->> sc7180-trogdor-coachz.dtsi
->>
->> only the 'big' cores are used as cooling devices in the
->> 'skin_temp_thermal' - the CPU6 and CPU7.
->>
->> I assume you don't want to model at all the power usage
->> from the Little cluster (which is quite big: 6 CPUs), do you?
->> I can see that the Little CPUs have small dyn-power-coeff
->> ~30% of the big and lower max freq, but still might be worth
->> to add them to IPA. You might give them more 'weight', to
->> make sure they receive more power during power split.
->>
->> You also don't have GPU cooling device in that thermal zone.
->> Based on my experience if your GPU is a power hungry one,
->> e.g. 2-4Watts, you might get better results when you model
->> this 'hot' device (which impacts your temp sensor reported value).
-> 
-> I think the two boards you point at (homestar and coachz) are just the
-> two that override the default defined in the SoC dtsi file. If you
-> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
-> map. You can also see the cooling maps for the littles.
-> 
-> I guess we don't have a `dynamic-power-coefficient` for the GPU,
-> though? Seems like we should, but I haven't dug through all the code
-> here...
+--Sig_/nO3MwzHd32JIR23_QdrLEwe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The dynamic-power-coefficient is available for OPPs which includes 
-CPUfreq and devfreq. As the GPU is managed by devfreq, setting the 
-dynamic-power-coefficient makes the energy model available for it.
+On Tue, 15 Feb 2022 17:52:26 +0100
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-However, the OPPs must define the frequency and the voltage. That is the 
-case for most platforms except on QCom platform.
+> Introduce a fourcc code for a single-channel frame buffer format with two
+> darkness levels.  This can be used for two-level dark-on-light displays.
+>=20
+> As the number of bits per pixel is less than eight, this relies on
+> proper block handling for the calculation of bits per pixel and pitch.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  drivers/gpu/drm/drm_fourcc.c  | 2 ++
+>  include/uapi/drm/drm_fourcc.h | 3 +++
+>  2 files changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
+> index c12e48ecb1ab8aad..d00ce5d8d1fb9dd3 100644
+> --- a/drivers/gpu/drm/drm_fourcc.c
+> +++ b/drivers/gpu/drm/drm_fourcc.c
+> @@ -151,6 +151,8 @@ const struct drm_format_info *__drm_format_info(u32 f=
+ormat)
+>  		{ .format =3D DRM_FORMAT_C4,		.depth =3D 4,  .num_planes =3D 1,
+>  		  .char_per_block =3D { 1, }, .block_w =3D { 2, }, .block_h =3D { 1, }=
+, .hsub =3D 1, .vsub =3D 1 },
+>  		{ .format =3D DRM_FORMAT_C8,		.depth =3D 8,  .num_planes =3D 1, .cpp =
+=3D { 1, 0, 0 }, .hsub =3D 1, .vsub =3D 1 },
+> +		{ .format =3D DRM_FORMAT_D1,		.depth =3D 1,  .num_planes =3D 1,
+> +		  .char_per_block =3D { 1, }, .block_w =3D { 8, }, .block_h =3D { 1, }=
+, .hsub =3D 1, .vsub =3D 1 },
+>  		{ .format =3D DRM_FORMAT_R1,		.depth =3D 1,  .num_planes =3D 1,
+>  		  .char_per_block =3D { 1, }, .block_w =3D { 8, }, .block_h =3D { 1, }=
+, .hsub =3D 1, .vsub =3D 1 },
+>  		{ .format =3D DRM_FORMAT_R2,		.depth =3D 2,  .num_planes =3D 1,
+> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+> index 8605a1acc6813e6c..c15c6efcc65e5827 100644
+> --- a/include/uapi/drm/drm_fourcc.h
+> +++ b/include/uapi/drm/drm_fourcc.h
+> @@ -104,6 +104,9 @@ extern "C" {
+>  #define DRM_FORMAT_C4		fourcc_code('C', '4', ' ', ' ') /* [3:0] C */
+>  #define DRM_FORMAT_C8		fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
+> =20
+> +/* 1 bpp Darkness */
+> +#define DRM_FORMAT_D1		fourcc_code('D', '1', ' ', ' ') /* [0] D */
+> +
 
-That may not be specified as it uses a frequency index and the hardware 
-does the voltage change in our back. The QCom cpufreq backend get the 
-voltage table from a register (or whatever) and completes the voltage 
-values for the OPPs, thus adding the information which is missing in the 
-device tree. The energy model can then initializes itself and allows the 
-usage of the Energy Aware Scheduler.
+Hi Geert,
 
-However this piece of code is missing for the GPU part.
+the same comment here as for C1 and R1 formats, need to specify pixel
+ordering inside a byte.
+
+I think it would also be good to explain the rationale why C1 and R1
+are not suitable for this case and we need yet another 1-bit format in
+the commit message.
+
+For posterity, of course. I roughly remember the discussions.
+
+I also wonder if anyone would actually use D1. Should it be added
+anyway? There is no rule that a pixel format must be used inside the
+kernel AFAIK, but is there even a prospective userspace wanting this?
+
+Exposing R1 and inverting bits while copying to hardware might be
+enough?
 
 
+Thanks,
+pq
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>  /* 1 bpp Red */
+>  #define DRM_FORMAT_R1		fourcc_code('R', '1', ' ', ' ') /* [0] R */
+> =20
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+
+--Sig_/nO3MwzHd32JIR23_QdrLEwe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmIOHxkACgkQI1/ltBGq
+qqfxtQ//cB5PpnZOZOuy1vfa4m+SVmb/OfNz3ra6mqw9akiOfUbA4cT/0vTDCtGl
+KzNEJaKvg1zt27R+FxRqUupLRBX30d0sCm83/eMCziS7+2BmfBm2Q03nsJxo3zW6
+CJXfT/O+cOMiBsJWEAd0kefgH7e5Ea1s3H5yDvMWr/VKg8R58M+OzYhtMlDRto/e
+VSsL2RlTp+tPJfUvrWX0sqCtH8KKAJVvIRAILJBCN6CA+qp50INFTZNTJ1rs293p
+KGmErPfLWStT0KFQPdzdBE/fC18xsjS5jCORvRmQMtlrcFZRJq6q3UTg7K7SiVKx
+1nJCl7b4RG9zNaAnwIFh8e629NpVaPewzpT1aXfWQ6afCCgebYoqbK+aR7Q9E3zX
+2iR0GJRVOrm6Xe8nVgOPNjNkb8HwhREfLoE7AYxDUgX3/4nfKvu8ElrcaeKenbM/
+6EcD5u5CVO2PINa5Dp2qXcgiC4u+pS4nko8yc+a0Zr+gP0BwM5FiQ2/mbZeP+0Ka
+aqYIntktyOsK5ppgJDaCHPnIQmPoJNJp7/JN05Se7Gg6ZyEv/zKRvOsjpACxKwFL
+fc+R38/3nG94r2h9O01qC35vXxr1CYSBtxSD861Nwpg+omICPh4WzQ8JWevT4mch
+x4aulQlxkRJmqe+oRk6urYTjDvR9KsYPWDn5sKCgMdAAIFgpSdM=
+=5ycp
+-----END PGP SIGNATURE-----
+
+--Sig_/nO3MwzHd32JIR23_QdrLEwe--

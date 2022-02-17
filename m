@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715FC4BAB78
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BA24BAB88
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 22:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiBQVEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 16:04:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37800 "EHLO
+        id S244171AbiBQVE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 16:04:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbiBQVEE (ORCPT
+        with ESMTP id S243968AbiBQVEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 16:04:04 -0500
+        Thu, 17 Feb 2022 16:04:05 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7533615F62F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 13:03:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8151A606C0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 13:03:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645131827;
+        s=mimecast20190719; t=1645131829;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vLJOjKLZ39eFv5+IT8kSwjIWjbjOHHgriRQmWUrdZO4=;
-        b=gpdMXMhHeCEYQGvACxXYeF259FJyNjJ0LRvBqbymHOhsbFwlNBttJ1ZVhiMUSXlOWrDbHo
-        Pweo/46pL5KpbY7y11QJ0ibFBc6d957vaG+Z7C9a9HbLIrWY//qfC8lVSapsyLL/285n6O
-        4jz+zhhJYhro7NF88eIJDo2Su0h7XLY=
+        bh=OHp7eCJ3K/70kXWnZkbsnuPJwutGvkoHsNxiUQwN8KY=;
+        b=R72TgHWC2A2oXt87/+kgM4i/roSciXgN82bG7gPrB/ByF4ZrJ/rUvp1/4KO+2hVIe6OMgG
+        uDg4bYHyCSMgYmLQ+dAB04Szw9rerM+QyXHX1lLzcKbResN2UwtTQpN1OaK2TWkzKrV3/D
+        to+Ai+M7q/+/8484gZrmcNtE+RKYcF4=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-NlK-EqKMMwa3o5ycz1cgAw-1; Thu, 17 Feb 2022 16:03:44 -0500
-X-MC-Unique: NlK-EqKMMwa3o5ycz1cgAw-1
+ us-mta-653-dgYWI2tIOnm4JoAoRWi8lg-1; Thu, 17 Feb 2022 16:03:46 -0500
+X-MC-Unique: dgYWI2tIOnm4JoAoRWi8lg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9CDF1006AA0;
-        Thu, 17 Feb 2022 21:03:42 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4DC7D1091DA1;
+        Thu, 17 Feb 2022 21:03:43 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8BEB146982;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F3F6E46985;
         Thu, 17 Feb 2022 21:03:42 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     seanjc@google.com
-Subject: [PATCH v2 03/18] KVM: x86/mmu: WARN if PAE roots linger after kvm_mmu_unload
-Date:   Thu, 17 Feb 2022 16:03:25 -0500
-Message-Id: <20220217210340.312449-4-pbonzini@redhat.com>
+Subject: [PATCH v2 04/18] KVM: x86/mmu: avoid NULL-pointer dereference on page freeing bugs
+Date:   Thu, 17 Feb 2022 16:03:26 -0500
+Message-Id: <20220217210340.312449-5-pbonzini@redhat.com>
 In-Reply-To: <20220217210340.312449-1-pbonzini@redhat.com>
 References: <20220217210340.312449-1-pbonzini@redhat.com>
 MIME-Version: 1.0
@@ -51,7 +51,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,41 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+WARN and bail if KVM attempts to free a root that isn't backed by a shadow
+page.  KVM allocates a bare page for "special" roots, e.g. when using PAE
+paging or shadowing 2/3/4-level page tables with 4/5-level, and so root_hpa
+will be valid but won't be backed by a shadow page.  It's all too easy to
+blindly call mmu_free_root_page() on root_hpa, be nice and WARN instead of
+crashing KVM and possibly the kernel.
+
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 296f8723f9ae..a67071ac80f3 100644
+index a67071ac80f3..6ea423b00824 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5086,12 +5086,21 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
- 	return r;
- }
+@@ -3222,6 +3222,8 @@ static void mmu_free_root_page(struct kvm *kvm, hpa_t *root_hpa,
+ 		return;
  
-+static void __kvm_mmu_unload(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
-+{
-+	int i;
-+	kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOTS_ALL);
-+	WARN_ON(VALID_PAGE(mmu->root_hpa));
-+	if (mmu->pae_root) {
-+		for (i = 0; i < 4; ++i)
-+			WARN_ON(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
-+	}
-+}
-+
- void kvm_mmu_unload(struct kvm_vcpu *vcpu)
- {
--	kvm_mmu_free_roots(vcpu, &vcpu->arch.root_mmu, KVM_MMU_ROOTS_ALL);
--	WARN_ON(VALID_PAGE(vcpu->arch.root_mmu.root_hpa));
--	kvm_mmu_free_roots(vcpu, &vcpu->arch.guest_mmu, KVM_MMU_ROOTS_ALL);
--	WARN_ON(VALID_PAGE(vcpu->arch.guest_mmu.root_hpa));
-+	__kvm_mmu_unload(vcpu, &vcpu->arch.root_mmu);
-+	__kvm_mmu_unload(vcpu, &vcpu->arch.guest_mmu);
- }
+ 	sp = to_shadow_page(*root_hpa & PT64_BASE_ADDR_MASK);
++	if (WARN_ON(!sp))
++		return;
  
- static bool need_remote_flush(u64 old, u64 new)
+ 	if (is_tdp_mmu_page(sp))
+ 		kvm_tdp_mmu_put_root(kvm, sp, false);
 -- 
 2.31.1
 

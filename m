@@ -2,140 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3992A4B99A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CC44B99AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 08:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236054AbiBQHLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 02:11:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45176 "EHLO
+        id S236070AbiBQHMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 02:12:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236044AbiBQHLo (ORCPT
+        with ESMTP id S236044AbiBQHMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:11:44 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB941082;
-        Wed, 16 Feb 2022 23:11:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JzmG64LdZz4xNq;
-        Thu, 17 Feb 2022 18:11:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1645081886;
-        bh=knr5RP7jO6NuuhlrZBzG1Zyk0G91nMtqAcJPvFJy+TQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X+ZfwMIK5sQGVJsTJza3TwEB03lVe66wSrGVsX9KfXLRCfc7hCvX9zIQ0oNr1ev9i
-         A+jJmeva5LVNGR6ZFli9Ae9fBgE1DW95CaoDVuzTCGe3Ofd0Xswbsx7BkO1KWiftFA
-         HT+lf9gXWuAGOgIR2WWOvjrq3uYr7zJ8OzIsqBAVZnWmIs+Ya/rd8qO9y6ayNy1SSS
-         rL5/OVgwfMIB8FRSFtzYrRu616ZqzWl3Y9dMfqe6N9VSC5Sj6qDGRzWgHa6NIXRfze
-         ke/E119QOsK07hTRua05jwapUcCMB2k7bh6mIhYykGtZXfSuwlrwgYqdaHfn7A4FQ+
-         opEXmOUJJWFmQ==
-Date:   Thu, 17 Feb 2022 18:11:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Liam Howlett <liam.howlett@oracle.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the maple tree
-Message-ID: <20220217181125.138b7340@canb.auug.org.au>
+        Thu, 17 Feb 2022 02:12:40 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C95132957
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 23:12:24 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id d23so8151120lfv.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Feb 2022 23:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cEr9ceiXSBzxtl9pW55l2PGta6KX4196ZTMOQFJarqY=;
+        b=np3fgCu6l1VhZUSWIXrd8VY48YtoJal3smJlQs93fg9Ywg5XRZoejvZRhulbNkpQ/y
+         AWSXr4LWhVvagLBB1oN24NnacWGTzlzQNmftkwb7dl1IWGJ1kEUSvyMZPSY3unTbKUeF
+         d4RZiITdFXae8qr2GVo/nv2HOIKnpJ36bi5eqVN4MdYQUAghyEmivM1CJeyHpdppOtYh
+         9vraOypWdpLsv86N+130sPdZ68X1MZFrh8XGqAQe5AIxxdGIF1R0W5PPaI/mwwQKiAxO
+         2Ek8GPxa/ERfzESvdXEsopRODe82vRI2Dp4WKd+4VhwaIkCGjuk5+Ie99kRmrtK9wt5+
+         n2ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cEr9ceiXSBzxtl9pW55l2PGta6KX4196ZTMOQFJarqY=;
+        b=26yJCt0xgqtqi/vklM7uJWKGXUWSYyUvYipiuOxtbMTU508Js4ziEsBk+YvOAzPoTS
+         /9lmGraD9hUYaRxJHS6lSnQCCNkNP1w9ASLoN4IAOwy+xlIOWzUUb8DB1vs8JFeglodE
+         EU4ReCRgDUrnLRGvAGeblHVXSW4oXyMSKKlRomn6K+dmNglT6WFfw23Eoa6b3CxLQ94Z
+         AAQjHJzm5emRoSjZx5JS438lbCIAiYb7XSn5RezNh1yGy0KSMhbq9EafhqtVEBtJ4VqW
+         p3Fc4r+dVUStzNRgiQmTZ6W7/wG5INrQKssULpleK/NOA6PuB5kFa/grsxDOLnPjDLK7
+         CjOA==
+X-Gm-Message-State: AOAM530mbeTDrwLNTKg8nOcWU0t6a/8hUGimqmOL0yBTKIh+LYyqBAtf
+        8x3GkuALplY03p+0ff4dRPJiIw==
+X-Google-Smtp-Source: ABdhPJyUzt65C5f6ESKZs6SoN+X8J1YfJ+9Ofv8uW/Qw02VVoWXM/VHkeoOw1AcbxBoh2tXXohpYPA==
+X-Received: by 2002:ac2:58d8:0:b0:442:bc4b:afb7 with SMTP id u24-20020ac258d8000000b00442bc4bafb7mr1116916lfo.99.1645081941762;
+        Wed, 16 Feb 2022 23:12:21 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id o18sm3276467lfk.17.2022.02.16.23.12.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Feb 2022 23:12:21 -0800 (PST)
+Message-ID: <acf0a2a2-f2e5-906a-3c51-525abd18ee6f@linaro.org>
+Date:   Thu, 17 Feb 2022 10:12:19 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/91KVv/kXvKiRuucoKcLnV7H";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [REPOST PATCH v4 08/13] drm/msm/disp/dpu1: Don't use DSC with
+ mode_3d
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Clark <robdclark@gmail.com>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-9-vkoul@kernel.org>
+ <67006cc4-3385-fe03-bb4d-58623729a8a8@quicinc.com> <Yg3mvEvqYs89dJWI@matsya>
+ <4b89f5fe-0752-3c6a-3fb0-192f1f2e7b9e@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <4b89f5fe-0752-3c6a-3fb0-192f1f2e7b9e@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/91KVv/kXvKiRuucoKcLnV7H
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 17/02/2022 09:33, Abhinav Kumar wrote:
+> 
+> 
+> On 2/16/2022 10:10 PM, Vinod Koul wrote:
+>> On 16-02-22, 19:11, Abhinav Kumar wrote:
+>>>
+>>>
+>>> On 2/10/2022 2:34 AM, Vinod Koul wrote:
+>>>> We cannot enable mode_3d when we are using the DSC. So pass
+>>>> configuration to detect DSC is enabled and not enable mode_3d
+>>>> when we are using DSC
+>>>>
+>>>> We add a helper dpu_encoder_helper_get_dsc() to detect dsc
+>>>> enabled and pass this to .setup_intf_cfg()
+>>>>
+>>>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>>>
+>>> We should not use 3D mux only when we use DSC merge topology.
+>>> I agree that today we use only 2-2-1 topology for DSC which means its 
+>>> using
+>>> DSC merge.
+>>>
+>>> But generalizing that 3D mux should not be used for DSC is not right.
+>>>
+>>> You can detect DSC merge by checking if there are two encoders and one
+>>> interface in the topology and if so, you can disable 3D mux.
+>>
+>> Right now with DSC we disable that as suggested by Dmitry last time.
+>> Whenever we introduce merge we should revisit this, for now this should
+>> suffice
+>>
+> 
+> Sorry I didnt follow.
+> 
+> The topology which you are supporting today IS DSC merge 2-2-1. I didnt 
+> get what you mean by "whenever we introduce".
+> 
+> I didnt follow Dmitry's comment either.
+> 
+> "anybody adding support for SDE_RM_TOPOLOGY_DUALPIPE_3DMERGE_DSC handle 
+> this."
+> 
+> 3D mux shouldnt be used when DSC merge is used.
+> 
+> The topology Dmitry is referring to will not use DSC merge but you are 
+> using it here and thats why you had to make this patch in the first 
+> place. So I am not sure why would someone who uses 3D merge topology 
+> worry about DSC merge. Your patch is the one which deals with the 
+> topology in question.
+> 
+> What I am suggesting is a small but necessary improvement to this patch.
 
-Hi all,
+It seems that we can replace this patch by changing 
+dpu_encoder_helper_get_3d_blend_mode() to contain the following 
+condition (instead of the one present there). Does the following seem 
+correct to you:
 
-Today's linux-next merge of the folio tree got a conflict in:
+static inline enum dpu_3d_blend_mode dpu_encoder_helper_get_3d_blend_mode(
+                 struct dpu_encoder_phys *phys_enc)
+{
+         struct dpu_crtc_state *dpu_cstate;
 
-  mm/mmap.c
+         if (!phys_enc || phys_enc->enable_state == DPU_ENC_DISABLING)
+                 return BLEND_3D_NONE;
 
-between commit:
+         dpu_cstate = to_dpu_crtc_state(phys_enc->parent->crtc->state);
 
-  b09e8361a4c3 ("mm: Remove the vma linked list")
++	/* Use merge_3d unless DSCMERGE topology is used */
+         if (phys_enc->split_role == ENC_ROLE_SOLO &&
++           hweight(dpu_encoder_helper_get_dsc(phys_enc)) != 1 &&
+             dpu_cstate->num_mixers == CRTC_DUAL_MIXERS)
+                 return BLEND_3D_H_ROW_INT;
 
-from the maple tree and commit:
+         return BLEND_3D_NONE;
+}
 
-  ad56e23dec9a ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
 
-from the folio tree.
+> 
+> All that you have to do is in query whether DSC merge is used from the 
+> topology. You can do it in multiple ways:
+> 
+> 1) Either query this from the encoder
+> 2) Store a bool "dsc_merge" in the intf_cfg
+> 
 
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc mm/mmap.c
-index 1b3600152f6f,64b5985b5295..000000000000
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@@ -3116,30 -3132,13 +3112,19 @@@ void exit_mmap(struct mm_struct *mm
-  		set_bit(MMF_OOM_SKIP, &mm->flags);
-  	}
- =20
- -	mmap_write_lock(mm);
- +	/*
- +	 * Actually taking the mmap semaphore here costs 3% performance on
- +	 * a large machine:
- +	 * https://lore.kernel.org/lkml/20170725151754.3txp44a2kbffsxdg@node.shu=
-temov.name/
- +	 * Lockdep will complain about not holding the mmap_lock, so we lie.
- +	 */
- +	rwsem_acquire(&mm->mmap_lock.dep_map, 0, 0, _THIS_IP_);
-- 	if (mm->locked_vm) {
-- 		mas_for_each(&mas, vma, ULONG_MAX) {
-- 			if (vma->vm_flags & VM_LOCKED) {
-- 				mm->locked_vm -=3D vma_pages(vma);
-- 				munlock_vma_pages_all(vma);
-- 			}
-- 		}
-- 		mas_set(&mas, 0);
-- 	}
--=20
-  	arch_exit_mmap(mm);
- =20
- -	vma =3D mm->mmap;
- +	vma =3D mas_find(&mas, ULONG_MAX);
-  	if (!vma) {
-  		/* Can happen if dup_mmap() received an OOM */
- -		mmap_write_unlock(mm);
- +		rwsem_release(&mm->mmap_lock.dep_map, _THIS_IP_);
-  		return;
-  	}
- =20
-
---Sig_/91KVv/kXvKiRuucoKcLnV7H
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIN9R0ACgkQAVBC80lX
-0GxtSAf9H1TiK5hLB+eFD34NPoDnEmWlLokriU/nYoUnyNhvfDJi1UuTb4Ti21Ai
-kmundy9JSU1dGXuI6wfc7EMauSaNfBKv/j9iz3th+5Gr9sBFdEJR/UVVzfg7OYZ7
-/fDhqH5x2we7h29NJTCD1NMMmYpT7Mprvk1cqEgl048vlc+VG6N15NzKVOTVJ/mq
-EvJDuVDSrKP/tSqZSVUDET7NkZb/tbZQBhxo5gdO/ge7WNRGqFSBpwrWl8JGcI42
-DGlyDoVgzeXWqv6zDgCj+lDVY4lLFITMcwkdwgDR762cHCtsaGvMTUH5CrquQYiI
-03zyCt5uEHRfrYTZmtUWjpaAJNEBxg==
-=Fy4s
------END PGP SIGNATURE-----
-
---Sig_/91KVv/kXvKiRuucoKcLnV7H--
+-- 
+With best wishes
+Dmitry

@@ -2,106 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CC04BA755
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBD64BA75A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 18:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243825AbiBQRlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 12:41:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45770 "EHLO
+        id S243794AbiBQRmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 12:42:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243813AbiBQRlL (ORCPT
+        with ESMTP id S241845AbiBQRmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 12:41:11 -0500
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF402B3ACC;
-        Thu, 17 Feb 2022 09:40:56 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 17 Feb 2022 12:42:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3C321819;
+        Thu, 17 Feb 2022 09:41:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4K02DQ0K4Wz9sWF;
-        Thu, 17 Feb 2022 18:40:54 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645119651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QH+uxp2J6kpD1HokNKgqcYwu1J2p2T1tcY6BL3c2JJI=;
-        b=tWMx6MoaUZD0xNqqttpCvHypOW3bPemVIgFcEg9b+EF1Dcu00QWebmZnU0ptkv1EVYs4X2
-        SPgZS4F+pEDYw6xQ7TYgyS7BIcafyGYESYfN6xKhbxeg4+nwl3ti+Qqdnj9kD3Wxyd1OIm
-        PiE5jGDzflOumX0npgI8HmjcBvUjc3Gu9r/9uCBs5sHeD+elncay5UvO1ruEhEIpL100py
-        7Gp6s11xuBr2kgoeOyxshRBhydENqvvBbVKAXrrXz+m5tilWZ2nI/+D+xOs0YHSxsdmPz8
-        Zzg4Vj/Gen8Z6q5/K4QpnRH6fAN9pN8byy/2xKJAEidbJ8L9iYzzRBv00Zwekg==
-Message-ID: <abfcdd863bb0166a6828c5742bf651eb9409c31b.camel@sylv.io>
-Subject: Re: [PATCH v1 1/1] hwmon: (pmbus) Add regulator supply into macro
-From:   sylv <sylv@sylv.io>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Date:   Thu, 17 Feb 2022 18:40:47 +0100
-In-Reply-To: <15b95695-6fbc-1916-ff39-abf13e989fc4@roeck-us.net>
-References: <cover.1645092563.git.sylv@sylv.io>
-         <d3563864d03a3d3450cf00b3be05465dc506e161.1645092563.git.sylv@sylv.io>
-         <15b95695-6fbc-1916-ff39-abf13e989fc4@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9051FB820C2;
+        Thu, 17 Feb 2022 17:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467FFC340E8;
+        Thu, 17 Feb 2022 17:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645119703;
+        bh=8pbZj/3cVuW2vQLaHmXTlBvSAEOnHZPHPU8EvjwJvmY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lICo15JaGIZ/+wRcv2OoGVinuJEdNg3fOgujgAyrExKrBVNZWnseGROU0F8zsi3XY
+         SwZR4kNdyhOIKqUv8y+gsMfXk8TBoQPckN91MTym3WTpQB1X7VLe8CL/u5O+Pf9x9a
+         UxRJvr1+jg2PvqdiG+nBI0C+x2ZyLUiI3nyUguqk62WvzsT2+H3tL3JabPWuJXf4cU
+         AKOkKRnJBf9FTiqOTbx2N6qVW5b2iVuCWLutJcz2kv473EmYc2TlKYMhu4n1/gj0d9
+         1TjxBU5O4nVFT1ikddcrYzGZ55h/hVIr4rQws6yNoehya20EIeOGWhPPzUpR1bL+Nv
+         XQ6Bz+csenJuw==
+Date:   Thu, 17 Feb 2022 10:41:37 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] um: Allow builds with Clang
+Message-ID: <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
+References: <20220217002843.2312603-1-keescook@chromium.org>
+ <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-17 at 09:36 -0800, Guenter Roeck wrote:
-> On 2/17/22 02:23, Marcello Sylvester Bauer wrote:
-> > Add optional regulator supply into PWBUS_REGULATOR macro. This
-> > makes it
-> 
-> The code doesn't look optional to me. What exactly is optional ?
-
-I mean, it is optional to add a supply. It should not cause errors if
-you don't. I should probably reword this, too.
-
-> 
-> > possible to define a vin-supply in DT. Not defining a supply will
-> > only
-> > cause the following debug output:
-> > 
-> > ```
-> > Looking up vin-supply property in node [...] failed
-> > ```
-> > 
-> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+On Thu, Feb 17, 2022 at 01:54:58PM +0900, Masahiro Yamada wrote:
+> On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Add x86-64 target for Clang+um and update user-offsets.c to use
+> > Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
+> > ("kbuild: fix asm-offset generation to work with clang").
+> >
+> > This lets me run KUnit tests with Clang:
+> >
+> > $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> > ...
+> > $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> > ...
+> >
+> > Cc: Jeff Dike <jdike@addtoit.com>
+> > Cc: Richard Weinberger <richard@nod.at>
+> > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: David Gow <davidgow@google.com>
+> > Cc: linux-um@lists.infradead.org
+> > Cc: linux-kbuild@vger.kernel.org
+> > Cc: linux-kselftest@vger.kernel.org
+> > Cc: kunit-dev@googlegroups.com
+> > Cc: llvm@lists.linux.dev
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > > ---
-> >   drivers/hwmon/pmbus/pmbus.h | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/hwmon/pmbus/pmbus.h
-> > b/drivers/hwmon/pmbus/pmbus.h
-> > index e0aa8aa46d8c..38f049d68d32 100644
-> > --- a/drivers/hwmon/pmbus/pmbus.h
-> > +++ b/drivers/hwmon/pmbus/pmbus.h
-> > @@ -464,6 +464,7 @@ extern const struct regulator_ops
-> > pmbus_regulator_ops;
-> >   #define PMBUS_REGULATOR(_name, _id)                           \
-> >         [_id] = {                                               \
-> >                 .name = (_name # _id),                          \
-> > +               .supply_name = "vin",                           \
-> >                 .id = (_id),                                    \
-> >                 .of_match = of_match_ptr(_name # _id),          \
-> >                 .regulators_node = of_match_ptr("regulators"),  \
+> >  arch/x86/um/user-offsets.c | 4 ++--
+> >  scripts/Makefile.clang     | 1 +
+> >  2 files changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> > index bae61554abcc..d9071827b515 100644
+> > --- a/arch/x86/um/user-offsets.c
+> > +++ b/arch/x86/um/user-offsets.c
+> > @@ -10,10 +10,10 @@
+> >  #include <asm/types.h>
+> >
+> >  #define DEFINE(sym, val) \
+> > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+> >
+> >  #define DEFINE_LONGS(sym, val) \
+> > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+> >
+> >  void foo(void)
+> >  {
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 51fc23e2e9e5..857b23de51c6 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+> >  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+> >  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+> >  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> > +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
 > 
-> That seems to be quite far reaching. How does this affect / change
-> behavior
-> of existing systems which so far did not expect supply_name to be set
-> ?
 > 
-> Guenter
+> Does this work for the i386 host?
+> 
+> UML supports i386 and x86_64 as the host architecture as of now,
+> but this always compiles UML for x86_64?
 
+I think the current code will work because arch/x86/Makefile.um includes
+-m32 for CONFIG_X86_32, which will implicitly change x86_64-linux-gnu
+into a 32-bit target triple:
+
+$ echo | clang --target=x86_64-linux-gnu -x c -c -o test.o -
+
+$ file test.o
+test.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+
+$ echo | clang --target=x86_64-linux-gnu -m32 -x c -c -o test.o -
+
+$ file test.o
+test.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), not stripped
+
+In fact, we rely on this for ARCH=i386 LLVM=1 right now, as it uses
+x86_64-linux-gnu for the target flag.
+
+While UML only supports x86, maybe it is worth using SUBARCH instead of
+hardcoding the triple? No strong opinion around that though.
+
+diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+index 51fc23e2e9e5..87285b76adb2 100644
+--- a/scripts/Makefile.clang
++++ b/scripts/Makefile.clang
+@@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
+ CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
+ CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
+ CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
++CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
+ CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
+ 
+ ifeq ($(CROSS_COMPILE),)
+
+> >  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> >
+> >  ifeq ($(CROSS_COMPILE),)
+> > --
+> > 2.30.2
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada

@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4CA4B96C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 04:44:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9794B96CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 04:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbiBQDoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Feb 2022 22:44:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60712 "EHLO
+        id S232950AbiBQDpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Feb 2022 22:45:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiBQDoh (ORCPT
+        with ESMTP id S232910AbiBQDpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Feb 2022 22:44:37 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04291F3F04;
-        Wed, 16 Feb 2022 19:44:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645069463; x=1676605463;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gM7xFOlZfumuqt4ILZvlvsWFAotYrzlXNFmpjcE0QBs=;
-  b=jjneRFPDDeQV+FybtsTPQiedaRG9qaPPKM5lUqahqcc1ZmeLi1RMl6BW
-   J7RfbCY5bjj+jwpVrw9JuaZyZG7WbGfgFSDylmXpdwGl4RVgNyPK2qVp5
-   epojbfh5OsTUNIeg3nHgtmQ4tMOH8Eblo/KxjMfYeabMhSoN8v9gc5zNv
-   E=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Feb 2022 19:44:23 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 19:44:17 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 16 Feb 2022 19:44:17 -0800
-Received: from [10.111.174.92] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 16 Feb
- 2022 19:44:14 -0800
-Message-ID: <a59295f2-d3ba-5d10-ac96-c00e4cf90e4a@quicinc.com>
-Date:   Wed, 16 Feb 2022 19:44:12 -0800
+        Wed, 16 Feb 2022 22:45:08 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D116829C137;
+        Wed, 16 Feb 2022 19:44:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=QKExgNQWp3Zssh/nqG6fZnwPbmQE7iVXyRjvlEzqCoM=; b=F55Xyk13rPLqv1D0CWn92CH/go
+        LF2wtY8At3qADfgJr/QBA9S0q/xNksDEWXHlT149de660uf8Bu628/FJjVgRF5DvHycjQ/Jj6NuaZ
+        8AkXiOLnrNiXlrJNtSR02rB6CVWOGtUYmGxqG7Z+z58s9qkvEh5Bh6Q4zkmbuhZhPPSa6B+S74ZqY
+        mlUwQ2AQgz1h4fCmVVOgAJ+rJ5g2IfhewPR2fzipz9jQHzI7jmJ9AAzZHYbqMMc1tSz7SmhXVssAa
+        YBtn8SWkOS/MtBbLXid3p3mr0/9oCT9T4JTt4XEgRPlrLUG0sTZmzFv5l214mrNUsuTr8vFvxjJIl
+        PFXqMU1Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKXij-00FHCo-1j; Thu, 17 Feb 2022 03:44:41 +0000
+Message-ID: <3f657ffc-e137-de8f-c89e-90676bc42448@infradead.org>
+Date:   Wed, 16 Feb 2022 19:44:35 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [Freedreno] [REPOST PATCH v4 13/13] drm/msm/dsi: Add support for
- DSC configuration
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: earlyprintk=xdbc seems broken
 Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
-CC:     Jonathan Marek <jonathan@marek.ca>,
-        David Airlie <airlied@linux.ie>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Abhinav Kumar" <abhinavk@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <dri-devel@lists.freedesktop.org>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-14-vkoul@kernel.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220210103423.271016-14-vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+References: <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com> <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
+ <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
+ <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
+ <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
+ <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
+ <Ye/w/lOf4f8+8fDt@hirez.programming.kicks-ass.net>
+ <yt9dbl00rmgx.fsf@linux.ibm.com>
+ <a34be5ca-47e7-95a6-602f-da054e409e85@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <a34be5ca-47e7-95a6-602f-da054e409e85@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,180 +71,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2/10/2022 2:34 AM, Vinod Koul wrote:
-> When DSC is enabled, we need to configure DSI registers accordingly and
-> configure the respective stream compression registers.
+On 1/25/22 08:24, Dave Hansen wrote:
+> On 1/25/22 05:09, Sven Schnelle wrote:
+>>> Now the documentation states we need this super speed A<->A cable, but
+>>> could you also update the documentation for usb-c ? There's a fair
+>>> number of usb-c only devices out there now.
+>> Stupid beginners question: Would every USB3 A-A cable work, or are the
+>> debug cables special? I've read the RX/TX pairs have to be swapped, but
+>> to me it looks like that's always the case?
 > 
-> Add support to calculate the register setting based on DSC params and
-> timing information and configure these registers.
+> My understanding is that the 5v line is disconnected.  Here's one cable I have:
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  10 +++
->   drivers/gpu/drm/msm/dsi/dsi_host.c | 109 ++++++++++++++++++++++++++++-
->   2 files changed, 118 insertions(+), 1 deletion(-)
+>> https://designintools.intel.com/SVT_DCI_DbC2_3_A_to_A_Debug_Cable_1_Meter_p/itpdciamam1m.htm
 > 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> index 49b551ad1bff..c1c85df58c4b 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-> @@ -706,4 +706,14 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
->   #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
->   
->   
-> +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
-> +
-> +#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL2			0x000002a0
-> +
-> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
-> +
-> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
-> +
-> +#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL3			0x000002ac
-> +
+> I think they snip that line to prevent any chance of current flowing between devices.  The cable isn't expensive, but I do remember being astounded at how much Intel charged itself for shipping it. ;)
 
-This file should not be edited manually. The updates have to be 
-generated using the headergen tool.
 
->   #endif /* DSI_XML */
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 438c80750682..3d8d5a1daaa3 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -908,6 +908,20 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
->   		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
->   }
->   
-> +static int dsi_dsc_update_pic_dim(struct msm_display_dsc_config *dsc,
-> +				  int pic_width, int pic_height)
-> +{
-> +	if (!dsc || !pic_width || !pic_height) {
-> +		pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n", pic_width, pic_height);
-> +		return -EINVAL;
-> +	}
-> +
-> +	dsc->drm->pic_width = pic_width;
-> +	dsc->drm->pic_height = pic_height;
-> +
-> +	return 0;
-> +}
-> +
->   static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->   {
->   	struct drm_display_mode *mode = msm_host->mode;
-> @@ -940,7 +954,68 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->   		hdisplay /= 2;
->   	}
->   
-> +	if (msm_host->dsc) {
-> +		struct msm_display_dsc_config *dsc = msm_host->dsc;
-> +
-> +		/* update dsc params with timing params */
-> +		dsi_dsc_update_pic_dim(dsc, mode->hdisplay, mode->vdisplay);
-> +		DBG("Mode Width- %d x Height %d\n", dsc->drm->pic_width, dsc->drm->pic_height);
-> +
-> +		/* we do the calculations for dsc parameters here so that
-> +		 * panel can use these parameters
-> +		 */
-> +		dsi_populate_dsc_params(dsc);
-> +
-> +		/* Divide the display by 3 but keep back/font porch and
-> +		 * pulse width same
-> +		 */
-> +		h_total -= hdisplay;
-> +		hdisplay /= 3;
-> +		h_total += hdisplay;
-> +		ha_end = ha_start + hdisplay;
-> +	}
-> +
->   	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> +		if (msm_host->dsc) {
-> +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> +			u32 reg, intf_width, slice_per_intf;
-> +			u32 total_bytes_per_intf;
-> +
-> +			/* first calculate dsc parameters and then program
-> +			 * compress mode registers
-> +			 */
-> +			intf_width = hdisplay;
-> +			slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
-> +
-> +			dsc->drm->slice_count = 1;
+This one works OK:
+https://www.datapro.net/products/usb-3-0-super-speed-a-a-debugging-cable.html
 
-Why is this hard-coded to 1 here? Am i missing something?
-I think I need another day to look into these calculations.
+> That said, I've also used the same cable Peter has: just a cheap A-to-A cable I had lying around.  It surely has VBUS connected, so I usually plumb it through a USB hub with a power switch.  This surely isn't the "right" way to do it, but it does seem to work in some situations.
 
-> +			dsc->bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * 8, 8);
-> +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
-> +
-> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-> +			dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
-> +			dsc->bytes_per_pkt = dsc->bytes_in_slice * dsc->drm->slice_count;
-> +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
-> +
-> +			reg = dsc->bytes_per_pkt << 16;
-> +			reg |= (0x0b << 8);    /* dtype of compressed image */
-> +
-> +			/* pkt_per_line:
-> +			 * 0 == 1 pkt
-> +			 * 1 == 2 pkt
-> +			 * 2 == 4 pkt
-> +			 * 3 pkt is not supported
-> +			 * above translates to ffs() - 1
-> +			 */
-> +			reg |= (ffs(dsc->pkt_per_line) - 1) << 6;
-> +
-> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-> +			reg |= dsc->eol_byte_num << 4;
-> +			reg |= 1;
-> +
-> +			dsi_write(msm_host,
-> +				  REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
-> +		}
-> +
->   		dsi_write(msm_host, REG_DSI_ACTIVE_H,
->   			DSI_ACTIVE_H_START(ha_start) |
->   			DSI_ACTIVE_H_END(ha_end));
-> @@ -959,8 +1034,40 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->   			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
->   			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
->   	} else {		/* command mode */
-> +		if (msm_host->dsc) {
-> +			struct msm_display_dsc_config *dsc = msm_host->dsc;
-> +			u32 reg, reg_ctrl, reg_ctrl2;
-> +			u32 slice_per_intf, bytes_in_slice, total_bytes_per_intf;
-> +
-> +			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
-> +			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
-> +
-> +			slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
-> +			bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
-> +						      dsc->drm->bits_per_pixel, 8);
-> +			dsc->drm->slice_chunk_size = bytes_in_slice;
-> +			total_bytes_per_intf = dsc->bytes_in_slice * slice_per_intf;
-> +			dsc->pkt_per_line = slice_per_intf / dsc->drm->slice_count;
-> +
-> +			reg = 0x39 << 8;
-> +			reg |= ffs(dsc->pkt_per_line) << 6;
-> +
-> +			dsc->eol_byte_num = total_bytes_per_intf % 3;
-> +			reg |= dsc->eol_byte_num << 4;
-> +			reg |= 1;
-> +
-> +			reg_ctrl |= reg;
-> +			reg_ctrl2 |= bytes_in_slice;
-> +
-> +			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
-> +			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2, reg_ctrl2);
-> +		}
-> +
->   		/* image data and 1 byte write_memory_start cmd */
-> -		wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
-> +		if (!msm_host->dsc)
-> +			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
-> +		else
-> +			wc = mode->hdisplay / 2 + 1;
->   
->   		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
->   			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
+-- 
+~Randy

@@ -2,79 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B674BAB5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01E64BAB5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 21:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243776AbiBQU5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 15:57:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44090 "EHLO
+        id S243706AbiBQU7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 15:59:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243654AbiBQU5V (ORCPT
+        with ESMTP id S234111AbiBQU7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 15:57:21 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C3B26570;
-        Thu, 17 Feb 2022 12:57:06 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 919661F46309
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645131425;
-        bh=o3K6tBzoDd9/wUzrBeJx9N/1UIvuvmQGWXMam7COp4g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kcl7N0jJOd6xombjhHEZtPPOy7HfPXscpWoPieyMDbxjizt6W/7vKMMsZIWciKKbc
-         ujcVO6Ldu2dnrJUdd/RRnzDT6qRaUvnNSUvlUnfZ3DCJVR0EXZVM888asx0ZhMcLs7
-         vHA0oLYhgaBpXyuH1RnGxjot+M7CbFpyJQhmk0/+faOgy7yM7E55aLfYaTa7ucyY7N
-         9xbiyYA9tSQ9ER4o752nSVTkxZDW1WngjorJ9dCRNhNMq5jsq349BV2wYKp3xmNr0/
-         W1N+MCPMb8lyRxKtWxh7nyfGwxiiiFvVS1eRRDQwk3h7z8i+e+28yd2JlwniVSZcLN
-         qM85pAYXXo1ZQ==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, kernelci@groups.io,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/lkdtm: add config
-Date:   Fri, 18 Feb 2022 01:56:20 +0500
-Message-Id: <20220217205620.2512094-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220217205620.2512094-1-usama.anjum@collabora.com>
-References: <20220217205620.2512094-1-usama.anjum@collabora.com>
+        Thu, 17 Feb 2022 15:59:07 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DD637BC2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 12:58:52 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id EDD991C0B7F; Thu, 17 Feb 2022 21:58:50 +0100 (CET)
+Date:   Thu, 17 Feb 2022 21:58:50 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Daniel Wagner <wagi@monom.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+Subject: Re: [ANNOUNCE] 4.4.302-rt232 (END OF LIFE)
+Message-ID: <20220217205850.GA21437@duo.ucw.cz>
+References: <164396730424.21109.15121913505546223213@beryllium.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="EeQfGwPcQSOJBaQU"
+Content-Disposition: inline
+In-Reply-To: <164396730424.21109.15121913505546223213@beryllium.lan>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add config option which is needed for SLAB_LINEAR_OVERFLOW test. It
-needs KASAN enabled.
 
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Fixes: 9c4f6ebc3665 ("lkdtm/heap: Add vmalloc linear overflow test")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/lkdtm/config | 1 +
- 1 file changed, 1 insertion(+)
+--EeQfGwPcQSOJBaQU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-index adc9fa60057c5..4e8af0f712f74 100644
---- a/tools/testing/selftests/lkdtm/config
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -7,6 +7,7 @@ CONFIG_HARDENED_USERCOPY=y
- CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
- CONFIG_INIT_ON_FREE_DEFAULT_ON=y
- CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
-+CONFIG_KASAN=y
- CONFIG_UBSAN=y
- CONFIG_UBSAN_BOUNDS=y
- CONFIG_UBSAN_TRAP=y
--- 
-2.30.2
+Hi!
 
+> This is an update to the v4.4 stable update[1]. No RT specific changes.
+>=20
+> The v4.4-rt branch is END OF LIFE. There wont be any v4.4-rt updates
+> from the stable-rt community anymore as the stable v4.4 branch reached
+> END OF LIFE as well. As Greg indicated the CIP project is considering to
+> support v4.4 a bit longer.
+
+That's correct. We'll maintain 4.4 and 4.4-rt going forward, at least
+on hardware our members care about.
+
+CIP project is committed to maintain 4.4.x kernel till January of 2027
+[1]. We are maintaining -cip branch [2], that is stable kernel with about
+1000 of patches to support our reference hardware [3] and -cip-rt
+branch, with is merge of -rt and -cip trees.
+
+If you for some reason need 4.4.x with bug and security fixes, and are
+running similar hardware to our reference hardware (x86-64 and armv7),
+-cip tree may be good base for that work. Testing of the -cip tree is
+welcome, as is joining the CIP project.
+
+[1] https://wiki.linuxfoundation.org/civilinfrastructureplatform/start
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/log/?=
+h=3Dlinux-4.4.y-cip-rt
+[3] https://wiki.linuxfoundation.org/civilinfrastructureplatform/ciptesting=
+/cipreferencehardware
+
+?
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--EeQfGwPcQSOJBaQU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYg63CgAKCRAw5/Bqldv6
+8qJLAJ4i2mB1+SbWVVhqYU1RViC7+vcHFwCgnL0nNMSa73k8Sx9y/4krYpVNDcw=
+=MqB2
+-----END PGP SIGNATURE-----
+
+--EeQfGwPcQSOJBaQU--

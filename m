@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF52D4B9D88
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B4B4B9D86
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 11:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbiBQKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 05:48:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38694 "EHLO
+        id S239314AbiBQKsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 05:48:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbiBQKsF (ORCPT
+        with ESMTP id S232911AbiBQKsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Feb 2022 05:48:05 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 818A229412E;
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140481E4C45;
+        Thu, 17 Feb 2022 02:47:51 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id y6-20020a7bc186000000b0037bdc5a531eso4328566wmi.0;
+        Thu, 17 Feb 2022 02:47:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wDOa5zAjxEYdZwQwENexU8DjbH6bq4RkGCaO539Y7fA=;
+        b=SEZtit2TYLlZ/CFGrluRQZeV2omoXH19rw3xlKJdlVIUe2ntmFOGvLtJX8Q06Ize2I
+         w6Ez8FL2EEo/CyelOhNsac7tbA//euZj5/tdMpE4SeUTEhiinaQH6n3NnO7tlaZdkv6f
+         gKG5i702oy+D2ftnUb+wC2U93LGsa0TewSfGgrfPkwSDsPkT9A8XUGCb7JCjfCd9rVuM
+         NK+EFWOq6+3Mrokj1f7jliRkubSonsyTmgdN5Jlo8VItpwbFJlb19JrDBuBAhuOGJ0H8
+         1QzgUmCDJXFfaZtCHN3pNYFysPfOHyxFX+Lm4P0diJllyfaeGoUEmvAdI07WosTEepXA
+         PDfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wDOa5zAjxEYdZwQwENexU8DjbH6bq4RkGCaO539Y7fA=;
+        b=qvgtfdh0Q4NiGxSxisOOEzhu2kY/9L+48XcUYQ9aTt3FJEG55UjBCDqbhfBXGHvHGB
+         cwxJgCxIJpFkTrqORmSOFd7zp25xsOAZVmOxbLJEl0eU2/IIiFYbBpFWAjmP1cjPKGB7
+         0uyLvHq4tq3QnkKE9EMvBOzFbR/Wa04ybP267QMBArF1UqvecAn4X4Okh+Qq3fbo1YwT
+         omK4EMJEQIan4r1qSoGbjB8JPcBVXXWD1CSaJA/nKWDWA0ilHznGsFxHcppQMHUj6B2g
+         2qbtJy86KjSqqqnI2RSsh0O2YkgmGSpIOJy48zi74Y7oO1BeKaQxZO42JGeWqWOPqP+C
+         M2sA==
+X-Gm-Message-State: AOAM533Dn5veRtCqFmKTwIvGPYBBy0g1rnQW/cM3UZXfwoPLvh89qqir
+        mAvbdcAbecpSUsAw/BrdklM=
+X-Google-Smtp-Source: ABdhPJyp+txqXxigrnTRyLOPTaPW0lu6yiIYHRrXl/74gmUQ+6rN929i/lmlIS8oTnw09BzzkYn4WQ==
+X-Received: by 2002:a7b:cb90:0:b0:37b:b88b:b4a2 with SMTP id m16-20020a7bcb90000000b0037bb88bb4a2mr2155841wmi.148.1645094869500;
         Thu, 17 Feb 2022 02:47:49 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24854D6E;
-        Thu, 17 Feb 2022 02:47:49 -0800 (PST)
-Received: from [10.57.17.240] (unknown [10.57.17.240])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0B5D3F66F;
-        Thu, 17 Feb 2022 02:47:46 -0800 (PST)
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        amit daniel kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre.Gondois@arm.com, Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <20220207073036.14901-2-lukasz.luba@arm.com> <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com> <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com> <YgQ9XLcto9v0fyTf@google.com>
- <d120110a-7d01-0cfd-f7eb-d160e17ec2a8@arm.com>
- <CAD=FV=VntGw1_AzJPpdOk0zSpOVZRH2X1JNg84JX+zCeU1jvXg@mail.gmail.com>
- <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <5b8ca53e-3595-85fd-5ae9-a5e8285e8513@arm.com>
-Date:   Thu, 17 Feb 2022 10:47:44 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p7sm13690196wrr.95.2022.02.17.02.47.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 02:47:48 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] staging: wfx: Fix spelling mistake "unexpectly" -> "unexpectedly"
+Date:   Thu, 17 Feb 2022 10:47:47 +0000
+Message-Id: <20220217104747.15424-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <7c059f4f-7439-0cad-c398-96dbde4e49c1@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,122 +71,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+There is a spelling mistake in a dev_warn message. Fix it.
 
-On 2/17/22 10:10 AM, Daniel Lezcano wrote:
-> On 16/02/2022 18:33, Doug Anderson wrote:
->> Hi,
->>
->> On Wed, Feb 16, 2022 at 7:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>
->>> Hi Matthias,
->>>
->>> On 2/9/22 10:17 PM, Matthias Kaehlcke wrote:
->>>> On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
->>>>>
->>>>>
->>>>> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
->>>>>> On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
->>>>>>>
->>>>>>>
->>>
->>> [snip]
->>>
->>>>>>> Could you point me to those devices please?
->>>>>>
->>>>>> arch/arm64/boot/dts/qcom/sc7180-trogdor-*
->>>>>>
->>>>>> Though as per above they shouldn't be impacted by your change, 
->>>>>> since the
->>>>>> CPUs always pretend to use milli-Watts.
->>>>>>
->>>>>> [skipped some questions/answers since sc7180 isn't actually 
->>>>>> impacted by
->>>>>>     the change]
->>>>>
->>>>> Thank you Matthias. I will investigate your setup to get better
->>>>> understanding.
->>>>
->>>> Thanks!
->>>>
->>>
->>> I've checked those DT files and related code.
->>> As you already said, this patch is safe for them.
->>> So we can apply it IMO.
->>>
->>>
->>> -------------Off-topic------------------
->>> Not in $subject comments:
->>>
->>> AFAICS based on two files which define thermal zones:
->>> sc7180-trogdor-homestar.dtsi
->>> sc7180-trogdor-coachz.dtsi
->>>
->>> only the 'big' cores are used as cooling devices in the
->>> 'skin_temp_thermal' - the CPU6 and CPU7.
->>>
->>> I assume you don't want to model at all the power usage
->>> from the Little cluster (which is quite big: 6 CPUs), do you?
->>> I can see that the Little CPUs have small dyn-power-coeff
->>> ~30% of the big and lower max freq, but still might be worth
->>> to add them to IPA. You might give them more 'weight', to
->>> make sure they receive more power during power split.
->>>
->>> You also don't have GPU cooling device in that thermal zone.
->>> Based on my experience if your GPU is a power hungry one,
->>> e.g. 2-4Watts, you might get better results when you model
->>> this 'hot' device (which impacts your temp sensor reported value).
->>
->> I think the two boards you point at (homestar and coachz) are just the
->> two that override the default defined in the SoC dtsi file. If you
->> look in sc7180.dtsi you'll see 'gpuss1-thermal' which has a cooling
->> map. You can also see the cooling maps for the littles.
->>
->> I guess we don't have a `dynamic-power-coefficient` for the GPU,
->> though? Seems like we should, but I haven't dug through all the code
->> here...
-> 
-> The dynamic-power-coefficient is available for OPPs which includes 
-> CPUfreq and devfreq. As the GPU is managed by devfreq, setting the 
-> dynamic-power-coefficient makes the energy model available for it.
-> 
-> However, the OPPs must define the frequency and the voltage. That is the 
-> case for most platforms except on QCom platform.
-> 
-> That may not be specified as it uses a frequency index and the hardware 
-> does the voltage change in our back. The QCom cpufreq backend get the 
-> voltage table from a register (or whatever) and completes the voltage 
-> values for the OPPs, thus adding the information which is missing in the 
-> device tree. The energy model can then initializes itself and allows the 
-> usage of the Energy Aware Scheduler.
-> 
-> However this piece of code is missing for the GPU part.
-> 
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/staging/wfx/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you for joining the discussion. I don't know about that Qcom
-GPU voltage information is missing.
+diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
+index 0ddc67b56589..d832a22850c7 100644
+--- a/drivers/staging/wfx/main.c
++++ b/drivers/staging/wfx/main.c
+@@ -190,7 +190,7 @@ bool wfx_api_older_than(struct wfx_dev *wdev, int major, int minor)
+ 			goto next;
+ 		}
+ 		if (chunk_len > WFX_PDS_MAX_CHUNK_SIZE)
+-			dev_warn(wdev->dev, "PDS:%d: unexpectly large chunk\n", chunk_num);
++			dev_warn(wdev->dev, "PDS:%d: unexpectedly large chunk\n", chunk_num);
+ 		if (buf[4] != '{' || buf[chunk_len - 1] != '}')
+ 			dev_warn(wdev->dev, "PDS:%d: unexpected content\n", chunk_num);
+ 
+-- 
+2.34.1
 
-If the voltage is not available (only the frequencies), there is
-another way. There is an 'advanced' EM which uses registration function:
-em_dev_register_perf_domain(). It uses a local driver callback to get
-power for each found frequency. It has benefit because there is no
-restriction to 'fit' into the math formula, instead just avg power
-values can be feed into EM. It's called 'advanced' EM [1].
-
-Now we hit (again) the DT & EM issue (it's an old one, IIRC Morten
-was proposing from ~2014 this upstream, but EAS wasn't merged back
-then):
-where to store these power-freq values, which are then used by the
-callback. We have the 'dynamic-power-coefficient' in DT, but
-it has limitations. It would be good to have this simple array
-attached to the GPU/CPU node. IMHO it meet the requirement of DT,
-it describes the HW (it would have HZ and Watts values).
-
-Doug, Matthias could you have a look at that function and its
-usage, please [1]?
-If you guys would support me in this, I would start, with an RFC
-proposal, a discussion on LKML.
-
-
-[1] 
-https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/power/energy-model.rst#L87

@@ -2,211 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1934C4B9E7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95504B9E7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Feb 2022 12:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239695AbiBQLX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 06:23:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53902 "EHLO
+        id S239711AbiBQLY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 06:24:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiBQLX1 (ORCPT
+        with ESMTP id S232210AbiBQLY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 06:23:27 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E4B1285B5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:23:10 -0800 (PST)
-Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21HBMWwN049591;
-        Thu, 17 Feb 2022 20:22:32 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
- Thu, 17 Feb 2022 20:22:32 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21HBMWDC049588
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 17 Feb 2022 20:22:32 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <2f887679-c783-bf18-a2aa-aa9a709bfb38@I-love.SAKURA.ne.jp>
-Date:   Thu, 17 Feb 2022 20:22:30 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: [PATCH v2] workqueue: Warn flush attempt using system-wide workqueues
+        Thu, 17 Feb 2022 06:24:27 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC6E120EB1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 03:24:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZEGcg7eDAakeItBIi2pgUu2kNP5S89dyuVdBZ1ONTp6bNBPum7Oq1LZykLBsWlwLiCGmQScqca5XaiheKz7Ad15J1SWSW6j5sL9x/a3Ct6do8WrU6DK+PPDwH0ky5dQDgX3j+X1KfULfwOb3d+v8D3KWjkBXd5Y4k18NI0GWYQXIvF++6uAswKK683OvTCdR12EjlyiAC2bkG+l/pSQ5yVFoCNdEk60661NEhPDAHwgnOe0odGVcfxUlYPDbXHDxgjJkonE5h53bAKuAIED0J9vKGdK+W7b9igbPzAsOUMxJVmNF3qEoTweO53+DF+tuQzK9wonkL7CJAAry168NNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5Y/Mmd2+yb0HL39QEcc4lRX964659kpUpnrrkIwskSU=;
+ b=IRMRfbFaAwGWqJqPDAvtgGcPBf4GND+5cjL0zcnld9qLlPf6Ssa7OaGcS+Lz0IY8j61gkQHC2msTvY36aDLV+iK7+6hZN5+NZ0Q7vda7jiS4b4X/gjjAwPVSSWfEfz4Qzj4QxzOQ0P99BJGq1b4SRki/Had6JBk3AZNs2TLcbdWbSitMeCwxo/dgy1URW4feWt4hRHvjEHnauYfMcp8zHSqphfVCW0D/VUiPHQJSECiiOGZW7JAlhubLwIy3k9FIq4rgMd6cHQ75A+m8zJa/mjcZkVpa8/1G32PkVyvUmJz8087f8wo0tTxZ4+Jd5TlYEDRTcV2WF7WJowCQaPOVsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5Y/Mmd2+yb0HL39QEcc4lRX964659kpUpnrrkIwskSU=;
+ b=PnwE4H6gODkk4JFosee+iX5CLi0C29tOCa/jqmfWilCQm36jlXRZDAYkV4ZGWPNGhi19abIoQVuE2awTn3InflAIGxEUEgF2I0voYs/Rktyu3Tk2o94X/6MeXaHEdb7+BrXDJhy3EkLhwV/U9uq1KvSWwpr/qMu+lIYNz1+Zk+g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW2PR12MB2379.namprd12.prod.outlook.com (52.132.180.152) by
+ DM5PR12MB1610.namprd12.prod.outlook.com (10.172.33.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4995.16; Thu, 17 Feb 2022 11:24:06 +0000
+Received: from MW2PR12MB2379.namprd12.prod.outlook.com
+ ([fe80::c90d:9f80:a049:b432]) by MW2PR12MB2379.namprd12.prod.outlook.com
+ ([fe80::c90d:9f80:a049:b432%2]) with mapi id 15.20.4975.017; Thu, 17 Feb 2022
+ 11:24:06 +0000
+Message-ID: <a57dbac2-1b8e-ea5c-8b6c-3a97ac186ad9@amd.com>
+Date:   Thu, 17 Feb 2022 16:53:51 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v4] sched/fair: Consider cpu affinity when allowing NUMA
+ imbalance in find_idlest_group
 Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>, jgg@ziepe.ca,
-        linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Haakon Bugge <haakon.bugge@oracle.com>
-References: <0000000000005975a605d7aef05e@google.com>
- <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
- <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
- <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
- <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
- <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
- <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
- <YgnQGZWT/n3VAITX@slm.duckdns.org>
- <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
- <YgqSsuSN5C7StvKx@slm.duckdns.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YgqSsuSN5C7StvKx@slm.duckdns.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     peterz@infradead.org, aubrey.li@linux.intel.com, efault@gmx.de,
+        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
+        mingo@kernel.org, song.bao.hua@hisilicon.com,
+        srikar@linux.vnet.ibm.com, valentin.schneider@arm.com,
+        vincent.guittot@linaro.org
+References: <20220217055408.28151-1-kprateek.nayak@amd.com>
+ <20220217100523.GV3366@techsingularity.net>
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <20220217100523.GV3366@techsingularity.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: PN3PR01CA0144.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:bf::11) To MW2PR12MB2379.namprd12.prod.outlook.com
+ (2603:10b6:907:9::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cc818cf2-9fe5-4082-1ed6-08d9f2080232
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1610:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB16106852787388D5C86AFDF798369@DM5PR12MB1610.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mOMZqRzZeAOnsDu78z9YlDdTFJ8pj7n/zNk5cRy+bH1J91ANIxNRKM4PYZvhWl7wgqMRWQWmn99o6ZcbbT84rrTD9/4S3CHWdvONjbKM8LsIU/4VzoTObpEnqwgQiHC2mhNYUhW/OPNMIDkarhJOoRPjT8UcaJHOlceojP9MGr+66+KXKa5jwy1z5g0/0SRJd0U8UOc/+7xwjtvH4g3EeSXDqe4Iy+413wA/Ni0lHv0fZvBUg0DEZ1ThTOmz+fg1G1iDX6UDx9oZds2pmKyD+9N9TwmNuXsgW1PLvzfeOgokm2hUx/NGneGWJ/K2J7ukW8NfidhbJ1Pdb0LK3gI/sYDC4F4EhkB5oW3R/mTRrDc1JIlrLCOkWrW8Nf476+gRIvO01y2sw2Na4z2RvkTROjCypDE2SXL/RuYFH2H3++le8O2vMsSMrZ+jz4BE98U39EiAca0bT+jUCCkRzmVStEH01TYrHi0nJGq7dqflyzWryuEQfdbZ8okMagGwgihryslhWCn2Dci+UMl+4733LJqlb2Um0FQ6ssqAYX66fgA77TeY+EA3ij/f2iXkveYMZ3Ih3pfhfL0gmL2rHlcbIELfouJJ8ZYR46rZw65gZPm/9YBBs2rL4VcaichCjhkk8C2AtYyY/yj+aMF2GI9jE9F9MhbSrk872b/S/S41ZMy+nqp4gA8JwBBrQkRFjfFLlqogSllyjJsSogPriShsMOVVlERdf4aWsMXKRTNYmVB9C/8pzNYhCSd/ttJ7gbTd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2379.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(86362001)(31686004)(36756003)(6916009)(316002)(6666004)(83380400001)(31696002)(6506007)(53546011)(5660300002)(8936002)(38100700002)(26005)(186003)(7416002)(6512007)(2616005)(508600001)(6486002)(66946007)(8676002)(66556008)(4326008)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZkhzK29INkQ0d0tkTW5PYXA1Sjk1a1JZekdKUlQ0dDc1RFhqa2tFbTZxUE9o?=
+ =?utf-8?B?L2xOVDlHcFBLbnVaNVdsMk0zVkpqa1NyWUVHdElNN3hoMDN5ZWpmL2VHS2lr?=
+ =?utf-8?B?TGphT3ZrLy9leGx2dmFZTmh5TVFiMnFCNTV6WWNrb3dSa2FJb01xdE9SQ3Y3?=
+ =?utf-8?B?c3JhQUdtdWd3NUt2WTNtUGJseWRzYUNZVGZHMlVlUXB1NS9nc2I2Qm9PN1hL?=
+ =?utf-8?B?eC96aGVWZ0ZwNkN5VXhmU25IRHgrMjl2YkdnVmVTbTBhQ1lkTFVUNVdZTHQ3?=
+ =?utf-8?B?RHdtYkU3U2I5eG5UNVRiRWxZS2hpa0ZHOUwyVlI4c2JHZXVQMDgyVDdKNnNL?=
+ =?utf-8?B?dmozcWpxQXFwaHBkaWg3UFo2Nnk4OGt5NGQxL000OXRZUy91NHV2YVZsUGZM?=
+ =?utf-8?B?aFZxdjBnMUhPbFRIdS90amtsZTZlOFZlZzRxSVVMcEU3UDU0QllPQXpHOStz?=
+ =?utf-8?B?N3dzZEwzZ0lTK0FMK0hkWHlmSmhNeGN0YUR2NndyaGliMTR5dGYrU2pNM3FQ?=
+ =?utf-8?B?SFJ0Rm9QRmxPUGZqcXFyZ29YaWI2M3pUdk12YjdQSnRUeDlnUTlxTTd2ampr?=
+ =?utf-8?B?eE9zNEI5bTRQeW9zTWtlcDFZWTZNRkxuNGthTWVtbXkvNmlwbGdhTVdyM0VB?=
+ =?utf-8?B?OUdzYUhnSHR1ZU9hSmlzN0x6RU5sQlJEaE5Gd1hwcE9pWmc4WkxnOHZTZ3Bq?=
+ =?utf-8?B?RlFzWVlOVHhLN0U0QzBadU9ScjdlSTZGWUZmVmNYOEJhUnM4RGt4RXAwdTVX?=
+ =?utf-8?B?Zk56Vkwxb0F1SUZaNzZmREgzWjh6KzNydFBCejRRMERJbkowMklIS2FCZ0JT?=
+ =?utf-8?B?dW9jcTg1aStTaCsrTExLR3V0UTNCcGFlcjB6UkRtbzdJbmk5NTJJWUg1aTQ2?=
+ =?utf-8?B?WURLNEY3dndrUVBxWWlHclFoU1RCTzJSY1Y1U2g5M20zdUR0dlVUUmQ2NDZR?=
+ =?utf-8?B?RzRWL1dwK0Nzb3BwWW9zQ0tiU1IzZ2pudEMycHZiZlMyRXlQWWkycnUzME1W?=
+ =?utf-8?B?QU42VVlHbkJIUVBHZkZOaHJVOXFUTWVvUjZ0MXEyVDlodXB1VGpBYjJJZGt3?=
+ =?utf-8?B?V0MwWFhtUGJrU1dzOXJnTHpjcGJ2Zk1JQVgxU3dyMVhrTm1OQ2oyNDQ4SlVW?=
+ =?utf-8?B?dEdGWE5ROE1SQXJ4bThLYS8yQkpvWHVpeUF3cytYQktqdnRxdnUwVnZza2N6?=
+ =?utf-8?B?TzhEcGI1Yk5JMXM4a2dIaDBoU2dGRXB3MnJZd1FaUFYwdVdzcXJxdWdSdkM5?=
+ =?utf-8?B?Y1dRKzJwcm9lZlkyZmU0TGFwelBTRmJmRStUTmdwUFVSajQ0Y2RFMXN5TlZX?=
+ =?utf-8?B?dkRNUDJERFM4MVNLSjNZOTVud0UxbUh0K2VDOFFnTU1IUGFKamNhaVczWWF1?=
+ =?utf-8?B?cmRlRlpMaHlpNFlSTlF6Ynk5TFlDZXlBTGFqb0UzYktZMVc2T05jZ3BVaExS?=
+ =?utf-8?B?YzFBQ01KSkEySlJCMmUra1U4Mk1zTklzWlZUb0crMlhXWVlQVE54NE5RRmFw?=
+ =?utf-8?B?VXgyaFcwbXJub2RLSGtiQjRQWjNKNUJxSFBMZVRmYlRkUEtUanlNTkk5YUFy?=
+ =?utf-8?B?WGsxL25Xd2tXTDlZYllyVi9VTHhRRHFxQ0thY0JkQitrL3Y3a3dvY3g4b3cw?=
+ =?utf-8?B?T0VDczZJYnAyMEljWXNUTnFGc205d0N6Vm5GMC9zRGxMWWpXVWpHTzUydDJF?=
+ =?utf-8?B?dVc0WHdLRlgrK25WdWwwOUJQcWswSHVVakFjNldQUmpKS2t2YzRIR256R0RI?=
+ =?utf-8?B?UThqYVFQUERGMnIvbVVndm9NZXJCYmU5alYrRys3ZS9VUG9tRElVczZQY3lU?=
+ =?utf-8?B?NzlnTXV3c3JnWTFIY3V3Y3hBVVpxTjhtbndJREk1dEpBRlVTcWgvMjIvUHNa?=
+ =?utf-8?B?ZGxZdks0dWNvNHRsakRadGJzS2FlK0dadDEyYzNtR243RzF5SFNJMXVieGpn?=
+ =?utf-8?B?L2lRbmlZd3dJRnQ4eUlYc1NaV3AyeGtoNENBVFBFTXdKOHVjaUsrUENWVWZn?=
+ =?utf-8?B?SzlteFF3TkgrT0g4SzBOcXhnUjVFU1QvNW5ZZ2oxNyt1VXVmT3VkOTl2SkNT?=
+ =?utf-8?B?T0tmQXRsV3ZEVHlnMkNXTDdETlhVZENnS1NaMTdmUktFV3Y3MTlWRmMwY0ZR?=
+ =?utf-8?B?SFVVVmNlcnFCVFpQak5SRUZMaytZNi9lUCs5SE5BSlpIdkZWd0RJN1dLOWI3?=
+ =?utf-8?Q?qIPUd7Poqq1gtzOgxWo98lY=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc818cf2-9fe5-4082-1ed6-08d9f2080232
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2379.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2022 11:24:06.4822
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NSt8rm4aZqa11qk7fsi+rHhjwrzTxB3eFsvCbnMg+NDmBQOgiIjlQTlTbPvNtyag88x+IQxwn9EiGpwDy8mWdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1610
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot found a circular locking dependency which is caused by flushing
-system_long_wq WQ [1]. Tejun Heo commented that it makes no sense at all
-to call flush_workqueue() on the shared workqueues as the caller has no
-idea what it's gonna end up waiting for.
+Hello Mel,
 
-Although there is flush_scheduled_work() which flushes system_wq WQ with
-"Think twice before calling this function! It's very easy to get into
-trouble if you don't take great care." warning message, it will be too
-difficult to guarantee that all users safely flush system-wide WQs.
 
-Therefore, let's change the direction to that developers had better use
-their own WQs if flushing is inevitable. To give developers time to update
-their modules, for now just emit a warning message when flush_workqueue()
-or flush_work() is called on system-wide WQs. We will eventually convert
-this warning message into WARN_ON() and kill flush_scheduled_work().
+Thank you for looking into the patch.
 
-Link: https://syzkaller.appspot.com/bug?extid=831661966588c802aae9 [1]
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-Changes in v2:
-  Removed #ifdef CONFIG_PROVE_LOCKING=y check.
-  Also check flush_work() attempt.
-  Shorten warning message.
-  Introduced a public WQ_ flag, which is initially meant for use by
-  only system-wide WQs, but allows private WQs used by built-in modules
-  to use this flag for detecting unexpected flush attempts if they want.
+On 2/17/2022 3:35 PM, Mel Gorman wrote:
+> Thanks Prateek,
+>
+> On Thu, Feb 17, 2022 at 11:24:08AM +0530, K Prateek Nayak wrote:
+>> [..snip..]
+>>
+>> Eg: numactl -C 0,16,32,48,64,80,96,112 ./stream8
+>>
+> In this case the stream threads can use any CPU of the subset, presumably
+> this is parallelised with OpenMP without specifying spread or bind
+> directives.
+Yes it is parallelized using OpenMP without specifying any directive.
+> [..snip..]
+> One concern I have is that we incur a cpumask setup and cpumask_weight
+> cost on every clone whether a restricted CPU mask is used or not.  Peter,
+> is it acceptable to avoid the cpumask check if there is no restrictions
+> on allowed cpus like this?
+>
+> 	imb = sd->imb_numa_nr;
+> 	if (p->nr_cpus_allowed != num_online_cpus())
+> 		struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+>
+> 		cpumask_and(cpus, sched_group_span(local), p->cpus_ptr);
+> 		imb = min(cpumask_weight(cpus), imb);
+> 	}
+Can we optimize this further as:
 
- include/linux/workqueue.h | 26 +++++++++++++------------
- kernel/workqueue.c        | 41 ++++++++++++++++++++++++++++-----------
- 2 files changed, 44 insertions(+), 23 deletions(-)
+	imb = sd->imb_numa_nr;
+	if (unlikely(p->nr_cpus_allowed != num_online_cpus()))
+		struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
 
-diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index 7fee9b6cfede..4b698917b9d5 100644
---- a/include/linux/workqueue.h
-+++ b/include/linux/workqueue.h
-@@ -335,6 +335,18 @@ enum {
- 	 */
- 	WQ_POWER_EFFICIENT	= 1 << 7,
- 
-+	/*
-+	 * Since flush operation synchronously waits for completion, flushing
-+	 * system-wide workqueues (e.g. system_wq) or a work on a system-wide
-+	 * workqueue might introduce possibility of deadlock due to unexpected
-+	 * locking dependency.
-+	 *
-+	 * This flag emits warning if flush operation is attempted. Don't set
-+	 * this flag on user-defined workqueues, for destroy_workqueue() will
-+	 * involve flush operation.
-+	 */
-+	WQ_WARN_FLUSH_ATTEMPT   = 1 << 8,
-+
- 	__WQ_DRAINING		= 1 << 16, /* internal: workqueue is draining */
- 	__WQ_ORDERED		= 1 << 17, /* internal: workqueue is ordered */
- 	__WQ_LEGACY		= 1 << 18, /* internal: create*_workqueue() */
-@@ -569,18 +581,8 @@ static inline bool schedule_work(struct work_struct *work)
-  * Forces execution of the kernel-global workqueue and blocks until its
-  * completion.
-  *
-- * Think twice before calling this function!  It's very easy to get into
-- * trouble if you don't take great care.  Either of the following situations
-- * will lead to deadlock:
-- *
-- *	One of the work items currently on the workqueue needs to acquire
-- *	a lock held by your code or its caller.
-- *
-- *	Your code is running in the context of a work routine.
-- *
-- * They will be detected by lockdep when they occur, but the first might not
-- * occur very often.  It depends on what work items are on the workqueue and
-- * what locks they need, which you have no control over.
-+ * Please stop calling this function. If you need to flush, please use your
-+ * own workqueue.
-  *
-  * In most situations flushing the entire workqueue is overkill; you merely
-  * need to know that a particular work item isn't queued and isn't running.
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 33f1106b4f99..8e6e64372441 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -2618,6 +2618,20 @@ static int rescuer_thread(void *__rescuer)
- 	goto repeat;
- }
- 
-+static void warn_flush_attempt(struct workqueue_struct *wq)
-+{
-+	static DEFINE_RATELIMIT_STATE(flush_warn_rs, 600 * HZ, 1);
-+
-+
-+	/* Use ratelimit for now in order not to flood warning messages. */
-+	ratelimit_set_flags(&flush_warn_rs, RATELIMIT_MSG_ON_RELEASE);
-+	if (!__ratelimit(&flush_warn_rs))
-+		return;
-+	/* Don't use WARN_ON() for now in order not to break kernel testing. */
-+	pr_warn("Please do not flush %s WQ.\n", wq->name);
-+	dump_stack();
-+}
-+
- /**
-  * check_flush_dependency - check for flush dependency sanity
-  * @target_wq: workqueue being flushed
-@@ -2635,6 +2649,9 @@ static void check_flush_dependency(struct workqueue_struct *target_wq,
- 	work_func_t target_func = target_work ? target_work->func : NULL;
- 	struct worker *worker;
- 
-+	if (unlikely(target_wq->flags & WQ_WARN_FLUSH_ATTEMPT))
-+		warn_flush_attempt(target_wq);
-+
- 	if (target_wq->flags & WQ_MEM_RECLAIM)
- 		return;
- 
-@@ -6054,18 +6071,20 @@ void __init workqueue_init_early(void)
- 		ordered_wq_attrs[i] = attrs;
- 	}
- 
--	system_wq = alloc_workqueue("events", 0, 0);
--	system_highpri_wq = alloc_workqueue("events_highpri", WQ_HIGHPRI, 0);
--	system_long_wq = alloc_workqueue("events_long", 0, 0);
--	system_unbound_wq = alloc_workqueue("events_unbound", WQ_UNBOUND,
-+	system_wq = alloc_workqueue("events", WQ_WARN_FLUSH_ATTEMPT, 0);
-+	system_highpri_wq = alloc_workqueue("events_highpri",
-+					    WQ_WARN_FLUSH_ATTEMPT | WQ_HIGHPRI, 0);
-+	system_long_wq = alloc_workqueue("events_long", WQ_WARN_FLUSH_ATTEMPT, 0);
-+	system_unbound_wq = alloc_workqueue("events_unbound", WQ_WARN_FLUSH_ATTEMPT | WQ_UNBOUND,
- 					    WQ_UNBOUND_MAX_ACTIVE);
--	system_freezable_wq = alloc_workqueue("events_freezable",
--					      WQ_FREEZABLE, 0);
--	system_power_efficient_wq = alloc_workqueue("events_power_efficient",
--					      WQ_POWER_EFFICIENT, 0);
--	system_freezable_power_efficient_wq = alloc_workqueue("events_freezable_power_efficient",
--					      WQ_FREEZABLE | WQ_POWER_EFFICIENT,
--					      0);
-+	system_freezable_wq =
-+		alloc_workqueue("events_freezable", WQ_WARN_FLUSH_ATTEMPT | WQ_FREEZABLE, 0);
-+	system_power_efficient_wq =
-+		alloc_workqueue("events_power_efficient",
-+				WQ_WARN_FLUSH_ATTEMPT | WQ_POWER_EFFICIENT, 0);
-+	system_freezable_power_efficient_wq =
-+		alloc_workqueue("events_freezable_power_efficient",
-+				WQ_WARN_FLUSH_ATTEMPT | WQ_FREEZABLE | WQ_POWER_EFFICIENT, 0);
- 	BUG_ON(!system_wq || !system_highpri_wq || !system_long_wq ||
- 	       !system_unbound_wq || !system_freezable_wq ||
- 	       !system_power_efficient_wq ||
--- 
-2.32.0
+		cpumask_and(cpus, sched_group_span(local), p->cpus_ptr);
+		imb = min(cpumask_weight(cpus), imb);
+	}
 
+As for most part, p->nr_cpus_allowed will be equal to num_online_cpus()
+unless user has specifically pinned the task.
+
+--
+Thanks and Regards,
+Prateek
 

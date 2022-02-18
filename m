@@ -2,141 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0B74BB606
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5744BB608
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbiBRKAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:00:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51060 "EHLO
+        id S233828AbiBRKAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:00:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiBRKAF (ORCPT
+        with ESMTP id S229993AbiBRKAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:00:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83AA2AE714;
-        Fri, 18 Feb 2022 01:59:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E79DB8249B;
-        Fri, 18 Feb 2022 09:59:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F5D2C340E9;
-        Fri, 18 Feb 2022 09:59:42 +0000 (UTC)
-Message-ID: <d33e96db-8cd0-08a5-7e73-742187ea6de5@xs4all.nl>
-Date:   Fri, 18 Feb 2022 10:59:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [RFC v2 0/8] Move HEVC stateless controls out of staging
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, jonas@kwiboo.se, nicolas@ndufresne.ca
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk
-References: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 18 Feb 2022 05:00:48 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D456B2AEDB8;
+        Fri, 18 Feb 2022 02:00:30 -0800 (PST)
+Received: from jleng.ambarella.net (unknown [180.169.129.130])
+        by mail-app3 (Coremail) with SMTP id cC_KCgDXv_IXbg9iV4Z4DQ--.27261S2;
+        Fri, 18 Feb 2022 17:59:56 +0800 (CST)
+From:   3090101217@zju.edu.cn
+To:     gregkh@linuxfoundation.org
+Cc:     balbi@kernel.org, colin.king@intel.com, jackp@codeaurora.org,
+        jbrunet@baylibre.com, jleng@ambarella.com,
+        pavel.hofman@ivitera.com, pawell@cadence.com,
+        ruslan.bilovol@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v4] usb: gadget: f_uac2: fix superspeed transfer
+Date:   Fri, 18 Feb 2022 17:59:48 +0800
+Message-Id: <20220218095948.4077-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <Yg5onoldRY3ygW7v@kroah.com>
+References: <Yg5onoldRY3ygW7v@kroah.com>
+X-CM-TRANSID: cC_KCgDXv_IXbg9iV4Z4DQ--.27261S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw1UWFWxtFykAF1UGryxAFb_yoWrGrW3pw
+        n8C39rtrW5Ar1a9a1rAr48Ar43AFWIyayYkw4Ivw1YvF4Sq34ktF1IyryYkFyDAFyjyw10
+        vF4jkw47u3Zrur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPGb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2vYz4IE4I80cI0F6IAv
+        xc0EwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+        Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7
+        xC0wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
+        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
+        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
+        x2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
+        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
+        yTuYvjxUx189DUUUU
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwMFBVNG3FklugABsO
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+From: Jing Leng <jleng@ambarella.com>
 
-On 15/02/2022 12:00, Benjamin Gaignard wrote:
-> This series aims to make HEVC uapi stable and usable for hardware
-> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
-> and 2 out of the tree drivers (rkvdec and RPI).
-> 
-> The 3 first patches are from Hans to implement v4l2 dynamic control
-> feature which is need by patch 7 for V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET
-> definition.
-> 
-> Patch 4 move the existing uapi to stable, including definitions renaming 
-> and CID number change to fit with v4l2 naming.
-> 
-> Patches 5 and 7 add fields needed for rkvdec and RPI decoders.
-> 
-> Patches 6 is cleaning up the uapi of useless field.
-> Patches 8 change one field description and name to define offset by
-> bytes rather than by bits
+On page 362 of the USB3.2 specification (
+https://usb.org/sites/default/files/usb_32_20210125.zip),
+The 'SuperSpeed Endpoint Companion Descriptor' shall only be returned
+by Enhanced SuperSpeed devices that are operating at Gen X speed.
+Each endpoint described in an interface is followed by a 'SuperSpeed
+Endpoint Companion Descriptor'.
 
-I have some housekeeping questions:
+If users use SuperSpeed UDC, host can't recognize the device if endpoint
+doesn't have 'SuperSpeed Endpoint Companion Descriptor' followed.
 
-I have several older HEVC-related patches from you, which of those are still
-valid?
+Currently in the uac2 driver code:
+1. ss_epout_desc_comp follows ss_epout_desc;
+2. ss_epin_fback_desc_comp follows ss_epin_fback_desc;
+3. ss_epin_desc_comp follows ss_epin_desc;
+4. Only ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
+Companion Descriptor' followed, so we should add it.
 
-"[v4,0/9] Additional features for Hantro HEVC":
-https://patchwork.linuxtv.org/project/linux-media/cover/20210625141143.577998-1-benjamin.gaignard@collabora.com/
+Fixes: eaf6cbe09920 ("usb: gadget: f_uac2: add volume and mute support")
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ChangeLog v3->v4:
+- Add "Fixes:" tag in the changelog area
+ChangeLog v2->v3:
+- Remove static variables which are explicitly initialized to 0
+- Remove redundant modification "case USB_SPEED_SUPER_PLUS:"
+ChangeLog v1->v2:
+- Update more detailed description of the PATCH
+---
+ drivers/usb/gadget/function/f_uac2.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-"media: hevc: fix pictures lists type":
-https://patchwork.linuxtv.org/project/linux-media/patch/20210823082949.237716-1-benjamin.gaignard@collabora.com/
-
-"media: hantro: Trace hevc hw cycles performance register":
-https://patchwork.linuxtv.org/project/linux-media/patch/20210823135606.633052-1-benjamin.gaignard@collabora.com/
-
-"media: hantro: Add support of compressed reference buffers"
-https://patchwork.linuxtv.org/project/linux-media/patch/20210823162916.824336-1-benjamin.gaignard@collabora.com/
-
-Before moving the HEVC API out of staging I would prefer to have any remaining
-issues fixed. So one series that adds any remaining fixes (i.e. from the older patches
-mentioned above), and a second series on top that moves it out of staging.
-
-That way I can mark the older patches as Superseded, and we have a
-fresh series that we can discuss.
-
-Regards,
-
-	Hans
-
-> 
-> Benjamin
-> 
-> Benjamin Gaignard (5):
->   media: uapi: Move HEVC stateless controls out of staging
->   media: uapi: Add fields needed for RKVDEC driver
->   media: uapi: Remove bit_size field from v4l2_ctrl_hevc_slice_params
->   media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
->   media: uapi: Change data_bit_offset definition
-> 
-> Hans Verkuil (3):
->   videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
->   v4l2-ctrls: add support for dynamically allocated arrays.
->   vivid: add dynamic array test control
-> 
->  .../userspace-api/media/drivers/hantro.rst    |   5 -
->  .../media/v4l/ext-ctrls-codec.rst             |  58 ++--
->  .../media/v4l/vidioc-queryctrl.rst            |   8 +
->  .../media/test-drivers/vivid/vivid-ctrls.c    |  15 ++
->  drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++++++--
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 182 ++++++++++---
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +--
->  drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
->  drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
->  drivers/staging/media/hantro/hantro_drv.c     |  27 +-
->  drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
->  drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
->  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
->  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  13 +-
->  include/linux/hantro-media.h                  |  17 ++
->  include/media/hevc-ctrls.h                    | 250 ------------------
->  include/media/v4l2-ctrls.h                    |  48 +++-
->  include/uapi/linux/v4l2-controls.h            | 224 ++++++++++++++++
->  include/uapi/linux/videodev2.h                |   8 +
->  19 files changed, 640 insertions(+), 408 deletions(-)
->  create mode 100644 include/linux/hantro-media.h
->  delete mode 100644 include/media/hevc-ctrls.h
-> 
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index 097a709549d6..b5baefe14013 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -282,6 +282,12 @@ static struct usb_endpoint_descriptor ss_ep_int_desc = {
+ 	.bInterval = 4,
+ };
+ 
++static struct usb_ss_ep_comp_descriptor ss_ep_int_desc_comp = {
++	.bLength = sizeof(ss_ep_int_desc_comp),
++	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
++	.wBytesPerInterval = cpu_to_le16(6),
++};
++
+ /* Audio Streaming OUT Interface - Alt0 */
+ static struct usb_interface_descriptor std_as_out_if0_desc = {
+ 	.bLength = sizeof std_as_out_if0_desc,
+@@ -595,7 +601,8 @@ static struct usb_descriptor_header *ss_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&in_feature_unit_desc,
+ 	(struct usb_descriptor_header *)&io_out_ot_desc,
+ 
+-  (struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc_comp,
+ 
+ 	(struct usb_descriptor_header *)&std_as_out_if0_desc,
+ 	(struct usb_descriptor_header *)&std_as_out_if1_desc,
+@@ -723,6 +730,7 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_fback_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
+ 	struct usb_endpoint_descriptor *epout_desc;
+ 	struct usb_endpoint_descriptor *epin_desc;
+ 	struct usb_endpoint_descriptor *epin_fback_desc;
+@@ -750,6 +758,7 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 		epin_fback_desc = &ss_epin_fback_desc;
+ 		epin_fback_desc_comp = &ss_epin_fback_desc_comp;
+ 		ep_int_desc = &ss_ep_int_desc;
++		ep_int_desc_comp = &ss_ep_int_desc_comp;
+ 	}
+ 
+ 	i = 0;
+@@ -778,8 +787,11 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 	if (EPOUT_EN(opts))
+ 		headers[i++] = USBDHDR(&io_out_ot_desc);
+ 
+-	if (FUOUT_EN(opts) || FUIN_EN(opts))
++	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
+ 		headers[i++] = USBDHDR(ep_int_desc);
++		if (ep_int_desc_comp)
++			headers[i++] = USBDHDR(ep_int_desc_comp);
++	}
+ 
+ 	if (EPOUT_EN(opts)) {
+ 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
+-- 
+2.17.1
 

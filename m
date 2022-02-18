@@ -2,55 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2EE4BC22E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5366C4BC23A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239929AbiBRVep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:34:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34810 "EHLO
+        id S239973AbiBRVhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:37:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236354AbiBRVem (ORCPT
+        with ESMTP id S235931AbiBRVhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:34:42 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92CA5BD03
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:34:24 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id m7-20020a056602018700b0064075a7ac3aso2239676ioo.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:34:24 -0800 (PST)
+        Fri, 18 Feb 2022 16:37:07 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB33436685
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:36:48 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id b11so7760363lfb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n9yp2F/tFbPYbNUub6ORMzULNCV7x8Jlyoxm8mDT9LM=;
+        b=Vzr8WauP0HUY6liDBBny5+hyIdwaYSB7eC8COVdVPuuehStAkuOCBNtdW+EB7vYzT/
+         H9gQvBm04uo+QRZ83sJECp7nWUQBFcYTMHJDcPZ+lXanfAEUq6V7a/pvQsdVqtAwbuuX
+         Aaww0DIIgs5T0c1t5HcDcI3J2P2t1VHfyX9Mae3YWroLW9EomXY6CfBCIiwX0rkND1Zm
+         uBza6AD97DSxFT4mwF+lecomueWaVfFNz6FJIucnwwjktFoZ9eFIRkVYzu/LbWdPrFO1
+         v40FUCYG/BhllxpVG7ljKeh7/cx79qEyJdClSBEJRS2I5JzmvaBL5v3JEKRojKabVPO1
+         LS5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=ESDhSXcBKMjopPYZv2w9C93Fs32sPD81EnUFCwe47Z8=;
-        b=1BAdAF6oyfntpWuQTxE2XBvh1V+4erodOd3p+KLb3f7m2qDnwTEIGlVU/q7KoCGcNg
-         fx8og5s53pKlzAYqdan82qA5wfV5PGw3/iHRidjHNnUD5bA4BxPLaFNMYjyaVCNGNAbV
-         tn92+LsxJODk4TH+Idtr5hnAeoRWSElJRCL3xsW4sRL1t+4y9DGx0SCeZWHRMlVnBTlA
-         mxFgepvU8NTj4ywm0f+XDzf5d9DWwDi0ZlEmzDS9vcAKJ3GupGXmVntsGiW1lSuNTdUM
-         AHcA70bUUi+S/SHzg8/r9AHrj5twZCoBmVSyg1Ai6SY2D7XRCpUDcRMO8+ckjU+9Pu5u
-         6ZxA==
-X-Gm-Message-State: AOAM533xxuHtUpygFUEPl4Cph56o87MVmB3NHSwUW/G1CsvKzdtah428
-        EXc29Lar4thtkdv7PAE+DOMbt5HBV0qGaY98TlNLigqXLFeN
-X-Google-Smtp-Source: ABdhPJwijr18CZvtR9XxK1PvZnkcu5gmF2lHkJyrHt3O3Z8dSibn5LNQzbfbLx58lPYXLyq/i7hG87TE3BFNHiMto1TlRjnzLNL0
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=n9yp2F/tFbPYbNUub6ORMzULNCV7x8Jlyoxm8mDT9LM=;
+        b=HiYe7/4jAlRwhzWIK+cydd1TSHYfPN9Qt04YxmavxzBrSAoPwMUtl1ZHkxoekZsiI/
+         z+EMCNMxI6OzlSPfQdBUH1VdP7qKGDvbsIePWDUTi4Ltq6AvK/kEhr2GVklDE0W/Hfrb
+         rFbKfj7dGYTLgcqQIPlyE3wvr9htfE32ObWFtPzFqGVZcBegh0pztk9MvWDULEV1UY9l
+         Z3T+oPAj8wFijq0hjjLgUgPnib2J0g9yucU2vU4gQBRwLCb6ycCs6g719HN2iVNKKrpW
+         qoHF1WOzUi/Swf5fSkjGn3N4oTL6iTD6PSHMW2DssIrG2cReaqcq71RtwXchjRR7nkok
+         QLfw==
+X-Gm-Message-State: AOAM5306IojxOckEr5H6qlpOhTX4HY8n2CsPfX60+LdDteKjIynKj1wM
+        IJi08uFGQj36zUbVC78jvmOGXw==
+X-Google-Smtp-Source: ABdhPJyg1rjvoJjmNealuZAHVqqpmiKSoqxUfMtoP0Z2gXj+zdSFLGc9yJCrsBJCytQTPBU0xzhdhQ==
+X-Received: by 2002:ac2:4e04:0:b0:442:bfb6:c832 with SMTP id e4-20020ac24e04000000b00442bfb6c832mr7105656lfr.519.1645220207016;
+        Fri, 18 Feb 2022 13:36:47 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id l24sm451725ljb.90.2022.02.18.13.36.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 13:36:46 -0800 (PST)
+Message-ID: <e8bd7d02-1de6-4de0-9b01-68152f22e8a2@linaro.org>
+Date:   Sat, 19 Feb 2022 00:36:45 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:190e:b0:2bf:ac1e:b5b7 with SMTP id
- w14-20020a056e02190e00b002bfac1eb5b7mr6853634ilu.304.1645220064174; Fri, 18
- Feb 2022 13:34:24 -0800 (PST)
-Date:   Fri, 18 Feb 2022 13:34:24 -0800
-In-Reply-To: <0000000000003118ba05d500cce1@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000080aa2705d851a531@google.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in nf_nat_setup_info (2)
-From:   syzbot <syzbot+cbcd154fce7c6d953d1c@syzkaller.appspotmail.com>
-To:     coreteam@netfilter.org, davem@davemloft.net, fw@strlen.de,
-        glider@google.com, kadlec@netfilter.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [Freedreno] [REPOST PATCH v4 08/13] drm/msm/disp/dpu1: Don't use
+ DSC with mode_3d
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        freedreno@lists.freedesktop.org
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-9-vkoul@kernel.org>
+ <67006cc4-3385-fe03-bb4d-58623729a8a8@quicinc.com> <Yg3mvEvqYs89dJWI@matsya>
+ <4b89f5fe-0752-3c6a-3fb0-192f1f2e7b9e@quicinc.com>
+ <acf0a2a2-f2e5-906a-3c51-525abd18ee6f@linaro.org>
+ <a38432a8-7920-e26d-7391-a49bebbc57f9@quicinc.com>
+ <9f1e2df6-4f28-1d91-7654-ff2d9339dfd9@linaro.org>
+ <5b27912e-3e49-675e-86f5-ac6be8dc21c5@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <5b27912e-3e49-675e-86f5-ac6be8dc21c5@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,84 +89,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 19/02/2022 00:29, Abhinav Kumar wrote:
+> 
+> 
+> On 2/18/2022 1:21 PM, Dmitry Baryshkov wrote:
+>> On 18/02/2022 23:46, Abhinav Kumar wrote:
+>>>
+>>>
+>>> On 2/16/2022 11:12 PM, Dmitry Baryshkov wrote:
+>>>> On 17/02/2022 09:33, Abhinav Kumar wrote:
+>>>>>
+>>>>>
+>>>>> On 2/16/2022 10:10 PM, Vinod Koul wrote:
+>>>>>> On 16-02-22, 19:11, Abhinav Kumar wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> On 2/10/2022 2:34 AM, Vinod Koul wrote:
+>>>>>>>> We cannot enable mode_3d when we are using the DSC. So pass
+>>>>>>>> configuration to detect DSC is enabled and not enable mode_3d
+>>>>>>>> when we are using DSC
+>>>>>>>>
+>>>>>>>> We add a helper dpu_encoder_helper_get_dsc() to detect dsc
+>>>>>>>> enabled and pass this to .setup_intf_cfg()
+>>>>>>>>
+>>>>>>>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>>>>>>>
+>>>>>>> We should not use 3D mux only when we use DSC merge topology.
+>>>>>>> I agree that today we use only 2-2-1 topology for DSC which means 
+>>>>>>> its using
+>>>>>>> DSC merge.
+>>>>>>>
+>>>>>>> But generalizing that 3D mux should not be used for DSC is not 
+>>>>>>> right.
+>>>>>>>
+>>>>>>> You can detect DSC merge by checking if there are two encoders 
+>>>>>>> and one
+>>>>>>> interface in the topology and if so, you can disable 3D mux.
+>>>>>>
+>>>>>> Right now with DSC we disable that as suggested by Dmitry last time.
+>>>>>> Whenever we introduce merge we should revisit this, for now this 
+>>>>>> should
+>>>>>> suffice
+>>>>>>
+>>>>>
+>>>>> Sorry I didnt follow.
+>>>>>
+>>>>> The topology which you are supporting today IS DSC merge 2-2-1. I 
+>>>>> didnt get what you mean by "whenever we introduce".
+>>>>>
+>>>>> I didnt follow Dmitry's comment either.
+>>>>>
+>>>>> "anybody adding support for SDE_RM_TOPOLOGY_DUALPIPE_3DMERGE_DSC 
+>>>>> handle this."
+>>>>>
+>>>>> 3D mux shouldnt be used when DSC merge is used.
+>>>>>
+>>>>> The topology Dmitry is referring to will not use DSC merge but you 
+>>>>> are using it here and thats why you had to make this patch in the 
+>>>>> first place. So I am not sure why would someone who uses 3D merge 
+>>>>> topology worry about DSC merge. Your patch is the one which deals 
+>>>>> with the topology in question.
+>>>>>
+>>>>> What I am suggesting is a small but necessary improvement to this 
+>>>>> patch.
+>>>>
+>>>> It seems that we can replace this patch by changing 
+>>>> dpu_encoder_helper_get_3d_blend_mode() to contain the following 
+>>>> condition (instead of the one present there). Does the following 
+>>>> seem correct to you:
+>>>>
+>>>> static inline enum dpu_3d_blend_mode 
+>>>> dpu_encoder_helper_get_3d_blend_mode(
+>>>>                  struct dpu_encoder_phys *phys_enc)
+>>>> {
+>>>>          struct dpu_crtc_state *dpu_cstate;
+>>>>
+>>>>          if (!phys_enc || phys_enc->enable_state == DPU_ENC_DISABLING)
+>>>>                  return BLEND_3D_NONE;
+>>>>
+>>>>          dpu_cstate = to_dpu_crtc_state(phys_enc->parent->crtc->state);
+>>>>
+>>>> +    /* Use merge_3d unless DSCMERGE topology is used */
+>>>>          if (phys_enc->split_role == ENC_ROLE_SOLO &&
+>>>> +           hweight(dpu_encoder_helper_get_dsc(phys_enc)) != 1 &&
+>>
+>> Yes, the correct should be:
+>> hweight(...) == 2
+>>
+>>>>              dpu_cstate->num_mixers == CRTC_DUAL_MIXERS)
+>>>>                  return BLEND_3D_H_ROW_INT;
+>>>>
+>>>>          return BLEND_3D_NONE;
+>>>> }
+>>>
+>>> This will not be enough. To detect whether DSC merge is enabled you 
+>>> need to query the topology. The above condition only checks if DSC is 
+>>> enabled not DSC merge.
+>>>
+>>> So the above function can be modified to use a helper like below 
+>>> instead of the hweight.
+>>>
+>>> bool dpu_encoder_get_dsc_merge_info(struct dpu_encoder_virt *dpu_enc)
+>>> {
+>>>      struct msm_display_topology topology = {0};
+>>>
+>>>      topology = dpu_encoder_get_topology(...);
+>>>
+>>>      if (topology.num_dsc > topology.num_intf)
+>>
+>> num_intf is 1 or 2. If it's one, the split_role is SOLO
+>> hweight would return a num of bits in the DSC mask. It's 0, 1 or 2.
+>> So, if the split_role is SOLO and hweight is 2, we get exactly your 
+>> condition.
+>>
+> num_intf is 1 in this case as only single interface is used. But even 4 
+> dsc encoders going to 2 interfaces its DSC merge. So assuming num_intf 
+> as 1 always is not right. Thats why I suggested a generalized confition 
+> like above.
 
-HEAD commit:    724946410067 x86: kmsan: enable KMSAN builds for x86
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=17b02532700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76f99026248b24e4
-dashboard link: https://syzkaller.appspot.com/bug?extid=cbcd154fce7c6d953d1c
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1659ab4c700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1621cbf2700000
+Ah, quadpipe. Yes, then I was incorrect.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cbcd154fce7c6d953d1c@syzkaller.appspotmail.com
+> 
+>> Does that sound correct?
+>>
+>>>          return true;
+>>>      else
+>>>          return false;
+>>> }
+>>>
+>>> if (!dpu_encoder_get_dsc_merge_info() && other conditions listed above)
+>>>      return BLEND_3D_H_ROW_INT;
+>>> else
+>>>      BLEND_3D_NONE;
+>>>>
+>>>>
+>>>>>
+>>>>> All that you have to do is in query whether DSC merge is used from 
+>>>>> the topology. You can do it in multiple ways:
+>>>>>
+>>>>> 1) Either query this from the encoder
+>>>>> 2) Store a bool "dsc_merge" in the intf_cfg
+>>>>>
+>>>>
+>>>>
+>>
+>>
 
-=====================================================
-BUG: KMSAN: uninit-value in get_unique_tuple net/netfilter/nf_nat_core.c:548 [inline]
-BUG: KMSAN: uninit-value in nf_nat_setup_info+0x628/0x4a40 net/netfilter/nf_nat_core.c:642
- get_unique_tuple net/netfilter/nf_nat_core.c:548 [inline]
- nf_nat_setup_info+0x628/0x4a40 net/netfilter/nf_nat_core.c:642
- nfnetlink_parse_nat_setup+0xb86/0xcf0
- ctnetlink_parse_nat_setup+0xde/0x390 net/netfilter/nf_conntrack_netlink.c:1845
- ctnetlink_setup_nat net/netfilter/nf_conntrack_netlink.c:1920 [inline]
- ctnetlink_create_conntrack net/netfilter/nf_conntrack_netlink.c:2325 [inline]
- ctnetlink_new_conntrack+0x1d5d/0x4240 net/netfilter/nf_conntrack_netlink.c:2452
- nfnetlink_rcv_msg+0xe0a/0xf80 net/netfilter/nfnetlink.c:296
- netlink_rcv_skb+0x40c/0x7e0 net/netlink/af_netlink.c:2494
- nfnetlink_rcv+0x667/0x4740 net/netfilter/nfnetlink.c:654
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x1093/0x1360 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x14d9/0x1720 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmsg+0x704/0x840 net/socket.c:2496
- __do_sys_sendmsg net/socket.c:2505 [inline]
- __se_sys_sendmsg net/socket.c:2503 [inline]
- __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2503
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Uninit was created at:
- __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5429
- alloc_pages+0xa08/0xd50
- alloc_slab_page mm/slub.c:1816 [inline]
- allocate_slab+0x29e/0x1b00 mm/slub.c:1961
- new_slab mm/slub.c:2021 [inline]
- ___slab_alloc+0xb52/0x1da0 mm/slub.c:3035
- __slab_alloc mm/slub.c:3122 [inline]
- slab_alloc_node mm/slub.c:3213 [inline]
- slab_alloc mm/slub.c:3255 [inline]
- kmem_cache_alloc+0xbb3/0x11c0 mm/slub.c:3260
- __nf_conntrack_alloc+0x232/0x7f0 net/netfilter/nf_conntrack_core.c:1553
- init_conntrack+0x29b/0x24c0 net/netfilter/nf_conntrack_core.c:1634
- resolve_normal_ct net/netfilter/nf_conntrack_core.c:1745 [inline]
- nf_conntrack_in+0x1abc/0x3130 net/netfilter/nf_conntrack_core.c:1903
- ipv4_conntrack_in+0x68/0x80 net/netfilter/nf_conntrack_proto.c:191
- nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
- nf_hook_slow net/netfilter/core.c:619 [inline]
- nf_hook_slow_list+0x358/0xb40 net/netfilter/core.c:657
- NF_HOOK_LIST include/linux/netfilter.h:343 [inline]
- ip_sublist_rcv+0x1411/0x14a0 net/ipv4/ip_input.c:607
- ip_list_rcv+0x930/0x970 net/ipv4/ip_input.c:644
- __netif_receive_skb_list_ptype net/core/dev.c:5394 [inline]
- __netif_receive_skb_list_core+0xdf9/0x11f0 net/core/dev.c:5442
- __netif_receive_skb_list+0x7e3/0x940 net/core/dev.c:5494
- netif_receive_skb_list_internal+0x848/0xdc0 net/core/dev.c:5585
- gro_normal_list include/net/gro.h:425 [inline]
- napi_complete_done+0x579/0xdc0 net/core/dev.c:5932
- virtqueue_napi_complete drivers/net/virtio_net.c:339 [inline]
- virtnet_poll+0x17a4/0x2340 drivers/net/virtio_net.c:1554
- __napi_poll+0x14c/0xc00 net/core/dev.c:6365
- napi_poll net/core/dev.c:6432 [inline]
- net_rx_action+0x7e2/0x1820 net/core/dev.c:6519
- __do_softirq+0x1ee/0x7c5 kernel/softirq.c:558
-
-CPU: 1 PID: 3471 Comm: syz-executor142 Not tainted 5.17.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
-
+-- 
+With best wishes
+Dmitry

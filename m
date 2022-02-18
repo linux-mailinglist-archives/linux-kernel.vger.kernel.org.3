@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB474BBFA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419014BBFAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbiBRSjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:39:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46264 "EHLO
+        id S239328AbiBRSkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:40:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235292AbiBRSjp (ORCPT
+        with ESMTP id S235292AbiBRSkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:39:45 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903C524089;
-        Fri, 18 Feb 2022 10:39:28 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id a8so16999386ejc.8;
-        Fri, 18 Feb 2022 10:39:28 -0800 (PST)
+        Fri, 18 Feb 2022 13:40:06 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEE92A0729
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:39:49 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id u12so7805898plf.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:39:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XPv9wzgm5eXSDUL7FuIzzc3fU8coeepn/zPu2iCKfKE=;
-        b=MQG9PtAMTNn84e/Kw4NUhvpfYiTfAIAmqT1PGJ0wORN2nQScSDWvyiBZhwbSGBHIzq
-         RW1yi1QXAVKcL4Bgotb3ErSLUZjmTIPXx6GdnWcwSbVQ7BJ9MvPv0zsyJu5RfG7KPv9U
-         oiYEPpB3YydS7XujQSw2pkbc1teoGRWpf2mJJmXfroVuQPyaFCLwhOM1KK8b58hWRYTP
-         dVf9Y0Cm9dd3ugcjU4j622YN/KpntKCh+4v14/hEtp1IlZYNet7+zUtsxQWraDl90UFs
-         IzrQWkYVmVHGFgjP8+koTbT/XHNfkyQouPYQEjW5HO8xr85UoA+tK1aKuXqkkP7Y5d2H
-         4dvA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z6Bvj05xcHZ8scACXRLrqFmVNNP/kVQ38WCNRoc9XKw=;
+        b=rxk0jwB8ICLKh+8xaKXBp+1GzMw8O3daGo7CE8qC+eNNHZUl5rhvpsxPc+UkJtI9Ma
+         KeZVPi9IRBNVjqLEJ+8R50hnUHGRKf56Ufo3ibpmdEciJ39pOv29hlXCt7YMhpLhcUEo
+         HUzWguhARNtG9UbfU2cyuBn9ejeRfbvfS3MRi3BVrEHEIgziCmp2twyApgtveBjZY7AA
+         sOuTFg6TR9vDcJR3tBxfo9zRB1ayCW/T1YkWUOHacvs9Cg10bh8ZD2XHmrqaylELbP6S
+         Fw0y2/FuiOBOdI87r4ncpeVYTQzwFBhefTG/leFRrd8fac2nrgmfiX//dR8VQpyDsyI9
+         TAdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XPv9wzgm5eXSDUL7FuIzzc3fU8coeepn/zPu2iCKfKE=;
-        b=nRSz6c5FsJjlEyG4+4xoIgAfVv8qqg5l1k9aXA3+Jk1Cc+ZP3A6c0XxEB2CX5J4FuV
-         rfdZFuXxabzNhDMuXlHEohBSOWGRzbc9Y+Fwt7syPOuO/SfuXdGHnLC5K3lhfCm/J5IU
-         ih9BbXNk2/5LeLnkdWPGJRuKx/k2yOCOipDQA9TOHFJ+dILGNv4Nxx0h4uHUUJJBns7v
-         LGtQA+TF9QoMcj/UZD6zO5dK8UyRqzF1xpKHZ1tMESWZorcJcPUT/R1Ie2vepan4dSKW
-         rQ/vVbrwz/APD/VMRo20Rh6SpcjFNQyjTcINTlavI9djToUoy2s3Wo4HnZVVz2vSxnUw
-         iD7A==
-X-Gm-Message-State: AOAM532soU9U9U8rrCFfKhRW3YVAUJcDrbL6HFWDKze8jvdh62cy3/ux
-        spDor5Ai1wQoiGDUvZuN8HhWLWygD67vzg==
-X-Google-Smtp-Source: ABdhPJw84HaIb839BtmITA2w3xH5gEkODoWbn6CWobM0f3YrOlMC8w5JIUmCdf5QqzA/Svg6BVlnKA==
-X-Received: by 2002:a17:906:2846:b0:6ce:21cd:5398 with SMTP id s6-20020a170906284600b006ce21cd5398mr7714653ejc.49.1645209567050;
-        Fri, 18 Feb 2022 10:39:27 -0800 (PST)
-Received: from ?IPV6:2a00:a040:197:458f:c93a:90a3:1c34:c6d2? ([2a00:a040:197:458f:c93a:90a3:1c34:c6d2])
-        by smtp.gmail.com with ESMTPSA id i5sm5068089edc.94.2022.02.18.10.39.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 10:39:26 -0800 (PST)
-Message-ID: <26d74eaa-5c6a-4103-cf77-1356173a3978@gmail.com>
-Date:   Fri, 18 Feb 2022 20:39:24 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z6Bvj05xcHZ8scACXRLrqFmVNNP/kVQ38WCNRoc9XKw=;
+        b=G2Rwhx37mepP3mvABIKZQEeSN28ScaOzl107CwmSGgZvsBeGbTAwr0+bqlSIK3Ggnt
+         IP9F32q5Ubvu+ZriEDSF9hm9hr+Z71zgcGcuJcXeVIczOKRekqFvkoQufarZR5mTYS35
+         uyUkqKjwQcVJ5tALHkIZoIdok1xRyKvK0mJ9b6IMwkYx8mQVXqxM5rQ3k3awTeTY6Jdg
+         dWGOT76CNqgP+wLbpCwgM0OYtAKcIsr0vTwUDCnUdIBl2s6BXE1FZWab4eHIRISWjfE1
+         6K1ErpXJiuV8jVyIielWRY3r3R/d8aa67IWs3O/H/W1mq4bElzVSdubi3DzsbDGlfVnt
+         Hhfw==
+X-Gm-Message-State: AOAM5300Vpqn8ea367wjKZnb10UQ1+gPEJRZ+xn7Juqpj5qPiF43JNNR
+        rmRyHitlGWB/aXGi6Lro4foYe/c5Bs5LKg==
+X-Google-Smtp-Source: ABdhPJzjq13fjwW0o9GeWGu5+HhZkEk3XYCmh4PYDrDLtL3cQaeU7+asPz9j0b75b+hI9CssfaYEIQ==
+X-Received: by 2002:a17:90a:bb0e:b0:1b9:fffa:f030 with SMTP id u14-20020a17090abb0e00b001b9fffaf030mr9613386pjr.206.1645209588900;
+        Fri, 18 Feb 2022 10:39:48 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id on17sm104807pjb.40.2022.02.18.10.39.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 10:39:48 -0800 (PST)
+Date:   Fri, 18 Feb 2022 18:39:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 08/18] KVM: x86/mmu: do not pass vcpu to root freeing
+ functions
+Message-ID: <Yg/n8dC7Umd5x0m6@google.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-9-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] kconfig: Show menuconfigs as menus in the .config
- file
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211213100043.45645-1-arielmarcovitch@gmail.com>
- <20211213100043.45645-2-arielmarcovitch@gmail.com>
- <CAK7LNAS+Df_V-B9Qy_39hgUZF1b6UeiHQ5m-25JekiVYSQ67dQ@mail.gmail.com>
-From:   Ariel Marcovitch <arielmarcovitch@gmail.com>
-In-Reply-To: <CAK7LNAS+Df_V-B9Qy_39hgUZF1b6UeiHQ5m-25JekiVYSQ67dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217210340.312449-9-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,128 +72,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> These functions only operate on a given MMU, of which there are two in a vCPU.
 
-On 18/01/2022 20:20, Masahiro Yamada wrote:
-> On Mon, Dec 13, 2021 at 7:01 PM Ariel Marcovitch
-> <arielmarcovitch@gmail.com> wrote:
->> Until now, menuconfigs were considered configs because they had non-zero
->> sym attribute. This meant that instead of having the nice menu comment
->> block in the .config output file, they were merely shown as single
->> configs.
->>
->> For example:
->> ```Kconfig
->> menu "Foo"
->> endmenu
->>
->> menuconfig BAR
->>          bool "Bar"
->>
->> config OTHER
->>          bool "Other"
->>          depends on BAR
->> ```
->>
->> Will be shown as:
->> ```.config
->>   #
->>   # Foo
->>   #
->>   # end of Foo
->
-> I am OK with this patch.
->
-> Just a nit.
->
-> As far as I tested your sample code (without applying this patch),
-> I did not see the line "# end of Foo".
->
-> The line "# end of ..." is printed when the last child gets back to
-> its parent, but the "Foo" menu has no child menu here.
->
-> This is out of scope of this patch, but can you update the
-> commit log so it matches the current behavior?
+Technically 3, but one is only used to walk guest pages tables ;-)
 
-I saw you added a patch to change that, so now the code sample here is 
-less of a lie :)
+> They also need a struct kvm in order to lock the mmu_lock, but they do not
+> needed anything else in the struct kvm_vcpu.  So, pass the vcpu->kvm directly
+> to them.
 
-I learned my message of never adding code samples to commit messages 
-without testing these as well :)
+Wrapping at ~75 chars is preferred for changelogs.
 
-So is it ready now to be applied on top of your change?
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
 
-> (or add one config into the "Foo" menu)
->
->
->
->
->
->
->
->>   CONFIG_BAR=y
->>   CONFIG_OTHER=y
->> ```
->>
->> Instead of using the sym attribute to decide whether or not to print the
->> menu block comment, check menu->prompt->type explicitly (after checking
->> that menu_is_visible(menu) which means menu->prompt is not none). The
->> only prompt types we actually show as menus are P_MENU and P_COMMENT. At
->> the end of the menu we need to show the end of block only for P_MENU
->> (although P_COMMENT prompts will not get to this flow because they don't
->> have children).
->>
->> Signed-off-by: Ariel Marcovitch <arielmarcovitch@gmail.com>
->> ---
->>   scripts/kconfig/confdata.c | 28 +++++++++++++++++-----------
->>   1 file changed, 17 insertions(+), 11 deletions(-)
->>
->> diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
->> index 42bc56ee238c..9f2c22f46ee0 100644
->> --- a/scripts/kconfig/confdata.c
->> +++ b/scripts/kconfig/confdata.c
->> @@ -874,16 +874,21 @@ int conf_write(const char *name)
->>          menu = rootmenu.list;
->>          while (menu) {
->>                  sym = menu->sym;
->> -               if (!sym) {
->> -                       if (!menu_is_visible(menu))
->> -                               goto next;
->> -                       str = menu_get_prompt(menu);
->> -                       fprintf(out, "\n"
->> -                                    "#\n"
->> -                                    "# %s\n"
->> -                                    "#\n", str);
->> -                       need_newline = false;
->> -               } else if (!(sym->flags & SYMBOL_CHOICE) &&
->> +
->> +               if (menu_is_visible(menu)) {
->> +                       enum prop_type type = menu->prompt->type;
->> +
->> +                       if (type == P_MENU || type == P_COMMENT) {
->> +                               str = menu_get_prompt(menu);
->> +                               fprintf(out, "\n"
->> +                                       "#\n"
->> +                                       "# %s\n"
->> +                                       "#\n", str);
->> +                               need_newline = false;
->> +                       }
->> +               }
->> +
->> +               if (sym && !(sym->flags & SYMBOL_CHOICE) &&
->>                             !(sym->flags & SYMBOL_WRITTEN)) {
->>                          sym_calc_value(sym);
->>                          if (!(sym->flags & SYMBOL_WRITE))
->> @@ -904,7 +909,8 @@ int conf_write(const char *name)
->>                  if (menu->next)
->>                          menu = menu->next;
->>                  else while ((menu = menu->parent)) {
->> -                       if (!menu->sym && menu_is_visible(menu) &&
->> +                       if (menu_is_visible(menu) &&
->> +                           menu->prompt->type == P_MENU &&
->>                              menu != &rootmenu) {
->>                                  str = menu_get_prompt(menu);
->>                                  fprintf(out, "# end of %s\n", str);
->> --
->> 2.25.1
->>
+Reviewed-by: Sean Christopherson <seanjc@google.com>

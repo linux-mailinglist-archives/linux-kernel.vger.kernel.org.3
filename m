@@ -2,477 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF044BC2DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 00:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6044BC2E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 00:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239937AbiBRX3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 18:29:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48066 "EHLO
+        id S240173AbiBRXgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 18:36:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiBRX3G (ORCPT
+        with ESMTP id S235291AbiBRXgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 18:29:06 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D1011D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:28:46 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id c23so4691666ioi.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:28:46 -0800 (PST)
+        Fri, 18 Feb 2022 18:36:14 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA3523088C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:35:56 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 195so9121367pgc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:35:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=WdyRbSqxjRN1Kn8UJVUm0MbimiQX+217FfELPaU3/mo=;
-        b=So2XH78/2595kAYYKMXPWI9MBLaanBtHaVGj+8tMhL2jAiQtdtMjFgn2Wt6CDsh/u3
-         TR34w2Vl+WqieKRHoe0bR0w2XuiMfdnv3LrzFE+B6Vcs0jGSHaHGs51Oii2MuvHVZrFh
-         I/IZ0LRqi7EEW7qvKWvYWPRgRj8BzKHB4vSDM=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FZsLTrBtK3TIKi6znBawoZ+YQgveHVMJBjVViZ+ZI9I=;
+        b=ocTW4xYVtEUiFTHfgGa+DOZ3/hoX+WD3Wf1H9QiD5tNx13dO4c3aByIXRRfjIIw26T
+         ec/0nrFthMMRbJVd+vUeV9kFC/Qb8/iaklFLAnfJOcSWpOIcyLpAs7hhwIeYqa8zJbRE
+         tn8pgie1KedOUPI9ejghACw/hdQ3HJIaaXV60=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WdyRbSqxjRN1Kn8UJVUm0MbimiQX+217FfELPaU3/mo=;
-        b=0Iy42aDCkK2wK7OSItOM1vp/3Rr7sQtjYGMcRDFrylIKS7xpUAPq5+b8z3oNM84s59
-         9uCzNHGlHTGBzNGWG4/xHnq15UxhJQb+ZkcXhnUjPcpC9awYdJVqqRdOE0tM1FyjcXru
-         QrC+D9vxBVboKb5DZhckjZGmPbEdQ78xQrhvQbGsGa7f0ER2pwrTmA0cscc1vKbBG8w9
-         c4S6tUsz4hEmHMsZxAP9m+q8FT/VqHFbJx/Moa7k+cLLi981xwyDDNUmlJdN/Ww0ktjd
-         pICtoEIuXOo6hWoDAXBt+kQ7+D3GuLFkHRmqdT1ZTGSep/ygZfzOsDp+182dGa2AYZgU
-         5OYg==
-X-Gm-Message-State: AOAM531IaQhHrWwnXL/rYaK9FHqeZv7pbIJNNubERQ5aAJNDfhBRxFEU
-        vVj+AkIRKofhA760fjJ173kVKw==
-X-Google-Smtp-Source: ABdhPJxmcycqlgoMN58L6oxhcMc4rumhOI+6qqD7jI8B6nrdWJoKhQN+KJXjBlbPEIJq21Mo9AC9CQ==
-X-Received: by 2002:a02:cc55:0:b0:311:bd14:fe74 with SMTP id i21-20020a02cc55000000b00311bd14fe74mr6960161jaq.84.1645226926133;
-        Fri, 18 Feb 2022 15:28:46 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id m14sm3821705ioj.34.2022.02.18.15.28.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 15:28:45 -0800 (PST)
-Subject: Re: [PATCH 3/3] selftests: drivers/s390x: Add uvdevice tests
-To:     Steffen Eiden <seiden@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220217113717.46624-1-seiden@linux.ibm.com>
- <20220217113717.46624-4-seiden@linux.ibm.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e624fe39-51e2-cfd0-fcdc-d04080272386@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 16:28:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=FZsLTrBtK3TIKi6znBawoZ+YQgveHVMJBjVViZ+ZI9I=;
+        b=pQW0ObXmW2IXvav5onXu4ab8jhiVcca49vqCvhfuXwVVt09N8vknuPCi88uzsdD/bT
+         qz/XUWq7sB2RvyoTuOLGZeT3vwMzUY5Qxb+sPCZRURPjz5x/G9+h6cRo0aF1XswqScUk
+         Xirmx1nwFE3w+K6oEwlTZsAl2KLVYgSB7H5M52GNCqmb8WtmbF2f1l2n1o5v+WbKwLzn
+         M7NcsYE8GquaLJ3aqb4fW3yJ2xR67EMYNHrm21MrIf7NBwuhI3CgJoaLnroFWDDZ4+0v
+         dZus5nv7fGgbeMMKYRtlTc2B0sL4ZF489obYeJJb/Iq4HoxxBljJiMZM/EkPUvASS17+
+         QC7A==
+X-Gm-Message-State: AOAM5310eWgrr2USod7l7kzMk5jdjWAm3ZO5xrnfcqTfmzF10j1jYxDO
+        oipgIxN/Gi/7WUyku8lhqkRLzjvvSZx+4Gvw
+X-Google-Smtp-Source: ABdhPJzOVNsmTySJHEEohgFGoycKrY0tIQxTBWSDZG2SaaSNf3OYI9SLqmPS3zPPoS/8g11Q03/1sw==
+X-Received: by 2002:a05:6a00:c95:b0:4e1:3259:f7ad with SMTP id a21-20020a056a000c9500b004e13259f7admr9717807pfv.43.1645227356208;
+        Fri, 18 Feb 2022 15:35:56 -0800 (PST)
+Received: from wmahon.c.googlers.com.com (218.180.124.34.bc.googleusercontent.com. [34.124.180.218])
+        by smtp.gmail.com with ESMTPSA id i17sm11967109pgv.8.2022.02.18.15.35.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 15:35:55 -0800 (PST)
+From:   William Mahon <wmahon@chromium.org>
+X-Google-Original-From: William Mahon <wmahon@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     William Mahon <wmahon@google.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org
+Subject: [PATCH v2] HID: Add mapping for KEY_ALL_APPLICATIONS
+Date:   Fri, 18 Feb 2022 23:35:49 +0000
+Message-Id: <20220218233350.1.I3a7746ad05d270161a18334ae06e3b6db1a1d339@changeid>
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
 MIME-Version: 1.0
-In-Reply-To: <20220217113717.46624-4-seiden@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 4:37 AM, Steffen Eiden wrote:
-> Adds some selftests to test ioctl error paths of the uv-uapi.
-> 
+This patch adds a new key definition for KEY_ALL_APPLICATIONS
+which is an alias of KEY_DASHBOARD.
 
-Please add information on how to run this test and example output.
+It also maps the 0x0c/0x2a2 usage code to KEY_ALL_APPLICATIONS.
 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-> ---
->   MAINTAINERS                                   |   1 +
->   tools/testing/selftests/Makefile              |   1 +
->   tools/testing/selftests/drivers/.gitignore    |   1 +
->   .../selftests/drivers/s390x/uvdevice/Makefile |  22 ++
->   .../selftests/drivers/s390x/uvdevice/config   |   1 +
->   .../drivers/s390x/uvdevice/test_uvdevice.c    | 280 ++++++++++++++++++
->   6 files changed, 306 insertions(+)
->   create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/Makefile
->   create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/config
->   create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c7d8d0fe48cf..c6a0311c3fa8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10462,6 +10462,7 @@ F:	arch/s390/kernel/uv.c
->   F:	arch/s390/kvm/
->   F:	arch/s390/mm/gmap.c
->   F:	drivers/s390/char/uvdevice.c
-> +F:	tools/testing/selftests/drivers/s390x/uvdevice/
->   F:	tools/testing/selftests/kvm/*/s390x/
->   F:	tools/testing/selftests/kvm/s390x/
->   
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index c852eb40c4f7..3b8abaee9271 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -9,6 +9,7 @@ TARGETS += core
->   TARGETS += cpufreq
->   TARGETS += cpu-hotplug
->   TARGETS += drivers/dma-buf
-> +TARGETS += drivers/s390x/uvdevice
->   TARGETS += efivarfs
->   TARGETS += exec
->   TARGETS += filesystems
-> diff --git a/tools/testing/selftests/drivers/.gitignore b/tools/testing/selftests/drivers/.gitignore
-> index ca74f2e1c719..09e23b5afa96 100644
-> --- a/tools/testing/selftests/drivers/.gitignore
-> +++ b/tools/testing/selftests/drivers/.gitignore
-> @@ -1,2 +1,3 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   /dma-buf/udmabuf
-> +/s390x/uvdevice/test_uvdevice
-> diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/Makefile b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-> new file mode 100644
-> index 000000000000..5e701d2708d4
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-> @@ -0,0 +1,22 @@
-> +include ../../../../../build/Build.include
-> +
-> +UNAME_M := $(shell uname -m)
-> +
-> +ifneq ($(UNAME_M),s390x)
-> +nothing:
-> +.PHONY: all clean run_tests install
-> +.SILENT:
-> +else
-> +
-> +TEST_GEN_PROGS := test_uvdevice
-> +
-> +top_srcdir ?= ../../../../../..
-> +KSFT_KHDR_INSTALL := 1
-> +khdr_dir = $(top_srcdir)/usr/include
-> +LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
-> +
-> +CFLAGS += -Wall -Werror -static -I$(khdr_dir) -I$(LINUX_TOOL_ARCH_INCLUDE)
-> +
-> +include ../../../lib.mk
-> +
-> +endif
-> diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/config b/tools/testing/selftests/drivers/s390x/uvdevice/config
-> new file mode 100644
-> index 000000000000..f28a04b99eff
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/s390x/uvdevice/config
-> @@ -0,0 +1 @@
-> +CONFIG_S390_UV_UAPI=y
-> diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-> new file mode 100644
-> index 000000000000..f23663bcab03
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-> @@ -0,0 +1,280 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + *  selftest for the Ultravisor UAPI device
-> + *
-> + *  Copyright IBM Corp. 2022
-> + *  Author(s): Steffen Eiden <seiden@linux.ibm.com>
-> + */
-> +
-> +#include <stdint.h>
-> +#include <fcntl.h>
-> +#include <errno.h>
-> +#include <sys/ioctl.h>
-> +#include <sys/mman.h>
-> +
-> +#include <asm/uvdevice.h>
-> +
-> +#include "../../../kselftest_harness.h"
-> +
-> +#define BUFFER_SIZE 0x200
-> +FIXTURE(uvio_fixture) {
-> +	int uv_fd;
-> +	struct uvio_ioctl_cb uvio_ioctl;
-> +	uint8_t buffer[BUFFER_SIZE];
-> +	__u64 fault_page;
-> +};
-> +
-> +FIXTURE_VARIANT(uvio_fixture) {
-> +	unsigned long ioctl_cmd;
-> +	uint32_t arg_size;
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(uvio_fixture, qui) {
-> +	.ioctl_cmd = UVIO_IOCTL_QUI,
-> +	.arg_size = BUFFER_SIZE,
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(uvio_fixture, att) {
-> +	.ioctl_cmd = UVIO_IOCTL_ATT,
-> +	.arg_size = sizeof(struct uvio_attest),
-> +};
-> +
-> +FIXTURE_SETUP(uvio_fixture)
-> +{
-> +	self->uv_fd = open("/dev/uv", O_RDWR);
-> +
-> +	self->uvio_ioctl.argument_addr = (__u64)self->buffer;
-> +	self->uvio_ioctl.argument_len = variant->arg_size;
-> +	self->fault_page =
-> +		(__u64)mmap(NULL, (size_t)getpagesize(), PROT_NONE, MAP_ANONYMOUS, -1, 0);
-> +}
-> +
-> +FIXTURE_TEARDOWN(uvio_fixture)
-> +{
-> +	if (self->uv_fd)
-> +		close(self->uv_fd);
-> +	munmap((void *)self->fault_page, (size_t)getpagesize());
-> +}
-> +
-> +TEST_F(uvio_fixture, fault_ioctl_arg)
-> +{
-> +	int rc, errno_cache;
-> +
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, NULL);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EFAULT);
-> +
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, self->fault_page);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EFAULT);
-> +}
-> +
-> +TEST_F(uvio_fixture, fault_uvio_arg)
-> +{
-> +	int rc, errno_cache;
-> +
-> +	self->uvio_ioctl.argument_addr = 0;
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EFAULT);
-> +
-> +	self->uvio_ioctl.argument_addr = self->fault_page;
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EFAULT);
-> +}
-> +
-> +/*
-> + * Test to verify that IOCTLs with invalid values in the ioctl_control block
-> + * are rejected.
-> + */
-> +TEST_F(uvio_fixture, inval_ioctl_cb)
-> +{
-> +	int rc, errno_cache;
-> +
-> +	self->uvio_ioctl.argument_len = 0;
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EINVAL);
-> +
-> +	self->uvio_ioctl.argument_len = (uint32_t)-1;
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EINVAL);
-> +	self->uvio_ioctl.argument_len = variant->arg_size;
-> +
-> +	self->uvio_ioctl.flags = (uint32_t)-1;
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EINVAL);
-> +	self->uvio_ioctl.flags = 0;
-> +
-> +	memset(self->uvio_ioctl.reserved14, 0xff, sizeof(self->uvio_ioctl.reserved14));
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EINVAL);
-> +
-> +	memset(&self->uvio_ioctl, 0x11, sizeof(self->uvio_ioctl));
-> +	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-> +	ASSERT_EQ(rc, -1);
-> +}
-> +
-> +TEST_F(uvio_fixture, inval_ioctl_cmd)
-> +{
-> +	int rc, errno_cache;
-> +	uint8_t nr = _IOC_NR(variant->ioctl_cmd);
-> +	unsigned long cmds[] = {
-> +		_IOWR('a', nr, struct uvio_ioctl_cb),
-> +		_IOWR(UVIO_TYPE_UVC, nr, int),
-> +		_IO(UVIO_TYPE_UVC, nr),
-> +		_IOR(UVIO_TYPE_UVC, nr, struct uvio_ioctl_cb),
-> +		_IOW(UVIO_TYPE_UVC, nr, struct uvio_ioctl_cb),
-> +	};
-> +
-> +	for (size_t i = 0; i < ARRAY_SIZE(cmds); i++) {
-> +		rc = ioctl(self->uv_fd, cmds[i], &self->uvio_ioctl);
-> +		errno_cache = errno;
-> +		ASSERT_EQ(rc, -1);
-> +		ASSERT_EQ(errno_cache, EINVAL);
-> +	}
-> +}
-> +
-> +struct test_attest_buffer {
-> +	uint8_t arcb[0x180];
-> +	uint8_t meas[64];
-> +	uint8_t add[32];
-> +};
-> +
-> +FIXTURE(attest_fixture) {
-> +	int uv_fd;
-> +	struct uvio_ioctl_cb uvio_ioctl;
-> +	struct uvio_attest uvio_attest;
-> +	struct test_attest_buffer attest_buffer;
-> +	__u64 fault_page;
-> +};
-> +
-> +FIXTURE_SETUP(attest_fixture)
-> +{
-> +	self->uv_fd = open("/dev/uv", O_RDWR);
+Signed-off-by: William Mahon <wmahon@google.com>
+---
 
-So each test opne and closes the devuce. Can this file stay open
-for the duraction of the test run and close it in main() after
-test exits?
+ drivers/hid/hid-input.c                | 2 ++
+ include/uapi/linux/input-event-codes.h | 1 +
+ 2 files changed, 3 insertions(+)
 
-> +
-> +	self->uvio_ioctl.argument_addr = (__u64)&self->uvio_attest;
-> +	self->uvio_ioctl.argument_len = sizeof(self->uvio_attest);
-> +
-> +	self->uvio_attest.arcb_addr = (__u64)&self->attest_buffer.arcb;
-> +	self->uvio_attest.arcb_len = sizeof(self->attest_buffer.arcb);
-> +
-> +	self->uvio_attest.meas_addr = (__u64)&self->attest_buffer.meas;
-> +	self->uvio_attest.meas_len = sizeof(self->attest_buffer.meas);
-> +
-> +	self->uvio_attest.add_data_addr = (__u64)&self->attest_buffer.add;
-> +	self->uvio_attest.add_data_len = sizeof(self->attest_buffer.add);
-> +	self->fault_page =
-> +		(__u64)mmap(NULL, (size_t)getpagesize(), PROT_NONE, MAP_ANONYMOUS, -1, 0);
-> +}
-> +
-> +FIXTURE_TEARDOWN(attest_fixture)
-> +{
-> +	if (self->uv_fd)
-> +		close(self->uv_fd);
-> +	munmap((void *)self->fault_page, (size_t)getpagesize());
-> +}
-> +
-> +static void att_inval_sizes_test(uint32_t *size, uint32_t max_size, bool test_zero,
-> +				 struct __test_metadata *_metadata,
-> +				 FIXTURE_DATA(attest_fixture) *self)
-> +{
-> +	int rc, errno_cache;
-> +	uint32_t tmp = *size;
-> +
-> +	if (test_zero) {
-> +		*size = 0;
-> +		rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-> +		errno_cache = errno;
-> +		ASSERT_EQ(rc, -1);
-> +		ASSERT_EQ(errno_cache, EINVAL);
-> +	}
-> +	*size = max_size + 1;
-> +	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EINVAL);
-> +	*size = tmp;
-> +}
-> +
-> +/*
-> + * Test to verify that attestation IOCTLs with invalid values in the UVIO
-> + * attestation control block are rejected.
-> + */
-> +TEST_F(attest_fixture, att_inval_request)
-> +{
-> +	int rc, errno_cache;
-> +
-> +	att_inval_sizes_test(&self->uvio_attest.add_data_len, UVIO_ATT_ADDITIONAL_MAX_LEN,
-> +			     false, _metadata, self);
-> +	att_inval_sizes_test(&self->uvio_attest.meas_len, UVIO_ATT_MEASUREMENT_MAX_LEN,
-> +			     true, _metadata, self);
-> +	att_inval_sizes_test(&self->uvio_attest.arcb_len, UVIO_ATT_ARCB_MAX_LEN,
-> +			     true, _metadata, self);
-> +
-> +	self->uvio_attest.reserved136 = (uint16_t)-1;
-> +	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EINVAL);
-> +
-> +	memset(&self->uvio_attest, 0x11, sizeof(self->uvio_attest));
-> +	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-> +	ASSERT_EQ(rc, -1);
-> +}
-> +
-> +static void att_inval_addr_test(__u64 *addr, struct __test_metadata *_metadata,
-> +				FIXTURE_DATA(attest_fixture) *self)
-> +{
-> +	int rc, errno_cache;
-> +	__u64 tmp = *addr;
-> +
-> +	*addr = 0;
-> +	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EFAULT);
-> +	*addr = self->fault_page;
-> +	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-> +	errno_cache = errno;
-> +	ASSERT_EQ(rc, -1);
-> +	ASSERT_EQ(errno_cache, EFAULT);
-> +	*addr = tmp;
-> +}
-> +
-> +TEST_F(attest_fixture, att_inval_addr)
-> +{
-> +	att_inval_addr_test(&self->uvio_attest.arcb_addr, _metadata, self);
-> +	att_inval_addr_test(&self->uvio_attest.add_data_addr, _metadata, self);
-> +	att_inval_addr_test(&self->uvio_attest.meas_addr, _metadata, self);
-> +}
-> +
-> +static void __attribute__((constructor)) __constructor_order_last(void)
-> +{
-> +	if (!__constructor_order)
-> +		__constructor_order = _CONSTRUCTOR_ORDER_BACKWARD;
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	int fd = open("/dev/uv", O_RDWR);
-> +
-> +	if (fd < 0) {
-> +		ksft_exit_skip("No uv-device.\n");
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index eccd89b5ea9f..c3e303c1d8d1 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -1162,6 +1162,8 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+ 
+ 		case 0x29d: map_key_clear(KEY_KBD_LAYOUT_NEXT);	break;
+ 
++		case 0x2a2: map_key_clear(KEY_ALL_APPLICATIONS);	break;
++
+ 		case 0x2c7: map_key_clear(KEY_KBDINPUTASSIST_PREV);		break;
+ 		case 0x2c8: map_key_clear(KEY_KBDINPUTASSIST_NEXT);		break;
+ 		case 0x2c9: map_key_clear(KEY_KBDINPUTASSIST_PREVGROUP);		break;
+diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+index 311a57f3e01a..e520f22c1b8d 100644
+--- a/include/uapi/linux/input-event-codes.h
++++ b/include/uapi/linux/input-event-codes.h
+@@ -279,6 +279,7 @@
+ #define KEY_PROG3		202
+ #define KEY_PROG4		203
+ #define KEY_DASHBOARD		204	/* AL Dashboard */
++#define KEY_ALL_APPLICATIONS KEY_DASHBOARD
+ #define KEY_SUSPEND		205
+ #define KEY_CLOSE		206	/* AC Close */
+ #define KEY_PLAY		207
+-- 
+2.35.1.473.g83b2b277ed-goog
 
-Please add information on which confg options need to be enabled
-to run this test - CONFIG_S390_UV_UAPI?
-
-Also add a check and skip when run by non-root if this test requires
-root privileges.
-
-> +		ksft_exit(KSFT_SKIP);
-
-You don't need this - ksft_exit_skip() calls exit(KSFT_SKIP)
-
-
-> +	}
-> +	close(fd);
-
-Closing the file before test inocation?
-
-> +	return test_harness_run(argc, argv);
-> +}
-> 
-
-thanks,
--- Shuah

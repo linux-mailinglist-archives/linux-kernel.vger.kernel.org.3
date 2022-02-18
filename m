@@ -2,91 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AD54BB5DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398704BB5DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbiBRJoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:44:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52938 "EHLO
+        id S233731AbiBRJop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:44:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbiBRJoH (ORCPT
+        with ESMTP id S232251AbiBRJon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:44:07 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471C4237F5;
-        Fri, 18 Feb 2022 01:43:51 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id qx21so13588790ejb.13;
-        Fri, 18 Feb 2022 01:43:51 -0800 (PST)
+        Fri, 18 Feb 2022 04:44:43 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C3B23BCF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 01:44:27 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id j12so18380188ybh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 01:44:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8gzRpoadSXSxB0BIzDqVsAXWUfQOc0XeG3vY2OHWrw4=;
-        b=XKfx6RWsxF0BE8FESNVpCImccET2T6xMYcSKtsrB0C7zVJBx63CTl5dDyu6HffnIMC
-         gG6909iMibiElPgOTMVG2Fy4NGAhwdOWHxVzrY4JHhNi/ezqp28SzsSQwOQf/iqxkaDK
-         xUWAtzZdl75P4LhJy9WtWq2Den344zuoVkJHwQEnZxRTP1iAS1A/eh5hhQmi4IjqdabV
-         4/bthYoCatA5SfUM/entbQh8OIirTCDXJQdE5yK6ShuioF0HDmKej7MIVeLGVI8saJrp
-         0qFrsIwwbubqVQaOoAp+olFiICrwvJHYOI1bX8+EfgxnzaCu9W7nZNvowEusykvXCvHU
-         OXxw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9TGdjV0Q3xyVks5N4khTecn3sldyZnJb3gKUY1KtrMU=;
+        b=AOlbdfQfIplSLJ+l7JlFsTZZwiIAFQP4vIRwLqfU+sjpXwwcGu+odpiC4icGnuczPs
+         KCQ7UdnoBYRMsYk4KeyzhC7qAGYFA6E0Qpq1O8DZcHvVi2MjhrMYLTiUb75o29fdI75c
+         CKuYhRHEpbSSPBB14diyEqMWUJEOPcEGtzPdzR+LoAq888eDJge9JXTuL5kepYYkD1cg
+         QhlHmg2DKjFO5jG057keS4XhnJcVSMwgq5fnEB5xAJIPsb5YlIYAsux692PLMV3ZZHpX
+         lfFUmmSibdwm0f4NpT9WiEByUqvPez+8mLlHyJBgv/9VM10QxKwTWqjEryMUlv6dNWKb
+         dqLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8gzRpoadSXSxB0BIzDqVsAXWUfQOc0XeG3vY2OHWrw4=;
-        b=6NfmG//2PbBmOwlJNgfATOR4NC1/Ja+LheIb6sLnShHxxRPjc9uTF8RDmJORJoSdMb
-         VB/QMebJvYhaET1kjx/P/iJRoZDQaYO5U0ltf3OWxiEYyKFHRmI5ABEKS/Vdvw4lPim4
-         98QXD3JWfOlecWVteYlA/pHI4ruP4cwRBlQ7q0rRUZBHVdGoz50UpHGhHrMVrVh2kMq2
-         AxiTSZv1l9G26PpAmj0JU4woKU+4DMBo3NxV0wTD8F6r41FEsdWSGI9sb6+ldyXTTc2x
-         rBJgTo3YOZot1UZ/4wDLD7MwMti3MJXtdiqb3Qs8izUiclYuJEendtBjslZdZ2f4jAWZ
-         CV9w==
-X-Gm-Message-State: AOAM530GdvDH6ioj7wuM3MRjrED225CHgbNZz7O/lgcLmSkbxt3QP9XZ
-        JdIR+7hMT+QuDYcflOu9bSNOHiLcJGY=
-X-Google-Smtp-Source: ABdhPJy+9t1giFT+NiQvcNipEOFTkMK7WctZSrFXg32Fjh4JpcNBg7jYgNyMstxgvwVGTDCf8KJZ8Q==
-X-Received: by 2002:a17:906:c211:b0:6ce:e221:4c21 with SMTP id d17-20020a170906c21100b006cee2214c21mr5610629ejz.691.1645177429712;
-        Fri, 18 Feb 2022 01:43:49 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id gq1sm2072372ejb.58.2022.02.18.01.43.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 01:43:49 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <bfe385f9-b075-12e7-43c3-7957bf1b54bc@redhat.com>
-Date:   Fri, 18 Feb 2022 10:43:48 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9TGdjV0Q3xyVks5N4khTecn3sldyZnJb3gKUY1KtrMU=;
+        b=fO0JW1qQedh9cMtxvjSDx09mcpYelOYQvByRceSsQ2H5N2paWmF1FEX+Jn9GHYweqd
+         G0pFaI7JGm2GF/7wVDDAVPrr3IRckSMDo/RMa5gbD0n4kNriYcU7gLlocEWT8iuCMTQX
+         h+yIR3Tz4beBjEsIJKmhqs1Fm3VSoAK/+z+xZEKvT4qQGB+NkgxwPodh98xE+K5lRucO
+         tVMewQB6i66Blmgtrb+EPGEjfdu2uh5TEeGhbYTPp0InS+wxUL3sQEjIvKSx+9vw6Zr3
+         F+WJnun1ecWdFOwDj3HABshtwiyYPacVlAeCn9zQYLKm2OKk51G+arVaTjxFgS7lavUb
+         6Ftw==
+X-Gm-Message-State: AOAM53146EjVes9CcZjUC0LUKdw6J/C+dthgOcqqFrvH01tlOrYtuMmg
+        UZAf4R+ssMh/faQoMCU44b9+yjk6+yS7tk540dKv8A==
+X-Google-Smtp-Source: ABdhPJzA46WERAi0kdsB5sx7dXGjsix8eJtkQhaYxjn+ahZ0OgZmhU+uPdP7ygKFCmqJscjB9WRhduaBjvniEosQ+dk=
+X-Received: by 2002:a05:6902:2:b0:624:4cb5:fd3b with SMTP id
+ l2-20020a056902000200b006244cb5fd3bmr791226ybh.1.1645177466506; Fri, 18 Feb
+ 2022 01:44:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] KVM: SEV: Allow SEV intra-host migration of VM with
- mirrors
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Orr <marcorr@google.com>, linux-kernel@vger.kernel.org
-References: <20220211193634.3183388-1-pgonda@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220211193634.3183388-1-pgonda@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <1645176813-202756-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1645176813-202756-1-git-send-email-john.garry@huawei.com>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 18 Feb 2022 10:44:15 +0100
+Message-ID: <CANpmjNMVz0VoBvV74AJhCYoP5yVad0JwOpY47YhUrqsZqF7NZw@mail.gmail.com>
+Subject: Re: [PATCH v2] perf test: Skip Sigtrap test for arm+aarch64
+To:     John Garry <john.garry@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
+        leo.yan@linaro.org, dvyukov@google.com, will@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        tmricht@linux.ibm.com, irogers@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 20:36, Peter Gonda wrote:
-> -	WARN_ON(sev->num_mirrored_vms);
-> +	WARN_ON(!list_empty(&sev->mirror_vms));
->   
->   	if (!sev_guest(kvm))
->   		return;
-> @@ -2049,11 +2071,9 @@ void sev_vm_destroy(struct kvm *kvm)
+On Fri, 18 Feb 2022 at 10:39, John Garry <john.garry@huawei.com> wrote:
+>
+> Skip the Sigtrap test for arm + arm64, same as was done for s390 in
+> commit a840974e96fd ("perf test: Test 73 Sig_trap fails on s390"). For
+> this, reuse BP_SIGNAL_IS_SUPPORTED - meaning that the arch can use BP to
+> generate signals - instead of BP_ACCOUNT_IS_SUPPORTED, which is
+> appropriate.
+>
+> As described by Will at [0], in the test we get stuck in a loop of handling
+> the HW breakpoint exception and never making progress. GDB handles this
+> by stepping over the faulting instruction, but with perf the kernel is
+> expected to handle the step (which it doesn't for arm).
+>
+> Dmitry made an attempt to get this work, also mentioned in the same thread
+> as [0], which was appreciated. But the best thing to do is skip the test
+> for now.
+>
+> [0] https://lore.kernel.org/linux-perf-users/20220118124343.GC98966@leoy-ThinkPad-X240s/T/#m13b06c39d2a5100d340f009435df6f4d8ee57b5a
+>
+> Fixes: Fixes: 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
+> Signed-off-by: John Garry <john.garry@huawei.com>
 
-Note, the WARN must now be moved after "if (!sev_guest(kvm))" (before, 
-num_mirrored_vms was initialized to 0).
+Acked-by: Marco Elver <elver@google.com>
 
-Paolo
+Thanks !
+
+> diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+> index 1f147fe6595f..e32ece90e164 100644
+> --- a/tools/perf/tests/sigtrap.c
+> +++ b/tools/perf/tests/sigtrap.c
+> @@ -22,19 +22,6 @@
+>  #include "tests.h"
+>  #include "../perf-sys.h"
+>
+> -/*
+> - * PowerPC and S390 do not support creation of instruction breakpoints using the
+> - * perf_event interface.
+> - *
+> - * Just disable the test for these architectures until these issues are
+> - * resolved.
+> - */
+> -#if defined(__powerpc__) || defined(__s390x__)
+> -#define BP_ACCOUNT_IS_SUPPORTED 0
+> -#else
+> -#define BP_ACCOUNT_IS_SUPPORTED 1
+> -#endif
+> -
+>  #define NUM_THREADS 5
+>
+>  static struct {
+> @@ -135,7 +122,7 @@ static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __m
+>         char sbuf[STRERR_BUFSIZE];
+>         int i, fd, ret = TEST_FAIL;
+>
+> -       if (!BP_ACCOUNT_IS_SUPPORTED) {
+> +       if (!BP_SIGNAL_IS_SUPPORTED) {
+>                 pr_debug("Test not supported on this architecture");
+>                 return TEST_SKIP;
+>         }
+> --
+> 2.26.2
+>

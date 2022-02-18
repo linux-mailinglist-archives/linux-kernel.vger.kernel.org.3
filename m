@@ -2,195 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101764BB4FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5424BB4F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbiBRJE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:04:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41560 "EHLO
+        id S233111AbiBRJFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:05:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiBRJE4 (ORCPT
+        with ESMTP id S229974AbiBRJFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:04:56 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89552BA77F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 01:04:40 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E595F1F37D;
-        Fri, 18 Feb 2022 09:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645175078; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=da51WVZQbbZtQI4xx6YUIAVO+nEkYuxtVw098L1wUuE=;
-        b=c2pekESmLtqXCJIecXBJLbcl0gGtqCyZLzoF29mOLciUOQhJB/NFJjFY7ba/L/na0n8QO9
-        B44pkUvaYUwV9JAS5OVZSIK/EJ4cfdZCHe4cY90rD0l4xs/FXZfIOnraqoMPYc6VmYla1H
-        hTh45jh8e13ozGCDCydWjKfc+vF1A84=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CBB90A3B84;
-        Fri, 18 Feb 2022 09:04:38 +0000 (UTC)
-Date:   Fri, 18 Feb 2022 10:04:38 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: start&stop: was: Re: [PATCH printk v1 10/13] printk: add kthread
- console printers
-Message-ID: <Yg9hJgFJgoVhgtBu@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-11-john.ogness@linutronix.de>
+        Fri, 18 Feb 2022 04:05:19 -0500
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFC22B3AE9;
+        Fri, 18 Feb 2022 01:05:03 -0800 (PST)
+Received: by mail-vs1-f50.google.com with SMTP id i27so9182541vsr.10;
+        Fri, 18 Feb 2022 01:05:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PuyWdNt7E53vPgI1lZLvKTUut2bNACfNkxpc83Dke5E=;
+        b=zUYJ8DyJR0XAKhK2aW0V9Dz5HZK8N2AShWYfXed/095wWvB9CTROSnVccH2xxl8401
+         OPOFsY3QwwjlpYOa49V1SKWTw8JZxF5a6UmpldbN+uZpVHnyFxRdTj6BBXt7N+CNzZeC
+         HF492QU03VheHV2E3rONZNDiLjSAiCIrHZ65/B8DovbOlnqsUQ8DnoofWhRGwBf9SPkc
+         2NritbCd9BwcCt6KnbiqtErwN1OBcznH2H+kPYUloePwmFwuh67k1afILANcpie/yjs3
+         C9IRul6X2QmwCiP0Qs5eJoESDoyzR/bBCqps66NALqwZjgltxqK3+wsRZHvZpFYK6M+T
+         dw0A==
+X-Gm-Message-State: AOAM5338XgfM7ilE8sEUHCOp2zT4J3li4HDjCc5KHJ81iqWywcfCNh+G
+        Mhiym2eKnAH3MdNcIa05ebFa73cuomOP2w==
+X-Google-Smtp-Source: ABdhPJyNsOVW02HV2K1WWVZ/JFpfkB7pylbLD656wQXmNl3Fe3sxMmaf/qwoVesUKkRuptTCrZ2qfA==
+X-Received: by 2002:a67:e113:0:b0:30e:303d:d1d6 with SMTP id d19-20020a67e113000000b0030e303dd1d6mr3157595vsl.38.1645175102120;
+        Fri, 18 Feb 2022 01:05:02 -0800 (PST)
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
+        by smtp.gmail.com with ESMTPSA id 187sm7012763vsi.12.2022.02.18.01.04.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 01:05:00 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id u10so9172361vsu.13;
+        Fri, 18 Feb 2022 01:04:59 -0800 (PST)
+X-Received: by 2002:a67:b00e:0:b0:30d:dc98:6024 with SMTP id
+ z14-20020a67b00e000000b0030ddc986024mr3285076vse.57.1645175099822; Fri, 18
+ Feb 2022 01:04:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207194323.273637-11-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-14-arnd@kernel.org>
+In-Reply-To: <20220216131332.1489939-14-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 18 Feb 2022 10:04:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVfiuYEMQhtscwt4xCm1Dfw0M_qEmQ4pof59eB4jZFOPg@mail.gmail.com>
+Message-ID: <CAMuHMdVfiuYEMQhtscwt4xCm1Dfw0M_qEmQ4pof59eB4jZFOPg@mail.gmail.com>
+Subject: Re: [PATCH v2 13/18] uaccess: generalize access_ok()
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-07 20:49:20, John Ogness wrote:
-> Create a kthread for each console to perform console printing. During
-> normal operation (@system_state == SYSTEM_RUNNING), the kthread
-> printers are responsible for all printing on their respective
-> consoles.
-> 
-> During non-normal operation, console printing is done as it has been:
-> within the context of the printk caller or within irq work triggered
-> by the printk caller.
-> 
-> Console printers synchronize against each other and against console
-> lockers by taking the console lock for each message that is printed.
-> ---
->  include/linux/console.h |   2 +
->  kernel/printk/printk.c  | 159 +++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 159 insertions(+), 2 deletions(-)
-> 
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3114,6 +3145,8 @@ void register_console(struct console *newcon)
->  		/* Begin with next message. */
->  		newcon->seq = prb_next_seq(prb);
->  	}
-> +	if (kthreads_started)
-> +		start_printk_kthread(newcon);
+On Wed, Feb 16, 2022 at 2:17 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> There are many different ways that access_ok() is defined across
+> architectures, but in the end, they all just compare against the
+> user_addr_max() value or they accept anything.
+>
+> Provide one definition that works for most architectures, checking
+> against TASK_SIZE_MAX for user processes or skipping the check inside
+> of uaccess_kernel() sections.
+>
+> For architectures without CONFIG_SET_FS(), this should be the fastest
+> check, as it comes down to a single comparison of a pointer against a
+> compile-time constant, while the architecture specific versions tend to
+> do something more complex for historic reasons or get something wrong.
+>
+> Type checking for __user annotations is handled inconsistently across
+> architectures, but this is easily simplified as well by using an inline
+> function that takes a 'const void __user *' argument. A handful of
+> callers need an extra __user annotation for this.
+>
+> Some architectures had trick to use 33-bit or 65-bit arithmetic on the
+> addresses to calculate the overflow, however this simpler version uses
+> fewer registers, which means it can produce better object code in the
+> end despite needing a second (statically predicted) branch.
+>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Acked-by: Mark Rutland <mark.rutland@arm.com> [arm64, asm-generic]
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-It is a corner case but we should handle possible error here.
+>  arch/m68k/Kconfig.cpu                 |  1 +
+>  arch/m68k/include/asm/uaccess.h       | 19 +--------
 
-The easiest solution is to stop all other printk kthreads and
-use direct printing all the time. It should be enough because
-it is a corner case. If kthreads could not be created then
-the system is in big troubles anyway.
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
->  	console_unlock();
->  	console_sysfs_notify();
->  
-> @@ -3170,6 +3203,11 @@ int unregister_console(struct console *console)
->  		}
->  	}
->  
-> +	if (console->thread) {
-> +		kthread_stop(console->thread);
+Gr{oetje,eeting}s,
 
-I think that must not be called under console_lock or any other
-locks that might be used by the kthread.
+                        Geert
 
-kthread_stop() waits until the kthread really exits. It means
-that kthread_func() must check kthread_should_stop() and return.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-There might be a deadlock when kthread_func() need to take some
-locks in the main loop between kthread_should_stop() checks.
-
-> +		console->thread = NULL;
-> +	}
-> +
->  	if (res)
->  		goto out_disable_unlock;
->  
-> @@ -3345,6 +3390,116 @@ bool pr_flush(int timeout_ms, bool
-> reset_on_progress)
-[...]
-> +}
-> +
-> +static int printk_kthread_func(void *data)
-> +{
-> +	struct console *con = data;
-> +	char *dropped_text = NULL;
-> +	char *ext_text = NULL;
-> +	bool progress;
-> +	bool handover;
-> +	u64 seq = 0;
-> +	char *text;
-> +	int error;
-> +
-> +	pr_info("%sconsole [%s%d]: printing thread started\n",
-> +		(con->flags & CON_BOOT) ? "boot" : "",
-> +		con->name, con->index);
-
-This should be printed after the allocations succeeded before entering
-the main loop.
-
-> +	text = kmalloc(CONSOLE_LOG_MAX, GFP_KERNEL);
-> +	if (!text)
-> +		goto out;
-> +
-> +	if (con->flags & CON_EXTENDED) {
-> +		ext_text = kmalloc(CONSOLE_EXT_LOG_MAX, GFP_KERNEL);
-> +		if (!ext_text)
-> +			goto out;
-> +	} else {
-> +		dropped_text = kmalloc(DROPPED_TEXT_MAX, GFP_KERNEL);
-> +		if (!dropped_text)
-> +			goto out;
-> +	}
-
-here
-
-> +	for (;;) {
-> +		error = wait_event_interruptible(log_wait, printer_should_wake(con, seq));
-> +
-> +		if (kthread_should_stop())
-> +			break;
-> +
-> +		if (error)
-> +			continue;
-> +
-> +		do {
-
-[...]
-
-> +
-> +/* Must be called within console_lock(). */
-> +static void start_printk_kthread(struct console *con)
-> +{
-> +	con->thread = kthread_run(printk_kthread_func, con,
-> +				  "pr/%s%d", con->name, con->index);
-> +	if (IS_ERR(con->thread)) {
-> +		con->thread = NULL;
-> +		pr_err("%sconsole [%s%d]: unable to start printing thread\n",
-> +			(con->flags & CON_BOOT) ? "boot" : "",
-> +			con->name, con->index);
-> +		return;
-
-We need to pass the error down. The system has to switch to
-direct printing off when any printk kthread could not be started.
-Otherwise, the related console would not work.
-
-> +	}
-> +}
-> +
->  /*
->   * Delayed printk version, for scheduler-internal messages:
->   */
-
-Best Regards,
-Petr
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

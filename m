@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7681A4BBED6
+	by mail.lfdr.de (Postfix) with ESMTP id F233A4BBED7
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238849AbiBRR5u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 12:57:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59076 "EHLO
+        id S238862AbiBRR56 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 12:57:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbiBRR5m (ORCPT
+        with ESMTP id S236574AbiBRR54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:57:42 -0500
+        Fri, 18 Feb 2022 12:57:56 -0500
 Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE5B2102A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:57:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04F0C21B1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:57:38 -0800 (PST)
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-282-oc3OI1FUP-m1dUeuELmFDg-1; Fri, 18 Feb 2022 12:57:21 -0500
-X-MC-Unique: oc3OI1FUP-m1dUeuELmFDg-1
+ us-mta-562-deJtrdHpMBS6WWtPDsmWAA-1; Fri, 18 Feb 2022 12:57:23 -0500
+X-MC-Unique: deJtrdHpMBS6WWtPDsmWAA-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B08AD2F47;
-        Fri, 18 Feb 2022 17:57:19 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 10113801AC5;
+        Fri, 18 Feb 2022 17:57:22 +0000 (UTC)
 Received: from x1.com (unknown [10.22.32.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1097438DE9;
-        Fri, 18 Feb 2022 17:57:17 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4CC5D2BCC1;
+        Fri, 18 Feb 2022 17:57:19 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org
-Subject: [PATCH 2/3] rtla/osnoise: Free params at the exit
-Date:   Fri, 18 Feb 2022 18:57:08 +0100
-Message-Id: <0be31d8259c7c53b98a39769d60cfeecd8421785.1645206561.git.bristot@kernel.org>
+Subject: [PATCH 3/3] rtla/osnoise: Fix error message when failing to enable trace instance
+Date:   Fri, 18 Feb 2022 18:57:09 +0100
+Message-Id: <53ef0582605af91eca14b19dba9fc9febb95d4f9.1645206561.git.bristot@kernel.org>
 In-Reply-To: <cover.1645206561.git.bristot@kernel.org>
 References: <cover.1645206561.git.bristot@kernel.org>
 MIME-Version: 1.0
@@ -55,12 +55,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable that stores the parsed command line arguments are not
-being free()d at the rtla osnoise top exit path.
+When a trace instance creation fails, tools are printing:
 
-Free params variable before exiting.
+	Could not enable -> osnoiser <- tracer for tracing
 
-Fixes: 1eceb2fc2ca5 ("rtla/osnoise: Add osnoise top mode")
+Print the actual (and correct) name of the tracer it fails to enable.
+
+Fixes: b1696371d865 ("rtla: Helper functions for rtla")
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
@@ -69,21 +70,22 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- tools/tracing/rtla/src/osnoise_top.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/tracing/rtla/src/osnoise.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
-index c67dc28ef716..7af769b9c0de 100644
---- a/tools/tracing/rtla/src/osnoise_top.c
-+++ b/tools/tracing/rtla/src/osnoise_top.c
-@@ -573,6 +573,7 @@ int osnoise_top_main(int argc, char **argv)
- 	osnoise_free_top(tool->data);
- 	osnoise_destroy_tool(record);
- 	osnoise_destroy_tool(tool);
-+	free(params);
- out_exit:
- 	exit(return_value);
- }
+diff --git a/tools/tracing/rtla/src/osnoise.c b/tools/tracing/rtla/src/osnoise.c
+index 5648f9252e58..e60f1862bad0 100644
+--- a/tools/tracing/rtla/src/osnoise.c
++++ b/tools/tracing/rtla/src/osnoise.c
+@@ -810,7 +810,7 @@ struct osnoise_tool *osnoise_init_trace_tool(char *tracer)
+ 
+ 	retval = enable_tracer_by_name(trace->trace.inst, tracer);
+ 	if (retval) {
+-		err_msg("Could not enable osnoiser tracer for tracing\n");
++		err_msg("Could not enable %s tracer for tracing\n", tracer);
+ 		goto out_err;
+ 	}
+ 
 -- 
 2.34.1
 

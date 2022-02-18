@@ -2,115 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6204BBF07
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12D64BBF0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238955AbiBRSIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:08:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43368 "EHLO
+        id S238973AbiBRSJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:09:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238975AbiBRSH6 (ORCPT
+        with ESMTP id S237964AbiBRSJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:07:58 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39EC1F05D7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:07:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645207654; x=1676743654;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=P61hqkigcCXUA+lnv8eaEqIDmAf64Sj27hqBQtZm8c0=;
-  b=FGtnaMkAlIQ3HLsest8x7jHyey1C6QklKNkkg7WXo2YzARk40dGXPhrg
-   wvMJJGT12tFIzWS6Wrv3Lk7EreWUsVYdhlJxCjUEdB3g99m/lpl7/S22L
-   2r0tpAWju+m/e8zYlKw3HWFvb7euy0RQfPrCOROp7F49s64V0pTE19/+r
-   fWL0MF/O9QTwZIdNFOLMkjtVo25SK64iTT/9diCdxbOC2wWZQx3Pb0jaO
-   xLncVAbeAk1ixzEBzfvwJxDV8QQZscinULydxZY5S0Ks8VO3+SEJz5yXe
-   DqDP+3DR/OacI0hrIXEZkfU9wF4oy3heVAZonQCOoNL0bacWeeFYOs3UM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="251380282"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="251380282"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 10:07:34 -0800
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="504079848"
-Received: from ryanflyn-mobl.amr.corp.intel.com (HELO [10.212.54.106]) ([10.212.54.106])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 10:07:32 -0800
-Message-ID: <2267504d-37cc-9a6e-5c4a-6051df95773c@linux.intel.com>
-Date:   Fri, 18 Feb 2022 12:07:31 -0600
+        Fri, 18 Feb 2022 13:09:18 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8622D265539
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:09:01 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id w37so2146731pga.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:09:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AlHyiX5LrdEWhZ9Co3lMbGLFgIDtYexqf1L/CNhQw3E=;
+        b=HpvXBj1VHVYEWtTw1OGbUHeNyUjkoPhx6+l1cPDm/SKWtBGjlpYKkuOh3pRmcOKi9z
+         F40QfcVvdWBWUNVIEX9nKE5hOSXpxQz8i162U8F6hoEIFmdxfJd6JWbcRFL7oVVRnTdt
+         CCSHf0ggP8hdfxU87dEL8nMyGEn72hNsaUe7BFlUb8acpAA7heOEu4k3ioLRzXRa2qsB
+         mw3xqtflLxDYgP6z0Xe08Wb12/UJ2iMr2vs5BJ9R8N+hpiSJIiniTmUZb9pffGR3Rq4Y
+         fcIbvyCO3jkVqqSazurJIQYMy1/qNWfsoNG8njWZsphJo+nSdMwgJsMBiMMl8BMmAZ9r
+         wGPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AlHyiX5LrdEWhZ9Co3lMbGLFgIDtYexqf1L/CNhQw3E=;
+        b=pIDT4fYFabxiu9l720sjQNpoztQafZ4RPud+A0HhgeHbQ0Hbk78nZon6d5n43c9ExP
+         lEJJUhsVZP2NQW/cftmdhoYUBqAwIVJLLR1ZHhZ70gi4JBrX81DOQJR7GpyY/tEJ3V3M
+         BzgQoPsu4w8ssfnPyHW6U9jgr3vCyvx7OMWa32GtJHjdEWwUIvn8bQVXiCtJlTWIDG8k
+         FnHaqmwgzPqEhELbi08VTcNFFTBWdYaR9SOiCj/0skp6cBNny+TF/ul8T6NbRvz1vYzi
+         Nonno8azwUufl8dBGg/olewOnvo4owznIienmtDYHknyco5LexKDjA6kTDNcukwKdIGC
+         IAFQ==
+X-Gm-Message-State: AOAM5337NRWQFJ8aGBxg7LYuIJmQevZPy+1tTSH+nRcKrEXF+7AhWwcQ
+        xHJRBo06/OdH0jpCV7ioxexiINFo9DIo3Q==
+X-Google-Smtp-Source: ABdhPJyBlmVUgv9BMdbLQgS/63ZmOTggTRvnwzOGFX3es6MawMFCoUFF5HCPCGoOdjMTYq6JBZ3hyA==
+X-Received: by 2002:a63:e30b:0:b0:34a:e4d9:c0c8 with SMTP id f11-20020a63e30b000000b0034ae4d9c0c8mr7391562pgh.54.1645207740765;
+        Fri, 18 Feb 2022 10:09:00 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id ob12sm95751pjb.5.2022.02.18.10.08.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 10:09:00 -0800 (PST)
+Date:   Fri, 18 Feb 2022 18:08:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 09/18] KVM: x86/mmu: look for a cached PGD when going
+ from 32-bit to 64-bit
+Message-ID: <Yg/guAXFLJBmDflh@google.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-10-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH] ASoC: SOF: Intel: Add topology overwrite for Felwinter
-Content-Language: en-US
-To:     Brent Lu <brent.lu@intel.com>, alsa-devel@alsa-project.org
-Cc:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        sound-open-firmware@alsa-project.org
-References: <20220218082741.1707209-1-brent.lu@intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220218082741.1707209-1-brent.lu@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217210340.312449-10-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/18/22 02:27, Brent Lu wrote:
-> From: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> Right now, PGD caching avoids placing a PAE root in the cache by using the
+> old value of mmu->root_level and mmu->shadow_root_level; it does not look
+> for a cached PGD if the old root is a PAE one, and then frees it using
+> kvm_mmu_free_roots.
 > 
-> The Felwinter uses four max98360a amplifiers on corresponding CH0~CH3.
-> There are four amps on the board connecting to headphone to SSP0 port,
-> amp to SSP1,and the DAI format would be DSP_A,8-slots, 32 bit slot-width.
+> Change the logic instead to free the uncacheable root early.
+> This way, __kvm_new_mmu_pgd is able to look up the cache when going from
+> 32-bit to 64-bit (if there is a hit, the invalid root becomes the least
+> recently used).  An example of this is nested virtualization with shadow
+> paging, when a 64-bit L1 runs a 32-bit L2.
 > 
-> CH0: L(Woofer), CH1:R(Woofer), CH2:L(Tweeter), CH3:R(Tweeter)
-> 
-> Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-> Signed-off-by: Brent Lu <brent.lu@intel.com>
+> As a side effect (which is actually the reason why this patch was
+> written), PGD caching does not use the old value of mmu->root_level
+> and mmu->shadow_root_level anymore.
 
-This patch is already in the SOF tree and for some reason I didn't send
-it, sorry about the delay.
+Maybe another blurb on 5=>4-level nNPT being broken?  I'm also ok omitting it.
 
-Here are the tags we collected during the reviews.
-
-Reviewed-by: Curtis Malainey <cujomalainey@chromium.org>
-Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->  sound/soc/sof/sof-pci-dev.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/sound/soc/sof/sof-pci-dev.c b/sound/soc/sof/sof-pci-dev.c
-> index 20c6ca37dbc4..61f2afd54c3e 100644
-> --- a/sound/soc/sof/sof-pci-dev.c
-> +++ b/sound/soc/sof/sof-pci-dev.c
-> @@ -67,6 +67,14 @@ static const struct dmi_system_id sof_tplg_table[] = {
->  		},
->  		.driver_data = "sof-adl-max98390-ssp2-rt5682-ssp0.tplg",
->  	},
-> +	{
-> +		.callback = sof_tplg_cb,
-> +		.matches = {
-> +			DMI_MATCH(DMI_PRODUCT_FAMILY, "Google_Brya"),
-> +			DMI_MATCH(DMI_OEM_STRING, "AUDIO_AMP-MAX98360_ALC5682VS_I2S_2WAY"),
-> +		},
-> +		.driver_data = "sof-adl-max98360a-rt5682-2way.tplg",
-> +	},
+
+Nits aside,
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+> +static bool cached_root_find_and_keep_current(struct kvm *kvm, struct kvm_mmu *mmu,
+> +					      gpa_t new_pgd,
+> +					      union kvm_mmu_page_role new_role)
+>  {
+>  	uint i;
+> -	struct kvm_mmu *mmu = vcpu->arch.mmu;
 >  
->  	{}
->  };
+>  	if (is_root_usable(&mmu->root, new_pgd, new_role))
+>  		return true;
+>  
+>  	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
+> +		/*
+> +		 * The swaps end up rotating the cache like this:
+> +		 *   C   0 1 2 3   (on entry to the function)
+> +		 *   0   C 1 2 3
+> +		 *   1   C 0 2 3
+> +		 *   2   C 0 1 3
+> +		 *   3   C 0 1 2   (on exit from the loop)
+> +		 */
+>  		swap(mmu->root, mmu->prev_roots[i]);
+> -
+
+I'd prefer we keep this whitespace, I like that it separates the swap() and its
+comment from the usability check.
+
+>  		if (is_root_usable(&mmu->root, new_pgd, new_role))
+> -			break;
+> +			return true;
+>  	}
+>  
+> -	return i < KVM_MMU_NUM_PREV_ROOTS;
+> +	kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOT_CURRENT);
+> +	return false;
+>  }
+>  
+> -static bool fast_pgd_switch(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+> -			    union kvm_mmu_page_role new_role)
+> +/*
+> + * Find out if a previously cached root matching the new pgd/role is available.
+> + * On entry, mmu->root is invalid.
+> + * If a matching root is found, it is assigned to kvm_mmu->root, the LRU entry
+> + * of the cache becomes invalid, and true is returned.
+> + * If no match is found, kvm_mmu->root is left invalid and false is returned.
+> + */
+> +static bool cached_root_find_without_current(struct kvm *kvm, struct kvm_mmu *mmu,
+> +					     gpa_t new_pgd,
+> +					     union kvm_mmu_page_role new_role)
+>  {
+> -	struct kvm_mmu *mmu = vcpu->arch.mmu;
+> +	uint i;
+> +
+> +	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
+> +		if (is_root_usable(&mmu->prev_roots[i], new_pgd, new_role))
+> +			goto hit;
+
+The for-loop needs curly braces.
+
+>  
+> +	return false;
+> +
+> +hit:
+> +	swap(mmu->root, mmu->prev_roots[i]);
+> +	/* Bubble up the remaining roots.  */
+> +	for (; i < KVM_MMU_NUM_PREV_ROOTS - 1; i++)
+> +		mmu->prev_roots[i] = mmu->prev_roots[i + 1];
+> +	mmu->prev_roots[i].hpa = INVALID_PAGE;
+> +	return true;
+> +}
+> +
+> +static bool fast_pgd_switch(struct kvm *kvm, struct kvm_mmu *mmu,
+> +			    gpa_t new_pgd, union kvm_mmu_page_role new_role)
+> +{
+>  	/*
+> -	 * For now, limit the fast switch to 64-bit hosts+VMs in order to avoid
+> +	 * For now, limit the caching to 64-bit hosts+VMs in order to avoid
+>  	 * having to deal with PDPTEs. We may add support for 32-bit hosts/VMs
+>  	 * later if necessary.
+>  	 */
+> -	if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL &&
+> -	    mmu->root_level >= PT64_ROOT_4LEVEL)
+> -		return cached_root_available(vcpu, new_pgd, new_role);
+> +	if (VALID_PAGE(mmu->root.hpa) && !to_shadow_page(mmu->root.hpa))
+> +		kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOT_CURRENT);
+>  
+> -	return false;
+> +	if (VALID_PAGE(mmu->root.hpa))
+> +		return cached_root_find_and_keep_current(kvm, mmu, new_pgd, new_role);
+> +	else
+> +		return cached_root_find_without_current(kvm, mmu, new_pgd, new_role);
+>  }
+>  
+>  static void __kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+> @@ -4160,8 +4196,8 @@ static void __kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+>  {
+>  	struct kvm_mmu *mmu = vcpu->arch.mmu;
+>  
+> -	if (!fast_pgd_switch(vcpu, new_pgd, new_role)) {
+> -		kvm_mmu_free_roots(vcpu->kvm, mmu, KVM_MMU_ROOT_CURRENT);
+> +	if (!fast_pgd_switch(vcpu->kvm, mmu, new_pgd, new_role)) {
+> +		/* kvm_mmu_ensure_valid_pgd will set up a new root.  */
+
+The "kvm_mmu_ensure_valid_pgd" part is stale due to the bikeshedding stalemate.
+Maybe reference vcpu_enter_guest() instead?  E.g.
+
+	/*
+	 * If no usable root is found there's nothing more to do, a new root
+	 * will be set up during vcpu_enter_guest(), prior to the next VM-Enter.
+	 */
+	if (!fast_pgd_switch(vcpu->kvm, mmu, new_pgd, new_role))
+		return;

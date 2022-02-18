@@ -2,167 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454544BBB28
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 729C84BBB04
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbiBRO41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:56:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50160 "EHLO
+        id S236243AbiBROyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:54:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236249AbiBRO4Y (ORCPT
+        with ESMTP id S236231AbiBROyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:56:24 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39222580D1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:55:58 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id k41so5444788wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:55:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XGn4CkzlW3He7suVzPqPn3VD7gzaiArcrGd2MUYMtSU=;
-        b=0znZPsKcNdd1NmNr2Xn13+NpX3iZlRQKoZJpfmDBFyv5A0hV+K4AlVPvPmlaPIjpVE
-         7fV47gN4i6t29kArBwEYgJSBczEv/nhXke4N9H3Hm85Y3XHkjFf85bxzhlp52AZQvSPn
-         rnkl0YXYxpzLD0S/pxVg32Zn1CezaUjxvhzki+Ry7QhjX49Dub4bj6dC5TRoTFnYBhXM
-         vZ+K08ltxEWzFTsOK6QKSO16W/X0c7+69Gc7+LTNOdN487vCKHrdHNNkWM5LIYKYkyhY
-         U0FNxmKO9N7fC4g+j/xGKQdY2P8oQxtECcNg0HJbXJbgmiGtOqrxff2COk75zT1joSIu
-         HspQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XGn4CkzlW3He7suVzPqPn3VD7gzaiArcrGd2MUYMtSU=;
-        b=qS7rNiEK70uFJA20nsAKdnSRgrFnWTWg+nMGGnG41c8J07PYQbzdwaanwy4l8bQucZ
-         yIBEQn04vp5qawwpqPM1EXr4ScWIQnDVDfSjTptXsNew7kOYteGKnZgj4/mYB4Pirkak
-         8kFyOd4HVEGOsR7v6vuaKmYsj8JVquM7VhKkq05zFJeBeSYAnsrPZYcAl+qwNTkDoYBt
-         NOkJ8PajCwkrtCzuFMcNhOLBNoDdculc5oLuqO727azrKbEYr55aZlu9aWbXw0vlxk5U
-         BiX2nvn7pSXFXw3GUOYCM+IrTc5dayTy6JwuWiABhOUBHI2EqyBlEWPzXVRe9w6Mzptv
-         XdwA==
-X-Gm-Message-State: AOAM533UjaUbqTnbOMaH58/ZN652i0Jmu2cE/uymKfqZ0Mw/eOwbssXb
-        GYKBaT/rS3R1fglJLGbsHyKP6Q==
-X-Google-Smtp-Source: ABdhPJy/hWg5q4suBUdAaXAZ8422BePcDuhOqnlAR76Tw+/0DUL9qkMSzTulm5CpJQZwKlZUAe2+6A==
-X-Received: by 2002:a05:600c:154f:b0:37b:c5cf:40e8 with SMTP id f15-20020a05600c154f00b0037bc5cf40e8mr10984119wmg.27.1645196156766;
-        Fri, 18 Feb 2022 06:55:56 -0800 (PST)
-Received: from localhost.localdomain (2a02-8440-6241-3b28-3074-96af-9642-0002.rev.sfr.net. [2a02:8440:6241:3b28:3074:96af:9642:2])
-        by smtp.gmail.com with ESMTPSA id b10sm47431454wrd.8.2022.02.18.06.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 06:55:56 -0800 (PST)
-From:   Guillaume Ranquet <granquet@baylibre.com>
-To:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com,
-        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
-        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH v8 0/19] drm/mediatek: Add mt8195 DisplayPort driver
-Date:   Fri, 18 Feb 2022 15:54:18 +0100
-Message-Id: <20220218145437.18563-1-granquet@baylibre.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 18 Feb 2022 09:54:40 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B564A5621B;
+        Fri, 18 Feb 2022 06:54:23 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id A26911F46BA2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645196062;
+        bh=aJ3xIH2fN9ae3SbsE2VP6ml3rhW+Z3DMmyq7epfAAqc=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=WErC1atFCUoRx9/I6wMe2kPsGiJj6UAjtjLC3qrBKFMFKqo5v8jb5sh1yS6p1mIbR
+         E4ThhBytCjU9fAMb9ZGmn6fuALC7GMtdvqXkFV/cKpvhntjFJON8WVVbVapC53dFof
+         fHQ2QFvRHH+4YG+71qSaFiRI81GS3ls7RXCCSIAkTyy12dL3CSQbfmuaTMrW8g0cgk
+         FN2bnL0sctrZ2Tw3hsg07b4ukcAWXgB6xrOOIbe3H8/e6Np9IzHT2DWHCXDqUXHTGo
+         63dQ9Jp6ZqGxKoqNkCUdd5dT7Y+BeUq72dLV58RhItGoZ6WtZtjYbYGV9RTcXvGUHs
+         BuOcPl9mAQzrg==
+Message-ID: <a624679f-3b87-ff07-8983-982bbd983e94@collabora.com>
+Date:   Fri, 18 Feb 2022 15:54:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [v2 05/17] ASoC: mediatek: mt8186: support hw gain in platform
+ driver
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
+        geert+renesas@glider.be, trevor.wu@mediatek.com,
+        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
+ <20220217134205.15400-6-jiaxin.yu@mediatek.com>
+Content-Language: en-US
+In-Reply-To: <20220217134205.15400-6-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-this series is built around the DisplayPort driver. The dpi/dpintf
-driver and the added helper functions are required for the DisplayPort
-driver to work.
+Il 17/02/22 14:41, Jiaxin Yu ha scritto:
+> This path adds mt8186 hw gain dai driver.
+> 
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> ---
+>   .../soc/mediatek/mt8186/mt8186-dai-hw-gain.c  | 245 ++++++++++++++++++
+>   1 file changed, 245 insertions(+)
+>   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c
+> 
+> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c b/sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c
+> new file mode 100644
+> index 000000000000..796878989727
+> --- /dev/null
+> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c
+> @@ -0,0 +1,245 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// MediaTek ALSA SoC Audio DAI HW Gain Control
+> +//
+> +// Copyright (c) 2022 MediaTek Inc.
+> +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> +
+> +#include <linux/regmap.h>
+> +#include "mt8186-afe-common.h"
+> +#include "mt8186-interconnection.h"
+> +
+> +#define HW_GAIN_1_EN_W_NAME "HW GAIN 1 Enable"
+> +#define HW_GAIN_2_EN_W_NAME "HW GAIN 2 Enable"
+> +
+> +/* dai component */
+> +static const struct snd_kcontrol_new mtk_hw_gain1_in_ch1_mix[] = {
+> +	SOC_DAPM_SINGLE_AUTODISABLE("CONNSYS_I2S_CH1 Switch", AFE_CONN13_1,
+> +				    I_CONNSYS_I2S_CH1, 1, 0),
+> +};
+> +
+> +static const struct snd_kcontrol_new mtk_hw_gain1_in_ch2_mix[] = {
+> +	SOC_DAPM_SINGLE_AUTODISABLE("CONNSYS_I2S_CH2 Switch", AFE_CONN14_1,
+> +				    I_CONNSYS_I2S_CH2, 1, 0),
+> +};
+> +
+> +static const struct snd_kcontrol_new mtk_hw_gain2_in_ch1_mix[] = {
+> +	SOC_DAPM_SINGLE_AUTODISABLE("ADDA_UL_CH1 Switch", AFE_CONN15,
+> +				    I_ADDA_UL_CH1, 1, 0),
+> +};
+> +
+> +static const struct snd_kcontrol_new mtk_hw_gain2_in_ch2_mix[] = {
+> +	SOC_DAPM_SINGLE_AUTODISABLE("ADDA_UL_CH2 Switch", AFE_CONN16,
+> +				    I_ADDA_UL_CH2, 1, 0),
+> +};
+> +
+> +static int mtk_hw_gain_event(struct snd_soc_dapm_widget *w,
+> +			     struct snd_kcontrol *kcontrol,
+> +			     int event)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	unsigned int gain_cur;
+> +	unsigned int gain_con1;
+> +
+> +	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x\n",
+> +		__func__, w->name, event);
+> +
+> +	switch (event) {
+> +	case SND_SOC_DAPM_PRE_PMU:
+> +		if (strcmp(w->name, HW_GAIN_1_EN_W_NAME) == 0) {
+> +			gain_cur = AFE_GAIN1_CUR;
+> +			gain_con1 = AFE_GAIN1_CON1;
+> +		} else {
+> +			gain_cur = AFE_GAIN2_CUR;
+> +			gain_con1 = AFE_GAIN2_CON1;
+> +		}
+> +
+> +		/* let hw gain ramp up, set cur gain to 0 */
+> +		regmap_update_bits(afe->regmap,
+> +				   gain_cur,
+> +				   AFE_GAIN1_CUR_MASK_SFT,
+> +				   0);
 
-Changes from v7:
+This fits in one line (86 columns is ok)
 
-As requested from CK Hu, I've split the DP driver into multiple patches
-with initial support for eDP, then DP and finally Audio.
+> +
+> +		/* set target gain to 0 */
+> +		regmap_update_bits(afe->regmap,
+> +				   gain_con1,
+> +				   GAIN1_TARGET_MASK_SFT,
+> +				   0);
 
-the dpi patches have also been split to isolate all the boolean/config
-options added to the board config structure.
+Same here.
 
-I've thus removed the "Reviewed-By" tags (from AngeloGioacchino Del Regno) touching these patches.
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct snd_soc_dapm_widget mtk_dai_hw_gain_widgets[] = {
+> +	/* inter-connections */
+> +	SND_SOC_DAPM_MIXER("HW_GAIN1_IN_CH1", SND_SOC_NOPM, 0, 0,
+> +			   mtk_hw_gain1_in_ch1_mix,
+> +			   ARRAY_SIZE(mtk_hw_gain1_in_ch1_mix)),
+> +	SND_SOC_DAPM_MIXER("HW_GAIN1_IN_CH2", SND_SOC_NOPM, 0, 0,
+> +			   mtk_hw_gain1_in_ch2_mix,
+> +			   ARRAY_SIZE(mtk_hw_gain1_in_ch2_mix)),
+> +	SND_SOC_DAPM_MIXER("HW_GAIN2_IN_CH1", SND_SOC_NOPM, 0, 0,
+> +			   mtk_hw_gain2_in_ch1_mix,
+> +			   ARRAY_SIZE(mtk_hw_gain2_in_ch1_mix)),
+> +	SND_SOC_DAPM_MIXER("HW_GAIN2_IN_CH2", SND_SOC_NOPM, 0, 0,
+> +			   mtk_hw_gain2_in_ch2_mix,
+> +			   ARRAY_SIZE(mtk_hw_gain2_in_ch2_mix)),
+> +
+> +	SND_SOC_DAPM_SUPPLY(HW_GAIN_1_EN_W_NAME,
+> +			    AFE_GAIN1_CON0, GAIN1_ON_SFT, 0,
+> +			    mtk_hw_gain_event,
+> +			    SND_SOC_DAPM_PRE_PMU),
+> +
+> +	SND_SOC_DAPM_SUPPLY(HW_GAIN_2_EN_W_NAME,
+> +			    AFE_GAIN2_CON0, GAIN2_ON_SFT, 0,
+> +			    mtk_hw_gain_event,
+> +			    SND_SOC_DAPM_PRE_PMU),
+> +
+> +	SND_SOC_DAPM_INPUT("HW Gain 1 Out Endpoint"),
+> +	SND_SOC_DAPM_INPUT("HW Gain 2 Out Endpoint"),
+> +	SND_SOC_DAPM_OUTPUT("HW Gain 1 In Endpoint"),
+> +};
+> +
+> +static const struct snd_soc_dapm_route mtk_dai_hw_gain_routes[] = {
+> +	{"HW Gain 1 In", NULL, "HW_GAIN1_IN_CH1"},
+> +	{"HW Gain 1 In", NULL, "HW_GAIN1_IN_CH2"},
+> +	{"HW Gain 2 In", NULL, "HW_GAIN2_IN_CH1"},
+> +	{"HW Gain 2 In", NULL, "HW_GAIN2_IN_CH2"},
+> +
+> +	{"HW Gain 1 In", NULL, HW_GAIN_1_EN_W_NAME},
+> +	{"HW Gain 1 Out", NULL, HW_GAIN_1_EN_W_NAME},
+> +	{"HW Gain 2 In", NULL, HW_GAIN_2_EN_W_NAME},
+> +	{"HW Gain 2 Out", NULL, HW_GAIN_2_EN_W_NAME},
+> +
+> +	{"HW Gain 1 In Endpoint", NULL, "HW Gain 1 In"},
+> +	{"HW Gain 1 Out", NULL, "HW Gain 1 Out Endpoint"},
+> +	{"HW Gain 2 Out", NULL, "HW Gain 2 Out Endpoint"},
+> +};
+> +
+> +static const struct snd_kcontrol_new mtk_hw_gain_controls[] = {
+> +	SOC_SINGLE("HW Gain 1 Volume", AFE_GAIN1_CON1,
+> +		   GAIN1_TARGET_SFT, GAIN1_TARGET_MASK, 0),
+> +	SOC_SINGLE("HW Gain 2 Volume", AFE_GAIN2_CON1,
+> +		   GAIN2_TARGET_SFT, GAIN2_TARGET_MASK, 0),
+> +};
+> +
+> +/* dai ops */
+> +static int mtk_dai_gain_hw_params(struct snd_pcm_substream *substream,
+> +				  struct snd_pcm_hw_params *params,
+> +				  struct snd_soc_dai *dai)
+> +{
+> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+> +	unsigned int rate = params_rate(params);
+> +	unsigned int rate_reg = mt8186_rate_transform(afe->dev, rate, dai->id);
+> +
+> +	dev_info(afe->dev, "%s(), id %d, stream %d, rate %d\n",
+> +		 __func__,
+> +		 dai->id,
+> +		 substream->stream,
+> +		 rate);
 
-I've also included 2 patches from Jitao to the series:
-  drm/mediatek: add hpd debounce
-  drm/mediatek: change the aux retries times when receiving AUX_DEFER
+This should be:
+	dev_info(afe->dev, "%s(), id %d, stream %d, rate %d\n",
 
-Older revisions:
-RFC - https://lore.kernel.org/linux-mediatek/20210816192523.1739365-1-msp@baylibre.com/
-v1  - https://lore.kernel.org/linux-mediatek/20210906193529.718845-1-msp@baylibre.com/
-v2  - https://lore.kernel.org/linux-mediatek/20210920084424.231825-1-msp@baylibre.com/
-v3  - https://lore.kernel.org/linux-mediatek/20211001094443.2770169-1-msp@baylibre.com/
-v4  - https://lore.kernel.org/linux-mediatek/20211011094624.3416029-1-msp@baylibre.com/
-v5  - https://lore.kernel.org/all/20211021092707.3562523-1-msp@baylibre.com/
-v6  - https://lore.kernel.org/linux-mediatek/20211110130623.20553-1-granquet@baylibre.com/
-v7  - https://lore.kernel.org/linux-mediatek/20211217150854.2081-1-granquet@baylibre.com/
-
-Functional dependencies are:
-- Add Mediatek Soc DRM (vdosys0) support for mt8195
-  https://lore.kernel.org/all/20211026155911.17651-1-jason-jh.lin@mediatek.com/
-- Add MediaTek SoC DRM (vdosys1) support for mt8195
-  https://lore.kernel.org/all/20211029075203.17093-1-nancy.lin@mediatek.com/
-
-
-Guillaume Ranquet (11):
-  drm/mediatek: dpi: move dpi limits to board config
-  drm/mediatek: dpi: implement a CK/DE pol toggle in board config
-  drm/mediatek: dpi: implement a swap_input toggle in board config
-  drm/mediatek: dpi: move dimension mask to board config
-  drm/mediatek: dpi: move dimension_mask to board config
-  drm/mediatek: dpi: move swap_shift to board config
-  drm/mediatek: dpi: move the yuv422_en_bit to board config
-  drm/mediatek: dpi: move the csc_enable bit to board config
-  drm/mediatek: dpi: Add dpintf support
-  drm/mediatek: Add mt8195 External DisplayPort support
-  drm/mediatek: DP audio support for mt8195
-
-Jitao Shi (2):
-  drm/mediatek: add hpd debounce
-  drm/mediatek: change the aux retries times when receiving AUX_DEFER
-
-Markus Schneider-Pargmann (6):
-  dt-bindings: mediatek,dpi: Add DP_INTF compatible
-  dt-bindings: mediatek,dp: Add Display Port binding
-  drm/edid: Add cea_sad helpers for freq/length
-  video/hdmi: Add audio_infoframe packing for DP
-  phy: phy-mtk-dp: Add driver for DP phy
-  drm/mediatek: Add mt8195 Embedded DisplayPort driver
-
- .../display/mediatek/mediatek,dp.yaml         |   87 +
- .../display/mediatek/mediatek,dpi.yaml        |   11 +-
- MAINTAINERS                                   |    1 +
- drivers/gpu/drm/drm_edid.c                    |   74 +
- drivers/gpu/drm/mediatek/Kconfig              |    7 +
- drivers/gpu/drm/mediatek/Makefile             |    2 +
- drivers/gpu/drm/mediatek/mtk_dp.c             | 3067 +++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_dp_reg.h         |  568 +++
- drivers/gpu/drm/mediatek/mtk_dpi.c            |  287 +-
- drivers/gpu/drm/mediatek/mtk_dpi_regs.h       |   38 +
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   |    8 +
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |    1 +
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        |    6 +-
- drivers/gpu/drm/mediatek/mtk_drm_drv.h        |    1 +
- drivers/phy/mediatek/Kconfig                  |    8 +
- drivers/phy/mediatek/Makefile                 |    1 +
- drivers/phy/mediatek/phy-mtk-dp.c             |  199 ++
- drivers/video/hdmi.c                          |   83 +-
- include/drm/drm_dp_helper.h                   |    2 +
- include/drm/drm_edid.h                        |   18 +-
- include/linux/hdmi.h                          |    7 +-
- include/linux/soc/mediatek/mtk-mmsys.h        |    2 +
- 22 files changed, 4399 insertions(+), 79 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
- create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
- create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
- create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
-
--- 
-2.34.1
+		 __func__, dai->id, substream->stream, rate);
 

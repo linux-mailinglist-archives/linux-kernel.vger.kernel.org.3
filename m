@@ -2,219 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1654BB66F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A954BB674
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbiBRKJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:09:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60142 "EHLO
+        id S233876AbiBRKLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:11:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiBRKJc (ORCPT
+        with ESMTP id S230250AbiBRKLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:09:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 808063D1FD
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:09:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645178954;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XHsrA51tA3vT398QL9pL8+F4Xpr1TIdT6DiOmwJYGxM=;
-        b=IcBtMpMMw6d3eY6hdMKAb+G9eueQlpsng/jKj49sOUU9kWYgMBJTB49OkysY+6cpGhFP80
-        HQG32EDJjEzqcDamkV9lrgI9Ax3mnmfFlYvENXdz87afVbYWvz5rSMXwmTgNvl+H5MMFbv
-        W40IbFNZge9Vu0Rs8/FM3R1eFTtKEik=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-645u8sAxP-aLt-X_BIJBKQ-1; Fri, 18 Feb 2022 05:09:12 -0500
-X-MC-Unique: 645u8sAxP-aLt-X_BIJBKQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5D93A1006AA3;
-        Fri, 18 Feb 2022 10:09:11 +0000 (UTC)
-Received: from virtlab511.virt.lab.eng.bos.redhat.com (virtlab511.virt.lab.eng.bos.redhat.com [10.19.152.198])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F3131106222E;
-        Fri, 18 Feb 2022 10:09:10 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pgonda@google.com
-Subject: [PATCH] selftests: KVM: add sev_migrate_tests on machines without SEV-ES
-Date:   Fri, 18 Feb 2022 05:09:10 -0500
-Message-Id: <20220218100910.35767-1-pbonzini@redhat.com>
+        Fri, 18 Feb 2022 05:11:24 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C2F1A3406;
+        Fri, 18 Feb 2022 02:11:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645179029;
+        bh=dQaqrY1szTQw9YJ5drdcXLw3CUwut1x5HuSIYC9iL30=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=gB6XqqEoSlrqdJyM42lAzTT7wy7q/yZHtvVLzTXcgzyD6Uh9a3eptkNSd1nNcQwjH
+         RJfXeEaEteC6w5aDfYAOJmUxH5+P6Tuss79Q+abdFRrae076f4niwkTb/+bcsWZmNc
+         pBiF+JcSUaIiCpDgn8QC83D/4LiziJIUh1aGEgKU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from max-esprimop556.user.selfnet.de ([141.72.241.228]) by
+ mail.gmx.net (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M6DWi-1nNC4j26w4-006hyE; Fri, 18 Feb 2022 11:10:29 +0100
+From:   Max Buchholz <max.buchholz@gmx.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Max Buchholz <max.buchholz@gmx.de>
+Cc:     Max Buchholz <Max.Buchholz@gmx.de>,
+        David Heidelberg <david@ixit.cz>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: nvidia,tegra20-kbc: Convert to json-schema
+Date:   Fri, 18 Feb 2022 11:10:10 +0100
+Message-Id: <20220218101011.22988-1-max.buchholz@gmx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:UkGIICl6xbjoVsCCGPW/PZwIzzlt2IWnp1FVx8gSHB/6A++cTIy
+ uITxyk1KCNKk6tDRl4e21GfJQ1wzqqVRLCewIdzOYlFEr8NPgumVyzqx9ufFg0ja+gVGSU3
+ +QzocnU6Y9dhHb+t5kXaHBssqy47WN/rT3RjpiiTHMhJFU5ty4VsawFpo3hEmWSw6QqA8CB
+ 0mTiNW7ek7WUI6dOFQrmw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+xjSSEDY6F4=:xYZggW/fkvD+XhqJuzQlTc
+ okTjuMKHFJ/IcFNnvci3yGLge2sKr1yLfeiXtUWKdDjfmjSwWRbOsfWcRYkJ1Y8KSLQTB6Kbk
+ K7/H3XrIou7qtAvgZgd0t8N43EZEhP7zHDSZlkj0Q60OsQLtgldct3mcqG/gOzkni5luy7Tex
+ 6Jg5KTtnymLSTxMHwpdzRc2s/DC7kuFqKVVmvHmhb0R/9LlpLDY1lGU+veMao+3xvdwSmApdb
+ BVSMs5Ev2NeLc+uWWCEmuSE45WH0naMkTGUtgnGUZ+WjeYwsYfLg6lQ9vcLo1hBMmv523LwmG
+ fkSVH7RdXFlsnZ7AcLw1/9T168ILepnYzfFqzbfnxUyG6VSBi/E+EleAqfytLWvC6Z51YzyKv
+ 7DeT73s1qMne0NialqWS/iL7MdksLU+cONJtFTDxvqvp2tZ/5csuuXWceCqucWm4Z/Uw94kUQ
+ tcuHQ6HCjLjJ5RR+xhZPGYp9n8eQa0dMV/QM5vEVSY7PovDtFdoYQsDCYBv4L5I9YdbNT8WYe
+ SabwFDQODkbgFEy1uXiDlXdXhvPjMy3EpjOzai2hFhONos6euJIXZt+38aPqK3kbaiDI+tw2N
+ qmqYr3ucOaplSZRrxQnGL0SuOuvxbbhgmWTLLbK7I/M31ZeMDwoSaPBAnn7NXTlP4NRvTuDLc
+ V/uXNBqTu7WfAQPfpgYeAFiZtLthQpjeW4tD8oXIoDmB3sCrJwapPcAtvHo3GzW/a2wEdK99m
+ mgkHl+wxTjSx9FpcT5VEjF24nDc8wm+jvVAFxwW8Owd0uZffyrluGan/dOEKlcM46bgstYFxO
+ OZ+Eu9fmkvlxucdDnPV07H/w6ldg/p3cPXHVcPa/tPSnKEbHLUK/Bj5tFD6Iqzqbj0hprz3Y8
+ HPGESuI1rkCf9TvRt1UtBNHP0vWaMlF13N3ZpgR2v9n2isylMfZ7WqT58I+SJpoxzq6h+/Py8
+ 7yI6iUwpXpBiPG65vHSEeW9/k8odas+DT9POAjnoVNmKA/s7Z/O8zNUyxqzRYJIaVbFNG1bUQ
+ 0h6xXfauRpNci0V8E6oVG3QyBBclCsM7g3p2lwbtOuqiriV45cmm/hyU/AzMVzxUnmVffxbKd
+ /SerSQg27utJ9I=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I managed to get hold of a machine that has SEV but not SEV-ES, and
-sev_migrate_tests fails because sev_vm_create(true) returns ENOTTY.
-Fix this, and while at it also return KSFT_SKIP on machines that do
-not have SEV at all, instead of returning 0.
+From: Max Buchholz <Max.Buchholz@gmx.de>
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- .../selftests/kvm/x86_64/sev_migrate_tests.c  | 78 ++++++++++++++-----
- 1 file changed, 57 insertions(+), 21 deletions(-)
+This converts the Nvidia Tegra keyboard controller bindings to YAML
+and fix them up a bit.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-index 2e5a42cb470b..d1dc1acf997c 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-@@ -21,6 +21,8 @@
- #define NR_LOCK_TESTING_THREADS 3
- #define NR_LOCK_TESTING_ITERATIONS 10000
- 
-+bool have_sev_es;
-+
- static int __sev_ioctl(int vm_fd, int cmd_id, void *data, __u32 *fw_error)
- {
- 	struct kvm_sev_cmd cmd = {
-@@ -172,10 +174,18 @@ static void test_sev_migrate_parameters(void)
- 		*sev_es_vm_no_vmsa;
- 	int ret;
- 
--	sev_vm = sev_vm_create(/* es= */ false);
--	sev_es_vm = sev_vm_create(/* es= */ true);
- 	vm_no_vcpu = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
- 	vm_no_sev = aux_vm_create(true);
-+	ret = __sev_migrate_from(vm_no_vcpu->fd, vm_no_sev->fd);
-+	TEST_ASSERT(ret == -1 && errno == EINVAL,
-+		    "Migrations require SEV enabled. ret %d, errno: %d\n", ret,
-+		    errno);
-+
-+	if (!have_sev_es)
-+		goto out;
-+
-+	sev_vm = sev_vm_create(/* es= */ false);
-+	sev_es_vm = sev_vm_create(/* es= */ true);
- 	sev_es_vm_no_vmsa = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
- 	sev_ioctl(sev_es_vm_no_vmsa->fd, KVM_SEV_ES_INIT, NULL);
- 	vm_vcpu_add(sev_es_vm_no_vmsa, 1);
-@@ -204,14 +214,10 @@ static void test_sev_migrate_parameters(void)
- 		"SEV-ES migrations require UPDATE_VMSA. ret %d, errno: %d\n",
- 		ret, errno);
- 
--	ret = __sev_migrate_from(vm_no_vcpu->fd, vm_no_sev->fd);
--	TEST_ASSERT(ret == -1 && errno == EINVAL,
--		    "Migrations require SEV enabled. ret %d, errno: %d\n", ret,
--		    errno);
+Acked-by: David Heidelberg <david@ixit.cz>
+Signed-off-by: Max Buchholz <max.buchholz@gmx.de>
+=2D--
+ .../bindings/input/nvidia,tegra20-kbc.txt     |  55 ---------
+ .../bindings/input/nvidia,tegra20-kbc.yaml    | 114 ++++++++++++++++++
+ 2 files changed, 114 insertions(+), 55 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20=
+-kbc.txt
+ create mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20=
+-kbc.yaml
+
+diff --git a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.tx=
+t b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
+deleted file mode 100644
+index 1faa7292e21f..000000000000
+=2D-- a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
++++ /dev/null
+@@ -1,55 +0,0 @@
+-* Tegra keyboard controller
+-The key controller has maximum 24 pins to make matrix keypad. Any pin
+-can be configured as row or column. The maximum column pin can be 8
+-and maximum row pins can be 16 for Tegra20/Tegra30.
 -
- 	kvm_vm_free(sev_vm);
- 	kvm_vm_free(sev_es_vm);
- 	kvm_vm_free(sev_es_vm_no_vmsa);
-+out:
- 	kvm_vm_free(vm_no_vcpu);
- 	kvm_vm_free(vm_no_sev);
- }
-@@ -300,7 +306,6 @@ static void test_sev_mirror_parameters(void)
- 	int ret;
- 
- 	sev_vm = sev_vm_create(/* es= */ false);
--	sev_es_vm = sev_vm_create(/* es= */ true);
- 	vm_with_vcpu = aux_vm_create(true);
- 	vm_no_vcpu = aux_vm_create(false);
- 
-@@ -310,6 +315,21 @@ static void test_sev_mirror_parameters(void)
- 		"Should not be able copy context to self. ret: %d, errno: %d\n",
- 		ret, errno);
- 
-+	ret = __sev_mirror_create(vm_no_vcpu->fd, vm_with_vcpu->fd);
-+	TEST_ASSERT(ret == -1 && errno == EINVAL,
-+		    "Copy context requires SEV enabled. ret %d, errno: %d\n", ret,
-+		    errno);
-+
-+	ret = __sev_mirror_create(vm_with_vcpu->fd, sev_vm->fd);
-+	TEST_ASSERT(
-+		ret == -1 && errno == EINVAL,
-+		"SEV copy context requires no vCPUS on the destination. ret: %d, errno: %d\n",
-+		ret, errno);
-+
-+	if (!have_sev_es)
-+		goto out;
-+
-+	sev_es_vm = sev_vm_create(/* es= */ true);
- 	ret = __sev_mirror_create(sev_vm->fd, sev_es_vm->fd);
- 	TEST_ASSERT(
- 		ret == -1 && errno == EINVAL,
-@@ -322,19 +342,10 @@ static void test_sev_mirror_parameters(void)
- 		"Should not be able copy context to SEV-ES enabled VM. ret: %d, errno: %d\n",
- 		ret, errno);
- 
--	ret = __sev_mirror_create(vm_no_vcpu->fd, vm_with_vcpu->fd);
--	TEST_ASSERT(ret == -1 && errno == EINVAL,
--		    "Copy context requires SEV enabled. ret %d, errno: %d\n", ret,
--		    errno);
+-Required properties:
+=2D- compatible: "nvidia,tegra20-kbc"
+=2D- reg: Register base address of KBC.
+=2D- interrupts: Interrupt number for the KBC.
+=2D- nvidia,kbc-row-pins: The KBC pins which are configured as row. This i=
+s an
+-  array of pin numbers which is used as rows.
+=2D- nvidia,kbc-col-pins: The KBC pins which are configured as column. Thi=
+s is an
+-  array of pin numbers which is used as column.
+=2D- linux,keymap: The keymap for keys as described in the binding documen=
+t
+-  devicetree/bindings/input/matrix-keymap.txt.
+=2D- clocks: Must contain one entry, for the module clock.
+-  See ../clocks/clock-bindings.txt for details.
+=2D- resets: Must contain an entry for each entry in reset-names.
+-  See ../reset/reset.txt for details.
+=2D- reset-names: Must include the following entries:
+-  - kbc
 -
--	ret = __sev_mirror_create(vm_with_vcpu->fd, sev_vm->fd);
--	TEST_ASSERT(
--		ret == -1 && errno == EINVAL,
--		"SEV copy context requires no vCPUS on the destination. ret: %d, errno: %d\n",
--		ret, errno);
-+	kvm_vm_free(sev_es_vm);
- 
-+out:
- 	kvm_vm_free(sev_vm);
--	kvm_vm_free(sev_es_vm);
- 	kvm_vm_free(vm_with_vcpu);
- 	kvm_vm_free(vm_no_vcpu);
- }
-@@ -393,11 +404,35 @@ static void test_sev_move_copy(void)
- 	kvm_vm_free(sev_vm);
- }
- 
-+#define X86_FEATURE_SEV (1 << 1)
-+#define X86_FEATURE_SEV_ES (1 << 3)
+-Optional properties, in addition to those specified by the shared
+-matrix-keyboard bindings:
+-
+=2D- linux,fn-keymap: a second keymap, same specification as the
+-  matrix-keyboard-controller spec but to be used when the KEY_FN modifier
+-  key is pressed.
+=2D- nvidia,debounce-delay-ms: delay in milliseconds per row scan for debo=
+uncing
+=2D- nvidia,repeat-delay-ms: delay in milliseconds before repeat starts
+=2D- nvidia,ghost-filter: enable ghost filtering for this device
+=2D- wakeup-source: configure keyboard as a wakeup source for suspend/resu=
+me
+-		 (Legacy property supported: "nvidia,wakeup-source")
+-
+-Example:
+-
+-keyboard: keyboard {
+-	compatible =3D "nvidia,tegra20-kbc";
+-	reg =3D <0x7000e200 0x100>;
+-	interrupts =3D <0 85 0x04>;
+-	clocks =3D <&tegra_car 36>;
+-	resets =3D <&tegra_car 36>;
+-	reset-names =3D "kbc";
+-	nvidia,ghost-filter;
+-	nvidia,debounce-delay-ms =3D <640>;
+-	nvidia,kbc-row-pins =3D <0 1 2>;    /* pin 0, 1, 2 as rows */
+-	nvidia,kbc-col-pins =3D <11 12 13>; /* pin 11, 12, 13 as columns */
+-	linux,keymap =3D <0x00000074
+-			0x00010067
+-			0x00020066
+-			0x01010068
+-			0x02000069
+-			0x02010070
+-			0x02020071>;
+-};
+diff --git a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.ya=
+ml b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
+new file mode 100644
+index 000000000000..076b347a6f07
+=2D-- /dev/null
++++ b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
+@@ -0,0 +1,114 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/input/nvidia,tegra20-kbc.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
- int main(int argc, char *argv[])
- {
-+	struct kvm_cpuid_entry2 *cpuid;
++title: Nvidia Tegra keyboard controller
 +
-+	if (!kvm_check_cap(KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM) &&
-+	    !kvm_check_cap(KVM_CAP_VM_COPY_ENC_CONTEXT_FROM)) {
-+		print_skip("Capabilities not available");
-+		exit(KSFT_SKIP);
-+	}
++maintainers:
++  - Max Buchholz <max.buchholz@gmx.de>
 +
-+	cpuid = kvm_get_supported_cpuid_entry(0x80000000);
-+	if (cpuid->eax < 0x8000001f) {
-+		print_skip("AMD memory encryption not available");
-+		exit(KSFT_SKIP);
-+	}
-+	cpuid = kvm_get_supported_cpuid_entry(0x8000001f);
-+	if (!(cpuid->eax & X86_FEATURE_SEV)) {
-+		print_skip("AMD SEV not available");
-+		exit(KSFT_SKIP);
-+	}
-+	have_sev_es = !!(cpuid->eax & X86_FEATURE_SEV_ES);
++description: >
++  The key controller has maximum 24 pins to make matrix keypad. Any pin
++  can be configured as row or column. The maximum column pin can be 8
++  and maximum row pins can be 16 for Tegra20/Tegra30.
 +
- 	if (kvm_check_cap(KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM)) {
- 		test_sev_migrate_from(/* es= */ false);
--		test_sev_migrate_from(/* es= */ true);
-+		if (have_sev_es)
-+			test_sev_migrate_from(/* es= */ true);
- 		test_sev_migrate_locking();
- 		test_sev_migrate_parameters();
- 		if (kvm_check_cap(KVM_CAP_VM_COPY_ENC_CONTEXT_FROM))
-@@ -405,7 +440,8 @@ int main(int argc, char *argv[])
- 	}
- 	if (kvm_check_cap(KVM_CAP_VM_COPY_ENC_CONTEXT_FROM)) {
- 		test_sev_mirror(/* es= */ false);
--		test_sev_mirror(/* es= */ true);
-+		if (have_sev_es)
-+			test_sev_mirror(/* es= */ true);
- 		test_sev_mirror_parameters();
- 	}
- 	return 0;
--- 
-2.31.1
++properties:
++  compatible:
++    const: nvidia,tegra20-kbc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    description: Interrupt number for the KBC.
++
++  nvidia,kbc-row-pins:
++    description: >
++      The KBC pins which are configured as row. This is an
++      array of pin numbers which is used as rows.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++
++  nvidia,kbc-col-pins:
++    description: >
++      The KBC pins which are configured as column. This is an
++      array of pin numbers which is used as column.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++
++  linux,keymap:
++    description: >
++      The keymap for keys as described in the binding document
++      devicetree/bindings/input/matrix-keymap.txt.
++
++  clocks:
++    maxItems: 1
++    description: >
++      Must contain one entry, for the module clock.
++      See ../clocks/clock-bindings.txt for details.
++
++  resets:
++    description: >
++      Must contain an entry for each entry in reset-names.
++      See ../reset/reset.txt for details.
++
++  reset-names:
++    const: kbc
++
++  linux,fn-keymap:
++    description: >
++      a second keymap, same specification as the
++      matrix-keyboard-controller spec but to be used when the KEY_FN modi=
+fier
++      key is pressed.
++
++  nvidia,debounce-delay-ms:
++    description: delay in milliseconds per row scan for debouncing
++
++  nvidia,repeat-delay-ms:
++    description: delay in milliseconds before repeat starts
++
++  nvidia,ghost-filter:
++    description: enable ghost filtering for this device
++    type: boolean
++
++  wakeup-source:
++    description: configure keyboard as a wakeup source for suspend/resume
++
++  nvidia,wakeup-source:
++    description: configure keyboard as a wakeup source for suspend/resume
++    deprecated: true
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - nvidia,kbc-row-pins
++  - nvidia,kbc-col-pins
++  - linux,keymap
++  - clocks
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    keyboard: {
++        compatible =3D "nvidia,tegra20-kbc";
++        reg =3D <0x7000e200 0x100>;
++        interrupts =3D <0 85 0x04>;
++        clocks =3D <&tegra_car 36>;
++        resets =3D <&tegra_car 36>;
++        reset-names =3D "kbc";
++        nvidia,ghost-filter;
++        nvidia,debounce-delay-ms =3D <640>;
++        nvidia,kbc-row-pins =3D <0 1 2>;    /* pin 0, 1, 2 as rows */
++        nvidia,kbc-col-pins =3D <11 12 13>; /* pin 11, 12, 13 as columns =
+*/
++        linux,keymap =3D <0x00000074
++                0x00010067
++                0x00020066
++                0x01010068
++                0x02000069
++                0x02010070
++                0x02020071>;
++    };
+=2D-
+2.35.1
 

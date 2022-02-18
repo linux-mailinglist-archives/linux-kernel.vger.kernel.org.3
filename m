@@ -2,87 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39AA14BBB7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCF74BBB94
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236385AbiBRO53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:57:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51386 "EHLO
+        id S236570AbiBRO7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:59:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236410AbiBRO4s (ORCPT
+        with ESMTP id S236681AbiBRO6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:56:48 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6502B2FF0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:18 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id cm8so6301822edb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HEDVsJdoBlriKRiWsMiaPibDlLRBSHkQp8aBEXdrRPg=;
-        b=fqRe4zP7YJl0es1coqEkQ+IA42hkW52O3II+Mzuv6ExVlmG3hQ9BH55+U9/QlFyisp
-         0usnUkaPANy2IpTeSlyrZXG5nwU5PJx+kftwW3x7K85HTPrWGf5JoMKVsOXl8czZudNt
-         kgmk68cPq+KhxefMKldnyo24+ONhbjWcEPftQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HEDVsJdoBlriKRiWsMiaPibDlLRBSHkQp8aBEXdrRPg=;
-        b=NlR2YxHRPWoi3ULARZIQZzaOAM6/YEUXO1Glb4rFnNTnYq4Kq1/BjqvuR4QziDFEtU
-         hJHkHnRkSHwLTxjESsqXjy7lefy1Zl18KhoIlkPueyeoMbuD3OEMp5+EJ7nNjC21nqpU
-         elBy99rTulvThOr4qNcIs0xbTDrQnxeCs4a1ZX8hm+8vq3hVf5VVrD8fcA6DhAqo2pud
-         HlimleIJICPMSS24Vbdz5JbkdrAfgLvRirA9Fp1o046VGWeV4jHtkGSfouA5922ALNT9
-         mfoTmitMdErJqc0/+Hc8ionXR1hF677DKqDcvnVv6P1KS+WJ2fAA7Ah6Nw1BI7bQxIwG
-         Y2eA==
-X-Gm-Message-State: AOAM530tZ1qnHGU/QK284LF16jl1jmR5GMz38HEzh0gmrVs3ui1T7eoz
-        k7tilGHmLwLtyHcN27/oqYxPpt4ECvZs3FJHEqU=
-X-Google-Smtp-Source: ABdhPJyKJpSAHcZtMzfYQF/gcShqQif4CzVTjcl/RQ6Tg+W9nLIA/gdXfqnenWj7SzTHEtNsmP/qJw==
-X-Received: by 2002:a05:6402:518b:b0:412:80a3:fb6e with SMTP id q11-20020a056402518b00b0041280a3fb6emr8865190edd.84.1645196176254;
-        Fri, 18 Feb 2022 06:56:16 -0800 (PST)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id z12sm5153604edb.77.2022.02.18.06.56.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 06:56:15 -0800 (PST)
-Received: by mail-wr1-f47.google.com with SMTP id f3so14887809wrh.7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:15 -0800 (PST)
-X-Received: by 2002:a5d:4c48:0:b0:1e4:aeab:c77e with SMTP id
- n8-20020a5d4c48000000b001e4aeabc77emr6335194wrt.342.1645196174604; Fri, 18
- Feb 2022 06:56:14 -0800 (PST)
+        Fri, 18 Feb 2022 09:58:51 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C5E102F;
+        Fri, 18 Feb 2022 06:57:06 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21IEPv4h031154;
+        Fri, 18 Feb 2022 09:57:00 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3e9fu17bws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Feb 2022 09:57:00 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 21IEuxna029574
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Feb 2022 09:56:59 -0500
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 18 Feb 2022 09:56:58 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 18 Feb 2022 09:56:58 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 18 Feb 2022 09:56:58 -0500
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 21IEuneO031805;
+        Fri, 18 Feb 2022 09:56:52 -0500
+From:   Cristian Pop <cristian.pop@analog.com>
+To:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <jic23@kernel.org>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>, Cristian Pop <cristian.pop@analog.com>
+Subject: [PATCH v5 1/2] dt-bindings: iio: frequency: Add ADMV4420 doc
+Date:   Fri, 18 Feb 2022 17:07:37 +0200
+Message-ID: <20220218150738.94735-1-cristian.pop@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <1644494255-6632-1-git-send-email-quic_sbillaka@quicinc.com>
- <1644494255-6632-3-git-send-email-quic_sbillaka@quicinc.com> <YgWoAwdH/AqJUshh@builder.lan>
-In-Reply-To: <YgWoAwdH/AqJUshh@builder.lan>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 18 Feb 2022 06:56:01 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XHsgg-cPVRr8jEUTGm3rf_BO5P+jQawDPq9Hju-O4uwQ@mail.gmail.com>
-Message-ID: <CAD=FV=XHsgg-cPVRr8jEUTGm3rf_BO5P+jQawDPq9Hju-O4uwQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] arm64: dts: qcom: sc7280: Add support for eDP
- panel on CRD
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, quic_kalyant@quicinc.com,
-        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
-        quic_mkrishn@quicinc.com, quic_vproddut@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: 3mtlnP6pzlF2VtvbZyKt3jwjdMiAJDvS
+X-Proofpoint-GUID: 3mtlnP6pzlF2VtvbZyKt3jwjdMiAJDvS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-18_05,2022-02-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 clxscore=1015 spamscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202180096
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,34 +70,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add device tree bindings for the ADMV4420 K band downconverter.
 
-On Thu, Feb 10, 2022 at 4:04 PM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> > +&mdss_edp {
-> > +     status = "okay";
-> > +
-> > +     vdda-1p2-supply = <&vreg_l6b_1p2>;
-> > +     vdda-0p9-supply = <&vreg_l10c_0p8>;
-> > +     /delete-property/ pinctrl-names;
-> > +     /delete-property/ pinctrl-0;
->
-> If the first device to enable &mdss_edp overwrites pinctrl-{names,0} in
-> &mdss_dp and removes the properties in &mdss_edp, I think that's a sign
-> that they should not be in the .dtsi in the first place.
+Signed-off-by: Cristian Pop <cristian.pop@analog.com>
+---
+changes in v5:
+ - Add spaces and fix prefix in commit subject
+ - Rename node name: admv4420 -> mixer
+ .../bindings/iio/frequency/adi,admv4420.yaml  | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
 
-Actually, I just looked more carefully here. I think the
-"/delete-property" for edp_hpd here is just wrong. I'm pretty sure
-that the HPD signal is hooked up on CRD and we actually need it. If
-somehow deleting the property helps you then it's probably just
-hacking around a bug and relying on the panel to be always powered on,
-or something.
+diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
+new file mode 100644
+index 000000000000..da7fe85ec92e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
+@@ -0,0 +1,55 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/frequency/adi,admv4420.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ADMV4420 K Band Downconverter
++
++maintainers:
++  - Cristian Pop <cristian.pop@analog.com>
++
++description:
++  The ADMV4420 is a highly integrated, double balanced, active
++  mixer with an integrated fractional-N synthesizer, ideally suited
++  for next generation K band satellite communications
++
++properties:
++  compatible:
++    enum:
++      - adi,admv4420
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency:
++    maximum: 1000000
++
++  adi,lo-freq-khz:
++    description: LO Frequency
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  adi,ref-ext-single-ended-en:
++    description: External reference selected.
++    type: boolean
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      mixer@0 {
++        compatible = "adi,admv4420";
++        reg = <0>;
++        spi-max-frequency = <1000000>;
++        adi,lo-freq-khz = <16750000>;
++        adi,ref-ext-single-ended-en;
++      };
++    };
++...
+-- 
+2.17.1
 
-I think this gets into some of the stuff in your final patch in this
-series. I found that, on my hardware, the panel doesn't come up at all
-with that final patch. When I go back to how things were working in an
-earlier version of your series, though, I can get things working a
-little better (though still not perfect).
-
--Doug

@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C534BB366
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0039C4BB36B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiBRHdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:33:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39318 "EHLO
+        id S230413AbiBRHdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:33:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiBRHct (ORCPT
+        with ESMTP id S232105AbiBRHcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:32:49 -0500
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 23:32:33 PST
-Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E3D291F95
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:32:33 -0800 (PST)
-Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 202202180731276cbb713a540644d188
+        Fri, 18 Feb 2022 02:32:55 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 23:32:39 PST
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C357296929
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:32:37 -0800 (PST)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 202202180731280445ec3ecc9d6b97da
         for <linux-kernel@vger.kernel.org>;
-        Fri, 18 Feb 2022 08:31:27 +0100
+        Fri, 18 Feb 2022 08:31:29 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=EBXVVXzuqxQZpJ7v89UZdV7W1f/O/+KXI4n9OYKaozE=;
- b=eX9Xm9P7vjJCE2roMer44/L2/Azjd4/a22KhwDrLONyLD1Ln8GVkkzf+9A/mab16Q1yzIC
- eQv4aBZUIrzi4iBW81JLcn71RX0ALV1cr4jeR5cm54GGx6jyAWsVU18TFG75vA1bq2CtcPU6
- pP69fzGbsL8dhalxTelUAmZ3VcFKE=;
+ bh=2QoxEb5jjQqEe5geNwJ+mjwTK4TQqzNR+pyl04R918k=;
+ b=ZeGM0muVikeLVW3ioAfDZNV2g2Cl5RsaHoqT0WQLRx5dRB8w8z9WrwyEfoi6mLA4tmkRFv
+ MVuAUrAh6AJzR1KgOdLqX9SQ2KBnGMpl70c+uWHsscI1JBW5PY9cFSK6cez1SJ3rGhxo9I3T
+ k8l1NnzzQsphVDTRZXAxMEFjgPUZc=;
 From:   daniel.starke@siemens.com
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 3/7] tty: n_gsm: fix proper link termination after failed open
-Date:   Thu, 17 Feb 2022 23:31:19 -0800
-Message-Id: <20220218073123.2121-3-daniel.starke@siemens.com>
+Subject: [PATCH 4/7] tty: n_gsm: fix NULL pointer access due to DLCI release
+Date:   Thu, 17 Feb 2022 23:31:20 -0800
+Message-Id: <20220218073123.2121-4-daniel.starke@siemens.com>
 In-Reply-To: <20220218073123.2121-1-daniel.starke@siemens.com>
 References: <20220218073123.2121-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
@@ -50,35 +50,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Trying to open a DLCI by sending a SABM frame may fail with a timeout.
-The link is closed on the initiator side without informing the responder
-about this event. The responder assumes the link is open after sending a
-UA frame to answer the SABM frame. The link gets stuck in a half open
-state.
+The here fixed commit made the tty hangup asynchronous to avoid a circular
+locking warning. I could not reproduce this warning. Furthermore, due to
+the asynchronous hangup the function call now gets queued up while the
+underlying tty is being freed. Depending on the timing this results in a
+NULL pointer access in the global work queue scheduler. To be precise in
+process_one_work(). Therefore, the previous commit made the issue worse
+which it tried to fix.
 
-This patch fixes this by initiating the proper link termination procedure
-after link setup timeout instead of silently closing it down.
+This patch fixes this by falling back to the old behavior which uses a
+blocking tty hangup call before freeing up the associated tty.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Fixes: 7030082a7415 ("tty: n_gsm: avoid recursive locking with async port hangup")
 Cc: stable@vger.kernel.org
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/n_gsm.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 0b1808e3a912..52224a3494a0 100644
+index 0b1808e3a912..e63154ef0b6c 100644
 --- a/drivers/tty/n_gsm.c
 +++ b/drivers/tty/n_gsm.c
-@@ -1514,7 +1514,7 @@ static void gsm_dlci_t1(struct timer_list *t)
- 			dlci->mode = DLCI_MODE_ADM;
- 			gsm_dlci_open(dlci);
- 		} else {
--			gsm_dlci_close(dlci);
-+			gsm_dlci_begin_close(dlci); /* prevent half open link */
- 		}
+@@ -1748,7 +1748,12 @@ static void gsm_dlci_release(struct gsm_dlci *dlci)
+ 		gsm_destroy_network(dlci);
+ 		mutex_unlock(&dlci->mutex);
  
- 		break;
+-		tty_hangup(tty);
++		/* We cannot use tty_hangup() because in tty_kref_put() the tty
++		 * driver assumes that the hangup queue is free and reuses it to
++		 * queue release_one_tty() -> NULL pointer panic in
++		 * process_one_work().
++		 */
++		tty_vhangup(tty);
+ 
+ 		tty_port_tty_set(&dlci->port, NULL);
+ 		tty_kref_put(tty);
 -- 
 2.25.1
 

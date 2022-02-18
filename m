@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F504BBD94
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AC54BBD99
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237947AbiBRQdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:33:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51866 "EHLO
+        id S237960AbiBRQeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:34:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiBRQd3 (ORCPT
+        with ESMTP id S237955AbiBRQep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:33:29 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07346207FE4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:33:13 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 10so7592227plj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:33:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H/uvUOlzgu7E24r5QEdLevzWEd8lLd8nM8VcgKvELNA=;
-        b=FXF0/Fza6sK6cvL+St88kZZabLCdML0OeO223BGa1SzRlyr4MGJ58NzWL+hbDLc2v7
-         Or8G0auvC8WPsxEaE5VJHEDDv028Na/ogvPcWUeNGxNVEl29/omxHODVv4wG7NZ2oX3Y
-         BFNEqPNMUr13wRmM29v6HIAtGJAwPamG8HIsKjD3+pdUj/NqmiPiqXZRtWzxpKL7WwMi
-         dBO83zMKOEeJXnc1g6jGWVOFsa+4q98Tq1aAdbB1gBVPwGb/gFIAFzj7Luu8/SBTkrNd
-         HGI3R4ResJbYayDylt5pGuUHL6cpX6xMM7gj0PFW4CUUh62wyrt3z0NHS4wnqCsLvdMS
-         soog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H/uvUOlzgu7E24r5QEdLevzWEd8lLd8nM8VcgKvELNA=;
-        b=QNrF0z0bfGhTH9jWul2DsKPk7raDmPmQnowe5l0tIJbFUJuEc3zAnmgmbVwvFII5oW
-         +ltedzzPv9O48PE2UyWNspFcWp+zQRCEebXx9J36jr4jjMPxId5SO5JkPpMv5cOVS+FL
-         fCyqDp9/HptBshqKj0M59gvPl+9b/RcU5Ss6c+faZ4GJfGJVxVFg/lihgyU+B/iFdmUi
-         s9MspvtBzMn+h0FYfJR3buSSpTAYDvJVTt9IyrbOy4nfEVq8J/xKU+gz77MLReAy4uRW
-         XScMubGY4PbJYrRGy9l7C2xjFlkgwr7cZgHd2JWEZJEpPGhhT51OE29oxRMIjxhzKN3Q
-         YtJA==
-X-Gm-Message-State: AOAM5332qRCbpZ2unRza+bJLsve1D68+wiZquTM1NDhj3NMDvG1WpCYp
-        Kc8C6Xzz6GsaUoO8UD6jMAk=
-X-Google-Smtp-Source: ABdhPJzBLHb36gu+M6PJfFcde8bWIL4/8LlgT2QnnY6F0lsQ+lsZ6001H//ihGsYTTIqNBsqCsgoVw==
-X-Received: by 2002:a17:902:f78d:b0:14d:522e:deb3 with SMTP id q13-20020a170902f78d00b0014d522edeb3mr7940668pln.173.1645201992479;
-        Fri, 18 Feb 2022 08:33:12 -0800 (PST)
-Received: from localhost.localdomain ([2405:201:9005:88cd:8c06:953a:a435:bc37])
-        by smtp.gmail.com with ESMTPSA id s42sm3405724pfg.180.2022.02.18.08.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 08:33:11 -0800 (PST)
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-To:     tglx@linutronix.de, maz@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH] irqchip: nvic: release nvic_base upon failure
-Date:   Fri, 18 Feb 2022 22:03:03 +0530
-Message-Id: <20220218163303.33344-1-jrdr.linux@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 18 Feb 2022 11:34:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721032ABD1D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:34:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BDC261F65
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:34:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005E3C340E9;
+        Fri, 18 Feb 2022 16:34:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645202066;
+        bh=3mfSjeFg5UvPQyM+d6QjT4buHJvJkQj1rCBa6ArkwLs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZuRn1OerTeB+bGjnhGoQE/AGo69mdoiz0E94CWlv2O8qyXt8tljx3FyIj8RrliyvM
+         WGRoGjBmzmAvbayY/2fINCHlio9C9JYdxFIpqVQcRbhxfyj+EWFZgDIB/645q83692
+         ZcePfNUtvxSL+MD8fic+EX/SikK+JkWHZBPBjvj1V2YEswppYXOCxRdcjhPnYx8U1r
+         d0/ViUsO9e0tFx6SuBL9yhMRwlJwPPRCFMxcQRDikG1o69g2DygDes4CUt66T+xAtt
+         g1wjcbQ3cLNEJEbcsYE97yvpt8ezTQO6pjTQRdDdiAJkdvjWpRDNAFsqB3MoF1yoHq
+         YjXANXrPgSL0A==
+Date:   Fri, 18 Feb 2022 09:34:22 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Fangrui Song <maskray@google.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] arm64 module: remove (NOLOAD)
+Message-ID: <Yg/KjpHOZ7HwZq9f@dev-arch.archlinux-ax161>
+References: <20220218081209.354383-1-maskray@google.com>
+ <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
+ <20220218085016.jv4qcfaxav5fxhrs@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218085016.jv4qcfaxav5fxhrs@google.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+On Fri, Feb 18, 2022 at 12:50:16AM -0800, Fangrui Song wrote:
+> On 2022-02-18, Ard Biesheuvel wrote:
+> > On Fri, 18 Feb 2022 at 09:12, Fangrui Song <maskray@google.com> wrote:
+> > > 
+> > > On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+> > > inappropriate for .plt and .text.* sections which are always
+> > > SHT_PROGBITS.
+> > > 
+> > > In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+> > > and (NOLOAD) will be essentially ignored. In ld.lld, since
+> > > https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+> > > customize the output section type"), ld.lld will report a `section type
+> > > mismatch` error. Just remove (NOLOAD) to fix the error.
+> > > 
+> > > [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+> > > section should be marked as not loadable" on
+> > > https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+> > > outdated for ELF.
+> > 
+> > This patch lacks a SOB line.
+> > 
+> > With one added,
+> > 
+> > Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> 
+> Ah, yes. Sorry, I haven't sent a kernel patch for a while...
+> 
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-smatch warning was reported as below ->
+I am assuming this patch is the solution we want, as opposed to Ard's
+suggestion of renaming these sections at
+https://reviews.llvm.org/D118840 (unless that was a tangential
+suggestion).
 
-smatch warnings:
-drivers/irqchip/irq-nvic.c:131 nvic_of_init()
-warn: 'nvic_base' not released on lines: 97.
+I have verified that modules still load. Additionally, this needs to go
+to stable so that groups who upgrade their toolchain to a revision that
+include the LLD patch don't get broken as well.
 
-Release nvic_base upon failure.
+Cc: stable@vger.kernel.org
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
----
- drivers/irqchip/irq-nvic.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/irqchip/irq-nvic.c b/drivers/irqchip/irq-nvic.c
-index 125f9c1cf0c3..ba6332b00a0a 100644
---- a/drivers/irqchip/irq-nvic.c
-+++ b/drivers/irqchip/irq-nvic.c
-@@ -94,6 +94,7 @@ static int __init nvic_of_init(struct device_node *node,
- 
- 	if (!nvic_irq_domain) {
- 		pr_warn("Failed to allocate irq domain\n");
-+		iounmap(nvic_base);
- 		return -ENOMEM;
- 	}
- 
-@@ -103,6 +104,7 @@ static int __init nvic_of_init(struct device_node *node,
- 	if (ret) {
- 		pr_warn("Failed to allocate irq chips\n");
- 		irq_domain_remove(nvic_irq_domain);
-+		iounmap(nvic_base);
- 		return ret;
- 	}
- 
--- 
-2.25.1
-
+> > > ---
+> > >  arch/arm64/include/asm/module.lds.h | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
+> > > index a11ccadd47d2..094701ec5500 100644
+> > > --- a/arch/arm64/include/asm/module.lds.h
+> > > +++ b/arch/arm64/include/asm/module.lds.h
+> > > @@ -1,8 +1,8 @@
+> > >  SECTIONS {
+> > >  #ifdef CONFIG_ARM64_MODULE_PLTS
+> > > -       .plt 0 (NOLOAD) : { BYTE(0) }
+> > > -       .init.plt 0 (NOLOAD) : { BYTE(0) }
+> > > -       .text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
+> > > +       .plt 0 : { BYTE(0) }
+> > > +       .init.plt 0 : { BYTE(0) }
+> > > +       .text.ftrace_trampoline 0 : { BYTE(0) }
+> > >  #endif
+> > > 
+> > >  #ifdef CONFIG_KASAN_SW_TAGS
+> > > --
+> > > 2.35.1.265.g69c8d7142f-goog
+> > > 
+> 

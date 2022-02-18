@@ -2,260 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8524BC223
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2EE4BC22E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239839AbiBRVdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:33:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56128 "EHLO
+        id S239929AbiBRVep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:34:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236354AbiBRVdJ (ORCPT
+        with ESMTP id S236354AbiBRVem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:33:09 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115094B1F7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:32:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645219972; x=1676755972;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KBR9zM/fymdOYU0EYo3ZeZyWso7ZfzLLA/qBIAZAJjw=;
-  b=TKWuBH35nRuY/RujSSIc98tA8xzVom6nBKIzjIBADy6x6pGWmwjUn80/
-   +4D6lNXMWLq7lcZ+2wBjXifC9xsLUvFHANNIoNGaMaRc+UV7WGZ2MZ2DU
-   b+A0Vdy+UVYCJvgh1aFMaCo/tOXzWkF+6gkzPUMrUlT0z8XLx5cIx2V1/
-   nXgb9hgo36+zQ4dZ46o3p4WLKnIQSfDOFjx0r/iOihq+JFVGoLuzIc8I9
-   1Z8Ze5fU4kD0KJD/WtFqI6gm5fGY3rrD2YS4IdzRVBcW8lV2Geg5lk2hE
-   i62WvTlm5F2dqyORJCbZeldX7Gi8iAyeNHPd0cmC/9UtM2O2arF71w1Ac
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="250986815"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="250986815"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 13:32:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="705538862"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 18 Feb 2022 13:32:45 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 1C4D894; Fri, 18 Feb 2022 23:33:01 +0200 (EET)
-Date:   Sat, 19 Feb 2022 00:33:00 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 02/32] x86/coco: Add API to handle encryption mask
-Message-ID: <20220218213300.2bs4t3admhozonaq@black.fi.intel.com>
-References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
- <20220218161718.67148-3-kirill.shutemov@linux.intel.com>
- <66fcd7e7-deb6-f27e-9fc6-33293ce04f16@intel.com>
+        Fri, 18 Feb 2022 16:34:42 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92CA5BD03
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:34:24 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id m7-20020a056602018700b0064075a7ac3aso2239676ioo.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:34:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=ESDhSXcBKMjopPYZv2w9C93Fs32sPD81EnUFCwe47Z8=;
+        b=1BAdAF6oyfntpWuQTxE2XBvh1V+4erodOd3p+KLb3f7m2qDnwTEIGlVU/q7KoCGcNg
+         fx8og5s53pKlzAYqdan82qA5wfV5PGw3/iHRidjHNnUD5bA4BxPLaFNMYjyaVCNGNAbV
+         tn92+LsxJODk4TH+Idtr5hnAeoRWSElJRCL3xsW4sRL1t+4y9DGx0SCeZWHRMlVnBTlA
+         mxFgepvU8NTj4ywm0f+XDzf5d9DWwDi0ZlEmzDS9vcAKJ3GupGXmVntsGiW1lSuNTdUM
+         AHcA70bUUi+S/SHzg8/r9AHrj5twZCoBmVSyg1Ai6SY2D7XRCpUDcRMO8+ckjU+9Pu5u
+         6ZxA==
+X-Gm-Message-State: AOAM533xxuHtUpygFUEPl4Cph56o87MVmB3NHSwUW/G1CsvKzdtah428
+        EXc29Lar4thtkdv7PAE+DOMbt5HBV0qGaY98TlNLigqXLFeN
+X-Google-Smtp-Source: ABdhPJwijr18CZvtR9XxK1PvZnkcu5gmF2lHkJyrHt3O3Z8dSibn5LNQzbfbLx58lPYXLyq/i7hG87TE3BFNHiMto1TlRjnzLNL0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <66fcd7e7-deb6-f27e-9fc6-33293ce04f16@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:190e:b0:2bf:ac1e:b5b7 with SMTP id
+ w14-20020a056e02190e00b002bfac1eb5b7mr6853634ilu.304.1645220064174; Fri, 18
+ Feb 2022 13:34:24 -0800 (PST)
+Date:   Fri, 18 Feb 2022 13:34:24 -0800
+In-Reply-To: <0000000000003118ba05d500cce1@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000080aa2705d851a531@google.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in nf_nat_setup_info (2)
+From:   syzbot <syzbot+cbcd154fce7c6d953d1c@syzkaller.appspotmail.com>
+To:     coreteam@netfilter.org, davem@davemloft.net, fw@strlen.de,
+        glider@google.com, kadlec@netfilter.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 12:36:02PM -0800, Dave Hansen wrote:
-> On 2/18/22 08:16, Kirill A. Shutemov wrote:
-> > +#ifdef CONFIG_ARCH_HAS_CC_PLATFORM
-> > +u64 cc_get_mask(bool enc);
-> > +u64 cc_mkenc(u64 val);
-> > +u64 cc_mkdec(u64 val);
-> > +#else
-> > +#define cc_get_mask(enc)	0
-> > +#define cc_mkenc(val)		(val)
-> > +#define cc_mkdec(val)		(val)
-> > +#endif
-> 
-> Is there a reason the stubs as #defines?  Static inlines are preferred
-> for consistent type safety among other things.
+syzbot has found a reproducer for the following issue on:
 
-I was slightly worried about 32-bit non-PAE that has phys_addr_t and
-pgprotval_t 32-bit. I was not completely sure it will not cause any
-issue due to type mismatch. Maybe it is ungrounded.
+HEAD commit:    724946410067 x86: kmsan: enable KMSAN builds for x86
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=17b02532700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=76f99026248b24e4
+dashboard link: https://syzkaller.appspot.com/bug?extid=cbcd154fce7c6d953d1c
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1659ab4c700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1621cbf2700000
 
-With CONFIG_ARCH_HAS_CC_PLATFORM=y, all relevant types are 64-bit.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cbcd154fce7c6d953d1c@syzkaller.appspotmail.com
 
-> It would also be nice to talk about the u64 type in the changelog.  If I
-> remember right, there was a reason you didn't want to have a pgprot_t
-> here.
+=====================================================
+BUG: KMSAN: uninit-value in get_unique_tuple net/netfilter/nf_nat_core.c:548 [inline]
+BUG: KMSAN: uninit-value in nf_nat_setup_info+0x628/0x4a40 net/netfilter/nf_nat_core.c:642
+ get_unique_tuple net/netfilter/nf_nat_core.c:548 [inline]
+ nf_nat_setup_info+0x628/0x4a40 net/netfilter/nf_nat_core.c:642
+ nfnetlink_parse_nat_setup+0xb86/0xcf0
+ ctnetlink_parse_nat_setup+0xde/0x390 net/netfilter/nf_conntrack_netlink.c:1845
+ ctnetlink_setup_nat net/netfilter/nf_conntrack_netlink.c:1920 [inline]
+ ctnetlink_create_conntrack net/netfilter/nf_conntrack_netlink.c:2325 [inline]
+ ctnetlink_new_conntrack+0x1d5d/0x4240 net/netfilter/nf_conntrack_netlink.c:2452
+ nfnetlink_rcv_msg+0xe0a/0xf80 net/netfilter/nfnetlink.c:296
+ netlink_rcv_skb+0x40c/0x7e0 net/netlink/af_netlink.c:2494
+ nfnetlink_rcv+0x667/0x4740 net/netfilter/nfnetlink.c:654
+ netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+ netlink_unicast+0x1093/0x1360 net/netlink/af_netlink.c:1343
+ netlink_sendmsg+0x14d9/0x1720 net/netlink/af_netlink.c:1919
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg net/socket.c:725 [inline]
+ ____sys_sendmsg+0xe11/0x12c0 net/socket.c:2413
+ ___sys_sendmsg net/socket.c:2467 [inline]
+ __sys_sendmsg+0x704/0x840 net/socket.c:2496
+ __do_sys_sendmsg net/socket.c:2505 [inline]
+ __se_sys_sendmsg net/socket.c:2503 [inline]
+ __x64_sys_sendmsg+0xe2/0x120 net/socket.c:2503
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-With standalone <asm/coco.h> I think we can make it work with other type.
-But I'm not sure what it has to be.
+Uninit was created at:
+ __alloc_pages+0xbbf/0x1090 mm/page_alloc.c:5429
+ alloc_pages+0xa08/0xd50
+ alloc_slab_page mm/slub.c:1816 [inline]
+ allocate_slab+0x29e/0x1b00 mm/slub.c:1961
+ new_slab mm/slub.c:2021 [inline]
+ ___slab_alloc+0xb52/0x1da0 mm/slub.c:3035
+ __slab_alloc mm/slub.c:3122 [inline]
+ slab_alloc_node mm/slub.c:3213 [inline]
+ slab_alloc mm/slub.c:3255 [inline]
+ kmem_cache_alloc+0xbb3/0x11c0 mm/slub.c:3260
+ __nf_conntrack_alloc+0x232/0x7f0 net/netfilter/nf_conntrack_core.c:1553
+ init_conntrack+0x29b/0x24c0 net/netfilter/nf_conntrack_core.c:1634
+ resolve_normal_ct net/netfilter/nf_conntrack_core.c:1745 [inline]
+ nf_conntrack_in+0x1abc/0x3130 net/netfilter/nf_conntrack_core.c:1903
+ ipv4_conntrack_in+0x68/0x80 net/netfilter/nf_conntrack_proto.c:191
+ nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
+ nf_hook_slow net/netfilter/core.c:619 [inline]
+ nf_hook_slow_list+0x358/0xb40 net/netfilter/core.c:657
+ NF_HOOK_LIST include/linux/netfilter.h:343 [inline]
+ ip_sublist_rcv+0x1411/0x14a0 net/ipv4/ip_input.c:607
+ ip_list_rcv+0x930/0x970 net/ipv4/ip_input.c:644
+ __netif_receive_skb_list_ptype net/core/dev.c:5394 [inline]
+ __netif_receive_skb_list_core+0xdf9/0x11f0 net/core/dev.c:5442
+ __netif_receive_skb_list+0x7e3/0x940 net/core/dev.c:5494
+ netif_receive_skb_list_internal+0x848/0xdc0 net/core/dev.c:5585
+ gro_normal_list include/net/gro.h:425 [inline]
+ napi_complete_done+0x579/0xdc0 net/core/dev.c:5932
+ virtqueue_napi_complete drivers/net/virtio_net.c:339 [inline]
+ virtnet_poll+0x17a4/0x2340 drivers/net/virtio_net.c:1554
+ __napi_poll+0x14c/0xc00 net/core/dev.c:6365
+ napi_poll net/core/dev.c:6432 [inline]
+ net_rx_action+0x7e2/0x1820 net/core/dev.c:6519
+ __do_softirq+0x1ee/0x7c5 kernel/softirq.c:558
 
-I found helpers useful for modifying pgprotval_t and phys_addr_t. I
-considered u64 a common ground.
+CPU: 1 PID: 3471 Comm: syz-executor142 Not tainted 5.17.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
 
-Should I change this to something else?
-
-> ...
-> > @@ -74,12 +72,52 @@ static bool hyperv_cc_platform_has(enum cc_attr attr)
-> >  
-> >  bool cc_platform_has(enum cc_attr attr)
-> >  {
-> > -	if (sme_me_mask)
-> > +	switch (cc_vendor) {
-> > +	case CC_VENDOR_AMD:
-> >  		return amd_cc_platform_has(attr);
-> > -
-> > -	if (hv_is_isolation_supported())
-> > +	case CC_VENDOR_INTEL:
-> > +		return intel_cc_platform_has(attr);
-> > +	case CC_VENDOR_HYPERV:
-> >  		return hyperv_cc_platform_has(attr);
-> > -
-> > -	return false;
-> > +	default:
-> > +		return false;
-> > +	}
-> >  }
-> >  EXPORT_SYMBOL_GPL(cc_platform_has);
-> 
-> This patch is bordering on doing too many different things.  Adding the
-> CC_VENDOR_*'s in a separate patch probably would have been nice, for
-> instance.
-> 
-> This wasn't really broached at all in the changelog.
-
-I'll update a log. Or do you want a separate patch for the vendor
-introduction?
-
-> > +u64 cc_get_mask(bool enc)
-> > +{
-> > +	switch (cc_vendor) {
-> > +	case CC_VENDOR_AMD:
-> > +		return enc ? cc_mask : 0;
-> > +	default:
-> > +		return 0;
-> > +	}
-> > +}
-> 
-> I had to ask myself why you need all three of these functions.  It's
-> obvious _after_ reading the whole patch, but it left me wanting more in
-> the changelog about it.
-
-Okay.
-
-> > +u64 cc_mkenc(u64 val)
-> > +{
-> > +	switch (cc_vendor) {
-> > +	case CC_VENDOR_AMD:
-> > +		return val | cc_mask;
-> > +	default:
-> > +		return val;
-> > +	}
-> > +}
-> > +
-> > +u64 cc_mkdec(u64 val)
-> > +{
-> > +	switch (cc_vendor) {
-> > +	case CC_VENDOR_AMD:
-> > +		return val & ~cc_mask;
-> > +	default:
-> > +		return val;
-> > +	}
-> > +}
-> > +EXPORT_SYMBOL_GPL(cc_mkdec);
-> > +
-> > +__init void cc_init(enum cc_vendor vendor, u64 mask)
-> > +{
-> > +	cc_vendor = vendor;
-> > +	cc_mask = mask;
-> > +}
-> > diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> > index 5a99f993e639..9af6be143998 100644
-> > --- a/arch/x86/kernel/cpu/mshyperv.c
-> > +++ b/arch/x86/kernel/cpu/mshyperv.c
-> > @@ -33,6 +33,7 @@
-> >  #include <asm/nmi.h>
-> >  #include <clocksource/hyperv_timer.h>
-> >  #include <asm/numa.h>
-> > +#include <asm/coco.h>
-> >  
-> >  /* Is Linux running as the root partition? */
-> >  bool hv_root_partition;
-> > @@ -344,6 +345,8 @@ static void __init ms_hyperv_init_platform(void)
-> >  		 */
-> >  		swiotlb_force = SWIOTLB_FORCE;
-> >  #endif
-> > +		if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
-> > +			cc_init(CC_VENDOR_HYPERV, 0);
-> >  	}
-> >  
-> >  	if (hv_max_functions_eax >= HYPERV_CPUID_NESTED_FEATURES) {
-> > diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-> > index 3f0abb403340..fa758247ab57 100644
-> > --- a/arch/x86/mm/mem_encrypt_identity.c
-> > +++ b/arch/x86/mm/mem_encrypt_identity.c
-> > @@ -44,6 +44,7 @@
-> >  #include <asm/setup.h>
-> >  #include <asm/sections.h>
-> >  #include <asm/cmdline.h>
-> > +#include <asm/coco.h>
-> >  
-> >  #include "mm_internal.h"
-> >  
-> > @@ -565,8 +566,7 @@ void __init sme_enable(struct boot_params *bp)
-> >  	} else {
-> >  		/* SEV state cannot be controlled by a command line option */
-> >  		sme_me_mask = me_mask;
-> > -		physical_mask &= ~sme_me_mask;
-> > -		return;
-> > +		goto out;
-> >  	}
-> >  
-> >  	/*
-> > @@ -600,6 +600,8 @@ void __init sme_enable(struct boot_params *bp)
-> >  		sme_me_mask = 0;
-> >  	else
-> >  		sme_me_mask = active_by_default ? me_mask : 0;
-> > -
-> > +out:
-> >  	physical_mask &= ~sme_me_mask;
-> > +	if (sme_me_mask)
-> > +		cc_init(CC_VENDOR_AMD, sme_me_mask);
-> >  }
-> 
-> I don't think you need to mop it up here, but where does this leave
-> sme_me_mask?
-
-I think sme_me_mask still can be useful to indicate that the code is only
-relevant for AMD context.
-
-> > diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> > index b4072115c8ef..e79366b8a9da 100644
-> > --- a/arch/x86/mm/pat/set_memory.c
-> > +++ b/arch/x86/mm/pat/set_memory.c
-> > @@ -1999,8 +1999,8 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
-> >  	memset(&cpa, 0, sizeof(cpa));
-> >  	cpa.vaddr = &addr;
-> >  	cpa.numpages = numpages;
-> > -	cpa.mask_set = enc ? __pgprot(_PAGE_ENC) : __pgprot(0);
-> > -	cpa.mask_clr = enc ? __pgprot(0) : __pgprot(_PAGE_ENC);
-> > +	cpa.mask_set = __pgprot(cc_get_mask(enc));
-> > +	cpa.mask_clr = __pgprot(cc_get_mask(!enc));
-> >  	cpa.pgd = init_mm.pgd;
-> >  
-> >  	/* Must avoid aliasing mappings in the highmem code */
-> 
-> This actually ended up looking pretty nice.  It was a real mess along
-> the way, but this makes me think this is a _good_ solution.
-
--- 
- Kirill A. Shutemov

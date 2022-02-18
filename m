@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DFC4BB9A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 623AC4BB9B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235488AbiBRM4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:56:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36408 "EHLO
+        id S235440AbiBRM4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:56:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235569AbiBRM4V (ORCPT
+        with ESMTP id S235490AbiBRM4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:56:21 -0500
+        Fri, 18 Feb 2022 07:56:30 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91562B4D9F;
-        Fri, 18 Feb 2022 04:55:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5EF2B620F;
+        Fri, 18 Feb 2022 04:55:58 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 0D75B1F46724
+        with ESMTPSA id 0DC341F4241F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645188954;
-        bh=YkLMpSsBe1IVOGgotAXLOXcJ0eSyRqXWWqGIQixSJMY=;
+        s=mail; t=1645188957;
+        bh=zZZAdneJgA4W7d7XjgDPYrk55GM/cCNi1QttHSnzdKw=;
         h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=YYKTTPieNptOxsVy76k7+v+tLGltKW1zVx8nyjUug3jxcQiAFxkhGASfRFnmnlM30
-         kgjiRsbtOKx1ntIORUi+xgWAvSYGFZmRVnwk1rYKcrhWUAWRI7Th8cBc/eu448PdGx
-         D1ue8x5x4NzrL9qfrDzC/eU9DeZyj9nlC2osZjrkozP6flYzuAymzUIYCEuKc2+Py6
-         JnHRlx4fnx0LTeHwpqENewz0ioeefXAkNeOboNzzi+LWkkLEogr7UmF7a5wTDt+eTI
-         Mv65+quAi5q0GfmNpmmxNwS0HuYbPGLnCMZ0k7Mr67HLbtOFngbISnrMI7VxkHzyz5
-         +YFqCDdEpBxvg==
-Message-ID: <719c23ae-a8b4-5f0d-6be2-483bb82dbce9@collabora.com>
-Date:   Fri, 18 Feb 2022 13:55:51 +0100
+        b=ZSGoIM7dw6wGoMBH5Bre9rq5VoKXoY/lgOZ04rVjsvCgPg87XsnUtB7fOSBnxg3+2
+         PjfZrAt+ZazJwLwcTGqW1FrcU5wRZAo+RYQhkppwl63CsIdDZrJgQQ4XaJmBOKDWeB
+         XCMSGOp6bVTYiboOb3cFr9dVgN+iPssLaqlttKFVpK4xHB/a4PWx6ZRacccDrL9ZNw
+         CIxLd3X43uUGSe9nhWKMNlpfNSS4siyYDq0w92V+u2JunuQolhm5lWupn3dlyO/R9i
+         y/HFLFkENxUmwbLQR9oqlYFmxKkoaG/E7sIQs0BlfD3JarKHzW2RzEsuWJj2saAodj
+         J2a/P17Y3dQVg==
+Message-ID: <518a64d5-2101-dc31-c409-e9c99458c900@collabora.com>
+Date:   Fri, 18 Feb 2022 13:55:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2 12/23] arm64: dts: mt8192: Add efuse node
+Subject: Re: [PATCH v2 13/23] arm64: dts: mt8192: Add mmc device nodes
 To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
         =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
         <nfraprado@collabora.com>
 References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
- <20220218091633.9368-13-allen-kh.cheng@mediatek.com>
+ <20220218091633.9368-14-allen-kh.cheng@mediatek.com>
 Content-Language: en-US
-In-Reply-To: <20220218091633.9368-13-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20220218091633.9368-14-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -64,43 +64,65 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 18/02/22 10:16, Allen-KH Cheng ha scritto:
-> Add efuse node for mt8192 SoC
+> Add mmc nodes for mt8192 SoC.
 > 
 > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 36 +++++++++++++++++++++---
+>   1 file changed, 32 insertions(+), 4 deletions(-)
 > 
 > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index f51fd0f6c356..094805db395b 100644
+> index 094805db395b..cfc2db501108 100644
 > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
 > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -939,6 +939,20 @@
->   			status = "disabled";
+> @@ -1154,10 +1154,38 @@
+>   			#clock-cells = <1>;
 >   		};
 >   
-> +		efuse: efuse@11c10000 {
-> +			compatible = "mediatek,efuse";
-> +			reg = <0 0x11c10000 0 0x1000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			lvts_e_data1: data1 {
+> -		msdc: clock-controller@11f60000 {
+> -			compatible = "mediatek,mt8192-msdc";
+> -			reg = <0 0x11f60000 0 0x1000>;
+> -			#clock-cells = <1>;
+> +		mmc0: mmc@11f60000 {
+> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
+> +			reg = <0 0x11f60000 0 0x1000>,
+> +			      <0 0x11f50000 0 0x1000>;
 
-			lvts_e_data1: lvts_data1@1c0 {
-				reg = <0x1c0 0x58>;
+This fits on a single line:
+			reg = <0 0x11f60000 0 0x1000>, <0 0x11f50000 0 0x1000>;
 
-Please write hex with lower case characters.
-
-> +				reg = <0x1C0 0x58>;
-> +			};
-> +			svs_calibration: calib@580 {
-> +				reg = <0x580 0x68>;
-> +			};
+> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
+> +				 <&msdc_top CLK_MSDC_TOP_H_MST_0P>,
+> +				 <&msdc_top CLK_MSDC_TOP_SRC_0P>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
+> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>;
+> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
+> +				      "axi_cg", "ahb_cg", "pclk_cg";
+> +			status = "disabled";
 > +		};
 > +
->   		i2c3: i2c@11cb0000 {
->   			compatible = "mediatek,mt8192-i2c";
->   			reg = <0 0x11cb0000 0 0x1000>,
+> +		mmc1: mmc@11f70000 {
+> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
+> +			reg = <0 0x11f70000 0 0x1000>,
+> +			      <0 0x11c70000 0 0x1000>;
 
+Same here.
+
+> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
+> +				 <&msdc_top CLK_MSDC_TOP_H_MST_1P>,
+> +				 <&msdc_top CLK_MSDC_TOP_SRC_1P>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
+> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC1>;
+> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
+> +				      "axi_cg", "ahb_cg", "pclk_cg";
+> +			status = "disabled";
+>   		};
+>   
+>   		mfgcfg: clock-controller@13fbf000 {
 

@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EC34BC130
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05A44BC135
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239472AbiBRUai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 15:30:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55296 "EHLO
+        id S239503AbiBRUbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 15:31:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235855AbiBRUaf (ORCPT
+        with ESMTP id S237825AbiBRUbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 15:30:35 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B0B27DF05
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:30:18 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id y16so1376850pjt.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:30:18 -0800 (PST)
+        Fri, 18 Feb 2022 15:31:32 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8EC27DF05
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:31:15 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id c18so6414459ioc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:31:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DNFcmS6uw3KxEPl6z8drDxT/aeyaze5jPFLIWBXfGcM=;
-        b=e/q+3layfTT2uJlUk+dxnbcpwhXmtyyU+HZ7fgNM2pMwxbLeVqbPhgjsz8Q7Rpilo4
-         C9MB8oZH41riL0mqdtF1NOI9TX1Ux1BIWMuX5qRny1SFLaM2ZzV852gmRs9e7WehdNT4
-         FLohFX4cGeqD+e7GcMaJRWi0UkuY1qfvlwRxrpXwX1fjQSu5M8CY0BtDBfFCI28c4kV4
-         9CYA1hOD2vMp5C3yAv9n6EguQO8ifhW04x3agzlolDXcFAkxIgr/lWABcXBHVfHF5ial
-         VnCQXrr9/+wW4QaSyjnmzDq5gS9n0fvay12v2iQNkYdFo0Nc7fGOxXrEkvWZt1Ye2BXr
-         Q8SQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=MD0+yom/goJw86HmBFQYbieNADbWQVLI9oz2PsE5hQw=;
+        b=iSJ9BtKpkks5QWg/HyNH/d0nwba3DUPdbpYseZadQJYR+WbLw9W5GdAVq3LlwQ8YC1
+         p3i/MF1om6JjWl5MKfpj5UlYKu8d2Kwh8fApeMSIx6zBK6tqCzm8vWzoH8RygxQcai4e
+         3tQcsqBYEEeXiEwQpiKfCOd79bZLCWZ49uGpE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DNFcmS6uw3KxEPl6z8drDxT/aeyaze5jPFLIWBXfGcM=;
-        b=qaQBgjB4Zp4p6ZQ8hjVK+hpkv2K3kEBnFlrx1eFJDEFJI2iNaBMJ2L85lRFi+i+xIe
-         dX9YfepfDoKtwOtc4JQifQfe5Zg9N68U4S/UurGoXHr7rpGxOmuCv6La9fMxSNuZHk5L
-         tS1dpPK+lBwVyBdDBF4ExkalNwYmyGGFHnnL1EIx8nTCa1CuH1tcQuwkzeyCbE5ugZ+h
-         j4WSdI9VSmLtJxCdu4bo4Rqds/c8C7SUK63U7lJKYn3DjoVW6Vx+nVizAVHfNziq+T35
-         Z30g37LZhNtV8A757AmdfgskxfCT2+ve2F8EY+oFH3GMWN0he84DMHtuwWRKenpF/Z46
-         Kbjg==
-X-Gm-Message-State: AOAM530Bh0k8aP8VuWytQP192NmTldnvxvBFR4q2Xrnsm57QWmpTf0/p
-        00NKHr609ijOk9mMQPuAyoZMHRD5fQAytg==
-X-Google-Smtp-Source: ABdhPJzJwYzm0DJRv5DwCaljdu2YM/3NJe2ZwfPmisgbN4UYw7m5x7pVOHc516qpIrzlt3NMLljFEQ==
-X-Received: by 2002:a17:90b:1bc4:b0:1b9:ae7c:7c67 with SMTP id oa4-20020a17090b1bc400b001b9ae7c7c67mr14311623pjb.168.1645216217527;
-        Fri, 18 Feb 2022 12:30:17 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q4sm3927977pfj.113.2022.02.18.12.30.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 12:30:16 -0800 (PST)
-Date:   Fri, 18 Feb 2022 20:30:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 14/18] KVM: x86/mmu: avoid indirect call for get_cr3
-Message-ID: <YhAB1d1/nQbx6yvk@google.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
- <20220217210340.312449-15-pbonzini@redhat.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=MD0+yom/goJw86HmBFQYbieNADbWQVLI9oz2PsE5hQw=;
+        b=kzKJF6WkwebWFGcrBprpP5S5/26daaqnNtxIqvEDbkbuqv6NYVJWMwoq4FP4LDWi7o
+         lOtZfiYBEu9gu2LdlrFy9BZDjiP0RWsnfB7ji0HpJTSE19BEIzlrxMHOtyKKOle8rhbf
+         zR7NOfdfZUV3kcCHY9QkgdLACT5naPQvE18sMKmoGaypTafUeusADMWHtbinAjlHI9bo
+         oOieBE2t5tcKu0A8EvA4uKoRgka9Cwxr6VQARzN2L30Htko8nCw2PGc0zfQePJ8dhjtT
+         hw9rDgSWZgg0gDkR9RfFeLip7lWQMj3vO0gFGNQmXzYJdUirtq06qICQZPAgzcqh+Ew/
+         pwsQ==
+X-Gm-Message-State: AOAM530IZ/bqKL0b5kU62RBaNgRwXVI3ul5FxHCxWl2jk4FYADixsbzQ
+        4ww1Cpl9PgFdFHtg+XbZFfA82w==
+X-Google-Smtp-Source: ABdhPJzLumz6MWKjuTVGJYhGl9ZdR+pklktFrXSS/2eGSiG2/cVCh29UhIOrpEo/dbB1fCMmWwDZpA==
+X-Received: by 2002:a02:6d6c:0:b0:30d:bfb2:84c with SMTP id e44-20020a026d6c000000b0030dbfb2084cmr6388052jaf.205.1645216274576;
+        Fri, 18 Feb 2022 12:31:14 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id r7sm2055356ilc.24.2022.02.18.12.31.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 12:31:14 -0800 (PST)
+Subject: Re: [PATCH v3 3/5] selftests/resctrl: Update README about using
+ kselftest framework to build/run resctrl_tests
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
+ <20220216022641.2998318-4-tan.shaopeng@jp.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e1e65afc-4842-29f9-679a-aa10b5cf72b3@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 13:31:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217210340.312449-15-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <20220216022641.2998318-4-tan.shaopeng@jp.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +76,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022, Paolo Bonzini wrote:
-> Most of the time, calls to get_guest_pgd result in calling
-> kvm_read_cr3 (the exception is only nested TDP).  Hardcode
-> the default instead of using the get_cr3 function, avoiding
-> a retpoline if they are enabled.
+On 2/15/22 7:26 PM, Shaopeng Tan wrote:
+> In this patch series, I make restrl_tests build/run using kselftest
+> framework, but some users do not known how to build/run resctrl_tests
+> using kseltest framework.
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Add manual of how to make resctrl_tests build/run
+> using kselftest framework into README.
+> 
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
->  arch/x86/kvm/mmu.h             | 13 +++++++++++++
->  arch/x86/kvm/mmu/mmu.c         | 15 +++++----------
->  arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
->  arch/x86/kvm/x86.c             |  2 +-
->  4 files changed, 20 insertions(+), 12 deletions(-)
+>   tools/testing/selftests/resctrl/README | 34 ++++++++++++++++++++++++++
+>   1 file changed, 34 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index 1d0c1904d69a..1808d6814ddb 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -116,6 +116,19 @@ static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
->  					  vcpu->arch.mmu->shadow_root_level);
->  }
->  
-> +static inline gpa_t __kvm_mmu_get_guest_pgd(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
-> +{
-
-I'd prefer to do what we do for page faults.  That approach avoids the need for a
-comment to document NULL and avoids a conditional when RETPOLINE is not enabled.
-
-Might be worth renaming get_cr3 => get_guest_cr3 though.
-
-#ifdef CONFIG_RETPOLINE
-	if (mmu->get_guest_pgd = get_guest_cr3)
-		return kvm_read_cr3(vcpu);
-#endif
-	return mmu->get_guest_pgd(vcpu);
-
-
-> +	if (!mmu->get_guest_pgd)
-> +		return kvm_read_cr3(vcpu);
-> +	else
-> +		return mmu->get_guest_pgd(vcpu);
-> +}
+> diff --git a/tools/testing/selftests/resctrl/README b/tools/testing/selftests/resctrl/README
+> index 3d2bbd4fa3aa..a0dd459049b7 100644
+> --- a/tools/testing/selftests/resctrl/README
+> +++ b/tools/testing/selftests/resctrl/README
+> @@ -12,9 +12,43 @@ Allocation test on Intel RDT hardware. More tests will be added in the future.
+>   And the test suit can be extended to cover AMD QoS and ARM MPAM hardware
+>   as well.
+>   
+> +resctrl_tests can be run with or without kselftest framework.
 > +
-> +static inline gpa_t kvm_mmu_get_guest_pgd(struct kvm_vcpu *vcpu)
-> +{
-> +	return __kvm_mmu_get_guest_pgd(vcpu, vcpu->arch.mmu);
+> +USE KSELFTEST FRAMEWORK
+> +-----------------------
+> +
+> +BUILD
+> +-----
+> +
+> +Execute the following command in top level directory of the kernel source.
+> +
+> +Build resctrl:
+> + $ make -C tools/testing/selftests TARGETS=resctrl
+> +
+> +Build all self tests:
+> + $ make -C tools/testing/selftests
+> +
+> +RUN
+> +---
+> +
+> +Run resctrl:
+> + $ make -C tools/testing/selftests TARGETS=resctrl run_tests
+> +
 
-I'd much prefer we don't provide an @vcpu-only variant and force the caller to
-provide the mmu.
+==================================
+> +Run all self tests:
+> + $ make -C tools/testing/selftests run_tests
+> +
+
+Remove the above
+This part is relevant to this test. This is already documented in kselftest
+doc.
+==================================
+
+> +Using kselftest framework, the ./resctrl_tests will be run without any parameters.
+> +
+> +More details about kselftest framework as follow.
+> +Documentation/dev-tools/kselftest.rst
+> +
+> +NOT USE KSELFTEST FRAMEWORK
+> +---------------------------
+> +
+>   BUILD
+>   -----
+>   
+> +Execute the following command in this directory(tools/testing/selftests/resctrl/).
+>   Run "make" to build executable file "resctrl_tests".
+>   
+>   RUN
+> 
+
+Add information how long it takes to run this test in here.
+
+thanks,
+-- Shuah

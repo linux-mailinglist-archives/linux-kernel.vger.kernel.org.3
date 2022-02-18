@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECF64BC265
+	by mail.lfdr.de (Postfix) with ESMTP id DD6E24BC266
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240033AbiBRV62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:58:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39122 "EHLO
+        id S240060AbiBRV6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:58:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236928AbiBRV6Y (ORCPT
+        with ESMTP id S236928AbiBRV63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:58:24 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8958B60CC7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:58:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :Subject:From:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=rTFlTPx7C6Iu63CArqpOV0QwSimp1W7D9+7MJYR1hyA=; b=KyikYNygb1kjOzDj1BtAKK5G1q
-        yl9KFI/qV15w1zZDlVc0m4RLkplSvYk1s/QkDSqd56vPz7nLh2jjc1E9gxAojdqkKKCFF7MQ1nbo5
-        uZvBUlfT/aM/dKGT5wFkWdNC5nj1ywVDJkJYTL5hW0m9Br0yrcK5Cr3iUCX+hTd751F9YhJKlJQmk
-        747oyDTiPe4HZI6ZPjytuxOuAg9e0H4rk8PUFYtuhqUGMA4Zn4f5LR2zHmyCloy8Jv+U3uslzKLcE
-        BKy0ANUGU0cWqyuCKhdTsQ83K45wBM59G3uf6EK00X5JXSLzPuYY4OO4uLWZb5NCdTK/uL6nXv7ua
-        Xw2zmXlg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nLBGO-00AvAg-Ex; Fri, 18 Feb 2022 21:58:04 +0000
-Message-ID: <858a2b13-64e1-99bc-e2f7-5b2477bb1126@infradead.org>
-Date:   Fri, 18 Feb 2022 13:57:58 -0800
+        Fri, 18 Feb 2022 16:58:29 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3A460CC7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:58:11 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0D0A51EC0453;
+        Fri, 18 Feb 2022 22:58:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1645221486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=J55Q5NQy9XofJf/Hn0z+dtUK60FR7xoYSvRgaERtoSg=;
+        b=FxX6KKCJJ5DpiBxBtyc02jEeswHBxizIyyQGJl7WIQ5unZ63tfn7qMbX5d5YJzkD+Nzxpo
+        F2s8vHEHSLIyvxbAEgafK435UQh+XJrZ7TInDrd5ls89P0AsO69hH6Jorvdz1czRf90G7n
+        KgHrCwy0q/zZo6zRqjjurggZwySKtls=
+Date:   Fri, 18 Feb 2022 22:58:08 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 02/32] x86/coco: Add API to handle encryption mask
+Message-ID: <YhAWcPbzgUGcJZjI@zn.tnic>
+References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
+ <20220218161718.67148-3-kirill.shutemov@linux.intel.com>
+ <66fcd7e7-deb6-f27e-9fc6-33293ce04f16@intel.com>
+ <20220218213300.2bs4t3admhozonaq@black.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Content-Language: en-US
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: fallthrough question
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220218213300.2bs4t3admhozonaq@black.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Feb 19, 2022 at 12:33:00AM +0300, Kirill A. Shutemov wrote:
+> I'll update a log. Or do you want a separate patch for the vendor
+> introduction?
 
-I expected this to produce a fallthrough warning, but it doesn't
-(with gcc 11.1.0):
+Yes pls.
 
-from sound/oss/dmasound/dmasound_core.c:#1481, when falling from case 1
-into case 0: (in arch/m68k/ selected builds only)
-
-	case 1:
-		if ((size = ints[2]) < 256) /* check for small buffer specs */
-			size <<= 10 ;
-                if (size < MIN_BUFSIZE || size > MAX_BUFSIZE)
-                        printk("dmasound_setup: invalid write buffer size, using default = %d\n", writeBufSize);
-                else
-                        writeBufSize = size;
-	case 0:
-		break;
-	default:
-
-Can you tell me what is going on here?
-
-thanks.
 -- 
-~Randy
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

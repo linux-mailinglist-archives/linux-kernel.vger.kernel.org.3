@@ -2,91 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094734BAFB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 03:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9BE4BAF9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 03:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbiBRC3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 21:29:33 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33166 "EHLO
+        id S231610AbiBRCYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 21:24:52 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiBRC3c (ORCPT
+        with ESMTP id S231593AbiBRCYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 21:29:32 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BB1BF3;
-        Thu, 17 Feb 2022 18:29:16 -0800 (PST)
-X-UUID: 08657ab6883d452fa20ea281cf2356aa-20220218
-X-UUID: 08657ab6883d452fa20ea281cf2356aa-20220218
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <lina.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1321124463; Fri, 18 Feb 2022 10:29:13 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 18 Feb 2022 10:29:12 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 18 Feb 2022 10:29:08 +0800
-From:   Lina Wang <lina.wang@mediatek.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        bpf <bpf@vger.kernel.org>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v3] net: fix wrong network header length
-Date:   Fri, 18 Feb 2022 10:23:15 +0800
-Message-ID: <20220218022315.2560-1-lina.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <CAADnVQJEXOOH6--uA7BvFUPmXY42zeOQVweHmaMqkbj_g5TLqA@mail.gmail.com>
-References: <CAADnVQJEXOOH6--uA7BvFUPmXY42zeOQVweHmaMqkbj_g5TLqA@mail.gmail.com>
+        Thu, 17 Feb 2022 21:24:47 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225406582E;
+        Thu, 17 Feb 2022 18:24:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K0FrY646xz4xbw;
+        Fri, 18 Feb 2022 13:24:29 +1100 (AEDT)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Maxime Bizon <mbizon@freebox.fr>, stable@vger.kernel.org
+In-Reply-To: <aea33b4813a26bdb9378b5f273f00bd5d4abe240.1638857364.git.christophe.leroy@csgroup.eu>
+References: <aea33b4813a26bdb9378b5f273f00bd5d4abe240.1638857364.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH] powerpc/603: Fix boot failure with DEBUG_PAGEALLOC and KFENCE
+Message-Id: <164515103939.912400.9280138789823591343.b4-ty@ellerman.id.au>
+Date:   Fri, 18 Feb 2022 13:23:59 +1100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-17 at 09:05 -0800, Alexei Starovoitov wrote:
-> On Thu, Feb 17, 2022 at 12:45 AM Paolo Abeni <pabeni@redhat.com>
-> wrote:
-> > To clarify: Alexei is asking to add a test under:
-> > 
-> > tools/testing/selftests/net/
-> > 
-> > to cover this specific case. You can propbably extend the existing
-> > udpgro_fwd.sh.
+On Tue, 7 Dec 2021 06:10:05 +0000, Christophe Leroy wrote:
+> Allthough kernel text is always mapped with BATs, we still have
+> inittext mapped with pages, so TLB miss handling is required
+> when CONFIG_DEBUG_PAGEALLOC or CONFIG_KFENCE is set.
 > 
-> Exactly.
-> I suspect the setup needs a bit more than just iperf udp test.
-> Does it need a specific driver and hw?
+> The final solution should be to set a BAT that also maps inittext
+> but that BAT then needs to be cleared at end of init, and it will
+> require more changes to be able to do it properly.
+> 
+> [...]
 
-My hw is Android phone, Android system has improved clatd with bpf. When 
-clatd starts, cls_bpf_classify will handle ingress packets with bpf progs.
-bpf_skb_proto_6_to_4 is used here.
+Applied to powerpc/fixes.
 
-> Can it be reproduced with veth or other virtual netdev?
+[1/1] powerpc/603: Fix boot failure with DEBUG_PAGEALLOC and KFENCE
+      https://git.kernel.org/powerpc/c/9bb162fa26ed76031ed0e7dbc77ccea0bf977758
 
-I am not sure. I have no idea how to verify it in linux system. 
-
-> Also commit talks about bpf_skb_proto_6_to_4.
-> So that bpf helper has to be somehow involved, but iperf udp test
-> says nothing about it.
-> Please craft a _complete_ selftest.
-
-Thanks!
-
-
+cheers

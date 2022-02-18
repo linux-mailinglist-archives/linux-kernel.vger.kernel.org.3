@@ -2,130 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473294BBC78
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4E44BBC7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237154AbiBRPus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 10:50:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38272 "EHLO
+        id S237188AbiBRPvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:51:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235979AbiBRPuq (ORCPT
+        with ESMTP id S231462AbiBRPvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:50:46 -0500
-Received: from m2.came.com (m2.came.com [185.158.232.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D72F272D95
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:50:25 -0800 (PST)
-X-Envelope-From: <rferrazzo@came.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=came.com; s=hqs1;
-        t=1645199415; bh=q6QFR4wFKzZN4oRBk8KBFG9epo/vvtWvpCpYh6Ehr0o=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=Wtch1HJ/vXsf71CQqP7cYJRoWx32CrMOKQhAnvMIOLaqC+wWFmvoP6WEwMn/H3VmR
-         gLofc0taron60T+2IhAwfKAdmr4dZqZJOWaJYU1UlG+nJNvMG/PbKIEJveK+flk9Wb
-         RpftE2vORKPIQ4xPuK86dCVwZnGINpwTFfPjEdLA=
-Received: from mail.came.com (exch.camegroup.local [172.17.10.18])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by m2.came.com (Postfix) with ESMTPS id D335A41ADF;
-        Fri, 18 Feb 2022 16:50:15 +0100 (CET)
-Received: from EXCH01SERVER.camegroup.local (172.17.10.18) by
- EXCH01SERVER.camegroup.local (172.17.10.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Fri, 18 Feb 2022 16:50:15 +0100
-Received: from EXCH01SERVER.camegroup.local ([fe80::4c87:c04d:9e86:91dc]) by
- EXCH01SERVER.camegroup.local ([fe80::4c87:c04d:9e86:91dc%8]) with mapi id
- 15.01.2375.018; Fri, 18 Feb 2022 16:50:15 +0100
-From:   Riccardo Ferrazzo <rferrazzo@came.com>
-To:     =?utf-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] staging: wfx: fix scan with WFM200 and WW regulation
-Thread-Topic: [PATCH] staging: wfx: fix scan with WFM200 and WW regulation
-Thread-Index: AQHYJLXqgTJEtVhygkqmI4jmjTDnvqyZEoqAgAAA3wCAAAMMAIAAPNCo///zhgCAACzfmQ==
-Date:   Fri, 18 Feb 2022 15:50:15 +0000
-Message-ID: <00c200c56dad4b1180d644e740112706@came.com>
-References: <20220218105358.283769-1-Jerome.Pouiller@silabs.com>
- <3527203.aO2mCyqpp7@pc-42>
- <5feac65fc71f4060abb7421ee4571af4@came.com>,<3633390.6h3MoT29mx@pc-42>
-In-Reply-To: <3633390.6h3MoT29mx@pc-42>
-Accept-Language: it-IT, en-US
-Content-Language: it-IT
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.244.98]
-x-c2processedorg: a31d4ad1-e59b-425b-8b09-d5eff97e4ea3
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 18 Feb 2022 10:51:42 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2067.outbound.protection.outlook.com [40.107.94.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92462E088;
+        Fri, 18 Feb 2022 07:51:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UvT5mITkAsl7mws9Yuw+8vN+p8XiKk79pXVOAjZbQ8NxZ1Ji2I6RHgz46Q4G1EkIABvjpWCc2ai6Cd4xGrT9KO1JKC5uhKziIJDWVHIdTFP8z6Nvpxy8kmw63v6u3m9ifdRCkWs3tv1IJsbIaDWaM1dFObVToOGydm4dgZK6rAe403IN5XxAnY2z1kstwf5jfYh+vcjjPxMIEPFJsFZRtMWbiO+t4W942nzkSzjMQegBlpwlRrY9PsH3oCrSFktgpQIH5dK9M+h0jAmg4nMs34f+t1tMUjuOLdfI0+GuQmUTXRr5N7Yc6D151A5Y7weZHfAT4ESF8ghvLqM79AecuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CtxlQa5iLhCE0E4YJfAkC6l3iSo1wJqE9HIu7L2K5t4=;
+ b=ab7OCFyooYYHpohPRZfyPt/FKA/9+RlK1tQ5PbWTE0IOEo6u4+NhUKiPGUebOSfDJV5gIwHwsYHY8yKaxcOMsJryKXUf0zuG3kjirXNjiYn87nJFaXkQkdsV0klAlNjkF8Dlr+S4bm8x0ZZR1nRXiUEPDXkk474wVVlh9pD+4ydvOh1YxkQJ/cYQpnC3st6kT7lyrohNFYAnTWYfHH2Iv4aSxOV2gkZuoW6R6hqsW2wJaiXsd4kXNf7r2IyCVDNrRobQgWeAoyVn07NbqoptCkqhVDPd8tIL9dt/pRBx7LRwsoST4MfAF897Eyi1j5QFChAQEFq58kBvLUkIfY6xcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CtxlQa5iLhCE0E4YJfAkC6l3iSo1wJqE9HIu7L2K5t4=;
+ b=ozWctIEL8A5mOTaE2bDcsFb1v9CVD9CXeNEHEi2gU7K5uoK4WW8GD1nk4SX/ecfrz+ItUUN9+GK/GWXicuWdgafxvXMjG/l4wmoj2SoU7kfv7/jmh+P7oBreNaASm0iyS3YR7K1ocmD5Z7RtmIqfAFANhLjS4ypv1zNTWseFKdHrP3ex9cDMdrQx40gOeZyaxM7mGY0nV5EcvNesbTEl6gKKg2tOLqkyC9GB55nPxfnD88sYEQN2ZkaFozaD3bInkWl9jwNbStJe1ExaDXOvQvmdEk9cgglZ+lNxidyZrVTHTCTue24tyjSXE4LRwhGTiwTjmTYkCj5P46ppn0WTnA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM6PR12MB4746.namprd12.prod.outlook.com (2603:10b6:5:35::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.17; Fri, 18 Feb
+ 2022 15:51:23 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%5]) with mapi id 15.20.4995.024; Fri, 18 Feb 2022
+ 15:51:23 +0000
+Date:   Fri, 18 Feb 2022 11:51:21 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/11] Fix BUG_ON in vfio_iommu_group_notifier()
+Message-ID: <20220218155121.GU4160@nvidia.com>
+References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218005521.172832-1-baolu.lu@linux.intel.com>
+X-ClientProxiedBy: MN2PR16CA0057.namprd16.prod.outlook.com
+ (2603:10b6:208:234::26) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-X-CAME-Libra-ESVA-Information: Please contact CAME for more information
-X-CAME-Libra-ESVA-ID: D335A41ADF.ADE9C
-X-CAME-Libra-ESVA: No virus found
-X-CAME-Libra-ESVA-From: rferrazzo@came.com
-X-CAME-Libra-ESVA-Watermark: 1645804218.74232@4mG+8eCEAtX6cMEcm+BxEA
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7b9fc67e-21c2-4672-a8c9-08d9f2f68338
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4746:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB474604376B48BF34FAC62591C2379@DM6PR12MB4746.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3rBBryg6u3PtZZa4hS3/14APltmOaD0CbjkQcBiG4OONW6rVqoJDuZlf1Al3B7MxwKIcZxveBOmw87MCHMtP21U0kOHC5doP3aYuWbYZVkqdHcubVh3Khi0KYJGWwtFdRXdmAuL5buki0hFaOJoly9LUNHRAmkHG/mgOmAekKRn1Op0ZHSeIGkXNqvvJxKzsXJBa2wAvrKZrwx92c6eExH9EXMrMKoOX3h5lDUB00sEXSnfsOTKu3xEdzoXZR6PFvdnm5Y5pLJQXpl9xNMeWYRMH/a1f4sDPFNjSmCkx5jn2tLiUNGZEr/pTdJkVp94nc5G7FAD10vqWR0FP/Hc3ROAuNGUwd+WvWcHzukuwJ+A9kwfcPEwmwvTQ0z7z/db5EeHnX4Qcxgl0jxyjZR79gK00p9wdW+99TOXaEALkj8+zpXoXxl/+17urPDDWHX23L/IMJWmwpQHg//319G3Kiq7gc0riACa/0L7znbGO/6pIOsY5n74xsuZCEa+OkBYu5JfF51uVxiHpoSIq0ocDl6N/T+hZswTQi33KL/ogxPM6hBlEE9CCHMIZE1FChxeJ9m4wqY6gqmRn34x3dcTwjTemF81j6lisKeEfW12czmCYlbTUtTmhjfk8YhXZ9l+nszaTtTCswmDfmL8FmyH3aA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(36756003)(2616005)(38100700002)(316002)(66946007)(66556008)(6486002)(66476007)(6916009)(186003)(1076003)(33656002)(26005)(86362001)(7416002)(6512007)(2906002)(508600001)(54906003)(8936002)(8676002)(6506007)(83380400001)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gxMerCbYFWN0oAmu2Bnrcp+RiwPW/VSPhWkhcKrQcDOD3UVRBRVyl+ND2Nqe?=
+ =?us-ascii?Q?tTsgV50Q2x8BqC4/6aCHL1qc8v5lGadQK1MoU0Osm97odmsUZyQFvfnzMD3S?=
+ =?us-ascii?Q?K0SMKjiwRCvyiUjRtnmroJgJK3Crb02X3FybPtqgrnSrxI8Ne1Kv+lCH2KdV?=
+ =?us-ascii?Q?412thtrJptFJprSj43s9lJ+CLfYKAn2lW0aq+ddU0sqY/qJI1Ui6rsvzIOm/?=
+ =?us-ascii?Q?yQP5Gsl1fPBSJMObUhaEZs9lrcQTvSUcEl5ECh+2LNM8a5NVoktXZDq3d5Z4?=
+ =?us-ascii?Q?HbU79tiA5VVu3FZL+hyeUtQcpkAIyscaX4E7FMe5A/qc37XKAwhlTy/2rn+/?=
+ =?us-ascii?Q?sz5XySCC3uPI801tQjdvE4ZPeIugKOoPpsDZ4wiA63Tqh2udfv7FQswBLn3V?=
+ =?us-ascii?Q?4WePv5FlLj/YYMG8O+V9ytmpH8QyM3HivQY/wg+lNKXx27OrOrVkhBYlOFWK?=
+ =?us-ascii?Q?XReZ5SMPzuxZARjB5Gy1g8AbugmCtT8nnQVJWmxk13P7rJXMnYbTx4sMZVTM?=
+ =?us-ascii?Q?oJclMRBxvA3Z2IUNU0u+qmwtN8I8SFVCmA77d77MsBjJrVHH1fzugVUr6d+W?=
+ =?us-ascii?Q?QSbvY8G81CTAntMRudc+Afjh8v7epVmNc7WTRbQr4Bo+/TjbKhetCjMI4vpK?=
+ =?us-ascii?Q?9ZWPIGaZgA6FzjVisutm612TSXr5sFTI9NYIO5H0CanO9MgjzAjeqb2rFqSB?=
+ =?us-ascii?Q?k79xCj54yK/3Tjigvz5b/5+2Es54DJujPlQGEG0zG7tu4IfP+k7MJxtcA15o?=
+ =?us-ascii?Q?NYGgM9SO4D3REKnQfFJb29/iaeVXfySTLOnGkibSrLBQqpSL1xp+YXhe9YfH?=
+ =?us-ascii?Q?3tyWwfLr9R9FtPJm6e51AK1KWJT7cgypP0YTYisR2N8RiXqvsWgBSu10UuJv?=
+ =?us-ascii?Q?LHEuZKWm02sAJSII5/VMAvbHXh9MeW7i2nT2cxTgh7BEZ+NhW/l/KZP+AN5y?=
+ =?us-ascii?Q?aVRfUk+y7f7LSf0nREoL7bIM5ZrG55BfPC/ueTiGSupGqgKw3E7rA/QHFz1N?=
+ =?us-ascii?Q?u4ahhKIuBxocraX67W/aDaPr26Ve40czMDfqOKBcvHddsQ4u6Y1n2HL7cFE2?=
+ =?us-ascii?Q?FyfSMLq0pCS/POFmKqfKcleqKcVdwBbcz9FVJsF1XaXdUq712CgaWT+Lb1UQ?=
+ =?us-ascii?Q?qj17i1nmUqjt07jiy5BBMKpB1gvto3JRfQkcHWbbj4HwvDK4H4wkFv52/dIW?=
+ =?us-ascii?Q?H4B7vMcoPZSGkex/whv80TAgzQtywjTCDxxlZ455Iz3L/Oe+bQCsVjAdzQu5?=
+ =?us-ascii?Q?Ma1rqrcaspJz9s7oYCk4f+DqDY5/iCee3ClfIdbj9Guum7q+HHE4TZj1F7nr?=
+ =?us-ascii?Q?VX4Ka6C2Clvm18RZA2xdZUrRq5cNA9KgZSiHO+LbEdalF0DOhNLvPgsPXyf9?=
+ =?us-ascii?Q?Hf6su5IDclaXiiJRwkpg5h+TPIDZDuTYN0qYnbCtJ/4Yvd1SEsEmS23pHv2L?=
+ =?us-ascii?Q?PHx9QfIBAsi2W2EkI6pLO1E3zMsj7yZBHl3zc5TzfIMLR6TKeLLLUs9x7vEO?=
+ =?us-ascii?Q?Zb8A1dlPZfhoygKQiOe+AXIlXteiZpg50uXLQwrbKWbhTFALggi8mt3bVeDm?=
+ =?us-ascii?Q?C94Cod1RawrhuWYSB5k=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b9fc67e-21c2-4672-a8c9-08d9f2f68338
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 15:51:22.9207
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PbgIjW2I0m/9DRa7cVCDhB00MfO3dPsZva7keqsEnthywCYl5J1sPdTGj1SVTvjn
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4746
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PkRhOiBKw6lyw7RtZSBQb3VpbGxlciA8amVyb21lLnBvdWlsbGVyQHNpbGFicy5jb20+DQo+SW52
-aWF0bzogdmVuZXJkw6wgMTggZmViYnJhaW8gMjAyMiAxNTowNA0KPkE6IEdyZWcgS3JvYWgtSGFy
-dG1hbjsgUmljY2FyZG8gRmVycmF6em8NCj5DYzogbGludXgtd2lyZWxlc3NAdmdlci5rZXJuZWwu
-b3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBLYWxsZSBWYWxvOyBkZXZlbEBkcml2ZXJkZXYu
-b3N1b3NsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgRGF2aWQgUyAuIE1pbGxl
-cg0KPk9nZ2V0dG86IFJlOiBbUEFUQ0hdIHN0YWdpbmc6IHdmeDogZml4IHNjYW4gd2l0aCBXRk0y
-MDAgYW5kIFdXIHJlZ3VsYXRpb24NCj4NCj5IZWxsbyBSaWNjYXJkbywNCj4NCj4NCj5PbiBGcmlk
-YXkgMTggRmVicnVhcnkgMjAyMiAxNDo1MzozNSBDRVQgUmljY2FyZG8gRmVycmF6em8gd3JvdGU6
-DQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogUmljY2FyZG8gRmVycmF6em8gPHJmZXJyYXp6b0BjYW1l
-LmNvbT4NCj4+DQo+Pg0KPj4gU29ycnkgZm9yIHRoZSBmb290ZXIgaXQgaXMgYWRkZWQgYXV0b21h
-dGljYWxseQ0KPj4NCj4NCj5Zb3VyIG1haWwgaGFzIHByb2JhYmx5IG5vdCBiZWVuIHJlY2VpdmVk
-IGJ5IGV2ZXJ5b25lIHNpbmNlIHlvdSBzZW50IGl0DQo+aW4gaHRtbFsxXSAodHJ5IGFsc28gdG8g
-YXZvaWQgdG9wLXBvc3RpbmcpLg0KPg0KPk5ldmVydGhlbGVzcywgR3JlZywgaXMgaXQgc3VmZmlj
-aWVudCBmb3IgeW91Pw0KPg0KPlsxXTogIGh0dHBzOi8vdXJsc2FuZC5lc3ZhbGFicy5jb20vP3U9
-aHR0cHMlM0ElMkYlMkZ1c2VwbGFpbnRleHQuZW1haWwlMkYmZT0wOTczM2Y5NCZoPTFlYzU1NzFl
-JmY9eSZwPW4NCj4NCj4+IE9uIEZyaWRheSAxOCBGZWJydWFyeSAyMDIyIDEyOjAwOjU0IENFVCBH
-cmVnIEtyb2FoLUhhcnRtYW4gd3JvdGU6DQo+PiA+IE9uIEZyaSwgRmViIDE4LCAyMDIyIGF0IDEx
-OjU3OjQ3QU0gKzAxMDAsIErDqXLDtG1lIFBvdWlsbGVyIHdyb3RlOg0KPj4gPiA+IE9uIEZyaWRh
-eSAxOCBGZWJydWFyeSAyMDIyIDExOjUzOjU4IENFVCBKZXJvbWUgUG91aWxsZXIgd3JvdGU6DQo+
-PiA+ID4NCg0KUmljY2FyZG8gRmVycmF6em8NClImRCBTb2Z0d2FyZSBEZXNpZ25lcg0KcmZlcnJh
-enpvQGNhbWUuY29tDQpDQU1FIFMucC5BLg0KDQo+IEZyb206IFJpY2NhcmRvIEZlcnJhenpvIDxy
-ZmVycmF6em9AY2FtZS5jb20+DQo+PiA+ID4gPg0KPj4gPiA+ID4gU29tZSB2YXJpYW50cyBvZiB0
-aGUgV0YyMDAgZGlzYWxsb3cgYWN0aXZlIHNjYW4gb24gY2hhbm5lbCAxMiBhbmQgMTMuDQo+PiA+
-ID4gPiBGb3IgdGhlc2UgcGFydHMsIHRoZSBjaGFubmVscyAxMiBhbmQgMTMgYXJlIG1hcmtlZCBJ
-RUVFODAyMTFfQ0hBTl9OT19JUi4NCj4+ID4gPiA+DQo+PiA+ID4gPiBIb3dldmVyLCB0aGUgYmVh
-Y29uIGhpbnQgcHJvY2VkdXJlIHdhcyByZW1vdmluZyB0aGUgZmxhZw0KPj4gPiA+ID4gSUVFRTgw
-MjExX0NIQU5fTk9fSVIgZnJvbSBjaGFubmVscyB3aGVyZSBhIEJTUyBpcyBkaXNjb3ZlcmVkLiBU
-aGlzIHdhcw0KPj4gPiA+ID4gbWFraW5nIHN1YnNlcXVlbnQgc2NhbnMgdG8gZmFpbCBiZWNhdXNl
-IHRoZSBkcml2ZXIgd2FzIHRyeWluZyBhY3RpdmUNCj4+ID4gPiA+IHNjYW5zIG9uIHByb2hpYml0
-ZWQgY2hhbm5lbHMuDQo+PiA+ID4gPg0KPj4gPiA+ID4gU2lnbmVkLW9mZi1ieTogSsOpcsO0bWUg
-UG91aWxsZXIgPGplcm9tZS5wb3VpbGxlckBzaWxhYnMuY29tPg0KPj4gPiA+DQo+PiA+ID4gSSBm
-b3Jnb3QgdG8gbWVudGlvbiBJIGhhdmUgcmV2aWV3ZWQgb24gdGhpcyBwYXRjaDoNCj4+ID4gPg0K
-Pj4gPiA+IFJldmlld2VkLWJ5OiBKw6lyw7RtZSBQb3VpbGxlciA8amVyb21lLnBvdWlsbGVyQHNp
-bGFicy5jb20+DQo+PiA+DQo+PiA+IFJldml3ZWQtYnkgaXMgaW1wbGllZCB3aXRoIHNpZ25lZC1v
-ZmYtYnkuDQo+PiA+DQo+PiA+IEJ1dCB3aGF0IGhhcHBlbmVkIHRvIHRoZSBzaWduZWQtb2ZmLWJ5
-IGZyb20gdGhlIGF1dGhvciBvZiB0aGlzIGNoYW5nZT8NCj4+DQo+PiBUaGUgYXV0aG9yIGhhc24n
-dCB1c2VkIGZvcm1hdC1wYXRjaCB0byB0cmFuc21pdCB0aGlzIHBhdGNoLg0KPj4NCj4+IFJpY2Nh
-cmRvLCBjYW4geW91IHJlcGx5IHRvIHRoaXMgbWFpbCB3aXRoIHRoZSBtZW50aW9uICJTaWduZWQt
-b2ZmLWJ5Og0KPj4gWW91ciBuYW1lIDx5b3VyLW1haWxAZG9tLmNvbT4iPyBJdCBjZXJ0aWZpZXMg
-dGhhdCB5b3Ugd3JvdGUgaXQgb3INCj4+IG90aGVyd2lzZSBoYXZlIHRoZSByaWdodCB0byBwYXNz
-IGl0IG9uIGFzIGFuIG9wZW4tc291cmNlIHBhdGNoWzFdLg0KPj4NCj4+DQo+PiBbMV0gIGh0dHBz
-Oi8vdXJsc2FuZC5lc3ZhbGFicy5jb20vP3U9aHR0cHMlM0ElMkYlMkZ3d3cua2VybmVsLm9yZyUy
-RmRvYyUyRmh0bWwlMkZ2NC4xNyUyRnByb2Nlc3MlMkZzdWJtaXR0aW5nLXBhdGNoZXMuaHRtbCUy
-M3NpZ24teW91ci13b3JrLXRoZS1kZXZlbG9wZXItcy1jZXJ0aWZpY2F0ZS1vZi1vcmlnaW4mZT0w
-OTczM2Y5NCZoPWUwOWYyZWZhJmY9eSZwPW48aHR0cHM6Ly91cmxkZWZlbnNlLmNvbS92My9fX2h0
-dHBzOi8vdXJsc2FuZC5lc3ZhbGFicy5jb20vP3U9aHR0cHMqM0EqMkYqMkZ3d3cua2VybmVsLm9y
-ZyoyRmRvYyoyRmh0bWwqMkZ2NC4xNyoyRnByb2Nlc3MqMkZzdWJtaXR0aW5nLXBhdGNoZXMuaHRt
-bCoyM3NpZ24teW91ci13b3JrLXRoZS1kZXZlbG9wZXItcy1jZXJ0aWZpY2F0ZS1vZi1vcmlnaW4m
-ZT0wOTczM2Y5NCZoPWUwOWYyZWZhJmY9eSZwPW5fXztKU1VsSlNVbEpTVWwhIU4zMENzN0pyIUdS
-Z0JfSmxoWkYyWHphREVCMVpEblNiTGlNbUQ4WGRybUNfdXF5TG9jelI1ZTA1dnZNbERDZ3lLbEV1
-M1h5STNQZEpLJD4NCj4+DQo+PiBUaGFuayB5b3UsDQo+Pg0KPj4gLS0NCj4+IErDqXLDtG1lIFBv
-dWlsbGVyDQo+Pg0KPj4NCj4+DQo+DQo+LS0NCj5Kw6lyw7RtZSBQb3VpbGxlcg0KDQpNaWdodCBs
-b29rIGJldHRlciBub3cNClNpZ25lZC1vZmYtYnk6IFJpY2NhcmRvIEZlcnJhenpvIDxyZmVycmF6
-em9AY2FtZS5jb20+DQo=
+On Fri, Feb 18, 2022 at 08:55:10AM +0800, Lu Baolu wrote:
+> Hi folks,
+> 
+> The iommu group is the minimal isolation boundary for DMA. Devices in
+> a group can access each other's MMIO registers via peer to peer DMA
+> and also need share the same I/O address space.
+> 
+> Once the I/O address space is assigned to user control it is no longer
+> available to the dma_map* API, which effectively makes the DMA API
+> non-working.
+> 
+> Second, userspace can use DMA initiated by a device that it controls
+> to access the MMIO spaces of other devices in the group. This allows
+> userspace to indirectly attack any kernel owned device and it's driver.
+
+This series has changed quite a lot since v1 - but I couldn't spot
+anything wrong with this. It is a small incremental step and I think
+it is fine now, so 
+
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+I hope you continue to work on the "Scrap iommu_attach/detach_group()
+interfaces" series and try to minimize all the special places testing
+against the default domain
+
+Thanks,
+Jason

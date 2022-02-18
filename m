@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AC04BBD5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEF14BBD4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237883AbiBRQTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:19:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42904 "EHLO
+        id S237770AbiBRQTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:19:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbiBRQR4 (ORCPT
+        with ESMTP id S237643AbiBRQR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 11:17:56 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885283969B
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008413A5E6
         for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:17:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645201046; x=1676737046;
+  t=1645201047; x=1676737047;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hz/kh0uvaCIxwsvfeV4VXQp/Vpt7YUdFG5ImQMhC4rQ=;
-  b=PGJ+XaNv+fYDZnz2bYEu8QkDArB89IhQMMfUYDO19QzJDg4cr2y6bXgj
-   ttyZPGZ0mdFrfV6KtyA5u38eHjk+ixFvKnsuulSXUiYn+lUiE8LyqZOSF
-   mTlvsoXMjN5FhIW3/vrKAA8vX2DrBvFIh78oVRrKXm7mSNAkqt3dRFybc
-   ffbImfvKoh/4xcLd3cACHfrEysK5YFq/TPpdk2VYSw1ER1VnqDE97BQvH
-   553JqT42bJ6v2XQY+0ONxpkwObdGYAsUdqB1qULolrT/sPoEZRWKCAJIC
-   pCdF+DIEbVR0gdSqrDwq0sKcNXjJ1kCSqUiT7FB+2evL3umnWs9bUe2vg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="311897901"
+  bh=C/Kr5OtLyLFJ8JIEjNyBn5AW++nQARb4Poi2KZHPrbc=;
+  b=DCSQRPyolIoJMHOxx9IIBD1kdWDgZU1CmbZFNum895//uBKeKGxunvsT
+   waj0Ktn18X2jRef1y3aiYEeT/76abaBc0COepu79FaBBVoggNAK3xzrPv
+   tKwB5hzcLg6Hvn8RkksGSO4j1uKoicguLZpk3uCGCKgsYRyrXWP367gtX
+   ID5AZb8M34anoUxesDyeBzOAH3BGgum0adYE8+pMnfCetnlz9dva6fIpA
+   AEV/A+L+eM9u8juf4s6TKjDbka+EqSu3w+gx2o3YTP6ot8po0vRZRXadq
+   WgPLmbPk9eVvNMLzM1t1Y/1wq56xK1XMy4V4McSMO5+dnpicIO3HZ6lIq
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="238559747"
 X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="311897901"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 08:17:26 -0800
+   d="scan'208";a="238559747"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 08:17:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="775328282"
+   d="scan'208";a="546333157"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Feb 2022 08:17:20 -0800
+  by orsmga008.jf.intel.com with ESMTP; 18 Feb 2022 08:17:20 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id E123CAFD; Fri, 18 Feb 2022 18:17:22 +0200 (EET)
+        id EBEF2B2F; Fri, 18 Feb 2022 18:17:22 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -51,144 +51,113 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         x86@kernel.org, linux-kernel@vger.kernel.org,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv3 18/32] x86/tdx: Add port I/O emulation
-Date:   Fri, 18 Feb 2022 19:17:04 +0300
-Message-Id: <20220218161718.67148-19-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv3 19/32] x86/tdx: Handle early boot port I/O
+Date:   Fri, 18 Feb 2022 19:17:05 +0300
+Message-Id: <20220218161718.67148-20-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
 References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+From: Andi Kleen <ak@linux.intel.com>
 
-TDX hypervisors cannot emulate instructions directly. This includes
-port I/O which is normally emulated in the hypervisor. All port I/O
-instructions inside TDX trigger the #VE exception in the guest and
-would be normally emulated there.
+TDX guests cannot do port I/O directly. The TDX module triggers a #VE
+exception to let the guest kernel emulate port I/O by converting them
+into TDCALLs to call the host.
 
-Use a hypercall to emulate port I/O. Extend the
-tdx_handle_virt_exception() and add support to handle the #VE due to
-port I/O instructions.
+But before IDT handlers are set up, port I/O cannot be emulated using
+normal kernel #VE handlers. To support the #VE-based emulation during
+this boot window, add a minimal early #VE handler support in early
+exception handlers. This is similar to what AMD SEV does. This is
+mainly to support earlyprintk's serial driver, as well as potentially
+the VGA driver.
 
-String I/O operations are not supported in TDX. Unroll them by declaring
-CC_ATTR_GUEST_UNROLL_STRING_IO confidential computing attribute.
+The early handler only supports I/O-related #VE exceptions. Unhandled or
+failed exceptions will be handled via early_fixup_exceptions() (like
+normal exception failures).
 
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Signed-off-by: Andi Kleen <ak@linux.intel.com>
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/coco/tdx.c           | 54 +++++++++++++++++++++++++++++++++++
- arch/x86/kernel/cc_platform.c |  7 ++++-
- 2 files changed, 60 insertions(+), 1 deletion(-)
+ arch/x86/coco/tdx.c        | 16 ++++++++++++++++
+ arch/x86/include/asm/tdx.h |  4 ++++
+ arch/x86/kernel/head64.c   |  3 +++
+ 3 files changed, 23 insertions(+)
 
 diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
-index 74ab7c5a767d..e3693d0494a7 100644
+index e3693d0494a7..d23d389124a1 100644
 --- a/arch/x86/coco/tdx.c
 +++ b/arch/x86/coco/tdx.c
-@@ -19,6 +19,12 @@
- #define EPT_READ	0
- #define EPT_WRITE	1
- 
-+/* See Exit Qualification for I/O Instructions in VMX documentation */
-+#define VE_IS_IO_IN(e)		((e) & BIT(3))
-+#define VE_GET_IO_SIZE(e)	(((e) & GENMASK(2, 0)) + 1)
-+#define VE_GET_PORT_NUM(e)	((e) >> 16)
-+#define VE_IS_IO_STRING(e)	((e) & BIT(4))
-+
- static struct {
- 	unsigned int gpa_width;
- 	unsigned long attributes;
-@@ -292,6 +298,52 @@ static bool handle_mmio(struct pt_regs *regs, struct ve_info *ve)
- 	return true;
+@@ -344,6 +344,22 @@ static bool handle_io(struct pt_regs *regs, u32 exit_qual)
+ 	return ret;
  }
  
 +/*
-+ * Emulate I/O using hypercall.
-+ *
-+ * Assumes the IO instruction was using ax, which is enforced
-+ * by the standard io.h macros.
-+ *
-+ * Return True on success or False on failure.
++ * Early #VE exception handler. Only handles a subset of port I/O.
++ * Intended only for earlyprintk. If failed, return false.
 + */
-+static bool handle_io(struct pt_regs *regs, u32 exit_qual)
++__init bool tdx_early_handle_ve(struct pt_regs *regs)
 +{
-+	struct tdx_hypercall_args args = {
-+		.r10 = TDX_HYPERCALL_STANDARD,
-+		.r11 = EXIT_REASON_IO_INSTRUCTION,
-+	};
-+	int size, port;
-+	u64 mask;
-+	bool in, ret;
++	struct ve_info ve;
 +
-+	if (VE_IS_IO_STRING(exit_qual))
++	tdx_get_ve_info(&ve);
++
++	if (ve.exit_reason != EXIT_REASON_IO_INSTRUCTION)
 +		return false;
 +
-+	in   = VE_IS_IO_IN(exit_qual);
-+	size = VE_GET_IO_SIZE(exit_qual);
-+	port = VE_GET_PORT_NUM(exit_qual);
-+	mask = GENMASK(BITS_PER_BYTE * size, 0);
-+
-+	args.r12 = size;
-+	args.r13 = !in;
-+	args.r14 = port;
-+	args.r15 = in ? 0 : regs->ax;
-+
-+	/*
-+	 * Emulate the I/O read/write via hypercall. More info about
-+	 * ABI can be found in TDX Guest-Host-Communication Interface
-+	 * (GHCI) section titled "TDG.VP.VMCALL<Instruction.IO>".
-+	 */
-+	ret = !__tdx_hypercall(&args, in ? TDX_HCALL_HAS_OUTPUT : 0);
-+	if (!ret || !in)
-+		return ret;
-+
-+	regs->ax &= ~mask;
-+	regs->ax |= ret ? args.r11 & mask : UINT_MAX;
-+
-+	return ret;
++	return handle_io(regs, ve.exit_qual);
 +}
 +
  void tdx_get_ve_info(struct ve_info *ve)
  {
  	struct tdx_module_output out;
-@@ -347,6 +399,8 @@ static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
- 		return handle_cpuid(regs);
- 	case EXIT_REASON_EPT_VIOLATION:
- 		return handle_mmio(regs, ve);
-+	case EXIT_REASON_IO_INSTRUCTION:
-+		return handle_io(regs, ve->exit_qual);
- 	default:
- 		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
- 		return false;
-diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
-index dba713c444ab..55128de5e27c 100644
---- a/arch/x86/kernel/cc_platform.c
-+++ b/arch/x86/kernel/cc_platform.c
-@@ -18,7 +18,12 @@ static enum cc_vendor cc_vendor;
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+index 54803cb6ccf5..ba0f8c2b185c 100644
+--- a/arch/x86/include/asm/tdx.h
++++ b/arch/x86/include/asm/tdx.h
+@@ -56,11 +56,15 @@ bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve);
  
- static bool intel_cc_platform_has(enum cc_attr attr)
- {
--	return false;
-+	switch (attr) {
-+	case CC_ATTR_GUEST_UNROLL_STRING_IO:
-+		return true;
-+	default:
-+		return false;
-+	}
+ void tdx_safe_halt(void);
+ 
++bool tdx_early_handle_ve(struct pt_regs *regs);
++
+ #else
+ 
+ static inline void tdx_early_init(void) { };
+ static inline void tdx_safe_halt(void) { };
+ 
++static inline bool tdx_early_handle_ve(struct pt_regs *regs) { return false; }
++
+ #endif /* CONFIG_INTEL_TDX_GUEST */
+ 
+ #endif /* !__ASSEMBLY__ */
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 6dff50c3edd6..ecbf50e5b8e0 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -417,6 +417,9 @@ void __init do_early_exception(struct pt_regs *regs, int trapnr)
+ 	    trapnr == X86_TRAP_VC && handle_vc_boot_ghcb(regs))
+ 		return;
+ 
++	if (trapnr == X86_TRAP_VE && tdx_early_handle_ve(regs))
++		return;
++
+ 	early_fixup_exception(regs, trapnr);
  }
  
- /*
 -- 
 2.34.1
 

@@ -2,144 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949394BBABE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F684BBAC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236104AbiBROg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:36:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39910 "EHLO
+        id S236117AbiBROgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:36:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiBROg0 (ORCPT
+        with ESMTP id S236111AbiBROgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:36:26 -0500
-Received: from mail-m2838.qiye.163.com (mail-m2838.qiye.163.com [103.74.28.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F63E281989;
-        Fri, 18 Feb 2022 06:35:50 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.126.138.100])
-        by mail-m2838.qiye.163.com (Hmail) with ESMTPA id 3CD763C00E8;
-        Fri, 18 Feb 2022 22:35:34 +0800 (CST)
-From:   Tao Liu <thomas.liu@ucloud.cn>
-To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, edumazet@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tao Liu <thomas.liu@ucloud.cn>
-Subject: [PATCH net v3] gso: do not skip outer ip header in case of ipip and net_failover
-Date:   Fri, 18 Feb 2022 22:35:24 +0800
-Message-Id: <20220218143524.61642-1-thomas.liu@ucloud.cn>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Fri, 18 Feb 2022 09:36:39 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711822819B3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:36:22 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2AB03C0007;
+        Fri, 18 Feb 2022 14:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645194980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Fn3nkzJzBFVgF8fM2FSj8yDW3bHjsPdv9AqR1HVmuV8=;
+        b=Irw1b76E+oIhx1Kpfcdcml+M1OiiD2cgBNcJAMCO6kinh7CMUOUIxfcksMHIXZedB7oB07
+        d8qgOLFVd2GvoSYed/reJERhgP48VsaPIMMcBUKj3HvDqT15hcU92+SfvgYsj+6Dzmg0ru
+        o5j+7c0dFkwNuluIcaD4+ZnYVTtN4gMdpuhN61RER/O1aCxHEAQYSAMEQwiG5rQGb7aaRp
+        w2gvDkunDOrGs7AwGPw9XFmky7VY7vxqxvv1zEkMoVdamMvTYS13y6OGGnBxM6mtGMS7R0
+        +aFCM6SXZ8lDc/JZLjfQVE5tcGWQAxD43a1B+XVMo8esum5/qkU48aoVZO4drA==
+Date:   Fri, 18 Feb 2022 15:36:17 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] mtd: Fixes for v5.17-rc5
+Message-ID: <20220218153617.016a905a@xps13>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUlCN1dZLVlBSVdZDwkaFQgSH1lBWUJNTx5WQx4aH05MShhJHk
-        IYVRkRExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MRQ6HDo5TDI4EQ1WODo0NRoz
-        DB8aCjNVSlVKTU9OSkJPQkhPT05IVTMWGhIXVQ8TFBYaCFUXEg47DhgXFA4fVRgVRVlXWRILWUFZ
-        SklPVUpJTVVKSENVSktLWVdZCAFZQU9KTUk3Bg++
-X-HM-Tid: 0a7f0d4278268420kuqw3cd763c00e8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We encounter a tcp drop issue in our cloud environment. Packet GROed in
-host forwards to a VM virtio_net nic with net_failover enabled. VM acts
-as a IPVS LB with ipip encapsulation. The full path like:
-host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
- -> ipip encap -> net_failover tx -> virtio_net tx
+Hello Linus,
 
-When net_failover transmits a ipip pkt (gso_type = 0x0103, which means
-SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4), there is no gso
-did because it supports TSO and GSO_IPXIP4. But network_header points to
-inner ip header.
+This is a fixes MTD PR for the next -rc.
 
-Call Trace:
- tcp4_gso_segment        ------> return NULL
- inet_gso_segment        ------> inner iph, network_header points to
- ipip_gso_segment
- inet_gso_segment        ------> outer iph
- skb_mac_gso_segment
+Thanks,
+Miqu=C3=A8l
 
-Afterwards virtio_net transmits the pkt, only inner ip header is modified.
-And the outer one just keeps unchanged. The pkt will be dropped in remote
-host.
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-Call Trace:
- inet_gso_segment        ------> inner iph, outer iph is skipped
- skb_mac_gso_segment
- __skb_gso_segment
- validate_xmit_skb
- validate_xmit_skb_list
- sch_direct_xmit
- __qdisc_run
- __dev_queue_xmit        ------> virtio_net
- dev_hard_start_xmit
- __dev_queue_xmit        ------> net_failover
- ip_finish_output2
- ip_output
- iptunnel_xmit
- ip_tunnel_xmit
- ipip_tunnel_xmit        ------> ipip
- dev_hard_start_xmit
- __dev_queue_xmit
- ip_finish_output2
- ip_output
- ip_forward
- ip_rcv
- __netif_receive_skb_one_core
- netif_receive_skb_internal
- napi_gro_receive
- receive_buf
- virtnet_poll
- net_rx_action
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-The root cause of this issue is specific with the rare combination of
-SKB_GSO_DODGY and a tunnel device that adds an SKB_GSO_ tunnel option.
-SKB_GSO_DODGY is set from external virtio_net. We need to reset network
-header when callbacks.gso_segment() returns NULL.
+are available in the Git repository at:
 
-This patch also includes ipv6_gso_segment(), considering SIT, etc.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/fixe=
+s-for-5.17-rc5
 
-Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
-Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
----
- net/ipv4/af_inet.c     | 5 ++++-
- net/ipv6/ip6_offload.c | 2 ++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+for you to fetch changes up to 36415a7964711822e63695ea67fede63979054d9:
 
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 9c465ba..72fde28 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1376,8 +1376,11 @@ struct sk_buff *inet_gso_segment(struct sk_buff *skb,
- 	}
- 
- 	ops = rcu_dereference(inet_offloads[proto]);
--	if (likely(ops && ops->callbacks.gso_segment))
-+	if (likely(ops && ops->callbacks.gso_segment)) {
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
-+	}
- 
- 	if (IS_ERR_OR_NULL(segs))
- 		goto out;
-diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-index b29e9ba..5f577e2 100644
---- a/net/ipv6/ip6_offload.c
-+++ b/net/ipv6/ip6_offload.c
-@@ -114,6 +114,8 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
- 	if (likely(ops && ops->callbacks.gso_segment)) {
- 		skb_reset_transport_header(skb);
- 		segs = ops->callbacks.gso_segment(skb, features);
-+		if (!segs)
-+			skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
- 	}
- 
- 	if (IS_ERR_OR_NULL(segs))
--- 
-1.8.3.1
+  mtd: rawnand: brcmnand: Fixed incorrect sub-page ECC status (2022-01-31 1=
+7:08:56 +0100)
 
+----------------------------------------------------------------
+MTD changes:
+* Qcom:
+  - Don't print error message on -EPROBE_DEFER
+  - Fix kernel panic on skipped partition
+  - Fix missing free for pparts in cleanup
+* phram: Prevent divide by zero bug in phram_setup()
+
+Raw NAND controller changes:
+* ingenic: Fix missing put_device in ingenic_ecc_get
+* qcom: Fix clock sequencing in qcom_nandc_probe()
+* omap2: Prevent invalid configuration and build error
+* gpmi: Don't leak PM reference in error path
+* brcmnand: Fix incorrect sub-page ECC status
+
+----------------------------------------------------------------
+Ansuel Smith (2):
+      mtd: parsers: qcom: Fix kernel panic on skipped partition
+      mtd: parsers: qcom: Fix missing free for pparts in cleanup
+
+Bryan O'Donoghue (2):
+      mtd: rawnand: qcom: Fix clock sequencing in qcom_nandc_probe()
+      mtd: parsers: qcom: Don't print error message on -EPROBE_DEFER
+
+Christian Eggers (1):
+      mtd: rawnand: gpmi: don't leak PM reference in error path
+
+Dan Carpenter (1):
+      mtd: phram: Prevent divide by zero bug in phram_setup()
+
+Miaoqian Lin (1):
+      mtd: rawnand: ingenic: Fix missing put_device in ingenic_ecc_get
+
+Roger Quadros (1):
+      mtd: rawnand: omap2: Prevent invalid configuration and build error
+
+david regan (1):
+      mtd: rawnand: brcmnand: Fixed incorrect sub-page ECC status
+
+ drivers/mtd/devices/phram.c                | 12 ++++++++----
+ drivers/mtd/nand/raw/Kconfig               |  3 ++-
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c   |  2 +-
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |  3 ++-
+ drivers/mtd/nand/raw/ingenic/ingenic_ecc.c |  7 ++++++-
+ drivers/mtd/nand/raw/qcom_nandc.c          | 14 ++++++--------
+ drivers/mtd/parsers/qcomsmempart.c         | 36 +++++++++++++++++++++++---=
+----------
+ 7 files changed, 48 insertions(+), 29 deletions(-)

@@ -2,182 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C6C4BB702
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C1E4BB706
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbiBRKip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:38:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57352 "EHLO
+        id S233862AbiBRKjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:39:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiBRKin (ORCPT
+        with ESMTP id S233865AbiBRKjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:38:43 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2118.outbound.protection.outlook.com [40.107.244.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1757B5BD2C;
-        Fri, 18 Feb 2022 02:38:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OkXascRZuhRTvXJm7Kx2CSTWPLkqtGy2hVQXB4sofENVXrou2LhBfH7OMxJCq41T2aI49UwtyOqzJmoyTDX4p0+rkFTLXSakQEaXUaEmhLKJpmkp1pDqjadD4w2AAb69pvGfaQxYdUA7cwqqUcPmP5dNZZMEEm3jII9ONBPZCILxeaIFu7olOk0DWO9jKYlHcU2VswPocLBYjbgqbUqQa9eLiDQ5ZDIMWoheN3E5wKTpt4a6AE3dc3+3227IIVVfoDoOwUyd6z4VjcGw+glqgobchd6or9L5X4mquCzIDJ0QoMdQCaToCvX5II8E+RkT0pWjbjJZXg/8bDt6VmrQRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hUK9Cn4fEZFJr9zFNAHPMFXMneWYgz8q1w324ceHEsA=;
- b=Re67wzvX3Dn6iizrIKr7X7uH8R8Y3KuIMpGYEALasFdNZWfmCSg7RFfs89xc6hCu1XfRhdVwaabiNYuZQIRfsq8VpV0MWB+UbqNyL3UyDD2Qp0i+RQheFthZ3d1jBdlJ6WtIbLmDm8/raBePSVrywpl2gfAHeZWdVqqSLbNJ+InPqbyIoGwsrkRS/yVc7lf6B1xxoT3+WpNPbBqDujDEHxei/RQrI1Kgceuy+MDVbTAhRvh7qVA8H2+5yBRceCzpgmmwyXeBr5MkT/d0I2Ol5G+DptJrwxpj88m9IxUT25pdS0IioEma6XKKqx8B76ZYdkXQqbZ7FFdii1ydFKZitw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hUK9Cn4fEZFJr9zFNAHPMFXMneWYgz8q1w324ceHEsA=;
- b=agAxWj2CjT6nFBzrAU85JX7iKzrZ20fVwjkMOoa2pVnfAbHOAnD1yS5aUZHaZT/h3+3zwQPvwDhEIyBOOAKJ2jZ0WENwCAkYynRLgb+9ZBBqJdXVBhsTeRAyw7eijnuB/zRvLqarYjghpsS9zI3e5u8kIy4qcJoQO3cIRmSNhxo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MWHPR13MB1248.namprd13.prod.outlook.com (2603:10b6:300:99::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Fri, 18 Feb
- 2022 10:38:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::7037:b9dc:923c:c20d]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::7037:b9dc:923c:c20d%7]) with mapi id 15.20.4995.024; Fri, 18 Feb 2022
- 10:38:24 +0000
-Date:   Fri, 18 Feb 2022 11:38:14 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Roi Dayan <roid@nvidia.com>, Ido Schimmel <idosch@idosch.org>
-Cc:     Jianbo Liu <jianbol@nvidia.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        olteanv@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
-        f.fainelli@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        rajur@chelsio.com, claudiu.manoil@nxp.com, sgoutham@marvell.com,
-        gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
-        saeedm@nvidia.com, leon@kernel.org, idosch@nvidia.com,
-        petrm@nvidia.com, alexandre.belloni@bootlin.com,
-        UNGLinuxDriver@microchip.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        baowen.zheng@corigine.com, louis.peens@netronome.com,
-        peng.zhang@corigine.com, oss-drivers@corigine.com
-Subject: Re: [PATCH net-next v2 0/2] flow_offload: add tc police parameters
-Message-ID: <20220218103813.GA29654@corigine.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg44A/JcKmsTU6N4@shredder>
- <5e9a4e05-8501-4d21-c8b9-91c992c109f0@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: AM0PR01CA0086.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:10e::27) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Fri, 18 Feb 2022 05:39:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B6F413296F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:38:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645180731;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BB3RvaNyELHc5+cbc7+hBFpImVt+dcbvRUKC71NhhxA=;
+        b=HI5YskYZA93PlBOywea2cgXOu0zC9iztARNh//bqI2Tji9DPcoESpxTnt79EUbdQhu00cG
+        U1RCCNSVBbVWkuMdNq50g5DHV4Tu8cuniJPj8XErOl8PfQI7YRBowaf7Lhd7YrgCKG0kkS
+        RCryavCCz5BUnISBIcEhUngg1K0slvQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-462-6QdD3zdgOnWSWUAq3pRALw-1; Fri, 18 Feb 2022 05:38:50 -0500
+X-MC-Unique: 6QdD3zdgOnWSWUAq3pRALw-1
+Received: by mail-ej1-f71.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso2847787eje.20
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:38:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BB3RvaNyELHc5+cbc7+hBFpImVt+dcbvRUKC71NhhxA=;
+        b=yQmuDgRmDn4WhLOEJeE0OQDretDTuu/sAYNKf/Q/PoRfK31otVJVcVSrg9Hs17RcvZ
+         AfhgIzUG+VNpfgkNr7DvBl1lNy9PTkO920B7G94LV3BY6I7aDZNUI+c2EFgpU0+XvXhy
+         sRlal8Iwze507dxwrid1cqZozb3ALNC00a9e6AZg+XjuX1Q6wx1rveKmbPNsPBozooEZ
+         fwwpwe0IgbbDsB/kPknddyHLxBnL8Q2oHKzYt9kKW9gfDEDz9hfflwstzJyHQPW98MJ8
+         YL/MoOT+ciHz/sLVoUfhJ+6+WEsasOR03rysDFT4a9ByqwB4f+040QRpiQxn7HAtE+DD
+         T7tA==
+X-Gm-Message-State: AOAM532V3Hq/TpVNXVzoMue+YvvtT7nhoqoLxWQKBXBg30mUQydObgjr
+        LeEQUWUEqMB1hzk2UpZWgOCcIPHk3TqkIy2RwLW/JHRO3KfNCrwAfB3XGB6Ust7F8GTY9rGb6Uj
+        9+s+V1ub2iroUwkAZGxzoir2r
+X-Received: by 2002:aa7:c7c4:0:b0:407:52cc:3b32 with SMTP id o4-20020aa7c7c4000000b0040752cc3b32mr7361681eds.397.1645180728887;
+        Fri, 18 Feb 2022 02:38:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJykfGhd50F9wQIvpfwSV02IuVtosrF0JYSvVlOA9FaeEpZTbChuHWqvZILt6ivHs5QKeNBX5w==
+X-Received: by 2002:aa7:c7c4:0:b0:407:52cc:3b32 with SMTP id o4-20020aa7c7c4000000b0040752cc3b32mr7361656eds.397.1645180728579;
+        Fri, 18 Feb 2022 02:38:48 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id t4sm4835504edd.7.2022.02.18.02.38.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 02:38:48 -0800 (PST)
+Message-ID: <d3f0cc20-d226-ee42-cc98-b469949cec9e@redhat.com>
+Date:   Fri, 18 Feb 2022 11:38:47 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8d2ebf7a-2d28-4795-1c08-08d9f2caca07
-X-MS-TrafficTypeDiagnostic: MWHPR13MB1248:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR13MB1248A4C3C9668A5B7F6B26D7E8379@MWHPR13MB1248.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X8s20xrk/Df+G9SuNSm8W3SkAbzY8CyumFkAc0wDq0QkLZJLonq+gwbIJtoBS8l6KeVv0AZynTjhkc1UIsUGFv9fwzCU9TWjDkMF9jIiUw6DgdUaJco+gY1zFz+i9BdGd5SxSc5Eyrd2LN4hAwzDWf6dykBZGN732JLEIIcc97wGrvDQuFzdYpNbKnfwLjGklYEsw/FVDmBFaO7X11ORHF6O7TLNPpYgFGcss2d5R/2uWtvbW/3anqFO9rPUwtAN9mYpPWcMxv2y2S10hLjcNQkEeqB8wNTY2wwR/Kym0KH9b/oAE5l9lDVeEG+GByfTViA+xsrX0OjKIvHcqCvXVURGmrYZRRKkzlF+trXl2oCOuQQBAXUm8/dPUsXm/5IVlcCs4AJPPcQJYjC/MPg+YHTfQwIpH4QhfJeynTl8NKdLOQvzke7NNQOKsEUPeNYqfZXjuNqlQBAm+0jvli5xQjiiah9hX2JuNlNmV5zlc2mA44ToiD4YeQSPpw+p0TKj9+Q0d3XSFuAPrXu4wFKaltL3IBSpM27AoHKTMg6wFT4N8J+lsvG4XVht3Hevg57tNyIDKRhjvrLALrRfiOu3zdxdRG4mv8bc8oeb2rMUD36tDKQQVcjHPDBp0mylEFIOo80WfEbOeiqIgIjoErW82g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(136003)(366004)(376002)(396003)(346002)(39830400003)(6666004)(53546011)(52116002)(6506007)(8936002)(38100700002)(66476007)(4326008)(6486002)(33656002)(508600001)(316002)(8676002)(66556008)(66946007)(110136005)(1076003)(186003)(2616005)(107886003)(2906002)(83380400001)(5660300002)(86362001)(7416002)(6512007)(44832011)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aZUN1vKQmeYFRe8qGRkfN9t5UVVFLN0gO9LRORCgACSsmtfiwE1mLSmZPF2M?=
- =?us-ascii?Q?pOAByH2O8+vNbeTUqWgGVD1yU8HBaHWY4j1ezMHX1DJEGD8ToWGVkBUJrXcf?=
- =?us-ascii?Q?CyupHK/k/GDMGyWpAm/ltYF8vrJ03Rq9vUwcP0iWNC//8KleUrgUFBb8Vpvb?=
- =?us-ascii?Q?t7zUhQcYUau+oiftmwYAfbdEt5bDLn9+qDJiZlpddf12rNbOCFR3T16VBKN8?=
- =?us-ascii?Q?XkcG4SPfCg6QNyhGu03qiaHNMP2bf0oB/oTNLy5H+Vw+EejJanIh5WPK3s79?=
- =?us-ascii?Q?+XvIwIDlT6NW3eqAGGv1JgU3rfmiuzNhuJz/SEWsLIORSIa4c7NRSLCq/oLw?=
- =?us-ascii?Q?FI2jFeLAS3sw2E9EoZnb2ODJJBIeA4wK+tgMawU/6eQIL42RUj/OMMx57sFY?=
- =?us-ascii?Q?q3EAqCdc1dfL4Y/MQOKkHImfg6qVoFGxHjiEuu6klaqlF0j5sTC3AU+GkGmu?=
- =?us-ascii?Q?o8ueWomOsBTCcNyrcx7oNK3f1MwbbR1ska+r0mUGns8Ljn2Ig2KeyLOOJo/9?=
- =?us-ascii?Q?vKkGWsiwAl9xgFz9AGWt8D3l0yMG+xfmhrmwbeKK80uN0vB+FoMR5elQycB1?=
- =?us-ascii?Q?/okfNj4sUAW5EDwozlo5Fbu+2xJUW3C0hAeH6v6tlUmHRGtRqk47RZIFDiU8?=
- =?us-ascii?Q?uWVF5fXj63qftPELzoiDHOOOC2eGQrVISvTPDdbWmM+0JrTzBldbS1bUwTb6?=
- =?us-ascii?Q?zvnkArFFas7s0FOEg0fknkFR/RmGErkWI7wOYqwZ7PSmASBwXQcN0Jb5Hp9a?=
- =?us-ascii?Q?4kLIpu+Al82e5uLeWGgRja4QZ9lVswHIS6Hwb93gps6FqXwKTrcRTl+zUXkz?=
- =?us-ascii?Q?zeqousfdjIH+ZbKPCDwg9SuXo6ZiralvziU4z4ZBMcNdiGnFwhXY4zH5/nW6?=
- =?us-ascii?Q?5oAgJlFehdlZTKC+C4r8t9/XcPTVKQ5h2om1nT6NjVCtaVlFbUgN05TC+UmT?=
- =?us-ascii?Q?lK4RJyHVTjhI6evjsGOS+1R4M+l9sS5Cxzx10ytCvOI2g/BS2LOhvoEyBXHT?=
- =?us-ascii?Q?HMKxPSghlLmqjcxCFqAMShJqIiWEWXBwdgKH5mcfabJz6jT0YZABhW48RaD6?=
- =?us-ascii?Q?+FYWom1UVOQwChiGxG9vfbO8grQ199GTW9M9PwIyf9QXvlSuwtAqzVZXFxAe?=
- =?us-ascii?Q?c3f44UxkG/mJ5UHVbFmwy2m6h1025PZMH6MiRGct9+hmDlFuraB+5SXS/pOO?=
- =?us-ascii?Q?/paZHbATT0RhAhNbU1bTGgFKHbVbTPsF0r2EcNAjhygVn4xi5lR2QhwyilTO?=
- =?us-ascii?Q?UnEi4DvR7AMCFN7We8hnofKcPRfX+2oCisTnFtbPqoJbH6UAl14ZjfNZi3fy?=
- =?us-ascii?Q?RFjyoTXBALYk6Stsl97Bmf2kl2sfi/PHyEI0KBSTAtWxS8gQFVPKfCWXqdV4?=
- =?us-ascii?Q?IK3xoib7+H1kFUm38Of4GjFMHUKRofCsHknadi1lxR3MUyYGK6TS5s9vK3Vs?=
- =?us-ascii?Q?a4QPq+j3wr1UUz0i96cB8qpCIIX5AMieJtT+sncUwZSfd6uJTQLyT2L6y4Zc?=
- =?us-ascii?Q?QVKEmMwpRHUK3kAZwA9XwfY5r7MGbskdk7sSZ50kixlC7BhpP/x0LKXVLkh9?=
- =?us-ascii?Q?7eyPjoZeMiFDAfeBFyE5oLbGaZ73ig5bO7Q6Yc9RONCQE1iMIIaJ3j0RXmIo?=
- =?us-ascii?Q?7Ym53aKjjinwanm+SS1OMas93+/8grDi7W7GEy/YRLGk2e1GS4WqTjhr4joD?=
- =?us-ascii?Q?EtPIfSgu3cPF2Ot2YgM/MZC3LP/YV5QcDlKFWCZzkLssYetc7cBNvn+n35cT?=
- =?us-ascii?Q?5Qnd/+C+zGaUL7kjCHny8pFNJGGhxRk=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d2ebf7a-2d28-4795-1c08-08d9f2caca07
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 10:38:23.9851
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GLSMo26Q9sOK8XOqJDGHF6qCmNyMyQ+KtCQWApG0mtuWAcHmYNzPvG9hufDsN5VzAlf8lnu67CRaHSV1rukVJVB79WPZFMbWHsx80POCWIk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR13MB1248
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FAKE_REPLY_C,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [Intel-gfx] [PATCH v8 1/3] gpu: drm: separate panel orientation
+ property creating and value setting
+Content-Language: en-US
+To:     Emil Velikov <emil.l.velikov@gmail.com>,
+        Simon Ser <contact@emersion.fr>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        LAKML <linux-arm-kernel@lists.infradead.org>
+References: <20220208084234.1684930-1-hsinyi@chromium.org>
+ <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
+ <KW6DNh6IRRgVJx9DfOFBnEqc4a0x-AnDXEbMxwpfEbk8dOn_KGVzAfo-slJWq-4nWW728Uc-OVpFh2w4fDE4-bxfkDuz1hFILRVvbcuXqaw=@emersion.fr>
+ <CACvgo532-pC+7DLFCo=DWTX-OnJEJvSoTmQnt3_qLhiT4cqEMg@mail.gmail.com>
+ <GYG6EVT1MqtmfKiPpMhDG9mpuATnmwVDq2PuE_dpDat5oQW_t1tUfm39lSWHj32D5r7mrog27sL4dkgdMYQ5BN830TfVOrgQ4Ts8LcO8Hcs=@emersion.fr>
+ <CACvgo52+o9_ETC+1RKzqKkyw3ZJ28RjH0BqC9DfmNAKqByud8Q@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CACvgo52+o9_ETC+1RKzqKkyw3ZJ28RjH0BqC9DfmNAKqByud8Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 01:52:47PM +0200, Roi Dayan wrote:
-> On 2022-02-17 1:34 PM, Simon Horman wrote:
-> > On Thu, Feb 17, 2022 at 08:28:01AM +0000, Jianbo Liu wrote:
-> > > As a preparation for more advanced police offload in mlx5 (e.g.,
-> > > jumping to another chain when bandwidth is not exceeded), extend the
-> > > flow offload API with more tc-police parameters. Adjust existing
-> > > drivers to reject unsupported configurations.
-> > 
-> > Hi,
-> > 
-> > I have a concern that
-> > a) patch 1 introduces a facility that may break existing drivers; and
-> > b) patch 2 then fixes this
-> > 
-> > I'd slightly prefer if the series was rearranged to avoid this problem.
-> > 
-> > ...
-> 
-> Hi Simon,
-> 
-> It can't be rearranged as patch 2 can't compile without patch 1.
-> Patch 1 only adds more information passing to the driver.
-> 
-> The drivers functionality doesn't change. drivers today ignore
-> police information, like actions, and still being ignored after patch 1.
-> 
-> patch 2 updates the drivers to use that information instead of
-> ignoring it. so it fixes the drivers that without patch 1 can't be
-> fixed.
+Hi,
 
-I think it would be possible, but...
+Sorry for jumping in in the middle of the thread I did
+not notice this thread before.
 
-On Thu, Feb 17, 2022 at 01:56:51PM +0200, Ido Schimmel wrote:
-
-...
-
-> Not sure what you mean by the above. Patch #1 extends the flow offload
-> API with tc-police parameters that weren't communicated to drivers until
-> now. Drivers still ignore the new parameters after this patch. It is
-> only in patch #2 that these drivers reject configurations where the
-> parameters are set.
+On 2/16/22 13:00, Emil Velikov wrote:
+> On Tue, 15 Feb 2022 at 16:37, Simon Ser <contact@emersion.fr> wrote:
+>>
+>> On Tuesday, February 15th, 2022 at 15:38, Emil Velikov <emil.l.velikov@gmail.com> wrote:
+>>
+>>> On Tue, 15 Feb 2022 at 13:55, Simon Ser <contact@emersion.fr> wrote:
+>>>>
+>>>> On Tuesday, February 15th, 2022 at 13:04, Emil Velikov <emil.l.velikov@gmail.com> wrote:
+>>>>
+>>>>> Greetings everyone,
+>>>>>
+>>>>> Padron for joining in so late o/
+>>>>>
+>>>>> On Tue, 8 Feb 2022 at 08:42, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>>>>>>
+>>>>>> drm_dev_register() sets connector->registration_state to
+>>>>>> DRM_CONNECTOR_REGISTERED and dev->registered to true. If
+>>>>>> drm_connector_set_panel_orientation() is first called after
+>>>>>> drm_dev_register(), it will fail several checks and results in following
+>>>>>> warning.
+>>>>>>
+>>>>>> Add a function to create panel orientation property and set default value
+>>>>>> to UNKNOWN, so drivers can call this function to init the property earlier
+>>>>>> , and let the panel set the real value later.
+>>>>>>
+>>>>>
+>>>>> The warning illustrates a genuine race condition, where userspace will
+>>>>> read the old/invalid property value/state. So this patch masks away
+>>>>> the WARNING without addressing the actual issue.
+>>>>> Instead can we fix the respective drivers, so that no properties are
+>>>>> created after drm_dev_register()?
+>>>>>
+>>>>> Longer version:
+>>>>> As we look into drm_dev_register() it's in charge of creating the
+>>>>> dev/sysfs nodes (et al). Note that connectors cannot disappear at
+>>>>> runtime.
+>>>>> For panel orientation, we are creating an immutable connector
+>>>>> properly, meaning that as soon as drm_dev_register() is called we must
+>>>>> ensure that the property is available (if applicable) and set to the
+>>>>> correct value.
+>>>>
+>>>> Unfortunately we can't quite do this. To apply the panel orientation quirks we
+>>>> need to grab the EDID of the eDP connector, and this happened too late in my
+>>>> testing.
+>>>>
+>>>> What we can do is create the prop early during module load, and update it when
+>>>> we read the EDID (at the place where we create it right now). User-space will
+>>>> receive a hotplug event after the EDID is read, so will be able to pick up the
+>>>> new value if any.
+>>>
+>>> Didn't quite get that, are you saying that a GETPROPERTY for the EDID,
+>>> the ioctl blocks or that we get an empty EDID?
+>>
+>> I'm not referring to GETPROPERTY, I'm referring to the driver getting the EDID
+>> from the sink (here, the eDP panel). In my experimentations with amdgpu I
+>> noticed that the driver module load finished before the EDID was available to
+>> the driver. Maybe other drivers behave differently and probe connectors when
+>> loaded, not sure.
+>>
+> I see thanks.
 > 
-> Therefore, the only breakage I see is the one that can happen after
-> patch #2: unaware user space that was installing actions that weren't
-> fully reflected to hardware.
-> 
-> If we want to be on the safe side, it is possible to remove the errors,
-> but keep the extack messages so that user space is at least somewhat
-> aware.
+>>> The EDID hotplug even thing is neat - sounds like it also signals on
+>>> panel orientation, correct?
+>>> On such an event, which properties userspace should be re-fetching -
+>>> everything or guess randomly?
+>>>
+>>> Looking through the documentation, I cannot see a clear answer :-\
+>>
+>> User-space should re-fetch *all* properties. In practice some user-space may
+>> only be fetching some properties, but that should get fixed in user-space.
+>>
+>> Also the kernel can indicate that only a single connector changed via the
+>> "CONNECTOR" uevent prop, or even a single connector property via "PROPERTY".
+>> See [1] for a user-space implementation. But all of this is purely an optional
+>> optimization. Re-fetching all properties is a bit slower (especially if some
+>> drmModeGetConnector calls force-probe connectors) but works perfectly fine
 
-Yes, I see what you mean.
-I'm now comfortable with the way this patchset is arranged.
+What I'm reading in the above is that it is being considered to allow
+changing the panel-orientation value after the connector has been made
+available to userspace; and let userspace know about this through a uevent.
+
+I believe that this is a bad idea, it is important to keep in mind here
+what userspace (e.g. plymouth) uses this prorty for. This property is
+used to rotate the image being rendered / shown on the framebuffer to
+adjust for the panel orientation.
+
+So now lets assume we apply the correct upside-down orientation later
+on a device with an upside-down mounted LCD panel. Then on boot the
+following could happen:
+
+1. amdgpu exports a connector for the LCD panel to userspace without
+setting panel-orient=upside-down
+2. plymouth sees this and renders its splash normally, but since the
+panel is upside-down it will now actually show upside-down
+3. amdgpu adjusts the panel-orient prop to upside-down, sends out
+uevents
+4. Lets assume plymouth handles this well (i) and now adjust its
+rendering and renders the next frame of the bootsplash 180° rotated
+to compensate for the panel being upside down. Then from now on
+the user will see the splash normally
+
+So this means that the user will briefly see the bootsplash rendered
+upside down which IMHO is not acceptable behavior. Also see my footnote
+about how I seriously doubt plymouth will see the panel-orient change
+at all.
+
+I'm also a bit unsure about:
+
+a) How you can register the panel connector with userspace before
+reading the edid, don't you need the edid to give the physical size +
+modeline to userspace, which you cannot just leave out ?
+
+I guess the initial modeline is inherited from the video-bios, but
+what about the physical size? Note that you cannot just change the
+physical size later either, that gets used to determine the hidpi
+scaling factor in the bootsplash, and changing that after the initial
+bootsplash dislay will also look ugly
+
+b) Why you need the edid for the panel-orientation property at all,
+typically the edid prom is part of the panel and the panel does not
+know that it is mounted e.g. upside down at all, that is a property
+of the system as a whole not of the panel as a standalone unit so
+in my experience getting panel-orient info is something which comes
+from the firmware /video-bios not from edid ?
+
+Regards,
+
+Hans
+
+
+
+i) I don't think plymouth will handle this well though, since it tries to
+skip unchanged connectors and I believe it only checks the crtc routing +
+preferred modeline to determine "unchanged".
 

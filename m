@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277994BB174
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 06:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8654BB177
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 06:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiBRFbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 00:31:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42560 "EHLO
+        id S230324AbiBRFfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 00:35:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiBRFbi (ORCPT
+        with ESMTP id S229719AbiBRFe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 00:31:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7395079C63;
-        Thu, 17 Feb 2022 21:31:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E4E861E9A;
-        Fri, 18 Feb 2022 05:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 664A7C340E9;
-        Fri, 18 Feb 2022 05:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645162281;
-        bh=lyKt5YoIwrlI8Prw+lFo2isAq5Rr39stn2K/Eebeiu4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=osv5OaEV+RyyN6/6QKJvV+rFrS3Av585sT+jh4/JzWwo4eYpMU0eswXzRsYecBO5/
-         v3qJSrq5pW/LP7jpMC2j8oDyISjfquhP8DEvxDKcw7M56pdLUowztgM3NBUaJ7HFgk
-         4VLd6oZZDAYnzxfxL85TxlTHVOJ7v/pQoZ7+lRsNUZQMyjyB3GhRfIGaCDHZbzmSTw
-         Y1ANNhumXO+JFL3rQ7xXuClcmHa1y4c4q0mtljErniiASH5RzOAv8WJUZpGBasq1Xc
-         IJz4ZH1fGLo8I3tMq3pMHCSKop55gzYcnhdCbvtvqNT3u1yOVEdnHTk9jD/dfapAKJ
-         /WW+tfZdxGvZw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F13EB5C1AC1; Thu, 17 Feb 2022 21:31:20 -0800 (PST)
-Date:   Thu, 17 Feb 2022 21:31:20 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Rik van Riel <riel@surriel.com>, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, Chris Mason <clm@fb.com>,
-        linux-fsdevel@vger.kernel.org,
-        Giuseppe Scrivano <gscrivan@redhat.com>
-Subject: Re: [PATCH][RFC] ipc,fs: use rcu_work to free struct ipc_namespace
-Message-ID: <20220218053120.GV4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220217153620.4607bc28@imladris.surriel.com>
- <Yg8StKzTWh+7FLuA@zeniv-ca.linux.org.uk>
+        Fri, 18 Feb 2022 00:34:57 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E601783AB
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 21:34:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645162481; x=1676698481;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vZmmDTIxi0lu2DZF0PIAIbRLyfoDOnSLD948kCfctC0=;
+  b=lvmvS5W0sTmCHltY3qEs6gKuWlaEa35MBzul1khdFmIFZ1WgWCpqUsKH
+   lWHh4CzEBEEeLZ889zipoZ1Fry5f6Io/BPc5mMUnjpUdyg6hFImxiEdZ0
+   oXp82WbNSvSsrT/wtX+02mGQ0na8tiOPyFWSGQ0ffjgCYmlfhavQXzEOo
+   Iq/cePYju049wnW1yJg8wZfvjMMghb49CIKZf6AXJh/w5ybl5Xkfv+lF7
+   vh5qRrG6Lo9UtBpNX2ZoHyYfgYMJg77DGQozEOQYgufHu+Ehu3f7tyHez
+   8Fenvj2obUekhnzolLH50NL/5YTyeqZ0lWVwZ5Wzd9lTuN+4YJ1Bx6rbI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="251255013"
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="251255013"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 21:34:41 -0800
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="777898092"
+Received: from rbfawkes-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.127.120])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 21:34:41 -0800
+Date:   Thu, 17 Feb 2022 21:34:41 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 19/44] mm/pkeys: PKS Testing, add pks_mk_*() tests
+Message-ID: <Yg8v8XPyDTH4O2rr@iweiny-desk3>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-20-ira.weiny@intel.com>
+ <00b87c5f-b4ed-7593-827c-0e1114b8b456@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yg8StKzTWh+7FLuA@zeniv-ca.linux.org.uk>
+In-Reply-To: <00b87c5f-b4ed-7593-827c-0e1114b8b456@intel.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,56 +65,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 03:29:56AM +0000, Al Viro wrote:
-> On Thu, Feb 17, 2022 at 03:36:20PM -0500, Rik van Riel wrote:
-> > The patch works, but a cleanup question for Al Viro:
-> > 
-> > How do we get rid of #include "../fs/mount.h" and the raw ->mnt_ns = NULL thing
-> > in the cleanest way?
+On Tue, Feb 01, 2022 at 09:45:03AM -0800, Dave Hansen wrote:
+> On 1/27/22 09:54, ira.weiny@intel.com wrote:
+> >  bool pks_test_callback(void)
+> >  {
+> > -	return false;
+> > +	bool armed = (test_armed_key != 0);
+> > +
+> > +	if (armed) {
+> > +		pks_mk_readwrite(test_armed_key);
+> > +		fault_cnt++;
+> > +	}
+> > +
+> > +	return armed;
+> > +}
 > 
-> Hell knows...  mnt_make_shortterm(mnt) with big, fat warning along the lines of
-> "YOU MUST HAVE AN RCU GRACE PERIOD BEFORE YOU DROP THAT REFERENCE!!!", perhaps?
+> Where's the locking for all this?  I don't think we need anything fancy,
+> but is there anything preventing the test from being started from
+> multiple threads at the same time?  I think a simple global test mutex
+> would probably suffice.
 
-Rik's patch uses queue_rcu_work(), which always uses a normal grace
-period.  Therefore, one way of checking that an RCU grace period has
-elapsed is as follows:
+Good idea.  Generally I don't see that happening but it is good to be safe.
 
-Step 1: Get a snapshot of the normal grace-period state:
+> 
+> Also, pks_test_callback() needs at least a comment or two about what
+> it's doing.
 
-	rcuseq = get_state_synchronize_rcu(); // In mainline
+The previous patch which adds this call in the fault handler contains the
+following comment which is in the final code:
 
-Step 2: Verify that a normal grace period has elapsed since step 1:
+/*
+ * pks_test_callback() is called by the fault handler to indicate it saw a pkey
+ * fault.
+ *
+ * NOTE: The callback is responsible for clearing any condition which would
+ * cause the fault to re-trigger.
+ */
 
-	WARN_ON_ONCE(!poll_state_synchronize_rcu(rcuseq));
+Would you like more comments within the function?
 
-These functions are both in mainline.
+> 
+> Does this work if you have a test armed and then you get an unrelated
+> PKS fault on another CPU?  I think this will disarm the test from the
+> unrelated thread.
 
-And apologies for my answer on IRC being unhelpful.  Here is hoping that
-this is more to the point.
+This code will detect a false fault.  But the other unrelated fault will work
+correctly.
 
-							Thanx, Paul
+I've debated if the test code should use a specific fault callback...  :-/
+That breaks my test which iterates all keys...  but would fix this problem.
 
-------------------------------------------------------------------------
-
-PS.  Just in case it ever becomes relevant, if Rik's patch were instead
-     to use synchronize_rcu() or synchronize_rcu_expedited() to wait for
-     the grace period, it would be necessary to capture both the normal
-     and expedited grace-period state:
-
-Step 1: Get a snapshot of both the normal and the expedited state:
-
-	rcuseq = get_state_synchronize_rcu();
-	rcuxseq = get_state_synchronize_rcu_expedited();
-
-Step 2: Verify that either a normal or expedited grace period has
-	elapsed since step 1:
-
-	WARN_ON_ONCE(!poll_state_synchronize_rcu(rcuseq) &&
-		     !poll_state_synchronize_rcu_expedited(rcuxseq));
-
-The reason for doing both is that synchronize_rcu_expedited() and
-synchronize_rcu() can both be switched between using normal and expedited
-grace periods.  Not just at boot time, but also at runtime.  Fun.
-
-The two expedited functions are in -rcu rather than mainline, so if
-someone does ever need them, please let me know.
+Ira

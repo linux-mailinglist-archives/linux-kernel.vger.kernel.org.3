@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFD54BBE2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AA24BBE30
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236739AbiBRRQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:16:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43588 "EHLO
+        id S236070AbiBRRQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:16:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238235AbiBRRPT (ORCPT
+        with ESMTP id S238237AbiBRRPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:15:19 -0500
+        Fri, 18 Feb 2022 12:15:20 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A474C7A1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00944D9FF
         for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:15:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=n09cSUUt8kmqGH7bH8N8CKGVS+b2rhhGAV948lm4hj4=; b=CKd1O32y3JuE9QAzcd1ocBeNsd
-        xUav//8E1xDunH1IvglsLdPozFDYg2XlhucR7BfiyISDWriYGJOLqxqdPIVmDJc8T6rEikVz95cnq
-        Y/a1kmmBONUn03yJPi6qxy78QLE3qJzBU012qEH5miHHhUlmXn5LHSq6dkp2g/HJx3qCapQ+ZZFxP
-        MpedixxhqenJJT+byQdQeBgGewOT7YL4oYnBIjmvwIXjgpqfgV+f9M4M+ro0a7GxzlhmpfKA0QHU9
-        4doe1/zshuVFa6KO6rxEzISKTW9MiWw6Rur6tjPl4XA6zEG4M8aGnRQX6lGy8m3pARgvpfGOZsFCz
-        IhhARznQ==;
+        bh=OS+OXrxkCjB0CbzDPGpVL+JNryaY3jwFx8CPkYYuhvk=; b=OgokgflfjPq3B2GQr3adelV6Va
+        c0csuH3VvpGe9CAfpu86GiPNp7oOrM6MbbNun5IyOb6sooXlmWPOt5s2HGDEAIPHqWGFXdwb72OKI
+        gQWF6uVyk1yTv72n/DyaBlHlCMj18OLJdIgJhhSuqQoMOKxy9qhp6rVwMH+itN9s0/iOu1Y7IY37h
+        CtmqaJTDRvzT2j1cXl0cJgdIc4zjL9MT+7bWUURsZrcGXWJbIVO9gnGp1617I4Awr+QWI35re/6Er
+        3bp2UN405FfuM4JmcGb2Xz62GG0nOBIhNUsYy1PRdz7IJHlpdtVBi0+4pxVSoMf7Fw/NOkmD5UZuy
+        r8wzzBXA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nL6qA-00AsBg-JB; Fri, 18 Feb 2022 17:14:44 +0000
+        id 1nL6qA-00AsBf-JB; Fri, 18 Feb 2022 17:14:50 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CE4C3301A50;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CF654301A96;
         Fri, 18 Feb 2022 18:14:39 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 4FC2A213C1E73; Fri, 18 Feb 2022 18:14:39 +0100 (CET)
-Message-ID: <20220218171409.637954642@infradead.org>
+        id 520B929A07E01; Fri, 18 Feb 2022 18:14:39 +0100 (CET)
+Message-ID: <20220218171409.696743603@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 18 Feb 2022 17:49:20 +0100
+Date:   Fri, 18 Feb 2022 17:49:21 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -46,7 +46,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         ndesaulniers@google.com, keescook@chromium.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com
-Subject: [PATCH 18/29] x86/ibt,ftrace: Annotate ftrace code patching
+Subject: [PATCH 19/29] x86/ibt,xen: Annotate away warnings
 References: <20220218164902.008644515@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,100 +60,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Notably the noinline is required to generate sane code; without it GCC
-think's it's awesome to fold in a constant to the code reloc which
-puts it in the wrong place to match with the ANNOTATE_NOENDBR.
+The xen_iret ENDBR is needed for pre-alternative code calling the
+pv_ops using indirect calls.
+
+The rest look like hypervisor entry points which will be IRET like
+transfers and as such don't need ENDBR.
+
+The hypercall page comes from the hypervisor, there might or might not
+be ENDBR there, not our problem.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/kernel/ftrace.c    |    2 +-
- arch/x86/kernel/ftrace_64.S |    9 +++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ arch/x86/entry/entry_64.S |    1 +
+ arch/x86/kernel/head_64.S |    1 +
+ arch/x86/xen/xen-asm.S    |    8 ++++++++
+ arch/x86/xen/xen-head.S   |    5 +++--
+ 4 files changed, 13 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -69,7 +69,7 @@ static const char *ftrace_nop_replace(vo
- 	return x86_nops[5];
- }
- 
--static const char *ftrace_call_replace(unsigned long ip, unsigned long addr)
-+static noinline const char *ftrace_call_replace(unsigned long ip, unsigned long addr)
- {
- 	return text_gen_insn(CALL_INSN_OPCODE, (void *)ip, (void *)addr);
- }
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -145,6 +145,7 @@ SYM_FUNC_START(ftrace_caller)
- 	movq %rcx, RSP(%rsp)
- 
- SYM_INNER_LABEL(ftrace_caller_op_ptr, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
- 	/* Load the ftrace_ops into the 3rd parameter */
- 	movq function_trace_op(%rip), %rdx
- 
-@@ -155,6 +156,7 @@ SYM_INNER_LABEL(ftrace_caller_op_ptr, SY
- 	movq $0, CS(%rsp)
- 
- SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
- 	call ftrace_stub
- 
- 	/* Handlers can change the RIP */
-@@ -169,6 +171,7 @@ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBA
- 	 * layout here.
- 	 */
- SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
-+	ANNOTATE_NOENDBR
- 
- 	jmp ftrace_epilogue
- SYM_FUNC_END(ftrace_caller);
-@@ -179,6 +182,7 @@ SYM_FUNC_START(ftrace_epilogue)
-  * It is also used to copy the RET for trampolines.
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -818,6 +818,7 @@ SYM_CODE_END(exc_xen_hypervisor_callback
   */
- SYM_INNER_LABEL_ALIGN(ftrace_stub, SYM_L_WEAK)
+ SYM_CODE_START(xen_failsafe_callback)
+ 	UNWIND_HINT_EMPTY
 +	ANNOTATE_NOENDBR
- 	UNWIND_HINT_FUNC
- 	RET
- SYM_FUNC_END(ftrace_epilogue)
-@@ -192,6 +196,7 @@ SYM_FUNC_START(ftrace_regs_caller)
- 	/* save_mcount_regs fills in first two parameters */
+ 	movl	%ds, %ecx
+ 	cmpw	%cx, 0x10(%rsp)
+ 	jne	1f
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -392,6 +392,7 @@ SYM_CODE_START(early_idt_handler_array)
+ 	.endr
+ 	UNWIND_HINT_IRET_REGS offset=16 entry=0
+ SYM_CODE_END(early_idt_handler_array)
++	ANNOTATE_NOENDBR // early_idt_handler_array[NUM_EXCEPTION_VECTORS]
  
- SYM_INNER_LABEL(ftrace_regs_caller_op_ptr, SYM_L_GLOBAL)
+ SYM_CODE_START_LOCAL(early_idt_handler_common)
+ 	/*
+--- a/arch/x86/xen/xen-asm.S
++++ b/arch/x86/xen/xen-asm.S
+@@ -122,6 +122,7 @@ SYM_FUNC_END(xen_read_cr2_direct);
+ .macro xen_pv_trap name
+ SYM_CODE_START(xen_\name)
+ 	UNWIND_HINT_EMPTY
 +	ANNOTATE_NOENDBR
- 	/* Load the ftrace_ops into the 3rd parameter */
- 	movq function_trace_op(%rip), %rdx
- 
-@@ -221,6 +226,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_op_pt
- 	leaq (%rsp), %rcx
- 
- SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
+ 	pop %rcx
+ 	pop %r11
+ 	jmp  \name
+@@ -162,6 +163,7 @@ SYM_CODE_START(xen_early_idt_handler_arr
+ 	i = 0
+ 	.rept NUM_EXCEPTION_VECTORS
+ 	UNWIND_HINT_EMPTY
 +	ANNOTATE_NOENDBR
- 	call ftrace_stub
- 
- 	/* Copy flags back to SS, to restore them */
-@@ -248,6 +254,7 @@ SYM_INNER_LABEL(ftrace_regs_call, SYM_L_
- 	 */
- 	testq	%rax, %rax
- SYM_INNER_LABEL(ftrace_regs_caller_jmp, SYM_L_GLOBAL)
+ 	pop %rcx
+ 	pop %r11
+ 	jmp early_idt_handler_array + i*EARLY_IDT_HANDLER_SIZE
+@@ -169,6 +171,7 @@ SYM_CODE_START(xen_early_idt_handler_arr
+ 	.fill xen_early_idt_handler_array + i*XEN_EARLY_IDT_HANDLER_SIZE - ., 1, 0xcc
+ 	.endr
+ SYM_CODE_END(xen_early_idt_handler_array)
 +	ANNOTATE_NOENDBR
- 	jnz	1f
+ 	__FINIT
  
- 	restore_mcount_regs
-@@ -261,6 +268,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_jmp,
- 	 * to the return.
- 	 */
- SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ hypercall_iret = hypercall_page + __HYPERVISOR_iret * 32
+@@ -189,6 +192,7 @@ hypercall_iret = hypercall_page + __HYPE
+  */
+ SYM_CODE_START(xen_iret)
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 	pushq $0
+ 	jmp hypercall_iret
+ SYM_CODE_END(xen_iret)
+@@ -230,6 +234,7 @@ SYM_CODE_END(xenpv_restore_regs_and_retu
+ /* Normal 64-bit system call target */
+ SYM_CODE_START(xen_syscall_target)
+ 	UNWIND_HINT_EMPTY
 +	ANNOTATE_NOENDBR
- 	jmp ftrace_epilogue
+ 	popq %rcx
+ 	popq %r11
  
- 	/* Swap the flags with orig_rax */
-@@ -284,6 +292,7 @@ SYM_FUNC_START(__fentry__)
- 	jnz trace
- 
- SYM_INNER_LABEL(ftrace_stub, SYM_L_GLOBAL)
+@@ -249,6 +254,7 @@ SYM_CODE_END(xen_syscall_target)
+ /* 32-bit compat syscall target */
+ SYM_CODE_START(xen_syscall32_target)
+ 	UNWIND_HINT_EMPTY
 +	ANNOTATE_NOENDBR
- 	RET
+ 	popq %rcx
+ 	popq %r11
  
- trace:
+@@ -266,6 +272,7 @@ SYM_CODE_END(xen_syscall32_target)
+ /* 32-bit compat sysenter target */
+ SYM_CODE_START(xen_sysenter_target)
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR
+ 	/*
+ 	 * NB: Xen is polite and clears TF from EFLAGS for us.  This means
+ 	 * that we don't need to guard against single step exceptions here.
+@@ -289,6 +296,7 @@ SYM_CODE_END(xen_sysenter_target)
+ SYM_CODE_START(xen_syscall32_target)
+ SYM_CODE_START(xen_sysenter_target)
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR
+ 	lea 16(%rsp), %rsp	/* strip %rcx, %r11 */
+ 	mov $-ENOSYS, %rax
+ 	pushq $0
+--- a/arch/x86/xen/xen-head.S
++++ b/arch/x86/xen/xen-head.S
+@@ -25,8 +25,8 @@
+ SYM_CODE_START(hypercall_page)
+ 	.rept (PAGE_SIZE / 32)
+ 		UNWIND_HINT_FUNC
+-		.skip 31, 0x90
+-		RET
++		ANNOTATE_NOENDBR
++		.skip 32, 0xcc
+ 	.endr
+ 
+ #define HYPERCALL(n) \
+@@ -74,6 +74,7 @@ SYM_CODE_END(startup_xen)
+ .pushsection .text
+ SYM_CODE_START(asm_cpu_bringup_and_idle)
+ 	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR
+ 
+ 	call cpu_bringup_and_idle
+ SYM_CODE_END(asm_cpu_bringup_and_idle)
 
 

@@ -2,335 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33ADB4BB11D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 06:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE724BB121
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 06:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiBRFB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 00:01:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48364 "EHLO
+        id S230189AbiBRFCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 00:02:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiBRFBO (ORCPT
+        with ESMTP id S230243AbiBRFCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 00:01:14 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711852BCA83;
-        Thu, 17 Feb 2022 21:00:54 -0800 (PST)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220218050052epoutp03d91cfa16b6fa4a5938cf3c95b83c923c~UyLb-sZkN1838918389epoutp03_;
-        Fri, 18 Feb 2022 05:00:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220218050052epoutp03d91cfa16b6fa4a5938cf3c95b83c923c~UyLb-sZkN1838918389epoutp03_
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1645160452;
-        bh=qK0Db7DE4FPkYkFTizqzCYGIigvy1nkNn6Hr9Lykvoc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gOtFxKEQVPkzhX30rY5YgMnbj5s/xh7CiVZTaDACsNpphU8HeO5VxX9LNWxhgH+2o
-         I4X1EYctLQqIfI8zqzDxBf+EXro33sPKB5nQq8Qc3gTC5YOeG5i8QYxP4XPuataa/x
-         Uynud4WA7A5EfX8UUOQAZxhYJ8CSHbwSrNJqfbT0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220218050051epcas5p1364c8f46134da12ab9f98c6e135615f5~UyLbWQtpz0935609356epcas5p15;
-        Fri, 18 Feb 2022 05:00:51 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4K0KJr1m5Dz4x9Q8; Fri, 18 Feb
-        2022 05:00:44 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3C.F7.05590.BF72F026; Fri, 18 Feb 2022 14:00:43 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220217130401epcas5p1c671c22f1b3d8ff7c662763f0cdb9bb5~UlIATE4D-3210232102epcas5p1K;
-        Thu, 17 Feb 2022 13:04:01 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220217130401epsmtrp23758e5a1d5a2620ddbd620ec4d9c6a90~UlIARikU73066630666epsmtrp2C;
-        Thu, 17 Feb 2022 13:04:01 +0000 (GMT)
-X-AuditID: b6c32a4b-739ff700000015d6-59-620f27fb9e31
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9E.BD.08738.1C74E026; Thu, 17 Feb 2022 22:04:01 +0900 (KST)
-Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220217130356epsmtip28c51f7f8d8b35afe7c013782e59c1ca4~UlH7t34aT1085610856epsmtip2R;
-        Thu, 17 Feb 2022 13:03:56 +0000 (GMT)
-Date:   Thu, 17 Feb 2022 18:29:01 +0530
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     hch@lst.de, javier@javigon.com, chaitanyak@nvidia.com,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, axboe@kernel.dk,
-        msnitzer@redhat.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, hare@suse.de, kbusch@kernel.org,
-        Frederick.Knight@netapp.com, osandov@fb.com,
-        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
-        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
-        jack@suse.com, joshi.k@samsung.com, arnav.dawn@samsung.com,
-        nitheshshetty@gmail.com, SelvaKumar S <selvakuma.s1@samsung.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/10] block: Introduce queue limits for copy-offload
- support
-Message-ID: <20220217125901.GA3781@test-zns>
+        Fri, 18 Feb 2022 00:02:34 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2053.outbound.protection.outlook.com [40.107.102.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F49266A;
+        Thu, 17 Feb 2022 21:01:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z/oAaqW3bUh07dcTlDNcN/+y42UJ7PaxdakNAPAn4AQxX3tgmu5G8CAVLj+j2aLTGsE7mSM0p6LWXf4Sx84+DBN2g7nCiyVIOZNauvWk/voVYCZj2z8Ue5OPdYohOecoCgHAoNattvVAwxEIvP+jufw/Ssqq8tEkX/B/frnbIIe2CFR6Q0R/AxGdVRelr6+20uoKpQMBG0YY9ujXJOcLFSLhJhRKQUxSlOSx7xvsg6P+ZneyNQod5qiSpeEi1PfhUtEEx2X4HAacE7cAD9tzSmFaxBz6Yg5E79lGUBsYzFLnfASU1kbicsJqLmsH3Z3+2BXFNtgBn3xkIwVtfBdAzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8kpeKIqyxftSZHTlx1V/g8hGZu6mZYTo3Iy9q0o/bUI=;
+ b=csnMBMxuyaSok0p6Vq0wpaOCn2bihYY2CBtfs7Vy6fHmwdZNvZp36rxZ0MDtwW1T8gYshGH6TwCaRvGLPdWeihiV0DJrTSp5svpfX41ilcG5W8ibhAm+xCT3c/tGJnl+Wg8yx051I+0KeQUnu6qnErwa5pXmomF2xAQA4ieAggVmONIbyjg3fPfdGbLops2ZGorZy4sYKssU4i6qraqqLb5Q15Ubt5SFLrWIm//Lnpyei2l7Jj8O1/EJa+v5C9aOMFA0SIA7AB9uNT11qcuYSKfT1fP1RumZhBMZMYUjTCD5emrgkwynJxTAFJx5HZvA+xW0gIJOMgm5Rb2TEp4jNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8kpeKIqyxftSZHTlx1V/g8hGZu6mZYTo3Iy9q0o/bUI=;
+ b=FUTzfqkslMJ4GYUeRjqp/BgXx1pZdBRRtr4ABzk3pvw8eV/2CA07JUeKNFH/LhjPHJgib9D3GCQcAQpxiABmjiSUq2ABdpZ/U45POlj9Nxrbyxe2r+5hzugTvxvGCu49CBJKHOmI8ET5Li7+l2S0FQ+fkZD/LE4jPSfk9OMTbWdJxozeLcRQ/SLnA/Rw2hEziAKBb5i9P+qGGg41i31PuDqt4LKQVKXLDZKUMPYJNccHRPfPp5ux3HFX/Ox+OSponBRRqka+9iuPr4rd7PupSakahpd4sB8jUfNP7dNBwGbV75XFXg7aGS3ChiImVcnwFO6ldCyKm8rFHviq5tyMbw==
+Received: from DM5PR12MB1850.namprd12.prod.outlook.com (2603:10b6:3:108::23)
+ by BYAPR12MB3333.namprd12.prod.outlook.com (2603:10b6:a03:a9::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.22; Fri, 18 Feb
+ 2022 05:01:52 +0000
+Received: from DM5PR12MB1850.namprd12.prod.outlook.com
+ ([fe80::94d8:5850:e33d:b133]) by DM5PR12MB1850.namprd12.prod.outlook.com
+ ([fe80::94d8:5850:e33d:b133%4]) with mapi id 15.20.4995.017; Fri, 18 Feb 2022
+ 05:01:52 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+Subject: RE: [PATCH v19 0/4] Add NVIDIA Tegra GPC-DMA driver
+Thread-Topic: [PATCH v19 0/4] Add NVIDIA Tegra GPC-DMA driver
+Thread-Index: AQHYHDOhosviul8qH0O0gfnObfQ556yYz4vg
+Date:   Fri, 18 Feb 2022 05:01:51 +0000
+Message-ID: <DM5PR12MB1850AEFF5FA511525E25905EC0379@DM5PR12MB1850.namprd12.prod.outlook.com>
+References: <1644246094-29423-1-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1644246094-29423-1-git-send-email-akhilrajeev@nvidia.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e0b09852-b58a-4e6b-a375-08d9f29bc6f5
+x-ms-traffictypediagnostic: BYAPR12MB3333:EE_
+x-microsoft-antispam-prvs: <BYAPR12MB333354FC08F30072A5A72CC2C0379@BYAPR12MB3333.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PEIyqNT+lAskp7DAZuA8gmSg8aaWWi+HvV9sc8SixfwoYQj2BiWkT4UIIxjHxucmK6ida8Kp7i0nig9AuObhlWAjZP8aGCzwxS71a4D36AvMLEHMzS9163yjXJuknFCU5wnrD3POMl52vg+vjzRzGfqezaZifw3nT+ixOcTCx0NbcF2GkyhUCLCbLaCFZDzTbJTWIWBW+/py8Kmasq2BSTI7QP9/CIwdhTUKqALOpw4NLUIT48Z+MHXawreJ2sUE8FDWpuzgdfIOaXSWIjHBxzGWJkVoMHe1qGuxFDqXH+P8n0gnKQZHmKJz7dyWKXoti/c/DWf72KzhDyLwPpLoB1UT3VeRCcOnhaczC/o6/HSyQB8x/boC5hYouL0pqWaFWqd3Z0UUG51qnMDAokHc+3chqZH6wnP9bWhf4K7xdunsm1wMQQ4ETnzhyDTMLOXhWb0KKcru3VaHWpWN0VaNZf9UJj3jKzNUXoFaM2O2JcHmbA3t6N0TTwqKHiWW9E0lNv5H/jXP0OSDpkKrWXZs6JbwU7a0ebqYU0VYTjiA/kpxZ2zCT5AyB2kmONqLNdckOUA0gmMY2kveYnRZspo1KQWMXYJLJpY6bgmDBdBeOVJL9pwgPii0F+g06TQNvhNFHaJhAuB31XoYu9CqECz3F5qKcdrLn/Y3037lXaikL3CtNUexPZB0CkSLa1cGMLcm2n+FX/py2ObviBAUpuj67mYnmwAiBxo6awTw1hzaM80Uu0yLWpbq1s/r3STtnjk+QndP8jE5dANiiAqsA6sf7r8ZT5zDR7SpTt+8ZPlPJqo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1850.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(76116006)(508600001)(86362001)(8676002)(64756008)(66446008)(66476007)(66556008)(966005)(71200400001)(316002)(110136005)(55016003)(66946007)(9686003)(7696005)(6506007)(2906002)(33656002)(8936002)(52536014)(38100700002)(122000001)(921005)(5660300002)(55236004)(186003)(26005)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?twDD1S+hiTL3qzNXxs/sVIu324ObKnrQLjEp4B3d3B8Cvp6h0lcrSnLVqoc8?=
+ =?us-ascii?Q?/g/oR1BaeNaBNcGbTwvtrRpGEdFbPoIVvarEeGZwKHeD9oNzVvtM00i4U9V8?=
+ =?us-ascii?Q?TJbo4xIE6r5GJQGdP+z7cdQmNnlJsUqeY+DCsTtk+r2Th2WzE32aCDul9/kJ?=
+ =?us-ascii?Q?ErIWSOVfTcoW/1qOU/H85s3S92Dxx2hTPhTjrbR7UAQsC63nOs3W2n2uB1yj?=
+ =?us-ascii?Q?2dM0KpK0VrIJ20w3fKD9A7VUUxlzTOH3hqEQw2JKC8ODu9KNy8uspzoCndjI?=
+ =?us-ascii?Q?4eNjUO8kRR2b9TfVPPzpHqY3C6Cic6E5ltFukZkStBPY4fMl4WaI2EiZuKYX?=
+ =?us-ascii?Q?1kgpBRZQKNavO5LVBAfiQhkdqSpHF7g4y4fnH3q47nr0KDL8QYFOLKaf7SdF?=
+ =?us-ascii?Q?cLgzYfNBhjBp6DWkCK4nxELyoEW/CmosQKUuQz0x8rHwCsqB+qE0ham7EjWX?=
+ =?us-ascii?Q?IMNaGaUdvReTw0ee/38qbudKc+GfNNDbBvLPEGy123NwnsE+2b1zHMPqYLkm?=
+ =?us-ascii?Q?pI8sgoUMe/mM6RWGmUU8m/fFECCMJATbmZukPPex5VxlzamQ94NcaILz6Yy/?=
+ =?us-ascii?Q?ykQt6xf6yBpBmpyauCSy7R+JBTVHtC7TLNAO+wq28WRpLotuFgfiBxNgEdNf?=
+ =?us-ascii?Q?XzfL+mCNVNEhbu4lBUzK5t44htmtZg18BQnGh5O94WvaEMwUJeR1uw0beSQn?=
+ =?us-ascii?Q?CjN4AONnCVrVIo5iZz4YBm+HBzhARtS7grVEPMhn+kvf0Vib+MaLI39jBr2g?=
+ =?us-ascii?Q?JzGnzJ8GSJluUb4iYXcRKRkWeDGeoFImaDJiOdThJvmWrNqw/PK6qcjiicvG?=
+ =?us-ascii?Q?C5EF4gqjN/iQq8rTXUxwmeQlH6YAMJwpxV54GpXC+h5DT0VL+DomVa6SPeJJ?=
+ =?us-ascii?Q?FImwGE93TkdgPFCX+7l276Vx/iBHUBxuC2MUbyc94cdJLqiund78PTi0LD4M?=
+ =?us-ascii?Q?+eHNRcdpkqAAbqcV99Lu9h/y0dQJ8o5niICMb9RDdx7TY6+oUEz7VKDnstlk?=
+ =?us-ascii?Q?hJB7diaDJqFfHKkj7cEAf5dTOQi+WU1kgJW5HsuC/mXSK0KMY3VI5+5mqeRL?=
+ =?us-ascii?Q?nFh/Aon2RwfJdhELQC44L30L2Iln4btDEo7/Dh/BEv3/WIWUZKdj05fpkYbb?=
+ =?us-ascii?Q?mLYroE6wl3yBwmcxIWcEwbOmXeckiKOwHnWIsEZlGlQeNKtkpvfzV4LhtvjW?=
+ =?us-ascii?Q?ORL3kGTK+GcG7zS4DSxdev0Wr78ys5GDA10njowQN+960iaAW/+4gq0p1j5f?=
+ =?us-ascii?Q?Lbzw10SxhSTnDTzdhidbHPliz58WkcSgbkSIxKLmt4g6JKCKcJ+yqBPvonK2?=
+ =?us-ascii?Q?LY2b6QM7imOTCMR6GxPwgw+ykGzO3oT+G8MEAQBH8S8Y/qQT4SfL0YyrenFp?=
+ =?us-ascii?Q?kW5sxxWyTcQwfCub1zuozpudmjmYWKLLcl4lR3tfaeYXoCaLkEPMZyGYGcJT?=
+ =?us-ascii?Q?BCyGl+tg4QM/4C2wXI+KKT/AcDPuBFndAPvE7mJGxXf1H+kYaVczWsKX7olP?=
+ =?us-ascii?Q?/0Dp+uCIoZExNMI3DQSaMH7290LNfqQo1C81bmHLrVtBmxRWwbE773U10ABe?=
+ =?us-ascii?Q?deWwGHE+eugNSw9qGaLODktVV15AsOP3kBh/6QQorxlwx74b8kr3iYIEmdmL?=
+ =?us-ascii?Q?5Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20220217090700.b7n33vbkx5s4qbfq@garbanzo>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te1BTRxTG3ZvkJtAGrwFhhYmmYWxEXglCWCpYx1p7W+wIQ1tHWwevcAsM
-        kGTysK11FEQ6Gh4CFguxYGo7BdHyKlrkJSCY4SUoBUEEoTxkCgKCKChKEwJt//vtN9939uye
-        ORwGr5Ntz4mQqWmljIoS4pbMazedRK4vRasPiRcTeaig8RYDVXTPsNDl3jM4Ojc1z0CTNYMs
-        lHYmg43ah6xQ5cR5Fmqbi8XQYPEihioupmHo0uV6DD3K+Rmg8p+eYOh0UxuGFgYkqH7xMY7S
-        ajsBGu7QYajyvjOqqGxgovayH3F04ddhNkq4V4qjqrFKBsoxvMZQV8owQLd1CzgqHYoF6GZf
-        BxPlj00y0dhcA46+K5oFKD5xno1aXxlY2x3J9j/9Sd3DFpxMjZtgk9d1vWyyta+IScbpHzDJ
-        9hYNWZx3Gid//+U4ebYrB5Dl3TE4eaK5nkFmTD/FyaS4CZx8MnyfSU5WdeABtvsjfcNpKpRW
-        CmhZiDw0QhbmJ/QPCn4v2EsqlrhKfJC3UCCjomk/4c7dAa67IqKMnygUHKaiNEYpgFKphO7b
-        fJVyjZoWhMtVaj8hrQiNUngq3FRUtEojC3OT0ep3JGKxh5fReDAyPLa0i6WYl36dmyuKAQMu
-        WmDBgYQnLGtux7TAksMjygGsKTnBMh+mAUwZHWKbXDxiBsDY+K0riZFzXcumMmOiu5BtPowA
-        mPXi0VKCSWyEj7XFRheHgxPOsGmRY5JtiE2wKiUJMzGDmMVh6u39Jos18Rlsq95okrmEC0w4
-        1coy8xrYkDnENLEF4Q0vzOmXeC3hCKuvGZa6hkSmJXxW1QNMdSCxE/b0K8x9WsO/DSVsM9vD
-        mYlK3OxPAHCu+eFyOAPAuJQ43Ox6F96peIWZCjGIcJiWKTHLfJjemL/csxVMejmEmXUuLM1e
-        YUd4pUC/XGYd7Hweu8wkNLSP4ub/GQdwNruOkQI26P73ON1/1+mWrnCB+vJp3Cw7wJzXHDM6
-        wYIydz1g5YF1tEIVHUarvBRbZPRX/047RB5dDJYWbLN/Kfirf8qtFmAcUAsghyG04U7VcA/x
-        uKHUN0dopTxYqYmiVbXAyzipVIb92hC5cUNl6mCJp4/YUyqVevpskUqEdtzGsEKKR4RRajqS
-        phW0ciWHcSzsYzAHOUMXZLshN8l2MOb5bqtsjy+aHAzrA6n4T3yo+sQHQRcTUA+6Uey4V5v8
-        VpDdVkrcm2+b47tNfooe44ssQjfta5G6p2YSvgenkoOqpCibVfqtI8RffPl+wXgg2Pub93HF
-        gFPwQmHWScK6rqQ/dp6trY7u2CVL/jSR5ydade8pP/7OpZqrJ9UOoyU5zw4fE+h7q2yyk99c
-        nZXhXEsdW1M7uP2uRvuh2vUqNXj3ut/nctLJ/sCemFseuG4wqUCXLg4+u35iqC49u+vtP66c
-        1+0I4H8kEhzt49/oXdUTaKn6QYNxM/OU+yaOWB/4+IM3+NQeN2LmqJ3vCFkYOf590ZjYVshU
-        hVOSzQylivoHaFGXcekEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTdxTH87v39vZSU70Udb9qmFsVMMXhYEzO2Nh8BW9i2EhmjNscWuUO
-        HBRYCwImizw2JwUGQyVSZVQhNmK2hfpYhZa0ddAhryqipYgLQjXa8dxkEAtshS3zv2/O9/M5
-        55/DkJIzglXMobRMXpWmSJXRIuraDdma16w7lh54fbY3EH662UqCqe8PAVwaKKOhcnyGhDHr
-        kAAqyk4LoWd4KZhHzwjAMZ1PwJBhngDT+QoCLl5qIeCxvhZB07kJAoraHQR4B8OhZX6Ehgrb
-        XQTuXi0BZlcomMxtFPQ0nqWh5oJbCMX3jDQ0e8wk6O1zBDjL3Qi6tF4ajMP5CG486KXgR88Y
-        BZ7pNhqONTxD8HXJjBC6Z+2CzWu5njs7Oe1vnTT3XeGokLuuHRBy3Q8aKK5Qd5/iejqzOEN9
-        Ec1drjvKnXDqEdfUl0dzBR0tJHd68k+aKy0cpbkJt4vixpp76fiVH4veSeRTDx3mVRvf3S9K
-        vmstEGYYI3MmS2oEeahRrkF+DGYj8aNKp0CDRIyENSJ8snZSuFhI8YXZX8jFHIAvzj0WLkLD
-        CFssEwsFxQbhEY3hH5thaDYUt88zvvFydj1uLi8lfDzJPqdxQ7WV9DEB7G7ssAT5GDG7ARcf
-        7/738O8Ie+2d9GLhj9uqhilfJlk5ds49IXwuya7G+rmF/X5sFK6Z1i0gK9i12HLNTpQjf+0L
-        tvYFW/u/rUNkPZLyGWplklIdnhGRxmeHqRVKdVZaUtjBdKUBLfyPXG5EpvrxMBsiGGRDmCFl
-        y8XjVvEBiThRkXuEV6XvU2Wl8mobWs1QspfEDk3bPgmbpMjkU3g+g1f91xKM36o84lxK/hNl
-        wrcrX9WnTyXXuY4/fTOFehTctbu0f2f/kuxcictRUOTwblsz9srllCF3wlbviabnsRtGt3UW
-        Sb98pgs5teuWq/HkN+uKq0gzGbFpy9tv1YKl6haeGahcEhP11GNadzS+qvUvSegXtz9ICEne
-        DpaOwIaHgVNXdB1xnzZvvBI7G3A1Zj9Xqv9c53ffHt1yJDImOI79eZnhs9hl328aTAwZeLn+
-        vS0a6UfVhfKuuDvXSzyi1K/WO+h4zp/8xBrlX5YZXIanf90hzK0jm+Jvtr5RfXvPZoPn/IcH
-        D2fuehjdbuH3KM72B72/IsJzT2rL7hsk8qci9v6wFeVEu0Yo57EcGaVOVoTLSZVa8TfrqJgv
-        rgMAAA==
-X-CMS-MailID: 20220217130401epcas5p1c671c22f1b3d8ff7c662763f0cdb9bb5
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----8TtN9ZnHmYbjupaEpeShJ04PQlBV3ZvePY_ZWnFgjSBPeLtG=_8e144_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220214080605epcas5p16868dae515a6355cf9fecf22df4f3c3d
-References: <20220214080002.18381-1-nj.shetty@samsung.com>
-        <CGME20220214080605epcas5p16868dae515a6355cf9fecf22df4f3c3d@epcas5p1.samsung.com>
-        <20220214080002.18381-3-nj.shetty@samsung.com>
-        <20220217090700.b7n33vbkx5s4qbfq@garbanzo>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1850.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0b09852-b58a-4e6b-a375-08d9f29bc6f5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2022 05:01:52.0069
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YUWscUgtrXBqY2I/Tz4P2HtKmZqs+LIzZUqAilj8mtfJDrILGPm/nhMEj4a2pkybSucjmqskD4izU2xnFQ+MhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3333
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------8TtN9ZnHmYbjupaEpeShJ04PQlBV3ZvePY_ZWnFgjSBPeLtG=_8e144_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+> Add support for NVIDIA Tegra general purpose DMA driver for
+> Tegra186 and Tegra194 platform.
+>=20
+> v18 -> v19:
+>   * Use function pointer to call pause/stop_client() in terminate_all()
+>   * Remove unused arg in program_sid()
+>=20
+> v18 - https://lkml.org/lkml/2022/2/4/379
+>=20
+> Akhil R (4):
+>   dt-bindings: dmaengine: Add doc for tegra gpcdma
+>   dmaengine: tegra: Add tegra gpcdma driver
+>   arm64: defconfig: tegra: Enable GPCDMA
+>   arm64: tegra: Add GPCDMA node for tegra186 and tegra194
+>=20
+>  .../bindings/dma/nvidia,tegra186-gpc-dma.yaml      |  110 ++
+>  arch/arm64/boot/dts/nvidia/tegra186.dtsi           |   42 +
+>  arch/arm64/boot/dts/nvidia/tegra194.dtsi           |   43 +
+>  arch/arm64/configs/defconfig                       |    1 +
+>  drivers/dma/Kconfig                                |   11 +
+>  drivers/dma/Makefile                               |    1 +
+>  drivers/dma/tegra186-gpc-dma.c                     | 1505 ++++++++++++++=
+++++++
+>  7 files changed, 1713 insertions(+)
+>  create mode 100644
+> Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+>  create mode 100644 drivers/dma/tegra186-gpc-dma.c
 
- Thu, Feb 17, 2022 at 01:07:00AM -0800, Luis Chamberlain wrote:
-> The subject says limits for copy-offload...
-> 
-> On Mon, Feb 14, 2022 at 01:29:52PM +0530, Nitesh Shetty wrote:
-> > Add device limits as sysfs entries,
-> >         - copy_offload (RW)
-> >         - copy_max_bytes (RW)
-> >         - copy_max_hw_bytes (RO)
-> >         - copy_max_range_bytes (RW)
-> >         - copy_max_range_hw_bytes (RO)
-> >         - copy_max_nr_ranges (RW)
-> >         - copy_max_nr_ranges_hw (RO)
-> 
-> Some of these seem like generic... and also I see a few more max_hw ones
-> not listed above...
->
-queue_limits and sysfs entries are differently named.
-All sysfs entries start with copy_* prefix. Also it makes easy to lookup
-all copy sysfs.
-For queue limits naming, I tried to following existing queue limit
-convention (like discard).
+Please help to apply the patchset if there are no further concerns or sugge=
+stions.
 
-> > --- a/block/blk-settings.c
-> > +++ b/block/blk-settings.c
-> > +/**
-> > + * blk_queue_max_copy_sectors - set max sectors for a single copy payload
-> > + * @q:  the request queue for the device
-> > + * @max_copy_sectors: maximum number of sectors to copy
-> > + **/
-> > +void blk_queue_max_copy_sectors(struct request_queue *q,
-> > +		unsigned int max_copy_sectors)
-> > +{
-> > +	q->limits.max_hw_copy_sectors = max_copy_sectors;
-> > +	q->limits.max_copy_sectors = max_copy_sectors;
-> > +}
-> > +EXPORT_SYMBOL(blk_queue_max_copy_sectors);
-> 
-> Please use EXPORT_SYMBOL_GPL() for all new things.
-> 
-acked.
+Thanks,
+Akhil
 
-> Why is this setting both? The documentation does't seem to say.
-> What's the point?
->
-
-This function is used only by driver, while intializing request queue.
-I will put this as part of description next time.
-
-> > +
-> > +/**
-> > + * blk_queue_max_copy_range_sectors - set max sectors for a single range, in a copy payload
-> > + * @q:  the request queue for the device
-> > + * @max_copy_range_sectors: maximum number of sectors to copy in a single range
-> > + **/
-> > +void blk_queue_max_copy_range_sectors(struct request_queue *q,
-> > +		unsigned int max_copy_range_sectors)
-> > +{
-> > +	q->limits.max_hw_copy_range_sectors = max_copy_range_sectors;
-> > +	q->limits.max_copy_range_sectors = max_copy_range_sectors;
-> > +}
-> > +EXPORT_SYMBOL(blk_queue_max_copy_range_sectors);
-> 
-> Same here.
-> 
-> > +/**
-> > + * blk_queue_max_copy_nr_ranges - set max number of ranges, in a copy payload
-> > + * @q:  the request queue for the device
-> > + * @max_copy_nr_ranges: maximum number of ranges
-> > + **/
-> > +void blk_queue_max_copy_nr_ranges(struct request_queue *q,
-> > +		unsigned int max_copy_nr_ranges)
-> > +{
-> > +	q->limits.max_hw_copy_nr_ranges = max_copy_nr_ranges;
-> > +	q->limits.max_copy_nr_ranges = max_copy_nr_ranges;
-> > +}
-> > +EXPORT_SYMBOL(blk_queue_max_copy_nr_ranges);
-> 
-> Same.
-> 
-> > +
-> >  /**
-> >   * blk_queue_max_write_same_sectors - set max sectors for a single write same
-> >   * @q:  the request queue for the device
-> > @@ -541,6 +592,14 @@ int blk_stack_limits(struct queue_limits *t, struct queue_limits *b,
-> >  	t->max_segment_size = min_not_zero(t->max_segment_size,
-> >  					   b->max_segment_size);
-> >  
-> > +	t->max_copy_sectors = min(t->max_copy_sectors, b->max_copy_sectors);
-> > +	t->max_hw_copy_sectors = min(t->max_hw_copy_sectors, b->max_hw_copy_sectors);
-> > +	t->max_copy_range_sectors = min(t->max_copy_range_sectors, b->max_copy_range_sectors);
-> > +	t->max_hw_copy_range_sectors = min(t->max_hw_copy_range_sectors,
-> > +						b->max_hw_copy_range_sectors);
-> > +	t->max_copy_nr_ranges = min(t->max_copy_nr_ranges, b->max_copy_nr_ranges);
-> > +	t->max_hw_copy_nr_ranges = min(t->max_hw_copy_nr_ranges, b->max_hw_copy_nr_ranges);
-> > +
-> >  	t->misaligned |= b->misaligned;
-> >  
-> >  	alignment = queue_limit_alignment_offset(b, start);
-> > diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-> > index 9f32882ceb2f..9ddd07f142d9 100644
-> > --- a/block/blk-sysfs.c
-> > +++ b/block/blk-sysfs.c
-> > @@ -212,6 +212,129 @@ static ssize_t queue_discard_zeroes_data_show(struct request_queue *q, char *pag
-> >  	return queue_var_show(0, page);
-> >  }
-> >  
-> > +static ssize_t queue_copy_offload_show(struct request_queue *q, char *page)
-> > +{
-> > +	return queue_var_show(blk_queue_copy(q), page);
-> > +}
-> > +
-> > +static ssize_t queue_copy_offload_store(struct request_queue *q,
-> > +				       const char *page, size_t count)
-> > +{
-> > +	unsigned long copy_offload;
-> > +	ssize_t ret = queue_var_store(&copy_offload, page, count);
-> > +
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	if (copy_offload && !q->limits.max_hw_copy_sectors)
-> > +		return -EINVAL;
-> 
-> 
-> If the kernel schedules, copy_offload may still be true and
-> max_hw_copy_sectors may be set to 0. Is that an issue?
->
-
-This check ensures that, we dont enable offload if device doesnt support
-offload. I feel it shouldn't be an issue.
-
-> > +
-> > +	if (copy_offload)
-> > +		blk_queue_flag_set(QUEUE_FLAG_COPY, q);
-> > +	else
-> > +		blk_queue_flag_clear(QUEUE_FLAG_COPY, q);
-> 
-> The flag may be set but the queue flag could be set. Is that an issue?
-> 
-> > @@ -597,6 +720,14 @@ QUEUE_RO_ENTRY(queue_nr_zones, "nr_zones");
-> >  QUEUE_RO_ENTRY(queue_max_open_zones, "max_open_zones");
-> >  QUEUE_RO_ENTRY(queue_max_active_zones, "max_active_zones");
-> >  
-> > +QUEUE_RW_ENTRY(queue_copy_offload, "copy_offload");
-> > +QUEUE_RO_ENTRY(queue_copy_max_hw, "copy_max_hw_bytes");
-> > +QUEUE_RW_ENTRY(queue_copy_max, "copy_max_bytes");
-> > +QUEUE_RO_ENTRY(queue_copy_range_max_hw, "copy_max_range_hw_bytes");
-> > +QUEUE_RW_ENTRY(queue_copy_range_max, "copy_max_range_bytes");
-> > +QUEUE_RO_ENTRY(queue_copy_nr_ranges_max_hw, "copy_max_nr_ranges_hw");
-> > +QUEUE_RW_ENTRY(queue_copy_nr_ranges_max, "copy_max_nr_ranges");
-> 
-> Seems like you need to update Documentation/ABI/stable/sysfs-block.
->
-
-acked. 
-
-> > diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> > index efed3820cbf7..792e6d556589 100644
-> > --- a/include/linux/blkdev.h
-> > +++ b/include/linux/blkdev.h
-> > @@ -254,6 +254,13 @@ struct queue_limits {
-> >  	unsigned int		discard_alignment;
-> >  	unsigned int		zone_write_granularity;
-> >  
-> > +	unsigned long		max_hw_copy_sectors;
-> > +	unsigned long		max_copy_sectors;
-> > +	unsigned int		max_hw_copy_range_sectors;
-> > +	unsigned int		max_copy_range_sectors;
-> > +	unsigned short		max_hw_copy_nr_ranges;
-> > +	unsigned short		max_copy_nr_ranges;
-> 
-> Before limits start growing more.. I wonder if we should just
-> stuff hw offload stuff to its own struct within queue_limits.
-> 
-> Christoph?
-> 
->   Luis
->
-Yeah, would like to know community opinion on this.
-
-
--- Nitesh
-
-------8TtN9ZnHmYbjupaEpeShJ04PQlBV3ZvePY_ZWnFgjSBPeLtG=_8e144_
-Content-Type: text/plain; charset="utf-8"
-
-
-------8TtN9ZnHmYbjupaEpeShJ04PQlBV3ZvePY_ZWnFgjSBPeLtG=_8e144_--

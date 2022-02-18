@@ -2,62 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC84B4BC20E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338E84BC20F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239748AbiBRVaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:30:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42400 "EHLO
+        id S236252AbiBRVaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:30:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiBRV37 (ORCPT
+        with ESMTP id S235638AbiBRVaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:29:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E671162;
-        Fri, 18 Feb 2022 13:29:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5904961E5D;
-        Fri, 18 Feb 2022 21:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97463C340E9;
-        Fri, 18 Feb 2022 21:29:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645219781;
-        bh=Yb49tcIy2xwRWN51tmn7o97oJJXUMsJ5zuFJFE4YTkk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tfhllptfUsOFf99hfb8EY55d2s//BYF5/fQLucehl6+UdHxjLDpDggJH7t1IJ1kNQ
-         BBvaCTTLeIxaCAZKFvEXnegTi7yN2q/X4JBOVfpGctmXx36+D64dNyakHYdAbMcw+0
-         R1BIaxnUUfM3gs0Yve5RmMC2Y+Gz9Nh+8EeyVtw6LP14zBFxXVq/2dcgK0cWqP8ltO
-         nhDyKaGvEXRsbXY5VmQV1eFciH7M0pP36YMzEUVJzk7X7t2z2llG0JN2NV99iX2LzU
-         zKLer9NHb6ikUzjM/T+R0oI8ZEi8/5/R6Zy7mewx10r9D4L1MOdQxAJ6N9FXpFQoUe
-         UULTaUOuKl6gA==
-Received: by pali.im (Postfix)
-        id 348992BAE; Fri, 18 Feb 2022 22:29:39 +0100 (CET)
-Date:   Fri, 18 Feb 2022 22:29:39 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Increase PCIe IO size
- from 64 KiB to 1 MiB
-Message-ID: <20220218212939.adfnbgx5fdita55m@pali>
-References: <20220113170755.11856-1-pali@kernel.org>
- <CAK8P3a2D8Yv+KpM4NJyP9mosieqbhHh08=mdEy+OA84Vx6FVCQ@mail.gmail.com>
+        Fri, 18 Feb 2022 16:30:04 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C651162;
+        Fri, 18 Feb 2022 13:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645219786; x=1676755786;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+/WSsmi40gdBLQGwlCJoTxpH6qkC2WHPubjqFNGJJQE=;
+  b=lume7kaZAetSpJgTKrv07T3XnzBiDDexJ8oCPK7k0ddYTSwvVAJj3T72
+   IORjy2WxZwzPiNXDH2CMZQttqfoDK3/zlQ+hkYbskC33T0FAcLgUGyUiq
+   k6jg2Ehm+5deYc1gEnQfZtj/dix5SK2IPPM8XW2vseovphgNmwC7lFDeO
+   E=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 Feb 2022 13:29:46 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 13:29:46 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 18 Feb 2022 13:29:45 -0800
+Received: from [10.111.174.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Fri, 18 Feb
+ 2022 13:29:43 -0800
+Message-ID: <5b27912e-3e49-675e-86f5-ac6be8dc21c5@quicinc.com>
+Date:   Fri, 18 Feb 2022 13:29:41 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [Freedreno] [REPOST PATCH v4 08/13] drm/msm/disp/dpu1: Don't use
+ DSC with mode_3d
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Abhinav Kumar" <abhinavk@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
+        <freedreno@lists.freedesktop.org>
+References: <20220210103423.271016-1-vkoul@kernel.org>
+ <20220210103423.271016-9-vkoul@kernel.org>
+ <67006cc4-3385-fe03-bb4d-58623729a8a8@quicinc.com> <Yg3mvEvqYs89dJWI@matsya>
+ <4b89f5fe-0752-3c6a-3fb0-192f1f2e7b9e@quicinc.com>
+ <acf0a2a2-f2e5-906a-3c51-525abd18ee6f@linaro.org>
+ <a38432a8-7920-e26d-7391-a49bebbc57f9@quicinc.com>
+ <9f1e2df6-4f28-1d91-7654-ff2d9339dfd9@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <9f1e2df6-4f28-1d91-7654-ff2d9339dfd9@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a2D8Yv+KpM4NJyP9mosieqbhHh08=mdEy+OA84Vx6FVCQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,47 +80,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 18 February 2022 17:43:04 Arnd Bergmann wrote:
-> On Thu, Jan 13, 2022 at 6:07 PM Pali Rohár <pali@kernel.org> wrote:
-> >
-> > Commit 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM
-> > space") increased size of PCIe MEM to 127 MiB, which is the maximal
-> > possible size for allocated 128 MiB PCIe window. PCIe IO size in that
-> > commit was unchanged.
-> >
-> > Armada 3720 PCIe controller supports 32-bit IO space mapping so it is
-> > possible to assign more than 64 KiB if address space for IO.
-> >
-> > Currently controller has assigned 127 MiB + 64 KiB memory and therefore
-> > there is 960 KiB of unused memory. So assign it to IO space by increasing
-> > IO window from 64 KiB to 1 MiB.
-> >
-> > DTS file armada-3720-turris-mox.dts already uses whole 128 MiB space, so
-> > only update comment about 32-bit IO space mapping.
-> >
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > Fixes: 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM space")
-> 
-> I just saw this is the fixes pull request, and it seems very odd. Does this
-> fix an actual bug? Note that Linux normally doesn't map more than 64KB
-> of I/O space per PCI domain, so it should not make a difference to us.
-> 
-> Also, note that having a high bus address for the I/O space (0xefff0000,
-> as as the CPU physical address here) means that a lot of the older
-> devices that actually require I/O space won't work, because they need a
-> low bus address in the first few KB.
-> 
-> Is this mapping a requirement from a broken bootloader, or can you change
-> the mapping of the I/O port window in the physical space to the usual
-> bus address 0?
-> 
->         Arnd
 
-As we discussed on IRC changing mapping of I/O to bus address 0x0 is
-possible and together with recent changes of pci-aardvark.c driver
-should work out-of-the box.
 
-I sent patch which is changing I/O bus address to 0x0:
-https://lore.kernel.org/linux-arm-kernel/20220218212526.16021-1-pali@kernel.org/
+On 2/18/2022 1:21 PM, Dmitry Baryshkov wrote:
+> On 18/02/2022 23:46, Abhinav Kumar wrote:
+>>
+>>
+>> On 2/16/2022 11:12 PM, Dmitry Baryshkov wrote:
+>>> On 17/02/2022 09:33, Abhinav Kumar wrote:
+>>>>
+>>>>
+>>>> On 2/16/2022 10:10 PM, Vinod Koul wrote:
+>>>>> On 16-02-22, 19:11, Abhinav Kumar wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 2/10/2022 2:34 AM, Vinod Koul wrote:
+>>>>>>> We cannot enable mode_3d when we are using the DSC. So pass
+>>>>>>> configuration to detect DSC is enabled and not enable mode_3d
+>>>>>>> when we are using DSC
+>>>>>>>
+>>>>>>> We add a helper dpu_encoder_helper_get_dsc() to detect dsc
+>>>>>>> enabled and pass this to .setup_intf_cfg()
+>>>>>>>
+>>>>>>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>>>>>>
+>>>>>> We should not use 3D mux only when we use DSC merge topology.
+>>>>>> I agree that today we use only 2-2-1 topology for DSC which means 
+>>>>>> its using
+>>>>>> DSC merge.
+>>>>>>
+>>>>>> But generalizing that 3D mux should not be used for DSC is not right.
+>>>>>>
+>>>>>> You can detect DSC merge by checking if there are two encoders and 
+>>>>>> one
+>>>>>> interface in the topology and if so, you can disable 3D mux.
+>>>>>
+>>>>> Right now with DSC we disable that as suggested by Dmitry last time.
+>>>>> Whenever we introduce merge we should revisit this, for now this 
+>>>>> should
+>>>>> suffice
+>>>>>
+>>>>
+>>>> Sorry I didnt follow.
+>>>>
+>>>> The topology which you are supporting today IS DSC merge 2-2-1. I 
+>>>> didnt get what you mean by "whenever we introduce".
+>>>>
+>>>> I didnt follow Dmitry's comment either.
+>>>>
+>>>> "anybody adding support for SDE_RM_TOPOLOGY_DUALPIPE_3DMERGE_DSC 
+>>>> handle this."
+>>>>
+>>>> 3D mux shouldnt be used when DSC merge is used.
+>>>>
+>>>> The topology Dmitry is referring to will not use DSC merge but you 
+>>>> are using it here and thats why you had to make this patch in the 
+>>>> first place. So I am not sure why would someone who uses 3D merge 
+>>>> topology worry about DSC merge. Your patch is the one which deals 
+>>>> with the topology in question.
+>>>>
+>>>> What I am suggesting is a small but necessary improvement to this 
+>>>> patch.
+>>>
+>>> It seems that we can replace this patch by changing 
+>>> dpu_encoder_helper_get_3d_blend_mode() to contain the following 
+>>> condition (instead of the one present there). Does the following seem 
+>>> correct to you:
+>>>
+>>> static inline enum dpu_3d_blend_mode 
+>>> dpu_encoder_helper_get_3d_blend_mode(
+>>>                  struct dpu_encoder_phys *phys_enc)
+>>> {
+>>>          struct dpu_crtc_state *dpu_cstate;
+>>>
+>>>          if (!phys_enc || phys_enc->enable_state == DPU_ENC_DISABLING)
+>>>                  return BLEND_3D_NONE;
+>>>
+>>>          dpu_cstate = to_dpu_crtc_state(phys_enc->parent->crtc->state);
+>>>
+>>> +    /* Use merge_3d unless DSCMERGE topology is used */
+>>>          if (phys_enc->split_role == ENC_ROLE_SOLO &&
+>>> +           hweight(dpu_encoder_helper_get_dsc(phys_enc)) != 1 &&
+> 
+> Yes, the correct should be:
+> hweight(...) == 2
+> 
+>>>              dpu_cstate->num_mixers == CRTC_DUAL_MIXERS)
+>>>                  return BLEND_3D_H_ROW_INT;
+>>>
+>>>          return BLEND_3D_NONE;
+>>> }
+>>
+>> This will not be enough. To detect whether DSC merge is enabled you 
+>> need to query the topology. The above condition only checks if DSC is 
+>> enabled not DSC merge.
+>>
+>> So the above function can be modified to use a helper like below 
+>> instead of the hweight.
+>>
+>> bool dpu_encoder_get_dsc_merge_info(struct dpu_encoder_virt *dpu_enc)
+>> {
+>>      struct msm_display_topology topology = {0};
+>>
+>>      topology = dpu_encoder_get_topology(...);
+>>
+>>      if (topology.num_dsc > topology.num_intf)
+> 
+> num_intf is 1 or 2. If it's one, the split_role is SOLO
+> hweight would return a num of bits in the DSC mask. It's 0, 1 or 2.
+> So, if the split_role is SOLO and hweight is 2, we get exactly your 
+> condition.
+> 
+num_intf is 1 in this case as only single interface is used. But even 4 
+dsc encoders going to 2 interfaces its DSC merge. So assuming num_intf 
+as 1 always is not right. Thats why I suggested a generalized confition 
+like above.
 
-Please look at it.
+> Does that sound correct?
+> 
+>>          return true;
+>>      else
+>>          return false;
+>> }
+>>
+>> if (!dpu_encoder_get_dsc_merge_info() && other conditions listed above)
+>>      return BLEND_3D_H_ROW_INT;
+>> else
+>>      BLEND_3D_NONE;
+>>>
+>>>
+>>>>
+>>>> All that you have to do is in query whether DSC merge is used from 
+>>>> the topology. You can do it in multiple ways:
+>>>>
+>>>> 1) Either query this from the encoder
+>>>> 2) Store a bool "dsc_merge" in the intf_cfg
+>>>>
+>>>
+>>>
+> 
+> 

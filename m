@@ -2,86 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DE44BBC5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7D14BBC6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237150AbiBRPpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 10:45:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44974 "EHLO
+        id S237143AbiBRPs2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 10:48:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237143AbiBRPpN (ORCPT
+        with ESMTP id S229485AbiBRPsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:45:13 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486BA25B6FB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:44:57 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 132so8210277pga.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:44:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WW1+9zlpyrV60I92VVXb9m5yf74JuacJkWT5mx40gBM=;
-        b=CHWiCXwwPvKo9/bgi4ri6u/BwPAT5eVvnPTUZhRwp7vIPLf8wQPBieipeC1uSokNha
-         bv+JG1huaegKmj2UbZWmi88/pCeC2lLsvGeZtqkMNKmenZQmyOjukqkssQyy/fX7zM0V
-         NBiLli6Mig1KBvYCrVf45gvTZ5coPP1zpD4itua/4N8CK1giSizWCpDTsxEPzG0OdWYQ
-         kriX0pmD4maVL0mm46MlcLqBmpLvND7YNu373e+9Tvg54nP8BsblrFgQ3a8gQPaZuac5
-         X0/CJu6KUPWvw0zbGREWYZngSj0HOZk1MtYrfVrCwrohHO3alpD8t7gk1XqJuMpPWdVs
-         KNhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WW1+9zlpyrV60I92VVXb9m5yf74JuacJkWT5mx40gBM=;
-        b=xDqKZ6cln877vCAgnqLTAbCvcLRmmKoJvRLhvvRsJr9ClIoRsThlTmaam1ROer3Thd
-         NkDk6UCKwACLY3lu//S+TZboWXuAYLrALHGZ95ElUbPFwe7jBGJ/l6SOux9tK/nWSaSN
-         bqDMoHK535XLSfJ4mKLbKBoTFi2Rxp9eq/z0SzERj7zVKkC9f5tzkb+P8sNl8ySSRksF
-         KfeOgwF2VNnLfxJViPyEsCX4fbLuSnFH9Y1OnWjI7XofuHngwSW8JU14F9R0snPbKiDS
-         NPkdeg6X0etvotkcsLUHNUHKcrMXWN25mc280v+z8A+ocNVOADzh3I/YjNX+cqGY1moU
-         kD2Q==
-X-Gm-Message-State: AOAM532zC8ao/R10pqQhc/b+MhYXuqr3aNhAUH6/OaON799eXpUe92gV
-        PjoPX4zdfamujEbnRTAAxTKYjg==
-X-Google-Smtp-Source: ABdhPJz9uQx/hS2fxrIv0RK1Gx3Q5+yEY15wQk9lfou5+Sa5RxMM++1F+vDNJ2nbbIdnLWdYYFGvwA==
-X-Received: by 2002:a05:6a00:8c5:b0:4c7:f9a5:ebc6 with SMTP id s5-20020a056a0008c500b004c7f9a5ebc6mr8503794pfu.34.1645199096658;
-        Fri, 18 Feb 2022 07:44:56 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m25sm11951828pgv.4.2022.02.18.07.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 07:44:55 -0800 (PST)
-Date:   Fri, 18 Feb 2022 15:44:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v3 1/6] KVM: x86: return 1 unconditionally for
- availability of KVM_CAP_VAPIC
-Message-ID: <Yg++9MLgfBUyGHya@google.com>
-References: <20220217180831.288210-1-pbonzini@redhat.com>
- <20220217180831.288210-2-pbonzini@redhat.com>
+        Fri, 18 Feb 2022 10:48:22 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 865F52B3576
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:46:02 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-70--4RjbVXtMcueaeoDqT_n6w-1; Fri, 18 Feb 2022 15:45:59 +0000
+X-MC-Unique: -4RjbVXtMcueaeoDqT_n6w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Fri, 18 Feb 2022 15:45:56 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Fri, 18 Feb 2022 15:45:56 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>, Arnd Bergmann <arnd@kernel.org>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "will@kernel.org" <will@kernel.org>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "bcain@codeaurora.org" <bcain@codeaurora.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "nickhu@andestech.com" <nickhu@andestech.com>,
+        "green.hu@gmail.com" <green.hu@gmail.com>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "shorne@gmail.com" <shorne@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "dalias@libc.org" <dalias@libc.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "richard@nod.at" <richard@nod.at>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: RE: [PATCH v2 05/18] x86: remove __range_not_ok()
+Thread-Topic: [PATCH v2 05/18] x86: remove __range_not_ok()
+Thread-Index: AQHYJJDV6CwChj5QoEqoVAdoFeMQC6yZc16A
+Date:   Fri, 18 Feb 2022 15:45:56 +0000
+Message-ID: <905678e9e05d40b9a4e13e7b1a34cb68@AcuMS.aculab.com>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <20220216131332.1489939-6-arnd@kernel.org> <20220218062851.GC22576@lst.de>
+In-Reply-To: <20220218062851.GC22576@lst.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217180831.288210-2-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022, Paolo Bonzini wrote:
-> The two ioctl used to implement userspace-accelerated TPR,
-
-Hmm, are ioctl like LEGO?
-
-> KVM_TPR_ACCESS_REPORTING and KVM_SET_VAPIC_ADDR, are available
-> even if hardware-accelerated TPR can be used.  So there is
-> no reason not to report KVM_CAP_VAPIC.
+From: Christoph Hellwig
+> Sent: 18 February 2022 06:29
+...
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+> > diff --git a/arch/x86/kernel/stacktrace.c b/arch/x86/kernel/stacktrace.c
+> > index 15b058eefc4e..ee117fcf46ed 100644
+> > --- a/arch/x86/kernel/stacktrace.c
+> > +++ b/arch/x86/kernel/stacktrace.c
+> > @@ -90,7 +90,7 @@ copy_stack_frame(const struct stack_frame_user __user *fp,
+> >  {
+> >  	int ret;
+> >
+> > -	if (__range_not_ok(fp, sizeof(*frame), TASK_SIZE))
+> > +	if (!__access_ok(fp, sizeof(*frame)))
+> >  		return 0;
+> 
+> Just switch the __get_user calls below to get_user instead.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Is this worth doing at all?
+How much userspace code is actually compiled with stack frames?
+
+Won't work well for a 32bit process on a 64bit kernel either.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

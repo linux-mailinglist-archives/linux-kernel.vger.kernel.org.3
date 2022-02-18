@@ -2,100 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCABF4BB470
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DC74BB473
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbiBRIl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 03:41:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40094 "EHLO
+        id S232776AbiBRImF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 03:42:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232728AbiBRIlw (ORCPT
+        with ESMTP id S232748AbiBRImA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 03:41:52 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98CEA1A02B0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 00:41:32 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-315-zKRYnzO6OK2WH4oQHyHOLw-1; Fri, 18 Feb 2022 08:41:30 +0000
-X-MC-Unique: zKRYnzO6OK2WH4oQHyHOLw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 18 Feb 2022 08:41:28 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 18 Feb 2022 08:41:28 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Masahiro Yamada' <masahiroy@kernel.org>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net v3] net: Force inlining of checksum functions in
- net/checksum.h
-Thread-Topic: [PATCH net v3] net: Force inlining of checksum functions in
- net/checksum.h
-Thread-Index: AQHYI/ioJk+yETn/QkyN152xjKaZ96yXvR4wgAAXuo+AAALtMIAAE/+AgAAGkICAAAzxAIAA/QGA
-Date:   Fri, 18 Feb 2022 08:41:28 +0000
-Message-ID: <d5ea3d1cb4284c02b8ecdb0f7b737f7f@AcuMS.aculab.com>
-References: <978951d76d8cb84bab347c7623bc163e9a038452.1645100305.git.christophe.leroy@csgroup.eu>
- <35bcd5df0fb546008ff4043dbea68836@AcuMS.aculab.com>
- <d38e5e1c-29b6-8cc6-7409-d0bdd5772f23@csgroup.eu>
- <9b8ef186-c7fe-822c-35df-342c9e86cc88@csgroup.eu>
- <3c2b682a7d804b5e8749428b50342c82@AcuMS.aculab.com>
- <CAK7LNASWTJ-ax9u5yOwHV9vHCBAcQTazV-oXtqVFVFedOA0Eqw@mail.gmail.com>
- <2e38265880db45afa96cfb51223f7418@AcuMS.aculab.com>
- <CAK7LNASvBLLWMa+kb5eGJ6vpSqob_dBUxwCnpHZfL-spzRG7qA@mail.gmail.com>
-In-Reply-To: <CAK7LNASvBLLWMa+kb5eGJ6vpSqob_dBUxwCnpHZfL-spzRG7qA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 18 Feb 2022 03:42:00 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1B6275AFC;
+        Fri, 18 Feb 2022 00:41:42 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 3F9AD1F4417B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645173701;
+        bh=y1MQQgamboxKWXR250aZ3v7J3tHKl044R2X9kxvJNdI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hryznIMs6S1YAgP5BqLwjtosco6cTHMhj8+u3FKZgapd5mLfncU7NthBVXO5JlV/K
+         uV3Y2xOjmgTMbN71Usw1XA6qLIlGbCLHg7Fb/4CxzQPdFGiVwcPLyhRRsp6xas6EoI
+         rt0DZ24LBHflRQEkcdLvCH4JYZwN/yFYchX0c96GaOHzYoroYIwuzhc7JrEXdNR4xQ
+         mqCZ1Ld8DDobZ6EniAvDXDGa6GjGor8eXqWhKJpOJi37BCg2wFuhw1lgfVW8BxIdr2
+         ZBCDZUBjSN/xOmGmP9h8SO3jzWdulFseuCCj71qC4MnDJ8jv40LOK/caehosqx4iKM
+         ZoQfCXpD9PUbQ==
+Message-ID: <a4e66e61-35c4-adb5-fb65-e1f076bbe6ba@collabora.com>
+Date:   Fri, 18 Feb 2022 09:41:37 +0100
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 2/2] iommu/mediatek: Add mt8186 iommu support
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Yong Wu <yong.wu@mediatek.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
+        yen-chang.chen@mediatek.com, mingyuan.ma@mediatek.com,
+        yf.wang@mediatek.com, libo.kang@mediatek.com,
+        chengci.xu@mediatek.com, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+References: <20220125093244.18230-1-yong.wu@mediatek.com>
+ <20220125093244.18230-3-yong.wu@mediatek.com>
+ <b52a1df8-58f4-baa2-cfb6-9c56244caa0f@collabora.com>
+ <01cc69cdf7773962140c01fe37b12ab2c9491c25.camel@mediatek.com>
+ <0e430d1e-ee25-1b3d-4a2c-8641db255adb@collabora.com>
+ <8b63983222a4a304586a7b880379fcf4a7036c4a.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <8b63983222a4a304586a7b880379fcf4a7036c4a.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWFzYWhpcm8gWWFtYWRhDQo+IFNlbnQ6IDE3IEZlYnJ1YXJ5IDIwMjIgMTc6MjcNCj4g
-DQo+IE9uIEZyaSwgRmViIDE4LCAyMDIyIGF0IDE6NDkgQU0gRGF2aWQgTGFpZ2h0IDxEYXZpZC5M
-YWlnaHRAYWN1bGFiLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBGcm9tOiBNYXNhaGlybyBZYW1hZGEN
-Cj4gPiA+IFNlbnQ6IDE3IEZlYnJ1YXJ5IDIwMjIgMTY6MTcNCj4gPiAuLi4NCj4gPiA+IE5vLiAg
-Tm90IHRoYXQgb25lLg0KPiA+ID4NCj4gPiA+IFRoZSBjb21taXQgeW91IHByZXN1bWFibHkgd2Fu
-dCB0byByZXZlcnQgaXM6DQo+ID4gPg0KPiA+ID4gYTc3MWYyYjgyYWEyICgiW1BBVENIXSBBZGQg
-YSBzZWN0aW9uIGFib3V0IGlubGluaW5nIHRvDQo+ID4gPiBEb2N1bWVudGF0aW9uL0NvZGluZ1N0
-eWxlIikNCj4gPiA+DQo+ID4gPiBUaGlzIGlzIG5vdyByZWZlcnJlZCB0byBhcyAiX19hbHdheXNf
-aW5saW5lIGRpc2Vhc2UiLCB0aG91Z2guDQo+ID4NCj4gPiBUaGF0IGRlc2NyaXB0aW9uIGlzIGxh
-cmdlbHkgZmluZS4NCj4gPg0KPiA+IEluYXBwcm9wcmlhdGUgJ2lubGluZScgb3VnaHQgdG8gYmUg
-cmVtb3ZlZC4NCj4gPiBUaGVuICdpbmxpbmUnIG1lYW5zIC0gJ3JlYWxseSBkbyBpbmxpbmUgdGhp
-cycuDQo+IA0KPiANCj4gWW91IGNhbm5vdCBjaGFuZ2UgInN0YXRpYyBpbmxpbmUiIHRvICJzdGF0
-aWMiDQo+IGluIGhlYWRlciBmaWxlcy4NCg0KWW91J2QgbmVlZCBzb21lICdtYWdpY2FyeScgdG8g
-Z2V0IGFuIGV4dGVybiBleGNlcHQgZm9yIGEgc3BlY2lhbA0KaW5jbHVkZSB0aGF0IGdlbmVyYXRl
-ZCB0aGUgdmlzaWJsZSBmdW5jdGlvbi4NCkl0IGhhcyBiZWVuIGRvbmUuDQoNCj4gSWYgICJzdGF0
-aWMgaW5saW5lIiBtZWFudCBfX2Fsd2F5c19pbmxpbmUsDQo+IHRoZXJlIHdvdWxkIGJlIG5vIHdh
-eSB0byBuZWdhdGUgaXQuDQo+IFRoYXQncyB3aHkgd2UgbmVlZCBib3RoIGlubGluZSBhbmQgX19h
-bHdheXNfaW5saW5lLg0KDQpJJ2QgZ28gdGhlIG90aGVyIHdheSwgJ2lubGluZScgYW5kICdpbmxp
-bmVfZm9yX2NvZGVfYmxvYXQnDQoob3IgbWF5YmUgaW5saW5lX2Zvcl9zcGVlZCkuDQpNdWNoIHRo
-ZSBzYW1lIGFzIHRoZSBub2lubGluZSdzIHRvIHN0b3Agc3RhY2sgYmxvYXQuDQoNCglEYXZpZA0K
-DQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFy
-bSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAo
-V2FsZXMpDQo=
+Il 18/02/22 04:32, Yong Wu ha scritto:
+> On Mon, 2022-01-31 at 10:25 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 28/01/22 10:39, Yong Wu ha scritto:
+>>> On Thu, 2022-01-27 at 12:28 +0100, AngeloGioacchino Del Regno
+>>> wrote:
+>>>> Il 25/01/22 10:32, Yong Wu ha scritto:
+>>>>> Add mt8186 iommu supports.
+>>>>>
+>>>>> Signed-off-by: Anan Sun <anan.sun@mediatek.com>
+>>>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+>>>>> ---
+>>>>>     drivers/iommu/mtk_iommu.c | 17 +++++++++++++++++
+>>>>>     1 file changed, 17 insertions(+)
+>>>
+>>> [snip]
+>>>
+>>>>>     static const struct mtk_iommu_plat_data mt8192_data = {
+>>>>>     	.m4u_plat       = M4U_MT8192,
+>>>>>     	.flags          = HAS_BCLK | HAS_SUB_COMM_2BITS |
+>>>>> OUT_ORDER_WR_EN |
+>>>>> @@ -1470,6 +1486,7 @@ static const struct of_device_id
+>>>>> mtk_iommu_of_ids[] = {
+>>>>>     	{ .compatible = "mediatek,mt8167-m4u", .data =
+>>>>> &mt8167_data},
+>>>>>     	{ .compatible = "mediatek,mt8173-m4u", .data =
+>>>>> &mt8173_data},
+>>>>>     	{ .compatible = "mediatek,mt8183-m4u", .data =
+>>>>> &mt8183_data},
+>>>>> +	{ .compatible = "mediatek,mt8186-iommu-mm", .data =
+>>>>> &mt8186_data_mm},
+>>>>
+>>>> Hello!
+>>>>
+>>>> Is there any particular reason why this compatible is not
+>>>> "mediatek,mt8186-m4u"?
+>>>
+>>> There is no special reason. In the previous SoC, We only support MM
+>>> IOMMU, it was called by "m4u". In the lastest SoC, We have the
+>>> other
+>>> types IOMMU, like for INFRA masters and APU, thus they are called
+>>> "mm
+>>> iommu", "infra iommu" and "apu iommu". Of course, "m4u" means "mm
+>>> iommu".
+>>>
+>>
+>> I suggest, at this point, to change it to "mediatek,mt8186-m4u" for
+>> naming
+>> consistency with the other bindings and to avoid any kind of
+>> confusion.
+> 
+> Understand. But we don't call it "m4u" anymore. I'd not like to use a
+> outdated name. For readable, I could add a comment like this:
+> 
+> { .compatible = "mediatek,mt8186-iommu-mm", xx}, /* iommu-mm: m4u */
+> 
+> Is this ok for you?
+> Thanks.
+> 
+
+Ok, go on with that.
+
+Cheers,
+Angelo
+
+>> Thank you!
+>>
+>>>>
+>>>> Thanks,
+>>>> Angelo
+>>>>
+>>>>>     	{ .compatible = "mediatek,mt8192-m4u", .data =
+>>>>> &mt8192_data},
+>>>>>     	{ .compatible = "mediatek,mt8195-iommu-infra", .data =
+>>>>> &mt8195_data_infra},
+>>>>>     	{ .compatible = "mediatek,mt8195-iommu-vdo",   .data =
+>>>>> &mt8195_data_vdo},
+>>>>
+>>>> _______________________________________________
+>>>> Linux-mediatek mailing list
+>>>> Linux-mediatek@lists.infradead.org
+>>>> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+>>
+>>
+> 
 

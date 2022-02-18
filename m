@@ -2,106 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A174BBFF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FAF4BBFFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbiBRSyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:54:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40180 "EHLO
+        id S235592AbiBRSyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:54:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiBRSyJ (ORCPT
+        with ESMTP id S231234AbiBRSye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:54:09 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9888D1F05DF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:53:52 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id w20so7841687plq.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:53:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=McwjLSLaytCtK7tV2i/coh6cpneHZuWc7h/cZMMLVaQ=;
-        b=qS5kgw9dlzff3cynK7hHxw9gR3U0R6hubv+YKcGJnsGj3VYm2oM+4O8weoW2p2sZyw
-         c20WORhh8vLskTonGbwQkhF8S2qVv87wVcmcCnpfCuniNqBKPpM3SHHkZI1UBVKT3hdc
-         /YYE0ThFOusvkuKpKTcnSmn257veUPiLnnl1YAaAZJfOWUdbvmQIunP9HnqoMI57Y1p3
-         wrQfbe6PsnVJTG7l7cwGBJAlOs7W0U1A2yfEgqIt4vCTpNWdhS6rmjOn1/dRvj6lItI7
-         5a4xFx3R6iXDH5namFQ8U8M1i30J62YRRSyRjFQ671TIwRe1D0dHHSvemmvCUID/eKhv
-         rtrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=McwjLSLaytCtK7tV2i/coh6cpneHZuWc7h/cZMMLVaQ=;
-        b=YTORiU7TjSP5qKK+TB31p463yeOZcMd5TiK7iQYR1qWeb97IvadA4GeJ4HTTrzyaMz
-         /qkElveBIIMxCQZigsH++2+1eLOydMfatS9ymFkkq7zB2RBph3Igv8ZbFAr+CXP0Io6k
-         njxWS9qhVxvfJ4aYAn5MZgBAciZ/7z6EQN0M8SbGv07TOmMLzjcTsw/eAgEzvZ4W6xq9
-         55qs4joK60t2BYFnmFEFoLNksZcqHlqqkR7MHuKVyZZ+EZ7UpjoBiMjGF6WfpmsU9JKv
-         4ZBi529DiVORRW4SaT9UgDd/5OtItMIsnM3sYruhfxgCu2LoBU8RdTrwBZcdWMyIkzZv
-         v83w==
-X-Gm-Message-State: AOAM531NZg8Q5rM1gSnrDLptSdov0OpgUS/Fts3ryJdQtEoE5dNKMAgm
-        7VBVz6WGsQ7gV/Q2fQ7RrrM=
-X-Google-Smtp-Source: ABdhPJzQQSZPxtLkIpcflnhLn+ubFoe7B07qM/ToZ1Aq0GEshzZY7TCT7UmLcClTvTCsiaUJa7UVgQ==
-X-Received: by 2002:a17:902:da82:b0:14d:c6d8:822f with SMTP id j2-20020a170902da8200b0014dc6d8822fmr8509644plx.55.1645210432081;
-        Fri, 18 Feb 2022 10:53:52 -0800 (PST)
-Received: from localhost.localdomain ([2405:201:9005:88cd:7443:8052:dc37:e678])
-        by smtp.gmail.com with ESMTPSA id p2sm125106pjo.38.2022.02.18.10.53.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 10:53:51 -0800 (PST)
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        nathan@kernel.org, desaulniers@google.com, Felix.Kuehling@amd.com,
-        Oak.Zeng@amd.com, nirmoy.das@amd.com, jonathan.kim@amd.com,
-        kevin1.wang@amd.com, tzimmermann@suse.de, Philip.Yang@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] drm/amdgpu: Initialize value of r in amdgpu_fill_buffer()
-Date:   Sat, 19 Feb 2022 00:23:12 +0530
-Message-Id: <20220218185312.34464-1-jrdr.linux@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 18 Feb 2022 13:54:34 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC2E212E2D;
+        Fri, 18 Feb 2022 10:54:16 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BA49D1F380;
+        Fri, 18 Feb 2022 18:54:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645210454; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7xBLRQZhq3/skvOmeDBJB14+LYXLehKVzIynhx/JjM0=;
+        b=0jXyJ65ecJsaSLvPCVibOVAuY3OGK4usVKD2EERKyiLsHHz0e7QV4ZYTI3Rbt+GijfiPAG
+        xIwopJxYs0ot03/jzftod8OrUCu8aNBPsxw0mQJkerkALjDt7nHVaIaaaszd+tdaM61Yh8
+        d+1wWi8yXTM/1QG71yycfwTLocwKzPk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645210454;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7xBLRQZhq3/skvOmeDBJB14+LYXLehKVzIynhx/JjM0=;
+        b=80A1QJM3/GCBQg8FBevUB/VqXoEnD5gOwj9dFfPlDytKxWCjOlLQ3vd3yEu21dWjq5f7Ox
+        JiaCkAMG6wXNfDDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87D2513C9F;
+        Fri, 18 Feb 2022 18:54:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Zl1lIFbrD2KneQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 18 Feb 2022 18:54:14 +0000
+Message-ID: <c237f6d1-4219-0e6d-6aca-9c29d060bb4f@suse.cz>
+Date:   Fri, 18 Feb 2022 19:54:14 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] slab: remove __alloc_size attribute from
+ __kmalloc_track_caller
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        llvm@lists.linux.dev
+References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
+ <a5ab4496-8190-6221-72c7-d1ff2e6cf1d4@suse.cz> <Yg/eG4X7Esa0h1al@kroah.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Yg/eG4X7Esa0h1al@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+On 2/18/22 18:57, Greg Kroah-Hartman wrote:
+> On Fri, Feb 18, 2022 at 06:14:55PM +0100, Vlastimil Babka wrote:
+>> On 2/18/22 14:13, Greg Kroah-Hartman wrote:
+>> > Commit c37495d6254c ("slab: add __alloc_size attributes for better
+>> > bounds checking") added __alloc_size attributes to a bunch of kmalloc
+>> > function prototypes.  Unfortunately the change to __kmalloc_track_caller
+>> > seems to cause clang to generate broken code and the first time this is
+>> > called when booting, the box will crash.
+>> > 
+>> > While the compiler problems are being reworked and attempted to be
+>> > solved, let's just drop the attribute to solve the issue now.  Once it
+>> > is resolved it can be added back.
+>> 
+>> Could we instead wrap it in some #ifdef that' only true for clang build?
+>> That would make the workaround more precise and self-documented. Even
+>> better if it can trigger using clang version range and once a fixed
+>> clang version is here, it can be updated to stay true for older clangs.
+> 
+> It's not doing all that much good like this, let's just remove it for
+> now until it does actually provide a benifit and not just crash the box :)
+> 
+> This is only 1 function, that is used in only a very small number of
+> callers.  I do not think it will be missed.
 
-Kernel test robot reported warning ->
-drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c:2129:2: warning: Undefined
-or garbage value returned to caller [clang-analyzer-core.
-uninitialized.UndefReturn]
+Fair enough, added to the slab tree:
 
-Initialize r inside amdgpu_fill_buffer().
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=for-5.17/fixup5
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 414a22dddc78..5fafb223177f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -2089,7 +2089,7 @@ int amdgpu_fill_buffer(struct amdgpu_bo *bo,
- 	struct amdgpu_ring *ring = adev->mman.buffer_funcs_ring;
- 	struct dma_fence *fence = NULL;
- 	struct amdgpu_res_cursor dst;
--	int r;
-+	int r = 0;
- 
- 	if (!adev->mman.buffer_funcs_enabled) {
- 		DRM_ERROR("Trying to clear memory with ring turned off.\n");
--- 
-2.25.1
+> thanks,
+> 
+> greg k-h
+> 
 

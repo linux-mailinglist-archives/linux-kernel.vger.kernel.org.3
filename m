@@ -2,130 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E594BB499
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB404BB49D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbiBRIul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 03:50:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47898 "EHLO
+        id S232874AbiBRIxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 03:53:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbiBRIui (ORCPT
+        with ESMTP id S231127AbiBRIxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 03:50:38 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ACB2B354D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 00:50:20 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id m7so8035604pjk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 00:50:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=b7z6iiw22lnHjci/Ii1/zt223km1527nVd9KogEQtMU=;
-        b=seeuPptDfkero5sztHjnfTdR7kAX0RDQ+GXKIYPmD9/YMJP1s/q1+WUrOEvfXGR7S0
-         2KDZBfbuc6AyrLHQr5yV8jEBMmXJXCcdZ5N6HivQXxMR5W6FVV5diWMQMLAIxpEhlG2M
-         iY/M6jiEV7sn40uD+OfH0H7ZQiTGEqUek1GmoMXA9kc/fF7hsXGbhWqjVNgPvZJjifQA
-         DlR8sjSQC5xn6p3QCtM9E8bfCsH6azPSSjjpUQD6UxKusGPR9G+UzqQ+OyI26qUJS5KO
-         LaHkIN1dwzN66kfSzZnRnOUFkEa1mF6Raq1psC4+zvSNWD5cGF1C7c5lVCX4nCHaf22N
-         dKAQ==
+        Fri, 18 Feb 2022 03:53:49 -0500
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EF419281;
+        Fri, 18 Feb 2022 00:53:33 -0800 (PST)
+Received: by mail-vk1-f169.google.com with SMTP id j12so4492350vkr.0;
+        Fri, 18 Feb 2022 00:53:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=b7z6iiw22lnHjci/Ii1/zt223km1527nVd9KogEQtMU=;
-        b=bscZS2pXfApQf8KVg0Ib2r2aggQODpoKJmxZ7l/sQuNlgqoupEQ0nCE8UHLVU+uUuX
-         lpZm3EmwUTAAWLPhwE9w4M/U2C++l2RZFDY0pzIJ9Ki1Eyn8e5yaegJtIdmXHPYp0zcj
-         9E6Ghtk3EYu+m76KR+0rAwig4cdXTWG+458gj9PHEKtg1wVbT8o3Ll9ORkymtlErQKk2
-         DmJO9jU1C/02vgtm0Er9CuTYbxHAsaT47CpahwLNthRNh+EEhWRjfUK3w9cuzTQ8/uUG
-         lT3ma9UJerPmx6ztJNme53CFLprK0RZf6eoRzBTmlvoSnDlrJNMcvx+MCPMXiULugeTx
-         nOIQ==
-X-Gm-Message-State: AOAM532Y8s3MbeeP9J5VTSXQO2QFf1upwdLYIq0ddPJcDpJ75wrN2z6b
-        kwxvL+pO3t/p/LCqn7ZFU+nMMA==
-X-Google-Smtp-Source: ABdhPJwpYaB42zV9cx7WtkoPcQKhcNvCEW0vB7/C4F6IE0jCZlGR4uQYV9WGq9VayBg64TbURiE0aQ==
-X-Received: by 2002:a17:903:31cd:b0:14d:bb40:2a17 with SMTP id v13-20020a17090331cd00b0014dbb402a17mr6448398ple.1.1645174219918;
-        Fri, 18 Feb 2022 00:50:19 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:200:bdb7:3728:9760:87c])
-        by smtp.gmail.com with ESMTPSA id d16sm2192602pfj.1.2022.02.18.00.50.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 00:50:19 -0800 (PST)
-Date:   Fri, 18 Feb 2022 00:50:16 -0800
-From:   Fangrui Song <maskray@google.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] arm64 module: remove (NOLOAD)
-Message-ID: <20220218085016.jv4qcfaxav5fxhrs@google.com>
-References: <20220218081209.354383-1-maskray@google.com>
- <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3IIIM8aS689yU8psbZYAY0WKVYVp4V9dRKA9Ow9rLTc=;
+        b=MbyfzjkgcWpKW/6xaGtJ7JWEzP9pwxsJLmFUZGvo5au1tkg3ufPM/SPLt/aicKifu1
+         Lpmkq68MGu2310sQzdBpdv6ts3Tw6w6xBkp63qWKuW9yDNLnMgd+hp7Iula1n5PQqFVz
+         ZsJyTKfgttyuy3VbaJSqIVf3bMr4v7ASVoI5LRwizkYC4lnYQtM6nCB0qMugriTDT4IP
+         45IZX+g4bz3/HQM7+FiR8bj8JWlgLyKD3U70Mznq6qmQXjtYgUys0jhdrRBbjyXFck6U
+         TN6ty38TMKSiQ5Vc+TCycZVVmH5sDAHCwjEEAS4ooI0o4Bh4hY7nHW6nYA3hY/eJi0LS
+         T2Ng==
+X-Gm-Message-State: AOAM531mJwkxF4MrM+YGtV3fgr55KISe99HuW+HSmamhytWU8wFAYc6f
+        ZcfWPXFZKKZ0EVA1Owsly78jr+xDJF12BA==
+X-Google-Smtp-Source: ABdhPJyHW4vHQnfNg450tMEUP2Hud3vrWJ2VWq1H/0ZqnaessifvrZASsiLQpwOMJaSxXHF5Uz8WcA==
+X-Received: by 2002:a1f:fc86:0:b0:32c:36f2:69d0 with SMTP id a128-20020a1ffc86000000b0032c36f269d0mr3079180vki.10.1645174412355;
+        Fri, 18 Feb 2022 00:53:32 -0800 (PST)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id x24sm1993034vsk.29.2022.02.18.00.53.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 00:53:31 -0800 (PST)
+Received: by mail-vk1-f172.google.com with SMTP id w128so3753361vkd.3;
+        Fri, 18 Feb 2022 00:53:31 -0800 (PST)
+X-Received: by 2002:a05:6122:130c:b0:330:e674:ec91 with SMTP id
+ e12-20020a056122130c00b00330e674ec91mr2843712vkp.33.1645174411496; Fri, 18
+ Feb 2022 00:53:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGZuOWOPEHv0YSM4GseG2PnTgS8mSLXQ+imo-TN7MmvaQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220215165226.2738568-1-geert@linux-m68k.org>
+ <20220215165226.2738568-3-geert@linux-m68k.org> <4fff0c08-adab-c1d5-4a7e-1513cb2bf7ca@suse.de>
+ <CAMuHMdVK7eWfod73JQAntO=7BAMEcS-ktH4NJmDjna3zUn7giw@mail.gmail.com> <4ed13232-bee3-0bea-9abb-51bf9d0bf84b@suse.de>
+In-Reply-To: <4ed13232-bee3-0bea-9abb-51bf9d0bf84b@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 18 Feb 2022 09:53:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXjXdfNSvy4tvTgxe16EHoZ1CnXKNXRoP4SVpHnSFLvAQ@mail.gmail.com>
+Message-ID: <CAMuHMdXjXdfNSvy4tvTgxe16EHoZ1CnXKNXRoP4SVpHnSFLvAQ@mail.gmail.com>
+Subject: Re: [PATCH 2/8] drm/fb-helper: Add support for DRM_FORMAT_C[124]
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-18, Ard Biesheuvel wrote:
->On Fri, 18 Feb 2022 at 09:12, Fangrui Song <maskray@google.com> wrote:
->>
->> On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
->> inappropriate for .plt and .text.* sections which are always
->> SHT_PROGBITS.
->>
->> In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
->> and (NOLOAD) will be essentially ignored. In ld.lld, since
->> https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
->> customize the output section type"), ld.lld will report a `section type
->> mismatch` error. Just remove (NOLOAD) to fix the error.
->>
->> [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
->> section should be marked as not loadable" on
->> https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
->> outdated for ELF.
->
->This patch lacks a SOB line.
->
->With one added,
->
->Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Hi Thomas,
 
-Ah, yes. Sorry, I haven't sent a kernel patch for a while...
+On Fri, Feb 18, 2022 at 9:14 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Am 17.02.22 um 17:12 schrieb Geert Uytterhoeven:
+> > On Thu, Feb 17, 2022 at 3:57 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> >> Am 15.02.22 um 17:52 schrieb Geert Uytterhoeven:
+> >>> Add support for color-indexed frame buffer formats with two, four, and
+> >>> sixteen colors to the DRM framebuffer helper functions:
+> >>>     1. Add support for depths 1/2/4 to the damage helper,
+> >>>     2. For color-indexed modes, the length of the color bitfields must be
+> >>>        set to the color depth, else the logo code may pick a logo with too
+> >>>        many colors.  Drop the incorrect DAC width comment, which
+> >>>        originates from the i915 driver.
+> >>>     3. Accept C[124] modes when validating or filling in struct
+> >>>        fb_var_screeninfo, and  use the correct number of bits per pixel.
+> >>>     4. Set the visual to FB_VISUAL_PSEUDOCOLOR for all supported
+> >>>        color-indexed modes.
+> >>>
+> >>> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> >
+> >>> --- a/drivers/gpu/drm/drm_fb_helper.c
+> >>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+> >>> @@ -376,12 +376,34 @@ static void drm_fb_helper_damage_blit_real(struct drm_fb_helper *fb_helper,
+> >>>                                           struct iosys_map *dst)
+> >>>    {
+> >>>        struct drm_framebuffer *fb = fb_helper->fb;
+> >>> -     unsigned int cpp = fb->format->cpp[0];
+> >>> -     size_t offset = clip->y1 * fb->pitches[0] + clip->x1 * cpp;
+> >>> -     void *src = fb_helper->fbdev->screen_buffer + offset;
+> >>> -     size_t len = (clip->x2 - clip->x1) * cpp;
+> >>> +     size_t offset = clip->y1 * fb->pitches[0];
+> >>> +     size_t len = clip->x2 - clip->x1;
+> >>>        unsigned int y;
+> >>> +     void *src;
+> >>>
+> >>> +     switch (fb->format->depth) {
+> >>
+> >> The depth field is deprecated. It's probably better to use
+> >> fb->format->format and test against 4CC codes.
+> >
+> > The reason I checked for depth instead of a 4CC code is that the only
+> > thing that matters here is the number of bits per pixel.  Hence this
+> > function won't need any changes to support R1, R2, R4, and D1 later.
+> > When we get here, we already know that we are using a format that
+> > is supported by the fbdev helper code, and thus passed the 4CC
+> > checks elsewhere.
+>
+> At some point, we will probably have to change several of these tests to
+> 4cc. C8 and RGB332 both have 8-bit depth/bpp; same for C4 and RGB121; or
+> whatever low-color formats we also want to add.
+>
+> It's not a blocker now, but maybe something to keep in mind.
+>
+> >
+> > Alternatively, we could introduce drm_format_info_bpp() earlier in
+> > the series, and use that?
+>
+> Having a helper for this might indeed be useful. We use depth for the
+> number of color bits and bpp for the number of bits in he pixel.  That's
+> important for XRGB8888, where depth is 24, or XRGB555 where depth is 15.
+>
+> If that makes sense, maybe have a helper for depth and one for bpp, even
+> if they return the same value in most of the cases.
 
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Fangrui Song <maskray@google.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+The helper for bpp is introduced in "[PATCH 3/8] drm/fourcc: Add
+drm_format_info_bpp() helper".
+I don't think we need a helper for depth, there's already the .depth
+field.  It might be deprecated, but it's still used?
+Gr{oetje,eeting}s,
 
->> ---
->>  arch/arm64/include/asm/module.lds.h | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
->> index a11ccadd47d2..094701ec5500 100644
->> --- a/arch/arm64/include/asm/module.lds.h
->> +++ b/arch/arm64/include/asm/module.lds.h
->> @@ -1,8 +1,8 @@
->>  SECTIONS {
->>  #ifdef CONFIG_ARM64_MODULE_PLTS
->> -       .plt 0 (NOLOAD) : { BYTE(0) }
->> -       .init.plt 0 (NOLOAD) : { BYTE(0) }
->> -       .text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
->> +       .plt 0 : { BYTE(0) }
->> +       .init.plt 0 : { BYTE(0) }
->> +       .text.ftrace_trampoline 0 : { BYTE(0) }
->>  #endif
->>
->>  #ifdef CONFIG_KASAN_SW_TAGS
->> --
->> 2.35.1.265.g69c8d7142f-goog
->>
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

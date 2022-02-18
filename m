@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFB34BB3BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252044BB3BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbiBRH6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:58:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46600 "EHLO
+        id S232265AbiBRH6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:58:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiBRH63 (ORCPT
+        with ESMTP id S232303AbiBRH63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 02:58:29 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F9917BCD8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:58:07 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id r19-20020a170902be1300b0014edf03f82eso3223916pls.20
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:58:07 -0800 (PST)
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FA51928E2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:58:12 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d07ae1145aso36298517b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:58:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=j0CZufvSyGMkqIs03zWz3SOrzF5QkxrcKJyKN+3F6DU=;
-        b=DnvEEpeLGT7C5chE/iFqLg1oxG7vGRUWbZEgwmeFp5/uBfxwHZ4WKh+ARdG0TZevOn
-         S8V+kTXByBAPADfiBUy8qdYWtbxpPbyjuahrqoW5Y+jx4Ka3f2ix+XYBDPLErajyCmGc
-         WhsTS3GeBvKSmJU24IW3jl4Eitt4U8L46TqvxavzKDg0M7fao2jGz5UhpxjTsQKN5dwB
-         3pcbMsevsoyi2PABytqDtcFfB+sDZF7+PctoUcSKimkNVz6fqrYV63g+hOOmzfycxYWD
-         GeQLc8fwAtfGcxSsJO76HpBCHUOMxWvmRj95XUCGtf7GYhrl8yZF035C7XUfj6JbBWPA
-         VPkw==
+         :cc:content-transfer-encoding;
+        bh=URNN4JDAS2rJK/SsmuwfW0pd7j7Yza7iayBlpkhGFLc=;
+        b=EBGQU4gek4jI2VHo57UusHs/wBde2oMRrnCtCmvYuBRGiig/b+r8mypTt+pMzb70F+
+         eui57kZL0D/54jmqGjPrmsWd0gCCmIddw38zfF9pbmDCKJlhAdFSEiYaxzW6GmFO49Yu
+         4RQaHEq87uRGZVdETZV+edy95vXUKC33J17G8BU6e3WahR+nFckwqtWorOj6MMQ/YOvZ
+         gl2yOMRPf+OuLe+iUFLdgXX42Wt9q4ukxNsPwtPrcQkgE8bBuiANjsLn54dhHyW0HIeI
+         DXlmWM+XgNzhDKEWkVKRqXrhzm++Sv6+QkC4DoMdzkdUGfb51BKxH9jR5kdWZcjQ0pa2
+         EbYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=j0CZufvSyGMkqIs03zWz3SOrzF5QkxrcKJyKN+3F6DU=;
-        b=egLOonhMNgrFXc+7fDUVgtRXxgO3Ep8+Mke0kL4mFb330WbRfxACWf+8+4b6RgQcG9
-         lpshdkopucRslLRQ3zbhqWwWdx9i4mhtGfxBQxTEgr+pbI/OVxuL1awz+YSOhzoFR8v9
-         1pS2fEeQfVSwXDJxLhpRCnvEU4K7WKEg6jTfcSFT0Y+PkfOa+L0Zhadtm/13UUF+iN1M
-         UDt5eS0/EY6igB6Fd/i7uF0h7Rja6vhwOdhPxNOEuEFIYwxoLAeBFof+5BXi7jUUxsM3
-         1KE8NQATkPwXy7dDL8weqCRW8FMY6n3KXWNKC9ME/DCS/udEJy9T11a5vZ5nlkb3p3Fm
-         RLfg==
-X-Gm-Message-State: AOAM532SdOeNzqdRP3xSVOsuX3bkJd3wE0HEClVVKxFjvScvnbX1soCW
-        IFTuvt1kZCVq7WWER8JAtORMGNyIkMZEIQ==
-X-Google-Smtp-Source: ABdhPJweI7iurcA3Hbq+nFlKuGo4v8cSMtTOOIZv9Y5cBs/yQBBEnAM5KLK3GgPSvT5VxuN+hAiv//qPBNXQEg==
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=URNN4JDAS2rJK/SsmuwfW0pd7j7Yza7iayBlpkhGFLc=;
+        b=k1b8JFQAk7qcrdOKuSW7RpMvMEIOUutSEhEARhNYssIGibBFtdSKJ8bQPxX0x633Pr
+         rAuaIBhCU1xImZggnhKGzlmtpbudb9WsLHDhR0/UD/DpkzZsLLlRa7/uDZQkPA7lEg3z
+         uyqBZ2/RLbi4EwoZNeFFrUk6HiTYvg/PSszqiHUQjrNR29XSpL/U5nwQoO1B65zFeVEJ
+         LXeq9WX3k4NXH5OzRZMvDWwrA8WxlQ7gHdu8e2vLXVaO0vi5O+nsv2qQwBCGMFMcryy2
+         pjJJ5z/Fj8iEOFeUf9E6zdD0aB/TLy9l+kcoehMBv0iO2/5baWsRfLTFaQaEIYxUUXLs
+         9tSw==
+X-Gm-Message-State: AOAM5317g7DZuJcnz2BaeYsurp8LcZ+RKMWnmkrmyFDTbmbv2TUY59If
+        c4mnLGcAE0lQMjL3IAtBL4jaMc1WFzXetg==
+X-Google-Smtp-Source: ABdhPJzkXNI0mIB4QIL1eB63wzi9+92ViwlJdKnUh9PGSnuYSdteX3Ps478m374ivFv5Kh1qd98wF5JtWHxwTw==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90a:581:b0:1b9:b85e:94df with SMTP id
- i1-20020a17090a058100b001b9b85e94dfmr7115153pji.195.1645171087194; Thu, 17
- Feb 2022 23:58:07 -0800 (PST)
-Date:   Fri, 18 Feb 2022 15:57:26 +0800
+ (user=davidgow job=sendgmr) by 2002:a81:f611:0:b0:2cf:aa3c:ab17 with SMTP id
+ w17-20020a81f611000000b002cfaa3cab17mr658303ywm.410.1645171091604; Thu, 17
+ Feb 2022 23:58:11 -0800 (PST)
+Date:   Fri, 18 Feb 2022 15:57:27 +0800
 In-Reply-To: <20220218075727.2737623-1-davidgow@google.com>
-Message-Id: <20220218075727.2737623-4-davidgow@google.com>
+Message-Id: <20220218075727.2737623-5-davidgow@google.com>
 Mime-Version: 1.0
 References: <20220218075727.2737623-1-davidgow@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH 3/4] IB/qib: Compile under User-Mode Linux
+Subject: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
 From:   David Gow <davidgow@google.com>
 To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
@@ -65,42 +65,68 @@ Cc:     David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
         linux-rdma@vger.kernel.org, x86@kernel.org, felix.kuehling@amd.com,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The User-Mode-Linux architecture (with the x86_64 subarch) defines
-CONFIG_X86_64, but doesn't expose the cpuinfo_x86 struct (instead
-there's a cpuinfo_um struct).
+There are a number of Kconfig options which break compilation under UML wit=
+h
+allyesconfig.  As kunit_tool's --alltests option is based on allyesconfig a=
+nd
+UML, we need to update the list of broken options to make --alltests build
+again.
 
-In order to allow UML to build with allyesconfig, only check cpuinfo_x86
-on non-UML architectures.
+Note that, while this does build again, it still segfaults on startup,
+so more work remains to be done.
+
+They are:
+- CONFIG_VFIO_PCI: Needs ioport_map/ioport_unmap.
+- CONFIG_INFINIBAND_RDMAVT: Needs cpuinfo_x86 and __copy_user_nocache
+- CONFIG_BNXT: Failing under UML with -Werror
+ERROR:root:../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c: In function =
+=E2=80=98bnxt_ptp_enable=E2=80=99:
+../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:400:43: error: array subsc=
+ript 255 is above array bounds of =E2=80=98struct pps_pin[4]=E2=80=99 [-Wer=
+ror=3Darray-bounds]
+  400 |                         ptp->pps_info.pins[pin_id].event =3D BNXT_P=
+PS_EVENT_EXTERNAL;
+      |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~
+- CONFIG_PATA_CS5535: Needs MSR access (__tracepoint_{read,write}_msr)
+- CONFIG_VDPA: Enables CONFIG_DMA_OPS, which is unimplemented. ('dma_ops' i=
+s not defined)
+
+These are all issues which should be investigated properly and the
+corresponding options either fixed or disabled under UML. Having this
+list of broken options should act as a good to-do list here, and will
+allow these issues to be worked on independently, and other tests to
+work in the meantime.
 
 Signed-off-by: David Gow <davidgow@google.com>
 ---
- drivers/infiniband/hw/qib/qib_wc_x86_64.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/kunit/configs/broken_on_uml.config | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/infiniband/hw/qib/qib_wc_x86_64.c b/drivers/infiniband/hw/qib/qib_wc_x86_64.c
-index edd0ddbd4481..76fef1321c26 100644
---- a/drivers/infiniband/hw/qib/qib_wc_x86_64.c
-+++ b/drivers/infiniband/hw/qib/qib_wc_x86_64.c
-@@ -146,5 +146,9 @@ void qib_disable_wc(struct qib_devdata *dd)
-  */
- int qib_unordered_wc(void)
- {
-+#ifndef CONFIG_UML
- 	return boot_cpu_data.x86_vendor != X86_VENDOR_AMD;
-+#else
-+	return 0;
-+#endif
- }
--- 
+diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testi=
+ng/kunit/configs/broken_on_uml.config
+index 690870043ac0..546482b0bc4d 100644
+--- a/tools/testing/kunit/configs/broken_on_uml.config
++++ b/tools/testing/kunit/configs/broken_on_uml.config
+@@ -42,3 +42,8 @@
+ # CONFIG_ADI_AXI_ADC is not set
+ # CONFIG_DEBUG_PAGEALLOC is not set
+ # CONFIG_PAGE_POISONING is not set
++# CONFIG_VFIO_PCI is not set
++# CONFIG_INFINIBAND_RDMAVT is not set
++# CONFIG_BNXT is not set
++# CONFIG_PATA_CS5535 is not set
++# CONFIG_VDPA is not set
+--=20
 2.35.1.265.g69c8d7142f-goog
 

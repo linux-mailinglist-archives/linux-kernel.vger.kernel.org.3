@@ -2,121 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554DF4BC023
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52B54BC028
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236559AbiBRTMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 14:12:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53978 "EHLO
+        id S236663AbiBRTNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 14:13:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232499AbiBRTMd (ORCPT
+        with ESMTP id S236628AbiBRTNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 14:12:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E204BFE4;
-        Fri, 18 Feb 2022 11:12:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAD8C61A5C;
-        Fri, 18 Feb 2022 19:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A450C340EF;
-        Fri, 18 Feb 2022 19:12:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645211535;
-        bh=0e4veZFcnn6yrRxE8i8DKuPwxKv+TS/DeK6cNKOXQ54=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qeWNMdspHVNInULfaQuInCBT8d3TksMptTgCh7LpndB8SfHule0W3eou5k7pnWItm
-         kyi/sch6LZgNEx5NoxbGNDhpg7HVOFJBQvvbfC+JaI1CYroZIo3yBiDAjef1t+gSN8
-         C2F2uR1Qm7ZivunyMbjdbl94yrer5ywR9dxC65CkMuqnluV5I4TlKUtewqNEBwXKHj
-         7n/HxeSsfPOvlnDysqaQElvrA8WvGCO+ng867YbTGQG7XoSmY7eoKABOkwbqd/Wi/C
-         /yfPTfqhjSLZs1NpZyEVP4CTrpFD7GjZLbTYBkT3AWEeB7xQLMUt48R4SKZ1VkMlUf
-         Ju916tD+LhMSg==
-Received: by mail-wr1-f44.google.com with SMTP id k1so16132029wrd.8;
-        Fri, 18 Feb 2022 11:12:15 -0800 (PST)
-X-Gm-Message-State: AOAM533joUi99m6tHOwqyOjALj46j60P31MJHPAHcRJXN4axWxmrGOFG
-        wzLK3VkYfZ8qaivQYkLmjZmJskpoZTgpc+GjHNc=
-X-Google-Smtp-Source: ABdhPJyWH4CFWTT1Ll+WXb+18S8oGb/1G5KWI/Y6rIcTot+u2tQMSfX5AgtBvvz8Ecbi6oD9pAUYOK3hEgORTiO+gTs=
-X-Received: by 2002:a5d:6884:0:b0:1e4:ed7b:fd71 with SMTP id
- h4-20020a5d6884000000b001e4ed7bfd71mr7205218wru.550.1645211533454; Fri, 18
- Feb 2022 11:12:13 -0800 (PST)
+        Fri, 18 Feb 2022 14:13:15 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6A84D9C2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:12:57 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id h15so146404edv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:12:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kFx5mVaEHwZpR1G+osdopjqc+OzJyT2vvM3+pSprCFk=;
+        b=EQ+kstcsfvyoiVxpZH4DOveKWuo8ZLZzYUIop0Vlthf3r2DTADG1kDnjLZlmhEiEk+
+         6G1pQYgdE0Nh9wv/F/mr614cojFdmQRp2bm+wGYz7pZOcacHQguC10UzY7EM+1ffc44f
+         Wm1l5TaMSkrezOOuca+rkd439a22duxj7f/9y8nVcQJWPTcyz8zTDf/7iz5H+ApzRhTQ
+         NbqGdRr/U/H9RUKkTlGKY86fsffbY3C0Y3yyKrxlpGI6ol/qaBZxmLnCbHD8+AclEyv0
+         7/rPTsF6rq9ujxffbMlZt2i1zvBQfzL4TUlU49jq+ZYhmHm7rxl9MwWPEqQDFslXytJ8
+         Gf+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kFx5mVaEHwZpR1G+osdopjqc+OzJyT2vvM3+pSprCFk=;
+        b=RDBMTjts3TwdbWJL4aBZTVNbd9XjkzYLD2r3egjotwbAwGwQAiR0tysz/Ot5X72esd
+         XeMJTaldrCFBxxgNJu1lY7edwGvgsA7yqaftlUgpIpocGZWcSNbPDsnMuf/bhBICmosY
+         3GSJhwr0hLKeF6J8KpBCV+X8ZsQMv92qedIJlst3FThbvYDKZRBVMOmgV/CAn05FiA6O
+         /FO6++c+Y8NxVKSCgYlyuECMCNFh5dDPEtfiUW/n2+b/pU8UhwIFFx/HhpG3BXPRAXJM
+         MoeizhNRq8N/dm8HSlS02ONNnhYZODFMCf40+eSh9FEsZVu1sI+C+dtgbO0PvCAkNWAq
+         ojXw==
+X-Gm-Message-State: AOAM532NoowleiFhM5wbhZPMP6eO80GkYOFAyZntrcjpcNLeVscthFz5
+        +B99CZyHS+CjsDq+GNblHEwRLYsVALzuKYyOylOQZA==
+X-Google-Smtp-Source: ABdhPJx3RFzhIbi2OeHNvwEo2c7s9U+9friyhOB0W2+wJsBDRyonLy4N3OFnI5CX3I+UAblAArNaJNvZqMIqINE8LuU=
+X-Received: by 2002:aa7:c0d0:0:b0:410:d576:8808 with SMTP id
+ j16-20020aa7c0d0000000b00410d5768808mr9831902edp.340.1645211575981; Fri, 18
+ Feb 2022 11:12:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220218180559.1432559-1-jannh@google.com>
-In-Reply-To: <20220218180559.1432559-1-jannh@google.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 18 Feb 2022 20:12:02 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE23L05mwadr_DH548T=BMG5dhkL0X+4+R75NDJUHxkYQ@mail.gmail.com>
-Message-ID: <CAMj1kXE23L05mwadr_DH548T=BMG5dhkL0X+4+R75NDJUHxkYQ@mail.gmail.com>
-Subject: Re: [PATCH] efivars: Respect "block" flag in efivar_entry_set_safe()
-To:     Jann Horn <jannh@google.com>
-Cc:     linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
+References: <20220211161831.3493782-1-tjmercier@google.com>
+In-Reply-To: <20220211161831.3493782-1-tjmercier@google.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Fri, 18 Feb 2022 11:12:44 -0800
+Message-ID: <CABdmKX3qO7UW-HGXMdZZdVi1P8FnKDh0H=TGT_ct=tHoAeVxbw@mail.gmail.com>
+Subject: Re: [RFC v2 0/6] Proposal for a GPU cgroup controller
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 at 19:06, Jann Horn <jannh@google.com> wrote:
+On Fri, Feb 11, 2022 at 8:18 AM T.J. Mercier <tjmercier@google.com> wrote:
 >
-> When the "block" flag is false, the old code would sometimes still call
-> check_var_size(), which wrongly tells ->query_variable_store() that it can
-> block.
+> This patch series revisits the proposal for a GPU cgroup controller to
+> track and limit memory allocations by various device/allocator
+> subsystems. The patch series also contains a simple prototype to
+> illustrate how Android intends to implement DMA-BUF allocator
+> attribution using the GPU cgroup controller. The prototype does not
+> include resource limit enforcements.
 >
-> As far as I can tell, this can't really materialize as a bug at the moment,
-> because ->query_variable_store only does something on X86 with generic EFI,
-> and in that configuration we always take the efivar_entry_set_nonblocking()
-> path. So I'm not marking this for stable backporting.
+> Changelog:
 >
-> Fixes: ca0e30dcaa53 ("efi: Add nonblocking option to efi_query_variable_store()")
-> Signed-off-by: Jann Horn <jannh@google.com>
-
-Thanks Jann. I'll queue this up.
-
-> ---
+> v2:
+> See the previous revision of this change submitted by Hridya Valsaraju
+> at: https://lore.kernel.org/all/20220115010622.3185921-1-hridya@google.co=
+m/
 >
->  drivers/firmware/efi/vars.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
+> heap to a single dma-buf function for all heaps per Daniel Vetter and
+> Christian K=C3=B6nig. Pointers to struct gpucg and struct gpucg_device
+> tracking the current associations were added to the dma_buf struct to
+> achieve this.
 >
-> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-> index abdc8a6a3963..cae590bd08f2 100644
-> --- a/drivers/firmware/efi/vars.c
-> +++ b/drivers/firmware/efi/vars.c
-> @@ -742,6 +742,7 @@ int efivar_entry_set_safe(efi_char16_t *name, efi_guid_t vendor, u32 attributes,
->  {
->         const struct efivar_operations *ops;
->         efi_status_t status;
-> +       unsigned long varsize;
+> Fix incorrect Kconfig help section indentation per Randy Dunlap.
 >
->         if (!__efivars)
->                 return -EINVAL;
-> @@ -764,15 +765,17 @@ int efivar_entry_set_safe(efi_char16_t *name, efi_guid_t vendor, u32 attributes,
->                 return efivar_entry_set_nonblocking(name, vendor, attributes,
->                                                     size, data);
+> History of the GPU cgroup controller
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> The GPU/DRM cgroup controller came into being when a consensus[1]
+> was reached that the resources it tracked were unsuitable to be integrate=
+d
+> into memcg. Originally, the proposed controller was specific to the DRM
+> subsystem and was intended to track GEM buffers and GPU-specific
+> resources[2]. In order to help establish a unified memory accounting mode=
+l
+> for all GPU and all related subsystems, Daniel Vetter put forth a
+> suggestion to move it out of the DRM subsystem so that it can be used by
+> other DMA-BUF exporters as well[3]. This RFC proposes an interface that
+> does the same.
 >
-> +       varsize = size + ucs2_strsize(name, 1024);
->         if (!block) {
->                 if (down_trylock(&efivars_lock))
->                         return -EBUSY;
-> +               status = check_var_size_nonblocking(attributes, varsize);
->         } else {
->                 if (down_interruptible(&efivars_lock))
->                         return -EINTR;
-> +               status = check_var_size(attributes, varsize);
->         }
+> [1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.=
+9506-1-brian.welty@intel.com/#22624705
+> [2]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@i=
+ntel.com/
+> [3]: https://lore.kernel.org/amd-gfx/YCVOl8%2F87bqRSQei@phenom.ffwll.loca=
+l/
 >
-> -       status = check_var_size(attributes, size + ucs2_strsize(name, 1024));
->         if (status != EFI_SUCCESS) {
->                 up(&efivars_lock);
->                 return -ENOSPC;
+> T.J. Mercier (6):
+>   gpu: rfc: Proposal for a GPU cgroup controller
+>   cgroup: gpu: Add a cgroup controller for allocator attribution of GPU
+>     memory
+>   dmabuf: Use the GPU cgroup charge/uncharge APIs
+>   dmabuf: heaps: export system_heap buffers with GPU cgroup charging
+>   dmabuf: Add gpu cgroup charge transfer function
+>   android: binder: Add a buffer flag to relinquish ownership of fds
 >
-> base-commit: 83e396641110663d3c7bb25b9bc0c6a750359ecf
+>  Documentation/gpu/rfc/gpu-cgroup.rst | 195 +++++++++++++++++
+>  Documentation/gpu/rfc/index.rst      |   4 +
+>  drivers/android/binder.c             |  26 +++
+>  drivers/dma-buf/dma-buf.c            | 100 +++++++++
+>  drivers/dma-buf/dma-heap.c           |  27 +++
+>  drivers/dma-buf/heaps/system_heap.c  |   3 +
+>  include/linux/cgroup_gpu.h           | 127 +++++++++++
+>  include/linux/cgroup_subsys.h        |   4 +
+>  include/linux/dma-buf.h              |  22 +-
+>  include/linux/dma-heap.h             |  11 +
+>  include/uapi/linux/android/binder.h  |   1 +
+>  init/Kconfig                         |   7 +
+>  kernel/cgroup/Makefile               |   1 +
+>  kernel/cgroup/gpu.c                  | 304 +++++++++++++++++++++++++++
+>  14 files changed, 830 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/gpu/rfc/gpu-cgroup.rst
+>  create mode 100644 include/linux/cgroup_gpu.h
+>  create mode 100644 kernel/cgroup/gpu.c
+>
 > --
-> 2.35.1.473.g83b2b277ed-goog
+> 2.35.1.265.g69c8d7142f-goog
 >
+
+Gentle nudge to GPU maintainers to please provide their feedback on
+this RFC. Thanks!

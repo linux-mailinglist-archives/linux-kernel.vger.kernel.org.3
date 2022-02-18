@@ -2,229 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529784BC30E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 00:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F024BC318
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 00:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240241AbiBRXyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 18:54:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42540 "EHLO
+        id S240252AbiBRX5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 18:57:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235407AbiBRXyM (ORCPT
+        with ESMTP id S240243AbiBRX5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 18:54:12 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A07D40A15
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:53:54 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id t11so3691019ioi.7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:53:54 -0800 (PST)
+        Fri, 18 Feb 2022 18:57:43 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8FA8A307
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:57:25 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 132so9161588pga.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:57:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rOpUiR8n3d/m0SdjK8sAMw/3CX7PN8XqlvE3BZ5rD0k=;
-        b=EGE1LgCBRl3NkHrHJw/T6Giq8BHqYXQjHi+CLUSqJR3UyprEz0GI72cPWPOH4usAiu
-         OuslpHfqCLmRXJHhk6EL3QXf8NnPRpsgTtfbqyJSnVTX6ZYBOUYVb/78tXu5mlOIkm7d
-         jX282FuwadAI0JSrM8kDvO44jcXyPPhyIxTMY=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RDMp4k3c0UgW7Xo+ygoRLLYEkiKw3xZ8wcdtVyJ0vL4=;
+        b=aLwMZPFKdGqQqiVIoUumDK/EfPQcSCX0ubaVlaDy+i8xaLI8jwmhPi8oKXzG/HRo6/
+         uTtDas0XVNazaKieivDWatWIrHVsRM7qY2zgKVy0M7hmmI35w8ME10D+lAW7qhBhgGWP
+         m+Dxvh9JAYfefpU8QTlZLwRIQzg+Zqk6WfUILdcrnePSxhuIw7Wuu3BzQuqdZj2soCxT
+         le2wK7AQWoZCB1thij/Uvz/M1nKCdVCj3UmXrDJncVU8hP2APjZg9vH2EXUGShQt1+G7
+         yXD5IzD/ksPazA7+ePtbV2DiU1zEG9t3ITh9g1CRkPlQSe7xemzEN/853j5Vhgzi4+rC
+         gEDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rOpUiR8n3d/m0SdjK8sAMw/3CX7PN8XqlvE3BZ5rD0k=;
-        b=qwrxq1FWO4aGBDG8LVte70cz9qxoytuLRsRibUGbugdXiZG+xfnvGRfIv8sd2clCFi
-         zen2UcBHMcbcN7sSxGT33eTOjC2/dH8u6z5RLeLW0IhlRJxkQLGGYOviM0oMOB7jWzB2
-         Mnb9RMFWBfZUPCvm0/qbVDdCIXqD/ECKoYmtRcn+ULdp63X4xbKAWWUZZGaTUO1tSLSN
-         jw4h/twPjsYq521nGcX4cMso4NQ71AjtOAmYcX7YEQ9C0itKMHc6GFQ0OBtJ368MM7v9
-         5zfjiGCs2xkNu6+G5sPmtvamFgQznJFgYIPoHMAkkaGC7aADRy0AouDEY65kcQdZYaZT
-         BANA==
-X-Gm-Message-State: AOAM530GHNurZUUQV7aVclhqgbX2BbK3EYRJLiH8r/vMpRRDHkdDHY6J
-        bHsCJ+oWMy4WFenmoi2AzP3oKg==
-X-Google-Smtp-Source: ABdhPJySxT0XluO0lLx8upzk8DdrfyQukZiJ56ChtE9EZNjdGXUhefD/cOScpUE2bMZuEOdTMtOBlA==
-X-Received: by 2002:a05:6638:1405:b0:30d:69cd:f44 with SMTP id k5-20020a056638140500b0030d69cd0f44mr6883109jad.208.1645228433847;
-        Fri, 18 Feb 2022 15:53:53 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id r7sm2317316ilc.24.2022.02.18.15.53.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 15:53:53 -0800 (PST)
-Subject: Re: [PATCH RESEND v6 5/9] cpupower: Introduce ACPI CPPC library
-To:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org
-Cc:     Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Jassmine Meng <li.meng@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216073558.751071-1-ray.huang@amd.com>
- <20220216073558.751071-6-ray.huang@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5e7bfce4-f326-930b-4a25-15538f741167@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 16:53:52 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RDMp4k3c0UgW7Xo+ygoRLLYEkiKw3xZ8wcdtVyJ0vL4=;
+        b=BY0u1WKZ6jT8fRRON/wffovMN1dsqN+CICJo9fQlxpSPWwAI6U+E1xe2vqJBdQVW/F
+         jcGKFMXAam/h1OUU1ax+fTgjGPKMJvF1VMaL+5tN2BH+nzAKcmtmSOYGtsscCAee4sqd
+         0uka1drm6J4IdYrO95ifihWmkl5XZoE2xEPBHyjT/rsWy3pMU4azVPLXUs6qEttPxudY
+         +ngl3sorr2Wzl8M+rSVcImoLfsZFw5zO6J6j0KYvzBUEI1YfeWUOESHS8a+ZUPQo88fU
+         3O7GUu1Q4M6F7xhyrFjZwwIM52Zdw5bGrYieCZ3UCjcs7LH8WQHc/+SAxr1O89Mw2TfM
+         kCow==
+X-Gm-Message-State: AOAM533pbiKXmqBlJeESTlRd9TYeQrI1e/lQqB38EOddS1A20JIv+f0/
+        F5Jbdg6p9j/xt84D/XvcZdrD5ozhy/ND7Q==
+X-Google-Smtp-Source: ABdhPJwmiG0Fo0cO3tyL7yYnQBUJyceU6pggtmEI9bajV5eb9gMQ2wDCIYtv2DhRFZL26muKP4+sVg==
+X-Received: by 2002:a63:ce44:0:b0:36c:d02:1f52 with SMTP id r4-20020a63ce44000000b0036c0d021f52mr8132996pgi.142.1645228644714;
+        Fri, 18 Feb 2022 15:57:24 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j12sm11424343pgf.63.2022.02.18.15.57.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 15:57:23 -0800 (PST)
+Date:   Fri, 18 Feb 2022 23:57:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 17/18] KVM: x86: flush TLB separately from MMU reset
+Message-ID: <YhAyX+Bc3x4+ZMTG@google.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-18-pbonzini@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20220216073558.751071-6-ray.huang@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217210340.312449-18-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 12:35 AM, Huang Rui wrote:
-> Kernel ACPI subsytem introduced the sysfs attributes for acpi cppc
-> library in below path:
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> For both CR0 and CR4, disassociate the TLB flush logic from the
+> MMU role logic.  Instead  of relying on kvm_mmu_reset_context() being
+> a superset of various TLB flushes (which is not necessarily going to
+> be the case in the future), always call it if the role changes
+> but also set the various TLB flush requests according to what is
+> in the manual.
 > 
-> /sys/devices/system/cpu/cpuX/acpi_cppc/
-> 
-> And these attributes will be used for AMD P-State driver to provide some
-> performance and frequency values.
-> 
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->   tools/power/cpupower/Makefile        |  6 +--
->   tools/power/cpupower/lib/acpi_cppc.c | 59 ++++++++++++++++++++++++++++
->   tools/power/cpupower/lib/acpi_cppc.h | 21 ++++++++++
->   3 files changed, 83 insertions(+), 3 deletions(-)
->   create mode 100644 tools/power/cpupower/lib/acpi_cppc.c
->   create mode 100644 tools/power/cpupower/lib/acpi_cppc.h
-> 
-> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-> index 3b1594447f29..e9b6de314654 100644
-> --- a/tools/power/cpupower/Makefile
-> +++ b/tools/power/cpupower/Makefile
-> @@ -143,9 +143,9 @@ UTIL_HEADERS = utils/helpers/helpers.h utils/idle_monitor/cpupower-monitor.h \
->   	utils/helpers/bitmask.h \
->   	utils/idle_monitor/idle_monitors.h utils/idle_monitor/idle_monitors.def
->   
-> -LIB_HEADERS = 	lib/cpufreq.h lib/cpupower.h lib/cpuidle.h
-> -LIB_SRC = 	lib/cpufreq.c lib/cpupower.c lib/cpuidle.c
-> -LIB_OBJS = 	lib/cpufreq.o lib/cpupower.o lib/cpuidle.o
-> +LIB_HEADERS = 	lib/cpufreq.h lib/cpupower.h lib/cpuidle.h lib/acpi_cppc.h
-> +LIB_SRC = 	lib/cpufreq.c lib/cpupower.c lib/cpuidle.c lib/acpi_cppc.c
-> +LIB_OBJS = 	lib/cpufreq.o lib/cpupower.o lib/cpuidle.o lib/acpi_cppc.o
->   LIB_OBJS :=	$(addprefix $(OUTPUT),$(LIB_OBJS))
->   
->   override CFLAGS +=	-pipe
-> diff --git a/tools/power/cpupower/lib/acpi_cppc.c b/tools/power/cpupower/lib/acpi_cppc.c
-> new file mode 100644
-> index 000000000000..a07a8922eca2
-> --- /dev/null
-> +++ b/tools/power/cpupower/lib/acpi_cppc.c
-> @@ -0,0 +1,59 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <stdio.h>
-> +#include <errno.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <sys/types.h>
-> +#include <sys/stat.h>
-> +#include <fcntl.h>
-> +#include <unistd.h>
-> +
-> +#include "cpupower_intern.h"
-> +#include "acpi_cppc.h"
-> +
-> +/* ACPI CPPC sysfs access ***********************************************/
-> +
-> +static int acpi_cppc_read_file(unsigned int cpu, const char *fname,
-> +			       char *buf, size_t buflen)
-> +{
-> +	char path[SYSFS_PATH_MAX];
-> +
-> +	snprintf(path, sizeof(path), PATH_TO_CPU "cpu%u/acpi_cppc/%s",
-> +		 cpu, fname);
-> +	return cpupower_read_sysfs(path, buf, buflen);
-> +}
-> +
-> +static const char *acpi_cppc_value_files[] = {
-> +	[HIGHEST_PERF] = "highest_perf",
-> +	[LOWEST_PERF] = "lowest_perf",
-> +	[NOMINAL_PERF] = "nominal_perf",
-> +	[LOWEST_NONLINEAR_PERF] = "lowest_nonlinear_perf",
-> +	[LOWEST_FREQ] = "lowest_freq",
-> +	[NOMINAL_FREQ] = "nominal_freq",
-> +	[REFERENCE_PERF] = "reference_perf",
-> +	[WRAPAROUND_TIME] = "wraparound_time"
-> +};
-> +
-> +unsigned long acpi_cppc_get_data(unsigned cpu, enum acpi_cppc_value which)
 
-unsigned int cpu
+Code is good, a few nits on comments.
 
-> +{
-> +	unsigned long long value;
-> +	unsigned int len;
-> +	char linebuf[MAX_LINE_LEN];
-> +	char *endp;
-> +
-> +	if (which >= MAX_CPPC_VALUE_FILES)
-> +		return 0;
-> +
-> +	len = acpi_cppc_read_file(cpu, acpi_cppc_value_files[which],
-> +				  linebuf, sizeof(linebuf));
-> +	if (len == 0)
-> +		return 0;
-> +
-> +	value = strtoull(linebuf, &endp, 0);
-> +
-> +	if (endp == linebuf || errno == ERANGE)
-> +		return 0;
-> +
-> +	return value;
-> +}
-> diff --git a/tools/power/cpupower/lib/acpi_cppc.h b/tools/power/cpupower/lib/acpi_cppc.h
-> new file mode 100644
-> index 000000000000..576291155224
-> --- /dev/null
-> +++ b/tools/power/cpupower/lib/acpi_cppc.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#ifndef __ACPI_CPPC_H__
-> +#define __ACPI_CPPC_H__
-> +
-> +enum acpi_cppc_value {
-> +	HIGHEST_PERF,
-> +	LOWEST_PERF,
-> +	NOMINAL_PERF,
-> +	LOWEST_NONLINEAR_PERF,
-> +	LOWEST_FREQ,
-> +	NOMINAL_FREQ,
-> +	REFERENCE_PERF,
-> +	WRAPAROUND_TIME,
-> +	MAX_CPPC_VALUE_FILES
-> +};
-> +
-> +extern unsigned long acpi_cppc_get_data(unsigned cpu,
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-extern prototype in .h?
-
-unsigned int cpu
-
-> +					enum acpi_cppc_value which);
+> @@ -1057,28 +1064,41 @@ EXPORT_SYMBOL_GPL(kvm_is_valid_cr4);
+>  
+>  void kvm_post_set_cr4(struct kvm_vcpu *vcpu, unsigned long old_cr4, unsigned long cr4)
+>  {
+> +	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
+> +		kvm_mmu_reset_context(vcpu);
 > +
-> +#endif /* _ACPI_CPPC_H */
-> 
+>  	/*
+> -	 * If any role bit is changed, the MMU needs to be reset.
+> -	 *
+> -	 * If CR4.PCIDE is changed 1 -> 0, the guest TLB must be flushed.
+>  	 * If CR4.PCIDE is changed 0 -> 1, there is no need to flush the TLB
+>  	 * according to the SDM; however, stale prev_roots could be reused
+>  	 * incorrectly in the future after a MOV to CR3 with NOFLUSH=1, so we
+> -	 * free them all.  KVM_REQ_MMU_RELOAD is fit for the both cases; it
+> -	 * is slow, but changing CR4.PCIDE is a rare case.
+> -	 *
+> -	 * If CR4.PGE is changed, the guest TLB must be flushed.
+> -	 *
+> -	 * Note: resetting MMU is a superset of KVM_REQ_MMU_RELOAD and
+> -	 * KVM_REQ_MMU_RELOAD is a superset of KVM_REQ_TLB_FLUSH_GUEST, hence
+> -	 * the usage of "else if".
+> +	 * free them all.  This is *not* a superset of KVM_REQ_TLB_FLUSH_GUEST
+> +	 * or KVM_REQ_TLB_FLUSH_CURRENT, because the hardware TLB is not flushed,
+> +	 * so fall through.
+>  	 */
+> -	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
+> -		kvm_mmu_reset_context(vcpu);
+> -	else if ((cr4 ^ old_cr4) & X86_CR4_PCIDE)
+> +	if (!tdp_enabled &&
+> +	    (cr4 & X86_CR4_PCIDE) && !(old_cr4 & X86_CR4_PCIDE))
+>  		kvm_make_request(KVM_REQ_MMU_RELOAD, vcpu);
+> -	else if ((cr4 ^ old_cr4) & X86_CR4_PGE)
+> -		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+> +
+> +	/*
+> +	 * The TLB has to be flushed for all PCIDs on:
+> +	 * - CR4.PCIDE changed from 1 to 0
 
-thanks,
--- Shuah
+Uber nit, grammatically this should use "a ... change", not "changed".  And I
+think it's worth calling out that the flush is architecturally required.
+Something like this, though I don't like using "conditions" to describe the
+cases (can't think of a bette word, obviously).
+
+	/*
+	 * A TLB flush for all PCIDs is architecturally required if any of the
+	 * following conditions is true:
+	 * - CR4.PCIDE is changed from 1 to 0
+	 * - CR4.PGE is toggled
+	 */
+
+> +	 * - any change to CR4.PGE
+> +	 *
+> +	 * This is a superset of KVM_REQ_TLB_FLUSH_CURRENT.
+> +	 */
+> +	if (((cr4 ^ old_cr4) & X86_CR4_PGE) ||
+> +	    (!(cr4 & X86_CR4_PCIDE) && (old_cr4 & X86_CR4_PCIDE)))
+> +		 kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+> +
+> +	/*
+> +	 * The TLB has to be flushed for the current PCID on:
+> +	 * - CR4.SMEP changed from 0 to 1
+> +	 * - any change to CR4.PAE
+> +	 */
+
+Same nit plus "architecturally required" feedback fo rthis one.
+
+> +	else if (((cr4 ^ old_cr4) & X86_CR4_PAE) ||
+> +		 ((cr4 & X86_CR4_SMEP) && !(old_cr4 & X86_CR4_SMEP)))
+> +		 kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
+> +
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_post_set_cr4);
+>  
+> @@ -11323,15 +11343,17 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  	static_call(kvm_x86_update_exception_bitmap)(vcpu);
+>  
+>  	/*
+> -	 * Reset the MMU context if paging was enabled prior to INIT (which is
+> +	 * A TLB flush is needed if paging was enabled prior to INIT (which is
+
+I appreciate the cleverness in changing only a single like, but I think both
+pieces warrant a mention.  How 'bout this, to squeak by with two lines?
+
+	/*
+	 * Reset the MMU and flush the TLB if paging was enabled (INIT only, as
+	 * CR0 is currently guaranteed to be '0' prior to RESET).  Unlike the
+
+>  	 * implied if CR0.PG=1 as CR0 will be '0' prior to RESET).  Unlike the
+>  	 * standard CR0/CR4/EFER modification paths, only CR0.PG needs to be
+>  	 * checked because it is unconditionally cleared on INIT and all other
+>  	 * paging related bits are ignored if paging is disabled, i.e. CR0.WP,
+>  	 * CR4, and EFER changes are all irrelevant if CR0.PG was '0'.
+>  	 */
+> -	if (old_cr0 & X86_CR0_PG)
+> +	if (old_cr0 & X86_CR0_PG) {
+> +		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+>  		kvm_mmu_reset_context(vcpu);
+> +	}
+>  
+>  	/*
+>  	 * Intel's SDM states that all TLB entries are flushed on INIT.  AMD's
+> -- 
+> 2.31.1

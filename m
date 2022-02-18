@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313A74BBBB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521F24BBBC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236759AbiBRPC0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 10:02:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44698 "EHLO
+        id S236747AbiBRPEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:04:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236718AbiBRPCT (ORCPT
+        with ESMTP id S234018AbiBRPEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:02:19 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEBD18D232;
-        Fri, 18 Feb 2022 07:02:00 -0800 (PST)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K0ZdT5fdXz67sHf;
-        Fri, 18 Feb 2022 23:01:01 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Feb 2022 16:01:57 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Fri, 18 Feb 2022 16:01:57 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
-Thread-Topic: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
-Thread-Index: AQHYImlgJM6Z1962JUm5hvc+dgM0dqyZawKA
-Date:   Fri, 18 Feb 2022 15:01:57 +0000
-Message-ID: <4513acbef98840199ff62124601cf455@huawei.com>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
-In-Reply-To: <20220215124042.186506-1-roberto.sassu@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 18 Feb 2022 10:04:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF84B29720E;
+        Fri, 18 Feb 2022 07:04:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D8F561D5A;
+        Fri, 18 Feb 2022 15:04:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B0EC340EF;
+        Fri, 18 Feb 2022 15:04:29 +0000 (UTC)
+Message-ID: <58bfb1fb-431d-a47d-ee9e-fbef89a700a0@xs4all.nl>
+Date:   Fri, 18 Feb 2022 16:04:28 +0100
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3 0/4] Add V4L stateless video decoder API support to
+ NVIDIA Tegra driver
+Content-Language: en-US
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220207141937.13089-1-digetx@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220207141937.13089-1-digetx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Roberto Sassu
-> Sent: Tuesday, February 15, 2022 1:41 PM
-> Extend the interoperability with IMA, to give wider flexibility for the
-> implementation of integrity-focused LSMs based on eBPF.
+Dmitry,
+
+On 07/02/2022 15:19, Dmitry Osipenko wrote:
+> Support V4L stateless video decoder API by NVIDIA Tegra decoder driver.
+> Tested using GStreamer [1] and libvdpau-tegra [2][8].
 > 
-> Patch 1 fixes some style issues.
+> [1] https://github.com/grate-driver/gstreamer/commit/b8509bdbb69b534e61419ea1798f32f9ad2f3597
+> [2] https://github.com/grate-driver/libvdpau-tegra/commit/f822e95911e5e0c39f8ba19f843ddc1e0138d5ce
+> [8] https://github.com/grate-driver/libvdpau-tegra/commit/80db4d02369f2a984ce3173d6bc305f32e9fdb97
+
+Nice work!
+
+Can you make a v4 that just moves the whole driver to drivers/media/platform? I see no
+reason for keeping this in staging.
+
+Once I have a v4 that does that I plan to make a PR for it.
+
+For the v4 don't forget to update MAINTAINERS with the new path and to drop the TODO
+file in staging.
+
+Regards,
+
+	Hans
+
 > 
-> Patches 2-4 gives the ability to eBPF-based LSMs to take advantage of the
-> measurement capability of IMA without needing to setup a policy in IMA
-> (those LSMs might implement the policy capability themselves).
+> Changelog:
 > 
-> Patches 5-6 allows eBPF-based LSMs to evaluate files read by the kernel.
-
-Hi everyone
-
-I published the new DIGLIM eBPF, that takes advantage of
-the new features introduced with this patch set:
-
-https://github.com/robertosassu/diglim-ebpf
-
-the eBPF program is in ebpf/diglim_kern.c
-
-If you could have a look and give me some comments
-or suggestions, it would be very appreciated!
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
-
-> Changelog
+> v3: - Added new decode_params flags [7] instead of V4L2_BUF_FLAG_*FRAME flags,
+>       as was suggested by Nicolas Dufresne.
 > 
-> v1:
-> - Modify ima_file_hash() only and allow the usage of the function with the
->   modified behavior by eBPF-based LSMs through the new function
->   bpf_ima_file_hash() (suggested by Mimi)
-> - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
->   and bpf_ima_file_hash() can be called inside the implementation of
->   eBPF-based LSMs for this hook
+>       [7] https://github.com/grate-driver/gstreamer/commit/c5cd847f9c26b7669720ae58f9058de2515f51a2
 > 
-> Roberto Sassu (6):
->   ima: Fix documentation-related warnings in ima_main.c
->   ima: Always return a file measurement in ima_file_hash()
->   bpf-lsm: Introduce new helper bpf_ima_file_hash()
->   selftests/bpf: Add test for bpf_ima_file_hash()
->   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
->   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
+>     - Added new patch that removes legacy UAPI.
 > 
->  include/uapi/linux/bpf.h                      | 11 +++++
->  kernel/bpf/bpf_lsm.c                          | 21 +++++++++
->  security/integrity/ima/ima_main.c             | 47 ++++++++++++-------
->  tools/include/uapi/linux/bpf.h                | 11 +++++
->  tools/testing/selftests/bpf/ima_setup.sh      |  2 +
->  .../selftests/bpf/prog_tests/test_ima.c       | 30 ++++++++++--
->  tools/testing/selftests/bpf/progs/ima.c       | 34 ++++++++++++--
->  7 files changed, 132 insertions(+), 24 deletions(-)
+> v2: - Made V4L2_BUF_FLAG_*FRAME flags mandatory [3] and dropped reading
+>       of raw bitstream from the driver code, as was suggested by
+>       Nicolas Dufresne.
 > 
-> --
-> 2.32.0
+>       [3] https://github.com/grate-driver/gstreamer/commit/aee292f0f2e84b7654a314dd7e63f916888ffaa5
+> 
+>     - Ran v4l2-compliance [4] and fluster [5][6] tests, like was suggested by
+>       Nicolas Dufresne. Fixed minor v4l2-compliance errors that were related
+>       to a partial initialization of the coded format and were harmless in
+>       practice, but made compliance checker unhappy.
+> 
+>       [4] https://gist.github.com/digetx/5d6bcdab633488f1dcc7c141ab90d30e
+>       [5] https://gist.github.com/digetx/b06c5d779e9d25afa41d9f46946fe399
+>       [6] https://gist.github.com/digetx/ac4198bc340e5065aa8ec3288bb21356
+> 
+> Dmitry Osipenko (4):
+>   media: v4l2-ctrls: Add new V4L2_H264_DECODE_PARAM_FLAG_P/BFRAME flags
+>   media: staging: tegra-vde: Factor out H.264 code
+>   media: staging: tegra-vde: Support V4L stateless video decoder API
+>   media: staging: tegra-vde: Remove legacy UAPI support
+> 
+>  .../media/v4l/ext-ctrls-codec-stateless.rst   |    6 +
+>  drivers/staging/media/tegra-vde/Kconfig       |    7 +
+>  drivers/staging/media/tegra-vde/Makefile      |    2 +-
+>  .../staging/media/tegra-vde/dmabuf-cache.c    |    2 +-
+>  drivers/staging/media/tegra-vde/h264.c        |  946 +++++++++++++++
+>  drivers/staging/media/tegra-vde/iommu.c       |    2 +-
+>  drivers/staging/media/tegra-vde/uapi.h        |   73 --
+>  drivers/staging/media/tegra-vde/v4l2.c        | 1018 +++++++++++++++++
+>  drivers/staging/media/tegra-vde/vde.c         |  945 ++-------------
+>  drivers/staging/media/tegra-vde/vde.h         |  121 +-
+>  include/uapi/linux/v4l2-controls.h            |    2 +
+>  11 files changed, 2170 insertions(+), 954 deletions(-)
+>  create mode 100644 drivers/staging/media/tegra-vde/h264.c
+>  delete mode 100644 drivers/staging/media/tegra-vde/uapi.h
+>  create mode 100644 drivers/staging/media/tegra-vde/v4l2.c
+> 
 

@@ -2,282 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551584BAF1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1A44BAF20
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiBRBPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 20:15:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39130 "EHLO
+        id S230424AbiBRBVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 20:21:38 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbiBRBPw (ORCPT
+        with ESMTP id S229567AbiBRBVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 20:15:52 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2481DE0DF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:15:36 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id i11so11072099eda.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:15:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zXsV9Jyymt/nwWGz9uZH/Iyco0WvTORuBxKnSlfp7oI=;
-        b=fU7BSnpLXBWOmmJoPAQivNE61esLhIPWkcQSJN442i6y0CnA8vPWiCBUOhyZVVrFcl
-         /3ClDPpjDOV7nMrns2LdUOmMxzUjucYb9djwOGt5LJ084myH9UndfcSzwBWlAOgVYhZK
-         4mnTuH275zrnEqc46QD/M3WvlknwEAuoGrQtKOzAbhBPTWSDYMibuSuHmk6Qv4KIP8I1
-         OsiFgTd4xpGRECf9h3k2YIsqNJRft1rvoBtR2OyM+NwFSxT5+4UnCoDNbujuFDIAs9lG
-         9R0/G9+ONnZ3vMhxa8oAjjSVj+u15vZHga6QQKy2Q9W6OdyQy5R1Q6WanC3mJ4kLBdyb
-         Tl1A==
+        Thu, 17 Feb 2022 20:21:36 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08052DF402
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:21:20 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id i7-20020a056e020ec700b002be118c9b21so3028890ilk.20
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:21:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zXsV9Jyymt/nwWGz9uZH/Iyco0WvTORuBxKnSlfp7oI=;
-        b=mD5FiQFPHYBS56vFxA2vn+/joMqeQ5k0oBETmIkZb4kDLzWupC3m1J7Z4xUydU7HZ2
-         MB9tHuGaGoC7/GpzKNl75g9Qy61+cJ5tJg3kmzfohB1OtRpM12MBwyKixfYj4e4dMfjj
-         E6a8Aw9qEkG/b3SSBVta2wZ9TQvHTlxfbJBpCiaIR+WgZ/cIaxLxYAf/HpK98LUdl5Cg
-         azRozaV4smfqlVI8d4e6Ev3kAgUB0RPdDvrUdYI7/RQ2xy4umDAzPxFk8jJGsw2OYs2o
-         pDzIcigk2cCf7ZZrG62m6Hgh6Z5NUJkz/Z98w5cMEhGYD2YzwIrairEkCjZJw+xat0f6
-         2h3Q==
-X-Gm-Message-State: AOAM5314nf881CBwUWPvcwrlXWh/FXfN1XrPOeLvNudbK8Gz4RLwkqrN
-        SJn8/mfq09BovxA6yVtF/GIs9h1Yh3eyxUc+XUgzzA==
-X-Google-Smtp-Source: ABdhPJzqSlqqE671jWYBd/RfHL4WSjO11rG3Hna0rwlH1kjD+XEZ8FoFQSZah7KJ2HbJk8lrYSzXW026FUjvKZjO0Jk=
-X-Received: by 2002:a50:c446:0:b0:40f:612b:e294 with SMTP id
- w6-20020a50c446000000b0040f612be294mr5572359edf.240.1645146934306; Thu, 17
- Feb 2022 17:15:34 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=PI4bJ+3UyFNIhL2gM6ZjIwlHECbqteu1Qx27eZtjvq0=;
+        b=o8ii6/4vDN5iCFJR3cf1Y2mc3/zZ05z29YjmGur2dgzR8ANPiq+MilNkhxp4Ud+Ixs
+         JR0pe98GuAarvQ/xe0UjjkmhKfEUe9PzVdKsqeJjafvZBBW9+wHFFQ1m4/Gp7fTvrtpz
+         Qr/ipaHUYEdRNeADP+5GLpaT2Jt5d1ddAR7UlwopAJrJPDmvnuHCjxfPBj8U+LCQG04/
+         nGS/j0cG2AIiUMSHwPwKQmtdCmNlO41DRYU9QAB1zmvfn8N9dw02RdmdHH9v3s0fFkP6
+         WTF9v+701PQgaBs+ZCL0EFtfmu6LYLY0azPBhmlSN2QbUAoABYVFC4+RPDgywpI0+cv6
+         3kLw==
+X-Gm-Message-State: AOAM531zGSgQ33CHaRdoaz8Y9tZ2glFWFx+DPYWn+gdH3eqSk0DMpujQ
+        oWpQd+qR8VQKxeHLc+2x0hWTaQZyvAUjJR7UQIxlERFMU7zQ
+X-Google-Smtp-Source: ABdhPJzMJrON2BfGCITlW3+eDZBkMBVufcpwdoMqqQUBSQYi62zjJDqVxJCzoKejc1qpyiIQn37+6yEdGUiIUI4TInkv67gcdYe3
 MIME-Version: 1.0
-References: <20220211023008.3197397-1-wonchung@google.com> <CAJZ5v0gD4zs3uBAYv6M4_1gNpkZ-g9XKOywJnf5007e6GwoGVA@mail.gmail.com>
- <CAOvb9yjpruiHxkZyZ8BOT0Hi_iV7xMOnBCr59BZX3eah_Zcy_w@mail.gmail.com>
- <CAOvb9yh7jo27NH32tbAOtkJrnC9LwUFgFbHRbdbArwiU+YSmdw@mail.gmail.com>
- <Ygt9B6+0b1hIBr5a@kuha.fi.intel.com> <CAJZ5v0hVZ1a9krnfW=ogdi+bpOpGDPvT12NxdstRRWjhNi+v3g@mail.gmail.com>
- <YgzhRgPD/eBw6UU3@kuha.fi.intel.com> <CAJZ5v0gQnbYv15EKXhicwHM5+Kp9sjv1QyscxagiC7isn-p1WA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gQnbYv15EKXhicwHM5+Kp9sjv1QyscxagiC7isn-p1WA@mail.gmail.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Thu, 17 Feb 2022 17:15:23 -0800
-Message-ID: <CAOvb9yhGMtA2+jzQ5KxBRDDtASQfA3BPxnHhCrgd_8E4umtiig@mail.gmail.com>
-Subject: Re: [PATCH v6] ACPI: device_sysfs: Add sysfs support for _PLD
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <greg@kroah.com>
+X-Received: by 2002:a02:a1d6:0:b0:314:af71:b38a with SMTP id
+ o22-20020a02a1d6000000b00314af71b38amr323871jah.95.1645147280047; Thu, 17 Feb
+ 2022 17:21:20 -0800 (PST)
+Date:   Thu, 17 Feb 2022 17:21:20 -0800
+In-Reply-To: <00000000000070ac6505d7d9f7a8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003b07b305d840b30f@google.com>
+Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
+From:   syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
+To:     jasowang@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 8:39 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Feb 16, 2022 at 12:34 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Tue, Feb 15, 2022 at 02:54:11PM +0100, Rafael J. Wysocki wrote:
-> > > On Tue, Feb 15, 2022 at 11:14 AM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > On Mon, Feb 14, 2022 at 02:58:44PM -0800, Won Chung wrote:
-> > > > > On Mon, Feb 14, 2022 at 12:30 PM Won Chung <wonchung@google.com> wrote:
-> > > > > >
-> > > > > > On Mon, Feb 14, 2022 at 11:12 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Fri, Feb 11, 2022 at 3:30 AM Won Chung <wonchung@google.com> wrote:
-> > > > > > > >
-> > > > > > > > When ACPI table includes _PLD fields for a device, create a new
-> > > > > > > > directory (pld) in sysfs to share _PLD fields.
-> > > > > > >
-> > > > > > > This version of the patch loos better to me, but I'm not sure if it
-> > > > > > > goes into the right direction overall.
-> > > > > > >
-> > > > > > > > Currently without PLD information, when there are multiple of same
-> > > > > > > > devices, it is hard to distinguish which device corresponds to which
-> > > > > > > > physical device in which location. For example, when there are two Type
-> > > > > > > > C connectors, it is hard to find out which connector corresponds to the
-> > > > > > > > Type C port on the left panel versus the Type C port on the right panel.
-> > > > > > >
-> > > > > > > So I think that this is your primary use case and I'm wondering if
-> > > > > > > this is the best way to address it.
-> > > > > > >
-> > > > > > > Namely, by exposing _PLD information under the ACPI device object,
-> > > > > > > you'll make user space wanting to use that information depend on this
-> > > > > > > interface, but the problem is not ACPI-specific (inevitably, it will
-> > > > > > > appear on systems using DT, sooner or later) and making the user space
-> > > > > > > interface related to it depend on ACPI doesn't look like a perfect
-> > > > > > > choice.
-> > > > > > >
-> > > > > > > IOW, why don't you create a proper ABI for this in the Type C
-> > > > > > > subsystem and expose the information needed by user space in a generic
-> > > > > > > way that can be based on the _PLD information on systems with ACPI?
-> > > > > >
-> > > > > > Hi Rafael,
-> > > > > >
-> > > > > > Thank you for the review.
-> > > > > >
-> > > > > > I was thinking that _PLD info is specific to ACPI since it is part of
-> > > > > > the ACPI table. Could you explain a little bit more on why you think
-> > > > > > exposing _PLD fields is not an ACPI-specific problem?
-> > > > >
-> > > > > Hi Rafael again,
-> > > > >
-> > > > > Sorry for the silly question here. I misunderstood your comment a bit,
-> > > > > but I talked to Benson and Prashant for clarification. I understand
-> > > > > now what you mean by it is not an ACPI-specific problem and exposing
-> > > > > PLD would depend on ACPI.
-> > > > >
-> > > > > >
-> > > > > > I gave an example of how _PLD fields can be used for specifying Type C
-> > > > > > connectors, but it is not Type C specific. For Chrome OS, we plan to
-> > > > > > initially add PLD to not only Type C connectors but also USB port
-> > > > > > devices (including Type C and Type A). Also, PLD can be used in the
-> > > > > > future for describing other types of ports too like HDMI. (Benson and
-> > > > > > Prashant, please correct or add if I am wrong or missing some
-> > > > > > information) Maybe my commit message was not detailed enough..
-> > > > > >
-> > > > > > I am also curious what Heikki thinks about this. Heikki, can you take
-> > > > > > a look and share your thoughts?
-> > > > >
-> > > > > I am still curious what you and Heikki think about this since it may
-> > > > > not be a Type C specific issue. We can start from adding generic
-> > > > > location info to Type C subsystem first, as you suggested, then
-> > > > > consider how to do the same for USB devices and Type A ports
-> > > > > afterwards. I would appreciate sharing any thoughts or feedback. Thank
-> > > > > you very much!
-> > > >
-> > > > Like you said, _PLD is not Type-C specific. We can't limit it to any
-> > > > specific device class. For example, I'm pretty sure that sooner or
-> > > > later we want to get this information in user space also with camera
-> > > > sensors, and probable with a few other things as well.
-> > > >
-> > > > I think the question here is, can we create a some kind of an
-> > > > abstraction layer for the user space that exposes the device location
-> > > > details in generic Linux specific way - so with ACPI it would utilise
-> > > > the _PLD, and with DT something else (today AFAIK DT does not have
-> > > > any way to describe locations of the devices). Maybe I'm wrong?
-> > >
-> > > No, you aren't.
-> > >
-> > > > But if that is the question, then IMO the answer is: maybe one day,
-> > > > but not today,
-> > >
-> > > Why not?
-> > >
-> > > > and even if we one day can come up with something like
-> > > > that, we still should expose the _PLD as ACPI specific information to
-> > > > the user space as is.
-> > >
-> > > Why would it need that information in this particular format?
-> > >
-> > > > Even if one day we have common sysfs attributes for all the devices
-> > > > that contain the location of the device in some form, those attributes
-> > > > will almost certainly have only a sub-set of the _PLD details, a
-> > > > sub-set that works also with DT.
-> > >
-> > > That doesn't have to be the case.
-> > >
-> > > However, things linke cpuidle have been invented to provide user space
-> > > interfaces for features that previously were only available on systems
-> > > with ACPI.  Why is _PLD different?
-> > >
-> > > > IMO the user space should always have access to all the necessary _PLD
-> > > > details in their raw form if needed, even if those common device
-> > > > location attributes exist - duplicated information or not.
-> > >
-> > > Again, why would it need that information?
-> >
-> > We don't know if we'll need that in the future, and that's the point.
->
-> Well, for me that would be a good enough reason for avoiding to expose it.
->
-> If there is no particular reason for exposing any information to user
-> space, I don't see why it should be exposed at all.
->
-> There is some cost of exposing things to user space, so why pay it for
-> no benefit?
->
-> > > > And debugfs
-> > > > unfortunately is also not OK for that, because the user space needs to
-> > > > be able to also rely on access to the additional details if needed.
-> > >
-> > > What additional details do you mean?
-> > >
-> > > > We can limit the _PLD fields that we expose to the ones that we know
-> > > > we need today (and probable should limit them to those), and we can of
-> > > > course have a Kconfig option for the _PLD sysfs information if we want
-> > > > to, but let's not start this by trying to figure out what kind of
-> > > > abstraction we want for this. Right now we simply can not do that.
-> > >
-> > > Why can't we?
-> >
-> > Right now we can't say for sure if DT can even supply the details that
-> > we need from _PLD. I don't think we can at the moment even say are the
-> > DT guys willing to support this at all.
-> >
-> > To play it safe, I would just supply the needed _PLD fields as part of
-> > the ACPI device nodes (under /sys/bus/acpi).
->
-> That would be suboptimal for a few reasons:
->
-> 1. The interface is potentially confusing.  User space would first
-> need to locate the ACPI device interface corresponding to the given
-> "real" device in order to use that information.
-> 2. It doesn't scale beyond ACPI.
-> 3. From the ACPI subsystem's perspective the choice of the "relevant"
-> _PLD fields is arbitrary and exposing all of them is overkill for any
-> use cases known to me.
-> 4. The ACPI subsystem doesn't know the devices for which _PLD
-> information should be exposed and there are some devices for which it
-> is just not useful.
->
-> > There we can guarantee
-> > that we'll always be able to supply all the information in the _PDL if
-> > needed. Since we would add these to the ACPI nodes, it would be
-> > crystal clear to the userspace that this information is only available
-> > on ACPI platforms.
->
-> I'm not considering this as a feature.
->
-> > Then if, and only if, we know that DT can supply the same information
-> > (at least to some of it) I would start thinking about the alternative
-> > interface to this information that we make part of the actual devices.
-> > Since at this point we have already the primary ACPI specific
-> > interface to this same information that guarantees that it can supply
-> > all the details if necessary, we don't have to worry about having to
-> > be able to do the same with this new interface. This interface can
-> > just expose the common details that we know for sure that both ACPI
-> > and DT can always supply.
->
-> Well, there is another possible approach: Expose the information
-> needed to address a particular use case in a way that doesn't strictly
-> depend on ACPI and make this use ACPI as a backend.  Don't worry about
-> the DT side of things.  If the generic interface is there and it is
-> suitable enough, DT will be in the receiving end position with much
-> less of a freedom to introduce a new interface for the same purpose.
->
-> On the other hand, if _PLD information is exposed in an ACPI-specific
-> way, it is almost guaranteed that there will be a DT-specific
-> interface for the same thing and utilities wanting to be generic will
-> need to support both of them which will be extra pain.  Some of them
-> will choose to support the DT-specific interface only and we'll end up
-> with utilities that can't be used on ACPI-based systems because of
-> incompatible interfaces.  Been there already.  Thanks, but no thanks!
+syzbot has found a reproducer for the following issue on:
 
-Hi Rafael,
+HEAD commit:    f71077a4d84b Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=104c04ca700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
+dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1362e232700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11373a6c700000
 
-Thank you for the feedback. If we add a generic location to type c
-connector, would you suggest we do something similar to other devices
-that would use PLD information? (like USB devices, HDMI ports, and so
-on) Also, I am curious what you think about how to add generic
-locations for Type A ports which I believe do not have connectors like
-Type C. I would appreciate it if anyone can share any ideas. Thank you
-very much!
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
 
-Won
+------------[ cut here ]------------
+kernel BUG at drivers/vhost/vhost.c:2335!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3597 Comm: vhost-3596 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
+Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
+ vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
+Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+

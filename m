@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDBE4BBE2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68174BBE18
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238519AbiBRRRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:17:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43214 "EHLO
+        id S238372AbiBRRQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:16:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238225AbiBRRPQ (ORCPT
+        with ESMTP id S238222AbiBRRPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 12:15:16 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927AA4D242
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2784C7B9
         for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:14:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=rPGVJZYhH4ZyFQ/kZLyDGtIj22GPwW8lW8znOgOBgT8=; b=F6uCfnrvRpVz4+Io2PvfrXyyus
-        doW04R77Zqu714SAf5jHzun6mbAudXXPYpcbRlXM6MZn+ViIUoLTzGJegcUbhU7Ce0LiD6gvL8GsJ
-        HpiBcsRydZQ71qoPdmfUkrpSx3qGsZZ5fGkSZmojK6VnhpmyZR7AuWTo1/cAlnnaedoyeDcf5SjrK
-        xwV1jnR1VYMZJQ5lzfj6F0Aam623y2+niraV0U+8ExIgXVmeu1s8K11ENmZmwwQrI+uZh7UxnZTtN
-        ye1nBNCLOLKt39aqNKO5HKRlP/l2k88zxSbFf+QYyWPv4gQbktCIo54kLRLArgYjoTtG9GTMmItTX
-        xsmqca1Q==;
+        bh=y1BqAPopW4amCojJ1jHN1wrCsivM9+TaKLpxGKtH/GM=; b=KKUyyjWyUvOV7Ek39FI/+dLZNo
+        eyZ/yITL8LPIvZxdZPJIq++byqeWX87lvihLv0Nf9kshC8CAXpXiuUDf+vGt7Rm4wEO4A0tmWUACZ
+        jBE4RxEAtB1ica0q97T93r66dGpPpgIkO8VlwKocFKPkW30OzgJB9844fvNXVm+UJrbLd/2vEUm+e
+        Rvb+bX5ABBqleM+ylkMlgqm7/JdmNHvkoU/iGnBcQaOdtgmvl6DxkHjjEKrRjYi9UzjSP4NO/DAPW
+        zva72nkgncY8ozKo/FhmNhIUVinDa0n/lB+7OLkeFlQw4h11kBLNLquYE667XbrSFIZjO3dbyXItz
+        e+Q6+Otg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nL6qA-00Gl8h-GT; Fri, 18 Feb 2022 17:14:42 +0000
+        id 1nL6qA-00Gl8i-Gr; Fri, 18 Feb 2022 17:14:42 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C936A301221;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C940630144C;
         Fri, 18 Feb 2022 18:14:39 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 3DF7A2096549D; Fri, 18 Feb 2022 18:14:39 +0100 (CET)
-Message-ID: <20220218171409.395399333@infradead.org>
+        id 40F6D2096F3D9; Fri, 18 Feb 2022 18:14:39 +0100 (CET)
+Message-ID: <20220218171409.456054276@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 18 Feb 2022 17:49:16 +0100
+Date:   Fri, 18 Feb 2022 17:49:17 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -46,7 +46,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         ndesaulniers@google.com, keescook@chromium.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com
-Subject: [PATCH 14/29] x86/ibt: Add IBT feature, MSR and #CP handling
+Subject: [PATCH 15/29] x86: Disable IBT around firmware
 References: <20220218164902.008644515@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,233 +60,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bits required to make the hardware go.. Of note is that, provided
-the syscall entry points are covered with ENDBR, #CP doesn't need to
-be an IST because we'll never hit the syscall gap.
+Assume firmware isn't IBT clean and disable it across calls.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/cpufeatures.h          |    1 
- arch/x86/include/asm/idtentry.h             |    5 ++
- arch/x86/include/asm/msr-index.h            |   20 ++++++++
- arch/x86/include/asm/traps.h                |    2 
- arch/x86/include/uapi/asm/processor-flags.h |    2 
- arch/x86/kernel/cpu/common.c                |   23 +++++++++
- arch/x86/kernel/idt.c                       |    4 +
- arch/x86/kernel/traps.c                     |   65 ++++++++++++++++++++++++++++
- 8 files changed, 121 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/efi.h   |    9 +++++++--
+ arch/x86/include/asm/ibt.h   |   10 ++++++++++
+ arch/x86/kernel/apm_32.c     |    7 +++++++
+ arch/x86/kernel/cpu/common.c |   28 ++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+), 2 deletions(-)
 
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -387,6 +387,7 @@
- #define X86_FEATURE_TSXLDTRK		(18*32+16) /* TSX Suspend Load Address Tracking */
- #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
- #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
-+#define X86_FEATURE_IBT			(18*32+20) /* Indirect Branch Tracking */
- #define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
- #define X86_FEATURE_AVX512_FP16		(18*32+23) /* AVX512 FP16 */
- #define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -622,6 +622,11 @@ DECLARE_IDTENTRY_DF(X86_TRAP_DF,	exc_dou
- DECLARE_IDTENTRY_RAW_ERRORCODE(X86_TRAP_DF,	xenpv_exc_double_fault);
- #endif
+--- a/arch/x86/include/asm/efi.h
++++ b/arch/x86/include/asm/efi.h
+@@ -7,6 +7,7 @@
+ #include <asm/tlb.h>
+ #include <asm/nospec-branch.h>
+ #include <asm/mmu_context.h>
++#include <asm/ibt.h>
+ #include <linux/build_bug.h>
+ #include <linux/kernel.h>
+ #include <linux/pgtable.h>
+@@ -120,8 +121,12 @@ extern asmlinkage u64 __efi_call(void *f
+ 	efi_enter_mm();							\
+ })
  
-+/* #CP */
-+#ifdef CONFIG_X86_IBT
-+DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP,	exc_control_protection);
-+#endif
+-#define arch_efi_call_virt(p, f, args...)				\
+-	efi_call((void *)p->f, args)					\
++#define arch_efi_call_virt(p, f, args...) ({				\
++	u64 ret, ibt = ibt_save();					\
++	ret = efi_call((void *)p->f, args);				\
++	ibt_restore(ibt);						\
++	ret;								\
++})
+ 
+ #define arch_efi_call_virt_teardown()					\
+ ({									\
+--- a/arch/x86/include/asm/ibt.h
++++ b/arch/x86/include/asm/ibt.h
+@@ -6,6 +6,8 @@
+ 
+ #ifndef __ASSEMBLY__
+ 
++#include <linux/types.h>
 +
- /* #VC */
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- DECLARE_IDTENTRY_VC(X86_TRAP_VC,	exc_vmm_communication);
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -360,11 +360,29 @@
- #define MSR_ATOM_CORE_TURBO_RATIOS	0x0000066c
- #define MSR_ATOM_CORE_TURBO_VIDS	0x0000066d
+ #ifdef CONFIG_X86_64
+ #define ASM_ENDBR	"endbr64\n\t"
+ #else
+@@ -25,6 +27,9 @@ static inline bool is_endbr(const void *
+ 	return val == ~0xfa1e0ff3;
+ }
  
--
- #define MSR_CORE_PERF_LIMIT_REASONS	0x00000690
- #define MSR_GFX_PERF_LIMIT_REASONS	0x000006B0
- #define MSR_RING_PERF_LIMIT_REASONS	0x000006B1
- 
-+/* Control-flow Enforcement Technology MSRs */
-+#define MSR_IA32_U_CET			0x000006a0 /* user mode cet */
-+#define MSR_IA32_S_CET			0x000006a2 /* kernel mode cet */
-+#define CET_SHSTK_EN			BIT_ULL(0)
-+#define CET_WRSS_EN			BIT_ULL(1)
-+#define CET_ENDBR_EN			BIT_ULL(2)
-+#define CET_LEG_IW_EN			BIT_ULL(3)
-+#define CET_NO_TRACK_EN			BIT_ULL(4)
-+#define CET_SUPPRESS_DISABLE		BIT_ULL(5)
-+#define CET_RESERVED			(BIT_ULL(6) | BIT_ULL(7) | BIT_ULL(8) | BIT_ULL(9))
-+#define CET_SUPPRESS			BIT_ULL(10)
-+#define CET_WAIT_ENDBR			BIT_ULL(11)
++extern u64 ibt_save(void);
++extern void ibt_restore(u64 save);
 +
-+#define MSR_IA32_PL0_SSP		0x000006a4 /* ring-0 shadow stack pointer */
-+#define MSR_IA32_PL1_SSP		0x000006a5 /* ring-1 shadow stack pointer */
-+#define MSR_IA32_PL2_SSP		0x000006a6 /* ring-2 shadow stack pointer */
-+#define MSR_IA32_PL3_SSP		0x000006a7 /* ring-3 shadow stack pointer */
-+#define MSR_IA32_INT_SSP_TAB		0x000006a8 /* exception shadow stack table */
-+
- /* Hardware P state interface */
- #define MSR_PPERF			0x0000064e
- #define MSR_PERF_LIMIT_REASONS		0x0000064f
---- a/arch/x86/include/asm/traps.h
-+++ b/arch/x86/include/asm/traps.h
-@@ -18,6 +18,8 @@ void __init trap_init(void);
- asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt_regs *eregs);
- #endif
+ #else /* __ASSEMBLY__ */
  
-+extern bool ibt_selftest(void);
-+
- #ifdef CONFIG_X86_F00F_BUG
- /* For handling the FOOF bug */
- void handle_invalid_op(struct pt_regs *regs);
---- a/arch/x86/include/uapi/asm/processor-flags.h
-+++ b/arch/x86/include/uapi/asm/processor-flags.h
-@@ -130,6 +130,8 @@
- #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
- #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
- #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
-+#define X86_CR4_CET_BIT		23 /* enable Control-flow Enforcement Technology */
-+#define X86_CR4_CET		_BITUL(X86_CR4_CET_BIT)
+ #ifdef CONFIG_X86_64
+@@ -39,10 +44,15 @@ static inline bool is_endbr(const void *
  
- /*
-  * x86-64 Task Priority Register, CR8
+ #ifndef __ASSEMBLY__
+ 
++#include <linux/types.h>
++
+ #define ASM_ENDBR
+ 
+ #define __noendbr
+ 
++static inline u64 ibt_save(void) { return 0; }
++static inline void ibt_restore(u64 save) { }
++
+ #else /* __ASSEMBLY__ */
+ 
+ #define ENDBR
+--- a/arch/x86/kernel/apm_32.c
++++ b/arch/x86/kernel/apm_32.c
+@@ -232,6 +232,7 @@
+ #include <asm/paravirt.h>
+ #include <asm/reboot.h>
+ #include <asm/nospec-branch.h>
++#include <asm/ibt.h>
+ 
+ #if defined(CONFIG_APM_DISPLAY_BLANK) && defined(CONFIG_VT)
+ extern int (*console_blank_hook)(int);
+@@ -598,6 +599,7 @@ static long __apm_bios_call(void *_call)
+ 	struct desc_struct	save_desc_40;
+ 	struct desc_struct	*gdt;
+ 	struct apm_bios_call	*call = _call;
++	u64			ibt;
+ 
+ 	cpu = get_cpu();
+ 	BUG_ON(cpu != 0);
+@@ -607,11 +609,13 @@ static long __apm_bios_call(void *_call)
+ 
+ 	apm_irq_save(flags);
+ 	firmware_restrict_branch_speculation_start();
++	ibt = ibt_save();
+ 	APM_DO_SAVE_SEGS;
+ 	apm_bios_call_asm(call->func, call->ebx, call->ecx,
+ 			  &call->eax, &call->ebx, &call->ecx, &call->edx,
+ 			  &call->esi);
+ 	APM_DO_RESTORE_SEGS;
++	ibt_restore(ibt);
+ 	firmware_restrict_branch_speculation_end();
+ 	apm_irq_restore(flags);
+ 	gdt[0x40 / 8] = save_desc_40;
+@@ -676,6 +680,7 @@ static long __apm_bios_call_simple(void
+ 	struct desc_struct	save_desc_40;
+ 	struct desc_struct	*gdt;
+ 	struct apm_bios_call	*call = _call;
++	u64			ibt;
+ 
+ 	cpu = get_cpu();
+ 	BUG_ON(cpu != 0);
+@@ -685,10 +690,12 @@ static long __apm_bios_call_simple(void
+ 
+ 	apm_irq_save(flags);
+ 	firmware_restrict_branch_speculation_start();
++	ibt = ibt_save();
+ 	APM_DO_SAVE_SEGS;
+ 	error = apm_bios_call_simple_asm(call->func, call->ebx, call->ecx,
+ 					 &call->eax);
+ 	APM_DO_RESTORE_SEGS;
++	ibt_restore(ibt);
+ 	firmware_restrict_branch_speculation_end();
+ 	apm_irq_restore(flags);
+ 	gdt[0x40 / 8] = save_desc_40;
 --- a/arch/x86/kernel/cpu/common.c
 +++ b/arch/x86/kernel/cpu/common.c
-@@ -59,6 +59,7 @@
- #include <asm/cpu_device_id.h>
- #include <asm/uv/uv.h>
- #include <asm/sigframe.h>
-+#include <asm/traps.h>
- 
- #include "cpu.h"
- 
-@@ -592,6 +593,27 @@ static __init int setup_disable_pku(char
+@@ -592,6 +592,34 @@ static __init int setup_disable_pku(char
  __setup("nopku", setup_disable_pku);
  #endif /* CONFIG_X86_64 */
  
-+static __always_inline void setup_cet(struct cpuinfo_x86 *c)
++#ifdef CONFIG_X86_IBT
++
++u64 ibt_save(void)
++{
++	u64 msr = 0;
++
++	if (cpu_feature_enabled(X86_FEATURE_IBT)) {
++		rdmsrl(MSR_IA32_S_CET, msr);
++		wrmsrl(MSR_IA32_S_CET, msr & ~CET_ENDBR_EN);
++	}
++
++	return msr;
++}
++
++void ibt_restore(u64 save)
 +{
 +	u64 msr;
 +
-+	if (!IS_ENABLED(CONFIG_X86_IBT) ||
-+	    !cpu_feature_enabled(X86_FEATURE_IBT))
-+		return;
-+
-+	cr4_set_bits(X86_CR4_CET);
-+
-+	rdmsrl(MSR_IA32_S_CET, msr);
-+	if (cpu_feature_enabled(X86_FEATURE_IBT))
-+		msr |= CET_ENDBR_EN;
-+	wrmsrl(MSR_IA32_S_CET, msr);
-+
-+	if (!ibt_selftest()) {
-+		pr_err("IBT selftest: Failed!\n");
-+		setup_clear_cpu_cap(X86_FEATURE_IBT);
++	if (cpu_feature_enabled(X86_FEATURE_IBT)) {
++		rdmsrl(MSR_IA32_S_CET, msr);
++		msr &= ~CET_ENDBR_EN;
++		msr |= (save & CET_ENDBR_EN);
++		wrmsrl(MSR_IA32_S_CET, msr);
 +	}
 +}
 +
- /*
-  * Some CPU features depend on higher CPUID levels, which may not always
-  * be available due to CPUID level capping or broken virtualization
-@@ -1709,6 +1731,7 @@ static void identify_cpu(struct cpuinfo_
- 
- 	x86_init_rdrand(c);
- 	setup_pku(c);
-+	setup_cet(c);
- 
- 	/*
- 	 * Clear/Set all flags overridden by options, need do it
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -104,6 +104,10 @@ static const __initconst struct idt_data
- 	ISTG(X86_TRAP_MC,		asm_exc_machine_check, IST_INDEX_MCE),
- #endif
- 
-+#ifdef CONFIG_X86_IBT
-+	INTG(X86_TRAP_CP,		asm_exc_control_protection),
 +#endif
 +
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- 	ISTG(X86_TRAP_VC,		asm_exc_vmm_communication, IST_INDEX_VC),
- #endif
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -210,6 +210,71 @@ DEFINE_IDTENTRY(exc_overflow)
- 	do_error_trap(regs, 0, "overflow", X86_TRAP_OF, SIGSEGV, 0, NULL);
- }
- 
-+#ifdef CONFIG_X86_IBT
-+
-+static bool ibt_fatal = true;
-+
-+extern unsigned long ibt_selftest_ip; /* defined in asm beow */
-+static volatile bool ibt_selftest_ok = false;
-+
-+DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-+{
-+	if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
-+		pr_err("Whaaa?!?!\n");
-+		return;
-+	}
-+
-+	if (WARN_ON_ONCE(user_mode(regs) || error_code != 3))
-+		return;
-+
-+	if (unlikely(regs->ip == ibt_selftest_ip)) {
-+		ibt_selftest_ok = true;
-+		return;
-+	}
-+
-+	pr_err("Missing ENDBR: %pS\n", (void *)instruction_pointer(regs));
-+	BUG_ON(ibt_fatal);
-+}
-+
-+bool ibt_selftest(void)
-+{
-+	ibt_selftest_ok = false;
-+
-+	asm (ANNOTATE_NOENDBR
-+	     "1: lea 2f(%%rip), %%rax\n\t"
-+	     ANNOTATE_RETPOLINE_SAFE
-+	     "   jmp *%%rax\n\t"
-+	     "2: nop\n\t"
-+
-+	     /* unsigned ibt_selftest_ip = 2b */
-+	     ".pushsection .data,\"aw\"\n\t"
-+	     ".align 8\n\t"
-+	     ".type ibt_selftest_ip, @object\n\t"
-+	     ".size ibt_selftest_ip, 8\n\t"
-+	     "ibt_selftest_ip:\n\t"
-+	     ".quad 2b\n\t"
-+	     ".popsection\n\t"
-+
-+	     : : : "rax", "memory");
-+
-+	return ibt_selftest_ok;
-+}
-+
-+static int __init ibt_setup(char *str)
-+{
-+	if (!strcmp(str, "off"))
-+		setup_clear_cpu_cap(X86_FEATURE_IBT);
-+
-+	if (!strcmp(str, "warn"))
-+		ibt_fatal = false;
-+
-+	return 1;
-+}
-+
-+__setup("ibt=", ibt_setup);
-+
-+#endif /* CONFIG_X86_IBT */
-+
- #ifdef CONFIG_X86_F00F_BUG
- void handle_invalid_op(struct pt_regs *regs)
- #else
+ static __always_inline void setup_cet(struct cpuinfo_x86 *c)
+ {
+ 	u64 msr;
 
 

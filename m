@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976984BBA2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59B74BBA2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235782AbiBRNhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 08:37:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45162 "EHLO
+        id S235790AbiBRNiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 08:38:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbiBRNhC (ORCPT
+        with ESMTP id S232474AbiBRNiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 08:37:02 -0500
+        Fri, 18 Feb 2022 08:38:03 -0500
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AF320F6F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:36:45 -0800 (PST)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA3E1AA256
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:37:45 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 273D840304
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:36:44 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E10EA40306
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:37:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645191404;
-        bh=H/bO0aBxUyDz5Z1iaHc3hPM9Zt6+vPNG7kqFlweb1Sg=;
+        s=20210705; t=1645191463;
+        bh=5wR2inrb50SGryPV3ql5qm7RIRt9i7gNq/sby+Clcps=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=doVSvq0XpiLf28mQ6nkMDU7O+44dmL9pBuOe05xIXkeOZzmv34PfgvXhKagkH7q/V
-         y1Sgox/TGi5bqyqsL3LS9YaxYv6PtUGAgbv6AAYpCRCUAJUeAhwLJ1ZE1qo3fPcyT8
-         jjYd+iuTCrmu5D0ni1BVc4DzzdgNavnmqwCu3P7pTeOVC42VbNHoB6kvVNzBnYnzbH
-         1l771xw9oFGcE5T2kX/k65r91Fc5srjIOPy+00xwI2ROEC0G9EfDRgV1G/5Cn11wSR
-         3wha+6WsMrC0Hy8eK8+lZEfYKEEYGo0/HNscGyT+mi9H+oboqySm3vTEEDLQuQZ14y
-         794L7O6WxgP+w==
-Received: by mail-wr1-f69.google.com with SMTP id h24-20020adfaa98000000b001e33eb81e71so3578890wrc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:36:44 -0800 (PST)
+        b=qZuo+9Csuk+9lm4KjCfI9sOW1y/+M6zZS6c2K7eLmCTFmq7gOMj4jzO1lD+pclrtQ
+         7RF8NbzT9DWNJbOzZI1lFfv3hfRWMheQyQXkuXXBrnblME10x1269GVi5H8N5Xx6BY
+         cHR31WadHXSYtlqZZBKcQQsStuOO+aqTk/dOERY48V5RNU5U2DvaNKkYu0b5R/tHYD
+         xhZ63bm9Kxz8uGlrq26o33GPw30N0oNRmJ12BegPlzmOqCTWveCGeb+b9iPTbs3d6r
+         v/oSTcD9BYTSWccymiWo8KPHqeUo+5SIo4EMBHR6lwpDCzvoAG79RnT+gRBNKVV8HC
+         y8PJPCvADzAwQ==
+Received: by mail-wm1-f69.google.com with SMTP id 125-20020a1c0283000000b0037bf720e6a8so5935018wmc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:37:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=H/bO0aBxUyDz5Z1iaHc3hPM9Zt6+vPNG7kqFlweb1Sg=;
-        b=eftvCTNHbx3nlESI0RAiqHzOObFWcOktsVEfXDiURPGiBuXa8bR3qsbq8DlZur5JcZ
-         bX5LVwP5gcTBosev42KizxdR6ijCLMm29OiXOaf0KS6aZu8nqH/iC+SeFaxHmKniTyQG
-         +daZrYIkE7IH47RSI/mtW+m9MqoTfFEl6TGpnpVIgqqWw5NQf1QOAXKIzSCQmfuapYue
-         zgeKoyuGkVO9ByagLnkVPnbz6Pje3/T/08eF9ddvfn3FPTJaAxbrOzd3oeQ4cXFAJ2Fx
-         QmHw7AMfYuTIrirVenBVJSa6PRDEkK7Im+514fLj/Lq/be8npwLJ0fHmlvWwm07Ktvk7
-         mBuQ==
-X-Gm-Message-State: AOAM530ij3QiZdN3/MW+6mfznJHwfMziWbGb1fgOIy0G78tSYxVFy3Vy
-        fdh9lz+o6sTmcGJI3a2k3G5kFTwns54ckACo1WKuPdQs6IC7TyzfdZvtx0SL5MAyr+w22n8AGQb
-        L0X5/UTpxHXdR9R3FSrAkeftpJBhGYfVJ7s+8WvFZNg==
-X-Received: by 2002:adf:c188:0:b0:1e6:8ecb:ea5a with SMTP id x8-20020adfc188000000b001e68ecbea5amr5888271wre.711.1645191402135;
-        Fri, 18 Feb 2022 05:36:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyONeVylq+VBkXW8VpHpa9vSjAFyqnAnqrsQ2M08ZZvxaC3/JU4jOZLRotcih0KkieDFRj/qg==
-X-Received: by 2002:adf:c188:0:b0:1e6:8ecb:ea5a with SMTP id x8-20020adfc188000000b001e68ecbea5amr5888255wre.711.1645191401906;
-        Fri, 18 Feb 2022 05:36:41 -0800 (PST)
+        bh=5wR2inrb50SGryPV3ql5qm7RIRt9i7gNq/sby+Clcps=;
+        b=34QPEzkRKqVCPCwhJH8ovzsInp3kBTSFOs15kiAsTvB13W4OwuP4nzptstm5dLufni
+         /deRnS6eOoIYUJl1yg0EhNMTLFNPz/5/n1AgKvaHGVibNiYciAQcNp1KQuMiy3lGxnVr
+         uH4BAz0/pDO6wkjZLQfYpezVHiGC1j9/u+0hltcSG7LUcGOjdc4nHAM2rW1mE8V+eaIc
+         ODOLfi/aUvtY0GgYq2mupGMiBfmrtLnhQ3ZBG5msjYUO9s1+IEkS9GuOU2zqcSyARveU
+         5EPsdyr4JDGoy3i7k+hXRmkt8YejpgEyeA9tkfKoDtMze8YwwtEj5ciQYFL7aXsQXkKH
+         u06w==
+X-Gm-Message-State: AOAM530U0/1Xapo5TGyPyoFperfY6Ua2gzt+HlBEdvwLJxrIkPVrBv7u
+        mD+mk3Kf1sBF4p5nuzRl83cM32HDPWejXs7wGEmbAwNHLBEbL19X2ee2L8kxttZPDOM/SQ1YeRt
+        mk04qaBzt3tvGarZcQE4dcyzvQPXQa186E5wPnzP/VQ==
+X-Received: by 2002:a1c:7715:0:b0:37b:dc94:9eb4 with SMTP id t21-20020a1c7715000000b0037bdc949eb4mr7292831wmi.61.1645191463169;
+        Fri, 18 Feb 2022 05:37:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz1rOcJLLe1sMpbmzJaKzZ9MrfRNf1PgF+TEXDfRIfQBwQQMxq9mXwaThHJyZuyQwyiE6VwOg==
+X-Received: by 2002:a1c:7715:0:b0:37b:dc94:9eb4 with SMTP id t21-20020a1c7715000000b0037bdc949eb4mr7292811wmi.61.1645191463026;
+        Fri, 18 Feb 2022 05:37:43 -0800 (PST)
 Received: from localhost.localdomain (lfbn-gre-1-195-1.w90-112.abo.wanadoo.fr. [90.112.158.1])
-        by smtp.gmail.com with ESMTPSA id z7sm4146155wml.40.2022.02.18.05.36.41
+        by smtp.gmail.com with ESMTPSA id h21sm4886378wmq.26.2022.02.18.05.37.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 05:36:41 -0800 (PST)
+        Fri, 18 Feb 2022 05:37:42 -0800 (PST)
 From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -70,9 +70,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Nick Hu <nickhu@andestech.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         kasan-dev@googlegroups.com
-Subject: [PATCH -fixes 1/4] riscv: Fix is_linear_mapping with recent move of KASAN region
-Date:   Fri, 18 Feb 2022 14:35:10 +0100
-Message-Id: <20220218133513.1762929-2-alexandre.ghiti@canonical.com>
+Subject: [PATCH -fixes 2/4] riscv: Fix config KASAN && SPARSEMEM && !SPARSE_VMEMMAP
+Date:   Fri, 18 Feb 2022 14:35:11 +0100
+Message-Id: <20220218133513.1762929-3-alexandre.ghiti@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220218133513.1762929-1-alexandre.ghiti@canonical.com>
 References: <20220218133513.1762929-1-alexandre.ghiti@canonical.com>
@@ -88,31 +88,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN region was recently moved between the linear mapping and the
-kernel mapping, is_linear_mapping used to check the validity of an
-address by using the start of the kernel mapping, which is now wrong.
+In order to get the pfn of a struct page* when sparsemem is enabled
+without vmemmap, the mem_section structures need to be initialized which
+happens in sparse_init.
 
-Fix this by using the maximum size of the physical memory.
+But kasan_early_init calls pfn_to_page way before sparse_init is called,
+which then tries to dereference a null mem_section pointer.
 
-Fixes: f7ae02333d13 ("riscv: Move KASAN mapping next to the kernel mapping")
+Fix this by removing the usage of this function in kasan_early_init.
+
+Fixes: 8ad8b72721d0 ("riscv: Add KASAN support")
 Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 ---
- arch/riscv/include/asm/page.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/mm/kasan_init.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index 160e3a1e8f8b..004372f8da54 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -119,7 +119,7 @@ extern phys_addr_t phys_ram_base;
- 	((x) >= kernel_map.virt_addr && (x) < (kernel_map.virt_addr + kernel_map.size))
+diff --git a/arch/riscv/mm/kasan_init.c b/arch/riscv/mm/kasan_init.c
+index f61f7ca6fe0f..85e849318389 100644
+--- a/arch/riscv/mm/kasan_init.c
++++ b/arch/riscv/mm/kasan_init.c
+@@ -202,8 +202,7 @@ asmlinkage void __init kasan_early_init(void)
  
- #define is_linear_mapping(x)	\
--	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < kernel_map.virt_addr))
-+	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
+ 	for (i = 0; i < PTRS_PER_PTE; ++i)
+ 		set_pte(kasan_early_shadow_pte + i,
+-			mk_pte(virt_to_page(kasan_early_shadow_page),
+-			       PAGE_KERNEL));
++			pfn_pte(virt_to_pfn(kasan_early_shadow_page), PAGE_KERNEL));
  
- #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
- #define kernel_mapping_pa_to_va(y)	({						\
+ 	for (i = 0; i < PTRS_PER_PMD; ++i)
+ 		set_pmd(kasan_early_shadow_pmd + i,
 -- 
 2.32.0
 

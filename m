@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E8F4BBF53
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D344BBF4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239095AbiBRSRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:17:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53456 "EHLO
+        id S239117AbiBRSRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:17:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239066AbiBRSRC (ORCPT
+        with ESMTP id S239074AbiBRSRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:17:02 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDC4E46;
-        Fri, 18 Feb 2022 10:16:45 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id x5so11077970wrg.13;
-        Fri, 18 Feb 2022 10:16:44 -0800 (PST)
+        Fri, 18 Feb 2022 13:17:04 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16E42655;
+        Fri, 18 Feb 2022 10:16:46 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h6so15903724wrb.9;
+        Fri, 18 Feb 2022 10:16:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4uog9y8e2uGEDe7ul64TEQZKDjtI1qlVaFMwkdOVDqo=;
-        b=BcRgIjpCjdKsmD1hifDCxyFo7H8M+pelERGXldq/KXqEHk6EkcL0zFiu1G2aBagFdw
-         Ycm5NTRmPepuel/RcIcGgKLiU63n4TeV+wyDXRQ74M4FfpY9yra8PkRUVI48MD9yG7X6
-         LEsAaWL5q0YdJq3jali0uTa0KMBZOxnI4jQ0urGcoSyxmBiv1rsDzRtPxxxklKpUyb5r
-         6z2rnXkWYoN+Lq2hCHKajRhJNEvXBF0jL8vhdiFU+GuxEe07eDxUGJB/iZCbZtRv9xPD
-         VxRiKf2hf3QCBy1JgYQi+77olsvbVEeYpN76PCxKMuPZsDn552gH3dfHts44S+phhn0Z
-         0BtQ==
+        bh=sVpw/YkSpECxioHiJcwwjO5cIgkz+JQrp0Z1102tsjs=;
+        b=WMEnfHw96wCX1wphCv5/NoHdkP+bH/Booqpf2gva3Qsnq1R2UY6qm8wGmfuwDem2se
+         aeJSSeQe2dShQ4tJVADNkDfDAy7ySS3vbdeh0KgNLfZBiiB4Y8frX8tuRMEfltB69i/M
+         sl6YxSABSWDm9MSXmAai7ccUigRl4mDbU2ODjAaRGk6Gl49Zr12BNmWxKULtOIkISX1E
+         OAv8qKYoOCZ74TEetkUTK5IUOK0vNoUZOyyt4+dAzJxuZE/64ekRG2rXa0eMwOwJ1wH+
+         MMoXac89ZygyNDk0YpAy82ABrk/fGmUBWQlzUWFy2DIZZxgmqScawfILyB2ir+X+5KIu
+         KqTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4uog9y8e2uGEDe7ul64TEQZKDjtI1qlVaFMwkdOVDqo=;
-        b=qEWj5OruEeRwzOxjV3rWIeBfi7mCh6EC0UTc4Tk5UnLy4i8VaE7bHpbHTBWOqplZCj
-         jnbk8Qgc2GiZ7ApgbKbDIrK33h6o+jg+16/2cLmLq9fXlUJn31v1PQwP5qp7PGcp8lWO
-         HuQF6EJ/46I0OgdTwaMFTpTVFJvungvzmgLSy1LQsaX7UOrkNzr2fN6W2C1djleJQ5zf
-         8D1vBZseh3RlHCoIpEcAk8v18RcmeHsZ7ND6wM8oBchtq+F/8r7JC2ROGUqcT2fhM5U6
-         0YsK44OZ3UhsUqLEgPl4kK7kUsi3gmNO494QDvdxMCOM+qqU2aOz5+hYg5wKmHOW1Spg
-         ZRcg==
-X-Gm-Message-State: AOAM531b1vjpGhxhEjY9B/txsPrETQAZ1VYQbdLiM47q5Ako3jApNnI6
-        8Gktm/b8NYa7z0dv+FXn91M=
-X-Google-Smtp-Source: ABdhPJwoGAqCnTbH6+8pCXavYOeKOon6tieBJ1Aoa51OqKaHWYhCdLMszt/uM6Vdcl8otOgbgFTMUQ==
-X-Received: by 2002:a05:6000:144c:b0:1e8:50e5:fec1 with SMTP id v12-20020a056000144c00b001e850e5fec1mr7113263wrx.648.1645208203688;
-        Fri, 18 Feb 2022 10:16:43 -0800 (PST)
+        bh=sVpw/YkSpECxioHiJcwwjO5cIgkz+JQrp0Z1102tsjs=;
+        b=Thpbq+l5u4RxP98XhtjvN1q7c+lPGIfbwQ26/lHVJGCULc5sXCf8J9cAuUSyJ1kO6n
+         sjJ/rmyrKWPrOT0Dn39+ni4Mnk1jFX7i+TgGeJIhxK87Q7yEUS405T37QVXwP1mL8l7C
+         g12uWEPiSa0XBGpvRzRyCtcbzRYAlfCco98hg8NFtxKCDN7mE51uQXsYZwWgu6blIVen
+         wHFP57KCjnFwa9pfliLJ0JBWa/K2c/k4IQeyq8c0NtPu54h4FTIDbVeeGNbyJojteCoQ
+         6HxyL/dsnfhHwurCp0Zg+qOL/4fwIgiCqKKqJXj+XR9xOMNyj/YUpYMW/eLEIDH5eW9W
+         WTFg==
+X-Gm-Message-State: AOAM530Y9ljiH0l35wt8W0c4r57LmsKguDJ6K0fDRNG9Gx4dXohR39+2
+        844MxTQMmZ0ijnrLnqYviLVRJBAQKtiLbA==
+X-Google-Smtp-Source: ABdhPJws4VKz76/Rj4ocyZfLWDIEslDjzDyROQuhjJG1xPu9xGMlfPjmNX7CdHYFHno8/clRALSaHw==
+X-Received: by 2002:a5d:6309:0:b0:1e4:9a62:d46f with SMTP id i9-20020a5d6309000000b001e49a62d46fmr6651438wru.50.1645208205059;
+        Fri, 18 Feb 2022 10:16:45 -0800 (PST)
 Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id b2sm20978639wri.35.2022.02.18.10.16.42
+        by smtp.gmail.com with ESMTPSA id b2sm20978639wri.35.2022.02.18.10.16.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 10:16:43 -0800 (PST)
+        Fri, 18 Feb 2022 10:16:44 -0800 (PST)
 From:   =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>
 To:     corbet@lwn.net
 Cc:     =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 04/11] scripts: kernel-doc: Translate the "Output format selection" subsection of OPTIONS
-Date:   Fri, 18 Feb 2022 19:16:21 +0100
-Message-Id: <20220218181628.1411551-5-tomasz.warniello@gmail.com>
+Subject: [PATCH v4 05/11] scripts: kernel-doc: Translate the "Output format selection modifier" subsection of OPTIONS
+Date:   Fri, 18 Feb 2022 19:16:22 +0100
+Message-Id: <20220218181628.1411551-6-tomasz.warniello@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
 References: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
@@ -73,74 +73,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Another step in the direction of a uniform POD documentation, which will
-make users happier.
+Aim: unified POD, user more happy
 
-Options land at the end of the script, not to clutter the file top.
+This section is renamed to "Output format modifiers" to make it simple.
 
-The default output format is corrected to rst. That's what it is now.
+To make it even more simple, a subsection is added:
+"reStructuredText only".
 
-A POD delimiting comment is added to the script head, which improves
-the script logical structure.
+Other notes:
+- paragraphing correction
+- article correction
 
 Signed-off-by: Tomasz Warniełło <tomasz.warniello@gmail.com>
 ---
- scripts/kernel-doc | 31 ++++++++++++++++++++++++++-----
- 1 file changed, 26 insertions(+), 5 deletions(-)
+ scripts/kernel-doc | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
 
 diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index e4203f13fa93..18eca172c4b5 100755
+index 18eca172c4b5..b926faa16b00 100755
 --- a/scripts/kernel-doc
 +++ b/scripts/kernel-doc
-@@ -52,6 +52,8 @@ See Documentation/doc-guide/kernel-doc.rst for the documentation comment syntax.
- 
- =cut
- 
-+# more perldoc at the end of the file
-+
- # 18/01/2001 - 	Cleanups
- # 		Functions prototyped as foo(void) same as foo()
- # 		Stop eval'ing where we don't need to.
-@@ -81,11 +83,6 @@ sub usage {
+@@ -83,13 +83,6 @@ sub usage {
      my $message = <<"EOF";
  Usage: $0 [OPTION ...] FILE ...
  
--Output format selection (mutually exclusive):
--  -man			Output troff manual page format. This is the default.
--  -rst			Output reStructuredText format.
--  -none			Do not output documentation, only warnings.
+-Output format selection modifier (affects only ReST output):
 -
- Output format selection modifier (affects only ReST output):
+-  -sphinx-version	Use the ReST C domain dialect compatible with an
+-			specific Sphinx Version.
+-			If not specified, kernel-doc will auto-detect using
+-			the sphinx-build version found on PATH.
+-
+ Output selection (mutually exclusive):
+   -export		Only output documentation for symbols that have been
+ 			exported using EXPORT_SYMBOL() or EXPORT_SYMBOL_GPL()
+@@ -2583,4 +2576,19 @@ Do not output documentation, only warnings.
  
-   -sphinx-version	Use the ReST C domain dialect compatible with an
-@@ -2563,3 +2560,27 @@ if ($Werror && $warnings) {
- } else {
-     exit($output_mode eq "none" ? 0 : $errors)
- }
+ =back
+ 
++=head2 Output format modifiers
 +
-+__END__
-+
-+=head1 OPTIONS
-+
-+=head2 Output format selection (mutually exclusive):
++=head3 reStructuredText only
 +
 +=over 8
 +
-+=item -man
++=item -sphinx-version VERSION
 +
-+Output troff manual page format.
++Use the ReST C domain dialect compatible with a specific Sphinx Version.
 +
-+=item -rst
-+
-+Output reStructuredText format. This is the default.
-+
-+=item -none
-+
-+Do not output documentation, only warnings.
++If not specified, kernel-doc will auto-detect using the sphinx-build version
++found on PATH.
 +
 +=back
 +
-+=cut
+ =cut
 -- 
 2.30.2
 

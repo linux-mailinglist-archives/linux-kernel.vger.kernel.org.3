@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52B54BC028
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4524BC031
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236663AbiBRTNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 14:13:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57400 "EHLO
+        id S236842AbiBRTVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 14:21:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236628AbiBRTNP (ORCPT
+        with ESMTP id S236738AbiBRTU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 14:13:15 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6A84D9C2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:12:57 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id h15so146404edv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kFx5mVaEHwZpR1G+osdopjqc+OzJyT2vvM3+pSprCFk=;
-        b=EQ+kstcsfvyoiVxpZH4DOveKWuo8ZLZzYUIop0Vlthf3r2DTADG1kDnjLZlmhEiEk+
-         6G1pQYgdE0Nh9wv/F/mr614cojFdmQRp2bm+wGYz7pZOcacHQguC10UzY7EM+1ffc44f
-         Wm1l5TaMSkrezOOuca+rkd439a22duxj7f/9y8nVcQJWPTcyz8zTDf/7iz5H+ApzRhTQ
-         NbqGdRr/U/H9RUKkTlGKY86fsffbY3C0Y3yyKrxlpGI6ol/qaBZxmLnCbHD8+AclEyv0
-         7/rPTsF6rq9ujxffbMlZt2i1zvBQfzL4TUlU49jq+ZYhmHm7rxl9MwWPEqQDFslXytJ8
-         Gf+w==
+        Fri, 18 Feb 2022 14:20:58 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DFF2838DF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:20:41 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1819440304
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 19:20:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645212040;
+        bh=H0Iwmd8wCuU9HHukGVMrKzFKF37GPFWQBtO1dM10cGA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=tnirLOHSVJC/I18fFVGats1KzVhWNAWRGc7yDhQ8AWS3r59/pyfwrIj3SvUlxQnuy
+         9bjcvUhfZBePJaTV1XwXMyfubzlK+QQDIU0v3Y53DopCZaShCXWiuEVVjVn1LBB2kt
+         2dqxk1/hecXP1iXdnwbbaAVXqY/WteSg1NfsRsNLzfVJe864uT0B3D0dlTRzoiNiuj
+         VINR/MrI5/FYwPikSztxo2xJ8hwPeez+FjqMAfRMqYDYJnrsH8OKj7+d5byOzvSJq/
+         VdEfLLB7L+X5g2T05Gpi+BViJxDqOkXcGVMlZ953RNKqEl+LGHG5hBNja/cwa4H4Kn
+         DCKHIAqJoj2vw==
+Received: by mail-ej1-f71.google.com with SMTP id d7-20020a1709061f4700b006bbf73a7becso3476471ejk.17
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:20:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kFx5mVaEHwZpR1G+osdopjqc+OzJyT2vvM3+pSprCFk=;
-        b=RDBMTjts3TwdbWJL4aBZTVNbd9XjkzYLD2r3egjotwbAwGwQAiR0tysz/Ot5X72esd
-         XeMJTaldrCFBxxgNJu1lY7edwGvgsA7yqaftlUgpIpocGZWcSNbPDsnMuf/bhBICmosY
-         3GSJhwr0hLKeF6J8KpBCV+X8ZsQMv92qedIJlst3FThbvYDKZRBVMOmgV/CAn05FiA6O
-         /FO6++c+Y8NxVKSCgYlyuECMCNFh5dDPEtfiUW/n2+b/pU8UhwIFFx/HhpG3BXPRAXJM
-         MoeizhNRq8N/dm8HSlS02ONNnhYZODFMCf40+eSh9FEsZVu1sI+C+dtgbO0PvCAkNWAq
-         ojXw==
-X-Gm-Message-State: AOAM532NoowleiFhM5wbhZPMP6eO80GkYOFAyZntrcjpcNLeVscthFz5
-        +B99CZyHS+CjsDq+GNblHEwRLYsVALzuKYyOylOQZA==
-X-Google-Smtp-Source: ABdhPJx3RFzhIbi2OeHNvwEo2c7s9U+9friyhOB0W2+wJsBDRyonLy4N3OFnI5CX3I+UAblAArNaJNvZqMIqINE8LuU=
-X-Received: by 2002:aa7:c0d0:0:b0:410:d576:8808 with SMTP id
- j16-20020aa7c0d0000000b00410d5768808mr9831902edp.340.1645211575981; Fri, 18
- Feb 2022 11:12:55 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H0Iwmd8wCuU9HHukGVMrKzFKF37GPFWQBtO1dM10cGA=;
+        b=EU5A5n7SIaU6nj84OZb5lds6OHLlpZ4fK7vNskD6dty253Wq7JcV2/M/X3ElYTS+3n
+         ex22VXBZ2n/SYPAIL8oK8ckTmdLmdN6jrK6buSQD+trQaVXaMUrRa6zifM19tY+DGbea
+         IgDj4s4FSCbMqhp3cMce5bzBKdyE4BpriiZSD3oS2nfT+9KaCcE8DZuQnQVc3FvapW0l
+         vStsKThvX+noH5Uv8/+HNJk0BlXoadErsDeIZJbzgvULrv3sT3m/hNYdtlqgfmjfEfYy
+         WqpZr9zlTJ9dG6Fagay+AC0HABCZF5yi3Ymir2EmjZxPr06ttcIIQQ45Mqe0gEND/Bip
+         dlpQ==
+X-Gm-Message-State: AOAM530FSAI1T/SavSk8gL8v8Vx7EnrYisF1OytTMde/Os4qdQbrDuWR
+        AfukPbkc4qz8r7DLaQ5Sw+aXtc2IwpuQjVeHLk0xmIZRzTi+52i1zvbggcJKDsC7oy9qj6TiJk2
+        jV6goS589RKFBMacCXFI9NM061Sbxaa7iP51GCI3u1A==
+X-Received: by 2002:a17:906:b1d0:b0:6cd:fa02:b427 with SMTP id bv16-20020a170906b1d000b006cdfa02b427mr7463369ejb.99.1645212039291;
+        Fri, 18 Feb 2022 11:20:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz+3tAag5IIivzTuXFNNLBWIeNlv9ap8rmkimlg4Z9CIQb87t2RY7mnVEypnk+2Ca7rgN3Q6g==
+X-Received: by 2002:a17:906:b1d0:b0:6cd:fa02:b427 with SMTP id bv16-20020a170906b1d000b006cdfa02b427mr7463358ejb.99.1645212039146;
+        Fri, 18 Feb 2022 11:20:39 -0800 (PST)
+Received: from [192.168.0.116] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id l24sm5147643edv.88.2022.02.18.11.20.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 11:20:37 -0800 (PST)
+Message-ID: <91a26d60-abeb-6188-2ed2-1145e52ca36e@canonical.com>
+Date:   Fri, 18 Feb 2022 20:20:35 +0100
 MIME-Version: 1.0
-References: <20220211161831.3493782-1-tjmercier@google.com>
-In-Reply-To: <20220211161831.3493782-1-tjmercier@google.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Fri, 18 Feb 2022 11:12:44 -0800
-Message-ID: <CABdmKX3qO7UW-HGXMdZZdVi1P8FnKDh0H=TGT_ct=tHoAeVxbw@mail.gmail.com>
-Subject: Re: [RFC v2 0/6] Proposal for a GPU cgroup controller
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2] power: supply: max17042_battery: Use
+ devm_work_autocancel()
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <670ea51361f96035f49852c617325af10ffa07ea.1645205558.git.christophe.jaillet@wanadoo.fr>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <670ea51361f96035f49852c617325af10ffa07ea.1645205558.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,83 +89,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 8:18 AM T.J. Mercier <tjmercier@google.com> wrote:
->
-> This patch series revisits the proposal for a GPU cgroup controller to
-> track and limit memory allocations by various device/allocator
-> subsystems. The patch series also contains a simple prototype to
-> illustrate how Android intends to implement DMA-BUF allocator
-> attribution using the GPU cgroup controller. The prototype does not
-> include resource limit enforcements.
->
-> Changelog:
->
-> v2:
-> See the previous revision of this change submitted by Hridya Valsaraju
-> at: https://lore.kernel.org/all/20220115010622.3185921-1-hridya@google.co=
-m/
->
-> Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
-> heap to a single dma-buf function for all heaps per Daniel Vetter and
-> Christian K=C3=B6nig. Pointers to struct gpucg and struct gpucg_device
-> tracking the current associations were added to the dma_buf struct to
-> achieve this.
->
-> Fix incorrect Kconfig help section indentation per Randy Dunlap.
->
-> History of the GPU cgroup controller
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> The GPU/DRM cgroup controller came into being when a consensus[1]
-> was reached that the resources it tracked were unsuitable to be integrate=
-d
-> into memcg. Originally, the proposed controller was specific to the DRM
-> subsystem and was intended to track GEM buffers and GPU-specific
-> resources[2]. In order to help establish a unified memory accounting mode=
-l
-> for all GPU and all related subsystems, Daniel Vetter put forth a
-> suggestion to move it out of the DRM subsystem so that it can be used by
-> other DMA-BUF exporters as well[3]. This RFC proposes an interface that
-> does the same.
->
-> [1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.=
-9506-1-brian.welty@intel.com/#22624705
-> [2]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@i=
-ntel.com/
-> [3]: https://lore.kernel.org/amd-gfx/YCVOl8%2F87bqRSQei@phenom.ffwll.loca=
-l/
->
-> T.J. Mercier (6):
->   gpu: rfc: Proposal for a GPU cgroup controller
->   cgroup: gpu: Add a cgroup controller for allocator attribution of GPU
->     memory
->   dmabuf: Use the GPU cgroup charge/uncharge APIs
->   dmabuf: heaps: export system_heap buffers with GPU cgroup charging
->   dmabuf: Add gpu cgroup charge transfer function
->   android: binder: Add a buffer flag to relinquish ownership of fds
->
->  Documentation/gpu/rfc/gpu-cgroup.rst | 195 +++++++++++++++++
->  Documentation/gpu/rfc/index.rst      |   4 +
->  drivers/android/binder.c             |  26 +++
->  drivers/dma-buf/dma-buf.c            | 100 +++++++++
->  drivers/dma-buf/dma-heap.c           |  27 +++
->  drivers/dma-buf/heaps/system_heap.c  |   3 +
->  include/linux/cgroup_gpu.h           | 127 +++++++++++
->  include/linux/cgroup_subsys.h        |   4 +
->  include/linux/dma-buf.h              |  22 +-
->  include/linux/dma-heap.h             |  11 +
->  include/uapi/linux/android/binder.h  |   1 +
->  init/Kconfig                         |   7 +
->  kernel/cgroup/Makefile               |   1 +
->  kernel/cgroup/gpu.c                  | 304 +++++++++++++++++++++++++++
->  14 files changed, 830 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/gpu/rfc/gpu-cgroup.rst
->  create mode 100644 include/linux/cgroup_gpu.h
->  create mode 100644 kernel/cgroup/gpu.c
->
-> --
-> 2.35.1.265.g69c8d7142f-goog
->
+On 18/02/2022 18:37, Christophe JAILLET wrote:
+> Use devm_work_autocancel() instead of hand-writing it.
+> This saves a few lines of code.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> V2: s/devm_delayed_work_autocancel/devm_work_autocancel/
+> 
+>  drivers/power/supply/max17042_battery.c | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
+> 
 
-Gentle nudge to GPU maintainers to please provide their feedback on
-this RFC. Thanks!
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

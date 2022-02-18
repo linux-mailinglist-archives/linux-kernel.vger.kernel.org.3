@@ -2,125 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B2B4BBFF5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A174BBFF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235739AbiBRSwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:52:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59354 "EHLO
+        id S234604AbiBRSyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:54:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiBRSvz (ORCPT
+        with ESMTP id S231234AbiBRSyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:51:55 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AB0517D0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:51:37 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id l125so21339127ybl.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:51:37 -0800 (PST)
+        Fri, 18 Feb 2022 13:54:09 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9888D1F05DF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:53:52 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id w20so7841687plq.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:53:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=64Hr5c+MUPH0UtYd4UTCS7fr7Nh+2ZrmXtm/tvR5t7Y=;
-        b=PBtssgXv9m1BoS65xAlWeNHBZBxDv+bK53eCIYGouTr1l3kQbom7SwKhhDFvH4pq5M
-         8rUGREP//MFBKFPb9TpLs3c8kvXdIVLDBjwUcrpZa4G8SQIBQwEpUegD+ej0iee2ftXY
-         +5B0VVMRJ9hpmxejHtdFY/pFS8tnvQ+Rohd+aEFIH5YGkhP8LLE2eucvdTzqngquHkpW
-         BTv69+eHoULBF3/uqiubsv1m42CZ84jEnzKISvZwJo6rbKuO7N1hVtWm4r7m1qK5L/UO
-         Gq3lZG74M22EXNeEXMXMiFut5E4DlIRqURUUO0Yh8Fi0woXvGY6U7QdKupMUA0T/1SOs
-         Aq+g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=McwjLSLaytCtK7tV2i/coh6cpneHZuWc7h/cZMMLVaQ=;
+        b=qS5kgw9dlzff3cynK7hHxw9gR3U0R6hubv+YKcGJnsGj3VYm2oM+4O8weoW2p2sZyw
+         c20WORhh8vLskTonGbwQkhF8S2qVv87wVcmcCnpfCuniNqBKPpM3SHHkZI1UBVKT3hdc
+         /YYE0ThFOusvkuKpKTcnSmn257veUPiLnnl1YAaAZJfOWUdbvmQIunP9HnqoMI57Y1p3
+         wrQfbe6PsnVJTG7l7cwGBJAlOs7W0U1A2yfEgqIt4vCTpNWdhS6rmjOn1/dRvj6lItI7
+         5a4xFx3R6iXDH5namFQ8U8M1i30J62YRRSyRjFQ671TIwRe1D0dHHSvemmvCUID/eKhv
+         rtrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=64Hr5c+MUPH0UtYd4UTCS7fr7Nh+2ZrmXtm/tvR5t7Y=;
-        b=RKdzRfDTqj7O2PW2XNEvOJ7ZhDJQq3P1bSwTVfrBZBrp72K/z85N75Xe/AkC15B6DS
-         wJOn68cdPErSO5AIgKbaY/QjtHt2fK43YPsKLrykUr7LI0WIgs+eQrLcegzoEkimgbtr
-         nmmFR5zKCL/ZduZhBjgBvlgdEasmZl4DcXQSBo/KzAv6Q0kaahnltrUwDmZX776MtUpu
-         GNHZ/h/soOp0Rj+GCa8HLTarCxNc6AQBgSX4+PMnJsvj4GRGWAqE0mXWy+194ND6IP7M
-         GQKblL2tP/WzZvdeoA/WZQA7vjwHnJTdVybgmYU9StJ/mVSsIzz/F+CgCbYb1NxvbJRU
-         aVEg==
-X-Gm-Message-State: AOAM531yJGFZwglxRU1ipkEKi11RVOWYYSLJjwqm00QQMqNVuiMBTInn
-        +Kinuu+Ybw7a4bL42az0mHhaFR9e7S5POc06BcJDtw==
-X-Google-Smtp-Source: ABdhPJzzv2So3wlSjld8rmD+iS8rbF8mOgwhZ0HfP4AcBs+107yRpT3mG6sh4adNx0Hk62hcCjqjHXmTqyqbgP7tInc=
-X-Received: by 2002:a25:3b17:0:b0:619:4463:a400 with SMTP id
- i23-20020a253b17000000b006194463a400mr8730690yba.36.1645210296676; Fri, 18
- Feb 2022 10:51:36 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=McwjLSLaytCtK7tV2i/coh6cpneHZuWc7h/cZMMLVaQ=;
+        b=YTORiU7TjSP5qKK+TB31p463yeOZcMd5TiK7iQYR1qWeb97IvadA4GeJ4HTTrzyaMz
+         /qkElveBIIMxCQZigsH++2+1eLOydMfatS9ymFkkq7zB2RBph3Igv8ZbFAr+CXP0Io6k
+         njxWS9qhVxvfJ4aYAn5MZgBAciZ/7z6EQN0M8SbGv07TOmMLzjcTsw/eAgEzvZ4W6xq9
+         55qs4joK60t2BYFnmFEFoLNksZcqHlqqkR7MHuKVyZZ+EZ7UpjoBiMjGF6WfpmsU9JKv
+         4ZBi529DiVORRW4SaT9UgDd/5OtItMIsnM3sYruhfxgCu2LoBU8RdTrwBZcdWMyIkzZv
+         v83w==
+X-Gm-Message-State: AOAM531NZg8Q5rM1gSnrDLptSdov0OpgUS/Fts3ryJdQtEoE5dNKMAgm
+        7VBVz6WGsQ7gV/Q2fQ7RrrM=
+X-Google-Smtp-Source: ABdhPJzQQSZPxtLkIpcflnhLn+ubFoe7B07qM/ToZ1Aq0GEshzZY7TCT7UmLcClTvTCsiaUJa7UVgQ==
+X-Received: by 2002:a17:902:da82:b0:14d:c6d8:822f with SMTP id j2-20020a170902da8200b0014dc6d8822fmr8509644plx.55.1645210432081;
+        Fri, 18 Feb 2022 10:53:52 -0800 (PST)
+Received: from localhost.localdomain ([2405:201:9005:88cd:7443:8052:dc37:e678])
+        by smtp.gmail.com with ESMTPSA id p2sm125106pjo.38.2022.02.18.10.53.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 10:53:51 -0800 (PST)
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        nathan@kernel.org, desaulniers@google.com, Felix.Kuehling@amd.com,
+        Oak.Zeng@amd.com, nirmoy.das@amd.com, jonathan.kim@amd.com,
+        kevin1.wang@amd.com, tzimmermann@suse.de, Philip.Yang@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/amdgpu: Initialize value of r in amdgpu_fill_buffer()
+Date:   Sat, 19 Feb 2022 00:23:12 +0530
+Message-Id: <20220218185312.34464-1-jrdr.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220218083133.18031-1-imagedong@tencent.com>
-In-Reply-To: <20220218083133.18031-1-imagedong@tencent.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 18 Feb 2022 10:51:25 -0800
-Message-ID: <CANn89i+ZPrA=ZQKR+y921_WxoqH91_LwRKnw7C2u-SgoAnhcxw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 0/9] net: add skb drop reasons to TCP packet receive
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        flyingpeng@tencent.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 12:32 AM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()"),
-> we added the support of reporting the reasons of skb drops to kfree_skb
-> tracepoint. And in this series patches, reasons for skb drops are added
-> to TCP layer (both TCPv4 and TCPv6 are considered).
-> Following functions are processed:
->
+From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
 
->
-> /* SKB_DROP_REASON_TCP_MD5* corresponding to LINUX_MIB_TCPMD5* */
-> SKB_DROP_REASON_TCP_MD5NOTFOUND
-> SKB_DROP_REASON_TCP_MD5UNEXPECTED
-> SKB_DROP_REASON_TCP_MD5FAILURE
-> SKB_DROP_REASON_SOCKET_BACKLOG
-> SKB_DROP_REASON_TCP_FLAGS
-> SKB_DROP_REASON_TCP_ZEROWINDOW
-> SKB_DROP_REASON_TCP_OLD_DATA
-> SKB_DROP_REASON_TCP_OVERWINDOW
-> /* corresponding to LINUX_MIB_TCPOFOMERGE */
-> SKB_DROP_REASON_TCP_OFOMERGE
->
+Kernel test robot reported warning ->
+drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c:2129:2: warning: Undefined
+or garbage value returned to caller [clang-analyzer-core.
+uninitialized.UndefReturn]
 
-For the whole series:
+Initialize r inside amdgpu_fill_buffer().
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks !
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index 414a22dddc78..5fafb223177f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -2089,7 +2089,7 @@ int amdgpu_fill_buffer(struct amdgpu_bo *bo,
+ 	struct amdgpu_ring *ring = adev->mman.buffer_funcs_ring;
+ 	struct dma_fence *fence = NULL;
+ 	struct amdgpu_res_cursor dst;
+-	int r;
++	int r = 0;
+ 
+ 	if (!adev->mman.buffer_funcs_enabled) {
+ 		DRM_ERROR("Trying to clear memory with ring turned off.\n");
+-- 
+2.25.1
+

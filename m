@@ -2,58 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230154BB39B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664CE4BB39F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbiBRHwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:52:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51628 "EHLO
+        id S232197AbiBRHxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:53:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiBRHwd (ORCPT
+        with ESMTP id S232203AbiBRHxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:52:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B7F580E8;
-        Thu, 17 Feb 2022 23:52:16 -0800 (PST)
+        Fri, 18 Feb 2022 02:53:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9905D6A3B4;
+        Thu, 17 Feb 2022 23:52:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0E7AB82537;
-        Fri, 18 Feb 2022 07:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F70C340ED;
-        Fri, 18 Feb 2022 07:52:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645170733;
-        bh=V+9C48iv9XRk+MUoKRdXyp5e9Ugr2dXDUyMumpaYQ6g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J50nw6T8dG5KzH/M8aFe8tHATxgNAosOGLEUAPRWPC99g6+YSWDb3TC1slK7qRKWZ
-         r78c+ZEleASEcNm80gohZLsLprX9bBCL6K6KaMuVr2gqJBrcyOrVrFUF3a4hahRmSw
-         sXqJy5WNvMLvQQMBN93Q3HkJKsbSpOSsUalvBZyA=
-Date:   Fri, 18 Feb 2022 08:51:54 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-ext4@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Chinner <dchinner@redhat.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [REPORT] kernel BUG at fs/ext4/inode.c:2620 - page_buffers()
-Message-ID: <Yg9QGm2Rygrv+lMj@kroah.com>
-References: <Yg0m6IjcNmfaSokM@google.com>
- <82d0f4e4-c911-a245-4701-4712453592d9@nvidia.com>
- <Yg8bxiz02WBGf6qO@mit.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg8bxiz02WBGf6qO@mit.edu>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A161B82538;
+        Fri, 18 Feb 2022 07:52:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CE8C340E9;
+        Fri, 18 Feb 2022 07:52:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645170777;
+        bh=WLAGjSGNb/26rp/2ZS1J2DnI/WrX+hLgCMjaN0HluQg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=Ssq4OgTen80Y5rHXytvnaql9XvpvLjb30KcpAtGaWAMLqULzzajbsI0PGqIEP6SaL
+         0amvoKpfWSgxpx2RrEwMwDxhyiq3ZmMdSLBBQ3CkhsZLNqrG/bfHz7gRYjV1Q5aQF6
+         Pm/DZe+Bq1XQvuzqqsU6LKxyf7XElqHXqIrLDd90dtD/fkmENjoL2JxbDGZ6mhRXGB
+         REXhTRLD1ARxjFKfUuffVr4jpm9VwW+6v2m0TPeHxjUXFR6bxIlu88w0QmqJa5Y9c8
+         Ri1Bg542nyLpcz2fLY626Y6TNP9aAJcF8IsjM1h4dwQ4AVnHUbbka/y/XnD/tLQqre
+         Sr0cO05crqT3Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     Yuanchu Xie <yuanchu@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        SeongJae Park <sj@kernel.org>, rientjes@google.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/damon: make selftests executable
+Date:   Fri, 18 Feb 2022 07:52:54 +0000
+Message-Id: <20220218075254.11467-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220218001017.3500673-3-yuanchu@google.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,28 +53,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 11:08:38PM -0500, Theodore Ts'o wrote:
-> On Thu, Feb 17, 2022 at 05:06:45PM -0800, John Hubbard wrote:
-> > Yes. And looking at the pair of backtraces below, this looks very much
-> > like another aspect of the "get_user_pages problem" [1], originally
-> > described in Jan Kara's 2018 email [2].
-> 
-> Hmm... I just posted my analysis, which tracks with yours; but I had
-> forgotten about Jan's 2018 e-mail on the matter.
-> 
-> > I'm getting close to posting an RFC for the direct IO conversion to
-> > FOLL_PIN, but even after that, various parts of the kernel (reclaim,
-> > filesystems/block layer) still need to be changed so as to use
-> > page_maybe_dma_pinned() to help avoid this problem. There's a bit
-> > more than that, actually.
-> 
-> The challenge is that fixing this "the right away" is probably not
-> something we can backport into an LTS kernel, whether it's 5.15 or
-> 5.10... or 4.19.
+Hello Yuanchu,
 
-Don't worry about stable backports to start with.  Do it the "right way"
-first and then we can consider if it needs to be backported or not.
+Thank you for this patch!
 
-thanks,
+On Fri, 18 Feb 2022 00:10:17 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
 
-greg k-h
+> The damon selftests do not have the executable bit on. We fix that by
+> setting the x bits on the .sh files similar to other existing shell
+> selftests.
+> 
+> Fixes: 9ab3b0c8ef62 ("selftests/damon: split test cases")
+> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+> ---
+>  tools/testing/selftests/damon/debugfs_attrs.sh                 | 0
+>  tools/testing/selftests/damon/debugfs_empty_targets.sh         | 0
+>  tools/testing/selftests/damon/debugfs_huge_count_read_write.sh | 0
+>  tools/testing/selftests/damon/debugfs_schemes.sh               | 0
+>  tools/testing/selftests/damon/debugfs_target_ids.sh            | 0
+>  5 files changed, 0 insertions(+), 0 deletions(-)
+>  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_attrs.sh
+>  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_empty_targets.sh
+>  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
+>  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_schemes.sh
+>  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids.sh
+> 
+> diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
+> old mode 100644
+> new mode 100755
+> diff --git a/tools/testing/selftests/damon/debugfs_empty_targets.sh b/tools/testing/selftests/damon/debugfs_empty_targets.sh
+> old mode 100644
+> new mode 100755
+> diff --git a/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
+> old mode 100644
+> new mode 100755
+> diff --git a/tools/testing/selftests/damon/debugfs_schemes.sh b/tools/testing/selftests/damon/debugfs_schemes.sh
+> old mode 100644
+> new mode 100755
+> diff --git a/tools/testing/selftests/damon/debugfs_target_ids.sh b/tools/testing/selftests/damon/debugfs_target_ids.sh
+> old mode 100644
+> new mode 100755
+> -- 
+> 2.35.1.265.g69c8d7142f-goog

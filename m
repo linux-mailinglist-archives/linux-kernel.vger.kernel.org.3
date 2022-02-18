@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16E44BB83D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FC34BB83B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234728AbiBRLhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:37:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44278 "EHLO
+        id S234703AbiBRLhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 06:37:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234577AbiBRLgk (ORCPT
+        with ESMTP id S234573AbiBRLgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 06:36:40 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2373A2B1A92
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236072B1A82
         for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:36:21 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 9EB512244E;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id DFFF62244F;
         Fri, 18 Feb 2022 12:36:16 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645184176;
+        t=1645184177;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DvTwO/d5q8PM9u/lLrOXBuccah4W7HSyVD2GJr3f7lQ=;
-        b=XDl6lxtCVyKnGj0DTdsfpAhoPHFTbnDLHXb/ynWzXKIkSWq+8gJWybASJTjLJmhypzwBm3
-        8skDhTEqYzewTR/5Rh56oyVOsKeQbBGnGnJdJZgqeojo0WV3Gvrj278803aCZNgDRRHINL
-        i8+yj3455Xz2ptTV6KpxQwsbIC6d8kQ=
+        bh=usr8xYhL0OkkvyVpz03FFLuCa1SjXG6k7g15Vf3dWH4=;
+        b=XTYzoJHBLBXKEqd2f9usCrt/CVFuMS+TmnVSE36vh1EtEs27NDKzWxrwleBwHPoDiWCV8j
+        4PHO0kk3jwR/lQVF3TW76g8aKAkuerejObuC7oH8SsEmNeZvVi2viHEImeAm3zR+uieCwq
+        t7F/C+zApEMUwd3ywTuNZEd1LEkCrJ0=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
@@ -39,9 +39,9 @@ Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 08/32] mtd: spi-nor: intel: unify function names
-Date:   Fri, 18 Feb 2022 12:35:43 +0100
-Message-Id: <20220218113607.1360020-9-michael@walle.cc>
+Subject: [PATCH v2 09/32] mtd: spi-nor: issi: unify function names
+Date:   Fri, 18 Feb 2022 12:35:44 +0100
+Message-Id: <20220218113607.1360020-10-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220218113607.1360020-1-michael@walle.cc>
 References: <20220218113607.1360020-1-michael@walle.cc>
@@ -67,30 +67,44 @@ There are no functional changes.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- drivers/mtd/spi-nor/intel.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/mtd/spi-nor/issi.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/intel.c b/drivers/mtd/spi-nor/intel.c
-index d64e114e9fb4..9179f2d09cba 100644
---- a/drivers/mtd/spi-nor/intel.c
-+++ b/drivers/mtd/spi-nor/intel.c
-@@ -8,7 +8,7 @@
+diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
+index 23629b919ade..c012bc2486e1 100644
+--- a/drivers/mtd/spi-nor/issi.c
++++ b/drivers/mtd/spi-nor/issi.c
+@@ -29,7 +29,7 @@ static const struct spi_nor_fixups is25lp256_fixups = {
+ 	.post_bfpt = is25lp256_post_bfpt_fixups,
+ };
  
- #include "core.h"
+-static const struct flash_info issi_parts[] = {
++static const struct flash_info issi_nor_parts[] = {
+ 	/* ISSI */
+ 	{ "is25cd512",  INFO(0x7f9d20, 0, 32 * 1024,   2)
+ 		NO_SFDP_FLAGS(SECT_4K) },
+@@ -69,18 +69,18 @@ static const struct flash_info issi_parts[] = {
+ 		NO_SFDP_FLAGS(SECT_4K) },
+ };
  
--static const struct flash_info intel_parts[] = {
-+static const struct flash_info intel_nor_parts[] = {
- 	/* Intel/Numonyx -- xxxs33b */
- 	{ "160s33b",  INFO(0x898911, 0, 64 * 1024,  32)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE) },
-@@ -20,6 +20,6 @@ static const struct flash_info intel_parts[] = {
+-static void issi_default_init(struct spi_nor *nor)
++static void issi_nor_default_init(struct spi_nor *nor)
+ {
+ 	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
+ }
  
- const struct spi_nor_manufacturer spi_nor_intel = {
- 	.name = "intel",
--	.parts = intel_parts,
--	.nparts = ARRAY_SIZE(intel_parts),
-+	.parts = intel_nor_parts,
-+	.nparts = ARRAY_SIZE(intel_nor_parts),
+ static const struct spi_nor_fixups issi_fixups = {
+-	.default_init = issi_default_init,
++	.default_init = issi_nor_default_init,
+ };
+ 
+ const struct spi_nor_manufacturer spi_nor_issi = {
+ 	.name = "issi",
+-	.parts = issi_parts,
+-	.nparts = ARRAY_SIZE(issi_parts),
++	.parts = issi_nor_parts,
++	.nparts = ARRAY_SIZE(issi_nor_parts),
+ 	.fixups = &issi_fixups,
  };
 -- 
 2.30.2

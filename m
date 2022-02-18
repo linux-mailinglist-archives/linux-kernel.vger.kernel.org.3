@@ -2,58 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71744BB0B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 05:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C41D4BB0C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 05:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiBREYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 23:24:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40560 "EHLO
+        id S229849AbiBRE1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 23:27:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiBREYs (ORCPT
+        with ESMTP id S229690AbiBRE1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 23:24:48 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400DB1277B;
-        Thu, 17 Feb 2022 20:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Twy8bHXVuGiqojDpjPWR5wAliPZVNEGz6RxLEr/EStY=; b=QEWgBN0ALj5dP9eYdTp2Bvdoq7
-        kurAWQd4bf/PKofyNScuGnszzTlY+0vQVWgmGo/GxiWLD+p2e5vJfKaIzXgQmRYHLYDXd/lyqXQv0
-        7jEmFbHsUnuzPFi93SaoRzSZ1fqrFw7IpO9aKxdppF2bF8fpwMtULvf8d5ALEqAf31MHbL4dK0IMV
-        WTaQ5IOrDwb01vKXHX0GvhPUlJb7Z4uMQ4/lyOtgwDG9tG+g4L2KneE0w89kHMbiBy8GnfmpN01CR
-        gzqIugOw5e9532idpIHTWfWXAdJKZtPiHNkTNaofOLPTRqc3Nmgn0zEl5WMTEJj6MdlRtyz6MVQv0
-        wARKumdA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKuoe-00GGyD-LB; Fri, 18 Feb 2022 04:24:20 +0000
-Date:   Fri, 18 Feb 2022 04:24:20 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-ext4@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Chinner <dchinner@redhat.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [REPORT] kernel BUG at fs/ext4/inode.c:2620 - page_buffers()
-Message-ID: <Yg8fdCuE6RusrjIh@casper.infradead.org>
-References: <Yg0m6IjcNmfaSokM@google.com>
- <Yg8KZvDVFJgTXm4C@mit.edu>
+        Thu, 17 Feb 2022 23:27:49 -0500
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D8B3F31A;
+        Thu, 17 Feb 2022 20:27:32 -0800 (PST)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1nKurY-0004Gf-K1; Fri, 18 Feb 2022 15:27:21 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 18 Feb 2022 15:27:20 +1100
+Date:   Fri, 18 Feb 2022 15:27:20 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux@dominikbrodowski.net,
+        linux-crypto@vger.kernel.org, Matt Mackall <mpm@selenic.com>,
+        Kalle Valo <kvalo@kernel.org>, ath9k-devel@qca.qualcomm.com,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] random: pull add_hwgenerator_randomness() declaration
+ into random.h
+Message-ID: <Yg8gKLVZpLs2mZYF@gondor.apana.org.au>
+References: <20220213152522.816777-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yg8KZvDVFJgTXm4C@mit.edu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220213152522.816777-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,12 +43,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 09:54:30PM -0500, Theodore Ts'o wrote:
-> process_vm_writev() uses [un]pin_user_pages_remote() which is the same
-> interface uses for RDMA.  But it's not clear this is ever supposed to
-> work for memory which is mmap'ed region backed by a file.
-> pin_user_pages_remote() appears to assume that it is an anonymous
-> region, since the get_user_pages functions in mm/gup.c don't call
-> read_page() to read data into any pages that might not be mmaped in.
+On Sun, Feb 13, 2022 at 04:25:22PM +0100, Jason A. Donenfeld wrote:
+> add_hwgenerator_randomness() is a function implemented and documented
+> inside of random.c. It is the way that hardware RNGs push data into it.
+> Therefore, it should be declared in random.h. Otherwise sparse complains
+> with:
+> 
+> random.c:1137:6: warning: symbol 'add_hwgenerator_randomness' was not declared. Should it be static?
+> 
+> The alternative would be to include hw_random.h into random.c, but that
+> wouldn't really be good for anything except slowing down compile time.
+> 
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Cc: Matt Mackall <mpm@selenic.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: linux-crypto@vger.kernel.org
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: ath9k-devel@qca.qualcomm.com
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  drivers/char/hw_random/core.c        | 1 +
+>  drivers/net/wireless/ath/ath9k/rng.c | 1 +
+>  include/linux/hw_random.h            | 2 --
+>  include/linux/random.h               | 2 ++
+>  4 files changed, 4 insertions(+), 2 deletions(-)
 
-... it doesn't end up calling handle_mm_fault() in faultin_page()?
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

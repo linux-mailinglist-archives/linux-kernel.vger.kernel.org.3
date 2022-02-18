@@ -2,121 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977B24BB9AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4316B4BB98F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235696AbiBRM5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:57:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35334 "EHLO
+        id S235634AbiBRM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:58:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235634AbiBRM5L (ORCPT
+        with ESMTP id S235686AbiBRM5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:57:11 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831DA286E9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 04:56:38 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id u18so15323348edt.6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 04:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=JQAvlLJWgldHDOHcIcacjIOpg5TUZmVngZ2Pms5NG7Q=;
-        b=OZEbl6KFipfUGSY3KFbkW5bY3S675hY6/6OQBZOkiQDH6GySEY4TVOEFN7FJqiqPJO
-         agFru8efuG36LReL5w2nHtLPmYtalsoT1wnvZtm5B66UR3WpHZe7YTWBnI+8hwcg+B9b
-         6VTqOjeC2sjnoEVsct21NLGE+w42y7sE+dK+Kvyf2ZNQWqLNSVCxvg8SrSQ4nfcquitG
-         gNzOCZpbJ3cIiSkDeprGVHuEDLqS0lNFTsmcAJrL1QvP69xRb+k98zeCzu96aeF/5vna
-         AQQtm0c00Xr1SD+EXnd+BcRUJLCn+nrZnVcDaQjb8hG/lck3U1O70LYNSK/UVt5iDZ4s
-         w/aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=JQAvlLJWgldHDOHcIcacjIOpg5TUZmVngZ2Pms5NG7Q=;
-        b=U2C3M8fqBG4E91YfNho5Q14VIRuEGqs/ht8Ic0PSz/4R1rEnHQzmXbZ+WvqH2daYDf
-         fRz+VFWw9+FmyvGlAS4QcFvHx23OcUzjexfbr0VhFBOzu+jBwCKaOMImuk3LVprzQrfv
-         JGGx/EDYOvFK/IS/Q9CRFStxefVaGwj92qUdw3NoTfc/wN96hg5RiKzWXUAQnBMq0+ld
-         T2ewYgRUunPX/3yLWsH7SzGpKlLXF1in/lYgLKMmCjVKy3ES1lNwvEpmtc/DkKmI69Uq
-         RSdY3EuZwIJgaC94A1D6inQheKgT/3mKyq7yLfGaIBkPOeQUjcH+d2sgOwmsM9CTZl2v
-         hWjg==
-X-Gm-Message-State: AOAM533qOHWtmWHZaL5UZ8snNG4R0jH6GSWXw+9ypvIBY8Yuh8kQmtcV
-        sNoNnvTNZFHn7w+vY5siMj6dgkFXvpgJTp4FoHY=
-X-Google-Smtp-Source: ABdhPJyy4wsNexIMJl8t/qFduIub1BwgK6qhMR7/odqNLNSPL6c7sGIHAwwI3wMCua1JSW86yo5J9Zuy9ZUHmEauhdw=
-X-Received: by 2002:a05:6402:2801:b0:410:a592:a5d0 with SMTP id
- h1-20020a056402280100b00410a592a5d0mr8026964ede.253.1645188996769; Fri, 18
- Feb 2022 04:56:36 -0800 (PST)
+        Fri, 18 Feb 2022 07:57:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99DE33363;
+        Fri, 18 Feb 2022 04:57:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12A5B60AFD;
+        Fri, 18 Feb 2022 12:57:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465C5C340E9;
+        Fri, 18 Feb 2022 12:57:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645189020;
+        bh=rUxvNFgonoAuLA33gOMyiOrfFD2DvpL2w4FzX9GKdIo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=niE6ZUuTmbQ7TRwS9gYorjiGlxQb8rljzceGARLh7tGeLXTs9TFaUCJkWCoU1Sma7
+         l+nBaT/VqiXvGcYTiRGpzA4pb5QN5k+Cz5Arb8I1bMj1711KbWeLmURFw42Mdz40Ox
+         wF9ziwHlVac83VEZzG0Q5neclS3ps67WoM3lhGa5HzgkhGsLWTSs07Y+zPzyipyp3B
+         h7A0+VGFoNUw9IWI77Ixu4nkZpGxHHHS2CCjqScsbS+j8LEKB5/GXN9UUN7N+Ti1nY
+         +t/RSApmUFCIcul8JFJpbmCrvuFk9Dhm7ELlh9ukrLNeF0r1YKaxSI77TCww+ht3fv
+         vrm89y0ZMIbYQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1C7D4400FE; Fri, 18 Feb 2022 09:56:58 -0300 (-03)
+Date:   Fri, 18 Feb 2022 09:56:58 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     John Garry <john.garry@huawei.com>, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, jolsa@kernel.org,
+        namhyung@kernel.org, elver@google.com, dvyukov@google.com,
+        will@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux@armlinux.org.uk, tmricht@linux.ibm.com, irogers@google.com
+Subject: Re: [PATCH v2] perf test: Skip Sigtrap test for arm+aarch64
+Message-ID: <Yg+Xmt27POS2y2LI@kernel.org>
+References: <1645176813-202756-1-git-send-email-john.garry@huawei.com>
+ <20220218104611.GD56419@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-Sender: brianphilippe60@gmail.com
-Received: by 2002:a17:906:d04b:0:0:0:0 with HTTP; Fri, 18 Feb 2022 04:56:36
- -0800 (PST)
-From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
-Date:   Fri, 18 Feb 2022 12:56:36 +0000
-X-Google-Sender-Auth: zimhkdm4D_7Zb9el7ImS1HVoEM8
-Message-ID: <CAG_+5rzYP5EJeFoJ8ag25DHdaJAYO-mwwPF+ctcuT0zqZyKjHw@mail.gmail.com>
-Subject: Investment proposal,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5141]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aishagaddafi1894[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [brianphilippe60[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218104611.GD56419@leoy-ThinkPad-X240s>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear Friend,
+Em Fri, Feb 18, 2022 at 06:46:11PM +0800, Leo Yan escreveu:
+> On Fri, Feb 18, 2022 at 05:33:33PM +0800, John Garry wrote:
+> > Skip the Sigtrap test for arm + arm64, same as was done for s390 in
+> > commit a840974e96fd ("perf test: Test 73 Sig_trap fails on s390"). For
+> > this, reuse BP_SIGNAL_IS_SUPPORTED - meaning that the arch can use BP to
+> > generate signals - instead of BP_ACCOUNT_IS_SUPPORTED, which is
+> > appropriate.
+> > 
+> > As described by Will at [0], in the test we get stuck in a loop of handling
+> > the HW breakpoint exception and never making progress. GDB handles this
+> > by stepping over the faulting instruction, but with perf the kernel is
+> > expected to handle the step (which it doesn't for arm).
+> > 
+> > Dmitry made an attempt to get this work, also mentioned in the same thread
+> > as [0], which was appreciated. But the best thing to do is skip the test
+> > for now.
+> > 
+> > [0] https://lore.kernel.org/linux-perf-users/20220118124343.GC98966@leoy-ThinkPad-X240s/T/#m13b06c39d2a5100d340f009435df6f4d8ee57b5a
+> > 
+> > Fixes: Fixes: 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
+> > Signed-off-by: John Garry <john.garry@huawei.com>
+> 
+> I tested this patch on my Juno board:
+> 
+> root@Juno:# ./perf test 73
+>  73: Sigtrap                                                         : Skip
+> 
+> Tested-by: Leo Yan <leo.yan@linaro.org>
 
-With due respect to your person and much sincerity of purpose I wish
-to write to you today for our mutual benefit in this investment
-transaction.
-I'm Mrs. Aisha Al-Gaddafi, presently residing herein Oman the
-Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
-single Mother and a widow with three Children. I am the only
-biological Daughter of the late Libyan President (Late Colonel.
-Muammar Gaddafi). I have an investment funds worth Twenty Seven
-Million Five Hundred Thousand United State Dollars ($27.500.000.00 )
-and i need an investment Manager/Partner and because of my Asylum
-Status I will authorize you the ownership of the investment funds,
-However, I am interested in you for investment project assistance in
-your country, may be from there,. we can build a business relationship
-in the nearest future.
+Thanks, applied.
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits. If you are
-willing to handle this project kindly reply urgently to enable me to
-provide you more information about the investment funds.
+- Arnaldo
 
-Your urgent reply will be appreciated if only you are interested in
-this investment project..
-Best Regards
-Mrs. Aisha Al-Gaddafi.

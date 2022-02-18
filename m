@@ -2,131 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF794BAF51
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6144BAF57
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiBRBxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 20:53:24 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34394 "EHLO
+        id S231414AbiBRB4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 20:56:45 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiBRBxX (ORCPT
+        with ESMTP id S229673AbiBRB4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 20:53:23 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D6558384
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:53:07 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K0F6Q5hpQz9snD;
-        Fri, 18 Feb 2022 09:51:26 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Feb 2022 09:53:05 +0800
-Subject: Re: [PATCH v2 4/8] mm/memory-failure.c: fix race with changing page
- more robustly
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220216091431.39406-1-linmiaohe@huawei.com>
- <20220216091431.39406-5-linmiaohe@huawei.com>
- <20220218011351.GA2941369@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <8a939237-50e2-090e-efe1-2eb04a68f6d1@huawei.com>
-Date:   Fri, 18 Feb 2022 09:53:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20220218011351.GA2941369@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Feb 2022 20:56:44 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857CB5C341;
+        Thu, 17 Feb 2022 17:56:28 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id om7so7280893pjb.5;
+        Thu, 17 Feb 2022 17:56:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=WHpd6Sk/XqYh0Nmb203v+Ms5w8m3DPKkCa4xdTTw7C8=;
+        b=GRQCNflMzwSiCrZxgdp/birK1ikdDMUfUZqq53GBOycuXlfK+u55Xio3IRY2pmgDrG
+         6vpkrL+tfZrr6H3e9kVqTGU3vXDxWGKl2PEoBFuZu/YNSnSJ5/eTpmHX1fRuyCAsy38P
+         A/90aP3Zl4ZPaaFgXt7/u+tWODDpypYdXqzkQD9mLuUI0a9KBlcPtSi93FxI9IO2SwPc
+         O/Ez/W3kDBl1a68ZlU9b6PrSpnZgj5LtKJawXOibKX7o2K8517M3tdIbBJ1sZuTfUI3+
+         Gkz41RcwdK3bOOE3CYPi+DvONT9us4OGolEDWsmedZ/gizCsujhhs9hxhaNeRV8uq2j0
+         zKuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=WHpd6Sk/XqYh0Nmb203v+Ms5w8m3DPKkCa4xdTTw7C8=;
+        b=zeY6iZcJ1hmpL8DOwzdHo3jpst6iXXJFBLmICbCZO8whu3PMr/CUFcLCIajTX/IACp
+         6U6Q0ae5RmMN3hyPnUvgM+6m8iTVbFGz7g1J60X8NKUnQpRV8Cpgw837U4kd1J2G/NFo
+         zUYVKgMP1nDdOdEvysREIAF0q+7RJXcX2vvmpka7silfM6pdlWTQXw+dUfJY3GewqJIa
+         EBMKa/YR1t/p1hXcJDV6MDztQrfqwArHhno75/saVHN9fYc/c+NbsQCCCUkck5pIeT+V
+         GZYqQmK3Tg9dBXzzIGku2M7lYANWdoaxvnmXQvp4cbeAOBQRR898P1+wud2Dk56afWLX
+         3igg==
+X-Gm-Message-State: AOAM531zu/Lq7f+eSza5Ikp54USftZ/XSkBXxNNNKUZXZ+bxG1HUTOCe
+        JDxlPdpUR3QIAhIUqMEu4lKgjhaXfxFc9Q==
+X-Google-Smtp-Source: ABdhPJyGF9SFBwyyZSZ95lmmAgCDOnmg5xfmy+Ly6ZrFBOdqdYSznKxxD5LTEC/EHLfKh+4q3rSGEA==
+X-Received: by 2002:a17:902:d353:b0:14a:18ab:298c with SMTP id l19-20020a170902d35300b0014a18ab298cmr5303458plk.87.1645149387808;
+        Thu, 17 Feb 2022 17:56:27 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id g18sm87493pfc.108.2022.02.17.17.56.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Feb 2022 17:56:27 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH] dt-bindings: spi: delete unused required and adjust the item.
+Date:   Fri, 18 Feb 2022 09:56:44 +0800
+Message-Id: <6a86f8c481be417972ef1b1e3b902ccf95706547.1645149279.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/18 9:13, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Wed, Feb 16, 2022 at 05:14:27PM +0800, Miaohe Lin wrote:
->> We're only intended to deal with the non-Compound page after we split thp
->> in memory_failure. However, the page could have changed compound pages due
->> to race window. If this happens, we could try again to hopefully handle the
->> page next round. Also remove unneeded orig_head. It's always equal to the
->> hpage. So we can use hpage directly and remove this redundant one.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/memory-failure.c | 20 ++++++++++++--------
->>  1 file changed, 12 insertions(+), 8 deletions(-)
->>
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index 7e205d91b2d7..d66f642888be 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -1690,7 +1690,6 @@ int memory_failure(unsigned long pfn, int flags)
->>  {
->>  	struct page *p;
->>  	struct page *hpage;
->> -	struct page *orig_head;
->>  	struct dev_pagemap *pgmap;
->>  	int res = 0;
->>  	unsigned long page_flags;
->> @@ -1736,7 +1735,7 @@ int memory_failure(unsigned long pfn, int flags)
->>  		goto unlock_mutex;
->>  	}
->>  
->> -	orig_head = hpage = compound_head(p);
->> +	hpage = compound_head(p);
->>  	num_poisoned_pages_inc();
->>  
->>  	/*
->> @@ -1817,13 +1816,18 @@ int memory_failure(unsigned long pfn, int flags)
->>  	lock_page(p);
->>  
->>  	/*
->> -	 * The page could have changed compound pages during the locking.
->> -	 * If this happens just bail out.
->> +	 * We're only intended to deal with the non-Compound page here.
->> +	 * However, the page could have changed compound pages due to
->> +	 * race window. If this happens, we could try again to hopefully
->> +	 * handle the page next round.
->>  	 */
->> -	if (PageCompound(p) && compound_head(p) != orig_head) {
->> -		action_result(pfn, MF_MSG_DIFFERENT_COMPOUND, MF_IGNORED);
->> -		res = -EBUSY;
->> -		goto unlock_page;
->> +	if (PageCompound(p)) {
->> +		if (TestClearPageHWPoison(p))
->> +			num_poisoned_pages_dec();
->> +		unlock_page(p);
->> +		put_page(p);
->> +		flags &= ~MF_COUNT_INCREASED;
-> 
-> Could you limit the retry chance only once by using the local variable
-> "retry"?  It might be very rare to hit the race more than once in a single
-> error event, but just to be safe from potential infinite loop (that could be
-> opened by future changes).
-> 
+delete unused required(clock-name)
+adjust position (interrupts)
 
-Sure. Will do it in V3. Thanks.
+Fixes: 3b8ab4da34 ("spi: Fix test error for sp7021")
 
-> Thanks,
-> Naoya Horiguchi
-> 
->> +		goto try_again;
->>  	}
->>  
->>  	/*
->> -- 
->> 2.23.0
+Reported-by: Rob Herring <robh+dt@kernel.org>
+Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+---
+ Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+index 298eac2..9df08d7 100644
+--- a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+@@ -47,10 +47,9 @@ required:
+   - compatible
+   - reg
+   - reg-names
+-  - interrupts
+   - interrupt-names
++  - interrupts
+   - clocks
+-  - clocks-names
+   - resets
+   - pinctrl-names
+   - pinctrl-0
+-- 
+2.7.4
 

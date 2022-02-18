@@ -2,124 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCB34BB076
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 04:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89A44BB078
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 05:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiBRD7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 22:59:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60298 "EHLO
+        id S229616AbiBRECL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 23:02:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiBRD73 (ORCPT
+        with ESMTP id S229457AbiBRECI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 22:59:29 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B728427F0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 19:59:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645156753; x=1676692753;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OSGbZypEOwcCe0OaAJ2kZQaniBnS/aF4uV3HEa+PyAg=;
-  b=XYbJlL9FIofwCvJnDSMo+ttoRFKeKHewspJaHXfJ9yoLaHYCaFO5okUl
-   /jrMOeQn+GrF3l9hMhNmYA+zdqJ+SpgptKnggxFuiSLFMK206/bFUdPGW
-   /wxfcGUETytU849NzxeEkW41hBxkZqaAQWYYOxpRX/HgKGaPPoJXtDWr9
-   4wAfIoYrKkVlKWcNgN3xzhYxJvyCMWhP2pLxoymUxx7nWeEU9/gJOFXQX
-   taHygAt/jAXHzDQ4grWoP3TFchcsXQCJjjO4zhM8/dZ8vdlUz0jIkta5O
-   RpvR5rTeumWVnQIAfzve0TcQP9SQOKUD9OkeCBCApNLNncVSJRl39bQQ7
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="311787386"
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="311787386"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 19:59:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="637599349"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2022 19:59:11 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKuQI-0000ui-Rp; Fri, 18 Feb 2022 03:59:10 +0000
-Date:   Fri, 18 Feb 2022 11:58:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [axboe-block:m1-test-nvme 25/27] drivers/nvme/host/apple.c:507:15:
- error: 'struct bio_vec' has no member named 'bv_dma_start'
-Message-ID: <202202181128.nqOiwDlV-lkp@intel.com>
+        Thu, 17 Feb 2022 23:02:08 -0500
+Received: from sonic315-22.consmr.mail.ne1.yahoo.com (sonic315-22.consmr.mail.ne1.yahoo.com [66.163.190.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E42B26123
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 20:01:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1645156908; bh=/pLDRequG8GfM5XOyTepSSAIHTdVgBO2aqGX88Fp02g=; h=Date:From:To:Cc:Subject:References:From:Subject:Reply-To; b=buCRcyrYneqba8ekPeR4Z5hNi4ZtSTWihuocePWsudqu7aSDZiyU1Lj8D8ZQg1CjRxfBJASBNl6DYp5HthkNnAHMquwYTi7NTK6py+occtpGGEK9NRDkTcytL9eZCRlGAH67rNq1UjwhCI4Afc6PSMRrNy3oqThmsv1ekHVk6uSTPn4yvxDIgs1NJs4INUwsUopzn+yHf0msA8N8imTb68zT71ui9lFmyMgk0YKeAO0LlaLFkz/jHXKO1TzC7LZ2ZmNtykEftZfvKY/x5lDphNMU8VKdEo5VMqoDQDm7WqPb1+AQQcYtvH0qF+zeUGimC/Rf5PCMFYghgouXk/fy9w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1645156908; bh=nv9tW2p2ynOWMc/D4jszk0cxF+eWGpPHDxeBwtyADuY=; h=X-Sonic-MF:Date:From:To:Subject:From:Subject; b=KAp1rWUWa8tWvMzQ+qdfuVSw7z6wacthTsCG9rWeYIzQOo9L4W8G5R6vPIu2uoBu/nOglAHqRSF4th9VngWRaqXH4/Slhefg9iMn4hEC0D732k07kwyl495DVu9xxHcPkMX1R+EZOv6opSEMhz2RYGBY31TLBxYCzsSgQkL0tPVAhpaqnxxrWBhimsBQp0NfBF+LwNanab0awwA0M6CaZikDiQb81rdI34mNqJyK4QFRyCPLeEJhvj7QhXEmT9M5ZXoeaix/pKiadUJz61BtcL+XonC/oBvPltEFsjaFGLJqA7IVi4xDDDlCOiAbQcDjnYwmHy09ne8NYxEVUfrfDg==
+X-YMail-OSG: QxEVqcgVM1mViik7xmzj8RRDdO4AykdZj22cCG2et4.c26N15_Q9LHQgWmidSM7
+ d9OGB_dLFLIU0RVuzKJlhyVUviHRh_DdyK0.tlp1NYuBXevUNgIRu6rCpTsnEbq0Ym1hw79TXgMP
+ dgCbR1dvymxQK5UgbL6O2e2fMa11XJG4UCRH2L50d5Gn0mkpgusVhq3hgzRiYmdBW276QPM_LJ.i
+ 2I4nxX5PApvqnn8zoTpSdSxYo14Kr1olLBfg1.91m55GEMJL8X5NLdD.4Xeb6OrOMXpWrfYRZJtT
+ lEW4vDrBT3TpBYvh4xls80A3.Lk.97RUpGsckF0usHepQNcSGuEzLI_T6upeb94SXTQCVgCh2Q6o
+ ebeZZX6RUC.8rHchy1lvO.4euPbQf9dGj0tbTgC57JIqqKgqiGFxisxPyr1wKQUSCNNw44hicSAa
+ dPc4X42Uj87JfdjWLJBVqDATPeGHFI7M7BkQcAKoIgucTzPNo6oa3pxmtforBrW6GLnbKuqMlckz
+ Hj9Kd648n.Z5PM7usNwCo1x0RWNHpDw91YSn5p7NpfA..EBPq.ECN3nj0tLKdQWz8UKeC62Ev.iz
+ jO2w3q5c7CcL0DAiStJbJoj04xJV7zZUNvcLTgdrNVa_zvk16HjOC3AAwyGzIQPnOvwaA4uCQfgZ
+ ldvSIOuSupYdsRt72V_Vabu0Q_g6zgNby3spcDkYkU8vCQ_VRHxsQt9uJarduN33Gh6Gxems2gD2
+ AMTgrOIvmqG4UaBrPMlv1mejEHoKCWKB0ng7H4ml2Ygd62ZLFAVL8chJgla0hLRGSbMbhP_1fGX.
+ df5Vq8wPqH8HF8eeP7HAd9RHKtqLmlNVX8Qc31U6niLC6GeUm0XorcYjOwsxV8dbCZuV0WmfdS1V
+ mFDm31Lzwypkbv55AsrtrtI7hManBnBx0wxdNdZxD_bcehvkOSQKYXmSajT5qQZ.8zdNWy6z0lMN
+ VnFJvDoZnE7Zt_guwYI8ZqDLpHIeaRwKxTMtnipHW9Pm0_VScJY6CfDd_dIiMU5Je2yYIRstWgMB
+ DRzB6wxjiJhgwppDxFeZISFzkqQc6baHaHWxT..bFtbq9iEQ_0P55nBQsHMEelOZ7KQRK2gpzaTk
+ B9Dba369zAAloq8hyldmxqG2QVb5V32vDWKlSzzVQiqPv0F9YyU1JiMoKaVqZispbRJhGk8whg6o
+ Zf.jKKPwiXMUaT9UbHyKMFHmVjC0P2VxrogCUtzVtHkXRgg.r072o5JXhZlQXThmSQXOk6LjKULR
+ ncPzOEUB1g3RD_sy7pfQan8FEq0VNIqQgubTzINU4cei871L3daqZLuavhBnRWduDOKeNsMn5.uA
+ en8H9oMNjRJlsk2BBUYo4NXDF43XqWPMaxKEqaxZHdkcwfR9JR26Psski2W4tCPxLwpJMPmI6eSG
+ oR44yEFrhzLJyoDPnpCp4LJh54XJuVxE6qqGi1MIrBInoMhyyi1JVrTzw_quz5UcW0zUqDkUSPEb
+ yu03MRMtXX01RS43Bla6W60gM15dOB0jo_AWbzBSb7PZLhDTKU_ZOEzPydZ89ZkPR3kRFZ4qymcC
+ xGs3ZkcAJprkZ.mbkdEG6BKbwlS12LZFvvwl_K6HcN6MhY1i_ZyT6YHK0x3R10spEV_NcMslcXCO
+ q_BztbQrwPmIHdhOkqyAcB0v8aAky28GhwvXM47cEe5SDmBcD.e_ccLWj8ku_OAkwkL2DaBhwuSi
+ ijZLg2qryxwpZGzLrq4rHPGGi81ITjYK9UZgEV7GWLCBmc4__nX.Crjq5ypM0gsJSah.RCccNhYV
+ y904udjFL6tnIaKJosfBV8c0hdcUcqoTERP2C6gta4jSfAgY_vyatk32EO1slSiZ2n2aOs2oCpoL
+ ffhNXBmd5N5qA0fvupAlKYQ6o4A4tGir76In4H272lws9bhCCAQSLbHYw8BrCV6reUF_OwzK12Hq
+ Vw5d2ieqpwg2.t8vdtTSbZONMUzQhsqCTN9lBo_xQWH3lT0tSeHdOm4NoGkYV7Kl7iCJNn_Jhx0Q
+ OjQMUbzFHUMPbhtHtgAlYig.OhdQC9aaM1n4fAtCp4Dpo4bC11YPiMpedlIjQaaGfuSpMTsKuE3G
+ aOr9A8Z.hTcPsRWXFdMfi.oIvJmLrkMNzB2_YXOoyBdCpXLEkJf6VTyIFY85ebfGbjVOsmyjRAgz
+ cbFzR9MuoYIvEt_KD8xQhkZLlZo9FrehNsvZcqORZoKPg.wsj.7lXSJT8G8_D0wL41T_xcL7Gjhn
+ V9FMiOw--
+X-Sonic-MF: <marcelo.as@aol.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Fri, 18 Feb 2022 04:01:48 +0000
+Received: by kubenode522.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID caf70707316f0e4c5d07448c65571989;
+          Fri, 18 Feb 2022 04:01:46 +0000 (UTC)
+Date:   Fri, 18 Feb 2022 01:01:40 -0300
+From:   Marcelo Aloisio da Silva <marcelo.as@aol.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: r8188eu: move out assignment in if condition
+Message-ID: <20220218040140.GA22796@snoopy>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220218040140.GA22796.ref@snoopy>
+X-Mailer: WebService/1.1.19797 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git m1-test-nvme
-head:   c0629b5191ba9a1a5372182580dc5452072ac666
-commit: abdcb53ec9f23b6669cce5845151c6a1925bfd3d [25/27] apple-nvme: support persistent DMA maps
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220218/202202181128.nqOiwDlV-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=abdcb53ec9f23b6669cce5845151c6a1925bfd3d
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block m1-test-nvme
-        git checkout abdcb53ec9f23b6669cce5845151c6a1925bfd3d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/nvme/host/
+Should not use assignment in if condition.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/nvme/host/apple.c: In function 'apple_nvme_setup_prp_simple':
->> drivers/nvme/host/apple.c:507:15: error: 'struct bio_vec' has no member named 'bv_dma_start'
-     507 |         if (bv->bv_dma_start) {
-         |               ^~
-   drivers/nvme/host/apple.c:509:36: error: 'struct bio_vec' has no member named 'bv_dma_start'
-     509 |                 iod->first_dma = bv->bv_dma_start;
-         |                                    ^~
-
-
-vim +507 drivers/nvme/host/apple.c
-
-   497	
-   498	static blk_status_t apple_nvme_setup_prp_simple(struct apple_nvme *anv,
-   499							struct request *req,
-   500							struct nvme_rw_command *cmnd,
-   501							struct bio_vec *bv)
-   502	{
-   503		struct apple_nvme_iod *iod = blk_mq_rq_to_pdu(req);
-   504		unsigned int offset = bv->bv_offset & (NVME_CTRL_PAGE_SIZE - 1);
-   505		unsigned int first_prp_len = NVME_CTRL_PAGE_SIZE - offset;
-   506	
- > 507		if (bv->bv_dma_start) {
-   508			iod->persistent = true;
-   509			iod->first_dma = bv->bv_dma_start;
-   510		} else {
-   511			iod->first_dma = dma_map_bvec(anv->dev, bv, rq_dma_dir(req), 0);
-   512			if (dma_mapping_error(anv->dev, iod->first_dma))
-   513				return BLK_STS_RESOURCE;
-   514		}
-   515		iod->dma_len = bv->bv_len;
-   516	
-   517		cmnd->dptr.prp1 = iod->first_dma;
-   518		if (bv->bv_len > first_prp_len)
-   519			cmnd->dptr.prp2 = iod->first_dma + first_prp_len;
-   520		return BLK_STS_OK;
-   521	}
-   522	
-
+Signed-off-by: Marcelo Aloisio da Silva <marcelo.as@aol.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/staging/r8188eu/core/rtw_cmd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+index 46a49f30f900..6eca30124ee8 100644
+--- a/drivers/staging/r8188eu/core/rtw_cmd.c
++++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+@@ -1318,7 +1318,8 @@ static void c2h_wk_callback(struct work_struct *work)
+ 	evtpriv->c2h_wk_alive = true;
+ 
+ 	while (!rtw_cbuf_empty(evtpriv->c2h_queue)) {
+-		if ((c2h_evt = (struct c2h_evt_hdr *)rtw_cbuf_pop(evtpriv->c2h_queue)) != NULL) {
++		c2h_evt = (struct c2h_evt_hdr *)rtw_cbuf_pop(evtpriv->c2h_queue);
++		if (c2h_evt) {
+ 			/* This C2H event is read, clear it */
+ 			rtw_write8(adapter, REG_C2HEVT_CLEAR, C2H_EVT_HOST_CLOSE);
+ 		} else {
+-- 
+2.25.1
+

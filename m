@@ -2,169 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936D54BB345
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312D24BB35F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiBRHak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:30:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34354 "EHLO
+        id S232089AbiBRHcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:32:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiBRHah (ORCPT
+        with ESMTP id S231896AbiBRHcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:30:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED59726B79D;
-        Thu, 17 Feb 2022 23:30:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F9E7B820CC;
-        Fri, 18 Feb 2022 07:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C2B4C340FC;
-        Fri, 18 Feb 2022 07:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645169417;
-        bh=4Rk51yI7cy+h8GrR+wkZuFO6d6ZOgVmodthZQla/xGE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W+QkvboqRofbLzCm9hHbzxq3Qth8S5HybnqRYBMCOV1+sxzSrsO0GxsWzCKKMdHEn
-         bqDIEx/e5uKVtXdEgKU0zauKVsAP+BwRxL7Eht14lnrZY8/Snkv6ooC0Xtnb3PIWOU
-         TH9CI9oqKC4NB6YlmX9GiyVVlzJ9JxhHp19vd8W2yF7M0r4JQcSsxSZGgcunHmnBls
-         jIKpwMz+6/fED/WEoZ31MUXYk0elz6QstAQFVIrh0vdiPiG2fQNGZe4Ls/9ylnZeuT
-         EPDfxlf0eA4H0vr8C6AxZVCkxFWsivLQ9riuK2cmIaTDgPv5zksZWQSERe1IxP+qyj
-         OVCD1xp4hu7Yg==
-Received: by mail-wr1-f53.google.com with SMTP id o24so13020470wro.3;
-        Thu, 17 Feb 2022 23:30:17 -0800 (PST)
-X-Gm-Message-State: AOAM533Pn0K1psX08r8MR/7uIPoYLosS7GxMRhKr7RvKUFAahONEFcGZ
-        56vGzBunQmxfc7bc1gmCrRw124pgkUxH0XSUlNI=
-X-Google-Smtp-Source: ABdhPJz4trlMwdvjT8y0UPggztkdijECp2hMuaf6QP4pGa8b+VYFZp4/tSgCA0YRdkm1OA4dObRIZr3wh6XhtS+RfLY=
-X-Received: by 2002:adf:ea01:0:b0:1e4:b3e6:1f52 with SMTP id
- q1-20020adfea01000000b001e4b3e61f52mr4942117wrm.317.1645169415535; Thu, 17
- Feb 2022 23:30:15 -0800 (PST)
+        Fri, 18 Feb 2022 02:32:47 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 23:32:30 PST
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73FF29692B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:32:30 -0800 (PST)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 202202180731240bb70884d26969ae15
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 18 Feb 2022 08:31:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=1PPSTDXqlzyXQhlxtHT8JuIds5BO+gt8oYzfP79dzIw=;
+ b=bZ1LeMGvLLSM/hVoEES8r4kSm0rDxTN0W/PmveyTFElnwXlfBl7Vl98OmgpdP1+tpcUn6i
+ XvMOdXhxVPg9+3VVPK8v9P0JfXHElTHjfN8ENssc4ScvuZQgjpJEC/2OdjdslBkmvz7ihWCk
+ yu/zSNYESP+S1iyE9nEY/BbhYmYmY=;
+From:   daniel.starke@siemens.com
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 1/7] tty: n_gsm: fix encoding of control signal octet bit DV
+Date:   Thu, 17 Feb 2022 23:31:17 -0800
+Message-Id: <20220218073123.2121-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-6-arnd@kernel.org>
- <20220218062851.GC22576@lst.de>
-In-Reply-To: <20220218062851.GC22576@lst.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 18 Feb 2022 08:29:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1Dhn1Gsap1Wss2xpKBwe3jWLAmMYtL7S1-26tZ5D_2fQ@mail.gmail.com>
-Message-ID: <CAK8P3a1Dhn1Gsap1Wss2xpKBwe3jWLAmMYtL7S1-26tZ5D_2fQ@mail.gmail.com>
-Subject: Re: [PATCH v2 05/18] x86: remove __range_not_ok()
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-7517:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 7:28 AM Christoph Hellwig <hch@lst.de> wrote:
-> On Wed, Feb 16, 2022 at 02:13:19PM +0100, Arnd Bergmann wrote:
-> > --- a/arch/x86/events/core.c
-> > +++ b/arch/x86/events/core.c
-> > @@ -2794,7 +2794,7 @@ perf_callchain_kernel(struct perf_callchain_entry_ctx *entry, struct pt_regs *re
-> >  static inline int
-> >  valid_user_frame(const void __user *fp, unsigned long size)
-> >  {
-> > -     return (__range_not_ok(fp, size, TASK_SIZE) == 0);
-> > +     return __access_ok(fp, size);
-> >  }
->
-> valid_user_frame just need to go away and the following __get_user calls
-> replaced with normal get_user ones.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.4.6.3.7 describes the encoding of the
+control signal octet used by the MSC (modem status command). The same
+encoding is also used in convergence layer type 2 as described in chapter
+5.5.2. Table 7 and 24 both require the DV (data valid) bit to be set 1 for
+outgoing control signal octets sent by the DTE (data terminal equipment),
+i.e. for the initiator side.
+Currently, the DV bit is only set if CD (carrier detect) is on, regardless
+of the side.
 
-As I understand it, that would not work here because get_user() calls
-access_ok() rather than __access_ok(), and on x86 that can not be
-called in NMI context.
+This patch fixes this behavior by setting the DV bit on the initiator side
+unconditionally.
 
-It is a bit odd that x86 is the only architecture that has this check,
-but adding
-it was clearly intentional, see 7c4788950ba5 ("x86/uaccess, sched/preempt:
-Verify access_ok() context").
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > diff --git a/arch/x86/kernel/dumpstack.c b/arch/x86/kernel/dumpstack.c
-> > index 53de044e5654..da534fb7b5c6 100644
-> > --- a/arch/x86/kernel/dumpstack.c
-> > +++ b/arch/x86/kernel/dumpstack.c
-> > @@ -85,7 +85,7 @@ static int copy_code(struct pt_regs *regs, u8 *buf, unsigned long src,
-> >        * Make sure userspace isn't trying to trick us into dumping kernel
-> >        * memory by pointing the userspace instruction pointer at it.
-> >        */
-> > -     if (__chk_range_not_ok(src, nbytes, TASK_SIZE_MAX))
-> > +     if (!__access_ok((void __user *)src, nbytes))
-> >               return -EINVAL;
->
-> This one is not needed at all as copy_from_user_nmi already checks the
-> access range.
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 0b1808e3a912..e199315a158e 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -439,7 +439,7 @@ static u8 gsm_encode_modem(const struct gsm_dlci *dlci)
+ 		modembits |= MDM_RTR;
+ 	if (dlci->modem_tx & TIOCM_RI)
+ 		modembits |= MDM_IC;
+-	if (dlci->modem_tx & TIOCM_CD)
++	if (dlci->modem_tx & TIOCM_CD || dlci->gsm->initiator)
+ 		modembits |= MDM_DV;
+ 	return modembits;
+ }
+-- 
+2.25.1
 
-Ok, removing this.
-
-> > diff --git a/arch/x86/kernel/stacktrace.c b/arch/x86/kernel/stacktrace.c
-> > index 15b058eefc4e..ee117fcf46ed 100644
-> > --- a/arch/x86/kernel/stacktrace.c
-> > +++ b/arch/x86/kernel/stacktrace.c
-> > @@ -90,7 +90,7 @@ copy_stack_frame(const struct stack_frame_user __user *fp,
-> >  {
-> >       int ret;
-> >
-> > -     if (__range_not_ok(fp, sizeof(*frame), TASK_SIZE))
-> > +     if (!__access_ok(fp, sizeof(*frame)))
-> >               return 0;
->
-> Just switch the __get_user calls below to get_user instead.
-
-Same as the first one, I think we can't do this in NMI context.
-
-         Arnd

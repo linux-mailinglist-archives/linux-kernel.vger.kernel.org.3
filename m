@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DBE4BB934
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB984BB916
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbiBRMcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:32:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33464 "EHLO
+        id S235156AbiBRM0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:26:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234206AbiBRMcg (ORCPT
+        with ESMTP id S233158AbiBRM0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:32:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD05F4A3E7;
-        Fri, 18 Feb 2022 04:32:19 -0800 (PST)
+        Fri, 18 Feb 2022 07:26:00 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94871FEBC8;
+        Fri, 18 Feb 2022 04:25:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B1C861F8A;
-        Fri, 18 Feb 2022 12:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD057C340E9;
-        Fri, 18 Feb 2022 12:32:15 +0000 (UTC)
-Message-ID: <ac210c17-a269-7360-6f7e-7d794bc8e936@xs4all.nl>
-Date:   Fri, 18 Feb 2022 13:32:14 +0100
+        by sin.source.kernel.org (Postfix) with ESMTPS id E8589CE322D;
+        Fri, 18 Feb 2022 12:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 856EEC340E9;
+        Fri, 18 Feb 2022 12:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645187140;
+        bh=hCw/QzW+metfpvnUJhYJxq5jHUUp3oRC3CxANUSCPqo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K57EV/CZWYVTFjJ2okmja32aJOfPyGqkh6ffprwvNM4WgG5QjEZQSa6x0dav0nxF5
+         lTGS2pi+FZl3RTTN9/c00xm+/GxPjXDCukfaYxrgJ82e++kacq3nX6SbxLX3GCJIpd
+         PUa/wuwpgTN3z3SioeFOM5gFkF8jBkrrXdGp+0yHj8VV5KSobYKYDdvhRKw2PYnMUn
+         cSIsTe4FdWnfbnm9LvVf20DLsalP5Bv7THSPsO/8tHls01QhDwYYnlQMcnjscNi03Q
+         h/P3WhzLj7IqkvtDHMGXShd4yzLCX1VaIRw+D0C/pU6cdAHOh4m3Q7PX7f8/zG+dLj
+         0KVyK+u2OwDbw==
+Date:   Fri, 18 Feb 2022 12:32:28 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jagath Jog J <jagathjog1996@gmail.com>
+Cc:     lars@metafoo.de, andy.shevchenko@gmail.com, sst@poczta.fm,
+        robh+dt@kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] iio: potentiometer: Add support for Maxim DS3502
+Message-ID: <20220218123228.6ad125cc@jic23-huawei>
+In-Reply-To: <20220218042038.15176-6-jagathjog1996@gmail.com>
+References: <20220218042038.15176-1-jagathjog1996@gmail.com>
+        <20220218042038.15176-6-jagathjog1996@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [RFC v2 5/8] media: uapi: Add fields needed for RKVDEC driver
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, jonas@kwiboo.se, nicolas@ndufresne.ca
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk
-References: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
- <20220215110103.241297-6-benjamin.gaignard@collabora.com>
- <b41ea0ec-b5c0-4ea5-9866-35a952c6a8b9@xs4all.nl>
- <3973e1f8-665a-c2d1-d493-19f66d307b88@collabora.com>
- <ee02bf52-b738-95f7-a4a8-f7d7f2e029ef@xs4all.nl>
- <db0963ec-9a25-9e1f-7184-64d36fdadf34@collabora.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <db0963ec-9a25-9e1f-7184-64d36fdadf34@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,128 +57,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/02/2022 13:30, Benjamin Gaignard wrote:
-> 
-> Le 18/02/2022 à 13:22, Hans Verkuil a écrit :
->> On 18/02/2022 13:19, Benjamin Gaignard wrote:
->>> Le 18/02/2022 à 12:32, Hans Verkuil a écrit :
->>>> On 15/02/2022 12:01, Benjamin Gaignard wrote:
->>>>> RKVDEC driver requires additional fields to perform HEVC decoding.
->>>>> Even if the driver isn't mainlined yet WIP patches could be find here:
->>>>> https://github.com/LibreELEC/LibreELEC.tv/blob/master/projects/Rockchip/patches/linux/default/linux-2000-v4l2-wip-rkvdec-hevc.patch
->>>>>
->>>>> This patch only include the change in HEVC uAPI.
->>>>>
->>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>>>> ---
->>>>>    .../userspace-api/media/v4l/ext-ctrls-codec.rst  | 16 ++++++++++++++++
->>>>>    include/uapi/linux/v4l2-controls.h               |  5 +++++
->>>>>    2 files changed, 21 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>> index 4f3b3ba8319f..3296ac3b9fca 100644
->>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>> @@ -2661,6 +2661,13 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>>        :stub-columns: 0
->>>>>        :widths:       1 1 2
->>>>>    +    * - __u8
->>>>> +      - ``video_parameter_set_id``
->>>>> +      - Identifies the VPS for reference by other syntax elements.
->>>>> +    * - __u8
->>>>> +      - ``seq_parameter_set_id``
->>>>> +      - Provides an identifier for the SPS for reference by other syntax
->>>>> +        elements.
->>>>>        * - __u16
->>>>>          - ``pic_width_in_luma_samples``
->>>>>          -
->>>>> @@ -2800,6 +2807,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>>        :stub-columns: 0
->>>>>        :widths:       1 1 2
->>>>>    +    * - __u8
->>>>> +      - ``pic_parameter_set_id``
->>>>> +      - Identifies the PPS for reference by other syntax elements.
->>>>>        * - __u8
->>>>>          - ``num_extra_slice_header_bits``
->>>>>          -
->>>>> @@ -3026,6 +3036,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>>        * - __u8
->>>>>          - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->>>>>          - The list of L1 reference elements as indices in the DPB.
->>>>> +    * - __u16
->>>>> +      - ``short_term_ref_pic_set_size``
->>>>> +      -
->>>>> +    * - __u16
->>>>> +      - ``long_term_ref_pic_set_size``
->>>>> +      -
->>>>>        * - __u8
->>>>>          - ``padding``
->>>>>          - Applications and drivers must set this to zero.
->>>> Just to confirm: these additional fields are all from the H.265 spec, right?
->>>> They are not rkvdec specific.
->>> They are in H.265 spec section "7.4.3.2.2 Sequence parameter set range extension semantics":
->>> - num_short_term_ref_pic_sets specifies the number of st_ref_pic_set( ) syntax structures included in the SPS. The value
->>> of num_short_term_ref_pic_sets shall be in the range of 0 to 64, inclusive.
->>>
->>> - num_long_term_ref_pics_sps specifies the number of candidate long-term reference pictures that are specified in the
->>> SPS. The value of num_long_term_ref_pics_sps shall be in the range of 0 to 32, inclusive.
->> And what about video/seq/pic_parameter_set_id?
-> 
-> It is the same they come from section "7.4.3.2.1 General sequence parameter set RBSP semantics":
-> - sps_video_parameter_set_id specifies the value of the vps_video_parameter_set_id of the active VPS.
-> - sps_seq_parameter_set_id provides an identifier for the SPS for reference by other syntax elements.
->   The value of
->  sps_seq_parameter_set_id shall be in the range of 0 to 15, inclusive.
+On Fri, 18 Feb 2022 09:50:37 +0530
+Jagath Jog J <jagathjog1996@gmail.com> wrote:
 
-Then I'm satisfied :-)
-
-Thanks!
-
-	Hans
-
+> The DS3502 is a 7-bit, nonvolatile digital potentiometer featuring
+> an output voltage range of up to 15.5V.
+> DS3502 support is implemented into existing DS1803 driver.
+> Datasheet: https://datasheets.maximintegrated.com/en/ds/DS3502.pdf
 > 
-> Regards,
-> Benjamin
+> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+
+Hi Jagath,
+
+One suggestion from my review of v2.  Instead of putting the enum
+for type in the per chip type cfg structure, use a function pointer
+and break out the device specific bits of the read_raw() into
+separate functions accessed via that function pointer.
+
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/potentiometer/Kconfig  |  6 ++--
+>  drivers/iio/potentiometer/ds1803.c | 46 ++++++++++++++++++++++++------
+>  2 files changed, 41 insertions(+), 11 deletions(-)
 > 
->>
->> Regards,
->>
->>     Hans
->>
->>> I mention rkvdec because that it is the only driver to use they (as far I knows)
->>>
->>> Regards,
->>> Benjamin
->>>
->>>> Regards,
->>>>
->>>>      Hans
->>>>
->>>>> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
->>>>> index 0e0ec2c61b80..b1a3dc05f02f 100644
->>>>> --- a/include/uapi/linux/v4l2-controls.h
->>>>> +++ b/include/uapi/linux/v4l2-controls.h
->>>>> @@ -2341,6 +2341,8 @@ enum v4l2_stateless_hevc_start_code {
->>>>>      struct v4l2_ctrl_hevc_sps {
->>>>>        /* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
->>>>> +    __u8    video_parameter_set_id;
->>>>> +    __u8    seq_parameter_set_id;
->>>>>        __u16    pic_width_in_luma_samples;
->>>>>        __u16    pic_height_in_luma_samples;
->>>>>        __u8    bit_depth_luma_minus8;
->>>>> @@ -2393,6 +2395,7 @@ struct v4l2_ctrl_hevc_sps {
->>>>>      struct v4l2_ctrl_hevc_pps {
->>>>>        /* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
->>>>> +    __u8    pic_parameter_set_id;
->>>>>        __u8    num_extra_slice_header_bits;
->>>>>        __u8    num_ref_idx_l0_default_active_minus1;
->>>>>        __u8    num_ref_idx_l1_default_active_minus1;
->>>>> @@ -2487,6 +2490,8 @@ struct v4l2_ctrl_hevc_slice_params {
->>>>>        __u32    slice_segment_addr;
->>>>>        __u8    ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->>>>>        __u8    ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->>>>> +    __u16    short_term_ref_pic_set_size;
->>>>> +    __u16    long_term_ref_pic_set_size;
->>>>>          /* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
->>>>>        struct v4l2_hevc_pred_weight_table pred_weight_table;
+> diff --git a/drivers/iio/potentiometer/Kconfig b/drivers/iio/potentiometer/Kconfig
+> index 832df8da2bc6..79c524640196 100644
+> --- a/drivers/iio/potentiometer/Kconfig
+> +++ b/drivers/iio/potentiometer/Kconfig
+> @@ -27,11 +27,11 @@ config AD5272
+>  	  module will be called ad5272.
+>  
+>  config DS1803
+> -	tristate "Maxim Integrated DS1803 Digital Potentiometer driver"
+> +	tristate "Maxim Integrated DS1803 and similar Digital Potentiometer driver"
+>  	depends on I2C
+>  	help
+> -	  Say yes here to build support for the Maxim Integrated DS1803
+> -	  digital potentiometer chip.
+> +	  Say yes here to build support for the Maxim Integrated Devices DS1803 and
+> +	  DS3502 digital potentiometer chip.
+>  
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called ds1803.
+> diff --git a/drivers/iio/potentiometer/ds1803.c b/drivers/iio/potentiometer/ds1803.c
+> index ca28ad147402..ca903e9c2816 100644
+> --- a/drivers/iio/potentiometer/ds1803.c
+> +++ b/drivers/iio/potentiometer/ds1803.c
+> @@ -1,12 +1,15 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Maxim Integrated DS1803 digital potentiometer driver
+> + * Maxim Integrated DS1803 and similar digital potentiometer driver
+>   * Copyright (c) 2016 Slawomir Stepien
+> + * Copyright (c) 2022 Jagath Jog J
+>   *
+>   * Datasheet: https://datasheets.maximintegrated.com/en/ds/DS1803.pdf
+> + * Datasheet: https://datasheets.maximintegrated.com/en/ds/DS3502.pdf
+>   *
+>   * DEVID	#Wipers	#Positions	Resistor Opts (kOhm)	i2c address
+>   * ds1803	2	256		10, 50, 100		0101xxx
+> + * ds3502	1	128		10			01010xx
+>   */
+>  
+>  #include <linux/err.h>
+> @@ -18,11 +21,13 @@
+>  
+>  #define DS1803_WIPER_0         0xA9
+>  #define DS1803_WIPER_1         0xAA
+> +#define DS3502_WR_IVR          0x00
+>  
+>  enum ds1803_type {
+>  	DS1803_010,
+>  	DS1803_050,
+>  	DS1803_100,
+> +	DS3502,
+>  };
+>  
+>  struct ds1803_cfg {
+> @@ -36,6 +41,7 @@ struct ds1803_cfg {
+>  struct ds1803_data {
+>  	struct i2c_client *client;
+>  	const struct ds1803_cfg *cfg;
+> +	enum ds1803_type chip_type;
+
+Hmm. I'm not that keen on this backwards reference (effectively).
+Consider using a read() function pointer in here instead.
+
+>  };
+>  
+>  #define DS1803_CHANNEL(ch, addr) {					\
+> @@ -54,6 +60,10 @@ static const struct iio_chan_spec ds1803_channels[] = {
+>  	DS1803_CHANNEL(1, DS1803_WIPER_1),
+>  };
+>  
+> +static const struct iio_chan_spec ds3502_channels[] = {
+> +	DS1803_CHANNEL(0, DS3502_WR_IVR),
+> +};
+> +
+>  static const struct ds1803_cfg ds1803_cfg[] = {
+>  	[DS1803_010] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  10,
+>  			 .channels = ds1803_channels,
+> @@ -64,6 +74,9 @@ static const struct ds1803_cfg ds1803_cfg[] = {
+>  	[DS1803_100] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms = 100,
+>  			 .channels = ds1803_channels,
+>  			 .num_channels = ARRAY_SIZE(ds1803_channels) },
+> +	[DS3502] =     { .wipers = 1, .avail = { 0, 1, 127 }, .kohms =  10,
+> +			 .channels = ds3502_channels,
+> +			 .num_channels = ARRAY_SIZE(ds3502_channels) },
+>  };
+>  
+>  static int ds1803_read_raw(struct iio_dev *indio_dev,
+> @@ -77,13 +90,26 @@ static int ds1803_read_raw(struct iio_dev *indio_dev,
+>  
+>  	switch (mask) {
+>  	case IIO_CHAN_INFO_RAW:
+> -		ret = i2c_master_recv(data->client, result,
+> -				      indio_dev->num_channels);
+> -		if (ret < 0)
+> -			return ret;
+> -
+> -		*val = result[pot];
+> -		return IIO_VAL_INT;
+> +		switch (data->chip_type) {
+> +		case DS1803_010:
+> +		case DS1803_050:
+> +		case DS1803_100:
+
+This block can become
+			ret = data->read(indio_dev, chan, val);
+or something along those lines and you can remove the switch statement
+as it's a simple lookup.
+
+> +			ret = i2c_master_recv(data->client, result,
+> +					      indio_dev->num_channels);
+> +			if (ret < 0)
+> +				return ret;
+> +			*val = result[pot];
+> +			return IIO_VAL_INT;
+> +		case DS3502:
+> +			ret = i2c_smbus_read_byte_data(data->client,
+> +						       chan->address);
+> +			if (ret < 0)
+> +				return ret;
+> +			*val = ret;
+> +			return IIO_VAL_INT;
+> +		default:
+> +			return -EINVAL;
+> +		}
+>  
+>  	case IIO_CHAN_INFO_SCALE:
+>  		*val = 1000 * data->cfg->kohms;
+> @@ -156,6 +182,7 @@ static int ds1803_probe(struct i2c_client *client, const struct i2c_device_id *i
+>  	if (!data->cfg)
+>  		data->cfg = &ds1803_cfg[id->driver_data];
+>  
+> +	data->chip_type = id->driver_data;
+>  	indio_dev->info = &ds1803_info;
+>  	indio_dev->channels = data->cfg->channels;
+>  	indio_dev->num_channels = data->cfg->num_channels;
+> @@ -168,6 +195,7 @@ static const struct of_device_id ds1803_dt_ids[] = {
+>  	{ .compatible = "maxim,ds1803-010", .data = &ds1803_cfg[DS1803_010] },
+>  	{ .compatible = "maxim,ds1803-050", .data = &ds1803_cfg[DS1803_050] },
+>  	{ .compatible = "maxim,ds1803-100", .data = &ds1803_cfg[DS1803_100] },
+> +	{ .compatible = "maxim,ds3502", .data = &ds1803_cfg[DS3502] },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, ds1803_dt_ids);
+> @@ -176,6 +204,7 @@ static const struct i2c_device_id ds1803_id[] = {
+>  	{ "ds1803-010", DS1803_010 },
+>  	{ "ds1803-050", DS1803_050 },
+>  	{ "ds1803-100", DS1803_100 },
+> +	{ "ds3502", DS3502 },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(i2c, ds1803_id);
+> @@ -192,5 +221,6 @@ static struct i2c_driver ds1803_driver = {
+>  module_i2c_driver(ds1803_driver);
+>  
+>  MODULE_AUTHOR("Slawomir Stepien <sst@poczta.fm>");
+> +MODULE_AUTHOR("Jagath Jog J <jagathjog1996@gmail.com>");
+>  MODULE_DESCRIPTION("DS1803 digital potentiometer");
+>  MODULE_LICENSE("GPL v2");
 

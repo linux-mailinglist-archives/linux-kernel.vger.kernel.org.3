@@ -2,109 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79F24BBC0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF634BBC19
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236973AbiBRPYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 10:24:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42710 "EHLO
+        id S236974AbiBRPZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:25:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbiBRPYG (ORCPT
+        with ESMTP id S232694AbiBRPZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:24:06 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340B22B2C63
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:23:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645197828; x=1676733828;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Tys8vO5jpeQwCnqRIjfr24bGhzNHl5EH73fMc8XJTZA=;
-  b=dr1soqJDNySDfeytT+SUSwi5p1nY7jmd8TmSc0L0WXZMGjpPrJsiRN0F
-   6m13Yg/lWkZHYrHsZyYWx+mCi6Ininikv6nWOBpDXowZQOqZ9LrXbVKR7
-   lGFrvm8BlNWFWzzU+TeqtAa/WN1SE0pRHzcweS+aSF/mELRte2AgPvv1f
-   mNy5ct2bn8Q/Y/gwpxigJRK0lMHOV/IVXEzjcSaPeqCIQjYdC+bnLyHek
-   AA9Tfvsh9WqiIe+fWHZAruWvxe1Bs3hXO+iOqNJh5xparMLcxUo7FNxYg
-   E0U+MohkElsZFIY23rQGysyqjEfk+0oT98T7K9dKq0ZXBegxmOUI+Rh9F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="250900614"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="250900614"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 07:23:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="546317536"
-Received: from nntpat99-84.inn.intel.com ([10.125.99.84])
-  by orsmga008.jf.intel.com with ESMTP; 18 Feb 2022 07:23:45 -0800
-From:   Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>
-Subject: [PATCH urgent] perf data: Fix double free in perf_session__delete
-Date:   Fri, 18 Feb 2022 18:23:41 +0300
-Message-Id: <20220218152341.5197-2-alexey.v.bayduraev@linux.intel.com>
-X-Mailer: git-send-email 2.19.0
-In-Reply-To: <20220218152341.5197-1-alexey.v.bayduraev@linux.intel.com>
-References: <20220218152341.5197-1-alexey.v.bayduraev@linux.intel.com>
+        Fri, 18 Feb 2022 10:25:17 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249672B1A9B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:24:59 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E894D1C0009;
+        Fri, 18 Feb 2022 15:24:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645197898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bH9jFFMUpeu1jlpFnHW5Tq0sYFAnVpCE7f4kf0gx5uo=;
+        b=EJbQ27ckGECJAr6ecUFCTGJJDDfnsaIrk8a2yf+1Vp7ZYZWk5Wv1UIpVhciwT1im2jJIXc
+        ZhUhKZb27ghHjdsKI0lQ7MYZlQ+c+iPxvMhGNDEYQYPbr1hXTjTnoIQ4MC25lXQCINH7fm
+        BetfPA3+IZAEtPa/mLRfrlavDGR0EJdgSecEyf4ucfjM1S2RzY3x3i9/E3QQEZOWx70Xdx
+        ZbEOgnkJBfQ6U6ycTk3iY+RFPsEBIOZeRhYnp2hHWD0JbJXtXWeQCiuxaBUbM8Jq/aUFKb
+        QgDoVbUeyWD7fUVU1SvrFJnRi/EtVfCd/OS2aruX7xecOcjhIPDKB2P1+CVWcw==
+Date:   Fri, 18 Feb 2022 16:24:55 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     mpm@selenic.com, herbert@gondor.apana.org.au,
+        nicolas.ferre@microchip.com, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] hwrnd: atmel - add runtime pm support
+Message-ID: <Yg+6R52is+0tQk3d@piout.net>
+References: <20220218101712.530576-1-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218101712.530576-1-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When perf_data__create_dir fails, it calls close_dir, but
-perf_session__delete also calls close_dir and since dir.version and
-dir.nr was initialized by perf_data__create_dir, a double free occurs.
-This patch moves the initialization of dir.version and dir.nr after
-successful initialization of dir.files, that prevents double freeing.
-This behavior is already implemented in perf_data__open_dir.
+On 18/02/2022 12:17:05+0200, Claudiu Beznea wrote:
+> Hi,
+> 
+> This series adds runtime PM support for atmel-rng driver. Along with
+> this some cleanup and fixes patches were added to the series.
+> 
+> Thank you,
+> Claudiu Beznea
+> 
+> Claudiu Beznea (7):
+>   hwrng: atmel - add wait for ready support on read
+>   hwrnd: atmel - disable trng on failure path
+>   hwrnd: atmel - rename enable/disable functions to init/cleanup
+>   hwrng: atmel - move set of TRNG_HALFR in atmel_trng_init()
+>   hwrnd: atmel - use __maybe_unused and pm_ptr() for pm ops
+>   hwrnd: atmel - add runtime pm support
+>   hwrnd: atmel - remove extra line
+>
 
-Fixes: 145520631130bd64 ("perf data: Add perf_data__(create_dir|close_dir) functions")
-Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
----
- tools/perf/util/data.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+I don't mind too much but you are mixing hwrng and hwrnd ;)
+ 
+>  drivers/char/hw_random/atmel-rng.c | 148 ++++++++++++++++++-----------
+>  1 file changed, 91 insertions(+), 57 deletions(-)
+> 
+> -- 
+> 2.32.0
+> 
 
-diff --git a/tools/perf/util/data.c b/tools/perf/util/data.c
-index f5d260b1df4d..15a4547d608e 100644
---- a/tools/perf/util/data.c
-+++ b/tools/perf/util/data.c
-@@ -44,10 +44,6 @@ int perf_data__create_dir(struct perf_data *data, int nr)
- 	if (!files)
- 		return -ENOMEM;
- 
--	data->dir.version = PERF_DIR_VERSION;
--	data->dir.files   = files;
--	data->dir.nr      = nr;
--
- 	for (i = 0; i < nr; i++) {
- 		struct perf_data_file *file = &files[i];
- 
-@@ -62,6 +58,9 @@ int perf_data__create_dir(struct perf_data *data, int nr)
- 		file->fd = ret;
- 	}
- 
-+	data->dir.version = PERF_DIR_VERSION;
-+	data->dir.files   = files;
-+	data->dir.nr      = nr;
- 	return 0;
- 
- out_err:
 -- 
-2.19.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

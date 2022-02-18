@@ -2,322 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FB04BC078
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 672A84BC07D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbiBRTtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 14:49:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46148 "EHLO
+        id S237987AbiBRTuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 14:50:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237908AbiBRTtV (ORCPT
+        with ESMTP id S235164AbiBRTuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 14:49:21 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AAA272782
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:49:03 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id a8so17350606ejc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:49:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hJEE+cv+6xCbGa4jQEXn7VGGp0DTOmfh8dpnPYBjQs4=;
-        b=rIPV2fS2vPSFW7PNQ0x0YCERTPrI8oAVWUydodMUCgPQ9MW2wUJ35O4kjM+CEsrhyS
-         hdrsiYVgCQHO/5eYAZOud3q5qtHFFI5ENXehoXCEfe+6hZe4g448nnFrFTtFUVJ17TC0
-         l07gzpJvFMtFQGMZOiVxszK+6BNR3wLQSz5msxAFkTcL+uUhhmi91zMzpKrF3b/6QbYo
-         cRd2N3F23iTjoqsZ5ZKOhQALglAm4QeE6+QHH4HnxlsZjL/ylCc2ZKp7GgCVjHekC7Gi
-         v2ndEvrqTVdBYRItbd1MVQ3LbYpxrySOj6wtqmVBfbZYi8ulwsFLNam+zMFJx7hJKNaO
-         5vtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hJEE+cv+6xCbGa4jQEXn7VGGp0DTOmfh8dpnPYBjQs4=;
-        b=Ac9/guOw/2bWF5/z2/vE1ETiOgUnBa0BPSZ2NSM0Bmbw1PpwbD9xzlmK8eQpP3Yzag
-         N+P2EH620f0RFvm7ah7sABYeQGK4uiqXlC2/6fSYmPiHQDgO73iFLZrbB3Q2ZHYWJkRU
-         buG+V+M5EY4ReFgtZh5CrNjxr9TtTRNGuGIQ/hZy5iFN6P+e7SRPKK682pSkWD8ckQ/V
-         rWP+iXahPdLtAPl8XZfWh6vwWzVgZPCK6khWtzEBF25SB1SsrG8w1h0LhmX+VFn2SnK+
-         BC2bkyDvlVnF5JRfyAy5HwRPew7UK1wdoH2K7hm0rcB4itgwCTuv/VvY/V57S4YauSkY
-         i73w==
-X-Gm-Message-State: AOAM532Q6qcBcAJDV2Gz7FVtBYXnCiEtqADaRP/06otvsB38D24kgykD
-        2DKpyWJDueH2jBCt5UPvMSBV82nsl5B83aFuiQFT865kRKlyGDJ1
-X-Google-Smtp-Source: ABdhPJyANf5tRTb+iv8hDetZDFPXvNsUyCaJuFRUVFO2LQDy49MwpU+MvUtcJFBc3n6LVQg/yvQFVG4rrjgpS+HAS1E=
-X-Received: by 2002:a17:906:2897:b0:6ce:e16a:c09c with SMTP id
- o23-20020a170906289700b006cee16ac09cmr7393479ejd.114.1645213742013; Fri, 18
- Feb 2022 11:49:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20220211023008.3197397-1-wonchung@google.com> <CAJZ5v0gD4zs3uBAYv6M4_1gNpkZ-g9XKOywJnf5007e6GwoGVA@mail.gmail.com>
- <CAOvb9yjpruiHxkZyZ8BOT0Hi_iV7xMOnBCr59BZX3eah_Zcy_w@mail.gmail.com>
- <CAOvb9yh7jo27NH32tbAOtkJrnC9LwUFgFbHRbdbArwiU+YSmdw@mail.gmail.com>
- <Ygt9B6+0b1hIBr5a@kuha.fi.intel.com> <CAJZ5v0hVZ1a9krnfW=ogdi+bpOpGDPvT12NxdstRRWjhNi+v3g@mail.gmail.com>
- <YgzhRgPD/eBw6UU3@kuha.fi.intel.com> <CAJZ5v0gQnbYv15EKXhicwHM5+Kp9sjv1QyscxagiC7isn-p1WA@mail.gmail.com>
- <CAOvb9yhGMtA2+jzQ5KxBRDDtASQfA3BPxnHhCrgd_8E4umtiig@mail.gmail.com> <CAJZ5v0img+=uZQwOgj=gCpsDfkeygPHb+vDKrxG4bO189-vR=g@mail.gmail.com>
-In-Reply-To: <CAJZ5v0img+=uZQwOgj=gCpsDfkeygPHb+vDKrxG4bO189-vR=g@mail.gmail.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Fri, 18 Feb 2022 11:48:50 -0800
-Message-ID: <CAOvb9yh7uNg9ZU3RsieGChsjLCfKQhHhipBi4RMuQYKEA4fu9A@mail.gmail.com>
-Subject: Re: [PATCH v6] ACPI: device_sysfs: Add sysfs support for _PLD
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <greg@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 18 Feb 2022 14:50:10 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603C128F970;
+        Fri, 18 Feb 2022 11:49:53 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IJbsEc019615;
+        Fri, 18 Feb 2022 19:49:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=0bNWs3y7alJX9yOw12cdKbGps4DI3+y9jedSaQwlQ9g=;
+ b=SdAjwMoUHkyBRUbK5faHeWPVQzH2eXy8xao1WvzppO3VyeN/Cb8nKGoKIKYh8RXEGSJP
+ Ge2hywMtgWPo/biv/pVv3l2tMEC9Rd+vHsdNLGbHm/oVCpydJvJT1mLHr329/PQeh2ft
+ 7azGDHumghiA4AAuqtEySgPOD3RBEtl1gZrbezD+CYjHFcyMuUpccrKrYvDPlLGke8EN
+ RRumqZonOb4GI30DDUQAxAlR11zmwkDMyKxKXqI2FL5/yC4SDBiqs378VoMd0YQiCKG9
+ GP/IsLllqT0Fy6qalY6I1tykC0dWD3CL2kco1lT/D9fWBjE3tsnZR4+w5pROcFyHCOyo yA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3eafqqke7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Feb 2022 19:49:32 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21IJf9jb032150;
+        Fri, 18 Feb 2022 19:49:31 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3eafqqke7a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Feb 2022 19:49:31 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21IJhxNA026396;
+        Fri, 18 Feb 2022 19:49:29 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645km8gf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Feb 2022 19:49:29 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21IJnPXg22610194
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Feb 2022 19:49:25 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ECBAB4C04A;
+        Fri, 18 Feb 2022 19:49:24 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E5AC4C058;
+        Fri, 18 Feb 2022 19:49:22 +0000 (GMT)
+Received: from sig-9-65-86-101.ibm.com (unknown [9.65.86.101])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 18 Feb 2022 19:49:22 +0000 (GMT)
+Message-ID: <5a71b96d0969cb7222d5b8637a19ed34cb08c72e.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 17/27] ima: Add functions for creating and freeing
+ of an ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Christian Brauner <brauner@kernel.org>
+Date:   Fri, 18 Feb 2022 14:49:21 -0500
+In-Reply-To: <20220201203735.164593-18-stefanb@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-18-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AaC2QZgmvwzkGCqGsL3sAqsqFZpw7HLx
+X-Proofpoint-ORIG-GUID: bzhxvu5uARNS9Bp7LEAChImnpE-VW5SN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-18_08,2022-02-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 phishscore=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202180119
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 9:25 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Feb 18, 2022 at 2:15 AM Won Chung <wonchung@google.com> wrote:
-> >
-> > On Wed, Feb 16, 2022 at 8:39 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Wed, Feb 16, 2022 at 12:34 PM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > On Tue, Feb 15, 2022 at 02:54:11PM +0100, Rafael J. Wysocki wrote:
-> > > > > On Tue, Feb 15, 2022 at 11:14 AM Heikki Krogerus
-> > > > > <heikki.krogerus@linux.intel.com> wrote:
-> > > > > >
-> > > > > > On Mon, Feb 14, 2022 at 02:58:44PM -0800, Won Chung wrote:
-> > > > > > > On Mon, Feb 14, 2022 at 12:30 PM Won Chung <wonchung@google.com> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, Feb 14, 2022 at 11:12 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Fri, Feb 11, 2022 at 3:30 AM Won Chung <wonchung@google.com> wrote:
-> > > > > > > > > >
-> > > > > > > > > > When ACPI table includes _PLD fields for a device, create a new
-> > > > > > > > > > directory (pld) in sysfs to share _PLD fields.
-> > > > > > > > >
-> > > > > > > > > This version of the patch loos better to me, but I'm not sure if it
-> > > > > > > > > goes into the right direction overall.
-> > > > > > > > >
-> > > > > > > > > > Currently without PLD information, when there are multiple of same
-> > > > > > > > > > devices, it is hard to distinguish which device corresponds to which
-> > > > > > > > > > physical device in which location. For example, when there are two Type
-> > > > > > > > > > C connectors, it is hard to find out which connector corresponds to the
-> > > > > > > > > > Type C port on the left panel versus the Type C port on the right panel.
-> > > > > > > > >
-> > > > > > > > > So I think that this is your primary use case and I'm wondering if
-> > > > > > > > > this is the best way to address it.
-> > > > > > > > >
-> > > > > > > > > Namely, by exposing _PLD information under the ACPI device object,
-> > > > > > > > > you'll make user space wanting to use that information depend on this
-> > > > > > > > > interface, but the problem is not ACPI-specific (inevitably, it will
-> > > > > > > > > appear on systems using DT, sooner or later) and making the user space
-> > > > > > > > > interface related to it depend on ACPI doesn't look like a perfect
-> > > > > > > > > choice.
-> > > > > > > > >
-> > > > > > > > > IOW, why don't you create a proper ABI for this in the Type C
-> > > > > > > > > subsystem and expose the information needed by user space in a generic
-> > > > > > > > > way that can be based on the _PLD information on systems with ACPI?
-> > > > > > > >
-> > > > > > > > Hi Rafael,
-> > > > > > > >
-> > > > > > > > Thank you for the review.
-> > > > > > > >
-> > > > > > > > I was thinking that _PLD info is specific to ACPI since it is part of
-> > > > > > > > the ACPI table. Could you explain a little bit more on why you think
-> > > > > > > > exposing _PLD fields is not an ACPI-specific problem?
-> > > > > > >
-> > > > > > > Hi Rafael again,
-> > > > > > >
-> > > > > > > Sorry for the silly question here. I misunderstood your comment a bit,
-> > > > > > > but I talked to Benson and Prashant for clarification. I understand
-> > > > > > > now what you mean by it is not an ACPI-specific problem and exposing
-> > > > > > > PLD would depend on ACPI.
-> > > > > > >
-> > > > > > > >
-> > > > > > > > I gave an example of how _PLD fields can be used for specifying Type C
-> > > > > > > > connectors, but it is not Type C specific. For Chrome OS, we plan to
-> > > > > > > > initially add PLD to not only Type C connectors but also USB port
-> > > > > > > > devices (including Type C and Type A). Also, PLD can be used in the
-> > > > > > > > future for describing other types of ports too like HDMI. (Benson and
-> > > > > > > > Prashant, please correct or add if I am wrong or missing some
-> > > > > > > > information) Maybe my commit message was not detailed enough..
-> > > > > > > >
-> > > > > > > > I am also curious what Heikki thinks about this. Heikki, can you take
-> > > > > > > > a look and share your thoughts?
-> > > > > > >
-> > > > > > > I am still curious what you and Heikki think about this since it may
-> > > > > > > not be a Type C specific issue. We can start from adding generic
-> > > > > > > location info to Type C subsystem first, as you suggested, then
-> > > > > > > consider how to do the same for USB devices and Type A ports
-> > > > > > > afterwards. I would appreciate sharing any thoughts or feedback. Thank
-> > > > > > > you very much!
-> > > > > >
-> > > > > > Like you said, _PLD is not Type-C specific. We can't limit it to any
-> > > > > > specific device class. For example, I'm pretty sure that sooner or
-> > > > > > later we want to get this information in user space also with camera
-> > > > > > sensors, and probable with a few other things as well.
-> > > > > >
-> > > > > > I think the question here is, can we create a some kind of an
-> > > > > > abstraction layer for the user space that exposes the device location
-> > > > > > details in generic Linux specific way - so with ACPI it would utilise
-> > > > > > the _PLD, and with DT something else (today AFAIK DT does not have
-> > > > > > any way to describe locations of the devices). Maybe I'm wrong?
-> > > > >
-> > > > > No, you aren't.
-> > > > >
-> > > > > > But if that is the question, then IMO the answer is: maybe one day,
-> > > > > > but not today,
-> > > > >
-> > > > > Why not?
-> > > > >
-> > > > > > and even if we one day can come up with something like
-> > > > > > that, we still should expose the _PLD as ACPI specific information to
-> > > > > > the user space as is.
-> > > > >
-> > > > > Why would it need that information in this particular format?
-> > > > >
-> > > > > > Even if one day we have common sysfs attributes for all the devices
-> > > > > > that contain the location of the device in some form, those attributes
-> > > > > > will almost certainly have only a sub-set of the _PLD details, a
-> > > > > > sub-set that works also with DT.
-> > > > >
-> > > > > That doesn't have to be the case.
-> > > > >
-> > > > > However, things linke cpuidle have been invented to provide user space
-> > > > > interfaces for features that previously were only available on systems
-> > > > > with ACPI.  Why is _PLD different?
-> > > > >
-> > > > > > IMO the user space should always have access to all the necessary _PLD
-> > > > > > details in their raw form if needed, even if those common device
-> > > > > > location attributes exist - duplicated information or not.
-> > > > >
-> > > > > Again, why would it need that information?
-> > > >
-> > > > We don't know if we'll need that in the future, and that's the point.
-> > >
-> > > Well, for me that would be a good enough reason for avoiding to expose it.
-> > >
-> > > If there is no particular reason for exposing any information to user
-> > > space, I don't see why it should be exposed at all.
-> > >
-> > > There is some cost of exposing things to user space, so why pay it for
-> > > no benefit?
-> > >
-> > > > > > And debugfs
-> > > > > > unfortunately is also not OK for that, because the user space needs to
-> > > > > > be able to also rely on access to the additional details if needed.
-> > > > >
-> > > > > What additional details do you mean?
-> > > > >
-> > > > > > We can limit the _PLD fields that we expose to the ones that we know
-> > > > > > we need today (and probable should limit them to those), and we can of
-> > > > > > course have a Kconfig option for the _PLD sysfs information if we want
-> > > > > > to, but let's not start this by trying to figure out what kind of
-> > > > > > abstraction we want for this. Right now we simply can not do that.
-> > > > >
-> > > > > Why can't we?
-> > > >
-> > > > Right now we can't say for sure if DT can even supply the details that
-> > > > we need from _PLD. I don't think we can at the moment even say are the
-> > > > DT guys willing to support this at all.
-> > > >
-> > > > To play it safe, I would just supply the needed _PLD fields as part of
-> > > > the ACPI device nodes (under /sys/bus/acpi).
-> > >
-> > > That would be suboptimal for a few reasons:
-> > >
-> > > 1. The interface is potentially confusing.  User space would first
-> > > need to locate the ACPI device interface corresponding to the given
-> > > "real" device in order to use that information.
-> > > 2. It doesn't scale beyond ACPI.
-> > > 3. From the ACPI subsystem's perspective the choice of the "relevant"
-> > > _PLD fields is arbitrary and exposing all of them is overkill for any
-> > > use cases known to me.
-> > > 4. The ACPI subsystem doesn't know the devices for which _PLD
-> > > information should be exposed and there are some devices for which it
-> > > is just not useful.
-> > >
-> > > > There we can guarantee
-> > > > that we'll always be able to supply all the information in the _PDL if
-> > > > needed. Since we would add these to the ACPI nodes, it would be
-> > > > crystal clear to the userspace that this information is only available
-> > > > on ACPI platforms.
-> > >
-> > > I'm not considering this as a feature.
-> > >
-> > > > Then if, and only if, we know that DT can supply the same information
-> > > > (at least to some of it) I would start thinking about the alternative
-> > > > interface to this information that we make part of the actual devices.
-> > > > Since at this point we have already the primary ACPI specific
-> > > > interface to this same information that guarantees that it can supply
-> > > > all the details if necessary, we don't have to worry about having to
-> > > > be able to do the same with this new interface. This interface can
-> > > > just expose the common details that we know for sure that both ACPI
-> > > > and DT can always supply.
-> > >
-> > > Well, there is another possible approach: Expose the information
-> > > needed to address a particular use case in a way that doesn't strictly
-> > > depend on ACPI and make this use ACPI as a backend.  Don't worry about
-> > > the DT side of things.  If the generic interface is there and it is
-> > > suitable enough, DT will be in the receiving end position with much
-> > > less of a freedom to introduce a new interface for the same purpose.
-> > >
-> > > On the other hand, if _PLD information is exposed in an ACPI-specific
-> > > way, it is almost guaranteed that there will be a DT-specific
-> > > interface for the same thing and utilities wanting to be generic will
-> > > need to support both of them which will be extra pain.  Some of them
-> > > will choose to support the DT-specific interface only and we'll end up
-> > > with utilities that can't be used on ACPI-based systems because of
-> > > incompatible interfaces.  Been there already.  Thanks, but no thanks!
-> >
-> > Hi Rafael,
-> >
-> > Thank you for the feedback. If we add a generic location to type c
-> > connector, would you suggest we do something similar to other devices
-> > that would use PLD information? (like USB devices, HDMI ports, and so
-> > on).
->
-> If there is a specific use case for exposing that information to user
-> space, then yes, but it all depends on how user space is going to use
-> that information (or how you envision the usage of that information in
-> user space).
->
-> > Also, I am curious what you think about how to add generic
-> > locations for Type A ports which I believe do not have connectors like
-> > Type C. I would appreciate it if anyone can share any ideas. Thank you
-> > very much!
->
-> I'm not sure I understand the question correctly.  Can you clarify,
-> please?  Or better, give an example of what exactly you are referring
-> to?
+On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> Implement create_ima_ns() to create an empty ima_namespace. Defer its
+> initialization to a later point outside this function. Implement
+> free_ima_ns() to free it.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
+> 
+> ---
+> v9:
+>  - Set user_ns->ims_ns = NULL in free_ima_ns()
+>  - Refactored create_ima_ns() to defer initialization
+>  - Removed pr_debug functions
+> ---
+>  include/linux/ima.h                      | 13 ++++++
+>  security/integrity/ima/Makefile          |  1 +
+>  security/integrity/ima/ima.h             | 15 +++++++
+>  security/integrity/ima/ima_init_ima_ns.c |  2 +-
+>  security/integrity/ima/ima_ns.c          | 53 ++++++++++++++++++++++++
+>  5 files changed, 83 insertions(+), 1 deletion(-)
+>  create mode 100644 security/integrity/ima/ima_ns.c
+> 
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 0cf2a80c8b35..964a08702573 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -220,4 +220,17 @@ static inline bool ima_appraise_signature(enum kernel_read_file_id func)
+>  	return false;
+>  }
+>  #endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+> +
+> +#ifdef CONFIG_IMA_NS
+> +
+> +void free_ima_ns(struct user_namespace *ns);
+> +
+> +#else
+> +
+> +static inline void free_ima_ns(struct user_namespace *user_ns)
+> +{
+> +}
+> +
+> +#endif /* CONFIG_IMA_NS */
+> +
+>  #endif /* _LINUX_IMA_H */
+> diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
+> index f8a5e5f3975d..b86a35fbed60 100644
+> --- a/security/integrity/ima/Makefile
+> +++ b/security/integrity/ima/Makefile
+> @@ -14,6 +14,7 @@ ima-$(CONFIG_HAVE_IMA_KEXEC) += ima_kexec.o
+>  ima-$(CONFIG_IMA_BLACKLIST_KEYRING) += ima_mok.o
+>  ima-$(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) += ima_asymmetric_keys.o
+>  ima-$(CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS) += ima_queue_keys.o
+> +ima-$(CONFIG_IMA_NS) += ima_ns.o
+>  
+>  ifeq ($(CONFIG_EFI),y)
+>  ima-$(CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT) += ima_efi.o
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 8c757223d549..751e936a6311 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -167,6 +167,7 @@ extern bool ima_canonical_fmt;
+>  int ima_init(void);
+>  int ima_fs_init(void);
+>  int ima_ns_init(void);
+> +int ima_init_namespace(struct ima_namespace *ns);
+>  int ima_add_template_entry(struct ima_namespace *ns,
+>  			   struct ima_template_entry *entry, int violation,
+>  			   const char *op, struct inode *inode,
+> @@ -502,4 +503,18 @@ static inline struct ima_namespace
+>  	return NULL;
+>  }
+>  
+> +#ifdef CONFIG_IMA_NS
+> +
+> +struct ima_namespace *create_ima_ns(void);
+> +
+> +#else
+> +
+> +static inline struct ima_namespace *create_ima_ns(void)
+> +{
+> +	WARN(1, "Cannot create an IMA namespace\n");
+> +	return ERR_PTR(-EFAULT);
+> +}
+> +
+> +#endif /* CONFIG_IMA_NS */
+> +
+>  #endif /* __LINUX_IMA_H */
+> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
+> index 1cba545ae477..166dab4a3126 100644
+> --- a/security/integrity/ima/ima_init_ima_ns.c
+> +++ b/security/integrity/ima/ima_init_ima_ns.c
+> @@ -8,7 +8,7 @@
+>  
+>  #include "ima.h"
+>  
+> -static int ima_init_namespace(struct ima_namespace *ns)
+> +int ima_init_namespace(struct ima_namespace *ns)
+>  {
+>  	int rc;
+>  
+> diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
+> new file mode 100644
+> index 000000000000..b3b81a1e313e
+> --- /dev/null
+> +++ b/security/integrity/ima/ima_ns.c
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2016-2021 IBM Corporation
+> + * Author:
+> + *  Yuqiong Sun <suny@us.ibm.com>
+> + *  Stefan Berger <stefanb@linux.vnet.ibm.com>
+> + */
+> +
+> +#include <linux/ima.h>
+> +
+> +#include "ima.h"
+> +
+> +static struct kmem_cache *imans_cachep;
+> +
+> +struct ima_namespace *create_ima_ns(void)
+> +{
+> +	struct ima_namespace *ns;
+> +
+> +	ns = kmem_cache_zalloc(imans_cachep, GFP_KERNEL);
+> +	if (!ns)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	return ns;
+> +}
+> +
+> +/* destroy_ima_ns() must only be called after ima_init_namespace() was called */
+> +static void destroy_ima_ns(struct ima_namespace *ns)
+> +{
+> +	unregister_blocking_lsm_notifier(&ns->ima_lsm_policy_notifier);
+> +	kfree(ns->arch_policy_entry);
 
-Hi Rafael,
+Oh!  Here's the missing free of the architecture specific rules
+(comment on 16/27).  Even if these rules have already been freed after
+a custom policy is loaded, I guess it is safe to free them again.
 
-For Type C ports, we have Type C connectors at /sys/class/typec in
-which we can add generic location information, as you suggested.
-However, since Type A ports do not have such connectors, I was curious
-what would be a good way to add a generic location, instead of
-exposing _PLD directly in the USB-A port's ACPI device.
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Now that I think about it again and look through sysfs, I think we can
-also add generic location to
-/sys/bus/usb/devices/.../<hub_interface>/port<X>, some of which
-represents Type A ports. Benson, do you think this could be a good way
-for Type A ports? Who would be a good person to get feedback on this?
+> +	ima_free_policy_rules(ns);
+> +}
+> +
+> +void free_ima_ns(struct user_namespace *user_ns)
+> +{
+> +	struct ima_namespace *ns = user_ns->ima_ns;
+> +
+> +	if (!ns || WARN_ON(ns == &init_ima_ns))
+> +		return;
+> +
+> +	destroy_ima_ns(ns);
+> +
+> +	kmem_cache_free(imans_cachep, ns);
+> +
+> +	user_ns->ima_ns = NULL;
+> +}
+> +
+> +static int __init imans_cache_init(void)
+> +{
+> +	imans_cachep = KMEM_CACHE(ima_namespace, SLAB_PANIC);
+> +	return 0;
+> +}
+> +subsys_initcall(imans_cache_init)
 
-Heikki, I am also convinced by Rafael's feedback since userspace code
-would also be quite ACPI-specific to access _PLD fields from ACPI
-device sysfs. Would you agree? Regarding your concerns with DT, we can
-look for some ways to have similar location information on systems
-with DT. Would it sound okay to you to add generic location in Type C
-connectors? If it does, I can start working on it and send patches for
-review. If it does not, I would appreciate it if you can share your
-thoughts on possible alternative approach.
 
-Thank you very much all for the feedback!
-Won

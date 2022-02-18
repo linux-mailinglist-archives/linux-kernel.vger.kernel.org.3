@@ -2,134 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEBB4BB859
+	by mail.lfdr.de (Postfix) with ESMTP id 56CCF4BB85A
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbiBRLjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:39:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45106 "EHLO
+        id S233192AbiBRLjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 06:39:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234635AbiBRLgu (ORCPT
+        with ESMTP id S234836AbiBRLjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 06:36:50 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25B12B164D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:36:33 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 850563F32C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:36:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645184192;
-        bh=eqZvCZxGDjXGAgoTRaRXfKhQZpkzSKP7kp6S7SARNpY=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-         In-Reply-To:Content-Type;
-        b=X/Qxqu1b2QA5P0fjlT4ZCgO09Roo3NibTaA+5/cCKWw3eF/2c2MpGjkTBGZdMJrGV
-         F3rprKcYdulcjeXI4Yv9J6NoTV90IBCBYhJSxLGp6jfZsdfEp7sDtoqUnTO6blqBhl
-         uzxTGl8ClNPKw2kpLp9c/QB9b5MdUvqo6pCF1J6xbB9UxHs0f7wYkiLTqXA66H7wwZ
-         XU11lxK03TchitBQOK1vktLn4ZIPRqxxr6vPQidOVPyrEJ6YEC8z9voObMfFKkf3l+
-         Ov9289IpGTmIQVmH4YO+BziF37/m4aPZ/X44MRt0K2ZTtq62avvwk/Jvk27ct7naBI
-         O8+oBKLQriXYQ==
-Received: by mail-ed1-f71.google.com with SMTP id b26-20020a056402139a00b004094fddbbdfso5369876edv.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:36:32 -0800 (PST)
+        Fri, 18 Feb 2022 06:39:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8385131351
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645184253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kRz2HhmPOJqUdEguD6ineI0jgT8YXoXhvMfK4d0/iRk=;
+        b=iZ8JXWnJegYuprPViiFj2S44PQ5iqRXJGJHJRk8YfDqhz7va0cVkg6kWlG4cwcBN6x2pCA
+        9fazozbtoSl1s2Rhbqr0EH5/lxR42g1nYTgNTZkz85TOWE3VsRg/zbtTgvTKxOBhsXjZgi
+        V3ZipINj24mTyr6QYckhe1LKrV7RcMo=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-460-jfc7Aa6qMPSA7UniXMQkBQ-1; Fri, 18 Feb 2022 06:37:32 -0500
+X-MC-Unique: jfc7Aa6qMPSA7UniXMQkBQ-1
+Received: by mail-ed1-f72.google.com with SMTP id y13-20020aa7c24d000000b00411925b7829so5197921edo.22
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:37:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=eqZvCZxGDjXGAgoTRaRXfKhQZpkzSKP7kp6S7SARNpY=;
-        b=JSceLPY5s2O1JW5cj5DIJPTDAi6PRM2b3u0a/bnXR+ETPxerQoJvWuj/AfnuKLDX4h
-         g8F0lCZmbcjR49crj8FakTeILe3368d5WSKKcWv2Me+hDppV1DpArb46loPGeiUcjm1A
-         jzjrotpOfHQ4GD7eKghk9Gb1f0l90TC8RiU+k++XZdr+4yLzvLLXxqjsU+PsUxWCmRj0
-         xP7/zXH0svCZoxodcrXRmjeFnAnXK55XOwSMgkRSlhxvodpa+/or0w6YRuTl2QtU+eTj
-         mkfWuRBMdAUKbLyIHM5pl9eaEZskyuUaqFVttG3vvr3AfIY57ilM36ksOo+QFw02pHgu
-         b9ng==
-X-Gm-Message-State: AOAM533Ph0/uma2LXx2jpf8GXX1xNxtzBvdc4NKY8Txbs1orI/SddTC/
-        Q7+foDoIfV+2drGQtDA6ADgz0E+VeGwiJxZzqbbro5Af1jgzv1IDEJtHMFVkFkZptDLzo+TXos+
-        N7kT7C/DFwMP4zWPwhURd/+Al6FjVom+mA9qCuZEVYw==
-X-Received: by 2002:a17:906:6408:b0:6ce:a125:9f8a with SMTP id d8-20020a170906640800b006cea1259f8amr6301205ejm.755.1645184192060;
-        Fri, 18 Feb 2022 03:36:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwy81ceaKjvz0Zq2b5XTujzz20F5PuvcE9JiodWtJ3SHuBmN7udhs1Vua8wt9qc1W8hJbTynA==
-X-Received: by 2002:a17:906:6408:b0:6ce:a125:9f8a with SMTP id d8-20020a170906640800b006cea1259f8amr6301190ejm.755.1645184191864;
-        Fri, 18 Feb 2022 03:36:31 -0800 (PST)
-Received: from [192.168.0.114] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id s15sm2182902ejj.84.2022.02.18.03.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 03:36:31 -0800 (PST)
-Message-ID: <3a36a973-1bc2-0472-9820-375584e00982@canonical.com>
-Date:   Fri, 18 Feb 2022 12:36:30 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kRz2HhmPOJqUdEguD6ineI0jgT8YXoXhvMfK4d0/iRk=;
+        b=mPIwmHW/s1pghskw65RyJLZZaTWNU7Fyh0tvhe5za6dRd+AdAW7OEnhoRygIyyf1vm
+         DjORshlYNPV1ekahSQKNZPlbnT48BrfvzrBfTfAi4DwTNXi9NHm2D0BdlieVqIkQYMSd
+         xPEZmTV0UBRPb5UxEZar/j+nTlskRnXfn//6Anzd2og1y3ramYXzjkRH+kEJMETt9yOC
+         wytTe7kLVSkutyZaKa7C2HZQBlSwjMPzRbhSTIFnzPZiZo69xZESOnIdmt4xnD4o+XVI
+         yAuNONFZu8dhOtm6pNtVcCj7zOr7yjHrTIf6nNdZbvH/oJtV7ZQaoT6TGSTUx8tFTp2l
+         n7KA==
+X-Gm-Message-State: AOAM531BpVapV+v9t2sE3f/xvRx1sppLYAdibL42gCKLNVlYHZGnDZSO
+        utxJ/q9PUSZ42t1Ylg3n+gWp7/sJtuAzXm4WeDgBZ7hICc1DjyhzQGTCCDdjkAkBqOYRoQU6+K9
+        opGlNA8Osxk86bfdJF90tsJes
+X-Received: by 2002:a17:906:f293:b0:6b6:bc93:f01f with SMTP id gu19-20020a170906f29300b006b6bc93f01fmr5656030ejb.743.1645184251241;
+        Fri, 18 Feb 2022 03:37:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyumwEeTQqcko1h2tOqCFdEjZvTGldy8JfDmmW/0pXvLQMU7H6ovgQWyZGrpbpB4r5tpsNPFQ==
+X-Received: by 2002:a17:906:f293:b0:6b6:bc93:f01f with SMTP id gu19-20020a170906f29300b006b6bc93f01fmr5656019ejb.743.1645184251001;
+        Fri, 18 Feb 2022 03:37:31 -0800 (PST)
+Received: from redhat.com ([2.55.156.211])
+        by smtp.gmail.com with ESMTPSA id z18sm2209291ejl.78.2022.02.18.03.37.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 03:37:30 -0800 (PST)
+Date:   Fri, 18 Feb 2022 06:37:26 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
+Cc:     jasowang@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
+Message-ID: <20220218063352-mutt-send-email-mst@kernel.org>
+References: <00000000000070ac6505d7d9f7a8@google.com>
+ <0000000000003b07b305d840b30f@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/2] Documentation: dt: extcon: add optional
- input-debounce attribute
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Raveendra Padasalagi <raveendra.padasalagi@broadcom.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com
-References: <1508406773-887-1-git-send-email-raveendra.padasalagi@broadcom.com>
- <12b558e3-dc99-db6a-73ea-7d704262ac6a@canonical.com>
-In-Reply-To: <12b558e3-dc99-db6a-73ea-7d704262ac6a@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000003b07b305d840b30f@google.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/02/2022 12:32, Krzysztof Kozlowski wrote:
-> On 19/10/2017 11:52, Raveendra Padasalagi wrote:
->> Add documentation on optional dt attribute "input-debounce"
->> in extcon node to capture user specified timeout value for id
->> and vbus gpio detection.
->>
->> Signed-off-by: Raveendra Padasalagi <raveendra.padasalagi@broadcom.com>
->> Reviewed-by: Ray Jui <ray.jui@broadcom.com>
->> Reviewed-by: Srinath Mannam <srinath.mannam@broadcom.com>
->> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
->> ---
->>
->> Changes in v3:
->>  - Modified commit log to name debounce-timeout-ms to input-debounce
->>  - Added Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
->>
->> Changes in v2:
->>  Rename debounce-timeout-ms to input-debounce
->>
->>  Documentation/devicetree/bindings/extcon/extcon-usb-gpio.txt | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/extcon/extcon-usb-gpio.txt b/Documentation/devicetree/bindings/extcon/extcon-usb-gpio.txt
->> index dfc14f7..d115900 100644
->> --- a/Documentation/devicetree/bindings/extcon/extcon-usb-gpio.txt
->> +++ b/Documentation/devicetree/bindings/extcon/extcon-usb-gpio.txt
->> @@ -10,6 +10,9 @@ Either one of id-gpio or vbus-gpio must be present. Both can be present as well.
->>  - id-gpio: gpio for USB ID pin. See gpio binding.
->>  - vbus-gpio: gpio for USB VBUS pin.
->>  
->> +Optional properties:
->> +- input-debounce: debounce timeout value for id and vbus gpio in microseconds.
->> +
+On Thu, Feb 17, 2022 at 05:21:20PM -0800, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
 > 
-> Use standard unit suffix. See schemas/property-units.yaml in dtschema
-> sources/repo.
+> HEAD commit:    f71077a4d84b Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=104c04ca700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1362e232700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11373a6c700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> kernel BUG at drivers/vhost/vhost.c:2335!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 3597 Comm: vhost-3596 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
+> Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+> RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+> R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
+> R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
+>  vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
+>  kthread+0x2e9/0x3a0 kernel/kthread.c:377
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
-Although different topic is what Rob expressed here:
-https://lore.kernel.org/all/20171025145337.kubcbkxrhbsy6o4a@rob-hp-laptop/
+I don't see how this can trigger normally so I'm assuming
+another case of use after free.
 
-It's a no go and sending new versions is not the way to deal with it.
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
+> Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+> RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+> R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
+> R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Best regards,
-Krzysztof

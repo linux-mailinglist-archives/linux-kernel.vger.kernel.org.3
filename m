@@ -2,46 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55954BB76C
+	by mail.lfdr.de (Postfix) with ESMTP id 568234BB76B
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbiBRLA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:00:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52946 "EHLO
+        id S234256AbiBRLAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 06:00:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234228AbiBRLAV (ORCPT
+        with ESMTP id S234244AbiBRLA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 06:00:21 -0500
-Received: from smtpproxy21.qq.com (smtpbg703.qq.com [203.205.195.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B68F1ED621
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:00:05 -0800 (PST)
-X-QQ-mid: bizesmtp67t1645181999tkqrwa4u
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 18 Feb 2022 18:59:53 +0800 (CST)
-X-QQ-SSF: 01400000002000B0E000B00M0000000
-X-QQ-FEAT: Lrjk7Ti9kjiycnf/HJB03UJzBsueqWUhUXioFSdAl8z5DeJyXcGEgbTEWkY8Z
-        tlSY2FaakRoz9rxks4ej69Dr5xLalOMJjc9Cp/HothRGQOPZ9KH4sygP3ietuFRK9YQzkUE
-        CfPvhl+SxQ7OZe7hSJlZSvwNJPIixEaAXB9kTW9mbACkWlU/TgM1iE6dBjCs3Lt+rMewEoD
-        z1BeFW4mkjpb/rYmXknsPh6ncO0R6pL7+xY1opKDZvJuTKzgHCKEpJ+xBCT9UpbG9SaF+Kq
-        IENOVLHeq9kM3OHPVDm6LEmGRkHpDwBj9xYxJnOIHVuQ9DMKRvdzz571Wv8Jhlt2f7X845l
-        KJ1PRox6Qj2jQVeeMVLZA7L1PLIsFKcQfd9tDsDuqK/sc8ZgvI=
-X-QQ-GoodBg: 2
-From:   tangmeng <tangmeng@uniontech.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH 5/5] kernel/do_mount_initrd: move real_root_dev sysctls to its own file
-Date:   Fri, 18 Feb 2022 18:59:49 +0800
-Message-Id: <20220218105949.13125-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 18 Feb 2022 06:00:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011A01EB420;
+        Fri, 18 Feb 2022 03:00:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91B6B61E80;
+        Fri, 18 Feb 2022 11:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EDB11C340EB;
+        Fri, 18 Feb 2022 11:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645182010;
+        bh=KwglRraOwOZOyLVRrYY428yqdeqobp9eallBt0vf47w=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ifQQtPSY4h9ByFo7m6Lj86wzl27AaVnW50/hj4q6IbZZyWHhdn5Jpo3cOlrYj+vc/
+         9yCWB0LunTBgmZZj2hdX9cT7OQQ/VfMYF62XramxmF78eb3pTVWcIgil9vZlRv7hww
+         T6CTMacI2yrhfbmj8F+AMEe9DDIgtXnVPMWQn2CtSiC4KstBfHQ7ZNXtSyOOVYMPPX
+         Xv+YsTGl1fSGoZiOYTRIRw0c/lXuwxlcWuQnzSvtPTyYADPBVrPbc0DZ9SwQm1rL+t
+         XWu5b9UqGuojhVMerU/PbxjoOwqyoA0O9TrLaY5ivEVq6dN3cUHdAVL5dI3Vs7ADxh
+         C6p2I6GkPpIUg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D6F33E7BB07;
+        Fri, 18 Feb 2022 11:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: Re: [PATCH V3] drivers: hamradio: 6pack: fix UAF bug caused by
+ mod_timer()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164518200987.19952.16423799122287139298.git-patchwork-notify@kernel.org>
+Date:   Fri, 18 Feb 2022 11:00:09 +0000
+References: <20220217014303.102986-1-duoming@zju.edu.cn>
+In-Reply-To: <20220217014303.102986-1-duoming@zju.edu.cn>
+To:     =?utf-8?b?5ZGo5aSa5piOIDxkdW9taW5nQHpqdS5lZHUuY24+?=@ci.codeaurora.org
+Cc:     linux-hams@vger.kernel.org, kuba@kernel.org,
+        ajk@comnets.uni-bremen.de, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linma@zju.edu.cn
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,98 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-dishes, this makes it very difficult to maintain.
+Hello:
 
-To help with this maintenance let's start by moving sysctls to places
-where they actually belong.  The proc sysctl maintainers do not want to
-know what sysctl knobs you wish to add for your own piece of code, we
-just care about the core logic.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-All filesystem syctls now get reviewed by fs folks. This commit
-follows the commit of fs, move the real_root_dev sysctl to its own file,
-kernel/do_mount_initrd.c.
+On Thu, 17 Feb 2022 09:43:03 +0800 you wrote:
+> When a 6pack device is detaching, the sixpack_close() will act to cleanup
+> necessary resources. Although del_timer_sync() in sixpack_close()
+> won't return if there is an active timer, one could use mod_timer() in
+> sp_xmit_on_air() to wake up timer again by calling userspace syscall such
+> as ax25_sendmsg(), ax25_connect() and ax25_ioctl().
+> 
+> This unexpected waked handler, sp_xmit_on_air(), realizes nothing about
+> the undergoing cleanup and may still call pty_write() to use driver layer
+> resources that have already been released.
+> 
+> [...]
 
-Signed-off-by: tangmeng <tangmeng@uniontech.com>
----
- include/linux/initrd.h  |  2 --
- init/do_mounts_initrd.c | 22 +++++++++++++++++++++-
- kernel/sysctl.c         |  9 ---------
- 3 files changed, 21 insertions(+), 12 deletions(-)
+Here is the summary with links:
+  - [V3] drivers: hamradio: 6pack: fix UAF bug caused by mod_timer()
+    https://git.kernel.org/netdev/net/c/efe4186e6a1b
 
-diff --git a/include/linux/initrd.h b/include/linux/initrd.h
-index 1bbe9af48dc3..f1a1f4c92ded 100644
---- a/include/linux/initrd.h
-+++ b/include/linux/initrd.h
-@@ -29,8 +29,6 @@ static inline void wait_for_initramfs(void) {}
- extern phys_addr_t phys_initrd_start;
- extern unsigned long phys_initrd_size;
- 
--extern unsigned int real_root_dev;
--
- extern char __initramfs_start[];
- extern unsigned long __initramfs_size;
- 
-diff --git a/init/do_mounts_initrd.c b/init/do_mounts_initrd.c
-index 533d81ed74d4..327962ea354c 100644
---- a/init/do_mounts_initrd.c
-+++ b/init/do_mounts_initrd.c
-@@ -14,12 +14,32 @@
- 
- unsigned long initrd_start, initrd_end;
- int initrd_below_start_ok;
--unsigned int real_root_dev;	/* do_proc_dointvec cannot handle kdev_t */
-+static unsigned int real_root_dev;	/* do_proc_dointvec cannot handle kdev_t */
- static int __initdata mount_initrd = 1;
- 
- phys_addr_t phys_initrd_start __initdata;
- unsigned long phys_initrd_size __initdata;
- 
-+#ifdef CONFIG_SYSCTL
-+static struct ctl_table kern_do_mounts_initrd_table[] = {
-+	{
-+		.procname       = "real-root-dev",
-+		.data           = &real_root_dev,
-+		.maxlen         = sizeof(int),
-+		.mode           = 0644,
-+		.proc_handler   = proc_dointvec,
-+	},
-+	{ }
-+};
-+
-+static __init int kernel_do_mounts_initrd_sysctls_init(void)
-+{
-+	register_sysctl_init("kernel", kern_do_mounts_initrd_table);
-+	return 0;
-+}
-+late_initcall(kernel_do_mounts_initrd_sysctls_init);
-+#endif /* CONFIG_SYSCTL */
-+
- static int __init no_initrd(char *str)
- {
- 	mount_initrd = 0;
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index e448f43a8988..64d368d59a58 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1699,15 +1699,6 @@ static struct ctl_table kern_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= sysctl_latencytop,
- 	},
--#endif
--#ifdef CONFIG_BLK_DEV_INITRD
--	{
--		.procname	= "real-root-dev",
--		.data		= &real_root_dev,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
--	},
- #endif
- 	{
- 		.procname	= "print-fatal-signals",
+You are awesome, thank you!
 -- 
-2.20.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 

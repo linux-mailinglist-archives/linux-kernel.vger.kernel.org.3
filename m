@@ -2,98 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B0D4BBD65
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6F64BBD68
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbiBRQWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:22:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35618 "EHLO
+        id S237293AbiBRQXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:23:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiBRQWG (ORCPT
+        with ESMTP id S231320AbiBRQXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:22:06 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE72D3F880
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:21:48 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id 60so4519829uae.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:21:48 -0800 (PST)
+        Fri, 18 Feb 2022 11:23:22 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE555C85F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:23:01 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id m17so16296368edc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:23:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MBFxmlsp+Ppol0M03sVOJPvD0cRtLe1wxV7SG8UW4lw=;
-        b=MOS0ZKbjI8xl7ER0rzl/N7TIG//ZghuPB3+myCtK980sjjNtXfoG68cs7DQ3UmiurJ
-         53FT/TZbLegmZ6S3INVntv8MYtcjmRCufuqBSeNGO4tBI/mAkEOicmpJju5Oe03jW8Q3
-         IZ+mtwdUX19fa/ja86NtCvIPTxzgXmdOV5ZDF3iWcT0TIL8RySDfJ/Ra3IZqTG4ensmo
-         6pU2bUhI8mOK3cmAcp/y//7nAQNcX2n94uC9SwYW/AUne1MkBgwDWqIzDt7EIEmn8IU0
-         Hut28l0qhkrkAJCkwXqKGivrwsHPIICRZiVECgMaEzCvmpF7lllWCS7EihA5nEGZfIoQ
-         vSdQ==
+         :cc:content-transfer-encoding;
+        bh=idw7YZntoBJP5z9pQg5T5B0np+JD13UcXDxLG774Cwc=;
+        b=QyURN3uk2BLtN80COI5GpugWKjfwNhPgf1QfsKzjgguvwOYKDRL9xS+9csSYsiNlmL
+         RY6gVFgthq9mH8z7Min5CnG9W9oFTiT6XJ5ECd5Q25mQGl2pG+prqOuaFHqxsVkDAk0O
+         5kfxmtsfCrqfTXtNWfJdjjPJ/1C85eFit45001GsN1AmLIFMHrDMXCVANquBGn3xXVKB
+         az3rnw/PRs+T3tKBjGNsBn/SNMA1S8MBkVjx2mPww8FRHKDOEz5gLhymg9H3n1I4jJvx
+         LqFaavcp4MGY8A8SeWRDjEu04ifpzzLNM4fyVBywuYGBOgOIerQ3rPEx/YlmCctBwlcc
+         pzww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MBFxmlsp+Ppol0M03sVOJPvD0cRtLe1wxV7SG8UW4lw=;
-        b=OXUK24VDx+g7wLYC85XkGNoLq1P1UzGW5q7FK0MVTj4zgef74djFjGCvU7ZaXWfQxD
-         RNwHbcrfOcgeKyYUP6heiXcC7DNJPO5QAiRMErDiO5zMCt7DtuntQg+dPFstdWp5Q17f
-         AAx48l6cd/7D2L/QRTsKsD0liXxGRNBvWk0iD59hJgpmw40kBSAOFHt7hRjmvCgyTkZn
-         TE1PsxTRmGH2oZConHUa+fdHmd5DgvVUWpMqXmnhPbv/jtraWPvq1VwB6SDVUUWvP4wa
-         +WoJCyJg5RJia4qeMcEjYjA5Be8/ZqLQ/ZF9hYxaoQF1DcOhriCwPt4XrRa8fdcK/+Gt
-         Wi2g==
-X-Gm-Message-State: AOAM533kVl/q1X8WwmSTY82JxH554Hj3uOxAI/H+7vrnrNyEeJCxML7Z
-        e0FDA9pQuy7NDsWCjKIImIlBQ+FJhSFaFCfBSzNIwsx90riN+w==
-X-Google-Smtp-Source: ABdhPJzAl3cdYfXDoi8IHapaMBToDE190zn9xog31chAYhWjAgGvCYxbQV9awiWUVLoK9PNPXBPYF9Eig5kuZXLh/Ok=
-X-Received: by 2002:ab0:60b1:0:b0:341:543e:c388 with SMTP id
- f17-20020ab060b1000000b00341543ec388mr3270571uam.80.1645201307736; Fri, 18
- Feb 2022 08:21:47 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=idw7YZntoBJP5z9pQg5T5B0np+JD13UcXDxLG774Cwc=;
+        b=ga+6lwWwD2h27GFOcyuz6Ktt/Cm+JHI3P2hwQ9ctuYAV3UVq5IMHVeyYiLiac6ws6c
+         X549PMVB2z2W1nuC0NNKe4PNN2UHGZW2IQPvIxOtO89BnKG7957N3b7v0Xz1tC3SZN7t
+         TljogoFvBJudc4l+NEajCE3NJ7z8kblXD01ieZxFLuBP6SWtFP8vV4Gu/KDCf0CEUbHO
+         hUk455kZqKx4aL/bPRnPVo4bYXvHNOe4/inARiPFx5DmFF9QixbE/hQ5xLjQgQXvxZ51
+         GIWQQqRRlxbBHHyvJrmCDGm4pF34G+vNln1NqFR0TceFScaHwrrsGu6lKbWxw1F1TCrS
+         IvIA==
+X-Gm-Message-State: AOAM533zdh6tPtGaPmcL16O18rbcJZf7dXANmt/wMqcIec7rtUJ6jLL3
+        BJnSXiDVXIWx4YJFjC+TjYRTtfUXoTamRiZljJVw
+X-Google-Smtp-Source: ABdhPJwLIybVpRExsjCTwswlHvN7ki7KcVz8lLR6HcnU7FD3+kIDwifek077ymQZKGu85pdM8b+a11wHWuPdePK5ciA=
+X-Received: by 2002:a05:6402:3487:b0:40f:fa53:956c with SMTP id
+ v7-20020a056402348700b0040ffa53956cmr8948400edc.22.1645201380380; Fri, 18 Feb
+ 2022 08:23:00 -0800 (PST)
 MIME-Version: 1.0
-References: <Yg54nse5qNQO3sbW@zn.tnic> <20220218013209.2436006-1-juew@google.com>
- <Yg+2Hc78nfSRmh/j@zn.tnic> <CAPcxDJ4c3eGXTB9UPJmZ8dzyCNPW4Lv9s1QSeoCWq_LdNWTrJw@mail.gmail.com>
- <Yg/FyrvLWhZHB/UC@zn.tnic>
-In-Reply-To: <Yg/FyrvLWhZHB/UC@zn.tnic>
-From:   Jue Wang <juew@google.com>
-Date:   Fri, 18 Feb 2022 08:21:36 -0800
-Message-ID: <CAPcxDJ72dMOpbKXxyb__OeMaEyjYSPtsL_ubVsKOuRXefAQ3_w@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/mce: work around an erratum on fast string copy instructions.
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-4-cgzones@googlemail.com>
+In-Reply-To: <20220217142133.72205-4-cgzones@googlemail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 18 Feb 2022 11:22:46 -0500
+Message-ID: <CAHC9VhSup7QDQSGxDhbHrpEVNJZ7C0ReDcvuLF=S+1Mb=xRUdQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Austin Kim <austin.kim@lge.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 8:14 AM Borislav Petkov <bp@alien8.de> wrote:
+On Thu, Feb 17, 2022 at 9:22 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
 >
-> On Fri, Feb 18, 2022 at 08:03:24AM -0800, Jue Wang wrote:
-> > Since MSR_IA32_MISC_ENABLE is not a MCA register, I wonder if we want
-> > to mix its read/write with the injected MCE code.
-> >
-> > I was a bit concerned about potential race with mce-inject and the
-> > read/write to MSR_IA32_MISC_ENABLE.
+> Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
+> introduced a NULL check on the context after a successful call to
+> security_sid_to_context().  This is on the one hand redundant after
+> checking for success and on the other hand insufficient on an actual
+> NULL pointer, since the context is passed to seq_escape() leading to a
+> call of strlen() on it.
 >
-> It won't inject anything:
+> Reported by Clang analyzer:
 >
->                 offset = msr_to_offset(msr);
->                 if (offset < 0)
->                         ret = 0;
->
-Thanks.
+>     In file included from security/selinux/hooks.c:28:
+>     In file included from ./include/linux/tracehook.h:50:
+>     In file included from ./include/linux/memcontrol.h:13:
+>     In file included from ./include/linux/cgroup.h:18:
+>     ./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1s=
+t argument to string length function [unix.cstring.NullArg]
+>             seq_escape_mem(m, src, strlen(src), flags, esc);
+>                                    ^~~~~~~~~~~
 
-My concern was that here returns 0 instead the value read from the msr.
+Interesting.  If I'm understanding this correctly, Clang is reporting
+on a potential NULL pointer simply because we are checking for a NULL
+pointer a few lines earlier, even though @context should not be NULL
+if (rc !=3D 0)?
 
-Maybe this cannot happen?
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  security/selinux/hooks.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Besides, you need to use those routines due to EX_TYPE_{RD,WR}MSR_IN_MCE
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 1e69f88eb326..ac802b99d36c 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -1020,7 +1020,7 @@ static int show_sid(struct seq_file *m, u32 sid)
+>         rc =3D security_sid_to_context(&selinux_state, sid,
+>                                              &context, &len);
+>         if (!rc) {
+> -               bool has_comma =3D context && strchr(context, ',');
+> +               bool has_comma =3D strchr(context, ',');
 >
+>                 seq_putc(m, '=3D');
+>                 if (has_comma)
 > --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+> 2.35.1
+
+--=20
+paul-moore.com

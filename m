@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1A44BAF20
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969B34BAF24
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbiBRBVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 20:21:38 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36148 "EHLO
+        id S231245AbiBRB1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 20:27:52 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiBRBVg (ORCPT
+        with ESMTP id S230339AbiBRB1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 20:21:36 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08052DF402
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:21:20 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id i7-20020a056e020ec700b002be118c9b21so3028890ilk.20
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:21:20 -0800 (PST)
+        Thu, 17 Feb 2022 20:27:49 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5014A7654
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:27:34 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id q5so1513314oij.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:27:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:from:user-agent:date:message-id:subject:to:cc;
+        bh=kFDKVWyEyvDppu0jj4hMTqjCtj/MAyORvC6FZOal0io=;
+        b=WP7RLa6pkhllQDpL4S6fLT6vXbProVLngxFcYwjtsvrnjsRrYuorZM6OlDLKtqkWh5
+         cvpIJjyO44pDC+AoXA2/rG4ylbi4QbVZD17hSfFBJfz//JE+6Wfb1UfbNXGv6akZ/rFI
+         Uf7DY89cYwhXaqGdYL1+vQGimTKFrPlPBmmrU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=PI4bJ+3UyFNIhL2gM6ZjIwlHECbqteu1Qx27eZtjvq0=;
-        b=o8ii6/4vDN5iCFJR3cf1Y2mc3/zZ05z29YjmGur2dgzR8ANPiq+MilNkhxp4Ud+Ixs
-         JR0pe98GuAarvQ/xe0UjjkmhKfEUe9PzVdKsqeJjafvZBBW9+wHFFQ1m4/Gp7fTvrtpz
-         Qr/ipaHUYEdRNeADP+5GLpaT2Jt5d1ddAR7UlwopAJrJPDmvnuHCjxfPBj8U+LCQG04/
-         nGS/j0cG2AIiUMSHwPwKQmtdCmNlO41DRYU9QAB1zmvfn8N9dw02RdmdHH9v3s0fFkP6
-         WTF9v+701PQgaBs+ZCL0EFtfmu6LYLY0azPBhmlSN2QbUAoABYVFC4+RPDgywpI0+cv6
-         3kLw==
-X-Gm-Message-State: AOAM531zGSgQ33CHaRdoaz8Y9tZ2glFWFx+DPYWn+gdH3eqSk0DMpujQ
-        oWpQd+qR8VQKxeHLc+2x0hWTaQZyvAUjJR7UQIxlERFMU7zQ
-X-Google-Smtp-Source: ABdhPJzMJrON2BfGCITlW3+eDZBkMBVufcpwdoMqqQUBSQYi62zjJDqVxJCzoKejc1qpyiIQn37+6yEdGUiIUI4TInkv67gcdYe3
+        h=x-gm-message-state:mime-version:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=kFDKVWyEyvDppu0jj4hMTqjCtj/MAyORvC6FZOal0io=;
+        b=QzGGwxrmsMQhb3TRfPdI7185jKW1qycsF17t1pg44MNiDRLF9PzsPidaZeS+Z1YcqT
+         wpvUWlrCHVoutJkl5Q9PSYdZU9X7aeps/P75sIkM8x+p8NKlrLEl4MTftlYzG3KwARpr
+         GmtGF1V+BKtYRXVX7XK98HQgOuo+FKj4jjv9u8jAVsF/2ki+6g47zaOrGd+RNyw5eZFb
+         6B7UmsX4zURwVuoqGFS7NYE+3zVKfn4JofiUWMuBGhCkuqQFsQl+49qfU+FWRSwjGbit
+         FM/6PLmLVILBIGt4V+ofIFsy4JgQ/Nbs+XD7v5Da0iPGZKVJm2wxQrbRb3DLqpxd9BwL
+         djkg==
+X-Gm-Message-State: AOAM531SXpkZy4Q82V4AGt/YqroPonUPcBzrsUb++V8/d1PGNvI7ca41
+        Q1rUgdb5v2HZ0trdQh6Y4WaqJNY4Dk4DbRZcCEu3Ow==
+X-Google-Smtp-Source: ABdhPJzHC6aV5Kx1A5nxbGw3uEjAqoiTLrCzQpK7+KxzKNv9PZZ7OGTdCHLqssNOfVN6n/2z1yIdw8f4yp4eg7z1wlU=
+X-Received: by 2002:aca:df44:0:b0:2ce:285f:cb99 with SMTP id
+ w65-20020acadf44000000b002ce285fcb99mr3960562oig.40.1645147653657; Thu, 17
+ Feb 2022 17:27:33 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 17 Feb 2022 17:27:33 -0800
 MIME-Version: 1.0
-X-Received: by 2002:a02:a1d6:0:b0:314:af71:b38a with SMTP id
- o22-20020a02a1d6000000b00314af71b38amr323871jah.95.1645147280047; Thu, 17 Feb
- 2022 17:21:20 -0800 (PST)
-Date:   Thu, 17 Feb 2022 17:21:20 -0800
-In-Reply-To: <00000000000070ac6505d7d9f7a8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003b07b305d840b30f@google.com>
-Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
-From:   syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
-To:     jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 17 Feb 2022 17:27:33 -0800
+Message-ID: <CAE-0n53cOFJFOOV-YOc0MzbiLr9FvaJw=ucs2SNNGOeznYzVLw@mail.gmail.com>
+Subject: arm64 ftrace fixes for v5.4.y
+To:     stable@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,58 +66,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi stable maintainers,
 
-HEAD commit:    f71077a4d84b Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=104c04ca700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
-dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1362e232700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11373a6c700000
+I recently ran into an issue where trying to load a module with jump
+table entries crashes the system when function tracing is enabled. The
+crash happens because ftrace is modifying the code and then marking it
+as read-only too early. ftrace_make_call() calls module_enable_ro(mod,
+true) before module init is over because ftrace_module_enable() calls
+__ftrace_replace_code() which does FTRACE_UPDATE_MAKE_CALL. All this
+code is gone now upstream but is still present on v5.4 stable kernels. I
+picked this set of patches to v5.4 and it fixed it for me.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+fbf6c73c5b26 ftrace: add ftrace_init_nop()
+a1326b17ac03 module/ftrace: handle patchable-function-entry
+bd8b21d3dd66 arm64: module: rework special section handling
+f1a54ae9af0d arm64: module/ftrace: intialize PLT at load time
 
-------------[ cut here ]------------
-kernel BUG at drivers/vhost/vhost.c:2335!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3597 Comm: vhost-3596 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
-Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
-RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
- vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
-Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
-RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+after doing that I ran into another issue because I'm using clang. Would
+it be possible to pick two more patches to the stable tree to silence
+this module warning from sysfs complaining about
+/module/<modname>/sections/__patchable_function_entries being
+duplicated?
 
+dd2776222abb kbuild: lto: merge module sections
+6a3193cdd5e5 kbuild: lto: Merge module sections if and only if
+CONFIG_LTO_CLANG is enabled
+
+All of these apply cleanly to v5.4.y stable branch.
+
+Crash below.
+
+ Unable to handle kernel write to read-only memory at virtual address
+ffffffd1b81fc0b0
+ Mem abort info:
+   ESR = 0x9600004f
+   EC = 0x25: DABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+ Data abort info:
+   ISV = 0, ISS = 0x0000004f
+   CM = 0, WnR = 1
+ swapper pgtable: 4k pages, 39-bit VAs, pgdp=0000000081bc1000
+ [ffffffd1b81fc0b0] pgd=0000000271858003, pud=0000000271858003,
+pmd=0000000266c05003, pte=00600001f3f4df93
+ Internal error: Oops: 9600004f [#1] PREEMPT SMP
+ Modules linked in: vsock(+) <a bunch more modules>
+ CPU: 5 PID: 6254 Comm: modprobe Not tainted 5.4.177 #19
+ Hardware name: Google Lazor (rev3 - 8) with KB Backlight (DT)
+ pstate: 60400009 (nZCv daif +PAN -UAO)
+ pc : jump_label_swap+0x2c/0x68
+ lr : jump_label_swap+0x18/0x68
+ sp : ffffffc01946bb10
+ x29: ffffffc01946bb10 x28: 00000000000000b0
+ x27: 0000000000000010 x26: 00000000000000b0
+ x25: 00000000000001a0 x24: ffffffd1b81fc180
+ x23: ffffffd2036540fc x22: ffffffd1b81fc000
+ x21: 0000000000000010 x20: ffffffd1b81fc0b0
+ x19: ffffffd1b81fc180 x18: 0000000000000000
+ x17: ffffffd204006e08 x16: 0000000000006000
+ x15: ffffffd1b8209000 x14: 0066ba79a6ffffff
+ x13: 0000000000000004 x12: 000000004c55e4d8
+ x11: 00000000ffffd9f0 x10: 00000000ffffd754
+ x9 : ffffffffffffff30 x8 : 00000000ffffe2ec
+ x7 : fefefefefefefefe x6 : 00000000000341d5
+ x5 : ffffffd203654164 x4 : ffffffd2036540fc
+ x3 : 0000000000000000 x2 : ffffffc01946bb30
+ x1 : ffffffd203654110 x0 : 00000000fffffff0
+ Call trace:
+  jump_label_swap+0x2c/0x68
+  do_swap+0x98/0xa0
+  sort_r+0x178/0x1a0
+  sort+0x14/0x1c
+  jump_label_module_notify+0x7c/0x2c0
+  notifier_call_chain+0x58/0x90
+  __blocking_notifier_call_chain+0x58/0x84
+  blocking_notifier_call_chain+0x38/0x48
+  prepare_coming_module+0x30/0x3c
+  load_module+0xda4/0xf8c
+  __arm64_sys_finit_module+0xa4/0xdc
+  el0_svc_common+0xb4/0x17c
+  el0_svc_compat_handler+0x2c/0x58
+  el0_svc_compat+0x8/0x2c
+ Code: cb130289 29402e8a f940068c 4b090108 (b9000288)

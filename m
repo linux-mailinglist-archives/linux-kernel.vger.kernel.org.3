@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194AE4BB47A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F8B4BB482
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiBRInX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 03:43:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46534 "EHLO
+        id S232810AbiBRIoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 03:44:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiBRInV (ORCPT
+        with ESMTP id S232671AbiBRIof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 03:43:21 -0500
-Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACA7F298AC9;
-        Fri, 18 Feb 2022 00:43:03 -0800 (PST)
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.202
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(32753:0:AUTH_RELAY)
-        (envelope-from <edwin.chiu@sunplus.com>); Fri, 18 Feb 2022 16:43:15 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Fri, 18 Feb 2022 16:43:15 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Fri, 18 Feb 2022 16:43:15 +0800
-From:   =?utf-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Edwin Chiu <edwinchiu0505tw@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Thread-Topic: [PATCH v4] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Thread-Index: AQHYG/cOqjt4Bbqwy06Z29eKCBs1J6yIApeAgApaEBD//8HxAIAANpMAgAa1xTA=
-Date:   Fri, 18 Feb 2022 08:43:14 +0000
-Message-ID: <2ff2ec3f14b24565bafb29b43be1dc4e@sphcmbx02.sunplus.com.tw>
-References: <cover.1644218105.git.edwinchiu0505tw@gmail.com>
- <957d882222d218b62fe3fb7a069e2f7952afc5be.1644218105.git.edwinchiu0505tw@gmail.com>
- <64f91b1a-93b9-941d-fdfa-271e198e1ab5@canonical.com>
- <0edae7bea1ae47cd9044cd223a989b81@sphcmbx02.sunplus.com.tw>
- <136f2087-10e7-c9e8-2292-3046711c8f68@canonical.com>
- <20220214095950.vt7fkvrkvio3gtkw@bogus>
-In-Reply-To: <20220214095950.vt7fkvrkvio3gtkw@bogus>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 18 Feb 2022 03:44:35 -0500
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3057E29924D;
+        Fri, 18 Feb 2022 00:44:19 -0800 (PST)
+Received: by mail-vk1-f171.google.com with SMTP id f12so4427666vkl.2;
+        Fri, 18 Feb 2022 00:44:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SimntoUMkVEr2cj/igvj4PS7W+Y51sYnkHLvFZaYW80=;
+        b=H6EhQcfUGl/x/FwmMEC0GKzTlKvRrsxJdOISya+K5Mkm8xYNd0hntME3zyIJ+vkjQ/
+         k+vJmT1TvwkEe+vqjgoHwhMvYr2h1k3l7hW2hLOHGs1Yv1An/baL6znslB2wdnlFG6J1
+         2l7YoPkNPezwQJHVbwQNl/lyStlZYs6AoKMOYUnWre8Fk3m+T3dkaPZsEqziH196rizf
+         1F/I5UZg+MMmr2WZtOPhCZ2kjAYaso3BMCprhvakXUjsxAITEsq+RI5MtXZQOLceXcRx
+         ol6URm8dGp69rsuV9Eyj9iE+f6L1R0ICGcZgHuG3xISe87YsFP2GoaLGl9+hrE/W51DN
+         BC1Q==
+X-Gm-Message-State: AOAM531Fvoh2etlhhEEMMIZWPA5/yeBC58bWcFHMirDlBvycAebtSPNF
+        sVF1ULJt1XPk98rRf35p1oRxgikwWXW8EA==
+X-Google-Smtp-Source: ABdhPJzMjRhSvl0VZmieN75UYGGMI1CQ9FCxiL/qO/pUNgU5jpDf48XNxNqWb0Hdh+ZaLQzAuFsmGA==
+X-Received: by 2002:a05:6122:549:b0:330:288:f36d with SMTP id y9-20020a056122054900b003300288f36dmr2942131vko.28.1645173858249;
+        Fri, 18 Feb 2022 00:44:18 -0800 (PST)
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
+        by smtp.gmail.com with ESMTPSA id s25sm2314167vkm.21.2022.02.18.00.44.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 00:44:18 -0800 (PST)
+Received: by mail-vk1-f175.google.com with SMTP id k128so4438580vkk.10;
+        Fri, 18 Feb 2022 00:44:17 -0800 (PST)
+X-Received: by 2002:a05:6122:ca1:b0:330:b95b:e048 with SMTP id
+ ba33-20020a0561220ca100b00330b95be048mr2974054vkb.39.1645173857563; Fri, 18
+ Feb 2022 00:44:17 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220209232232.18461-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220209232232.18461-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 18 Feb 2022 09:44:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUgtbqA9M_ZuCJpB0EcH3Ysw-zqG2c1EHuih2DJO714qg@mail.gmail.com>
+Message-ID: <CAMuHMdUgtbqA9M_ZuCJpB0EcH3Ysw-zqG2c1EHuih2DJO714qg@mail.gmail.com>
+Subject: Re: [PATCH] i2c: riic: Simplify reset handling
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Chris Brandt <chris.brandt@renesas.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTdWRlZXAgSG9sbGEg
-PHN1ZGVlcC5ob2xsYUBhcm0uY29tPg0KPiBTZW50OiBNb25kYXksIEZlYnJ1YXJ5IDE0LCAyMDIy
-IDY6MDAgUE0NCj4gVG86IEVkd2luIENoaXUg6YKx5Z6C5bOwIDxlZHdpbi5jaGl1QHN1bnBsdXMu
-Y29tPg0KPiBDYzogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBjYW5v
-bmljYWwuY29tPjsgRWR3aW4gQ2hpdQ0KPiA8ZWR3aW5jaGl1MDUwNXR3QGdtYWlsLmNvbT47IHJv
-YmgrZHRAa2VybmVsLm9yZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWtl
-cm5lbEB2Z2VyLmtlcm5lbC5vcmc7IHJhZmFlbEBrZXJuZWwub3JnOyBkYW5pZWwubGV6Y2Fub0Bs
-aW5hcm8ub3JnOyBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRD
-SCB2NF0gY3B1aWRsZTogc3VucGx1czogQ3JlYXRlIGNwdWlkbGUgZHJpdmVyIGZvciBzdW5wbHVz
-IHNwNzAyMQ0KPiANCj4gT24gTW9uLCBGZWIgMTQsIDIwMjIgYXQgMDc6NDQ6MzBBTSArMDEwMCwg
-S3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gPiBPbiAxNC8wMi8yMDIyIDAzOjU1LCBFZHdp
-biBDaGl1IOmCseWeguWzsCB3cm90ZToNCj4gPiA+IEhpIEtyenlzenRvZjoNCj4gPiA+DQo+ID4g
-PiBQbGVhc2Ugc2VlIGJlbG93IGFuc3dlci4NCj4gPiA+DQo+ID4gPj4+ICtzdGF0aWMgc3RydWN0
-IGNwdWlkbGVfZHJpdmVyIHNwNzAyMV9pZGxlX2RyaXZlciA9IHsNCj4gPiA+Pj4gKwkubmFtZSA9
-ICJzcDcwMjFfaWRsZSIsDQo+ID4gPj4+ICsJLm93bmVyID0gVEhJU19NT0RVTEUsDQo+ID4gPj4+
-ICsJLyoNCj4gPiA+Pj4gKwkgKiBTdGF0ZSBhdCBpbmRleCAwIGlzIHN0YW5kYnkgd2ZpIGFuZCBj
-b25zaWRlcmVkIHN0YW5kYXJkDQo+ID4gPj4+ICsJICogb24gYWxsIEFSTSBwbGF0Zm9ybXMuIElm
-IGluIHNvbWUgcGxhdGZvcm1zIHNpbXBsZSB3ZmkNCj4gPiA+Pj4gKwkgKiBjYW4ndCBiZSB1c2Vk
-IGFzICJzdGF0ZSAwIiwgRFQgYmluZGluZ3MgbXVzdCBiZSBpbXBsZW1lbnRlZA0KPiA+ID4+PiAr
-CSAqIHRvIHdvcmsgYXJvdW5kIHRoaXMgaXNzdWUgYW5kIGFsbG93IGluc3RhbGxpbmcgYSBzcGVj
-aWFsDQo+ID4gPj4+ICsJICogaGFuZGxlciBmb3IgaWRsZSBzdGF0ZSBpbmRleCAwLg0KPiA+ID4+
-PiArCSAqLw0KPiA+ID4+PiArCS5zdGF0ZXNbMF0gPSB7DQo+ID4gPj4+ICsJCS5lbnRlciAgICAg
-ICAgICAgICAgICAgID0gc3A3MDIxX2VudGVyX2lkbGVfc3RhdGUsDQo+ID4gPj4+ICsJCS5leGl0
-X2xhdGVuY3kgICAgICAgICAgID0gMSwNCj4gPiA+Pj4gKwkJLnRhcmdldF9yZXNpZGVuY3kgICAg
-ICAgPSAxLA0KPiA+ID4+PiArCQkucG93ZXJfdXNhZ2UJCT0gVUlOVF9NQVgsDQo+ID4gPj4+ICsJ
-CS5uYW1lICAgICAgICAgICAgICAgICAgID0gIldGSSIsDQo+ID4gPj4+ICsJCS5kZXNjICAgICAg
-ICAgICAgICAgICAgID0gIkFSTSBXRkkiLA0KPiA+ID4+DQo+ID4gPj4gSSBoYXZlIGltcHJlc3Np
-b24gdGhhdCB0aGVyZSBpcyBubyBwb2ludCBpbiBoYXZpbmcgY3VzdG9tIGRyaXZlciB3aXRoIFdG
-SS4uLg0KPiA+ID4+DQo+IA0KPiArMQ0KPiANCj4gPiA+PiBTdGlsbCB0aGUgbWFpbiBxdWVzdGlv
-biBmcm9tIERhbmllbCBhbmQgU3VkZWVwIHN0YXlzOiB3aHkgZG8geW91DQo+ID4gPj4gbmVlZCB0
-aGlzPyBZb3UgY29waWVkIGV4YWN0bHkgY3B1aWxkbGUtYXJtIGRyaXZlciwgdGhlcmUgaXMgbm90
-aGluZw0KPiA+ID4+IGRpZmZlcmVudCBoZXJlLiBBdCBsZWFzdCBJIGNvdWxkIG5vdCBzcG90IGRp
-ZmZlcmVuY2VzLiBNYXliZSBleGNlcHQNCj4gPiA+PiB0aGF0IHlvdSB1c2UgY3B1X3Y3X2RvX2lk
-bGUgZXhwbGljaXRseS4NCj4gPiA+Pg0KPiANCj4gUGxlYXNlIGNvbW1lbnQgb3IgYW5zd2VyIHdo
-eSB5b3UgY2FuJ3QgdXNlIHN0YW5kYXJkIGRyaXZlci4NCg0KSSBkbyB1c2VkIGNvbXBhdGlibGUg
-PSAiYXJtLGlkbGUtc3RhdGUiIGluIERUIGFuZCBlbmFibGUgZ2VuZXJpYyBhcm0gY3B1aWRsZSBk
-cml2ZXIgaW4gbWVudWNvbmZpZy4NCkJ1dCB0aGVyZSBoYXZlIG1vdW50IGRyaXZlciBmYWlsIG1l
-c3NhZ2UgZHVlIHRvIG5vIGNwdWlkbGVfb3BzIGZ1bmN0aW9ucy4NClRoYXQgaXMgd2h5IEkgbmVl
-ZCBhZGRlZCBwYXRjaCBjb2RlIHRvIGNvbXBsZXRlIGNwdWlkbGUgZHJpdmVyLg0KDQo+ID4gPj4g
-VW5mb3J0dW5hdGVseSBJIGNhbm5vdCB1bmRlcnN0YW5kIHRoZSBleHBsYW5hdGlvbiBoZXJlOg0K
-PiA+ID4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8wODEyYzQ0Zjc3N2Q0MDI2Yjc5ZGYy
-ZTM2OTgyOTRiZUBzcGhjbWINCj4gPiA+PiB4MDIuc3VucGx1cy5jb20udHcvIFdoeSBleGFjdGx5
-IGNwdWlkbGUtYXJtIGRvZXMgbm90IHdvcmsgaW4geW91cg0KPiA+ID4+IGNhc2U/DQo+ID4gPj4N
-Cj4gPiA+IEVkd2luPT4gSSBtZWFuIGNwdWlkbGUtYXJtIGRyaXZlciBjYW4ndCBkaXJlY3RseSB1
-c2Ugd2l0aCBubyBtb2RpZmllZC4NCj4gPiA+ICAgICAgICBJZiBzb21lb25lIHdhbnQgdG8gdXNl
-IGNwdWlkbGUtYXJtIGRyaXZlciwgYmVsb3cgbW9kaWZpY2F0aW9uIHNlZW1zIG5lY2Vzc2FyeS4N
-Cj4gPiA+DQo+IH5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+ID4gPiAgICAgICAgU3RhdGljIGludCBz
-cDcwMjFfY3B1aWRsZV9zdXNwZW5kX2VudGVyKHVuc2lnbmVkIGxvbmcgaW5kZXgpIHt+fQ0KPiA+
-ID4gICAgICAgIFN0YXRpYyBpbnQgX19pbml0IHNwNzAyMV9jcHVpZGxlX2luaXQoc3RydWN0IGRl
-dmljZV9ub2RlICpjcHVfbm9kZSwgaW50IGNwdSkge359DQo+ID4gPiAgICAgICAgU3RhdGljIGNv
-bnN0IHN0cnVjdCBjcHVpZGxlX29wcyBzY19zbXBfb3BzIF9faW5pdGNvbnN0ID0gew0KPiA+ID4g
-ICAgICAgICAgICAgLnN1c3BlbmQgPSBzcDcwMjFfY3B1aWRsZV9zdXNwZW5kX2VudGVyLA0KPiA+
-ID4gICAgICAgICAgICAgLmluaXQgPSBzcDcwMjFfY3B1aWRsZV9pbml0LA0KPiA+ID4gICAgICAg
-IH07DQo+ID4gPiAgICAgICAgQ1BVSURMRV9NRVRIT0RfT0ZfREVDTEFSRShzY19zbXAsICJzdW5w
-bHVzLHNjLXNtcCIsICZzY19zbXBfb3BzKTsgLy9kZWNsYXJlDQo+IGVuYWJsZSBtZXRob2QNCj4g
-PiA+DQo+ID4gPiB+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fg0KPiA+ID4gfn5+fn5+fn5+fn5+DQo+ID4gPg0KPiANCj4g
-TWF5IGJlLiBJdCBkZXBlbmRzIG9uIHdoYXQgaXMgeW91ciBlbmFibGUtbWV0aG9kLiBJIGRpZCBh
-IHF1aWNrIGdyZXAgYW5kIGNvdWxkIHNlZSBhbnkgc3VwcG9ydCBmb3INCj4gc3VucGx1cyBwbGF0
-Zm9ybSB1cHN0cmVhbS4gU28gSSBhbSBub3Qgc3VyZSB3aGF0IGlzIHRoZSBjcHUgYm9vdC9lbmFi
-bGUgbWV0aG9kIHVzZWQuIElzIGl0IFBTQ0kgb3INCj4gc29tZXRoaW5nIGN1c3RvbS4gWW91IHNo
-b3VsZCBiZSB1c2luZyBzdGFuZGFyZCBQU0NJIGlmIGl0IGlzIHJlbGF0aXZlbHkgbmV3IHBsYXRm
-b3JtIG9yIHlvdSBoYXZlIGFueQ0KPiBvdGhlciBzdHJvbmcgcmVhc29ucyB0byB1c2UgY3VzdG9t
-IG1ldGhvZC4gSWYgeW91IGFyZSB1c2luZyBjdXN0b20gbWV0aG9kLCB0aGVuIHNvbWUgY2hhbmdl
-cyBsaWtlDQo+IGFib3ZlIGlzIHJlcXVpcmVkIGJ1dCB0aGF0IHdpbGwgYmUgaW4gdGhlIHBsYXRm
-b3JtIHBvcnQgYW5kIG5vdCB0aGUgY29yZSBjcHVpZGxlIGRyaXZlci9mcmFtZXdvcmsuDQo+IA0K
-PiBJbiBzaG9ydCBOQUNLIGZvciBhbnkgZGVkaWNhdGVkIGRyaXZlciBmb3IgdGhpcyBwbGF0Zm9y
-bSwgdXNlIHRoZSBnZW5lcmljIGNwdWlkbGUtYXJtIGRyaXZlciB3aXRoDQo+IGFwcHJvcHJpYXRl
-IHBsYXRmb3JtIGhvb2tzKGxpa2UgdGhlIGFib3ZlIG9uZSBvbmx5IGlmIHlvdSBjaG9vc2UgdG8g
-dXNlIGN1c3RvbSBlbmFibGUgbWV0aG9kIGFuZCBub3QNCj4gc3RhbmRhcmQgUFNDSSkNCj4gDQo+
-IC0tDQo+IFJlZ2FyZHMsDQo+IFN1ZGVlcA0KDQoNClllcyBpdCBzZWVtcyBkZXBlbmRzIG9uIGVu
-YWJsZS1tZXRob2QuDQoicHNjaSIgaXMgb25lIG1ldGhvZC4NCkJ1dCB3aGVuIEkgdGVzdCAicHNj
-aSIgaW4gbXkgcGxhdGZvcm0sIHRoZXJlIGhhdmUgZXhjZXB0aW9uIGhhcHBlbmVkIGluIG9wZXJh
-dGUgc21jLg0KVGhpcyBpcyBhbm90aGVyIHN0b3J5Lg0KDQpBY2NvcmRpbmcgeW91ciBjb21tZW50
-LCBJIHdpbGwgdHJ5IHRvIHVzZSBjb21tb24gcGFydHMgYW5kIGhvb2sgY3VzdG9tIGNvZGUgaW4g
-cGxhdGZvcm0gc2lkZSBsYXRlci4NClRoYW5rcy4NCg0K6YKx5Z6C5bOwIEVkd2luQ2hpdQ0K5pm6
-6IO96YGL566X5bCI5qGIDQpUOiArODg2LTMtNTc4NjAwNSBleHQuMjU5MA0KZWR3aW4uY2hpdUBz
-dW5wbHVzLmNvbQ0KMzAwIOaWsOerueenkeWtuOWckuWNgOWJteaWsOS4gOi3rzE56JmfDQo=
+On Thu, Feb 10, 2022 at 12:22 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Read reset phandle as optional instead of exclusive so that all the DT's
+> passing the reset phandle can be used to assert/deassert the reset line.
+> With this change we don't have to differentiate the RZ/G2L SoC.
+>
+> With the above changes we no longer need the "renesas,riic-r9a07g044"
+> compatible string, so drop it from riic_i2c_dt_ids[]. No changes are
+> required to the r9a07g044.dtsi as we already have "renesas,riic-rz" as a
+> fallback compatible string.
+>
+> While at it, check the return code of reset_control_deassert() as it might
+> fail and also add a devres action to assert the reset line.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

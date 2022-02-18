@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B737F4BBD00
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3CA4BBD21
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbiBRQFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:05:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33170 "EHLO
+        id S237477AbiBRQOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:14:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbiBRQFC (ORCPT
+        with ESMTP id S231910AbiBRQOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:05:02 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196B9532FC
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:04:46 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id c4so2642791pfl.7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:04:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WDCu5fW0jU66ysKsVUGrCitGNsiEZTA+NVb+oahcLwA=;
-        b=LXDx8icFsWFPMdF/g01b4gSchKGaC2RcBtXtf4DrUEw3t5xt4m7ZPlXIYKBxC4e7Ub
-         Qd7R+6JNu13TapP/gJmnVnpBwUs0I+fiPNRTy9aIzKEEJdLXmqwROwUL6hBCncRKywW9
-         8AvV3xi6aYtB42zirKim6PrWOMPK7bB1j41JRV68B8HvQa95E+mwiiG1PgEEgOpmgWMF
-         h33tPRQY2315I8lczu0a/qLAjNkMvRguMkRPLTGsdDGNajduA6X8/xfLnAyQbFuPyPkj
-         9qeh8O2uxYR/MgnK/noxfEWh/4i8ORQzF6PfcJ04CAxA2jBWjFflZvonmOP9BxSG8Dgf
-         MeHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WDCu5fW0jU66ysKsVUGrCitGNsiEZTA+NVb+oahcLwA=;
-        b=RGjiJSHLbvuH5KBiEsNILEasUcwZw9kl2hxY32CC+CtBJPdK9j9gUu6PPD3d1x5RmV
-         nM70yezDS1QIXFdwgHIFSLgDF1G9sOhs06N+cQ47nc8JBLYIC6rHHx0NGMCtpist9M7w
-         5hZOX3vdi9b/qfgGrSWUJ57R+PKNijIolpvyHaPaJvzO0D+kBt727YkhgGbXm54ZH1Eu
-         1Mknn16bfMtOZgjhjnU7witpKr4ICWN3BSnZ7WTDEApZj+926YdpOeoHrxdnDFXW6+ln
-         5K9tVwRCmH92Edis3opf2zw5QBaaMfl/NPtu3dZKWH+y1LSnkLc6YcYIw55aLWpOm90a
-         pWGw==
-X-Gm-Message-State: AOAM531mSYby8DRdAoWckYFEkVQe89R8bo7CbYzPDBWLsRuItskPv+7c
-        zjKCXjlkaqMezawdSwxUYcnd2w==
-X-Google-Smtp-Source: ABdhPJyOXXnBv1yMQKgPoI/ywpg5jlp3cL5cedKhOmSghspyiza1zCJ9BlMluZ1SBcRYyVkJhYM2AQ==
-X-Received: by 2002:a62:65c6:0:b0:4d1:6354:e8e6 with SMTP id z189-20020a6265c6000000b004d16354e8e6mr8190211pfb.64.1645200285419;
-        Fri, 18 Feb 2022 08:04:45 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id mg24sm5112105pjb.4.2022.02.18.08.04.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 08:04:44 -0800 (PST)
-Date:   Fri, 18 Feb 2022 16:04:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peng Hao <flyingpenghao@gmail.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH]  kvm: correct comment description issue
-Message-ID: <Yg/DmdjSqNLwWo2d@google.com>
-References: <20220218110547.11249-1-flyingpeng@tencent.com>
+        Fri, 18 Feb 2022 11:14:47 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E919D775;
+        Fri, 18 Feb 2022 08:14:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645200869; x=1676736869;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/5lR+P7Kv8815A4k8RgFtG3prJtHS7oEZ0AFM6VPfxk=;
+  b=U6rP8peJrLbPrrcIraNvI9anzCYqNJ+F9owBDiClKOTJ2CGD9SHD/okk
+   AMR3hrQzG3SzxFj025dWtLBnWBCtyYa2njBjJQKo5yLIZ57QFm7RKj+8p
+   7RLAOuy/3Ty+sRss6FbIo1fsy7lQf5rmCHh/WYUSDtbi+t91ZfGKuoD+a
+   4qzt2+UrVsE2M4+48O82/RBoS1nmwSqCySSZ/Rzz3co1gqQ28PyM4lu7k
+   KbG+un1lCz0rsWsjDd3Ui6rUkrrGGEzhUNwkWZq/yOKx1InoZ+V1IVUaP
+   ugXSUsUiREtgGvwS0NVoI1VaxG0HnPrRIhfotAXxSDQ9nFjfW6AoBBZkN
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="248752360"
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="248752360"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 08:14:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="572354133"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
+  by orsmga001.jf.intel.com with ESMTP; 18 Feb 2022 08:14:26 -0800
+Date:   Sat, 19 Feb 2022 00:05:55 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v4] fpga: microchip-spi: add Microchip FPGA manager
+Message-ID: <20220218160555.GA1333893@yilunxu-OptiPlex-7050>
+References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+ <20220217191851.11730-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218110547.11249-1-flyingpeng@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <20220217191851.11730-1-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +62,499 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"KVM: VMX:" for the scope.  A more specific shortlog would also be helfpul, stating
-that a comment is being modified doesn't provide any info about what comment.
-
-On Fri, Feb 18, 2022, Peng Hao wrote:
-> loaded_vmcs does not have this field 'vcpu', modify this comment.
-
-It would be helpful to state that loaded_vmcs has 'cpu', not 'vcpu'.  It's hard to
-identify what's being changed.
-
-
-Something like this?
-
-  KVM: VMX: Fix typos above smp_wmb() comment in __loaded_vmcs_clear()
-
-  Fix a comment documenting the memory barrier related to clearing a
-  loaded_vmcs; loaded_vmcs tracks the host CPU the VMCS is loaded on via
-  the field 'cpu', it doesn't have a 'vcpu' field.
-
-With a tweaked shortlog/changelog (doesn't have to be exactly the above),
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-
-> Signed-off-by: Peng Hao <flyingpeng@tencent.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+On Thu, Feb 17, 2022 at 10:18:51PM +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Microchip Polarfire
+> FPGAs over slave SPI interface.
 > 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 7dce746c175f..0ffcfe54eea5 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -644,10 +644,10 @@ static void __loaded_vmcs_clear(void *arg)
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+> Changelog:
+>   v1 -> v2: fix printk formating
+>   v2 -> v3:
+>    * replace "microsemi" with "microchip"
+>    * replace prefix "microsemi_fpga_" with "mpf_"
+>    * more sensible .compatible and .name strings
+>    * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+>   v3 -> v4: fix unused variable warning
+>     Put 'mpf_of_ids' definition under conditional compilation, so it
+>     would not hang unused if CONFIG_OF is not enabled.
+> 
+>  drivers/fpga/Kconfig         |   9 +
+>  drivers/fpga/Makefile        |   1 +
+>  drivers/fpga/microchip-spi.c | 361 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 371 insertions(+)
+>  create mode 100644 drivers/fpga/microchip-spi.c
+> 
+> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> index 26025dbab353..4240c641b100 100644
+> --- a/drivers/fpga/Kconfig
+> +++ b/drivers/fpga/Kconfig
+> @@ -248,4 +248,13 @@ config FPGA_MGR_VERSAL_FPGA
+>  	  configure the programmable logic(PL).
 >  
->  	/*
->  	 * Ensure all writes to loaded_vmcs, including deleting it from its
-> -	 * current percpu list, complete before setting loaded_vmcs->vcpu to
-> -	 * -1, otherwise a different cpu can see vcpu == -1 first and add
-> -	 * loaded_vmcs to its percpu list before it's deleted from this cpu's
-> -	 * list. Pairs with the smp_rmb() in vmx_vcpu_load_vmcs().
-> +	 * current percpu list, complete before setting loaded_vmcs->cpu to
-> +	 * -1, otherwise a different cpu can see loaded_vmcs->cpu == -1 first
-> +	 * and add loaded_vmcs to its percpu list before it's deleted from this
-> +	 * cpu's list. Pairs with the smp_rmb() in vmx_vcpu_load_vmcs().
->  	 */
->  	smp_wmb();
->  
+>  	  To compile this as a module, choose M here.
+> +
+> +config FPGA_MGR_MICROCHIP_SPI
+> +	tristate "Microchip Polarfire SPI FPGA manager"
+> +	depends on SPI
+> +	select CRC_CCITT
+> +	help
+> +	  FPGA manager driver support for Microchip Polarfire FPGAs
+> +	  programming over slave SPI interface.
+> +
+>  endif # FPGA
+> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> index 4da5273948df..fcb389ca4873 100644
+> --- a/drivers/fpga/Makefile
+> +++ b/drivers/fpga/Makefile
+> @@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
+>  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
+> +obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
+>  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
+> 
+> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
+> new file mode 100644
+> index 000000000000..5db25734a27a
+> --- /dev/null
+> +++ b/drivers/fpga/microchip-spi.c
+> @@ -0,0 +1,361 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Microchip Polarfire FPGA programming over slave SPI interface.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/of_device.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/delay.h>
+> +#include <linux/crc-ccitt.h>
+
+Please list them in alphabetical order.
+
+> +
+> +#define	SPI_ISC_ENABLE		0x0B
+> +#define	SPI_ISC_DISABLE		0x0C
+> +#define	SPI_READ_STATUS		0x00
+> +#define	SPI_READ_DATA		0x01
+> +#define	SPI_FRAME_INIT		0xAE
+> +#define	SPI_FRAME		0xEE
+> +#define	SPI_PRG_MODE		0x01
+> +#define	SPI_RELEASE		0x23
+> +
+> +#define	SPI_FRAME_SIZE		16
+> +
+> +#define	HEADER_SIZE_OFFSET	24
+> +#define	DATA_SIZE_OFFSET	55
+> +
+> +#define	LOOKUP_TABLE_RECORD_SIZE	9
+> +#define	LOOKUP_TABLE_BLOCK_ID_OFFSET	0
+> +#define	LOOKUP_TABLE_BLOCK_START_OFFSET	1
+> +
+> +#define	COMPONENTS_SIZE_ID	5
+> +#define	BITSTREAM_ID		8
+> +
+> +#define	BITS_PER_COMPONENT_SIZE	22
+> +
+> +#define	STATUS_POLL_TIMEOUT_MS	1000
+> +#define	STATUS_BUSY		BIT(0)
+> +#define	STATUS_READY		BIT(1)
+
+Maybe add some prefix for these vendor specific definitions, like
+MFP_SPI_ISC_ENABLE.
+
+> +
+> +struct mpf_priv {
+> +	struct spi_device *spi;
+> +	bool program_mode;
+> +};
+> +
+> +static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
+> +{
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi = priv->spi;
+> +	bool program_mode = priv->program_mode;
+> +	ssize_t status;
+> +
+> +	status = spi_w8r8(spi, SPI_READ_STATUS);
+> +
+> +	if (!program_mode && !status)
+> +		return FPGA_MGR_STATE_OPERATING;
+> +
+> +	return FPGA_MGR_STATE_UNKNOWN;
+> +}
+> +
+> +static int poll_status_not_busy(struct spi_device *spi, u8 mask)
+> +{
+> +	ssize_t status, timeout = STATUS_POLL_TIMEOUT_MS;
+> +
+> +	while (timeout--) {
+> +		status = spi_w8r8(spi, SPI_READ_STATUS);
+> +		if (status < 0)
+> +			return status;
+> +
+> +		if (mask) {
+> +			if (!(status & STATUS_BUSY) && (status & mask))
+> +				return status;
+> +		} else {
+> +			if (!(status & STATUS_BUSY))
+> +				return status;
+> +		}
+
+!(status & STATUS_BUSY) is always checked regardless of mask, so may
+move the check out of the if...else statement.
+
+> +
+> +		mdelay(1);
+
+busy wait for 1ms is discouraged, maybe usleep_range(). See
+Documentation/timers/timers-howto.rst
+
+> +	}
+
+The actual timeout may be much longer than what is defined. To be more
+accurate, you may use:
+
+	time_after(jiffies, timeout_jiffies)
+
+> +
+> +	return -EBUSY;
+> +}
+> +
+> +static int mpf_spi_write(struct spi_device *spi, const void *buf, size_t buf_size)
+> +{
+> +	int status = poll_status_not_busy(spi, 0);
+> +
+> +	if (status < 0)
+> +		return status;
+> +
+> +	return spi_write(spi, buf, buf_size);
+> +}
+> +
+> +static int mpf_spi_write_then_read(struct spi_device *spi,
+> +				   const void *txbuf, size_t txbuf_size,
+> +				   void *rxbuf, size_t rxbuf_size)
+> +{
+> +	const u8 read_command[] = { SPI_READ_DATA };
+> +	int ret;
+> +
+> +	ret = mpf_spi_write(spi, txbuf, txbuf_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = poll_status_not_busy(spi, STATUS_READY);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return spi_write_then_read(spi, read_command, sizeof(read_command),
+> +				   rxbuf, rxbuf_size);
+> +}
+> +
+> +static int mpf_ops_write_init(struct fpga_manager *mgr,
+> +			      struct fpga_image_info *info, const char *buf,
+> +			      size_t count)
+> +{
+> +	const u8 isc_en_command[] = { SPI_ISC_ENABLE };
+> +	const u8 program_mode[] = { SPI_FRAME_INIT, SPI_PRG_MODE };
+
+Better we follow the reverse xmas tree declaration, so reverse the 2
+lines please.
+
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi = priv->spi;
+> +	struct device *dev = &mgr->dev;
+> +	u32 isc_ret;
+> +	int ret;
+> +
+> +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
+> +		dev_err(dev, "Partial reconfiguration is not supported\n");
+> +
+
+remove the blank line please
+
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	ret = mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_command),
+> +				      &isc_ret, sizeof(isc_ret));
+> +	if (ret || isc_ret) {
+> +		dev_err(dev, "Failed to enable ISC: %d\n", ret ? ret : isc_ret);
+
+							   ret ? : isc_ret
+
+> +
+
+remove the blank line please
+
+> +		return -EFAULT;
+> +	}
+> +
+> +	ret = mpf_spi_write(spi, program_mode, sizeof(program_mode));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to enter program mode: %d\n", ret);
+> +
+
+the same
+
+> +		return ret;
+> +	}
+> +
+> +	priv->program_mode = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t lookup_block_start(int id, const char *buf, size_t buf_size)
+> +{
+> +	u8 header_size, blocks_num, block_id;
+> +	u32 block_start, i;
+> +
+> +	header_size = *(buf + HEADER_SIZE_OFFSET);
+> +
+> +	if (header_size > buf_size)
+> +		return -EFAULT;
+> +
+> +	blocks_num = *(buf + header_size - 1);
+> +
+> +	if (header_size + blocks_num * LOOKUP_TABLE_RECORD_SIZE > buf_size)
+> +		return -EFAULT;
+> +
+> +	for (i = 0; i < blocks_num; i++) {
+> +		block_id = *(buf + header_size + LOOKUP_TABLE_RECORD_SIZE * i +
+> +			     LOOKUP_TABLE_BLOCK_ID_OFFSET);
+> +
+> +		if (block_id == id) {
+> +			memcpy(&block_start,
+> +			       buf + header_size +
+> +			       LOOKUP_TABLE_RECORD_SIZE * i +
+> +			       LOOKUP_TABLE_BLOCK_START_OFFSET,
+> +			       sizeof(block_start));
+
+why a memcpy here, could we just read from the offset?
+
+> +
+> +			return le32_to_cpu(block_start);
+> +		}
+> +	}
+> +
+> +	return -EFAULT;
+> +}
+> +
+> +static ssize_t parse_bitstream_size(const char *buf, size_t buf_size)
+> +{
+> +	ssize_t	bitstream_size = 0, components_size_start = 0,
+> +		component_size_byte_num, component_size_byte_off, i;
+> +	u16 components_num;
+> +	u32 component_size;
+> +
+> +	memcpy(&components_num, buf + DATA_SIZE_OFFSET, sizeof(components_num));
+
+the same, why a memcpy?
+
+> +	components_num = le16_to_cpu(components_num);
+> +
+> +	components_size_start = lookup_block_start(COMPONENTS_SIZE_ID, buf,
+> +						   buf_size);
+> +	if (components_size_start < 0)
+> +		return components_size_start;
+> +
+> +	if (components_size_start +
+> +	    DIV_ROUND_UP(components_num * BITS_PER_COMPONENT_SIZE,
+> +			 BITS_PER_BYTE) > buf_size)
+> +		return -EFAULT;
+> +
+> +	for (i = 0; i < components_num; i++) {
+> +		component_size_byte_num =
+> +			(i * BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
+> +		component_size_byte_off =
+> +			(i * BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
+> +
+> +		memcpy(&component_size,
+> +		       buf + components_size_start + component_size_byte_num,
+> +		       sizeof(component_size));
+> +		component_size = le32_to_cpu(component_size);
+> +		component_size >>= component_size_byte_off;
+> +		component_size &= GENMASK(BITS_PER_COMPONENT_SIZE - 1, 0);
+> +
+> +		bitstream_size += component_size;
+> +	}
+> +
+> +	return bitstream_size;
+> +}
+> +
+> +static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
+> +{
+> +	ssize_t bitstream_start = 0, bitstream_size;
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi = priv->spi;
+> +	struct device *dev = &mgr->dev;
+> +	u8 tmp_buf[SPI_FRAME_SIZE + 1];
+> +	int ret, i;
+> +
+> +	if (crc_ccitt(0, buf, count)) {
+> +		dev_err(dev, "CRC error\n");
+> +
+> +		return -EINVAL;
+> +	}
+> +
+> +	bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
+> +	if (bitstream_start < 0) {
+> +		dev_err(dev, "Failed to find bitstream start %zd\n",
+> +			bitstream_start);
+> +
+> +		return bitstream_start;
+> +	}
+> +
+> +	bitstream_size = parse_bitstream_size(buf, count);
+> +	if (bitstream_size < 0) {
+> +		dev_err(dev, "Failed to parse bitstream size %zd\n",
+> +			bitstream_size);
+> +
+> +		return bitstream_size;
+> +	}
+> +
+> +	if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
+> +		dev_err(dev,
+> +			"Bitstram outruns firmware. Bitstream start %zd, bitstream size %zd, firmware size %zu\n",
+
+			 Bitstream
+
+> +			bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
+> +
+> +		return -EFAULT;
+> +	}
+> +
+
+If I understand right, this function assumes the users provide the
+entire image buffer. But it is possible the image buffer is from a
+scatter list and the callback would be called several times.
+
+Maybe the bitstream info at the head of the image could be parsed in
+write_init(), and this requires the driver fill the
+fpga_manager_ops.initial_header_size
+
+> +	for (i = 0; i < bitstream_size; i++) {
+> +		tmp_buf[0] = SPI_FRAME;
+> +		memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
+> +		       SPI_FRAME_SIZE);
+> +
+> +		ret = mpf_spi_write(spi, tmp_buf, sizeof(tmp_buf));
+
+Is it possible we use spi_sync_transfer to avoid memcpy the whole
+bitstream?
+
+> +		if (ret) {
+> +			dev_err(dev,
+> +				"Failed to write bitstream frame number %d of %zd\n",
+> +				i, bitstream_size);
+> +
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mpf_ops_write_complete(struct fpga_manager *mgr,
+> +					     struct fpga_image_info *info)
+
+"CHECK: Alignment should match open parenthesis" from checkpatch.pl --strict
+
+> +{
+> +	const u8 isc_dis_command[] = { SPI_ISC_DISABLE };
+> +	const u8 release_command[] = { SPI_RELEASE };
+> +	struct mpf_priv *priv = mgr->priv;
+> +	struct spi_device *spi = priv->spi;
+> +	struct device *dev = &mgr->dev;
+> +	int ret;
+> +
+> +	ret = mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to disable ISC: %d\n", ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	mdelay(1);
+
+Same concern
+
+> +
+> +	ret = mpf_spi_write(spi, release_command, sizeof(release_command));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to exit program mode: %d\n", ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	priv->program_mode = false;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct fpga_manager_ops mpf_ops = {
+> +	.state = mpf_ops_state,
+> +	.write_init = mpf_ops_write_init,
+> +	.write = mpf_ops_write,
+> +	.write_complete = mpf_ops_write_complete,
+> +};
+> +
+> +static int mpf_probe(struct spi_device *spi)
+> +{
+> +	struct mpf_priv *priv;
+> +	struct device *dev = &spi->dev;
+> +	struct fpga_manager *mgr;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->spi = spi;
+> +
+> +	mgr = devm_fpga_mgr_register(dev, "Microchip Polarfire SPI FPGA Manager",
+> +				     &mpf_ops, priv);
+> +
+> +	return PTR_ERR_OR_ZERO(mgr);
+> +}
+> +
+> +static const struct spi_device_id mpf_spi_ids[] = {
+> +	{ .name = "mpf-spi-fpga-mgr", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(spi, mpf_spi_ids);
+> +
+> +#if IS_ENABLED(CONFIG_OF)
+> +static const struct of_device_id mpf_of_ids[] = {
+> +	{ .compatible = "microchip,mpf-spi-fpga-mgr" },
+
+From checkpatch.pl
+
+"WARNING: DT compatible string "microchip,mpf-spi-fpga-mgr" appears un-documented -- check ./Documentation/devicetree/bindings/"
+
+Thanks,
+Yilun
+
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mpf_of_ids);
+> +#endif /* IS_ENABLED(CONFIG_OF) */
+> +
+> +static struct spi_driver mpf_driver = {
+> +	.probe = mpf_probe,
+> +	.id_table = mpf_spi_ids,
+> +	.driver = {
+> +		.name = "microchip_mpf_spi_fpga_mgr",
+> +		.of_match_table = of_match_ptr(mpf_of_ids),
+> +	},
+> +};
+> +
+> +module_spi_driver(mpf_driver);
+> +
+> +MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
+> +MODULE_LICENSE("GPL");
 > -- 
-> 2.27.0
+> 2.34.1
 > 

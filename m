@@ -2,177 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12424BB8DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D794BB8D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235004AbiBRMJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:09:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38722 "EHLO
+        id S234990AbiBRMDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:03:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbiBRMJj (ORCPT
+        with ESMTP id S232329AbiBRMDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:09:39 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF79D185540;
-        Fri, 18 Feb 2022 04:09:22 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IBdEws018520;
-        Fri, 18 Feb 2022 12:09:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=kiZSoymZWrUZ21eL5E5DBr3+lL3dmAn6D++X/+xOH8I=;
- b=PMrydSkxhf8Kx+mBHJdYZFO/tp6QeMvhSVU6wbzlwQ074IvDbJJjiv30hQo2ioEh62mm
- ED2RREd9UH9sdZ0nJ1k98vJVzw0LWD2o9rk/RsOtrJ6+B/oRnkZ6Vv+2qLy7NNPxizrF
- iXYjH/rGYGq7BSi3v9ZlFSzivDwejkIiRghrimrHK/gN6n+ce0/E0zgfce+7qZVCzGv+
- rFAcVAjrBYJBhd+GuwBz/iyQ5YiXFhtcc8gRjpR6FAYB2jfteA9NH8SEr7Y7KGdZkQZv
- b0CSmHtThBGh7u32HHd9vx+nGUdgFIr0gq9hgAiv6lG1B8GJF7LGhaXmvvZ9dGH5ra/e HA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ea94utcrj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:09:21 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21IBjv7D007125;
-        Fri, 18 Feb 2022 12:09:20 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ea94utcq9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:09:20 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21IC82ex022802;
-        Fri, 18 Feb 2022 12:09:18 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3e64haf7ay-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:09:18 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21IBwlNZ45875568
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Feb 2022 11:58:47 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8B88A4062;
-        Fri, 18 Feb 2022 12:09:14 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C04CBA4054;
-        Fri, 18 Feb 2022 12:09:13 +0000 (GMT)
-Received: from [9.171.81.151] (unknown [9.171.81.151])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Feb 2022 12:09:13 +0000 (GMT)
-Message-ID: <a1c0e067-cc6a-8edb-1fe9-4aa368aa6518@linux.ibm.com>
-Date:   Fri, 18 Feb 2022 13:09:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] KVM: s390: selftests: Refactor memop test
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Thomas Huth <thuth@redhat.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220211182215.2730017-11-scgl@linux.ibm.com>
- <20220217145336.1794778-1-scgl@linux.ibm.com>
- <20220217145336.1794778-2-scgl@linux.ibm.com>
- <ce27dcb4-c2a3-fad6-8277-f5b86e184892@linuxfoundation.org>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <ce27dcb4-c2a3-fad6-8277-f5b86e184892@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WKL47Nh10YO_jYeg13qEB_Nw-QQz5Vng
-X-Proofpoint-ORIG-GUID: SlmLjttPh4R2paLaNXGk_FajH913T4JG
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 18 Feb 2022 07:03:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA3220F42;
+        Fri, 18 Feb 2022 04:03:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42485B825D4;
+        Fri, 18 Feb 2022 12:03:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51578C340E9;
+        Fri, 18 Feb 2022 12:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645185809;
+        bh=5eCNGRZmLgvKjz0xwJntkcNjbDBrasjKtxubxgHEuIs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gat8Bz/ayLWMwqVKTR/TpQ1SFEyaR0to68tpYy9Ee9p4nSXcFNP5rR9IP8hPB5R7i
+         m69pfGU6QgcA+JQ1yjc1MaNrf+1tKQKEE6UhTrawngSuQnmgDDCGYo3+0nuqgE4BAN
+         fUmteywuV18OhthhefEzIf4heM+3qs8Efr96LFw4aYdlhPEgFQe82T2WyvR8SsaWNS
+         h5qJwByeXpTf4TWDGX3xZJSUoYmGXxLqtnh958/2MEsbYXcg4HvuQobvwI8OAfmy7o
+         P/WVYFICdJ9ygz54YuIGiZNLQ2wa/62QI8J/f2dk3zzjCezt89Limwl9XeBNB2l4po
+         4b2ORGQo6cOaA==
+Date:   Fri, 18 Feb 2022 12:10:17 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] iio: accel: adxl345: Add ACPI HID table
+Message-ID: <20220218121017.32bbdef9@jic23-huawei>
+In-Reply-To: <CAHp75Vf4pjyJJDLKWTjq2ny1xkF9fSCSPb_8q5yk69DjV9EUAg@mail.gmail.com>
+References: <20220217055208.2388929-1-kai.heng.feng@canonical.com>
+        <CAHp75VfFGw3b_ZtQir0AfTfXfQ7fi_LKLsY-7ww=4+MMBR8BAQ@mail.gmail.com>
+        <CAAd53p7O7joFa7MH0s+rw-59WQkigvjKBf1bpO9e2gX9ddjF-A@mail.gmail.com>
+        <CAHp75Vf4pjyJJDLKWTjq2ny1xkF9fSCSPb_8q5yk69DjV9EUAg@mail.gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-18_04,2022-02-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501
- spamscore=0 suspectscore=0 impostorscore=0 mlxscore=0 bulkscore=0
- clxscore=1011 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202180078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 18:36, Shuah Khan wrote:
-> On 2/17/22 7:53 AM, Janis Schoetterl-Glausch wrote:
->> Introduce macro for performing MEM_OP ioctls in a concise way.
-> 
-> How does this help? What is the value in re-writing existing
-> code and turning it into a macro?
+On Fri, 18 Feb 2022 09:39:14 +0100
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-I want invocations of the ioctl to be independent of each other, so the reader does not
-have to keep track of the state of the struct kvm_s390_mem_op.
+> On Fri, Feb 18, 2022 at 4:46 AM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+> > On Thu, Feb 17, 2022 at 6:57 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote: =20
+> > > On Thursday, February 17, 2022, Kai-Heng Feng <kai.heng.feng@canonica=
+l.com> wrote: =20
+>=20
+> ...
+>=20
+> > >> +               acpi_id =3D acpi_match_device(dev->driver->acpi_matc=
+h_table, dev);
+> > >> +               if (acpi_id) {
+> > >> +                       type =3D acpi_id->driver_data;
+> > >> +                       name =3D acpi_id->id;
+> > >> +               } else
+> > >> +                       return -ENODEV; =20
+> > >
+> > > Thanks, but can we do this in ACPI agnostic way?
+> > >
+> > > Can be as simple as
+> > >
+> > > if (id)
+> > >   ...
+> > > else {
+> > >   match =3D device_get_match_data(dev);
+> > >   if (!match)
+> > >     return -ENODEV;
+> > > }
+> > >
+> > > Note, it might require to reconsider what is put in the driver data (=
+either convert to pointers, or be sure that valid type is never a 0/NULL). =
+=20
+> >
+> > Unlike acpi_match_device(), device_get_match_data() only get
+> > driver_data, so we need a new struct to provide both name and type. =20
+>=20
+> It's unfortunate. Let me think about it a bit more.
+Usual solution is just to add that name to a per device type structure.
+In this particular case there isn't one so far though and an enum is used
+in the one place we might otherwise have used a part number specific struct=
+ure.
 
-So you have to specify all arguments manually like so, which is rather noisy and makes it
-hard to see what the relevant parameter is:
+Probably the easiest thing to do is use the enum to do a lookup in an array
+of structures and have the string there.
 
-ksmo.gaddr = guest_mem1;
-ksmo.flags = 0;
-ksmo.size = maxsize;
-ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-ksmo.buf = (uintptr_t)mem1;
-ksmo.ar = 17;
-rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+>=20
+> > > Also note, in both cases using ID name for name us fragile. Probably =
+we have to fix that first. Let me check today=E2=80=99s evening. =20
+> >
+> > Can you please explain more on this? How does ID name make it fragile? =
+=20
+>=20
+> I thought this one is used somehow by userspace to distinguish the
+> instance of the device, but looking into the rest of the IIO drivers
+> it seems more or less  a field for part number. That said, the ID is
+> okay to use. I hope Jonathan may correct me.
+>=20
+Should be part number.  Instances are distinguished via label rather than
+name (or via the device parent on older kernels where we didn't have
+label).
 
-Or you introduce an abstraction.
-Previously I used lots of functions with repeated code which got chaotic.
-I decided on the macro because it's more flexible, e.g. you don't have to pass default args.
-For example, there is only one test that passes the access register arg, so you would want
-to default it to 0 for all other test.
-For the access key argument you need to pass both a flag and the key itself, so you'd probably
-get rid of this redundancy also.
-There also might be future extensions of the ioctl that work the same way
-(not 100% but not purely theoretical either).
+There are a few places where we accidentally let though IDs that aren't
+always simply the part number and they became part of the ABI so we
+couldn't really fix them after the event.
 
-With the macro all that is orthogonal, you just pass the argument you need or you don't.
-With functions you'd maybe add a memop_key() variant and a _ar() variant and a _key_ar()
-variant if you need it (currently not necessary), doubling the number of functions with
-each additional argument. Another example is GADDR_V and GADDR, the first takes care of
-translating the address to an physical one, but sometimes you need to pass it untranslated,
-and we need to combine that with passing a key or not.
+Jonathan
 
-A big improvement was making the target of the ioctl (vm/vcpu) and the operation arguments
-instead of baking it into the function. Since they're mandatory arguments this is independent
-of the macro vs functions question.
-
-In the end there are multiple independent but interacting improvements and it is kinda
-hard to make the call on how far to go along one dimension, e.g. I was unsure if I
-wanted to introduce the DEFAULT_READ macro, but decided for it, since, as a reviewer,
-you can see that it executes the same code with different arguments, instead of trying
-to identify the difference between 5 copy-pasted and modified lines of code. On the other
-hand you have the cost of introducing an indirection.
-> 
-> 
->> Split test cases into multiple host/guest pairs making them independent.
-> 
-> This is a good change.
-> 
->> Make various minor improvements.
->> All in all this lays the groundwork for future extensions.
-> 
-> Also good if these changes make it easier to add test. Would be helpful
-> to know the details of the groundwork.
-
-Yeah I'm not too happy about the commit descriptions.
-I was unsure how to structure the patches, since the new test motivate
-the restructuring, e.g. if I put the _test_errors_common in the first patch
-it's kinda weird since at that stage there is no commonality at all.
-I ended up moving stuff around + since I'm not quite sure about stuff like the DEFAULT_
-macros I left the description kinda vague.
-
-Probably should have linked to the series this is a reply to, since linux-kselftest wasn't on cc:
-https://lore.kernel.org/kvm/20220211182215.2730017-1-scgl@linux.ibm.com/
-
-> 
-> thanks,
-> -- Shuah
 

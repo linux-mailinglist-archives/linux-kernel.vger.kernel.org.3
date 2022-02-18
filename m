@@ -2,138 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52A94BB8C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5204BB8D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbiBRL5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:57:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50548 "EHLO
+        id S235000AbiBRMFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:05:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234375AbiBRL5X (ORCPT
+        with ESMTP id S232329AbiBRMFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 06:57:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646B6253BE5;
-        Fri, 18 Feb 2022 03:57:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 18 Feb 2022 07:05:51 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1185E21E1A;
+        Fri, 18 Feb 2022 04:05:33 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5149B219A7;
+        Fri, 18 Feb 2022 12:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645185932; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m87japvLs6dTotRw4YdigIf21fJ6IZ9mrxbcurYJjpA=;
+        b=yL7tUspE1/oIcVnVHmeQkrRPbWmE2koS2I4ZX7YaTv28BQ9FQ3h4Z+X10KoypCXSLVPXiT
+        iz1W4EFkaXllnszgnn4lBd+WvjI+b9KXXLXd0vmE6mkZfA/KhWUk+SVrwwaRoSXkXZvczp
+        0rjcp5sINF8Tja+PvZLUGpQuytskbss=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645185932;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m87japvLs6dTotRw4YdigIf21fJ6IZ9mrxbcurYJjpA=;
+        b=aiPSgPFlhB4wMyB6cmR5KnM7bVTV5JJnNVZ1Za5wOBLioEeq0a+9nvgx9TSOp5hT7kIZ/P
+        m7YANTEYE3fNu/CA==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0097061F58;
-        Fri, 18 Feb 2022 11:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE1DC340E9;
-        Fri, 18 Feb 2022 11:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645185426;
-        bh=kUbpTt/StXluIZwwl2qBkxYOiqUkjNO4FOl6aWmkKgE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GxwBfGr8ZW19lDxtJvWqMkKDLHE29ewva9Z5w5wTqgsRIc/oWypmSBMOGez3bUB77
-         wOUrA4reZxkn5hagfLnGvI/b2eh58WVZ9qJRvRZ4bhGAN+Uv0sKqOhgIp2RMiQcPr/
-         6fQai/yh6H2DAhtsOItLpCKoz7i+oTZIgqxq/Q2Kq1c8FhwNbGlfRpdj8kYOMBlc5b
-         4t8ByMv94NaewMe8SPseAAGO3Y1Qh1HT9Tuf9oDDllMIjwlo9zv3zSrC2HZ0e59EI1
-         loyUFvDZwia2cqIjejXlj3lSw0sqtLsNdl44jOWs3Afa8XsLPP+lEKyCKgJTLZQW8s
-         xJVvGgOPbe9pg==
-Date:   Fri, 18 Feb 2022 12:03:55 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cristian Pop <cristian.pop@analog.com>
-Cc:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 1/2] dt:bindings:iio:frequency: Add ADMV4420 doc
-Message-ID: <20220218120355.4b7c33e1@jic23-huawei>
-In-Reply-To: <20220218095048.86826-1-cristian.pop@analog.com>
-References: <20220218095048.86826-1-cristian.pop@analog.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        by relay2.suse.de (Postfix) with ESMTPS id ECB0AA3B81;
+        Fri, 18 Feb 2022 12:05:31 +0000 (UTC)
+Date:   Fri, 18 Feb 2022 13:05:30 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Martin Mares <mj@ucw.cz>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Herrmann <dh.herrmann@gmail.com>,
+        linux-video@atrey.karlin.mff.cuni.cz, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] simplefb: Enable boot time VESA graphic mode
+ selection.
+Message-ID: <20220218120530.GX3113@kunlun.suse.cz>
+References: <14dd85f1-21b1-2ff7-3491-466c077210e6@suse.de>
+ <20220218105138.5384-1-msuchanek@suse.de>
+ <a789e375-a23e-6988-33bc-1410eb5d974f@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a789e375-a23e-6988-33bc-1410eb5d974f@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 11:50:47 +0200
-Cristian Pop <cristian.pop@analog.com> wrote:
-
-> Add device tree bindings for the ADMV4420 K band downconverter.
+On Fri, Feb 18, 2022 at 12:36:10PM +0100, Thomas Zimmermann wrote:
+> Hi
 > 
-> Signed-off-by: Cristian Pop <cristian.pop@analog.com>
-> ---
-
-Change log?  Also, looks like this crossed with a question from
-Rob on v3.
-
-Thanks,
-
-Jonathan
-
-
->  .../bindings/iio/frequency/adi,admv4420.yaml  | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
+> Am 18.02.22 um 11:51 schrieb Michal Suchanek:
+> > Since switch to simplefb/simpledrm VESA graphic modes are no longer
+> > available with legacy BIOS.
+> > 
+> > The x86 realmode boot code enables the VESA graphic modes when option
+> > FB_BOOT_VESA_SUPPORT is enabled.
+> > 
+> > To enable use of VESA modes with simpledrm in legacy BIOS boot mode drop
+> > dependency of BOOT_VESA_SUPPORT on FB, also drop the FB_ prefix, and
+> > select the option when simpledrm is built-in on x86.
+> > 
+> > Fixes: e3263ab389a7 ("x86: provide platform-devices for boot-framebuffers")
+> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > ---
+> > v2: Select BOOT_VESA_SUPPORT from simplefb rather than simpledrm. The
+> > simpledrm driver uses the firmware provided video modes only indirectly
+> > through simplefb, and both can be enabled independently.
+> > ---
+> >   arch/x86/boot/video-vesa.c  | 4 ++--
+> >   drivers/firmware/Kconfig    | 1 +
+> >   drivers/video/fbdev/Kconfig | 9 ++++-----
+> >   3 files changed, 7 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/arch/x86/boot/video-vesa.c b/arch/x86/boot/video-vesa.c
+> > index 7e185977a984..c2c6d35e3a43 100644
+> > --- a/arch/x86/boot/video-vesa.c
+> > +++ b/arch/x86/boot/video-vesa.c
+> > @@ -83,7 +83,7 @@ static int vesa_probe(void)
+> >   			   (vminfo.memory_layout == 4 ||
+> >   			    vminfo.memory_layout == 6) &&
+> >   			   vminfo.memory_planes == 1) {
+> > -#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
+> > +#ifdef CONFIG_BOOT_VESA_SUPPORT
+> >   			/* Graphics mode, color, linear frame buffer
+> >   			   supported.  Only register the mode if
+> >   			   if framebuffer is configured, however,
+> > @@ -121,7 +121,7 @@ static int vesa_set_mode(struct mode_info *mode)
+> >   	if ((vminfo.mode_attr & 0x15) == 0x05) {
+> >   		/* It's a supported text mode */
+> >   		is_graphic = 0;
+> > -#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
+> > +#ifdef CONFIG_BOOT_VESA_SUPPORT
+> >   	} else if ((vminfo.mode_attr & 0x99) == 0x99) {
+> >   		/* It's a graphics mode with linear frame buffer */
+> >   		is_graphic = 1;
+> > diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> > index 75cb91055c17..8053c75b8645 100644
+> > --- a/drivers/firmware/Kconfig
+> > +++ b/drivers/firmware/Kconfig
+> > @@ -224,6 +224,7 @@ config SYSFB
+> >   config SYSFB_SIMPLEFB
+> >   	bool "Mark VGA/VBE/EFI FB as generic system framebuffer"
+> >   	depends on SYSFB
+> > +	select BOOT_VESA_SUPPORT if X86
+> >   	help
+> >   	  Firmwares often provide initial graphics framebuffers so the BIOS,
+> >   	  bootloader or kernel can show basic video-output during boot for
+> > diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+> > index 6ed5e608dd04..4f3be9b7a520 100644
+> > --- a/drivers/video/fbdev/Kconfig
+> > +++ b/drivers/video/fbdev/Kconfig
+> > @@ -66,9 +66,8 @@ config FB_DDC
+> >   	select I2C_ALGOBIT
+> >   	select I2C
+> > -config FB_BOOT_VESA_SUPPORT
+> > +config BOOT_VESA_SUPPORT
+> >   	bool
+> > -	depends on FB
+> >   	help
+> >   	  If true, at least one selected framebuffer driver can take advantage
+> >   	  of VESA video modes set at an early boot stage via the vga= parameter.
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
-> new file mode 100644
-> index 000000000000..35a3fb3fd339
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/frequency/adi,admv4420.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ADMV4420 K Band Downconverter
-> +
-> +maintainers:
-> +  - Cristian Pop <cristian.pop@analog.com>
-> +
-> +description:
-> +  The ADMV4420 is a highly integrated, double balanced, active
-> +  mixer with an integrated fractional-N synthesizer, ideally suited
-> +  for next generation K band satellite communications
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,admv4420
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  spi-max-frequency:
-> +    maximum: 1000000
-> +
-> +  adi,lo-freq-khz:
-> +    description: LO Frequency
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  adi,ref-ext-single-ended-en:
-> +    description: External reference selected.
-> +    type: boolean
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    spi {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      admv4420@0 {
-> +        compatible = "adi,admv4420";
-> +        reg = <0>;
-> +        spi-max-frequency = <1000000>;
-> +        adi,lo-freq-khz = <16750000>;
-> +        adi,ref-ext-single-ended-en;
-> +      };
-> +    };
-> +...
+> This isn't an fb option any longer. Should we move this into
+> arch/x86/Kconfig ?
+
+I tried moving it just a directory up but then found that it works even
+where it is. It's specific to x86 boot code so moving to x86 may make
+sense. Then the 'if X86' should not be needed, either.
+
+Thanks
+
+Michal
+
+> 
+> Best regards
+> Thomas
+> 
+> > @@ -627,7 +626,7 @@ config FB_VESA
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > -	select FB_BOOT_VESA_SUPPORT
+> > +	select BOOT_VESA_SUPPORT
+> >   	help
+> >   	  This is the frame buffer device driver for generic VESA 2.0
+> >   	  compliant graphic cards. The older VESA 1.2 cards are not supported.
+> > @@ -1051,7 +1050,7 @@ config FB_INTEL
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > -	select FB_BOOT_VESA_SUPPORT if FB_INTEL = y
+> > +	select BOOT_VESA_SUPPORT if FB_INTEL = y
+> >   	depends on !DRM_I915
+> >   	help
+> >   	  This driver supports the on-board graphics built in to the Intel
+> > @@ -1378,7 +1377,7 @@ config FB_SIS
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > -	select FB_BOOT_VESA_SUPPORT if FB_SIS = y
+> > +	select BOOT_VESA_SUPPORT if FB_SIS = y
+> >   	select FB_SIS_300 if !FB_SIS_315
+> >   	help
+> >   	  This is the frame buffer device driver for the SiS 300, 315, 330
+> 
+> -- 
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 Nürnberg, Germany
+> (HRB 36809, AG Nürnberg)
+> Geschäftsführer: Ivo Totev
+
+
 

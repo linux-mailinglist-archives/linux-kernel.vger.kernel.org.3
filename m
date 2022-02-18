@@ -2,156 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148334BC083
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDE64BC0BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238026AbiBRTvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 14:51:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50946 "EHLO
+        id S236621AbiBRT4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 14:56:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235164AbiBRTvg (ORCPT
+        with ESMTP id S235479AbiBRTzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 14:51:36 -0500
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622B02905B3;
-        Fri, 18 Feb 2022 11:51:18 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2d66f95f1d1so77382707b3.0;
-        Fri, 18 Feb 2022 11:51:18 -0800 (PST)
+        Fri, 18 Feb 2022 14:55:45 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07C129E;
+        Fri, 18 Feb 2022 11:55:27 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id h11so5468680ilq.9;
+        Fri, 18 Feb 2022 11:55:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5uMqrw8+6VchXMRp0bzbPkGR2Iy1g3pLICkvKHQUn5s=;
+        b=Gz+N6F0GuBqFa6mOtU/cqd9YC7sTYPS/YXaUQIwHTo3WhD9LCaPiA2X2CrplBDWlzX
+         d2ie1fQsmGyLhelJ7fLx3PLzYB8+fYH6BazFK1Eoz+uR1nvpZZ07lVUQS9AEq2v7cT6Q
+         sw4KvXulNbKRo4b/FMm7HRUDlf4Mj2ABfjHbt5vmXbVg48xaGBOgJbrEwTHMxJluJBeP
+         KXYzVJU+CNLflQgHSnu8uf0+H570io3eu9QgiCnTk+gxHlxeAe7pD8n0A/Dj40h1zr+l
+         aecSnsUsCE6HoSyLb4pmFFPzzdv4N0SwzsaLeZ/44JItbt03+uC1GiuyAC8Ojurn8/Z1
+         L6rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6UpmHze97W9LathLwKVIjqOsoo/tKcPCSRRjEHG+pgk=;
-        b=7E6KQNXkKAOF2BUCuquYMyP2TtV9Xo91qIfV/Sp7WOx2wZH4SBZHqbKObUy0WUApsX
-         ZjYaqDMxnE3l7n3sh+aXIl/IrLnocXE52sMVtVPy1msYVW+Ib4/WDrhc/SvHiw94X/qk
-         yJP8ceN9qPAihhDWYY3IF2qqNJTRLMdGP/nBR64XinD9sCmO4yYwhLoCWzkuOhmkb2r6
-         VG3sXwRruUCB5apELUAy+lExELzgsLBtla5ylLSLZWoGIhVbKfm+DHf+WCf3phMeQPCf
-         um36orRqHe0V22oiZkG4vlHNPbA3M2nxD60JTNReAo9cu1NP+FwuW1I78WfVWSRPQ0r5
-         qdag==
-X-Gm-Message-State: AOAM5302IQefdPjo8CuXofzfrXoCmgN7yUWnWdn12MCQlFRt8gmr1KKh
-        V3fx4qpuQpKAkkbZnukzWtO/ZALWVF+rPsIscZxZLxtA
-X-Google-Smtp-Source: ABdhPJw8iiRMmLhZY9o1UAyVsrYD0rOzIDAgwp+BY5YjlXi+5cJKUF7wlAYuB72Vi54Y902H7OtvODEqCuS7bM5P1iE=
-X-Received: by 2002:a0d:e8d2:0:b0:2d6:1743:4023 with SMTP id
- r201-20020a0de8d2000000b002d617434023mr9279305ywe.7.1645213877421; Fri, 18
- Feb 2022 11:51:17 -0800 (PST)
+        bh=5uMqrw8+6VchXMRp0bzbPkGR2Iy1g3pLICkvKHQUn5s=;
+        b=EU+ANyg24Vpcen35b4Z5uBQd5KOuG/DbVRxdnitYjm8h7otRjX4e3gRIO4Ga/TRJmS
+         UPh0N3uzQ8OUUdnO1ucBl6kkRPztLtJmqGQ7W0pxuwhoaffkfRZSAM0wwKd89143/jsa
+         5Gudz/OvrifqMnGaq7ifDNYB5wpTWp6ZcYlQusti3To0GNM4E68D9Jj/5gYeXTawHoLn
+         8NV57aG+d1y/bfNk+YG0Gxp8byMdwAc/QqaYRXSGR6Ygy6dvazRDyx8yYNoIq+qNVYiL
+         zN7CrWT4uYi8Fft50lOKg0rWa2GaKKhz1k6bZfTSDTLoubb+E7RSjAgWtZjsEyKLsp6p
+         0mEQ==
+X-Gm-Message-State: AOAM532WM6sWb6IwaSi+ZRjZTTO6lwME4trzQbv6SpNAZBTUoKKaexfW
+        eJn0E2mvDiHNA9vgE467Jh8EESynHs0U3HlGvFQ6zwjxYYs=
+X-Google-Smtp-Source: ABdhPJwMElGK0zoFWXExXzv66lkDUPkUajOfC5brsjaVY+7cETRxZt3fHRYc7wYWrqv/3bY+JQmsfOL4rp9yZ/BTJrw=
+X-Received: by 2002:a92:d208:0:b0:2c1:1a3c:7b01 with SMTP id
+ y8-20020a92d208000000b002c11a3c7b01mr6454880ily.71.1645214127400; Fri, 18 Feb
+ 2022 11:55:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20220209145318.83405-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220209145318.83405-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 18 Feb 2022 20:51:06 +0100
-Message-ID: <CAJZ5v0g5EWb34iGitsHv2EEOMoDSWHFgbpL1avbbqh5Enggcsw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] ACPI: property: Get rid of redundant 'else'
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
+References: <20220217131916.50615-1-jolsa@kernel.org> <20220217131916.50615-4-jolsa@kernel.org>
+ <CAEf4BzYP7=JuyuY=xZe71urpxat4ba-JnqeSTcHF=CYmsQbofQ@mail.gmail.com> <Yg9geQ0LJjhnrc7j@krava>
+In-Reply-To: <Yg9geQ0LJjhnrc7j@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 18 Feb 2022 11:55:16 -0800
+Message-ID: <CAEf4BzZaFWhWf73JbfO7gLi82Nn4ma-qmaZBPij=giNzzoSCTQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] perf tools: Rework prologue generation code
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 3:53 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Fri, Feb 18, 2022 at 1:01 AM Jiri Olsa <olsajiri@gmail.com> wrote:
 >
-> In the snippets like the following
+> On Thu, Feb 17, 2022 at 01:53:16PM -0800, Andrii Nakryiko wrote:
+> > On Thu, Feb 17, 2022 at 5:19 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > Some functions we use now for bpf prologue generation are
+> > > going to be deprecated, so reworking the current code not
+> > > to use them.
+> > >
+> > > We need to replace following functions/struct:
+> > >    bpf_program__set_prep
+> > >    bpf_program__nth_fd
+> > >    struct bpf_prog_prep_result
+> > >
+> > > Current code uses bpf_program__set_prep to hook perf callback
+> > > before the program is loaded and provide new instructions with
+> > > the prologue.
+> > >
+> > > We workaround this by using objects's 'unloaded' programs instructions
+> > > for that specific program and load new ebpf programs with prologue
+> > > using separate bpf_prog_load calls.
+> > >
+> > > We keep new ebpf program instances descriptors in bpf programs
+> > > private struct.
+> > >
+> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  tools/perf/util/bpf-loader.c | 122 +++++++++++++++++++++++++++++------
+> > >  1 file changed, 104 insertions(+), 18 deletions(-)
+> > >
+> >
+> > [...]
+> >
+> > >  errout:
+> > > @@ -696,7 +718,7 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+> > >         struct bpf_prog_priv *priv = program_priv(prog);
+> > >         struct perf_probe_event *pev;
+> > >         bool need_prologue = false;
+> > > -       int err, i;
+> > > +       int i;
+> > >
+> > >         if (IS_ERR_OR_NULL(priv)) {
+> > >                 pr_debug("Internal error when hook preprocessor\n");
+> > > @@ -727,6 +749,12 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+> > >                 return 0;
+> > >         }
+> > >
+> > > +       /*
+> > > +        * Do not load programs that need prologue, because we need
+> > > +        * to add prologue first, check bpf_object__load_prologue.
+> > > +        */
+> > > +       bpf_program__set_autoload(prog, false);
+> >
+> > if you set autoload to false, program instructions might be invalid in
+> > the end. Libbpf doesn't apply some (all?) relocations to such
+> > programs, doesn't resolve CO-RE, etc, etc. You have to let
+> > "prototypal" BPF program to be loaded before you can grab final
+> > instructions. It's not great, but in your case it should work, right?
 >
->         if (...)
->                 return / goto / break / continue ...;
->         else
->                 ...
->
-> the 'else' is redundant. Get rid of it.
->
-> While at it, replace conditional '<= 0' for unsigned type by '== 0'
-> in acpi_data_prop_read(); update comment in the
-> __acpi_node_get_property_reference() on how we parse the reference.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/acpi/property.c | 27 +++++++++++++++------------
->  1 file changed, 15 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> index 4744c191acee..928aa4f86344 100644
-> --- a/drivers/acpi/property.c
-> +++ b/drivers/acpi/property.c
-> @@ -541,7 +541,8 @@ acpi_device_data_of_node(const struct fwnode_handle *fwnode)
->         if (is_acpi_device_node(fwnode)) {
->                 const struct acpi_device *adev = to_acpi_device_node(fwnode);
->                 return &adev->data;
-> -       } else if (is_acpi_data_node(fwnode)) {
-> +       }
-> +       if (is_acpi_data_node(fwnode)) {
->                 const struct acpi_data_node *dn = to_acpi_data_node(fwnode);
->                 return &dn->data;
->         }
-> @@ -739,14 +740,19 @@ int __acpi_node_get_property_reference(const struct fwnode_handle *fwnode,
->                                         return -EINVAL;
->                         }
->
-> -                       /* assume following integer elements are all args */
-> +                       /*
-> +                        * Assume the following integer elements are all args.
-> +                        * Stop counting on the first reference or end of the
-> +                        * package arguments. In case of neither reference,
-> +                        * nor integer, return an error, we can't parse it.
-> +                        */
->                         for (i = 0; element + i < end && i < num_args; i++) {
->                                 int type = element[i].type;
->
-> +                               if (type == ACPI_TYPE_LOCAL_REFERENCE)
-> +                                       break;
->                                 if (type == ACPI_TYPE_INTEGER)
->                                         nargs++;
-> -                               else if (type == ACPI_TYPE_LOCAL_REFERENCE)
-> -                                       break;
->                                 else
->                                         return -EINVAL;
->                         }
-> @@ -938,7 +944,7 @@ static int acpi_data_prop_read(const struct acpi_device_data *data,
->
->         if (proptype != DEV_PROP_STRING && nval > obj->package.count)
->                 return -EOVERFLOW;
-> -       else if (nval <= 0)
-> +       if (nval == 0)
->                 return -EINVAL;
->
->         items = obj->package.elements;
-> @@ -1000,14 +1006,10 @@ struct fwnode_handle *acpi_get_next_subnode(const struct fwnode_handle *fwnode,
->         const struct list_head *head;
->         struct list_head *next;
->
-> -       if (!child || is_acpi_device_node(child)) {
-> +       if ((!child || is_acpi_device_node(child)) && adev) {
->                 struct acpi_device *child_adev;
->
-> -               if (adev)
-> -                       head = &adev->children;
-> -               else
-> -                       goto nondev;
-> -
-> +               head = &adev->children;
->                 if (list_empty(head))
->                         goto nondev;
->
-> @@ -1077,7 +1079,8 @@ acpi_node_get_parent(const struct fwnode_handle *fwnode)
->         if (is_acpi_data_node(fwnode)) {
->                 /* All data nodes have parent pointer so just return that */
->                 return to_acpi_data_node(fwnode)->parent;
-> -       } else if (is_acpi_device_node(fwnode)) {
-> +       }
-> +       if (is_acpi_device_node(fwnode)) {
->                 struct device *dev = to_acpi_device_node(fwnode)->dev.parent;
->
->                 if (dev)
-> --
+> hum, do we care? it should all be done when the 'new' program with
+> the prologue is loaded, right?
 
-Applied as 5.18 material, thanks!
+yeah, you should care. If there is any BPF map involved, it is
+properly resolved to correct FD (which is put into ldimm64 instruction
+in BPF program code) during the load. If program is not autoloaded,
+this is skipped. Same for any global variable or subprog call (if it's
+not always inlined). So you very much should care for any non-trivial
+program.
+
+>
+> I switched it off because the verifier failed to load the program
+> without the prologue.. because in the original program there's no
+> code to grab the arguments that the rest of the code depends on,
+> so the verifier sees invalid access
+
+Do you have an example of C code and corresponding BPF instructions
+before/after prologue generation? Just curious to see in details how
+this is done.
+
+>
+> >
+> > > +
+> > >         priv->need_prologue = true;
+> > >         priv->insns_buf = malloc(sizeof(struct bpf_insn) * BPF_MAXINSNS);
+> > >         if (!priv->insns_buf) {
+> > > @@ -734,6 +762,13 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+> > >                 return -ENOMEM;
+> > >         }
+> > >
+> >
+> > [...]
+> >
+> > > +               /*
+> > > +                * For each program that needs prologue we do following:
+> > > +                *
+> > > +                * - take its current instructions and use them
+> > > +                *   to generate the new code with prologue
+> > > +                *
+> > > +                * - load new instructions with bpf_prog_load
+> > > +                *   and keep the fd in proglogue_fds
+> > > +                *
+> > > +                * - new fd will be used bpf__foreach_event
+> > > +                *   to connect this program with perf evsel
+> > > +                */
+> > > +               orig_insns = bpf_program__insns(prog);
+> > > +               orig_insns_cnt = bpf_program__insn_cnt(prog);
+> > > +
+> > > +               pev = &priv->pev;
+> > > +               for (i = 0; i < pev->ntevs; i++) {
+> > > +                       err = preproc_gen_prologue(prog, i, orig_insns,
+> > > +                                                  orig_insns_cnt, &res);
+> > > +                       if (err)
+> > > +                               return err;
+> > > +
+> > > +                       fd = bpf_prog_load(bpf_program__get_type(prog),
+> >
+> > nit: bpf_program__type() is preferred (we are deprecating/discouraging
+> > "get_" prefixed getters in libbpf 1.0)
+>
+> ok, will change
+
+It's been added in v0.7, yeah.
+
+>
+> >
+> > > +                                          bpf_program__name(prog), "GPL",
+> >
+> > would it make sense to give each clone a distinct name?
+>
+> AFAICS the original code uses same prog name for instances,
+> so I'd rather keep it that way
+>
+
+sure, np
+
+> thanks,
+> jirka
+>
+> >
+> > > +                                          res.new_insn_ptr,
+> > > +                                          res.new_insn_cnt, NULL);
+> > > +                       if (fd < 0) {
+> > > +                               char bf[128];
+> > > +
+> >
+> > [...]

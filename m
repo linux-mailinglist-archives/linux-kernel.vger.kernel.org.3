@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023044BC1EA
+	by mail.lfdr.de (Postfix) with ESMTP id ED9984BC1EC
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239535AbiBRV0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:26:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52066 "EHLO
+        id S239939AbiBRV05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:26:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239860AbiBRVZu (ORCPT
+        with ESMTP id S239985AbiBRV0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:25:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44DE323F0A3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:25:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645219531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t4YkvwtbfB22VP8TPxgmMroXlY648sAStQ0/hZSRZew=;
-        b=f8qu4bbPUsRJEDkWb+cnWZbGq4oG1Y86yw9RMzE3hHvDJnt3AqRVVGgWCjR2P1ebyea3Js
-        98QFMaIfwiqAFJX3XkOPKwqiTqNEyGJ2WY7aJoMJ0I0zV6BJTRrpo7Sn7gifTLMq/5gudO
-        LbIX5FLRhIBItNQKWfMQlG0kn6HFOnY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-361-0C8YmBd1MFeFfXjNw3-eTg-1; Fri, 18 Feb 2022 16:25:30 -0500
-X-MC-Unique: 0C8YmBd1MFeFfXjNw3-eTg-1
-Received: by mail-wm1-f69.google.com with SMTP id 125-20020a1c0283000000b0037bf720e6a8so6464239wmc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:25:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=t4YkvwtbfB22VP8TPxgmMroXlY648sAStQ0/hZSRZew=;
-        b=LidsDJTeDDRzl7jHOzes0Qm4CAxJbdI32Bu8boBX19tQYrBeRskH8vQSxGecX/IBMQ
-         fspQkv1iQW1kOe55js5WucU702J/U1LpSmbBVw+DWJt+yKDPjJzGhAuWlb8LAXL/tcoE
-         5CRbalPTU7bGebqHIYBsPQNm1urzfiyC/43YXm9MSgYBv1WfbpPRYxCcflUPgJxeLyoY
-         buS5++koCAzM4HJ+eam68TyNs14uN1ikZlbnc+8aSOTz+x/CJ1/P9vrxdonCqRH8OTfM
-         HBx03IW6fFCR1cr+KQSIk6NgL3QuDf4/rCu5IbULijCDZKG1ukNK0M1TnyRohKrCa+Qr
-         5f9g==
-X-Gm-Message-State: AOAM532sIEeZCs4eKMMZ3qGrWxvGSihUaIsYwFkapbc3kTpbxYXNylu6
-        Jp8stK10E8TctjoJaltUlz5wuM8jTRgNJ+rdARFcoL5RsOjaV3IN9Hev7BDVR4Of0vKWzVd6Ovb
-        7X+QyfA7Wm0hfb0iRctNsqBs=
-X-Received: by 2002:adf:dd87:0:b0:1e4:b8e2:2793 with SMTP id x7-20020adfdd87000000b001e4b8e22793mr7498277wrl.382.1645219527000;
-        Fri, 18 Feb 2022 13:25:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZLDYJLO1/nZQ+C1BCov2W9Qb5EJfSUyLiu7Xv5aQQQZEEjZ1GP0K5B+qK4NVhMsLxqwfpVw==
-X-Received: by 2002:adf:dd87:0:b0:1e4:b8e2:2793 with SMTP id x7-20020adfdd87000000b001e4b8e22793mr7498260wrl.382.1645219526717;
-        Fri, 18 Feb 2022 13:25:26 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id bk5sm29207920wrb.10.2022.02.18.13.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 13:25:26 -0800 (PST)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     mcgrof@kernel.org
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, allen.lkml@gmail.com, joe@perches.com,
-        christophe.leroy@csgroup.eu, msuchanek@suse.de,
-        oleksandr@natalenko.name
-Subject: [PATCH v6 10/13] module: Move procfs support into a separate file
-Date:   Fri, 18 Feb 2022 21:25:08 +0000
-Message-Id: <20220218212511.887059-11-atomlin@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220218212511.887059-1-atomlin@redhat.com>
-References: <20220218212511.887059-1-atomlin@redhat.com>
+        Fri, 18 Feb 2022 16:26:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BB528DDE7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:26:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F1B261E14
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 21:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CE9AC340EB;
+        Fri, 18 Feb 2022 21:26:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645219567;
+        bh=67CzBjJX5ADPiMrFIWys7nmcZswOOgMf2OfedGZwxso=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KnpXmn4UT51pv3OWGWxN0LEuLx7nJmopvtcQpAL5hGJK3qQ4/stQHpVs9AUiPmeSm
+         OMU0ic9ZpSj4FvN3+zGRy+vCoJAgTsecq1voWEgbcwO2qOCzywXe3l3L547tvQCawy
+         MgNnbuqAeU2KI8HnejMxoccRTnjmBbPX1A65DsS9UIjXpJbbghEW1gbrm96oblRBRr
+         nhP6p//q8hPYwj7rV+BHj0GLSRZdW9xz7HT0akxtZw8zde2G2lQdjaMNDG6gazRQOK
+         gM1ON+gK2ZxY02Pq32ozlEfCO0MxVzlotwVmnaFaglDiuWD1uqf4aD8Wcsxs5HBdLa
+         FXYs/J54Nohng==
+Received: by pali.im (Postfix)
+        id 496B22BAE; Fri, 18 Feb 2022 22:26:04 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: marvell: armada-37xx: Remap IO space to bus address 0x0
+Date:   Fri, 18 Feb 2022 22:25:26 +0100
+Message-Id: <20220218212526.16021-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,361 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional change.
+Remap PCI I/O space to the bus address 0x0 in the Armada 37xx
+device-tree in order to support legacy I/O port based cards which have
+hardcoded I/O ports in low address space.
 
-This patch migrates code that allows one to generate a
-list of loaded/or linked modules via /proc when procfs
-support is enabled into kernel/module/procfs.c.
+Some legacy PCI I/O based cards do not support 32-bit I/O addressing.
 
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from
+'ranges' DT property") this driver can work with I/O windows which have
+a different address for CPU than for PCI bus (unless there is some
+conflict with other A37xx mapping), without needing additional support
+for this in the firmware.
+
+Note that DDR on A37xx is mapped to bus address 0x0 and that mapping of
+I/O space can be set to address 0x0 too because MEM space and I/O space
+are separate and so they do not conflict.
+
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Reported-by: Arnd Bergmann <arnd@arndb.de>
 ---
- kernel/module/Makefile   |   1 +
- kernel/module/internal.h |   1 +
- kernel/module/main.c     | 131 +-----------------------------------
- kernel/module/procfs.c   | 142 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 145 insertions(+), 130 deletions(-)
- create mode 100644 kernel/module/procfs.c
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 2 +-
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi           | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index a5a0963ba481..f66fda0b41cc 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -13,4 +13,5 @@ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
- obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
- obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
-+obj-$(CONFIG_PROC_FS) += procfs.o
- endif
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 99b88e2eb479..ddb37024a0d6 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -72,6 +72,7 @@ struct module *find_module_all(const char *name, size_t len, bool even_unformed)
- int cmp_name(const void *name, const void *sym);
- long module_get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
- 		       unsigned int section);
-+char *module_flags(struct module *mod, char *buf);
+diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+index 6581092c2c90..7d1b9153a901 100644
+--- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+@@ -163,7 +163,7 @@
+ 	 */
+ 	#address-cells = <3>;
+ 	#size-cells = <2>;
+-	ranges = <0x81000000 0 0xe8000000   0 0xe8000000   0 0x01000000   /* Port 0 IO */
++	ranges = <0x81000000 0 0x00000000   0 0xe8000000   0 0x01000000   /* Port 0 IO */
+ 		  0x82000000 0 0xe9000000   0 0xe9000000   0 0x07000000>; /* Port 0 MEM */
  
- static inline unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
- {
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 952079987ea4..44b6fd1acc44 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -22,7 +22,6 @@
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
- #include <linux/elf.h>
--#include <linux/proc_fs.h>
- #include <linux/seq_file.h>
- #include <linux/syscalls.h>
- #include <linux/fcntl.h>
-@@ -805,31 +804,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- 	return ret;
- }
- 
--static inline void print_unload_info(struct seq_file *m, struct module *mod)
--{
--	struct module_use *use;
--	int printed_something = 0;
--
--	seq_printf(m, " %i ", module_refcount(mod));
--
--	/*
--	 * Always include a trailing , so userspace can differentiate
--	 * between this and the old multi-field proc format.
--	 */
--	list_for_each_entry(use, &mod->source_list, source_list) {
--		printed_something = 1;
--		seq_printf(m, "%s,", use->source->name);
--	}
--
--	if (mod->init != NULL && mod->exit == NULL) {
--		printed_something = 1;
--		seq_puts(m, "[permanent],");
--	}
--
--	if (!printed_something)
--		seq_puts(m, "-");
--}
--
- void __symbol_put(const char *symbol)
- {
- 	struct find_symbol_arg fsa = {
-@@ -919,12 +893,6 @@ void module_put(struct module *module)
- EXPORT_SYMBOL(module_put);
- 
- #else /* !CONFIG_MODULE_UNLOAD */
--static inline void print_unload_info(struct seq_file *m, struct module *mod)
--{
--	/* We don't know the usage count, or what modules are using. */
--	seq_puts(m, " - -");
--}
--
- static inline void module_unload_free(struct module *mod)
- {
- }
-@@ -3596,7 +3564,7 @@ static void cfi_cleanup(struct module *mod)
- }
- 
- /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
--static char *module_flags(struct module *mod, char *buf)
-+char *module_flags(struct module *mod, char *buf)
- {
- 	int bx = 0;
- 
-@@ -3619,103 +3587,6 @@ static char *module_flags(struct module *mod, char *buf)
- 	return buf;
- }
- 
--#ifdef CONFIG_PROC_FS
--/* Called by the /proc file system to return a list of modules. */
--static void *m_start(struct seq_file *m, loff_t *pos)
--{
--	mutex_lock(&module_mutex);
--	return seq_list_start(&modules, *pos);
--}
--
--static void *m_next(struct seq_file *m, void *p, loff_t *pos)
--{
--	return seq_list_next(p, &modules, pos);
--}
--
--static void m_stop(struct seq_file *m, void *p)
--{
--	mutex_unlock(&module_mutex);
--}
--
--static int m_show(struct seq_file *m, void *p)
--{
--	struct module *mod = list_entry(p, struct module, list);
--	char buf[MODULE_FLAGS_BUF_SIZE];
--	void *value;
--
--	/* We always ignore unformed modules. */
--	if (mod->state == MODULE_STATE_UNFORMED)
--		return 0;
--
--	seq_printf(m, "%s %u",
--		   mod->name, mod->init_layout.size + mod->core_layout.size);
--	print_unload_info(m, mod);
--
--	/* Informative for users. */
--	seq_printf(m, " %s",
--		   mod->state == MODULE_STATE_GOING ? "Unloading" :
--		   mod->state == MODULE_STATE_COMING ? "Loading" :
--		   "Live");
--	/* Used by oprofile and other similar tools. */
--	value = m->private ? NULL : mod->core_layout.base;
--	seq_printf(m, " 0x%px", value);
--
--	/* Taints info */
--	if (mod->taints)
--		seq_printf(m, " %s", module_flags(mod, buf));
--
--	seq_puts(m, "\n");
--	return 0;
--}
--
--/*
-- * Format: modulename size refcount deps address
-- *
-- * Where refcount is a number or -, and deps is a comma-separated list
-- * of depends or -.
-- */
--static const struct seq_operations modules_op = {
--	.start	= m_start,
--	.next	= m_next,
--	.stop	= m_stop,
--	.show	= m_show
--};
--
--/*
-- * This also sets the "private" pointer to non-NULL if the
-- * kernel pointers should be hidden (so you can just test
-- * "m->private" to see if you should keep the values private).
-- *
-- * We use the same logic as for /proc/kallsyms.
-- */
--static int modules_open(struct inode *inode, struct file *file)
--{
--	int err = seq_open(file, &modules_op);
--
--	if (!err) {
--		struct seq_file *m = file->private_data;
--		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
--	}
--
--	return err;
--}
--
--static const struct proc_ops modules_proc_ops = {
--	.proc_flags	= PROC_ENTRY_PERMANENT,
--	.proc_open	= modules_open,
--	.proc_read	= seq_read,
--	.proc_lseek	= seq_lseek,
--	.proc_release	= seq_release,
--};
--
--static int __init proc_modules_init(void)
--{
--	proc_create("modules", 0, NULL, &modules_proc_ops);
--	return 0;
--}
--module_init(proc_modules_init);
--#endif
--
- /* Given an address, look for it in the module exception tables. */
- const struct exception_table_entry *search_module_extables(unsigned long addr)
- {
-diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
-new file mode 100644
-index 000000000000..2717e130788e
---- /dev/null
-+++ b/kernel/module/procfs.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module proc support
-+ *
-+ * Copyright (C) 2008 Alexey Dobriyan
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/kallsyms.h>
-+#include <linux/mutex.h>
-+#include <linux/seq_file.h>
-+#include <linux/proc_fs.h>
-+#include "internal.h"
-+
-+#ifdef CONFIG_MODULE_UNLOAD
-+static inline void print_unload_info(struct seq_file *m, struct module *mod)
-+{
-+	struct module_use *use;
-+	int printed_something = 0;
-+
-+	seq_printf(m, " %i ", module_refcount(mod));
-+
-+	/*
-+	 * Always include a trailing , so userspace can differentiate
-+	 * between this and the old multi-field proc format.
-+	 */
-+	list_for_each_entry(use, &mod->source_list, source_list) {
-+		printed_something = 1;
-+		seq_printf(m, "%s,", use->source->name);
-+	}
-+
-+	if (mod->init && !mod->exit) {
-+		printed_something = 1;
-+		seq_puts(m, "[permanent],");
-+	}
-+
-+	if (!printed_something)
-+		seq_puts(m, "-");
-+}
-+#else /* !CONFIG_MODULE_UNLOAD */
-+static inline void print_unload_info(struct seq_file *m, struct module *mod)
-+{
-+	/* We don't know the usage count, or what modules are using. */
-+	seq_puts(m, " - -");
-+}
-+#endif /* CONFIG_MODULE_UNLOAD */
-+
-+/* Called by the /proc file system to return a list of modules. */
-+static void *m_start(struct seq_file *m, loff_t *pos)
-+{
-+	mutex_lock(&module_mutex);
-+	return seq_list_start(&modules, *pos);
-+}
-+
-+static void *m_next(struct seq_file *m, void *p, loff_t *pos)
-+{
-+	return seq_list_next(p, &modules, pos);
-+}
-+
-+static void m_stop(struct seq_file *m, void *p)
-+{
-+	mutex_unlock(&module_mutex);
-+}
-+
-+static int m_show(struct seq_file *m, void *p)
-+{
-+	struct module *mod = list_entry(p, struct module, list);
-+	char buf[MODULE_FLAGS_BUF_SIZE];
-+	void *value;
-+
-+	/* We always ignore unformed modules. */
-+	if (mod->state == MODULE_STATE_UNFORMED)
-+		return 0;
-+
-+	seq_printf(m, "%s %u",
-+		   mod->name, mod->init_layout.size + mod->core_layout.size);
-+	print_unload_info(m, mod);
-+
-+	/* Informative for users. */
-+	seq_printf(m, " %s",
-+		   mod->state == MODULE_STATE_GOING ? "Unloading" :
-+		   mod->state == MODULE_STATE_COMING ? "Loading" :
-+		   "Live");
-+	/* Used by oprofile and other similar tools. */
-+	value = m->private ? NULL : mod->core_layout.base;
-+	seq_printf(m, " 0x%px", value);
-+
-+	/* Taints info */
-+	if (mod->taints)
-+		seq_printf(m, " %s", module_flags(mod, buf));
-+
-+	seq_puts(m, "\n");
-+	return 0;
-+}
-+
-+/*
-+ * Format: modulename size refcount deps address
-+ *
-+ * Where refcount is a number or -, and deps is a comma-separated list
-+ * of depends or -.
-+ */
-+static const struct seq_operations modules_op = {
-+	.start	= m_start,
-+	.next	= m_next,
-+	.stop	= m_stop,
-+	.show	= m_show
-+};
-+
-+/*
-+ * This also sets the "private" pointer to non-NULL if the
-+ * kernel pointers should be hidden (so you can just test
-+ * "m->private" to see if you should keep the values private).
-+ *
-+ * We use the same logic as for /proc/kallsyms.
-+ */
-+static int modules_open(struct inode *inode, struct file *file)
-+{
-+	int err = seq_open(file, &modules_op);
-+
-+	if (!err) {
-+		struct seq_file *m = file->private_data;
-+
-+		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
-+	}
-+
-+	return err;
-+}
-+
-+static const struct proc_ops modules_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
-+	.proc_open	= modules_open,
-+	.proc_read	= seq_read,
-+	.proc_lseek	= seq_lseek,
-+	.proc_release	= seq_release,
-+};
-+
-+static int __init proc_modules_init(void)
-+{
-+	proc_create("modules", 0, NULL, &modules_proc_ops);
-+	return 0;
-+}
-+module_init(proc_modules_init);
+ 	/* enabled by U-Boot if PCIe module is present */
+diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+index 549c3f7c5b27..a099b7787429 100644
+--- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
++++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+@@ -515,7 +515,7 @@
+ 			 * (totaling 127 MiB) for MEM.
+ 			 */
+ 			ranges = <0x82000000 0 0xe8000000   0 0xe8000000   0 0x07f00000   /* Port 0 MEM */
+-				  0x81000000 0 0xeff00000   0 0xeff00000   0 0x00100000>; /* Port 0 IO*/
++				  0x81000000 0 0x00000000   0 0xeff00000   0 0x00100000>; /* Port 0 IO */
+ 			interrupt-map-mask = <0 0 0 7>;
+ 			interrupt-map = <0 0 0 1 &pcie_intc 0>,
+ 					<0 0 0 2 &pcie_intc 1>,
 -- 
-2.34.1
+2.20.1
 

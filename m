@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17FC4BBE48
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E98A4BBE4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238430AbiBRRWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:22:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40334 "EHLO
+        id S238460AbiBRRXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:23:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237838AbiBRRWt (ORCPT
+        with ESMTP id S238455AbiBRRXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:22:49 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC95BE4D3E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:22:32 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id i10so7695173plr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=LXJHrFcUgfck6T64vbuXER18RsSAh2smjYW7lHXzLuY=;
-        b=FqkbDs/H8Ewd7Vcw8fdowTT+8Gz0hPCfAMIeDFtIc8Oe8k6GUaz0GoMPf6SqcHK7f+
-         B1PJBCo9pYWM7Gx4PLel0GnvEXYwIXXTgjm0wEI/QHU+ZCygklKm5ia6VpX4e0DXCo/i
-         Uwrbt5Lvds/1sKHSezH908ot9BQmjut2mvdiu8tfrxfr5XwvJ3kDhj3mm2X4cFXH5vXe
-         t1alDyuWhGr0Dz5eyNxE0FLbsCVbp1J5SzXPXwtzOOoQMTkYlsZPrvLkhdGF7cogPIAb
-         Qb4E6DRrX3+UBCgU4Tg2Of3vMusT5jim2T1We197f6bLdK2FFdwrqr1ct8bY1I6c1O4l
-         mjFA==
+        Fri, 18 Feb 2022 12:23:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 897C912342A
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:23:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645205008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wLmxSPunZdkKjVW0sxyYdXHyDxLpVVtwITCTa0ESLxY=;
+        b=VWcHXHkeQ5XwyCp/mxDus7JZW1eqnhMm91nP9Gpv9MJc9lVz60iqf4Ikz5nCwzp6j6AMio
+        Lf7XGDwERsDYARdZf7IXDkga+PRiFlNGFbnHElH6nodDoitP7grThMbnZHKdsaNfeEH3cq
+        vHicfg3WXjfG/iyDqlhzuAd+SITbK0Q=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-453-dIwtGsc6PECMwDyUbJy7eA-1; Fri, 18 Feb 2022 12:23:27 -0500
+X-MC-Unique: dIwtGsc6PECMwDyUbJy7eA-1
+Received: by mail-ej1-f69.google.com with SMTP id q3-20020a17090676c300b006a9453c33b0so3324817ejn.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:23:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=LXJHrFcUgfck6T64vbuXER18RsSAh2smjYW7lHXzLuY=;
-        b=gvZjsF7XHZC2ZSHfDh+fd53J8fgX61P06RbaHUUYrWIcPDQkfyLunNRLBC88r9B8g0
-         39qqL9Q41ZPUzfbGBmayTdLzngWuM1Qf/KUstKFiO6yTBXGZH5uBcz9Sa2VCi6wW4Y/t
-         eRRGi2bKirbIv1RHag3bi6mmcocsJV9wjTs+mRpLAlOh+/I53CsKWXoIeFiwXOBrwOjf
-         i+l6zRzJj+F3ek2RbtdpV8IchyLx/trhPjQ7yefA49XqgqX/mANNb/iTf0x5SBn2GZwQ
-         Ka0qyuIo/MZvLFfA6p/rxuTU0Tz/d/EGJ+5404aKZVEsz/DNs12T7JY36U26tT0J0sl0
-         W8bw==
-X-Gm-Message-State: AOAM530FYX1WzfwQGAyRP4Jjq17oPuKYub1b/8oHLp1XwMfPvVMuDign
-        R2rk/+MufHbozHHrWfVLpyGb/w==
-X-Google-Smtp-Source: ABdhPJw/c+h/pWxfufvRX4XVAxiKzV6InzDmLsJiZ1+tzlPRN3BtE0+v3cwHUFIJI9frujCWtXiPIQ==
-X-Received: by 2002:a17:90a:67c7:b0:1b9:b5ed:3f19 with SMTP id g7-20020a17090a67c700b001b9b5ed3f19mr13463709pjm.90.1645204952281;
-        Fri, 18 Feb 2022 09:22:32 -0800 (PST)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id e4sm10328571pgr.35.2022.02.18.09.22.31
+        bh=wLmxSPunZdkKjVW0sxyYdXHyDxLpVVtwITCTa0ESLxY=;
+        b=sKGyqqqyvgjzqmgZeh7YeG3eDVrvMynnaU3QVgYixaGJyrjKBsedGqgjvF4vTSZcmd
+         beyCYyItIfn4QNJqTUiFHE8qooBaoM3qgpLfO23BgKXv2FWlCIj/MSYFpTpMUq2BX0u2
+         bXcvp3Vm9wcO6HTA+ckzo/xMI7NNLXixrOBxeQSICcbKvPBoBoKpwiMYJ0Ihb2iziILt
+         x4moKc+Wm9XJmSfKsd7Gmz1tyrm1z4e9MSboQnwZucXfg2NhzxPPzmmGV/fap6Y1iWE1
+         45ROz3SFLFOfxOnxympxZniBkxBFSDpFRmG1iqVT3Cma4jPX1Xgd9TAGRT5trNkp595q
+         Xv2A==
+X-Gm-Message-State: AOAM533dc0Q6pCPWVjWfJPwyrnoK3KpQuJj145rXLjPpDy76Ijn8CYYg
+        WP0R7z5Jcon99+WlxVNOo5pU6BTeYC7WYiwMvlSl+xsSgpepG8/HTW6cJHWp2bse6oc6otYKMpI
+        rvP3YYyExBBpLlJrqG7HFK/G8
+X-Received: by 2002:a05:6402:2744:b0:404:ba60:fec6 with SMTP id z4-20020a056402274400b00404ba60fec6mr9180010edd.235.1645205005949;
+        Fri, 18 Feb 2022 09:23:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzdIaWlXASY65HPZXhodkvuJC5wJqCuuyoymnUNW/je7psQin+hEy5z4WOcHvtLjzv6WrXDMQ==
+X-Received: by 2002:a05:6402:2744:b0:404:ba60:fec6 with SMTP id z4-20020a056402274400b00404ba60fec6mr9179996edd.235.1645205005723;
+        Fri, 18 Feb 2022 09:23:25 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id b19sm1466874edd.91.2022.02.18.09.23.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 09:22:31 -0800 (PST)
-Message-ID: <3561688b-b52c-8858-3da2-afda7c3e681f@linaro.org>
-Date:   Fri, 18 Feb 2022 09:22:30 -0800
+        Fri, 18 Feb 2022 09:23:25 -0800 (PST)
+Message-ID: <db3e3781-0ae8-7392-b899-b386f4df0368@redhat.com>
+Date:   Fri, 18 Feb 2022 18:23:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: [PATCH] KVM: x86: Forcibly leave nested virt when SMM state is
- toggled
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+8112db3ab20e70d50c31@syzkaller.appspotmail.com
-References: <20220125220358.2091737-1-seanjc@google.com>
- <db8a9edd-533e-3502-aed1-e084d6b55e48@linaro.org>
- <Yg/QKgxotNyZbYAI@google.com>
+Subject: Re: [PATCH v2 03/18] KVM: x86/mmu: WARN if PAE roots linger after
+ kvm_mmu_unload
 Content-Language: en-US
-In-Reply-To: <Yg/QKgxotNyZbYAI@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-4-pbonzini@redhat.com> <Yg/UCQggoKQ27pVm@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yg/UCQggoKQ27pVm@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/22 08:58, Sean Christopherson wrote:
-> This SMM-specific patch fixes something different, the bug that you are still
-> hitting is the FNAME(cmpxchg_gpte) mess.  The uaccess CMPXCHG series[*] that
-> properly fixes that issue hasn't been merged yet.
-> 
->    ==================================================================
->    BUG: KASAN: use-after-free in ept_cmpxchg_gpte.constprop.0+0x3c3/0x590
->    Write of size 8 at addr ffff888010000000 by task repro/5633
-> 
-> [*]https://lore.kernel.org/all/20220202004945.2540433-1-seanjc@google.com
-> 
+On 2/18/22 18:14, Sean Christopherson wrote:
+> Checkpatch doesn't like it, and IMO the existing asserts
+> are unnecessary.
 
-Ok, that's good. I will keep an eye on it and give it a try then.
--- 
-Thanks,
-Tadeusz
+I agree that removing the assertions could be another way to go.
+
+A third and better one could be to just wait until pae_root is gone.  I 
+have started looking at it but I would like your opinion on one detail; 
+see question I posted at 
+https://lore.kernel.org/kvm/7ccb16e5-579e-b3d9-cedc-305152ef9b8f@redhat.com/.
+
+For now I'll drop this patch.
+
+Paolo
 

@@ -2,145 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27394BB91E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D644BB91F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbiBRM1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:27:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36942 "EHLO
+        id S235187AbiBRM1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:27:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbiBRM1P (ORCPT
+        with ESMTP id S235169AbiBRM1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:27:15 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B330220F6F;
-        Fri, 18 Feb 2022 04:26:58 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IAHhvi009210;
-        Fri, 18 Feb 2022 12:26:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=ZQoLSGRcl3CdiH6Oq/9zlDrwoM66f1ImRi8z4uxe/Iw=;
- b=xMag2PJD979vPrQo9suuIW4zzQFLbXf+dzzQFRFhzG1oL+1Lb0l9lP6K5hhe75vvZkoB
- 9n1IkjiwYV3DrUUeCsNILVsuULGXsO0z1mVFrxzY6FsJaciRixqX8D2ErDIRy02HNQvW
- uFqT7LldFTul1NPSP/tIOGiXnezIH85arRlg7LsG3h3ZC6Ez9d37oAxB//a+5s2dg7+e
- b2cZXlsrZepIThABxKUBwW9KbdW/8d4hk5NlQN7udezXVC1kXDNqukVn+7PqRNYwDHEv
- vzRu37pXNxFAl+8+YrIrDJZi+C0p1RYLXoWiZie9cR8Wbnx4qFHlu+S0/tja8CWJy+jM jw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e8n3e1byb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Feb 2022 12:26:43 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21ICGdK4163948;
-        Fri, 18 Feb 2022 12:26:40 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
-        by aserp3030.oracle.com with ESMTP id 3e9brdqq15-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Feb 2022 12:26:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EP/xS7ZOEXywaDnFrZY7kBWy+GjqElx3MS/IwQoWooY46slUY8m4KzMB17GhZ0172jtO0fX3u+Ox8+0A5dYLQjThRh1agTHLzwxFR7qzhLhgKRvl8FF+CTaSjjVDB8qdDmiasKLIfCEMZUvxBlB1Z6fPgdlRJnf5cCA1bo2XiHi0zE5lNlnzgDzr0fGNj4Be/8HOA+rtmiJLZ58w9enVKZAN1Q5Kx2fYA+lmlsfb2DUvNgaEROk7q/dAzFRATa+i5HB9kMabXNx0Evfqty9VBLuLATGfkAhOvW/HhxT71odxIYV7k60wB1SfP2/CciKw8HWBMlEqcpOZHSobE/NYSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZQoLSGRcl3CdiH6Oq/9zlDrwoM66f1ImRi8z4uxe/Iw=;
- b=Nzjrx07sPTrXDUtE5vEbUnWt9unV9Use1/5GHs+q1tiwjcLMg0RDjNri3nSTaNYhhA9HGPW86WRDHV9RDspzT1YAlBgUhKGu/t2x9z/Kerz2lKYsMeD+E27aM/RltdSDuPLatPU3Yt47zFYpQd9glLtuPZMecLLMY4kn+fRw3mJwks1O9ZYWtYWGdEcLbMZCAdpsfbGp0duE7xwgFaCxSkOFkdaQqNqVSxW3kStFN8eak7zWAdI1edzZ8BSZMvBAVZXfwSuG2izwYLFO3CZixpQLllZDHI+VfhAJDWGEq5G1Vg7liSymWxuKqWSmCkIDsG+z9/mnueXi3i5e+lajfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZQoLSGRcl3CdiH6Oq/9zlDrwoM66f1ImRi8z4uxe/Iw=;
- b=zYgUtWMnfomsrsF/2e2kKp45t7IhKfOSgg2NQm73aLBo6eCJiE4V6Al1XSihHKBbsMT7J+3I1Brc2rCUocNp5vQhtaDxsWpHm2ee3SkKSY7VK33i+8Fgn2qyNqEjqyJ74Z/vkda72pnJnrXG42cpBMyJs22bsWh4XUkQKOcYrMU=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BY5PR10MB3955.namprd10.prod.outlook.com
- (2603:10b6:a03:1f7::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Fri, 18 Feb
- 2022 12:26:38 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%3]) with mapi id 15.20.4975.019; Fri, 18 Feb 2022
- 12:26:38 +0000
-Date:   Fri, 18 Feb 2022 15:26:20 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Andy Walls <awalls@md.metrocast.net>,
-        kernel-janitors@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/9] media: cx18: use GFP_KERNEL
-Message-ID: <20220218122620.GI2407@kadam>
-References: <20220210204223.104181-1-Julia.Lawall@inria.fr>
- <20220210204223.104181-3-Julia.Lawall@inria.fr>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220210204223.104181-3-Julia.Lawall@inria.fr>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0030.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::21)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Fri, 18 Feb 2022 07:27:17 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9773B1B7BF;
+        Fri, 18 Feb 2022 04:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=MVaFoxpSrw0lXOFRf60il59+xXDuimORkK161w41iNc=;
+        t=1645187219; x=1646396819; b=EXibw6MQDxwd+G9ZAGVB7tlsFUP8j9mDkVRMKG/rZAkrK1b
+        DvpIMQb2rEZIJlLjbXgYU641EJcGdpL2saikvB4+JDr/QblHL4nO8a78ww2/oCeSnyz1/UxPlEoQY
+        QCSV+OTJvz+5IVTZ7kwUMvpKywlU7+mchSrEq11AL0anykxxgT48GuBBGgn4QN5ZbFT8Yxyn2wfah
+        CBtdsJbFk92XfeOuVkRRGl0r9V/Z9Kgfo2+o919/aZKPrPWo+vhey5YBi/ddP7r5lkNDq41h41Ao7
+        7CndmP3jomv4luE25VGXdLKA5X+P5TmnZs4p9RJCU6tZ7uU3FVa+8XwQksIkgr0Q==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nL2LH-002du1-NQ;
+        Fri, 18 Feb 2022 13:26:31 +0100
+Message-ID: <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
+Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-um@lists.infradead.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, felix.kuehling@amd.com,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 18 Feb 2022 13:26:30 +0100
+In-Reply-To: <20220218075727.2737623-5-davidgow@google.com>
+References: <20220218075727.2737623-1-davidgow@google.com>
+         <20220218075727.2737623-5-davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c8370562-d51c-43bc-c8be-08d9f2d9e8fe
-X-MS-TrafficTypeDiagnostic: BY5PR10MB3955:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR10MB3955887FE64A35457C890B638E379@BY5PR10MB3955.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8GsYq/pccMCsEC+sksSxtfQPgP/WLoNKUrvzEZjRBG+ZjQWYD08KcJZ6jSm8mVl9KJvPsi9rvNy9/qFm5pfwioxPG1CHo9AEMT1sMc62ZlR0jGxNWbNSkxR4FedQ2EPLKqXQUohDsH+MugyHmx3YsMq7/cVuqn1aVUAKx3POCDrrT0VtCXO4+Pl9cnmzyy8tEzIVfvOpvsxBbPlKmSST/CD4dFOKLK6ij9ttSzg1OpL+Bd6gUCwkRYTEGfp2VCgwWo8flUiJkBIhstSOwkgoxssBqrol4ehWLH4abYORFyL9sR3JJfCx9NSNx7Z4gQTmfrYkKTvN79FiwM4JcWKSnw5GrjpYLJG9QpQZjoL5zxuvg6i4yswhBIj8cxNTgmKustoVsNFdxgy5GsURAcVQrYMNVzrGQ/yr91Ns61FtwO9CJrexBAJTiLq1gxt4pZe536Cfjl+6ryCLZB8fNPC8MpsC9MBY9i+FVDKirtEZ4J7gXUdbzL/3YlvM1dFddNOvUqlKk1uhymzbZHGxjGqBJIRBxi8mkLjxgyp3dKwJwYJFifbY1W9S4ngfgS2zi6AaEbAiuRgeokt5aXvmEXv0Ky6Hsc/0+HRgLDCSLWg8hJE1e0Rfgdqh/IWQvirGuFXB70ifW0nlZODfEZ+8fj5+sDHO2pDV5fvO3s7kg/+BFLebz6ZCB7C0d3N699qi6dY6q6widPy46C6ZzodZbl3iBw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(1076003)(44832011)(33716001)(4744005)(52116002)(6506007)(9686003)(6512007)(86362001)(4326008)(5660300002)(6666004)(66946007)(66476007)(8676002)(186003)(26005)(66556008)(2906002)(6486002)(8936002)(38350700002)(38100700002)(83380400001)(316002)(33656002)(54906003)(6916009)(508600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RP/1v4TBzgibNtxP891pAJTujPUFo5Qarcm1LQI8bn099g6iwDQ0mbnMRf50?=
- =?us-ascii?Q?FR10hnX9FFU4YV6b98zj/hlPHisXpaDdGwgaPhCuV8g7CxORXbcEmE1WkbF4?=
- =?us-ascii?Q?9MLRsiylg7kNC8bEydUHE7ihaZLBLp2SNbapsDTIAswjlmL9kKmor06fFgaa?=
- =?us-ascii?Q?BQrLbA602i3KbFvU9aC8NA43ZYRHhX8Pq3ZZDBd2OCL0VIilTpz9CwoTmf2w?=
- =?us-ascii?Q?8rEiQtU3mUW8YEKfakzvDrH9axvczxTe/+5HXaaV34eVrOWI/4Ll/+ZYP3fm?=
- =?us-ascii?Q?QP/FiA+CUk1IpMbRnr5WsGhhHI7RDIh1sHUAEyY6Ky1zGbGk3HlnQOlTUE4V?=
- =?us-ascii?Q?HI9d9GxFqe/4Gwf+HH+UTTnSrOZimlE57gibcCDYy/pJPJsRUk9TN99FOqLS?=
- =?us-ascii?Q?0Wrdfji62Bca4lUNg0zO7p4M6AymKLholfzwZ/rsaL9NKY4fH49qyLCrMosM?=
- =?us-ascii?Q?soj1zkV8PCzNNC6NNfYJvs01ziXegNLtEQjeX0E1B+vwOLcAgfOYaY/mstKj?=
- =?us-ascii?Q?nh6gLyQh0rqc6dMVMDyMcnqWTiZ9MLEAVmAC7rRAUGWjzf59chkOtx4Zk4pO?=
- =?us-ascii?Q?rpZtciaE8Fo8GBTdP506iE0L3iSOg+IF212K/wLJ14dkqJfqeYeiwbxb8oZ3?=
- =?us-ascii?Q?T+AhftFuhvvvc901a79T7hPuOmDrSmGroLd7jvkPF8Fc4oUQtw2ICZE6jPmR?=
- =?us-ascii?Q?h3hhKSWTu62i5CGcTDxukbUUKvsOfQmbwrg45x6rb3ft2zXWB3y0v7IruxWK?=
- =?us-ascii?Q?4xJapapT2owlrbRsLKqE7mixI3Ii9/KwmKw/LkfwcDvRxay28NK51hqhRoyO?=
- =?us-ascii?Q?imePZK3aIGWRZOHbUvuSUErkz5jkKWw4klLGa5V1vqxkJ/nPgT7O4xo0UgLj?=
- =?us-ascii?Q?lLLQlh0fB2SUIfBSTxNh1mCstbRT/DI1CgmWDM46IfYGkpZCoKvJSfkzXBt7?=
- =?us-ascii?Q?QIolz4SvN3ty44t/lNO6lZrVx2YQW/iVpBHIVFPaqYUBMYcutEIeDj+VMU8U?=
- =?us-ascii?Q?3tlm6g7XHmknrhCHC6EqJIqIcCSe28DVWrsIA3ISg873/paHh4CfbtuYNF9j?=
- =?us-ascii?Q?XugTaXHA7euAGy+w3RwE52zdeUZQ/8nNDo8QuXrQSabZFRPi9uV2BoUNhMif?=
- =?us-ascii?Q?sg5Ozla57wrgMlHRxVnR6vTEURGmhqe0q+nawSQIaOKr5cfi/2g27rDLeeXI?=
- =?us-ascii?Q?PfBe1p34/F9vloHTpCt+cZiZcp1ISNPp9TbfUbKdHPMScqr9vvPgTcUxwX2a?=
- =?us-ascii?Q?InuPaZVOronvkdWreFwf83OsA7dpKCXJC+PVQhmfJqHZUICNO3L4vQTRUKKk?=
- =?us-ascii?Q?4ButHO/4KcfEQ3J99WueRhqNW5NgEM7nA32Embtwcys+WUq6H2Ac2FeT3kg/?=
- =?us-ascii?Q?vW1tZ/nK6OdYshxWAKbcXxs1Gsgxr5hP/7JbRIoAQxlW7gR5sp0WR73E+VqB?=
- =?us-ascii?Q?iQadG9SIpQb0G7F93cmMYbcBFnlCi5AgpIBzvLnTEXtmFZFo6Aa1DVBVESfq?=
- =?us-ascii?Q?jTVHWnph4maDqxNB82Nj7bvUx8oMjSSunEoe87MvBQ8sM892tBVRTtj2UUxl?=
- =?us-ascii?Q?/qCX+QnkREl0b2uUjmWLvWMfLHflBAWTshMTEkRPQ2n4TyDvsqH8x0PUldrT?=
- =?us-ascii?Q?uvIRsOKacxYcnwGaIkxPD/U8vCpUY0PHfzQQtE6HPk3ilgQ9evF4Chn9Vedj?=
- =?us-ascii?Q?Dt4C2w=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8370562-d51c-43bc-c8be-08d9f2d9e8fe
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 12:26:38.2347
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: If4Gs/g+cdaEdoVkuGJWAGObyL+dsnx+WrTf0mRJF1PgZrOaZ315/xoEVDN2aI+G8LpcgX7bjhJQkZIfeAdFz7LyFmkychi8+QB4Qvg0lG0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB3955
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10261 signatures=677564
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202180080
-X-Proofpoint-ORIG-GUID: zxVd4KgjDj3ry9JwRbxPi4ozAmLRnJua
-X-Proofpoint-GUID: zxVd4KgjDj3ry9JwRbxPi4ozAmLRnJua
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,28 +62,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 09:42:16PM +0100, Julia Lawall wrote:
-> Pci_driver probe functions aren't called with locks held
-> and thus don't need GFP_ATOMIC. Use GFP_KERNEL instead.
+On Fri, 2022-02-18 at 15:57 +0800, David Gow wrote:
 > 
-> Problem found with Coccinelle.
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
-> ---
->  drivers/media/pci/cx18/cx18-driver.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/pci/cx18/cx18-driver.c b/drivers/media/pci/cx18/cx18-driver.c
-> index 59497ba6bf1f..1be9672ae9d4 100644
-> --- a/drivers/media/pci/cx18/cx18-driver.c
-> +++ b/drivers/media/pci/cx18/cx18-driver.c
-> @@ -899,7 +899,7 @@ static int cx18_probe(struct pci_dev *pci_dev,
->  		return -ENOMEM;
+> Note that, while this does build again, it still segfaults on startup,
+> so more work remains to be done.
 
-Unrelated to your patch but every error path in this function ought to
-call atomic_dec(&cx18_instance);
+That's probably just a lot more stuff getting included somehow?
 
-regards,
-dan carpenter
+> They are:
+> - CONFIG_VFIO_PCI: Needs ioport_map/ioport_unmap.
+> - CONFIG_INFINIBAND_RDMAVT: Needs cpuinfo_x86 and __copy_user_nocache
+> - CONFIG_BNXT: Failing under UML with -Werror
+> ERROR:root:../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c: In function ‘bnxt_ptp_enable’:
+> ../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:400:43: error: array subscript 255 is above array bounds of ‘struct pps_pin[4]’ [-Werror=array-bounds]
+>   400 |                         ptp->pps_info.pins[pin_id].event = BNXT_PPS_EVENT_EXTERNAL;
+>       |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~
+> - CONFIG_PATA_CS5535: Needs MSR access (__tracepoint_{read,write}_msr)
+> - CONFIG_VDPA: Enables CONFIG_DMA_OPS, which is unimplemented. ('dma_ops' is not defined)
+> 
+> These are all issues which should be investigated properly and the
+> corresponding options either fixed or disabled under UML. Having this
+> list of broken options should act as a good to-do list here, and will
+> allow these issues to be worked on independently, and other tests to
+> work in the meantime.
+> 
 
+I'm not really sure it makes sense to even do anything other than
+disabling these.
+
+It looks like all of them are just exposed by now being able to build
+PCI drivers on UML. Surely the people writing the driver didn't expect
+their drivers to run over simulated PCI (which is what the UML PCI
+support is all about).
+
+Now from a PCI driver point of view you can't really tell the difference
+(and anyway the driver won't be probed), but the issues (at least the
+build time ones) come from having
+
+    UML && PCI && X86_64
+
+or
+
+    UML && PCI && X86_32
+
+because drivers typically depend on X86_64 or X86_32, rather than on
+"X86 && X86_64" or "X86 && X86_32". In a sense thus, the issue is those
+drivers don't know that "!X86 && (X86_32 || X86_64)" can happen (with
+UML).
+
+
+Now you could say that's the driver bug, or you could say that they
+should just add "depends on !UML" (though that's basically equivalent to
+adding "depends on X86" and the latter may be preferable in some cases).
+
+Or actually in the three patches you have (1-3) it's in the code, but
+same thing, you can either add && !UML (like you did) or add && X86.
+
+
+Arguably, however, building PCI drivers by default is somewhat
+questionable in the first place?
+
+So maybe you should just add
+
+    # CONFIG_UML_PCI_OVER_VIRTIO is not set
+
+to the broken_on_uml.config since it exposes all these issues, and
+really is not very useful since you're not going to actually run with
+any simulated PCI devices anyway, so drivers will not be probed.
+
+johannes

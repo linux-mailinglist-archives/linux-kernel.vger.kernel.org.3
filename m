@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F104BB2E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2244BB2E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbiBRHIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:08:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43034 "EHLO
+        id S231778AbiBRHIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:08:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbiBRHII (ORCPT
+        with ESMTP id S231817AbiBRHIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:08:08 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCED31BB715;
-        Thu, 17 Feb 2022 23:07:50 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id c15so2915556ljf.11;
-        Thu, 17 Feb 2022 23:07:50 -0800 (PST)
+        Fri, 18 Feb 2022 02:08:10 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292BB1BA334;
+        Thu, 17 Feb 2022 23:07:52 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id p22so3655753lfu.5;
+        Thu, 17 Feb 2022 23:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IWDJ487yLqJMH2R9nX25geZJE4tvSDIiR8xa0l3wTz0=;
-        b=IlUrs1RVK2LtAIx0K8FKunjdCr8qaBX4BhLfEYD1cCBATkF5gNTEO5aV7XLepcZngT
-         5xvmeytA/gzHC7V3X2nPXsV4pFX77uEGlVZbJSOnIN9ERh24nUyI6U1w20I77lwNLk3T
-         YlewxLcYhoMWB0zHtnKLq1JaTd893WrE9ZFOjCRjeJBpPeRNDtgkZ3o+nKqQbX8NYVGG
-         UQ040lm1calR6iOJOW+PHnP+cISn94xgQVBK27t6rACckUPZFd9mAokgv79qLo8YqwSL
-         jcHfZcNH6DafyXoUSt3kpr5PBDWbz0aMI3lFx3XP2x11SkHkyg0IPgd7GUGj+y7hriwX
-         PhaQ==
+        bh=tX9YbbK4wZDYd/1rJF+Fsl9cu8MwUvaAy3wkrzRgdck=;
+        b=pxTGNtwoQqXXXR2NQW0yIPEwzA0QmPkCsh3TL6HrB99Tf4HSx4B99Dqicg+E+RHzC4
+         MHVO+WtCge/ccF+M4pDhmB+OD4gvoQIUaWPxzX5LNEvLfpsBaQVMP8fhanBREMlxHQ5E
+         ZdNRPw0yRGsymvyZkIp1f+lCFpsngd3NFTe7zgypaZr8kw1W8gcuioLuvcbUG/YW02Vg
+         Gisz5pm04fQLQuetkLKo5JcrTCmFE08MjcSuSeRa3UDe8sOu+okvGvlfJJc9FkH8OQRW
+         qUBLmGNGZGFsQc3a7ViJMZUUZyVUeahBQTItXu0/PqWVLKKFJp/uB5ta0zEpLyVc60qg
+         wjBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IWDJ487yLqJMH2R9nX25geZJE4tvSDIiR8xa0l3wTz0=;
-        b=uZfL+hVb3bJTBYuZiaHoGKB+QrEuQB63Wy7W5Z+/TZSpO0DYlQD++9ZodROFOxh50C
-         7rCl9X1xYWTaLjWmkiu1d/1QHgfG/2ZtYNCzG3T6Xo5vniW8fT8JdzeQhxy3l0xLnJkG
-         Ii+YD4mfPmgzhTMm2M5x2T3DejeXOQ3Dlhn//azt7NqNTTKWbhSfT1u6yyWLPp6lG0DM
-         hG0gLdZgr2PHaAysIIqvZuG5TZimtH0/fkzT754hG33M4R/+UtlIpr9/ByTudSv9Pzug
-         sohTvrMH2b1S9ELfCBPPNS6jQP+ELa+JtUSLl5jSs/WVD9G2BXL/yDfDdFhuT10dGIm5
-         QnBw==
-X-Gm-Message-State: AOAM530D5YKpqjCE/gaAMpCuySTALXKIaDb/rVapDGUom6SLnyXeibku
-        LciZ8UWeYUPqLn5F48wuPjI=
-X-Google-Smtp-Source: ABdhPJyG4PhqQCB3tkP0I48RQhI08avuz/CEw5sI25p72beCNJ/SSg79592K5goUTi3gS47psMDsHA==
-X-Received: by 2002:a2e:9043:0:b0:246:1afb:1436 with SMTP id n3-20020a2e9043000000b002461afb1436mr3638607ljg.215.1645168069084;
-        Thu, 17 Feb 2022 23:07:49 -0800 (PST)
+        bh=tX9YbbK4wZDYd/1rJF+Fsl9cu8MwUvaAy3wkrzRgdck=;
+        b=aMxHVL5xaH6e2E1nYq5lgnZE0V1AszvAY2otdHup8Dp69N6IN5tgRpV6gtU6qbv0hW
+         8Czuy94NEtQwz7AAB7XxJMlogXXSrvJm1wKnqymrI20p2uW1rnUrqyLrzV1GzyFQRDwC
+         P1g13gslrlxEbZdSfF0MIQGrV3dyS+Kq8qJ/MN3rI5c+NGeYvIVD6oU4S9G3S8xdiTIF
+         NMcPMRXqqCpzbwHvxMthGqrg3as9yBhAUm0V5j5WMoWHIc1JfWHvtNna34E9uxYNz6RZ
+         I2KG89Rrgzp7+Eoh1qMWBsbH54n4hjwp9RsYhEsaFQNMwtUmGpfzqLWSNCzTIdcpd16x
+         2hnA==
+X-Gm-Message-State: AOAM530SpVWoXuPdhgDRrgCUYYu+O4QiCuJ7+bvaLBJp+KB8wa7xK4em
+        90QAdpta8IvD2sinS+5bZzE=
+X-Google-Smtp-Source: ABdhPJxGeC6tp3SeoxUP99YYLkCjtoNxEe4/ANtehLPoJQ2I5YnOQLjx0VpstabDvYhzosZJadeOmw==
+X-Received: by 2002:ac2:554d:0:b0:443:6539:a299 with SMTP id l13-20020ac2554d000000b004436539a299mr4590089lfk.552.1645168070508;
+        Thu, 17 Feb 2022 23:07:50 -0800 (PST)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id f2sm216321ljn.11.2022.02.17.23.07.48
+        by smtp.gmail.com with ESMTPSA id f2sm216321ljn.11.2022.02.17.23.07.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 23:07:48 -0800 (PST)
+        Thu, 17 Feb 2022 23:07:50 -0800 (PST)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -57,9 +57,9 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V3 2/3] dt-bindings: nvmem: brcm,nvram: add basic NVMEM cells
-Date:   Fri, 18 Feb 2022 08:07:28 +0100
-Message-Id: <20220218070729.3256-3-zajec5@gmail.com>
+Subject: [PATCH V3 3/3] nvmem: core: add cell name based matching of DT cell nodes
+Date:   Fri, 18 Feb 2022 08:07:29 +0100
+Message-Id: <20220218070729.3256-4-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220218070729.3256-1-zajec5@gmail.com>
 References: <20220124160300.25131-1-zajec5@gmail.com>
@@ -79,66 +79,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-NVRAM doesn't have cells at hardcoded addresses. They are stored in
-internal struct (custom & dynamic format). It's still important to
-define relevant cells in DT so NVMEM consumers can reference them.
-
-Update binding to allow including basic cells as NVMEM device subnodes.
+When adding NVMEM cells defined by driver it's important to match them
+with DT nodes that specify matching names. That way other bindings &
+drivers can reference such "dynamic" NVMEM cells.
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
-V2: Add children nodes description per Rob's request
-V3: Document NVMEM cells as properties
----
- .../devicetree/bindings/nvmem/brcm,nvram.yaml | 25 +++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ drivers/nvmem/core.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-index 8c3f0cd22821..25033de3ef6b 100644
---- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-@@ -14,6 +14,8 @@ description: |
-   NVRAM can be accessed on Broadcom BCM47xx MIPS and Northstar ARM Cortex-A9
-   devices usiong I/O mapped memory.
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 53a43d843743..a891449c52f1 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -499,6 +499,31 @@ static int nvmem_cell_info_to_nvmem_cell_entry(struct nvmem_device *nvmem,
+ 	return 0;
+ }
  
-+  NVRAM variables can be defined as NVMEM device subnodes.
++/**
++ * nvmem_find_cell_of_node() - Find DT node matching nvmem cell
++ *
++ * @nvmem: nvmem provider
++ * @name: nvmem cell name
++ *
++ * Runtime created nvmem cells (those not coming from DT) may still need to be
++ * referenced in DT. This function allows finding DT node referencing nvmem cell
++ * by its name. Such a DT node can be then used by nvmem consumers.
++ *
++ * Return: NULL or pointer to DT node
++ */
++static struct device_node *nvmem_find_cell_of_node(struct nvmem_device *nvmem,
++						   const char *name)
++{
++	struct device_node *child;
 +
- maintainers:
-   - Rafał Miłecki <rafal@milecki.pl>
++	for_each_child_of_node(nvmem->dev.of_node, child) {
++		if (!strcmp(child->name, name))
++			return child;
++	}
++
++	return NULL;
++}
++
+ /**
+  * nvmem_add_cells() - Add cell information to an nvmem device
+  *
+@@ -532,6 +557,8 @@ static int nvmem_add_cells(struct nvmem_device *nvmem,
+ 			goto err;
+ 		}
  
-@@ -27,11 +29,30 @@ properties:
-   reg:
-     maxItems: 1
++		cells[i]->np = nvmem_find_cell_of_node(nvmem, cells[i]->name);
++
+ 		nvmem_cell_entry_add(cells[i]);
+ 	}
  
-+  board_id:
-+    type: object
-+    description: Board identification name
-+
-+  et0macaddr:
-+    type: object
-+    description: First Ethernet interface's MAC address
-+
-+  et1macaddr:
-+    type: object
-+    description: Second Ethernet interface's MAC address
-+
-+  et2macaddr:
-+    type: object
-+    description: Third Ethernet interface's MAC address
-+
- unevaluatedProperties: false
- 
- examples:
-   - |
-     nvram@1eff0000 {
--            compatible = "brcm,nvram";
--            reg = <0x1eff0000 0x10000>;
-+        compatible = "brcm,nvram";
-+        reg = <0x1eff0000 0x10000>;
-+
-+        mac: et0macaddr {
-+        };
-     };
 -- 
 2.34.1
 

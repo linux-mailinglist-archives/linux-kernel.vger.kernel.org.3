@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7AB4BBAFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8FD4BBB06
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236173AbiBROyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:54:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44454 "EHLO
+        id S236200AbiBROyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:54:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbiBROyR (ORCPT
+        with ESMTP id S233795AbiBROyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:54:17 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4943053E20
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:54:00 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id x3so15152025qvd.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=AMxb1/snu2ldA/ubJJEAYt1WVb3/09SyAfGJTEa/UKQ=;
-        b=Fgz90lidrUWx8l9/L+dip/BnxqYGQh6NwgzlB66sPD48dp7ZS+wyGTykM1quRiiwCK
-         Q3ZYwz1Z+E/dKHgKgkNkOw0THEQ70be8BD6HxmlwRbAQlf/Onle4QuK2Q1X2YjYScZb1
-         Rw+h/B+ErAD0GMCl5cJJyNZSzInCV/TPEJh+2OF6EcmPGOAH0+D/XJrnjLwiFuqvI+AT
-         ajOSwwvowFnB2e96OcEIECaDhyGL1UKz4wywrx6dF4/u9aDNUvMTOsfycj5W9XEs5k27
-         +C525sy9IXwMGSiYSUKd2oll0mJXowpW7I1TzH1F+KEDgv9OX9e3VzgU0PktJjfavLI9
-         fS1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=AMxb1/snu2ldA/ubJJEAYt1WVb3/09SyAfGJTEa/UKQ=;
-        b=3bWrB33FZYmQY+/wDMPMBzqAdyV/dE5yxGEJZ9bK+eNs3ygRsqhJomfMVZMSD9tCXw
-         VSYhNt50fDvyk0Ri3tknq9MjnXODdJLVsoByCc1kzD36nYOb2cqMnyd9jeJYAchifFDc
-         nykvMv0mgo1PHgBzI0Vm533di1pyQnqNgvAr6XhrtqYnnD/lNQ4p0jSvJgIyXn7D6DqU
-         pQ/uIe+GSTX+3sS/FOugvBxm9jurrvtYtvMM/RXzTr3JuEy1vz6yyJgFSpz61AMLbEp2
-         m6EvsXJTXU9KH101+uoKkdHEGIV/mVXWHt2NBaHcPremCDT4N/3bLF14gnf6DtnfW/nR
-         0Ldw==
-X-Gm-Message-State: AOAM530/l/11Q+Um7zUmDje+ByE6PI3Y4JKJ2pg/Y2OaG40530MJrBYm
-        ggEMV5iucmO3MHFjqQhh6v6G1A==
-X-Google-Smtp-Source: ABdhPJwhFNB8fLdh0ym9XWrA9EZ9+ejd6mCNse+81XslSzMhPYs9F3LauZqXUMfLhfpDArU2+f7pUA==
-X-Received: by 2002:a05:6214:d03:b0:42c:ce43:9f8b with SMTP id 3-20020a0562140d0300b0042cce439f8bmr5926290qvh.102.1645196039402;
-        Fri, 18 Feb 2022 06:53:59 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id a188sm876860qkf.27.2022.02.18.06.53.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 06:53:59 -0800 (PST)
-Message-ID: <419d47d2dfac0b31d48e2ce3b4128c421f808038.camel@ndufresne.ca>
-Subject: Re: [PATCH] media: cedrus: h264: Fix neighbour info buffer size
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com
-Cc:     mchehab@kernel.org, wens@csie.org, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 18 Feb 2022 09:53:57 -0500
-In-Reply-To: <20220214190839.707889-1-jernej.skrabec@gmail.com>
-References: <20220214190839.707889-1-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Fri, 18 Feb 2022 09:54:31 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E8154FA5;
+        Fri, 18 Feb 2022 06:54:14 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id BDAD81F46B85
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645196052;
+        bh=waAoYQrd/zon1ObYSebR32rz8jo/+xh5mii/0mQIta0=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=J+5IrzL1aUstLqU1jHWBQ5y184NmlTZ1BA8PdukNZ1FcXWUD9gFtXQDbbh9hfmF7u
+         XxavwG7XoNIZ/APJ3iwjJt2CEguvvFNPMJ3sLk3pv+0qQAPXSmMvULlrQXg3SO4gbo
+         3Z/4jfHGHpKS8E1Fprko/SPC3zn8RurvHt5ukJ4JRaSQstIYUbnPtnk1caRtn/Z6j3
+         mGRmknFUMigs7RnN/+87mHydSLVl3zdzY9lMnJ3ZbVNv9ze63b9spIfQWUoqKZIKYn
+         dDJA5v4hjnLwnnBTW87vYzingVYERkjLoNe8JLafl1IJCK7JkVQZiXiUUQblhX00/T
+         +J+n0x5OarDQg==
+Message-ID: <b22976ee-6426-cabf-f153-fbe093611e97@collabora.com>
+Date:   Fri, 18 Feb 2022 15:54:09 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [v2 01/17] ASoC: mediatek: mt6366: add codec driver
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
+        geert+renesas@glider.be, trevor.wu@mediatek.com,
+        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
+ <20220217134205.15400-2-jiaxin.yu@mediatek.com>
+Content-Language: en-US
+In-Reply-To: <20220217134205.15400-2-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le lundi 14 février 2022 à 20:08 +0100, Jernej Skrabec a écrit :
-> According to BSP library source, H264 neighbour info buffer size needs
-> to be 32 kiB for H6. This is similar to H265 decoding, which also needs
-> double buffer size in comparison to older Cedrus core generations.
+Il 17/02/22 14:41, Jiaxin Yu ha scritto:
+> Mt6366 is a new version of mt6358, and they are same about audio part.
+> So we can reuse the driver of mt6358.
 > 
-> Increase buffer size to cover H6 needs. Since increase is not that big
-> in absolute numbers, it doesn't make sense to complicate logic for older
-> generations.
-> 
-> Issue was discovered using iommu and cross checked with BSP library
-> source.
-> 
-> Fixes: 6eb9b758e307 ("media: cedrus: Add H264 decoding support")
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
 
-Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Hello Jiaxin,
+I'm sorry but this commit makes very little sense.
+
+If you want to advertise MT6366 support, please write a note and/or
+a new compatible string inside of the mt6358 driver (and dt-bindings),
+then, please drop this commit.
+
 
 > ---
->  drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   sound/soc/codecs/Kconfig  | 8 ++++++++
+>   sound/soc/codecs/Makefile | 1 +
+>   2 files changed, 9 insertions(+)
 > 
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> index b4173a8926d6..d8fb93035470 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> @@ -38,7 +38,7 @@ struct cedrus_h264_sram_ref_pic {
->  
->  #define CEDRUS_H264_FRAME_NUM		18
->  
-> -#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(16 * SZ_1K)
-> +#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(32 * SZ_1K)
->  #define CEDRUS_MIN_PIC_INFO_BUF_SIZE       (130 * SZ_1K)
->  
->  static void cedrus_h264_write_sram(struct cedrus_dev *dev,
+> diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+> index 8fa24783ce01..6631094678f5 100644
+> --- a/sound/soc/codecs/Kconfig
+> +++ b/sound/soc/codecs/Kconfig
+> @@ -132,6 +132,7 @@ config SND_SOC_ALL_CODECS
+>   	imply SND_SOC_MT6351
+>   	imply SND_SOC_MT6358
+>   	imply SND_SOC_MT6359
+> +	imply SND_SOC_MT6366
+>   	imply SND_SOC_MT6660
+>   	imply SND_SOC_NAU8315
+>   	imply SND_SOC_NAU8540
+> @@ -1888,6 +1889,13 @@ config SND_SOC_MT6359_ACCDET
+>   	  for ASoC codec soc-jack detection mechanism.
+>   	  Select N if you don't have jack on board.
+>   
+> +config SND_SOC_MT6366
+> +	tristate "MediaTek MT6366 Codec"
+> +	depends on MTK_PMIC_WRAP
+> +	help
+> +	  Enable support for the platform which uses MT6366 as
+> +	  external codec device.
+> +
+>   config SND_SOC_MT6660
+>   	tristate "Mediatek MT6660 Speaker Amplifier"
+>   	depends on I2C
+> diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
+> index 42d00aa4ee46..1279684feaf0 100644
+> --- a/sound/soc/codecs/Makefile
+> +++ b/sound/soc/codecs/Makefile
+> @@ -465,6 +465,7 @@ obj-$(CONFIG_SND_SOC_MT6351)	+= snd-soc-mt6351.o
+>   obj-$(CONFIG_SND_SOC_MT6358)	+= snd-soc-mt6358.o
+>   obj-$(CONFIG_SND_SOC_MT6359)	+= snd-soc-mt6359.o
+>   obj-$(CONFIG_SND_SOC_MT6359_ACCDET) += mt6359-accdet.o
+> +obj-$(CONFIG_SND_SOC_MT6366)	+= snd-soc-mt6358.o
+>   obj-$(CONFIG_SND_SOC_MT6660)	+= snd-soc-mt6660.o
+>   obj-$(CONFIG_SND_SOC_NAU8315)   += snd-soc-nau8315.o
+>   obj-$(CONFIG_SND_SOC_NAU8540)   += snd-soc-nau8540.o
+
 

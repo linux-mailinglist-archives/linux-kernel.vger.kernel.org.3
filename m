@@ -2,139 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AB64BBC44
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2BE4BBC42
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237076AbiBRPf1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 10:35:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59632 "EHLO
+        id S237068AbiBRPfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:35:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiBRPf0 (ORCPT
+        with ESMTP id S237059AbiBRPfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:35:26 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484B32B2C4F;
-        Fri, 18 Feb 2022 07:35:09 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:34138)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nL5Hk-0071wH-Qv; Fri, 18 Feb 2022 08:35:04 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:48854 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nL5Hj-000V6x-Ed; Fri, 18 Feb 2022 08:35:04 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     <linux-kernel@vger.kernel.org>, Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Michal =?utf-8?Q?Kou?= =?utf-8?Q?tn=C3=BD?= <mkoutny@suse.com>,
-        <linux-api@vger.kernel.org>
-In-Reply-To: <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Wed, 16 Feb 2022 09:56:37 -0600")
-References: <20220207121800.5079-1-mkoutny@suse.com>
-        <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
-        <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Fri, 18 Feb 2022 09:34:24 -0600
-Message-ID: <87wnhsfatb.fsf_-_@email.froward.int.ebiederm.org>
+        Fri, 18 Feb 2022 10:35:06 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706F11EEF5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:34:49 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id d3so15367498qvb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XB9Ws3daxQbWMBueDBVoJ12vlfuC8IiSDXQOIWtwbYM=;
+        b=ib2R0eit6zqTdwhJ17aK637SZ1+jEjqrpddGCPLZo40hCHBNkr/3aZxQQoQ2dDPHXW
+         W0dYn9SX6MJcrhfWkq64srTQ0h7l7XBBGfvfKPnp6BfWV6GsvpNDiWbBa/FOd8y/InIx
+         c3DckpnFB4VbJI7KWs0mgJ/xUereQcCSEWZLJBkB4YUqnyMPKBO6g/mKPASn31MsMvpo
+         RjiogjqpUSl1YIhn6l4uhH0eM2dbm32ghQ+L3cz5AKmnUERv4aJ8Ifvuy6/Ah2JCWd1J
+         j7Q+e3/mbmmLzupr9Obi0bKE7SNej/Cu7FhD2QAJT8qUrQL4kc6IxE3busi2Xtg1Vs5E
+         pCDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XB9Ws3daxQbWMBueDBVoJ12vlfuC8IiSDXQOIWtwbYM=;
+        b=O1ZSRvfLGHpMkppSvbsOSkOOtV+trdDkMHsETzux5Arq9+2tvjVcHqaqst65r9YWsY
+         3Tf1DgvZZNeejuVGSRr0uMTSaPhyad50WjkY7cxW+e0dvO0K/ouYWkpdCPLRWhULDVGw
+         1qsKkBzmKOjr4BuLfBVC6kMOxRqjnVRzz4QuVlimTgIdScZTp7BPvqjgegtvb/MUeitK
+         2KA1ZfyOTHjNyD++82lnoGxvm5Zmv0FX9xwGA/DG+SIAZkH5fmkUq1A1lstnVCx0N9Of
+         0v7Nzq9XdTHeHnrDxPARdR0LDS6uSixWlurKJ1ueHs5i8utsV4aWsVqohWDnEC4l+CH3
+         GDDQ==
+X-Gm-Message-State: AOAM530vg0NN3YTfayJryIurhh8D5EUOv5Cfepo1+uOdYxKXQ9yPWL+m
+        vmPJWlyHAfrwTl9dbEUXXx+3Tw6ndnnHH4pu
+X-Google-Smtp-Source: ABdhPJwfdfy1sZ0uTHZoDHkGgcKoqm6w6DI7eaqzXSd/DD+ZZ4JXHTjAt+jHZKL50hm8Ps+FnSq6Ug==
+X-Received: by 2002:a05:622a:54d:b0:2d9:6d84:c7d1 with SMTP id m13-20020a05622a054d00b002d96d84c7d1mr7044174qtx.307.1645198488378;
+        Fri, 18 Feb 2022 07:34:48 -0800 (PST)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id bi11sm21322967qkb.18.2022.02.18.07.34.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 07:34:47 -0800 (PST)
+Date:   Fri, 18 Feb 2022 10:34:46 -0500
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Roman Gushchin <guro@fb.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, clm@fb.com
+Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance
+ patch
+Message-ID: <Yg+8lsJw00qEWEza@localhost.localdomain>
+References: <YappSLDS2EvRJmr9@localhost.localdomain>
+ <87lf0y9i8x.mognet@arm.com>
+ <87v8zx8zia.mognet@arm.com>
+ <YbJWBGaGAW/MenOn@localhost.localdomain>
+ <99452126-661e-9a0c-6b51-d345ed0f76ee@leemhuis.info>
+ <87tuf07hdk.mognet@arm.com>
+ <YdMhQRq1K8tW+S05@localhost.localdomain>
+ <87k0f37fl6.mognet@arm.com>
+ <YeBZ7qNjPsonEYZz@carbon.dhcp.thefacebook.com>
+ <f0ebbdfd-d14c-b497-07fb-54eb8d71ff38@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nL5Hj-000V6x-Ed;;;mid=<87wnhsfatb.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19XCajOGFlerezhWHtxQiJqFG3eQqptWXk=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0ebbdfd-d14c-b497-07fb-54eb8d71ff38@leemhuis.info>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: ; sa04 0; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 502 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 8 (1.7%), b_tie_ro: 7 (1.4%), parse: 0.89 (0.2%),
-        extract_message_metadata: 3.4 (0.7%), get_uri_detail_list: 1.61 (0.3%),
-         tests_pri_-1000: 3.2 (0.6%), tests_pri_-950: 1.01 (0.2%),
-        tests_pri_-900: 0.84 (0.2%), tests_pri_-90: 184 (36.7%), check_bayes:
-        182 (36.2%), b_tokenize: 6 (1.3%), b_tok_get_all: 8 (1.6%),
-        b_comp_prob: 2.1 (0.4%), b_tok_touch_all: 161 (32.0%), b_finish: 1.32
-        (0.3%), tests_pri_0: 277 (55.2%), check_dkim_signature: 0.64 (0.1%),
-        check_dkim_adsp: 3.5 (0.7%), poll_dns_idle: 1.14 (0.2%), tests_pri_10:
-        3.1 (0.6%), tests_pri_500: 13 (2.7%), rewrite_mail: 0.00 (0.0%)
-Subject: [GIT PULL] ucounts: RLIMIT_NPROC fixes for v5.17
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 18, 2022 at 12:00:41PM +0100, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker speaking. Top-posting
+> for once, to make this easy accessible to everyone.
+> 
+> FWIW, this is a gentle reminder that I'm still tracking this regression.
+> Afaics nothing happened in the last few weeks.
+> 
+> If the discussion continued somewhere else, please let me know; you can
+> do this directly or simply tell my regression tracking bot yourself by
+> sending a reply to this mail with a paragraph containing a regzbot
+> command like "#regzbot monitor
+> https://lore.kernel.org/r/some_msgi@example.com/"
+> 
+> If you think there are valid reasons to drop this regressions from the
+> tracking, let me know; you can do this directly or simply tell my
+> regression tracking bot yourself by sending a reply to this mail with a
+> paragraph containing a regzbot command like "#regzbot invalid: Some
+> explanation" (without the quotes).
+> 
+> Anyway: I'm putting it on back burner now to reduce the noise, as this
+> afaics is less important than other regressions:
+> 
+> #regzbot backburner: Culprit is hard to track down
+> #regzbot poke
+> 
+> You likely get two more mails like this after the next two merge
+> windows, then I'll drop it if I don't here anything back.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+> reports on my table. I can only look briefly into most of them and lack
+> knowledge about most of the areas they concern. I thus unfortunately
+> will sometimes get things wrong or miss something important. I hope
+> that's not the case here; if you think it is, don't hesitate to tell me
+> in a public reply, it's in everyone's interest to set the public record
+> straight.
+> 
+> 
 
-Linus,
+Roman and I sat down to mess with this some more and had some weird
+observations.
 
-Please pull the ucount-rlimit-fixes-for-v5.17 branch from the git tree:
+On our Facebook internal boxes we couldn't reproduce.  If we disable all the
+normal FB specific stuff so the box is "quiet" 5.16 performs better.  However
+these are all single socket machines with stupid high numbers of cores, my local
+machine is 2 socket 6 cores.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-fixes-for-v5.17
+On my box it was actually pretty noisy testing in isolation as well.  In the end
+I rigged up fsperf to run 1000 runs and graph each kernel on top of eachother.
+What came out was really strange.
 
-  HEAD: 0cbae9e24fa7d6c6e9f828562f084da82217a0c5 ucounts: Handle wrapping in is_ucounts_overlimit
+1. The "good" kernel had a period for the first ~100 runs that were very low,
+the p50 was ~9000ns, but after those first 100 runs it jumped up and was right
+ontop of 5.16.  This explains why it shows up on my overnight tests, the box
+literally reboots and runs tests.  So there's a "warmup" period for the
+scheduler, once it's been hammered on enough it matches 5.16 exactly, otherwise
+its faster at the beginning.
 
-Michal Koutný recently found some bugs in the enforcement of
-RLIMIT_NPROC in the recent ucount rlimit implementation.
+2. The regression essentially disappears looking at the graphs over 1000 runs.
+The results are so jittery this was the only way we could honestly look at the
+results and see anything.  The only place the "regression" shows up is in the
+write completion latency p99.  There 5.15 ranges between 75000-85000 ns, whereas
+5.16 ranges between 80000 and 100000 ns.  However again this is only on my
+machine, and the p50 latencies and the actual bw_bytes is the same.
 
-I saw some additional bugs and some cleaner ways to fix the problem so
-instead of starting with his fixes these are my own.
+Given this test is relatively bursty anyways and the fact that we can't
+reproduce it internally, and the fact that 5.16 actually consistently performs
+better internally has convinced us to drop this, it's simply too noisy to get a
+handle on to actually call it a problem.
 
-I have rewritten about half my fixes since the last time this was
-posted.  There is this notion (not entirely wrong) that the code should
-be consistent and make sense.  When I dug in I discovered that has not
-been the case for the last 20 years.  Fixing the long standing
-inconsistencies is something that seems to warrent wider vetting on
-linux-api.
+#regzbot invalid: test too noisy and the results aren't clear cut.
 
-So with this set of patches I have developed a very conservative
-approach changing only what is necessary to fix the bugs that I can
-see clearly.  Cleanups and anything that is making the code more
-consistent can follow after we have the code working as it has
-historically.
+Thanks,
 
-I had hoped to let this sit in linux-next for a few days just to be
-doubly certain all is well.  But these patches are all trivial and
-linux-next is on holiday.
-
-v2: https://lkml.kernel.org/r/87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org>
-v1: https://lkml.kernel.org/r/87o83e2mbu.fsf@email.froward.int.ebiederm.org>
-
-Eric W. Biederman (5):
-      rlimit: Fix RLIMIT_NPROC enforcement failure caused by capability calls in set_user
-      ucounts: Enforce RLIMIT_NPROC not RLIMIT_NPROC+1
-      ucounts: Base set_cred_ucounts changes on the real user
-      ucounts: Move RLIMIT_NPROC handling after set_user
-      ucounts: Handle wrapping in is_ucounts_overlimit
-
- kernel/cred.c   |  9 ++-------
- kernel/fork.c   | 10 +++++-----
- kernel/sys.c    | 20 ++++++++++++++------
- kernel/ucount.c |  3 ++-
- 4 files changed, 23 insertions(+), 19 deletions(-)
-
-p.s. I should say that the problem is not so much inconsistencies
-(although those exist) but that it is very difficult to figure out what
-the code should be doing in the case of RLIMIT_NPROC.
-
-All other rlimits are only enforced where the resource is acquired
-(allocated).  RLIMIT_NPROC by necessity needs to be enforced in
-an additional location, and our current implementation stumbled
-it's way into that implementation.
-
-Eric
-
-
-
-
+Josef

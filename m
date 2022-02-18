@@ -2,88 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F074BB38A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AD74BB390
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiBRHvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:51:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48322 "EHLO
+        id S232120AbiBRHw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:52:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiBRHvF (ORCPT
+        with ESMTP id S230400AbiBRHwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:51:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ADBB0EA9;
-        Thu, 17 Feb 2022 23:50:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21997B8257C;
-        Fri, 18 Feb 2022 07:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60CBC340EB;
-        Fri, 18 Feb 2022 07:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645170646;
-        bh=mJRaMEex6raK6353llbGviKh82YJn/hPKaTuIEyH+rI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=dBFXJYF484qAzCNoVO3WgAM0Uk/bG1sHk5nGr+5wKCAWSDDrfWfchhnAiIq9XHlzy
-         +ih3ThppekFARPhWJQE5d8WnhrR4z1p1oMoI8R+0sQDHUT9VmkNN7U3iQW+BRA0Q+9
-         1+zl8L64bDzF5iBL1OMfs+bsOzu6/11+1conlKLQowmDgvxPgVa8qk+AoON4aPlBXS
-         3LO40BG5XaU8e1xYpm6Nh/WWhK+iYAz/WK6fR5ScwT0Ht3EH7ummta5clNtDx9t4lk
-         +/Ozr4wOQaG7DtUQYIAuGBdmdpJu/Df25e7l0DK4AiUUnFgLKhmvHEFTHA17QKS7tE
-         EusEK8f1litRw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>, rientjes@google.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/damon: add damon to selftests root Makefile
-Date:   Fri, 18 Feb 2022 07:50:42 +0000
-Message-Id: <20220218075042.11326-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220218001017.3500673-2-yuanchu@google.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 18 Feb 2022 02:52:23 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A880256C3E;
+        Thu, 17 Feb 2022 23:52:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645170727; x=1676706727;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=V6cTLA9ndByCFRVhdBYvxukvirSrYaDBlX9n8tyWtL4=;
+  b=cNHmJfYIJRdSNswmKW4kE+qLzGA9LYfZgW5Xl6Y0RHipZNCeXDsKOM5T
+   c/3lpLJf8HGbgxlYYW/uNUCRFh3l/UkEqpqODgU4cQ2jMnFGCNUqxYlWA
+   hQ+YLHANeVgTlA3Yft+wVPKNR0YxhxIamRiugGbAW05Z4AXgnt8r8fj51
+   M=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 Feb 2022 23:52:07 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 23:52:06 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 17 Feb 2022 23:52:06 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 17 Feb 2022 23:52:02 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_rjendra@quicinc.com>,
+        <quic_saipraka@quicinc.com>, <quic_schowdhu@quicinc.com>
+Subject: [PATCH V1 0/2] Revert device tree changes for EUD
+Date:   Fri, 18 Feb 2022 13:21:34 +0530
+Message-ID: <cover.1645168567.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yuanchu, thank you for this patch!
+Revert the device tree changes for Embedded USB Debugger(EUD)
+from the usb tree to avoid conflicts as device tree changes
+for EUD are supposed to go from qcom Tree.
 
-On Fri, 18 Feb 2022 00:10:16 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
+Souradeep Chowdhury (2):
+  Revert "arm64: dts: qcom: sc7280: Set the default dr_mode for usb2"
+  Revert "arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector"
 
-> Currently the damon selftests are not built with the rest of the
-> selftests. We add damon to the list of targets.
-> 
-> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
-> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts |  4 ----
+ arch/arm64/boot/dts/qcom/sc7280.dtsi    | 36 ---------------------------------
+ 2 files changed, 40 deletions(-)
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+--
+2.7.4
 
-
-Thanks,
-SJ
-
-> ---
->  tools/testing/selftests/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index d08fe4cfe811..ffe453760a12 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -9,6 +9,7 @@ TARGETS += clone3
->  TARGETS += core
->  TARGETS += cpufreq
->  TARGETS += cpu-hotplug
-> +TARGETS += damon
->  TARGETS += drivers/dma-buf
->  TARGETS += efivarfs
->  TARGETS += exec
-> -- 
-> 2.35.1.265.g69c8d7142f-goog

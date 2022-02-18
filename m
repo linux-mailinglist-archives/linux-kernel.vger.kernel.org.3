@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01E64BC1B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 703434BC189
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239695AbiBRVQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:16:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42436 "EHLO
+        id S239607AbiBRVHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:07:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239657AbiBRVQL (ORCPT
+        with ESMTP id S231464AbiBRVHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:16:11 -0500
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3083328BF41;
-        Fri, 18 Feb 2022 13:15:53 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id EBB513BA9DC;
-        Fri, 18 Feb 2022 16:06:49 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id QrN-FJ-75sez; Fri, 18 Feb 2022 16:06:49 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 6E7F73BA9D3;
-        Fri, 18 Feb 2022 16:06:46 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6E7F73BA9D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1645218406;
-        bh=jU3p85idUR7noONNjLpaS2BHDqtaaxwv6Q/ch9Ss5iw=;
-        h=From:To:Date:Message-Id;
-        b=LsRo9UIlwMUGVY1clr3Qnuzy3HVHBMRT8X7jx/1O46uXqF/nAxJrBBxSZhHILoDyR
-         lZLxFDOOTdxuSp7/PiNn6jhNX0jd1PBvm5VK7TaO1oIgQtcQS2B3ggCJSBLslPdP1c
-         Pt+5SsUHvZNeO1l5TwJ6ID0PL2Pcy3Yj+g958XcV7avusJb7ul87aytm/6kQSfdfsk
-         53LdmfMk6ZB2EQxEjPqVWI9J4+W5AdvKddHRFCPsj46TMMFePPY9red9bNIMwVlzZA
-         p/yDIG+hnt1r8DF8D4reCyZcjmC2hj+6pS7yUSjwWAlKXTeaGmF12hssnHm5TrsDwd
-         rKXZzl7cAEYng==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id X7ITggOoy7jL; Fri, 18 Feb 2022 16:06:46 -0500 (EST)
-Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id 1EF273BA5F2;
-        Fri, 18 Feb 2022 16:06:45 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC PATCH v2 11/11] selftests/rseq: Implement rseq vm_vcpu_id field support
-Date:   Fri, 18 Feb 2022 16:06:33 -0500
-Message-Id: <20220218210633.23345-12-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220218210633.23345-1-mathieu.desnoyers@efficios.com>
-References: <20220218210633.23345-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Fri, 18 Feb 2022 16:07:36 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB1D10FD3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:07:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645218439; x=1676754439;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=ky/sFQgO7G6Nqidx2wlMpJdnhLfeu8rxJY8dSggBnjY=;
+  b=lc486d1Wnx/de476iln/+sDYX/k4OHk3lMf02TUZBaG9uHCM+ZNrJoqq
+   YkYUoEeiA0Aks54LX65Cqha5SCdHD10KWhnfeflSFX+QrHHof/sRoFHfN
+   hCHkg+7wsWWPZXpuoooq0m82022STcCTw5cVZr89I3ABJHL2jIIZ/Krj6
+   +EVuMzhzdaOP2CBvFA+DMLs42M0XRhTf/CgHzfgmN3xaAKTFtB8o9hAKD
+   TeoTioqlPtx04VpEAworo0hliC2tBqmj7fJz8JFVYdd8l+awIN+oivkVF
+   yGHUJWOlGiW+sa9yd2vALYgIAHnfkx5yyxazzJzRii2cN3698NREB30if
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="275807313"
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="275807313"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 13:07:18 -0800
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="682613294"
+Received: from jabonill-mobl1.amr.corp.intel.com (HELO [10.251.27.55]) ([10.251.27.55])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 13:07:17 -0800
+Message-ID: <5252a906-41e7-ec92-3b99-4a8d5cff4f0f@intel.com>
+Date:   Fri, 18 Feb 2022 13:07:11 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
+ <20220218161718.67148-4-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv3 03/32] x86/tdx: Detect running as a TDX guest in early
+ boot
+In-Reply-To: <20220218161718.67148-4-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +72,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- tools/testing/selftests/rseq/rseq-abi.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On 2/18/22 08:16, Kirill A. Shutemov wrote:
+> From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> 
+> cc_platform_has() API is used in the kernel to enable confidential
+> computing features. Since TDX guest is a confidential computing
+> platform, it also needs to use this API.
 
-diff --git a/tools/testing/selftests/rseq/rseq-abi.h b/tools/testing/selftests/rseq/rseq-abi.h
-index a1faa9162d52..1ee4740ebe94 100644
---- a/tools/testing/selftests/rseq/rseq-abi.h
-+++ b/tools/testing/selftests/rseq/rseq-abi.h
-@@ -155,6 +155,15 @@ struct rseq_abi {
- 	 */
- 	__u32 node_id;
- 
-+	/*
-+	 * Restartable sequences vm_vcpu_id field. Updated by the kernel. Read by
-+	 * user-space with single-copy atomicity semantics. This field should
-+	 * only be read by the thread which registered this data structure.
-+	 * Aligned on 32-bit. Contains the current thread's virtual CPU ID
-+	 * (allocated uniquely within a memory space).
-+	 */
-+	__u32 vm_vcpu_id;
-+
- 	/*
- 	 * Flexible array member at end of structure, after last feature field.
- 	 */
--- 
-2.17.1
+I'm struggling to connect the relevance of this paragraph to the patch
+below.
 
+I went through the whole series and I don't see any modifications to
+cc_platform_has() or checks for X86_FEATURE_TDX_GUEST that seem like
+they influence cc_platform_has().
+
+What the heck am I missing?
+
+> In preparation of extending cc_platform_has() API to support TDX guest,
+> use CPUID instruction to detect support for TDX guests in the early
+> boot code (via tdx_early_init()). Since copy_bootdata() is the first
+> user of cc_platform_has() API, detect the TDX guest status before it.
+
+This is good.  It tells us *why* it is initialized in that location.
+
+> Since cc_plaform_has() API will be used frequently across the boot
+> code, instead of repeatedly detecting the TDX guest status using the
+> CPUID instruction, detect once and cache the result.
+
+Isn't this a remnant of an old implementation where there was a separate
+'tdx_enabled' variable in addition to X86_FEATURE_TDX_GUEST?
+
+Does this "caching" refer to X86_FEATURE_TDX_GUEST or the old thing?
+
+> Define a synthetic feature flag (X86_FEATURE_TDX_GUEST) and set this
+> bit in a valid TDX guest platform.
+
+
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 391c4cac8958..ea4190c53db6 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -880,6 +880,18 @@ config ACRN_GUEST
+>  	  IOT with small footprint and real-time features. More details can be
+>  	  found in https://projectacrn.org/.
+>  
+> +config INTEL_TDX_GUEST
+> +	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
+> +	depends on X86_64 && CPU_SUP_INTEL
+> +	depends on X86_X2APIC
+> +	help
+> +	  Support running as a guest under Intel TDX.  Without this support,
+> +	  the guest kernel can not boot or run under TDX.
+> +	  TDX includes memory encryption and integrity capabilities
+> +	  which protect the confidentiality and integrity of guest
+> +	  memory contents and CPU state. TDX guests are protected from
+> +	  potential attacks from the VMM.
+
+Nit: I don't think "potential" is the right word there.  "some" might
+work better.

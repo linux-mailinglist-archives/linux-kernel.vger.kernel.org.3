@@ -2,83 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC1E4BBBF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E295C4BBBF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236899AbiBRPMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 10:12:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54944 "EHLO
+        id S236911AbiBRPSH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 10:18:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiBRPMf (ORCPT
+        with ESMTP id S232052AbiBRPSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:12:35 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84384163063
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:12:18 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id n185so8275598qke.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:12:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UFK1H0MLL3zfV8rrVT42KAQLrDb10EeLRg7qACWBZgo=;
-        b=loqXxekcoX4BlDC6iJQG0PRWrLmv96YvYeNl8NRamBd2P2OGZnI0oi2OBzO5/s8rhl
-         T+PXXlTJp48Z+7ULhVkAqr9KouVemM7c8uUYgfL8QJYTv12dM4D8HDCxA0SDDpUhGOvg
-         rE5oFChEjkRNN04dRyvaVz5kbXhbhHWa1S8RXEqKgxqJ9VPxpBhGsDP3+sEp4wKCq39Q
-         dG9tbJMPhNg+QCNvnwXuWzsvFTtj0VJCYY0sjVhMuNodOyeHr9bFiaeXdANNhcKhZxk2
-         y1x49gtOrmgtEUcvR4vYY5ULHDEpPUdlFhiU0tJXMWUkdNB/+4dbfbamE96F8vrSX6yS
-         OGkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UFK1H0MLL3zfV8rrVT42KAQLrDb10EeLRg7qACWBZgo=;
-        b=pthttxleEGuz0lVROoYXmHK71NiVFZkybqxxkJfHnJAwgIezQSrrzXMmRsLWtpjATT
-         kcgvtybIIkSnbGL8ObTDMNzFYze49Y/7Q1/shCzgBGLD7WFBatg7aH8Cl0b4hsjtgDc3
-         GeJrtYEog+3KlHiQijasVH+TMzeglWf6IudBMui2jBLMCCCxyIS11jwZINSV+3EWrz84
-         Nqy4lR4Mo5SRVq1ZJs6jPcck3pkIH5K+xA8PTm8yLNlBnjpTUcmHcfxqCv+uKlGjL060
-         /zmKzFbF6yj/P6ebG8GwUFVHGDs6EbTEN8dmGzd7h9K5Ja53TkcCxgS9XV+ithMN86h8
-         y18w==
-X-Gm-Message-State: AOAM532v7/10FvBHHF0TNEF0hu9pv8iYIpzm/AQSEC4najoJYgMoxnmB
-        FZ4kVFWi7fTEvgcys7Nd8lVTi1V8NKf4TQ==
-X-Google-Smtp-Source: ABdhPJyZJc9V59o/iPIJ6jZ7/kpiQxhh7Z5dMrM80fj+rWapsiOI8tOm/ORLO0hRQDXn6isRJ+AEkw==
-X-Received: by 2002:a37:af81:0:b0:502:7ea:34e7 with SMTP id y123-20020a37af81000000b0050207ea34e7mr4972743qke.737.1645197137730;
-        Fri, 18 Feb 2022 07:12:17 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id i12sm23483248qkn.83.2022.02.18.07.12.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 07:12:16 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nL4vg-006d8h-D0; Fri, 18 Feb 2022 11:12:16 -0400
-Date:   Fri, 18 Feb 2022 11:12:16 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [RFC PATCH 04/13] vfio/mdev: remove the usage of the list
- iterator after the loop
-Message-ID: <20220218151216.GE1037534@ziepe.ca>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-5-jakobkoschel@gmail.com>
+        Fri, 18 Feb 2022 10:18:06 -0500
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 353AA24F0F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:17:49 -0800 (PST)
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-CPx7BDMGMSieQKvLJa3X6Q-1; Fri, 18 Feb 2022 10:17:44 -0500
+X-MC-Unique: CPx7BDMGMSieQKvLJa3X6Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AE0CB2F45;
+        Fri, 18 Feb 2022 15:17:43 +0000 (UTC)
+Received: from x1.com (unknown [10.22.32.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B1FC7BD55;
+        Fri, 18 Feb 2022 15:17:42 +0000 (UTC)
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] tracing/osnoise: Make osnoise_main to sleep for microseconds
+Date:   Fri, 18 Feb 2022 16:17:38 +0100
+Message-Id: <302aa6c7bdf2d131719b22901905e9da122a11b2.1645197336.git.bristot@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217184829.1991035-5-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=bristot@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,19 +52,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 07:48:20PM +0100, Jakob Koschel wrote:
-> It is unsafe to assume that tmp != mdev can only evaluate to false
-> if the break within the list iterator is hit.
-> 
-> When the break is not hit, tmp is set to an address derived from the
-> head element. If mdev would match with that value of tmp it would allow
-> continuing beyond the safety check even if mdev was never found within
-> the list
+osnoise's runtime and period are in the microseconds scale, but it is
+currently sleeping in the millisecond's scale. This behavior roots in the
+usage of hwlat as the skeleton for osnoise.
 
-I think due to other construction this is not actually possible, but I
-guess it is technically correct
+Make osnoise to sleep in the microseconds scale. Also, move the sleep to
+a specialized function.
 
-This seems like just a straight up style fix with nothing to do with
-speculative execution though. Why not just send it as a proper patch?
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+---
+ kernel/trace/trace_osnoise.c | 53 ++++++++++++++++++++++--------------
+ 1 file changed, 32 insertions(+), 21 deletions(-)
 
-Jason
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index 870a08da5b48..cfddb30e65ab 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -1436,6 +1436,37 @@ static int run_osnoise(void)
+ static struct cpumask osnoise_cpumask;
+ static struct cpumask save_cpumask;
+ 
++/*
++ * osnoise_sleep - sleep until the next period
++ */
++static void osnoise_sleep(void)
++{
++	u64 interval;
++	ktime_t wake_time;
++
++	mutex_lock(&interface_lock);
++	interval = osnoise_data.sample_period - osnoise_data.sample_runtime;
++	mutex_unlock(&interface_lock);
++
++	/*
++	 * differently from hwlat_detector, the osnoise tracer can run
++	 * without a pause because preemption is on.
++	 */
++	if (!interval) {
++		/* Let synchronize_rcu_tasks() make progress */
++		cond_resched_tasks_rcu_qs();
++		return;
++	}
++
++	wake_time = ktime_add_us(ktime_get(), interval);
++	__set_current_state(TASK_INTERRUPTIBLE);
++
++	while (schedule_hrtimeout_range(&wake_time, 0, HRTIMER_MODE_ABS)) {
++		if (kthread_should_stop())
++			break;
++	}
++}
++
+ /*
+  * osnoise_main - The osnoise detection kernel thread
+  *
+@@ -1444,30 +1475,10 @@ static struct cpumask save_cpumask;
+  */
+ static int osnoise_main(void *data)
+ {
+-	u64 interval;
+ 
+ 	while (!kthread_should_stop()) {
+-
+ 		run_osnoise();
+-
+-		mutex_lock(&interface_lock);
+-		interval = osnoise_data.sample_period - osnoise_data.sample_runtime;
+-		mutex_unlock(&interface_lock);
+-
+-		do_div(interval, USEC_PER_MSEC);
+-
+-		/*
+-		 * differently from hwlat_detector, the osnoise tracer can run
+-		 * without a pause because preemption is on.
+-		 */
+-		if (interval < 1) {
+-			/* Let synchronize_rcu_tasks() make progress */
+-			cond_resched_tasks_rcu_qs();
+-			continue;
+-		}
+-
+-		if (msleep_interruptible(interval))
+-			break;
++		osnoise_sleep();
+ 	}
+ 
+ 	return 0;
+-- 
+2.34.1
+

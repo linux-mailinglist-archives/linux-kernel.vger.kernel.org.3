@@ -2,232 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729C84BBB04
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D344BBB35
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236243AbiBROyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:54:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46032 "EHLO
+        id S236249AbiBRO4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:56:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236231AbiBROyk (ORCPT
+        with ESMTP id S236302AbiBRO40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:54:40 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B564A5621B;
-        Fri, 18 Feb 2022 06:54:23 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A26911F46BA2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645196062;
-        bh=aJ3xIH2fN9ae3SbsE2VP6ml3rhW+Z3DMmyq7epfAAqc=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=WErC1atFCUoRx9/I6wMe2kPsGiJj6UAjtjLC3qrBKFMFKqo5v8jb5sh1yS6p1mIbR
-         E4ThhBytCjU9fAMb9ZGmn6fuALC7GMtdvqXkFV/cKpvhntjFJON8WVVbVapC53dFof
-         fHQ2QFvRHH+4YG+71qSaFiRI81GS3ls7RXCCSIAkTyy12dL3CSQbfmuaTMrW8g0cgk
-         FN2bnL0sctrZ2Tw3hsg07b4ukcAWXgB6xrOOIbe3H8/e6Np9IzHT2DWHCXDqUXHTGo
-         63dQ9Jp6ZqGxKoqNkCUdd5dT7Y+BeUq72dLV58RhItGoZ6WtZtjYbYGV9RTcXvGUHs
-         BuOcPl9mAQzrg==
-Message-ID: <a624679f-3b87-ff07-8983-982bbd983e94@collabora.com>
+        Fri, 18 Feb 2022 09:56:26 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB2C57B3B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:00 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id k1so15027129wrd.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qC+RbOnlbAMYT0RkhfvSIqXlBo3fNavEyqmQsnLiR2Q=;
+        b=CB/gthuBR1PKlTX0iRK6AGpgmej1LoRD8khuOAy0FQB9eCSE8iJkQM4NYE1ZysOiKs
+         la2wmI5DNqHmk3Wie4KVwcRAjSuR3pv9v0Z3NBZHUVKejZwAY0Y78WkhHLlnXLYHPDIv
+         KiAERdi2FrteWdUGKvtFGAAT71x4pk+S1RHGgB1i/atRB3wMMCKZVkDFzFbER0ZMu+O4
+         VATNEmRSJkbX/ZDl4zvF+/q0Cl8dwfUwyt24KzEVU8MVMBpgeCCsQTzOW3z1fLhqK7CM
+         WOhVK1BhA0a2HUW0Pn8hKI2l4dGz92rXj1d/SpDEDofgbA1bFqHzXEVn6guVSxM93lv7
+         SjxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qC+RbOnlbAMYT0RkhfvSIqXlBo3fNavEyqmQsnLiR2Q=;
+        b=3rY10/dODCRa0rdQWewX8icdMyb1v264MmNfsFjFV1bR35hGlU/TWmMOnPKagoIKo5
+         DzzfBsEeOnJOqEsZs3nnNG2mxVd9GnNenYNy15/igwnnGxQWQQA+VkpvrjoGFKjdi9HH
+         SP7r573KBSuVvsr5Un6mSIRy3ZGORYrxvbgUcw8B1DDYEgsxityHMyuk2oCqq695UiFP
+         bYCja6BYuiEhnmJAqLP+19zTJTCNyj2cDU/YtTa0A5755QGfYCsXIsWaonooND+XLoIu
+         PhNDvsHkJPGVErtvPCwoKNFTkoSJ+RRGpo587FJxZKOEtycG2hQu9e6089mxsYEhSLgI
+         PQqA==
+X-Gm-Message-State: AOAM530kjanO9CIoJ0fuhOfEACR2ZKd5v3jxNMvpBDZDT1mmhgvotIg9
+        n7nWPgTV9uaFXepOcNbLwiRzcw==
+X-Google-Smtp-Source: ABdhPJwNBdk3NS5ZflKP/t4iGuuUk373NB0fBIlAS30h710cFUX/Rlxqs4tq3A739PN3fuS29Ive5g==
+X-Received: by 2002:a05:6000:257:b0:1e3:3a1b:d4ca with SMTP id m23-20020a056000025700b001e33a1bd4camr6304391wrz.112.1645196158903;
+        Fri, 18 Feb 2022 06:55:58 -0800 (PST)
+Received: from localhost.localdomain (2a02-8440-6241-3b28-3074-96af-9642-0002.rev.sfr.net. [2a02:8440:6241:3b28:3074:96af:9642:2])
+        by smtp.gmail.com with ESMTPSA id b10sm47431454wrd.8.2022.02.18.06.55.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 06:55:58 -0800 (PST)
+From:   Guillaume Ranquet <granquet@baylibre.com>
+To:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com,
+        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
+        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com,
+        angelogioacchino.delregno@collabora.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v8 01/19] dt-bindings: mediatek,dpi: Add DP_INTF compatible
 Date:   Fri, 18 Feb 2022 15:54:19 +0100
+Message-Id: <20220218145437.18563-2-granquet@baylibre.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220218145437.18563-1-granquet@baylibre.com>
+References: <20220218145437.18563-1-granquet@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [v2 05/17] ASoC: mediatek: mt8186: support hw gain in platform
- driver
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
-        geert+renesas@glider.be, trevor.wu@mediatek.com,
-        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
- <20220217134205.15400-6-jiaxin.yu@mediatek.com>
-Content-Language: en-US
-In-Reply-To: <20220217134205.15400-6-jiaxin.yu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/02/22 14:41, Jiaxin Yu ha scritto:
-> This path adds mt8186 hw gain dai driver.
-> 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> ---
->   .../soc/mediatek/mt8186/mt8186-dai-hw-gain.c  | 245 ++++++++++++++++++
->   1 file changed, 245 insertions(+)
->   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c
-> 
-> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c b/sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c
-> new file mode 100644
-> index 000000000000..796878989727
-> --- /dev/null
-> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-hw-gain.c
-> @@ -0,0 +1,245 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +//
-> +// MediaTek ALSA SoC Audio DAI HW Gain Control
-> +//
-> +// Copyright (c) 2022 MediaTek Inc.
-> +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> +
-> +#include <linux/regmap.h>
-> +#include "mt8186-afe-common.h"
-> +#include "mt8186-interconnection.h"
-> +
-> +#define HW_GAIN_1_EN_W_NAME "HW GAIN 1 Enable"
-> +#define HW_GAIN_2_EN_W_NAME "HW GAIN 2 Enable"
-> +
-> +/* dai component */
-> +static const struct snd_kcontrol_new mtk_hw_gain1_in_ch1_mix[] = {
-> +	SOC_DAPM_SINGLE_AUTODISABLE("CONNSYS_I2S_CH1 Switch", AFE_CONN13_1,
-> +				    I_CONNSYS_I2S_CH1, 1, 0),
-> +};
-> +
-> +static const struct snd_kcontrol_new mtk_hw_gain1_in_ch2_mix[] = {
-> +	SOC_DAPM_SINGLE_AUTODISABLE("CONNSYS_I2S_CH2 Switch", AFE_CONN14_1,
-> +				    I_CONNSYS_I2S_CH2, 1, 0),
-> +};
-> +
-> +static const struct snd_kcontrol_new mtk_hw_gain2_in_ch1_mix[] = {
-> +	SOC_DAPM_SINGLE_AUTODISABLE("ADDA_UL_CH1 Switch", AFE_CONN15,
-> +				    I_ADDA_UL_CH1, 1, 0),
-> +};
-> +
-> +static const struct snd_kcontrol_new mtk_hw_gain2_in_ch2_mix[] = {
-> +	SOC_DAPM_SINGLE_AUTODISABLE("ADDA_UL_CH2 Switch", AFE_CONN16,
-> +				    I_ADDA_UL_CH2, 1, 0),
-> +};
-> +
-> +static int mtk_hw_gain_event(struct snd_soc_dapm_widget *w,
-> +			     struct snd_kcontrol *kcontrol,
-> +			     int event)
-> +{
-> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
-> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
-> +	unsigned int gain_cur;
-> +	unsigned int gain_con1;
-> +
-> +	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x\n",
-> +		__func__, w->name, event);
-> +
-> +	switch (event) {
-> +	case SND_SOC_DAPM_PRE_PMU:
-> +		if (strcmp(w->name, HW_GAIN_1_EN_W_NAME) == 0) {
-> +			gain_cur = AFE_GAIN1_CUR;
-> +			gain_con1 = AFE_GAIN1_CON1;
-> +		} else {
-> +			gain_cur = AFE_GAIN2_CUR;
-> +			gain_con1 = AFE_GAIN2_CON1;
-> +		}
-> +
-> +		/* let hw gain ramp up, set cur gain to 0 */
-> +		regmap_update_bits(afe->regmap,
-> +				   gain_cur,
-> +				   AFE_GAIN1_CUR_MASK_SFT,
-> +				   0);
+From: Markus Schneider-Pargmann <msp@baylibre.com>
 
-This fits in one line (86 columns is ok)
+DP_INTF is similar to DPI but does not have the exact same feature set
+or register layouts.
 
-> +
-> +		/* set target gain to 0 */
-> +		regmap_update_bits(afe->regmap,
-> +				   gain_con1,
-> +				   GAIN1_TARGET_MASK_SFT,
-> +				   0);
+DP_INTF is the sink of the display pipeline that is connected to the
+DisplayPort controller and encoder unit. It takes the same clocks as
+DPI.
 
-Same here.
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct snd_soc_dapm_widget mtk_dai_hw_gain_widgets[] = {
-> +	/* inter-connections */
-> +	SND_SOC_DAPM_MIXER("HW_GAIN1_IN_CH1", SND_SOC_NOPM, 0, 0,
-> +			   mtk_hw_gain1_in_ch1_mix,
-> +			   ARRAY_SIZE(mtk_hw_gain1_in_ch1_mix)),
-> +	SND_SOC_DAPM_MIXER("HW_GAIN1_IN_CH2", SND_SOC_NOPM, 0, 0,
-> +			   mtk_hw_gain1_in_ch2_mix,
-> +			   ARRAY_SIZE(mtk_hw_gain1_in_ch2_mix)),
-> +	SND_SOC_DAPM_MIXER("HW_GAIN2_IN_CH1", SND_SOC_NOPM, 0, 0,
-> +			   mtk_hw_gain2_in_ch1_mix,
-> +			   ARRAY_SIZE(mtk_hw_gain2_in_ch1_mix)),
-> +	SND_SOC_DAPM_MIXER("HW_GAIN2_IN_CH2", SND_SOC_NOPM, 0, 0,
-> +			   mtk_hw_gain2_in_ch2_mix,
-> +			   ARRAY_SIZE(mtk_hw_gain2_in_ch2_mix)),
-> +
-> +	SND_SOC_DAPM_SUPPLY(HW_GAIN_1_EN_W_NAME,
-> +			    AFE_GAIN1_CON0, GAIN1_ON_SFT, 0,
-> +			    mtk_hw_gain_event,
-> +			    SND_SOC_DAPM_PRE_PMU),
-> +
-> +	SND_SOC_DAPM_SUPPLY(HW_GAIN_2_EN_W_NAME,
-> +			    AFE_GAIN2_CON0, GAIN2_ON_SFT, 0,
-> +			    mtk_hw_gain_event,
-> +			    SND_SOC_DAPM_PRE_PMU),
-> +
-> +	SND_SOC_DAPM_INPUT("HW Gain 1 Out Endpoint"),
-> +	SND_SOC_DAPM_INPUT("HW Gain 2 Out Endpoint"),
-> +	SND_SOC_DAPM_OUTPUT("HW Gain 1 In Endpoint"),
-> +};
-> +
-> +static const struct snd_soc_dapm_route mtk_dai_hw_gain_routes[] = {
-> +	{"HW Gain 1 In", NULL, "HW_GAIN1_IN_CH1"},
-> +	{"HW Gain 1 In", NULL, "HW_GAIN1_IN_CH2"},
-> +	{"HW Gain 2 In", NULL, "HW_GAIN2_IN_CH1"},
-> +	{"HW Gain 2 In", NULL, "HW_GAIN2_IN_CH2"},
-> +
-> +	{"HW Gain 1 In", NULL, HW_GAIN_1_EN_W_NAME},
-> +	{"HW Gain 1 Out", NULL, HW_GAIN_1_EN_W_NAME},
-> +	{"HW Gain 2 In", NULL, HW_GAIN_2_EN_W_NAME},
-> +	{"HW Gain 2 Out", NULL, HW_GAIN_2_EN_W_NAME},
-> +
-> +	{"HW Gain 1 In Endpoint", NULL, "HW Gain 1 In"},
-> +	{"HW Gain 1 Out", NULL, "HW Gain 1 Out Endpoint"},
-> +	{"HW Gain 2 Out", NULL, "HW Gain 2 Out Endpoint"},
-> +};
-> +
-> +static const struct snd_kcontrol_new mtk_hw_gain_controls[] = {
-> +	SOC_SINGLE("HW Gain 1 Volume", AFE_GAIN1_CON1,
-> +		   GAIN1_TARGET_SFT, GAIN1_TARGET_MASK, 0),
-> +	SOC_SINGLE("HW Gain 2 Volume", AFE_GAIN2_CON1,
-> +		   GAIN2_TARGET_SFT, GAIN2_TARGET_MASK, 0),
-> +};
-> +
-> +/* dai ops */
-> +static int mtk_dai_gain_hw_params(struct snd_pcm_substream *substream,
-> +				  struct snd_pcm_hw_params *params,
-> +				  struct snd_soc_dai *dai)
-> +{
-> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-> +	unsigned int rate = params_rate(params);
-> +	unsigned int rate_reg = mt8186_rate_transform(afe->dev, rate, dai->id);
-> +
-> +	dev_info(afe->dev, "%s(), id %d, stream %d, rate %d\n",
-> +		 __func__,
-> +		 dai->id,
-> +		 substream->stream,
-> +		 rate);
-
-This should be:
-	dev_info(afe->dev, "%s(), id %d, stream %d, rate %d\n",
-
-		 __func__, dai->id, substream->stream, rate);
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+index dd2896a40ff08..53acf9a84f7fb 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: mediatek DPI Controller Device Tree Bindings
++title: mediatek DPI/DP_INTF Controller Device Tree Bindings
+ 
+ maintainers:
+   - CK Hu <ck.hu@mediatek.com>
+   - Jitao shi <jitao.shi@mediatek.com>
+ 
+ description: |
+-  The Mediatek DPI function block is a sink of the display subsystem and
+-  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a parallel
+-  output bus.
++  The Mediatek DPI and DP_INTF function blocks are a sink of the display
++  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
++  parallel output bus.
+ 
+ properties:
+   compatible:
+@@ -23,6 +23,7 @@ properties:
+       - mediatek,mt8173-dpi
+       - mediatek,mt8183-dpi
+       - mediatek,mt8192-dpi
++      - mediatek,mt8195-dpintf
+ 
+   reg:
+     maxItems: 1
+@@ -54,7 +55,7 @@ properties:
+     $ref: /schemas/graph.yaml#/properties/port
+     description:
+       Output port node. This port should be connected to the input port of an
+-      attached HDMI or LVDS encoder chip.
++      attached HDMI, LVDS or DisplayPort encoder chip.
+ 
+ required:
+   - compatible
+-- 
+2.34.1
 

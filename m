@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4674BB4D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B33D4BB4D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbiBRJC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:02:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58088 "EHLO
+        id S231949AbiBRJCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:02:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233064AbiBRJCa (ORCPT
+        with ESMTP id S233062AbiBRJCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 04:02:30 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697BC55BEC
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F68255BE9
         for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 01:02:10 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K0QZJ13J1z1FD9b;
-        Fri, 18 Feb 2022 16:57:44 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K0Qf44yfgzbkPy;
+        Fri, 18 Feb 2022 17:01:00 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 18 Feb
- 2022 17:02:07 +0800
+ 2022 17:02:08 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH v3 2/8] mm/memory-failure.c: catch unexpected -EFAULT from vma_address()
-Date:   Fri, 18 Feb 2022 17:01:12 +0800
-Message-ID: <20220218090118.1105-3-linmiaohe@huawei.com>
+Subject: [PATCH v3 3/8] mm/memory-failure.c: rework the signaling logic in kill_proc
+Date:   Fri, 18 Feb 2022 17:01:13 +0800
+Message-ID: <20220218090118.1105-4-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220218090118.1105-1-linmiaohe@huawei.com>
 References: <20220218090118.1105-1-linmiaohe@huawei.com>
@@ -40,38 +40,58 @@ X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's unexpected to walk the page table when vma_address() return -EFAULT.
-But dev_pagemap_mapping_shift() is called only when vma associated to the
-error page is found already in collect_procs_{file,anon}, so vma_address()
-should not return -EFAULT except with some bug, as Naoya pointed out. We
-can use VM_BUG_ON_VMA() to catch this bug here.
+BUS_MCEERR_AR code is only sent when MF_ACTION_REQUIRED is set and the
+target is current. Rework the code to make this clear.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 ---
- mm/memory-failure.c | 1 +
- 1 file changed, 1 insertion(+)
+ mm/memory-failure.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index b3ff7e99a421..eaa241058401 100644
+index eaa241058401..7e205d91b2d7 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -315,6 +315,7 @@ static unsigned long dev_pagemap_mapping_shift(struct page *page,
- 	pmd_t *pmd;
- 	pte_t *pte;
+@@ -258,16 +258,13 @@ static int kill_proc(struct to_kill *tk, unsigned long pfn, int flags)
+ 	pr_err("Memory failure: %#lx: Sending SIGBUS to %s:%d due to hardware memory corruption\n",
+ 			pfn, t->comm, t->pid);
  
-+	VM_BUG_ON_VMA(address == -EFAULT, vma);
- 	pgd = pgd_offset(vma->vm_mm, address);
- 	if (!pgd_present(*pgd))
- 		return 0;
+-	if (flags & MF_ACTION_REQUIRED) {
+-		if (t == current)
+-			ret = force_sig_mceerr(BUS_MCEERR_AR,
+-					 (void __user *)tk->addr, addr_lsb);
+-		else
+-			/* Signal other processes sharing the page if they have PF_MCE_EARLY set. */
+-			ret = send_sig_mceerr(BUS_MCEERR_AO, (void __user *)tk->addr,
+-				addr_lsb, t);
+-	} else {
++	if ((flags & MF_ACTION_REQUIRED) && (t == current))
++		ret = force_sig_mceerr(BUS_MCEERR_AR,
++				 (void __user *)tk->addr, addr_lsb);
++	else
+ 		/*
++		 * Signal other processes sharing the page if they have
++		 * PF_MCE_EARLY set.
+ 		 * Don't use force here, it's convenient if the signal
+ 		 * can be temporarily blocked.
+ 		 * This could cause a loop when the user sets SIGBUS
+@@ -275,7 +272,6 @@ static int kill_proc(struct to_kill *tk, unsigned long pfn, int flags)
+ 		 */
+ 		ret = send_sig_mceerr(BUS_MCEERR_AO, (void __user *)tk->addr,
+ 				      addr_lsb, t);  /* synchronous? */
+-	}
+ 	if (ret < 0)
+ 		pr_info("Memory failure: Error sending signal to %s:%d: %d\n",
+ 			t->comm, t->pid, ret);
 -- 
 2.23.0
 

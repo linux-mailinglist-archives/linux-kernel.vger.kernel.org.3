@@ -2,122 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A1D4BB03D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 04:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09D54BB039
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 04:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbiBRDZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 22:25:51 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39090 "EHLO
+        id S232080AbiBRD0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 22:26:16 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiBRDZu (ORCPT
+        with ESMTP id S232060AbiBRD0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 22:25:50 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5365F4F441
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 19:25:35 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nKttj-002drd-3Z; Fri, 18 Feb 2022 03:25:31 +0000
-Date:   Fri, 18 Feb 2022 03:25:31 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 6/7] kernfs: Introduce hashed rw-sem to replace per-fs
- kernfs_rwsem.
-Message-ID: <Yg8Rq2H1C1ihFqds@zeniv-ca.linux.org.uk>
-References: <20220214120322.2402628-1-imran.f.khan@oracle.com>
- <20220214120322.2402628-7-imran.f.khan@oracle.com>
- <YgxXh3clQqpxUPba@zeniv-ca.linux.org.uk>
- <bfdef75d-4343-2734-2723-d8546df37c69@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bfdef75d-4343-2734-2723-d8546df37c69@oracle.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Feb 2022 22:26:14 -0500
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B148D1B4F30;
+        Thu, 17 Feb 2022 19:25:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1645154754;
+        bh=F/tGiAdsjuQ0q4Nj/0VGkH32X+GI2mQPc8R61JxSmTM=;
+        h=In-Reply-To:References:From:To:Cc:Subject:Date;
+        b=yZ0hbSooVqyWKuBRGQaqVlGG8jHd3aDQZGS8U0TbDj+XR7yZ+TRxi33d0ZjIXh0d/
+         KWcZVJW0nZY1yolJsmExW9sr8XPZq4mHHnQe1OF7V2++jbEGlPNw7nHrFYbEHSEGj5
+         mpbivzb8BmeceA07KuPS6kRrm6t0I4OD72i0vAt4=
+X-QQ-FEAT: oHWrrGTW1dDmmdYeXRw4YEXQp3CWT7El
+X-QQ-SSF: 00000000000000F0000000000000
+X-QQ-XMAILINFO: M/OchVwRIgcXcgiSPOYTSo67/UC58rNJiHD1eqUIupMUylOlig6Pg1EwAXQBQE
+         P6TGvEezTR3nSPgIyvHLLTB/NgGsc/ZT/EgTyJPs8lu8nT8hTxfJ1dZznTw//hKsMOVl9IP1C6gzu
+         Iw0ysO40N6oDfdmeWq2rKQGYka2vxDfdeveevc7HGDXO2cxSNRxWBHnJO4W/wGYU7/wjGUMgz8TmG
+         cnb33k/Dib38edsTFRNARG8gJP4zhdXsT8JztQmrOi+OkuyTYhzffj++b6eUJFAxmglFydc4hI0cy
+         UMohn1THfvyuzgdgk02GVsLaXJkcwECz7mlJSFwoVrbs7TijQ8qQEezvty4TEZnDtrhBSlmf3S7Xy
+         3zEWNAvRQYlyeA3UOx7oFprcp5uMmUY1+j9tZWRFNqKI4jSaxki5r7Tae7RA2Dca4wnk0WPgTAQzX
+         gkXDlmfSZXYHsoVAQ7Y+q5mFqcXLnhQE+4keROvATyB5XA/9CfpgeQBrFHe0Rk5TR5PKHOU2Q0fFa
+         gg6rgEo7vNUYw6jCajycXUl59yqxjM+SoqMvAww7L8U0EHbNfwewQUKocaV3+VikweiQJPizH4/pT
+         jQGj0nFaHpcag6xcfxW+srKEuCwNWziUzcEJcWCcbE14wv9slfR8IDpEtft4LCH0+h40H6HgA174M
+         tk+nw2XjSMVgBhYGTL2BommBGkuCFRMtTy3g0QEIAtoMKzZ6T2pSZp3LtPxuEwKE3vGg/BMeQ8JR0
+         rsAPPrSLwXR324wX3m67zrRtOl//efHbKAjTbM6OQckSf8Trw328cSI2PEKk81+6Fah1xj5pKN2xX
+         +peIrzlq7vlD72jLTgIvWlDlrg87liYouU3ohBA11sVaec6z3rWPYqB+3Khgt4pTSA==
+X-HAS-ATTACH: no
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 111.47.122.156
+In-Reply-To: <17f0ac8707d.e967ff2c113435.3595297833916391134@zohomail.com>
+References: <tencent_CA4766945C568E210AA2701525957F041007@qq.com>
+        <17f0ac8707d.e967ff2c113435.3595297833916391134@zohomail.com>
+X-QQ-STYLE: 
+X-QQ-mid: webmail813t1645154753t3342158
+From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
+To:     "=?ISO-8859-1?B?TGkgQ2hlbg==?=" <lchen.firstlove@zohomail.com>
+Cc:     "=?ISO-8859-1?B?a2lzaG9u?=" <kishon@ti.com>,
+        "=?ISO-8859-1?B?bG9yZW56by5waWVyYWxpc2k=?=" 
+        <lorenzo.pieralisi@arm.com>,
+        "=?ISO-8859-1?B?a3c=?=" <kw@linux.com>,
+        "=?ISO-8859-1?B?YmhlbGdhYXM=?=" <bhelgaas@google.com>,
+        "=?ISO-8859-1?B?bGludXgtcGNp?=" <linux-pci@vger.kernel.org>,
+        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] [PATCH] PCI: endpoint: functions/pci-epf-test: fix a potential memory leak
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="ISO-8859-1"
+Content-Transfer-Encoding: base64
+Date:   Fri, 18 Feb 2022 11:25:53 +0800
+X-Priority: 3
+Message-ID: <tencent_E7FF1CE4823926578BC38502335C4169EB05@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_EXCESS_BASE64,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 03:57:09PM +1100, Imran Khan wrote:
+LS0tLSBPbiBGcmksIDE4IEZlYiAyMDIyIDExOjAzOjAyICswODAwICBMaSBDaGVuIDxsY2hl
+bi5maXJzdGxvdmVAem9ob21haWwuY29tPiB3cm90ZSAtLS0tCj4gVGhpcyBpcyBkdXBsaWNh
+dGUgIHRvIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMTdlZDgxNmI2ZjMuZDRmYjQ0
+ZmI2OTc0NS4xMDQ4NDQ3ODQxNzIxMzgyOTIwQHpvaG9tYWlsLmNvbS9ULwoKT2ghIEkgYW0g
+c29ycnkgdGhhdCBJIG9ubHkgdmlld2VkIHRoZSBjb2RlIGluIHRvcnZhbGRzL2xpbnV4IGdp
+dCAKcmVwb3NpdG9yeSwgYnV0IG5vdCB0aGUgbWFpbCBsaXN0LgpUaGFuayB5b3UgZm9yIHlv
+dXIgcmVtaW5kZXIuCgpSZWdhcmRzLApXYW5n
 
-> Agree. I missed the point of changing parent during wait of rwsem. Could
-> you please let me know if following approach is acceptable in this case:
-> 
-> 1. Note kn->parent
-> 2. down_write_
-> 3. After acquiring the rwsems check if current kn->parent is same as the
-> earlier noted one and if so proceed otherwise invoke down_write_ again
-> as per current kn->parent.
-> 
-> Once we have taken the rwsems and found that kn->parent did not change
-> during wait we can proceed safely till corresponding up_write_
-
-Maybe...  TBH, kernfs_remove_ns() calling conventions suck; "move this
-(wherever it is) there under that name", especially combined with
-topology-modifying moves, makes life very unpleasant for callers who
-want to use it safely.  And I'm not at all sure they manage (or care to)
-use it safely...
-
-There are very few sources of cross-directory moves in the entire system.
-One is cross-directory cgroup rename(2) (already serialized on per-fs basis
-on VFS level), another is device_move().  Which is uncommon (5 callers
-in the entire system, one in drivers/media/usb/pvrusb2/, another in
-drivers/s390/cio, 3 more in net/bluetooth) and AFAICS unsafe wrt e.g.
-kobject_get_path().  Not for kernfs data structures - unsafe use of
-kobject->parent pointers.  I could be wrong - that's just from some grepping
-around, but it looks like a use-after-free race in the best case.
-
-So changes of kn->parent can be considered a very cold path.  Just make sure
-you pin the damn thing, so it won't disapper away from under you while you
-are grabbing the locks.
-
-> I have run my tests with lockdep enabled as well. Could you please let
-> me know if there is something that can be done as proof of correctness.
-> For sanity of patches, my current tests include LTP sysfs tests, CPU
-> hotplugging and cgroup access/creation/removal. I am booting oracle
-> linux as well which involves cgroupfs access(via systemd). If you could
-> suggest some other tests I can execute those as well.
-> 
-> Also regarding locking rules, I am not sure where to mention it. If I
-> put accompanying comments, at all the places where I am taking hashed
-> rwsems, to explain why lock corresponding to a node or corresponding to
-> its parent is being taken, will that be enough as description of locking
-> rules.
-
-A separate text, along the lines of "foo->bar is modified only when we
-are holding this, this and that; any of those is sufficient to stabilize
-it.  Locking order is such-and-such.  Such-and-such predicate is guaranteed
-to be true when you acquire this lock and must be true again by the time
-you drop it.", etc.  Some of that might go into the comments somewhere
-in source (e.g. when it's about data structures dealt with only one
-file, or in the header where the data structures are declared), some -
-in a separate text, perhaps in fs/kernfs/, perhaps in Documentation/filesystems/)
-
-And, of course, there's the cover letter of series and commit messages.
-
-> > I agree that sysfs locking had always been an atrocity - "serialize
-> > everything, we can't be arsed to think of that" approach had been there
-> > from the day one.  However, that's precisely the reason why replacement
-> > needs a very careful analysis.  For all I know, you might've done just
-> > that, but you are asking reviewers to reproduce that work independently.
-> > Or to hope that you've gotten it right and nod through the entire thing.
-> > Pardon me, but I know how easy it is to miss something while doing that
-> > kind of work - been there, done that.
-> 
-> I understand your concern but I am not asking reviewers to reproduce
-> this work independently :). If I can get to know what things can
-> be/should be tested further in this regard, I can do those tests.
-> Since the start of this work, I have been also running my tests with
-> lockdep and KASAN enabled as well and those tests have flagged some
-> issues which I have addressed.
-> 
-> I will certainly address your review comments in next version but in the
-> meantime if you have some suggestions regarding testing or description
-> of locking rules, please let me know.
-
-Tests are useful, but if we can't reason about the behaviour of code...

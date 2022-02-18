@@ -2,114 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1324BBD0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA894BBD16
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237509AbiBRQKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:10:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48056 "EHLO
+        id S237541AbiBRQK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:10:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237493AbiBRQKp (ORCPT
+        with ESMTP id S237534AbiBRQK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:10:45 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D33F105AAA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:10:28 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 139so8292245pge.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:10:28 -0800 (PST)
+        Fri, 18 Feb 2022 11:10:57 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B852B2E38
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:10:38 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso8954486wme.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:10:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HAYrDphdekGq8Y2YdxSlByL5fP4/mKHO4xQXVEQlRIA=;
-        b=WtOl1Gg29/RXqP6+l0OXUA7jj3EGFt3yNmclK999v8XN6uBArMXVClQ5BwJBGv27IT
-         BGn5tyTnaQM8s8Qt0IZ8zzJS53z8duXCnHVMmXMw0O1+eMscP65VAWsOENGj/inhp5OX
-         9XBhFpnpSCPLMN57fyFbWCoLfruG34fNyaahsdlRtnAUzM3nNq3twp27QmFVPCpfUtgE
-         UrzW9dtFrptd+xjnw0PsjCJDIKKnP569LFbWwej8zp3ObBjJshq3lJhweZSBAAIncxrp
-         JcegXpKPzjQqLOyNPkT4/G76KEAzNhs744LP+1r+cdV7yKCv/aSyCTBnTNlcHe0WkE34
-         /4bQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r/AWVD/1v/OrltbsGLUWIiBolmGY0D5NB3cjsCAaCvo=;
+        b=F196Gj6X7cMmzv1LmcLHEWq1bNaYOHIez4eL8fW9SaLZd4vLt1LlT989pRSsRtpqYu
+         zvABT7jyXZy5k8s7GLJ5rYlNkIfrShBaRCjziTLt+oyNiHrnXb/dH92AbwOqgTHzXakf
+         j8egLAR8jk/59JbSo0boemLftJ9a8wlSQWLZ981MLbZN+BeMym4pAjufS/wCUwquUWi+
+         TN8conih/ENjS7WS8MU82mrrPZbCofNUyVaS7XdQlcwTfiRBYDraR8Tru0qBrHPLGs1S
+         VyielxAnD2JJtvNxx/qX0nssoXYJ8/w66vrMeMDOu8xSzPsAD1eAb7TK7QbfvWg9xO1g
+         lcMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HAYrDphdekGq8Y2YdxSlByL5fP4/mKHO4xQXVEQlRIA=;
-        b=oERm8L+y6WBhwjMn1JpeWVMJuqEezESc2MCkVAgzsQZ/d102Jh9/qO5py90pXtzccH
-         3/tJckmfe8iToXiJ3pzVNkODbsrTRqNHCmthMFCQiGHHDmeg/mxL2qR6T/PWVZdjvCoY
-         JGNDfDCILsdAo7dsxvf/v00GQCi+M0PUiTU/F0Nz4aRyVA2oVb7nQzIWGPfIOZUC+tJF
-         9AoAyVOuzdf1kaoxlwXHctK9L8EQfi/ifn6/TlBttQkcAPY05fgUQGQfDIjeAwr6PngW
-         H7nCD1O6SmdlIq0eBh0kc3AUJTFXut63hYScm5tu7M9FefTKLmFnja25zq+XSSHe43w9
-         1mzw==
-X-Gm-Message-State: AOAM532iw0nTTTv4WAMevpYBzmri1XEFd+8zEfP9AJhIs1NC63B1UTBs
-        o9YKXwgvqnIp/S00eciQCWZWRA==
-X-Google-Smtp-Source: ABdhPJwcLmDZWmg0L3526xbxQ3iTxJHpDES/UOFw0XqtXvvvDJ8V2+nR1w2BOMdmn38i0LpaESo6cQ==
-X-Received: by 2002:a63:5911:0:b0:36c:4394:5bfa with SMTP id n17-20020a635911000000b0036c43945bfamr6763463pgb.519.1645200627893;
-        Fri, 18 Feb 2022 08:10:27 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x5sm5130665pjr.37.2022.02.18.08.10.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 08:10:27 -0800 (PST)
-Date:   Fri, 18 Feb 2022 16:10:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peng Hao <flyingpenghao@gmail.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4]  x86/kvm: remove a redundant variable
-Message-ID: <Yg/E71MbiFWq9A0p@google.com>
-References: <20220218110747.11455-1-flyingpeng@tencent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r/AWVD/1v/OrltbsGLUWIiBolmGY0D5NB3cjsCAaCvo=;
+        b=tXlILcQ7HgGq6yW/2iiSVhBZ2aPTKgCf5pqR9g/Yao6LWN5ILw6MUxrkUAC8v+Si5R
+         wU6wlibz8N14Yh7dpy469DaDnP1zch5nLIotuolWbCtruVHhNfJnMvsz/kqX7998d0VP
+         yrzkniQFoM3zQ2e8kjKsueOCDg/gRlu1p0+JtIihey4GE1gLjCDirjK+KeDIwp3rAaul
+         bO6ydjRhqP0gq5tHf4c1DHAbNEnKTDoT0kOElb8DyjuQng+9SUJM6ub6ZMuuHrmpqcBD
+         P8/1l8yrR1sj/fProAt+vtdyB6EmgxbcwkTJP0rBo3qxJvVPf6/Dl62Wkpu5gjqk0mPR
+         4nEA==
+X-Gm-Message-State: AOAM533vytbLYI8qjBIEm8vyCNM599BE4IBvYem01LzBLTKvNgONGhbY
+        GfbAa7+WCIm7FT+mXCmyvRziY0drb3f1ThtGTbicqw==
+X-Google-Smtp-Source: ABdhPJyaTo8GQS0NlVyqhKtGAlZCehfwbplk5FAbe/7QQ9yc04MN011Y6Cp2S6D7f2WTZbq3wFru9ATE8GWB9Yt9D0E=
+X-Received: by 2002:a1c:a510:0:b0:37e:2645:2222 with SMTP id
+ o16-20020a1ca510000000b0037e26452222mr11164689wme.26.1645200637167; Fri, 18
+ Feb 2022 08:10:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218110747.11455-1-flyingpeng@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220209105706.18852-1-quic_jinlmao@quicinc.com> <20220209105706.18852-6-quic_jinlmao@quicinc.com>
+In-Reply-To: <20220209105706.18852-6-quic_jinlmao@quicinc.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Fri, 18 Feb 2022 16:10:26 +0000
+Message-ID: <CAJ9a7Vi5L8c7FoxHHNk1NVuPr_Sp4rMHZO11JwX5CaTFSTTBXg@mail.gmail.com>
+Subject: Re: [PATCH v3 05/10] coresight-tpdm: Add DSB dataset support
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar comments to the other patch.  "KVM: VMX:" for the scope, and a more descriptive
-shortlog.
+Hi
 
-Also, this patch isn't part of a series, it should be simply "PATCH", not "patch 1/4".
+This patch does not apply cleanly:-
 
-On Fri, Feb 18, 2022, Peng Hao wrote:
-> variable 'cpu' is defined repeatedly.
+=======================================
+git apply -v ../patch.in/qcom/qcom-05.patch
+Checking patch drivers/hwtracing/coresight/coresight-tpdm.c...
+error: while searching for:
 
-The changelog should make it clear why it's ok to remove the redundant variable.
-E.g.
+DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
 
-  KVM: VMX: Remove scratch 'cpu' variable that shadows an identical scratch var
+/** TPDM enable operations **/
+static int tpdm_enable(struct coresight_device *csdev,
+               struct perf_event *event, u32 mode)
+{
 
-  Remove a redundant 'cpu' declaration from inside an if-statement that
-  that shadows an identical declaration at function scope.  Both variables
-  are used as scratch variables in for_each_*_cpu() loops, thus there's no
-  harm in sharing a variable.
+error: patch failed: drivers/hwtracing/coresight/coresight-tpdm.c:20
+error: drivers/hwtracing/coresight/coresight-tpdm.c: patch does not apply
+Checking patch drivers/hwtracing/coresight/coresight-tpdm.h...
 
-With that,
+=======================================
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+In patch 3 - the first time coresight-tpdm.c. is added the comment line is
 
-> Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+/* TPDM enable operations */
+
+Note the single * in the comment.
+
+This would seem to indicate missing intermediate patches, or patches
+from different trees / times.
+
+A coherent patch set is needed for review
+
+Regards
+
+Mike
+
+
+
+On Wed, 9 Feb 2022 at 10:57, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
+>
+> TPDM serves as data collection component for various dataset types.
+> DSB(Discrete Single Bit) is one of the dataset types. DSB subunit
+> can be enabled for data collection by writing 1 to the first bit of
+> DSB_CR register. This change is to add enable/disable function for
+> DSB dataset by writing DSB_CR register.
+>
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
 > ---
->  arch/x86/kvm/vmx/vmx.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index ba66c171d951..6101c2980a9c 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7931,7 +7931,6 @@ static int __init vmx_init(void)
->  	    ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
->  	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
->  	    KVM_EVMCS_VERSION) {
-> -		int cpu;
->  
->  		/* Check that we have assist pages on all online CPUs */
->  		for_each_online_cpu(cpu) {
-> -- 
-> 2.27.0
-> 
+>  drivers/hwtracing/coresight/coresight-tpdm.c | 57 ++++++++++++++++++++
+>  drivers/hwtracing/coresight/coresight-tpdm.h | 21 ++++++++
+>  2 files changed, 78 insertions(+)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index 51b8b17e6a80..c6480b7389b0 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -20,7 +20,28 @@
+>
+>  DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
+>
+> +static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+> +{
+> +       u32 val;
+> +
+> +       /* Set the enable bit of DSB control register to 1 */
+> +       val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
+> +       val = val | BIT(0);
+> +       writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
+> +}
+> +
+>  /** TPDM enable operations **/
+> +static void _tpdm_enable(struct tpdm_drvdata *drvdata)
+> +{
+> +       CS_UNLOCK(drvdata->base);
+> +
+> +       /* Check if DSB datasets is present for TPDM. */
+> +       if (test_bit(TPDM_DS_DSB, drvdata->datasets))
+> +               tpdm_enable_dsb(drvdata);
+> +
+> +       CS_LOCK(drvdata->base);
+> +}
+> +
+>  static int tpdm_enable(struct coresight_device *csdev,
+>                        struct perf_event *event, u32 mode)
+>  {
+> @@ -32,6 +53,7 @@ static int tpdm_enable(struct coresight_device *csdev,
+>                 return -EBUSY;
+>         }
+>
+> +       _tpdm_enable(drvdata);
+>         drvdata->enable = true;
+>         mutex_unlock(&drvdata->lock);
+>
+> @@ -39,7 +61,29 @@ static int tpdm_enable(struct coresight_device *csdev,
+>         return 0;
+>  }
+>
+> +static void tpdm_disable_dsb(struct tpdm_drvdata *drvdata)
+> +{
+> +       u32 val;
+> +
+> +       /* Set the enable bit of DSB control register to 0 */
+> +       val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
+> +       val = val & ~BIT(0);
+> +       writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
+> +}
+> +
+>  /** TPDM disable operations **/
+> +static void _tpdm_disable(struct tpdm_drvdata *drvdata)
+> +{
+> +       CS_UNLOCK(drvdata->base);
+> +
+> +       /* Check if DSB datasets is present for TPDM. */
+> +       if (test_bit(TPDM_DS_DSB, drvdata->datasets))
+> +               tpdm_disable_dsb(drvdata);
+> +
+> +       CS_LOCK(drvdata->base);
+> +
+> +}
+> +
+>  static void tpdm_disable(struct coresight_device *csdev,
+>                          struct perf_event *event)
+>  {
+> @@ -51,6 +95,7 @@ static void tpdm_disable(struct coresight_device *csdev,
+>                 return;
+>         }
+>
+> +       _tpdm_disable(drvdata);
+>         drvdata->enable = false;
+>         mutex_unlock(&drvdata->lock);
+>
+> @@ -76,7 +121,19 @@ static const struct coresight_ops tpdm_cs_ops = {
+>
+>  static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+>  {
+> +       int i;
+> +       u32 pidr;
+> +
+>         drvdata->traceid = coresight_get_system_trace_id();
+> +
+> +       CS_UNLOCK(drvdata->base);
+> +       /*  Get the datasets present on the TPDM. */
+> +       pidr = readl_relaxed(drvdata->base + CORESIGHT_PERIPHIDR0);
+> +       for (i = 0; i < TPDM_DATASETS; i++) {
+> +               if (pidr & BIT(i))
+> +                       __set_bit(i, drvdata->datasets);
+> +       }
+> +       CS_LOCK(drvdata->base);
+>  }
+>
+>  static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
+> index 2effbabf349b..cb3ddc6c89ae 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+> @@ -6,6 +6,25 @@
+>  #ifndef _CORESIGHT_CORESIGHT_TPDM_H
+>  #define _CORESIGHT_CORESIGHT_TPDM_H
+>
+> +/* The max number of the datasets that TPDM supports */
+> +#define TPDM_DATASETS       7
+> +
+> +/* DSB Subunit Registers */
+> +#define TPDM_DSB_CR            (0x780)
+> +
+> +/**
+> + * This enum is for PERIPHIDR0 register of TPDM.
+> + * The fields [6:0] of PERIPHIDR0 are used to determine what
+> + * interfaces and subunits are present on a given TPDM.
+> + *
+> + * PERIPHIDR0[0] : Fix to 1 if ImplDef subunit present, else 0
+> + * PERIPHIDR0[1] : Fix to 1 if DSB subunit present, else 0
+> + */
+> +enum tpdm_dataset {
+> +       TPDM_DS_IMPLDEF,
+> +       TPDM_DS_DSB,
+> +};
+> +
+>  /**
+>   * struct tpdm_drvdata - specifics associated to an TPDM component
+>   * @base:       memory mapped base address for this component.
+> @@ -13,6 +32,7 @@
+>   * @csdev:      component vitals needed by the framework.
+>   * @lock:       lock for the enable value.
+>   * @enable:     enable status of the component.
+> + * @datasets:   The datasets types present of the TPDM.
+>   * @traceid:    value of the current ID for this component.
+>   */
+>
+> @@ -22,6 +42,7 @@ struct tpdm_drvdata {
+>         struct coresight_device *csdev;
+>         struct mutex            lock;
+>         bool                    enable;
+> +       DECLARE_BITMAP(datasets, TPDM_DATASETS);
+>         int                     traceid;
+>  };
+>
+> --
+> 2.17.1
+>
+
+
+--
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

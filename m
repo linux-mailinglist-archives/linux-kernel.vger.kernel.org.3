@@ -2,84 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784944BB92A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD864BB92E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbiBRMa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:30:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53868 "EHLO
+        id S235259AbiBRMar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:30:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234972AbiBRMa1 (ORCPT
+        with ESMTP id S235236AbiBRMan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:30:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8473192F;
-        Fri, 18 Feb 2022 04:30:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Feb 2022 07:30:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8CB3616F;
+        Fri, 18 Feb 2022 04:30:25 -0800 (PST)
+Received: from [IPV6:2a01:e0a:120:3210:b17a:7c93:c01d:b57a] (unknown [IPv6:2a01:e0a:120:3210:b17a:7c93:c01d:b57a])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E3C961F7C;
-        Fri, 18 Feb 2022 12:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B9DDDC340ED;
-        Fri, 18 Feb 2022 12:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645187409;
-        bh=7TkBnTKCtjACB5HwO0CqoOG0HQYKb1/UgHZIn0NmGkw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LLvZvuN3NkfX4k5hr5apRNXCzA5jSdi2e2yJC30olk4fdiNRIqhNz08avPMZXHvrf
-         jTOYYAH4W/r+zvxsjURKXLZ4PGYh1o6GY5ymYg8Fx/qk8ngUI9iCdQLwWtRlFxUXsl
-         xecFFaVy2XjVmG9Ws2mqqFYws1FU/KACfVQjJpUHFUz6qL1D1yuDp2AUdyO17JAWXz
-         7lThiCeE187EJmrxmrY9mmCwNEdKXj8mBivjP+CnbEg08M2TJo5l3O8JiFXtjhKMqx
-         c1MbWvpz9CvTZcFGZ5vYDZF5tBrCaZN9um3w4BtsXjloDk4yqvonR0hpaIK9VVuK/x
-         NCY+4TWnoy2SA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98EEFE6BBD2;
-        Fri, 18 Feb 2022 12:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 25B091F4698B;
+        Fri, 18 Feb 2022 12:30:19 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645187424;
+        bh=4LkZirJpZ+weLDWtd7Mc8McPNaGtJ7AsS8viYces0vA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KnqL4Pd+xbs0PgpJmcWZF8v/LCo2RInTJRVKfKFWa3Fj8riuAxYbLhSzNUhw1wYBY
+         +xKcEjvIAoJZTbo8oQUeUR9KcMrBvXSgwp5zWvushzQP+/25JE2LiG1E/+24u09u6J
+         5LnXyk7DI8KO751qBdhMWvgAf+d76nLghjTWZciI/JXetMb1oqGYEhFMRWxuZCk9gU
+         lCMnarfRG4+C8ADT4iKeOiePSpQxUMU0sUr8yBGRVYWaWdDSk8gmTYni5V4x4lITZo
+         C9ibWMEW1V62xntPDNjDHhqcQsclcqN1NmYOsAKkgjRjvkBPoF9/tmb6xlUDTWHqsv
+         bcwnltg3K+zJw==
+Message-ID: <db0963ec-9a25-9e1f-7184-64d36fdadf34@collabora.com>
+Date:   Fri, 18 Feb 2022 13:30:16 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC v2 5/8] media: uapi: Add fields needed for RKVDEC driver
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>, mchehab@kernel.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se, nicolas@ndufresne.ca
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk
+References: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
+ <20220215110103.241297-6-benjamin.gaignard@collabora.com>
+ <b41ea0ec-b5c0-4ea5-9866-35a952c6a8b9@xs4all.nl>
+ <3973e1f8-665a-c2d1-d493-19f66d307b88@collabora.com>
+ <ee02bf52-b738-95f7-a4a8-f7d7f2e029ef@xs4all.nl>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <ee02bf52-b738-95f7-a4a8-f7d7f2e029ef@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: ll_temac: check the return value of devm_kmalloc()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164518740962.31566.15528927954028529401.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Feb 2022 12:30:09 +0000
-References: <tencent_CC2F97870384A231BC4689E51F04C4985905@qq.com>
-In-Reply-To: <tencent_CC2F97870384A231BC4689E51F04C4985905@qq.com>
-To:     Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, michal.simek@xilinx.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Le 18/02/2022 à 13:22, Hans Verkuil a écrit :
+> On 18/02/2022 13:19, Benjamin Gaignard wrote:
+>> Le 18/02/2022 à 12:32, Hans Verkuil a écrit :
+>>> On 15/02/2022 12:01, Benjamin Gaignard wrote:
+>>>> RKVDEC driver requires additional fields to perform HEVC decoding.
+>>>> Even if the driver isn't mainlined yet WIP patches could be find here:
+>>>> https://github.com/LibreELEC/LibreELEC.tv/blob/master/projects/Rockchip/patches/linux/default/linux-2000-v4l2-wip-rkvdec-hevc.patch
+>>>>
+>>>> This patch only include the change in HEVC uAPI.
+>>>>
+>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>> ---
+>>>>    .../userspace-api/media/v4l/ext-ctrls-codec.rst  | 16 ++++++++++++++++
+>>>>    include/uapi/linux/v4l2-controls.h               |  5 +++++
+>>>>    2 files changed, 21 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> index 4f3b3ba8319f..3296ac3b9fca 100644
+>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> @@ -2661,6 +2661,13 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>        :stub-columns: 0
+>>>>        :widths:       1 1 2
+>>>>    +    * - __u8
+>>>> +      - ``video_parameter_set_id``
+>>>> +      - Identifies the VPS for reference by other syntax elements.
+>>>> +    * - __u8
+>>>> +      - ``seq_parameter_set_id``
+>>>> +      - Provides an identifier for the SPS for reference by other syntax
+>>>> +        elements.
+>>>>        * - __u16
+>>>>          - ``pic_width_in_luma_samples``
+>>>>          -
+>>>> @@ -2800,6 +2807,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>        :stub-columns: 0
+>>>>        :widths:       1 1 2
+>>>>    +    * - __u8
+>>>> +      - ``pic_parameter_set_id``
+>>>> +      - Identifies the PPS for reference by other syntax elements.
+>>>>        * - __u8
+>>>>          - ``num_extra_slice_header_bits``
+>>>>          -
+>>>> @@ -3026,6 +3036,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>        * - __u8
+>>>>          - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>>>>          - The list of L1 reference elements as indices in the DPB.
+>>>> +    * - __u16
+>>>> +      - ``short_term_ref_pic_set_size``
+>>>> +      -
+>>>> +    * - __u16
+>>>> +      - ``long_term_ref_pic_set_size``
+>>>> +      -
+>>>>        * - __u8
+>>>>          - ``padding``
+>>>>          - Applications and drivers must set this to zero.
+>>> Just to confirm: these additional fields are all from the H.265 spec, right?
+>>> They are not rkvdec specific.
+>> They are in H.265 spec section "7.4.3.2.2 Sequence parameter set range extension semantics":
+>> - num_short_term_ref_pic_sets specifies the number of st_ref_pic_set( ) syntax structures included in the SPS. The value
+>> of num_short_term_ref_pic_sets shall be in the range of 0 to 64, inclusive.
+>>
+>> - num_long_term_ref_pics_sps specifies the number of candidate long-term reference pictures that are specified in the
+>> SPS. The value of num_long_term_ref_pics_sps shall be in the range of 0 to 32, inclusive.
+> And what about video/seq/pic_parameter_set_id?
 
-On Fri, 18 Feb 2022 10:19:39 +0800 you wrote:
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
-> 
-> devm_kmalloc() returns a pointer to allocated memory on success, NULL
-> on failure. While lp->indirect_lock is allocated by devm_kmalloc()
-> without proper check. It is better to check the value of it to
-> prevent potential wrong memory access.
-> 
-> [...]
+It is the same they come from section "7.4.3.2.1 General sequence parameter set RBSP semantics":
+- sps_video_parameter_set_id specifies the value of the vps_video_parameter_set_id of the active VPS.
+- sps_seq_parameter_set_id provides an identifier for the SPS for reference by other syntax elements.
+   The value of
+  sps_seq_parameter_set_id shall be in the range of 0 to 15, inclusive.
 
-Here is the summary with links:
-  - [v2] net: ll_temac: check the return value of devm_kmalloc()
-    https://git.kernel.org/netdev/net/c/b352c3465bb8
+Regards,
+Benjamin
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>
+> Regards,
+>
+> 	Hans
+>
+>> I mention rkvdec because that it is the only driver to use they (as far I knows)
+>>
+>> Regards,
+>> Benjamin
+>>
+>>> Regards,
+>>>
+>>>      Hans
+>>>
+>>>> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+>>>> index 0e0ec2c61b80..b1a3dc05f02f 100644
+>>>> --- a/include/uapi/linux/v4l2-controls.h
+>>>> +++ b/include/uapi/linux/v4l2-controls.h
+>>>> @@ -2341,6 +2341,8 @@ enum v4l2_stateless_hevc_start_code {
+>>>>      struct v4l2_ctrl_hevc_sps {
+>>>>        /* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
+>>>> +    __u8    video_parameter_set_id;
+>>>> +    __u8    seq_parameter_set_id;
+>>>>        __u16    pic_width_in_luma_samples;
+>>>>        __u16    pic_height_in_luma_samples;
+>>>>        __u8    bit_depth_luma_minus8;
+>>>> @@ -2393,6 +2395,7 @@ struct v4l2_ctrl_hevc_sps {
+>>>>      struct v4l2_ctrl_hevc_pps {
+>>>>        /* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+>>>> +    __u8    pic_parameter_set_id;
+>>>>        __u8    num_extra_slice_header_bits;
+>>>>        __u8    num_ref_idx_l0_default_active_minus1;
+>>>>        __u8    num_ref_idx_l1_default_active_minus1;
+>>>> @@ -2487,6 +2490,8 @@ struct v4l2_ctrl_hevc_slice_params {
+>>>>        __u32    slice_segment_addr;
+>>>>        __u8    ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>>>        __u8    ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>>> +    __u16    short_term_ref_pic_set_size;
+>>>> +    __u16    long_term_ref_pic_set_size;
+>>>>          /* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
+>>>>        struct v4l2_hevc_pred_weight_table pred_weight_table;

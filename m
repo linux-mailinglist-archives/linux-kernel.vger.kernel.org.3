@@ -2,559 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3CA4BBD21
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B954BBD03
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbiBRQOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:14:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33120 "EHLO
+        id S236721AbiBRQIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:08:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbiBRQOr (ORCPT
+        with ESMTP id S232578AbiBRQIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:14:47 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E919D775;
-        Fri, 18 Feb 2022 08:14:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645200869; x=1676736869;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/5lR+P7Kv8815A4k8RgFtG3prJtHS7oEZ0AFM6VPfxk=;
-  b=U6rP8peJrLbPrrcIraNvI9anzCYqNJ+F9owBDiClKOTJ2CGD9SHD/okk
-   AMR3hrQzG3SzxFj025dWtLBnWBCtyYa2njBjJQKo5yLIZ57QFm7RKj+8p
-   7RLAOuy/3Ty+sRss6FbIo1fsy7lQf5rmCHh/WYUSDtbi+t91ZfGKuoD+a
-   4qzt2+UrVsE2M4+48O82/RBoS1nmwSqCySSZ/Rzz3co1gqQ28PyM4lu7k
-   KbG+un1lCz0rsWsjDd3Ui6rUkrrGGEzhUNwkWZq/yOKx1InoZ+V1IVUaP
-   ugXSUsUiREtgGvwS0NVoI1VaxG0HnPrRIhfotAXxSDQ9nFjfW6AoBBZkN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="248752360"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="248752360"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 08:14:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="572354133"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
-  by orsmga001.jf.intel.com with ESMTP; 18 Feb 2022 08:14:26 -0800
-Date:   Sat, 19 Feb 2022 00:05:55 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v4] fpga: microchip-spi: add Microchip FPGA manager
-Message-ID: <20220218160555.GA1333893@yilunxu-OptiPlex-7050>
-References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
- <20220217191851.11730-1-i.bornyakov@metrotek.ru>
+        Fri, 18 Feb 2022 11:08:42 -0500
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9A4CCC4E
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:08:25 -0800 (PST)
+Received: from in02.mta.xmission.com ([166.70.13.52]:45600)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nL5ny-00Ec5Y-Ia; Fri, 18 Feb 2022 09:08:22 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:50354 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nL5np-000aMm-18; Fri, 18 Feb 2022 09:08:22 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Rik van Riel <riel@surriel.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Chris Mason <clm@fb.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20220217153620.4607bc28@imladris.surriel.com>
+Date:   Fri, 18 Feb 2022 10:08:05 -0600
+In-Reply-To: <20220217153620.4607bc28@imladris.surriel.com> (Rik van Riel's
+        message of "Thu, 17 Feb 2022 15:36:20 -0500")
+Message-ID: <87iltcf996.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217191851.11730-1-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nL5np-000aMm-18;;;mid=<87iltcf996.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19gVp8M02CqpqJfjbQxgIt7XAaL04EJRws=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: ; 
+X-Spam-Combo: *;Rik van Riel <riel@surriel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 8812 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 11 (0.1%), b_tie_ro: 10 (0.1%), parse: 0.99
+        (0.0%), extract_message_metadata: 3.0 (0.0%), get_uri_detail_list:
+        0.84 (0.0%), tests_pri_-1000: 3.8 (0.0%), tests_pri_-950: 1.29 (0.0%),
+        tests_pri_-900: 1.05 (0.0%), tests_pri_-90: 61 (0.7%), check_bayes: 60
+        (0.7%), b_tokenize: 6 (0.1%), b_tok_get_all: 4.9 (0.1%), b_comp_prob:
+        1.62 (0.0%), b_tok_touch_all: 45 (0.5%), b_finish: 0.80 (0.0%),
+        tests_pri_0: 8701 (98.7%), check_dkim_signature: 1.04 (0.0%),
+        check_dkim_adsp: 2.8 (0.0%), poll_dns_idle: 0.70 (0.0%), tests_pri_10:
+        4.0 (0.0%), tests_pri_500: 15 (0.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH][RFC] ipc,fs: use rcu_work to free struct ipc_namespace
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 10:18:51PM +0300, Ivan Bornyakov wrote:
-> Add support to the FPGA manager for programming Microchip Polarfire
-> FPGAs over slave SPI interface.
-> 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> ---
-> Changelog:
->   v1 -> v2: fix printk formating
->   v2 -> v3:
->    * replace "microsemi" with "microchip"
->    * replace prefix "microsemi_fpga_" with "mpf_"
->    * more sensible .compatible and .name strings
->    * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
->   v3 -> v4: fix unused variable warning
->     Put 'mpf_of_ids' definition under conditional compilation, so it
->     would not hang unused if CONFIG_OF is not enabled.
-> 
->  drivers/fpga/Kconfig         |   9 +
->  drivers/fpga/Makefile        |   1 +
->  drivers/fpga/microchip-spi.c | 361 +++++++++++++++++++++++++++++++++++
->  3 files changed, 371 insertions(+)
->  create mode 100644 drivers/fpga/microchip-spi.c
-> 
-> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> index 26025dbab353..4240c641b100 100644
-> --- a/drivers/fpga/Kconfig
-> +++ b/drivers/fpga/Kconfig
-> @@ -248,4 +248,13 @@ config FPGA_MGR_VERSAL_FPGA
->  	  configure the programmable logic(PL).
->  
->  	  To compile this as a module, choose M here.
-> +
-> +config FPGA_MGR_MICROCHIP_SPI
-> +	tristate "Microchip Polarfire SPI FPGA manager"
-> +	depends on SPI
-> +	select CRC_CCITT
-> +	help
-> +	  FPGA manager driver support for Microchip Polarfire FPGAs
-> +	  programming over slave SPI interface.
-> +
->  endif # FPGA
-> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> index 4da5273948df..fcb389ca4873 100644
-> --- a/drivers/fpga/Makefile
-> +++ b/drivers/fpga/Makefile
-> @@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
->  obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
->  obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
->  obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)      += versal-fpga.o
-> +obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE)         += altera-pr-ip-core.o
->  obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)    += altera-pr-ip-core-plat.o
-> 
-> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-> new file mode 100644
-> index 000000000000..5db25734a27a
-> --- /dev/null
-> +++ b/drivers/fpga/microchip-spi.c
-> @@ -0,0 +1,361 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Microchip Polarfire FPGA programming over slave SPI interface.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/spi/spi.h>
-> +#include <linux/of_device.h>
-> +#include <linux/fpga/fpga-mgr.h>
-> +#include <linux/delay.h>
-> +#include <linux/crc-ccitt.h>
 
-Please list them in alphabetical order.
+Maybe I am reading the lifetimes wrong but is there
+any chance the code can just do something like the diff below?
 
-> +
-> +#define	SPI_ISC_ENABLE		0x0B
-> +#define	SPI_ISC_DISABLE		0x0C
-> +#define	SPI_READ_STATUS		0x00
-> +#define	SPI_READ_DATA		0x01
-> +#define	SPI_FRAME_INIT		0xAE
-> +#define	SPI_FRAME		0xEE
-> +#define	SPI_PRG_MODE		0x01
-> +#define	SPI_RELEASE		0x23
-> +
-> +#define	SPI_FRAME_SIZE		16
-> +
-> +#define	HEADER_SIZE_OFFSET	24
-> +#define	DATA_SIZE_OFFSET	55
-> +
-> +#define	LOOKUP_TABLE_RECORD_SIZE	9
-> +#define	LOOKUP_TABLE_BLOCK_ID_OFFSET	0
-> +#define	LOOKUP_TABLE_BLOCK_START_OFFSET	1
-> +
-> +#define	COMPONENTS_SIZE_ID	5
-> +#define	BITSTREAM_ID		8
-> +
-> +#define	BITS_PER_COMPONENT_SIZE	22
-> +
-> +#define	STATUS_POLL_TIMEOUT_MS	1000
-> +#define	STATUS_BUSY		BIT(0)
-> +#define	STATUS_READY		BIT(1)
+AKA have a special version of kern_umount that does the call_rcu?
 
-Maybe add some prefix for these vendor specific definitions, like
-MFP_SPI_ISC_ENABLE.
+Looking at rcu_reclaim_tiny I think this use of mnt_rcu is valid.
+AKA reusing the rcu_head in the rcu callback.
 
-> +
-> +struct mpf_priv {
-> +	struct spi_device *spi;
-> +	bool program_mode;
-> +};
-> +
-> +static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
-> +{
-> +	struct mpf_priv *priv = mgr->priv;
-> +	struct spi_device *spi = priv->spi;
-> +	bool program_mode = priv->program_mode;
-> +	ssize_t status;
-> +
-> +	status = spi_w8r8(spi, SPI_READ_STATUS);
-> +
-> +	if (!program_mode && !status)
-> +		return FPGA_MGR_STATE_OPERATING;
-> +
-> +	return FPGA_MGR_STATE_UNKNOWN;
-> +}
-> +
-> +static int poll_status_not_busy(struct spi_device *spi, u8 mask)
-> +{
-> +	ssize_t status, timeout = STATUS_POLL_TIMEOUT_MS;
-> +
-> +	while (timeout--) {
-> +		status = spi_w8r8(spi, SPI_READ_STATUS);
-> +		if (status < 0)
-> +			return status;
-> +
-> +		if (mask) {
-> +			if (!(status & STATUS_BUSY) && (status & mask))
-> +				return status;
-> +		} else {
-> +			if (!(status & STATUS_BUSY))
-> +				return status;
-> +		}
 
-!(status & STATUS_BUSY) is always checked regardless of mask, so may
-move the check out of the if...else statement.
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 40b994a29e90..7d7aaef1592e 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -4395,6 +4395,22 @@ void kern_unmount(struct vfsmount *mnt)
+ }
+ EXPORT_SYMBOL(kern_unmount);
+ 
++static void rcu_mntput(struct rcu_head *head)
++{
++       struct mount *mnt = container_of(head, struct mount, mnt_rcu);
++       mntput(&mnt->mnt);
++}
++
++void kern_rcu_unmount(struct vfsmount *mnt)
++{
++       /* release long term mount so mount point can be released */
++       if (!IS_ERR_OR_NULL(mnt)) {
++               struct mount *m = real_mount(mnt);
++               m->mnt_ns = NULL;
++               call_rcu(&m->mnt_rcu, rcu_mntput);
++       }
++}
++
+ void kern_unmount_array(struct vfsmount *mnt[], unsigned int num)
+ {
+        unsigned int i;
+diff --git a/ipc/mqueue.c b/ipc/mqueue.c
+index 5becca9be867..e54742f82e7d 100644
+--- a/ipc/mqueue.c
++++ b/ipc/mqueue.c
+@@ -1700,7 +1700,7 @@ void mq_clear_sbinfo(struct ipc_namespace *ns)
+ 
+ void mq_put_mnt(struct ipc_namespace *ns)
+ {
+-       kern_unmount(ns->mq_mnt);
++       kern_rcu_unmount(ns->mq_mnt);
+ }
+ 
+ static int __init init_mqueue_fs(void)
 
-> +
-> +		mdelay(1);
-
-busy wait for 1ms is discouraged, maybe usleep_range(). See
-Documentation/timers/timers-howto.rst
-
-> +	}
-
-The actual timeout may be much longer than what is defined. To be more
-accurate, you may use:
-
-	time_after(jiffies, timeout_jiffies)
-
-> +
-> +	return -EBUSY;
-> +}
-> +
-> +static int mpf_spi_write(struct spi_device *spi, const void *buf, size_t buf_size)
-> +{
-> +	int status = poll_status_not_busy(spi, 0);
-> +
-> +	if (status < 0)
-> +		return status;
-> +
-> +	return spi_write(spi, buf, buf_size);
-> +}
-> +
-> +static int mpf_spi_write_then_read(struct spi_device *spi,
-> +				   const void *txbuf, size_t txbuf_size,
-> +				   void *rxbuf, size_t rxbuf_size)
-> +{
-> +	const u8 read_command[] = { SPI_READ_DATA };
-> +	int ret;
-> +
-> +	ret = mpf_spi_write(spi, txbuf, txbuf_size);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = poll_status_not_busy(spi, STATUS_READY);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return spi_write_then_read(spi, read_command, sizeof(read_command),
-> +				   rxbuf, rxbuf_size);
-> +}
-> +
-> +static int mpf_ops_write_init(struct fpga_manager *mgr,
-> +			      struct fpga_image_info *info, const char *buf,
-> +			      size_t count)
-> +{
-> +	const u8 isc_en_command[] = { SPI_ISC_ENABLE };
-> +	const u8 program_mode[] = { SPI_FRAME_INIT, SPI_PRG_MODE };
-
-Better we follow the reverse xmas tree declaration, so reverse the 2
-lines please.
-
-> +	struct mpf_priv *priv = mgr->priv;
-> +	struct spi_device *spi = priv->spi;
-> +	struct device *dev = &mgr->dev;
-> +	u32 isc_ret;
-> +	int ret;
-> +
-> +	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
-> +		dev_err(dev, "Partial reconfiguration is not supported\n");
-> +
-
-remove the blank line please
-
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	ret = mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_command),
-> +				      &isc_ret, sizeof(isc_ret));
-> +	if (ret || isc_ret) {
-> +		dev_err(dev, "Failed to enable ISC: %d\n", ret ? ret : isc_ret);
-
-							   ret ? : isc_ret
-
-> +
-
-remove the blank line please
-
-> +		return -EFAULT;
-> +	}
-> +
-> +	ret = mpf_spi_write(spi, program_mode, sizeof(program_mode));
-> +	if (ret) {
-> +		dev_err(dev, "Failed to enter program mode: %d\n", ret);
-> +
-
-the same
-
-> +		return ret;
-> +	}
-> +
-> +	priv->program_mode = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t lookup_block_start(int id, const char *buf, size_t buf_size)
-> +{
-> +	u8 header_size, blocks_num, block_id;
-> +	u32 block_start, i;
-> +
-> +	header_size = *(buf + HEADER_SIZE_OFFSET);
-> +
-> +	if (header_size > buf_size)
-> +		return -EFAULT;
-> +
-> +	blocks_num = *(buf + header_size - 1);
-> +
-> +	if (header_size + blocks_num * LOOKUP_TABLE_RECORD_SIZE > buf_size)
-> +		return -EFAULT;
-> +
-> +	for (i = 0; i < blocks_num; i++) {
-> +		block_id = *(buf + header_size + LOOKUP_TABLE_RECORD_SIZE * i +
-> +			     LOOKUP_TABLE_BLOCK_ID_OFFSET);
-> +
-> +		if (block_id == id) {
-> +			memcpy(&block_start,
-> +			       buf + header_size +
-> +			       LOOKUP_TABLE_RECORD_SIZE * i +
-> +			       LOOKUP_TABLE_BLOCK_START_OFFSET,
-> +			       sizeof(block_start));
-
-why a memcpy here, could we just read from the offset?
-
-> +
-> +			return le32_to_cpu(block_start);
-> +		}
-> +	}
-> +
-> +	return -EFAULT;
-> +}
-> +
-> +static ssize_t parse_bitstream_size(const char *buf, size_t buf_size)
-> +{
-> +	ssize_t	bitstream_size = 0, components_size_start = 0,
-> +		component_size_byte_num, component_size_byte_off, i;
-> +	u16 components_num;
-> +	u32 component_size;
-> +
-> +	memcpy(&components_num, buf + DATA_SIZE_OFFSET, sizeof(components_num));
-
-the same, why a memcpy?
-
-> +	components_num = le16_to_cpu(components_num);
-> +
-> +	components_size_start = lookup_block_start(COMPONENTS_SIZE_ID, buf,
-> +						   buf_size);
-> +	if (components_size_start < 0)
-> +		return components_size_start;
-> +
-> +	if (components_size_start +
-> +	    DIV_ROUND_UP(components_num * BITS_PER_COMPONENT_SIZE,
-> +			 BITS_PER_BYTE) > buf_size)
-> +		return -EFAULT;
-> +
-> +	for (i = 0; i < components_num; i++) {
-> +		component_size_byte_num =
-> +			(i * BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
-> +		component_size_byte_off =
-> +			(i * BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
-> +
-> +		memcpy(&component_size,
-> +		       buf + components_size_start + component_size_byte_num,
-> +		       sizeof(component_size));
-> +		component_size = le32_to_cpu(component_size);
-> +		component_size >>= component_size_byte_off;
-> +		component_size &= GENMASK(BITS_PER_COMPONENT_SIZE - 1, 0);
-> +
-> +		bitstream_size += component_size;
-> +	}
-> +
-> +	return bitstream_size;
-> +}
-> +
-> +static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
-> +{
-> +	ssize_t bitstream_start = 0, bitstream_size;
-> +	struct mpf_priv *priv = mgr->priv;
-> +	struct spi_device *spi = priv->spi;
-> +	struct device *dev = &mgr->dev;
-> +	u8 tmp_buf[SPI_FRAME_SIZE + 1];
-> +	int ret, i;
-> +
-> +	if (crc_ccitt(0, buf, count)) {
-> +		dev_err(dev, "CRC error\n");
-> +
-> +		return -EINVAL;
-> +	}
-> +
-> +	bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
-> +	if (bitstream_start < 0) {
-> +		dev_err(dev, "Failed to find bitstream start %zd\n",
-> +			bitstream_start);
-> +
-> +		return bitstream_start;
-> +	}
-> +
-> +	bitstream_size = parse_bitstream_size(buf, count);
-> +	if (bitstream_size < 0) {
-> +		dev_err(dev, "Failed to parse bitstream size %zd\n",
-> +			bitstream_size);
-> +
-> +		return bitstream_size;
-> +	}
-> +
-> +	if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
-> +		dev_err(dev,
-> +			"Bitstram outruns firmware. Bitstream start %zd, bitstream size %zd, firmware size %zu\n",
-
-			 Bitstream
-
-> +			bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
-> +
-> +		return -EFAULT;
-> +	}
-> +
-
-If I understand right, this function assumes the users provide the
-entire image buffer. But it is possible the image buffer is from a
-scatter list and the callback would be called several times.
-
-Maybe the bitstream info at the head of the image could be parsed in
-write_init(), and this requires the driver fill the
-fpga_manager_ops.initial_header_size
-
-> +	for (i = 0; i < bitstream_size; i++) {
-> +		tmp_buf[0] = SPI_FRAME;
-> +		memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
-> +		       SPI_FRAME_SIZE);
-> +
-> +		ret = mpf_spi_write(spi, tmp_buf, sizeof(tmp_buf));
-
-Is it possible we use spi_sync_transfer to avoid memcpy the whole
-bitstream?
-
-> +		if (ret) {
-> +			dev_err(dev,
-> +				"Failed to write bitstream frame number %d of %zd\n",
-> +				i, bitstream_size);
-> +
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mpf_ops_write_complete(struct fpga_manager *mgr,
-> +					     struct fpga_image_info *info)
-
-"CHECK: Alignment should match open parenthesis" from checkpatch.pl --strict
-
-> +{
-> +	const u8 isc_dis_command[] = { SPI_ISC_DISABLE };
-> +	const u8 release_command[] = { SPI_RELEASE };
-> +	struct mpf_priv *priv = mgr->priv;
-> +	struct spi_device *spi = priv->spi;
-> +	struct device *dev = &mgr->dev;
-> +	int ret;
-> +
-> +	ret = mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
-> +	if (ret) {
-> +		dev_err(dev, "Failed to disable ISC: %d\n", ret);
-> +
-> +		return ret;
-> +	}
-> +
-> +	mdelay(1);
-
-Same concern
-
-> +
-> +	ret = mpf_spi_write(spi, release_command, sizeof(release_command));
-> +	if (ret) {
-> +		dev_err(dev, "Failed to exit program mode: %d\n", ret);
-> +
-> +		return ret;
-> +	}
-> +
-> +	priv->program_mode = false;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct fpga_manager_ops mpf_ops = {
-> +	.state = mpf_ops_state,
-> +	.write_init = mpf_ops_write_init,
-> +	.write = mpf_ops_write,
-> +	.write_complete = mpf_ops_write_complete,
-> +};
-> +
-> +static int mpf_probe(struct spi_device *spi)
-> +{
-> +	struct mpf_priv *priv;
-> +	struct device *dev = &spi->dev;
-> +	struct fpga_manager *mgr;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->spi = spi;
-> +
-> +	mgr = devm_fpga_mgr_register(dev, "Microchip Polarfire SPI FPGA Manager",
-> +				     &mpf_ops, priv);
-> +
-> +	return PTR_ERR_OR_ZERO(mgr);
-> +}
-> +
-> +static const struct spi_device_id mpf_spi_ids[] = {
-> +	{ .name = "mpf-spi-fpga-mgr", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(spi, mpf_spi_ids);
-> +
-> +#if IS_ENABLED(CONFIG_OF)
-> +static const struct of_device_id mpf_of_ids[] = {
-> +	{ .compatible = "microchip,mpf-spi-fpga-mgr" },
-
-From checkpatch.pl
-
-"WARNING: DT compatible string "microchip,mpf-spi-fpga-mgr" appears un-documented -- check ./Documentation/devicetree/bindings/"
-
-Thanks,
-Yilun
-
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, mpf_of_ids);
-> +#endif /* IS_ENABLED(CONFIG_OF) */
-> +
-> +static struct spi_driver mpf_driver = {
-> +	.probe = mpf_probe,
-> +	.id_table = mpf_spi_ids,
-> +	.driver = {
-> +		.name = "microchip_mpf_spi_fpga_mgr",
-> +		.of_match_table = of_match_ptr(mpf_of_ids),
-> +	},
-> +};
-> +
-> +module_spi_driver(mpf_driver);
-> +
-> +MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.34.1
-> 
+Eric

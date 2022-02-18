@@ -2,137 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEC74BBE3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EC14BBE41
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238315AbiBRRUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:20:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34934 "EHLO
+        id S238353AbiBRRUg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 12:20:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbiBRRUV (ORCPT
+        with ESMTP id S236427AbiBRRUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:20:21 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDED1074CB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:20:04 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso1298486ooc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:20:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9CKMthUXCokgWPQMB0IqyzdQ/Xmbb9rlJivmagQi36I=;
-        b=cydyiGcMci/xbRpUq63u1Hv+UdC/Vor48jhWgM7lnEFrIn3NnvwrUKdNfQL/0Fw3sF
-         BPu6GRfWcYeuJIW0u0sEfSq/qHLjsHrf0Lr1QlWxT9DHzJ4CtDczMy2Ih6PCgNjqFMoe
-         0Jwiw76Ky/0w+VPlCcij25Qcmzrr4WJfMVppv7iJxRlseur+qiVYeMkBO/y1cvuQqCll
-         qntNTuHAjURsYJVdD8NLvjqIb56sxiqWTxTy/6IZzvOt/MtWGDXvw8lTBJ9E4rMIIT+/
-         o7qHHhgWo8AD24vQQnBiC2Ygm1AUVGrIgmhYLjtfUtM431V/1dc62FN14QHkSBMze8GV
-         /99g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9CKMthUXCokgWPQMB0IqyzdQ/Xmbb9rlJivmagQi36I=;
-        b=6LMGWrbl1q3qH/mPzx9VSmFbr/TKH6YEP+uGEKaKosKQ2nU9yh0H/9U4UJ4wpZyGDt
-         8YarktiGMEMhsY5oigB29HTAfWI7lQr0yNE4TdkBuVUZacqV+0c7Yb+v3pzH2CwLZh3E
-         eqGf89uYlunlNFHCl2lBUsSJkgx7RmDjcT6wO2+dmgytQEQ3EpEYAAol4heuZ4p8NhEx
-         bih84XG8IZuxa1MdthXGiA6r90S0BNqvNWIiVqNcHGzR3uv3IbFVzNr2ZctneDwgAzIe
-         UgMf0AumnuJLHl+N0y1k+WjxXKZM5F3RZaAps4zRu/3DwXf5NNUpFrHL4KYxY15smZ8t
-         3RFw==
-X-Gm-Message-State: AOAM533GfrfLNMlgfXY4v/N9wm9W/5EcfncZfuZgUrLXMgdhcEr7JWFO
-        zyiEQV+hRGwXn8XyL6WjdTF5zszgF4hrB0oHnseAyg==
-X-Google-Smtp-Source: ABdhPJy4WTc78tZjJuxIgpcdJcD0ARkv52fe0fcQtgKg4EF2No3CqEz35B6g2+kkVmHNmdLz8XExDdjk1pj92tWB4lE=
-X-Received: by 2002:a05:6870:12d1:b0:ce:c0c9:6e0 with SMTP id
- 17-20020a05687012d100b000cec0c906e0mr4581469oam.306.1645204802484; Fri, 18
- Feb 2022 09:20:02 -0800 (PST)
+        Fri, 18 Feb 2022 12:20:33 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE82B523A;
+        Fri, 18 Feb 2022 09:20:15 -0800 (PST)
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M433w-1nL6vW1Ka0-0000YL; Fri, 18 Feb 2022 18:20:14 +0100
+Received: by mail-wr1-f51.google.com with SMTP id o24so15715965wro.3;
+        Fri, 18 Feb 2022 09:20:14 -0800 (PST)
+X-Gm-Message-State: AOAM530OYnMBKHbPQ5PIPh98PvvQPli1FCBmJWBXGvhJh8lEESIVKzww
+        f3OtYCpkRpXUBJqQzNpHjowtm/A3qhaEHVij2w0=
+X-Google-Smtp-Source: ABdhPJw+uQLrWDPTpaVZ2hg+LNvKUOpuIxEMj1NjckGcj0wwgwCnAHT9Xg0He56mfzVIg4cUyUq5DUDOvJoCst25FuU=
+X-Received: by 2002:adf:cf0c:0:b0:1e6:22fe:4580 with SMTP id
+ o12-20020adfcf0c000000b001e622fe4580mr6693423wrj.12.1645204813909; Fri, 18
+ Feb 2022 09:20:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 18 Feb 2022 09:19:51 -0800
-Message-ID: <CAKwvOd=4uwMVBwYU8XPP+cHkw5V1S_t7i8psMTRySsKEcDVZ_A@mail.gmail.com>
-Subject: Re: [PATCH] slab: remove __alloc_size attribute from __kmalloc_track_caller
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        llvm@lists.linux.dev
+References: <20220113170755.11856-1-pali@kernel.org> <CAK8P3a2D8Yv+KpM4NJyP9mosieqbhHh08=mdEy+OA84Vx6FVCQ@mail.gmail.com>
+ <20220218165530.j62nafuofe342sfi@pali>
+In-Reply-To: <20220218165530.j62nafuofe342sfi@pali>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 18 Feb 2022 18:19:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1CHRztMCOFN6iomVf2J7_9qRi4GdZBQfDyhjqDb1Z0Vw@mail.gmail.com>
+Message-ID: <CAK8P3a1CHRztMCOFN6iomVf2J7_9qRi4GdZBQfDyhjqDb1Z0Vw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Increase PCIe IO size
+ from 64 KiB to 1 MiB
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:sAedr4StlE0AfwTwvazt/sikNnozQKkTmku1eP7cz5Bfac//0Fo
+ K7Jz/P3gEMu0ocfrTr2srvZFAiAmUNOWP8D2LGC6fS0aELv/M0fKqEd+bIcM1wNaTmqyhEy
+ 1+Qd+ZcC5M2wxsd6dcMWB9I3Vdr78BCdaI6MrHwife9OWnGMpItvhXzN6/e8IG4r8twU/5o
+ G/Vzk5VQd2iTv+HCYJgaw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bAYExVEZUsI=:sm2JTVg0I7xsOYmC/Klq1b
+ QVRElotdl8y0+Gz3ocWShaGaDBJl4PDpB/Dc8GyfVzmnDI6c4GKoUTldiD2osEKif67zK6GDo
+ +8XG6QKUGejPYHekM4bQk7zmjN210jCdh83ZtBd47pgvKb2H/2MqtZXoaiz5W8R8pxfN7S/PL
+ Yz8cmODWnp9c5OXIRcyXjy7sedXbaN/YcHhvGrfzGsrfTLEMqB9wDZ3Oeb24W9l0VliqKZwVd
+ 8a0x8GATkvmWnMrGsoMYK+mSjj0KR7cqQQhAl0zjCGFGHOgfRtTDG2YbvDutDAJBHyvx2KQgW
+ zOqUXDMG8HT5CfhFtWGJA5H4/AI2L8WBkusVev51GhwbVe5anRPxQUku2BXIgHoWtnCyK2bZu
+ dO3O8nbskjo9GYQs4VQfOMhu6+a2iXys/614lcN4eL2uIMA5k+JHBPbRiC6JI53ccOixx5NoG
+ qj+q7uHk8COqTEhZQQ84xslOWpCZsDKvFv7hBNfKBMAgXhnY7QROn2uNw6CEupQK8yBSdsRm7
+ Pozv9PTLYC8schHEo3UyKviXej1CKey9bHBAAO3lWXV3EjaaCXGcmTOgX6kceWxO2USGYTOZ3
+ y2fpUaYrCB1KHMWpzlVDW+MHhlSUowhBJQRHtuzHB+yLfp3kyzx7onR3kNUDU+P9UL3htAque
+ 3WJHU7OqHz4dESkzAqh+98kQrrpnzg/eCNUZyfUMUjQAJu0esAKajSHL/Iap0WASdxD5/TcFx
+ 9llyar/WKPS9Sy3eMdQq6bbFrVtnAsU1bDNhC7K0QZbrUd5warO6Ov9sYAgl7YCywHGL4TN4b
+ 8uZMBXT8mwb1TQfnmjrw5pKbCBTXDjrf8ndVgnoXhTL0+/hB/Q=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 5:14 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Fri, Feb 18, 2022 at 5:55 PM Pali Rohár <pali@kernel.org> wrote:
+> On Friday 18 February 2022 17:43:04 Arnd Bergmann wrote:
+> > On Thu, Jan 13, 2022 at 6:07 PM Pali Rohár <pali@kernel.org> wrote:
+> > >
+> > > Commit 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM
+> > > space") increased size of PCIe MEM to 127 MiB, which is the maximal
+> > > possible size for allocated 128 MiB PCIe window. PCIe IO size in that
+> > > commit was unchanged.
+> > >
+> > > Armada 3720 PCIe controller supports 32-bit IO space mapping so it is
+> > > possible to assign more than 64 KiB if address space for IO.
+> > >
+> > > Currently controller has assigned 127 MiB + 64 KiB memory and therefore
+> > > there is 960 KiB of unused memory. So assign it to IO space by increasing
+> > > IO window from 64 KiB to 1 MiB.
+> > >
+> > > DTS file armada-3720-turris-mox.dts already uses whole 128 MiB space, so
+> > > only update comment about 32-bit IO space mapping.
+> > >
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > Fixes: 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM space")
+> >
+> > I just saw this is the fixes pull request, and it seems very odd. Does this
+> > fix an actual bug?
 >
-> Commit c37495d6254c ("slab: add __alloc_size attributes for better
-> bounds checking") added __alloc_size attributes to a bunch of kmalloc
-> function prototypes.  Unfortunately the change to __kmalloc_track_caller
-> seems to cause clang to generate broken code and the first time this is
-> called when booting, the box will crash.
->
-> While the compiler problems are being reworked and attempted to be
-> solved, let's just drop the attribute to solve the issue now.  Once it
-> is resolved it can be added back.
+> Do you mean this patch or commit 514ef1e62d65?
 
-Sorry about the mess; we'll get it cleaned up!
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1599
+This one. 514ef1e62d65 looks fine.
 
+> > Note that Linux normally doesn't map more than 64KB
+> > of I/O space per PCI domain, so it should not make a difference to us.
 >
-> Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
-> Cc: stable <stable@vger.kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Daniel Micay <danielmicay@gmail.com>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Pekka Enberg <penberg@kernel.org>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  include/linux/slab.h | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 37bde99b74af..5b6193fd8bd9 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -660,8 +660,7 @@ static inline __alloc_size(1, 2) void *kcalloc(size_t n, size_t size, gfp_t flag
->   * allocator where we care about the real place the memory allocation
->   * request comes from.
->   */
-> -extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
-> -                                  __alloc_size(1);
-> +extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
->  #define kmalloc_track_caller(size, flags) \
->         __kmalloc_track_caller(size, flags, _RET_IP_)
->
-> --
-> 2.35.1
->
+> Last time I looked into ARM code, it can allocate more than 64 kB for IO.
 
 
--- 
-Thanks,
-~Nick Desaulniers
+
+> > Also, note that having a high bus address for the I/O space (0xefff0000,
+> > as as the CPU physical address here) means that a lot of the older
+> > devices that actually require I/O space won't work, because they need a
+> > low bus address in the first few KB.
+> >
+> > Is this mapping a requirement from a broken bootloader, or can you change
+> > the mapping of the I/O port window in the physical space to the usual
+> > bus address 0?
+>
+> At physical address 0x0 it is not possible as at this address is mapped
+> DDR.
+
+I meant bus address 0, not CPU physical address 0 of course. We don't
+care where in physical space the I/O window is.
+
+> ARM Trusted-Firmware sets PCIe space to range [0xe8000000-0xf0000000].
+> This (default) configuration is specified in DTS file. Which parts of
+> this range is used for IO and which MEM is up to the a3720 PCIe kernel
+> driver and currently it configures it based on how sub-ranges are
+> specified in DT.
+>
+> In some cases (e.g. when board has 4 GB of RAM), TF-A relocates this
+> PCIe range to different location (otherwise it cannot activate more than
+> 2 GB of RAM) and U-Boot during loading of kernel DTB file, is patching
+> it.
+>
+> It could be possible to change TF-A code to move PCIe space to different
+> location (from [0xe8000000-0xf0000000]) but not to 0x0. But changing it
+> means to move other parts and invent mapping in which most of RAM can be
+> mapped to...
+
+Can't you change the mapping to have a bus address that is different
+the physical address?
+
+       Arnd

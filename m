@@ -2,162 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3915C4BB5AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A484BB604
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbiBRJcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:32:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43624 "EHLO
+        id S233816AbiBRJ5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:57:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbiBRJcp (ORCPT
+        with ESMTP id S229993AbiBRJ5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:32:45 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F00A10FFA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 01:32:26 -0800 (PST)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220218093224epoutp048e59b587a8eb11be24b6fff66e114fe2~U14hHu-ho0057600576epoutp04y
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:32:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220218093224epoutp048e59b587a8eb11be24b6fff66e114fe2~U14hHu-ho0057600576epoutp04y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1645176744;
-        bh=ZbMqDPz1/aU815nnZ0+dvC+64Od9cHIaosbZ+gukjNg=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=ufN5MbqAbZZAenR1zVZyugizY/WSTMNC6QMwHFHBVnFvwwEo8HHRqGEV8UGCuHcob
-         KPg5w00SVfHt9WXhj9S+AC6pGxc8NfHAvSzk7ih97rjV4lyvGEgWN9R85sM7qMFA2L
-         clHPsvTzLkDiXKHQgnfsMOsgybgG/4kotf/Lguew=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220218093223epcas1p4d6902da1601e1950ce086c9561c25aea~U14goH_9p1100611006epcas1p4p;
-        Fri, 18 Feb 2022 09:32:23 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.38.233]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4K0RLC42t7z4x9QJ; Fri, 18 Feb
-        2022 09:32:19 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9C.3F.21932.3A76F026; Fri, 18 Feb 2022 18:32:19 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220218093218epcas1p385c5cca2010183e90ac7ac1b4063af25~U14b6Pt_72486024860epcas1p3j;
-        Fri, 18 Feb 2022 09:32:18 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220218093218epsmtrp2d30138d4b8aae59d2103d3f9ef8448bb~U14b4tVkO0963709637epsmtrp2r;
-        Fri, 18 Feb 2022 09:32:18 +0000 (GMT)
-X-AuditID: b6c32a38-93fff700000255ac-88-620f67a3e6c5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        36.82.29871.2A76F026; Fri, 18 Feb 2022 18:32:18 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220218093218epsmtip1476a8068f389cb2e242f97f10dcdec00~U14brLOBq2637126371epsmtip1u;
-        Fri, 18 Feb 2022 09:32:18 +0000 (GMT)
-Subject: Re: [PATCH v3 2/2] extcon: add optional input-debounce attribute
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Raveendra Padasalagi <raveendra.padasalagi@broadcom.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <ef8bf06d-5762-8149-802a-de5cbdc11cc9@samsung.com>
-Date:   Fri, 18 Feb 2022 18:56:47 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        Fri, 18 Feb 2022 04:57:52 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FBF2ABD0B;
+        Fri, 18 Feb 2022 01:57:35 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 31DFF1F383;
+        Fri, 18 Feb 2022 09:57:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645178254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=meHXPrizPyCIEzFx7pcREbA6tkmm7SE3B2g/xsTKkOA=;
+        b=bfr91BoF3RgLC/XuIYXAKcQZvo/5W4/c9b+O/QthcAZIti5QY4vMFWoI6q/NvPJrrW5P68
+        aa5N1ZGskApJH6hGZiKneH1RJhoF7pGy7ABe95hi65yPZjfZgGwcaT7cgcSEcGUt2pnvSk
+        JPtX4uhfTRywZT/dJBZqzrZBqHrwcYM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645178254;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=meHXPrizPyCIEzFx7pcREbA6tkmm7SE3B2g/xsTKkOA=;
+        b=2okevh2hNmK62/Hpzu0J2NWSA1jn6WRze/gKWdqn7IsOYoMXH+CAb/3zTlMW6MotAX6gzL
+        bye2d8F61V9rS3Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BEB7B13C53;
+        Fri, 18 Feb 2022 09:57:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9V+DLY1tD2LAeAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 18 Feb 2022 09:57:33 +0000
+Message-ID: <4c6e1d15-3bb3-5a69-972f-592cc33ac0cd@suse.de>
+Date:   Fri, 18 Feb 2022 10:57:33 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220204135937.GA1166088@francesco-nb.int.toradex.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmvu7idP4kg0lTZSzW9h5lsZh/5Byr
-        xd2lPxktLu+aw2ax9PpFJovbjSvYLL61P2K1aN17hN2Bw2PNvDWMHrPun2Xz2LSqk82jb8sq
-        Ro9Nrzw8Pm+SC2CLyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy
-        8QnQdcvMAbpHSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgWqBXnJhbXJqXrpeX
-        WmJlaGBgZApUmJCdsfrDa7aCFxwV9z/tYm9gbGPvYuTgkBAwkXgxV6GLkYtDSGAHo8Sho2tY
-        IJxPjBLr/z1jh3C+MUq8u/eBqYuRE6zj8KNDrBCJvYwSh2f+gqp6zyjRfvEiG0iVsICnxJMX
-        +8E6RAQKJV72TQWzmQVuMko8uKwOYrMJaEnsf3EDrJ5fQFHi6o/HjCA2r4CdxPwlH1lAbBYB
-        VYkpB16ygtiiAmESJ7e1QNUISpyc+QSshlPAReL9uuUsEPPFJW49mQ+1S16ieetsZpDjJARW
-        ckjM3j2RHeIFF4muO0+hbGGJV8e3QNlSEp/f7WWDaGhmlGh4cZsRwulhlDj6rI8FospYYv/S
-        yUyg4GMW0JRYv0sfIqwosfP3XEaIzXwS7772sEJCmFeio00IokRZ4vKDu9BglJRY3N7JNoFR
-        aRaSf2Yh+WEWkh9mISxbwMiyilEstaA4Nz212LDABB7dyfm5mxjBiVXLYgfj3Lcf9A4xMnEw
-        HmKU4GBWEuH9cJA3SYg3JbGyKrUoP76oNCe1+BCjKTCEJzJLiSbnA1N7Xkm8oYmlgYmZkbGJ
-        haGZoZI4b+/U04lCAumJJanZqakFqUUwfUwcnFINTO4VU1KElx611CpwvCUVu2S6jsLulxum
-        zy/XCFuj8Jz7yhE/pwwzox0XQlYWL9mTkLikesGhXZMublpuY9ts2HNgifDzxKkbFh5neLV3
-        +wb9OI57vSU8+heEHT3kRJ5HqAve9jDsmmcz45ZZ+P69zzcvWSmQwf877ui2yT2q71RvnJ1e
-        VDj9sOsf/pmLGtI2cdZx/MydcuFtRbHlP/kL+TN6Uudvmi66LzjgLIvIxwxbhm8Lmi9/fqV0
-        tc5nYZbYkub0bqZ9HAvcZ1kWsXzv1Ipc0j7hzb24hUmygpIsq2Wnz5CNfFl6qq5fb+6M2MKd
-        Gw+2f7hwq/eHzdm7C16Vblf9OP3E7zwZXgsz5uzkX3ZKLMUZiYZazEXFiQDKRVxsNQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42LZdlhJTndROn+Swc4GWYu1vUdZLOYfOcdq
-        cXfpT0aLy7vmsFksvX6RyeJ24wo2i2/tj1gtWvceYXfg8Fgzbw2jx6z7Z9k8Nq3qZPPo27KK
-        0WPTKw+Pz5vkAtiiuGxSUnMyy1KL9O0SuDJWf3jNVvCCo+L+p13sDYxt7F2MnBwSAiYShx8d
-        Yu1i5OIQEtjNKDHh+G2ohKTEtItHmbsYOYBsYYnDh4shat4ySkw8ugKsRljAU+LJi/1MIDUi
-        AoUSLzeGgtQwC9xklFi27xYbRMMRJonWuwcYQRrYBLQk9r+4wQZi8wsoSlz98RgszitgJzF/
-        yUcWEJtFQFViyoGXrCC2qECYxM4lj5kgagQlTs58AlbDKeAi8X7dcjCbWUBd4s+8S8wQtrjE
-        rSfzmSBseYnmrbOZJzAKz0LSPgtJyywkLbOQtCxgZFnFKJlaUJybnltsWGCYl1quV5yYW1ya
-        l66XnJ+7iREcYVqaOxi3r/qgd4iRiYPxEKMEB7OSCO+Hg7xJQrwpiZVVqUX58UWlOanFhxil
-        OViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTAda5GVuym02uz+6cMH9oj4mn4281dUzUt9
-        cFWUWfDAZOWzzCb3+eb6SJ25sPrupiuCW9cEJWd0bPDMUA2++8yOWdL6dF3xWobMI7p7Wxfc
-        n3nQekHs0aVt9rNidlnybnr9tDUnWzco/kXFowaxOZZ1WSs/2fxqZd8V3L/W1mVVFqdM9kT9
-        T/5u4le0N1ioy1e+nKRxSn/tEV6nt13tyyuLn8nVmF+M/L7gdv/lxC8r4s1OqW1getVb6vF5
-        huKb0Bv24gekdLdd733veK1Dgv3opf2zQtfuTZ38PPvAfqOHesd5Tdkjs/u/NB/nZld1YH7J
-        /t81xkYn+MZWGaF1k1s/hTxjPci38OkJw/8aVwWUWIozEg21mIuKEwFdaRAMHwMAAA==
-X-CMS-MailID: 20220218093218epcas1p385c5cca2010183e90ac7ac1b4063af25
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20171019095315epcas1p1da40aef7397c561c5fe970309a97b762
-References: <1508406773-887-1-git-send-email-raveendra.padasalagi@broadcom.com>
-        <CGME20171019095315epcas1p1da40aef7397c561c5fe970309a97b762@epcas1p1.samsung.com>
-        <1508406773-887-2-git-send-email-raveendra.padasalagi@broadcom.com>
-        <59E87BDB.2090104@samsung.com>
-        <20220204135937.GA1166088@francesco-nb.int.toradex.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Michal Suchanek <msuchanek@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Sam Ravnborg <sam@ravnborg.org>,
+        Helge Deller <deller@gmx.de>, x86@kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Martin Mares <mj@ucw.cz>,
+        linux-video@atrey.karlin.mff.cuni.cz,
+        Daniel Mack <daniel@zonque.org>
+References: <20220218093334.24830-1-msuchanek@suse.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220218093334.24830-1-msuchanek@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------JYUW0XBHt0CzH6KJ0KeaIqyV"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Francesco,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------JYUW0XBHt0CzH6KJ0KeaIqyV
+Content-Type: multipart/mixed; boundary="------------6m9UmIRdykpjFkIQiBQka1kg";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Michal Suchanek <msuchanek@suse.de>, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org
+Cc: David Airlie <airlied@linux.ie>, Dave Hansen
+ <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Sam Ravnborg <sam@ravnborg.org>, Helge Deller <deller@gmx.de>,
+ x86@kernel.org, Javier Martinez Canillas <javierm@redhat.com>,
+ Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+ Borislav Petkov <bp@alien8.de>, Maxime Ripard <maxime@cerno.tech>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, Martin Mares <mj@ucw.cz>,
+ linux-video@atrey.karlin.mff.cuni.cz, Daniel Mack <daniel@zonque.org>
+Message-ID: <4c6e1d15-3bb3-5a69-972f-592cc33ac0cd@suse.de>
+Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
+References: <20220218093334.24830-1-msuchanek@suse.de>
+In-Reply-To: <20220218093334.24830-1-msuchanek@suse.de>
 
-On 2/4/22 10:59 PM, Francesco Dolcini wrote:
-> Hello Raveendra, Chanwoo et all
-> 
-> On Thu, Oct 19, 2017 at 07:18:03PM +0900, Chanwoo Choi wrote:
->> On 2017년 10월 19일 18:52, Raveendra Padasalagi wrote:
->>> Add changes to capture optional dt attribute "input-debounce"
->>> provided in extcon node and used the same value if provided otherwise
->>> default value of 20000 usecs is used for id and vbus gpios debounce time.
->> Looks good to me.
->> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
->>
->> After completing the review of patch1 from DT maintainer,
->> I'll merge these patch sets.
-> 
-> I noticed that this series [1] was never merged in the end, anything I
-> can do to help?
-> It is solving a real issue and I would be glad to understand what's the
-> reason this was not merged in 2017 to get it done now.
-> 
-> Francesco
-> 
-> [1] https://lore.kernel.org/all/1508406773-887-1-git-send-email-raveendra.padasalagi@broadcom.com/
-> 
-> 
+--------------6m9UmIRdykpjFkIQiBQka1kg
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Need to receive the review from dt maintainer.
-If possible, resend this patchset.
+SGkgTWljaGFsDQoNCkFtIDE4LjAyLjIyIHVtIDEwOjMzIHNjaHJpZWIgTWljaGFsIFN1Y2hh
+bmVrOg0KPiBTaW5jZSBzd2l0Y2ggdG8gc2ltcGxlZHJtIFZFU0EgZ3JhcGhpYyBtb2RlcyBh
+cmUgbm8gbG9uZ2VyIGF2YWlsYWJsZQ0KPiB3aXRoIGxlZ2FjeSBCSU9TLg0KPiANCj4gVGhl
+IHg4NiByZWFsbW9kZSBib290IGNvZGUgZW5hYmxlcyB0aGUgVkVTQSBncmFwaGljIG1vZGVz
+IHdoZW4gb3B0aW9uDQo+IEZCX0JPT1RfVkVTQV9TVVBQT1JUIGlzIGVuYWJsZWQuDQo+IA0K
+PiBUbyBlbmFibGUgdXNlIG9mIFZFU0EgbW9kZXMgd2l0aCBzaW1wbGVkcm0gaW4gbGVnYWN5
+IEJJT1MgYm9vdCBtb2RlIGRyb3ANCj4gZGVwZW5kZW5jeSBvZiBCT09UX1ZFU0FfU1VQUE9S
+VCBvbiBGQiwgYWxzbyBkcm9wIHRoZSBGQl8gcHJlZml4LCBhbmQNCj4gc2VsZWN0IHRoZSBv
+cHRpb24gd2hlbiBzaW1wbGVkcm0gaXMgYnVpbHQtaW4gb24geDg2Lg0KDQpUaGFua3MgZm9y
+IHNlbmRpbmcgdGhlIHBhdGNoLg0KDQpJIHRlc3RlZCBzaW1wbGVkcm0gb24gYSBWRVNBLWJh
+c2VkIHN5c3RlbXMgYW5kIGl0IHdvcmsuIERvIHlvdSBoYXZlIGEgDQpjb25jcmV0ZSBleGFt
+cGxlIG9mIGEgbW9kZSB0aGF0IGRvZXNuJ3Qgd29yayBhbnkgbG9uZ2VyPw0KDQo+IA0KPiBG
+aXhlczogMTFlOGY1ZmQyMjNiICgiZHJtOiBBZGQgc2ltcGxlZHJtIGRyaXZlciIpDQo+IFNp
+Z25lZC1vZmYtYnk6IE1pY2hhbCBTdWNoYW5layA8bXN1Y2hhbmVrQHN1c2UuZGU+DQo+IC0t
+LQ0KPiAgIGFyY2gveDg2L2Jvb3QvdmlkZW8tdmVzYS5jICAgfCA0ICsrLS0NCj4gICBkcml2
+ZXJzL2dwdS9kcm0vdGlueS9LY29uZmlnIHwgMSArDQo+ICAgZHJpdmVycy92aWRlby9mYmRl
+di9LY29uZmlnICB8IDkgKysrKy0tLS0tDQo+ICAgMyBmaWxlcyBjaGFuZ2VkLCA3IGluc2Vy
+dGlvbnMoKyksIDcgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYv
+Ym9vdC92aWRlby12ZXNhLmMgYi9hcmNoL3g4Ni9ib290L3ZpZGVvLXZlc2EuYw0KPiBpbmRl
+eCA3ZTE4NTk3N2E5ODQuLmMyYzZkMzVlM2E0MyAxMDA2NDQNCj4gLS0tIGEvYXJjaC94ODYv
+Ym9vdC92aWRlby12ZXNhLmMNCj4gKysrIGIvYXJjaC94ODYvYm9vdC92aWRlby12ZXNhLmMN
+Cj4gQEAgLTgzLDcgKzgzLDcgQEAgc3RhdGljIGludCB2ZXNhX3Byb2JlKHZvaWQpDQo+ICAg
+CQkJICAgKHZtaW5mby5tZW1vcnlfbGF5b3V0ID09IDQgfHwNCj4gICAJCQkgICAgdm1pbmZv
+Lm1lbW9yeV9sYXlvdXQgPT0gNikgJiYNCj4gICAJCQkgICB2bWluZm8ubWVtb3J5X3BsYW5l
+cyA9PSAxKSB7DQo+IC0jaWZkZWYgQ09ORklHX0ZCX0JPT1RfVkVTQV9TVVBQT1JUDQo+ICsj
+aWZkZWYgQ09ORklHX0JPT1RfVkVTQV9TVVBQT1JUDQo+ICAgCQkJLyogR3JhcGhpY3MgbW9k
+ZSwgY29sb3IsIGxpbmVhciBmcmFtZSBidWZmZXINCj4gICAJCQkgICBzdXBwb3J0ZWQuICBP
+bmx5IHJlZ2lzdGVyIHRoZSBtb2RlIGlmDQo+ICAgCQkJICAgaWYgZnJhbWVidWZmZXIgaXMg
+Y29uZmlndXJlZCwgaG93ZXZlciwNCj4gQEAgLTEyMSw3ICsxMjEsNyBAQCBzdGF0aWMgaW50
+IHZlc2Ffc2V0X21vZGUoc3RydWN0IG1vZGVfaW5mbyAqbW9kZSkNCj4gICAJaWYgKCh2bWlu
+Zm8ubW9kZV9hdHRyICYgMHgxNSkgPT0gMHgwNSkgew0KPiAgIAkJLyogSXQncyBhIHN1cHBv
+cnRlZCB0ZXh0IG1vZGUgKi8NCj4gICAJCWlzX2dyYXBoaWMgPSAwOw0KPiAtI2lmZGVmIENP
+TkZJR19GQl9CT09UX1ZFU0FfU1VQUE9SVA0KPiArI2lmZGVmIENPTkZJR19CT09UX1ZFU0Ff
+U1VQUE9SVA0KPiAgIAl9IGVsc2UgaWYgKCh2bWluZm8ubW9kZV9hdHRyICYgMHg5OSkgPT0g
+MHg5OSkgew0KPiAgIAkJLyogSXQncyBhIGdyYXBoaWNzIG1vZGUgd2l0aCBsaW5lYXIgZnJh
+bWUgYnVmZmVyICovDQo+ICAgCQlpc19ncmFwaGljID0gMTsNCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvZ3B1L2RybS90aW55L0tjb25maWcgYi9kcml2ZXJzL2dwdS9kcm0vdGlueS9LY29u
+ZmlnDQo+IGluZGV4IDcxMmUwMDA0ZTk2ZS4uMWJjMzBjNjRlZDE1IDEwMDY0NA0KPiAtLS0g
+YS9kcml2ZXJzL2dwdS9kcm0vdGlueS9LY29uZmlnDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2Ry
+bS90aW55L0tjb25maWcNCj4gQEAgLTU0LDYgKzU0LDcgQEAgY29uZmlnIERSTV9HTTEyVTMy
+MA0KPiAgIGNvbmZpZyBEUk1fU0lNUExFRFJNDQo+ICAgCXRyaXN0YXRlICJTaW1wbGUgZnJh
+bWVidWZmZXIgZHJpdmVyIg0KPiAgIAlkZXBlbmRzIG9uIERSTSAmJiBNTVUNCj4gKwlzZWxl
+Y3QgQk9PVF9WRVNBX1NVUFBPUlQgaWYgWDg2ICYmIERSTV9TSU1QTEVEUk0gPSB5DQoNCldl
+IHNob3VsZG4ndCBzZWxlY3QgdGhpcyBvcHRpb24gaW4gZHJpdmVycyBJTUhPLiBTaW1wbGUt
+ZnJhbWVidWZmZXIgDQpkZXZpY2VzIHdpdGggVkVTQSBhcmUgZW5hYmxlZCB3aXRoIFsxXSBh
+bmQgdGhhdCBzaG91bGQgYWxzbyBzZWxlY3QgdGhlIA0KQk9PVF9WRVNBX1NVUFBPUlQuDQoN
+CkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNClsxXSANCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4u
+Y29tL2xpbnV4L3Y1LjE2LjEwL3NvdXJjZS9kcml2ZXJzL2Zpcm13YXJlL0tjb25maWcjTDIy
+NA0KDQo+ICAgCXNlbGVjdCBEUk1fR0VNX1NITUVNX0hFTFBFUg0KPiAgIAlzZWxlY3QgRFJN
+X0tNU19IRUxQRVINCj4gICAJaGVscA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92aWRlby9m
+YmRldi9LY29uZmlnIGIvZHJpdmVycy92aWRlby9mYmRldi9LY29uZmlnDQo+IGluZGV4IDZl
+ZDVlNjA4ZGQwNC4uNGYzYmU5YjdhNTIwIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3ZpZGVv
+L2ZiZGV2L0tjb25maWcNCj4gKysrIGIvZHJpdmVycy92aWRlby9mYmRldi9LY29uZmlnDQo+
+IEBAIC02Niw5ICs2Niw4IEBAIGNvbmZpZyBGQl9EREMNCj4gICAJc2VsZWN0IEkyQ19BTEdP
+QklUDQo+ICAgCXNlbGVjdCBJMkMNCj4gICANCj4gLWNvbmZpZyBGQl9CT09UX1ZFU0FfU1VQ
+UE9SVA0KPiArY29uZmlnIEJPT1RfVkVTQV9TVVBQT1JUDQo+ICAgCWJvb2wNCj4gLQlkZXBl
+bmRzIG9uIEZCDQo+ICAgCWhlbHANCj4gICAJICBJZiB0cnVlLCBhdCBsZWFzdCBvbmUgc2Vs
+ZWN0ZWQgZnJhbWVidWZmZXIgZHJpdmVyIGNhbiB0YWtlIGFkdmFudGFnZQ0KPiAgIAkgIG9m
+IFZFU0EgdmlkZW8gbW9kZXMgc2V0IGF0IGFuIGVhcmx5IGJvb3Qgc3RhZ2UgdmlhIHRoZSB2
+Z2E9IHBhcmFtZXRlci4NCj4gQEAgLTYyNyw3ICs2MjYsNyBAQCBjb25maWcgRkJfVkVTQQ0K
+PiAgIAlzZWxlY3QgRkJfQ0ZCX0ZJTExSRUNUDQo+ICAgCXNlbGVjdCBGQl9DRkJfQ09QWUFS
+RUENCj4gICAJc2VsZWN0IEZCX0NGQl9JTUFHRUJMSVQNCj4gLQlzZWxlY3QgRkJfQk9PVF9W
+RVNBX1NVUFBPUlQNCj4gKwlzZWxlY3QgQk9PVF9WRVNBX1NVUFBPUlQNCj4gICAJaGVscA0K
+PiAgIAkgIFRoaXMgaXMgdGhlIGZyYW1lIGJ1ZmZlciBkZXZpY2UgZHJpdmVyIGZvciBnZW5l
+cmljIFZFU0EgMi4wDQo+ICAgCSAgY29tcGxpYW50IGdyYXBoaWMgY2FyZHMuIFRoZSBvbGRl
+ciBWRVNBIDEuMiBjYXJkcyBhcmUgbm90IHN1cHBvcnRlZC4NCj4gQEAgLTEwNTEsNyArMTA1
+MCw3IEBAIGNvbmZpZyBGQl9JTlRFTA0KPiAgIAlzZWxlY3QgRkJfQ0ZCX0ZJTExSRUNUDQo+
+ICAgCXNlbGVjdCBGQl9DRkJfQ09QWUFSRUENCj4gICAJc2VsZWN0IEZCX0NGQl9JTUFHRUJM
+SVQNCj4gLQlzZWxlY3QgRkJfQk9PVF9WRVNBX1NVUFBPUlQgaWYgRkJfSU5URUwgPSB5DQo+
+ICsJc2VsZWN0IEJPT1RfVkVTQV9TVVBQT1JUIGlmIEZCX0lOVEVMID0geQ0KPiAgIAlkZXBl
+bmRzIG9uICFEUk1fSTkxNQ0KPiAgIAloZWxwDQo+ICAgCSAgVGhpcyBkcml2ZXIgc3VwcG9y
+dHMgdGhlIG9uLWJvYXJkIGdyYXBoaWNzIGJ1aWx0IGluIHRvIHRoZSBJbnRlbA0KPiBAQCAt
+MTM3OCw3ICsxMzc3LDcgQEAgY29uZmlnIEZCX1NJUw0KPiAgIAlzZWxlY3QgRkJfQ0ZCX0ZJ
+TExSRUNUDQo+ICAgCXNlbGVjdCBGQl9DRkJfQ09QWUFSRUENCj4gICAJc2VsZWN0IEZCX0NG
+Ql9JTUFHRUJMSVQNCj4gLQlzZWxlY3QgRkJfQk9PVF9WRVNBX1NVUFBPUlQgaWYgRkJfU0lT
+ID0geQ0KPiArCXNlbGVjdCBCT09UX1ZFU0FfU1VQUE9SVCBpZiBGQl9TSVMgPSB5DQo+ICAg
+CXNlbGVjdCBGQl9TSVNfMzAwIGlmICFGQl9TSVNfMzE1DQo+ICAgCWhlbHANCj4gICAJICBU
+aGlzIGlzIHRoZSBmcmFtZSBidWZmZXIgZGV2aWNlIGRyaXZlciBmb3IgdGhlIFNpUyAzMDAs
+IDMxNSwgMzMwDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBE
+ZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVs
+ZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xy
+bmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
+--------------6m9UmIRdykpjFkIQiBQka1kg--
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+--------------JYUW0XBHt0CzH6KJ0KeaIqyV
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIPbY0FAwAAAAAACgkQlh/E3EQov+Bn
+2BAAjAwq+emgN48PSmawYbRBCYumLASLcliK2o74cowEUlmTldLrEiGiUcMfFD5dHEUbbs9KOkbw
+6pekDAoYR0IrDYl0DLKFUiYYP+n0ikZJPj7YhUytfHmEi2/Eict1rK13PNQZx3uI9ROUrIOnlhVM
+O9O/VVQw9ssEODyEkPnNN6wSM+2cmncMahXoffje3S8pl7ug2Blw+vYOnTWMXA5WPk9dYmyNTSTM
+HuUUAC16qvtSpbSGWDx/Ga27ySY1u7Fpq/cW319iSm7thrMsGYWb3yqZoK4p5F4GEMn5M2JuU2Q0
+vkyBOGcYBfnbQuNIxZHsMoPUmCGnLP3ixhT1uYaNDt6UuSwz5B3i3yxkg+7Heu0T836efpznGBjf
+j8SqVxFRCD1cK5h2gyMsiAc/axD+N6OH6n7ZHMr99mCg9Th4VTmN8853mwxjQZOdZC0kBWun0JM2
+7J62hCYcFd4yt7o3FhQtAhHXeyyDWnXOCyKakMoa1yJci8iFSYQVDRAbwKjvtrSh2U7QBNe7MbLo
+dnU08NZ3ch8U3nIIMobv5fWzXm1leJkN9JdIooHMIy9TC0GKgFV1k++zyvxXT1AdaYoAerPb1p6V
+IahTXTiMNtRFJPfJ31NRtXcwTncAQUa5HC+veTbY2skpGuU29tknU+nH6NYknLf9bExXYIGXlNqM
+dyM=
+=X4vd
+-----END PGP SIGNATURE-----
+
+--------------JYUW0XBHt0CzH6KJ0KeaIqyV--

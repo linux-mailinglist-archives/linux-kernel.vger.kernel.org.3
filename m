@@ -2,184 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93664BB9CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8F44BB9CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235585AbiBRNEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 08:04:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41010 "EHLO
+        id S235606AbiBRNFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 08:05:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiBRNEg (ORCPT
+        with ESMTP id S232256AbiBRNFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 08:04:36 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D242B4618;
-        Fri, 18 Feb 2022 05:04:19 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id F278D580226;
-        Fri, 18 Feb 2022 08:04:17 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 18 Feb 2022 08:04:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=pxpqD2+sLe6m/z/BcNmFIUMN1NaFzbA2gxa6Sn
-        G8FAE=; b=YkFltgs/c6JzKnjmgH8tHs+8cIg9owcvVpqyEagiIVRJ9bSEj1WQQ4
-        ToRrhcr4eSxTfN8YK279owt59FbvtFqd0r16BgV4FNPxcNVotRdE8NKhbPv/hd79
-        2Z4KaSShethSnnJhtocSPa3wJe+Kqgtsa0Ajokvu+RWPiHml0VG+lQJ9xB0RupSA
-        rDP40DVjUlvbXmSCYbqgpU5Us4Y/zNWFhlAZO9lg+qZkS8z00wZ4uCx4nAKWqm0+
-        jjyuWpxAwVLSxbJN6Q3yP1vrKkZa+bIrHADBD6azZA9KlxmcrBgTLK1ODPkLphE/
-        sl2ApynvQXp1tKkmPEqf12n1m1XdN6pA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=pxpqD2+sLe6m/z/Bc
-        NmFIUMN1NaFzbA2gxa6SnG8FAE=; b=WbwYTPkqk0SGSvuwi4hwM4TZzpgA3XNd7
-        wv27aKMOCVhvX9gnFwPVEne69GFZFbI3HtbGh7QKwNTG6UFQsQsrAgj60RDgn9wl
-        OQA8HpsOn+L4ORcoKjLZFXiFpzWTHW41QvEmuqQM6gqzjpZSy9b/za37y1h3+e9+
-        ZQ1/LxBUVUvW/Dixu/oap0jKWkMhHZAGI+BgU3DcZ6Gm7Oe6YZOdJjlTUwWjW+sW
-        8UWpVUHmOWaYxyrmI1st9346rijZkQFD/9yXdN7ptt1ud9CbYO6D6KOKRTtyejyt
-        Ks7ZzFLzq4c4hjpXwD7FGUvVxr/CrjKExXyDDcXmaepz8SEgTkTGg==
-X-ME-Sender: <xms:UZkPYktVLygxxXeO3qfwmn_ksqtSTVg48CPJLwdtQT9xFlUjWx_5LQ>
-    <xme:UZkPYhfP4pUaK0LhAQ-50255ESPE5GUXn2qlGumdhTZ5-8z3iZALJapsRlW6C99y1
-    PP5huOxzD7rIA>
-X-ME-Received: <xmr:UZkPYvwuNWocT16q2ezjMBMp1anqIk_Scs07YgdFzSPWET5ZZgsqh0u9IMJSywyepx_oOYKSP8kUIPEOizstVsVIg6geq7t0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkedtgdeghecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhm
-X-ME-Proxy: <xmx:UZkPYnPVDh6GLp2R8Sn2csqEhtGXq5cw9PmtlzNM7yUvY0QQ-PlE2Q>
-    <xmx:UZkPYk_4XdxzbSs83w8Y41rugLb5f_eEh71kjNxLK7aljvhDKd06-Q>
-    <xmx:UZkPYvVP1CwpPaQ2XpVAVfExnOvSUhwxRdwlLxVgqAsDqLY76of18A>
-    <xmx:UZkPYoUoiNB3WBcARV4FjZi9NGc92yFyyRDafFIlIheOzoL0bbaomw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Feb 2022 08:04:16 -0500 (EST)
-Date:   Fri, 18 Feb 2022 14:04:15 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Su Yue <l@damenly.su>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, David Sterba <dsterba@suse.com>,
-        clm@fb.com, josef@toxicpanda.com, linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.10 16/27] btrfs: tree-checker: check item_size
- for dev_item
-Message-ID: <Yg+ZT4b8J+MRU2nG@kroah.com>
-References: <20220209184103.47635-1-sashal@kernel.org>
- <20220209184103.47635-16-sashal@kernel.org>
- <Yg92voqmS9jz/rI+@kroah.com>
- <1r00qtxj.fsf@damenly.su>
+        Fri, 18 Feb 2022 08:05:12 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D082B461C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:04:55 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id AEB5E3F32C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645189488;
+        bh=+odAnFUpRotjyHmxRngOmP1U54MSnL1E+iRodbsJpEQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=gI9K6l+YpdYDzkLSKf5zXWXXw1Bamq0+jHqL1mZdq8y59cRI2tlf6wQpGn9+1gAyi
+         3b5LN871ELt1zS7JZRz8OAv8LNxHXPyJ86LZQshjGX+NpZ3ev/iH20QPU0YMMuVRai
+         xSSFUYaK1puzi2kyoFf0nky7GGAp5CbywtzlINoUXXDInDnGYfB+Fkoa5l+u7SklJV
+         q/KMDvrlwd+O8u+AeO1EEVBX0Dr+phVeAND9IUg4apVrEUqvgyIdlchGfZyD15F4IU
+         ia6e15fNoj3n11DcLjv+QRUtWvA5Fk1KjfANZ5Cle7GpHQLzht3ulbHIU+IjTq/gdK
+         ldXkLwezCFc+g==
+Received: by mail-ej1-f70.google.com with SMTP id q3-20020a17090676c300b006a9453c33b0so2992360ejn.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:04:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+odAnFUpRotjyHmxRngOmP1U54MSnL1E+iRodbsJpEQ=;
+        b=Fr2I4PsFCZ2ZZGxs2k5+OpsyzONaEhmP6dskObXR9fzppQ3vtHDjgwyybLUCcSzXne
+         6FdTPLt5FVLR4a+vJC04GTk1u0rnWdveXByt1/1q+f1mi9OrmQ993w9ZETSiGBypGtXE
+         6jHIfWnCVi6ya6NxqVBKQa5YPvGmk4Pz914pA5e/uW5YCv1154IO6G4dL6tAwTEe06Yk
+         7NCQbBvuh8PrgGrCdtc615vry2xQmceQlKjEQmi1w8NvQmoDanD+To9NABnsYxtiS/1v
+         bpj3hg4g5bFXXT/60ckzuUCyIIy11cwJyn/6DkfXLfRdTon0e7D8PUFbduAAS2PZOgwW
+         ZvSQ==
+X-Gm-Message-State: AOAM531xlKPRNM7jM/GoV/Inv7xt06k7QcKYIHM1XNZT4qyny2dQSqIA
+        TkB+WpGRG7UotYXPZxx6/1BIiFZIvYyncqqLPHrdKDwNoJE4xYw9VOtx5Qsqobm5VtUgcBpC444
+        VHUe8u4JPIrtIIYofFZfdkiEFunm8WoLdrXSnliIZQA==
+X-Received: by 2002:a05:6402:1684:b0:410:bb26:eb0d with SMTP id a4-20020a056402168400b00410bb26eb0dmr8266801edv.449.1645189488081;
+        Fri, 18 Feb 2022 05:04:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwvXxpsh7iz0pdqJwwrlptZe6U4CiyjPefOD8G89XYUluWuRDjSANbzlcyjvg3sshclFXdY5Q==
+X-Received: by 2002:a05:6402:1684:b0:410:bb26:eb0d with SMTP id a4-20020a056402168400b00410bb26eb0dmr8266780edv.449.1645189487873;
+        Fri, 18 Feb 2022 05:04:47 -0800 (PST)
+Received: from [192.168.0.115] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id pg26sm312856ejb.194.2022.02.18.05.04.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 05:04:47 -0800 (PST)
+Message-ID: <028f766d-e5ba-fc12-665c-8f65d6bdf817@canonical.com>
+Date:   Fri, 18 Feb 2022 14:04:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1r00qtxj.fsf@damenly.su>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] memory: tegra: Add APE memory clients for Tegra234
+Content-Language: en-US
+To:     Sameer Pujar <spujar@nvidia.com>, thierry.reding@gmail.com
+Cc:     jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <1645186589-25118-1-git-send-email-spujar@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1645186589-25118-1-git-send-email-spujar@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 07:25:20PM +0800, Su Yue wrote:
+On 18/02/2022 13:16, Sameer Pujar wrote:
+> Add the memory clients on Tegra234 which are needed for APE
+> DMA to properly use the SMMU.
 > 
-> On Fri 18 Feb 2022 at 11:36, Greg KH <greg@kroah.com> wrote:
+> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+> ---
+>  Please note that this patch depends on the DT binding patches of series
+>  https://patchwork.kernel.org/project/alsa-devel/list/?series=609494&state=*.
+>  So please consider this patch once Thierry picks up DT binding patches and
+>  provides ACK on this.
+
+I was not Cced on that patchset. Could you use
+scripts/get_maintainers.pl for obtaining list of people and lists to Cc?
+
+If Thierry picks up dt-bindings patch and I take this one, does it
+compile? No, I don't think so. The order is screwed. This should be sent
+together to make such dependencies obvious.
+
+Anyway, I cannot take it so:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+>  drivers/memory/tegra/tegra234.c | 22 +++++++++++++++++++++-
+>  1 file changed, 21 insertions(+), 1 deletion(-)
 > 
-> > On Wed, Feb 09, 2022 at 01:40:52PM -0500, Sasha Levin wrote:
-> > > From: Su Yue <l@damenly.su>
-> > > 
-> > > [ Upstream commit ea1d1ca4025ac6c075709f549f9aa036b5b6597d ]
-> > > 
-> > > Check item size before accessing the device item to avoid out of
-> > > bound
-> > > access, similar to inode_item check.
-> > > 
-> > > Signed-off-by: Su Yue <l@damenly.su>
-> > > Reviewed-by: David Sterba <dsterba@suse.com>
-> > > Signed-off-by: David Sterba <dsterba@suse.com>
-> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > > ---
-> > >  fs/btrfs/tree-checker.c | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > > 
-> > > diff --git a/fs/btrfs/tree-checker.c b/fs/btrfs/tree-checker.c
-> > > index d4a3a56726aa8..4a5ee516845f7 100644
-> > > --- a/fs/btrfs/tree-checker.c
-> > > +++ b/fs/btrfs/tree-checker.c
-> > > @@ -947,6 +947,7 @@ static int check_dev_item(struct extent_buffer
-> > > *leaf,
-> > >  			  struct btrfs_key *key, int slot)
-> > >  {
-> > >  	struct btrfs_dev_item *ditem;
-> > > +	const u32 item_size = btrfs_item_size(leaf, slot);
-> > > 
-> > >  	if (key->objectid != BTRFS_DEV_ITEMS_OBJECTID) {
-> > >  		dev_item_err(leaf, slot,
-> > > @@ -954,6 +955,13 @@ static int check_dev_item(struct extent_buffer
-> > > *leaf,
-> > >  			     key->objectid,  BTRFS_DEV_ITEMS_OBJECTID);
-> > >  		return -EUCLEAN;
-> > >  	}
-> > > +
-> > > +	if (unlikely(item_size != sizeof(*ditem))) {
-> > > +		dev_item_err(leaf, slot, "invalid item size: has %u expect %zu",
-> > > +			     item_size, sizeof(*ditem));
-> > > +		return -EUCLEAN;
-> > > +	}
-> > > +
-> > >  	ditem = btrfs_item_ptr(leaf, slot, struct btrfs_dev_item);
-> > >  	if (btrfs_device_id(leaf, ditem) != key->offset) {
-> > >  		dev_item_err(leaf, slot,
-> > > --
-> > > 2.34.1
-> > > 
-> > 
-> > This adds a build warning, showing that the backport is not correct, so
-> > I'll go drop this :(
-> > 
-> And the warning is
-> ========================================================================
-> arch/x86/kernel/head_64.o: warning: objtool: .text+0x5: unreachable
-> instruction
-> fs/btrfs/tree-checker.c: In function \342\200\230check_dev_item\342\200\231:
-> fs/btrfs/tree-checker.c:950:53: warning: passing argument 2 of
-> \342\200\230btrfs_item_size\342\200\231 makes pointer from integer without a
-> cast [-Wint-conversion]
->  950 |         const u32 item_size = btrfs_item_size(leaf, slot);
->      |                                                     ^~~~
->      |                                                     |
->      |                                                     int
-> In file included from fs/btrfs/tree-checker.c:21:
-> fs/btrfs/ctree.h:1474:48: note: expected \342\200\230const struct btrfs_item
-> *\342\200\231 but argument is of type \342\200\230int\342\200\231
-> 1474 |                                    const type *s) \
->      |                                    ~~~~~~~~~~~~^
-> fs/btrfs/ctree.h:1833:1: note: in expansion of macro
-> \342\200\230BTRFS_SETGET_FUNCS\342\200\231
-> 1833 | BTRFS_SETGET_FUNCS(item_size, struct btrfs_item, size, 32);
->      | ^~~~~~~~~~~~~~~~~~
-> ========================================================================
-> 
-> The upstream patchset[1] merged in 5.17-rc1, changed second parameter
-> of btrfs_item_size() from btrfs_item * to int directly.
-> So yes, the backport is wrong.
-> 
-> I'm not familiar with stable backport progress. Should I file a patch
-> using btrfs_item *? Or just drop it?
 
-If you think this needs to be in the stable tree, yes please backport it
-and send it to us.
 
-> The patch is related to  0c982944af27d131d3b74242f3528169f66950ad but
-> I wonder why the 0c98294 is not selected automatically.
-
-No idea, if you think that is needed to, please send it to us.
-
-thanks,
-
-greg k-h
+Best regards,
+Krzysztof

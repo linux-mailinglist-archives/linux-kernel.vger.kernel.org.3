@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0F84BB82F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091864BB831
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiBRLgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:36:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43970 "EHLO
+        id S234593AbiBRLgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 06:36:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbiBRLgf (ORCPT
+        with ESMTP id S234556AbiBRLgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 06:36:35 -0500
 Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8292B0B09
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BE82B0B37
         for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:36:16 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5AD9A22239;
-        Fri, 18 Feb 2022 12:36:13 +0100 (CET)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 78720223EF;
+        Fri, 18 Feb 2022 12:36:14 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
         t=1645184174;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9TlnQxnR88dBx+W0DgIZNYVu/Pyuax2FALjMy5Y26hA=;
-        b=fKlNwt/jYJrztVEeI5/UTMOCNQbgUyqv6daQaEtdYPHx7VJXfnkPUjmtfDEEhvcK92uoXK
-        w5m0T1mOTNqiLV+veF9sllwGLfl9Us35dcM++Y4Uhoj/J67fZRSDIIyIk8ReubJ2vAyR5a
-        uSCYNgWgOl7DrcfNp3AsAwZwz6mXcsg=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PtTcOZ5uJmuDgpPQTtF1sV4m//Y+QuqhzoWTdilRjsE=;
+        b=QpjTJYoVnhXCmAJn/q6Im0PBrO6zH/i8STj1lPW4AYlIm6xuhB5NeoEWg2O/PHfOxete3j
+        6hnPUv3UKfCodsYLDUJjHggXlB2GiyGyrH4ZWlTChg9KJshnCkRNg3VYmtgY67mPpGuiz1
+        JvUnq06p0G8domeHi6nWhTEr157dbUg=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
@@ -38,10 +39,12 @@ Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 00/32] mtd: spi-nor: move vendor specific code into vendor modules
-Date:   Fri, 18 Feb 2022 12:35:35 +0100
-Message-Id: <20220218113607.1360020-1-michael@walle.cc>
+Subject: [PATCH v2 01/32] mtd: spi-nor: atmel: unify function names
+Date:   Fri, 18 Feb 2022 12:35:36 +0100
+Message-Id: <20220218113607.1360020-2-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220218113607.1360020-1-michael@walle.cc>
+References: <20220218113607.1360020-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -54,88 +57,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It turns out that most of the special status register handling is
-specific for a particular vendor. I.e. Xilinx has some different
-opcodes for the status register read, Micron has an additional FSR
-register and Spansion has these flags integrated into the SR.
+To avoid name clashes unify all the function and static object names and
+use one of the following prefixes which should be sufficiently unique:
+ - <vendor>_nor_
+ - <flash_family>_
+ - <flash_part>_
 
-Create a callback to ready() where a flash chip can register its
-own function. This will let us move all the vendor specific stuff
-out of the core into the vendor modules.
+There are no functional changes.
 
-As a preparation step, unify all function and object names in the
-vendor modules. For the sake of consistency and better readability
-of the code flow, I also converted the setup() callback to be
-optional.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/mtd/spi-nor/atmel.c | 81 +++++++++++++++++++------------------
+ 1 file changed, 42 insertions(+), 39 deletions(-)
 
-Please note that this is only compile-time tested.
-
-Changes since v1:
- - rename/unify function names inside the vendor modules.
- - make local functions static
- - fix function doc typo
- - use late_init hook to set fsr_ready op
- - Use uppercase and period in comments
- - Add comments for the vendor flags
- - move coding style change in spi_nor_sr_ready() into own patch
- - new patch to add missing parenthesis in S3AN_INFO()
- - add missing function prefix rename patch for the spansion module
-
-Michael Walle (32):
-  mtd: spi-nor: atmel: unify function names
-  mtd: spi-nor: catalyst: unify function names
-  mtd: spi-nor: eon: unify function names
-  mtd: spi-nor: esmt: unify function names
-  mtd: spi-nor: everspin: unify function names
-  mtd: spi-nor: fujitsu: unify function names
-  mtd: spi-nor: gigadevice: unify function names
-  mtd: spi-nor: intel: unify function names
-  mtd: spi-nor: issi: unify function names
-  mtd: spi-nor: macronix: unify function names
-  mtd: spi-nor: micron-st: unify function names
-  mtd: spi-nor: spansion: unify function names
-  mtd: spi-nor: sst: unify function names
-  mtd: spi-nor: winbond: unify function names
-  mtd: spi-nor: xilinx: unify function names
-  mtd: spi-nor: xmc: unify function names
-  mtd: spi-nor: slightly refactor the spi_nor_setup()
-  mtd: spi-nor: allow a flash to define its own ready() function
-  mtd: spi-nor: export more function to be used in vendor modules
-  mtd: spi-nor: guard _page_size parameter in S3AN_INFO()
-  mtd: spi-nor: move all xilinx specifics into xilinx.c
-  mtd: spi-nor: xilinx: rename vendor specific functions and defines
-  mtd: spi-nor: xilinx: correct the debug message
-  mtd: spi-nor: move all micron-st specifics into micron-st.c
-  mtd: spi-nor: micron-st: convert USE_FSR to a manufacturer flag
-  mtd: spi-nor: micron-st: rename vendor specific functions and defines
-  mtd: spi-nor: spansion: slightly rework control flow in late_init()
-  mtd: spi-nor: move all spansion specifics into spansion.c
-  mtd: spi-nor: spansion: convert USE_CLSR to a manufacturer flag
-  mtd: spi-nor: spansion: rename vendor specific functions and defines
-  mtd: spi-nor: slightly change code style in spi_nor_sr_ready()
-  mtd: spi-nor: renumber flags
-
- drivers/mtd/spi-nor/atmel.c      |  81 +++++-----
- drivers/mtd/spi-nor/catalyst.c   |   6 +-
- drivers/mtd/spi-nor/core.c       | 265 ++-----------------------------
- drivers/mtd/spi-nor/core.h       |  70 ++++----
- drivers/mtd/spi-nor/eon.c        |   6 +-
- drivers/mtd/spi-nor/esmt.c       |   6 +-
- drivers/mtd/spi-nor/everspin.c   |   6 +-
- drivers/mtd/spi-nor/fujitsu.c    |   6 +-
- drivers/mtd/spi-nor/gigadevice.c |   6 +-
- drivers/mtd/spi-nor/intel.c      |   6 +-
- drivers/mtd/spi-nor/issi.c       |  10 +-
- drivers/mtd/spi-nor/macronix.c   |  14 +-
- drivers/mtd/spi-nor/micron-st.c  | 258 ++++++++++++++++++++++++------
- drivers/mtd/spi-nor/spansion.c   | 154 +++++++++++++-----
- drivers/mtd/spi-nor/sst.c        |  20 +--
- drivers/mtd/spi-nor/winbond.c    |  26 +--
- drivers/mtd/spi-nor/xilinx.c     |  93 +++++++++--
- drivers/mtd/spi-nor/xmc.c        |   6 +-
- include/linux/mtd/spi-nor.h      |  18 ---
- 19 files changed, 555 insertions(+), 502 deletions(-)
-
+diff --git a/drivers/mtd/spi-nor/atmel.c b/drivers/mtd/spi-nor/atmel.c
+index d6d889ce8876..19fbad841e2f 100644
+--- a/drivers/mtd/spi-nor/atmel.c
++++ b/drivers/mtd/spi-nor/atmel.c
+@@ -16,12 +16,12 @@
+  * is to unlock the whole flash array on startup. Therefore, we have to support
+  * exactly this operation.
+  */
+-static int atmel_at25fs_lock(struct spi_nor *nor, loff_t ofs, uint64_t len)
++static int at25fs_lock(struct spi_nor *nor, loff_t ofs, uint64_t len)
+ {
+ 	return -EOPNOTSUPP;
+ }
+ 
+-static int atmel_at25fs_unlock(struct spi_nor *nor, loff_t ofs, uint64_t len)
++static int at25fs_unlock(struct spi_nor *nor, loff_t ofs, uint64_t len)
+ {
+ 	int ret;
+ 
+@@ -37,28 +37,28 @@ static int atmel_at25fs_unlock(struct spi_nor *nor, loff_t ofs, uint64_t len)
+ 	return ret;
+ }
+ 
+-static int atmel_at25fs_is_locked(struct spi_nor *nor, loff_t ofs, uint64_t len)
++static int at25fs_is_locked(struct spi_nor *nor, loff_t ofs, uint64_t len)
+ {
+ 	return -EOPNOTSUPP;
+ }
+ 
+-static const struct spi_nor_locking_ops atmel_at25fs_locking_ops = {
+-	.lock = atmel_at25fs_lock,
+-	.unlock = atmel_at25fs_unlock,
+-	.is_locked = atmel_at25fs_is_locked,
++static const struct spi_nor_locking_ops at25fs_locking_ops = {
++	.lock = at25fs_lock,
++	.unlock = at25fs_unlock,
++	.is_locked = at25fs_is_locked,
+ };
+ 
+-static void atmel_at25fs_late_init(struct spi_nor *nor)
++static void at25fs_late_init(struct spi_nor *nor)
+ {
+-	nor->params->locking_ops = &atmel_at25fs_locking_ops;
++	nor->params->locking_ops = &at25fs_locking_ops;
+ }
+ 
+-static const struct spi_nor_fixups atmel_at25fs_fixups = {
+-	.late_init = atmel_at25fs_late_init,
++static const struct spi_nor_fixups at25fs_fixups = {
++	.late_init = at25fs_late_init,
+ };
+ 
+ /**
+- * atmel_set_global_protection - Do a Global Protect or Unprotect command
++ * atmel_nor_set_global_protection - Do a Global Protect or Unprotect command
+  * @nor:	pointer to 'struct spi_nor'
+  * @ofs:	offset in bytes
+  * @len:	len in bytes
+@@ -66,8 +66,8 @@ static const struct spi_nor_fixups atmel_at25fs_fixups = {
+  *
+  * Return: 0 on success, -error otherwise.
+  */
+-static int atmel_set_global_protection(struct spi_nor *nor, loff_t ofs,
+-				       uint64_t len, bool is_protect)
++static int atmel_nor_set_global_protection(struct spi_nor *nor, loff_t ofs,
++					   uint64_t len, bool is_protect)
+ {
+ 	int ret;
+ 	u8 sr;
+@@ -116,17 +116,20 @@ static int atmel_set_global_protection(struct spi_nor *nor, loff_t ofs,
+ 	return spi_nor_write_sr(nor, nor->bouncebuf, 1);
+ }
+ 
+-static int atmel_global_protect(struct spi_nor *nor, loff_t ofs, uint64_t len)
++static int atmel_nor_global_protect(struct spi_nor *nor, loff_t ofs,
++				    uint64_t len)
+ {
+-	return atmel_set_global_protection(nor, ofs, len, true);
++	return atmel_nor_set_global_protection(nor, ofs, len, true);
+ }
+ 
+-static int atmel_global_unprotect(struct spi_nor *nor, loff_t ofs, uint64_t len)
++static int atmel_nor_global_unprotect(struct spi_nor *nor, loff_t ofs,
++				      uint64_t len)
+ {
+-	return atmel_set_global_protection(nor, ofs, len, false);
++	return atmel_nor_set_global_protection(nor, ofs, len, false);
+ }
+ 
+-static int atmel_is_global_protected(struct spi_nor *nor, loff_t ofs, uint64_t len)
++static int atmel_nor_is_global_protected(struct spi_nor *nor, loff_t ofs,
++					 uint64_t len)
+ {
+ 	int ret;
+ 
+@@ -140,47 +143,47 @@ static int atmel_is_global_protected(struct spi_nor *nor, loff_t ofs, uint64_t l
+ 	return ((nor->bouncebuf[0] & ATMEL_SR_GLOBAL_PROTECT_MASK) == ATMEL_SR_GLOBAL_PROTECT_MASK);
+ }
+ 
+-static const struct spi_nor_locking_ops atmel_global_protection_ops = {
+-	.lock = atmel_global_protect,
+-	.unlock = atmel_global_unprotect,
+-	.is_locked = atmel_is_global_protected,
++static const struct spi_nor_locking_ops atmel_nor_global_protection_ops = {
++	.lock = atmel_nor_global_protect,
++	.unlock = atmel_nor_global_unprotect,
++	.is_locked = atmel_nor_is_global_protected,
+ };
+ 
+-static void atmel_global_protection_late_init(struct spi_nor *nor)
++static void atmel_nor_global_protection_late_init(struct spi_nor *nor)
+ {
+-	nor->params->locking_ops = &atmel_global_protection_ops;
++	nor->params->locking_ops = &atmel_nor_global_protection_ops;
+ }
+ 
+-static const struct spi_nor_fixups atmel_global_protection_fixups = {
+-	.late_init = atmel_global_protection_late_init,
++static const struct spi_nor_fixups atmel_nor_global_protection_fixups = {
++	.late_init = atmel_nor_global_protection_late_init,
+ };
+ 
+-static const struct flash_info atmel_parts[] = {
++static const struct flash_info atmel_nor_parts[] = {
+ 	/* Atmel -- some are (confusingly) marketed as "DataFlash" */
+ 	{ "at25fs010",  INFO(0x1f6601, 0, 32 * 1024,   4)
+ 		FLAGS(SPI_NOR_HAS_LOCK)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_at25fs_fixups },
++		.fixups = &at25fs_fixups },
+ 	{ "at25fs040",  INFO(0x1f6604, 0, 64 * 1024,   8)
+ 		FLAGS(SPI_NOR_HAS_LOCK)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_at25fs_fixups },
++		.fixups = &at25fs_fixups },
+ 	{ "at25df041a", INFO(0x1f4401, 0, 64 * 1024,   8)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_global_protection_fixups },
++		.fixups = &atmel_nor_global_protection_fixups },
+ 	{ "at25df321",  INFO(0x1f4700, 0, 64 * 1024,  64)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_global_protection_fixups },
++		.fixups = &atmel_nor_global_protection_fixups },
+ 	{ "at25df321a", INFO(0x1f4701, 0, 64 * 1024,  64)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_global_protection_fixups },
++		.fixups = &atmel_nor_global_protection_fixups },
+ 	{ "at25df641",  INFO(0x1f4800, 0, 64 * 1024, 128)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_global_protection_fixups },
++		.fixups = &atmel_nor_global_protection_fixups },
+ 	{ "at25sl321",	INFO(0x1f4216, 0, 64 * 1024, 64)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+ 	{ "at26f004",   INFO(0x1f0400, 0, 64 * 1024,  8)
+@@ -188,21 +191,21 @@ static const struct flash_info atmel_parts[] = {
+ 	{ "at26df081a", INFO(0x1f4501, 0, 64 * 1024, 16)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_global_protection_fixups },
++		.fixups = &atmel_nor_global_protection_fixups },
+ 	{ "at26df161a", INFO(0x1f4601, 0, 64 * 1024, 32)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_global_protection_fixups },
++		.fixups = &atmel_nor_global_protection_fixups },
+ 	{ "at26df321",  INFO(0x1f4700, 0, 64 * 1024, 64)
+ 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
+ 		NO_SFDP_FLAGS(SECT_4K)
+-		.fixups = &atmel_global_protection_fixups },
++		.fixups = &atmel_nor_global_protection_fixups },
+ 	{ "at45db081d", INFO(0x1f2500, 0, 64 * 1024, 16)
+ 		NO_SFDP_FLAGS(SECT_4K) },
+ };
+ 
+ const struct spi_nor_manufacturer spi_nor_atmel = {
+ 	.name = "atmel",
+-	.parts = atmel_parts,
+-	.nparts = ARRAY_SIZE(atmel_parts),
++	.parts = atmel_nor_parts,
++	.nparts = ARRAY_SIZE(atmel_nor_parts),
+ };
 -- 
 2.30.2
 

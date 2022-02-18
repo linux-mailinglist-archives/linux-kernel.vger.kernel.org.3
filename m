@@ -2,127 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB7B4BBF9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CC44BBFA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239316AbiBRSgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:36:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33896 "EHLO
+        id S239304AbiBRSiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:38:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236890AbiBRSgD (ORCPT
+        with ESMTP id S234606AbiBRSiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:36:03 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2053.outbound.protection.outlook.com [40.107.244.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F528268365
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:35:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HvJnQuHSIaTbKv4mGRvrbwZfoUOPYsozwnCqlf9jdyZ08f7txnoImcImu+C6TAqQMN1Dss/nppFGFJLaj46vfqLV3UDjS7HJ5z68xanvXApaAlf1JUMuxHVzlLVcSAYQioJq3G+oQssWGaHTvAkXFCnyBLyIcrhpOxuQar/eOIPiMIFspbdyHQwuXYfxgDId8XbzazO2KOWeV9gg8UhSNk+n1avGxpQbZ+1vCvCHWInxe4hJKWDjKt3v5/JA9i7y1k4wJ+DkhWzouvRmuFazXHPMY93HDzOqWWyGw/6l4wRTTPPH0Mfa9rzGI5jgPHYwK9Knh2eyru8ziOxrZIr9nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TWAptDzvTxJ0HtKqQGyReV04pwqw0dAROryPBkH7a5Q=;
- b=cR2n/2b0SgG+dvt5mA+gpEr5h50v7qZeMi4H8mKUxmyGlF0MHSzaqF1zgMu/7Y3gImK9xBkr8X/iSvTk2YFQDbHB7sgfsU6Ys2ijIdPkBzP5QvBYI9m4DpXkl/P4wgODYjvh8mObVw474A+UuV2kNPEeMKgguvgMlAfV6wdqxwIQw6G1K7hCtMR2xY6gYfgV4ISJ3lGvpsg+OsJB0yEccDoUsJwEDEQF21no8q6jfix/Kecr+3iFh/F8gq5haeWDT6EU2TvyWRqqZjFEQEV7mEOh8qXRX6rb9NSbStN10GzBMJjuGyqcSw8ECdh64MBmCVJHI6cTElM2+JdUy76vVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TWAptDzvTxJ0HtKqQGyReV04pwqw0dAROryPBkH7a5Q=;
- b=KgpO5ZYFrknLh1tEfQgPzEdXbUmeDr341ihQy9JrnUWKqYvZOQ8y5FyZnSp5PmVjCZ8s65+VeS/qAtic9PuUqHn2cligWQ7A+6cGYNaFzH1DMrfT2ExaMUflB696EFpvGI/ph04u8adVbwyVc7Qlj1TG9Vzod/wsc4HpwGX5zXY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by BY5PR12MB4034.namprd12.prod.outlook.com (2603:10b6:a03:205::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15; Fri, 18 Feb
- 2022 18:35:44 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::38ec:3a46:f85e:6cfa]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::38ec:3a46:f85e:6cfa%4]) with mapi id 15.20.4995.016; Fri, 18 Feb 2022
- 18:35:44 +0000
-Message-ID: <b98981f4-358b-ebdd-dade-4027c57a1a7e@amd.com>
-Date:   Fri, 18 Feb 2022 13:35:41 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/amdkfd: rework criu_restore_bos error handling
-Content-Language: en-US
-To:     trix@redhat.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
-        david.yatsin@amd.com, rajneesh.bhardwaj@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220218173913.3376948-1-trix@redhat.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <20220218173913.3376948-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT1PR01CA0091.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2d::30) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Fri, 18 Feb 2022 13:38:01 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522BE29C124
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:37:44 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id f8so8585932pgc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:37:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dXXbdeTStmwuBwtV+/FMa9zMsqjXwHLhEcrr0/z0eXQ=;
+        b=ID+Xet37oO0iAb5JEBFOOhaEsrRqHJD6UInxWzn8vO4zMqkegLeLcfyudPZCgeq1bN
+         6/iFd7scpnhEWiYWPzKOgpm614dBUtjNm9ak4fKWDGvhmfSvsk8fam6iiYGxcvQ2ctCr
+         SII/QWLNjNfQLYjN5c9eJfeCPHEeSl3f36gMoVZcZLk3Kl8S+/TYetOdTvF98jI0MCaP
+         pu8cWkDnkfIzpM6UhYtDTOOniRs3P6ZOhTNsB6FxV8hGImKmNvX5NSKOPr8wfpFZZHkf
+         y6fes9u9uT02rI41N8Zs91gl1sz+ZaIY2I8BnCFjJinX4556ObOcVjDy90wd3j/+mYgO
+         Xsng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dXXbdeTStmwuBwtV+/FMa9zMsqjXwHLhEcrr0/z0eXQ=;
+        b=eqkyuioODRXWH2cM0YhebZqsjWzxT4rjCeFdnN2uomkprStyfw0cb8pJalgw9ACVmk
+         fl89Cjul8D5Gca//8oMZGWBhWm7FtSEAVA5Y5frEwUBWXAtHnGIYQ/3HtKvIUj7rGPRj
+         XbWdkvQ0o+tIPaTu75qf2QsGUs7F3UxhsLhdxXg5PpPMPqj+rQyMPMcrculBkmSBed5e
+         V1Vy0ArzEj/rmNOtBn19cFy6aACNA6rVsrFlRnXahTwKt+qalZmYPLQCZzSTV51PNppf
+         hi5Sh79CgQvzzBHOMLNg7OKFERPw5oAPIzHLN/zMROa/+2xeNxUj05lpPnextqGCxdAN
+         1hiA==
+X-Gm-Message-State: AOAM530Wtqqt5VRp5Nuc2bJPziJDQQ/J4hnpyLrvbGbDQa2TNOS4ZEds
+        FCGItziZjyct/7DQ679NKGqehOkKzPnocA==
+X-Google-Smtp-Source: ABdhPJyuUJDQp3VaZiUtAKB7xa/grZSqZVMVbteE2LIKyk+l7Ok2yOQM8Gp6b519/kha438LVkK0lQ==
+X-Received: by 2002:a63:a556:0:b0:364:daad:997c with SMTP id r22-20020a63a556000000b00364daad997cmr7314112pgu.290.1645209463600;
+        Fri, 18 Feb 2022 10:37:43 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b16sm3787161pfv.192.2022.02.18.10.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 10:37:42 -0800 (PST)
+Date:   Fri, 18 Feb 2022 18:37:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>
+Subject: Re: [PATCH v2 07/18] KVM: x86/mmu: Do not use guest root level in
+ audit
+Message-ID: <Yg/nc1jjtUD2fhOR@google.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-8-pbonzini@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8a303859-c004-4d80-29ad-08d9f30d78e2
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4034:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB40341BE16BB0ABF258FF631392379@BY5PR12MB4034.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SfYITO7OxE31aeKFyhGSCr+MOSQQ2SmGOXw44tWn34N8Hu70CySu0yL26OOjHHuwBVl8JtPJcVftue42fwv65sK6qEJh7IG69nRsCgcy3xeXZz+b7S08PVYWHHEb4YUEdi7qzkH4P357EpPmz+yexUXHlTOst2clFUzOvn+hkxEZTYW73ygC1YhiL6NO6dMfQO7wGR/iHQC8NA2rYcq/N3Oh0FCLGb/IgMvGixotSJLi6BLqqWs5TjJBq2q89bNgt7iZroyc//CCvhJVMqu63J9TOjz0wC3LPAsV2wB9P7GpSn/8VfWMIWIx79qzVYEYNPedfYbKWg6w/cSTh8iSr4P7E8lMPmXDLciK+bCvIN4nT1ktRM/kaWyVtOne9uvaZ0plyAMNEq181cbyHKsw48hcMAtHb5OicC3WA1WQ7tkbAhJgsK/tn8xi4o+VcY9thOe2NCzolNTYS1FWK4LoD862REb1urv+GvRkR8q/OMk5BiLE6KJPaOhPn3XgVpzfTYX2kn3Vf9PiVFX11vOSwAvgMoh0hOVvBY4dagqCLeesvNyzVMEJ1JLAlklRMh1AIRCg//oXgAoFdFKaWxzaMJT5O6EFBboSQ9qgUuSqDynhhH3+bNzFFqQAPuIH8TcgvnGbII/6OaWlxftF2TxYwLd8B4Klku+a4i2QRVMxnx+emmSXD1nVLX8YLf3cfK2yMSmNRyLe0+hr4iUzWv8ar1XXOZI0WSXDUwJqTMEfLLf8WTUktO8wJjKyk9PdO9s7
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(6636002)(83380400001)(921005)(2906002)(6506007)(6512007)(6486002)(44832011)(508600001)(316002)(5660300002)(6666004)(186003)(26005)(2616005)(86362001)(31686004)(31696002)(8936002)(8676002)(4326008)(66946007)(66556008)(66476007)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OXdpeUJ1eWE3SmlFMDkzVnVZZUtxRFA2bzRFTjFkaW9vejFWWERIb1FGaUQ0?=
- =?utf-8?B?eVk4ZGN6K2FlWGJIUStpeDJTektoWjVxWTFiS1ZyZnhMNHZpMjM0bUc1NjJM?=
- =?utf-8?B?aDdaUXRtOTVJRThmK2Y0cUcycmZhZWpqcjBJMzAxWmd2YW05ZllwdjV4NDRY?=
- =?utf-8?B?WWgrS3JGM094Si9rT0toZjMyQmNhRWJnaHJjekgxbm82dXFGQzVKandsVWRm?=
- =?utf-8?B?Q1dDajBsUmxQMTFGV2xXOVpQM2E3bStRSGU5dEhrWmRmL3h4VzdTTExjdDNJ?=
- =?utf-8?B?QVEvTGVWSTN3ZWt4aXF5SWE2c1k1S1BiWTlPQTBidjdUdlBkTjlnSEpIT0RZ?=
- =?utf-8?B?U0drNjlJSVZKdUs2OTREcVZZOWRyRnJDZ0x6TnZ6NjhMWUFjRVBIRVkyeStF?=
- =?utf-8?B?aERKMGlQZ3lSSkNHa1AvaWdHSXExejVxUkloaGZjeFJoS05FMVI1eENtSXVM?=
- =?utf-8?B?cFlDRGtCb3RlSXluaXRhQ2ZiUE9WUWZWdEEzaWt0LzFyRFRjVTdkdHRpTGp2?=
- =?utf-8?B?WExmQ0l6OWRUMk5mYXJqWmI2Ykp4Y1htazc1aGRVMkx0YWdKTzZvVTlieTNH?=
- =?utf-8?B?Q01zbmJJcDZuREFlZ2I0WXN2Z09tVDZWMmo4b3ErYUVzd2xGOGt3NjN6MHJB?=
- =?utf-8?B?SC83YmJXZHRJS0kwS1ZHV2d2V2ZtU2FiM2NycHJiYkVqenhtSUVpWEswVTdt?=
- =?utf-8?B?VWtScUpqMStiTWxmQmh6RHNrbmtGTGhtQlA4UFU0dkJNVGFDYXk2cXpxcHdv?=
- =?utf-8?B?RlEwQ09kOXBhM3dINkY2eGlXUXloUmVvbVVQTlJ1aEZlRHpIa1FTa21hRWh5?=
- =?utf-8?B?bVdVemVDUm5VSzA2TjFlakRRY25LL1ZtTkZLNk96SXpVZnhOOUwwdXVad1Nu?=
- =?utf-8?B?dHVMSHBlL2xZUUZ3SHk5VVM1ZmhLd0tTZERHUk8zOGRRaEZhUFhyaXVYUTRs?=
- =?utf-8?B?S2o5aTduMUJndkZiMlpIWVZYRm1ZWGpWaFBINTdMNEZUa1N2V2xFVU0zU3Iy?=
- =?utf-8?B?aHlyYzVVVExwSUNjb1l1alN4aDVWZituYmlUdVpsTjBnb1p0T2pxbFlXcGpT?=
- =?utf-8?B?SUtUMjRGN2ZHVVU3YU4xVmRDYlRTN2Vua2t0OHYydDhlVnhVMW1KUGFnV2JQ?=
- =?utf-8?B?TlVGSkpkd0NUc0RSMGhDckYyOE1lbHJkS1Z2Zk1HVnBJVHN6TTRpUnN4VlF3?=
- =?utf-8?B?aFBPdXJYM1owUjhJS3dWRjRSTEtmYktWYkowQng0aldlYWNjVUUyeVIxQWRt?=
- =?utf-8?B?YkJENUNFQUg1cWw1TnhSNWRMenUzdkpHY0pLdDJYeTIzOUJtK3dCczBIc3Y3?=
- =?utf-8?B?aThidEhhWmF0eVllU0haVGpEUVZjK2RtNS8xbzluK0RmMm84RVBDRGVHczI1?=
- =?utf-8?B?T21oekFKbTNUUllpandhUC91dk1PSEJaYVhaL0txOUJDeFRub1NBZEFHb3JW?=
- =?utf-8?B?VXl4L2hVbEFvUXY0THVKekZkbjhWNDZ0UTFEblR2dE9KYWxNNi9sT2NiRE52?=
- =?utf-8?B?UDZ3UFRNVWJSeUpCdU1uc1pET25ldWdwVkczK2t6d3RGNDBMSHQ0TkZ3RC8z?=
- =?utf-8?B?dWlTRitmTVRCdG5uYVV2dFQ3NlpaWU5nNCt0MXVxWGdjazlKcjRaNFp6Wlh3?=
- =?utf-8?B?MkFyMHZIdUxLeHNmaDN5cWZjQXY3SHB2bllLRzhleWgzWFhkdWFkYlZDWGpF?=
- =?utf-8?B?N3hncy9TWXphK3QvcEhOSEg0b1pCczVXaVBYbHc3ZmErbWZjaXQ3NjVZRm5N?=
- =?utf-8?B?NVlrRlp6VUR6WkdlZnFzWHlKYmhsTWI1MlNsdTgxVjh1REdVYzdUQndxdjVv?=
- =?utf-8?B?QW9hamdYOHp0dEozbkllNDBuNDJmUDRqbUdZSG1oMjV5WnFQeTNCR2lHeWJY?=
- =?utf-8?B?YXVWZ2tnNzAzUUtmQzY2S2pENVovZnZ6NHRsSE4wYXU2S2lBb29lTUdOUHhw?=
- =?utf-8?B?Nk9WVmZmMTM1TFdzSzV5N3ZBemF6cVMxVFlYSGtwczlPbEdTekJna2xsUnli?=
- =?utf-8?B?aFBPaXh5aVUyMWZ0L3FnOUNLckVHTTRDOXp4MWlCVmFLQ0Jib05vY0Yxd0dl?=
- =?utf-8?B?OHZKUGNxQktmMDBlOHk3Rlpnb2R2dzBNeTJMc0FuZVV6Y3hJZll0UDgzUWwz?=
- =?utf-8?B?MVRYR1d2WXZ3QXErTzFrMFlkbzVwMU1YUE5ZNWdjYnF6RXNwSHNLWUIvMHIw?=
- =?utf-8?Q?0oZ2QHK1VSjz+0eZm2S9qkI=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a303859-c004-4d80-29ad-08d9f30d78e2
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 18:35:43.8941
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: D8sDWxjsQFlDm+LHZDMBgpSouYK+Iwylin19GYMD0qaxhedege8LOFni9jMgnxEw29skB1PdyAMrLlkSjf1BPA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4034
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217210340.312449-8-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,101 +73,503 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-02-18 um 12:39 schrieb trix@redhat.com:
-> From: Tom Rix <trix@redhat.com>
->
-> Clang static analysis reports this problem
-> kfd_chardev.c:2327:2: warning: 1st function call argument
->    is an uninitialized value
->    kvfree(bo_privs);
->    ^~~~~~~~~~~~~~~~
->
-> If the copy_from_users(bo_buckets, ...) fails, there is a jump to
-> the generic error handler at exit:.  The freeing of bo_privs and
-> unwinding of the dmabuf_fd loop do not need to be done.
->
-> Add some specific labels for the early failures.
-> Reorder the frees to be the reverse of their allocs.
->
-> Move the initialize of 'i' back to the loop.
-> The problem with the early frees predates the loop
-> unwinding problem.
-
-I think the existing error handling strategy in this function is fine. 
-Having only one exit label avoids potential issues when using the wrong 
-label. Freeing NULL pointers is not a problem. The loop becomes a noop 
-if i==0 (this was fixed by you in a previous patch). The only real 
-problem I see is that bo_privs is not initialized. So this should really 
-be a one-line or maybe two-line fix:
-
-	struct kfd_criu_bo_bucket *bo_buckets = NULL;
-	struct kfd_criu_bo_priv_data *bo_privs = NULL;
-
-Regards,
-   Felix
-
-
->
-> Fixes: 73fa13b6a511 ("drm/amdkfd: CRIU Implement KFD restore ioctl")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
+> 
+> Walking from the root page of the shadow page table should start with
+> the level of the shadow page table: shadow_root_level; do not
+> consult the level in order to check whether the root has a single
+> root or uses pae_root, either, and use to_shadow_page instead.
+> 
+> Also tweak audit_mappings(), where the current walking level is more
+> valuable to print.
+> 
+> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->   drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 15 +++++++++------
->   1 file changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> index 965af2a08bc0..1d5f41ac3832 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-> @@ -2102,7 +2102,7 @@ static int criu_restore_bos(struct kfd_process *p,
->   	const bool criu_resume = true;
->   	bool flush_tlbs = false;
->   	int ret = 0, j = 0;
-> -	uint32_t i = 0;
-> +	uint32_t i;
->   
->   	if (*priv_offset + (args->num_bos * sizeof(*bo_privs)) > max_priv_data_size)
->   		return -EINVAL;
-> @@ -2119,13 +2119,13 @@ static int criu_restore_bos(struct kfd_process *p,
->   	if (ret) {
->   		pr_err("Failed to copy BOs information from user\n");
->   		ret = -EFAULT;
-> -		goto exit;
-> +		goto free_buckets;
->   	}
->   
->   	bo_privs = kvmalloc_array(args->num_bos, sizeof(*bo_privs), GFP_KERNEL);
->   	if (!bo_privs) {
->   		ret = -ENOMEM;
-> -		goto exit;
-> +		goto free_buckets;
->   	}
->   
->   	ret = copy_from_user(bo_privs, (void __user *)args->priv_data + *priv_offset,
-> @@ -2133,12 +2133,12 @@ static int criu_restore_bos(struct kfd_process *p,
->   	if (ret) {
->   		pr_err("Failed to copy BOs information from user\n");
->   		ret = -EFAULT;
-> -		goto exit;
-> +		goto free_privs;
->   	}
->   	*priv_offset += args->num_bos * sizeof(*bo_privs);
->   
->   	/* Create and map new BOs */
-> -	for (; i < args->num_bos; i++) {
-> +	for (i = 0; i < args->num_bos; i++) {
->   		struct kfd_criu_bo_bucket *bo_bucket;
->   		struct kfd_criu_bo_priv_data *bo_priv;
->   		struct kfd_dev *dev;
-> @@ -2323,8 +2323,11 @@ static int criu_restore_bos(struct kfd_process *p,
->   		if (bo_buckets[i].alloc_flags & KFD_IOC_ALLOC_MEM_FLAGS_VRAM)
->   			close_fd(bo_buckets[i].dmabuf_fd);
->   	}
-> -	kvfree(bo_buckets);
-> +free_privs:
->   	kvfree(bo_privs);
-> +free_buckets:
-> +	kvfree(bo_buckets);
-> +
->   	return ret;
->   }
->   
+
+Since I keep bringing it up...
+
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 18 Feb 2022 09:43:05 -0800
+Subject: [PATCH] KVM: x86/mmu: Remove MMU auditing
+
+Remove mmu_audit.c and all its collateral, the auditing code has suffered
+severe bitrot, ironically partly due to shadow paging being more stable
+and thus not benefiting as much from auditing, but mostly due to TDP
+supplanting shadow paging for non-nested guests and shadowing of nested
+TDP not heavily stressing the logic that is being audited.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../admin-guide/kernel-parameters.txt         |   4 -
+ arch/x86/include/asm/kvm_host.h               |   4 -
+ arch/x86/kvm/Kconfig                          |   7 -
+ arch/x86/kvm/mmu/mmu.c                        |  25 --
+ arch/x86/kvm/mmu/mmu_audit.c                  | 303 ------------------
+ arch/x86/kvm/mmu/paging_tmpl.h                |   2 -
+ 6 files changed, 345 deletions(-)
+ delete mode 100644 arch/x86/kvm/mmu/mmu_audit.c
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 2a9746fe6c4a..05161afd7642 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -2368,10 +2368,6 @@
+ 	kvm.enable_vmware_backdoor=[KVM] Support VMware backdoor PV interface.
+ 				   Default is false (don't support).
+
+-	kvm.mmu_audit=	[KVM] This is a R/W parameter which allows audit
+-			KVM MMU at runtime.
+-			Default is 0 (off)
+-
+ 	kvm.nx_huge_pages=
+ 			[KVM] Controls the software workaround for the
+ 			X86_BUG_ITLB_MULTIHIT bug.
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index c880254300c2..c2fe020802d1 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1127,10 +1127,6 @@ struct kvm_arch {
+ 	struct kvm_hv hyperv;
+ 	struct kvm_xen xen;
+
+-	#ifdef CONFIG_KVM_MMU_AUDIT
+-	int audit_point;
+-	#endif
+-
+ 	bool backwards_tsc_observed;
+ 	bool boot_vcpu_runs_old_kvmclock;
+ 	u32 bsp_vcpu_id;
+diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+index 2b1548da00eb..e3cbd7706136 100644
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@ -126,13 +126,6 @@ config KVM_XEN
+
+ 	  If in doubt, say "N".
+
+-config KVM_MMU_AUDIT
+-	bool "Audit KVM MMU"
+-	depends on KVM && TRACEPOINTS
+-	help
+-	 This option adds a R/W kVM module parameter 'mmu_audit', which allows
+-	 auditing of KVM MMU events at runtime.
+-
+ config KVM_EXTERNAL_WRITE_TRACKING
+ 	bool
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index e1578f71feae..ed11a0383266 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -104,15 +104,6 @@ static int max_huge_page_level __read_mostly;
+ static int tdp_root_level __read_mostly;
+ static int max_tdp_level __read_mostly;
+
+-enum {
+-	AUDIT_PRE_PAGE_FAULT,
+-	AUDIT_POST_PAGE_FAULT,
+-	AUDIT_PRE_PTE_WRITE,
+-	AUDIT_POST_PTE_WRITE,
+-	AUDIT_PRE_SYNC,
+-	AUDIT_POST_SYNC
+-};
+-
+ #ifdef MMU_DEBUG
+ bool dbg = 0;
+ module_param(dbg, bool, 0644);
+@@ -1904,13 +1895,6 @@ static bool kvm_mmu_remote_flush_or_zap(struct kvm *kvm,
+ 	return true;
+ }
+
+-#ifdef CONFIG_KVM_MMU_AUDIT
+-#include "mmu_audit.c"
+-#else
+-static void kvm_mmu_audit(struct kvm_vcpu *vcpu, int point) { }
+-static void mmu_audit_disable(void) { }
+-#endif
+-
+ static bool is_obsolete_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+ {
+ 	if (sp->role.invalid)
+@@ -3674,17 +3658,12 @@ void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu)
+ 			return;
+
+ 		write_lock(&vcpu->kvm->mmu_lock);
+-		kvm_mmu_audit(vcpu, AUDIT_PRE_SYNC);
+-
+ 		mmu_sync_children(vcpu, sp, true);
+-
+-		kvm_mmu_audit(vcpu, AUDIT_POST_SYNC);
+ 		write_unlock(&vcpu->kvm->mmu_lock);
+ 		return;
+ 	}
+
+ 	write_lock(&vcpu->kvm->mmu_lock);
+-	kvm_mmu_audit(vcpu, AUDIT_PRE_SYNC);
+
+ 	for (i = 0; i < 4; ++i) {
+ 		hpa_t root = vcpu->arch.mmu->pae_root[i];
+@@ -3696,7 +3675,6 @@ void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu)
+ 		}
+ 	}
+
+-	kvm_mmu_audit(vcpu, AUDIT_POST_SYNC);
+ 	write_unlock(&vcpu->kvm->mmu_lock);
+ }
+
+@@ -5247,7 +5225,6 @@ static void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa,
+ 	gentry = mmu_pte_write_fetch_gpte(vcpu, &gpa, &bytes);
+
+ 	++vcpu->kvm->stat.mmu_pte_write;
+-	kvm_mmu_audit(vcpu, AUDIT_PRE_PTE_WRITE);
+
+ 	for_each_gfn_indirect_valid_sp(vcpu->kvm, sp, gfn) {
+ 		if (detect_write_misaligned(sp, gpa, bytes) ||
+@@ -5272,7 +5249,6 @@ static void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa,
+ 		}
+ 	}
+ 	kvm_mmu_remote_flush_or_zap(vcpu->kvm, &invalid_list, flush);
+-	kvm_mmu_audit(vcpu, AUDIT_POST_PTE_WRITE);
+ 	write_unlock(&vcpu->kvm->mmu_lock);
+ }
+
+@@ -6218,7 +6194,6 @@ void kvm_mmu_module_exit(void)
+ 	mmu_destroy_caches();
+ 	percpu_counter_destroy(&kvm_total_used_mmu_pages);
+ 	unregister_shrinker(&mmu_shrinker);
+-	mmu_audit_disable();
+ }
+
+ /*
+diff --git a/arch/x86/kvm/mmu/mmu_audit.c b/arch/x86/kvm/mmu/mmu_audit.c
+deleted file mode 100644
+index 3e5d62a25350..000000000000
+--- a/arch/x86/kvm/mmu/mmu_audit.c
++++ /dev/null
+@@ -1,303 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * mmu_audit.c:
+- *
+- * Audit code for KVM MMU
+- *
+- * Copyright (C) 2006 Qumranet, Inc.
+- * Copyright 2010 Red Hat, Inc. and/or its affiliates.
+- *
+- * Authors:
+- *   Yaniv Kamay  <yaniv@qumranet.com>
+- *   Avi Kivity   <avi@qumranet.com>
+- *   Marcelo Tosatti <mtosatti@redhat.com>
+- *   Xiao Guangrong <xiaoguangrong@cn.fujitsu.com>
+- */
+-
+-#include <linux/ratelimit.h>
+-
+-static char const *audit_point_name[] = {
+-	"pre page fault",
+-	"post page fault",
+-	"pre pte write",
+-	"post pte write",
+-	"pre sync",
+-	"post sync"
+-};
+-
+-#define audit_printk(kvm, fmt, args...)		\
+-	printk(KERN_ERR "audit: (%s) error: "	\
+-		fmt, audit_point_name[kvm->arch.audit_point], ##args)
+-
+-typedef void (*inspect_spte_fn) (struct kvm_vcpu *vcpu, u64 *sptep, int level);
+-
+-static void __mmu_spte_walk(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+-			    inspect_spte_fn fn, int level)
+-{
+-	int i;
+-
+-	for (i = 0; i < PT64_ENT_PER_PAGE; ++i) {
+-		u64 *ent = sp->spt;
+-
+-		fn(vcpu, ent + i, level);
+-
+-		if (is_shadow_present_pte(ent[i]) &&
+-		      !is_last_spte(ent[i], level)) {
+-			struct kvm_mmu_page *child;
+-
+-			child = to_shadow_page(ent[i] & PT64_BASE_ADDR_MASK);
+-			__mmu_spte_walk(vcpu, child, fn, level - 1);
+-		}
+-	}
+-}
+-
+-static void mmu_spte_walk(struct kvm_vcpu *vcpu, inspect_spte_fn fn)
+-{
+-	int i;
+-	struct kvm_mmu_page *sp;
+-
+-	if (!VALID_PAGE(vcpu->arch.mmu->root.hpa))
+-		return;
+-
+-	if (vcpu->arch.mmu->root_level >= PT64_ROOT_4LEVEL) {
+-		hpa_t root = vcpu->arch.mmu->root.hpa;
+-
+-		sp = to_shadow_page(root);
+-		__mmu_spte_walk(vcpu, sp, fn, vcpu->arch.mmu->root_level);
+-		return;
+-	}
+-
+-	for (i = 0; i < 4; ++i) {
+-		hpa_t root = vcpu->arch.mmu->pae_root[i];
+-
+-		if (IS_VALID_PAE_ROOT(root)) {
+-			root &= PT64_BASE_ADDR_MASK;
+-			sp = to_shadow_page(root);
+-			__mmu_spte_walk(vcpu, sp, fn, 2);
+-		}
+-	}
+-
+-	return;
+-}
+-
+-typedef void (*sp_handler) (struct kvm *kvm, struct kvm_mmu_page *sp);
+-
+-static void walk_all_active_sps(struct kvm *kvm, sp_handler fn)
+-{
+-	struct kvm_mmu_page *sp;
+-
+-	list_for_each_entry(sp, &kvm->arch.active_mmu_pages, link)
+-		fn(kvm, sp);
+-}
+-
+-static void audit_mappings(struct kvm_vcpu *vcpu, u64 *sptep, int level)
+-{
+-	struct kvm_mmu_page *sp;
+-	gfn_t gfn;
+-	kvm_pfn_t pfn;
+-	hpa_t hpa;
+-
+-	sp = sptep_to_sp(sptep);
+-
+-	if (sp->unsync) {
+-		if (level != PG_LEVEL_4K) {
+-			audit_printk(vcpu->kvm, "unsync sp: %p "
+-				     "level = %d\n", sp, level);
+-			return;
+-		}
+-	}
+-
+-	if (!is_shadow_present_pte(*sptep) || !is_last_spte(*sptep, level))
+-		return;
+-
+-	gfn = kvm_mmu_page_get_gfn(sp, sptep - sp->spt);
+-	pfn = kvm_vcpu_gfn_to_pfn_atomic(vcpu, gfn);
+-
+-	if (is_error_pfn(pfn))
+-		return;
+-
+-	hpa =  pfn << PAGE_SHIFT;
+-	if ((*sptep & PT64_BASE_ADDR_MASK) != hpa)
+-		audit_printk(vcpu->kvm, "levels %d pfn %llx hpa %llx "
+-			     "ent %llxn", vcpu->arch.mmu->root_level, pfn,
+-			     hpa, *sptep);
+-}
+-
+-static void inspect_spte_has_rmap(struct kvm *kvm, u64 *sptep)
+-{
+-	static DEFINE_RATELIMIT_STATE(ratelimit_state, 5 * HZ, 10);
+-	struct kvm_rmap_head *rmap_head;
+-	struct kvm_mmu_page *rev_sp;
+-	struct kvm_memslots *slots;
+-	struct kvm_memory_slot *slot;
+-	gfn_t gfn;
+-
+-	rev_sp = sptep_to_sp(sptep);
+-	gfn = kvm_mmu_page_get_gfn(rev_sp, sptep - rev_sp->spt);
+-
+-	slots = kvm_memslots_for_spte_role(kvm, rev_sp->role);
+-	slot = __gfn_to_memslot(slots, gfn);
+-	if (!slot) {
+-		if (!__ratelimit(&ratelimit_state))
+-			return;
+-		audit_printk(kvm, "no memslot for gfn %llx\n", gfn);
+-		audit_printk(kvm, "index %ld of sp (gfn=%llx)\n",
+-		       (long int)(sptep - rev_sp->spt), rev_sp->gfn);
+-		dump_stack();
+-		return;
+-	}
+-
+-	rmap_head = gfn_to_rmap(gfn, rev_sp->role.level, slot);
+-	if (!rmap_head->val) {
+-		if (!__ratelimit(&ratelimit_state))
+-			return;
+-		audit_printk(kvm, "no rmap for writable spte %llx\n",
+-			     *sptep);
+-		dump_stack();
+-	}
+-}
+-
+-static void audit_sptes_have_rmaps(struct kvm_vcpu *vcpu, u64 *sptep, int level)
+-{
+-	if (is_shadow_present_pte(*sptep) && is_last_spte(*sptep, level))
+-		inspect_spte_has_rmap(vcpu->kvm, sptep);
+-}
+-
+-static void audit_spte_after_sync(struct kvm_vcpu *vcpu, u64 *sptep)
+-{
+-	struct kvm_mmu_page *sp = sptep_to_sp(sptep);
+-
+-	if (vcpu->kvm->arch.audit_point == AUDIT_POST_SYNC && sp->unsync)
+-		audit_printk(vcpu->kvm, "meet unsync sp(%p) after sync "
+-			     "root.\n", sp);
+-}
+-
+-static void check_mappings_rmap(struct kvm *kvm, struct kvm_mmu_page *sp)
+-{
+-	int i;
+-
+-	if (sp->role.level != PG_LEVEL_4K)
+-		return;
+-
+-	for (i = 0; i < PT64_ENT_PER_PAGE; ++i) {
+-		if (!is_shadow_present_pte(sp->spt[i]))
+-			continue;
+-
+-		inspect_spte_has_rmap(kvm, sp->spt + i);
+-	}
+-}
+-
+-static void audit_write_protection(struct kvm *kvm, struct kvm_mmu_page *sp)
+-{
+-	struct kvm_rmap_head *rmap_head;
+-	u64 *sptep;
+-	struct rmap_iterator iter;
+-	struct kvm_memslots *slots;
+-	struct kvm_memory_slot *slot;
+-
+-	if (sp->role.direct || sp->unsync || sp->role.invalid)
+-		return;
+-
+-	slots = kvm_memslots_for_spte_role(kvm, sp->role);
+-	slot = __gfn_to_memslot(slots, sp->gfn);
+-	rmap_head = gfn_to_rmap(sp->gfn, PG_LEVEL_4K, slot);
+-
+-	for_each_rmap_spte(rmap_head, &iter, sptep) {
+-		if (is_writable_pte(*sptep))
+-			audit_printk(kvm, "shadow page has writable "
+-				     "mappings: gfn %llx role %x\n",
+-				     sp->gfn, sp->role.word);
+-	}
+-}
+-
+-static void audit_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+-{
+-	check_mappings_rmap(kvm, sp);
+-	audit_write_protection(kvm, sp);
+-}
+-
+-static void audit_all_active_sps(struct kvm *kvm)
+-{
+-	walk_all_active_sps(kvm, audit_sp);
+-}
+-
+-static void audit_spte(struct kvm_vcpu *vcpu, u64 *sptep, int level)
+-{
+-	audit_sptes_have_rmaps(vcpu, sptep, level);
+-	audit_mappings(vcpu, sptep, level);
+-	audit_spte_after_sync(vcpu, sptep);
+-}
+-
+-static void audit_vcpu_spte(struct kvm_vcpu *vcpu)
+-{
+-	mmu_spte_walk(vcpu, audit_spte);
+-}
+-
+-static bool mmu_audit;
+-static DEFINE_STATIC_KEY_FALSE(mmu_audit_key);
+-
+-static void __kvm_mmu_audit(struct kvm_vcpu *vcpu, int point)
+-{
+-	static DEFINE_RATELIMIT_STATE(ratelimit_state, 5 * HZ, 10);
+-
+-	if (!__ratelimit(&ratelimit_state))
+-		return;
+-
+-	vcpu->kvm->arch.audit_point = point;
+-	audit_all_active_sps(vcpu->kvm);
+-	audit_vcpu_spte(vcpu);
+-}
+-
+-static inline void kvm_mmu_audit(struct kvm_vcpu *vcpu, int point)
+-{
+-	if (static_branch_unlikely((&mmu_audit_key)))
+-		__kvm_mmu_audit(vcpu, point);
+-}
+-
+-static void mmu_audit_enable(void)
+-{
+-	if (mmu_audit)
+-		return;
+-
+-	static_branch_inc(&mmu_audit_key);
+-	mmu_audit = true;
+-}
+-
+-static void mmu_audit_disable(void)
+-{
+-	if (!mmu_audit)
+-		return;
+-
+-	static_branch_dec(&mmu_audit_key);
+-	mmu_audit = false;
+-}
+-
+-static int mmu_audit_set(const char *val, const struct kernel_param *kp)
+-{
+-	int ret;
+-	unsigned long enable;
+-
+-	ret = kstrtoul(val, 10, &enable);
+-	if (ret < 0)
+-		return -EINVAL;
+-
+-	switch (enable) {
+-	case 0:
+-		mmu_audit_disable();
+-		break;
+-	case 1:
+-		mmu_audit_enable();
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static const struct kernel_param_ops audit_param_ops = {
+-	.set = mmu_audit_set,
+-	.get = param_get_bool,
+-};
+-
+-arch_param_cb(mmu_audit, &audit_param_ops, &mmu_audit, 0644);
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index 346f3bad3cb9..252c77805eb9 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -904,12 +904,10 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+ 	if (is_page_fault_stale(vcpu, fault, mmu_seq))
+ 		goto out_unlock;
+
+-	kvm_mmu_audit(vcpu, AUDIT_PRE_PAGE_FAULT);
+ 	r = make_mmu_pages_available(vcpu);
+ 	if (r)
+ 		goto out_unlock;
+ 	r = FNAME(fetch)(vcpu, fault, &walker);
+-	kvm_mmu_audit(vcpu, AUDIT_POST_PAGE_FAULT);
+
+ out_unlock:
+ 	write_unlock(&vcpu->kvm->mmu_lock);
+
+base-commit: 385d1e4898fb823e0bb25b6c23d000400bf6340e
+--
+

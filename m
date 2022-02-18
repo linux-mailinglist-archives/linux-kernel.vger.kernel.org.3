@@ -2,123 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F6E4BAF2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BBC4BAF31
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiBRBhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 20:37:07 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47772 "EHLO
+        id S231288AbiBRBo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 20:44:28 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiBRBhF (ORCPT
+        with ESMTP id S231156AbiBRBo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 20:37:05 -0500
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47ED64C0;
-        Thu, 17 Feb 2022 17:36:49 -0800 (PST)
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 21I1aP3F029682;
-        Fri, 18 Feb 2022 10:36:26 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 21I1aP3F029682
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1645148186;
-        bh=VKdbuX5iAWZp7EuE5zh/xocsqym/fIrci0mPxooYe28=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IWhfFvtew4XU+l1tL7Sq692w35/peSkY5xMOmfIiDPmNJsFG/dLnh6hvuX7ZTQUAv
-         RRW+NYubKgOIhXlWjhKo/2EDILOCt78EfK6HwxqRRfooUeivpKtY1htnxsEICsK9f7
-         E5ql2bG+4s1DtHOKKdrpXy044p38x41eVsw9RIgZFPss5pUUwxst2PuCkvzz9UvlJh
-         +1RmkYZhSo9R5pPRI81FNE6r2L6eQHnKUKh4ulAcVwXBKvxh39KYHGOFSKlRQphiJy
-         n7ZaF4Z/STeLg4vjvCaaV4QaRvbPk6GKJlpASNp11lAs8w/T/9J6IF4nN+lGAbtnBB
-         CfH4t3KPiPU3A==
-X-Nifty-SrcIP: [209.85.216.47]
-Received: by mail-pj1-f47.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso7090066pjh.5;
-        Thu, 17 Feb 2022 17:36:26 -0800 (PST)
-X-Gm-Message-State: AOAM532U0FmFG9PBIDONcPzEOkTOvUH1yB2zbXQrBFvot8N0nLqimv0A
-        MRSYl7ZbLZwaW1OpeMWCSVmMYI81zjXrQmbV2Qo=
-X-Google-Smtp-Source: ABdhPJy0Ae337oqKkEUoK4O3IKhPlww6tXbKq+aJYguPXt6um9PiI+8T8dLczPOUtLJexLG3bu+W8fp8Z0qZsjNXFyc=
-X-Received: by 2002:a17:90b:4d84:b0:1b9:4109:7118 with SMTP id
- oj4-20020a17090b4d8400b001b941097118mr10117749pjb.119.1645148185337; Thu, 17
- Feb 2022 17:36:25 -0800 (PST)
+        Thu, 17 Feb 2022 20:44:26 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8206F673CD
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 17:44:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645148650; x=1676684650;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8GWz5ucNz+/A+WuLCYebshSzW0dvHmqhyyhAmPSllNI=;
+  b=bJPdUDMDaj9LvYJRDZry5uXgzsunV++5Ez8p3Ms/VcDVIs7t1wPVEaal
+   VGNFpCCUMH6U9uBZD4WYM27gvKDssUT0rO1yPe47R9FspGMUJVVwhO25A
+   ef1Y6GOQTg3lbbiRG7Dg53VW+7M92zDM/BBUOH62bcvIEvL+zuYbxqono
+   b8tRjWWU9s9+pGEJJidhPuy6k+fh1pyYMljwNotHEkl5I6bLZevqlbM1U
+   yjHtEWSuUfNEqpNQ0mlRAYuwhEBzO4fBXL+yIb6j2EWkKtF7erv5bhv7a
+   ajtcnn2NQt+mA+2BUa1ZUvD0JRuJCqiQtgwR002FLzrqQaKsWeBNhXcH+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="251225962"
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="251225962"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 17:44:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="637520539"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2022 17:44:08 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKsJb-0000nq-W1; Fri, 18 Feb 2022 01:44:07 +0000
+Date:   Fri, 18 Feb 2022 09:43:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp-fam0] BUILD SUCCESS
+ 5224f79096170bf7b92cc8fe42a12f44b91e5f62
+Message-ID: <620ef9b1.dsG5qgpNOV49X8xn%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <978951d76d8cb84bab347c7623bc163e9a038452.1645100305.git.christophe.leroy@csgroup.eu>
- <35bcd5df0fb546008ff4043dbea68836@AcuMS.aculab.com> <d38e5e1c-29b6-8cc6-7409-d0bdd5772f23@csgroup.eu>
- <9b8ef186-c7fe-822c-35df-342c9e86cc88@csgroup.eu> <3c2b682a7d804b5e8749428b50342c82@AcuMS.aculab.com>
- <CAK7LNASWTJ-ax9u5yOwHV9vHCBAcQTazV-oXtqVFVFedOA0Eqw@mail.gmail.com>
- <2e38265880db45afa96cfb51223f7418@AcuMS.aculab.com> <CAK7LNASvBLLWMa+kb5eGJ6vpSqob_dBUxwCnpHZfL-spzRG7qA@mail.gmail.com>
- <20220217180735.GM614@gate.crashing.org>
-In-Reply-To: <20220217180735.GM614@gate.crashing.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 18 Feb 2022 10:35:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ3tdOEYP7LjSX5+vhy=eUf0q-YiktQriH-rcr1n2Q3aA@mail.gmail.com>
-Message-ID: <CAK7LNAQ3tdOEYP7LjSX5+vhy=eUf0q-YiktQriH-rcr1n2Q3aA@mail.gmail.com>
-Subject: Re: [PATCH net v3] net: Force inlining of checksum functions in net/checksum.h
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 3:10 AM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> On Fri, Feb 18, 2022 at 02:27:16AM +0900, Masahiro Yamada wrote:
-> > On Fri, Feb 18, 2022 at 1:49 AM David Laight <David.Laight@aculab.com> wrote:
-> > > That description is largely fine.
-> > >
-> > > Inappropriate 'inline' ought to be removed.
-> > > Then 'inline' means - 'really do inline this'.
-> >
-> > You cannot change "static inline" to "static"
-> > in header files.
->
-> Why not?  Those two have identical semantics!
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp-fam0
+branch HEAD: 5224f79096170bf7b92cc8fe42a12f44b91e5f62  treewide: Replace zero-length arrays with flexible-array members
 
-e.g.)
+elapsed time: 728m
 
+configs tested: 135
+configs skipped: 3
 
-[1] Open  include/linux/device.h with your favorite editor,
-     then edit
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-static inline void *devm_kcalloc(struct device *dev,
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+arm                       omap2plus_defconfig
+powerpc                       ppc64_defconfig
+arm                           viper_defconfig
+powerpc                       maple_defconfig
+arc                                 defconfig
+sh                         microdev_defconfig
+mips                  decstation_64_defconfig
+riscv                            allyesconfig
+xtensa                  nommu_kc705_defconfig
+xtensa                    xip_kc705_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                       eiger_defconfig
+h8300                               defconfig
+microblaze                      mmu_defconfig
+m68k                       m5475evb_defconfig
+arm                        spear6xx_defconfig
+arm                            lart_defconfig
+sh                            titan_defconfig
+h8300                            alldefconfig
+nios2                         3c120_defconfig
+m68k                         apollo_defconfig
+sh                           se7343_defconfig
+sh                     sh7710voipgw_defconfig
+powerpc                      pasemi_defconfig
+arc                    vdk_hs38_smp_defconfig
+x86_64                           alldefconfig
+mips                           ip32_defconfig
+mips                            gpr_defconfig
+arm                             pxa_defconfig
+powerpc64                           defconfig
+powerpc                    klondike_defconfig
+sh                               j2_defconfig
+arc                         haps_hs_defconfig
+xtensa                           alldefconfig
+arm                           corgi_defconfig
+sh                          sdk7780_defconfig
+m68k                        m5272c3_defconfig
+arm                           h5000_defconfig
+ia64                         bigsur_defconfig
+powerpc                      tqm8xx_defconfig
+um                             i386_defconfig
+m68k                         amcore_defconfig
+arm                          pxa3xx_defconfig
+ia64                          tiger_defconfig
+m68k                           sun3_defconfig
+powerpc                        cell_defconfig
+powerpc                      makalu_defconfig
+m68k                       m5208evb_defconfig
+arm                             ezx_defconfig
+sparc                       sparc32_defconfig
+microblaze                          defconfig
+arm                  randconfig-c002-20220217
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-    to
+clang tested configs:
+riscv                randconfig-c006-20220217
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220217
+arm                  randconfig-c002-20220217
+i386                          randconfig-c001
+mips                 randconfig-c004-20220217
+mips                          ath79_defconfig
+mips                           ip22_defconfig
+arm                     davinci_all_defconfig
+arm                      tct_hammer_defconfig
+arm                     am200epdkit_defconfig
+powerpc                     tqm5200_defconfig
+arm                        magician_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220217
+hexagon              randconfig-r041-20220217
+riscv                randconfig-r042-20220217
 
-static void *devm_kcalloc(struct device *dev,
-
-
-[2] Build the kernel
-
-
-
-
-
-
-
-
-
->
->
-> Segher
-
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

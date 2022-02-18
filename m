@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955724BB0FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 05:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA9C4BB109
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 06:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiBRE54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 23:57:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37654 "EHLO
+        id S230156AbiBRFAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 00:00:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiBRE5x (ORCPT
+        with ESMTP id S229792AbiBRFAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 23:57:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E46DFABD5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 20:57:37 -0800 (PST)
+        Fri, 18 Feb 2022 00:00:30 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D7C2BAA03
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 21:00:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645160257; x=1676696257;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=l7ftpFnCb/O18IQbZiuP+YjPFB7WGOV4wq64D8YJp0E=;
-  b=iS/beWCRv+byLKkYVXdk+WIQwULKWky8uydPNHpeGzWUSiBCWZk2++ZW
-   24RuUtYWijwR2pbUVyH0EyzPzYqTSvv0nmx9qN6dAqyJ4NeSw8U0IV4fT
-   tVxq9CPlrH9/zWPpd8ZX+NxEW5K8WZRGvvTFSw+geAc2Wdik/+7VyvMy4
-   NsqrO10tKv+dyGMYY399qKKg/MbY4Hj4SARegKA/h3BVhDFd1FYao54zc
-   MybpBgX8lsnDOknogyoQ7b05cm5fT8yq6mqE0F7WciFT3lCGpUpxs/+L8
-   l9UDp/Co2nYGYTyWRq1cWbNm9IelUnYvVXi+5hd3k/uf1HLqBfNwh4LsK
+  t=1645160415; x=1676696415;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+/4Ws4n5GO5MA4Lob8Av7zlFDSbbD9go+e2hEhCE6S8=;
+  b=CPnR3kyDbfhCzD4Kz5VTmYB/8xlmRAXAyh578UqcY8b3fAC9ltlfrcpt
+   DYJBs2tIw+n0sCQjkkXgaKHVUzzuNvdVTh8Ur6SVyzUxTjrYLvlKTjSvq
+   dJl/k377ehDE3zdf31yFWMwAdoMXpGv5076vAKk/asWhbZv7/TH5KyeQC
+   YAgRKL9g1amtwJ1TdGer0w/s7EgIr9fBLJoVMfgj++vTpU9clkr0mW8DN
+   gVUT4VSppzeDds4LT/Xce335avjFNHtvX3UqwVAjYK5ACKniURyge/IoG
+   KxwhIp7vxSHi/hqFR3+T2WqDiKtPSOtjXXQryRtxzBAuOrE5kQqzZqxOO
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="231034416"
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="337496543"
 X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="231034416"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 20:57:37 -0800
+   d="scan'208";a="337496543"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 21:00:14 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="546104238"
-Received: from bmeland-mobl2.amr.corp.intel.com (HELO localhost) ([10.212.148.192])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 20:57:36 -0800
-From:   Jordan Justen <jordan.l.justen@intel.com>
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Matthew Auld <matthew.auld@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Simon Ser <contact@emersion.fr>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Kenneth Graunke <kenneth@whitecape.org>,
-        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
-        Slawomir Milczarek <slawomir.milczarek@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 5/5] drm/i915/uapi: document behaviour for DG2 64K
- support
-In-Reply-To: <20220208203419.1094362-6-bob.beckett@collabora.com>
-References: <20220208203419.1094362-1-bob.beckett@collabora.com>
- <20220208203419.1094362-6-bob.beckett@collabora.com>
-Date:   Thu, 17 Feb 2022 20:57:35 -0800
-Message-ID: <87ee40ojpc.fsf@jljusten-skl>
+   d="scan'208";a="530771170"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 17 Feb 2022 21:00:13 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKvNM-0000y0-D9; Fri, 18 Feb 2022 05:00:12 +0000
+Date:   Fri, 18 Feb 2022 12:59:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     yipechai <YiPeng.Chai@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>
+Subject: [agd5f:drm-next 73/91]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2460:5: warning: no previous
+ prototype for 'amdgpu_ras_block_late_init_default'
+Message-ID: <202202181246.FqQEZVzy-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,123 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Beckett <bob.beckett@collabora.com> writes:
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   7dfbe38cecadbaf6dd426855d8bf8f34a4ca2c30
+commit: 418abce203fc2e936bf8c7632a9a429e861f6283 [73/91] drm/amdgpu: Remove redundant .ras_late_init initialization in some ras blocks
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220218/202202181246.FqQEZVzy-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 418abce203fc2e936bf8c7632a9a429e861f6283
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-> From: Matthew Auld <matthew.auld@intel.com>
->
-> On discrete platforms like DG2, we need to support a minimum page size
-> of 64K when dealing with device local-memory. This is quite tricky for
-> various reasons, so try to document the new implicit uapi for this.
->
-> v3: fix typos and less emphasis
-> v2: Fixed suggestions on formatting [Daniel]
->
-> Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-> Acked-by: Jordan Justen <jordan.l.justen@intel.com>
-> Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
-> Reviewed-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
-> cc: Simon Ser <contact@emersion.fr>
-> cc: Pekka Paalanen <ppaalanen@gmail.com>
-> Cc: Jordan Justen <jordan.l.justen@intel.com>
-> Cc: Kenneth Graunke <kenneth@whitecape.org>
-> Cc: mesa-dev@lists.freedesktop.org
-> Cc: Tony Ye <tony.ye@intel.com>
-> Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
-> ---
->  include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
->  1 file changed, 39 insertions(+), 5 deletions(-)
->
-> diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
-> index 5e678917da70..77e5e74c32c1 100644
-> --- a/include/uapi/drm/i915_drm.h
-> +++ b/include/uapi/drm/i915_drm.h
-> @@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
->  	/**
->  	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
->  	 * the user with the GTT offset at which this object will be pinned.
-> +	 *
->  	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
->  	 * presumed_offset of the object.
-> +	 *
->  	 * During execbuffer2 the kernel populates it with the value of the
->  	 * current GTT offset of the object, for future presumed_offset writes.
-> +	 *
-> +	 * See struct drm_i915_gem_create_ext for the rules when dealing with
-> +	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
-> +	 * minimum page sizes, like DG2.
->  	 */
->  	__u64 offset;
->=20=20
-> @@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
->  	 *
->  	 * The (page-aligned) allocated size for the object will be returned.
->  	 *
-> -	 * Note that for some devices we have might have further minimum
-> -	 * page-size restrictions(larger than 4K), like for device local-memory.
-> -	 * However in general the final size here should always reflect any
-> -	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REG=
-IONS
-> -	 * extension to place the object in device local-memory.
-> +	 *
-> +	 * DG2 64K min page size implications:
-> +	 *
-> +	 * On discrete platforms, starting from DG2, we have to contend with GTT
-> +	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
-> +	 * objects.  Specifically the hardware only supports 64K or larger GTT
-> +	 * page sizes for such memory. The kernel will already ensure that all
-> +	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
-> +	 * sizes underneath.
-> +	 *
-> +	 * Note that the returned size here will always reflect any required
-> +	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
-> +	 * such as DG2.
-> +	 *
-> +	 * Special DG2 GTT address alignment requirement:
-> +	 *
-> +	 * The GTT alignment will also need to be at least 2M for such objects.
-> +	 *
-> +	 * Note that due to how the hardware implements 64K GTT page support, we
-> +	 * have some further complications:
-> +	 *
-> +	 *   1) The entire PDE (which covers a 2MB virtual address range), must
-> +	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
-> +	 *   PDE is forbidden by the hardware.
-> +	 *
-> +	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
-> +	 *   objects.
-> +	 *
-> +	 * To keep things simple for userland, we mandate that any GTT mappings
-> +	 * must be aligned to and rounded up to 2MB.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Could I get a clarification about this "rounded up" part.
+All warnings (new ones prefixed by >>):
 
-Currently Mesa is aligning the start of each and every buffer VMA to be
-2MiB aligned. But, we are *not* taking any steps to "round up" the size
-of buffers to 2MiB alignment.
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2460:5: warning: no previous prototype for 'amdgpu_ras_block_late_init_default' [-Wmissing-prototypes]
+    2460 | int amdgpu_ras_block_late_init_default(struct amdgpu_device *adev,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bob's Mesa MR from a while ago,
 
-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/14599
+vim +/amdgpu_ras_block_late_init_default +2460 drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
 
-was trying to add this "round up" size for buffers. We didn't accept
-this MR because we thought if we have ensured that no other buffer will
-use the same 2MiB VMA range, then it should not be required.
+  2459	
+> 2460	int amdgpu_ras_block_late_init_default(struct amdgpu_device *adev,
+  2461				 struct ras_common_if *ras_block)
+  2462	{
+  2463		return amdgpu_ras_block_late_init(adev, ras_block);
+  2464	}
+  2465	
 
-If what we are doing is ok, then maybe this "round up" language should
-be dropped? Or, perhaps the "round up" mentioned here isn't implying we
-must align the size of buffers that we create, and I'm misinterpreting
-this.
-
--Jordan
-
-> As this only wastes virtual
-> +	 * address space and avoids userland having to copy any needlessly
-> +	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
-> +	 * is deemed to be a good compromise.
->  	 */
->  	__u64 size;
->  	/**
-> --=20
-> 2.25.1
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

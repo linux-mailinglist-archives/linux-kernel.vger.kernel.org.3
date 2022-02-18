@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3624BBF56
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746D24BBF59
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:17:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239128AbiBRSRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:17:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53642 "EHLO
+        id S239150AbiBRSRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:17:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239080AbiBRSRG (ORCPT
+        with ESMTP id S239092AbiBRSRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:17:06 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F3FBA5;
-        Fri, 18 Feb 2022 10:16:49 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id e3so16005223wra.0;
-        Fri, 18 Feb 2022 10:16:49 -0800 (PST)
+        Fri, 18 Feb 2022 13:17:09 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB8A1A387;
+        Fri, 18 Feb 2022 10:16:50 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id u1so15904592wrg.11;
+        Fri, 18 Feb 2022 10:16:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2lb5EpDrjZ7Ucka1D9DCg1WHob0SHwbW9oEXk90RPrs=;
-        b=WS3QZY6M3UB9909PRkjQxHh3MFAbnv5w63hkV438NIYYd84kFghIWSJErVXRGpgY0e
-         VA9gO3pQHfB3JAgF4hwCGe+jI3x8Cg5SFDmg2hxcw1AkWq+C7+g0rovX3YNrqw7Pb39Y
-         fAhcCLHtVPZNe+G8/v2s82g/qP48s6gIz76tD3ouu4DBh1qTDVMqQ7AZ3LH745yG8lzq
-         +N2P0x7dE4eTabpuiBSICqwZ+Ppzm7keyoBtfgcKt6q3nhRCRD+ntfQB3EWD/uWWpqA6
-         fng7F/+TtGEivESLN0mw35wwju7YqME3CeNDV+Bn+JE2b6MYu6SDYXmo+fFRYw850W2U
-         MVZw==
+        bh=BKVwInCpVkxcu4QibmqUE+njZypLWjFf62FZiJ7RfDY=;
+        b=idcfe+gYBoodhi/dxSiO7KNkyG85wSPk/fEcAhTr842WEIMqs266rypz/qc0pY0r7w
+         gxvoTs5LE/DJ7w9tMOGgkba5oGTh6brZA4KLOiXKGllY3kC2mX3U0MWhLYBnwY4TkftW
+         i2XKR8WC/vJjhZGSh9KYTOzIueFLw5SZZfv433Kkz6Owx+nQPCfrXF2VoHQMm57ZOKRJ
+         txYAzMcrkanYrZvUWhFYrBJCQDKhM8gBZSrYNBWCA8ARvfX2jsPDnxayJzrAjFtOaxvf
+         gmVmdtS6ILnDiPjHg2vH2XfUWEhBpoAPAzP+XgqCXnrxIHlT8B+Ay44dfhsXggSq1/uN
+         7OuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2lb5EpDrjZ7Ucka1D9DCg1WHob0SHwbW9oEXk90RPrs=;
-        b=vN2P1SQPDZCr/ctIY8xl8kxdr+z7HGQxUSudFg6P2ZEWsOMLKma2AI3cyhIfDperHp
-         OQR2M/7+v/Lw19uhcci6EXS3YDlPc3a5uKfwxrEsuMAte3er/jJG8PrOPH0MPJMYEe04
-         f67wYWszp28BAdi/4tCRzRMmchbmckP6kPva+x8xhzBuZaRV95+Oiie38wByeI1Os9qA
-         wA/Lz54ZTRhxLbDNRDTNO8BJkaY1FHWGtFSOB/6Rkqn/yH94TCXypK7pFKrOFi+9iijl
-         MMVl6Qhgi1lRTyA8xTL29FOtyLiW2ypCt3eanGBCnxo0WW+4y7LXQvIxhuuUPjRn7oWH
-         zXRA==
-X-Gm-Message-State: AOAM5321gwA+P7FdeKr55H9Z7AwoVOhvsDdr4BdmLZJwIueQ32ibgLtN
-        po7c2oBQpx4pk23fRINC6sY=
-X-Google-Smtp-Source: ABdhPJwlQXbzR3MwBSz9x39dlEhRav6nu/HafcNw9vr9feXS38Bl6Inn00TaH4YdXR9hbOsIhWbFgA==
-X-Received: by 2002:a5d:6244:0:b0:1e7:686d:41e7 with SMTP id m4-20020a5d6244000000b001e7686d41e7mr6785305wrv.491.1645208207924;
-        Fri, 18 Feb 2022 10:16:47 -0800 (PST)
+        bh=BKVwInCpVkxcu4QibmqUE+njZypLWjFf62FZiJ7RfDY=;
+        b=whF1xSq0/nGLQlhZGr5DX2ZNGnDPc3Njh5lZ+hGkDyBpUvca4+Y1Pfgqft1W24R/28
+         +Vnz7EgT+b6wTGyU6TkGPDPkG+lqwQUh5sOymb0NxkQpy7OsOgJOibbFcVRiZrnOpx4i
+         wZ1OG8XayOCbXkoA0d0wDfYN4pFHTZEbEv93XsPI4KbfFkm8eSHZqxG3uWqT3r/YjeZz
+         nYcHbrB5ghb7gXkdeouGUe8yixWAvty84Lrz3JSZBe8I136jaCRkPk5FpnUM1TUarEaD
+         A2QUylpMj1/F+UFrNSoX7tsaFyG8I3B/6DRl+6ywxAZnQWZpTQD27l9fhr/R7Z6eNXzO
+         XpEg==
+X-Gm-Message-State: AOAM533SyqLG0KPis+9sTztMQGWswMFYveUXhsD1e5HI0x6YdQpXiZWI
+        /G0y7NUWlJd90Yzqfb+FFrg=
+X-Google-Smtp-Source: ABdhPJwc1hqz5DkZxJCKnWZoWDp85ZWAwbozBuikgb2fXWlk2vNfr0PYY7Kw/ghPB9JEZnrI+7J2xQ==
+X-Received: by 2002:a05:6000:c9:b0:1e4:bcc1:f806 with SMTP id q9-20020a05600000c900b001e4bcc1f806mr6966527wrx.372.1645208209067;
+        Fri, 18 Feb 2022 10:16:49 -0800 (PST)
 Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id b2sm20978639wri.35.2022.02.18.10.16.46
+        by smtp.gmail.com with ESMTPSA id b2sm20978639wri.35.2022.02.18.10.16.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 10:16:47 -0800 (PST)
+        Fri, 18 Feb 2022 10:16:48 -0800 (PST)
 From:   =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>
 To:     corbet@lwn.net
 Cc:     =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 08/11] scripts: kernel-doc: Translate the "Other parameters" subsection of OPTIONS
-Date:   Fri, 18 Feb 2022 19:16:25 +0100
-Message-Id: <20220218181628.1411551-9-tomasz.warniello@gmail.com>
+Subject: [PATCH v4 09/11] scripts: kernel-doc: Replace the usage function
+Date:   Fri, 18 Feb 2022 19:16:26 +0100
+Message-Id: <20220218181628.1411551-10-tomasz.warniello@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
 References: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
@@ -75,54 +75,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Aim: unified POD, user more satisfied, script better structured
 
-Notes:
-- The -help token is added.
-- The entries are sorted alphbetically.
+You can see the results with:
+
+$ scripts/kernel-doc -help
 
 Signed-off-by: Tomasz Warniełło <tomasz.warniello@gmail.com>
 ---
- scripts/kernel-doc | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+
+This ends the fundamental POD transformation.
+---
+ scripts/kernel-doc | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
 diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index 210e7e3b501b..4a26a74318e6 100755
+index 4a26a74318e6..d7ca4877eeda 100755
 --- a/scripts/kernel-doc
 +++ b/scripts/kernel-doc
-@@ -83,11 +83,6 @@ sub usage {
-     my $message = <<"EOF";
- Usage: $0 [OPTION ...] FILE ...
+@@ -79,15 +79,6 @@ See Documentation/doc-guide/kernel-doc.rst for the documentation comment syntax.
+ # 25/07/2012 - Added support for HTML5
+ # -- Dan Luedtke <mail@danrl.de>
  
--Other parameters:
--  -v			Verbose output, more warnings and other information.
--  -h			Print this help.
--  -Werror		Treat warnings as errors.
+-sub usage {
+-    my $message = <<"EOF";
+-Usage: $0 [OPTION ...] FILE ...
 -
- EOF
-     print $message;
-     exit 1;
-@@ -2628,4 +2623,22 @@ Enable output of #define LINENO lines.
- 
- =back
- 
-+=head2 Other parameters:
-+
-+=over 8
-+
-+=item -h, -help
-+
-+Print this help.
-+
-+=item -v
-+
-+Verbose output, more warnings and other information.
-+
-+=item -Werror
-+
-+Treat warnings as errors.
-+
-+=back
-+
- =cut
+-EOF
+-    print $message;
+-    exit 1;
+-}
+-
+ #
+ # format of comments.
+ # In the following table, (...)? signifies optional structure.
+@@ -468,7 +459,7 @@ while ($ARGV[0] =~ m/^--?(.*)/) {
+     } elsif ($cmd eq "Werror") {
+ 	$Werror = 1;
+     } elsif (($cmd eq "h") || ($cmd eq "help")) {
+-	usage();
++		pod2usage(-exitval => 0, -verbose => 2);
+     } elsif ($cmd eq 'no-doc-sections') {
+ 	    $no_doc_sections = 1;
+     } elsif ($cmd eq 'enable-lineno') {
 -- 
 2.30.2
 

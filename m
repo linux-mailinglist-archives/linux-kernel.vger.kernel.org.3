@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04C14BBFCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C09324BBFCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239342AbiBRSrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:47:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41050 "EHLO
+        id S239392AbiBRSrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:47:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238706AbiBRSrJ (ORCPT
+        with ESMTP id S237417AbiBRSrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:47:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C622713E10
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:46:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645210011;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j4AtUKdetjfbUWDMIVmKhaD+IokO5XwjAf4ZeGwgD5o=;
-        b=E5hDTvi1kINeQjElv13278gp3KAhL6LJtTMG6mWLSPUwiiybVDm1F7bV4XoSpabUMMlzzQ
-        nZwmZumZ1A6CDZng6lmj9HCMavv0/TKEvN2e8Ni2wpsvRKV/yS0KB9rljh06W+sx/G9uPT
-        0PfYd+dEA3505YdikZN9IyjD+rcn07s=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-KUlURqKYO6a6aLsTsuz0lA-1; Fri, 18 Feb 2022 13:46:50 -0500
-X-MC-Unique: KUlURqKYO6a6aLsTsuz0lA-1
-Received: by mail-ej1-f72.google.com with SMTP id o4-20020a170906768400b006a981625756so3494964ejm.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:46:49 -0800 (PST)
+        Fri, 18 Feb 2022 13:47:49 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE2F13E10
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:47:32 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id g1so3009628pfv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=9s/ZIHrGES7feK2tz5dP1rmrFQ/RLT8GNy7zBmf9EgA=;
+        b=f0H3TVA9AOk2uGP+1p95rEv5SaFwf75XopgpbmOxZY8zZsMWRS7/ilyAzemq42ESPm
+         wlFR7t4VyV+eB83JWky1FqzO4CdSZjDePKhOC5uuKA42mL9nd98/EVdL9zpuiudJCRHG
+         E/569cf/0s3ZM93xiPP35gjTOIeT6l97ECf0fifUKeerHnYhMsaBs/uZnBlqlDJvqtX8
+         9zyEy2gnZm6ck0iYurd/2iReR+k7ZeFKo/nzibUUGYQkf6MeYCCb7CUMpRqjEUOum+zH
+         z0+tIlA6QCpa+mIRTL/DQP/NDl3xZeu/8IIub+8KNEX5t30zXH6yiACac5mO3G2kSuAH
+         2HyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j4AtUKdetjfbUWDMIVmKhaD+IokO5XwjAf4ZeGwgD5o=;
-        b=j26Gdxtb9QW7qC8lOylh5+u12zDGJDfEpt4fRw+j/otctVoqmY79+IrNii1jjIi7Du
-         QsJXCbUU0K2Nkaj3BdY0IuZv220tpx7OPzX7WXJVOxNlJVYAKaplCi5B329sT8ErhtNI
-         yCiz6QMz/kceaxGnYNKPLzf8sFO1iPBAWxpwq+eZ0PfNCbcjE7ZCtDSqhmYOBSzrrqM7
-         UjMszoPTs6+sOjxIbPVsaqQyUJX9MTXli+ftJB7BTY4cc+eI7vCT4hM3k8bQpor0w5K7
-         4MV0k5vd8H8MUHu2SM1kBqRSU9gCwAstmPolLXp0/kAXQ6ZEqquK85lm7Bzltxqo75he
-         tmNg==
-X-Gm-Message-State: AOAM533QXmS/oRSxKbhmmNZ+dd0XzOXsO7g+oURjMtPgOOe7Pf3Yis1r
-        luCJ9f3yqLMNXNgV1muHVdg4h00ouLUtb9iVy67sDlJ0sKK1EkT7PaxU6W8ZLCWYKdwbCTGFuQF
-        C4073Heb++IrnO5ckj8HmlTQV
-X-Received: by 2002:a50:c082:0:b0:402:c2dd:5567 with SMTP id k2-20020a50c082000000b00402c2dd5567mr9769568edf.113.1645210008656;
-        Fri, 18 Feb 2022 10:46:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxqzh/mZWjIeLwSt0SDcmglddr5v+ON2zOTKVj74G+ah3yUrrEbyn4yp0hjVEDGrhAorl500Q==
-X-Received: by 2002:a50:c082:0:b0:402:c2dd:5567 with SMTP id k2-20020a50c082000000b00402c2dd5567mr9769554edf.113.1645210008412;
-        Fri, 18 Feb 2022 10:46:48 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id j9sm2491562ejo.106.2022.02.18.10.46.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 10:46:47 -0800 (PST)
-Message-ID: <219937f8-6b49-47db-4ecf-f354b110da1c@redhat.com>
-Date:   Fri, 18 Feb 2022 19:46:39 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=9s/ZIHrGES7feK2tz5dP1rmrFQ/RLT8GNy7zBmf9EgA=;
+        b=AV2dc4k04/htbUf5ci/ZIUPPdAzY/xfn1Qhrgu39GXRXaX8miEa3cHwiPGaTBUYrAr
+         OIHINzd88GD/94AYpA9As08BVfu48cBDOnnABAanoyft/m4iNHNVewO328xg0b8HglW0
+         XLdF3WuuWQACiVM+3JRXba88KEPQshU4VHj7b6fTH2H8ukihBKp5QxEVjh/AdGIxVOjd
+         lXgG4z+oEci770Vt34ZYM8crxM5i/+EHrVfpwpGZvX6db2zyjPFvSAyGj/qF23C19tTH
+         dqnZ1vG4Y3zrg4ZKdybyPcCQNytSSXHnlxJPL1/W2G9mvW/rXtk76jzM0wCXKAb1j7EF
+         If6g==
+X-Gm-Message-State: AOAM5333OivMc/OWvit/+PIo0sW7OrPXZ08kCZ8Ft0qPDcN2mfWp2c5M
+        dSwKFqfSdOpr8qDuCvZv79pGqQ==
+X-Google-Smtp-Source: ABdhPJxbZeaBnK2HPkHb7qJeePZrSd31i9bN8DyNF4o8wa3tB2DdFjfjcOKFTXhdLq/D0WfDRNYbsQ==
+X-Received: by 2002:a62:3085:0:b0:4e0:1218:6d03 with SMTP id w127-20020a623085000000b004e012186d03mr9053021pfw.19.1645210051404;
+        Fri, 18 Feb 2022 10:47:31 -0800 (PST)
+Received: from [2620:15c:29:204:701:472c:4005:6710] ([2620:15c:29:204:701:472c:4005:6710])
+        by smtp.gmail.com with ESMTPSA id h5sm3534755pfc.118.2022.02.18.10.47.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 10:47:30 -0800 (PST)
+Date:   Fri, 18 Feb 2022 10:47:30 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] slab: remove __alloc_size attribute from
+ __kmalloc_track_caller
+In-Reply-To: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
+Message-ID: <b8e9dcd2-5b2d-af7d-e4e6-c6bd4a7e4315@google.com>
+References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 07/18] KVM: x86/mmu: Do not use guest root level in
- audit
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
- <20220217210340.312449-8-pbonzini@redhat.com> <Yg/nc1jjtUD2fhOR@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yg/nc1jjtUD2fhOR@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/22 19:37, Sean Christopherson wrote:
-> Since I keep bringing it up...
-> 
-> From: Sean Christopherson<seanjc@google.com>
-> Date: Fri, 18 Feb 2022 09:43:05 -0800
-> Subject: [PATCH] KVM: x86/mmu: Remove MMU auditing
-> 
-> Remove mmu_audit.c and all its collateral, the auditing code has suffered
-> severe bitrot, ironically partly due to shadow paging being more stable
-> and thus not benefiting as much from auditing, but mostly due to TDP
-> supplanting shadow paging for non-nested guests and shadowing of nested
-> TDP not heavily stressing the logic that is being audited.
-> 
-> Signed-off-by: Sean Christopherson<seanjc@google.com>
+On Fri, 18 Feb 2022, Greg Kroah-Hartman wrote:
 
-Queued, thanks. O:-)
+> Commit c37495d6254c ("slab: add __alloc_size attributes for better
+> bounds checking") added __alloc_size attributes to a bunch of kmalloc
+> function prototypes.  Unfortunately the change to __kmalloc_track_caller
+> seems to cause clang to generate broken code and the first time this is
+> called when booting, the box will crash.
+> 
+> While the compiler problems are being reworked and attempted to be
+> solved, let's just drop the attribute to solve the issue now.  Once it
+> is resolved it can be added back.
+> 
+> Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+> Cc: stable <stable@vger.kernel.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Daniel Micay <danielmicay@gmail.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Christoph Lameter <cl@linux.com>
+> Cc: Pekka Enberg <penberg@kernel.org>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Paolo
-
+Acked-by: David Rientjes <rientjes@google.com>

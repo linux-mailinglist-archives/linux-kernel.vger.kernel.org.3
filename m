@@ -2,158 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9C84BBEB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A112C4BBEAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238846AbiBRRva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:51:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35190 "EHLO
+        id S236941AbiBRRv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:51:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238872AbiBRRvZ (ORCPT
+        with ESMTP id S238800AbiBRRvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:51:25 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8E0251E71
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:51:06 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso6962090wmj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:51:06 -0800 (PST)
+        Fri, 18 Feb 2022 12:51:11 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDAC74621
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:50:54 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id p206-20020a4a2fd7000000b0031bfec11983so4333758oop.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:50:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jE4Xp1Su1BAg5kbbWTHG1FN0oJ9hDn50nQE95kDMcIE=;
-        b=MxLJUtFlCRDP8c5O9j7qn9H/9WVcYL4FTz/wJsj1nBC+8Eo7be0XNzCcMG7IFYF04X
-         wfSyyZYpZtYVyyzKGH155eXDDEch6z2ZoqVYBAA3SNjeyUkC4u+Z5QXEW7dRRNTB7wpO
-         83YVexXJl0rD3c9EOSiO9DqUX53R0VSvbjAmJwKK2eZ0Tk+ckvUOAB97JrBBXmlVYZ8C
-         09uaJvKoUc721Z66ZJI17FbTVzKUlB70k1OuxB5g3t+2i3ZP6ETNDB3AQe1n/CVWhvIH
-         k+/fbSZNULkJiP0rWzkJS+3+Q338dbHCs3yc4DyQviIXL1hYhDOe5uSZagoCIhgJ4Gvt
-         Kbfw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i6PdaTZaoqrR3pWnqrcADN2t1Wh6WW3RvOic4loCQ2g=;
+        b=mXgCS7/y0gs6Lf1lr7O/RG+nXEWcseUmfzR3/nAl+1Pb1Qs2+zyz5rgRUTqH3Ne/V1
+         K/hT1kYcuCq7WbHpIgjK9HxuM7i1UDsV+5ZuOnSUHccmkcWg59O4KA/DmatwPyvv2avC
+         5Gmcas/lcHb9ycO847tUmhK3HUOjO7l6m8K0bC1jjHwubpQm0HB8/u866HemwCQoElwc
+         +zFDBVTF8HZJL1Rxq1XP2GDELr3d/zw/dCYmi7YigYKy534vB0oShlOdQ9EEvXsGhDV4
+         CFwS3Q+zBzdGjWi4jDosguzFMrcpCODNmO4M6zZhZp9xICL4p9MAaYbhEhFeMnYjzfs0
+         aImg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jE4Xp1Su1BAg5kbbWTHG1FN0oJ9hDn50nQE95kDMcIE=;
-        b=n5a+GwoYNGbwTNYmolunAyv3YuCO0Ze86iIVZs8L2bh1N3wUN+8HkWZkKL203Tisdf
-         m8YXWVi2E/Pce5ZAK4ccf1DUw2OEwM26wRW4qAA87TvWe9gl0ECBi5E8Pi2EeLyWj1Aw
-         geT7UT1/OYVCGc1xD7LXT0diBiGVWjH7dLiooLAd1xgfWuLY0riCBWVBsu2tgN3H/Sfz
-         us2TNT0WgIwYzps+1gDwP4PCUfD8M2pNlxwfcIPJNJOz+0pJz7XjA6NZodzIP8xWMZqZ
-         f/70DT45AydW46oLtOT2kvXDyglJnqHl6I+xS34n+T86EsjzmFbQPYlfYM/1MwTxMiEj
-         4uMw==
-X-Gm-Message-State: AOAM533VPmJR5d+IdsWtnv9JaCHwk7N/jV8+SP7uKIqIv/sn2MsCk+ki
-        Y5vqSQepVBqkwsvU2lvrJncyXINCQvlIWG3FDew=
-X-Google-Smtp-Source: ABdhPJx24uWpNh4PfLwgQ+xUx/EoND/HPGkbbfmZDRMurF3pbX/iA/d2w1P971ubT+7wz+S9OWfwFAODyX9SZVdqpFI=
-X-Received: by 2002:a7b:c409:0:b0:34d:4775:4961 with SMTP id
- k9-20020a7bc409000000b0034d47754961mr11458478wmi.44.1645206665172; Fri, 18
- Feb 2022 09:51:05 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i6PdaTZaoqrR3pWnqrcADN2t1Wh6WW3RvOic4loCQ2g=;
+        b=Wwu+wApXVGV14rlGTzu977GM0c61boA3frXYZdHflFG19ryHgyfauayLTLGKgmut9X
+         2TYwh2XVgD+hLpgfXlnKxDBrFiPsw8pgS4hf1Ss+q9DWU0lwn7WtjgC3AmKQh2nY8vUH
+         LJGwehXKWxGr2Sc1Ibuey67qjIZH2SETBMgcf9n37rEZzzRvFOIR2NDC8ff9GhvBvqbE
+         dEKWmXn67qfhjCCUUS4Qu78fUdHT8JZpqweiD16WyDbSNpJ166vSsdg79zQyzXWVFvSC
+         U8BDJADOR7DJHyKpwuMEYUFUs1KPs+1lbJMtwxuF0dfToRq1w2J8OeKHKp56iDWf5q75
+         ht6g==
+X-Gm-Message-State: AOAM5303xWvaZqzDMQxna7tGqcXYlOAfJYauxLuW6cdzPt6hP3MajdYH
+        Pt0FQ2sVnvGoE08TtKOkzUZMGLPtKH/CBA==
+X-Google-Smtp-Source: ABdhPJwGiKIuSKLq2Srt/umgk9hiZl0LZ27JYC0IPjV3D+pJl3Dpcskij6xMdpTTIeUvmcxqQpj8Qg==
+X-Received: by 2002:a05:6870:8305:b0:d2:793b:1eaa with SMTP id p5-20020a056870830500b000d2793b1eaamr3325187oae.332.1645206654072;
+        Fri, 18 Feb 2022 09:50:54 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id i18sm60354oof.29.2022.02.18.09.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 09:50:53 -0800 (PST)
+Date:   Fri, 18 Feb 2022 09:52:59 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: remove duplicate entry for i2c-qcom-geni
+Message-ID: <Yg/c+27yR1P0b+eL@ripper>
+References: <20220218104904.14405-1-wsa@kernel.org>
 MIME-Version: 1.0
-References: <20220218155725.487785-1-robdclark@gmail.com> <CAPaKu7R+6g9XRzWPk-u0jKWa602z6CJVxhPqgjJPipzY=S-txA@mail.gmail.com>
-In-Reply-To: <CAPaKu7R+6g9XRzWPk-u0jKWa602z6CJVxhPqgjJPipzY=S-txA@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 18 Feb 2022 09:51:25 -0800
-Message-ID: <CAF6AEGtrQ7rcK6sEbiaHa72cebGbrdS0RNS22T07XQwCM2sQ0g@mail.gmail.com>
-Subject: Re: [PATCH] drm/virtio: Add USE_INTERNAL blob flag
-To:     Chia-I Wu <olvaffe@gmail.com>
-Cc:     ML dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218104904.14405-1-wsa@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 8:42 AM Chia-I Wu <olvaffe@gmail.com> wrote:
->
-> On Fri, Feb 18, 2022 at 7:57 AM Rob Clark <robdclark@gmail.com> wrote:
-> >
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > With native userspace drivers in guest, a lot of GEM objects need to be
-> > neither shared nor mappable.  And in fact making everything mappable
-> > and/or sharable results in unreasonably high fd usage in host VMM.
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> > This is for a thing I'm working on, a new virtgpu context type that
-> > allows for running native userspace driver in the guest, with a
-> > thin shim in the host VMM.  In this case, the guest has a lot of
-> > GEM buffer objects which need to be neither shared nor mappable.
-> >
-> > Alternative idea is to just drop the restriction that blob_flags
-> > be non-zero.  I'm ok with either approach.
-> Dropping the restriction sounds better to me.
->
-> What is the use case for such a resource?  Does the host need to know
-> such a resource exists?
+On Fri 18 Feb 02:49 PST 2022, Wolfram Sang wrote:
 
-There are a bunch of use cases, some internal (like visibility stream
-buffers filled during binning pass and consumed during draw pass),
-some external (tiled and/or UBWC buffers are never accessed on the
-CPU).
+> The driver is already covered in the ARM/QUALCOMM section. Also, Akash
+> Asthana's email bounces meanwhile and Mukesh Savaliya has never
+> responded to mails regarding this driver.
+> 
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
 
-In theory, at least currently, drm/virtgpu does not need to know about
-them, but there are a lot of places in userspace that expect to have a
-gem handle.  Longer term, I think I want to extend virtgpu with
-MADVISE ioctl so we can track DONTNEED state in guest and only release
-buffers when host and/or guest is under memory pressure.  For that we
-will defn need guest side gem handles
+It would have been nice to go the other direction (reducing
+ARM/QUALCOMM), but your assessment looks accurate, so:
 
-BR,
--R
+Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> >
-> >  drivers/gpu/drm/virtio/virtgpu_ioctl.c | 7 ++++++-
-> >  include/uapi/drm/virtgpu_drm.h         | 1 +
-> >  2 files changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-> > index 69f1952f3144..92e1ba6b8078 100644
-> > --- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-> > +++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-> > @@ -36,7 +36,8 @@
-> >
-> >  #define VIRTGPU_BLOB_FLAG_USE_MASK (VIRTGPU_BLOB_FLAG_USE_MAPPABLE | \
-> >                                     VIRTGPU_BLOB_FLAG_USE_SHAREABLE | \
-> > -                                   VIRTGPU_BLOB_FLAG_USE_CROSS_DEVICE)
-> > +                                   VIRTGPU_BLOB_FLAG_USE_CROSS_DEVICE | \
-> > +                                   VIRTGPU_BLOB_FLAG_USE_INTERNAL)
-> >
-> >  static int virtio_gpu_fence_event_create(struct drm_device *dev,
-> >                                          struct drm_file *file,
-> > @@ -662,6 +663,10 @@ static int verify_blob(struct virtio_gpu_device *vgdev,
-> >         params->size = rc_blob->size;
-> >         params->blob = true;
-> >         params->blob_flags = rc_blob->blob_flags;
-> > +
-> > +       /* USE_INTERNAL is local to guest kernel, don't past to host: */
-> > +       params->blob_flags &= ~VIRTGPU_BLOB_FLAG_USE_INTERNAL;
-> > +
-> >         return 0;
-> >  }
-> >
-> > diff --git a/include/uapi/drm/virtgpu_drm.h b/include/uapi/drm/virtgpu_drm.h
-> > index 0512fde5e697..62b7483e5c60 100644
-> > --- a/include/uapi/drm/virtgpu_drm.h
-> > +++ b/include/uapi/drm/virtgpu_drm.h
-> > @@ -163,6 +163,7 @@ struct drm_virtgpu_resource_create_blob {
-> >  #define VIRTGPU_BLOB_FLAG_USE_MAPPABLE     0x0001
-> >  #define VIRTGPU_BLOB_FLAG_USE_SHAREABLE    0x0002
-> >  #define VIRTGPU_BLOB_FLAG_USE_CROSS_DEVICE 0x0004
-> > +#define VIRTGPU_BLOB_FLAG_USE_INTERNAL     0x0008   /* not-mappable, not-shareable */
-> >         /* zero is invalid blob_mem */
-> >         __u32 blob_mem;
-> >         __u32 blob_flags;
-> > --
-> > 2.34.1
-> >
+Regards,
+Bjorn
+
+> ---
+>  MAINTAINERS | 8 --------
+>  1 file changed, 8 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ea3e6c914384..f0485f61295d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15972,14 +15972,6 @@ F:	Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+>  F:	drivers/misc/fastrpc.c
+>  F:	include/uapi/misc/fastrpc.h
+>  
+> -QUALCOMM GENERIC INTERFACE I2C DRIVER
+> -M:	Akash Asthana <akashast@codeaurora.org>
+> -M:	Mukesh Savaliya <msavaliy@codeaurora.org>
+> -L:	linux-i2c@vger.kernel.org
+> -L:	linux-arm-msm@vger.kernel.org
+> -S:	Supported
+> -F:	drivers/i2c/busses/i2c-qcom-geni.c
+> -
+>  QUALCOMM HEXAGON ARCHITECTURE
+>  M:	Brian Cain <bcain@codeaurora.org>
+>  L:	linux-hexagon@vger.kernel.org
+> -- 
+> 2.30.2
+> 

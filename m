@@ -2,170 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E894BBE69
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED41C4BBE66
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238591AbiBRR3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:29:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60470 "EHLO
+        id S238603AbiBRR3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:29:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234314AbiBRR3V (ORCPT
+        with ESMTP id S238594AbiBRR32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:29:21 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6DF2A64F2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:29:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645205343; x=1676741343;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=2FYa3Z2Z1p5i07xv/TKktHyLQt1G7cNlm63euFfk0EQ=;
-  b=GNFqy7BQsQ9KPFBJQkjKiF0MSaCiozeCcLUGPV3LkUPtWocyxB7WKzFx
-   wj+3L0u6TurJBDtHOIg3sDWJqdDKIULmCVOt4oWrhdBj4I0CVT1d3W6tW
-   AuJrU65hgjBYEQZ69zGC2zPcG3AdJSYtuqOsA3hBWtDNCMmMgrUOTIyHK
-   Tc5/OxruaE9+2WbJuQ88M6ZHDN8MgLKRI8qncERgkw2vgfpadLoxAqVoS
-   03PLdxwuvnVCRE4UqTgCnCSozIBEAUiyFlig/WhVXoyldE8EPRDeolPaD
-   qNb46opOtSQog1IvoY2kCcUnSu9IX5n+LQrTcV525IPIAeaZIRdNBHvlK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="248768255"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="248768255"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 09:29:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="506374913"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga006.jf.intel.com with ESMTP; 18 Feb 2022 09:29:01 -0800
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 18 Feb 2022 09:29:01 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 18 Feb 2022 09:29:01 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Fri, 18 Feb 2022 09:29:01 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Fri, 18 Feb 2022 09:29:01 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LcnSGDLXiRY996juCy1c3X+9n01qWe3Ygr2QDEtVJqVQ60SEqQSNFz57eRjT18hqx8GyqHM/O6rGFY4Ua0eHTM6+R/JwK1zAL15ZYYa6qDNeWtRAatJojyqQ4jI9fSwWv7xyI2HKwVf39CTIHboeGDzCOp+HAXf8V8oo+mob32jvUhUbITOoSyKctsBGpidWlGyCmGnhwC+FoxTiVRDp1g9nGdXhMyKjUnC6/9s1SiDI6jSJeTxqXz/OVVaeniYWMwfmO/JdDuDZRCFZMCxK2fBLAA4zXUbs4VxfHjWHAgRRpzvwvAB7TnyGfwWduMAoig/bo4DtMCrLYoB2vr/Ewg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2FYa3Z2Z1p5i07xv/TKktHyLQt1G7cNlm63euFfk0EQ=;
- b=QoKaCsZEo4BbriocpZJuSPTxy64aiQK/7zh45N3jjHEVkQZJInayTWCo4PTPt7sDAjmo8+PtKTJpPYwFiBwkb7IIqaxbd67A8zKbiqvaMj0bfaXWVd32ISZ6c+Xq/iqYH4rc+lsbQf43xxCFzZ7Xz2hPSOFk7N09mgb2sx/mfUQAxsezD6CKEVTd7ux1JHT8WIuSUpfuR/FC8VKmcfKDlFolqABiYc4VoIUM0JmLUhjyRbMP5sHUlFZEhRBObGA/JJlpRMKvA+Rc683YIpfpU1He9azTG2W5NwWtm+0VSJJ2Vt1q4CRDrtnUJwV4pVGc+Hoe82yA16ikd/HH4stlbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MN2PR11MB4141.namprd11.prod.outlook.com (2603:10b6:208:13b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Fri, 18 Feb
- 2022 17:28:59 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::250a:7e8f:1f3d:de15]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::250a:7e8f:1f3d:de15%4]) with mapi id 15.20.4975.021; Fri, 18 Feb 2022
- 17:28:58 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "Weiny, Ira" <ira.weiny@intel.com>
-CC:     "hpa@zytor.com" <hpa@zytor.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH V8 26/44] x86/fault: Print PKS MSR on fault
-Thread-Topic: [PATCH V8 26/44] x86/fault: Print PKS MSR on fault
-Thread-Index: AQHYE6cSvAinJ1PkIkSVk8TPjaDgIqx/B5GAgBnrBYCAAMAggA==
-Date:   Fri, 18 Feb 2022 17:28:58 +0000
-Message-ID: <d94be5f21bf18c844d7088a96ae35aa209a0ef4e.camel@intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
-         <20220127175505.851391-27-ira.weiny@intel.com>
-         <2a919d9ed8ed874f8b89014c0b42cbadb44d837b.camel@intel.com>
-         <Yg82L5ibjbn15AHO@iweiny-desk3>
-In-Reply-To: <Yg82L5ibjbn15AHO@iweiny-desk3>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 74e60c94-eb39-4cb5-4af5-08d9f30425bb
-x-ms-traffictypediagnostic: MN2PR11MB4141:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-x-microsoft-antispam-prvs: <MN2PR11MB414162898D8AFDA207CE0713C9379@MN2PR11MB4141.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TmXE/Y4FYMf0ed1uhZ37AcXwpCwLN3wsQEqitEAckbOwDe8WWdKitzK4Oq/q10X651+xYbqQHul5W8Sx0ZuJPO2LPwf4Chob7q6JmVGQYTXqFfD26VrBYHQXK2Om8T2GCWREHqAJkD/vqLbrxmL9Kg98HhDxv9y5+8Ih6u8SEXGHunV1CfA8fzP+1tJ1d/50aGBDyvap7V0gCYhRWKWtzOQsQSdLor2FjfXPfah8xw97sPNrrQ74KPpA695Ug5Ri3cv+rc3hOzVNT2oAjbvDTWmajvi/TyY5ikppKN+A5jJ5KjyRqsjmBJpcGbbqOaX/trKaTxOZxhGORdYF7LsrF98TWBGdGMxbJRaq11rC4k3s1rYgBnw+TTBHN48nX1y8RdCQixUeva8m5PfVPaV7jSOToLOn7/PI8m5prFzIB2/X5w2e8W10bwFgMVOun9vPdPomZIJkI6cm43fkciEPSFNo1zA6COeJpUYqGYcWfoQ9hQ7L3uPAxeu2KoM7nzApp3UUzeQiCePmnW/MZi21iud07Ctc5to2Ai7hM6EthBhcPAMNz9iRyT/j9y2UlkocaeQYWVnyaanULJAy4/BZM5QFyPyxcOOxG3vD9QkdCwA5sxngtmysRkqfuNSVU0sfGz4vw7yy3ZCXgRtmWaqY9zk3FL9EZOidu5apuIu68HYYRs9/LiDN//VN/x8IMr1m9W32Gf3+VUmfbUczeiOYYAmhGFI515NFJJJrhbUr4m4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6486002)(2906002)(86362001)(38100700002)(6506007)(37006003)(83380400001)(508600001)(8676002)(66946007)(66446008)(76116006)(38070700005)(66476007)(4326008)(66556008)(64756008)(6512007)(71200400001)(316002)(2616005)(6862004)(8936002)(186003)(122000001)(26005)(54906003)(5660300002)(6636002)(36756003)(82960400001)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SGgvUGphN2hqSnE2UWk0b0lnd1o3bUI1L0Vmd3FIWVlGUzRBUDhaa044akEy?=
- =?utf-8?B?Q2UrM21aQjRrdTZWZU5Zc0kvcnhTRkU5bDI4Z2ZtRy9zdFkySkptUXptK0Jq?=
- =?utf-8?B?R2I2ejZkbks2YW1tMGFPekhEWUUyV1VFSUNxUit0S2JWb2Y2QlhlVVcyZTRh?=
- =?utf-8?B?ZGhxdTNBTVdPbkdkTmk1MnZ0SCtrQkxpdG1VNjI5Z0dnUCtKdWw4SUJaL2Fx?=
- =?utf-8?B?Sm1LRHBCVXBDR01UbEFtSVVmSFNodUw3T3ZsZnJzTzEzamlRQ09hTnF5aTJV?=
- =?utf-8?B?T0M5VS9Zekgza3JmMXZLL3dkclNQbzFlY3ZLVWZXeHpCRFEza3V4MEQvZlhm?=
- =?utf-8?B?ckFBU005SkhKTnJUMmlTVVZRRUhHN0JzVlFMRTFuR1ZqWUp6SC9aaVlxdDBD?=
- =?utf-8?B?OXJuS3JEUnpqdW9NaEZqdmk3bmtLREFKZkp1NjQ3M1UxSER3V3pnNUhnWVhw?=
- =?utf-8?B?OEplZkZtQnB0RnNpUVowWXU1VUEvMFFMaktLS1FJdEZ0VEpQTS9xNGV1Q0p0?=
- =?utf-8?B?cFQ5QjVCT3ZTMWl4anlMYjJkUFFmMDlDNTBjejhwTGh4U1lUd2x1aUdoT1pK?=
- =?utf-8?B?S3g1OWVGVHZjUHl6OFU2N044V2N0emo5N3gxLy9ocVBCOUdRam9odnY1aU9q?=
- =?utf-8?B?MXFIQzk5M011ZEN2U0pGVGZjWTZraXRZNXVNRlVXOW9OWWppSCtoRHp0b1Z6?=
- =?utf-8?B?SFcvb29kbVY5aWhxTEVRelZ4V1VHUUdKTVAxSUdBcDlHaE1CTDdHd2RjZFlo?=
- =?utf-8?B?d0kxNTRpenppdGJKOGlsazVpZHczNU5jZzlhMTNGSUY3eU9Tekd5OExWbGtp?=
- =?utf-8?B?ZWNMem9SWThraUErVVpKZHRJMmltdXhRMEJhYVBidUlYTmhpaGF1REljTHJl?=
- =?utf-8?B?cjAxMEFrcy9Ob0VGMCtsV29jVzhPVkkyVGtndUg3Y0pKcFNJeE90L3dSendU?=
- =?utf-8?B?bXVUSW5VZVc1MmcxYlA4UFVBaGpLeHliWVN6Q1NjaStSWVRWM2VDREJGWTdZ?=
- =?utf-8?B?SEdEUDVHanR3Z0pQTE9QWnMyRGdWS0dpbWhQcVRjeWdKTUI5R2tQcVMwQWdP?=
- =?utf-8?B?Q2V1TWJFTlVFY3k1ZWJHelRuSXdvT0IwMWRGYTNNeHBZSXJERzdJaDV4MFhR?=
- =?utf-8?B?UWovYkM3RlJveU83dkVyanNmNTVNS0x4RWl1d3hIWjFKT2czUGlMYjVTWTc4?=
- =?utf-8?B?S3FiNzQ5YW5mOXBXTVFycFlkM0lHcXhmM1JONXk2MTF0M1B5bHBUeENlOXh3?=
- =?utf-8?B?eE1pRGhtblEyZC9OdUVSYVJVU000ekVvRkJTZEFGTzVhUUJ5SnRHN0tsNTJy?=
- =?utf-8?B?U29ySkZXSnpTMEtkbThNenE3ZGFlQ0dMU0JMR1Y1TzlMS1RyQ0lQcU1nQ3M5?=
- =?utf-8?B?ZkhWbXR3c3U5dVB0YkRpZnN2QkUxdXpKQVNOUUgvWFVmSURZdlVhOG1CNWhG?=
- =?utf-8?B?SGIyWWJVMzVENWxpK2xtcHB2ajhScU9IcmxmSU9UUEY5S0FiWVJjSnYwT3VS?=
- =?utf-8?B?S2Zwb3R4RmhCUlNTcDBTL3IrRVBCNGc4V3hyUDBZU2xPYjEwVlNBNHpBU2tL?=
- =?utf-8?B?WGJ5MEs3Y3k2QXJNV3NmQzNudHJjRjRvZFg1ejgwQ3l5bjJwVW5ZQmlYUlZP?=
- =?utf-8?B?RzkyNjRRVHpGbDR5Y3dHWW5DdzJwWTZpUlZkaGdyM1JmbFRUUXRYZ2l3N1Az?=
- =?utf-8?B?KzR5akdxYk9raVkvelRvVlVKRDBPQ1JGcDAwU3d6MFQyZTFEZ2RqR083Y010?=
- =?utf-8?B?czRPZ04ySnV1bzF3U2RIZlZxRXY1OGZzOVRDT29wOE1UMlp5M1MrVTkvcGRL?=
- =?utf-8?B?T3JlYTFORHhQQnZ4VlRPUHNPZnNsVXFiaWFJakJxWWJEZVpyNFFsU2QzTDFI?=
- =?utf-8?B?cHFhdGIxZ0N5WE1YeENDajF2S0JNdGs1Tm4xcEJLOUxLMkRudHYrUUlJVFZP?=
- =?utf-8?B?UG94ZmQ5QUp4T1BHQThlTmV5Tjd6WVArV1JHRmRDRUJ6NUluc0NiK0JELzNo?=
- =?utf-8?B?eVBEVlJTUW01QSswTEFoU2NuTDBNZjlZSzhjNjZTT0Z6aUs5ZDJjRW92MUtm?=
- =?utf-8?B?TWtWaUNNWjdHa3pORFRlZFRqaFpxeXlyZ1Z0bzlPczFxd1NzeFVhVVNqUTBN?=
- =?utf-8?B?bnl6NkcxNmxHN1VndDNFTm5YV3hIWmZqQ2hzeVVtYWVKWTAydWVIVWRFYVZZ?=
- =?utf-8?B?ZXhMekRqVkdrN0NXOS9OUHF1SmFMdHZmOCtUZzdodTRIbDFTUHF5a0Q3RURP?=
- =?utf-8?Q?TyQ4IYtlwIgQ/n9sZ0LNsg6pAa4Ju2FytzR7a1YBBU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D02B1A647D6DF846BAD1CEA09AE71F53@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 18 Feb 2022 12:29:28 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276502B2E3C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:29:11 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so6896632wmq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:29:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=An8WyAG3vbfG1ZL4q6fzovdUaIVOWu7FP5i73dPwvUA=;
+        b=dKTePdT4FpJ1vgMKtEfU7k06uPnmfOm8MFZ9dI60Y9KlWz9r/+UCr+XejzDGceCeHO
+         GxYrklakI5pSajWG/7NXLnN63dwNkHVnKCj0mivqRGicljRHJssoM5ivHOlQxlH27OwV
+         Xa70+IqxGeUoYt8WTqrAif/YVMiu1q0zzJAqq22K7BvTdaMLD2qOUSVoFhw2UwEa3+ex
+         AkCgyb2ue1TyNrA4OtsADX/C07Pl/PYBoX/wq/W/58eNOSsW+fU14vr/Aur+l/Tk+x4Q
+         gZ1fBt/+z2l8mwO4Y6gJp3WbA3sJE6VXBzUs1gf0x6RDciQ0q/pYDnOghcbVZK0U5lDJ
+         a/Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=An8WyAG3vbfG1ZL4q6fzovdUaIVOWu7FP5i73dPwvUA=;
+        b=0B8XbN0L+2S5dWElZ+2luJ2ZXmb84DPhaKSDbE7WRYYZcozrmuHloIEkuniNwBFM0a
+         3AkQ2oDJE23aRGhZV31D6hcKrUQsn/m85PHBWK6qlRK1MCFN8vTDAPwJPN+uNU/9KREp
+         18VolSjVELYT8ZUKxwo6rORaW/SuiucSWo9KotHb8ySDpQRO0UbKmTlkEqAPCLACJDg2
+         GAv6Md7ucYp+Srh2/MJ+Z+7qjCNXvEebXUAt+8d/jx0B3N93I3PobHsdXUc1fu6SrTRV
+         /BKoX/X1DpxyK5jf8UeBbvEAG2efCKrXERw6l/aZbORNbCFwPke5KkH1ZOJljOr7O8D1
+         feHQ==
+X-Gm-Message-State: AOAM532WDfVpG+YKlqCaqe7c7qSsTHq+V88dJ/eNwXPMADn3lZQHhCVT
+        NO43vsKXiB6Q7+gDijHg5rQOjQ==
+X-Google-Smtp-Source: ABdhPJy4Es4J7YiLNdEEk25z1NsGDyeiCfHbctbIgWC3VDEiZoPCp5JeTpGfSz6JWNRIizgOHbsfqw==
+X-Received: by 2002:a05:600c:4f4f:b0:37b:d847:ef15 with SMTP id m15-20020a05600c4f4f00b0037bd847ef15mr11222248wmq.130.1645205349422;
+        Fri, 18 Feb 2022 09:29:09 -0800 (PST)
+Received: from localhost ([2a02:168:96c5:1:55ed:514f:6ad7:5bcc])
+        by smtp.gmail.com with ESMTPSA id c4sm21945436wri.22.2022.02.18.09.29.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 09:29:08 -0800 (PST)
+From:   Jann Horn <jannh@google.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jann Horn <jannh@google.com>, stable@vger.kernel.org
+Subject: [PATCH] pstore: Don't use semaphores in always-atomic-context code
+Date:   Fri, 18 Feb 2022 18:29:01 +0100
+Message-Id: <20220218172901.1425605-1-jannh@google.com>
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74e60c94-eb39-4cb5-4af5-08d9f30425bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2022 17:28:58.6836
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TNZb3LAp2fgE4ItAXZ/7Df3RA7SFf9QLkeyC/GsfE58HJx4mOY9Tph2t2kIesLWS6ZjIGNTb7nY8SQhmnJLXYpQ++IIvl8/82Uu/nIFmFuw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4141
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -173,23 +74,247 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTAyLTE3IGF0IDIyOjAxIC0wODAwLCBJcmEgV2Vpbnkgd3JvdGU6DQo+IEFy
-ZSB5b3Ugc3VnZ2VzdGluZyB0aGUgUEtSVSBzaG91bGQgYmUgcHJpbnRlZCBpbnN0ZWFkIG9yIGlu
-IGFkZGl0aW9uDQo+IHRvIHRoZQ0KPiBQS1M/DQoNCldlbGwgSSB3YXMganVzdCB0aGlua2luZyB0
-aGF0IFBLUlMgc2hvdWxkIG9ubHkgYmUgcHJpbnRlZCBpZiBpdCdzIGFuDQphY2Nlc3MgdmlhIGEg
-c3VwZXJ2aXNvciBwdGUuIEkgZ3Vlc3MgcHJpbnRpbmcgUEtSVSBmb3IgdXNlciBmYXVsdHMNCmNv
-dWxkIGJlIG1vcmUgY29tcGxldGUuIEknbSBub3Qgc3VyZSBob3cgUEtSVSBjb3VsZCBiZSB1c2Vm
-dWwgdGhvdWdoLCBJDQpjYW4gb25seSB0aGluayBpZiBzbWFwIHdhcyBkaXNhYmxlZCBhbmQgdGhl
-cmUgd2FzIGFuIGVycmFudCBhY2Nlc3MuDQoNCj4gDQo+IEFGQUlDUyB0aGlzIHJlYWxseSBzaG91
-bGQgbm90IHByZXNlbnQgYSBwcm9ibGVtIGV2ZW4gaWYgdGhlIGZhdWx0IGlzDQo+IGR1ZSB0byBh
-DQo+IHVzZXIgcGtleSB2aW9sYXRpb24uICBJdCBpcyBzaW1wbHkgZXh0cmEgaW5mb3JtYXRpb24u
-DQoNClllYSB0aGVyZSBpcyBzdGlsbCBlbm91Z2ggaW5mb3JtYXRpb24gdG8gZGVjb2RlIHRoZSBm
-YXVsdCwgYnV0IGl0IGNvdWxkDQpiZSBtaXNsZWFkaW5nIGF0IGEgZ2xhbmNlLiBZb3UncmUgcmln
-aHQgaXQncyBub3QgYSBiaWcgZGVhbCwgYnV0IGlmIGl0DQp3ZXJlIG1lIEkgd291bGQgZml4IGl0
-Lg0KDQpKdXN0IGxvb2tpbmcgbW9yZSwgeW91IHdvdWxkIGhhdmUgdG8gbG9vayB1cCB0aGUgUFRF
-IGxpa2UgaXMgaGFwcGVuaW5nDQpmb3IgUEZfSU5TVFIuIFRoYXQgY29kZSB3b3VsZCBuZWVkIHRv
-IGJlIHR3ZWFrZWQgYSBsaXR0bGUgdG8gYWxzbw0KaW5jbHVkZSBYODZfUEZfUEsuDQoNCk9uIHRo
-ZSBvdGhlciBoYW5kLCBzb21lb25lIG9uY2UgdG9sZCBtZSB0byBhdm9pZCB0b3VjaGluZyB0aGUg
-b29wcyBjb2RlDQpiZWNhdXNlIGlmIGl0IGdldHMgYnJva2VuIGl0IG1ha2VzIGRlYnVnZ2luZyB2
-ZXJ5IGhhcmQuIEl0J3MgYmV0dGVyIHRvDQpiZSByZWxpYWJsZSB0aGFuIGZhbmN5IGZvciB0aGF0
-IHN0dWZmLg0K
+pstore_dump() is *always* invoked in atomic context (nowadays in an RCU
+read-side critical section, before that under a spinlock).
+It doesn't make sense to try to use semaphores here.
+
+This is mostly a revert of commit ea84b580b955 ("pstore: Convert buf_lock
+to semaphore"), except that two parts aren't restored back exactly as they
+were:
+
+ - keep the lock initialization in pstore_register
+ - in efi_pstore_write(), always set the "block" flag to false
+ - omit "is_locked", that was unnecessary since
+   commit 959217c84c27 ("pstore: Actually give up during locking failure")
+ - fix the bailout message
+
+The actual problem that the buggy commit was trying to address may have
+been that the use of preemptible() in efi_pstore_write() was wrong - it
+only looks at preempt_count() and the state of IRQs, but __rcu_read_lock()
+doesn't touch either of those under CONFIG_PREEMPT_RCU.
+(Sidenote: CONFIG_PREEMPT_RCU means that the scheduler can preempt tasks in
+RCU read-side critical sections, but you're not allowed to actively
+block/reschedule.)
+
+Lockdep probably never caught the problem because it's very rare that you
+actually hit the contended case, and lockdep can't check a
+
+Fixes: ea84b580b955 ("pstore: Convert buf_lock to semaphore")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jann Horn <jannh@google.com>
+---
+Testing on 5.15.24 (latest stable), with CONFIG_PREEMPT=3Dy, when I trigger
+a BUG() via LKDTM ("echo BUG > /sys/kernel/debug/provoke-crash/DIRECT"),
+I first get the expected BUG splat, followed by this RCU warning:
+
+Voluntary context switch within RCU read-side critical section!
+WARNING: CPU: 2 PID: 1478 at kernel/rcu/tree_plugin.h:316 rcu_note_context_=
+switch+0x525/0x580
+Modules linked in:
+CPU: 2 PID: 1478 Comm: bash Tainted: G      D           5.15.24jann #90
+[...]
+RIP: 0010:rcu_note_context_switch+0x525/0x580
+Code: 08 4d 89 be 38 03 00 00 49 89 b6 40 03 00 00 48 89 3e e9 42 fd ff ff =
+48 c7 c7 20 a4 06 92 c6 05 ce f7 a2 01 01 e8 03 fc bc 00 <0f> 0b e9 2b fb f=
+f ff 48 8b 73 20 c6 43 15 00 ba 01 00 00 00 48 8b
+RSP: 0018:ffffb27f01f8f910 EFLAGS: 00010082
+RAX: 000000000000003f RBX: ffff9f5e8f6abd80 RCX: ffff9f5e8f69b608
+RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff9f5e8f69b600
+RBP: 0000000000000000 R08: ffffffff924d5fe8 R09: 0000000000000003
+R10: ffffffff92466000 R11: 3fffffffffffffff R12: ffff9f5e8f6ab0c0
+R13: ffff9f5be87b3a00 R14: 0000000000000007 R15: 0000000000000400
+FS:  00007f998ba3d740(0000) GS:ffff9f5e8f680000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055fa242279b8 CR3: 00000001602f6004 CR4: 00000000001706e0
+Call Trace:
+ <TASK>
+ __schedule+0x74/0x6e0
+ schedule+0x59/0xc0
+ schedule_timeout+0xf7/0x140
+ ? __prepare_to_swait+0x4b/0x70
+ wait_for_completion+0x79/0xc0
+ virt_efi_query_variable_info+0x141/0x150
+ efi_query_variable_store+0x41/0x180
+ efivar_entry_set_safe+0xa5/0x1f0
+ efi_pstore_write+0xe6/0x130
+ pstore_dump+0x177/0x290
+ ? lkdtm_BUG+0x5/0x10
+ kmsg_dump+0x46/0x60
+ oops_end+0x47/0x90
+ do_trap+0xcc/0x120
+ do_error_trap+0x65/0x80
+ ? lkdtm_BUG+0x5/0x10
+ exc_invalid_op+0x4e/0x70
+ ? lkdtm_BUG+0x5/0x10
+ asm_exc_invalid_op+0xf/0x20
+RIP: 0010:lkdtm_BUG+0x5/0x10
+Code: ef e8 af a3 aa ff 8b 44 24 18 5a 59 48 83 c4 10 5d c3 b8 f4 ff ff ff =
+eb f3 cc cc cc cc cc cc cc cc cc cc cc cc 0f 1f 44 00 00 <0f> 0b 66 0f 1f 8=
+4 00 00 00 00 00 0f 1f 44 00 00 83 05 38 6b bb 01
+RSP: 0018:ffffb27f01f8fe60 EFLAGS: 00010282
+RAX: ffffffff91240710 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff9f5e8f6a7400 RSI: ffff9f5e8f69b600 RDI: ffffffff91d13550
+RBP: ffffffff9218acab R08: ffffffff924d5fe8 R09: 0000000000000003
+R10: 00000000fffff000 R11: 3fffffffffffffff R12: ffff9f5be87be000
+R13: 0000000000000004 R14: ffffb27f01f8ff10 R15: 0000000000000004
+ ? lkdtm_check_bool_cmdline+0x80/0x80
+ direct_entry.cold+0x2c/0x37
+ full_proxy_write+0x53/0x80
+ vfs_write+0xc0/0x280
+ ksys_write+0x4f/0xc0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+This patch makes the RCU context warning go away.
+
+ drivers/firmware/efi/efi-pstore.c |  2 +-
+ fs/pstore/platform.c              | 36 ++++++++++++++-----------------
+ include/linux/pstore.h            |  7 +++---
+ 3 files changed, 21 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/firmware/efi/efi-pstore.c b/drivers/firmware/efi/efi-p=
+store.c
+index 0ef086e43090..7e771c56c13c 100644
+--- a/drivers/firmware/efi/efi-pstore.c
++++ b/drivers/firmware/efi/efi-pstore.c
+@@ -266,7 +266,7 @@ static int efi_pstore_write(struct pstore_record *recor=
+d)
+ 		efi_name[i] =3D name[i];
+=20
+ 	ret =3D efivar_entry_set_safe(efi_name, vendor, PSTORE_EFI_ATTRIBUTES,
+-			      preemptible(), record->size, record->psi->buf);
++			      false, record->size, record->psi->buf);
+=20
+ 	if (record->reason =3D=3D KMSG_DUMP_OOPS && try_module_get(THIS_MODULE))
+ 		if (!schedule_work(&efivar_work))
+diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
+index f243cb5e6a4f..5eafb655106d 100644
+--- a/fs/pstore/platform.c
++++ b/fs/pstore/platform.c
+@@ -143,27 +143,26 @@ static void pstore_timer_kick(void)
+ 	mod_timer(&pstore_timer, jiffies + msecs_to_jiffies(pstore_update_ms));
+ }
+=20
+-/*
+- * Should pstore_dump() wait for a concurrent pstore_dump()? If
+- * not, the current pstore_dump() will report a failure to dump
+- * and return.
+- */
+-static bool pstore_cannot_wait(enum kmsg_dump_reason reason)
++bool pstore_cannot_block_path(enum kmsg_dump_reason reason)
+ {
+-	/* In NMI path, pstore shouldn't block regardless of reason. */
++	/*
++	 * In case of NMI path, pstore shouldn't be blocked
++	 * regardless of reason.
++	 */
+ 	if (in_nmi())
+ 		return true;
+=20
+ 	switch (reason) {
+ 	/* In panic case, other cpus are stopped by smp_send_stop(). */
+ 	case KMSG_DUMP_PANIC:
+-	/* Emergency restart shouldn't be blocked. */
++	/* Emergency restart shouldn't be blocked by spin lock. */
+ 	case KMSG_DUMP_EMERG:
+ 		return true;
+ 	default:
+ 		return false;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(pstore_cannot_block_path);
+=20
+ #if IS_ENABLED(CONFIG_PSTORE_DEFLATE_COMPRESS)
+ static int zbufsize_deflate(size_t size)
+@@ -389,21 +388,19 @@ static void pstore_dump(struct kmsg_dumper *dumper,
+ 	unsigned long	total =3D 0;
+ 	const char	*why;
+ 	unsigned int	part =3D 1;
++	unsigned long	flags =3D 0;
+ 	int		ret;
+=20
+ 	why =3D kmsg_dump_reason_str(reason);
+=20
+-	if (down_trylock(&psinfo->buf_lock)) {
+-		/* Failed to acquire lock: give up if we cannot wait. */
+-		if (pstore_cannot_wait(reason)) {
+-			pr_err("dump skipped in %s path: may corrupt error record\n",
+-				in_nmi() ? "NMI" : why);
+-			return;
+-		}
+-		if (down_interruptible(&psinfo->buf_lock)) {
+-			pr_err("could not grab semaphore?!\n");
++	if (pstore_cannot_block_path(reason)) {
++		if (!spin_trylock_irqsave(&psinfo->buf_lock, flags)) {
++			pr_err("dump skipped in %s path because of concurrent dump\n"
++				       , in_nmi() ? "NMI" : why);
+ 			return;
+ 		}
++	} else {
++		spin_lock_irqsave(&psinfo->buf_lock, flags);
+ 	}
+=20
+ 	kmsg_dump_rewind(&iter);
+@@ -467,8 +464,7 @@ static void pstore_dump(struct kmsg_dumper *dumper,
+ 		total +=3D record.size;
+ 		part++;
+ 	}
+-
+-	up(&psinfo->buf_lock);
++	spin_unlock_irqrestore(&psinfo->buf_lock, flags);
+ }
+=20
+ static struct kmsg_dumper pstore_dumper =3D {
+@@ -594,7 +590,7 @@ int pstore_register(struct pstore_info *psi)
+ 		psi->write_user =3D pstore_write_user_compat;
+ 	psinfo =3D psi;
+ 	mutex_init(&psinfo->read_mutex);
+-	sema_init(&psinfo->buf_lock, 1);
++	spin_lock_init(&psinfo->buf_lock);
+=20
+ 	if (psi->flags & PSTORE_FLAGS_DMESG)
+ 		allocate_buf_for_compression();
+diff --git a/include/linux/pstore.h b/include/linux/pstore.h
+index eb93a54cff31..e6bd205ddc63 100644
+--- a/include/linux/pstore.h
++++ b/include/linux/pstore.h
+@@ -14,7 +14,7 @@
+ #include <linux/errno.h>
+ #include <linux/kmsg_dump.h>
+ #include <linux/mutex.h>
+-#include <linux/semaphore.h>
++#include <linux/spinlock.h>
+ #include <linux/time.h>
+ #include <linux/types.h>
+=20
+@@ -87,7 +87,7 @@ struct pstore_record {
+  * @owner:	module which is responsible for this backend driver
+  * @name:	name of the backend driver
+  *
+- * @buf_lock:	semaphore to serialize access to @buf
++ * @buf_lock:	spinlock to serialize access to @buf
+  * @buf:	preallocated crash dump buffer
+  * @bufsize:	size of @buf available for crash dump bytes (must match
+  *		smallest number of bytes available for writing to a
+@@ -178,7 +178,7 @@ struct pstore_info {
+ 	struct module	*owner;
+ 	const char	*name;
+=20
+-	struct semaphore buf_lock;
++	spinlock_t	buf_lock;
+ 	char		*buf;
+ 	size_t		bufsize;
+=20
+@@ -205,6 +205,7 @@ struct pstore_info {
+=20
+ extern int pstore_register(struct pstore_info *);
+ extern void pstore_unregister(struct pstore_info *);
++extern bool pstore_cannot_block_path(enum kmsg_dump_reason reason);
+=20
+ struct pstore_ftrace_record {
+ 	unsigned long ip;
+
+base-commit: 83e396641110663d3c7bb25b9bc0c6a750359ecf
+--=20
+2.35.1.265.g69c8d7142f-goog
+

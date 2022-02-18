@@ -2,190 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501234BBF0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B0C4BBF13
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238991AbiBRSJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:09:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51426 "EHLO
+        id S239003AbiBRSMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:12:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbiBRSJr (ORCPT
+        with ESMTP id S236218AbiBRSMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:09:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5371285AB5;
-        Fri, 18 Feb 2022 10:09:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 964BFB826B9;
-        Fri, 18 Feb 2022 18:09:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 470FBC340E9;
-        Fri, 18 Feb 2022 18:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645207767;
-        bh=MgoMihgQ8vusrPtnllASKdZxBMSNyiaMLb6Llh3Epcw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=q+8hXqNp8Tr8uQaoOmKF57Zl2j+ehECfFueVhqBYiYbb+kXVOKFaguHHr+GMap6Hm
-         j/oD65mwwoL+Y3LfmCCo4pEKM3dcRVI6c9agkNzArhNe4ZV8roCAKRvWwz9ntBVaYz
-         C4ttEipjf1hoBmDeCpZFlryBTA2tlXglwhIIMs3pTKP01DXKnvnk0gsVpjrLWI8Yxi
-         yNgHq6B+LuacGxClufc75Ry9OGPpBYmmlv4UQqAquoBqX3IziXsnGU0TD6RFbzZwrD
-         xowpxZi9iPxRuHjiMx/5fqSHS1R213dRx/GI/DLn75Lne3gbHdje140ETA456qJjjl
-         UNrGmqRue8fog==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 051595C03DB; Fri, 18 Feb 2022 10:09:27 -0800 (PST)
-Date:   Fri, 18 Feb 2022 10:09:26 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     kernel-team@fb.com, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org, rostedt@goodmis.org, tj@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
- incoming CPUs
-Message-ID: <20220218180926.GX4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220209233811.GC557593@lothringen>
- <20220214164435.GA2805255@paulmck-ThinkPad-P17-Gen-1>
- <f8cff19c-5e8f-a7ed-c2ff-49a264b4e342@quicinc.com>
- <20220215173951.GH4285@paulmck-ThinkPad-P17-Gen-1>
- <ca0cac53-68ec-7df4-e617-2a4cd9710491@quicinc.com>
+        Fri, 18 Feb 2022 13:12:18 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7A933354
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:12:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645207921; x=1676743921;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qJpUQfCMiajF+akcXvNXCP6L2CbGn7TS+KQgaql4Uhw=;
+  b=ITZ3A+1DcOTJYsa73284Q6h2CuxkQjigBVkC/g0uiI2fCYwjXUg8IabN
+   XDadI4vnREvujdD7tPa+rwShAcsLAXUeBhrBzvhEH7E1Q5/PdwpgonIvo
+   0fy+X0eqK3aZZ/tY44pe/LfzbG3Wq553W2nRqtGQLDDrK48QdcFj4w57z
+   0fFXnmq4/JkJfZfaTP8uBI5K0FCBh+w7cigGLtGohHU6o4Gpm6WIkpo0x
+   K//rSMkFoSxXKQWj6RtYDGmgkLcIykK5ea3b/QmGMCANyVqjnFUFYCPvx
+   tar/PPgnJSPLt0SzdDFI84WBBTMcS1tuXNo42Z/wyYGQviFCcpUSHZ1ro
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="234716125"
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="234716125"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 10:12:00 -0800
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="504080860"
+Received: from ryanflyn-mobl.amr.corp.intel.com (HELO [10.212.54.106]) ([10.212.54.106])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 10:11:59 -0800
+Message-ID: <c17173cb-290c-9ecd-54e3-b74f9d4e9061@linux.intel.com>
+Date:   Fri, 18 Feb 2022 12:11:59 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca0cac53-68ec-7df4-e617-2a4cd9710491@quicinc.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH 0/1] sound: add quirk for Huawei D15
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>,
+        linux-kernel@vger.kernel.org,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Huajun Li <huajun.li@intel.com>, tiwai@suse.de,
+        Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>
+References: <cover.1640351150.git.mchehab@kernel.org>
+ <164519450743.1836505.3912962145996830275.b4-ty@kernel.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <164519450743.1836505.3912962145996830275.b4-ty@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 11:03:03PM +0530, Mukesh Ojha wrote:
+
+
+On 2/18/22 08:28, Mark Brown wrote:
+> On Fri, 24 Dec 2021 14:09:48 +0100, Mauro Carvalho Chehab wrote:
+>> Based on my tests, Huawei D15 (Intel) uses SSP0 on es8336.
+>>
+>> Add a quirk for it.
+>>
+>> Please notice that, currently, only the internal speaker is working.
+>> The topology for the internal microphone and for the headphones
+>> is wrong. Enabling/disabling the other two quirks (GPIO and/or DMIC)
+>> doesn't cause any audible results, nor change the devices listed
+>> on pavucontrol (tested with pipewire-pulse).
+>>
+>> [...]
 > 
-> On 2/15/2022 11:09 PM, Paul E. McKenney wrote:
-> > On Tue, Feb 15, 2022 at 07:53:10PM +0530, Mukesh Ojha wrote:
-> > > On 2/14/2022 10:14 PM, Paul E. McKenney wrote:
-> > > > On Thu, Feb 10, 2022 at 12:38:11AM +0100, Frederic Weisbecker wrote:
-> > > > > On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
-> > > > > > Although it is usually safe to invoke synchronize_rcu_expedited() from a
-> > > > > > preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
-> > > > > > between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
-> > > > > > invoke a workqueue handler will hang due to RCU waiting on a CPU that
-> > > > > > the scheduler is not paying attention to.  This commit therefore expands
-> > > > > > use of the existing workqueue-independent synchronize_rcu_expedited()
-> > > > > > from early boot to also include CPUs that are being hotplugged.
-> > > > > > 
-> > > > > > Link:https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
-> > > > > > Reported-by: Mukesh Ojha<quic_mojha@quicinc.com>
-> > > > > > Cc: Tejun Heo<tj@kernel.org>
-> > > > > > Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
-> > > > > I'm surprised by this scheduler behaviour.
-> > > > > 
-> > > > > Since sched_cpu_activate() hasn't been called yet,
-> > > > > rq->balance_callback = balance_push_callback. As a result, balance_push() should
-> > > > > be called at the end of schedule() when the workqueue is picked as the next task.
-> > > > > Then eventually the workqueue should be immediately preempted by the stop task to
-> > > > > be migrated elsewhere.
-> > > > > 
-> > > > > So I must be missing something. For the fun, I booted the following and it
-> > > > > didn't produce any issue:
-> > > > > 
-> > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > > index 80faf2273ce9..b1e74a508881 100644
-> > > > > --- a/kernel/rcu/tree.c
-> > > > > +++ b/kernel/rcu/tree.c
-> > > > > @@ -4234,6 +4234,8 @@ int rcutree_online_cpu(unsigned int cpu)
-> > > > >    	// Stop-machine done, so allow nohz_full to disable tick.
-> > > > >    	tick_dep_clear(TICK_DEP_BIT_RCU);
-> > > > > +	if (cpu != 0)
-> > > > > +		synchronize_rcu_expedited();
-> > > > >    	return 0;
-> > > > >    }
-> > > > That does seem compelling.  And others have argued that the workqueue
-> > > > system's handling of offline CPUs should deal with this.
-> > > > 
-> > > > Mukesh, was this a theoretical bug, or did you actually make it happen?
-> > > > If you made it happen, as seems to have been the case given your original
-> > > > email [1], could you please post your reproducer?
-> > > No, it was not theoretical one. We saw this issue only once in our testing
-> > > and i don't think it is easy to reproduce otherwise
-> > > it would been fixed by now.
-> > > 
-> > > When one of thread calling synchronize_expedite_rcu with timer of 20s but it
-> > > did not get the exp funnel
-> > > lock for 20s and there we crash it with panic() on timeout.
-> > > 
-> > > The other thread cpuhp which was having the lock got stuck at the point
-> > > mentioned at the below link.
-> > > 
-> > > https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
-> > OK.  Are you able to create an in-kernel reproducer, perhaps similar to
-> > Frederic's change above?
-> > 
-> > I am worried that the patch that I am carrying might be fixing some
-> > other bug by accident...
+> Applied to
 > 
-> Just for information, we are running on 5.10 kernel and after numerous
-> attempt, i was not able to reproduce the issue:-)
-
-Thank you for checking!
-
-I will drop this commit from -rcu's "dev" branch, but leave a tag
-"exponl.2022.02.18a" should it ever prove necessary.
-
-							Thanx, Paul
-
-> Thanks,
-> -Mukesh
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 > 
-> > 
-> > 							Thanx, Paul
-> > 
-> > > e.g Below sample test in combination of many other test in parallel
-> > > 
-> > > :loop
-> > > 
-> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu0/online"
-> > > 
-> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu0/online"
-> > > 
-> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu1/online"
-> > > 
-> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu1/online"
-> > > 
-> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu2/online"
-> > > 
-> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu2/online"
-> > > 
-> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu3/online"
-> > > 
-> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu3/online"
-> > > 
-> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu4/online"
-> > > 
-> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu4/online"
-> > > 
-> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu5/online"
-> > > 
-> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu5/online"
-> > > 
-> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu6/online"
-> > > 
-> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu6/online"
-> > > 
-> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu7/online"
-> > > 
-> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu7/online"
-> > > 
-> > > goto loop
-> > > 
-> > > 
-> > > 
-> > > Thanks, Mukesh
-> > > 
-> > > > 							Thanx, Paul
-> > > > 
-> > > > [1]https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+> Thanks!
+> 
+> [1/1] ASoC: Intel: sof_es8336: add quirk for Huawei D15 2021
+>       commit: ce6a70bfce21bb4edb7c0f29ecfb0522fa34ab71
+
+I'll probably revert this change in my next update [1], I have a set of
+changes where we can detect which SSP is used by parsing the NHTL
+information in platform firmware.
+
+I am still trying to figure out how to detect which MCLK is used, and
+once this is done I'll send the patches upstream.
+
+[1] https://github.com/thesofproject/linux/pull/3338

@@ -2,287 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169C14BBB09
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 924314BBB6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236231AbiBROyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:54:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46964 "EHLO
+        id S236473AbiBRO46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:56:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiBROyw (ORCPT
+        with ESMTP id S236335AbiBRO4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:54:52 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4B856C02;
-        Fri, 18 Feb 2022 06:54:27 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E2ACB1F46BCC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645196066;
-        bh=/QgSDHmSLtXvOS6O4MR4blf2HkvBBf8c5LbK7+RhC/g=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=l4Hk/xNAQ9LI5HLIKjHT7LXufn5WBixzlQRdyddMU3+xD8Vpmv8OIalXuAfL3AMLJ
-         yz/XG6p0xcI91t9L2B2lu5FY54eZuM9gJX1/hVOnPE4VhXTAbkI1vMDlP1Ha+p3rWt
-         II08XN0xewiJByAY6o++s2A5Xh8E5lIbHTrMjCtjbejwznFY7nHjfEFlP6Q0v5T2s2
-         P6cDAF+JN7EieM8P4xqcqg1pUIs8TPIeCrn/4a7K38V4zaTGZwalrVwNRYWTux/46F
-         p1jj2AJKIiXcGsoA1QYMpgPyG1/iNn1EUMf8WVaLmWsOsPhfBiUOfuX4ZOp9dsHbtD
-         SDdZHADn3nPIg==
-Message-ID: <78474983-a07c-6b1d-797a-d0788f3577b6@collabora.com>
+        Fri, 18 Feb 2022 09:56:32 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F2D580DF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:09 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id u1so15005411wrg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Rl9GJMwANTs4ZJlwlTLAUM9iGOwBbNwdWImM77zNitM=;
+        b=Hq1ej1mQ2MMxf1bH4FLzvR7tpbxNj+Ol/3YFedobT9BlNZW3XGnLfALtYMiNcrFzvx
+         6wfzxXM7ZKIwy8BWbif2XP0qliiTiU2SwVHwOoJ0MqJE6DuHFSclcfH5h4QjN8UtDm8T
+         IIaoAVlt8blotwG4zd4GBZQgaMwNFiq47JQGj0VDHJmeFcNcGBTyYfvmV4e0IQKILwBT
+         YihSV6M8YUNaWuEcTz5iv2sOHevL3jcuTZNiVFYuLPZHhY6LtP5DRie4iwTinXqSZKgv
+         Mnorce5EopmKWsKgTqFd7XpUdJOS75xN0MyOPsv4qcw3iMagdkdhheMdVHy6NhAu549X
+         1/5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Rl9GJMwANTs4ZJlwlTLAUM9iGOwBbNwdWImM77zNitM=;
+        b=CVCQpjnvk/ci5Omky+U+XmCNDOkRpjn3PnV/XKfyqUiZbz6fkyhYMAXcUHf+NFdsI8
+         o0+Iewt0lpshB86L8KbnjqD+Ciq+rsLTs9JRNrmCoYfVTqgaz8HGZhPkAtI6NVIz87iq
+         zqXxwsWOG7aoRzqJRAiShGtZPFwnQUdhXpX550TmexOxwKOJCeT9dsrwh8YZoLQKtqOD
+         kX0E+QQh0RrnSMt5Gp99D66at4tppSvCFx4QzqTyGHGub7Pau1KWGtrhzwUU3giEE/rm
+         VXuP423Cmmb7FOB1cqiigOHESSgAVpwBbEfNxRQIaBi0zFr33py+PkuM5USW3MMzNRTi
+         8kJA==
+X-Gm-Message-State: AOAM5308vrkUQYGp1d/zAsceyMiUYOsG+S5bV4dAIWv5KeJU8iXm2b0i
+        v+0BlfM7/+TQgUnpXrIqErbj5A==
+X-Google-Smtp-Source: ABdhPJzLbEEfYgSHqBNDUq8sOQOCufmyh+U/0S0P0s5vcWkm4sqUVe7KIKtrF43MUbMyX5wJmXLcDQ==
+X-Received: by 2002:adf:ec07:0:b0:1e3:1ef2:5ff6 with SMTP id x7-20020adfec07000000b001e31ef25ff6mr6336681wrn.255.1645196168227;
+        Fri, 18 Feb 2022 06:56:08 -0800 (PST)
+Received: from localhost.localdomain (2a02-8440-6241-3b28-3074-96af-9642-0002.rev.sfr.net. [2a02:8440:6241:3b28:3074:96af:9642:2])
+        by smtp.gmail.com with ESMTPSA id b10sm47431454wrd.8.2022.02.18.06.56.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 06:56:07 -0800 (PST)
+From:   Guillaume Ranquet <granquet@baylibre.com>
+To:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com,
+        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
+        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com,
+        angelogioacchino.delregno@collabora.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH v8 05/19] drm/mediatek: dpi: move dpi limits to board config
 Date:   Fri, 18 Feb 2022 15:54:23 +0100
+Message-Id: <20220218145437.18563-6-granquet@baylibre.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220218145437.18563-1-granquet@baylibre.com>
+References: <20220218145437.18563-1-granquet@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [v2 07/17] ASoC: mediatek: mt8186: support pcm in platform driver
-Content-Language: en-US
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
-        geert+renesas@glider.be, trevor.wu@mediatek.com,
-        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
- <20220217134205.15400-8-jiaxin.yu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220217134205.15400-8-jiaxin.yu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/02/22 14:41, Jiaxin Yu ha scritto:
-> This patch adds mt8186 pcm dai driver.
-> 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> ---
->   sound/soc/mediatek/mt8186/mt8186-dai-pcm.c | 432 +++++++++++++++++++++
->   1 file changed, 432 insertions(+)
->   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-pcm.c
-> 
-> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-pcm.c b/sound/soc/mediatek/mt8186/mt8186-dai-pcm.c
-> new file mode 100644
-> index 000000000000..73b3f720ed35
-> --- /dev/null
-> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-pcm.c
-> @@ -0,0 +1,432 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +//
-> +// MediaTek ALSA SoC Audio DAI I2S Control
-> +//
-> +// Copyright (c) 2022 MediaTek Inc.
-> +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> +
-> +#include <linux/regmap.h>
-> +#include <sound/pcm_params.h>
-> +#include "mt8186-afe-common.h"
-> +#include "mt8186-afe-gpio.h"
-> +#include "mt8186-interconnection.h"
-> +
-> +struct mtk_afe_pcm_priv {
-> +	unsigned int id;
-> +	unsigned int fmt;
-> +	unsigned int bck_invert;
-> +	unsigned int lck_invert;
-> +};
-> +
-> +enum AUD_TX_LCH_RPT {
+Add flexibility by moving the dpi limits to the board config
 
-lowercase enumeration names please...
+Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+---
+ drivers/gpu/drm/mediatek/mtk_dpi.c | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-enum aud_tx_lch_rpt {
-	AUD_TX....BLAH
-};
+diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+index 4554e2de14309..4746eb3425674 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dpi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+@@ -125,6 +125,7 @@ struct mtk_dpi_conf {
+ 	bool edge_sel_en;
+ 	const u32 *output_fmts;
+ 	u32 num_output_fmts;
++	const struct mtk_dpi_yc_limit *limit;
+ };
+ 
+ static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val, u32 mask)
+@@ -235,9 +236,10 @@ static void mtk_dpi_config_fb_size(struct mtk_dpi *dpi, u32 width, u32 height)
+ 	mtk_dpi_mask(dpi, DPI_SIZE, height << VSIZE, VSIZE_MASK);
+ }
+ 
+-static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi,
+-					 struct mtk_dpi_yc_limit *limit)
++static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi)
+ {
++	const struct mtk_dpi_yc_limit *limit = dpi->conf->limit;
++
+ 	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_bottom << Y_LIMINT_BOT,
+ 		     Y_LIMINT_BOT_MASK);
+ 	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_top << Y_LIMINT_TOP,
+@@ -449,7 +451,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+ 				    struct drm_display_mode *mode)
+ {
+-	struct mtk_dpi_yc_limit limit;
+ 	struct mtk_dpi_polarities dpi_pol;
+ 	struct mtk_dpi_sync_param hsync;
+ 	struct mtk_dpi_sync_param vsync_lodd = { 0 };
+@@ -484,11 +485,6 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+ 	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
+ 		pll_rate, vm.pixelclock);
+ 
+-	limit.c_bottom = 0x0010;
+-	limit.c_top = 0x0FE0;
+-	limit.y_bottom = 0x0010;
+-	limit.y_top = 0x0FE0;
+-
+ 	dpi_pol.ck_pol = MTK_DPI_POLARITY_FALLING;
+ 	dpi_pol.de_pol = MTK_DPI_POLARITY_RISING;
+ 	dpi_pol.hsync_pol = vm.flags & DISPLAY_FLAGS_HSYNC_HIGH ?
+@@ -536,7 +532,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+ 	else
+ 		mtk_dpi_config_fb_size(dpi, vm.hactive, vm.vactive);
+ 
+-	mtk_dpi_config_channel_limit(dpi, &limit);
++	mtk_dpi_config_channel_limit(dpi);
+ 	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
+ 	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
+ 	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+@@ -790,12 +786,20 @@ static const u32 mt8183_output_fmts[] = {
+ 	MEDIA_BUS_FMT_RGB888_2X12_BE,
+ };
+ 
++static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
++	.c_bottom = 0x0010,
++	.c_top = 0x0FE0,
++	.y_bottom = 0x0010,
++	.y_top = 0x0FE0,
++};
++
+ static const struct mtk_dpi_conf mt8173_conf = {
+ 	.cal_factor = mt8173_calculate_factor,
+ 	.reg_h_fre_con = 0xe0,
+ 	.max_clock_khz = 300000,
+ 	.output_fmts = mt8173_output_fmts,
+ 	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
++	.limit = &mtk_dpi_limit,
+ };
+ 
+ static const struct mtk_dpi_conf mt2701_conf = {
+@@ -805,6 +809,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
+ 	.max_clock_khz = 150000,
+ 	.output_fmts = mt8173_output_fmts,
+ 	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
++	.limit = &mtk_dpi_limit,
+ };
+ 
+ static const struct mtk_dpi_conf mt8183_conf = {
+@@ -813,6 +818,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
+ 	.max_clock_khz = 100000,
+ 	.output_fmts = mt8183_output_fmts,
+ 	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
++	.limit = &mtk_dpi_limit,
+ };
+ 
+ static const struct mtk_dpi_conf mt8192_conf = {
+@@ -821,6 +827,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
+ 	.max_clock_khz = 150000,
+ 	.output_fmts = mt8173_output_fmts,
+ 	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
++	.limit = &mtk_dpi_limit,
+ };
+ 
+ static int mtk_dpi_probe(struct platform_device *pdev)
+-- 
+2.34.1
 
-> +	AUD_TX_LCH_RPT_NO_REPEAT = 0,
-> +	AUD_TX_LCH_RPT_REPEAT = 1
-> +};
-> +
-> +enum AUD_VBT_16K_MODE {
-> +	AUD_VBT_16K_MODE_DISABLE = 0,
-> +	AUD_VBT_16K_MODE_ENABLE = 1
-> +};
-> +
-> +enum AUD_EXT_MODEM {
-> +	AUD_EXT_MODEM_SELECT_INTERNAL = 0,
-> +	AUD_EXT_MODEM_SELECT_EXTERNAL = 1
-> +};
-> +
-> +enum AUD_PCM_SYNC_TYPE {
-> +	/* bck sync length = 1 */
-> +	AUD_PCM_ONE_BCK_CYCLE_SYNC = 0,
-> +	/* bck sync length = PCM_INTF_CON1[9:13] */
-> +	AUD_PCM_EXTENDED_BCK_CYCLE_SYNC = 1
-> +};
-> +
-> +enum AUD_BT_MODE {
-> +	AUD_BT_MODE_DUAL_MIC_ON_TX = 0,
-> +	AUD_BT_MODE_SINGLE_MIC_ON_TX = 1
-> +};
-> +
-> +enum AUD_PCM_AFIFO_SRC {
-> +	/* slave mode & external modem uses different crystal */
-> +	AUD_PCM_AFIFO_ASRC = 0,
-> +	/* slave mode & external modem uses the same crystal */
-> +	AUD_PCM_AFIFO_AFIFO = 1
-> +};
-> +
-> +enum AUD_PCM_CLOCK_SOURCE {
-> +	AUD_PCM_CLOCK_MASTER_MODE = 0,
-> +	AUD_PCM_CLOCK_SLAVE_MODE = 1
-> +};
-> +
-> +enum AUD_PCM_WLEN {
-> +	AUD_PCM_WLEN_PCM_32_BCK_CYCLES = 0,
-> +	AUD_PCM_WLEN_PCM_64_BCK_CYCLES = 1
-> +};
-> +
-> +enum AUD_PCM_24BIT {
-> +	AUD_PCM_24BIT_PCM_16_BITS = 0,
-> +	AUD_PCM_24BIT_PCM_24_BITS = 1
-> +};
-> +
-> +enum AUD_PCM_MODE {
-> +	AUD_PCM_MODE_PCM_MODE_8K = 0,
-> +	AUD_PCM_MODE_PCM_MODE_16K = 1,
-> +	AUD_PCM_MODE_PCM_MODE_32K = 2,
-> +	AUD_PCM_MODE_PCM_MODE_48K = 3,
-> +};
-> +
-> +enum AUD_PCM_FMT {
-> +	AUD_PCM_FMT_I2S = 0,
-> +	AUD_PCM_FMT_EIAJ = 1,
-> +	AUD_PCM_FMT_PCM_MODE_A = 2,
-> +	AUD_PCM_FMT_PCM_MODE_B = 3
-> +};
-> +
-> +enum AUD_BCLK_OUT_INV {
-> +	AUD_BCLK_OUT_INV_NO_INVERSE = 0,
-> +	AUD_BCLK_OUT_INV_INVERSE = 1
-> +};
-> +
-> +enum AUD_LRCLK_OUT_INV {
-> +	AUD_LRCLK_OUT_INV_NO_INVERSE = 0,
-> +	AUD_LRCLK_OUT_INV_INVERSE = 1
-> +};
-> +
-> +enum AUD_PCM_EN {
-> +	AUD_PCM_EN_DISABLE = 0,
-> +	AUD_PCM_EN_ENABLE = 1
-> +};
-> +
-
-..snip..
-
-> +
-> +/* dai ops */
-> +static int mtk_dai_pcm_hw_params(struct snd_pcm_substream *substream,
-> +				 struct snd_pcm_hw_params *params,
-> +				 struct snd_soc_dai *dai)
-> +{
-> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-> +	int pcm_id = dai->id;
-> +	struct mtk_afe_pcm_priv *pcm_priv = afe_priv->dai_priv[pcm_id];
-> +	unsigned int rate = params_rate(params);
-> +	unsigned int rate_reg = mt8186_rate_transform(afe->dev, rate, dai->id);
-> +	snd_pcm_format_t format = params_format(params);
-> +	unsigned int data_width =
-> +		snd_pcm_format_width(format);
-> +	unsigned int wlen_width =
-> +		snd_pcm_format_physical_width(format);
-> +	unsigned int pcm_con = 0;
-> +
-> +	dev_info(afe->dev, "%s(), id %d, stream %d, widget active p %d, c %d\n",
-> +		 __func__,
-> +		 dai->id,
-> +		 substream->stream,
-> +		 dai->playback_widget->active,
-> +		 dai->capture_widget->active);
-> +	dev_info(afe->dev, "%s(), rate %d, rate_reg %d, data_width %d, wlen_width %d\n",
-> +		 __func__,
-> +		 rate,
-> +		 rate_reg,
-> +		 data_width,
-> +		 wlen_width);
-
-dev_dbg() - also, you don't need one line per variable.
-
-> +
-> +	if (dai->playback_widget->active || dai->capture_widget->active)
-> +		return 0;
-> +
-> +	switch (dai->id) {
-> +	case MT8186_DAI_PCM:
-> +		pcm_con |= AUD_TX_LCH_RPT_NO_REPEAT << PCM_TX_LCH_RPT_SFT;
-> +		pcm_con |= AUD_VBT_16K_MODE_DISABLE << PCM_VBT_16K_MODE_SFT;
-> +		pcm_con |= AUD_EXT_MODEM_SELECT_EXTERNAL << PCM_EXT_MODEM_SFT;
-> +		pcm_con |= AUD_PCM_ONE_BCK_CYCLE_SYNC << PCM_SYNC_TYPE_SFT;
-> +		pcm_con |= AUD_BT_MODE_DUAL_MIC_ON_TX << PCM_BT_MODE_SFT;
-> +		pcm_con |= AUD_PCM_AFIFO_AFIFO << PCM_BYP_ASRC_SFT;
-> +		pcm_con |= AUD_PCM_CLOCK_MASTER_MODE << PCM_SLAVE_SFT;
-> +		pcm_con |= 0 << PCM_SYNC_LENGTH_SFT;
-> +
-> +		/* sampling rate */
-> +		pcm_con |= rate_reg << PCM_MODE_SFT;
-> +
-> +		/* format */
-> +		pcm_con |= pcm_priv->fmt << PCM_FMT_SFT;
-> +
-> +		/* 24bit data width */
-> +		if (data_width > 16)
-> +			pcm_con |= AUD_PCM_24BIT_PCM_24_BITS << PCM_24BIT_SFT;
-> +		else
-> +			pcm_con |= AUD_PCM_24BIT_PCM_16_BITS << PCM_24BIT_SFT;
-> +
-> +		/* wlen width*/
-> +		if (wlen_width > 16)
-> +			pcm_con |= AUD_PCM_WLEN_PCM_64_BCK_CYCLES << PCM_WLEN_SFT;
-> +		else
-> +			pcm_con |= AUD_PCM_WLEN_PCM_32_BCK_CYCLES << PCM_WLEN_SFT;
-> +
-> +		/* clock invert */
-> +		pcm_con |= pcm_priv->lck_invert << PCM_SYNC_OUT_INV_SFT;
-> +		pcm_con |= pcm_priv->bck_invert << PCM_BCLK_OUT_INV_SFT;
-> +
-> +		regmap_update_bits(afe->regmap, PCM_INTF_CON1,
-> +				   0xfffffffe, pcm_con);
-
-Fits in one line.
-
-> +		break;
-> +	default:
-> +		dev_info(afe->dev, "%s(), id %d not support\n",
-> +			 __func__, dai->id);
-
-dev_err()
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_dai_pcm_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
-> +{
-> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
-> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-> +	struct mtk_afe_pcm_priv *pcm_priv = afe_priv->dai_priv[dai->id];
-> +
-> +	if (!pcm_priv) {
-> +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
-
-dev_err()
-
-> +		return -EINVAL;
-> +	}
-> +

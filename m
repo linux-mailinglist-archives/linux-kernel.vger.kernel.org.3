@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4712D4BB2D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 834C34BB2DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiBRHDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:03:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55648 "EHLO
+        id S231743AbiBRHGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:06:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbiBRHDe (ORCPT
+        with ESMTP id S230436AbiBRHGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:03:34 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159A131524
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:03:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645167798; x=1676703798;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=a2Tv3Q+ikrhGpCBk8zfVHjzNDCxJUWzxmbrwJ1R1+Xs=;
-  b=Sz5DMTcQR+AazM0O5UJZrk3r8UAz/LhUTMVqKS4PRlDCC7IjCNP5envY
-   CH8oFE7ZCC223Li2vT2sq3E62qRtpa45itQyx/lsn0bf/oVy5A0egrNe4
-   2xgXCaeTjOud5X6XEU+lwC93mLk8dwqE+HBmRCRkUHNx4uazmI7vTcOkx
-   RyX0erUZOK3nNb/yH1x/VVSS/U1YwnM/WP1qWOPI2knIZrJipvOzywGTt
-   Vy5w/EgvqAbVpoRIYT7j4uKGDtrDd85T4xawPRpucgGnj38TT1AzTDfO3
-   XzSLfiy5fYiajIgupg5NFMTWtUPHJOK3pR3iu4pzpmaaKmWomUUwuuA49
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="249902295"
-X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="249902295"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 23:03:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="541804217"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 17 Feb 2022 23:03:16 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKxIR-00013I-QV; Fri, 18 Feb 2022 07:03:15 +0000
-Date:   Fri, 18 Feb 2022 15:02:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- e5733d8c89c3b57c8fcd40b8acf508388fabaa42
-Message-ID: <620f449c.pdLgIHtzGvQQch3P%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 18 Feb 2022 02:06:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9853C9024B;
+        Thu, 17 Feb 2022 23:06:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B932B82486;
+        Fri, 18 Feb 2022 07:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A1CC340E9;
+        Fri, 18 Feb 2022 07:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645167986;
+        bh=QJPbN3zuIFj6R/D7I1HLXCBbU2fB00n1t4O0aal5Tc0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cgrIS+wndLdGLfD5FJUJai7yFBfhaBwN+0AEv07k2WFCbvJ6IeU8OytKUMI3CLV6A
+         EvmQG6RIat5X0C6GoXlqLy6zOLnfztj/dYTQQPPNPpUyawE8pK568arYvU6kS62xLk
+         svcpJoqDxDQGkfxeSdUKZ/U2ZBCm1aTxIaN0ZcjY8m/dc/hekCgtz2YDiLtH42gdYG
+         J+F2GuqmNr09DQ5h7glj/TUxqMuvUkoBWZyxYnnXMMxoJTj/OTE5g+0m+mSuX+sS9h
+         yZqQSWr8CG83DXDv3bQ4MXyzILyupI9KB+R/nvlNvXyYdJj8HQmxAoqmqJZZGkGTSL
+         sSfd6gTQO9qIg==
+Date:   Fri, 18 Feb 2022 12:36:22 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Minnekhanov <alexeymin@postmarketos.org>
+Subject: Re: [PATCH v5] i2c: qcom-geni: Add support for GPI DMA
+Message-ID: <Yg9Fbh//iSe+VAiT@matsya>
+References: <20220131120403.2481995-1-vkoul@kernel.org>
+ <CAA8EJpoqCJbYgOUpEhcoae3=Mivp8c7PZU8XO78EMZMR+NQQKw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpoqCJbYgOUpEhcoae3=Mivp8c7PZU8XO78EMZMR+NQQKw@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,121 +60,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: e5733d8c89c3b57c8fcd40b8acf508388fabaa42  x86/sgx: Fix missing poison handling in reclaimer
+On 17-02-22, 20:51, Dmitry Baryshkov wrote:
+> On Mon, 31 Jan 2022 at 15:04, Vinod Koul <vkoul@kernel.org> wrote:
 
-elapsed time: 725m
+> > +static int geni_i2c_fifo_xfer(struct geni_i2c_dev *gi2c,
+> > +                             struct i2c_msg msgs[], int num)
+> > +{
+> > +       int i, ret = 0;
+> > +
+> > +       for (i = 0; i < num; i++) {
+> > +               u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
+> > +
+> > +               m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
+> > +
+> > +               gi2c->cur = &msgs[i];
+> > +               if (msgs[i].flags & I2C_M_RD)
+> > +                       ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
+> > +               else
+> > +                       ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
+> > +
+> > +               if (ret)
+> > +                       break;
+> 
+> I'd suggest to 'return ret' here and change the return line to 'return num'.
 
-configs tested: 100
-configs skipped: 84
+Done
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> >  static int geni_i2c_xfer(struct i2c_adapter *adap,
+> >                          struct i2c_msg msgs[],
+> >                          int num)
+> >  {
+> >         struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
+> > -       int i, ret;
+> > +       int ret;
+> >
+> >         gi2c->err = 0;
+> >         reinit_completion(&gi2c->done);
+> > @@ -475,22 +670,11 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+> >         }
+> >
+> >         qcom_geni_i2c_conf(gi2c);
+> > -       for (i = 0; i < num; i++) {
+> > -               u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
+> > -
+> > -               m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
+> > -
+> > -               gi2c->cur = &msgs[i];
+> > -               if (msgs[i].flags & I2C_M_RD)
+> > -                       ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
+> > -               else
+> > -                       ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
+> >
+> > -               if (ret)
+> > -                       break;
+> > -       }
+> > -       if (ret == 0)
+> > -               ret = num;
+> > +       if (gi2c->gpi_mode)
+> > +               ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
+> > +       else
+> > +               ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
+> 
+> We should return num if ret is 0 here (or in
+> geni_i2c_fifo_xfer()/geni_i2c_gpi_xfer()).
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-parisc                generic-32bit_defconfig
-m68k                            mac_defconfig
-ia64                         bigsur_defconfig
-powerpc                        cell_defconfig
-arc                          axs101_defconfig
-arc                        vdk_hs38_defconfig
-arc                    vdk_hs38_smp_defconfig
-xtensa                generic_kc705_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                       eiger_defconfig
-h8300                               defconfig
-microblaze                      mmu_defconfig
-powerpc                      pasemi_defconfig
-arm                           h5000_defconfig
-arm                          pxa3xx_defconfig
-ia64                          tiger_defconfig
-m68k                           sun3_defconfig
-powerpc                      makalu_defconfig
-arm                  randconfig-c002-20220217
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-arm                      tct_hammer_defconfig
-riscv                            alldefconfig
-powerpc                     tqm5200_defconfig
-arm                        magician_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220217
-hexagon              randconfig-r041-20220217
-riscv                randconfig-r042-20220217
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I have picked your fix for that!
+-- 
+~Vinod

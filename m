@@ -2,59 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9136F4BBED9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B36114BBEDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238871AbiBRR6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:58:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33162 "EHLO
+        id S238875AbiBRR7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:59:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237328AbiBRR6J (ORCPT
+        with ESMTP id S234595AbiBRR7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:58:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9931103E;
-        Fri, 18 Feb 2022 09:57:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D6D2B826A7;
-        Fri, 18 Feb 2022 17:57:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75124C340E9;
-        Fri, 18 Feb 2022 17:57:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645207070;
-        bh=dP5b+VA+uAx3bJhnVmVq20KQ+X+9Cy6qAmDwVZSVETA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QvDPAbFjC/4BDN5N4QWsBAXqH2By2fN9OfvYaiEa2EMGl4mymWW8xR+qlQyNEIuA8
-         TPqKYelwYUzcA6s0HPFMHH/nhichKTgj+hHrBc37kVQaDoNGGuLZTVgIDxzZ9up4Nv
-         3l394mt2DHKY8m9e4DnwbzD5MGioZ5eock/RE5GY=
-Date:   Fri, 18 Feb 2022 18:57:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] slab: remove __alloc_size attribute from
- __kmalloc_track_caller
-Message-ID: <Yg/eG4X7Esa0h1al@kroah.com>
-References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
- <a5ab4496-8190-6221-72c7-d1ff2e6cf1d4@suse.cz>
+        Fri, 18 Feb 2022 12:59:07 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A41023
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645207130; x=1676743130;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=/ZZ8b31Er7R5CNT7Q792VI7QvRSKMZXQ4IsgRjHYIS0=;
+  b=N6T0Uu3ZvDM1HJaEicicba26ZOi/QxQPaw3otRV4uxVSkP2bnHm2Rfpj
+   kNq5I6ZvhpFuskU9+loswKkTRAjgerijxWj1rouu4nLegyOOnC61FnKCB
+   GoHm7iWHapFbc3HjGqQvofsiyZtdpsCAMlPssz00A7LOkNc8QucmfzB29
+   OJ3ntmkzMQluUHdlujUnFpDGePdfixE61if+0+NoF4T36N0id6beN9zdv
+   cVtZWd7q8MfwVd3SAE44BPtfknjm9ga/re8dKIiSye7l/UBlWbPEji1AV
+   O613gfeDmP3yGwyzAJbWuaqwQhGw+g0vQuM/RIVcNjS2SkRPzLYzW8BMJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="251377682"
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="251377682"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 09:58:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="682576532"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by fmsmga001.fm.intel.com with ESMTP; 18 Feb 2022 09:58:43 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 18 Feb 2022 09:58:43 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 18 Feb 2022 09:58:42 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.020;
+ Fri, 18 Feb 2022 09:58:42 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>, Jue Wang <juew@google.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [PATCH v2] x86/mce: work around an erratum on fast string copy
+ instructions.
+Thread-Topic: [PATCH v2] x86/mce: work around an erratum on fast string copy
+ instructions.
+Thread-Index: AQHYJGdbPe82lm9eb0O/d1VFli+im6yZ77OA//+pYdA=
+Date:   Fri, 18 Feb 2022 17:58:42 +0000
+Message-ID: <dca14efd34294fe1b58d21a230fe6f11@intel.com>
+References: <Yg54nse5qNQO3sbW@zn.tnic>
+ <20220218013209.2436006-1-juew@google.com> <Yg+2Hc78nfSRmh/j@zn.tnic>
+In-Reply-To: <Yg+2Hc78nfSRmh/j@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a5ab4496-8190-6221-72c7-d1ff2e6cf1d4@suse.cz>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,29 +85,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 06:14:55PM +0100, Vlastimil Babka wrote:
-> On 2/18/22 14:13, Greg Kroah-Hartman wrote:
-> > Commit c37495d6254c ("slab: add __alloc_size attributes for better
-> > bounds checking") added __alloc_size attributes to a bunch of kmalloc
-> > function prototypes.  Unfortunately the change to __kmalloc_track_caller
-> > seems to cause clang to generate broken code and the first time this is
-> > called when booting, the box will crash.
-> > 
-> > While the compiler problems are being reworked and attempted to be
-> > solved, let's just drop the attribute to solve the issue now.  Once it
-> > is resolved it can be added back.
-> 
-> Could we instead wrap it in some #ifdef that' only true for clang build?
-> That would make the workaround more precise and self-documented. Even
-> better if it can trigger using clang version range and once a fixed
-> clang version is here, it can be updated to stay true for older clangs.
-
-It's not doing all that much good like this, let's just remove it for
-now until it does actually provide a benifit and not just crash the box :)
-
-This is only 1 function, that is used in only a very small number of
-callers.  I do not think it will be missed.
-
-thanks,
-
-greg k-h
+PiBBbHNvLCBUb255LCBJIHRoaW5rIHRoZSBjbGVhcmluZyBvZiBNQ0dfU1RBVFVTIHNob3VsZCBo
+YXBwZW4gbGFzdC4NCg0KWWVzLiBUaGVyZSdzIGEgcmFjZSBpZiBhbm90aGVyICNNQyBjb21lcyBp
+biBhZnRlciBNQ0lQIGlzIGNsZWFyZWQsIGJ1dCBiZWZvcmUgd2UgZ2V0DQpvZmYgdGhlIG1hY2hp
+bmUgY2hlY2sgc3RhY2suIFNob3VsZCBtYWtlIHRoYXQgd2luZG93IGFzIHNtYWxsIGFzIHBvc3Np
+YmxlLg0KDQotVG9ueQ0K

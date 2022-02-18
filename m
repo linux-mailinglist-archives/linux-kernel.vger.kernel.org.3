@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A124BC18D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D40B4BC18F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239619AbiBRVLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:11:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52308 "EHLO
+        id S239627AbiBRVMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:12:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiBRVLt (ORCPT
+        with ESMTP id S231464AbiBRVMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:11:49 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 641FC1133D6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:11:30 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-217--zoMOBvpMVq-lx5Sa2SNmQ-1; Fri, 18 Feb 2022 21:11:27 +0000
-X-MC-Unique: -zoMOBvpMVq-lx5Sa2SNmQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 18 Feb 2022 21:11:25 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 18 Feb 2022 21:11:25 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andrew Cooper' <Andrew.Cooper3@citrix.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>
-Subject: RE: [PATCH 05/29] x86: Base IBT bits
-Thread-Topic: [PATCH 05/29] x86: Base IBT bits
-Thread-Index: AQHYJOs4MY/fho88+Uaa/a9ERSiwKKyZyEiAgAAEwLA=
-Date:   Fri, 18 Feb 2022 21:11:25 +0000
-Message-ID: <bf7f2867a77e4ebe8c44fd0577a3ac55@AcuMS.aculab.com>
-References: <20220218164902.008644515@infradead.org>
- <20220218171408.867389898@infradead.org>
- <96209eb7-f95c-41c5-12c1-da4dbbbf67f3@citrix.com>
-In-Reply-To: <96209eb7-f95c-41c5-12c1-da4dbbbf67f3@citrix.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 18 Feb 2022 16:12:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10563FD83;
+        Fri, 18 Feb 2022 13:11:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91B4061D52;
+        Fri, 18 Feb 2022 21:11:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1815FC340E9;
+        Fri, 18 Feb 2022 21:11:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645218709;
+        bh=Bu4O0hoD4gCdzZCtQ5D13/mnbp6m/o471u7XqAd976M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WHKQBa8yKoM/IqMv3DqlSx0ai1ElZgjEmQXh1L3r2BQKNyRN8Yf0A3Ojd4ZumCV32
+         zFlYvNQl/8BoaYoY2wUpaZ97tftXlpu9G6i2LKWzFxyXQVoN5FeL6crErIa8mhRbcj
+         fqPMCZChnJt/AngLiMcBIQOiy5e5+NqzUKd4rm9P+5s5Q9Lbg0X+G62kyHPYdrtR/l
+         XA7DzskGXnV7F6E01K+3/E2n2tiH0AXIa55kPw40fBroTmDo1JYk5RGBICIITOvo6l
+         Eu9VzoYdXIQ8F6++VIwYYIvYEADt/ORViOVGIWza22xfa8F8whImbxeGDATv9tYskd
+         jP/zGzL9KJYRw==
+Date:   Fri, 18 Feb 2022 22:11:39 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: remove duplicate entry for i2c-qcom-geni
+Message-ID: <YhALi4X78OzJbjs9@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+References: <20220218104904.14405-1-wsa@kernel.org>
+ <Yg/c+27yR1P0b+eL@ripper>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m8g2eFA0cUN3Z0Em"
+Content-Disposition: inline
+In-Reply-To: <Yg/c+27yR1P0b+eL@ripper>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQW5kcmV3IENvb3Blcg0KPiBTZW50OiAxOCBGZWJydWFyeSAyMDIyIDIwOjUwDQo+IA0K
-PiBPbiAxOC8wMi8yMDIyIDE2OjQ5LCBQZXRlciBaaWpsc3RyYSB3cm90ZToNCj4gPiArLyoNCj4g
-PiArICogQSBiaXQgY29udm9sdXRlZCwgYnV0IG1hdGNoZXMgYm90aCBlbmRicjMyIGFuZCBlbmRi
-cjY0IHdpdGhvdXQNCj4gPiArICogaGF2aW5nIGVpdGhlciBhcyBsaXRlcmFsIGluIHRoZSB0ZXh0
-Lg0KPiA+ICsgKi8NCj4gPiArc3RhdGljIGlubGluZSBib29sIGlzX2VuZGJyKGNvbnN0IHZvaWQg
-KmFkZHIpDQo+ID4gK3sNCj4gPiArCXVuc2lnbmVkIGludCB2YWwgPSB+Kih1bnNpZ25lZCBpbnQg
-KilhZGRyOw0KPiA+ICsJdmFsIHw9IDB4MDEwMDAwMDBVOw0KPiA+ICsJcmV0dXJuIHZhbCA9PSB+
-MHhmYTFlMGZmMzsNCj4gPiArfQ0KPiANCj4gQXQgdGhpcyBwb2ludCwgSSBmZWVsIEkndmUgZWFy
-bmVkIGFuICJJIHRvbGQgeW91IHNvIi4gOikNCj4gDQo+IENsYW5nIDEzIHNlZXMgc3RyYWlnaHQg
-dGhyb3VnaCB0aGUgdHJpY2tlcnkgYW5kIGdlbmVyYXRlczoNCj4gDQo+IGlzX2VuZGJyOsKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAj
-IEBpc19lbmRicg0KPiDCoMKgwqDCoMKgwqDCoCBtb3ZswqDCoMKgICQtMTY3NzcyMTcsICVlYXjC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgIyBpbW0gPSAweEZFRkZGRkZGDQo+IMKgwqDC
-oMKgwqDCoMKgIGFuZGzCoMKgwqAgKCVyZGkpLCAlZWF4DQo+IMKgwqDCoMKgwqDCoMKgIGNtcGzC
-oMKgwqAgJC05ODY5MzEzMywgJWVheMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAjIGlt
-bSA9IDB4RkExRTBGRjMNCj4gwqDCoMKgwqDCoMKgwqAgc2V0ZcKgwqDCoCAlYWwNCj4gwqDCoMKg
-wqDCoMKgwqAgcmV0cQ0KDQpJIHRoaW5rIGl0IGlzIGVub3VnaCB0byBhZGQ6DQoJYXNtKCIiLCAi
-PXIiICh2YWwpKTsNCnNvbWV3aGVyZSBpbiB0aGUgbWlkZGxlLg0KKEkgdGhpbmsgdGhhdCBpcyBy
-aWdodCBmb3IgYXNtIHdpdGggaW5wdXQgYW5kIG91dHB1dCBpbiB0aGUgc2FtZQ0KcmVnaXN0ZXIu
-KQ0KVGhlcmUgbWlnaHQgYmUgYSBISURFX0ZPUl9PUFRJTUlTRVIoKSBkZWZpbmUgdGhhdCBkb2Vz
-IHRoYXQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1s
-ZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJh
-dGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
+--m8g2eFA0cUN3Z0Em
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> It would have been nice to go the other direction (reducing
+> ARM/QUALCOMM), but your assessment looks accurate, so:
+
+I totally agree. Sadly, I don't know who could take over the driver.
+
+
+--m8g2eFA0cUN3Z0Em
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIQC4QACgkQFA3kzBSg
+KbZNBw/+Jd7JLYc1NcMsm+XgNHX6+ScCv0742ERHDPRKThGVrtqHsL+dWltEyd3g
+GxiO5Px4k2EMtJZfroY/CMUluxLa/9eHWQlCzod0To+qoIXxHibvs8MBAS1k+JUO
+GXcnZQCjPWrXsrXwkth9s0Jr+02cdAF/Rvw6/MmXioV1+S5wnO8mLvsXLPJubnV8
+OXxEb7q2gAbu7WO2NpBwsS5p/Tok+rd7CTsenZxcbZFeIaRlgcvAQru5UpZ/snSA
+0AAkFgY4P3oaQ6K3okvFpxJRu4o2JPRmkufWzYAO+OwrpalJqbbca9NxDY212o5q
+XiQM4PHZ8DVd/HwW79AVTE+TWfSd0AEMJug2Zbj7jvYlTWjE3vT0L12AFEc72Mkj
+gqr9Ajum0+6DY8STHOiQCFCtr/oUI572z+O7fVe9PsCuguvmiZyw4vK0eZ221ZCW
+q0Rfr4hemGl7qALFEFp6vm6dWZwwEUmPPpiJry4hYltfAbQ/RsGG28ld+tmse5ny
+adg1rLglGnTXG+Ej4Yr5kY2uUHYrfV76kjJmQvZmfl/XxQDIWYcPi7ORx87fEH5u
+5Ycz2NSDq5PVEs4/hvdvzpCTRzffoiGC69H+v/XyT4yMXpgXM2tLvAm87rl//erf
+9U3B03+3R9FmbsTOmllxpnML5+jgShCY2kDkzQqLXKmfhTbdHhM=
+=fBvI
+-----END PGP SIGNATURE-----
+
+--m8g2eFA0cUN3Z0Em--

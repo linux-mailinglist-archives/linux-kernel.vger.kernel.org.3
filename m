@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC95E4BB3A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 530974BB3C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbiBRH6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:58:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45032 "EHLO
+        id S231768AbiBRIBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 03:01:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiBRH6H (ORCPT
+        with ESMTP id S230056AbiBRIBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:58:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74207151D09;
-        Thu, 17 Feb 2022 23:57:50 -0800 (PST)
+        Fri, 18 Feb 2022 03:01:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DD31738F9;
+        Fri, 18 Feb 2022 00:01:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F49561028;
-        Fri, 18 Feb 2022 07:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0C1C340E9;
-        Fri, 18 Feb 2022 07:57:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00B7A612AF;
+        Fri, 18 Feb 2022 08:01:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C17FC340E9;
+        Fri, 18 Feb 2022 08:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645171069;
-        bh=1RjXsiu3Z6SS4o/E9a4X65asxgr+t4tHtpZNXouQhc8=;
+        s=korg; t=1645171274;
+        bh=wlMKj3Vczzg2CXtGVuAuaNfHplfiJXvDzqzkB6AONQY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cPYS2jFabTvnkMbQC77iAOAB25vBb+nAZUhtDb3CuoffF3jriH6wQss6h9EX85pQt
-         AdTNny719PLHXh49AeUyXcgBkHcU3Db+BT5cZeC4PkA7qyrV/xx/LO0UpM1TWIHLNz
-         CMOETdfRnGlB5XnVlHZ8HL/JTXe6Ty4CG0gIJPj8=
-Date:   Fri, 18 Feb 2022 08:57:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-usb@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
-Subject: Re: usb: gadget: function: add spinlock for rndis response list
-Message-ID: <Yg9ReVfKxHUPOTvZ@kroah.com>
-References: <CGME20220218053230epcas2p1c63c8b28e7448988727221e0265c64fc@epcas2p1.samsung.com>
- <1645162195-54476-1-git-send-email-dh10.jung@samsung.com>
+        b=meXSLvfjyeKjeSTO3/guG9OP9lyEqngjge5GQ4Jkxme5Qsg30IPN13Pvt8KgZTiG6
+         8jrbmMG2+B60qLx5jS/DdONcm3Bj6042Q8asqr4Xv77To8xrSFuhAeihzNjv9roia8
+         vxbCvnM8bS6LDYfhP1+S+1eLUAnyBuZKkx60qOD4=
+Date:   Fri, 18 Feb 2022 09:01:11 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Yuanchu Xie <yuanchu@google.com>, Shuah Khan <shuah@kernel.org>,
+        Markus Boehme <markubo@amazon.de>, rientjes@google.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/damon: make selftests executable
+Message-ID: <Yg9SR88j0JV/0gKJ@kroah.com>
+References: <20220218001017.3500673-3-yuanchu@google.com>
+ <20220218075254.11467-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1645162195-54476-1-git-send-email-dh10.jung@samsung.com>
+In-Reply-To: <20220218075254.11467-1-sj@kernel.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,47 +54,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 02:29:55PM +0900, Daehwan Jung wrote:
-> There's no lock for rndis response list. It could cause list corruption
-> if two different list_add at the same time like below.
-> It's better to add in rndis_add_response / rndis_free_response
-> / rndis_get_next_response to prevent any race condition on response list.
+On Fri, Feb 18, 2022 at 07:52:54AM +0000, SeongJae Park wrote:
+> Hello Yuanchu,
 > 
-> [  361.894299] [1:   irq/191-dwc3:16979] list_add corruption.
-> next->prev should be prev (ffffff80651764d0),
-> but was ffffff883dc36f80. (next=ffffff80651764d0).
+> Thank you for this patch!
 > 
-> [  361.904380] [1:   irq/191-dwc3:16979] Call trace:
-> [  361.904391] [1:   irq/191-dwc3:16979]  __list_add_valid+0x74/0x90
-> [  361.904401] [1:   irq/191-dwc3:16979]  rndis_msg_parser+0x168/0x8c0
-> [  361.904409] [1:   irq/191-dwc3:16979]  rndis_command_complete+0x24/0x84
-> [  361.904417] [1:   irq/191-dwc3:16979]  usb_gadget_giveback_request+0x20/0xe4
-> [  361.904426] [1:   irq/191-dwc3:16979]  dwc3_gadget_giveback+0x44/0x60
-> [  361.904434] [1:   irq/191-dwc3:16979]  dwc3_ep0_complete_data+0x1e8/0x3a0
-> [  361.904442] [1:   irq/191-dwc3:16979]  dwc3_ep0_interrupt+0x29c/0x3dc
-> [  361.904450] [1:   irq/191-dwc3:16979]  dwc3_process_event_entry+0x78/0x6cc
-> [  361.904457] [1:   irq/191-dwc3:16979]  dwc3_process_event_buf+0xa0/0x1ec
-> [  361.904465] [1:   irq/191-dwc3:16979]  dwc3_thread_interrupt+0x34/0x5c
+> On Fri, 18 Feb 2022 00:10:17 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
 > 
-> Fixes: f6281af9d62e ("usb: gadget: rndis: use list_for_each_entry_safe")
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> ---
->  drivers/usb/gadget/function/rndis.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> > The damon selftests do not have the executable bit on. We fix that by
+> > setting the x bits on the .sh files similar to other existing shell
+> > selftests.
+> > 
+> > Fixes: 9ab3b0c8ef62 ("selftests/damon: split test cases")
+> > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
 > 
-> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
-> index b7ccf1803656..b4d58324e2d2 100644
-> --- a/drivers/usb/gadget/function/rndis.c
-> +++ b/drivers/usb/gadget/function/rndis.c
-> @@ -1011,16 +1011,21 @@ void rndis_add_hdr(struct sk_buff *skb)
->  }
->  EXPORT_SYMBOL_GPL(rndis_add_hdr);
->  
-> +/* add spinlock to prevent race condition for rndis response list */
-> +static DEFINE_SPINLOCK(resp_lock);
+> Reviewed-by: SeongJae Park <sj@kernel.org>
 
-Shouldn't this be one lock per rndis_params structure, and not a global
-one for the whole driver?
+This type of change does not work outside of git, so why not just make
+the tool that calls these scripts not care about the executable bit like
+we do for other scripts?
 
 thanks,
 

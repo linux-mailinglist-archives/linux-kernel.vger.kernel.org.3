@@ -2,126 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6F64BBD68
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10C44BBD6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237293AbiBRQXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:23:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41052 "EHLO
+        id S237726AbiBRQYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:24:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiBRQXW (ORCPT
+        with ESMTP id S234373AbiBRQYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:23:22 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE555C85F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:23:01 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id m17so16296368edc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:23:01 -0800 (PST)
+        Fri, 18 Feb 2022 11:24:14 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563CA70310
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:23:58 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id g1so2705312pfv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:23:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=idw7YZntoBJP5z9pQg5T5B0np+JD13UcXDxLG774Cwc=;
-        b=QyURN3uk2BLtN80COI5GpugWKjfwNhPgf1QfsKzjgguvwOYKDRL9xS+9csSYsiNlmL
-         RY6gVFgthq9mH8z7Min5CnG9W9oFTiT6XJ5ECd5Q25mQGl2pG+prqOuaFHqxsVkDAk0O
-         5kfxmtsfCrqfTXtNWfJdjjPJ/1C85eFit45001GsN1AmLIFMHrDMXCVANquBGn3xXVKB
-         az3rnw/PRs+T3tKBjGNsBn/SNMA1S8MBkVjx2mPww8FRHKDOEz5gLhymg9H3n1I4jJvx
-         LqFaavcp4MGY8A8SeWRDjEu04ifpzzLNM4fyVBywuYGBOgOIerQ3rPEx/YlmCctBwlcc
-         pzww==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yOF1n7tghKKIAbhQ9j+Q3jSmefs92rndMD1UKm3tdV4=;
+        b=HudpNHEwpV1T8DC9ek4CCWrNPF+lHxBdB/NYDU6fuC1dHsFHNK5Wwm1gYEyKR2DTUV
+         Y6xGW/CaRVHbAS+YH3TM3wKXfEa/orADgD5SkHZjQGKgE3RfC/nHWfS/vIVYaS+KmmCX
+         +yJGswkQIH0w0VFrpB8lRAqkxjQ6aRgL5P/7LQqWQOh36L7tEzsc6+AOUYJmBfBtiI9v
+         5wOua4yA0WngQNzG0B4lxQP8YqKPEnE4sdfNaFPbvCxXDy5vBWBamWAt4Hske/mn93n9
+         2h+z2shm+kVy4F6QkVUUCjodx3p3UZrdQP1E1/a9rAyZuxmigtdZ5LAIyEKxEhsP5y1i
+         UZ5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=idw7YZntoBJP5z9pQg5T5B0np+JD13UcXDxLG774Cwc=;
-        b=ga+6lwWwD2h27GFOcyuz6Ktt/Cm+JHI3P2hwQ9ctuYAV3UVq5IMHVeyYiLiac6ws6c
-         X549PMVB2z2W1nuC0NNKe4PNN2UHGZW2IQPvIxOtO89BnKG7957N3b7v0Xz1tC3SZN7t
-         TljogoFvBJudc4l+NEajCE3NJ7z8kblXD01ieZxFLuBP6SWtFP8vV4Gu/KDCf0CEUbHO
-         hUk455kZqKx4aL/bPRnPVo4bYXvHNOe4/inARiPFx5DmFF9QixbE/hQ5xLjQgQXvxZ51
-         GIWQQqRRlxbBHHyvJrmCDGm4pF34G+vNln1NqFR0TceFScaHwrrsGu6lKbWxw1F1TCrS
-         IvIA==
-X-Gm-Message-State: AOAM533zdh6tPtGaPmcL16O18rbcJZf7dXANmt/wMqcIec7rtUJ6jLL3
-        BJnSXiDVXIWx4YJFjC+TjYRTtfUXoTamRiZljJVw
-X-Google-Smtp-Source: ABdhPJwLIybVpRExsjCTwswlHvN7ki7KcVz8lLR6HcnU7FD3+kIDwifek077ymQZKGu85pdM8b+a11wHWuPdePK5ciA=
-X-Received: by 2002:a05:6402:3487:b0:40f:fa53:956c with SMTP id
- v7-20020a056402348700b0040ffa53956cmr8948400edc.22.1645201380380; Fri, 18 Feb
- 2022 08:23:00 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yOF1n7tghKKIAbhQ9j+Q3jSmefs92rndMD1UKm3tdV4=;
+        b=OaUaYMRfiD3I3L6XpfGVUemQjdXR4M3SrMU0pmsPojEy62tMn+xcaUNgxGs7qE2aUf
+         KI21FF/bK5pv+aSGNB3OQaURD32wGtyx500M0w3CDewr8PQFupvaYtAe2EHSnFFBomtK
+         96CdXNgK1ljGmu+H3RPs6a3MqHqx1Ta+I6TxQnGNpTYOzHuODsZ1dfercTo1TwUHBIdS
+         KKn6pYwH/F8hKtC/vd4ODzBrCcdJAtwVGQ97ip6iKyZKIljQNi8E/Ryz/LozfX4sBtPj
+         ew6TTtVceq+1OmFfpTTvsUWx5zylHf2Z/VcuH0AqaDHicfhfpWo2QXH8UCK4Lic4uB0+
+         KtUg==
+X-Gm-Message-State: AOAM530jR2OKq5wacXSp0FvwWti7VJ3bSsu3Iv9ajf9yUwoya6bAQHyo
+        RweThqzJkyrHAS68CLrSODd3Der2U4PEJw==
+X-Google-Smtp-Source: ABdhPJzVnGVBGRXc9lULlH6X/u7mIhDrQGo9oIZHMJe+2Q7U2uEh47vc0cnImf7Se8j5jb/m7OPcLQ==
+X-Received: by 2002:a63:f04f:0:b0:373:bd70:af2 with SMTP id s15-20020a63f04f000000b00373bd700af2mr5258065pgj.497.1645201437311;
+        Fri, 18 Feb 2022 08:23:57 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s40sm3725094pfg.145.2022.02.18.08.23.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 08:23:56 -0800 (PST)
+Date:   Fri, 18 Feb 2022 16:23:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] KVM: x86: make several AVIC callbacks optional
+Message-ID: <Yg/IGUFqqS2r98II@google.com>
+References: <20220217180831.288210-1-pbonzini@redhat.com>
+ <20220217180831.288210-6-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-4-cgzones@googlemail.com>
-In-Reply-To: <20220217142133.72205-4-cgzones@googlemail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 18 Feb 2022 11:22:46 -0500
-Message-ID: <CAHC9VhSup7QDQSGxDhbHrpEVNJZ7C0ReDcvuLF=S+1Mb=xRUdQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selinux: drop unnecessary NULL check
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Austin Kim <austin.kim@lge.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217180831.288210-6-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 9:22 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> Commit e3489f8974e1 ("selinux: kill selinux_sb_get_mnt_opts()")
-> introduced a NULL check on the context after a successful call to
-> security_sid_to_context().  This is on the one hand redundant after
-> checking for success and on the other hand insufficient on an actual
-> NULL pointer, since the context is passed to seq_escape() leading to a
-> call of strlen() on it.
->
-> Reported by Clang analyzer:
->
->     In file included from security/selinux/hooks.c:28:
->     In file included from ./include/linux/tracehook.h:50:
->     In file included from ./include/linux/memcontrol.h:13:
->     In file included from ./include/linux/cgroup.h:18:
->     ./include/linux/seq_file.h:136:25: warning: Null pointer passed as 1s=
-t argument to string length function [unix.cstring.NullArg]
->             seq_escape_mem(m, src, strlen(src), flags, esc);
->                                    ^~~~~~~~~~~
+Nit, s/AVIC/APICv in the shortlog.  The "AVIC" callbacks are being deleted, not
+made optional, it's kvm_x86_ops' APICv hooks that are becoming optional.
 
-Interesting.  If I'm understanding this correctly, Clang is reporting
-on a potential NULL pointer simply because we are checking for a NULL
-pointer a few lines earlier, even though @context should not be NULL
-if (rc !=3D 0)?
-
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> SVM does not need them, so mark them as optional and delete the
+> implementation.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->  security/selinux/hooks.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 1e69f88eb326..ac802b99d36c 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -1020,7 +1020,7 @@ static int show_sid(struct seq_file *m, u32 sid)
->         rc =3D security_sid_to_context(&selinux_state, sid,
->                                              &context, &len);
->         if (!rc) {
-> -               bool has_comma =3D context && strchr(context, ',');
-> +               bool has_comma =3D strchr(context, ',');
->
->                 seq_putc(m, '=3D');
->                 if (has_comma)
-> --
-> 2.35.1
+>  arch/x86/include/asm/kvm-x86-ops.h | 10 +++++-----
+>  arch/x86/kvm/lapic.c               | 24 ++++++++++--------------
+>  arch/x86/kvm/svm/avic.c            | 18 ------------------
+>  arch/x86/kvm/svm/svm.c             |  4 ----
+>  arch/x86/kvm/svm/svm.h             |  1 -
+>  arch/x86/kvm/x86.c                 |  4 ++--
+>  6 files changed, 17 insertions(+), 44 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 5e3296c07207..c0ec066a8599 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -75,11 +75,11 @@ KVM_X86_OP(enable_irq_window)
+>  KVM_X86_OP_OPTIONAL(update_cr8_intercept)
+>  KVM_X86_OP(check_apicv_inhibit_reasons)
+>  KVM_X86_OP(refresh_apicv_exec_ctrl)
+> -KVM_X86_OP(hwapic_irr_update)
+> -KVM_X86_OP(hwapic_isr_update)
+> +KVM_X86_OP_OPTIONAL(hwapic_irr_update)
+> +KVM_X86_OP_OPTIONAL(hwapic_isr_update)
+>  KVM_X86_OP_OPTIONAL(guest_apic_has_interrupt)
+> -KVM_X86_OP(load_eoi_exitmap)
+> -KVM_X86_OP(set_virtual_apic_mode)
+> +KVM_X86_OP_OPTIONAL(load_eoi_exitmap)
+> +KVM_X86_OP_OPTIONAL(set_virtual_apic_mode)
+>  KVM_X86_OP_OPTIONAL(set_apic_access_page_addr)
+>  KVM_X86_OP(deliver_interrupt)
+>  KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
+> @@ -102,7 +102,7 @@ KVM_X86_OP_OPTIONAL(vcpu_blocking)
+>  KVM_X86_OP_OPTIONAL(vcpu_unblocking)
+>  KVM_X86_OP_OPTIONAL(pi_update_irte)
+>  KVM_X86_OP_OPTIONAL(pi_start_assignment)
+> -KVM_X86_OP(apicv_post_state_restore)
+> +KVM_X86_OP_OPTIONAL(apicv_post_state_restore)
 
---=20
-paul-moore.com
+apicv_post_state_restore() isn't conditional, it's implemented and wired up
+unconditionally by both VMX and SVM.

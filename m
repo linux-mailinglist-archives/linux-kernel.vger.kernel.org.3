@@ -2,109 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9464D4BB73F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78CD4BB747
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbiBRKuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:50:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49774 "EHLO
+        id S234166AbiBRKwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:52:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbiBRKuD (ORCPT
+        with ESMTP id S232114AbiBRKwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:50:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A861EC51;
-        Fri, 18 Feb 2022 02:49:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03B87B823BB;
-        Fri, 18 Feb 2022 10:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E8C3C340E9;
-        Fri, 18 Feb 2022 10:49:43 +0000 (UTC)
-Message-ID: <c78ed114-b838-e030-a235-f4de9c88e71e@xs4all.nl>
-Date:   Fri, 18 Feb 2022 11:49:42 +0100
+        Fri, 18 Feb 2022 05:52:03 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F110E0E9;
+        Fri, 18 Feb 2022 02:51:46 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DF376219A4;
+        Fri, 18 Feb 2022 10:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645181504; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r4VLD7m5wPL60NKvEVAhzGCIMJAD3yDjimzKOIw9AfQ=;
+        b=D0eJ9PaqOgtHeGTiKBuoEhKfsPuPKQBnQzAafDJq/raOVBdWs7WwshxaJbKgVX+//y89pp
+        TjZttL/Kl6Tq37vrP6fGLqePcxICqWSJnfX5dPk0Eb20iwhrAgQGS+XzRYq7WP+3YaeI3S
+        g2HkUYDKQE64m2RLXzPI0yWhpyoS/vE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645181504;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r4VLD7m5wPL60NKvEVAhzGCIMJAD3yDjimzKOIw9AfQ=;
+        b=GqODA8jnl4slVGzgXEuZUW5KUXxvUMaPS1Xelv1BTSB9U2qBWEW+CF9e2RFiOJd79MENfB
+        bzz+VxtDeeCp3LBA==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 7F135A3B83;
+        Fri, 18 Feb 2022 10:51:44 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Michal Suchanek <msuchanek@suse.de>, Martin Mares <mj@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Herrmann <dh.herrmann@gmail.com>,
+        linux-video@atrey.karlin.mff.cuni.cz, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] simplefb: Enable boot time VESA graphic mode selection.
+Date:   Fri, 18 Feb 2022 11:51:38 +0100
+Message-Id: <20220218105138.5384-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <14dd85f1-21b1-2ff7-3491-466c077210e6@suse.de>
+References: <14dd85f1-21b1-2ff7-3491-466c077210e6@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] media: dvb-frontends: use div64_u64() instead of do_div()
-Content-Language: en-US
-To:     Qing Wang <wangqing@vivo.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1644395896-4036-1-git-send-email-wangqing@vivo.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <1644395896-4036-1-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2022 09:38, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
-> 
-> do_div() does a 64-by-32 division.
-> When the divisor is u64, do_div() truncates it to 32 bits, this means it
-> can test non-zero and be truncated to zero for division.
-> 
-> fix do_div.cocci warning:
-> do_div() does a 64-by-32 division, please consider using div64_u64 instead.
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  drivers/media/dvb-frontends/tda10048.c     | 2 +-
->  drivers/media/dvb-frontends/tda18271c2dd.c | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/dvb-frontends/tda10048.c b/drivers/media/dvb-frontends/tda10048.c
-> index d1d206e..1ce2e67
-> --- a/drivers/media/dvb-frontends/tda10048.c
-> +++ b/drivers/media/dvb-frontends/tda10048.c
-> @@ -344,7 +344,7 @@ static int tda10048_set_wref(struct dvb_frontend *fe, u32 sample_freq_hz,
->  	z = 7 * sample_freq_hz;
->  	do_div(t, z);
->  	t += 5;
-> -	do_div(t, 10);
-> +	div64_u64(t, 10);
+Since switch to simplefb/simpledrm VESA graphic modes are no longer
+available with legacy BIOS.
 
-This makes no sense, I think you intended to convert the previous do_div(t, z).
+The x86 realmode boot code enables the VESA graphic modes when option
+FB_BOOT_VESA_SUPPORT is enabled.
 
->  
->  	tda10048_writereg(state, TDA10048_TIME_WREF_LSB, (u8)t);
->  	tda10048_writereg(state, TDA10048_TIME_WREF_MID1, (u8)(t >> 8));
-> diff --git a/drivers/media/dvb-frontends/tda18271c2dd.c b/drivers/media/dvb-frontends/tda18271c2dd.c
-> index a3483448..fd92878
-> --- a/drivers/media/dvb-frontends/tda18271c2dd.c
-> +++ b/drivers/media/dvb-frontends/tda18271c2dd.c
-> @@ -328,7 +328,7 @@ static int CalcMainPLL(struct tda_state *state, u32 freq)
->  
->  	OscFreq = (u64) freq * (u64) Div;
->  	OscFreq *= (u64) 16384;
-> -	do_div(OscFreq, (u64)16000000);
-> +	do_div(OscFreq, 16000000);
->  	MainDiv = OscFreq;
->  
->  	state->m_Regs[MPD] = PostDiv & 0x77;
-> @@ -352,7 +352,7 @@ static int CalcCalPLL(struct tda_state *state, u32 freq)
->  	OscFreq = (u64)freq * (u64)Div;
->  	/* CalDiv = u32( OscFreq * 16384 / 16000000 ); */
->  	OscFreq *= (u64)16384;
-> -	do_div(OscFreq, (u64)16000000);
-> +	do_div(OscFreq, 16000000);
->  	CalDiv = OscFreq;
->  
->  	state->m_Regs[CPD] = PostDiv;
+To enable use of VESA modes with simpledrm in legacy BIOS boot mode drop
+dependency of BOOT_VESA_SUPPORT on FB, also drop the FB_ prefix, and
+select the option when simpledrm is built-in on x86.
 
-The changes here do not match with the subject line of this patch.
-I think it is best to split this into two patches, one for each source.
+Fixes: e3263ab389a7 ("x86: provide platform-devices for boot-framebuffers")
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+v2: Select BOOT_VESA_SUPPORT from simplefb rather than simpledrm. The
+simpledrm driver uses the firmware provided video modes only indirectly
+through simplefb, and both can be enabled independently.
+---
+ arch/x86/boot/video-vesa.c  | 4 ++--
+ drivers/firmware/Kconfig    | 1 +
+ drivers/video/fbdev/Kconfig | 9 ++++-----
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Regards,
+diff --git a/arch/x86/boot/video-vesa.c b/arch/x86/boot/video-vesa.c
+index 7e185977a984..c2c6d35e3a43 100644
+--- a/arch/x86/boot/video-vesa.c
++++ b/arch/x86/boot/video-vesa.c
+@@ -83,7 +83,7 @@ static int vesa_probe(void)
+ 			   (vminfo.memory_layout == 4 ||
+ 			    vminfo.memory_layout == 6) &&
+ 			   vminfo.memory_planes == 1) {
+-#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
++#ifdef CONFIG_BOOT_VESA_SUPPORT
+ 			/* Graphics mode, color, linear frame buffer
+ 			   supported.  Only register the mode if
+ 			   if framebuffer is configured, however,
+@@ -121,7 +121,7 @@ static int vesa_set_mode(struct mode_info *mode)
+ 	if ((vminfo.mode_attr & 0x15) == 0x05) {
+ 		/* It's a supported text mode */
+ 		is_graphic = 0;
+-#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
++#ifdef CONFIG_BOOT_VESA_SUPPORT
+ 	} else if ((vminfo.mode_attr & 0x99) == 0x99) {
+ 		/* It's a graphics mode with linear frame buffer */
+ 		is_graphic = 1;
+diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+index 75cb91055c17..8053c75b8645 100644
+--- a/drivers/firmware/Kconfig
++++ b/drivers/firmware/Kconfig
+@@ -224,6 +224,7 @@ config SYSFB
+ config SYSFB_SIMPLEFB
+ 	bool "Mark VGA/VBE/EFI FB as generic system framebuffer"
+ 	depends on SYSFB
++	select BOOT_VESA_SUPPORT if X86
+ 	help
+ 	  Firmwares often provide initial graphics framebuffers so the BIOS,
+ 	  bootloader or kernel can show basic video-output during boot for
+diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+index 6ed5e608dd04..4f3be9b7a520 100644
+--- a/drivers/video/fbdev/Kconfig
++++ b/drivers/video/fbdev/Kconfig
+@@ -66,9 +66,8 @@ config FB_DDC
+ 	select I2C_ALGOBIT
+ 	select I2C
+ 
+-config FB_BOOT_VESA_SUPPORT
++config BOOT_VESA_SUPPORT
+ 	bool
+-	depends on FB
+ 	help
+ 	  If true, at least one selected framebuffer driver can take advantage
+ 	  of VESA video modes set at an early boot stage via the vga= parameter.
+@@ -627,7 +626,7 @@ config FB_VESA
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
+-	select FB_BOOT_VESA_SUPPORT
++	select BOOT_VESA_SUPPORT
+ 	help
+ 	  This is the frame buffer device driver for generic VESA 2.0
+ 	  compliant graphic cards. The older VESA 1.2 cards are not supported.
+@@ -1051,7 +1050,7 @@ config FB_INTEL
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
+-	select FB_BOOT_VESA_SUPPORT if FB_INTEL = y
++	select BOOT_VESA_SUPPORT if FB_INTEL = y
+ 	depends on !DRM_I915
+ 	help
+ 	  This driver supports the on-board graphics built in to the Intel
+@@ -1378,7 +1377,7 @@ config FB_SIS
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
+-	select FB_BOOT_VESA_SUPPORT if FB_SIS = y
++	select BOOT_VESA_SUPPORT if FB_SIS = y
+ 	select FB_SIS_300 if !FB_SIS_315
+ 	help
+ 	  This is the frame buffer device driver for the SiS 300, 315, 330
+-- 
+2.31.1
 
-	Hans

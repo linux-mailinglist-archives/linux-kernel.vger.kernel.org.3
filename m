@@ -2,187 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560704BC306
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 00:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38844BC30A
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 00:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240228AbiBRXrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 18:47:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45622 "EHLO
+        id S240235AbiBRXtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 18:49:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240220AbiBRXrH (ORCPT
+        with ESMTP id S238418AbiBRXtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 18:47:07 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248EB5133A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:46:49 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id f14so1712243ioz.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:46:49 -0800 (PST)
+        Fri, 18 Feb 2022 18:49:50 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5813DF1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:49:31 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id e17so6502619ljk.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 15:49:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8ApOdbLf2viFC8HOyVIL76M9o9gtvAN0a+oYBSzuctM=;
-        b=RcM5KBnGh0md1BmuL/NkOW3FBn7vrf1DLi5eD8iLAFpvoLxufqWXnNAL1eW4ImjZmj
-         lZIt5d9oC7CAvM09QsarVhPsvTQDJUcSgaCgJM7T8j1WkUu6p7qy4HpbdIvnOr6EwnUT
-         TT78lmKlb0uPeOS4KWzuId+rcI8SDXctopcM4=
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6sj3ejMVoh7St89NMQnReErtrznfRzBIbBg3djPrhmg=;
+        b=V8vl9lDw11rdLfohpcnuXToIk6SmfsfE9wf+gZFnAeXavwjB3dA+BpY3mkO9CRgk6k
+         kadFRvUaxalr6xGbWoa09qT2Qbvot6Rl9sWUflA923V4lZFP/yaLrDP4N7dOSKBb6Um1
+         TOm3CS0Bw+5xfFNDxQSW8Whl2goggpSTIKwGfL1tuSbyhi2oITNHZKCHa/Cw7ORG6BMU
+         ZJbTHlrviinHxXFCI2LUalfq3Po6Y3sGmSEhsT/cj/BvfW2QfKF5iKooDyE5F7Fm+caK
+         9iwM8Q+HO5WcDpFdjZux92fczZPSVDu4yA8yccwwbeVllv1q82W6mIfwOdghQ3aDG1sA
+         tMWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8ApOdbLf2viFC8HOyVIL76M9o9gtvAN0a+oYBSzuctM=;
-        b=qny2L8Ftt6lkN3yskEmldcpsvbZ4Hjc9gDffFKEl/tHsYr85FGOzLvYM8Lu/uziydo
-         YlmM/N+aEzyoC3OlhXqP2sgmnMncAhMTDKBmIl/UHpBICFt7O9ERK/SNO6xR3KGVRI51
-         LGYb1c3faStK7o+XIX/3BQdjyKpFUP5LlCkYzJ2YwnaUPQmVdRcdZKbCX3ZHCqvPdBvm
-         V4o3pQQDY+9lumjTJ00kYRufY9dlrvcexeJyLe5nvm0N0Feg57kJxZ+u3rs5euQs5olY
-         tELaP9yIGdOhTMC6SfLn/sfJQRsxIj+EIevKqzNVliPjhqA/GLMGiRWgWm4YPS0dYECL
-         YiWQ==
-X-Gm-Message-State: AOAM530rkaWKLRvfDXflWRTeJN3AnZ6MUBQPq9rmqgqdOmU01lYrs3wJ
-        BIrfOzAMTmaC4Ed+iQThNGgATw==
-X-Google-Smtp-Source: ABdhPJzG9Wf5D3tQinJhQj0RW7b2acZ6v/jfrdaRwlJbxWjpxlcyOpEftDqAh0A5tXrFDUnK+pL5vw==
-X-Received: by 2002:a05:6602:27c9:b0:5ed:1c27:2982 with SMTP id l9-20020a05660227c900b005ed1c272982mr6972651ios.163.1645228008561;
-        Fri, 18 Feb 2022 15:46:48 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id d18sm4272666iln.79.2022.02.18.15.46.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 15:46:47 -0800 (PST)
-Subject: Re: [PATCH RESEND v6 4/9] cpupower: Add the function to get the sysfs
- value from specific table
-To:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org
-Cc:     Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Jassmine Meng <li.meng@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216073558.751071-1-ray.huang@amd.com>
- <20220216073558.751071-5-ray.huang@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <10708ac3-d33b-90b7-e096-14bccdfab942@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 16:46:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6sj3ejMVoh7St89NMQnReErtrznfRzBIbBg3djPrhmg=;
+        b=s9GZ+m2R83wsaH4SitgSHUdKAC9zUzwtziEqhFFYJM/Q6BMywy3SZ3wH+MkTabwdoo
+         7PkIkBVv2mEgKIBwmJLscw9U6OY1Z54YGBLW2Uh4GnW6UBmVLVc1fI/UL/6Pq00YNk6L
+         eGpZwut0LsHZ73UC3f/Tism5b/0cR6ifmkHnJRemM6+hWNM5hRlCLCQTen5ZubLmnDjc
+         uA6y5OKivpION49GmX5P2gJAM9pxkB9CMbqHQqNGD/7PQi6KJr5ULYYsBqXtAHe3hraM
+         uty9nJPt1DQi1Q6k72HGc/Sx9iUHx5xSAxWN5OyMZV/WCNiCwjHkZJSniEy+4jbTbBdh
+         W63w==
+X-Gm-Message-State: AOAM530FS9t6LO2Pu+WzhjP/Fe7ZOmIvJLSf/T13I1PI3NzswsNq3V5X
+        7Js8aZuALnF2SidqoYRKuAsWemBb22c69/3Es/MveA==
+X-Google-Smtp-Source: ABdhPJw2SpShQ5Ngg1lhm4zyco+Rhhuuw30Msx2Wla4p5VUHqhNo6IkiA9f8U9/AsM8aYoobzy79ejgvf0pDHaftLZk=
+X-Received: by 2002:a05:651c:1592:b0:235:38f7:d3e3 with SMTP id
+ h18-20020a05651c159200b0023538f7d3e3mr5938730ljq.5.1645228169968; Fri, 18 Feb
+ 2022 15:49:29 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220216073558.751071-5-ray.huang@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220214231852.3331430-1-jeremy.linton@arm.com>
+In-Reply-To: <20220214231852.3331430-1-jeremy.linton@arm.com>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Sat, 19 Feb 2022 00:49:27 +0100
+Message-ID: <CAPv3WKe-=+zqkNKD1rkk0uU6t5Z=aixeHD+fp8tZqbGn0sgyZA@mail.gmail.com>
+Subject: Re: [BUG/PATCH v3] net: mvpp2: always set port pcs ops
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 12:35 AM, Huang Rui wrote:
-> Expose the helper into cpufreq header, then cpufreq driver can use this
-> function to get the sysfs value if it has any specific sysfs interfaces.
-> 
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
+wt., 15 lut 2022 o 00:18 Jeremy Linton <jeremy.linton@arm.com> napisa=C5=82=
+(a):
+>
+> Booting a MACCHIATObin with 5.17, the system OOPs with
+> a null pointer deref when the network is started. This
+> is caused by the pcs->ops structure being null in
+> mcpp2_acpi_start() when it tries to call pcs_config().
+>
+> Hoisting the code which sets pcs_gmac.ops and pcs_xlg.ops,
+> assuring they are always set, fixes the problem.
+>
+> The OOPs looks like:
+> [   18.687760] Unable to handle kernel access to user memory outside uacc=
+ess routines at virtual address 0000000000000010
+> [   18.698561] Mem abort info:
+> [   18.698564]   ESR =3D 0x96000004
+> [   18.698567]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+> [   18.709821]   SET =3D 0, FnV =3D 0
+> [   18.714292]   EA =3D 0, S1PTW =3D 0
+> [   18.718833]   FSC =3D 0x04: level 0 translation fault
+> [   18.725126] Data abort info:
+> [   18.729408]   ISV =3D 0, ISS =3D 0x00000004
+> [   18.734655]   CM =3D 0, WnR =3D 0
+> [   18.738933] user pgtable: 4k pages, 48-bit VAs, pgdp=3D0000000111bbf00=
+0
+> [   18.745409] [0000000000000010] pgd=3D0000000000000000, p4d=3D000000000=
+0000000
+> [   18.752235] Internal error: Oops: 96000004 [#1] SMP
+> [   18.757134] Modules linked in: rfkill ip_set nf_tables nfnetlink qrtr =
+sunrpc vfat fat omap_rng fuse zram xfs crct10dif_ce mvpp2 ghash_ce sbsa_gwd=
+t phylink xhci_plat_hcd ahci_plam
+> [   18.773481] CPU: 0 PID: 681 Comm: NetworkManager Not tainted 5.17.0-0.=
+rc3.89.fc36.aarch64 #1
+> [   18.781954] Hardware name: Marvell                         Armada 7k/8=
+k Family Board      /Armada 7k/8k Family Board      , BIOS EDK II Jun  4 20=
+19
+> [   18.795222] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+> [   18.802213] pc : mvpp2_start_dev+0x2b0/0x300 [mvpp2]
+> [   18.807208] lr : mvpp2_start_dev+0x298/0x300 [mvpp2]
+> [   18.812197] sp : ffff80000b4732c0
+> [   18.815522] x29: ffff80000b4732c0 x28: 0000000000000000 x27: ffffccab3=
+8ae57f8
+> [   18.822689] x26: ffff6eeb03065a10 x25: ffff80000b473a30 x24: ffff80000=
+b4735b8
+> [   18.829855] x23: 0000000000000000 x22: 00000000000001e0 x21: ffff6eeb0=
+7b6ab68
+> [   18.837021] x20: ffff6eeb07b6ab30 x19: ffff6eeb07b6a9c0 x18: 000000000=
+0000014
+> [   18.844187] x17: 00000000f6232bfe x16: ffffccab899b1dc0 x15: 000000006=
+a30f9fa
+> [   18.851353] x14: 000000003b77bd50 x13: 000006dc896f0e8e x12: 001bbbfcc=
+fd0d3a2
+> [   18.858519] x11: 0000000000001528 x10: 0000000000001548 x9 : ffffccab3=
+8ad0fb0
+> [   18.865685] x8 : ffff80000b473330 x7 : 0000000000000000 x6 : 000000000=
+0000000
+> [   18.872851] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff80000=
+b4732f8
+> [   18.880017] x2 : 000000000000001a x1 : 0000000000000002 x0 : ffff6eeb0=
+7b6ab68
+> [   18.887183] Call trace:
+> [   18.889637]  mvpp2_start_dev+0x2b0/0x300 [mvpp2]
+> [   18.894279]  mvpp2_open+0x134/0x2b4 [mvpp2]
+> [   18.898483]  __dev_open+0x128/0x1e4
+> [   18.901988]  __dev_change_flags+0x17c/0x1d0
+> [   18.906187]  dev_change_flags+0x30/0x70
+> [   18.910038]  do_setlink+0x278/0xa7c
+> [   18.913540]  __rtnl_newlink+0x44c/0x7d0
+> [   18.917391]  rtnl_newlink+0x5c/0x8c
+> [   18.920892]  rtnetlink_rcv_msg+0x254/0x314
+> [   18.925006]  netlink_rcv_skb+0x48/0x10c
+> [   18.928858]  rtnetlink_rcv+0x24/0x30
+> [   18.932449]  netlink_unicast+0x290/0x2f4
+> [   18.936386]  netlink_sendmsg+0x1d0/0x41c
+> [   18.940323]  sock_sendmsg+0x60/0x70
+> [   18.943825]  ____sys_sendmsg+0x248/0x260
+> [   18.947762]  ___sys_sendmsg+0x74/0xa0
+> [   18.951438]  __sys_sendmsg+0x64/0xcc
+> [   18.955027]  __arm64_sys_sendmsg+0x30/0x40
+> [   18.959140]  invoke_syscall+0x50/0x120
+> [   18.962906]  el0_svc_common.constprop.0+0x4c/0xf4
+> [   18.967629]  do_el0_svc+0x30/0x9c
+> [   18.970958]  el0_svc+0x28/0xb0
+> [   18.974025]  el0t_64_sync_handler+0x10c/0x140
+> [   18.978400]  el0t_64_sync+0x1a4/0x1a8
+> [   18.982078] Code: 52800004 b9416262 aa1503e0 52800041 (f94008a5)
+> [   18.988196] ---[ end trace 0000000000000000 ]---
+>
+> Fixes: cff056322372 ("net: mvpp2: use .mac_select_pcs() interface")
+> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
 > ---
->   tools/power/cpupower/lib/cpufreq.c | 21 +++++++++++++++------
->   tools/power/cpupower/lib/cpufreq.h | 12 ++++++++++++
->   2 files changed, 27 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
-> index c3b56db8b921..c011bca27041 100644
-> --- a/tools/power/cpupower/lib/cpufreq.c
-> +++ b/tools/power/cpupower/lib/cpufreq.c
-> @@ -83,20 +83,21 @@ static const char *cpufreq_value_files[MAX_CPUFREQ_VALUE_READ_FILES] = {
->   	[STATS_NUM_TRANSITIONS] = "stats/total_trans"
->   };
->   
+> v1->v2: Apply Russell's fix
+> v2->v3: Fix Russell's name
+>
+>  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/ne=
+t/ethernet/marvell/mvpp2/mvpp2_main.c
+> index 7cdbf8b8bbf6..1a835b48791b 100644
+> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> @@ -6870,6 +6870,9 @@ static int mvpp2_port_probe(struct platform_device =
+*pdev,
+>         dev->max_mtu =3D MVPP2_BM_JUMBO_PKT_SIZE;
+>         dev->dev.of_node =3D port_node;
+>
+> +       port->pcs_gmac.ops =3D &mvpp2_phylink_gmac_pcs_ops;
+> +       port->pcs_xlg.ops =3D &mvpp2_phylink_xlg_pcs_ops;
+> +
+>         if (!mvpp2_use_acpi_compat_mode(port_fwnode)) {
+>                 port->phylink_config.dev =3D &dev->dev;
+>                 port->phylink_config.type =3D PHYLINK_NETDEV;
+> @@ -6940,9 +6943,6 @@ static int mvpp2_port_probe(struct platform_device =
+*pdev,
+>                                   port->phylink_config.supported_interfac=
+es);
+>                 }
+>
+> -               port->pcs_gmac.ops =3D &mvpp2_phylink_gmac_pcs_ops;
+> -               port->pcs_xlg.ops =3D &mvpp2_phylink_xlg_pcs_ops;
 > -
-> -static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
-> -						 enum cpufreq_value which)
-> +unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
-> +						 const char **table,
-> +						 unsigned index,
+>                 phylink =3D phylink_create(&port->phylink_config, port_fw=
+node,
+>                                          phy_mode, &mvpp2_phylink_ops);
+>                 if (IS_ERR(phylink)) {
+>
 
-unsigned int
+All works fine in my setup, thanks!
 
-> +						 unsigned size)
-
-unsigned int
-
->   {
->   	unsigned long value;
->   	unsigned int len;
->   	char linebuf[MAX_LINE_LEN];
->   	char *endp;
->   
-> -	if (which >= MAX_CPUFREQ_VALUE_READ_FILES)
-> +	if (!table || index >= size || !table[index])
->   		return 0;
->   
-> -	len = sysfs_cpufreq_read_file(cpu, cpufreq_value_files[which],
-> -				linebuf, sizeof(linebuf));
-> +	len = sysfs_cpufreq_read_file(cpu, table[index], linebuf,
-> +				      sizeof(linebuf));
->   
->   	if (len == 0)
->   		return 0;
-> @@ -109,6 +110,14 @@ static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
->   	return value;
->   }
->   
-> +static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
-> +						 enum cpufreq_value which)
-> +{
-> +	return cpufreq_get_sysfs_value_from_table(cpu, cpufreq_value_files,
-> +						  which,
-> +						  MAX_CPUFREQ_VALUE_READ_FILES);
-> +}
-> +
->   /* read access to files which contain one string */
->   
->   enum cpufreq_string {
-> diff --git a/tools/power/cpupower/lib/cpufreq.h b/tools/power/cpupower/lib/cpufreq.h
-> index 95f4fd9e2656..107668c0c454 100644
-> --- a/tools/power/cpupower/lib/cpufreq.h
-> +++ b/tools/power/cpupower/lib/cpufreq.h
-> @@ -203,6 +203,18 @@ int cpufreq_modify_policy_governor(unsigned int cpu, char *governor);
->   int cpufreq_set_frequency(unsigned int cpu,
->   				unsigned long target_frequency);
->   
-> +/*
-> + * get the sysfs value from specific table
-> + *
-> + * Read the value with the sysfs file name from specific table. Does
-> + * only work if the cpufreq driver has the specific sysfs interfaces.
-> + */
-> +
-> +unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
-> +						 const char **table,
-> +						 unsigned index,
-
-unsigned int?
-
-> +						 unsigned size);
-
-unsigned int?
-
-> +
->   #ifdef __cplusplus
->   }
->   #endif
-> 
-
-thanks,
--- Shuah
+You can add my:
+Reviewed-by: Marcin Wojtas <mw@semihalf.com>

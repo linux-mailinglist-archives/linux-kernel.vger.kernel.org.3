@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98B54BC137
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF0D4BC139
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239481AbiBRUcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 15:32:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60172 "EHLO
+        id S239484AbiBRUeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 15:34:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235980AbiBRUcn (ORCPT
+        with ESMTP id S234170AbiBRUeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 15:32:43 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460E832EC4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:32:26 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id c23so4225869ioi.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:32:26 -0800 (PST)
+        Fri, 18 Feb 2022 15:34:05 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6693833354
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:33:48 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id o10so5578874ilh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:33:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OC/1gLj8YvBkQUZUrsbQXVRK4g0Fu/RGJXaLX/hTlIE=;
-        b=VUYiRxl7QQYbQTzrhoI5VxmE1dxTzS+T3rXsSAxVrz0cjQGpiXzj0nj9SJlA/Tiipu
-         jT7JCWmkgKGytpB+3pbmcXMnSKAmmgoorkrtcAdJ7WvEpcRIR47ZaxhN0ItkuEkNcnKf
-         PWizezoRmX11NmsQ9ej6OoEbXNe3RiUi+Ff3c=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ezvsvchx2nUrNXjulTpQnqP/UL35iteRMo/MbI6yggw=;
+        b=Ckqkc00JrGDi6HmRG7q8ohNa40xUmPGtlIEGIUdRjd7XoKtniFSNtK8AxLSIlyWG2i
+         s5rMFyMDsQrML/vf9ED51fT7QBdErMVL7TRrrJDC5uy0nWG+tkuv6lxiT5LQRqlaunLY
+         xQO1ojYeS2oxyelFVB2HTVoOuAjNYxQxLOQbPGTKDFRLjcTHKnlc0tkRTu20Sb2rV6RC
+         te9LSFj0kBXSZ79xXCJ8bsiDXlmRmWPfXTR+2xcnkfNi7E+Zar2pykR6fdqf37+z/ob1
+         wFhYb4IIe1pe5dJ9J0h55+JfdTR5pWB7VZXW4Hvvym5Z9E/W1lOhGL1YRY9F76gJL/YA
+         L7jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OC/1gLj8YvBkQUZUrsbQXVRK4g0Fu/RGJXaLX/hTlIE=;
-        b=UEVboegM3M8fYQKG50cQOEOJb+nYRkTSC0lsqxXERWzj4Mv6Olenp9zPZN8iCHvd1O
-         v7l8VsY4z5YORid5faNK1A6ZVmOrxTbMQgYP0YGjLmQeynpl/uFWhawPmeWb2ZIpWAqx
-         LRKjv0ciyeA77RFgWTp1pNelSfzx7V+oWO3S72QuInwM01xN1IgzrcO4aE3W0DEt5SzD
-         OWsRBuYSr8BlhGuv7J+7qebXyGQUa/nYR1tlKWlW0CzwuKChdlCQ+fogMHlSACeUi9ve
-         1PqVNPioBxBIfRxYIEIgOtu13apPNfXxfrLT9sGJBsS/umTQBNmzzkrp2OVJ9O7NbuS4
-         g2LA==
-X-Gm-Message-State: AOAM533KODSQnwyflpj1GS/L/KfY7FQC37L4qipcTsHa8AFXFSip2dmT
-        U/xaXmYHeBI8WnGmDbryeEMNtQ==
-X-Google-Smtp-Source: ABdhPJxcsC5WZ3meD4lZFBEjpZyxGnBOKuRaKCQS2yliGT78npKQinvgqDJK+vrAtBDCyd2ffoFHyQ==
-X-Received: by 2002:a05:6638:3043:b0:314:7ce2:4a6e with SMTP id u3-20020a056638304300b003147ce24a6emr6409294jak.258.1645216345652;
-        Fri, 18 Feb 2022 12:32:25 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id k11sm4596618iob.23.2022.02.18.12.32.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 12:32:25 -0800 (PST)
-Subject: Re: [PATCH v3 4/5] selftests/resctrl: Change the default limited time
- to 120 seconds
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-5-tan.shaopeng@jp.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fb4db52d-49dc-3df8-8ae7-d2bee80e5a4b@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 13:32:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ezvsvchx2nUrNXjulTpQnqP/UL35iteRMo/MbI6yggw=;
+        b=3JtHExeKf8KF+xzsfJpf22s5oLQYELNqzYS88aj9R6pkCLd5XQpvPiOBE64MJQR6t2
+         yG5yHJ5K0CZzlxtaNvIsSGFcv9+Y+OpCpWE+MWPU9XmzQaeezKV3+e8WRzrfIeeaUNZK
+         5HgkovBb22RQaWqO3s4Y6Si5tUmYOYx3h+50YSUXWQ/M9x/xTQxj/duK+7YfMYostNLt
+         2eyeax1ql8HyQNBbQYONRj0B5C5qrklXl3cVlf9zTbQ4qIG7qqqcF6FLltVAPhn+LIwY
+         SRMQjLYxQMb6fnCmEG7jSLFQ8e0SNeM+xhZSKSPNF3Z4OEpTkJfIIw0WPON8lF/yjJsz
+         oQ9A==
+X-Gm-Message-State: AOAM530TOmIfJw5HMU377sNyPzc+oqqAkmMc9qRwgfs+sYwKtYypsG+w
+        xHXCutN0HxgigNRn2R1vySXQOBBUw33n3C45K0ihFw==
+X-Google-Smtp-Source: ABdhPJygk7EeWASgvdvSr9hY38K732LIuASEbSD6NpXpWPiwBwk91jovTWJpGC613wrC33QTB7/iXiFtoQsx5B+DmwI=
+X-Received: by 2002:a05:6e02:b27:b0:2c1:a9cd:e300 with SMTP id
+ e7-20020a056e020b2700b002c1a9cde300mr3069058ilu.44.1645216427582; Fri, 18 Feb
+ 2022 12:33:47 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220216022641.2998318-5-tan.shaopeng@jp.fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <00000000000038779505d5d8b372@google.com> <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
+ <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
+ <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
+ <a0769218-c84a-a1d3-71e7-aefd40bf54fe@ghiti.fr> <CANp29Y4WMhsE_-VWvNbwq18+qvb1Qc-ES80h_j_G-N_hcAnRAw@mail.gmail.com>
+ <CANp29Y4ujmz901aE9oiBDx9dYWHti4-Jw=6Ewtotm6ck6MN9FQ@mail.gmail.com>
+ <CACT4Y+ZvStiHLYBOcPDoAJnk8hquXwm9BgjQTv=APwh7AvgEUQ@mail.gmail.com>
+ <CANp29Y56Or0V1AG7rzBfV_ZTph2Crg4JKKHiuw1kcGFFxeWqiQ@mail.gmail.com>
+ <CANp29Y5+MuhKAzVxzEDb_k9voXmKWrUFx8k4wnW5=2+5enVFVA@mail.gmail.com>
+ <CA+zEjCtvaT0YsxxUgnEGM+V4b5sWuCAs3=3J+Xocf580uT3t1g@mail.gmail.com>
+ <CA+zEjCs1FEUTcM+pgV+_MZnixSO5c2hexZFxGxuCQWc2ZMQiRg@mail.gmail.com>
+ <CANp29Y4rDSjrfTOxcQqwh+Qm+ocR0v6Oxr7EkFxScf+24M1tNA@mail.gmail.com> <CA+zEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag@mail.gmail.com>
+In-Reply-To: <CA+zEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag@mail.gmail.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 18 Feb 2022 21:33:36 +0100
+Message-ID: <CANp29Y4g5x4N174uDJNSTmtn2M-HM-Chp9S9zNtFrso-JBDayg@mail.gmail.com>
+Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        linux-riscv@lists.infradead.org,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,41 +83,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 7:26 PM, Shaopeng Tan wrote:
-> When testing on a Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz the resctrl
-> selftests fail due to timeout after exceeding the default time limit of
-> 45 seconds. On this system the test takes about 68 seconds.
-> Since the failing test by default accesses a fixed size of memory, the
-> execution time should not vary significantly between different environment.
-> A new default of 120 seconds should be sufficient yet easy to customize
-> with the introduction of the "settings" file for reference.
-> 
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
->  From the perspective of the kselftest framework,
-> a rule of "Don't take too long" is a concern.
-> To get some better informed opinions from kselftest audience,
-> I highlighted this change in the cover letter.
-> 
-> I adopted most of Reinette's phrase from the discussion in patch v2
-> to explain why 120s is appropriate for this test.
-> 
->   tools/testing/selftests/resctrl/settings | 1 +
->   1 file changed, 1 insertion(+)
->   create mode 100644 tools/testing/selftests/resctrl/settings
-> 
-> diff --git a/tools/testing/selftests/resctrl/settings b/tools/testing/selftests/resctrl/settings
-> new file mode 100644
-> index 000000000000..6091b45d226b
-> --- /dev/null
-> +++ b/tools/testing/selftests/resctrl/settings
-> @@ -0,0 +1 @@
-> +timeout=120
-> 
+Hi Alex,
 
-This is fine.
+On Fri, Feb 18, 2022 at 2:45 PM Alexandre Ghiti
+<alexandre.ghiti@canonical.com> wrote:
+>
+> Hi Aleksandr,
+>
+> On Thu, Feb 17, 2022 at 6:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+> >
+> > Hi Alex,
+> >
+> > On Thu, Feb 17, 2022 at 5:53 PM Alexandre Ghiti
+> > <alexandre.ghiti@canonical.com> wrote:
+> > >
+> > > Aleksandr,
+> > >
+> > > On Wed, Feb 16, 2022 at 5:58 PM Alexandre Ghiti
+> > > <alexandre.ghiti@canonical.com> wrote:
+> > > >
+> > > > First, thank you for working on this.
+> > > >
+> > > > On Wed, Feb 16, 2022 at 5:17 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+> > > > >
+> > > > > If I use just defconfig + DEBUG_VIRTUAL, without any KASAN, it begins
+> > > > > to boot, but overwhelms me with tons of `virt_to_phys used for
+> > > > > non-linear address:` errors.
+> > > > >
+> > > > > Like that
+> > > > >
+> > > > > [    2.701271] virt_to_phys used for non-linear address:
+> > > > > 00000000b59e31b6 (0xffffffff806c2000)
+> > > > > [    2.701727] WARNING: CPU: 0 PID: 1 at arch/riscv/mm/physaddr.c:16
+> > > > > __virt_to_phys+0x7e/0x86
+> > > > > [    2.702207] Modules linked in:
+> > > > > [    2.702393] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W
+> > > > >   5.17.0-rc1 #1
+> > > > > [    2.702806] Hardware name: riscv-virtio,qemu (DT)
+> > > > > [    2.703051] epc : __virt_to_phys+0x7e/0x86
+> > > > > [    2.703298]  ra : __virt_to_phys+0x7e/0x86
+> > > > > [    2.703547] epc : ffffffff80008448 ra : ffffffff80008448 sp :
+> > > > > ffff8f800021bde0
+> > > > > [    2.703977]  gp : ffffffff80ed9b30 tp : ffffaf8001230000 t0 :
+> > > > > ffffffff80eea56f
+> > > > > [    2.704704]  t1 : ffffffff80eea560 t2 : 0000000000000000 s0 :
+> > > > > ffff8f800021be00
+> > > > > [    2.705153]  s1 : ffffffff806c2000 a0 : 000000000000004f a1 :
+> > > > > ffffffff80e723d8
+> > > > > [    2.705555]  a2 : 0000000000000010 a3 : fffffffffffffffe a4 :
+> > > > > 0000000000000000
+> > > > > [    2.706027]  a5 : 0000000000000000 a6 : 0000000000000005 a7 :
+> > > > > ffffffffffffffff
+> > > > > [    2.706474]  s2 : ffffffff80b80b08 s3 : 00000000000000c2 s4 :
+> > > > > ffffffff806c2000
+> > > > > [    2.706891]  s5 : ffffffff80edba10 s6 : ffffffff80edb960 s7 :
+> > > > > 0000000000000001
+> > > > > [    2.707290]  s8 : 00000000000000ff s9 : ffffffff80b80b40 s10:
+> > > > > 00000000000000cc
+> > > > > [    2.707689]  s11: ffffaf807e1fcf00 t3 : 0000000000000076 t4 :
+> > > > > ffffffffffffffff
+> > > > > [    2.708092]  t5 : 00000000000001f2 t6 : ffff8f800021bb48
+> > > > > [    2.708433] status: 0000000000000120 badaddr: 0000000000000000
+> > > > > cause: 0000000000000003
+> > > > > [    2.708919] [<ffffffff8011416a>] free_reserved_area+0x72/0x19a
+> > > > > [    2.709296] [<ffffffff80003a5a>] free_initmem+0x6c/0x7c
+> > > > > [    2.709648] [<ffffffff805f60c8>] kernel_init+0x3a/0x10a
+> > > > > [    2.709993] [<ffffffff80002fda>] ret_from_exception+0x0/0xc
+> > > > > [    2.710310] ---[ end trace 0000000000000000 ]---
+> > > > >
+> > > >
+> > > > I was able to reproduce this: the first one regarding init_zero_pfn is
+> > > > legit but not wrong, I have to check when it was introduced and how to
+> > > > fix this.
+> > > > Regarding the huge batch that follows, at first sight, I would say
+> > > > this is linked to my sv48 patchset but that does not seem important as
+> > > > the address is a kernel mapping address so the use of virt_to_phys is
+> > > > right.
+> > > >
+> > > > > On Wed, Feb 16, 2022 at 5:09 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+> > > > > >
+> > > > > > On Wed, Feb 16, 2022 at 12:56 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+> > > > > > >
+> > > > > > > On Wed, 16 Feb 2022 at 12:47, Aleksandr Nogikh <nogikh@google.com> wrote:
+> > > > > > > >
+> > > > > > > > On Wed, Feb 16, 2022 at 11:37 AM Aleksandr Nogikh <nogikh@google.com> wrote:
+> > > > > > > > >
+> > > > > > > > > Hi Alex,
+> > > > > > > > >
+> > > > > > > > > On Wed, Feb 16, 2022 at 5:14 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
+> > > > > > > > > >
+> > > > > > > > > > Hi Dmitry,
+> > > > > > > > > >
+> > > > > > > > > > On 2/15/22 18:12, Dmitry Vyukov wrote:
+> > > > > > > > > > > On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
+> > > > > > > > > > > <alexandre.ghiti@canonical.com> wrote:
+> > > > > > > > > > >> Hi Aleksandr,
+> > > > > > > > > > >>
+> > > > > > > > > > >> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+> > > > > > > > > > >>> Hello,
+> > > > > > > > > > >>>
+> > > > > > > > > > >>> syzbot has already not been able to fuzz its RISC-V instance for 97
+> > > > > > > > > > >> That's a longtime, I'll take a look more regularly.
+> > > > > > > > > > >>
+> > > > > > > > > > >>> days now because the compiled kernel cannot boot. I bisected the issue
+> > > > > > > > > > >>> to the following commit:
+> > > > > > > > > > >>>
+> > > > > > > > > > >>> commit 54c5639d8f507ebefa814f574cb6f763033a72a5
+> > > > > > > > > > >>> Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+> > > > > > > > > > >>> Date:   Fri Oct 29 06:59:27 2021 +0200
+> > > > > > > > > > >>>
+> > > > > > > > > > >>>      riscv: Fix asan-stack clang build
+> > > > > > > > > > >>>
+> > > > > > > > > > >>> Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
+> > > > > > > > > > >>> enabled. In the previous message syzbot mentions
+> > > > > > > > > > >>> "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
+> > > > > > > > > > >>> Binutils for Debian) 2.35.2", but the issue also reproduces finely on
+> > > > > > > > > > >>> a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
+> > > > > > > > > > >>> 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
+> > > > > > > > > > >>> For convenience, I also duplicate the .config file from the bot's
+> > > > > > > > > > >>> message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
+> > > > > > > > > > >>>
+> > > > > > > > > > >>> Can someone with KASAN and RISC-V expertise please take a look?
+> > > > > > > > > > >> I'll take a look at that today.
+> > > > > > > > > > >>
+> > > > > > > > > > >> Thanks for reporting the issue,
+> > > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > I took a quick look, not enough to fix it but I know the issue comes
+> > > > > > > > > > from the inline instrumentation, I have no problem with the outline
+> > > > > > > > > > instrumentation. I need to find some cycles to work on this, my goal is
+> > > > > > > > > > to fix this for 5.17.
+> > > > > > > > >
+> > > > > > > > > Thanks for the update!
+> > > > > > > > >
+> > > > > > > > > Can you please share the .config with which you tested the outline
+> > > > > > > > > instrumentation?
+> > > > > > > > > I updated the syzbot config to use KASAN_OUTLINE instead of KASAN_INLINE,
+> > > > > > > > > but it still does not boot :(
+> > > > > > > > >
+> > > > > > > > > Here's what I used:
+> > > > > > > > > https://gist.github.com/a-nogikh/279c85c2d24f47efcc3e865c08844138
+> > > > > > > >
+> > > > > > > > Update: it doesn't boot with that big config, but boots if I generate
+> > > > > > > > a simple one with KASAN_OUTLINE:
+> > > > > > > >
+> > > > > > > > make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
+> > > > > > > > ./scripts/config -e KASAN -e KASAN_OUTLINE
+> > > > > > > > make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
+> > > > > > > >
+> > > > > > > > And it indeed doesn't work if I use KASAN_INLINE.
+> > > > > > >
+> > > > > > > It may be an issue with code size. Full syzbot config + KASAN + KCOV
+> > > > > > > produce hugely massive .text. It may be hitting some limitation in the
+> > > > > > > bootloader/kernel bootstrap code.
+> > > >
+> > > > I took a quick glance and it traps on a KASAN address that is not
+> > > > mapped, either because it is too soon or because the mapping failed
+> > > > somehow.
+> > > >
+> > > > I'll definitely dive into that tomorrow, sorry for being slow here and
+> > > > thanks again for all your work, that helps a lot.
+> > > >
+> > > > Thanks,
+> > > >
+> > > > Alex
+> > > >
+> > > > > >
+> > > > > > I bisected the difference between the config we use on syzbot and the
+> > > > > > simple one that was generated like I described above.
+> > > > > > Turns out that it's the DEBUG_VIRTUAL config that makes the difference.
+> > > > > >
+> > > > > > make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
+> > > > > > ./scripts/config -e KASAN -e KASAN_OUTLINE -e DEBUG_VIRTUAL
+> > > > > > make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
+> > > > > >
+> > > > > > And the resulting kernel does not boot.
+> > > > > > My env: the `riscv/fixes` branch, commit
+> > > > > > 6df2a016c0c8a3d0933ef33dd192ea6606b115e3, qemu 6.2.0.
+> > >
+> > > I fixed a few things today: KASAN + SPARSE_VMEMMAP, DEBUG_VIRTUAL and
+> > > maybe KASAN  + KCOV.
+> > >
+> > > With those small fixes, I was able to boot your large dotconfig with
+> > > KASAN_OUTLINE, the inline version still fails, this is my next target
+> > > :)
+> > > I'll push that tomorrow!
+> >
+> > Awesome, thank you very much!
+> > Looking forward to finally seeing the instance run :)
+>
+> I sent a patchset which should fix your config with *outline* instrumentation.
+>
+> However, as you'll see in the cover letter, I have an issue with
+> another KASAN config and if you can take a look at the stacktrace and
+> see if that rings a bell, that would be great.
+>
+> Don't hesitate next time to ping me when the riscv syzbot instance fails :)
+>
+> Alex
+>
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Thank you very much for the patch series and for the update!
 
-thanks,
--- Shuah
+I'll try to take a closer look on Monday. To be honest, I don't really
+have expertise in KASAN internals, so it's rather unlikely that I
+could be of much help here :(
+
+>
+> >
+> > --
+> > Best Regards,
+> > Aleksandr
+> >
+> > >
+> > > Thanks again,
+> > >
+> > > Alex
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag%40mail.gmail.com.

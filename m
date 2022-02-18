@@ -2,87 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542DC4BC076
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCB54BC05B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237893AbiBRTsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 14:48:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43680 "EHLO
+        id S237608AbiBRTms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 14:42:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236914AbiBRTsw (ORCPT
+        with ESMTP id S237590AbiBRTmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 14:48:52 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F09C268373
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:48:35 -0800 (PST)
+        Fri, 18 Feb 2022 14:42:42 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A19D226F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:42:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645213715; x=1676749715;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=XDQZJxIx28rQCTMb2jQbyuTZQHexkK21y4qx7zsjtWQ=;
-  b=aXTbUpGwOCy2FOU8PuVjXVWRVh7C3dmR9UoHoeAziUCDJh195N3ItBNz
-   1bACXodpMWZiJgrlSdF01b0LVO+T5KcYdVxUe5MVkoONJehSjuBvrpqDG
-   FblfPH4MNvTu8Vlu3VGT/GkYjegoppP4SHoAIb++BPg0dkGWXz0pcvulb
-   X2eJQr/Kuc3jSt1euTksGf5x+74ys0UKo/4ZWnKaRR7Ea2i3dwkt0TRTK
-   ZB0i2t9Q83obaT2xvBhR2JWaXKJRFQ5DkNs1e5WWLopyy87AvX/XhpyON
-   cBhOndRmnqTLw8TSBln4xhdYfZqSNmMZgvkRKfl6bK83gBcYn4/LfDarp
+  t=1645213345; x=1676749345;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=baOXokhByXXziWZwCqa3Bh4RX/PKcroubuFVmmtj6zE=;
+  b=dRU8lUmu1CzSWq80Hkn/nBmRgFeR2dB9Q1YT6RR4vdDV4Mejvex/oUXH
+   HGgn6xT6F3qM7x0ld4dw2oTcNNmSzvP32h6kD4pXadjksdCppwaY03XXV
+   6lqXCPFDLWpmrqveepwO+/p4aLiyvgB7pU+tGAWjb/Bu/wzXpqfYD1t/z
+   kRYYU9QVW9Ontp5a7UJruuVxdBNCHMM9ZQkKlxM0OZalbxxcLY6xU6hBt
+   4RRXmvUKOVkELD1ovqywEYV9cMET2PAQ+gMQclkd3hEScVZWZ7yHBaFE+
+   aXsBFgjpON0q9/jDE1HAzqZDMHezffs/2u109jkmWMPvGB7DP2j2TyB6M
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="250957483"
+X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="251144521"
 X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="250957483"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 11:48:31 -0800
+   d="scan'208";a="251144521"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 11:42:24 -0800
 X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="546426638"
-Received: from jabonill-mobl1.amr.corp.intel.com (HELO [10.251.27.55]) ([10.251.27.55])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 11:48:29 -0800
-Message-ID: <523e473f-3a9f-7d82-1d51-2f5db673c84a@intel.com>
-Date:   Fri, 18 Feb 2022 11:39:42 -0800
+   d="scan'208";a="504111596"
+Received: from sporter-mobl.ger.corp.intel.com (HELO localhost) ([10.209.62.47])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 11:42:24 -0800
+From:   Jordan Justen <jordan.l.justen@intel.com>
+To:     Ramalingam C <ramalingam.c@intel.com>,
+        Robert Beckett <bob.beckett@collabora.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Simon Ser <contact@emersion.fr>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Kenneth Graunke <kenneth@whitecape.org>,
+        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
+        Slawomir Milczarek <slawomir.milczarek@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 5/5] drm/i915/uapi: document behaviour for DG2 64K
+ support
+In-Reply-To: <20220218185540.GA7762@intel.com>
+References: <20220208203419.1094362-1-bob.beckett@collabora.com>
+ <20220208203419.1094362-6-bob.beckett@collabora.com>
+ <87ee40ojpc.fsf@jljusten-skl> <20220218134735.GB3646@intel.com>
+ <78df4b73-9b2d-670b-a6b0-a45b476f1f0a@collabora.com>
+ <20220218185540.GA7762@intel.com>
+Date:   Fri, 18 Feb 2022 11:42:23 -0800
+Message-ID: <875ypcneqo.fsf@jljusten-skl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        David Rientjes <rientjes@google.com>
-References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
- <20220218161718.67148-2-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv3 01/32] x86/mm: Fix warning on build with
- X86_MEM_ENCRYPT=y
-In-Reply-To: <20220218161718.67148-2-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/22 08:16, Kirill A. Shutemov wrote:
-> So far, AMD_MEM_ENCRYPT is the only user of X86_MEM_ENCRYPT. TDX will be
-> the second. It will make mem_encrypt.c build without AMD_MEM_ENCRYPT,
-> which triggers a warning:
-> 
-> arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for
-> 	function 'mem_encrypt_init' [-Wmissing-prototypes]
-> 
-> Fix it by moving mem_encrypt_init() declaration outside of #ifdef
-> CONFIG_AMD_MEM_ENCRYPT.
+Ramalingam C <ramalingam.c@intel.com> writes:
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+> On 2022-02-18 at 18:06:00 +0000, Robert Beckett wrote:
+>> 
+>> If desired, we can make the wording clearer, maybe something like:
+>> 
+>> "To keep things simple for userland, we mandate that any GTT mappings
+>> must be aligned to 2MB. The kernel will internally pad them out to the next
+>> 2MB boundary"
+>
+> Added the extra information in next version @
+> https://patchwork.freedesktop.org/patch/475166/?series=100419&rev=1
+>
+> Jordan, hope this explanation clears your doubt.
 
+Ok. It sounds like what we are doing in Mesa matches what is required by
+hardware and the kernel. Thanks.
+
+-Jordan

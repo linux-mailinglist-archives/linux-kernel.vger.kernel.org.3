@@ -2,152 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBFC4BBE59
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF364BBE5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238543AbiBRR1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:27:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52026 "EHLO
+        id S238558AbiBRR10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:27:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238539AbiBRR1I (ORCPT
+        with ESMTP id S238556AbiBRR1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:27:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F75BFD24;
-        Fri, 18 Feb 2022 09:26:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B6C61FDA;
-        Fri, 18 Feb 2022 17:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C8E3C340E9;
-        Fri, 18 Feb 2022 17:26:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645205208;
-        bh=+CsiT9aObl7pRKrN4X1EFOMytJanhfZAOxH4JPRCsTo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F9UlKsliY/spNXDMb9Kj4P4u/GB/CpjBzHNbnKjEW/u/ubgMEzvjrQlrTumw7Ru95
-         eof51FLbxL8TH6iTBka0XtevRpu1JOGtf9y2waX4StQ+7rDbtOSBTze9BYG+oeolNk
-         bH8Bl+LybFkNpCs54CPMQlWomqAd09kwobHreRMMYZ2muOGVJJphuzVpIIHwY1ysnN
-         4QCAcibihVYvnA5b0lLN9osvPNHoINiH8VBHovWRBsCxjmGLyyfxKDIEIr2rM6CwgO
-         r2gjt3dnSK7YNuuiG5Kpz6oKkqDy4xhqSd5TPqRO4ux2hIW0ghbyUmu0uVu4JaaYic
-         aizOFdzUp63GQ==
-Received: by pali.im (Postfix)
-        id A0DE32BAE; Fri, 18 Feb 2022 18:26:45 +0100 (CET)
-Date:   Fri, 18 Feb 2022 18:26:45 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Increase PCIe IO size
- from 64 KiB to 1 MiB
-Message-ID: <20220218172645.rfp3526mp3zp4yzm@pali>
-References: <20220113170755.11856-1-pali@kernel.org>
- <CAK8P3a2D8Yv+KpM4NJyP9mosieqbhHh08=mdEy+OA84Vx6FVCQ@mail.gmail.com>
- <20220218165530.j62nafuofe342sfi@pali>
- <CAK8P3a1CHRztMCOFN6iomVf2J7_9qRi4GdZBQfDyhjqDb1Z0Vw@mail.gmail.com>
+        Fri, 18 Feb 2022 12:27:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6A42193CB
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:27:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645205220;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=upweF6mJlzxIKcNN/0kmnYngCUVtOGRIXfAJ2sVsDfw=;
+        b=hFGmEMhh9PzZXqO3BAPFPsxYsfHDmWWANQOyfHvLl0rHUL6P39okcP4w9WShPUUk2asVM6
+        cQlzY+d/uFoOEYD3fYx7kKvBk0St1wGxb2i5X3tdPAeGIR5ZarN3h7wsZkNjNAQqkDL5jf
+        3HPMov7EMo2Wa19e/28AgQK9sgsaB/k=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-164-WHNMCB7_PAChE2Jl12jlYA-1; Fri, 18 Feb 2022 12:26:59 -0500
+X-MC-Unique: WHNMCB7_PAChE2Jl12jlYA-1
+Received: by mail-ed1-f72.google.com with SMTP id n7-20020a05640205c700b0040b7be76147so5898912edx.10
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:26:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=upweF6mJlzxIKcNN/0kmnYngCUVtOGRIXfAJ2sVsDfw=;
+        b=UC7F6DLBJd9/5+TXQT3WR8FJK3ZAGE4FyHR3QIkj0Y4dYhLuA8u2koXOR0jc9K3PHf
+         7XNrrEgsj2lD8B+ysChINIeoZQFbTBiloi/Vq3K3TACWyczykgJn0n5GNOB+jVk82kcn
+         XE3cwNjXFyC14aBOYZ26hoc25+jRieT/XiPlVq2NmxbhqxCtAcIzaC1hQXYQjTcszDIw
+         BUPRh9puAECZjY33GoecHwAUoAXhXLzf+zwZZoKnep40Lh8US/MmmEqR92ft5i3Ilwnf
+         cF8vJKXw/SiZ6nE/UFjoJN+FfDxK8jYi2+atV8cNfcDWwv/ce//7sGkAZeJbrjkYHDvJ
+         fR5w==
+X-Gm-Message-State: AOAM533VsqFmRsjRPNzWKfu+qt2TfvXYmoTR8I04ocpymcQZfgliw4/p
+        /3GL1K0NpNvUO8+muGmIIXwa9OKZM9MUgkD+SPAp2z9SzApNYah4C+gFZ+KImTh0iNXU9CIi+/X
+        EYF09MjaUFlXoGOJQsRtb/nEC
+X-Received: by 2002:a17:906:f115:b0:6b8:7a29:e60f with SMTP id gv21-20020a170906f11500b006b87a29e60fmr6946364ejb.706.1645205217407;
+        Fri, 18 Feb 2022 09:26:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz/81bd1BueB+HdpPjgcMOvE/9BWHDqPOZaCj83zw0giSvBVCxqBHjRDBU7PKEiR2f8opRVFg==
+X-Received: by 2002:a17:906:f115:b0:6b8:7a29:e60f with SMTP id gv21-20020a170906f11500b006b87a29e60fmr6946347ejb.706.1645205217167;
+        Fri, 18 Feb 2022 09:26:57 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id h14sm1298837edz.29.2022.02.18.09.26.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 09:26:56 -0800 (PST)
+Message-ID: <b6553a40-3a4c-4bd7-ea4e-2d5cf649d0f8@redhat.com>
+Date:   Fri, 18 Feb 2022 18:26:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a1CHRztMCOFN6iomVf2J7_9qRi4GdZBQfDyhjqDb1Z0Vw@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 01/18] KVM: x86: host-initiated EFER.LME write affects
+ the MMU
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-2-pbonzini@redhat.com> <Yg/Sd3UE2aCNimGj@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yg/Sd3UE2aCNimGj@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 18 February 2022 18:19:57 Arnd Bergmann wrote:
-> On Fri, Feb 18, 2022 at 5:55 PM Pali Rohár <pali@kernel.org> wrote:
-> > On Friday 18 February 2022 17:43:04 Arnd Bergmann wrote:
-> > > On Thu, Jan 13, 2022 at 6:07 PM Pali Rohár <pali@kernel.org> wrote:
-> > > >
-> > > > Commit 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM
-> > > > space") increased size of PCIe MEM to 127 MiB, which is the maximal
-> > > > possible size for allocated 128 MiB PCIe window. PCIe IO size in that
-> > > > commit was unchanged.
-> > > >
-> > > > Armada 3720 PCIe controller supports 32-bit IO space mapping so it is
-> > > > possible to assign more than 64 KiB if address space for IO.
-> > > >
-> > > > Currently controller has assigned 127 MiB + 64 KiB memory and therefore
-> > > > there is 960 KiB of unused memory. So assign it to IO space by increasing
-> > > > IO window from 64 KiB to 1 MiB.
-> > > >
-> > > > DTS file armada-3720-turris-mox.dts already uses whole 128 MiB space, so
-> > > > only update comment about 32-bit IO space mapping.
-> > > >
-> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > > Fixes: 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM space")
-> > >
-> > > I just saw this is the fixes pull request, and it seems very odd. Does this
-> > > fix an actual bug?
-> >
-> > Do you mean this patch or commit 514ef1e62d65?
+On 2/18/22 18:08, Sean Christopherson wrote:
+> The shortlog doesn't come remotely close to saying what this patch does, it's
+> simply a statement.
 > 
-> This one. 514ef1e62d65 looks fine.
+>    KVM: x86: Reset the MMU context if host userspace toggles EFER.LME
 
-Well, this patch just increase size of IO window, nothing more. What
-what is wrong with this patch if is just moves end of the window?
+I'd like not to use "reset the MMU context" because 1) the meaning 
+changes at the end of the series so it's not the best time to use the 
+expression, 2) actually I hope to get rid of it completely and just use 
+kvm_init_mmu.
 
-> > > Note that Linux normally doesn't map more than 64KB
-> > > of I/O space per PCI domain, so it should not make a difference to us.
-> >
-> > Last time I looked into ARM code, it can allocate more than 64 kB for IO.
-> 
-> 
-> 
-> > > Also, note that having a high bus address for the I/O space (0xefff0000,
-> > > as as the CPU physical address here) means that a lot of the older
-> > > devices that actually require I/O space won't work, because they need a
-> > > low bus address in the first few KB.
-> > >
-> > > Is this mapping a requirement from a broken bootloader, or can you change
-> > > the mapping of the I/O port window in the physical space to the usual
-> > > bus address 0?
-> >
-> > At physical address 0x0 it is not possible as at this address is mapped
-> > DDR.
-> 
-> I meant bus address 0, not CPU physical address 0 of course. We don't
-> care where in physical space the I/O window is.
+I'll use "Reinitialize MMU" which is the important part of 
+kvm_reset_mmu_context().
 
-Currently all mapping between CPU and PCIe is 1:1.
+Paolo
 
-There are registers for adding remapping, but nobody played with it yet.
-And it needs to be done again in TF-A (or probably in U-Boot could be too).
-
-> > ARM Trusted-Firmware sets PCIe space to range [0xe8000000-0xf0000000].
-> > This (default) configuration is specified in DTS file. Which parts of
-> > this range is used for IO and which MEM is up to the a3720 PCIe kernel
-> > driver and currently it configures it based on how sub-ranges are
-> > specified in DT.
-> >
-> > In some cases (e.g. when board has 4 GB of RAM), TF-A relocates this
-> > PCIe range to different location (otherwise it cannot activate more than
-> > 2 GB of RAM) and U-Boot during loading of kernel DTB file, is patching
-> > it.
-> >
-> > It could be possible to change TF-A code to move PCIe space to different
-> > location (from [0xe8000000-0xf0000000]) but not to 0x0. But changing it
-> > means to move other parts and invent mapping in which most of RAM can be
-> > mapped to...
+> On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+>> While the guest runs, EFER.LME cannot change unless CR0.PG is clear, and therefore
+>> EFER.NX is the only bit that can affect the MMU role.  However, set_efer accepts
+>> a host-initiated change to EFER.LME even with CR0.PG=1.  In that case, the
+>> MMU has to be reset.
 > 
-> Can't you change the mapping to have a bus address that is different
-> the physical address?
+> Wrap at ~75 please.
 > 
->        Arnd
+>> Fixes: 11988499e62b ("KVM: x86: Skip EFER vs. guest CPUID checks for host-initiated writes")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>> ---
+> 
+> With nits addressed,
+> 
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> 
+>>   arch/x86/kvm/mmu.h | 1 +
+>>   arch/x86/kvm/x86.c | 2 +-
+>>   2 files changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+>> index 51faa2c76ca5..a5a50cfeffff 100644
+>> --- a/arch/x86/kvm/mmu.h
+>> +++ b/arch/x86/kvm/mmu.h
+>> @@ -48,6 +48,7 @@
+>>   			       X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_PKE)
+>>   
+>>   #define KVM_MMU_CR0_ROLE_BITS (X86_CR0_PG | X86_CR0_WP)
+>> +#define KVM_MMU_EFER_ROLE_BITS (EFER_LME | EFER_NX)
+>>   
+>>   static __always_inline u64 rsvd_bits(int s, int e)
+>>   {
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index d3da64106685..99a58c25f5c2 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -1647,7 +1647,7 @@ static int set_efer(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>   	}
+>>   
+>>   	/* Update reserved bits */
+> 
+> This comment needs to be dropped, toggling EFER.LME affects more than just reserved
+> bits.
+> 
+>> -	if ((efer ^ old_efer) & EFER_NX)
+>> +	if ((efer ^ old_efer) & KVM_MMU_EFER_ROLE_BITS)
+>>   		kvm_mmu_reset_context(vcpu);
+>>   
+>>   	return 0;
+>> -- 
+>> 2.31.1
+>>
+>>
+> 
 
-That could be possible, need to investigate... but I think it would be
-done in bootloader and then by patching DTB file on the fly.

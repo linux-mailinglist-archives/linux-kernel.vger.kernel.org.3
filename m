@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B6A4BC282
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 23:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A7F4BC283
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 23:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240087AbiBRWTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 17:19:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53566 "EHLO
+        id S240105AbiBRWTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 17:19:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbiBRWTI (ORCPT
+        with ESMTP id S232331AbiBRWTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 17:19:08 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07471EAFE
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 14:18:51 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id k13-20020a65434d000000b00342d8eb46b4so5380336pgq.23
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 14:18:51 -0800 (PST)
+        Fri, 18 Feb 2022 17:19:19 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8A2205E8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 14:19:01 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id c192-20020a621cc9000000b004e0ff94313dso2374185pfc.17
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 14:19:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=pVXJc061TtsoEtD7PMBvnKKXs8wiB3Pj+BQh/nz39ZM=;
-        b=PWhchmhruRHRbpXpRMLRPHFK1XFQmqchFlS47gdcy11C7pj0SAgu1vuOk3S7M2/dhG
-         fDkhDUlMuWp+bwxAFYUAgv2ApKkxxdEDzQQGsKMkcFTt4Pg1BSJeBd99+BDxC7UAoD6r
-         j4MC+1BQNrKJznA5j2wh2d+gP7bg+UNEl91HHlMltRfW8tpM17N6wYqIpGvNSQEN0vYS
-         HX0bdQfvsGenBUR2mXk3u3a+nf1BBPjFrVa53Y6kPC18OI/57+zxG9ViTOl16AUY9A5Z
-         43PMlWfQ+UHzllEcmsnhDk4scx1pAsY79MnCH6z8VEVCGxSK8PouWYFkq2XmeVrgJSlY
-         +bBg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=FQ6TqW9LDWiaBMsImTySrVeuKimH2Sgd7xTvRW+ZiUc=;
+        b=f+y9glqe2GAIqQosesj7J0tJoAPFI66pL2Fq6iAyoWFG+hGBBOVSm9JpzIIdjWgfvZ
+         Bj76rl5VwdfG/RacKfjjRW8lrraQrKuL0B4Zk3PpPJRON/jzCZQZbmSb9WdeK39X+Cxq
+         E7j9M49Ex1F0u01suk6kHPBRap4TnB43qXp8RTVeXSXnmvVhP0OjrPDshcizFlDYpwaC
+         hiG1Jp0WJeoFPGHHqBgSSD7nJ4f+xSRNdSthuMUZKWx13UjUR8Lmwsxa+kjtagZb3TyT
+         wlnfSgq0ZLVCTsM3u/D8AT++bKL6t4GShyS+m6wlCFMcTxWAzrwrt2UovI/JxzrCeOVM
+         o6Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=pVXJc061TtsoEtD7PMBvnKKXs8wiB3Pj+BQh/nz39ZM=;
-        b=YGxux+W20QTbbPkfjT86K13Qi+BGwpWTkc6tRcs+h3NFrk0wJACD7S0kUTjILE0ELI
-         cgLScsOJTDtyIhb0GnM7G0K2Klsycv9S2MqQWPzzogDL3EflTSuKKkIAvxmRMr7fxukz
-         5HaxmHEoFzp+ApjB0JGFL8jLIajv5bM/J0td+lSm4RoFsLH2FsTvUYSdLOzD24nLi4yR
-         Hhh9Gvksi3hyzx3ZQnliz40mDT8Jdp0EVOAvxaqRvLSKym3LPtj9eOk5usY7xsTLIKXP
-         +w7mqdWw248BaeMFg6pSvOYXHZmTOYOCwCnb90fW0/gP3nyAVk9397vX27pMcWOUqHz8
-         46lw==
-X-Gm-Message-State: AOAM531CN3FQXaPg3+XUN/59p9FifvV15kdZZUwks4oEqqOf5PaebNRG
-        oLhyq5KgAd6LoNwQOHRnryMScSCMRA==
-X-Google-Smtp-Source: ABdhPJwGJGkbPMPTEtL4lszTVj6AH0AbHHyVr2JbcSJs6spkuSyd8Mab+dX/jIBFHpH5OLQj3Dy/0W4HAQ==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=FQ6TqW9LDWiaBMsImTySrVeuKimH2Sgd7xTvRW+ZiUc=;
+        b=6DxjGEauy6092LJZ3j6MvANVstNe5UU1uiD3mafxs3WePmpKnY/3EHZbpLYAoOs1J6
+         +SsEjVDV84LmjF5a91cFEul9FJxvbDMFt+BjjZNh5+07f4Dz9l+AbBxzF1KsgW0ZEB+a
+         IP9YF+5CWafgasLPIECWC1K36InCPNhBd86quU1tP8fFWmf+UaWwqMxmgYbU1sh6rp7W
+         p46z0e+6Z6fSTMj9KutUQsiA4UW4oivXhuP8Hk4ZUuSFgjJpFgh+MvCo5ccs507NpsVc
+         3kppa7OXIqOLuaZyW75F+4717rh2MDxYKjMwyi9aT1ePrnxk8fKFsEFKYwtf592hfIWT
+         geUw==
+X-Gm-Message-State: AOAM531K9/0YyHX/YhpLRJ2fvsLa8HHkw21/tvKF4MghtNA+JwybPuYr
+        bu3+ktNY3S+qCZZ3FhZVcbTHyUFpuA==
+X-Google-Smtp-Source: ABdhPJxXaT7tVhtYK1FZb5tv9Lq3jevXAOGZULk6rBw92Jnl7ZzKpGWK9GL+NdUyq3JMtEI1+0q2coCOIA==
 X-Received: from swine1.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:42e])
- (user=swine job=sendgmr) by 2002:a17:90b:3a85:b0:1b9:e751:2335 with SMTP id
- om5-20020a17090b3a8500b001b9e7512335mr14644881pjb.43.1645222731098; Fri, 18
- Feb 2022 14:18:51 -0800 (PST)
-Date:   Fri, 18 Feb 2022 14:18:19 -0800
-Message-Id: <20220218221820.950118-1-swine@google.com>
+ (user=swine job=sendgmr) by 2002:a05:6a00:1709:b0:4c8:42df:c87c with SMTP id
+ h9-20020a056a00170900b004c842dfc87cmr9607942pfc.5.1645222741107; Fri, 18 Feb
+ 2022 14:19:01 -0800 (PST)
+Date:   Fri, 18 Feb 2022 14:18:20 -0800
+In-Reply-To: <20220218221820.950118-1-swine@google.com>
+Message-Id: <20220218221820.950118-2-swine@google.com>
 Mime-Version: 1.0
+References: <20220218221820.950118-1-swine@google.com>
 X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH 1/2] kvm/x86: rename kvm's read_tsc() as kvm_read_host_tsc()
+Subject: [PATCH 2/2] timers: retpoline mitigation for time funcs
 From:   Pete Swain <swine@google.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -79,35 +83,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid clash with host driver's INDIRECT_CALLABLE_SCOPE read_tsc()
+Adds indirect call exports for clock reads from tsc, apic,
+hrtimer, via clock-event, timekeeper & posix interfaces.
 
 Signed-off-by: Pete Swain <swine@google.com>
 ---
- arch/x86/kvm/x86.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/apic/apic.c    |  8 +++++---
+ arch/x86/kernel/tsc.c          |  3 ++-
+ include/linux/hrtimer.h        | 19 ++++++++++++++++---
+ kernel/time/clockevents.c      |  9 ++++++---
+ kernel/time/hrtimer.c          |  3 ++-
+ kernel/time/posix-cpu-timers.c |  4 ++--
+ kernel/time/posix-timers.c     |  3 ++-
+ kernel/time/timekeeping.c      |  2 +-
+ 8 files changed, 36 insertions(+), 15 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 641044db415d..0424d77cd214 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -2632,7 +2632,7 @@ static inline void adjust_tsc_offset_host(struct kvm_vcpu *vcpu, s64 adjustment)
- 
- #ifdef CONFIG_X86_64
- 
--static u64 read_tsc(void)
-+static u64 kvm_read_host_tsc(void)
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index b70344bf6600..523a569dd35e 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -463,15 +463,17 @@ EXPORT_SYMBOL_GPL(setup_APIC_eilvt);
+ /*
+  * Program the next event, relative to now
+  */
+-static int lapic_next_event(unsigned long delta,
++INDIRECT_CALLABLE_SCOPE
++int lapic_next_event(unsigned long delta,
+ 			    struct clock_event_device *evt)
  {
- 	u64 ret = (u64)rdtsc_ordered();
- 	u64 last = pvclock_gtod_data.clock.cycle_last;
-@@ -2674,7 +2674,7 @@ static inline u64 vgettsc(struct pvclock_clock *clock, u64 *tsc_timestamp,
- 		break;
- 	case VDSO_CLOCKMODE_TSC:
- 		*mode = VDSO_CLOCKMODE_TSC;
--		*tsc_timestamp = read_tsc();
-+		*tsc_timestamp = kvm_read_host_tsc();
- 		v = (*tsc_timestamp - clock->cycle_last) &
- 			clock->mask;
- 		break;
+ 	apic_write(APIC_TMICT, delta);
+ 	return 0;
+ }
+ 
+-static int lapic_next_deadline(unsigned long delta,
+-			       struct clock_event_device *evt)
++INDIRECT_CALLABLE_SCOPE
++int lapic_next_deadline(unsigned long delta,
++		       struct clock_event_device *evt)
+ {
+ 	u64 tsc;
+ 
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index a698196377be..ff2868d5ddea 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -1090,7 +1090,8 @@ static void tsc_resume(struct clocksource *cs)
+  * checking the result of read_tsc() - cycle_last for being negative.
+  * That works because CLOCKSOURCE_MASK(64) does not mask out any bit.
+  */
+-static u64 read_tsc(struct clocksource *cs)
++INDIRECT_CALLABLE_SCOPE
++u64 read_tsc(struct clocksource *cs)
+ {
+ 	return (u64)rdtsc_ordered();
+ }
+diff --git a/include/linux/hrtimer.h b/include/linux/hrtimer.h
+index 0ee140176f10..9d2d110f0b8c 100644
+--- a/include/linux/hrtimer.h
++++ b/include/linux/hrtimer.h
+@@ -20,6 +20,7 @@
+ #include <linux/seqlock.h>
+ #include <linux/timer.h>
+ #include <linux/timerqueue.h>
++#include <linux/indirect_call_wrapper.h>
+ 
+ struct hrtimer_clock_base;
+ struct hrtimer_cpu_base;
+@@ -297,14 +298,17 @@ static inline s64 hrtimer_get_expires_ns(const struct hrtimer *timer)
+ 	return ktime_to_ns(timer->node.expires);
+ }
+ 
++INDIRECT_CALLABLE_DECLARE(extern ktime_t ktime_get(void));
++
+ static inline ktime_t hrtimer_expires_remaining(const struct hrtimer *timer)
+ {
+-	return ktime_sub(timer->node.expires, timer->base->get_time());
++	return ktime_sub(timer->node.expires,
++			INDIRECT_CALL_1(timer->base->get_time, ktime_get));
+ }
+ 
+ static inline ktime_t hrtimer_cb_get_time(struct hrtimer *timer)
+ {
+-	return timer->base->get_time();
++	return INDIRECT_CALL_1(timer->base->get_time, ktime_get);
+ }
+ 
+ static inline int hrtimer_is_hres_active(struct hrtimer *timer)
+@@ -503,7 +507,9 @@ hrtimer_forward(struct hrtimer *timer, ktime_t now, ktime_t interval);
+ static inline u64 hrtimer_forward_now(struct hrtimer *timer,
+ 				      ktime_t interval)
+ {
+-	return hrtimer_forward(timer, timer->base->get_time(), interval);
++	return hrtimer_forward(timer,
++			INDIRECT_CALL_1(timer->base->get_time, ktime_get),
++			interval);
+ }
+ 
+ /* Precise sleep: */
+@@ -536,4 +542,11 @@ int hrtimers_dead_cpu(unsigned int cpu);
+ #define hrtimers_dead_cpu	NULL
+ #endif
+ 
++struct clock_event_device;
++INDIRECT_CALLABLE_DECLARE(extern __weak u64 read_tsc(struct clocksource *cs));
++INDIRECT_CALLABLE_DECLARE(extern int thread_cpu_clock_get(
++		const clockid_t which_clock, struct timespec64 *tp));
++INDIRECT_CALLABLE_DECLARE(extern __weak int lapic_next_deadline(
++		unsigned long delta, struct clock_event_device *evt));
++
+ #endif
+diff --git a/kernel/time/clockevents.c b/kernel/time/clockevents.c
+index 003ccf338d20..ac15412e87c4 100644
+--- a/kernel/time/clockevents.c
++++ b/kernel/time/clockevents.c
+@@ -245,7 +245,8 @@ static int clockevents_program_min_delta(struct clock_event_device *dev)
+ 
+ 		dev->retries++;
+ 		clc = ((unsigned long long) delta * dev->mult) >> dev->shift;
+-		if (dev->set_next_event((unsigned long) clc, dev) == 0)
++		if (INDIRECT_CALL_1(dev->set_next_event, lapic_next_deadline,
++				  (unsigned long) clc, dev) == 0)
+ 			return 0;
+ 
+ 		if (++i > 2) {
+@@ -284,7 +285,8 @@ static int clockevents_program_min_delta(struct clock_event_device *dev)
+ 
+ 		dev->retries++;
+ 		clc = ((unsigned long long) delta * dev->mult) >> dev->shift;
+-		if (dev->set_next_event((unsigned long) clc, dev) == 0)
++		if (INDIRECT_CALL_1(dev->set_next_event, lapic_next_deadline,
++				  (unsigned long) clc, dev) == 0)
+ 			return 0;
+ 	}
+ 	return -ETIME;
+@@ -331,7 +333,8 @@ int clockevents_program_event(struct clock_event_device *dev, ktime_t expires,
+ 	delta = max(delta, (int64_t) dev->min_delta_ns);
+ 
+ 	clc = ((unsigned long long) delta * dev->mult) >> dev->shift;
+-	rc = dev->set_next_event((unsigned long) clc, dev);
++	rc = INDIRECT_CALL_1(dev->set_next_event, lapic_next_deadline,
++			   (unsigned long) clc, dev);
+ 
+ 	return (rc && force) ? clockevents_program_min_delta(dev) : rc;
+ }
+diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
+index 0ea8702eb516..e1e17fdfcd18 100644
+--- a/kernel/time/hrtimer.c
++++ b/kernel/time/hrtimer.c
+@@ -1241,7 +1241,8 @@ static int __hrtimer_start_range_ns(struct hrtimer *timer, ktime_t tim,
+ 	remove_hrtimer(timer, base, true, force_local);
+ 
+ 	if (mode & HRTIMER_MODE_REL)
+-		tim = ktime_add_safe(tim, base->get_time());
++		tim = ktime_add_safe(tim,
++			INDIRECT_CALL_1(base->get_time, ktime_get));
+ 
+ 	tim = hrtimer_update_lowres(timer, tim, mode);
+ 
+diff --git a/kernel/time/posix-cpu-timers.c b/kernel/time/posix-cpu-timers.c
+index 96b4e7810426..d8bf325fa84e 100644
+--- a/kernel/time/posix-cpu-timers.c
++++ b/kernel/time/posix-cpu-timers.c
+@@ -1596,8 +1596,8 @@ static int thread_cpu_clock_getres(const clockid_t which_clock,
+ {
+ 	return posix_cpu_clock_getres(THREAD_CLOCK, tp);
+ }
+-static int thread_cpu_clock_get(const clockid_t which_clock,
+-				struct timespec64 *tp)
++INDIRECT_CALLABLE_SCOPE
++int thread_cpu_clock_get(const clockid_t which_clock, struct timespec64 *tp)
+ {
+ 	return posix_cpu_clock_get(THREAD_CLOCK, tp);
+ }
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 1cd10b102c51..35eac10ee796 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -1089,7 +1089,8 @@ SYSCALL_DEFINE2(clock_gettime, const clockid_t, which_clock,
+ 	if (!kc)
+ 		return -EINVAL;
+ 
+-	error = kc->clock_get_timespec(which_clock, &kernel_tp);
++	error = INDIRECT_CALL_1(kc->clock_get_timespec, thread_cpu_clock_get,
++				which_clock, &kernel_tp);
+ 
+ 	if (!error && put_timespec64(&kernel_tp, tp))
+ 		error = -EFAULT;
+diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+index dcdcb85121e4..2b1a3b146614 100644
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -190,7 +190,7 @@ static inline u64 tk_clock_read(const struct tk_read_base *tkr)
+ {
+ 	struct clocksource *clock = READ_ONCE(tkr->clock);
+ 
+-	return clock->read(clock);
++	return INDIRECT_CALL_1(clock->read, read_tsc, clock);
+ }
+ 
+ #ifdef CONFIG_DEBUG_TIMEKEEPING
 -- 
 2.35.1.473.g83b2b277ed-goog
 

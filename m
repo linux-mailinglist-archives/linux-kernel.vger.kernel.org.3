@@ -2,146 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EC14BBE41
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC31E4BBE45
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238353AbiBRRUg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 12:20:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35340 "EHLO
+        id S238493AbiBRRUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:20:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236427AbiBRRUd (ORCPT
+        with ESMTP id S238444AbiBRRUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:20:33 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE82B523A;
-        Fri, 18 Feb 2022 09:20:15 -0800 (PST)
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M433w-1nL6vW1Ka0-0000YL; Fri, 18 Feb 2022 18:20:14 +0100
-Received: by mail-wr1-f51.google.com with SMTP id o24so15715965wro.3;
-        Fri, 18 Feb 2022 09:20:14 -0800 (PST)
-X-Gm-Message-State: AOAM530OYnMBKHbPQ5PIPh98PvvQPli1FCBmJWBXGvhJh8lEESIVKzww
-        f3OtYCpkRpXUBJqQzNpHjowtm/A3qhaEHVij2w0=
-X-Google-Smtp-Source: ABdhPJw+uQLrWDPTpaVZ2hg+LNvKUOpuIxEMj1NjckGcj0wwgwCnAHT9Xg0He56mfzVIg4cUyUq5DUDOvJoCst25FuU=
-X-Received: by 2002:adf:cf0c:0:b0:1e6:22fe:4580 with SMTP id
- o12-20020adfcf0c000000b001e622fe4580mr6693423wrj.12.1645204813909; Fri, 18
- Feb 2022 09:20:13 -0800 (PST)
+        Fri, 18 Feb 2022 12:20:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF02A2B5B9D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:20:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645204823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NgDqx8HSqCkXZKNu7vuKVqOOrMrgIVsFIgF5vX7lT30=;
+        b=D7A7VKn3cRsVJfa2f+z6FCnjVvVCVzCUzJwHE+jxxBSwWBK7XctYjd1hsEy29vm3EpHA+x
+        OSmFEUuzdRma0mKDHNWoDxKmapMdsaPF+9AEqiFXIaK8ZcdiO9RbfvuPnsnww7XMy/aN5B
+        zVIrfCg4+XOxJsWeCIoWnR0zs9zRLGw=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-179-sRM9ddktOg-8dUa-eSRDSA-1; Fri, 18 Feb 2022 12:20:21 -0500
+X-MC-Unique: sRM9ddktOg-8dUa-eSRDSA-1
+Received: by mail-ej1-f69.google.com with SMTP id ky6-20020a170907778600b0068e4bd99fd1so3357623ejc.15
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:20:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NgDqx8HSqCkXZKNu7vuKVqOOrMrgIVsFIgF5vX7lT30=;
+        b=d2jOjVSJyBcpSYYhdCCQc7USYAtBV4+GYi+2AeUSxkJthXncLg+6jYuRJ+LJ/exZYn
+         b7FSGHElfe1HgPnF3Sfq6CBMIeXF9sANXAE9Xz09Vpf2isV1PinWUWj0lKxZc7hopC9D
+         9G18+aviYnXpjMRWB3UWTLCMaE25ws2LPPxacHQHE4nc81nPkjj6lwBbdtx78BFTKaLH
+         e5a7mqwc5M3PV6jQqMq15l1uOvzAu2ElltKeayt7QqhX/3Hld95YBnCviJ2E6SvKCkdc
+         OC0JkaIaE26MjyYrafuQOpK2ZnnA8bgUUZr1q0fAAYlyfAo8eURLNMy0yG9V6iRXHMmv
+         hNXg==
+X-Gm-Message-State: AOAM530ejxUyiiqoHC5eo+LSLA8Vb+bb4g7/ibDp197IgmaFaZaYqE2a
+        OYAtMc7ahIE/liK/MjFTkCMU2Drrrs0CAHy0piWpXTbhAz2UPk3jAqwMULmHkgUTWon6Nk19Wsx
+        j6r3i5JGyVqGjYbvxA4rsHSdo
+X-Received: by 2002:a17:906:27db:b0:6cf:69cb:505b with SMTP id k27-20020a17090627db00b006cf69cb505bmr7267514ejc.481.1645204819726;
+        Fri, 18 Feb 2022 09:20:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwJ36aQL0l5tavfqy6yy1q3Uovk2dBAsmZ84rUawH7dFx9yLTPPdhpoohSi1qhMwI9Ry39arw==
+X-Received: by 2002:a17:906:27db:b0:6cf:69cb:505b with SMTP id k27-20020a17090627db00b006cf69cb505bmr7267503ejc.481.1645204819491;
+        Fri, 18 Feb 2022 09:20:19 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id j8sm5312944edw.40.2022.02.18.09.20.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 09:20:18 -0800 (PST)
+Message-ID: <8f99a6a2-b64e-0211-a7d3-8b84c668a92f@redhat.com>
+Date:   Fri, 18 Feb 2022 18:20:17 +0100
 MIME-Version: 1.0
-References: <20220113170755.11856-1-pali@kernel.org> <CAK8P3a2D8Yv+KpM4NJyP9mosieqbhHh08=mdEy+OA84Vx6FVCQ@mail.gmail.com>
- <20220218165530.j62nafuofe342sfi@pali>
-In-Reply-To: <20220218165530.j62nafuofe342sfi@pali>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 18 Feb 2022 18:19:57 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1CHRztMCOFN6iomVf2J7_9qRi4GdZBQfDyhjqDb1Z0Vw@mail.gmail.com>
-Message-ID: <CAK8P3a1CHRztMCOFN6iomVf2J7_9qRi4GdZBQfDyhjqDb1Z0Vw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Increase PCIe IO size
- from 64 KiB to 1 MiB
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:sAedr4StlE0AfwTwvazt/sikNnozQKkTmku1eP7cz5Bfac//0Fo
- K7Jz/P3gEMu0ocfrTr2srvZFAiAmUNOWP8D2LGC6fS0aELv/M0fKqEd+bIcM1wNaTmqyhEy
- 1+Qd+ZcC5M2wxsd6dcMWB9I3Vdr78BCdaI6MrHwife9OWnGMpItvhXzN6/e8IG4r8twU/5o
- G/Vzk5VQd2iTv+HCYJgaw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bAYExVEZUsI=:sm2JTVg0I7xsOYmC/Klq1b
- QVRElotdl8y0+Gz3ocWShaGaDBJl4PDpB/Dc8GyfVzmnDI6c4GKoUTldiD2osEKif67zK6GDo
- +8XG6QKUGejPYHekM4bQk7zmjN210jCdh83ZtBd47pgvKb2H/2MqtZXoaiz5W8R8pxfN7S/PL
- Yz8cmODWnp9c5OXIRcyXjy7sedXbaN/YcHhvGrfzGsrfTLEMqB9wDZ3Oeb24W9l0VliqKZwVd
- 8a0x8GATkvmWnMrGsoMYK+mSjj0KR7cqQQhAl0zjCGFGHOgfRtTDG2YbvDutDAJBHyvx2KQgW
- zOqUXDMG8HT5CfhFtWGJA5H4/AI2L8WBkusVev51GhwbVe5anRPxQUku2BXIgHoWtnCyK2bZu
- dO3O8nbskjo9GYQs4VQfOMhu6+a2iXys/614lcN4eL2uIMA5k+JHBPbRiC6JI53ccOixx5NoG
- qj+q7uHk8COqTEhZQQ84xslOWpCZsDKvFv7hBNfKBMAgXhnY7QROn2uNw6CEupQK8yBSdsRm7
- Pozv9PTLYC8schHEo3UyKviXej1CKey9bHBAAO3lWXV3EjaaCXGcmTOgX6kceWxO2USGYTOZ3
- y2fpUaYrCB1KHMWpzlVDW+MHhlSUowhBJQRHtuzHB+yLfp3kyzx7onR3kNUDU+P9UL3htAque
- 3WJHU7OqHz4dESkzAqh+98kQrrpnzg/eCNUZyfUMUjQAJu0esAKajSHL/Iap0WASdxD5/TcFx
- 9llyar/WKPS9Sy3eMdQq6bbFrVtnAsU1bDNhC7K0QZbrUd5warO6Ov9sYAgl7YCywHGL4TN4b
- 8uZMBXT8mwb1TQfnmjrw5pKbCBTXDjrf8ndVgnoXhTL0+/hB/Q=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 6/6] KVM: x86: allow defining return-0 static calls
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220217180831.288210-1-pbonzini@redhat.com>
+ <20220217180831.288210-7-pbonzini@redhat.com> <Yg/JZZ+i67HDKCVK@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yg/JZZ+i67HDKCVK@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 5:55 PM Pali Rohár <pali@kernel.org> wrote:
-> On Friday 18 February 2022 17:43:04 Arnd Bergmann wrote:
-> > On Thu, Jan 13, 2022 at 6:07 PM Pali Rohár <pali@kernel.org> wrote:
-> > >
-> > > Commit 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM
-> > > space") increased size of PCIe MEM to 127 MiB, which is the maximal
-> > > possible size for allocated 128 MiB PCIe window. PCIe IO size in that
-> > > commit was unchanged.
-> > >
-> > > Armada 3720 PCIe controller supports 32-bit IO space mapping so it is
-> > > possible to assign more than 64 KiB if address space for IO.
-> > >
-> > > Currently controller has assigned 127 MiB + 64 KiB memory and therefore
-> > > there is 960 KiB of unused memory. So assign it to IO space by increasing
-> > > IO window from 64 KiB to 1 MiB.
-> > >
-> > > DTS file armada-3720-turris-mox.dts already uses whole 128 MiB space, so
-> > > only update comment about 32-bit IO space mapping.
-> > >
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > Fixes: 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM space")
-> >
-> > I just saw this is the fixes pull request, and it seems very odd. Does this
-> > fix an actual bug?
->
-> Do you mean this patch or commit 514ef1e62d65?
+On 2/18/22 17:29, Sean Christopherson wrote:
+> On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+>> A few vendor callbacks are only used by VMX, but they return an integer
+>> or bool value.  Introduce KVM_X86_OP_OPTIONAL_RET0 for them: if a func is
+>> NULL in struct kvm_x86_ops, it will be changed to __static_call_return0
+>> when updating static calls.
+>>
+>> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>> ---
+>>   arch/x86/include/asm/kvm-x86-ops.h | 15 +++++++++------
+>>   arch/x86/include/asm/kvm_host.h    |  4 ++++
+>>   arch/x86/kvm/svm/avic.c            |  5 -----
+>>   arch/x86/kvm/svm/svm.c             | 20 --------------------
+>>   arch/x86/kvm/x86.c                 |  2 +-
+>>   kernel/static_call.c               |  1 +
+>>   6 files changed, 15 insertions(+), 32 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+>> index c0ec066a8599..29affccb353c 100644
+>> --- a/arch/x86/include/asm/kvm-x86-ops.h
+>> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+>> @@ -10,7 +10,9 @@ BUILD_BUG_ON(1)
+>>    *
+>>    * KVM_X86_OP_OPTIONAL() can be used for those functions that can have
+>>    * a NULL definition, for example if "static_call_cond()" will be used
+>> - * at the call sites.
+>> + * at the call sites.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
+>> + * to make a definition optional, but in this case the default will
+>> + * be __static_call_return0.
+> 
+> __static_call_return0()
+> 
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index ab1c4778824a..d3da64106685 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -131,6 +131,7 @@ struct kvm_x86_ops kvm_x86_ops __read_mostly;
+>>   	DEFINE_STATIC_CALL_NULL(kvm_x86_##func,			     \
+>>   				*(((struct kvm_x86_ops *)0)->func));
+>>   #define KVM_X86_OP_OPTIONAL KVM_X86_OP
+>> +#define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
+>>   #include <asm/kvm-x86-ops.h>
+>>   EXPORT_STATIC_CALL_GPL(kvm_x86_get_cs_db_l_bits);
+>>   EXPORT_STATIC_CALL_GPL(kvm_x86_cache_reg);
+>> @@ -12016,7 +12017,6 @@ void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
+>>   static inline bool kvm_guest_apic_has_interrupt(struct kvm_vcpu *vcpu)
+>>   {
+>>   	return (is_guest_mode(vcpu) &&
+>> -			kvm_x86_ops.guest_apic_has_interrupt &&
+>>   			static_call(kvm_x86_guest_apic_has_interrupt)(vcpu));
+> 
+> Can you opportunistically align the indentation and drop the outer parantheses? I.e.
+> 
+> 	return is_guest_mode(vcpu) &&
+> 	       static_call(kvm_x86_guest_apic_has_interrupt)(vcpu);
 
-This one. 514ef1e62d65 looks fine.
+Hmm, I like having the parentheses (despite "return not being a 
+function") because editors are inconsistent in what indentation to use 
+after return.
 
-> > Note that Linux normally doesn't map more than 64KB
-> > of I/O space per PCI domain, so it should not make a difference to us.
->
-> Last time I looked into ARM code, it can allocate more than 64 kB for IO.
+Some use a tab (which does the right thing just by chance with Linux 
+because "return " is as long as a tab is wide), but vim for example does 
+the totally awkward
 
+int f()
+{
+         return a &&
+                 b;
+}
 
+Of course I can fix the indentation.
 
-> > Also, note that having a high bus address for the I/O space (0xefff0000,
-> > as as the CPU physical address here) means that a lot of the older
-> > devices that actually require I/O space won't work, because they need a
-> > low bus address in the first few KB.
-> >
-> > Is this mapping a requirement from a broken bootloader, or can you change
-> > the mapping of the I/O port window in the physical space to the usual
-> > bus address 0?
->
-> At physical address 0x0 it is not possible as at this address is mapped
-> DDR.
+Paolo
 
-I meant bus address 0, not CPU physical address 0 of course. We don't
-care where in physical space the I/O window is.
+>>   }
+>>   
+>> diff --git a/kernel/static_call.c b/kernel/static_call.c
+>> index 43ba0b1e0edb..76abd46fe6ee 100644
+>> --- a/kernel/static_call.c
+>> +++ b/kernel/static_call.c
+>> @@ -503,6 +503,7 @@ long __static_call_return0(void)
+>>   {
+>>   	return 0;
+>>   }
+>> +EXPORT_SYMBOL_GPL(__static_call_return0)
+> 
+> This doesn't compile, it needs a semicolon.
+> 
 
-> ARM Trusted-Firmware sets PCIe space to range [0xe8000000-0xf0000000].
-> This (default) configuration is specified in DTS file. Which parts of
-> this range is used for IO and which MEM is up to the a3720 PCIe kernel
-> driver and currently it configures it based on how sub-ranges are
-> specified in DT.
->
-> In some cases (e.g. when board has 4 GB of RAM), TF-A relocates this
-> PCIe range to different location (otherwise it cannot activate more than
-> 2 GB of RAM) and U-Boot during loading of kernel DTB file, is patching
-> it.
->
-> It could be possible to change TF-A code to move PCIe space to different
-> location (from [0xe8000000-0xf0000000]) but not to 0x0. But changing it
-> means to move other parts and invent mapping in which most of RAM can be
-> mapped to...
-
-Can't you change the mapping to have a bus address that is different
-the physical address?
-
-       Arnd

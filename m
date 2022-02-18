@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05524BBE95
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F674BBE9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbiBRRlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:41:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53528 "EHLO
+        id S232033AbiBRRpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:45:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiBRRlv (ORCPT
+        with ESMTP id S238323AbiBRRpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:41:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBB69D5DEA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:41:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645206093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GnuYPx4ALc7vupBYJPJ5qvV7EVEzwTLdGl9AEN4VlDg=;
-        b=LJ2qPP1o/siJb14t6jrlse64ZkpWKZQNHfximiI9GtyxLthvWAbg9OPq9Ev5dY8/vwnipz
-        otiNEi/5OIm3DtIoDx8rb8kD6WiuqCrzGNxoAJvXBCfk9Z8zVJnYcylMDeZrLZE9s11MPV
-        Qvoeeu8QWTGIANWTtY4Z8B8RWfRPKXA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-425-MXcLaNaRMNquHRN5qQKqSg-1; Fri, 18 Feb 2022 12:41:31 -0500
-X-MC-Unique: MXcLaNaRMNquHRN5qQKqSg-1
-Received: by mail-ed1-f70.google.com with SMTP id o5-20020a50c905000000b00410effbf65dso5907855edh.17
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:41:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+        Fri, 18 Feb 2022 12:45:51 -0500
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B69251E47
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:45:34 -0800 (PST)
+Received: by mail-oo1-xc29.google.com with SMTP id e19-20020a4ab993000000b0031a98fe3a9dso4353318oop.6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:45:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=GnuYPx4ALc7vupBYJPJ5qvV7EVEzwTLdGl9AEN4VlDg=;
-        b=XePR71nCzgBtEvsekeN4OcfNNgzz3sVtVC2zGLr16RY01v8Bi1m7U1VmxuyukosD+z
-         rIxd1lvdjxKIognoa4OHO8OSURQ1+pHl7jr1+uemRTNNZ7jdVNm5qDE1UWR1tp8qQsQE
-         9SI53VTtgu7wayv/KMfbAyvrREvnIpzsnsOW6ZaPFf3OFNM8QckOCVxJ3VgxL+5s9JNc
-         dLQOv4ZL+WfGldASC9Ne0slugMg9HIsABgPilLKavqxG3i2KMnLqk+n5IOrd4DDpF5Vs
-         P8kSg+qXBkTG6L67MkGHVN8fxWY+1UnIT98RUhyG2HuQAo7UcGrJWzn99/qFL8aXikfu
-         idKQ==
-X-Gm-Message-State: AOAM530g4dHvgR8+axujAlFelvm5ETDiUdKeISaTAAURfrxUyhJSMCie
-        teGOtwbGRelcdL5TcoN3hJZGNF83A+g590kPjPxnnlTG+wqfwO2dpbJlR8dKHaOfnWzWnTV7sDN
-        3L/VNdmiIPBByZTPzu5ey7YFv
-X-Received: by 2002:a17:906:91c8:b0:6c5:76a6:688b with SMTP id b8-20020a17090691c800b006c576a6688bmr7601171ejx.174.1645206090167;
-        Fri, 18 Feb 2022 09:41:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwVaFGgjuTsFPf5JRE18FJ5HhxPm41qDpdkzlQQSvv+/hX9VXjS7tjz10ooZ8Pb4bglOjzg1Q==
-X-Received: by 2002:a17:906:91c8:b0:6c5:76a6:688b with SMTP id b8-20020a17090691c800b006c576a6688bmr7601160ejx.174.1645206089931;
-        Fri, 18 Feb 2022 09:41:29 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id h8sm4926063edk.14.2022.02.18.09.41.27
+        bh=afcM4DQupixAxH0kc1FcSrJ62dkTTraEAu7alpgcE5k=;
+        b=T2FTHtJlw2tz58RdWq5RP/pXsvqUojg0GbRxPQDEAZsbI5S3XxD3nc+uWjVc5kMo46
+         EVoPJlz3ZiGLQ97OD+P8Mz+CPb/quyO5wYs8zjn8cO9huLAmun9brZQb+K5PdUJfwhCa
+         Gv9KcPoWfBCHCe4jeVU+iqa+belCW2JP35GX2LQzk0synQTcnKE22hM41CFe7yGJl15T
+         PQJMoJYfZ5ITi3OuEmNpqyyc9avf4BlkQ8ie5Q0S506dpdzkwIoW2fYHQsaedQJLMS6U
+         s3nb0vmjJ31wQMNN0x6J2Vc46Bw6y0DPLb03A/vYhscgM8HKBZKA/weNIbTO9DIHkyQi
+         dT8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=afcM4DQupixAxH0kc1FcSrJ62dkTTraEAu7alpgcE5k=;
+        b=S5vCBD6gVmubxX/rgIJopfQjjDR47OQgMTIrc6Pxu4Ix1ly1Hw2+75kYgIOSkqoo1/
+         2yxKRik+mOe6mlJO9b3guibgdQskI+eyQc0F0P8Ci1Ue4tcFg6jIuPQjydVnNmaOCGH8
+         wfB2o4bwhx/VZH7aRyURJGrmtyj/8HmBIXFzHL88ufXIAvIOJ0pxKvLQSjIuRvPEBGXr
+         Fj4BI8DepDdJZCe3+UTXqoAj64Nx8aMtD1B4cnrscy3KajvJUu8YXNJF0+wNqZhzy9Sc
+         o66o7F8kyoVQioInHzLIOmtPh3ocd+lbxRjXzyTbPX0psGID1UyLaiX18ro8wEHMJ79R
+         qDOQ==
+X-Gm-Message-State: AOAM531Yff8/p2FZW3jd81UT1jX3eecptGn4N9jYXpKISxZbd9IXe9Uq
+        MZWrTnmviIstvd74+UVAgNg=
+X-Google-Smtp-Source: ABdhPJyId5/JaldGbob8T9AXgeuwzjHaMaeS4RXNFfR3wDk9nqVeHI5Geg7g8vUf9Ox7DP8Cs8Hm1w==
+X-Received: by 2002:a05:6870:75c6:b0:d3:5241:d4c0 with SMTP id de6-20020a05687075c600b000d35241d4c0mr3168966oab.19.1645206334092;
+        Fri, 18 Feb 2022 09:45:34 -0800 (PST)
+Received: from [192.168.1.103] (cpe-24-31-246-181.kc.res.rr.com. [24.31.246.181])
+        by smtp.gmail.com with ESMTPSA id p22sm22691187oae.33.2022.02.18.09.45.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 09:41:29 -0800 (PST)
-Message-ID: <65871234-0c94-2455-c55f-6c1d5775e485@redhat.com>
-Date:   Fri, 18 Feb 2022 18:41:27 +0100
+        Fri, 18 Feb 2022 09:45:33 -0800 (PST)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <fb51e801-d1b9-a436-8fd2-e05a69f0c24b@lwfinger.net>
+Date:   Fri, 18 Feb 2022 11:45:31 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 5/6] KVM: x86: make several AVIC callbacks optional
+ Thunderbird/91.6.0
+Subject: Re: [PATCH RFC] staging: r8188eu: comment about the chip's packet
+ format
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220217180831.288210-1-pbonzini@redhat.com>
- <20220217180831.288210-6-pbonzini@redhat.com> <Yg/IGUFqqS2r98II@google.com>
- <eff2543a-10ab-611a-28e2-18999d21ddd8@redhat.com>
- <Yg/ZZMAz7XZ6wn/u@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yg/ZZMAz7XZ6wn/u@google.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Martin Kaiser <martin@kaiser.cx>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220218092252.853807-1-martin@kaiser.cx>
+ <20220218102227.GE2407@kadam>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <20220218102227.GE2407@kadam>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/22 18:37, Sean Christopherson wrote:
->> True, on the other hand there's no reason why a hypothetical third vendor
->> would have to support it.  The call is conditional to apicv_active being
->> true.
-> Ah, right, even if the the static_call_cond() is unnecessary because we want to
-> make the hook mandatory if APICv is supported, APICv itself may not be supported.
+On 2/18/22 04:22, Dan Carpenter wrote:
+> On Fri, Feb 18, 2022 at 10:22:53AM +0100, Martin Kaiser wrote:
+>> The structs phy_rx_agc_info and phy_status_rpt define parts of the
+>> header data that the r8188eu chipset sends to this driver via usb.
+>>
+>> Add a comment to clarify that we cannot modify the content of these
+>> structures and remove seemingly unused fields.
+>>
+>> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+>> ---
+>>
+>> Dear all,
+>>
+>> I experimented with "cleaning up" these structures and related code before
+>> discovering that their content comes from usb packets we receive from the
+>> r8188eu chipset.
+>>
+>> Would it make sense to add a word of warning to prevent others from
+>> repeating this exercise?
+> 
+> Just the fact that these structs are endian means they're from the
+> firmware or the network.
+> 
+> If a struct has a pointer in it, then it's rarely part of the UAPI but
+> if it has endian data then it probably is.
 
-I'm not even sure we want to make it mandatory, in fact.
+Additionally, do not change any struct with the __packed attribute. Most will 
+have endian variables as well, but not all will.
 
-Also new full log:
+Testing after modifying any struct is a necessity.
 
-----
-All their invocations are conditional on vcpu->arch.apicv_active,
-meaning that they need not be implemented by vendor code: even
-though at the moment both vendors implement APIC virtualization,
-all of them should be optional.  In fact SVM does not need many of
-them, and their implementation can be deleted now.
-----
-
-Paolo
+Larry
 

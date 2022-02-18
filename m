@@ -2,31 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372B84BB54E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F414BB52E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233299AbiBRJRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:17:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59348 "EHLO
+        id S233276AbiBRJRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:17:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233209AbiBRJRJ (ORCPT
+        with ESMTP id S233208AbiBRJRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 04:17:09 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AFF11175;
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CB71117E;
         Fri, 18 Feb 2022 01:16:50 -0800 (PST)
-X-UUID: 8c74edc5be4d4c7cbc3def0e3364168e-20220218
-X-UUID: 8c74edc5be4d4c7cbc3def0e3364168e-20220218
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-UUID: cf2f7da9140d4f098cc3b515a4a63132-20220218
+X-UUID: cf2f7da9140d4f098cc3b515a4a63132-20220218
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1013492680; Fri, 18 Feb 2022 17:16:46 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 18 Feb 2022 17:16:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 18 Feb
- 2022 17:16:45 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1742451437; Fri, 18 Feb 2022 17:16:47 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 18 Feb 2022 17:16:45 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Fri, 18 Feb 2022 17:16:45 +0800
@@ -42,9 +40,9 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         "Chen-Yu Tsai" <wenst@chromium.org>,
         Ryder Lee <ryder.lee@kernel.org>,
         Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v2 09/23] arm64: dts: mt8192: Add infracfg_rst node
-Date:   Fri, 18 Feb 2022 17:16:19 +0800
-Message-ID: <20220218091633.9368-10-allen-kh.cheng@mediatek.com>
+Subject: [PATCH v2 10/23] arm64: dts: mt8192: Add PCIe node
+Date:   Fri, 18 Feb 2022 17:16:20 +0800
+Message-ID: <20220218091633.9368-11-allen-kh.cheng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
 References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
@@ -60,51 +58,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add infracfg_rst node for mt8192 SoC.
+Add PCIe node for mt8192 SoC.
 
 Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 38 ++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index f93fe3779161..a935a22babbb 100644
+index a935a22babbb..4533c794effc 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -12,6 +12,7 @@
- #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
- #include <dt-bindings/phy/phy.h>
- #include <dt-bindings/power/mt8192-power.h>
-+#include <dt-bindings/reset/ti-syscon.h>
- 
- / {
- 	compatible = "mediatek,mt8192";
-@@ -267,10 +268,23 @@
- 			#clock-cells = <1>;
+@@ -886,6 +886,44 @@
+ 			};
  		};
  
--		infracfg: syscon@10001000 {
--			compatible = "mediatek,mt8192-infracfg", "syscon";
-+		infracfg: infracfg@10001000 {
-+			compatible = "mediatek,mt8192-infracfg", "syscon", "simple-mfd";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
++		pcie: pcie@11230000 {
++			compatible = "mediatek,mt8192-pcie";
++			device_type = "pci";
++			reg = <0 0x11230000 0 0x2000>;
++			reg-names = "pcie-mac";
++			#address-cells = <3>;
++			#size-cells = <2>;
++			clocks = <&infracfg CLK_INFRA_PCIE_TL_26M>,
++				<&infracfg CLK_INFRA_PCIE_TL_96M>,
++				<&infracfg CLK_INFRA_PCIE_TL_32K>,
++				<&infracfg CLK_INFRA_PCIE_PERI_26M>,
++				<&infracfg CLK_INFRA_PCIE_TOP_H_133M>,
++				<&infracfg CLK_INFRA_PCIE_PL_P_250M>;
++			clock-names = "sys_ck0", "ahb_ck0", "aux_ck0",
++				 "obff_ck0", "axi_ck0", "pipe_ck0";
++			assigned-clocks = <&topckgen CLK_TOP_TL_SEL>;
++			assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D6_D4>;
++			resets = <&infracfg_rst 2>,
++				 <&infracfg_rst 3>;
++			reset-names = "phy", "mac";
++			interrupts = <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH 0>;
++			bus-range = <0x00 0xff>;
++			ranges = <0x82000000 0 0x12000000 0x0 0x12000000 0 0x0800000>,
++				 <0x81000000 0 0x12800000 0x0 0x12800000 0 0x0800000>;
 +
-+			infracfg_rst: reset-controller {
-+				compatible = "ti,syscon-reset";
-+				#reset-cells = <1>;
-+
-+				ti,reset-bits = <
-+					0x120 0 0x124 0 0 0	(ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 0: lvts_ap */
-+					0x730 12 0x734 12 0 0	(ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 1: lvts_mcu */
-+					0x140 15 0x144 15 0 0	(ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 2: pcie phy */
-+					0x730 1 0x734 1 0 0	(ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 3: pcie top */
-+					0x150 5 0x154 5 0 0	(ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* 4: svs */
-+				>;
++			#interrupt-cells = <1>;
++			interrupt-map-mask = <0 0 0 7>;
++			interrupt-map = <0 0 0 1 &pcie_intc0 0>,
++				   <0 0 0 2 &pcie_intc0 1>,
++				   <0 0 0 3 &pcie_intc0 2>,
++				   <0 0 0 4 &pcie_intc0 3>;
++			pcie_intc0: interrupt-controller {
++				interrupt-controller;
++				#address-cells = <0>;
++				#interrupt-cells = <1>;
 +			};
- 		};
- 
- 		pericfg: syscon@10003000 {
++		};
++
+ 		nor_flash: spi@11234000 {
+ 			compatible = "mediatek,mt8192-nor";
+ 			reg = <0 0x11234000 0 0xe0>;
 -- 
 2.18.0
 

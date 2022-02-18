@@ -2,207 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D646C4BB555
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965954BB55E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbiBRJUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:20:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47186 "EHLO
+        id S233453AbiBRJVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:21:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiBRJU3 (ORCPT
+        with ESMTP id S233400AbiBRJVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:20:29 -0500
-Received: from outbound-smtp30.blacknight.com (outbound-smtp30.blacknight.com [81.17.249.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F2721E00
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 01:20:10 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp30.blacknight.com (Postfix) with ESMTPS id 7BD1FBAAF6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:20:08 +0000 (GMT)
-Received: (qmail 27521 invoked from network); 18 Feb 2022 09:20:08 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 18 Feb 2022 09:20:08 -0000
-Date:   Fri, 18 Feb 2022 09:20:06 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 5/6] mm/page_alloc: Free pages in a single pass during
- bulk free
-Message-ID: <20220218092006.GX3366@techsingularity.net>
-References: <20220217002227.5739-1-mgorman@techsingularity.net>
- <20220217002227.5739-6-mgorman@techsingularity.net>
- <Yg2qhJyTovY2oQhe@ziqianlu-nuc9qn>
- <20220217093113.GU3366@techsingularity.net>
- <Yg8ec9MLblOkHTY9@ziqianlu-nuc9qn>
+        Fri, 18 Feb 2022 04:21:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A52245A8;
+        Fri, 18 Feb 2022 01:20:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8253461ADA;
+        Fri, 18 Feb 2022 09:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D5AC34101;
+        Fri, 18 Feb 2022 09:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645176057;
+        bh=iKhg0GBIaPe+CQxdRyb4Yd6fYvnOL1KGipyOpowy2ho=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qrzVx9uS01f/Wj0cFTg/+0LSWhE1G7FN6TwYhpUGHAfRFXkIpmBM4F8J0dk50pwkS
+         wKyObRAaCrLX377JCN9FqH7Kvh/1cBMDdQ9Fjl4a3lK+Eyuc/W9Ce2RzgwmHPVRzsr
+         3j4FGxlx7lZ6K6w7D7wAQsHsLFhAT1CPEWL3AgKOjYatwwZ+xb00t40/49j3taYxi7
+         gRGFGpqJndNBvH9elSM9uplg5tkpex37l+LNXc8C5bEpjwPDfEuZXV6BzcjuhIjM6I
+         kPpps+g+oF8SDzjL1o/OiI+AT3LkK+UOezRIAS0FwKI07/pNdUg4V02kqmHkVrKU4l
+         dfD2eBhw3uwOw==
+Received: by mail-wr1-f42.google.com with SMTP id f3so13289879wrh.7;
+        Fri, 18 Feb 2022 01:20:56 -0800 (PST)
+X-Gm-Message-State: AOAM530/8ynQ2Sox3qdd+hljEgevuVWg2ebkSe+jjxBmuyrX0wWjudhE
+        1rPXf/WK8PQwkS3/XqRT6jePEgeW1SI6q4RrXDs=
+X-Google-Smtp-Source: ABdhPJyGR3PQRCwNo0b6q27n8W/CBFQ1qGTyO2eZuzZDzHloL87fpnteJNso35Jub1TB9UHbj8TuXAAIoiRTkKAAdXc=
+X-Received: by 2002:a5d:59a3:0:b0:1e9:542d:1a35 with SMTP id
+ p3-20020a5d59a3000000b001e9542d1a35mr816366wrr.192.1645176055050; Fri, 18 Feb
+ 2022 01:20:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <Yg8ec9MLblOkHTY9@ziqianlu-nuc9qn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220216131332.1489939-1-arnd@kernel.org> <00496df2-f9f2-2547-3ca3-7989e4713d6b@csgroup.eu>
+ <CAK8P3a3_dPbjB23QffnYMtw+5ojfwChrVC8LLMQqNctU7Nh+mQ@mail.gmail.com> <Yg8CjZwjWYIibrsd@zeniv-ca.linux.org.uk>
+In-Reply-To: <Yg8CjZwjWYIibrsd@zeniv-ca.linux.org.uk>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 18 Feb 2022 10:20:38 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0_uJQXshn5N0o4J_8dVPNCw885xGHqnKj3i5kYB+GtBg@mail.gmail.com>
+Message-ID: <CAK8P3a0_uJQXshn5N0o4J_8dVPNCw885xGHqnKj3i5kYB+GtBg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/18] clean up asm/uaccess.h, kill set_fs for good
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "dalias@libc.org" <dalias@libc.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "bcain@codeaurora.org" <bcain@codeaurora.org>,
+        "deller@gmx.de" <deller@gmx.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "green.hu@gmail.com" <green.hu@gmail.com>,
+        "shorne@gmail.com" <shorne@gmail.com>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "nickhu@andestech.com" <nickhu@andestech.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 12:20:03PM +0800, Aaron Lu wrote:
-> > The baseline looks fine. It's different to what I used but the page_alloc
-> > shouldn't have much impact.
-> > 
-> > When looking at will-it-scale, please pay attention to lower CPU counts
-> > as well and take account changes in standard deviation. Looking at the
-> 
-> I'll also test nr_task=4/16/64 on the 4sockets CooperLake(nr_cpu=144) then.
-> 
+n Fri, Feb 18, 2022 at 3:21 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Thu, Feb 17, 2022 at 08:49:59AM +0100, Arnd Bergmann wrote:
+>
+> > Same here: architectures can already provide a __put_user_fn()
+> > and __get_user_fn(), to get the generic versions of the interface,
+> > but few architectures use that. You can actually get all the interfaces
+> > by just providing raw_copy_from_user() and raw_copy_to_user(),
+> > but the get_user/put_user versions you get from that are fairly
+> > inefficient.
+>
+> FWIW, __{get,put}_user_{8,16,32,64} would probably make it easier to
+> unify.  That's where the really variable part tends to be, anyway.
+> IMO __get_user_fn() had been a mistake.
 
-Thanks.
+I've prototyped this now, to see what this might look like, see
+https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?h=generic-get_user-prototype
 
-> > I expect there will be different good/bad points based on looking at
-> > Zen1 results (8 nodes, varying distances, 64 cores with 128 CPUs HT
-> > enabled)
-> > 
-> >                                                     5.17.0-rc3                 5.17.0-rc3                 5.17.0-rc3
-> >                                                        vanilla        mm-reverthighpcp-v1           mm-highpcpopt-v2
-> > Hmean     page_fault1-threads-2          2985366.46 (   0.00%)      2984649.41 (  -0.02%)      3028407.35 (   1.44%)
-> > Hmean     page_fault1-threads-5          3491833.63 (   0.00%)      3500237.35 (   0.24%)      3489971.99 (  -0.05%)
-> > Hmean     page_fault1-threads-8          3254335.58 (   0.00%)      3277515.51 *   0.71%*      3234275.28 *  -0.62%*
-> > Hmean     page_fault1-threads-12         5101504.72 (   0.00%)      5390649.46 *   5.67%*      5162047.68 (   1.19%)
-> > Hmean     page_fault1-threads-21         7714265.64 (   0.00%)      7714763.10 (   0.01%)      7854367.65 *   1.82%*
-> > Hmean     page_fault1-threads-30        10034561.94 (   0.00%)      9865446.68 (  -1.69%)      9746368.76 *  -2.87%*
-> > Hmean     page_fault1-threads-48        12571351.99 (   0.00%)     13257508.23 *   5.46%*     12160897.07 *  -3.27%*
-> > Hmean     page_fault1-threads-79        11124387.46 (   0.00%)     10641145.82 *  -4.34%*     10677656.39 *  -4.02%*
-> > Hmean     page_fault1-threads-110       11980424.12 (   0.00%)     10778220.84 * -10.03%*     10354249.62 * -13.57%* <-- close to nr_cpus
-> > Hmean     page_fault1-threads-141        9727528.73 (   0.00%)      9966965.70 (   2.46%)      9656148.13 (  -0.73%) <-- close to nr_cpus
-> 
-> I have never tested thread mode, because I think the heavy loaded
-> thread mode is more about testing the mmap_sem contention than page
-> allocator's performance?
+This adds generic inline version of {__get,get,__put,put}_user()
+and converts x86 to (optionally) use it. This builds with gcc-5
+through gcc-11 on 32-bit and 64-bit x86, using asm-goto with
+outputs where possible, and requiring a minimum set of macro
+definitions from the architecture. Compiling with clang produces
+no warnings but does cause a linker issue at the moment, so
+there is probably at least one bug in it.
 
-You're right, I meant to paste in the processes figures and used
-processes for the stddev
+Aside from compile-testing, I have not tried to verify if this
+is correct or efficient, but let me know if you think this is headed
+in the right direction.
 
-Hmean     page_fault1-processes-2        3087765.27 (   0.00%)      3040255.24 *  -1.54%*      3026943.42 *  -1.97%*
-Hmean     page_fault1-processes-5        3630079.14 (   0.00%)      3644005.83 *   0.38%*      3641029.26 *   0.30%*
-Hmean     page_fault1-processes-8        3435519.22 (   0.00%)      3440525.39 *   0.15%*      3430091.10 *  -0.16%*
-Hmean     page_fault1-processes-12       7060647.54 (   0.00%)      7078730.32 *   0.26%*      7066516.90 (   0.08%)
-Hmean     page_fault1-processes-21      10529603.15 (   0.00%)     10543342.71 *   0.13%*     10529619.72 (   0.00%)
-Hmean     page_fault1-processes-30      13919518.76 (   0.00%)     13916089.66 (  -0.02%)     13911735.60 *  -0.06%*
-Hmean     page_fault1-processes-48      20655910.65 (   0.00%)     20680704.25 *   0.12%*     20634196.53 *  -0.11%*
-Hmean     page_fault1-processes-79      27154979.79 (   0.00%)     27200579.85 *   0.17%*     27111810.79 *  -0.16%*
-Hmean     page_fault1-processes-110     26456190.23 (   0.00%)     26498119.30 *   0.16%*     26414120.14 *  -0.16%*
-Hmean     page_fault1-processes-141     25741741.47 (   0.00%)     25377519.19 (  -1.41%)     26020885.64 (   1.08%)
-Hmean     page_fault1-processes-172     26029813.28 (   0.00%)     26107861.43 *   0.30%*     26011987.83 *  -0.07%*
-Hmean     page_fault1-processes-203     26005230.37 (   0.00%)     26114882.22 *   0.42%*     25999181.70 (  -0.02%)
-Hmean     page_fault1-processes-234     26021903.34 (   0.00%)     26123727.47 *   0.39%*     26000412.62 *  -0.08%*
-Hmean     page_fault1-processes-265     26019386.67 (   0.00%)     26139301.80 *   0.46%*     26014073.54 (  -0.02%)
-Hmean     page_fault1-processes-296     26014579.15 (   0.00%)     26101018.62 *   0.33%*     26009459.16 (  -0.02%)
-Hmean     page_fault1-processes-327     26059483.56 (   0.00%)     26279026.62 (   0.84%)     25990821.88 (  -0.26%)
-Hmean     page_fault1-processes-358     19604338.34 (   0.00%)     26115341.28 *  33.21%*     25995281.86 *  32.60%*
-Hmean     page_fault1-processes-389     26084730.88 (   0.00%)     26058850.78 (  -0.10%)     26007661.51 *  -0.30%*
-Hmean     page_fault1-processes-420     25358929.58 (   0.00%)     25097140.75 (  -1.03%)     26005923.68 (   2.55%)
-Hmean     page_fault1-processes-451     26172808.51 (   0.00%)     26439611.24 *   1.02%*     26078355.47 (  -0.36%)
-Hmean     page_fault1-processes-482     26848297.49 (   0.00%)     26722385.24 (  -0.47%)     26171033.04 *  -2.52%*
+> One thing I somewhat dislike about the series is the boilerplate in
+> asm/uaccess.h instances - #include <asm-generic/access-ok.h> in
+> a lot of them might make sense as a transitory state, but getting
+> stuck with those indefinitely...
 
-> It's surprising this patch caused a
-> performance change.
-> 
+Christoph also complained about it, the problem for now is that
+asm-generic/access_ok.h must first see the macro definitions for
+architectures that override any of the contents, but access_ok()
+itself is used at least in some of the asm/uaccess.h files as well,
+so it must be included in the middle of it, until more of the uaccess.h
+implementation is moved to linux/uaccess.h in an architecture
+independent way.
 
-The figures say it meakes little difference. I wasn't really
-concentrating on will-it-scale-pf as such when writing the patch. I
-included pf because it was the original justification for deferring
-the zone lock acquisition until after pages had been taken off the PCP.
+Would you prefer having an asm/access_ok.h that falls back to
+the asm-generic version but can have an architecture specific
+override when needed (ia64, arm64, x86, um)?
 
-> > Hmean     page_fault1-threads-234       11322381.78 (   0.00%)      9163162.66 ( -19.07%)      9141561.16 ( -19.26%)
-> > Hmean     page_fault1-threads-265        7956982.52 (   0.00%)      7774650.20 (  -2.29%)      8292405.57 *   4.22%*
-> > Hmean     page_fault1-threads-296        7892153.88 (   0.00%)      8272671.84 *   4.82%*      7907026.20 (   0.19%)
-> > Hmean     page_fault1-threads-327        7957124.50 (   0.00%)      8078297.34 (   1.52%)      8129776.79 (   2.17%)
-> > Hmean     page_fault1-threads-358        7847563.90 (   0.00%)      8202303.36 (   4.52%)      8139027.38 (   3.71%)
-> > Hmean     page_fault1-threads-389        7928386.47 (   0.00%)      8104732.41 (   2.22%)      8022002.73 (   1.18%)
-> > Hmean     page_fault1-threads-420        7690107.89 (   0.00%)      7587821.54 (  -1.33%)      7783777.95 (   1.22%)
-> > Hmean     page_fault1-threads-451        7683132.29 (   0.00%)      7979578.21 (   3.86%)      7693067.13 (   0.13%)
-> > Hmean     page_fault1-threads-482        7720646.31 (   0.00%)      7597453.65 (  -1.60%)      7870063.90 (   1.94%)
-> > Hmean     page_fault1-threads-512        7353458.45 (   0.00%)      7584407.14 (   3.14%)      8119539.24 (  10.42%)
-> > Stddev    page_fault1-processes-2           4086.39 (   0.00%)         1698.11 (  58.44%)         1488.13 (  63.58%)
-> > Stddev    page_fault1-processes-5           1448.69 (   0.00%)         1616.59 ( -11.59%)         1567.37 (  -8.19%)
-> > Stddev    page_fault1-processes-8           1828.29 (   0.00%)         2628.59 ( -43.77%)         2701.96 ( -47.79%)
-> > Stddev    page_fault1-processes-12         14073.12 (   0.00%)         1575.18 (  88.81%)         4880.93 (  65.32%)
-> > Stddev    page_fault1-processes-21          4368.35 (   0.00%)         7865.27 ( -80.05%)         3778.03 (  13.51%)
-> > Stddev    page_fault1-processes-30          5348.13 (   0.00%)        11751.43 (-119.73%)         3240.22 (  39.41%)
-> > Stddev    page_fault1-processes-48         23687.16 (   0.00%)         7803.01 (  67.06%)         2635.85 (  88.87%)
-> > Stddev    page_fault1-processes-79         12779.16 (   0.00%)         4311.60 (  66.26%)        22539.03 ( -76.37%)
-> > Stddev    page_fault1-processes-110        21031.04 (   0.00%)        15115.36 (  28.13%)        12136.54 (  42.29%)
-> > Stddev    page_fault1-processes-141       589804.99 (   0.00%)      1335519.71 (-126.43%)        19560.01 (  96.68%)
-> > Stddev    page_fault1-processes-172         7033.94 (   0.00%)         7147.71 (  -1.62%)        11366.64 ( -61.60%)
-> > Stddev    page_fault1-processes-203         6322.20 (   0.00%)         5035.55 (  20.35%)         4043.45 (  36.04%)
-> > Stddev    page_fault1-processes-234        12046.53 (   0.00%)        24208.37 (-100.96%)         9159.91 (  23.96%)
-> > Stddev    page_fault1-processes-265        11869.43 (   0.00%)        13528.26 ( -13.98%)         8943.99 (  24.65%)
-> > Stddev    page_fault1-processes-296         8918.50 (   0.00%)        16130.54 ( -80.87%)         5211.80 (  41.56%)
-> > Stddev    page_fault1-processes-327       101102.64 (   0.00%)       845864.70 (-736.64%)        16238.99 (  83.94%)
-> > Stddev    page_fault1-processes-358      2102190.38 (   0.00%)        11316.00 (  99.46%)         7508.57 (  99.64%)
-> > Stddev    page_fault1-processes-389        61012.79 (   0.00%)       121446.55 ( -99.05%)        18279.64 (  70.04%)
-> > Stddev    page_fault1-processes-420      2305208.40 (   0.00%)      2347564.71 (  -1.84%)         3202.77 (  99.86%)
-> > Stddev    page_fault1-processes-451        20214.37 (   0.00%)       173800.17 (-759.79%)       492258.35 (-2335.19%)
-> > Stddev    page_fault1-processes-482       236881.21 (   0.00%)       330501.32 ( -39.52%)        15307.31 (  93.54%)
-> > Stddev    page_fault1-processes-512       201354.82 (   0.00%)       207019.93 (  -2.81%)      4900536.90 (-2333.78%)
-> > 
-> > This is showing there was a impact around the nr_cpus (110 and 141
-> > processes measured) but the standard deviation around 141 was particularly
->   ~~~~~~~~~
-> 
->   Did you mean threads?
-> 
+>         BTW, do we need user_addr_max() anymore?  The definition in
+> asm-generic/access-ok.h is the only one, so ifndef around it is pointless.
 
-I meant processes both times and based the reasoning on processes and
-pasted the wrong thing. I'm going to split this config into threads
-versions and processes versions because they measure different things
-and considering them together in the context of the same test is hazardous.
+Right, the v2 changes got rid of the last override, so it could get
+hardcoded to TASK_SIZE_MAX, or we can convert the five
+references to just use that instead and remove it altogether:
 
-> > If possible, it would be nice if you could add something like
-> > configs/config-io-trunc from mmtests to lkp if it doesn't exist already
-> > to consider the simple case. As its most basic, all it's doing is
-> > 
-> > ---8<---
-> > #!/bin/bash
-> > 
-> > for i in {1..10}; do
-> >         dd if=/dev/zero of=sparse_file-$i bs=1 count=0 seek=1G &>/dev/null
-> >         cat sparse_file-$i > /dev/null
-> > done
-> > sync
-> > 
-> > # Primary metric
-> > time rm sparse_file*
-> > ---8<---
-> > 
-> > The main difference is that the mmtests will report the time to fault the
-> > sparse files (bulk simple allocate inserting into page cache) as well as
-> > the bulk truncate (bulk simple release of page cache).
-> 
-> Thanks for the suggestion.
-> 
-> vm-scalability has a similar test called case-truncate which LKP already uses:
-> https://git.kernel.org/pub/scm/linux/kernel/git/wfg/vm-scalability.git/tree/case-truncate
-> except in case-truncate, the rm is done concurrently and only the
-> truncate time is reported.
+arch/arm64/kernel/traps.c:      if (address >= user_addr_max()) {
+                 \
+arch/parisc/kernel/signal.c:    if (start >= user_addr_max() - sigframe_size)
+arch/parisc/kernel/signal.c:            if (A(&usp[0]) >=
+user_addr_max() - 5 * sizeof(int))
+lib/strncpy_from_user.c:        max_addr = user_addr_max();
+lib/strnlen_user.c:     max_addr = user_addr_max();
 
-This is still a valid test except you may also be measuring LRU lock
-contention so it'll be less clear for evaluating this series unless the
-scale factor is 1.
+user_addr_max() first showed up in architecture-independent code in
+c5389831cda3 ("sparc: Fix user_addr_max() definition."), and from that
+I think the original intent is no longer useful.
 
-> I'll modify the case to make it do the rm in
-> sequential mode and also report the fault time.
-> 
-
-Thanks.
-
--- 
-Mel Gorman
-SUSE Labs
+          Arnd

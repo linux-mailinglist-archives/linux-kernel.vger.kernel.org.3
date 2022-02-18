@@ -2,59 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CBF4BB724
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21D84BB72E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234168AbiBRKpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:45:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34258 "EHLO
+        id S234133AbiBRKqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:46:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234137AbiBRKpk (ORCPT
+        with ESMTP id S229993AbiBRKq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:45:40 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD5025AE56
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:45:24 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nL0lE-0007Wy-FR; Fri, 18 Feb 2022 11:45:12 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
+        Fri, 18 Feb 2022 05:46:29 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D397D25AE46
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:46:12 -0800 (PST)
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9A31436EAB;
-        Fri, 18 Feb 2022 10:45:07 +0000 (UTC)
-Date:   Fri, 18 Feb 2022 11:45:04 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>, kernel@axis.com,
-        Lars Persson <larper@axis.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: Enable NAPI before interrupts go live
-Message-ID: <20220218104504.62sfwbc4yoaceqdw@pengutronix.de>
-References: <20220217145527.2696444-1-vincent.whitchurch@axis.com>
- <20220217203604.39e318d0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5E67C3F1A1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645181171;
+        bh=dGDRz61XRlmN2nrsI5bz0i1S0S+h5+fQGdDwmq0wB0k=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=s1N7881ofX1d93IOgsQ9T2rUSkVlXMJCRrUtvZM+/JAjkOdTK3ljkfaftjaS0qAIQ
+         V1otuDOuNzlg9xgVSBVjzy/MtXP05jjCwFDUTyF8kdw1DMV3Gx7ErshZE3t3J6VyoG
+         AteB3iAdCVf2leEkHZxB/98gWLxGV0bHnpg4gRM1+fF0f1uiodpoScdDcFFvqPA9C5
+         z+Tb9fchUdiPeaR6gqaRv2k7gCLUioJUCH5Z5s+BGRvnI/Oa/3dF92dR+uyZaSoGfJ
+         jnV00glj9A2Ikc14OSvuHFnDMV1grEbkQJnMI6QQQ5JrbIIbx9pF2ki7SAVmG61uxM
+         ANPswlTbriqNw==
+Received: by mail-wm1-f70.google.com with SMTP id v130-20020a1cac88000000b0037e3d70e7e1so2991897wme.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:46:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dGDRz61XRlmN2nrsI5bz0i1S0S+h5+fQGdDwmq0wB0k=;
+        b=dH6Dupm2x6mLDBIiirczFsrSXXVUmRCPMEZ+ubvJHnf/CcCLak4B5/hWBvh8NlWmFl
+         GueJYPCbpx2RdRXyGa9J8A12GB9I2K4oyPEWBhTXbwwpGvWbvnZjzUi6NpXQWDdriw8y
+         nMdzYLETjK9ddY3AuchkRs0veMcmGhPf9z/S/rkp4+Pjpdy3xIBHJFaFyeWSRosUZYVX
+         Btg2BxUJ61uyvMFRty6XNDWBBfv2H48ompEYRbEfteqKKTJ6sCsrQzjJsXaOnQfjCytK
+         uS3NBE5RmjVeF132L1ohgysFon1HgXcTbeuQmGTUpdFoBRR5uyEb0X8+7MRmajjpeFVR
+         m0PA==
+X-Gm-Message-State: AOAM5333C8X5c7TNc5JFUWoDBR0e6q3NrWVmr+Jyp/TXhRwzBkqQtplq
+        niz7HJAO4S9XVr5FxlsLDXMlkX7Ur+9evr6BBJWOY/sF/KG8QwogjsimbLFa+y5s2ZH/qcxRCWj
+        U8cveyaPWjlaYKSQ/uBBk5ybX2/1qzPCVrRfe08bVYY4KhssumN666ZCvIQ==
+X-Received: by 2002:aa7:d3d9:0:b0:410:7a81:c0cf with SMTP id o25-20020aa7d3d9000000b004107a81c0cfmr7414113edr.177.1645181160596;
+        Fri, 18 Feb 2022 02:46:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQ+NAme7XzeWAZqBbGMYs1sQLjBbN9OgKux5J4SQWKa0WWJPX7Ydz76FgBA28E+tI3LAqAq09x/bebpkHqaFo=
+X-Received: by 2002:aa7:d3d9:0:b0:410:7a81:c0cf with SMTP id
+ o25-20020aa7d3d9000000b004107a81c0cfmr7414090edr.177.1645181160350; Fri, 18
+ Feb 2022 02:46:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h4oitkp7lwuotckt"
-Content-Disposition: inline
-In-Reply-To: <20220217203604.39e318d0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
+ <mhng-cdec292e-aea2-4b76-8853-b8465521e94f@palmer-ri-x1c9>
+ <CA+zEjCuTSjOCmNExSN1jO50tsuXNzL9x6K6jWjG4+vVky5eWsw@mail.gmail.com> <CA+zEjCuTYmk-dLPhJ=9CkNrqf7VbCNyRDSZUGYkJSUWqZDWHpA@mail.gmail.com>
+In-Reply-To: <CA+zEjCuTYmk-dLPhJ=9CkNrqf7VbCNyRDSZUGYkJSUWqZDWHpA@mail.gmail.com>
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Date:   Fri, 18 Feb 2022 11:45:49 +0100
+Message-ID: <CA+zEjCt04OV++qK5ar+p8HwqOfEgkSN8YFfxwRiCFw1FeJv2rg@mail.gmail.com>
+Subject: Re: [PATCH v3 00/13] Introduce sv48 support without relocatable kernel
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, zong.li@sifive.com, anup@brainfault.org,
+        Atish.Patra@rivosinc.com, Christoph Hellwig <hch@lst.de>,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, ardb@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        keescook@chromium.org, guoren@linux.alibaba.com,
+        heinrich.schuchardt@canonical.com, mchitale@ventanamicro.com,
+        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,69 +86,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Palmer,
 
---h4oitkp7lwuotckt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 20, 2022 at 11:05 AM Alexandre Ghiti
+<alexandre.ghiti@canonical.com> wrote:
+>
+> On Thu, Jan 20, 2022 at 8:30 AM Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+> >
+> > On Thu, Jan 20, 2022 at 5:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> > >
+> > > On Mon, 06 Dec 2021 02:46:44 PST (-0800), alexandre.ghiti@canonical.com wrote:
+> > > > * Please note notable changes in memory layouts and kasan population *
+> > > >
+> > > > This patchset allows to have a single kernel for sv39 and sv48 without
+> > > > being relocatable.
+> > > >
+> > > > The idea comes from Arnd Bergmann who suggested to do the same as x86,
+> > > > that is mapping the kernel to the end of the address space, which allows
+> > > > the kernel to be linked at the same address for both sv39 and sv48 and
+> > > > then does not require to be relocated at runtime.
+> > > >
+> > > > This implements sv48 support at runtime. The kernel will try to
+> > > > boot with 4-level page table and will fallback to 3-level if the HW does not
+> > > > support it. Folding the 4th level into a 3-level page table has almost no
+> > > > cost at runtime.
+> > > >
+> > > > Note that kasan region had to be moved to the end of the address space
+> > > > since its location must be known at compile-time and then be valid for
+> > > > both sv39 and sv48 (and sv57 that is coming).
+> > > >
+> > > > Tested on:
+> > > >   - qemu rv64 sv39: OK
+> > > >   - qemu rv64 sv48: OK
+> > > >   - qemu rv64 sv39 + kasan: OK
+> > > >   - qemu rv64 sv48 + kasan: OK
+> > > >   - qemu rv32: OK
+> > > >
+> > > > Changes in v3:
+> > > >   - Fix SZ_1T, thanks to Atish
+> > > >   - Fix warning create_pud_mapping, thanks to Atish
+> > > >   - Fix k210 nommu build, thanks to Atish
+> > > >   - Fix wrong rebase as noted by Samuel
+> > > >   - * Downgrade to sv39 is only possible if !KASAN (see commit changelog) *
+> > > >   - * Move KASAN next to the kernel: virtual layouts changed and kasan population *
+> > > >
+> > > > Changes in v2:
+> > > >   - Rebase onto for-next
+> > > >   - Fix KASAN
+> > > >   - Fix stack canary
+> > > >   - Get completely rid of MAXPHYSMEM configs
+> > > >   - Add documentation
+> > > >
+> > > > Alexandre Ghiti (13):
+> > > >   riscv: Move KASAN mapping next to the kernel mapping
+> > > >   riscv: Split early kasan mapping to prepare sv48 introduction
+> > > >   riscv: Introduce functions to switch pt_ops
+> > > >   riscv: Allow to dynamically define VA_BITS
+> > > >   riscv: Get rid of MAXPHYSMEM configs
+> > > >   asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
+> > > >   riscv: Implement sv48 support
+> > > >   riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
+> > > >   riscv: Explicit comment about user virtual address space size
+> > > >   riscv: Improve virtual kernel memory layout dump
+> > > >   Documentation: riscv: Add sv48 description to VM layout
+> > > >   riscv: Initialize thread pointer before calling C functions
+> > > >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
+> > > >
+> > > >  Documentation/riscv/vm-layout.rst             |  48 ++-
+> > > >  arch/riscv/Kconfig                            |  37 +-
+> > > >  arch/riscv/configs/nommu_k210_defconfig       |   1 -
+> > > >  .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
+> > > >  arch/riscv/configs/nommu_virt_defconfig       |   1 -
+> > > >  arch/riscv/include/asm/csr.h                  |   3 +-
+> > > >  arch/riscv/include/asm/fixmap.h               |   1
+> > > >  arch/riscv/include/asm/kasan.h                |  11 +-
+> > > >  arch/riscv/include/asm/page.h                 |  20 +-
+> > > >  arch/riscv/include/asm/pgalloc.h              |  40 ++
+> > > >  arch/riscv/include/asm/pgtable-64.h           | 108 ++++-
+> > > >  arch/riscv/include/asm/pgtable.h              |  47 +-
+> > > >  arch/riscv/include/asm/sparsemem.h            |   6 +-
+> > > >  arch/riscv/kernel/cpu.c                       |  23 +-
+> > > >  arch/riscv/kernel/head.S                      |   4 +-
+> > > >  arch/riscv/mm/context.c                       |   4 +-
+> > > >  arch/riscv/mm/init.c                          | 408 ++++++++++++++----
+> > > >  arch/riscv/mm/kasan_init.c                    | 250 ++++++++---
+> > > >  drivers/firmware/efi/libstub/efi-stub.c       |   2
+> > > >  drivers/pci/controller/pci-xgene.c            |   2 +-
+> > > >  include/asm-generic/pgalloc.h                 |  24 +-
+> > > >  include/linux/sizes.h                         |   1
+> > > >  22 files changed, 833 insertions(+), 209 deletions(-)
+> > >
+> > > Sorry this took a while.  This is on for-next, with a bit of juggling: a
+> > > handful of trivial fixes for configs that were failing to build/boot and
+> > > some merge issues.  I also pulled out that MAXPHYSMEM fix to the top, so
+> > > it'd be easier to backport.  This is bigger than something I'd normally like to
+> > > take late in the cycle, but given there's a lot of cleanups, likely some fixes,
+> > > and it looks like folks have been testing this I'm just going to go with it.
+> > >
+> >
+> > Yes yes yes! That's fantastic news :)
+> >
+> > > Let me know if there's any issues with the merge, it was a bit hairy.
+> > > Probably best to just send along a fixup patch at this point.
+> >
+> > I'm going to take a look at that now, and I'll fix anything that comes
+> > up quickly :)
+>
+> I see in for-next that you did not take the following patches:
+>
+>   riscv: Improve virtual kernel memory layout dump
+>   Documentation: riscv: Add sv48 description to VM layout
+>   riscv: Initialize thread pointer before calling C functions
+>   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
+>
+> I'm not sure this was your intention. If it was, I believe that at
+> least the first 2 patches are needed in this series, the 3rd one is a
+> useful fix and we can discuss the 4th if that's an issue for you.
 
-On 17.02.2022 20:36:04, Jakub Kicinski wrote:
-> On Thu, 17 Feb 2022 15:55:26 +0100 Vincent Whitchurch wrote:
-> > From: Lars Persson <larper@axis.com>
-> >=20
-> > The stmmac_open function has a race window between enabling the RX
-> > path and its interrupt to the point where napi_enabled is called.
-> >=20
-> > A chatty network with plenty of broadcast/multicast traffic has the
-> > potential to completely fill the RX ring before the interrupt handler
-> > is installed. In this scenario the single interrupt taken will find
-> > napi disabled and the RX ring will not be processed. No further RX
-> > interrupt will be delivered because the ring is full.
-> >=20
-> > The RX stall could eventually clear because the TX path will trigger a
-> > DMA interrupt once the tx_coal_frames threshold is reached and then
-> > NAPI becomes scheduled.
->=20
-> LGTM, although now the ndo_open and ndo_stop paths are not symmetrical.
-> Is there no way to mask the IRQs so that they don't fire immediately?
-> More common flow (IMO) would be:
->  - request irq
->  - mask irq
+Can you confirm that this was intentional and maybe explain the
+motivation behind it? Because I see value in those patches.
 
-I think you can merge these, to avoid a race condition, see:
+Thanks,
 
-| cbe16f35bee6 genirq: Add IRQF_NO_AUTOEN for request_irq/nmi()
+Alex
 
->  - populate rings
->  - start dma
->  - enable napi
->  - unmask irq
-> Other than the difference in flow between open/stop there may also be
-> some unpleasantness around restarting tx queues twice with the patch
-> as is.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---h4oitkp7lwuotckt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIPeK0ACgkQrX5LkNig
-011lEAf/ceZBFk9BF55mTJawpi5z5TpEgwyp84woyMIdPDmhW3IArp/mlLOJTaMF
-7lcjuYVsoI2YmLM5uuk8XFrI/+7ajWtphtGFcks3RxEMR3/GoSPdY8UI5Z4bdMT8
-c0dMjvNeD77ha6lQ2ZUHflAaBzCbtRctty+f8nxqVix/uI2xLQ4AAgehs079auMh
-+yEBwQ8WWBF5UWdLCcLe9zqcQ5NPHMLfPiiHLA3VLUr8ilDTcp1gy613RDzHRPnj
-qGvowf3Kwa4jAN0LISa1kJ1/4OsezXdrTvUTwfns6JxvP/PmktSX0ENg6jVKefds
-vIR5lSdqHX0L74ub2GLCNXqf7rJCdw==
-=WZKK
------END PGP SIGNATURE-----
-
---h4oitkp7lwuotckt--
+>
+> I tested for-next on both sv39 and sv48 successfully, I took a glance
+> at the code and noticed you fixed the PTRS_PER_PGD error, thanks for
+> that. Otherwise nothing obvious has popped.
+>
+> Thanks again,
+>
+> Alex
+>
+> >
+> > Thanks!
+> >
+> > Alex
+> >
+> > >
+> > > Thanks!

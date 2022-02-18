@@ -2,139 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A6A4BB2D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4712D4BB2D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiBRHDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:03:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53690 "EHLO
+        id S231739AbiBRHDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:03:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiBRHDJ (ORCPT
+        with ESMTP id S231713AbiBRHDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:03:09 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D742A251;
-        Thu, 17 Feb 2022 23:02:53 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id d187so1629376pfa.10;
-        Thu, 17 Feb 2022 23:02:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FJqrkQfzTnG3eDmhPKmKXJVLXCEy88O3PeJm+Gvo5fQ=;
-        b=Eba2adp7v6mpSgtbQqDRnlcx98z/cWg31mRLWAl8rbnOt0gcknZ4Q0vywzaaOgg2c5
-         wUkuJEGi212lS2nCo4PEZIk7Wo/yjwS9mvUSWCE7QmIU8P3xmegLxrfuqiYt1Neamug3
-         N3KK56PmUv32+dfiOvTgrmVbgtYEYWGl/qgGDnuXTWDU4TEXs8mFQYXQcRCPePYzs2DC
-         n1U9J/3Ghb4QnhQeYSutuX75uYtL8mobqecRlb5tj/ICIhNIzv2w99CtI06cuElrC2c4
-         PeOQZLwTbGqcPp7gWoFSyhW7bJyyIF/rgaRD9Bi40zpOrZiE8uwkBMzrOCSsqgOofUcK
-         EfxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FJqrkQfzTnG3eDmhPKmKXJVLXCEy88O3PeJm+Gvo5fQ=;
-        b=pPrfDKeKIJz+vaOz81A1L9KkjcSk81fQwzOFOjBbKbKLow0CfXPwrEfbrEMz83OACW
-         6lTkRDtyJRErfyZeTQW3eqbQk3u8my3oeXXtYDXuMvViZqCp7kuReHogYn+wDjIyJxMC
-         fodlQSnfNFMk2PMdQvNnnG2oSy+hA8j2aeFCCOmrfzSMLoKoLDKstFX0OuUoSqCLK4b2
-         ZLK8afVCz4rsga6YfOUB1rtGzmsujZw9G47H/HFsIeX3ehRGDvPtj8VcYzOc+vjX/AA5
-         ftdt7nGP3gYeM0F8k8WFr4HUd9rA2n9NvCMpyX0kuBpZfyaZ/CQiFRgwVTlr2w1UlvWO
-         YHeQ==
-X-Gm-Message-State: AOAM530cBpOQBhV6ky7PDg+Zw+W/kUhtvaxzlldGrVoiLZG34DMAODyi
-        xjDMWH7wI+bkR1iVXjp3ROd+3t1Vf4s=
-X-Google-Smtp-Source: ABdhPJyPi4O97+YrRTUqHf8Ye2GyvILWU7QwlWOVr6c3rQcRC/n5ZFWFw+p6+7iL/jUy6aJAVhDjCA==
-X-Received: by 2002:a05:6a00:c96:b0:4e0:5347:92df with SMTP id a22-20020a056a000c9600b004e0534792dfmr6736769pfv.36.1645167772724;
-        Thu, 17 Feb 2022 23:02:52 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:9800:6e8c:a0db:87e7])
-        by smtp.gmail.com with ESMTPSA id f3sm1422502pfe.137.2022.02.17.23.02.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 23:02:51 -0800 (PST)
-Date:   Thu, 17 Feb 2022 23:02:49 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Shelby Heffron <Shelby.Heffron@garmin.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] input: Add Marine Navigation Keycodes
-Message-ID: <Yg9EmVAHpEpmnLok@google.com>
-References: <20210622235708.8828-1-matthew.stephenson2@garmin.com>
- <20220126211224.28590-1-Shelby.Heffron@garmin.com>
+        Fri, 18 Feb 2022 02:03:34 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159A131524
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:03:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645167798; x=1676703798;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a2Tv3Q+ikrhGpCBk8zfVHjzNDCxJUWzxmbrwJ1R1+Xs=;
+  b=Sz5DMTcQR+AazM0O5UJZrk3r8UAz/LhUTMVqKS4PRlDCC7IjCNP5envY
+   CH8oFE7ZCC223Li2vT2sq3E62qRtpa45itQyx/lsn0bf/oVy5A0egrNe4
+   2xgXCaeTjOud5X6XEU+lwC93mLk8dwqE+HBmRCRkUHNx4uazmI7vTcOkx
+   RyX0erUZOK3nNb/yH1x/VVSS/U1YwnM/WP1qWOPI2knIZrJipvOzywGTt
+   Vy5w/EgvqAbVpoRIYT7j4uKGDtrDd85T4xawPRpucgGnj38TT1AzTDfO3
+   XzSLfiy5fYiajIgupg5NFMTWtUPHJOK3pR3iu4pzpmaaKmWomUUwuuA49
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="249902295"
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="249902295"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 23:03:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="541804217"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Feb 2022 23:03:16 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKxIR-00013I-QV; Fri, 18 Feb 2022 07:03:15 +0000
+Date:   Fri, 18 Feb 2022 15:02:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ e5733d8c89c3b57c8fcd40b8acf508388fabaa42
+Message-ID: <620f449c.pdLgIHtzGvQQch3P%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126211224.28590-1-Shelby.Heffron@garmin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shelby,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: e5733d8c89c3b57c8fcd40b8acf508388fabaa42  x86/sgx: Fix missing poison handling in reclaimer
 
-On Wed, Jan 26, 2022 at 03:12:24PM -0600, Shelby Heffron wrote:
-> Add keycodes that are used by marine navigation devices
-> 
-> Signed-off-by: Shelby Heffron <Shelby.Heffron@garmin.com>
-> ---
->  include/uapi/linux/input-event-codes.h | 28 ++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
-> index 225ec87d4f22..26b6a2f482ab 100644
-> --- a/include/uapi/linux/input-event-codes.h
-> +++ b/include/uapi/linux/input-event-codes.h
-> @@ -660,6 +660,34 @@
->  /* Select an area of screen to be copied */
->  #define KEY_SELECTIVE_SCREENSHOT	0x27a
->  
-> +/* Toggle the focus in or out */
-> +#define KEY_FOCUS_TOGGLE		0x27b
+elapsed time: 725m
 
-Could it be served by KEY_SELECT?
+configs tested: 100
+configs skipped: 84
 
-> +
-> +/* Move between highlightable items */
-> +#define KEY_NEXT_HIGHLIGHT		0x27c
-> +#define KEY_PREVIOUS_HIGHLIGHT		0x27d
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I wonder if KEY_NEXT and KEY_PREVIOUS would be suitable for your
-application.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+parisc                generic-32bit_defconfig
+m68k                            mac_defconfig
+ia64                         bigsur_defconfig
+powerpc                        cell_defconfig
+arc                          axs101_defconfig
+arc                        vdk_hs38_defconfig
+arc                    vdk_hs38_smp_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                       eiger_defconfig
+h8300                               defconfig
+microblaze                      mmu_defconfig
+powerpc                      pasemi_defconfig
+arm                           h5000_defconfig
+arm                          pxa3xx_defconfig
+ia64                          tiger_defconfig
+m68k                           sun3_defconfig
+powerpc                      makalu_defconfig
+arm                  randconfig-c002-20220217
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-> +
-> +/* Toggle Autopilot enagement */
-> +#define KEY_AUTOPILOT_ENGAGE_TOGGLE	0x27e
-> +
-> +/* Navigate Displays */
-> +#define KEY_NEXT_DISPLAY		0x27f
-> +#define KEY_PREVIOUS_DISPLAY		0x280
+clang tested configs:
+arm                      tct_hammer_defconfig
+riscv                            alldefconfig
+powerpc                     tqm5200_defconfig
+arm                        magician_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220217
+hexagon              randconfig-r041-20220217
+riscv                randconfig-r042-20220217
 
-I am not familiar with marine navigation devices, could you please
-explain a bit more about displays you are navigating. Are there separate
-physical screens or are there several application screens/views you are
-switching between?
-
-> +
-> +/* Shortcut Keys */
-> +#define KEY_MARK_WAYPOINT		0x281
-> +#define KEY_SOS			0x282
-> +#define KEY_NAV_CHART			0x283
-> +#define KEY_FISHING_CHART		0x284
-> +#define KEY_SINGLE_RANGE_RADAR		0x285
-> +#define KEY_DUAL_RANGE_RADAR		0x286
-> +#define KEY_RADAR_OVERLAY		0x287
-> +#define KEY_TRADITIONAL_SONAR		0x288
-> +#define KEY_CLEARVU_SONAR		0x289
-> +#define KEY_SIDEVU_SONAR		0x28a
-> +#define KEY_NAV_INFO			0x28b
-
-This are fine I believe.
-
-> +#define KEY_BRIGHTNESS_MENU		0x28c
-
-Do you have multiple menus in the application?
-
-Thanks.
-
--- 
-Dmitry
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

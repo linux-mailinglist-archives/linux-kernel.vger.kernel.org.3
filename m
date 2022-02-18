@@ -2,123 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B954BBD03
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E14A4BBD04
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbiBRQIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:08:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44946 "EHLO
+        id S237431AbiBRQJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:09:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiBRQIm (ORCPT
+        with ESMTP id S237423AbiBRQJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:08:42 -0500
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9A4CCC4E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:08:25 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:45600)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nL5ny-00Ec5Y-Ia; Fri, 18 Feb 2022 09:08:22 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:50354 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nL5np-000aMm-18; Fri, 18 Feb 2022 09:08:22 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Rik van Riel <riel@surriel.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Chris Mason <clm@fb.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <20220217153620.4607bc28@imladris.surriel.com>
-Date:   Fri, 18 Feb 2022 10:08:05 -0600
-In-Reply-To: <20220217153620.4607bc28@imladris.surriel.com> (Rik van Riel's
-        message of "Thu, 17 Feb 2022 15:36:20 -0500")
-Message-ID: <87iltcf996.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 18 Feb 2022 11:09:01 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710E0E7F71
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645200519;
+        bh=MRyFDIwwAfIPkkcyDVDGrNn3Seh++39CRJKoEQM13Do=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=LgydUFyXTIdP2FiipNrc+J1DbcuwzvkPXfquagYbdc1ln5DfqXkw5egMjFr30ZYfs
+         ZLMvPMzd3njSy3NyADyx9IIHgW4BqzCOojynMF1nevS6PE6s4Tw2A73GTfdQB649b/
+         dXdJt2XT7Cn/I6ZUunYKNIc5LRIaXxqASkG42gcU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYNJq-1npKHk3xhq-00VTA2; Fri, 18
+ Feb 2022 17:08:38 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     "Joel Stanley" <joel@jms.id.au>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Subject: [PATCH RESEND] MAINTAINERS: ARM/WPCM450: Add 'W:' line with wiki
+Date:   Fri, 18 Feb 2022 17:08:34 +0100
+Message-Id: <20220218160834.320200-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nL5np-000aMm-18;;;mid=<87iltcf996.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19gVp8M02CqpqJfjbQxgIt7XAaL04EJRws=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yq/8qcpxD5O6jVZ7ZxGNZgIVSzb8peSicYUoPwvZllsj//xQkZG
+ aD/nn75jFtAQobh9sUQ1IEAeSG6bbNG898SFkXJemb78OOch+VRY3ai50+pQzLQr07Ko0ze
+ MEZRZTffvRlP/FJZ7vPAaLwgDQeQstVdtTOIgUorPsDbmGiGFtM2/NcavOrBNliuC1IVgDo
+ 2SwVsYbOMWyBtVTcF1frw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wzFRBRbt2mk=:6T//iTd/vKppJ+IsHCb7NR
+ JKExUBxxiZK45uFFBMAQ0rV/MdrOmhtGpReONEh1GMg80n6+jIJJeYPYOckuXqYA4o3hVeyTa
+ DzbNPKWOM6a3RrC6DHQftaZAHWzbXzPCg0qJV4kFnWpjtHNW7WHZGnzOXZTeNJkIHT6fHd5AY
+ wR+rIb7foG5UIuWRwM9QGfY7RjcUuAgM8PzT854CU1n4/ZgmNy6f1nRyjZFc8/46P57W5kodc
+ lAiUa+vnYmc9Y4ACeZH1l72KPmNI8v/43EDugzlCYZdOC36T6yq79JArtiUlmiXTPK896DxBC
+ m7mqcfKi9LubWfUfIm/Va3r9OXjY3hpQPs6PgNbxIlWzlBdsrNf6bfV2LDjiXUad+ktgejiK8
+ 8Or9FYwT55QmEuZRg+EdhG2sWFtYhSP7rW8ylwv//vI8NNMzaTbLowjkjQnfTOn1EZ9j7q5ao
+ PfTdvylhbI3n5EjHjbURvo62tyOffI7eyZQdsR48yd2p4vVFykTQG9T/3p8DDKmTUbC7AsMx9
+ 9lwNabPT45SaSZFp/kDEuno/+l70ysQFb6Mm12Z7Or2UrfQm+qQuJ8YoNkzHYoH4sPmSBhavg
+ cHb4IKz1u1ik1Ts6Wo1H0s2uIR2Wi6pdAnodaneXcWGdfjNApD8uRtYi1HMzScmKBNHFxaumP
+ 7RSNF0/I046ZdjS34vRzrFTN/6WgAyvvsXlqh6qa6KYQMwpRj60arHojyvFdd/Fq2YRuGM1F4
+ zMgcmrd21wYkFe5e/shy2B7rz4S4rr1rhY+Rxjed3hFbOoKsbz6FVaaJlBGMjP4ys028Deggr
+ NBlW93FGyTfitKkJp2lsCBHF5IHpVFRpTkR0koEJfjB9GL6wury9KHjRDKYy/IywklYvS6SPw
+ 3Y4McWUiTpjLbd6eEZS6SVXY47I85hK68cFb50pld+6+nV4Jthfo659ql3KMwmR02DHV0jMlU
+ 2NIMhYrbaWdbmW/9ktLGBQKYB46Y2Xe2ou/uVFUifFGU/P6EtFSfcFjPp+gbCGsGhN2x8FbDh
+ JYIpULIC8JWIXoqc/KF/NpeqkZmCXCpecD6ejUMk3GwTIvZB5bkr472i4wC+7zUq+8JgEIh2M
+ UjpkD40joc2L/8=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: ; 
-X-Spam-Combo: *;Rik van Riel <riel@surriel.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 8812 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 11 (0.1%), b_tie_ro: 10 (0.1%), parse: 0.99
-        (0.0%), extract_message_metadata: 3.0 (0.0%), get_uri_detail_list:
-        0.84 (0.0%), tests_pri_-1000: 3.8 (0.0%), tests_pri_-950: 1.29 (0.0%),
-        tests_pri_-900: 1.05 (0.0%), tests_pri_-90: 61 (0.7%), check_bayes: 60
-        (0.7%), b_tokenize: 6 (0.1%), b_tok_get_all: 4.9 (0.1%), b_comp_prob:
-        1.62 (0.0%), b_tok_touch_all: 45 (0.5%), b_finish: 0.80 (0.0%),
-        tests_pri_0: 8701 (98.7%), check_dkim_signature: 1.04 (0.0%),
-        check_dkim_adsp: 2.8 (0.0%), poll_dns_idle: 0.70 (0.0%), tests_pri_10:
-        4.0 (0.0%), tests_pri_500: 15 (0.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH][RFC] ipc,fs: use rcu_work to free struct ipc_namespace
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The wiki is a useful source of 3rd-party information about the SoC,
+mostly hardware documentation.
 
-Maybe I am reading the lifetimes wrong but is there
-any chance the code can just do something like the diff below?
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-AKA have a special version of kern_umount that does the call_rcu?
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1fbbd9fa88d86..39d9e2c6f94ac 100644
+=2D-- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2350,6 +2350,7 @@ ARM/NUVOTON WPCM450 ARCHITECTURE
+ M:	Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Maintained
++W:	https://github.com/neuschaefer/wpcm450/wiki
+ F:	Documentation/devicetree/bindings/*/*wpcm*
+ F:	arch/arm/boot/dts/nuvoton-wpcm450*
+ F:	arch/arm/mach-npcm/wpcm450.c
+=2D-
+2.30.2
 
-Looking at rcu_reclaim_tiny I think this use of mnt_rcu is valid.
-AKA reusing the rcu_head in the rcu callback.
-
-
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 40b994a29e90..7d7aaef1592e 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -4395,6 +4395,22 @@ void kern_unmount(struct vfsmount *mnt)
- }
- EXPORT_SYMBOL(kern_unmount);
- 
-+static void rcu_mntput(struct rcu_head *head)
-+{
-+       struct mount *mnt = container_of(head, struct mount, mnt_rcu);
-+       mntput(&mnt->mnt);
-+}
-+
-+void kern_rcu_unmount(struct vfsmount *mnt)
-+{
-+       /* release long term mount so mount point can be released */
-+       if (!IS_ERR_OR_NULL(mnt)) {
-+               struct mount *m = real_mount(mnt);
-+               m->mnt_ns = NULL;
-+               call_rcu(&m->mnt_rcu, rcu_mntput);
-+       }
-+}
-+
- void kern_unmount_array(struct vfsmount *mnt[], unsigned int num)
- {
-        unsigned int i;
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index 5becca9be867..e54742f82e7d 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -1700,7 +1700,7 @@ void mq_clear_sbinfo(struct ipc_namespace *ns)
- 
- void mq_put_mnt(struct ipc_namespace *ns)
- {
--       kern_unmount(ns->mq_mnt);
-+       kern_rcu_unmount(ns->mq_mnt);
- }
- 
- static int __init init_mqueue_fs(void)
-
-Eric

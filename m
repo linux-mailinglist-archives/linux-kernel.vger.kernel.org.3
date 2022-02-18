@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057BF4BB806
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831084BB809
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234397AbiBRL22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:28:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39964 "EHLO
+        id S234490AbiBRL32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 06:29:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiBRL20 (ORCPT
+        with ESMTP id S230475AbiBRL31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 06:28:26 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0144013F893
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:28:09 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id v4so8320136pjh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:28:09 -0800 (PST)
+        Fri, 18 Feb 2022 06:29:27 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ED727AFF1;
+        Fri, 18 Feb 2022 03:29:10 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id p9so14299050ejd.6;
+        Fri, 18 Feb 2022 03:29:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PK/ubS/6VsrQfiT6fGu4snd5NM7nEqZO9rUfJO/NsiI=;
-        b=n/cvs6OXRCT6uPZ/Yw7GOroXVfh58ytcqRxwlJXMudjxgtROBVythTC/elOjbwNC3u
-         UH9nSTNV9ahF0MqrDCfr+DfIi8+vD4xNJ4qdK5ApItATZ0grW1xWnHAenvlSJ7NIIoj3
-         0FK3cM95L6B3YdgR8Dp2MOJHgdED9iU6z2vgxjXLJxciDepCwVki4Kb96IOBfojKypXA
-         AENFOrP9JnnwZ5pKQThwrwWgTut7f8LDlWtNTk4+Jk8ffzjg8/EXw7SI7nzgXFNsAFaT
-         2FGQy82gtk3SROxpDsW0cDqTFGSozWPPDbNulKfLODuimfsD6DkJA3THtl2LYxKeKM1b
-         T43Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0FW/pU/f32V5+RIYnmQVW0sV/WL9/PnhYjJBJ0552cI=;
+        b=Nc3L9PI1T2qbTsfrZZIfEVMfH4hzjOxTjxf7aqWZogkvqv/pR4A0e5OStS0tk6nKXu
+         nzaYwx484mNgD9RZta2nT8Phada2G6gc1s43Tke1qYwscBLbMeylyydcc3YVxYoHOK4R
+         xKbcStRnnUCAoFlugCuOPxqGGE0dKahfpu2U5/jn9LWSwgGpNECNOAP/xazJyr1xOlky
+         8tp4Y4c1wSMn56L1ISQG9d+Dt2klROs8QrhYRxpCrS+hl9FNxE+CmubStR7Uz/CAXT15
+         j2bOqc00mLUzwsT46UPkq6KvCjuvYeLXrDnIXwcW5YTxKruBzI3sCLfGR0+5TzjcO6py
+         d6tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PK/ubS/6VsrQfiT6fGu4snd5NM7nEqZO9rUfJO/NsiI=;
-        b=BvKrLJB6ZyHC89btdBpjI42RlEu9rt2QTi5vDzfflF9WMrnITuMTxG1O90/0de3C3J
-         T5hZAIHBmAHSIRMuE2y0DV3z2W/LISncgQElZ2wvxSK6cE+hRyWjmhDJoS8nPD9F1vCc
-         hOj5xE90WOD+NlKaMgzvRzP+0MuuGj/J09ybAy4eIO4Aw9B18Kqor/wQWsrIORu+fa4G
-         kOyL+yXSn7P7hSaTx2gJH07D0XpH0Jpn65eET4gicznxRm9wSwDQbTIKdlZDJhT6SARE
-         ZFClmqHYqC/asYgp12FOFG8w0iN6GN1zIRNuPDSYAC7l6qlvkSpi3oJpX5xKdAi1DtO5
-         agRw==
-X-Gm-Message-State: AOAM531SlNGnKRPAkbZnSlsseX02Xoq5O23dW61f8QgS33mZ1MAD+HPu
-        Gm7EHGJYAArfoGCnDyAlkTM=
-X-Google-Smtp-Source: ABdhPJy3Gih8h6AYa+elDZwsK5cx+J5xZ+6EWCZm6XLpJpwnVTm7xeYAKheh5zAXCfPVi6sQ7lPfKw==
-X-Received: by 2002:a17:903:143:b0:14d:44e7:5886 with SMTP id r3-20020a170903014300b0014d44e75886mr7051510plc.148.1645183689452;
-        Fri, 18 Feb 2022 03:28:09 -0800 (PST)
-Received: from baohua-VirtualBox.localdomain (47-72-151-34.dsl.dyn.ihug.co.nz. [47.72.151.34])
-        by smtp.gmail.com with ESMTPSA id ob12sm5222899pjb.5.2022.02.18.03.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 03:28:09 -0800 (PST)
-From:   Barry Song <21cnbao@gmail.com>
-X-Google-Original-From: Barry Song <song.bao.hua@hisilicon.com>
-To:     shankerd@codeaurora.org, will@kernel.org
-Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, marc.zyngier@arm.com,
-        scampbel@codeaurora.org, tglx@linutronix.de,
-        tspeier@codeaurora.org, vikrams@codeaurora.org
-Subject: Re: [PATCH] irqchip/gic-v3: Use wmb() instead of smb_wmb() in gic_raise_softirq()
-Date:   Fri, 18 Feb 2022 19:27:52 +0800
-Message-Id: <20220218112752.9811-1-song.bao.hua@hisilicon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <1517443422-30693-1-git-send-email-shankerd@codeaurora.org>
-References: <1517443422-30693-1-git-send-email-shankerd@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0FW/pU/f32V5+RIYnmQVW0sV/WL9/PnhYjJBJ0552cI=;
+        b=6fzxGUyZWPkecFWkGOOrJYTb+2E1MuDPjq+LRi2nz5jHJXlnV4Dl8OVDEWovVJtR03
+         3S2JxRzH318yoWSxPSqm8x/7utAnsMLfyBSMvS6wlCu6i32X5BPG0ruqNZ5fNj7PDmRE
+         0oKWksbEKExN1smv9EXMDE9ecxeuFbbP94biCPf3gsYUZYFdSJBVjGTh58woqbkIa+G1
+         c57HAxWzH9OLSAr4bdKvt01nofm4CNteWj/kunI6Yp9VIgnsFWBw1XeHu7BAxZ0h8KNp
+         sW9jYAUAsQSakm/OWRKAD8aq+J+qQj/87TJ7IARuTWWEzLE8dbTMX4N49MyiXzAfRpmF
+         23Zg==
+X-Gm-Message-State: AOAM5314juBUlc+U6F4DHcZ0SXDHb+Mu3JsYSLsxtHn4u+jS5AcCoTYt
+        1Z29WeJB6wrtjoQ5RuGdcRYBaoVIy7shLXDvLYo=
+X-Google-Smtp-Source: ABdhPJwGfrdenixaslfGWFGSsI5SffGvoPfA9HDVXTQR/cJyp/DbTfwwF7iXzIUFhK/MD7pjXgHnLKHL84fjvE1TH9Q=
+X-Received: by 2002:a17:906:4116:b0:6cd:1980:5ad0 with SMTP id
+ j22-20020a170906411600b006cd19805ad0mr6390417ejk.595.1645183748929; Fri, 18
+ Feb 2022 03:29:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220217160528.2662513-1-hardware.evs@gmail.com> <AM6PR04MB39761CAFB51985AFC203C535EC379@AM6PR04MB3976.eurprd04.prod.outlook.com>
+In-Reply-To: <AM6PR04MB39761CAFB51985AFC203C535EC379@AM6PR04MB3976.eurprd04.prod.outlook.com>
+From:   EVS Hardware Dpt <hardware.evs@gmail.com>
+Date:   Fri, 18 Feb 2022 12:28:57 +0100
+Message-ID: <CAEDiaShTrWgA75e8x2deHMHF-53LFiusrVHTxP_Jy4gvaLg_9A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] net/fsl: fman: Allow fm_max_frame_sz &
+ rx_extra_headroom config from devicetree.
+To:     Madalin Bucur <madalin.bucur@nxp.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,23 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> --- a/drivers/irqchip/irq-gic-v3.c
-> +++ b/drivers/irqchip/irq-gic-v3.c
-> @@ -688,7 +688,7 @@ static void gic_raise_softirq(const struct cpumask *mask, unsigned int irq)
->  	 * Ensure that stores to Normal memory are visible to the
->  	 * other CPUs before issuing the IPI.
->  	 */
-> -	smp_wmb();
-> +	wmb();
+Hi Madalin, Guys
 
-Sorry for waking up the old thread. isn't dsb(ishst) enough here as we only
-need to guarantee the visibility of data to other CPUs in smp inner domain
-before we send the ipi?
+I know, but it's somewhat difficult to use those parameters on kernel's
+command line.
+I don't think it's wrong to also add that in devicetree.
+No removal, just an added feature.
 
-> 
->  	for_each_cpu(cpu, mask) {
->  		u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu));
+For ethernet node in devicetree, there are a lot of configuration stuff lik=
+e
+max-frame-size to allow configuration of MTU
+(and so potentially enable jumbo) and it's regarded as fine.
 
-Thanks
-Barry
+It's also the goal of this patch. Allow an easy configuration of
+fsl_fm_max_frm from a dts. I added rx_extra_headroom for the sake of
+completeness.
 
+So I plead for this addition because I don't think it's wrong to do that an=
+d
+I consider it's nicer to add an optional devicetree property rather than
+adding a lot of obscure stuff on kernel's command line.
+
+Hope you'll share my point of view.
+
+Have a nice weekend Madalin, Guys,
+Fred.
+
+Le ven. 18 f=C3=A9vr. 2022 =C3=A0 08:23, Madalin Bucur <madalin.bucur@nxp.c=
+om> a =C3=A9crit :
+>
+> > -----Original Message-----
+> > From: Fred Lefranc <hardware.evs@gmail.com>
+> > Subject: [PATCH 1/2] net/fsl: fman: Allow fm_max_frame_sz &
+> > rx_extra_headroom config from devicetree.
+> >
+> > Allow modification of two additional Frame Manager parameters :
+> > - FM Max Frame Size : Can be changed to a value other than 1522
+> >   (ie support Jumbo Frames)
+> > - RX Extra Headroom
+> >
+> > Signed-off-by: Fred Lefranc <hardware.evs@gmail.com>
+>
+> Hi, Fred,
+>
+> there are module params already for both, look into
+>
+> drivers/net/ethernet/freescale/fman/fman.c
+>
+> for fsl_fm_rx_extra_headroom and fsl_fm_max_frm.
+>
+> Regards,
+> Madalin

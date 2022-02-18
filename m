@@ -2,295 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97654BBA45
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C2C4BBA4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbiBRNpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 08:45:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48506 "EHLO
+        id S235841AbiBRNro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 08:47:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiBRNpf (ORCPT
+        with ESMTP id S231408AbiBRNrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 08:45:35 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C763360052
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:45:17 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 623363F32C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:45:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645191916;
-        bh=7FQkiu6wbxuprBukB5/j4MRrTzAJk0o7r1z/REMgVTQ=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ZQd8Hht2TGwh9cGCvi77oHHTmDMhoriD3cEfV26sbiLYaGeg0RjneJWmmczdhe22P
-         eHmkpfWvaLkDSZWrZWm5Xjs7eRHs1VMK79csglSkxyPXXYkdrBGgUBswl2DFPNvFaL
-         +iuSHjcD0JHBh7spWW203xHX7mUfK0LP9sCY1EoJM09gsHU3CoycllPs1eTaUvtYmi
-         NUI04x+xfi5d9phMzqmaeCrchitvpPYw8VhM4juy/myBq3i/XbtW+mxKSAxd3E8ooZ
-         iuZL9X80q4r9EHoq7mRFGZE1FlHR3MbSavYPmtFKva6UBbcAzenyUj+oHuWQ1wpL9U
-         RMPPF6s5PKIUg==
-Received: by mail-ed1-f72.google.com with SMTP id m4-20020a50cc04000000b0040edb9d147cso5543061edi.15
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:45:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7FQkiu6wbxuprBukB5/j4MRrTzAJk0o7r1z/REMgVTQ=;
-        b=FqCRwFyc/Y+dcMHQH2dKIeSbORkz4ySiSKn3v+geZfqzC2TQcbeS725rRwXGTM0T97
-         NO9i+58wT4fmRIwDRf9hIfC3FgRlkro3ZHZVujsFhzJ9ZGyxa0gpRbnHiKVz4Rpcn34j
-         /PAA4vlxVLPoe0QOEJIVDpyUmZMWmePbYywG6E+pA9EczpikGGEbA7b1adYhtT2lM78r
-         5XVFBLGMo1nIEVlKQ4v7xzfN6CiUeabazTUfDrzVikpmLMqq2sgd6gfO0yxm6M+XCVGj
-         hNZazDeKSSUScPp7DVmQzwPZCpXC1Y2j0PqJwnGcgzO015bTwBKZi8iDH8J/RBeLypVk
-         /T9w==
-X-Gm-Message-State: AOAM531C8Fzej2Z5NgZS2cYRBjccTnoQ0TQQlIzmnkG0XJPCTsMdhwt0
-        3hq6vDgLTt/aytyfYk2DWiQkfHjE68hms48B7SKTxZn01LPPEjFCRHAsHOPV/8doDdPhBDf8DRc
-        lyL7C7Nn5kuJxTbZAKSKDNZsGm8bz4UWdChJ4HbPunGmLF8Gi3/o+hzZeqQ==
-X-Received: by 2002:aa7:dd1a:0:b0:410:9bb4:cba4 with SMTP id i26-20020aa7dd1a000000b004109bb4cba4mr8082041edv.364.1645191915661;
-        Fri, 18 Feb 2022 05:45:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxgnWz7d6yoe7A9EYFiJdRIVR6SnoM9DztzsseMO/rWGgfDhGIk+klnwAC90bf3Lek9llItA1fXVM7B3IHs8oQ=
-X-Received: by 2002:aa7:dd1a:0:b0:410:9bb4:cba4 with SMTP id
- i26-20020aa7dd1a000000b004109bb4cba4mr8082028edv.364.1645191915416; Fri, 18
- Feb 2022 05:45:15 -0800 (PST)
+        Fri, 18 Feb 2022 08:47:42 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED057D5DF1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:47:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645192045; x=1676728045;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=tKHTAqY5T2BMl2+XWtmVNCn1hckMQmwghJ9KORUmvUo=;
+  b=R/swFEbsodBH0uLlxPOjNuzegOYE4+0owaPpBrSqC6OBJ6mX4wQpMV88
+   vPvCGXShAFvEDXiU6ZUuxNN7CB96kRnYgO28CwJM7pOEWLW+dLq9CHwQr
+   xXWymX0LQpytjBcH9uqytS7sjoNJAnYW27t62m1Gj23VPdR5QtBl7WsTb
+   9eHGfYEuaOh3Qqm3AU89nKwMwaGEIGnsmPbG+fALDMrnieSij/v/bolEy
+   GhVM5IvgTe21lVWYI0SqVMIz5vV6ieCqTmYFEI0rtmRuzEcOit4YLr605
+   Hf0cg4MkUjnrfXOBTRRxOwkBkdSei++ldLNTA4ye1pCChOXxOLS/h1sr8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="250882736"
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="250882736"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 05:47:25 -0800
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="775292814"
+Received: from ramaling-i9x.iind.intel.com (HELO intel.com) ([10.203.144.108])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 05:47:20 -0800
+Date:   Fri, 18 Feb 2022 19:17:35 +0530
+From:   Ramalingam C <ramalingam.c@intel.com>
+To:     Jordan Justen <jordan.l.justen@intel.com>
+Cc:     Robert Beckett <bob.beckett@collabora.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Simon Ser <contact@emersion.fr>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Kenneth Graunke <kenneth@whitecape.org>,
+        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
+        Slawomir Milczarek <slawomir.milczarek@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 5/5] drm/i915/uapi: document behaviour for DG2 64K
+ support
+Message-ID: <20220218134735.GB3646@intel.com>
+References: <20220208203419.1094362-1-bob.beckett@collabora.com>
+ <20220208203419.1094362-6-bob.beckett@collabora.com>
+ <87ee40ojpc.fsf@jljusten-skl>
 MIME-Version: 1.0
-References: <00000000000038779505d5d8b372@google.com> <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
- <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
- <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
- <a0769218-c84a-a1d3-71e7-aefd40bf54fe@ghiti.fr> <CANp29Y4WMhsE_-VWvNbwq18+qvb1Qc-ES80h_j_G-N_hcAnRAw@mail.gmail.com>
- <CANp29Y4ujmz901aE9oiBDx9dYWHti4-Jw=6Ewtotm6ck6MN9FQ@mail.gmail.com>
- <CACT4Y+ZvStiHLYBOcPDoAJnk8hquXwm9BgjQTv=APwh7AvgEUQ@mail.gmail.com>
- <CANp29Y56Or0V1AG7rzBfV_ZTph2Crg4JKKHiuw1kcGFFxeWqiQ@mail.gmail.com>
- <CANp29Y5+MuhKAzVxzEDb_k9voXmKWrUFx8k4wnW5=2+5enVFVA@mail.gmail.com>
- <CA+zEjCtvaT0YsxxUgnEGM+V4b5sWuCAs3=3J+Xocf580uT3t1g@mail.gmail.com>
- <CA+zEjCs1FEUTcM+pgV+_MZnixSO5c2hexZFxGxuCQWc2ZMQiRg@mail.gmail.com> <CANp29Y4rDSjrfTOxcQqwh+Qm+ocR0v6Oxr7EkFxScf+24M1tNA@mail.gmail.com>
-In-Reply-To: <CANp29Y4rDSjrfTOxcQqwh+Qm+ocR0v6Oxr7EkFxScf+24M1tNA@mail.gmail.com>
-From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Date:   Fri, 18 Feb 2022 14:45:04 +0100
-Message-ID: <CA+zEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag@mail.gmail.com>
-Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        linux-riscv@lists.infradead.org,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87ee40ojpc.fsf@jljusten-skl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aleksandr,
-
-On Thu, Feb 17, 2022 at 6:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
->
-> Hi Alex,
->
-> On Thu, Feb 17, 2022 at 5:53 PM Alexandre Ghiti
-> <alexandre.ghiti@canonical.com> wrote:
+On 2022-02-17 at 20:57:35 -0800, Jordan Justen wrote:
+> Robert Beckett <bob.beckett@collabora.com> writes:
+> 
+> > From: Matthew Auld <matthew.auld@intel.com>
 > >
-> > Aleksandr,
+> > On discrete platforms like DG2, we need to support a minimum page size
+> > of 64K when dealing with device local-memory. This is quite tricky for
+> > various reasons, so try to document the new implicit uapi for this.
 > >
-> > On Wed, Feb 16, 2022 at 5:58 PM Alexandre Ghiti
-> > <alexandre.ghiti@canonical.com> wrote:
-> > >
-> > > First, thank you for working on this.
-> > >
-> > > On Wed, Feb 16, 2022 at 5:17 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > >
-> > > > If I use just defconfig + DEBUG_VIRTUAL, without any KASAN, it begins
-> > > > to boot, but overwhelms me with tons of `virt_to_phys used for
-> > > > non-linear address:` errors.
-> > > >
-> > > > Like that
-> > > >
-> > > > [    2.701271] virt_to_phys used for non-linear address:
-> > > > 00000000b59e31b6 (0xffffffff806c2000)
-> > > > [    2.701727] WARNING: CPU: 0 PID: 1 at arch/riscv/mm/physaddr.c:16
-> > > > __virt_to_phys+0x7e/0x86
-> > > > [    2.702207] Modules linked in:
-> > > > [    2.702393] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W
-> > > >   5.17.0-rc1 #1
-> > > > [    2.702806] Hardware name: riscv-virtio,qemu (DT)
-> > > > [    2.703051] epc : __virt_to_phys+0x7e/0x86
-> > > > [    2.703298]  ra : __virt_to_phys+0x7e/0x86
-> > > > [    2.703547] epc : ffffffff80008448 ra : ffffffff80008448 sp :
-> > > > ffff8f800021bde0
-> > > > [    2.703977]  gp : ffffffff80ed9b30 tp : ffffaf8001230000 t0 :
-> > > > ffffffff80eea56f
-> > > > [    2.704704]  t1 : ffffffff80eea560 t2 : 0000000000000000 s0 :
-> > > > ffff8f800021be00
-> > > > [    2.705153]  s1 : ffffffff806c2000 a0 : 000000000000004f a1 :
-> > > > ffffffff80e723d8
-> > > > [    2.705555]  a2 : 0000000000000010 a3 : fffffffffffffffe a4 :
-> > > > 0000000000000000
-> > > > [    2.706027]  a5 : 0000000000000000 a6 : 0000000000000005 a7 :
-> > > > ffffffffffffffff
-> > > > [    2.706474]  s2 : ffffffff80b80b08 s3 : 00000000000000c2 s4 :
-> > > > ffffffff806c2000
-> > > > [    2.706891]  s5 : ffffffff80edba10 s6 : ffffffff80edb960 s7 :
-> > > > 0000000000000001
-> > > > [    2.707290]  s8 : 00000000000000ff s9 : ffffffff80b80b40 s10:
-> > > > 00000000000000cc
-> > > > [    2.707689]  s11: ffffaf807e1fcf00 t3 : 0000000000000076 t4 :
-> > > > ffffffffffffffff
-> > > > [    2.708092]  t5 : 00000000000001f2 t6 : ffff8f800021bb48
-> > > > [    2.708433] status: 0000000000000120 badaddr: 0000000000000000
-> > > > cause: 0000000000000003
-> > > > [    2.708919] [<ffffffff8011416a>] free_reserved_area+0x72/0x19a
-> > > > [    2.709296] [<ffffffff80003a5a>] free_initmem+0x6c/0x7c
-> > > > [    2.709648] [<ffffffff805f60c8>] kernel_init+0x3a/0x10a
-> > > > [    2.709993] [<ffffffff80002fda>] ret_from_exception+0x0/0xc
-> > > > [    2.710310] ---[ end trace 0000000000000000 ]---
-> > > >
-> > >
-> > > I was able to reproduce this: the first one regarding init_zero_pfn is
-> > > legit but not wrong, I have to check when it was introduced and how to
-> > > fix this.
-> > > Regarding the huge batch that follows, at first sight, I would say
-> > > this is linked to my sv48 patchset but that does not seem important as
-> > > the address is a kernel mapping address so the use of virt_to_phys is
-> > > right.
-> > >
-> > > > On Wed, Feb 16, 2022 at 5:09 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > >
-> > > > > On Wed, Feb 16, 2022 at 12:56 PM Dmitry Vyukov <dvyukov@google.com> wrote:
-> > > > > >
-> > > > > > On Wed, 16 Feb 2022 at 12:47, Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > > >
-> > > > > > > On Wed, Feb 16, 2022 at 11:37 AM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > > > >
-> > > > > > > > Hi Alex,
-> > > > > > > >
-> > > > > > > > On Wed, Feb 16, 2022 at 5:14 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
-> > > > > > > > >
-> > > > > > > > > Hi Dmitry,
-> > > > > > > > >
-> > > > > > > > > On 2/15/22 18:12, Dmitry Vyukov wrote:
-> > > > > > > > > > On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
-> > > > > > > > > > <alexandre.ghiti@canonical.com> wrote:
-> > > > > > > > > >> Hi Aleksandr,
-> > > > > > > > > >>
-> > > > > > > > > >> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > > > > > > >>> Hello,
-> > > > > > > > > >>>
-> > > > > > > > > >>> syzbot has already not been able to fuzz its RISC-V instance for 97
-> > > > > > > > > >> That's a longtime, I'll take a look more regularly.
-> > > > > > > > > >>
-> > > > > > > > > >>> days now because the compiled kernel cannot boot. I bisected the issue
-> > > > > > > > > >>> to the following commit:
-> > > > > > > > > >>>
-> > > > > > > > > >>> commit 54c5639d8f507ebefa814f574cb6f763033a72a5
-> > > > > > > > > >>> Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> > > > > > > > > >>> Date:   Fri Oct 29 06:59:27 2021 +0200
-> > > > > > > > > >>>
-> > > > > > > > > >>>      riscv: Fix asan-stack clang build
-> > > > > > > > > >>>
-> > > > > > > > > >>> Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
-> > > > > > > > > >>> enabled. In the previous message syzbot mentions
-> > > > > > > > > >>> "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
-> > > > > > > > > >>> Binutils for Debian) 2.35.2", but the issue also reproduces finely on
-> > > > > > > > > >>> a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
-> > > > > > > > > >>> 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
-> > > > > > > > > >>> For convenience, I also duplicate the .config file from the bot's
-> > > > > > > > > >>> message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
-> > > > > > > > > >>>
-> > > > > > > > > >>> Can someone with KASAN and RISC-V expertise please take a look?
-> > > > > > > > > >> I'll take a look at that today.
-> > > > > > > > > >>
-> > > > > > > > > >> Thanks for reporting the issue,
-> > > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > I took a quick look, not enough to fix it but I know the issue comes
-> > > > > > > > > from the inline instrumentation, I have no problem with the outline
-> > > > > > > > > instrumentation. I need to find some cycles to work on this, my goal is
-> > > > > > > > > to fix this for 5.17.
-> > > > > > > >
-> > > > > > > > Thanks for the update!
-> > > > > > > >
-> > > > > > > > Can you please share the .config with which you tested the outline
-> > > > > > > > instrumentation?
-> > > > > > > > I updated the syzbot config to use KASAN_OUTLINE instead of KASAN_INLINE,
-> > > > > > > > but it still does not boot :(
-> > > > > > > >
-> > > > > > > > Here's what I used:
-> > > > > > > > https://gist.github.com/a-nogikh/279c85c2d24f47efcc3e865c08844138
-> > > > > > >
-> > > > > > > Update: it doesn't boot with that big config, but boots if I generate
-> > > > > > > a simple one with KASAN_OUTLINE:
-> > > > > > >
-> > > > > > > make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > > > ./scripts/config -e KASAN -e KASAN_OUTLINE
-> > > > > > > make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > > >
-> > > > > > > And it indeed doesn't work if I use KASAN_INLINE.
-> > > > > >
-> > > > > > It may be an issue with code size. Full syzbot config + KASAN + KCOV
-> > > > > > produce hugely massive .text. It may be hitting some limitation in the
-> > > > > > bootloader/kernel bootstrap code.
-> > >
-> > > I took a quick glance and it traps on a KASAN address that is not
-> > > mapped, either because it is too soon or because the mapping failed
-> > > somehow.
-> > >
-> > > I'll definitely dive into that tomorrow, sorry for being slow here and
-> > > thanks again for all your work, that helps a lot.
-> > >
-> > > Thanks,
-> > >
-> > > Alex
-> > >
-> > > > >
-> > > > > I bisected the difference between the config we use on syzbot and the
-> > > > > simple one that was generated like I described above.
-> > > > > Turns out that it's the DEBUG_VIRTUAL config that makes the difference.
-> > > > >
-> > > > > make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > > ./scripts/config -e KASAN -e KASAN_OUTLINE -e DEBUG_VIRTUAL
-> > > > > make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > >
-> > > > > And the resulting kernel does not boot.
-> > > > > My env: the `riscv/fixes` branch, commit
-> > > > > 6df2a016c0c8a3d0933ef33dd192ea6606b115e3, qemu 6.2.0.
+> > v3: fix typos and less emphasis
+> > v2: Fixed suggestions on formatting [Daniel]
 > >
-> > I fixed a few things today: KASAN + SPARSE_VMEMMAP, DEBUG_VIRTUAL and
-> > maybe KASAN  + KCOV.
+> > Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+> > Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+> > Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> > Acked-by: Jordan Justen <jordan.l.justen@intel.com>
+> > Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
+> > Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> > cc: Simon Ser <contact@emersion.fr>
+> > cc: Pekka Paalanen <ppaalanen@gmail.com>
+> > Cc: Jordan Justen <jordan.l.justen@intel.com>
+> > Cc: Kenneth Graunke <kenneth@whitecape.org>
+> > Cc: mesa-dev@lists.freedesktop.org
+> > Cc: Tony Ye <tony.ye@intel.com>
+> > Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
+> > ---
+> >  include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 39 insertions(+), 5 deletions(-)
 > >
-> > With those small fixes, I was able to boot your large dotconfig with
-> > KASAN_OUTLINE, the inline version still fails, this is my next target
-> > :)
-> > I'll push that tomorrow!
->
-> Awesome, thank you very much!
-> Looking forward to finally seeing the instance run :)
+> > diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
+> > index 5e678917da70..77e5e74c32c1 100644
+> > --- a/include/uapi/drm/i915_drm.h
+> > +++ b/include/uapi/drm/i915_drm.h
+> > @@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
+> >  	/**
+> >  	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
+> >  	 * the user with the GTT offset at which this object will be pinned.
+> > +	 *
+> >  	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
+> >  	 * presumed_offset of the object.
+> > +	 *
+> >  	 * During execbuffer2 the kernel populates it with the value of the
+> >  	 * current GTT offset of the object, for future presumed_offset writes.
+> > +	 *
+> > +	 * See struct drm_i915_gem_create_ext for the rules when dealing with
+> > +	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
+> > +	 * minimum page sizes, like DG2.
+> >  	 */
+> >  	__u64 offset;
+> >  
+> > @@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
+> >  	 *
+> >  	 * The (page-aligned) allocated size for the object will be returned.
+> >  	 *
+> > -	 * Note that for some devices we have might have further minimum
+> > -	 * page-size restrictions(larger than 4K), like for device local-memory.
+> > -	 * However in general the final size here should always reflect any
+> > -	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
+> > -	 * extension to place the object in device local-memory.
+> > +	 *
+> > +	 * DG2 64K min page size implications:
+> > +	 *
+> > +	 * On discrete platforms, starting from DG2, we have to contend with GTT
+> > +	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
+> > +	 * objects.  Specifically the hardware only supports 64K or larger GTT
+> > +	 * page sizes for such memory. The kernel will already ensure that all
+> > +	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
+> > +	 * sizes underneath.
+> > +	 *
+> > +	 * Note that the returned size here will always reflect any required
+> > +	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
+> > +	 * such as DG2.
+> > +	 *
+> > +	 * Special DG2 GTT address alignment requirement:
+> > +	 *
+> > +	 * The GTT alignment will also need to be at least 2M for such objects.
+> > +	 *
+> > +	 * Note that due to how the hardware implements 64K GTT page support, we
+> > +	 * have some further complications:
+> > +	 *
+> > +	 *   1) The entire PDE (which covers a 2MB virtual address range), must
+> > +	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
+> > +	 *   PDE is forbidden by the hardware.
+> > +	 *
+> > +	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
+> > +	 *   objects.
+> > +	 *
+> > +	 * To keep things simple for userland, we mandate that any GTT mappings
+> > +	 * must be aligned to and rounded up to 2MB.
+> 
+> Could I get a clarification about this "rounded up" part.
+> 
+> Currently Mesa is aligning the start of each and every buffer VMA to be
+> 2MiB aligned. But, we are *not* taking any steps to "round up" the size
+> of buffers to 2MiB alignment.
+> 
+> Bob's Mesa MR from a while ago,
+> 
+> https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/14599
+> 
+> was trying to add this "round up" size for buffers. We didn't accept
+> this MR because we thought if we have ensured that no other buffer will
+> use the same 2MiB VMA range, then it should not be required.
+> 
+> If what we are doing is ok, then maybe this "round up" language should
+> be dropped? Or, perhaps the "round up" mentioned here isn't implying we
+> must align the size of buffers that we create, and I'm misinterpreting
+> this.
+Jordan,
 
-I sent a patchset which should fix your config with *outline* instrumentation.
+as per my understanding this size rounding up to 2MB is for the VMA mapping,
+not for the buffer size. 
 
-However, as you'll see in the cover letter, I have an issue with
-another KASAN config and if you can take a look at the stacktrace and
-see if that rings a bell, that would be great.
+Even if we drop this rounding up of vma size to 2MB but align the VMA
+start to 2MB address then also this should be fine. Becasue the remaining of the
+last PDE(2MB) will never be used for any other GTT mapping as the
+starting addr wont align to 2MB.
 
-Don't hesitate next time to ping me when the riscv syzbot instance fails :)
+Bob, Is the above understanding is right? if so could we drop the
+requirement of mapping the vma size to 2MB?
 
-Alex
-
-
->
-> --
-> Best Regards,
-> Aleksandr
->
-> >
-> > Thanks again,
-> >
-> > Alex
+Ram
+> 
+> -Jordan
+> 
+> > As this only wastes virtual
+> > +	 * address space and avoids userland having to copy any needlessly
+> > +	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
+> > +	 * is deemed to be a good compromise.
+> >  	 */
+> >  	__u64 size;
+> >  	/**
+> > -- 
+> > 2.25.1

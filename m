@@ -2,87 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FC94BBE53
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06ADE4BBE4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238508AbiBRRZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:25:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49862 "EHLO
+        id S238533AbiBRRZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:25:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238510AbiBRRZY (ORCPT
+        with ESMTP id S238526AbiBRRZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:25:24 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5BE2B6200
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:25:06 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id ay7so3773673oib.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:25:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:cc;
-        bh=AT2vVSkbs5Z2AlPH3lVSxISBm4g33VFLgVGD3BjUf+w=;
-        b=NrtR9+xtE0nen8wtzr6Z9xalBUEY+y3BMYwe1v/JgYpQ4EWoaDpS42MEcqEdN9JKUq
-         yKeIYwqnj0dvneqByhH5LYGyVbzbUEguQ27QoP86fknOJae0imy2lrGMosJV7/7474Ii
-         QBhuwm5l5BzJ3xj4m9TbhA2JPahsGznkgMBVmcZA05jCskaL83OHAqYQSPV6zyV+W5yD
-         I4DqAu/vDW0kHWz+pERFxwwpTSXznIdP/LPJdIPH8HnmeYLB+9KoJkswd7a6/5oozqQZ
-         UWxucd06b3f64yM/E+lIeTOCZBvGZzGTOIhSdBszK3PVhzss3plMpr5Y+62pN0iQn53a
-         ucSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:cc;
-        bh=AT2vVSkbs5Z2AlPH3lVSxISBm4g33VFLgVGD3BjUf+w=;
-        b=W74EWu94ewj33hskRka7v3PL+oMkzQI1o5ZEhB52Qt2E0haVBCAHPKxyv3C79nncIe
-         HDt6ra9vs9stVBfhww0XivyAduvztzR9tXpiHwKJnYhkDGdXkYWaQVHCHsGIQyBHOOcy
-         RyvwcrvrojGXGkVcF4Ldxs7F1JGkV53/fhXBcbZrQBdvM83VgK3Nvh7EkVe5lGIXOKUr
-         /JAgmPg0ucluAxgq6++Jo4cCCxvV/sSRFxlaRPZacb82xmZ7MOZ8p24sCS0GXp5d8zmL
-         g2uYScgw4eubnpGOjCdOdhOO+HpLdQJtktx/q6nFHS3Xe3w3Z4FwU1JzTvsfvs1a74M/
-         eTgQ==
-X-Gm-Message-State: AOAM533eDmj1l7Be5vugezTujCc9sdw0f5Uqnmeh+F1rjpWCZNYOL4ep
-        o+eFxuaaZE/j2bIjRDm1fpkYNPfAwA2SJGShcUU=
-X-Received: by 2002:a05:6808:3084:b0:2d4:c36a:4d27 with SMTP id
- bl4-20020a056808308400b002d4c36a4d27mt213128oib.66.1645205106262; Fri, 18 Feb
- 2022 09:25:06 -0800 (PST)
+        Fri, 18 Feb 2022 12:25:30 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F022B6222
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645205112; x=1676741112;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5f5JDzLplFmvvlqdfeuY85FDd5GMFEphOULZXgLWA20=;
+  b=Cr3ZQ2wUHaQmMGOb9mZHgBamIbODRpmb7PdZl48J07hhrRYgGhiJ7avf
+   qAQsY/fU3hfAFUv3Ijb5BgVVZ+H6hYTAlLr6tY1sMBh1Uat8WJbtqrc/+
+   2fmtKGM9nYscIxealgESfAcOweNgxWtn0CVTnh5G0CrpA6Od3Dghu6x7c
+   0E5GCL6LFVL37qJc2yWgQxQgvCRE7QS+cI4KWtCDc45bHIBxSBjXC8PBE
+   aaeZB0+1m6/NohD7ttY67P7oaoNwEgvkvVjCcZwlc4XAG/L9UYyqajDyU
+   x9vrfkJVnwVYGE0eeTMt30t28J/STUDUD67FzWEMY3gA39Fj6d8SmxZQA
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="238574048"
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="238574048"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 09:25:12 -0800
+X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
+   d="scan'208";a="504067766"
+Received: from rabecker-mobl.amr.corp.intel.com (HELO localhost) ([10.212.87.237])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 09:25:11 -0800
+Date:   Fri, 18 Feb 2022 09:25:11 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 19/44] mm/pkeys: PKS Testing, add pks_mk_*() tests
+Message-ID: <Yg/Wd4We9uinmGYk@iweiny-desk3>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-20-ira.weiny@intel.com>
+ <00b87c5f-b4ed-7593-827c-0e1114b8b456@intel.com>
+ <Yg8v8XPyDTH4O2rr@iweiny-desk3>
+ <311ef2df-dd49-0711-aa8b-fa88a87ff196@intel.com>
 MIME-Version: 1.0
-Received: by 2002:ac9:3d81:0:0:0:0:0 with HTTP; Fri, 18 Feb 2022 09:25:05
- -0800 (PST)
-Reply-To: lisamuna2001@gmail.com
-In-Reply-To: <CAA4TxLDjn13B2rruf_MxysWGf6Qrb07+HYx7VUDeiFJnPHWB-A@mail.gmail.com>
-References: <CAA4TxLB-GPMzqZS53twLjRpPD=FV6nyBch9Ug31kgcwjZKYSbg@mail.gmail.com>
- <CAA4TxLABzWLhedu5LeEqyKtfSzmfA_LKSBkg6ZuppkjYDOs-3g@mail.gmail.com>
- <CAA4TxLCp_wUVhpz8Vh2rF2sU73hauve841SP2uinzWotLydM+g@mail.gmail.com>
- <CAA4TxLBCRwXJZ9h_LotGjdRzZf0SoeT+GUOwSRkB5JtGAV3PGQ@mail.gmail.com>
- <CAA4TxLCRb-V=h7Lr2m3JQRfV4c8ra5md77rj7kh9qsYsHtGUMg@mail.gmail.com>
- <CAA4TxLDLzVe8g9NL54ATHfuBW9U5+n1BY-C5t9kHcx=GKfhdzA@mail.gmail.com>
- <CAA4TxLAoLESq5rAn9B91aVpAXR32AiOH6y8cKnkrTnrkZKra9A@mail.gmail.com>
- <CAA4TxLDG84jPsEOC8edRq5ggdu0gqHkaQk_=OsiygAWJog3g-g@mail.gmail.com>
- <CAA4TxLAoa53CGtXP-TGNAUFfa6pE-TSwmBWEcJwhiFvRFe88Yg@mail.gmail.com>
- <CAA4TxLD4dBU59pCyVRKfTzCkV83AHA_7RAgpQr7MEds1yNowHQ@mail.gmail.com>
- <CAA4TxLBn6KhR2Ci6vAnPqCZi0LenDsDtHSzgdY5i8-329WoR-w@mail.gmail.com>
- <CAA4TxLBSWTRUwxQ9N_CP3azLh=yvV___HporFsBwWUtmJBp2ug@mail.gmail.com>
- <CAA4TxLCcCJiV=XYwTxDOT_6mYBAeJyaRj0+iRbtng3JXCzVwkw@mail.gmail.com>
- <CAA4TxLChV=prOWEi3ZVSEhzXe2BAAOj-mDTk7vDxE-rxGE5pFw@mail.gmail.com>
- <CAA4TxLBHsKpS5F=ruymO6B88H435httx5XWS8PR+RxMs_WJh9Q@mail.gmail.com>
- <CAA4TxLD1s0m4714Jnb8W2uUm2L6+S6t7YfZbzNjwVv-RyW=hKw@mail.gmail.com>
- <CAA4TxLDKTg488SZ6h8njg9VACJO8mK1NJ3cHS7Yh9bfQu5VDug@mail.gmail.com>
- <CAA4TxLDKY=diqROV3Dm5+wXB0BxbxgwBmpF-Afua7yTFip02-Q@mail.gmail.com> <CAA4TxLDjn13B2rruf_MxysWGf6Qrb07+HYx7VUDeiFJnPHWB-A@mail.gmail.com>
-From:   lisa muna <kristengriest098@gmail.com>
-Date:   Fri, 18 Feb 2022 18:25:05 +0100
-Message-ID: <CAA4TxLBvc6YKLOLED8V=Cu7SR=M2UY30dj0sRFYN4Sx-aYEJ-Q@mail.gmail.com>
-Subject: hi
-Cc:     lisamuna2001@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        MISSING_HEADERS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <311ef2df-dd49-0711-aa8b-fa88a87ff196@intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-do you receive my massage
+On Fri, Feb 18, 2022 at 07:28:04AM -0800, Dave Hansen wrote:
+> On 2/17/22 21:34, Ira Weiny wrote:
+> > On Tue, Feb 01, 2022 at 09:45:03AM -0800, Dave Hansen wrote:
+> >> On 1/27/22 09:54, ira.weiny@intel.com wrote:
+> >>>  bool pks_test_callback(void)
+> >>>  {
+> >>> -	return false;
+> >>> +	bool armed = (test_armed_key != 0);
+> >>> +
+> >>> +	if (armed) {
+> >>> +		pks_mk_readwrite(test_armed_key);
+> >>> +		fault_cnt++;
+> >>> +	}
+> >>> +
+> >>> +	return armed;
+> >>> +}
+> >>
+> >> Where's the locking for all this?  I don't think we need anything fancy,
+> >> but is there anything preventing the test from being started from
+> >> multiple threads at the same time?  I think a simple global test mutex
+> >> would probably suffice.
+> > 
+> > Good idea.  Generally I don't see that happening but it is good to be safe.
+> 
+> I'm not sure what you mean.
+> 
+> In the kernel, we always program as if userspace is out to get us.  If
+> userspace can possibly do something to confuse the kernel, it will.  It
+> might be malicious or incompetent, but it will happen.
+> 
+> This isn't really a "good to be safe" kind of thing.  Kernel code must
+> *be* safe.
+
+Yes
+
+> 
+> >> Also, pks_test_callback() needs at least a comment or two about what
+> >> it's doing.
+> > 
+> > The previous patch which adds this call in the fault handler contains the
+> > following comment which is in the final code:
+> > 
+> > /*
+> >  * pks_test_callback() is called by the fault handler to indicate it saw a pkey
+> >  * fault.
+> >  *
+> >  * NOTE: The callback is responsible for clearing any condition which would
+> >  * cause the fault to re-trigger.
+> >  */
+> > 
+> > Would you like more comments within the function?
+> 
+> Ahh, it just wasn't in the context.
+> 
+> Looking at this again, I don't really like the name "callback" is almost
+> always a waste of bytes.  Imagine this was named something like:
+> 
+> 	pks_test_induced_fault();
+> 
+> ... and had a comment like:
+> 
+> /*
+>  * Ensure that the fault handler does not treat
+>  * test-induced faults as actual errors.
+>  */
+
+Ok.  At this point this may go away depending on how I resolve the ability to
+test all the keys.  pks_test_callback() was critical for that feature without
+introducing a bunch of ugly test code in pks-keys.h and pkeys.c.
+
+> 
+> >> Does this work if you have a test armed and then you get an unrelated
+> >> PKS fault on another CPU?  I think this will disarm the test from the
+> >> unrelated thread.
+> > 
+> > This code will detect a false fault.  
+> 
+> That's a bug that's going to get fixed, right? ;)
+
+Yep.  Not sure how at the moment.
+
+Ira

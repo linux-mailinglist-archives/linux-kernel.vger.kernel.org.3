@@ -2,258 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5224BB0F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 05:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 955724BB0FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 05:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiBRExd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 23:53:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51504 "EHLO
+        id S230094AbiBRE54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 23:57:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiBRExa (ORCPT
+        with ESMTP id S229593AbiBRE5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 23:53:30 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A076580
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 20:53:14 -0800 (PST)
+        Thu, 17 Feb 2022 23:57:53 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E46DFABD5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 20:57:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645159994; x=1676695994;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YzhlzeCExCO59G1Z7/40cxwY3nWas+LjB2Rnfev9e1Y=;
-  b=VntZSYcYU0NA0Zlj7EmZs+y/Xr5Ny/SM2wJaTnj+iKVrDsKiunDWYGxs
-   M9fNB5I8DIQ647ZdjDFHUkF/5BnrGGM0+vdCjeU8En8bDttcl5E4hfU1X
-   pZd3wkv5j2i24gLSK9gS6uYPFoxiLpho8hA76VDciNiGJ55wIr6FZAGhD
-   xpajfxxriuX4C7pdr48mRL29sB3avUbnbtvCOYsT00xLyjg9qNEXykKL3
-   q9NKaZKc1Eehk2unOYUYNrSKMIX2HFFTrt0y+Juxy6lJCnimhusEL/Ag6
-   QAtd1WWzD3c7jpgks3AZEp4U5CGZT7tIPsGXN4ETredExP2vGYs+/+77r
+  t=1645160257; x=1676696257;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=l7ftpFnCb/O18IQbZiuP+YjPFB7WGOV4wq64D8YJp0E=;
+  b=iS/beWCRv+byLKkYVXdk+WIQwULKWky8uydPNHpeGzWUSiBCWZk2++ZW
+   24RuUtYWijwR2pbUVyH0EyzPzYqTSvv0nmx9qN6dAqyJ4NeSw8U0IV4fT
+   tVxq9CPlrH9/zWPpd8ZX+NxEW5K8WZRGvvTFSw+geAc2Wdik/+7VyvMy4
+   NsqrO10tKv+dyGMYY399qKKg/MbY4Hj4SARegKA/h3BVhDFd1FYao54zc
+   MybpBgX8lsnDOknogyoQ7b05cm5fT8yq6mqE0F7WciFT3lCGpUpxs/+L8
+   l9UDp/Co2nYGYTyWRq1cWbNm9IelUnYvVXi+5hd3k/uf1HLqBfNwh4LsK
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="238455545"
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="231034416"
 X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="238455545"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 20:53:14 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="231034416"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 20:57:37 -0800
 X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
-   d="scan'208";a="489146834"
-Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Feb 2022 20:53:12 -0800
-Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nKvGa-0000x7-53; Fri, 18 Feb 2022 04:53:12 +0000
-Date:   Fri, 18 Feb 2022 12:53:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.02.16a] BUILD SUCCESS
- a8a211791f8c93c42529755fa12e85cbc3461db7
-Message-ID: <620f2631.4WrSMauQ3QQAQUzc%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="546104238"
+Received: from bmeland-mobl2.amr.corp.intel.com (HELO localhost) ([10.212.148.192])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 20:57:36 -0800
+From:   Jordan Justen <jordan.l.justen@intel.com>
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Matthew Auld <matthew.auld@intel.com>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Simon Ser <contact@emersion.fr>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Kenneth Graunke <kenneth@whitecape.org>,
+        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
+        Slawomir Milczarek <slawomir.milczarek@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 5/5] drm/i915/uapi: document behaviour for DG2 64K
+ support
+In-Reply-To: <20220208203419.1094362-6-bob.beckett@collabora.com>
+References: <20220208203419.1094362-1-bob.beckett@collabora.com>
+ <20220208203419.1094362-6-bob.beckett@collabora.com>
+Date:   Thu, 17 Feb 2022 20:57:35 -0800
+Message-ID: <87ee40ojpc.fsf@jljusten-skl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.02.16a
-branch HEAD: a8a211791f8c93c42529755fa12e85cbc3461db7  rcu/nocb: Initialize nocb kthreads only for boot CPU prior SMP initialization
+Robert Beckett <bob.beckett@collabora.com> writes:
 
-elapsed time: 1606m
+> From: Matthew Auld <matthew.auld@intel.com>
+>
+> On discrete platforms like DG2, we need to support a minimum page size
+> of 64K when dealing with device local-memory. This is quite tricky for
+> various reasons, so try to document the new implicit uapi for this.
+>
+> v3: fix typos and less emphasis
+> v2: Fixed suggestions on formatting [Daniel]
+>
+> Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> Acked-by: Jordan Justen <jordan.l.justen@intel.com>
+> Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
+> Reviewed-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
+> cc: Simon Ser <contact@emersion.fr>
+> cc: Pekka Paalanen <ppaalanen@gmail.com>
+> Cc: Jordan Justen <jordan.l.justen@intel.com>
+> Cc: Kenneth Graunke <kenneth@whitecape.org>
+> Cc: mesa-dev@lists.freedesktop.org
+> Cc: Tony Ye <tony.ye@intel.com>
+> Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
+> ---
+>  include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
+>  1 file changed, 39 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
+> index 5e678917da70..77e5e74c32c1 100644
+> --- a/include/uapi/drm/i915_drm.h
+> +++ b/include/uapi/drm/i915_drm.h
+> @@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
+>  	/**
+>  	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
+>  	 * the user with the GTT offset at which this object will be pinned.
+> +	 *
+>  	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
+>  	 * presumed_offset of the object.
+> +	 *
+>  	 * During execbuffer2 the kernel populates it with the value of the
+>  	 * current GTT offset of the object, for future presumed_offset writes.
+> +	 *
+> +	 * See struct drm_i915_gem_create_ext for the rules when dealing with
+> +	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
+> +	 * minimum page sizes, like DG2.
+>  	 */
+>  	__u64 offset;
+>=20=20
+> @@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
+>  	 *
+>  	 * The (page-aligned) allocated size for the object will be returned.
+>  	 *
+> -	 * Note that for some devices we have might have further minimum
+> -	 * page-size restrictions(larger than 4K), like for device local-memory.
+> -	 * However in general the final size here should always reflect any
+> -	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REG=
+IONS
+> -	 * extension to place the object in device local-memory.
+> +	 *
+> +	 * DG2 64K min page size implications:
+> +	 *
+> +	 * On discrete platforms, starting from DG2, we have to contend with GTT
+> +	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
+> +	 * objects.  Specifically the hardware only supports 64K or larger GTT
+> +	 * page sizes for such memory. The kernel will already ensure that all
+> +	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
+> +	 * sizes underneath.
+> +	 *
+> +	 * Note that the returned size here will always reflect any required
+> +	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
+> +	 * such as DG2.
+> +	 *
+> +	 * Special DG2 GTT address alignment requirement:
+> +	 *
+> +	 * The GTT alignment will also need to be at least 2M for such objects.
+> +	 *
+> +	 * Note that due to how the hardware implements 64K GTT page support, we
+> +	 * have some further complications:
+> +	 *
+> +	 *   1) The entire PDE (which covers a 2MB virtual address range), must
+> +	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
+> +	 *   PDE is forbidden by the hardware.
+> +	 *
+> +	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
+> +	 *   objects.
+> +	 *
+> +	 * To keep things simple for userland, we mandate that any GTT mappings
+> +	 * must be aligned to and rounded up to 2MB.
 
-configs tested: 173
-configs skipped: 4
+Could I get a clarification about this "rounded up" part.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Currently Mesa is aligning the start of each and every buffer VMA to be
+2MiB aligned. But, we are *not* taking any steps to "round up" the size
+of buffers to 2MiB alignment.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-arm                        cerfcube_defconfig
-arm                          exynos_defconfig
-arc                          axs103_defconfig
-arm                           corgi_defconfig
-powerpc                      ep88xc_defconfig
-sh                ecovec24-romimage_defconfig
-sh                        dreamcast_defconfig
-powerpc                 mpc85xx_cds_defconfig
-xtensa                generic_kc705_defconfig
-arc                      axs103_smp_defconfig
-powerpc                       maple_defconfig
-sh                         microdev_defconfig
-mips                  decstation_64_defconfig
-arc                                 defconfig
-m68k                          hp300_defconfig
-powerpc                      cm5200_defconfig
-powerpc                      makalu_defconfig
-parisc                generic-32bit_defconfig
-m68k                            mac_defconfig
-ia64                         bigsur_defconfig
-powerpc                        cell_defconfig
-riscv                            allyesconfig
-xtensa                  nommu_kc705_defconfig
-xtensa                    xip_kc705_defconfig
-arc                          axs101_defconfig
-arc                        vdk_hs38_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc64                           defconfig
-mips                            ar7_defconfig
-arc                           tb10x_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                       eiger_defconfig
-h8300                               defconfig
-microblaze                      mmu_defconfig
-sh                 kfr2r09-romimage_defconfig
-openrisc                            defconfig
-m68k                       m5475evb_defconfig
-arm                        spear6xx_defconfig
-arm                            lart_defconfig
-sh                            titan_defconfig
-h8300                            alldefconfig
-powerpc                       ppc64_defconfig
-arm                        keystone_defconfig
-powerpc                      pasemi_defconfig
-x86_64                           alldefconfig
-nios2                            alldefconfig
-xtensa                  audio_kc705_defconfig
-sh                  sh7785lcr_32bit_defconfig
-m68k                          sun3x_defconfig
-sh                           se7619_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                         mpc30x_defconfig
-sh                        sh7785lcr_defconfig
-arm                         nhk8815_defconfig
-arm                             pxa_defconfig
-powerpc                    klondike_defconfig
-sh                               j2_defconfig
-mips                           gcw0_defconfig
-openrisc                  or1klitex_defconfig
-mips                    maltaup_xpa_defconfig
-arm                           viper_defconfig
-sh                            shmin_defconfig
-powerpc                 mpc8540_ads_defconfig
-sh                     sh7710voipgw_defconfig
-powerpc64                        alldefconfig
-m68k                            q40_defconfig
-arm                           h5000_defconfig
-s390                       zfcpdump_defconfig
-mips                           jazz_defconfig
-sh                            migor_defconfig
-arm                          pxa3xx_defconfig
-ia64                          tiger_defconfig
-m68k                           sun3_defconfig
-sh                   sh7724_generic_defconfig
-sh                           se7712_defconfig
-m68k                       m5208evb_defconfig
-arm                             ezx_defconfig
-sparc                       sparc32_defconfig
-microblaze                          defconfig
-arm                  randconfig-c002-20220217
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+Bob's Mesa MR from a while ago,
 
-clang tested configs:
-riscv                randconfig-c006-20220217
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220217
-arm                  randconfig-c002-20220217
-i386                          randconfig-c001
-mips                 randconfig-c004-20220217
-mips                          malta_defconfig
-arm                     davinci_all_defconfig
-mips                        workpad_defconfig
-mips                     loongson2k_defconfig
-powerpc                 mpc8315_rdb_defconfig
-x86_64                           allyesconfig
-powerpc                 mpc832x_mds_defconfig
-arm                        spear3xx_defconfig
-mips                      malta_kvm_defconfig
-mips                           mtx1_defconfig
-arm                     am200epdkit_defconfig
-arm                      tct_hammer_defconfig
-riscv                            alldefconfig
-powerpc                        fsp2_defconfig
-arm                        vexpress_defconfig
-arm                        multi_v5_defconfig
-powerpc                     tqm5200_defconfig
-arm                        magician_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220217
-hexagon              randconfig-r041-20220217
-riscv                randconfig-r042-20220217
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/14599
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+was trying to add this "round up" size for buffers. We didn't accept
+this MR because we thought if we have ensured that no other buffer will
+use the same 2MiB VMA range, then it should not be required.
+
+If what we are doing is ok, then maybe this "round up" language should
+be dropped? Or, perhaps the "round up" mentioned here isn't implying we
+must align the size of buffers that we create, and I'm misinterpreting
+this.
+
+-Jordan
+
+> As this only wastes virtual
+> +	 * address space and avoids userland having to copy any needlessly
+> +	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
+> +	 * is deemed to be a good compromise.
+>  	 */
+>  	__u64 size;
+>  	/**
+> --=20
+> 2.25.1

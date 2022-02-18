@@ -2,60 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489814BB6C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C26F4BB6CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbiBRKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:23:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52776 "EHLO
+        id S234073AbiBRKZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:25:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiBRKXX (ORCPT
+        with ESMTP id S234050AbiBRKY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:23:23 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424B52B1AA1;
-        Fri, 18 Feb 2022 02:23:05 -0800 (PST)
+        Fri, 18 Feb 2022 05:24:59 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052AF2B1AA4;
+        Fri, 18 Feb 2022 02:24:42 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id vz16so14040155ejb.0;
+        Fri, 18 Feb 2022 02:24:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1645179787;
-  x=1676715787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0t0ig3q6Sp2mvoezO0JaagGhH+DGXuT456KDBH79FZ0=;
-  b=pHI6jFzvxoi0j3ne7wO34lrazDpzu6REhaVP5x9nJ/IpQKNqL3FS4GKH
-   rf/wpDyUIngYpdO87FBPTLInPxtDaQO/tCBvjvr7L0/JxybMwot6yZqJa
-   KmhKeD3ttWqwp5B0BSf/ip0MKs8h1l1yU6/Z/SZlngGwHVjwmQ+SrYJd6
-   uKfIZ9wdMECVwEmXyL3lBipUF6zMQC1KZdm1o7h/RBynLF5iH3HFP+dlS
-   UZiUFrZ+MPLmYGI+x3DEqLhBf3DyQVoPZ3b3Bwe6U17rxSi624TbfVLW+
-   uE5Ca0jqMRc1VuoWPj4MMZLfpLkFvuKJGsMlJiSEJG0Fti4ytTI6fBfC3
-   g==;
-Date:   Fri, 18 Feb 2022 11:23:03 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        kernel <kernel@axis.com>, Lars Persson <Lars.Persson@axis.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: stmmac: Enable NAPI before interrupts go live
-Message-ID: <20220218102303.GA21458@axis.com>
-References: <20220217145527.2696444-1-vincent.whitchurch@axis.com>
- <20220217203604.39e318d0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uhDLgzXXHRnN4GC26esSMVFkTXLX2SeGv1b6vABa0YE=;
+        b=ldN4nYeuTFyQKl87jS97MC8XjudyI6kITPvRqrl6d+yl2KTm1tD+boxrlg93b8TgxD
+         z19LW8ITaX4xanNTTI3AKJ6zVndsm2drHz8WbJ39ZWXSbakcI+BVqdxr39LhSQafLWzt
+         UU2ryIVzOgqna+/SZ341V4efGFHUHZbejKJ7tMFffCaNkSE+nqAYhCuDp0laNizGvnUN
+         BqicdFVnnywHLgRJQH03KE/jHonEyREg8rLeLD9SfehCoune5DCJcUz0gZwArMrldIPt
+         mXntQOyV+3DiEke5yRy0Of2JP6LTpdvh0zmng7yXlgmqc8VPttf5mKxgiME7fU4BrBVH
+         j9DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uhDLgzXXHRnN4GC26esSMVFkTXLX2SeGv1b6vABa0YE=;
+        b=a2qwUQ5A52qmZNm6eaAv/z4t9en+7zJRm+KttEoJVRpowH2brC/calSQWL+z8dlHV+
+         9rZnElKZp2zLvcBrGiGKnEeR2Wadf9KQMWhx0VU4EnE3pxKoFY7LKjqpVH6bUyKwcQpb
+         X1ceHfELsqISIOcTWcOQCsMNs5ZtfQq3a7JeIuNBbVujvqE5W8b58Stov9AtoRCFAqML
+         GsXyZOE4HefOCnMIDRfGt9eZYy/PYUSBQuW70V8sDOnbeWeKU/9IVVWgh+bzQVIxtypN
+         yv0Ck1ZgCW2Whuy318kKKhSkP74rq0xQDEl4qpbjyY9FxtMKy4w+r8hbh35rUPm79STd
+         A4eg==
+X-Gm-Message-State: AOAM5326b5Igp58/HhZS6I2vcsQpHYf/9ADZpMhmVc+JQm+upxfQfZOJ
+        KE44HUBGIchs7A8op5WErUw=
+X-Google-Smtp-Source: ABdhPJzsb3g2tHwvNZSdHlpfMu3w4VmnuROCCvCsgS1xN/yd+M7MTZTbID+81YehUvRHQYqPYW1s5g==
+X-Received: by 2002:a17:907:78d1:b0:6ce:70b4:f6f9 with SMTP id kv17-20020a17090778d100b006ce70b4f6f9mr6080601ejc.196.1645179880406;
+        Fri, 18 Feb 2022 02:24:40 -0800 (PST)
+Received: from [192.168.178.21] (p57b0bff8.dip0.t-ipconnect.de. [87.176.191.248])
+        by smtp.gmail.com with ESMTPSA id g3sm2102719ejz.180.2022.02.18.02.24.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 02:24:39 -0800 (PST)
+Message-ID: <47c3a681-379e-18d4-86da-c48721081911@gmail.com>
+Date:   Fri, 18 Feb 2022 11:24:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220217203604.39e318d0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/amdgpu: check vm bo eviction valuable at last
+Content-Language: en-US
+To:     Qiang Yu <yuq825@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linaro-mm-sig@lists.linaro.org, Qiang Yu <qiang.yu@amd.com>,
+        amd-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org
+References: <20220217090440.4468-1-qiang.yu@amd.com>
+ <5d3fdd2c-e74a-49f4-2b28-32c06483236f@amd.com>
+ <CAKGbVbtLTBJPF5eTu4rABUTBa8eqjQvqjo1AEUrzgPgYgCREuA@mail.gmail.com>
+ <dac70c05-e712-d2e3-2267-278380895f1e@amd.com>
+ <CAKGbVbvtLbDiKrX80-dMnipdLkTE+FP=g_mx37e12fuMtA1Y4Q@mail.gmail.com>
+ <ca27a9c6-f390-a938-dd66-ac23f3b44dc4@amd.com>
+ <CAKGbVbv4UFCybS_OFj5UkDgevbrB5qe3pv+0nHv9WdefYhy6Ww@mail.gmail.com>
+ <6711073b-8771-5750-33f7-b72333b411c6@amd.com>
+ <CAKGbVbvR+msXjrsXmDM8QTmsCP03hL5-q5CTJBYu4mm=NQd01A@mail.gmail.com>
+ <a11b7073-6597-8e87-b724-33acab32e791@gmail.com>
+ <CAKGbVbuJ-QdeoMTg=_O=1x5A5tbqZftsjt8aCCoVkAekci0USA@mail.gmail.com>
+ <d830bb82-63ea-2de6-6d10-3a401ac0dcf0@amd.com>
+ <CAKGbVbtorRius+Sq1_3SPUF3JzA00U747noSGhx7eP8Vn1rSDg@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <CAKGbVbtorRius+Sq1_3SPUF3JzA00U747noSGhx7eP8Vn1rSDg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,135 +94,233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 05:36:04AM +0100, Jakub Kicinski wrote:
-> On Thu, 17 Feb 2022 15:55:26 +0100 Vincent Whitchurch wrote:
-> > The stmmac_open function has a race window between enabling the RX
-> > path and its interrupt to the point where napi_enabled is called.
-> > 
-> > A chatty network with plenty of broadcast/multicast traffic has the
-> > potential to completely fill the RX ring before the interrupt handler
-> > is installed. In this scenario the single interrupt taken will find
-> > napi disabled and the RX ring will not be processed. No further RX
-> > interrupt will be delivered because the ring is full.
-> > 
-> > The RX stall could eventually clear because the TX path will trigger a
-> > DMA interrupt once the tx_coal_frames threshold is reached and then
-> > NAPI becomes scheduled.
-> 
-> LGTM, although now the ndo_open and ndo_stop paths are not symmetrical.
-> Is there no way to mask the IRQs so that they don't fire immediately?
+Am 18.02.22 um 11:16 schrieb Qiang Yu:
+> [SNIP]
+>>> If amdgpu_vm_ready() use evicting flag, it's still not equivalent to check
+>>> vm idle: true -> vm idle, false -> vm may be idle or busy.
+>> Yeah, but why should that be relevant?
+>>
+>> The amdgpu_vm_ready() return if we can do page table updates or not. If
+>> the VM is idle or not is only relevant for eviction.
+>>
+>> In other words any CS or page table update makes the VM busy, but that
+>> only affects if the VM can be evicted or not.
+>>
+> My point is: we can't use amdgpu_vm_ready() to replace vm_is_busy(), so
+> currently we update vm even when vm is busy. So why not use:
+> if (!amdgpu_vm_ready() || vm_is_busy()) return;
+> in amdgpu_gem_va_update_vm(), as you mentioned we prefer to not
+> update vm when it's idle.
 
-The initial enabling of the DMA irqs is done as part of the
-->init_chan() callback inside the various variants.  We could use the
-->disable_dma_irq() callback to to disable the DMA irqs and only enable
-them at the end of the init sequence with a stmmac_enable_all_dma_irq().
+Because updating the VM while it is busy is perfectly fine, we do it all 
+the time.
 
-This avoids having to change all the variants and there should be no
-problem in calling ->disable_dma_irq() after the interrupts have been
-momentarily enabled in ->stmmac_init_chan() since the DMA is reset
-before these calls and not started until later.
+We should just not update it when it is already idle and was considered 
+for eviction. In this situation it makes most of the time sense to keep 
+it idle and postpone the update till the next command submission.
 
-Note that I haven't added a symmetrical stmmac_disable_all_dma_irq() at
-the top of stmmac_release() before the NAPI disable since I can't see
-that it would do any good there since NAPI can re-enable DMA irqs.
+>>>>> Then we can keep the evicting flag accurate (after solving your
+>>>>> concern for this patch that eviction may fail latter by further delay
+>>>>> the flag update after eviction success).
+>>>> That won't work. See we need to mark the VM as evicted before we
+>>>> actually evict them because otherwise somebody could use the VM in
+>>>> parallel and add another fence to it.
+>>>>
+>>> I see, make this too accurate should cost too much like holding the
+>>> eviction_lock when eviction. But just delay it in
+>>> amdgpu_ttm_bo_eviction_valuable()
+>>> could avoid most false positive case.
+>> Partially correct. Another fundamental problem is that we can't hold the
+>> eviction lock because that would result in lock inversion and potential
+>> deadlock.
+>>
+>> We could set the flag later on, but as I said before that when we set
+>> the evicted flag when the VM is already idle is a desired effect.
+>>
+> As above, this confuse me as we can explicitly check vm idle when
+> user update vm, why bother to embed it in evicting flag implicitly?
 
-> More common flow (IMO) would be:
->  - request irq
->  - mask irq
->  - populate rings
->  - start dma
->  - enable napi
->  - unmask irq
+Well as I said it's irrelevant for the update if the VM is idle or not.
 
-I don't think this driver has ever followed this exact sequence, but the
-request_irq() was done before the "start dma" and the "enable napi"
-before the commit mentioned in the Fixes: tag.  But that's quite a while
-ago and the driver has changed a lot since then and gotten support for a
-lot of variants and features which I can't test, so I didn't dare to
-rewrite the entire init sequence.
+To summarize the rules once more:
+1. When VM page tables are used by CS or page tables updates it is 
+considered busy, e.g. not idle.
 
-> Other than the difference in flow between open/stop there may also be
-> some unpleasantness around restarting tx queues twice with the patch
-> as is.
+2. When we want to evict a VM it must be idle. As soon as we considered 
+this we should set the evicted flag to make sure to keep it idle as much 
+as possible.
 
-New patch below, it works for me (though I don't have hardware with
-working suspend/resume support).  I will send it out as a v2 if there
-are no objections.  Thanks.
+3. When we want to update the page tables we just need to check if the 
+VM is idle or not.
 
-8<-----
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 6708ca2aa4f7..43978558d6c0 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2260,6 +2260,23 @@ static void stmmac_stop_tx_dma(struct stmmac_priv *priv, u32 chan)
- 	stmmac_stop_tx(priv, priv->ioaddr, chan);
- }
- 
-+static void stmmac_enable_all_dma_irq(struct stmmac_priv *priv)
-+{
-+	u32 rx_channels_count = priv->plat->rx_queues_to_use;
-+	u32 tx_channels_count = priv->plat->tx_queues_to_use;
-+	u32 dma_csr_ch = max(rx_channels_count, tx_channels_count);
-+	u32 chan;
-+
-+	for (chan = 0; chan < dma_csr_ch; chan++) {
-+		struct stmmac_channel *ch = &priv->channel[chan];
-+		unsigned long flags;
-+
-+		spin_lock_irqsave(&ch->lock, flags);
-+		stmmac_enable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-+		spin_unlock_irqrestore(&ch->lock, flags);
-+	}
-+}
-+
- /**
-  * stmmac_start_all_dma - start all RX and TX DMA channels
-  * @priv: driver private structure
-@@ -2902,8 +2919,10 @@ static int stmmac_init_dma_engine(struct stmmac_priv *priv)
- 		stmmac_axi(priv, priv->ioaddr, priv->plat->axi);
- 
- 	/* DMA CSR Channel configuration */
--	for (chan = 0; chan < dma_csr_ch; chan++)
-+	for (chan = 0; chan < dma_csr_ch; chan++) {
- 		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
-+		stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-+	}
- 
- 	/* DMA RX Channel Configuration */
- 	for (chan = 0; chan < rx_channels_count; chan++) {
-@@ -3759,6 +3778,7 @@ static int stmmac_open(struct net_device *dev)
- 
- 	stmmac_enable_all_queues(priv);
- 	netif_tx_start_all_queues(priv->dev);
-+	stmmac_enable_all_dma_irq(priv);
- 
- 	return 0;
- 
-@@ -6508,8 +6528,10 @@ int stmmac_xdp_open(struct net_device *dev)
- 	}
- 
- 	/* DMA CSR Channel configuration */
--	for (chan = 0; chan < dma_csr_ch; chan++)
-+	for (chan = 0; chan < dma_csr_ch; chan++) {
- 		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
-+		stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-+	}
- 
- 	/* Adjust Split header */
- 	sph_en = (priv->hw->rx_csum > 0) && priv->sph;
-@@ -6570,6 +6592,7 @@ int stmmac_xdp_open(struct net_device *dev)
- 	stmmac_enable_all_queues(priv);
- 	netif_carrier_on(dev);
- 	netif_tx_start_all_queues(dev);
-+	stmmac_enable_all_dma_irq(priv);
- 
- 	return 0;
- 
-@@ -7447,6 +7470,7 @@ int stmmac_resume(struct device *dev)
- 	stmmac_restore_hw_vlan_rx_fltr(priv, ndev, priv->hw);
- 
- 	stmmac_enable_all_queues(priv);
-+	stmmac_enable_all_dma_irq(priv);
- 
- 	mutex_unlock(&priv->lock);
- 	rtnl_unlock();
+4. When a CS happens we don't have another chance and make the VM busy 
+again. And do all postponed page table updates.
+
+Regards,
+Christian.
+
+>
+> Check vm idle need to hold resv lock. Read your patch for adding
+> evicting flag is to update vm without resv lock. But user vm ops in
+> amdgpu_gem_va_update_vm() do hold the resv lock, so the difference
+> happens when calling amdgpu_vm_bo_update_mapping() from
+> svm_range_(un)map_to_gpu(). So embed vm idle in evicting flag
+> is for svm_range_(un)map_to_gpu() also do nothing when vm idle?
+
+
+
+>
+> Regards,
+> Qiang
+>
+>> Regards,
+>> Christian.
+>>
+>>> Regards,
+>>> Qiang
+>>>
+>>>> Regards,
+>>>> Christian.
+>>>>
+>>>>> Regards,
+>>>>> Qiang
+>>>>>
+>>>>>
+>>>>>> Regards,
+>>>>>> Christian.
+>>>>>>
+>>>>>>> Regards,
+>>>>>>> Qiang
+>>>>>>>
+>>>>>>>> Regards,
+>>>>>>>> Christian.
+>>>>>>>>
+>>>>>>>>> Regards,
+>>>>>>>>> Qiang
+>>>>>>>>>
+>>>>>>>>>> Regards,
+>>>>>>>>>> Christian.
+>>>>>>>>>>
+>>>>>>>>>>> Regards,
+>>>>>>>>>>> Qiang
+>>>>>>>>>>>
+>>>>>>>>>>>> What we should rather do is to fix amdgpu_vm_ready() to take a look at
+>>>>>>>>>>>> the flag instead of the linked list.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Regards,
+>>>>>>>>>>>> Christian.
+>>>>>>>>>>>>
+>>>>>>>>>>>>> Signed-off-by: Qiang Yu <qiang.yu@amd.com>
+>>>>>>>>>>>>> ---
+>>>>>>>>>>>>>         drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 85 ++++++++++++++-----------
+>>>>>>>>>>>>>         1 file changed, 47 insertions(+), 38 deletions(-)
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>>>>>>>> index 5a32ee66d8c8..88a27911054f 100644
+>>>>>>>>>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>>>>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>>>>>>>> @@ -1306,45 +1306,11 @@ uint64_t amdgpu_ttm_tt_pte_flags(struct amdgpu_device *adev, struct ttm_tt *ttm,
+>>>>>>>>>>>>>             return flags;
+>>>>>>>>>>>>>         }
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> -/*
+>>>>>>>>>>>>> - * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
+>>>>>>>>>>>>> - * object.
+>>>>>>>>>>>>> - *
+>>>>>>>>>>>>> - * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
+>>>>>>>>>>>>> - * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
+>>>>>>>>>>>>> - * it can find space for a new object and by ttm_bo_force_list_clean() which is
+>>>>>>>>>>>>> - * used to clean out a memory space.
+>>>>>>>>>>>>> - */
+>>>>>>>>>>>>> -static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>>>>>>> -                                         const struct ttm_place *place)
+>>>>>>>>>>>>> +static bool amdgpu_ttm_mem_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>>>>>>> +                                          const struct ttm_place *place)
+>>>>>>>>>>>>>         {
+>>>>>>>>>>>>>             unsigned long num_pages = bo->resource->num_pages;
+>>>>>>>>>>>>>             struct amdgpu_res_cursor cursor;
+>>>>>>>>>>>>> -     struct dma_resv_list *flist;
+>>>>>>>>>>>>> -     struct dma_fence *f;
+>>>>>>>>>>>>> -     int i;
+>>>>>>>>>>>>> -
+>>>>>>>>>>>>> -     /* Swapout? */
+>>>>>>>>>>>>> -     if (bo->resource->mem_type == TTM_PL_SYSTEM)
+>>>>>>>>>>>>> -             return true;
+>>>>>>>>>>>>> -
+>>>>>>>>>>>>> -     if (bo->type == ttm_bo_type_kernel &&
+>>>>>>>>>>>>> -         !amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo)))
+>>>>>>>>>>>>> -             return false;
+>>>>>>>>>>>>> -
+>>>>>>>>>>>>> -     /* If bo is a KFD BO, check if the bo belongs to the current process.
+>>>>>>>>>>>>> -      * If true, then return false as any KFD process needs all its BOs to
+>>>>>>>>>>>>> -      * be resident to run successfully
+>>>>>>>>>>>>> -      */
+>>>>>>>>>>>>> -     flist = dma_resv_shared_list(bo->base.resv);
+>>>>>>>>>>>>> -     if (flist) {
+>>>>>>>>>>>>> -             for (i = 0; i < flist->shared_count; ++i) {
+>>>>>>>>>>>>> -                     f = rcu_dereference_protected(flist->shared[i],
+>>>>>>>>>>>>> -                             dma_resv_held(bo->base.resv));
+>>>>>>>>>>>>> -                     if (amdkfd_fence_check_mm(f, current->mm))
+>>>>>>>>>>>>> -                             return false;
+>>>>>>>>>>>>> -             }
+>>>>>>>>>>>>> -     }
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>             switch (bo->resource->mem_type) {
+>>>>>>>>>>>>>             case AMDGPU_PL_PREEMPT:
+>>>>>>>>>>>>> @@ -1377,10 +1343,53 @@ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>>>>>>>                     return false;
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>             default:
+>>>>>>>>>>>>> -             break;
+>>>>>>>>>>>>> +             return ttm_bo_eviction_valuable(bo, place);
+>>>>>>>>>>>>>             }
+>>>>>>>>>>>>> +}
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> -     return ttm_bo_eviction_valuable(bo, place);
+>>>>>>>>>>>>> +/*
+>>>>>>>>>>>>> + * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
+>>>>>>>>>>>>> + * object.
+>>>>>>>>>>>>> + *
+>>>>>>>>>>>>> + * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
+>>>>>>>>>>>>> + * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
+>>>>>>>>>>>>> + * it can find space for a new object and by ttm_bo_force_list_clean() which is
+>>>>>>>>>>>>> + * used to clean out a memory space.
+>>>>>>>>>>>>> + */
+>>>>>>>>>>>>> +static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>>>>>>> +                                         const struct ttm_place *place)
+>>>>>>>>>>>>> +{
+>>>>>>>>>>>>> +     struct dma_resv_list *flist;
+>>>>>>>>>>>>> +     struct dma_fence *f;
+>>>>>>>>>>>>> +     int i;
+>>>>>>>>>>>>> +
+>>>>>>>>>>>>> +     /* Swapout? */
+>>>>>>>>>>>>> +     if (bo->resource->mem_type == TTM_PL_SYSTEM)
+>>>>>>>>>>>>> +             return true;
+>>>>>>>>>>>>> +
+>>>>>>>>>>>>> +     /* If bo is a KFD BO, check if the bo belongs to the current process.
+>>>>>>>>>>>>> +      * If true, then return false as any KFD process needs all its BOs to
+>>>>>>>>>>>>> +      * be resident to run successfully
+>>>>>>>>>>>>> +      */
+>>>>>>>>>>>>> +     flist = dma_resv_shared_list(bo->base.resv);
+>>>>>>>>>>>>> +     if (flist) {
+>>>>>>>>>>>>> +             for (i = 0; i < flist->shared_count; ++i) {
+>>>>>>>>>>>>> +                     f = rcu_dereference_protected(flist->shared[i],
+>>>>>>>>>>>>> +                             dma_resv_held(bo->base.resv));
+>>>>>>>>>>>>> +                     if (amdkfd_fence_check_mm(f, current->mm))
+>>>>>>>>>>>>> +                             return false;
+>>>>>>>>>>>>> +             }
+>>>>>>>>>>>>> +     }
+>>>>>>>>>>>>> +
+>>>>>>>>>>>>> +     /* Check by different mem type. */
+>>>>>>>>>>>>> +     if (!amdgpu_ttm_mem_eviction_valuable(bo, place))
+>>>>>>>>>>>>> +             return false;
+>>>>>>>>>>>>> +
+>>>>>>>>>>>>> +     /* VM bo should be checked at last because it will mark VM evicting. */
+>>>>>>>>>>>>> +     if (bo->type == ttm_bo_type_kernel)
+>>>>>>>>>>>>> +             return amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo));
+>>>>>>>>>>>>> +
+>>>>>>>>>>>>> +     return true;
+>>>>>>>>>>>>>         }
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>         static void amdgpu_ttm_vram_mm_access(struct amdgpu_device *adev, loff_t pos,
+

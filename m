@@ -2,75 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7D74BBE36
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B2C4BBE3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238475AbiBRRR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:17:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46708 "EHLO
+        id S238225AbiBRRS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:18:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238508AbiBRRRB (ORCPT
+        with ESMTP id S238570AbiBRRSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:17:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5552B8ADB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:16:03 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5650F1EC0304;
-        Fri, 18 Feb 2022 18:15:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645204557;
+        Fri, 18 Feb 2022 12:18:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEEA65D1AB
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:17:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645204675;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=SwNBtYXWJ8xiYRb8tX389TEN1/KTpft305R1guyh4Rg=;
-        b=HEND9/BS0oJ+LlJZKY72NIJltRz8k1VKVsnwXtG8WtQwT3M+tPyNBD+n0D2FIl6MOFucH8
-        lCqIHoXJuQoRZSDukk2xSsnoWFOtWMVwQDeCDbmLAZy/APHak5P6PN3LisZ8Qw2JPj+3xu
-        BzIEgPNmQUQSZTjoLmt4OvG8iuyjNxw=
-Date:   Fri, 18 Feb 2022 18:16:00 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jue Wang <juew@google.com>
-Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v2] x86/mce: work around an erratum on fast string copy
- instructions.
-Message-ID: <Yg/UUHuVvd9AOJ94@zn.tnic>
-References: <Yg54nse5qNQO3sbW@zn.tnic>
- <20220218013209.2436006-1-juew@google.com>
- <Yg+2Hc78nfSRmh/j@zn.tnic>
- <CAPcxDJ4c3eGXTB9UPJmZ8dzyCNPW4Lv9s1QSeoCWq_LdNWTrJw@mail.gmail.com>
- <Yg/FyrvLWhZHB/UC@zn.tnic>
- <CAPcxDJ72dMOpbKXxyb__OeMaEyjYSPtsL_ubVsKOuRXefAQ3_w@mail.gmail.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7dZcSV2Uv5l2PGNp5lATuM06Bp3rDpiylATyLlFeY84=;
+        b=IIA4/RZNWcLcz/+Yc2+bl8SIqI0+UIbtu4WuvyN9Ag55jkAn2TxtPnYoL7rHbZTP+G5YkH
+        o+XJvS6hDOVJZFEGI1X+ObG99x1DjvzEGDxBYWTcwfBpACcIvKGXp6tZo5awVjRAbouopW
+        7anPoi2k9svb7XyKZh3+h8xaEe51jWU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-552-gzjJMq4vNpamBWwmLVqlVA-1; Fri, 18 Feb 2022 12:17:53 -0500
+X-MC-Unique: gzjJMq4vNpamBWwmLVqlVA-1
+Received: by mail-wm1-f70.google.com with SMTP id p24-20020a05600c1d9800b0037be98d03a1so6229087wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:17:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7dZcSV2Uv5l2PGNp5lATuM06Bp3rDpiylATyLlFeY84=;
+        b=4WakLS0jl2J1KW6AIX4a8Ort1ajf5G6WfFB9NQlnV86AnvipHZizEN49rJzGV/O0Vx
+         f7MXDrIQf5nH50c/o0bgaEsOyhBF2L3hiIGG2Unn20enfHnwmCpo/evV3N53rkQ+T/Bu
+         5JaMTxdASJmRwKZpGFBkz13UESFcho9q7zswrgoP/CFvcNYQGi6qLjS0ijq18nf2En5x
+         udDjsj9ueTz4D8wBJheV5FY1W12DrEf++g2CG4L386g5rEeo6LHvh43Wu3eSH/a1udW7
+         Mz7vj9qMcfzvdRSbu87lWoz2d2cl/Nok+nVH4JxpdQyXQ0Yw8Apu/BF6ZavHYvqEwmIf
+         /imw==
+X-Gm-Message-State: AOAM530aLvmIQUJSUbi7V7p1X+de+ka+0XxzvWJz3Sswwr7MTYY2o7ic
+        f4fQTITIHYbvn9BAKRAGeuDuhBNnVFrkkfSizH1RR/1eW7M5Nw2MRwcKNzRV2garyi0bbzaJdE5
+        1xQyigCNcGW66XsbxH71cDa0U
+X-Received: by 2002:a05:6000:18c8:b0:1e4:b8f4:da8f with SMTP id w8-20020a05600018c800b001e4b8f4da8fmr6969524wrq.199.1645204671852;
+        Fri, 18 Feb 2022 09:17:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyY5FTYmJEwXfkrd2Ezeeyz/sLJDt8iOSxwKTt+YEJIOAC62rZBIt4qJftKdXphpHZFmYhoGg==
+X-Received: by 2002:a05:6000:18c8:b0:1e4:b8f4:da8f with SMTP id w8-20020a05600018c800b001e4b8f4da8fmr6969512wrq.199.1645204671607;
+        Fri, 18 Feb 2022 09:17:51 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id n15sm13833015wri.33.2022.02.18.09.17.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 09:17:50 -0800 (PST)
+Message-ID: <eff2543a-10ab-611a-28e2-18999d21ddd8@redhat.com>
+Date:   Fri, 18 Feb 2022 18:17:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPcxDJ72dMOpbKXxyb__OeMaEyjYSPtsL_ubVsKOuRXefAQ3_w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 5/6] KVM: x86: make several AVIC callbacks optional
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220217180831.288210-1-pbonzini@redhat.com>
+ <20220217180831.288210-6-pbonzini@redhat.com> <Yg/IGUFqqS2r98II@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yg/IGUFqqS2r98II@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 08:21:36AM -0800, Jue Wang wrote:
-> My concern was that here returns 0 instead the value read from the msr.
+On 2/18/22 17:23, Sean Christopherson wrote:
+> The "AVIC" callbacks are being deleted, not
+> made optional, it's kvm_x86_ops' APICv hooks that are becoming optional.
 
-You'd walk into that code only if you're doing MCE injections. In that
-case, it won't read or write MSR_IA32_MISC_ENABLE because the injection
-code writes into the injection mce struct only.
+Maybe "make several APIC virtualization callbacks optional".
 
-So it won't disable fast strings when you manage to inject the exact
-error type which triggers this erratum.
+>> +KVM_X86_OP_OPTIONAL(apicv_post_state_restore)
+>
+> apicv_post_state_restore() isn't conditional, it's implemented and wired up
+> unconditionally by both VMX and SVM.
 
-I think that's actually a good thing - you don't want to disable fast
-strings just because you injected a particular MCE type.
+True, on the other hand there's no reason why a hypothetical third 
+vendor would have to support it.  The call is conditional to 
+apicv_active being true.
 
--- 
-Regards/Gruss,
-    Boris.
+Paolo
 
-https://people.kernel.org/tglx/notes-about-netiquette

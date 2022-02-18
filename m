@@ -2,174 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526D04BBBD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D904BBBD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236793AbiBRPHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 10:07:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37562 "EHLO
+        id S236811AbiBRPHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:07:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236785AbiBRPHa (ORCPT
+        with ESMTP id S236795AbiBRPHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:07:30 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7811FA5E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:07:11 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 29CCA1EC0453;
-        Fri, 18 Feb 2022 16:07:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645196826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4dgrVhY1zhSIpJ67A/qW0ekCgb8tkD1wGOZsXKygGvI=;
-        b=BtcpeqG9GRvEK/cadYcIC9HJIHGD3pgA8AuAa7ojK/+CEMs0QtVTqam4AeeqHVNCZX4w7n
-        JjJjZoKg6leeI8XSdmdG6SdzLCEk3Qn/imzg4N+NDeWvQMTEUC3akhJiFxd2ie/q+YDQ7H
-        Yuooou/A67KcZu+7spNLKDZsDl4N1ls=
-Date:   Fri, 18 Feb 2022 16:07:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jue Wang <juew@google.com>, Tony Luck <tony.luck@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v2] x86/mce: work around an erratum on fast string copy
- instructions.
-Message-ID: <Yg+2Hc78nfSRmh/j@zn.tnic>
-References: <Yg54nse5qNQO3sbW@zn.tnic>
- <20220218013209.2436006-1-juew@google.com>
+        Fri, 18 Feb 2022 10:07:44 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4517E95F;
+        Fri, 18 Feb 2022 07:07:26 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id n6so15224244qvk.13;
+        Fri, 18 Feb 2022 07:07:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZhgMN9Y8qBcc8YGa9U6sLk3eYcQWBNZevK+546EBJ1k=;
+        b=qIQG3afKmJFnM9d3UiPVX2r/wN+GvKrRzK9THFQwXH7zo8J0hGAPaVTzGJG3XLQFSJ
+         UQuRKlMxrk6pfFphfO72D78g3ZlzMzxFMxzY73RGTBbG13vrPxs8+nlwKpF2kBVqwexF
+         jxhcBxYU18xdnW0+wS+LTM8e9j8ipOAbb1X7nlb864lcUZLCYBManADJ8Zx1PMq9cOXt
+         ySZ6g0v5SfGozDHhNoO0xTQWq07i9pRQ8dFcZLKUsYsCInYH1oyKITrlWswW9XAohpEW
+         Wd7VIuftDM6nlCOyvLBoqlhZdFcE7fui9ZxrdVqM+LBJ8BTRniMAU47qeTCd8M2VynLx
+         1UfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZhgMN9Y8qBcc8YGa9U6sLk3eYcQWBNZevK+546EBJ1k=;
+        b=oK0U3G0rr8PNkJcYN4aRsToQDtV2fOArPMj4To+B6G8dt54ADWw/ly5mwnlo/ss4GB
+         5l113q7LL15Foe195ijIzq1/mqrmhPXl4dyQoUuWeF5OyEzESVtOze5JENCEXqomCdoX
+         MFK7nIFMf5l1NGVEsSwmOt2iwi9GiEzw5ZC7hpLN3xMtR/Pc4f88dDOBwUPjZeA/XT+x
+         h7wOzN5SwvDpH9Z5lGWlGmWYI4hfZh/esRNwAvEpNiwf98hvWLom5oikUQ21pj1v8Jks
+         wQ1uZJTt30QuZWd+hsORVbfmduBIGK+H72kQG7qLsVbH/Ef/J3h238KkYk/LE7hlb5dQ
+         YQsg==
+X-Gm-Message-State: AOAM530BUuEPHQpoVhySrhmNIvMYpnmsYcT0XhlXwuT7qU5qv1z5QY6s
+        YP3XTDySEVonT3RtfpE0CXU=
+X-Google-Smtp-Source: ABdhPJxPj6KFAgVZSXo8bZyFDqRGlFPG7D+gFGABIvifLDj63FEusJTipGPOb92u+mICxFnGhItHvg==
+X-Received: by 2002:a05:622a:164f:b0:2d5:8e77:8050 with SMTP id y15-20020a05622a164f00b002d58e778050mr6994063qtj.481.1645196845785;
+        Fri, 18 Feb 2022 07:07:25 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z17sm25490999qta.11.2022.02.18.07.07.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 07:07:25 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1c0b1562-aeca-52d1-96cb-93e4a252604c@roeck-us.net>
+Date:   Fri, 18 Feb 2022 07:07:22 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220218013209.2436006-1-juew@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/2] hwmon: Add driver for Texas Instruments TMP464 and
+ TMP468
+Content-Language: en-US
+To:     Agathe Porte <agathe.porte@nokia.com>, linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>
+References: <20220218065856.1899086-1-linux@roeck-us.net>
+ <20220218065856.1899086-2-linux@roeck-us.net>
+ <bb9d1f78-7f4d-a865-922e-ebf7362f6b64@nokia.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <bb9d1f78-7f4d-a865-922e-ebf7362f6b64@nokia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 05:32:09PM -0800, Jue Wang wrote:
-> +static noinstr bool quirk_skylake_repmov(void)
-> +{
-> +	u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
-> +	u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
-> +
-> +	/*
-> +	 * Apply the quirk only to local machine checks, i.e., no broadcast
-> +	 * sync is needed.
-> +	 */
-> +	if ((mcgstatus & MCG_STATUS_LMCES) &&
-> +	    unlikely(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
-> +		u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
-> +
-> +		/* Check for a software-recoverable data fetch error. */
-> +		if ((mc1_status &
-> +		     (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
-> +		      MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
-> +		      MCI_STATUS_AR | MCI_STATUS_S)) ==
-> +		     (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
-> +		      MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
-> +		      MCI_STATUS_AR | MCI_STATUS_S)) {
-> +			misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
-> +			__wrmsr(MSR_IA32_MISC_ENABLE,
-> +				(u32)misc_enable, (u32)(misc_enable >> 32));
+On 2/18/22 01:50, Agathe Porte wrote:
+> Hi Guenter,
+> 
+> Le 18/02/2022 à 07:58, Guenter Roeck a écrit :
+>> Add support for Texas Instruments TMP464 and TMP468 temperature sensor
+>> ICs.
+>>
+>> TI's TMP464 is an I2C temperature sensor chip. This chip is similar
+>> to TI's TMP421 chip, but with 16bit-wide registers (instead of
+>> 8bit-wide registers). The chip has one local sensor and four remote
+>> sensors. TMP468 is similar to TMP464 but has one local and eight
+>> remote sensors.
+>>
+>> Originally-from: Agathe Porte <agathe.porte@nokia.com>
+>> Cc: Agathe Porte <agathe.porte@nokia.com>
+>> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>> v4:
+>> - Fixed reading n-factor information from devicetree
+>>    [Use of_property_read_u8 instead of of_property_read_s32 to read the
+>>     property value, and write n-factor value into the upper 8 bit of the
+>>     n-factor register]
+> 
+> Changing n-factor with DT seems to work:
+> 
+> temp2_input=38500 (nfactor=10)
+> temp2_input=35500 (nfactor=-10)
+> 
+> Driver probes just fine with this attribute set.
+> 
+>> +static int tmp464_probe_child_from_dt(struct device *dev,
+>> +                      struct device_node *child,
+>> +                      struct tmp464_data *data)
+>> +
+>> +{
+>> +    struct regmap *regmap = data->regmap;
+>> +    u32 channel;
+>> +    u8 nfactor;
+>> +    s32 val;
+> 
+> val is not used according to the compiler, and thus should be removed (module does not compile with -Werror)
+> 
 
-"You're going to have to use the mce_{rd,wr}msrl() routines."
+Fixed.
 
-I actually really meant that.
+> PS: TMP464 samples will be sent by DHL today and should arrive to you on Feb, 23rd.
+> 
+Thanks a lot!
 
-And I went and simplified this a bit more so that it is more readable,
-diff ontop.
-
-Also, Tony, I think the clearing of MCG_STATUS should happen last.
-
----
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index c1a41da99975..1741be9b9464 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -831,34 +831,35 @@ quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
-  */
- static noinstr bool quirk_skylake_repmov(void)
- {
--	u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
--	u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
-+	u64 mcgstatus   = mce_rdmsrl(MSR_IA32_MCG_STATUS);
-+	u64 misc_enable = mce_rdmsrl(MSR_IA32_MISC_ENABLE);
-+	u64 mc1_status;
- 
- 	/*
- 	 * Apply the quirk only to local machine checks, i.e., no broadcast
- 	 * sync is needed.
- 	 */
--	if ((mcgstatus & MCG_STATUS_LMCES) &&
--	    (misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
--		u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
--
--		/* Check for a software-recoverable data fetch error. */
--		if ((mc1_status &
--		     (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
--		      MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
--		      MCI_STATUS_AR | MCI_STATUS_S)) ==
--		     (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
--		      MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
--		      MCI_STATUS_AR | MCI_STATUS_S)) {
--			misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
--			__wrmsr(MSR_IA32_MISC_ENABLE,
--				(u32)misc_enable, (u32)(misc_enable >> 32));
--			mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
--			mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
--			pr_err_once("Errata detected, disable fast string copy instructions.\n");
--			return true;
--		}
-+	if (!(mcgstatus & MCG_STATUS_LMCES) ||
-+	    !(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING))
-+		return false;
-+
-+	mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
-+
-+	/* Check for a software-recoverable data fetch error. */
-+	if ((mc1_status &
-+	     (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
-+	      MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
-+	      MCI_STATUS_AR | MCI_STATUS_S)) ==
-+	     (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
-+	      MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
-+	      MCI_STATUS_AR | MCI_STATUS_S)) {
-+		misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
-+		mce_wrmsrl(MSR_IA32_MISC_ENABLE, misc_enable);
-+		mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
-+		pr_err_once("Erratum detected, disable fast string copy instructions.\n");
-+		return true;
- 	}
-+
- 	return false;
- }
- 
-@@ -1432,7 +1433,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 		return unexpected_machine_check(regs);
- 
- 	if (mce_flags.skx_repmov_quirk && quirk_skylake_repmov())
--		return;
-+		goto clear;
- 
- 	/*
- 	 * Establish sequential order between the CPUs entering the machine
-@@ -1576,6 +1577,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- out:
- 	instrumentation_end();
- 
-+clear:
- 	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
- }
- EXPORT_SYMBOL_GPL(do_machine_check);
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Guenter

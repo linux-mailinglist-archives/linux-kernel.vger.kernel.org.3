@@ -2,230 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582B64BBEE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D93114BBEF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238887AbiBRSBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:01:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46970 "EHLO
+        id S238939AbiBRSHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:07:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238883AbiBRSBy (ORCPT
+        with ESMTP id S238926AbiBRSHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:01:54 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9A43D1E1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:01:34 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: bbeckett)
-        with ESMTPSA id EAA391F46EF5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645207292;
-        bh=Iuy2G7MDQdbOsm1aB6YG2bA7J9et0uNrkLFCEN2/ly4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ui7GDo3jnjj/go+nyIX7ex/aIZpTzGXTKOTrk5XoB2ONccqYlioyOqUHJWgoXdNJk
-         MO3O54j3YRs3ym8OYDPMwh0AzvSB55jjHjlcsKrvstMX4g1gYdMmFgYZZmnMbdq/ZQ
-         vfgNXE69Dubmc7U06wA2MYbCRX48Ucm5kpHcOHTAxYsxZErXoPze8OjrsrsTvGRvWo
-         7WFBtcHIgxhPUTYu22xWXj8NqjmBRZtl7QuOHbVCEUzTsZBSyeVikE9a5xZcF3FOps
-         MplHknfHjuMZQI+MJhwDGmcEgag6KyW99mjyZ7y4sSRG0SthHtQRpJwjiToa4Ocs1w
-         N55/BQ9SWJLnQ==
-Message-ID: <78df4b73-9b2d-670b-a6b0-a45b476f1f0a@collabora.com>
-Date:   Fri, 18 Feb 2022 18:06:00 +0000
+        Fri, 18 Feb 2022 13:07:06 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9505333E0D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:06:48 -0800 (PST)
+Received: by mail-oo1-xc31.google.com with SMTP id p206-20020a4a2fd7000000b0031bfec11983so4384970oop.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:06:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j28LsEyKO8fhnvouEfWy5wWPWcngh3hdC6d0wPRNOHw=;
+        b=Tc8NRnRggxrDmjg3L2ct4nrSkx07K06UkPIviAKlfLFrk2ctwl541YfpN2b5ABGjUa
+         SV0RYScbzN6Zc8aMKLpBaAxWZabKT3hxdcPEcpVaTDDNvwzpXIfffQALwlnyq6akvrFl
+         t2lRsZUYVLw9ZrGs7O8NABu51Rjth5d1zxUDpTg5C4OUZB5/BXk/WVeYaKw5Plhgz+b3
+         8x+6AgPxBNh4D0iRXP7U8/9+S+N0OdzmPfL39gS6ki3gWldvwWXbblz6MkiUSUX+Bq+A
+         3Ho+J1w0Ja0CRzoonVgBKrJi1Eakch0KYaabCiSVl8+TI3ljw3jVmhK/kycCPwu72/V3
+         Yiuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j28LsEyKO8fhnvouEfWy5wWPWcngh3hdC6d0wPRNOHw=;
+        b=s/5qJOXzZ+tqNFDhUteSpKgaf6gB8a/uRDHl5ZoYB30Y+EyQlUxF0mGJvWiZHbeNAh
+         HQcJWtJcIbhdHrvN1OrTTQ0iO0bTQ3Mi5JMxlTwBw1p1JPuxm1sigB/kiq0u7jCP3PP5
+         emJMvFhxKHysZVd2568o9xqN8h0DDp8rVxcRzK9Ka/OOFvp7TaAFpGVTbA9xM4wpNFEE
+         jwL/pmYDk316dcNuu8/Ao73DF0zWj6iVUc0Nq5LUREq3x6fDKisygp2OdCMiDoqyatop
+         d3sF1A8eB1rNdpVEMaVcanAcgve8aASU8lgY12QePTtJjIgPbq0w5gUOyrzbLVVByhi+
+         tucA==
+X-Gm-Message-State: AOAM53248v2gqCmh6FeoojEvyzfIVPxvRxzYAh//vOMOLynqvzhhCSZM
+        gj8k+CYCJjPH0hjAaotWZBfQ+MBEOPYIYG0bZdphpA==
+X-Google-Smtp-Source: ABdhPJzXHeMUfUpHFz9cX4KAvTQ8Kr6vcAte/GQmMLl8KbpIaHiH9oO/JX/8xW2dkD2gcjeaiGq0I+RIHUNxzzDNqno=
+X-Received: by 2002:a05:6871:586:b0:d2:672a:8dd with SMTP id
+ u6-20020a056871058600b000d2672a08ddmr3618682oan.16.1645207607939; Fri, 18 Feb
+ 2022 10:06:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v8 5/5] drm/i915/uapi: document behaviour for DG2 64K
- support
-Content-Language: en-US
-To:     Ramalingam C <ramalingam.c@intel.com>,
-        Jordan Justen <jordan.l.justen@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Simon Ser <contact@emersion.fr>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Kenneth Graunke <kenneth@whitecape.org>,
-        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
-        Slawomir Milczarek <slawomir.milczarek@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220208203419.1094362-1-bob.beckett@collabora.com>
- <20220208203419.1094362-6-bob.beckett@collabora.com>
- <87ee40ojpc.fsf@jljusten-skl> <20220218134735.GB3646@intel.com>
-From:   Robert Beckett <bob.beckett@collabora.com>
-In-Reply-To: <20220218134735.GB3646@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217163357.276036-1-kjain@linux.ibm.com>
+In-Reply-To: <20220217163357.276036-1-kjain@linux.ibm.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 18 Feb 2022 10:06:36 -0800
+Message-ID: <CAPcyv4jwpMbz0woftSfm3EO05pr3ZG9rVMJCkYVsapKYSOn3xw@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] Add perf interface to expose nvdimm
+To:     Kajol Jain <kjain@linux.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 17, 2022 at 8:34 AM Kajol Jain <kjain@linux.ibm.com> wrote:
+>
+> Patchset adds performance stats reporting support for nvdimm.
+> Added interface includes support for pmu register/unregister
+> functions. A structure is added called nvdimm_pmu to be used for
+> adding arch/platform specific data such as cpumask, nvdimm device
+> pointer and pmu event functions like event_init/add/read/del.
+> User could use the standard perf tool to access perf events
+> exposed via pmu.
+>
+> Interface also defines supported event list, config fields for the
+> event attributes and their corresponding bit values which are exported
+> via sysfs. Patch 3 exposes IBM pseries platform nmem* device
+> performance stats using this interface.
+>
+> Result from power9 pseries lpar with 2 nvdimm device:
+>
+> Ex: List all event by perf list
+>
+> command:# perf list nmem
+>
+>   nmem0/cache_rh_cnt/                                [Kernel PMU event]
+>   nmem0/cache_wh_cnt/                                [Kernel PMU event]
+>   nmem0/cri_res_util/                                [Kernel PMU event]
+>   nmem0/ctl_res_cnt/                                 [Kernel PMU event]
+>   nmem0/ctl_res_tm/                                  [Kernel PMU event]
+>   nmem0/fast_w_cnt/                                  [Kernel PMU event]
+>   nmem0/host_l_cnt/                                  [Kernel PMU event]
+>   nmem0/host_l_dur/                                  [Kernel PMU event]
+>   nmem0/host_s_cnt/                                  [Kernel PMU event]
+>   nmem0/host_s_dur/                                  [Kernel PMU event]
+>   nmem0/med_r_cnt/                                   [Kernel PMU event]
+>   nmem0/med_r_dur/                                   [Kernel PMU event]
+>   nmem0/med_w_cnt/                                   [Kernel PMU event]
+>   nmem0/med_w_dur/                                   [Kernel PMU event]
+>   nmem0/mem_life/                                    [Kernel PMU event]
+>   nmem0/poweron_secs/                                [Kernel PMU event]
+>   ...
+>   nmem1/mem_life/                                    [Kernel PMU event]
+>   nmem1/poweron_secs/                                [Kernel PMU event]
+>
+> Patch1:
+>         Introduces the nvdimm_pmu structure
+> Patch2:
+>         Adds common interface to add arch/platform specific data
+>         includes nvdimm device pointer, pmu data along with
+>         pmu event functions. It also defines supported event list
+>         and adds attribute groups for format, events and cpumask.
+>         It also adds code for cpu hotplug support.
+> Patch3:
+>         Add code in arch/powerpc/platform/pseries/papr_scm.c to expose
+>         nmem* pmu. It fills in the nvdimm_pmu structure with pmu name,
+>         capabilities, cpumask and event functions and then registers
+>         the pmu by adding callbacks to register_nvdimm_pmu.
+> Patch4:
+>         Sysfs documentation patch
+>
+> Changelog
+> ---
+> Resend v5 -> v6
+> - No logic change, just a rebase to latest upstream and
+>   tested the patchset.
+>
+> - Link to the patchset Resend v5: https://lkml.org/lkml/2021/11/15/3979
+>
+> v5 -> Resend v5
+> - Resend the patchset
+>
+> - Link to the patchset v5: https://lkml.org/lkml/2021/9/28/643
+>
+> v4 -> v5:
+> - Remove multiple variables defined in nvdimm_pmu structure include
+>   name and pmu functions(event_int/add/del/read) as they are just
+>   used to copy them again in pmu variable. Now we are directly doing
+>   this step in arch specific code as suggested by Dan Williams.
+>
+> - Remove attribute group field from nvdimm pmu structure and
+>   defined these attribute groups in common interface which
+>   includes format, event list along with cpumask as suggested by
+>   Dan Williams.
+>   Since we added static defination for attrbute groups needed in
+>   common interface, removes corresponding code from papr.
+>
+> - Add nvdimm pmu event list with event codes in the common interface.
+>
+> - Remove Acked-by/Reviewed-by/Tested-by tags as code is refactored
+>   to handle review comments from Dan.
 
+I don't think review comments should invalidate the Acked-by tags in
+this case. Nothing fundamentally changed in the approach, and I would
+like to have the perf ack before taking this through the nvdimm tree.
 
-On 18/02/2022 13:47, Ramalingam C wrote:
-> On 2022-02-17 at 20:57:35 -0800, Jordan Justen wrote:
->> Robert Beckett <bob.beckett@collabora.com> writes:
->>
->>> From: Matthew Auld <matthew.auld@intel.com>
->>>
->>> On discrete platforms like DG2, we need to support a minimum page size
->>> of 64K when dealing with device local-memory. This is quite tricky for
->>> various reasons, so try to document the new implicit uapi for this.
->>>
->>> v3: fix typos and less emphasis
->>> v2: Fixed suggestions on formatting [Daniel]
->>>
->>> Signed-off-by: Matthew Auld <matthew.auld@intel.com>
->>> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
->>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->>> Acked-by: Jordan Justen <jordan.l.justen@intel.com>
->>> Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
->>> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
->>> cc: Simon Ser <contact@emersion.fr>
->>> cc: Pekka Paalanen <ppaalanen@gmail.com>
->>> Cc: Jordan Justen <jordan.l.justen@intel.com>
->>> Cc: Kenneth Graunke <kenneth@whitecape.org>
->>> Cc: mesa-dev@lists.freedesktop.org
->>> Cc: Tony Ye <tony.ye@intel.com>
->>> Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
->>> ---
->>>   include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
->>>   1 file changed, 39 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
->>> index 5e678917da70..77e5e74c32c1 100644
->>> --- a/include/uapi/drm/i915_drm.h
->>> +++ b/include/uapi/drm/i915_drm.h
->>> @@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
->>>   	/**
->>>   	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
->>>   	 * the user with the GTT offset at which this object will be pinned.
->>> +	 *
->>>   	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
->>>   	 * presumed_offset of the object.
->>> +	 *
->>>   	 * During execbuffer2 the kernel populates it with the value of the
->>>   	 * current GTT offset of the object, for future presumed_offset writes.
->>> +	 *
->>> +	 * See struct drm_i915_gem_create_ext for the rules when dealing with
->>> +	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
->>> +	 * minimum page sizes, like DG2.
->>>   	 */
->>>   	__u64 offset;
->>>   
->>> @@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
->>>   	 *
->>>   	 * The (page-aligned) allocated size for the object will be returned.
->>>   	 *
->>> -	 * Note that for some devices we have might have further minimum
->>> -	 * page-size restrictions(larger than 4K), like for device local-memory.
->>> -	 * However in general the final size here should always reflect any
->>> -	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
->>> -	 * extension to place the object in device local-memory.
->>> +	 *
->>> +	 * DG2 64K min page size implications:
->>> +	 *
->>> +	 * On discrete platforms, starting from DG2, we have to contend with GTT
->>> +	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
->>> +	 * objects.  Specifically the hardware only supports 64K or larger GTT
->>> +	 * page sizes for such memory. The kernel will already ensure that all
->>> +	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
->>> +	 * sizes underneath.
->>> +	 *
->>> +	 * Note that the returned size here will always reflect any required
->>> +	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
->>> +	 * such as DG2.
->>> +	 *
->>> +	 * Special DG2 GTT address alignment requirement:
->>> +	 *
->>> +	 * The GTT alignment will also need to be at least 2M for such objects.
->>> +	 *
->>> +	 * Note that due to how the hardware implements 64K GTT page support, we
->>> +	 * have some further complications:
->>> +	 *
->>> +	 *   1) The entire PDE (which covers a 2MB virtual address range), must
->>> +	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
->>> +	 *   PDE is forbidden by the hardware.
->>> +	 *
->>> +	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
->>> +	 *   objects.
->>> +	 *
->>> +	 * To keep things simple for userland, we mandate that any GTT mappings
->>> +	 * must be aligned to and rounded up to 2MB.
->>
->> Could I get a clarification about this "rounded up" part.
->>
->> Currently Mesa is aligning the start of each and every buffer VMA to be
->> 2MiB aligned. But, we are *not* taking any steps to "round up" the size
->> of buffers to 2MiB alignment.
->>
->> Bob's Mesa MR from a while ago,
->>
->> https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/14599
->>
->> was trying to add this "round up" size for buffers. We didn't accept
->> this MR because we thought if we have ensured that no other buffer will
->> use the same 2MiB VMA range, then it should not be required.
->>
->> If what we are doing is ok, then maybe this "round up" language should
->> be dropped? Or, perhaps the "round up" mentioned here isn't implying we
->> must align the size of buffers that we create, and I'm misinterpreting
->> this.
-> Jordan,
-> 
-> as per my understanding this size rounding up to 2MB is for the VMA mapping,
-> not for the buffer size.
-correct, only the vma is rounded up
+Otherwise this looks good to me.
 
-> 
-> Even if we drop this rounding up of vma size to 2MB but align the VMA
-> start to 2MB address then also this should be fine. Becasue the remaining of the
-> last PDE(2MB) will never be used for any other GTT mapping as the
-> starting addr wont align to 2MB.
-The kernel has to handle 4K pages also, which could in theory attempt to 
-be placed in any remaining space within a 2MB region, which is not 
-supported. For this reason, the kernel rounds up the vma to next 2MB to 
-ensure no 4K pages can treat the remaining space as a candidate for 
-placement.
-
-For mesa, this is not required as they only ever use 2MB alignment for 
-all buffers, hence the denial of the mesa mr.
-
-Internally, the kernel will still round up the vma reservations to 
-prevent any kernel 4K buffers being situated in remaining space.
-
-If desired, we can make the wording clearer, maybe something like:
-
-"To keep things simple for userland, we mandate that any GTT mappings
-must be aligned to 2MB. The kernel will internally pad them out to the 
-next 2MB boundary"
-
-
-> 
-> Bob, Is the above understanding is right? if so could we drop the
-> requirement of mapping the vma size to 2MB?
-> 
-> Ram
->>
->> -Jordan
->>
->>> As this only wastes virtual
->>> +	 * address space and avoids userland having to copy any needlessly
->>> +	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
->>> +	 * is deemed to be a good compromise.
->>>   	 */
->>>   	__u64 size;
->>>   	/**
->>> -- 
->>> 2.25.1
+Peter, might you have a chance to re-Ack this series, or any concerns
+about me retrieving those Acks from the previous postings?

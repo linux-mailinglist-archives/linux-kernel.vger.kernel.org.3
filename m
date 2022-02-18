@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21D84BB72E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7734BB72F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbiBRKqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:46:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35368 "EHLO
+        id S234139AbiBRKqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:46:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiBRKq3 (ORCPT
+        with ESMTP id S234141AbiBRKqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:46:29 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D397D25AE46
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:46:12 -0800 (PST)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5E67C3F1A1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645181171;
-        bh=dGDRz61XRlmN2nrsI5bz0i1S0S+h5+fQGdDwmq0wB0k=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=s1N7881ofX1d93IOgsQ9T2rUSkVlXMJCRrUtvZM+/JAjkOdTK3ljkfaftjaS0qAIQ
-         V1otuDOuNzlg9xgVSBVjzy/MtXP05jjCwFDUTyF8kdw1DMV3Gx7ErshZE3t3J6VyoG
-         AteB3iAdCVf2leEkHZxB/98gWLxGV0bHnpg4gRM1+fF0f1uiodpoScdDcFFvqPA9C5
-         z+Tb9fchUdiPeaR6gqaRv2k7gCLUioJUCH5Z5s+BGRvnI/Oa/3dF92dR+uyZaSoGfJ
-         jnV00glj9A2Ikc14OSvuHFnDMV1grEbkQJnMI6QQQ5JrbIIbx9pF2ki7SAVmG61uxM
-         ANPswlTbriqNw==
-Received: by mail-wm1-f70.google.com with SMTP id v130-20020a1cac88000000b0037e3d70e7e1so2991897wme.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:46:11 -0800 (PST)
+        Fri, 18 Feb 2022 05:46:36 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B471E2B3AEA
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:46:18 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id l19so2034069pfu.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:46:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LAy9H/l1KWh4fEiWJeqleJ0QHDEZvecxPJTGx+dOoeQ=;
+        b=zQP2DkmSP1w7wdCEkRYZL2SWr0Uiz5YUoO4L3J7HwGpQwYrcKDP63GwwH/Gsj6yuZ1
+         pIHm70tjJtva+sTQdqzGCOmW4jwYLxAo0zg6kR2v/fC946ru/zrSYEvqOeUU4LkXY5WJ
+         zKlZQM78u+OGQwISssqDFOqK1or0PGBvJW0W0/7ievNql9gZ7DHcPoVGwMJoU/oNZQDJ
+         5aeeJ1VIVZRvp6D+dMbkfCtQDPUJqokovXvViqUVo9s8DITwT4MUbobl8D/Y9MIpha/6
+         4f55G83fZpO0Q281Vw24tnz1PBW3InBaFE24y+s79Y/l4JDK7TMLNaSDfHg8QTNnEpPB
+         qUHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dGDRz61XRlmN2nrsI5bz0i1S0S+h5+fQGdDwmq0wB0k=;
-        b=dH6Dupm2x6mLDBIiirczFsrSXXVUmRCPMEZ+ubvJHnf/CcCLak4B5/hWBvh8NlWmFl
-         GueJYPCbpx2RdRXyGa9J8A12GB9I2K4oyPEWBhTXbwwpGvWbvnZjzUi6NpXQWDdriw8y
-         nMdzYLETjK9ddY3AuchkRs0veMcmGhPf9z/S/rkp4+Pjpdy3xIBHJFaFyeWSRosUZYVX
-         Btg2BxUJ61uyvMFRty6XNDWBBfv2H48ompEYRbEfteqKKTJ6sCsrQzjJsXaOnQfjCytK
-         uS3NBE5RmjVeF132L1ohgysFon1HgXcTbeuQmGTUpdFoBRR5uyEb0X8+7MRmajjpeFVR
-         m0PA==
-X-Gm-Message-State: AOAM5333C8X5c7TNc5JFUWoDBR0e6q3NrWVmr+Jyp/TXhRwzBkqQtplq
-        niz7HJAO4S9XVr5FxlsLDXMlkX7Ur+9evr6BBJWOY/sF/KG8QwogjsimbLFa+y5s2ZH/qcxRCWj
-        U8cveyaPWjlaYKSQ/uBBk5ybX2/1qzPCVrRfe08bVYY4KhssumN666ZCvIQ==
-X-Received: by 2002:aa7:d3d9:0:b0:410:7a81:c0cf with SMTP id o25-20020aa7d3d9000000b004107a81c0cfmr7414113edr.177.1645181160596;
-        Fri, 18 Feb 2022 02:46:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxQ+NAme7XzeWAZqBbGMYs1sQLjBbN9OgKux5J4SQWKa0WWJPX7Ydz76FgBA28E+tI3LAqAq09x/bebpkHqaFo=
-X-Received: by 2002:aa7:d3d9:0:b0:410:7a81:c0cf with SMTP id
- o25-20020aa7d3d9000000b004107a81c0cfmr7414090edr.177.1645181160350; Fri, 18
- Feb 2022 02:46:00 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LAy9H/l1KWh4fEiWJeqleJ0QHDEZvecxPJTGx+dOoeQ=;
+        b=VwmuMyYuoazhLmvtZoyGe8/gQZ4c5R1PgDuX5wAiHyspjit09a5R686mwMnIQukNMD
+         vIPT9V2c3C4UU7bL5/eDSHEXMRMjOjVRFPDz2jOQcwUTzvWWPYM2cahbwkFHhfFdnsJi
+         MmcOrtO+Eog9EgYgJN/uFa6nKgHBTuM2cm7B3pfRhnDQEmioTiy7NiYwoxbYFBHG5CrM
+         K0F+wjPw6scAy/0cZ2Px18nVkBRTzDllz7VtbR3FyvJoLkG7VQnkvB2LORRU+HXJP2LN
+         ab8cDvGY8KcXuN+caqwpeEse/CLDdqITpfNOWWYF582AUZFvNo0F7LfRYMbbBLjUI9rx
+         XIgA==
+X-Gm-Message-State: AOAM533qfo32j+2IUXooZo+XNoECAjQzcs2CqbmZ08fNJyzRqwdi2dnK
+        ayEe8Gqqo5wgMd2zDDwJs514Uw==
+X-Google-Smtp-Source: ABdhPJwGtw4sZz0qpalh7OWQa3lBdQSvJkO1h9NOHuXGe8fFyRc9X4o4BQsE0THQpb5h03AeDkUGUQ==
+X-Received: by 2002:a62:7554:0:b0:4e1:5898:4fbb with SMTP id q81-20020a627554000000b004e158984fbbmr7102723pfc.2.1645181177951;
+        Fri, 18 Feb 2022 02:46:17 -0800 (PST)
+Received: from leoy-ThinkPad-X240s (216.24.179.146.16clouds.com. [216.24.179.146])
+        by smtp.gmail.com with ESMTPSA id np15sm4919722pjb.44.2022.02.18.02.46.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 02:46:17 -0800 (PST)
+Date:   Fri, 18 Feb 2022 18:46:11 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
+        elver@google.com, dvyukov@google.com, will@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        tmricht@linux.ibm.com, irogers@google.com
+Subject: Re: [PATCH v2] perf test: Skip Sigtrap test for arm+aarch64
+Message-ID: <20220218104611.GD56419@leoy-ThinkPad-X240s>
+References: <1645176813-202756-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
-References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
- <mhng-cdec292e-aea2-4b76-8853-b8465521e94f@palmer-ri-x1c9>
- <CA+zEjCuTSjOCmNExSN1jO50tsuXNzL9x6K6jWjG4+vVky5eWsw@mail.gmail.com> <CA+zEjCuTYmk-dLPhJ=9CkNrqf7VbCNyRDSZUGYkJSUWqZDWHpA@mail.gmail.com>
-In-Reply-To: <CA+zEjCuTYmk-dLPhJ=9CkNrqf7VbCNyRDSZUGYkJSUWqZDWHpA@mail.gmail.com>
-From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Date:   Fri, 18 Feb 2022 11:45:49 +0100
-Message-ID: <CA+zEjCt04OV++qK5ar+p8HwqOfEgkSN8YFfxwRiCFw1FeJv2rg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/13] Introduce sv48 support without relocatable kernel
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, zong.li@sifive.com, anup@brainfault.org,
-        Atish.Patra@rivosinc.com, Christoph Hellwig <hch@lst.de>,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, ardb@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        keescook@chromium.org, guoren@linux.alibaba.com,
-        heinrich.schuchardt@canonical.com, mchitale@ventanamicro.com,
-        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645176813-202756-1-git-send-email-john.garry@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,144 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+On Fri, Feb 18, 2022 at 05:33:33PM +0800, John Garry wrote:
+> Skip the Sigtrap test for arm + arm64, same as was done for s390 in
+> commit a840974e96fd ("perf test: Test 73 Sig_trap fails on s390"). For
+> this, reuse BP_SIGNAL_IS_SUPPORTED - meaning that the arch can use BP to
+> generate signals - instead of BP_ACCOUNT_IS_SUPPORTED, which is
+> appropriate.
+> 
+> As described by Will at [0], in the test we get stuck in a loop of handling
+> the HW breakpoint exception and never making progress. GDB handles this
+> by stepping over the faulting instruction, but with perf the kernel is
+> expected to handle the step (which it doesn't for arm).
+> 
+> Dmitry made an attempt to get this work, also mentioned in the same thread
+> as [0], which was appreciated. But the best thing to do is skip the test
+> for now.
+> 
+> [0] https://lore.kernel.org/linux-perf-users/20220118124343.GC98966@leoy-ThinkPad-X240s/T/#m13b06c39d2a5100d340f009435df6f4d8ee57b5a
+> 
+> Fixes: Fixes: 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
+> Signed-off-by: John Garry <john.garry@huawei.com>
 
-On Thu, Jan 20, 2022 at 11:05 AM Alexandre Ghiti
-<alexandre.ghiti@canonical.com> wrote:
->
-> On Thu, Jan 20, 2022 at 8:30 AM Alexandre Ghiti
-> <alexandre.ghiti@canonical.com> wrote:
-> >
-> > On Thu, Jan 20, 2022 at 5:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> > >
-> > > On Mon, 06 Dec 2021 02:46:44 PST (-0800), alexandre.ghiti@canonical.com wrote:
-> > > > * Please note notable changes in memory layouts and kasan population *
-> > > >
-> > > > This patchset allows to have a single kernel for sv39 and sv48 without
-> > > > being relocatable.
-> > > >
-> > > > The idea comes from Arnd Bergmann who suggested to do the same as x86,
-> > > > that is mapping the kernel to the end of the address space, which allows
-> > > > the kernel to be linked at the same address for both sv39 and sv48 and
-> > > > then does not require to be relocated at runtime.
-> > > >
-> > > > This implements sv48 support at runtime. The kernel will try to
-> > > > boot with 4-level page table and will fallback to 3-level if the HW does not
-> > > > support it. Folding the 4th level into a 3-level page table has almost no
-> > > > cost at runtime.
-> > > >
-> > > > Note that kasan region had to be moved to the end of the address space
-> > > > since its location must be known at compile-time and then be valid for
-> > > > both sv39 and sv48 (and sv57 that is coming).
-> > > >
-> > > > Tested on:
-> > > >   - qemu rv64 sv39: OK
-> > > >   - qemu rv64 sv48: OK
-> > > >   - qemu rv64 sv39 + kasan: OK
-> > > >   - qemu rv64 sv48 + kasan: OK
-> > > >   - qemu rv32: OK
-> > > >
-> > > > Changes in v3:
-> > > >   - Fix SZ_1T, thanks to Atish
-> > > >   - Fix warning create_pud_mapping, thanks to Atish
-> > > >   - Fix k210 nommu build, thanks to Atish
-> > > >   - Fix wrong rebase as noted by Samuel
-> > > >   - * Downgrade to sv39 is only possible if !KASAN (see commit changelog) *
-> > > >   - * Move KASAN next to the kernel: virtual layouts changed and kasan population *
-> > > >
-> > > > Changes in v2:
-> > > >   - Rebase onto for-next
-> > > >   - Fix KASAN
-> > > >   - Fix stack canary
-> > > >   - Get completely rid of MAXPHYSMEM configs
-> > > >   - Add documentation
-> > > >
-> > > > Alexandre Ghiti (13):
-> > > >   riscv: Move KASAN mapping next to the kernel mapping
-> > > >   riscv: Split early kasan mapping to prepare sv48 introduction
-> > > >   riscv: Introduce functions to switch pt_ops
-> > > >   riscv: Allow to dynamically define VA_BITS
-> > > >   riscv: Get rid of MAXPHYSMEM configs
-> > > >   asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
-> > > >   riscv: Implement sv48 support
-> > > >   riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
-> > > >   riscv: Explicit comment about user virtual address space size
-> > > >   riscv: Improve virtual kernel memory layout dump
-> > > >   Documentation: riscv: Add sv48 description to VM layout
-> > > >   riscv: Initialize thread pointer before calling C functions
-> > > >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
-> > > >
-> > > >  Documentation/riscv/vm-layout.rst             |  48 ++-
-> > > >  arch/riscv/Kconfig                            |  37 +-
-> > > >  arch/riscv/configs/nommu_k210_defconfig       |   1 -
-> > > >  .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
-> > > >  arch/riscv/configs/nommu_virt_defconfig       |   1 -
-> > > >  arch/riscv/include/asm/csr.h                  |   3 +-
-> > > >  arch/riscv/include/asm/fixmap.h               |   1
-> > > >  arch/riscv/include/asm/kasan.h                |  11 +-
-> > > >  arch/riscv/include/asm/page.h                 |  20 +-
-> > > >  arch/riscv/include/asm/pgalloc.h              |  40 ++
-> > > >  arch/riscv/include/asm/pgtable-64.h           | 108 ++++-
-> > > >  arch/riscv/include/asm/pgtable.h              |  47 +-
-> > > >  arch/riscv/include/asm/sparsemem.h            |   6 +-
-> > > >  arch/riscv/kernel/cpu.c                       |  23 +-
-> > > >  arch/riscv/kernel/head.S                      |   4 +-
-> > > >  arch/riscv/mm/context.c                       |   4 +-
-> > > >  arch/riscv/mm/init.c                          | 408 ++++++++++++++----
-> > > >  arch/riscv/mm/kasan_init.c                    | 250 ++++++++---
-> > > >  drivers/firmware/efi/libstub/efi-stub.c       |   2
-> > > >  drivers/pci/controller/pci-xgene.c            |   2 +-
-> > > >  include/asm-generic/pgalloc.h                 |  24 +-
-> > > >  include/linux/sizes.h                         |   1
-> > > >  22 files changed, 833 insertions(+), 209 deletions(-)
-> > >
-> > > Sorry this took a while.  This is on for-next, with a bit of juggling: a
-> > > handful of trivial fixes for configs that were failing to build/boot and
-> > > some merge issues.  I also pulled out that MAXPHYSMEM fix to the top, so
-> > > it'd be easier to backport.  This is bigger than something I'd normally like to
-> > > take late in the cycle, but given there's a lot of cleanups, likely some fixes,
-> > > and it looks like folks have been testing this I'm just going to go with it.
-> > >
-> >
-> > Yes yes yes! That's fantastic news :)
-> >
-> > > Let me know if there's any issues with the merge, it was a bit hairy.
-> > > Probably best to just send along a fixup patch at this point.
-> >
-> > I'm going to take a look at that now, and I'll fix anything that comes
-> > up quickly :)
->
-> I see in for-next that you did not take the following patches:
->
->   riscv: Improve virtual kernel memory layout dump
->   Documentation: riscv: Add sv48 description to VM layout
->   riscv: Initialize thread pointer before calling C functions
->   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
->
-> I'm not sure this was your intention. If it was, I believe that at
-> least the first 2 patches are needed in this series, the 3rd one is a
-> useful fix and we can discuss the 4th if that's an issue for you.
+I tested this patch on my Juno board:
 
-Can you confirm that this was intentional and maybe explain the
-motivation behind it? Because I see value in those patches.
+root@Juno:# ./perf test 73
+ 73: Sigtrap                                                         : Skip
 
-Thanks,
-
-Alex
-
->
-> I tested for-next on both sv39 and sv48 successfully, I took a glance
-> at the code and noticed you fixed the PTRS_PER_PGD error, thanks for
-> that. Otherwise nothing obvious has popped.
->
-> Thanks again,
->
-> Alex
->
-> >
-> > Thanks!
-> >
-> > Alex
-> >
-> > >
-> > > Thanks!
+Tested-by: Leo Yan <leo.yan@linaro.org>

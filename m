@@ -2,148 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627624BB74C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F33DC4BB750
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbiBRKys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:54:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35922 "EHLO
+        id S234192AbiBRKyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:54:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232865AbiBRKyq (ORCPT
+        with ESMTP id S234175AbiBRKyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:54:46 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2055.outbound.protection.outlook.com [40.107.236.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E677622530;
-        Fri, 18 Feb 2022 02:54:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oRps0eD2OIkS9RYhumcTKgKUSaMjKHxUP3kF93J+rbzExXKAX40qDFTq3xCTbYD8aoggm9+d7okFYqkACw1wtgg0fuZA2G5FF6Ssam+lD8uQxFqKF3UpcrpYlzZakm5gJ+/JSmv1hBOxo7gCI6cuCfKh9X98JHlv92xaJTnxZJL8txme4QITvmhwCd/njLocI2FNnHUY8FgvHx/FRwGL927Vym00hkurWjvs2utG8TvLy5u4RezqYNXzy51TxKKI9AtBUmejbVokd0HnXxojCgpZHYAbl2qGnHTeYKlZPiITGEpk+mX9rmFsQBbNpWbVBul2DxSkHW9bps6UH75C4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C6486Dcz5hnZIsS+NWCT8cQAaujbHa05s8lfs45okOo=;
- b=JQgPxdGwg7t6cR11P4F0jjSNrtl9+kTj6dvj798yftOi1L/0fQfr09Uzc6SkxH+mKX62Lbv4iBeKoGa5wYIWY+kiVCDMNAqU8z3ewvk4MW8UHsK5psL4rQptHmLZh4m7sUZ3AeLm3dJ8CxW6+UXKZU8XI+FfcR0g56qRx2eZlWuGYmbezNO+Mut3QyVObBHgOYRZ0nQtZx4Cp64Gpp0MDIAH0QRiITJdriO1abn7434g9pymThkNVjgEodpJ47kaM1wpQnjUkd9xRmrzuABtm5imMTI3AKa1BDm8JMG0UrC8fro6kO+TQGMho6DTXGVEJebhXAGAtrtZuHDuginyZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
- dkim=pass header.d=silabs.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C6486Dcz5hnZIsS+NWCT8cQAaujbHa05s8lfs45okOo=;
- b=CrgU9djm6Je9/7ORIL+DsfwqLTHSd9EH2qnGkINUMqd6STvqxUwQAayLT5e1xeNQOdBlQh22s2RgYVCrjQTK70I+hawKn05J6xinSLYD+WsEWvjTXhHGKxGoIhdulL9w/YbVU6t+T6ucv1rmTHSF+RPwc2IFVfrg6VecVe0iOWY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=silabs.com;
-Received: from PH0PR11MB5657.namprd11.prod.outlook.com (2603:10b6:510:ee::19)
- by BN7PR11MB2771.namprd11.prod.outlook.com (2603:10b6:406:a9::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Fri, 18 Feb
- 2022 10:54:26 +0000
-Received: from PH0PR11MB5657.namprd11.prod.outlook.com
- ([fe80::1b3:e483:7396:1f98]) by PH0PR11MB5657.namprd11.prod.outlook.com
- ([fe80::1b3:e483:7396:1f98%3]) with mapi id 15.20.4995.024; Fri, 18 Feb 2022
- 10:54:26 +0000
-From:   Jerome Pouiller <Jerome.Pouiller@silabs.com>
-To:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>
-Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Riccardo Ferrazzo <rferrazzo@came.com>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
-        <jerome.pouiller@silabs.com>
-Subject: [PATCH] staging: wfx: fix scan with WFM200 and WW regulation
-Date:   Fri, 18 Feb 2022 11:53:58 +0100
-Message-Id: <20220218105358.283769-1-Jerome.Pouiller@silabs.com>
-X-Mailer: git-send-email 2.34.1
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-ClientProxiedBy: PR3P251CA0027.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:102:b5::13) To PH0PR11MB5657.namprd11.prod.outlook.com
- (2603:10b6:510:ee::19)
+        Fri, 18 Feb 2022 05:54:47 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEF322BEE;
+        Fri, 18 Feb 2022 02:54:31 -0800 (PST)
+Received: from [IPV6:2a01:e0a:120:3210:b17a:7c93:c01d:b57a] (unknown [IPv6:2a01:e0a:120:3210:b17a:7c93:c01d:b57a])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 914981F46707;
+        Fri, 18 Feb 2022 10:54:29 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645181670;
+        bh=mDKgd+Q2AHRC4xAge6dnVi0CH3nxoQVlAGei2HcyOQg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TDu6sVCPrAY0o8/Q/YqZdiINsKgsQ9aBOAHrLbjWG6lDHh6LP5+wUAoVaHpKm72GK
+         hN0Tx8+ZFIjAdsm5juPRKOsdTZC/8HF4+nRkE6inLRXiTSY27pSAKL8CjB7zPYi+kY
+         aqQyDfCda2CrYeokplNn9ZN/lhdCOhoGYaR3U8W7xDmaXx1vBGW+sOE2WYPLjjsQHu
+         ZFBoZU00zEF43GIRvf5paKh5cEvE2dBX2rDofpHqxpe4D01+kX5AWUtYrwwvF5M0TK
+         ZyQnkZo/lYJ3RuazpgvcpTLaUWvFio0a8uwj26HdUAbAcOvXnQQzRa8kizIbSlv6f/
+         rrgmvoYawds6g==
+Message-ID: <8ea4b561-2d46-3d40-73a1-2fe4d92c095d@collabora.com>
+Date:   Fri, 18 Feb 2022 11:54:27 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3c254fe4-b687-444d-02e4-08d9f2cd07bb
-X-MS-TrafficTypeDiagnostic: BN7PR11MB2771:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR11MB2771265B15AFA32A2876666C93379@BN7PR11MB2771.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6+8jboAO8WiXk2yjpbs+ZO/phECsD4N1BXEW4cPmLWAXTONqFGaorJIIlYJ3+FOAY6lmQ+uRX3NqbqjZYLQE7b4PcpsAF3haCKnNyLEwJhouEsQrq/083/bD1IE+WAoLZE1eCSxQtvED34467rblYwpGmbMrKDE/CcBRrnoT8+jAkz+BhTjQ4XNIemocmxsIh9jCRj+EMQQuRW2YamVDw/DhCgW1ymi8TxLUqKXVJ0waLKqd/hwe6ZVrbW+TaPhtBNx9qx6lmUId+nGu7okys+Q3dhfuwK/+UC30pzwX3rnJToOklWLk8ngf9sGWH8HH/5EAJmlXpeOLihqaVYRrGs01Nwg9xfC+3DELmZxYSam5VKI3w54JNpxQB4zWNwyelL7BwFFgE22KnY/8og4b4AltFdbD50Oh9eSjlzK+SxZKwFiWMNYoW9YT7ruMULaV0xOCkpWtF6ORLz85fdzsDhJ9aFLiQc8RRcHXXXJRA0qv0hWEgyBhE6bkCWUHBd6xTve6A0hShctDhNfbPDEA2dP9DVsoHu/rnT87Hreb7ABFfe9cdf3EX8Vlqq52BZTty4YSqQ7pnypZVA4ob0UQXxI5SIHobVx8PwjTZhUp32fIs7Rg6jUw85eiP6yvRMWdCiflmay4WgWjUBxlCuLUVHIIjWyTKQ/PiAZJkpm1Ii0LFeXVqaCr0ni8f2GF7OAEcH9Y4NXNoNg+47Az/5ZzDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(186003)(52116002)(66556008)(4326008)(26005)(107886003)(83380400001)(1076003)(8676002)(5660300002)(54906003)(38100700002)(38350700002)(8936002)(36756003)(6512007)(6486002)(66946007)(6916009)(2616005)(6506007)(2906002)(66574015)(6666004)(508600001)(66476007)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TVl5TzJwZFZwdkg2NVFpN2pjNnErN0FuVGRuM292bkszSGgvNWtiY0NyNVho?=
- =?utf-8?B?L05ocEJHREpPL1lUZDc2WjdiM09sMjZlVzh3VG50YXpXalArWFlydSszc1R0?=
- =?utf-8?B?WktRL2ZxU2padEtOU0dJSFl0TXozODdzQVFTNUFoRDdNOWRDZmpVV0hkTXdt?=
- =?utf-8?B?b0hxTVczLzRxN1NFajBiYzgrdlIvc0E5SWdYeFgxMmlYV0I1UTJ0UFR2OFlO?=
- =?utf-8?B?RThQSFd0Y0lqSWJrMWVTeDlVcmJ5ZFhjVjd2cjhhVDd1dFFNVVJEZzBuM2lS?=
- =?utf-8?B?ZW15QzYwUXBTaTVrNkZBSFRvRUsyaE5iUnpHR25KLzMrM2QwNTJ3Ky94QS8y?=
- =?utf-8?B?aDZGdjl6WGVzaTUzU0VtakJyRFdOMWhuMmpiZ3NtcjJrZkFJY3JUZC84Y21u?=
- =?utf-8?B?WVFGcXlJa3BNOHF6K2h4TC80VE5XRE1BYWdwRkwzamlnbWIwUUJCQ2NpWnAw?=
- =?utf-8?B?YjVSUkk1cklMTlZIVnM3YW1yN0kvNjFDeHh4OEIyRUR4cEsvQjdzZXRwZzB0?=
- =?utf-8?B?OFFWR3gzcG9ZUXVJVlVZY01PM2E2b045a0R4UFd5ZTJXL1l5QXhMbkdsd0ZZ?=
- =?utf-8?B?OElCRjlqWXJFOURzZU9WdTloVjRmRS9xYlRydmFMZExMamFQa0JmRlNYOEU4?=
- =?utf-8?B?VzU3ME1rdUIxc1VQRHhlS2ZWMmlhOUVwazB2V0t5aXNCZjJrVnBYSEhsejlz?=
- =?utf-8?B?d1AvM0pORTN2ZklacXEyblRaWURya2Z1dUhnVWZCYUNpS3BjK0xnczN6WEVZ?=
- =?utf-8?B?eW9MWEJyVldVNS85dUZjVnhJQ3lVZWZ6YlE3YkFPMEt3NzYzQkJ5L3YzOFh0?=
- =?utf-8?B?YUN4L1RUV1RDblRjNUZvL0RPa3p6SVRnM1JKWndUZkhEZk1aMHZpNTVITUs3?=
- =?utf-8?B?cXgyNUVaUHpjSUtvQVZGRDQ5NnFlZDNLRk90RFBLTFhNK2xabmorTjdGNGpl?=
- =?utf-8?B?dnFITVBsbm5WZHdISFJYbFQ5V1FQRDl1MFVkSkVjT3FaNnJNTWZsc2IrQzRK?=
- =?utf-8?B?RWtaYkUyTVRveGIwaXZoQUNKWHBPWmpMUHQ2T0hnOFNITVhId1p1WUtyTWdM?=
- =?utf-8?B?Zzl2dy9PVnJEalVISEhiVG5Vb2MxRUh4ZWIwaWFSekJ4a1B1QzBYUmNsUXRI?=
- =?utf-8?B?MlcvYkg0N2JLeW5tMFc2cGlwT09zZTA2ZjFnNCt2SHdaZGpITjFZTFlaSFpX?=
- =?utf-8?B?VUFBdmlmZ0Q1L3NTajB0cDA2RjRpNzFEakpwWG51clEwTEptaEF0aXZ5elRs?=
- =?utf-8?B?TlpXSW9XUGhueXhhcm5pS1hWcm1qb0o5WlVlbWdmYllUOGExa09wcjhTdUF5?=
- =?utf-8?B?NFppQUNwcVlLSlpuQTlFNWFYd0Jpb0ZhQ3RLNXVhZCtaSk9pTkNDZUduOFZj?=
- =?utf-8?B?NlBJWllhaHZyQ3ZPOEJlakdJMC9FN2JjN1hnU2NOZi81eDZWc1hoRXBDNHNS?=
- =?utf-8?B?UExzKzBTLyt0STdIRC9tYWJXT0xPc3krWHIzdWtkSXhRS2hsYkJjN1ovbTFs?=
- =?utf-8?B?VEJRNmNobTBZWS9ha3hPZDlKVmo3M1ovQ3BJNk9rM0w5SXFEZmxPbzZmRE9E?=
- =?utf-8?B?OXhXR3U3bHc1YjEzMzdvUU5tWHMveTVSQ0haUUloZnN0NWw1QVhnQUR5V0FP?=
- =?utf-8?B?ZStWamdOcjlENFBKdmVwaklkY2ppeHpsQ0xqdkx6MFZnSUNkUnBBb0Nyamhu?=
- =?utf-8?B?WkdxbkUwRjIyUDJPTnRYLzd3eVp0QURtWHI4dHZkaUp4TCszbUNMTyt6Q3d5?=
- =?utf-8?B?eXpQN3p2Vm9tajRVbFRZdmszTzhONEhESjJ0SjVPci9SSmRqVjE5MXFaTXVv?=
- =?utf-8?B?MUxQaSs2K3p1UzR3Um1ndzVVUll0akdHNDdHZ3FOZDd6V25XUVZycTZ3M3ls?=
- =?utf-8?B?cjZ5UWJVMUxGQ1d4NUEyN3lSVTJaL0hrSnBpSXVndzlIRUNtRHd6RFJMSVZa?=
- =?utf-8?B?SXVqZUNTL1BzQkd1VFZoTlNUcG1xVWNhMkhTajN4NndWVE1kRWdMVFhSUVZh?=
- =?utf-8?B?MFBuN0hnMnhxaS9pblFPd1lxWlV2TnFlbXdkMHlCVkVkTFZlaWZPVDYzZVlF?=
- =?utf-8?B?cjE0MTBqMnkyQnRRRkNBblBOcjZhR0ZqeXFaOTU4Wm4yOWV1RStjNlZXYjYr?=
- =?utf-8?B?KzUyNVZ2dHZuZE0wNmR5QzU0bzVBSVU3VU9HZUdOaUJvZFJSNm5LQ2JxTHZU?=
- =?utf-8?Q?qnsXHJ58Y2kQTkpxEQXf0GE=3D?=
-X-OriginatorOrg: silabs.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c254fe4-b687-444d-02e4-08d9f2cd07bb
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5657.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 10:54:26.4529
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 54dbd822-5231-4b20-944d-6f4abcd541fb
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: COhDC81AUz/NT2PYTNaTbOSAFF/uK+gebaA+jpCzdi9pQOgV8Z+fuGvdH9piGjfhYA69BUoVmnc1KIIUzj4M1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2771
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC v2 0/8] Move HEVC stateless controls out of staging
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>, mchehab@kernel.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se, nicolas@ndufresne.ca
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk
+References: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
+ <d33e96db-8cd0-08a5-7e73-742187ea6de5@xs4all.nl>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <d33e96db-8cd0-08a5-7e73-742187ea6de5@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogUmljY2FyZG8gRmVycmF6em8gPHJmZXJyYXp6b0BjYW1lLmNvbT4KClNvbWUgdmFyaWFu
-dHMgb2YgdGhlIFdGMjAwIGRpc2FsbG93IGFjdGl2ZSBzY2FuIG9uIGNoYW5uZWwgMTIgYW5kIDEz
-LgpGb3IgdGhlc2UgcGFydHMsIHRoZSBjaGFubmVscyAxMiBhbmQgMTMgYXJlIG1hcmtlZCBJRUVF
-ODAyMTFfQ0hBTl9OT19JUi4KCkhvd2V2ZXIsIHRoZSBiZWFjb24gaGludCBwcm9jZWR1cmUgd2Fz
-IHJlbW92aW5nIHRoZSBmbGFnCklFRUU4MDIxMV9DSEFOX05PX0lSIGZyb20gY2hhbm5lbHMgd2hl
-cmUgYSBCU1MgaXMgZGlzY292ZXJlZC4gVGhpcyB3YXMKbWFraW5nIHN1YnNlcXVlbnQgc2NhbnMg
-dG8gZmFpbCBiZWNhdXNlIHRoZSBkcml2ZXIgd2FzIHRyeWluZyBhY3RpdmUKc2NhbnMgb24gcHJv
-aGliaXRlZCBjaGFubmVscy4KClNpZ25lZC1vZmYtYnk6IErDqXLDtG1lIFBvdWlsbGVyIDxqZXJv
-bWUucG91aWxsZXJAc2lsYWJzLmNvbT4KLS0tCiBkcml2ZXJzL3N0YWdpbmcvd2Z4L21haW4uYyB8
-IDEgKwogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVy
-cy9zdGFnaW5nL3dmeC9tYWluLmMgYi9kcml2ZXJzL3N0YWdpbmcvd2Z4L21haW4uYwppbmRleCBk
-ODMyYTIyODUwYzcuLjU5OTllODFkYzQ0ZCAxMDA2NDQKLS0tIGEvZHJpdmVycy9zdGFnaW5nL3dm
-eC9tYWluLmMKKysrIGIvZHJpdmVycy9zdGFnaW5nL3dmeC9tYWluLmMKQEAgLTM4MSw2ICszODEs
-NyBAQCBpbnQgd2Z4X3Byb2JlKHN0cnVjdCB3ZnhfZGV2ICp3ZGV2KQogCX0KIAogCWlmICh3ZGV2
-LT5od19jYXBzLnJlZ2lvbl9zZWxfbW9kZSkgeworCQl3ZGV2LT5ody0+d2lwaHktPnJlZ3VsYXRv
-cnlfZmxhZ3MgfD0gUkVHVUxBVE9SWV9ESVNBQkxFX0JFQUNPTl9ISU5UUzsKIAkJd2Rldi0+aHct
-PndpcGh5LT5iYW5kc1tOTDgwMjExX0JBTkRfMkdIWl0tPmNoYW5uZWxzWzExXS5mbGFncyB8PQog
-CQkJSUVFRTgwMjExX0NIQU5fTk9fSVI7CiAJCXdkZXYtPmh3LT53aXBoeS0+YmFuZHNbTkw4MDIx
-MV9CQU5EXzJHSFpdLT5jaGFubmVsc1sxMl0uZmxhZ3MgfD0KLS0gCjIuMzQuMQoK
+
+Le 18/02/2022 à 10:59, Hans Verkuil a écrit :
+> Hi Benjamin,
+>
+> On 15/02/2022 12:00, Benjamin Gaignard wrote:
+>> This series aims to make HEVC uapi stable and usable for hardware
+>> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+>> and 2 out of the tree drivers (rkvdec and RPI).
+>>
+>> The 3 first patches are from Hans to implement v4l2 dynamic control
+>> feature which is need by patch 7 for V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET
+>> definition.
+>>
+>> Patch 4 move the existing uapi to stable, including definitions renaming
+>> and CID number change to fit with v4l2 naming.
+>>
+>> Patches 5 and 7 add fields needed for rkvdec and RPI decoders.
+>>
+>> Patches 6 is cleaning up the uapi of useless field.
+>> Patches 8 change one field description and name to define offset by
+>> bytes rather than by bits
+> I have some housekeeping questions:
+>
+> I have several older HEVC-related patches from you, which of those are still
+> valid?
+>
+> "[v4,0/9] Additional features for Hantro HEVC":
+> https://patchwork.linuxtv.org/project/linux-media/cover/20210625141143.577998-1-benjamin.gaignard@collabora.com/
+>
+> "media: hevc: fix pictures lists type":
+> https://patchwork.linuxtv.org/project/linux-media/patch/20210823082949.237716-1-benjamin.gaignard@collabora.com/
+>
+> "media: hantro: Trace hevc hw cycles performance register":
+> https://patchwork.linuxtv.org/project/linux-media/patch/20210823135606.633052-1-benjamin.gaignard@collabora.com/
+>
+> "media: hantro: Add support of compressed reference buffers"
+> https://patchwork.linuxtv.org/project/linux-media/patch/20210823162916.824336-1-benjamin.gaignard@collabora.com/
+>
+> Before moving the HEVC API out of staging I would prefer to have any remaining
+> issues fixed. So one series that adds any remaining fixes (i.e. from the older patches
+> mentioned above), and a second series on top that moves it out of staging.
+
+Hi Hans,
+
+They are all related to Hantro diver and, after post-proc patches, the internal driver design
+has change so they won't apply anymore. You can discard them.
+HEVC UAPI migration isn't not impacted by these patches.
+My plan is a finish the HEVC UAPI first, send patches to add features (compression, 10bits, scaling)
+to Hantro driver and finally move it out of staging too.
+If possible I would like to not make HEVC UAPI topic depends of Hantro features.
+
+Does that makes sense for you ?
+
+Regards,
+Benjamin
+
+>
+> That way I can mark the older patches as Superseded, and we have a
+> fresh series that we can discuss.
+>
+> Regards,
+>
+> 	Hans
+>
+>> Benjamin
+>>
+>> Benjamin Gaignard (5):
+>>    media: uapi: Move HEVC stateless controls out of staging
+>>    media: uapi: Add fields needed for RKVDEC driver
+>>    media: uapi: Remove bit_size field from v4l2_ctrl_hevc_slice_params
+>>    media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
+>>    media: uapi: Change data_bit_offset definition
+>>
+>> Hans Verkuil (3):
+>>    videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+>>    v4l2-ctrls: add support for dynamically allocated arrays.
+>>    vivid: add dynamic array test control
+>>
+>>   .../userspace-api/media/drivers/hantro.rst    |   5 -
+>>   .../media/v4l/ext-ctrls-codec.rst             |  58 ++--
+>>   .../media/v4l/vidioc-queryctrl.rst            |   8 +
+>>   .../media/test-drivers/vivid/vivid-ctrls.c    |  15 ++
+>>   drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++++++--
+>>   drivers/media/v4l2-core/v4l2-ctrls-core.c     | 182 ++++++++++---
+>>   drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +--
+>>   drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+>>   drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+>>   drivers/staging/media/hantro/hantro_drv.c     |  27 +-
+>>   drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
+>>   drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
+>>   .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+>>   .../staging/media/sunxi/cedrus/cedrus_h265.c  |  13 +-
+>>   include/linux/hantro-media.h                  |  17 ++
+>>   include/media/hevc-ctrls.h                    | 250 ------------------
+>>   include/media/v4l2-ctrls.h                    |  48 +++-
+>>   include/uapi/linux/v4l2-controls.h            | 224 ++++++++++++++++
+>>   include/uapi/linux/videodev2.h                |   8 +
+>>   19 files changed, 640 insertions(+), 408 deletions(-)
+>>   create mode 100644 include/linux/hantro-media.h
+>>   delete mode 100644 include/media/hevc-ctrls.h
+>>

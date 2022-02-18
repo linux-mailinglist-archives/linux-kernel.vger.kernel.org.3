@@ -2,91 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB524BC16B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014B04BC16D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239573AbiBRUyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 15:54:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59818 "EHLO
+        id S239586AbiBRUze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 15:55:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbiBRUyb (ORCPT
+        with ESMTP id S239576AbiBRUza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 15:54:31 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3E1FDFB0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645217654; x=1676753654;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gqs9pgYk8IAWf5YLT2+4r7t94OiRCL9q78qgGVoC8OM=;
-  b=TZPLSKDC/NzFTNXDZOIhC6kK+9fSEEg6QoDoXc4MvwkeCdgnR1+BrHFH
-   3L0PWcrXs8rK0S/jxKIpPe8NbwcaniMpGFs82nLWatuYgvPCgEKE6dPWb
-   YX7hNE5cMgpIoBzJAHsZvubvtBIATyybist/CwhnGeHN5Oi77mg7QrsY6
-   AZTpDtHLyi/PxH/QQlcPriBlIaxpsDKsv4c0GakSgJ7pcvfZs4B85gYCF
-   dgisq6Pd4FZ57aYXffCComClQ4EduRW5BzdlRABxVhGpMjDumAg7e8S6e
-   oqkHvf3jfpZ35BnrRWwdyRV+/wycES6zmjRmnOD2lqrfxEDE2XrlGn9p7
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="314484332"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="314484332"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 12:54:13 -0800
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="775387524"
-Received: from cjjohn4x-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.212.214])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 12:54:11 -0800
-Date:   Fri, 18 Feb 2022 12:54:11 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH V8 26/44] x86/fault: Print PKS MSR on fault
-Message-ID: <YhAHc8SkF/tV91ru@iweiny-desk3>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-27-ira.weiny@intel.com>
- <2a919d9ed8ed874f8b89014c0b42cbadb44d837b.camel@intel.com>
- <Yg82L5ibjbn15AHO@iweiny-desk3>
- <d94be5f21bf18c844d7088a96ae35aa209a0ef4e.camel@intel.com>
- <edb6706a-6e06-2510-3bbc-84da97b8cd52@intel.com>
+        Fri, 18 Feb 2022 15:55:30 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB3D174D58
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:55:12 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id h16so8989973iol.11
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=G+Nk3Ul8ZofZGlECV35FaczdZLbFxqJtymW7VkmqAf4=;
+        b=eu8Q571+jCRn45TU/+tjBOUYgv2oxcsCnPicaM5xfdFC0nUZ8NrDf6/0ECOdpVhf05
+         c67wuGN2pLB+Z3JonOrf6OlLDQ0NgIzdDQRdMpG8DuS7ht7vVjGhM1KThw/MFe4u/Pmf
+         DfwR1f7w9bwIJ+vRiTYgXa4M6nw3zILyPsL/E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=G+Nk3Ul8ZofZGlECV35FaczdZLbFxqJtymW7VkmqAf4=;
+        b=L3m/Lcq4UKSIltqVYND0s3Q/3hTGeiTRqPoBRzUcQj9Qgzdc/G8x58S+xOon7AJcam
+         tJws5Ioi/boxocr6U7T6ekE+VNYWdLXQdCFrVgsD/DNoemi35UnDESv6O9jinSrAtPHq
+         A77SvmMdc3JWECz5zMyM9lYA+gNdssR2Wnbxc+fqsK5kzQ2IPfyeKJKCXWFpkiPzpLSJ
+         StVJXg3+W8eHjFa9dBk80xK+rPnQK2KwYq2s2R1swYAMEIo/cpU5HrLy0k0uSp+HRDA0
+         8uRC9FH725BaczlAEYl2Nh+NFOGGeEm47KQiUTXrVKZaUj929Sb2qnsHB8DbJZ/L9HDa
+         7gOg==
+X-Gm-Message-State: AOAM533V51vf8ytq39muuBik7P1cksUPUEA+zc+ArkX8gdvIJ+VXTz7J
+        T2M2dNvEWoVmuQ+UiBP00zHZZw==
+X-Google-Smtp-Source: ABdhPJzC5Ui1Ck6NMD5fi9OWGky4aR3TsSlVjOUWZ8pyscjh+UpvL6znB2junqICWLXmttT9Q1lwTg==
+X-Received: by 2002:a05:6602:2f10:b0:638:3f31:f282 with SMTP id q16-20020a0566022f1000b006383f31f282mr6849046iow.171.1645217711703;
+        Fri, 18 Feb 2022 12:55:11 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id j14sm4113991ilc.62.2022.02.18.12.55.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 12:55:11 -0800 (PST)
+Subject: Re: [PATCH] selftests/resctrl: Add missing SPDX license to Makefile
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220216022826.2999382-1-tan.shaopeng@jp.fujitsu.com>
+ <4e8297a0-f2a5-2bee-912e-005de2c03b50@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <dd1507fe-4948-38fd-98f1-26e15306b150@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 13:55:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <edb6706a-6e06-2510-3bbc-84da97b8cd52@intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4e8297a0-f2a5-2bee-912e-005de2c03b50@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 12:20:58PM -0800, Dave Hansen wrote:
-> On 2/18/22 09:28, Edgecombe, Rick P wrote:
-> > On Thu, 2022-02-17 at 22:01 -0800, Ira Weiny wrote:
-> >> Are you suggesting the PKRU should be printed instead or in addition
-> >> to the
-> >> PKS?
-> > Well I was just thinking that PKRS should only be printed if it's an
-> > access via a supervisor pte.
+On 2/18/22 1:47 PM, Shuah Khan wrote:
+> On 2/15/22 7:28 PM, Shaopeng Tan wrote:
+>> Add the missing SPDX(SPDX-License-Identifier) license header to
+>> tools/testing/selftests/resctrl/Makefile.
+>>
+>> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+>> ---
+>>   tools/testing/selftests/resctrl/Makefile | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
+>> index de26638540ba..d661eb2df19b 100644
+>> --- a/tools/testing/selftests/resctrl/Makefile
+>> +++ b/tools/testing/selftests/resctrl/Makefile
+>> @@ -1,3 +1,5 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>>   CFLAGS += -g -Wall -O2 -D_FORTIFY_SOURCE=2
+>>   TEST_GEN_PROGS := resctrl_tests
+>>
 > 
-> That's not *wrong* per se, but it's not what we do for PKU:
+> This looks good to me. I will queue this up for Linux 5.18-rc1
 > 
->         if (cpu_feature_enabled(X86_FEATURE_OSPKE))
->                 printk("%sPKRU: %08x\n", log_lvl, read_pkru());
-> 
-> If the feature is enabled, we print the register.  We don't try to be
-> fancy and decide if it's relevant to the oops.  Why don't you just stick
-> PKRS on the same line as PKRU whenever it's supported?
 
-Ah good point.  I'll do that.
+Looks like this depends on the 5 patch series. Please include this
+one on the same series.
 
-Thanks,
-Ira
+thanks,
+-- Shuah

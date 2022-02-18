@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E384BB04E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 04:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8E04BB04C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 04:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiBRDlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 22:41:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42612 "EHLO
+        id S229579AbiBRDld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 22:41:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiBRDlp (ORCPT
+        with ESMTP id S229561AbiBRDlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 22:41:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6722910FFA
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 19:41:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645155686;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=hArr4mJlPZnwAWrYBTIVC2/1c3VQ46oZ6y6rsQQSe+k=;
-        b=e2PDR2R23RT312eTFtcxpKYXtW1Om/lr4MO29SvFRa7+VrCqJ7+Ruu1oTu5UZfYnnNCXUw
-        bEeQrgsGfe91zksgEXS+HFoBspvVhuxpIPGJsjXVWAYz/AfF0WLOvunDWb22dULTojyDtJ
-        Y61y9bHncYGTgm8R5YCcWpsevY2nkK8=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-WW-JRKYQNxyl1A7It435vg-1; Thu, 17 Feb 2022 22:41:25 -0500
-X-MC-Unique: WW-JRKYQNxyl1A7It435vg-1
-Received: by mail-oi1-f200.google.com with SMTP id o4-20020aca5a04000000b002d3a5cc05b9so909917oib.6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 19:41:25 -0800 (PST)
+        Thu, 17 Feb 2022 22:41:32 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16E5B18B6;
+        Thu, 17 Feb 2022 19:41:16 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id d16so6732999pgd.9;
+        Thu, 17 Feb 2022 19:41:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IO9s8KzRes95vzfkF7po1cE6U/yprrUy5xOgD2OSUu4=;
+        b=ON3tYEw/7+3ccvxhEx90PqtB6dGsTiQOSIRCkXBXa/ykFOEXPWEOQv8iaAsD5MhEk9
+         Fi2YzjXH3edf5xlWOYV0pJt2z/hP4ZWwNLLCnKCS+UrAE69Zbvp67rnIeaXiY3pxf9v0
+         zZxaXIAZRtKhZ6SQgYTD6kEUR+DEHrdICGGZhmZ7VfvKcc3BVD3D19tzs6qQ8YlpiPln
+         sllGf7i61bpMPJ3k5pTHyZjC+bjvFh5K8T91WfA8/MOBl+PQeaQe7Rp489cqRLW9XbN6
+         9RjB9ertGPP/I4eWyGGYeLjA1J4rGmjRPtRoCTTXugIwtF53BWYi1kdNgKFHwLVkzjjF
+         FJ2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=hArr4mJlPZnwAWrYBTIVC2/1c3VQ46oZ6y6rsQQSe+k=;
-        b=Gu52sT0coMtRv+IM7o8AFCyiBrtVWjr7swVV+iQkk43o43qMQiRY95GCahQtBkvA/G
-         eMA+pDYGqWjQa8sCFQFjoU6dh0viXVXD71tI4ePHRibcVnmXIoSFPIRX31OD+jvPu+04
-         Jw2zJGc95U3APNtQ8AVrXh4rVKV2LQeJfKsQ2JFb339IRhjj4r/4w6EFUHykkmxXHHrU
-         qGuojvNCbf5jnH2mO6mj8UHILMjF+5ddIbt9lZgI+K35qBDg3AhiciAGd53t6ypbFbZd
-         5AF6rLBMvYc40BTH+vZJB7wg9EXAFLm6yZe5+04QRb3NWQtxy4CmK6YWXQV0i7ztcz5L
-         c8XA==
-X-Gm-Message-State: AOAM530ESbPWFAxeJWVKYh6usiDdgVVZvRqBvcLEeZAKXuevqEa8PeUX
-        9aybXUrbRc3qlk+VT3PdZpCzqudTeLR4A51yzfvLOlVIX8xMBodqtyLao5/SqUb7ay6W+5fqn4t
-        /6G0IHzBWHBxzYosN0MTjqF7j
-X-Received: by 2002:a9d:2c8:0:b0:59e:bea0:a9f4 with SMTP id 66-20020a9d02c8000000b0059ebea0a9f4mr1930282otl.221.1645155684415;
-        Thu, 17 Feb 2022 19:41:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz0+GdnkfLgkCWNJkBfsRH9CCeWqV4vimJP6tkia4RuKX0EWc/0JV/P6rzXwl8ah+7NPZFpXw==
-X-Received: by 2002:a9d:2c8:0:b0:59e:bea0:a9f4 with SMTP id 66-20020a9d02c8000000b0059ebea0a9f4mr1930266otl.221.1645155684208;
-        Thu, 17 Feb 2022 19:41:24 -0800 (PST)
-Received: from localhost.localdomain ([2804:431:c7f1:c12c:38a3:24a6:f679:3afd])
-        by smtp.gmail.com with ESMTPSA id 189sm694698ooi.9.2022.02.17.19.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 19:41:23 -0800 (PST)
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Leonardo Bras <leobras@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH v1 1/1] x86/kvm: Fix compilation warning in non-x86_64 builds
-Date:   Fri, 18 Feb 2022 00:41:00 -0300
-Message-Id: <20220218034100.115702-1-leobras@redhat.com>
-X-Mailer: git-send-email 2.35.1
+        bh=IO9s8KzRes95vzfkF7po1cE6U/yprrUy5xOgD2OSUu4=;
+        b=HJlBdOxUDmHH8fy+hNDY6d3luECPnA7OW9veSnwATQQR/t9RuUSJgZBe/5Uv+9Ekd0
+         20p/jV/O+P11ipeFM62S1bZ4F9TBX5S8DMcLTAUs99f7Ma8scxG+T39Do4gO3LDt7RCD
+         VBg2DJTBIKjDNKzQXMo4VAa2YFiZuGOH2yFrguzrjZCZaVeyiEEoJiaS+JAjsoOKJWG+
+         HnEOe0b5XNRTLkFZld5y1NlHwCo64GDG02vqsLJPN2CG26h8k7Mez+tD7WJpAyWUuonD
+         2sWTHNmlN0XH5OeRJKP8vOEbxIqDxSziDsRBZZckwXPUzZD0AxqoTMs2mB/GekfS/IlY
+         oetQ==
+X-Gm-Message-State: AOAM532hfspP5MuIROyaeNO2hQilmTDXX9wwu/+r9/U8w1VWSECBJrHL
+        dPsxI9JBP5xIteBVaiyfFdU=
+X-Google-Smtp-Source: ABdhPJwd6cr/xrdWP6jxd0afu7D5RpFS8K7nU2iDuksHf9i7m2G/f7+NEAJQA+nRszt/SY9o9ifWpQ==
+X-Received: by 2002:a63:5f0f:0:b0:370:1db0:5766 with SMTP id t15-20020a635f0f000000b003701db05766mr4816692pgb.532.1645155676052;
+        Thu, 17 Feb 2022 19:41:16 -0800 (PST)
+Received: from [172.20.119.15] ([103.112.79.203])
+        by smtp.gmail.com with ESMTPSA id ng16sm3245301pjb.12.2022.02.17.19.41.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 19:41:15 -0800 (PST)
+Message-ID: <6e6df16c-3609-71ef-c147-435920e59e8c@gmail.com>
+Date:   Fri, 18 Feb 2022 11:41:11 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [RFC V4 2/6] blk-wbt: make wbt pluggable
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <jbacik@fb.com>,
+        Tejun Heo <tj@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220217031349.98561-1-jianchao.wan9@gmail.com>
+ <20220217031349.98561-3-jianchao.wan9@gmail.com>
+ <Yg4MQSUZZu9D+qJu@infradead.org>
+From:   Wang Jianchao <jianchao.wan9@gmail.com>
+In-Reply-To: <Yg4MQSUZZu9D+qJu@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On non-x86_64 builds, the helper gtod_is_based_on_tsc() is defined but
-never used, which results in an warning with -Wunused-function, and
-becomes an error if -Werror is present.
 
-Add #ifdef so gtod_is_based_on_tsc() is only defined in x86_64 builds.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Leonardo Bras <leobras@redhat.com>
----
- arch/x86/kvm/x86.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 2022/2/17 4:50 下午, Christoph Hellwig wrote:
+>> +struct rq_qos *wbt_rq_qos(struct request_queue *q);
+>>  int wbt_init(struct request_queue *);
+> 
+> 
+> Please move the wb_lat sysfs attribute into blk-wbt.c as well, which
+> removes the need to expose these two functions.
+> 
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index ca0fae020961..b389517aa6ed 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -2363,10 +2363,12 @@ static u64 compute_guest_tsc(struct kvm_vcpu *vcpu, s64 kernel_ns)
- 	return tsc;
- }
- 
-+#ifdef CONFIG_X86_64
- static inline int gtod_is_based_on_tsc(int mode)
- {
- 	return mode == VDSO_CLOCKMODE_TSC || mode == VDSO_CLOCKMODE_HVCLOCK;
- }
-+#endif
- 
- static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu)
- {
--- 
-2.35.1
+Given this patchset:
+(1) Do we need to reserve the wb_lat sysfs when we turn off the wbt ?
+(2) Do we need to disable wbt automatically when switch io scheduler
+    to bfq ? Or just tell the user turn off the wbt by themselves ?
 
+Thanks
+Jianchao

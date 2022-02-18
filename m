@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281954BBDD9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63A64BBDDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiBRQyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:54:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53634 "EHLO
+        id S238102AbiBRQzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:55:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbiBRQyr (ORCPT
+        with ESMTP id S233766AbiBRQzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:54:47 -0500
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F18217BCF9;
-        Fri, 18 Feb 2022 08:54:29 -0800 (PST)
-Received: from imladris.surriel.com ([96.67.55.152])
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1nL6WU-0005MC-L2; Fri, 18 Feb 2022 11:54:22 -0500
-Message-ID: <76ab6eb2c848f6b33fe3cc910d754599e6b2d213.camel@surriel.com>
-Subject: Re: [PATCH][RFC] ipc,fs: use rcu_work to free struct ipc_namespace
-From:   Rik van Riel <riel@surriel.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Chris Mason <clm@fb.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Date:   Fri, 18 Feb 2022 11:54:21 -0500
-In-Reply-To: <87iltcf996.fsf@email.froward.int.ebiederm.org>
-References: <20220217153620.4607bc28@imladris.surriel.com>
-         <87iltcf996.fsf@email.froward.int.ebiederm.org>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-Nj4RU8Ef5+fKGiA/YAQB"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Fri, 18 Feb 2022 11:55:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A102325AE5C;
+        Fri, 18 Feb 2022 08:55:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BBBE61F8C;
+        Fri, 18 Feb 2022 16:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 741F8C340E9;
+        Fri, 18 Feb 2022 16:55:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645203333;
+        bh=pgtgOnne91mf4WHIxfyxxseb+GRrxggNdUTSH1ecoF4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fjmDpwx3KX51Tf/RvOAb12EKpUwIMNXjB/UYZjlnld6dk09xc/LeVBYB6/9wA/haz
+         pfcyWNt4MsrLMmQ/J5BRlphjdXXoNyHTAi55X+htLcINZ17ljv0xSYEOom2oGOb+Kc
+         l/R7S9FuzK6nNdCyXEkrujOAwhwrJwzJtIJtLbABuP0U1NyG0X4YST3CeNkKVIXMEW
+         Ff9eDZiRSJip0DqVDwQCKAK7QF3yjup1xs6QTNC7K2VmiaiRke5HT4QWRxncmp78FC
+         yRIb9FhmCqGcM/4udWbl1dvBE2hQA43br9qD7boxr3PpZczi2wjV8fs2guWRC08wFc
+         MINTnaJxZJnAA==
+Received: by pali.im (Postfix)
+        id DDE6F2BAE; Fri, 18 Feb 2022 17:55:30 +0100 (CET)
+Date:   Fri, 18 Feb 2022 17:55:30 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Increase PCIe IO size
+ from 64 KiB to 1 MiB
+Message-ID: <20220218165530.j62nafuofe342sfi@pali>
+References: <20220113170755.11856-1-pali@kernel.org>
+ <CAK8P3a2D8Yv+KpM4NJyP9mosieqbhHh08=mdEy+OA84Vx6FVCQ@mail.gmail.com>
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8P3a2D8Yv+KpM4NJyP9mosieqbhHh08=mdEy+OA84Vx6FVCQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Friday 18 February 2022 17:43:04 Arnd Bergmann wrote:
+> On Thu, Jan 13, 2022 at 6:07 PM Pali Rohár <pali@kernel.org> wrote:
+> >
+> > Commit 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM
+> > space") increased size of PCIe MEM to 127 MiB, which is the maximal
+> > possible size for allocated 128 MiB PCIe window. PCIe IO size in that
+> > commit was unchanged.
+> >
+> > Armada 3720 PCIe controller supports 32-bit IO space mapping so it is
+> > possible to assign more than 64 KiB if address space for IO.
+> >
+> > Currently controller has assigned 127 MiB + 64 KiB memory and therefore
+> > there is 960 KiB of unused memory. So assign it to IO space by increasing
+> > IO window from 64 KiB to 1 MiB.
+> >
+> > DTS file armada-3720-turris-mox.dts already uses whole 128 MiB space, so
+> > only update comment about 32-bit IO space mapping.
+> >
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > Fixes: 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM space")
+> 
+> I just saw this is the fixes pull request, and it seems very odd. Does this
+> fix an actual bug?
 
---=-Nj4RU8Ef5+fKGiA/YAQB
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Do you mean this patch or commit 514ef1e62d65?
 
-On Fri, 2022-02-18 at 10:08 -0600, Eric W. Biederman wrote:
->=20
-> Maybe I am reading the lifetimes wrong but is there
-> any chance the code can just do something like the diff below?
->=20
-> AKA have a special version of kern_umount that does the call_rcu?
->=20
-> Looking at rcu_reclaim_tiny I think this use of mnt_rcu is valid.
-> AKA reusing the rcu_head in the rcu callback.
->=20
->=20
-> diff --git a/fs/namespace.c b/fs/namespace.c
-> index 40b994a29e90..7d7aaef1592e 100644
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-> @@ -4395,6 +4395,22 @@ void kern_unmount(struct vfsmount *mnt)
-> =C2=A0}
-> =C2=A0EXPORT_SYMBOL(kern_unmount);
-> =C2=A0
-> +static void rcu_mntput(struct rcu_head *head)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct mount *mnt =3D container_of(=
-head, struct mount,
-> mnt_rcu);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mntput(&mnt->mnt);
-> +}
-> +
-> +void kern_rcu_unmount(struct vfsmount *mnt)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* release long term mount so mount=
- point can be released */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!IS_ERR_OR_NULL(mnt)) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 struct mount *m =3D real_mount(mnt);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 m->mnt_ns =3D NULL;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 call_rcu(&m->mnt_rcu, rcu_mntput);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> +}
+> Note that Linux normally doesn't map more than 64KB
+> of I/O space per PCI domain, so it should not make a difference to us.
 
-OK, two comments here:
+Last time I looked into ARM code, it can allocate more than 64 kB for IO.
 
-1) As Paul pointed out, we need to use call_rcu_work here,
-   because rcu_mntput needs to run from a work item (or well,
-   any process context) because of the rwlock.
-2) No user of kern_unmount can use the vfsmount structure
-   after kern_unmount returns. That means they could all use
-   the RCU version, and no special version is needed.
+> Also, note that having a high bus address for the I/O space (0xefff0000,
+> as as the CPU physical address here) means that a lot of the older
+> devices that actually require I/O space won't work, because they need a
+> low bus address in the first few KB.
+> 
+> Is this mapping a requirement from a broken bootloader, or can you change
+> the mapping of the I/O port window in the physical space to the usual
+> bus address 0?
 
-Let me go test a patch that does that...
+At physical address 0x0 it is not possible as at this address is mapped
+DDR.
 
---=20
-All Rights Reversed.
+ARM Trusted-Firmware sets PCIe space to range [0xe8000000-0xf0000000].
+This (default) configuration is specified in DTS file. Which parts of
+this range is used for IO and which MEM is up to the a3720 PCIe kernel
+driver and currently it configures it based on how sub-ranges are
+specified in DT.
 
---=-Nj4RU8Ef5+fKGiA/YAQB
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+In some cases (e.g. when board has 4 GB of RAM), TF-A relocates this
+PCIe range to different location (otherwise it cannot activate more than
+2 GB of RAM) and U-Boot during loading of kernel DTB file, is patching
+it.
 
------BEGIN PGP SIGNATURE-----
+It could be possible to change TF-A code to move PCIe space to different
+location (from [0xe8000000-0xf0000000]) but not to 0x0. But changing it
+means to move other parts and invent mapping in which most of RAM can be
+mapped to...
 
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmIPzz0ACgkQznnekoTE
-3oPA5gf/RwIK7o5WwLOdv/NrgFKzTA7grHe3+UaXCdMPIbtPN02DVKRBChzt3tam
-Bg4KlnXpdOuUSOtZlyWI7lBYJqPnuMBTOnAmRjLPtKfM33oF57x9SRa3gidIYB2o
-GgulqLJbxDISofE3p8UQt6omATXVEclDiuFFX2Dq9Z0J0F+QypOH+HPmjHjxj4sp
-9r4zcp2kLJJVucAcnCSdDwA/Aobg3asBeyqpYJaoKtQMMhZcQEMYYChpjkQ0kozc
-MKri/ZwKBKALc7xfoQzEtmyXlS8zekZVnZGY9oXUZnGT6A9agYchgB261603Lzjn
-2XILdfGnUu0sVGFdNjCbq8U0iUDczA==
-=gYON
------END PGP SIGNATURE-----
-
---=-Nj4RU8Ef5+fKGiA/YAQB--
+> 
+>         Arnd

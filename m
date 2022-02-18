@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CC44BB6E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E964BB6E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiBRK13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:27:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37940 "EHLO
+        id S233556AbiBRK3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:29:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233570AbiBRK1X (ORCPT
+        with ESMTP id S231464AbiBRK3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:27:23 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27163193CB;
-        Fri, 18 Feb 2022 02:27:06 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 75so7453980pgb.4;
-        Fri, 18 Feb 2022 02:27:06 -0800 (PST)
+        Fri, 18 Feb 2022 05:29:01 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6183B39BA3;
+        Fri, 18 Feb 2022 02:28:45 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v4so8188255pjh.2;
+        Fri, 18 Feb 2022 02:28:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WRUQ/0ItbuB8Qd5eXwqs349lFDwlCtd3M661qIRr/M4=;
-        b=mD47QKPrM8oJIUo+2zfGME4E/z+r0q6UB4rPJC0A6e/1sP61wyq8JjzZTfaYqLg4rz
-         zd65wHk4j7xCrbUkA63r2cUWBIhpqDDoGnOSTYKw5oCCoagzg4Uqi3nupCr01pI8Hhoe
-         dnkIkfcyAq1Jw/P3GfeRMAcg0qcIt4iMYFk5U5lhfPwHO9PIeCFqCoIZZGEkVGK6/9M2
-         2lm/NmFLQZnk3UxhW0e/e6IpSFLR3fmpMbpq119M4eDA+HiVSWB/mJq4c22JzFXSYBfE
-         FPSBE8ECWtRW1t1C/IJEqg7WBygiBLKNvhJfFnvQKMarWipClLIx9u8HmQJr60EbcD7H
-         JP4Q==
+        bh=hZxv3pHz6Udq1OzuuR9MJTgehSeTgSTYX6aQTnuEBto=;
+        b=DelbllCB/RnzeNnQQUFk7K6N1cJt9lxouz4gqHucg3Uoadz8eU7vuIxQO54qf3Gid4
+         2sNHQLHRI8ReIxh1KgWSg2K40KyZXT2/BfvwhzRgRO/prp2gzJnc/QLjoUMSFoQnrarp
+         o+omlMWVM0lLTUWf1fgsOEENwOHGp+1WGm5aJNZLzVPwtr0kEqVtBhZ6UijYyRMz3FcK
+         qQ2gW/WaTpyLD9ewHu/QUYzWYur+IXe7JZ3b0BjvZT5CZjMXsoSfUnBwggdcXit0/yx+
+         95bvqo8tks7yD9HOQPoYm6Rbzcm2YpbVYYbynYex7LZmZMyva8lFyUUlno+jaT3xisY3
+         4v6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WRUQ/0ItbuB8Qd5eXwqs349lFDwlCtd3M661qIRr/M4=;
-        b=HFZ7Qf6JXv6XrbXP5cRa2Crntx/7SCG1DUdgHI0p32Ego75w2fNUWtWl3IB9WUehuF
-         FkPsqnkhD27qsWvs4pGjVjtqXjjDrSh4h/oD041GihdVeMHv1a6UGlZjPtgtSHZ+RTp/
-         9ToeJbMEaI3qkMu6dl0a7v9T+5xt4hV2EDealo772Ukzf8JR+YubyLOQuHlvURPM8pS5
-         cnKLW6OBCiUvszbyNDjIssr27Q5oQMVd1bapCTKLhuAps7dDzsLhllGVcMRHSpY7V7pc
-         Frv5tFLY3hkiC2qwmVUUit89J1J8yCcS5ZwcjAfchdeFY3vUZX0Z7Pe+4o8Iber0CDUJ
-         kpCQ==
-X-Gm-Message-State: AOAM532aj9U4QiKT1LtGpX2k5RynwVwngSMDYr063gWXzvrh8JJCs4qs
-        hoBZujS0P6ENz9+FIqXS0Sc=
-X-Google-Smtp-Source: ABdhPJzspd9NuP5bL32rgfy620IWs+rzFnjNv77U9r9eEoNmSQhxtq+FlWo92HmBLKkzXmlR4I4Wcg==
-X-Received: by 2002:a63:a501:0:b0:372:f7dc:6ced with SMTP id n1-20020a63a501000000b00372f7dc6cedmr5871183pgf.26.1645180025700;
-        Fri, 18 Feb 2022 02:27:05 -0800 (PST)
+        bh=hZxv3pHz6Udq1OzuuR9MJTgehSeTgSTYX6aQTnuEBto=;
+        b=AzSzYugGdbv1a2BtVpR4kMfxKa+P1BLvdBseOkcyVCjaqGbMDK21VymZ8nmNCZSvH5
+         jP5H0JHMYW1qnG3KyXKh61Urr/wuFVClUstS7QnPtyjCGIp+L0oTIMcFBegaW98dLj8k
+         in50ZrXtGk8fSPfF4qr+L3FCgYiBpeAqt+fihLnPzt/cqhHo8viDzlnJF82hwvKTKFn/
+         S6h8MZahGEYYsPsfP9TGCRHXYnkU7ikA7jQTv8Mew2ek9u7KpiJcG4UchGKp/MNy9cYe
+         Y4EdLu8WtHvnYl1qHYPW47fj+qblS7Bj7MFQYr9rSVEQIn+toKqPTK2qwcehMa2jhohJ
+         8KVw==
+X-Gm-Message-State: AOAM531apC151vddiOoQYUvdDW84aMxmpnVnlidkobLR+Nryr3wq7som
+        FslCNwTDGbzyupyMpZeZPLk=
+X-Google-Smtp-Source: ABdhPJwxbtXRkf7mBwYXDUF8FymlXpTcaK8hVmcTvlAMUfv4/X0OyE197uN+tCZ27Bkb605Rvg773g==
+X-Received: by 2002:a17:90b:1283:b0:1b9:cfb1:9cad with SMTP id fw3-20020a17090b128300b001b9cfb19cadmr11919710pjb.82.1645180124984;
+        Fri, 18 Feb 2022 02:28:44 -0800 (PST)
 Received: from localhost.localdomain ([101.78.151.222])
-        by smtp.gmail.com with ESMTPSA id r14sm2411481pfl.62.2022.02.18.02.27.02
+        by smtp.gmail.com with ESMTPSA id 16sm2676856pfl.99.2022.02.18.02.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 02:27:05 -0800 (PST)
+        Fri, 18 Feb 2022 02:28:44 -0800 (PST)
 From:   Rex Nie <rexnie3@gmail.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
@@ -58,9 +58,9 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, hsinyi@chromium.org,
         Rex Nie <rexnie3@gmail.com>
-Subject: [PATCH 1/2] drm/panel-edp: Add eDP innolux panel support
-Date:   Fri, 18 Feb 2022 18:26:47 +0800
-Message-Id: <20220218102647.1634329-1-rexnie3@gmail.com>
+Subject: [PATCH 2/2] dt-bindings: display: simple: Add InnoLux n140hca-eac panel
+Date:   Fri, 18 Feb 2022 18:28:15 +0800
+Message-Id: <20220218102815.1634561-1-rexnie3@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,57 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the 14" innolux,n140hca-eac eDP panel.
+Add support for InnoLux n140hca-eac display panel. It is a 14" eDP panel
+with 1920x1080 display resolution.
 
 Signed-off-by: Rex Nie <rexnie3@gmail.com>
 ---
- drivers/gpu/drm/panel/panel-edp.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index f7bfcf63d48e..f5f9c9cb26ba 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -1330,6 +1330,29 @@ static const struct panel_desc innolux_n125hce_gn1 = {
- 	},
- };
- 
-+static const struct display_timing innolux_n140hca_eac_timing = {
-+	.pixelclock = { 72600000, 76420000, 80240000 },
-+	.hactive = { 1920, 1920, 1920 },
-+	.hfront_porch = { 80, 80, 80 },
-+	.hback_porch = { 190, 190, 190 },
-+	.hsync_len = { 60, 60, 60 },
-+	.vactive = { 1080, 1080, 1080 },
-+	.vfront_porch = { 6, 6, 6 },
-+	.vback_porch = { 38, 38, 38 },
-+	.vsync_len = { 8, 8, 8 },
-+	.flags = DISPLAY_FLAGS_VSYNC_LOW | DISPLAY_FLAGS_HSYNC_LOW,
-+};
-+
-+static const struct panel_desc innolux_n140hca_eac = {
-+	.timings = &innolux_n140hca_eac_timing,
-+	.num_timings = 1,
-+	.bpc = 6,
-+	.size = {
-+		.width = 309,
-+		.height = 174,
-+	},
-+};
-+
- static const struct drm_display_mode innolux_p120zdg_bf1_mode = {
- 	.clock = 206016,
- 	.hdisplay = 2160,
-@@ -1750,6 +1773,9 @@ static const struct of_device_id platform_of_match[] = {
- 	}, {
- 		.compatible = "innolux,n125hce-gn1",
- 		.data = &innolux_n125hce_gn1,
-+	}, {
-+		.compatible = "innolux,n140hca-eac",
-+		.data = &innolux_n140hca_eac,
- 	}, {
- 		.compatible = "innolux,p120zdg-bf1",
- 		.data = &innolux_p120zdg_bf1,
+diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+index 1eb9dd4f8f58..f8383a8dc3dc 100644
+--- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
++++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+@@ -180,6 +180,8 @@ properties:
+       - innolux,n116bge
+         # InnoLux 13.3" FHD (1920x1080) eDP TFT LCD panel
+       - innolux,n125hce-gn1
++        # InnoLux 14" FHD (1920x1080) eDP TFT LCD panel
++      - innolux,n140hca-eac
+         # InnoLux 15.6" WXGA TFT LCD panel
+       - innolux,n156bge-l21
+         # Innolux Corporation 7.0" WSVGA (1024x600) TFT LCD panel
 -- 
 2.25.1
 

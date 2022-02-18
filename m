@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C1A4BBA64
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D11FE4BBA6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235932AbiBROFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:05:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59796 "EHLO
+        id S235921AbiBROKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:10:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235921AbiBROFT (ORCPT
+        with ESMTP id S233569AbiBROKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:05:19 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482551802A1;
-        Fri, 18 Feb 2022 06:04:59 -0800 (PST)
+        Fri, 18 Feb 2022 09:10:15 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CE51AF07C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:09:58 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JM2aAH0uOIS1MGzZbM9ff+kNW219EYEVs005HfCqZi5pNWGcv5uxg+5aGugwQlIGGU3OXM7jukqfDA/2/6AqJIxSI1zcBWDpu3UC/rq3Vd5LAkLjZfcwp7BLrbUFH2XXEzp0mk/4QzJBfe9KJDwhs9xl7tGoZqFdOJ7I/fKt+akKH0ltxIfOcyQLEP0HpZjOJWVPi3oJ5na1bWSRNjlv8prHTQwrwLdzEf+UwVhAbvkZzFzMaIP/hI9Z+LFu+vXTb97AZrBiGYceqRe5gDpwxDU6I3aOjecnVkhlWJ12Apw7yeZvk99PeyuyCzQ2Lxl0+ts+8uKuQZkITEJ0zTg//w==
+ b=Z26FYiNCIr4W2JtOV8wyhyodzb9YMbRQ5IORU8vyNXaSeKhTNIf9lJ13BF++8RBaM1xOIZRX+uN2XGwZAFDdme2sCj1o3KGdubPsTC2vWYBMC4AWquosXgZUZ3egELreEwNqhPm6a2mqnKBzCVv5c0Kxd/Qt78z79CRFW/HXYM8PpYP9y1Eje6dB0XSgNnVr96qxF0+6d10DhPkfh+9mcVW3kj6nxdIrdL8raG7nPe4OAIhnWsVFzb+bDpblTZKItYHou+17uyU72+esk2SZgjEW3w7cZPIKOjoI0iYud4zCF1Pjqu/S8RWb0S5llYAABMrBeRDwXKAzOJAu3n1qKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pnew7yp7Y/Pzd+vzAtd0A6WNvd8bwQHt3U5HIBuDuW0=;
- b=HtHMVJz0JcsZw9MYJ8GaZ0p/e7yQ1wuOHv7K49lfKm1UlNmp9AMnXpgeZ8dTzfP9imXRlrrRDGhiAzvDKEEPPjO2KXHce5zd/NoMTY5x1DZdHwiZxCYHoRdRQwtNDl07WSBz4eGubT0km9M8NkhC+Tfgr6mNr1d7g/XeKxJVFHDOzS67B/tAIunpvovIgM6VePbsLJnjsnxNQYTsBtWFApLpN170b6oNGq1zFQSqRoYodk8Ly29aEL2U2+m+YLRfM75gyzL2cX8lPuaYfWkvV6Bn+zf7kPua03rWYYFNi28Ne/4EIgjxkBWT8+BbYgUTzlsLrOgbx/DrwZePz7IQwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+ bh=QXWrQ1wQTyu7ba9ClnJyZOOdVNf3nys/iygpXWFV0Bk=;
+ b=VyJC65VVf8Oosrf2qKDTzZYSM8/LknSe9KgZ+Psl4M6gKh+9mgNFirBBrJ7g1pYhMpRIP6TNfUwZtTbL7JS6UYWr0+LlIQ8TpZL9g9DThUaVnJay0arpG18SHEI61YFA22xV4RmJe9G5cTMoO4m7OBnmIolOdekyDWCz4AK5fUvVgTkjiPWg+2rsqDGKnXVw+XDUvoqOgVmdiSaAY3C+HQyWgA90IhE/xauHy0SSCOmc6TxrLm9btqov6ATQfS5km4oj69CjpEwzZTW6OJuNo2Sk43Mqf0afXE1T5TaRBnSG/liznlVzebirEZfz88pVKHh3RRwzXO2GXqn1JNGIUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
+ dkim=pass header.d=silabs.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pnew7yp7Y/Pzd+vzAtd0A6WNvd8bwQHt3U5HIBuDuW0=;
- b=fzAeEhxlrRXBZPBHseQwlR0WqeOVbYvSvxkYEselxa+w4+LPVoZHyQnCTAGF0FDFTChsEYpUW9x53yq76Szv1rhlMfGzkwa5WUfvPAMiuNAbdiFBZvoo031y7PsN0xDRAhQAxMZOR0+HLNfhO7XQZkUgQuz5j1NZB2CPybTGJB8=
+ bh=QXWrQ1wQTyu7ba9ClnJyZOOdVNf3nys/iygpXWFV0Bk=;
+ b=Y/gabrJHFbHm99AsR/9r/RZ9NFcp0VCKKztAb2gHDgiT9brzJLam1Rcy8QSMY4y4EnbrATNKSbjjfoSI8yAtrgNJ/eenmFkJyxHlPG7lAOKtV35iu7uupm3Qx6Hdga0Ou1ivTT8CHAtNQxzyd+r65gpfMvT0sYNVETJ4vDXMGVs=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=silabs.com;
 Received: from PH0PR11MB5657.namprd11.prod.outlook.com (2603:10b6:510:ee::19)
- by BYAPR11MB3704.namprd11.prod.outlook.com (2603:10b6:a03:f9::29) with
+ by SJ0PR11MB5939.namprd11.prod.outlook.com (2603:10b6:a03:42e::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Fri, 18 Feb
- 2022 14:04:56 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Fri, 18 Feb
+ 2022 14:09:57 +0000
 Received: from PH0PR11MB5657.namprd11.prod.outlook.com
  ([fe80::1b3:e483:7396:1f98]) by PH0PR11MB5657.namprd11.prod.outlook.com
  ([fe80::1b3:e483:7396:1f98%3]) with mapi id 15.20.4995.024; Fri, 18 Feb 2022
- 14:04:56 +0000
+ 14:09:57 +0000
 From:   =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jerome.pouiller@silabs.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Riccardo Ferrazzo <rferrazzo@came.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH] staging: wfx: fix scan with WFM200 and WW regulation
-Date:   Fri, 18 Feb 2022 15:04:48 +0100
-Message-ID: <3633390.6h3MoT29mx@pc-42>
+To:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com,
+        xkernel.wang@foxmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: Re: [PATCH v2 1/2] staging: wfx: fix an error handling in wfx_init_common()
+Date:   Fri, 18 Feb 2022 15:09:49 +0100
+Message-ID: <1989597.O86Mz80lD7@pc-42>
 Organization: Silicon Labs
-In-Reply-To: <5feac65fc71f4060abb7421ee4571af4@came.com>
-References: <20220218105358.283769-1-Jerome.Pouiller@silabs.com> <3527203.aO2mCyqpp7@pc-42> <5feac65fc71f4060abb7421ee4571af4@came.com>
+In-Reply-To: <tencent_24A24A3EFF61206ECCC4B94B1C5C1454E108@qq.com>
+References: <tencent_24A24A3EFF61206ECCC4B94B1C5C1454E108@qq.com>
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="iso-8859-1"
-X-ClientProxiedBy: PR2P264CA0011.FRAP264.PROD.OUTLOOK.COM (2603:10a6:101::23)
- To PH0PR11MB5657.namprd11.prod.outlook.com (2603:10b6:510:ee::19)
+X-ClientProxiedBy: PAZP264CA0155.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:1f9::19) To PH0PR11MB5657.namprd11.prod.outlook.com
+ (2603:10b6:510:ee::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3172c93f-98de-465a-0414-08d9f2e7a486
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3704:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR11MB3704BB7BE402CA15AB301EA393379@BYAPR11MB3704.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:483;
+X-MS-Office365-Filtering-Correlation-Id: ba6e7cbb-429f-4d18-86c7-08d9f2e857de
+X-MS-TrafficTypeDiagnostic: SJ0PR11MB5939:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR11MB5939C870DDDC76730EF9BD0A93379@SJ0PR11MB5939.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ciUzOWhqr2R600mr1djOi4uIob83khJAbuaWkXy9TlStpp+IW54/DFUhwHFsDoO9e1zZI35IHlDKRC5j6FVwTcw3q2uP7zruzTAijnma3DXKctIfMd+jITuKqfWqHCx/JcruD4dGdq7l49GnqLZ3F8x8uCbzFpKeyOOye4z5FuTeFvMatD/2l6ZSQYGhZiFY3kbKvHjtXAifVyQfnbJ3hnHlIsRRQvNO+yWa+CtjW1SkObRzztFi+i4Y2Qwy2p5ax9TSB5Y2U90M6FK2El/OqiGqxCIds86xbTGqCvpLVpiNdRoeMgU68WGU/0+385/HPBSjGnl/OpyUgi1nHK4veXnuwloPMwJFw3JtARUc4lag9gXuvymWa16ZX2YnWnbWf/TqfE4n4DX+LxvxTZD9fNiHWN3wZI4/wfkoYl7UR/u71jZiiSu9TLnLJzHoQLN8qf0uLxXd1FF7YAL5dYQgH+rquDF5A6KFODXuWdqdqQ8n684z3yeqIbiy0F/XBVDZ0tZH38Myq3SB72wjhPHNZ7vEVDUpZGJEaFdMQVzqzmJD4Mzt2KUmEKijYENRexx7pa6ItcKnXkpGJZTW2HPR6361pObARQTNn1bo8xk7fpITasi/vATjDSh4OfkS95a4u8Xb5WhO1K0MmOjHtUQFUQriX5XyiCgyUu5/rRlGHGZygIMdhlZZbAzMXSkGycgz/pSNZVdW1nmzAWtPgrf2Pk8teLv0eNXGPDkOe9UorfvPkz1CvpJOaK8O5yo8M2PVk88X0T4HyzqF4tW3uf5Uf9kvwUh6SLDVoMIBl69i+yd9+pYs6yAgkgsWxd/CKs++
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(26005)(36916002)(66946007)(9686003)(5660300002)(508600001)(316002)(186003)(6486002)(66556008)(66476007)(966005)(54906003)(110136005)(8936002)(8676002)(4326008)(52116002)(33716001)(2906002)(6512007)(6506007)(38350700002)(38100700002)(86362001)(6666004)(39026012);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ET10Ri96R1hg9Xvw1yfLi5c9PE+g1Cap+T8y9GU7s8pSyjgBHc5ozP6kYI8Sus9kiVnk7MJ5jAKDcTr44nSux7OAT0FF2B7DOLZPQ7K05F0zLhkRwzFxNopxplVFRTkzTp91wtL+iQ7nZ8iGSXFukfaLo/qqYmQC2MevFnQC1T3sLMOuxo+FpkVbZA2NYgszS9612//Pijnk2ZHLNqnlZ+saBqD7qXCek4eWzU/xFsFUz5QXRCou3jshR+yXMaDFKyf3FOtm2vSo/R/PNrKdIngEMliNMoyrutJ93KcbvqxVNbAz2XhXFx0/0OZOlRqzBBSq0A9DqvFiMKJEz6wYcHQ524h9ft/WBy1iVUXHKflap6ZBwdsYGfXPLeZc1kgsuzW/dJTWLpaBRDW36gbcJlXeu3R9mV6hyDNKGuUov6ZC/eR2N2lYaOvlG309LJym1CBh2oiMOXPH4+9jnR2A7MMHWjDKqq4400fzDZRzDjXlhu6Ng/YanDsf12UP1wSngtu0VyttXGz4EnfesqXNSm//EK8O54QG+b8FYhqrZ++6fKD6kLFFl1sRYCkh2J/VPo1c7XSMc171di5fI1+MJgezU+/v5+PRupbtOmmTcoCQE0T1pvbJyymSdeZBmZ58N9UyEtBym4CTvbyrNVPndElh6cwaO7GnyraK5+12tkDtVA2KZOPTTHFc7CTHGpCz/nzQUcEbF8mCo3gfFV6TR4Ia3WkNY+1LSE79NlQhjXb4g0XZPHg2+wOvPLfDRhriBnCuGC2s2340PuHGR98O3g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66476007)(6506007)(4326008)(2906002)(33716001)(66574015)(186003)(52116002)(8936002)(5660300002)(6666004)(6512007)(8676002)(26005)(86362001)(6486002)(36916002)(83380400001)(38100700002)(66556008)(66946007)(38350700002)(508600001)(9686003)(316002)(39026012)(48020200001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?ssmNS42NlWRfpJNn/FmEQMToFW1ErITwv6zVPZASSyeIvviK6qSbrVN5IJ?=
- =?iso-8859-1?Q?w1GJAYnlIg9DDbfdZcUiUQb4vEsgoAx/dVUK74oKj38b+kGzhf2xUw3Klu?=
- =?iso-8859-1?Q?9Xa2c7rqkZBlV6xYCJ6LcS8s7+o51Agbj32BPJNWInLtzJiIoKSa319p+c?=
- =?iso-8859-1?Q?w4ZAZSr4mp3oRy/ocVjVsjqhX/EZ6jsrbCBZ0D5unpr1OGwWpIJMHU9Sp/?=
- =?iso-8859-1?Q?VZnuq4n/gNnmJY28D+bh/kWks8NgUqFFSxyRd9KSk4W5a7aXMXYJoxrgb/?=
- =?iso-8859-1?Q?BO4xfiJ6+2OqeamA5zYU6jey89cPCAeSaiWn/2VaWa+7TcKJgF/uG8bwUs?=
- =?iso-8859-1?Q?9yuiNb/4s0spltGPseMLvHALu5gDr6QSsHjwjcA+HFq+YzOe+BqcdZXPtX?=
- =?iso-8859-1?Q?0G6AUOS5irPzrRO5a4n1rQio3oLrk8+5+a2ZOaqkYCOF86tSYV3A4U8NLW?=
- =?iso-8859-1?Q?0We/3mqQ/WKmYl1o8gpTKHHYMK7nen9ecOTKRvs5whulSaxCGPPWvMOPMS?=
- =?iso-8859-1?Q?lQQ7y5Yryev4I+ThTr3grVsDOE9HzYnttYlrjjtdQ2v4T+G9pT9FHGGUxg?=
- =?iso-8859-1?Q?u3o/UoOdlDcEzRGIMK9/h6OzV8ANB9c703210/YtvyWMAkXaSjkpVOOOHg?=
- =?iso-8859-1?Q?F3JmGCNCj0zA01l5BGl+SR0IuCTKS4Jg/pB32fYH8ahKikSVByrHOD45vn?=
- =?iso-8859-1?Q?rjzcfi+YD/WsBsZe49mhg8Tn/Ixts00zARmyP5/Bnz8b1d04cKI3ZOSqyS?=
- =?iso-8859-1?Q?4rDzs361s+IPf0V4WEXEtfTKagBjTLvbETMpyVd3xfw603uGPn18xgYNxh?=
- =?iso-8859-1?Q?O8RXJ8I4dRqibsmlPq1PP0WHmk6YZlfZCr2TmB4narTuKySyfZlLyTlJcT?=
- =?iso-8859-1?Q?UW9DTThreglI84T5dsIOMpRN27XGoHN9fYHYW+/7kExtg8BJ5vCshHe/cv?=
- =?iso-8859-1?Q?fVNNWRSZrvDbRyt/xrYcVOPOUTNiLh2HQCvStqropIm27kPG1BPhZQRO4N?=
- =?iso-8859-1?Q?771bwsLxxjjqwpYaXIkSI2uhaTk3be9KyLDdjjHxheIUY+7OIprjiiPdeS?=
- =?iso-8859-1?Q?UyUo6u/u5PKXDqZc//1qh4tYsjeEFBiAsbphi4g2P1FYNnQ0nZdkD2RFgo?=
- =?iso-8859-1?Q?RFa9d9Zswjms6ezMJxxan56aGkirjCq4cBYaYVejadVvolfh+8WSGU+aMC?=
- =?iso-8859-1?Q?94sVBIpNPb1DJ2E8Hb+PPla+NcoDejvXKH7jh9Zi9YLlloxTDF5Obo0I5H?=
- =?iso-8859-1?Q?SE+ezeoa91TxR5GxDd6M3TbLI5AMZ4EcrW8wBgYc2KZXiPhHlNzdMtDHon?=
- =?iso-8859-1?Q?ys5Y5UYgTB+kmo/nqn1xb7GKkqPfDD6INUD8rkAvdOYJv/1ZgvBCN5DKaa?=
- =?iso-8859-1?Q?98M5K/tfVHDSms/VmwfEo7VpxaW87Lwp8fdInp4Tw02B2QvE/xTXzBadXy?=
- =?iso-8859-1?Q?H2cE7b4AyARzbSL19l6aDosge43T0bpkn5Tci7lURES4CwvEdfhLy5I1ZC?=
- =?iso-8859-1?Q?HM7WObp9IFPJzDqve34SFniGt8BhZlcKUZduHOSL6q6507n1jtxsZG7NdH?=
- =?iso-8859-1?Q?3nBzWOWpSHFBLQHqnSjjp8GNYUby5Ar+ruC0vuf/B2/iGWKRbQWuuNShZQ?=
- =?iso-8859-1?Q?HISUyQAjxdrbBbuFKh03basTgyumHQRzGwdmLTlk2eQloQ23ub11HC7rfq?=
- =?iso-8859-1?Q?rinYxQKCXPX9mrRuZS4=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?aTTIxJ8YwMaIy7gE4UlyaVXVakQ3+GgzzHhf33Uy48Ad6HoUo5QrAvoqhR?=
+ =?iso-8859-1?Q?zinjQwqKOUGKcs4HSbcT+AEN7987I3sj0WioCDnSJZf9rxYlqkjHFFZPcR?=
+ =?iso-8859-1?Q?tbNYhbZLP8Ct6yDB9+TZdiG03Su1Oo5V2t76VfFjt6RlIkKKiWo3cP62Ry?=
+ =?iso-8859-1?Q?IgfIWTqbHvNd0pwgYVGT2Tw8WbzKfTp+ZE1k/z8dpewFI8aj8OiNDQFeAF?=
+ =?iso-8859-1?Q?TFdwD+WgQoTl71O/nKRllnDL231K0DJQGBEx6r8grXa/L5c5HoqlsJ+2Ku?=
+ =?iso-8859-1?Q?+8r8uioZLnB0hF06Fp3CUNFdmTy3JPlI2b1oN4rBXqfqh/CPlmyibrVN2T?=
+ =?iso-8859-1?Q?vS33h9csR/FxW1EgoTsRJwdsW+/CeGsPAD/aaGn1W4bGGEjUZq2CTZo4N1?=
+ =?iso-8859-1?Q?zNOiDrSEdu/CHaIbMPACX7x3dwKAmGgu+gLxCotZREo9enMmLgydPOjsea?=
+ =?iso-8859-1?Q?mOam45jbGhLBtYZ8YpqKA+zkEeHK/SXB/+gEAr5mvbBhROCSeGAXVvVq1g?=
+ =?iso-8859-1?Q?ZNCGsw2Hv5Faofe7Hfg4n1lxE3pMzh1qSQA8x71nnavqNiQGAHx/YUCILa?=
+ =?iso-8859-1?Q?OFbrQVagwuaicNJMzEtc6cSF46yCbCMfyGpIiKp3vWgjc1AZNpGCXF3hd+?=
+ =?iso-8859-1?Q?WweD4Q0150i4pgQFP4bSKiW33G6yWqXGnjPi5Qs2pLKj+/4bn0ObkWP2mh?=
+ =?iso-8859-1?Q?0rl+G+IkXiKMQ02dve/E1ZvreNcXcJXY3xGg/ZePYVGYlDngJKhGrfUbRw?=
+ =?iso-8859-1?Q?NnuIVoiURRizN2T5+X2biG19pIC0sCSIFz5LwgWpP54Ely7ACs6QakC3Q6?=
+ =?iso-8859-1?Q?2khf4OkaxTVCh2O/vSTgpN690BSJXOI4/fxt5YLxXPg8puk7RyijuvqO1T?=
+ =?iso-8859-1?Q?pxKaQjxz1HoyiCumzZBJmUnRlOfsyC3yrlSY6he/l7FQJxQp12O1vRAy2w?=
+ =?iso-8859-1?Q?nJmrr2JYgX+HHOGPkOMBNnv57894Rw1EsE1RzeXEb4WoCI3QV3Xwcp1ULJ?=
+ =?iso-8859-1?Q?Xc+cLTuBs/DQcFcZciVRLMYElBXy8sAz5AdJaY03RkxV4vXSil3wrzYn0g?=
+ =?iso-8859-1?Q?vxYaoCRdOD+jvo3yBn6rc9FSHChBTopNiDQaEOl/YuFBO9LzVQgrGeH3JK?=
+ =?iso-8859-1?Q?39q8SKIgsNombIJi9t+44+mvdJ0tsj7nZwdBmzr+qKG+w0Hk+ClkxsACGK?=
+ =?iso-8859-1?Q?XvDUxeR2Ef+P1XqejuhiMMOlYHwB0iQmFuXEZ+z+wavJ3pkmOnioqrq+HB?=
+ =?iso-8859-1?Q?ww5K75T0y+uX7UteQCWdJLouj7I4P0MXUNUjCHHl7Y7hXP6Yaeh5aJY66t?=
+ =?iso-8859-1?Q?RRC1x9hyWochIeGkmJpoUeTlOYLOZMvPWy/pT3sRyOChhBKKU5zCtz00E4?=
+ =?iso-8859-1?Q?hYPEjqUDPe/rWK4V4/3VnxvKyaXWH413xODH3Om9CZJgIuvtx4nCYkrXGu?=
+ =?iso-8859-1?Q?t+U/9tf9QkaEsKWo7unOJb3jIHz4IDSN4jUkXp9DetbXSW5tGzdgqhqHu1?=
+ =?iso-8859-1?Q?hDnZ7B/yUBp3Zsrr+ddOObdM+oQf+oXEx5Aq8920FtduSK37hWlhcT5JIJ?=
+ =?iso-8859-1?Q?jivky+ilIz4PSJD171rJ00iCk3yjWKeiVTjQY7e+CT5t6hS7MXR/ITZV4D?=
+ =?iso-8859-1?Q?NAFdCtk7ivJVLgD3EGZw7jBsPeQTj8HFBxXWOJ+MfDaSV8X4Cx7H6RjtRn?=
+ =?iso-8859-1?Q?VYsQorJG4Hg8yNJmzpU=3D?=
 X-OriginatorOrg: silabs.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3172c93f-98de-465a-0414-08d9f2e7a486
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba6e7cbb-429f-4d18-86c7-08d9f2e857de
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5657.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 14:04:56.4074
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 14:09:57.1280
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 54dbd822-5231-4b20-944d-6f4abcd541fb
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PV4A3xYqbwssTetryvnCHDRs/l/QZOtedxrHEb/gC2qnZ//EYcIXBwMvpd+NtjDbDgdkJyb0DmJl70ur6rh2Gg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3704
+X-MS-Exchange-CrossTenant-UserPrincipalName: kMRHDXH1vhcz72WYU0beybW18VzZnhMh9yXYcyzsyskQjqDI7eoD9AZXIx64RrEUcB8aC3qUAdtAlDR5Qcnsmw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5939
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -120,74 +118,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Riccardo,
-
-
-On Friday 18 February 2022 14:53:35 CET Riccardo Ferrazzo wrote:
+On Friday 18 February 2022 14:59:45 CET xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
 >=20
-> Signed-off-by: Riccardo Ferrazzo <rferrazzo@came.com>
+> One error handler of wfx_init_common() return without calling
+> ieee80211_free_hw(hw), which may result in memory leak. And I add
+> one err label to unify the error handler, which is useful for the
+> subsequent changes.
 >=20
+> Suggested-by: J=E9r=F4me Pouiller <jerome.pouiller@silabs.com>
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+> Changelog
+> v1->v2 restore the wrong modification of a return statement.
+>  drivers/staging/wfx/main.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 >=20
-> Sorry for the footer it is added automatically
+> diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
+> index 4b9fdf9..9ff69c5 100644
+> --- a/drivers/staging/wfx/main.c
+> +++ b/drivers/staging/wfx/main.c
+> @@ -309,7 +309,8 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+>         wdev->pdata.gpio_wakeup =3D devm_gpiod_get_optional(dev, "wakeup"=
+,
+>                                                           GPIOD_OUT_LOW);
+>         if (IS_ERR(wdev->pdata.gpio_wakeup))
+> -               return NULL;
+> +               goto err;
+> +
+>         if (wdev->pdata.gpio_wakeup)
+>                 gpiod_set_consumer_name(wdev->pdata.gpio_wakeup, "wfx wak=
+eup");
 >=20
-
-Your mail has probably not been received by everyone since you sent it
-in html[1] (try also to avoid top-posting).
-
-Nevertheless, Greg, is it sufficient for you?
-
-[1]: https://useplaintext.email/
-
-> On Friday 18 February 2022 12:00:54 CET Greg Kroah-Hartman wrote:
-> > On Fri, Feb 18, 2022 at 11:57:47AM +0100, J=E9r=F4me Pouiller wrote:
-> > > On Friday 18 February 2022 11:53:58 CET Jerome Pouiller wrote:
-> > > > From: Riccardo Ferrazzo <rferrazzo@came.com>
-> > > >
-> > > > Some variants of the WF200 disallow active scan on channel 12 and 1=
-3.
-> > > > For these parts, the channels 12 and 13 are marked IEEE80211_CHAN_N=
-O_IR.
-> > > >
-> > > > However, the beacon hint procedure was removing the flag
-> > > > IEEE80211_CHAN_NO_IR from channels where a BSS is discovered. This =
-was
-> > > > making subsequent scans to fail because the driver was trying activ=
-e
-> > > > scans on prohibited channels.
-> > > >
-> > > > Signed-off-by: J=E9r=F4me Pouiller <jerome.pouiller@silabs.com>
-> > >
-> > > I forgot to mention I have reviewed on this patch:
-> > >
-> > > Reviewed-by: J=E9r=F4me Pouiller <jerome.pouiller@silabs.com>
-> >
-> > Reviwed-by is implied with signed-off-by.
-> >
-> > But what happened to the signed-off-by from the author of this change?
+> @@ -328,6 +329,10 @@ struct wfx_dev *wfx_init_common(struct device *dev,
+>                 return NULL;
 >=20
-> The author hasn't used format-patch to transmit this patch.
+>         return wdev;
+> +
+> +err:
+> +       ieee80211_free_hw(hw);
+> +       return NULL;
+>  }
 >=20
-> Riccardo, can you reply to this mail with the mention "Signed-off-by:
-> Your name <your-mail@dom.com>"? It certifies that you wrote it or
-> otherwise have the right to pass it on as an open-source patch[1].
->=20
->=20
-> [1]  https://urlsand.esvalabs.com/?u=3Dhttps%3A%2F%2Fwww.kernel.org%2Fdoc=
-%2Fhtml%2Fv4.17%2Fprocess%2Fsubmitting-patches.html%23sign-your-work-the-de=
-veloper-s-certificate-of-origin&e=3D09733f94&h=3De09f2efa&f=3Dy&p=3Dn<https=
-://urldefense.com/v3/__https://urlsand.esvalabs.com/?u=3Dhttps*3A*2F*2Fwww.=
-kernel.org*2Fdoc*2Fhtml*2Fv4.17*2Fprocess*2Fsubmitting-patches.html*23sign-=
-your-work-the-developer-s-certificate-of-origin&e=3D09733f94&h=3De09f2efa&f=
-=3Dy&p=3Dn__;JSUlJSUlJSUl!!N30Cs7Jr!GRgB_JlhZF2XzaDEB1ZDnSbLiMmD8XdrmC_uqyL=
-oczR5e05vvMlDCgyKlEu3XyI3PdJK$>
->=20
-> Thank you,
->=20
+>  int wfx_probe(struct wfx_dev *wdev)
 > --
-> J=E9r=F4me Pouiller
 >=20
->=20
->=20
+
+Looks right.
+
+Reviewed-by: J=E9r=F4me Pouiller <jerome.pouiller@silabs.com>
+
 
 
 --=20

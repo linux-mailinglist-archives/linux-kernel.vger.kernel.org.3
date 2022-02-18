@@ -2,88 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0100B4BC2A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 23:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA5C4BC2A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 23:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240152AbiBRWib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 17:38:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58674 "EHLO
+        id S240157AbiBRWnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 17:43:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233451AbiBRWi2 (ORCPT
+        with ESMTP id S233435AbiBRWni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 17:38:28 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD0556C29
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 14:38:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645223891; x=1676759891;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=3U5CqholvR0447graRVIPJ8jfZ7zdarnpTpqBHx+y3M=;
-  b=CmrXCULPdj05mj7/1Opdm8f+njfBPN+wMr9sC6Hcx4OqNTxSkXSCp02v
-   /gRIoTvNnbIQn2yo5Jr1bl/TVmWWJuEF25E3sYAvLa/rM8prtdDUYXz1a
-   Tyvux91dUHdBs1mq2y0c0wScamkanabNIEDW8hkIoyJTB+QkwaeUtHYZW
-   ncWXOgmsMoOWxapwmHRppRm469/uvYzoX3Git39B1Nkrya7TDKHIlPNaM
-   1w58Xi3WgeAt63GBqhgpJSwDzi5owgMe0wICZEQ5Syw4ZgQQG8Eo1KEy2
-   GFm92UJLjTpFz/04boJpcs1g1MiVAO+1+V4nkosB7EDjAvV4GutKVfvBT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="234778407"
-X-IronPort-AV: E=Sophos;i="5.88,380,1635231600"; 
-   d="scan'208";a="234778407"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 14:38:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,380,1635231600"; 
-   d="scan'208";a="489818207"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga003.jf.intel.com with ESMTP; 18 Feb 2022 14:38:11 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 18 Feb 2022 14:38:10 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 18 Feb 2022 14:38:10 -0800
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.020;
- Fri, 18 Feb 2022 14:38:10 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Jue Wang <juew@google.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH v2] x86/mce: work around an erratum on fast string copy
- instructions.
-Thread-Topic: [PATCH v2] x86/mce: work around an erratum on fast string copy
- instructions.
-Thread-Index: AQHYJGdbPe82lm9eb0O/d1VFli+im6yZ77OAgAAPtwCAAAL5AIAAAh0AgAAPMwCAAAXxAIAASw2A//+CIBA=
-Date:   Fri, 18 Feb 2022 22:38:10 +0000
-Message-ID: <0de9b9b5800e4e4a879fddc74b67bfec@intel.com>
-References: <Yg54nse5qNQO3sbW@zn.tnic>
- <20220218013209.2436006-1-juew@google.com> <Yg+2Hc78nfSRmh/j@zn.tnic>
- <CAPcxDJ4c3eGXTB9UPJmZ8dzyCNPW4Lv9s1QSeoCWq_LdNWTrJw@mail.gmail.com>
- <Yg/FyrvLWhZHB/UC@zn.tnic>
- <CAPcxDJ72dMOpbKXxyb__OeMaEyjYSPtsL_ubVsKOuRXefAQ3_w@mail.gmail.com>
- <Yg/UUHuVvd9AOJ94@zn.tnic>
- <CAPcxDJ7=hCz6KRih4OBVv-k8WLcBL4n+VSpeP_zky7Uunq89zg@mail.gmail.com>
- <YhAYQQ6f/XJjOI8A@zn.tnic>
-In-Reply-To: <YhAYQQ6f/XJjOI8A@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.22.254.132]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 18 Feb 2022 17:43:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C0F40A12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 14:43:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1A03A210E2;
+        Fri, 18 Feb 2022 22:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645224197; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=MAAF1UrArLR3/kFKSC5XvKKA5dLaxWP8f2xQrIQUM6o=;
+        b=WQkGpbwBk8jJmD6Ny45sTTKMcWh9pHcTfYCn5MS3AMp5JaSpUCRdAw+AGMarVTJvuzQLPO
+        lm49jj6EOEJkxSpH/4Bx0UaDyuYxPIfDO0wtinhkvh8jFVI6UV5aPRCjZnEgj8eIiHYv7Q
+        zqynSfPm27IVM2ohCn7MWgnvNK8K42s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645224197;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=MAAF1UrArLR3/kFKSC5XvKKA5dLaxWP8f2xQrIQUM6o=;
+        b=7+laXMoY04tlx5Jwv+Po738O0aJNT+0QwxjqGcw0N5HPkpHOGswsxyG7rWkSBr5g+/IYvI
+        hO6HJzxv508wxSDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4A85213CCE;
+        Fri, 18 Feb 2022 22:43:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id P7X7DgQhEGKMQwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Fri, 18 Feb 2022 22:43:16 +0000
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Alexey Makhalov <amakhalov@vmware.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH 0/1] Fix allocating nodes twice on x86
+Date:   Fri, 18 Feb 2022 23:43:01 +0100
+Message-Id: <20220218224302.5282-1-osalvador@suse.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,9 +71,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBkbyB3ZSByZWFsbHkgbmVlZCB0aGF0IHByaW50ayBpbiB0aGVyZT8NCg0KSSB0aGluayB3ZSBk
-by4gVGhhdCBDUFUgaXMgbm93IHJ1bm5pbmcgaW4gZGVncmFkZWQgbW9kZSAoZmFzdCBzdHJpbmdz
-IGRpc2FibGVkKSAuLi4gc3lzYWRtaW5zIHdpbGwgd2FudCB0byBrbm93IHRoYXQuDQoNCj4gSWYg
-c28sIHdlIGNhbiBzYW5kd2ljaCBhcm91bmQgaXQgd2l0aCBuc3RydW1lbnRhdGlvbl9iZWdpbigp
-IGFuZCBfZW5kKCkuLi4NCg0KSSBndWVzcyBzbyAuLi4gdGhpcyBzdHVmZiBpcyBhbGwgR3JlZWsg
-dG8gbWUuDQoNCi1Ub255DQo=
+Hi,
+
+I was about to send this patch as a part of a cleanup patchset that goes on
+top of last Michal's work about properly init memoryless nodes [1], but I
+thought I may send it as a standalone one as it is the only real fix of
+that series.
+
+Discussing the fix with Michal, another concern came up, about whether
+memoryless-nodes but with CPUs should be marked as online at all.
+Here Michal and I have different opinions, while I think that
+memoryless-nodes with its CPUs online should be marked online,
+he thinks that the property 'online' applied to node has to do more
+with memory, and I have to confess that after having a look at 
+some of the usages of for_each_online_node, most of them are checked
+to do something memory-realted afterwards, so I guess he has a point
+there.
+
+My main concern is that if memoryless-nodes do not get online, its
+sysfs showing the cpu<->numa topology will not be created and I am
+not sure about losing that information.
+E.g: i guess 'numactl -H' would not be able to show the right
+topolovy as it coul not walk sysfs to get it right (in case it does).
+
+Anyway, as a quick test, I wanted to see what happens if init_node_to_cpu()
+and init_gi_nodes(), do not online the nodes.
+(those nodes get online because of the CPU and Generic Initiator
+affinity).
+The outcome is that we blow up badly down the chain, and we do because
+of a nasty side-effect (more information can be found at the end of
+patch#1)
+Short-long story: by the time bringup_nonboot_cpus() gets called to
+bring up the cpus and bring up their respective nodes, we have not even
+registered the node_subsys bus yet, so
+bringup_nonboot_cpus()->..->__try_online_node->()register_one_node()->bus_add_device()
+will crash when dereferencing some of the bus' struct fields.
+
+We happen not to crash now, because init_to_cpu_node() and
+init_gi_nodes() mark the node online, and by doing that,
+it has the effect of __try_online_node() backing off and not
+calling register_one_node().
+
+I think the whole thing is kinda broken, or at the very least subtle and
+fragile.
+
+I am willing to have a look at how we can make this optimal, but wanted
+to share with you.
+
+Anyway, It is getting late here, so I just wanted to 1) send this quick
+fix, 2) expose some nasty behavior and 3) kick off a discussion about
+how to improve this situation.
+
+[1] https://lore.kernel.org/lkml/20220127085305.20890-1-mhocko@kernel.org/
+
+Oscar Salvador (1):
+  arch/x86/mm/numa: Do not initialize nodes twice
+
+ arch/x86/mm/numa.c | 15 ++-------------
+ include/linux/mm.h |  1 -
+ mm/page_alloc.c    |  2 +-
+ 3 files changed, 3 insertions(+), 15 deletions(-)
+
+-- 
+2.34.1
+

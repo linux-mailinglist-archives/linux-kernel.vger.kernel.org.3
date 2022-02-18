@@ -2,126 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4774BBC74
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C50A74BBC73
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237182AbiBRPtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 10:49:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53810 "EHLO
+        id S233604AbiBRPtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:49:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237170AbiBRPs1 (ORCPT
+        with ESMTP id S237175AbiBRPs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 10:48:27 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E9C275AD3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:47:47 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id m185so7989227iof.10
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:47:47 -0800 (PST)
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1932790AA
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:47:56 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id n19-20020a17090ade9300b001b9892a7bf9so12683406pjv.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0d+ENbVi/YpblJNfRhmkBPMtWMK0eYnnrjx3M98By1Q=;
-        b=iSzm9e9rhgQdjya/dXkRvAM1FpOkM7gQVMGxVGb2x1Y4goZHEdAoK2B9HxrblJG4pO
-         6wf6/kKjkJtiISXXLCHwzlpVKNoAPwhYEAYu+mPgoa2BvPLoJO7yTR2zYtPDUCqWAUEy
-         N48CXZ0HChG5SH0ZIL5VnwzVvgZ9GIlevIoprkPkXl5mx2XSmkhVJWPlhld6nWFEo+/J
-         +hkfWO2MHK6Rqd2hZ+YCH+eIWG4CR8/KnQG7OaEOpnERc0DH6Bg6qUfusAvUqTv4iAOz
-         XPFjiOXk8YeQfwOZW2tfENayg5tdXx0HCC6mZrQB7p+W85ysXB/3elBm+s+DNC5YF4MH
-         PHNg==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=R7TNHVy3VEleA7R3NGQqJ4zyGtuvT0iWporTmytRR1U=;
+        b=KON7l6sZDqK4j+UT/SLLl9wF0aR06ZernKJUjbdRwbfCJF4h8uSdazOttrU1iG8NaU
+         aDhQOQ0jYzLFylcXFA+taa/4jHZodaAoym1QARbYZmSzL/dtrbqDNyP1bH7glXmkRDNB
+         FgykfB4u+o0F5Wf7FQZatjp2JwJiMs99Jds6X9y6FTpVYUQfDJmJw4lwcpv/Bke0AcGM
+         I9KzBB297Tq9W0BEPf3DdlvRXIJTreFFHtgRJxEyLP/qthEggEsUGDqsx4vOGXTbMXQj
+         6pfGH4+qTrnMgO7msiSZaQu4ZEWxJe8HvXUAiuDmXrGYvJCHe3iaponKD1TLutiDi3YY
+         +hzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0d+ENbVi/YpblJNfRhmkBPMtWMK0eYnnrjx3M98By1Q=;
-        b=27ifEOC9QlxAZ7M6fTnJfTLqo3oA/TJvhORFf3wa6Tglx36AUjiT3n7ThZit3DTWzD
-         nPUMjWaS7V8+zyU8MoJ254ZBgaYeIEGBAhWqaJ9s2LCKwsgJ8OJUmpYz+ENl3qMrLpaK
-         S2YNxXs68Fe2ETgswmkLWKW68oc6N7m3qB8crwKxpcvEVwgw2JFuQ9XF/uyeoBgCiujp
-         +NbHWLbRqWPDuYqFgODhaCfv+hD0+6qZ/qNoe9zpAChX722Ap9i9HsDaCphMg3Cp4LEA
-         At1NpcoQPSes/UmsUesnS51bNPBnDtDlh4wJvyKJhnqnioGz4WF5Qv94gOFlaLPvPz4h
-         Cl2w==
-X-Gm-Message-State: AOAM531cSU2LKQng/pHQCcQDmGqVfebbBbRTy+lM7mHog3Zm3dtB+D2f
-        SHHXSDvA2qbiFbthlThSYGB4yQ==
-X-Google-Smtp-Source: ABdhPJwHpswjOEoA8nxD3wFPtsUtlFlgSNXvQOMW/OrH5MyURG9TSAVfOrvj6jF1aUyljKqJYuYP6Q==
-X-Received: by 2002:a05:6638:168b:b0:314:7a8d:19d4 with SMTP id f11-20020a056638168b00b003147a8d19d4mr5936881jat.199.1645199266560;
-        Fri, 18 Feb 2022 07:47:46 -0800 (PST)
-Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id f10sm3550646ilj.73.2022.02.18.07.47.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 07:47:46 -0800 (PST)
-Message-ID: <e516d27b-922a-dbbe-e0da-143eb2ab31d8@linaro.org>
-Date:   Fri, 18 Feb 2022 09:47:44 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=R7TNHVy3VEleA7R3NGQqJ4zyGtuvT0iWporTmytRR1U=;
+        b=ETM/AEgJIzz1iqbiPIgqaT3QFrEJ24ciS6AGUfVGwpl4wkIBBOniknmEZYf+Ukvcvt
+         SZg7MJDNHtData6LIBL1GLUL3/blukDb/K3zwF30eB8l56AL7WEMfpBjhFZKQhx1SI3V
+         0n3YKx4aHj0xeqpzf0hHANuzDAuPjMY9K0/h1WpRUg/auuZCNx/XwVGE+tsckcuARsfG
+         nQ4XNjtn9sCfEJhyoub/kWN3o7BPFXvScDm5hPR2Rx3aBKFt5/qP1SUoMAUAKsS6sVPn
+         vPtxAkFbV6dVOUl4ZqKbnKgXwcn0eWJqF6Z5abwraQoz9yb6fSCHfX6X9Sx5RU3MPmKV
+         SXZg==
+X-Gm-Message-State: AOAM5302LWwpIOFmkrRRPlVZE9ueC2/evJq8w997yE/Lf8UDPxnaLnyT
+        BAHwQCsuscdx9DS/9vMNTz7EqgLf87bHUiYpBwJs
+X-Google-Smtp-Source: ABdhPJzodkaf8k/ZT66s8Hyu+Nb97VQ60hfUBvzEFWPT3b+9kE7PaFflndfYJBSvH3GRCP/p8PpArYs83Tx8ZDOUlPU=
+X-Received: by 2002:a17:902:b94b:b0:14e:f1a8:9b99 with SMTP id
+ h11-20020a170902b94b00b0014ef1a89b99mr8066539pls.28.1645199276295; Fri, 18
+ Feb 2022 07:47:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 12/25] bus: mhi: ep: Add support for ring management
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
-        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
-        quic_cang@quicinc.com, quic_skananth@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-13-manivannan.sadhasivam@linaro.org>
- <20504c14-6df5-83d1-53e9-85c682a5a3c7@linaro.org>
- <20220218080704.GD11964@workstation> <20220218152327.GA11639@thinkpad>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220218152327.GA11639@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217142133.72205-1-cgzones@googlemail.com>
+In-Reply-To: <20220217142133.72205-1-cgzones@googlemail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 18 Feb 2022 10:47:45 -0500
+Message-ID: <CAHC9VhSuVr6NPVToScGQ=6Ugm1BFbijtzXxuTW3bs4ze57fn6g@mail.gmail.com>
+Subject: Re: [PATCH 2/5] selinux: use correct type for context length
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Austin Kim <austin.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/22 9:23 AM, Manivannan Sadhasivam wrote:
->>>
->>> I'm pretty sure I mentioned this before...  I don't really like these
->>> "DWORD" macros that simply write compute register values to write
->>> out to the TREs.  A TRE is a structure, not a set of registers.  And
->>> a whole TRE can be written or read in a single ARM instruction in
->>> some cases--but most likely you need to define it as a structure
->>> for that to happen.
->>>
->>> struct mhi_tre {
->>> 	__le64 addr;
->>> 	__le16 len_opcode
->>> 	__le16 reserved;
->>> 	__le32 flags;
->>> };
->> Changing the TRE structure requires changes to both host and endpoint
->> stack. So I'll tackle this as an improvement later.
->>
->> Added to TODO list.
-> Just did a comparision w/ IPA code and I convinced myself that this conversion
-> should happen now itself. So please ignore my above comment.
+On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> security_sid_to_context() expects a pointer to an u32 as the address
+> where to store the length of the computed context.
+>
+> Reported by sparse:
+>
+>     security/selinux/xfrm.c:359:39: warning: incorrect type in argument 4=
+ (different signedness)
+>     security/selinux/xfrm.c:359:39:    expected unsigned int [usertype] *=
+scontext_len
+>     security/selinux/xfrm.c:359:39:    got int *
+>
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  security/selinux/xfrm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This might not be that much work, but if it is, I somewhat
-apologize for that.  Still, I believe the code will be better
-as a result, so I'm not *that* sorry.
+Merged into selinux/next, thanks.
 
-If you do this though, I would recommend you do it as a
-separate, prerequisite bit of work.  Your series is too
-long, and making it longer by adding this will just delay
-*everything* a bit more.  So, I'd advise updating the
-existing host code this way first, then adapt your patch
-series to do things the new way.
-
-Alternatively, do this later (as you earlier said you would),
-and don't delay this series any more.  If it works, it works,
-and you can always improve it in the future.
-
-And now that your series is getting closer to golden, maybe
-you can break it into a few smaller series?  I don't know,
-that also can lead to some confusion, so I won't strongly
-advocate that.  But it's something to consider for future
-work regardless.
-
-					-Alex
+--=20
+paul-moore.com

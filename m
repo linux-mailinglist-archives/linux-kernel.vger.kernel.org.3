@@ -2,143 +2,492 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67244BBB5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1048B4BBB0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236558AbiBRO5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:57:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50378 "EHLO
+        id S236269AbiBROzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:55:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236569AbiBRO4x (ORCPT
+        with ESMTP id S236260AbiBROyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:56:53 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3246A5A5AF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:20 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id c192so5420832wma.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TsBWqhdlaWb1gMEMCTy+xVO70hKJt7Vn6RQJImIvis0=;
-        b=7+JO8GgDz4eLqZqGL8gwXCKx3NMB4p8Wwn1xYLk69tPcCPx4ZZCHeT2egR0aCOFzB3
-         5plooVjc/uxWNVgjnYd/iz55rnCbwVFW1oZzJqY9FMA/kZ2lMHqhv+nw4/fzrbSl888o
-         +pJ+UmsFn7LNXUxlgJV3l21O6IRlAn5q034XeSze0dJXlywxtBuTY9GbCbDmIt8Gp7hG
-         yDfy8Vf247TlM2ydggvBl1+jh9aKkMNTxJZeAHaGCaEUm8bcM1VqDkMtn4rwTPSeG81O
-         B9zdgBvg9OXJjnqT70Mq1uscokETupfm+oflpZzO0oC/Mh4DqnYIEcgw1XaTuDF52lj7
-         s7Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TsBWqhdlaWb1gMEMCTy+xVO70hKJt7Vn6RQJImIvis0=;
-        b=g27C4KAGfOzPS25mFI1kQMbWZUi+vyzqQ6LPfu6JDHvRn55soCV3U46e879wxGXtj1
-         w5GzOSwKrR9poVz5oU59QTlU8q+qlms5Tl/472Uu8XDW2Dta1x0gLggCIiJl+bLvY9Zg
-         vNxIQIG9iTV7iJUO8BTrEJAgEOcEibBQzV2CmXwmqz2CydpOdfJ0tjTXGu5wegxppgLm
-         lSygl5NKSo+0nofDtYa//6al9WE49rXOqx68jrTYa6t2EcX01FGgYeI08LqYUROMtEAf
-         u65oVbuPgXD55ojrG/N9pJ30joXpmSZDnn88ayZvkvvp5+TKZlpbAOScKFLPOPuku5XG
-         N36A==
-X-Gm-Message-State: AOAM532tHyBgKz8PPs/5vct3ikLvcevHn9bV2FdLKg8JcoQZeASx/UnK
-        rcd/b35/XPTAXgdkhn7GlmHwbw==
-X-Google-Smtp-Source: ABdhPJyFvD28f6eULBjPuAD0GLrHqccrZfmLJsTsBWJtRo1FCRC+AL4xjZn1NWK7NCcpJLwQblQYQQ==
-X-Received: by 2002:a05:600c:2d41:b0:354:24d2:8e13 with SMTP id a1-20020a05600c2d4100b0035424d28e13mr11133608wmg.138.1645196178651;
-        Fri, 18 Feb 2022 06:56:18 -0800 (PST)
-Received: from localhost.localdomain (2a02-8440-6241-3b28-3074-96af-9642-0002.rev.sfr.net. [2a02:8440:6241:3b28:3074:96af:9642:2])
-        by smtp.gmail.com with ESMTPSA id b10sm47431454wrd.8.2022.02.18.06.56.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 06:56:18 -0800 (PST)
-From:   Guillaume Ranquet <granquet@baylibre.com>
-To:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com,
-        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
-        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH v8 10/19] drm/mediatek: dpi: move swap_shift to board config
+        Fri, 18 Feb 2022 09:54:54 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEA1575E9;
+        Fri, 18 Feb 2022 06:54:33 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B3C001F46B9E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645196072;
+        bh=9LOKSJOw3hrIjnfZFnzW6ySiVT5icMuzMaCYA+0KEPE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ORUI+1d1LqsS47HvLYgL9rWWZbGCGwRSwH0OIKPA+Dg8FcNHD9a7cXR9/GhTNAGB9
+         dyhCmfYXO88uBAn/iclOsmUg5rmlsxL4blVkrWGLWl45MJGFdHbutAVQwlO7d3PZEq
+         uHtj6fvqH7WdNuK3EAu9lPtFN6JlX5U9sQHbJn+c0Nj3Efns8pl87Yvcj4DPR2NgYn
+         tIP8WLqquDZ9/1Aa+vB6wvmg5gHSkSBVq7L9xYTyimjBKfrXLVIE9oIVDDfc/dhEqf
+         me8K3g28zyq9eCr4fhGsWpJgVSMDcyxoIt8TaX2vvXTrtKOkFgj3Prp+x3imtLt9aj
+         qHaR4n5uv5pDw==
+Message-ID: <fcae42a5-6e11-e683-8f3a-453650f08d38@collabora.com>
 Date:   Fri, 18 Feb 2022 15:54:28 +0100
-Message-Id: <20220218145437.18563-11-granquet@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220218145437.18563-1-granquet@baylibre.com>
-References: <20220218145437.18563-1-granquet@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [v2 09/17] ASoC: mediatek: mt8186: support tdm in platform driver
+Content-Language: en-US
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
+        geert+renesas@glider.be, trevor.wu@mediatek.com,
+        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
+ <20220217134205.15400-10-jiaxin.yu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220217134205.15400-10-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add flexibility by moving the swap shift value to board config
+Il 17/02/22 14:41, Jiaxin Yu ha scritto:
+> This patch adds mt8186 tdm dai driver.
+> 
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> ---
+>   sound/soc/mediatek/mt8186/mt8186-dai-tdm.c | 713 +++++++++++++++++++++
+>   1 file changed, 713 insertions(+)
+>   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
+> 
+> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c b/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
+> new file mode 100644
+> index 000000000000..28dd3661f0e0
+> --- /dev/null
+> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
+> @@ -0,0 +1,713 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// MediaTek ALSA SoC Audio DAI TDM Control
+> +//
+> +// Copyright (c) 2022 MediaTek Inc.
+> +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> +
+> +#include <linux/regmap.h>
+> +#include <sound/pcm_params.h>
+> +
+> +#include "mt8186-afe-clk.h"
+> +#include "mt8186-afe-common.h"
+> +#include "mt8186-afe-gpio.h"
+> +#include "mt8186-interconnection.h"
+> +
+> +#define TDM_HD_EN_W_NAME "TDM_HD_EN"
+> +#define TDM_MCLK_EN_W_NAME "TDM_MCLK_EN"
+> +#define MTK_AFE_TDM_KCONTROL_NAME "TDM_HD_Mux"
+> +
+> +struct mtk_afe_tdm_priv {
+> +	unsigned int id;
+> +	unsigned int rate; /* for determine which apll to use */
+> +	unsigned int bck_invert;
+> +	unsigned int lck_invert;
+> +	unsigned int lrck_width;
+> +	unsigned int mclk_id;
+> +	unsigned int mclk_multiple; /* according to sample rate */
+> +	unsigned int mclk_rate;
+> +	unsigned int mclk_apll;
+> +	unsigned int tdm_mode;
+> +	unsigned int data_mode;
+> +	unsigned int slave_mode;
+> +	unsigned int low_jitter_en;
+> +};
+> +
+> +enum {
+> +	TDM_IN_I2S = 0,
+> +	TDM_IN_LJ = 1,
+> +	TDM_IN_RJ = 2,
+> +	TDM_IN_DSP_A = 4,
+> +	TDM_IN_DSP_B = 5,
+> +};
+> +
+> +enum {
+> +	TDM_DATA_ONE_PIN = 0,
+> +	TDM_DATA_MULTI_PIN,
+> +};
+> +
+> +enum {
+> +	TDM_BCK_NON_INV = 0,
+> +	TDM_BCK_INV = 1,
+> +};
+> +
+> +enum {
+> +	TDM_LCK_NON_INV = 0,
+> +	TDM_LCK_INV = 1,
+> +};
+> +
+> +static unsigned int get_tdm_lrck_width(snd_pcm_format_t format,
+> +				       unsigned int mode)
+> +{
+> +	if (mode == TDM_IN_DSP_A || mode == TDM_IN_DSP_B)
+> +		return 0;
+> +	else
 
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
----
- drivers/gpu/drm/mediatek/mtk_dpi.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Drop the "else"
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 0d3acd08ea358..ec221e24e0fee 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -131,6 +131,7 @@ struct mtk_dpi_conf {
- 	u32 dimension_mask;
- 	// Mask used for HSIZE and VSIZE (no shift)
- 	u32 hvsize_mask;
-+	u32 channel_swap_shift;
- 	const struct mtk_dpi_yc_limit *limit;
- };
- 
-@@ -349,7 +350,8 @@ static void mtk_dpi_config_channel_swap(struct mtk_dpi *dpi,
- 		break;
- 	}
- 
--	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << CH_SWAP, CH_SWAP_MASK);
-+	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << CH_SWAP,
-+		     CH_SWAP_MASK << dpi->conf->channel_swap_shift);
- }
- 
- static void mtk_dpi_config_yuv422_enable(struct mtk_dpi *dpi, bool enable)
-@@ -821,6 +823,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
- 	.swap_input_support = true,
- 	.dimension_mask = HPW_MASK,
- 	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
- 	.limit = &mtk_dpi_limit,
- };
- 
-@@ -835,6 +838,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
- 	.swap_input_support = true,
- 	.dimension_mask = HPW_MASK,
- 	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
- 	.limit = &mtk_dpi_limit,
- };
- 
-@@ -848,6 +852,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
- 	.swap_input_support = true,
- 	.dimension_mask = HPW_MASK,
- 	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
- 	.limit = &mtk_dpi_limit,
- };
- 
-@@ -861,6 +866,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
- 	.swap_input_support = true,
- 	.dimension_mask = HPW_MASK,
- 	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
- 	.limit = &mtk_dpi_limit,
- };
- 
--- 
-2.34.1
+> +		return snd_pcm_format_physical_width(format) - 1;
+> +}
+> +
+> +static unsigned int get_tdm_ch_fixup(unsigned int channels)
+> +{
+> +	if (channels > 4)
+> +		return 8;
+> +	else if (channels > 2)
+> +		return 4;
+> +	else
 
+Same here
+
+> +		return 2;
+> +}
+> +
+> +static unsigned int get_tdm_ch_per_sdata(unsigned int mode,
+> +					 unsigned int channels)
+> +{
+> +	if (mode == TDM_IN_DSP_A || mode == TDM_IN_DSP_B)
+> +		return get_tdm_ch_fixup(channels);
+> +	else
+
+...and same here
+
+> +		return 2;
+> +}
+> +
+> +enum {
+> +	SUPPLY_SEQ_APLL,
+> +	SUPPLY_SEQ_TDM_MCK_EN,
+> +	SUPPLY_SEQ_TDM_HD_EN,
+> +	SUPPLY_SEQ_TDM_EN,
+> +};
+> +
+> +static int get_tdm_id_by_name(const char *name)
+> +{
+> +	return MT8186_DAI_TDM_IN;
+> +}
+> +
+> +static int mtk_tdm_en_event(struct snd_soc_dapm_widget *w,
+> +			    struct snd_kcontrol *kcontrol,
+> +			    int event)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(w->name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +
+> +	if (!tdm_priv) {
+> +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
+
+dev_err()
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x\n",
+> +		__func__, w->name, event);
+> +
+> +	switch (event) {
+> +	case SND_SOC_DAPM_PRE_PMU:
+> +		mt8186_afe_gpio_request(afe->dev, true, tdm_priv->id, 0);
+> +		break;
+> +	case SND_SOC_DAPM_POST_PMD:
+> +		mt8186_afe_gpio_request(afe->dev, false, tdm_priv->id, 0);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_tdm_mck_en_event(struct snd_soc_dapm_widget *w,
+> +				struct snd_kcontrol *kcontrol,
+> +				int event)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(w->name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +
+> +	if (!tdm_priv) {
+> +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
+
+dev_err() - please fix all other instances
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x, dai_id %d\n",
+> +		__func__, w->name, event, dai_id);
+> +
+> +	switch (event) {
+> +	case SND_SOC_DAPM_PRE_PMU:
+> +		mt8186_mck_enable(afe, tdm_priv->mclk_id, tdm_priv->mclk_rate);
+> +		break;
+> +	case SND_SOC_DAPM_POST_PMD:
+> +		tdm_priv->mclk_rate = 0;
+> +		mt8186_mck_disable(afe, tdm_priv->mclk_id);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+...snip...
+
+> +
+> +static int mt8186_tdm_hd_set(struct snd_kcontrol *kcontrol,
+> +			     struct snd_ctl_elem_value *ucontrol)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(kcontrol->id.name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
+> +	int hd_en;
+> +
+> +	if (ucontrol->value.enumerated.item[0] >= e->items)
+> +		return -EINVAL;
+> +
+> +	hd_en = ucontrol->value.integer.value[0];
+> +
+> +	dev_info(afe->dev, "%s(), kcontrol name %s, hd_en %d\n",
+> +		 __func__, kcontrol->id.name, hd_en);
+
+dev_dbg()
+
+> +
+> +	if (!tdm_priv) {
+> +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	tdm_priv->low_jitter_en = hd_en;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct snd_kcontrol_new mtk_dai_tdm_controls[] = {
+> +	SOC_ENUM_EXT(MTK_AFE_TDM_KCONTROL_NAME, mt8186_tdm_enum[0],
+> +		     mt8186_tdm_hd_get, mt8186_tdm_hd_set),
+> +};
+> +
+> +static const struct snd_soc_dapm_route mtk_dai_tdm_routes[] = {
+> +	{"TDM IN", NULL, "aud_tdm_clk"},
+> +	{"TDM IN", NULL, "TDM_EN"},
+> +	{"TDM IN", NULL, TDM_HD_EN_W_NAME, mtk_afe_tdm_hd_connect},
+> +	{TDM_HD_EN_W_NAME, NULL, APLL1_W_NAME, mtk_afe_tdm_apll_connect},
+> +	{TDM_HD_EN_W_NAME, NULL, APLL2_W_NAME, mtk_afe_tdm_apll_connect},
+> +
+> +	{"TDM IN", NULL, TDM_MCLK_EN_W_NAME, mtk_afe_tdm_mclk_connect},
+> +	{TDM_MCLK_EN_W_NAME, NULL, APLL1_W_NAME, mtk_afe_tdm_mclk_apll_connect},
+> +	{TDM_MCLK_EN_W_NAME, NULL, APLL2_W_NAME, mtk_afe_tdm_mclk_apll_connect},
+> +
+> +	/* allow tdm on without codec on */
+> +	{"TDM IN", NULL, "TDM_In_Mux"},
+> +	{"TDM_In_Mux", "Dummy_Widget", "TDM_DUMMY_IN"},
+> +};
+> +
+> +/* dai ops */
+> +static int mtk_dai_tdm_cal_mclk(struct mtk_base_afe *afe,
+> +				struct mtk_afe_tdm_priv *tdm_priv,
+> +				int freq)
+> +{
+> +	int apll;
+> +	int apll_rate;
+> +
+> +	apll = mt8186_get_apll_by_rate(afe, freq);
+> +	apll_rate = mt8186_get_apll_rate(afe, apll);
+> +
+> +	if (!freq || freq > apll_rate) {
+> +		dev_info(afe->dev,
+> +			 "%s(), freq(%d Hz) invalid\n", __func__, freq);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (apll_rate % freq != 0) {
+> +		dev_info(afe->dev,
+> +			 "%s(), APLL cannot generate %d Hz", __func__, freq);
+> +		return -EINVAL;
+> +	}
+> +
+> +	tdm_priv->mclk_rate = freq;
+> +	tdm_priv->mclk_apll = apll;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_dai_tdm_hw_params(struct snd_pcm_substream *substream,
+> +				 struct snd_pcm_hw_params *params,
+> +				 struct snd_soc_dai *dai)
+> +{
+> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int tdm_id = dai->id;
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[tdm_id];
+> +	unsigned int tdm_mode = tdm_priv->tdm_mode;
+> +	unsigned int data_mode = tdm_priv->data_mode;
+> +	unsigned int rate = params_rate(params);
+> +	unsigned int channels = params_channels(params);
+> +	snd_pcm_format_t format = params_format(params);
+> +	unsigned int bit_width =
+> +		snd_pcm_format_physical_width(format);
+> +	unsigned int tdm_channels = (data_mode == TDM_DATA_ONE_PIN) ?
+> +		get_tdm_ch_per_sdata(tdm_mode, channels) : 2;
+> +	unsigned int lrck_width =
+> +		get_tdm_lrck_width(format, tdm_mode);
+> +	unsigned int tdm_con = 0;
+> +	bool slave_mode = tdm_priv->slave_mode;
+> +	bool lrck_inv = tdm_priv->lck_invert;
+> +	bool bck_inv = tdm_priv->bck_invert;
+> +	unsigned int ctrl_reg;
+> +	unsigned int ctrl_mask;
+> +	unsigned int tran_rate;
+> +	unsigned int tran_relatch_rate;
+> +
+> +	if (tdm_priv)
+> +		tdm_priv->rate = rate;
+> +	else
+> +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +
+> +	tran_rate = mt8186_rate_transform(afe->dev, rate, dai->id);
+> +	tran_relatch_rate = mt8186_tdm_relatch_rate_transform(afe->dev, rate);
+> +
+> +	/* calculate mclk_rate, if not set explicitly */
+> +	if (!tdm_priv->mclk_rate) {
+> +		tdm_priv->mclk_rate = rate * tdm_priv->mclk_multiple;
+> +		mtk_dai_tdm_cal_mclk(afe,
+> +				     tdm_priv,
+> +				     tdm_priv->mclk_rate);
+> +	}
+> +
+> +	/* ETDM_IN1_CON0 */
+> +	tdm_con |= slave_mode << ETDM_IN1_CON0_REG_SLAVE_MODE_SFT;
+> +	tdm_con |= tdm_mode << ETDM_IN1_CON0_REG_FMT_SFT;
+> +	tdm_con |= (bit_width - 1) << ETDM_IN1_CON0_REG_BIT_LENGTH_SFT;
+> +	tdm_con |= (bit_width - 1) << ETDM_IN1_CON0_REG_WORD_LENGTH_SFT;
+> +	tdm_con |= (tdm_channels - 1) << ETDM_IN1_CON0_REG_CH_NUM_SFT;
+> +	/* default disable sync mode */
+> +	tdm_con |= 0 << ETDM_IN1_CON0_REG_SYNC_MODE_SFT;
+
+0 << (anything) == 0
+
+(number |= 0) == number
+
+Is this a mistake, or are you really doing nothing here?
+
+
+> +	/* relatch fix to h26m */
+> +	tdm_con |= 0 << ETDM_IN1_CON0_REG_RELATCH_1X_EN_SEL_DOMAIN_SFT;
+> +
+> +	ctrl_reg = ETDM_IN1_CON0;
+> +	ctrl_mask = ETDM_IN_CON0_CTRL_MASK;
+> +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
+> +
+> +	/* ETDM_IN1_CON1 */
+> +	tdm_con = 0;
+> +	tdm_con |= 0 << ETDM_IN1_CON1_REG_LRCK_AUTO_MODE_SFT;
+> +	tdm_con |= 1 << ETDM_IN1_CON1_PINMUX_MCLK_CTRL_OE_SFT;
+> +	tdm_con |= (lrck_width - 1) << ETDM_IN1_CON1_REG_LRCK_WIDTH_SFT;
+> +
+> +	ctrl_reg = ETDM_IN1_CON1;
+> +	ctrl_mask = ETDM_IN_CON1_CTRL_MASK;
+> +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
+
+You don't need the ctrl_reg, nor ctrl_mask variables...
+
+regmap_update_bits(afe->regmap, ETDM_IN1_CON1, ETDM_IN_CON1_CTRL_MASK, tdm_con);
+
+> +
+> +	/* ETDM_IN1_CON3 */
+> +	tdm_con = 0;
+> +	tdm_con = ETDM_IN_CON3_FS(tran_rate);
+> +
+> +	ctrl_reg = ETDM_IN1_CON3;
+> +	ctrl_mask = ETDM_IN_CON3_CTRL_MASK;
+> +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
+
+same here
+
+> +
+> +	/* ETDM_IN1_CON4 */
+> +	tdm_con = 0;
+> +	tdm_con = ETDM_IN_CON4_FS(tran_relatch_rate);
+> +	if (slave_mode) {
+> +		if (lrck_inv)
+> +			tdm_con |= ETDM_IN_CON4_CON0_SLAVE_LRCK_INV;
+> +		if (bck_inv)
+> +			tdm_con |= ETDM_IN_CON4_CON0_SLAVE_BCK_INV;
+> +	} else {
+> +		if (lrck_inv)
+> +			tdm_con |= ETDM_IN_CON4_CON0_MASTER_LRCK_INV;
+> +		if (bck_inv)
+> +			tdm_con |= ETDM_IN_CON4_CON0_MASTER_BCK_INV;
+> +	}
+> +
+> +	ctrl_reg = ETDM_IN1_CON4;
+> +	ctrl_mask = ETDM_IN_CON4_CTRL_MASK;
+> +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
+
+and here
+
+> +
+> +	/* ETDM_IN1_CON2 */
+> +	tdm_con = 0;
+> +	if (data_mode == TDM_DATA_MULTI_PIN) {
+> +		tdm_con |= ETDM_IN_CON2_MULTI_IP_2CH_MODE;
+> +		tdm_con |= ETDM_IN_CON2_MULTI_IP_CH(channels);
+> +	}
+> +
+> +	ctrl_reg = ETDM_IN1_CON2;
+> +	ctrl_mask = ETDM_IN_CON2_CTRL_MASK;
+> +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
+
+and here
+
+> +
+> +	/* ETDM_IN1_CON8 */
+> +	tdm_con = 0;
+> +	if (slave_mode) {
+> +		tdm_con |= 1 << ETDM_IN1_CON8_REG_ETDM_USE_AFIFO_SFT;
+> +		tdm_con |= 0 << ETDM_IN1_CON8_REG_AFIFO_CLOCK_DOMAIN_SEL_SFT;
+> +		tdm_con |= ETDM_IN_CON8_FS(tran_relatch_rate);
+> +	} else {
+> +		tdm_con |= 0 << ETDM_IN1_CON8_REG_ETDM_USE_AFIFO_SFT;
+> +	}
+> +
+> +	ctrl_reg = ETDM_IN1_CON8;
+> +	ctrl_mask = ETDM_IN_CON8_CTRL_MASK;
+> +	regmap_update_bits(afe->regmap, ctrl_reg, ctrl_mask, tdm_con);
+
+finally, here too.
+
+> +
+> +	return 0;
+> +}
+> +
+
+Thanks,
+ANgelo

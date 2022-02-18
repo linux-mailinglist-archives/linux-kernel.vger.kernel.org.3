@@ -2,129 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0CC4BC12E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EC34BC130
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236681AbiBRU2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 15:28:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46914 "EHLO
+        id S239472AbiBRUai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 15:30:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiBRU2n (ORCPT
+        with ESMTP id S235855AbiBRUaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 15:28:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E978621D0A4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:28:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645216106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GNaUEreaifOp/OglB8GJSgfLwiBjVBu/cwnxKYI2cd8=;
-        b=esZiUYThHK6XVdsAcw1v7Mb/7D4AL9uoqkL/rCFlAF5wuHU22eLCF0Ef0F3EbBfImqCs6u
-        351VTKNDeoX26mpAe0WV65tWMleKZTWkraS6oxxgxKqSIvmArZhkW3WT9U+sOnDFeBWg+W
-        aOXxmEnE/Nk8BuvE/sc2qwC4sVvMP5k=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-271-XR1IhEs3NUOW0IZo1rqXvA-1; Fri, 18 Feb 2022 15:28:24 -0500
-X-MC-Unique: XR1IhEs3NUOW0IZo1rqXvA-1
-Received: by mail-qk1-f197.google.com with SMTP id bj2-20020a05620a190200b005084968bb24so8380544qkb.23
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:28:24 -0800 (PST)
+        Fri, 18 Feb 2022 15:30:35 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B0B27DF05
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:30:18 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id y16so1376850pjt.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DNFcmS6uw3KxEPl6z8drDxT/aeyaze5jPFLIWBXfGcM=;
+        b=e/q+3layfTT2uJlUk+dxnbcpwhXmtyyU+HZ7fgNM2pMwxbLeVqbPhgjsz8Q7Rpilo4
+         C9MB8oZH41riL0mqdtF1NOI9TX1Ux1BIWMuX5qRny1SFLaM2ZzV852gmRs9e7WehdNT4
+         FLohFX4cGeqD+e7GcMaJRWi0UkuY1qfvlwRxrpXwX1fjQSu5M8CY0BtDBfFCI28c4kV4
+         9CYA1hOD2vMp5C3yAv9n6EguQO8ifhW04x3agzlolDXcFAkxIgr/lWABcXBHVfHF5ial
+         VnCQXrr9/+wW4QaSyjnmzDq5gS9n0fvay12v2iQNkYdFo0Nc7fGOxXrEkvWZt1Ye2BXr
+         Q8SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=GNaUEreaifOp/OglB8GJSgfLwiBjVBu/cwnxKYI2cd8=;
-        b=K7CydGTncgU1R3JZjARIReIgAVNZSu45TkPtkliq/FEAd5L5hlITAVbVLf+8ImWBsc
-         0tpls3WcbOWlIWCi0wM858OZHobOqCn4W2WmgcW8o/Xuiam9El59sIE14ik/U6ZpdHE4
-         Grs46rDMOs7pmd653Ktd6VPAaJR/aV0F5a6jvExXJyUwTdm774M/LSK8H1Bmk3OJfWh+
-         zpCwUiMhw35Cshuy1vQz7tbiUUF9qRlfX0QCLMm+8PTM/uI197mEEwvbgJJekCzL7bi8
-         VvpPII6uGAnyNUYXGwUozG+tQrdZfgaalXJTP+WLhJXh7kJhvK8a+j60fjjJrYiz/FhW
-         jjlg==
-X-Gm-Message-State: AOAM533y085ydnM88j4Gfe0CbX3YzJGYoIdVeJU5huDQ5kz18Kg9ORqR
-        arsQkTr4TdT0q8B2iytALXPr/BEliNQyqk0iMolANnrM43xETFa8i1badT2F0UxjD6NdgSwXO4g
-        nc2G8m/uOih8Ht3NTZyDboB4C
-X-Received: by 2002:ac8:4e51:0:b0:2dd:53e9:6c14 with SMTP id e17-20020ac84e51000000b002dd53e96c14mr7314966qtw.673.1645216104222;
-        Fri, 18 Feb 2022 12:28:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxniQmFIzkrLcfHl2hy/x0o/5qpoUVyvMeEHjF76JH0Ipx2ay7glvX+6BCr/2T4UQBNO9GAdQ==
-X-Received: by 2002:ac8:4e51:0:b0:2dd:53e9:6c14 with SMTP id e17-20020ac84e51000000b002dd53e96c14mr7314950qtw.673.1645216104002;
-        Fri, 18 Feb 2022 12:28:24 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id c2sm18333613qkp.0.2022.02.18.12.28.22
+        bh=DNFcmS6uw3KxEPl6z8drDxT/aeyaze5jPFLIWBXfGcM=;
+        b=qaQBgjB4Zp4p6ZQ8hjVK+hpkv2K3kEBnFlrx1eFJDEFJI2iNaBMJ2L85lRFi+i+xIe
+         dX9YfepfDoKtwOtc4JQifQfe5Zg9N68U4S/UurGoXHr7rpGxOmuCv6La9fMxSNuZHk5L
+         tS1dpPK+lBwVyBdDBF4ExkalNwYmyGGFHnnL1EIx8nTCa1CuH1tcQuwkzeyCbE5ugZ+h
+         j4WSdI9VSmLtJxCdu4bo4Rqds/c8C7SUK63U7lJKYn3DjoVW6Vx+nVizAVHfNziq+T35
+         Z30g37LZhNtV8A757AmdfgskxfCT2+ve2F8EY+oFH3GMWN0he84DMHtuwWRKenpF/Z46
+         Kbjg==
+X-Gm-Message-State: AOAM530Bh0k8aP8VuWytQP192NmTldnvxvBFR4q2Xrnsm57QWmpTf0/p
+        00NKHr609ijOk9mMQPuAyoZMHRD5fQAytg==
+X-Google-Smtp-Source: ABdhPJzJwYzm0DJRv5DwCaljdu2YM/3NJe2ZwfPmisgbN4UYw7m5x7pVOHc516qpIrzlt3NMLljFEQ==
+X-Received: by 2002:a17:90b:1bc4:b0:1b9:ae7c:7c67 with SMTP id oa4-20020a17090b1bc400b001b9ae7c7c67mr14311623pjb.168.1645216217527;
+        Fri, 18 Feb 2022 12:30:17 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q4sm3927977pfj.113.2022.02.18.12.30.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 12:28:23 -0800 (PST)
-Date:   Fri, 18 Feb 2022 12:28:20 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH 02/29] x86/module: Fix the paravirt vs alternative order
-Message-ID: <20220218202820.7tvwxytkyqtngiks@treble>
-References: <20220218164902.008644515@infradead.org>
- <20220218171408.691941184@infradead.org>
+        Fri, 18 Feb 2022 12:30:16 -0800 (PST)
+Date:   Fri, 18 Feb 2022 20:30:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 14/18] KVM: x86/mmu: avoid indirect call for get_cr3
+Message-ID: <YhAB1d1/nQbx6yvk@google.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-15-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218171408.691941184@infradead.org>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220217210340.312449-15-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 05:49:04PM +0100, Peter Zijlstra wrote:
-> Ever since commit 4e6292114c741 ("x86/paravirt: Add new features for
-> paravirt patching") there is an ordering dependency between patching
-> paravirt ops and patching alternatives, the module loader still
-> violates this.
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> Most of the time, calls to get_guest_pgd result in calling
+> kvm_read_cr3 (the exception is only nested TDP).  Hardcode
+> the default instead of using the get_cr3 function, avoiding
+> a retpoline if they are enabled.
 > 
-> Fixes: 4e6292114c741 ("x86/paravirt: Add new features for paravirt patching")
-> Cc: Juergen Gross <jgross@suse.com>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-Probably a good idea to put the 'para' and 'alt' clauses next to each
-other and add a comment that the ordering is necessary.
-
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->  arch/x86/kernel/module.c |    9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>  arch/x86/kvm/mmu.h             | 13 +++++++++++++
+>  arch/x86/kvm/mmu/mmu.c         | 15 +++++----------
+>  arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
+>  arch/x86/kvm/x86.c             |  2 +-
+>  4 files changed, 20 insertions(+), 12 deletions(-)
 > 
-> --- a/arch/x86/kernel/module.c
-> +++ b/arch/x86/kernel/module.c
-> @@ -272,6 +272,10 @@ int module_finalize(const Elf_Ehdr *hdr,
->  			retpolines = s;
->  	}
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index 1d0c1904d69a..1808d6814ddb 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -116,6 +116,19 @@ static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
+>  					  vcpu->arch.mmu->shadow_root_level);
+>  }
 >  
-> +	if (para) {
-> +		void *pseg = (void *)para->sh_addr;
-> +		apply_paravirt(pseg, pseg + para->sh_size);
-> +	}
->  	if (retpolines) {
->  		void *rseg = (void *)retpolines->sh_addr;
->  		apply_retpolines(rseg, rseg + retpolines->sh_size);
-> @@ -289,11 +293,6 @@ int module_finalize(const Elf_Ehdr *hdr,
->  					    tseg, tseg + text->sh_size);
->  	}
->  
-> -	if (para) {
-> -		void *pseg = (void *)para->sh_addr;
-> -		apply_paravirt(pseg, pseg + para->sh_size);
-> -	}
-> -
->  	/* make jump label nops */
->  	jump_label_apply_nops(me);
->  
-> 
-> 
+> +static inline gpa_t __kvm_mmu_get_guest_pgd(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
+> +{
 
--- 
-Josh
+I'd prefer to do what we do for page faults.  That approach avoids the need for a
+comment to document NULL and avoids a conditional when RETPOLINE is not enabled.
 
+Might be worth renaming get_cr3 => get_guest_cr3 though.
+
+#ifdef CONFIG_RETPOLINE
+	if (mmu->get_guest_pgd = get_guest_cr3)
+		return kvm_read_cr3(vcpu);
+#endif
+	return mmu->get_guest_pgd(vcpu);
+
+
+> +	if (!mmu->get_guest_pgd)
+> +		return kvm_read_cr3(vcpu);
+> +	else
+> +		return mmu->get_guest_pgd(vcpu);
+> +}
+> +
+> +static inline gpa_t kvm_mmu_get_guest_pgd(struct kvm_vcpu *vcpu)
+> +{
+> +	return __kvm_mmu_get_guest_pgd(vcpu, vcpu->arch.mmu);
+
+I'd much prefer we don't provide an @vcpu-only variant and force the caller to
+provide the mmu.

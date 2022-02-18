@@ -2,92 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467944BB4CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A81F4BB4D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbiBRJCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:02:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55574 "EHLO
+        id S232747AbiBRJCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:02:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbiBRJB4 (ORCPT
+        with ESMTP id S233051AbiBRJCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:01:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7110E51331;
-        Fri, 18 Feb 2022 01:01:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 330FFB825AE;
-        Fri, 18 Feb 2022 09:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5989DC340E9;
-        Fri, 18 Feb 2022 09:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645174898;
-        bh=xVrAIrahrueaW9ffryAhmcNWxZJXZm/2LO+7/0W/VI4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FL1t7Ns7A9wwzcfynYdLqp6eEE/kIcInmdRwHMHElX0Nz2PKz7Ae5s3Q1mAm4cDjD
-         gavbfz53KfYdOU3bzajaAbZKubcC0Y+RXatjm1k2CRIJs5lkNtOz1Q4uQRPy/oB9Ay
-         +RWkY0Tcz+Op0N3UKrcUCSMK7CZKrd2pn2yTIij4=
-Date:   Fri, 18 Feb 2022 10:01:35 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
+        Fri, 18 Feb 2022 04:02:09 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79823541B9;
+        Fri, 18 Feb 2022 01:01:50 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id bg21-20020a05600c3c9500b0035283e7a012so5889744wmb.0;
+        Fri, 18 Feb 2022 01:01:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MMooeDrJfD+MSlWbTtjztNE5tCVYFbi09srETvHrxyE=;
+        b=LkyQK1tuBU3F8wwaUsWNOBmumJHGImN2OeDODhK2rl9gWzlbqq+MRRuk70kze8+RM4
+         y2F82bkOwh8y/5TYrnimKoxOotOiukUz7aIUkPEGfOneXK7eWGmREZcMGGXz4skBldDl
+         8xnPVDOdlKmodcUPjOd4kNZp6Cm/H2BDlJj1WncJmAF94Jm9ri/RJWXlQXMRtVwwIZ/x
+         5KKDOXK+WAfsWD81eo+0O32tQUmvLE5svObUd3JYCTuzMpij3XP+O/30GyIHGbcPZgZv
+         lYKxNSjjVvoJyD7gnCjJ6RIGWMtu2Vhx6g4ge0JfyP4Km61yqirkPh7/NruecQI2jssr
+         03mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MMooeDrJfD+MSlWbTtjztNE5tCVYFbi09srETvHrxyE=;
+        b=B+fbK/q1QgMuGTVm8BqlIeL/LRZCVPJduShiOvauzbljKvm2YNG2nQRWw9PIbvZSoD
+         h3BkOJFiNAKoAbPmNJTKyIiUttvWHTwsezXP2vsBzoUCTLlS8rfrbgIe+rZ7/4vUsGlb
+         VH/PsU7IXkZcFLUUTqZSlZhOQgRqscA6C95GxW8PkmvZe175IeQNULhJ4403OG0xmGEl
+         VT1PN8PiwGI+tsQgGCJKbC26wbgmJupvBPfJb+biuqepDMUc9np10fWCBhudlM0Z6k8j
+         fCtEWvpIGfP6I/Jp7JVIf1UQfKFZM4Jik64abExa3ed4x2ajnI2HkeXhlA5s08d3/rdD
+         YMxw==
+X-Gm-Message-State: AOAM532WbWj2QEQDI7xJ/o3IV2gncN078bYBoQHN1LMSxUFgKgq0TMkf
+        OkexTEjjKwWgeSs7qLTrOYM=
+X-Google-Smtp-Source: ABdhPJwP0DNxczzXwHSaFAcN5EVFHM4JR80AWM/uieubehRVv4wiIqUitZAAoIpZr077/IouS4JXpw==
+X-Received: by 2002:a05:600c:22d3:b0:37b:f1a7:ceb5 with SMTP id 19-20020a05600c22d300b0037bf1a7ceb5mr6205842wmg.164.1645174908956;
+        Fri, 18 Feb 2022 01:01:48 -0800 (PST)
+Received: from krava ([2a00:102a:5012:d617:c924:e6ed:1707:a063])
+        by smtp.gmail.com with ESMTPSA id p2sm3658016wmc.33.2022.02.18.01.01.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 01:01:48 -0800 (PST)
+Date:   Fri, 18 Feb 2022 10:01:45 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: arm64 ftrace fixes for v5.4.y
-Message-ID: <Yg9gb4qXyPVyE60W@kroah.com>
-References: <CAE-0n53cOFJFOOV-YOc0MzbiLr9FvaJw=ucs2SNNGOeznYzVLw@mail.gmail.com>
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH 3/3] perf tools: Rework prologue generation code
+Message-ID: <Yg9geQ0LJjhnrc7j@krava>
+References: <20220217131916.50615-1-jolsa@kernel.org>
+ <20220217131916.50615-4-jolsa@kernel.org>
+ <CAEf4BzYP7=JuyuY=xZe71urpxat4ba-JnqeSTcHF=CYmsQbofQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAE-0n53cOFJFOOV-YOc0MzbiLr9FvaJw=ucs2SNNGOeznYzVLw@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAEf4BzYP7=JuyuY=xZe71urpxat4ba-JnqeSTcHF=CYmsQbofQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 05:27:33PM -0800, Stephen Boyd wrote:
-> Hi stable maintainers,
+On Thu, Feb 17, 2022 at 01:53:16PM -0800, Andrii Nakryiko wrote:
+> On Thu, Feb 17, 2022 at 5:19 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Some functions we use now for bpf prologue generation are
+> > going to be deprecated, so reworking the current code not
+> > to use them.
+> >
+> > We need to replace following functions/struct:
+> >    bpf_program__set_prep
+> >    bpf_program__nth_fd
+> >    struct bpf_prog_prep_result
+> >
+> > Current code uses bpf_program__set_prep to hook perf callback
+> > before the program is loaded and provide new instructions with
+> > the prologue.
+> >
+> > We workaround this by using objects's 'unloaded' programs instructions
+> > for that specific program and load new ebpf programs with prologue
+> > using separate bpf_prog_load calls.
+> >
+> > We keep new ebpf program instances descriptors in bpf programs
+> > private struct.
+> >
+> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  tools/perf/util/bpf-loader.c | 122 +++++++++++++++++++++++++++++------
+> >  1 file changed, 104 insertions(+), 18 deletions(-)
+> >
 > 
-> I recently ran into an issue where trying to load a module with jump
-> table entries crashes the system when function tracing is enabled. The
-> crash happens because ftrace is modifying the code and then marking it
-> as read-only too early. ftrace_make_call() calls module_enable_ro(mod,
-> true) before module init is over because ftrace_module_enable() calls
-> __ftrace_replace_code() which does FTRACE_UPDATE_MAKE_CALL. All this
-> code is gone now upstream but is still present on v5.4 stable kernels. I
-> picked this set of patches to v5.4 and it fixed it for me.
+> [...]
 > 
-> fbf6c73c5b26 ftrace: add ftrace_init_nop()
-> a1326b17ac03 module/ftrace: handle patchable-function-entry
-> bd8b21d3dd66 arm64: module: rework special section handling
-> f1a54ae9af0d arm64: module/ftrace: intialize PLT at load time
-
-These all apply just fine, thanks.
-
-> after doing that I ran into another issue because I'm using clang. Would
-> it be possible to pick two more patches to the stable tree to silence
-> this module warning from sysfs complaining about
-> /module/<modname>/sections/__patchable_function_entries being
-> duplicated?
+> >  errout:
+> > @@ -696,7 +718,7 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+> >         struct bpf_prog_priv *priv = program_priv(prog);
+> >         struct perf_probe_event *pev;
+> >         bool need_prologue = false;
+> > -       int err, i;
+> > +       int i;
+> >
+> >         if (IS_ERR_OR_NULL(priv)) {
+> >                 pr_debug("Internal error when hook preprocessor\n");
+> > @@ -727,6 +749,12 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+> >                 return 0;
+> >         }
+> >
+> > +       /*
+> > +        * Do not load programs that need prologue, because we need
+> > +        * to add prologue first, check bpf_object__load_prologue.
+> > +        */
+> > +       bpf_program__set_autoload(prog, false);
 > 
-> dd2776222abb kbuild: lto: merge module sections
-> 6a3193cdd5e5 kbuild: lto: Merge module sections if and only if
-> CONFIG_LTO_CLANG is enabled
+> if you set autoload to false, program instructions might be invalid in
+> the end. Libbpf doesn't apply some (all?) relocations to such
+> programs, doesn't resolve CO-RE, etc, etc. You have to let
+> "prototypal" BPF program to be loaded before you can grab final
+> instructions. It's not great, but in your case it should work, right?
 
-These two do not apply to the 5.4.y branch, as the file they touch is
-not present in 5.4.y.  They do apply to 5.10.y, so I've queued them up
-there, but I think you need to provide a working backport please.
+hum, do we care? it should all be done when the 'new' program with
+the prologue is loaded, right?
+
+I switched it off because the verifier failed to load the program
+without the prologue.. because in the originaal program there's no
+code to grab the arguments that the rest of the code depends on,
+so the verifier sees invalid access
+
+> 
+> > +
+> >         priv->need_prologue = true;
+> >         priv->insns_buf = malloc(sizeof(struct bpf_insn) * BPF_MAXINSNS);
+> >         if (!priv->insns_buf) {
+> > @@ -734,6 +762,13 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+> >                 return -ENOMEM;
+> >         }
+> >
+> 
+> [...]
+> 
+> > +               /*
+> > +                * For each program that needs prologue we do following:
+> > +                *
+> > +                * - take its current instructions and use them
+> > +                *   to generate the new code with prologue
+> > +                *
+> > +                * - load new instructions with bpf_prog_load
+> > +                *   and keep the fd in proglogue_fds
+> > +                *
+> > +                * - new fd will be used bpf__foreach_event
+> > +                *   to connect this program with perf evsel
+> > +                */
+> > +               orig_insns = bpf_program__insns(prog);
+> > +               orig_insns_cnt = bpf_program__insn_cnt(prog);
+> > +
+> > +               pev = &priv->pev;
+> > +               for (i = 0; i < pev->ntevs; i++) {
+> > +                       err = preproc_gen_prologue(prog, i, orig_insns,
+> > +                                                  orig_insns_cnt, &res);
+> > +                       if (err)
+> > +                               return err;
+> > +
+> > +                       fd = bpf_prog_load(bpf_program__get_type(prog),
+> 
+> nit: bpf_program__type() is preferred (we are deprecating/discouraging
+> "get_" prefixed getters in libbpf 1.0)
+
+ok, will change
+
+> 
+> > +                                          bpf_program__name(prog), "GPL",
+> 
+> would it make sense to give each clone a distinct name?
+
+AFAICS the original code uses same prog name for instances,
+so I'd rather keep it that way
 
 thanks,
+jirka
 
-greg k-h
+> 
+> > +                                          res.new_insn_ptr,
+> > +                                          res.new_insn_cnt, NULL);
+> > +                       if (fd < 0) {
+> > +                               char bf[128];
+> > +
+> 
+> [...]

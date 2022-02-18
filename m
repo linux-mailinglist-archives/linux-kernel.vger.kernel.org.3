@@ -2,170 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C994BBF0E
+	by mail.lfdr.de (Postfix) with ESMTP id 501234BBF0F
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238981AbiBRSJm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 13:09:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51028 "EHLO
+        id S238991AbiBRSJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:09:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238838AbiBRSJl (ORCPT
+        with ESMTP id S236218AbiBRSJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:09:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FD727F2A6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:09:24 -0800 (PST)
+        Fri, 18 Feb 2022 13:09:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5371285AB5;
+        Fri, 18 Feb 2022 10:09:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BEFA62034
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 18:09:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09EB6C340E9;
-        Fri, 18 Feb 2022 18:09:21 +0000 (UTC)
-Date:   Fri, 18 Feb 2022 13:09:20 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jakub =?UTF-8?B?TWF0xJtuYQ==?= <matenajakub@gmail.com>
-Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@kernel.org,
-        mgorman@techsingularity.net, willy@infradead.org,
-        liam.howlett@oracle.com, hughd@google.com, kirill@shutemov.name,
-        riel@surriel.com, peterz@infradead.org
-Subject: Re: [RFC PATCH 4/4] [PATCH 4/4] mm: add tracing for VMA merges
-Message-ID: <20220218130920.5902d967@gandalf.local.home>
-In-Reply-To: <20220218122019.130274-5-matenajakub@gmail.com>
-References: <20220218122019.130274-1-matenajakub@gmail.com>
-        <20220218122019.130274-5-matenajakub@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 964BFB826B9;
+        Fri, 18 Feb 2022 18:09:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 470FBC340E9;
+        Fri, 18 Feb 2022 18:09:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645207767;
+        bh=MgoMihgQ8vusrPtnllASKdZxBMSNyiaMLb6Llh3Epcw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=q+8hXqNp8Tr8uQaoOmKF57Zl2j+ehECfFueVhqBYiYbb+kXVOKFaguHHr+GMap6Hm
+         j/oD65mwwoL+Y3LfmCCo4pEKM3dcRVI6c9agkNzArhNe4ZV8roCAKRvWwz9ntBVaYz
+         C4ttEipjf1hoBmDeCpZFlryBTA2tlXglwhIIMs3pTKP01DXKnvnk0gsVpjrLWI8Yxi
+         yNgHq6B+LuacGxClufc75Ry9OGPpBYmmlv4UQqAquoBqX3IziXsnGU0TD6RFbzZwrD
+         xowpxZi9iPxRuHjiMx/5fqSHS1R213dRx/GI/DLn75Lne3gbHdje140ETA456qJjjl
+         UNrGmqRue8fog==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 051595C03DB; Fri, 18 Feb 2022 10:09:27 -0800 (PST)
+Date:   Fri, 18 Feb 2022 10:09:26 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     kernel-team@fb.com, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org, rostedt@goodmis.org, tj@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
+ incoming CPUs
+Message-ID: <20220218180926.GX4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220209233811.GC557593@lothringen>
+ <20220214164435.GA2805255@paulmck-ThinkPad-P17-Gen-1>
+ <f8cff19c-5e8f-a7ed-c2ff-49a264b4e342@quicinc.com>
+ <20220215173951.GH4285@paulmck-ThinkPad-P17-Gen-1>
+ <ca0cac53-68ec-7df4-e617-2a4cd9710491@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca0cac53-68ec-7df4-e617-2a4cd9710491@quicinc.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 13:20:19 +0100
-Jakub Matěna <matenajakub@gmail.com> wrote:
+On Fri, Feb 18, 2022 at 11:03:03PM +0530, Mukesh Ojha wrote:
+> 
+> On 2/15/2022 11:09 PM, Paul E. McKenney wrote:
+> > On Tue, Feb 15, 2022 at 07:53:10PM +0530, Mukesh Ojha wrote:
+> > > On 2/14/2022 10:14 PM, Paul E. McKenney wrote:
+> > > > On Thu, Feb 10, 2022 at 12:38:11AM +0100, Frederic Weisbecker wrote:
+> > > > > On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
+> > > > > > Although it is usually safe to invoke synchronize_rcu_expedited() from a
+> > > > > > preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
+> > > > > > between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
+> > > > > > invoke a workqueue handler will hang due to RCU waiting on a CPU that
+> > > > > > the scheduler is not paying attention to.  This commit therefore expands
+> > > > > > use of the existing workqueue-independent synchronize_rcu_expedited()
+> > > > > > from early boot to also include CPUs that are being hotplugged.
+> > > > > > 
+> > > > > > Link:https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+> > > > > > Reported-by: Mukesh Ojha<quic_mojha@quicinc.com>
+> > > > > > Cc: Tejun Heo<tj@kernel.org>
+> > > > > > Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
+> > > > > I'm surprised by this scheduler behaviour.
+> > > > > 
+> > > > > Since sched_cpu_activate() hasn't been called yet,
+> > > > > rq->balance_callback = balance_push_callback. As a result, balance_push() should
+> > > > > be called at the end of schedule() when the workqueue is picked as the next task.
+> > > > > Then eventually the workqueue should be immediately preempted by the stop task to
+> > > > > be migrated elsewhere.
+> > > > > 
+> > > > > So I must be missing something. For the fun, I booted the following and it
+> > > > > didn't produce any issue:
+> > > > > 
+> > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > index 80faf2273ce9..b1e74a508881 100644
+> > > > > --- a/kernel/rcu/tree.c
+> > > > > +++ b/kernel/rcu/tree.c
+> > > > > @@ -4234,6 +4234,8 @@ int rcutree_online_cpu(unsigned int cpu)
+> > > > >    	// Stop-machine done, so allow nohz_full to disable tick.
+> > > > >    	tick_dep_clear(TICK_DEP_BIT_RCU);
+> > > > > +	if (cpu != 0)
+> > > > > +		synchronize_rcu_expedited();
+> > > > >    	return 0;
+> > > > >    }
+> > > > That does seem compelling.  And others have argued that the workqueue
+> > > > system's handling of offline CPUs should deal with this.
+> > > > 
+> > > > Mukesh, was this a theoretical bug, or did you actually make it happen?
+> > > > If you made it happen, as seems to have been the case given your original
+> > > > email [1], could you please post your reproducer?
+> > > No, it was not theoretical one. We saw this issue only once in our testing
+> > > and i don't think it is easy to reproduce otherwise
+> > > it would been fixed by now.
+> > > 
+> > > When one of thread calling synchronize_expedite_rcu with timer of 20s but it
+> > > did not get the exp funnel
+> > > lock for 20s and there we crash it with panic() on timeout.
+> > > 
+> > > The other thread cpuhp which was having the lock got stuck at the point
+> > > mentioned at the below link.
+> > > 
+> > > https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+> > OK.  Are you able to create an in-kernel reproducer, perhaps similar to
+> > Frederic's change above?
+> > 
+> > I am worried that the patch that I am carrying might be fixing some
+> > other bug by accident...
+> 
+> Just for information, we are running on 5.10 kernel and after numerous
+> attempt, i was not able to reproduce the issue:-)
 
-> diff --git a/include/trace/events/mmap.h b/include/trace/events/mmap.h
-> index 4661f7ba07c0..9f6439e2ed2d 100644
-> --- a/include/trace/events/mmap.h
-> +++ b/include/trace/events/mmap.h
-> @@ -6,6 +6,7 @@
->  #define _TRACE_MMAP_H
->  
->  #include <linux/tracepoint.h>
-> +#include <../mm/internal.h>
->  
->  TRACE_EVENT(vm_unmapped_area,
->  
-> @@ -42,6 +43,60 @@ TRACE_EVENT(vm_unmapped_area,
->  		__entry->low_limit, __entry->high_limit, __entry->align_mask,
->  		__entry->align_offset)
->  );
-> +
-> +TRACE_EVENT(vm_av_merge,
-> +
-> +	TP_PROTO(int merged, enum vma_merge_res merge_prev, enum vma_merge_res merge_next, enum vma_merge_res merge_both),
-> +
-> +	TP_ARGS(merged, merge_prev, merge_next, merge_both),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(int,			merged)
-> +		__field(enum vma_merge_res,	predecessor_different_av)
-> +		__field(enum vma_merge_res,	successor_different_av)
-> +		__field(enum vma_merge_res,	predecessor_with_successor_different_av)
-> +		__field(int,			diff_count)
-> +		__field(int,			failed_count)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->merged = merged == 0;
-> +		__entry->predecessor_different_av = merge_prev;
-> +		__entry->successor_different_av = merge_next;
-> +		__entry->predecessor_with_successor_different_av = merge_both;
-> +		__entry->diff_count = (merge_prev == AV_MERGE_DIFFERENT)
-> +		+ (merge_next == AV_MERGE_DIFFERENT) + (merge_both == AV_MERGE_DIFFERENT);
-> +		__entry->failed_count = (merge_prev == AV_MERGE_FAILED)
-> +		+ (merge_next == AV_MERGE_FAILED) + (merge_both == AV_MERGE_FAILED);
+Thank you for checking!
 
-Please indent the above better. That is:
+I will drop this commit from -rcu's "dev" branch, but leave a tag
+"exponl.2022.02.18a" should it ever prove necessary.
 
-		__entry->diff_count = (merge_prev == AV_MERGE_DIFFERENT)
-				+ (merge_next == AV_MERGE_DIFFERENT)
-				+ (merge_both == AV_MERGE_DIFFERENT);
+							Thanx, Paul
 
-
-> +	),
-> +
-> +	TP_printk("merged=%d predecessor=%d successor=%d predecessor_with_successor=%d diff_count=%d failed_count=%d\n",
-> +		__entry->merged,
-> +		__entry->predecessor_different_av, __entry->successor_different_av,
-> +		__entry->predecessor_with_successor_different_av,
-> +		__entry->diff_count, __entry->failed_count)
-
-To make the above easier to read for humans, you could have at the start:
-
-#define AV_MERGE_TYPES		\
-	EM(MERGE_FAILED),	\
-	EM(AV_MERGE_FAILED)	\
-	EM(MERGE_OK)		\
-	EMe(AV_MERGE_DIFFERENT)
-
-#define EM(a)	TRACE_DEFINE_ENUM(a);
-#define EMe(a)	TRACE_DEFINE_ENUM(a);
-
-AV_MERGE_TYPES
-
-#undef EM
-#undef EMe
-
-#define EM(a) 	{a, #a},
-#define EMe(a)	{a, #a}
-
-Then:
-
-	TP_printk("merged=%d predecessor=%s successor=%s predecessor_with_successor=%s diff_count=%d failed_count=%d",
-
-(note, no "\n", get rid of that)
-
-		__entry->merged,
-		__print_symbolic(predecessor_different_av, AV_MERGE_TYPES),
-		__print_symbolic(successor_different_av, AV_MERGE_TYPES),
-		__print_symbolic(predecessor_with_successor_different_av, AV_MERGE_TYPES),
-		__entry->diff_count, __entry->failed_count)
-
-Then the output will show strings instead of meaningless numbers.
-
--- Steve
-
-
-> +
-> +);
-> +
-> +TRACE_EVENT(vm_pgoff_merge,
-> +
-> +	TP_PROTO(struct vm_area_struct *vma, bool anon_pgoff_updated),
-> +
-> +	TP_ARGS(vma, anon_pgoff_updated),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(bool,	faulted)
-> +		__field(bool,	updated)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->faulted = vma->anon_vma;
-> +		__entry->updated = anon_pgoff_updated;
-> +	),
-> +
-> +	TP_printk("faulted=%d updated=%d\n",
-> +		__entry->faulted, __entry->updated)
-> +);
->  #endif
->  
->  /* This part must be outside protection */
+> Thanks,
+> -Mukesh
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > > e.g Below sample test in combination of many other test in parallel
+> > > 
+> > > :loop
+> > > 
+> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu0/online"
+> > > 
+> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu0/online"
+> > > 
+> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu1/online"
+> > > 
+> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu1/online"
+> > > 
+> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu2/online"
+> > > 
+> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu2/online"
+> > > 
+> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu3/online"
+> > > 
+> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu3/online"
+> > > 
+> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu4/online"
+> > > 
+> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu4/online"
+> > > 
+> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu5/online"
+> > > 
+> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu5/online"
+> > > 
+> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu6/online"
+> > > 
+> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu6/online"
+> > > 
+> > > adb shell "echo 0 > /sys/devices/system/cpu/cpu7/online"
+> > > 
+> > > adb shell "echo 1 > /sys/devices/system/cpu/cpu7/online"
+> > > 
+> > > goto loop
+> > > 
+> > > 
+> > > 
+> > > Thanks, Mukesh
+> > > 
+> > > > 							Thanx, Paul
+> > > > 
+> > > > [1]https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997784BBE1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6484BBE1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238314AbiBRRQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:16:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43276 "EHLO
+        id S238405AbiBRRQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:16:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238216AbiBRRPQ (ORCPT
+        with ESMTP id S238228AbiBRRPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:15:16 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF934C7B3
+        Fri, 18 Feb 2022 12:15:17 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8B74D278
         for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:14:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=0GRAegTdgi3auRe/t63t5h8YTp9nrb+yNH0x1eayzck=; b=CEvOfsf1MVCAY4XfooourffxMj
-        VHvJRdWXdN6KHXYPUWM9P7EQf/iKRZxyrjNlMW91BK6dRgo57uwB6kRwvj43IJ2gqKHSa0H1nEPWw
-        8n/IMSbv1Ej/BRBWlH62XxbuBuiGzCgk1/YQK375sOjevVWfv+8ypfzgLoRs6+5axlMEo74BRzmBq
-        vR3EHK16KYmiyf1wXVuGXGos7yR9so0lM2I16f3ZIHk7ADIfp064+HtosyYGXws6elZboGH/8mXj7
-        9QjuvRgBGPcwMo0CEPDyQSJYVLPL3iYXlOO9pvTgFcJXEodiMrG3lf3lAySAbm+O4LaAZgvSphZjc
-        Jqxm8xow==;
+        bh=3jolC4QFVpJxiV+fv/bIh9hbxDawI/fQtnAbEJQqZr0=; b=TmHB6iaAgBbD7pJS0wTFoas9bb
+        B9g6I5uXayEbr7QmTmGcEFCt7fxIdFwOdMLm8WfCiJCD1Ow6LjlL+TvQjy49/odrNWStgVM0jtayk
+        sZpg8/0Hcvdk+EiSOiJbxcBpdg0l5ZwG70+HJYBz7JDRW1Jl064goouAGkyy1tSFC/nVOmxXqTKw0
+        7kJ4hmZA/s6ANiU3eKoMZaH/Cl/KP3gNGWY7G6TE/0ojo3rqkSs4GCWeObxDvNbGmj1+5C2fXSL5t
+        akIQVIiB7BobgRwydN41MwWQyMJlSKX1WLNsGfcKifoQocsevBRjaSvkm51qpeINuJbZb5rjJcuoO
+        lU/0mDuw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nL6q9-00Gl8S-62; Fri, 18 Feb 2022 17:14:41 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nL6q9-00AsBP-6P; Fri, 18 Feb 2022 17:14:41 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4534E3005A3;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 430F930026F;
         Fri, 18 Feb 2022 18:14:39 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 04624203C1C7F; Fri, 18 Feb 2022 18:14:38 +0100 (CET)
-Message-ID: <20220218171408.633523348@infradead.org>
+        id 07ED0203C1C84; Fri, 18 Feb 2022 18:14:39 +0100 (CET)
+Message-ID: <20220218171408.691941184@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 18 Feb 2022 17:49:03 +0100
+Date:   Fri, 18 Feb 2022 17:49:04 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         ndesaulniers@google.com, keescook@chromium.org,
         samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com
-Subject: [PATCH 01/29] static_call: Avoid building empty .static_call_sites
+        alyssa.milburn@intel.com, Juergen Gross <jgross@suse.com>
+Subject: [PATCH 02/29] x86/module: Fix the paravirt vs alternative order
 References: <20220218164902.008644515@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,33 +60,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without CONFIG_HAVE_STATIC_CALL_INLINE there's no point in creating
-the .static_call_sites section and it's related symbols.
+Ever since commit 4e6292114c741 ("x86/paravirt: Add new features for
+paravirt patching") there is an ordering dependency between patching
+paravirt ops and patching alternatives, the module loader still
+violates this.
 
+Fixes: 4e6292114c741 ("x86/paravirt: Add new features for paravirt patching")
+Cc: Juergen Gross <jgross@suse.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/asm-generic/vmlinux.lds.h |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/kernel/module.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -398,6 +398,7 @@
- 	KEEP(*(__jump_table))						\
- 	__stop___jump_table = .;
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -272,6 +272,10 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 			retpolines = s;
+ 	}
  
-+#ifdef CONFIG_HAVE_STATIC_CALL_INLINE
- #define STATIC_CALL_DATA						\
- 	. = ALIGN(8);							\
- 	__start_static_call_sites = .;					\
-@@ -406,6 +407,9 @@
- 	__start_static_call_tramp_key = .;				\
- 	KEEP(*(.static_call_tramp_key))					\
- 	__stop_static_call_tramp_key = .;
-+#else
-+#define STATIC_CALL_DATA
-+#endif
++	if (para) {
++		void *pseg = (void *)para->sh_addr;
++		apply_paravirt(pseg, pseg + para->sh_size);
++	}
+ 	if (retpolines) {
+ 		void *rseg = (void *)retpolines->sh_addr;
+ 		apply_retpolines(rseg, rseg + retpolines->sh_size);
+@@ -289,11 +293,6 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 					    tseg, tseg + text->sh_size);
+ 	}
  
- /*
-  * Allow architectures to handle ro_after_init data on their
+-	if (para) {
+-		void *pseg = (void *)para->sh_addr;
+-		apply_paravirt(pseg, pseg + para->sh_size);
+-	}
+-
+ 	/* make jump label nops */
+ 	jump_label_apply_nops(me);
+ 
 
 

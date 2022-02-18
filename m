@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31124BB840
+	by mail.lfdr.de (Postfix) with ESMTP id 95E034BB83F
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234692AbiBRLhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:37:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44304 "EHLO
+        id S234750AbiBRLhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 06:37:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbiBRLgk (ORCPT
+        with ESMTP id S234582AbiBRLgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 06:36:40 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72294389A
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CD12B3541
         for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:36:23 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 26C3022455;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 69D7022456;
         Fri, 18 Feb 2022 12:36:18 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
         t=1645184178;
@@ -27,10 +27,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail20160613
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mAAklKio0JJkGw53kWM7gFAN8lZmsvKpPSFctQzn+dA=;
-        b=Q4wG2obFYxqxCm2/+QCY4HDCh4BIZEenfqLIlVwzlJj6Q70JWuwNmt3ezO3La3Qzctz0s2
-        CCQWVkH0cs60B3YHaOU7nHZfSqcn9kixKlSOe1taVJYI2XKbQQKtJozcPR4w4uwLSGx/IP
-        VJ2oAqKOju2k1vga/ufkt9er2LlSkuI=
+        bh=Wwdz4ZqLZzwMbbOuFl8qfVobOJC0DCzhISRyc0ex6gI=;
+        b=E/qT1sWAIUfmRcLrru+mcYRGgbpFE8Fj4IuLQtL/nx9rqQPFM+RWKrVaJWR3xEieEqVMd6
+        9LAL8O+hC8gtcpTIGPikxo7ygxxQUt+AoIe5MA4o7Y1S/LF+UU7moEB7xvzQURVpsOwiMd
+        eciY9/atDQlkEFLrNdd9kl5Z1B/bICo=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
@@ -39,9 +39,9 @@ Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 13/32] mtd: spi-nor: sst: unify function names
-Date:   Fri, 18 Feb 2022 12:35:48 +0100
-Message-Id: <20220218113607.1360020-14-michael@walle.cc>
+Subject: [PATCH v2 14/32] mtd: spi-nor: winbond: unify function names
+Date:   Fri, 18 Feb 2022 12:35:49 +0100
+Message-Id: <20220218113607.1360020-15-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220218113607.1360020-1-michael@walle.cc>
 References: <20220218113607.1360020-1-michael@walle.cc>
@@ -67,59 +67,75 @@ There are no functional changes.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- drivers/mtd/spi-nor/sst.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/mtd/spi-nor/winbond.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/sst.c b/drivers/mtd/spi-nor/sst.c
-index 30183e9189b9..45d277d62584 100644
---- a/drivers/mtd/spi-nor/sst.c
-+++ b/drivers/mtd/spi-nor/sst.c
-@@ -58,7 +58,7 @@ static const struct spi_nor_fixups sst26vf_fixups = {
- 	.late_init = sst26vf_late_init,
+diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+index 3d91888882e4..8314266c2fec 100644
+--- a/drivers/mtd/spi-nor/winbond.c
++++ b/drivers/mtd/spi-nor/winbond.c
+@@ -32,7 +32,7 @@ static const struct spi_nor_fixups w25q256_fixups = {
+ 	.post_bfpt = w25q256_post_bfpt_fixups,
  };
  
--static const struct flash_info sst_parts[] = {
-+static const struct flash_info sst_nor_parts[] = {
- 	/* SST -- large erase sizes are "overlays", "sectors" are 4K */
- 	{ "sst25vf040b", INFO(0xbf258d, 0, 64 * 1024,  8)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_SWP_IS_VOLATILE)
-@@ -117,8 +117,8 @@ static const struct flash_info sst_parts[] = {
- 		.fixups = &sst26vf_fixups },
- };
- 
--static int sst_write(struct mtd_info *mtd, loff_t to, size_t len,
--		     size_t *retlen, const u_char *buf)
-+static int sst_nor_write(struct mtd_info *mtd, loff_t to, size_t len,
-+			 size_t *retlen, const u_char *buf)
+-static const struct flash_info winbond_parts[] = {
++static const struct flash_info winbond_nor_parts[] = {
+ 	/* Winbond -- w25x "blocks" are 64K, "sectors" are 4KiB */
+ 	{ "w25x05", INFO(0xef3010, 0, 64 * 1024,  1)
+ 		NO_SFDP_FLAGS(SECT_4K) },
+@@ -138,7 +138,7 @@ static const struct flash_info winbond_parts[] = {
+  *
+  * Return: 0 on success, -errno otherwise.
+  */
+-static int winbond_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
++static int winbond_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
  {
- 	struct spi_nor *nor = mtd_to_spi_nor(mtd);
- 	size_t actual = 0;
-@@ -203,19 +203,19 @@ static int sst_write(struct mtd_info *mtd, loff_t to, size_t len,
- 	return ret;
+ 	int ret;
+ 
+@@ -162,7 +162,7 @@ static int winbond_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
+ 	return spi_nor_write_disable(nor);
  }
  
--static void sst_late_init(struct spi_nor *nor)
-+static void sst_nor_late_init(struct spi_nor *nor)
- {
- 	if (nor->info->mfr_flags & SST_WRITE)
--		nor->mtd._write = sst_write;
-+		nor->mtd._write = sst_nor_write;
- }
- 
--static const struct spi_nor_fixups sst_fixups = {
--	.late_init = sst_late_init,
-+static const struct spi_nor_fixups sst_nor_fixups = {
-+	.late_init = sst_nor_late_init,
+-static const struct spi_nor_otp_ops winbond_otp_ops = {
++static const struct spi_nor_otp_ops winbond_nor_otp_ops = {
+ 	.read = spi_nor_otp_read_secr,
+ 	.write = spi_nor_otp_write_secr,
+ 	.erase = spi_nor_otp_erase_secr,
+@@ -170,25 +170,25 @@ static const struct spi_nor_otp_ops winbond_otp_ops = {
+ 	.is_locked = spi_nor_otp_is_locked_sr2,
  };
  
- const struct spi_nor_manufacturer spi_nor_sst = {
- 	.name = "sst",
--	.parts = sst_parts,
--	.nparts = ARRAY_SIZE(sst_parts),
--	.fixups = &sst_fixups,
-+	.parts = sst_nor_parts,
-+	.nparts = ARRAY_SIZE(sst_nor_parts),
-+	.fixups = &sst_nor_fixups,
+-static void winbond_default_init(struct spi_nor *nor)
++static void winbond_nor_default_init(struct spi_nor *nor)
+ {
+-	nor->params->set_4byte_addr_mode = winbond_set_4byte_addr_mode;
++	nor->params->set_4byte_addr_mode = winbond_nor_set_4byte_addr_mode;
+ }
+ 
+-static void winbond_late_init(struct spi_nor *nor)
++static void winbond_nor_late_init(struct spi_nor *nor)
+ {
+ 	if (nor->params->otp.org->n_regions)
+-		nor->params->otp.ops = &winbond_otp_ops;
++		nor->params->otp.ops = &winbond_nor_otp_ops;
+ }
+ 
+-static const struct spi_nor_fixups winbond_fixups = {
+-	.default_init = winbond_default_init,
+-	.late_init = winbond_late_init,
++static const struct spi_nor_fixups winbond_nor_fixups = {
++	.default_init = winbond_nor_default_init,
++	.late_init = winbond_nor_late_init,
+ };
+ 
+ const struct spi_nor_manufacturer spi_nor_winbond = {
+ 	.name = "winbond",
+-	.parts = winbond_parts,
+-	.nparts = ARRAY_SIZE(winbond_parts),
+-	.fixups = &winbond_fixups,
++	.parts = winbond_nor_parts,
++	.nparts = ARRAY_SIZE(winbond_nor_parts),
++	.fixups = &winbond_nor_fixups,
  };
 -- 
 2.30.2

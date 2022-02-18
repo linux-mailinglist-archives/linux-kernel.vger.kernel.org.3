@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FB24BBEA4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDE64BBEA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235512AbiBRRtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:49:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53742 "EHLO
+        id S236326AbiBRRtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:49:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbiBRRtK (ORCPT
+        with ESMTP id S235838AbiBRRtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:49:10 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A97275DE;
-        Fri, 18 Feb 2022 09:48:53 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id bn33so5398157ljb.6;
-        Fri, 18 Feb 2022 09:48:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UBQJQxk57KVmmWwqpt5wwYAP2wFmkmOERw/E1car8z4=;
-        b=CrZSv+53Qrbk/xbEWiqhgVvVDLGEVE76DC8r47OlzLVeWE3y81wO6EtlKgvRRJkekF
-         P/ZjltimRmKMfe3e2Jn+TPnDUpUHj59VnYZqBzaEDFyy4/C6iNVe8w61X2flr6CS7L6Y
-         393T6GTyNRvY9gEIGf9qvlV+1w+irRM6nfuvyBDL1uCc2tjoMTk/yawWd6adlnyMe+8M
-         Ag8rfqXqGtLetOGl3Ef8DUQbZHzpbEO6n4GAaQp3xNYmmC6IVBwGD34fFq5Xtysl+J56
-         wfI8KtdcYV9EXovBrM2X2CH1YK+2peLp5Jg24G8ZcOWtgLNtWvpc2WaZb7evg6h7FDzV
-         oFuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UBQJQxk57KVmmWwqpt5wwYAP2wFmkmOERw/E1car8z4=;
-        b=DebamgGtk8RUpJCq6QEc9mm3IhN9ySdux5E8IOqVbe1oMF9Z3KCD3u/aKP724u8uFJ
-         8B2MZjYfILZNVPQVe1/ynhHlyUA/3A8Tud8LMEkT9QBNp/9IbUOdsoiWSQgQdMmuJmTK
-         KqdMBPbd3Ycs7uNzG1kmJ4l4T5wA/92FXozRTarM30+hOUsoUN/mnkFot9rGMvtlBkiL
-         BS7HnBk0a0nTf/ty2cp5xsd5B/3Kuj18sESAmfHe46HfwIReB7pd2Q+BTBDuDajHJWnX
-         nhpptvA60iVcTpwMPy7JbGTk/CniUD2dJErfiyEe7SekrVOTa/I5RqXQpjMjic+OeJJP
-         RoXg==
-X-Gm-Message-State: AOAM530zsGkzQTpB7jf7YeSvFmf2BjuYgjGYuGXn5mpoicTUdup6hoD+
-        xnmLHnvfxhkirODRl/0/KaU=
-X-Google-Smtp-Source: ABdhPJwyi5fZBmE+2EKAPyT52Jhwt7YBdt1W7ao6OtGUxrJuTK75QectzagveZP33jp8lkLgpgLSPw==
-X-Received: by 2002:a2e:9c94:0:b0:244:4ec3:3313 with SMTP id x20-20020a2e9c94000000b002444ec33313mr6402675lji.281.1645206531518;
-        Fri, 18 Feb 2022 09:48:51 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id m21sm127705ljp.54.2022.02.18.09.48.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 09:48:50 -0800 (PST)
-Message-ID: <0a9e14f8-02db-2d3f-c0d5-04c53919de07@gmail.com>
-Date:   Fri, 18 Feb 2022 20:48:49 +0300
+        Fri, 18 Feb 2022 12:49:45 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EE927CD4;
+        Fri, 18 Feb 2022 09:49:26 -0800 (PST)
+Date:   Fri, 18 Feb 2022 18:49:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645206564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zmVi8TBeXUlm/v/kPHbfKCWVJ4hV0bUUD/V9V8Aajwc=;
+        b=Pol6RFBLpkYOCYLyjLzz/sxKGhLrPXB2+06UELwZFXetgUTPPlh8mIbEP/SdhpnFWuWiA2
+        Xm0Y0WyA0x/kX4jM1XluaNUu9t9Cm5atkxlOIp73quo7qegfoid9TlznnU4EMdjKL9o5Go
+        vv7eEyv0XA+X/3QW7EvPVd8p6yABQGH/x1FpX/kjqohFDPWg7dyBQD2iooMqLu9Y5kvPiG
+        kKTbulSpf+FX6u3j62LbQpuPHD3t3E+9uMsgZNlIEPkzN4XqFbPJhJO9iklmPhrKejcefe
+        bErtdGN52gzkfJeI9pg5P+U+eXmOPsMuKngc+4pPSnBDvqACYitkk8aS97XjsA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645206564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zmVi8TBeXUlm/v/kPHbfKCWVJ4hV0bUUD/V9V8Aajwc=;
+        b=6xaSHPiTAR090p8kNmJv8YY6vgpJcvJKTiqI1NpA9RolkaSOl56GGOSeyhkY696fyePXLJ
+        qwd6dik4PjBfEFAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Jann Horn <jannh@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] pstore: Don't use semaphores in always-atomic-context
+ code
+Message-ID: <Yg/cIzXsya8dNLYp@linutronix.de>
+References: <20220218172901.1425605-1-jannh@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 0/4] Add V4L stateless video decoder API support to
- NVIDIA Tegra driver
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220207141937.13089-1-digetx@gmail.com>
- <58bfb1fb-431d-a47d-ee9e-fbef89a700a0@xs4all.nl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <58bfb1fb-431d-a47d-ee9e-fbef89a700a0@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220218172901.1425605-1-jannh@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-18.02.2022 18:04, Hans Verkuil пишет:
-> Dmitry,
-> 
-> On 07/02/2022 15:19, Dmitry Osipenko wrote:
->> Support V4L stateless video decoder API by NVIDIA Tegra decoder driver.
->> Tested using GStreamer [1] and libvdpau-tegra [2][8].
->>
->> [1] https://github.com/grate-driver/gstreamer/commit/b8509bdbb69b534e61419ea1798f32f9ad2f3597
->> [2] https://github.com/grate-driver/libvdpau-tegra/commit/f822e95911e5e0c39f8ba19f843ddc1e0138d5ce
->> [8] https://github.com/grate-driver/libvdpau-tegra/commit/80db4d02369f2a984ce3173d6bc305f32e9fdb97
-> Nice work!
-> 
-> Can you make a v4 that just moves the whole driver to drivers/media/platform? I see no
-> reason for keeping this in staging.
-> 
-> Once I have a v4 that does that I plan to make a PR for it.
-> 
-> For the v4 don't forget to update MAINTAINERS with the new path and to drop the TODO
-> file in staging.
+On 2022-02-18 18:29:01 [+0100], Jann Horn wrote:
+=E2=80=A6
+> Lockdep probably never caught the problem because it's very rare that you
+> actually hit the contended case, and lockdep can't check a
 
-I'll prepare v4 over the weekend, thanks to you and Nicolas.
+I appears that after =C2=B4a' a few words would follow.
+
+> Fixes: ea84b580b955 ("pstore: Convert buf_lock to semaphore")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+> Testing on 5.15.24 (latest stable), with CONFIG_PREEMPT=3Dy, when I trigg=
+er
+> a BUG() via LKDTM ("echo BUG > /sys/kernel/debug/provoke-crash/DIRECT"),
+> I first get the expected BUG splat, followed by this RCU warning:
+>=20
+> Voluntary context switch within RCU read-side critical section!
+
+Right, scheduling not allowed within a RCU read-side section. I'm not
+sure if lockdep cares but if you enable CONFIG_DEBUG_ATOMIC_SLEEP then
+the might_sleep() will complain if you are in a RCU section.
+
+> This patch makes the RCU context warning go away.
+
+Makes sense.
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+
+> --- a/fs/pstore/platform.c
+> +++ b/fs/pstore/platform.c
+> @@ -143,27 +143,26 @@ static void pstore_timer_kick(void)
+>  	mod_timer(&pstore_timer, jiffies + msecs_to_jiffies(pstore_update_ms));
+>  }
+> =20
+> -/*
+> - * Should pstore_dump() wait for a concurrent pstore_dump()? If
+> - * not, the current pstore_dump() will report a failure to dump
+> - * and return.
+> - */
+> -static bool pstore_cannot_wait(enum kmsg_dump_reason reason)
+> +bool pstore_cannot_block_path(enum kmsg_dump_reason reason)
+>  {
+> -	/* In NMI path, pstore shouldn't block regardless of reason. */
+> +	/*
+> +	 * In case of NMI path, pstore shouldn't be blocked
+> +	 * regardless of reason.
+> +	 */
+>  	if (in_nmi())
+>  		return true;
+> =20
+>  	switch (reason) {
+>  	/* In panic case, other cpus are stopped by smp_send_stop(). */
+>  	case KMSG_DUMP_PANIC:
+> -	/* Emergency restart shouldn't be blocked. */
+> +	/* Emergency restart shouldn't be blocked by spin lock. */
+
+ by spinning on pstore_info::buf_lock
+
+>  	case KMSG_DUMP_EMERG:
+>  		return true;
+>  	default:
+>  		return false;
+>  	}
+>  }
+> +EXPORT_SYMBOL_GPL(pstore_cannot_block_path);
+> =20
+>  #if IS_ENABLED(CONFIG_PSTORE_DEFLATE_COMPRESS)
+>  static int zbufsize_deflate(size_t size)
+
+Sebastian

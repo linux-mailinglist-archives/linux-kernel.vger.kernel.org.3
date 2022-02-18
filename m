@@ -2,152 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC7D4BB9D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0504BB9D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbiBRNIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 08:08:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57870 "EHLO
+        id S235625AbiBRNJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 08:09:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiBRNIQ (ORCPT
+        with ESMTP id S232256AbiBRNJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 08:08:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AB726AE0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:07:59 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nL2zF-0000dh-Qy; Fri, 18 Feb 2022 14:07:49 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nL2zE-000435-RH; Fri, 18 Feb 2022 14:07:48 +0100
-Date:   Fri, 18 Feb 2022 14:07:48 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Svenning =?utf-8?B?U8O4cmVuc2Vu?= <sss@secomea.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: dsa: microchip: fix bridging with more than two
- member ports
-Message-ID: <20220218130748.GA3144@pengutronix.de>
-References: <DB7PR08MB3867F92FD096A79EAD736021B5379@DB7PR08MB3867.eurprd08.prod.outlook.com>
+        Fri, 18 Feb 2022 08:09:11 -0500
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C6926AE0;
+        Fri, 18 Feb 2022 05:08:54 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id bg21-20020a05600c3c9500b0035283e7a012so6409038wmb.0;
+        Fri, 18 Feb 2022 05:08:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oLRoYYItaRFSQb7v3ZtTL1xufEneAUj0e5cG7bAyUuA=;
+        b=wqHsF/PWcocQX6+RaHL0mzGk5seYnziFDeHEvciGktqYUooFHKnZYZhPcj0GEL+oBv
+         Y5asFXjI2aum4yM3JtSkghnnqlv4Pj1B7XRO8nHQI5Q0U9nXkrwDvSkvW6T/CsTjzJSv
+         XGSkNjiiht/57sLu5ksNVuxlk0f9+BvzxCOBpkx4gCgM8sITIpAB0XlkgR6wPTH2wm73
+         vmWsnQWF0E+gGNjM+XD8bAiKaGRuy63fNWj5nhgRGnjovF9RPJ7x0lYErRgBGTJR9/Mi
+         urcqI9Yy/rYHBtkjMVy8ejvsiDRjQgTu2ZSIi2UYHZizn5/2iUjG4JTP4anIBwXFKAew
+         SzeA==
+X-Gm-Message-State: AOAM531k5zUOXWcSjtu8DDgBkss245IbXP0IgwpXKGRl5G95mWriqLXU
+        wK4gKok47nnnX8C6v9KUuvNrT4meowM=
+X-Google-Smtp-Source: ABdhPJy43cjFwZwEPYGnQ7ZaOIr5GqRfVOfSEPQH1GbnFQ/wJbIW4wgG1PAn2KA/xfC+zEIBNO0P5A==
+X-Received: by 2002:a7b:c3d3:0:b0:37b:ea2b:55a4 with SMTP id t19-20020a7bc3d3000000b0037bea2b55a4mr7119758wmj.85.1645189733419;
+        Fri, 18 Feb 2022 05:08:53 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id f25sm4027574wml.16.2022.02.18.05.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 05:08:52 -0800 (PST)
+Date:   Fri, 18 Feb 2022 13:08:51 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     sthemmin@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        vkuznets@redhat.com
+Subject: Re: [PATCH 1/1] hv_utils: Add comment about max VMbus packet size in
+ VSS driver
+Message-ID: <20220218130851.2afjdrmhov2qzlu3@liuwe-devbox-debian-v2>
+References: <1644423070-75125-1-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB7PR08MB3867F92FD096A79EAD736021B5379@DB7PR08MB3867.eurprd08.prod.outlook.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:04:07 up 69 days, 21:49, 85 users,  load average: 0.26, 0.33,
- 0.27
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1644423070-75125-1-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 11:27:01AM +0000, Svenning Sørensen wrote:
-> Commit b3612ccdf284 ("net: dsa: microchip: implement multi-bridge support")
-> plugged a packet leak between ports that were members of different bridges.
-> Unfortunately, this broke another use case, namely that of more than two
-> ports that are members of the same bridge.
+On Wed, Feb 09, 2022 at 08:11:10AM -0800, Michael Kelley wrote:
+> The VSS driver allocates a VMbus receive buffer significantly
+> larger than sizeof(hv_vss_msg), with no explanation. To help
+> prevent future mistakes, add a #define and comment about why
+> this is done.
 > 
-> After that commit, when a port is added to a bridge, hardware bridging
-> between other member ports of that bridge will be cleared, preventing
-> packet exchange between them.
+> No functional change.
 > 
-> Fix by ensuring that the Port VLAN Membership bitmap includes any existing
-> ports in the bridge, not just the port being added.
-> 
-> Fixes: b3612ccdf284 ("net: dsa: microchip: implement multi-bridge support")
-> Signed-off-by: Svenning Sørensen <sss@secomea.com>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-Thank you for your patch. You are right. I'm able to reproduce this issue on
-ksz9477.
-
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-
-> ---
->  drivers/net/dsa/microchip/ksz_common.c | 26 +++++++++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index 55dbda04ea62..243f8ad6d06e 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -26,7 +26,7 @@ void ksz_update_port_member(struct ksz_device *dev, int port)
->  	struct dsa_switch *ds = dev->ds;
->  	u8 port_member = 0, cpu_port;
->  	const struct dsa_port *dp;
-> -	int i;
-> +	int i, j;
->  
->  	if (!dsa_is_user_port(ds, port))
->  		return;
-> @@ -45,13 +45,33 @@ void ksz_update_port_member(struct ksz_device *dev, int port)
->  			continue;
->  		if (!dsa_port_bridge_same(dp, other_dp))
->  			continue;
-> +		if (other_p->stp_state != BR_STATE_FORWARDING)
-> +			continue;
->  
-> -		if (other_p->stp_state == BR_STATE_FORWARDING &&
-> -		    p->stp_state == BR_STATE_FORWARDING) {
-> +		if (p->stp_state == BR_STATE_FORWARDING) {
->  			val |= BIT(port);
->  			port_member |= BIT(i);
->  		}
->  
-> +		/* Retain port [i]'s relationship to other ports than [port] */
-> +		for (j = 0; j < ds->num_ports; j++) {
-> +			const struct dsa_port *third_dp;
-> +			struct ksz_port *third_p;
-> +
-> +			if (j == i)
-> +				continue;
-> +			if (j == port)
-> +				continue;
-> +			if (!dsa_is_user_port(ds, j))
-> +				continue;
-> +			third_p = &dev->ports[j];
-> +			if (third_p->stp_state != BR_STATE_FORWARDING)
-> +				continue;
-> +			third_dp = dsa_to_port(ds, j);
-> +			if (dsa_port_bridge_same(other_dp, third_dp))
-> +				val |= BIT(j);
-> +		}
-> +
->  		dev->dev_ops->cfg_port_member(dev, i, val | cpu_port);
->  	}
->  
-> -- 
-> 2.20.1
-> 
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Applied to hyperv-next. Thanks.

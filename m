@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9164BC1E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07B14BC1D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239775AbiBRVZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:25:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50816 "EHLO
+        id S239850AbiBRV0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:26:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239759AbiBRVZe (ORCPT
+        with ESMTP id S239777AbiBRVZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:25:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 371AD23F0A3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:25:16 -0800 (PST)
+        Fri, 18 Feb 2022 16:25:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DD082402C1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:25:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645219515;
+        s=mimecast20190719; t=1645219518;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8QQHiXtKZc6qfiHodKXWQmnnFzlUO+zklxX1NE5LbNM=;
-        b=P/fvWkaipidFZ1O8+AMhKDhFVnNKr0IbA4u7vPHP7myaOmycUrTPakgJXDGkgbJy4561nD
-        KwHvDHJyk+F2ueK+xu1hXoU09fJcUbhxDUpmeUrGLoZSSV3nUo0Q688dOGuLfKSGt5R0wv
-        0hutZ7tVOlzpzjiS4hW2BHxJ0rFSk0I=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yPUuU8/wCW1qP4n+cpgW0WPpf5qATzz9w+DjJOgqH1k=;
+        b=AsTEkyIEBsYFO9837Xqn2lgwGSGjqsaIb7erHmiwzEsNNiN366UdBGQRZA2vXHkQKH7eVa
+        V9HYByJHv3yaWNbFAeSlP1kYqdB7/qlekjSPmJuctV28QtXMamjGnW+ZYIlyodFItdiJ/g
+        mTZlnL7vWMLtp2KpBWBOCClORrF4Nmg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-457-F1qhBmv8M2yGxKF6ZJs3LA-1; Fri, 18 Feb 2022 16:25:13 -0500
-X-MC-Unique: F1qhBmv8M2yGxKF6ZJs3LA-1
-Received: by mail-wr1-f69.google.com with SMTP id s5-20020adfbc05000000b001e7af4f2231so4089586wrg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:25:13 -0800 (PST)
+ us-mta-256-596R-h3mP_2E0WkN8vmHoQ-1; Fri, 18 Feb 2022 16:25:15 -0500
+X-MC-Unique: 596R-h3mP_2E0WkN8vmHoQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 125-20020a1c0283000000b0037bf720e6a8so6463939wmc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:25:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8QQHiXtKZc6qfiHodKXWQmnnFzlUO+zklxX1NE5LbNM=;
-        b=jjOSstuFo4RYMei2WGzifxUuPlFfYSZY0+4qhHEImPtTawfUdGW/74MbkzFntZcUd2
-         ooNmh85un8FbAhPYoIwrymz3TzR26VMN+nykd1KKnsYZ5vzAgix400aD+qgCuNTcRRsP
-         W1bg227q/jJBKH8FVnMr6uCEIBOaUeSangUhDQ0goIBttfR5l1bD7xmvMK92ntTzLUad
-         tGtIlvRUaS4kVY6Gq26LzQ6Xf3sO8KX53P/QkbeUaTOrRJf8RrxIlkFctFCIqfBCh2Au
-         af1Y7k/+jB4G2ZzTOrdJ/KxNP32MjpUYQrOse42NEp2HZ/8ucEJoBU30gMmsDTIWTURy
-         fYVQ==
-X-Gm-Message-State: AOAM532ggHPWG+kPyC/sMemj1vCls7Ab0E5j8oU5TtqLR5IhT/ysFqjz
-        rlYlKZOcXLEYLkOqPTkVHFx68DvQNrlcap/xq5nEyZLJpCOfofEst10uNZrqGgLrCab0UxlQ/ok
-        oD/C9wmUQwL3I8Z6t4mbjI2s=
-X-Received: by 2002:a5d:47ce:0:b0:1e8:88b7:446a with SMTP id o14-20020a5d47ce000000b001e888b7446amr7462754wrc.459.1645219512497;
-        Fri, 18 Feb 2022 13:25:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyT7nM8df1OjFYTQK+axAfa27dhMHOTeBGj+dcP/J66TJhLgCqXtBNsDeUschFutfR2BXSl0g==
-X-Received: by 2002:a5d:47ce:0:b0:1e8:88b7:446a with SMTP id o14-20020a5d47ce000000b001e888b7446amr7462743wrc.459.1645219512207;
-        Fri, 18 Feb 2022 13:25:12 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yPUuU8/wCW1qP4n+cpgW0WPpf5qATzz9w+DjJOgqH1k=;
+        b=zVUzztzbDdIYx6pkdGxMhpiLxw/4h83nPu1kNFzRkAb3oC+dtaEu1XAcQAba0etrbd
+         G/A/uG2fZajhBTYIbE5wbqZxM4jIYLxTP4c7z3clVB40R2X+6y9mB8aYLUyNbbjZVD86
+         X/kAjWHk5fvQpRGVC/hEmIUE1/EfMcv56fhCjPyMb18bOkkd491g3VeSiVRsFMEZJzG7
+         Agi3F1xXRwIfNYPtQEtpSTkExy3Gzb85imJXkOfnDfwEeuIx6UlxVhGsmBdWVGcHtbPH
+         6STUDpvfp/XC4pKfbteJ75tgWRWmPaELKQ9UtBeNwQdXAr7jYorGcjytiX+Tvy1DOBEx
+         IsyA==
+X-Gm-Message-State: AOAM5312eh3Zg2MBHzsMjyUJRg5Vhlv9lVwhXLSHKYHXP/uxppkP4dE9
+        A+ZEGpVVQd/KwnU2Gy6dzTqOwD6p3QWmyJaxO95jRNIgzT2KBLWY7NRKE6bfcI8nynHsOSTKJT8
+        zCtMeP02EXY+2WQ2ym7TDb6c=
+X-Received: by 2002:adf:ecc5:0:b0:1e5:7908:966b with SMTP id s5-20020adfecc5000000b001e57908966bmr7169897wro.661.1645219514332;
+        Fri, 18 Feb 2022 13:25:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx1bDwGyCe3fdOy1XA3oeI4R4NKw2Ep8j5BTykIngcZyjVI2YIxemEDiVkrdxvwl8vfECY9fQ==
+X-Received: by 2002:adf:ecc5:0:b0:1e5:7908:966b with SMTP id s5-20020adfecc5000000b001e57908966bmr7169873wro.661.1645219513960;
+        Fri, 18 Feb 2022 13:25:13 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id k34sm488228wms.35.2022.02.18.13.25.11
+        by smtp.gmail.com with ESMTPSA id o4sm562796wms.9.2022.02.18.13.25.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 13:25:11 -0800 (PST)
+        Fri, 18 Feb 2022 13:25:13 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -63,16 +64,17 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         ghalat@redhat.com, allen.lkml@gmail.com, joe@perches.com,
         christophe.leroy@csgroup.eu, msuchanek@suse.de,
         oleksandr@natalenko.name
-Subject: [PATCH v6 00/13] module: core code clean up
-Date:   Fri, 18 Feb 2022 21:24:58 +0000
-Message-Id: <20220218212511.887059-1-atomlin@redhat.com>
+Subject: [PATCH v6 01/13] module: Move all into module/
+Date:   Fri, 18 Feb 2022 21:24:59 +0000
+Message-Id: <20220218212511.887059-2-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220218212511.887059-1-atomlin@redhat.com>
+References: <20220218212511.887059-1-atomlin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,129 +82,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luis,
+No functional changes.
 
-As per your suggestion [1], this is an attempt to refactor and split
-optional code out of core module support code into separate components.
-This version is based on Linus' commit 7993e65fdd0f ("Merge tag
-'mtd/fixes-for-5.17-rc5' of
-git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux").
-Please let me know your thoughts.
+This patch moves all module related code into a separate directory,
+modifies each file name and creates a new Makefile. Note: this effort
+is in preparation to refactor core module code.
 
-Changes since v5 [2]:
-
- - Updated MAINTAINERS to include the entire kernel/module/ directory
-   (Christophe Leroy)
- - Reintroduce commit a97ac8cb24a3 ("module: fix signature check failures
-   when using in-kernel decompression") (Michal Suchánek)
- - Refactored code to address some (i.e.
-   --ignore=MULTIPLE_ASSIGNMENTS,ASSIGN_IN_IF was used) style violations
-   e.g. "Alignment should match open parenthesis", reported by
-   scripts/checkpatch.pl --strict (Christophe Leroy)
- - Used PAGE_ALIGN() and PAGE_ALIGNED() instead (Christophe Leroy)
- - Removed sig_enforce from include/linux/module.h as it is only
-   used in kernel/module/signing.c (Christophe Leroy)
- - Added static keyword for anything not used outside a source file
-   (Christophe Leroy)
- - Moved mod_sysfs_teardown() to kernel/module/sysfs.c (Christophe Leroy)
- - Removed kdb_modules from kernel/debug/kdb/kdb_private.h
-   (Christophe Leroy)
-
-Changes since v4 [3]:
-
- - Moved is_livepatch_module() and set_livepatch_module() to
-   kernel/module/livepatch.c
- - Addressed minor compiler warning concerning
-   kernel/module/internal.h (0-day)
- - Resolved style violations reported by scripts/checkpatch.pl
- - Dropped patch 5 [4] so external patch [5] can be applied at
-   a later date post merge into module-next (Christophe Leroy)
-
-Changes since v3 [6]:
-
- - Refactored both is_livepatch_module() and set_livepatch_module(),
-   respectively, to use IS_ENABLED(CONFIG_LIVEPATCH) (Joe Perches)
- - Addressed various compiler warnings e.g., no previous prototype (0-day)
-
-Changes since v2 [7]:
-
- - Moved module decompress support to a separate file
- - Made check_modinfo_livepatch() generic (Petr Mladek)
- - Removed filename from each newly created file (Luis Chamberlain)
- - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
-   minor scripts/checkpatch.pl concerns e.g., use strscpy over
-   strlcpy and missing a blank line after declarations (Allen)
-
-Changes since v1 [8]:
-
-  - Moved module version support code into a new file
-
-[1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
-[2]: https://lore.kernel.org/lkml/20220209170358.3266629-1-atomlin@redhat.com/
-[3]: https://lore.kernel.org/lkml/20220130213214.1042497-1-atomlin@redhat.com/
-[4]: https://lore.kernel.org/lkml/20220130213214.1042497-6-atomlin@redhat.com/
-[5]: https://lore.kernel.org/lkml/203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu/
-[6]: https://lore.kernel.org/lkml/20220128203934.600247-1-atomlin@redhat.com/
-[7]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
-[8]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
-
-
-Aaron Tomlin (13):
-  module: Move all into module/
-  module: Simple refactor in preparation for split
-  module: Make internal.h and decompress.c more compliant
-  module: Move livepatch support to a separate file
-  module: Move latched RB-tree support to a separate file
-  module: Move strict rwx support to a separate file
-  module: Move extra signature support out of core code
-  module: Move kmemleak support to a separate file
-  module: Move kallsyms support into a separate file
-  module: Move procfs support into a separate file
-  module: Move sysfs support into a separate file
-  module: Move kdb_modules list out of core code
-  module: Move version support into a separate file
-
- MAINTAINERS                                   |    2 +-
- include/linux/module.h                        |    9 +-
- kernel/Makefile                               |    5 +-
- kernel/debug/kdb/kdb_main.c                   |    5 +
- kernel/debug/kdb/kdb_private.h                |    4 -
- kernel/module-internal.h                      |   50 -
- kernel/module/Makefile                        |   19 +
- kernel/module/debug_kmemleak.c                |   30 +
- .../decompress.c}                             |    5 +-
- kernel/module/internal.h                      |  284 +++
- kernel/module/kallsyms.c                      |  502 +++++
- kernel/module/livepatch.c                     |   74 +
- kernel/{module.c => module/main.c}            | 1856 +----------------
- kernel/module/procfs.c                        |  142 ++
- .../signature.c}                              |    0
- kernel/module/signing.c                       |  122 ++
- kernel/module/strict_rwx.c                    |   84 +
- kernel/module/sysfs.c                         |  436 ++++
- kernel/module/tree_lookup.c                   |  109 +
- kernel/module/version.c                       |  109 +
- kernel/module_signing.c                       |   45 -
- 21 files changed, 2010 insertions(+), 1882 deletions(-)
- delete mode 100644 kernel/module-internal.h
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+---
+ MAINTAINERS                                         | 2 +-
+ kernel/Makefile                                     | 5 +----
+ kernel/module/Makefile                              | 9 +++++++++
+ kernel/{module_decompress.c => module/decompress.c} | 2 +-
+ kernel/{module-internal.h => module/internal.h}     | 0
+ kernel/{module.c => module/main.c}                  | 2 +-
+ kernel/{module_signature.c => module/signature.c}   | 0
+ kernel/{module_signing.c => module/signing.c}       | 2 +-
+ 8 files changed, 14 insertions(+), 8 deletions(-)
  create mode 100644 kernel/module/Makefile
- create mode 100644 kernel/module/debug_kmemleak.c
  rename kernel/{module_decompress.c => module/decompress.c} (99%)
- create mode 100644 kernel/module/internal.h
- create mode 100644 kernel/module/kallsyms.c
- create mode 100644 kernel/module/livepatch.c
- rename kernel/{module.c => module/main.c} (64%)
- create mode 100644 kernel/module/procfs.c
+ rename kernel/{module-internal.h => module/internal.h} (100%)
+ rename kernel/{module.c => module/main.c} (99%)
  rename kernel/{module_signature.c => module/signature.c} (100%)
- create mode 100644 kernel/module/signing.c
- create mode 100644 kernel/module/strict_rwx.c
- create mode 100644 kernel/module/sysfs.c
- create mode 100644 kernel/module/tree_lookup.c
- create mode 100644 kernel/module/version.c
- delete mode 100644 kernel/module_signing.c
+ rename kernel/{module_signing.c => module/signing.c} (97%)
 
-
-base-commit: 7993e65fdd0fe07beb9f36f998f9bbef2c0ee391
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bd86ed9fbc79..463bdb829db4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13012,7 +13012,7 @@ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+ F:	include/linux/module.h
+-F:	kernel/module.c
++F:	kernel/module/
+ 
+ MONOLITHIC POWER SYSTEM PMIC DRIVER
+ M:	Saravanan Sekar <sravanhome@gmail.com>
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 56f4ee97f328..3a6380975c57 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -53,6 +53,7 @@ obj-y += rcu/
+ obj-y += livepatch/
+ obj-y += dma/
+ obj-y += entry/
++obj-y += module/
+ 
+ obj-$(CONFIG_KCMP) += kcmp.o
+ obj-$(CONFIG_FREEZER) += freezer.o
+@@ -66,10 +67,6 @@ ifneq ($(CONFIG_SMP),y)
+ obj-y += up.o
+ endif
+ obj-$(CONFIG_UID16) += uid16.o
+-obj-$(CONFIG_MODULES) += module.o
+-obj-$(CONFIG_MODULE_DECOMPRESS) += module_decompress.o
+-obj-$(CONFIG_MODULE_SIG) += module_signing.o
+-obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
+ obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
+ obj-$(CONFIG_CRASH_CORE) += crash_core.o
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+new file mode 100644
+index 000000000000..2902fc7d0ef1
+--- /dev/null
++++ b/kernel/module/Makefile
+@@ -0,0 +1,9 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Makefile for linux kernel module support
++#
++
++obj-$(CONFIG_MODULES) += main.o
++obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
++obj-$(CONFIG_MODULE_SIG) += signing.o
++obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
+diff --git a/kernel/module_decompress.c b/kernel/module/decompress.c
+similarity index 99%
+rename from kernel/module_decompress.c
+rename to kernel/module/decompress.c
+index ffef98a20320..d14d6443225a 100644
+--- a/kernel/module_decompress.c
++++ b/kernel/module/decompress.c
+@@ -12,7 +12,7 @@
+ #include <linux/sysfs.h>
+ #include <linux/vmalloc.h>
+ 
+-#include "module-internal.h"
++#include "internal.h"
+ 
+ static int module_extend_max_pages(struct load_info *info, unsigned int extent)
+ {
+diff --git a/kernel/module-internal.h b/kernel/module/internal.h
+similarity index 100%
+rename from kernel/module-internal.h
+rename to kernel/module/internal.h
+diff --git a/kernel/module.c b/kernel/module/main.c
+similarity index 99%
+rename from kernel/module.c
+rename to kernel/module/main.c
+index 46a5c2ed1928..34a2b0cf3c3e 100644
+--- a/kernel/module.c
++++ b/kernel/module/main.c
+@@ -58,7 +58,7 @@
+ #include <linux/dynamic_debug.h>
+ #include <linux/audit.h>
+ #include <uapi/linux/module.h>
+-#include "module-internal.h"
++#include "internal.h"
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/module.h>
+diff --git a/kernel/module_signature.c b/kernel/module/signature.c
+similarity index 100%
+rename from kernel/module_signature.c
+rename to kernel/module/signature.c
+diff --git a/kernel/module_signing.c b/kernel/module/signing.c
+similarity index 97%
+rename from kernel/module_signing.c
+rename to kernel/module/signing.c
+index 8723ae70ea1f..8aeb6d2ee94b 100644
+--- a/kernel/module_signing.c
++++ b/kernel/module/signing.c
+@@ -12,7 +12,7 @@
+ #include <linux/string.h>
+ #include <linux/verification.h>
+ #include <crypto/public_key.h>
+-#include "module-internal.h"
++#include "internal.h"
+ 
+ /*
+  * Verify the signature on a module.
 -- 
 2.34.1
 

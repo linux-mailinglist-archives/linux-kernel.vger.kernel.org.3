@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37004BBC55
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A2B4BBC59
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237127AbiBRPoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 10:44:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40888 "EHLO
+        id S237139AbiBRPos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:44:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiBRPoP (ORCPT
+        with ESMTP id S231462AbiBRPoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:44:15 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849F318B15F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:43:58 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id 102so2288151uag.6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:43:58 -0800 (PST)
+        Fri, 18 Feb 2022 10:44:46 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6C022B709
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:44:29 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id x18so2606426pfh.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:44:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZlNKOu+PC57cWSc9B8bT89/4L+VjMA7vIqhUEFRfco4=;
-        b=A5pZd2CbfalKIrQ8Zz9VDALtD8d0Ppxdsa3oKI8TWnym/Jq71tJqV/zLFLqHw1TCfL
-         Jnb30zQNSzXZ520Ak7J0JDNC/yND2NIuEY+vYEYpzNHBAkEi5q7SGZ8gyd9SsseC3DUY
-         4+/oN3cZhkbPvFl9P/+iAQVAV5+ACUKiF29y3QzCzJL1zk+CKI/GCDooNzXIfjuuNg0A
-         eNm7aEjnd2GPMbwdT0IA4nFSMUGbecguG8fpB25GkrFoZFY0VAbtO6MNcK9k4M/7zksj
-         tPQmGRwkwaxPerUdlxUj43PPiQfW7/crp2j6XSzi261L87ckszK0zb24UvQVZAc0WeD8
-         sYSw==
+         :cc:content-transfer-encoding;
+        bh=doT7bK7EPrJiz241mVjN8JSE6X0c4y1Cn7yH47MmQuY=;
+        b=f7IrV8Co4YLWgbQabeAxKnaaARwhRRuipRCEkgrAJCQqP2XFBjrXQKuLiqPrbblMp4
+         1I0PyweE1qWbuBRwiem9GlWvoesOq6Y1GB8AnDJbzrRXaD1VWQKp8irajqq+k55dCKAi
+         CseUDopHDjNGPOjBaX9WvpduIweYhYqPDAMXxxYv0yiDD8iPLrA7BZIetCe3CCIYdVYV
+         ASZLZRL6vD/Zv40jqnzmkhX/ZXHdMbZSSn8xdx8/UI1a++gVGYKlWrJhfahzStHzBbVt
+         iFKohUn9z3TIl5lLqD6/ZqoBkVkbxJ6dRJy+TTq14nDy33ykAI0H/nBHragcZH98I9mN
+         Pgvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZlNKOu+PC57cWSc9B8bT89/4L+VjMA7vIqhUEFRfco4=;
-        b=bBZUS5Cq0DBHR3zZPSauf/zS7/giIc/dwuVSKUlA3Gtg4rumwdQQyPGqCTitkIWnba
-         NzZU1gHBTI8V/WaMR8aFUGCBDaSYtpcnRqYfY/yWCbbKil7AiBO/swwT2YXO8edufaci
-         y+m4M4nQzrXNQOj3xdUU4gZBxXDlDzRzu6A6kT4uP5jUUvM1Zvw0y+qSlMLiFDSNm8Z2
-         naLwozoKWfbCqp1gXOYwGVT3N+B/Bi83h9Ps8Qoo1/3v5Blo7diJTzAHKrs+hHeEYDTB
-         26R/wM8ag5HJMXf+Iggk5bczHDQvuss/PBRGOg62ch/66WJXuaYqBOzOBgDS19kXk4jF
-         L5ew==
-X-Gm-Message-State: AOAM530N4rQe8zKuAubCWS1Nufy22rkCi6zpzJwGv/B9sIq2HwT8iJQW
-        nV0fuJi4B/4iI/iA5zx4aAZgu63kemc=
-X-Google-Smtp-Source: ABdhPJzxn5hVV8ovS5Tt5NqjgvOfhCRa4cHN2du4YQFIdr1kc1ktPFcsVXVVouAQCxO7xVDUtaJ3tA==
-X-Received: by 2002:ab0:13ad:0:b0:340:22f4:574d with SMTP id m42-20020ab013ad000000b0034022f4574dmr3188642uae.102.1645199037571;
-        Fri, 18 Feb 2022 07:43:57 -0800 (PST)
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
-        by smtp.gmail.com with ESMTPSA id n8sm1437313vsl.8.2022.02.18.07.43.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 07:43:56 -0800 (PST)
-Received: by mail-vk1-f181.google.com with SMTP id j17so4701969vkd.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:43:56 -0800 (PST)
-X-Received: by 2002:a05:6122:788:b0:331:2063:3645 with SMTP id
- k8-20020a056122078800b0033120633645mr3858580vkr.10.1645199036123; Fri, 18 Feb
- 2022 07:43:56 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=doT7bK7EPrJiz241mVjN8JSE6X0c4y1Cn7yH47MmQuY=;
+        b=T8bXt/YviUCX7d1FpIUrEM6TH0sPTiOcPeyy+DX5ttJNSEl/U2dIRkvYLtXLiMQbaW
+         1hsN8ypARWkVnx5T2la2oeYFTF+c27/w8yeNnSIdCNKR15OPk1XbK7R38XCrhKXfKNVp
+         x9dKFW2mDuJZwMLwSmBa5We9BXEUVi4wh5u0ZuyvAlgeP0GsMbtErQo9pmi7V2TkUDrL
+         y7oCgQiLsz8btV3zprwxFDvamFagWFqSV7BvsenUITBhpOqcpay9KZgLJY6WH0VsgKOz
+         bxM5zvnOZSYvaWEkJpvRsiP4fhFQIgefob9XyxCpeLplHopGd37+fFkLhD77/w/nuUPv
+         4WFw==
+X-Gm-Message-State: AOAM533Y8e4Ql1EbBRAuX864bw3g9Ef0xDOOO6FtSzlb8m1XAMMTZKZS
+        02jUCTHeGBdclP23LKWPtHaE48UQ8iGb2735w8Pt
+X-Google-Smtp-Source: ABdhPJzPTn2nMsDVP8pfZnyivdp+JN2LbHE/ubEBj9MgLJGKutLru+hZtPhdSKHgoM+BCyRoh2SY4sYUhFcJlHlQacc=
+X-Received: by 2002:a63:da4d:0:b0:36c:2302:1940 with SMTP id
+ l13-20020a63da4d000000b0036c23021940mr6764465pgj.261.1645199069118; Fri, 18
+ Feb 2022 07:44:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-3-andrew@daynix.com>
- <CA+FuTSfPq-052=D3GzibMjUNXEcHTz=p87vW_3qU0OH9dDHSPQ@mail.gmail.com>
- <CABcq3pFLXUMi3ctr6WyJMaXbPjKregTzQ2fG1fwDU7tvk2uRFg@mail.gmail.com>
- <CA+FuTSfJS6b3ba7eW_u4TAHCq=ctpHDJUrb-Yc3iDwpJHHuBMw@mail.gmail.com> <CABcq3pE9ewELP0xW-BxFCjTUPBf9LFzmde4tMf1Szivb8nMp7g@mail.gmail.com>
-In-Reply-To: <CABcq3pE9ewELP0xW-BxFCjTUPBf9LFzmde4tMf1Szivb8nMp7g@mail.gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 18 Feb 2022 08:43:20 -0700
-X-Gmail-Original-Message-ID: <CA+FuTScisEyVdMcK2LJHnT8TTmduPqs20_7SzukkP_OYDEQpwA@mail.gmail.com>
-Message-ID: <CA+FuTScisEyVdMcK2LJHnT8TTmduPqs20_7SzukkP_OYDEQpwA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] drivers/net/virtio_net: Added basic RSS support.
-To:     Andrew Melnichenko <andrew@daynix.com>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
+References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-5-cgzones@googlemail.com>
+In-Reply-To: <20220217142133.72205-5-cgzones@googlemail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 18 Feb 2022 10:44:18 -0500
+Message-ID: <CAHC9VhQ6hTa2ZrNHBWeE2hcr9uAbD1r351oZvxRzO6H357-H0g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] selinux: drop return statement at end of void functions
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Austin Kim <austin.kim@lge.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 12:05 PM Andrew Melnichenko <andrew@daynix.com> wrote:
+On Thu, Feb 17, 2022 at 9:22 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
 >
-> Hi all,
+> Those return statements at the end of a void function are redundant.
 >
-> On Mon, Feb 14, 2022 at 12:09 AM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
-> >
-> > > > > @@ -3113,13 +3270,14 @@ static int virtnet_probe(struct virtio_device *vdev)
-> > > > >         u16 max_queue_pairs;
-> > > > >         int mtu;
-> > > > >
-> > > > > -       /* Find if host supports multiqueue virtio_net device */
-> > > > > -       err = virtio_cread_feature(vdev, VIRTIO_NET_F_MQ,
-> > > > > -                                  struct virtio_net_config,
-> > > > > -                                  max_virtqueue_pairs, &max_queue_pairs);
-> > > > > +       /* Find if host supports multiqueue/rss virtio_net device */
-> > > > > +       max_queue_pairs = 1;
-> > > > > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_MQ) || virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
-> > > > > +               max_queue_pairs =
-> > > > > +                    virtio_cread16(vdev, offsetof(struct virtio_net_config, max_virtqueue_pairs));
-> > > >
-> > > > Instead of testing either feature and treating them as somewhat equal,
-> > > > shouldn't RSS be dependent on MQ?
-> > >
-> > > No, RSS is dependent on CTRL_VQ. Technically RSS and MQ are similar features.
-> >
-> > RSS depends on having multiple queues.
-> >
-> > What would enabling VIRTIO_NET_F_RSS without VIRTIO_NET_F_MQ do?
+> Reported by clang-tidy [readability-redundant-control-flow]
 >
-> RSS would work.
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  security/selinux/hooks.c          | 2 --
+>  security/selinux/ss/conditional.c | 2 --
+>  security/selinux/ss/ebitmap.c     | 1 -
+>  security/selinux/ss/mls.c         | 1 -
+>  security/selinux/ss/services.c    | 2 --
+>  5 files changed, 8 deletions(-)
 
-What does that mean, exactly? RSS is load balancing, does that not
-require multi-queue?
+Merged into selinux/next, thanks.
+
+--=20
+paul-moore.com

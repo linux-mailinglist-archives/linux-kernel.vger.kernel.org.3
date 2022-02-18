@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7863C4BB691
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B391B4BB692
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbiBRKNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:13:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43810 "EHLO
+        id S233963AbiBRKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:13:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233953AbiBRKNn (ORCPT
+        with ESMTP id S233953AbiBRKNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:13:43 -0500
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9BE5EDD9;
-        Fri, 18 Feb 2022 02:13:27 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id d26so4563415vsh.0;
-        Fri, 18 Feb 2022 02:13:27 -0800 (PST)
+        Fri, 18 Feb 2022 05:13:51 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CBB6007B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:13:35 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id y9so8163478pjf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:13:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1PKhL/9YxVh44Q8mJ2k9mFL0NfcXYRcMNcar+n3ctso=;
+        b=B+V1TX06hO7yCTDcwWv1oOU8qPNwVKVSZAOtzncFeznx+dbcYcNw7EgUbZhCqOncHE
+         v07rLC4MeWFX2F7hwBkI1VJCKIPIy5Ef6fty6j0rsRyg1QnFHJIQihmylTkAKmuBTEFN
+         FQ8JC410OGtNTk8gZr+umUw0FnV78fqcuDl7rgniPqygdLBM2Nk4jSZnQxuMQVgRp0kq
+         UfD7BUOs6si5i6YmhVdSxxHtcYuRefsaXUHRTLT53TYe2s2XXzbDQ30YqB+g5bEzFNIm
+         3tLColl7XhgKpDgFrUvPTHSUgq0uEmOSBXHlmyGciCppxMSY8OcOQyBmX7bv1ASyc+jF
+         5cqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=biimC3ZT2BE1qWlcoP/prHvVGaEl3yOP7VCC6ZAmJec=;
-        b=GwlLUnzqr3Qf3/Dlfc26dn9yftBoS5iP5IpWB4rtuwydAkaKmjQWsLZwhWfNec32Fy
-         vU06IuHCMjfdas3jzEwCTjhSKL73a0rZJJs25JRPDH5B+bKxnw86876PRsCB0dDL04rO
-         ybPIK74pfix7tqGQotSe/VR+guWJ6JpIOZ/NpdnURUEDRq2TRabyMf46uJKhwVu0rbPi
-         ENHKRtIr2PEj6sko+y74D8QXuq3Wi7kxVAnhGTEhkMX3ETf7A1melPOhB+mK/ZeQCl8b
-         E/T67/8ixxTCjIS1PVIsqwe15Kbx5NGcoQaO0Q+oco0WWeJrYWt/GlNNeU4hIDICXvEQ
-         +BkA==
-X-Gm-Message-State: AOAM531atcCGBI5TWGOguFU4H5fS14Fe2uKg7TnqswRMxBEd+7qFIzF3
-        Ia3VXb/fHiXOKF4By3TFP50k5BvZbU6wPQ==
-X-Google-Smtp-Source: ABdhPJzboswq3Qf4DkeS6az73Pe3optwurOBz43dfLXN1TnoFH5VquHl77Z8ldgag6e98Z3Q8txQlA==
-X-Received: by 2002:a05:6102:ccb:b0:31b:93d6:aba7 with SMTP id g11-20020a0561020ccb00b0031b93d6aba7mr2966959vst.79.1645179206169;
-        Fri, 18 Feb 2022 02:13:26 -0800 (PST)
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com. [209.85.221.175])
-        by smtp.gmail.com with ESMTPSA id z23sm4964827uaq.2.2022.02.18.02.13.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 02:13:26 -0800 (PST)
-Received: by mail-vk1-f175.google.com with SMTP id bj24so4548372vkb.8;
-        Fri, 18 Feb 2022 02:13:25 -0800 (PST)
-X-Received: by 2002:a05:6122:ca1:b0:330:b95b:e048 with SMTP id
- ba33-20020a0561220ca100b00330b95be048mr3094832vkb.39.1645179205702; Fri, 18
- Feb 2022 02:13:25 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1PKhL/9YxVh44Q8mJ2k9mFL0NfcXYRcMNcar+n3ctso=;
+        b=oh5ccjuMOwX/bczFiRQauF/HG9eVSdRZdWDBUWy39jV1mT9ydfL81Jf80Lak8giZpq
+         ylP+5Rv0g/N5QvlzynSzsm7n+nCD8FQMVvHA2CcCNzUX+Q23RQ2/uB3+66BVs7R/OoQx
+         fRR90g/a6g5OAGLUdyrz/dL0PmsuBqIuAlw+gTsE6wt5A4J6IwvksUSbnZXeraIIBV56
+         Yv8S1d1n2bOmEswB1okNddRofsLhlxFYNkvbVnvnLji961MxLb5C12TmCiMQ0Sb5TZle
+         FLi4evv3rhtswdqPIpjPxLGvZH3HykPM5ybUHXmKY+Sp2c7Wb1yTW1ku12xmDJTDYUJg
+         5EaA==
+X-Gm-Message-State: AOAM5300IPQGWeQVuT/DOiGq3Y+E3eE86IGa3I9eOCB4vmHwBQ+hzkaj
+        0si0t4c8zqceXJvgefpt+Do8YDVOUTySKA==
+X-Google-Smtp-Source: ABdhPJxcY9wJZv/QU9AS+Ztdz6u/swmfTAQm+kxu19oxkxM5a7MSxqJP7i7VJvqnFX3D6YmfBE2olA==
+X-Received: by 2002:a17:90a:ec10:b0:1b8:9da7:3d13 with SMTP id l16-20020a17090aec1000b001b89da73d13mr7641603pjy.194.1645179214682;
+        Fri, 18 Feb 2022 02:13:34 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id x4sm4398484pjq.2.2022.02.18.02.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 02:13:34 -0800 (PST)
+Date:   Fri, 18 Feb 2022 10:13:29 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@gentwo.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christoph Lameter <cl@gentwo.de>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: Do we really need SLOB nowdays?
+Message-ID: <Yg9xSWEaTZLA+hYt@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <YWw1n6y/AGED14HD@casper.infradead.org>
+ <CAB=+i9Tor-tmZuB8YjATT_rv68nnF2W_TvMvyGp55AGaSyKynw@mail.gmail.com>
+ <alpine.DEB.2.22.394.2110251016260.3145@gentwo.de>
+ <20211028100414.GA2928@kvm.asia-northeast3-a.c.our-ratio-313919.internal>
+ <YXqSoo+b9RTclW/2@casper.infradead.org>
+ <20211210110835.GA632811@odroid>
+ <alpine.DEB.2.22.394.2112101305500.290446@gentwo.de>
+ <cbfaeb40-13c7-15b6-177d-07b3f3c4a0a9@suse.cz>
+ <20211215062904.GA1150813@odroid>
+ <54c6fff8-8c79-463b-a359-96e37bd13674@suse.cz>
 MIME-Version: 1.0
-References: <20220216181003.114049-1-nikita.yoush@cogentembedded.com>
-In-Reply-To: <20220216181003.114049-1-nikita.yoush@cogentembedded.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 18 Feb 2022 11:13:14 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUM0tKbJ_8OkNA4Ep_mzhmwr=JNC+v48hgqZtAGu--p1Q@mail.gmail.com>
-Message-ID: <CAMuHMdUM0tKbJ_8OkNA4Ep_mzhmwr=JNC+v48hgqZtAGu--p1Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: ulcb-kf: fix wrong comment
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <54c6fff8-8c79-463b-a359-96e37bd13674@suse.cz>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,26 +86,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 7:10 PM Nikita Yushchenko
-<nikita.yoush@cogentembedded.com> wrote:
-> Fix comment referencing salvator board, likely a copy-paste leftover.
->
-> ulcb-kf.dtsi has nothing to do with salvator.
->
-> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+On Wed, Dec 15, 2021 at 11:10:06AM +0100, Vlastimil Babka wrote:
+> On 12/15/21 07:29, Hyeonggon Yoo wrote:
+> > On Tue, Dec 14, 2021 at 06:24:58PM +0100, Vlastimil Babka wrote:
+> >> On 12/10/21 13:06, Christoph Lameter wrote:
+> >> > On Fri, 10 Dec 2021, Hyeonggon Yoo wrote:
+> >> > 
+> >> >> > > (But I still have doubt if we can run linux on machines like that.)
+> >> >> >
+> >> >> > I sent you a series of articles about making Linux run in 1MB.
+> >> >>
+> >> >> After some time playing with the size of kernel,
+> >> >> I was able to run linux in 6.6MiB of RAM. and the SLOB used
+> >> >> around 300KiB of memory.
+> >> > 
+> >> > What is the minimal size you need for SLUB?
+> >>  
+> > 
+> > I don't know why Christoph's mail is not in my mailbox. maybe I deleted it
+> > by mistake or I'm not cc-ed.
+> > 
+> > Anyway, I tried to measure this again with SLUB and SLOB.
+> > 
+> > SLUB uses few hundreds of bytes than SLOB.
+> > 
+> > There isn't much difference in 'Memory required to boot'.
+> > (interestingly SLUB requires less)
+> > 
+> > 'Memory required to boot' is measured by reducing memory
+> > until it says 'System is deadlocked on memory'. I don't know
+> > exact reason why they differ.
+> > 
+> > Note that the configuration is based on tinyconfig and
+> > I added initramfs support + tty layer (+ uart driver) + procfs support,
+> > + ELF binary support + etc.
+> > 
+> > there isn't even block layer, but it's good starting point to see
+> > what happens in small system.
+> > 
+> > SLOB:
+> > 
+> > 	Memory required to boot: 6950K
+> > 
+> > 		Slab:                368 kB
+> > 
+> > SLUB:
+> > 	Memory required to boot: 6800K
+> > 
+> > 		Slab:                552 kB
+> > 
+> > SLUB with slab merging:
+> > 
+> > 		Slab:                536 kB
+> 
+> 168kB different on a system with less than 8MB memory looks rather
+> significant to me to simply delete SLOB, I'm afraid.
 
-Fixes: 80c07701d5918928 ("arm64: dts: renesas: ulcb-kf: add pcm3168
-sound codec")
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.18.
+Just FYI...
+Some experiment based on v5.17-rc3:
 
-Gr{oetje,eeting}s,
+SLOB:
+	Slab:                388 kB
 
-                        Geert
+SLUB:
+	Slab:                540 kB (+152kb)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+SLUB with s->min_partial = 0:
+	Slab:                452 kB (+64kb)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+SLUB with s->min_partial = 0 && slub_max_order = 0:
+	Slab:                436 kB (+48kb)
+
+SLUB with s->min_partial = 0 && slub_max_order = 0
++ merging slabs crazily (just ignore SLAB_NEVER_MERGE/SLAB_MERGE_SAME):
+	Slab:                408 kB (+20kb)
+
+Decreasing further seem to be hard and
+I guess +20kb are due to partial slabs.
+
+I think SLUB can be memory-efficient as SLOB.
+Is SLOB (Address-Ordered next fit) stronger to fragmentation than SLUB?

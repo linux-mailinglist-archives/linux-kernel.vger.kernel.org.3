@@ -2,208 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F19C4BBCFE
+	by mail.lfdr.de (Postfix) with ESMTP id B737F4BBD00
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiBRQFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:05:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33168 "EHLO
+        id S234811AbiBRQFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:05:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiBRQFC (ORCPT
+        with ESMTP id S233019AbiBRQFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 11:05:02 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5458532EF;
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196B9532FC
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:04:46 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id c4so2642791pfl.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:04:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WDCu5fW0jU66ysKsVUGrCitGNsiEZTA+NVb+oahcLwA=;
+        b=LXDx8icFsWFPMdF/g01b4gSchKGaC2RcBtXtf4DrUEw3t5xt4m7ZPlXIYKBxC4e7Ub
+         Qd7R+6JNu13TapP/gJmnVnpBwUs0I+fiPNRTy9aIzKEEJdLXmqwROwUL6hBCncRKywW9
+         8AvV3xi6aYtB42zirKim6PrWOMPK7bB1j41JRV68B8HvQa95E+mwiiG1PgEEgOpmgWMF
+         h33tPRQY2315I8lczu0a/qLAjNkMvRguMkRPLTGsdDGNajduA6X8/xfLnAyQbFuPyPkj
+         9qeh8O2uxYR/MgnK/noxfEWh/4i8ORQzF6PfcJ04CAxA2jBWjFflZvonmOP9BxSG8Dgf
+         MeHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WDCu5fW0jU66ysKsVUGrCitGNsiEZTA+NVb+oahcLwA=;
+        b=RGjiJSHLbvuH5KBiEsNILEasUcwZw9kl2hxY32CC+CtBJPdK9j9gUu6PPD3d1x5RmV
+         nM70yezDS1QIXFdwgHIFSLgDF1G9sOhs06N+cQ47nc8JBLYIC6rHHx0NGMCtpist9M7w
+         5hZOX3vdi9b/qfgGrSWUJ57R+PKNijIolpvyHaPaJvzO0D+kBt727YkhgGbXm54ZH1Eu
+         1Mknn16bfMtOZgjhjnU7witpKr4ICWN3BSnZ7WTDEApZj+926YdpOeoHrxdnDFXW6+ln
+         5K9tVwRCmH92Edis3opf2zw5QBaaMfl/NPtu3dZKWH+y1LSnkLc6YcYIw55aLWpOm90a
+         pWGw==
+X-Gm-Message-State: AOAM531mSYby8DRdAoWckYFEkVQe89R8bo7CbYzPDBWLsRuItskPv+7c
+        zjKCXjlkaqMezawdSwxUYcnd2w==
+X-Google-Smtp-Source: ABdhPJyOXXnBv1yMQKgPoI/ywpg5jlp3cL5cedKhOmSghspyiza1zCJ9BlMluZ1SBcRYyVkJhYM2AQ==
+X-Received: by 2002:a62:65c6:0:b0:4d1:6354:e8e6 with SMTP id z189-20020a6265c6000000b004d16354e8e6mr8190211pfb.64.1645200285419;
         Fri, 18 Feb 2022 08:04:45 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 292B7210E5;
-        Fri, 18 Feb 2022 16:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645200284; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wIVcCgCTUoNfrlDbIxcNqaydrcBIQu4poVRFpF/GnA4=;
-        b=c8xX1dJN/jW1X4017fu3kzeO9XdQ/rqYvo0vSCpT/vYkjvZJqC3TnCoFXsgVCVJ7MKFEEr
-        ZdzyOi6dP2lTWAezAA0FYyeYSZrMFCerq1RY5WeZP+2LQb9jPv30GuKAzfFxqA23OgsVq6
-        qJodMrzWB1QMeKQP/jv729Eo5+6X9y4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645200284;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wIVcCgCTUoNfrlDbIxcNqaydrcBIQu4poVRFpF/GnA4=;
-        b=RbMZVYc2yY2G1mJYHFa1WTyH53eB1wo60u/MFWDFOjQKcziXohigfThCj8T6nSicH/1pia
-        gqfB8S3gd0O8cGBQ==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        by relay2.suse.de (Postfix) with ESMTP id 603D3A3B8C;
-        Fri, 18 Feb 2022 16:04:43 +0000 (UTC)
-From:   Michal Suchanek <msuchanek@suse.de>
-To:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Michal Suchanek <msuchanek@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
-        Helge Deller <deller@gmx.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Herrmann <dh.herrmann@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-video@atrey.karlin.mff.cuni.cz
-Subject: [PATCH v3] simplefb: Enable boot time VESA graphic mode selection.
-Date:   Fri, 18 Feb 2022 17:04:36 +0100
-Message-Id: <20220218160436.23211-1-msuchanek@suse.de>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <a789e375-a23e-6988-33bc-1410eb5d974f@suse.de>
-References: <a789e375-a23e-6988-33bc-1410eb5d974f@suse.de>
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id mg24sm5112105pjb.4.2022.02.18.08.04.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 08:04:44 -0800 (PST)
+Date:   Fri, 18 Feb 2022 16:04:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peng Hao <flyingpenghao@gmail.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH]  kvm: correct comment description issue
+Message-ID: <Yg/DmdjSqNLwWo2d@google.com>
+References: <20220218110547.11249-1-flyingpeng@tencent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218110547.11249-1-flyingpeng@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since switch to simplefb/simpledrm VESA graphic modes are no longer
-available with legacy BIOS.
+"KVM: VMX:" for the scope.  A more specific shortlog would also be helfpul, stating
+that a comment is being modified doesn't provide any info about what comment.
 
-The x86 realmode boot code enables the VESA graphic modes when option
-FB_BOOT_VESA_SUPPORT is enabled.
+On Fri, Feb 18, 2022, Peng Hao wrote:
+> loaded_vmcs does not have this field 'vcpu', modify this comment.
 
-To enable use of VESA modes with simplefb in legacy BIOS boot mode drop
-dependency of BOOT_VESA_SUPPORT on FB, also drop the FB_ prefix, and
-select the option when simplefb enabled on x86.
+It would be helpful to state that loaded_vmcs has 'cpu', not 'vcpu'.  It's hard to
+identify what's being changed.
 
-The BOOT_VESA_SUPPORT is not specific to framebuffer but rather to x86
-platform, move it from fbdev to x86 Kconfig.
 
-Fixes: e3263ab389a7 ("x86: provide platform-devices for boot-framebuffers")
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
----
-v2: Select BOOT_VESA_SUPPORT from simplefb rather than simpledrm. The
-simpledrm driver uses the firmware provided video modes only indirectly
-through simplefb, and both can be enabled independently.
-v3: Move BOOT_VESA_SUPPORT from fbdev to x86
----
- arch/x86/Kconfig            |  6 ++++++
- arch/x86/boot/video-vesa.c  |  4 ++--
- drivers/firmware/Kconfig    |  1 +
- drivers/video/fbdev/Kconfig | 13 +++----------
- 4 files changed, 12 insertions(+), 12 deletions(-)
+Something like this?
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 9f5bd41bf660..cceb1aab0486 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -942,6 +942,12 @@ config GART_IOMMU
- 
- 	  If unsure, say Y.
- 
-+config BOOT_VESA_SUPPORT
-+	bool
-+	help
-+	  If true, at least one selected framebuffer driver can take advantage
-+	  of VESA video modes set at an early boot stage via the vga= parameter.
-+
- config MAXSMP
- 	bool "Enable Maximum number of SMP Processors and NUMA Nodes"
- 	depends on X86_64 && SMP && DEBUG_KERNEL
-diff --git a/arch/x86/boot/video-vesa.c b/arch/x86/boot/video-vesa.c
-index 7e185977a984..c2c6d35e3a43 100644
---- a/arch/x86/boot/video-vesa.c
-+++ b/arch/x86/boot/video-vesa.c
-@@ -83,7 +83,7 @@ static int vesa_probe(void)
- 			   (vminfo.memory_layout == 4 ||
- 			    vminfo.memory_layout == 6) &&
- 			   vminfo.memory_planes == 1) {
--#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
-+#ifdef CONFIG_BOOT_VESA_SUPPORT
- 			/* Graphics mode, color, linear frame buffer
- 			   supported.  Only register the mode if
- 			   if framebuffer is configured, however,
-@@ -121,7 +121,7 @@ static int vesa_set_mode(struct mode_info *mode)
- 	if ((vminfo.mode_attr & 0x15) == 0x05) {
- 		/* It's a supported text mode */
- 		is_graphic = 0;
--#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
-+#ifdef CONFIG_BOOT_VESA_SUPPORT
- 	} else if ((vminfo.mode_attr & 0x99) == 0x99) {
- 		/* It's a graphics mode with linear frame buffer */
- 		is_graphic = 1;
-diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-index 75cb91055c17..ad64f3a6f54f 100644
---- a/drivers/firmware/Kconfig
-+++ b/drivers/firmware/Kconfig
-@@ -224,6 +224,7 @@ config SYSFB
- config SYSFB_SIMPLEFB
- 	bool "Mark VGA/VBE/EFI FB as generic system framebuffer"
- 	depends on SYSFB
-+	select BOOT_VESA_SUPPORT
- 	help
- 	  Firmwares often provide initial graphics framebuffers so the BIOS,
- 	  bootloader or kernel can show basic video-output during boot for
-diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
-index 6ed5e608dd04..5bdd303b5268 100644
---- a/drivers/video/fbdev/Kconfig
-+++ b/drivers/video/fbdev/Kconfig
-@@ -66,13 +66,6 @@ config FB_DDC
- 	select I2C_ALGOBIT
- 	select I2C
- 
--config FB_BOOT_VESA_SUPPORT
--	bool
--	depends on FB
--	help
--	  If true, at least one selected framebuffer driver can take advantage
--	  of VESA video modes set at an early boot stage via the vga= parameter.
--
- config FB_CFB_FILLRECT
- 	tristate
- 	depends on FB
-@@ -627,7 +620,7 @@ config FB_VESA
- 	select FB_CFB_FILLRECT
- 	select FB_CFB_COPYAREA
- 	select FB_CFB_IMAGEBLIT
--	select FB_BOOT_VESA_SUPPORT
-+	select BOOT_VESA_SUPPORT
- 	help
- 	  This is the frame buffer device driver for generic VESA 2.0
- 	  compliant graphic cards. The older VESA 1.2 cards are not supported.
-@@ -1051,7 +1044,7 @@ config FB_INTEL
- 	select FB_CFB_FILLRECT
- 	select FB_CFB_COPYAREA
- 	select FB_CFB_IMAGEBLIT
--	select FB_BOOT_VESA_SUPPORT if FB_INTEL = y
-+	select BOOT_VESA_SUPPORT if FB_INTEL = y
- 	depends on !DRM_I915
- 	help
- 	  This driver supports the on-board graphics built in to the Intel
-@@ -1378,7 +1371,7 @@ config FB_SIS
- 	select FB_CFB_FILLRECT
- 	select FB_CFB_COPYAREA
- 	select FB_CFB_IMAGEBLIT
--	select FB_BOOT_VESA_SUPPORT if FB_SIS = y
-+	select BOOT_VESA_SUPPORT if FB_SIS = y
- 	select FB_SIS_300 if !FB_SIS_315
- 	help
- 	  This is the frame buffer device driver for the SiS 300, 315, 330
--- 
-2.31.1
+  KVM: VMX: Fix typos above smp_wmb() comment in __loaded_vmcs_clear()
 
+  Fix a comment documenting the memory barrier related to clearing a
+  loaded_vmcs; loaded_vmcs tracks the host CPU the VMCS is loaded on via
+  the field 'cpu', it doesn't have a 'vcpu' field.
+
+With a tweaked shortlog/changelog (doesn't have to be exactly the above),
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+> Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 7dce746c175f..0ffcfe54eea5 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -644,10 +644,10 @@ static void __loaded_vmcs_clear(void *arg)
+>  
+>  	/*
+>  	 * Ensure all writes to loaded_vmcs, including deleting it from its
+> -	 * current percpu list, complete before setting loaded_vmcs->vcpu to
+> -	 * -1, otherwise a different cpu can see vcpu == -1 first and add
+> -	 * loaded_vmcs to its percpu list before it's deleted from this cpu's
+> -	 * list. Pairs with the smp_rmb() in vmx_vcpu_load_vmcs().
+> +	 * current percpu list, complete before setting loaded_vmcs->cpu to
+> +	 * -1, otherwise a different cpu can see loaded_vmcs->cpu == -1 first
+> +	 * and add loaded_vmcs to its percpu list before it's deleted from this
+> +	 * cpu's list. Pairs with the smp_rmb() in vmx_vcpu_load_vmcs().
+>  	 */
+>  	smp_wmb();
+>  
+> -- 
+> 2.27.0
+> 

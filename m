@@ -2,84 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF894BB6D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBBF4BB6DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiBRKZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:25:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60326 "EHLO
+        id S232259AbiBRK1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:27:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiBRKY6 (ORCPT
+        with ESMTP id S230343AbiBRK1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:24:58 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461842B1AA8;
-        Fri, 18 Feb 2022 02:24:42 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EF51A219A4;
-        Fri, 18 Feb 2022 10:24:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645179880; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pEW6tURx/EzwxI4FUVurCKiPgw0jrsrJlPXVlnXp/HE=;
-        b=SeoCtDNR2wsBLJTj900OTN3n7fC0g/p+HrcnzV651Qw3Pas8MIHw+vT5WvcTm8cLyvPUB4
-        pZ3+tmcKMwEhG3y8TeMQq2Q5Mq08k+tIGoZ6RDCRfv5KLQaOKU+X2GPFB77h7e+fayDkW9
-        DfTgYnjOlJcVmQOmBEJTunTHBHmr7lQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645179880;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pEW6tURx/EzwxI4FUVurCKiPgw0jrsrJlPXVlnXp/HE=;
-        b=gZ6C1Ocahxs4eYt0MvA84lXhjcbaOMrU+ICWDeayObwpAJxjPofiuEeRLkIFUO7dEhbQ+F
-        3goJdrfmlLmkMCAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8B4F913C47;
-        Fri, 18 Feb 2022 10:24:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zuG3IOhzD2LxCAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 18 Feb 2022 10:24:40 +0000
-Message-ID: <14dd85f1-21b1-2ff7-3491-466c077210e6@suse.de>
-Date:   Fri, 18 Feb 2022 11:24:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Sam Ravnborg <sam@ravnborg.org>,
-        Helge Deller <deller@gmx.de>, x86@kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Martin Mares <mj@ucw.cz>,
-        linux-video@atrey.karlin.mff.cuni.cz,
-        Daniel Mack <daniel@zonque.org>
-References: <20220218093334.24830-1-msuchanek@suse.de>
- <4c6e1d15-3bb3-5a69-972f-592cc33ac0cd@suse.de>
- <20220218100841.GV3113@kunlun.suse.cz>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220218100841.GV3113@kunlun.suse.cz>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------LTgM6u0q34vOjsOnn7OEejJ0"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        Fri, 18 Feb 2022 05:27:00 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8F8389E
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:26:42 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id m7so8216619pjk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:26:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ajou.ac.kr; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=6n56412XkU3cVeHo6hCtYyL1En8oEnrT0LI9PHtRQKk=;
+        b=qZeAPcCyvBIo+T+9s+LRJtCfoZjxGRuKEhvu5IUL/6YC+70/BETeTNFTYNzlW4BZ0y
+         16vTX9BbC7msF3IAUMzbeZ0CUtR4VpPsWtOZPMjE7Gd7GQ83y8ASnu2F3PkmR8zodPDf
+         n0e+qfSi/NZ3/C5XVXY+0nhXu/J4zaqLGb3JQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=6n56412XkU3cVeHo6hCtYyL1En8oEnrT0LI9PHtRQKk=;
+        b=6BsSbWHeqm2g6AXzMSjeHjsVGSjCagKoQynjI+n28wq5shSdrEsbNVrZu3oXtwM+fy
+         ThTl4ynBtLysXIQuvTRxwRX/wXa4TxKKQV7Qw63RaP7FmEhBzffmCk587gD+PAe5wdL8
+         oZg768b7jLWMoB5jsXbODmvhzYhMYytXk7+V7sOrqCmDUoSuyl/eGfwVbZL10XfpS3sm
+         3xwL/5Fe/U0dmLWkplbGRRP8NJgvEWRWwQQREeugSqXPCDb6jnuzLAWaTTM/f3TXqeyi
+         WqtVD1Is0d7AsLhgBxjL5HmdDlVWjC1WHRLfFX1BNa/nq8EOtbXJKHzjhxcUj/QcwLf/
+         zkSQ==
+X-Gm-Message-State: AOAM532U0MedikobckioNOylVnCU8SpxJVAF5zIdPxG9vRTjSc1ZbNOr
+        IW95Fwjo1S+cN5XkOCwbbrMrEQ==
+X-Google-Smtp-Source: ABdhPJwuVBXUZpK+hSCOU/2l/R/2lXyT9XqbtWvaqaQsEhYCtzyFSucUiJIAdYb3woEmZZoQER4eDQ==
+X-Received: by 2002:a17:902:d708:b0:14d:cf6a:a9a3 with SMTP id w8-20020a170902d70800b0014dcf6aa9a3mr7013845ply.118.1645180001784;
+        Fri, 18 Feb 2022 02:26:41 -0800 (PST)
+Received: from localhost.localdomain ([210.107.197.32])
+        by smtp.googlemail.com with ESMTPSA id k13sm2767696pfc.176.2022.02.18.02.26.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 02:26:41 -0800 (PST)
+From:   Jonghyeon Kim <tome01@ajou.ac.kr>
+To:     akpm@linux-foundation.org
+Cc:     Jonghyeon Kim <tome01@ajou.ac.kr>, Jonathan.Cameron@Huawei.com,
+        amit@kernel.org, benh@kernel.crashing.org, corbet@lwn.net,
+        david@redhat.com, dwmw@amazon.com, elver@google.com,
+        foersleo@amazon.de, gthelen@google.com, markubo@amazon.de,
+        rientjes@google.com, shakeelb@google.com, shuah@kernel.org,
+        linux-damon@amazon.com, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v1 0/3] Rebase DAMON_RECALIM for NUMA system
+Date:   Fri, 18 Feb 2022 19:26:08 +0900
+Message-Id: <20220218102611.31895-1-tome01@ajou.ac.kr>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,127 +66,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------LTgM6u0q34vOjsOnn7OEejJ0
-Content-Type: multipart/mixed; boundary="------------TPm4NPg2Cxx7x1oIMonTxg69";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
-Cc: dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
- David Airlie <airlied@linux.ie>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Sam Ravnborg <sam@ravnborg.org>,
- Helge Deller <deller@gmx.de>, x86@kernel.org,
- Javier Martinez Canillas <javierm@redhat.com>, Ingo Molnar
- <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
- Borislav Petkov <bp@alien8.de>, Maxime Ripard <maxime@cerno.tech>,
- Thomas Gleixner <tglx@linutronix.de>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, Martin Mares <mj@ucw.cz>,
- linux-video@atrey.karlin.mff.cuni.cz, Daniel Mack <daniel@zonque.org>
-Message-ID: <14dd85f1-21b1-2ff7-3491-466c077210e6@suse.de>
-Subject: Re: [PATCH] simpldrm: Enable boot time VESA graphic mode selection.
-References: <20220218093334.24830-1-msuchanek@suse.de>
- <4c6e1d15-3bb3-5a69-972f-592cc33ac0cd@suse.de>
- <20220218100841.GV3113@kunlun.suse.cz>
-In-Reply-To: <20220218100841.GV3113@kunlun.suse.cz>
 
---------------TPm4NPg2Cxx7x1oIMonTxg69
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Current DAMON_RECALIM is not compatible with the NUMA memory system. To
+proactively reclaim memory, DAMON_RECLAIM kernel thread(kdamond) has to wake up
+before kswapd does reclaim memory. However, the current watermark for proactive
+reclamation is based on entire system free memory. So, though the one memory
+node is fully used, kdamond is not waked up.
 
-SGkNCg0KQW0gMTguMDIuMjIgdW0gMTE6MDggc2NocmllYiBNaWNoYWwgU3VjaMOhbmVrOg0K
-PiBIZWxsbywNCj4gDQo+IE9uIEZyaSwgRmViIDE4LCAyMDIyIGF0IDEwOjU3OjMzQU0gKzAx
-MDAsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gSGkgTWljaGFsDQo+Pg0KPj4gQW0g
-MTguMDIuMjIgdW0gMTA6MzMgc2NocmllYiBNaWNoYWwgU3VjaGFuZWs6DQo+Pj4gU2luY2Ug
-c3dpdGNoIHRvIHNpbXBsZWRybSBWRVNBIGdyYXBoaWMgbW9kZXMgYXJlIG5vIGxvbmdlciBh
-dmFpbGFibGUNCj4+PiB3aXRoIGxlZ2FjeSBCSU9TLg0KPj4+DQo+Pj4gVGhlIHg4NiByZWFs
-bW9kZSBib290IGNvZGUgZW5hYmxlcyB0aGUgVkVTQSBncmFwaGljIG1vZGVzIHdoZW4gb3B0
-aW9uDQo+Pj4gRkJfQk9PVF9WRVNBX1NVUFBPUlQgaXMgZW5hYmxlZC4NCj4+Pg0KPj4+IFRv
-IGVuYWJsZSB1c2Ugb2YgVkVTQSBtb2RlcyB3aXRoIHNpbXBsZWRybSBpbiBsZWdhY3kgQklP
-UyBib290IG1vZGUgZHJvcA0KPj4+IGRlcGVuZGVuY3kgb2YgQk9PVF9WRVNBX1NVUFBPUlQg
-b24gRkIsIGFsc28gZHJvcCB0aGUgRkJfIHByZWZpeCwgYW5kDQo+Pj4gc2VsZWN0IHRoZSBv
-cHRpb24gd2hlbiBzaW1wbGVkcm0gaXMgYnVpbHQtaW4gb24geDg2Lg0KPj4NCj4+IFRoYW5r
-cyBmb3Igc2VuZGluZyB0aGUgcGF0Y2guDQo+Pg0KPj4gSSB0ZXN0ZWQgc2ltcGxlZHJtIG9u
-IGEgVkVTQS1iYXNlZCBzeXN0ZW1zIGFuZCBpdCB3b3JrLiBEbyB5b3UgaGF2ZSBhDQo+IA0K
-PiBJbiBFRkkgb3IgbGVnYWN5IG1vZGU/DQoNCkl0IHdhcyBhIDMyLWJpdCBBdGhsb25YUC4g
-U28gYXMgbGVnYWN5IGFzIGl0IGdldHMuDQoNCj4gDQo+PiBjb25jcmV0ZSBleGFtcGxlIG9m
-IGEgbW9kZSB0aGF0IGRvZXNuJ3Qgd29yayBhbnkgbG9uZ2VyPw0KPiANCj4gQXMgcGVyIGRp
-c2N1c3Npb24gaW4NCj4gaHR0cHM6Ly9idWd6aWxsYS5vcGVuc3VzZS5vcmcvc2hvd19idWcu
-Y2dpP2lkPTExOTMyNTAgdmdhPTc5MSBkb2VzIG5vdC4NCg0KSSB3b25kZXIgaWYgdGhpcyBm
-aXhlcyBhIGZldyBtb3JlIG9mIHRoZSBjb21wbGFpbnMgd2UndmUgc2VlbiBhYm91dCANCm1p
-c3NpbmcgcmVzb2x1dGlvbnMuDQoNCj4gDQo+IEFsc28gaXQgaXMgY2xlYXIgZXhhbWluaWcg
-dGhlIHJlYWxtb2RlIGNvZGUgdGhhdCB0aGlzIG9wdGlvbiBpcyBuZWVkZWQNCj4gdG8gZW5h
-YmxlIGdyYXBoaWMgbW9kZSBzZWxlY3Rpb24uDQo+IA0KPiBJIGRvbid0IGhhdmUgYSBzeXN0
-ZW0gd2l0aCBsZWdhY3kgQklPUyBhdCBoYW5kIGJ1dCBmcm9tIHVzZXIgdGVzdGluZw0KPiB0
-aGlzIGltcHJvdmVzIHRoZSBzaXR1YXRpb24gLSBrZXJuZWwgZG9lcyBub3QgcmVlamVjdCB0
-aGUgdmlkZW9tb2RlDQo+IGFyZ3VtZW50LCBhbmQgc2ltcGxlZHJtIGlzIGluaXRpYWxpemVk
-IGR1cmluZyBib290Lg0KDQpObyBkb3VidCBhYm91dCB0aGF0Lg0KDQpCZXN0IHJlZ2FyZHMN
-ClRob21hcw0KDQo+IA0KPiBUaGFua3MNCj4gDQo+IE1pY2hhbA0KPiANCj4+DQo+Pj4NCj4+
-PiBGaXhlczogMTFlOGY1ZmQyMjNiICgiZHJtOiBBZGQgc2ltcGxlZHJtIGRyaXZlciIpDQo+
-Pj4gU2lnbmVkLW9mZi1ieTogTWljaGFsIFN1Y2hhbmVrIDxtc3VjaGFuZWtAc3VzZS5kZT4N
-Cj4+PiAtLS0NCj4+PiAgICBhcmNoL3g4Ni9ib290L3ZpZGVvLXZlc2EuYyAgIHwgNCArKy0t
-DQo+Pj4gICAgZHJpdmVycy9ncHUvZHJtL3RpbnkvS2NvbmZpZyB8IDEgKw0KPj4+ICAgIGRy
-aXZlcnMvdmlkZW8vZmJkZXYvS2NvbmZpZyAgfCA5ICsrKystLS0tLQ0KPj4+ICAgIDMgZmls
-ZXMgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQ0KPj4+DQo+Pj4g
-ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2Jvb3QvdmlkZW8tdmVzYS5jIGIvYXJjaC94ODYvYm9v
-dC92aWRlby12ZXNhLmMNCj4+PiBpbmRleCA3ZTE4NTk3N2E5ODQuLmMyYzZkMzVlM2E0MyAx
-MDA2NDQNCj4+PiAtLS0gYS9hcmNoL3g4Ni9ib290L3ZpZGVvLXZlc2EuYw0KPj4+ICsrKyBi
-L2FyY2gveDg2L2Jvb3QvdmlkZW8tdmVzYS5jDQo+Pj4gQEAgLTgzLDcgKzgzLDcgQEAgc3Rh
-dGljIGludCB2ZXNhX3Byb2JlKHZvaWQpDQo+Pj4gICAgCQkJICAgKHZtaW5mby5tZW1vcnlf
-bGF5b3V0ID09IDQgfHwNCj4+PiAgICAJCQkgICAgdm1pbmZvLm1lbW9yeV9sYXlvdXQgPT0g
-NikgJiYNCj4+PiAgICAJCQkgICB2bWluZm8ubWVtb3J5X3BsYW5lcyA9PSAxKSB7DQo+Pj4g
-LSNpZmRlZiBDT05GSUdfRkJfQk9PVF9WRVNBX1NVUFBPUlQNCj4+PiArI2lmZGVmIENPTkZJ
-R19CT09UX1ZFU0FfU1VQUE9SVA0KPj4+ICAgIAkJCS8qIEdyYXBoaWNzIG1vZGUsIGNvbG9y
-LCBsaW5lYXIgZnJhbWUgYnVmZmVyDQo+Pj4gICAgCQkJICAgc3VwcG9ydGVkLiAgT25seSBy
-ZWdpc3RlciB0aGUgbW9kZSBpZg0KPj4+ICAgIAkJCSAgIGlmIGZyYW1lYnVmZmVyIGlzIGNv
-bmZpZ3VyZWQsIGhvd2V2ZXIsDQo+Pj4gQEAgLTEyMSw3ICsxMjEsNyBAQCBzdGF0aWMgaW50
-IHZlc2Ffc2V0X21vZGUoc3RydWN0IG1vZGVfaW5mbyAqbW9kZSkNCj4+PiAgICAJaWYgKCh2
-bWluZm8ubW9kZV9hdHRyICYgMHgxNSkgPT0gMHgwNSkgew0KPj4+ICAgIAkJLyogSXQncyBh
-IHN1cHBvcnRlZCB0ZXh0IG1vZGUgKi8NCj4+PiAgICAJCWlzX2dyYXBoaWMgPSAwOw0KPj4+
-IC0jaWZkZWYgQ09ORklHX0ZCX0JPT1RfVkVTQV9TVVBQT1JUDQo+Pj4gKyNpZmRlZiBDT05G
-SUdfQk9PVF9WRVNBX1NVUFBPUlQNCj4+PiAgICAJfSBlbHNlIGlmICgodm1pbmZvLm1vZGVf
-YXR0ciAmIDB4OTkpID09IDB4OTkpIHsNCj4+PiAgICAJCS8qIEl0J3MgYSBncmFwaGljcyBt
-b2RlIHdpdGggbGluZWFyIGZyYW1lIGJ1ZmZlciAqLw0KPj4+ICAgIAkJaXNfZ3JhcGhpYyA9
-IDE7DQo+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS90aW55L0tjb25maWcgYi9k
-cml2ZXJzL2dwdS9kcm0vdGlueS9LY29uZmlnDQo+Pj4gaW5kZXggNzEyZTAwMDRlOTZlLi4x
-YmMzMGM2NGVkMTUgMTAwNjQ0DQo+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3RpbnkvS2Nv
-bmZpZw0KPj4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS90aW55L0tjb25maWcNCj4+PiBAQCAt
-NTQsNiArNTQsNyBAQCBjb25maWcgRFJNX0dNMTJVMzIwDQo+Pj4gICAgY29uZmlnIERSTV9T
-SU1QTEVEUk0NCj4+PiAgICAJdHJpc3RhdGUgIlNpbXBsZSBmcmFtZWJ1ZmZlciBkcml2ZXIi
-DQo+Pj4gICAgCWRlcGVuZHMgb24gRFJNICYmIE1NVQ0KPj4+ICsJc2VsZWN0IEJPT1RfVkVT
-QV9TVVBQT1JUIGlmIFg4NiAmJiBEUk1fU0lNUExFRFJNID0geQ0KPj4NCj4+IFdlIHNob3Vs
-ZG4ndCBzZWxlY3QgdGhpcyBvcHRpb24gaW4gZHJpdmVycyBJTUhPLiBTaW1wbGUtZnJhbWVi
-dWZmZXIgZGV2aWNlcw0KPj4gd2l0aCBWRVNBIGFyZSBlbmFibGVkIHdpdGggWzFdIGFuZCB0
-aGF0IHNob3VsZCBhbHNvIHNlbGVjdCB0aGUNCj4+IEJPT1RfVkVTQV9TVVBQT1JULg0KPiAN
-Cj4gU291bmRzIG9rIHRvIHNlbGVjdCBmcm9tIHRoZXJlLCBpdCBzaG91bGQgYWxzbyBjb3Zl
-ciBzaW1wbGVmYiB0aGVuLg0KPiANCj4gVGhhbmtzDQo+IA0KPiBNaWNoYWwNCg0KLS0gDQpU
-aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
-d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xy
-bmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNm
-w7xocmVyOiBJdm8gVG90ZXYNCg==
+These patches clarify watermarks of DAMOS and enable monitoring per NUMA node
+proactive reclamation on DAMON_RECLAIM.
 
---------------TPm4NPg2Cxx7x1oIMonTxg69--
+Jonghyeon Kim (3):
+  mm/damon: Rebase damos watermarks for NUMA systems
+  mm/damon/core: Add damon_start_one()
+  mm/damon/reclaim: Add per NUMA node proactive reclamation by
+    DAMON_RECLAIM.
 
---------------LTgM6u0q34vOjsOnn7OEejJ0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+ include/linux/damon.h |   3 +
+ mm/damon/core.c       |  39 +++++++++--
+ mm/damon/reclaim.c    | 147 ++++++++++++++++++++++++++++++------------
+ 3 files changed, 140 insertions(+), 49 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.17.1
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIPc+cFAwAAAAAACgkQlh/E3EQov+BH
-gQ//RgDCqtQlenbOA0fCUdGHC+oXuhOec33RIYsU23am8QOxThWrmV4RIP12S+6kpvH9+c32lG/c
-HTIyxmE3T3igD5asQ29orKnxz2uOIuvC3lBW85zmantd4CZAFfMiFOZc/ZfZnFv+uWSlI8wcdxAQ
-kROUTY5N3brxOuidBSgTHwQtUW6SNP2ycxaD6aq8bKofX0dq1y28zkLby7UO1BUp+FnlIKFYYATv
-nkhxAiqfxBhbzjJQD90MsTqa3OJIXAyTO9CW0oHHHf0m42k+2bW9gLPwo3syv9VuRyCz4uDKmevO
-kjR208vGQyYBoYoarkbLLqyhcI1Kbgeky7s855+tiF9cpRZ1Up6+fKmOhHtd0gyJoy2Nnj0J3lf3
-amBhaTDVYqZl0p/WSRXz2bsCInRAz7Dl9w20SuiZDAXhVf7D4q6QmDKHL49eEwCFqgr+sXJnzbYz
-GJUh6YrKjsOps6+boxGHf5rMzvCL5iLiFaQ/91N98vBu+/p3UnUcUlBcWzdO3tA4rjY1bfkAkOcJ
-qNtGPQmczDWCtmRGJo2Fbl+ID9ILNMLdE0t9Oh/FSVpvwIdmTjs2/rFav9zkDVDkeKqzeBn6y1Iv
-QhLCt/52wf1XunOOqN6ljgppebY2PXgfLvt8hCgq4VfPPc3dJ40KuXP2xMYX98K7DbFrvMdASFfL
-v9w=
-=U2ec
------END PGP SIGNATURE-----
-
---------------LTgM6u0q34vOjsOnn7OEejJ0--

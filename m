@@ -2,150 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FA54BBDE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830894BBDE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238106AbiBRQ4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:56:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60032 "EHLO
+        id S238122AbiBRQ6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:58:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbiBRQ4O (ORCPT
+        with ESMTP id S234828AbiBRQ6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:56:14 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03BB25AE6E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:55:57 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso4181268oon.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:55:57 -0800 (PST)
+        Fri, 18 Feb 2022 11:58:39 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1319726B7A6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:58:23 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id y9so9119327pjf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:58:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=pInuhqCUKlyUoEXuWgKg1Wujz7TDTU39Sy2l1F/hTtA=;
-        b=tGMO/mIvCDGbcTb9cGMz11xTh7itxXS7A61+zRdHHfGkwSvgMKZFG21gFAWetvbnZ1
-         H4bw6eg7/5ZzhaBpDRHoc3nlq1CRQJKgagvK74uAoeHWDDB4PzmwUAfXXEYfMp3lCZdr
-         wbqQtOUtgx3GFlT10yrWbUD3w+oVZWsmqMNZvmJPevYtneBMhxNEFdtDyCDD5L4k6Qrd
-         1oR6nCDA/xl+K/3EhSi3fDIkSABdaGL9AHY8uJJVRDVE2X1TMyDXNguJ7VmEUWzyReZw
-         pbIl/RGCSJupHY11jktZoCTTDx1y2zABB+9f3bMGIAPErILsRUiqgvXFSZ4otQ+Weboh
-         iGNw==
+        bh=IktHu5iN5JmjOfLB1UGUCckxpS+Vy4U9FOJp53Urqvs=;
+        b=dlF+yoegUj4oGGAbg6LQmwO98lpn3qy11LCBk+zYzd4+rgiFn3VQxq0u5ajuy/Zbiq
+         GS8kHYvtOIjvdIdey3Qvt4VIeVAJay4pikewHsbB8VEU9jejEn5LtoHfFVwdHgXheo3F
+         xXWySYGd4skxwWGA96mb6JCXDOQdI7x/yynyCOg5d/F45lOL8/f2mS21oa29d2YGm6Nk
+         Dx9MeNtVbdNONahK5G/iguk6OzlATrl8wREhSqILunGDuNPtsu1BFK7ZM76WL6XhmDPm
+         4+jE2OoyAg478ERp70Kazu1tX7jGcnQtiLvB2wQGEXiBqN9ZQmuR/nm/H+PQDHKZaN12
+         MalA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=pInuhqCUKlyUoEXuWgKg1Wujz7TDTU39Sy2l1F/hTtA=;
-        b=PYy1zBRspEJrWbxhljZ/8jcRAvJj9PhOzNM0sB6ZSYW1DMvXSr+mUE6MFysRMcJVaK
-         dnyfCT9JxPHG+C+EBr0C9MgEGBVPzVzM6I2kcMDceUvIaoaJSSkJoqzupIkkyoBCpySl
-         Zq/gtD7NEwRTYfze7E0yuqWfZ6M7hvLLCwP9nYCtw18D6COBschd6Z5fS9Gegfrpu1z4
-         wpSaAATTzdtj500qN9DM7bc+kUbbjqRUKKQutDn0TFJ5TixqZiFCMZGj+IY+yt1lNnHl
-         n4STr4S6vLdBljcblOT3vzAOvEMnYAebTWSJ6PHCdqT0NwVHmwOkR+RyDyvCdiXKcEdX
-         PbWw==
-X-Gm-Message-State: AOAM533KUnW82d6HjHpMCPCjgf8pMdEdqeA/L9NHxxyOiPh+MjUjtDhH
-        XwTkEol85TUQExDh+PPn0bFRFg==
-X-Google-Smtp-Source: ABdhPJwMdNlDq+QHL5mKNt87mqwiHbkMztRqQza/VJNIKkYfdAwMNP8R1T6Q3XW6mpT4o1PdTGlfdg==
-X-Received: by 2002:a05:6870:b003:b0:d1:3804:aee2 with SMTP id y3-20020a056870b00300b000d13804aee2mr2889956oae.155.1645203357235;
-        Fri, 18 Feb 2022 08:55:57 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id el40sm22088082oab.22.2022.02.18.08.55.56
+        bh=IktHu5iN5JmjOfLB1UGUCckxpS+Vy4U9FOJp53Urqvs=;
+        b=qp7D1DuH2CDTjMv/tNLyMiOVHexzhDvTEqG+aH9HEGi+p17Y5/OvEKEm+BdOVC6ge2
+         W55LAjKgOJCwt+XEgZ/E+9xGkBHeicx6QwEpAQswOdUC91wcKHz7bbqNPE1HlaZ9t5o+
+         85c8rQIzFu8jhTTjA7Eu5knD7X8jmXvXDBOQzWFwLU/4s/4ooFBxk28Ga8YiEUEiifWE
+         i984n73T4nE1cJzwzk9Gt7pYzx6JbwCPEyS8Sl0jeWeTDj5qsQGGHjrWDz+a/7q3QaK5
+         9T7otj36pB22mUM/XIDzZX0Zv/woBpCsHHsE9USR7Fn6vUwNWpqrlOBGcaeLKqUXKK4b
+         YTuw==
+X-Gm-Message-State: AOAM531m0NFsiTyR/RaAtUEdOlN6JKY+7N6x00udfLrt18sKk+XcepNk
+        5xCv6kozmnbZV6RWv+iZaBPerA==
+X-Google-Smtp-Source: ABdhPJyKnWMWiokAkNm0fSnEfEJFQzKdKWZPkfvuEnkfpb3TbxH33lbgGyccpfVAvuBm/H6etwyWqw==
+X-Received: by 2002:a17:90a:fd10:b0:1bb:8ad7:b351 with SMTP id cv16-20020a17090afd1000b001bb8ad7b351mr13577169pjb.208.1645203502332;
+        Fri, 18 Feb 2022 08:58:22 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id d8sm3883727pfv.84.2022.02.18.08.58.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 08:55:56 -0800 (PST)
-Date:   Fri, 18 Feb 2022 08:58:02 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Satya Priya Kakitapalli <c_skakit@qti.qualcomm.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
-        linux-leds@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-pwm <linux-pwm@vger.kernel.org>
-Subject: Re: [PATCH v12 2/2] leds: Add driver for Qualcomm LPG
-Message-ID: <Yg/QGqQhYZY6KaqJ@ripper>
-References: <20220216045620.1716537-1-bjorn.andersson@linaro.org>
- <20220216045620.1716537-2-bjorn.andersson@linaro.org>
- <CAD=FV=Xj5k7JROP1PFY9tmXxLY7FRJNdr-+UmkCW_YGqpDkFew@mail.gmail.com>
+        Fri, 18 Feb 2022 08:58:21 -0800 (PST)
+Date:   Fri, 18 Feb 2022 16:58:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+8112db3ab20e70d50c31@syzkaller.appspotmail.com
+Subject: Re: [PATCH] KVM: x86: Forcibly leave nested virt when SMM state is
+ toggled
+Message-ID: <Yg/QKgxotNyZbYAI@google.com>
+References: <20220125220358.2091737-1-seanjc@google.com>
+ <db8a9edd-533e-3502-aed1-e084d6b55e48@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=Xj5k7JROP1PFY9tmXxLY7FRJNdr-+UmkCW_YGqpDkFew@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <db8a9edd-533e-3502-aed1-e084d6b55e48@linaro.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 18 Feb 08:10 PST 2022, Doug Anderson wrote:
-
-> Hi,
+On Thu, Feb 17, 2022, Tadeusz Struk wrote:
+> On 1/25/22 14:03, Sean Christopherson wrote:
+> > Forcibly leave nested virtualization operation if userspace toggles SMM
+> > state via KVM_SET_VCPU_EVENTS or KVM_SYNC_X86_EVENTS.  If userspace
+> > forces the vCPU out of SMM while it's post-VMXON and then injects an SMI,
+> > vmx_enter_smm() will overwrite vmx->nested.smm.vmxon and end up with both
+> > vmxon=false and smm.vmxon=false, but all other nVMX state allocated.
+> > 
+> > Don't attempt to gracefully handle the transition as (a) most transitions
+> > are nonsencial, e.g. forcing SMM while L2 is running, (b) there isn't
+> > sufficient information to handle all transitions, e.g. SVM wants access
+> > to the SMRAM save state, and (c) KVM_SET_VCPU_EVENTS must precede
+> > KVM_SET_NESTED_STATE during state restore as the latter disallows putting
+> > the vCPU into L2 if SMM is active, and disallows tagging the vCPU as
+> > being post-VMXON in SMM if SMM is not active.
+> > 
+> > Abuse of KVM_SET_VCPU_EVENTS manifests as a WARN and memory leak in nVMX
+> > due to failure to free vmcs01's shadow VMCS, but the bug goes far beyond
+> > just a memory leak, e.g. toggling SMM on while L2 is active puts the vCPU
+> > in an architecturally impossible state.
+> > 
+> >    WARNING: CPU: 0 PID: 3606 at free_loaded_vmcs arch/x86/kvm/vmx/vmx.c:2665 [inline]
+> >    WARNING: CPU: 0 PID: 3606 at free_loaded_vmcs+0x158/0x1a0 arch/x86/kvm/vmx/vmx.c:2656
+> >    Modules linked in:
+> >    CPU: 1 PID: 3606 Comm: syz-executor725 Not tainted 5.17.0-rc1-syzkaller #0
+> >    Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> >    RIP: 0010:free_loaded_vmcs arch/x86/kvm/vmx/vmx.c:2665 [inline]
+> >    RIP: 0010:free_loaded_vmcs+0x158/0x1a0 arch/x86/kvm/vmx/vmx.c:2656
+> >    Code: <0f> 0b eb b3 e8 8f 4d 9f 00 e9 f7 fe ff ff 48 89 df e8 92 4d 9f 00
+> >    Call Trace:
+> >     <TASK>
+> >     kvm_arch_vcpu_destroy+0x72/0x2f0 arch/x86/kvm/x86.c:11123
+> >     kvm_vcpu_destroy arch/x86/kvm/../../../virt/kvm/kvm_main.c:441 [inline]
+> >     kvm_destroy_vcpus+0x11f/0x290 arch/x86/kvm/../../../virt/kvm/kvm_main.c:460
+> >     kvm_free_vcpus arch/x86/kvm/x86.c:11564 [inline]
+> >     kvm_arch_destroy_vm+0x2e8/0x470 arch/x86/kvm/x86.c:11676
+> >     kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1217 [inline]
+> >     kvm_put_kvm+0x4fa/0xb00 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1250
+> >     kvm_vm_release+0x3f/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1273
+> >     __fput+0x286/0x9f0 fs/file_table.c:311
+> >     task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+> >     exit_task_work include/linux/task_work.h:32 [inline]
+> >     do_exit+0xb29/0x2a30 kernel/exit.c:806
+> >     do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+> >     get_signal+0x4b0/0x28c0 kernel/signal.c:2862
+> >     arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+> >     handle_signal_work kernel/entry/common.c:148 [inline]
+> >     exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+> >     exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+> >     __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+> >     syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+> >     do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+> >     entry_SYSCALL_64_after_hwframe+0x44/0xae
+> >     </TASK>
+> > 
+> > Cc: stable@vger.kernel.org
+> > Reported-by: syzbot+8112db3ab20e70d50c31@syzkaller.appspotmail.com
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > 
-> On Tue, Feb 15, 2022 at 8:54 PM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > +static int lpg_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-> > +                        const struct pwm_state *state)
-> > +{
-> > +       struct lpg *lpg = container_of(chip, struct lpg, pwm);
-> > +       struct lpg_channel *chan = &lpg->channels[pwm->hwpwm];
-> > +       int ret;
-> > +
-> > +       if (state->polarity != PWM_POLARITY_NORMAL)
-> > +               return -EINVAL;
-> > +
-> > +       mutex_lock(&lpg->lock);
-> > +
-> > +       if (state->enabled) {
-> > +               ret = lpg_calc_freq(chan, state->period);
-> > +               if (ret < 0)
-> > +                       goto out_unlock;
-> > +
-> > +               lpg_calc_duty(chan, state->duty_cycle);
-> > +       }
-> > +       chan->enabled = state->enabled;
-> > +
-> > +       lpg_apply(chan);
-> > +
-> > +       triled_set(lpg, chan->triled_mask, chan->enabled ? chan->triled_mask : 0);
-> > +
-> > +out_unlock:
-> > +       mutex_unlock(&lpg->lock);
-> > +
-> > +       return ret;
-> > +}
+> Sean,
+> I can reliably reproduce my original issue [1] that this supposed to fix
+> on 5.17-rc4, with the same reproducer [2]. Here is a screen dump [3].
+> Maybe we do still need my patch. It fixed the issue.
+
+This SMM-specific patch fixes something different, the bug that you are still
+hitting is the FNAME(cmpxchg_gpte) mess.  The uaccess CMPXCHG series[*] that
+properly fixes that issue hasn't been merged yet.
+
+  ==================================================================
+  BUG: KASAN: use-after-free in ept_cmpxchg_gpte.constprop.0+0x3c3/0x590
+  Write of size 8 at addr ffff888010000000 by task repro/5633
+
+[*] https://lore.kernel.org/all/20220202004945.2540433-1-seanjc@google.com
+
 > 
-> My compiler (correctly) yelled that `ret` is returned uninitialized if
-> `state->enabled` is false.
-
-You're absolutely correct. I am however not able to figure out how to
-get my compiler (aarc64 gcc 11.2.0) to give me a warning about this.
-
-If anyone have any suggestions I'd be very happy.
-
-> I initialized `ret` to 0 and the problem
-> went away. I assume that the patch will need to spin to fix that
-> unless everything else looks great and a maintainer wants to fix that
-> when applying.
+> [1] https://lore.kernel.org/all/3789ab35-6ede-34e8-b2d0-f50f4e0f1f15@linaro.org/
+> [2] https://syzkaller.appspot.com/text?tag=ReproC&x=173085bdb00000
+> [3] https://termbin.com/fkm8f
 > 
-> With that fix, I was able to use Bjorn's patch along with Satya's
-> patches adding pm8350c support (removing the now defunct
-> "pwm_9bit_mask" property) to make the PWM on my board work. Thus, once
-> the error my compiler complained about is fixed I'm happy with my
-> `Tested-by` being added.
-> 
-
-Thanks! I will initialize ret and send out v13 including your T-b.
-
-Regards,
-Bjorn
-
-> For now I haven't actually reviewed the code here, but if folks feel
-> like it needs an extra pair of eyes then please yell and I'll find
-> some time to do it.
-> 
-> -Doug
+> -- 
+> Thanks,
+> Tadeusz

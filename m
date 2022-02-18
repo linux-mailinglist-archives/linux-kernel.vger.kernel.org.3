@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C89B4BB922
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40004BB926
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235189AbiBRM2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:28:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41720 "EHLO
+        id S235213AbiBRM2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:28:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235169AbiBRM2M (ORCPT
+        with ESMTP id S235194AbiBRM2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:28:12 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58F32B267;
-        Fri, 18 Feb 2022 04:27:54 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id a8so14659893ejc.8;
-        Fri, 18 Feb 2022 04:27:54 -0800 (PST)
+        Fri, 18 Feb 2022 07:28:30 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609953192F;
+        Fri, 18 Feb 2022 04:28:13 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id vz16so14801673ejb.0;
+        Fri, 18 Feb 2022 04:28:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=iPb78P3cqG/5JcH44Mpn0ycJuuynvsj5Ss8VpDQPK9I=;
-        b=TwDVTkAZ8SfYmVdyLtAvlFgsUHoUXW/BG9tzx+JaeB7RnLE81imVoYVMV3RO6SNNC8
-         nRPE8WorJTMsjvbiHTs/m0EfZIQEfZhGN+R3fji9bKz2FHTSqF+d0nKqrobgtSuP4d5n
-         IBbWoJ+jr1kCzNaxOb/8Wl61oQuEl8Nd1DjqpWW6PiL/8yMaljrQgsIDbKQJOXkRtBA9
-         R33fyTw28URzSd6QuZfbeHJGC0ojZHZsZ3T7oQfxYd7cw57FY8VlvI8Uvfg9oHg36Blz
-         n80I4Vix49I69DUuPO0w2bKO8Z4jUmfQFryQ7ALiWs1KHWFWIwTMLbwP5TqVu2/HHeRk
-         GkiA==
+        bh=C1lw7uNZm/xyouZ1Wh64rNvsOy0Q10dXbE6lSVaApf8=;
+        b=WLdDx9a9lWqvO19IakmF3Nw0GE1EoDLf1CJkpsB9DRxNNf0td+f3pOypJyNtH+2nsy
+         zeY6y9rCqD+b0DV9h6O/hNJrC3ZsydnbYHoHZ9rI5fbliaNDXPWKwHCDPtO1cxT3eYhF
+         lVzHtqmPVBSQ2rCamvC83WvfuX+4yhqUzV1Ga1Rq5ppyTvmTAVwYq2LkA9H0RVqf+cg5
+         qeS2Em7ftH6RGkJEnHrMUR24t2lSH+vhLq1kAyZIqehHNkovM1oIBds8yk+7WRguw7QC
+         hnLecIoTOyI6YeKXlq7fP0G2PpVQKGBeLQFMPaFeeaozVE4MJ2U79hCOKIPkXz7EeI88
+         clVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iPb78P3cqG/5JcH44Mpn0ycJuuynvsj5Ss8VpDQPK9I=;
-        b=GGG8ODCbDPMmpa00HCH3DbHwuXi4mvKcD/ACZDH+IjJgH7JKRbPAKplnM6sfWcTvky
-         ikZoz5qXpxq30bwWudTy3VlMphnTJuW1hDpn/hYZZqsHIw4jeGHkul6JyLT4RsJGYX62
-         oTi4/+URnjKburUE/NZMZc6pCtHjRLGOwz7xNfnLQVKnowQXS8GXJQ3ClqWC4FkLR9Fm
-         jmBRTUWAtFbHz0W/0sU2AKZ47aqrYJsGAQAnDBV8U59e9mL0GBP1c3d2oFTcZH5pqvc9
-         egp6yxe/pzuMNHUYe69akxj6WpuTVZ6yC18q4i/rUGl2HmUxw1xNKoIs7I3ki2cu5Xsl
-         pRsA==
-X-Gm-Message-State: AOAM533BtP9zwPLTHEWRTj7dAXV/DBcSfcLwiFuitJcWh5YJW676fPt6
-        NyE12F8GS+N0LBh1UERaENsD843Ii7h1sVN6U0Q=
-X-Google-Smtp-Source: ABdhPJy4l1IftTvBpL9CZodl5fjFko/+IPYWSFBdkXUBM/kDIpGma2HukCJfivOUSCpBdA+i1ExzYBPtfYqvF79ufpY=
-X-Received: by 2002:a17:907:6e01:b0:6d0:562c:e389 with SMTP id
- sd1-20020a1709076e0100b006d0562ce389mr6288828ejc.497.1645187273159; Fri, 18
- Feb 2022 04:27:53 -0800 (PST)
+        bh=C1lw7uNZm/xyouZ1Wh64rNvsOy0Q10dXbE6lSVaApf8=;
+        b=JfuGellLvYE8RtYKE42P19TDhQXB1kU3fDGF4jNbZfpjY4CS4trGuR0wAYFoA8aNN/
+         Mur1cOtr2AN0/wXxM9QHAJlPculdhslKQCiOvMh5MS2jITewpw5Ov2ICOuailcVe8k7y
+         G7fflcBDXI9nmeUuseCuHF6zFuaIcvN5O06JT8dj9fBnCWPY83ri6xBr8JuFj5rfBrxK
+         nmLzdkNXlswCV7H/b7TO4b1AUtazeyBP4BgFmTarDVnqmOl7S/cj7cPgn9bkNQ0sk3N1
+         GRV5sRCqVUYTVVg86apxRJ8hLV7HIgFQOi0EOpq2euijitnz58RlySVHAShe5fVQwMVL
+         38qA==
+X-Gm-Message-State: AOAM530jdFMA4Ul7MG93veERt67MMKYftJUFt2zz4Li0vYPGl9AIPEQD
+        9bfWYAsfPZgeNTCD8/DmfrXyW+Bb9acQyH7Ay7s=
+X-Google-Smtp-Source: ABdhPJzmufdHi2qeP40w0kPofkBS5uKHhZyG2fz1SdKqwSpc/U18+vtL7ELPl2edHgikgfAPloTLE3V7DNZe+3Q2RBU=
+X-Received: by 2002:a17:907:9956:b0:6cf:cd25:c5a7 with SMTP id
+ kl22-20020a170907995600b006cfcd25c5a7mr6007905ejc.635.1645187291927; Fri, 18
+ Feb 2022 04:28:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20220217055208.2388929-1-kai.heng.feng@canonical.com>
- <CAHp75VfFGw3b_ZtQir0AfTfXfQ7fi_LKLsY-7ww=4+MMBR8BAQ@mail.gmail.com>
- <CAAd53p7O7joFa7MH0s+rw-59WQkigvjKBf1bpO9e2gX9ddjF-A@mail.gmail.com>
- <CAHp75Vf4pjyJJDLKWTjq2ny1xkF9fSCSPb_8q5yk69DjV9EUAg@mail.gmail.com> <20220218121017.32bbdef9@jic23-huawei>
-In-Reply-To: <20220218121017.32bbdef9@jic23-huawei>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 18 Feb 2022 13:27:17 +0100
-Message-ID: <CAHp75Vdja-9tjXDiR_aMFP3twNuTXtC3w1mkPo81pdM6dRya6Q@mail.gmail.com>
-Subject: Re: [PATCH v4] iio: accel: adxl345: Add ACPI HID table
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+References: <20220217160528.2662513-1-hardware.evs@gmail.com>
+ <AM6PR04MB39761CAFB51985AFC203C535EC379@AM6PR04MB3976.eurprd04.prod.outlook.com>
+ <CAEDiaShTrWgA75e8x2deHMHF-53LFiusrVHTxP_Jy4gvaLg_9A@mail.gmail.com> <AM6PR04MB397692A930803C5CB6B1D568EC379@AM6PR04MB3976.eurprd04.prod.outlook.com>
+In-Reply-To: <AM6PR04MB397692A930803C5CB6B1D568EC379@AM6PR04MB3976.eurprd04.prod.outlook.com>
+From:   EVS Hardware Dpt <hardware.evs@gmail.com>
+Date:   Fri, 18 Feb 2022 13:28:00 +0100
+Message-ID: <CAEDiaSg8SZWyoiX6jJYCX4HncZks5O8dyyVLOchYD4idGf4rCg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] net/fsl: fman: Allow fm_max_frame_sz &
+ rx_extra_headroom config from devicetree.
+To:     Madalin Bucur <madalin.bucur@nxp.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -73,79 +74,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 1:03 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> On Fri, 18 Feb 2022 09:39:14 +0100
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Fri, Feb 18, 2022 at 4:46 AM Kai-Heng Feng
-> > <kai.heng.feng@canonical.com> wrote:
-> > > On Thu, Feb 17, 2022 at 6:57 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Thursday, February 17, 2022, Kai-Heng Feng <kai.heng.feng@canoni=
-cal.com> wrote:
-> >
-> > ...
-> >
-> > > >> +               acpi_id =3D acpi_match_device(dev->driver->acpi_ma=
-tch_table, dev);
-> > > >> +               if (acpi_id) {
-> > > >> +                       type =3D acpi_id->driver_data;
-> > > >> +                       name =3D acpi_id->id;
-> > > >> +               } else
-> > > >> +                       return -ENODEV;
-> > > >
-> > > > Thanks, but can we do this in ACPI agnostic way?
-> > > >
-> > > > Can be as simple as
-> > > >
-> > > > if (id)
-> > > >   ...
-> > > > else {
-> > > >   match =3D device_get_match_data(dev);
-> > > >   if (!match)
-> > > >     return -ENODEV;
-> > > > }
-> > > >
-> > > > Note, it might require to reconsider what is put in the driver data=
- (either convert to pointers, or be sure that valid type is never a 0/NULL)=
-.
-> > >
-> > > Unlike acpi_match_device(), device_get_match_data() only get
-> > > driver_data, so we need a new struct to provide both name and type.
-> >
-> > It's unfortunate. Let me think about it a bit more.
-> Usual solution is just to add that name to a per device type structure.
-> In this particular case there isn't one so far though and an enum is used
-> in the one place we might otherwise have used a part number specific stru=
-cture.
->
-> Probably the easiest thing to do is use the enum to do a lookup in an arr=
-ay
-> of structures and have the string there.
->
-> >
-> > > > Also note, in both cases using ID name for name us fragile. Probabl=
-y we have to fix that first. Let me check today=E2=80=99s evening.
-> > >
-> > > Can you please explain more on this? How does ID name make it fragile=
-?
-> >
-> > I thought this one is used somehow by userspace to distinguish the
-> > instance of the device, but looking into the rest of the IIO drivers
-> > it seems more or less  a field for part number. That said, the ID is
-> > okay to use. I hope Jonathan may correct me.
-> >
-> Should be part number.  Instances are distinguished via label rather than
-> name (or via the device parent on older kernels where we didn't have
-> label).
->
-> There are a few places where we accidentally let though IDs that aren't
-> always simply the part number and they became part of the ABI so we
-> couldn't really fix them after the event.
+Hi Madalin, Guys,
 
-Thanks for chiming in.
-So, can we simply use dev_name() then? Or would it be too bad to have
-the device instance name there?
+I didn't have that historical part in mind. So, even if I still think there
+are a lot of examples super close to what I'm proposing everywhere in
+dts files, devicetree is out of equation.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Could I change the patchset to allow configuration of those two parameters
+from config ? I won't remove configuration using module parameters,
+just adding (what I think to be) an easier way of configuration.
+
+What do you think?
+
+Regards,
+Fred.
+
+Le ven. 18 f=C3=A9vr. 2022 =C3=A0 12:33, Madalin Bucur <madalin.bucur@nxp.c=
+om> a =C3=A9crit :
+>
+> > -----Original Message-----
+> > From: EVS Hardware Dpt <hardware.evs@gmail.com>
+> > Subject: Re: [PATCH 1/2] net/fsl: fman: Allow fm_max_frame_sz &
+> > rx_extra_headroom config from devicetree.
+> >
+> > Hi Madalin, Guys
+> >
+> > I know, but it's somewhat difficult to use those parameters on kernel's
+> > command line.
+> > I don't think it's wrong to also add that in devicetree.
+> > No removal, just an added feature.
+> >
+> > For ethernet node in devicetree, there are a lot of configuration stuff
+> > like
+> > max-frame-size to allow configuration of MTU
+> > (and so potentially enable jumbo) and it's regarded as fine.
+> >
+> > It's also the goal of this patch. Allow an easy configuration of
+> > fsl_fm_max_frm from a dts. I added rx_extra_headroom for the sake of
+> > completeness.
+> >
+> > So I plead for this addition because I don't think it's wrong to do tha=
+t
+> > and
+> > I consider it's nicer to add an optional devicetree property rather tha=
+n
+> > adding a lot of obscure stuff on kernel's command line.
+> >
+> > Hope you'll share my point of view.
+> >
+> > Have a nice weekend Madalin, Guys,
+> > Fred.
+>
+> Hi, Fred,
+>
+> I understand your concerns in regards to usability but the device trees, =
+as
+> explained earlier by Jakub, have a different role - they describe the HW,
+> rather than configure the SW on it. Removal of such config entries from t=
+he
+> device tree was one item on a long list to get the DPAA drivers upstreame=
+d.
+>
+> > Le ven. 18 f=C3=A9vr. 2022 =C3=A0 08:23, Madalin Bucur <madalin.bucur@n=
+xp.com> a
+> > =C3=A9crit :
+> > >
+> > > > -----Original Message-----
+> > > > From: Fred Lefranc <hardware.evs@gmail.com>
+> > > > Subject: [PATCH 1/2] net/fsl: fman: Allow fm_max_frame_sz &
+> > > > rx_extra_headroom config from devicetree.
+> > > >
+> > > > Allow modification of two additional Frame Manager parameters :
+> > > > - FM Max Frame Size : Can be changed to a value other than 1522
+> > > >   (ie support Jumbo Frames)
+> > > > - RX Extra Headroom
+> > > >
+> > > > Signed-off-by: Fred Lefranc <hardware.evs@gmail.com>
+> > >
+> > > Hi, Fred,
+> > >
+> > > there are module params already for both, look into
+> > >
+> > > drivers/net/ethernet/freescale/fman/fman.c
+> > >
+> > > for fsl_fm_rx_extra_headroom and fsl_fm_max_frm.
+> > >
+> > > Regards,
+> > > Madalin

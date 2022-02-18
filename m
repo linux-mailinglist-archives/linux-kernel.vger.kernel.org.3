@@ -2,72 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DEF4BB2E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9BF4BB2F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbiBRHIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:08:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46476 "EHLO
+        id S231831AbiBRHLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:11:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiBRHIo (ORCPT
+        with ESMTP id S230074AbiBRHLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:08:44 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2757620A898
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:08:29 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id j7so3635139lfu.6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 23:08:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=SZlflNwJM/FoSzNidwvG3Q12/AiRGSJaNEWCCSkms7g=;
-        b=P8QEK8+l18+BEoaHEGc2oCwf5chp899Xbc3YFeSdvO3f3+RE/js6hF3q5GAMOYxTxU
-         79puw5Kn9FaToKJNsJtVHMhBZWDvlIgRY985TIi5Gk+O0s4eKGfqxknTWWv5jcKlUoxG
-         MXw8EUDnTU2FsTjbaM8FDk5a73SLY/1fCrcMYNib5QzOHAGJzXP0uThaPWTxY55vS7WG
-         wuUqIt3H45otIz6fFXLTkoRyZ+zlBZj40o/aEuZ8lOCD8GKT3ngpLYoqAnt31TuNtFXr
-         CnjUEcnlZhALUs2ByOHhuNuYmvl8AkM7TctDSmddm+WDV7JTsPJW2iu7bE/3CAqTWSGG
-         V5SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=SZlflNwJM/FoSzNidwvG3Q12/AiRGSJaNEWCCSkms7g=;
-        b=jwwDeTe0pMoHDq/V/bv8Rl6q6/rgS7P2DDosyrATzmhx34CTnuBBCNM9cIv3jxzu6s
-         +R21gRRIxgz4DMjScdOguaqIauM5eziS8aWeq2um881aO5DrExjus/YKPzDRMkkCGA33
-         EcnmeaQVGptpWzPNiiqygySlgMggd5mJbA+8rLEH6L66MMuoFqKAL6yhVrruSwK/ZJt0
-         nnRfBCrggxt7aC5hQ2OgKwTNsTkqFa16rBbEJz1fRCiXUVmVyej6eoppElsbz2EmpBIS
-         fN0hNlDBOMISB61sQRrEQ267dMxMngkkxA96b62Fm6w6gzKY1PynHo0TGkLsF9D2pZiV
-         5hrA==
-X-Gm-Message-State: AOAM530GZQSjfy1t04MetoQPXCljaleXgLOIU3VkGlCoGDno/A/9a0qx
-        mKghgYtdV5WJ6tU2+ndP1ogGkxrxt7RsLWFKaKk=
-X-Google-Smtp-Source: ABdhPJwKWpc/ZbtLmPh6+KL4L4Qqn93wkI8KzbyMh9KwMjxPbGsCRJ8T/yCrUeO1LoKWtJUy5NhCeBG5nNCg2r5JsSw=
-X-Received: by 2002:ac2:5481:0:b0:43f:cf9e:4383 with SMTP id
- t1-20020ac25481000000b0043fcf9e4383mr4386157lfk.3.1645168107555; Thu, 17 Feb
- 2022 23:08:27 -0800 (PST)
+        Fri, 18 Feb 2022 02:11:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2FB25B2F8;
+        Thu, 17 Feb 2022 23:10:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCB5AB820CC;
+        Fri, 18 Feb 2022 07:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7237BC340E9;
+        Fri, 18 Feb 2022 07:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645168243;
+        bh=U1L1tXaxAPzHw25B4dwwR3MsazfLjv3b5y7cZc7Ajbc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=j/ULvY2AEs1Y/Cc/kxwc99BmTDI+sKjegZezPUNxSiAEgZoi3zk3NcwNR6gaBuKas
+         ddOX6bcsBLpCq/CBjJ7fKtrT9/0HR0zijquw1D+JV3/CePEugqsvEvUkh3c2rryUAn
+         iGdWuSivzeB2X8B9lLMG5e/Ou+Jo88syE3wWjxK1CzqmTDy9Kpz5pQaOvGvZ4Wakvb
+         r2oj8Wg46rfzApWhTiI1Sn7A5OPlL8MF46bCOLGSHQojALsR9kKZLx5uSZ2etiSHig
+         HpB0AaGds98PKUvmte4NxXYBZGTza7B9MIYk8zB/lrmjqqbOX6/VfwhTTbMSwZXuXj
+         no9lcx5EiWBUg==
+Received: by mail-wr1-f48.google.com with SMTP id o24so12951351wro.3;
+        Thu, 17 Feb 2022 23:10:43 -0800 (PST)
+X-Gm-Message-State: AOAM531mn9P3QF+lQIfaFKXfcQh6+LrmaCkhG1TkIfS7F9oPg8skN9rf
+        RQLrGwaISSeghjE2ck226TZXH2okWvZj2SHTboI=
+X-Google-Smtp-Source: ABdhPJyoMw4CwWZhykLaKIetnvcgd+UId8rsi1OwYV9K65APKYAe4q4e2o9Z+APv3B5OF6xZqiLLay/ZUVAPiuS2n+0=
+X-Received: by 2002:adf:90c1:0:b0:1e4:ad27:22b9 with SMTP id
+ i59-20020adf90c1000000b001e4ad2722b9mr4956866wri.219.1645168241615; Thu, 17
+ Feb 2022 23:10:41 -0800 (PST)
 MIME-Version: 1.0
-Sender: aagbidji@gmail.com
-Received: by 2002:a05:6512:32b9:0:0:0:0 with HTTP; Thu, 17 Feb 2022 23:08:27
- -0800 (PST)
-From:   Hannah Johnson <hannahjohnson8856@gmail.com>
-Date:   Fri, 18 Feb 2022 07:08:27 +0000
-X-Google-Sender-Auth: uwdIdscBwg7KK_p-2sLmc6nt9To
-Message-ID: <CA+6YaA62WNvvqV9yMmDut4M_cuZ8-nWVTB_YyW-0sqdMyTu6eg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-19-arnd@kernel.org>
+ <20220218063714.GL22576@lst.de>
+In-Reply-To: <20220218063714.GL22576@lst.de>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 18 Feb 2022 08:10:25 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3ac9Wo6fs+Wbdw3-WHfzF9vu_CZs5EUUTX-1iALUr54w@mail.gmail.com>
+Message-ID: <CAK8P3a3ac9Wo6fs+Wbdw3-WHfzF9vu_CZs5EUUTX-1iALUr54w@mail.gmail.com>
+Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello
-Nice to meet you
-my name is Hannah Johnson i will be glad if we get to know each other more
-better and share pictures i am  expecting your reply
-thank you
+On Fri, Feb 18, 2022 at 7:37 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> s/maining/remaining/ ?
+>
+> Or maybe rather:
+>
+> uaccess: remove CONFIG_SET_FS
+>
+> because it is all gone now.
+>
+> > With CONFIG_SET_FS gone, so drop all remaining references to
+> > set_fs()/get_fs(), mm_segment_t and uaccess_kernel().
+>
+> And this sentence does not parse.
+
+Both fixed now, thanks!
+
+       Arnd

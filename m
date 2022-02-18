@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9FC4BB6D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BF24BB6DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbiBRK1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:27:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37674 "EHLO
+        id S233288AbiBRK1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:27:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbiBRK1K (ORCPT
+        with ESMTP id S234050AbiBRK1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:27:10 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB55D64F8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:26:54 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id x4so6817184plb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:26:54 -0800 (PST)
+        Fri, 18 Feb 2022 05:27:19 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBF512770
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:27:01 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id qe15so8159404pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:27:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ajou.ac.kr; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=48kB5lAYgSfFmsICPZUMRy13W44Wv8CdeSdM5zh36Ro=;
-        b=W3astCwwAyNQranzslt+8SIVB9svslnNne9hAGV/MpxQw0cP0JbyeBOEZWHKEgcYDw
-         eOrC4GquiAZGyMgCCpI9y1/lx0HkTTsehtY3KV73v6w/8qmqjQnPvlTQIvSLjiI0eRu/
-         P6UFKhgUola5sBEkHxBF5NPbMKzYmwHN05py0=
+        bh=+T3KpWhNKa0tR65ONmcJl30b/m+LmztZvFh+zw/KtCk=;
+        b=CSBsjQACvcRO/sFAdwgQWs3JH/MmMWvyiVBNhla3nPtD9bgbk93JwZ2ntMsBUKq32T
+         UIB8q3Ud3Aljxzwv3VHVhqrkqAdydQhA7KNG3IKuxZjpV67WfFmat9sN/omK6iuwGB4C
+         IPB1CVoscYCyZtSboNE8VGsLqW3UjP5cZIHcA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=48kB5lAYgSfFmsICPZUMRy13W44Wv8CdeSdM5zh36Ro=;
-        b=YC1eNQ9G0aUIVcjqAqzAUmFveuqs/gkQhfuMJvJlHGZ36dw0iwRxtZsTTPMvv/+Qww
-         zqjnBM69klcgM6Ygem3QCLqa5+j4bwb7VPyaEoJN+s7wUpxJy++u8Udfw5jUhj15DSYb
-         SRQaRy6XfIAAhKa5mj+Q+TqSaWe7XoCQ+AB8xGWV+QoLgCawqWmt26FSeh3gr5eA3WCi
-         IaNX7Bbg+vWFSAaiJHP4Dkt0FTtc8G5yNl8/1gyfnfNd/V0UDQhQ9vnjycCmZMT4GZAQ
-         MaNyeZQfpkgW+WHHaESTCDTrEYbYdRxUx6aokk88vV2vDRxB5YzFH2oKprIXHgVMhqto
-         Fi0g==
-X-Gm-Message-State: AOAM530hZWdwuhaNs1RNB9mtBKr9slV2KOAuGiUmcn5qQTfaGIySKRdw
-        fJkJKb9Vqu0jD2/dC+pI7z6XAg==
-X-Google-Smtp-Source: ABdhPJw7BKEUMMQFo15QZFrb31FFqmsj+eQYpuHpVdwZyvtZncX1W/2Fxnh8PllN3pxemTfjNuGIkQ==
-X-Received: by 2002:a17:902:6902:b0:14d:6aa4:f3f5 with SMTP id j2-20020a170902690200b0014d6aa4f3f5mr6987246plk.20.1645180013550;
-        Fri, 18 Feb 2022 02:26:53 -0800 (PST)
+        bh=+T3KpWhNKa0tR65ONmcJl30b/m+LmztZvFh+zw/KtCk=;
+        b=0mYEE1d/lv7N1YeGSh2XxEFg3u5DVfgl0HUrf9XfFm41ycCVpnKrWJ+BBIdeFEFZ3c
+         727MlMY+/am8GUwyAEqrYvzlzILlrWSCBaDCRgGUOFtpGopcB1FPv1UV6Qaz/KoJpoQp
+         9ni5HMSFBMl57l9cu5WkI8t6rJ7xe6naVo2RLLFZ4vrHpHe0in1NI51OCIKuR+UJ7eoT
+         P7oKFOu7YgC41kUUKbCNyieYTgoRurT/onF09YFFBazGuzcNomy9cl0erCOfsNqSE00h
+         IM4B0PeUgICPRMo/orfSC4XQW9av/akHmKtQ+iAVpW9sOje6mlhEVfoKZ43n4Vkihwch
+         msyw==
+X-Gm-Message-State: AOAM533c8iMcRYQh+7u78rkoictne6eSaPx/QDj7RzfChziMl/xHiwAs
+        /Wl7NIMRwANMlZFrx8gNdZ5NVQ==
+X-Google-Smtp-Source: ABdhPJwmd0fVZO0Edt92aYqkcns0NPA3othJELbRqEVsjcuckc3gLs6OopDmtExBFLlQwLVPribCdw==
+X-Received: by 2002:a17:90b:38ce:b0:1b9:e0dd:50ec with SMTP id nn14-20020a17090b38ce00b001b9e0dd50ecmr11885292pjb.163.1645180021147;
+        Fri, 18 Feb 2022 02:27:01 -0800 (PST)
 Received: from localhost.localdomain ([210.107.197.32])
-        by smtp.googlemail.com with ESMTPSA id k13sm2767696pfc.176.2022.02.18.02.26.49
+        by smtp.googlemail.com with ESMTPSA id k13sm2767696pfc.176.2022.02.18.02.26.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 02:26:53 -0800 (PST)
+        Fri, 18 Feb 2022 02:27:00 -0800 (PST)
 From:   Jonghyeon Kim <tome01@ajou.ac.kr>
 To:     akpm@linux-foundation.org
 Cc:     Jonghyeon Kim <tome01@ajou.ac.kr>, Jonathan.Cameron@Huawei.com,
@@ -53,15 +53,15 @@ Cc:     Jonghyeon Kim <tome01@ajou.ac.kr>, Jonathan.Cameron@Huawei.com,
         rientjes@google.com, shakeelb@google.com, shuah@kernel.org,
         linux-damon@amazon.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 1/3] mm/damon: Rebase damos watermarks for NUMA systems
-Date:   Fri, 18 Feb 2022 19:26:09 +0900
-Message-Id: <20220218102611.31895-2-tome01@ajou.ac.kr>
+Subject: [RFC PATCH v1 2/3] mm/damon/core: Add damon_start_one()
+Date:   Fri, 18 Feb 2022 19:26:10 +0900
+Message-Id: <20220218102611.31895-3-tome01@ajou.ac.kr>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220218102611.31895-1-tome01@ajou.ac.kr>
 References: <20220218102611.31895-1-tome01@ajou.ac.kr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,79 +69,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For NUMA systems, there is a need to allow damos to select watermark
-options for monitoring each NUMA node or whole system free memory. Even
-if we do not use NUMA, since the default NUMA node number is 0, we can
-monitor the whole system memory without any configuration.
+damon_start() function is designed to start multiple damon monitoring
+contexts. But, sometimes we need to start monitoring one context.
+Although __damon_start() could be considered to start for one monitoring
+context, it seems reasonable to adopt a new function that does not need
+to handle 'damon_lock' from the caller.
 
 Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
 ---
- include/linux/damon.h |  2 ++
- mm/damon/core.c       | 14 ++++++++------
- 2 files changed, 10 insertions(+), 6 deletions(-)
+ include/linux/damon.h |  1 +
+ mm/damon/core.c       | 25 +++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
 diff --git a/include/linux/damon.h b/include/linux/damon.h
-index 49c4a11ecf20..c0adf1566603 100644
+index c0adf1566603..069577477662 100644
 --- a/include/linux/damon.h
 +++ b/include/linux/damon.h
-@@ -170,6 +170,7 @@ enum damos_wmark_metric {
-  * @high:	High watermark.
-  * @mid:	Middle watermark.
-  * @low:	Low watermark.
-+ * @node:	NUMA node for the watermarks.
-  *
-  * If &metric is &DAMOS_WMARK_NONE, the scheme is always active.  Being active
-  * means DAMON does monitoring and applying the action of the scheme to
-@@ -186,6 +187,7 @@ struct damos_watermarks {
- 	unsigned long high;
- 	unsigned long mid;
- 	unsigned long low;
-+	int node;
+@@ -511,6 +511,7 @@ int damon_register_ops(struct damon_operations *ops);
+ int damon_select_ops(struct damon_ctx *ctx, enum damon_ops_id id);
  
- /* private: */
- 	bool activated;
+ int damon_start(struct damon_ctx **ctxs, int nr_ctxs);
++int damon_start_one(struct damon_ctx *ctx);
+ int damon_stop(struct damon_ctx **ctxs, int nr_ctxs);
+ 
+ #endif	/* CONFIG_DAMON */
 diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 82e0a4620c4f..290c9c0535ee 100644
+index 290c9c0535ee..e43f138a3489 100644
 --- a/mm/damon/core.c
 +++ b/mm/damon/core.c
-@@ -179,6 +179,7 @@ struct damos *damon_new_scheme(
- 	scheme->wmarks.high = wmarks->high;
- 	scheme->wmarks.mid = wmarks->mid;
- 	scheme->wmarks.low = wmarks->low;
-+	scheme->wmarks.node = wmarks->node;
- 	scheme->wmarks.activated = true;
- 
- 	return scheme;
-@@ -951,14 +952,15 @@ static bool kdamond_need_stop(struct damon_ctx *ctx)
- 	return true;
+@@ -466,6 +466,31 @@ int damon_start(struct damon_ctx **ctxs, int nr_ctxs)
+ 	return err;
  }
  
--static unsigned long damos_wmark_metric_value(enum damos_wmark_metric metric)
-+static unsigned long damos_wmark_metric_value(struct damos_watermarks wmarks)
- {
--	struct sysinfo i;
-+	unsigned long nr_total, nr_free;
- 
--	switch (metric) {
-+	switch (wmarks.metric) {
- 	case DAMOS_WMARK_FREE_MEM_RATE:
--		si_meminfo(&i);
--		return i.freeram * 1000 / i.totalram;
-+		nr_total = node_present_pages(wmarks.node);
-+		nr_free = sum_zone_node_page_state(wmarks.node, NR_FREE_PAGES);
-+		return nr_free * 1000 / nr_total;
- 	default:
- 		break;
- 	}
-@@ -976,7 +978,7 @@ static unsigned long damos_wmark_wait_us(struct damos *scheme)
- 	if (scheme->wmarks.metric == DAMOS_WMARK_NONE)
- 		return 0;
- 
--	metric = damos_wmark_metric_value(scheme->wmarks.metric);
-+	metric = damos_wmark_metric_value(scheme->wmarks);
- 	/* higher than high watermark or lower than low watermark */
- 	if (metric > scheme->wmarks.high || scheme->wmarks.low > metric) {
- 		if (scheme->wmarks.activated)
++/**
++ * damon_start_one() - Starts the monitorings for one context.
++ * @ctx:	monitoring context
++ *
++ * This function starts one monitoring thread for only one monitoring context
++ * handling damon_lock.
++ *
++ * Return: 0 on success, negative error code otherwise.
++ */
++int damon_start_one(struct damon_ctx *ctx)
++{
++	int err = 0;
++
++	mutex_lock(&damon_lock);
++	err = __damon_start(ctx);
++	if (err) {
++		mutex_unlock(&damon_lock);
++		return err;
++	}
++	nr_running_ctxs++;
++	mutex_unlock(&damon_lock);
++
++	return err;
++}
++
+ /*
+  * __damon_stop() - Stops monitoring of given context.
+  * @ctx:	monitoring context
 -- 
 2.17.1
 

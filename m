@@ -2,150 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06ADE4BBE4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3D04BBE58
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238533AbiBRRZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:25:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49954 "EHLO
+        id S238526AbiBRR1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:27:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238526AbiBRRZa (ORCPT
+        with ESMTP id S236445AbiBRR1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:25:30 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F022B6222
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:25:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645205112; x=1676741112;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5f5JDzLplFmvvlqdfeuY85FDd5GMFEphOULZXgLWA20=;
-  b=Cr3ZQ2wUHaQmMGOb9mZHgBamIbODRpmb7PdZl48J07hhrRYgGhiJ7avf
-   qAQsY/fU3hfAFUv3Ijb5BgVVZ+H6hYTAlLr6tY1sMBh1Uat8WJbtqrc/+
-   2fmtKGM9nYscIxealgESfAcOweNgxWtn0CVTnh5G0CrpA6Od3Dghu6x7c
-   0E5GCL6LFVL37qJc2yWgQxQgvCRE7QS+cI4KWtCDc45bHIBxSBjXC8PBE
-   aaeZB0+1m6/NohD7ttY67P7oaoNwEgvkvVjCcZwlc4XAG/L9UYyqajDyU
-   x9vrfkJVnwVYGE0eeTMt30t28J/STUDUD67FzWEMY3gA39Fj6d8SmxZQA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="238574048"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="238574048"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 09:25:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="504067766"
-Received: from rabecker-mobl.amr.corp.intel.com (HELO localhost) ([10.212.87.237])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 09:25:11 -0800
-Date:   Fri, 18 Feb 2022 09:25:11 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 19/44] mm/pkeys: PKS Testing, add pks_mk_*() tests
-Message-ID: <Yg/Wd4We9uinmGYk@iweiny-desk3>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-20-ira.weiny@intel.com>
- <00b87c5f-b4ed-7593-827c-0e1114b8b456@intel.com>
- <Yg8v8XPyDTH4O2rr@iweiny-desk3>
- <311ef2df-dd49-0711-aa8b-fa88a87ff196@intel.com>
+        Fri, 18 Feb 2022 12:27:00 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B05064EF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:26:42 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id e2so1912147ljq.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:26:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZYe2t/FMZ93x2Kic1ao1JKybApih1A56RL1y9i2FhLE=;
+        b=gOzR/3gjf7/yY5lV5TZ57e/x1QHxbFE+SzLfqHEUg96Sgohxk75AEOBey92ZQc0yen
+         4aThrlFgnRNf9Z68Q3QFatelLW9CVGwuBcW36NUiY4xO1gMmIPMkP+kho7g8aOG8ifL/
+         yJkCIbLgpPXbQ3o35h4BggnBXVBhURaMExrK8uukcO82l+LdThbMAp/h+DKVZ+grqSh9
+         s8l9HHb/JNFM5ttGIW9a1vz10ButIC84JkWcSsHyr2BEA40yNmf/Ig37ndCdp5XWrs2N
+         JzB4n7vom3dKNRvlqiuYWluuxWMgOykrBmx9eq8BE49uM0RSwVgS8NQdOUpMzkpuCBi1
+         PNzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZYe2t/FMZ93x2Kic1ao1JKybApih1A56RL1y9i2FhLE=;
+        b=tawyXn/LfhgtzS6HLTgyaZvE7yIQn9+fl98prhU3uf0rwyCwBIP06AR4XNpH9JJDPj
+         xqk4B0l5s9weQ8/fOZ8S3fqPpv768yaHwiZ4tMGOMa69iQGl1fn3XnkbuVC4nWCs+uLh
+         yRfH9275FLg8DMgtq3jNwKLtRhdjDFMZNX4s3bf7ZLNFVgw/HljDyGg5TKll/f0eub5Y
+         8mvAMAjDWGmYf+mF7L7jZiA0Sc4yuzf0Ji50yoKQ+Lh/2k2ux7Vrsb6iU3PQK1xW9AbW
+         vNJeGoG1LhnOhLPmrsrYzwHEUI6dm3wRfyzpWRIDEl5c9++sUZ2vFSuyTfFTpqC9vykA
+         c6Qg==
+X-Gm-Message-State: AOAM5329cschgsJKkY8iFy6VPhOVNFgBk8HwqETrORcfzSNhNajkv0rW
+        b3VWoGZaT4UE0nGN6bVtgReFeA==
+X-Google-Smtp-Source: ABdhPJzF6KsEJtgTA6aUDgNsa2gJAo/6KzTixWf4JHc5zKVLW0gmtaXhNhMuSUe6ZlrOXZsTogAVWQ==
+X-Received: by 2002:a2e:99d1:0:b0:244:bad9:4ab7 with SMTP id l17-20020a2e99d1000000b00244bad94ab7mr6398922ljj.269.1645205200824;
+        Fri, 18 Feb 2022 09:26:40 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id r3sm272173lfi.260.2022.02.18.09.26.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 09:26:40 -0800 (PST)
+Message-ID: <fab2ccb6-9c00-90cb-5986-8e1544c14596@linaro.org>
+Date:   Fri, 18 Feb 2022 20:26:39 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <311ef2df-dd49-0711-aa8b-fa88a87ff196@intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 2/2] drm/msm/dpu: Fix timeout issues on command mode
+ panels
+Content-Language: en-GB
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>, robdclark@gmail.com
+Cc:     sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        abhinavk@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        paul.bouchara@somainline.org
+References: <20210911163919.47173-1-angelogioacchino.delregno@somainline.org>
+ <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20210911163919.47173-2-angelogioacchino.delregno@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 07:28:04AM -0800, Dave Hansen wrote:
-> On 2/17/22 21:34, Ira Weiny wrote:
-> > On Tue, Feb 01, 2022 at 09:45:03AM -0800, Dave Hansen wrote:
-> >> On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> >>>  bool pks_test_callback(void)
-> >>>  {
-> >>> -	return false;
-> >>> +	bool armed = (test_armed_key != 0);
-> >>> +
-> >>> +	if (armed) {
-> >>> +		pks_mk_readwrite(test_armed_key);
-> >>> +		fault_cnt++;
-> >>> +	}
-> >>> +
-> >>> +	return armed;
-> >>> +}
-> >>
-> >> Where's the locking for all this?  I don't think we need anything fancy,
-> >> but is there anything preventing the test from being started from
-> >> multiple threads at the same time?  I think a simple global test mutex
-> >> would probably suffice.
-> > 
-> > Good idea.  Generally I don't see that happening but it is good to be safe.
+On 11/09/2021 19:39, AngeloGioacchino Del Regno wrote:
+> In function dpu_encoder_phys_cmd_wait_for_commit_done we are always
+> checking if the relative CTL is started by waiting for an interrupt
+> to fire: it is fine to do that, but then sometimes we call this
+> function while the CTL is up and has never been put down, but that
+> interrupt gets raised only when the CTL gets a state change from
+> 0 to 1 (disabled to enabled), so we're going to wait for something
+> that will never happen on its own.
 > 
-> I'm not sure what you mean.
+> Solving this while avoiding to restart the CTL is actually possible
+> and can be done by just checking if it is already up and running
+> when the wait_for_commit_done function is called: in this case, so,
+> if the CTL was already running, we can say that the commit is done
+> if the command transmission is complete (in other terms, if the
+> interface has been flushed).
 > 
-> In the kernel, we always program as if userspace is out to get us.  If
-> userspace can possibly do something to confuse the kernel, it will.  It
-> might be malicious or incompetent, but it will happen.
-> 
-> This isn't really a "good to be safe" kind of thing.  Kernel code must
-> *be* safe.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-Yes
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> >> Also, pks_test_callback() needs at least a comment or two about what
-> >> it's doing.
-> > 
-> > The previous patch which adds this call in the fault handler contains the
-> > following comment which is in the final code:
-> > 
-> > /*
-> >  * pks_test_callback() is called by the fault handler to indicate it saw a pkey
-> >  * fault.
-> >  *
-> >  * NOTE: The callback is responsible for clearing any condition which would
-> >  * cause the fault to re-trigger.
-> >  */
-> > 
-> > Would you like more comments within the function?
-> 
-> Ahh, it just wasn't in the context.
-> 
-> Looking at this again, I don't really like the name "callback" is almost
-> always a waste of bytes.  Imagine this was named something like:
-> 
-> 	pks_test_induced_fault();
-> 
-> ... and had a comment like:
-> 
-> /*
->  * Ensure that the fault handler does not treat
->  * test-induced faults as actual errors.
->  */
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> index aa01698d6b25..aa5d3b3cef15 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> @@ -682,6 +682,9 @@ static int dpu_encoder_phys_cmd_wait_for_commit_done(
+>   	if (!dpu_encoder_phys_cmd_is_master(phys_enc))
+>   		return 0;
+>   
+> +	if (phys_enc->hw_ctl->ops.is_started(phys_enc->hw_ctl))
+> +		return dpu_encoder_phys_cmd_wait_for_tx_complete(phys_enc);
+> +
+>   	return _dpu_encoder_phys_cmd_wait_for_ctl_start(phys_enc);
+>   }
+>   
 
-Ok.  At this point this may go away depending on how I resolve the ability to
-test all the keys.  pks_test_callback() was critical for that feature without
-introducing a bunch of ugly test code in pks-keys.h and pkeys.c.
 
-> 
-> >> Does this work if you have a test armed and then you get an unrelated
-> >> PKS fault on another CPU?  I think this will disarm the test from the
-> >> unrelated thread.
-> > 
-> > This code will detect a false fault.  
-> 
-> That's a bug that's going to get fixed, right? ;)
-
-Yep.  Not sure how at the moment.
-
-Ira
+-- 
+With best wishes
+Dmitry

@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E964BBE13
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D433B4BBE32
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238220AbiBRRPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:15:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43066 "EHLO
+        id S235679AbiBRRR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:17:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238174AbiBRRPM (ORCPT
+        with ESMTP id S238471AbiBRRRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:15:12 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAEE4B850
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:14:55 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so9105727pjh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:14:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xH/IlepHKMPyzwGE0aHvfUnRRSRkxlsVgqDXZENsWF4=;
-        b=CCZJEx6wJo54CRJ1nw52S3756+GgvbkbG4fFiUiKvWxfwo3MAxnvlqtWClKtKtJhBR
-         rAlT6HU9MUCOUOWOB/f+bl21qmDRIi2eShXVQuQB4QooVixEMhz9TMdgMO2+H9q0djig
-         QSzuZrCKSTBBPSM0GNZenFIkkaY9EbveT+FpSAmKoN2B8A3YeTLtptVHTaTz4Zwc4GZ/
-         Bz6MbtsB1jEqlTbzVmeTMH+B8mMJM9A8re+zHSmQGH7YpupplZdGb3VfwbIMf87lBjcA
-         /z0B5whNJpDv3VA31g5ARfkabFqCYKAdZIwjZCZanyTeUF64kKRqOspmZmOvrs2pu/K+
-         uf3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xH/IlepHKMPyzwGE0aHvfUnRRSRkxlsVgqDXZENsWF4=;
-        b=WHgV/YY6VgFzWWoSyxfesnoIZIPd6CVzKwxAkkpaR6VGIHceN51aSP0kr+i/pWrsgY
-         wjr/BFFxkSu05xb4JGIryrJA2tM5+eVGmUtbhDfh0+YckvGX7gp4613YcL+YR/L7R1sw
-         ExH3axUE5F08C5DAkqiZSrsVf3X4inC00jJ3EO9zKPET+GuLngI7gZ/UIdC3BwMKzK6t
-         dRrNtT+WdI/DSgyy0kmvkIX+g8zpbYaUn059vGs+0MiQykDgm5vk7kLzmMM0nnm3OMts
-         /3esQywC5xewY+tZX2ID4VZdFRZtSujKxeIL8y6mWn2r+qPEqUVKEuVcTb1Qt+/TYPey
-         IElw==
-X-Gm-Message-State: AOAM531AYTOxeE+TUpszSQSm435+9vQl491YTtv1DZn7BA5OS36i7r+t
-        VLdHuW+WkwFo+yQV2IbFf3j74qP4QKkMxg==
-X-Google-Smtp-Source: ABdhPJyIt9N0yCc8Xc8p3SzO2o/LXgdOK3B0rha1X07eij+FvPTnQ1VvSItUKF7LOU8F+RELqJdHMg==
-X-Received: by 2002:a17:902:6aca:b0:14d:5b32:eb0e with SMTP id i10-20020a1709026aca00b0014d5b32eb0emr8030672plt.31.1645204494478;
-        Fri, 18 Feb 2022 09:14:54 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 19sm3447140pfz.153.2022.02.18.09.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 09:14:53 -0800 (PST)
-Date:   Fri, 18 Feb 2022 17:14:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 03/18] KVM: x86/mmu: WARN if PAE roots linger after
- kvm_mmu_unload
-Message-ID: <Yg/UCQggoKQ27pVm@google.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
- <20220217210340.312449-4-pbonzini@redhat.com>
+        Fri, 18 Feb 2022 12:17:00 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086162B7615;
+        Fri, 18 Feb 2022 09:16:01 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9EBD8219A4;
+        Fri, 18 Feb 2022 17:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645204559; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8zpVTMN5crc6K1MF78ftYrPJFMOci1TdJrt+hVPeq/w=;
+        b=AsIMLeva+P0GlDGnDCf06J1i2KnXl+5nAmZgGIujgukrWdYIBDgdf/mq3I4M5VFzd4D85B
+        W2s21/X3770XiMfAyPtEt183uB3cqgDmQvXAFWuJgQBnhoS74aYEYH/08CfnLgwOI+PoCp
+        ilCITaX5bktqFSC0gKzll2tHQHeAC6w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645204559;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8zpVTMN5crc6K1MF78ftYrPJFMOci1TdJrt+hVPeq/w=;
+        b=BlzL7u0HyzyzyKkOmqAUVW78roUbpkvRBvQYkZkUyV0AN4k6LkgMUPs2TM2jYoRRLgIcCI
+        FLPOuApZD1L/bJBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 545C813CBE;
+        Fri, 18 Feb 2022 17:15:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oclrE0/UD2IhVQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 18 Feb 2022 17:15:59 +0000
+Message-ID: <a5ab4496-8190-6221-72c7-d1ff2e6cf1d4@suse.cz>
+Date:   Fri, 18 Feb 2022 18:14:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217210340.312449-4-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] slab: remove __alloc_size attribute from
+ __kmalloc_track_caller
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable <stable@vger.kernel.org>, Kees Cook <keescook@chromium.org>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        llvm@lists.linux.dev
+References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022, Paolo Bonzini wrote:
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+On 2/18/22 14:13, Greg Kroah-Hartman wrote:
+> Commit c37495d6254c ("slab: add __alloc_size attributes for better
+> bounds checking") added __alloc_size attributes to a bunch of kmalloc
+> function prototypes.  Unfortunately the change to __kmalloc_track_caller
+> seems to cause clang to generate broken code and the first time this is
+> called when booting, the box will crash.
+> 
+> While the compiler problems are being reworked and attempted to be
+> solved, let's just drop the attribute to solve the issue now.  Once it
+> is resolved it can be added back.
+
+Could we instead wrap it in some #ifdef that' only true for clang build?
+That would make the workaround more precise and self-documented. Even
+better if it can trigger using clang version range and once a fixed
+clang version is here, it can be updated to stay true for older clangs.
+
+> Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+> Cc: stable <stable@vger.kernel.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Daniel Micay <danielmicay@gmail.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Christoph Lameter <cl@linux.com>
+> Cc: Pekka Enberg <penberg@kernel.org>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
->  arch/x86/kvm/mmu/mmu.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
+>  include/linux/slab.h | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 296f8723f9ae..a67071ac80f3 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5086,12 +5086,21 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
->  	return r;
->  }
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 37bde99b74af..5b6193fd8bd9 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -660,8 +660,7 @@ static inline __alloc_size(1, 2) void *kcalloc(size_t n, size_t size, gfp_t flag
+>   * allocator where we care about the real place the memory allocation
+>   * request comes from.
+>   */
+> -extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
+> -				   __alloc_size(1);
+> +extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
+>  #define kmalloc_track_caller(size, flags) \
+>  	__kmalloc_track_caller(size, flags, _RET_IP_)
 >  
-> +static void __kvm_mmu_unload(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
-> +{
-> +	int i;
-> +	kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOTS_ALL);
-> +	WARN_ON(VALID_PAGE(mmu->root_hpa));
-> +	if (mmu->pae_root) {
-> +		for (i = 0; i < 4; ++i)
-> +			WARN_ON(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
-> +	}
-> +}
-> +
->  void kvm_mmu_unload(struct kvm_vcpu *vcpu)
->  {
-> -	kvm_mmu_free_roots(vcpu, &vcpu->arch.root_mmu, KVM_MMU_ROOTS_ALL);
-> -	WARN_ON(VALID_PAGE(vcpu->arch.root_mmu.root_hpa));
-> -	kvm_mmu_free_roots(vcpu, &vcpu->arch.guest_mmu, KVM_MMU_ROOTS_ALL);
-> -	WARN_ON(VALID_PAGE(vcpu->arch.guest_mmu.root_hpa));
-> +	__kvm_mmu_unload(vcpu, &vcpu->arch.root_mmu);
-> +	__kvm_mmu_unload(vcpu, &vcpu->arch.guest_mmu);
 
-Can we just drop this one?  Checkpatch doesn't like it, and IMO the existing asserts
-are unnecessary.  IIRC you said this one never actually fired?
-
-WARNING: Missing commit description - Add an appropriate one
-
-WARNING: Missing a blank line after declarations
-#22: FILE: arch/x86/kvm/mmu/mmu.c:5092:
-+	int i;
-+	kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOTS_ALL);
-
-
->  }
->  
->  static bool need_remote_flush(u64 old, u64 new)
-> -- 
-> 2.31.1
-> 
-> 

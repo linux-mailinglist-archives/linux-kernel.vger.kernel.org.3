@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEF44BAFE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 03:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E784BAF2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 02:33:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbiBRCzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 21:55:11 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60546 "EHLO
+        id S231271AbiBRBdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 20:33:47 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiBRCzJ (ORCPT
+        with ESMTP id S231156AbiBRBdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 21:55:09 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D05580F9;
-        Thu, 17 Feb 2022 18:54:52 -0800 (PST)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21I2sUcx031678
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 21:54:31 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 8A76415C34C8; Thu, 17 Feb 2022 21:54:30 -0500 (EST)
-Date:   Thu, 17 Feb 2022 21:54:30 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-ext4@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Dave Chinner <dchinner@redhat.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [REPORT] kernel BUG at fs/ext4/inode.c:2620 - page_buffers()
-Message-ID: <Yg8KZvDVFJgTXm4C@mit.edu>
-References: <Yg0m6IjcNmfaSokM@google.com>
+        Thu, 17 Feb 2022 20:33:44 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63861B2799;
+        Thu, 17 Feb 2022 17:33:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645148009; x=1676684009;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=68iC9cnz+ae05R1FGoesD5y/UbMcqAkHpnWUd6+k1Sc=;
+  b=i8bZya4fC7QqS0Q3v9ZsXM9QyMpcd82z4nidTqgc3Ml9jE15DsSuaPjy
+   518ThgpjNEBIb6Pi31gCVTkpu5SobGZeNE6TB5VRp6LSASKzFkhko080I
+   MhTR+KOeYKT+49lyZoTU0QZ3w1yVdBT8Gie5uQNVhjv+XX+DURXJ7auUM
+   gMTRplpG+MmE81goCYlyM+jcFjYzNkW1EJ+oY78Fxl0KBUnL2mos15849
+   GfChBTVzFEXXRTQmwidw0S/ICuOa2jieFVT5nRUN4d6vof+T18IEH4DgX
+   n7GUpWK9GK2vtTpJjQ8Jm2c9Bgx5+QnKXnwnV3BJnwenT8vpRn21bEiHv
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="231662947"
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="231662947"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 17:33:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,377,1635231600"; 
+   d="scan'208";a="503791413"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by orsmga002.jf.intel.com with ESMTP; 17 Feb 2022 17:33:26 -0800
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
+Subject: [PATCH] perf tools: fix failed to use cpu list for uncore events
+Date:   Fri, 18 Feb 2022 17:31:27 +0800
+Message-Id: <20220218093127.1844241-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg0m6IjcNmfaSokM@google.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,103 +60,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 04:31:36PM +0000, Lee Jones wrote:
-> 
-> After recently receiving a bug report from Syzbot [0] which was raised
-> specifically against the Android v5.10 kernel, I spent some time
-> trying to get to the crux.  Firstly I reproduced the issue on the
-> reported kernel, then did the same using the latest release kernel
-> v5.16.
-> 
-> The full kernel trace can be seen below at [1].
-> 
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-Lee, thanks for your work in trimming down the syzkaller reproducer.
-The moral equivalent of what it is doing (except each system call is
-done in a separate thread, with synchronization so each gets executed
-in order, but perhaps on a different CPU) is:
+The 'perf record' and 'perf stat' commands have supported the option
+'-C/--cpus' to count or collect only on the list of CPUs provided.
+commit 1d3351e631fc ("perf tools: Enable on a list of CPUs for hybrid")
+add it to be supported for hybrid. For hybrid support, it checks the
+cpu list are available on hybrid PMU. But when we test only uncore
+events(or events not in cpu_core and cpu_atom), there is a bug:
 
-        int dest_fd, src_fd, truncate_fd, mmap_fd;
-        pid_t tid;
-        struct iovec local_iov, remote_iov;
+Before:
+ # perf stat -C0  -e uncore_clock/clockticks/ sleep 1
+   failed to use cpu list 0
 
-        dest_fd = open("./bus", O_RDWR|O_CREAT|O_NONBLOCK|O_SYNC|
-                       O_DIRECT|O_LARGEFILE|O_NOATIME, 0);
-        src_fd = openat(AT_FDCWD, "/bin/bash", O_RDONLY);
-        truncate_fd = syscall(__NR_open, "./bus", O_RDWR|O_CREAT|O_SYNC|O_NOATIME|O_ASYNC);
-        ftruncate(truncate_fd, 0x2008002ul);
-        mmap((void *) 0x20000000ul /* addr */, 0x600000ul /* length */,
-             PROT_WRITE|PROT_EXEC|PROT_SEM||0x7ffff0, MAP_FIXED|MAP_SHARED, mmap_fd, 0);
-        sendfile(dest_fd, src_fd, 0 /* offset */, 0x80000005ul /* count */);
-        local_iov.iov_base = (void *) 0x2034afa4;
-        local_iov.iov_len = 0x1f80;
-        remote_iov.iov_base = (void *) 0x20000080;
-        remote_iov.iov_len = 0x2034afa5;
-        process_vm_writev(gettid(), &local_iov, 1, &remote_iov, 1, 0);
-        sendfile(dest_fd, src_fd, 0 /* offset */, 0x1f000005ul /* count */);
+In this case, for uncore event, its pmu_name is not cpu_core or cpu_atom,
+so in evlist__fix_hybrid_cpus, perf_pmu__find_hybrid_pmu should return
+NULL,both events_nr and unmatched_count should be 0 ,then the cpu list
+check function evlist__fix_hybrid_cpus return -1 and the error "failed
+to use cpu list 0" will happen. Bypass "events_nr=0" case then the issue
+is fixed.
 
-Which is then executed repeataedly over and over again.  (With the
-file descriptors closed at each loop, so the file is reopened each time.)
+After:
+ # perf stat -C0  -e uncore_clock/clockticks/ sleep 1
 
-So basically, we have a scratch file which is initialized using an
-sendfile using O_DIRECT.  The scratch file is also mmap'ed into the
-process's address space, and we then *modify* that an mmap'ed reagion
-using process_vm_writev() --- and this is where the problem starts.
+ Performance counter stats for 'CPU(s) 0':
 
-process_vm_writev() uses [un]pin_user_pages_remote() which is the same
-interface uses for RDMA.  But it's not clear this is ever supposed to
-work for memory which is mmap'ed region backed by a file.
-pin_user_pages_remote() appears to assume that it is an anonymous
-region, since the get_user_pages functions in mm/gup.c don't call
-read_page() to read data into any pages that might not be mmaped in.
+       195,476,873      uncore_clock/clockticks/
 
-They also don't follow the mm / file system protocol of calling the
-file system's write_begin() or page_mkwrite() before modifying a page,
-and so when when process_vm_writev() calls unpin_user_pages_remote(),
-this tries to dirty the page, but since page_mkwrite() or
-write_begin() hasn't been called, buffers haven't been attached to the
-page, and so that triggers the following ext4 WARN_ON:
+       1.004518677 seconds time elapsed
 
-[ 1451.095939] WARNING: CPU: 1 PID: 449 at fs/ext4/inode.c:3565 ext4_set_page_dirty+0x48/0x50
-  ...
-[ 1451.139877] Call Trace:
-[ 1451.140833]  <TASK>
-[ 1451.141889]  folio_mark_dirty+0x2f/0x60
-[ 1451.143408]  set_page_dirty_lock+0x3e/0x60
-[ 1451.145130]  unpin_user_pages_dirty_lock+0x108/0x130
-[ 1451.147405]  process_vm_rw_single_vec.constprop.0+0x1b9/0x260
-[ 1451.150135]  process_vm_rw_core.constprop.0+0x156/0x280
-[ 1451.159576]  process_vm_rw+0xc4/0x110
+When testing with at least one core event and uncore events, it has no
+issue.
 
+ # perf stat -C0  -e cpu_core/cpu-cycles/,uncore_clock/clockticks/ sleep 1
 
-Then when ext4_writepages() gets called, we trigger the BUG because
-buffers haven't been attached to the page.  We can certainly avoid the
-BUG by checking to see if buffers are attached first, and if not, skip
-writing the page trigger a WARN_ON, and then forcibly clear the page
-dirty flag so don't permanently leak memory and allow the file system
-to be unmounted.  (Note: we can't fix the problem by attaching the
-buffers in set_page_dirty(), since is occasionally called under
-spinlocks and without the page being locked, so we can't do any kind
-of allocation, so ix-nay on calling create_empty_buffers() which calls
-alloc_buffer_head().)
+ Performance counter stats for 'CPU(s) 0':
 
-BUT, that is really papering over the problem, since it's not clear
-it's valid to try to use get_user_pages() and friends (including
-[un]pin_user_pages_remote() on file-backed memory.
+         5,993,774      cpu_core/cpu-cycles/
+       301,025,912      uncore_clock/clockticks/
 
-And if it is supposed to be valid, then mm/gup.c needs to first call
-readpage() if the page is not present, so that if process_vm_writev()
-is only modifying a few bytes in the mmap'ed region, we need to fault
-in the page first, and then mm/gup.c needs to inform the file system
-to make sure that if pinned memory region is not yet allocated, than
-whatever needs to happen to allocate space, via page_mkwrite() has
-taken place.  (And by the way, that means that pin_user_pages_remote()
-may need to return ENOSPC if there is not free space in the file
-system, and hence ENOSPC may need to reflected all the way back to
-process_vm_writev().
+       1.003964934 seconds time elapsed
 
-Alternatively, if we don't expect process_vm_writev() to work on
-file-backed memory, perhaps it and pin_user_pages_remote() should
-return some kind of error?
+Fixes: 1d3351e631fc ("perf tools: Enable on a list of CPUs for hybrid")
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+---
+ tools/perf/util/evlist-hybrid.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-	    	      	     	    	      - Ted
+diff --git a/tools/perf/util/evlist-hybrid.c b/tools/perf/util/evlist-hybrid.c
+index 7f234215147d..57f02beef023 100644
+--- a/tools/perf/util/evlist-hybrid.c
++++ b/tools/perf/util/evlist-hybrid.c
+@@ -154,8 +154,8 @@ int evlist__fix_hybrid_cpus(struct evlist *evlist, const char *cpu_list)
+ 		perf_cpu_map__put(matched_cpus);
+ 		perf_cpu_map__put(unmatched_cpus);
+ 	}
+-
+-	ret = (unmatched_count == events_nr) ? -1 : 0;
++	if (events_nr)
++		ret = (unmatched_count == events_nr) ? -1 : 0;
+ out:
+ 	perf_cpu_map__put(cpus);
+ 	return ret;
+-- 
+2.25.1
+

@@ -2,133 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D904BBBD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0371C4BBBDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236811AbiBRPHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 10:07:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38206 "EHLO
+        id S236840AbiBRPI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:08:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236795AbiBRPHo (ORCPT
+        with ESMTP id S236689AbiBRPI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:07:44 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4517E95F;
-        Fri, 18 Feb 2022 07:07:26 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id n6so15224244qvk.13;
-        Fri, 18 Feb 2022 07:07:26 -0800 (PST)
+        Fri, 18 Feb 2022 10:08:27 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737D067346
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:08:10 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id d3so4833249ilr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:08:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZhgMN9Y8qBcc8YGa9U6sLk3eYcQWBNZevK+546EBJ1k=;
-        b=qIQG3afKmJFnM9d3UiPVX2r/wN+GvKrRzK9THFQwXH7zo8J0hGAPaVTzGJG3XLQFSJ
-         UQuRKlMxrk6pfFphfO72D78g3ZlzMzxFMxzY73RGTBbG13vrPxs8+nlwKpF2kBVqwexF
-         jxhcBxYU18xdnW0+wS+LTM8e9j8ipOAbb1X7nlb864lcUZLCYBManADJ8Zx1PMq9cOXt
-         ySZ6g0v5SfGozDHhNoO0xTQWq07i9pRQ8dFcZLKUsYsCInYH1oyKITrlWswW9XAohpEW
-         Wd7VIuftDM6nlCOyvLBoqlhZdFcE7fui9ZxrdVqM+LBJ8BTRniMAU47qeTCd8M2VynLx
-         1UfQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0WAY4GVsgjaO40pd4PC+o5Qrkod87XgfNtjMligfgoY=;
+        b=k0fc5rFlb0nYvtjo4+yOGOzoacZjWtAHBTbCbMc7Q25WPenvdId6aWq+y6Rdb+00Dq
+         aOaQ218/pbphHfK1eH91BX8+P0n48dqdTw2zXtA+iPrZ1D3/fyQW8/DtgREA0pJKvUj6
+         Lp3X/6UpSCjLaud6YFWBrPpbWCOZpWE2/WLzSzX0WdLKV9qwvctPYZ60VTz33cAFUw2H
+         ipn17iIMIdUWIB+10TVBgomrK5cedM2iYJRHZjXO/1y0/Lu4+/ZN9IN9pabjQMn7Gx6n
+         qpN+ALnPW/fafYsm5bvSbyI2r+q53/Kf+9VFoS0l84yOd5GtMAbo2c69nY8gVvEJjEaB
+         R64A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZhgMN9Y8qBcc8YGa9U6sLk3eYcQWBNZevK+546EBJ1k=;
-        b=oK0U3G0rr8PNkJcYN4aRsToQDtV2fOArPMj4To+B6G8dt54ADWw/ly5mwnlo/ss4GB
-         5l113q7LL15Foe195ijIzq1/mqrmhPXl4dyQoUuWeF5OyEzESVtOze5JENCEXqomCdoX
-         MFK7nIFMf5l1NGVEsSwmOt2iwi9GiEzw5ZC7hpLN3xMtR/Pc4f88dDOBwUPjZeA/XT+x
-         h7wOzN5SwvDpH9Z5lGWlGmWYI4hfZh/esRNwAvEpNiwf98hvWLom5oikUQ21pj1v8Jks
-         wQ1uZJTt30QuZWd+hsORVbfmduBIGK+H72kQG7qLsVbH/Ef/J3h238KkYk/LE7hlb5dQ
-         YQsg==
-X-Gm-Message-State: AOAM530BUuEPHQpoVhySrhmNIvMYpnmsYcT0XhlXwuT7qU5qv1z5QY6s
-        YP3XTDySEVonT3RtfpE0CXU=
-X-Google-Smtp-Source: ABdhPJxPj6KFAgVZSXo8bZyFDqRGlFPG7D+gFGABIvifLDj63FEusJTipGPOb92u+mICxFnGhItHvg==
-X-Received: by 2002:a05:622a:164f:b0:2d5:8e77:8050 with SMTP id y15-20020a05622a164f00b002d58e778050mr6994063qtj.481.1645196845785;
-        Fri, 18 Feb 2022 07:07:25 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z17sm25490999qta.11.2022.02.18.07.07.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 07:07:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1c0b1562-aeca-52d1-96cb-93e4a252604c@roeck-us.net>
-Date:   Fri, 18 Feb 2022 07:07:22 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0WAY4GVsgjaO40pd4PC+o5Qrkod87XgfNtjMligfgoY=;
+        b=aEoeumAeVil8ElhNQKr8SRY2fkoAhnVVOEbLM00MsHGWc4xaLdjh1KiceTZ7O0D44K
+         4hICThDJ3oCcyokVo5YbZFeXO7PXI3/B8C/jx3ggb4PxMTZWqylqwRWFs9L/I00z83u0
+         9ZSUWeou+1EAO5yKFgbwxGahIJWtMbZ2oGKxRmoxoXgj2RIvnXc9zWTOxL3vzjkL3Egu
+         OVEAbeEx00wTEUiqqlIPoMZbDsIEDHGg98R2eGfxFywT5jHd1iyP33X3elWjAP/SzLKm
+         JAV79CRTXF+7w49kLna1VMxAaje7bM5UMkVQnLBi7m5QVwkap0IxjpV+9hCb7z5Ze16o
+         cAkg==
+X-Gm-Message-State: AOAM532rA+BMXW0igiB/XvSZFYb1DWx9eJDmGnOW5+eIjT2UZqcXPJ3O
+        +ePDJG8JqMMxPXToezMzgqxhoIq6piREqVYloao=
+X-Google-Smtp-Source: ABdhPJzMnq7hK9D6lNRhKVIGRl8EXyxXzDy7SCwE7CO0ADTREL9Si+pDygSfUleL+W61anVYscsBJdjjvZkJ28zIcZ4=
+X-Received: by 2002:a05:6e02:1905:b0:2c1:e164:76eb with SMTP id
+ w5-20020a056e02190500b002c1e16476ebmr982921ilu.28.1645196889849; Fri, 18 Feb
+ 2022 07:08:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] hwmon: Add driver for Texas Instruments TMP464 and
- TMP468
-Content-Language: en-US
-To:     Agathe Porte <agathe.porte@nokia.com>, linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>
-References: <20220218065856.1899086-1-linux@roeck-us.net>
- <20220218065856.1899086-2-linux@roeck-us.net>
- <bb9d1f78-7f4d-a865-922e-ebf7362f6b64@nokia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <bb9d1f78-7f4d-a865-922e-ebf7362f6b64@nokia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <5b120f7cadcc0e0d8d5f41fd0cff35981b3f7f3a.1645038022.git.andreyknvl@google.com>
+ <Yg44yQJ9tQMgmiZq@lakrids>
+In-Reply-To: <Yg44yQJ9tQMgmiZq@lakrids>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Fri, 18 Feb 2022 16:07:58 +0100
+Message-ID: <CA+fCnZfAwSJQp7zE+qHChaSvy1uEL6xi0JiHtMi6iq29Fk3tRw@mail.gmail.com>
+Subject: Re: [PATCH mm] kasan: print virtual mapping info in reports
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/22 01:50, Agathe Porte wrote:
-> Hi Guenter,
-> 
-> Le 18/02/2022 à 07:58, Guenter Roeck a écrit :
->> Add support for Texas Instruments TMP464 and TMP468 temperature sensor
->> ICs.
->>
->> TI's TMP464 is an I2C temperature sensor chip. This chip is similar
->> to TI's TMP421 chip, but with 16bit-wide registers (instead of
->> 8bit-wide registers). The chip has one local sensor and four remote
->> sensors. TMP468 is similar to TMP464 but has one local and eight
->> remote sensors.
->>
->> Originally-from: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v4:
->> - Fixed reading n-factor information from devicetree
->>    [Use of_property_read_u8 instead of of_property_read_s32 to read the
->>     property value, and write n-factor value into the upper 8 bit of the
->>     n-factor register]
-> 
-> Changing n-factor with DT seems to work:
-> 
-> temp2_input=38500 (nfactor=10)
-> temp2_input=35500 (nfactor=-10)
-> 
-> Driver probes just fine with this attribute set.
-> 
->> +static int tmp464_probe_child_from_dt(struct device *dev,
->> +                      struct device_node *child,
->> +                      struct tmp464_data *data)
->> +
->> +{
->> +    struct regmap *regmap = data->regmap;
->> +    u32 channel;
->> +    u8 nfactor;
->> +    s32 val;
-> 
-> val is not used according to the compiler, and thus should be removed (module does not compile with -Werror)
-> 
+On Thu, Feb 17, 2022 at 1:00 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Wed, Feb 16, 2022 at 08:01:37PM +0100, andrey.konovalov@linux.dev wrote:
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > Print virtual mapping range and its creator in reports affecting virtual
+> > mappings.
+> >
+> > Also get physical page pointer for such mappings, so page information
+> > gets printed as well.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > ---
+> >
+> > Note: no need to merge this patch into any of the KASAN vmalloc patches
+> > that are already in mm, better to keep it separate.
+> > ---
+> >  mm/kasan/report.c | 12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> > index 137c2c0b09db..8002fb3c417d 100644
+> > --- a/mm/kasan/report.c
+> > +++ b/mm/kasan/report.c
+> > @@ -260,8 +260,18 @@ static void print_address_description(void *addr, u8 tag)
+> >               pr_err(" %pS\n", addr);
+> >       }
+> >
+> > +     if (is_vmalloc_addr(addr)) {
+> > +             struct vm_struct *va = find_vm_area(addr);
+> > +
+> > +             pr_err("The buggy address belongs to the virtual mapping at\n"
+> > +                    " [%px, %px) created by:\n"
+> > +                    " %pS\n", va->addr, va->addr + va->size, va->caller);
+>
+> The return value of find_vm_area() needs a NULL check here;
+> is_vmalloc_addr(addr) just checks that `addr` is within the vmalloc VA
+> range, and doesn't guarantee that there is a vmap_area associated with
+> that `addr`.
+>
+> Without the NULL-check, we'll blow up on the `va->addr` dereference and
+> will fail to make the report, which would be unfortunate.
 
-Fixed.
-
-> PS: TMP464 samples will be sent by DHL today and should arrive to you on Feb, 23rd.
-> 
-Thanks a lot!
-
-Guenter
+Indeed. Will fix in v2. Thanks, Mark!

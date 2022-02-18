@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CB54BB9E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E544BB9EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbiBRNOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 08:14:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57066 "EHLO
+        id S235717AbiBRNO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 08:14:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbiBRNOO (ORCPT
+        with ESMTP id S231269AbiBRNO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 08:14:14 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495621BE077;
-        Fri, 18 Feb 2022 05:13:57 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id bg10so15001790ejb.4;
-        Fri, 18 Feb 2022 05:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2rr4tmi7/d0PvHdO4onYfUR4YvrcRNFtlu5Wyv5itrM=;
-        b=FhW+J6S+lwhp+0e20MHUdBowUwSmmRoeYeeoPK1VwSrUJvNbrC1Zos5gbbgENd1X9o
-         Tcki/9zZB8RCQ9Als6J6AbgSC2C6kNhaV0J/bSJiWQWWnaFyVKCUGZtVHnyz/4+DIrwQ
-         swR7w1YANDn2Va9KxvpMvtAtxQzanTQc2OoY4aZY+8lfonQOqdUSVx+pPigIkmuLEghc
-         Nw2lB5dxBAD1mcIxYmzer+VbKIywXaxaxi4HVHbD3Wp4HpYwWFXrm9zFXKpv214zNdSy
-         lVpVvGCPWUmhRyh8Um8o4AEc0V8ECv8PlM1YvUEEA7pOIa3r4nq2m/paNhFBKrlMgkPQ
-         fwvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2rr4tmi7/d0PvHdO4onYfUR4YvrcRNFtlu5Wyv5itrM=;
-        b=3xxsYhoOhh5MJAFaWohsk3J7ZCS5sj13p1XrwyZJrW+nWe8wXhrLbz1Jtla/kMEL33
-         ODh7xELoVPlZMjOfT1r1RfVC+7qgMu9QEYIbvICrwZQU1k+Exl5rC0cOhhlivC8GgpwA
-         TqC7I5tKcNU1BJMm/64nXH1rZJ9gRbBLz215zXbBToRvH6BvpEuOk88UJgxcYGtpNdBC
-         X9gEnRbXSgFvyStTCGGIFmX92bSRBPUARKUyQVbqxh5TOHYT/x5IOi52RN6BaWAKwWwf
-         bm8oXqkppg51mEIJ75INRZdXmoTbLcOLlzX8svOy8MVPIBegrUxR1YnHWndcbl0zRyoh
-         +f9Q==
-X-Gm-Message-State: AOAM530NEDpuEbsdwhqlqdQUo5MsAmzJaqNPoS/B8jeKfqSZuRNfopcv
-        fEXanQaZG6NwMSGdRvO+3I/WZh9Jyoe84VmAaqk=
-X-Google-Smtp-Source: ABdhPJxl+IQGTmAKoqkdMrngrr13yLSAsVP8hfHBAXMPVfVWdOd5SK0ailB8rMVVElRPkUqg5y2xJl0LMkEaVPIeuzI=
-X-Received: by 2002:a17:906:ae97:b0:6cf:73fe:8515 with SMTP id
- md23-20020a170906ae9700b006cf73fe8515mr6366008ejb.462.1645190035697; Fri, 18
- Feb 2022 05:13:55 -0800 (PST)
+        Fri, 18 Feb 2022 08:14:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F41B446D;
+        Fri, 18 Feb 2022 05:14:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 209B261687;
+        Fri, 18 Feb 2022 13:14:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B61C340E9;
+        Fri, 18 Feb 2022 13:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645190048;
+        bh=tYfeunHQUCJoMBW4KCGOeDi3CMtMJKFVuq09f4Qy3/c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vBbXWXZfhyx61GlN+4nIkKHAofV3Tmyr7SoPL/JEr5O8aDuGGFkaqtwjsuHp/aWJd
+         NyVHxUGohJ8znulkcU6/mgN478hdbs6CnYqpPVU4HyjCX7mZdBjeSEtJOQLoG+JX8i
+         tfgZ0yR1aFtzmkQnXpRV3CxMiyI7vkizA2SIxd24=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] slab: remove __alloc_size attribute from __kmalloc_track_caller
+Date:   Fri, 18 Feb 2022 14:13:58 +0100
+Message-Id: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220131220518.GA515079@bhelgaas> <bac4cc7e-f81e-82e6-9b60-e5e3199637d7@ti.com>
-In-Reply-To: <bac4cc7e-f81e-82e6-9b60-e5e3199637d7@ti.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Fri, 18 Feb 2022 14:13:44 +0100
-Message-ID: <CAH9NwWcChBLEwLrzUEcvh7EXtjaEBe5rZo0gHNnzXnaV9p5QGA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: cadence: respond to received PTM Requests
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1953; h=from:subject; bh=tYfeunHQUCJoMBW4KCGOeDi3CMtMJKFVuq09f4Qy3/c=; b=owGbwMvMwCRo6H6F97bub03G02pJDEn8s6c4O30y6vORX/ORQXjx0QO+yZ+7OfqrVN2bJEW4TmtN 7uPpiGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIlYJDIsaL/7pkRd/rig6sTwLMFXHx PEKo9OYpifbbZwheqTPMfejscylVHLrm1gNdQFAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+Commit c37495d6254c ("slab: add __alloc_size attributes for better
+bounds checking") added __alloc_size attributes to a bunch of kmalloc
+function prototypes.  Unfortunately the change to __kmalloc_track_caller
+seems to cause clang to generate broken code and the first time this is
+called when booting, the box will crash.
 
-Am Fr., 18. Feb. 2022 um 11:56 Uhr schrieb Kishon Vijay Abraham I
-<kishon@ti.com>:
->
-> Hi Bjorn,
->
-> On 01/02/22 3:35 am, Bjorn Helgaas wrote:
-> > Update subject line to match previous conventions ("git log --oneline
-> > drivers/pci/controller/cadence/pcie-cadence-host.c" to see).
-> >
-> > On Mon, Jan 31, 2022 at 01:08:27PM +0100, Christian Gmeiner wrote:
-> >> This enables the Controller [RP] to automatically respond
-> >> with Response/ResponseD messages.
-> >
-> > Update to imperative mood, e.g., "Enable Controller to ...":
-> >
-> >   https://chris.beams.io/posts/git-commit/
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/maintainer-tip.rst?id=v5.16#n134
-> >
-> >> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-> >> ---
-> >>  drivers/pci/controller/cadence/pcie-cadence-host.c | 10 ++++++++++
-> >>  drivers/pci/controller/cadence/pcie-cadence.h      |  4 ++++
-> >>  2 files changed, 14 insertions(+)
-> >>
-> >> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> >> index fb96d37a135c..940c7dd701d6 100644
-> >> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> >> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> >> @@ -123,6 +123,14 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
-> >>      return ret;
-> >>  }
-> >>
-> >> +static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
-> >> +{
-> >> +    u32 val;
-> >> +
-> >> +    val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
-> >> +    cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
-> >
-> > I assume this is some device-specific enable bit that is effectively
-> > ANDed with PCI_PTM_CTRL_ENABLE in the Precision Time Measurement
-> > Capability?
->
-> That's correct. This bit enables Controller [RP] to respond to the received PTM
-> Requests.
->
+While the compiler problems are being reworked and attempted to be
+solved, let's just drop the attribute to solve the issue now.  Once it
+is resolved it can be added back.
 
-With that information is it okay for you that I send a V2 of this
-patch with an improved commit message or do
-you see any other problems that I need to take into account?
+Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+Cc: stable <stable@vger.kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Daniel Micay <danielmicay@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/linux/slab.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 37bde99b74af..5b6193fd8bd9 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -660,8 +660,7 @@ static inline __alloc_size(1, 2) void *kcalloc(size_t n, size_t size, gfp_t flag
+  * allocator where we care about the real place the memory allocation
+  * request comes from.
+  */
+-extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller)
+-				   __alloc_size(1);
++extern void *__kmalloc_track_caller(size_t size, gfp_t flags, unsigned long caller);
+ #define kmalloc_track_caller(size, flags) \
+ 	__kmalloc_track_caller(size, flags, _RET_IP_)
+ 
 -- 
-greets
---
-Christian Gmeiner, MSc
+2.35.1
 
-https://christian-gmeiner.info/privacypolicy

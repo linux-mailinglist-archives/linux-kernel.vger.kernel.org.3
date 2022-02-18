@@ -2,195 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F714BB9C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C93664BB9CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235553AbiBRNDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 08:03:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36938 "EHLO
+        id S235585AbiBRNEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 08:04:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbiBRNDr (ORCPT
+        with ESMTP id S232256AbiBRNEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 08:03:47 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B629E2B4611;
-        Fri, 18 Feb 2022 05:03:29 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id b13so15481200edn.0;
-        Fri, 18 Feb 2022 05:03:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xOs0uaJkZw6XSqCT47Qsb31OiMxuh3k2TEKng99tzTk=;
-        b=RJOdqj97r0Mfp3qitF7KrOqCBQxXRakn2z7sMDYdQ8e9AMLKTZBr4Ov1BNAzOZsGls
-         MkWCCx9PdEDpp5eQL/xzRCq6fjv+NaNnL9nS5NHoQczeb76mEpEE101gW55xL5Usd4HL
-         pc0dWT3YvREgcaIED9isF76Ljm5oIBegXUMSz+3jhRcjnfblbUBqTT2OSvBOQtbMXKwM
-         sEB/r/EtlipUtdgJSVvVe7/O40N9euGNGr6l3rLhUbIzB2qUU42F0QQRsgBWy5b5LzCk
-         7ky3jEZmk5kUuk2mnVfOOMMYmjZC+uDtlyGOmXRNlgx19DI/S74vLyerraQf+I8sFX84
-         pWbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xOs0uaJkZw6XSqCT47Qsb31OiMxuh3k2TEKng99tzTk=;
-        b=jLtBQSiexM5Izy2IzCPc8W3tKDCcKopGG0BgxRcAX04lCy/KrODC6cyHnaU8RMPHVT
-         L2xXMWpnMTQ9gJ7ksDi0q1HF7WtNS9B4AG6ycyosH1UnhATtmy/hcVBFvYtuIonwKZRM
-         iqhpoeL4aQDqklRd6cHW+Djv2glITzSViDYUzWZZ4RAy8zLr/c0ThTs0BiuWhtVkNtIC
-         q1KQZwv9IsmYmDmOZoLyibMtV5ayD/h7XgmkQOd4+NasLtQoJjrpY8w5wBfT/6s9RPdi
-         2dD8Fz2Ooje6DjVl43jxjDvMZfyQJUhJSCZivzhrxSJ1MeiXEM/MM3Ggkn9lv/pJGi8Z
-         NCLg==
-X-Gm-Message-State: AOAM531TU4l/4TWsrARuhehvcxyHEWVNB3K/2u/pLifdWnSGGZhLnNdd
-        TInVDl4jY2jTmRKMfWc4ylU=
-X-Google-Smtp-Source: ABdhPJyrVGmO0zq32H5QDik2uU8AJSVIfJn4HVkwBhRddi+WF01ShlDGgk41aLwt84TaO7s1chUMRQ==
-X-Received: by 2002:a50:9e2e:0:b0:410:d1b6:4d2e with SMTP id z43-20020a509e2e000000b00410d1b64d2emr7996818ede.201.1645189408145;
-        Fri, 18 Feb 2022 05:03:28 -0800 (PST)
-Received: from krava ([83.240.63.12])
-        by smtp.gmail.com with ESMTPSA id t3sm2202918ejd.83.2022.02.18.05.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 05:03:27 -0800 (PST)
-Date:   Fri, 18 Feb 2022 14:03:25 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH 3/3] perf tools: Rework prologue generation code
-Message-ID: <Yg+ZHUm4raVBwnQP@krava>
-References: <20220217131916.50615-1-jolsa@kernel.org>
- <20220217131916.50615-4-jolsa@kernel.org>
- <CAEf4BzYP7=JuyuY=xZe71urpxat4ba-JnqeSTcHF=CYmsQbofQ@mail.gmail.com>
- <Yg9geQ0LJjhnrc7j@krava>
+        Fri, 18 Feb 2022 08:04:36 -0500
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D242B4618;
+        Fri, 18 Feb 2022 05:04:19 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id F278D580226;
+        Fri, 18 Feb 2022 08:04:17 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 18 Feb 2022 08:04:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=pxpqD2+sLe6m/z/BcNmFIUMN1NaFzbA2gxa6Sn
+        G8FAE=; b=YkFltgs/c6JzKnjmgH8tHs+8cIg9owcvVpqyEagiIVRJ9bSEj1WQQ4
+        ToRrhcr4eSxTfN8YK279owt59FbvtFqd0r16BgV4FNPxcNVotRdE8NKhbPv/hd79
+        2Z4KaSShethSnnJhtocSPa3wJe+Kqgtsa0Ajokvu+RWPiHml0VG+lQJ9xB0RupSA
+        rDP40DVjUlvbXmSCYbqgpU5Us4Y/zNWFhlAZO9lg+qZkS8z00wZ4uCx4nAKWqm0+
+        jjyuWpxAwVLSxbJN6Q3yP1vrKkZa+bIrHADBD6azZA9KlxmcrBgTLK1ODPkLphE/
+        sl2ApynvQXp1tKkmPEqf12n1m1XdN6pA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=pxpqD2+sLe6m/z/Bc
+        NmFIUMN1NaFzbA2gxa6SnG8FAE=; b=WbwYTPkqk0SGSvuwi4hwM4TZzpgA3XNd7
+        wv27aKMOCVhvX9gnFwPVEne69GFZFbI3HtbGh7QKwNTG6UFQsQsrAgj60RDgn9wl
+        OQA8HpsOn+L4ORcoKjLZFXiFpzWTHW41QvEmuqQM6gqzjpZSy9b/za37y1h3+e9+
+        ZQ1/LxBUVUvW/Dixu/oap0jKWkMhHZAGI+BgU3DcZ6Gm7Oe6YZOdJjlTUwWjW+sW
+        8UWpVUHmOWaYxyrmI1st9346rijZkQFD/9yXdN7ptt1ud9CbYO6D6KOKRTtyejyt
+        Ks7ZzFLzq4c4hjpXwD7FGUvVxr/CrjKExXyDDcXmaepz8SEgTkTGg==
+X-ME-Sender: <xms:UZkPYktVLygxxXeO3qfwmn_ksqtSTVg48CPJLwdtQT9xFlUjWx_5LQ>
+    <xme:UZkPYhfP4pUaK0LhAQ-50255ESPE5GUXn2qlGumdhTZ5-8z3iZALJapsRlW6C99y1
+    PP5huOxzD7rIA>
+X-ME-Received: <xmr:UZkPYvwuNWocT16q2ezjMBMp1anqIk_Scs07YgdFzSPWET5ZZgsqh0u9IMJSywyepx_oOYKSP8kUIPEOizstVsVIg6geq7t0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkedtgdeghecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:UZkPYnPVDh6GLp2R8Sn2csqEhtGXq5cw9PmtlzNM7yUvY0QQ-PlE2Q>
+    <xmx:UZkPYk_4XdxzbSs83w8Y41rugLb5f_eEh71kjNxLK7aljvhDKd06-Q>
+    <xmx:UZkPYvVP1CwpPaQ2XpVAVfExnOvSUhwxRdwlLxVgqAsDqLY76of18A>
+    <xmx:UZkPYoUoiNB3WBcARV4FjZi9NGc92yFyyRDafFIlIheOzoL0bbaomw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Feb 2022 08:04:16 -0500 (EST)
+Date:   Fri, 18 Feb 2022 14:04:15 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Su Yue <l@damenly.su>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, David Sterba <dsterba@suse.com>,
+        clm@fb.com, josef@toxicpanda.com, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.10 16/27] btrfs: tree-checker: check item_size
+ for dev_item
+Message-ID: <Yg+ZT4b8J+MRU2nG@kroah.com>
+References: <20220209184103.47635-1-sashal@kernel.org>
+ <20220209184103.47635-16-sashal@kernel.org>
+ <Yg92voqmS9jz/rI+@kroah.com>
+ <1r00qtxj.fsf@damenly.su>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yg9geQ0LJjhnrc7j@krava>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1r00qtxj.fsf@damenly.su>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 10:01:45AM +0100, Jiri Olsa wrote:
-> On Thu, Feb 17, 2022 at 01:53:16PM -0800, Andrii Nakryiko wrote:
-> > On Thu, Feb 17, 2022 at 5:19 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > >
-> > > Some functions we use now for bpf prologue generation are
-> > > going to be deprecated, so reworking the current code not
-> > > to use them.
-> > >
-> > > We need to replace following functions/struct:
-> > >    bpf_program__set_prep
-> > >    bpf_program__nth_fd
-> > >    struct bpf_prog_prep_result
-> > >
-> > > Current code uses bpf_program__set_prep to hook perf callback
-> > > before the program is loaded and provide new instructions with
-> > > the prologue.
-> > >
-> > > We workaround this by using objects's 'unloaded' programs instructions
-> > > for that specific program and load new ebpf programs with prologue
-> > > using separate bpf_prog_load calls.
-> > >
-> > > We keep new ebpf program instances descriptors in bpf programs
-> > > private struct.
-> > >
-> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+On Fri, Feb 18, 2022 at 07:25:20PM +0800, Su Yue wrote:
+> 
+> On Fri 18 Feb 2022 at 11:36, Greg KH <greg@kroah.com> wrote:
+> 
+> > On Wed, Feb 09, 2022 at 01:40:52PM -0500, Sasha Levin wrote:
+> > > From: Su Yue <l@damenly.su>
+> > > 
+> > > [ Upstream commit ea1d1ca4025ac6c075709f549f9aa036b5b6597d ]
+> > > 
+> > > Check item size before accessing the device item to avoid out of
+> > > bound
+> > > access, similar to inode_item check.
+> > > 
+> > > Signed-off-by: Su Yue <l@damenly.su>
+> > > Reviewed-by: David Sterba <dsterba@suse.com>
+> > > Signed-off-by: David Sterba <dsterba@suse.com>
+> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
 > > > ---
-> > >  tools/perf/util/bpf-loader.c | 122 +++++++++++++++++++++++++++++------
-> > >  1 file changed, 104 insertions(+), 18 deletions(-)
-> > >
-> > 
-> > [...]
-> > 
-> > >  errout:
-> > > @@ -696,7 +718,7 @@ static int hook_load_preprocessor(struct bpf_program *prog)
-> > >         struct bpf_prog_priv *priv = program_priv(prog);
-> > >         struct perf_probe_event *pev;
-> > >         bool need_prologue = false;
-> > > -       int err, i;
-> > > +       int i;
-> > >
-> > >         if (IS_ERR_OR_NULL(priv)) {
-> > >                 pr_debug("Internal error when hook preprocessor\n");
-> > > @@ -727,6 +749,12 @@ static int hook_load_preprocessor(struct bpf_program *prog)
-> > >                 return 0;
-> > >         }
-> > >
-> > > +       /*
-> > > +        * Do not load programs that need prologue, because we need
-> > > +        * to add prologue first, check bpf_object__load_prologue.
-> > > +        */
-> > > +       bpf_program__set_autoload(prog, false);
-> > 
-> > if you set autoload to false, program instructions might be invalid in
-> > the end. Libbpf doesn't apply some (all?) relocations to such
-> > programs, doesn't resolve CO-RE, etc, etc. You have to let
-> > "prototypal" BPF program to be loaded before you can grab final
-> > instructions. It's not great, but in your case it should work, right?
-> 
-> hum, do we care? it should all be done when the 'new' program with
-> the prologue is loaded, right?
-> 
-> I switched it off because the verifier failed to load the program
-> without the prologue.. because in the originaal program there's no
-> code to grab the arguments that the rest of the code depends on,
-> so the verifier sees invalid access
-> 
-> > 
+> > >  fs/btrfs/tree-checker.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > > 
+> > > diff --git a/fs/btrfs/tree-checker.c b/fs/btrfs/tree-checker.c
+> > > index d4a3a56726aa8..4a5ee516845f7 100644
+> > > --- a/fs/btrfs/tree-checker.c
+> > > +++ b/fs/btrfs/tree-checker.c
+> > > @@ -947,6 +947,7 @@ static int check_dev_item(struct extent_buffer
+> > > *leaf,
+> > >  			  struct btrfs_key *key, int slot)
+> > >  {
+> > >  	struct btrfs_dev_item *ditem;
+> > > +	const u32 item_size = btrfs_item_size(leaf, slot);
+> > > 
+> > >  	if (key->objectid != BTRFS_DEV_ITEMS_OBJECTID) {
+> > >  		dev_item_err(leaf, slot,
+> > > @@ -954,6 +955,13 @@ static int check_dev_item(struct extent_buffer
+> > > *leaf,
+> > >  			     key->objectid,  BTRFS_DEV_ITEMS_OBJECTID);
+> > >  		return -EUCLEAN;
+> > >  	}
 > > > +
-> > >         priv->need_prologue = true;
-> > >         priv->insns_buf = malloc(sizeof(struct bpf_insn) * BPF_MAXINSNS);
-> > >         if (!priv->insns_buf) {
-> > > @@ -734,6 +762,13 @@ static int hook_load_preprocessor(struct bpf_program *prog)
-> > >                 return -ENOMEM;
-> > >         }
-> > >
-> > 
-> > [...]
-> > 
-> > > +               /*
-> > > +                * For each program that needs prologue we do following:
-> > > +                *
-> > > +                * - take its current instructions and use them
-> > > +                *   to generate the new code with prologue
-> > > +                *
-> > > +                * - load new instructions with bpf_prog_load
-> > > +                *   and keep the fd in proglogue_fds
-> > > +                *
-> > > +                * - new fd will be used bpf__foreach_event
-> > > +                *   to connect this program with perf evsel
-> > > +                */
-> > > +               orig_insns = bpf_program__insns(prog);
-> > > +               orig_insns_cnt = bpf_program__insn_cnt(prog);
+> > > +	if (unlikely(item_size != sizeof(*ditem))) {
+> > > +		dev_item_err(leaf, slot, "invalid item size: has %u expect %zu",
+> > > +			     item_size, sizeof(*ditem));
+> > > +		return -EUCLEAN;
+> > > +	}
 > > > +
-> > > +               pev = &priv->pev;
-> > > +               for (i = 0; i < pev->ntevs; i++) {
-> > > +                       err = preproc_gen_prologue(prog, i, orig_insns,
-> > > +                                                  orig_insns_cnt, &res);
-> > > +                       if (err)
-> > > +                               return err;
-> > > +
-> > > +                       fd = bpf_prog_load(bpf_program__get_type(prog),
+> > >  	ditem = btrfs_item_ptr(leaf, slot, struct btrfs_dev_item);
+> > >  	if (btrfs_device_id(leaf, ditem) != key->offset) {
+> > >  		dev_item_err(leaf, slot,
+> > > --
+> > > 2.34.1
+> > > 
 > > 
-> > nit: bpf_program__type() is preferred (we are deprecating/discouraging
-> > "get_" prefixed getters in libbpf 1.0)
+> > This adds a build warning, showing that the backport is not correct, so
+> > I'll go drop this :(
+> > 
+> And the warning is
+> ========================================================================
+> arch/x86/kernel/head_64.o: warning: objtool: .text+0x5: unreachable
+> instruction
+> fs/btrfs/tree-checker.c: In function \342\200\230check_dev_item\342\200\231:
+> fs/btrfs/tree-checker.c:950:53: warning: passing argument 2 of
+> \342\200\230btrfs_item_size\342\200\231 makes pointer from integer without a
+> cast [-Wint-conversion]
+>  950 |         const u32 item_size = btrfs_item_size(leaf, slot);
+>      |                                                     ^~~~
+>      |                                                     |
+>      |                                                     int
+> In file included from fs/btrfs/tree-checker.c:21:
+> fs/btrfs/ctree.h:1474:48: note: expected \342\200\230const struct btrfs_item
+> *\342\200\231 but argument is of type \342\200\230int\342\200\231
+> 1474 |                                    const type *s) \
+>      |                                    ~~~~~~~~~~~~^
+> fs/btrfs/ctree.h:1833:1: note: in expansion of macro
+> \342\200\230BTRFS_SETGET_FUNCS\342\200\231
+> 1833 | BTRFS_SETGET_FUNCS(item_size, struct btrfs_item, size, 32);
+>      | ^~~~~~~~~~~~~~~~~~
+> ========================================================================
 > 
-> ok, will change
+> The upstream patchset[1] merged in 5.17-rc1, changed second parameter
+> of btrfs_item_size() from btrfs_item * to int directly.
+> So yes, the backport is wrong.
+> 
+> I'm not familiar with stable backport progress. Should I file a patch
+> using btrfs_item *? Or just drop it?
 
-hum, I can't see bpf_program__type.. what do I miss?
+If you think this needs to be in the stable tree, yes please backport it
+and send it to us.
 
-jirka
+> The patch is related to  0c982944af27d131d3b74242f3528169f66950ad but
+> I wonder why the 0c98294 is not selected automatically.
+
+No idea, if you think that is needed to, please send it to us.
+
+thanks,
+
+greg k-h

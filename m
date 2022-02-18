@@ -2,335 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4204BB711
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB9D4BB718
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbiBRKlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:41:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41930 "EHLO
+        id S233716AbiBRKn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:43:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbiBRKlQ (ORCPT
+        with ESMTP id S231648AbiBRKnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:41:16 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050CE1F1750;
-        Fri, 18 Feb 2022 02:41:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645180860; x=1676716860;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kw8s8Fnk90rdDbUnGNwVXOc0fqJlLbDuPmGpy4FvXWU=;
-  b=eNG5SGnWCGHOLspU96X7NreYMe/7RdFqHjW2X3HBawThtOtkGCE20lbg
-   8fYe9XlhB4LAKDqfP/cpZRkTWhkZwBYNVtv3Ea15EV1nSNpInoWxw92Lg
-   wHDkFVFK42Djf+Hy9kA49cWe7gtf/mB4Lr8z4SScS7TicEzxFVJixBZ74
-   8Bf2xOTb7q1JvfErNjcW33mW2NLZahXlhe9gjoT5W4Iv8XKTElGvAOtp0
-   KcuCeF0lYzRvQOF9ygSzouBpZwrzO2/pI9forUsmJj+aWeDU3sdtbIxJo
-   mtRKHtJAnvKa2cPD+DXns4FVc7PE/hEGWVnWHLuAZB5k3OH8POQfOUVos
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="251302243"
-X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="251302243"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 02:40:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
-   d="scan'208";a="682454333"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 18 Feb 2022 02:40:49 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 18 Feb 2022 12:40:48 +0200
-Date:   Fri, 18 Feb 2022 12:40:48 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 4/6] typec: mux: Allow multiple mux_devs per mux
-Message-ID: <Yg93sMPmpfS/9+ns@kuha.fi.intel.com>
-References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
- <20220208031944.3444-5-bjorn.andersson@linaro.org>
+        Fri, 18 Feb 2022 05:43:52 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF14825A97B;
+        Fri, 18 Feb 2022 02:43:33 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id h18so14713037edb.7;
+        Fri, 18 Feb 2022 02:43:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3Thuz9Uo64aPeka2S6d2lt8dTabuHdIgegYkV8o7Wgo=;
+        b=OSyNlSsmApXjWa65bZnCGTAvdfnPRQ8X+uhi+MDkVi/tB698GdI0HArwXDp71AshcX
+         lbALjKMuD4lMiv5YPdXUNHlJw1E9hsD0q/CvwoIY7K5aVemplD2lSnNmeSOVOMpHSm33
+         bVB1F5GMJmT6ShgdK1DL562ejhjhOOjyZK4dcIdQykMQvtBzX2chfMDaRXRNBj72YRXf
+         p2eDOE+XAkRl/kR/AUJcOpLmav4xOFrTNiWctzZdd3W7UceRZKnk7cYV6BrjUs2CfGo/
+         Y17XxbIkIkYbWS0Y+akD2T2obAXT01L5irhbAyiVn4U+nyEWuSaXUUTh1r0d+3eHyXvU
+         6FXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3Thuz9Uo64aPeka2S6d2lt8dTabuHdIgegYkV8o7Wgo=;
+        b=eaOLwwPZ+mpbHLsuQYLe7PD2JcP9CAnQGLYmIPnL+Wb/MRuY87quJRkd4nPks6T7Qs
+         QDJTgjmaOF9oYPg1SNxfekAE7eMzoSgcpVUWKkghTD9m1IHOfl8w3QfNcSw3bbjJez5R
+         9hNByE3jl/OiZiEvsVxOCS73wKgf3Ezh48+H/bQ+XvhXxnMu9+uQEJf2nNlReGwWpXZn
+         p2d6zxpJS+gJYadK542EXFYlGGPB8H9n3wq3VD+Y285mk+j68GurfJxuZJBMs2KnSwCI
+         pSbZCxWCCo2/2GsopI0i59Dw0u54gaMMAaGp1NSoNKg4DIw0AEge6KpxTaIujMBpFdRs
+         /UxQ==
+X-Gm-Message-State: AOAM533DM5lLdBt+qVh2/aj9+glk1ic4DYxKfkt6TSTfcV+88PBt//7I
+        6tuXEiBI71fBx2P7XyQc/z8=
+X-Google-Smtp-Source: ABdhPJzfWzMPEQW7thJ+rut9P39XTZAz0s79d/BY4FLn9NMviYosi+40rIGqZJ+i5mWH9RyvUG48gw==
+X-Received: by 2002:a05:6402:17c8:b0:406:80a3:5cad with SMTP id s8-20020a05640217c800b0040680a35cadmr7284471edy.388.1645181012161;
+        Fri, 18 Feb 2022 02:43:32 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id f19sm4372310edu.22.2022.02.18.02.43.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 02:43:31 -0800 (PST)
+Date:   Fri, 18 Feb 2022 12:43:30 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: ksz9477: export HW
+ stats over stats64 interface
+Message-ID: <20220218104330.g3vfbpdqltdkp4sr@skbuf>
+References: <20220217140726.248071-1-o.rempel@pengutronix.de>
+ <20220217155554.bo6gcva6h2pkryou@skbuf>
+ <20220218083956.GA4681@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220208031944.3444-5-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220218083956.GA4681@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 07:19:42PM -0800, Bjorn Andersson wrote:
-> In the Qualcomm platforms the USB/DP PHY handles muxing and orientation
-> switching of the SuperSpeed lines, but the SBU lines needs to be
-> connected and switched by external (to the SoC) hardware.
+On Fri, Feb 18, 2022 at 09:39:56AM +0100, Oleksij Rempel wrote:
+> On Thu, Feb 17, 2022 at 05:55:54PM +0200, Vladimir Oltean wrote:
+> > On Thu, Feb 17, 2022 at 03:07:26PM +0100, Oleksij Rempel wrote:
+> > > +static void ksz9477_get_stats64(struct dsa_switch *ds, int port,
+> > > +				struct rtnl_link_stats64 *stats)
+> > > +{
+> > > +	struct ksz_device *dev = ds->priv;
+> > > +	struct ksz9477_stats_raw *raw;
+> > > +	struct ksz_port_mib *mib;
+> > > +	int ret;
+> > > +
+> > > +	mib = &dev->ports[port].mib;
+> > > +	raw = (struct ksz9477_stats_raw *)mib->counters;
+> > > +
+> > > +	mutex_lock(&mib->cnt_mutex);
+> > 
+> > The eternal problem, ndo_get_stats64 runs in atomic context,
+> > mutex_lock() sleeps. Please test your patches with
+> > CONFIG_DEBUG_ATOMIC_SLEEP=y.
 > 
-> It's therefor necessary to be able to have the TypeC controller operate
-> multiple TypeC muxes and switches. Use the newly introduced indirection
-> object to handle this, to avoid having to taint the TypeC controllers
-> with knowledge about the downstream hardware configuration.
+> Good point, thx! I reworked the code.
 > 
-> The max number of devs per indirection is set to 3, which account for
-> being able to mux/switch the USB HS, SS and SBU lines, as per defined
-> defined in the usb-c-connector binding. This number could be grown if
-> need arrises at a later point in time.
+> Beside, I get this warning with differnt locking validators:
+> [  153.140000] br0: port 1(lan2) entered blocking state
+> [  153.190000] br0: port 1(lan2) entered disabled state
+> [  153.320000] device lan2 entered promiscuous mode
+> [  153.350000] ------------[ cut here ]------------
+> [  153.350000] WARNING: CPU: 0 PID: 71 at net/core/dev.c:7913 __dev_set_promiscuity+0x10c/0x138
+> [  153.360000] RTNL: assertion failed at net/core/dev.c (7913)
+> [  153.370000] Modules linked in: atmel_aes atmel_tdes atmel_sha
+> [  153.370000] CPU: 0 PID: 71 Comm: kworker/u2:5 Not tainted 5.17.0-rc2-00714-g845f6fa17e48-dirty #33
+> [  153.370000] Hardware name: Atmel SAMA5
+> [  153.370000] Workqueue: dsa_ordered dsa_slave_switchdev_event_work
+> [  153.370000]  unwind_backtrace from show_stack+0x18/0x1c
+> [  153.370000]  show_stack from dump_stack_lvl+0x58/0x70
+> [  153.370000]  dump_stack_lvl from __warn+0xd8/0x228
+> [  153.370000]  __warn from warn_slowpath_fmt+0x98/0xc8
+> [  153.370000]  warn_slowpath_fmt from __dev_set_promiscuity+0x10c/0x138
+> [  153.370000]  __dev_set_promiscuity from __dev_set_rx_mode+0x8c/0x98
+> [  153.370000]  __dev_set_rx_mode from dev_uc_add+0x84/0x8c
+> [  153.370000]  dev_uc_add from dsa_port_host_fdb_add+0x48/0x80
+> [  153.370000]  dsa_port_host_fdb_add from dsa_slave_switchdev_event_work+0x1dc/0x254
+> [  153.370000]  dsa_slave_switchdev_event_work from process_one_work+0x2b0/0x7d4
+> [  153.370000]  process_one_work from worker_thread+0x4c/0x53c
+> [  153.370000]  worker_thread from kthread+0xf8/0x12c
+> [  153.370000]  kthread from ret_from_fork+0x14/0x2c
+> [  153.370000] Exception stack(0xc1f13fb0 to 0xc1f13ff8)
+> [  153.370000] 3fa0:                                     00000000 00000000 00000000 00000000
+> [  153.370000] 3fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> [  153.370000] 3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [  153.380000] irq event stamp: 0
+> [  153.390000] hardirqs last  enabled at (0): [<00000000>] 0x0
+> [  153.390000] hardirqs last disabled at (0): [<c0124b38>] copy_process+0x7d8/0x194c
+> [  153.400000] softirqs last  enabled at (0): [<c0124b38>] copy_process+0x7d8/0x194c
+> [  153.410000] softirqs last disabled at (0): [<00000000>] 0x0
+> [  153.410000] ---[ end trace 0000000000000000 ]---
+> [  153.420000] device eth0 entered promiscuous mode
+> [  153.770000] ksz9477-switch spi1.0 lan2: configuring for phy/gmii link mode
+> [  155.040000] ksz9477-switch spi1.0 lan4: Link is Down
+> [  156.960000] ksz9477-switch spi1.0 lan2: Link is Up - 1Gbps/Full - flow control rx/tx
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Is it something known?
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Thanks for reporting. It isn't something known (at least to me - who
+knows whether somebody may have been chuckling while I was gloating that
+I removed rtnl_lock() from the DSA switchdev FDB notifiers).
 
-> ---
-> 
-> Changes since v1:
-> - Improved the motivation for the 3 in the commit message.
-> - kfree sw and mux in error paths
-> 
->  drivers/usb/typec/mux.c | 128 ++++++++++++++++++++++++++++++++--------
->  1 file changed, 102 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> index d0b42c297aca..cf2347dd1663 100644
-> --- a/drivers/usb/typec/mux.c
-> +++ b/drivers/usb/typec/mux.c
-> @@ -17,8 +17,11 @@
->  #include "class.h"
->  #include "mux.h"
->  
-> +#define TYPEC_MUX_MAX_DEVS	3
-> +
->  struct typec_switch {
-> -	struct typec_switch_dev *sw_dev;
-> +	struct typec_switch_dev *sw_devs[TYPEC_MUX_MAX_DEVS];
-> +	unsigned int num_sw_devs;
->  };
->  
->  static int switch_fwnode_match(struct device *dev, const void *fwnode)
-> @@ -67,25 +70,50 @@ static void *typec_switch_match(struct fwnode_handle *fwnode, const char *id,
->   */
->  struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode)
->  {
-> -	struct typec_switch_dev *sw_dev;
-> +	struct typec_switch_dev *sw_devs[TYPEC_MUX_MAX_DEVS];
->  	struct typec_switch *sw;
-> +	int count;
-> +	int err;
-> +	int i;
->  
->  	sw = kzalloc(sizeof(*sw), GFP_KERNEL);
->  	if (!sw)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	sw_dev = fwnode_connection_find_match(fwnode, "orientation-switch", NULL,
-> -					      typec_switch_match);
-> -	if (IS_ERR_OR_NULL(sw_dev)) {
-> +	count = fwnode_connection_find_matches(fwnode, "orientation-switch", NULL,
-> +					       typec_switch_match,
-> +					       (void **)sw_devs,
-> +					       ARRAY_SIZE(sw_devs));
-> +	if (count <= 0) {
->  		kfree(sw);
-> -		return ERR_CAST(sw_dev);
-> +		return NULL;
->  	}
->  
-> -	WARN_ON(!try_module_get(sw_dev->dev.parent->driver->owner));
-> +	for (i = 0; i < count; i++) {
-> +		if (IS_ERR(sw_devs[i])) {
-> +			err = PTR_ERR(sw_devs[i]);
-> +			goto put_sw_devs;
-> +		}
-> +	}
->  
-> -	sw->sw_dev = sw_dev;
-> +	for (i = 0; i < count; i++) {
-> +		WARN_ON(!try_module_get(sw_devs[i]->dev.parent->driver->owner));
-> +		sw->sw_devs[i] = sw_devs[i];
-> +	}
-> +
-> +	sw->num_sw_devs = count;
->  
->  	return sw;
-> +
-> +put_sw_devs:
-> +	for (i = 0; i < count; i++) {
-> +		if (!IS_ERR(sw_devs[i]))
-> +			put_device(&sw_devs[i]->dev);
-> +	}
-> +
-> +	kfree(sw);
-> +
-> +	return ERR_PTR(err);
->  }
->  EXPORT_SYMBOL_GPL(fwnode_typec_switch_get);
->  
-> @@ -98,14 +126,17 @@ EXPORT_SYMBOL_GPL(fwnode_typec_switch_get);
->  void typec_switch_put(struct typec_switch *sw)
->  {
->  	struct typec_switch_dev *sw_dev;
-> +	unsigned int i;
->  
->  	if (IS_ERR_OR_NULL(sw))
->  		return;
->  
-> -	sw_dev = sw->sw_dev;
-> +	for (i = 0; i < sw->num_sw_devs; i++) {
-> +		sw_dev = sw->sw_devs[i];
->  
-> -	module_put(sw_dev->dev.parent->driver->owner);
-> -	put_device(&sw_dev->dev);
-> +		module_put(sw_dev->dev.parent->driver->owner);
-> +		put_device(&sw_dev->dev);
-> +	}
->  	kfree(sw);
->  }
->  EXPORT_SYMBOL_GPL(typec_switch_put);
-> @@ -170,13 +201,21 @@ int typec_switch_set(struct typec_switch *sw,
->  		     enum typec_orientation orientation)
->  {
->  	struct typec_switch_dev *sw_dev;
-> +	unsigned int i;
-> +	int ret;
->  
->  	if (IS_ERR_OR_NULL(sw))
->  		return 0;
->  
-> -	sw_dev = sw->sw_dev;
-> +	for (i = 0; i < sw->num_sw_devs; i++) {
-> +		sw_dev = sw->sw_devs[i];
-> +
-> +		ret = sw_dev->set(sw_dev, orientation);
-> +		if (ret)
-> +			return ret;
-> +	}
->  
-> -	return sw_dev->set(sw_dev, orientation);
-> +	return 0;
->  }
->  EXPORT_SYMBOL_GPL(typec_switch_set);
->  
-> @@ -208,7 +247,8 @@ EXPORT_SYMBOL_GPL(typec_switch_get_drvdata);
->  /* ------------------------------------------------------------------------- */
->  
->  struct typec_mux {
-> -	struct typec_mux_dev *mux_dev;
-> +	struct typec_mux_dev *mux_devs[TYPEC_MUX_MAX_DEVS];
-> +	unsigned int num_mux_devs;
->  };
->  
->  static int mux_fwnode_match(struct device *dev, const void *fwnode)
-> @@ -291,25 +331,50 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
->  struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
->  				       const struct typec_altmode_desc *desc)
->  {
-> -	struct typec_mux_dev *mux_dev;
-> +	struct typec_mux_dev *mux_devs[TYPEC_MUX_MAX_DEVS];
->  	struct typec_mux *mux;
-> +	int count;
-> +	int err;
-> +	int i;
->  
->  	mux = kzalloc(sizeof(*mux), GFP_KERNEL);
->  	if (!mux)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	mux_dev = fwnode_connection_find_match(fwnode, "mode-switch", (void *)desc,
-> -					       typec_mux_match);
-> -	if (IS_ERR_OR_NULL(mux_dev)) {
-> +	count = fwnode_connection_find_matches(fwnode, "mode-switch",
-> +					       (void *)desc, typec_mux_match,
-> +					       (void **)mux_devs,
-> +					       ARRAY_SIZE(mux_devs));
-> +	if (count <= 0) {
->  		kfree(mux);
-> -		return ERR_CAST(mux_dev);
-> +		return NULL;
->  	}
->  
-> -	WARN_ON(!try_module_get(mux_dev->dev.parent->driver->owner));
-> +	for (i = 0; i < count; i++) {
-> +		if (IS_ERR(mux_devs[i])) {
-> +			err = PTR_ERR(mux_devs[i]);
-> +			goto put_mux_devs;
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < count; i++) {
-> +		WARN_ON(!try_module_get(mux_devs[i]->dev.parent->driver->owner));
-> +		mux->mux_devs[i] = mux_devs[i];
-> +	}
->  
-> -	mux->mux_dev = mux_dev;
-> +	mux->num_mux_devs = count;
->  
->  	return mux;
-> +
-> +put_mux_devs:
-> +	for (i = 0; i < count; i++) {
-> +		if (!IS_ERR(mux_devs[i]))
-> +			put_device(&mux_devs[i]->dev);
-> +	}
-> +
-> +	kfree(mux);
-> +
-> +	return ERR_PTR(err);
->  }
->  EXPORT_SYMBOL_GPL(fwnode_typec_mux_get);
->  
-> @@ -322,13 +387,16 @@ EXPORT_SYMBOL_GPL(fwnode_typec_mux_get);
->  void typec_mux_put(struct typec_mux *mux)
->  {
->  	struct typec_mux_dev *mux_dev;
-> +	unsigned int i;
->  
->  	if (IS_ERR_OR_NULL(mux))
->  		return;
->  
-> -	mux_dev = mux->mux_dev;
-> -	module_put(mux_dev->dev.parent->driver->owner);
-> -	put_device(&mux_dev->dev);
-> +	for (i = 0; i < mux->num_mux_devs; i++) {
-> +		mux_dev = mux->mux_devs[i];
-> +		module_put(mux_dev->dev.parent->driver->owner);
-> +		put_device(&mux_dev->dev);
-> +	}
->  	kfree(mux);
->  }
->  EXPORT_SYMBOL_GPL(typec_mux_put);
-> @@ -336,13 +404,21 @@ EXPORT_SYMBOL_GPL(typec_mux_put);
->  int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
->  {
->  	struct typec_mux_dev *mux_dev;
-> +	unsigned int i;
-> +	int ret;
->  
->  	if (IS_ERR_OR_NULL(mux))
->  		return 0;
->  
-> -	mux_dev = mux->mux_dev;
-> +	for (i = 0; i < mux->num_mux_devs; i++) {
-> +		mux_dev = mux->mux_devs[i];
-> +
-> +		ret = mux_dev->set(mux_dev, state);
-> +		if (ret)
-> +			return ret;
-> +	}
->  
-> -	return mux_dev->set(mux_dev, state);
-> +	return 0;
->  }
->  EXPORT_SYMBOL_GPL(typec_mux_set);
->  
-> -- 
-> 2.33.1
+It turns out that dsa_port_host_fdb_add() needs rtnl_lock() around
+dev_uc_add(), at least if the master doesn't support IFF_UNICAST_FLT.
 
--- 
-heikki
+It's pretty nasty. If we add an rtnl_lock() there, we'll deadlock from
+the code paths that call dsa_flush_workqueue(), which have rtnl_lock()
+already held.
+
+The only way I think we can get out of this is if we call dev_uc_add()
+only if the master has IFF_UNICAST_FLT. If it doesn't, we should force a
+call to dsa_master_set_promiscuity() during dsa_master_setup().
+Not exactly the cleanest solution, but at least it shouldn't deadlock
+and it should work.
+
+Andrew, Florian, Vivien?

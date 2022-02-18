@@ -2,160 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979664BB8F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809504BB901
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235064AbiBRMOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:14:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55592 "EHLO
+        id S235107AbiBRMSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:18:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbiBRMOs (ORCPT
+        with ESMTP id S232963AbiBRMSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:14:48 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960C1285707;
-        Fri, 18 Feb 2022 04:14:31 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IAbx5j004757;
-        Fri, 18 Feb 2022 12:14:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qYg3HbRvuyaDwlHM7pM6xhilL0TvYLUeas7iaFOSKs4=;
- b=oapUP9ukTBd+6fEhkmhMmghy447KM4OKaHQLx6dXARxsCoqenmY1bzxjmrUCmvRtpDRE
- 5MpsEY3FTOuzaKJE8ZHv9CcdR4bYzYDb0o3+GmEAtBUvzLtFwKKn0AEh6pPXZi/ZQT47
- 9a5xCn3cGHCW2Wbui7RwTpWpz1HAVFjgCJuJZ/SfHFdNONB3rgswDZBjNrtxyCU8Yjx6
- ehZh3C7JsniHLgKbd4Q8akeFVYi7dRFfQCRKI6WjQDo+UKjlh2kD/6hH6XPXdiD1ezsp
- x+FmEbWFLHWUsRnszfJgJhHHRtWgUb34xRtqSWX6FX4iCKgSQ5f+eCf2ZHGjVsLjirrk tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ea9jda9aj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:14:30 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21ICETOO008647;
-        Fri, 18 Feb 2022 12:14:29 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ea9jda9a2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:14:29 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21IC7rRH027863;
-        Fri, 18 Feb 2022 12:14:27 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e645khwda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:14:27 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21ICEOa818940406
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Feb 2022 12:14:24 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 17B6EA4054;
-        Fri, 18 Feb 2022 12:14:24 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1A5EA4062;
-        Fri, 18 Feb 2022 12:14:22 +0000 (GMT)
-Received: from [9.171.81.151] (unknown [9.171.81.151])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Feb 2022 12:14:22 +0000 (GMT)
-Message-ID: <2af9c3a9-e5a1-484b-9c1e-693a25993cdb@linux.ibm.com>
-Date:   Fri, 18 Feb 2022 13:14:21 +0100
+        Fri, 18 Feb 2022 07:18:23 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2056.outbound.protection.outlook.com [40.107.223.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226ED294FCC;
+        Fri, 18 Feb 2022 04:18:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k/DIs9ZdmQjc5veV7echyMVS0G3ZDwACgFRdB+W+T4N0HuHvUi/YD1jT2iVgzYzwiMOh3glcW90wGT+1DHmWOUA/hTOkIkqxRbOv338yUK9Av5+qP1ogOJP6AAqeiLjGDIpneMwshpxvqt7NEs3veBttNaBYjzSZQ8eLyUchLa7DVDo1yWIdufAuWE9zi4A2I5x3PXU8LtBha/mPCCBtBWpwvUGtkJhEN/5gxC6OHn920IVeOL/7e8Vc8ROWnokMXqT2rpKct4bSc86CT0mlP1d01X+tofaNQ3EGMW/yhjhsfeW1e7x4btGZU3NrOopK/PB5vaOueElo4KlDq1kfxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GjNndLZ7oDcnGiZ6yBpPbJ50crBgvrrghGer3OqGcHk=;
+ b=k2HO+CoXZ7Gl2aW2hH/3ScRUmzTLrOnWWZVKLfksatrdZMCi9eYFZmpNcdDvUd40F4imaDb2h2dIY8DDhJ6PrEskQrdbg2AKuj819qBzLB+SB3BY2Z4UeE6Aegg0C9Ex7F4BklIUH9etb86cFh1RtVma+YsCOm/zeJU26mCCGnk5Yz3FC2kV8QRbU9CGLuFXzBl8FDQ/QosYaWgW6/RBfcYZnj8rAK9dBOUWn3I5dro56Uz/KUZU7Kfkx2DEbKqaaFtxq9o//WyZbr6roSsiFbetzhpcxNrFFmp8iRCZgwa8b/xc3WmZDLnjEZITEW9L3zzeaw7gSSllu0BmWcK16w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=temperror action=none header.from=nvidia.com; dkim=none (message not
+ signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GjNndLZ7oDcnGiZ6yBpPbJ50crBgvrrghGer3OqGcHk=;
+ b=jll7ZC1xWASlO4MWArN1IQqfPRKQBBnpc+Vw2NX8eRaiHXH/kihL8EsXQnVjeoAnr9c27QTzOEkQHzL+pujIVMswqVLIyJSCNI2iRi6XEbgTa8Db0ApLNH6DnXXOI8znyajf4DQdRTaCA73AtL1+INIgPv4Iaz4tjF3xPWDAmV0GG5uE2zI/51Ij9yhvyEyWzcU/oTsElwodpd/eiv5Gsx4kobXbb/WCf5nncxtK46P0P0MAwKnn1DOo5rhJcdRSR+CF3kR/tfTBu1qIeVICuI48U/VJ191cwW4QGbZmtTz1sA9giH1Q6wRlbQH0YQ+gtf6NI+u5+BIsoIr+afzycQ==
+Received: from BN0PR04CA0086.namprd04.prod.outlook.com (2603:10b6:408:ea::31)
+ by PH0PR12MB5629.namprd12.prod.outlook.com (2603:10b6:510:141::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.14; Fri, 18 Feb
+ 2022 12:18:03 +0000
+Received: from BN8NAM11FT046.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ea:cafe::96) by BN0PR04CA0086.outlook.office365.com
+ (2603:10b6:408:ea::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14 via Frontend
+ Transport; Fri, 18 Feb 2022 12:18:03 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=nvidia.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of nvidia.com: DNS Timeout)
+Received: from mail.nvidia.com (12.22.5.234) by
+ BN8NAM11FT046.mail.protection.outlook.com (10.13.177.127) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4995.15 via Frontend Transport; Fri, 18 Feb 2022 12:18:01 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 18 Feb
+ 2022 12:17:58 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Fri, 18 Feb 2022
+ 04:17:57 -0800
+Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.9)
+ with Microsoft SMTP Server id 15.2.986.9 via Frontend Transport; Fri, 18 Feb
+ 2022 04:17:55 -0800
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <krzysztof.kozlowski@canonical.com>, <thierry.reding@gmail.com>
+CC:     <jonathanh@nvidia.com>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH] memory: tegra: Add APE memory clients for Tegra234
+Date:   Fri, 18 Feb 2022 17:46:29 +0530
+Message-ID: <1645186589-25118-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] KVM: s390: selftests: Test vm and vcpu memop with
- keys
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Thomas Huth <thuth@redhat.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220211182215.2730017-11-scgl@linux.ibm.com>
- <20220217145336.1794778-1-scgl@linux.ibm.com>
- <20220217145336.1794778-3-scgl@linux.ibm.com>
- <7d0b5b03-21f4-0402-779a-788d4bd58071@linuxfoundation.org>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <7d0b5b03-21f4-0402-779a-788d4bd58071@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dgoOZILauosDLH8qZeOhpT3DQ9BI8vfF
-X-Proofpoint-GUID: H5CqkSacmumSN9NkkxkBuif3WNkLkAdt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-18_04,2022-02-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxlogscore=999 bulkscore=0 adultscore=0 priorityscore=1501 clxscore=1015
- suspectscore=0 mlxscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202180078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7d21ef22-4c14-4224-8a0d-08d9f2d8b54e
+X-MS-TrafficTypeDiagnostic: PH0PR12MB5629:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR12MB56290EA36F4781A1C089AF9DA7379@PH0PR12MB5629.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OsjL/ZfmqdA+VAKp69HwEHI5xQqnwb7cvFHI2lMcTTf8g9ZkfNW8neMhlHB67UFpdScskcDdV3XX8uqrNFFIo3s0SrO2NBr6Q/Ouk5jvksTcSi8p4XN4vUY/+uY7A2+falIw40SWvFX91Ij6U/gv7yD0siFAt4exabFC3GDRSu9Jk5Rr5BUMLEL5xP/U7FcFCuuKzCI4B0VXibIiafB7iR5ePL9O9pspTTCUvsGoCSYfrYq992vmoEvEJGrvSkfuP9O6+8pvUbKMX4/cm4yfLnyOrsimu73fP0e7JQQX40f1XAkMhxnZl16ruGFR5vHZsl5xyO5rQB6uly25N7PbuGQQDhNhlMyWm2COZLdjKc1sSsuhFxy3B2WdfT3PU3wuvKTNHuHx52iwBfSEHj3xNA+vqi6BavCWkXzHl4aQksCLx7PbLLp1txrv4EXH2dJ614OLpeghQ3mfvN1oWK1n+GvH8pdrVXSbHgoCK/wfDXg1OjMukFK1ouKzXJCZ5aPgrKmATeSiQ3Zypzqk0wrl/zNRIWoGzH/BihLRru+X9Jt2FA6G8eQG9Jam47eFKvgfN+pYLaFvn8r90TyBmu0sWGymselpVz0sBBbLIOkC/NZNpPLPshIUh+IepZYyEcitQDzqxD0Bk9K76VWBajJ6wu+KJV6ihUN7rdZct+ryks6oj+8r+N8iwucL5z0Iezu7A19gTW/9GWoUKEKyrZRSuy+TQVM1BX3HvCbd/Lbgtbedc4AdNZM9vJ+ao42yT/JQgi5yWOh1GLGYaKCiXxi9iIVgnPNhVPXxA1jY1xfkl7g=
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(40460700003)(63350400001)(47076005)(83380400001)(107886003)(5660300002)(86362001)(966005)(508600001)(6666004)(63370400001)(36756003)(36860700001)(2906002)(4326008)(336012)(426003)(356005)(186003)(70206006)(8676002)(81166007)(316002)(70586007)(54906003)(110136005)(26005)(2616005)(7696005)(82310400004)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 12:18:01.6441
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d21ef22-4c14-4224-8a0d-08d9f2d8b54e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT046.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5629
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/22 18:54, Shuah Khan wrote:
-> On 2/17/22 7:53 AM, Janis Schoetterl-Glausch wrote:
->> Test storage key checking for both vm and vcpu MEM_OP ioctls.
->> Test both error and non error conditions.
->>
-> 
-> This patch seems to combine restructuring the code and new code.
-> e,g test_errors() was added in the last patch, only to be redone
-> in this patch with test_errors split into test_common_errors()
-> 
-> Doing restructure in a separate patch and then adding new code
-> makes it easier to review and also keep them simpler patches.
-> 
-> Please split the code in these two patches to just do restructure
-> and then add new code.
-> 
-> I also would like to have good reasons to change existing code and
-> make them into macros.
->  
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->> ---
->>   tools/testing/selftests/kvm/s390x/memop.c | 342 +++++++++++++++++++++-
->>   1 file changed, 328 insertions(+), 14 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
->> index 4510418d73e6..bc12a9238967 100644
->> --- a/tools/testing/selftests/kvm/s390x/memop.c
->> +++ b/tools/testing/selftests/kvm/s390x/memop.c
->> @@ -201,6 +201,8 @@ static int err_memop_ioctl(struct test_vcpu vcpu, struct kvm_s390_mem_op *ksmo)
->>   #define PAGE_SHIFT 12
->>   #define PAGE_SIZE (1ULL << PAGE_SHIFT)
->>   #define PAGE_MASK (~(PAGE_SIZE - 1))
->> +#define CR0_FETCH_PROTECTION_OVERRIDE    (1UL << (63 - 38))
->> +#define CR0_STORAGE_PROTECTION_OVERRIDE    (1UL << (63 - 39))
->>     #define ASSERT_MEM_EQ(p1, p2, size) \
->>       TEST_ASSERT(!memcmp(p1, p2, size), "Memory contents do not match!")
->> @@ -235,6 +237,11 @@ static struct test_default test_default_init(void *guest_code)
->>       return t;
->>   }
->>   +static vm_vaddr_t test_vaddr_alloc(struct test_vcpu vm, size_t size, vm_vaddr_t vaddr_min)
->> +{
->> +    return vm_vaddr_alloc(vm.vm, size, vaddr_min);
->> +}
->> +
-> 
-> What is the value of adding a new routine that simply calls another?
+Add the memory clients on Tegra234 which are needed for APE
+DMA to properly use the SMMU.
 
-I just found the vm.vm confusing/ugly and wanted to hide it,
-I'm not married to that idea, tho.
+Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+---
+ Please note that this patch depends on the DT binding patches of series
+ https://patchwork.kernel.org/project/alsa-devel/list/?series=609494&state=*.
+ So please consider this patch once Thierry picks up DT binding patches and
+ provides ACK on this.
 
-> Do you see this routine changing in the future to do more?
+ drivers/memory/tegra/tegra234.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-No.
-> 
-> thanks,
-> -- Shuah
+diff --git a/drivers/memory/tegra/tegra234.c b/drivers/memory/tegra/tegra234.c
+index f7b24ba..1d19cb9 100644
+--- a/drivers/memory/tegra/tegra234.c
++++ b/drivers/memory/tegra/tegra234.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Copyright (C) 2021 NVIDIA CORPORATION.  All rights reserved.
++ * Copyright (C) 2021-2022, NVIDIA CORPORATION.  All rights reserved.
+  */
+ 
+ #include <soc/tegra/mc.h>
+@@ -170,6 +170,26 @@ static const struct tegra_mc_client tegra234_mc_clients[] = {
+ 				.security = 0x4b4,
+ 			},
+ 		},
++	}, {
++		.id = TEGRA234_MEMORY_CLIENT_APEDMAR,
++		.name = "apedmar",
++		.sid = TEGRA234_SID_APE,
++		.regs = {
++			.sid = {
++				.override = 0x4f8,
++				.security = 0x4fc,
++			},
++		},
++	}, {
++		.id = TEGRA234_MEMORY_CLIENT_APEDMAW,
++		.name = "apedmaw",
++		.sid = TEGRA234_SID_APE,
++		.regs = {
++			.sid = {
++				.override = 0x500,
++				.security = 0x504,
++			},
++		},
+ 	},
+ };
+ 
+-- 
+2.7.4
 

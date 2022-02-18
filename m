@@ -2,59 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AED04BB410
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EC84BB418
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbiBRIWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 03:22:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58422 "EHLO
+        id S232494AbiBRIYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 03:24:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiBRIWa (ORCPT
+        with ESMTP id S230221AbiBRIYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 03:22:30 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5C633DA55;
-        Fri, 18 Feb 2022 00:22:14 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 91CE080AF;
-        Fri, 18 Feb 2022 08:21:29 +0000 (UTC)
-Date:   Fri, 18 Feb 2022 10:22:12 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [BUG]: musb broken since v5.17-rc1 on gta04 (omap3 / dm3730) -
- cf081d009c44 ("usb: musb: Set the DT node on the child device")
-Message-ID: <Yg9XNBlOtwBamDm/@atomide.com>
-References: <F24D461D-8103-456E-AD28-1AA9D5C2AA3D@goldelico.com>
- <D26EF7C8-5264-456F-88FC-1B55AB83AAED@goldelico.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D26EF7C8-5264-456F-88FC-1B55AB83AAED@goldelico.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 18 Feb 2022 03:24:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EA73E0FB;
+        Fri, 18 Feb 2022 00:24:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE6DDB824A3;
+        Fri, 18 Feb 2022 08:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D9AC340E9;
+        Fri, 18 Feb 2022 08:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645172674;
+        bh=pae/aN5UV9dv8pK4WMcI2r3n2XoZK9a73URkWMOsIU8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=nPho2b8erTCNwqyeEtsBRpmMOA28WSKNSM80QMXGtOhqnxS2kscFrpozFk8dcvKwY
+         nE7zdwKqDVye4p7zcmikDqBFAlzORK6kp/bxSPS+BgbM2DeBlz1DqdxqRXOgaLB+49
+         O7keRvG2n1Ptmcq2EEkKETwDL8s8mzTOIkcywNC+qVvzKXi5bFPsUTYbCpQWYK7YNt
+         KxEegVdCS0DfHem1JyXAfAToN3P6yOiqwtSSw//xb7JZj/5zdyeSZZSmMxEfwZWRvL
+         9dxeR+iTzVorcXVjxdRx8kVjefAY7Us2ULfGSsKh6eYbpa9aB3tLqFYJoZC12BJiIt
+         F1e2fDqDWMDXw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Yuanchu Xie <yuanchu@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Markus Boehme <markubo@amazon.de>, rientjes@google.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/damon: make selftests executable
+Date:   Fri, 18 Feb 2022 08:24:28 +0000
+Message-Id: <20220218082428.11699-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <Yg9SR88j0JV/0gKJ@kroah.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* H. Nikolaus Schaller <hns@goldelico.com> [220215 06:40]:
-> Hi Rob or Tony,
-> any insights or fixes?
+On Fri, 18 Feb 2022 09:01:11 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
+
+> On Fri, Feb 18, 2022 at 07:52:54AM +0000, SeongJae Park wrote:
+> > Hello Yuanchu,
+> > 
+> > Thank you for this patch!
+> > 
+> > On Fri, 18 Feb 2022 00:10:17 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
+> > 
+> > > The damon selftests do not have the executable bit on. We fix that by
+> > > setting the x bits on the .sh files similar to other existing shell
+> > > selftests.
+> > > 
+> > > Fixes: 9ab3b0c8ef62 ("selftests/damon: split test cases")
+> > > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+> > 
+> > Reviewed-by: SeongJae Park <sj@kernel.org>
 > 
-> At the moment we have simply reverted cf081d009c44 in the Letux distro kernels.
+> This type of change does not work outside of git, so why not just make
+> the tool that calls these scripts not care about the executable bit like
+> we do for other scripts?
 
-Yeah this probably should be reverted unless Rob has better solution
-available.
+Actually, we made kselftest receives scripts having no executable bit[1],
+though it still prints warning.  I guess Yuanchu wants to remove the warning?
 
-Regards,
+To remove the warning, simply making kselftest (runner.sh) stop printing the
+warning message might make more sense.  Nevertheless, it's also true that
+letting some scripts have executable bits while others not looks inconsistent
+to me.  That's why I left the warning message there.  Should we remove the
+warning from kselftest and remove executable bits from other selftest test
+scripts?  Or, let the inconsistency be?  I have no real opinion here, so just
+wanted to hear others' opinion if possible.
 
-Tony
+BTW, similar issue is also in Kconfig's 'shell' macro.  For example,
+'runst-version.sh' on -mm tree bothered me before[2], and now
+'pahole-version.sh'.  I might make change in 'scrips/Kconfig/preprocess.c'
+later.
+
+[1] https://lore.kernel.org/linux-kselftest/20210810164534.25902-1-sj38.park@gmail.com/
+[2] https://lore.kernel.org/all/20220110085952.6137-1-sj@kernel.org/
+
+
+Thanks,
+SJ
+
+> 
+> thanks,
+> 
+> greg k-h

@@ -2,128 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784FA4BBCEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450514BBCF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237411AbiBRQCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:02:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47498 "EHLO
+        id S237365AbiBRQD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:03:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237449AbiBRQBr (ORCPT
+        with ESMTP id S234506AbiBRQDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:01:47 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5AD2B5223
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:01:22 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id om7so8945300pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:01:22 -0800 (PST)
+        Fri, 18 Feb 2022 11:03:54 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DE948E79
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:03:37 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id 10so4484696uar.9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:03:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XFjNobaT2htcA4k2+rACGDlyXr0w1b0IEeXMGWoU+GQ=;
-        b=EPaXCh+QRxSRoSgsWxmJwRg6tqGCP82QzcP53X8m2d27haBnyVeGZM/TmoF1kloVEv
-         7uQ7xQGri+04tUGGioLH9mW/QWzlVs+zX7RZTBaQOhJJwwzqnHwshwpwJ6HUuR1cM/sN
-         jIEDk5XztFcGgigk325bNCeR1Ru4VN9kqMAvfG6ip18Rjx3zzJ3oKs4CEcrfw7ByvDt2
-         B1XNj1b9UPfOQEqnwvGeyQQ9Cr0MFD+oF5AaJlW4klqELqyMnDOo9UBdgnu6QmXprStY
-         4Kp5UNnyQlMzncVujkp9F47AvHEfza+1X5MHABFWaCkzNpUMMPQomJCv57ZgHaXhwpSb
-         YjMQ==
+         :cc;
+        bh=a/tt/i/SHiINJEY0pzj/+Ldx+3Qwg7aOlXBO5O3mv/g=;
+        b=dF4InSk4puY7t63FDNQji1VKBMAT10aW6SsRaj+tbGjKZBA7rCD6pWG5TDIOUYZs6d
+         52g9JlO5u2/5vAvhhXDbgKidl3IcbTgCPe3jNeCsjUK9FLQY9n9zO8f1y5naKqP3Sa5P
+         6GKB8aFGjIk9FgIJB2WZatULVInnG6CvYYyvh929X6pCjT5OuXW71PguXiOApK1ZNhuT
+         riblrkDGEjVWLHl8fFmKnX12m+X1DNxNvEgBeFwgNXqv5j+bZkRW75RYE9667sBznToC
+         Oi0OVnAmg+weJANXpwN9GQNBpPcnyRiuHypFs7bPUZZAfQYlurfZET/5qT1iznjdQTv8
+         ZHNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XFjNobaT2htcA4k2+rACGDlyXr0w1b0IEeXMGWoU+GQ=;
-        b=nmyEkJlydDb0vgBXJfbH9PMNXjTiK6sTWF2gXNTWBAsuhPSo2vwQXGPXknotWML7Kn
-         JIXhxwf/CiL5uwKtiEt/qQIIz8m/TN8IjZfb8JDOFTjU9pu+NkfQ9NepSACC2/XNWW9v
-         4J/Npia8UGzh8dt5rZs+cCWyMi8LXiUGr+D9KOZgxnjcQje//5lhdtrxHQf4DHalmYaf
-         FRovbzvFPOuun78NvRvtyqYdGF4SvpE7LpsiuWJwwf6thNubmgu34KCxm4Yzzx/4CmVK
-         Reod2nhZtzc0GImOVgeRaCgmI05hE9mxZlPBAsjz6+fDP1jC0ugJdMSNyr0by+4f4vqr
-         jCow==
-X-Gm-Message-State: AOAM5337/etQhZqsUijrhJQX38y+xkW55vKST8DhDiITw3rZCPQ43Tbo
-        iii9zvpYo3e7Znnbpp4LI9To7BB1bSa3fGGUm1K1
-X-Google-Smtp-Source: ABdhPJwLt+s8aeYwD2rdVVWp7ivVPPj6qTMkm8CczLA4ox6HcF14gZmFwHu1ScwIEJ2iHUDfWyR9MXBzmMJA0gyJ1CA=
-X-Received: by 2002:a17:90a:9294:b0:1b9:48e9:a030 with SMTP id
- n20-20020a17090a929400b001b948e9a030mr13317434pjo.200.1645200081628; Fri, 18
- Feb 2022 08:01:21 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=a/tt/i/SHiINJEY0pzj/+Ldx+3Qwg7aOlXBO5O3mv/g=;
+        b=IRFlC6POXPpqwn+mxtPLA6JqtWkWRTozYij4NoNuYVVbdWLbNG56f3TIxZzTwE+zk0
+         6h1tHH5EnIIFbwyWOP7GNcW2/W3IYMvMVQpzPe1CmEe7uw/fAJVYn99JDm6hegERYpBN
+         aSIbDP3j8WU9XnUNMv667jC90eRBteYFPtYA2EycodafwLOaqFH03qQKza+CarXMDVfA
+         hu82zklMzez3Rm5LzYbuw3jtutZprrywfCvxN+peWHvmpZ5bKCWnNWKJ6hqXV049xpjh
+         ZrYV/Wx8W9I91RORhgJ5KKYa4Aq4Y4mWsWvQ+9mTyrXu5bsMY9g2MCQzNOQXmq8nCcdq
+         /NKA==
+X-Gm-Message-State: AOAM533fItALWNT9ibbY0HIUnpV2/S5cdUA9i3CeU+4uJ3Q19H2rFOQa
+        uda2tk/Rveq0nGw9TqZ/CsYk2D/X4n7RdOjgiTdUy+D0e1amFQ==
+X-Google-Smtp-Source: ABdhPJweA9UfX0PBbz3wdvBXso5dR5TQDJ3ynb4y/07Jh18joreI6URQtKSRC6DR2FHWxXidwq0Il055iZlCfHPircE=
+X-Received: by 2002:ab0:60b1:0:b0:341:543e:c388 with SMTP id
+ f17-20020ab060b1000000b00341543ec388mr3233205uam.80.1645200215894; Fri, 18
+ Feb 2022 08:03:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20220217142133.72205-1-cgzones@googlemail.com> <20220217142133.72205-2-cgzones@googlemail.com>
-In-Reply-To: <20220217142133.72205-2-cgzones@googlemail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 18 Feb 2022 11:01:10 -0500
-Message-ID: <CAHC9VhQPZ3_dXvM9eqwsxZ2c+2mcdvNNJbtUNs_-9Md5F3P8vA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] selinux: use consistent pointer types for boolean arrays
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Austin Kim <austin.kim@lge.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <Yg54nse5qNQO3sbW@zn.tnic> <20220218013209.2436006-1-juew@google.com>
+ <Yg+2Hc78nfSRmh/j@zn.tnic>
+In-Reply-To: <Yg+2Hc78nfSRmh/j@zn.tnic>
+From:   Jue Wang <juew@google.com>
+Date:   Fri, 18 Feb 2022 08:03:24 -0800
+Message-ID: <CAPcxDJ4c3eGXTB9UPJmZ8dzyCNPW4Lv9s1QSeoCWq_LdNWTrJw@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/mce: work around an erratum on fast string copy instructions.
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
+On Fri, Feb 18, 2022 at 7:07 AM Borislav Petkov <bp@alien8.de> wrote:
 >
-> Use a consistent type of unsigned int* for boolean arrays, instead of
-> using implicit casts to and from int*.
+> On Thu, Feb 17, 2022 at 05:32:09PM -0800, Jue Wang wrote:
+> > +static noinstr bool quirk_skylake_repmov(void)
+> > +{
+> > +     u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
+> > +     u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
+> > +
+> > +     /*
+> > +      * Apply the quirk only to local machine checks, i.e., no broadcast
+> > +      * sync is needed.
+> > +      */
+> > +     if ((mcgstatus & MCG_STATUS_LMCES) &&
+> > +         unlikely(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
+> > +             u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
+> > +
+> > +             /* Check for a software-recoverable data fetch error. */
+> > +             if ((mc1_status &
+> > +                  (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
+> > +                   MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
+> > +                   MCI_STATUS_AR | MCI_STATUS_S)) ==
+> > +                  (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
+> > +                   MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
+> > +                   MCI_STATUS_AR | MCI_STATUS_S)) {
+> > +                     misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
+> > +                     __wrmsr(MSR_IA32_MISC_ENABLE,
+> > +                             (u32)misc_enable, (u32)(misc_enable >> 32));
 >
-> Reported by sparse:
+> "You're going to have to use the mce_{rd,wr}msrl() routines."
 >
->     security/selinux/selinuxfs.c:1481:30: warning: incorrect type in assi=
-gnment (different signedness)
->     security/selinux/selinuxfs.c:1481:30:    expected unsigned int *
->     security/selinux/selinuxfs.c:1481:30:    got int *[addressable] value=
-s
->     security/selinux/selinuxfs.c:1398:48: warning: incorrect type in argu=
-ment 3 (different signedness)
->     security/selinux/selinuxfs.c:1398:48:    expected int *values
->     security/selinux/selinuxfs.c:1398:48:    got unsigned int *bool_pendi=
-ng_values
+> I actually really meant that.
+Thanks.
+
+Since MSR_IA32_MISC_ENABLE is not a MCA register, I wonder if we want
+to mix its read/write with the injected MCE code. I was a bit concerned about
+potential race with mce-inject and the read/write to MSR_IA32_MISC_ENABLE.
+
 >
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> And I went and simplified this a bit more so that it is more readable,
+> diff ontop.
+>
+> Also, Tony, I think the clearing of MCG_STATUS should happen last.
 >
 > ---
-> A more invasive change would be to change all boolean arrays to bool*.
-
-I think that might be a worthwhile change, although that can happen at
-a later date.
-
-A quick general comment: please try to stick to 80-char long lines.  I
-realize Linus/checkpatch.pl has started to allow longer lines but I
-would still like SELinux to try and keep to 80-chars or under.
-
-> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/service=
-s.c
-> index 6901dc07680d..7865926962ab 100644
-> --- a/security/selinux/ss/services.c
-> +++ b/security/selinux/ss/services.c
-> @@ -3175,7 +3175,8 @@ int security_get_bool_value(struct selinux_state *s=
-tate,
->  static int security_preserve_bools(struct selinux_policy *oldpolicy,
->                                 struct selinux_policy *newpolicy)
+> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+> index c1a41da99975..1741be9b9464 100644
+> --- a/arch/x86/kernel/cpu/mce/core.c
+> +++ b/arch/x86/kernel/cpu/mce/core.c
+> @@ -831,34 +831,35 @@ quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
+>   */
+>  static noinstr bool quirk_skylake_repmov(void)
 >  {
-> -       int rc, *bvalues =3D NULL;
-> +       int rc;
-> +       unsigned int *bvalues =3D NULL;
-
-Doesn't this cause a type mismatch (unsigned int vs int) when an entry
-from bvalues[] is assigned to cond_bool_datum::state later in the
-security_preserve_bools() function?
-
---=20
-paul-moore.com
+> -       u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
+> -       u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
+> +       u64 mcgstatus   = mce_rdmsrl(MSR_IA32_MCG_STATUS);
+> +       u64 misc_enable = mce_rdmsrl(MSR_IA32_MISC_ENABLE);
+> +       u64 mc1_status;
+>
+>         /*
+>          * Apply the quirk only to local machine checks, i.e., no broadcast
+>          * sync is needed.
+>          */
+> -       if ((mcgstatus & MCG_STATUS_LMCES) &&
+> -           (misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
+> -               u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
+> -
+> -               /* Check for a software-recoverable data fetch error. */
+> -               if ((mc1_status &
+> -                    (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
+> -                     MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
+> -                     MCI_STATUS_AR | MCI_STATUS_S)) ==
+> -                    (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
+> -                     MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
+> -                     MCI_STATUS_AR | MCI_STATUS_S)) {
+> -                       misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
+> -                       __wrmsr(MSR_IA32_MISC_ENABLE,
+> -                               (u32)misc_enable, (u32)(misc_enable >> 32));
+> -                       mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
+> -                       mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
+> -                       pr_err_once("Errata detected, disable fast string copy instructions.\n");
+> -                       return true;
+> -               }
+> +       if (!(mcgstatus & MCG_STATUS_LMCES) ||
+> +           !(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING))
+> +               return false;
+> +
+> +       mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
+> +
+> +       /* Check for a software-recoverable data fetch error. */
+> +       if ((mc1_status &
+> +            (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
+> +             MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
+> +             MCI_STATUS_AR | MCI_STATUS_S)) ==
+> +            (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
+> +             MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
+> +             MCI_STATUS_AR | MCI_STATUS_S)) {
+> +               misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
+> +               mce_wrmsrl(MSR_IA32_MISC_ENABLE, misc_enable);
+> +               mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
+> +               pr_err_once("Erratum detected, disable fast string copy instructions.\n");
+> +               return true;
+>         }
+> +
+>         return false;
+>  }
+>
+> @@ -1432,7 +1433,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+>                 return unexpected_machine_check(regs);
+>
+>         if (mce_flags.skx_repmov_quirk && quirk_skylake_repmov())
+> -               return;
+> +               goto clear;
+>
+>         /*
+>          * Establish sequential order between the CPUs entering the machine
+> @@ -1576,6 +1577,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+>  out:
+>         instrumentation_end();
+>
+> +clear:
+>         mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
+>  }
+>  EXPORT_SYMBOL_GPL(do_machine_check);
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette

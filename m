@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF7F4BBA8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B38E4BBA94
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236001AbiBROXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:23:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44944 "EHLO
+        id S236021AbiBRO05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:26:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235993AbiBROXM (ORCPT
+        with ESMTP id S233235AbiBRO0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:23:12 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D402459E;
-        Fri, 18 Feb 2022 06:22:52 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id p9so14840995wra.12;
-        Fri, 18 Feb 2022 06:22:52 -0800 (PST)
+        Fri, 18 Feb 2022 09:26:55 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2EEA2;
+        Fri, 18 Feb 2022 06:26:38 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v4so8741409pjh.2;
+        Fri, 18 Feb 2022 06:26:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VnAIJ0UvovmuuRgmc/P0eoCaMTkjs2w9LqScQtLxo3g=;
-        b=Px6loXhQkxStejGmXJpI+5UAeQ9EfLtKQPkqYEikfuKSw1EzIkaz0YZ1Dibes4Mpii
-         EotzNG5rl+jqnQMR5J3kkeTAer9ndjct5npAKK1EIHVpbiaL5I9TC7/je4AWTMtdHfhd
-         /SnwAdLdGvNUPHpmjVZCTfpmn+9lrX8FcvQHM4mGQU8io+4JLu8OK0y6kmPWbv/AWHUU
-         clFjFg69ChGs8iyMPFAbHCD+9Hkgk9lHkbWBxWC+3dxpUtppgVAIoV7f9yH3USdw9VlQ
-         ZKk12XpwJhjI7BRzYaP3nxatFuazHwavRq/AI78Md3qELUZhC1gI0G5yfW0WVif5KkLZ
-         09Tg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Tl1qAGSp1vbK3qa2hW0s4M5fyrIzlh1pOe1T73qOAJU=;
+        b=NrrLS9xLNyIf02IMsCAtqfVs21Qp5t8h4q/x8nkYwSieduxrUw5+BeIfm4Uwar+jcW
+         dM4dxLeCtQsrnRPocGf3CxPLuJvU5bKrbqBChJDeceDDvKjV4eS2sSAvY5FmVlwIUqNm
+         lQzSLOyVmj362cmgXQR05y6GiDK7RGEjgTi23OpghAqCinSGPVgmfxDKWG6oRt+APycn
+         lCIeq/g3u/lrsJoeC73vXXTBRO2CnjhbEJu8RFApvSs9zISHxXMQh/a67He6AJ00+0Dh
+         lFUZnchcVOFtO8J22MIXNnqoiTVl/nbwntLe8unI6ZEWjVuW2SShAkOrINjEk0p/pM+R
+         Ur5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VnAIJ0UvovmuuRgmc/P0eoCaMTkjs2w9LqScQtLxo3g=;
-        b=n6YxPgCMigLQHXvB1+RZa3aDOb7Bdt5qJtphlM3+9qtC3fnfVzvPtXzcMUaiRCtPxy
-         2sUGpA4tMzyD6WhDcLi+w547KKqVVmUBlh+lqEkPQDbmUycBnA4tGtXJhXUcuNHQNf1d
-         64iIdzJimIHvsQC+DSq6JqZL8E9Df15MNC/Z9Gu0GWNNLk0VQqNhosPsmFPFhzx5lCb0
-         7HeQ1gduxX5S8LEBJKxkZec8OQxehxCl579QclvYjknICfEtmvzXkxvsBgxu/D9oC0MV
-         HrYqvgi1UHlz8omtGtibhoxS0dKB9qcB0IDyNwczReWKjGtdXWZe5ZvrDzP0UttRvBWn
-         Atvg==
-X-Gm-Message-State: AOAM530g4ylGxnINcELUdD805e1mzJRTBsy3kf5Z6uUl2ZOXbBTvTrzB
-        YhW2iT/Y6fxW4Mtz0JZm0cw=
-X-Google-Smtp-Source: ABdhPJxQ+renDcxdLPuwzaYOA43bndL6cMVEwsRjfRPhlbJ8m+sJbAToPEOAIVPa3JoxRtrBlq/JGQ==
-X-Received: by 2002:adf:9106:0:b0:1e3:c02a:f4af with SMTP id j6-20020adf9106000000b001e3c02af4afmr6353398wrj.150.1645194171020;
-        Fri, 18 Feb 2022 06:22:51 -0800 (PST)
-Received: from krava ([83.240.63.12])
-        by smtp.gmail.com with ESMTPSA id b18sm34031223wrx.92.2022.02.18.06.22.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 06:22:50 -0800 (PST)
-Date:   Fri, 18 Feb 2022 15:22:48 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH 3/3] perf tools: Rework prologue generation code
-Message-ID: <Yg+ruDjO0kq2a3O/@krava>
-References: <20220217131916.50615-1-jolsa@kernel.org>
- <20220217131916.50615-4-jolsa@kernel.org>
- <CAEf4BzYP7=JuyuY=xZe71urpxat4ba-JnqeSTcHF=CYmsQbofQ@mail.gmail.com>
- <Yg9geQ0LJjhnrc7j@krava>
- <Yg+ZHUm4raVBwnQP@krava>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Tl1qAGSp1vbK3qa2hW0s4M5fyrIzlh1pOe1T73qOAJU=;
+        b=TjHJjPf3lRVNL1/jYRLOd+fVYl9E1oG3HyLYgmdk5LvDYFLuyalWBYH3ZoFAlv8oGY
+         ZaPQbD3Yamhs1/tJdRQCHRqiEXvDIDSX/cGeJA3/S5TEa+CHGdwnQ0dlRVJnygsINIH4
+         3JZ4qwao3IoD5e0dzJEheqocg7QkCLB++pbeHaNfGW5ybPdn+fBUjfThRaaVok4jmU7S
+         YgofXUHPQP7S4662WszJwOmcexHVow5/5UzfcaoNZHrSaBYrJzG6mE0Of05t4UeScRUn
+         awWuw0YwpJcUQeLwBtPNfwZx11L1meFBOmRfxnUjsh9gO8KWMBpIBwwLro85EZs53Kn/
+         a6ew==
+X-Gm-Message-State: AOAM5317OUBWVYtiPyVc3qe1iyN769AcHRDV7PRSyRkwrxqazCpM25QP
+        Fi1ey8UJGxrXEeoHuw+ydfY=
+X-Google-Smtp-Source: ABdhPJx/R4JNDN3idZ4sf8zooEzhxC/z1ndVSQDsJY2yXemagSaEnaVTBCFkVfZw802ARmO4HEkIgw==
+X-Received: by 2002:a17:90a:d786:b0:1b8:bd2a:d804 with SMTP id z6-20020a17090ad78600b001b8bd2ad804mr8651674pju.245.1645194398416;
+        Fri, 18 Feb 2022 06:26:38 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id j10sm3512553pfu.93.2022.02.18.06.26.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 06:26:38 -0800 (PST)
+Message-ID: <dfefa601-c58d-c86c-953f-5e4454db9409@gmail.com>
+Date:   Fri, 18 Feb 2022 23:26:34 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg+ZHUm4raVBwnQP@krava>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: [PATCH 3/3] Reword note on missing CJK fonts
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <aaa9dca1-27c0-c414-77f3-c5587db0cc5b@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <aaa9dca1-27c0-c414-77f3-c5587db0cc5b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -84,117 +74,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 02:03:28PM +0100, Jiri Olsa wrote:
-> On Fri, Feb 18, 2022 at 10:01:45AM +0100, Jiri Olsa wrote:
-> > On Thu, Feb 17, 2022 at 01:53:16PM -0800, Andrii Nakryiko wrote:
-> > > On Thu, Feb 17, 2022 at 5:19 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > > >
-> > > > Some functions we use now for bpf prologue generation are
-> > > > going to be deprecated, so reworking the current code not
-> > > > to use them.
-> > > >
-> > > > We need to replace following functions/struct:
-> > > >    bpf_program__set_prep
-> > > >    bpf_program__nth_fd
-> > > >    struct bpf_prog_prep_result
-> > > >
-> > > > Current code uses bpf_program__set_prep to hook perf callback
-> > > > before the program is loaded and provide new instructions with
-> > > > the prologue.
-> > > >
-> > > > We workaround this by using objects's 'unloaded' programs instructions
-> > > > for that specific program and load new ebpf programs with prologue
-> > > > using separate bpf_prog_load calls.
-> > > >
-> > > > We keep new ebpf program instances descriptors in bpf programs
-> > > > private struct.
-> > > >
-> > > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > > ---
-> > > >  tools/perf/util/bpf-loader.c | 122 +++++++++++++++++++++++++++++------
-> > > >  1 file changed, 104 insertions(+), 18 deletions(-)
-> > > >
-> > > 
-> > > [...]
-> > > 
-> > > >  errout:
-> > > > @@ -696,7 +718,7 @@ static int hook_load_preprocessor(struct bpf_program *prog)
-> > > >         struct bpf_prog_priv *priv = program_priv(prog);
-> > > >         struct perf_probe_event *pev;
-> > > >         bool need_prologue = false;
-> > > > -       int err, i;
-> > > > +       int i;
-> > > >
-> > > >         if (IS_ERR_OR_NULL(priv)) {
-> > > >                 pr_debug("Internal error when hook preprocessor\n");
-> > > > @@ -727,6 +749,12 @@ static int hook_load_preprocessor(struct bpf_program *prog)
-> > > >                 return 0;
-> > > >         }
-> > > >
-> > > > +       /*
-> > > > +        * Do not load programs that need prologue, because we need
-> > > > +        * to add prologue first, check bpf_object__load_prologue.
-> > > > +        */
-> > > > +       bpf_program__set_autoload(prog, false);
-> > > 
-> > > if you set autoload to false, program instructions might be invalid in
-> > > the end. Libbpf doesn't apply some (all?) relocations to such
-> > > programs, doesn't resolve CO-RE, etc, etc. You have to let
-> > > "prototypal" BPF program to be loaded before you can grab final
-> > > instructions. It's not great, but in your case it should work, right?
-> > 
-> > hum, do we care? it should all be done when the 'new' program with
-> > the prologue is loaded, right?
-> > 
-> > I switched it off because the verifier failed to load the program
-> > without the prologue.. because in the originaal program there's no
-> > code to grab the arguments that the rest of the code depends on,
-> > so the verifier sees invalid access
-> > 
-> > > 
-> > > > +
-> > > >         priv->need_prologue = true;
-> > > >         priv->insns_buf = malloc(sizeof(struct bpf_insn) * BPF_MAXINSNS);
-> > > >         if (!priv->insns_buf) {
-> > > > @@ -734,6 +762,13 @@ static int hook_load_preprocessor(struct bpf_program *prog)
-> > > >                 return -ENOMEM;
-> > > >         }
-> > > >
-> > > 
-> > > [...]
-> > > 
-> > > > +               /*
-> > > > +                * For each program that needs prologue we do following:
-> > > > +                *
-> > > > +                * - take its current instructions and use them
-> > > > +                *   to generate the new code with prologue
-> > > > +                *
-> > > > +                * - load new instructions with bpf_prog_load
-> > > > +                *   and keep the fd in proglogue_fds
-> > > > +                *
-> > > > +                * - new fd will be used bpf__foreach_event
-> > > > +                *   to connect this program with perf evsel
-> > > > +                */
-> > > > +               orig_insns = bpf_program__insns(prog);
-> > > > +               orig_insns_cnt = bpf_program__insn_cnt(prog);
-> > > > +
-> > > > +               pev = &priv->pev;
-> > > > +               for (i = 0; i < pev->ntevs; i++) {
-> > > > +                       err = preproc_gen_prologue(prog, i, orig_insns,
-> > > > +                                                  orig_insns_cnt, &res);
-> > > > +                       if (err)
-> > > > +                               return err;
-> > > > +
-> > > > +                       fd = bpf_prog_load(bpf_program__get_type(prog),
-> > > 
-> > > nit: bpf_program__type() is preferred (we are deprecating/discouraging
-> > > "get_" prefixed getters in libbpf 1.0)
-> > 
-> > ok, will change
-> 
-> hum, I can't see bpf_program__type.. what do I miss?
+Use past tense as the fonts can be installed after the fact.
+Add suggestion to install "Noto Sans CJK" and "Noto Serif CJK"
+font families. ("Noto Serif CJK" is optional.)
 
-nah I was on top of perf/core.. I see it now ;-)
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+---
+This note won't be seen by many, but feedback from a native
+speaker would be much appreciated.
 
-jirka
+To see this note, you need a system without the "Noto Sans CJK"
+font.  (Not expecting you'd actually do it.)
+
+    Thanks, Akira
+--
+ Documentation/sphinx/kerneldoc-preamble.sty | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/sphinx/kerneldoc-preamble.sty b/Documentation/sphinx/kerneldoc-preamble.sty
+index 5e59900e994d..9d0204dc38be 100644
+--- a/Documentation/sphinx/kerneldoc-preamble.sty
++++ b/Documentation/sphinx/kerneldoc-preamble.sty
+@@ -205,9 +205,16 @@
+     %% CJK chapters can be ignored.
+     \newcommand{\kerneldocBeginSC}[1]{%
+ 	%% Put a note on missing CJK fonts in place of zh_CN translation.
+-	\begin{sphinxadmonition}{note}{Note:}
+-	    ``Noto Sans CJK'' fonts are not found while building this PDF\@.
+-	    Translations of zh\_CN, zh\_TW, ko\_KR, and ja\_JP are skipped.
++	\begin{sphinxadmonition}{note}{Note on missing fonts:}
++	    Translations of Simplified Chinese (zh\_CN), Traditional Chinese
++	    (zh\_TW), Korean (ko\_KR), and Japanese (ja\_JP) were skipped
++	    due to the lack of suitable font families.
++
++	    If you want them, please install ``Noto Sans CJK'' font families
++	    by following instructions from
++	    \sphinxcode{./scripts/sphinx-pre-install}.
++	    Having optional ``Noto Serif CJK'' font families will improve
++	    the looks of those translations.
+ 	\end{sphinxadmonition}}
+     \newcommand{\kerneldocEndSC}{}
+     \newcommand{\kerneldocBeginTC}[1]{}
+-- 
+2.17.1
+
+

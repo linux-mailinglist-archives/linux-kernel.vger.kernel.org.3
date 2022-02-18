@@ -2,125 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0DD4BB9D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC7D4BB9D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbiBRNKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 08:10:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41416 "EHLO
+        id S235507AbiBRNIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 08:08:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiBRNKe (ORCPT
+        with ESMTP id S232256AbiBRNIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 08:10:34 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE163253BDE;
-        Fri, 18 Feb 2022 05:10:15 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 7BBD11F37F;
-        Fri, 18 Feb 2022 13:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645189814;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1JlFxuUX2jYEpN7LRjICgbNOHYKr0FMLJ/vNPXX2b/U=;
-        b=z4fVxXPuw0f6uc2eukxJR1Wew1zDHTNY7X7eEEgRuhUWUxeDZQ98fZptur359cHZrl6dl4
-        d8ZpONw5LmnWScpGPPyEgkBsnMtzhjdrnH3b87+E3cxFTRAQ+byIyP3NOu9EjaA+Ito5rY
-        cKKT2ZL+S30ol5XDgeUxkv8BETyBbR0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645189814;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1JlFxuUX2jYEpN7LRjICgbNOHYKr0FMLJ/vNPXX2b/U=;
-        b=cnjSx/5Gzt/joRIUQbkLAXJ2pgOS+AwnCVFi+95JtZugVJgSwsvNsXAYiyOm4cOkiubrIC
-        9448VWjM0cAyZPCA==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 6896EA3B83;
-        Fri, 18 Feb 2022 13:10:14 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id CD392DA829; Fri, 18 Feb 2022 14:06:28 +0100 (CET)
-Date:   Fri, 18 Feb 2022 14:06:28 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] btrfs: Fix non-kernel-doc comment
-Message-ID: <20220218130628.GS12643@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220218101345.125518-1-jiapeng.chong@linux.alibaba.com>
+        Fri, 18 Feb 2022 08:08:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AB726AE0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:07:59 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nL2zF-0000dh-Qy; Fri, 18 Feb 2022 14:07:49 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nL2zE-000435-RH; Fri, 18 Feb 2022 14:07:48 +0100
+Date:   Fri, 18 Feb 2022 14:07:48 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Svenning =?utf-8?B?U8O4cmVuc2Vu?= <sss@secomea.com>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: dsa: microchip: fix bridging with more than two
+ member ports
+Message-ID: <20220218130748.GA3144@pengutronix.de>
+References: <DB7PR08MB3867F92FD096A79EAD736021B5379@DB7PR08MB3867.eurprd08.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220218101345.125518-1-jiapeng.chong@linux.alibaba.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DB7PR08MB3867F92FD096A79EAD736021B5379@DB7PR08MB3867.eurprd08.prod.outlook.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:04:07 up 69 days, 21:49, 85 users,  load average: 0.26, 0.33,
+ 0.27
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 06:13:45PM +0800, Jiapeng Chong wrote:
-> Fixes the following W=1 kernel build warning:
+On Fri, Feb 18, 2022 at 11:27:01AM +0000, Svenning Sørensen wrote:
+> Commit b3612ccdf284 ("net: dsa: microchip: implement multi-bridge support")
+> plugged a packet leak between ports that were members of different bridges.
+> Unfortunately, this broke another use case, namely that of more than two
+> ports that are members of the same bridge.
 > 
-> fs/btrfs/ioctl.c:1789: warning: This comment starts with '/**', but
-> isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Entry point to file defragmentation.
+> After that commit, when a port is added to a bridge, hardware bridging
+> between other member ports of that bridge will be cleared, preventing
+> packet exchange between them.
 > 
-> fs/btrfs/extent_map.c:390: warning: This comment starts with '/**', but
-> isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Add new extent map to the extent tree.
+> Fix by ensuring that the Port VLAN Membership bitmap includes any existing
+> ports in the bridge, not just the port being added.
 > 
-> fs/btrfs/block-group.c:1743: warning: This comment starts with '/**',
-> but isn't a kernel-doc comment. Refer
-> Documentation/doc-guide/kernel-doc.rst
->  * Map a physical disk address to a list of logical addresses.
-> 
-> fs/btrfs/extent_io.c:4923: warning: This comment starts with '/**', but
-> isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Walk the list of dirty pages of the given address space and write all
->  * of them.
-> 
-> fs/btrfs/file-item.c:625: warning: This comment starts with '/**', but
-> isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Calculate checksums of the data contained inside a bio.
-> 
-> fs/btrfs/inode.c:3430: warning: This comment starts with '/**', but
-> isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Wait for flushing all delayed iputs
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  fs/btrfs/block-group.c | 2 +-
->  fs/btrfs/extent_io.c   | 2 +-
->  fs/btrfs/extent_map.c  | 2 +-
->  fs/btrfs/file-item.c   | 2 +-
->  fs/btrfs/inode.c       | 2 +-
->  fs/btrfs/ioctl.c       | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
-> index c22d287e020b..884002e510ec 100644
-> --- a/fs/btrfs/block-group.c
-> +++ b/fs/btrfs/block-group.c
-> @@ -1739,7 +1739,7 @@ static void set_avail_alloc_bits(struct btrfs_fs_info *fs_info, u64 flags)
->  	write_sequnlock(&fs_info->profiles_lock);
->  }
->  
-> -/**
-> +/*
->   * Map a physical disk address to a list of logical addresses
->   *
->   * @fs_info:       the filesystem
+> Fixes: b3612ccdf284 ("net: dsa: microchip: implement multi-bridge support")
+> Signed-off-by: Svenning Sørensen <sss@secomea.com>
 
-We'd actually like the kdoc script to check the argument list.
+Thank you for your patch. You are right. I'm able to reproduce this issue on
+ksz9477.
+
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+
+> ---
+>  drivers/net/dsa/microchip/ksz_common.c | 26 +++++++++++++++++++++++---
+>  1 file changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+> index 55dbda04ea62..243f8ad6d06e 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.c
+> +++ b/drivers/net/dsa/microchip/ksz_common.c
+> @@ -26,7 +26,7 @@ void ksz_update_port_member(struct ksz_device *dev, int port)
+>  	struct dsa_switch *ds = dev->ds;
+>  	u8 port_member = 0, cpu_port;
+>  	const struct dsa_port *dp;
+> -	int i;
+> +	int i, j;
+>  
+>  	if (!dsa_is_user_port(ds, port))
+>  		return;
+> @@ -45,13 +45,33 @@ void ksz_update_port_member(struct ksz_device *dev, int port)
+>  			continue;
+>  		if (!dsa_port_bridge_same(dp, other_dp))
+>  			continue;
+> +		if (other_p->stp_state != BR_STATE_FORWARDING)
+> +			continue;
+>  
+> -		if (other_p->stp_state == BR_STATE_FORWARDING &&
+> -		    p->stp_state == BR_STATE_FORWARDING) {
+> +		if (p->stp_state == BR_STATE_FORWARDING) {
+>  			val |= BIT(port);
+>  			port_member |= BIT(i);
+>  		}
+>  
+> +		/* Retain port [i]'s relationship to other ports than [port] */
+> +		for (j = 0; j < ds->num_ports; j++) {
+> +			const struct dsa_port *third_dp;
+> +			struct ksz_port *third_p;
+> +
+> +			if (j == i)
+> +				continue;
+> +			if (j == port)
+> +				continue;
+> +			if (!dsa_is_user_port(ds, j))
+> +				continue;
+> +			third_p = &dev->ports[j];
+> +			if (third_p->stp_state != BR_STATE_FORWARDING)
+> +				continue;
+> +			third_dp = dsa_to_port(ds, j);
+> +			if (dsa_port_bridge_same(other_dp, third_dp))
+> +				val |= BIT(j);
+> +		}
+> +
+>  		dev->dev_ops->cfg_port_member(dev, i, val | cpu_port);
+>  	}
+>  
+> -- 
+> 2.20.1
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

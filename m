@@ -2,130 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB074BBD7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986F04BBD86
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237898AbiBRQ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:29:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38568 "EHLO
+        id S237919AbiBRQaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:30:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237889AbiBRQ3x (ORCPT
+        with ESMTP id S237406AbiBRQad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:29:53 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2085.outbound.protection.outlook.com [40.107.243.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00F470851
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:29:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HyMNNQMCGLBJdHEz9rP6huFfLy1kHwaXFS+t+rl3W9tYhCTP8vi2wGKwMK8iU71rpBjBHLPV4RceMl7GRY1oBASxAe5861uMGfTT3+Qb1jti0EBMhwwuiKqJhnqE3W4BeyjHXov6imxwqpAKRc3C6yTE5c+EM7t3Bsrm1K07lNmW7NTcBfsnVdCX6YYwXjfu5GqQDcHNkDzgIKmZhgHG2J+lMVr49lO44vbC6dsC/jwjxOB/u0aOPFyTJKRD4Pvm53+yF72Rv4eyxNW9+W+VBp5vmk9Glub5LMF6v+IHJBT+wUvbrVadG/PidkM3gTawNpBTLH9QM1X18QOssA6l8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yn8dLJgmRLb7bXzYJsrYh9hnHbnA2wNMFN4gaU1Vkow=;
- b=ELY9HC3fvtsZJzhTlBdN/Q55eiofl52+9Rt0+SVT/5sQXmz3hAJN2O1VCCu1OWQfIivBPYHjKDyKZ921DjDXxRyXMJ92GeCScHOTr6d4MxCDVGWjY/z77A9LuGUqnv3cRMaQ6XXUybwmIvLFp/PeO8hAwX7iau+oGV9RzKPQccaEPkGDcBLKlmfNuyyvhc9o+uvkzMfxaj7mVbxqlkHb5IKD1wm/LM9+dLksP2EsvgD8kFrjJBB2k3YJZUlZLLU5ard68EOm/YbhWf7DbpzdANwhY+FAzprpogdVz0u7GBEbHhBEZuIE2TqTgCKgpn1pj7BYtZyT8ky95IIwb+7C8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yn8dLJgmRLb7bXzYJsrYh9hnHbnA2wNMFN4gaU1Vkow=;
- b=Yo55OYespZ/Iu4p8cgrVJ6v8PYjq/1yL40zgmlrA5BZZYwe0XdwRNZwRl5R4+J8fyq9Y9RytAJXfeuJJ6q0UT+WfukiTq1M8LUL0ivzk8ZoSDj/EW3ppwaOPzS+K0f+P418RkbEfqOyLzFjuHMHsSxbdZShZ46az3anikYBchmM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MN2PR12MB4845.namprd12.prod.outlook.com (2603:10b6:208:183::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Fri, 18 Feb
- 2022 16:29:34 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.4995.024; Fri, 18 Feb 2022
- 16:29:34 +0000
-Message-ID: <0eeaa0b7-7ae6-c244-cfcd-86333d8f9b8b@amd.com>
-Date:   Fri, 18 Feb 2022 17:29:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/amdkfd: Replace one-element array with flexible-array
- member
-Content-Language: en-US
-To:     Felix Kuehling <felix.kuehling@amd.com>, cgel.zte@gmail.com
-Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220218030943.1905838-1-deng.changcheng@zte.com.cn>
- <cbc80795-af46-21fd-dc9f-ce932be76d4f@amd.com>
- <ea7d5e53-c008-4833-a24c-a17522ce96b5@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <ea7d5e53-c008-4833-a24c-a17522ce96b5@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS9PR06CA0327.eurprd06.prod.outlook.com
- (2603:10a6:20b:45b::22) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Fri, 18 Feb 2022 11:30:33 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10A217E97E
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:30:16 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id j15so6427152lfe.11
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:30:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=312lapKwafxiS2MTjPJeJeudqKLuqKmyJULFLFuRBRY=;
+        b=CSnkaVF1tUHg9btEqNzLCWt4jG+0S94ZEQOsehqLGYk57c0fNxkCwHWdO/Xl1gKqem
+         Gg/f14dX+7wWYzFYheYfoZyx2BS8B2SQDBdK7bNwuGG8Wv5LBxRoK4Q5NUSDBKT2nvFM
+         wKwFZ03p+TxfPINCCCHya0gBtsi157a40o0HTkMT8nu7qTm4aDcDRkheX2TfAQ/1+atK
+         wu1Zkvm9JQ3V6JnPaN40HGfEZRnJtlSSpqYwVFP1L5bzKmS2+CwVr5BcY445k9CIESu9
+         uJvguLH/z3ujJMwfYHdstVPHP27R/8BUj+sRdHT0ukT0oKwgznkO7rKokZLYn0r5/Yez
+         Dylw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=312lapKwafxiS2MTjPJeJeudqKLuqKmyJULFLFuRBRY=;
+        b=Cuxf8IKl4ZgskN2w3CNxCSGzTn+rsjsVtPYS8BQtbo56mg7oHFmKpd1dg1oS2vuSm+
+         J3g+hQmgm7anl2siOh7v2Ouu/qcVcHrkRJPOFhB+eOwqLS8XEa5mBRmRhkmOSIJZCKmh
+         jog/wxsNIikcts+eYHhDfvUOdeFkBMbG2vhGe1vG5KUHa4Oz/Dd6DAQOhdlsIRIUZykU
+         55eUBM/EL/Vf6iBHc9+50Atbs/3MgDRn+yMwQ7M8y0RaBKMMxubRNihRT8DNVUz2CJC0
+         xWSONQAQhWMA0x2MvBqyBUI1qnnLas4/mqll1lp1iRr8Ihrjh8y3lmu3frU6gZgflj3N
+         Z8qw==
+X-Gm-Message-State: AOAM530ho6icRkDxl4UUX2w1o4qUIbxcu6Cl9LqJ7tGOEX98nv6BjYWx
+        lSqGGC1VAGz2FHYjFSoUpdyyUbwF9Lcg/bbL7FmR6g==
+X-Google-Smtp-Source: ABdhPJz5qGIkghROC2DmhXeLI1kRTQMiyE1CPE9Z6IYObgWq2hfondwj22K8KKj0a4/flTwBJ324HRBwNTjQT1617ZA=
+X-Received: by 2002:a05:6512:b83:b0:443:161a:e467 with SMTP id
+ b3-20020a0565120b8300b00443161ae467mr5871108lfv.315.1645201814922; Fri, 18
+ Feb 2022 08:30:14 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9665614f-e6e8-44d6-9459-08d9f2fbd929
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4845:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4845A89A88474BB4D7FCCA5883379@MN2PR12MB4845.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WFY4vzgdXClbctG70P5K2n37ZBscpx2MBGIImC3pOiwC/sh3KAYWFFv3rVEiYHjmD2OoFCv7TmA5ouihI3N2p2539BS8unH9DiQ9iyX/OanBHO9emenbdqOE9F4OvsRgKauLqyfbohN2FdczRDqWl0sjcZxfgg0ShOEb+at6yVubIUtmases97srCbs5mu6hPRWNLXTpUxw+h0lkpQT2ulDo1IlYoCvW1n8bpkx9Tufm5T/QAxBo7UPbwBW3CTcjR8uREv4AbOATNDkCfJeIOhwamkoLogsxpMSWPhbWM9QMxU1/sG1c46b23f+0434W1Wqk1GNJAYoQg1wHwlEVYD1jPU8lPq8wZCzT6ekLyHkcAHoHTZT5qfgnbLlqRU3qOtvOD/SAR5q2dkW9ASGr6zIZRWuFLDkJuKPSjdA2N1aG7QkfVh4K7M3I5VWap68t7wGB+lGVpvEZuO4B1eoNtTJKrpwWvlbodZX/JFFhgDK8yWI/48ySttH4Rc+oannQmxZggHWlfR70UzcM116KvBPUaDuYLp/c+rR3LnSoIp2VoEPC2D/55XgpABPAO2QCGug6xl5xdUrAA0P0HiTpSlWWdHRY6ZrCHXaGHMPw4qS7IQjYEuqCNwTzwdSdQvxx6owb+EWKveRih2Mb6e7KMgzqXYut1JuAzxhFUfdin5RVEswxD1WD/YRGkU45Z6nuEEKM/BnyNpmUoN62qYXdJWscAjlPH9+iVyaeVx6uu8vdlL8t0yPA3OS8EjPRdeQVeZ5V+rsC1LC0PJ4WH7FajpiEL8lVgMggvHX5TwwJN3Ui4ZUVH5XjFKa1YWJbBCJn
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(966005)(4326008)(38100700002)(6486002)(508600001)(6506007)(8676002)(31696002)(66946007)(66556008)(6666004)(316002)(54906003)(66476007)(2906002)(31686004)(66574015)(186003)(36756003)(8936002)(5660300002)(2616005)(83380400001)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MVRMamRqNnpTNUdhS3huTE12dDVuYlJ1b2pOY045T2lIS2p0d3BxMHl2K0wy?=
- =?utf-8?B?RnkyYzVuVStHL0gxQjk0VVhTNkNPK04wSDhJTTZoYVRrNCswRENDWWNQcDcv?=
- =?utf-8?B?bGlqMjMzeGRmcVNIQzRjdTE3d0xnSlJETlZsZ3BiVUZ0ZnFsOWtRaWtpZWhO?=
- =?utf-8?B?aFpUZzIyVE9UNHB2T0FTNlFGNHZBbWtiS0pmWThQaHJGV2w3Yk5wUGw0WmYx?=
- =?utf-8?B?KzZycHJEZFlSN3FBVThMS09SNUYwY0FEeEdzSFdrUVQ0VDdOQVIxcDFDNGxZ?=
- =?utf-8?B?UGV3UVRNbDd2NmROMWxJMVRETzRFOG9FMmRJNTZkeG1Yd3BVQTI0Q0cvb1Vw?=
- =?utf-8?B?aUNITENnSFVCWmVDYUdxRDBFUjM4a1dGREM4TDNUTHlna2lWMU9KWHhDYkVt?=
- =?utf-8?B?TzVJV0J6bXdkZ1NCL296cSsxVUNQMTdlVmVSOXRpQit5Uy9ITUo5MTVIc2g0?=
- =?utf-8?B?OTFZV1NYcVhkdG5sZkM5MVpEMHByVVRzaUg3M1pMbm5XSDlvZVlzT3JkcFZz?=
- =?utf-8?B?S3Y0TEpDaGxnTHArb0M0MEpSZGo3QWZNc1dtcktwQUxTeVBHSlpNbUkvdHJr?=
- =?utf-8?B?RHZ5MG4xTGI2QzJXUkw3bjJUSitSYkJLdDR4bno4TGpxRk8wYnZIUVFENEVz?=
- =?utf-8?B?RUxEY0NiMmxDa0NPY0ZwTFFMei9DbnJqeHRrS3RZUXhkdlBjaXJSRGF3SXRp?=
- =?utf-8?B?MUxmY3FKa004RHVVZEFWaXRuK1VGaVhqQ28vNTJhVVVUSC9KbEV0bjA1WDJB?=
- =?utf-8?B?K0UxZnRUMUpaR3kzRDU4N0c5V1ZrRUtTN05MeS9xTERMTnU4WDJUaGdaeFgz?=
- =?utf-8?B?VEZwWW5xYWhQano2YVNvR3J5ZUU3UEhkQitnbkJ6NldlU3p0MzFNOHVVSThj?=
- =?utf-8?B?czZjandMdTBJeVJ0a0RiTW01ay8vc0xIZTdCaVAwWVl3d1ZPT3d4eGRieDlo?=
- =?utf-8?B?eXdJM25KaFFaSkVLRmQ0VitqamJpSXluZkdFWFkvWDFZakpmTGhNT29XWllT?=
- =?utf-8?B?SFRaUGFJRkZMWitvVWlXU0tQZHdlZDVCRlhscFQzRlp1WXFYOTVvY0EwR1p4?=
- =?utf-8?B?enhNb3o5RlJFK05OcnAxbERBMnRSQXNuc25tL09CZDlNYk9OdUMvSVJESDd4?=
- =?utf-8?B?RklYZmZsN3VBN3AxWTFrNFFTQ0hFYXRSQUZTa2UrdkVuUVhRYWpvN0N1S0ts?=
- =?utf-8?B?cU9iQTNoM05uRzlKSzBBWWxsN1lWTEI2UFFKaVNHRVJwS3A0dUV0M1ZBRmNR?=
- =?utf-8?B?UHlEa0lrTU5KVVFNaUR4S1JaeXg4aXJINEN0TXNqTnU4c1Zya09jUjczZlJX?=
- =?utf-8?B?Mm9wRW1zT3cxZnBqNzdSK0dGcG9yNHZzZ29hYW85bjUrWVJNY3YraXN5akhI?=
- =?utf-8?B?Tkx0NmU5dzR5V2pqcjVBNkh1YXNIVEhjNHRrdUFIT1FhTjJOYm4yK2ozb3NW?=
- =?utf-8?B?YzYzNVpwdUhzQnF1MUhIS3RLbW9hWlVjZUljRUlKaG5MNTlSTEYva0hOaDFY?=
- =?utf-8?B?Wk5DZElxWi9iUGcybkpjd2s3UVIwM01OWXphQ1FYNXpiQSswQk4vNk5qM1RG?=
- =?utf-8?B?YWh6VU53ZEJIRFBKTDltOWFRdFBHWE15L0JLU0FLaCtwTy9qMHpWT0o2T2NI?=
- =?utf-8?B?UHRNT2ZDbStnOWhiWWNLNEhBSUV0aHM5WUoyTjkzSTVqekVLUmY2ZUtRQ0lB?=
- =?utf-8?B?RWlHemUrZExVVDRSYmNIbjV6cEYrZDRmbDNlT2Y3Ry9kenl2UytDTjlTTjk1?=
- =?utf-8?B?a01rOVlDNzJ5bHBGUVF1eU9XdVNhVDFvYmoyalJESXVFUDBkSGtCVjdRWGVY?=
- =?utf-8?B?ZmZEUXZuVHZkVndCNENhQUlaUUpzMW44ZVhBLzNWWERNRGlnVlpzYWhCdzNs?=
- =?utf-8?B?WldZdXFWVUJoN2Z1cFVTcDRyVExHWEo1YUxwbHZjaHVtMTNqcWhnNmR1anJX?=
- =?utf-8?B?bGcrOG1Uc2JtU2h4Wjh1cmNiM1NoNGRXY0NrdXcway95czZ3WGlLd3lHcms3?=
- =?utf-8?B?NHVEdk84U2RIV0x2ZnFiK3BQOElLdGowaVNyMTVTQjlPaFJnK2FxYnd3bVA4?=
- =?utf-8?B?UUZFVlAwNVBuZkVwS2IzWDFYNXB5UGxQTHpLZ2doL0N4ZStXaVUzajBXRnVU?=
- =?utf-8?B?OCtORHR1cU9ZYmdLbEltNjVBQWdsWTJ0S3ZJTUt3OWtxMG9nUEdjRWNENE1C?=
- =?utf-8?Q?cPdAane9G8Ju/i5bY9BEXVA=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9665614f-e6e8-44d6-9459-08d9f2fbd929
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 16:29:34.5760
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2qNKS6WB684UNov05ByzQKkRMhSAeFtX1v4UL9noI0odm5A8qlAfYBN5ZVFi1rH7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4845
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com> <20220217184829.1991035-2-jakobkoschel@gmail.com>
+In-Reply-To: <20220217184829.1991035-2-jakobkoschel@gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 18 Feb 2022 17:29:48 +0100
+Message-ID: <CAG48ez0m6V12dPVwZMQ9gi0ig7ELf_+KbLArE02SD5cYrZvH-w@mail.gmail.com>
+Subject: Re: [RFC PATCH 01/13] list: introduce speculative safe list_for_each_entry()
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,61 +78,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Well in that case somebody could argue that we should probably remove 
-the structure altogether.
-
-Regards,
-Christian.
-
-Am 18.02.22 um 17:15 schrieb Felix Kuehling:
-> It looks like this structure isn't being used at all. So I'm OK with 
-> this change, in case we ever use it in the future.
+On Thu, Feb 17, 2022 at 7:48 PM Jakob Koschel <jakobkoschel@gmail.com> wrote:
+> list_for_each_entry() selects either the correct value (pos) or a safe
+> value for the additional mispredicted iteration (NULL) for the list
+> iterator.
+> list_for_each_entry() calls select_nospec(), which performs
+> a branch-less select.
 >
-> Regards,
->   Felix
+> On x86, this select is performed via a cmov. Otherwise, it's performed
+> via various shift/mask/etc. operations.
 >
+> Kasper Acknowledgements: Jakob Koschel, Brian Johannesmeyer, Kaveh
+> Razavi, Herbert Bos, Cristiano Giuffrida from the VUSec group at VU
+> Amsterdam.
 >
-> Am 2022-02-18 um 02:47 schrieb Christian König:
->> Felix need to comment as well, but I don't think that this will work 
->> that easily.
->>
->> By changing the entry from 1 to 0 your are also changing the size of 
->> the structure.
->>
->> Regards,
->> Christian.
->>
->> Am 18.02.22 um 04:09 schrieb cgel.zte@gmail.com:
->>> From: Changcheng Deng <deng.changcheng@zte.com.cn>
->>>
->>> There is a regular need in the kernel to provide a way to declare 
->>> having
->>> a dynamically sized set of trailing elements in a structure. Kernel 
->>> code
->>> should always use "flexible array members" for these cases. The older
->>> style of one-element or zero-length arrays should no longer be used.
->>> Reference:
->>> https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays 
->>>
->>>
->>> Reported-by: Zeal Robot <zealci@zte.com.cn>
->>> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
->>> ---
->>>   drivers/gpu/drm/amd/amdkfd/kfd_crat.h | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.h 
->>> b/drivers/gpu/drm/amd/amdkfd/kfd_crat.h
->>> index 482ba84a728d..d7c38fbc533e 100644
->>> --- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.h
->>> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.h
->>> @@ -310,7 +310,7 @@ struct cdit_header {
->>>       uint32_t    creator_revision;
->>>       uint32_t    total_entries;
->>>       uint16_t    num_domains;
->>> -    uint8_t        entry[1];
->>> +    uint8_t        entry[];
->>>   };
->>>     #pragma pack()
->>
+> Co-developed-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
+> Signed-off-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 
+Yeah, I think this is the best way to do this without deeply intrusive
+changes to how lists are represented in memory.
+
+Some notes on the specific implementation:
+
+>  arch/x86/include/asm/barrier.h | 12 ++++++++++++
+>  include/linux/list.h           |  3 ++-
+>  include/linux/nospec.h         | 16 ++++++++++++++++
+>  3 files changed, 30 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
+> index 35389b2af88e..722797ad74e2 100644
+> --- a/arch/x86/include/asm/barrier.h
+> +++ b/arch/x86/include/asm/barrier.h
+> @@ -48,6 +48,18 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
+>  /* Override the default implementation from linux/nospec.h. */
+>  #define array_index_mask_nospec array_index_mask_nospec
+>
+> +/* Override the default implementation from linux/nospec.h. */
+> +#define select_nospec(cond, exptrue, expfalse)                         \
+> +({                                                                     \
+> +       typeof(exptrue) _out = (exptrue);                               \
+> +                                                                       \
+> +       asm volatile("test %1, %1\n\t"                                  \
+
+This shouldn't need "volatile", because it is only necessary if _out
+is actually used. Using "volatile" here could prevent optimizing out
+useless code. OPTIMIZER_HIDE_VAR() also doesn't use "volatile".
+
+> +           "cmove %2, %0"                                              \
+> +           : "+r" (_out)                                               \
+> +           : "r" (cond), "r" (expfalse));                              \
+> +       _out;                                                           \
+> +})
+
+I guess the idea is probably to also add code like this for other
+important architectures, in particular arm64?
+
+
+It might also be a good idea to rename the arch-overridable macro to
+something like "arch_select_nospec" and then have a wrapper macro in
+include/linux/nospec.h that takes care of type safety issues.
+
+The current definition of the macro doesn't warn if you pass in
+incompatible pointer types, like this:
+
+int *bogus_pointer_mix(int cond, int *a, long *b) {
+  return select_nospec(cond, a, b);
+}
+
+and if you pass in integers of different sizes, it may silently
+truncate to the size of the smaller one - this C code:
+
+long wrong_int_conversion(int cond, int a, long b) {
+  return select_nospec(cond, a, b);
+}
+
+generates this assembly:
+
+wrong_int_conversion:
+  test %edi, %edi
+  cmove %rdx, %esi
+  movslq %esi, %rax
+  ret
+
+It might be a good idea to add something like a
+static_assert(__same_type(...), ...) to protect against that.
+
+>  /* Prevent speculative execution past this barrier. */
+>  #define barrier_nospec() alternative("", "lfence", X86_FEATURE_LFENCE_RDTSC)
+>
+> diff --git a/include/linux/list.h b/include/linux/list.h
+> index dd6c2041d09c..1a1b39fdd122 100644
+> --- a/include/linux/list.h
+> +++ b/include/linux/list.h
+> @@ -636,7 +636,8 @@ static inline void list_splice_tail_init(struct list_head *list,
+>   */
+>  #define list_for_each_entry(pos, head, member)                         \
+>         for (pos = list_first_entry(head, typeof(*pos), member);        \
+> -            !list_entry_is_head(pos, head, member);                    \
+> +           ({ bool _cond = !list_entry_is_head(pos, head, member);     \
+> +            pos = select_nospec(_cond, pos, NULL); _cond; }); \
+>              pos = list_next_entry(pos, member))
+
+I wonder if it'd look nicer to write it roughly like this:
+
+#define NOSPEC_TYPE_CHECK(_guarded_var, _cond)                  \
+({                                                              \
+  bool __cond = (_cond);                                        \
+  typeof(_guarded_var) *__guarded_var = &(_guarded_var);        \
+  *__guarded_var = select_nospec(__cond, *__guarded_var, NULL); \
+  __cond;                                                       \
+})
+
+#define list_for_each_entry(pos, head, member)                                \
+        for (pos = list_first_entry(head, typeof(*pos), member);              \
+             NOSPEC_TYPE_CHECK(head, !list_entry_is_head(pos, head, member)); \
+             pos = list_next_entry(pos, member))
+
+I think having a NOSPEC_TYPE_CHECK() like this makes it semantically
+clearer, and easier to add in other places? But I don't know if the
+others agree...
+
+>  /**
+> diff --git a/include/linux/nospec.h b/include/linux/nospec.h
+> index c1e79f72cd89..ca8ed81e4f9e 100644
+> --- a/include/linux/nospec.h
+> +++ b/include/linux/nospec.h
+> @@ -67,4 +67,20 @@ int arch_prctl_spec_ctrl_set(struct task_struct *task, unsigned long which,
+>  /* Speculation control for seccomp enforced mitigation */
+>  void arch_seccomp_spec_mitigate(struct task_struct *task);
+>
+> +/**
+> + * select_nospec - select a value without using a branch; equivalent to:
+> + * cond ? exptrue : expfalse;
+> + */
+> +#ifndef select_nospec
+> +#define select_nospec(cond, exptrue, expfalse)                         \
+> +({                                                                     \
+> +       unsigned long _t = (unsigned long) (exptrue);                   \
+> +       unsigned long _f = (unsigned long) (expfalse);                  \
+> +       unsigned long _c = (unsigned long) (cond);                      \
+> +       OPTIMIZER_HIDE_VAR(_c);                                         \
+> +       unsigned long _m = -((_c | -_c) >> (BITS_PER_LONG - 1));        \
+> +       (typeof(exptrue)) ((_t & _m) | (_f & ~_m));                     \
+> +})
+> +#endif
+
+(As a sidenote, it might be easier to implement a conditional zeroing
+primitive than a generic conditional select primitive if that's all
+you need, something like:
+
+#define cond_nullptr_nospec(_cond, _exp)          \
+({                                             \
+  unsigned long __exp = (unsigned long)(_exp); \
+  unsigned long _mask = 0UL - !(_cond);       \
+  OPTIMIZER_HIDE_VAR(_mask);                   \
+  (typeof(_exp)) (_mask & __exp);              \
+})
+
+)

@@ -2,79 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322584BBF88
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A07D4BBF8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238815AbiBRSdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:33:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54326 "EHLO
+        id S239260AbiBRSfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:35:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiBRSdj (ORCPT
+        with ESMTP id S239233AbiBRSfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:33:39 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8BD101F10;
-        Fri, 18 Feb 2022 10:33:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PrWz5qtwHqdsRw/blxCb36c0OKYX0eyItRlrI1nvhYw=; b=fg/RX55EvbqAh4EIcEZKIZHAgd
-        wZokEp23P5OtG3/qxuaVZuB1CKe9ivzibiisyFrMCsVvyXZHyofFgrLX+AJD9P+V7IqFl5XcrVDJW
-        3VuyeQ+odtBJtSQ1zxt2C8yQr0yougjcyfQ2Nn/TWUtcQnIemLmbrzAUrouL7i3V25YJWSzE4JSTn
-        W71rFO46xDp5fbkKSGv+Knq4mvYGoWBwLDLfZhVb4LowRK8cI90w2QN4ZrDPpOUnuwuNrAxasYfBq
-        birY9cRmAmJXZOpQY0BSh83O1o5ZEDFfN7ghHpYFsey+iLI0L+vsKt75H5L1Zp6vGVE3R3dXPNwF5
-        fxRTge8g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nL841-00FVaa-Of; Fri, 18 Feb 2022 18:33:05 +0000
-Date:   Fri, 18 Feb 2022 10:33:05 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     tangmeng <tangmeng@uniontech.com>,
-        zhanglianjie <zhanglianjie@uniontech.com>, nizhen@uniontech.com,
-        Xiaoming Ni <nixiaoming@huawei.com>
-Cc:     akpm@linux-foundation.org, keescook@chromium.org,
-        yzaikin@google.com, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 1/5] kernel/lockdep: move lockdep sysctls to its own file
-Message-ID: <Yg/mYW8mnWBmrY9G@bombadil.infradead.org>
-References: <20220218105857.12559-1-tangmeng@uniontech.com>
+        Fri, 18 Feb 2022 13:35:05 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66661A4D46
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:34:48 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id om7so9293194pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:34:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6ui+XdqQ+V/acH1rGOlyzDTKLEuaung66NwvBtj6LuE=;
+        b=X8Yel7V2IYImut8lQ0/DhVg5Kkg4WbtG3wN/JWTFXB8siwNd9e/xyeaRYAtT6WZRqQ
+         VM+Vd8LSykDzBvCWff30AJNihA3q3n0MDibbC4Vw0Ag8nJjg0uLvqeKy4EcdZqT3p1Ly
+         8+Dq+n7P0DgbbNzZex+aB8SU6M+ZJ5XeSDzbQrJPlUFMcqJV9UWauyV4i8vG2W5Zes4c
+         DqwTa5sb2uf3y5IE1mWKfTpv0yJvvX+XnRQ04u44SXHSpw+B9U++KYBmqh8FUJPQsjr1
+         cWHWxoSZEIld6gQAdIZ2X2zZENXG6WKvoO7Jn3MdLOtzyINhfbhFi5bqy0gjvzU6E08N
+         mdBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6ui+XdqQ+V/acH1rGOlyzDTKLEuaung66NwvBtj6LuE=;
+        b=Vm81dWl+uvB9QkpjCyiuKRAp9PHln/+zc/gDCp0KIdZGcusKezymQFO5+NwtMGzL6c
+         pF1ABYh6IYFRxn1+89NceLD8f/URN2PzbxTrt7vV6K0Lhyod1WBV2T+5yC8bRb0VKkYk
+         sGYrCQb4PeP41t24Y44Trho7hm0wSFMidHCw6R7ngYQzAZm2zBlknrEUN88MIjtsh2Tu
+         EVDvILZ6F2k/p7SmPRyVdL3g+eGL0C3t3fmGV1Gp8dCOb3aXm4duMLGNbdXVvueWlrJ+
+         5iH77lWmiMxc5D5KnMhrG7j0YqbdLBsOclT/DzEMuZ963YsjSP9BAbVQNBZfI2lTb6ue
+         YDcA==
+X-Gm-Message-State: AOAM532dbiK5LtGv/p1cSax3GrUqUi07rmpoOFIiKWCoFkVdebycQ1P2
+        FGkIoYopp9jOSaeebSFaozfn8A==
+X-Google-Smtp-Source: ABdhPJxVv/mRb2EhPSozftkcIU8eYn58a6qBEj8s0jA/yOkyFR7Djbb4fHuOjFvBLzo8ayCyt0EVlQ==
+X-Received: by 2002:a17:902:9348:b0:14d:8ee9:329f with SMTP id g8-20020a170902934800b0014d8ee9329fmr8484514plp.80.1645209288178;
+        Fri, 18 Feb 2022 10:34:48 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h5sm3519418pfc.118.2022.02.18.10.34.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 10:34:47 -0800 (PST)
+Date:   Fri, 18 Feb 2022 18:34:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     maz@kernel.org, kvm@vger.kernel.org, pbonzini@redhat.com,
+        kevin.tian@intel.com, tglx@linutronix.de,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 5/6] KVM: Rename and move CPUHP_AP_KVM_STARTING to
+ ONLINE section
+Message-ID: <Yg/mxKrB5ZoRBIG+@google.com>
+References: <20220216031528.92558-1-chao.gao@intel.com>
+ <20220216031528.92558-6-chao.gao@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218105857.12559-1-tangmeng@uniontech.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220216031528.92558-6-chao.gao@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 06:58:57PM +0800, tangmeng wrote:
-> kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-> dishes, this makes it very difficult to maintain.
+On Wed, Feb 16, 2022, Chao Gao wrote:
+> The CPU STARTING section doesn't allow callbacks to fail. Move KVM's
+> hotplug callback to ONLINE section so that it can abort onlining a CPU in
+> certain cases to avoid potentially breaking VMs running on existing CPUs.
+> For example, when kvm fails to enable hardware virtualization on the
+> hotplugged CPU.
 > 
-> To help with this maintenance let's start by moving sysctls to places
-> where they actually belong.  The proc sysctl maintainers do not want to
-> know what sysctl knobs you wish to add for your own piece of code, we
-> just care about the core logic.
+> Place KVM's hotplug state before CPUHP_AP_SCHED_WAIT_EMPTY as it ensures
+> when offlining a CPU, all user tasks and non-pinned kernel tasks have left
+> the CPU, i.e. there cannot be a vCPU task around. So, it is safe for KVM's
+> CPU offline callback to disable hardware virtualization at that point.
+> Likewise, KVM's online callback can enable hardware virtualization before
+> any vCPU task gets a chance to run on hotplugged CPUs.
 > 
-> All filesystem syctls now get reviewed by fs folks. This commit
-> follows the commit of fs, move the prove_locking and lock_stat sysctls
-> to its own file, kernel/lockdep.c.
+> KVM's CPU hotplug callbacks are renamed as well.
 > 
-> Signed-off-by: tangmeng <tangmeng@uniontech.com>
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> ---
 
-Thanks!
+For the KVM bits,
 
-Queued on to the new sysctl-next [0] please use that tree for further sysctl
-changes. And please Cc zhanglianjie and nizhen and Xiaoming Ni on future
-changes as well.
+  Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-[0] git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-next
-
-  Luis
+Someone with more knowledge of the CPU hotplug sequences should really review this
+too.

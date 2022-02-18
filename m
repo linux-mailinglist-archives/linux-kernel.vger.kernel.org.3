@@ -2,71 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A714BC038
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD574BC03B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 20:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236944AbiBRTX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 14:23:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38566 "EHLO
+        id S237022AbiBRT04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 14:26:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236921AbiBRTXZ (ORCPT
+        with ESMTP id S236908AbiBRT0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 14:23:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A36340FC
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 11:23:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D7911CE3314
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 19:23:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF58C340E9;
-        Fri, 18 Feb 2022 19:23:02 +0000 (UTC)
-Date:   Fri, 18 Feb 2022 14:23:01 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jakub =?UTF-8?B?TWF0xJtuYQ==?= <matenajakub@gmail.com>,
-        linux-mm@kvack.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@kernel.org,
-        mgorman@techsingularity.net, liam.howlett@oracle.com,
-        hughd@google.com, kirill@shutemov.name, riel@surriel.com,
-        peterz@infradead.org
-Subject: Re: [RFC PATCH 4/4] [PATCH 4/4] mm: add tracing for VMA merges
-Message-ID: <20220218142301.0b5731e1@gandalf.local.home>
-In-Reply-To: <Yg/phVScjJCLsGuC@casper.infradead.org>
-References: <20220218122019.130274-1-matenajakub@gmail.com>
-        <20220218122019.130274-5-matenajakub@gmail.com>
-        <20220218130920.5902d967@gandalf.local.home>
-        <Yg/phVScjJCLsGuC@casper.infradead.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 18 Feb 2022 14:26:54 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD9D34B9C;
+        Fri, 18 Feb 2022 11:26:35 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nL8tm-002o7t-7v; Fri, 18 Feb 2022 19:26:34 +0000
+Date:   Fri, 18 Feb 2022 19:26:34 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Rik van Riel <riel@surriel.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        linux-fsdevel@vger.kernel.org, paulmck@kernel.org,
+        gscrivan@redhat.com, Eric Biederman <ebiederm@xmission.com>,
+        Chris Mason <clm@fb.com>
+Subject: Re: [PATCH 1/2] vfs: free vfsmount through rcu work from kern_unmount
+Message-ID: <Yg/y6qv6dZ2fc5z1@zeniv-ca.linux.org.uk>
+References: <20220218183114.2867528-1-riel@surriel.com>
+ <20220218183114.2867528-2-riel@surriel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218183114.2867528-2-riel@surriel.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 18:46:29 +0000
-Matthew Wilcox <willy@infradead.org> wrote:
-
-> On Fri, Feb 18, 2022 at 01:09:20PM -0500, Steven Rostedt wrote:
-> > Please indent the above better. That is:
-> > 
-> > 		__entry->diff_count = (merge_prev == AV_MERGE_DIFFERENT)
-> > 				+ (merge_next == AV_MERGE_DIFFERENT)
-> > 				+ (merge_both == AV_MERGE_DIFFERENT);  
+On Fri, Feb 18, 2022 at 01:31:13PM -0500, Rik van Riel wrote:
+> After kern_unmount returns, callers can no longer access the
+> vfsmount structure. However, the vfsmount structure does need
+> to be kept around until the end of the RCU grace period, to
+> make sure other accesses have all gone away too.
 > 
-> I thought our coding style preferred trailing operators; that is:
-> 
-> 		 __entry->diff_count = (merge_prev == AV_MERGE_DIFFERENT) +
-> 				(merge_next == AV_MERGE_DIFFERENT) +
-> 				(merge_both == AV_MERGE_DIFFERENT);
+> This can be accomplished by either gating each kern_unmount
+> on synchronize_rcu (the comment in the code says it all), or
+> by deferring the freeing until the next grace period, where
+> it needs to be handled in a workqueue due to the locking in
+> mntput_no_expire().
 
-I'm OK with either. I just can't handle the original.
-
--- Steve
+NAK.  There's code that relies upon kern_unmount() being
+synchronous.  That's precisely the reason why MNT_INTERNAL
+is treated that way in mntput_no_expire().

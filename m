@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1644BBA24
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025684BBA28
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 14:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbiBRNeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 08:34:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40090 "EHLO
+        id S235775AbiBRNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 08:36:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbiBRNeN (ORCPT
+        with ESMTP id S232474AbiBRNgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 08:34:13 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC99736330
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:33:56 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id f37so5465549lfv.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:33:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yBG3V/eig43ynBk5iiTnHrDbLKGL4LoM/wYLee8FQvQ=;
-        b=b9UM2dxgLaVQjKx09mKUZcKnQ5FmD1WUxECvpsjrYzpnOTEWmIRvSotU7JPHAeWA+t
-         ctqIRJPNPYxj8kpJL1wHF5zV4jXzna1/R3759oSi4h8mV2EkRRTPpgi8/kJnUbaHRLyy
-         cA26oMJwDiFAPyc7TVPD4cFXPMNuKZA+PcWAivtkoByEGXANmZwJd4W6mKGmiBShWPP9
-         gemCGNvATWt7Z+n/1T+IE4JXSozCNgVoHzPqB00b/rJX5fGjoGbAGDvW/EjluUBXdziz
-         FtOn2cMqkFi18KLo+LQ6hrz6FnGP4O766oLd5Y/W1VntzVEmAf00mpiKV7ToAhCV0LCi
-         Wwew==
+        Fri, 18 Feb 2022 08:36:01 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4154DE8685
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:35:45 -0800 (PST)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 85D1F4004C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:35:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645191341;
+        bh=2yMxZwtr/8gF+DdEs5PumNe+/8vsdXtXdAp73EogBDY=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=bA6i/qlgJeDFjaiHw7hcOLwanhFG8KS0Lxxw05ucbGQOLPBdnv1oJR1Yt2wzVbdVq
+         Pagm5s+y7Wy8DdJIYM9Sd0NVLP9FR9q+MFBrEQ/T30RSJJcrfWwL6lvGZi2nyR+zz8
+         aSDfiVaN1YlzkRpYVAetllr2ja82X+r1dTN8Yb3//RrarC/22j95wksaBQAKkpWnHa
+         yPdwJwSlR3EiQ+kN6Zl06ODqHRS7Ekc00x6hRC+NUWRwLqn1c2tqCIvUZlefZOPfgL
+         UGQSZrRVxGX4bxhPJiWAv4YVsEShX6+/T8YjXoxcV6GeBQP3+Bdwj7Gmv3BQGW8DxL
+         5tkDFv5/FV5pw==
+Received: by mail-wm1-f71.google.com with SMTP id c7-20020a1c3507000000b0034a0dfc86aaso5933273wma.6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 05:35:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yBG3V/eig43ynBk5iiTnHrDbLKGL4LoM/wYLee8FQvQ=;
-        b=UvwEFifAJaCXTDGsqs3YrIii9ah+fCmdW99QM6befiDJdlCq5sPsw1a5ra3qVeOpvI
-         R2yN7+gkktXtvPv5km7Qe8qW1pRnI3FME5WI9cn1pBTqsikgdgahFmsMbNH6qWiKCaIh
-         j1s525JAYgpD9otgysrRTkjUQTIxISTEQ5iwNM+OvA3z/pU5WKdOPVmplLnBrgAnxJXL
-         2uPAji4hh+Y0eA+wXEtT1OfkJ3SpoWkEXlauhpN59qH2XKjpyzhSNN2UcWLf2HRI2Tst
-         TpmK62fy1VCPqpoN26RevIssWFNqToXsjlinkIyT+F21XWD847mS1iizn5HBd93mIx3D
-         hxcg==
-X-Gm-Message-State: AOAM533w7nIC3laYuwNcHhPZqgfjVB4+5594aUJPFenGdEDgcueNoFm1
-        HGPGusaSp0AyAQui9OF1dqrW1uz2/CHQZw==
-X-Google-Smtp-Source: ABdhPJwoar327tKUyukECeIPFAPFswuL2KC74HU5i3o7bgqnlFODh3dymJ3/E0TcDl01f3KZJueEqg==
-X-Received: by 2002:a05:6512:39d5:b0:439:750e:4541 with SMTP id k21-20020a05651239d500b00439750e4541mr5278628lfu.497.1645191234732;
-        Fri, 18 Feb 2022 05:33:54 -0800 (PST)
-Received: from dabros-l.roam.corp.google.com ([185.157.14.92])
-        by smtp.gmail.com with ESMTPSA id h26sm32256lfp.217.2022.02.18.05.33.53
+        bh=2yMxZwtr/8gF+DdEs5PumNe+/8vsdXtXdAp73EogBDY=;
+        b=dlabSvsNnZ/NITSnLxSkFhJhjDgg+BvFHes/eEhJg5EAQfOGiSZE0Htk2HNlYVxKhR
+         r9aIQZ1+x4klmMmIQcc6pwDA2vDz1huSKUeW/Z9QAPuMSScJRlfsLXaiu46pSfbjK7hb
+         qxbqZj8O/7fM0VklVE+mh7y6LU8tkga2LN/8cC+/j+6dWwLikrvpllKtLoARvOhi5Tji
+         cerrATV6wJCV+fiMg9HNbxP8Mfdcy/FC/xjthyN0YFE7LL6eWCllkLT3DwrzJzotXqhN
+         +EguK6J2B+UcPG8qsu6iP84DwaMrbUUtVG12UzYrWby7IitBtWeaDnC1CjeUpkb53MJ4
+         fyNw==
+X-Gm-Message-State: AOAM533QDc1yhYYmfni5R6WdaqOSZ1VlME5/twilakhOsrFUe9r3fxQl
+        sKMOust4gQubCZR8KQagRu73PCChyn+pks8Hw0Xu0cVj1ye1NzHKPK728Sa9qnGQdv+Kdu9nKOm
+        yN5J2Rm/mZ9VkBvOOMW+Czot0t0YZaoUTOWzUEudkCw==
+X-Received: by 2002:a05:600c:1e8e:b0:37b:b9ab:e35d with SMTP id be14-20020a05600c1e8e00b0037bb9abe35dmr10720473wmb.109.1645191340873;
+        Fri, 18 Feb 2022 05:35:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyohAygHewTfQYDTOphC1Yoet4IBKeTpab9xavEBbLBq0CfmQQB3UD7pgUqU6ku/vHItAmtOA==
+X-Received: by 2002:a05:600c:1e8e:b0:37b:b9ab:e35d with SMTP id be14-20020a05600c1e8e00b0037bb9abe35dmr10720462wmb.109.1645191340715;
+        Fri, 18 Feb 2022 05:35:40 -0800 (PST)
+Received: from localhost.localdomain (lfbn-gre-1-195-1.w90-112.abo.wanadoo.fr. [90.112.158.1])
+        by smtp.gmail.com with ESMTPSA id c4sm21258318wri.22.2022.02.18.05.35.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 05:33:54 -0800 (PST)
-From:   Jan Dabros <jsd@semihalf.com>
-To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
-Cc:     wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
-        jsd@semihalf.com, kernel test robot <lkp@intel.com>
-Subject: [PATCH -next] i2c: designware: Fix improper usage of readl
-Date:   Fri, 18 Feb 2022 14:33:48 +0100
-Message-Id: <20220218133348.628962-1-jsd@semihalf.com>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+        Fri, 18 Feb 2022 05:35:40 -0800 (PST)
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: [PATCH -fixes 0/4] Fixes KASAN and other along the way
+Date:   Fri, 18 Feb 2022 14:35:09 +0100
+Message-Id: <20220218133513.1762929-1-alexandre.ghiti@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel test robot reported incorrect type in argument 1 of readl(), but
-more importantly it brought attention that MMIO accessor shouldn't be
-used in this case, since req->hdr.status is part of a command-response
-buffer in system memory.
+As reported by Aleksandr, syzbot riscv is broken since commit
+54c5639d8f50 ("riscv: Fix asan-stack clang build"). This commit actually
+breaks KASAN_INLINE which is not fixed in this series, that will come later
+when found.
 
-Since its value may be altered by PSP outside of the scope of current
-thread (somehow similar to IRQ handler case), we need to use
-READ_ONCE() to ensure compiler won't optimize this call.
+Nevertheless, this series fixes small things that made the syzbot
+configuration + KASAN_OUTLINE fail to boot.
 
-Fix also 'status' variable type to reflect that corresponding field in
-command-response buffer is platform-independent u32.
+Note that even though the config at [1] boots fine with this series, I
+was not able to boot the small config at [2] which fails because
+kasan_poison receives a really weird address 0x4075706301000000 (maybe a
+kasan person could provide some hint about what happens below in
+do_ctors -> __asan_register_globals):
 
-Signed-off-by: Jan Dabros <jsd@semihalf.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- drivers/i2c/busses/i2c-designware-amdpsp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Thread 2 hit Breakpoint 1, kasan_poison (addr=<optimized out>, size=<optimized out>, value=<optimized out>, init=<optimized out>) at /home/alex/work/linux/mm/kasan/shadow.c:90
+90		if (WARN_ON((unsigned long)addr & KASAN_GRANULE_MASK))
+1: x/i $pc
+=> 0xffffffff80261712 <kasan_poison>:	andi	a4,a0,7
+5: /x $a0 = 0x4075706301000000
 
-diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-index 752e0024db03..c64e459afb5c 100644
---- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-+++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-@@ -160,9 +160,10 @@ static int psp_send_cmd(struct psp_i2c_req *req)
- /* Helper to verify status returned by PSP */
- static int check_i2c_req_sts(struct psp_i2c_req *req)
- {
--	int status;
-+	u32 status;
- 
--	status = readl(&req->hdr.status);
-+	/* Status field in command-response buffer is updated by PSP */
-+	status = READ_ONCE(req->hdr.status);
- 
- 	switch (status) {
- 	case PSP_I2C_REQ_STS_OK:
+Thread 2 hit Breakpoint 2, handle_exception () at /home/alex/work/linux/arch/riscv/kernel/entry.S:27
+27		csrrw tp, CSR_SCRATCH, tp
+1: x/i $pc
+=> 0xffffffff80004098 <handle_exception>:	csrrw	tp,sscratch,tp
+5: /x $a0 = 0xe80eae0b60200000
+(gdb) bt
+#0  handle_exception () at /home/alex/work/linux/arch/riscv/kernel/entry.S:27
+#1  0xffffffff80261746 in kasan_poison (addr=<optimized out>, size=<optimized out>, value=<optimized out>, init=<optimized out>)
+    at /home/alex/work/linux/mm/kasan/shadow.c:98
+#2  0xffffffff802618b4 in kasan_unpoison (addr=<optimized out>, size=<optimized out>, init=<optimized out>)
+    at /home/alex/work/linux/mm/kasan/shadow.c:138
+#3  0xffffffff80260876 in register_global (global=<optimized out>) at /home/alex/work/linux/mm/kasan/generic.c:214
+#4  __asan_register_globals (globals=<optimized out>, size=<optimized out>) at /home/alex/work/linux/mm/kasan/generic.c:226
+#5  0xffffffff8125efac in _sub_I_65535_1 ()
+#6  0xffffffff81201b32 in do_ctors () at /home/alex/work/linux/init/main.c:1156
+#7  do_basic_setup () at /home/alex/work/linux/init/main.c:1407
+#8  kernel_init_freeable () at /home/alex/work/linux/init/main.c:1613
+#9  0xffffffff81153ddc in kernel_init (unused=<optimized out>) at /home/alex/work/linux/init/main.c:1502
+#10 0xffffffff800041c0 in handle_exception () at /home/alex/work/linux/arch/riscv/kernel/entry.S:231
+
+
+Thanks again to Aleksandr for narrowing down the issues fixed here.
+
+
+[1] https://gist.github.com/a-nogikh/279c85c2d24f47efcc3e865c08844138
+[2] https://gist.github.com/AlexGhiti/a5a0cab0227e2bf38f9d12232591c0e4
+
+Alexandre Ghiti (4):
+  riscv: Fix is_linear_mapping with recent move of KASAN region
+  riscv: Fix config KASAN && SPARSEMEM && !SPARSE_VMEMMAP
+  riscv: Fix DEBUG_VIRTUAL false warnings
+  riscv: Fix config KASAN && DEBUG_VIRTUAL
+
+ arch/riscv/include/asm/page.h | 2 +-
+ arch/riscv/mm/Makefile        | 3 +++
+ arch/riscv/mm/kasan_init.c    | 3 +--
+ arch/riscv/mm/physaddr.c      | 4 +---
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
 -- 
-2.35.1.265.g69c8d7142f-goog
+2.32.0
 

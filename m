@@ -2,140 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CCF4BB85A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3937E4BB896
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbiBRLjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:39:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45624 "EHLO
+        id S234889AbiBRLot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 06:44:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbiBRLjA (ORCPT
+        with ESMTP id S234791AbiBRLoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 06:39:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8385131351
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:37:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645184253;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kRz2HhmPOJqUdEguD6ineI0jgT8YXoXhvMfK4d0/iRk=;
-        b=iZ8JXWnJegYuprPViiFj2S44PQ5iqRXJGJHJRk8YfDqhz7va0cVkg6kWlG4cwcBN6x2pCA
-        9fazozbtoSl1s2Rhbqr0EH5/lxR42g1nYTgNTZkz85TOWE3VsRg/zbtTgvTKxOBhsXjZgi
-        V3ZipINj24mTyr6QYckhe1LKrV7RcMo=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-460-jfc7Aa6qMPSA7UniXMQkBQ-1; Fri, 18 Feb 2022 06:37:32 -0500
-X-MC-Unique: jfc7Aa6qMPSA7UniXMQkBQ-1
-Received: by mail-ed1-f72.google.com with SMTP id y13-20020aa7c24d000000b00411925b7829so5197921edo.22
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:37:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kRz2HhmPOJqUdEguD6ineI0jgT8YXoXhvMfK4d0/iRk=;
-        b=mPIwmHW/s1pghskw65RyJLZZaTWNU7Fyh0tvhe5za6dRd+AdAW7OEnhoRygIyyf1vm
-         DjORshlYNPV1ekahSQKNZPlbnT48BrfvzrBfTfAi4DwTNXi9NHm2D0BdlieVqIkQYMSd
-         xPEZmTV0UBRPb5UxEZar/j+nTlskRnXfn//6Anzd2og1y3ramYXzjkRH+kEJMETt9yOC
-         wytTe7kLVSkutyZaKa7C2HZQBlSwjMPzRbhSTIFnzPZiZo69xZESOnIdmt4xnD4o+XVI
-         yAuNONFZu8dhOtm6pNtVcCj7zOr7yjHrTIf6nNdZbvH/oJtV7ZQaoT6TGSTUx8tFTp2l
-         n7KA==
-X-Gm-Message-State: AOAM531BpVapV+v9t2sE3f/xvRx1sppLYAdibL42gCKLNVlYHZGnDZSO
-        utxJ/q9PUSZ42t1Ylg3n+gWp7/sJtuAzXm4WeDgBZ7hICc1DjyhzQGTCCDdjkAkBqOYRoQU6+K9
-        opGlNA8Osxk86bfdJF90tsJes
-X-Received: by 2002:a17:906:f293:b0:6b6:bc93:f01f with SMTP id gu19-20020a170906f29300b006b6bc93f01fmr5656030ejb.743.1645184251241;
-        Fri, 18 Feb 2022 03:37:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyumwEeTQqcko1h2tOqCFdEjZvTGldy8JfDmmW/0pXvLQMU7H6ovgQWyZGrpbpB4r5tpsNPFQ==
-X-Received: by 2002:a17:906:f293:b0:6b6:bc93:f01f with SMTP id gu19-20020a170906f29300b006b6bc93f01fmr5656019ejb.743.1645184251001;
-        Fri, 18 Feb 2022 03:37:31 -0800 (PST)
-Received: from redhat.com ([2.55.156.211])
-        by smtp.gmail.com with ESMTPSA id z18sm2209291ejl.78.2022.02.18.03.37.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 03:37:30 -0800 (PST)
-Date:   Fri, 18 Feb 2022 06:37:26 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
-Cc:     jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
-Message-ID: <20220218063352-mutt-send-email-mst@kernel.org>
-References: <00000000000070ac6505d7d9f7a8@google.com>
- <0000000000003b07b305d840b30f@google.com>
+        Fri, 18 Feb 2022 06:44:09 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F8912770;
+        Fri, 18 Feb 2022 03:43:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=gFf5jfKrkPZO7pBJTx+x51tYvfxtkyD2Tt7FbOYTxSM=; b=ne3pKNvph23SdiOId6gZjhosGZ
+        0/Y330PGQTWsNgZph8JRPvujHW8Q7yKi9RQEgI8sxuwa2hTYF1G3+u4oQbOVU3E/PpQedbAEsecpY
+        GB/eNaRWvsSnwp7xFs7UD57eeoSb7bgvY5aVZXPlhLXS3vFFiscH0vkrzkRecru/9bTh+zaiKsKRR
+        9G0bujjWMv3oiBpmAlrCLQlvdZ9rr4G6A1/9444UmUXEqkVY/r9YMST3MN5eVMm/2iPyHlAZLbxdJ
+        rmvXg8Rn5+I8rTguH5iOrNTLqeNT5TgHldS7x9iJj/X/MNKmlX+irsCyJS4Xuo/QAmF7mPTf02za3
+        O4j4fI0w==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <mperttunen@nvidia.com>)
+        id 1nL1fp-0006eP-OW; Fri, 18 Feb 2022 13:43:41 +0200
+From:   Mikko Perttunen <mperttunen@nvidia.com>
+To:     thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
+        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com
+Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Subject: [PATCH v3 0/9] Host1x context isolation support
+Date:   Fri, 18 Feb 2022 13:39:43 +0200
+Message-Id: <20220218113952.3077606-1-mperttunen@nvidia.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000003b07b305d840b30f@google.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: mperttunen@nvidia.com
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 05:21:20PM -0800, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    f71077a4d84b Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=104c04ca700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1362e232700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11373a6c700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> kernel BUG at drivers/vhost/vhost.c:2335!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 3597 Comm: vhost-3596 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
-> Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
-> RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-> R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
-> R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
-> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
->  vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
->  kthread+0x2e9/0x3a0 kernel/kthread.c:377
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+***
+New in v3:
 
-I don't see how this can trigger normally so I'm assuming
-another case of use after free.
+Added device tree bindings for new property.
+Rebased.
+***
 
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
-> Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
-> RSP: 0018:ffffc90001d1fb88 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff8880234b0000 RSI: ffffffff86d715c3 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-> R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888072c24d68
-> R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888072c24bb0
-> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000002 CR3: 000000007902c000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+***
+New in v2:
+
+Added support for Tegra194
+Use standard iommu-map property instead of custom mechanism
+***
+
+This series adds support for Host1x 'context isolation'. Since
+when programming engines through Host1x, userspace can program in
+any addresses it wants, we need some way to isolate the engines'
+memory spaces. Traditionally this has either been done imperfectly
+with a single shared IOMMU domain, or by copying and verifying the
+programming command stream at submit time (Host1x firewall).
+
+Since Tegra186 there is a privileged (only usable by kernel)
+Host1x opcode that allows setting the stream ID sent by the engine
+to the SMMU. So, by allocating a number of context banks and stream
+IDs for this purpose, and using this opcode at the beginning of
+each job, we can implement isolation. Due to the limited number of
+context banks only each process gets its own context, and not
+each channel.
+
+This feature also allows sharing engines among multiple VMs when
+used with Host1x's hardware virtualization support - up to 8 VMs
+can be configured with a subset of allowed stream IDs, enforced
+at hardware level.
+
+To implement this, this series adds a new host1x context bus, which
+will contain the 'struct device's corresponding to each context
+bank / stream ID, changes to device tree and SMMU code to allow
+registering the devices and using the bus, as well as the Host1x
+stream ID programming code and support in TegraDRM.
+
+Thanks,
+Mikko
+
+Mikko Perttunen (9):
+  dt-bindings: host1x: Add memory-contexts property
+  gpu: host1x: Add context bus
+  gpu: host1x: Add context device management code
+  gpu: host1x: Program context stream ID on submission
+  iommu/arm-smmu: Attach to host1x context device bus
+  arm64: tegra: Add Host1x context stream IDs on Tegra186+
+  drm/tegra: falcon: Set DMACTX field on DMA transactions
+  drm/tegra: vic: Implement get_streamid_offset
+  drm/tegra: Support context isolation
+
+ .../display/tegra/nvidia,tegra20-host1x.yaml  |  10 +
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi      |  12 ++
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi      |  12 ++
+ drivers/gpu/Makefile                          |   3 +-
+ drivers/gpu/drm/tegra/drm.h                   |   2 +
+ drivers/gpu/drm/tegra/falcon.c                |   8 +
+ drivers/gpu/drm/tegra/falcon.h                |   1 +
+ drivers/gpu/drm/tegra/submit.c                |  13 ++
+ drivers/gpu/drm/tegra/uapi.c                  |  36 +++-
+ drivers/gpu/drm/tegra/vic.c                   |  38 ++++
+ drivers/gpu/host1x/Kconfig                    |   5 +
+ drivers/gpu/host1x/Makefile                   |   2 +
+ drivers/gpu/host1x/context.c                  | 174 ++++++++++++++++++
+ drivers/gpu/host1x/context.h                  |  27 +++
+ drivers/gpu/host1x/context_bus.c              |  31 ++++
+ drivers/gpu/host1x/dev.c                      |  12 +-
+ drivers/gpu/host1x/dev.h                      |   2 +
+ drivers/gpu/host1x/hw/channel_hw.c            |  52 +++++-
+ drivers/gpu/host1x/hw/host1x06_hardware.h     |  10 +
+ drivers/gpu/host1x/hw/host1x07_hardware.h     |  10 +
+ drivers/iommu/arm/arm-smmu/arm-smmu.c         |  13 ++
+ include/linux/host1x.h                        |  21 +++
+ include/linux/host1x_context_bus.h            |  15 ++
+ 23 files changed, 500 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/gpu/host1x/context.c
+ create mode 100644 drivers/gpu/host1x/context.h
+ create mode 100644 drivers/gpu/host1x/context_bus.c
+ create mode 100644 include/linux/host1x_context_bus.h
+
+-- 
+2.35.0
 

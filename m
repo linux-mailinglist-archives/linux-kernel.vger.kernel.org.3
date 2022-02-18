@@ -2,169 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EE74BB1D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 07:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087434BB1D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 07:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiBRGKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 01:10:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52092 "EHLO
+        id S231253AbiBRGNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 01:13:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbiBRGJy (ORCPT
+        with ESMTP id S231177AbiBRGNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 01:09:54 -0500
-Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49F31193F7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Feb 2022 22:09:34 -0800 (PST)
-Received: from unknown (HELO lgeamrelo04.lge.com) (156.147.1.127)
-        by 156.147.23.51 with ESMTP; 18 Feb 2022 15:09:33 +0900
-X-Original-SENDERIP: 156.147.1.127
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.127 with ESMTP; 18 Feb 2022 15:09:33 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Fri, 18 Feb 2022 15:09:26 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, joel@joelfernandes.org,
-        sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        bfields@fieldses.org, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: [PATCH 02/16] dept: Implement Dept(Dependency Tracker)
-Message-ID: <20220218060926.GA26206@X58A-UD3R>
-References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
- <1645095472-26530-3-git-send-email-byungchul.park@lge.com>
- <20220217123656.389e8783@gandalf.local.home>
+        Fri, 18 Feb 2022 01:13:17 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98B525580;
+        Thu, 17 Feb 2022 22:13:00 -0800 (PST)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K0Lq66Y9xz1FDLR;
+        Fri, 18 Feb 2022 14:08:34 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 18 Feb 2022 14:12:58 +0800
+Subject: Re: [PATCH -next] jffs2: fix use-after-free in
+ jffs2_clear_xattr_subsystem
+To:     <richard@nod.at>, <dwmw2@infradead.org>,
+        <christian.brauner@ubuntu.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <yukuai3@huawei.com>, <stable@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>
+References: <20211228125430.1880252-1-libaokun1@huawei.com>
+From:   "libaokun (A)" <libaokun1@huawei.com>
+Message-ID: <fcc5cec6-63d0-e1e3-1f33-e6a424daff85@huawei.com>
+Date:   Fri, 18 Feb 2022 14:12:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217123656.389e8783@gandalf.local.home>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20211228125430.1880252-1-libaokun1@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 12:36:56PM -0500, Steven Rostedt wrote:
-> > +struct dept_ecxt;
-> > +struct dept_iecxt {
-> > +	struct dept_ecxt *ecxt;
-> > +	int enirq;
-> > +	bool staled; /* for preventing to add a new ecxt */
-> > +};
-> > +
-> > +struct dept_wait;
-> > +struct dept_iwait {
-> > +	struct dept_wait *wait;
-> > +	int irq;
-> > +	bool staled; /* for preventing to add a new wait */
-> > +	bool touched;
-> > +};
-> 
-> Nit. It makes it easier to read (and then review) if structures are spaced
-> where their fields are all lined up:
-> 
-> struct dept_iecxt {
-> 	struct dept_ecxt		*ecxt;
-> 	int				enirq;
-> 	bool				staled;
-> };
-> 
-> struct dept_iwait {
-> 	struct dept_wait		*wait;
-> 	int				irq;
-> 	bool				staled;
-> 	bool				touched;
-> };
-> 
-> See, the fields stand out, and is nicer on the eyes. Especially for those
-> of us that are getting up in age, and our eyes do not work as well as they
-> use to ;-)
+ÔÚ 2021/12/28 20:54, Baokun Li Ð´µÀ:
 
-Sure! I will apply this.
+ping
 
-> > + * ---
-> > + * This program is free software; you can redistribute it and/or modify
-> > + * it under the terms of the GNU General Public License as published by
-> > + * the Free Software Foundation; either version 2 of the License, or
-> > + * (at your ootion) any later version.
-> > + *
-> > + * This program is distributed in the hope that it will be useful, but
-> > + * WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> > + * General Public License for more details.
-> > + *
-> > + * You should have received a copy of the GNU General Public License
-> > + * along with this program; if not, you can access it online at
-> > + * http://www.gnu.org/licenses/gpl-2.0.html.
-> 
-> The SPDX at the top of the file is all that is needed. Please remove this
-> boiler plate. We do not use GPL boiler plates in the kernel anymore. The
-> SPDX code supersedes that.
+> When we mount a jffs2 image, assume that the first few blocks of
+> the image are normal and contain at least one xattr-related inode,
+> but the next block is abnormal. As a result, an error is returned
+> in jffs2_scan_eraseblock(). jffs2_clear_xattr_subsystem() is then
+> called in jffs2_build_filesystem() and then again in
+> jffs2_do_fill_super().
+>
+> Finally we can observe the following report:
+>   ==================================================================
+>   BUG: KASAN: use-after-free in jffs2_clear_xattr_subsystem+0x95/0x6ac
+>   Read of size 8 at addr ffff8881243384e0 by task mount/719
+>
+>   Call Trace:
+>    dump_stack+0x115/0x16b
+>    jffs2_clear_xattr_subsystem+0x95/0x6ac
+>    jffs2_do_fill_super+0x84f/0xc30
+>    jffs2_fill_super+0x2ea/0x4c0
+>    mtd_get_sb+0x254/0x400
+>    mtd_get_sb_by_nr+0x4f/0xd0
+>    get_tree_mtd+0x498/0x840
+>    jffs2_get_tree+0x25/0x30
+>    vfs_get_tree+0x8d/0x2e0
+>    path_mount+0x50f/0x1e50
+>    do_mount+0x107/0x130
+>    __se_sys_mount+0x1c5/0x2f0
+>    __x64_sys_mount+0xc7/0x160
+>    do_syscall_64+0x45/0x70
+>    entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>
+>   Allocated by task 719:
+>    kasan_save_stack+0x23/0x60
+>    __kasan_kmalloc.constprop.0+0x10b/0x120
+>    kasan_slab_alloc+0x12/0x20
+>    kmem_cache_alloc+0x1c0/0x870
+>    jffs2_alloc_xattr_ref+0x2f/0xa0
+>    jffs2_scan_medium.cold+0x3713/0x4794
+>    jffs2_do_mount_fs.cold+0xa7/0x2253
+>    jffs2_do_fill_super+0x383/0xc30
+>    jffs2_fill_super+0x2ea/0x4c0
+>   [...]
+>
+>   Freed by task 719:
+>    kmem_cache_free+0xcc/0x7b0
+>    jffs2_free_xattr_ref+0x78/0x98
+>    jffs2_clear_xattr_subsystem+0xa1/0x6ac
+>    jffs2_do_mount_fs.cold+0x5e6/0x2253
+>    jffs2_do_fill_super+0x383/0xc30
+>    jffs2_fill_super+0x2ea/0x4c0
+>   [...]
+>
+>   The buggy address belongs to the object at ffff8881243384b8
+>    which belongs to the cache jffs2_xattr_ref of size 48
+>   The buggy address is located 40 bytes inside of
+>    48-byte region [ffff8881243384b8, ffff8881243384e8)
+>   [...]
+>   ==================================================================
+>
+> The triggering of the BUG is shown in the following stack:
+> -----------------------------------------------------------
+> jffs2_fill_super
+>    jffs2_do_fill_super
+>      jffs2_do_mount_fs
+>        jffs2_build_filesystem
+>          jffs2_scan_medium
+>            jffs2_scan_eraseblock        <--- ERROR
+>          jffs2_clear_xattr_subsystem    <--- free
+>      jffs2_clear_xattr_subsystem        <--- free again
+> -----------------------------------------------------------
+>
+> An error is returned in jffs2_do_mount_fs(). If the error is returned
+> by jffs2_sum_init(), the jffs2_clear_xattr_subsystem() does not need to
+> be executed. If the error is returned by jffs2_build_filesystem(), the
+> jffs2_clear_xattr_subsystem() also does not need to be executed again.
+> So move jffs2_clear_xattr_subsystem() from 'out_inohash' to 'out_root'
+> to fix this UAF problem.
+>
+> Fixes: aa98d7cf59b5 ("[JFFS2][XATTR] XATTR support on JFFS2 (version. 5)")
+> Cc: stable@vger.kernel.org
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>   fs/jffs2/fs.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/jffs2/fs.c b/fs/jffs2/fs.c
+> index 2ac410477c4f..71f03a5d36ed 100644
+> --- a/fs/jffs2/fs.c
+> +++ b/fs/jffs2/fs.c
+> @@ -603,8 +603,8 @@ int jffs2_do_fill_super(struct super_block *sb, struct fs_context *fc)
+>   	jffs2_free_ino_caches(c);
+>   	jffs2_free_raw_node_refs(c);
+>   	kvfree(c->blocks);
+> - out_inohash:
+>   	jffs2_clear_xattr_subsystem(c);
+> + out_inohash:
+>   	kfree(c->inocache_list);
+>    out_wbuf:
+>   	jffs2_flash_cleanup(c);
 
-Thank you for informing it!
-
-> > +/*
-> > + * Can use llist no matter whether CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG is
-> > + * enabled because DEPT never race with NMI by nesting control.
-> 
->                          "never races with"
-
-Good eyes!
-
-> Although, I'm confused by what you mean with "by nesting control".
-
-I should've expressed it more clearly. It meant NMI and other contexts
-never run inside of Dept concurrently in the same CPU by preventing
-reentrance.
-
-> > +static void initialize_class(struct dept_class *c)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < DEPT_IRQS_NR; i++) {
-> > +		struct dept_iecxt *ie = &c->iecxt[i];
-> > +		struct dept_iwait *iw = &c->iwait[i];
-> > +
-> > +		ie->ecxt = NULL;
-> > +		ie->enirq = i;
-> > +		ie->staled = false;
-> > +
-> > +		iw->wait = NULL;
-> > +		iw->irq = i;
-> > +		iw->staled = false;
-> > +		iw->touched = false;
-> > +	}
-> > +	c->bfs_gen = 0U;
-> 
-> Is the U really necessary?
-
-I was just wondering if it's really harmful? I want to leave this if
-it's harmless because U let us guess the data type of ->bfs_gen correctly
-at a glance. Or am I missing some reason why I should fix this?
-
-Thank you very much, Steven.
 

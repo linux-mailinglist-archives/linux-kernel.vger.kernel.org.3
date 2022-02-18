@@ -2,138 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BA04BC105
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71E44BC10C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239119AbiBRUKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 15:10:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34626 "EHLO
+        id S239145AbiBRUNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 15:13:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236962AbiBRUK3 (ORCPT
+        with ESMTP id S230190AbiBRUNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 15:10:29 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BBA24B2A5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:10:12 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id q8so8918319iod.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:10:12 -0800 (PST)
+        Fri, 18 Feb 2022 15:13:19 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CE124B291
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:13:02 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id e11so5514645ils.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:13:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YIWJpKEENbFmbXbEyafcxIcJq6TphA9pvUdJgiZAvyE=;
-        b=HlutxaM+IbO8xNMZTBAF65o2Cc5yGGegUjfKlJS1Zty5V2H/VvESFd2K1dklflc3BZ
-         ukF56mfOCn1pWBx/sK+pnhYEcjKzeVeHKwJr2jtw9f0lreeHxy/qdqFZz80CVvIuVNOd
-         yKuIXBusqH+gm6OCwpgcJIb3mJakayN7ht+6Q=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gVsHCHmwADKSqOo2GYanEhPkg98MAktxHGKwbeIcwQA=;
+        b=I9BBM++2sTN5aGRqni53EP3taTChxanqlZJ+rnp+WqJODfYkMXtFECQAUiyTgRKCAK
+         eU6xqPVAwBZbNPQXGVxAHM0Rzml12LqzqyZOnYJUARnvNegrbMc531+SYOWD+/jU03zI
+         oS4gee3t77tcfziiVXaxqcvovI8kf9aFSRfN6gnoZFI1MMDx+0O4R1JCyepGKrU0+ItM
+         c2Ke30RLO7gGl/simOSrkbfotOVMqRjfyut+66b3DOkrjvcmqoO/wHrPPkKr6+b/YDYu
+         cHkkdcKzNmcE1RtrUyo1R+EN4M8vxTcbQcFINFHqe+o/tkORYo2lZjcbrTBvOViZCNjb
+         G2Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YIWJpKEENbFmbXbEyafcxIcJq6TphA9pvUdJgiZAvyE=;
-        b=m45XOWuiLho19AdkiR1A//LS88P8EKiSVN7G7xPtTZJd4JzIz58nP2mJ6b701SA31c
-         GsQpd3GO0/Th4oAfF5+PtO+NvLOoGlcGFmo0KcHE1X8x2p2bBWHsLUWDGbU+RPhdPkHK
-         tQESybn+1SpQ9UwUvrY82dUjbMg/JI4SKC5rceslWFcdBXLrxfOYr+jqslH07TbfqVrx
-         PYb8hUWqqLgm5CKZAauz0+96RZwu73k0nghhtq8mFLwou6wHray2ioN5rVQEMGIc+R6R
-         ylY/xDfS2e7+TsAD9tlJ+yk2lyXHYFMqYmdEwREHYtA+wvH/F4NYZ9/qccp5+5Qdn8fw
-         zAeQ==
-X-Gm-Message-State: AOAM530D3BGmn6RY6RqYcuvT2Bj3oGJR3oJKH41CWBRynECHdHzszBfL
-        8oWIBe14HcMzMrpfG+wVPg8rbw==
-X-Google-Smtp-Source: ABdhPJwqQDwxWISKZBWY0L8hGgo42UBhTa//k+554mx88o/db9mFUtSqS7l2M7uBvWV9mNbGfDmPWg==
-X-Received: by 2002:a05:6602:15cf:b0:614:52d4:952 with SMTP id f15-20020a05660215cf00b0061452d40952mr6527679iow.185.1645215011808;
-        Fri, 18 Feb 2022 12:10:11 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id y6sm4213205ilv.3.2022.02.18.12.10.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 12:10:11 -0800 (PST)
-Subject: Re: [PATCH v3 1/5] selftests/resctrl: Kill child process before
- parent process terminates if SIGTERM is received
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-2-tan.shaopeng@jp.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f0205a17-fba6-7c06-303d-a6e690c93073@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 13:10:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gVsHCHmwADKSqOo2GYanEhPkg98MAktxHGKwbeIcwQA=;
+        b=1VPf/x8HFVVmSa41pWBMgaL03iTBnjVBNf6qHgyaBCllS04SfZx2sqvP9rnMZyMuJd
+         M98Xwq0VchjhK16LCyKXYjvK5S8BqcGgqJANlgclUG/wTWQ9406nIYBnqQm3iB8eCCZz
+         dYmif2Oc0wKy4bMZYNHD3oLVi2ZaGKYVVL/sI1jamBMY1SD/KJK5Xi2Wv3Lv5K9wL3gY
+         EXb9MYWxAD20DJCDlrb5WKd6ExQq7YwThq8c/MJ7R+QSohnPBDLyxDZXHxYQheYFeZ9N
+         mbncIwF3EqazGjkzs1wBO1OAW+JaCBwiSqOSpvIiPXq19NpEcziPPAe5EV/sDj02IFvy
+         kmPA==
+X-Gm-Message-State: AOAM531GpUl1SJNAXYp/4Xgifscv+MRQD3x3l3BWptZJMfPmnZpi1hWA
+        0wcT9pFQx7jiJzwep5LhGteVxOW2zC7xMlFOs4jPNA==
+X-Google-Smtp-Source: ABdhPJz9xqKlKR2n+B2bJRtz8x9xLAQBSZHzS73OpfCRy+cu0hbrw8WHq8/TecendfrhWg59B+OJfszNK/hjMb+P1zg=
+X-Received: by 2002:a05:6e02:1a0f:b0:2c1:a8db:a266 with SMTP id
+ s15-20020a056e021a0f00b002c1a8dba266mr3315687ild.127.1645215181718; Fri, 18
+ Feb 2022 12:13:01 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220216022641.2998318-2-tan.shaopeng@jp.fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000073b3e805d7fed17e@google.com> <462fa505-25a8-fd3f-cc36-5860c6539664@iogearbox.net>
+ <CAPhsuW6rPx3JqpPdQVdZN-YtZp1SbuW1j+SVNs48UVEYv68s1A@mail.gmail.com>
+ <CAPhsuW5JhG07TYKKHRbNVtepOLjZ2ekibePyyqCwuzhH0YoP7Q@mail.gmail.com>
+ <CANp29Y64wUeARFUn8Z0fjk7duxaZ3bJM2uGuVug_0ZmhGG_UTA@mail.gmail.com>
+ <CAPhsuW6YOv_xjvknt_FPGwDhuCuG5s=7Xt1t-xL2+F6UKsJf-w@mail.gmail.com>
+ <CANp29Y4YC_rSKAgkYTaPV1gcN4q4WeGMvs61P2wnMQEv=kiu8A@mail.gmail.com> <2AB2B7C8-5F07-4D41-8CC3-04BE7C74DCCC@fb.com>
+In-Reply-To: <2AB2B7C8-5F07-4D41-8CC3-04BE7C74DCCC@fb.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 18 Feb 2022 21:12:50 +0100
+Message-ID: <CANp29Y5cFKGRTFy9EGqTD=BU4GMsP8uvOXBb=O+Mh0i5ExPsag@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_jit_free
+To:     Song Liu <songliubraving@fb.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Cc:     Song Liu <song@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+        syzbot <syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin Lau <kafai@fb.com>, KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 7:26 PM, Shaopeng Tan wrote:
-> In kselftest framework, a sub test is run using the timeout utility
-> and it will send SIGTERM to the test upon timeout.
-> 
-> In resctrl_tests, a child process is created by fork() to
-> run benchmark but SIGTERM is not set in sigaction().
-> If SIGTERM signal is received, the parent process will be killed,
-> but the child process still exists.
-> 
-> kill child process before parent process terminates
-> if SIGTERM signal is received.
-> 
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
-> Some important feedbacks from v1&v2 are addressed as follows:
-> 
-> - Change the order so that current patch 3/3 becomes 1/3. Since without
->    the SIGTERM fix, the test would hang if run from the kselftest framework.
->    => I changed the order and the SIGTERM fix now becomes patch [1/5].
-> 
-> - Describe that the test is run using the timeout utility and
->    it will send SIGTERM to the test upon timeout.
->    => I updated the changelog to include this information.
-> 
-> - Describe changes in imperative mood, and address this in all patches.
->    See Documentation/process/submitting-patches.rst for more details.
->    => I described all my patches' changelog in imperative mood and
->       deleted "This commit".
-> 
-> - +	    sigaction(SIGTERM, &sigact, NULL) ||
->    This snippet is preceded with a comment that describes its usage
->    you could also update it with the expanded use of the kselftest framework.
->    => I don't think it is necessary to add other comments.
->       Since the current comment already states "Register CTRL-C handler for parent,
->       as it has to kill benchmark before exiting", So, when SIGTERM comes,
->       the benchmark(child process) should be killed before parent process terminates,
->       but it was missing.
-> 
->   tools/testing/selftests/resctrl/resctrl_val.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-> index 95224345c78e..b32b96356ec7 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_val.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-> @@ -678,6 +678,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
->   	sigemptyset(&sigact.sa_mask);
->   	sigact.sa_flags = SA_SIGINFO;
->   	if (sigaction(SIGINT, &sigact, NULL) ||
-> +	    sigaction(SIGTERM, &sigact, NULL) ||
->   	    sigaction(SIGHUP, &sigact, NULL)) {
->   		perror("# sigaction");
->   		ret = errno;
-> 
+Hi Song,
 
-This looks good to me.
+On Thu, Feb 17, 2022 at 9:05 PM Song Liu <songliubraving@fb.com> wrote:
+>
+> Hi Aleksandr,
+>
+> > On Feb 17, 2022, at 10:32 AM, Aleksandr Nogikh <nogikh@google.com> wrote:
+> >
+> > Hi Song,
+> >
+> > On Wed, Feb 16, 2022 at 5:27 PM Song Liu <song@kernel.org> wrote:
+> >>
+> >> Hi Aleksandr,
+> >>
+> >> Thanks for your kind reply!
+> >>
+> >> On Wed, Feb 16, 2022 at 1:38 AM Aleksandr Nogikh <nogikh@google.com> wrote:
+> >>>
+> >>> Hi Song,
+> >>>
+> >>> Is syzkaller not doing something you expect it to do with this config?
+> >>
+> >> I fixed sshkey in the config, and added a suppression for hsr_node_get_first.
+> >> However, I haven't got a repro overnight.
+> >
+> > Oh, that's unfortunately not a very reliable thing. The bug has so far
+> > happened only once on syzbot, so it must be pretty rare. Maybe you'll
+> > have more luck with your local setup :)
+> >
+> > You can try to run syz-repro on the log file that is available on the
+> > syzbot dashboard:
+> > https://github.com/google/syzkaller/blob/master/tools/syz-repro/repro.go
+> > Syzbot has already done it and apparently failed to succeed, but this
+> > is also somewhat probabilistic, especially when the bug is due to some
+> > rare race condition. So trying it several times might help.
+> >
+> > Also you might want to hack your local syzkaller copy a bit:
+> > https://github.com/google/syzkaller/blob/master/syz-manager/manager.go#L804
+> > Here you can drop the limit on the maximum number of repro attempts
+> > and make needLocalRepro only return true if crash.Title matches the
+> > title of this particular bug. With this change your local syzkaller
+> > instance won't waste time reproducing other bugs.
+> >
+> > There's also a way to focus syzkaller on some specific kernel
+> > functions/source files:
+> > https://github.com/google/syzkaller/blob/master/pkg/mgrconfig/config.go#L125
+>
+> Thanks for these tips!
+>
+> After fixing some other things. I was able to reproduce one of the three
+> failures modes overnight and some related issues from fault injection.
+> These errors gave me clue to fix the bug (or at least one of the bugs).
+>
+> I have a suggestions on the bug dashboard, like:
+>
+> https://syzkaller.appspot.com/bug?id=86fa0212fb895a0d41fd1f1eecbeaee67191a4c9
+>
+> It isn't obvious to me which image was used in the test. Maybe we can add
+> a link to the image or instructions to build the image? In this case, I
+> think the bug only triggers on some images, so testing with the exact image
+> is important.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Hmm, that's interesting. If the exact image can really make a
+difference, I think we could e.g. remember the images syzbot used for
+the last 1-2 months and make them downloadable from the bug details
+page. I'll check if there are any obstacles, at first sight this
+should not be a problem.
 
-thanks,
--- Shuah
+Thanks for the suggestion!
+
+--
+Best Regards,
+Aleksandr
+
+>
+> Thanks again,
+> Song

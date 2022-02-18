@@ -2,131 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703434BC189
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369804BC18C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 22:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239607AbiBRVHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 16:07:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41196 "EHLO
+        id S239617AbiBRVI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 16:08:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiBRVHg (ORCPT
+        with ESMTP id S231464AbiBRVIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:07:36 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB1D10FD3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:07:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645218439; x=1676754439;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=ky/sFQgO7G6Nqidx2wlMpJdnhLfeu8rxJY8dSggBnjY=;
-  b=lc486d1Wnx/de476iln/+sDYX/k4OHk3lMf02TUZBaG9uHCM+ZNrJoqq
-   YkYUoEeiA0Aks54LX65Cqha5SCdHD10KWhnfeflSFX+QrHHof/sRoFHfN
-   hCHkg+7wsWWPZXpuoooq0m82022STcCTw5cVZr89I3ABJHL2jIIZ/Krj6
-   +EVuMzhzdaOP2CBvFA+DMLs42M0XRhTf/CgHzfgmN3xaAKTFtB8o9hAKD
-   TeoTioqlPtx04VpEAworo0hliC2tBqmj7fJz8JFVYdd8l+awIN+oivkVF
-   yGHUJWOlGiW+sa9yd2vALYgIAHnfkx5yyxazzJzRii2cN3698NREB30if
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="275807313"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="275807313"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 13:07:18 -0800
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="682613294"
-Received: from jabonill-mobl1.amr.corp.intel.com (HELO [10.251.27.55]) ([10.251.27.55])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 13:07:17 -0800
-Message-ID: <5252a906-41e7-ec92-3b99-4a8d5cff4f0f@intel.com>
-Date:   Fri, 18 Feb 2022 13:07:11 -0800
+        Fri, 18 Feb 2022 16:08:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 156CF10FD3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:08:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645218517;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nVamlfcTUZABNPWHwKiYsy4zyINV7sFAe+6maTrLNFs=;
+        b=b8JGLl9auDqAqL52B64UGT61SpexBWaCRkuujItA9QmDBl5litWRGFlhv+NNcJHHJYN/Co
+        MeoKHSwCascsbOrmEQlpO0wc2JwxkYUdgkC7GiLR1tGYfgb9n9MVysJEhwj4tAYGJpytI+
+        jdCm5+AO+n0sZFgsT2CX++nwCTuVJ3E=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-4NIKvOHnP2-DULaEF8mOmA-1; Fri, 18 Feb 2022 16:08:35 -0500
+X-MC-Unique: 4NIKvOHnP2-DULaEF8mOmA-1
+Received: by mail-qk1-f199.google.com with SMTP id bi17-20020a05620a319100b0050850bdcbb2so8452570qkb.17
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 13:08:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nVamlfcTUZABNPWHwKiYsy4zyINV7sFAe+6maTrLNFs=;
+        b=oVarvXfYowVe6zXp6rn94aRd1e2zgXee4ddD3IDn9f7pV4P4uG32bNbB4L9vZRxARP
+         CP5zSi98iUS591+dgvaGQi94mE8rspgTGewRq9ER+EtTwdgQCiJ/LfSjGYTTeLDCBsKB
+         9ZtAY4rf3QrSK7A1236U4CfKVldG5bV9wrQME5CY5z1gUg7nnUjBExMlkr2nvL+FNsCZ
+         FM1p3qZ8N/gpOVsFOmBvu3+exlc6n9I88/kEcVc7yTjrULip5q1jQ5gBnVrty6PyxYeP
+         yiJ/Ifsk4l+yRK4D+bdokVEyd12LkA/+wa4NBIJ/byEE8draTwOZhoc1TUQnOP3IzsYo
+         WvTA==
+X-Gm-Message-State: AOAM531yYHgZXJSfs9CDbZLR1xsq6dBPbGUaZoYTlq4yEbzzMm97pp1P
+        w1PaRyJ2c2NUrj0hj/aAgg6ZtZvyIK5BRWd/IQ6zep2im8ieJEDfznzzMYD+Oy1X6maeWdz3uyu
+        7IYRlB8NlpPHLl1jIy4udPKMO
+X-Received: by 2002:ad4:5d45:0:b0:42c:37fe:6e48 with SMTP id jk5-20020ad45d45000000b0042c37fe6e48mr7389166qvb.37.1645218515278;
+        Fri, 18 Feb 2022 13:08:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw7zCa8lEAZHm4WLScv/y+Zt4e8ZY+GUHayOI7MzRLhV614dIKefKQ6PUFkiNnP9+b+sJmd9g==
+X-Received: by 2002:ad4:5d45:0:b0:42c:37fe:6e48 with SMTP id jk5-20020ad45d45000000b0042c37fe6e48mr7389147qvb.37.1645218515072;
+        Fri, 18 Feb 2022 13:08:35 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id t30sm2994581qtc.57.2022.02.18.13.08.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 13:08:34 -0800 (PST)
+Date:   Fri, 18 Feb 2022 13:08:31 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com, Miroslav Benes <mbenes@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 04/29] x86/livepatch: Validate __fentry__ location
+Message-ID: <20220218210831.u2ugtfr7gxllk4cs@treble>
+References: <20220218164902.008644515@infradead.org>
+ <20220218171408.808810436@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
- <20220218161718.67148-4-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv3 03/32] x86/tdx: Detect running as a TDX guest in early
- boot
-In-Reply-To: <20220218161718.67148-4-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220218171408.808810436@infradead.org>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/22 08:16, Kirill A. Shutemov wrote:
-> From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+On Fri, Feb 18, 2022 at 05:49:06PM +0100, Peter Zijlstra wrote:
+> Currently livepatch assumes __fentry__ lives at func+0, which is most
+> likely untrue with IBT on. Override the weak klp_get_ftrace_location()
+> function with an arch specific version that's IBT aware.
 > 
-> cc_platform_has() API is used in the kernel to enable confidential
-> computing features. Since TDX guest is a confidential computing
-> platform, it also needs to use this API.
-
-I'm struggling to connect the relevance of this paragraph to the patch
-below.
-
-I went through the whole series and I don't see any modifications to
-cc_platform_has() or checks for X86_FEATURE_TDX_GUEST that seem like
-they influence cc_platform_has().
-
-What the heck am I missing?
-
-> In preparation of extending cc_platform_has() API to support TDX guest,
-> use CPUID instruction to detect support for TDX guests in the early
-> boot code (via tdx_early_init()). Since copy_bootdata() is the first
-> user of cc_platform_has() API, detect the TDX guest status before it.
-
-This is good.  It tells us *why* it is initialized in that location.
-
-> Since cc_plaform_has() API will be used frequently across the boot
-> code, instead of repeatedly detecting the TDX guest status using the
-> CPUID instruction, detect once and cache the result.
-
-Isn't this a remnant of an old implementation where there was a separate
-'tdx_enabled' variable in addition to X86_FEATURE_TDX_GUEST?
-
-Does this "caching" refer to X86_FEATURE_TDX_GUEST or the old thing?
-
-> Define a synthetic feature flag (X86_FEATURE_TDX_GUEST) and set this
-> bit in a valid TDX guest platform.
-
-
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 391c4cac8958..ea4190c53db6 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -880,6 +880,18 @@ config ACRN_GUEST
->  	  IOT with small footprint and real-time features. More details can be
->  	  found in https://projectacrn.org/.
+> Also make the weak fallback verify the location is an actual ftrace
+> location as a sanity check.
+> 
+> Suggested-by: Miroslav Benes <mbenes@suse.cz>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/x86/include/asm/livepatch.h |    9 +++++++++
+>  kernel/livepatch/patch.c         |    2 +-
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> --- a/arch/x86/include/asm/livepatch.h
+> +++ b/arch/x86/include/asm/livepatch.h
+> @@ -17,4 +17,13 @@ static inline void klp_arch_set_pc(struc
+>  	ftrace_instruction_pointer_set(fregs, ip);
+>  }
 >  
-> +config INTEL_TDX_GUEST
-> +	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
-> +	depends on X86_64 && CPU_SUP_INTEL
-> +	depends on X86_X2APIC
-> +	help
-> +	  Support running as a guest under Intel TDX.  Without this support,
-> +	  the guest kernel can not boot or run under TDX.
-> +	  TDX includes memory encryption and integrity capabilities
-> +	  which protect the confidentiality and integrity of guest
-> +	  memory contents and CPU state. TDX guests are protected from
-> +	  potential attacks from the VMM.
+> +#define klp_get_ftrace_location klp_get_ftrace_location
+> +static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
+> +{
+> +	unsigned long addr = ftrace_location(faddr);
+> +	if (!addr && IS_ENABLED(CONFIG_X86_IBT))
+> +		addr = ftrace_location(faddr + 4);
+> +	return addr;
 
-Nit: I don't think "potential" is the right word there.  "some" might
-work better.
+I'm kind of surprised this logic doesn't exist in ftrace itself.  Is
+livepatch really the only user that needs to find the fentry for a given
+function?
+
+I had to do a double take for the ftrace_location() semantics, as I
+originally assumed that's what it did, based on its name and signature.
+
+Instead it apparently functions like a bool but returns its argument on
+success.
+
+Though the function comment tells a different story:
+
+/**
+ * ftrace_location - return true if the ip giving is a traced location
+
+So it's all kinds of confusing...
+
+-- 
+Josh
+

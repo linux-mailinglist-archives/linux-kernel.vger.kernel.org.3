@@ -2,69 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2083A4BBFC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04C14BBFCA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238502AbiBRSrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:47:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40894 "EHLO
+        id S239342AbiBRSrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:47:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiBRSrG (ORCPT
+        with ESMTP id S238706AbiBRSrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:47:06 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E88D6A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:46:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tx5f0UJcnj4R4TQ9Q7WxhcrF/JhIh7OvVd5/el1oJq8=; b=ey0q4gnDN4OAF8aBKVU9l6rjjr
-        SrFhHlNWfk+cJDXcEuK4fKsOj3WawdGMMseCJOjiKTJ5jRGKcWNSnmD+LjeKbgGcgkXWzUARq2tjr
-        ph6jmD0I8IIjefo+toFeEoo+1isV3SavZG/j7vTRZcBE6b8xWFJFmnWVVZ1ONQuEghbzYsjMg7uM3
-        bBuHy1zb+Rmrp+xa8pj1Y2cR7or9Nroof+zEaVCzm8w84Xy+1fvD+tEDFREbdSx7jY/x/uhgDqP8h
-        KE1g9nBEtg6E3VAx0tMSIRhvFMfCb+vBrpAiPh0ERnNNXwt1U9KPowUk/lcBMa2DsN/M/neeuOOe4
-        i/J1cHwg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nL8Gz-00Gq2v-9i; Fri, 18 Feb 2022 18:46:29 +0000
-Date:   Fri, 18 Feb 2022 18:46:29 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jakub =?utf-8?Q?Mat=C4=9Bna?= <matenajakub@gmail.com>,
-        linux-mm@kvack.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@kernel.org,
-        mgorman@techsingularity.net, liam.howlett@oracle.com,
-        hughd@google.com, kirill@shutemov.name, riel@surriel.com,
-        peterz@infradead.org
-Subject: Re: [RFC PATCH 4/4] [PATCH 4/4] mm: add tracing for VMA merges
-Message-ID: <Yg/phVScjJCLsGuC@casper.infradead.org>
-References: <20220218122019.130274-1-matenajakub@gmail.com>
- <20220218122019.130274-5-matenajakub@gmail.com>
- <20220218130920.5902d967@gandalf.local.home>
+        Fri, 18 Feb 2022 13:47:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C622713E10
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:46:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645210011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j4AtUKdetjfbUWDMIVmKhaD+IokO5XwjAf4ZeGwgD5o=;
+        b=E5hDTvi1kINeQjElv13278gp3KAhL6LJtTMG6mWLSPUwiiybVDm1F7bV4XoSpabUMMlzzQ
+        nZwmZumZ1A6CDZng6lmj9HCMavv0/TKEvN2e8Ni2wpsvRKV/yS0KB9rljh06W+sx/G9uPT
+        0PfYd+dEA3505YdikZN9IyjD+rcn07s=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-643-KUlURqKYO6a6aLsTsuz0lA-1; Fri, 18 Feb 2022 13:46:50 -0500
+X-MC-Unique: KUlURqKYO6a6aLsTsuz0lA-1
+Received: by mail-ej1-f72.google.com with SMTP id o4-20020a170906768400b006a981625756so3494964ejm.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:46:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j4AtUKdetjfbUWDMIVmKhaD+IokO5XwjAf4ZeGwgD5o=;
+        b=j26Gdxtb9QW7qC8lOylh5+u12zDGJDfEpt4fRw+j/otctVoqmY79+IrNii1jjIi7Du
+         QsJXCbUU0K2Nkaj3BdY0IuZv220tpx7OPzX7WXJVOxNlJVYAKaplCi5B329sT8ErhtNI
+         yCiz6QMz/kceaxGnYNKPLzf8sFO1iPBAWxpwq+eZ0PfNCbcjE7ZCtDSqhmYOBSzrrqM7
+         UjMszoPTs6+sOjxIbPVsaqQyUJX9MTXli+ftJB7BTY4cc+eI7vCT4hM3k8bQpor0w5K7
+         4MV0k5vd8H8MUHu2SM1kBqRSU9gCwAstmPolLXp0/kAXQ6ZEqquK85lm7Bzltxqo75he
+         tmNg==
+X-Gm-Message-State: AOAM533QXmS/oRSxKbhmmNZ+dd0XzOXsO7g+oURjMtPgOOe7Pf3Yis1r
+        luCJ9f3yqLMNXNgV1muHVdg4h00ouLUtb9iVy67sDlJ0sKK1EkT7PaxU6W8ZLCWYKdwbCTGFuQF
+        C4073Heb++IrnO5ckj8HmlTQV
+X-Received: by 2002:a50:c082:0:b0:402:c2dd:5567 with SMTP id k2-20020a50c082000000b00402c2dd5567mr9769568edf.113.1645210008656;
+        Fri, 18 Feb 2022 10:46:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxqzh/mZWjIeLwSt0SDcmglddr5v+ON2zOTKVj74G+ah3yUrrEbyn4yp0hjVEDGrhAorl500Q==
+X-Received: by 2002:a50:c082:0:b0:402:c2dd:5567 with SMTP id k2-20020a50c082000000b00402c2dd5567mr9769554edf.113.1645210008412;
+        Fri, 18 Feb 2022 10:46:48 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id j9sm2491562ejo.106.2022.02.18.10.46.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 10:46:47 -0800 (PST)
+Message-ID: <219937f8-6b49-47db-4ecf-f354b110da1c@redhat.com>
+Date:   Fri, 18 Feb 2022 19:46:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218130920.5902d967@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 07/18] KVM: x86/mmu: Do not use guest root level in
+ audit
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-8-pbonzini@redhat.com> <Yg/nc1jjtUD2fhOR@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yg/nc1jjtUD2fhOR@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 01:09:20PM -0500, Steven Rostedt wrote:
-> Please indent the above better. That is:
+On 2/18/22 19:37, Sean Christopherson wrote:
+> Since I keep bringing it up...
 > 
-> 		__entry->diff_count = (merge_prev == AV_MERGE_DIFFERENT)
-> 				+ (merge_next == AV_MERGE_DIFFERENT)
-> 				+ (merge_both == AV_MERGE_DIFFERENT);
+> From: Sean Christopherson<seanjc@google.com>
+> Date: Fri, 18 Feb 2022 09:43:05 -0800
+> Subject: [PATCH] KVM: x86/mmu: Remove MMU auditing
+> 
+> Remove mmu_audit.c and all its collateral, the auditing code has suffered
+> severe bitrot, ironically partly due to shadow paging being more stable
+> and thus not benefiting as much from auditing, but mostly due to TDP
+> supplanting shadow paging for non-nested guests and shadowing of nested
+> TDP not heavily stressing the logic that is being audited.
+> 
+> Signed-off-by: Sean Christopherson<seanjc@google.com>
 
-I thought our coding style preferred trailing operators; that is:
+Queued, thanks. O:-)
 
-		 __entry->diff_count = (merge_prev == AV_MERGE_DIFFERENT) +
-				(merge_next == AV_MERGE_DIFFERENT) +
-				(merge_both == AV_MERGE_DIFFERENT);
+Paolo
 

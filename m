@@ -2,183 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD4A4BBB3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AA14BBB7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233083AbiBRO4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:56:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50236 "EHLO
+        id S236385AbiBRO53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:57:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236354AbiBRO42 (ORCPT
+        with ESMTP id S236410AbiBRO4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:56:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 883D9593A4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645196164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4ldn/wyFUYS9oX2H4KZV4SRGFhvLNkEJlNBHlweSE44=;
-        b=ZGJ6uKfop4GVTHnZqrhHQhp3RCzj2MiKOFHTiwphtj1caj4hla0uu227MojdUTUJLInGS3
-        ABPX0tVStqI+JMidxPy2rY7UJySDx9KawhaTQMv44hiZq+edczVIeYdTwNxlvG7pkW3PIb
-        d3eZNS/cJ86gYyTXvc1fZnqreDcmLnw=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611--KoJPLJSPeGI16TeMqEKYQ-1; Fri, 18 Feb 2022 09:56:02 -0500
-X-MC-Unique: -KoJPLJSPeGI16TeMqEKYQ-1
-Received: by mail-qv1-f70.google.com with SMTP id a12-20020a056214062c00b0042c2f3fca04so9039108qvx.21
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:02 -0800 (PST)
+        Fri, 18 Feb 2022 09:56:48 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6502B2FF0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:18 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id cm8so6301822edb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HEDVsJdoBlriKRiWsMiaPibDlLRBSHkQp8aBEXdrRPg=;
+        b=fqRe4zP7YJl0es1coqEkQ+IA42hkW52O3II+Mzuv6ExVlmG3hQ9BH55+U9/QlFyisp
+         0usnUkaPANy2IpTeSlyrZXG5nwU5PJx+kftwW3x7K85HTPrWGf5JoMKVsOXl8czZudNt
+         kgmk68cPq+KhxefMKldnyo24+ONhbjWcEPftQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=4ldn/wyFUYS9oX2H4KZV4SRGFhvLNkEJlNBHlweSE44=;
-        b=gN/MFE6ewNweUOPQ252YTshjOcOX1HJpAmQ4mhgN9w+YyLTmSMGleWpeDzJUfOlSfa
-         wB1WBB0MFfYRkJscX8WTG9pPX6lzVQuAtYLfXw4SLFIF2GoYJSQ7jLqI96vntb8oxaAq
-         7Cm3obQhze2yzWCJ1tWPpC/eMsDbEAR33D4O1I6CnQ9PxPY0g/KRFsowB43TK+i4ZwlU
-         IBPpWmxfsAt2wOe2wqrFcnc4Si/QbYEzMz7CYxKatPXNIjrLLFFv2vGcf8XJtt5jjb5R
-         CCKI+OVO6avrpiH3BumXfyls8Dba8nvD7ea558OE3owhTJC/IawJegp1SeLQ2cZ71X5H
-         A5cQ==
-X-Gm-Message-State: AOAM53126OnUhPqALnXTxf/LZGXwprTJTL7dii945a7JezlRx7SOv6Tb
-        xQP2Hc+sqNGcRJzJkD/xNhcpJFSw0MqXS6oU9gYD7DgklUZgUAzrqgJuMYPpn+CqyfIfeYyU2lL
-        xoVY11TJd9msmb+YRIAvkS7s6
-X-Received: by 2002:ac8:5c8f:0:b0:2dd:b404:bd94 with SMTP id r15-20020ac85c8f000000b002ddb404bd94mr1693189qta.50.1645196161891;
-        Fri, 18 Feb 2022 06:56:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw8JBQaaH0N3aIPc7v5Iu6VHkGq5FX+w6ES4TNS3Zwc4jIuKXDTgK1I/UV9BSzRxEBdFdrTJA==
-X-Received: by 2002:ac8:5c8f:0:b0:2dd:b404:bd94 with SMTP id r15-20020ac85c8f000000b002ddb404bd94mr1693178qta.50.1645196161706;
-        Fri, 18 Feb 2022 06:56:01 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w3sm25923138qta.13.2022.02.18.06.56.00
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HEDVsJdoBlriKRiWsMiaPibDlLRBSHkQp8aBEXdrRPg=;
+        b=NlR2YxHRPWoi3ULARZIQZzaOAM6/YEUXO1Glb4rFnNTnYq4Kq1/BjqvuR4QziDFEtU
+         hJHkHnRkSHwLTxjESsqXjy7lefy1Zl18KhoIlkPueyeoMbuD3OEMp5+EJ7nNjC21nqpU
+         elBy99rTulvThOr4qNcIs0xbTDrQnxeCs4a1ZX8hm+8vq3hVf5VVrD8fcA6DhAqo2pud
+         HlimleIJICPMSS24Vbdz5JbkdrAfgLvRirA9Fp1o046VGWeV4jHtkGSfouA5922ALNT9
+         mfoTmitMdErJqc0/+Hc8ionXR1hF677DKqDcvnVv6P1KS+WJ2fAA7Ah6Nw1BI7bQxIwG
+         Y2eA==
+X-Gm-Message-State: AOAM530tZ1qnHGU/QK284LF16jl1jmR5GMz38HEzh0gmrVs3ui1T7eoz
+        k7tilGHmLwLtyHcN27/oqYxPpt4ECvZs3FJHEqU=
+X-Google-Smtp-Source: ABdhPJyKJpSAHcZtMzfYQF/gcShqQif4CzVTjcl/RQ6Tg+W9nLIA/gdXfqnenWj7SzTHEtNsmP/qJw==
+X-Received: by 2002:a05:6402:518b:b0:412:80a3:fb6e with SMTP id q11-20020a056402518b00b0041280a3fb6emr8865190edd.84.1645196176254;
+        Fri, 18 Feb 2022 06:56:16 -0800 (PST)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id z12sm5153604edb.77.2022.02.18.06.56.15
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 06:56:01 -0800 (PST)
-Subject: Re: [PATCH v1 4/7] fpga: dfl: fix VF creation when ports have no
- local BAR space
-To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
-        "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20220214112619.219761-1-tianfei.zhang@intel.com>
- <20220214112619.219761-5-tianfei.zhang@intel.com>
- <c527e9c7-4588-463b-8a6b-3db68d003d7a@redhat.com>
- <BN9PR11MB54830E0D185101B6B1517113E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <1281cbc7-7a1f-da84-3713-0d81982379ab@redhat.com>
-Date:   Fri, 18 Feb 2022 06:55:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Fri, 18 Feb 2022 06:56:15 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id f3so14887809wrh.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:15 -0800 (PST)
+X-Received: by 2002:a5d:4c48:0:b0:1e4:aeab:c77e with SMTP id
+ n8-20020a5d4c48000000b001e4aeabc77emr6335194wrt.342.1645196174604; Fri, 18
+ Feb 2022 06:56:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <BN9PR11MB54830E0D185101B6B1517113E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1644494255-6632-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1644494255-6632-3-git-send-email-quic_sbillaka@quicinc.com> <YgWoAwdH/AqJUshh@builder.lan>
+In-Reply-To: <YgWoAwdH/AqJUshh@builder.lan>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 18 Feb 2022 06:56:01 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XHsgg-cPVRr8jEUTGm3rf_BO5P+jQawDPq9Hju-O4uwQ@mail.gmail.com>
+Message-ID: <CAD=FV=XHsgg-cPVRr8jEUTGm3rf_BO5P+jQawDPq9Hju-O4uwQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] arm64: dts: qcom: sc7280: Add support for eDP
+ panel on CRD
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, quic_kalyant@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
+        quic_mkrishn@quicinc.com, quic_vproddut@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 2/18/22 12:14 AM, Zhang, Tianfei wrote:
+On Thu, Feb 10, 2022 at 4:04 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
 >
->> -----Original Message-----
->> From: Tom Rix <trix@redhat.com>
->> Sent: Tuesday, February 15, 2022 11:51 PM
->> To: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao <hao.wu@intel.com>;
->> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
->> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org
->> Cc: corbet@lwn.net; Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> Subject: Re: [PATCH v1 4/7] fpga: dfl: fix VF creation when ports have no local
->> BAR space
->>
->>
->> On 2/14/22 3:26 AM, Tianfei zhang wrote:
->>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>
->>> When a port is not connected to the same PCIe endpoint as the FME, the
->>> port does not need to be released before being virtualized.  Fix VF
->>> creation code to handle this new use
->> Similar, how does this fit in with iofs, this looks like it would not be valid for the
->> existing cards
-> IOFS introducing multiple methods for PR and AFU access.
-> 1. Legacy Model.
-> 2. Micro-Personas in AFU.
-> 3. Multiple VFs per PR slot.
+> > +&mdss_edp {
+> > +     status = "okay";
+> > +
+> > +     vdda-1p2-supply = <&vreg_l6b_1p2>;
+> > +     vdda-0p9-supply = <&vreg_l10c_0p8>;
+> > +     /delete-property/ pinctrl-names;
+> > +     /delete-property/ pinctrl-0;
 >
-> For 1 and 2 model, there are 1:1 mapping between Port device and PR slot (or entire AFU). In virtualization,
-> it should release the Port device firstly and then assign to VM. In this models, the DFL driver will track  that
-> the number of port devices has released (cdev->released_port_num in dfl_fpga_cdev_config_ports_vf() function)
-> are equal with the numbers of SRIOV or not. But in model 3, it has multiple VFs per PR slot, and assign the VF to VM
-> without release the port device, so the tracking mechanism of cdev->released_port_num is not workable on new
+> If the first device to enable &mdss_edp overwrites pinctrl-{names,0} in
+> &mdss_dp and removes the properties in &mdss_edp, I think that's a sign
+> that they should not be in the .dtsi in the first place.
 
-If ->release_port_num is not workable, then it needs to be generalized.
+Actually, I just looked more carefully here. I think the
+"/delete-property" for edp_hpd here is just wrong. I'm pretty sure
+that the HPD signal is hooked up on CRD and we actually need it. If
+somehow deleting the property helps you then it's probably just
+hacking around a bug and relying on the panel to be always powered on,
+or something.
 
-Refactor to handle all the cases.
+I think this gets into some of the stuff in your final patch in this
+series. I found that, on my hardware, the panel doesn't come up at all
+with that final patch. When I go back to how things were working in an
+earlier version of your series, though, I can get things working a
+little better (though still not perfect).
 
-Tom
-
-> model. This patch want to handle this new model during VF creation.
->
->>> case.
->>>
->>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
->>> ---
->>>    drivers/fpga/dfl.c | 11 +++++++++--
->>>    1 file changed, 9 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c index
->>> 26f8cf890700..cfc539a656f0 100644
->>> --- a/drivers/fpga/dfl.c
->>> +++ b/drivers/fpga/dfl.c
->>> @@ -1705,15 +1705,22 @@
->> EXPORT_SYMBOL_GPL(dfl_fpga_cdev_config_ports_pf);
->>>    int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
->>>    {
->>>    	struct dfl_feature_platform_data *pdata;
->>> -	int ret = 0;
->>> +	int ret = 0, port_count = 0;
->>>
->>>    	mutex_lock(&cdev->lock);
->>> +
->>> +	list_for_each_entry(pdata, &cdev->port_dev_list, node) {
->>> +		if (pdata->dev)
->> This looks wrong,
->>
->> pdata->dev is dereferenced below, if there is a case were (!pdata->dev)
->> here there would be crash later.
->>
->>> +			continue;
->>> +		port_count++;
->> how does this work when only some of the ports are handled in the new way ?
-> This code want to handle the " Multiple VFs per PR slot" model as I mentioned above.
-> In new model, the port_count want to count that how many port devices have released.
-> This code looks not good readability, I try to re-write it.
->
->> Tom
->>
->>> +	}
->>> +
->>>    	/*
->>>    	 * can't turn multiple ports into 1 VF device, only 1 port for 1 VF
->>>    	 * device, so if released port number doesn't match VF device number,
->>>    	 * then reject the request with -EINVAL error code.
->>>    	 */
->>> -	if (cdev->released_port_num != num_vfs) {
->>> +	if (port_count && cdev->released_port_num != num_vfs) {
->>>    		ret = -EINVAL;
->>>    		goto done;
->>>    	}
-
+-Doug

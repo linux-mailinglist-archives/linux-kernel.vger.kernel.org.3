@@ -2,230 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664A24BB8BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 12:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BD74BB8D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbiBRLzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 06:55:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39870 "EHLO
+        id S234996AbiBRMEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:04:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiBRLy6 (ORCPT
+        with ESMTP id S232329AbiBRMEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 06:54:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0E5124CDF8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:54:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645185281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZU73Lo7l6hbSvjkFhO1EujONMpX8Sskgkmm1GL0ixLg=;
-        b=UDlHwW55KWkEhNCOV8g/QQ6ozSbCIjz5SBeHVw8qZYLxnkHowGUvF8YWcVIJTvirsdqr+L
-        LfehSL3djJPsSoBnwcUkXpHlR/1AQLaWlEUsg2irrIGvQD/hjqbSiYnKGQdnj1JZhgImT6
-        p3U7fGNXGt3Pn4T7IF/X+bI6WZd6OI4=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-222-N_mLWo0EP0eEndPDpnND0A-1; Fri, 18 Feb 2022 06:54:39 -0500
-X-MC-Unique: N_mLWo0EP0eEndPDpnND0A-1
-Received: by mail-ej1-f69.google.com with SMTP id kw5-20020a170907770500b006ba314a753eso2919687ejc.21
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 03:54:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZU73Lo7l6hbSvjkFhO1EujONMpX8Sskgkmm1GL0ixLg=;
-        b=sypSuRk6CW9goO2SdAmPNdjXuCZ0K6bcfHQsHuyS6X8UoJML2Qh4rIG0Upy9jxdXHD
-         Jj5qvUTjte8quI6spPgq9kgXXORiO+1SwvWgczQanU2nHFAb2EqQL/b/IJwV9H+fr0hJ
-         Yvx45RgiVf18yrWG2ppMZB9LM9wURlnzp/4nS3y8CbqwH5b8F7wNY6GBQs+TsbtffAlC
-         NgZaQ4RmJ0wJOQBdX4pWPAXK2ZOwbQMt9n2jdJVxt+Uly8OztFAHKpPKPbWlZTs5njC6
-         wVR5hWmUMMKFitXc78eEyQL4o70ubs8+h80DhvM7C8L53yRw/YTkI5otzHd4ETC8IARB
-         JP/g==
-X-Gm-Message-State: AOAM533nL1ZqxK5qWAMQErLORu11Qh7AdV1OrFoS0XdySuFlx3A/nEez
-        cdDMN/PsKSwQbq+YXg+1V3f17ovRjZFX5EYbL7ebNBDv2ipcKzm0kt2f3gSPoZIIoadm2N2ZAyR
-        6HGImQCMkDlZuhLszpBkF3NQc
-X-Received: by 2002:a50:9d89:0:b0:410:ff04:5a98 with SMTP id w9-20020a509d89000000b00410ff045a98mr7904634ede.404.1645185278658;
-        Fri, 18 Feb 2022 03:54:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyKC5xUwcjHlFIGoyRJN0JH+XVQBj7pZ69Bxv7eGGxHiHW08opExAMFa04qBDUF8/KvyA07hw==
-X-Received: by 2002:a50:9d89:0:b0:410:ff04:5a98 with SMTP id w9-20020a509d89000000b00410ff045a98mr7904604ede.404.1645185278370;
-        Fri, 18 Feb 2022 03:54:38 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id s15sm2197882ejj.84.2022.02.18.03.54.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 03:54:37 -0800 (PST)
-Message-ID: <d4f5e101-3dd5-2f3a-6c14-6b32ee37c223@redhat.com>
-Date:   Fri, 18 Feb 2022 12:54:36 +0100
+        Fri, 18 Feb 2022 07:04:31 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E18921E1A;
+        Fri, 18 Feb 2022 04:04:14 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IAR9pA012876;
+        Fri, 18 Feb 2022 12:04:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=VORmXRm/C/bHZNSgGTho6cWg3rhX086W+oYQTjaKFfg=;
+ b=BaO+w0WQ2TV2k6wcBCzQnpS+im1vx+3KbENoZSgeUmGJuaOVGrJkMcrahUoItsNm26mt
+ Y7tr07/24YabwvAZHRbw7+GLSpW4vJfQeW6i4A1rkTO05sJOtTAaIaawjhU2PvvzBKiD
+ F6yzCsgX4FW7Wn18gaeq8Xbrdbr4EUBP4zkmNaM7HGfeLucanshUaoApvONQbtpnKh9I
+ b8yvZTebCUuqiw/oaV06ulWLVEyaAydA168zy6URzajrNgIhD9DHjLJGZisHliZrMhdd
+ tiWO+JbabqOFHu/VKloUrgnItN1GDzSipk9CbTuU8vFFCEFctR5Lh8oepcL5KHxy336K 7A== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e8nb3rtgb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Feb 2022 12:04:08 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21IC0GYO052249;
+        Fri, 18 Feb 2022 12:04:07 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
+        by aserp3020.oracle.com with ESMTP id 3e8nvv6a1n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Feb 2022 12:04:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CEK8Q/LMBdmuPlEfuRw6i3YDmFT62efFdtkT2MHY+Oci2Z4wK34SLA77vgUh/0dCIJTqmEK/F+ml6JEROo2SXkaXofGfqkvFF6s3Bzu+CtYpU6srnGbrV/4cV+PSZrLbRK+NUhufDwvNuCp8Df0LjMQPlH5ZzFYe+tQoTwZblRtiGUzzMvJ7kuEPo3TrNeYYO9hi15HtszfwRuJSz9jCdNBP+NZGkcFUU0pYzj2kBZ+Ht9ZTYZM4OAeYo98OcbgdKRzCMg+adPobevMj/Z99tZjWijgk9vXAofQNC7dzoE0Ve6pv9I36WS6lgr1TfUMbwbHjjv/5IcL1dSBSNL0CEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VORmXRm/C/bHZNSgGTho6cWg3rhX086W+oYQTjaKFfg=;
+ b=E9swgtmUNn9IYX2PqlrkKZ9PARAfwQUykHE4dSG24JbveWSkNiRuH2NLd8Ts2aLJTXcy+Tpaj4MeB4stPEcuXP4PYp/EhAlXsm6R9qa3gtvP+wr+OidXlpLPJfj37wiIFd8IxcWkojGQpKb3elt51jk2lD+LBg18u0lEjYqnR/ziFDSHp41rVlUt58/P/9osFjr6sX+NWXiX9yrS2q3/m9MELObFtqSdeyHEBAbT/SGgbLf8FBJd3NOYw3kXgKhE7R1LLu+MSzG0TqyDbuUFk2oowDUkg/nLV9pqwR8E2AT9GvB54O5G8K+hctQKI3KCbG1XrA7WKQexX5in+fBY2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VORmXRm/C/bHZNSgGTho6cWg3rhX086W+oYQTjaKFfg=;
+ b=Ngk53lFpLJkbjdKmA/17euiIcHsAXiUX0zkJ1Iqchwgzf6ukPFEAWjdAXVI8QCCxepabWhcR+wN0lOoqTHwDBmDIikmmbkjmsils1inuEdfJU1GKrc8jQrNmuSkkAm0yeqblm322Fd9Nhy9BWtORuBtQZUOmO8H4TmZ+xJRdC8Q=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by BN0PR10MB4824.namprd10.prod.outlook.com
+ (2603:10b6:408:121::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Fri, 18 Feb
+ 2022 12:04:05 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::2c3d:92b5:42b3:c1c5%3]) with mapi id 15.20.4975.019; Fri, 18 Feb 2022
+ 12:04:05 +0000
+Date:   Fri, 18 Feb 2022 15:03:44 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     manishc@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        coiby.xu@gmail.com, gregkh@linuxfoundation.org,
+        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: qlge: add unregister_netdev in qlge_probe
+Message-ID: <20220218120344.GH2407@kadam>
+References: <20220218081130.45670-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218081130.45670-1-hbh25y@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JN2P275CA0045.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::33)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [Intel-gfx] [PATCH v8 1/3] gpu: drm: separate panel orientation
- property creating and value setting
-Content-Language: en-US
-To:     Simon Ser <contact@emersion.fr>
-Cc:     Emil Velikov <emil.l.velikov@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        LAKML <linux-arm-kernel@lists.infradead.org>
-References: <20220208084234.1684930-1-hsinyi@chromium.org>
- <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
- <KW6DNh6IRRgVJx9DfOFBnEqc4a0x-AnDXEbMxwpfEbk8dOn_KGVzAfo-slJWq-4nWW728Uc-OVpFh2w4fDE4-bxfkDuz1hFILRVvbcuXqaw=@emersion.fr>
- <CACvgo532-pC+7DLFCo=DWTX-OnJEJvSoTmQnt3_qLhiT4cqEMg@mail.gmail.com>
- <GYG6EVT1MqtmfKiPpMhDG9mpuATnmwVDq2PuE_dpDat5oQW_t1tUfm39lSWHj32D5r7mrog27sL4dkgdMYQ5BN830TfVOrgQ4Ts8LcO8Hcs=@emersion.fr>
- <CACvgo52+o9_ETC+1RKzqKkyw3ZJ28RjH0BqC9DfmNAKqByud8Q@mail.gmail.com>
- <d3f0cc20-d226-ee42-cc98-b469949cec9e@redhat.com>
- <YV87l-2XXzmZ2i6GuGd__uf85s2JQkbXt_qTQDYlbBh1kW2COJoNLUDinmLCokKyy-_0ZnIMUcZeW0GdJ8zF690iYi4ThKrjc09omNMe-0g=@emersion.fr>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YV87l-2XXzmZ2i6GuGd__uf85s2JQkbXt_qTQDYlbBh1kW2COJoNLUDinmLCokKyy-_0ZnIMUcZeW0GdJ8zF690iYi4ThKrjc09omNMe-0g=@emersion.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 340cb458-5946-42b3-c3cb-08d9f2d6c269
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4824:EE_
+X-Microsoft-Antispam-PRVS: <BN0PR10MB4824415610B367BC8B85B1FD8E379@BN0PR10MB4824.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: F4CqLQg5E0AUFVU8zCsugh2QuC+ItNbyCs9+nFMPhYRJTTL+GdusfA2cUMWdbmm6Rxmv0w9z6J9OrMMMYSUTJgHEXpWDZO4DbKQ8weJwh4LkpUq3VtlOh6IH6ICOZaJB6Cr0uuqTF8Mbi+SxZrRKnFkZuwZ9BTMoN4lJIEda2ynEcVYGRIYNSfLtfBEnq7+SizkySF1YBgug3vjRMBFVfgSiZod+dfGaCqNE95OgcHtu0AT/OTrhuXfcSSIAKXnQw2oNvyCvfJLjVR9nVsJl4ggjUIaPC0bqBUB7wZZW3+LXjaTAAIDy+aGlmWBmmQnLNAT+K3v81bJjjRdCjmZVHtF7MW1Zy42k7K7OaxvCBLHwjKoHTJhbTssw/uYde9PNC+ikvgQftXj+C/8bD9GA/RsquzLgX++Eg7n2ijZehKmdostO020O0WDLHQS4qBHxGu4/RHi1jL7M2CvueoD6nm/nuofSMK5v+2hz45R8DdxdaOUXmhEOqFGVUR0LWu06ydKg24ByJ/a7mVTQyMfHlsMqHr4AHHSou8m6wsMSlCjPP0KRST/N/TsrBsmAsmGasaNxcSWZaXcxVXhyZhjPZvwr0GRvANR5bDJs7jUdFYgUJB+IOjrOxsIowOIHyEFRQZeq7pjuDU93Ro39T7aZgUfjT2vHebcATS5Bclhiy6/kDLWPpgGuuR/+BTtca5olUm93eh2ZdCriEb06vbIOCg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(1076003)(33656002)(66476007)(66946007)(83380400001)(44832011)(4326008)(38100700002)(38350700002)(8936002)(86362001)(8676002)(5660300002)(66556008)(2906002)(316002)(508600001)(52116002)(6506007)(6916009)(33716001)(9686003)(6512007)(6666004)(6486002)(186003)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hBkfix7/YPdCU9dgNzjhThCJgC2NLHD445bfzYXXalSzBFQMWlQw7fBInVu6?=
+ =?us-ascii?Q?PUM63AHLtsvZzpNtLRxENlEGl0l7qCDk2Dz5LnNExF8JlTAiFh7o59XvBHu1?=
+ =?us-ascii?Q?lIDinw8517lqC7X7I5BSZ+2sZGtdZPp3/QnH3DD6B/FbsL94UkXGTJ4p9BoK?=
+ =?us-ascii?Q?97KoahWmn4xHyENgoazb0RgbSSgrtFtAnLd8c8q4OfEobGu5+dZRMtDSIRik?=
+ =?us-ascii?Q?aHhatoWIwZkvehnMkfaL8iztd7FT3iu041f+RdgLe9qjFizf1VA8kvUkM7mO?=
+ =?us-ascii?Q?kVvm4qcyw+c/hWPctVU5kbZVMXd7YffSYo8C3MRwIihRXR253rqdDFTEsv6V?=
+ =?us-ascii?Q?nLKU5kXWDffint1OM8kZjqePPnlYJ4aR+VtH1AiIxxHml+srb/L8jr08aOPV?=
+ =?us-ascii?Q?LA8xXt40zx8CFUCirjPH2p0SXygq9sfpLyjLmnlrvXzd1YqeC6mwi0xhT42y?=
+ =?us-ascii?Q?3SSaHNNlgVhP4VX0xlyYRFSoFcuFTm8d4gtdwCWi2SKt+Lz4doxVJjGajSyK?=
+ =?us-ascii?Q?iBAnnEx6vNAxqwtswNIcNbGC8dufVrsVpAjeorFN42Nd9RKiOq7HAjzkmoWb?=
+ =?us-ascii?Q?4c89RxeNz/3s/nZ1j7Z58R8Icn2a8Fs9udy3roXCsc6DcOqfh5wkM6iINSzg?=
+ =?us-ascii?Q?C3zj5J0Jf1rHAwrVvQQTZw9EUklcU36IkOjI7mNvQ65U2tIHafCf7G/EBfj9?=
+ =?us-ascii?Q?PjRkzo/XY5cZgJ3tcAsUrxh0Q1F7Hw08sF+TN4piyDvFb3pyxNRxHFT/F1mW?=
+ =?us-ascii?Q?S5O0QM0o2E8rqb1BHgtF+2Q5R6+FrwFvQqN0IxUxwbvTNVEtgyxqy6LkemNJ?=
+ =?us-ascii?Q?hhnXCWV8kiSVtQvV6AcLU4Qcx56g24f4+tSkVBGDoQAz0dHEknjM4qkEkB3q?=
+ =?us-ascii?Q?S7ZtdHPn/Af0wgvw3hqrvgO/4g1mbLKXV22csBRPBKHNx/ijCRDwZ+xicXvh?=
+ =?us-ascii?Q?FT7wv2REhsBCJItb9ks+thMZj+Ekz3RMf6s9B1Nyxa5PIs2RFLj0BhYodaBI?=
+ =?us-ascii?Q?o/w2OX362ZJxwShfTFj5PkQSrcs1/Ur2cCa8LcKDAnTJcDSMtdQ73U+7dO4k?=
+ =?us-ascii?Q?N5aPrWfjAcocrR6JX5KC8af1MZ/lTKNBaSYTJtZRFSzMrgQmhA/hQk07gqfV?=
+ =?us-ascii?Q?kKL5oUQTp987NTQ7LVL9UN/tBtVDKnOKN+gamdOwCWHXJlNIBNsV+dfr6Y/R?=
+ =?us-ascii?Q?dMK3OMO3iQ2OWRr4E6WZTR+1OQUkhsH+yT78cnZ+gRBcvnQtyz9zOxn66TRB?=
+ =?us-ascii?Q?IzjuCuHAZAKKQd8EbwESMGGny72nCSJg6aJbOJ66osxuc3tvbJlaWMQuCTiD?=
+ =?us-ascii?Q?q7C2KXiFPd1Y/Gp8R0QsPOZnTMCu1Bn0n9LZ7Nd+2C4HZlp25lmLa+8/2YBL?=
+ =?us-ascii?Q?dsQssXzGd+GSIEc6f3+CdXRV1bsRVD6oY0pBoZStyY44NiFXie7+1b9jIhay?=
+ =?us-ascii?Q?FwcQMquHFBy8UizbsRffFk5bQAuVkiaq+ZeWxrC4nl9m6DS14c6LLyuN0Gvc?=
+ =?us-ascii?Q?7o8KUJ/0iEntw+w6arIy9wXxU7pUS8nDRVOERGPv9X66ADx3Y8TSVvZtryQn?=
+ =?us-ascii?Q?h1F6o0P8gGiqRotxPk8pBNiePJpgKSD1s+pg7dN7WDwTziwbmX5EEOP1EbeB?=
+ =?us-ascii?Q?nb03a1WIpuYomzCfMpuG2QxuLMvWm6nLdhnFV9tNknw1BflZZoN4GNjRUkEU?=
+ =?us-ascii?Q?2MDIaw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 340cb458-5946-42b3-c3cb-08d9f2d6c269
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 12:04:05.0926
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XU9w+v1Xjx17XeEJ87xE2EPrBHrnJywbQ/OFm8Jx4nIIwBXwm23iwpD10q2mp+7EnkMnE8zTDEtmkv69tCG3DDOAg5QwUTA1wpwZEPQ+poY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB4824
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10261 signatures=677564
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202180078
+X-Proofpoint-GUID: 9HEm23XwEcT85uKrV-kFtuNQPdL4ickS
+X-Proofpoint-ORIG-GUID: 9HEm23XwEcT85uKrV-kFtuNQPdL4ickS
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2/18/22 12:39, Simon Ser wrote:
-> On Friday, February 18th, 2022 at 11:38, Hans de Goede <hdegoede@redhat.com> wrote:
+On Fri, Feb 18, 2022 at 04:11:30PM +0800, Hangyu Hua wrote:
+> unregister_netdev need to be called when register_netdev succeeds
+> qlge_health_create_reporters fails.
 > 
->> What I'm reading in the above is that it is being considered to allow
->> changing the panel-orientation value after the connector has been made
->> available to userspace; and let userspace know about this through a uevent.
->>
->> I believe that this is a bad idea, it is important to keep in mind here
->> what userspace (e.g. plymouth) uses this prorty for. This property is
->> used to rotate the image being rendered / shown on the framebuffer to
->> adjust for the panel orientation.
->>
->> So now lets assume we apply the correct upside-down orientation later
->> on a device with an upside-down mounted LCD panel. Then on boot the
->> following could happen:
->>
->> 1. amdgpu exports a connector for the LCD panel to userspace without
->> setting panel-orient=upside-down
->> 2. plymouth sees this and renders its splash normally, but since the
->> panel is upside-down it will now actually show upside-down
+
+1) Add a Fixes tag:
+
+Fixes: d8827ae8e22b ("staging: qlge: deal with the case that devlink_health_reporter_create fails")
+
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>  drivers/staging/qlge/qlge_main.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> At this point amdgpu hasn't probed the connector yet. So the connector
-> will be marked as disconnected, and plymouth shouldn't render anything.
+> diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
+> index 9873bb2a9ee4..0a199c6d77a1 100644
+> --- a/drivers/staging/qlge/qlge_main.c
+> +++ b/drivers/staging/qlge/qlge_main.c
+> @@ -4611,8 +4611,10 @@ static int qlge_probe(struct pci_dev *pdev,
+>  	}
+>  
+>  	err = qlge_health_create_reporters(qdev);
+> -	if (err)
+> +	if (err) {
+> +		unregister_netdev(ndev);
+>  		goto netdev_free;
+> +	}
 
-If before the initial probe of the connector there is a /dev/dri/card0 
-which plymouth can access, then plymouth may at this point decide
-to disable any seemingly unused crtcs, which will make the screen go black...
+2) Use a goto to unwind.  3) Release the other pdev stuff as well.
+4)  Clean up the error handling for register_netdev() by using a goto
+as well.
 
-I'm not sure if plymouth will actually do this, but AFAICT this would
-not be invalid behavior for a userspace kms consumer to do and I
-believe it is likely that mutter will disable unused crtcs.
+	err = register_netdev(ndev);
+	if (err) {
+		dev_err(&pdev->dev, "net device registration failed.\n");
+		goto cleanup_pdev;
+	}
 
-IMHO it is just a bad idea to register /dev/dri/card0 with userspace
-before the initial connector probe is done. Nothing good can come
-of that.
+	err = qlge_health_create_reporters(qdev);
+	if (err)
+		goto unregister_netdev;
 
-If all the exposed connectors initially are going to show up as
-disconnected anyways what is the value in registering /dev/dri/card0
-with userspace early ?
+	...
 
->> 3. amdgpu adjusts the panel-orient prop to upside-down, sends out
->> uevents
-> 
-> That's when amdgpu marks the connector as connected. So everything
-> should be fine I believe, no bad frame.
+	return 0;
 
-See above.
+unregister_netdev:
+	unregister_netdev(ndev);
+cleanup_pdev:
+	qlge_release_all(pdev);
+	pci_disable_device(pdev);
+netdev_free:
+	free_netdev(ndev);
+devlink_free:
+	devlink_free(devlink);
 
->> 4. Lets assume plymouth handles this well (i) and now adjust its
->> rendering and renders the next frame of the bootsplash 180° rotated
->> to compensate for the panel being upside down. Then from now on
->> the user will see the splash normally
->>
->> So this means that the user will briefly see the bootsplash rendered
->> upside down which IMHO is not acceptable behavior. Also see my footnote
->> about how I seriously doubt plymouth will see the panel-orient change
->> at all.
->>
->> I'm also a bit unsure about:
->>
->> a) How you can register the panel connector with userspace before
->> reading the edid, don't you need the edid to give the physical size +
->> modeline to userspace, which you cannot just leave out ?
-> 
-> Yup. The KMS EDID property is created before the EDID is read, and is set
-> to zero (NULL blob). The width/height in mm and other info are also zero.
-> You can try inspecting the state printed by drm_info on any disconnected
-> connector to see for yourself.
+	return ret;
 
-Right, I missed the detail hat the connector is initially marked as
-disconnected. That solves the issue of invalid panel-orient / mode /
-dpi info, bit it opens up other problems.
-
->> I guess the initial modeline is inherited from the video-bios, but
->> what about the physical size? Note that you cannot just change the
->> physical size later either, that gets used to determine the hidpi
->> scaling factor in the bootsplash, and changing that after the initial
->> bootsplash dislay will also look ugly
->>
->> b) Why you need the edid for the panel-orientation property at all,
->> typically the edid prom is part of the panel and the panel does not
->> know that it is mounted e.g. upside down at all, that is a property
->> of the system as a whole not of the panel as a standalone unit so
->> in my experience getting panel-orient info is something which comes
->> from the firmware /video-bios not from edid ?
-> 
-> This is an internal DRM thing. The orientation quirks logic uses the
-> mode size advertised by the EDID.
-
-The DMI based quirking does, yes. But e.g. the quirk code directly
-reading this from the Intel VBT does not rely on the mode.
-
-But if you are planning on using a DMI based quirk for the steamdeck
-then yes that needs the mode.
-
-Thee mode check is there for 2 reasons:
-
-1. To avoid also applying the quirk to external displays, but
-I think that that is also solved in most drivers by only checking for
-a quirk at all on the eDP connector
-
-2. Some laptop models ship with different panels in different badges
-some of these are portrait (so need a panel-orient) setting and others
-are landscape.
-
-> I agree that at least in the Steam
-> Deck case it may not make a lot of sense to use any info from the
-> EDID, but that's needed for the current status quo.
-
-We could extend the DMI quirk mechanism to allow quirks which don't
-do the mode check, for use on devices where we can guarantee neither
-1 nor 2 happens, then amdgpu could call the quirk code early simply
-passing 0x0 as resolution.
-
-> Also note, DisplayID has a bit to indicate the panel orientation IIRC.
-> Would be nice to support parsing this at some point.
-
-Ack.
-
-Regards,
-
-Hans
+regards,
+dan carpenter
 

@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B764BB4C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D29E4BB4CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbiBRJBK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 04:01:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54198 "EHLO
+        id S232991AbiBRJBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:01:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiBRJBI (ORCPT
+        with ESMTP id S232957AbiBRJBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:01:08 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38A531867C4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 01:00:51 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-117-Paf7cxtnMtCmxTJ17km-zA-1; Fri, 18 Feb 2022 09:00:48 +0000
-X-MC-Unique: Paf7cxtnMtCmxTJ17km-zA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 18 Feb 2022 09:00:46 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 18 Feb 2022 09:00:46 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Petr Mladek' <pmladek@suse.com>,
-        John Ogness <john.ogness@linutronix.de>
-CC:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Shawn Guo" <shawn.guo@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wang Qing <wangqing@vivo.com>, Tejun Heo <tj@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>
-Subject: RE: [PATCH printk v1 09/13] printk: add functions to allow direct
- printing
-Thread-Topic: [PATCH printk v1 09/13] printk: add functions to allow direct
- printing
-Thread-Index: AQHYI/0/7XPqOu2p+UeF1AvHpJcIY6yZAzcg
-Date:   Fri, 18 Feb 2022 09:00:46 +0000
-Message-ID: <ca5b7ec96aa444c292b3413a6374028b@AcuMS.aculab.com>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-10-john.ogness@linutronix.de> <Yg5FCVF5c1jDo116@alley>
-In-Reply-To: <Yg5FCVF5c1jDo116@alley>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 18 Feb 2022 04:01:48 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1914C50476;
+        Fri, 18 Feb 2022 01:01:31 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id u1so13322861wrg.11;
+        Fri, 18 Feb 2022 01:01:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZYxZ73c+F4J6jMvbnzlZ5/TEHyIV+XiIyxVP9fH3B1M=;
+        b=iPVKlwSPbFttDZnZ5Es+EotVr6BSKpP0TrQChOGASg6H20kOJzZuVDooyplF9ShgAZ
+         IOSt5vS+zz6z2AvBGmQDpQomb3RkFLmAQCmFmgihBLjNbVMxKBbhMGPlAILWL60Z4shD
+         7h3Lhi86Y2KukyWmn1/Xe2xecHKYglxNfTCD6YNrv87CbfyhhtcDI1KD5XsspbXxEGb+
+         a18K9lVokQMyqKHURj9pZSZOZQUInuQvc1Zi7LBFmwl0YJUUBdE6SAAFHgSApRUpvBpS
+         n0QhuM9KNTkmIcRGRDhKD8Nqejq2gh/m6K4WaCKsrxq+msSti+c2qvk17n7exbjLn8QB
+         ODfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZYxZ73c+F4J6jMvbnzlZ5/TEHyIV+XiIyxVP9fH3B1M=;
+        b=PWbM+r2wo8VqfvxLvaXfoQEzyEGy0LGqFCUHTK4/pFI7i/4e73Cp6K+V4vka05gRXI
+         nRJ+O5PNRoHgYnOvgh+weyORCyPrre/PXlXBt8eTqN69/elyoskyNPzuRuDv5BKiZXcb
+         Cpw/UF3WDH92T4N6m+8EUX4z4XLsmxDp0FBZ7Z1Yt1NBDRiyXLzJZiTZ3FBQbsglb4II
+         RmSsS+c5q0AgJsYAFRBYS/Qz24OQisDSfpDLp5qxV88wwRz27N4OuPWgpEedt0zC18FA
+         WNLsm9WX+U4gOz4Q1CdJYy8YaJ8qdnsZ5AxqjYF+IPz7+UGDZLMN6JZTxXBER4q0yLbP
+         xGKw==
+X-Gm-Message-State: AOAM533+CUJgQ9d+b8P1UIqMnFhS2ML7J8SeTr1ZYzjx0cgI6w+uwb2e
+        B6sF8xhIW1sZ14P5PfujbmQ=
+X-Google-Smtp-Source: ABdhPJzp9gaKEXAgzSOr/AqWCnj3GEq7kh3LRumz7b1qp29hfaGqB/mZ8t2sLgChGS5UTHKj0bGMIQ==
+X-Received: by 2002:a5d:6b8b:0:b0:1e5:2d46:d150 with SMTP id n11-20020a5d6b8b000000b001e52d46d150mr5314811wrx.380.1645174889506;
+        Fri, 18 Feb 2022 01:01:29 -0800 (PST)
+Received: from krava ([2a00:102a:5012:d617:c924:e6ed:1707:a063])
+        by smtp.gmail.com with ESMTPSA id r10sm1172969wrv.28.2022.02.18.01.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 01:01:29 -0800 (PST)
+Date:   Fri, 18 Feb 2022 10:01:25 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH 1/3] perf tools: Remove
+ bpf_program__set_priv/bpf_program__priv usage
+Message-ID: <Yg9gZa0hxfFcOk57@krava>
+References: <20220217131916.50615-1-jolsa@kernel.org>
+ <20220217131916.50615-2-jolsa@kernel.org>
+ <CAEf4BzboYd4y53KjKwNMCqE6oV9ms0zbtKCGweEGtjZvCe1f0w@mail.gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzboYd4y53KjKwNMCqE6oV9ms0zbtKCGweEGtjZvCe1f0w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon 2022-02-07 20:49:19, John Ogness wrote:
-> > Once kthread printing is introduced, console printing will no longer
-> > occur in the context of the printk caller. However, there are some
-> > special contexts where it is desirable for the printk caller to
-> > directly print out kernel messages.
+On Thu, Feb 17, 2022 at 01:47:16PM -0800, Andrii Nakryiko wrote:
+> On Thu, Feb 17, 2022 at 5:19 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Both bpf_program__set_priv/bpf_program__priv are deprecated
+> > and will be eventually removed.
+> >
+> > Using hashmap to replace that functionality.
+> >
+> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  tools/perf/util/bpf-loader.c | 91 +++++++++++++++++++++++++++++-------
+> >  1 file changed, 75 insertions(+), 16 deletions(-)
+> >
+> 
+> [...]
+> 
+> > +
+> > +static int program_set_priv(struct bpf_program *prog, void *priv)
+> > +{
+> > +       void *old_priv;
+> > +
+> > +       if (!bpf_program_hash) {
+> > +               bpf_program_hash = hashmap__new(ptr_hash, ptr_equal, NULL);
+> > +               if (!bpf_program_hash)
+> 
+> should use IS_ERR here
 
-Yes - most of them.
+ah right, thanks
 
-It is going to be pretty impossible to do 'hard' kernel debugging
-if printk get deferred.
+jirka
 
-Typically there already is a deferral method.
-The prints aren't done by the kernel, but by syslogd.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> 
+> > +                       return -ENOMEM;
+> > +       }
+> > +
+> > +       old_priv = program_priv(prog);
+> > +       if (old_priv) {
+> > +               clear_prog_priv(prog, old_priv);
+> > +               return hashmap__set(bpf_program_hash, prog, priv, NULL, NULL);
+> > +       }
+> > +       return hashmap__add(bpf_program_hash, prog, priv);
+> >  }
+> 
+> [...]

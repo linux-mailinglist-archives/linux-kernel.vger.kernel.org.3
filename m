@@ -2,245 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F924BC001
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A1B4BC002
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235949AbiBRSz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:55:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47008 "EHLO
+        id S235933AbiBRS4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:56:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235952AbiBRSzs (ORCPT
+        with ESMTP id S235302AbiBRS4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:55:48 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2D7245FFD
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:55:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645210530; x=1676746530;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=A/pt0JouG2A35RjAzS61fMx6Y80ODkG2+c2DnZHED/8=;
-  b=EGx13HkNH73r6iDypX1icXNUi0i/HuISX2UzrUKCBVrDtniHapsjEJdM
-   0U7rDyIt/RftRF2JQryeBjxFXmgKRS5h/UXi03EJzgjVjgtdcw4P0eDjP
-   kerWkODWT9QTvqpqUvUOmyjhSdsYOBiUjinnO5VLs3CeNOJlyNyvopm+O
-   IeNA22NBf4f7SvfD7w+Iv6QyzVyixHKpeONVycRXQD1BLXbWbp5CovA/F
-   nDFXuylKg9zG8qbrDFRgFUVThPGKtMcrgxG/LrlxJKDa1Uc0DaxVeLpcd
-   yAxDPOyuisDHKoQaiODMtq7kh3oVuL23RcahH6IBW+ExO6nNeJpMO6Vh0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10262"; a="231824998"
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="231824998"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 10:55:30 -0800
-X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="637830201"
-Received: from ramaling-i9x.iind.intel.com (HELO intel.com) ([10.203.144.108])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 10:55:25 -0800
-Date:   Sat, 19 Feb 2022 00:25:40 +0530
-From:   Ramalingam C <ramalingam.c@intel.com>
-To:     Robert Beckett <bob.beckett@collabora.com>
-Cc:     Jordan Justen <jordan.l.justen@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Simon Ser <contact@emersion.fr>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Kenneth Graunke <kenneth@whitecape.org>,
-        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
-        Slawomir Milczarek <slawomir.milczarek@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 5/5] drm/i915/uapi: document behaviour for DG2 64K
- support
-Message-ID: <20220218185540.GA7762@intel.com>
-References: <20220208203419.1094362-1-bob.beckett@collabora.com>
- <20220208203419.1094362-6-bob.beckett@collabora.com>
- <87ee40ojpc.fsf@jljusten-skl>
- <20220218134735.GB3646@intel.com>
- <78df4b73-9b2d-670b-a6b0-a45b476f1f0a@collabora.com>
+        Fri, 18 Feb 2022 13:56:10 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F5A24CCDB;
+        Fri, 18 Feb 2022 10:55:53 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id p9so17083855ejd.6;
+        Fri, 18 Feb 2022 10:55:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=C9S0KAwxEIvtCrO/D15JVJx6Fz48S13//eFCQ5KdSr0=;
+        b=NS/nptB6vvX3DFxuXH9LAFzvvi4/H8pVOKKqtn4f5wNhQga6rHX2+X3s55OZLRrpfq
+         yN7v3mxQbQpypnDoSc1sD9HQ6x+0HGNZbkmHyZtJf1rJtG+6dIAbHcXB2kwJhSDHb/Fz
+         AA9a4xSmgjdOy0qQnZt3nOySCBGQgfBc1aFV/a5q71Et1YgCmX4An9g9vmxTnWh16QLf
+         Z0xFgY9M7VwxtypQx1L5ifJjncao1/tgIBpCHa2DBIcx0MlExaunT0hvqBX1YHpsCr3N
+         ZyB+njDi/fAAus9aC2m2UPIYJbzmPJgLQrAUO6cG/IdIrPtPD5sEuP6x+Lg9B5q3dMVX
+         u+WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C9S0KAwxEIvtCrO/D15JVJx6Fz48S13//eFCQ5KdSr0=;
+        b=Zo6HVwslfVeEQbqqOdST9+v9qHR6QSMHdtZnmi5wTxltxU9cpxL131GFDfu9vsMMRk
+         Yf0ONbcADrM/H7av5fWoXRa8wZKecyK4QlbKzxACN1BJYy2afwpS+b23k8jBoSSUUxIh
+         /wH2l7PAL557TvkkUAL2z4CQ9SHRKpROzMvbJZh1qeLfEXmZygdXEwZ4FTLjmKshabgU
+         YFmEgKtQFgDAdHPwZJJzHzSJRO5f31yO6Bqz3/Y5SWPkuh/LYWCOp+2r89kkhjZsAx26
+         kybrIsDEzqJ/lQtpt+OFWSBRrPTgcOJrPWaR49ZRMpoyM3ZnjMPc3hqw6QcgrYgtqa10
+         YrVQ==
+X-Gm-Message-State: AOAM530v4h+lFg2kt9ayj2LWppDt21gpvSlcQClTnDclaJ4CT5P717YL
+        qNNGcXP2SCmdnfgVQOzzdwYBQKKr/e+29g==
+X-Google-Smtp-Source: ABdhPJyRPIAYWOPFd4ap77k/xfQrHQpF4DUegJjYDzq7KACI5ECN8r4efiiJzDyUzZ3HgTwwLgoChQ==
+X-Received: by 2002:a17:906:3bc9:b0:6d0:8d78:e7e6 with SMTP id v9-20020a1709063bc900b006d08d78e7e6mr5254159ejf.222.1645210551746;
+        Fri, 18 Feb 2022 10:55:51 -0800 (PST)
+Received: from ?IPV6:2a00:a040:197:458f:c93a:90a3:1c34:c6d2? ([2a00:a040:197:458f:c93a:90a3:1c34:c6d2])
+        by smtp.gmail.com with ESMTPSA id y22sm5373205edc.41.2022.02.18.10.55.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 10:55:51 -0800 (PST)
+Message-ID: <8043765d-2aa5-16ad-cc03-127398451e93@gmail.com>
+Date:   Fri, 18 Feb 2022 20:55:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <78df4b73-9b2d-670b-a6b0-a45b476f1f0a@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] kconfig: Make comments look different than menus in
+ .config
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211213100043.45645-1-arielmarcovitch@gmail.com>
+ <20211213100043.45645-3-arielmarcovitch@gmail.com>
+ <CAK7LNAQb8ivsQX-0YDNx6B_ZTBUq9v7SSG+m8=e1GsGL-DuBsg@mail.gmail.com>
+From:   Ariel Marcovitch <arielmarcovitch@gmail.com>
+In-Reply-To: <CAK7LNAQb8ivsQX-0YDNx6B_ZTBUq9v7SSG+m8=e1GsGL-DuBsg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-18 at 18:06:00 +0000, Robert Beckett wrote:
-> 
-> 
-> On 18/02/2022 13:47, Ramalingam C wrote:
-> > On 2022-02-17 at 20:57:35 -0800, Jordan Justen wrote:
-> > > Robert Beckett <bob.beckett@collabora.com> writes:
-> > > 
-> > > > From: Matthew Auld <matthew.auld@intel.com>
-> > > > 
-> > > > On discrete platforms like DG2, we need to support a minimum page size
-> > > > of 64K when dealing with device local-memory. This is quite tricky for
-> > > > various reasons, so try to document the new implicit uapi for this.
-> > > > 
-> > > > v3: fix typos and less emphasis
-> > > > v2: Fixed suggestions on formatting [Daniel]
-> > > > 
-> > > > Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-> > > > Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
-> > > > Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-> > > > Acked-by: Jordan Justen <jordan.l.justen@intel.com>
-> > > > Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
-> > > > Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> > > > cc: Simon Ser <contact@emersion.fr>
-> > > > cc: Pekka Paalanen <ppaalanen@gmail.com>
-> > > > Cc: Jordan Justen <jordan.l.justen@intel.com>
-> > > > Cc: Kenneth Graunke <kenneth@whitecape.org>
-> > > > Cc: mesa-dev@lists.freedesktop.org
-> > > > Cc: Tony Ye <tony.ye@intel.com>
-> > > > Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
-> > > > ---
-> > > >   include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
-> > > >   1 file changed, 39 insertions(+), 5 deletions(-)
-> > > > 
-> > > > diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
-> > > > index 5e678917da70..77e5e74c32c1 100644
-> > > > --- a/include/uapi/drm/i915_drm.h
-> > > > +++ b/include/uapi/drm/i915_drm.h
-> > > > @@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
-> > > >   	/**
-> > > >   	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
-> > > >   	 * the user with the GTT offset at which this object will be pinned.
-> > > > +	 *
-> > > >   	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
-> > > >   	 * presumed_offset of the object.
-> > > > +	 *
-> > > >   	 * During execbuffer2 the kernel populates it with the value of the
-> > > >   	 * current GTT offset of the object, for future presumed_offset writes.
-> > > > +	 *
-> > > > +	 * See struct drm_i915_gem_create_ext for the rules when dealing with
-> > > > +	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
-> > > > +	 * minimum page sizes, like DG2.
-> > > >   	 */
-> > > >   	__u64 offset;
-> > > > @@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
-> > > >   	 *
-> > > >   	 * The (page-aligned) allocated size for the object will be returned.
-> > > >   	 *
-> > > > -	 * Note that for some devices we have might have further minimum
-> > > > -	 * page-size restrictions(larger than 4K), like for device local-memory.
-> > > > -	 * However in general the final size here should always reflect any
-> > > > -	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
-> > > > -	 * extension to place the object in device local-memory.
-> > > > +	 *
-> > > > +	 * DG2 64K min page size implications:
-> > > > +	 *
-> > > > +	 * On discrete platforms, starting from DG2, we have to contend with GTT
-> > > > +	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
-> > > > +	 * objects.  Specifically the hardware only supports 64K or larger GTT
-> > > > +	 * page sizes for such memory. The kernel will already ensure that all
-> > > > +	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
-> > > > +	 * sizes underneath.
-> > > > +	 *
-> > > > +	 * Note that the returned size here will always reflect any required
-> > > > +	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
-> > > > +	 * such as DG2.
-> > > > +	 *
-> > > > +	 * Special DG2 GTT address alignment requirement:
-> > > > +	 *
-> > > > +	 * The GTT alignment will also need to be at least 2M for such objects.
-> > > > +	 *
-> > > > +	 * Note that due to how the hardware implements 64K GTT page support, we
-> > > > +	 * have some further complications:
-> > > > +	 *
-> > > > +	 *   1) The entire PDE (which covers a 2MB virtual address range), must
-> > > > +	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
-> > > > +	 *   PDE is forbidden by the hardware.
-> > > > +	 *
-> > > > +	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
-> > > > +	 *   objects.
-> > > > +	 *
-> > > > +	 * To keep things simple for userland, we mandate that any GTT mappings
-> > > > +	 * must be aligned to and rounded up to 2MB.
-> > > 
-> > > Could I get a clarification about this "rounded up" part.
-> > > 
-> > > Currently Mesa is aligning the start of each and every buffer VMA to be
-> > > 2MiB aligned. But, we are *not* taking any steps to "round up" the size
-> > > of buffers to 2MiB alignment.
-> > > 
-> > > Bob's Mesa MR from a while ago,
-> > > 
-> > > https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/14599
-> > > 
-> > > was trying to add this "round up" size for buffers. We didn't accept
-> > > this MR because we thought if we have ensured that no other buffer will
-> > > use the same 2MiB VMA range, then it should not be required.
-> > > 
-> > > If what we are doing is ok, then maybe this "round up" language should
-> > > be dropped? Or, perhaps the "round up" mentioned here isn't implying we
-> > > must align the size of buffers that we create, and I'm misinterpreting
-> > > this.
-> > Jordan,
-> > 
-> > as per my understanding this size rounding up to 2MB is for the VMA mapping,
-> > not for the buffer size.
-> correct, only the vma is rounded up
-> 
-> > 
-> > Even if we drop this rounding up of vma size to 2MB but align the VMA
-> > start to 2MB address then also this should be fine. Becasue the remaining of the
-> > last PDE(2MB) will never be used for any other GTT mapping as the
-> > starting addr wont align to 2MB.
-> The kernel has to handle 4K pages also, which could in theory attempt to be
-> placed in any remaining space within a 2MB region, which is not supported.
-> For this reason, the kernel rounds up the vma to next 2MB to ensure no 4K
-> pages can treat the remaining space as a candidate for placement.
-> 
-> For mesa, this is not required as they only ever use 2MB alignment for all
-> buffers, hence the denial of the mesa mr.
-> 
-> Internally, the kernel will still round up the vma reservations to prevent
-> any kernel 4K buffers being situated in remaining space.
-> 
-> If desired, we can make the wording clearer, maybe something like:
-> 
-> "To keep things simple for userland, we mandate that any GTT mappings
-> must be aligned to 2MB. The kernel will internally pad them out to the next
-> 2MB boundary"
+On 18/01/2022 20:25, Masahiro Yamada wrote:
+> On Mon, Dec 13, 2021 at 7:01 PM Ariel Marcovitch
+> <arielmarcovitch@gmail.com> wrote:
+>> Currently, the same code that handles menus in the write to .config
+>> handles comments as well. That's why comments look exactly like menus in
+>> the .config except for the 'end of menu' comments that appear only for
+>> menus. This makes sense because sometimes comments are used as sort of
+>> submenus. However for the other cases, it looks kinda weird because one
+>> might attempt to look for the 'end of menu' for comments as well and be
+>> very confused.
+>>
+>> Make comments look different than menus. For the following:
+>> ```kconfig
+>> menu "Stuff"
+>>
+>> config FOO
+>>          def_bool y
+>>
+>> comment "Some comment"
+>>
+>> config BAR
+>>          def_bool n
+>>
+>> endmenu
+>> ```
+>>
+>> The .config will look like this:
+>> ```
+>>   #
+>>   # Stuff
+>>   #
+>>   CONFIG_FOO=y
+>>
+>>   ### Some comment
+>>   # CONFIG_BAR is not defined
+>>   # end of Stuff
+>>
+>> ```
+>>
+>> Signed-off-by: Ariel Marcovitch <arielmarcovitch@gmail.com>
+>> ---
+>>   scripts/kconfig/confdata.c | 14 ++++++++++----
+>>   1 file changed, 10 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+>> index 9f2c22f46ee0..d3ec1ad67d92 100644
+>> --- a/scripts/kconfig/confdata.c
+>> +++ b/scripts/kconfig/confdata.c
+>> @@ -880,10 +880,16 @@ int conf_write(const char *name)
+>>
+>>                          if (type == P_MENU || type == P_COMMENT) {
+>>                                  str = menu_get_prompt(menu);
+>> -                               fprintf(out, "\n"
+>> -                                       "#\n"
+>> -                                       "# %s\n"
+>> -                                       "#\n", str);
+>> +
+>> +                               if (type == P_MENU)
+>> +                                       fprintf(out, "\n"
+>> +                                               "#\n"
+>> +                                               "# %s\n"
+>> +                                               "#\n", str);
+>> +                               else
+>> +                                       fprintf(out, "\n"
+>> +                                               "### %s\n", str);
+>> +
+>>                                  need_newline = false;
+>>                          }
+>>                  }
+>> --
+>> 2.25.1
+>>
+>
+> Since "# CONFIG... is not set" looks like a comment,
+> I am not sure if this improves the visibility.
 
-Added the extra information in next version @ https://patchwork.freedesktop.org/patch/475166/?series=100419&rev=1
+I agree that adding another '#' signs to the real comments doesn't solve 
+the real
+problem here, being that kconfig uses comments to save actual information
 
-Jordan, hope this explanation clears your doubt.
+I guess this is for being able to check for a config in shell script 
+with [[ -n $CONFIG_FOO ]]?
 
-Ram.
-> 
-> 
-> > 
-> > Bob, Is the above understanding is right? if so could we drop the
-> > requirement of mapping the vma size to 2MB?
-> > 
-> > Ram
-> > > 
-> > > -Jordan
-> > > 
-> > > > As this only wastes virtual
-> > > > +	 * address space and avoids userland having to copy any needlessly
-> > > > +	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
-> > > > +	 * is deemed to be a good compromise.
-> > > >   	 */
-> > > >   	__u64 size;
-> > > >   	/**
-> > > > -- 
-> > > > 2.25.1
+Although if that's the case, leaving the config empty has the same 
+effect, no? And then
+we can add a comment to the end of the definition stating that the 
+config is unset.
+Something like this:
+
+CONFIG_FOO=y
+CONFIG_BAR= # is not set
+
+It may break scripts doing something like this:
+
+: ${CONFIG_FOO=?Config FOO must be defined}
+
+But they can be changed to use ':?' instead (which checks for non-zero 
+length string
+rather than whether the variable is defined or not)
+
+Actually, now that I think of it, it might even be an improvement for 
+scripts to be able to tell whether a config isn't defined or whether it 
+has an 'n' value
+
+Anyway, I'm absolutely fine with delaying this patch until we find a 
+solution
+
+>
+> I will not pick up this until I find out what a really good format is.
+Thanks!

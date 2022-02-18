@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9415C4BAE60
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 01:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DD54BAE63
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 01:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiBRAaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Feb 2022 19:30:14 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:42720 "EHLO
+        id S230152AbiBRAaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Feb 2022 19:30:15 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiBRAaN (ORCPT
+        with ESMTP id S229968AbiBRAaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Feb 2022 19:30:13 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E555E17C;
-        Thu, 17 Feb 2022 16:29:57 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c192so4176913wma.4;
-        Thu, 17 Feb 2022 16:29:57 -0800 (PST)
+        Thu, 17 Feb 2022 19:30:14 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529135E749;
+        Thu, 17 Feb 2022 16:29:58 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id w11so11755087wra.4;
+        Thu, 17 Feb 2022 16:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/OTruRCD+Ij6EmV9ckr8IJ1zAJ1b2hmL42wGrOlCU10=;
-        b=pImZn1Zhd2lJxHSPc8u25DL0DScj4aIrBcWC7PAamH33A13iQ1UhnqIKRK0ZhbwzSP
-         +rvkMHRFZ0iqZ55M5CRkQ2F+EtrwmKTyVe6f9wLO/DjFccUFgMZdD/hKm4F8Gtf197J7
-         tQ2ezG51RkTN10j1TPVo2dUfmIco/G9ln6mnBiOkUkjCBnRbUu35TZmMEv2NoB+pnnOX
-         /KgOujMt+vEuRFNLc+7IYr9p7zD1hS6DgxAksy1C5nkDRfaLjXLyRDgNtBKgFQHrhre+
-         sSUIHVXGkDZnEIqSunfYV5qnm4DoaAXzkvwa3APCBVeUbbPp7UkSztf7aZPpwNRUDugw
-         zsMw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kenzeLE/QK4xsXZwypHLjD1liPO03+eqYkLmazUP49s=;
+        b=hfVBMkjM5hFowFo6txsQVXiIYjiPBU2FaQM3rzOYvLIabGfbKrTt2PCoG9nc90mDgp
+         1PDSLbN93cI2m2Dq61lyGxYuC0p/KxYkgF1Qa74B90NOFbyRQKYcwP6jWSyHK/Pba3Cu
+         OuwaNLgxyBbEh57Aw8EjTFWSuqe24x4dyukkShaBHWdrTPVz+OpoR8huV4Jrd2Thr85Y
+         DrwlmGY7Cah8E5MVi5hmC4CHgykZ9qka7oUo0qmaY6VkQMx2FhHhXD+vsNS5xQD7rnHN
+         E98CAeQv0gm3zd49DFHPHaxnMBVfMbSgxQIfnbvNZFgfHpmsVqswYCOgaOuX8SVYmYRO
+         IjKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/OTruRCD+Ij6EmV9ckr8IJ1zAJ1b2hmL42wGrOlCU10=;
-        b=728XWdI19rbUo2HyDurNKeMsTD6pU63K6wDwtLyXm3OHbUWyp15HYC7WaYWAp1ToFa
-         74TtFdKye4nc6YbTVYXv9o3Osf1ML0fqLyeZTS7zAbgjdHcJNjHFrQwJZV2Q6Y17E9co
-         iE/rdYQDz/AXcNKZPa0j6ultzQDBsDmvc5ab3wfBo2rUlDc6ksA/JBbz/kiNM1oqgfI9
-         8eH6ddARtwcjlREvFtczj6S4v9RTs5TA2T+2HCT/YE/cpH26Wi1JRqRBWmGlSH7pO5Jc
-         EqRqbStHjSbKekH0WRIKxevMLjYDRuo0PLIQXBqWSUfjNfsqDtEBnN0k6q3OJ0/5vJ2J
-         wehA==
-X-Gm-Message-State: AOAM5321Hj6rWjtdsiash4jV7rObu9f3rDRmHVIjfrSjgmbyv/Gy57MD
-        pYm7jPMfeubIuZFZk960kYo=
-X-Google-Smtp-Source: ABdhPJx+hrwVMjoiO5aTUi3AaEvAAdkQP879FBW22W4ZFQBb9PeUZwxZM23/oekaDNmvTFfmDHHFEQ==
-X-Received: by 2002:a05:600c:364f:b0:37b:ba9e:2805 with SMTP id y15-20020a05600c364f00b0037bba9e2805mr4750108wmq.119.1645144195936;
-        Thu, 17 Feb 2022 16:29:55 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kenzeLE/QK4xsXZwypHLjD1liPO03+eqYkLmazUP49s=;
+        b=c4idwDoFDz+NmzHjCTsRE5jGgKISEECEmpvgn+kDg+tWa0uwuQ5c0/7ROQvZx3hPOE
+         OA37ec9x909Hu/KpEWCX+nWDnIRXphhSu6UKI+2AniJka+DQ5H4dQyqNpLviy6MGbcLn
+         bqg2cyT7Ju+wU6lkxlCDMo8t/SsPif5eaBnnxUejVX7phMSaVPDq99/bpOhkESbDwGQs
+         m3f/CUFZ4MogDe2LIdq0sMRU/i0z2XQ36K0mhhduUF0z78KCjBLOiFodp2ujBAF380SC
+         GMxPACvFMWp3WgWlLQ7D+ooUwDP+lWnSleRiArMkoHSKHgflyC1JrS6jyO9TlA6aK0WQ
+         pnhw==
+X-Gm-Message-State: AOAM531ErREkrS0rZOhOjNRK5cp437vX2QpXYMe8kajGEz7XL7LlZB5S
+        PZkA+1phNRZn/YwxP5EETX0=
+X-Google-Smtp-Source: ABdhPJw4AImeogmuit+wCghBsEiV25MP6L+To2pUlKQXGWSZ74iDUofaW6Nex7qvCv8FI9MRP+MnhA==
+X-Received: by 2002:adf:e185:0:b0:1e2:6421:f2d0 with SMTP id az5-20020adfe185000000b001e26421f2d0mr4174052wrb.703.1645144196875;
+        Thu, 17 Feb 2022 16:29:56 -0800 (PST)
 Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id d29sm3640406wra.63.2022.02.17.16.29.54
+        by smtp.googlemail.com with ESMTPSA id d29sm3640406wra.63.2022.02.17.16.29.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 16:29:55 -0800 (PST)
+        Thu, 17 Feb 2022 16:29:56 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -55,10 +55,12 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [PATCH v2 00/18] Multiple addition to ipq8064 dtsi
-Date:   Fri, 18 Feb 2022 01:29:38 +0100
-Message-Id: <20220218002956.6590-1-ansuelsmth@gmail.com>
+Subject: [PATCH v2 01/18] ARM: dts: qcom: add multiple missing pin definition for ipq8064
+Date:   Fri, 18 Feb 2022 01:29:39 +0100
+Message-Id: <20220218002956.6590-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220218002956.6590-1-ansuelsmth@gmail.com>
+References: <20220218002956.6590-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,58 +73,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This try to complete the ipq8064 dtsi and introduce 2 new dtsi
-ipq8064-v2 and ipq8065. While some node are still missing (cpufreq node,
-l2 scale node, fab scale node) this would add most of the missing node
-to make ipq8064 actually usable.
+Add missing definition for mdio0 pins used for gpio-bitbang driver,i2c4
+pins and rgmii2 pins for ipq8064.
 
-Some of the changes are the fix for the pci IO that cause any secondary
-wifi card with ath10k to fail init.
-Adds regulators definition for RPM.
-Adds many missing gsbi nodes used by all the devices.
-Enable the usb phy by default as they are actually enabled internally by
-xlate only if the dwc3 driver is used.
-Add opp table and declare idle state for ipq8064.
-Fix some dtc warning.
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ arch/arm/boot/dts/qcom-ipq8064.dtsi | 34 +++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-This also add the ipq8064-v2.0 dtsi and the ipq8065 dtsi used by more
-recent devices based on this SoC.
-
-v2:
-- Added missing patch
-- Added additional gsbi6 spi
-- Added extra description for L2 cache opp
-- Fxied smb208 enabled by default that is problematic for rb3011 devices
-
-Ansuel Smith (18):
-  ARM: dts: qcom: add multiple missing pin definition for ipq8064
-  ARM: dts: qcom: add gsbi6 missing definition for ipq8064
-  ARM: dts: qcom: add missing rpm regulators and cells for ipq8064
-  ARM: dts: qcom: disable smb208 regulators for ipq8064-rb3011
-  ARM: dts: qcom: add missing snps,dwmac compatible for gmac ipq8064
-  ARM: dts: qcom: enable usb phy by default for ipq8064
-  ARM: dts: qcom: reduce pci IO size to 64K for ipq8064
-  ARM: dts: qcom: fix dtc warning for missing #address-cells for ipq8064
-  ARM: dts: qcom: add smem node for ipq8064
-  ARM: dts: qcom: add saw for l2 cache and kraitcc for ipq8064
-  ARM: dts: qcom: add sic non secure node for ipq8064
-  ARM: dts: qcom: fix and add some missing gsbi node for ipq8064
-  ARM: dts: qcom: add opp table for cpu and l2 for ipq8064
-  ARM: dts: qcom: add speedbin efuse nvmem binding
-  ARM: dts: qcom: add multiple missing binding for cpu and l2 for
-    ipq8064
-  ARM: dts: qcom: remove redundant binding from ipq8064 rb3011 dts
-  ARM: dts: qcom: add ipq8064-v2.0 dtsi
-  ARM: dts: qcom: add ipq8065 dtsi
-
- arch/arm/boot/dts/qcom-ipq8064-rb3011.dts |  21 +-
- arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi  |  70 ++++
- arch/arm/boot/dts/qcom-ipq8064.dtsi       | 375 +++++++++++++++++++++-
- arch/arm/boot/dts/qcom-ipq8065.dtsi       | 168 ++++++++++
- 4 files changed, 603 insertions(+), 31 deletions(-)
- create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
- create mode 100644 arch/arm/boot/dts/qcom-ipq8065.dtsi
-
+diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+index 11481313bdb6..cc6ca9013ab1 100644
+--- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+@@ -382,6 +382,15 @@ mux {
+ 				};
+ 			};
+ 
++			i2c4_pins: i2c4_pinmux {
++				mux {
++					pins = "gpio12", "gpio13";
++					function = "gsbi4";
++					drive-strength = <12>;
++					bias-disable;
++				};
++			};
++
+ 			spi_pins: spi_pins {
+ 				mux {
+ 					pins = "gpio18", "gpio19", "gpio21";
+@@ -424,6 +433,8 @@ mux {
+ 
+ 				pullups {
+ 					pins = "gpio39";
++					function = "nand";
++					drive-strength = <10>;
+ 					bias-pull-up;
+ 				};
+ 
+@@ -431,9 +442,32 @@ hold {
+ 					pins = "gpio40", "gpio41", "gpio42",
+ 					       "gpio43", "gpio44", "gpio45",
+ 					       "gpio46", "gpio47";
++					function = "nand";
++					drive-strength = <10>;
+ 					bias-bus-hold;
+ 				};
+ 			};
++
++			mdio0_pins: mdio0_pins {
++				mux {
++					pins = "gpio0", "gpio1";
++					function = "mdio";
++					drive-strength = <8>;
++					bias-disable;
++				};
++			};
++
++			rgmii2_pins: rgmii2_pins {
++				mux {
++					pins = "gpio27", "gpio28", "gpio29",
++					       "gpio30", "gpio31", "gpio32",
++					       "gpio51", "gpio52", "gpio59",
++					       "gpio60", "gpio61", "gpio62";
++					function = "rgmii2";
++					drive-strength = <8>;
++					bias-disable;
++				};
++			};
+ 		};
+ 
+ 		intc: interrupt-controller@2000000 {
 -- 
 2.34.1
 

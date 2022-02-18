@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB024BB5E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868024BB5E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbiBRJpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:45:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58510 "EHLO
+        id S233770AbiBRJqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:46:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233759AbiBRJpR (ORCPT
+        with ESMTP id S233500AbiBRJqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:45:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657F891AE1;
-        Fri, 18 Feb 2022 01:45:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0319661CC6;
-        Fri, 18 Feb 2022 09:45:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6849DC340E9;
-        Fri, 18 Feb 2022 09:44:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645177500;
-        bh=LT71l6gwcGH1NnbC9kIG8tjwGrUTGDrTwjaoMyi1uxo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZUbmDCEeuGxYM4CR0GkyPvBPp5BNDCuruzagoA+krCxt38WdV2BnZgVYzLsc8gYOm
-         /PO5V0eYlXVBHyMGhK2UDUGWcI/fRS9oqXE3S4s38GYqd4bIVf/lZS4uxLijj/d1Pr
-         wYSzZI0JgmdoYsm20U46c51H+yq13RoxbDxFAczk2vJrOBJD84MFZgY74A9DP1LagP
-         AFyNQEivgBbGgFPSN0Aq5AcY08pL3vmW2oAk+A92Y9RQ3hw9YPnAP2S5nMqTymkB8s
-         o+7lOaAToehKx7kF8QaTQNw6sVcFYFGQZQTgvDnwU1tmZyRP+iSZ2AmErZHIGYA1LY
-         MymyNTjGU8HFA==
-Date:   Fri, 18 Feb 2022 10:44:55 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     jorcrous@amazon.com
-Cc:     linux-arm-msm@vger.kernel.org,
-        Akash Asthana <akashast@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: qcom-geni: Fix return value for master_xfer
-Message-ID: <Yg9qlwvh08tXDqTv@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, jorcrous@amazon.com,
-        linux-arm-msm@vger.kernel.org,
-        Akash Asthana <akashast@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220209210356.2848-1-jorcrous@amazon.com>
+        Fri, 18 Feb 2022 04:46:18 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B9D24092;
+        Fri, 18 Feb 2022 01:46:02 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id z17so6731829plb.9;
+        Fri, 18 Feb 2022 01:46:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L1rvqCHVtRBiuL9Y54dOZY1q4vVwsKl3F8s+6b7SX10=;
+        b=kA8iQUGA3pzeY3mPS+gSBAbw8lUtB4kqJTNiQ4j3kyPWxAixQyNAEY4/1/8iJEmXuA
+         v5Qqnk8Ws7cR3V6Qd+6CD3evF5GdaTJfTj5O7HQqXc5XzV1lV6kOWQ2zj3PkNtYbOmAn
+         0/pzmY1to6SSXd6XOjcQXBFQFPqLHWW7jvaEVdgZUexwKm+QgTQxnhAxiL4YeFEssdoc
+         ruIMdw4V2A57EfgTWdUHMLS74Pi19jhW0x10/P6k9R+JudXs1ecgErg1BBsTYtALDkTT
+         YEARe7bXjx+CwSp2r2mtaamPXPZPKMYDpy8eXkW0wIUMcYGP3LywhOkNHRkShrmyKXDm
+         eSWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L1rvqCHVtRBiuL9Y54dOZY1q4vVwsKl3F8s+6b7SX10=;
+        b=nvuejdbRryAAsQplf8IRYS6KUo/zpceBLCe56Ybr2cpMdRaC5WZArSo49n0AnWEqaK
+         HT+Nb/Z4qn7FXlI2OjReHql2CITTvuAcdoiAHNrieaTm0FvNaK4XAq3lKOOVA07zpLBx
+         GRFF+JbhLUGf0p6WJ+WHSPUvj4AiSoBftWdgADE4p1NIKoZMf5SJoAAT5kQOngKaO91E
+         QOuB+geuT0WOZFWrcoYbf48mbawDuTxPOcnTyO7EeBoUjgEh0byt5GY4leVRt/LQSAYv
+         X2/7lkuwwkRppsTmZEhvGl3uO1YePYhRtPMGIiqPC4v2Zs/yMZoOqw0bgmDKMqqzuYPj
+         J8nw==
+X-Gm-Message-State: AOAM530ywptAcmT0NCB9GFxNFv//Kehvcr1ZGVare6DWh5G13gKjKszC
+        7yBNU5cRlzKuVQevHHQN4FI=
+X-Google-Smtp-Source: ABdhPJxQiWDrvZISrqJRZDLKJbKAvehEF9S+UjGB7lwhpbuLIelGs8siUiCxWTlbhl3eam2Q5joT7w==
+X-Received: by 2002:a17:90b:1c8f:b0:1b8:c6dc:ca61 with SMTP id oo15-20020a17090b1c8f00b001b8c6dcca61mr7465172pjb.13.1645177561869;
+        Fri, 18 Feb 2022 01:46:01 -0800 (PST)
+Received: from localhost.localdomain ([101.78.151.222])
+        by smtp.gmail.com with ESMTPSA id u8sm7675704pgf.83.2022.02.18.01.45.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 01:46:01 -0800 (PST)
+From:   Rex Nie <rexnie3@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Daocai Nie <niedaocai@huaqin.corp-partner.google.com>
+Subject: [PATCH 2/2] dt-bindings: display: simple: Add InnoLux n140hca-eac panel
+Date:   Fri, 18 Feb 2022 17:45:49 +0800
+Message-Id: <20220218094549.1631706-1-rexnie3@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5Tqk2YBQNjoACgSM"
-Content-Disposition: inline
-In-Reply-To: <20220209210356.2848-1-jorcrous@amazon.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Daocai Nie <niedaocai@huaqin.corp-partner.google.com>
 
---5Tqk2YBQNjoACgSM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add support for InnoLux n140hca-eac display panel. It is a 14" eDP panel
+with 1920x1080 display resolution.
 
-On Wed, Feb 09, 2022 at 09:03:56PM +0000, jorcrous@amazon.com wrote:
-> From: Jordan Crouse <jorcrous@amazon.com>
->=20
-> The master_xfer function is supposed to return the number of messages that
-> were processed. Both  geni_i2c_gpi_xfer and geni_i2c_fifo_xfer are
-> returning 0 which is being interpeted as a error in the upper layers.
->=20
-> Fixes: 8133682618cb ("i2c: qcom-geni: Add support for GPI DMA")
-> Signed-off-by: Jordan Crouse <jorcrous@amazon.com>
+Signed-off-by: Daocai Nie <niedaocai@huaqin.corp-partner.google.com>
+---
+ .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
+ 1 file changed, 2 insertions(+)
 
-For the record, this patch is not upstream yet and needs to be folded
-into the next version of the GPI DMA patch by Vinod.
+diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+index 1eb9dd4f8f58..f8383a8dc3dc 100644
+--- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
++++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
+@@ -180,6 +180,8 @@ properties:
+       - innolux,n116bge
+         # InnoLux 13.3" FHD (1920x1080) eDP TFT LCD panel
+       - innolux,n125hce-gn1
++        # InnoLux 14" FHD (1920x1080) eDP TFT LCD panel
++      - innolux,n140hca-eac
+         # InnoLux 15.6" WXGA TFT LCD panel
+       - innolux,n156bge-l21
+         # Innolux Corporation 7.0" WSVGA (1024x600) TFT LCD panel
+-- 
+2.25.1
 
-
---5Tqk2YBQNjoACgSM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIPapcACgkQFA3kzBSg
-Kba0tRAAnxde9VTJoRlopJGPtr4GN0tlb1xWoJJcnHEj3rYjSVsjHUvEDSfJ5SgA
-PNr4/LjT/R7XhNiBhYPjkfb28/m4JvA3N8ygPKU9zPJOM87O/hKDPrgc5Kr+9I/t
-NipCwH0EGTfUbuqRavL0hBHsiclnq1u6ib3+PY/gFCT17l4CVNtJ4Rwx3X3IfB9z
-8ixcqQ6uHUlPEj3qJGG9mZUD9bvch57Y53LaCRFvx8SG0VDvlMnHh1uXZSpA+I2Y
-kPjjvuuMncAdkZWy7mvU9OTa9gzOs47Fv34GEklrLyt3D0WBpF/3N5JSWS1mNrBt
-5KPaBXYBa/JYdP5nlocFT/dl7B4FALQuPzqD4Pcu73pOmGeLBqgm9zFO+5NpihA3
-bwQc419am3q6fZAA2Ovxq3PjFN01i5Wbd1dBWVe6ZPDyDVEJ5GVblStTIMKqlKbZ
-hNVLeuUJIM+sn2eYXIr1K1z6CqRBE3WwaaFa+BAlbKMSdFSwzmifHW+DAlqGSHLI
-OUzhUHjfuP0i+T6wIkNGhuSfHbrEc4SKM3hR7QVwFiJB8YQ0ZKrUNNMSsvt/V2/w
-nxPEBomlHELKic+B4cVCUXuhHK2DTt/bKLMdUq3I8iMDrNSi5w1bRQ1ULMd410lf
-cO2MLb9F9IKaQaKChN1/t0QNDyZsCuXU31nImUVKGYIt94sD0uo=
-=NXEL
------END PGP SIGNATURE-----
-
---5Tqk2YBQNjoACgSM--

@@ -2,264 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6014BBB42
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169C14BBB09
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235694AbiBRO4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:56:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50382 "EHLO
+        id S236231AbiBROyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:54:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236336AbiBRO4c (ORCPT
+        with ESMTP id S236251AbiBROyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:56:32 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3105A5AF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:07 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id p9so14995539wra.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cimbY7LPDbRuh3lILBl/36Td2W7ROjWFj0D1595RCaw=;
-        b=TNGjjxKv6EvX9YTQfRDhTS2iTF1YJF70cMlDGdFJvKiVMAcafgzWoGpdVNJ3f1VaN6
-         K2VmR7PE/RJ9gtMjWj0UeFiU4QpV0ro7fQXRXHrO7Ey5v1TM3PuzmRI5HSgWSYJ1c1sF
-         PBOq+rk8WTLpxfSdRm1ZciN3IeAKXL00c+zu8C4GTacn917TuorzBb953HHpAvFUmP7i
-         +yLIkMgLDilwd3itpBtFL5ItEvLySPXk00YHamGIM5JAOXfi4ZfqqCUva2SIgs1j+lks
-         sxrb5oX0G9ATnrJRBpTzk3zCrQVSf5JhtCSXaLUJ7t6abMEtF9CgH2l+EfvwH79/I3MP
-         hcJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cimbY7LPDbRuh3lILBl/36Td2W7ROjWFj0D1595RCaw=;
-        b=eG+bKKPm6Ix/PoeBqFlmZZ9D0lNZooYdK11GBl4j1rYO9SNK+d9HJ5m4DgybBMFkZA
-         h4aA+IB+FCyzbM+r3/UlNDf7l6oD9fiOjCyBp78QhCub/FfZqM03akxni29lQUB0xiVh
-         uqSnPL1GnKW8hK/sbK3GHB7/P02VKaXqGQJ/1TyOUNvLBD7IgR9UE+/ujDG2OAkd2wVf
-         8GjMuPb1YsnlhTY8S+L6Gs02scEyJFrK+BB6QiczzxU+d7x8COXG0R8U3MHopw0qIU7P
-         KmQ1Is0bLL6pUF+1noS5FWXXCB1pMJgEtyL7J0V+Y4+Bem5ZlTffaQrkLW+xZXo8SQop
-         N0Rg==
-X-Gm-Message-State: AOAM533gJcwWbLtsmmAG3r7Vb9dY8sucUNkAuuC/9Mms7AgcFHJqD2vh
-        hqgtuFuFb5HeBthQNxKCrWLkSw==
-X-Google-Smtp-Source: ABdhPJy1JUJKheTePbsE3NKWxwoKzBKakTmpScLec8cb68771P+YmJAhdQP0PlPzF4bonlbfNdg8+Q==
-X-Received: by 2002:adf:d20c:0:b0:1e5:952c:34b5 with SMTP id j12-20020adfd20c000000b001e5952c34b5mr6528414wrh.82.1645196165879;
-        Fri, 18 Feb 2022 06:56:05 -0800 (PST)
-Received: from localhost.localdomain (2a02-8440-6241-3b28-3074-96af-9642-0002.rev.sfr.net. [2a02:8440:6241:3b28:3074:96af:9642:2])
-        by smtp.gmail.com with ESMTPSA id b10sm47431454wrd.8.2022.02.18.06.56.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 06:56:05 -0800 (PST)
-From:   Guillaume Ranquet <granquet@baylibre.com>
-To:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com,
-        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
-        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        angelogioacchino.delregno@collabora.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v8 04/19] video/hdmi: Add audio_infoframe packing for DP
-Date:   Fri, 18 Feb 2022 15:54:22 +0100
-Message-Id: <20220218145437.18563-5-granquet@baylibre.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220218145437.18563-1-granquet@baylibre.com>
-References: <20220218145437.18563-1-granquet@baylibre.com>
+        Fri, 18 Feb 2022 09:54:52 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4B856C02;
+        Fri, 18 Feb 2022 06:54:27 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E2ACB1F46BCC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645196066;
+        bh=/QgSDHmSLtXvOS6O4MR4blf2HkvBBf8c5LbK7+RhC/g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=l4Hk/xNAQ9LI5HLIKjHT7LXufn5WBixzlQRdyddMU3+xD8Vpmv8OIalXuAfL3AMLJ
+         yz/XG6p0xcI91t9L2B2lu5FY54eZuM9gJX1/hVOnPE4VhXTAbkI1vMDlP1Ha+p3rWt
+         II08XN0xewiJByAY6o++s2A5Xh8E5lIbHTrMjCtjbejwznFY7nHjfEFlP6Q0v5T2s2
+         P6cDAF+JN7EieM8P4xqcqg1pUIs8TPIeCrn/4a7K38V4zaTGZwalrVwNRYWTux/46F
+         p1jj2AJKIiXcGsoA1QYMpgPyG1/iNn1EUMf8WVaLmWsOsPhfBiUOfuX4ZOp9dsHbtD
+         SDdZHADn3nPIg==
+Message-ID: <78474983-a07c-6b1d-797a-d0788f3577b6@collabora.com>
+Date:   Fri, 18 Feb 2022 15:54:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [v2 07/17] ASoC: mediatek: mt8186: support pcm in platform driver
+Content-Language: en-US
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
+        geert+renesas@glider.be, trevor.wu@mediatek.com,
+        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
+ <20220217134205.15400-8-jiaxin.yu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220217134205.15400-8-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Markus Schneider-Pargmann <msp@baylibre.com>
+Il 17/02/22 14:41, Jiaxin Yu ha scritto:
+> This patch adds mt8186 pcm dai driver.
+> 
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> ---
+>   sound/soc/mediatek/mt8186/mt8186-dai-pcm.c | 432 +++++++++++++++++++++
+>   1 file changed, 432 insertions(+)
+>   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-pcm.c
+> 
+> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-pcm.c b/sound/soc/mediatek/mt8186/mt8186-dai-pcm.c
+> new file mode 100644
+> index 000000000000..73b3f720ed35
+> --- /dev/null
+> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-pcm.c
+> @@ -0,0 +1,432 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// MediaTek ALSA SoC Audio DAI I2S Control
+> +//
+> +// Copyright (c) 2022 MediaTek Inc.
+> +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> +
+> +#include <linux/regmap.h>
+> +#include <sound/pcm_params.h>
+> +#include "mt8186-afe-common.h"
+> +#include "mt8186-afe-gpio.h"
+> +#include "mt8186-interconnection.h"
+> +
+> +struct mtk_afe_pcm_priv {
+> +	unsigned int id;
+> +	unsigned int fmt;
+> +	unsigned int bck_invert;
+> +	unsigned int lck_invert;
+> +};
+> +
+> +enum AUD_TX_LCH_RPT {
 
-Similar to HDMI, DP uses audio infoframes as well which are structured
-very similar to the HDMI ones.
+lowercase enumeration names please...
 
-This patch adds a helper function to pack the HDMI audio infoframe for
-DP, called hdmi_audio_infoframe_pack_for_dp().
-hdmi_audio_infoframe_pack_only() is split into two parts. One of them
-packs the payload only and can be used for HDMI and DP.
+enum aud_tx_lch_rpt {
+	AUD_TX....BLAH
+};
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
----
- drivers/video/hdmi.c        | 83 ++++++++++++++++++++++++++++---------
- include/drm/drm_dp_helper.h |  2 +
- include/linux/hdmi.h        |  7 +++-
- 3 files changed, 72 insertions(+), 20 deletions(-)
+> +	AUD_TX_LCH_RPT_NO_REPEAT = 0,
+> +	AUD_TX_LCH_RPT_REPEAT = 1
+> +};
+> +
+> +enum AUD_VBT_16K_MODE {
+> +	AUD_VBT_16K_MODE_DISABLE = 0,
+> +	AUD_VBT_16K_MODE_ENABLE = 1
+> +};
+> +
+> +enum AUD_EXT_MODEM {
+> +	AUD_EXT_MODEM_SELECT_INTERNAL = 0,
+> +	AUD_EXT_MODEM_SELECT_EXTERNAL = 1
+> +};
+> +
+> +enum AUD_PCM_SYNC_TYPE {
+> +	/* bck sync length = 1 */
+> +	AUD_PCM_ONE_BCK_CYCLE_SYNC = 0,
+> +	/* bck sync length = PCM_INTF_CON1[9:13] */
+> +	AUD_PCM_EXTENDED_BCK_CYCLE_SYNC = 1
+> +};
+> +
+> +enum AUD_BT_MODE {
+> +	AUD_BT_MODE_DUAL_MIC_ON_TX = 0,
+> +	AUD_BT_MODE_SINGLE_MIC_ON_TX = 1
+> +};
+> +
+> +enum AUD_PCM_AFIFO_SRC {
+> +	/* slave mode & external modem uses different crystal */
+> +	AUD_PCM_AFIFO_ASRC = 0,
+> +	/* slave mode & external modem uses the same crystal */
+> +	AUD_PCM_AFIFO_AFIFO = 1
+> +};
+> +
+> +enum AUD_PCM_CLOCK_SOURCE {
+> +	AUD_PCM_CLOCK_MASTER_MODE = 0,
+> +	AUD_PCM_CLOCK_SLAVE_MODE = 1
+> +};
+> +
+> +enum AUD_PCM_WLEN {
+> +	AUD_PCM_WLEN_PCM_32_BCK_CYCLES = 0,
+> +	AUD_PCM_WLEN_PCM_64_BCK_CYCLES = 1
+> +};
+> +
+> +enum AUD_PCM_24BIT {
+> +	AUD_PCM_24BIT_PCM_16_BITS = 0,
+> +	AUD_PCM_24BIT_PCM_24_BITS = 1
+> +};
+> +
+> +enum AUD_PCM_MODE {
+> +	AUD_PCM_MODE_PCM_MODE_8K = 0,
+> +	AUD_PCM_MODE_PCM_MODE_16K = 1,
+> +	AUD_PCM_MODE_PCM_MODE_32K = 2,
+> +	AUD_PCM_MODE_PCM_MODE_48K = 3,
+> +};
+> +
+> +enum AUD_PCM_FMT {
+> +	AUD_PCM_FMT_I2S = 0,
+> +	AUD_PCM_FMT_EIAJ = 1,
+> +	AUD_PCM_FMT_PCM_MODE_A = 2,
+> +	AUD_PCM_FMT_PCM_MODE_B = 3
+> +};
+> +
+> +enum AUD_BCLK_OUT_INV {
+> +	AUD_BCLK_OUT_INV_NO_INVERSE = 0,
+> +	AUD_BCLK_OUT_INV_INVERSE = 1
+> +};
+> +
+> +enum AUD_LRCLK_OUT_INV {
+> +	AUD_LRCLK_OUT_INV_NO_INVERSE = 0,
+> +	AUD_LRCLK_OUT_INV_INVERSE = 1
+> +};
+> +
+> +enum AUD_PCM_EN {
+> +	AUD_PCM_EN_DISABLE = 0,
+> +	AUD_PCM_EN_ENABLE = 1
+> +};
+> +
 
-diff --git a/drivers/video/hdmi.c b/drivers/video/hdmi.c
-index 947be761dfa40..63e74d9fd210e 100644
---- a/drivers/video/hdmi.c
-+++ b/drivers/video/hdmi.c
-@@ -21,6 +21,7 @@
-  * DEALINGS IN THE SOFTWARE.
-  */
- 
-+#include <drm/drm_dp_helper.h>
- #include <linux/bitops.h>
- #include <linux/bug.h>
- #include <linux/errno.h>
-@@ -381,12 +382,34 @@ static int hdmi_audio_infoframe_check_only(const struct hdmi_audio_infoframe *fr
-  *
-  * Returns 0 on success or a negative error code on failure.
-  */
--int hdmi_audio_infoframe_check(struct hdmi_audio_infoframe *frame)
-+int hdmi_audio_infoframe_check(const struct hdmi_audio_infoframe *frame)
- {
- 	return hdmi_audio_infoframe_check_only(frame);
- }
- EXPORT_SYMBOL(hdmi_audio_infoframe_check);
- 
-+static void
-+hdmi_audio_infoframe_pack_payload(const struct hdmi_audio_infoframe *frame,
-+				  u8 *buffer)
-+{
-+	u8 channels;
-+
-+	if (frame->channels >= 2)
-+		channels = frame->channels - 1;
-+	else
-+		channels = 0;
-+
-+	buffer[0] = ((frame->coding_type & 0xf) << 4) | (channels & 0x7);
-+	buffer[1] = ((frame->sample_frequency & 0x7) << 2) |
-+		 (frame->sample_size & 0x3);
-+	buffer[2] = frame->coding_type_ext & 0x1f;
-+	buffer[3] = frame->channel_allocation;
-+	buffer[4] = (frame->level_shift_value & 0xf) << 3;
-+
-+	if (frame->downmix_inhibit)
-+		buffer[4] |= BIT(7);
-+}
-+
- /**
-  * hdmi_audio_infoframe_pack_only() - write HDMI audio infoframe to binary buffer
-  * @frame: HDMI audio infoframe
-@@ -404,7 +427,6 @@ EXPORT_SYMBOL(hdmi_audio_infoframe_check);
- ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
- 				       void *buffer, size_t size)
- {
--	unsigned char channels;
- 	u8 *ptr = buffer;
- 	size_t length;
- 	int ret;
-@@ -420,28 +442,13 @@ ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
- 
- 	memset(buffer, 0, size);
- 
--	if (frame->channels >= 2)
--		channels = frame->channels - 1;
--	else
--		channels = 0;
--
- 	ptr[0] = frame->type;
- 	ptr[1] = frame->version;
- 	ptr[2] = frame->length;
- 	ptr[3] = 0; /* checksum */
- 
--	/* start infoframe payload */
--	ptr += HDMI_INFOFRAME_HEADER_SIZE;
--
--	ptr[0] = ((frame->coding_type & 0xf) << 4) | (channels & 0x7);
--	ptr[1] = ((frame->sample_frequency & 0x7) << 2) |
--		 (frame->sample_size & 0x3);
--	ptr[2] = frame->coding_type_ext & 0x1f;
--	ptr[3] = frame->channel_allocation;
--	ptr[4] = (frame->level_shift_value & 0xf) << 3;
--
--	if (frame->downmix_inhibit)
--		ptr[4] |= BIT(7);
-+	hdmi_audio_infoframe_pack_payload(frame,
-+					  ptr + HDMI_INFOFRAME_HEADER_SIZE);
- 
- 	hdmi_infoframe_set_checksum(buffer, length);
- 
-@@ -479,6 +486,44 @@ ssize_t hdmi_audio_infoframe_pack(struct hdmi_audio_infoframe *frame,
- }
- EXPORT_SYMBOL(hdmi_audio_infoframe_pack);
- 
-+/**
-+ * hdmi_audio_infoframe_pack_for_dp - Pack a HDMI Audio infoframe for
-+ *                                    displayport
-+ *
-+ * @frame HDMI Audio infoframe
-+ * @sdp secondary data packet for display port. This is filled with the
-+ * appropriate data
-+ * @dp_version Display Port version to be encoded in the header
-+ *
-+ * Packs a HDMI Audio Infoframe to be sent over Display Port. This function
-+ * fills the secondary data packet to be used for Display Port.
-+ *
-+ * Return: Number of total written bytes or a negative errno on failure.
-+ */
-+ssize_t
-+hdmi_audio_infoframe_pack_for_dp(const struct hdmi_audio_infoframe *frame,
-+				 struct dp_sdp *sdp, u8 dp_version)
-+{
-+	int ret;
-+
-+	ret = hdmi_audio_infoframe_check(frame);
-+	if (ret)
-+		return ret;
-+
-+	memset(sdp->db, 0, sizeof(sdp->db));
-+
-+	// Secondary-data packet header
-+	sdp->sdp_header.HB0 = 0;
-+	sdp->sdp_header.HB1 = frame->type;
-+	sdp->sdp_header.HB2 = DP_SDP_AUDIO_INFOFRAME_HB2;
-+	sdp->sdp_header.HB3 = (dp_version & 0x3f) << 2;
-+
-+	hdmi_audio_infoframe_pack_payload(frame, sdp->db);
-+
-+	return frame->length + 4;
-+}
-+EXPORT_SYMBOL(hdmi_audio_infoframe_pack_for_dp);
-+
- /**
-  * hdmi_vendor_infoframe_init() - initialize an HDMI vendor infoframe
-  * @frame: HDMI vendor infoframe
-diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
-index 30359e434c3f3..707927e3e773a 100644
---- a/include/drm/drm_dp_helper.h
-+++ b/include/drm/drm_dp_helper.h
-@@ -1567,6 +1567,8 @@ int drm_dp_bw_code_to_link_rate(u8 link_bw);
- #define DP_SDP_VSC_EXT_CEA		0x21 /* DP 1.4 */
- /* 0x80+ CEA-861 infoframe types */
- 
-+#define DP_SDP_AUDIO_INFOFRAME_HB2	0x1b
-+
- /**
-  * struct dp_sdp_header - DP secondary data packet header
-  * @HB0: Secondary Data Packet ID
-diff --git a/include/linux/hdmi.h b/include/linux/hdmi.h
-index c8ec982ff4984..2f4dcc8d060e3 100644
---- a/include/linux/hdmi.h
-+++ b/include/linux/hdmi.h
-@@ -336,7 +336,12 @@ ssize_t hdmi_audio_infoframe_pack(struct hdmi_audio_infoframe *frame,
- 				  void *buffer, size_t size);
- ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
- 				       void *buffer, size_t size);
--int hdmi_audio_infoframe_check(struct hdmi_audio_infoframe *frame);
-+int hdmi_audio_infoframe_check(const struct hdmi_audio_infoframe *frame);
-+
-+struct dp_sdp;
-+ssize_t
-+hdmi_audio_infoframe_pack_for_dp(const struct hdmi_audio_infoframe *frame,
-+				 struct dp_sdp *sdp, u8 dp_version);
- 
- enum hdmi_3d_structure {
- 	HDMI_3D_STRUCTURE_INVALID = -1,
--- 
-2.34.1
+..snip..
 
+> +
+> +/* dai ops */
+> +static int mtk_dai_pcm_hw_params(struct snd_pcm_substream *substream,
+> +				 struct snd_pcm_hw_params *params,
+> +				 struct snd_soc_dai *dai)
+> +{
+> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int pcm_id = dai->id;
+> +	struct mtk_afe_pcm_priv *pcm_priv = afe_priv->dai_priv[pcm_id];
+> +	unsigned int rate = params_rate(params);
+> +	unsigned int rate_reg = mt8186_rate_transform(afe->dev, rate, dai->id);
+> +	snd_pcm_format_t format = params_format(params);
+> +	unsigned int data_width =
+> +		snd_pcm_format_width(format);
+> +	unsigned int wlen_width =
+> +		snd_pcm_format_physical_width(format);
+> +	unsigned int pcm_con = 0;
+> +
+> +	dev_info(afe->dev, "%s(), id %d, stream %d, widget active p %d, c %d\n",
+> +		 __func__,
+> +		 dai->id,
+> +		 substream->stream,
+> +		 dai->playback_widget->active,
+> +		 dai->capture_widget->active);
+> +	dev_info(afe->dev, "%s(), rate %d, rate_reg %d, data_width %d, wlen_width %d\n",
+> +		 __func__,
+> +		 rate,
+> +		 rate_reg,
+> +		 data_width,
+> +		 wlen_width);
+
+dev_dbg() - also, you don't need one line per variable.
+
+> +
+> +	if (dai->playback_widget->active || dai->capture_widget->active)
+> +		return 0;
+> +
+> +	switch (dai->id) {
+> +	case MT8186_DAI_PCM:
+> +		pcm_con |= AUD_TX_LCH_RPT_NO_REPEAT << PCM_TX_LCH_RPT_SFT;
+> +		pcm_con |= AUD_VBT_16K_MODE_DISABLE << PCM_VBT_16K_MODE_SFT;
+> +		pcm_con |= AUD_EXT_MODEM_SELECT_EXTERNAL << PCM_EXT_MODEM_SFT;
+> +		pcm_con |= AUD_PCM_ONE_BCK_CYCLE_SYNC << PCM_SYNC_TYPE_SFT;
+> +		pcm_con |= AUD_BT_MODE_DUAL_MIC_ON_TX << PCM_BT_MODE_SFT;
+> +		pcm_con |= AUD_PCM_AFIFO_AFIFO << PCM_BYP_ASRC_SFT;
+> +		pcm_con |= AUD_PCM_CLOCK_MASTER_MODE << PCM_SLAVE_SFT;
+> +		pcm_con |= 0 << PCM_SYNC_LENGTH_SFT;
+> +
+> +		/* sampling rate */
+> +		pcm_con |= rate_reg << PCM_MODE_SFT;
+> +
+> +		/* format */
+> +		pcm_con |= pcm_priv->fmt << PCM_FMT_SFT;
+> +
+> +		/* 24bit data width */
+> +		if (data_width > 16)
+> +			pcm_con |= AUD_PCM_24BIT_PCM_24_BITS << PCM_24BIT_SFT;
+> +		else
+> +			pcm_con |= AUD_PCM_24BIT_PCM_16_BITS << PCM_24BIT_SFT;
+> +
+> +		/* wlen width*/
+> +		if (wlen_width > 16)
+> +			pcm_con |= AUD_PCM_WLEN_PCM_64_BCK_CYCLES << PCM_WLEN_SFT;
+> +		else
+> +			pcm_con |= AUD_PCM_WLEN_PCM_32_BCK_CYCLES << PCM_WLEN_SFT;
+> +
+> +		/* clock invert */
+> +		pcm_con |= pcm_priv->lck_invert << PCM_SYNC_OUT_INV_SFT;
+> +		pcm_con |= pcm_priv->bck_invert << PCM_BCLK_OUT_INV_SFT;
+> +
+> +		regmap_update_bits(afe->regmap, PCM_INTF_CON1,
+> +				   0xfffffffe, pcm_con);
+
+Fits in one line.
+
+> +		break;
+> +	default:
+> +		dev_info(afe->dev, "%s(), id %d not support\n",
+> +			 __func__, dai->id);
+
+dev_err()
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_dai_pcm_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+> +{
+> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	struct mtk_afe_pcm_priv *pcm_priv = afe_priv->dai_priv[dai->id];
+> +
+> +	if (!pcm_priv) {
+> +		dev_info(afe->dev, "%s(), tdm_priv == NULL", __func__);
+
+dev_err()
+
+> +		return -EINVAL;
+> +	}
+> +

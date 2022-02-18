@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2144BB5D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AD54BB5DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 10:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbiBRJno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 04:43:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50838 "EHLO
+        id S233727AbiBRJoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 04:44:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiBRJnn (ORCPT
+        with ESMTP id S232251AbiBRJoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:43:43 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4006E23BCF;
-        Fri, 18 Feb 2022 01:43:27 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id k1so13526659wrd.8;
-        Fri, 18 Feb 2022 01:43:27 -0800 (PST)
+        Fri, 18 Feb 2022 04:44:07 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471C4237F5;
+        Fri, 18 Feb 2022 01:43:51 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id qx21so13588790ejb.13;
+        Fri, 18 Feb 2022 01:43:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=mS4LgDgn7RWAOaBoEfxml6SAyAPFqdzmOTJ3SaSVOeg=;
-        b=PhqWKMWWgeeQJMoOwP2sGYFnaiME8Py4XuKv/FNLg+oxrBvgIDzFl40h94ciw66Zaz
-         pf285sm3W9ykpH0bXPqgasO0fz01ELbf9U3MObUpmvhS8H1Sp8JNVrIGkJwfFrVCJb17
-         lysDexqtrpQuwQop8Irtmxa+frUY3lWXvzdZAuqUEnQRL3hMfYWRFg/zWE05Gjs3x81C
-         so+6NCG9GFbQuNclXgd5MO0n/mWkyusTQ0vwKm+N7i4iUM8UU+ao4zwbxBDm7xSHP0zX
-         1pX1gs8WXB9y0DZTIbhfmMxJ7eLx7h71Df/uTvwos3woFRVaYzbjvSd9Trin+Hm4gzl4
-         uKEg==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8gzRpoadSXSxB0BIzDqVsAXWUfQOc0XeG3vY2OHWrw4=;
+        b=XKfx6RWsxF0BE8FESNVpCImccET2T6xMYcSKtsrB0C7zVJBx63CTl5dDyu6HffnIMC
+         gG6909iMibiElPgOTMVG2Fy4NGAhwdOWHxVzrY4JHhNi/ezqp28SzsSQwOQf/iqxkaDK
+         xUWAtzZdl75P4LhJy9WtWq2Den344zuoVkJHwQEnZxRTP1iAS1A/eh5hhQmi4IjqdabV
+         4/bthYoCatA5SfUM/entbQh8OIirTCDXJQdE5yK6ShuioF0HDmKej7MIVeLGVI8saJrp
+         0qFrsIwwbubqVQaOoAp+olFiICrwvJHYOI1bX8+EfgxnzaCu9W7nZNvowEusykvXCvHU
+         OXxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=mS4LgDgn7RWAOaBoEfxml6SAyAPFqdzmOTJ3SaSVOeg=;
-        b=DBQ/L6EDz73Vck1VSJ3+JuFZFSgFi+q8RSV7gq9VwrnfNkw8hnDBLYVf+bK/Fyw0G0
-         SAnKaZ+q5N2KjJw9+txrlehz/vwhvccZjkK0ajKEa3/N0ch/c+B+xMMxoDptfHKBNko5
-         B0h6spB/q7TnkFNHJ+IMEcBvJgBFEf92lZ9/XA9zVTuNnxPsFgXeOdTZYH3TYvQ9Z+5p
-         m9l3UupcMfYJdPce+k39FQZ2pg/siNj5ZFLmHzhaP1z0RotiFUlYsFHclij32rUWKonk
-         tynB+9UEZF8j9+nBV44YNidiScluaDTSPUfxayBwZtsSSqhzh2WgV0FPrXE+wjNu676o
-         pQjA==
-X-Gm-Message-State: AOAM5304JCca+ByB+0tZxzqVuBn5u4+FPwOZ+PwEbM/DVPpIeTjSU9L0
-        5iVf3HTAAKJfT+QHGMFEnjcV36G8jLs=
-X-Google-Smtp-Source: ABdhPJw0vAAQkT0x994IAxnaYkD6Qnca5fJ5t1ZmQuM0sNSlBj6amqw5jRZoC1o5/oKHQSt0hgqjwQ==
-X-Received: by 2002:a5d:59a6:0:b0:1e8:580f:9f5b with SMTP id p6-20020a5d59a6000000b001e8580f9f5bmr5345961wrr.64.1645177405752;
-        Fri, 18 Feb 2022 01:43:25 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id c9sm20846026wrn.51.2022.02.18.01.43.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 01:43:25 -0800 (PST)
-Date:   Fri, 18 Feb 2022 10:43:22 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Harsha <harsha.harsha@xilinx.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, michals@xilinx.com,
-        saratcha@xilinx.com, harshj@xilinx.com, git@xilinx.com
-Subject: Re: [PATCH V2 2/4] firmware: xilinx: Add ZynqMP SHA API for SHA3
- functionality
-Message-ID: <Yg9qOrjJuttVSetN@Red>
-References: <1645125264-11033-1-git-send-email-harsha.harsha@xilinx.com>
- <1645125264-11033-3-git-send-email-harsha.harsha@xilinx.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8gzRpoadSXSxB0BIzDqVsAXWUfQOc0XeG3vY2OHWrw4=;
+        b=6NfmG//2PbBmOwlJNgfATOR4NC1/Ja+LheIb6sLnShHxxRPjc9uTF8RDmJORJoSdMb
+         VB/QMebJvYhaET1kjx/P/iJRoZDQaYO5U0ltf3OWxiEYyKFHRmI5ABEKS/Vdvw4lPim4
+         98QXD3JWfOlecWVteYlA/pHI4ruP4cwRBlQ7q0rRUZBHVdGoz50UpHGhHrMVrVh2kMq2
+         AxiTSZv1l9G26PpAmj0JU4woKU+4DMBo3NxV0wTD8F6r41FEsdWSGI9sb6+ldyXTTc2x
+         rBJgTo3YOZot1UZ/4wDLD7MwMti3MJXtdiqb3Qs8izUiclYuJEendtBjslZdZ2f4jAWZ
+         CV9w==
+X-Gm-Message-State: AOAM530GdvDH6ioj7wuM3MRjrED225CHgbNZz7O/lgcLmSkbxt3QP9XZ
+        JdIR+7hMT+QuDYcflOu9bSNOHiLcJGY=
+X-Google-Smtp-Source: ABdhPJy+9t1giFT+NiQvcNipEOFTkMK7WctZSrFXg32Fjh4JpcNBg7jYgNyMstxgvwVGTDCf8KJZ8Q==
+X-Received: by 2002:a17:906:c211:b0:6ce:e221:4c21 with SMTP id d17-20020a170906c21100b006cee2214c21mr5610629ejz.691.1645177429712;
+        Fri, 18 Feb 2022 01:43:49 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id gq1sm2072372ejb.58.2022.02.18.01.43.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 01:43:49 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <bfe385f9-b075-12e7-43c3-7957bf1b54bc@redhat.com>
+Date:   Fri, 18 Feb 2022 10:43:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1645125264-11033-3-git-send-email-harsha.harsha@xilinx.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] KVM: SEV: Allow SEV intra-host migration of VM with
+ mirrors
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Orr <marcorr@google.com>, linux-kernel@vger.kernel.org
+References: <20220211193634.3183388-1-pgonda@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220211193634.3183388-1-pgonda@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, Feb 18, 2022 at 12:44:22AM +0530, Harsha a écrit :
-> This patch adds zynqmp_pm_sha_hash API in the ZynqMP firmware to compute
-> SHA3 hash of given data.
-> 
-> Signed-off-by: Harsha <harsha.harsha@xilinx.com>
-> Acked-by: Michal Simek <michal.simek@xilinx.com>
-> ---
+On 2/11/22 20:36, Peter Gonda wrote:
+> -	WARN_ON(sev->num_mirrored_vms);
+> +	WARN_ON(!list_empty(&sev->mirror_vms));
+>   
+>   	if (!sev_guest(kvm))
+>   		return;
+> @@ -2049,11 +2071,9 @@ void sev_vm_destroy(struct kvm *kvm)
 
-Hello
+Note, the WARN must now be moved after "if (!sev_guest(kvm))" (before, 
+num_mirrored_vms was initialized to 0).
 
-Your signed-off should contain your real name.
-Furthermore why did you drop copyright from previous poster ?
-See https://patchwork.kernel.org/project/linux-crypto/cover/1556793282-17346-1-git-send-email-kalyani.akula@xilinx.com/ for reference.
-
-Furthermore, the previous poster didnt answered my questions about parallel processing and tests.
-
-Regards
+Paolo

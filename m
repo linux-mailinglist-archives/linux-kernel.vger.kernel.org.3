@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05A44BC135
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B98B54BC137
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 21:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239503AbiBRUbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 15:31:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56886 "EHLO
+        id S239481AbiBRUcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 15:32:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237825AbiBRUbc (ORCPT
+        with ESMTP id S235980AbiBRUcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 15:31:32 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8EC27DF05
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:31:15 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id c18so6414459ioc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:31:15 -0800 (PST)
+        Fri, 18 Feb 2022 15:32:43 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460E832EC4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:32:26 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id c23so4225869ioi.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:32:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MD0+yom/goJw86HmBFQYbieNADbWQVLI9oz2PsE5hQw=;
-        b=iSJ9BtKpkks5QWg/HyNH/d0nwba3DUPdbpYseZadQJYR+WbLw9W5GdAVq3LlwQ8YC1
-         p3i/MF1om6JjWl5MKfpj5UlYKu8d2Kwh8fApeMSIx6zBK6tqCzm8vWzoH8RygxQcai4e
-         3tQcsqBYEEeXiEwQpiKfCOd79bZLCWZ49uGpE=
+        bh=OC/1gLj8YvBkQUZUrsbQXVRK4g0Fu/RGJXaLX/hTlIE=;
+        b=VUYiRxl7QQYbQTzrhoI5VxmE1dxTzS+T3rXsSAxVrz0cjQGpiXzj0nj9SJlA/Tiipu
+         jT7JCWmkgKGytpB+3pbmcXMnSKAmmgoorkrtcAdJ7WvEpcRIR47ZaxhN0ItkuEkNcnKf
+         PWizezoRmX11NmsQ9ej6OoEbXNe3RiUi+Ff3c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=MD0+yom/goJw86HmBFQYbieNADbWQVLI9oz2PsE5hQw=;
-        b=kzKJF6WkwebWFGcrBprpP5S5/26daaqnNtxIqvEDbkbuqv6NYVJWMwoq4FP4LDWi7o
-         lOtZfiYBEu9gu2LdlrFy9BZDjiP0RWsnfB7ji0HpJTSE19BEIzlrxMHOtyKKOle8rhbf
-         zR7NOfdfZUV3kcCHY9QkgdLACT5naPQvE18sMKmoGaypTafUeusADMWHtbinAjlHI9bo
-         oOieBE2t5tcKu0A8EvA4uKoRgka9Cwxr6VQARzN2L30Htko8nCw2PGc0zfQePJ8dhjtT
-         hw9rDgSWZgg0gDkR9RfFeLip7lWQMj3vO0gFGNQmXzYJdUirtq06qICQZPAgzcqh+Ew/
-         pwsQ==
-X-Gm-Message-State: AOAM530IZ/bqKL0b5kU62RBaNgRwXVI3ul5FxHCxWl2jk4FYADixsbzQ
-        4ww1Cpl9PgFdFHtg+XbZFfA82w==
-X-Google-Smtp-Source: ABdhPJzLumz6MWKjuTVGJYhGl9ZdR+pklktFrXSS/2eGSiG2/cVCh29UhIOrpEo/dbB1fCMmWwDZpA==
-X-Received: by 2002:a02:6d6c:0:b0:30d:bfb2:84c with SMTP id e44-20020a026d6c000000b0030dbfb2084cmr6388052jaf.205.1645216274576;
-        Fri, 18 Feb 2022 12:31:14 -0800 (PST)
+        bh=OC/1gLj8YvBkQUZUrsbQXVRK4g0Fu/RGJXaLX/hTlIE=;
+        b=UEVboegM3M8fYQKG50cQOEOJb+nYRkTSC0lsqxXERWzj4Mv6Olenp9zPZN8iCHvd1O
+         v7l8VsY4z5YORid5faNK1A6ZVmOrxTbMQgYP0YGjLmQeynpl/uFWhawPmeWb2ZIpWAqx
+         LRKjv0ciyeA77RFgWTp1pNelSfzx7V+oWO3S72QuInwM01xN1IgzrcO4aE3W0DEt5SzD
+         OWsRBuYSr8BlhGuv7J+7qebXyGQUa/nYR1tlKWlW0CzwuKChdlCQ+fogMHlSACeUi9ve
+         1PqVNPioBxBIfRxYIEIgOtu13apPNfXxfrLT9sGJBsS/umTQBNmzzkrp2OVJ9O7NbuS4
+         g2LA==
+X-Gm-Message-State: AOAM533KODSQnwyflpj1GS/L/KfY7FQC37L4qipcTsHa8AFXFSip2dmT
+        U/xaXmYHeBI8WnGmDbryeEMNtQ==
+X-Google-Smtp-Source: ABdhPJxcsC5WZ3meD4lZFBEjpZyxGnBOKuRaKCQS2yliGT78npKQinvgqDJK+vrAtBDCyd2ffoFHyQ==
+X-Received: by 2002:a05:6638:3043:b0:314:7ce2:4a6e with SMTP id u3-20020a056638304300b003147ce24a6emr6409294jak.258.1645216345652;
+        Fri, 18 Feb 2022 12:32:25 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id r7sm2055356ilc.24.2022.02.18.12.31.13
+        by smtp.gmail.com with ESMTPSA id k11sm4596618iob.23.2022.02.18.12.32.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 12:31:14 -0800 (PST)
-Subject: Re: [PATCH v3 3/5] selftests/resctrl: Update README about using
- kselftest framework to build/run resctrl_tests
+        Fri, 18 Feb 2022 12:32:25 -0800 (PST)
+Subject: Re: [PATCH v3 4/5] selftests/resctrl: Change the default limited time
+ to 120 seconds
 To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -55,14 +55,14 @@ To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-4-tan.shaopeng@jp.fujitsu.com>
+ <20220216022641.2998318-5-tan.shaopeng@jp.fujitsu.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e1e65afc-4842-29f9-679a-aa10b5cf72b3@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 13:31:13 -0700
+Message-ID: <fb4db52d-49dc-3df8-8ae7-d2bee80e5a4b@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 13:32:24 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220216022641.2998318-4-tan.shaopeng@jp.fujitsu.com>
+In-Reply-To: <20220216022641.2998318-5-tan.shaopeng@jp.fujitsu.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,77 +77,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 2/15/22 7:26 PM, Shaopeng Tan wrote:
-> In this patch series, I make restrl_tests build/run using kselftest
-> framework, but some users do not known how to build/run resctrl_tests
-> using kseltest framework.
-> 
-> Add manual of how to make resctrl_tests build/run
-> using kselftest framework into README.
+> When testing on a Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz the resctrl
+> selftests fail due to timeout after exceeding the default time limit of
+> 45 seconds. On this system the test takes about 68 seconds.
+> Since the failing test by default accesses a fixed size of memory, the
+> execution time should not vary significantly between different environment.
+> A new default of 120 seconds should be sufficient yet easy to customize
+> with the introduction of the "settings" file for reference.
 > 
 > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
->   tools/testing/selftests/resctrl/README | 34 ++++++++++++++++++++++++++
->   1 file changed, 34 insertions(+)
+>  From the perspective of the kselftest framework,
+> a rule of "Don't take too long" is a concern.
+> To get some better informed opinions from kselftest audience,
+> I highlighted this change in the cover letter.
 > 
-> diff --git a/tools/testing/selftests/resctrl/README b/tools/testing/selftests/resctrl/README
-> index 3d2bbd4fa3aa..a0dd459049b7 100644
-> --- a/tools/testing/selftests/resctrl/README
-> +++ b/tools/testing/selftests/resctrl/README
-> @@ -12,9 +12,43 @@ Allocation test on Intel RDT hardware. More tests will be added in the future.
->   And the test suit can be extended to cover AMD QoS and ARM MPAM hardware
->   as well.
->   
-> +resctrl_tests can be run with or without kselftest framework.
-> +
-> +USE KSELFTEST FRAMEWORK
-> +-----------------------
-> +
-> +BUILD
-> +-----
-> +
-> +Execute the following command in top level directory of the kernel source.
-> +
-> +Build resctrl:
-> + $ make -C tools/testing/selftests TARGETS=resctrl
-> +
-> +Build all self tests:
-> + $ make -C tools/testing/selftests
-> +
-> +RUN
-> +---
-> +
-> +Run resctrl:
-> + $ make -C tools/testing/selftests TARGETS=resctrl run_tests
-> +
-
-==================================
-> +Run all self tests:
-> + $ make -C tools/testing/selftests run_tests
-> +
-
-Remove the above
-This part is relevant to this test. This is already documented in kselftest
-doc.
-==================================
-
-> +Using kselftest framework, the ./resctrl_tests will be run without any parameters.
-> +
-> +More details about kselftest framework as follow.
-> +Documentation/dev-tools/kselftest.rst
-> +
-> +NOT USE KSELFTEST FRAMEWORK
-> +---------------------------
-> +
->   BUILD
->   -----
->   
-> +Execute the following command in this directory(tools/testing/selftests/resctrl/).
->   Run "make" to build executable file "resctrl_tests".
->   
->   RUN
+> I adopted most of Reinette's phrase from the discussion in patch v2
+> to explain why 120s is appropriate for this test.
+> 
+>   tools/testing/selftests/resctrl/settings | 1 +
+>   1 file changed, 1 insertion(+)
+>   create mode 100644 tools/testing/selftests/resctrl/settings
+> 
+> diff --git a/tools/testing/selftests/resctrl/settings b/tools/testing/selftests/resctrl/settings
+> new file mode 100644
+> index 000000000000..6091b45d226b
+> --- /dev/null
+> +++ b/tools/testing/selftests/resctrl/settings
+> @@ -0,0 +1 @@
+> +timeout=120
 > 
 
-Add information how long it takes to run this test in here.
+This is fine.
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah

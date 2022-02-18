@@ -2,78 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530974BB3C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C564BB3C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 09:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbiBRIBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 03:01:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33628 "EHLO
+        id S232301AbiBRICR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 03:02:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiBRIBb (ORCPT
+        with ESMTP id S232218AbiBRICM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 03:01:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DD31738F9;
-        Fri, 18 Feb 2022 00:01:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00B7A612AF;
-        Fri, 18 Feb 2022 08:01:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C17FC340E9;
-        Fri, 18 Feb 2022 08:01:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645171274;
-        bh=wlMKj3Vczzg2CXtGVuAuaNfHplfiJXvDzqzkB6AONQY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=meXSLvfjyeKjeSTO3/guG9OP9lyEqngjge5GQ4Jkxme5Qsg30IPN13Pvt8KgZTiG6
-         8jrbmMG2+B60qLx5jS/DdONcm3Bj6042Q8asqr4Xv77To8xrSFuhAeihzNjv9roia8
-         vxbCvnM8bS6LDYfhP1+S+1eLUAnyBuZKkx60qOD4=
-Date:   Fri, 18 Feb 2022 09:01:11 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Yuanchu Xie <yuanchu@google.com>, Shuah Khan <shuah@kernel.org>,
-        Markus Boehme <markubo@amazon.de>, rientjes@google.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/damon: make selftests executable
-Message-ID: <Yg9SR88j0JV/0gKJ@kroah.com>
-References: <20220218001017.3500673-3-yuanchu@google.com>
- <20220218075254.11467-1-sj@kernel.org>
+        Fri, 18 Feb 2022 03:02:12 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B7A1AA89C;
+        Fri, 18 Feb 2022 00:01:55 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B6C2658017F;
+        Fri, 18 Feb 2022 03:01:52 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Fri, 18 Feb 2022 03:01:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=wkcSQ8FpO5eoDsVGH3ed8TbQbskSmxyIS38SCF
+        5Bh64=; b=oNbfQApvvRqdF3yo/fQmi0UTrg+2Mc1VMer4KIrkrZ/YsXife4bPjp
+        q2xmSImJ7QYDGbvevCxm648cUvaQQmq30SNcKRG8u+htmrjmstuq+8KtKUTQc0y+
+        8x0BmjdtFnIpM8V8QSrFsLfSTl++5qPrWKGUUzwfdx8s+EqSAPApK7bmi1OUiUJ8
+        CattKDdMwy2q6R5t+dCROuNqeNOgLHwYcndg3t5wqfXViVZ4+aqa8fG1znSH+5iZ
+        QxZOH/Jd9sVufndKGJy5LWCNyC5g9E5KueU7byFeb03J1KzigOn9Tj70yrN+7uq+
+        eNTqiV9wjZnstIRa+2uOm0toJueWS0SQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=wkcSQ8FpO5eoDsVGH
+        3ed8TbQbskSmxyIS38SCF5Bh64=; b=fKdcb7b+HXcQe+pT6jnmvUJBkgnP+ok4S
+        VpJtiNfetovGUQKhW5mN+NNJaCbDGisiCZ/APcNuEtSTQKsNF2lAcNvwYRZ31K2x
+        byFSeXAdjZ2zAJdvsQDeW7Q5bq53VjEJ8OviJ+fOSckg6w35lzq3ui6df1/01FQ8
+        oADfOAi915Q7nekPqtSdXsxf73m08TshtSpGNWTP6NM13IE0xVo2qRiKcyuOlq/y
+        sp079emMx4O9ESQeUF7CkzAHQsTcj5MJaBKMj/u4ik4Kquv2S1b2AWuXMCL9avUy
+        HfdLBX68U68DwziNN7U811oYBM1RMEcezZrKJjzEuQWKnhebjzwUQ==
+X-ME-Sender: <xms:cFIPYsRXY-78XAwn7CJWZfTFs1Y-RsCuaMFVq9hLvYPcaYdReXbSTw>
+    <xme:cFIPYpySzOnf8iA5_SpkfD_EG15x4m-CpUOqg2uoECwJT6ab7ZYTMyMhXYI5sGHG9
+    L5HN0bGsLwZdw>
+X-ME-Received: <xmr:cFIPYp3sAr-alkSOT1g3Z67nYTAIrBjQDGn_2ZMNTAY-yyAmlKXBKia9zAfKBfD73ltxQ7u8SNnb6vc3wuLHIhyhYM2yjdF7>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeelgdduudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
+    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
+    necuggftrfgrthhtvghrnhepveeuheejgfffgfeivddukedvkedtleelleeghfeljeeiue
+    eggeevueduudekvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
+    lhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:cFIPYgA5c4BqC114YgMAgFETT10AEmQ3qsefdV-fGtLK-vwNsxCG4w>
+    <xmx:cFIPYlgJif6DJ8a71CdG8uXZcpbJn10x1YbS7aToVt5tm0jiMesWzQ>
+    <xmx:cFIPYsqmxOxU_zSlqZHOr5QW16-N4KQzz6J8tI4uehOw3A1C5Bawog>
+    <xmx:cFIPYubh4fthAwVjP7Yg5sHSFo6m0f3EmEXPZl5cJNO-KGbb6jbzZQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Feb 2022 03:01:51 -0500 (EST)
+Date:   Fri, 18 Feb 2022 09:01:48 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org, quic_rjendra@quicinc.com,
+        quic_saipraka@quicinc.com
+Subject: Re: [PATCH V1 1/2] Revert "arm64: dts: qcom: sc7280: Set the default
+ dr_mode for usb2"
+Message-ID: <Yg9SbHo/T8KB0NiR@kroah.com>
+References: <cover.1645168567.git.quic_schowdhu@quicinc.com>
+ <9a2f9da9fdc1893863f70b4294c7011bf739dd92.1645168567.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218075254.11467-1-sj@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <9a2f9da9fdc1893863f70b4294c7011bf739dd92.1645168567.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 07:52:54AM +0000, SeongJae Park wrote:
-> Hello Yuanchu,
+On Fri, Feb 18, 2022 at 01:21:35PM +0530, Souradeep Chowdhury wrote:
+> Revert the change to set the dr_mode for usb2 in case
+> of Embedded USB Debugger(EUD).
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dts | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> Thank you for this patch!
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> index f40eaa5..9b991ba 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+> @@ -61,10 +61,6 @@
+>  	modem-init;
+>  };
 > 
-> On Fri, 18 Feb 2022 00:10:17 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
+> -&usb_2_dwc3 {
+> -	dr_mode = "otg";
+> -};
+> -
+>  &pmk8350_rtc {
+>  	status = "okay";
+>  };
+> --
+> 2.7.4
 > 
-> > The damon selftests do not have the executable bit on. We fix that by
-> > setting the x bits on the .sh files similar to other existing shell
-> > selftests.
-> > 
-> > Fixes: 9ab3b0c8ef62 ("selftests/damon: split test cases")
-> > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
-> 
-> Reviewed-by: SeongJae Park <sj@kernel.org>
 
-This type of change does not work outside of git, so why not just make
-the tool that calls these scripts not care about the executable bit like
-we do for other scripts?
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch does not have a Signed-off-by: line.  Please read the
+  kernel file, Documentation/SubmittingPatches and resend it after
+  adding that line.  Note, the line needs to be in the body of the
+  email, before the patch, not at the bottom of the patch or in the
+  email signature.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot

@@ -2,134 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDE64BBEA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D7C4BBEB0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 18:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbiBRRtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 12:49:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56344 "EHLO
+        id S236572AbiBRRuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 12:50:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235838AbiBRRtp (ORCPT
+        with ESMTP id S235838AbiBRRuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:49:45 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EE927CD4;
-        Fri, 18 Feb 2022 09:49:26 -0800 (PST)
-Date:   Fri, 18 Feb 2022 18:49:23 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645206564;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zmVi8TBeXUlm/v/kPHbfKCWVJ4hV0bUUD/V9V8Aajwc=;
-        b=Pol6RFBLpkYOCYLyjLzz/sxKGhLrPXB2+06UELwZFXetgUTPPlh8mIbEP/SdhpnFWuWiA2
-        Xm0Y0WyA0x/kX4jM1XluaNUu9t9Cm5atkxlOIp73quo7qegfoid9TlznnU4EMdjKL9o5Go
-        vv7eEyv0XA+X/3QW7EvPVd8p6yABQGH/x1FpX/kjqohFDPWg7dyBQD2iooMqLu9Y5kvPiG
-        kKTbulSpf+FX6u3j62LbQpuPHD3t3E+9uMsgZNlIEPkzN4XqFbPJhJO9iklmPhrKejcefe
-        bErtdGN52gzkfJeI9pg5P+U+eXmOPsMuKngc+4pPSnBDvqACYitkk8aS97XjsA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645206564;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zmVi8TBeXUlm/v/kPHbfKCWVJ4hV0bUUD/V9V8Aajwc=;
-        b=6xaSHPiTAR090p8kNmJv8YY6vgpJcvJKTiqI1NpA9RolkaSOl56GGOSeyhkY696fyePXLJ
-        qwd6dik4PjBfEFAg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Jann Horn <jannh@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] pstore: Don't use semaphores in always-atomic-context
- code
-Message-ID: <Yg/cIzXsya8dNLYp@linutronix.de>
-References: <20220218172901.1425605-1-jannh@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220218172901.1425605-1-jannh@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 18 Feb 2022 12:50:35 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA1F3EF08
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:50:18 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id l9so7779745plg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 09:50:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:cc:from:to:message-id;
+        bh=0Qt9aLRVk4goBTUwquuWJkruOHldgdUssfKiVNyRjBQ=;
+        b=ELVfiqPh9ppAkt0PMnsaDcgHf9dr6TJTZx9jcxSn8dD8lROslE9gx+uCG3xPON3JIL
+         nzHVZTyC12rV3QQhc/z6iIQz5FJxsgNfVA5U3/S3dfxwjl/Oe8MQzGLia/1RA7VU/V0Y
+         VqcgPz2pHKc90EFevzjH0w6BQw9cbPycC84VHmDu7k6i3FAeqV1NF5P0Oo5588EvwZFL
+         1wmwH+4WDywZdyLPB+X3ZP+Wm+KkOxTe9E6Nyj++EX+1KXh9D8gwWgwR3ECJN3c9FyFT
+         3rBWEV8sGmdptAiulK619gvuB3lHRgHnMINsLG5SyjKYl8BIyyFlalWBRnWVE3q/8itv
+         J72w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:cc:from:to:message-id;
+        bh=0Qt9aLRVk4goBTUwquuWJkruOHldgdUssfKiVNyRjBQ=;
+        b=oKO93+F9Q8OdzO/2Q4XrujozVVX+JteUyVpiVRc//6vP/DIPPo64rmmanqCyW9Wonb
+         SqYkj4ZDXPfWPKOqL4/H55HQ0vMzREgyamTfBEiOKRScKbyj5NvNZAANt1buJ4tonGru
+         6zZEvPoPzGYYr2iO3H2R+hBZn5XV/a+w42tWJ8WZuHL53raWDJC80pTiccdcqfjfNdhG
+         OPAsmiWDaWfHtOxQ/anKL/FhITLTKcZrQv2+fzr8hwJfLMl1P2IQmCcVp/PtnR0VUwC5
+         tdvod/48kvSXPdb3bteHou+N+QHAeYzOoVIDS0oQpvr8wHiD5pDGneLcEj0ysG5f2mwp
+         3iMg==
+X-Gm-Message-State: AOAM532tI05XKrMAYNOFo9Z2Lc4qf8G5k5pZY1i1Cry7MDOziPGRHPbd
+        3X0xOA7s75EL1pMxHy0OaPiuzQ/3JLAwBw==
+X-Google-Smtp-Source: ABdhPJwO6mvs5H5GQcZgPoP18sncryFhxTQwZ/ukf2jOdcU83CBOdxodUkk58WWfOmTighdkR3YjVw==
+X-Received: by 2002:a17:902:b201:b0:14d:66b5:5d69 with SMTP id t1-20020a170902b20100b0014d66b55d69mr8420800plr.95.1645206617851;
+        Fri, 18 Feb 2022 09:50:17 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id u1sm4081853pfg.151.2022.02.18.09.50.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 09:50:17 -0800 (PST)
+Date:   Fri, 18 Feb 2022 09:50:17 -0800 (PST)
+X-Google-Original-Date: Fri, 18 Feb 2022 09:49:33 PST (-0800)
+Subject: [GIT PULL] RISC-V Fixes for 5.17-rc5
+CC:        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-f149d1ba-1f6d-43b3-8df0-95d27c2b89c0@palmer-mbp2014>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-18 18:29:01 [+0100], Jann Horn wrote:
-=E2=80=A6
-> Lockdep probably never caught the problem because it's very rare that you
-> actually hit the contended case, and lockdep can't check a
+The following changes since commit 6df2a016c0c8a3d0933ef33dd192ea6606b115e3:
 
-I appears that after =C2=B4a' a few words would follow.
+  riscv: fix build with binutils 2.38 (2022-02-10 09:17:01 -0800)
 
-> Fixes: ea84b580b955 ("pstore: Convert buf_lock to semaphore")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jann Horn <jannh@google.com>
-> ---
-> Testing on 5.15.24 (latest stable), with CONFIG_PREEMPT=3Dy, when I trigg=
-er
-> a BUG() via LKDTM ("echo BUG > /sys/kernel/debug/provoke-crash/DIRECT"),
-> I first get the expected BUG splat, followed by this RCU warning:
->=20
-> Voluntary context switch within RCU read-side critical section!
+are available in the Git repository at:
 
-Right, scheduling not allowed within a RCU read-side section. I'm not
-sure if lockdep cares but if you enable CONFIG_DEBUG_ATOMIC_SLEEP then
-the might_sleep() will complain if you are in a RCU section.
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.17-rc5
 
-> This patch makes the RCU context warning go away.
+for you to fetch changes up to 5feef64f4c67068c49f5409d43c67cabf2327f66:
 
-Makes sense.
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+  RISC-V: Fix IPI/RFENCE hmask on non-monotonic hartid ordering (2022-02-14 12:27:45 -0800)
 
-> --- a/fs/pstore/platform.c
-> +++ b/fs/pstore/platform.c
-> @@ -143,27 +143,26 @@ static void pstore_timer_kick(void)
->  	mod_timer(&pstore_timer, jiffies + msecs_to_jiffies(pstore_update_ms));
->  }
-> =20
-> -/*
-> - * Should pstore_dump() wait for a concurrent pstore_dump()? If
-> - * not, the current pstore_dump() will report a failure to dump
-> - * and return.
-> - */
-> -static bool pstore_cannot_wait(enum kmsg_dump_reason reason)
-> +bool pstore_cannot_block_path(enum kmsg_dump_reason reason)
->  {
-> -	/* In NMI path, pstore shouldn't block regardless of reason. */
-> +	/*
-> +	 * In case of NMI path, pstore shouldn't be blocked
-> +	 * regardless of reason.
-> +	 */
->  	if (in_nmi())
->  		return true;
-> =20
->  	switch (reason) {
->  	/* In panic case, other cpus are stopped by smp_send_stop(). */
->  	case KMSG_DUMP_PANIC:
-> -	/* Emergency restart shouldn't be blocked. */
-> +	/* Emergency restart shouldn't be blocked by spin lock. */
+----------------------------------------------------------------
+RISC-V Fixes for 5.17-rc5
 
- by spinning on pstore_info::buf_lock
+* A set of three fixes, all aimed at fixing some fallout from the recent
+  sparse hart ID support.
 
->  	case KMSG_DUMP_EMERG:
->  		return true;
->  	default:
->  		return false;
->  	}
->  }
-> +EXPORT_SYMBOL_GPL(pstore_cannot_block_path);
-> =20
->  #if IS_ENABLED(CONFIG_PSTORE_DEFLATE_COMPRESS)
->  static int zbufsize_deflate(size_t size)
+----------------------------------------------------------------
+Geert Uytterhoeven (3):
+      RISC-V: Fix hartid mask handling for hartid 31 and up
+      RISC-V: Fix handling of empty cpu masks
+      RISC-V: Fix IPI/RFENCE hmask on non-monotonic hartid ordering
 
-Sebastian
+ arch/riscv/kernel/sbi.c | 72 ++++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 47 insertions(+), 25 deletions(-)

@@ -2,38 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65FF4BB939
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15024BB95C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 13:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbiBRMd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 07:33:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40342 "EHLO
+        id S235072AbiBRMmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 07:42:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235282AbiBRMdz (ORCPT
+        with ESMTP id S233235AbiBRMmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:33:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2285F256
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 04:33:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 441B161F88
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 12:33:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B22C340E9;
-        Fri, 18 Feb 2022 12:33:36 +0000 (UTC)
-Date:   Fri, 18 Feb 2022 12:33:33 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] arm64 fixes for 5.17-rc5
-Message-ID: <Yg+SHbDujjurwIqb@arm.com>
+        Fri, 18 Feb 2022 07:42:16 -0500
+X-Greylist: delayed 388 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Feb 2022 04:41:59 PST
+Received: from mail-m2838.qiye.163.com (mail-m2838.qiye.163.com [103.74.28.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262B41CC7CF;
+        Fri, 18 Feb 2022 04:41:58 -0800 (PST)
+Received: from localhost.localdomain (unknown [117.48.120.186])
+        by mail-m2838.qiye.163.com (Hmail) with ESMTPA id DF7583C066F;
+        Fri, 18 Feb 2022 20:35:27 +0800 (CST)
+From:   Tao Liu <thomas.liu@ucloud.cn>
+To:     willemdebruijn.kernel@gmail.com, Tao Liu <thomas.liu@ucloud.cn>
+Cc:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, sridhar.samudrala@intel.com,
+        yoshfuji@linux-ipv6.org
+Subject: Re: [PATCH net v2] gso: do not skip outer ip header in case of ipip and net_failover
+Date:   Fri, 18 Feb 2022 20:35:06 +0800
+Message-Id: <CAF=yD-JH3uKC20eRcNGkrYHnz0Csgg_NvnGNw4k-ECz9vLpKbg@mail.gmail.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <CAF=yD-JH3uKC20eRcNGkrYHnz0Csgg_NvnGNw4k-ECz9vLpKbg@mail.gmail.com>
+References: <CAF=yD-JH3uKC20eRcNGkrYHnz0Csgg_NvnGNw4k-ECz9vLpKbg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUlCN1dZLVlBSVdZDwkaFQgSH1lBWUJCHx5WGk5DGkoaTh9ISE
+        lOVRkRExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OhQ6HBw4PTIrNw1WAzgiOgwf
+        PxkaCxJVSlVKTU9OSkNMTElDSUhLVTMWGhIXVQ8TFBYaCFUXEg47DhgXFA4fVRgVRVlXWRILWUFZ
+        SkpMVU9DVUpJS1VKQ01ZV1kIAVlBSElMSjcG
+X-HM-Tid: 0a7f0cd4829f8420kuqwdf7583c066f
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,31 +49,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 
-Please pull the arm64 fix below. Thanks.
+Sorry for late reply.
 
-The following changes since commit da5fb9e1ad3fbf632dce735f1bdad257ca528499:
+> 
+> I think the message could be rewritten to point out that the issue is
+> specific with the rare combination of SKB_GSO_DODGY and a tunnel
+> device that adds an SKB_GSO_ tunnel option.
+> 
+Will do.
 
-  ACPI/IORT: Check node revision for PMCG resources (2022-02-09 18:16:22 +0000)
+> > This patch also includes ipv6_gso_segment(), considering SIT, etc.
+> >
+> > Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
+> > Fixes: cfc80d9a1163 ("net: Introduce net_failover driver")
+> 
+> This is not a net_failover issue.
+> 
+Will remove it.
 
-are available in the Git repository at:
+> I'm not sure whether the issue existed at the time tunnel support was
+> added, or introduced later. It's reasonable to assume that it was
+> always there, but it might be worth a quick code inspection.
+> 
+> > Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
+> > ---
+> >  net/ipv4/af_inet.c     | 5 ++++-
+> >  net/ipv6/ip6_offload.c | 2 ++
+> >  2 files changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> > index 9c465ba..72fde28 100644
+> > --- a/net/ipv4/af_inet.c
+> > +++ b/net/ipv4/af_inet.c
+> > @@ -1376,8 +1376,11 @@ struct sk_buff *inet_gso_segment(struct sk_buff *skb,
+> >         }
+> >
+> >         ops = rcu_dereference(inet_offloads[proto]);
+> > -       if (likely(ops && ops->callbacks.gso_segment))
+> > +       if (likely(ops && ops->callbacks.gso_segment)) {
+> >                 segs = ops->callbacks.gso_segment(skb, features);
+> > +               if (!segs)
+> > +                       skb->network_header = skb_mac_header(skb) + nhoff - skb->head;
+> > +       }
+> >
+> >         if (IS_ERR_OR_NULL(segs))
+> >                 goto out;
+> 
+> It's unfortunate that we have to add a branch in the common path. But
+> I also don't immediately see a cleaner option.
+> 
+Yes, it is.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
-
-for you to fetch changes up to 4f6de676d94ee8ddfc2e7e7cd935fc7cb2feff3a:
-
-  arm64: Correct wrong label in macro __init_el2_gicv3 (2022-02-14 18:37:07 +0000)
-
-----------------------------------------------------------------
-Fix wrong branch label in the EL2 GICv3 initialisation code.
-
-----------------------------------------------------------------
-Joakim Tjernlund (1):
-      arm64: Correct wrong label in macro __init_el2_gicv3
-
- arch/arm64/include/asm/el2_setup.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
--- 
-Catalin
+Thanks.

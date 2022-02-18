@@ -2,130 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C084BBD7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE294BBD7A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237860AbiBRQ3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:29:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37456 "EHLO
+        id S237873AbiBRQ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:29:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234373AbiBRQ3k (ORCPT
+        with ESMTP id S237867AbiBRQ3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:29:40 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FEE527C8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:29:23 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id i10so7582193plr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:29:23 -0800 (PST)
+        Fri, 18 Feb 2022 11:29:47 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4E55BD2C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:29:30 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso12781814pjt.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:29:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+S2A0TOvwCJqKZEf2n99ER8D0GRma+qu1vDI6jWof+k=;
-        b=17FGGI/YNQ0KAFTAypdxgCTm9RsrQp5K+/cVxDpHxnSkxeVsiaSt9Ac07mjSXc13ZK
-         h5Ktl0Ae9ERA3vumep+jO9/6crSymL4N2TdTM5DBCyniUTz322SOFXsEU2aB7M3NSZQp
-         z5hdVjRJWawRVRC0hpmiGDUjVPj0CD4yz5GQBg6hUP2yFvgjq4iPANEEQRU+8mSBTiHQ
-         A74gL4IMVRFT6lyj4iCaPqObqquNtP7bwR2C5I2kljvhaKHQ9gMBTIUNlISvXQcvzFwd
-         VQmKQo8+Hfr3ClRpm9RFA9lJXxMQ8O/AZd5D3rPCYmee6i9hEsWNVIuVLJwzf83SOXO7
-         fY4A==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IM/2+LCRnBwBlETtyOQ6tMfj541R3srotOuDDw7AKd4=;
+        b=jbLeCTL7uGnFnam5Oj94kEFSX7Z/4IIJEoP4W46A9eUJzPRbpWS6PHGUiIDBJNcWa1
+         5D71MDvTTcbym6lOtyWDAd0mMz/gWPfS80dELeultve59mL23j3A+UCMUK1S6GcswgQn
+         L52lbFb5xWPYu0zwbUNzswEgYD7QzSJr7xHCQMKjUn8KvpYNa1D7igV+FwOtPc3GvWkM
+         294Kihi5R/Y1yEZCKb5gb+M0AVWtuLbvWVWUOLMFgCZMf0tuxnxGIMkoo90PFy7oEKco
+         hUGHv/VlBTCwJrnE5PWxeVaX1XSP1jNwa+1Zz323VfutRPkleH1CAZn3c9T42bu9KoMk
+         yyEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+S2A0TOvwCJqKZEf2n99ER8D0GRma+qu1vDI6jWof+k=;
-        b=I2tOLYvcvUP0SD80LfAOJjnBOnUE8ArM2ojCLyxjXQUJnGZsv4asnvUcBplskGrcG9
-         Dy9+DGbh/QJfmk4ipqHWdTL2ehulDH9zZ7Px9O3en0gtsNx3eHwgvGddwwKiClPHkMvl
-         23swo+zaauvKZDhXpZiG5YB107TTheAarF5wdV292zqSiZyJJLxCHnVpV8JjnyxngHSm
-         7c7uW0syFfm5MBumfEiqK+kk+2/A7kms6gq7n1MVnJWG4/Q2XfnRXDQyx60/KP578BBo
-         Ww5T7VGwQ2EbuhLxaZTvtiPyv2zKuhlR+362scoSCRBPYlivic5hL4FAkoFkZlcs0Cn6
-         X0Jg==
-X-Gm-Message-State: AOAM533mBs3BaX8mPgQkLRDFPJI2aB9XHxCygFoB/EbDrAdJNTbu+wUx
-        ETS96pj12X5YApgGQ/WJMa610A==
-X-Google-Smtp-Source: ABdhPJwExeAIiHnGtSDYvzLTn9a79LfvNamR7Qrx/rmjXi3TsyKaPlksaqY9nzNuXqJXPRkk8OfIyw==
-X-Received: by 2002:a17:90a:bb0d:b0:1b8:a958:543d with SMTP id u13-20020a17090abb0d00b001b8a958543dmr9142994pjr.51.1645201763446;
-        Fri, 18 Feb 2022 08:29:23 -0800 (PST)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id f16sm3920555pfa.147.2022.02.18.08.29.22
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IM/2+LCRnBwBlETtyOQ6tMfj541R3srotOuDDw7AKd4=;
+        b=yhd1+rv/9VvwozxWU5N8AwtGARk60bO8oZKq+yHwWe9aJJm4MbZxKNGk5i8cfYmcdP
+         jN5DoQopcv08h1qhcI8rtYX3QBJwxR10T3mNp+cT0K/3mBWQkNNYJzQs6ML6NnwF9GuE
+         UrdWZHJZ7bC3vJpA8brS4J45u+iyYg4Hz3cUt5PxsfHPnQXLzPYjGuP1p2ajpdVyL0Si
+         O3o7fQdarRgpbKscPGOWqBoG2Egtl7yCaHL7Jojo8U1eWNqZDcU47q2ptjwth/jcG0k3
+         MkwzEKY3XPAJRgvYG7U3M4SeIbV8gH8xurL+SOa5SnXOPwhYAMOkBsDZ2hXzOwlYkUgI
+         M0qg==
+X-Gm-Message-State: AOAM532d4Bx05Anga9u051guikggV4FnfRePsKA3xoGteIaIYBjlCM11
+        hmiit3PLKfsVy2qCRtpFnPe8xg==
+X-Google-Smtp-Source: ABdhPJwgthkvW072K2HIaeRND5ZZua6z8HKJ8Gade9siRk2cxiCwayXURG9BFbtaUjkPQ/qqyK9new==
+X-Received: by 2002:a17:902:eb8e:b0:14d:9788:1461 with SMTP id q14-20020a170902eb8e00b0014d97881461mr8397501plg.129.1645201769333;
+        Fri, 18 Feb 2022 08:29:29 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id w198sm3711928pff.96.2022.02.18.08.29.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 08:29:23 -0800 (PST)
-Date:   Fri, 18 Feb 2022 08:29:20 -0800
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net v3] net: Force inlining of checksum functions in
- net/checksum.h
-Message-ID: <20220218082920.06d6b80f@hermes.local>
-In-Reply-To: <20220218121237.GQ614@gate.crashing.org>
-References: <978951d76d8cb84bab347c7623bc163e9a038452.1645100305.git.christophe.leroy@csgroup.eu>
-        <35bcd5df0fb546008ff4043dbea68836@AcuMS.aculab.com>
-        <d38e5e1c-29b6-8cc6-7409-d0bdd5772f23@csgroup.eu>
-        <9b8ef186-c7fe-822c-35df-342c9e86cc88@csgroup.eu>
-        <3c2b682a7d804b5e8749428b50342c82@AcuMS.aculab.com>
-        <CAK7LNASWTJ-ax9u5yOwHV9vHCBAcQTazV-oXtqVFVFedOA0Eqw@mail.gmail.com>
-        <2e38265880db45afa96cfb51223f7418@AcuMS.aculab.com>
-        <CAK7LNASvBLLWMa+kb5eGJ6vpSqob_dBUxwCnpHZfL-spzRG7qA@mail.gmail.com>
-        <20220217180735.GM614@gate.crashing.org>
-        <CAK7LNAQ3tdOEYP7LjSX5+vhy=eUf0q-YiktQriH-rcr1n2Q3aA@mail.gmail.com>
-        <20220218121237.GQ614@gate.crashing.org>
+        Fri, 18 Feb 2022 08:29:28 -0800 (PST)
+Date:   Fri, 18 Feb 2022 16:29:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] KVM: x86: allow defining return-0 static calls
+Message-ID: <Yg/JZZ+i67HDKCVK@google.com>
+References: <20220217180831.288210-1-pbonzini@redhat.com>
+ <20220217180831.288210-7-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217180831.288210-7-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 06:12:37 -0600
-Segher Boessenkool <segher@kernel.crashing.org> wrote:
-
-> On Fri, Feb 18, 2022 at 10:35:48AM +0900, Masahiro Yamada wrote:
-> > On Fri, Feb 18, 2022 at 3:10 AM Segher Boessenkool
-> > <segher@kernel.crashing.org> wrote:  
-> > > On Fri, Feb 18, 2022 at 02:27:16AM +0900, Masahiro Yamada wrote:  
-> > > > On Fri, Feb 18, 2022 at 1:49 AM David Laight <David.Laight@aculab.com> wrote:  
-> > > > > That description is largely fine.
-> > > > >
-> > > > > Inappropriate 'inline' ought to be removed.
-> > > > > Then 'inline' means - 'really do inline this'.  
-> > > >
-> > > > You cannot change "static inline" to "static"
-> > > > in header files.  
-> > >
-> > > Why not?  Those two have identical semantics!  
-> > 
-> > e.g.)
-> > 
-> > 
-> > [1] Open  include/linux/device.h with your favorite editor,
-> >      then edit
-> > 
-> > static inline void *devm_kcalloc(struct device *dev,
-> > 
-> >     to
-> > 
-> > static void *devm_kcalloc(struct device *dev,
-> > 
-> > 
-> > [2] Build the kernel  
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> A few vendor callbacks are only used by VMX, but they return an integer
+> or bool value.  Introduce KVM_X86_OP_OPTIONAL_RET0 for them: if a func is
+> NULL in struct kvm_x86_ops, it will be changed to __static_call_return0
+> when updating static calls.
 > 
-> You get some "defined but not used" warnings that are shushed for
-> inlines.  Do you see something else?
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h | 15 +++++++++------
+>  arch/x86/include/asm/kvm_host.h    |  4 ++++
+>  arch/x86/kvm/svm/avic.c            |  5 -----
+>  arch/x86/kvm/svm/svm.c             | 20 --------------------
+>  arch/x86/kvm/x86.c                 |  2 +-
+>  kernel/static_call.c               |  1 +
+>  6 files changed, 15 insertions(+), 32 deletions(-)
 > 
-> The semantics are the same.  Warnings are just warnings.  It builds
-> fine.
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index c0ec066a8599..29affccb353c 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -10,7 +10,9 @@ BUILD_BUG_ON(1)
+>   *
+>   * KVM_X86_OP_OPTIONAL() can be used for those functions that can have
+>   * a NULL definition, for example if "static_call_cond()" will be used
+> - * at the call sites.
+> + * at the call sites.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
+> + * to make a definition optional, but in this case the default will
+> + * be __static_call_return0.
 
-Kernel code should build with zero warnings, the compiler is telling you
-something.
+__static_call_return0()
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index ab1c4778824a..d3da64106685 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -131,6 +131,7 @@ struct kvm_x86_ops kvm_x86_ops __read_mostly;
+>  	DEFINE_STATIC_CALL_NULL(kvm_x86_##func,			     \
+>  				*(((struct kvm_x86_ops *)0)->func));
+>  #define KVM_X86_OP_OPTIONAL KVM_X86_OP
+> +#define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
+>  #include <asm/kvm-x86-ops.h>
+>  EXPORT_STATIC_CALL_GPL(kvm_x86_get_cs_db_l_bits);
+>  EXPORT_STATIC_CALL_GPL(kvm_x86_cache_reg);
+> @@ -12016,7 +12017,6 @@ void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
+>  static inline bool kvm_guest_apic_has_interrupt(struct kvm_vcpu *vcpu)
+>  {
+>  	return (is_guest_mode(vcpu) &&
+> -			kvm_x86_ops.guest_apic_has_interrupt &&
+>  			static_call(kvm_x86_guest_apic_has_interrupt)(vcpu));
+
+Can you opportunistically align the indentation and drop the outer parantheses? I.e.
+
+	return is_guest_mode(vcpu) &&
+	       static_call(kvm_x86_guest_apic_has_interrupt)(vcpu);
+
+>  }
+>  
+> diff --git a/kernel/static_call.c b/kernel/static_call.c
+> index 43ba0b1e0edb..76abd46fe6ee 100644
+> --- a/kernel/static_call.c
+> +++ b/kernel/static_call.c
+> @@ -503,6 +503,7 @@ long __static_call_return0(void)
+>  {
+>  	return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(__static_call_return0)
+
+This doesn't compile, it needs a semicolon.

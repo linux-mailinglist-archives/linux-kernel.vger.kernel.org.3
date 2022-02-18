@@ -2,139 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7D14BBC6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDD84BBC71
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 16:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237143AbiBRPs2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 10:48:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53812 "EHLO
+        id S237167AbiBRPtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 10:49:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiBRPsW (ORCPT
+        with ESMTP id S237220AbiBRPs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:48:22 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 865F52B3576
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:46:02 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-70--4RjbVXtMcueaeoDqT_n6w-1; Fri, 18 Feb 2022 15:45:59 +0000
-X-MC-Unique: -4RjbVXtMcueaeoDqT_n6w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 18 Feb 2022 15:45:56 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 18 Feb 2022 15:45:56 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>, Arnd Bergmann <arnd@kernel.org>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "will@kernel.org" <will@kernel.org>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "bcain@codeaurora.org" <bcain@codeaurora.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "nickhu@andestech.com" <nickhu@andestech.com>,
-        "green.hu@gmail.com" <green.hu@gmail.com>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "shorne@gmail.com" <shorne@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "dalias@libc.org" <dalias@libc.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "richard@nod.at" <richard@nod.at>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: RE: [PATCH v2 05/18] x86: remove __range_not_ok()
-Thread-Topic: [PATCH v2 05/18] x86: remove __range_not_ok()
-Thread-Index: AQHYJJDV6CwChj5QoEqoVAdoFeMQC6yZc16A
-Date:   Fri, 18 Feb 2022 15:45:56 +0000
-Message-ID: <905678e9e05d40b9a4e13e7b1a34cb68@AcuMS.aculab.com>
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-6-arnd@kernel.org> <20220218062851.GC22576@lst.de>
-In-Reply-To: <20220218062851.GC22576@lst.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 18 Feb 2022 10:48:26 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CB82C125
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:46:39 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso12675769pjt.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 07:46:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0h0yzaW462ZF9lyYj1aHP10k4uXSQPfG+Ko5s+1LJxg=;
+        b=Vblj9l7DSl6NjW4P3nEo+yA4pBRc6GV5wKlIkQI9RYk9QxeAYDmff7Wt96DQ419OxE
+         venDArEZzh23AuQhZaL0x9N7i0BohjnLY2hSowm4bhh1u4EF8PXFB90+NYdQxVtqL0vX
+         4N6sHfws37oWBIEmcxSVmrzyBfvJuzdh53JXuzCYoUED5Gc6IKy2PPvNJcHVrGzbeTLJ
+         w5lgAW46wmvaDEwj7/HqAu2jmWfdw84YAU0tcWig2mC0GaeECKjEvy5uU0HBiEx1kBUa
+         MeO75fomWOPLzf62CyyjhQb3n+PedNP2hZxYSoz2xtof3EFX7+3wlFnldDHO2G2Bi5kU
+         5KsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0h0yzaW462ZF9lyYj1aHP10k4uXSQPfG+Ko5s+1LJxg=;
+        b=6kwCX3jvclTA/u1HejIZCLowAT+LJMz1M7iZqrSYlDI8ITtg0H16I44Lh414jK4A56
+         veshTS9rlJLTPDsUpr3YOqO04i72Xsl7DmUlreMqv0w4TADuaKLX8eeZRxrw0r4RJEyO
+         wo+xSHmxeDKIHNK6h0rz9l/4lNEljUXFqyzctCNCVFj3P8za0wSj9vZs/CUC6Xrqf3on
+         mcetH2ORxgm24j7zkA4u40FyHkBso7P7RpsKFVxp3+/QSNJk+aglPytz14MeHY+rocGc
+         /ZYvJv413HJzjEMGM9P7mOzBBzdPlVEtK24acU6/iivDo6KWRR4AXgc4mnnyO4+HtJL1
+         Z2mQ==
+X-Gm-Message-State: AOAM5312XyiqvnkyAoPm1UUT0GlNoboXhXVXbE2WFv10OLtWOpq64ehD
+        1EB5/jTJjYSfzr5kLLbVQYZnBA==
+X-Google-Smtp-Source: ABdhPJwTapBayvFSHcTphOCuoc0Liz2WvP8m0tyMK3bULiLHZ4HyYwgRZwfW19JzdRRkOIM//07CzA==
+X-Received: by 2002:a17:902:eb85:b0:14d:b906:cbd3 with SMTP id q5-20020a170902eb8500b0014db906cbd3mr7909810plg.122.1645199199015;
+        Fri, 18 Feb 2022 07:46:39 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 14sm11614010pgk.85.2022.02.18.07.46.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 07:46:38 -0800 (PST)
+Date:   Fri, 18 Feb 2022 15:46:34 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] KVM: x86: use static_call_cond for optional
+ callbacks
+Message-ID: <Yg+/WirqvhO0Zx1q@google.com>
+References: <20220217180831.288210-1-pbonzini@redhat.com>
+ <20220217180831.288210-3-pbonzini@redhat.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217180831.288210-3-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 18 February 2022 06:29
-...
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> SVM implements neither update_emulated_instruction nor
+> set_apic_access_page_addr.  Remove an "if" by calling them
+> with static_call_cond().
 > 
-> > diff --git a/arch/x86/kernel/stacktrace.c b/arch/x86/kernel/stacktrace.c
-> > index 15b058eefc4e..ee117fcf46ed 100644
-> > --- a/arch/x86/kernel/stacktrace.c
-> > +++ b/arch/x86/kernel/stacktrace.c
-> > @@ -90,7 +90,7 @@ copy_stack_frame(const struct stack_frame_user __user *fp,
-> >  {
-> >  	int ret;
-> >
-> > -	if (__range_not_ok(fp, sizeof(*frame), TASK_SIZE))
-> > +	if (!__access_ok(fp, sizeof(*frame)))
-> >  		return 0;
-> 
-> Just switch the __get_user calls below to get_user instead.
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
 
-Is this worth doing at all?
-How much userspace code is actually compiled with stack frames?
-
-Won't work well for a 32bit process on a 64bit kernel either.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Reviewed-by: Sean Christopherson <seanjc@google.com>

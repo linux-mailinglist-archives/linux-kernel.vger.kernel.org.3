@@ -2,76 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2CB4BBF6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027804BBF72
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236796AbiBRS0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:26:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60178 "EHLO
+        id S239201AbiBRS2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:28:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239286AbiBRS0B (ORCPT
+        with ESMTP id S237795AbiBRS2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:26:01 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90FE4AE1E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:25:44 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id l9so7850737plg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 10:25:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/YY6gHmhRlidn/sY9OLwMpBqcTm3U79RSE+/6MPGrJA=;
-        b=Yikg60aEeMXc80GolC4gFuR/bCOvdyO1+bgorzH57I67lv589wT3iZ9TqMt+rjvOh8
-         H8KWOYa5PNS0FNo7DZ2Agm9k7fVGWhXapa6dpQ9huUdCNFN4rfqx28UCJlTIeU4nIZYw
-         bzk/srr8FDPJtk1MHlC6HZGRCbYRKOKe+5eIpUECPeAD/ke9yHdvdmhmBxBkJ61ufoj8
-         Dq1x3lJeVTVfUmOr+etb76YXjwuMyrl1bkN7YKNFoAcMdfZJh5YjI1HHRrQko5Udffol
-         7rS+shfUUfDbvZqxep/a6EPgOH1S+Qcco6yiASWw57vXjlRQAO0hAPJC0O5G/afKME81
-         0+kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/YY6gHmhRlidn/sY9OLwMpBqcTm3U79RSE+/6MPGrJA=;
-        b=6L9dF6Ojx1LQcybUAtrV+wOgYvqhfHO2bbQl5PDN0CThn6zKhsoT4xZy1TwtVZoiUa
-         Bx5+mCgoeSTt97skVR42pfI9bhgmb529YEKQ1j5vvdF+XpkKtYjSesGCnfiTMIW+2o+k
-         ex66YmDSVRnfrYxexKH3nQXp8yWRsQk8fUGbgnxgTyZmHECrqRQysY/TBlgSCm82sBDb
-         gK7oqtRryBOJVQnT79nOxkKrGn737xM1VVxCWifJ0HQoQ96mBswgcRtPDwSxk57rKmwg
-         8yGV3GP5QEdRUQgIlVtDbNMLGiSE0CjIPKqIjJo/gz2B4Vg5oN1e4v3DdjuVyi66xj5X
-         9JPg==
-X-Gm-Message-State: AOAM531UEYKtzJA2MOXHqxH9PDo7lT2ZBA1YtRh86xoxBRXWsEwWYjD3
-        /eunD6IvlLEZZHqGhB0u8jC+1w==
-X-Google-Smtp-Source: ABdhPJwggBWLIivAjldbUymbvPVfh/gDQqm0tN/nVKFq9v/jYAjSkDjVptJ8J0RWsg1nUGnzVBaXhw==
-X-Received: by 2002:a17:90a:bb88:b0:1b9:eaf6:fe09 with SMTP id v8-20020a17090abb8800b001b9eaf6fe09mr9473590pjr.95.1645208744140;
-        Fri, 18 Feb 2022 10:25:44 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z9sm11531437pgz.32.2022.02.18.10.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 10:25:43 -0800 (PST)
-Date:   Fri, 18 Feb 2022 18:25:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Eric Hankland <ehankland@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: x86/pmu: Protect kvm->arch.pmu_event_filter
- with SRCU
-Message-ID: <Yg/ko3ZE09/UvKL2@google.com>
-References: <20220217083601.24829-1-likexu@tencent.com>
- <20220217083601.24829-2-likexu@tencent.com>
- <12b84d17-94cc-6ee7-bde4-340b609c16d2@redhat.com>
+        Fri, 18 Feb 2022 13:28:03 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C155D67D;
+        Fri, 18 Feb 2022 10:27:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=AZEADM8IK5yfcItVy/AZkXq/eoM28jmc3QuPDjTirFs=; b=c/fDBc+IA9+hJZoEuvwfGV6ayi
+        pFDxUjS9AwOKG838mbwpoH2WbU2fVNP8VVol1MpU14G8Yz2nXyXJ3+cqloYaQVhLQClmiw3zr6jh1
+        SkUMFFH5B1Qx5IrncjAAyuUhCCuRqwDBsjD9y3aVRfEcb3RDxqLp1CDaPlGLE3KHYDcEKBPTUX4+8
+        +nKixIV5BNil5rb94olbpD0NcG+/32LvG7Z6xunWv6Aym6KE7I755Oid/WxVKmAqSRvuL+y523IHw
+        KBYgimqSVKtodZAMDGkrlZzS5J3hWRGfHhobn8We0YgvoCYYGR8W70svYRx6uzRvdX+QerrTA/m8N
+        p0fFTT/w==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nL7yn-00FV82-1z; Fri, 18 Feb 2022 18:27:41 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     akpm@linux-foundation.org, keescook@chromium.org,
+        yzaikin@google.com, sfr@canb.auug.org.au
+Cc:     patches@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH] MAINTAINERS: add sysctl-next git tree
+Date:   Fri, 18 Feb 2022 10:27:36 -0800
+Message-Id: <20220218182736.3694508-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12b84d17-94cc-6ee7-bde4-340b609c16d2@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,32 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022, Paolo Bonzini wrote:
-> On 2/17/22 09:36, Like Xu wrote:
-> > From: Like Xu<likexu@tencent.com>
-> > 
-> > Fix the following positive warning:
-> > 
-> >   =============================
-> >   WARNING: suspicious RCU usage
-> >   arch/x86/kvm/pmu.c:190 suspicious rcu_dereference_check() usage!
-> >   other info that might help us debug this:
-> >   rcu_scheduler_active = 2, debug_locks = 1
-> >   1 lock held by CPU 28/KVM/370841:
-> >   #0: ff11004089f280b8 (&vcpu->mutex){+.+.}-{3:3}, at: kvm_vcpu_ioctl+0x87/0x730 [kvm]
-> >   Call Trace:
-> >    <TASK>
-> >    dump_stack_lvl+0x59/0x73
-> >    reprogram_fixed_counter+0x15d/0x1a0 [kvm]
-> >    kvm_pmu_trigger_event+0x1a3/0x260 [kvm]
-> >    ? free_moved_vector+0x1b4/0x1e0
-> >    complete_fast_pio_in+0x8a/0xd0 [kvm]
-> >    [...]
-> 
-> I think the right fix is to add SRCU protection to complete_userspace_io in
-> kvm_arch_vcpu_ioctl_run.  Most calls of complete_userspace_io can execute
-> similar code to vmexits.
+Add a git tree for sysctls as there's been quite a bit of
+work lately to remove all the syctls out of kernel/sysctl.c
+and move to their respective places, so coordination has been
+needed to avoid conflicts. This tree will also help soak
+these changes on linux-next prior to getting to Linus.
 
-Agreed, I bet similar warnings can be triggered on SVM with nrips=false due to
-svm_skip_emulated_instruction() dropping into the emulator, e.g. for HyperV and
-Xen usage where next_rip doesn't appear to be filled in all paths.
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+
+Collecting Reviews/Acks, I can throw this into the sysctl-next tree.
+
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bd86ed9fbc79..08bce45710e6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15564,6 +15564,7 @@ M:	Iurii Zaikin <yzaikin@google.com>
+ L:	linux-kernel@vger.kernel.org
+ L:	linux-fsdevel@vger.kernel.org
+ S:	Maintained
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-next
+ F:	fs/proc/proc_sysctl.c
+ F:	include/linux/sysctl.h
+ F:	kernel/sysctl-test.c
+-- 
+2.34.1
+

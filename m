@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB954BBF45
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925BC4BBF4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 19:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239055AbiBRSRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 13:17:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53242 "EHLO
+        id S239071AbiBRSRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 13:17:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbiBRSQ6 (ORCPT
+        with ESMTP id S233228AbiBRSQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 13:16:58 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9E7B2B;
+        Fri, 18 Feb 2022 13:16:59 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E28B32;
         Fri, 18 Feb 2022 10:16:41 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg21-20020a05600c3c9500b0035283e7a012so7027492wmb.0;
-        Fri, 18 Feb 2022 10:16:40 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id p9so15892947wra.12;
+        Fri, 18 Feb 2022 10:16:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RUj5tv88ZrnAPtys6wyBXq2J8Bptpatax+XE2plB4SI=;
-        b=XzUDz+MneXP8UeVJMav0LETmbRoamMxLS+y4uk91AN3ChYMedziqaOjMDOqgzswcTw
-         xPPb+e3IrH8xTMAzn54BzdpSP4urAiyB/7zFzs6I95wayHrmDWSvmdjs7tRU5NTp6JIG
-         t9jMa7a9K6rAw1YJD6Lg0uUickntxiQtSOQYZsOtTYgmk2R02nWfzHWROzs9sekNnczJ
-         8YoLScDuUEvQjn0JX7mhhhdk0Zp6Q9J2BA8y0vmH741nC5+LicjIIbz6/xWy+GYSlRsm
-         GQ//ubW8YJhQhK+3UcqwnKZP3yK2JHo4Ws00SM0vuloalSy4mHebCNftQoI9uvFTf4P6
-         Yp3w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=60WfrxgVMKQI4zJcrOBqZYpPlE/wCIZ8P+dtpfYXPkI=;
+        b=fiIiBcLWdP+8+IT79yBp5InVJ72o+Pi2rARnrcsVrF/Wic68xivQH9tJNHtJ8erna4
+         qnpJ+rZt6UvniUuQcq7z7uc/PC+6AL2Zad5TiG3ZVFX6ih4xoxzqzdi33is+W936ae95
+         xeW4DX30A3vGQ0aCoZSToCMtxXRHNJkbI0Yd+PC0JUpn0nDNhImu61ldaR0qLhcSR+Jy
+         2DRE+I70k/PAm601odyuS6Y9RtWFeqXBYQ3yjvVnELsN4KGTHDNPiHHiUUquHEjywp31
+         xi/lDJFVf7k8A6ZHjrlNuJhYDF7zmzc/ioaustDTiKpSZmjCxY6McRAS9Z1byx7Xiv3r
+         rmew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RUj5tv88ZrnAPtys6wyBXq2J8Bptpatax+XE2plB4SI=;
-        b=4/rqxwzlUzMmbJElNMgy7OezovXSSuaPYC9Xx2LK3UQQjRDEdXUNylAuPb+W/l8sz5
-         G2Z7s7dz/nr2OA51NgAK4WglcKjBeBNko8RMF3UGQ1Q/26u4CR0rBt1/NRHBl0CDAI/C
-         LCi4/WVeEO90DsRNZ/zj8eu4Osp8wogTnjx+bAKaGiWyuXeZAxQEQWvH+LxzmVn/1s1L
-         fx0ouUE4cqsu6ClkR5RLoxKBYLcNipf0RRNMcZeC+iCFFMRevB+BKbPaPIhk/XmS7eGn
-         OrkEG7xmaGPGrU4B9FjIgBV16YT6ZosQLgRhswb4vl7aAHbFxBToyIkZY2ScurQi6BHw
-         170A==
-X-Gm-Message-State: AOAM530p+FGKTDhuhY7NkZk8NudhF4fc9kcZ8uX2kIpHdQECy63hXqf9
-        SK9eAi9QL0LE5Nw5w3/HrG/7ocxB21vqCw==
-X-Google-Smtp-Source: ABdhPJxdKtuQWwSWiJAteHW5fREyTroULIKXlkI1Y50k7wyiRcIBhu1wplROx8i05TvTmGeeLjMXgg==
-X-Received: by 2002:a05:600c:5103:b0:37b:c134:cad with SMTP id o3-20020a05600c510300b0037bc1340cadmr11622649wms.32.1645208199555;
-        Fri, 18 Feb 2022 10:16:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=60WfrxgVMKQI4zJcrOBqZYpPlE/wCIZ8P+dtpfYXPkI=;
+        b=ff/DZVPM9sqLjiZifp3YjOuhYXBtkr/mJHqUzJmChfkY2FQ+EGRvVFX97sEHMMytxY
+         V5eL07ZGwiS4T+LX9myQJDl/h+tjoTIC57aOCXD23TEfNols1brmT8f9YQwGda37PErp
+         OrHEWzquSywRhPFG9MaSufOVjLM+N4SJi2HYRocspxbl32hifdvr0g7wflmoAh/4ksM9
+         I4wd60lkmg7r32+U9JAeTcfq4GrzfB/faXk+8esb1GQ1uvQBVFL0nyKVF5VkDUofIHv/
+         oKsd5idQHgmyQQfrNdfX5QHP3l3gEynzTSo1FWxSTpn4dG05zYliIRxj0oKMHH6GR79f
+         CpIg==
+X-Gm-Message-State: AOAM5313EXRVdQsnd2j87q0ZCjxoTxF5dN5eryasWk55tcMG9sJOyrE/
+        tN2lpFTbf1DlQMPBkmOLqyE=
+X-Google-Smtp-Source: ABdhPJzkA8jJy2xMB1ke00Fe2OJZPVG0khdRBVSZDzdbyFv7GWWNj70xhDzGRSPr6OM6yvtknvTleQ==
+X-Received: by 2002:a05:6000:1881:b0:1e8:f75c:591d with SMTP id a1-20020a056000188100b001e8f75c591dmr5353507wri.257.1645208200437;
+        Fri, 18 Feb 2022 10:16:40 -0800 (PST)
 Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id b2sm20978639wri.35.2022.02.18.10.16.38
+        by smtp.gmail.com with ESMTPSA id b2sm20978639wri.35.2022.02.18.10.16.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 10:16:38 -0800 (PST)
+        Fri, 18 Feb 2022 10:16:40 -0800 (PST)
 From:   =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>
 To:     corbet@lwn.net
 Cc:     =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 00/11] Transform documentation into POD
-Date:   Fri, 18 Feb 2022 19:16:17 +0100
-Message-Id: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
+Subject: [PATCH v4 01/11] scripts: kernel-doc: Add the basic POD sections
+Date:   Fri, 18 Feb 2022 19:16:18 +0100
+Message-Id: <20220218181628.1411551-2-tomasz.warniello@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
+References: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -71,73 +73,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series transforms the free-form general comments - mainly the usage
-instructions and the meta information - into the standard Perl
-documentation format. Some of the original text is reduced out. And some
-is simply dropped.
+The NAME section provides the doc title, while SYNOPSIS contains
+the basic syntax and usage description, which will be printed
+in the help document and in the error output produced on wrong script
+usage.
 
-The transformation includes language, paragraphing and editorial
-corrections.
+The rationale is to give users simple and succinct enlightment,
+at the same time structuring the script internally for the maintainers.
 
-The only change in the script execution flow is the replacement of the
-'usage' function with the native standard Perl 'pod2usage'.
+In the synopsis, Rst-only options are grouped around rst, and the rest is
+arranged as in the OPTIONS subsections (yet to be translated into POD,
+check at the end of the series).
 
-The to-do suggestion to write POD found in the script is ancient, thus
-I can't address its author with a "Suggested-by" tag.
+The third of the basic sections, DESCRIPTION, is added separately.
 
-This version follows the advice received on v3, except I'm leaving
-the old copyrights untouched.
+Signed-off-by: Tomasz Warniełło <tomasz.warniello@gmail.com>
+---
+ scripts/kernel-doc | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-The process consists of 14 steps.
-
-Patches beginning with no 3 are disfunctional until no 9 has been
-applied.
-
-1) Add the basic POD sections
-2) Relink argument parsing error handling to pod2usage
-
-The following subseries is disfunctional before its last part.
-
-3) Translate the DESCRIPTION section
-4) Translate the "Output format selection" subsection of OPTIONS
-5) Translate the "Output format selection modifier" subsection of OPTIONS
-6) Translate the "Output selection" subsection of OPTIONS
-7) Translate the "Output selection modifiers" subsection of OPTIONS
-8) Translate the "Other parameters" subsection of OPTIONS
-9) Replace the usage function
-    
-Here the DESCRIPTION and OPTIONS subseries is finished. The -h and -help
-parameters are handled by POD now.
-    
-10) Drop obsolete comments
-11) Refresh the copyright lines
-
-Let's see what's wrong this time.
-
-Tomasz Warniełło (11):
-  scripts: kernel-doc: Add the basic POD sections
-  scripts: kernel-doc: Relink argument parsing error handling to
-    pod2usage
-  scripts: kernel-doc: Translate the DESCRIPTION section
-  scripts: kernel-doc: Translate the "Output format selection"
-    subsection of OPTIONS
-  scripts: kernel-doc: Translate the "Output format selection modifier"
-    subsection of OPTIONS
-  scripts: kernel-doc: Translate the "Output selection" subsection of
-    OPTIONS
-  scripts: kernel-doc: Translate the "Output selection modifiers"
-    subsection of OPTIONS
-  scripts: kernel-doc: Translate the "Other parameters" subsection of
-    OPTIONS
-  scripts: kernel-doc: Replace the usage function
-  scripts: kernel-doc: Drop obsolete comments
-  scripts: kernel-doc: Refresh the copyright lines
-
- scripts/kernel-doc | 347 +++++++++++++++++++++------------------------
- 1 file changed, 159 insertions(+), 188 deletions(-)
-
-
-base-commit: 2a987e65025e2b79c6d453b78cb5985ac6e5eb26
+diff --git a/scripts/kernel-doc b/scripts/kernel-doc
+index 3106b7536b89..c8fbf1d3d5aa 100755
+--- a/scripts/kernel-doc
++++ b/scripts/kernel-doc
+@@ -16,6 +16,31 @@ use strict;
+ ## This software falls under the GNU General Public License.     ##
+ ## Please read the COPYING file for more information             ##
+ 
++=head1 NAME
++
++kernel-doc - Print formatted kernel documentation to stdout
++
++=head1 SYNOPSIS
++
++ kernel-doc [-h] [-v] [-Werror]
++   [ -man |
++     -rst [-sphinx-version VERSION] [-enable-lineno] |
++     -none
++   ]
++   [
++     -export |
++     -internal |
++     [-function NAME] ... |
++     [-nosymbol NAME] ...
++   ]
++   [-no-doc-sections]
++   [-export-file FILE] ...
++   FILE ...
++
++Run `kernel-doc -h` for details.
++
++=cut
++
+ # 18/01/2001 - 	Cleanups
+ # 		Functions prototyped as foo(void) same as foo()
+ # 		Stop eval'ing where we don't need to.
 -- 
 2.30.2
 

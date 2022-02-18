@@ -2,98 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5A84BB664
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C077C4BB66C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 11:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233878AbiBRKIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 05:08:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55678 "EHLO
+        id S233893AbiBRKI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 05:08:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233874AbiBRKId (ORCPT
+        with ESMTP id S233887AbiBRKIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 05:08:33 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFE61CFE2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:08:16 -0800 (PST)
-X-UUID: a7452fd66f514c769cccefc581fbd0e7-20220218
-X-UUID: a7452fd66f514c769cccefc581fbd0e7-20220218
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1954846244; Fri, 18 Feb 2022 18:08:13 +0800
-Received: from MTKMBS34N1.mediatek.inc (172.27.4.172) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 18 Feb 2022 18:08:13 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS34N1.mediatek.inc
- (172.27.4.172) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 18 Feb
- 2022 18:08:12 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- MTKCAS36.mediatek.inc (172.27.4.170) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Fri, 18 Feb 2022 18:08:10 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <jitao.shi@mediatek.com>, <allen-kh.cheng@mediatek.com>,
-        <rex-bc.chen@mediatek.com>, Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: [PATCH v2,3/3] drm/mediatek: Add mt8186 dsi compatible to mtk_dsi.c
-Date:   Fri, 18 Feb 2022 18:07:49 +0800
-Message-ID: <1645178869-18048-4-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1645178869-18048-1-git-send-email-xinlei.lee@mediatek.com>
-References: <1645178869-18048-1-git-send-email-xinlei.lee@mediatek.com>
+        Fri, 18 Feb 2022 05:08:49 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2055.outbound.protection.outlook.com [40.107.21.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C3324F0A
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 02:08:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oWQJHNfRxQHhNFTvvp+GHAzQhyJVLWJyfvB5SSPMPuhHXsYZ6x26VTsv2uiSgulDKp+aLqkG+ee60QfGDvjzrbCcVE1eqjqN5czpCtTf6Bw2cKVq0JgaO/lgpoM9HqjUaAW7iVvQUE3wFDDU3fw9EQ4mgCU9rrdIjdWtEldXyayRi0shDWCOakQ1TMXmY/gtZ2kRa0lfRMOumfPyPLyALwp080GV0IAGtISgtSqysQ5TjLaEpQcRN96ndSUorXb75lxlEzn3ysIDkB497+T+wfUhVqE79hpJ84Q/i/i5vWIIJOUc/sWUskAoHxg/sN7dpgbkbRVHgCMki5lxvbuTrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dlj4rvcbwCYD/HgmGI16gOAuge6AdgUklR2LZ83DymA=;
+ b=Iv1v+MkGnOXPZd0F01swyqKMBCtaKhltJrN11u1CTJOKrTaTRDHocqwO33ji9ONfoVDa4yoidAMIsCO42EXqBXMoZBDHnkj/or77+JIPEjWIWyVz2o98jo/cHFHXUpfLxq3ivRovBQoxqajpOZB/ACGtYKam/H7/YsHZPD4UmGskfYKKWzyObTtNnhkymNFYeDwpULRiqaCe/DNzt8Cj/6d4uxZfm93VWrNKEbpWRx8pbXj8ka1Byul5/dkLGczW10acLO6inGicj7tso6eHrdFYzuS977mDaw8nvAgoCt79L72amwCNckKjxXIEep1wdotTi8wTVBh3+U3TMwLw+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dlj4rvcbwCYD/HgmGI16gOAuge6AdgUklR2LZ83DymA=;
+ b=LRxZd9vqx9PxjimsqK3CzkWgZkCMk3URoDwYL87SKSf/9HmEnL33IPOW/krNjk/412uiE58lPIxvIrw1URlPxtT1ocgTIeosTLIkFe2KBDqLRJRClaH0PtVLNmOwYNNbUqmnDGH21CDt+3bg0KdmcOvQ/gWSwYo1OuHqI63yQDo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR0402MB3902.eurprd04.prod.outlook.com
+ (2603:10a6:803:22::27) by DB3PR0402MB3801.eurprd04.prod.outlook.com
+ (2603:10a6:8:3::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Fri, 18 Feb
+ 2022 10:08:26 +0000
+Received: from VI1PR0402MB3902.eurprd04.prod.outlook.com
+ ([fe80::7075:9a92:d8b1:61cf]) by VI1PR0402MB3902.eurprd04.prod.outlook.com
+ ([fe80::7075:9a92:d8b1:61cf%3]) with mapi id 15.20.4995.017; Fri, 18 Feb 2022
+ 10:08:26 +0000
+Date:   Fri, 18 Feb 2022 12:08:21 +0200
+From:   Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+To:     Rudi Heitbaum <rudi@heitbaum.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/imx/dcss: i.MX8MQ DCSS select DRM_GEM_CMA_HELPER
+Message-ID: <20220218100821.xnndumkrhdbg2xlh@fsr-ub1664-121.ea.freescale.net>
+References: <20220216212228.1217831-1-rudi@heitbaum.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216212228.1217831-1-rudi@heitbaum.com>
+User-Agent: NeoMutt/20171215
+X-ClientProxiedBy: AM0PR02CA0088.eurprd02.prod.outlook.com
+ (2603:10a6:208:154::29) To VI1PR0402MB3902.eurprd04.prod.outlook.com
+ (2603:10a6:803:22::27)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8818c59d-da70-4098-7ab5-08d9f2c69a8c
+X-MS-TrafficTypeDiagnostic: DB3PR0402MB3801:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DB3PR0402MB3801C9F19E02A478ABF010E2BE379@DB3PR0402MB3801.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:983;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iOi5ZdfGlmwcXo5w06YWAkLgzBYvU7nEJwLvT+2js8pSY+taae1taZexe3QMhazXfOj54ZaXhpK4JPZhOSq3PbToB/0chRoHdmPT+HsesYOcfX8psP2Rdks49w7Iuuqqhvns3X8nttXV5Ht86m8rKLJFDqm+UwWnnLQiK8gg+Kh8f3QPvzgoZWR0i44b7H4j4ZC1NaemeFfBIXdutzIc4hMT2qzY83ev5n60XoWhku60tzoiCP6F5kV07RNcr24BtL9EGfDgdBStQVUQ0C4n4qzIqBzjLekUqOWz8cLotVOUJLKYwslOcMJYDM55qJQ+3xp0RzHrYAEFTlGiHYnZSKlP9SRCaAQULa0A9JtLkJJVJ1s/CzkOmqbprdNWgHb4RL7TuUgdNComgJ5Tv46N7FHHAjWAexIKMvek57nOffJA3R8wRbmh/s5gZtuYXksjxyc0JVSc4ifH0ojrc1fgUdKyDKjYrfmZ3PKTV4m8voHgYto8SnkyahOoQi6mLj1htUhN7NjkwyE5FZegOBoxi9zTtP8jC/y7EKsDPxrEhht4c31TIlrPX7/oXYOrfJUFEIEx7MpW5TKssxOdi7zkmDomZPDXc+tk1i1Wkj+Muq+l+r7vYLyxP2sJBsJTfAY6SzeQ8p6na0ldESP2iRcgNLyz+osqi0UJCJLV6jvTCjraeCGvjNXqFMKdvf88RzME015zKuWZWMJMW5+URR6Kxg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3902.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(7416002)(6486002)(66556008)(6506007)(9686003)(52116002)(8936002)(86362001)(6666004)(8676002)(6512007)(66476007)(6916009)(508600001)(66946007)(5660300002)(4326008)(26005)(54906003)(38350700002)(186003)(44832011)(38100700002)(4744005)(1076003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NrWkWwLZrFCR/atbYVkYyLItKkAp/wnWHtRdPG8PoXbqW1itUUWqxDI5vzy+?=
+ =?us-ascii?Q?7nKp33nFIBY8eIqpYq+DKc0E/K8gr/M9w+UWTrtBSCXqDhTIwM10dVWxGm/o?=
+ =?us-ascii?Q?F/kM3VmlJOwyoV7OBd9ZwFc6gM9hdGzt+A7B0qW9M4yrh5m8TTMm/rllhWI6?=
+ =?us-ascii?Q?8VsansiVuZD09NbqbFbFcT5W+RQZ7YsaqHcEtKYGrzJh4wyUzWG5S0q/0om2?=
+ =?us-ascii?Q?htNztzQdh7t3moQ6O0d4OxG2c1A0Fqqeapxh87k/nI8FvCD+tPrY2p1GZIKy?=
+ =?us-ascii?Q?DbZ9tzOtdK/RE0xgm8NRJrlsKyQ6g4kg02MgsdoA3l1AmqiZkY4krY//VeYY?=
+ =?us-ascii?Q?Joch/GkmvCJZTW/E99V79W7SFEGiiQRuXQERbsAObidIlPwRv1Ft6Sr08KRu?=
+ =?us-ascii?Q?+6XwNx7uOOFvb89TaSxAAlYRUWnXD9M7Y88amN196tug+pxr1uVHuwG01mgw?=
+ =?us-ascii?Q?HTb0Y3pO27IIek4eDtrQG+BrQRpBe40CpzBjshUwRjXrNqs2s+yoaYqDXXWB?=
+ =?us-ascii?Q?EulR2aBSoM2cXd9OGd6NxosXlGRX4s3/AQyqHvsnXWJZ2kkXpuuFECQ40NNg?=
+ =?us-ascii?Q?rFrFBjdgEuGADd+LXuaHznWNBdYv/7rbuUgm/59T1DwoFKyaAUjG7mxwL7ty?=
+ =?us-ascii?Q?/3OApBedEvmKgHR3vByDM93kR2mFL2pGvSbIc1bp7EjfMtPrpYGCttJ9JL3i?=
+ =?us-ascii?Q?5braONEuQYtrkc6zhqSLJA7RiRdVrQzrBIyjjo527ybWBRxEMQBUsNX8/paA?=
+ =?us-ascii?Q?ZdGCsg/C/RRynXcRDLEud+vatRge4Ml+gLUO+J5jax+hF45SMfB107P9DuC0?=
+ =?us-ascii?Q?WamVF5pTe0l53+XHfpvDR4drnGyxmb0JUFSBKTiO0zLQkm3aKxtccGDb3lOj?=
+ =?us-ascii?Q?82PCcCe8FdSbC1OAAxiPQKpIPKOGpvVY1PoPaCNEbMGRehdMek94Hk86XRz7?=
+ =?us-ascii?Q?SSXbVHr5n2yGAEc4ZyI9c5N1iGB2KM5ewV+JV5r5iSkgAkxWK8Hy3V/MFpFG?=
+ =?us-ascii?Q?MGWENA3YB1IAtnUhOZgN04/YzntQn8gkjmDTwlgFT5slEkgUDLtsjJbdeaL1?=
+ =?us-ascii?Q?KQvj2O8J5XMKW9uSYMBcM1PfvFWkCGxW0OEz5RLFRbOkDpO74uwuFBewp1nw?=
+ =?us-ascii?Q?tqEqOL4SaGyhfVbGPFAbl/CnYmnavBEdWkqjlGiSR4OuXBYGF2IrjQa15VuC?=
+ =?us-ascii?Q?n4v+9695yxrDXxy3PMFdur0BfU5F4Mw8ACdzn9KMnNPVHFDtM63MqZQkVYMm?=
+ =?us-ascii?Q?mgRipicQvdTarQfdip6tds6B42tNY9dW+RVf3ucDbYim2/cphMcGp426YNg4?=
+ =?us-ascii?Q?f1Q+ia13qiLcMr7KJCkTULVy0ApWVkBmI6qIe3E7NnUGabTdDeIa4g3FL9PD?=
+ =?us-ascii?Q?rsDeglD1ixrf9JWqcObCNWgWvj9zVu2Oxqe7aZ/hQ29djTUYX+s9VU136cIJ?=
+ =?us-ascii?Q?kqaiFGqO/ihCG6jV29xJ9aUiP7vqFxYqjpaK7+3tN1OGBPCdzkdKKMleP9vU?=
+ =?us-ascii?Q?iuCWPTUZ191SBZImaKWkEBs5++4ERh7nGhcqCziXyBvx+sQDvVVUg2auf0M8?=
+ =?us-ascii?Q?l7KMleI4ZnRUfTakMVEYIg+0+wGhIjILMZKbiW/cf4dgHKhmOSlGwh2w7UCq?=
+ =?us-ascii?Q?sWpZl6dEpyuiDBBRMeuE8QU=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8818c59d-da70-4098-7ab5-08d9f2c69a8c
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3902.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2022 10:08:26.2167
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Tq5UB6yMFkt7wQ20FQZ/efSOZMEizu4brQLJUWPtucGjLBG185415bIvhWN9fSXHYtamf7fGbTeVzVIgMxCXPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3801
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinlei Lee <xinlei.lee@mediatek.com>
+Hi Rudi,
 
-Add the compatible because use different cmdq addresses in mt8186.
+On Wed, Feb 16, 2022 at 09:22:28PM +0000, Rudi Heitbaum wrote:
+> Without DRM_GEM_CMA_HELPER i.MX8MQ DCSS won't build. This needs to be
+> there.
+> 
+> Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
+Reviewed-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
 
-Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+...and pushed to drm-misc-fixes.
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index bced4c7d668e..8c61c4f412bc 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -1140,6 +1140,12 @@ static const struct mtk_dsi_driver_data mt8183_dsi_driver_data = {
- 	.has_size_ctl = true,
- };
- 
-+static const struct mtk_dsi_driver_data mt8186_dsi_driver_data = {
-+	.reg_cmdq_off = 0xd00,
-+	.has_shadow_ctl = true,
-+	.has_size_ctl = true,
-+};
-+
- static const struct of_device_id mtk_dsi_of_match[] = {
- 	{ .compatible = "mediatek,mt2701-dsi",
- 	  .data = &mt2701_dsi_driver_data },
-@@ -1147,6 +1153,8 @@ static const struct of_device_id mtk_dsi_of_match[] = {
- 	  .data = &mt8173_dsi_driver_data },
- 	{ .compatible = "mediatek,mt8183-dsi",
- 	  .data = &mt8183_dsi_driver_data },
-+	{ .compatible = "mediatek,mt8186-dsi",
-+	  .data = &mt8186_dsi_driver_data },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, mtk_dsi_of_match);
--- 
-2.18.0
+Thanks,
+laurentiu
 
+> ---
+>  drivers/gpu/drm/imx/dcss/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpu/drm/imx/dcss/Kconfig b/drivers/gpu/drm/imx/dcss/Kconfig
+> index 7374f1952762..5c2b2277afbf 100644
+> --- a/drivers/gpu/drm/imx/dcss/Kconfig
+> +++ b/drivers/gpu/drm/imx/dcss/Kconfig
+> @@ -2,6 +2,7 @@ config DRM_IMX_DCSS
+>  	tristate "i.MX8MQ DCSS"
+>  	select IMX_IRQSTEER
+>  	select DRM_KMS_HELPER
+> +	select DRM_GEM_CMA_HELPER
+>  	select VIDEOMODE_HELPERS
+>  	depends on DRM && ARCH_MXC && ARM64
+>  	help
+> -- 
+> 2.25.1
+> 

@@ -2,501 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E44F4BBB2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD4A4BBB3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 15:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbiBROz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 09:55:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48238 "EHLO
+        id S233083AbiBRO4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 09:56:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235152AbiBROzM (ORCPT
+        with ESMTP id S236354AbiBRO42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 09:55:12 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1FF5717D;
-        Fri, 18 Feb 2022 06:54:52 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 270C21F46B85
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645196091;
-        bh=al6Ev0bQKorkckF2iTM/jxCkPr35vPyHBaRFp9zx2wg=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=JABE/NDHqXiChVUIOUwgcgWWfmBkoDCrMTVFDcPnx9onUsr3vWZrMkHoDK5JDfpdt
-         ER/sFomFfCRzO90HeEf5YnqMlJM1n/vHzmwtIIyRiTHbWZfpQQE7ZqovIyDZtEGzr2
-         vHe92RxN4JsKH84jdlq/5xKgFMrd4vKRM9rUNPrvJBTza7Mb271Dt1ENj74fjx1t9X
-         T1ELDH9lHFXVoNCCtplqAAdU0QbJZmFpu+TaJ/mHrexNfE7krhUflPcX4QQxVFrV+J
-         eR1xgPqFSDotoGGON0gUG5ACKIYT04Q4qgVFnHTBfxP9BXkXWPOw7fHuurEDGSgcQ+
-         cD6mdVX2hKyqg==
-Message-ID: <70147e6f-a008-ab1a-eb07-dbb1236849b0@collabora.com>
-Date:   Fri, 18 Feb 2022 15:54:47 +0100
+        Fri, 18 Feb 2022 09:56:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 883D9593A4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645196164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ldn/wyFUYS9oX2H4KZV4SRGFhvLNkEJlNBHlweSE44=;
+        b=ZGJ6uKfop4GVTHnZqrhHQhp3RCzj2MiKOFHTiwphtj1caj4hla0uu227MojdUTUJLInGS3
+        ABPX0tVStqI+JMidxPy2rY7UJySDx9KawhaTQMv44hiZq+edczVIeYdTwNxlvG7pkW3PIb
+        d3eZNS/cJ86gYyTXvc1fZnqreDcmLnw=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611--KoJPLJSPeGI16TeMqEKYQ-1; Fri, 18 Feb 2022 09:56:02 -0500
+X-MC-Unique: -KoJPLJSPeGI16TeMqEKYQ-1
+Received: by mail-qv1-f70.google.com with SMTP id a12-20020a056214062c00b0042c2f3fca04so9039108qvx.21
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 06:56:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=4ldn/wyFUYS9oX2H4KZV4SRGFhvLNkEJlNBHlweSE44=;
+        b=gN/MFE6ewNweUOPQ252YTshjOcOX1HJpAmQ4mhgN9w+YyLTmSMGleWpeDzJUfOlSfa
+         wB1WBB0MFfYRkJscX8WTG9pPX6lzVQuAtYLfXw4SLFIF2GoYJSQ7jLqI96vntb8oxaAq
+         7Cm3obQhze2yzWCJ1tWPpC/eMsDbEAR33D4O1I6CnQ9PxPY0g/KRFsowB43TK+i4ZwlU
+         IBPpWmxfsAt2wOe2wqrFcnc4Si/QbYEzMz7CYxKatPXNIjrLLFFv2vGcf8XJtt5jjb5R
+         CCKI+OVO6avrpiH3BumXfyls8Dba8nvD7ea558OE3owhTJC/IawJegp1SeLQ2cZ71X5H
+         A5cQ==
+X-Gm-Message-State: AOAM53126OnUhPqALnXTxf/LZGXwprTJTL7dii945a7JezlRx7SOv6Tb
+        xQP2Hc+sqNGcRJzJkD/xNhcpJFSw0MqXS6oU9gYD7DgklUZgUAzrqgJuMYPpn+CqyfIfeYyU2lL
+        xoVY11TJd9msmb+YRIAvkS7s6
+X-Received: by 2002:ac8:5c8f:0:b0:2dd:b404:bd94 with SMTP id r15-20020ac85c8f000000b002ddb404bd94mr1693189qta.50.1645196161891;
+        Fri, 18 Feb 2022 06:56:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw8JBQaaH0N3aIPc7v5Iu6VHkGq5FX+w6ES4TNS3Zwc4jIuKXDTgK1I/UV9BSzRxEBdFdrTJA==
+X-Received: by 2002:ac8:5c8f:0:b0:2dd:b404:bd94 with SMTP id r15-20020ac85c8f000000b002ddb404bd94mr1693178qta.50.1645196161706;
+        Fri, 18 Feb 2022 06:56:01 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id w3sm25923138qta.13.2022.02.18.06.56.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 06:56:01 -0800 (PST)
+Subject: Re: [PATCH v1 4/7] fpga: dfl: fix VF creation when ports have no
+ local BAR space
+To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
+        "Wu, Hao" <hao.wu@intel.com>, "mdf@kernel.org" <mdf@kernel.org>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+References: <20220214112619.219761-1-tianfei.zhang@intel.com>
+ <20220214112619.219761-5-tianfei.zhang@intel.com>
+ <c527e9c7-4588-463b-8a6b-3db68d003d7a@redhat.com>
+ <BN9PR11MB54830E0D185101B6B1517113E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <1281cbc7-7a1f-da84-3713-0d81982379ab@redhat.com>
+Date:   Fri, 18 Feb 2022 06:55:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [v2 14/17] ASoC: mediatek: mt8186: add machine driver with
- mt6366, da7219 and max98357
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
-        geert+renesas@glider.be, trevor.wu@mediatek.com,
-        tzungbi@google.com, aaronyu@google.com, zhangqilong3@huawei.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220217134205.15400-1-jiaxin.yu@mediatek.com>
- <20220217134205.15400-15-jiaxin.yu@mediatek.com>
-Content-Language: en-US
-In-Reply-To: <20220217134205.15400-15-jiaxin.yu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <BN9PR11MB54830E0D185101B6B1517113E3379@BN9PR11MB5483.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/02/22 14:42, Jiaxin Yu ha scritto:
-> This patch adds support for mt8186 board with mt6366, da7219 and max98357.
-> 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> ---
->   .../mt8186/mt8186-mt6366-da7219-max98357.c    | 910 ++++++++++++++++++
->   1 file changed, 910 insertions(+)
->   create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-> 
-> diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-> new file mode 100644
-> index 000000000000..6ba53b8d1e46
-> --- /dev/null
-> +++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-> @@ -0,0 +1,910 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +//
-> +// mt8186-mt6366-da7219-max98357.c
-> +//	--  MT8186-MT6366-DA7219-MAX98357 ALSA SoC machine driver
-> +//
-> +// Copyright (c) 2022 MediaTek Inc.
-> +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> +//
-> +
-> +#include <linux/input.h>
-> +#include <linux/module.h>
-> +#include <linux/pm_runtime.h>
-> +#include <sound/pcm_params.h>
-> +#include <sound/soc.h>
-> +
-> +#include "../../codecs/da7219-aad.h"
-> +#include "../../codecs/da7219.h"
-> +#include "../../codecs/mt6358.h"
-> +#include "../common/mtk-afe-platform-driver.h"
-> +#include "mt8186-afe-common.h"
-> +#include "mt8186-afe-clk.h"
-> +#include "mt8186-afe-gpio.h"
-> +
-> +#define DA7219_CODEC_DAI "da7219-hifi"
-> +#define DA7219_DEV_NAME "da7219.5-001a"
-> +
-> +struct mt8186_mt6366_da7219_max98357_priv {
-> +	struct snd_soc_jack headset_jack, hdmi_jack;
-> +};
-> +
-> +static struct snd_soc_codec_conf mt6366_codec_conf[] = {
-> +	{
-> +		.dlc = COMP_CODEC_CONF("mt6358-sound"),
-> +		.name_prefix = "Mt6366",
-> +	},
-> +};
-> +
-> +static int mt8186_da7219_init(struct snd_soc_pcm_runtime *rtd)
-> +{
-> +	struct mt8186_mt6366_da7219_max98357_priv *priv =
-> +		snd_soc_card_get_drvdata(rtd->card);
-> +	struct snd_soc_jack *jack = &priv->headset_jack;
-> +	struct snd_soc_component *cmpnt_codec =
-> +		asoc_rtd_to_codec(rtd, 0)->component;
-> +	int ret;
-> +
-> +	/* Enable Headset and 4 Buttons Jack detection */
-> +	ret = snd_soc_card_jack_new(rtd->card, "Headset Jack",
-> +				    SND_JACK_HEADSET | SND_JACK_BTN_0 |
-> +				    SND_JACK_BTN_1 | SND_JACK_BTN_2 |
-> +				    SND_JACK_BTN_3 | SND_JACK_LINEOUT,
-> +				    jack, NULL, 0);
-> +	if (ret) {
-> +		dev_err(rtd->dev, "Headset Jack creation failed: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	snd_jack_set_key(jack->jack, SND_JACK_BTN_0, KEY_PLAYPAUSE);
-> +	snd_jack_set_key(jack->jack, SND_JACK_BTN_1, KEY_VOLUMEUP);
-> +	snd_jack_set_key(jack->jack, SND_JACK_BTN_2, KEY_VOLUMEDOWN);
-> +	snd_jack_set_key(jack->jack, SND_JACK_BTN_3, KEY_VOICECOMMAND);
-> +
-> +	da7219_aad_jack_det(cmpnt_codec, &priv->headset_jack);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mt8186_da7219_i2s_hw_params(struct snd_pcm_substream *substream,
-> +				       struct snd_pcm_hw_params *params)
-> +{
-> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-> +	struct snd_soc_dai *codec_dai;
-> +	unsigned int rate = params_rate(params);
-> +	unsigned int mclk_fs_ratio = 256;
-> +	unsigned int mclk_fs = rate * mclk_fs_ratio;
-> +	unsigned int freq;
-> +	int ret = 0, j;
-> +
-> +	ret = snd_soc_dai_set_sysclk(asoc_rtd_to_cpu(rtd, 0), 0,
-> +				     mclk_fs, SND_SOC_CLOCK_OUT);
-> +	if (ret < 0)
-> +		dev_err(rtd->dev, "failed to set cpu dai sysclk\n");
 
-Does it really make sense to go on after this failure?
-
-> +
-> +	for_each_rtd_codec_dais(rtd, j, codec_dai) {
-> +		if (!strcmp(codec_dai->component->name, DA7219_DEV_NAME)) {
-> +			ret = snd_soc_dai_set_sysclk(codec_dai,
-> +						     DA7219_CLKSRC_MCLK,
-> +						     mclk_fs,
-> +						     SND_SOC_CLOCK_IN);
-> +			if (ret < 0)
-> +				dev_err(rtd->dev, "failed to set sysclk\n");
-> +
-
-I think that going on past this wouldn't make sense as well, as it may result
-in unexpected behavior... just return a failure here
-
-> +			if ((rate % 8000) == 0)
-> +				freq = DA7219_PLL_FREQ_OUT_98304;
-> +			else
-> +				freq = DA7219_PLL_FREQ_OUT_90316;
-> +
-> +			ret = snd_soc_dai_set_pll(codec_dai, 0,
-> +						  DA7219_SYSCLK_PLL_SRM,
-> +						  0, freq);
-> +			if (ret)
-> +				dev_err(rtd->dev, "failed to start PLL: %d\n",
-> +					ret);
-
-and here
-
-> +		}
-> +	}
-> +
-
-So, you've covered all failure cases already, for which, you can simply
-return 0 here.
-
-> +	return ret;
-> +}
-> +
-> +static int mt8186_da7219_i2s_hw_free(struct snd_pcm_substream *substream)
-> +{
-> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-> +	struct snd_soc_dai *codec_dai;
-> +	int ret = 0, j;
-> +
-> +	for_each_rtd_codec_dais(rtd, j, codec_dai) {
-> +		if (!strcmp(codec_dai->component->name, DA7219_DEV_NAME)) {
-> +			ret = snd_soc_dai_set_pll(codec_dai,
-> +						  0, DA7219_SYSCLK_MCLK, 0, 0);
-> +			if (ret < 0) {
-> +				dev_err(rtd->dev, "failed to stop PLL: %d\n",
-> +					ret);
-> +				break;
-> +			}
-> +		}
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct snd_soc_ops mt8186_da7219_i2s_ops = {
-> +	.hw_params = mt8186_da7219_i2s_hw_params,
-> +	.hw_free = mt8186_da7219_i2s_hw_free,
-> +};
-> +
-> +static int mt8186_mt6366_hdmi_init(struct snd_soc_pcm_runtime *rtd)
-> +{
-> +	struct snd_soc_component *cmpnt_codec =
-> +		asoc_rtd_to_codec(rtd, 0)->component;
-> +	struct mt8186_mt6366_da7219_max98357_priv *priv =
-> +		snd_soc_card_get_drvdata(rtd->card);
-> +	int ret;
-> +
-> +	ret = snd_soc_card_jack_new(rtd->card, "HDMI Jack", SND_JACK_LINEOUT,
-> +				    &priv->hdmi_jack, NULL, 0);
-> +	if (ret) {
-> +		dev_err(rtd->dev, "HDMI Jack creation failed: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return snd_soc_component_set_jack(cmpnt_codec, &priv->hdmi_jack, NULL);
-> +}
-> +
-> +static int mt8186_mt6366_init(struct snd_soc_pcm_runtime *rtd)
-> +{
-> +	struct snd_soc_component *cmpnt_afe =
-> +		snd_soc_rtdcom_lookup(rtd, AFE_PCM_NAME);
-> +	struct snd_soc_component *cmpnt_codec =
-> +		asoc_rtd_to_codec(rtd, 0)->component;
-> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt_afe);
-> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-> +	struct snd_soc_dapm_context *dapm = &rtd->card->dapm;
-> +	int ret;
-> +
-> +	/* set mtkaif protocol */
-> +	mt6358_set_mtkaif_protocol(cmpnt_codec,
-> +				   MT6358_MTKAIF_PROTOCOL_1);
-> +	afe_priv->mtkaif_protocol = MT6358_MTKAIF_PROTOCOL_1;
-> +
-> +	ret = snd_soc_dapm_sync(dapm);
-> +	if (ret) {
-> +		dev_info(rtd->dev, "failed to snd_soc_dapm_sync\n");
-
-dev_err()
-
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mt8186_i2s_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
-> +				      struct snd_pcm_hw_params *params)
-> +{
-> +	struct snd_interval *channels = hw_param_interval(params,
-> +		SNDRV_PCM_HW_PARAM_CHANNELS);
-> +	dev_info(rtd->dev, "%s(), fix format to 32bit\n", __func__);
-> +
-
-dev_dbg()
-
-> +	/* fix BE i2s channel to 2 channel */
-> +	channels->min = 2;
-> +	channels->max = 2;
-> +
-> +	/* fix BE i2s format to S32_LE, clean param mask first */
-> +	snd_mask_reset_range(hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT),
-> +			     0, (__force unsigned int)SNDRV_PCM_FORMAT_LAST);
-> +
-> +	params_set_format(params, SNDRV_PCM_FORMAT_S32_LE);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mt8186_hdmi_i2s_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
-> +					   struct snd_pcm_hw_params *params)
-> +{
-> +	struct snd_interval *channels = hw_param_interval(params,
-> +		SNDRV_PCM_HW_PARAM_CHANNELS);
-> +	dev_info(rtd->dev, "%s(), fix format to 32bit\n", __func__);
-> +
-
-dev_dbg()
-
-> +	/* fix BE i2s channel to 2 channel */
-> +	channels->min = 2;
-> +	channels->max = 2;
-> +
-> +	/* fix BE i2s format to S24_LE, clean param mask first */
-> +	snd_mask_reset_range(hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT),
-> +			     0, (__force unsigned int)SNDRV_PCM_FORMAT_LAST);
-> +
-> +	params_set_format(params, SNDRV_PCM_FORMAT_S24_LE);
-> +
-> +	return 0;
-> +}
-
-Besides, I would do the following instead:
-
-static int mt8186_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
-
-				  struct snd_pcm_hw_params *params,
-
-				  snd_pcm_format_t fmt)
-
-{
-
-	struct snd_interval *channels = hw_param_interval(params,
-
-		SNDRV_PCM_HW_PARAM_CHANNELS);
-
-	dev_dbg(rtd->dev, "%s(), fix format to 32bit\n", __func__);
-
-
-
-	/* fix BE i2s channel to 2 channel */
-
-	channels->min = 2;
-
-	channels->max = 2;
-
-
-
-	/* fix BE i2s format to S32_LE, clean param mask first */
-
-	snd_mask_reset_range(hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT),
-
-			     0, (__force unsigned int)SNDRV_PCM_FORMAT_LAST);
-
-
-
-	params_set_format(params, fmt);
-
-
-
-	return 0;
-
-}
-
-
-
-static int mt8186_i2s_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
-
-				      struct snd_pcm_hw_params *params)
-
-{
-
-	return mt8186_hw_params_fixup(rtd, params, SNDRV_PCM_FORMAT_S32_LE);
-
-}
-
-
-
-static int mt8186_hdmi_i2s_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
-
-					   struct snd_pcm_hw_params *params)
-
-{
-
-	return mt8186_hw_params_fixup(rtd, params, SNDRV_PCM_FORMAT_S24_LE);
-
-}
-
-... this reduces code duplication!
-
-> +
-> +/* FE */
-> +SND_SOC_DAILINK_DEFS(playback1,
-> +		     DAILINK_COMP_ARRAY(COMP_CPU("DL1")),
-> +		     DAILINK_COMP_ARRAY(COMP_DUMMY()),
-> +		     DAILINK_COMP_ARRAY(COMP_EMPTY()));
-
-
-..snip..
-
-> +static int mt8186_mt6366_da7219_max98357_dev_probe(struct platform_device *pdev)
-> +{
-> +	struct snd_soc_card *card = &mt8186_mt6366_da7219_max98357_soc_card;
-> +	struct snd_soc_dai_link *dai_link;
-> +	struct mt8186_mt6366_da7219_max98357_priv *priv;
-> +	struct device_node *platform_node, *hdmi_codec;
-> +	int ret, i;
-> +
-> +	dev_info(&pdev->dev, "%s(), ++\n", __func__);
-> +
-> +	card->dev = &pdev->dev;
-> +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	platform_node = of_parse_phandle(pdev->dev.of_node,
-> +					 "mediatek,platform", 0);
-> +	if (!platform_node) {
-> +		dev_info(&pdev->dev,
-> +			 "Property 'platform' missing or invalid\n");
-
-	if (!platform_node)
-		return dev_err_probe(&pdev->dev, -EINVAL,
-				    "mediatek,platform missing or invalid\n");
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
-> +				      "mediatek,hdmi-codec", 0);
-> +	if (!hdmi_codec) {
-> +		dev_info(&pdev->dev,
-> +			 "Property 'hdmi' missing or invalid\n");
-
-dev_err()
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	for_each_card_prelinks(card, i, dai_link) {
-> +		if (dai_link->platforms->name)
-> +			continue;
-> +
-> +		if (hdmi_codec && strcmp(dai_link->name, "I2S3") == 0) {
-> +			dai_link->codecs->of_node = hdmi_codec;
-> +			dai_link->ignore = 0;
-> +		}
-> +
-> +		dai_link->platforms->of_node = platform_node;
-> +	}
-> +
-> +	snd_soc_card_set_drvdata(card, priv);
-> +
-> +	/* init gpio */
-> +	ret = mt8186_afe_gpio_init(&pdev->dev);
-> +	if (ret)
-> +		dev_info(&pdev->dev, "init gpio error\n");
-
-dev_err() and goto end;
-
-> +
-> +	dev_info(&pdev->dev, "%s(), devm_snd_soc_register_card\n", __func__);
-> +	ret = devm_snd_soc_register_card(&pdev->dev, card);
-> +	if (ret)
-> +		dev_info(&pdev->dev, "%s snd_soc_register_card fail %d\n",
-> +			 __func__, ret);
-
-dev_err_probe()
-
-end:
-
-> +	of_node_put(platform_node);
-> +	of_node_put(hdmi_codec);
-> +
-> +	return ret;
-> +}
-> +
-> +#if IS_ENABLED(CONFIG_OF)
-> +static const struct of_device_id mt8186_mt6366_da7219_max98357_dt_match[] = {
-> +	{.compatible = "mediatek,mt8186_mt6366_da7219_max98357_sound",},
-> +	{}
-> +};
-> +#endif
-> +
-> +static struct platform_driver mt8186_mt6366_da7219_max98357_driver = {
-> +	.driver = {
-> +		.name = "mt8186_mt6366_da7219_max98357",
-> +#if IS_ENABLED(CONFIG_OF)
-> +		.of_match_table = mt8186_mt6366_da7219_max98357_dt_match,
-> +#endif
-> +		.pm = &snd_soc_pm_ops,
-> +	},
-> +	.probe = mt8186_mt6366_da7219_max98357_dev_probe,
-> +};
-> +
-> +module_platform_driver(mt8186_mt6366_da7219_max98357_driver);
-> +
-> +/* Module information */
-> +MODULE_DESCRIPTION("MT8186-MT6366-DA7219-MAX98357 ALSA SoC machine driver");
-> +MODULE_AUTHOR("Jiaxin Yu <jiaxin.yu@mediatek.com>");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("mt8186_mt6366_da7219_max98357 soc card");
-
+On 2/18/22 12:14 AM, Zhang, Tianfei wrote:
+>
+>> -----Original Message-----
+>> From: Tom Rix <trix@redhat.com>
+>> Sent: Tuesday, February 15, 2022 11:51 PM
+>> To: Zhang, Tianfei <tianfei.zhang@intel.com>; Wu, Hao <hao.wu@intel.com>;
+>> mdf@kernel.org; Xu, Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
+>> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Cc: corbet@lwn.net; Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Subject: Re: [PATCH v1 4/7] fpga: dfl: fix VF creation when ports have no local
+>> BAR space
+>>
+>>
+>> On 2/14/22 3:26 AM, Tianfei zhang wrote:
+>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>>
+>>> When a port is not connected to the same PCIe endpoint as the FME, the
+>>> port does not need to be released before being virtualized.  Fix VF
+>>> creation code to handle this new use
+>> Similar, how does this fit in with iofs, this looks like it would not be valid for the
+>> existing cards
+> IOFS introducing multiple methods for PR and AFU access.
+> 1. Legacy Model.
+> 2. Micro-Personas in AFU.
+> 3. Multiple VFs per PR slot.
+>
+> For 1 and 2 model, there are 1:1 mapping between Port device and PR slot (or entire AFU). In virtualization,
+> it should release the Port device firstly and then assign to VM. In this models, the DFL driver will track  that
+> the number of port devices has released (cdev->released_port_num in dfl_fpga_cdev_config_ports_vf() function)
+> are equal with the numbers of SRIOV or not. But in model 3, it has multiple VFs per PR slot, and assign the VF to VM
+> without release the port device, so the tracking mechanism of cdev->released_port_num is not workable on new
+
+If ->release_port_num is not workable, then it needs to be generalized.
+
+Refactor to handle all the cases.
+
+Tom
+
+> model. This patch want to handle this new model during VF creation.
+>
+>>> case.
+>>>
+>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+>>> ---
+>>>    drivers/fpga/dfl.c | 11 +++++++++--
+>>>    1 file changed, 9 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c index
+>>> 26f8cf890700..cfc539a656f0 100644
+>>> --- a/drivers/fpga/dfl.c
+>>> +++ b/drivers/fpga/dfl.c
+>>> @@ -1705,15 +1705,22 @@
+>> EXPORT_SYMBOL_GPL(dfl_fpga_cdev_config_ports_pf);
+>>>    int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
+>>>    {
+>>>    	struct dfl_feature_platform_data *pdata;
+>>> -	int ret = 0;
+>>> +	int ret = 0, port_count = 0;
+>>>
+>>>    	mutex_lock(&cdev->lock);
+>>> +
+>>> +	list_for_each_entry(pdata, &cdev->port_dev_list, node) {
+>>> +		if (pdata->dev)
+>> This looks wrong,
+>>
+>> pdata->dev is dereferenced below, if there is a case were (!pdata->dev)
+>> here there would be crash later.
+>>
+>>> +			continue;
+>>> +		port_count++;
+>> how does this work when only some of the ports are handled in the new way ?
+> This code want to handle the " Multiple VFs per PR slot" model as I mentioned above.
+> In new model, the port_count want to count that how many port devices have released.
+> This code looks not good readability, I try to re-write it.
+>
+>> Tom
+>>
+>>> +	}
+>>> +
+>>>    	/*
+>>>    	 * can't turn multiple ports into 1 VF device, only 1 port for 1 VF
+>>>    	 * device, so if released port number doesn't match VF device number,
+>>>    	 * then reject the request with -EINVAL error code.
+>>>    	 */
+>>> -	if (cdev->released_port_num != num_vfs) {
+>>> +	if (port_count && cdev->released_port_num != num_vfs) {
+>>>    		ret = -EINVAL;
+>>>    		goto done;
+>>>    	}
 

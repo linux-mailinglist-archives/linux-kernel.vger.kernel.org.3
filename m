@@ -2,198 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450514BBCF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F19C4BBCFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 17:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237365AbiBRQD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 11:03:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56728 "EHLO
+        id S237420AbiBRQFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 11:05:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbiBRQDy (ORCPT
+        with ESMTP id S232578AbiBRQFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 11:03:54 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DE948E79
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:03:37 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id 10so4484696uar.9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 08:03:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a/tt/i/SHiINJEY0pzj/+Ldx+3Qwg7aOlXBO5O3mv/g=;
-        b=dF4InSk4puY7t63FDNQji1VKBMAT10aW6SsRaj+tbGjKZBA7rCD6pWG5TDIOUYZs6d
-         52g9JlO5u2/5vAvhhXDbgKidl3IcbTgCPe3jNeCsjUK9FLQY9n9zO8f1y5naKqP3Sa5P
-         6GKB8aFGjIk9FgIJB2WZatULVInnG6CvYYyvh929X6pCjT5OuXW71PguXiOApK1ZNhuT
-         riblrkDGEjVWLHl8fFmKnX12m+X1DNxNvEgBeFwgNXqv5j+bZkRW75RYE9667sBznToC
-         Oi0OVnAmg+weJANXpwN9GQNBpPcnyRiuHypFs7bPUZZAfQYlurfZET/5qT1iznjdQTv8
-         ZHNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a/tt/i/SHiINJEY0pzj/+Ldx+3Qwg7aOlXBO5O3mv/g=;
-        b=IRFlC6POXPpqwn+mxtPLA6JqtWkWRTozYij4NoNuYVVbdWLbNG56f3TIxZzTwE+zk0
-         6h1tHH5EnIIFbwyWOP7GNcW2/W3IYMvMVQpzPe1CmEe7uw/fAJVYn99JDm6hegERYpBN
-         aSIbDP3j8WU9XnUNMv667jC90eRBteYFPtYA2EycodafwLOaqFH03qQKza+CarXMDVfA
-         hu82zklMzez3Rm5LzYbuw3jtutZprrywfCvxN+peWHvmpZ5bKCWnNWKJ6hqXV049xpjh
-         ZrYV/Wx8W9I91RORhgJ5KKYa4Aq4Y4mWsWvQ+9mTyrXu5bsMY9g2MCQzNOQXmq8nCcdq
-         /NKA==
-X-Gm-Message-State: AOAM533fItALWNT9ibbY0HIUnpV2/S5cdUA9i3CeU+4uJ3Q19H2rFOQa
-        uda2tk/Rveq0nGw9TqZ/CsYk2D/X4n7RdOjgiTdUy+D0e1amFQ==
-X-Google-Smtp-Source: ABdhPJweA9UfX0PBbz3wdvBXso5dR5TQDJ3ynb4y/07Jh18joreI6URQtKSRC6DR2FHWxXidwq0Il055iZlCfHPircE=
-X-Received: by 2002:ab0:60b1:0:b0:341:543e:c388 with SMTP id
- f17-20020ab060b1000000b00341543ec388mr3233205uam.80.1645200215894; Fri, 18
- Feb 2022 08:03:35 -0800 (PST)
+        Fri, 18 Feb 2022 11:05:02 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5458532EF;
+        Fri, 18 Feb 2022 08:04:45 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 292B7210E5;
+        Fri, 18 Feb 2022 16:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645200284; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wIVcCgCTUoNfrlDbIxcNqaydrcBIQu4poVRFpF/GnA4=;
+        b=c8xX1dJN/jW1X4017fu3kzeO9XdQ/rqYvo0vSCpT/vYkjvZJqC3TnCoFXsgVCVJ7MKFEEr
+        ZdzyOi6dP2lTWAezAA0FYyeYSZrMFCerq1RY5WeZP+2LQb9jPv30GuKAzfFxqA23OgsVq6
+        qJodMrzWB1QMeKQP/jv729Eo5+6X9y4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645200284;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wIVcCgCTUoNfrlDbIxcNqaydrcBIQu4poVRFpF/GnA4=;
+        b=RbMZVYc2yY2G1mJYHFa1WTyH53eB1wo60u/MFWDFOjQKcziXohigfThCj8T6nSicH/1pia
+        gqfB8S3gd0O8cGBQ==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id 603D3A3B8C;
+        Fri, 18 Feb 2022 16:04:43 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
+        Helge Deller <deller@gmx.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Herrmann <dh.herrmann@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-video@atrey.karlin.mff.cuni.cz
+Subject: [PATCH v3] simplefb: Enable boot time VESA graphic mode selection.
+Date:   Fri, 18 Feb 2022 17:04:36 +0100
+Message-Id: <20220218160436.23211-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <a789e375-a23e-6988-33bc-1410eb5d974f@suse.de>
+References: <a789e375-a23e-6988-33bc-1410eb5d974f@suse.de>
 MIME-Version: 1.0
-References: <Yg54nse5qNQO3sbW@zn.tnic> <20220218013209.2436006-1-juew@google.com>
- <Yg+2Hc78nfSRmh/j@zn.tnic>
-In-Reply-To: <Yg+2Hc78nfSRmh/j@zn.tnic>
-From:   Jue Wang <juew@google.com>
-Date:   Fri, 18 Feb 2022 08:03:24 -0800
-Message-ID: <CAPcxDJ4c3eGXTB9UPJmZ8dzyCNPW4Lv9s1QSeoCWq_LdNWTrJw@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/mce: work around an erratum on fast string copy instructions.
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Tony Luck <tony.luck@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 7:07 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Feb 17, 2022 at 05:32:09PM -0800, Jue Wang wrote:
-> > +static noinstr bool quirk_skylake_repmov(void)
-> > +{
-> > +     u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
-> > +     u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
-> > +
-> > +     /*
-> > +      * Apply the quirk only to local machine checks, i.e., no broadcast
-> > +      * sync is needed.
-> > +      */
-> > +     if ((mcgstatus & MCG_STATUS_LMCES) &&
-> > +         unlikely(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
-> > +             u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
-> > +
-> > +             /* Check for a software-recoverable data fetch error. */
-> > +             if ((mc1_status &
-> > +                  (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
-> > +                   MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
-> > +                   MCI_STATUS_AR | MCI_STATUS_S)) ==
-> > +                  (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
-> > +                   MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
-> > +                   MCI_STATUS_AR | MCI_STATUS_S)) {
-> > +                     misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
-> > +                     __wrmsr(MSR_IA32_MISC_ENABLE,
-> > +                             (u32)misc_enable, (u32)(misc_enable >> 32));
->
-> "You're going to have to use the mce_{rd,wr}msrl() routines."
->
-> I actually really meant that.
-Thanks.
+Since switch to simplefb/simpledrm VESA graphic modes are no longer
+available with legacy BIOS.
 
-Since MSR_IA32_MISC_ENABLE is not a MCA register, I wonder if we want
-to mix its read/write with the injected MCE code. I was a bit concerned about
-potential race with mce-inject and the read/write to MSR_IA32_MISC_ENABLE.
+The x86 realmode boot code enables the VESA graphic modes when option
+FB_BOOT_VESA_SUPPORT is enabled.
 
->
-> And I went and simplified this a bit more so that it is more readable,
-> diff ontop.
->
-> Also, Tony, I think the clearing of MCG_STATUS should happen last.
->
-> ---
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index c1a41da99975..1741be9b9464 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -831,34 +831,35 @@ quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
->   */
->  static noinstr bool quirk_skylake_repmov(void)
->  {
-> -       u64 mcgstatus = mce_rdmsrl(MSR_IA32_MCG_STATUS);
-> -       u64 misc_enable = __rdmsr(MSR_IA32_MISC_ENABLE);
-> +       u64 mcgstatus   = mce_rdmsrl(MSR_IA32_MCG_STATUS);
-> +       u64 misc_enable = mce_rdmsrl(MSR_IA32_MISC_ENABLE);
-> +       u64 mc1_status;
->
->         /*
->          * Apply the quirk only to local machine checks, i.e., no broadcast
->          * sync is needed.
->          */
-> -       if ((mcgstatus & MCG_STATUS_LMCES) &&
-> -           (misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING)) {
-> -               u64 mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
-> -
-> -               /* Check for a software-recoverable data fetch error. */
-> -               if ((mc1_status &
-> -                    (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
-> -                     MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
-> -                     MCI_STATUS_AR | MCI_STATUS_S)) ==
-> -                    (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
-> -                     MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
-> -                     MCI_STATUS_AR | MCI_STATUS_S)) {
-> -                       misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
-> -                       __wrmsr(MSR_IA32_MISC_ENABLE,
-> -                               (u32)misc_enable, (u32)(misc_enable >> 32));
-> -                       mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
-> -                       mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
-> -                       pr_err_once("Errata detected, disable fast string copy instructions.\n");
-> -                       return true;
-> -               }
-> +       if (!(mcgstatus & MCG_STATUS_LMCES) ||
-> +           !(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING))
-> +               return false;
-> +
-> +       mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
-> +
-> +       /* Check for a software-recoverable data fetch error. */
-> +       if ((mc1_status &
-> +            (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
-> +             MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
-> +             MCI_STATUS_AR | MCI_STATUS_S)) ==
-> +            (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
-> +             MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
-> +             MCI_STATUS_AR | MCI_STATUS_S)) {
-> +               misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
-> +               mce_wrmsrl(MSR_IA32_MISC_ENABLE, misc_enable);
-> +               mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
-> +               pr_err_once("Erratum detected, disable fast string copy instructions.\n");
-> +               return true;
->         }
-> +
->         return false;
->  }
->
-> @@ -1432,7 +1433,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
->                 return unexpected_machine_check(regs);
->
->         if (mce_flags.skx_repmov_quirk && quirk_skylake_repmov())
-> -               return;
-> +               goto clear;
->
->         /*
->          * Establish sequential order between the CPUs entering the machine
-> @@ -1576,6 +1577,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
->  out:
->         instrumentation_end();
->
-> +clear:
->         mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
->  }
->  EXPORT_SYMBOL_GPL(do_machine_check);
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+To enable use of VESA modes with simplefb in legacy BIOS boot mode drop
+dependency of BOOT_VESA_SUPPORT on FB, also drop the FB_ prefix, and
+select the option when simplefb enabled on x86.
+
+The BOOT_VESA_SUPPORT is not specific to framebuffer but rather to x86
+platform, move it from fbdev to x86 Kconfig.
+
+Fixes: e3263ab389a7 ("x86: provide platform-devices for boot-framebuffers")
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+v2: Select BOOT_VESA_SUPPORT from simplefb rather than simpledrm. The
+simpledrm driver uses the firmware provided video modes only indirectly
+through simplefb, and both can be enabled independently.
+v3: Move BOOT_VESA_SUPPORT from fbdev to x86
+---
+ arch/x86/Kconfig            |  6 ++++++
+ arch/x86/boot/video-vesa.c  |  4 ++--
+ drivers/firmware/Kconfig    |  1 +
+ drivers/video/fbdev/Kconfig | 13 +++----------
+ 4 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 9f5bd41bf660..cceb1aab0486 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -942,6 +942,12 @@ config GART_IOMMU
+ 
+ 	  If unsure, say Y.
+ 
++config BOOT_VESA_SUPPORT
++	bool
++	help
++	  If true, at least one selected framebuffer driver can take advantage
++	  of VESA video modes set at an early boot stage via the vga= parameter.
++
+ config MAXSMP
+ 	bool "Enable Maximum number of SMP Processors and NUMA Nodes"
+ 	depends on X86_64 && SMP && DEBUG_KERNEL
+diff --git a/arch/x86/boot/video-vesa.c b/arch/x86/boot/video-vesa.c
+index 7e185977a984..c2c6d35e3a43 100644
+--- a/arch/x86/boot/video-vesa.c
++++ b/arch/x86/boot/video-vesa.c
+@@ -83,7 +83,7 @@ static int vesa_probe(void)
+ 			   (vminfo.memory_layout == 4 ||
+ 			    vminfo.memory_layout == 6) &&
+ 			   vminfo.memory_planes == 1) {
+-#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
++#ifdef CONFIG_BOOT_VESA_SUPPORT
+ 			/* Graphics mode, color, linear frame buffer
+ 			   supported.  Only register the mode if
+ 			   if framebuffer is configured, however,
+@@ -121,7 +121,7 @@ static int vesa_set_mode(struct mode_info *mode)
+ 	if ((vminfo.mode_attr & 0x15) == 0x05) {
+ 		/* It's a supported text mode */
+ 		is_graphic = 0;
+-#ifdef CONFIG_FB_BOOT_VESA_SUPPORT
++#ifdef CONFIG_BOOT_VESA_SUPPORT
+ 	} else if ((vminfo.mode_attr & 0x99) == 0x99) {
+ 		/* It's a graphics mode with linear frame buffer */
+ 		is_graphic = 1;
+diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+index 75cb91055c17..ad64f3a6f54f 100644
+--- a/drivers/firmware/Kconfig
++++ b/drivers/firmware/Kconfig
+@@ -224,6 +224,7 @@ config SYSFB
+ config SYSFB_SIMPLEFB
+ 	bool "Mark VGA/VBE/EFI FB as generic system framebuffer"
+ 	depends on SYSFB
++	select BOOT_VESA_SUPPORT
+ 	help
+ 	  Firmwares often provide initial graphics framebuffers so the BIOS,
+ 	  bootloader or kernel can show basic video-output during boot for
+diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+index 6ed5e608dd04..5bdd303b5268 100644
+--- a/drivers/video/fbdev/Kconfig
++++ b/drivers/video/fbdev/Kconfig
+@@ -66,13 +66,6 @@ config FB_DDC
+ 	select I2C_ALGOBIT
+ 	select I2C
+ 
+-config FB_BOOT_VESA_SUPPORT
+-	bool
+-	depends on FB
+-	help
+-	  If true, at least one selected framebuffer driver can take advantage
+-	  of VESA video modes set at an early boot stage via the vga= parameter.
+-
+ config FB_CFB_FILLRECT
+ 	tristate
+ 	depends on FB
+@@ -627,7 +620,7 @@ config FB_VESA
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
+-	select FB_BOOT_VESA_SUPPORT
++	select BOOT_VESA_SUPPORT
+ 	help
+ 	  This is the frame buffer device driver for generic VESA 2.0
+ 	  compliant graphic cards. The older VESA 1.2 cards are not supported.
+@@ -1051,7 +1044,7 @@ config FB_INTEL
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
+-	select FB_BOOT_VESA_SUPPORT if FB_INTEL = y
++	select BOOT_VESA_SUPPORT if FB_INTEL = y
+ 	depends on !DRM_I915
+ 	help
+ 	  This driver supports the on-board graphics built in to the Intel
+@@ -1378,7 +1371,7 @@ config FB_SIS
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
+-	select FB_BOOT_VESA_SUPPORT if FB_SIS = y
++	select BOOT_VESA_SUPPORT if FB_SIS = y
+ 	select FB_SIS_300 if !FB_SIS_315
+ 	help
+ 	  This is the frame buffer device driver for the SiS 300, 315, 330
+-- 
+2.31.1
+

@@ -2,130 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8604BB39C
+	by mail.lfdr.de (Postfix) with ESMTP id 230154BB39B
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Feb 2022 08:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiBRHwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 02:52:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51560 "EHLO
+        id S232216AbiBRHwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 02:52:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiBRHwb (ORCPT
+        with ESMTP id S232171AbiBRHwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:52:31 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4262F580D0;
-        Thu, 17 Feb 2022 23:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645170735; x=1676706735;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=NL2i8hfGmRzChtiBfW40qSaziq0ALGwdtM1vhdp7/4E=;
-  b=t4Q4nN68eYgTVCvEtuZFvlVaqzFoA6nfvqQh4xpDn9q76YmwQtDzCdNq
-   nehSGdXu0UdXAsz7Me40pGAE2CQVXJejBV++WXTi9uWDXDa9prd4V2O3i
-   RsYDpt3qgQArb4suglyI76w5ti5ISSzDZfVJ4f1gDL/i1Ge25ULHfjqL7
-   Q=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 17 Feb 2022 23:52:15 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 23:52:14 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 17 Feb 2022 23:52:14 -0800
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 17 Feb 2022 23:52:10 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_rjendra@quicinc.com>,
-        <quic_saipraka@quicinc.com>, <quic_schowdhu@quicinc.com>
-Subject: [PATCH V1 2/2] Revert "arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector"
-Date:   Fri, 18 Feb 2022 13:21:36 +0530
-Message-ID: <a9b0bcd1c7f2a94006cb9ad098c96d64e9c93863.1645168567.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1645168567.git.quic_schowdhu@quicinc.com>
-References: <cover.1645168567.git.quic_schowdhu@quicinc.com>
+        Fri, 18 Feb 2022 02:52:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B7F580E8;
+        Thu, 17 Feb 2022 23:52:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0E7AB82537;
+        Fri, 18 Feb 2022 07:52:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F70C340ED;
+        Fri, 18 Feb 2022 07:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645170733;
+        bh=V+9C48iv9XRk+MUoKRdXyp5e9Ugr2dXDUyMumpaYQ6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J50nw6T8dG5KzH/M8aFe8tHATxgNAosOGLEUAPRWPC99g6+YSWDb3TC1slK7qRKWZ
+         r78c+ZEleASEcNm80gohZLsLprX9bBCL6K6KaMuVr2gqJBrcyOrVrFUF3a4hahRmSw
+         sXqJy5WNvMLvQQMBN93Q3HkJKsbSpOSsUalvBZyA=
+Date:   Fri, 18 Feb 2022 08:51:54 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-ext4@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Chinner <dchinner@redhat.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [REPORT] kernel BUG at fs/ext4/inode.c:2620 - page_buffers()
+Message-ID: <Yg9QGm2Rygrv+lMj@kroah.com>
+References: <Yg0m6IjcNmfaSokM@google.com>
+ <82d0f4e4-c911-a245-4701-4712453592d9@nvidia.com>
+ <Yg8bxiz02WBGf6qO@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yg8bxiz02WBGf6qO@mit.edu>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Revert all the changes to add the Embedded USB Debugger(EUD) Node
-in the device tree, the connector node and also changes to usb2 Node
-associated with this.
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 36 ------------------------------------
- 1 file changed, 36 deletions(-)
+On Thu, Feb 17, 2022 at 11:08:38PM -0500, Theodore Ts'o wrote:
+> On Thu, Feb 17, 2022 at 05:06:45PM -0800, John Hubbard wrote:
+> > Yes. And looking at the pair of backtraces below, this looks very much
+> > like another aspect of the "get_user_pages problem" [1], originally
+> > described in Jan Kara's 2018 email [2].
+> 
+> Hmm... I just posted my analysis, which tracks with yours; but I had
+> forgotten about Jan's 2018 e-mail on the matter.
+> 
+> > I'm getting close to posting an RFC for the direct IO conversion to
+> > FOLL_PIN, but even after that, various parts of the kernel (reclaim,
+> > filesystems/block layer) still need to be changed so as to use
+> > page_maybe_dma_pinned() to help avoid this problem. There's a bit
+> > more than that, actually.
+> 
+> The challenge is that fixing this "the right away" is probably not
+> something we can backport into an LTS kernel, whether it's 5.15 or
+> 5.10... or 4.19.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 96917fe..937c2e0 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2583,12 +2583,6 @@
- 				phys = <&usb_2_hsphy>;
- 				phy-names = "usb2-phy";
- 				maximum-speed = "high-speed";
--				usb-role-switch;
--				port {
--					usb2_role_switch: endpoint {
--						remote-endpoint = <&eud_ep>;
--					};
--				};
- 			};
- 		};
- 
-@@ -2630,36 +2624,6 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
--		eud: eud@88e0000 {
--			compatible = "qcom,sc7280-eud","qcom,eud";
--			reg = <0 0x88e0000 0 0x2000>,
--			      <0 0x88e2000 0 0x1000>;
--			interrupts-extended = <&pdc 11 IRQ_TYPE_LEVEL_HIGH>;
--			ports {
--				port@0 {
--					eud_ep: endpoint {
--						remote-endpoint = <&usb2_role_switch>;
--					};
--				};
--				port@1 {
--					eud_con: endpoint {
--						remote-endpoint = <&con_eud>;
--					};
--				};
--			};
--		};
--
--		eud_typec: connector {
--			compatible = "usb-c-connector";
--			ports {
--				port@0 {
--					con_eud: endpoint {
--						remote-endpoint = <&eud_con>;
--					};
--				};
--			};
--		};
--
- 		nsp_noc: interconnect@a0c0000 {
- 			reg = <0 0x0a0c0000 0 0x10000>;
- 			compatible = "qcom,sc7280-nsp-noc";
--- 
-2.7.4
+Don't worry about stable backports to start with.  Do it the "right way"
+first and then we can consider if it needs to be backported or not.
 
+thanks,
+
+greg k-h

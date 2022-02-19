@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8014BC7AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E979A4BC7A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242006AbiBSKV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 05:21:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35444 "EHLO
+        id S242041AbiBSKWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 05:22:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241146AbiBSKVs (ORCPT
+        with ESMTP id S241902AbiBSKVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 19 Feb 2022 05:21:48 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DBCD85;
-        Sat, 19 Feb 2022 02:21:28 -0800 (PST)
-Date:   Sat, 19 Feb 2022 10:21:26 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE98E03;
+        Sat, 19 Feb 2022 02:21:29 -0800 (PST)
+Date:   Sat, 19 Feb 2022 10:21:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645266087;
+        s=2020; t=1645266088;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9CRasBmJo1PDlEkAqZxiN1EM8XlHdsukWFgEcQDUCZg=;
-        b=dyfhTAky6mj5DSM/zNpfM1uHzUJ1BMvTj1/D2agrWZs40lmNzMxv8HSiQPZZ2II3cvdXRC
-        nC4pR8ulwBHjmCDMl4E8tqjI5MIxXpBU91ZFAyK/vokXKzAR7gmevJ73wkMNR5gcUQW8v8
-        QOKauNVWmMQGtBUiLOzcpYMvCwxJh6ALW+TIOVvi/6Hr7Sid9YJUaPINCjxPRZ8wQDHavD
-        JFA/NnZe4rYTsXzMxv+pWTTwltdC/3Mucb8rcVNIy47rCLtScIgGyM6B3Iyj0zFSWtNx1R
-        2kx7jRL8AfotmenzymW3POEoD+iDRhG8aMELJlWcQ36fxx54il+K2S/ONXSYdg==
+        bh=DJhHvKEXRPHSAjTa2sh1695Mi5ecnxmwtw9hbQv4+W0=;
+        b=hsvFUjlGJhcfXUEovd6KFOX+j1amOBHyOTSNhZu6apHe7oHY9aNg4Y71DGY+zDA2cpUTMb
+        ERbB1LGn1V9IxpAbhltgFBvSBoKBfN+30/ET3jVX4kdAb9V+44/xqbYIiB/zqqxLsdPBh5
+        IVgDzvbKCHJuokkgGPXcWPaGZUrPAj1YFg4eZw4tnVBHamJznxmG+fPZamnXj4xq+odidt
+        UUm4DDQY7tPWvUn1J7SHuXyoz4GrRGoEVcIcJ9023L8CVJeUdRZiKkW02dVrbT2J1oljKL
+        Gp6xGyTEaSeKBo3CDywEDOBOWyiqwJuHAMe6GSRpKxPjhRKVKQ7DhIy5enSCVg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645266087;
+        s=2020e; t=1645266088;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9CRasBmJo1PDlEkAqZxiN1EM8XlHdsukWFgEcQDUCZg=;
-        b=bO2Gx9Bjn+ey3/IYbMLu7zMRyiUtFzNa6PElQirYLkxEYc3/6oQZu2rFQ0J1zA7pwbwwrP
-        ERi8wsegCOFsyOBQ==
+        bh=DJhHvKEXRPHSAjTa2sh1695Mi5ecnxmwtw9hbQv4+W0=;
+        b=thWtI1LUSC/CeDmZNN+mnA99iCMLsxlFGzMcP8FimAo1EDRcHBACxdkCQHEDlBwzASiw0l
+        VytRnsptnq0oaiBA==
 From:   "tip-bot2 for Mark Rutland" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/preempt: Decouple HAVE_PREEMPT_DYNAMIC from
- GENERIC_ENTRY
+Subject: [tip: sched/core] sched/preempt: Simplify
+ irqentry_exit_cond_resched() callers
 Cc:     Mark Rutland <mark.rutland@arm.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220214165216.2231574-5-mark.rutland@arm.com>
-References: <20220214165216.2231574-5-mark.rutland@arm.com>
+In-Reply-To: <20220214165216.2231574-4-mark.rutland@arm.com>
+References: <20220214165216.2231574-4-mark.rutland@arm.com>
 MIME-Version: 1.0
-Message-ID: <164526608616.16921.6985331369063891215.tip-bot2@tip-bot2>
+Message-ID: <164526608700.16921.17683501386513808570.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,59 +70,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     33c64734be3461222a8aa27d3dadc477ebca62de
-Gitweb:        https://git.kernel.org/tip/33c64734be3461222a8aa27d3dadc477ebca62de
+Commit-ID:     4624a14f4daa8ab4578d274555fd8847254ce339
+Gitweb:        https://git.kernel.org/tip/4624a14f4daa8ab4578d274555fd8847254ce339
 Author:        Mark Rutland <mark.rutland@arm.com>
-AuthorDate:    Mon, 14 Feb 2022 16:52:13 
+AuthorDate:    Mon, 14 Feb 2022 16:52:12 
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Sat, 19 Feb 2022 11:11:08 +01:00
 
-sched/preempt: Decouple HAVE_PREEMPT_DYNAMIC from GENERIC_ENTRY
+sched/preempt: Simplify irqentry_exit_cond_resched() callers
 
-Now that the enabled/disabled states for the preemption functions are
-declared alongside their definitions, the core PREEMPT_DYNAMIC logic is
-no longer tied to GENERIC_ENTRY, and can safely be selected so long as
-an architecture provides enabled/disabled states for
-irqentry_exit_cond_resched().
+Currently callers of irqentry_exit_cond_resched() need to be aware of
+whether the function should be indirected via a static call, leading to
+ugly ifdeffery in callers.
 
-Make it possible to select HAVE_PREEMPT_DYNAMIC without GENERIC_ENTRY.
+Save them the hassle with a static inline wrapper that does the right
+thing. The raw_irqentry_exit_cond_resched() will also be useful in
+subsequent patches which will add conditional wrappers for preemption
+functions.
 
-For existing users of HAVE_PREEMPT_DYNAMIC there should be no functional
-change as a result of this patch.
+Note: in arch/x86/entry/common.c, xen_pv_evtchn_do_upcall() always calls
+irqentry_exit_cond_resched() directly, even when PREEMPT_DYNAMIC is in
+use. I believe this is a latent bug (which this patch corrects), but I'm
+not entirely certain this wasn't deliberate.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Ard Biesheuvel <ardb@kernel.org>
 Acked-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20220214165216.2231574-5-mark.rutland@arm.com
+Link: https://lore.kernel.org/r/20220214165216.2231574-4-mark.rutland@arm.com
 ---
- arch/Kconfig        | 1 -
- kernel/sched/core.c | 2 ++
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ include/linux/entry-common.h |  9 ++++++---
+ kernel/entry/common.c        | 12 ++++--------
+ 2 files changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 678a807..601691f 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1279,7 +1279,6 @@ config HAVE_STATIC_CALL_INLINE
- config HAVE_PREEMPT_DYNAMIC
- 	bool
- 	depends on HAVE_STATIC_CALL
--	depends on GENERIC_ENTRY
- 	help
- 	   Select this if the architecture support boot time preempt setting
- 	   on top of static calls. It is strongly advised to support inline
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index bf3a97f..300c045 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8149,7 +8149,9 @@ EXPORT_SYMBOL(__cond_resched_rwlock_write);
- 
+diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+index a01ac1a..dfd84c5 100644
+--- a/include/linux/entry-common.h
++++ b/include/linux/entry-common.h
+@@ -454,11 +454,14 @@ irqentry_state_t noinstr irqentry_enter(struct pt_regs *regs);
+  *
+  * Conditional reschedule with additional sanity checks.
+  */
+-void irqentry_exit_cond_resched(void);
++void raw_irqentry_exit_cond_resched(void);
  #ifdef CONFIG_PREEMPT_DYNAMIC
+-#define irqentry_exit_cond_resched_dynamic_enabled	irqentry_exit_cond_resched
++#define irqentry_exit_cond_resched_dynamic_enabled	raw_irqentry_exit_cond_resched
+ #define irqentry_exit_cond_resched_dynamic_disabled	NULL
+-DECLARE_STATIC_CALL(irqentry_exit_cond_resched, irqentry_exit_cond_resched);
++DECLARE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);
++#define irqentry_exit_cond_resched()	static_call(irqentry_exit_cond_resched)()
++#else
++#define irqentry_exit_cond_resched()	raw_irqentry_exit_cond_resched()
+ #endif
  
-+#ifdef CONFIG_GENERIC_ENTRY
- #include <linux/entry-common.h>
-+#endif
+ /**
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index bad7136..1739ca7 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -380,7 +380,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+ 	return ret;
+ }
  
- /*
-  * SC:cond_resched
+-void irqentry_exit_cond_resched(void)
++void raw_irqentry_exit_cond_resched(void)
+ {
+ 	if (!preempt_count()) {
+ 		/* Sanity check RCU and thread stack */
+@@ -392,7 +392,7 @@ void irqentry_exit_cond_resched(void)
+ 	}
+ }
+ #ifdef CONFIG_PREEMPT_DYNAMIC
+-DEFINE_STATIC_CALL(irqentry_exit_cond_resched, irqentry_exit_cond_resched);
++DEFINE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);
+ #endif
+ 
+ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+@@ -420,13 +420,9 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+ 		}
+ 
+ 		instrumentation_begin();
+-		if (IS_ENABLED(CONFIG_PREEMPTION)) {
+-#ifdef CONFIG_PREEMPT_DYNAMIC
+-			static_call(irqentry_exit_cond_resched)();
+-#else
++		if (IS_ENABLED(CONFIG_PREEMPTION))
+ 			irqentry_exit_cond_resched();
+-#endif
+-		}
++
+ 		/* Covers both tracing and lockdep */
+ 		trace_hardirqs_on();
+ 		instrumentation_end();

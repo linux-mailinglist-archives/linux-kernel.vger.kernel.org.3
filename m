@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686CB4BCA9E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 21:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E20E4BCA9F
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 21:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243125AbiBSUkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 15:40:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54570 "EHLO
+        id S243148AbiBSUnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 15:43:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiBSUkW (ORCPT
+        with ESMTP id S243126AbiBSUnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 15:40:22 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEF9B7E0
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 12:40:00 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d27so20198132wrc.6
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 12:40:00 -0800 (PST)
+        Sat, 19 Feb 2022 15:43:17 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1101126
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 12:42:57 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id f3so20055755wrh.7
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 12:42:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=9MVIzOhhFVrqb+O9seRvzRjJKrnabh0ef9RGnj5egx0=;
-        b=GqEmVAJN25pVd1XzMJhV+AXrYmOgKc/gT9JjMOR8U87xRVITzDAZMm/jkE+PVc4AFy
-         NHaazPZZ49aDlIa/hfdz77GEpza+HYkfgi750vBTMB8Y5Zrk9TquMCWEssg7DNaar2N4
-         z8tjPN+4ZlSsvWuc323WvzQxLDc8F/NSjyXhRrJl5N/r7B0QeMqKbXBONLYBhJfx/E73
-         xZ96kcF79UVW10YBoQgcXxAMJ/TEQFg1/5awrXa23xxuRDfuNkzP3XVA3i/JsT8PWzy5
-         HPrwe8ci6BF8puQADw0bAXLz1t33TsrFtbEMM1ureYtnyaE98N7cIAkZnkqe+sK5TrfN
-         +Elw==
+        b=FSMy4/X+PUJEJ5uJN/rbAJeO95uFWHk7GhnIuk7030vhManD7qR9govmr251xgrmJZ
+         xuM4QRG1/Uug+n1gJNfiZCMk9pVPOzF/JsmLVUafk3vt0e8XG8yimt/JoxYCyagVYO+A
+         Z0yBoHl0J9lJLCXBsCOzzY6/XNtG9hLtsCnlffo8UnxTsRWV9UWxp4lLcP2m48jmec3M
+         mFZU3GzyNOIybwDt0DfSGkN1eBKQU+Fa1fgqkVotgg/64epxWYXmVSr63ERZ1iL6mbih
+         sZtKWYE5YCnCCvQdax2YBmJP7aDinxkQTK255zdxq7SRfJYrBG/3js1iR7knzmK8MUUL
+         4BvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=9MVIzOhhFVrqb+O9seRvzRjJKrnabh0ef9RGnj5egx0=;
-        b=joatMMPcxQwaUVEQhZph8RzY7pr+akVkPbhZMLRAqrmLeDbm5LoXESRT/busdj2Sb9
-         HtOKlpWp3cKgbQr4tkUKrOMW6wFmaGUnGi5E4GkTBSe9/B7TG+r0CoyJ3N66TLmtl0za
-         nNELzcayqNm4u0SpPUL3PsEHrwxL+2yNY8Sk+4XZB3SdL57NIgxb+L+1BvHTRaf2UMht
-         CZxxvRmeDig9Bw3Bntq1TqVXA2AcJbqBnonaMqtkxej0+6VMybn+3dSMiBHytGuP7mwD
-         cnjNayrzcR4UnobfBs9DEux8/4VWLCtd4hd2U+//RNqG06LpeNHqxnX83x3kOQs2EcOY
-         y34w==
-X-Gm-Message-State: AOAM532iuU5nh1oYyFOtlJAkAHu6FRImn7pPgjo9N2zbbBQxGk0+boAw
-        IiySS7ADPd6jupMnfZ6rQ6c=
-X-Google-Smtp-Source: ABdhPJzSMe3s3NyVZhHQkDVanj+D9XKNpScFUjHoRtRUXclbZSGHu+lOxsefqQK/rs+O/vTPnNmZag==
-X-Received: by 2002:a5d:64c9:0:b0:1e4:a048:8e1d with SMTP id f9-20020a5d64c9000000b001e4a0488e1dmr10323607wri.74.1645303198855;
-        Sat, 19 Feb 2022 12:39:58 -0800 (PST)
+        b=MkL7zpUYjDoTQdhpgP4uODPQd7exh0MMXF65RCf+5M97kVI0uHBpI60uWp/sKWEOzH
+         NiLs6ZXU8Hfv9jaBNHjBsFfZ1b/QjLVicb2AMiYNCTPAdSM9ImtGw3d2ikb1xx/nKmNF
+         3C05RDM+c/ZTe9KnUcEhrhngsL4rCiKowBf5Swgl6U9Mw8b7RHjBEXKY4/oLlZmr2/RJ
+         IkTtQ4BeKi9Uuf/VQ9fVio4kfuPlG2I5r174gWH2hs16agLJ+P17bkUKSIDUWGhTmTUM
+         8YodIRoP++XWd3aOQKUrVGoUHZDO65X5K7FyT5xOzBg6sys2hDT3UAZJ6LN+vyKzUL+0
+         2YuQ==
+X-Gm-Message-State: AOAM530oNRxFKpoRcUwewkTQYO1Xyx5nEzu1XDBZcKQ3MlDGoUdQBguA
+        2I9nB8zJtoaQZ1/9H/89UjXgIm++Fv3PUBXppFRy0A==
+X-Google-Smtp-Source: ABdhPJxILi9Tt//8KbB3NV1mBM8IWHXhxEWndhw60+nglzTtj7OeYIf/qMv+2HKB3zBG/Bu/DrGdmA==
+X-Received: by 2002:adf:bc14:0:b0:1e2:b035:9c46 with SMTP id s20-20020adfbc14000000b001e2b0359c46mr10272297wrg.386.1645303376052;
+        Sat, 19 Feb 2022 12:42:56 -0800 (PST)
 Received: from localhost.localdomain ([217.61.0.106])
-        by smtp.gmail.com with ESMTPSA id b10sm51374279wrd.8.2022.02.19.12.39.58
+        by smtp.gmail.com with ESMTPSA id n4-20020a05600c464400b0037c19c2d16esm3023387wmo.43.2022.02.19.12.42.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 12:39:58 -0800 (PST)
+        Sat, 19 Feb 2022 12:42:55 -0800 (PST)
 From:   Hans Weber <hwe.kernel@gmail.com>
-To:     torvalds@evo.osdl.org
-Cc:     linux-kernel@vger.kernel.org, Hans Weber <hwe.kernel@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Hans Weber <hwe.kernel@gmail.com>
 Subject: [PATCH] only call the c function set_bios_mode if the value CONFIG_X86_64 is set.
-Date:   Sat, 19 Feb 2022 21:39:50 +0100
-Message-Id: <20220219203950.106655-1-hwe.kernel@gmail.com>
+Date:   Sat, 19 Feb 2022 21:42:45 +0100
+Message-Id: <20220219204245.106718-1-hwe.kernel@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit

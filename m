@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6291D4BC833
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 12:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F9D4BC83E
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 12:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240215AbiBSLfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 06:35:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45742 "EHLO
+        id S241152AbiBSLmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 06:42:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239587AbiBSLfK (ORCPT
+        with ESMTP id S232300AbiBSLmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 06:35:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B641B127C
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 03:34:51 -0800 (PST)
+        Sat, 19 Feb 2022 06:42:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AAB32078;
+        Sat, 19 Feb 2022 03:42:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58E2C61151
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 11:34:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D50FC004E1;
-        Sat, 19 Feb 2022 11:34:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4650CB8013C;
+        Sat, 19 Feb 2022 11:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D30C340EB;
+        Sat, 19 Feb 2022 11:41:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645270490;
-        bh=OKlx/FClzpOEQUKVzcalOiKnCJi/40i0qewDv8BgHPk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iZZfI8YVIrxGEKJgw6YE1friXXRNqMKmn+EZ2pOmjl6e7iv1dR4smYUJ0TIql5N4h
-         55GAF2aF8BVJCtcItJP9eLMLN92paTVJq12ToiaTP+cI7k1uiRZZVPYJufrJt/N106
-         Uk5l4hpylO7PLV0ffa6IJzlcxTnldY2nfIytL6aCeiuUKw2mUhYrYPRDTuV1JbZDa7
-         4K3nFTdepXCh8rKgIoeOIuZr78nZMe7Ub9VsIOHJlqZbVt4MRo5QeCPZOhIlTWmpQW
-         GROHThbBgFeZIzalITvuUY7SVyCQstk9RlbHBltyI0OWixRVFUaf8TPJmiV8zTgdWV
-         MCPml7EByuZ2A==
-Date:   Sat, 19 Feb 2022 12:34:45 +0100
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: marvell: armada-37xx: Remap IO space to bus
- address 0x0
-Message-ID: <20220219123445.14940a12@thinkpad>
-In-Reply-To: <20220218212526.16021-1-pali@kernel.org>
-References: <20220218212526.16021-1-pali@kernel.org>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        s=k20201202; t=1645270919;
+        bh=42N0kSNDN/I0l7uNeWq1bWt0szwT7gCbE5fdpr8yCWs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O3O2Mbkpy5TFqAygEu87Dvm9J87aB8FAFvYPSkE9DLHzRQlZXkAlWApSkQQZaFgEB
+         L7jszgblHHH1L7JJkforHcFZ1JF0KCGZZifWtslRWx0DiUcBvShfihcgZI4qViffbd
+         lFcKrpPkZ4X6Tv3yILibtkxjXDNyudmM44Q0NRt40XQFBugcE3Zk8Wx8flsPYcquN9
+         btlLaJmoCSDzGgbHEnOj4/SZJVMq5rGGoc7oKv2UtbLINzm3E2uYd0qHeD5NPhMdoL
+         n4gyWmC6Wk1UZMXw3VAsPWZ7eZIWvFMLnLllPTyk+FcpqyUZA8plxckNOLRlTnifdr
+         3XFtUZubEZoYg==
+Date:   Sat, 19 Feb 2022 12:42:30 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
+Message-ID: <YhDXpq8YDhxg0RLW@iki.fi>
+References: <20210712170313.884724-1-mic@digikod.net>
+ <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
+ <YcGVZitNa23PCSFV@iki.fi>
+ <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net>
+ <Ydc/E3S2vmtDOnpw@iki.fi>
+ <YddADJJNLDlQAYRW@iki.fi>
+ <86c5010e-a926-023a-8915-d6605cfc4f0a@digikod.net>
+ <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
+ <Yg6o/ARtOIwuBFsW@iki.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yg6o/ARtOIwuBFsW@iki.fi>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,26 +75,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 22:25:26 +0100
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+On Thu, Feb 17, 2022 at 08:58:57PM +0100, Jarkko Sakkinen wrote:
+> On Mon, Jan 31, 2022 at 12:33:51PM +0100, Mickaël Salaün wrote:
+> > 
+> > On 07/01/2022 13:14, Mickaël Salaün wrote:
+> > > 
+> > > On 06/01/2022 20:16, Jarkko Sakkinen wrote:
+> > > > On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
+> > > > > On Tue, Jan 04, 2022 at 04:56:36PM +0100, Mickaël Salaün wrote:
+> > > > > > 
+> > > > > > On 21/12/2021 09:50, Jarkko Sakkinen wrote:
+> > > > > > > On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
+> > > > > > > > Hi Jarkko,
+> > > > > > > > 
+> > > > > > > > Since everyone seems OK with this and had plenty of
+> > > > > > > > time to complain, could
+> > > > > > > > you please take this patch series in your tree? It still applies on
+> > > > > > > > v5.16-rc5 and it is really important to us. Please
+> > > > > > > > let me know if you need
+> > > > > > > > something more.
+> > > > > > > > 
+> > > > > > > > Regards,
+> > > > > > > >    Mickaël
+> > > > > > > 
+> > > > > > > I'm off-work up until end of the year, i.e. I will
+> > > > > > > address only important
+> > > > > > > bug fixes and v5.16 up until that.
+> > > > > > > 
+> > > > > > > If any of the patches is yet missing my ack, feel free to
+> > > > > > > 
+> > > > > > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > > > 
+> > > > > > Thanks Jarkko. Can you please take it into your tree?
+> > > > > 
+> > > > > I can yes, as I need to anyway do a revised PR for v5.17, as one commit
+> > > > > in my first trial had a truncated fixes tag.
+> > > > 
+> > > > Please check:
+> > > > 
+> > > > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> > > > 
+> > > > /Jarkko
+> > > 
+> > > Great, thanks!
+> > 
+> > Hi Jarkko,
+> > 
+> > I noticed your commits https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=3ec9c3a0531ac868422be3b12fc17310ed8c07dc
+> > are no more referenced in your tree. Is there an issue?
+> 
+> This must be some sort of mistake I've made. I'll re-apply the patches.
+> Sorry about this.
 
-> Remap PCI I/O space to the bus address 0x0 in the Armada 37xx
-> device-tree in order to support legacy I/O port based cards which have
-> hardcoded I/O ports in low address space.
->=20
-> Some legacy PCI I/O based cards do not support 32-bit I/O addressing.
->=20
-> Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from
-> 'ranges' DT property") this driver can work with I/O windows which have
-> a different address for CPU than for PCI bus (unless there is some
-> conflict with other A37xx mapping), without needing additional support
-> for this in the firmware.
->=20
-> Note that DDR on A37xx is mapped to bus address 0x0 and that mapping of
-> I/O space can be set to address 0x0 too because MEM space and I/O space
-> are separate and so they do not conflict.
->=20
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Reported-by: Arnd Bergmann <arnd@arndb.de>
+OK now the patches are in and will be included to the next PR. I fixed
+merge conflicts caused by 5cca36069d4c ("certs: refactor file cleaning")
+in "certs: Check that builtin blacklist hashes are valid" so please
+sanity check that it is good.
 
-Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
+BR, Jarkko

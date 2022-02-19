@@ -2,110 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B271D4BC949
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 17:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575284BC950
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 17:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237703AbiBSQZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 11:25:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45082 "EHLO
+        id S242599AbiBSQeL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 19 Feb 2022 11:34:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiBSQZW (ORCPT
+        with ESMTP id S229528AbiBSQeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 11:25:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3641959D3;
-        Sat, 19 Feb 2022 08:25:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B2C760B35;
-        Sat, 19 Feb 2022 16:25:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26930C004E1;
-        Sat, 19 Feb 2022 16:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645287902;
-        bh=kDljAIp9S1nSRednTbW/1jhULMQHBXru5memF9e/114=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u6tRX8o8oFx+AiAPMTv++UvtcGNZDLln3yzOi62DHpYeFgtQUalBv5OLhISDN1aan
-         2WqbrQtVPexuTjCsdI+gF5QepBUFwxvmNEs3y+gsxpIO1mbwPXmOGKCIBWNd3z0XWK
-         JINSPX5dIl1vSBNPPX+/pwF3UDi91sXLJ0AT1WVjrE0xv3PocKQAdkDtWGXrYese4Z
-         PFKStfB4L7+ChtVFF5c5kstM8WvHuWBpY701N0olloB4HU3CUf/hTYjsrWlDGDOkNy
-         gg/SbfdaofvcOHSQiOsN8uMYu8HyJ2bmjuiKD4WLu+savllgsnXiH5+iAAXMlXx745
-         M5CYylmNsvxoA==
-Date:   Sat, 19 Feb 2022 16:31:49 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andrea Merello <andrea.merello@gmail.com>
-Cc:     mchehab+huawei@kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
-        matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
-        jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
-Subject: Re: [v3 05/13] iio: document pitch, yaw, roll modifiers
-Message-ID: <20220219163149.6c33318c@jic23-huawei>
-In-Reply-To: <20220217162710.33615-6-andrea.merello@gmail.com>
-References: <20220217162710.33615-1-andrea.merello@gmail.com>
-        <20220217162710.33615-6-andrea.merello@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 19 Feb 2022 11:34:09 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48F6047AEB
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 08:33:48 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-115-134YVXIbNfWUuHtnEmsqEg-1; Sat, 19 Feb 2022 16:33:46 +0000
+X-MC-Unique: 134YVXIbNfWUuHtnEmsqEg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Sat, 19 Feb 2022 16:33:45 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Sat, 19 Feb 2022 16:33:44 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Miaohe Lin' <linmiaohe@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+CC:     "vitaly.wool@konsulko.com" <vitaly.wool@konsulko.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 6/9] mm/z3fold: move decrement of pool->pages_nr into
+ __release_z3fold_page()
+Thread-Topic: [PATCH 6/9] mm/z3fold: move decrement of pool->pages_nr into
+ __release_z3fold_page()
+Thread-Index: AQHYJXLUWbfrUcWr0kay123DGS2luaybEHRg
+Date:   Sat, 19 Feb 2022 16:33:44 +0000
+Message-ID: <dba43259e1fe4e36a0bdbe97efaaca2f@AcuMS.aculab.com>
+References: <20220219092533.12596-1-linmiaohe@huawei.com>
+ <20220219092533.12596-7-linmiaohe@huawei.com>
+In-Reply-To: <20220219092533.12596-7-linmiaohe@huawei.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 17:27:02 +0100
-Andrea Merello <andrea.merello@gmail.com> wrote:
-
-> This patch introduces ABI documentation for new modifiers used for
-> reporting rotations expressed as euler angles (i.e. yaw, pitch, roll).
+From: Miaohe Lin
+> Sent: 19 February 2022 09:26
 > 
-> Signed-off-by: Andrea Merello <andrea.merello@iit.it>
-I've lost track of what we already discussed about this, but why have these
-as measured in degrees?
+> The z3fold will always do atomic64_dec(&pool->pages_nr) when the
+> __release_z3fold_page() is called. Thus we can move decrement of
+> pool->pages_nr into __release_z3fold_page() to simplify the code.
+> Also we can reduce the size of z3fold.o ~1k.
+> Without this patch:
+>    text	   data	    bss	    dec	    hex	filename
+>   15444	   1376	      8	  16828	   41bc	mm/z3fold.o
+> With this patch:
+>    text	   data	    bss	    dec	    hex	filename
+>   15044	   1248	      8	  16300	   3fac	mm/z3fold.o
 
-Gah. I thought we'd maintained consistency on this, but seems incli is
-in degrees, angl is in radians and rot isn't documented at all.
+I can't see anything obvious in this patch that would reduce the size much.
+OTOH there are some large functions that are pointlessly marked 'inline'.
+Maybe the compiler made a better choice?
+Although it isn't al all obvious why the 'data' size changes.
 
-Checking drivers the adis16209 has rot in degrees and I can't immediately figure
-out what the hid sensors driver is using.  The underlying spec supports the
-hardware returning in either radians or degrees I think. 
-
-Ah well, at least these are new so given the existing mess means at least some
-units are already in degrees we aren't making things worse.
-
-Perhaps it's worth a comment on the unit inconsistency in this patch description
-so we can at least look back at the history if it comes up for a future driver.
-
-Thanks,
-
-Jonathan
-
-
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->  Documentation/ABI/testing/sysfs-bus-iio | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  mm/z3fold.c | 41 ++++++++++++-----------------------------
+>  1 file changed, 12 insertions(+), 29 deletions(-)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
-> index b2fb4d9abcd1..1b8d77577608 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-iio
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio
-> @@ -2008,3 +2008,12 @@ Description:
->  		Available range for the forced calibration value, expressed as:
->  
->  		- a range specified as "[min step max]"
+> diff --git a/mm/z3fold.c b/mm/z3fold.c
+> index adc0b3fa4906..18a697f6fe32 100644
+> --- a/mm/z3fold.c
+> +++ b/mm/z3fold.c
+> @@ -520,6 +520,8 @@ static void __release_z3fold_page(struct z3fold_header *zhdr, bool locked)
+>  	list_add(&zhdr->buddy, &pool->stale);
+>  	queue_work(pool->release_wq, &pool->work);
+>  	spin_unlock(&pool->stale_lock);
 > +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_rot_yaw_raw
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_rot_pitch_raw
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_rot_roll_raw
-> +KernelVersion:	5.17
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Raw (unscaled) euler angles readings. Units after
-> +		application of scale are deg.
+> +	atomic64_dec(&pool->pages_nr);
+
+Looks like you can move the decrement inside the lock.
+If you can do the same for the increment you can avoid the
+expensive locked bus cycle.
+
+	David
+
+>  }
+> 
+>  static void release_z3fold_page(struct kref *ref)
+> @@ -737,13 +739,9 @@ static struct z3fold_header *compact_single_buddy(struct z3fold_header *zhdr)
+>  	return new_zhdr;
+> 
+>  out_fail:
+> -	if (new_zhdr) {
+> -		if (kref_put(&new_zhdr->refcount, release_z3fold_page_locked))
+> -			atomic64_dec(&pool->pages_nr);
+> -		else {
+> -			add_to_unbuddied(pool, new_zhdr);
+> -			z3fold_page_unlock(new_zhdr);
+> -		}
+> +	if (new_zhdr && !kref_put(&new_zhdr->refcount, release_z3fold_page_locked)) {
+> +		add_to_unbuddied(pool, new_zhdr);
+> +		z3fold_page_unlock(new_zhdr);
+>  	}
+>  	return NULL;
+> 
+> @@ -816,10 +814,8 @@ static void do_compact_page(struct z3fold_header *zhdr, bool locked)
+>  	list_del_init(&zhdr->buddy);
+>  	spin_unlock(&pool->lock);
+> 
+> -	if (kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+> -		atomic64_dec(&pool->pages_nr);
+> +	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+>  		return;
+> -	}
+> 
+>  	if (test_bit(PAGE_STALE, &page->private) ||
+>  	    test_and_set_bit(PAGE_CLAIMED, &page->private)) {
+> @@ -829,9 +825,7 @@ static void do_compact_page(struct z3fold_header *zhdr, bool locked)
+> 
+>  	if (!zhdr->foreign_handles && buddy_single(zhdr) &&
+>  	    zhdr->mapped_count == 0 && compact_single_buddy(zhdr)) {
+> -		if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+> -			atomic64_dec(&pool->pages_nr);
+> -		else {
+> +		if (!kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+>  			clear_bit(PAGE_CLAIMED, &page->private);
+>  			z3fold_page_unlock(zhdr);
+>  		}
+> @@ -1089,10 +1083,8 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
+>  		if (zhdr) {
+>  			bud = get_free_buddy(zhdr, chunks);
+>  			if (bud == HEADLESS) {
+> -				if (kref_put(&zhdr->refcount,
+> +				if (!kref_put(&zhdr->refcount,
+>  					     release_z3fold_page_locked))
+> -					atomic64_dec(&pool->pages_nr);
+> -				else
+>  					z3fold_page_unlock(zhdr);
+>  				pr_err("No free chunks in unbuddied\n");
+>  				WARN_ON(1);
+> @@ -1239,10 +1231,8 @@ static void z3fold_free(struct z3fold_pool *pool, unsigned long handle)
+> 
+>  	if (!page_claimed)
+>  		free_handle(handle, zhdr);
+> -	if (kref_put(&zhdr->refcount, release_z3fold_page_locked_list)) {
+> -		atomic64_dec(&pool->pages_nr);
+> +	if (kref_put(&zhdr->refcount, release_z3fold_page_locked_list))
+>  		return;
+> -	}
+>  	if (page_claimed) {
+>  		/* the page has not been claimed by us */
+>  		put_z3fold_header(zhdr);
+> @@ -1353,9 +1343,7 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
+>  				break;
+>  			}
+>  			if (!z3fold_page_trylock(zhdr)) {
+> -				if (kref_put(&zhdr->refcount,
+> -						release_z3fold_page))
+> -					atomic64_dec(&pool->pages_nr);
+> +				kref_put(&zhdr->refcount, release_z3fold_page);
+>  				zhdr = NULL;
+>  				continue; /* can't evict at this point */
+>  			}
+> @@ -1366,10 +1354,8 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
+>  			 */
+>  			if (zhdr->foreign_handles ||
+>  			    test_and_set_bit(PAGE_CLAIMED, &page->private)) {
+> -				if (kref_put(&zhdr->refcount,
+> +				if (!kref_put(&zhdr->refcount,
+>  						release_z3fold_page_locked))
+> -					atomic64_dec(&pool->pages_nr);
+> -				else
+>  					z3fold_page_unlock(zhdr);
+>  				zhdr = NULL;
+>  				continue; /* can't evict such page */
+> @@ -1447,7 +1433,6 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
+>  			if (kref_put(&zhdr->refcount,
+>  					release_z3fold_page_locked)) {
+>  				kmem_cache_free(pool->c_handle, slots);
+> -				atomic64_dec(&pool->pages_nr);
+>  				return 0;
+>  			}
+>  			/*
+> @@ -1669,10 +1654,8 @@ static void z3fold_page_putback(struct page *page)
+>  	if (!list_empty(&zhdr->buddy))
+>  		list_del_init(&zhdr->buddy);
+>  	INIT_LIST_HEAD(&page->lru);
+> -	if (kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+> -		atomic64_dec(&pool->pages_nr);
+> +	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+>  		return;
+> -	}
+>  	spin_lock(&pool->lock);
+>  	list_add(&page->lru, &pool->lru);
+>  	spin_unlock(&pool->lock);
+> --
+> 2.23.0
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

@@ -2,96 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBB84BC66D
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 08:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A979A4BC6AD
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 08:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241619AbiBSHTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 02:19:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58364 "EHLO
+        id S241638AbiBSHZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 02:25:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiBSHTd (ORCPT
+        with ESMTP id S229737AbiBSHY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 02:19:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22AC5F25B;
-        Fri, 18 Feb 2022 23:19:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 284BEB827D4;
-        Sat, 19 Feb 2022 07:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9CCAC004E1;
-        Sat, 19 Feb 2022 07:19:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645255151;
-        bh=5N9q8YGpLg7pzimVDpcpfsBGpCNjJr17vwBuSaeLOzg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z3JZA0jkkKEqYPSuaw6XQokUqkc1pHcCOFjSe3Kzf8MHcYJHvrHCzic06q6mfeKNR
-         lYNN0vIvNCGoRQ8agRIGhqhtIq8cKGpX5vBVKgmd12VTQNL3YuMjIn2byIcjnmIoaX
-         vkI2LkzgzqIRBlITVjf5gJrNpIwkHLga5cTH6DnY=
-Date:   Sat, 19 Feb 2022 08:19:02 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] slab: remove __alloc_size attribute from
- __kmalloc_track_caller
-Message-ID: <YhCZ5m+uw/xqS9W2@kroah.com>
-References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
- <a5ab4496-8190-6221-72c7-d1ff2e6cf1d4@suse.cz>
- <Yg/eG4X7Esa0h1al@kroah.com>
- <c237f6d1-4219-0e6d-6aca-9c29d060bb4f@suse.cz>
+        Sat, 19 Feb 2022 02:24:57 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97986929A;
+        Fri, 18 Feb 2022 23:24:37 -0800 (PST)
+Received: from kwepemi500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K10MG1HVkzbbZM;
+        Sat, 19 Feb 2022 15:20:10 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ kwepemi500021.china.huawei.com (7.221.188.245) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 19 Feb 2022 15:24:35 +0800
+Received: from linux_suse_sp4_work.huawei.com (10.67.133.232) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 19 Feb 2022 15:24:35 +0800
+From:   Liao Hua <liaohua4@huawei.com>
+To:     <mcgrof@kernel.org>, <keescook@chromium.org>, <yzaikin@google.com>,
+        <nixiaoming@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <wangfangpeng1@huawei.com>, <zhongjubin@huawei.com>,
+        <liaohua4@huawei.com>
+Subject: [PATCH] latencytop: move latencytop sysctl to its own file
+Date:   Sat, 19 Feb 2022 15:24:33 +0800
+Message-ID: <20220219072433.86983-1-liaohua4@huawei.com>
+X-Mailer: git-send-email 2.12.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c237f6d1-4219-0e6d-6aca-9c29d060bb4f@suse.cz>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.133.232]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 07:54:14PM +0100, Vlastimil Babka wrote:
-> On 2/18/22 18:57, Greg Kroah-Hartman wrote:
-> > On Fri, Feb 18, 2022 at 06:14:55PM +0100, Vlastimil Babka wrote:
-> >> On 2/18/22 14:13, Greg Kroah-Hartman wrote:
-> >> > Commit c37495d6254c ("slab: add __alloc_size attributes for better
-> >> > bounds checking") added __alloc_size attributes to a bunch of kmalloc
-> >> > function prototypes.  Unfortunately the change to __kmalloc_track_caller
-> >> > seems to cause clang to generate broken code and the first time this is
-> >> > called when booting, the box will crash.
-> >> > 
-> >> > While the compiler problems are being reworked and attempted to be
-> >> > solved, let's just drop the attribute to solve the issue now.  Once it
-> >> > is resolved it can be added back.
-> >> 
-> >> Could we instead wrap it in some #ifdef that' only true for clang build?
-> >> That would make the workaround more precise and self-documented. Even
-> >> better if it can trigger using clang version range and once a fixed
-> >> clang version is here, it can be updated to stay true for older clangs.
-> > 
-> > It's not doing all that much good like this, let's just remove it for
-> > now until it does actually provide a benifit and not just crash the box :)
-> > 
-> > This is only 1 function, that is used in only a very small number of
-> > callers.  I do not think it will be missed.
-> 
-> Fair enough, added to the slab tree:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=for-5.17/fixup5
-> 
+From: liaohua <liaohua4@huawei.com>
 
-Thanks!
+This moves latencytop sysctl to kernel/latencytop.c
+
+Signed-off-by: liaohua <liaohua4@huawei.com>
+---
+ include/linux/latencytop.h |  3 ---
+ kernel/latencytop.c        | 41 +++++++++++++++++++++++++++++------------
+ kernel/sysctl.c            | 10 ----------
+ 3 files changed, 29 insertions(+), 25 deletions(-)
+
+diff --git a/include/linux/latencytop.h b/include/linux/latencytop.h
+index abe3d95f795b..84f1053cf2a8 100644
+--- a/include/linux/latencytop.h
++++ b/include/linux/latencytop.h
+@@ -38,9 +38,6 @@ account_scheduler_latency(struct task_struct *task, int usecs, int inter)
+ 
+ void clear_tsk_latency_tracing(struct task_struct *p);
+ 
+-int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
+-		size_t *lenp, loff_t *ppos);
+-
+ #else
+ 
+ static inline void
+diff --git a/kernel/latencytop.c b/kernel/latencytop.c
+index 166d7bf49666..d2d17a856de0 100644
+--- a/kernel/latencytop.c
++++ b/kernel/latencytop.c
+@@ -55,6 +55,7 @@
+ #include <linux/sched/stat.h>
+ #include <linux/list.h>
+ #include <linux/stacktrace.h>
++#include <linux/sysctl.h>
+ 
+ static DEFINE_RAW_SPINLOCK(latency_lock);
+ 
+@@ -63,6 +64,31 @@ static struct latency_record latency_record[MAXLR];
+ 
+ int latencytop_enabled;
+ 
++static int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
++		size_t *lenp, loff_t *ppos)
++{
++	int err;
++
++	err = proc_dointvec(table, write, buffer, lenp, ppos);
++	if (latencytop_enabled)
++		force_schedstat_enabled();
++
++	return err;
++}
++
++#ifdef CONFIG_SYSCTL
++static struct ctl_table latencytop_sysctl[] = {
++	{
++		.procname   = "latencytop",
++		.data       = &latencytop_enabled,
++		.maxlen     = sizeof(int),
++		.mode       = 0644,
++		.proc_handler   = sysctl_latencytop,
++	},
++	{}
++};
++#endif
++
+ void clear_tsk_latency_tracing(struct task_struct *p)
+ {
+ 	unsigned long flags;
+@@ -266,18 +292,9 @@ static const struct proc_ops lstats_proc_ops = {
+ static int __init init_lstats_procfs(void)
+ {
+ 	proc_create("latency_stats", 0644, NULL, &lstats_proc_ops);
++#ifdef CONFIG_SYSCTL
++	register_sysctl_init("kernel", latencytop_sysctl);
++#endif
+ 	return 0;
+ }
+-
+-int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
+-		size_t *lenp, loff_t *ppos)
+-{
+-	int err;
+-
+-	err = proc_dointvec(table, write, buffer, lenp, ppos);
+-	if (latencytop_enabled)
+-		force_schedstat_enabled();
+-
+-	return err;
+-}
+ device_initcall(init_lstats_procfs);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 5ae443b2882e..57ec448b1268 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -65,7 +65,6 @@
+ #include <linux/bpf.h>
+ #include <linux/mount.h>
+ #include <linux/userfaultfd_k.h>
+-#include <linux/latencytop.h>
+ #include <linux/pid.h>
+ #include <linux/delayacct.h>
+ 
+@@ -1824,15 +1823,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+ #endif
+-#ifdef CONFIG_LATENCYTOP
+-	{
+-		.procname	= "latencytop",
+-		.data		= &latencytop_enabled,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= sysctl_latencytop,
+-	},
+-#endif
+ #ifdef CONFIG_BLK_DEV_INITRD
+ 	{
+ 		.procname	= "real-root-dev",
+-- 
+2.12.3
+

@@ -2,238 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA58B4BCA58
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 19:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3735D4BCA5B
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 20:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236969AbiBSS73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 13:59:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52074 "EHLO
+        id S242533AbiBSTAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 14:00:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiBSS70 (ORCPT
+        with ESMTP id S229437AbiBSTAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 13:59:26 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A5B59A53;
-        Sat, 19 Feb 2022 10:59:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645297146; x=1676833146;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YjcmreUpCIrBCYdc1cFbN9dGuwQFr7PWHG7P8Kh35AU=;
-  b=mxYwLOvVLbye2UJZxyeA0uzPeDhAvaxPjDXmvFS/d3tS+n5Ma4Oi8Vhq
-   BM601u6AUCVDJCSFvqehXGTujNgXQP+lLoVvf8oGxBAuhoFos5DXQZ0zJ
-   QvWh5Y/bRAA2CIMaWf3kpiLC7WZ2nAKl9DdG4UioFD62u7QeAw8PgvCAC
-   Yt3vWaVnZKxdKT4NWoND+6a1WgngogzRwl/xtYpKWl0tahbdgXwTMFMl8
-   6rGNQBnPUvfSx/OBNWc1eWXRHcl7WOb61lhverkEwLe0eNnxc842zqg4J
-   W9xTVOUocbq9RyKKu+gXdQGTKLEn+OwxjSyaidzFelCela0uZtMLzZZTP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="251501265"
-X-IronPort-AV: E=Sophos;i="5.88,381,1635231600"; 
-   d="scan'208";a="251501265"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 10:59:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,381,1635231600"; 
-   d="scan'208";a="531330912"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 19 Feb 2022 10:59:06 -0800
-Received: from kpavlasx-mobl2.amr.corp.intel.com (kpavlasx-mobl2.amr.corp.intel.com [10.209.114.238])
-        by linux.intel.com (Postfix) with ESMTP id D74A3580975;
-        Sat, 19 Feb 2022 10:59:05 -0800 (PST)
-Message-ID: <f5318c1171c5733388c9b455f2058f9aed127b8b.camel@linux.intel.com>
-Subject: Re: [PATCH V5 3/3] PCI: vmd: Configure PCIe ASPM and LTR
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Jonathan Derrick <jonathan.derrick@linux.dev>,
-        nirmal.patel@linux.intel.com, lorenzo.pieralisi@arm.com,
-        hch@infradead.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@linux.intel.com,
-        rafael@kernel.org, me@adhityamohan.in
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 19 Feb 2022 10:59:05 -0800
-In-Reply-To: <1a163e75-f620-dfe7-01b1-5356fe767b2d@linux.dev>
-References: <20220218045056.333799-1-david.e.box@linux.intel.com>
-         <20220218045056.333799-4-david.e.box@linux.intel.com>
-         <1a163e75-f620-dfe7-01b1-5356fe767b2d@linux.dev>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Sat, 19 Feb 2022 14:00:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EF259A53;
+        Sat, 19 Feb 2022 11:00:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B67DA60E84;
+        Sat, 19 Feb 2022 19:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B344C340EC;
+        Sat, 19 Feb 2022 19:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645297210;
+        bh=koCVmhrrOoMAENsrk2W+MxsXDFkkYZ7Hlx1gDJI17a8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=D1LbqvijCZ+M250vjz9yT5c65gxKVLrDA4NSV/7QW6dCB53mquo5xKspQMT0vOL1n
+         Vf8+5qG5zU3RYrOsb4tcKV4k75+FA1JeLZKHe9W+hjA4j7Koa1b9z9iKen6o0cXLwa
+         WRT/gknJrrklbDmBDO+lQr87UtY+562nhVt2X4m8zzEOX4QyZO/NgEdtGenfbtDgBt
+         +Y+Q+tF1xubl+KU9ZBVKCVPZe4r852ZtgjHclx2LYvQ7fpaE7vOZuZgc8mpgSzgDRM
+         PxdYY1SvSHURF5DeGc6C+OJlGVtDzfTiUhPBWEaHTPivnK6ccHQOYw37SNabnaONK8
+         b37YaUj+dP+fQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F266FE7BB0B;
+        Sat, 19 Feb 2022 19:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 1/1] net: dsa: microchip: ksz9477: export HW stats
+ over stats64 interface
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164529720998.31615.18049890364706478684.git-patchwork-notify@kernel.org>
+Date:   Sat, 19 Feb 2022 19:00:09 +0000
+References: <20220219082630.2454948-1-o.rempel@pengutronix.de>
+In-Reply-To: <20220219082630.2454948-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, f.fainelli@gmail.com, vivien.didelot@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-On Fri, 2022-02-18 at 14:30 -0700, Jonathan Derrick wrote:
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Sat, 19 Feb 2022 09:26:30 +0100 you wrote:
+> Provide access to HW offloaded packets over stats64 interface.
+> The rx/tx_bytes values needed some fixing since HW is accounting size of
+> the Ethernet frame together with FCS.
 > 
-> On 2/17/2022 9:50 PM, David E. Box wrote:
-> > Currently, PCIe ports reserved for VMD use are not visible to BIOS
-> > and
-> > therefore not configured to enable PCIE ASPM. Additionally, PCIE
-> > LTR
-> > values may be left unset since BIOS will set a default maximum LTR
-> > value
-> > on endpoints to ensure that misconfigured devices don't block SoC
-> > power
-> > management. Lack of this programming results in high power
-> > consumption
-> > on laptops as reported in bugzilla [1].  For currently affected
-> > products, use pci_enable_default_link_state to set the allowed link
-> > states for devices on the root ports. Also set the LTR value to the
-> > maximum value needed for the SoC. Per the VMD hardware team future
-> > products using VMD will enable BIOS configuration of these
-> > capabilities.
-> Will the refreshes of the affected CPU be supported in BIOS or this
-> workaround?
-
-I'll have to check with the hardware/BIOS team. Still because it is
-BIOS this should check for signs that it hasn't already configured ASPM
-before modifying anything. I'll make this change.
-
-David
-
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+> changes v4:
+> - do not copy raw counters to the stack
+> changes v3:
+> - move dev->dev_ops->r_mib_stat64 insight of the mutex
+> changes v2:
+> - fix locking issue in in atomic context
 > 
-> > This solution is a workaround for current products that mainly
-> > targets
-> > laptops. Support is not provided if a switch is used nor for
-> > hotplug.
-> > 
-> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=213717
-> > 
-> > Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
-> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > ---
-> > V5
-> >   - Provide the LTR value as driver data.
-> >   - Use DWORD for the config space write to avoid PCI WORD access
-> > bug.
-> >   - Set ASPM links firsts, enabling all link states, before setting
-> > a
-> >     default LTR if the capability is present
-> >   - Add kernel message that VMD is setting the device LTR.
-> > V4
-> >   - Refactor vmd_enable_apsm() to exit early, making the lines
-> > shorter
-> >     and more readable. Suggested by Christoph.
-> > V3
-> >   - No changes
-> > V2
-> >   - Use return status to print pci_info message if ASPM cannot be
-> > enabled.
-> >   - Add missing static declaration, caught by lkp@intel.com
-> > 
-> >   drivers/pci/controller/vmd.c | 48
-> > +++++++++++++++++++++++++++++++++++-
-> >   1 file changed, 47 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/pci/controller/vmd.c
-> > b/drivers/pci/controller/vmd.c
-> > index a582c351b461..eac379c80cd7 100644
-> > --- a/drivers/pci/controller/vmd.c
-> > +++ b/drivers/pci/controller/vmd.c
-> > @@ -67,10 +67,19 @@ enum vmd_features {
-> >   	 * interrupt handling.
-> >   	 */
-> >   	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
-> > +
-> > +	/*
-> > +	 * Enable ASPM on the PCIE root ports and set the default LTR
-> > of the
-> > +	 * storage devices on platforms where these values are not
-> > configured by
-> > +	 * BIOS. This is needed for laptops, which require these
-> > settings for
-> > +	 * proper power management of the SoC.
-> > +	 */
-> > +	VMD_FEAT_BIOS_PM_QUIRK		= (1 << 5),
-> >   };
-> >   
-> >   struct vmd_device_data {
-> >   	enum vmd_features features;
-> > +	u16 ltr;
-> >   };
-> >   
-> >   static DEFINE_IDA(vmd_instance_ida);
-> > @@ -714,6 +723,38 @@ static void vmd_copy_host_bridge_flags(struct
-> > pci_host_bridge *root_bridge,
-> >   	vmd_bridge->native_dpc = root_bridge->native_dpc;
-> >   }
-> >   
-> > +/*
-> > + * Enable ASPM and LTR settings on devices that aren't configured
-> > by BIOS.
-> > + */
-> > +static int vmd_pm_enable_quirk(struct pci_dev *pdev, void
-> > *userdata)
-> > +{
-> > +	struct vmd_device_data *info = userdata;
-> > +	u32 ltr_reg;
-> > +	int pos;
-> > +
-> > +	if (!(info->features & VMD_FEAT_BIOS_PM_QUIRK))
-> > +		return 0;
-> > +
-> > +	pci_enable_default_link_state(pdev, PCIE_LINK_STATE_ALL);
-> > +
-> > +	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
-> > +	if (!pos)
-> > +		return 0;
-> > +
-> > +	/*
-> > +	 * If the LTR capability is present, set the default values to
-> > the
-> > +	 * maximum required by the platform to allow the deepest power
-> > +	 * management savings. Write this as a single DWORD where the
-> > lower word
-> > +	 * is the max snoop latency and the upper word is the max non-
-> > snoop
-> > +	 * latency.
-> > +	 */
-> > +	pci_info(pdev, "VMD: Setting a default LTR\n");
-> > +	ltr_reg = (info->ltr << 16) | info->ltr;
-> > +	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT,
-> > ltr_reg);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static int vmd_enable_domain(struct vmd_dev *vmd, struct
-> > vmd_device_data *info)
-> >   {
-> >   	struct pci_sysdata *sd = &vmd->sysdata;
-> > @@ -867,6 +908,8 @@ static int vmd_enable_domain(struct vmd_dev
-> > *vmd, struct vmd_device_data *info)
-> >   		pci_reset_bus(child->self);
-> >   	pci_assign_unassigned_bus_resources(vmd->bus);
-> >   
-> > +	pci_walk_bus(vmd->bus, vmd_pm_enable_quirk, info);
-> > +
-> >   	/*
-> >   	 * VMD root buses are virtual and don't return true on
-> > pci_is_pcie()
-> >   	 * and will fail pcie_bus_configure_settings() early. It can
-> > instead be
-> > @@ -1012,7 +1055,10 @@ static const struct vmd_device_data
-> > vmd_28c0_data = {
-> >   static const struct vmd_device_data vmd_467f_data = {
-> >   	.features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> >   		    VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > -		    VMD_FEAT_OFFSET_FIRST_VECTOR,
-> > +		    VMD_FEAT_OFFSET_FIRST_VECTOR |
-> > +		    VMD_FEAT_BIOS_PM_QUIRK,
-> > +	/* 3145728 ns (LatencyScale of 1048576 ns with a LatencyValue
-> > of 3) */
-> > +	.ltr = 0x1003,
-> >   };
-> >   
-> >   static const struct pci_device_id vmd_ids[] = {
+> [...]
+
+Here is the summary with links:
+  - [net-next,v4,1/1] net: dsa: microchip: ksz9477: export HW stats over stats64 interface
+    https://git.kernel.org/netdev/net-next/c/a7f4f13a0a68
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

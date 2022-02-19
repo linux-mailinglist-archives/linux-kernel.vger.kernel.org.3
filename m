@@ -2,134 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7824BC86C
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 13:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA7E4BC878
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 14:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242226AbiBSMtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 07:49:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54564 "EHLO
+        id S242339AbiBSNBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 08:01:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbiBSMtk (ORCPT
+        with ESMTP id S233494AbiBSNB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 07:49:40 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DA8483AB;
-        Sat, 19 Feb 2022 04:49:20 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id f11so229047ljq.11;
-        Sat, 19 Feb 2022 04:49:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wtjZ8Ae2cLsRZz7SUHUZ5yy4CcOsPrQ4KfjvroHRHfE=;
-        b=g7Xnklyx4Bu1DTso0pb2Bv6zQrurbW9O0sXWI2pmgrM8eaFGTyBLL5SliVyhj8U2Wk
-         ODmUEzZMGSNr7vqTWXHfzOgnqrwkmShY8J2ZeDS+fojyEBWILoLac2H3aPTP4tFZs3W+
-         XYa8W1ZGcuUeZHhxjw+8NQ7sxY+LpJpQrWV4ZtWYTzg7eomIsi48bCsasZEO5euEs+yD
-         JlMG/FRGCXd+RP0fjP5BP7v6EvdzMO3Nuu7gT7QDJeX4x9iLDCM2wp1t7qswnCEXZCC7
-         C0YoiT6f/LiLf4QrX2NsT4OxvijsnWdy8ezrr8XsLXc4xo9ECovyiWDz3ehHJLfIwDa8
-         zWgg==
+        Sat, 19 Feb 2022 08:01:29 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BA31FFF7F
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 05:01:11 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id b22-20020a6b6716000000b0064070ce7b49so4228281ioc.5
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 05:01:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wtjZ8Ae2cLsRZz7SUHUZ5yy4CcOsPrQ4KfjvroHRHfE=;
-        b=S9Ii55OYHcYWIX/LY8Wm786tiEZSPoPLi+OMJDq6zRSZhjR5mPHEQtT09LTRVXCTdb
-         eHl5ejOHqhZXMH3dxF+OBkxVhFoM+KI9nZWOIF8Qa4XWDDwikTCDa5i9Jq6FrLF8ZVuQ
-         Kpo+y0dV/3I4I5znP7NqYnDu/srKjawJLg+sV2C3MG1eXSYZcYgljXTYd8wh5V3bGOOJ
-         zBGurV4tOzXwKU1ecJCcoTGCM4qiFulfsmfo6NbECkeM7fHg5vDkg43T+fGk6XyCWE/U
-         4TmX9EU7WaHAiwWrgh3Pi93c7j5/toxxAFZCkVpmrA74y+L+GT4YaJ295pxWyvlMXp3D
-         LBOw==
-X-Gm-Message-State: AOAM533tNGcY3EZVBCokSYeOESsHMt+gpFgYdIMEvTEDeFNzK/izTdgm
-        EyRPCrkYZL+PmMnwhbH3FpY5dbfa+TE=
-X-Google-Smtp-Source: ABdhPJx3F50rZ2UoMvyAf2Z7Yddg7sa7UyrtTbX2UhyUX/S87/IyNgMMg/SdCzbizOH/VDJYTpOBgw==
-X-Received: by 2002:a2e:808b:0:b0:243:f7ef:fbb6 with SMTP id i11-20020a2e808b000000b00243f7effbb6mr8530698ljg.30.1645274958701;
-        Sat, 19 Feb 2022 04:49:18 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id w3sm569682lft.161.2022.02.19.04.49.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Feb 2022 04:49:18 -0800 (PST)
-Message-ID: <aa3e4a15-0e9b-5aea-7c6c-26b80d12ad7d@gmail.com>
-Date:   Sat, 19 Feb 2022 15:49:17 +0300
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Fl+5n1jjz3m84AqaKPaTylYfodG3ttae4QcHqpR94z0=;
+        b=GYE4HJsU3pKB4jvVOPZqqA3vqbtJVpOvUmzrPtYB2l3Je75ccQcbwItvluzKBh5HvE
+         eYacyoD6D9CjwaE81mxJKptLatpdp0M8PcgVY2QzR/uxTFD2LN3HSOQ2VoNTjZ2n2GBj
+         MGFyctscVpwS1qtmuovDNyxEIeMkAEqmCZ/EIXAtEA43LVkjjhx9xmBbrC4/cYpe0LRA
+         T1dpwVeYCF6vg+w+N/hRtETsSC1xn/SQJz9jOP4sswPtH89WfHztq4NgI9QAimDI6bJc
+         vj68wmLYD8+AQ3+Q4/tQg3p2an7G8rePU5rHH0bF0HfHV9M/wdft89/ukgLQ+GXyZf25
+         qgpg==
+X-Gm-Message-State: AOAM533GGk0jIzkcMYfU94i1IA4LBk5YtQdc2l4K5gm0MoelVAAJggHA
+        xReYCMqYrUOee7re+nuFcvHqmCJxKSbmc+8uiirYORwUxdq3
+X-Google-Smtp-Source: ABdhPJwXgfsqVH95fQpRwUN9c0iKCYH2k3ZDXnelYs+gRCiFjS1ehvyyeQAsO7CS5n8ALAaCnJ8cpDaydi+pMUBdcxMJmnoHjKH6
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] dt-bindings: memory: lpddr2: Adjust revision ID
- property to match lpddr3
-Content-Language: en-US
-To:     Julius Werner <jwerner@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220219012457.2889385-1-jwerner@chromium.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220219012457.2889385-1-jwerner@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:117:0:b0:634:4788:28e1 with SMTP id
+ 23-20020a6b0117000000b00634478828e1mr9024537iob.72.1645275670473; Sat, 19 Feb
+ 2022 05:01:10 -0800 (PST)
+Date:   Sat, 19 Feb 2022 05:01:10 -0800
+In-Reply-To: <20220219125100.835-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e5720605d85e97d7@google.com>
+Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
+From:   syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, jasowang@redhat.com,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-19.02.2022 04:24, Julius Werner пишет:
-> Commit 3539a2 (dt-bindings: memory: lpddr2: Add revision-id properties)
-> added the properties `revision-id1` and `revision-id2` to the
-> "jedec,lpddr2" binding. The "jedec,lpddr3" binding already had a single
-> array property `revision-id` for the same purpose. For consistency
-> between related memory types, this patch deprecates the LPDDR2
-> properties and instead adds a property in the same style as for LPDDR3
-> to that binding.
-> 
-> Signed-off-by: Julius Werner <jwerner@chromium.org>
-> ---
+Hello,
 
-Every revised version of the patch must contain changelog.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+kernel BUG in vhost_get_vq_desc
 
->  .../memory-controllers/ddr/jedec,lpddr2.yaml       | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-> index 25ed0266f6dd3d..37229738f47271 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-> @@ -30,12 +30,23 @@ properties:
->      maximum: 255
->      description: |
->        Revision 1 value of SDRAM chip. Obtained from device datasheet.
-> +      Property is deprecated, use revision-id instead.
-> +    deprecated: true
->  
->    revision-id2:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      maximum: 255
->      description: |
->        Revision 2 value of SDRAM chip. Obtained from device datasheet.
-> +      Property is deprecated, use revision-id instead.
-> +    deprecated: true
-> +
-> +  revision-id:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 2
-> +    maxItems: 2
-> +    description: |
-> +      Revision IDs read from Mode Register 6 and 7. One byte per uint32 cell (i.e. <MR6 MR7>).
->  
->    density:
->      $ref: /schemas/types.yaml#/definitions/uint32
-> @@ -164,8 +175,7 @@ examples:
->          compatible = "elpida,ECB240ABACN", "jedec,lpddr2-s4";
->          density = <2048>;
->          io-width = <32>;
-> -        revision-id1 = <1>;
-> -        revision-id2 = <0>;
-> +        revision-id = <123 234>;
->  
->          tRPab-min-tck = <3>;
->          tRCD-min-tck = <3>;
+------------[ cut here ]------------
+kernel BUG at drivers/vhost/vhost.c:2338!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 4071 Comm: vhost-4070 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:vhost_get_vq_desc+0x1dc5/0x2350 drivers/vhost/vhost.c:2338
+Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 25 59 28 fd e9 74 ff ff ff e8 cb c7 a1 fa <0f> 0b e8 c4 c7 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+RSP: 0018:ffffc900028bfb78 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801cbd1d00 RSI: ffffffff86d71655 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff86d7072d R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: ffff88806ffc4bb0 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000002 CR3: 000000001d077000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
+ vhost_worker+0x2e9/0x3e0 drivers/vhost/vhost.c:374
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:vhost_get_vq_desc+0x1dc5/0x2350 drivers/vhost/vhost.c:2338
+Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 25 59 28 fd e9 74 ff ff ff e8 cb c7 a1 fa <0f> 0b e8 c4 c7 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+RSP: 0018:ffffc900028bfb78 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801cbd1d00 RSI: ffffffff86d71655 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff86d7072d R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: ffff88806ffc4bb0 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc7293991d0 CR3: 000000001d077000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-It's not enough to change only the binding. You should also update the
-device-trees and drivers/memory.
+
+Tested on:
+
+commit:         f71077a4 Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=11e82d7a700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
+dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11857326700000
+

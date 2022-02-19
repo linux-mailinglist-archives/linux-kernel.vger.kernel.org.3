@@ -2,257 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF354BC396
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCEA4BC39C
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240443AbiBSApR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:45:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35358 "EHLO
+        id S240457AbiBSArg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:47:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236378AbiBSApQ (ORCPT
+        with ESMTP id S236378AbiBSArc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:45:16 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD3C22C6C9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:44:58 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id q17so18258310edd.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:44:58 -0800 (PST)
+        Fri, 18 Feb 2022 19:47:32 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9818A276D79
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:47:14 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id a7-20020a9d5c87000000b005ad1467cb59so3092425oti.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:47:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MGHwoQoxInpR0HuivERFqQnJ/YDdnM3tfc/vI2kgqZ0=;
-        b=L+32DakSO8c8K7dQaYC2mtIW9t6DJ7J7BcXCm5xHqMTTEj6M8Cimt10zk9POL68FNO
-         3aoz7cOkrOtyIke8YwmdlQhiVzqZGXGgtb4l6LUYLXsVYSlXCNKXLnTIvzEWBa6N2DWV
-         iUpQ2/xuPrntHC/2N9lgLUM820GNGSeYE8wsQ=
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5kb3IKgrEaUkoVxz5aA0o1q5npWMf+JMdpdQ0OBpg8g=;
+        b=ZUmRgqQVRSD5lIFjVIwRB6jQQeJs7QynEZXYd4c4cUhTiMs75PJkD2I1Blqblf87TY
+         OziWTMeFRi1zFzK2nDoy55VmrlkR38d5L9K93vIG7U2Cou1UcYukKXzYiHD9eACNtw7v
+         sTbnWKXLfw4544w1f7hqnd+jkVQ93ZW4VkiMzJO9LzjH08fKK8caWZgpTIeedDpql8CG
+         TUgYyvf2jCPPL5C4xGhZMyz8RM5PspPCKoQgj0rsB6lL/7wlzi6Ilm6yKZNoVE8WfVqg
+         8Toiin0ZLm1KFrqHWHjo+KK9c2I28/b+Y/5pgnI7F72libtLl/acOq3h2tN5dsABkzB4
+         5OXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MGHwoQoxInpR0HuivERFqQnJ/YDdnM3tfc/vI2kgqZ0=;
-        b=VjlWUcavT4Z8Rl6a1WI7qw6QO6he0WZlWxCSESv+/hwUJyeXP4WCP71e6zQEE7zeMK
-         7pPOvC6UEjn+AOBUF39zbiaNXmCJali05rMUmaClqMRpujApGxeJa0lPaR6sLSiXPuAS
-         jTvdjz0GE2OCpvHbw7K85qs88Mm8XGHq4ZrXBbJxzyLP6769WXDs0zz64/EtLo/x7Iwd
-         8Xtj5Pma+xkYTr5jH1LCaIsb35ND6y2C98/by69ggLMEyLnwyosf+IomYopU6Ecg+f+Q
-         FUTUYaeomrGxPchI8L5ZKQ7uz074Zo3widkwVwuNZu5E/fzWw/s7tCR67Tc2wfH1ZVqe
-         l31g==
-X-Gm-Message-State: AOAM531fhwurML4vEINAzjzCdLytzhdcDdIRXZE9eR3DwcFsSv87LV4K
-        VVhSpSUvJItd9LFrj5htwu7VQXzxTZyXb5JvjhY=
-X-Google-Smtp-Source: ABdhPJwOEGOndN3XJ2AdPVgs21Uk3Pl9ptap6C6m7lxGMh46gmnMmtXtddj1YDrRnLCd3mKOJXSTpg==
-X-Received: by 2002:aa7:d999:0:b0:40e:fdf0:38c with SMTP id u25-20020aa7d999000000b0040efdf0038cmr10733423eds.419.1645231496569;
-        Fri, 18 Feb 2022 16:44:56 -0800 (PST)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id l1sm2727025ejb.81.2022.02.18.16.44.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 16:44:55 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id p9so17085663wra.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:44:54 -0800 (PST)
-X-Received: by 2002:a5d:64ef:0:b0:1e3:1e05:d042 with SMTP id
- g15-20020a5d64ef000000b001e31e05d042mr7524925wri.679.1645231494092; Fri, 18
- Feb 2022 16:44:54 -0800 (PST)
-MIME-Version: 1.0
-References: <1644494255-6632-1-git-send-email-quic_sbillaka@quicinc.com> <1644494255-6632-6-git-send-email-quic_sbillaka@quicinc.com>
-In-Reply-To: <1644494255-6632-6-git-send-email-quic_sbillaka@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 18 Feb 2022 16:44:42 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WkjZr2vwo42rP7Ou_UP_CSoC=sGY08+pFHY_aVfN_Vhg@mail.gmail.com>
-Message-ID: <CAD=FV=WkjZr2vwo42rP7Ou_UP_CSoC=sGY08+pFHY_aVfN_Vhg@mail.gmail.com>
-Subject: Re: [PATCH v4 5/5] drm/msm/dp: Add driver support to utilize drm panel
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5kb3IKgrEaUkoVxz5aA0o1q5npWMf+JMdpdQ0OBpg8g=;
+        b=yLmQ3ZRaf1pXFTk+iBjnDb1Qkl9eLTqmMHy598G+yWHVsrRpmkGDZ+M8OmeFaXTETK
+         KwOF/mo/IJpAOsb6G0+wDkFzJhFuuz7JwOwOihOG+CLuaKSqAPXVjm8xPAYBsuXc4A09
+         VRT1S0sDkWoq3J515uZM09xR1UZNWIIQgeNVqH64MZhvQSntiyczwAEKmw7Kbjp9kMKP
+         IVMuGtDkr4XJgMA3MKR0LUQoGHLOeXA2NfX8lfAYzm3YGdvbugBLb/mLQ0K4NnSlebFn
+         BN48QzAs94F9DwTFjLOBYO9It0gTW3gn47tjt5odmu5df6IwWfjtWSSFEdiSwP9bhp94
+         7XbQ==
+X-Gm-Message-State: AOAM530lYKH6TQiXSdcNphQkHVn3Rh8EyTXi8Pi+1Kj7ztAcSjOCbnx/
+        WJKgJ4fximIOHB+cpy/UerY98CvTiafp7a9F
+X-Google-Smtp-Source: ABdhPJyT5RyK68SEDq1cNRE8g55FB2gnh2Kwx7nCvePB+hBNzvJHy6UClKZv5OIYG61KDyvU8b/mlw==
+X-Received: by 2002:a9d:668:0:b0:5ad:fb5:3745 with SMTP id 95-20020a9d0668000000b005ad0fb53745mr3261328otn.82.1645231633381;
+        Fri, 18 Feb 2022 16:47:13 -0800 (PST)
+Received: from rivos-atish.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
+        by smtp.gmail.com with ESMTPSA id n11sm11360794oal.1.2022.02.18.16.47.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 16:47:12 -0800 (PST)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, quic_kalyant@quicinc.com,
-        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
-        quic_mkrishn@quicinc.com, quic_vproddut@quicinc.com,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [v6 0/9] Improve RISC-V Perf support using SBI PMU and sscofpmf extension
+Date:   Fri, 18 Feb 2022 16:46:51 -0800
+Message-Id: <20220219004700.1973682-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series adds improved perf support for RISC-V based system using
+SBI PMU extension[1] and Sscofpmf extension[2]. The SBI PMU extension allows
+the kernel to program the counters for different events and start/stop counters
+while the sscofpmf extension allows the counter overflow interrupt and privilege
+mode filtering. An hardware platform can leverage SBI PMU extension without
+the sscofpmf extension if it supports mcounteren at least. Perf stat will work
+but record won't work as sscofpmf & mcountinhibit is required to support that.
+A platform can support both features event counting and sampling using perf
+tool only if sscofpmf is supported. 
 
-On Thu, Feb 10, 2022 at 3:58 AM Sankeerth Billakanti
-<quic_sbillaka@quicinc.com> wrote:
->
-> Add support in the DP driver to utilize the custom eDP panels
-> from drm/panels.
->
-> An eDP panel is always connected to the platform. So, the eDP
-> connector can be reported as always connected. The display mode
-> will be sourced from the panel. The panel mode will be set after
-> the link training is completed.
->
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> ---
->
-> Changes in v4:
->   - Remove obvious comments
->   - Define separate connector_ops for eDP
->   - Remove unnecessary checks
->
-> Changes in v3:
->   None
->
->  drivers/gpu/drm/msm/dp/dp_display.c |  6 ++++
->  drivers/gpu/drm/msm/dp/dp_drm.c     | 62 +++++++++++++++++++++++++++++++------
->  drivers/gpu/drm/msm/dp/dp_parser.h  |  3 ++
->  3 files changed, 61 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 7cc4d21..5d314e6 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1513,6 +1513,9 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
->                 return -EINVAL;
->         }
->
-> +       if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
-> +               dp_hpd_plug_handle(dp_display, 0);
+This series introduces a platform perf driver instead of a existing arch
+specific implementation. The new perf implementation has adopted a modular
+approach where most of the generic event handling is done in the core library
+while individual PMUs need to only implement necessary features specific to
+the PMU. This is easily extensible and any future RISC-V PMU implementation
+can leverage this. Currently, SBI PMU driver & legacy PMU driver are implemented
+as a part of this series.
 
-I'm really not so sure here. You're just totally ignoring the HPD
-signal here which isn't right at all. The HPD signal is important for
-knowing if an edp panel is ready yet so you can't just ignore it. The
-only way this could work is if something else turns the panel on w/
-plenty of time before your code runs so it has had time to get
-ready...
+The legacy driver tries to reimplement the existing minimal perf under a new
+config to maintain backward compatibility. This implementation only allows
+monitoring of always running cycle/instruction counters. Moreover, they can
+not be started or stopped. In general, this is very limited and not very useful.
+That's why, I am not very keen to carry the support into the new driver.
+However, I don't want to break perf for any existing hardware platforms.
+If everybody agrees that we don't need legacy perf implementation for older
+implementation, I will be happy to drop PATCH 4.
 
-It feels like we just need to work to get this all plumbed up properly
-with the right power sequencing. That'll also allow us to enable the
-generic edp-panel stuff...
+This series has been tested in Qemu (RV64 & RV32) and HiFive Unmatched.
+Qemu patches[4] and OpenSBI v1.0 is required to test it on Qemu and a dt patch
+required in U-Boot[5] for HiFive Unmatched. Qemu changes are not
+backward compatible. That means, you can not use perf anymore on older Qemu
+versions with latest OpenSBI and/or Kernel. However, newer kernel will
+just use legacy pmu driver if old OpenSBI is detected.
 
+The U-Boot patch is just an example that encodes few of the events defined
+in fu740 documentation [6] in the DT. We can update the DT to include all the
+events defined if required.
 
-> +static int edp_connector_get_modes(struct drm_connector *connector)
-> +{
-> +       struct msm_dp *dp;
-> +
-> +       dp = to_dp_connector(connector)->dp_display;
-> +
-> +       return drm_bridge_get_modes(dp->panel_bridge, connector);
-> +}
-> +
-> +static enum drm_mode_status edp_connector_mode_valid(
-> +               struct drm_connector *connector,
-> +               struct drm_display_mode *mode)
-> +{
-> +       if (mode->clock > EDP_MAX_PIXEL_CLK_KHZ)
-> +               return MODE_CLOCK_HIGH;
-> +
-> +       return MODE_OK;
-> +}
-> +
->  static const struct drm_connector_funcs dp_connector_funcs = {
->         .detect = dp_connector_detect,
->         .fill_modes = drm_helper_probe_single_connector_modes,
-> @@ -132,11 +151,24 @@ static const struct drm_connector_funcs dp_connector_funcs = {
->         .atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
->  };
->
-> +static const struct drm_connector_funcs edp_connector_funcs = {
-> +       .fill_modes = drm_helper_probe_single_connector_modes,
-> +       .destroy = drm_connector_cleanup,
-> +       .reset = drm_atomic_helper_connector_reset,
-> +       .atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
-> +       .atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
-> +};
-> +
->  static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
->         .get_modes = dp_connector_get_modes,
->         .mode_valid = dp_connector_mode_valid,
->  };
->
-> +static const struct drm_connector_helper_funcs edp_connector_helper_funcs = {
-> +       .get_modes = edp_connector_get_modes,
-> +       .mode_valid = edp_connector_mode_valid,
-> +};
-> +
->  /* connector initialization */
->  struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
->  {
-> @@ -154,18 +186,28 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
->
->         connector = &dp_connector->base;
->
-> -       ret = drm_connector_init(dp_display->drm_dev, connector,
-> -                       &dp_connector_funcs,
-> -                       dp_display->connector_type);
-> -       if (ret)
-> -               return ERR_PTR(ret);
-> +       if (dp_display->connector_type == DRM_MODE_CONNECTOR_eDP) {
-> +               ret = drm_connector_init(dp_display->drm_dev, connector,
-> +                               &edp_connector_funcs, DRM_MODE_CONNECTOR_eDP);
-> +               if (ret)
-> +                       return ERR_PTR(ret);
-> +
-> +               drm_connector_helper_add(connector,
-> +                               &edp_connector_helper_funcs);
-> +       } else {
-> +               ret = drm_connector_init(dp_display->drm_dev, connector,
-> +                               &dp_connector_funcs,
-> +                               DRM_MODE_CONNECTOR_DisplayPort);
-> +               if (ret)
-> +                       return ERR_PTR(ret);
->
-> -       drm_connector_helper_add(connector, &dp_connector_helper_funcs);
-> +               drm_connector_helper_add(connector, &dp_connector_helper_funcs);
+This series depends on the ISA extension parsing series[7].
 
-This is probably not the correct way to do this. Drivers like this
-should really be moving _away_ from creating their own connectors. The
-idea is that you should just be creating bridges and then someone
-creates a "bridge connector" that implements the connector functions
-atop the bridge.
+Here is an output of perf stat/report while running perf benchmark with OpenSBI, 
+Linux kernel and U-Boot patches applied.
 
-This is what Dmitry is working on [1]. Speaking of which, he really
-ought to be CCed on all your patches.
+HiFive Unmatched:
+=================
+perf stat -e cycles -e instructions -e L1-icache-load-misses -e branches -e branch-misses \
+-e r0000000000000200 -e r0000000000000400 \
+-e r0000000000000800 perf bench sched messaging -g 25 -l 15
+
+# Running 'sched/messaging' benchmark:
+# 20 sender and receiver processes per group
+# 25 groups == 1000 processes run
+
+     Total time: 0.826 [sec]
+
+ Performance counter stats for 'perf bench sched messaging -g 25 -l 15':
+
+        3426710073      cycles                (65.92%)
+        1348772808      instructions          #0.39  insn per cycle  (75.44%)
+                 0      L1-icache-load-misses (72.28%)
+         201133996      branches              (67.88%)
+          44663584      branch-misses         #22.21% of all branches (35.01%)
+         248194747      r0000000000000200     (41.94%) --> Integer load instruction retired
+         156879950      r0000000000000400     (43.58%) --> Integer store instruction retired
+           6988678      r0000000000000800     (47.91%) --> Atomic memory operation retired
+
+       1.931335000 seconds time elapsed
+
+       1.100415000 seconds user
+       3.755176000 seconds sys
 
 
-> -       /*
-> -        * Enable HPD to let hpd event is handled when cable is connected.
-> -        */
-> -       connector->polled = DRM_CONNECTOR_POLL_HPD;
-> +               /*
-> +                * Enable HPD to let hpd event is handled when cable is connected.
-> +                */
-> +               connector->polled = DRM_CONNECTOR_POLL_HPD;
-> +       }
->
->         drm_connector_attach_encoder(connector, dp_display->encoder);
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-> index 3172da0..58c4f27 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-> @@ -17,6 +17,9 @@
->  #define DP_MAX_PIXEL_CLK_KHZ   675000
->  #define DP_MAX_NUM_DP_LANES    4
->
-> +/* Maximum validated clock */
-> +#define EDP_MAX_PIXEL_CLK_KHZ  285550
+QEMU:
+=========
+Perf stat:
+=========
 
-As discussed out-of-band, this isn't my favorite define. The datasheet
-for sc7280, which is what you're testing on / targeting, claims to
-support higher rates. Other users of this driver also ought to support
-higher rates. It might be OK short term, but it's definitely not a
-good long term solution.
+[root@fedora-riscv riscv]# perf stat -e r8000000000000005 -e r8000000000000007 \
+-e r8000000000000006 -e r0000000000020002 -e r0000000000020004 -e branch-misses \
+-e cache-misses -e dTLB-load-misses -e dTLB-store-misses -e iTLB-load-misses \
+-e cycles -e instructions perf bench sched messaging -g 15 -l 10 \
+Running with 15*40 (== 600) tasks.
+Time: 6.578
 
-[1] https://lore.kernel.org/all/20220211224006.1797846-5-dmitry.baryshkov@linaro.org/
+ Performance counter stats for './hackbench -pipe 15 process':
+
+             1,794      r8000000000000005      (52.59%) --> SBI_PMU_FW_SET_TIMER
+             2,859      r8000000000000007      (60.74%) --> SBI_PMU_FW_IPI_RECVD
+             4,205      r8000000000000006      (68.71%) --> SBI_PMU_FW_IPI_SENT
+                 0      r0000000000020002      (81.69%)
+     <not counted>      r0000000000020004      (0.00%)
+     <not counted>      branch-misses          (0.00%)
+     <not counted>      cache-misses           (0.00%)
+         7,878,328      dTLB-load-misses       (15.60%)
+           680,270      dTLB-store-misses      (28.45%)
+         8,287,931      iTLB-load-misses       (39.24%)
+    20,008,506,675      cycles                 (48.60%)
+    21,484,427,932      instructions   # 1.07  insn per cycle (56.60%)
+
+       1.681344735 seconds time elapsed
+
+       0.614460000 seconds user
+       8.313254000 seconds sys
+
+
+[root@fedora-riscv ~]# perf stat -e cycles -e instructions -e dTLB-load-misses -e dTLB-store-misses -e iTLB-load-misses \
+> perf bench sched messaging -g 1 -l 10
+# Running 'sched/messaging' benchmark:
+# 20 sender and receiver processes per group
+# 1 groups == 40 processes run
+
+     Total time: 0.218 [sec]
+
+ Performance counter stats for 'perf bench sched messaging -g 1 -l 10':
+
+     3,685,401,394      cycles                                                      
+     3,684,529,388      instructions              #    1.00  insn per cycle         
+         3,006,042      dTLB-load-misses                                            
+           258,144      dTLB-store-misses                                           
+         1,992,860      iTLB-load-misses                                            
+
+       0.588717389 seconds time elapsed
+
+       0.324009000 seconds user
+       0.937087000 seconds sys
+
+[root@fedora-riscv ~]# perf record -e cycles -e instructions -e dTLB-load-misses -e dTLB-store-misses \
+-e iTLB-load-misses -c 10000 perf bench sched messaging -g 1 -l 10
+# Running 'sched/messaging' benchmark:
+# 20 sender and receiver processes per group
+# 1 groups == 40 processes run
+
+     Total time: 2.160 [sec]
+[ perf record: Woken up 11 times to write data ]
+Warning:
+Processed 291769 events and lost 1 chunks!
+
+[root@fedora-riscv ~]# perf report
+
+Available samples                                                               
+146K cycles                                                                    ◆
+146K instructions                                                              ▒
+298 dTLB-load-misses                                                           ▒
+8 dTLB-store-misses                                                            ▒
+211 iTLB-load-misses  
+
+[1] https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc
+[2] https://drive.google.com/file/d/171j4jFjIkKdj5LWcExphq4xG_2sihbfd/edit
+[3] https://github.com/atishp04/linux/tree/riscv_pmu_v6
+[4] https://github.com/atishp04/qemu/tree/riscv_pmu_v5
+[5] https://github.com/atishp04/u-boot/tree/hifive_unmatched_dt_pmu
+[6] https://sifive.cdn.prismic.io/sifive/de1491e5-077c-461d-9605-e8a0ce57337d_fu740-c000-manual-v1p3.pdf
+[7] https://lkml.org/lkml/2022/2/15/1604
+
+Changes from v5->v6:
+1. Split the used counters bitmap to firmware and hardware so that we don't
+   have to generate a hardware only used counter mask during overflow handling.
+2. Stopped all the counters during cpu hotplug to restore correct behavior.
+3. Addressed all the comments during the v5 review.
+4. Rebased on top of the isa extension framework series and 5.17-rc4.
+
+Changes from v4->v5:
+1. Fixed few corner case issues in perf interrupt handling.
+2. Changed the set_period API so that the caller can compute the initialize
+   value.
+3. Fixed the per cpu interrupt enablement issue.
+4. Fixed a bug for the privilege mode filtering.
+5. Modified the sbi driver independent of the DT.
+6. Removed any DT related modifications.
+
+Changes from v3->v4:
+1. Do not proceed overflow handler if event doesn't set for sampling.
+2. overflow status register is only read after counters are stopped.
+3. Added the PMU DT node for HiFive Unmatched.
+
+Changes from v2->v3:
+1. Added interrupt overflow support.
+2. Cleaned up legacy driver initialization.
+3. Supports perf record now.
+4. Added the DT binding and maintainers file.
+5. Changed cpu hotplug notifier to be multi-state.
+6. OpenSBI doesn't disable cycle/instret counter during boot. Update the
+   perf code to disable all the counter during the boot.
+
+Changes from v1->v2
+1. Implemented the latest SBI PMU extension specification.
+2. The core platform driver was changed to operate as a library while only
+   sbi based PMU is built as a driver. The legacy one is just a fallback if
+   SBI PMU extension is not available.
+
+Atish Patra (9):
+RISC-V: Remove the current perf implementation
+RISC-V: Add CSR encodings for all HPMCOUNTERS
+RISC-V: Add a perf core library for pmu drivers
+RISC-V: Add a simple platform driver for RISC-V legacy perf
+RISC-V: Add RISC-V SBI PMU extension definitions
+RISC-V: Add perf platform driver based on SBI PMU extension
+RISC-V: Add sscofpmf extension support
+Documentation: riscv: Remove the old documentation
+MAINTAINERS: Add entry for RISC-V PMU drivers
+
+Documentation/riscv/pmu.rst         | 255 ---------
+MAINTAINERS                         |   9 +
+arch/riscv/Kconfig                  |  13 -
+arch/riscv/include/asm/csr.h        |  66 ++-
+arch/riscv/include/asm/hwcap.h      |   1 +
+arch/riscv/include/asm/perf_event.h |  72 ---
+arch/riscv/include/asm/sbi.h        |  95 ++++
+arch/riscv/kernel/Makefile          |   1 -
+arch/riscv/kernel/cpu.c             |   1 +
+arch/riscv/kernel/cpufeature.c      |   2 +
+arch/riscv/kernel/perf_event.c      | 485 -----------------
+drivers/perf/Kconfig                |  30 ++
+drivers/perf/Makefile               |   3 +
+drivers/perf/riscv_pmu.c            | 324 ++++++++++++
+drivers/perf/riscv_pmu_legacy.c     | 142 +++++
+drivers/perf/riscv_pmu_sbi.c        | 790 ++++++++++++++++++++++++++++
+include/linux/cpuhotplug.h          |   1 +
+include/linux/perf/riscv_pmu.h      |  75 +++
+18 files changed, 1538 insertions(+), 827 deletions(-)
+delete mode 100644 Documentation/riscv/pmu.rst
+delete mode 100644 arch/riscv/kernel/perf_event.c
+create mode 100644 drivers/perf/riscv_pmu.c
+create mode 100644 drivers/perf/riscv_pmu_legacy.c
+create mode 100644 drivers/perf/riscv_pmu_sbi.c
+create mode 100644 include/linux/perf/riscv_pmu.h
+
+--
+2.30.2
+

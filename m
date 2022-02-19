@@ -2,100 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E72B4BC602
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 07:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0F34BC604
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 07:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241334AbiBSG35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 01:29:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56788 "EHLO
+        id S241346AbiBSGcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 01:32:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbiBSG3v (ORCPT
+        with ESMTP id S232507AbiBSGck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 01:29:51 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58403B2D78
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 22:29:33 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id y15-20020a4a650f000000b0031c19e9fe9dso3345468ooc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 22:29:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=A6c6+bU1vwCjSZejst+AnTNuuRlvzLcqyvxpwA2/+DjBNsiT76gcKnGzTn7ldeWElz
-         521dUdFa18SZn6azgEnpAmQIHHDBvCNTdLCbwnxDUu4z6xQKFv9OFsuokKJmv+DoYGWQ
-         u2j0siY4+CkTsBskPhf5skhROnr7h6nuoCpJYozG/oCQbWosJA9EZjbeNbkski2W7wT6
-         6/6cO2kPlxvy1cL9vkjVY2APgoqAOphRe4Xu302qtOKlSH2wMd8xSVyexZ3bwcLJq9G+
-         QL9F9qsUMgVgNHtTaNkUT+hm34+bfVJhA/hXqc00VksTUS72GuFQgWBn7Z4+8keJ6oV7
-         LywQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=HjHwdG0GlwxkZ0D1A0RlpO03nI0muoFMAtHM3UbWjWVahSviB4VhASSAJKy380Z2Ug
-         VbSOWFhWLukwcZMiu4ufeCntlrSyS9atgXD8jEfGk+gp2WEBj2iIl7sdL0AenMvMJj1F
-         N93hZiV22xq/kbkHJtBFlew1Xcgq505QklCXlVCezbPXrUt6hT35298p/DzYd+lGVXbz
-         wPHJuCpev0+mBP81ZPE0xdeCbE0U0oeI4yr3/7hnYBZ7CPSfHx+69U96CKJQ3iRfqoWY
-         8tPpPMdaoZfeEvV/2Yz5XTc6QxiSMiaaWCRNQ8gHj+hRhbzFZCEqWubXFYmcgaCBBTVT
-         /ihQ==
-X-Gm-Message-State: AOAM532NROHnWH5N5Q6X7CwFaKyZEPRnxNA1b2CNziV35c1Q9tsZbnD4
-        CWxa7C44TI7/Pa5Y0jV6O7KRDB5lV1RRmZPpc+E=
-X-Google-Smtp-Source: ABdhPJz9l0MPWRk0i1AJD5+jiUH1MqXIvIf7jHWWfsNGgcWmY3lhjZriE3clgQkwn/XAA8lFX35v+axgCoBG94rK6dU=
-X-Received: by 2002:a05:6870:d88e:b0:d1:359a:29f with SMTP id
- dv14-20020a056870d88e00b000d1359a029fmr5795381oab.232.1645252172535; Fri, 18
- Feb 2022 22:29:32 -0800 (PST)
+        Sat, 19 Feb 2022 01:32:40 -0500
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59E61928A
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 22:32:21 -0800 (PST)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id 749F3403DB;
+        Sat, 19 Feb 2022 11:32:15 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1645252337; bh=i/Xc3rXnQ31VWvth9DwfVBUyC4C2QCHs5CrNABz1B+g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PvRkxicWdFiMqfWBz74nha0w4PHEwhZR6tF+ZDG/YTlzojHskGlrFlKuOZCPY38Hv
+         PO+bgGJg9jaFsh/YzW6ZCBvMKBRwUDYCPUmzxFUck0aFWgdnQHVwC0V7QSUEs0yXUs
+         q3W5YjWWXjtmxvTSCfdvWtdQAkzm7vCiardPMfmRY7k5QAZ8CHkgu6MRufc7h+9S60
+         aapOH3eKCgnbfw0KOS2wJlNcIwbw8+Aoso9wtFH8s39LrHawpb1Z09qDkGQu0deBXg
+         DZVh1cKyesH+Ql4Yry6HZqk/4LrdXYJqP7FE8DP4Cejj+rgguo/7vippcA16DMtYA4
+         dKgygWZpkdOGQ==
 MIME-Version: 1.0
-Received: by 2002:a05:6838:c8cf:0:0:0:0 with HTTP; Fri, 18 Feb 2022 22:29:31
- -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <harrykuunda@gmail.com>
-Date:   Fri, 18 Feb 2022 22:29:31 -0800
-Message-ID: <CAKN7XSVf4XdL+w2fdk58Jqhedo3YXSS9XE-kd5w3Lfg+25yFjA@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:c2b listed in]
-        [list.dnswl.org]
-        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
-        *      [score: 0.1338]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [harrykuunda[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Date:   Sat, 19 Feb 2022 11:32:15 +0500
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linus.walleij@linaro.org, mturquette@baylibre.com,
+        bjorn.andersson@linaro.org, agross@kernel.org, tdas@codeaurora.org,
+        svarbanov@mm-sol.com, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 1/4] clk: qcom: clk-rcg2: Fail Duty-Cycle configuration if
+ MND divider is not enabled.
+In-Reply-To: <20220217223736.DFC2EC340E8@smtp.kernel.org>
+References: <20211209163720.106185-1-nikita@trvn.ru>
+ <20211209163720.106185-2-nikita@trvn.ru>
+ <20220108005209.5140EC36AEB@smtp.kernel.org>
+ <991533e0fddd6999c8a06a536ae57999@trvn.ru>
+ <20220110201452.2B3E4C36AE3@smtp.kernel.org>
+ <cc4241105bfd2249c1c309a4efa2e6aa@trvn.ru>
+ <20220217223736.DFC2EC340E8@smtp.kernel.org>
+Message-ID: <6c3d2f619b1e87ef21effc02bb6df1cb@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+Hi,
+
+Stephen Boyd писал(а) 18.02.2022 03:37:
+> Quoting Nikita Travkin (2022-01-26 07:14:21)
+>> Stephen Boyd писал(а) 11.01.2022 01:14:
+>> > Quoting Nikita Travkin (2022-01-07 23:25:19)
+>> >> Hi,
+>> >>
+>> >> Stephen Boyd писал(а) 08.01.2022 05:52:
+>> >> > Quoting Nikita Travkin (2021-12-09 08:37:17)
+>> >> I'm adding this error here primarily to bring attention of the
+>> >> user (e.g. developer enabling some peripheral that needs
+>> >> duty cycle control) who might have to change their clock tree
+>> >> to make this control effective. So, assuming that if someone
+>> >> sets the duty cycle to 50% then they might set it to some other
+>> >> value later, it makes sense to fail the first call anyway.
+>> >>
+>> >> If you think there are some other possibilities for this call
+>> >> to happen specifically with 50% duty cycle (e.g. some
+>> >> preparations or cleanups in the clk subsystem or some drivers
+>> >> that I'm not aware of) then I can make an exemption in the check
+>> >> for that.
+>> >>
+>> >
+>> > I don't see anywhere in clk_set_duty_cycle() where it would bail out
+>> > early if the duty cycle was set to what it already is. The default for
+>> > these clks is 50%, so I worry that some driver may try to set the duty
+>> > cycle to 50% and then fail now. Either we need to check the duty cycle
+>> > in the core before calling down into the driver or we need to check it
+>> > here in the driver. Can you send a patch to check the current duty cycle
+>> > in the core before calling down into the clk ops?
+>>
+>> Hi, sorry for a rather delayed response,
+>> I spent a bit of time looking at how to make the clk core be
+>> careful with ineffective duty-cycle calls and I can't find a
+>> nice way to do this... My idea was something like this:
+>>
+>> static int clk_core_set_duty_cycle_nolock(struct clk_core *core,
+>>                                           struct clk_duty *duty)
+>> {       /* ... */
+>>
+>>         /* Update core->duty values */
+>>         clk_core_update_duty_cycle_nolock(core);
+>>
+>>         if ( /* duty doesn't match core->duty */ ) {
+>>                 ret = core->ops->set_duty_cycle(core->hw, duty);
+>>         /* ... */
+>> }
+>>
+>> However there seem to be drawbacks to any variant of the
+>> comparison that I could come up with:
+>>
+>> Naive one would be to do
+>>     if (duty->num != core->duty->num || duty->den != core->duty->den)
+>> but it won't correctly compare e.g. 1/2 and 10/20.
+>>
+>> Other idea was to do
+>>     if (duty->den / duty->num != core->duty->den / core->duty->num)
+>> but it will likely fail with very close values (e.g. 100/500 and 101/500)
+>>
+>> I briefly thought of some more sophisticated math but I don't
+>> like the idea of complicating this too far.
+>>
+>> I briefly grepped the kernel sources for duty-cycle related methods
+>> and I saw only one user of the clk_set_duty_cycle:
+>>     sound/soc/meson/axg-tdm-interface.c
+>> Notably it sets the cycle to 1/2 in some cases, though it seems to
+>> be tied to the drivers/clk/meson/sclk-div.c clock driver by being
+>> the blocks of the same SoC.
+> 
+> Indeed, so this patch is untested? I doubt the qcom driver is being used
+> with the one caller of clk_set_duty_cycle() in the kernel.
+> 
+
+While right now, to my knowledge, there is no users of the duty cycle
+control, I'm adding a generic driver that uses it in another series [1]
+with an intention to use it across multiple qcom based devices.
+
+While making it I spent quite a bit of time staring at the oscilloscope
+to figure out that I need changes from patch 4/4 of this series and I'd
+like to make this quirk a bit more obvious to others.
+
+[1] https://lore.kernel.org/linux-pwm/20220212162342.72646-1-nikita@trvn.ru/
+
+>>
+>> Thinking of it a bit more, I saw another approach to the problem
+>> I want to solve: Since I just want to make developers aware of the
+>> hardware quirk, maybe I don't need to fail the set but just put a
+>> WARN or even WARN_ONCE there? This way the behavior will be unchanged.
+>>
+> 
+> I don't like the idea of a WARN or a WARN_ONCE as most likely nobody is
+> going to read it or do anything about it. Returning an error should be
+> fine then. If the duty cycle call fails for 50% then that's something we
+> have to live with.
+
+I intend this WARN or error to be hit by a person bringing up something
+new, user should never see it. For example a possible story could be:
+
+- Backlight control is connected to the clock on device X
+- Developer adds (future) pwm-clk adapter and pwm-backlight to the DT
+- Backlight slider in UI doesn't work anyway. (don't think UIs show
+  errors here)
+- Developer troubleshoots the thing and either finds WARN in dmesg
+  or that the sysfs write errors out.
+
+In my experience, people bringing devices up pay a very close attention
+to dmesg so I think giving a WARN is fine, but I'm fine with whichever
+approach you prefer.
+
+Nikita

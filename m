@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743B34BC997
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 18:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58C74BC99A
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 18:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242719AbiBSRuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 12:50:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59806 "EHLO
+        id S242725AbiBSRwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 12:52:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbiBSRuF (ORCPT
+        with ESMTP id S234217AbiBSRwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 12:50:05 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710655C858
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 09:49:45 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id e129-20020a25d387000000b006245d830ca6so2673658ybf.13
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 09:49:45 -0800 (PST)
+        Sat, 19 Feb 2022 12:52:23 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78F65F260;
+        Sat, 19 Feb 2022 09:52:03 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id g39so11136524lfv.10;
+        Sat, 19 Feb 2022 09:52:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=g6NUY8tWVaq9hcc+7rvde17O72ywerB7Kw8Oqcv6Cb8=;
-        b=O7hSka9m0Losb8V4/MYsnc1jyzFMyVcjtIBwf5aOuBQhnKI5PJ5SUJZLQDdthEGXkf
-         oKvbQRTnBPz85wCj9iCvNyZAchcUULrl9UbaFw38VP4rek0jLNzck2VSqE5MzSBEAPvi
-         BcURtgl4WRLsAhlnSTGJenIqDNWF5A7Gm7JxV/jj2nfv3Uox4GSokTaqUmW+Aq+vseEb
-         5Eb26fIhmLlqmRkqLFG3uUq4l9NHZz9KphHZD3NqexhGND7e2Hdrwjp8TrvZfIJyHSKC
-         jtRSzKAd/wJq96JuQXDifhX/Kphnt6w5DUdeE8JawqjgxYAxwfKUw9we7FA/26OqIRRy
-         Lx3A==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7yVrvBYHyY3QdyCCeyIxr1lH8/vkZhQdSt3EyEVyKOQ=;
+        b=Z+Y2PwCGESLzwlh6ekus16SE6okHck1S/aJ/1TVFDFmmxlRMudavC5ID4rfQx3gFCz
+         W1MZSPN/4+Fx/RCfC6kTNhwpni007xOVyRHw+z+nuasbJKry9LbwPKoZ2gAhc3KeCFAi
+         Qt17+bumSz0PxMvDV537wcEhoN84QExYE8Kopw5GoLiXcISR15yJ//wSPJDa1/Pt+7Z6
+         mFGFRf31DM/bSCDE9UYVRiAoXFf8vD7kuzRGxKnCrAWvtERB1NodQvBApniBlxN+wj9k
+         a7M/mJpr/nIOUZ5lB98CqvzBtpbpT+fABKX62mm4c+IPyP91fbflRUuDtCxqjSaRiNQ/
+         Lm+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=g6NUY8tWVaq9hcc+7rvde17O72ywerB7Kw8Oqcv6Cb8=;
-        b=AuXGrNAUWb8egFGEpevclYol+99pYUjFoJYBVxDGr5k5NB73FT6hZsdxKBI3OXKauf
-         QBXS3KEoCH7iZsplobOcBNPXz0BeMTWaC0v8qgg9QQl5zmtOLogJ5FQsTCIU2VmZAGYj
-         WWf87kB1yFtjnMqVLGTgQNv1ulQkFThq/Yx7hNTXs5WGRHkhyuCfPYi0rfvlzMMg2bOB
-         URTER+q+cLYXD/xF01KwY0yq4eAQcA6zuH79dLxqUc3KKy3fNHG4PQGYBmUDvveQUmBq
-         ZTYxH+31u+KDKpu5Allw2hHxGUPaH6DzKniEPwRqZcivbSJf1NSqqAUEl745EUS3wGTq
-         hKVg==
-X-Gm-Message-State: AOAM5326l+oJxkIknQqNFHwfki0jKSNCPN3zZigRrdvphhvdr6PeMX62
-        UBr4VmKeRaH3yhTVy2Me+ICyNQjVMzs=
-X-Google-Smtp-Source: ABdhPJwf14QjNvOBlEKfJtniVeJfLtC2EP2lzgT+pRF8F00YZc/vptpdnJGB4C1slL1oxsIeafyrTGtmROs=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:cbd0:4467:228e:5eea])
- (user=surenb job=sendgmr) by 2002:a25:bdc9:0:b0:61d:dfc5:a755 with SMTP id
- g9-20020a25bdc9000000b0061ddfc5a755mr11864217ybk.357.1645292984665; Sat, 19
- Feb 2022 09:49:44 -0800 (PST)
-Date:   Sat, 19 Feb 2022 09:49:40 -0800
-Message-Id: <20220219174940.2570901-1-surenb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH 1/1] mm: count time in drain_all_pages during direct reclaim
- as memory pressure
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, mhocko@suse.com, peterz@infradead.org,
-        guro@fb.com, shakeelb@google.com, minchan@kernel.org,
-        timmurray@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7yVrvBYHyY3QdyCCeyIxr1lH8/vkZhQdSt3EyEVyKOQ=;
+        b=yoyAqx+dcOn3QRRE2oQK62P4fdB8fz7TZRzwEDQjL3W+e2RML8FSrRWUe5IcwRGYSY
+         vxdC5gZWuwqQEquuIuOSjqqFIRry4IqgN7xNIIHRMpD9MZS1X9dewEZ2a33nzdQeieD1
+         nvaYqoKFvcbARpwdXKfFJIiqFSVbmVlqs04eGwynzd53f9NGLJAuoQmRRSMHRhedRDnF
+         6vPcfjoJgJVl8O7vLl0WYLvTL73AoO54AtAtnPhiAKzZZ2voBV+iVSGT+/QgZbfm2Zb9
+         YF/V5RbgCV4oJ884WjH4SCVFcdBlllqkUfwI1z1oB07t4vExtaAMzeZXpawOP9FquW/0
+         +SEA==
+X-Gm-Message-State: AOAM531Fju7DXRNUj5E6UA6rkyKdN23Outry+S1B537v9xwZIY8LtoKv
+        KoKOTpgJfCeFrCN7TNCPseBq8kKAnY0=
+X-Google-Smtp-Source: ABdhPJztgefYS2BdI3meZgbmQg2nNYbVEhFCxZeyVrUB8mQqvT+0gHoAIgPTRqIv1H4Rufh/EzXWng==
+X-Received: by 2002:ac2:5b4b:0:b0:43c:795a:25a6 with SMTP id i11-20020ac25b4b000000b0043c795a25a6mr9172627lfp.268.1645293121966;
+        Sat, 19 Feb 2022 09:52:01 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id q8sm630091lfr.181.2022.02.19.09.52.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Feb 2022 09:52:01 -0800 (PST)
+Message-ID: <2605a614-0a2c-85ac-576a-048f38f9d366@gmail.com>
+Date:   Sat, 19 Feb 2022 20:52:00 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 3/9] gpu: host1x: Add context device management code
+Content-Language: en-US
+To:     Mikko Perttunen <mperttunen@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, joro@8bytes.org, will@kernel.org,
+        robh+dt@kernel.org, robin.murphy@arm.com
+Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220218113952.3077606-1-mperttunen@nvidia.com>
+ <20220218113952.3077606-4-mperttunen@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220218113952.3077606-4-mperttunen@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,50 +78,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When page allocation in direct reclaim path fails, the system will
-make one attempt to shrink per-cpu page lists and free pages from
-high alloc reserves. Draining per-cpu pages into buddy allocator can
-be a very slow operation because it's done using workqueues and the
-task in direct reclaim waits for all of them to finish before
-proceeding. Currently this time is not accounted as psi memory stall.
+18.02.2022 14:39, Mikko Perttunen пишет:
+> +	for (index = 0; index < cdl->len; index++) {
+> +		struct iommu_fwspec *fwspec;
+> +
+> +		ctx = &cdl->devs[index];
+> +
+> +		ctx->host = host1x;
+> +
+> +		device_initialize(&ctx->dev);
+> +
+> +		ctx->dev.dma_mask = &context_device_dma_mask;
+> +		ctx->dev.coherent_dma_mask = context_device_dma_mask;
+> +		dev_set_name(&ctx->dev, "host1x-ctx.%d", index);
+> +		ctx->dev.bus = &host1x_context_device_bus_type;
 
-While testing mobile devices under extreme memory pressure, when
-allocations are failing during direct reclaim, we notices that psi
-events which would be expected in such conditions were not triggered.
-After profiling these cases it was determined that the reason for
-missing psi events was that a big chunk of time spent in direct
-reclaim is not accounted as memory stall, therefore psi would not
-reach the levels at which an event is generated. Further investigation
-revealed that the bulk of that unaccounted time was spent inside
-drain_all_pages call.
-
-Annotate drain_all_pages and unreserve_highatomic_pageblock during
-page allocation failure in the direct reclaim path so that delays
-caused by these calls are accounted as memory stall.
-
-Reported-by: Tim Murray <timmurray@google.com>
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- mm/page_alloc.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 3589febc6d31..7fd0d392b39b 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -4639,8 +4639,12 @@ __alloc_pages_direct_reclaim(gfp_t gfp_mask, unsigned int order,
- 	 * Shrink them and try again
- 	 */
- 	if (!page && !drained) {
-+		unsigned long pflags;
-+
-+		psi_memstall_enter(&pflags);
- 		unreserve_highatomic_pageblock(ac, false);
- 		drain_all_pages(NULL);
-+		psi_memstall_leave(&pflags);
- 		drained = true;
- 		goto retry;
- 	}
--- 
-2.35.1.473.g83b2b277ed-goog
-
+host1x_context_device_bus_type will be an undefined symbol if
+CONFIG_TEGRA_HOST1X_CONTEXT_BUS=n? Please compile and test all combinations.

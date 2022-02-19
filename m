@@ -2,141 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE32D4BC972
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 18:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEE64BC977
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 18:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242580AbiBSRAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 12:00:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50550 "EHLO
+        id S242689AbiBSRCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 12:02:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237802AbiBSRAS (ORCPT
+        with ESMTP id S242470AbiBSRCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 12:00:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE2E66634;
-        Sat, 19 Feb 2022 08:59:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F9E060B89;
-        Sat, 19 Feb 2022 16:59:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 279F8C004E1;
-        Sat, 19 Feb 2022 16:59:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645289997;
-        bh=34JCMX2vd9mdkBrisLNaRHxb0jWBq7aU4Xf9pF6nGWo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HyiMhNHwoj5fwEutPf0JbsfqmfAAPZv9S8x95toNVz/34taVbEAXA3PehywARUD5V
-         b5DNTblk4yqMXrdoM2Gtw1gc9Qz0EVHIp/FEAe08d51MP5phPqRQvkqw10sC+ETB8m
-         IBikkxMRPw4dhLdxSP0ose/vYLr5rLjZs5xGgsag/4ex5bsK03woG1KbeWPwLixHSC
-         hagNwuZ+rNzq9+ZeJZ8ZdfvHOXcEf2mefmyFcqRCpxJbo7pxJKQO+ZD80dRlWeBjZs
-         kgtIkoiqpNoiLlUZjPfVBUJsgly326Ry7VfipQwJ3HiS7LHyzWN9wonBDfR0MGMk/d
-         thcclbC8uDHiQ==
-Date:   Sat, 19 Feb 2022 17:06:45 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andrea Merello <andrea.merello@gmail.com>
-Cc:     mchehab+huawei@kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
-        matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
-        jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
-Subject: Re: [v3 13/13] docs: iio: add documentation for BNO055 driver
-Message-ID: <20220219170645.565afed8@jic23-huawei>
-In-Reply-To: <20220217162710.33615-14-andrea.merello@gmail.com>
-References: <20220217162710.33615-1-andrea.merello@gmail.com>
-        <20220217162710.33615-14-andrea.merello@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 19 Feb 2022 12:02:53 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6959CA195
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 09:02:34 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so11311243pjm.2
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 09:02:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JDxmYIM8I0UHDFtNzfKhVrh+LAL9uJ//iBVpmzyjpD8=;
+        b=bfkvqTNbGC0DdhOwIPwSY1qRb5B76PXNb+SxqNRNze7cN4qBNLEeT8w6zuE3/mnqZ3
+         kFid1tcwL7jpwjSkXTnqiwAZewoU205uGxuOTAXWKfEGjxcKHhlo4uGdsl0X9xYWSy7O
+         pcR6hGH8Gj2w104R5RudiEEdh5FwOr2AawvwM2teKU/syLKY/mPHG0x01Nzt7Tli1XZ7
+         ag4X2mFLvKpXVNkB34OEWmWl9EEQiVHgt3x6nVEF9S5NaSTUmKH2IMqjSCGyB6sUoORz
+         S3zZqQAjGK13Uonrb8g6bKGEOZ6gP4zV+OwooUgHOWrrDwHfBIdyqzmEJJQSpvNXgclS
+         xSuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JDxmYIM8I0UHDFtNzfKhVrh+LAL9uJ//iBVpmzyjpD8=;
+        b=SrENN3sEG2TwPwvUekCcbbxpHqUzSg8N59bfUFVV79dTm84Ip84PWq67MkaVGyyDyn
+         I4Nu6xXF52JZ59uwb19OAcDQEklJLEzURVFJF6kdX/fDNXH+yO3dSZLj7gbzbxWa+L3w
+         H6JSdXqyjMB9YVkhPR4ZG7rVfzedmJbv2Ipp4nTx7tvcE3V82YH67Qt7itfspK249i11
+         lAu7Gt1L+lYILH6F3stS98YVcCN7GuYgRccBQnEmIn6e3MO7/MBZVnqv/Jk9QP+c4BGT
+         3vbodvPLHthiwY9B75d4YC69kl+2K3YRn6UBnrsu/hP0xqQZI1YVI2FFE+mOWtWwRa+h
+         AyUA==
+X-Gm-Message-State: AOAM531FAp1rU7OMGkaLZySiIvEW5M6KjdbTQ6Ho1SttpdBA2RtxhNQ1
+        1cKwBMzrbWvr9SGbQc32dDM=
+X-Google-Smtp-Source: ABdhPJwNFTzgFD5Dxvg2t7x24UnqKLQIqCny6cm/SHjHpm8VoDCpT63w7lHReOZLzg/mrOjXulYbaA==
+X-Received: by 2002:a17:90b:117:b0:1b8:e632:c589 with SMTP id p23-20020a17090b011700b001b8e632c589mr13581026pjz.26.1645290153686;
+        Sat, 19 Feb 2022 09:02:33 -0800 (PST)
+Received: from localhost (c-73-25-156-94.hsd1.or.comcast.net. [73.25.156.94])
+        by smtp.gmail.com with ESMTPSA id z16sm6244371pfw.159.2022.02.19.09.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Feb 2022 09:02:32 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Chia-I Wu <olvaffe@gmail.com>, Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        virtualization@lists.linux-foundation.org (open list:VIRTIO GPU DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/virtio: Remove restriction of non-zero blob_flags
+Date:   Sat, 19 Feb 2022 09:03:01 -0800
+Message-Id: <20220219170301.545432-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 17:27:10 +0100
-Andrea Merello <andrea.merello@gmail.com> wrote:
+From: Rob Clark <robdclark@chromium.org>
 
-Perhaps a comment on why it's worth having documentation for this device
-when we rarely bother?  (complex device etc...)
+With native userspace drivers in guest, a lot of GEM objects need to be
+neither shared nor mappable.  And in fact making everything mappable
+and/or sharable results in unreasonably high fd usage in host VMM.
 
-> Signed-off-by: Andrea Merello <andrea.merello@iit.it>
-> ---
->  Documentation/iio/bno055.rst | 53 ++++++++++++++++++++++++++++++++++++
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+This is for a thing I'm working on, a new virtgpu context type that
+allows for running native userspace driver in the guest, with a
+thin shim in the host VMM.  In this case, the guest has a lot of
+GEM buffer objects which need to be neither shared nor mappable.
 
-Please add it to an appropriate index such as Docuemntation/iio/index.rst
-so that it actually gets linked to in the documentation built.
+This supersedes https://patchwork.freedesktop.org/patch/475127/
 
-One comment inline.
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/iio/bno055.rst
-> 
-> diff --git a/Documentation/iio/bno055.rst b/Documentation/iio/bno055.rst
-> new file mode 100644
-> index 000000000000..4bb185075325
-> --- /dev/null
-> +++ b/Documentation/iio/bno055.rst
-> @@ -0,0 +1,53 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +==============================
-> +BNO055 driver
-> +==============================
-> +
-> +1. Overview
-> +===========
-> +
-> +This driver supports Bosch BNO055 IMUs (on both serial and I2C busses).
-> +
-> +Accelerometer, magnetometer and gyroscope measures are always provided.
-> +When "fusion_enable" sysfs attribute is set to 1, orientation (both Euler
-> +angles and quaternion), linear velocity and gravity vector are also
-> +provided, but some sensor settings (e.g. low pass filtering and range)
-> +became locked (the IMU firmware controls them).
-> +
-> +IIO attributes for unavailable measurements (e.g. Euler angles when fusion
-> +mode is disabled) just read zero.
-
-Hmm. Should probably return -EBUSY as 0 could be a valid value.
-
-> +
-> +This driver supports also IIO buffers.
-> +
-> +2. Calibration
-> +==============
-> +
-> +The IMU continuously performs an autocalibration procedure if (and only if)
-> +operating in fusion mode. The magnetometer autocalibration can however be
-> +disabled writing 0 in the sysfs in_magn_calibration_fast_enable attribute.
-> +
-> +The driver provides access to autocalibration flags (i.e. you can known if
-> +the IMU has successfully autocalibrated) and to the calibration data blob.
-> +
-> +The user can save this blob in a firmware file (i.e. in /lib/firmware) that
-> +the driver looks for at probe time. If found, then the IMU is initialized
-> +with this calibration data. This saves the user from performing the
-> +calibration procedure every time (which consist of moving the IMU in
-> +various way).
-> +
-> +The driver looks for calibration data file using two different names: first
-> +a file whose name is suffixed with the IMU unique ID (exposed in sysfs as
-> +serial_number) is searched for; this is useful when there is more than one
-> +IMU instance. If this file is not found, then a "generic" calibration file
-> +is searched for (which can be used when only one IMU is present, without
-> +struggling with fancy names, that change on each device).
-> +
-> +Valid calibration file names would be e.g.
-> + bno055-caldata-0e7c26a33541515120204a35342b04ff.dat
-> + bno055-caldata.dat
-> +
-> +In non-fusion mode the IIO 'offset' attributes provide access to the
-> +offsets from calibration data (if any), so that the user can apply them to
-> +the accel, angvel and magn IIO attributes. In fusion mode they are not
-> +needed (the IMU firmware internally applies those corrections) and they
-> +read as zero.
+diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+index 69f1952f3144..3a8078f2ee27 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
++++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+@@ -617,8 +617,7 @@ static int verify_blob(struct virtio_gpu_device *vgdev,
+ 	if (!vgdev->has_resource_blob)
+ 		return -EINVAL;
+ 
+-	if ((rc_blob->blob_flags & ~VIRTGPU_BLOB_FLAG_USE_MASK) ||
+-	    !rc_blob->blob_flags)
++	if (rc_blob->blob_flags & ~VIRTGPU_BLOB_FLAG_USE_MASK)
+ 		return -EINVAL;
+ 
+ 	if (rc_blob->blob_flags & VIRTGPU_BLOB_FLAG_USE_CROSS_DEVICE) {
+-- 
+2.34.1
 

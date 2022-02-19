@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3414BC36A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFCF4BC375
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240433AbiBSAbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:31:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43310 "EHLO
+        id S239807AbiBSAcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:32:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240402AbiBSAbS (ORCPT
+        with ESMTP id S236378AbiBSAcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:31:18 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FD612E9F8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:31:00 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v8-20020a17090a634800b001bb78857ccdso11423210pjs.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:31:00 -0800 (PST)
+        Fri, 18 Feb 2022 19:32:46 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E30177E6C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:32:28 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso10009181pjj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:32:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8aZ16UFG/qN8SDATqq+xbNjeyEK8F2U4AYeI8Q7W9Mw=;
-        b=HArcINaTCCHq36tGrqoEk7mWbIGxWYrZtNbvjNwmDNrmBHrKF3eJlEmgsdsTdOVnMq
-         gwU0FIiZ3lb3nTu1nqY4vVwwJnHUzAC66FxLehc7wPjjnFMa8nrC2vIKci/NI+cgdx0O
-         5mv4Zjt08mwVjFMhablIrVrKKZ0tJ7ZkS+DWkG6oHr8ISvrHErku953L0IAfmJ5H1IwE
-         tpcPZ0e+eZl3ta4rPpfIMbwMD/rATwJYXVln33HESHVem5AggYKENrLDu9hCiM6AeD+L
-         65Y6x9O5zH7k0GE7uQdIZ4ZIvC3mSThjkE1YaZhLPfx0/4C+JHfEqBOdh+HVxKvriHUS
-         0uSA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=ie7wPkZjwdzElvH96PVmNl9jOWV+pttLF9kv7yIV990=;
+        b=xTfgkj43GqUJfIT66JQ/CEO0aqbzuw2HDpdXEqpu3IzOYFPcl5HSvT5OKgXRkPn4Gg
+         mb4mqEFq63/xODjvuapeQkj14wfE5nq4BTa5lyi8EEDDP7I++RjBebkj8zSSkGUSmARq
+         eih719ozeVgjor75YoZyUndQfWr4A5fwFWW+AOnZaQJZgcGXjc5Ydq97v0Tvl0GQ/3sW
+         8gMprRWBBG9jm+Mq0rpwPDdYFaBq2y4I5G6igIkAkcXfUlbt1Yvvy9wxYJvGfFP3LDaX
+         VSIbE5DUiNSRJV07cI0Ei/gsZuvVmkOS6CIBIcV+5GAWLs9VZefgy1jNamO0Sg0hNtYQ
+         XuuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8aZ16UFG/qN8SDATqq+xbNjeyEK8F2U4AYeI8Q7W9Mw=;
-        b=sL3Y+hLHOQgxCFGhA7SZwLZI7yW/JcusMudiuTvh/lWrBwEkK3LC6AvpVebIU0XfCN
-         PXF7F1W5MhxLIgMRAITFeMDZdMIXACP9HS41hKj4GrrLuAGYI90bvOI5QFf8wXvXsGWX
-         OmZCZqaofhF+X3vlkDGwMkCkI6aj1KewHBDj2Z5oyYffBBLH31/gdvijwjgx1c6tQ3y1
-         nJGIWgo7VGfSIwtssZz3Khe2DucRV+B7nQIQoTP3iIIhjsc09koosFIiAcaD44byTd0p
-         hff5GTD3Ghm496RjIiQHnPVyujx6XKte6L7PsH7cI1NnrrBd1eA4urIiSAGlynXVSUnQ
-         z1xw==
-X-Gm-Message-State: AOAM531U9cNeLoTVqM1FXTEZAuwNW7NV0bTIBugcS9k5bxncWOYyLxy3
-        F/IyTMLvcHvw/zzIU5XeJP0Dlxt/50Ksyw==
-X-Google-Smtp-Source: ABdhPJzSAZ6U4sxN5IKhc/gevNuxGBEtDf2fuX3iCreS0CIEogpHitT+hzBHDWMZx2JytIHaobdHSg==
-X-Received: by 2002:a17:90b:e89:b0:1b9:19d0:432c with SMTP id fv9-20020a17090b0e8900b001b919d0432cmr14919792pjb.154.1645230660174;
-        Fri, 18 Feb 2022 16:31:00 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x6sm4127791pfo.152.2022.02.18.16.30.59
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=ie7wPkZjwdzElvH96PVmNl9jOWV+pttLF9kv7yIV990=;
+        b=1p+gKltLkRO2nlervZjvcMwGMX7KPUuzVpL4SoBjkRjE3oFsuC5Ag+l0t1TAEMRvIR
+         kRpTrVvkG2pI7Ak2NR17dEeE/EESkFsq6HW78KdueQsAKaNggLiDkfwbBjP+zPFsa0Q2
+         8bjFvJXcWEz2fEDpip+4LpBd+ETUbtSXR55nsEeXst92+6EyfbmDR3WdyV/EFNTRBgNO
+         pfmZrbsQ75MVdyQ3qMz9HX152+srGT2BXsWUz5YzrG9UMLi1ge2WJIozKD01poiZsPzX
+         JQu2TIqmvHL0912X3aRVcKBn2eiz/X50EgSTBklQufqnyu/QC6TTJ99+crD/FaW5HBc8
+         ubTA==
+X-Gm-Message-State: AOAM531WFiDUiJd53DN99F8Cr0yRMN8/WeCfLAdH66SiG4RM4pUKZkuy
+        gKTrqsJC0F3HhhVn+Q6lACCF/g==
+X-Google-Smtp-Source: ABdhPJzOdNwzhEWF/xjssr/bVkeFSdPFFlB16rmenkttGnh8q8q7Hd4akRL6ZYVAz/rTPSjBriVFwA==
+X-Received: by 2002:a17:90a:6884:b0:1b8:c2c3:e10a with SMTP id a4-20020a17090a688400b001b8c2c3e10amr14993028pjd.38.1645230747811;
+        Fri, 18 Feb 2022 16:32:27 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id b13-20020a17090ae38d00b001b9dedc52d0sm420359pjz.29.2022.02.18.16.32.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 16:30:59 -0800 (PST)
-Date:   Sat, 19 Feb 2022 00:30:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Vipin Sharma <vipinsh@google.com>, kbuild-all@lists.01.org,
-        mkoutny@suse.com, tj@kernel.org, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, dmatlack@google.com, jiangshanlai@gmail.com,
-        kvm@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] KVM: Move VM's worker kthreads back to the original
- cgroup before exiting.
-Message-ID: <YhA6QIDME2wFbgIU@google.com>
-References: <20220217061616.3303271-1-vipinsh@google.com>
- <202202172046.GuW8pHQc-lkp@intel.com>
- <3113f00a-e910-2dfb-479f-268566445630@redhat.com>
+        Fri, 18 Feb 2022 16:32:27 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     "shunzhou.jiang@amlogic.com" <shunzhou.jiang@amlogic.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        jbrunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "jianxin.pan" <jianxin.pan@amlogic.com>
+Subject: Re: Re: [PATCH 2/2] soc: s4: Add support for power domains controller
+In-Reply-To: <2022021510112070486315@amlogic.com>
+References: <20220126061018.705338-1-shunzhou.jiang@amlogic.com>
+ <20220126061018.705338-3-shunzhou.jiang@amlogic.com>
+ <7hzgnal5yu.fsf@baylibre.com> <202202091001287547451@amlogic.com>
+ <7hee4bok8w.fsf@baylibre.com> <2022021117375354230910@amlogic.com>
+ <7hwni1me12.fsf@baylibre.com> <2022021510112070486315@amlogic.com>
+Date:   Fri, 18 Feb 2022 16:32:26 -0800
+Message-ID: <7hley7itlx.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3113f00a-e910-2dfb-479f-268566445630@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022, Paolo Bonzini wrote:
-> On 2/17/22 13:34, kernel test robot wrote:
-> > > 5859		reattach_err = cgroup_attach_task_all(current->real_parent, current);
-> 
-> This needs to be within rcu_dereference().
+"shunzhou.jiang@amlogic.com" <shunzhou.jiang@amlogic.com> writes:
 
-As Vipin found out the hard way, cgroup_attach_task_all() can't be inside an RCU
-critical section as it might sleep due to mutex_lock().
+> Hi Kevin:
+> Thanks your reply
+> This has been mentioned before
 
-My sched knowledge is sketchy at best, but I believe KVM just needs to guarantee
-the liveliness of real_parent when passing it to cgroup_attach_task_all().
-Presumably kthreadd_task can (in theory) be killed/exiting while this is going on,
-but at that point I doubt anyone cares much about cgroup accuracy.
+Yes, you mentioned what the domains are for, but you have not answered
+why the domains need to remain powered on when they are not in use.
+ 
+>> S4_VPU_HDMI:  for vpu,  this domain provide power to many moudles(osd, vpp, hdr, dv, di), if close, will cause system crash
 
-So I think this can be:
+Why does the system crash?  Most likely because a driver in this domain
+is still trying to access.  This suggests that that the DT shoud be
+updated so those devices are listed in the power domain, and also that
+those drivers use runtime PM so that the power domain is turned off ONLY
+when the devices are not in use.
 
-	rcu_read_lock();
-	parent = rcu_dereference(current->real_parent);
-	get_task_struct(parent);
-	rcu_read_unlock();
+>> S4_USB_COMB domain: for usb, if not always on,  all usb status will clear to 0, that's not right status for usb
 
-	(void)cgroup_attach_task_all(parent, current);
-        put_task_struct(parent);
+Why is this not the right status for usb?
 
+Again, my question is: why does the power domain need to stay on when
+the underlying devices are NOT used.
 
-> >    5860		if (reattach_err) {
-> >    5861			kvm_err("%s: cgroup_attach_task_all failed on reattach with err %d\n",
-> >    5862				__func__, reattach_err);
+If the underlying devices are in use, then if the power domain turns off
+it is a software bug.  Devices need to be connected to the power domain
+(in DT) and their drivers need to use runtime PM.  If that is done
+correctly, then there is no reason for the power domain to be turned off
+when the devices are in use.
 
-Eh, I wouldn't bother logging the error, userspace can't take action on it, and
-if the system is OOM it's just more noise in the log to dig through.
+In other words, your solution to always keep the power domain on has a
+two main problems:
+
+1) it just hides improperly configured, or poorly written drivers
+2) it wastes power and prevents low-power usecases
+
+Kevin
+
+> Shunzhou Jiang
+> SW Department
+>  
+> From: Kevin Hilman
+> Date: 2022-02-12 02:52
+> To: shunzhou.jiang@amlogic.com; linux-arm-kernel; linux-amlogic; linux-kernel
+> CC: Neil Armstrong; jbrunet; Martin Blumenstingl; jianxin.pan
+> Subject: Re: Re: [PATCH 2/2] soc: s4: Add support for power domains controller
+> [ EXTERNAL EMAIL ]
+>  
+> Hi Shunzhou,
+>  
+> "shunzhou.jiang@amlogic.com" <shunzhou.jiang@amlogic.com> writes:
+>  
+>> Hi Kevin:
+>> Thanks your kindly reply
+>  
+> You're welcome.  For future reference, please avoid top-posting.  See:
+> https://www.kernel.org/doc/html/latest/process/2.Process.html?highlight=top-posting#mailing-lists
+>  
+>> For those domains,  default is active, we hope not close when in use or not in use, in our case, 
+>> only runtime PM (include suspend) control this, so set always on flag to avoid domain shutdown,
+>  
+> my question remains: why do want to keep these powered on even when they
+> are not in use?
+>  
+> The goal of the power-domain framework + runtime PM is to be able to
+> save power by turnin off power domains when they are not in use.
+>  
+>> if you also have concern, we can control this not in kernel, but this not our expect.
+>  
+> My strong preference is that this is controlled by the kernel.
+>  
+> Kevin
+>  

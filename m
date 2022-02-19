@@ -2,38 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489CF4BC420
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 02:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A590D4BC41E
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 02:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238542AbiBSAz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:55:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39788 "EHLO
+        id S240929AbiBSA4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:56:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240716AbiBSAzg (ORCPT
+        with ESMTP id S240741AbiBSAzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Feb 2022 19:55:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D281E279928
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:55:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D78279905
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:55:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81786B8275F
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9A63B8240F
         for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 00:55:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45E76C340E9;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9051CC340ED;
         Sat, 19 Feb 2022 00:55:13 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1nLE1o-0051WB-Bo;
+        id 1nLE1o-0051XQ-OK;
         Fri, 18 Feb 2022 19:55:12 -0500
-Message-ID: <20220219005430.848118506@goodmis.org>
+Message-ID: <20220219005512.589693373@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 18 Feb 2022 19:54:30 -0500
+Date:   Fri, 18 Feb 2022 19:54:32 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [for-next][PATCH 00/16] tracing: Updates for 5.18
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [for-next][PATCH 02/16] tracing: Remove size restriction on hist trigger cmd error logging
+References: <20220219005430.848118506@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -43,61 +47,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-for-next
+From: Tom Zanussi <zanussi@kernel.org>
 
-Head SHA1: 864ea0e10cc90416a01b46f0d47a6f26dc020820
+Currently, hist trigger command error strings are restricted to a
+length of MAX_FILTER_STR_VAL (256), which is too short for some
+commands already seen in the wild (with cmd strings longer than that
+showing up truncated in err_log).
 
+Remove the restriction so that no hist trigger command error string is
+ever truncated.
 
-Beau Belgrave (12):
-      user_events: Add minimal support for trace_event into ftrace
-      user_events: Add print_fmt generation support for basic types
-      user_events: Handle matching arguments from dyn_events
-      user_events: Add basic perf and eBPF support
-      user_events: Optimize writing events by only copying data once
-      user_events: Validate user payloads for size and null termination
-      user_events: Add self-test for ftrace integration
-      user_events: Add self-test for dynamic_events integration
-      user_events: Add self-test for perf_event integration
-      user_events: Add self-test for validator boundaries
-      user_events: Add sample code for typical usage
-      user_events: Add documentation file
+Link: https://lkml.kernel.org/r/0f9d46407222eaf6632cd3b417bc50a11f401b71.1643399022.git.zanussi@kernel.org
 
-Steven Rostedt (Google) (1):
-      tracing: Save both wakee and current on wakeup events
+Signed-off-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace_events_hist.c | 30 +++++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
 
-Tom Zanussi (3):
-      tracing: Remove size restriction on tracing_log_err cmd strings
-      tracing: Remove size restriction on hist trigger cmd error logging
-      tracing: Remove size restriction on synthetic event cmd error logging
-
-----
- Documentation/trace/index.rst                     |    1 +
- Documentation/trace/user_events.rst               |  216 +++
- include/uapi/linux/user_events.h                  |  116 ++
- kernel/trace/Kconfig                              |   14 +
- kernel/trace/Makefile                             |    1 +
- kernel/trace/trace.c                              |   55 +-
- kernel/trace/trace.h                              |    2 +-
- kernel/trace/trace_events_hist.c                  |   30 +-
- kernel/trace/trace_events_synth.c                 |   17 +-
- kernel/trace/trace_events_user.c                  | 1617 +++++++++++++++++++++
- kernel/trace/trace_sched_switch.c                 |    2 +-
- samples/user_events/Makefile                      |    5 +
- samples/user_events/example.c                     |   91 ++
- tools/testing/selftests/user_events/Makefile      |    9 +
- tools/testing/selftests/user_events/dyn_test.c    |  130 ++
- tools/testing/selftests/user_events/ftrace_test.c |  452 ++++++
- tools/testing/selftests/user_events/perf_test.c   |  168 +++
- tools/testing/selftests/user_events/settings      |    1 +
- 18 files changed, 2902 insertions(+), 25 deletions(-)
- create mode 100644 Documentation/trace/user_events.rst
- create mode 100644 include/uapi/linux/user_events.h
- create mode 100644 kernel/trace/trace_events_user.c
- create mode 100644 samples/user_events/Makefile
- create mode 100644 samples/user_events/example.c
- create mode 100644 tools/testing/selftests/user_events/Makefile
- create mode 100644 tools/testing/selftests/user_events/dyn_test.c
- create mode 100644 tools/testing/selftests/user_events/ftrace_test.c
- create mode 100644 tools/testing/selftests/user_events/perf_test.c
- create mode 100644 tools/testing/selftests/user_events/settings
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index ada87bfb5bb8..5e8970624bce 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -727,11 +727,16 @@ static struct track_data *track_data_alloc(unsigned int key_len,
+ 	return data;
+ }
+ 
+-static char last_cmd[MAX_FILTER_STR_VAL];
++#define HIST_PREFIX "hist:"
++
++static char *last_cmd;
+ static char last_cmd_loc[MAX_FILTER_STR_VAL];
+ 
+ static int errpos(char *str)
+ {
++	if (!str || !last_cmd)
++		return 0;
++
+ 	return err_pos(last_cmd, str);
+ }
+ 
+@@ -739,12 +744,19 @@ static void last_cmd_set(struct trace_event_file *file, char *str)
+ {
+ 	const char *system = NULL, *name = NULL;
+ 	struct trace_event_call *call;
++	int len = 0;
+ 
+ 	if (!str)
+ 		return;
+ 
+-	strcpy(last_cmd, "hist:");
+-	strncat(last_cmd, str, MAX_FILTER_STR_VAL - 1 - sizeof("hist:"));
++	len += sizeof(HIST_PREFIX) + strlen(str) + 1;
++	kfree(last_cmd);
++	last_cmd = kzalloc(len, GFP_KERNEL);
++	if (!last_cmd)
++		return;
++
++	strcpy(last_cmd, HIST_PREFIX);
++	strncat(last_cmd, str, len - sizeof(HIST_PREFIX));
+ 
+ 	if (file) {
+ 		call = file->event_call;
+@@ -757,18 +769,22 @@ static void last_cmd_set(struct trace_event_file *file, char *str)
+ 	}
+ 
+ 	if (system)
+-		snprintf(last_cmd_loc, MAX_FILTER_STR_VAL, "hist:%s:%s", system, name);
++		snprintf(last_cmd_loc, MAX_FILTER_STR_VAL, HIST_PREFIX "%s:%s", system, name);
+ }
+ 
+-static void hist_err(struct trace_array *tr, u8 err_type, u8 err_pos)
++static void hist_err(struct trace_array *tr, u8 err_type, u16 err_pos)
+ {
++	if (!last_cmd)
++		return;
++
+ 	tracing_log_err(tr, last_cmd_loc, last_cmd, err_text,
+ 			err_type, err_pos);
+ }
+ 
+ static void hist_err_clear(void)
+ {
+-	last_cmd[0] = '\0';
++	if (last_cmd)
++		last_cmd[0] = '\0';
+ 	last_cmd_loc[0] = '\0';
+ }
+ 
+@@ -5610,7 +5626,7 @@ static int event_hist_trigger_print(struct seq_file *m,
+ 	bool have_var = false;
+ 	unsigned int i;
+ 
+-	seq_puts(m, "hist:");
++	seq_puts(m, HIST_PREFIX);
+ 
+ 	if (data->name)
+ 		seq_printf(m, "%s:", data->name);
+-- 
+2.34.1

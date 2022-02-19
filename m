@@ -2,101 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C164BC6D7
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 08:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B204BC6DC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 09:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241705AbiBSH4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 02:56:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54446 "EHLO
+        id S233242AbiBSIAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 03:00:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiBSH4B (ORCPT
+        with ESMTP id S231582AbiBSIAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 02:56:01 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7BD1BB702;
-        Fri, 18 Feb 2022 23:55:42 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id d10so20123841eje.10;
-        Fri, 18 Feb 2022 23:55:42 -0800 (PST)
+        Sat, 19 Feb 2022 03:00:39 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9E9204297
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 00:00:16 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso7928042wmj.2
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 00:00:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RrXiZDD7PTY+squB+2WTkj/JwujSEeOy/s6pDsbaDwA=;
-        b=Ifefml411w6zWQeeeIHONvXpeYAlv7xgij/oqQRGyK2GZodau0R45cXCNx+JnO0IDA
-         LE2NTO26p/aYyqCnXJXu5cc4Q/MAhwDcn/4y5349xiRaZBbqRe3fRLNyxHx9iIAd9J3B
-         ryurI/v+z3Fj5f5eMBW09Ld5rq4e64ODtSbPdZ1TJTaOR0kZF9z5s2jkzU2Yp9dhf3UF
-         W32MP7xw41aYVVwyhYvODl62T5u0YlYSxlFtcI50OcGvQsXPcJASCGdf4+33ZEKjFk0i
-         WRZrOSwrgIUETv/XND7z4RxBnV168xmEo40hG8N8rh29BgZXJGbxm8qEApw43zaw2pb7
-         qL7g==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tPH/D95wY8dD8U9+6qdee9WSnDauoVqv/4S3BumtQoA=;
+        b=hVDgLNX+8qFhP2WTRKOEEo9nUGm/BCdLKiXadLqmdl5aAgnR+bsbJbnwPKqNyAkaXs
+         GuP40w0bqoMLlt3rKddmEmtpUGjS1quMEi42yqCzTliiRW/qk8YzBcx6YrBWBYG5/pRw
+         mgVhsZ57LmXZwnU9eg6YYZDN5lMCFEEibIVb+I/2OTCUSuqOgaIqNMmYRjWNOiYxP+kx
+         YQjGg/09fgN+mnIDx7pLFtLvqgKmlcWBrVXzp4z30PdQ2E416RhqUrMLCPBrLj4R4Tpi
+         RR5PpTYvDRj3FwjOlJIBaJYqCk8pU1XtS2yYvFs+6pWv4fYrJwG2uSTO6GCWwcWmXVWZ
+         2sgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RrXiZDD7PTY+squB+2WTkj/JwujSEeOy/s6pDsbaDwA=;
-        b=RMW9s/WpR+y8O39VXbxAI7tNIB5NW8uZD3cF4PVAbATYdsJ/Vf28I9imRMvVzrV7cP
-         pJwCpanFu+veqWQcta6Jbjzgj1b2DxOXBUlzuGhRkXMZP58EPnQEsyc3fUhTHxII8eo8
-         pHC1hIzguxvFFI7LI0+OG48UHrxfvVeZVDNCIGsKRztQ9AgkwYfIEQMSTrJXVMQ1+f+t
-         3wRcYHtUh5I9Mnaf0f8oP7vVDPGbr61AI9yr5GfGRI4hYex5L/AhtgxMFTlfq33TGdI0
-         2WNfjSypuQ5Dd/DTNWHDhS2Xs0GdOzGrWVc2ArusrsytS23kM0rWZRnd0Aw9CJAMIyCE
-         AITw==
-X-Gm-Message-State: AOAM533vPyllPWy4MZcmxHxkml2hOU4M7XpmklLNUb7kQWfYlzH5flKT
-        mx1ByyUHDN5tLt85DosibGJhIBlKPDo=
-X-Google-Smtp-Source: ABdhPJz74L7JEIbykFtDFLKtJwalgprHvTapwcIrgZBtySy9Q4V1tK0oUfnoDT6z/8fJ+kUtmqnrLg==
-X-Received: by 2002:a17:906:b356:b0:6cf:3810:dcf1 with SMTP id cd22-20020a170906b35600b006cf3810dcf1mr9261139ejb.761.1645257341349;
-        Fri, 18 Feb 2022 23:55:41 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id b19sm2170829edd.91.2022.02.18.23.55.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 23:55:40 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <70cc45dc-c1e3-9ad4-92c2-f6305b8e8574@redhat.com>
-Date:   Sat, 19 Feb 2022 08:55:35 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tPH/D95wY8dD8U9+6qdee9WSnDauoVqv/4S3BumtQoA=;
+        b=A7uNMJGLUe3v/wGMZpaZSdyVrCEPcWo4x/PDl8QHcfRsxpwoRFPp0ItF99QGukM2W8
+         /5pzqDfLyotVyWOecm8jRvEUjlvjCYwxqk00uNUwzJJa5bwUAgM+Q+CP0xjJQ6Ac6OsL
+         vJWcYf6bAMwCQENVBq7sdHxBJbYeUgTHRueE61Hmf78ZEALdjhXlpkhYkiN4T0NNa/3S
+         NcLa2kXWVrC2PeBCILSt2e2yMgviz46tqVDJf17NK0K8fHo4n5k2USuGGxqfmwUngjKR
+         YFooyKPs61SCb/mmX6bA5Zs8vPpuznMxnkMXKeCZ11OvOS/cOrvinmzX8Vfb/1geJ5ku
+         CePA==
+X-Gm-Message-State: AOAM532ZrWh51XnbCBrJU7JmQ6mW2lddjwslNBg1dK7WaLpAYmK7qsqT
+        9MsMjFYXB8smOwSsIMJm+rVN6NvjWP4eun+4+ANj0g==
+X-Google-Smtp-Source: ABdhPJzbJOrM/2OLBtDRNHfACqh08uaaCdcmb5NeBmC69hAFuvYRavqZoqsRXsCrlc74PcOn8wHgcFrPuLcM4oK0IOY=
+X-Received: by 2002:a05:600c:215:b0:37c:729:f84d with SMTP id
+ 21-20020a05600c021500b0037c0729f84dmr9399022wmi.131.1645257615313; Sat, 19
+ Feb 2022 00:00:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] KVM: Move VM's worker kthreads back to the original
- cgroup before exiting.
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Vipin Sharma <vipinsh@google.com>, kbuild-all@lists.01.org,
-        mkoutny@suse.com, tj@kernel.org, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, dmatlack@google.com, jiangshanlai@gmail.com,
-        kvm@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220217061616.3303271-1-vipinsh@google.com>
- <202202172046.GuW8pHQc-lkp@intel.com>
- <3113f00a-e910-2dfb-479f-268566445630@redhat.com>
- <YhA6QIDME2wFbgIU@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YhA6QIDME2wFbgIU@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220218075727.2737623-1-davidgow@google.com> <20220218075727.2737623-5-davidgow@google.com>
+ <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
+In-Reply-To: <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 19 Feb 2022 16:00:04 +0800
+Message-ID: <CABVgOSnBq0QE+Cq+SDeV-LxOQYbGZ6Bqbjix6h-UpNj0GMicPA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-rdma@vger.kernel.org,
+        x86@kernel.org, felix.kuehling@amd.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000c013e305d85a63b4"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/19/22 01:30, Sean Christopherson wrote:
-> 
-> So I think this can be:
-> 
-> 	rcu_read_lock();
-> 	parent = rcu_dereference(current->real_parent);
-> 	get_task_struct(parent);
-> 	rcu_read_unlock();
-> 
-> 	(void)cgroup_attach_task_all(parent, current);
->          put_task_struct(parent);
+--000000000000c013e305d85a63b4
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Yes, I agree.
+On Fri, Feb 18, 2022 at 8:26 PM Johannes Berg <johannes@sipsolutions.net> w=
+rote:
+>
+> On Fri, 2022-02-18 at 15:57 +0800, David Gow wrote:
+> >
+> > Note that, while this does build again, it still segfaults on startup,
+> > so more work remains to be done.
+>
+> That's probably just a lot more stuff getting included somehow?
+>
 
-Paolo
+Yeah: it used to work (a couple of years ago), but something has
+broken it in the meantime. It's just a shame that bisecting things
+with allyesconfig takes so long...
+
+> > They are:
+> > - CONFIG_VFIO_PCI: Needs ioport_map/ioport_unmap.
+> > - CONFIG_INFINIBAND_RDMAVT: Needs cpuinfo_x86 and __copy_user_nocache
+> > - CONFIG_BNXT: Failing under UML with -Werror
+> > ERROR:root:../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c: In functio=
+n =E2=80=98bnxt_ptp_enable=E2=80=99:
+> > ../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:400:43: error: array s=
+ubscript 255 is above array bounds of =E2=80=98struct pps_pin[4]=E2=80=99 [=
+-Werror=3Darray-bounds]
+> >   400 |                         ptp->pps_info.pins[pin_id].event =3D BN=
+XT_PPS_EVENT_EXTERNAL;
+> >       |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~
+> > - CONFIG_PATA_CS5535: Needs MSR access (__tracepoint_{read,write}_msr)
+> > - CONFIG_VDPA: Enables CONFIG_DMA_OPS, which is unimplemented. ('dma_op=
+s' is not defined)
+> >
+> > These are all issues which should be investigated properly and the
+> > corresponding options either fixed or disabled under UML. Having this
+> > list of broken options should act as a good to-do list here, and will
+> > allow these issues to be worked on independently, and other tests to
+> > work in the meantime.
+> >
+>
+> I'm not really sure it makes sense to even do anything other than
+> disabling these.
+>
+> It looks like all of them are just exposed by now being able to build
+> PCI drivers on UML. Surely the people writing the driver didn't expect
+> their drivers to run over simulated PCI (which is what the UML PCI
+> support is all about).
+>
+> Now from a PCI driver point of view you can't really tell the difference
+> (and anyway the driver won't be probed), but the issues (at least the
+> build time ones) come from having
+>
+>     UML && PCI && X86_64
+>
+> or
+>
+>     UML && PCI && X86_32
+>
+> because drivers typically depend on X86_64 or X86_32, rather than on
+> "X86 && X86_64" or "X86 && X86_32". In a sense thus, the issue is those
+> drivers don't know that "!X86 && (X86_32 || X86_64)" can happen (with
+> UML).
+>
+>
+> Now you could say that's the driver bug, or you could say that they
+> should just add "depends on !UML" (though that's basically equivalent to
+> adding "depends on X86" and the latter may be preferable in some cases).
+>
+> Or actually in the three patches you have (1-3) it's in the code, but
+> same thing, you can either add && !UML (like you did) or add && X86.
+>
+
+I didn't realise X86 wasn't defined in UML: that's definitely a bit
+cleaner than !UML in a number of these cases.
+
+Not all of those issues are fundamentally solved by "depends on X86",
+though: there are a few which might be other missing things in UML
+(maybe the 'dma_ops' issues?), and/or might be the result of -Werror
+being enabled.
+
+>
+> Arguably, however, building PCI drivers by default is somewhat
+> questionable in the first place?
+
+We do want the ability to build PCI drivers under UML, as it makes
+running KUnit tests for PCI drivers much simpler and more pleasant.
+And indeed, it does work for KUnit in general, it's just that some
+drivers do have the issues mentioned above, so allyesconfig picks up
+every broken driver.
+
+We don't actually build the PCI drivers by default, only if the
+"--alltests" option is passed, which does include them, as we do have
+tests which depend on PCI we'd like to run (like the thunderbolt
+test).
+
+>
+> So maybe you should just add
+>
+>     # CONFIG_UML_PCI_OVER_VIRTIO is not set
+>
+> to the broken_on_uml.config since it exposes all these issues, and
+> really is not very useful since you're not going to actually run with
+> any simulated PCI devices anyway, so drivers will not be probed.
+
+I did try this as well, and it just got us a different set of issues
+(there are a bunch of drivers which depend on IOMEM but don't state it
+-- I'll try to send fixes for those out next week). And we'd lose
+things like the thunderbolt test if PCI
+
+Ultimately, the 'broken_on_uml.config' file is just there to pare back
+allyesconfig a bit for KUnit's purposes, but we still definitely want
+as many options (and hence tests) enabled as possible long-term. So I
+think actual fixes to either the code or Kconfig do make sense.
+
+Is 'make ARCH=3Dum allyesconfig' something we actually want to be able
+to build? If so, no amount of adding things to KUnit's
+broken_on_uml.config will solve the underlying issues, and we'll need
+to at least update the Kconfig entries.
+
+Cheers,
+-- David
+
+--000000000000c013e305d85a63b4
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC1
+hK5mkWbXD3kQGhQArPS3EpKnqjuOZpFfFWnAx7DK6DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAyMTkwODAwMTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAjnpewcuZUJVS6VIu0yi4
+03UYYnjQhPEECv0bhdeu4hsYPRtRxIiCLf3pHo16X6hgQixHb8uSkg5VJDcLfSKM6CCkOQLj8Zt8
+tZ1qXXWuD2yF+nWgcW0zHG9zpfGy2g5v0H3e4z3XswHVBQdgFcsY/N2v/m+7FlSlIKp4eKHVUyWQ
+QDocj2QwLwrPTzvToOVgfvnPDNf3CuMwA80C7v9WEX/syUDQMaQSWCyfuxTiaUHfBdvRCGgZt+M7
+XGmNI+IWcxeYhj5xZo4LWkK8APgeCTs5d+MhF0JpZK1QqJnb9rWSjyf7hOJdwPpedIOyrjQDfmbx
+pB+HTOm+2IxT/N2jYA==
+--000000000000c013e305d85a63b4--

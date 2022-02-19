@@ -2,132 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9374BC786
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F08A4BC775
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241889AbiBSKA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 05:00:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44302 "EHLO
+        id S241901AbiBSKC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 05:02:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiBSKA6 (ORCPT
+        with ESMTP id S231863AbiBSKCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 05:00:58 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E16A1BFA;
-        Sat, 19 Feb 2022 02:00:38 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id hw13so20541213ejc.9;
-        Sat, 19 Feb 2022 02:00:38 -0800 (PST)
+        Sat, 19 Feb 2022 05:02:25 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E50EE4C;
+        Sat, 19 Feb 2022 02:02:07 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso10272115wme.5;
+        Sat, 19 Feb 2022 02:02:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eyoLzh3GoCjEcko6E6TRX3Q0MN5P8KHlKdLhPGSzjas=;
-        b=nnddJEcHqLBBgfgW6X8nP2hJ+jbcGZujjBROoEt9DQKra/B8N1F3VqRROEaOdXzS1G
-         TnmFhHNUyN5sK64vsVyWIaI5/IWYIRSDlRlHN9lO44vm9/RH205qjm0HVp0WDQBkojHS
-         SxK7lXv9qPuxBw0h8IcrUN22V3RAYtX9gwDEXgiSTbwCKm6Cv+emuMeHX4pjOUOxLO1r
-         SBJvros1knM0ArBLcFpYEDQBMbDEOjZyNBZZLUKg0Dh+l34NitpBj33SGW8TgzKLy4aU
-         BUdMEoxEsM4NVFdyaStDhqIhtOms7cKP4Ae+XytJsnPBGISv5erc6kLo/q/y+6+jwYSL
-         tJVg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8XXsaw4tgn83gS8crkwTPKdvTDY08Kp+Lc4B7yP1Hzg=;
+        b=WemdgXnsuaBI8ROsyullKo+qPZ2fYYkSB5fdOnPJ0HbpQuDqm8EBY0lUPiGG3OFfah
+         2NNWyCqoEGXInQ6M4MsVohKmyuzOsBIEvSZI5r5q7hZgXEmSGvmJwxRGK41JxKsCrTiw
+         qjZmnc8t7aI1Z9ZMTI9HjKUqr62BShEId1JYvGzGDDLlS8y38SSWr98Ev6xR7fH1DvyX
+         vG687qlRvlIs2DnNrok1lFLeNK7+F2ZYlmTeKiILdmdb8kbAXM2Ka6U7EP17Z0NlqBSl
+         eKv6hmr55xt7l2xxvrOmRa7vDYhaJjcLWQ+C3yIzV0CkpSkJahGa2vOIEUnu2W66HNCf
+         6dBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eyoLzh3GoCjEcko6E6TRX3Q0MN5P8KHlKdLhPGSzjas=;
-        b=ikZVPyIlASmHZ8l0LzizvdISxXwDLAR9X8p3ifNg1lWZ1QB9bSlmWF2ucgYVRlNzil
-         2mLL0frS+3j3BRiiDasziSZa3I/iVMvU7vHm1bP1d+5yze98xKlwIfI4okKhWM4Y9yNv
-         hGHpYiACfFJ+Swpsr8TxowJ8nR/J9EVe3GIueqaJsGcCZtByXsI9SlKNg8g/WN99suyf
-         5D5CvnCfAoCqO6ouU3dYEZehToU8lFX59uC4b/6eBWoJho1OTktfXiCrFH/1cVSNe05u
-         VM8iMi/dE6eRXQR7AM/mDLqFOQz62kO7+GtlD7KsDIRRMCz/98K7hb53hVaLdMi2M7V5
-         SX1Q==
-X-Gm-Message-State: AOAM531SyddbjLXZ6CCt4lCJv3jaM4D+l5KiUkWoeZv4CScBbj40UQmk
-        IKcMn/dZfnm2ZK3Ub+OZYrg=
-X-Google-Smtp-Source: ABdhPJx1V2gD2Zh/g9vSl2TlbwK/2IUdNqZeGbq6SyVxCfhg7AYOb4RmbSYhkOf48WpzRbDFW0e3YQ==
-X-Received: by 2002:a17:906:154c:b0:6ce:21d7:2826 with SMTP id c12-20020a170906154c00b006ce21d72826mr9312950ejd.9.1645264837397;
-        Sat, 19 Feb 2022 02:00:37 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id b20sm5824839ede.23.2022.02.19.02.00.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8XXsaw4tgn83gS8crkwTPKdvTDY08Kp+Lc4B7yP1Hzg=;
+        b=MoDPA1vWHddJn59KE8vbAnu0++YlAUdsDmy8post/SPrTHuXkpImxUNSwZL0sh9qwL
+         xL/lmKD4cEjgnbf9AcWjFyiyHOD+F2+OGANfkg1A3TvlDQou+gDV2QL6+eadlz8GMSBL
+         q60uUhYVC7KMnnhgiwtK8lVGXt6/c+ZKf0dQZsC6+oqICurmzpdItqPm3oE8u49T2lFC
+         Fzie9CI/q8bFsPJvGhPxBUzWwLHg9dTjl5a4UJ752zgt2iuc8bPw13e4gduvs6pSOk2Z
+         tqsJ9GKFRbOPu0hW/nQgwKYjKfg5BHBQPX0yH7rS0ZR94Rx6kr9G54v2p+8FB2uXtmjv
+         5Lbw==
+X-Gm-Message-State: AOAM530pf+gld27MjohM2DWuMyQQfBNV/fo3pWsBlgNY2yHr5cmLJ68I
+        FkmV4RIL5dz1O3nBAaIhw54=
+X-Google-Smtp-Source: ABdhPJxQczUNC/qb3nVrZ7bsLEfXpXYMTGcByqqY5D3N9praTG9+e8KnrDQ++xckW1DYCYOJMXqfNw==
+X-Received: by 2002:a7b:c143:0:b0:37b:dacd:bf2f with SMTP id z3-20020a7bc143000000b0037bdacdbf2fmr10285943wmi.16.1645264925719;
+        Sat, 19 Feb 2022 02:02:05 -0800 (PST)
+Received: from localhost.localdomain ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id az13sm24417244wrb.39.2022.02.19.02.02.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 02:00:36 -0800 (PST)
-Date:   Sat, 19 Feb 2022 12:00:34 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Suryaputra <ssuryaextr@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        Po-Hsu Lin <po-hsu.lin@canonical.com>,
-        Baowen Zheng <baowen.zheng@corigine.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v3 4/5] net: dsa: mv88e6xxx: Add support for
- bridge port locked mode
-Message-ID: <20220219100034.lh343dkmc4fbiad3@skbuf>
-References: <20220218155148.2329797-1-schultz.hans+netdev@gmail.com>
- <20220218155148.2329797-5-schultz.hans+netdev@gmail.com>
+        Sat, 19 Feb 2022 02:02:05 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH for-5.18/uclogic 0/9] DIGImend patches, part II
+Date:   Sat, 19 Feb 2022 11:01:48 +0100
+Message-Id: <20220219100157.41920-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218155148.2329797-5-schultz.hans+netdev@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 04:51:47PM +0100, Hans Schultz wrote:
-> diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-> index ab41619a809b..46b7381899a0 100644
-> --- a/drivers/net/dsa/mv88e6xxx/port.c
-> +++ b/drivers/net/dsa/mv88e6xxx/port.c
-> @@ -1234,6 +1234,39 @@ int mv88e6xxx_port_set_mirror(struct mv88e6xxx_chip *chip, int port,
->  	return err;
->  }
->  
-> +int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
-> +			    bool locked)
-> +{
-> +	u16 reg;
-> +	int err;
-> +
-> +	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg);
-> +	if (err)
-> +		return err;
-> +
-> +	reg &= ~MV88E6XXX_PORT_CTL0_SA_FILT_MASK;
-> +	if (locked)
-> +		reg |= MV88E6XXX_PORT_CTL0_SA_FILT_DROP_ON_LOCK;
-> +
-> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_CTL0, reg);
-> +	if (err)
-> +		return err;
-> +
-> +	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, &reg);
-> +	if (err)
-> +		return err;
-> +
-> +	reg &= ~MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
-> +	if (locked)
-> +		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
-> +
-> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, reg);
+Hi everyone,
 
-	return mv88e6xxx_port_write(...);
+This series is a follow up to [1], kindly reviewed and applied
+by Jiří in hid.git#for-5.18/uclogic.
 
-> +	if (err)
-> +		return err;
-> +
-> +	return 0;
-> +}
+It might look a little bit longer than desired, but most of the
+patches are code simplification and refactoring in preparation
+for the last patch which adds support for multiple frame input
+devices.
+
+Thank you very much in advance to maintainers for reviewing it,
+José Expósito
+
+[1] https://lore.kernel.org/linux-input/nycvar.YFH.7.76.2202161642180.11721@cbobk.fhfr.pm/T/
+
+Nikolai Kondrashov (9):
+  HID: uclogic: Remove pen usage masking
+  HID: uclogic: Replace pen_frame_flag with subreport_list
+  HID: uclogic: Switch to matching subreport bytes
+  HID: uclogic: Specify total report size to buttonpad macro
+  HID: uclogic: Use different constants for frame report IDs
+  HID: uclogic: Use "frame" instead of "buttonpad"
+  HID: uclogic: Put version first in rdesc namespace
+  HID: uclogic: Define report IDs before their descriptors
+  HID: uclogic: Support multiple frame input devices
+
+ drivers/hid/hid-uclogic-core.c   |  79 +++++++------
+ drivers/hid/hid-uclogic-params.c | 195 ++++++++++++++-----------------
+ drivers/hid/hid-uclogic-params.h |  86 +++++++-------
+ drivers/hid/hid-uclogic-rdesc.c  |  53 ++++-----
+ drivers/hid/hid-uclogic-rdesc.h  |  38 +++---
+ 5 files changed, 221 insertions(+), 230 deletions(-)
+
+-- 
+2.25.1
+

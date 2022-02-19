@@ -2,142 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEED4BC859
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 13:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D9E4BC85C
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 13:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242207AbiBSMAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 07:00:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43452 "EHLO
+        id S242224AbiBSMA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 07:00:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbiBSMAF (ORCPT
+        with ESMTP id S242211AbiBSMA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 07:00:05 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16F95DE5F
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 03:59:46 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id d187so4530876pfa.10
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 03:59:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q3S/BU0h5z1TWDtM7/trwzzdXaxUs1NRowNdwGsTgok=;
-        b=YuK+xUE3N2UL4vhozvRT2RTu3henp67FsQdQcK59s4ZCoRpw/EAhgehnyf0YsqzR4W
-         BT1m3M2DQzlt8rP7rULMnrJZxz2ivFGTXOZ6gTQCisFOde+YRONXi5n7Jac+Oeqc9Hx0
-         vfLnTOosOgoL5hMLh+LGaOHxWIcAnV6kwxLe7Q4U9kQ/z+hPNYOvi8YO8cp/SUpuQAk0
-         L3odT2JVMpt6ZQd1ZspgGSjwUAjPHoDpXxFqQLy5JgCFRV+aicxqVORXKqOxEwIoq3IA
-         /e9eD2Z4ZfX0bhzZE/koRo8quqzM52m7YDNHAtLMVBVU6uoPItrQPyXEaApF+Kz5DbEx
-         MG8Q==
+        Sat, 19 Feb 2022 07:00:26 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301E95DE5F
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 04:00:08 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso6333791iov.16
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 04:00:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q3S/BU0h5z1TWDtM7/trwzzdXaxUs1NRowNdwGsTgok=;
-        b=RQTG+96cloz5NSJPWFM0sRysHdAjQcctkID51HU0keCh+dEYCZksyyyOBTB+mEMIYg
-         zvGIQZOrOTcYvOV788i7H8MyFZjOk5QcZAJTUuhsWO3EXEtcpQxXFiuZ/hPzwWPahgLq
-         FlFI66OMocIIR5onq8AaIpFgIQpmCzd1KUXddShG/CimM3SHHejbg11PnjkeGbOB7qKx
-         lMlkAH7KRTxGvLhql0L130I6hgwg7V4NqHqqDzD78gRlkVIuzfOicJWBErzbnYdntk6S
-         m//Xp/AFhwNyYDueIhY2d+NcEs7wd694SlB3zT29L/vBhZ98Hjnv2eYjha04X0C9Soa7
-         oweQ==
-X-Gm-Message-State: AOAM531HY2mVlQ1AgXJetAYb36TvoCBforZTwwFmE+0zCa5pqRUjOzLC
-        mDzTvzbxDyyg66lDCPN5vwE=
-X-Google-Smtp-Source: ABdhPJydTEJwQNWaSddpo4lHXPhWP5QjSCtR4+XvQy6/uJEiNdd4sa1yXcoDRDgWMI3nVuAk+c4zJA==
-X-Received: by 2002:a05:6a00:24ca:b0:4e1:cb76:32da with SMTP id d10-20020a056a0024ca00b004e1cb7632damr10876785pfv.81.1645271986371;
-        Sat, 19 Feb 2022 03:59:46 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id k16sm13009844pgh.45.2022.02.19.03.59.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 03:59:45 -0800 (PST)
-Date:   Sat, 19 Feb 2022 11:59:41 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@gentwo.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christoph Lameter <cl@gentwo.de>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: Do we really need SLOB nowdays?
-Message-ID: <YhDbrTSdSWQWFF91@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <alpine.DEB.2.22.394.2110251016260.3145@gentwo.de>
- <20211028100414.GA2928@kvm.asia-northeast3-a.c.our-ratio-313919.internal>
- <YXqSoo+b9RTclW/2@casper.infradead.org>
- <20211210110835.GA632811@odroid>
- <alpine.DEB.2.22.394.2112101305500.290446@gentwo.de>
- <cbfaeb40-13c7-15b6-177d-07b3f3c4a0a9@suse.cz>
- <20211215062904.GA1150813@odroid>
- <54c6fff8-8c79-463b-a359-96e37bd13674@suse.cz>
- <Yg9xSWEaTZLA+hYt@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <7829ee15074448d5a7cec1a0e3c352d4@AcuMS.aculab.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=L/vDtC736fZ13z2ml2gWQI7yv+OuKqvCVkJ7nsafods=;
+        b=XrA/1Eh0kTO3AG/bkzVme8T7AmdGDKs3G/k0vwXG383BDD3Yp/BIj+Qx21pAx85zBa
+         9zC4DT/5qkdpS6OrXpjyJebaAC9kuzadLvuU1Xg5oAeZrjtcPfFBXfBdym1tqJPTWjFQ
+         xqv3k+9M41rTIqEBkQC4Cou2u339xLvcEYviBUvCIEyXc/YGjiC1srSAo4FMC1qq91gn
+         MMOphXb2bC8yvd9eypp1FARKuhWoPGtI5EwK9tjlM3c3hIRusrVbVKef1MMH/9X7ymCQ
+         sfPCqEGJvkcKRYpgl14aT5mrZmHn23fSku8+N/MA4DL5GlXal5cG1hCrKnpn+zLJCECs
+         l10A==
+X-Gm-Message-State: AOAM531Mdnr5YkMoLGBRpDh2lRrDAywekK+joxkBFybO++0CNHMEOiCp
+        Vxbd71ytithgCVfPaNILgo1VU2Lto9RNH72DmRIj6NRyA6NO
+X-Google-Smtp-Source: ABdhPJwlLkRhTW6+scXC9+4YtbH8M8g53savRJBdac5PoBmFu0JXRYf/EtGiWA7ynHJxsR7GZRq/1VaDLlHTrFpH2mgN1GtMm38E
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7829ee15074448d5a7cec1a0e3c352d4@AcuMS.aculab.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1b02:b0:2b6:ae9d:67bf with SMTP id
+ i2-20020a056e021b0200b002b6ae9d67bfmr8694459ilv.19.1645272007587; Sat, 19 Feb
+ 2022 04:00:07 -0800 (PST)
+Date:   Sat, 19 Feb 2022 04:00:07 -0800
+In-Reply-To: <20220219114936.747-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000923d1c05d85dbd3d@google.com>
+Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
+From:   syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, jasowang@redhat.com,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 04:10:28PM +0000, David Laight wrote:
-> From: Hyeonggon Yoo
-> > Sent: 18 February 2022 10:13
-> ...
-> > I think SLUB can be memory-efficient as SLOB.
-> > Is SLOB (Address-Ordered next^Wfirst fit) stronger to fragmentation than SLUB?
-> 
-> Dunno, but I had to patch the vxworks malloc to use 'best fit'
-> because 'first fit' based on a fifo free list was really horrid.
-> 
-> I can't imagine an address ordered 'first fit' really being that much better.
-> 
-> There are probably a lot more allocs and frees than the kernel used to have.
-> 
-> Also isn't the performance of a 'first fit' going to get horrid
-> when there are a lot of small items on the free list.
+Hello,
 
-SLOB is focused on low memory usage, at the cost of poor performance.
-Its speed is not a concern.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in vhost_dev_cleanup
 
-I think Address-Ordered sequential fit method pretty well in terms of
-low memory usage.
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 4052 at drivers/vhost/vhost.c:715 vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
+Modules linked in:
+CPU: 1 PID: 4052 Comm: syz-executor213 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:vhost_dev_cleanup+0x8b8/0xbc0 drivers/vhost/vhost.c:715
+Code: c7 85 90 01 00 00 00 00 00 00 e8 83 6e a2 fa 48 89 ef 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e 41 5f e9 7d d6 ff ff e8 68 6e a2 fa <0f> 0b e9 46 ff ff ff 48 8b 7c 24 10 e8 b7 00 ea fa e9 75 f7 ff ff
+RSP: 0018:ffffc90001d2fca8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: ffff8880229e8000 RSI: ffffffff86d66fb8 RDI: ffff8880794300b0
+RBP: ffff888079430000 R08: 0000000000000001 R09: 0000000000000001
+R10: ffffffff817f1e08 R11: 0000000000000000 R12: ffff8880794300d0
+R13: ffff888079430120 R14: ffff8880794300d0 R15: 0000000000000002
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000002 CR3: 0000000019a2f000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vhost_vsock_dev_release+0x36e/0x4b0 drivers/vhost/vsock.c:771
+ __fput+0x286/0x9f0 fs/file_table.c:313
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xb29/0x2a30 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ __do_sys_exit_group kernel/exit.c:946 [inline]
+ __se_sys_exit_group kernel/exit.c:944 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:944
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f2b623eaba9
+Code: Unable to access opcode bytes at RIP 0x7f2b623eab7f.
+RSP: 002b:00007ffd86806ac8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f2b6245f330 RCX: 00007f2b623eaba9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 00007ffd86806cb8
+R10: 00007ffd86806cb8 R11: 0000000000000246 R12: 00007f2b6245f330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
 
-And I think SLUB may replace SLOB, but we need to sure SLUB is
-absolute winner.. I wonder How slab maintainers think?
 
-> 
-> Does SLUB split pages into 3s and 5s (on cache lime boundaries)
-> as well as powers of 2?
->
+Tested on:
 
-SLUB/SLAB use different strategy than SLOB, for better allocation
-performance. It's variant of segregated storage method.
+commit:         f71077a4 Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=11ece422700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
+dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=12f7f94c700000
 
-SLUB/SLAB both creates dedicated "caches" for each type of object. for
-example, on my system, there are slab cache for dentry(192), filp(256),
-fs_cache(64) ... etc.
-
-Objects that has different types are by default managed by different cache,
-which holds manages of pages. slab caches can be merged for better cacheline
-utilization.
-
-SLUB/SLAB also creates global kmalloc caches at boot time for power of 2
-objects and (128, 256, 512, 1K, 2K, 4K, 8K on my system).
-
-Thanks,
-Hyeonggon.
-
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 

@@ -2,59 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974EA4BC8D7
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 15:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFC44BC8D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 15:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242378AbiBSOac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 09:30:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57938 "EHLO
+        id S242397AbiBSOcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 09:32:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238683AbiBSOab (ORCPT
+        with ESMTP id S238683AbiBSOb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 09:30:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B035C606F8;
-        Sat, 19 Feb 2022 06:30:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBD5B60B12;
-        Sat, 19 Feb 2022 14:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2790C004E1;
-        Sat, 19 Feb 2022 14:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645281010;
-        bh=1QZrh94O15KQIpRKoAgo4yfgnwnVtT+uyOyqoZ05rc8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dugsq+id1n5+UDe7D5lP60NMG95d1fKfjDrpX4hL+DZdV7jFpjZ1Qz3MMhiDUtPGZ
-         zbqv62j1120QkeEBDl6Usy8tlI46+ajHe1n8yqgq0849xBb8q4HWiKuVlqR20b0m2n
-         J20JqDQjJsfYvFK/ZPhrFHp0DNhMZK3AXR5a6eTB7OdAckRKMgKDUFtLE9B/fQDRTc
-         RDXdmJiyZKv800cDhyYXo/yXrt8+KTGHJ07DspQzPVqttw2ua2yfnWIyaiH7wR35IA
-         f7EyI0aJaU22m2g3fcVqXCtrv24m+r9s4HgbNwsk4rhU/sO/GVXsRZtdqn93kjbztO
-         dMVBxNpTef9DA==
-Received: by pali.im (Postfix)
-        id 05BFC2B70; Sat, 19 Feb 2022 15:30:06 +0100 (CET)
-Date:   Sat, 19 Feb 2022 15:30:06 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] ARM: Marvell: Update PCIe fixup
-Message-ID: <20220219143006.bsr6wdagf5ytynxu@pali>
-References: <20211101150405.14618-1-pali@kernel.org>
- <20211102171259.9590-1-pali@kernel.org>
+        Sat, 19 Feb 2022 09:31:59 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7C354BF8
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 06:31:33 -0800 (PST)
+X-QQ-mid: bizesmtp63t1645281079tii7f3sb
+Received: from localhost.localdomain (unknown [202.96.137.248])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 19 Feb 2022 22:31:14 +0800 (CST)
+X-QQ-SSF: 01400000002000C0N000B00A0000000
+X-QQ-FEAT: FXvDfBZI5O5ET4AQmWTjT68XUTmv+yE0pNMFYLZeenm75W2EqwwENh4bZWHl+
+        S9XnVUDbT9BQkIiigHC7lPJ31B/NT/6HzE14M4gMGP8ZewOasF0XaYh12qi9vvcosWdFLYO
+        PCo6XyA9oODXvOfcp3E7WRYHnHtoEqRArtqKTAdTDN86C0yxiAtXUg145O4s7CzcJrFSzTJ
+        DZQjt5xkKv2/8x6E1SNLc5bsQ7/3FUcnu3MPaPFSC4X7Opw7hnWtKNnjVJwQuVUTNR5dEFr
+        9SNafKwDz+xT3/lIYnpc5ATLUo0wUdF+MoU4zr0FOq+tLV8aZ8Y1Lxg3Z4ncpTw5EcoNDOV
+        UxCgdZKtCITHHxns9k=
+X-QQ-GoodBg: 2
+From:   Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+To:     akpm@linux-foundation.org
+Cc:     sfr@canb.auug.org.au, seanga2@gmail.com, songmuchun@bytedance.com,
+        zhaochongxi2019@email.szu.edu.cn, weizhenliang@huawei.com,
+        tangbin@cmss.chinamobile.com, zhangyinan2019@email.szu.edu.cn,
+        linux-kernel@vger.kernel.org,
+        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+Subject: [PATCH] tools/vm/page_owner_sort.c: Fix the instructions for use
+Date:   Sat, 19 Feb 2022 22:31:06 +0800
+Message-Id: <20220219143106.2805-1-caoyixuan2019@email.szu.edu.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211102171259.9590-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign2
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,145 +52,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PING, Gente reminder for patch 1/2.
+I noticed a discrepancy between the usage method and the code logic.
 
-On Tuesday 02 November 2021 18:12:58 Pali Rohár wrote:
-> - The code relies on rc_pci_fixup being called, which only happens
->   when CONFIG_PCI_QUIRKS is enabled, so add that to Kconfig. Omitting
->   this causes a booting failure with a non-obvious cause.
-> - Update rc_pci_fixup to set the class properly, copying the
->   more modern style from other places
-> - Correct the rc_pci_fixup comment
-> 
-> This patch just re-applies commit 1dc831bf53fd ("ARM: Kirkwood: Update
-> PCI-E fixup") for all other Marvell ARM platforms which have same buggy
-> PCIe controller and do not use pci-mvebu.c controller driver yet.
-> 
-> Long-term goal for these Marvell ARM platforms should be conversion to
-> pci-mvebu.c controller driver and removal of these fixups in arch code.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: stable@vger.kernel.org
-> 
-> ---
-> Changes in v2:
-> * Move MIPS change into separate patch
-> * Add information that this patch is for platforms which do not use pci-mvebu.c
-> ---
->  arch/arm/Kconfig              |  1 +
->  arch/arm/mach-dove/pcie.c     | 11 ++++++++---
->  arch/arm/mach-mv78xx0/pcie.c  | 11 ++++++++---
->  arch/arm/mach-orion5x/Kconfig |  1 +
->  arch/arm/mach-orion5x/pci.c   | 12 +++++++++---
->  5 files changed, 27 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index fc196421b2ce..9f157e973555 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -400,6 +400,7 @@ config ARCH_DOVE
->  	select GENERIC_IRQ_MULTI_HANDLER
->  	select GPIOLIB
->  	select HAVE_PCI
-> +	select PCI_QUIRKS if PCI
->  	select MVEBU_MBUS
->  	select PINCTRL
->  	select PINCTRL_DOVE
-> diff --git a/arch/arm/mach-dove/pcie.c b/arch/arm/mach-dove/pcie.c
-> index ee91ac6b5ebf..ecf057a0f5ba 100644
-> --- a/arch/arm/mach-dove/pcie.c
-> +++ b/arch/arm/mach-dove/pcie.c
-> @@ -135,14 +135,19 @@ static struct pci_ops pcie_ops = {
->  	.write = pcie_wr_conf,
->  };
->  
-> +/*
-> + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
-> + * is operating as a root complex this needs to be switched to
-> + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
-> + * the device. Decoding setup is handled by the orion code.
-> + */
->  static void rc_pci_fixup(struct pci_dev *dev)
->  {
-> -	/*
-> -	 * Prevent enumeration of root complex.
-> -	 */
->  	if (dev->bus->parent == NULL && dev->devfn == 0) {
->  		int i;
->  
-> +		dev->class &= 0xff;
-> +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
->  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
->  			dev->resource[i].start = 0;
->  			dev->resource[i].end   = 0;
-> diff --git a/arch/arm/mach-mv78xx0/pcie.c b/arch/arm/mach-mv78xx0/pcie.c
-> index 636d84b40466..9362b5fc116f 100644
-> --- a/arch/arm/mach-mv78xx0/pcie.c
-> +++ b/arch/arm/mach-mv78xx0/pcie.c
-> @@ -177,14 +177,19 @@ static struct pci_ops pcie_ops = {
->  	.write = pcie_wr_conf,
->  };
->  
-> +/*
-> + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
-> + * is operating as a root complex this needs to be switched to
-> + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
-> + * the device. Decoding setup is handled by the orion code.
-> + */
->  static void rc_pci_fixup(struct pci_dev *dev)
->  {
-> -	/*
-> -	 * Prevent enumeration of root complex.
-> -	 */
->  	if (dev->bus->parent == NULL && dev->devfn == 0) {
->  		int i;
->  
-> +		dev->class &= 0xff;
-> +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
->  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
->  			dev->resource[i].start = 0;
->  			dev->resource[i].end   = 0;
-> diff --git a/arch/arm/mach-orion5x/Kconfig b/arch/arm/mach-orion5x/Kconfig
-> index e94a61901ffd..7189a5b1ec46 100644
-> --- a/arch/arm/mach-orion5x/Kconfig
-> +++ b/arch/arm/mach-orion5x/Kconfig
-> @@ -6,6 +6,7 @@ menuconfig ARCH_ORION5X
->  	select GPIOLIB
->  	select MVEBU_MBUS
->  	select FORCE_PCI
-> +	select PCI_QUIRKS
->  	select PHYLIB if NETDEVICES
->  	select PLAT_ORION_LEGACY
->  	help
-> diff --git a/arch/arm/mach-orion5x/pci.c b/arch/arm/mach-orion5x/pci.c
-> index 76951bfbacf5..5145fe89702e 100644
-> --- a/arch/arm/mach-orion5x/pci.c
-> +++ b/arch/arm/mach-orion5x/pci.c
-> @@ -509,14 +509,20 @@ static int __init pci_setup(struct pci_sys_data *sys)
->  /*****************************************************************************
->   * General PCIe + PCI
->   ****************************************************************************/
-> +
-> +/*
-> + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
-> + * is operating as a root complex this needs to be switched to
-> + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
-> + * the device. Decoding setup is handled by the orion code.
-> + */
->  static void rc_pci_fixup(struct pci_dev *dev)
->  {
-> -	/*
-> -	 * Prevent enumeration of root complex.
-> -	 */
->  	if (dev->bus->parent == NULL && dev->devfn == 0) {
->  		int i;
->  
-> +		dev->class &= 0xff;
-> +		dev->class |= PCI_CLASS_BRIDGE_HOST << 8;
->  		for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
->  			dev->resource[i].start = 0;
->  			dev->resource[i].end   = 0;
-> -- 
-> 2.20.1
-> 
+If we enable the -f option,
+it should be
+Filter out the information of blocks whose memory has been released.
+
+Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+---
+ tools/vm/page_owner_sort.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
+index de7b547c26aa..c93984eb8c2f 100644
+--- a/tools/vm/page_owner_sort.c
++++ b/tools/vm/page_owner_sort.c
+@@ -252,7 +252,7 @@ static void usage(void)
+ 		"-a	Sort by memory allocate time.\n"
+ 		"-r	Sort by memory release time.\n"
+ 		"-c	Cull by comparing stacktrace instead of total block.\n"
+-		"-f	Filter out the information of blocks whose memory has not been released.\n"
++		"-f	Filter out the information of blocks whose memory has been released.\n"
+ 	);
+ }
+ 
+-- 
+2.31.1
+
+
+

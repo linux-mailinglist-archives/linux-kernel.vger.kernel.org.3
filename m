@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63824BC348
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFADD4BC356
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240352AbiBSAYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:24:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44564 "EHLO
+        id S240360AbiBSA2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:28:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237337AbiBSAYD (ORCPT
+        with ESMTP id S240127AbiBSA2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:24:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D34386E34B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:23:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645230223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K35v6i7AXpk/D6ZiQB0RgrNtWKES2M6VUlrWvgj1/Nw=;
-        b=JTUBTdMbbBUqyYSzj/qwzIO0Q22f4zvuFKnc1kgOhjHx+IzLpydMPgddXXe1PHPw4r8FgW
-        /gW/KMu4i/b++cG9usVDL9NsmB2R+WSJmfoACuDj9TRUpmCVg7CTPznDJrWk+zyoaBRe6S
-        GITX9AMbFzC1UWWg7xpgpJBtVL2G7GQ=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-OJ8hnxq-OhiRBvS5U4E8kA-1; Fri, 18 Feb 2022 19:23:42 -0500
-X-MC-Unique: OJ8hnxq-OhiRBvS5U4E8kA-1
-Received: by mail-qk1-f198.google.com with SMTP id 2-20020a370a02000000b0060df1ac78baso4815245qkk.20
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:23:42 -0800 (PST)
+        Fri, 18 Feb 2022 19:28:01 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C037B715D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:27:43 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id f13so5905499ilq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:27:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JYKbon0sjmC8OdB1+pUCylkGlnV+3knb0QnDCySZnIw=;
+        b=UyDeiKgG7MnwJIirmRh8gakUGCKk++DgSMZTiEg1ZLGKiNBJO+MtrMz1tBlDXU//AF
+         cWHFPrIohCu/AOHoKZUR+Wm2PiTCit8e1W5/wmMe0Bvj3u7Wmpcu2NkGpMdqlEPLG/bu
+         XPJvxbgaIxjAT6SW7sZpv87qAv4gNN/gYZDMw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K35v6i7AXpk/D6ZiQB0RgrNtWKES2M6VUlrWvgj1/Nw=;
-        b=WU4C8WY9UQx4iz1p/vWFcbHR1jejuiyhXIOsW/RARdCTYQ7+lrBXobpY8yGk3riNWY
-         sjKN7tvU9k7jFJD7cDGHM5GnKE5Ypb1a53du4obzHWfDcrtAtFrOMvLsoAWARtD+5Cko
-         0Omov6tThdL/kSsdZHp3bOhAQhcJpUY7Pk4YoQgM+jWrf9Nl3yk29sG+0eSXotWeREpF
-         HnMYNUmY/cHYuQEQ2gHej84q0nBAlbxi75xxXyA/wVYI+X2/lKbFgK7+UZwjFUZz8tBJ
-         IyeFyu0/CxYYZFNAjyS4yPqe2htnxiVoRpoCo7jRgH0yGs8Vd+Rh4tvtGbAA6bJhoj6j
-         gNKg==
-X-Gm-Message-State: AOAM531vbEdU6w6JfORkAp3hVpCBCBw9Le8yv9WBsLo4gWEhUUHYSxlD
-        0rJrJMZcaDfaCxcDqJRQ1VEhHnukBIoDFAHBz2EjqXYU0S4w5is+ao3biOGNPHjU1WOds47U7XQ
-        Fo98a431KyhgBFAJwI2YPhA1V
-X-Received: by 2002:a05:620a:31a6:b0:646:d4d6:793a with SMTP id bi38-20020a05620a31a600b00646d4d6793amr1777661qkb.718.1645230222375;
-        Fri, 18 Feb 2022 16:23:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzlPo6afeTyzMMVRVT0mkOJR6sYFAcCeEgVm0QaaoNXywTYs0kSxbRxaEoQHqjU46O3dA3XTw==
-X-Received: by 2002:a05:620a:31a6:b0:646:d4d6:793a with SMTP id bi38-20020a05620a31a600b00646d4d6793amr1777648qkb.718.1645230222164;
-        Fri, 18 Feb 2022 16:23:42 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id d23sm5416974qka.50.2022.02.18.16.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 16:23:41 -0800 (PST)
-Date:   Fri, 18 Feb 2022 16:23:38 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com
-Subject: Re: [PATCH 07/29] x86/entry: Sprinkle ENDBR dust
-Message-ID: <20220219002338.khiqptqukabfdvy2@treble>
-References: <20220218164902.008644515@infradead.org>
- <20220218171408.984834165@infradead.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JYKbon0sjmC8OdB1+pUCylkGlnV+3knb0QnDCySZnIw=;
+        b=ZQvU/LQgmB1OSj9MW+UmwXp1+XZG8nelDxXMvHHzQlIkeD2Um010MD61QwxkyLzVYz
+         MwxuEuv84BESipUqoIJoapk6NePI5u6OcVCfLPa+RS2ZpaIpaD/mClA4wdvrUDB2EjYi
+         eNrAwVDdyFRtTkyq5TwtB3Y45Px0Px7233Uva+5dN3jf513PWQXHPpr9CgL12KY7C7iq
+         PCF+foQo5wtXv8Rncg+c/hrxJLuRf/I2MfRe3Da7fbAxbY5DmcfuWrPO0P7NNwy0FCR2
+         IAQyIYnDPhk2f8Io2RzrfyvXgBqtPTQEH77lLOubVEE217aZcRPlqgHE5NJXC8Gbh2oI
+         yDyQ==
+X-Gm-Message-State: AOAM533KS9CJYWS9kFfeMwTs+Ao/A7omLEOIdEHIugACuoTadMxVvvzO
+        c34q0tslP2k2Me3+2vZm08hiJw==
+X-Google-Smtp-Source: ABdhPJy6ZAFBwwp1IZSsSBg89VsTeKSYTj8aPKKyHGlR/AMvlPzX0pNDp8Mern6FI6wjY9MdXr1drA==
+X-Received: by 2002:a05:6e02:1be5:b0:2c1:efb6:9698 with SMTP id y5-20020a056e021be500b002c1efb69698mr393555ilv.131.1645230463021;
+        Fri, 18 Feb 2022 16:27:43 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id h6sm3516174ilj.58.2022.02.18.16.27.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 16:27:42 -0800 (PST)
+Subject: Re: [PATCH RESEND v6 0/9] cpupower: Add AMD P-State Support
+To:     Huang Rui <ray.huang@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org
+Cc:     Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Jassmine Meng <li.meng@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220216073558.751071-1-ray.huang@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8aafb93a-772c-1806-e087-cd285694aa74@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 17:27:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220218171408.984834165@infradead.org>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220216073558.751071-1-ray.huang@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 05:49:09PM +0100, Peter Zijlstra wrote:
-> Kernel entry points should be having ENDBR on for IBT configs.
+On 2/16/22 12:35 AM, Huang Rui wrote:
+> Hi Shuah,
 > 
-> The SYSCALL entry points are found through taking their respective
-> address in order to program them in the MSRs, while the exception
-> entry points are found through UNWIND_HINT_IRET_REGS.
+> Since AMD P-State kernel is merged into 5.17-rc1, I would like to continue
+> revising the AMD P-State support for the CPUPower tool. These series are
+> rebased on latest bleeding-edge, any comments are warm for me.
 > 
-> *Except* that latter hint is also used on exit code to denote when
-> we're down to an IRET frame. As such add an additional 'entry'
-> argument to the macro and have it default to '1' such that objtool
-> will assume it's an entry and WARN about it.
+> See patch series of CPUPower in below git repo:
+> V1: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v1
+> V2: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v2
+> V3: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v3
+> V4: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v4
+> V5: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=amd-pstate-dev-v5
+> V6: https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/log/?h=cpupower-amd-pstate
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-So we now have two unwind types which are identical, except one requires
-ENDBR after it.
+A few checkpatch warns to fix. I usually ignore CHECK from checkpatch,
+but a few of them found on this series could improve the code.
 
-It's not ideal.  The code has to make sure to get the annotations right
-for objtool to do its job.  Setting the macro's default to 'entry=1'
-does help with that, but still... it's clunky.
+Also is there a need to add/update manpages and documentation.
 
-Also, calling them "entry" and "exit" is confusing.  Not all the exits
-are exits.  Their common attribute is really that they're not "entry".
+I tested these my AMD Ryzen 7 4700G system. I didn't play with set commands
+and just the info ones.
 
-How important is it for objtool to validate these anyway?  Seems like
-such bugs would be few and far between, and would be discovered in a
-jiffy after bricking the system.
+cpupower info gave me this output. The first message is fine, but the
+second one is a bit odd. Should it just bail out right after the first
+message about "not support"
 
-Another possibly better and less intrusive way of doing this would be
-for objtool to realize that any UNWIND_HINT_IRET_REGS at the beginning
-of a SYM_CODE_START (global non-function code symbol) needs ENDBR.
+cpupower info
 
--- 
-Josh
+System does not support Intel's performance bias setting
+analyzing CPU 0:
+
+Go ahead send me v7 for these and add any mapages/doc if necessary.
+I will get them into Linux 5.18-rc1
+
+thanks,
+-- Shuah
 

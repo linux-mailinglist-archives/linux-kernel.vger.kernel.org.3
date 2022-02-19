@@ -2,394 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5DE4BC7AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6E74BC7B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242078AbiBSKWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 05:22:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35580 "EHLO
+        id S236506AbiBSK16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 05:27:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241959AbiBSKVu (ORCPT
+        with ESMTP id S229487AbiBSK1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 05:21:50 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F176316;
-        Sat, 19 Feb 2022 02:21:30 -0800 (PST)
-Date:   Sat, 19 Feb 2022 10:21:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645266089;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zI2Q6n3of6P85/qCQUOyZ21T/+NmhFhsj3BbBT9kZAQ=;
-        b=DAFchMrBJcA29viPwqy30VN0nM2OP/OWMBs8zNUHZtLAoX1mRnTTGW6U2FLBOPlmm36MsL
-        NigrG5hz4VsiqkY92/ozXnJcQjYBnVSlHYrIxht9q0XBY7KIfifSdUqPXot/EmEkMe1+0x
-        Mv8NXLU03kJbSfGIrUXzlSTjMzwSivPQgGQw5YzfcOB0I+OcwwQ7djfdTCvjk1qtVZwz4w
-        D+A6tK6Dv/ra4d2An3iAuG06IWWNEr5irYscKVk1WJphbVSdSehOmtYI+39+ZTfotWkBmL
-        /qsB/84qnoX1BwyOXjsAmoyFgaxJwGMVXazH0dE0BTS4EJ+PAtM3YNxSthiBdg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645266089;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zI2Q6n3of6P85/qCQUOyZ21T/+NmhFhsj3BbBT9kZAQ=;
-        b=os21Xt417A0bOvjbso9d4FGkvCOflq4mRye5OoeD3vUZCqJeKH1E2XNtY+PXBNauKj+5u0
-        8/J8Ioz05evVtYBQ==
-From:   "tip-bot2 for Mark Rutland" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/preempt: Move PREEMPT_DYNAMIC logic later
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220214165216.2231574-2-mark.rutland@arm.com>
-References: <20220214165216.2231574-2-mark.rutland@arm.com>
+        Sat, 19 Feb 2022 05:27:55 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128F348E47
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 02:27:28 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DB013420CF;
+        Sat, 19 Feb 2022 10:27:22 +0000 (UTC)
+To:     Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Justin Forbes <jforbes@redhat.com>,
+        Rafael Aquini <aquini@redhat.com>
+References: <20220201192924.672675-1-longman@redhat.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH] mm/sparsemem: Fix 'mem_section' will never be NULL gcc 12
+ warning
+Message-ID: <b1a924e2-c23b-f09d-9122-fdff360cacff@marcan.st>
+Date:   Sat, 19 Feb 2022 19:27:20 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Message-ID: <164526608858.16921.4085095758644727666.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220201192924.672675-1-longman@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+On 02/02/2022 04.29, Waiman Long wrote:
+> The gcc 12 compiler reports a warning on the following code:
+> 
+>     static inline struct mem_section *__nr_to_section(unsigned long nr)
+>     {
+>     #ifdef CONFIG_SPARSEMEM_EXTREME
+>         if (!mem_section)
+>                 return NULL;
+>     #endif
+>        :
+> 
+> With CONFIG_SPARSEMEM_EXTREME on, the mem_section definition is
+> 
+>     extern struct mem_section **mem_section;
+> 
+> Obviously, mem_section cannot be NULL, but *mem_section can be if memory
+> hasn't been allocated for the dynamic mem_section[] array yet. Fix this
+> warning by checking for "!*mem_section" instead.
+> 
+> Fixes: 83e3c48729d9 ("mm/sparsemem: Allocate mem_section at runtime for CONFIG_SPARSEMEM_EXTREME=y")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  include/linux/mmzone.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index aed44e9b5d89..bd1b19925f3b 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -1390,7 +1390,7 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
+>  static inline struct mem_section *__nr_to_section(unsigned long nr)
+>  {
+>  #ifdef CONFIG_SPARSEMEM_EXTREME
+> -	if (!mem_section)
+> +	if (!*mem_section)
+>  		return NULL;
+>  #endif
+>  	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+> 
 
-Commit-ID:     4c7485584d48f60b1e742c7c6a3a1fa503d48d97
-Gitweb:        https://git.kernel.org/tip/4c7485584d48f60b1e742c7c6a3a1fa503d48d97
-Author:        Mark Rutland <mark.rutland@arm.com>
-AuthorDate:    Mon, 14 Feb 2022 16:52:10 
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 19 Feb 2022 11:11:07 +01:00
+This broke booting on Apple T6000 (M1 Pro; support not yet mainlined)
+and it is obviously incorrect. !*mem_section is the same thing as
+!mem_section[0], which is always checking element 0 for NULL instead of
+the element we're interested in. These machines don't have memory at 0,
+fail the spurious check, and crash on early boot.
 
-sched/preempt: Move PREEMPT_DYNAMIC logic later
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x612f0240]
+[    0.000000] Linux version
+5.17.0-rc4-asahi-next-20220217-00141-g3eb6fdba1573 (marcan@raider)
+(aarch64-linux-gnu-gcc (Gentoo 11.2.0 p1) 11.2.0, GNU ld (Gentoo 2.36.1
+p1) 2.36.1) #1112 SMP PREEMPT Sat Feb 19 18:01:31 JST 2022
+[    0.000000] random: fast init done
+[    0.000000] Machine model: Apple MacBook Pro (14-inch, M1 Pro, 2021)
+[    0.000000] efi: UEFI not found.
+[    0.000000] earlycon: s5l0 at MMIO32 0x000000039b200000 (options '')
+[    0.000000] printk: bootconsole [s5l0] enabled
+[    0.000000] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000000
+<snip>
+[    0.000000] pc : sparse_init+0x150/0x268
+<snip>
 
-The PREEMPT_DYNAMIC logic in kernel/sched/core.c patches static calls
-for a bunch of preemption functions. While most are defined prior to
-this, the definition of cond_resched() is later in the file, and so we
-only have its declarations from include/linux/sched.h.
+Please revert fff3b2a167db5 and edecc06b4d34e.
 
-In subsequent patches we'd like to define some macros alongside the
-definition of each of the preemption functions, which we can use within
-sched_dynamic_update(). For this to be possible, the PREEMPT_DYNAMIC
-logic needs to be placed after the various preemption functions.
-
-As a preparatory step, this patch moves the PREEMPT_DYNAMIC logic after
-the various preemption functions, with no other changes -- this is
-purely a move.
-
-There should be no functional change as a result of this patch.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20220214165216.2231574-2-mark.rutland@arm.com
----
- kernel/sched/core.c | 272 +++++++++++++++++++++----------------------
- 1 file changed, 136 insertions(+), 136 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 1e08b02..a123ffa 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6555,142 +6555,6 @@ EXPORT_STATIC_CALL_TRAMP(preempt_schedule_notrace);
- 
- #endif /* CONFIG_PREEMPTION */
- 
--#ifdef CONFIG_PREEMPT_DYNAMIC
--
--#include <linux/entry-common.h>
--
--/*
-- * SC:cond_resched
-- * SC:might_resched
-- * SC:preempt_schedule
-- * SC:preempt_schedule_notrace
-- * SC:irqentry_exit_cond_resched
-- *
-- *
-- * NONE:
-- *   cond_resched               <- __cond_resched
-- *   might_resched              <- RET0
-- *   preempt_schedule           <- NOP
-- *   preempt_schedule_notrace   <- NOP
-- *   irqentry_exit_cond_resched <- NOP
-- *
-- * VOLUNTARY:
-- *   cond_resched               <- __cond_resched
-- *   might_resched              <- __cond_resched
-- *   preempt_schedule           <- NOP
-- *   preempt_schedule_notrace   <- NOP
-- *   irqentry_exit_cond_resched <- NOP
-- *
-- * FULL:
-- *   cond_resched               <- RET0
-- *   might_resched              <- RET0
-- *   preempt_schedule           <- preempt_schedule
-- *   preempt_schedule_notrace   <- preempt_schedule_notrace
-- *   irqentry_exit_cond_resched <- irqentry_exit_cond_resched
-- */
--
--enum {
--	preempt_dynamic_undefined = -1,
--	preempt_dynamic_none,
--	preempt_dynamic_voluntary,
--	preempt_dynamic_full,
--};
--
--int preempt_dynamic_mode = preempt_dynamic_undefined;
--
--int sched_dynamic_mode(const char *str)
--{
--	if (!strcmp(str, "none"))
--		return preempt_dynamic_none;
--
--	if (!strcmp(str, "voluntary"))
--		return preempt_dynamic_voluntary;
--
--	if (!strcmp(str, "full"))
--		return preempt_dynamic_full;
--
--	return -EINVAL;
--}
--
--void sched_dynamic_update(int mode)
--{
--	/*
--	 * Avoid {NONE,VOLUNTARY} -> FULL transitions from ever ending up in
--	 * the ZERO state, which is invalid.
--	 */
--	static_call_update(cond_resched, __cond_resched);
--	static_call_update(might_resched, __cond_resched);
--	static_call_update(preempt_schedule, __preempt_schedule_func);
--	static_call_update(preempt_schedule_notrace, __preempt_schedule_notrace_func);
--	static_call_update(irqentry_exit_cond_resched, irqentry_exit_cond_resched);
--
--	switch (mode) {
--	case preempt_dynamic_none:
--		static_call_update(cond_resched, __cond_resched);
--		static_call_update(might_resched, (void *)&__static_call_return0);
--		static_call_update(preempt_schedule, NULL);
--		static_call_update(preempt_schedule_notrace, NULL);
--		static_call_update(irqentry_exit_cond_resched, NULL);
--		pr_info("Dynamic Preempt: none\n");
--		break;
--
--	case preempt_dynamic_voluntary:
--		static_call_update(cond_resched, __cond_resched);
--		static_call_update(might_resched, __cond_resched);
--		static_call_update(preempt_schedule, NULL);
--		static_call_update(preempt_schedule_notrace, NULL);
--		static_call_update(irqentry_exit_cond_resched, NULL);
--		pr_info("Dynamic Preempt: voluntary\n");
--		break;
--
--	case preempt_dynamic_full:
--		static_call_update(cond_resched, (void *)&__static_call_return0);
--		static_call_update(might_resched, (void *)&__static_call_return0);
--		static_call_update(preempt_schedule, __preempt_schedule_func);
--		static_call_update(preempt_schedule_notrace, __preempt_schedule_notrace_func);
--		static_call_update(irqentry_exit_cond_resched, irqentry_exit_cond_resched);
--		pr_info("Dynamic Preempt: full\n");
--		break;
--	}
--
--	preempt_dynamic_mode = mode;
--}
--
--static int __init setup_preempt_mode(char *str)
--{
--	int mode = sched_dynamic_mode(str);
--	if (mode < 0) {
--		pr_warn("Dynamic Preempt: unsupported mode: %s\n", str);
--		return 0;
--	}
--
--	sched_dynamic_update(mode);
--	return 1;
--}
--__setup("preempt=", setup_preempt_mode);
--
--static void __init preempt_dynamic_init(void)
--{
--	if (preempt_dynamic_mode == preempt_dynamic_undefined) {
--		if (IS_ENABLED(CONFIG_PREEMPT_NONE)) {
--			sched_dynamic_update(preempt_dynamic_none);
--		} else if (IS_ENABLED(CONFIG_PREEMPT_VOLUNTARY)) {
--			sched_dynamic_update(preempt_dynamic_voluntary);
--		} else {
--			/* Default static call setting, nothing to do */
--			WARN_ON_ONCE(!IS_ENABLED(CONFIG_PREEMPT));
--			preempt_dynamic_mode = preempt_dynamic_full;
--			pr_info("Dynamic Preempt: full\n");
--		}
--	}
--}
--
--#else /* !CONFIG_PREEMPT_DYNAMIC */
--
--static inline void preempt_dynamic_init(void) { }
--
--#endif /* #ifdef CONFIG_PREEMPT_DYNAMIC */
--
- /*
-  * This is the entry point to schedule() from kernel preemption
-  * off of irq context.
-@@ -8271,6 +8135,142 @@ int __cond_resched_rwlock_write(rwlock_t *lock)
- }
- EXPORT_SYMBOL(__cond_resched_rwlock_write);
- 
-+#ifdef CONFIG_PREEMPT_DYNAMIC
-+
-+#include <linux/entry-common.h>
-+
-+/*
-+ * SC:cond_resched
-+ * SC:might_resched
-+ * SC:preempt_schedule
-+ * SC:preempt_schedule_notrace
-+ * SC:irqentry_exit_cond_resched
-+ *
-+ *
-+ * NONE:
-+ *   cond_resched               <- __cond_resched
-+ *   might_resched              <- RET0
-+ *   preempt_schedule           <- NOP
-+ *   preempt_schedule_notrace   <- NOP
-+ *   irqentry_exit_cond_resched <- NOP
-+ *
-+ * VOLUNTARY:
-+ *   cond_resched               <- __cond_resched
-+ *   might_resched              <- __cond_resched
-+ *   preempt_schedule           <- NOP
-+ *   preempt_schedule_notrace   <- NOP
-+ *   irqentry_exit_cond_resched <- NOP
-+ *
-+ * FULL:
-+ *   cond_resched               <- RET0
-+ *   might_resched              <- RET0
-+ *   preempt_schedule           <- preempt_schedule
-+ *   preempt_schedule_notrace   <- preempt_schedule_notrace
-+ *   irqentry_exit_cond_resched <- irqentry_exit_cond_resched
-+ */
-+
-+enum {
-+	preempt_dynamic_undefined = -1,
-+	preempt_dynamic_none,
-+	preempt_dynamic_voluntary,
-+	preempt_dynamic_full,
-+};
-+
-+int preempt_dynamic_mode = preempt_dynamic_undefined;
-+
-+int sched_dynamic_mode(const char *str)
-+{
-+	if (!strcmp(str, "none"))
-+		return preempt_dynamic_none;
-+
-+	if (!strcmp(str, "voluntary"))
-+		return preempt_dynamic_voluntary;
-+
-+	if (!strcmp(str, "full"))
-+		return preempt_dynamic_full;
-+
-+	return -EINVAL;
-+}
-+
-+void sched_dynamic_update(int mode)
-+{
-+	/*
-+	 * Avoid {NONE,VOLUNTARY} -> FULL transitions from ever ending up in
-+	 * the ZERO state, which is invalid.
-+	 */
-+	static_call_update(cond_resched, __cond_resched);
-+	static_call_update(might_resched, __cond_resched);
-+	static_call_update(preempt_schedule, __preempt_schedule_func);
-+	static_call_update(preempt_schedule_notrace, __preempt_schedule_notrace_func);
-+	static_call_update(irqentry_exit_cond_resched, irqentry_exit_cond_resched);
-+
-+	switch (mode) {
-+	case preempt_dynamic_none:
-+		static_call_update(cond_resched, __cond_resched);
-+		static_call_update(might_resched, (void *)&__static_call_return0);
-+		static_call_update(preempt_schedule, NULL);
-+		static_call_update(preempt_schedule_notrace, NULL);
-+		static_call_update(irqentry_exit_cond_resched, NULL);
-+		pr_info("Dynamic Preempt: none\n");
-+		break;
-+
-+	case preempt_dynamic_voluntary:
-+		static_call_update(cond_resched, __cond_resched);
-+		static_call_update(might_resched, __cond_resched);
-+		static_call_update(preempt_schedule, NULL);
-+		static_call_update(preempt_schedule_notrace, NULL);
-+		static_call_update(irqentry_exit_cond_resched, NULL);
-+		pr_info("Dynamic Preempt: voluntary\n");
-+		break;
-+
-+	case preempt_dynamic_full:
-+		static_call_update(cond_resched, (void *)&__static_call_return0);
-+		static_call_update(might_resched, (void *)&__static_call_return0);
-+		static_call_update(preempt_schedule, __preempt_schedule_func);
-+		static_call_update(preempt_schedule_notrace, __preempt_schedule_notrace_func);
-+		static_call_update(irqentry_exit_cond_resched, irqentry_exit_cond_resched);
-+		pr_info("Dynamic Preempt: full\n");
-+		break;
-+	}
-+
-+	preempt_dynamic_mode = mode;
-+}
-+
-+static int __init setup_preempt_mode(char *str)
-+{
-+	int mode = sched_dynamic_mode(str);
-+	if (mode < 0) {
-+		pr_warn("Dynamic Preempt: unsupported mode: %s\n", str);
-+		return 0;
-+	}
-+
-+	sched_dynamic_update(mode);
-+	return 1;
-+}
-+__setup("preempt=", setup_preempt_mode);
-+
-+static void __init preempt_dynamic_init(void)
-+{
-+	if (preempt_dynamic_mode == preempt_dynamic_undefined) {
-+		if (IS_ENABLED(CONFIG_PREEMPT_NONE)) {
-+			sched_dynamic_update(preempt_dynamic_none);
-+		} else if (IS_ENABLED(CONFIG_PREEMPT_VOLUNTARY)) {
-+			sched_dynamic_update(preempt_dynamic_voluntary);
-+		} else {
-+			/* Default static call setting, nothing to do */
-+			WARN_ON_ONCE(!IS_ENABLED(CONFIG_PREEMPT));
-+			preempt_dynamic_mode = preempt_dynamic_full;
-+			pr_info("Dynamic Preempt: full\n");
-+		}
-+	}
-+}
-+
-+#else /* !CONFIG_PREEMPT_DYNAMIC */
-+
-+static inline void preempt_dynamic_init(void) { }
-+
-+#endif /* #ifdef CONFIG_PREEMPT_DYNAMIC */
-+
- /**
-  * yield - yield the current processor to other threads.
-  *
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

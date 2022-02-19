@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0374BC340
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6AF4BC344
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240331AbiBSAQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:16:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43300 "EHLO
+        id S240346AbiBSAXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:23:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiBSAQX (ORCPT
+        with ESMTP id S240336AbiBSAXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:16:23 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A346A47568
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:16:05 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id b64-20020a256743000000b0061e169a5f19so15302475ybc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:16:05 -0800 (PST)
+        Fri, 18 Feb 2022 19:23:13 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9406E351
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:22:55 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id s16so9174039pgs.13
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:22:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=t1Jpw+ueBOtsD6/0A+P0khb1gbXjD6yCm6h0DxHEboA=;
-        b=pNQnxU1fILXMInmD4uqudCIT7Be0KkI0yr06/vuLrOZKOAyUYFI5sXtwM1+o9RxR72
-         6+ebYk4+o42Gl9qAWaWQYOihlS/TSymMphgi7XQkxBkA5U8rJdkqh0IWAjljDlB/iSjT
-         2wujuIskcm+4sAHbRr24reNg7ddXqEeBUIytY08mqr90KLmzWy86yHNSp7SNHBWl+UXo
-         ooxyWZbuEdFW4Sq6VZVu2Jc3tlrHOXfz56zgD6htJPtNletRcvBlePF6UXy1Ql0iX8eh
-         MZ6TxwA6vE5InaZxmK7u8gqVAC2ChsGBT3EwQLQoJpV4G2Kxd7wvm6D/7CBe3cdcW8l9
-         eYiQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PKozzWeotfW0H/XChUhKVfvoVAWx3v86SwCGH78y65k=;
+        b=YJr7T4GPIwDLm8MhhOOQayyse45vPIFv4uPo7XIm+miZ9JCsK1JdIoXK3rAPZLB5X4
+         A5CrKN2EGzd1cx5YPsdVhNoBP2nvJvTS/4QmYgq19BFsLKn3YLZYB9LJ8xgqA/uchgUP
+         ipCYRjqs/l0CY3IVqWzqCQtTcQeA0rNGszozpIa2Zx6netouSyuIUZq28gdMEIF9VStY
+         JKN6n7q0vweWxZEDIlaG78NXQVOwViN+B2oSQp+FSwOTjG11PB1XxaW1DqIS6HFxZ69S
+         qc5rB61GQSn1mjkgAWZJ8+Bx6Bjc+qVnwuCDcLglHfqIMXvEWaayvbu8KmVN9SES6FNm
+         H2KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=t1Jpw+ueBOtsD6/0A+P0khb1gbXjD6yCm6h0DxHEboA=;
-        b=dg3rofpSP3h8sCE9pq6ZuAdx4wfIHaHyPS/+GFyRWh4jWaWRG6WsgORmTMxcAg9ITX
-         H9g5UJi5jODkQdqjYxmpQLh5eam8ATinrFNoPT1rsC8FQVi2zm7MyoaYN+Xfx3YXlN7f
-         +FPvOGYaVTBuyj3KOHBeJ8xHkwGmgigdt0llcoocdZR1oaGe/k0vu5fpmlJ3XvNbhCW+
-         NRoCa/nuB00XMvTCOAhJ66SocNiT006KlTf5BVLcDqadh0rIgmQTRnBbw6ACvG3Zc9sy
-         VczW0/qqMks1TX5OW8i6ckAXXkw/0u0hSrSHNid9x1FU0BHqCyn9fs1khxI2xwndOknA
-         KuRg==
-X-Gm-Message-State: AOAM532g7WgLNdk0eBj5qA8eKuPBPEO6rRA8dBU48XykW090vvu9BDMb
-        VX9FQ3KuMMNL0At2VFEkqTD2qcbgJmI=
-X-Google-Smtp-Source: ABdhPJzC9kF2aqyqMClNmlOiYw6vcsQjNtY3AucQyQXxwhWEncOEjhIW6BZgRa79F/iaudlt/FUR/zaaEd4=
-X-Received: from khazhy-linux.svl.corp.google.com ([2620:15c:2cd:202:7d93:7487:6afd:f5f6])
- (user=khazhy job=sendgmr) by 2002:a25:3b17:0:b0:619:4463:a400 with SMTP id
- i23-20020a253b17000000b006194463a400mr9943708yba.36.1645229764835; Fri, 18
- Feb 2022 16:16:04 -0800 (PST)
-Date:   Fri, 18 Feb 2022 16:16:01 -0800
-Message-Id: <20220219001601.3534043-1-khazhy@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH v2] scsi: docs: update notes about scsi_times_out
-From:   Khazhismel Kumykov <khazhy@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-doc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bvanassche@acm.org,
-        Hannes Reinecke <hare@suse.com>,
-        Khazhismel Kumykov <khazhy@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PKozzWeotfW0H/XChUhKVfvoVAWx3v86SwCGH78y65k=;
+        b=WldBGFZZB4SuR9jzgnXtd30/vs7HgwKxHAdZBXfVYEu/gJW6DEvqejvNWrf186tPVP
+         iUv7t1QptGGj5jMHsNOM6Q0AJHBiyyusVXZdy3szb8wxvmJXRfEyrzT5uoGFfqK/XFN2
+         EYVt01R7JPKjV7wkeM7N34UCFTebrw7H/fYfBurW/SZqcz9ONnBw+aatgGmpZ+X66DoO
+         xFDfTTivM4B4Rmu0jVZVw+un734nM9boQ7jany9Dlj3uC4flr10Lp99w4s0n2EOE7mKv
+         PkMG9IFLKqbjl+Ty+EewnxwfS6Nlug8eZ2e9wwrvJ3ZZKHjy33/7vvOp5fthTlsgt/27
+         r9xA==
+X-Gm-Message-State: AOAM530hHuD6MJ9kkuEq9wtMteF8oZJrYGtfyNJlOsJkrk136naRDmh8
+        nTpAXU0R+JP4zXj5ejG4LnuOsg==
+X-Google-Smtp-Source: ABdhPJyam7kTYq5rTQAMSu2ALEE50Ee8PLPQAi1b3BzbfQybJRbIYqYjX74rsUr8nmhHftAfrz1Whw==
+X-Received: by 2002:a05:6a00:2391:b0:4a8:d88:9cd with SMTP id f17-20020a056a00239100b004a80d8809cdmr9879701pfc.11.1645230175301;
+        Fri, 18 Feb 2022 16:22:55 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i17sm12004965pgv.8.2022.02.18.16.22.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 16:22:54 -0800 (PST)
+Date:   Sat, 19 Feb 2022 00:22:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 13/18] KVM: x86: reset and reinitialize the MMU in
+ __set_sregs_common
+Message-ID: <YhA4WkeqPxbA3IEJ@google.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-14-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217210340.312449-14-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,47 +72,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most importantly: eh_timed_out() is not limited by scmd->allowed,
-and can reset timer forever.
+On Thu, Feb 17, 2022, Paolo Bonzini wrote:
+> Do a full unload of the MMU in KVM_SET_SREGS and KVM_SEST_REGS2, in
+> preparation for not doing so in kvm_mmu_reset_context.  There is no
+> need to delay the reset until after the return, so do it directly in
+> the __set_sregs_common function and remove the mmu_reset_needed output
+> parameter.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
 
-Fixes: c829c394165f ("[SCSI] FC transport : Avoid device offline cases by stalling aborts until device unblocked")
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
----
- Documentation/scsi/scsi_eh.rst | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+> +	kvm_init_mmu(vcpu);
+>  	if (update_pdptrs) {
+>  		idx = srcu_read_lock(&vcpu->kvm->srcu);
+> -		if (is_pae_paging(vcpu)) {
+> +		if (is_pae_paging(vcpu))
+>  			load_pdptrs(vcpu, kvm_read_cr3(vcpu));
+> -			*mmu_reset_needed = 1;
 
-diff --git a/Documentation/scsi/scsi_eh.rst b/Documentation/scsi/scsi_eh.rst
-index 7d78c2475615..885395dc1f15 100644
---- a/Documentation/scsi/scsi_eh.rst
-+++ b/Documentation/scsi/scsi_eh.rst
-@@ -95,19 +95,18 @@ function
- 
-     - BLK_EH_RESET_TIMER
- 	This indicates that more time is required to finish the
--	command.  Timer is restarted.  This action is counted as a
--	retry and only allowed scmd->allowed + 1(!) times.  Once the
--	limit is reached, action for BLK_EH_DONE is taken instead.
-+	command.  Timer is restarted.
- 
-     - BLK_EH_DONE
-         eh_timed_out() callback did not handle the command.
- 	Step #2 is taken.
- 
-- 2. scsi_abort_command() is invoked to schedule an asynchrous abort.
--    Asynchronous abort are not invoked for commands which the
--    SCSI_EH_ABORT_SCHEDULED flag is set (this indicates that the command
--    already had been aborted once, and this is a retry which failed),
--    or when the EH deadline is expired. In these case Step #3 is taken.
-+ 2. scsi_abort_command() is invoked to schedule an asynchronous abort which may
-+    issue a retry scmd->allowed + 1 times.  Asynchronous aborts are not invoked
-+    for commands for which the SCSI_EH_ABORT_SCHEDULED flag is set (this
-+    indicates that the command already had been aborted once, and this is a
-+    retry which failed), when retries are exceeded, or when the EH deadline is
-+    expired. In these cases Step #3 is taken.
- 
-  3. scsi_eh_scmd_add(scmd, SCSI_EH_CANCEL_CMD) is invoked for the
-     command.  See [1-4] for more information.
--- 
-2.35.1.473.g83b2b277ed-goog
+Eww (not your code, just this whole pile).  It might be worth calling out in the
+changelog that calling kvm_init_mmu() before load_pdptrs() will (subtly) _not_
+impact the functionality of load_pdptrs().  If the MMU is nested, kvm_init_mmu()
+will modify vcpu->arch.nested_mmu, whereas kvm_translate_gpa() will walk
+vcpu->arch.guest_mmu.  And if the MMU is not nested, kvm_translate_gpa() will not
+consuming vcpu->arch.mmu other than to check if it's == &guest_mmu.
 
+> -		}
+>  		srcu_read_unlock(&vcpu->kvm->srcu, idx);
+>  	}
+>  

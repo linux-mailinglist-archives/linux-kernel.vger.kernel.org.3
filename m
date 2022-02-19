@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6E74BC7B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63544BC7B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236506AbiBSK16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 05:27:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54374 "EHLO
+        id S241299AbiBSKfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 05:35:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiBSK1z (ORCPT
+        with ESMTP id S237964AbiBSKfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 05:27:55 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128F348E47
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 02:27:28 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DB013420CF;
-        Sat, 19 Feb 2022 10:27:22 +0000 (UTC)
-To:     Waiman Long <longman@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Justin Forbes <jforbes@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>
-References: <20220201192924.672675-1-longman@redhat.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH] mm/sparsemem: Fix 'mem_section' will never be NULL gcc 12
- warning
-Message-ID: <b1a924e2-c23b-f09d-9122-fdff360cacff@marcan.st>
-Date:   Sat, 19 Feb 2022 19:27:20 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Sat, 19 Feb 2022 05:35:30 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CF3021FC72
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 02:35:08 -0800 (PST)
+Received: from unknown (HELO lgemrelse7q.lge.com) (156.147.1.151)
+        by 156.147.23.53 with ESMTP; 19 Feb 2022 19:35:07 +0900
+X-Original-SENDERIP: 156.147.1.151
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.151 with ESMTP; 19 Feb 2022 19:35:07 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Sat, 19 Feb 2022 19:34:58 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, joel@joelfernandes.org,
+        sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: [PATCH 00/16] DEPT(Dependency Tracker)
+Message-ID: <20220219103458.GD10342@X58A-UD3R>
+References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
+ <Yg5u7dzUxL3Vkncg@mit.edu>
+ <20220217120005.67f5ddf4@gandalf.local.home>
+ <Yg8eQ/iR5H/AHZIg@mit.edu>
 MIME-Version: 1.0
-In-Reply-To: <20220201192924.672675-1-longman@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yg8eQ/iR5H/AHZIg@mit.edu>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2022 04.29, Waiman Long wrote:
-> The gcc 12 compiler reports a warning on the following code:
+On Thu, Feb 17, 2022 at 11:19:15PM -0500, Theodore Ts'o wrote:
+> On Thu, Feb 17, 2022 at 12:00:05PM -0500, Steven Rostedt wrote:
+> > 
+> > I personally believe that there's potential that this can be helpful and we
+> > will want to merge it.
+> > 
+> > But, what I believe Ted is trying to say is, if you do not know if the
+> > report is a bug or not, please do not ask the maintainers to determine it
+> > for you. This is a good opportunity for you to look to see why your tool
+> > reported an issue, and learn that subsystem. Look at if this is really a
+> > bug or not, and investigate why.
 > 
->     static inline struct mem_section *__nr_to_section(unsigned long nr)
->     {
->     #ifdef CONFIG_SPARSEMEM_EXTREME
->         if (!mem_section)
->                 return NULL;
->     #endif
->        :
-> 
-> With CONFIG_SPARSEMEM_EXTREME on, the mem_section definition is
-> 
->     extern struct mem_section **mem_section;
-> 
-> Obviously, mem_section cannot be NULL, but *mem_section can be if memory
-> hasn't been allocated for the dynamic mem_section[] array yet. Fix this
-> warning by checking for "!*mem_section" instead.
-> 
-> Fixes: 83e3c48729d9 ("mm/sparsemem: Allocate mem_section at runtime for CONFIG_SPARSEMEM_EXTREME=y")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  include/linux/mmzone.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index aed44e9b5d89..bd1b19925f3b 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -1390,7 +1390,7 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
->  static inline struct mem_section *__nr_to_section(unsigned long nr)
->  {
->  #ifdef CONFIG_SPARSEMEM_EXTREME
-> -	if (!mem_section)
-> +	if (!*mem_section)
->  		return NULL;
->  #endif
->  	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-> 
+> I agree there's potential here, or I would have ignored the ext4 "bug
+> report".
 
-This broke booting on Apple T6000 (M1 Pro; support not yet mainlined)
-and it is obviously incorrect. !*mem_section is the same thing as
-!mem_section[0], which is always checking element 0 for NULL instead of
-the element we're interested in. These machines don't have memory at 0,
-fail the spurious check, and crash on early boot.
+I just checked this one. Appreciate it...
 
-[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x612f0240]
-[    0.000000] Linux version
-5.17.0-rc4-asahi-next-20220217-00141-g3eb6fdba1573 (marcan@raider)
-(aarch64-linux-gnu-gcc (Gentoo 11.2.0 p1) 11.2.0, GNU ld (Gentoo 2.36.1
-p1) 2.36.1) #1112 SMP PREEMPT Sat Feb 19 18:01:31 JST 2022
-[    0.000000] random: fast init done
-[    0.000000] Machine model: Apple MacBook Pro (14-inch, M1 Pro, 2021)
-[    0.000000] efi: UEFI not found.
-[    0.000000] earlycon: s5l0 at MMIO32 0x000000039b200000 (options '')
-[    0.000000] printk: bootconsole [s5l0] enabled
-[    0.000000] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000000
-<snip>
-[    0.000000] pc : sparse_init+0x150/0x268
-<snip>
+> When we can get rid of the false positives, I think it should be
 
-Please revert fff3b2a167db5 and edecc06b4d34e.
+Of course, the false positives should be removed once it's found. I will
+try my best to remove all of those on my own as much as possible.
+However, thing is I can't see others than what I can see with my system.
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+> merged; I'd just rather it not be merged until after the false
+> positives are fixed, since otherwise, someone well-meaning will start
+> using it with Syzkaller, and noise that maintainers need to deal with
+> (with people requesting reverts of two year old commits, etc) will
+> increase by a factor of ten or more.  (With Syzbot reproducers that
+
+Agree.
+
+> set up random cgroups, IP tunnels with wiregaurd enabled, FUSE stress
+> testers, etc., that file system maintainers will be asked to try to
+> disentangle.)
+> 
+> So from a maintainer's perspective, false positives are highly
+> negative.  It may be that from some people's POV, one bug found and 20
+> false positive might still be "useful".  But if your tool gains a
+> reputation of not valuing maintainers' time, it's just going to make
+> us (or at least me :-) cranky, and it's going to be very hard to
+
+Agree.
+
+> recover from perception.  So it's probably better to be very
+> conservative and careful in polishing it before asking for it to be
+> merged.
+
+If it's true that there are too many false positives like 95%, then I'll
+fix those fist for sure before asking to merge it. Let's see if so.
+
+To kernel developers,
+
+It'd be appreciated if you'd let us know if you can see real ones than
+false positives in the middle of developing something in the kernel so
+it's useful. Otherwise, it's hard to measure how many false positives it
+reports and how valuable it is and so on...
+
+Thanks,
+Byungchul

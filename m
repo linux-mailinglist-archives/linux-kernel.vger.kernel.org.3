@@ -2,250 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271184BCADD
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 22:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9EB4BCAD1
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 22:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243241AbiBSV4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 16:56:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55432 "EHLO
+        id S238771AbiBSV5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 16:57:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243205AbiBSV4P (ORCPT
+        with ESMTP id S243342AbiBSV5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 16:56:15 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9282154197
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 13:55:54 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id w20so9873387plq.12
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 13:55:54 -0800 (PST)
+        Sat, 19 Feb 2022 16:57:21 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67499659D;
+        Sat, 19 Feb 2022 13:56:37 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21JBF85Q022899;
+        Sat, 19 Feb 2022 21:54:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=LVUK/8FqhmEAul4PL6LNodGZl6czDngFZsJzuL+X93Q=;
+ b=uA3ntgtYpGrt/pvMjRKgZxhsEb+zAvfNfCpRGtbL982JwDl7FZmeExOgSxo5v2EkuoT0
+ jXc2F5/Q195uyux23CO8sBFeb3Wkf48eFF5adKeVEbqNPuS5Clj2LjE85jEwIz7TITTk
+ yWGu0oZ8QVrQ5uH9XBPb/89madRM1NmPvEkM5NA89N6fODaV4KwXW/YPVkhoNvZ4vyVv
+ mVLYrVqJF5/T7OFyBtzdqz7JFzvY5z+fBfv5R6bxV5QQvO1xkC29yt+/Yeq8LZUsvVtU
+ pMGN6V51YJAegVm9D5L6qxpVDNmxaGF1kUTG2B0QaphLtHYgaYB0/5bI1Hk2AqPRYW3f VQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ear5t104f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 19 Feb 2022 21:54:04 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21JLogvq028898;
+        Sat, 19 Feb 2022 21:54:04 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2041.outbound.protection.outlook.com [104.47.73.41])
+        by aserp3030.oracle.com with ESMTP id 3eapkd33s1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 19 Feb 2022 21:54:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cu3PuWDoxgt6XKlzgXGYZeeN2ekeINGCt5410jR4htbFZjLTWgTVsCz6BDiUzXTE8e/8PTQiFWtf9lUSYxjBpk6GeiI57Pu6hGuBdh1LXHFnOvQT3sxLnETUSAotOs6HQ4+hig+BlpwrHg/BewZbqPSGhDUyy6WJfluOr/OZ7Jf3psJGtREvID0fW1E2Yiw5J/QmCq84BCJo/H1k4irOD5i35ySALWquJ25IQ55FDmG9PnKhsrWr50rAEnTxAmiaKDo+3wUYnyrrtZxMkZM2HVlGXB/qiPN6BB57bQaG6hP70rsfuRrlH9Gjzs5xaesfCHUGbhjJPwgC2F81v1xW0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LVUK/8FqhmEAul4PL6LNodGZl6czDngFZsJzuL+X93Q=;
+ b=S54UANipniuh3P+mWFFKjPKROqP4pmztL2N0AdSw5ShGOg3yrC+9KWmiDz79lP/tmB2AVgNmlVown23/+7z9RlfYZcNGVxFds47j7ONsBphqMGoGGQS6i0BVenwUIX+g5BzCHUhUM+a44Xymv9CiyQS+Riby4WyVcD+qHbWyO5LRxnuevI9PSLt5oOPL0M6EgiO8hD9qeuCdvlC68hWA4xjDE03vWd9aJebKtsxNOC8S5hWKH+qz/zAqg3W4KLhbeya4yoYksGgAwB9AioKkD0kjJLlLlDPwee4PLx2Yq1y3TfxphcqprKgzx9yDkQMVbHFoomNugwEG6KkVU57xgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ALItf1cmaYde5anKiXpaOkvR8+mXdj6IXy5l9T74CXY=;
-        b=Fn3Ru8rk2m6UM8OQLbL67IIZ8/ISkk5RdEHaoDTmx+kgG1d3LaSWDLlgU5hpIz1l7O
-         J7wJiWswQe2eiNiH9NK+KlcuyYwX5V/xk9AHURcL6gvv2KVTbN0ZXmOqjFP+Ymae+m6A
-         XsyBw4215bt3cTNo+f3XJ9PD+lGYKgdRNXJuv4eDuVCSb1Kd3aWbB/DRxrG1zuO6qOK6
-         bmbXgCSMop4xAHAEGWRHJpJPJUIw19GqTB9pqV/e0IkSqhlP2Oz0sYn9UK88VS0LbwQK
-         NDpXPd0nK3sJsBc29nP85v40SbCnUAjXVZumbtGJ7Ffb2doMS7kbn7u00qZ8C4AP5K39
-         rWYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ALItf1cmaYde5anKiXpaOkvR8+mXdj6IXy5l9T74CXY=;
-        b=spaGPPUZuI7W+qA4uLbJoTqHKY0umH1c8Yuk1vnTPDVMsZdTbNsPHEE38QYS6yxwcR
-         spbIYRFDZ8ncS8w2pRCLrbEU7KVWmgxsnKC4//1kFq4Eb8i4uWyTYlFOCFgiAnSILeyK
-         fMzGY8yEYtjduIa1oCIRokEjWXu2nYZEG2PJDgTrT2pzpP2EEvO61g+a4wnYhnHGM7os
-         FQPY0ZV0ThbqozwOoClNU3zcqnqIq1lcjwpzP7Svunp918Q5OYO/JrmPTWFcPQCqdJFk
-         0drr7JKiran2XEsxL4cifU/zrSLuobXDHmPxdCztnNGCOMGHUqbh5eFbrg20foIHFjfB
-         X5KQ==
-X-Gm-Message-State: AOAM530CuWZOdi3OmDVFu6eAnzQhQA/mk8354w7dZyHl7WMxbHIU+TZ+
-        oaeH05vcv0OFAcLNVPjrl3f6iA==
-X-Google-Smtp-Source: ABdhPJxMLUiSjR9mcVV1iK9+hG/lKSlGmCHqWar1s22AM6LNq/uC41pK9n3kfEId/9Rjt1hG8v3Asg==
-X-Received: by 2002:a17:902:ba96:b0:14c:8407:8e4b with SMTP id k22-20020a170902ba9600b0014c84078e4bmr12646881pls.135.1645307754101;
-        Sat, 19 Feb 2022 13:55:54 -0800 (PST)
-Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:31ab:1e81:9550:f30a])
-        by smtp.gmail.com with ESMTPSA id i17sm13447337pgn.82.2022.02.19.13.55.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 13:55:53 -0800 (PST)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dave Gerlach <d-gerlach@ti.com>, devicetree@vger.kernel.org,
-        Drew Fustini <dfustini@baylibre.com>,
-        Keerthy <j-keerthy@ti.com>, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, s-anna@ti.com,
-        khilman@baylibre.com
-Cc:     Brad Griffis <bgriffis@ti.com>
-Subject: [PATCH 11/11] soc: ti: wkup_m3_ipc: Add debug option to halt m3 in suspend
-Date:   Sat, 19 Feb 2022 13:53:28 -0800
-Message-Id: <20220219215328.485660-12-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220219215328.485660-1-dfustini@baylibre.com>
-References: <20220219215328.485660-1-dfustini@baylibre.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LVUK/8FqhmEAul4PL6LNodGZl6czDngFZsJzuL+X93Q=;
+ b=m51IZYLAHQSkIC8NKInJFrYvL+lduOMkr+MsoU1EUKE3kly9iu0BSdZNLXrRuPACH3IcNSXxjMXdG4for//9ohLQSCNc/9cdJqkZHNJNk7QOOyzxhGetCFwNhELOLIG/UJleyciniaFS68bl4J7fbY3Vt/r5XPu08RsSzgAasoo=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by DM6PR10MB3371.namprd10.prod.outlook.com (2603:10b6:5:1ab::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.17; Sat, 19 Feb
+ 2022 21:54:01 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c9f0:b3fb:25a6:3593]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c9f0:b3fb:25a6:3593%5]) with mapi id 15.20.4995.026; Sat, 19 Feb 2022
+ 21:54:00 +0000
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, artur.paszkiewicz@intel.com,
+        jinpu.wang@cloud.ionos.com, chenxiang66@hisilicon.com, hch@lst.de,
+        Ajish.Koshy@microchip.com, yanaijie@huawei.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linuxarm@huawei.com,
+        liuqi115@huawei.com, Viswas.G@microchip.com
+Subject: Re: [PATCH v2 00/18] scsi: libsas and users: Factor out LLDD TMF code
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq15ypail31.fsf@ca-mkp.ca.oracle.com>
+References: <1645112566-115804-1-git-send-email-john.garry@huawei.com>
+        <5ecf520e-588c-d756-1cb8-2224535b550e@opensource.wdc.com>
+Date:   Sat, 19 Feb 2022 16:53:57 -0500
+In-Reply-To: <5ecf520e-588c-d756-1cb8-2224535b550e@opensource.wdc.com> (Damien
+        Le Moal's message of "Fri, 18 Feb 2022 13:18:49 +0900")
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0P220CA0008.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:a03:41b::17) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 32f849cd-e563-4b6e-b905-08d9f3f255d6
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3371:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB33716A7C76207FC8DC8AC6148E389@DM6PR10MB3371.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1RfhzabgkLZqvfhIrj2kgrwLvwsP3B+vMzXADQE9vbeMyfXn1g4qlBzHtY3XWZ0/bXPgucmdOCfNvtvM7sYWmAplBQpazSpAjlUsUXku9ZVriEdStSotydVtJe+cbPofmwAAQG4QBNdaRShYxCvLFEKfQIzYMlfECLxYP5KL0xWxD1z4G6mgobMCY5hRVY3G1z4X3UMrwN6c/5+tLaYjvcBRiL02+6UBgYfZq6aqkv90TpFqGVVjuoxAIc3ZdhupYZMajLXlI+j21F+CRPvmzd29hYbLHdsZSJ9atvzzzxOt5wK3TLnrJVYGdKDX+eMxwqliNMCI1Mlie5j0vI/+++vX9bqNGDKtsJ4012bKp0FcNxudKFIKAR+xaWAJkzK+ae8Qn16CVIjSRamCoSOthEFFXDr6Bx5JzAmqQm4DAxHxyN1yoLB1n0pSJzJjZ5JfK4VPBN7KQDuj8uTCMB3pfLAvgkPxbrGiVqAybWROz7+qxaUn8THTfFAD30myvzi/8J+7vYWYU9sI6Tw5M2ZsD/QW8PajS1QR8bQdSuwJqZe7700bR2SKEX7MAxzz1HHJy3cYtiLXmgsvgVwCzCtfAe4WcZejBxW5bWRfAttYsFWKRqEy9SB/L/2oQ4HPQZfE6wYiIB5PBWHG8zTxodwRW8ARBBIdVvPKDroaZCcobwI4DnGWlOAltUKselxzkCDRkcg5TnVj0anZ5phsZJve4g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6916009)(83380400001)(316002)(2906002)(86362001)(508600001)(4744005)(186003)(26005)(6506007)(7416002)(38100700002)(38350700002)(5660300002)(66556008)(66476007)(8676002)(66946007)(4326008)(8936002)(6486002)(36916002)(6512007)(6666004)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5lKf2aXEvg/mjHaZydk75SR9HiM+0Om8a4sVQCMCWxr5kesePWPCsVVt101E?=
+ =?us-ascii?Q?KqIs5KB5PA3DAdTUZ4gLQ8rUe81LgxnAAN5K9qfICsSD8JEvdGLsgl39s8lV?=
+ =?us-ascii?Q?jxcCHcfbl0/1rQx9WkoggZw+Hf23iA07ZhkIc0ZVYJhllbiII1u7frcRMLYd?=
+ =?us-ascii?Q?0ElZIGrM0JT48M152YJhLIVBstE3HP2I0Ou3/bloQgLA+N8pU4m2qCevPw/W?=
+ =?us-ascii?Q?4T/VlKT6AVEeOMIy7l6HTI35YbTZOb/CAztih+CRhvduK55X9kWAVKbXHG+y?=
+ =?us-ascii?Q?lQTfsvdLYRaTPGIQLlRygJkiQCudYb0B1bITbWJoFX1qioh0V7j21b/nhsrH?=
+ =?us-ascii?Q?ftHa8TyG6UhFN0/3jXiA0QtVZsUZ241C3K6eNUqbhwKz2LFsseogFHu/44HJ?=
+ =?us-ascii?Q?0HMoPF27bST+zMLO1ZKNh8PT0wydMCcI4KS0zIAIqhhIJupse+ygh3kL2YG2?=
+ =?us-ascii?Q?nqV+KPkDIGLfD9w7ftjh9gIYokTZgdf5hckeOdDyKTvXcd+lQUc0ZAjnkCZT?=
+ =?us-ascii?Q?fj/in9hIE3U432NXmRvLoQ/ncJ1c6+S+B1IbGBDe550fNra5EJ+cLspu/tnN?=
+ =?us-ascii?Q?z2I6kAL59XrM18BDQPzXsBi/owVrTj5MQGNPQ7NSg3Xe9iLcbLT7C5TOp6GT?=
+ =?us-ascii?Q?31zfXBgPjj+d08ZyGdQmr7cxWDp3Z5F0CSHVH2eOdTKWTpYqPr8gVXv9BSFb?=
+ =?us-ascii?Q?txtF5Kub3XsHbz+5+GK67HWQasodTgNj9icEJAsEX0OX8bHOLnloLrccQXbN?=
+ =?us-ascii?Q?ZgtySX9DI+sYsf6+k03MZy5IqBcxm/rbTy5g27gIDZ9CD5FyA2LQQOJHElKW?=
+ =?us-ascii?Q?PNQYcrAc6c0p2BvyViVClyArRclOqYG3MW6/b28aWIZeUDUbrgdimblE/ccS?=
+ =?us-ascii?Q?Wwi4OuCGQhA90i3ho0DMh70qnho0IxDgO0zlaaRuU9kobwNx/tIHog9GWDrp?=
+ =?us-ascii?Q?lAR6K72qjCxqd0S6BZcGfLVDsTJDFuS2leVrzQ3MoXIgRiSVSOQCafk6Kbga?=
+ =?us-ascii?Q?DTVQtrWrTx3RnFIJbQRpO1u//CR5FNnrvh40Yrie7QF02bH9/bAFpM/d2C+x?=
+ =?us-ascii?Q?/OftZNRbpDe9TzvL2uLW/nuuqDOm3tQkx7GEYSu104pI0oDmgnk7+mrHV7h7?=
+ =?us-ascii?Q?tn6dPtcm7NOOpDzS9pAOqEOIbqFcCWM6GQYwAa6u7mIDMgDIga6xIeuZBIEM?=
+ =?us-ascii?Q?mUZm2tcrtbOxMeU2ZlLVF3Mvwq8UFRGZiIkMAUwjjLU+QT5jfKyg4Lh6sChG?=
+ =?us-ascii?Q?+dwFq5l0mSjptczMxMvfaJ5u7EiRNF8jQnvdA5szmAaTGvW/JPkeIGnYAmi5?=
+ =?us-ascii?Q?EWqs38fwUVgx1hkii/o9dzixXEMqLBpxix98dwK/poYIwSSmzEP5j9Kyq9Hp?=
+ =?us-ascii?Q?rWZcpWHGAzoVvLOeg5BG+OlmHESc7/fgsi5bXLhaCxpPzkYQjxbn/4161WPG?=
+ =?us-ascii?Q?x64dOGSM5HPEu8d3bS9jrGGsKiKFO2ntJy3YnA6Wdki8o9KK9V01MbprQJXm?=
+ =?us-ascii?Q?wTunNSzjw0f/wOCjP7wry35bOqv8BKpbBfD1EM9z7Lccaf7Y30a6vxDLn/cc?=
+ =?us-ascii?Q?gWv5fGOzWPX6WlXkRZCp8e7mVQSZHeDZzErU153cAHjhRU0sZ/nDCckdbL5E?=
+ =?us-ascii?Q?IHfgsJcx3FLyoCXEkHYf0XDAaW35oAHg5iAgwvbLmfUbpP/4Zy90iUKrBXIB?=
+ =?us-ascii?Q?JiQWMQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32f849cd-e563-4b6e-b905-08d9f3f255d6
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2022 21:54:00.1780
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CCZ420T6H5FLZsunzUfEWmY/+IUqQaDrXkojAhal5OnHG1LrogZ90jpiDYGhgyEDd1SZb/diX2mB3mybzOvK8+froeF3zV4ClCg0pPjn8rY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3371
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10263 signatures=677614
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202190140
+X-Proofpoint-GUID: YBL5NAHZruCVlR-3xVvLfOJoNa1nRg9T
+X-Proofpoint-ORIG-GUID: YBL5NAHZruCVlR-3xVvLfOJoNa1nRg9T
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Gerlach <d-gerlach@ti.com>
 
-Add a debugfs option to allow configurable halting of the wkup_m3
-during suspend at the last possible point before low power mode entry.
-This condition can only be resolved through JTAG and advancing beyond
-the while loop in a8_lp_ds0_handler. Although this hangs the system it
-forces the system to remain active once it has been entirely configured
-for low power mode entry, allowing for register inspection through JTAG
-to help in debugging transition errors.
+Damien,
 
-Halt mode can be set using the enable_off_mode entry under wkup_m3_ipc
-in the debugfs.
+> This series and my pm8001 series have a conflict. When applying the
+> pm8001 patches on top of these libsas changes, patch 28 has a fairly
+> easy to resolve conflict. Let me know if you want me to send a v6
+> rebased on top of this.
 
-Suggested-by: Brad Griffis <bgriffis@ti.com>
-Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-[dfustini: resolve trivial line conflicts]
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
- drivers/soc/ti/wkup_m3_ipc.c | 78 +++++++++++++++++++++++++++++++++++-
- include/linux/wkup_m3_ipc.h  |  2 +
- 2 files changed, 79 insertions(+), 1 deletion(-)
+"fairly easy to resolve", huh? Sure, if you manually rework the entire
+patch.
 
-diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-index 5a1722c3bf1a..244bce3f52e8 100644
---- a/drivers/soc/ti/wkup_m3_ipc.c
-+++ b/drivers/soc/ti/wkup_m3_ipc.c
-@@ -7,6 +7,7 @@
-  * Dave Gerlach <d-gerlach@ti.com>
-  */
- 
-+#include <linux/debugfs.h>
- #include <linux/err.h>
- #include <linux/firmware.h>
- #include <linux/kernel.h>
-@@ -50,6 +51,9 @@
- #define IPC_IO_ISOLATION_STAT_SHIFT	(10)
- #define IPC_IO_ISOLATION_STAT_MASK	(0x1 << 10)
- 
-+#define IPC_DBG_HALT_SHIFT		(11)
-+#define IPC_DBG_HALT_MASK		(0x1 << 11)
-+
- #define M3_STATE_UNKNOWN		0
- #define M3_STATE_RESET			1
- #define M3_STATE_INITED			2
-@@ -137,6 +141,73 @@ static void wkup_m3_scale_data_fw_cb(const struct firmware *fw, void *context)
- 	release_firmware(fw);
- };
- 
-+#ifdef CONFIG_DEBUG_FS
-+static void wkup_m3_set_halt_late(bool enabled)
-+{
-+	if (enabled)
-+		m3_ipc_state->halt = (1 << IPC_DBG_HALT_SHIFT);
-+	else
-+		m3_ipc_state->halt = 0;
-+}
-+
-+static int option_get(void *data, u64 *val)
-+{
-+	u32 *option = data;
-+
-+	*val = *option;
-+
-+	return 0;
-+}
-+
-+static int option_set(void *data, u64 val)
-+{
-+	u32 *option = data;
-+
-+	*option = val;
-+
-+	if (option == &m3_ipc_state->halt) {
-+		if (val)
-+			wkup_m3_set_halt_late(true);
-+		else
-+			wkup_m3_set_halt_late(false);
-+	}
-+
-+	return 0;
-+}
-+
-+DEFINE_SIMPLE_ATTRIBUTE(wkup_m3_ipc_option_fops, option_get, option_set,
-+			"%llu\n");
-+
-+static int wkup_m3_ipc_dbg_init(struct wkup_m3_ipc *m3_ipc)
-+{
-+	m3_ipc->dbg_path = debugfs_create_dir("wkup_m3_ipc", NULL);
-+
-+	if (!m3_ipc->dbg_path)
-+		return -EINVAL;
-+
-+	(void)debugfs_create_file("enable_late_halt", 0644,
-+				  m3_ipc->dbg_path,
-+				  &m3_ipc->halt,
-+				  &wkup_m3_ipc_option_fops);
-+
-+	return 0;
-+}
-+
-+static inline void wkup_m3_ipc_dbg_destroy(struct wkup_m3_ipc *m3_ipc)
-+{
-+	debugfs_remove_recursive(m3_ipc->dbg_path);
-+}
-+#else
-+static inline int wkup_m3_ipc_dbg_init(struct wkup_m3_ipc *m3_ipc)
-+{
-+	return 0;
-+}
-+
-+static inline void wkup_m3_ipc_dbg_destroy(struct wkup_m3_ipc *m3_ipc)
-+{
-+}
-+#endif /* CONFIG_DEBUG_FS */
-+
- static int wkup_m3_init_scale_data(struct wkup_m3_ipc *m3_ipc,
- 				   struct device *dev)
- {
-@@ -402,7 +473,8 @@ static int wkup_m3_prepare_low_power(struct wkup_m3_ipc *m3_ipc, int state)
- 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_power_state, 1);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type |
- 			       m3_ipc->vtt_conf |
--			       m3_ipc->isolation_conf, 4);
-+			       m3_ipc->isolation_conf |
-+			       m3_ipc->halt, 4);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 2);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 3);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 6);
-@@ -634,6 +706,8 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
- 		goto err_put_rproc;
- 	}
- 
-+	wkup_m3_ipc_dbg_init(m3_ipc);
-+
- 	return 0;
- 
- err_put_rproc:
-@@ -645,6 +719,8 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
- 
- static int wkup_m3_ipc_remove(struct platform_device *pdev)
- {
-+	wkup_m3_ipc_dbg_destroy(m3_ipc_state);
-+
- 	mbox_free_channel(m3_ipc_state->mbox);
- 
- 	rproc_shutdown(m3_ipc_state->rproc);
-diff --git a/include/linux/wkup_m3_ipc.h b/include/linux/wkup_m3_ipc.h
-index fef0fac60f8c..26d1eb058fa3 100644
---- a/include/linux/wkup_m3_ipc.h
-+++ b/include/linux/wkup_m3_ipc.h
-@@ -36,6 +36,7 @@ struct wkup_m3_ipc {
- 	int vtt_conf;
- 	int isolation_conf;
- 	int state;
-+	u32 halt;
- 
- 	unsigned long volt_scale_offsets;
- 	const char *sd_fw_name;
-@@ -46,6 +47,7 @@ struct wkup_m3_ipc {
- 
- 	struct wkup_m3_ipc_ops *ops;
- 	int is_rtc_only;
-+	struct dentry *dbg_path;
- };
- 
- struct wkup_m3_wakeup_src {
+Please send me an updated version of #28. The rest of the series is
+fine...
+
+Thanks!
+
 -- 
-2.32.0
-
+Martin K. Petersen	Oracle Linux Engineering

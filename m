@@ -2,73 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771DD4BC6FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 09:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B714BC6F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 09:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241658AbiBSIc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 03:32:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58698 "EHLO
+        id S241743AbiBSIc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 03:32:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239001AbiBSIc1 (ORCPT
+        with ESMTP id S239001AbiBSIc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 03:32:27 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE4966F9A
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 00:32:07 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id n20-20020a6bed14000000b0060faa0aefd3so5998618iog.20
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 00:32:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=igoAkr62uwBqt6MdzVON7HsNoLqGN8q1W1weZlEhX9A=;
-        b=mxOYrNzFsuiLSed5nbI2RoX9dZF2tQlHtMDlZWZBOOvjCyhymsB1sEa1ROAryy+uJo
-         LAIPTqD1Sd4oDIK3DMIXVsWmBnscdRbVFbMABU+5ylUWW80dfe8ZAraXjQ5z+A8a4/MH
-         6hJsX9pRfDuTZQH29LsOm7LypqytLYquDznWgZN2nz2w+3I57+g4UNjERhfeUQsKcA3X
-         qQcgy40p5O6nTjWdc085VZHWUOq0iw9JUVNZH/cg45NsmxHYeSebZBvrqaQqHgNkap63
-         eU9pqHTChYSt8MpP69a7oUFGn86PqlY9JYOtQqpnjkB7VOUSjnNoVi0nQ8HjoyPOPwnJ
-         CQaQ==
-X-Gm-Message-State: AOAM532KYeZ/Gb/eMkE0+pzpywqm4jk6Kg3GFuJVqILstfK3K1iw2j4L
-        JiFVW+CEeVI5kHMa43hzLWbkRjWBkwKkCEUoLo8M511UOMik
-X-Google-Smtp-Source: ABdhPJz0eiTh8/Kq1/brq+WpX7IwYm+Ys3u2m+LYdHtUPupV0Y45g17HdUKtGcVyGIc1mVNIfWK4MbxwvFfxmwk80Odum08VUY2H
+        Sat, 19 Feb 2022 03:32:58 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C1766F9A;
+        Sat, 19 Feb 2022 00:32:39 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21J8WUgM057790;
+        Sat, 19 Feb 2022 02:32:30 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645259550;
+        bh=6rcQBzyUPydjIamqI3RLR9Nf5jVDcMv1yS+W72Ii/FM=;
+        h=From:To:CC:Subject:Date;
+        b=CeMm+gb1MEZMnCzvs2yjRGurtJaNDmWQaCkZE0vIhjjhUsERYzVpRCzziQUxeJtNF
+         plwNb7yZLz20tobk4AedLvfnSxkmpIzTGCXFrt1RtDt7XQteCJk1cW3N9tvmLa0EIk
+         67h7W1/n3xfgA9ye/G9c1vEFZ/UIi7rAqQxVOsJ4=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21J8WU0h001563
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 19 Feb 2022 02:32:30 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 19
+ Feb 2022 02:32:30 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Sat, 19 Feb 2022 02:32:30 -0600
+Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21J8WRX6017343;
+        Sat, 19 Feb 2022 02:32:28 -0600
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH 0/2] dmaengine: ti: k3-udma: Add support for AM62x SoC
+Date:   Sat, 19 Feb 2022 14:02:18 +0530
+Message-ID: <20220219083220.489420-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:51c5:0:b0:314:4f44:7159 with SMTP id
- s188-20020a0251c5000000b003144f447159mr7491372jaa.29.1645259526928; Sat, 19
- Feb 2022 00:32:06 -0800 (PST)
-Date:   Sat, 19 Feb 2022 00:32:06 -0800
-In-Reply-To: <20220219081631.592-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aa811605d85ad5c4@google.com>
-Subject: Re: [syzbot] INFO: task hung in vhost_work_dev_flush
-From:   syzbot <syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, jasowang@redhat.com,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add AM62x SoC specific data for k3-udma driver
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+TRM: https://www.ti.com/lit/pdf/spruiv7
 
-Reported-and-tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+Vignesh Raghavendra (2):
+  dmaengine: ti: k3-udma: Add AM62x DMSS support
+  dmaengine: ti: k3-psil: Add AM62x PSIL and PDMA data
 
-Tested on:
+ drivers/dma/ti/Makefile       |   3 +-
+ drivers/dma/ti/k3-psil-am62.c | 186 ++++++++++++++++++++++++++++++++++
+ drivers/dma/ti/k3-psil-priv.h |   1 +
+ drivers/dma/ti/k3-psil.c      |   1 +
+ drivers/dma/ti/k3-udma.c      |   1 +
+ 5 files changed, 191 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/dma/ti/k3-psil-am62.c
 
-commit:         e6251ab4 Merge tag 'nfs-for-5.17-2' of git://git.linux..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-dashboard link: https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16139f0e700000
+-- 
+2.35.1
 
-Note: testing is done by a robot and is best-effort only.

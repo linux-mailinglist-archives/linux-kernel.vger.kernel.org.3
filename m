@@ -2,63 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111EF4BC9B5
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 19:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C42054BC9AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 18:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242766AbiBSSJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 13:09:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40864 "EHLO
+        id S242749AbiBSR7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 12:59:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242760AbiBSSJk (ORCPT
+        with ESMTP id S235751AbiBSR67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 13:09:40 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C2312AA6;
-        Sat, 19 Feb 2022 10:09:18 -0800 (PST)
-Date:   Sat, 19 Feb 2022 18:09:13 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645294155;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KT2fuDd/2PirIuy3AtxiVnUjnCo2bXQnL7fxmMZK7E0=;
-        b=4wZDboyuA4Ndb5TrYKYo1T38Fh+GANBotzIzyfjsSK49uu3Dj+1G0x16m1brwNZ1dwftNB
-        1Km6doczk1EFhhOiMqOvDizxBcszr9BgCT9yQCSmN0dZ4aK4ZIMXKL8EV8DCxck0KOv4qA
-        ntRYdXS4U9q3RTp6kaP8+HOtaX+0xBBMVrBa1lq1RbS8mVvF+7bU7N/hUHa/rEWmNdDz2e
-        Rbylriz2Yi3xsYsS2784VBP59yW9mzpcU6yeGqYRe8hmeod08ilui2SvaYbiD3J+hHifDb
-        7G9NLub4kaRmWeMnW538Aa2hUiaP2p1qsZa8bIGeosCnc3O8m1Rk3YewMRmrzg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645294155;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KT2fuDd/2PirIuy3AtxiVnUjnCo2bXQnL7fxmMZK7E0=;
-        b=h4+WaCIuALhrMLcIaQ2CONyORPxdJ5HOEsmrb4N9TihJ9t9sIGjfVnNyXZ/6ydQcCu02H0
-        TOAs29WW5+yPzRCQ==
-From:   "tip-bot2 for Jue Wang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/mce: Work around an erratum on fast string copy
- instructions
-Cc:     Jue Wang <juew@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220218013209.2436006-1-juew@google.com>
-References: <20220218013209.2436006-1-juew@google.com>
-MIME-Version: 1.0
-Message-ID: <164529415398.16921.8042682039148828519.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+        Sat, 19 Feb 2022 12:58:59 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BC5F8E0
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 09:58:39 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220219175838epoutp017bbb423593392884eb95bebe56e537a2~VQbzL1BrM1395513955epoutp014
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 17:58:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220219175838epoutp017bbb423593392884eb95bebe56e537a2~VQbzL1BrM1395513955epoutp014
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1645293518;
+        bh=nKq37BTRxnF03xFJIUPe/WlXxpClF9Q74HD9ufgg0os=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=ecmAC4N2MO59Y6/B6WLY6PzQZB/P69ZemTnMYVRrrlFgaA59411I75LHXKxODuK3p
+         +CJ6Brdehp/GpIDIWUWY6VqzIeYZ4uiM1OOXqSvMuqyEHBm6chEoT5fMj4o9xj2TEv
+         6+wqnlu5ySkHGP7P/x7Izt5nicd+9U3X/OK557/Q=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220219175836epcas5p24eb86f410d5ad077d8b5a3e8794fa15f~VQbyOuqQ31199511995epcas5p2K;
+        Sat, 19 Feb 2022 17:58:36 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4K1GWt1b9qz4x9Pt; Sat, 19 Feb
+        2022 17:58:34 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        78.5A.06423.ACF21126; Sun, 20 Feb 2022 02:58:34 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220219175832epcas5p399b652e6da610ada233376651694b42c~VQbuXSUAY2260922609epcas5p3W;
+        Sat, 19 Feb 2022 17:58:32 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220219175832epsmtrp17e62247e5c927b264d7b9a67830d481d~VQbuTNXzR0051400514epsmtrp1K;
+        Sat, 19 Feb 2022 17:58:32 +0000 (GMT)
+X-AuditID: b6c32a49-b13ff70000001917-6b-62112fca7380
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F7.5A.08738.8CF21126; Sun, 20 Feb 2022 02:58:32 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220219175831epsmtip274243b7cab6651563f7fed2052505bb6~VQbs93vgE1832918329epsmtip2a;
+        Sat, 19 Feb 2022 17:58:31 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     krzysztof.kozlowski@canonical.com,
+        linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, pankaj.dubey@samsung.com,
+        m.szyprowski@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH] clocksource/drivers/exynos_mct: Remove mct interrupt index
+ enum
+Date:   Sat, 19 Feb 2022 23:40:03 +0530
+Message-Id: <20220219181003.12739-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMKsWRmVeSWpSXmKPExsWy7bCmpu4pfcEkgzl3WCwezNvGZjHvs6zF
+        xrc/mCw2Pb7GanF51xw2ixnn9zFZrD1yl91i0dYv7BabN01lduD0mNXQy+Zx59oeNo93586x
+        e2xeUu/Rt2UVo8fnTXIBbFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJ
+        uam2Si4+AbpumTlANykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL
+        89L18lJLrAwNDIxMgQoTsjPanv1iLTjCVzF5SV4D4wvuLkZODgkBE4mPrycydzFycQgJ7GaU
+        OLfgJiOE84lRYtb06awQzmdGick979hgWtYePgbVsotRYtfRpywQTguTxPFNV5hAqtgEtCXu
+        Tt8CZosIuEncaOxgAiliFrjGKPFn4iFGkISwQJDEsc/dzCA2i4CqxLK2JywgNq+AjcSz2wdY
+        IdbJS6zecABsnYTAPnaJpkunoBIuEo++n2GCsIUlXh3fwg5hS0m87G8DsjmA7GyJnl3GEOEa
+        iaXzjrFA2PYSB67MYQEpYRbQlFi/Sx8kzCzAJ9H7+wkTRCevREebEES1qkTzu6tQndISE7u7
+        oQ7wkLi74QY4UIQEYiXOt3SyTWCUmYUwdAEj4ypGydSC4tz01GLTAsO81HJ43CTn525iBKcu
+        Lc8djHcffNA7xMjEwXiIUYKDWUmE98NB3iQh3pTEyqrUovz4otKc1OJDjKbAUJrILCWanA9M
+        nnkl8YYmlgYmZmZmJpbGZoZK4ryn0zckCgmkJ5akZqemFqQWwfQxcXBKNTCtldZ0TO16XKrh
+        /KxEiUkxfOUsp4S4uRLbl9utPcI177ZOcCufBMOh7qo7DJZ3TLnv6RsGHdpaP+tRQ2+WvAWb
+        zv4l38L97GKuX3INmyV+ZbfoHelZLO+la7mPzb/3MrV7i6cc95TD7OYrq25qxiimLZnIc0CR
+        85pOQfHWy0IGYgsesbrwWMhIPJv2N2iH99+w7cpRN44wGtgEOvAbRRp/da/P2SHoOTv+7ILX
+        O5d5Vs+T37bsl9UUwzNX0+rsVkW1nG1srtg275zwno+c/o03q9bfbs5ffSd84ZoKyxLfyOoA
+        dce/elwavJYMGyYve7SWXa3O+onU05jglKPBKVd/ameYrPeO7jX9/mzxPyWW4oxEQy3mouJE
+        AODbRwfmAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphluLIzCtJLcpLzFFi42LZdlhJXveEvmCSwbTHahYP5m1js5j3WdZi
+        49sfTBabHl9jtbi8aw6bxYzz+5gs1h65y26xaOsXdovNm6YyO3B6zGroZfO4c20Pm8e7c+fY
+        PTYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujLZnv1gLjvBVTF6S18D4gruLkZNDQsBE
+        Yu3hY8xdjFwcQgI7GCXWbOtkg0hIS1zfOIEdwhaWWPnvOTtEUROTRHP7EyaQBJuAtsTd6VvA
+        bBEBD4m2f/fAJjEL3GOU+N0yjREkISwQIHHozxawSSwCqhLL2p6wgNi8AjYSz24fYIXYIC+x
+        esMB5gmMPAsYGVYxSqYWFOem5xYbFhjlpZbrFSfmFpfmpesl5+duYgQHmJbWDsY9qz7oHWJk
+        4mA8xCjBwawkwvvhIG+SEG9KYmVValF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KL
+        YLJMHJxSDUyHTsR6Hu3Ytnre1UvvslWjHE7tqzhzMOVpvth9vXMSqt+TLe4slYvlm2dc6Fl6
+        +Ed4sa6rzf6Ti5/N0n2g+DTPtewKw+11sldF8k+08+8qNE9Y/SvgwYbJTyeULb/5X4Et6k5t
+        gdSPxT85OA3dFv/UrgplP7DQ7c45xdf62VpJBRnzH5obq6Q88jpRxvc7XYP7m1fHowPsrfZs
+        mvO9+CPCnnXF+/PI7dDMiGTbN7OSebvbrFVWmpdNdc9OXZDDHtUd19fMreXC/Yn/2s7FMVf8
+        V/jNy9izvlX/wNfSwilp7dPf2bDZn2Ivd3twPIpl+5Wo38mV/v5cXxrb3U5Kz8yM3s+6UL1q
+        9bz1+7nZY5VYijMSDbWYi4oTAe5LUZOfAgAA
+X-CMS-MailID: 20220219175832epcas5p399b652e6da610ada233376651694b42c
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220219175832epcas5p399b652e6da610ada233376651694b42c
+References: <CGME20220219175832epcas5p399b652e6da610ada233376651694b42c@epcas5p3.samsung.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,190 +113,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the ras/core branch of tip:
+MCT driver define an enum which list global and local timer's
+irq index. Most of them are not used but MCT_G0_IRQ and
+MCT_L0_IRQ and these two are at a fixed offset/index.
+Get rid of this enum and use a #define for the used irq index.
 
-Commit-ID:     8ca97812c3c830573f965a07bbd84223e8c5f5bd
-Gitweb:        https://git.kernel.org/tip/8ca97812c3c830573f965a07bbd84223e8c5f5bd
-Author:        Jue Wang <juew@google.com>
-AuthorDate:    Thu, 17 Feb 2022 17:32:09 -08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Sat, 19 Feb 2022 14:26:42 +01:00
+While at it, bump-up maximum number of MCT IRQ to match the
+binding documentation. And also change the name variable to be
+more generic.
 
-x86/mce: Work around an erratum on fast string copy instructions
+No functional changes expected.
 
-A rare kernel panic scenario can happen when the following conditions
-are met due to an erratum on fast string copy instructions:
-
-1) An uncorrected error.
-2) That error must be in first cache line of a page.
-3) Kernel must execute page_copy from the page immediately before that
-page.
-
-The fast string copy instructions ("REP; MOVS*") could consume an
-uncorrectable memory error in the cache line _right after_ the desired
-region to copy and raise an MCE.
-
-Bit 0 of MSR_IA32_MISC_ENABLE can be cleared to disable fast string
-copy and will avoid such spurious machine checks. However, that is less
-preferable due to the permanent performance impact. Considering memory
-poison is rare, it's desirable to keep fast string copy enabled until an
-MCE is seen.
-
-Intel has confirmed the following:
-1. The CPU erratum of fast string copy only applies to Skylake,
-Cascade Lake and Cooper Lake generations.
-
-Directly return from the MCE handler:
-2. Will result in complete execution of the "REP; MOVS*" with no data
-loss or corruption.
-3. Will not result in another MCE firing on the next poisoned cache line
-due to "REP; MOVS*".
-4. Will resume execution from a correct point in code.
-5. Will result in the same instruction that triggered the MCE firing a
-second MCE immediately for any other software recoverable data fetch
-errors.
-6. Is not safe without disabling the fast string copy, as the next fast
-string copy of the same buffer on the same CPU would result in a PANIC
-MCE.
-
-This should mitigate the erratum completely with the only caveat that
-the fast string copy is disabled on the affected hyper thread thus
-performance degradation.
-
-This is still better than the OS crashing on MCEs raised on an
-irrelevant process due to "REP; MOVS*' accesses in a kernel context,
-e.g., copy_page.
-
-Tested:
-
-Injected errors on 1st cache line of 8 anonymous pages of process
-'proc1' and observed MCE consumption from 'proc2' with no panic
-(directly returned).
-
-Without the fix, the host panicked within a few minutes on a
-random 'proc2' process due to kernel access from copy_page.
-
-  [ bp: Fix comment style + touch ups, zap an unlikely(), improve the
-    quirk function's readability. ]
-
-Signed-off-by: Jue Wang <juew@google.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/r/20220218013209.2436006-1-juew@google.com
+Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 ---
- arch/x86/kernel/cpu/mce/core.c     | 64 +++++++++++++++++++++++++++++-
- arch/x86/kernel/cpu/mce/internal.h |  5 +-
- 2 files changed, 68 insertions(+), 1 deletion(-)
+ drivers/clocksource/exynos_mct.c | 25 ++++++++-----------------
+ 1 file changed, 8 insertions(+), 17 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 0e71474..3d766e6 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -815,6 +815,59 @@ quirk_sandybridge_ifu(int bank, struct mce *m, struct pt_regs *regs)
- }
+- currently tested on exynos7 platform, appreciate testing on
+ exynos-{3,4,5} platforms
+
+diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
+index 6db3d5511b0f..4aea9cd3f7ba 100644
+--- a/drivers/clocksource/exynos_mct.c
++++ b/drivers/clocksource/exynos_mct.c
+@@ -60,27 +60,18 @@
+ #define MCT_CLKEVENTS_RATING		350
+ #endif
  
- /*
-+ * Disable fast string copy and return from the MCE handler upon the first SRAR
-+ * MCE on bank 1 due to a CPU erratum on Intel Skylake/Cascade Lake/Cooper Lake
-+ * CPUs.
-+ * The fast string copy instructions ("REP; MOVS*") could consume an
-+ * uncorrectable memory error in the cache line _right after_ the desired region
-+ * to copy and raise an MCE with RIP pointing to the instruction _after_ the
-+ * "REP; MOVS*".
-+ * This mitigation addresses the issue completely with the caveat of performance
-+ * degradation on the CPU affected. This is still better than the OS crashing on
-+ * MCEs raised on an irrelevant process due to "REP; MOVS*" accesses from a
-+ * kernel context (e.g., copy_page).
-+ *
-+ * Returns true when fast string copy on CPU has been disabled.
-+ */
-+static noinstr bool quirk_skylake_repmov(void)
-+{
-+	u64 mcgstatus   = mce_rdmsrl(MSR_IA32_MCG_STATUS);
-+	u64 misc_enable = mce_rdmsrl(MSR_IA32_MISC_ENABLE);
-+	u64 mc1_status;
++/* There are four Global timers starting with 0 offset */
++#define MCT_G0_IRQ	0
++/* Local timers count starts after global timer count */
++#define MCT_L0_IRQ	4
++/* Max number of MCT IRQ as per binding document */
++#define MCT_NR_IRQS	20
 +
-+	/*
-+	 * Apply the quirk only to local machine checks, i.e., no broadcast
-+	 * sync is needed.
-+	 */
-+	if (!(mcgstatus & MCG_STATUS_LMCES) ||
-+	    !(misc_enable & MSR_IA32_MISC_ENABLE_FAST_STRING))
-+		return false;
-+
-+	mc1_status = mce_rdmsrl(MSR_IA32_MCx_STATUS(1));
-+
-+	/* Check for a software-recoverable data fetch error. */
-+	if ((mc1_status &
-+	     (MCI_STATUS_VAL | MCI_STATUS_OVER | MCI_STATUS_UC | MCI_STATUS_EN |
-+	      MCI_STATUS_ADDRV | MCI_STATUS_MISCV | MCI_STATUS_PCC |
-+	      MCI_STATUS_AR | MCI_STATUS_S)) ==
-+	     (MCI_STATUS_VAL |                   MCI_STATUS_UC | MCI_STATUS_EN |
-+	      MCI_STATUS_ADDRV | MCI_STATUS_MISCV |
-+	      MCI_STATUS_AR | MCI_STATUS_S)) {
-+		misc_enable &= ~MSR_IA32_MISC_ENABLE_FAST_STRING;
-+		mce_wrmsrl(MSR_IA32_MISC_ENABLE, misc_enable);
-+		mce_wrmsrl(MSR_IA32_MCx_STATUS(1), 0);
-+
-+		instrumentation_begin();
-+		pr_err_once("Erratum detected, disable fast string copy instructions.\n");
-+		instrumentation_end();
-+
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+/*
-  * Do a quick check if any of the events requires a panic.
-  * This decides if we keep the events around or clear them.
-  */
-@@ -1383,6 +1436,9 @@ noinstr void do_machine_check(struct pt_regs *regs)
- 	else if (unlikely(!mca_cfg.initialized))
- 		return unexpected_machine_check(regs);
- 
-+	if (mce_flags.skx_repmov_quirk && quirk_skylake_repmov())
-+		goto clear;
-+
- 	/*
- 	 * Establish sequential order between the CPUs entering the machine
- 	 * check handler.
-@@ -1525,6 +1581,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
- out:
- 	instrumentation_end();
- 
-+clear:
- 	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0);
- }
- EXPORT_SYMBOL_GPL(do_machine_check);
-@@ -1838,6 +1895,13 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
- 
- 		if (c->x86 == 6 && c->x86_model == 45)
- 			mce_flags.snb_ifu_quirk = 1;
-+
-+		/*
-+		 * Skylake, Cascacde Lake and Cooper Lake require a quirk on
-+		 * rep movs.
-+		 */
-+		if (c->x86 == 6 && c->x86_model == INTEL_FAM6_SKYLAKE_X)
-+			mce_flags.skx_repmov_quirk = 1;
- 	}
- 
- 	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index a04b61e..3efb503 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -170,7 +170,10 @@ struct mce_vendor_flags {
- 	/* SandyBridge IFU quirk */
- 	snb_ifu_quirk		: 1,
- 
--	__reserved_0		: 57;
-+	/* Skylake, Cascade Lake, Cooper Lake REP;MOVS* quirk */
-+	skx_repmov_quirk	: 1,
-+
-+	__reserved_0		: 56;
+ enum {
+ 	MCT_INT_SPI,
+ 	MCT_INT_PPI
  };
  
- extern struct mce_vendor_flags mce_flags;
+-enum {
+-	MCT_G0_IRQ,
+-	MCT_G1_IRQ,
+-	MCT_G2_IRQ,
+-	MCT_G3_IRQ,
+-	MCT_L0_IRQ,
+-	MCT_L1_IRQ,
+-	MCT_L2_IRQ,
+-	MCT_L3_IRQ,
+-	MCT_L4_IRQ,
+-	MCT_L5_IRQ,
+-	MCT_L6_IRQ,
+-	MCT_L7_IRQ,
+-	MCT_NR_IRQS,
+-};
+-
+ static void __iomem *reg_base;
+ static unsigned long clk_rate;
+ static unsigned int mct_int_type;
+@@ -89,7 +80,7 @@ static int mct_irqs[MCT_NR_IRQS];
+ struct mct_clock_event_device {
+ 	struct clock_event_device evt;
+ 	unsigned long base;
+-	char name[10];
++	char name[MCT_NR_IRQS - 1];
+ };
+ 
+ static void exynos4_mct_write(unsigned int value, unsigned long offset)
+-- 
+2.25.1
+

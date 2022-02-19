@@ -2,104 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6AF4BC344
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63824BC348
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240346AbiBSAXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:23:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40990 "EHLO
+        id S240352AbiBSAYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:24:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240336AbiBSAXN (ORCPT
+        with ESMTP id S237337AbiBSAYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:23:13 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9406E351
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:22:55 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id s16so9174039pgs.13
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:22:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PKozzWeotfW0H/XChUhKVfvoVAWx3v86SwCGH78y65k=;
-        b=YJr7T4GPIwDLm8MhhOOQayyse45vPIFv4uPo7XIm+miZ9JCsK1JdIoXK3rAPZLB5X4
-         A5CrKN2EGzd1cx5YPsdVhNoBP2nvJvTS/4QmYgq19BFsLKn3YLZYB9LJ8xgqA/uchgUP
-         ipCYRjqs/l0CY3IVqWzqCQtTcQeA0rNGszozpIa2Zx6netouSyuIUZq28gdMEIF9VStY
-         JKN6n7q0vweWxZEDIlaG78NXQVOwViN+B2oSQp+FSwOTjG11PB1XxaW1DqIS6HFxZ69S
-         qc5rB61GQSn1mjkgAWZJ8+Bx6Bjc+qVnwuCDcLglHfqIMXvEWaayvbu8KmVN9SES6FNm
-         H2KA==
+        Fri, 18 Feb 2022 19:24:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D34386E34B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:23:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645230223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K35v6i7AXpk/D6ZiQB0RgrNtWKES2M6VUlrWvgj1/Nw=;
+        b=JTUBTdMbbBUqyYSzj/qwzIO0Q22f4zvuFKnc1kgOhjHx+IzLpydMPgddXXe1PHPw4r8FgW
+        /gW/KMu4i/b++cG9usVDL9NsmB2R+WSJmfoACuDj9TRUpmCVg7CTPznDJrWk+zyoaBRe6S
+        GITX9AMbFzC1UWWg7xpgpJBtVL2G7GQ=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-422-OJ8hnxq-OhiRBvS5U4E8kA-1; Fri, 18 Feb 2022 19:23:42 -0500
+X-MC-Unique: OJ8hnxq-OhiRBvS5U4E8kA-1
+Received: by mail-qk1-f198.google.com with SMTP id 2-20020a370a02000000b0060df1ac78baso4815245qkk.20
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:23:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=PKozzWeotfW0H/XChUhKVfvoVAWx3v86SwCGH78y65k=;
-        b=WldBGFZZB4SuR9jzgnXtd30/vs7HgwKxHAdZBXfVYEu/gJW6DEvqejvNWrf186tPVP
-         iUv7t1QptGGj5jMHsNOM6Q0AJHBiyyusVXZdy3szb8wxvmJXRfEyrzT5uoGFfqK/XFN2
-         EYVt01R7JPKjV7wkeM7N34UCFTebrw7H/fYfBurW/SZqcz9ONnBw+aatgGmpZ+X66DoO
-         xFDfTTivM4B4Rmu0jVZVw+un734nM9boQ7jany9Dlj3uC4flr10Lp99w4s0n2EOE7mKv
-         PkMG9IFLKqbjl+Ty+EewnxwfS6Nlug8eZ2e9wwrvJ3ZZKHjy33/7vvOp5fthTlsgt/27
-         r9xA==
-X-Gm-Message-State: AOAM530hHuD6MJ9kkuEq9wtMteF8oZJrYGtfyNJlOsJkrk136naRDmh8
-        nTpAXU0R+JP4zXj5ejG4LnuOsg==
-X-Google-Smtp-Source: ABdhPJyam7kTYq5rTQAMSu2ALEE50Ee8PLPQAi1b3BzbfQybJRbIYqYjX74rsUr8nmhHftAfrz1Whw==
-X-Received: by 2002:a05:6a00:2391:b0:4a8:d88:9cd with SMTP id f17-20020a056a00239100b004a80d8809cdmr9879701pfc.11.1645230175301;
-        Fri, 18 Feb 2022 16:22:55 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i17sm12004965pgv.8.2022.02.18.16.22.54
+        bh=K35v6i7AXpk/D6ZiQB0RgrNtWKES2M6VUlrWvgj1/Nw=;
+        b=WU4C8WY9UQx4iz1p/vWFcbHR1jejuiyhXIOsW/RARdCTYQ7+lrBXobpY8yGk3riNWY
+         sjKN7tvU9k7jFJD7cDGHM5GnKE5Ypb1a53du4obzHWfDcrtAtFrOMvLsoAWARtD+5Cko
+         0Omov6tThdL/kSsdZHp3bOhAQhcJpUY7Pk4YoQgM+jWrf9Nl3yk29sG+0eSXotWeREpF
+         HnMYNUmY/cHYuQEQ2gHej84q0nBAlbxi75xxXyA/wVYI+X2/lKbFgK7+UZwjFUZz8tBJ
+         IyeFyu0/CxYYZFNAjyS4yPqe2htnxiVoRpoCo7jRgH0yGs8Vd+Rh4tvtGbAA6bJhoj6j
+         gNKg==
+X-Gm-Message-State: AOAM531vbEdU6w6JfORkAp3hVpCBCBw9Le8yv9WBsLo4gWEhUUHYSxlD
+        0rJrJMZcaDfaCxcDqJRQ1VEhHnukBIoDFAHBz2EjqXYU0S4w5is+ao3biOGNPHjU1WOds47U7XQ
+        Fo98a431KyhgBFAJwI2YPhA1V
+X-Received: by 2002:a05:620a:31a6:b0:646:d4d6:793a with SMTP id bi38-20020a05620a31a600b00646d4d6793amr1777661qkb.718.1645230222375;
+        Fri, 18 Feb 2022 16:23:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzlPo6afeTyzMMVRVT0mkOJR6sYFAcCeEgVm0QaaoNXywTYs0kSxbRxaEoQHqjU46O3dA3XTw==
+X-Received: by 2002:a05:620a:31a6:b0:646:d4d6:793a with SMTP id bi38-20020a05620a31a600b00646d4d6793amr1777648qkb.718.1645230222164;
+        Fri, 18 Feb 2022 16:23:42 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id d23sm5416974qka.50.2022.02.18.16.23.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 16:22:54 -0800 (PST)
-Date:   Sat, 19 Feb 2022 00:22:50 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 13/18] KVM: x86: reset and reinitialize the MMU in
- __set_sregs_common
-Message-ID: <YhA4WkeqPxbA3IEJ@google.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
- <20220217210340.312449-14-pbonzini@redhat.com>
+        Fri, 18 Feb 2022 16:23:41 -0800 (PST)
+Date:   Fri, 18 Feb 2022 16:23:38 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com,
+        alyssa.milburn@intel.com
+Subject: Re: [PATCH 07/29] x86/entry: Sprinkle ENDBR dust
+Message-ID: <20220219002338.khiqptqukabfdvy2@treble>
+References: <20220218164902.008644515@infradead.org>
+ <20220218171408.984834165@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220217210340.312449-14-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220218171408.984834165@infradead.org>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022, Paolo Bonzini wrote:
-> Do a full unload of the MMU in KVM_SET_SREGS and KVM_SEST_REGS2, in
-> preparation for not doing so in kvm_mmu_reset_context.  There is no
-> need to delay the reset until after the return, so do it directly in
-> the __set_sregs_common function and remove the mmu_reset_needed output
-> parameter.
+On Fri, Feb 18, 2022 at 05:49:09PM +0100, Peter Zijlstra wrote:
+> Kernel entry points should be having ENDBR on for IBT configs.
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+> The SYSCALL entry points are found through taking their respective
+> address in order to program them in the MSRs, while the exception
+> entry points are found through UNWIND_HINT_IRET_REGS.
+> 
+> *Except* that latter hint is also used on exit code to denote when
+> we're down to an IRET frame. As such add an additional 'entry'
+> argument to the macro and have it default to '1' such that objtool
+> will assume it's an entry and WARN about it.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+So we now have two unwind types which are identical, except one requires
+ENDBR after it.
 
-> +	kvm_init_mmu(vcpu);
->  	if (update_pdptrs) {
->  		idx = srcu_read_lock(&vcpu->kvm->srcu);
-> -		if (is_pae_paging(vcpu)) {
-> +		if (is_pae_paging(vcpu))
->  			load_pdptrs(vcpu, kvm_read_cr3(vcpu));
-> -			*mmu_reset_needed = 1;
+It's not ideal.  The code has to make sure to get the annotations right
+for objtool to do its job.  Setting the macro's default to 'entry=1'
+does help with that, but still... it's clunky.
 
-Eww (not your code, just this whole pile).  It might be worth calling out in the
-changelog that calling kvm_init_mmu() before load_pdptrs() will (subtly) _not_
-impact the functionality of load_pdptrs().  If the MMU is nested, kvm_init_mmu()
-will modify vcpu->arch.nested_mmu, whereas kvm_translate_gpa() will walk
-vcpu->arch.guest_mmu.  And if the MMU is not nested, kvm_translate_gpa() will not
-consuming vcpu->arch.mmu other than to check if it's == &guest_mmu.
+Also, calling them "entry" and "exit" is confusing.  Not all the exits
+are exits.  Their common attribute is really that they're not "entry".
 
-> -		}
->  		srcu_read_unlock(&vcpu->kvm->srcu, idx);
->  	}
->  
+How important is it for objtool to validate these anyway?  Seems like
+such bugs would be few and far between, and would be discovered in a
+jiffy after bricking the system.
+
+Another possibly better and less intrusive way of doing this would be
+for objtool to realize that any UNWIND_HINT_IRET_REGS at the beginning
+of a SYM_CODE_START (global non-function code symbol) needs ENDBR.
+
+-- 
+Josh
+

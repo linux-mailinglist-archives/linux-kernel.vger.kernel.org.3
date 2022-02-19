@@ -2,208 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56F24BC321
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986B94BC325
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240294AbiBSABY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Feb 2022 19:01:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43940 "EHLO
+        id S240303AbiBSACW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:02:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235702AbiBSABW (ORCPT
+        with ESMTP id S238538AbiBSACU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:01:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DF9269AB6
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:01:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96E2A61F61
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 00:01:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BA2CC340E9;
-        Sat, 19 Feb 2022 00:00:59 +0000 (UTC)
-Date:   Fri, 18 Feb 2022 19:00:57 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH] eprobes: Remove redundant event type information
-Message-ID: <20220218190057.2f5a19a8@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 18 Feb 2022 19:02:20 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2418272DA1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:02:01 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id q8so9514753iod.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:02:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7ZlmJufess7nBAm7hU3DguIKv9ZtiGi9JSmRwv2EeUQ=;
+        b=KZ27u7Fd31CMtI1sPqE6SRPOXDBWUdVlnIrhec7AUUtBN+/jw1SCmwMElAsG6PKIt6
+         ccwedC7cvou8ouMzBv5d6f/9x/wWPbtESvfRfdlfF1gEfpN1+ISiGJCkMUWK/h6HDMcH
+         dzT8ryzNEwtjObNWI1k5ZsbrusIbFAGRxZupY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7ZlmJufess7nBAm7hU3DguIKv9ZtiGi9JSmRwv2EeUQ=;
+        b=cILLECdz1bxdWJJOu7ynCJdeZX08UqlRCjhxZ2h11bGzGQ7CjOcom5+tRQRo+ldk8n
+         a/KtG43UJP7KpK3xbKMnxpXWdLiQOjKjOdUEmW4In4uLhsBWR00AoRF0V1vPcJzIEFLF
+         j/RopzzxMQrhfh/S3Vs51L14ShlXi7UfAujbbIRm6Ss/YLm20glSyYmOFcz5xkHgvlY+
+         m2Q7Du66B6ZL2a2W3ZHT57qtifJoC28EBYza0No+4qqCJ8+m2LyUL6t8LuoSVXfwect5
+         84nxwgt5xQKTzuBbW6VvobyzzG4/neY9eqket5GWCmBtaegDOnIhtwnGjZWJdx0LwGkq
+         kIUg==
+X-Gm-Message-State: AOAM530SHt02Lelc0rMPfpI3hrLNP8I0sG3CmIqtbyZtTZeaXoEYsHsO
+        WhaDq/PzdhCq1KtdVEKtXelIaQ==
+X-Google-Smtp-Source: ABdhPJyO5b8f1Ne5v1jyoyUS2rZcna35i96AFo8C0R6aK1q7Jp4K3tW2sdgMnr2BwcH7XAu0HIZ5Jg==
+X-Received: by 2002:a02:3403:0:b0:314:b71f:eae7 with SMTP id x3-20020a023403000000b00314b71feae7mr2701398jae.6.1645228921094;
+        Fri, 18 Feb 2022 16:02:01 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id p5sm4433871ilq.71.2022.02.18.16.02.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 16:02:00 -0800 (PST)
+Subject: Re: [PATCH RESEND v6 7/9] cpupower: Enable boost state support for
+ AMD P-State module
+To:     Huang Rui <ray.huang@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org
+Cc:     Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Jassmine Meng <li.meng@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220216073558.751071-1-ray.huang@amd.com>
+ <20220216073558.751071-8-ray.huang@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f415df0b-9320-090c-7ca9-8597c0211e87@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 17:01:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220216073558.751071-8-ray.huang@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 3163c1db8bbde856367b9d4e132d1bac9ec26704 Mon Sep 17 00:00:00 2001
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Date: Fri, 18 Feb 2022 18:52:38 -0500
-Subject: [PATCH] eprobes: Remove redundant event type information
+On 2/16/22 12:35 AM, Huang Rui wrote:
+> The legacy ACPI hardware P-States function has 3 P-States on ACPI table,
+> the CPU frequency only can be switched between the 3 P-States. While the
+> processor supports the boost state, it will have another boost state
+> that the frequency can be higher than P0 state, and the state can be
+> decoded by the function of decode_pstates() and read by
+> amd_pci_get_num_boost_states().
+> 
+> However, the new AMD P-State function is different than legacy ACPI
+> hardware P-State on AMD processors. That has a finer grain frequency
+> range between the highest and lowest frequency. And boost frequency is
+> actually the frequency which is mapped on highest performance ratio. The
+> similiar previous P0 frequency is mapped on nominal performance ratio.
 
-Currently, the event probes save the type of the event they are attached
-to when recording the event. For example:
+Nit - similar
 
-  # echo 'e:switch sched/sched_switch prev_state=$prev_state prev_prio=$prev_prio next_pid=$next_pid next_prio=$next_prio' > dynamic_events
-  # cat events/eprobes/switch/format
+> If the highest performance on the processor is higher than nominal
+> performance, then we think the current processor supports the boost
+> state. And it uses amd_pstate_boost_init() to initialize boost for AMD
+> P-State function.
+> 
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
+> ---
+>   tools/power/cpupower/utils/helpers/amd.c     | 18 ++++++++++++++++++
+>   tools/power/cpupower/utils/helpers/helpers.h |  5 +++++
+>   tools/power/cpupower/utils/helpers/misc.c    |  2 ++
+>   3 files changed, 25 insertions(+)
+> 
+> diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
+> index 4d45d1b44164..f5ba528dc7db 100644
+> --- a/tools/power/cpupower/utils/helpers/amd.c
+> +++ b/tools/power/cpupower/utils/helpers/amd.c
+> @@ -175,5 +175,23 @@ static unsigned long amd_pstate_get_data(unsigned int cpu,
+>   						  MAX_AMD_PSTATE_VALUE_READ_FILES);
+>   }
+>   
+> +void amd_pstate_boost_init(unsigned int cpu, int *support, int *active)
+> +{
+> +	unsigned long highest_perf, nominal_perf, cpuinfo_min,
+> +		      cpuinfo_max, amd_pstate_max;
+> +
+> +	highest_perf = amd_pstate_get_data(cpu, AMD_PSTATE_HIGHEST_PERF);
+> +	nominal_perf = acpi_cppc_get_data(cpu, NOMINAL_PERF);
+> +
+> +	*support = highest_perf > nominal_perf ? 1 : 0;
+> +	if (!(*support))
+> +		return;
+> +
+> +	cpufreq_get_hardware_limits(cpu, &cpuinfo_min, &cpuinfo_max);
+> +	amd_pstate_max = amd_pstate_get_data(cpu, AMD_PSTATE_MAX_FREQ);
+> +
+> +	*active = cpuinfo_max == amd_pstate_max ? 1 : 0;
+> +}
+> +
+>   /* AMD P-State Helper Functions ************************************/
+>   #endif /* defined(__i386__) || defined(__x86_64__) */
+> diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
+> index 557524078e94..f142fbfa4a77 100644
+> --- a/tools/power/cpupower/utils/helpers/helpers.h
+> +++ b/tools/power/cpupower/utils/helpers/helpers.h
+> @@ -140,6 +140,8 @@ extern int cpufreq_has_boost_support(unsigned int cpu, int *support,
+>   
+>   /* AMD P-State stuff **************************/
+>   extern bool cpupower_amd_pstate_enabled(void);
+> +extern void amd_pstate_boost_init(unsigned int cpu,
+> +				  int *support, int *active);
+>   
+>   /* AMD P-State stuff **************************/
+>   
+> @@ -177,6 +179,9 @@ static inline int cpufreq_has_boost_support(unsigned int cpu, int *support,
+>   
+>   static inline bool cpupower_amd_pstate_enabled(void)
+>   { return false; }
+> +static void amd_pstate_boost_init(unsigned int cpu,
+> +				  int *support, int *active)
+> +{ return; }
 
- name: switch
- ID: 1717
- format:
-        field:unsigned short common_type;       offset:0;       size:2; signed:0;
-        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
-        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
-        field:int common_pid;   offset:4;       size:4; signed:1;
+No need for a return here
 
-        field:unsigned int __probe_type;        offset:8;       size:4; signed:0;
-        field:u64 prev_state;   offset:12;      size:8; signed:0;
-        field:u64 prev_prio;    offset:20;      size:8; signed:0;
-        field:u64 next_pid;     offset:28;      size:8; signed:0;
-        field:u64 next_prio;    offset:36;      size:8; signed:0;
+>   
+>   /* cpuid and cpuinfo helpers  **************************/
+>   
+> diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+> index 0c483cdefcc2..e0d3145434d3 100644
+> --- a/tools/power/cpupower/utils/helpers/misc.c
+> +++ b/tools/power/cpupower/utils/helpers/misc.c
+> @@ -41,6 +41,8 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+>   			if (ret)
+>   				return ret;
+>   		}
+> +	} else if (cpupower_cpu_info.caps & CPUPOWER_CAP_AMD_PSTATE) {
+> +		amd_pstate_boost_init(cpu, support, active);
+>   	} else if (cpupower_cpu_info.caps & CPUPOWER_CAP_INTEL_IDA)
+>   		*support = *active = 1;
+>   	return 0;
+> 
 
- print fmt: "(%u) prev_state=0x%Lx prev_prio=0x%Lx next_pid=0x%Lx next_prio=0x%Lx", REC->__probe_type, REC->prev_state, REC->prev_prio, REC->next_pid, REC->next_prio
-
-The __probe_type adds 4 bytes to every event.
-
-One of the reasons for creating eprobes is to limit what is traced in an
-event to be able to limit what is written into the ring buffer. Having
-this redundant 4 bytes to every event takes away from this.
-
-The event that is recorded can be retrieved from the event probe itself,
-that is available when the trace is happening. For user space tools, it
-could simply read the dynamic_event file to find the event they are for.
-So there is really no reason to write this information into the ring
-buffer for every event.
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/trace.h        |  1 -
- kernel/trace/trace_eprobe.c | 15 +++++++--------
- kernel/trace/trace_probe.c  | 10 +++++-----
- kernel/trace/trace_probe.h  |  1 -
- 4 files changed, 12 insertions(+), 15 deletions(-)
-
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 0f5e22238cd2..07d990270e2a 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -136,7 +136,6 @@ struct kprobe_trace_entry_head {
- 
- struct eprobe_trace_entry_head {
- 	struct trace_entry	ent;
--	unsigned int		type;
- };
- 
- struct kretprobe_trace_entry_head {
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 191db32dec46..02838d47129f 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -250,8 +250,6 @@ static int eprobe_event_define_fields(struct trace_event_call *event_call)
- 	if (WARN_ON_ONCE(!tp))
- 		return -ENOENT;
- 
--	DEFINE_FIELD(unsigned int, type, FIELD_STRING_TYPE, 0);
--
- 	return traceprobe_define_arg_fields(event_call, sizeof(field), tp);
- }
- 
-@@ -270,7 +268,9 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
- 	struct trace_event_call *pevent;
- 	struct trace_event *probed_event;
- 	struct trace_seq *s = &iter->seq;
-+	struct trace_eprobe *ep;
- 	struct trace_probe *tp;
-+	unsigned int type;
- 
- 	field = (struct eprobe_trace_entry_head *)iter->ent;
- 	tp = trace_probe_primary_from_call(
-@@ -278,15 +278,18 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
- 	if (WARN_ON_ONCE(!tp))
- 		goto out;
- 
-+	ep = container_of(tp, struct trace_eprobe, tp);
-+	type = ep->event->event.type;
-+
- 	trace_seq_printf(s, "%s: (", trace_probe_name(tp));
- 
--	probed_event = ftrace_find_event(field->type);
-+	probed_event = ftrace_find_event(type);
- 	if (probed_event) {
- 		pevent = container_of(probed_event, struct trace_event_call, event);
- 		trace_seq_printf(s, "%s.%s", pevent->class->system,
- 				 trace_event_name(pevent));
- 	} else {
--		trace_seq_printf(s, "%u", field->type);
-+		trace_seq_printf(s, "%u", type);
- 	}
- 
- 	trace_seq_putc(s, ')');
-@@ -498,10 +501,6 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
- 		return;
- 
- 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
--	if (edata->ep->event)
--		entry->type = edata->ep->event->event.type;
--	else
--		entry->type = 0;
- 	store_trace_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
- 
- 	trace_event_buffer_commit(&fbuffer);
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 73d90179b51b..80863c6508e5 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -871,15 +871,15 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
- 	switch (ptype) {
- 	case PROBE_PRINT_NORMAL:
- 		fmt = "(%lx)";
--		arg = "REC->" FIELD_STRING_IP;
-+		arg = ", REC->" FIELD_STRING_IP;
- 		break;
- 	case PROBE_PRINT_RETURN:
- 		fmt = "(%lx <- %lx)";
--		arg = "REC->" FIELD_STRING_FUNC ", REC->" FIELD_STRING_RETIP;
-+		arg = ", REC->" FIELD_STRING_FUNC ", REC->" FIELD_STRING_RETIP;
- 		break;
- 	case PROBE_PRINT_EVENT:
--		fmt = "(%u)";
--		arg = "REC->" FIELD_STRING_TYPE;
-+		fmt = "";
-+		arg = "";
- 		break;
- 	default:
- 		WARN_ON_ONCE(1);
-@@ -903,7 +903,7 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
- 					parg->type->fmt);
- 	}
- 
--	pos += snprintf(buf + pos, LEN_OR_ZERO, "\", %s", arg);
-+	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"%s", arg);
- 
- 	for (i = 0; i < tp->nr_args; i++) {
- 		parg = tp->args + i;
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 99e7a5df025e..92cc149af0fd 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -38,7 +38,6 @@
- #define FIELD_STRING_IP		"__probe_ip"
- #define FIELD_STRING_RETIP	"__probe_ret_ip"
- #define FIELD_STRING_FUNC	"__probe_func"
--#define FIELD_STRING_TYPE	"__probe_type"
- 
- #undef DEFINE_FIELD
- #define DEFINE_FIELD(type, item, name, is_signed)			\
--- 
-2.34.1
-
+thanks,
+-- Shuah

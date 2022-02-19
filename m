@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA124BCB10
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 23:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DC74BCB15
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 00:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241772AbiBSWzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 17:55:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37280 "EHLO
+        id S242029AbiBSXB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 18:01:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235536AbiBSWzG (ORCPT
+        with ESMTP id S229871AbiBSXBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 17:55:06 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFDA3BF80;
-        Sat, 19 Feb 2022 14:54:47 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id j3-20020a9d7683000000b005aeed94f4e9so1231601otl.6;
-        Sat, 19 Feb 2022 14:54:47 -0800 (PST)
+        Sat, 19 Feb 2022 18:01:24 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882EA506F1;
+        Sat, 19 Feb 2022 15:01:01 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id z7so7312529ilb.6;
+        Sat, 19 Feb 2022 15:01:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=R7Y7RGg/qzx7WEhwYEz0sSKfyOO0hLiZzhIhihySEI4=;
-        b=XztjrH+hO1rpoto9JNGNRFZtB/0dXFB28btA04mbnixtwjB1z7wal+a72CXvpSX3MO
-         IrreJ3USp80qxF7HT6HKSWVE/tB8jAOiWvtDH8uzHWjgRdVO/o0BKuIyY8sLK9WhY7a5
-         XR8AsK3EA6ksYwZVabcUYorkGLPbl9VJgcJpOq0pDczxgDw/OvPU5HIZSJebP7tPc04+
-         XTl9lpQNsYIIX2bsUhxaNZCkJ9ZNIsUhows0XFcxnzgdhU0pJhxCSU2AwLE3BqmOKuoF
-         fLWoDnwDWdKR7gMhrMWpCEbzFUGcOUM6c6oShbnEOUYZX3TbmFM1iovyICuLzI5cCMfm
-         IgUw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JsTvQXRsbNOiGcu58U9fFMq2V+cC9hbrFYaW/h3E+1g=;
+        b=Z6v34CPkmCq2AZb1WTbW3mh6Tm48Pu3YR0j6WN/wwMs+xuHp22zD8kUHhoz3TVmfOY
+         z+qdVyKgtKySnD20XiY4UuUPARq7lbCMHyKPxma3uECUDKeh0763ogQlE3zULF2a183i
+         WIrv5A6NnC6nhREzAEKWftm+BtXYFboYrsYDmyB7lqBClTxPONUHt8aFTDZZmQSu9cUK
+         fQVjei7MWURhmlT1R0aoYg31Rhwdxn7sDgTPJ4cNdN5QfC7Lo4OSPUNiMnhvwcgkPU+Z
+         juIkgyW5aH96hluWwW9l2ci2gK0uyLRnxxprEBnxCVOiqjuP6w3pNxlhLamLNHvVhPzV
+         ObSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=R7Y7RGg/qzx7WEhwYEz0sSKfyOO0hLiZzhIhihySEI4=;
-        b=mupRnQ8bWwTI+ciz5ilZGi7BFTJoPsTAQNTDM4nH1zfHX6bLqwqq6k9eMoyUSmHyi5
-         JfHVzHMQ2BMSVSZHImZKi8S6XpaCrgyqLcKagJKB+PYzXxAc75QB512NJEIE8mHyxvpC
-         8tXdUGKsWu5e4lDdwiuapDlAotCMug1Q62fkuj+yNdCJm3djaRez22NCiw+ZQ7/PZe8D
-         zyM6o5IyaE5PMu75UjzHus24ChBlOeqwTmHRu363QXd8rsIB0ECC1qyl+U+pg8m33LZU
-         ooIUUpq4LsX+QXa5yed+Q2kN4aa9ySiKC9+KaKWQ14lrZH7a9RY/iVyhPasjDCt5Gw4P
-         R1uw==
-X-Gm-Message-State: AOAM532ydybZZbLWfU/Pkk4RbE0KDUdwXrnedG7Q6RJH5GeXR25cliRc
-        RVfI8yggviip8Gcbc9PRYKo=
-X-Google-Smtp-Source: ABdhPJy261R/sNdhLo2AKcKlOYMVnTiwa28SFjDj9cxCvVv2nv2uxAynVJz2yrFu/pnQO7rnxqfq6Q==
-X-Received: by 2002:a9d:2e6:0:b0:5a3:ccab:78f6 with SMTP id 93-20020a9d02e6000000b005a3ccab78f6mr4552515otl.160.1645311285566;
-        Sat, 19 Feb 2022 14:54:45 -0800 (PST)
-Received: from ?IPV6:2601:284:8200:b700:75f1:ca3:f2d4:114e? ([2601:284:8200:b700:75f1:ca3:f2d4:114e])
-        by smtp.googlemail.com with ESMTPSA id r204sm4263441oih.1.2022.02.19.14.54.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Feb 2022 14:54:45 -0800 (PST)
-Message-ID: <29ff2768-ca3f-6a09-1df8-d703f85ecfac@gmail.com>
-Date:   Sat, 19 Feb 2022 15:54:41 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JsTvQXRsbNOiGcu58U9fFMq2V+cC9hbrFYaW/h3E+1g=;
+        b=KIjb9TgsPoAr/16501mzzAYAkFkJp4DA33vZzuqbQuWTnaWzRBfKTigK69YDWpsiFC
+         pEBMhsPnf2aEgHAb14vJNQ87AHvfQCHm4znQUTSWWL8bdWD1wL8jsfDipsArWu7H3LO1
+         qERceGSoGJk3P0Z2AsszSg6BuQ7D6T9BkkevXqiE2LlctrlHGysGpRpPGgOMwQlJHaws
+         /TqehExv/g9COIY/jYkjzoWpTwsfjjdu5tqhIflUi8GCOBstjifE00GGa7SckMelL6SN
+         1qgfD1aUzoza5Jxxpu3yGN8ULw5jS6NspNHErOe9YUxRSv4zpBjOoBoK8ay68RqlQB76
+         8o3Q==
+X-Gm-Message-State: AOAM5308AdjgW32K+iiPjsh47f5ZBU/qoU5f23ntCB8Kk5jJsqRr1jEv
+        vHWM1MfiH6eihe5JI3dsjisvkxO2dGeRNuvTtE4=
+X-Google-Smtp-Source: ABdhPJxAq6Xhci6X8EyjKISKWHQB8A7GAnQkTQsSYKWI9pTBuyyqr9uAdwughLQMbr6RkpSBKXR6D5MB/Sif6OYt2oU=
+X-Received: by 2002:a92:cd8c:0:b0:2be:abb:ec04 with SMTP id
+ r12-20020a92cd8c000000b002be0abbec04mr10635076ilb.246.1645311660937; Sat, 19
+ Feb 2022 15:01:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH v2 3/3] net: tun: track dropped skb via kfree_skb_reason()
-Content-Language: en-US
-To:     Dongli Zhang <dongli.zhang@oracle.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
-References: <20220219191246.4749-1-dongli.zhang@oracle.com>
- <20220219191246.4749-4-dongli.zhang@oracle.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220219191246.4749-4-dongli.zhang@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <CACsaVZ+mt3CfdXV0_yJh7d50tRcGcRZ12j3n6-hoX2cz3+njsg@mail.gmail.com>
+ <20220219210354.GF59715@dread.disaster.area>
+In-Reply-To: <20220219210354.GF59715@dread.disaster.area>
+From:   Kyle Sanderson <kyle.leet@gmail.com>
+Date:   Sat, 19 Feb 2022 15:00:51 -0800
+Message-ID: <CACsaVZ+LZUebtsGuiKhNV_No8fNLTv5kJywFKOigieB1cZcKUw@mail.gmail.com>
+Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
+ dm-crypt + xfs
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     qat-linux@intel.com, giovanni.cabiddu@intel.com,
+        Linux-Kernal <linux-kernel@vger.kernel.org>,
+        linux-xfs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dm-devel@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        salvatore.benedetto@intel.com, herbert@gondor.apana.org.au,
+        pablo.marcos.oltra@intel.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,16 +74,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/19/22 12:12 PM, Dongli Zhang wrote:
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index aa27268edc5f..ab47a66deb7f 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1062,13 +1062,16 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->  	struct netdev_queue *queue;
->  	struct tun_file *tfile;
->  	int len = skb->len;
-> +	int drop_reason;
+hi Dave,
 
-enum skb_drop_reason
+> This really sounds like broken hardware, not a kernel problem.
 
+It is indeed a hardware issue, specifically the intel qat crypto
+driver that's in-tree - the hardware is fine (see below). The IQAT
+eratta documentation states that if a request is not submitted
+properly it can stall the entire device. The remediation guidance from
+2020 was "don't do that" and "don't allow unprivileged users access to
+the device". The in-tree driver is not implemented properly either for
+this SoC or board - I'm thinking it's related to QATE-7495.
+
+https://01.org/sites/default/files/downloads//336211qatsoftwareforlinux-rn-hwversion1.7021.pdf
+
+> This implies a dmcrypt level problem - XFS can't make progress is dmcrypt is not completing IOs.
+
+That's the weird part about it. Some bio's are completing, others are
+completely dropped, with some stalling forever. I had to use
+xfs_repair to get the volumes operational again. I lost a good deal of
+files and had to recover from backup after toggling the device back on
+on a production system (silly, I know).
+
+> Where are the XFS corruption reports that the subject implies is occurring?
+
+I think you're right, it's dm-crypt that's broken here, with
+ultimately the crypto driver causing this corruption. XFS being the
+edge to the end-user is taking the brunt of it. There's reports going
+back to late 2017 of significant issues with this mainlined stable
+driver.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1522962
+https://serverfault.com/questions/1010108/luks-hangs-on-centos-running-on-atom-c3758-cpu
+https://www.phoronix.com/forums/forum/software/distributions/1172231-fedora-33-s-enterprise-linux-next-effort-approved-testbed-for-raising-cpu-requirements-etc?p=1174560#post1174560
+
+Any guidance would be appreciated.
+Kyle.
+On Sat, Feb 19, 2022 at 1:03 PM Dave Chinner <david@fromorbit.com> wrote:
+>
+> On Fri, Feb 18, 2022 at 09:02:28PM -0800, Kyle Sanderson wrote:
+> > A2SDi-8C-HLN4F has IQAT enabled by default, when this device is
+> > attempted to be used by xfs (through dm-crypt) the entire kernel
+> > thread stalls forever. Multiple users have hit this over the years
+> > (through sporadic reporting) - I ended up trying ZFS and encryption
+> > wasn't an issue there at all because I guess they don't use this
+> > device. Returning to sanity (xfs), I was able to provision a dm-crypt
+> > volume no problem on the disk, however when running mkfs.xfs on the
+> > volume is what triggers the cascading failure (each request kills a
+> > kthread).
+>
+> Can you provide the full stack traces for these errors so we can see
+> exactly what this cascading failure looks like, please? In reality,
+> the stall messages some time after this are not interesting - it's
+> the first errors that cause the stall that need to be investigated.
+>
+> A good idea would be to provide the full storage stack decription
+> and hardware in use, as per:
+>
+> https://xfs.org/index.php/XFS_FAQ#Q:_What_information_should_I_include_when_reporting_a_problem.3F
+>
+> > Disabling IQAT on the south bridge results in a working
+> > system, however this is not the default configuration for the
+> > distribution of choice (Ubuntu 20.04.3 LTS), nor the motherboard. I'm
+> > convinced this never worked properly based on the lack of popularity
+> > for kernel encryption (crypto), and the embedded nature that
+> > SuperMicro has integrated this device in collaboration with intel as
+> > it looks like the primary usage is through external accelerator cards.
+>
+> This really sounds like broken hardware, not a kernel problem.
+>
+> > Kernels tried were from RHEL8 over a year ago, and this impacts the
+> > entirety of the 5.4 series on Ubuntu.
+> > Please CC me on replies as I'm not subscribed to all lists. CPU is C3758.
+>
+> [snip stalled kcryptd worker threads]
+>
+> This implies a dmcrypt level problem - XFS can't make progress is
+> dmcrypt is not completing IOs.
+>
+> Where are the XFS corruption reports that the subject implies is
+> occurring?
+>
+> Cheers,
+>
+> Dave.
+> --
+> Dave Chinner
+> david@fromorbit.com

@@ -2,150 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751134BC92E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 16:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1119B4BC932
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 16:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239468AbiBSPl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 10:41:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53796 "EHLO
+        id S241903AbiBSPoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 10:44:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbiBSPly (ORCPT
+        with ESMTP id S235451AbiBSPoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 10:41:54 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353BF60059
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 07:41:34 -0800 (PST)
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A4B6E3F1D9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 15:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645285290;
-        bh=wVUHMJVViT2MtzH1YEUJhqVIF2mYs/hB4+17xc4P144=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=MShxyA1qZtgDWuofED1JcNw14qkXyN8VLl5bwP8E3eKvg8xrL1Ntz23XsAWFvMUP+
-         RQ5pSKJLhIsSs/uyUTn4uRdqItrgFnAh3VtHU5x+YstMNHi4pG8kTBl+jXzXR0AGs7
-         gS3Jn7sBIhl8fN25wQN9Oemo+zqjhcssBbInFzfQkjBXH3OaTwP0hsUiPorDFhQ9s2
-         9hOEjOQOJG8MKovL4IlMrQHztoRVCKepgGgO5MYt6H/15G+bgB2N/+8zFwjjD8bMj2
-         SBBLvZ9MfKKwGYC52SYMdBDW2knBSqZgQH7OTkkYTO7Uz4axGhTXond9OY3lqQkZQE
-         TFHN87xVxO+WA==
-Received: by mail-wr1-f71.google.com with SMTP id t8-20020adfa2c8000000b001e8f6889404so2800851wra.0
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 07:41:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wVUHMJVViT2MtzH1YEUJhqVIF2mYs/hB4+17xc4P144=;
-        b=AM/rU0Ye8y3mGAX6ni6/1fEDTp3ul3i0pw2LTAtMXTXwB41mOr24OqhCo/6uvFZPXj
-         q9VtE4rvBOyGyUn1w/J8yCkgzyAsgUX7huFcr+/8PNl8E4Gb1cEWx6qn6UjBUb2zZ6Tr
-         l3+n4osCSP7GJViI7wYoW2RneTjRcA0Sm3PCgDMHzR7zW8cgZvfgvWS0l9GgikG9TTjh
-         tkWvmjSFuz7VyYdPqFCAIWrXVTqjRlrcMK+SLVKI+qibAmJmijRyMc+S5CEQ6DJ3krAM
-         zVMaaGgAY5gGKSVGQSlRtPY77uu+0Eyyogl3lGWj2IDuviR4CokggSsM46MPeFlaWNZJ
-         bTjg==
-X-Gm-Message-State: AOAM531z0905r7G4N18Dx91/zi6MOo4IYuYrzenHjoF9TfsentomrC93
-        /dITCmdRZjRzJAIEpKaO0wTL/xq2v0ATGRzETe+370dCGeKdDa+5sB3CRzMZ7WB39OHluSfmY9k
-        B5mKDtqLBarsu8HZOq5x4Q/xhQz0S+Xn89mVusOg77g==
-X-Received: by 2002:adf:a45e:0:b0:1e7:7348:45a3 with SMTP id e30-20020adfa45e000000b001e7734845a3mr9948265wra.32.1645285290108;
-        Sat, 19 Feb 2022 07:41:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyVwizRupAclUY7A+ZD/YSEVUkhffmcUEWcFX/2fiVD7wTSvBgpDdolg7LuorSVTAOME2ccGw==
-X-Received: by 2002:adf:a45e:0:b0:1e7:7348:45a3 with SMTP id e30-20020adfa45e000000b001e7734845a3mr9948253wra.32.1645285289887;
-        Sat, 19 Feb 2022 07:41:29 -0800 (PST)
-Received: from [192.168.0.116] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id r2sm3203332wmq.24.2022.02.19.07.41.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Feb 2022 07:41:29 -0800 (PST)
-Message-ID: <9d33314e-97da-dc47-8361-2e45b75fa566@canonical.com>
-Date:   Sat, 19 Feb 2022 16:41:28 +0100
+        Sat, 19 Feb 2022 10:44:22 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DB6606DA;
+        Sat, 19 Feb 2022 07:44:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=51IuRnSgtWxZG2Jmu2renXJr42JUA6j1ZiqJaCkpimM=;
+        t=1645285443; x=1646495043; b=qyks8bf/gJgo+UE96AF+v7tTvMKni7RZUpphuTWTqN8Rk2R
+        Am7kqD49/sN5h4KDNJPrSZGV8f0GcT75I8xJNB7dcGxCbOdkerMrLVcOLIVrkE0K6bv3YpBEdoOFL
+        1T81+KgUQBYxxc8wcQ1X1VE+Li9W+osj7t0tXNzeK1JoBCdyEaAgR0y5IEE4UUtiZHm8kPNYbacIc
+        A7g4sVndtVppm8t6AXmAx3tRoGo/iJOTJ7lkr+kSWTa8E0INoalHKlQDPTbykbSf8rx5SDnxlLtl/
+        8xSYGedMKPgdMqq9W6I/HuRtVdvmcEjn+9lNqGKpUR7wIQuW5bhAPk9ifVlFgosw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nLRtJ-0035Fb-Ex;
+        Sat, 19 Feb 2022 16:43:21 +0100
+Message-ID: <d14b6a0c72788e78bab2bd1f0bc2c49891ded5d7.camel@sipsolutions.net>
+Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     David Gow <davidgow@google.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-rdma@vger.kernel.org,
+        x86@kernel.org, felix.kuehling@amd.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Sat, 19 Feb 2022 16:43:19 +0100
+In-Reply-To: <CABVgOSnBq0QE+Cq+SDeV-LxOQYbGZ6Bqbjix6h-UpNj0GMicPA@mail.gmail.com>
+References: <20220218075727.2737623-1-davidgow@google.com>
+         <20220218075727.2737623-5-davidgow@google.com>
+         <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
+         <CABVgOSnBq0QE+Cq+SDeV-LxOQYbGZ6Bqbjix6h-UpNj0GMicPA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] dt-bindings: memory: lpddr2: Adjust revision ID
- property to match lpddr3
-Content-Language: en-US
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220219012457.2889385-1-jwerner@chromium.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220219012457.2889385-1-jwerner@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/02/2022 02:24, Julius Werner wrote:
-> Commit 3539a2 (dt-bindings: memory: lpddr2: Add revision-id properties)
-> added the properties `revision-id1` and `revision-id2` to the
-> "jedec,lpddr2" binding. The "jedec,lpddr3" binding already had a single
-> array property `revision-id` for the same purpose. For consistency
-> between related memory types, this patch deprecates the LPDDR2
-> properties and instead adds a property in the same style as for LPDDR3
-> to that binding.
+On Sat, 2022-02-19 at 16:00 +0800, David Gow wrote:
+> On Fri, Feb 18, 2022 at 8:26 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+> > 
+> > On Fri, 2022-02-18 at 15:57 +0800, David Gow wrote:
+> > > 
+> > > Note that, while this does build again, it still segfaults on startup,
+> > > so more work remains to be done.
+> > 
+> > That's probably just a lot more stuff getting included somehow?
+> > 
 > 
-> Signed-off-by: Julius Werner <jwerner@chromium.org>
-> ---
->  .../memory-controllers/ddr/jedec,lpddr2.yaml       | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
+> Yeah: it used to work (a couple of years ago), but something has
+> broken it in the meantime. It's just a shame that bisecting things
+> with allyesconfig takes so long...
+
+Heh, right.
+
+But I guess you could "Kconfig bisect" first, i.e. see what option
+breaks it? It might not even help to bisect, if it's just some option
+getting enabled over time. Or perhaps the kernel is just too big for the
+address space layout if you have allyesconfig? Though that shouldn't be
+an issue, I think.
+
+> I didn't realise X86 wasn't defined in UML: 
+
+X86 is the architecture, X86_{32,64} is kind of a selection for how you
+want things to be built, and it's thus required for UML on x86, because
+UML imports stuff from X86.
+
+> that's definitely a bit
+> cleaner than !UML in a number of these cases.
+
+It looks like some (most?) of them don't really work that way though
+since they're not really platform specific, they just know only about a
+handful of platforms that they're compatible with.
+
+> Not all of those issues are fundamentally solved by "depends on X86",
+> though: there are a few which might be other missing things in UML
+> (maybe the 'dma_ops' issues?), and/or might be the result of -Werror
+> being enabled.
+
+Right.
+
+> We do want the ability to build PCI drivers under UML, as it makes
+> running KUnit tests for PCI drivers much simpler and more pleasant.
+
+OK, fair point. I'm thinking about this area in general also right now
+for iwlwifi, and obviously we're probably the only user of the virtual
+PCI code that lets us connect the driver to a simulated device on UML
+(but the driver doesn't really know) :-)
+
+> And indeed, it does work for KUnit in general, it's just that some
+> drivers do have the issues mentioned above, so allyesconfig picks up
+> every broken driver.
+
+Right.
+
+> We don't actually build the PCI drivers by default, only if the
+> "--alltests" option is passed, which does include them, as we do have
+> tests which depend on PCI we'd like to run (like the thunderbolt
+> test).
+
+Makes sense.
 > 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-> index 25ed0266f6dd3d..37229738f47271 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-> @@ -30,12 +30,23 @@ properties:
->      maximum: 255
->      description: |
->        Revision 1 value of SDRAM chip. Obtained from device datasheet.
-> +      Property is deprecated, use revision-id instead.
-> +    deprecated: true
->  
->    revision-id2:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      maximum: 255
->      description: |
->        Revision 2 value of SDRAM chip. Obtained from device datasheet.
-> +      Property is deprecated, use revision-id instead.
-> +    deprecated: true
-> +
-> +  revision-id:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 2
-> +    maxItems: 2
+> I did try this as well, and it just got us a different set of issues
+> (there are a bunch of drivers which depend on IOMEM but don't state it
+> -- I'll try to send fixes for those out next week). 
+> 
 
-You need maximum value under items.  See:
-Documentation/devicetree/bindings/arm/l2c2x0.yaml
+Fun.
 
-> +    description: |
-> +      Revision IDs read from Mode Register 6 and 7. One byte per uint32 cell (i.e. <MR6 MR7>).
->  
->    density:
->      $ref: /schemas/types.yaml#/definitions/uint32
-> @@ -164,8 +175,7 @@ examples:
->          compatible = "elpida,ECB240ABACN", "jedec,lpddr2-s4";
->          density = <2048>;
->          io-width = <32>;
-> -        revision-id1 = <1>;
-> -        revision-id2 = <0>;
-> +        revision-id = <123 234>;
+> Ultimately, the 'broken_on_uml.config' file is just there to pare back
+> allyesconfig a bit for KUnit's purposes, but we still definitely want
+> as many options (and hence tests) enabled as possible long-term. So I
+> think actual fixes to either the code or Kconfig do make sense.
 
-Don't change the original values.
+Makes sense.
 
-Plus what Dmitry pointed out.
+> Is 'make ARCH=um allyesconfig' something we actually want to be able
+> to build? If so, no amount of adding things to KUnit's
+> broken_on_uml.config will solve the underlying issues, and we'll need
+> to at least update the Kconfig entries.
+> 
 
->  
->          tRPab-min-tck = <3>;
->          tRCD-min-tck = <3>;
+That's a good point, as long as people are doing allyes/randconfig
+builds on UML, we probably need to have these fixes anyway rather than
+disabling something for KUnit specifically.
 
-
-Best regards,
-Krzysztof
+johannes

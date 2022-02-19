@@ -2,124 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E834A4BC906
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 16:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677D64BC911
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 16:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242416AbiBSPJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 10:09:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33784 "EHLO
+        id S242509AbiBSP0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 10:26:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbiBSPI6 (ORCPT
+        with ESMTP id S233699AbiBSP0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 10:08:58 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F7347AFB
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 07:08:39 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id f19so20830271qvb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 07:08:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=k/I+1clxvE02ds3q/vpOq8sh7Fxc4ogvnxrh8xQHKuQ=;
-        b=TleVrJNvlg/phE6uPMhvbmuSYGDJ5V9cN6e+Jw6Qtb8F4Job48cLov/trdCAtu5M5D
-         Lt8HaV4STqMw9oOxFHVveTysmnzpfrFjATpfi6SltgTK3TD6Db7USlvYJrUsPOKe9tCt
-         mKzShr9SSx4HbeU7z5b/PU02bOC427SAxsXBSK9pk+mm7MVm0VeVD34t3Jg2bXdQN7G2
-         5XRSUBZ2ICErh5q0J4FwlvYe7CyvC61OQXYw054YMXU9KI8sMGYpsgrADv+R9Ij07DT3
-         Fuo5uxDMYfcxilCrH2+9/NJeGG4FWYqbfg+NPP2HOvN2fvjWZgiaHVNchF/PEo25JZAe
-         wp6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=k/I+1clxvE02ds3q/vpOq8sh7Fxc4ogvnxrh8xQHKuQ=;
-        b=OsOrmgZqRGqJBx6gQwOeNSo5zcP7Th5Sd8oEZeDnj32zk/SDYO+tljtkQNhroswdti
-         BOKcahBvsoTirY53PE0V/egpxntc5D0rS9lht79qlqgfZ2djpsWKHTFoo9/IBq7EftYE
-         mqVVg2FA9U+G8RDXQKraLBBCKcTxgoxPeHH9K4fHJAW3Sow95AXOBzasOWw/7vr063aw
-         5Yg/57710YQNIC6M21EeB23UMMMhIFNN5/n1VlwKM8l+S8EZqUId4P8oIWAOz5hNqQGp
-         kl0mIwNOjsOLK0ZdxIaoTeymf+WBQ2EsPC4npay8JWBy2g/s4+jL5r79hMKM1MHTbQog
-         NzJA==
-X-Gm-Message-State: AOAM533jgqW+lOBx3C8MnZlMFd5H8jn2HvpJHHpRvuX7r0PLycFW820G
-        fXMVoSn59VDVJvZCV/pk7xTJ1F300f08lA==
-X-Google-Smtp-Source: ABdhPJyameQf7qV6cY5aAnDrPxy0Mb/C7d3bYB8Zb9PsM/egWUJPaMo36d8imI5Rx3LXwRBv4FBtyw==
-X-Received: by 2002:ad4:5ca5:0:b0:421:6335:89 with SMTP id q5-20020ad45ca5000000b0042163350089mr9331773qvh.89.1645283318438;
-        Sat, 19 Feb 2022 07:08:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q12sm27643417qtx.51.2022.02.19.07.08.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 07:08:37 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 19 Feb 2022 07:08:36 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     miquel.raynal@bootlin.com, krzysztof.kozlowski@canonical.com,
-        vigneshr@ti.com, nm@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: rawnand: omap2: Prevent invalid configuration and
- build error
-Message-ID: <20220219150836.GA1035394@roeck-us.net>
-References: <20220118123525.8020-1-rogerq@kernel.org>
+        Sat, 19 Feb 2022 10:26:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A209553739;
+        Sat, 19 Feb 2022 07:26:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40E31B80B0A;
+        Sat, 19 Feb 2022 15:26:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0396C004E1;
+        Sat, 19 Feb 2022 15:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645284384;
+        bh=6wMy5c40MoeMrkiAC6rmbWKQvU4M2MsxaJOM4WVGgnQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h7zxe6Y1JLH95rcf53kDPoMdpw63zTnIYT280c6n1kibcw4f9if2UA9HaAH59XpdR
+         LctZvLoBDQQtRvmkYMIV3j1Nzn1Tdtsj7WGwFV8NCNLLP+eP+9EorXTbuMN3K4s97+
+         toFAJ4OBGuqBlqFdHBjmaak2kUS+PxX1EcDlxf6Iknxn92bzxM8A7+iUSv/QaMW/Vr
+         o7E219fJW2AbeScZhpo8d0UFpPV107X4fN956XGjuRWcwSCPvmFfID+uzwKjPRC3u2
+         O27OgJTugIQqTpMSnqeScZQFmpzhcLhxooVUyd0oZUZRgV/u5iHQhuuTJYlkJGDuPj
+         m4VZCgyBTdKgg==
+Received: by pali.im (Postfix)
+        id 65F962B70; Sat, 19 Feb 2022 16:26:22 +0100 (CET)
+Date:   Sat, 19 Feb 2022 16:26:22 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 0/6] serial: mvebu-uart: Support for higher baudrates
+Message-ID: <20220219152622.mykr2zl5cl3rgsgx@pali>
+References: <20220211191238.2142-1-kabel@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220118123525.8020-1-rogerq@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220211191238.2142-1-kabel@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 02:35:25PM +0200, Roger Quadros wrote:
-> We need to select MEMORY as well otherwise OMAP_GPMC will not be built.
-> For simplicity let's select MEMORY and OMAP_GPMC unconditionally as
-> this driver depends on OMAP_GPMC driver and uses symbols from there.
+Hello Stephen!
+
+On Friday 11 February 2022 20:12:32 Marek Behún wrote:
+> Hello Greg, Stephen, Gregory,
 > 
-> Fixes: dbcb124acebd ("mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-
-This patch ignores OMAP_GPMC dependencies and results in:
-
-WARNING: unmet direct dependencies detected for OMAP_GPMC
-  Depends on [n]: MEMORY [=y] && OF_ADDRESS [=n]
-  Selected by [m]:
-  - MTD_NAND_OMAP2 [=m] && MTD [=m] && MTD_RAW_NAND [=m] && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
-
-when configuring sparc64:allmodconfig, and in the following
-build failure when trying to build that image.
-
-Building sparc64:allmodconfig ... failed
---------------
-Error log:
-<stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-sparc64-linux-ld: drivers/memory/omap-gpmc.o: in function `gpmc_probe_generic_child':
-omap-gpmc.c:(.text.unlikely+0x14c4): undefined reference to `of_platform_device_create'
-
-Guenter
-
-> ---
->  drivers/mtd/nand/raw/Kconfig | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> at Pali's request I have reviewed, updated and tested his series adding
+> support for higher baudrates on Marvell Armada A37xx boards.
 > 
-> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-> index 20408b7db540..d986ab4e4c35 100644
-> --- a/drivers/mtd/nand/raw/Kconfig
-> +++ b/drivers/mtd/nand/raw/Kconfig
-> @@ -42,7 +42,8 @@ config MTD_NAND_OMAP2
->  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
->  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
->  	depends on HAS_IOMEM
-> -	select OMAP_GPMC if ARCH_K3
-> +	select MEMORY
-> +	select OMAP_GPMC
->  	help
->  	  Support for NAND flash on Texas Instruments OMAP2, OMAP3, OMAP4
->  	  and Keystone platforms.
+> I have updated commit messages, some comments and indentation at some
+> places. As per Stephen Boyd's request, commit message of patch 3 now
+> contains more information about why we need to have UART
+> clock-controller binding defined in such a way (due to backwards
+> compatibility).
+
+Are updated commit messages better now?
+
+> Marek
+> 
+> Changes in v7:
+> * fixed lint errors in yaml binding file
+> * added Reviewed-by tags
+> * changed commit messages and comments a little
+> * fixed indentation at some places
+> * swapped patch 2 and 3 (dt-binding defining new binding should go
+>   before the driver adding usage of that new binding)
+> 
+> Changes in v6:
+> * fixed yaml binding file and dts files
+> 
+> Changes in v5:
+> * fixed yaml binding file
+> 
+> Changes in v4:
+> * converted armada3700-uart-clock documentation to YAML
+> * split documentation changes into two commits:
+>   - first which adds clock documentation
+>   - second which updates UART documentation
+> 
+> Changes in v3:
+> v3 is rebased on top of Linus master branch and all already applied patches
+> were dropped. There are no changes in patches itself since v2.
+> 
+> Pali Rohár (6):
+>   math64: New DIV_U64_ROUND_CLOSEST helper
+>   dt-bindings: mvebu-uart: document DT bindings for
+>     marvell,armada-3700-uart-clock
+>   serial: mvebu-uart: implement UART clock driver for configuring UART
+>     base clock
+>   dt-bindings: mvebu-uart: update information about UART clock
+>   arm64: dts: marvell: armada-37xx: add device node for UART clock and
+>     use it
+>   serial: mvebu-uart: implement support for baudrates higher than 230400
+>     Bd
+> 
+>  .../clock/marvell,armada-3700-uart-clock.yaml |  59 ++
+>  .../devicetree/bindings/serial/mvebu-uart.txt |   9 +-
+>  arch/arm64/boot/dts/marvell/armada-37xx.dtsi  |  14 +-
+>  drivers/tty/serial/Kconfig                    |   1 +
+>  drivers/tty/serial/mvebu-uart.c               | 596 +++++++++++++++++-
+>  include/linux/math64.h                        |  13 +
+>  6 files changed, 671 insertions(+), 21 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/marvell,armada-3700-uart-clock.yaml
+> 
 > -- 
-> 2.17.1
+> 2.34.1
 > 

@@ -2,184 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42054BC9AA
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 18:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2754BC9AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 19:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242749AbiBSR7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 12:59:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60496 "EHLO
+        id S242758AbiBSSD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 13:03:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbiBSR67 (ORCPT
+        with ESMTP id S235751AbiBSSDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 12:58:59 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BC5F8E0
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 09:58:39 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220219175838epoutp017bbb423593392884eb95bebe56e537a2~VQbzL1BrM1395513955epoutp014
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 17:58:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220219175838epoutp017bbb423593392884eb95bebe56e537a2~VQbzL1BrM1395513955epoutp014
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1645293518;
-        bh=nKq37BTRxnF03xFJIUPe/WlXxpClF9Q74HD9ufgg0os=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=ecmAC4N2MO59Y6/B6WLY6PzQZB/P69ZemTnMYVRrrlFgaA59411I75LHXKxODuK3p
-         +CJ6Brdehp/GpIDIWUWY6VqzIeYZ4uiM1OOXqSvMuqyEHBm6chEoT5fMj4o9xj2TEv
-         6+wqnlu5ySkHGP7P/x7Izt5nicd+9U3X/OK557/Q=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220219175836epcas5p24eb86f410d5ad077d8b5a3e8794fa15f~VQbyOuqQ31199511995epcas5p2K;
-        Sat, 19 Feb 2022 17:58:36 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4K1GWt1b9qz4x9Pt; Sat, 19 Feb
-        2022 17:58:34 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        78.5A.06423.ACF21126; Sun, 20 Feb 2022 02:58:34 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220219175832epcas5p399b652e6da610ada233376651694b42c~VQbuXSUAY2260922609epcas5p3W;
-        Sat, 19 Feb 2022 17:58:32 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220219175832epsmtrp17e62247e5c927b264d7b9a67830d481d~VQbuTNXzR0051400514epsmtrp1K;
-        Sat, 19 Feb 2022 17:58:32 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-6b-62112fca7380
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F7.5A.08738.8CF21126; Sun, 20 Feb 2022 02:58:32 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220219175831epsmtip274243b7cab6651563f7fed2052505bb6~VQbs93vgE1832918329epsmtip2a;
-        Sat, 19 Feb 2022 17:58:31 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     krzysztof.kozlowski@canonical.com,
-        linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, pankaj.dubey@samsung.com,
-        m.szyprowski@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH] clocksource/drivers/exynos_mct: Remove mct interrupt index
- enum
-Date:   Sat, 19 Feb 2022 23:40:03 +0530
-Message-Id: <20220219181003.12739-1-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMKsWRmVeSWpSXmKPExsWy7bCmpu4pfcEkgzl3WCwezNvGZjHvs6zF
-        xrc/mCw2Pb7GanF51xw2ixnn9zFZrD1yl91i0dYv7BabN01lduD0mNXQy+Zx59oeNo93586x
-        e2xeUu/Rt2UVo8fnTXIBbFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJ
-        uam2Si4+AbpumTlANykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL
-        89L18lJLrAwNDIxMgQoTsjPanv1iLTjCVzF5SV4D4wvuLkZODgkBE4mPrycydzFycQgJ7GaU
-        OLfgJiOE84lRYtb06awQzmdGick979hgWtYePgbVsotRYtfRpywQTguTxPFNV5hAqtgEtCXu
-        Tt8CZosIuEncaOxgAiliFrjGKPFn4iFGkISwQJDEsc/dzCA2i4CqxLK2JywgNq+AjcSz2wdY
-        IdbJS6zecABsnYTAPnaJpkunoBIuEo++n2GCsIUlXh3fwg5hS0m87G8DsjmA7GyJnl3GEOEa
-        iaXzjrFA2PYSB67MYQEpYRbQlFi/Sx8kzCzAJ9H7+wkTRCevREebEES1qkTzu6tQndISE7u7
-        oQ7wkLi74QY4UIQEYiXOt3SyTWCUmYUwdAEj4ypGydSC4tz01GLTAsO81HJ43CTn525iBKcu
-        Lc8djHcffNA7xMjEwXiIUYKDWUmE98NB3iQh3pTEyqrUovz4otKc1OJDjKbAUJrILCWanA9M
-        nnkl8YYmlgYmZmZmJpbGZoZK4ryn0zckCgmkJ5akZqemFqQWwfQxcXBKNTCtldZ0TO16XKrh
-        /KxEiUkxfOUsp4S4uRLbl9utPcI177ZOcCufBMOh7qo7DJZ3TLnv6RsGHdpaP+tRQ2+WvAWb
-        zv4l38L97GKuX3INmyV+ZbfoHelZLO+la7mPzb/3MrV7i6cc95TD7OYrq25qxiimLZnIc0CR
-        85pOQfHWy0IGYgsesbrwWMhIPJv2N2iH99+w7cpRN44wGtgEOvAbRRp/da/P2SHoOTv+7ILX
-        O5d5Vs+T37bsl9UUwzNX0+rsVkW1nG1srtg275zwno+c/o03q9bfbs5ffSd84ZoKyxLfyOoA
-        dce/elwavJYMGyYve7SWXa3O+onU05jglKPBKVd/ameYrPeO7jX9/mzxPyWW4oxEQy3mouJE
-        AODbRwfmAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphluLIzCtJLcpLzFFi42LZdlhJXveEvmCSwbTHahYP5m1js5j3WdZi
-        49sfTBabHl9jtbi8aw6bxYzz+5gs1h65y26xaOsXdovNm6YyO3B6zGroZfO4c20Pm8e7c+fY
-        PTYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujLZnv1gLjvBVTF6S18D4gruLkZNDQsBE
-        Yu3hY8xdjFwcQgI7GCXWbOtkg0hIS1zfOIEdwhaWWPnvOTtEUROTRHP7EyaQBJuAtsTd6VvA
-        bBEBD4m2f/fAJjEL3GOU+N0yjREkISwQIHHozxawSSwCqhLL2p6wgNi8AjYSz24fYIXYIC+x
-        esMB5gmMPAsYGVYxSqYWFOem5xYbFhjlpZbrFSfmFpfmpesl5+duYgQHmJbWDsY9qz7oHWJk
-        4mA8xCjBwawkwvvhIG+SEG9KYmVValF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KL
-        YLJMHJxSDUyHTsR6Hu3Ytnre1UvvslWjHE7tqzhzMOVpvth9vXMSqt+TLe4slYvlm2dc6Fl6
-        +Ed4sa6rzf6Ti5/N0n2g+DTPtewKw+11sldF8k+08+8qNE9Y/SvgwYbJTyeULb/5X4Et6k5t
-        gdSPxT85OA3dFv/UrgplP7DQ7c45xdf62VpJBRnzH5obq6Q88jpRxvc7XYP7m1fHowPsrfZs
-        mvO9+CPCnnXF+/PI7dDMiGTbN7OSebvbrFVWmpdNdc9OXZDDHtUd19fMreXC/Yn/2s7FMVf8
-        V/jNy9izvlX/wNfSwilp7dPf2bDZn2Ivd3twPIpl+5Wo38mV/v5cXxrb3U5Kz8yM3s+6UL1q
-        9bz1+7nZY5VYijMSDbWYi4oTAe5LUZOfAgAA
-X-CMS-MailID: 20220219175832epcas5p399b652e6da610ada233376651694b42c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220219175832epcas5p399b652e6da610ada233376651694b42c
-References: <CGME20220219175832epcas5p399b652e6da610ada233376651694b42c@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 19 Feb 2022 13:03:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DD760045;
+        Sat, 19 Feb 2022 10:03:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4073260B89;
+        Sat, 19 Feb 2022 18:03:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3089EC004E1;
+        Sat, 19 Feb 2022 18:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645293814;
+        bh=7sdjXCq+horHJeTaGuXGQHBBiVUmSagqKBrk/149NCU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P+hnkv8s6dzEW3vB/fakyR7sGqJH6EFy6xFKzprHN3D6JJd74gMeRaboaBJFlGGCU
+         yN2RVnHwvx/z8CaAZ9+9t7FcugU0jbxM22DOTFwyOYeUwGsrmfs78v0ANHK7h6z/Ac
+         Bs1nEbWEchnXKRgyi0P9CJSaf44eBqosCRcBTQb8I0T6XnKQY6zYJ5HbmVyM8SQ+uA
+         AybKK5z7ztDp3U4/bFm6H/TiTm6JVL0KrToE5eLbFHfDvPZLHfLN7szN9r0VAX3zzS
+         PPV/JQrhkGEr7UZls6VZaAndY+DY31kwiv/PHhqUxIhPtuKi82iL0FQxWBvDAoIc10
+         lbgJOKuiRvxTQ==
+Date:   Sat, 19 Feb 2022 18:10:22 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
+        andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        bsp-development.geo@leica-geosystems.com
+Subject: Re: [PATCH V2 4/5] iio: accel: sca3300: Add support for SCL3300
+Message-ID: <20220219181022.4655a1a7@jic23-huawei>
+In-Reply-To: <20220217062705.2867149-5-Qing-wu.Li@leica-geosystems.com.cn>
+References: <20220217062705.2867149-1-Qing-wu.Li@leica-geosystems.com.cn>
+        <20220217062705.2867149-5-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MCT driver define an enum which list global and local timer's
-irq index. Most of them are not used but MCT_G0_IRQ and
-MCT_L0_IRQ and these two are at a fixed offset/index.
-Get rid of this enum and use a #define for the used irq index.
+On Thu, 17 Feb 2022 06:27:04 +0000
+LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn> wrote:
 
-While at it, bump-up maximum number of MCT IRQ to match the
-binding documentation. And also change the name variable to be
-more generic.
+> Add support for Murata SCL3300, a 3-axis MEMS accelerometer.
+> Same as SCA3300, it has accelerometer and temperature output.
+> Datasheet:
+> www.murata.com/en-us/products/sensor/inclinometer/overview/lineup/scl3300
+> 
+> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
 
-No functional changes expected.
+Hi
 
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- drivers/clocksource/exynos_mct.c | 25 ++++++++-----------------
- 1 file changed, 8 insertions(+), 17 deletions(-)
+Most comments are follow on from previous patch review.
 
-- currently tested on exynos7 platform, appreciate testing on
- exynos-{3,4,5} platforms
+Thanks,
 
-diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-index 6db3d5511b0f..4aea9cd3f7ba 100644
---- a/drivers/clocksource/exynos_mct.c
-+++ b/drivers/clocksource/exynos_mct.c
-@@ -60,27 +60,18 @@
- #define MCT_CLKEVENTS_RATING		350
- #endif
- 
-+/* There are four Global timers starting with 0 offset */
-+#define MCT_G0_IRQ	0
-+/* Local timers count starts after global timer count */
-+#define MCT_L0_IRQ	4
-+/* Max number of MCT IRQ as per binding document */
-+#define MCT_NR_IRQS	20
-+
- enum {
- 	MCT_INT_SPI,
- 	MCT_INT_PPI
- };
- 
--enum {
--	MCT_G0_IRQ,
--	MCT_G1_IRQ,
--	MCT_G2_IRQ,
--	MCT_G3_IRQ,
--	MCT_L0_IRQ,
--	MCT_L1_IRQ,
--	MCT_L2_IRQ,
--	MCT_L3_IRQ,
--	MCT_L4_IRQ,
--	MCT_L5_IRQ,
--	MCT_L6_IRQ,
--	MCT_L7_IRQ,
--	MCT_NR_IRQS,
--};
--
- static void __iomem *reg_base;
- static unsigned long clk_rate;
- static unsigned int mct_int_type;
-@@ -89,7 +80,7 @@ static int mct_irqs[MCT_NR_IRQS];
- struct mct_clock_event_device {
- 	struct clock_event_device evt;
- 	unsigned long base;
--	char name[10];
-+	char name[MCT_NR_IRQS - 1];
- };
- 
- static void exynos4_mct_write(unsigned int value, unsigned long offset)
--- 
-2.25.1
+Jonathan
+
+> ---
+>  drivers/iio/accel/sca3300.c | 45 +++++++++++++++++++++++++++++++++++--
+>  1 file changed, 43 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/accel/sca3300.c b/drivers/iio/accel/sca3300.c
+> index b1748874c02d..123ab9a784d2 100644
+> --- a/drivers/iio/accel/sca3300.c
+> +++ b/drivers/iio/accel/sca3300.c
+> @@ -42,6 +42,9 @@
+>  #define SCA3300_VALUE_RS_ERROR	0x3
+>  #define SCA3300_MASK_RS_STATUS	GENMASK(1, 0)
+>  
+> +#define SCA3300_REG_ANG_CTRL 0x0C
+> +#define SCA3300_ANG_ENABLE   0x1F
+> +
+>  enum sca3300_op_mode_indexes {
+>  	OP_MOD_1 = 0,
+>  	OP_MOD_2,
+> @@ -52,6 +55,7 @@ enum sca3300_op_mode_indexes {
+>  
+>  enum sca3300_chip_type {
+>  	CHIP_SCA3300 = 0,
+> +	CHIP_SCL3300,
+>  	CHIP_CNT
+>  };
+>  
+> @@ -106,8 +110,19 @@ static const struct iio_chan_spec sca3300_channels[] = {
+>  	IIO_CHAN_SOFT_TIMESTAMP(SCA3300_TIMESTAMP),
+>  };
+>  
+> +static const struct iio_chan_spec scl3300_channels[] = {
+> +	SCA3300_ACCEL_CHANNEL(SCA3300_ACC_X, 0x1, X),
+> +	SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Y, 0x2, Y),
+> +	SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Z, 0x3, Z),
+> +	SCA3300_TEMP_CHANNEL(SCA3300_TEMP, 0x05),
+> +	IIO_CHAN_SOFT_TIMESTAMP(SCA3300_TIMESTAMP),
+> +};
+> +
+>  static const int sca3300_lp_freq_table[] = {70, 70, 70, 10};
+> +static const int scl3300_lp_freq_table[] = {40, 70, 10, 10};
+> +
+>  static const int sca3300_accel_scale_table[][2] = {{0, 370}, {0, 741}, {0, 185}, {0, 185}};
+> +static const int scl3300_accel_scale_table[][2] = {{0, 167}, {0, 333}, {0, 83}, {0, 83}};
+
+As below, given there is no obvious reason to support both mode 3 and 4 I would only
+have values for one of them and have a different number of modes available for this device.
+
+>  
+>  static const unsigned long sca3300_scan_masks[] = {
+>  	BIT(SCA3300_ACC_X) | BIT(SCA3300_ACC_Y) | BIT(SCA3300_ACC_Z) |
+> @@ -161,6 +176,18 @@ static const struct sca3300_chip_info sca3300_chip_info_tbl[] = {
+>  		.chip_id = 0x51,
+>  		.num_freqs = 2,
+>  	},
+> +	[CHIP_SCL3300] = {
+> +		.num_accel_scales = ARRAY_SIZE(scl3300_accel_scale_table)*2-1,
+> +		.num_channels = ARRAY_SIZE(scl3300_channels),
+> +		.accel_scale_table = scl3300_accel_scale_table,
+> +		.freq_table = scl3300_lp_freq_table,
+> +		.scan_masks = sca3300_scan_masks,
+> +		.channels = scl3300_channels,
+> +		.chip_type = CHIP_SCL3300,
+> +		.name = "scl3300",
+> +		.chip_id = 0xC1,
+> +		.num_freqs = 3,
+> +	},
+>  };
+>  
+>  DECLARE_CRC8_TABLE(sca3300_crc_table);
+> @@ -274,6 +301,11 @@ static int sca3300_set_op_mode(struct sca3300_data *sca_data, unsigned int mode)
+>  	if ((mode < OP_MOD_1) || (mode >= OP_MOD_CNT))
+>  		return -EINVAL;
+>  
+> +	/* SCL3300, mode 3 and 4 are same, use mode 4 only*/
+> +	if (sca_data->chip_info->chip_type == CHIP_SCL3300) {
+
+For this, the interface would be simpler if we just pretend mode 3 doesn't
+exist and have only 3 modes (though obvious we'll still need to adjust it ehre).
+
+> +		if (mode == OP_MOD_3)
+> +			mode = OP_MOD_4;
+> +	}
+>  	return sca3300_write_reg(sca_data, SCA3300_REG_MODE, mode);
+>  }
+>  
+> @@ -317,6 +349,8 @@ static int sca3300_write_raw(struct iio_dev *indio_dev,
+>  			if (reg_val == OP_MOD_4 && mode == OP_MOD_3)
+>  				return sca3300_set_op_mode(data, mode);
+>  			return -EINVAL;
+> +		case CHIP_SCL3300:
+> +			return sca3300_set_op_mode(data, mode);
+
+As mentioned in previous patch I'd like these choices to be expressed as
+'features' or similar in the chip_info so that we don't end up with
+the part differences exposed only via a specific 'type' field.
+
+>  		default:
+>  			return -EINVAL;
+>  		}
+> @@ -348,8 +382,9 @@ static int sca3300_read_raw(struct iio_dev *indio_dev,
+>  			*val =  data->chip_info->accel_scale_table[reg_val][0];
+>  			*val2 = data->chip_info->accel_scale_table[reg_val][1];
+>  			return IIO_VAL_INT_PLUS_MICRO;
+> +		default:
+> +			return -EINVAL;
+>  		}
+> -		return -EINVAL;
+
+Fix in earlier patch.
+
+>  	case IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY:
+>  		ret = sca3300_read_reg(data, SCA3300_REG_MODE, &reg_val);
+>  		if (ret)
+> @@ -431,6 +466,12 @@ static int sca3300_init(struct sca3300_data *sca_data,
+>  	indio_dev->name = sca3300_chip_info_tbl[i].name;
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  
+> +	if (sca_data->chip_info->chip_type == CHIP_SCL3300) {
+As previously I'd ideally prefer to have the chip_info contain flags on which we make
+a decision on a particular 'feature' rather than using a generic chip_type and
+mixing where we have the information on the difference between devices.  I want
+all that info in the chip_info structure.
+
+	if (sca_data->chip_info->ang) {
+		ret = sca3000_write_reg(sca_data, SCA330...
+		...
+	}
+> +		ret = sca3300_write_reg(sca_data, SCA3300_REG_ANG_CTRL, SCA3300_ANG_ENABLE);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> @@ -474,7 +515,6 @@ static int sca3300_read_avail(struct iio_dev *indio_dev,
+>  		default:
+>  			return -EINVAL;
+>  		}
+> -		return -EINVAL;
+
+This was introduced in previous patch. Please fix it there.
+
+
+>  	case IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY:
+>  		*vals = (const int *)data->chip_info->freq_table;
+>  		*length = data->chip_info->num_freqs;
+> @@ -536,6 +576,7 @@ static int sca3300_probe(struct spi_device *spi)
+>  
+>  static const struct of_device_id sca3300_dt_ids[] = {
+>  	{ .compatible = "murata,sca3300"},
+> +	{ .compatible = "murata,scl3300"},
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, sca3300_dt_ids);
 

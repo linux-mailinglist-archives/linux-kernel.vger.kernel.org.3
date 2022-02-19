@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8083C4BC71A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 10:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E1F4BC723
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 10:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241829AbiBSJ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 04:26:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57824 "EHLO
+        id S241835AbiBSJ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 04:27:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235598AbiBSJ0l (ORCPT
+        with ESMTP id S241789AbiBSJ0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 04:26:41 -0500
+        Sat, 19 Feb 2022 04:26:42 -0500
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471B624CCDC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20DD24CCE1
         for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 01:26:23 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K133m07Fxzbbb8;
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K133m30jLzbbb9;
         Sat, 19 Feb 2022 17:21:56 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <vitaly.wool@konsulko.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH 6/9] mm/z3fold: move decrement of pool->pages_nr into __release_z3fold_page()
-Date:   Sat, 19 Feb 2022 17:25:30 +0800
-Message-ID: <20220219092533.12596-7-linmiaohe@huawei.com>
+Subject: [PATCH 7/9] mm/z3fold: remove redundant list_del_init of zhdr->buddy in z3fold_free
+Date:   Sat, 19 Feb 2022 17:25:31 +0800
+Message-ID: <20220219092533.12596-8-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220219092533.12596-1-linmiaohe@huawei.com>
 References: <20220219092533.12596-1-linmiaohe@huawei.com>
@@ -48,142 +48,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The z3fold will always do atomic64_dec(&pool->pages_nr) when the
-__release_z3fold_page() is called. Thus we can move decrement of
-pool->pages_nr into __release_z3fold_page() to simplify the code.
-Also we can reduce the size of z3fold.o ~1k.
-Without this patch:
-   text	   data	    bss	    dec	    hex	filename
-  15444	   1376	      8	  16828	   41bc	mm/z3fold.o
-With this patch:
-   text	   data	    bss	    dec	    hex	filename
-  15044	   1248	      8	  16300	   3fac	mm/z3fold.o
+The do_compact_page will do list_del_init(&zhdr->buddy) for us. Remove this
+extra one to save some possible cpu cycles.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/z3fold.c | 41 ++++++++++++-----------------------------
- 1 file changed, 12 insertions(+), 29 deletions(-)
+ mm/z3fold.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/mm/z3fold.c b/mm/z3fold.c
-index adc0b3fa4906..18a697f6fe32 100644
+index 18a697f6fe32..867c590df027 100644
 --- a/mm/z3fold.c
 +++ b/mm/z3fold.c
-@@ -520,6 +520,8 @@ static void __release_z3fold_page(struct z3fold_header *zhdr, bool locked)
- 	list_add(&zhdr->buddy, &pool->stale);
- 	queue_work(pool->release_wq, &pool->work);
- 	spin_unlock(&pool->stale_lock);
-+
-+	atomic64_dec(&pool->pages_nr);
- }
- 
- static void release_z3fold_page(struct kref *ref)
-@@ -737,13 +739,9 @@ static struct z3fold_header *compact_single_buddy(struct z3fold_header *zhdr)
- 	return new_zhdr;
- 
- out_fail:
--	if (new_zhdr) {
--		if (kref_put(&new_zhdr->refcount, release_z3fold_page_locked))
--			atomic64_dec(&pool->pages_nr);
--		else {
--			add_to_unbuddied(pool, new_zhdr);
--			z3fold_page_unlock(new_zhdr);
--		}
-+	if (new_zhdr && !kref_put(&new_zhdr->refcount, release_z3fold_page_locked)) {
-+		add_to_unbuddied(pool, new_zhdr);
-+		z3fold_page_unlock(new_zhdr);
+@@ -1244,9 +1244,6 @@ static void z3fold_free(struct z3fold_pool *pool, unsigned long handle)
+ 		return;
  	}
- 	return NULL;
- 
-@@ -816,10 +814,8 @@ static void do_compact_page(struct z3fold_header *zhdr, bool locked)
- 	list_del_init(&zhdr->buddy);
- 	spin_unlock(&pool->lock);
- 
--	if (kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
--		atomic64_dec(&pool->pages_nr);
-+	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
- 		return;
--	}
- 
- 	if (test_bit(PAGE_STALE, &page->private) ||
- 	    test_and_set_bit(PAGE_CLAIMED, &page->private)) {
-@@ -829,9 +825,7 @@ static void do_compact_page(struct z3fold_header *zhdr, bool locked)
- 
- 	if (!zhdr->foreign_handles && buddy_single(zhdr) &&
- 	    zhdr->mapped_count == 0 && compact_single_buddy(zhdr)) {
--		if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
--			atomic64_dec(&pool->pages_nr);
--		else {
-+		if (!kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
- 			clear_bit(PAGE_CLAIMED, &page->private);
- 			z3fold_page_unlock(zhdr);
- 		}
-@@ -1089,10 +1083,8 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
- 		if (zhdr) {
- 			bud = get_free_buddy(zhdr, chunks);
- 			if (bud == HEADLESS) {
--				if (kref_put(&zhdr->refcount,
-+				if (!kref_put(&zhdr->refcount,
- 					     release_z3fold_page_locked))
--					atomic64_dec(&pool->pages_nr);
--				else
- 					z3fold_page_unlock(zhdr);
- 				pr_err("No free chunks in unbuddied\n");
- 				WARN_ON(1);
-@@ -1239,10 +1231,8 @@ static void z3fold_free(struct z3fold_pool *pool, unsigned long handle)
- 
- 	if (!page_claimed)
- 		free_handle(handle, zhdr);
--	if (kref_put(&zhdr->refcount, release_z3fold_page_locked_list)) {
--		atomic64_dec(&pool->pages_nr);
-+	if (kref_put(&zhdr->refcount, release_z3fold_page_locked_list))
- 		return;
--	}
- 	if (page_claimed) {
- 		/* the page has not been claimed by us */
- 		put_z3fold_header(zhdr);
-@@ -1353,9 +1343,7 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
- 				break;
- 			}
- 			if (!z3fold_page_trylock(zhdr)) {
--				if (kref_put(&zhdr->refcount,
--						release_z3fold_page))
--					atomic64_dec(&pool->pages_nr);
-+				kref_put(&zhdr->refcount, release_z3fold_page);
- 				zhdr = NULL;
- 				continue; /* can't evict at this point */
- 			}
-@@ -1366,10 +1354,8 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
- 			 */
- 			if (zhdr->foreign_handles ||
- 			    test_and_set_bit(PAGE_CLAIMED, &page->private)) {
--				if (kref_put(&zhdr->refcount,
-+				if (!kref_put(&zhdr->refcount,
- 						release_z3fold_page_locked))
--					atomic64_dec(&pool->pages_nr);
--				else
- 					z3fold_page_unlock(zhdr);
- 				zhdr = NULL;
- 				continue; /* can't evict such page */
-@@ -1447,7 +1433,6 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
- 			if (kref_put(&zhdr->refcount,
- 					release_z3fold_page_locked)) {
- 				kmem_cache_free(pool->c_handle, slots);
--				atomic64_dec(&pool->pages_nr);
- 				return 0;
- 			}
- 			/*
-@@ -1669,10 +1654,8 @@ static void z3fold_page_putback(struct page *page)
- 	if (!list_empty(&zhdr->buddy))
- 		list_del_init(&zhdr->buddy);
- 	INIT_LIST_HEAD(&page->lru);
--	if (kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
--		atomic64_dec(&pool->pages_nr);
-+	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
- 		return;
--	}
- 	spin_lock(&pool->lock);
- 	list_add(&page->lru, &pool->lru);
- 	spin_unlock(&pool->lock);
+ 	if (zhdr->cpu < 0 || !cpu_online(zhdr->cpu)) {
+-		spin_lock(&pool->lock);
+-		list_del_init(&zhdr->buddy);
+-		spin_unlock(&pool->lock);
+ 		zhdr->cpu = -1;
+ 		kref_get(&zhdr->refcount);
+ 		clear_bit(PAGE_CLAIMED, &page->private);
 -- 
 2.23.0
 

@@ -2,187 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424F54BC393
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF354BC396
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240434AbiBSAo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:44:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32812 "EHLO
+        id S240443AbiBSApR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:45:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236378AbiBSAoZ (ORCPT
+        with ESMTP id S236378AbiBSApQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:44:25 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733C1FFCA1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:44:07 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IMJaRH014492;
-        Sat, 19 Feb 2022 00:43:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2021-07-09;
- bh=tGXEvL3QP41l163hsMTB+M/txIyoPe7N/F7oB8bqCOI=;
- b=hBQ4dbD5p1tRFy3siuPNO2NArtGblPiKi8XQS7Ih2ZC4exTmjCnTmCHnsd5THtO1h2v9
- KKfJf6NEOB6G+WBw+AUQR9AYlOMkUasCNCSIU2TLCrSuGe6XSKJv55NcHEY5eAlYu79F
- Iv7vYmpwV+sPEJq12FzM8wZI8bQH2/6CvxqxYjgnkxb9CUqX8OXZyWI3DAQP77WHwQdd
- lgO5wJ8gUJjIMjiPS/1j8rcrfG8FuCNayXzvE9pO98/vlT9mAmXljpg69fkI6NSQSp92
- xDeh7BYAWk3F3Od+pKK86gUOvYUNbwHBqp/QRu4BIscupkjAixZGCu5ywqYk0VdIAhbI ew== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e8n3e33nu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 19 Feb 2022 00:43:58 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21J0anEc027719;
-        Sat, 19 Feb 2022 00:43:57 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-        by aserp3030.oracle.com with ESMTP id 3e9breg59f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 19 Feb 2022 00:43:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PQkXBBfi7KN+b2+fQ0BGERXdAkDjIHPNTiry6j6K28VBz8uEBU3YQUe7R39a1fj6mz3qIo+JLGnTl6hqo9PP0ucRfa/y2uMaSMmfx1bhohgF8X7VeYvm/eMBj009jTcAq8PbVV/3+2twDu5NnpsSoNnNBDWSAv6YRWfySJ8DHrbUDBdgZn3puQZRfjrC+pvMIMgxV/PDs8UmKkbHL+otinAMu4p5d04v0oXngnqv2ClVVpWmcjujRBBIQG7dAh8P2j826+LosOeI2Fq8v4KCkwiE16ZpyGHUZAoWCd0A15eed9rPBwmgOpXzf4SS7gCP5Iq/25032zr2qvWkiVqg+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tGXEvL3QP41l163hsMTB+M/txIyoPe7N/F7oB8bqCOI=;
- b=iOUykN4ob/hGWWrO+56Y0mlrU5ZISdOO1YoPD/Y2nfU3TNbbR1y9mj5ap/0VozA18cGj6rwE3QchH87U7q1W7FiQcZ2+K5RRoVCpoVJLAtkaS++3slzYU8M/06ny244vbCtrZDbslze2czL0NRoSTIcDw0WteOcpSSS7cc6NqiVlI4H+gmECGpZ2cGoxKly5pUy5KPukVbTzJYIQFRro3M0FRPQscGxhvlNHm9COLwOC4MjiKPedvzTTIZFVZfCxgWFGwqOdTskRc41U6zaPSJTfJgvsvWspvZEDoAaOe8Avp3r4HT0UqYW1ivA25DkiwKxU7ETxHo68NCMpY3f39A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        Fri, 18 Feb 2022 19:45:16 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD3C22C6C9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:44:58 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id q17so18258310edd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:44:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tGXEvL3QP41l163hsMTB+M/txIyoPe7N/F7oB8bqCOI=;
- b=eoG4Yb6Nza7uT/eACBRRnT6KO/zga7hI4Gc+ZzFJdNfHQ0A6bH7CSfHzjl8Srg76URpc9NSYnWrP/7lM9ADmIb0VX0V9J7qTxMLNki98lBYhIZSS63AslVY93QHW6R/wgkXSVhxnMEzoX5ZszRv7nhXEi0m4l6lMoqP0gZBH+b0=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by SJ0PR10MB5662.namprd10.prod.outlook.com (2603:10b6:a03:3da::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Sat, 19 Feb
- 2022 00:43:55 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::11f6:860e:575a:e6f1]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::11f6:860e:575a:e6f1%5]) with mapi id 15.20.4995.024; Sat, 19 Feb 2022
- 00:43:55 +0000
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH] selftests/memfd: clean up mapping in mfd_fail_write
-Date:   Fri, 18 Feb 2022 16:43:40 -0800
-Message-Id: <20220219004340.56478-1-mike.kravetz@oracle.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CO2PR04CA0186.namprd04.prod.outlook.com
- (2603:10b6:104:5::16) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MGHwoQoxInpR0HuivERFqQnJ/YDdnM3tfc/vI2kgqZ0=;
+        b=L+32DakSO8c8K7dQaYC2mtIW9t6DJ7J7BcXCm5xHqMTTEj6M8Cimt10zk9POL68FNO
+         3aoz7cOkrOtyIke8YwmdlQhiVzqZGXGgtb4l6LUYLXsVYSlXCNKXLnTIvzEWBa6N2DWV
+         iUpQ2/xuPrntHC/2N9lgLUM820GNGSeYE8wsQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MGHwoQoxInpR0HuivERFqQnJ/YDdnM3tfc/vI2kgqZ0=;
+        b=VjlWUcavT4Z8Rl6a1WI7qw6QO6he0WZlWxCSESv+/hwUJyeXP4WCP71e6zQEE7zeMK
+         7pPOvC6UEjn+AOBUF39zbiaNXmCJali05rMUmaClqMRpujApGxeJa0lPaR6sLSiXPuAS
+         jTvdjz0GE2OCpvHbw7K85qs88Mm8XGHq4ZrXBbJxzyLP6769WXDs0zz64/EtLo/x7Iwd
+         8Xtj5Pma+xkYTr5jH1LCaIsb35ND6y2C98/by69ggLMEyLnwyosf+IomYopU6Ecg+f+Q
+         FUTUYaeomrGxPchI8L5ZKQ7uz074Zo3widkwVwuNZu5E/fzWw/s7tCR67Tc2wfH1ZVqe
+         l31g==
+X-Gm-Message-State: AOAM531fhwurML4vEINAzjzCdLytzhdcDdIRXZE9eR3DwcFsSv87LV4K
+        VVhSpSUvJItd9LFrj5htwu7VQXzxTZyXb5JvjhY=
+X-Google-Smtp-Source: ABdhPJwOEGOndN3XJ2AdPVgs21Uk3Pl9ptap6C6m7lxGMh46gmnMmtXtddj1YDrRnLCd3mKOJXSTpg==
+X-Received: by 2002:aa7:d999:0:b0:40e:fdf0:38c with SMTP id u25-20020aa7d999000000b0040efdf0038cmr10733423eds.419.1645231496569;
+        Fri, 18 Feb 2022 16:44:56 -0800 (PST)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id l1sm2727025ejb.81.2022.02.18.16.44.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Feb 2022 16:44:55 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id p9so17085663wra.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:44:54 -0800 (PST)
+X-Received: by 2002:a5d:64ef:0:b0:1e3:1e05:d042 with SMTP id
+ g15-20020a5d64ef000000b001e31e05d042mr7524925wri.679.1645231494092; Fri, 18
+ Feb 2022 16:44:54 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5c145bf8-2eb0-40a7-fe5a-08d9f340e888
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5662:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR10MB56627CAC852FCD85E8E4E2A7E2389@SJ0PR10MB5662.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9e/vSJUCuoJTl8gl2nAxBRGNoBSA6ac9rYE1s7UFaniUVtm/Mc0HcOWurhIR0yTySdXqps68MJTbDmh0ifQ9DSQfwEiQc19iP0l2Mxuwb9qcRic5jmWGWV+Em0gxD5alVgEi5FfUB9tHrZNy8j2D0isG7Gws9sOsUHlm/OxjqtGhbuTdLDpbui2rxfCBKZM5fyKWYgRjUX+xv22NehvDpvwN8m4PONVGTExtBIX+xugjBVEGDIj1QEJ1EGibEAUuOefX1a6yrzlIQ7d/pqX3p0UIQ1MIVkj6sWhb7QHVwUkhNgaT2tcFLe/AOGck0xP+9GZCcxesx1PiTTcDD6kF0ZBAhbU0LTLKCN+ZUvuGzWt96qvgnz3Li3isA3A8dT6l9L3E1vY9x6DW9O5EIdo+uJDugKElTzUn8K3HoidofEhqAYtcOZCbZXoU1QBssUBERhHp9oEbFab9btlciL905IOWtL5aSNmN7vv2QNofukXdC9yZdczUHnwGZx++LFcM8yYxuxukHxFuLO7VEIvfuwbyzLTujYSOQbJP912GUilm9AjkiltJ450+/XzYafWlKIThu9PaDmvdUDZxCb7nppfuSopEiGMdUGlu4VjqRaEWRGbKe0k0h+ItdE3fOuoneUfPU44fCTqgE7YyoUixe35j7b98Gpld9a937ToNw2p3NrNJgJ3EU/psk4ztFYpbhrFWbYK8EPhIX1CqvLiCcw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(316002)(44832011)(1076003)(52116002)(2906002)(38350700002)(66476007)(38100700002)(36756003)(8936002)(54906003)(4326008)(5660300002)(66556008)(6666004)(66946007)(6486002)(508600001)(26005)(186003)(83380400001)(107886003)(6512007)(8676002)(2616005)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LfrZEUVy154hHadGvuwmilN9DvxudSn7lEpobE9XUB4HP3+F2JNeCoAnzv5W?=
- =?us-ascii?Q?3EU7Riqm2qZWSr3U2TXARDwf2ABH69b1k43lj0BsTKzYagC0118W+IK7pKxd?=
- =?us-ascii?Q?wps1+4g3uGgaR2Djgx0/GD29tCU/IUt7aXaXzMaiEAisESQz4S6qWe7mzDMb?=
- =?us-ascii?Q?8D7tlj++z54WOorA51zZxjBEfEfg1peMCx/aK2ZneVnimnxcwpe9ipQIIA8t?=
- =?us-ascii?Q?Z1CJpgba7G1SiO7enSh9HOSr8A5Y1RDPY8uhFBslfysDN+LUynFzxsqErS1+?=
- =?us-ascii?Q?3CW7AUB2+WtChEFT0wFoATici48cWAO1/MPQu0n+DheN0x6IJogKKRpc3msl?=
- =?us-ascii?Q?D8Pldhk/ShO61slyH726EW17ijbLBHPSWhExW96+zo2Z6CtCQwkJmMh7iAoV?=
- =?us-ascii?Q?0KF7vSOYazzfvHXlKOdotpeIqqfl0SUmrGL2ZrhTrAbQtoVnJMJyzqTPh5Rl?=
- =?us-ascii?Q?RGM7tzfWTWAEzzbg5KCgI3I6ETTyV4TOx8hUbY06WCpvLwHYQAVLbQEvxBbG?=
- =?us-ascii?Q?T157DnRGw9PXmTev5HWtGETj3Q7/v6M/fWBhUebYym7gI6HdDhuv+So/5uc/?=
- =?us-ascii?Q?i98/FImhIUWeWHxPMHG+rToDP1zC0H8XjA9U6JOLnVJv/A7XoYk914QFUFAQ?=
- =?us-ascii?Q?NoyTBX7AgFozjHyH5VvoLmirDq9VkEgKjICbDQ24BajZFvLbVKYoLnG4wxWe?=
- =?us-ascii?Q?m+BLkvuMUrXgtiJucPY9UZpxO12mzmc/DBSuTFtE4UOA3mZxnlTf3rrXiWmX?=
- =?us-ascii?Q?MOuS0EZL+4seWrQN7/5fBWNZz+1ddQq5nB59jGb8/5jMHGC7GRoc7Yv2Gv1A?=
- =?us-ascii?Q?HjrK+kzDtqj+T9mpZbhodJmXsS1YEi76dGG8qjsUHIMAvsM7AXn1+t/9EUpN?=
- =?us-ascii?Q?pXwhmtT9NMg4UP/rW4rzAo5GNqms/HTy91Z7qb02GX7Y+QTEZ/PEcPNCy1aB?=
- =?us-ascii?Q?2KPPd5jfjE0IatzlAMsMSCjqeOHP4adr4W8UChWG1OxIFMAzq4NW8cgFjhrx?=
- =?us-ascii?Q?SLkPla115WWrxZAMUAbZESDDjBtFUmUMkX258YGpVnfadTxzCMBjiu5YO1ua?=
- =?us-ascii?Q?KzH3rvEK5Psz5TOXy1/TGebJRQPDYzJgA5+Z65f0trXrDeBJc8WZtfW2v7zM?=
- =?us-ascii?Q?tnVY0cOH+6jnmYmr92E9T9+nthTK8Ka6dEsrrQp+CHzG6OUMvTqGFOtFKtGZ?=
- =?us-ascii?Q?6BSowAoeK3xXpph/P4vkasWIeJhiOn722pG2m8XsrIG7A7H/WVw4RxdsKBuk?=
- =?us-ascii?Q?QL8g9nepMAxGU8TgEwpJlL3rPmy/YMkkZfGpBT3MhkE0OMR+hXK1Lpm0mZEn?=
- =?us-ascii?Q?hyF4ZmC4hzdPkVHy3c8XaOJHcthewj8Cv51oQzY5sLvTMvuuRPODlFz2oab+?=
- =?us-ascii?Q?W/Xsijc3+AYi2wzl2lFzltuW8lqPWhvB9zxOo125XyaMBbNx7qKLHDh8Tsbz?=
- =?us-ascii?Q?NNIBJSjLglruhiChcndnKEa+Y0WdwyoSKsojIt/UFPlIqgNI0V3GRKdFBGUL?=
- =?us-ascii?Q?64XgQxxlnFs8AyKbCXk1mtqU3DfYUhS2KIZdqEZgSTjiDs7O2O9oEjJwgC9U?=
- =?us-ascii?Q?aLnliIKDvkZuPcpWJMb7nSKAd3Heuykv98LRdXeyapfFUjGkRsK4FTEqOgnC?=
- =?us-ascii?Q?DC5LKrvAivPl7NPCBuJ6+IQ=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c145bf8-2eb0-40a7-fe5a-08d9f340e888
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2022 00:43:55.5790
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7rA7R25Y9HjrWsXRDOshQ1atbPxAgPsO6LkfPrhnH4SrK8ZYM0voDe6dL+dulNIDDbAgqJcDm6MojX36haYgug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5662
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10262 signatures=677614
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 phishscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202190001
-X-Proofpoint-ORIG-GUID: dqri6GLgFNNkIl0goRyJg8xhHgvD0h8d
-X-Proofpoint-GUID: dqri6GLgFNNkIl0goRyJg8xhHgvD0h8d
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1644494255-6632-1-git-send-email-quic_sbillaka@quicinc.com> <1644494255-6632-6-git-send-email-quic_sbillaka@quicinc.com>
+In-Reply-To: <1644494255-6632-6-git-send-email-quic_sbillaka@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 18 Feb 2022 16:44:42 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WkjZr2vwo42rP7Ou_UP_CSoC=sGY08+pFHY_aVfN_Vhg@mail.gmail.com>
+Message-ID: <CAD=FV=WkjZr2vwo42rP7Ou_UP_CSoC=sGY08+pFHY_aVfN_Vhg@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] drm/msm/dp: Add driver support to utilize drm panel
+To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, quic_kalyant@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
+        quic_mkrishn@quicinc.com, quic_vproddut@quicinc.com,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Running the memfd script ./run_hugetlbfs_test.sh will often end in error
-as follows:
+Hi,
 
-memfd-hugetlb: CREATE
-memfd-hugetlb: BASIC
-memfd-hugetlb: SEAL-WRITE
-memfd-hugetlb: SEAL-FUTURE-WRITE
-memfd-hugetlb: SEAL-SHRINK
-fallocate(ALLOC) failed: No space left on device
-./run_hugetlbfs_test.sh: line 60: 166855 Aborted                 (core dumped) ./memfd_test hugetlbfs
-opening: ./mnt/memfd
-fuse: DONE
+On Thu, Feb 10, 2022 at 3:58 AM Sankeerth Billakanti
+<quic_sbillaka@quicinc.com> wrote:
+>
+> Add support in the DP driver to utilize the custom eDP panels
+> from drm/panels.
+>
+> An eDP panel is always connected to the platform. So, the eDP
+> connector can be reported as always connected. The display mode
+> will be sourced from the panel. The panel mode will be set after
+> the link training is completed.
+>
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> ---
+>
+> Changes in v4:
+>   - Remove obvious comments
+>   - Define separate connector_ops for eDP
+>   - Remove unnecessary checks
+>
+> Changes in v3:
+>   None
+>
+>  drivers/gpu/drm/msm/dp/dp_display.c |  6 ++++
+>  drivers/gpu/drm/msm/dp/dp_drm.c     | 62 +++++++++++++++++++++++++++++++------
+>  drivers/gpu/drm/msm/dp/dp_parser.h  |  3 ++
+>  3 files changed, 61 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 7cc4d21..5d314e6 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1513,6 +1513,9 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+>                 return -EINVAL;
+>         }
+>
+> +       if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
+> +               dp_hpd_plug_handle(dp_display, 0);
 
-If no hugetlb pages have been preallocated, run_hugetlbfs_test.sh will
-allocate 'just enough' pages to run the test.  In the SEAL-FUTURE-WRITE
-test the mfd_fail_write routine maps the file, but does not unmap.  As a
-result, two hugetlb pages remain reserved for the mapping.  When the
-fallocate call in the SEAL-SHRINK test attempts allocate all hugetlb
-pages, it is short by the two reserved pages.
+I'm really not so sure here. You're just totally ignoring the HPD
+signal here which isn't right at all. The HPD signal is important for
+knowing if an edp panel is ready yet so you can't just ignore it. The
+only way this could work is if something else turns the panel on w/
+plenty of time before your code runs so it has had time to get
+ready...
 
-Fix by making sure to unmap in mfd_fail_write.
+It feels like we just need to work to get this all plumbed up properly
+with the right power sequencing. That'll also allow us to enable the
+generic edp-panel stuff...
 
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
----
- tools/testing/selftests/memfd/memfd_test.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 192a2899bae8..94df2692e6e4 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -455,6 +455,7 @@ static void mfd_fail_write(int fd)
- 			printf("mmap()+mprotect() didn't fail as expected\n");
- 			abort();
- 		}
-+		munmap(p, mfd_def_size);
- 	}
- 
- 	/* verify PUNCH_HOLE fails */
--- 
-2.34.1
+> +static int edp_connector_get_modes(struct drm_connector *connector)
+> +{
+> +       struct msm_dp *dp;
+> +
+> +       dp = to_dp_connector(connector)->dp_display;
+> +
+> +       return drm_bridge_get_modes(dp->panel_bridge, connector);
+> +}
+> +
+> +static enum drm_mode_status edp_connector_mode_valid(
+> +               struct drm_connector *connector,
+> +               struct drm_display_mode *mode)
+> +{
+> +       if (mode->clock > EDP_MAX_PIXEL_CLK_KHZ)
+> +               return MODE_CLOCK_HIGH;
+> +
+> +       return MODE_OK;
+> +}
+> +
+>  static const struct drm_connector_funcs dp_connector_funcs = {
+>         .detect = dp_connector_detect,
+>         .fill_modes = drm_helper_probe_single_connector_modes,
+> @@ -132,11 +151,24 @@ static const struct drm_connector_funcs dp_connector_funcs = {
+>         .atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
+>  };
+>
+> +static const struct drm_connector_funcs edp_connector_funcs = {
+> +       .fill_modes = drm_helper_probe_single_connector_modes,
+> +       .destroy = drm_connector_cleanup,
+> +       .reset = drm_atomic_helper_connector_reset,
+> +       .atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
+> +       .atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
+> +};
+> +
+>  static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
+>         .get_modes = dp_connector_get_modes,
+>         .mode_valid = dp_connector_mode_valid,
+>  };
+>
+> +static const struct drm_connector_helper_funcs edp_connector_helper_funcs = {
+> +       .get_modes = edp_connector_get_modes,
+> +       .mode_valid = edp_connector_mode_valid,
+> +};
+> +
+>  /* connector initialization */
+>  struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+>  {
+> @@ -154,18 +186,28 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+>
+>         connector = &dp_connector->base;
+>
+> -       ret = drm_connector_init(dp_display->drm_dev, connector,
+> -                       &dp_connector_funcs,
+> -                       dp_display->connector_type);
+> -       if (ret)
+> -               return ERR_PTR(ret);
+> +       if (dp_display->connector_type == DRM_MODE_CONNECTOR_eDP) {
+> +               ret = drm_connector_init(dp_display->drm_dev, connector,
+> +                               &edp_connector_funcs, DRM_MODE_CONNECTOR_eDP);
+> +               if (ret)
+> +                       return ERR_PTR(ret);
+> +
+> +               drm_connector_helper_add(connector,
+> +                               &edp_connector_helper_funcs);
+> +       } else {
+> +               ret = drm_connector_init(dp_display->drm_dev, connector,
+> +                               &dp_connector_funcs,
+> +                               DRM_MODE_CONNECTOR_DisplayPort);
+> +               if (ret)
+> +                       return ERR_PTR(ret);
+>
+> -       drm_connector_helper_add(connector, &dp_connector_helper_funcs);
+> +               drm_connector_helper_add(connector, &dp_connector_helper_funcs);
 
+This is probably not the correct way to do this. Drivers like this
+should really be moving _away_ from creating their own connectors. The
+idea is that you should just be creating bridges and then someone
+creates a "bridge connector" that implements the connector functions
+atop the bridge.
+
+This is what Dmitry is working on [1]. Speaking of which, he really
+ought to be CCed on all your patches.
+
+
+> -       /*
+> -        * Enable HPD to let hpd event is handled when cable is connected.
+> -        */
+> -       connector->polled = DRM_CONNECTOR_POLL_HPD;
+> +               /*
+> +                * Enable HPD to let hpd event is handled when cable is connected.
+> +                */
+> +               connector->polled = DRM_CONNECTOR_POLL_HPD;
+> +       }
+>
+>         drm_connector_attach_encoder(connector, dp_display->encoder);
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
+> index 3172da0..58c4f27 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
+> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
+> @@ -17,6 +17,9 @@
+>  #define DP_MAX_PIXEL_CLK_KHZ   675000
+>  #define DP_MAX_NUM_DP_LANES    4
+>
+> +/* Maximum validated clock */
+> +#define EDP_MAX_PIXEL_CLK_KHZ  285550
+
+As discussed out-of-band, this isn't my favorite define. The datasheet
+for sc7280, which is what you're testing on / targeting, claims to
+support higher rates. Other users of this driver also ought to support
+higher rates. It might be OK short term, but it's definitely not a
+good long term solution.
+
+[1] https://lore.kernel.org/all/20220211224006.1797846-5-dmitry.baryshkov@linaro.org/

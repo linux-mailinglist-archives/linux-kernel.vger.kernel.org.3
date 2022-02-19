@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294344BCACD
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 22:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC1F4BCADC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 22:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243168AbiBSV4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 16:56:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55122 "EHLO
+        id S243229AbiBSV4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 16:56:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbiBSV4C (ORCPT
+        with ESMTP id S243174AbiBSV4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 16:56:02 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6B354197
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 13:55:42 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v8-20020a17090a634800b001bb78857ccdso13087113pjs.1
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 13:55:42 -0800 (PST)
+        Sat, 19 Feb 2022 16:56:11 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF4454197
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 13:55:44 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so11685193pjm.2
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 13:55:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=tlXNd4WfVV+N9MiUaNSDYcpKd5QnvzkHB2jHSyxHiSE=;
-        b=5CsPhfBVJpIWa/x8rm2/nRs+N1fPus18cLloeaRd9q55k67hSctSfb4OPSgzhhJRKN
-         ds1xDXNKBbrg/YjO4G0VLVCjHl3B+o1j4RfesE2fybq4r4tYeUdXsR+h9I0zKcJRX1in
-         ANy2eEEcRhi4ELUpvbxjt5gssa2HV/zXKk2xsUk1RXisQDOuDCvNlCnLYGYeJ6jUPjfR
-         MxSpYh+aNtu+Y1K6tIqqytBwhlY1/fikjip6nBX029rlIymhVbR4Sj+dMNh/5faVGfUM
-         EeXF5jv0IbknANDnNMHFurfvscQuwqwHttIU0niSRoEwE97/ecOlUqR7CWReYDyAIxo/
-         Fbkg==
+        bh=DPqC7sk0jXG3KL4pgR3flZBRy+4blHrbIS6/yBS27Mg=;
+        b=RCOdYH6WIaW2xVqRGFA32u3oOOKisUBbxh2bQZ6OLEuubkB37e/DLlUPUI/qS7ZsPp
+         K9vvLxcUrbv9BMjXSg9sciDkhvYNEdsasmZcb9Ita6e1im3+L2SufG4wk2DJXmvo5pK+
+         Wx2IcMPhbQ1baTb9PqWZsTEBmfmjFo8u1nF5FRQu3fsbnEslXRYQAawKzZ/FeLpMmYU+
+         P3YLroiH1jtnPz8t/uPk7nZkuRosB1f+3Lu82Nd6FqbNMUN3ETXpC3qUUkI2D6KutTCV
+         MvLoFxsc1KMYD2sK6O4571yQv32Zu02CNtmn8AKwLrNsFHFGSBRAnJHyhvH6+ZTianzC
+         Gd9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tlXNd4WfVV+N9MiUaNSDYcpKd5QnvzkHB2jHSyxHiSE=;
-        b=uDa0GZ6YanVw0WCK7HiGwXvGpOS1tT18+r4PZ0i0pm5uen9Tvdl1ljo6Y+UhCP/kgk
-         6wdpmqob6+1C1W5TECYONI3K4IZro7M2j+a/gCHm/F4KpXExFzFIsZ4JMhIuSMD+NGTq
-         Dj6vc3rQgHny8PR+BPToyRK2duEraCCgTsvIaZ7vMWQvlrgwd/cdwSlQ5rICMnlaiExm
-         fB7EEJHhdhQwvgv3NVIV2Rv93EBlL3d/yo95U27WxDB95cJIVnRD0QvZim23+paWiSzD
-         8cCEjX5Jxol1N3Vsh9AhUu7AyCGwebaQTn1Z9j1n/r96/ZRRPphWMnRliGZi2BYMvR0S
-         xZZA==
-X-Gm-Message-State: AOAM532vJOIXBJHlfJz016HOeerG+xlc1M4qC3FCOlcNv8SoZf0sjYwb
-        n8auZ7CjmLSBvLiairLSvjgvEQ==
-X-Google-Smtp-Source: ABdhPJxlo3caslaF3DdogQsF2CNkabNAPdTzgIT92VlqtQMgcaudXdsWCY5mLtbEZK5i64FQjhgHfg==
-X-Received: by 2002:a17:90b:4cc6:b0:1bc:210d:b6fa with SMTP id nd6-20020a17090b4cc600b001bc210db6famr741799pjb.104.1645307741905;
-        Sat, 19 Feb 2022 13:55:41 -0800 (PST)
+        bh=DPqC7sk0jXG3KL4pgR3flZBRy+4blHrbIS6/yBS27Mg=;
+        b=aabeinzV/rAMczB4iSNED1nM8X4ogOtd1In372gqWHGI1KU4lQrgGEXevqVCNWc+Ea
+         /ZMj8At5rJVJLgN1457adCqabLlXDbhovcKKL5sQ1m89IXt03lPDzZMFHMpRLPhb18gx
+         O505PYJAMc1rLNdEaeD2NW+p2ZCbsOS37g+G2nczBRW5Aw91zUHB5Hh/Nu91qeuVr9+C
+         BcvMAPrya6UibMZUizhFrarqBibjNzYFefFOJYRZrdy+pfSyxZ9r0Bpr/ZvGHPrnkhT1
+         YU5N1DY/a5GJGDICDrXSEBps7xzk4l9X9O/JNfnGl2iGtIPNtS9jQgyNy0c7pxPRQ7Hd
+         Xxsw==
+X-Gm-Message-State: AOAM533OheqhaW6JShzI0sobjAaSh2/7bIlF3cW4MG/yHxyziXPS2ivI
+        umvqMAxHCBINj1jT+ncu5m5KLbj8wLrsbU7uQsQ=
+X-Google-Smtp-Source: ABdhPJyrjgGWD8uK2oJsFpdirNDfgtzWoV5CCSu0s9ORmrFOQ1CeFPo+nYa0r4tS45fI/XS//g8JLQ==
+X-Received: by 2002:a17:90a:9309:b0:1bc:1bf1:dad4 with SMTP id p9-20020a17090a930900b001bc1bf1dad4mr1336912pjo.169.1645307744093;
+        Sat, 19 Feb 2022 13:55:44 -0800 (PST)
 Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:31ab:1e81:9550:f30a])
-        by smtp.gmail.com with ESMTPSA id i17sm13447337pgn.82.2022.02.19.13.55.40
+        by smtp.gmail.com with ESMTPSA id i17sm13447337pgn.82.2022.02.19.13.55.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 13:55:41 -0800 (PST)
+        Sat, 19 Feb 2022 13:55:43 -0800 (PST)
 From:   Drew Fustini <dfustini@baylibre.com>
 To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -61,9 +61,9 @@ To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         Santosh Shilimkar <ssantosh@kernel.org>,
         Tony Lindgren <tony@atomide.com>, s-anna@ti.com,
         khilman@baylibre.com
-Subject: [PATCH 02/11] dt-bindings: wkup_m3_ipc: Add vtt toggling bindings
-Date:   Sat, 19 Feb 2022 13:53:19 -0800
-Message-Id: <20220219215328.485660-3-dfustini@baylibre.com>
+Subject: [PATCH 03/11] soc: ti: wkup_m3_ipc: Add support for toggling VTT regulator
+Date:   Sat, 19 Feb 2022 13:53:20 -0800
+Message-Id: <20220219215328.485660-4-dfustini@baylibre.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220219215328.485660-1-dfustini@baylibre.com>
 References: <20220219215328.485660-1-dfustini@baylibre.com>
@@ -81,57 +81,115 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dave Gerlach <d-gerlach@ti.com>
 
-Add description of the wkup_m3_ipc DT properties that can be used to
-toggle VTT regulator during low power mode transitions.
+Some boards (currently AM335x EVM-SK) provides s/w control via
+GPIO to toggle VTT regulator to reduce power consumption in low
+power state.
+
+The VTT regulator should be disabled after enabling self-refresh on
+suspend, and should be enabled before disabling self-refresh on resume.
+This is to allow proper self-refresh entry/exit commands to be
+transmitted to the memory.
+
+Add support for toggling VTT regulator using DT properties.
+Actual toggling happens in CM3 Firmware. The enable option & the GPIO
+pin used is collected in A8 Core and then sent to CM3 using IPC
+registers.
+
+Note:
+Here it is assumed that VTT Toggle will be done using a pin on GPIO-0
+Instance. The reason is GPIO-0 is in wakeup domain.
 
 Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+Signed-off-by: Keerthy <j-keerthy@ti.com>
 Signed-off-by: Drew Fustini <dfustini@baylibre.com>
 ---
- .../bindings/soc/ti/wkup_m3_ipc.txt           | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ drivers/soc/ti/wkup_m3_ipc.c | 27 +++++++++++++++++++++++++--
+ include/linux/wkup_m3_ipc.h  |  1 +
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt b/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
-index 401550487ed6..4cdbb60fd0d0 100644
---- a/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
-+++ b/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
-@@ -55,3 +55,37 @@ Example:
- 			...
- 		};
- 	};
+diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
+index 72386bd393fe..974b4118a893 100644
+--- a/drivers/soc/ti/wkup_m3_ipc.c
++++ b/drivers/soc/ti/wkup_m3_ipc.c
+@@ -40,6 +40,13 @@
+ #define M3_FW_VERSION_MASK		0xffff
+ #define M3_WAKE_SRC_MASK		0xff
+ 
++#define IPC_MEM_TYPE_SHIFT		(0x0)
++#define IPC_MEM_TYPE_MASK		(0x7 << 0)
++#define IPC_VTT_STAT_SHIFT		(0x3)
++#define IPC_VTT_STAT_MASK		(0x1 << 3)
++#define IPC_VTT_GPIO_PIN_SHIFT		(0x4)
++#define IPC_VTT_GPIO_PIN_MASK		(0x3f << 4)
 +
-+Support for VTT Toggle
-+==================================
-+In order to enable the support for VTT toggle during Suspend/Resume
-+sequence needed by some boards (like AM335x EVM-SK & AM437x GP EVM),
-+the below DT properties are required. It is possible to toggle VTT
-+using one of two methods depending on the SoC being used, either
-+GPIO0 toggle (AM335x and AM437x), or any GPIO with DS_PAD_CONFIG
-+bits in the control module (AM437x only).
+ #define M3_STATE_UNKNOWN		0
+ #define M3_STATE_RESET			1
+ #define M3_STATE_INITED			2
+@@ -215,6 +222,12 @@ static int wkup_m3_is_available(struct wkup_m3_ipc *m3_ipc)
+ 		(m3_ipc->state != M3_STATE_UNKNOWN));
+ }
+ 
++static void wkup_m3_set_vtt_gpio(struct wkup_m3_ipc *m3_ipc, int gpio)
++{
++	m3_ipc->vtt_conf = (1 << IPC_VTT_STAT_SHIFT) |
++			    (gpio << IPC_VTT_GPIO_PIN_SHIFT);
++}
 +
-+VTT Toggle using GPIO0
-+----------------------------------
-+Supported by: AM335x and AM437x
-+Used on: AM335x EVM-SK
+ /* Public functions */
+ /**
+  * wkup_m3_set_mem_type - Pass wkup_m3 which type of memory is in use
+@@ -294,7 +307,8 @@ static int wkup_m3_prepare_low_power(struct wkup_m3_ipc *m3_ipc, int state)
+ 	/* Program each required IPC register then write defaults to others */
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->resume_addr, 0);
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_power_state, 1);
+-	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type, 4);
++	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type |
++			       m3_ipc->vtt_conf, 4);
+ 
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 2);
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 3);
+@@ -433,12 +447,13 @@ static int wkup_m3_rproc_boot_thread(void *arg)
+ static int wkup_m3_ipc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	int irq, ret;
++	int irq, ret, temp;
+ 	phandle rproc_phandle;
+ 	struct rproc *m3_rproc;
+ 	struct resource *res;
+ 	struct task_struct *task;
+ 	struct wkup_m3_ipc *m3_ipc;
++	struct device_node *np = dev->of_node;
+ 
+ 	m3_ipc = devm_kzalloc(dev, sizeof(*m3_ipc), GFP_KERNEL);
+ 	if (!m3_ipc)
+@@ -496,6 +511,14 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
+ 
+ 	m3_ipc->ops = &ipc_ops;
+ 
++	if (of_find_property(np, "ti,needs-vtt-toggle", NULL) &&
++	    !(of_property_read_u32(np, "ti,vtt-gpio-pin", &temp))) {
++		if (temp >= 0 && temp <= 31)
++			wkup_m3_set_vtt_gpio(m3_ipc, temp);
++		else
++			dev_warn(dev, "Invalid VTT GPIO(%d) pin\n", temp);
++	}
 +
-+Optional properties:
-+- ti,needs-vtt-toggle:	Indicates that the boards requires VTT toggling
-+			during suspend/resume.
-+- ti,vtt-gpio-pin:	Specifies the GPIO0 pin used for VTT toggle.
-+
-+Important Note:
-+- Here it is assumed that VTT Toggle will be done using a pin on GPIO-0 Instance.
-+  It will not work on any other GPIO using the above properties, regardless of
-+  which part is being used.
-+
-+Example:
-+	wkup_m3_ipc: wkup_m3_ipc@1324 {
-+		compatible = "ti,am3352-wkup-m3-ipc";
-+		...
-+		...
-+		ti,needs-vtt-toggle;
-+		ti,vtt-gpio-pin = <7>;
-+		...
-+	};
+ 	/*
+ 	 * Wait for firmware loading completion in a thread so we
+ 	 * can boot the wkup_m3 as soon as it's ready without holding
+diff --git a/include/linux/wkup_m3_ipc.h b/include/linux/wkup_m3_ipc.h
+index 3f496967b538..2bc52c6381d5 100644
+--- a/include/linux/wkup_m3_ipc.h
++++ b/include/linux/wkup_m3_ipc.h
+@@ -33,6 +33,7 @@ struct wkup_m3_ipc {
+ 
+ 	int mem_type;
+ 	unsigned long resume_addr;
++	int vtt_conf;
+ 	int state;
+ 
+ 	struct completion sync_complete;
 -- 
 2.32.0
 

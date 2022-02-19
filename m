@@ -2,45 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29384BC46E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 02:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F33064BC451
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 02:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240815AbiBSA4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:56:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40012 "EHLO
+        id S240949AbiBSA4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:56:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240813AbiBSAzl (ORCPT
+        with ESMTP id S240758AbiBSAzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:55:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82B327B9BB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:55:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 793FEB8276E
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 00:55:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37AA3C340F5;
-        Sat, 19 Feb 2022 00:55:16 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.95)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1nLE1r-0051fH-DL;
-        Fri, 18 Feb 2022 19:55:15 -0500
-Message-ID: <20220219005515.232319046@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Fri, 18 Feb 2022 19:54:46 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: [for-next][PATCH 16/16] user_events: Add documentation file
-References: <20220219005430.848118506@goodmis.org>
+        Fri, 18 Feb 2022 19:55:52 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC4D27B489
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:55:26 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2d07ae0b1c5so83419557b3.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l6e9XzbPyHYbUgARMJP6T48TY7WCA5S63JhOSi9mRoE=;
+        b=RikRBU7xIaIKvWLfe7SQw6ulaZ/y3ifFsyHlUYpwm4CyMN0bNrabJONNFTvSgOXy4z
+         UE1+PhxhbbBqGFcgZvQ5KQiY5boog3hwz8Mf83oTOLM2B2y0QHCb8CFJoelkGv7967ID
+         oTcVFwNH1UEjoR727/kfKB0NTyQYGVb3umh5akuFLzeKEBKD9OQ5EAP1m2NobiJG+jEd
+         LQIZzKBhHXkrprQ4z7hw9V5hP7dE0Pm2RYK1X/WcvoQvgGSKIXU3GDE8bxe1OIdN95tw
+         SyHQgaOfoOxHvDvGTXsvWKFcJ4Fc14uryZePzoesB+LDuZVPz8ZWjmIjX2P8N5XhtEnB
+         fHnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l6e9XzbPyHYbUgARMJP6T48TY7WCA5S63JhOSi9mRoE=;
+        b=24Suq+MI7VIOHyFOpayPwLC/28hh7YC9KDzzhLnHQxI5JmFehGrYdc5t8QDiNCNWOu
+         gnqNxhXJpHg30vy7lHASLcrVS9NIfND94BAH9/b/bdgEY87wpceLNb7/wVx/ODL1oexU
+         oBqkwyOhKhroroIBkx6Ei1nvIt1DJQIONWXN6BFIvuGJWDpC+PZ4zFYqMG8owqm11Y72
+         7bc0fFEio+kQ6ClOGFpKqLyhvEr783YFjKY4oP1PiM+Yw8GUapCNEeKm24/vWd33KDA4
+         XB2cOAEF2fsyBeql2HqJL+12ZtIt0kF0ndQvT/Sjb/fvqtbFi6y+iWwg/QuaCCB3stLM
+         VYNw==
+X-Gm-Message-State: AOAM531LnIcE9iTF8eW1C8NHUFCbIS1b2NzQkGTXIimUGbYWJGYhm/+g
+        bN1vZ1fSH75x+C1Y+dADbS5/ROKrHIaDE3L494zWJlD5rA5fJQ==
+X-Google-Smtp-Source: ABdhPJy0QzuFnbO1uSx4wHtdx9Iu18Fqj83SdErZlQ0sdD5fQ+iXFH2oyJpJxC9LTUhmYM+eMpl58Y567TJZ8lB3D3A=
+X-Received: by 2002:a81:9957:0:b0:2d0:a8ee:37e7 with SMTP id
+ q84-20020a819957000000b002d0a8ee37e7mr10582199ywg.448.1645232125466; Fri, 18
+ Feb 2022 16:55:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+References: <20220210131210.24605-1-jonathan@marek.ca> <20220210131210.24605-2-jonathan@marek.ca>
+In-Reply-To: <20220210131210.24605-2-jonathan@marek.ca>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 19 Feb 2022 01:55:14 +0100
+Message-ID: <CACRpkdbcmmjfybySW572JM1-2s98JZaSnf9OnAepMJEf3oM4vQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pinctrl: qcom: print egpio mode in debugfs
+To:     Jonathan Marek <jonathan@marek.ca>
+Cc:     linux-arm-msm@vger.kernel.org, dmitry.baryshkov@linaro.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,252 +68,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Beau Belgrave <beaub@linux.microsoft.com>
+On Thu, Feb 10, 2022 at 2:14 PM Jonathan Marek <jonathan@marek.ca> wrote:
 
-Add a documentation file about user_events with example code, etc.
-explaining how it may be used.
+> When egpio_enable bit is cleared, the gpio is driven by SSC/LPASS TLMM and
+> the APSS TLMM settings are ignored. Reflect that in the debugfs dump.
+>
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
 
-Link: https://lkml.kernel.org/r/20220118204326.2169-13-beaub@linux.microsoft.com
+Patch applied.
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- Documentation/trace/index.rst       |   1 +
- Documentation/trace/user_events.rst | 216 ++++++++++++++++++++++++++++
- 2 files changed, 217 insertions(+)
- create mode 100644 Documentation/trace/user_events.rst
-
-diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-index 3769b9b7aed8..3a47aa8341c6 100644
---- a/Documentation/trace/index.rst
-+++ b/Documentation/trace/index.rst
-@@ -30,3 +30,4 @@ Linux Tracing Technologies
-    stm
-    sys-t
-    coresight/index
-+   user_events
-diff --git a/Documentation/trace/user_events.rst b/Documentation/trace/user_events.rst
-new file mode 100644
-index 000000000000..bddedabaca80
---- /dev/null
-+++ b/Documentation/trace/user_events.rst
-@@ -0,0 +1,216 @@
-+=========================================
-+user_events: User-based Event Tracing
-+=========================================
-+
-+:Author: Beau Belgrave
-+
-+Overview
-+--------
-+User based trace events allow user processes to create events and trace data
-+that can be viewed via existing tools, such as ftrace, perf and eBPF.
-+To enable this feature, build your kernel with CONFIG_USER_EVENTS=y.
-+
-+Programs can view status of the events via
-+/sys/kernel/debug/tracing/user_events_status and can both register and write
-+data out via /sys/kernel/debug/tracing/user_events_data.
-+
-+Programs can also use /sys/kernel/debug/tracing/dynamic_events to register and
-+delete user based events via the u: prefix. The format of the command to
-+dynamic_events is the same as the ioctl with the u: prefix applied.
-+
-+Typically programs will register a set of events that they wish to expose to
-+tools that can read trace_events (such as ftrace and perf). The registration
-+process gives back two ints to the program for each event. The first int is the
-+status index. This index describes which byte in the
-+/sys/kernel/debug/tracing/user_events_status file represents this event. The
-+second int is the write index. This index describes the data when a write() or
-+writev() is called on the /sys/kernel/debug/tracing/user_events_data file.
-+
-+The structures referenced in this document are contained with the
-+/include/uap/linux/user_events.h file in the source tree.
-+
-+**NOTE:** *Both user_events_status and user_events_data are under the tracefs
-+filesystem and may be mounted at different paths than above.*
-+
-+Registering
-+-----------
-+Registering within a user process is done via ioctl() out to the
-+/sys/kernel/debug/tracing/user_events_data file. The command to issue is
-+DIAG_IOCSREG.
-+
-+This command takes a struct user_reg as an argument::
-+
-+  struct user_reg {
-+        u32 size;
-+        u64 name_args;
-+        u32 status_index;
-+        u32 write_index;
-+  };
-+
-+The struct user_reg requires two inputs, the first is the size of the structure
-+to ensure forward and backward compatibility. The second is the command string
-+to issue for registering. Upon success two outputs are set, the status index
-+and the write index.
-+
-+User based events show up under tracefs like any other event under the
-+subsystem named "user_events". This means tools that wish to attach to the
-+events need to use /sys/kernel/debug/tracing/events/user_events/[name]/enable
-+or perf record -e user_events:[name] when attaching/recording.
-+
-+**NOTE:** *The write_index returned is only valid for the FD that was used*
-+
-+Command Format
-+^^^^^^^^^^^^^^
-+The command string format is as follows::
-+
-+  name[:FLAG1[,FLAG2...]] [Field1[;Field2...]]
-+
-+Supported Flags
-+^^^^^^^^^^^^^^^
-+**BPF_ITER** - EBPF programs attached to this event will get the raw iovec
-+struct instead of any data copies for max performance.
-+
-+Field Format
-+^^^^^^^^^^^^
-+::
-+
-+  type name [size]
-+
-+Basic types are supported (__data_loc, u32, u64, int, char, char[20], etc).
-+User programs are encouraged to use clearly sized types like u32.
-+
-+**NOTE:** *Long is not supported since size can vary between user and kernel.*
-+
-+The size is only valid for types that start with a struct prefix.
-+This allows user programs to describe custom structs out to tools, if required.
-+
-+For example, a struct in C that looks like this::
-+
-+  struct mytype {
-+    char data[20];
-+  };
-+
-+Would be represented by the following field::
-+
-+  struct mytype myname 20
-+
-+Deleting
-+-----------
-+Deleting an event from within a user process is done via ioctl() out to the
-+/sys/kernel/debug/tracing/user_events_data file. The command to issue is
-+DIAG_IOCSDEL.
-+
-+This command only requires a single string specifying the event to delete by
-+its name. Delete will only succeed if there are no references left to the
-+event (in both user and kernel space). User programs should use a separate file
-+to request deletes than the one used for registration due to this.
-+
-+Status
-+------
-+When tools attach/record user based events the status of the event is updated
-+in realtime. This allows user programs to only incur the cost of the write() or
-+writev() calls when something is actively attached to the event.
-+
-+User programs call mmap() on /sys/kernel/debug/tracing/user_events_status to
-+check the status for each event that is registered. The byte to check in the
-+file is given back after the register ioctl() via user_reg.status_index.
-+Currently the size of user_events_status is a single page, however, custom
-+kernel configurations can change this size to allow more user based events. In
-+all cases the size of the file is a multiple of a page size.
-+
-+For example, if the register ioctl() gives back a status_index of 3 you would
-+check byte 3 of the returned mmap data to see if anything is attached to that
-+event.
-+
-+Administrators can easily check the status of all registered events by reading
-+the user_events_status file directly via a terminal. The output is as follows::
-+
-+  Byte:Name [# Comments]
-+  ...
-+
-+  Active: ActiveCount
-+  Busy: BusyCount
-+  Max: MaxCount
-+
-+For example, on a system that has a single event the output looks like this::
-+
-+  1:test
-+
-+  Active: 1
-+  Busy: 0
-+  Max: 4096
-+
-+If a user enables the user event via ftrace, the output would change to this::
-+
-+  1:test # Used by ftrace
-+
-+  Active: 1
-+  Busy: 1
-+  Max: 4096
-+
-+**NOTE:** *A status index of 0 will never be returned. This allows user
-+programs to have an index that can be used on error cases.*
-+
-+Status Bits
-+^^^^^^^^^^^
-+The byte being checked will be non-zero if anything is attached. Programs can
-+check specific bits in the byte to see what mechanism has been attached.
-+
-+The following values are defined to aid in checking what has been attached:
-+
-+**EVENT_STATUS_FTRACE** - Bit set if ftrace has been attached (Bit 0).
-+
-+**EVENT_STATUS_PERF** - Bit set if perf/eBPF has been attached (Bit 1).
-+
-+Writing Data
-+------------
-+After registering an event the same fd that was used to register can be used
-+to write an entry for that event. The write_index returned must be at the start
-+of the data, then the remaining data is treated as the payload of the event.
-+
-+For example, if write_index returned was 1 and I wanted to write out an int
-+payload of the event. Then the data would have to be 8 bytes (2 ints) in size,
-+with the first 4 bytes being equal to 1 and the last 4 bytes being equal to the
-+value I want as the payload.
-+
-+In memory this would look like this::
-+
-+  int index;
-+  int payload;
-+
-+User programs might have well known structs that they wish to use to emit out
-+as payloads. In those cases writev() can be used, with the first vector being
-+the index and the following vector(s) being the actual event payload.
-+
-+For example, if I have a struct like this::
-+
-+  struct payload {
-+        int src;
-+        int dst;
-+        int flags;
-+  };
-+
-+It's advised for user programs to do the following::
-+
-+  struct iovec io[2];
-+  struct payload e;
-+
-+  io[0].iov_base = &write_index;
-+  io[0].iov_len = sizeof(write_index);
-+  io[1].iov_base = &e;
-+  io[1].iov_len = sizeof(e);
-+
-+  writev(fd, (const struct iovec*)io, 2);
-+
-+**NOTE:** *The write_index is not emitted out into the trace being recorded.*
-+
-+EBPF
-+----
-+EBPF programs that attach to a user-based event tracepoint are given a pointer
-+to a struct user_bpf_context. The bpf context contains the data type (which can
-+be a user or kernel buffer, or can be a pointer to the iovec) and the data
-+length that was emitted (minus the write_index).
-+
-+Example Code
-+------------
-+See sample code in samples/user_events.
--- 
-2.34.1
+Yours,
+Linus Walleij

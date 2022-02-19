@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20874BC403
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670CA4BC41A
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 02:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240692AbiBSAzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:55:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39220 "EHLO
+        id S240983AbiBSA5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:57:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240697AbiBSAzP (ORCPT
+        with ESMTP id S240796AbiBSAzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:55:15 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72812782A2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:54:57 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id v186so22793256ybg.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:54:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9Vx+WPjk3Jqu/26mjZeRumiFftkfvBsbmk7u8x9gYoY=;
-        b=R9puxGJ7+Pr8wR/uUccCrfAZoWcAAi1ZN6s1pGy9Gak7AQvMqOSH8LAhEjcn5CCCOZ
-         noZmvNx/A+IjYcwWlom8/Ju1AK19wsZMF9LzmKV8bHUfeuyTMxNArJ0/s1CS30KgXoeU
-         VCZHCHAzv7G5GSamfnD23A/TjvvNgrRHcMCMVR5forkuuUPcNXjX6VijmO9+5wbbVjJS
-         kQSE1PXZ3paLguxz0QFxj+28GBv0+8jQeSJ4uy9l9CdexXEzbEd03znbqoQgU45/DKUi
-         km+AMtEzkSYTV3N0hi7/Q7/ziITi1gP4hM142X+T6oKUw+/gZeUonk4LDW5RR+yFfAk1
-         KpaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9Vx+WPjk3Jqu/26mjZeRumiFftkfvBsbmk7u8x9gYoY=;
-        b=uzA+vyUQfjOC33Vopkd7xJxlqZzZB8UoNgsPjC4nikm+rNjRUi5BkmQnn8hqh9mH7k
-         hyfH5yteE2jleQHbLXop7CwtvtWLcOtrBlfi8KIBRCGuOmte2xjnjFUTf+Ko5Zju4yE5
-         ythQIP3Sd0zD99Aps/BM7/gzXP0Mac7TftUgjUahjVaC+92fmYNeZugnMTKIqWIw1XIp
-         BBPhBUvOBRm2eg+H6PtjDHetOxfyoBaMO45K/f1gT5DFt59dkfeMG4U+pkOx2N+oBmPj
-         +1rta7NyH81hHGb8JdP3NWTgJ4+kg0EMbwUDKox7f+q84EeXa5XwFuit/nWGsgxQJBS5
-         4ecA==
-X-Gm-Message-State: AOAM532jz6WRua4NmCZS4s8A5mQ6c+l+spTyowZI7YMXduC04bIl5ex0
-        +F6n5Iglci3FtcAKXRnvEhkmKgRbSDawjwM+OW4q8A==
-X-Google-Smtp-Source: ABdhPJwQCzUoixTMtsRur9qzlG1qSn+Sx4LgwajsEMFV5UPE5DKIly0PKpV1NusJBRnndSql78KQlyW9+v6HfFngB7A=
-X-Received: by 2002:a25:a123:0:b0:623:f539:9b94 with SMTP id
- z32-20020a25a123000000b00623f5399b94mr10088403ybh.291.1645232097187; Fri, 18
- Feb 2022 16:54:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20220210131210.24605-1-jonathan@marek.ca>
-In-Reply-To: <20220210131210.24605-1-jonathan@marek.ca>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 19 Feb 2022 01:54:46 +0100
-Message-ID: <CACRpkdYPYJoteTR_zoSr4CZZiCEARu-wE4_ruN6gF8EdT_X6OQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] pinctrl: qcom: sm8450: Add egpio support
-To:     Jonathan Marek <jonathan@marek.ca>
-Cc:     linux-arm-msm@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Fri, 18 Feb 2022 19:55:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3346127B992
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 16:55:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645232117;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
+        bh=ClO/R9JRyaaM8bjM+2BOla/lLPUNMsID41a68FPN8DI=;
+        b=bo7VjF24UMdbtxaHprk33A1muHj9fywR2QlB7yzGXmWhC5zbtB3W0JAeoba/AZEqKJcXQ+
+        XJrGg/e2DLr1zaLHGI/kDrIXaZuNAtpGCmhjCrrCjywFvJW378Q4M8CFZJ5eI2wyEq0z5R
+        lvQwOpkiYsGfxMM9clWvUYl+RYyAmew=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-a-TIrPYBP8-42XIzhwQwjA-1; Fri, 18 Feb 2022 19:55:12 -0500
+X-MC-Unique: a-TIrPYBP8-42XIzhwQwjA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D73291091DA1;
+        Sat, 19 Feb 2022 00:55:08 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-39.pek2.redhat.com [10.72.12.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 190B262D4E;
+        Sat, 19 Feb 2022 00:54:49 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
+        cl@linux.com, 42.hyeyoo@gmail.com, penberg@kernel.org,
+        rientjes@google.com, iamjoonsoo.kim@lge.com, vbabka@suse.cz,
+        David.Laight@ACULAB.COM, david@redhat.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
+        netdev@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, linux-s390@vger.kernel.org, michael@walle.cc,
+        linux-i2c@vger.kernel.org, wsa@kernel.org
+Subject: [PATCH 12/22] staging: emxx_udc: Don't use GFP_DMA when calling dma_alloc_coherent()
+Date:   Sat, 19 Feb 2022 08:52:11 +0800
+Message-Id: <20220219005221.634-13-bhe@redhat.com>
+In-Reply-To: <20220219005221.634-1-bhe@redhat.com>
+References: <20220219005221.634-1-bhe@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,15 +64,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 2:14 PM Jonathan Marek <jonathan@marek.ca> wrote:
+dma_alloc_coherent() allocates dma buffer with device's addressing
+limitation in mind. It's redundent to specify GFP_DMA when calling
+dma_alloc_coherent().
 
-> This mirrors egpio support added for sc7280. This change is necessary for
-> gpios 165 to 209 to be driven by APSS.
->
-> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+[ 42.hyeyoo@gmail.com: Update changelog ]
 
-Haven't heard anything for over a week so I just applied the
-patches. I assume you know what you're doing.
+Signed-off-by: Baoquan He <bhe@redhat.com>
+Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
+ drivers/staging/emxx_udc/emxx_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/staging/emxx_udc/emxx_udc.c b/drivers/staging/emxx_udc/emxx_udc.c
+index b6abd3770e81..673f8de50213 100644
+--- a/drivers/staging/emxx_udc/emxx_udc.c
++++ b/drivers/staging/emxx_udc/emxx_udc.c
+@@ -2593,7 +2593,7 @@ static int nbu2ss_ep_queue(struct usb_ep *_ep,
+ 		if (!ep->virt_buf)
+ 			ep->virt_buf = dma_alloc_coherent(udc->dev, PAGE_SIZE,
+ 							  &ep->phys_buf,
+-							  GFP_ATOMIC | GFP_DMA);
++							  GFP_ATOMIC);
+ 		if (ep->epnum > 0)  {
+ 			if (ep->direct == USB_DIR_IN)
+ 				memcpy(ep->virt_buf, req->req.buf,
+-- 
+2.17.2
+

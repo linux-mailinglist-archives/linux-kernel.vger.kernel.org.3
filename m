@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA85D4BC946
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 17:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7374BC94D
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 17:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235919AbiBSQVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 11:21:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59534 "EHLO
+        id S240461AbiBSQag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 11:30:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiBSQVD (ORCPT
+        with ESMTP id S231519AbiBSQae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 11:21:03 -0500
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B87192F00
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 08:20:44 -0800 (PST)
-Received: by mail-oi1-x244.google.com with SMTP id j24so4224266oii.11
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 08:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=y/WwzOufdV8bFjC2XhKxeIddPBCZMNKZVHLfMOMvj6I=;
-        b=YGuSFSLMkF7GFHzJh1zqvsTAAW1n0gFqILKWnKfACMFpCNUOd9on+3A/w/g+pFJqA3
-         xZQAWO0SLB5+FycsAJgX/cvOihauJ8tPao7eOOrZJHrNCdFSGMSfNiDxznT0Qp264Wa0
-         wcjdFy23DAMLuRhcuPGXryVHTDdSSJ+We/F/w6Soy+MFRHrq1OFXoao3g91t+WAKN89h
-         31+aQQ+JHm0HvpPUGGT/7cpaV1375Rd4JR/Eszt1vMtUtIUUT4JSyQ3G2brNnktJAs+5
-         fG2Ynx0an9GV9Zch2mWYqjYmKzAxk+gSY0J93Fu9ulrg33DGRqt/MMMjU0uUVwXBqJLi
-         KKMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=y/WwzOufdV8bFjC2XhKxeIddPBCZMNKZVHLfMOMvj6I=;
-        b=VAjBQo6zPuLFd4QdTf8B4kwRRQmzxQ6OmjqBSj1WsNmYlk9urJm6bXgTubRqwU+/RZ
-         iP2CpMfheHeqKszwlnqz8/qV1aK7pG5km+MPzYnbiQlwmTQUHdgY7MaPqZnFLWqGMfuF
-         Y6NpjaTJjT8cSLOW6f8HDBhgdv8C+GAmDV3BKyuY/c9r/Tk3ZFBwUrqldjahpLKITf/L
-         5Z99BSMuiK1GYYxxzq9I//X0/cj9Pc4ab7l55KKj5rnnJ4A71hawvCy2zTAIUcyL6+5y
-         CeVkeGxKdBYXafbGErk1XQ6bcHKik/85v+K508y3VoeU7XCTAiBHoQVD9UNVEsqKeGBi
-         awpw==
-X-Gm-Message-State: AOAM532MOP1AyCA/LLIWVnSpsGtw4l5/HoXMzcor49rNI2yer83JHBya
-        B1phrt5KmUCe8hQPqwV0lqeNC58tU3Pj9aa9dZU=
-X-Google-Smtp-Source: ABdhPJzCJlq2Z4mJhRtmGY/+epx36XQ9YLljdGHJdJsTOhd1dOYvK8/WDkWMp0xWdHWLetRM0hdHDTx5iP9oPoGhViI=
-X-Received: by 2002:a05:6808:1596:b0:2d4:956c:ff1e with SMTP id
- t22-20020a056808159600b002d4956cff1emr5023216oiw.189.1645287644327; Sat, 19
- Feb 2022 08:20:44 -0800 (PST)
+        Sat, 19 Feb 2022 11:30:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773E61B7625;
+        Sat, 19 Feb 2022 08:30:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C63160B8D;
+        Sat, 19 Feb 2022 16:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AFBCFC340ED;
+        Sat, 19 Feb 2022 16:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645288210;
+        bh=tJVABENQLLFlTYHlBQE3dOhZT4/zn1fMVfl58sIxJLQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=R43a+grRG8B0QhD0IIMQ4Fqr5DRNE4NnCbBZ66r8KA5SCBwcaJs0QAt3zqZTj/iuF
+         kqpaqwN3O3CK5RBYAdBqaiXrvk4D7CRkpYp3peVr8BfysGCP3WH+jIALK4N65sKsJx
+         mREWkoqKVGWAy7q3zptqbQ82G8KoI1LwM2XLYpoP/33CAA6u2tI1YjR420GdbYcHQa
+         Z+J/b7qs8sUOcOenGToVSoGwRN+zl2PqbXFWjiwGbwkdeXIn9tN5g6B6ou8erTGjkh
+         lW6NCx7kYtfvCTNxB1wLcaxiKVzIVcKRQ6DbZlTtIe0FbMjfXF3MBz3qQBdApwya6P
+         Pq1HYiN7HTIHA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8D756E5D07D;
+        Sat, 19 Feb 2022 16:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Reply-To: drtracywilliams89@gmail.com
-Sender: bellomamuda46@gmail.com
-Received: by 2002:ac9:3e81:0:b0:409:fa75:363e with HTTP; Sat, 19 Feb 2022
- 08:20:43 -0800 (PST)
-From:   "Dr. Tracy Williams" <tracy0wiliams@gmail.com>
-Date:   Sat, 19 Feb 2022 08:20:43 -0800
-X-Google-Sender-Auth: 61EM1B7xmffbp1nO53uLyycP9fM
-Message-ID: <CAPs1NfvjkvnvA=itbkwu=5m+fEz16ad688B2c2Uzsv=jLcqLRg@mail.gmail.com>
-Subject: From Dr. Tracy Williams.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v4] net: Force inlining of checksum functions in
+ net/checksum.h
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164528821057.2939.79120804393158510.git-patchwork-notify@kernel.org>
+Date:   Sat, 19 Feb 2022 16:30:10 +0000
+References: <4c4e276f6491d127c61b627c9ff13f0a71dab092.1645104881.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <4c4e276f6491d127c61b627c9ff13f0a71dab092.1645104881.git.christophe.leroy@csgroup.eu>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        yamada.masahiro@socionext.com, ndesaulniers@google.com,
+        akpm@linux-foundation.org
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
+Hello:
 
-how are you today,I hope you are doing great. It is my great pleasure
-to contact you,I want to make a new and special friend,I hope you
-don't mind. My name is Tracy Williams
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-from the United States, Am a french and English nationality. I will
-give you pictures and more details about my self as soon as i hear
-from you in my email account bellow,
-Here is my email address; drtracywilliams89@gmail.com
+On Thu, 17 Feb 2022 14:35:49 +0100 you wrote:
+> All functions defined as static inline in net/checksum.h are
+> meant to be inlined for performance reason.
+> 
+> But since commit ac7c3e4ff401 ("compiler: enable
+> CONFIG_OPTIMIZE_INLINING forcibly") the compiler is allowed to
+> uninline functions when it wants.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v4] net: Force inlining of checksum functions in net/checksum.h
+    https://git.kernel.org/netdev/net/c/5486f5bf790b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Please send your reply to my PRIVATE  mail box.
-Thanks,
-
-Tracy Williams.

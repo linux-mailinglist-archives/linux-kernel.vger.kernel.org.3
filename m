@@ -2,212 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278FF4BC7A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8C14BC796
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238081AbiBSKJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 05:09:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45372 "EHLO
+        id S239309AbiBSKLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 05:11:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbiBSKI7 (ORCPT
+        with ESMTP id S232178AbiBSKLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 05:08:59 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16CD160437;
-        Sat, 19 Feb 2022 02:08:39 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V4tUAJL_1645265316;
-Received: from 30.15.223.223(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V4tUAJL_1645265316)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 19 Feb 2022 18:08:37 +0800
-Message-ID: <4964f8c3-8349-4fad-e176-8c26840d1a08@linux.alibaba.com>
-Date:   Sat, 19 Feb 2022 18:08:35 +0800
+        Sat, 19 Feb 2022 05:11:35 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9782F17CC5B
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 02:11:17 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nLMhf-0007Mh-RX; Sat, 19 Feb 2022 11:10:59 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nLMha-00HaZX-Eg; Sat, 19 Feb 2022 11:10:53 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nLMhY-004Ay5-5B; Sat, 19 Feb 2022 11:10:52 +0100
+Date:   Sat, 19 Feb 2022 11:10:49 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Nikita Travkin <nikita@trvn.ru>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
+        sboyd@kernel.org, krzk@kernel.org, linus.walleij@linaro.org,
+        masneyb@onstation.org, sean.anderson@seco.com,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v5 2/2] pwm: Add clock based PWM output driver
+Message-ID: <20220219101049.erwzy5mpmsfgcwjy@pengutronix.de>
+References: <20220212162342.72646-1-nikita@trvn.ru>
+ <20220212162342.72646-3-nikita@trvn.ru>
+ <20220214184320.ym36pfvozwdp5nbb@pengutronix.de>
+ <425691dbe49115f04dbe89c158bf6d1c@trvn.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [Issue report] drivers/ftgmac100: DHCP occasionally fails during
- boot up or link down/up
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Dylan Hung <dylan_hung@aspeedtech.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <0e456c4d-aa22-4e7f-9b2c-3059fe840cb9@linux.alibaba.com>
- <YgwSAjGN2eWUpamo@lunn.ch>
-From:   Heyi Guo <guoheyi@linux.alibaba.com>
-In-Reply-To: <YgwSAjGN2eWUpamo@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xcsfojf673wfhfx3"
+Content-Disposition: inline
+In-Reply-To: <425691dbe49115f04dbe89c158bf6d1c@trvn.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
 
-The DHCP issue is gone after applying below patch. I put the lock 
-statements outside of the pure reset function, for the phydev lock has 
-been acquired before calling adjust_link. The lock order in 
-ftgmac100_reset_task() was also changed, to make it the same as the lock 
-procedure in adjust_link, in which the phydev is locked first and then 
-rtnl_lock. I'm not quite sure whether it will bring in any potential 
-dead lock. Any advice?
+--xcsfojf673wfhfx3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+Hello,
 
-Heyi
+On Sat, Feb 19, 2022 at 11:46:31AM +0500, Nikita Travkin wrote:
+> Uwe Kleine-K=C3=B6nig =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 14.02.2022 2=
+3:43:
+> > On Sat, Feb 12, 2022 at 09:23:42PM +0500, Nikita Travkin wrote:
+> >> + * Limitations:
+> >> + * - Glitches are possible when new pwm state is applied.
+> >> + * - Due to the fact that exact behavior depends on the underlying
+> >> + *   clock driver, various limitations are possible.
+> >> + * - Period depends on the clock and, in general, not guaranteed.
+> >=20
+> > This sentence is broken.
+> >=20
+>=20
+> Here what I mean is that the clock driver might e.g. have a lookup table
+> for some rates and will only set one close to the requested ones.
+> (Extreme scenario is that only one rate is allowed in the lookup table,
+> which is a real possibility for some platforms that I think this driver
+> will be used with, the lookup may need to be changed for those clocks)
+>=20
+> I will reword this like:
+>=20
+>   Some clock drivers may only pick the closest available rate
+>   and not the exact requested one. Because of this, exact period
+>   is not guaranteed.
 
-diff --git a/drivers/net/ethernet/faraday/ftgmac100.c 
-b/drivers/net/ethernet/faraday/ftgmac100.c
-index 1c7912a94e36d..9610b59ca0876 100644
---- a/drivers/net/ethernet/faraday/ftgmac100.c
-+++ b/drivers/net/ethernet/faraday/ftgmac100.c
-@@ -1002,6 +1002,8 @@ static int ftgmac100_alloc_rx_buffers(struct 
-ftgmac100 *priv)
-         return 0;
-  }
+That there is no exact match is quite normal also for dedicated PWM
+HW blocks. So I think the second item in your list is good enough to
+cover the non-existing guaranteed for period and glitches.
 
-+static void ftgmac100_reset(struct ftgmac100 *priv);
-+
-  static void ftgmac100_adjust_link(struct net_device *netdev)
-  {
-         struct ftgmac100 *priv = netdev_priv(netdev);
-@@ -1050,8 +1052,14 @@ static void ftgmac100_adjust_link(struct 
-net_device *netdev)
-         /* Disable all interrupts */
-         iowrite32(0, priv->base + FTGMAC100_OFFSET_IER);
+Best regards
+Uwe
 
--       /* Reset the adapter asynchronously */
--       schedule_work(&priv->reset_task);
-+       if (priv->mii_bus)
-+               mutex_lock(&priv->mii_bus->mdio_lock);
-+       /* Lock the world */
-+       rtnl_lock();
-+       ftgmac100_reset(priv);
-+       rtnl_unlock();
-+       if (priv->mii_bus)
-+               mutex_unlock(&priv->mii_bus->mdio_lock);
-  }
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-  static int ftgmac100_mii_probe(struct ftgmac100 *priv, phy_interface_t 
-intf)
-@@ -1388,26 +1396,17 @@ static int ftgmac100_init_all(struct ftgmac100 
-*priv, bool ignore_alloc_err)
-         return err;
-  }
+--xcsfojf673wfhfx3
+Content-Type: application/pgp-signature; name="signature.asc"
 
--static void ftgmac100_reset_task(struct work_struct *work)
-+static void ftgmac100_reset(struct ftgmac100 *priv)
-  {
--       struct ftgmac100 *priv = container_of(work, struct ftgmac100,
--                                             reset_task);
-         struct net_device *netdev = priv->netdev;
-         int err;
+-----BEGIN PGP SIGNATURE-----
 
-         netdev_dbg(netdev, "Resetting NIC...\n");
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIQwiYACgkQwfwUeK3K
+7AmwDAgAh+qJOwueaEP6U+zrcuXsruNi3EYhzJmSWcoigyYJK42AI4f0mcayA/JP
+GASsrgIrdfvaAnR5uz13Fm3Bd+OClTe9vHP2w7CmzABoXjS6ML4HTkT2oCn4/8Ss
+lowe8NdBANsNW2JCi2ELw0k7504L2uGVMCipMR83L/1RVRimDdPtGinsW1bG6yG4
+jt/hS50vcEqknViWuzk+MXcPN+rvCaPZK1Mjisdf95+dPVqJUN4g2Bh57Q4vsBN5
+68tz9E9FruwEW0yf7EuJdlxEdBTOY5igm7ZPr7+uB5LePHjfG0pthex3pbwkepp6
+HDYaqxlQYdQhL6+yMKkiIDCvYgq0tg==
+=eD3B
+-----END PGP SIGNATURE-----
 
--       /* Lock the world */
--       rtnl_lock();
--       if (netdev->phydev)
--               mutex_lock(&netdev->phydev->lock);
--       if (priv->mii_bus)
--               mutex_lock(&priv->mii_bus->mdio_lock);
--
-
-         /* Check if the interface is still up */
-         if (!netif_running(netdev))
--               goto bail;
-+               return;
-
-         /* Stop the network stack */
-         netif_trans_update(netdev);
-@@ -1429,12 +1428,29 @@ static void ftgmac100_reset_task(struct 
-work_struct *work)
-         ftgmac100_init_all(priv, true);
-
-         netdev_dbg(netdev, "Reset done !\n");
-- bail:
-+}
-+
-+static void ftgmac100_reset_task(struct work_struct *work)
-+{
-+       struct ftgmac100 *priv = container_of(work, struct ftgmac100,
-+                                             reset_task);
-+       struct net_device *netdev = priv->netdev;
-+
-+       int err;
-+       /* Lock the world */
-+       if (netdev->phydev)
-+               mutex_lock(&netdev->phydev->lock);
-+       if (priv->mii_bus)
-+               mutex_lock(&priv->mii_bus->mdio_lock);
-+       rtnl_lock();
-+
-+       ftgmac100_reset(priv);
-+
-+       rtnl_unlock();
-         if (priv->mii_bus)
-                 mutex_unlock(&priv->mii_bus->mdio_lock);
-         if (netdev->phydev)
-                 mutex_unlock(&netdev->phydev->lock);
--       rtnl_unlock();
-  }
-
-  static int ftgmac100_open(struct net_device *netdev)
-
-在 2022/2/16 上午4:50, Andrew Lunn 写道:
-> On Tue, Feb 15, 2022 at 02:38:51PM +0800, Heyi Guo wrote:
->> Hi,
->>
->> We are using Aspeed 2600 and found DHCP occasionally fails during boot up or
->> link down/up. The DHCP client is systemd 247.6 networkd. Our network device
->> is 2600 MAC4 connected to a RGMII PHY module.
->>
->> Current investigation shows the first DHCP discovery packet sent by
->> systemd-networkd might be corrupted, and sysmtemd-networkd will continue to
->> send DHCP discovery packets with the same XID, but no other packets, as
->> there is no IP obtained at the moment. However the server side will not
->> respond with this serial of DHCP requests, until it receives some other
->> packets. This situation can be recovered by another link down/up, or a "ping
->> -I eth0 xxx.xxx.xxx.xxx" command to insert some other TX packets.
->>
->> Navigating the driver code ftgmac.c, I've some question about the work flow
->> from link down to link up. I think the flow is as below:
->>
->> 1. ftgmac100_open() will enable net interface with ftgmac100_init_all(), and
->> then call phy_start()
->>
->> 2. When PHY is link up, it will call netif_carrier_on() and then adjust_link
->> interface, which is ftgmac100_adjust_link() for ftgmac100
-> The order there is questionable. Maybe it should first call the adjust
-> link callback, and then the netif_carrier_on(). However...
->
->> 3. In ftgmac100_adjust_link(), it will schedule the reset work
->> (ftgmac100_reset_task)
->>
->> 4. ftgmac100_reset_task() will then reset the MAC
-> Because of this delayed reset, changing the order will not help this
-> driver.
->
->> I found networkd will start to send DHCP request immediately after
->> netif_carrier_on() called in step 2, but step 4 will reset the MAC, which
->> may potentially corrupt the sending packet.
-> What is not clear to my is why it is scheduling the work rather than
-> just doing it. At least for adjust_link, it is in a context it can
-> sleep. ftgmac100_set_ringparam() should also be able to
-> sleep. ftgmac100_interrupt() cannot sleep, so it does need to schedule
-> work.
->
-> I would suggest you refactor ftgmac100_reset_task() into a function
-> that actually does the reset, and a wrapper which takes a
-> work_struct. adjust_link can then directly do the reset, which
-> probably solves your problem.
->
-> 	 Andrew
+--xcsfojf673wfhfx3--

@@ -2,207 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E5E4BC326
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F58F4BC328
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 01:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240308AbiBSAEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 19:04:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54788 "EHLO
+        id S240316AbiBSAEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 19:04:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbiBSAEC (ORCPT
+        with ESMTP id S235810AbiBSAE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 19:04:02 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE22B2731F1;
-        Fri, 18 Feb 2022 16:03:43 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21J03RI2119691;
-        Fri, 18 Feb 2022 18:03:27 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645229007;
-        bh=1x3Kenh4ndILKwhJtba+OvQjGUjAsGb8pbNEJY2OSY8=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=KNUddUXS3k5yP1+wzVSVpvzL2Sm7QPcTXgj/4CPOA+TRID9JHbFiHONp05Ecq4B3h
-         mUGaayF/dj6QiY4a5SGh22v36gA848aOLhpt5ZV4aBrefiaXPvkCKEAJqo8BoufmSs
-         uJnqPNecY2HdXkFfq2HiiHc+VY4eJKB87G5pcumk=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21J03RuW121032
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Feb 2022 18:03:27 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 18
- Feb 2022 18:03:26 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 18 Feb 2022 18:03:26 -0600
-Received: from [10.249.33.2] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21J03PRk112149;
-        Fri, 18 Feb 2022 18:03:26 -0600
-Message-ID: <9d56bc51-2539-fe14-7968-c172acb8b4c9@ti.com>
-Date:   Fri, 18 Feb 2022 18:03:25 -0600
+        Fri, 18 Feb 2022 19:04:29 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05816273753;
+        Fri, 18 Feb 2022 16:04:11 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 0A2F2135;
+        Fri, 18 Feb 2022 16:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1645229051;
+        bh=fRpcrn9aRe9EB3cR2DrtWCDg9U+Fe9vYEshHpgA5N40=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UUNjOq1EkrefBQfoigV/yEWxQ5UP8sHroqNLu3a41MS89bovPx99hBDqDU+eRCfP/
+         QTHfKqWJMoLNYuaHckUwp9M8QlYbnMLHvnYBkY37wZSkfQ5ZLcyAL0GwnGete/HbSW
+         xqAgdtHJ/czvXlx6oNqTaUzAjDVHl9tyUCpVdQhU=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Zev Weiss <zev@bewilderbeest.net>
+Subject: [PATCH v2] hwmon: (pmbus) Add get_error_flags support to regulator ops
+Date:   Fri, 18 Feb 2022 16:03:59 -0800
+Message-Id: <20220219000359.19985-1-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] clocksource/drivers/timer-ti-dm: fix regression from
- errata i940 fix
-Content-Language: en-US
-To:     Drew Fustini <dfustini@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keerthy <j-keerthy@ti.com>, <linux-kernel@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>, <khilman@baylibre.com>
-References: <20220204053503.1409162-1-dfustini@baylibre.com>
-From:   Suman Anna <s-anna@ti.com>
-In-Reply-To: <20220204053503.1409162-1-dfustini@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
+The various PMBus status bits don't all map perfectly to the more
+limited set of REGULATOR_ERROR_* flags, but there's a reasonable
+number where they correspond well enough.
 
-On 2/3/22 23:35, Drew Fustini wrote:
-> The existing fix for errata i940 causes a conflict for IPU2 which is
-> using timer 3 and 4. From arch/arm/boot/dts/dra7-ipu-dsp-common.dtsi:
-> 
->   &ipu2 {
->           mboxes = <&mailbox6 &mbox_ipu2_ipc3x>;
->           ti,timers = <&timer3>;
->           ti,watchdog-timers = <&timer4>, <&timer9>;
->   };
-> 
-> The conflict was noticed when booting mainline on the BeagleBoard X15
-> which has a TI AM5728 SoC:
-> 
->   remoteproc remoteproc1: 55020000.ipu is available
->   remoteproc remoteproc1: powering up 55020000.ipu
->   remoteproc remoteproc1: Booting fw image dra7-ipu2-fw.xem4
->   omap-rproc 55020000.ipu: could not get timer platform device
->   omap-rproc 55020000.ipu: omap_rproc_enable_timers failed: -19
->   remoteproc remoteproc1: can't start rproc 55020000.ipu: -19
-> 
-> This change modifies the errata fix to instead use timer 15 and 16 which
-> resolves the timer conflict.
-> 
-> It does not appear to introduce any latency regression. Results from
-> cyclictest with original errata fix using dmtimer 3 and 4:
-> 
->   # cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
->   policy: fifo: loadavg: 0.02 0.03 0.05
-> 
->   T: 0 ( 1449) P:80 I:200 C: 800368 Min:   0 Act:   32 Avg:   22 Max:  128
->   T: 1 ( 1450) P:80 I:200 C: 800301 Min:   0 Act:   12 Avg:   23 Max:   70
-> 
-> The results after the change to dmtimer 15 and 16:
-> 
->   # cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
->   policy: fifo: loadavg: 0.36 0.19 0.07
-> 
->   T: 0 ( 1711) P:80 I:200 C: 759599 Min:   0 Act:    6 Avg:   22 Max:  108
->   T: 1 ( 1712) P:80 I:200 C: 759539 Min:   0 Act:   19 Avg:   23 Max:   79
-> 
+Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+---
 
-Gentle reminder, I don't see this in linux-next yet, was kinda expecting this
-would be included in the fixes for 5.17.
+Changes since v1 [0]:
+ - split patch out of power-efuse driver series
+ - simplified pmbus_get_status() call
+ - added comment explaining PB_STATUS_{IOUT_OC,VOUT_OV} checks
+ - added fallback PB_STATUS_TEMPERATURE check mapping it to
+   REGULATOR_ERROR_OVER_TEMP_WARN
 
-Just want to make sure that the patch did not get lost in your mbox.
+[0] https://lore.kernel.org/openbmc/20220217104444.7695-2-zev@bewilderbeest.net/
 
-regards
-Suman
+ drivers/hwmon/pmbus/pmbus_core.c | 109 +++++++++++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-> Fixes: 25de4ce5ed02 ("clocksource/drivers/timer-ti-dm: Handle dra7 timer wrap errata i940")
-> Link: https://lore.kernel.org/linux-omap/YfWsG0p6to3IJuvE@x1/
-> Suggested-by: Suman Anna <s-anna@ti.com>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
-> ---
-> v2 changes:
-> - add cyclictest results
-> - use lowercase letter in hex literals
-> 
->  arch/arm/boot/dts/dra7-l4.dtsi             | 5 ++---
->  arch/arm/boot/dts/dra7.dtsi                | 8 ++++----
->  drivers/clocksource/timer-ti-dm-systimer.c | 4 ++--
->  3 files changed, 8 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/dra7-l4.dtsi b/arch/arm/boot/dts/dra7-l4.dtsi
-> index 956a26d52a4c..0a11bacffc1f 100644
-> --- a/arch/arm/boot/dts/dra7-l4.dtsi
-> +++ b/arch/arm/boot/dts/dra7-l4.dtsi
-> @@ -3482,8 +3482,7 @@ timer14: timer@0 {
->  				ti,timer-pwm;
->  			};
->  		};
-> -
-> -		target-module@2c000 {			/* 0x4882c000, ap 17 02.0 */
-> +		timer15_target: target-module@2c000 {	/* 0x4882c000, ap 17 02.0 */
->  			compatible = "ti,sysc-omap4-timer", "ti,sysc";
->  			reg = <0x2c000 0x4>,
->  			      <0x2c010 0x4>;
-> @@ -3511,7 +3510,7 @@ timer15: timer@0 {
->  			};
->  		};
->  
-> -		target-module@2e000 {			/* 0x4882e000, ap 19 14.0 */
-> +		timer16_target: target-module@2e000 {	/* 0x4882e000, ap 19 14.0 */
->  			compatible = "ti,sysc-omap4-timer", "ti,sysc";
->  			reg = <0x2e000 0x4>,
->  			      <0x2e010 0x4>;
-> diff --git a/arch/arm/boot/dts/dra7.dtsi b/arch/arm/boot/dts/dra7.dtsi
-> index 6b485cbed8d5..8f7ffe2f66e9 100644
-> --- a/arch/arm/boot/dts/dra7.dtsi
-> +++ b/arch/arm/boot/dts/dra7.dtsi
-> @@ -1339,20 +1339,20 @@ timer@0 {
->  };
->  
->  /* Local timers, see ARM architected timer wrap erratum i940 */
-> -&timer3_target {
-> +&timer15_target {
->  	ti,no-reset-on-init;
->  	ti,no-idle;
->  	timer@0 {
-> -		assigned-clocks = <&l4per_clkctrl DRA7_L4PER_TIMER3_CLKCTRL 24>;
-> +		assigned-clocks = <&l4per3_clkctrl DRA7_L4PER3_TIMER15_CLKCTRL 24>;
->  		assigned-clock-parents = <&timer_sys_clk_div>;
->  	};
->  };
->  
-> -&timer4_target {
-> +&timer16_target {
->  	ti,no-reset-on-init;
->  	ti,no-idle;
->  	timer@0 {
-> -		assigned-clocks = <&l4per_clkctrl DRA7_L4PER_TIMER4_CLKCTRL 24>;
-> +		assigned-clocks = <&l4per3_clkctrl DRA7_L4PER3_TIMER16_CLKCTRL 24>;
->  		assigned-clock-parents = <&timer_sys_clk_div>;
->  	};
->  };
-> diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
-> index b6f97960d8ee..f52bf81dc1dd 100644
-> --- a/drivers/clocksource/timer-ti-dm-systimer.c
-> +++ b/drivers/clocksource/timer-ti-dm-systimer.c
-> @@ -695,9 +695,9 @@ static int __init dmtimer_percpu_quirk_init(struct device_node *np, u32 pa)
->  		return 0;
->  	}
->  
-> -	if (pa == 0x48034000)		/* dra7 dmtimer3 */
-> +	if (pa == 0x4882c000)           /* dra7 dmtimer15 */
->  		return dmtimer_percpu_timer_init(np, 0);
-> -	else if (pa == 0x48036000)	/* dra7 dmtimer4 */
-> +	else if (pa == 0x4882e000)      /* dra7 dmtimer16 */
->  		return dmtimer_percpu_timer_init(np, 1);
->  
->  	return 0;
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 776ee2237be2..6f05c271bdf8 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2417,10 +2417,119 @@ static int pmbus_regulator_disable(struct regulator_dev *rdev)
+ 	return _pmbus_regulator_on_off(rdev, 0);
+ }
+ 
++/* A PMBus status flag and the corresponding REGULATOR_ERROR_* flag */
++struct pmbus_regulator_status_assoc {
++	int pflag, rflag;
++};
++
++/* PMBus->regulator bit mappings for a PMBus status register */
++struct pmbus_regulator_status_category {
++	int func;
++	int reg;
++	const struct pmbus_regulator_status_assoc *bits; /* zero-terminated */
++};
++
++static const struct pmbus_regulator_status_category pmbus_regulator_flag_map[] = {
++	{
++		.func = PMBUS_HAVE_STATUS_VOUT,
++		.reg = PMBUS_STATUS_VOUT,
++		.bits = (const struct pmbus_regulator_status_assoc[]) {
++			{ PB_VOLTAGE_UV_WARNING, REGULATOR_ERROR_UNDER_VOLTAGE_WARN },
++			{ PB_VOLTAGE_UV_FAULT,   REGULATOR_ERROR_UNDER_VOLTAGE },
++			{ PB_VOLTAGE_OV_WARNING, REGULATOR_ERROR_OVER_VOLTAGE_WARN },
++			{ PB_VOLTAGE_OV_FAULT,   REGULATOR_ERROR_REGULATION_OUT },
++			{ },
++		},
++	}, {
++		.func = PMBUS_HAVE_STATUS_IOUT,
++		.reg = PMBUS_STATUS_IOUT,
++		.bits = (const struct pmbus_regulator_status_assoc[]) {
++			{ PB_IOUT_OC_WARNING,    REGULATOR_ERROR_OVER_CURRENT_WARN },
++			{ PB_IOUT_OC_FAULT,      REGULATOR_ERROR_OVER_CURRENT },
++			{ PB_IOUT_OC_LV_FAULT,   REGULATOR_ERROR_OVER_CURRENT },
++			{ },
++		},
++	}, {
++		.func = PMBUS_HAVE_STATUS_TEMP,
++		.reg = PMBUS_STATUS_TEMPERATURE,
++		.bits = (const struct pmbus_regulator_status_assoc[]) {
++			{ PB_TEMP_OT_WARNING,    REGULATOR_ERROR_OVER_TEMP_WARN },
++			{ PB_TEMP_OT_FAULT,      REGULATOR_ERROR_OVER_TEMP },
++			{ },
++		},
++	},
++};
++
++static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
++{
++	int i, status;
++	const struct pmbus_regulator_status_category *cat;
++	const struct pmbus_regulator_status_assoc *bit;
++	struct device *dev = rdev_get_dev(rdev);
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
++	u8 page = rdev_get_id(rdev);
++	int func = data->info->func[page];
++
++	*flags = 0;
++
++	for (i = 0; i < ARRAY_SIZE(pmbus_regulator_flag_map); i++) {
++		cat = &pmbus_regulator_flag_map[i];
++		if (!(func & cat->func))
++			continue;
++
++		status = pmbus_read_byte_data(client, page, cat->reg);
++		if (status < 0)
++			return status;
++
++		for (bit = cat->bits; bit->pflag; bit++) {
++			if (status & bit->pflag)
++				*flags |= bit->rflag;
++		}
++	}
++
++	/*
++	 * Map what bits of STATUS_{WORD,BYTE} we can to REGULATOR_ERROR_*
++	 * bits.  Some of the other bits are tempting (especially for cases
++	 * where we don't have the relevant PMBUS_HAVE_STATUS_*
++	 * functionality), but there's an unfortunate ambiguity in that
++	 * they're defined as indicating a fault *or* a warning, so we can't
++	 * easily determine whether to report REGULATOR_ERROR_<foo> or
++	 * REGULATOR_ERROR_<foo>_WARN.
++	 */
++	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
++	if (status < 0)
++		return status;
++
++	if (pmbus_regulator_is_enabled(rdev) && (status & PB_STATUS_OFF))
++		*flags |= REGULATOR_ERROR_FAIL;
++
++	/*
++	 * Unlike most other status bits, PB_STATUS_{IOUT_OC,VOUT_OV} are
++	 * defined strictly as fault indicators (not warnings).
++	 */
++	if (status & PB_STATUS_IOUT_OC)
++		*flags |= REGULATOR_ERROR_OVER_CURRENT;
++	if (status & PB_STATUS_VOUT_OV)
++		*flags |= REGULATOR_ERROR_REGULATION_OUT;
++
++	/*
++	 * If we haven't discovered any thermal faults or warnings via
++	 * PMBUS_STATUS_TEMPERATURE, map PB_STATUS_TEMPERATURE to a warning as
++	 * a (conservative) best-effort interpretation.
++	 */
++	if (!(*flags & (REGULATOR_ERROR_OVER_TEMP | REGULATOR_ERROR_OVER_TEMP_WARN))
++	    && (status & PB_STATUS_TEMPERATURE))
++		*flags |= REGULATOR_ERROR_OVER_TEMP_WARN;
++
++	return 0;
++}
++
+ const struct regulator_ops pmbus_regulator_ops = {
+ 	.enable = pmbus_regulator_enable,
+ 	.disable = pmbus_regulator_disable,
+ 	.is_enabled = pmbus_regulator_is_enabled,
++	.get_error_flags = pmbus_regulator_get_error_flags,
+ };
+ EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+ 
+-- 
+2.35.1
 

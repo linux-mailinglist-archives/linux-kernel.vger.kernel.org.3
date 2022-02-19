@@ -2,159 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600314BC73D
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 10:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0390E4BC73F
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 10:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241862AbiBSJyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 04:54:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45434 "EHLO
+        id S239840AbiBSJ4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 04:56:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239840AbiBSJyh (ORCPT
+        with ESMTP id S232848AbiBSJ4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 04:54:37 -0500
-Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBF7E6EB33
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 01:54:17 -0800 (PST)
-Received: from unknown (HELO lgemrelse7q.lge.com) (156.147.1.151)
-        by 156.147.23.52 with ESMTP; 19 Feb 2022 18:54:15 +0900
-X-Original-SENDERIP: 156.147.1.151
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.151 with ESMTP; 19 Feb 2022 18:54:15 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Sat, 19 Feb 2022 18:54:07 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
-        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Re: [PATCH 00/16] DEPT(Dependency Tracker)
-Message-ID: <20220219095407.GA10342@X58A-UD3R>
-References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
- <Yg5u7dzUxL3Vkncg@mit.edu>
+        Sat, 19 Feb 2022 04:56:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD7F38A2
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 01:56:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34477B8013C
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 09:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9AFC004E1;
+        Sat, 19 Feb 2022 09:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645264589;
+        bh=oE4n057itlw6z2EKGJmIYQhY6E/5y7x1AOT0/sQpMMI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g0lbhpjjGxWweCjUcNJUB522eW0PRgXADI9p1QWopi1qyAUDziM0YvIHnmtwv28hS
+         VPlj16C6Iyo9Fke4PtPLvQxCH4cGKjM55z9p/EgEMldmovrjLO3/SlNM5rcinXAfHU
+         M+M6m2OIP2Yya0bqO4D7jT110e523sZs4r351y1XZV+p/O0Nquwm4NGl13F+JWpMKX
+         I97lemeyEmOPK60gXRdqK70FY8bBw6Ctk5G+5wnJ1i3qXpPjesC71ZI5h/S0WE0lHR
+         /4ABvTPJHuFaVYM52dkGnaYBnmUjE2/Tyb0OZYQCl3Vh5SQMh1hTCBQU5oDRc3+rHT
+         Sh+8ztvWZDWgg==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nLMTa-008xLf-WF; Sat, 19 Feb 2022 09:56:27 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg5u7dzUxL3Vkncg@mit.edu>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Date:   Sat, 19 Feb 2022 09:56:26 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     tglx@linutronix.de, will@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
+        Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH] irqchip/gic-v3: use dsb(ishst) to synchronize data to smp
+ before issuing ipi
+In-Reply-To: <20220218215549.4274-1-song.bao.hua@hisilicon.com>
+References: <20220218215549.4274-1-song.bao.hua@hisilicon.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <6432e7e97b828d887da8794c150161c4@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: 21cnbao@gmail.com, tglx@linutronix.de, will@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com, song.bao.hua@hisilicon.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 10:51:09AM -0500, Theodore Ts'o wrote:
-> On Thu, Feb 17, 2022 at 07:57:36PM +0900, Byungchul Park wrote:
-> > 
-> > I've got several reports from the tool. Some of them look like false
-> > alarms and some others look like real deadlock possibility. Because of
-> > my unfamiliarity of the domain, it's hard to confirm if it's a real one.
-> > Let me add the reports on this email thread.
+On 2022-02-18 21:55, Barry Song wrote:
+> dsb(ishst) should be enough here as we only need to guarantee the
+> visibility of data to other CPUs in smp inner domain before we
+> send the ipi.
 > 
-> The problem is we have so many potentially invalid, or
-> so-rare-as-to-be-not-worth-the-time-to-investigate-in-the-
-> grand-scheme-of-all-of-the-fires-burning-on-maintainers laps that it's
-> really not reasonable to ask maintainers to determine whether
+> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+> ---
+>  drivers/irqchip/irq-gic-v3.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3.c 
+> b/drivers/irqchip/irq-gic-v3.c
+> index 5e935d97207d..0efe1a9a9f3b 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -1211,7 +1211,7 @@ static void gic_ipi_send_mask(struct irq_data
+> *d, const struct cpumask *mask)
+>  	 * Ensure that stores to Normal memory are visible to the
+>  	 * other CPUs before issuing the IPI.
+>  	 */
+> -	wmb();
+> +	dsb(ishst);
+> 
+>  	for_each_cpu(cpu, mask) {
+>  		u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu));
 
-Even though I might have been wrong and might be gonna be wrong, you
-look so arrogant. You were hasty to judge and trying to walk over me.
-
-I reported it because I thought it was a real problem but couldn't
-confirm it. For the other reports that I thought was not real, I didn't
-even mention it. If you are talking about the previous report, then I
-felt so sorry as I told you. I skimmed through the part of the waits...
-
-Basically, I respect you and appreciate your feedback. Hope you not get
-me wrong.
-
-> Looking at the second ext4 report, it doesn't make any sense.  Context
-> A is the kjournald thread.  We don't do a commit until (a) the timeout
-> expires, or (b) someone explicitly requests that a commit happen
-> waking up j_wait_commit.  I'm guessing that complaint here is that
-> DEPT thinks nothing is explicitly requesting a wake up.  But note that
-> after 5 seconds (or whatever journal->j_commit_interval) is configured
-> to be we *will* always start a commit.  So ergo, there can't be a deadlock.
-
-Yeah, it might not be a *deadlock deadlock* because the wait will be
-anyway woken up by one of the wake up points you mentioned. However, the
-dependency looks problematic because the three contexts participating in
-the dependency chain would be stuck for a while until one eventually
-wakes it up. I bet it would not be what you meant.
-
-Again. It's not critical but problematic. Or am I missing something?
-
-> At a higher level of discussion, it's an unfair tax on maintainer's
-> times to ask maintainers to help you debug DEPT for you.  Tools like
-> Syzkaller and DEPT are useful insofar as they save us time in making
-> our subsystems better.  But until you can prove that it's not going to
-> be a massive denial of service attack on maintainer's time, at the
-
-Partially I agree. I would understand you even if you don't support Dept
-until you think it's valuable enough. However, let me keep asking things
-to fs folks, not you, even though I would cc you on it.
-
-> If you know there there "appear to be false positives", you need to
-> make sure you've tracked them all down before trying to ask that this
-> be merged.
-
-To track them all down, I need to ask LKML because Dept works perfectly
-with my system. I don't want it to be merged with a lot of false
-positive still in there, either.
-
-> You may also want to add some documentation about why we should trust
-> this; in particular for wait channels, when a process calls schedule()
-> there may be multiple reasons why the thread will wake up --- in the
-> worst case, such as in the select(2) or epoll(2) system call, there
-> may be literally thousands of reasons (one for every file desriptor
-> the select is waiting on) --- why the process will wake up and thus
-> resolve the potential "deadlock" that DEPT is worrying about.  How is
-> DEPT going to handle those cases?  If the answer is that things need
-
-Thank you for the information but I don't get it which case you are
-concerning. I'd like to ask you a specific senario of that so that we
-can discuss it more - maybe I guess I could answer to it tho, but I
-won't ask you. Just give me an instance only if you think it's worthy.
-
-You look like a guy who unconditionally blames on new things before
-understanding it rather than asking and discussing. Again. I also think
-anyone doesn't have to spend his or her time for what he or she think is
-not worthy enough.
-
-> I know that you're trying to help us, but this tool needs to be far
-> better than Lockdep before we should think about merging it.  Even if
-> it finds 5% more potential deadlocks, if it creates 95% more false
-
-It should not get merged for sure if so, but it sounds too sarcastic.
-Let's see if it creates 95% false positives for real. If it's true and
-I can't control it, I will give up. That's what I should do.
-
-There are a lot of factors to judge how valuable Dept is. Dept would be
-useful especially in the middle of development, rather than in the final
-state in the tree. It'd be appreciated if you think that sides more, too.
+I'm not opposed to that change, but I'm pretty curious whether this 
+makes
+any visible difference in practice. Could you measure the effect of this 
+change
+for any sort of IPI heavy workload?
 
 Thanks,
-Byungchul
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...

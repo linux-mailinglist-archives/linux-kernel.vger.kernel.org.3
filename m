@@ -2,77 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441BA4BC6B8
+	by mail.lfdr.de (Postfix) with ESMTP id C29D04BC6B9
 	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 08:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241574AbiBSHdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 02:33:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55800 "EHLO
+        id S241249AbiBSHdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 02:33:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiBSHdC (ORCPT
+        with ESMTP id S234553AbiBSHdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 02:33:02 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84E254BF8;
-        Fri, 18 Feb 2022 23:32:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7eqdhnHI2SxSJ00bmOAf2xivBvyxyv0i9DUvwzQp/5c=; b=y8QNB+LFsQoRt0/Ug2MT7R5jm/
-        Pz50D6Dr1Owrb9/23C4jgfcqtSEBXwHo0qBohWZY48AK7rWIDK7cD4EW7HIMXlrN1YABbgedFv7GN
-        SfGQIre7H5o7+AoB5fFMsX+yT0jy/4/nsEEHgCRsi794ATO1E4BmyM5/9zWEoNKInh2w/Zsuvepj6
-        qVLr+n1wjm4gwEc7Fruj99WZ8y8hdPvBh9yy5DJSC40S5Z9QjwQmlmZlCh92tBXpy3tNcD/qOqwV3
-        C76W32A48372jZouRhAu//ZVsnbwjk8EiFdYucVqX6yJS8z5J/mD+cZoS4xozEg/+P5Y1Y2u6JW1c
-        PC9U+8OA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nLKEM-00GN21-4h; Sat, 19 Feb 2022 07:32:34 +0000
-Date:   Fri, 18 Feb 2022 23:32:34 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH v6 02/11] driver core: Add dma_cleanup callback in
- bus_type
-Message-ID: <YhCdEmC2lYStmUSL@infradead.org>
-References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
- <20220218005521.172832-3-baolu.lu@linux.intel.com>
+        Sat, 19 Feb 2022 02:33:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55BC48311
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 23:33:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CB55B8006F
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 07:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A8DC340EF;
+        Sat, 19 Feb 2022 07:33:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645255998;
+        bh=614FNkoWHrfwRnbpfM3As7ed3TVJxAFokHvmZjVr8IU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WIupzCRzvfCi47ZKZBcMIFmdWd7BCtN0ts570dK8MSngQkewmmnTfVAcEUrxy9fkV
+         M6M6H4X+KhEX/82l+GrvKXmJeoJl0DLMbrATlvh0qSxpjsmqoyNjGuAA424dsS/DCC
+         eGZ/YH/FpCYS9xXR1YvKFsgjPp/CO/gBB1HhV4+8=
+Date:   Sat, 19 Feb 2022 08:33:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Desmond Yan <desmond.yan@broadcom.com>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] misc: bcm-vk: add kconfig for supporting viper
+ chip
+Message-ID: <YhCdNyRxGYmhx21f@kroah.com>
+References: <20220218200811.17136-1-desmond.yan@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218005521.172832-3-baolu.lu@linux.intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220218200811.17136-1-desmond.yan@broadcom.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So we are back to the callback madness instead of the nice and simple
-flag?  Sigh.
+On Fri, Feb 18, 2022 at 12:08:11PM -0800, Desmond Yan wrote:
+> Add kconfig for enabling bcm-vk driver to support the viper chip.
+> Default is off and only explicitly configured that the viper chip
+> would be discovered by the driver and loaded for usage.
+> 
+> Tested-by: Desmond Yan <desmond.yan@broadcom.com>
+> Signed-off-by: Desmond Yan <desmond.yan@broadcom.com>
+> ---
+>  drivers/misc/bcm-vk/Kconfig      | 10 ++++++++++
+>  drivers/misc/bcm-vk/bcm_vk_dev.c |  2 ++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/drivers/misc/bcm-vk/Kconfig b/drivers/misc/bcm-vk/Kconfig
+> index 68a972772b99..43910a378163 100644
+> --- a/drivers/misc/bcm-vk/Kconfig
+> +++ b/drivers/misc/bcm-vk/Kconfig
+> @@ -16,6 +16,16 @@ config BCM_VK
+>  
+>  	  If unsure, say N.
+>  
+> +config BCM_VK_VIPER
+> +	bool "VK driver for VIPER"
+> +	depends on BCM_VK
+> +	help
+> +	  Turn on to enable using the vk driver for the viper variant.
+> +	  Used for development environments where viper uses VK driver
+> +	  and VK firmware rather than an alternate firmware and driver.
+> +
+> +	  If unsure, say N.
+> +
+>  config BCM_VK_TTY
+>  	bool "Enable tty ports on a Broadcom VK Accelerator device"
+>  	depends on TTY
+> diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+> index ad639ee85b2a..41dbfa4fa4a5 100644
+> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
+> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+> @@ -1633,7 +1633,9 @@ static void bcm_vk_shutdown(struct pci_dev *pdev)
+>  
+>  static const struct pci_device_id bcm_vk_ids[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_BROADCOM, PCI_DEVICE_ID_VALKYRIE), },
+> +#if defined(CONFIG_BCM_VK_VIPER)
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_BROADCOM, PCI_DEVICE_ID_VIPER), },
+> +#endif
+
+Why do you need a new config option just to add a new device id?  Why
+would you ever NOT want this option enabled as there is no other driver
+for this hardware?
+
+thanks,
+
+greg k-h

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD3D4BC793
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AFC4BC783
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241945AbiBSKCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 05:02:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48436 "EHLO
+        id S241953AbiBSKCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 05:02:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241903AbiBSKCc (ORCPT
+        with ESMTP id S241911AbiBSKCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 19 Feb 2022 05:02:32 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C04E4C;
-        Sat, 19 Feb 2022 02:02:13 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id o24so18500077wro.3;
-        Sat, 19 Feb 2022 02:02:13 -0800 (PST)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3500FA195;
+        Sat, 19 Feb 2022 02:02:14 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id k1so18480375wrd.8;
+        Sat, 19 Feb 2022 02:02:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xP5uwtUef3r0nEvw6n8H3ODuHfFiZTeoAS2iiXRb5ak=;
-        b=GcDVsN9kZNYJfKJ5gZPUU3DoKw3zHL2kbbr9P7tg2cTnZMFhDrMhKBxlQ4MuUASC76
-         nwe0ly7atN3aE3N6HysSEB2D/2Z3QLGJwo1pR+UOX84NI30Bl5Wuv3ZPG569Vp9SyWKW
-         oM4MjTO82Cs2xiIjkRLKkq/oCKGFIK9U0o9seIQcukTONLkmFNRseE3py3QYUpTydg28
-         oGzyw8CO6pCzV6KJmc4jla7YH987I1NJ5RZcLUhhNqmtjac6C1qDftAMctlYeH2eh28p
-         oK+uavz/zgrEhpHNvqOofFYBmKK/cvK/1nHqWvIHl95gUrJeYWAjKhqQY3PNHq/b+o7O
-         CMpQ==
+        bh=G+knIrKk+Y9Xw92x9dcrEHWonrnULiyFs1HfK/Dzs88=;
+        b=AU838J+kCinEFPJ7ney/lcajB7RH4SV0dxXKP2Qz9LmikLXP32/PUIAHGpnQZHYNNR
+         CaATYRM3a7C3IETf4uOdVRLPX5Yb/22uY/udhINlofTJOuB5P+c4Q3NIak8lcXacYlfK
+         nMgbFxro997ev63iliuM6qnMN8ls/KQfioddvYsnQWQ1TwINfBW8nFz/JFhmyqjqmywa
+         BAkmWzYv3gvLWNa5+/oQgZY0ySfGM2DaLk8JT4uMb2kRJ2kqbpY8S0qy9B8k26u7dT38
+         4vrs6SbkDlcT3eHcZu38I+yo7a3vh6P2njQQBpmnuXuzgjxYYR9LuN/w2Zr3E/qf65FC
+         4tRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xP5uwtUef3r0nEvw6n8H3ODuHfFiZTeoAS2iiXRb5ak=;
-        b=O3h2T1BaJEknfJNcW3Fnh3MpLQ+w6G20jq6gtFEO7ycTDgk0sQqPLd1k2hrCRK+8sz
-         h7Gkzb4tqi6LEyC2C3B9D7JGD3VPadh7x9K9S+waJziSFftgRIHy+ycuPgMLU7V2mUIP
-         AfLmMYoES/VQv0Wm8oCUC/Rz7cr4B7h6Zp/WPSXLZl7OhnDd9h9IHTReoZavcrxOfCt/
-         Xabc+HUS72xUuf/rT3VCFro3FzDjfPGkMfjACFilgiPZhzwoEDoqkOdK7f29TKuOwMnw
-         ZEeJmq/edyB+qtMHbzbo0XkXEm9Wz6YxyRxtRtKm+MX9dtmBTcVjCWMG1Av4RE+LTyyD
-         1T0w==
-X-Gm-Message-State: AOAM5309yTZfHKC2O40yFyPGd06kzeGJt/ziqnrbNgw/ybb6Mw/tYgaq
-        D+/0E83Yn7t+Vg4PWYs13Yg=
-X-Google-Smtp-Source: ABdhPJzVnLOg3dZASbtZkO2mFU0jG97f4txcOtAQJa7996v0jetJQK1IPpDdGfnMQV+1bCgxHDKV0A==
-X-Received: by 2002:a5d:584d:0:b0:1e4:a62d:ad45 with SMTP id i13-20020a5d584d000000b001e4a62dad45mr8738618wrf.571.1645264931942;
-        Sat, 19 Feb 2022 02:02:11 -0800 (PST)
+        bh=G+knIrKk+Y9Xw92x9dcrEHWonrnULiyFs1HfK/Dzs88=;
+        b=R7FOcGswBKPwLMYfIbNsDuWb8Fw/tb6k/vur71SmfGUXylAiY5E0pLlSx4nJKyh0js
+         BOjgrN+HHeY5ULsFyh3qV574vPFhZee0frAgyoNIwqVZTxYMiOTdkglDPYQ7vxNQNRK5
+         Ijoyy64Kn51MPEiB+yNFXbcaG6TCCeEGEpJr6+QLmki2TiNjsZm/GWeHUhYpg4lQl2JZ
+         gbIoxd3u2TbmsJ3+BsvM3cDD+GGKV0kqsl/lgCP6jYYRvzpFz4oTWfMwsaHwrNXWCzuZ
+         ehyutPidDETvc8yU2NygcTB7QZdk4/0OKZp+cT+i7ESMnPgLRFw8F3ulUTQdIZ07aRw3
+         e8Jw==
+X-Gm-Message-State: AOAM531ufKxq1grL0yf7bh56okPxWaTnFxxvaxMucNNc8WeePVAv8heO
+        ErZhJ4nHcq2YhoROGYzaEFA=
+X-Google-Smtp-Source: ABdhPJxvt6J8MSJnPVy1GVDVmkTeuhBjHqjobveFWXVh/X0ZsAq8TvBd2+tPgUyr3b7uUXPJG7Jz+A==
+X-Received: by 2002:adf:f1d2:0:b0:1e4:aef2:76a8 with SMTP id z18-20020adff1d2000000b001e4aef276a8mr8647909wro.445.1645264932745;
+        Sat, 19 Feb 2022 02:02:12 -0800 (PST)
 Received: from localhost.localdomain ([94.73.33.246])
-        by smtp.gmail.com with ESMTPSA id az13sm24417244wrb.39.2022.02.19.02.02.11
+        by smtp.gmail.com with ESMTPSA id az13sm24417244wrb.39.2022.02.19.02.02.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 02:02:11 -0800 (PST)
+        Sat, 19 Feb 2022 02:02:12 -0800 (PST)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     jikos@kernel.org
 Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH for-5.18/uclogic 3/9] HID: uclogic: Switch to matching subreport bytes
-Date:   Sat, 19 Feb 2022 11:01:51 +0100
-Message-Id: <20220219100157.41920-4-jose.exposito89@gmail.com>
+Subject: [PATCH for-5.18/uclogic 4/9] HID: uclogic: Specify total report size to buttonpad macro
+Date:   Sat, 19 Feb 2022 11:01:52 +0100
+Message-Id: <20220219100157.41920-5-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220219100157.41920-1-jose.exposito89@gmail.com>
 References: <20220219100157.41920-1-jose.exposito89@gmail.com>
@@ -74,94 +74,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nikolai Kondrashov <spbnick@gmail.com>
 
-Switch from matching UC-Logic subreport with a mask to a full value to
-support detecting Huion HS610 touch dial reports. Those would match the
-button mask otherwise.
+Simplify the UCLOGIC_RDESC_BUTTONPAD_BYTES macro by passing as param
+the size of the report to pad to in bytes.
 
 Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/hid/hid-uclogic-core.c   |  9 ++++++---
- drivers/hid/hid-uclogic-params.c |  4 ++--
- drivers/hid/hid-uclogic-params.h | 13 +++++++------
- 3 files changed, 15 insertions(+), 11 deletions(-)
+ drivers/hid/hid-uclogic-rdesc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-index 7092f86517a5..a02edeb30a35 100644
---- a/drivers/hid/hid-uclogic-core.c
-+++ b/drivers/hid/hid-uclogic-core.c
-@@ -365,9 +365,12 @@ static int uclogic_raw_event(struct hid_device *hdev,
- 				ARRAY_SIZE(params->pen.subreport_list);
- 			/* Try to match a subreport */
- 			for (subreport = params->pen.subreport_list;
--			     subreport < subreport_list_end &&
--				(data[1] & subreport->mask) != subreport->mask;
--			     subreport++);
-+			     subreport < subreport_list_end; subreport++) {
-+				if (subreport->value != 0 &&
-+				    subreport->value == data[1]) {
-+					break;
-+				}
-+			}
- 			/* If a subreport matched */
- 			if (subreport < subreport_list_end) {
- 				/* Change to subreport ID, and restart */
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index 138dd8b0a360..a4a53ab1e72c 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -763,7 +763,7 @@ static int uclogic_params_huion_init(struct uclogic_params *params,
- 				goto cleanup;
- 			}
- 			/* Link frame button subreports from pen reports */
--			p.pen.subreport_list[0].mask = 0x20;
-+			p.pen.subreport_list[0].value = 0xe0;
- 			p.pen.subreport_list[0].id =
- 				UCLOGIC_RDESC_BUTTONPAD_V2_ID;
- 			goto output;
-@@ -791,7 +791,7 @@ static int uclogic_params_huion_init(struct uclogic_params *params,
- 			(found ? "" : " not"));
- 		if (found) {
- 			/* Link frame button subreports from pen reports */
--			p.pen.subreport_list[0].mask = 0x20;
-+			p.pen.subreport_list[0].value = 0xe0;
- 			p.pen.subreport_list[0].id =
- 				UCLOGIC_RDESC_BUTTONPAD_V1_ID;
- 		}
-diff --git a/drivers/hid/hid-uclogic-params.h b/drivers/hid/hid-uclogic-params.h
-index 82db8ab36fec..c18569591b75 100644
---- a/drivers/hid/hid-uclogic-params.h
-+++ b/drivers/hid/hid-uclogic-params.h
-@@ -39,14 +39,15 @@ extern const char *uclogic_params_pen_inrange_to_str(
+diff --git a/drivers/hid/hid-uclogic-rdesc.c b/drivers/hid/hid-uclogic-rdesc.c
+index ec16355d200b..6e5bef39417e 100644
+--- a/drivers/hid/hid-uclogic-rdesc.c
++++ b/drivers/hid/hid-uclogic-rdesc.c
+@@ -654,10 +654,9 @@ const size_t uclogic_rdesc_pen_v2_template_size =
+ /*
+  * Expand to the contents of a generic buttonpad report descriptor.
+  *
+- * @_padding:	Padding from the end of button bits at bit 44, until
+- *		the end of the report, in bits.
++ * @_size:	Size of the report to pad to, including report ID, bytes.
   */
- struct uclogic_params_pen_subreport {
- 	/*
--	 * The subreport's bitmask matching the second byte of the pen report.
--	 * If zero, the subreport is considered invalid, and won't match.
-+	 * The value of the second byte of the pen report indicating this
-+	 * subreport. If zero, the subreport should be considered invalid and
-+	 * not matched.
- 	 */
--	__u8 mask;
-+	__u8 value;
+-#define UCLOGIC_RDESC_BUTTONPAD_BYTES(_padding) \
++#define UCLOGIC_RDESC_BUTTONPAD_BYTES(_size) \
+ 	0x05, 0x01,     /*  Usage Page (Desktop),               */ \
+ 	0x09, 0x07,     /*  Usage (Keypad),                     */ \
+ 	0xA1, 0x01,     /*  Collection (Application),           */ \
+@@ -692,21 +691,22 @@ const size_t uclogic_rdesc_pen_v2_template_size =
+ 	0x29, 0x03,     /*          Usage Maximum (03h),        */ \
+ 	0x95, 0x03,     /*          Report Count (3),           */ \
+ 	0x81, 0x02,     /*          Input (Variable),           */ \
+-	0x95, _padding, /*          Report Count (_padding),    */ \
++	0x95, ((_size) * 8 - 45),                                  \
++			/*          Report Count (padding),     */ \
+ 	0x81, 0x01,     /*          Input (Constant),           */ \
+ 	0xC0,           /*      End Collection,                 */ \
+ 	0xC0            /*  End Collection                      */
  
- 	/*
--	 * The ID to be assigned to the report, if the "mask" matches.
--	 * Only valid if "mask" is not zero.
-+	 * The ID to be assigned to the report, if the second byte of the pen
-+	 * report is equal to "value". Only valid if "value" is not zero.
- 	 */
- 	__u8 id;
+ /* Fixed report descriptor for (tweaked) v1 buttonpad reports */
+ const __u8 uclogic_rdesc_buttonpad_v1_arr[] = {
+-	UCLOGIC_RDESC_BUTTONPAD_BYTES(19)
++	UCLOGIC_RDESC_BUTTONPAD_BYTES(8)
  };
-@@ -200,7 +201,7 @@ extern int uclogic_params_init(struct uclogic_params *params,
- 		(_params)->pen.desc_ptr,                                    \
- 		(_params)->pen.desc_size,                                   \
- 		(_params)->pen.id,                                          \
--		(_params)->pen.subreport_list[0].mask,                      \
-+		(_params)->pen.subreport_list[0].value,                     \
- 		(_params)->pen.subreport_list[0].id,                        \
- 		uclogic_params_pen_inrange_to_str((_params)->pen.inrange),  \
- 		((_params)->pen.fragmented_hires ? "true" : "false"),       \
+ const size_t uclogic_rdesc_buttonpad_v1_size =
+ 			sizeof(uclogic_rdesc_buttonpad_v1_arr);
+ 
+ /* Fixed report descriptor for (tweaked) v2 buttonpad reports */
+ const __u8 uclogic_rdesc_buttonpad_v2_arr[] = {
+-	UCLOGIC_RDESC_BUTTONPAD_BYTES(51)
++	UCLOGIC_RDESC_BUTTONPAD_BYTES(12)
+ };
+ const size_t uclogic_rdesc_buttonpad_v2_size =
+ 			sizeof(uclogic_rdesc_buttonpad_v2_arr);
 -- 
 2.25.1
 

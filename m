@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0390E4BC73F
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 10:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE5C4BC772
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 11:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239840AbiBSJ4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 04:56:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53396 "EHLO
+        id S241868AbiBSJ5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 04:57:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbiBSJ4u (ORCPT
+        with ESMTP id S241865AbiBSJ5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 04:56:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD7F38A2
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 01:56:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34477B8013C
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 09:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9AFC004E1;
-        Sat, 19 Feb 2022 09:56:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645264589;
-        bh=oE4n057itlw6z2EKGJmIYQhY6E/5y7x1AOT0/sQpMMI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=g0lbhpjjGxWweCjUcNJUB522eW0PRgXADI9p1QWopi1qyAUDziM0YvIHnmtwv28hS
-         VPlj16C6Iyo9Fke4PtPLvQxCH4cGKjM55z9p/EgEMldmovrjLO3/SlNM5rcinXAfHU
-         M+M6m2OIP2Yya0bqO4D7jT110e523sZs4r351y1XZV+p/O0Nquwm4NGl13F+JWpMKX
-         I97lemeyEmOPK60gXRdqK70FY8bBw6Ctk5G+5wnJ1i3qXpPjesC71ZI5h/S0WE0lHR
-         /4ABvTPJHuFaVYM52dkGnaYBnmUjE2/Tyb0OZYQCl3Vh5SQMh1hTCBQU5oDRc3+rHT
-         Sh+8ztvWZDWgg==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nLMTa-008xLf-WF; Sat, 19 Feb 2022 09:56:27 +0000
+        Sat, 19 Feb 2022 04:57:12 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1FA50E2F;
+        Sat, 19 Feb 2022 01:56:53 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id hw13so20526416ejc.9;
+        Sat, 19 Feb 2022 01:56:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y7dI/kyXtQ5r7J/1JCw2+N0TiORB8W3a63ggFTECDo4=;
+        b=ZA9bzecfezxlqpIiccEI1K27SXLtnJUjvIEbkbGMkLbgdFc1iGqVU85mJgKlmd27Ss
+         HiozbCv7C4S2YiTIssUYYUrd0zqxKkMq6vZp4b0cc50nSW9sRoZd1xATLPxnA8jK7wLF
+         XY4FIbMD9X2B0LBasRTc3GMGMw8dHw1M9eL8AFSUBju46diRXcQtCFpV7+jUvB5E5N9i
+         1XzzVYYVTWtDWd5gJTGboaBXVKZYhalyZNB8qRLe/rMs4QA5+LG75iWuzuV+EEGww2Ua
+         pYVu/YUJK7gKO3hNz6QCVJP9y7Bybqbrbr980TjsvqkWiuKlhznug6XWMkd5seDCAUXf
+         u5Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y7dI/kyXtQ5r7J/1JCw2+N0TiORB8W3a63ggFTECDo4=;
+        b=sIscs2HmIkRdVEpgqRI2UkGhUPSoDmE/JW6M6F7SLi6sDok6OZ53STYHMCVUQPEqGD
+         Yw7j11Mun2Emsl8Hz+qsHH/lp1wsKXhffUd55FyfwZcuKT4BqQkNXDi8MbYqTkXv5vxx
+         GlFf2FNYM7fWXayyHMlPo5jNCi66aNVAv+rKFpBT1BTphtZxrIN09Y1HW465DpvGtK37
+         V5+2ZZbqnIItMzFG2GWyq4LvNLl/vXokKYtUDiA8zC9HLuO5HG5TbCHbIB+k/1bR1r5a
+         wKP2ctrUF1lLx7NF98Cc7LQuqN6A2ZRHv5ERKUCSteVnb2gDiKrGTnSbiSKpNrLHrSvP
+         pOew==
+X-Gm-Message-State: AOAM530ULlhd2D3I8QTOqqBAp2+3QhZCj0NMX2otuM7/FApZUdEYZu92
+        GFN27TvXWC7NRRk5T7Amp14=
+X-Google-Smtp-Source: ABdhPJw4Qrnkv2nVfARx+UT+8eb2/HWEusUffAfr14s7FY4OFC+GO4J8rN+JqiY75Bv0rz9G6LWSxw==
+X-Received: by 2002:a17:906:2f97:b0:6ce:3ef6:94be with SMTP id w23-20020a1709062f9700b006ce3ef694bemr9519064eji.136.1645264611500;
+        Sat, 19 Feb 2022 01:56:51 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id t4sm6165304edd.7.2022.02.19.01.56.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Feb 2022 01:56:51 -0800 (PST)
+Date:   Sat, 19 Feb 2022 11:56:49 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/5] net: dsa: Add support for offloaded
+ locked port flag
+Message-ID: <20220219095649.zaa7exduogwbpyyh@skbuf>
+References: <20220218155148.2329797-1-schultz.hans+netdev@gmail.com>
+ <20220218155148.2329797-4-schultz.hans+netdev@gmail.com>
 MIME-Version: 1.0
-Date:   Sat, 19 Feb 2022 09:56:26 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     tglx@linutronix.de, will@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
-        Barry Song <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH] irqchip/gic-v3: use dsb(ishst) to synchronize data to smp
- before issuing ipi
-In-Reply-To: <20220218215549.4274-1-song.bao.hua@hisilicon.com>
-References: <20220218215549.4274-1-song.bao.hua@hisilicon.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <6432e7e97b828d887da8794c150161c4@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: 21cnbao@gmail.com, tglx@linutronix.de, will@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com, song.bao.hua@hisilicon.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218155148.2329797-4-schultz.hans+netdev@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-18 21:55, Barry Song wrote:
-> dsb(ishst) should be enough here as we only need to guarantee the
-> visibility of data to other CPUs in smp inner domain before we
-> send the ipi.
+On Fri, Feb 18, 2022 at 04:51:46PM +0100, Hans Schultz wrote:
+> Among the switchcores that support this feature is the Marvell
+> mv88e6xxx family.
 > 
-> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
 > ---
->  drivers/irqchip/irq-gic-v3.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/irq-gic-v3.c 
-> b/drivers/irqchip/irq-gic-v3.c
-> index 5e935d97207d..0efe1a9a9f3b 100644
-> --- a/drivers/irqchip/irq-gic-v3.c
-> +++ b/drivers/irqchip/irq-gic-v3.c
-> @@ -1211,7 +1211,7 @@ static void gic_ipi_send_mask(struct irq_data
-> *d, const struct cpumask *mask)
->  	 * Ensure that stores to Normal memory are visible to the
->  	 * other CPUs before issuing the IPI.
->  	 */
-> -	wmb();
-> +	dsb(ishst);
-> 
->  	for_each_cpu(cpu, mask) {
->  		u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu));
 
-I'm not opposed to that change, but I'm pretty curious whether this 
-makes
-any visible difference in practice. Could you measure the effect of this 
-change
-for any sort of IPI heavy workload?
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-Thanks,
+Although this doesn't "add support for offloaded locked ports", that
+passes right through with no DSA-level filtering, from
+SWITCHDEV_ATTR_ID_PORT_BRIDGE_FLAGS to dsa_port_bridge_flags(),
+to ds->ops->port_bridge_flags().
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Rather, a clearer description of what this does is:
+
+net: dsa: include BR_PORT_LOCKED in the list of synced brport flags
+
+Make sure the DSA switch driver gets notified of changes to the
+BR_PORT_LOCKED flag as well, for the case when a DSA port joins or
+leaves a LAG that is a bridge port.

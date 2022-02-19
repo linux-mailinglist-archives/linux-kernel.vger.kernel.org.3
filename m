@@ -2,122 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86034BC6E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 09:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D91B4BC6E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 09:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239666AbiBSIDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 03:03:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49788 "EHLO
+        id S241722AbiBSIEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 03:04:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234840AbiBSIDN (ORCPT
+        with ESMTP id S234840AbiBSIEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 03:03:13 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2095.outbound.protection.outlook.com [40.92.99.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2645675C
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 00:02:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kNB67SInhc6/SOiEIN84f5HrZI46ZiTRnEg2sUhznjbeEKqlN8U1fQC2+Ybtg78c2HPSmZR8winmdKUULGQbiPWagLf0g8sNOiPQv8sw5RlprtkW0TR87W5yZdTzVV3nXV+fk9cwoJql3cE0FG4YBztH10PdiLnXiFySuaQ1+6DFmNHb8VPHAron5yvnLpJcL0gv0kQxPbVIRuGJlBJdGL2mHMBw0/d5K9PXc6LDSiLHV9rwxOXjCQ7UimFV1ZBYlNv0lmbaP+laeoFtdxHl5+hmEqP4GjeON9SdKe55uNC/EGSavJ40KPsfsAvgKyhWD3ee5B9AuxYhM1RxnW3/lA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c6bs9hNPpRrWxzwGzn3o6fBsChAz86A9JPBrJa7H0uY=;
- b=NeTQ4MwgqIeVwJ3AILOsIm3OFwEuXDiX42lgRUJuClipABdVfdhwI76s1eJcNBvqJ2XUaNn7/WYkoKXVPC3GzLSOg5bV64R8vZbBUqdFvK/K7wTfl7L50kXtrALSbkgYA+zQ98LNpg9jYghh7UYDNANEhOxWGgaPk/YskJ1tW8fF7I1HLuK50AH4tvUozyAc4g/O2uOUT38lsvmec+MM/80qzaUKVjG9j0akrezSJC/8u+FuTmxwAFsS8I11rcYG4naZrzZ7qCysCMYCWOp6lO9/F0Qiw+p8igvedSwycSVkt7eJRre0ymS3ytpPDJIn2NSYRdqKrRg7i+lg9wr/Ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:11e::14)
- by TYBP286MB0062.JPNP286.PROD.OUTLOOK.COM (2603:1096:404:8021::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Sat, 19 Feb
- 2022 08:02:51 +0000
-Received: from TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM
- ([fe80::41d6:4a04:e5c9:86a6]) by TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM
- ([fe80::41d6:4a04:e5c9:86a6%5]) with mapi id 15.20.4995.024; Sat, 19 Feb 2022
- 08:02:51 +0000
-From:   Oscar Shiang <oscar0225@livemail.tw>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [patch v11 00/13] extensible prctl task isolation interface and vmstat sync
-Date:   Sat, 19 Feb 2022 16:02:10 +0800
-Message-ID: <TYCP286MB19133894C3D15F11A9DB62A9A1389@TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220204173537.429902988@fedora.localdomain>
-References: <20220204173537.429902988@fedora.localdomain>
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-TMN:  [lbhfPHQc3AL+L1SkSMRNKOo+MsCf/pQj]
-X-ClientProxiedBy: HK2PR04CA0056.apcprd04.prod.outlook.com
- (2603:1096:202:14::24) To TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:11e::14)
-X-Microsoft-Original-Message-ID: <20220219080210.75774-1-oscar0225@livemail.tw>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: df6c097d-bcd2-4e74-5dbc-08d9f37e3986
-X-MS-TrafficTypeDiagnostic: TYBP286MB0062:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E5ySZlvZjwTLzbqO1HWSuPrEVKLGMjIC0dlAMzMT+OkWP8y9W9uC3fgd/72xAQxLILe7YYOMgzkKbVnfD1setAxofLueKBvTcD+W/n0L9itGIEI+uNPFubLJPJ3e4sRKSBGYr8ufMOhxGdD8gU0vi0wG4yumwvHQl4RkZZ0y2ChLukC6Q0lHEKADWBSVFePfgtkUkFfXhNyPSGfVJGHOcI3akqf+1wvlJFjMgWpVAZktizFh52i6aYG440vbup7p28SLKcZaTfae/mlZrCtsTdLsrbiLS5QscVnQry7CGFId8Tfu6nCF+QnTRkeQPmd+QErjWrv5tAr5NCQpP4PZKjFKsP+5HQbzluXh68VJ+uGJgLV0wjb2cntoB1nqvjKRjr3koP0ef0h/6XarBLbOdBSlpAncuElyen21kS/mnmgHnQ5iPsGLefABNhf/yPvDYcAvi+k1pc5zQmcHR5WSOPVFFCXDzJEoKUsmNYn9DxdBo6IFaT9R/trATMs5q/fxCrpm3o8BZ2ZdLL3qYomS3hjE7dXS/fLq3eFmv85XlejifB6p94Cyi+L6nCTnCFUodmYIXndU5fKWinF2iyAxOjuZskhD2UHTOIcJ5Sk4v1jWVrRUoN0UQY913PbAVbsy
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IZdKkkYgiwozQWmrkH4aHB9f0lTBc/lozM3iC0UsSvc1omGk4gE+Sko5ZOJO?=
- =?us-ascii?Q?Ip4d6y/1qqgjkpy9WNwctIAQ0Vk9jbJ+JM1rVJ7qcHtMjpAmFgLW0D1yjVvQ?=
- =?us-ascii?Q?IUw4H3zqwrTtS/kDjzvtA18qvdC5ir800mDi9INUi7YQGTCNK13Vz6/LtKaZ?=
- =?us-ascii?Q?aYFlCArGn7zIejmzkN83vgD8AvQnu3YqlIceVg3SlpbQff2FILH7m7BITnx2?=
- =?us-ascii?Q?slfv14Lr7EcATymRIIJB80Ibmk55i0uIAI2Hncs46mgWW6UB6UsT1Yuvhq/t?=
- =?us-ascii?Q?rRTYPoBDm4qh+FwuRm5ntMKLt085Y0tCLfWSLZzS6MosxzZVMeK3e02qL5xp?=
- =?us-ascii?Q?N3ye2z/9iWuvExCJl/Y4EWoMi/BdVJGO3hc1GLXvo0npwJ4bK+Xd0pNPZDsA?=
- =?us-ascii?Q?8dQPHT0ZUKS7u56HiAuOGkDbdbor/uPDD3wraSQsCZIATzSSPZjH4zyoPwZZ?=
- =?us-ascii?Q?xzutn/trp2ltiIurOClO2Y4SxAU+Gl3U2jIBbdLNHi0nO2e/YQ6qEUdqCtCM?=
- =?us-ascii?Q?t1w9vPNwqkz6qtBVhgejRah4mr9d0QlkfJj+t2YPyax032pB9dMK0/Fq6rXe?=
- =?us-ascii?Q?B9ty4CHhTQXqTBoA6IjjBZ5clY26NsBm2DtaK6CuYQaJBrksS0ZKtG8289FH?=
- =?us-ascii?Q?MnAstroleXq3Gmq7IKg+aWfm57HdTYYNKjw27Tiw3MCSzSCOOn+5OwCFptpU?=
- =?us-ascii?Q?2VY5ulv/ybm2cOpQ14jqAmVtfLSZpbZUVRBmRJzYy7NHRERiBzf2SLsZtaNP?=
- =?us-ascii?Q?lttd+b5T2glOZCLbvhNqGeFDHgeTgfJX0WJ72IxV8Q76zt21xJO7PG4SO4bb?=
- =?us-ascii?Q?IKgCI33wTJK1rz8aX57d0uglpkTJUBi3nUdgQtMKy/lwOU2PbPibRbfn4fa+?=
- =?us-ascii?Q?OODRBJ/0Q1UkhBvjFRpwKtEEzxvIOTM3zX/xgMmboDOztSvJaJE9+RYIJQ3j?=
- =?us-ascii?Q?dRL3uGfThv7TlN37196JTg=3D=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: df6c097d-bcd2-4e74-5dbc-08d9f37e3986
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2022 08:02:50.9452
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYBP286MB0062
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Feb 2022 03:04:13 -0500
+Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820605675C;
+        Sat, 19 Feb 2022 00:03:55 -0800 (PST)
+Received: from [45.44.224.220] (port=39896 helo=localhost)
+        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <olivier@trillion01.com>)
+        id 1nLKig-0001bt-Ib; Sat, 19 Feb 2022 03:03:54 -0500
+Date:   Sat, 19 Feb 2022 03:03:53 -0500
+Message-Id: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
+From:   Olivier Langlois <olivier@trillion01.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Hao Xu <haoxu@linux.alibaba.com>,
+        io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] io_uring: Add support for napi_busy_poll
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcelo,
+The sqpoll thread can be used for performing the napi busy poll in a
+similar way that it does io polling for file systems supporting direct
+access bypassing the page cache.
 
-I tried to apply your patches to kernel v5.15.18-rt28 and measured
-the latencies through oslat [1].
+The other way that io_uring can be used for napi busy poll is by
+calling io_uring_enter() to get events.
 
-It turns out that the peak latency (around 100us) can drop to about 90us.
-The result is impressive since I only changed the guest's kernel
-instead of installing the patched kernel to both host and guest.
+If the user specify a timeout value, it is distributed between polling
+and sleeping by using the systemwide setting
+/proc/sys/net/core/busy_poll.
 
-However, I am still curious about:
-1) Why did I catch a bigger maximum latency in almost each of the
-   results of applying task isolation patches? Or does it come from
-   other reasons?
-2) Why did we only get a 10us improvement on quiescing vmstat?
+Co-developed-by: Hao Xu <haoxu@linux.alibaba.com>
+Signed-off-by: Hao Xu <haoxu@linux.alibaba.com>
+Signed-off-by: Olivier Langlois <olivier@trillion01.com>
+---
+ fs/io_uring.c | 194 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 192 insertions(+), 2 deletions(-)
 
-[1]: The result and the test scripts I used can be found at
-https://gist.github.com/OscarShiang/8b530a00f472fd1c39f5979ee601516d#testing-task-isolation-via-oslat
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 77b9c7e4793b..0ed06f024e79 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -63,6 +63,7 @@
+ #include <net/sock.h>
+ #include <net/af_unix.h>
+ #include <net/scm.h>
++#include <net/busy_poll.h>
+ #include <linux/anon_inodes.h>
+ #include <linux/sched/mm.h>
+ #include <linux/uaccess.h>
+@@ -395,6 +396,10 @@ struct io_ring_ctx {
+ 	struct list_head	sqd_list;
+ 
+ 	unsigned long		check_cq_overflow;
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	/* used to track busy poll napi_id */
++	struct list_head	napi_list;
++#endif
+ 
+ 	struct {
+ 		unsigned		cached_cq_tail;
+@@ -1464,6 +1469,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 	INIT_WQ_LIST(&ctx->locked_free_list);
+ 	INIT_DELAYED_WORK(&ctx->fallback_work, io_fallback_req_func);
+ 	INIT_WQ_LIST(&ctx->submit_state.compl_reqs);
++	INIT_LIST_HEAD(&ctx->napi_list);
+ 	return ctx;
+ err:
+ 	kfree(ctx->dummy_ubuf);
+@@ -5398,6 +5404,111 @@ IO_NETOP_FN(send);
+ IO_NETOP_FN(recv);
+ #endif /* CONFIG_NET */
+ 
++#ifdef CONFIG_NET_RX_BUSY_POLL
++
++#define NAPI_TIMEOUT			(60 * SEC_CONVERSION)
++
++struct napi_entry {
++	struct list_head	list;
++	unsigned int		napi_id;
++	unsigned long		timeout;
++};
++
++/*
++ * Add busy poll NAPI ID from sk.
++ */
++static void io_add_napi(struct file *file, struct io_ring_ctx *ctx)
++{
++	unsigned int napi_id;
++	struct socket *sock;
++	struct sock *sk;
++	struct napi_entry *ne;
++
++	if (!net_busy_loop_on())
++		return;
++
++	sock = sock_from_file(file);
++	if (!sock)
++		return;
++
++	sk = sock->sk;
++	if (!sk)
++		return;
++
++	napi_id = READ_ONCE(sk->sk_napi_id);
++
++	/* Non-NAPI IDs can be rejected */
++	if (napi_id < MIN_NAPI_ID)
++		return;
++
++	list_for_each_entry(ne, &ctx->napi_list, list) {
++		if (ne->napi_id == napi_id) {
++			ne->timeout = jiffies + NAPI_TIMEOUT;
++			return;
++		}
++	}
++
++	ne = kmalloc(sizeof(*ne), GFP_KERNEL);
++	if (!ne)
++		return;
++
++	ne->napi_id = napi_id;
++	ne->timeout = jiffies + NAPI_TIMEOUT;
++	list_add_tail(&ne->list, &ctx->napi_list);
++}
++
++static inline void io_check_napi_entry_timeout(struct napi_entry *ne)
++{
++	if (time_after(jiffies, ne->timeout)) {
++		list_del(&ne->list);
++		kfree(ne);
++	}
++}
++
++/*
++ * Busy poll if globally on and supporting sockets found
++ */
++static bool io_napi_busy_loop(struct io_ring_ctx *ctx)
++{
++	struct napi_entry *ne, *n;
++
++	if (list_empty(&ctx->napi_list))
++		return false;
++
++	list_for_each_entry_safe(ne, n, &ctx->napi_list, list) {
++		napi_busy_loop(ne->napi_id, NULL, NULL, true,
++			       BUSY_POLL_BUDGET);
++		io_check_napi_entry_timeout(ne);
++	}
++	return !list_empty(&ctx->napi_list);
++}
++
++static void io_free_napi_list(struct io_ring_ctx *ctx)
++{
++	while (!list_empty(&ctx->napi_list)) {
++		struct napi_entry *ne =
++			list_first_entry(&ctx->napi_list, struct napi_entry,
++					 list);
++
++		list_del(&ne->list);
++		kfree(ne);
++	}
++}
++#else
++static inline void io_add_napi(struct file *file, struct io_ring_ctx *ctx)
++{
++}
++
++static inline bool io_napi_busy_loop(struct io_ring_ctx *ctx)
++{
++	return false;
++}
++
++static inline void io_free_napi_list(struct io_ring_ctx *ctx)
++{
++}
++#endif /* CONFIG_NET_RX_BUSY_POLL */
++
+ struct io_poll_table {
+ 	struct poll_table_struct pt;
+ 	struct io_kiocb *req;
+@@ -5776,6 +5887,7 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
+ 		__io_poll_execute(req, mask);
+ 		return 0;
+ 	}
++	io_add_napi(req->file, req->ctx);
+ 
+ 	/*
+ 	 * Release ownership. If someone tried to queue a tw while it was
+@@ -7518,7 +7630,8 @@ static int __io_sq_thread(struct io_ring_ctx *ctx, bool cap_entries)
+ 		    !(ctx->flags & IORING_SETUP_R_DISABLED))
+ 			ret = io_submit_sqes(ctx, to_submit);
+ 		mutex_unlock(&ctx->uring_lock);
+-
++		if (io_napi_busy_loop(ctx))
++			++ret;
+ 		if (to_submit && wq_has_sleeper(&ctx->sqo_sq_wait))
+ 			wake_up(&ctx->sqo_sq_wait);
+ 		if (creds)
+@@ -7649,6 +7762,9 @@ struct io_wait_queue {
+ 	struct io_ring_ctx *ctx;
+ 	unsigned cq_tail;
+ 	unsigned nr_timeouts;
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	unsigned busy_poll_to;
++#endif
+ };
+ 
+ static inline bool io_should_wake(struct io_wait_queue *iowq)
+@@ -7709,6 +7825,67 @@ static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
+ 	return !*timeout ? -ETIME : 1;
+ }
+ 
++#ifdef CONFIG_NET_RX_BUSY_POLL
++static void io_adjust_busy_loop_timeout(struct timespec64 *ts,
++					struct io_wait_queue *iowq)
++{
++	unsigned busy_poll_to = READ_ONCE(sysctl_net_busy_poll);
++	struct timespec64 pollto = ns_to_timespec64(1000 * (s64)busy_poll_to);
++
++	if (timespec64_compare(ts, &pollto) > 0) {
++		*ts = timespec64_sub(*ts, pollto);
++		iowq->busy_poll_to = busy_poll_to;
++	} else {
++		iowq->busy_poll_to = timespec64_to_ns(ts) / 1000;
++		ts->tv_sec = 0;
++		ts->tv_nsec = 0;
++	}
++}
++
++static inline bool io_busy_loop_timeout(unsigned long start_time,
++					unsigned long bp_usec)
++{
++	if (bp_usec) {
++		unsigned long end_time = start_time + bp_usec;
++		unsigned long now = busy_loop_current_time();
++
++		return time_after(now, end_time);
++	}
++	return true;
++}
++
++static bool io_busy_loop_end(void *p, unsigned long start_time)
++{
++	struct io_wait_queue *iowq = p;
++
++	return signal_pending(current) ||
++	       io_should_wake(iowq) ||
++	       io_busy_loop_timeout(start_time, iowq->busy_poll_to);
++}
++
++static void io_blocking_napi_busy_loop(struct io_ring_ctx *ctx,
++				       struct io_wait_queue *iowq)
++{
++	unsigned long start_time =
++		list_is_singular(&ctx->napi_list) ? 0 :
++		busy_loop_current_time();
++
++	do {
++		if (list_is_singular(&ctx->napi_list)) {
++			struct napi_entry *ne =
++				list_first_entry(&ctx->napi_list,
++						 struct napi_entry, list);
++
++			napi_busy_loop(ne->napi_id, io_busy_loop_end, iowq,
++				       true, BUSY_POLL_BUDGET);
++			io_check_napi_entry_timeout(ne);
++			break;
++		}
++	} while (io_napi_busy_loop(ctx) &&
++		 !io_busy_loop_end(iowq, start_time));
++}
++#endif /* CONFIG_NET_RX_BUSY_POLL */
++
+ /*
+  * Wait until events become available, if we don't already have some. The
+  * application must reap them itself, as they reside on the shared cq ring.
+@@ -7729,12 +7906,20 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 		if (!io_run_task_work())
+ 			break;
+ 	} while (1);
+-
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	iowq.busy_poll_to = 0;
++#endif
+ 	if (uts) {
+ 		struct timespec64 ts;
+ 
+ 		if (get_timespec64(&ts, uts))
+ 			return -EFAULT;
++#ifdef CONFIG_NET_RX_BUSY_POLL
++		if (!(ctx->flags & IORING_SETUP_SQPOLL) &&
++		    !list_empty(&ctx->napi_list)) {
++			io_adjust_busy_loop_timeout(&ts, &iowq);
++		}
++#endif
+ 		timeout = timespec64_to_jiffies(&ts);
+ 	}
+ 
+@@ -7759,6 +7944,10 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 	iowq.cq_tail = READ_ONCE(ctx->rings->cq.head) + min_events;
+ 
+ 	trace_io_uring_cqring_wait(ctx, min_events);
++#ifdef CONFIG_NET_RX_BUSY_POLL
++	if (iowq.busy_poll_to)
++		io_blocking_napi_busy_loop(ctx, &iowq);
++#endif
+ 	do {
+ 		/* if we can't even flush overflow, don't wait for more */
+ 		if (!io_cqring_overflow_flush(ctx)) {
+@@ -9440,6 +9629,7 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+ 		__io_sqe_files_unregister(ctx);
+ 	if (ctx->rings)
+ 		__io_cqring_overflow_flush(ctx, true);
++	io_free_napi_list(ctx);
+ 	mutex_unlock(&ctx->uring_lock);
+ 	io_eventfd_unregister(ctx);
+ 	io_destroy_buffers(ctx);
+-- 
+2.35.1
 
-Thanks,
-Oscar

@@ -2,121 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF384BC737
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 10:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600314BC73D
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 10:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241108AbiBSJth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 04:49:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49656 "EHLO
+        id S241862AbiBSJyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 04:54:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235846AbiBSJte (ORCPT
+        with ESMTP id S239840AbiBSJyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 04:49:34 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06C06735B;
-        Sat, 19 Feb 2022 01:49:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hR3rxcdYgcMxyAAOXXnyFp4PHzQ4gLSr0+8q8fXwvWvfGu+YjJW9I62hOA+ln+dY22U42wEV4zxf4zEr8wu0KgK8KSXPeQz1FWRwCe/NcJKsv/S0UM8VXVbds/sTfQdDxAwQVzqwjAF/nTYmAYTKd2WaTAgLelTfqRO7MzHUQlzMgU8O7S8hdlk5CUY5JarNoOxAY88zryrNY8l9JtjXiA466qd9b6AASSWPH+vDI8YZapHktvkEL1kYfzjZxQSlONzmRGCQeKb7a/KazLHh0szsRONqfX9mWhEqMf8BgEuCrsaCVChuge7guflU4h6O/EcPswuN1Yme+E/29w9vYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jSfc5UBhPz1PAJ/uMQbOHNfHywtqk085tV/RVc0QDA0=;
- b=SehJArcM+JF0Ix2UayoJm+01/32718j1FOWqsItl2TtfBWcKMJNTfDVAHq60foAsw2hnIDX3nzyiggNxd6wRCTYKu5x82KsxwQz5xYyBTWe4Bv+BeIPXXPRklvPosicD7EVeGR81WiXhpiVIIvohaRp/vv+TUCNQYI+JCUV4eYwHFkjBPa0sAkf9djSnKlPHG/zIkzaga4ySQ+7IdGnrSA+Pt3A5j+YA4paU9smM5h96lcEAXXChxhnXjuKHQdroJCmo+3tjBR2yXGtxd6MeE9NWK6+Y2oV5SajKmeY8mixhwJ4tS0+UzrRiKSZ4M/hiwT0HI8Y2zccOggyBsT0tkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=lunn.ch smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jSfc5UBhPz1PAJ/uMQbOHNfHywtqk085tV/RVc0QDA0=;
- b=Y9nbT4cJp0S1LiXPnwE4fvEetRLPnv5YHrEnw2fQvZyKN+Zudlcr48DKgfauFsrG3iDoh+CL5GyUAunDe+9asko4tEkOesmpaGzaAzUgbw6XnyOxdTZrOIC3Pc+/SYZJx4mO2RNtCUVHly3o9Bcn59hWZrIF6wQbII9DLVljZZa1tcBOOIQJoPopyA0zFK/0x4ip3ehB7Gqdxti3hVwNAtNM/kRAgLhPAiDQ3tEjOwLUOoP05+5J8hrI4nayEdoP7ETWC9+cIusKfMQlALFXDBnGOYFV/+2KSgCbdcgCGlU1P5eBvOWtqGgEm61DNL+KBTQGn5nx7rIk0xeANLkaWg==
-Received: from DM3PR12CA0069.namprd12.prod.outlook.com (2603:10b6:0:57::13) by
- BY5PR12MB4308.namprd12.prod.outlook.com (2603:10b6:a03:20a::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4975.17; Sat, 19 Feb 2022 09:49:12 +0000
-Received: from DM6NAM11FT021.eop-nam11.prod.protection.outlook.com
- (2603:10b6:0:57:cafe::4a) by DM3PR12CA0069.outlook.office365.com
- (2603:10b6:0:57::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15 via Frontend
- Transport; Sat, 19 Feb 2022 09:49:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT021.mail.protection.outlook.com (10.13.173.76) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4995.15 via Frontend Transport; Sat, 19 Feb 2022 09:49:11 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sat, 19 Feb
- 2022 09:49:11 +0000
-Received: from [172.27.1.59] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Sat, 19 Feb 2022
- 01:49:02 -0800
-Message-ID: <9ffcbd18-bc50-cc82-3582-83b1f10e31b6@nvidia.com>
-Date:   Sat, 19 Feb 2022 11:48:59 +0200
+        Sat, 19 Feb 2022 04:54:37 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBF7E6EB33
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 01:54:17 -0800 (PST)
+Received: from unknown (HELO lgemrelse7q.lge.com) (156.147.1.151)
+        by 156.147.23.52 with ESMTP; 19 Feb 2022 18:54:15 +0900
+X-Original-SENDERIP: 156.147.1.151
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.151 with ESMTP; 19 Feb 2022 18:54:15 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Sat, 19 Feb 2022 18:54:07 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: [PATCH 00/16] DEPT(Dependency Tracker)
+Message-ID: <20220219095407.GA10342@X58A-UD3R>
+References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
+ <Yg5u7dzUxL3Vkncg@mit.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net-next v3 5/5] selftests: forwarding: tests of locked
- port feature
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     <netdev@vger.kernel.org>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        "Stephen Suryaputra" <ssuryaextr@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "Ido Schimmel" <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        Po-Hsu Lin <po-hsu.lin@canonical.com>,
-        Baowen Zheng <baowen.zheng@corigine.com>,
-        <linux-kernel@vger.kernel.org>,
-        <bridge@lists.linux-foundation.org>,
-        <linux-kselftest@vger.kernel.org>
-References: <20220218155148.2329797-1-schultz.hans+netdev@gmail.com>
- <20220218155148.2329797-6-schultz.hans+netdev@gmail.com>
-From:   Nikolay Aleksandrov <nikolay@nvidia.com>
-In-Reply-To: <20220218155148.2329797-6-schultz.hans+netdev@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0aa2f904-fd10-40ce-dea5-08d9f38d1523
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4308:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB4308446EED6453F6E132EEADDF389@BY5PR12MB4308.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OIcmmWyCSVA9XLSRqxVH83/sItjoocpUFHl1UFD8sIwON+mFwLCDtdk+K+mHBsBsvGIg/iSc5CXfddjQOh70DQqohVRiCff3JrngebHzXR2THBkplOwLCBrU0uNjAqqwtebjCclWHCA/ln20RVPhrTOcYFfZiPf2B1To1zeS/varIFA0X6rmSEF4IRyIddwK63+MERKFHk6txpK12Ci2R1KKwiE2lo/J3uJTWS7iAn8ORnAj7XrThEdgq01I+zFPy3u6pPRVVWjnJKIH+0ogomczNggqaP5HaI2WEYLdL0GH9dyQg6+joZdf/xaUJfa//uohQRgeM8RA6ZGW2leSD+XUIcBsVxVBnzAszEzRfc70q0gZ01DEFujgCF+IE0Qj5ZM3Vb2xI/UBjmGTfji1HYZNlpnDp/la/+uLXCSYMbR5j0z2y5gahe0ZXUvgPwdzR/IwfPedPSN4Qv4EnaBW10v6CgQttpNoDdm+5zzU3LZf4legRSKDENjXSd5Gs2e+bYu6WJsgzPabCaEZyD9jsRmxn2B28YCsdmexFFrzTRA4n/bF6iZh7QbNeOCJHgY6cMMfo1ZN+DeNh4kw3WGCLHwn/kHRXfEHJslcDU2rt6SMltEBCRGZLif1jYNndQ44j/05XOGf2gJsFUULqAKXvSW0OyZ2vp2yy/sKP1XOcPsvVn2ChPYH/Bzph+11uL5r+t/lBG8WK70eLv9GXXRsMcz5ddfSen/MSQqYeIfe+H0ifRSRP2msKtYsulaXqKCk
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(36860700001)(2906002)(70206006)(70586007)(31696002)(81166007)(86362001)(4326008)(426003)(508600001)(36756003)(2616005)(8676002)(83380400001)(6666004)(40460700003)(356005)(8936002)(53546011)(5660300002)(82310400004)(47076005)(54906003)(110136005)(336012)(16576012)(26005)(31686004)(186003)(7416002)(16526019)(316002)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2022 09:49:11.8996
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0aa2f904-fd10-40ce-dea5-08d9f38d1523
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT021.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4308
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yg5u7dzUxL3Vkncg@mit.edu>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,52 +67,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/02/2022 17:51, Hans Schultz wrote:
-> These tests check that the basic locked port feature works, so that no 'host'
-> can communicate (ping) through a locked port unless the MAC address of the
-> 'host' interface is in the forwarding database of the bridge.
+On Thu, Feb 17, 2022 at 10:51:09AM -0500, Theodore Ts'o wrote:
+> On Thu, Feb 17, 2022 at 07:57:36PM +0900, Byungchul Park wrote:
+> > 
+> > I've got several reports from the tool. Some of them look like false
+> > alarms and some others look like real deadlock possibility. Because of
+> > my unfamiliarity of the domain, it's hard to confirm if it's a real one.
+> > Let me add the reports on this email thread.
 > 
-> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-> ---
->  .../testing/selftests/net/forwarding/Makefile |   1 +
->  .../net/forwarding/bridge_locked_port.sh      | 174 ++++++++++++++++++
->  tools/testing/selftests/net/forwarding/lib.sh |  16 ++
->  3 files changed, 191 insertions(+)
->  create mode 100755 tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
-> index 72ee644d47bf..8fa97ae9af9e 100644
-> --- a/tools/testing/selftests/net/forwarding/Makefile
-> +++ b/tools/testing/selftests/net/forwarding/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0+ OR MIT
->  
->  TEST_PROGS = bridge_igmp.sh \
-> +	bridge_locked_port.sh \
->  	bridge_port_isolation.sh \
->  	bridge_sticky_fdb.sh \
->  	bridge_vlan_aware.sh \
-> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> new file mode 100755
-> index 000000000000..d2805441b325
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> @@ -0,0 +1,174 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
-> +NUM_NETIFS=4
-> +CHECK_TC="no"
-> +source lib.sh
-> +
-> +h1_create()
-> +{
-> +	simple_if_init $h1 192.0.2.1/24 2001:db8:1::1/64
-> +	vrf_create "vrf-vlan-h1"
-> +        ip link set dev vrf-vlan-h1 up
-> +        vlan_create $h1 100 vrf-vlan-h1 192.0.3.1/24 2001:db8:3::1/64
-> +}
+> The problem is we have so many potentially invalid, or
+> so-rare-as-to-be-not-worth-the-time-to-investigate-in-the-
+> grand-scheme-of-all-of-the-fires-burning-on-maintainers laps that it's
+> really not reasonable to ask maintainers to determine whether
 
-Please use tabs similar to everywhere else in the file.
+Even though I might have been wrong and might be gonna be wrong, you
+look so arrogant. You were hasty to judge and trying to walk over me.
 
+I reported it because I thought it was a real problem but couldn't
+confirm it. For the other reports that I thought was not real, I didn't
+even mention it. If you are talking about the previous report, then I
+felt so sorry as I told you. I skimmed through the part of the waits...
+
+Basically, I respect you and appreciate your feedback. Hope you not get
+me wrong.
+
+> Looking at the second ext4 report, it doesn't make any sense.  Context
+> A is the kjournald thread.  We don't do a commit until (a) the timeout
+> expires, or (b) someone explicitly requests that a commit happen
+> waking up j_wait_commit.  I'm guessing that complaint here is that
+> DEPT thinks nothing is explicitly requesting a wake up.  But note that
+> after 5 seconds (or whatever journal->j_commit_interval) is configured
+> to be we *will* always start a commit.  So ergo, there can't be a deadlock.
+
+Yeah, it might not be a *deadlock deadlock* because the wait will be
+anyway woken up by one of the wake up points you mentioned. However, the
+dependency looks problematic because the three contexts participating in
+the dependency chain would be stuck for a while until one eventually
+wakes it up. I bet it would not be what you meant.
+
+Again. It's not critical but problematic. Or am I missing something?
+
+> At a higher level of discussion, it's an unfair tax on maintainer's
+> times to ask maintainers to help you debug DEPT for you.  Tools like
+> Syzkaller and DEPT are useful insofar as they save us time in making
+> our subsystems better.  But until you can prove that it's not going to
+> be a massive denial of service attack on maintainer's time, at the
+
+Partially I agree. I would understand you even if you don't support Dept
+until you think it's valuable enough. However, let me keep asking things
+to fs folks, not you, even though I would cc you on it.
+
+> If you know there there "appear to be false positives", you need to
+> make sure you've tracked them all down before trying to ask that this
+> be merged.
+
+To track them all down, I need to ask LKML because Dept works perfectly
+with my system. I don't want it to be merged with a lot of false
+positive still in there, either.
+
+> You may also want to add some documentation about why we should trust
+> this; in particular for wait channels, when a process calls schedule()
+> there may be multiple reasons why the thread will wake up --- in the
+> worst case, such as in the select(2) or epoll(2) system call, there
+> may be literally thousands of reasons (one for every file desriptor
+> the select is waiting on) --- why the process will wake up and thus
+> resolve the potential "deadlock" that DEPT is worrying about.  How is
+> DEPT going to handle those cases?  If the answer is that things need
+
+Thank you for the information but I don't get it which case you are
+concerning. I'd like to ask you a specific senario of that so that we
+can discuss it more - maybe I guess I could answer to it tho, but I
+won't ask you. Just give me an instance only if you think it's worthy.
+
+You look like a guy who unconditionally blames on new things before
+understanding it rather than asking and discussing. Again. I also think
+anyone doesn't have to spend his or her time for what he or she think is
+not worthy enough.
+
+> I know that you're trying to help us, but this tool needs to be far
+> better than Lockdep before we should think about merging it.  Even if
+> it finds 5% more potential deadlocks, if it creates 95% more false
+
+It should not get merged for sure if so, but it sounds too sarcastic.
+Let's see if it creates 95% false positives for real. If it's true and
+I can't control it, I will give up. That's what I should do.
+
+There are a lot of factors to judge how valuable Dept is. Dept would be
+useful especially in the middle of development, rather than in the final
+state in the tree. It'd be appreciated if you think that sides more, too.
+
+Thanks,
+Byungchul

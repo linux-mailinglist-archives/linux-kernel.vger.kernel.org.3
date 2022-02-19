@@ -2,208 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA304BC4AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 03:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE144BC4B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 03:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241011AbiBSCCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 21:02:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56600 "EHLO
+        id S241023AbiBSCKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 21:10:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241002AbiBSCCT (ORCPT
+        with ESMTP id S240986AbiBSCKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 21:02:19 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470D424637B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 18:01:57 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id w3-20020a056830060300b005ad10e3becaso3180898oti.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 18:01:57 -0800 (PST)
+        Fri, 18 Feb 2022 21:10:38 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EC95418B;
+        Fri, 18 Feb 2022 18:10:21 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id 10so8514997plj.1;
+        Fri, 18 Feb 2022 18:10:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=H1HxUEpXoVQpsG8b03LMRl3OP81XuF90MDBUIM1swkQ=;
-        b=eQ5IdMRZJ/DaSRP8WbiioyS35zcy5eh0OoymuYg4k1pbLMXwFPhx6Bp9+3DKPVO1vR
-         6shMg4ag19yItVLaQJzXoh57cB9YPbPrdKYsDJDRiQOgmnMfVtRJhOPnKkcYQrJ5Ye29
-         wS9+CiZlwWxqD1AOSZqhXXkKmmYf858gzM+C8=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+aB/FGXt2XpQqCXbTpQFLvS98YQQn2+KdMWsD6bNbw8=;
+        b=G0nXxjMog2ETCRgq7C8oy9WvUASJ+8lR1+OhAWGwaLxorKCuD2ILI8WOWxsD832AAp
+         DcmEdyDz7NX/pa0Xy9IGHZzFlIoinWxe4LovIBCAMCAEJcbpdCz19oe1GBLFgYbP0HTh
+         bu0V1sx6+J03iQ7PWHeWJ5p/e58XLknvpl5uX1HvzAnjJX9U5qo5EErLJRtsXE/WAO2c
+         2IzoefVi25lxzkmP8K1bfkkgdJyV3GCLI0ofbvMOKh69yjBNY8ljB+mhf+EftgZabM39
+         LupDYYmn+QvCpCyvVxsmEFWNjHGSr8dE3dePhzHZ4pJCf5CVPO2dCzJ+29YOWx+iQK60
+         BTUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=H1HxUEpXoVQpsG8b03LMRl3OP81XuF90MDBUIM1swkQ=;
-        b=s6AaC8bjhJvewesnnrCn6iAKx/4/BuFpinXiU4I6MEoK9TdF/CgS6vuYyAP/2SBP2K
-         JuzihntAwdhTmsxRaI+0yOb0415JqreVas5YS09MPwO7UzHbKQAqk4xLk6H1VTlO92hq
-         6TRybsjfH3ObkpRb6dQtHyNmHEf6udmdzFuZf/MP2x59Bt1Od7fL3D0cNxPwChhMhast
-         7NAyeo0bKs1lAn4SMELmt0q/C8yIPWTY1ozCYnBIvwzocxXEx0cqN4D9YG0l0Zf0F4/G
-         ekmFQFwkFped1fvv7pWVoSMOsIGTMLh/2xHRBdhCgDWk6K5WxSACdls9T/xrfmDLXVeO
-         d1rg==
-X-Gm-Message-State: AOAM530AL+L+zRT9HIzdgv/W+/r5HdLXEOwHUJytBBK4V8lYjq5pFIBU
-        EM/hWWVsZHHtb3QyPpfbPMTpCiu19F4BkUVMLy32iQ==
-X-Google-Smtp-Source: ABdhPJxbSl0kE3DczPu6BGX+BY6C0anissA0/n4yKPe0SQQa9W0I7aVBe/cfhUhFKWw4vHqaAMQV+sHfQkhzqIZeMyg=
-X-Received: by 2002:a9d:22e9:0:b0:5ac:1754:342c with SMTP id
- y96-20020a9d22e9000000b005ac1754342cmr3333680ota.159.1645236116595; Fri, 18
- Feb 2022 18:01:56 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 18 Feb 2022 18:01:55 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+aB/FGXt2XpQqCXbTpQFLvS98YQQn2+KdMWsD6bNbw8=;
+        b=pHuZdxWDjtqoumFwIK3A7pRhZxaTrPPOaFLFwHqRRFcDW81O1gfRNFjNjIMTuJpBW1
+         T9yJ9pW9LkixKL03IKTx0zVEjvHAPr3lxLnWJDV9qB8dM6U9rcO6B30DkMkAfR4NOKz1
+         tgecSsaxBkcx46cTd2NyoYKZfOT574vwJ80UXgDgWSNEzE6kqXOkpaGUZXzONiGnqtnj
+         JDzWOhYy3d6GVgcv0YkAjEA3PtzHxtjcwuRtWNsWWSKTIMtMJbK0nz/oTPZ4nOgjG0gC
+         tlEod5z4xFbHc7r2iX+sZoP6O6hjZXaO6+JbiqRwUlRMy4NnjShC6Kc+osB6VnaI7dQJ
+         HtVw==
+X-Gm-Message-State: AOAM53307xFNu5UvRx58Aqq8evJAX7hehGKP5omaIJf9c8upEGU2rKyn
+        9/2UjYCmc5HlxqAQGBrDLti30+xZoKLDSYIKfzDJa1Hh
+X-Google-Smtp-Source: ABdhPJwogpM9kP609BsMhPX4xux9kQv0xcsSfxr3o29faLZkP58pYyGGODASt78M4zuapI9QzCBrxCRVsbe3j8arOug=
+X-Received: by 2002:a17:902:76c5:b0:14e:e325:9513 with SMTP id
+ j5-20020a17090276c500b0014ee3259513mr9955087plt.55.1645236620285; Fri, 18 Feb
+ 2022 18:10:20 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1645182064-15843-6-git-send-email-quic_c_skakit@quicinc.com>
-References: <1645182064-15843-1-git-send-email-quic_c_skakit@quicinc.com> <1645182064-15843-6-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 18 Feb 2022 18:01:55 -0800
-Message-ID: <CAE-0n509bg6RzieOtYuUvicU14D7bmgH-u02F1TB+hBZ+xH4CA@mail.gmail.com>
-Subject: Re: [PATCH V7 5/5] arm64: dts: qcom: sc7280: Add pm8008 support for sc7280-idp
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
-        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+References: <Yfq+PJljylbwJ3Bf@krava> <CAADnVQKeTB=UgY4Gf-46EBa8rwWTu2wvi7hEj2sdVTALGJ0JEg@mail.gmail.com>
+ <YfvvfLlM1FOTgvDm@krava> <20220204094619.2784e00c0b7359356458ca57@kernel.org>
+ <CAADnVQJYY0Xm6M9O02E5rOkdQPX39NOOS4tM2jpwRLQvP-qDBg@mail.gmail.com>
+ <20220204110704.7c6eaf43ff9c8f5fe9bf3179@kernel.org> <CAADnVQJfq_10H0V+u0w0rzyZ9uy7vq=T-3BMDANjEN8A3-prsQ@mail.gmail.com>
+ <20220203211954.67c20cd3@gandalf.local.home> <CAADnVQKjNJjZDs+ZV7vcusEkKuDq+sWhSD3M5GtvNeZMx3Fcmg@mail.gmail.com>
+ <20220204125942.a4bda408f536c2e3248955e1@kernel.org> <Yguo4v7c+3A0oW/h@krava>
+ <CAEf4BzYO_B51TPgUnDXUPUsK55RSczwcnhuLz9DMbfO5JCj=Cw@mail.gmail.com>
+ <20220217230357.67d09baa261346a985b029b6@kernel.org> <CAEf4BzYxcSCae=sF3EKNUtLDCZhkhHkd88CEBt4bffzN_AZrDw@mail.gmail.com>
+ <20220218130727.51db96861c3e1c79b45daafb@kernel.org>
+In-Reply-To: <20220218130727.51db96861c3e1c79b45daafb@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 18 Feb 2022 18:10:08 -0800
+Message-ID: <CAADnVQ+eojJ8KMwbieJrtOf7oWPqw7VDYV9EAAWpx3UoFHZFDQ@mail.gmail.com>
+Subject: Re: [PATCH 0/8] bpf: Add fprobe link
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-02-18 03:01:03)
-> Add pm8008_infra and pm8008_regulators support for sc7280 idp.
+On Thu, Feb 17, 2022 at 8:07 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
 >
-> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
-> ---
-> Changes in V2:
->  - As per Stephen's comments, replaced '_' with '-' for node names.
+> On Thu, 17 Feb 2022 14:01:30 -0800
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 >
-> Changes in V3:
->  - Changed the regulator node names as l1, l2 etc
->  - Changed "pm8008-regulators" to "regulators"
->  - Changed "qcom,min-dropout-voltage" to "regulator-min-dropout-voltage-microvolt"
 >
-> Changes in V4:
->  - Moved all common stuff to pm8008.dtsi and added board specific configurations here.
+> > > > Is there any chance to support this fast multi-attach for uprobe? If
+> > > > yes, we might want to reuse the same link for both (so should we name
+> > > > it more generically?
+> > >
+> > > There is no interface to do that but also there is no limitation to
+> > > expand uprobes. For the kprobes, there are some limitations for the
+> > > function entry because it needs to share the space with ftrace. So
+> > > I introduced fprobe for easier to use.
+> > >
+> > > > on the other hand BPF program type for uprobe is
+> > > > BPF_PROG_TYPE_KPROBE anyway, so keeping it as "kprobe" also would be
+> > > > consistent with what we have today).
+> > >
+> > > Hmm, I'm not sure why BPF made such design choice... (Uprobe needs
+> > > the target program.)
+> > >
+> >
+> > We've been talking about sleepable uprobe programs, so we might need
+> > to add uprobe-specific program type, probably. But historically, from
+> > BPF point of view there was no difference between kprobe and uprobe
+> > programs (in terms of how they are run and what's available to them).
+> > From BPF point of view, it was just attaching BPF program to a
+> > perf_event.
 >
-> Changes in V5:
->  - Changed the node names as per pm8008.dtsi
->  - Moved supply nodes to chip level (mfd node).
->  - Removed the regulator-mindropout property.
+> Got it, so that will reuse the uprobe_events in ftrace. But I think
+> the uprobe requires a "path" to the attached binary, how is it
+> specified?
 >
-> Changes in V6:
->  - No changes.
+> > > > But yeah, the main question is whether there is something preventing
+> > > > us from supporting multi-attach uprobe as well? It would be really
+> > > > great for USDT use case.
+> > >
+> > > Ah, for the USDT, it will be useful. But since now we will have "user-event"
+> > > which is faster than uprobes, we may be better to consider to use it.
+> >
+> > Any pointers? I'm not sure what "user-event" refers to.
 >
-> Changes in V7:
->  - No Changes.
+> Here is the user-events series, which allows user program to define
+> raw dynamic events and it can write raw event data directly from
+> user space.
 >
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 66 ++++++++++++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> index ecbf2b8..371ad19 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> @@ -263,6 +263,62 @@
->         };
->  };
->
-> +&i2c1 {
+> https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
 
-Can we add another phandle?
-
-&pm8008_bus: &i2c1 {
-
-> +       #address-cells = <1>;
-> +       #size-cells = <0>;
-> +       status = "okay";
-> +
-> +       #include "pm8008.dtsi"
-> +};
-
-And then
-
-#include "pm8008.dtsi"
-
-and have the pm8008.dtsi file add itself as a child of &pm8008_bus? Then
-we can easily see that pm8008 is a child of pm8008_bus without having to
-figure out where the file is included. It also helps avoid polluting the
-i2c node with things that shouldn't be there in case we want to include
-configuration bits in the pm8008.dtsi file that aren't directly related
-to the bus node.
-
-> +
-> +&pm8008_infra {
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pm8008_active>;
-> +};
-> +
-> +&pm8008_regulators {
-> +       vdd_l1_l2-supply = <&vreg_s8b_1p2>;
-> +       vdd_l3_l4-supply = <&vreg_s1b_1p8>;
-> +       vdd_l5-supply = <&vreg_bob>;
-> +       vdd_l6-supply = <&vreg_bob>;
-> +       vdd_l7-supply = <&vreg_bob>;
-> +};
-> +
-> +&pm8008_l1 {
-> +       regulator-min-microvolt = <950000>;
-> +       regulator-max-microvolt = <1300000>;
-> +};
-> +
-> +&pm8008_l2 {
-> +       regulator-min-microvolt = <950000>;
-> +       regulator-max-microvolt = <1250000>;
-> +};
-> +
-> +&pm8008_l3 {
-> +       regulator-min-microvolt = <1650000>;
-> +       regulator-max-microvolt = <3000000>;
-> +};
-> +
-> +&pm8008_l4 {
-> +       regulator-min-microvolt = <1504000>;
-> +       regulator-max-microvolt = <1600000>;
-> +};
-> +
-> +&pm8008_l5 {
-> +       regulator-min-microvolt = <2600000>;
-> +       regulator-max-microvolt = <3000000>;
-> +};
-> +
-> +&pm8008_l6 {
-> +       regulator-min-microvolt = <2600000>;
-> +       regulator-max-microvolt = <3000000>;
-> +};
-> +
-> +&pm8008_l7 {
-> +       regulator-min-microvolt = <3000000>;
-> +       regulator-max-microvolt = <3544000>;
-> +};
-> +
->  &qfprom {
->         vcc-supply = <&vreg_l1c_1p8>;
->  };
-> @@ -375,6 +431,16 @@
->         drive-strength = <2>;
->  };
->
-> +&pm8350c_gpios {
-> +       pm8008_active: pm8008_active {
-
-No underscore in node names. pm8008_active: pm8008-active {
-
-> +               pins = "gpio4";
-> +               function = "normal";
-> +               bias-disable;
-> +               output-high;
-
-Is this a reset signal? Should the driver be deasserting the reset when
-it is ready? That could be the same time the gpio is acquired.
-
-> +               power-source = <0>;
-> +       };
-> +};
+Is this a way for user space to inject user bytes into kernel events?
+What is the use case?

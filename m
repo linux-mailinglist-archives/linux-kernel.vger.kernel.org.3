@@ -2,81 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DF54BC42C
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 02:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A6E4BC476
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 02:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240834AbiBSBKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Feb 2022 20:10:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38900 "EHLO
+        id S240841AbiBSBNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Feb 2022 20:13:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiBSBJ6 (ORCPT
+        with ESMTP id S240830AbiBSBNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Feb 2022 20:09:58 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D58C182073
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 17:09:41 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id u12so8793260ybd.7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 17:09:41 -0800 (PST)
+        Fri, 18 Feb 2022 20:13:42 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF12271E32
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 17:13:24 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2d646fffcc2so83815387b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Feb 2022 17:13:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IksLXADFvek17WHYJzvzDkWH8Xrf5A13V9P+cnSi+SY=;
-        b=QknuN3t2etfBlMwfjPB/UPSQCQ0LVnPGFMiarCqXbfbNgjg8e1RANjcj9iK4bGaIfb
-         1hSse3eusSQSspzhTQu+PcDa39zv173j766XbDRNqlRWGkbSoAewLjMo0qOSniyUcqVE
-         aTF2dm1gj6DQkodZBOH1WrtzLzy4VTFwCKeedOBkNCqKRTh7QhQnMZpjYzs2CeSl8lpR
-         BpchsefaJtLDs/pS7dr89hLeN8PUvjVu8j+2iKs/7i3ab17bxym8XKI/xA5e2uWX2I7d
-         GyOi3M0TRW+qjEwW+lsrMCr9JClkE2YzqI6WaAk+/nsCRvvvHAFeer+DFyWVWwGuULO9
-         jwFg==
+        bh=KuPVvHcGH6XYHC2N1vXONOOOdChkI1tr3mh5lR/eBf4=;
+        b=wgnQ1QfNOWXTz4uyN+xiZtl15SgO0HNRAwhITVZN3qh+opHwJxxylfyJ4agegmEm7q
+         ypeXRgg8OIq+yFa6wcZMLvJz/DD3FGv/2VuhSsgy/05eAO0sWhyVgkYbqORqp7UlA6ah
+         xaoOSiu3/0lf1CZ7jcGzchRlzJ+Qa13DqeQ8K7Tzb1aKoq6I/DE2W4vmyEn/1CzU2vda
+         i4aRw+CcvOhdQt+5WbglFSba8rVwdWFfa8oY2ZRKQGY0PbOPNB1TPp6GvYIChnGNXtm0
+         fzBXd3A/fv3aZFc6RFQI8jlqNU3HbKVbkU9YbHKpVgRCzf8ZTyi6fbwn4xAJaoAD8c3B
+         iKQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IksLXADFvek17WHYJzvzDkWH8Xrf5A13V9P+cnSi+SY=;
-        b=nl0n3mQt2YnphyVoKOo2ZEnRjVKstQeF5VhfsXSJaOYv3/T4/bDUs+ace6fhROqJhc
-         UU23oZkEb8QhNBgw65xfUucqxC7gsb9KGLGK+xdC0q+3rrbPml34FwJ+2twkF40mqBkJ
-         25LHe2COelzsO+yUeJZq3jd2W7nCdF30Zq5DspCr8JSSFzvbuwR7ljHUrIVZiDj8/9gS
-         0zv1jOf7W9H0cPJkuXvMexSmsrlbjx3l0s3KX+2erG9WERZBSEpMQ60M6HNhuLSaOvbT
-         r5IKM9n1nmWMenitDYMPodMTWTJgEcK/mr9NThT9TEtNNa0nvRSO8r0zvGl1FI3TbhFA
-         YUeg==
-X-Gm-Message-State: AOAM533x2C56UzbsponKyXxZ0n4v58eFyLh5cgSRgxGFVoDa35UzykMQ
-        bXAof3fs9UNtsjnHiUWSpZ46D83ZmBj9C6LT034AVQ==
-X-Google-Smtp-Source: ABdhPJxnVQXIGzqxSnP+rJkrDiBnc0niqDv58FRFwY/m6IlTDGePMZDxAFNtpNafQUQgJlAVGkgWf3wVGh5aW6jBjaQ=
-X-Received: by 2002:a25:a50a:0:b0:61d:720e:2748 with SMTP id
- h10-20020a25a50a000000b0061d720e2748mr9679977ybi.492.1645232980562; Fri, 18
- Feb 2022 17:09:40 -0800 (PST)
+        bh=KuPVvHcGH6XYHC2N1vXONOOOdChkI1tr3mh5lR/eBf4=;
+        b=M0IL2DikLZEacLmoIgAebvzi5NGKuGLQQmoPmTrbAM5QxIUzcUJsL3Psj1uJZYQz6H
+         f1hqgxirvD0guK/T/7dUl/3N8acnQoucBnp3veT+8mZjl/tU5TKgpx1J4X8Z0VIcYfzm
+         5mDGqFfmLkM5yb//R9PxVl7Bzx2HGUjoaqfw50FmRaBBd0T490g7G09YQ2k7sNfMwhap
+         ZGbEJFXtJ1RDcGw4juNZh36wy1TsIF6kl/yxOVOtbCZwxUko2gFUBPLH/NzqA5XDsEr6
+         y1gMEEaWvCBUWnPje5KElW2IoWm7bFcK6PNO0HxrM9uaIuEzkaSFc+jST1C8RtOozkd6
+         WqBA==
+X-Gm-Message-State: AOAM531KeiKgGiqkRJmxm1RP2q624+j+CMHE9ZXY6M5rw+41799cS/+Y
+        p903qX4eBIgeZNcrC1YxNkVpjfoW+GIEF8eZ1qULIA==
+X-Google-Smtp-Source: ABdhPJzjyhB275ObWFDUHntgtZfPqGSF0Q4EBsTUNbfD6yhytEp18TB8NqastVWOd/xKaerf5ut9BWf7BQISC3fMQyU=
+X-Received: by 2002:a81:f92:0:b0:2d0:5383:7ca with SMTP id 140-20020a810f92000000b002d0538307camr10383384ywp.268.1645233203766;
+ Fri, 18 Feb 2022 17:13:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20220217131737.10931-1-mans@mansr.com>
-In-Reply-To: <20220217131737.10931-1-mans@mansr.com>
+References: <20220216040037.22730-1-samuel@sholland.org>
+In-Reply-To: <20220216040037.22730-1-samuel@sholland.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 19 Feb 2022 02:09:29 +0100
-Message-ID: <CACRpkda-_1xQbE9=+Zx2bJ9Cgu=RSk8LqK3i1HJbO9iU-x9kbQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: sunxi: do not print error message for EPROBE_DEFER
-To:     Mans Rullgard <mans@mansr.com>
+Date:   Sat, 19 Feb 2022 02:13:12 +0100
+Message-ID: <CACRpkdZ1nFAmzRvsvKvZ08fsP_MgsnsiNpD7LdRRXUDWtO_w=Q@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: sunxi: Use unique lockdep classes for IRQs
+To:     Samuel Holland <samuel@sholland.org>
 Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 2:18 PM Mans Rullgard <mans@mansr.com> wrote:
+On Wed, Feb 16, 2022 at 5:00 AM Samuel Holland <samuel@sholland.org> wrote:
 
-> Avoid printing an error message if getting a regulator fails with
-> EPROBE_DEFER.  This can happen if, for example, a regulator supplying
-> one of the main banks is controlled by a PL pin.
+> This driver, like several others, uses a chained IRQ for each GPIO bank,
+> and forwards .irq_set_wake to the GPIO bank's upstream IRQ. As a result,
+> a call to irq_set_irq_wake() needs to lock both the upstream and
+> downstream irq_desc's. Lockdep considers this to be a possible deadlock
+> when the irq_desc's share lockdep classes, which they do by default:
 >
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
+>  ============================================
+>  WARNING: possible recursive locking detected
+>  5.17.0-rc3-00394-gc849047c2473 #1 Not tainted
+>  --------------------------------------------
+>  init/307 is trying to acquire lock:
+>  c2dfe27c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+>
+>  but task is already holding lock:
+>  c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+>
+>  other info that might help us debug this:
+>   Possible unsafe locking scenario:
+>
+>         CPU0
+>         ----
+>    lock(&irq_desc_lock_class);
+>    lock(&irq_desc_lock_class);
+>
+>   *** DEADLOCK ***
+>
+>   May be due to missing lock nesting notation
+>
+>  4 locks held by init/307:
+>   #0: c1f29f18 (system_transition_mutex){+.+.}-{3:3}, at: __do_sys_reboot+0x90/0x23c
+>   #1: c20f7760 (&dev->mutex){....}-{3:3}, at: device_shutdown+0xf4/0x224
+>   #2: c2e804d8 (&dev->mutex){....}-{3:3}, at: device_shutdown+0x104/0x224
+>   #3: c3c0ac7c (&irq_desc_lock_class){-.-.}-{2:2}, at: __irq_get_desc_lock+0x58/0xa0
+>
+>  stack backtrace:
+>  CPU: 0 PID: 307 Comm: init Not tainted 5.17.0-rc3-00394-gc849047c2473 #1
+>  Hardware name: Allwinner sun8i Family
+>   unwind_backtrace from show_stack+0x10/0x14
+>   show_stack from dump_stack_lvl+0x68/0x90
+>   dump_stack_lvl from __lock_acquire+0x1680/0x31a0
+>   __lock_acquire from lock_acquire+0x148/0x3dc
+>   lock_acquire from _raw_spin_lock_irqsave+0x50/0x6c
+>   _raw_spin_lock_irqsave from __irq_get_desc_lock+0x58/0xa0
+>   __irq_get_desc_lock from irq_set_irq_wake+0x2c/0x19c
+>   irq_set_irq_wake from irq_set_irq_wake+0x13c/0x19c
+>     [tail call from sunxi_pinctrl_irq_set_wake]
+>   irq_set_irq_wake from gpio_keys_suspend+0x80/0x1a4
+>   gpio_keys_suspend from gpio_keys_shutdown+0x10/0x2c
+>   gpio_keys_shutdown from device_shutdown+0x180/0x224
+>   device_shutdown from __do_sys_reboot+0x134/0x23c
+>   __do_sys_reboot from ret_fast_syscall+0x0/0x1c
+>
+> However, this can never deadlock because the upstream and downstream
+> IRQs are never the same (nor do they even involve the same irqchip).
+>
+> Silence this erroneous lockdep splat by applying what appears to be the
+> usual fix of moving the GPIO IRQs to separate lockdep classes.
+>
+> Fixes: a59c99d9eaf9 ("pinctrl: sunxi: Forward calls to irq_set_irq_wake")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Patch applied, thanks!
+Patch applied.
 
 Yours,
 Linus Walleij

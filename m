@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FE34BC921
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 16:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7724BC928
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 16:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242567AbiBSP3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 10:29:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43940 "EHLO
+        id S239347AbiBSP3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 10:29:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242557AbiBSP3J (ORCPT
+        with ESMTP id S242562AbiBSP3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 10:29:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C594C5D647;
-        Sat, 19 Feb 2022 07:28:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C4E60B20;
-        Sat, 19 Feb 2022 15:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A50C004E1;
-        Sat, 19 Feb 2022 15:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645284517;
-        bh=F6pcZPFpnI6hLMIYVmpuXloWiEvqSEfMam/xjyvdLDs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dMOKL2ugYw+WQBj3ZZQVOq9CBHushdo1zYvAtdjLBBulSXfJCxtB2RB70mxRdh3Uh
-         ZYRcyq4pgoZE0hi21EZUgZLGUBEdHYbpQ7+AqPMYjT8aeaE7RLgMOO/smC1jXlvwjm
-         Q/sdx9DDPtm5A9x8tDuFkGuh39ujbcS2YQQRGELvoICo8W3of08RrEAW+MtNrqSFD3
-         8GbHqHZbW4letP1dhAsqbX0W5Qffp8DgxfIFidm5jpNEosdiO2Gb4jjxV7PB1KCauD
-         9owowxo0EQU1Br+wL0r+wc1ipLOZrV/Wp9QP+XmQyyg5mhhEMyi5yteqShfU6+mVXA
-         +rJYplsFU8AQg==
-From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v9 6/6] arm64: dts: marvell: armada-37xx: add device node for UART clock and use it
-Date:   Sat, 19 Feb 2022 16:28:18 +0100
-Message-Id: <20220219152818.4319-7-kabel@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220219152818.4319-1-kabel@kernel.org>
-References: <20220219152818.4319-1-kabel@kernel.org>
+        Sat, 19 Feb 2022 10:29:44 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A001A5D642;
+        Sat, 19 Feb 2022 07:29:23 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id y16so2899763pjt.0;
+        Sat, 19 Feb 2022 07:29:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=47NPgrzp8pEwO3JsAuNGK/2TmTtZE2oK4TLe+eXt24k=;
+        b=KeYxSrOe987fsRSERSCLS2pCJEfmxfA1hjiLW6F6vJjT5JHKBDfucKgOdoVB4d4tu1
+         uyooDnUVCGKRNM8r1PNl8vv1Xp2yFXdu+/1dfsenW/IJbtsQGxGsNWVrKUTHywQgBPjG
+         /je/SzpLqbszUEFF5tNH7COeD/ukvk/MSGbEv6mM5Ata6iG87syC9RDp9S65O7iWLl6/
+         sSjzYZqc/Hzc1jdrzc1QS3Ip1nRZsp7nJv2ef52qHqp24/U1UDKQJtHuULXcExAcb2Qw
+         wcme+Ws+OsvBL040g86218zfnOtpRw5l716pZ4U0lIwkyP0aS8k3Q9q5lTJUUWtZ2Wiw
+         pGzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=47NPgrzp8pEwO3JsAuNGK/2TmTtZE2oK4TLe+eXt24k=;
+        b=4/52kBYmpHmppVCT8x4ZYrurPR+aRbzBrNvxM196Z9keAOQb7fKg5CWPQH4sQmN7X8
+         YhUJ+bEpLBbnPAJVWqn8xhgZ03lWpjAGP1z+LSw1zrIwn7A7S1LhJXkUyDPU1q8zbTmk
+         69usXF0umgSBXI4fxoBOr0DU6JBFI0Q5n2s+hq81MK5Gol1hRR1rhpK632dQ+bRYvOfG
+         XbSSd4CdkhoOKlfhUHvp9DMyoO0d/4DFZLQyAkoSY/UpVLr3WjSK8RGvPt1mAn9uwz7j
+         Qz+lqnYnIHlYlmeF4XbArk+jqzUfBd+WFCoAPEW0/lsvG60noxK0GcSXr6HFdVDMP9iL
+         rdBw==
+X-Gm-Message-State: AOAM530dQ2hq4fDhMD1v7yAmk/9jriLCcTAi6N8JunaXUplSkeU5/7vT
+        fqlsL5VuEnwetyEQUmhwL/k=
+X-Google-Smtp-Source: ABdhPJzYu0ULlV89DL3+dcsS6J6zetu2gCBCzFnC5q8suSdnE3Nuud/LQanfZECxtBxjaAtYC+qhNw==
+X-Received: by 2002:a17:902:ce83:b0:14f:2c78:3810 with SMTP id f3-20020a170902ce8300b0014f2c783810mr11668929plg.7.1645284563079;
+        Sat, 19 Feb 2022 07:29:23 -0800 (PST)
+Received: from localhost.localdomain ([2405:201:9005:88cd:46e0:823b:7e8c:4cf1])
+        by smtp.gmail.com with ESMTPSA id g5sm6800354pfv.22.2022.02.19.07.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Feb 2022 07:29:22 -0800 (PST)
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+To:     loic.poulain@linaro.org, kvalo@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        ryan.odonoghue@linaro.org
+Cc:     wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev,
+        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] wcn36xx: Initialize channel to NULL inside wcn36xx_change_opchannel()
+Date:   Sat, 19 Feb 2022 20:59:12 +0530
+Message-Id: <20220219152912.93580-1-jrdr.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
 
-Define DT node for UART clock "marvell,armada-3700-uart-clock" and use
-this UART clock as a base clock for all UART devices.
+Kernel test robot reported below warning ->
+drivers/net/wireless/ath/wcn36xx/main.c:409:7: warning: Branch
+condition evaluates to a garbage value
+[clang-analyzer-core.uninitialized.Branch]
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Reviewed-by: Marek Behún <kabel@kernel.org>
-Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Also code walk indicates, if channel is not found in first band,
+it will break the loop and instead of exit it will go ahead and
+assign a garbage value in wcn->channel which looks like a bug.
+
+Initialize channel with NULL should avoid this issue.
+
+Fixes: 	d6f2746691cb ("wcn36xx: Track the band and channel we are tuned to")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
 ---
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/net/wireless/ath/wcn36xx/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-index 673f4906eef9..da2f6b5c4b20 100644
---- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-@@ -132,10 +132,20 @@ avs: avs@11500 {
- 				reg = <0x11500 0x40>;
- 			};
+diff --git a/drivers/net/wireless/ath/wcn36xx/main.c b/drivers/net/wireless/ath/wcn36xx/main.c
+index 75661d449712..1a06eff07107 100644
+--- a/drivers/net/wireless/ath/wcn36xx/main.c
++++ b/drivers/net/wireless/ath/wcn36xx/main.c
+@@ -394,7 +394,7 @@ static void wcn36xx_change_opchannel(struct wcn36xx *wcn, int ch)
+ 	struct ieee80211_vif *vif = NULL;
+ 	struct wcn36xx_vif *tmp;
+ 	struct ieee80211_supported_band *band;
+-	struct ieee80211_channel *channel;
++	struct ieee80211_channel *channel = NULL;
+ 	unsigned long flags;
+ 	int i, j;
  
-+			uartclk: clock-controller@12010 {
-+				compatible = "marvell,armada-3700-uart-clock";
-+				reg = <0x12010 0x4>, <0x12210 0x4>;
-+				clocks = <&tbg 0>, <&tbg 1>, <&tbg 2>,
-+					 <&tbg 3>, <&xtalclk>;
-+				clock-names = "TBG-A-P", "TBG-B-P", "TBG-A-S",
-+					      "TBG-B-S", "xtal";
-+				#clock-cells = <1>;
-+			};
-+
- 			uart0: serial@12000 {
- 				compatible = "marvell,armada-3700-uart";
- 				reg = <0x12000 0x18>;
--				clocks = <&xtalclk>;
-+				clocks = <&uartclk 0>;
- 				interrupts =
- 				<GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
- 				<GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-@@ -147,7 +157,7 @@ uart0: serial@12000 {
- 			uart1: serial@12200 {
- 				compatible = "marvell,armada-3700-uart-ext";
- 				reg = <0x12200 0x30>;
--				clocks = <&xtalclk>;
-+				clocks = <&uartclk 1>;
- 				interrupts =
- 				<GIC_SPI 30 IRQ_TYPE_EDGE_RISING>,
- 				<GIC_SPI 31 IRQ_TYPE_EDGE_RISING>;
 -- 
-2.34.1
+2.25.1
 

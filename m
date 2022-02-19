@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3735D4BCA5B
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 20:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677E64BCA5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Feb 2022 20:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242533AbiBSTAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 14:00:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56848 "EHLO
+        id S243056AbiBSTAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 14:00:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiBSTAa (ORCPT
+        with ESMTP id S242139AbiBSTAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 14:00:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EF259A53;
-        Sat, 19 Feb 2022 11:00:11 -0800 (PST)
+        Sat, 19 Feb 2022 14:00:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953185A09D;
+        Sat, 19 Feb 2022 11:00:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B67DA60E84;
-        Sat, 19 Feb 2022 19:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B344C340EC;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65AB3B80CB1;
+        Sat, 19 Feb 2022 19:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D0D6C340F1;
         Sat, 19 Feb 2022 19:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1645297210;
-        bh=koCVmhrrOoMAENsrk2W+MxsXDFkkYZ7Hlx1gDJI17a8=;
+        bh=DRDDBCVkph1HPdANfG02zjftXRJS08B3iK2cQuXGaGE=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=D1LbqvijCZ+M250vjz9yT5c65gxKVLrDA4NSV/7QW6dCB53mquo5xKspQMT0vOL1n
-         Vf8+5qG5zU3RYrOsb4tcKV4k75+FA1JeLZKHe9W+hjA4j7Koa1b9z9iKen6o0cXLwa
-         WRT/gknJrrklbDmBDO+lQr87UtY+562nhVt2X4m8zzEOX4QyZO/NgEdtGenfbtDgBt
-         +Y+Q+tF1xubl+KU9ZBVKCVPZe4r852ZtgjHclx2LYvQ7fpaE7vOZuZgc8mpgSzgDRM
-         PxdYY1SvSHURF5DeGc6C+OJlGVtDzfTiUhPBWEaHTPivnK6ccHQOYw37SNabnaONK8
-         b37YaUj+dP+fQ==
+        b=qkGADES+asCTa/IQZsEP2SF6rj2eoWNaji6zz0fHQYeCfB8t9vSBk9SngWAXb7ZUB
+         FPJTCrR6bOxkwP+aJ1JVFuq5/jETTy4xb5cz9foJN+TtZy5yRiwyWXk/wLdNxHUt5x
+         OK5EECqtpjBknHiyOjKO9KBvCjwGKVZ7LBO9MUSc1iaB+fdXCqXmzjXlVwk6Y2zhw6
+         dHAY7sy/4r9jp9vybbcuk0/jSGMDVqulnd6liDXP91fMI4tgFWfDORBfaB73LXtqpD
+         yZ61kc2N0nPhGANDcNvVMw5XPTHIoicUGM+OZBwr8yWH9uHC9GjZoCdn9OEms4DWcb
+         R+Ss/qTTJVOSA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F266FE7BB0B;
-        Sat, 19 Feb 2022 19:00:09 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 15439E7BB19;
+        Sat, 19 Feb 2022 19:00:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 1/1] net: dsa: microchip: ksz9477: export HW stats
- over stats64 interface
+Subject: Re: [PATCH net-next] net: prestera: acl: fix 'client_map' buff overflow
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164529720998.31615.18049890364706478684.git-patchwork-notify@kernel.org>
-Date:   Sat, 19 Feb 2022 19:00:09 +0000
-References: <20220219082630.2454948-1-o.rempel@pengutronix.de>
-In-Reply-To: <20220219082630.2454948-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, f.fainelli@gmail.com, vivien.didelot@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org,
+Message-Id: <164529721008.31615.428174841093903848.git-patchwork-notify@kernel.org>
+Date:   Sat, 19 Feb 2022 19:00:10 +0000
+References: <1645187351-8489-1-git-send-email-volodymyr.mytnyk@plvision.eu>
+In-Reply-To: <1645187351-8489-1-git-send-email-volodymyr.mytnyk@plvision.eu>
+To:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
+Cc:     netdev@vger.kernel.org, taras.chornyi@plvision.eu,
+        mickeyr@marvell.com, serhiy.pshyk@plvision.eu, vmytnyk@marvell.com,
+        tchornyi@marvell.com, davem@davemloft.net, kuba@kernel.org,
         linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -66,25 +64,19 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Sat, 19 Feb 2022 09:26:30 +0100 you wrote:
-> Provide access to HW offloaded packets over stats64 interface.
-> The rx/tx_bytes values needed some fixing since HW is accounting size of
-> the Ethernet frame together with FCS.
+On Fri, 18 Feb 2022 14:29:11 +0200 you wrote:
+> From: Volodymyr Mytnyk <vmytnyk@marvell.com>
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
-> changes v4:
-> - do not copy raw counters to the stack
-> changes v3:
-> - move dev->dev_ops->r_mib_stat64 insight of the mutex
-> changes v2:
-> - fix locking issue in in atomic context
+> smatch warnings:
+> drivers/net/ethernet/marvell/prestera/prestera_acl.c:103
+> prestera_acl_chain_to_client() error: buffer overflow
+> 'client_map' 3 <= 3
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v4,1/1] net: dsa: microchip: ksz9477: export HW stats over stats64 interface
-    https://git.kernel.org/netdev/net-next/c/a7f4f13a0a68
+  - [net-next] net: prestera: acl: fix 'client_map' buff overflow
+    https://git.kernel.org/netdev/net-next/c/48c77bdf729a
 
 You are awesome, thank you!
 -- 

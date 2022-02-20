@@ -2,114 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88244BD02C
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 18:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E384BD02E
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 18:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242125AbiBTRMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 12:12:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36628 "EHLO
+        id S242098AbiBTRTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 12:19:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiBTRMc (ORCPT
+        with ESMTP id S229545AbiBTRTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 12:12:32 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB3D2B182;
-        Sun, 20 Feb 2022 09:12:09 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nLpkk-000503-PB; Sun, 20 Feb 2022 18:12:06 +0100
-Message-ID: <a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info>
-Date:   Sun, 20 Feb 2022 18:12:06 +0100
+        Sun, 20 Feb 2022 12:19:45 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D7C220FF
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 09:19:24 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so6297818ilc.17
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 09:19:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=3xkQhaOBGozKUnyCuvU0FT+zZ0tOvKqYH6mXlSM2uw4=;
+        b=e015F9ryzQXPNNUJgzXxEb8Eq3ruanMKbRI5wVutczsTeNf4hRFsS7IO0jB6eDU0G9
+         BRVm18bUr/qMlDgmAVvdryWpjZWbUtcqwReYL7kGKR4JaUdDHsPIO58p2+s4oMqOtzOj
+         imgB0AYMD8avYRhYN7X0xtg7P9+86qRzSkwwa4M3kGVF29igxKZN/VjQJv17ZCH+mCDw
+         RvjHjYQ9V6tHcIFyzPFRyYcWLRSk1Rx3Wm0IGGMjTHz1u8QL2+1JfiKuaeo2jLFQWYdo
+         +BRtgx0m8/m/6hRrZc8d5UbyyXZ3fPjZf8hA7rov1J/WDSZFwqn/8EzjClE/CHt79KA3
+         nPpg==
+X-Gm-Message-State: AOAM531FGq8KhF8TZF82PH+z/yhDqs9rTumSE4/PrHmvZjE3+euQBT5F
+        wLhMm1d5i/u9rNimAkF99OeSWAB4+0AUTem8mrxklP+IRrfF
+X-Google-Smtp-Source: ABdhPJwtaUiZkUplhDCPPcRh12bFhqAKhVGrenCQ93juK//PAxlA7foBBnORnyxI9cxPUV76BD+xJa9XOTKHbYcpkvoH12qeR1C5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-BS
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: regression: Bug 215601 - gcc segv at startup on ia64
-To:     "Anthony Yznaga <anthony.yznaga"@oracle.com,
-        Kees Cook <keescook@chromium.org>
-Cc:     matoro_bugzilla_kernel@matoro.tk,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        linux-ia64@vger.kernel.org,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1645377130;9576e647;
-X-HE-SMSGID: 1nLpkk-000503-PB
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1cab:b0:2c2:25b0:1e6a with SMTP id
+ x11-20020a056e021cab00b002c225b01e6amr2570203ill.312.1645377563601; Sun, 20
+ Feb 2022 09:19:23 -0800 (PST)
+Date:   Sun, 20 Feb 2022 09:19:23 -0800
+In-Reply-To: <0000000000005a991a05a86970bb@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000033314805d8765175@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
+From:   syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+syzbot has found a reproducer for the following issue on:
 
-I noticed a regression report in bugzilla.kernel.org that afaics nobody
-acted upon since it was reported about a week ago, that's why I'm hereby
-forwarding it to the lists and the relevant people. To quote
-https://bugzilla.kernel.org/show_bug.cgi?id=215601 :
+HEAD commit:    4f12b742eb2b Merge tag 'nfs-for-5.17-3' of git://git.linux..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=110a6df2700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f6a069ed94a1ed1d
+dashboard link: https://syzkaller.appspot.com/bug?extid=348b571beb5eeb70a582
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12377296700000
 
-> On ia64, after 5f501d555653f8968011a1e65ebb121c8b43c144, the gcc
-> binary crashes with SIGSEGV at startup (i.e., during ELF loading).
-> Only gcc exhibits the crash (including g++, etc), other toolchain
-> components (such as ld, ldd, etc) do not, and neither does any other
-> binary from what I can tell.  I also haven't observed the issue on
-> any other architecture.
-> 
-> Reverting this commit resolves the issue up to and including git tip,
-> with no (visible) issues.
-> 
-> Hardware:  HP Integrity rx2800 i2 Kernel config attached.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com
 
-Could somebody take a look into this? Or was this discussed somewhere
-else already? Or even fixed?
+==================================================================
+BUG: KASAN: use-after-free in dev_uevent+0x712/0x780 drivers/base/core.c:2320
+Read of size 8 at addr ffff88802b934098 by task udevd/3689
 
-Anyway, to get this tracked:
+CPU: 2 PID: 3689 Comm: udevd Not tainted 5.17.0-rc4-syzkaller-00229-g4f12b742eb2b #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ dev_uevent+0x712/0x780 drivers/base/core.c:2320
+ uevent_show+0x1b8/0x380 drivers/base/core.c:2391
+ dev_attr_show+0x4b/0x90 drivers/base/core.c:2094
+ sysfs_kf_seq_show+0x219/0x3d0 fs/sysfs/file.c:59
+ seq_read_iter+0x4f5/0x1280 fs/seq_file.c:230
+ kernfs_fop_read_iter+0x514/0x6f0 fs/kernfs/file.c:241
+ call_read_iter include/linux/fs.h:2068 [inline]
+ new_sync_read+0x429/0x6e0 fs/read_write.c:400
+ vfs_read+0x35c/0x600 fs/read_write.c:481
+ ksys_read+0x12d/0x250 fs/read_write.c:619
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f964cc558fe
+Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+RSP: 002b:00007ffc0133d258 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 000056497b21a140 RCX: 00007f964cc558fe
+RDX: 0000000000001000 RSI: 000056497b218650 RDI: 0000000000000008
+RBP: 00007f964cd22380 R08: 0000000000000008 R09: 00007f964cd25a60
+R10: 0000000000000008 R11: 0000000000000246 R12: 000056497b21a140
+R13: 0000000000000d68 R14: 00007f964cd21780 R15: 0000000000000d68
+ </TASK>
 
-#regzbot introduced: 5f501d555653f8968011a1e65ebb121c8b43c144
-#regzbot from: matoro <matoro_bugzilla_kernel@matoro.tk>
-#regzbot title: gcc segv at startup on ia64
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215601
+Allocated by task 4316:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+ kasan_kmalloc include/linux/kasan.h:270 [inline]
+ kmem_cache_alloc_trace+0x1ea/0x4a0 mm/slab.c:3567
+ kmalloc include/linux/slab.h:581 [inline]
+ kzalloc include/linux/slab.h:715 [inline]
+ dev_new drivers/usb/gadget/legacy/raw_gadget.c:183 [inline]
+ raw_open+0x8d/0x4c0 drivers/usb/gadget/legacy/raw_gadget.c:373
+ misc_open+0x372/0x4a0 drivers/char/misc.c:141
+ chrdev_open+0x266/0x770 fs/char_dev.c:414
+ do_dentry_open+0x4b9/0x1250 fs/open.c:824
+ do_open fs/namei.c:3476 [inline]
+ path_openat+0x1c9e/0x2940 fs/namei.c:3609
+ do_filp_open+0x1aa/0x400 fs/namei.c:3636
+ do_sys_openat2+0x16d/0x4d0 fs/open.c:1214
+ do_sys_open fs/open.c:1230 [inline]
+ __do_sys_openat fs/open.c:1246 [inline]
+ __se_sys_openat fs/open.c:1241 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1241
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Freed by task 4315:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ __cache_free mm/slab.c:3437 [inline]
+ kfree+0xf8/0x2b0 mm/slab.c:3794
+ kref_put include/linux/kref.h:65 [inline]
+ raw_release+0x218/0x290 drivers/usb/gadget/legacy/raw_gadget.c:412
+ __fput+0x286/0x9f0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
+The buggy address belongs to the object at ffff88802b934000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 152 bytes inside of
+ 4096-byte region [ffff88802b934000, ffff88802b935000)
+The buggy address belongs to the page:
+page:ffffea0000ae4d00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x2b934
+head:ffffea0000ae4d00 order:1 compound_mapcount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffffea00008be908 ffffea0000612d08 ffff888010c40900
+raw: 0000000000000000 ffff88802b934000 0000000100000001 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 1, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 4316, ts 254636955499, free_ts 240714313612
+ prep_new_page mm/page_alloc.c:2434 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+ __alloc_pages_slowpath.constprop.0+0x2eb/0x20d0 mm/page_alloc.c:4934
+ __alloc_pages+0x412/0x500 mm/page_alloc.c:5402
+ __alloc_pages_node include/linux/gfp.h:572 [inline]
+ kmem_getpages mm/slab.c:1378 [inline]
+ cache_grow_begin+0x75/0x390 mm/slab.c:2584
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
+ ____cache_alloc mm/slab.c:3040 [inline]
+ ____cache_alloc mm/slab.c:3023 [inline]
+ __do_cache_alloc mm/slab.c:3267 [inline]
+ slab_alloc mm/slab.c:3308 [inline]
+ kmem_cache_alloc_trace+0x380/0x4a0 mm/slab.c:3565
+ kmalloc include/linux/slab.h:581 [inline]
+ kzalloc include/linux/slab.h:715 [inline]
+ dev_new drivers/usb/gadget/legacy/raw_gadget.c:183 [inline]
+ raw_open+0x8d/0x4c0 drivers/usb/gadget/legacy/raw_gadget.c:373
+ misc_open+0x372/0x4a0 drivers/char/misc.c:141
+ chrdev_open+0x266/0x770 fs/char_dev.c:414
+ do_dentry_open+0x4b9/0x1250 fs/open.c:824
+ do_open fs/namei.c:3476 [inline]
+ path_openat+0x1c9e/0x2940 fs/namei.c:3609
+ do_filp_open+0x1aa/0x400 fs/namei.c:3636
+ do_sys_openat2+0x16d/0x4d0 fs/open.c:1214
+ do_sys_open fs/open.c:1230 [inline]
+ __do_sys_openat fs/open.c:1246 [inline]
+ __se_sys_openat fs/open.c:1241 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1241
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1352 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
+ free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3404
+ slab_destroy mm/slab.c:1630 [inline]
+ slabs_destroy+0x89/0xc0 mm/slab.c:1650
+ cache_flusharray mm/slab.c:3410 [inline]
+ ___cache_free+0x303/0x600 mm/slab.c:3472
+ qlink_free mm/kasan/quarantine.c:157 [inline]
+ qlist_free_all+0x50/0x1a0 mm/kasan/quarantine.c:176
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
+ __kasan_slab_alloc+0x97/0xb0 mm/kasan/common.c:446
+ kasan_slab_alloc include/linux/kasan.h:260 [inline]
+ slab_post_alloc_hook mm/slab.h:732 [inline]
+ slab_alloc_node mm/slab.c:3253 [inline]
+ kmem_cache_alloc_node+0x2ea/0x590 mm/slab.c:3591
+ __alloc_skb+0x215/0x340 net/core/skbuff.c:414
+ alloc_skb include/linux/skbuff.h:1158 [inline]
+ alloc_skb_with_frags+0x93/0x620 net/core/skbuff.c:5956
+ sock_alloc_send_pskb+0x793/0x920 net/core/sock.c:2586
+ unix_dgram_sendmsg+0x414/0x1a10 net/unix/af_unix.c:1896
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:725
+ __sys_sendto+0x21c/0x320 net/socket.c:2040
+ __do_sys_sendto net/socket.c:2052 [inline]
+ __se_sys_sendto net/socket.c:2048 [inline]
+ __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2048
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
 
--- 
-Additional information about regzbot:
+Memory state around the buggy address:
+ ffff88802b933f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88802b934000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88802b934080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                            ^
+ ffff88802b934100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88802b934180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.

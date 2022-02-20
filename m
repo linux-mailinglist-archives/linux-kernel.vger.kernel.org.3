@@ -2,152 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420B94BCEA3
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 14:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D568E4BCEC1
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 14:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243852AbiBTN12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 08:27:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57716 "EHLO
+        id S241255AbiBTNvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 08:51:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243837AbiBTN1S (ORCPT
+        with ESMTP id S235018AbiBTNvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 08:27:18 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CA435845
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 05:26:57 -0800 (PST)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220220132651epoutp048dbf121aea9604cadaa9950cd57308dd~VgXyoNypa1461814618epoutp04Q
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 13:26:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220220132651epoutp048dbf121aea9604cadaa9950cd57308dd~VgXyoNypa1461814618epoutp04Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1645363611;
-        bh=tSo2reU1UKCOdjcpnCsVa18TmwpMfYdF3qeO3szLFLk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nWVmLz4XRP1TPN3uH4xNGhsLeolr/8XkHQGhtptLq4hG/LxkzYafdRzOIcfU3lqhS
-         o7A7ReKEapGpO4/uIdwcLchATpShTNe9erZDiMo3E8jaff//uOv889NUmh5kgEODdT
-         9MrH5lblikju/LWAzR4LRS2YbZNEawcJxdDmi8TA=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220220132650epcas5p40eff534d30a733844e0838a3f6322d4c~VgXxuCVKU2772027720epcas5p4s;
-        Sun, 20 Feb 2022 13:26:50 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.180]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4K1mRn1kZbz4x9Pp; Sun, 20 Feb
-        2022 13:26:45 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EB.EB.06423.39142126; Sun, 20 Feb 2022 22:26:43 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220220132643epcas5p39d48a27bb3fcde2ea3a01a260b46e1a0~VgXrsbyFZ0719107191epcas5p3l;
-        Sun, 20 Feb 2022 13:26:43 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220220132643epsmtrp1c95de1de4426b0fce5bf13fe49af6b7b~VgXrxaHRp0610706107epsmtrp1b;
-        Sun, 20 Feb 2022 13:26:43 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-ef-62124193a85e
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0D.F0.08738.19142126; Sun, 20 Feb 2022 22:26:41 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220220132642epsmtip1032ae595d8aa0bbeedff726725dabe64~VgXqVOPN12018020180epsmtip1v;
-        Sun, 20 Feb 2022 13:26:42 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     krzysztof.kozlowski@canonical.com,
-        linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, pankaj.dubey@samsung.com,
-        m.szyprowski@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH v2 3/3] clocksource/drivers/exynos_mct: bump up number of
- local timer
-Date:   Sun, 20 Feb 2022 19:08:24 +0530
-Message-Id: <20220220133824.33837-3-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220220133824.33837-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRmVeSWpSXmKPExsWy7bCmuu5kR6EkgykPhCwezNvGZjHvs6zF
-        xrc/mCw2Pb7GanF51xw2ixnn9zFZrD1yl91i0dYv7BabN01lduD0mNXQy+Zx59oeNo93586x
-        e2xeUu/Rt2UVo8fnTXIBbFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJ
-        uam2Si4+AbpumTlANykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL
-        89L18lJLrAwNDIxMgQoTsjNuTl/AVvCMo2LLs/dMDYxz2bsYOTkkBEwkpl9extzFyMUhJLCb
-        UWLx1ilQzidGiTXvNrBAOJ8ZJT6efs4K07J31QRWiMQuRomnL5uYQRJCAi1MEh8nCoDYbALa
-        Enenb2ECsUUE3CRuNHYwgTQwC1xjlPgz8RAjSEJYIFyi//8isKksAqoS52/cBhvEK2AjcfbT
-        B6gD5SVWbzgAFOfg4BSwlbjVaQwyR0LgHrtEa/dUJogaF4kdBx9B2cISr45vgeqVknjZ38YO
-        0ishkC3Rs8sYIlwjsXTeMRYI217iwJU5LCAlzAKaEut36YOEmQX4JHp/P2GC6OSV6GgTgqhW
-        lWh+dxWqU1piYnc3NEg8JJauec4ICZIJjBInWrawTGCUnYUwdQEj4ypGydSC4tz01GLTAsO8
-        1HJ4PCXn525iBKc0Lc8djHcffNA7xMjEwXiIUYKDWUmE98NB3iQh3pTEyqrUovz4otKc1OJD
-        jKbAEJvILCWanA9Mqnkl8YYmlgYmZmZmJpbGZoZK4ryn0zckCgmkJ5akZqemFqQWwfQxcXBK
-        NTBx205eJ/B/beTTSZ1xzMnp+evrxG7ILVFT33mZ5SZnv4GE+v6v/YlLmJ8tdeC71Lho7nUX
-        PbVljWYrPK6HOszfv/TQIUufxFmuXjciRHrcXxhcvrBA6U+jzs+wQylHGXwsDHyPcTyd8eL2
-        aTbJ1L1WLdo/GOYE/u1N6nt3RrnwXlRi54LdaUHtB1vrXl23Cv23QYj3ye9nFUt7ZtatuFls
-        2DbZX7GhZlEvb2W2MVv3jclMs9j8GHVt7u0OCV215kXf/CNVj+4pFa4KzvB1urBg+XJ7veMs
-        L2KOOz+uOxH+53T7PAY1Pd9fE/zCy1uy+TvKatl3NF3jmxz8+ETPzurXxqezp6Sk6LzpKb+W
-        E6HEUpyRaKjFXFScCABzetYD8gMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrELMWRmVeSWpSXmKPExsWy7bCSnO5ER6Ekg+tNZhYP5m1js5j3WdZi
-        49sfTBabHl9jtbi8aw6bxYzz+5gs1h65y26xaOsXdovNm6YyO3B6zGroZfO4c20Pm8e7c+fY
-        PTYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujJvTF7AVPOOo2PLsPVMD41z2LkZODgkB
-        E4m9qyawdjFycQgJ7GCU2PBhMytEQlri+sYJUEXCEiv/PQezhQSamCS2rRABsdkEtCXuTt/C
-        BGKLCHhItP27xwwyiFngHqPE75ZpjF2MHBzCAqESN/bwgtSwCKhKnL9xmxnE5hWwkTj76QPU
-        fHmJ1RsOMIOUcwrYStzqNIZYZSMx++5+5gmMfAsYGVYxSqYWFOem5xYbFhjlpZbrFSfmFpfm
-        pesl5+duYgQHo5bWDsY9qz7oHWJk4mA8xCjBwawkwvvhIG+SEG9KYmVValF+fFFpTmrxIUZp
-        DhYlcd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUzHf5U5vOCau7de+oZ9u1Sl0YV/++Iidt26
-        +0D3AI/XN+lVIkb/Xx1ubNJY80P32i0Gu7gNW1Tvrt4QLSKsuWmaS0XO33VrprRuCjc6kzvL
-        h6erfUP7lV8T3/foZ/HVlD0+8nnupI+snEGnFCTt3zR0d1bGHXjh9YnldN40i80tqXYFsbqS
-        Yu+bvnR53ghSOVl5gvUU1843p3zla6a93Rt75HLJlfUvbMJEWJap7PE9F+HLduyQdvDU61NP
-        f5v/N5iXLXVH28YdCw3ucHq78CzWWPqdQYZnVcB9Z41ah0beQvt//T/7LuqysCzYNTP51sTL
-        L05ymeXsWaYTYHi2riVj/v/w6DaWSBPjgr4L3b1KLMUZiYZazEXFiQDkHmSWtQIAAA==
-X-CMS-MailID: 20220220132643epcas5p39d48a27bb3fcde2ea3a01a260b46e1a0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220220132643epcas5p39d48a27bb3fcde2ea3a01a260b46e1a0
-References: <20220220133824.33837-1-alim.akhtar@samsung.com>
-        <CGME20220220132643epcas5p39d48a27bb3fcde2ea3a01a260b46e1a0@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sun, 20 Feb 2022 08:51:46 -0500
+X-Greylist: delayed 115 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Feb 2022 05:51:25 PST
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6365621813;
+        Sun, 20 Feb 2022 05:51:25 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id 63AE62B00158;
+        Sun, 20 Feb 2022 08:49:27 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Sun, 20 Feb 2022 08:49:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Hzfm38
+        gwPt5b09qOmLkmmfY2IIYl8DekKzBTC8y6E/4=; b=Mh2eOvmHHkVx++fz80uns8
+        7+Y+xWxOHRMVpsAEIc1iX9iGRssSrqTt4DEoPDkKx1zMSVEFmktobYjSc+Q1vqpE
+        NB3k0jRzA8yiLumKKiNCTPhOv39knberB8iIy1iNXVam1m3xZ6RSDAXrqrZv8jX+
+        22yZfgzepiyULlT8Tz9i7x1r8X55zgZl8EZFYADfPMtKl/mzHfYyUHRn9F32L8x5
+        AKBkMSn9RahYlDyjeZLmzBXrhHBv5seX3OlpAlQfvr+eIxQRsqqhKWY76ow10uQ1
+        6Mdrffpszfy/cfGdr0ALfw3W1veNut0gsBQH0iw9CHa0rkPUs2n6BxamINmtawbw
+        ==
+X-ME-Sender: <xms:5kYSYlZgeDpGHPwBYlonXCSlDA0koRyD9axOwL3Z0YRw_CmQo-vWOw>
+    <xme:5kYSYsZkDLdYwizt3-sWnDo0Ek_-VY4wz4nUUXDRQm0KjWCCWcgIghGQQDlmgRR1H
+    gUdKOwZErNerA>
+X-ME-Received: <xmr:5kYSYn8kuaTIvJOQXtNXDSf_ZOaNsWIkXIB_zr2Ob-zXUb5UEpK2gIRWp0tu1j402tCpXi8AMuyBoBnqBS-_PsBDhHnIRE1I6n7OsbTNlbAh77k7t4A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeggdehkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofggtghogfesthekredtredtjeenucfhrhhomhepofgrrhgvkhcu
+    ofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinhhvih
+    hsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepgedvfefh
+    tdfgkeefveetkefhiedvuedvjeffuefggeefffdvueffvefgueelteehnecuffhomhgrih
+    hnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
+    mhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgshhlrg
+    gsrdgtohhm
+X-ME-Proxy: <xmx:5kYSYjoQloU_-2nKAY4zkNwVwTH0cnfqm9aPKAwL1aCC9pjApIe0Sg>
+    <xmx:5kYSYgrJNDHfSBhfWrXbh6aXi_ynQA1dHd5K9tXEFd7SIoILG-VPjg>
+    <xmx:5kYSYpQxN-LOWG68VKFpG8cBbHvCtcI2Y_kJqNdU2_BtkTjlS_xZ3A>
+    <xmx:5kYSYscqhqYX42m4acL8gaVOPiOG9sWqWL9OVERVct4UnFI7b5HIcb_l0sI>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 20 Feb 2022 08:49:25 -0500 (EST)
+From:   =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, stable@vger.kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        xen-devel@lists.xenproject.org (moderated list:XEN HYPERVISOR INTERFACE),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+Subject: [PATCH] xen/netfront: destroy queues before real_num_tx_queues is zeroed
+Date:   Sun, 20 Feb 2022 14:42:01 +0100
+Message-Id: <20220220134202.2187485-1-marmarek@invisiblethingslab.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Organization: Invisible Things Lab
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per the dt binding, maximum number of local timer can be
-up to 16. Increase the array size of the _name_ variable
-which holds the number of local timer name per CPU to
-reflect the binding. While at it, change the magic number to a
-meaningful macro.
+xennet_destroy_queues() relies on info->netdev->real_num_tx_queues to
+delete queues. Since d7dac083414eb5bb99a6d2ed53dc2c1b405224e5
+("net-sysfs: update the queue counts in the unregistration path"),
+unregister_netdev() indirectly sets real_num_tx_queues to 0. Those two
+facts together means, that xennet_destroy_queues() called from
+xennet_remove() cannot do its job, because it's called after
+unregister_netdev(). This results in kfree-ing queues that are still
+linked in napi, which ultimately crashes:
 
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+    BUG: kernel NULL pointer dereference, address: 0000000000000000
+    #PF: supervisor read access in kernel mode
+    #PF: error_code(0x0000) - not-present page
+    PGD 0 P4D 0
+    Oops: 0000 [#1] PREEMPT SMP PTI
+    CPU: 1 PID: 52 Comm: xenwatch Tainted: G        W         5.16.10-1.32.fc32.qubes.x86_64+ #226
+    RIP: 0010:free_netdev+0xa3/0x1a0
+    Code: ff 48 89 df e8 2e e9 00 00 48 8b 43 50 48 8b 08 48 8d b8 a0 fe ff ff 48 8d a9 a0 fe ff ff 49 39 c4 75 26 eb 47 e8 ed c1 66 ff <48> 8b 85 60 01 00 00 48 8d 95 60 01 00 00 48 89 ef 48 2d 60 01 00
+    RSP: 0000:ffffc90000bcfd00 EFLAGS: 00010286
+    RAX: 0000000000000000 RBX: ffff88800edad000 RCX: 0000000000000000
+    RDX: 0000000000000001 RSI: ffffc90000bcfc30 RDI: 00000000ffffffff
+    RBP: fffffffffffffea0 R08: 0000000000000000 R09: 0000000000000000
+    R10: 0000000000000000 R11: 0000000000000001 R12: ffff88800edad050
+    R13: ffff8880065f8f88 R14: 0000000000000000 R15: ffff8880066c6680
+    FS:  0000000000000000(0000) GS:ffff8880f3300000(0000) knlGS:0000000000000000
+    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+    CR2: 0000000000000000 CR3: 00000000e998c006 CR4: 00000000003706e0
+    Call Trace:
+     <TASK>
+     xennet_remove+0x13d/0x300 [xen_netfront]
+     xenbus_dev_remove+0x6d/0xf0
+     __device_release_driver+0x17a/0x240
+     device_release_driver+0x24/0x30
+     bus_remove_device+0xd8/0x140
+     device_del+0x18b/0x410
+     ? _raw_spin_unlock+0x16/0x30
+     ? klist_iter_exit+0x14/0x20
+     ? xenbus_dev_request_and_reply+0x80/0x80
+     device_unregister+0x13/0x60
+     xenbus_dev_changed+0x18e/0x1f0
+     xenwatch_thread+0xc0/0x1a0
+     ? do_wait_intr_irq+0xa0/0xa0
+     kthread+0x16b/0x190
+     ? set_kthread_struct+0x40/0x40
+     ret_from_fork+0x22/0x30
+     </TASK>
+
+Fix this by calling xennet_destroy_queues() from xennet_close() too,
+when real_num_tx_queues is still available. This ensures that queues are
+destroyed when real_num_tx_queues is set to 0, regardless of how
+unregister_netdev() was called.
+
+Originally reported at
+https://github.com/QubesOS/qubes-issues/issues/7257
+
+Fixes: d7dac083414eb5bb9 ("net-sysfs: update the queue counts in the unregistration path")
+Cc: stable@vger.kernel.org # 5.16+
+Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+
 ---
- drivers/clocksource/exynos_mct.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+While this fixes the issue, I'm not sure if that is the correct thing
+to do. xennet_remove() calls xennet_destroy_queues() under rtnl_lock,
+which may be important here? Just moving xennet_destroy_queues() before
+unregister_netdev() in xennet_remove() did not helped - it crashed in
+another way (use-after-free in xennet_close()).
 
-diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-index 0c7931f7f99a..8d63a9376701 100644
---- a/drivers/clocksource/exynos_mct.c
-+++ b/drivers/clocksource/exynos_mct.c
-@@ -66,6 +66,8 @@
- #define MCT_L0_IRQ	4
- /* Max number of IRQ as per DT binding document */
- #define MCT_NR_IRQS	20
-+/* Max number of local timers */
-+#define MCT_NR_LOCAL_TIMERS	16
+Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+---
+ drivers/net/xen-netfront.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
+index d514d96027a6..5b69a930581e 100644
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -828,6 +828,22 @@ static netdev_tx_t xennet_start_xmit(struct sk_buff *skb, struct net_device *dev
+ 	return NETDEV_TX_OK;
+ }
  
- enum {
- 	MCT_INT_SPI,
-@@ -80,7 +82,7 @@ static int mct_irqs[MCT_NR_IRQS];
- struct mct_clock_event_device {
- 	struct clock_event_device evt;
- 	unsigned long base;
--	char name[10];
-+	char name[MCT_NR_LOCAL_TIMERS];
- };
++static void xennet_destroy_queues(struct netfront_info *info)
++{
++	unsigned int i;
++
++	for (i = 0; i < info->netdev->real_num_tx_queues; i++) {
++		struct netfront_queue *queue = &info->queues[i];
++
++		if (netif_running(info->netdev))
++			napi_disable(&queue->napi);
++		netif_napi_del(&queue->napi);
++	}
++
++	kfree(info->queues);
++	info->queues = NULL;
++}
++
+ static int xennet_close(struct net_device *dev)
+ {
+ 	struct netfront_info *np = netdev_priv(dev);
+@@ -839,6 +855,7 @@ static int xennet_close(struct net_device *dev)
+ 		queue = &np->queues[i];
+ 		napi_disable(&queue->napi);
+ 	}
++	xennet_destroy_queues(np);
+ 	return 0;
+ }
  
- static void exynos4_mct_write(unsigned int value, unsigned long offset)
+@@ -2103,22 +2120,6 @@ static int write_queue_xenstore_keys(struct netfront_queue *queue,
+ 	return err;
+ }
+ 
+-static void xennet_destroy_queues(struct netfront_info *info)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < info->netdev->real_num_tx_queues; i++) {
+-		struct netfront_queue *queue = &info->queues[i];
+-
+-		if (netif_running(info->netdev))
+-			napi_disable(&queue->napi);
+-		netif_napi_del(&queue->napi);
+-	}
+-
+-	kfree(info->queues);
+-	info->queues = NULL;
+-}
+-
+ 
+ 
+ static int xennet_create_page_pool(struct netfront_queue *queue)
 -- 
-2.25.1
+2.31.1
 

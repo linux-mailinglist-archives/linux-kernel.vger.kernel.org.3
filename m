@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9865F4BCE90
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 14:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAD34BCE9C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 14:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243268AbiBTNLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 08:11:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49742 "EHLO
+        id S243832AbiBTNUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 08:20:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiBTNLk (ORCPT
+        with ESMTP id S232564AbiBTNUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 08:11:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90004ECDB;
-        Sun, 20 Feb 2022 05:11:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 208EA61170;
-        Sun, 20 Feb 2022 13:11:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F01FCC340E8;
-        Sun, 20 Feb 2022 13:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645362678;
-        bh=AcZOgu0tuVyGYdY45Zu3DvF/1IChW8HjkuF8aWEB+7I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GbzrqlkHlTXdq1wgMpkUMZQBNYkxxUdO6/mJpXzYNCOYmKzb7JpdWya9UlWN7NbJ4
-         Egnxx2krA4qM4Pq7nDQItkUUKNi/80wiIdyADYcwGuz539WzziWDmQtZHDcj72W0gQ
-         lvY97FZM6NbvyXNpxg+DYv9Yr1Udq9gQrWaymWvJStyVGc0D8wb5+vIWBwTdd7Nqfw
-         9Yc5Quwq7Yt2MIO3Tx0IknNFZWhZrPGaxbAllUx2zeDuC31D9Fd0dCKvEFEacbum7l
-         W32sYLXfYqqCintI/xHc7J6YlWtrXYbRR4qxP9nLON0xgl2WPbJjAT5LJ02q3mBKKS
-         ZHv9O3NeXD38g==
-Date:   Sun, 20 Feb 2022 13:18:09 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Nandor Han <nandor.han@vaisala.com>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] iio: core: provide a default value `label` property
-Message-ID: <20220220131809.1bc184e0@jic23-huawei>
-In-Reply-To: <20220216135604.3435769-1-nandor.han@vaisala.com>
-References: <20220216135604.3435769-1-nandor.han@vaisala.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 20 Feb 2022 08:20:30 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CD1424AD
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 05:20:08 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id d194-20020a6bcdcb000000b0063a4e3b9da6so8396925iog.6
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 05:20:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=PxiYsB68bMJBRDStT8Q66zeZicqp8GKsGnbo6+7iasQ=;
+        b=FPWmAhnX4v2ALcs/mQ68Fohw5noTkZfEjR51fD6Ch97PQBCdsyInoVPq7AKMwWSEOL
+         fp17FelfaZho4Ig5EtH6P+Xmm8Y8n9wv7MvYh0xzhMiYBZy8nFMFi/6bWp919xBBOhZL
+         IcirgZWJEEcgpnHuFdo41549/QkTIfxAhXhO53LCkaQwgE/bVFwbbrlWkEPzRA4L6zTU
+         O9bWYOZ/S5ZPmcEjdIDeCI2VYBpV4R+m7GlZcHqMTrxHNQIXC8Tb3DD+mfOApUWooAQO
+         mYvdj6GP1qtMAsdbwxDcv/YOCg5zZrgBmfh8SCxWg6eOTRDqlTIorqtgApC/VlON4Cwa
+         aHig==
+X-Gm-Message-State: AOAM5325yBB7bxMEJnR4wWhYakMHd4JaAEq3OnjCfTSt5WUN6FniKqT/
+        hzItYGbfaSwCjlalM0R4VOyQsuk8KHa6l/m3SnED8ZkOiQAw
+X-Google-Smtp-Source: ABdhPJx2l1wrYHFYY4RP7srumSWdJBEUIPsnZmkvsKnd9Yc/h9YUaWw+LHEEleAVlMSqm5hYUdy1AxyVqJpEwi5MCvM2hTowC+yR
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6602:1594:b0:640:7236:e6ea with SMTP id
+ e20-20020a056602159400b006407236e6eamr9868298iow.23.1645363207448; Sun, 20
+ Feb 2022 05:20:07 -0800 (PST)
+Date:   Sun, 20 Feb 2022 05:20:07 -0800
+In-Reply-To: <20220220075826-mutt-send-email-mst@kernel.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000081acbc05d872f93c@google.com>
+Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
+From:   syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
+To:     dvyukov@google.com, hdanton@sina.com, jasowang@redhat.com,
+        linux-kernel@vger.kernel.org, mst@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,101 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 15:56:04 +0200
-Nandor Han <nandor.han@vaisala.com> wrote:
+Hello,
 
-> The label property is used to correctly identify the same IIO device
-> over reboots. The implementation requires that a value will be provided
-> through device-tree. This sometime could requires many changes to
-> device-trees when multiple devices want to use the label property.
-> In order to prevent this, we could use the device-tree node
-> name as default value. The device-tree node name is unique and
-> also reflects the device which makes it a good choice as default value.
-> This change is backward compatible since doesn't affect the users that
-> do configure a label using the device-tree or the ones that are not
-> using the labels at all.
-> 
-> Use the device-tree node name as a default value for `label` property,
-> in case there isn't one configured through device-tree.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+kernel BUG in vhost_get_vq_desc
 
-Interesting idea.  However a few concerns come to mind.
-1) If we start having a default for this, then it will get used as ABI
-   and if a label is applied later to the DT then we will end up breaking
-   userspace scripts.
-2) If we do this it should be firmware agnostics (we need to fix
-   the existing code to be such as well).
-3) Is the node name always unique (think multiple accelerometers on
-   different i2c masters)?
-3) I'm fairly sure this information is readily available anyway.
-   either via the of_node link for the iio\:deviceX 
-   So why not have your usespace use that instead of label?
-   I'm not a fan of duplicating information that is readily available
-   anyway - be it as name and reg in the of_node directory.
+------------[ cut here ]------------
+kernel BUG at drivers/vhost/vhost.c:2335!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4048 Comm: vhost-4047 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
+Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+RSP: 0018:ffffc90001affb88 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801c9c5700 RSI: ffffffff86d715c3 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888073b44d68
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888073b44bb0
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000002 CR3: 0000000079bfe000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
+ vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
+Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 b7 59 28 fd e9 74 ff ff ff e8 5d c8 a1 fa <0f> 0b e8 56 c8 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
+RSP: 0018:ffffc90001affb88 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801c9c5700 RSI: ffffffff86d715c3 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff86d706bc R11: 0000000000000000 R12: ffff888073b44d68
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888073b44bb0
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005619d349f018 CR3: 0000000079bfe000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Thanks,
 
-Jonathan
+Tested on:
 
-> 
-> Signed-off-by: Nandor Han <nandor.han@vaisala.com>
-> ---
-> 
-> Notes:
->     Testing
->     -------
->     Using mx6sxsabresd dev board with device-tree:
->     ```
->     &adc1 {
->         vref-supply = <&reg_vref_3v3>;
->         label = "adc1";
->         status = "okay";
->     };
->     
->     &adc2 {
->         vref-supply = <&reg_vref_3v3>;
->         status = "okay";
->     };
->     ```
->     1. Verify that label property is visible and readable:PASS
->     > iio:device0 # ls -la label  
->     -r--r--r--    1 root     root          4096 Jan  1 00:00 label
->     > iio:device0 # cat label  
->     adc1
->     ```
->     2. Verify that default label property is used for adc2 device: PASS
->     ```
->     > iio:device1 # cat label  
->     adc@2284000
->     ```
-> 
->  drivers/iio/industrialio-core.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-> index e1ed44dec2ab..bd26df90ce41 100644
-> --- a/drivers/iio/industrialio-core.c
-> +++ b/drivers/iio/industrialio-core.c
-> @@ -1895,6 +1895,7 @@ int __iio_device_register(struct iio_dev *indio_dev, struct module *this_mod)
->  {
->  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
->  	const char *label;
-> +	const char *node_name;
->  	int ret;
->  
->  	if (!indio_dev->info)
-> @@ -1906,8 +1907,13 @@ int __iio_device_register(struct iio_dev *indio_dev, struct module *this_mod)
->  		indio_dev->dev.of_node = indio_dev->dev.parent->of_node;
->  
->  	label = of_get_property(indio_dev->dev.of_node, "label", NULL);
-> -	if (label)
-> +	if (label) {
->  		indio_dev->label = label;
-> +	} else {
-> +		node_name = of_node_full_name(indio_dev->dev.of_node);
-> +		if (node_name)
-> +			indio_dev->label = node_name;
-> +	}
->  
->  	ret = iio_check_unique_scan_index(indio_dev);
->  	if (ret < 0)
+commit:         f71077a4 Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=161cf916700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
+dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13500f0e700000
 

@@ -2,103 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90E04BCB34
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 00:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993394BCB39
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 01:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240084AbiBSX7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 18:59:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49994 "EHLO
+        id S232173AbiBTAMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 19:12:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiBSX7N (ORCPT
+        with ESMTP id S229807AbiBTAMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 18:59:13 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110423A1AB
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 15:58:54 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id y11so5424064pfi.11
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 15:58:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pyKnh0rifNC4U8/SpWhjiS3uUcC5kmVNLLaPc0IhXvY=;
-        b=eFv9LIHn5T7yu7SXdfr1xRt6PH8DYtfvvMqPlhlsZ6bZC6Gwo4CnvRkxkLGP4v1/za
-         xH7WDZlsGzhKXMPVZxNtJvfV97TeYC/+z2zTWMOzSyPurTe9RIkmSZRk2tNYowdcG0FS
-         fqY5kUxdDE9sZFT3ljh+x03Lnvopm2Tk7vorM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pyKnh0rifNC4U8/SpWhjiS3uUcC5kmVNLLaPc0IhXvY=;
-        b=xRFRUq+6c8DVQH46N/x2PO1DCRz9ZrwwmYAJIzYCX+n0xRXGb2CYZ9XzFRCX/uO5UA
-         WjpNcyGMANj8J1VSMD0VcmU7WfvBnIdosnHuLFkHGYb9JAraIGXrUlrsVjlGiR4njbO/
-         eQVTE1ujscdiwbt1e+zikeP3WizDb7z15xV/jv+FqzhonjyMqiCxJJyxjU8XelmaCuzd
-         j1gYhK0usF6KSGzYiZiRkWXPAzh41TpOKOLRW0r2pW5IvXkzPaoBXzhrVgVF51Nedi4Y
-         ouc0ftCP1vw3h+17DNYV4ZAQJllYEYEUwGpHDNfBtozTLXzb3z0HSLc4PeojzWBoJqr6
-         GeaQ==
-X-Gm-Message-State: AOAM531KNQv2hmSRy4HdoNuPunzGy1d7/4o71k/IdomAZ5ZOOvJwNsQi
-        UvR3kTbqGAE2XgvD5yMwQrtvqA==
-X-Google-Smtp-Source: ABdhPJz2B7x/obkYAxIzuuWmK0eIrem1Iyubh1rAOvTpZqyu2/XzDhnjlP1qJpC13eAFz3bW7Wje1A==
-X-Received: by 2002:a05:6a00:cd3:b0:4df:7b9e:2557 with SMTP id b19-20020a056a000cd300b004df7b9e2557mr14045768pfv.25.1645315133327;
-        Sat, 19 Feb 2022 15:58:53 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u11sm7756421pfi.71.2022.02.19.15.58.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 15:58:52 -0800 (PST)
-Date:   Sat, 19 Feb 2022 15:58:51 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] slab: remove __alloc_size attribute from
- __kmalloc_track_caller
-Message-ID: <202202191558.11C173F04@keescook>
-References: <20220218131358.3032912-1-gregkh@linuxfoundation.org>
- <CAKwvOd=4uwMVBwYU8XPP+cHkw5V1S_t7i8psMTRySsKEcDVZ_A@mail.gmail.com>
+        Sat, 19 Feb 2022 19:12:50 -0500
+X-Greylist: delayed 379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Feb 2022 16:12:28 PST
+Received: from gimli.rothwell.id.au (unknown [IPv6:2404:9400:2:0:216:3eff:fee1:997a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E22101E;
+        Sat, 19 Feb 2022 16:12:27 -0800 (PST)
+Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4K1Qgr65zRzyP2;
+        Sun, 20 Feb 2022 11:06:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
+        s=201702; t=1645315563;
+        bh=fhKEWE2qN7BLNknFxf7cwRDVzk4QhK6JwHxrtjN4H4U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jRSMFmYPNqQFDgCJZGzIs0QEolldSR7mUn+vKNXBn+wmWTrIZcf6CTQn8Rk3KloPM
+         yvJwV2qI+EBeTEGQ8Am9EggKsbbB6ndCBcJMno0C4YEEowloRjTB0/YsIlPKe0Rb3e
+         +2HlFILxNwUSc68J+1VJum3aUo2XKHcaZQ0c3KR1u/zm8RIx88xCV4tugnR/2raTdz
+         oXN8rnI9Brr9k5ZPgSWPQgM9Ejdt8/vhrwEGumb6cGMQG5uRS1PBhq4oLX1+shcIgs
+         c3icl/L7et2CADY5yoMUy7pjLIZvYirv28GUJlwWhgsuAiHmbmc24v/AC9Rf/6Ll5U
+         li2jRI2WCaOGA==
+Date:   Sun, 20 Feb 2022 11:05:19 +1100
+From:   Stephen Rothwell <sfr@rothwell.id.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, peterz@infradead.org,
+        Zhen Ni <nizhen@uniontech.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, tangmeng <tangmeng@uniontech.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v3 0/8] sched: Move a series of sysctls starting with
+ sys/kernel/sched_*
+Message-ID: <20220220110519.4c267c69@elm.ozlabs.ibm.com>
+In-Reply-To: <Yg/jxFqiuyR/xB2s@bombadil.infradead.org>
+References: <20220215114604.25772-1-nizhen@uniontech.com>
+        <Yg3+bAQKVX+Dj317@bombadil.infradead.org>
+        <20220217185238.802a7e2dd1980fee87be736c@linux-foundation.org>
+        <Yg/jxFqiuyR/xB2s@bombadil.infradead.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=4uwMVBwYU8XPP+cHkw5V1S_t7i8psMTRySsKEcDVZ_A@mail.gmail.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/A_7RQbOzLU6cilHr=SxBuq/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 09:19:51AM -0800, Nick Desaulniers wrote:
-> On Fri, Feb 18, 2022 at 5:14 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > Commit c37495d6254c ("slab: add __alloc_size attributes for better
-> > bounds checking") added __alloc_size attributes to a bunch of kmalloc
-> > function prototypes.  Unfortunately the change to __kmalloc_track_caller
-> > seems to cause clang to generate broken code and the first time this is
-> > called when booting, the box will crash.
-> >
-> > While the compiler problems are being reworked and attempted to be
-> > solved, let's just drop the attribute to solve the issue now.  Once it
-> > is resolved it can be added back.
-> 
-> Sorry about the mess; we'll get it cleaned up!
-> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1599
+--Sig_/A_7RQbOzLU6cilHr=SxBuq/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the issue link!
+Hi Luis,
 
-Acked-by: Kees Cook <keescook@chromium.org>
+On Fri, 18 Feb 2022 10:21:56 -0800 Luis Chamberlain <mcgrof@kernel.org> wro=
+te:
+>
+> On Thu, Feb 17, 2022 at 06:52:38PM -0800, Andrew Morton wrote:
+> > On Wed, 16 Feb 2022 23:51:08 -0800 Luis Chamberlain <mcgrof@kernel.org>=
+ wrote:
+> >  =20
+> > > Are you folks OK if say Stephen adds a sysctl-next for linux-next so
+> > > we can beat on these there too? =20
+> >=20
+> > Sure.  I just sent you a couple which I've collected. =20
+>=20
+> OK thanks! I've merged those into sysctl-next [0]
+>=20
+> Stephen,
+>=20
+> Can you add it to the set of trees you pull? I'll send a patch to add
+> this to MAINTAINERS too then.
+>=20
+> [0] git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl=
+-next
 
--- 
-Kees Cook
+Added from whenever the next linux-next tree gets done.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--Sig_/A_7RQbOzLU6cilHr=SxBuq/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIRhb8ACgkQAVBC80lX
+0GzueQgAkvmPVIX7H6WlKxMB4Zk4kOAaN4MZQytMEzU7k4MoUSMFWsw280y9rk/3
+kXyVuFA8bs2VdnW5ETsVmVVhJ1PRLtKZJVq+1pW3QWjtkNmmASXKtZE2Uweh2wXV
+e9FlpvZN53VtYtMv3FM+V1lae2SCCpQykl07tTxdXVUAKmdw0Y4XBi8zPo4XB8HP
+9GqGrDoxVId/NqpyR9lXKIEqdZIzoGu8Ku1aPPYMfzEAzNaJhBK/NbSAtAEwnQjh
+hwilcrLZtcUJ9MlaQZcBuTsEiHSPvobmqikpmIFTAVM0SfuvhZNSCzxG8Y3qGsyt
+CKdx6nm63HirlEFj4AhQeExT8N/sYg==
+=H2Cv
+-----END PGP SIGNATURE-----
+
+--Sig_/A_7RQbOzLU6cilHr=SxBuq/--

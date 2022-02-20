@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA96D4BCDEB
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 11:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0504E4BCE03
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 11:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiBTKSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 05:18:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53084 "EHLO
+        id S231673AbiBTKin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 05:38:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiBTKR6 (ORCPT
+        with ESMTP id S229788AbiBTKil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 05:17:58 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9AEBC9A;
-        Sun, 20 Feb 2022 02:17:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645352257; x=1676888257;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FJWA/e2ARCT6IKuYx267KSV+f+20WZxwf0RWSo+k1TA=;
-  b=Kx0NVxhHyj46y7lZ2Zw2xqZQDioTVQ+Zfy9uaP8lONlrkx5YovGF2DCu
-   5yj306r5YJ3ScBWT/UDxuVlZEQsOPFvCVDb6kmYp3/QyY0KuFRztNE4Ca
-   2duOGRqxchK2VkIhdqSVnw5/T9YfNtFh/VOUX9CrbUPGDTRKWNrm7Gc/z
-   4svGWsZe5pon2yo7h3LDdX3XUoES//TZ6OxARRN+8eKwAwl4b0peIFexx
-   q1/vAGmY2yCly9yns8IFfYLpn6HPetNZ6KoXqrjUNabJ8j6pSeYQPuwTc
-   /riVsH/izjSDnWRCWIbI4tTb+N03oyu4yxuvKLgSkWbuRGwEHRupYSwum
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="231331065"
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="231331065"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 02:17:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="590651267"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Feb 2022 02:17:35 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLjHa-0000EX-Nt; Sun, 20 Feb 2022 10:17:34 +0000
-Date:   Sun, 20 Feb 2022 18:17:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atish.patra@wdc.com>
-Cc:     kbuild-all@lists.01.org, Atish Patra <Atish.Patra@wdc.com>,
-        linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        linux-doc@vger.kernel.org
-Subject: [atishp04:sbi_pmu_v6 12/17] drivers/perf/riscv_pmu_legacy.c:76:
- warning: This comment starts with '/**', but isn't a kernel-doc comment.
- Refer Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202202201838.kdXweR8L-lkp@intel.com>
+        Sun, 20 Feb 2022 05:38:41 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6C04C40F
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 02:38:20 -0800 (PST)
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 77E073F1CF
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 10:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645353498;
+        bh=HJ3hf05bLGcI9whcyVuKruFWRj+0StPbt+dAPR96XFc=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=hYYTMXLh8xT4VJ50t43Albuy/HfZbqYa1f/PQNe6rx7Fk8r1E6oa8dH3xQ/3wQeUa
+         BP3tNVfsfw6/QScWfw2SXDH0k3NvLgBv8/Fd3q1h4qYqxeZDg9pcS8Iq38ZIYj0YSq
+         4co887iLJo7sFh722QRmLXMbuqFO/KF4cF1KdO+K+TqA9njKVVeTtM+sBFt72lm6+Z
+         VujAmX4DXJqO3xb5+hpSB2KqNDB9GWmaMgFqhfCZvkWoMSQwV9HGm4WzH/6p+X0vPW
+         Dn/sE650OKBKJ1ZzRyleOQPmkWYXwdL0nuvyEo/0gBmZluBudz7WPWkwbtOBGSC4wQ
+         GEhZVqxq+sN/A==
+Received: by mail-wr1-f71.google.com with SMTP id t8-20020adfa2c8000000b001e8f6889404so3760772wra.0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 02:38:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HJ3hf05bLGcI9whcyVuKruFWRj+0StPbt+dAPR96XFc=;
+        b=tpmr+afhb1tqprriJBlyS3jY6nTb55fN9xOxDHUwFebObLIqjahPYAorsm4aNVohTI
+         Er2EBRgPUzC4gtSqh3NrhCLrz66i4U+LrEZNmIzEndMQqtbK23WJV39ixPyDG8Ta8OGJ
+         8rZ3UmjX0DgY8r3nbPVKT3s5dbxKnlrvSMx67eauBj2HfojKJpW+VqbTxT5L/JmSV80t
+         y+K3LsEoLWNygVX4/jMVVlxGlvV70GmaeKBSQntLzHrTZAy5Bdt7Ys6m3e1EdWr3YgxR
+         12xYXKJ3ztS8YTf3dwpSCLQtW+LqbACBCmay75bJRzx5DuLd1sLPO+2IiCiAAHI54fcE
+         nusA==
+X-Gm-Message-State: AOAM532BNuvHTtMP3JJNsQodL2/xFSN4HUhqN0hny60dcTs0vNla/XUo
+        c+UmZ1niuSrM6xFkpQOUPRlQvADssL76IlhqaBy+KDWZs8AYAoubcs2GOPBitx9F3as56eZ2g7x
+        q0jijxlk5rZHB/jSly8uKDiscQCAMrgR9oP6rjYyttQ==
+X-Received: by 2002:a05:6000:25a:b0:1e3:2010:4d14 with SMTP id m26-20020a056000025a00b001e320104d14mr12150903wrz.455.1645353498013;
+        Sun, 20 Feb 2022 02:38:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwijQTb9gqvlCbIMT5zyu0cBqFSHKsClS4XIKOilmpzDy2v/za0javscwr09IAOAavEpM2L/w==
+X-Received: by 2002:a05:6000:25a:b0:1e3:2010:4d14 with SMTP id m26-20020a056000025a00b001e320104d14mr12150893wrz.455.1645353497852;
+        Sun, 20 Feb 2022 02:38:17 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id l10-20020a7bc44a000000b0037c32873258sm4419213wmi.2.2022.02.20.02.38.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 02:38:17 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thomas Abraham <thomas.abraham@linaro.org>,
+        Stephen Warren <swarren@nvidia.com>,
+        Kukjin Kim <kgene.kim@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH] clocksource/drivers/exynos_mct: Handle DTS with higher number of interrupts
+Date:   Sun, 20 Feb 2022 11:38:15 +0100
+Message-Id: <20220220103815.135380-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,58 +82,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/atishp04/linux sbi_pmu_v6
-head:   876094386d4f915d81ec2ee5b8b412987a10d808
-commit: 9cba22b308da91d7cf0781fcc18b3ad34abdf9b0 [12/17] RISC-V: Add a simple platform driver for RISC-V legacy perf
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220220/202202201838.kdXweR8L-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/atishp04/linux/commit/9cba22b308da91d7cf0781fcc18b3ad34abdf9b0
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 sbi_pmu_v6
-        git checkout 9cba22b308da91d7cf0781fcc18b3ad34abdf9b0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash drivers/perf/
+The driver statically defines maximum number of interrupts it can
+handle, however it does not respect that limit when configuring them.
+When provided with a DTS with more interrupts than assumed, the driver
+will overwrite static array mct_irqs leading to silent memory
+corruption.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Validate the interrupts coming from DTS to avoid this.  This does not
+change the fact that such DTS might not boot at all, because it is
+simply incompatible, however at least some warning will be printed.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/perf/riscv_pmu_legacy.c:76: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * This is just a simple implementation to allow legacy implementations
-
-
-vim +76 drivers/perf/riscv_pmu_legacy.c
-
-    74	
-    75	/**
-  > 76	 * This is just a simple implementation to allow legacy implementations
-    77	 * compatible with new RISC-V PMU driver framework.
-    78	 * This driver only allows reading two counters i.e CYCLE & INSTRET.
-    79	 * However, it can not start or stop the counter. Thus, it is not very useful
-    80	 * will be removed in future.
-    81	 */
-    82	static void pmu_legacy_init(struct riscv_pmu *pmu)
-    83	{
-    84		pr_info("Legacy PMU implementation is available\n");
-    85	
-    86		pmu->num_counters = RISCV_PMU_LEGACY_NUM_CTR;
-    87		pmu->ctr_start = pmu_legacy_ctr_start;
-    88		pmu->ctr_stop = NULL;
-    89		pmu->event_map = pmu_legacy_event_map;
-    90		pmu->ctr_get_idx = pmu_legacy_ctr_get_idx;
-    91		pmu->ctr_get_width = NULL;
-    92		pmu->ctr_clear_idx = NULL;
-    93		pmu->ctr_read = pmu_legacy_read_ctr;
-    94	
-    95		perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
-    96	}
-    97	
-
+Fixes: 36ba5d527e95 ("ARM: EXYNOS: add device tree support for MCT controller driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/clocksource/exynos_mct.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
+index 6db3d5511b0f..03782b399ea1 100644
+--- a/drivers/clocksource/exynos_mct.c
++++ b/drivers/clocksource/exynos_mct.c
+@@ -541,6 +541,11 @@ static int __init exynos4_timer_interrupts(struct device_node *np,
+ 	 * irqs are specified.
+ 	 */
+ 	nr_irqs = of_irq_count(np);
++	if (nr_irqs > ARRAY_SIZE(mct_irqs)) {
++		pr_err("exynos-mct: too many (%d) interrupts configured in DT\n",
++			nr_irqs);
++		nr_irqs = ARRAY_SIZE(mct_irqs);
++	}
+ 	for (i = MCT_L0_IRQ; i < nr_irqs; i++)
+ 		mct_irqs[i] = irq_of_parse_and_map(np, i);
+ 
+@@ -553,11 +558,14 @@ static int __init exynos4_timer_interrupts(struct device_node *np,
+ 		     mct_irqs[MCT_L0_IRQ], err);
+ 	} else {
+ 		for_each_possible_cpu(cpu) {
+-			int mct_irq = mct_irqs[MCT_L0_IRQ + cpu];
++			int mct_irq;
+ 			struct mct_clock_event_device *pcpu_mevt =
+ 				per_cpu_ptr(&percpu_mct_tick, cpu);
+ 
+ 			pcpu_mevt->evt.irq = -1;
++			if (MCT_L0_IRQ + cpu >= ARRAY_SIZE(mct_irqs))
++				break;
++			mct_irq = mct_irqs[MCT_L0_IRQ + cpu];
+ 
+ 			irq_set_status_flags(mct_irq, IRQ_NOAUTOEN);
+ 			if (request_irq(mct_irq,
+-- 
+2.32.0
+

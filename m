@@ -2,183 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7674BCF10
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D05754BCF18
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238722AbiBTOmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 09:42:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37898 "EHLO
+        id S241679AbiBTOpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 09:45:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiBTOmF (ORCPT
+        with ESMTP id S233440AbiBTOpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 09:42:05 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782D61D0D6
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 06:41:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645368103; x=1676904103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5Z8zDh3Yv0piKL5w+7BoRO4epVkGNJymFFSSeTelIDI=;
-  b=l/zpoRb4U9SCJoUTrK/8ZhjdbyyU7b3oN/j0ZPamAWQeakaHxiaosdYX
-   s4CRTjLt0r2rTgpNOs0E3ak7/pcvuhjE5empM4Q7jTsKSVa9wRSW8eIu2
-   N32SUVqnukeN0bSwyHGKPvFdnDZVABmP0VYFdSTxy6rVF1dPGCC2PG5VS
-   ri+lBtE/mvUAWZ0mMZcDIciaUeXOrtv2sXaqp67FsOish4YPFG8S5Efw9
-   v4dPJ5ZtuqPK1bTetbx5PpLGIoVV7dD3DlMsGbPXEDIrCOa5NcxbnP9cj
-   840VC9Gl54/Wu9Uo62JBUBOuj3Byr0uxm73GVSuSSqs68Rm8qERtcyML/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="250198315"
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="250198315"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 06:41:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="705933204"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2022 06:41:40 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLnPA-0000Ok-7P; Sun, 20 Feb 2022 14:41:40 +0000
-Date:   Sun, 20 Feb 2022 22:41:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Sun, 20 Feb 2022 09:45:30 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E3153701;
+        Sun, 20 Feb 2022 06:45:08 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id s24so17897601edr.5;
+        Sun, 20 Feb 2022 06:45:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9WBIrLV7a7ITqe2gJcFg0OaqJzdOIMlPPMgtT7XmAPU=;
+        b=H0+WHetxE3GHBnp1GDl3r6+qGiyJk3Rrd5db2S2XBkX0f4gUOf9+dOiE601TZBMNvK
+         IL47+O1eoRDnhJpw/ehMBCkw7lIM6BGDwr94NnWAZ89hl/ck/F1mSmYZuxRmlMmoc8zH
+         +w1NtPAN0whbKWUXSxHj+eoScSeggIAeE3ZunxCAfhqJlAEedXnP9Q2gNsiu/MmRGALz
+         8F07UMSrKtY4BzuqnPlOpklayIVU8RXWXJXuChOj1r0kvVSraITTXGjBQaqu13C4o5kl
+         BLexyC20HFa5vKBuWmmJ+OuOgMEJse7DLQQBR2n6vSPp3oMAGkuG+isfsE+cuDJFpfhX
+         o6Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9WBIrLV7a7ITqe2gJcFg0OaqJzdOIMlPPMgtT7XmAPU=;
+        b=pcQlYFnj2X5brC9pmpM2/hANfGEgqQ4g+zhDqdhgN8kgmGtWk0Ps7ORs5zXaLHiGPU
+         j/ud9OjZwpvLEJMAJHeFp3PxFDO0rpWYbv0vJosxZQYQjUnfFfA/PMhq8UqdFiPVh5SI
+         QQSXVc4yZW32KjWrbCToVYQQVj90j7XRRBQHX0HbdDVS8t76LPvnSbmPl/fSceXtWVE6
+         t99og57lKCtNdt2hTeZymHfQh8n68dpwuFnwA0CB3Hp8NT30Gh4WFbBGX4PUMX1cpyck
+         2+kD/O8/uC7XaCkc0ULIrXKYgs3sYbSJ5WXwLbe5MMGsV1QFDEUZ/6sk32AR6+ZTOgx6
+         gxCQ==
+X-Gm-Message-State: AOAM531ZD61RLHCvW3h+V8KbuKGzQYp/Mt1dAtzhTddsaJXIyHKSfWKJ
+        W2indIBXK35VSh3On/YDvpG8Eprhh5Q=
+X-Google-Smtp-Source: ABdhPJw69n/kzMU1yI5alkes24zOZOzztseCW0XJxNuMy+DzX+BR7QzCWzxYjqZgd7jVRDahFEO0BA==
+X-Received: by 2002:a50:aa9d:0:b0:40f:d653:ff0f with SMTP id q29-20020a50aa9d000000b0040fd653ff0fmr17436302edc.114.1645368307039;
+        Sun, 20 Feb 2022 06:45:07 -0800 (PST)
+Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id x12sm7133581edv.57.2022.02.20.06.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 06:45:06 -0800 (PST)
+Date:   Sun, 20 Feb 2022 15:44:54 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Jonathan McDowell <noodles@earth.li>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:axboe/linux-block/m1/2022-02-19 521/552]
- drivers/dma/apple-admac.c:353:6: warning: no previous prototype for
- 'admac_start_current_tx'
-Message-ID: <202202202235.KKqNQju1-lkp@intel.com>
+Subject: Re: [PATCH v2 16/18] ARM: dts: qcom: remove redundant binding from
+ ipq8064 rb3011 dts
+Message-ID: <YhJT5gD2TuwucnQX@Ansuel-xps.localdomain>
+References: <20220218002956.6590-1-ansuelsmth@gmail.com>
+ <20220218002956.6590-17-ansuelsmth@gmail.com>
+ <Yg+pL44ogVscn9Kw@earth.li>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yg+pL44ogVscn9Kw@earth.li>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/m1/2022-02-19
-head:   b781e0ccdc0c9a931571d15db09d45b7258b9905
-commit: bee62b9888b1bd6bd610383080a17ba0c9bb215b [521/552] dmaengine: apple-admac: Add Apple ADMAC driver
-config: nds32-randconfig-p002-20220220 (https://download.01.org/0day-ci/archive/20220220/202202202235.KKqNQju1-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/bee62b9888b1bd6bd610383080a17ba0c9bb215b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/m1/2022-02-19
-        git checkout bee62b9888b1bd6bd610383080a17ba0c9bb215b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash drivers/dma/
+On Fri, Feb 18, 2022 at 02:11:59PM +0000, Jonathan McDowell wrote:
+> On Fri, Feb 18, 2022 at 01:29:54AM +0100, Ansuel Smith wrote:
+> > Mdio0_pins are now declared in ipq8064 dtsi. Usb phy are enabled by
+> > default.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts | 17 -----------------
+> >  1 file changed, 17 deletions(-)
+> > 
+> > diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> > index 0982b6214fb7..ddc9cc49ab60 100644
+> > --- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> > +++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> > @@ -259,10 +259,6 @@ &gsbi7_serial {
+> >  	status = "okay";
+> >  };
+> >  
+> > -&hs_phy_1 {
+> > -	status = "okay";
+> > -};
+> > -
+> >  &nand {
+> >  	status = "okay";
+> >  
+> > @@ -309,15 +305,6 @@ mux {
+> >  		};
+> >  	};
+> >  
+> > -	mdio0_pins: mdio0_pins {
+> > -		mux {
+> > -			pins = "gpio0", "gpio1";
+> > -			function = "gpio";
+> > -			drive-strength = <8>;
+> > -			bias-disable;
+> > -		};
+> > -	};
+> > -
+> 
+> This sets the pins to "gpio". Your earlier patch sets them to "mdio", so
+> removing this will break MDIO0 on the RB3011. It's likely that your
+> fixes for MDIO/QCA8K mean that the RB3011 can be switch to use the MDIO
+> driver rather than mdio-gpio, but that will need tested and this change
+> alone will definitely break things.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I could be wrong but I remember that before the mdio driver we used the
+mdio-gpio driver with the pins set to mdio function without problems.
 
-All warnings (new ones prefixed by >>):
+> >  	mdio1_pins: mdio1_pins {
+> >  		mux {
+> >  			pins = "gpio10", "gpio11";
+> > @@ -358,10 +345,6 @@ mux {
+> >  	};
+> >  };
+> >  
+> > -&ss_phy_1 {
+> > -	status = "okay";
+> > -};
+> > -
+> >  &usb3_1 {
+> >  	pinctrl-0 = <&usb1_pwr_en_pins>;
+> >  	pinctrl-names = "default";
+> > -- 
+> > 2.34.1
+> > 
+> 
+> J.
+> 
+> -- 
+> /-\                             |  Even the Evening Herald slags me
+> |@/  Debian GNU/Linux Developer |                off.
+> \-                              |
 
-   drivers/dma/apple-admac.c:132:14: warning: no previous prototype for 'admac_tx_submit' [-Wmissing-prototypes]
-     132 | dma_cookie_t admac_tx_submit(struct dma_async_tx_descriptor *tx)
-         |              ^~~~~~~~~~~~~~~
-   drivers/dma/apple-admac.c:154:33: warning: no previous prototype for 'admac_prep_dma_cyclic' [-Wmissing-prototypes]
-     154 | struct dma_async_tx_descriptor *admac_prep_dma_cyclic(
-         |                                 ^~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/device.h:15,
-                    from drivers/dma/apple-admac.c:2:
-   drivers/dma/apple-admac.c: In function 'admac_cyclic_write_one_desc':
-   drivers/dma/apple-admac.c:200:26: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 5 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
-     200 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                         ^~~
-   include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
-     163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-         |                                             ^~~~~~~
-   drivers/dma/apple-admac.c:200:9: note: in expansion of macro 'dev_dbg'
-     200 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
-         |         ^~~~~~~
-   drivers/dma/apple-admac.c:200:54: note: format string is defined here
-     200 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
-         |                                                   ~~~^
-         |                                                      |
-         |                                                      long long unsigned int
-         |                                                   %x
-   drivers/dma/apple-admac.c:204:53: warning: right shift count >= width of type [-Wshift-count-overflow]
-     204 |         admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
-         |                                                     ^~
-   drivers/dma/apple-admac.c: At top level:
-   drivers/dma/apple-admac.c:228:5: warning: no previous prototype for 'admac_alloc_chan_resources' [-Wmissing-prototypes]
-     228 | int admac_alloc_chan_resources(struct dma_chan *chan)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/dma/apple-admac.c:233:6: warning: no previous prototype for 'admac_free_chan_resources' [-Wmissing-prototypes]
-     233 | void admac_free_chan_resources(struct dma_chan *chan)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/dma/apple-admac.c:238:5: warning: no previous prototype for 'admac_ring_noccupied_slots' [-Wmissing-prototypes]
-     238 | int admac_ring_noccupied_slots(int ringval)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/dma/apple-admac.c: In function 'admac_ring_noccupied_slots':
-   drivers/dma/apple-admac.c:240:22: error: implicit declaration of function 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=implicit-function-declaration]
-     240 |         int wrslot = FIELD_GET(RING_WRITE_SLOT, ringval);
-         |                      ^~~~~~~~~
-         |                      FOLL_GET
-   drivers/dma/apple-admac.c: At top level:
-   drivers/dma/apple-admac.c:258:5: warning: no previous prototype for 'admac_cyclic_read_residue' [-Wmissing-prototypes]
-     258 | u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/dma/apple-admac.c:284:17: warning: no previous prototype for 'admac_tx_status' [-Wmissing-prototypes]
-     284 | enum dma_status admac_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
-         |                 ^~~~~~~~~~~~~~~
->> drivers/dma/apple-admac.c:353:6: warning: no previous prototype for 'admac_start_current_tx' [-Wmissing-prototypes]
-     353 | void admac_start_current_tx(struct admac_chan *adchan)
-         |      ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/dma/apple-admac.c:367:6: warning: no previous prototype for 'admac_issue_pending' [-Wmissing-prototypes]
-     367 | void admac_issue_pending(struct dma_chan *chan)
-         |      ^~~~~~~~~~~~~~~~~~~
-   drivers/dma/apple-admac.c:386:5: warning: no previous prototype for 'admac_pause' [-Wmissing-prototypes]
-     386 | int admac_pause(struct dma_chan *chan)
-         |     ^~~~~~~~~~~
-   drivers/dma/apple-admac.c:395:5: warning: no previous prototype for 'admac_resume' [-Wmissing-prototypes]
-     395 | int admac_resume(struct dma_chan *chan)
-         |     ^~~~~~~~~~~~
-   drivers/dma/apple-admac.c:404:5: warning: no previous prototype for 'admac_terminate_all' [-Wmissing-prototypes]
-     404 | int admac_terminate_all(struct dma_chan *chan)
-         |     ^~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for NFSD_V2_ACL
-   Depends on NETWORK_FILESYSTEMS && NFSD
-   Selected by
-   - NFSD_V3_ACL && NETWORK_FILESYSTEMS
-
-
-vim +/admac_start_current_tx +353 drivers/dma/apple-admac.c
-
-   352	
- > 353	void admac_start_current_tx(struct admac_chan *adchan)
-   354	{
-   355		struct admac_data *ad = adchan->host;
-   356		int ch = adchan->no;
-   357	
-   358		admac_poke(ad, REG_CHAN_INTSTATUS1(ch), STATUS_DESC_DONE | STATUS_ERR);
-   359		admac_poke(ad, REG_CHAN_CTL(ch), REG_CHAN_CTL_RST_RINGS);
-   360		admac_poke(ad, REG_CHAN_CTL(ch), 0);
-   361	
-   362		admac_cyclic_write_one_desc(ad, ch, adchan->current_tx);
-   363		admac_start_chan(adchan);
-   364		admac_cyclic_write_desc(ad, ch, adchan->current_tx);
-   365	}
-   366	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+	Ansuel

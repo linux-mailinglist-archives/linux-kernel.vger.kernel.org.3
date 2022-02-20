@@ -2,250 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3400C4BCF66
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BEA4BCF6A
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244082AbiBTP1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 10:27:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45018 "EHLO
+        id S229533AbiBTPac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 10:30:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiBTP1s (ORCPT
+        with ESMTP id S233644AbiBTPa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 10:27:48 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E446A389E
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:27:26 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id x6-20020a923006000000b002bea39c3974so6141436ile.12
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:27:26 -0800 (PST)
+        Sun, 20 Feb 2022 10:30:26 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8CA4E39C;
+        Sun, 20 Feb 2022 07:30:05 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id q5so8432550oij.6;
+        Sun, 20 Feb 2022 07:30:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=v9yDxdXjwfjcEmcv6Q/zczMsjG6fgA4wk/0Tx7xP4sI=;
+        b=VTR+1+ba8QimGg/EB+ymwC2T9QsjGhjmRL6ovuUPN6kP0SriqXjo+4hPkFKzZ77HoZ
+         szTVyzhp8ly4R5KMheLHsUtEpwyn49rKDEE1qS5BhDcGbaXgpBQZdFxF6pFcw4EXZE3D
+         CdaWZllJIgMu0vVdidOmWzqlyxry/CZMcLVHDw0XvDOd/08WA0BHHXW9V+c6KejzNNUz
+         jzfCcmUtADW272OqxkUkVNzSzzYDKg6iGVmXSHrs+0Na87vi6Yti3FvwArZ0VSW1C737
+         5tfODeTf98+O6Uv8fFXA0P+2XROJFZubNsCxmBX5T36QFfwXJT+Lp5OgPL6w71sf6HJ3
+         4EGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Pwl3SHuPOjt3dJz5xQRtE1ITjaBluSoyaa2Ww+NNZAY=;
-        b=hzVPdSoiocNZPIeIZxYDA1pfTQnen8O2FaRZsYOS9mtoaVDOhylnSQMM25AUVW9IE4
-         qpP0YA62/SYqtASJGyFre+KVRUGVQGLMLdYKGCAdyoFYaEF+PKO8Q+Hl4yHpBNVAyscs
-         Y+6Hi4rSNihZ3JukYCIs9Z2Op59qoeySpRyflTQcmGs9WnQBF+mnljQIpr/qZWAIzmUe
-         sCVaJVq3MnmrR+Fo/JquRNb3gJIupGNG+J3dWdiLxtSzEUun85BSc3HHefsoYL2yGozP
-         N6MKX4xLe1DHhjjoSthL3HCrq0Ye0VWnNW7gLeAbY4mU038Fce7Crr1nGldJw28HGMYS
-         OWcw==
-X-Gm-Message-State: AOAM530NH7elSszYGGgkas8P/yq/JlEjIvzjissZHzRV5rfm2gnlg+AP
-        gtTmCRNiUUy/XUuHXtDKE2ES7GuTwapwEzPZYsQ3eNUXoZt0
-X-Google-Smtp-Source: ABdhPJztQDA5YMGyif4OKk0aEviQe579QU5VrA4mkHX7LOCfHzBdWS+DI3BRT2Y6rEuz0mB9WbJfjRg8WuNRShYIJYogvjRKOkMC
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=v9yDxdXjwfjcEmcv6Q/zczMsjG6fgA4wk/0Tx7xP4sI=;
+        b=Ipm/MOprtvXOvlmzP3X9zEAYwZ8qoDZaFLuDpagsQoklirYusYbVAftcrY8qxzy69h
+         9NAvE4KucEJMFne6IX+ILadbrO16pDeb+2uozQkzWtJKXoDPiefV2uDRK6XX6OB4Gvu7
+         Dd9NccftU6EeZ0IovJPE71RB2Qy4Q/nj5419Gb7zkiL5/+hhIVm72bs6XiqC1BZDWIBf
+         ZbENp5HubXj8n+bLaRV6d//45ErySb9tYv62kQB7FTidD/4gxu0W45Il4QORS871iyBk
+         i3xbPHvGuDt8HD9OotkvPCjI4eREC2N9pvpT+FAD/V1sysV7kxdDwGJWOop6OQFeKiiD
+         erXA==
+X-Gm-Message-State: AOAM531RPDGC+qvn86Zp1y8cJD4Xhjx34fXgnElAxHDqel6eVTa8NQE0
+        rldsBZvf8+XuPVMPy5TaoLE=
+X-Google-Smtp-Source: ABdhPJyR+bX5VZ+syJd8ZHj/h8NztoAD3ZKegIwwy3YXx8xIVyUo7wJTOXMgM4mdO2KfGmc7k3dSrg==
+X-Received: by 2002:a05:6808:11c4:b0:2d4:9b19:6940 with SMTP id p4-20020a05680811c400b002d49b196940mr5895550oiv.199.1645371004879;
+        Sun, 20 Feb 2022 07:30:04 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id be19sm5921088oib.31.2022.02.20.07.30.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 07:30:04 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7d387f96-1561-2eec-43e2-b971ff79d734@roeck-us.net>
+Date:   Sun, 20 Feb 2022 07:30:01 -0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a21:b0:2c1:a7ea:5600 with SMTP id
- g1-20020a056e021a2100b002c1a7ea5600mr9616223ile.261.1645370846311; Sun, 20
- Feb 2022 07:27:26 -0800 (PST)
-Date:   Sun, 20 Feb 2022 07:27:26 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d181a205d874c066@google.com>
-Subject: [syzbot] KASAN: slab-out-of-bounds Read in thrustmaster_probe
-From:   syzbot <syzbot+35eebd505e97d315d01c@syzkaller.appspotmail.com>
-To:     alexandre.torgue@foss.st.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        mcoquelin.stm32@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] hwmon: (dell-smm) Improve assembly code
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Armin Wolf' <W_Armin@gmx.de>,
+        "pali@kernel.org" <pali@kernel.org>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220219211011.16600-1-W_Armin@gmx.de>
+ <d66ab183f32c49b2b901b432d284edc5@AcuMS.aculab.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <d66ab183f32c49b2b901b432d284edc5@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2/20/22 04:20, David Laight wrote:
+> From: Armin Wolf
+>> Sent: 19 February 2022 21:10
+>>
+>> The new assembly code works on both 32 bit and 64 bit
+>> cpus and allows for more compiler optimisations by not
+>> requiring smm_regs to be packed. Also since the
+>> SMM handler seems to modify the carry flag, the new
+>> code informs the compiler that the flags register
+>> needs to be saved/restored. Since clang runs out of
+>> registers on 32 bit x86 when using CC_OUT, we need
+>> to execute "setc" ourself.
+> 
+> You always need to save anything from the flags register
+> inside the asm block - it is never valit afterwards.
+> 
 
-syzbot found the following issue on:
+Does that matter here ? I thought setcc is used to get the carry flag.
 
-HEAD commit:    c5d9ae265b10 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14ccc65c700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
-dashboard link: https://syzkaller.appspot.com/bug?extid=35eebd505e97d315d01c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=175ecbf2700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109973f2700000
+Guenter
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+35eebd505e97d315d01c@syzkaller.appspotmail.com
+>> Also modify the debug message so we can still see
+>> the result (eax) when the carry flag was set.
+>>
+>> Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
+>>
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> ---
+>> Changes in v2:
+>> - fix clang running out of registers on 32 bit x86
+>> - modify debug message
+>> ---
+>>   drivers/hwmon/dell-smm-hwmon.c | 85 ++++++++++------------------------
+>>   1 file changed, 25 insertions(+), 60 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+>> index c5939e68586d..f1538a46bfc9 100644
+>> --- a/drivers/hwmon/dell-smm-hwmon.c
+>> +++ b/drivers/hwmon/dell-smm-hwmon.c
+>> @@ -119,7 +119,7 @@ struct smm_regs {
+>>   	unsigned int edx;
+>>   	unsigned int esi;
+>>   	unsigned int edi;
+>> -} __packed;
+>> +};
+>>
+>>   static const char * const temp_labels[] = {
+>>   	"CPU",
+>> @@ -165,73 +165,38 @@ static int i8k_smm_func(void *par)
+>>   	int eax = regs->eax;
+>>   	int ebx = regs->ebx;
+>>   	long long duration;
+>> -	int rc;
+>> +	bool carry;
+> 
+> I'd use an explicit 'unsigned char' not bool.
+> Matches the type of the 'setcc' instriction.
+> 
+>>   	/* SMM requires CPU 0 */
+>>   	if (smp_processor_id() != 0)
+>>   		return -EBUSY;
+>>
+>> -#if defined(CONFIG_X86_64)
+>> -	asm volatile("pushq %%rax\n\t"
+>> -		"movl 0(%%rax),%%edx\n\t"
+>> -		"pushq %%rdx\n\t"
+>> -		"movl 4(%%rax),%%ebx\n\t"
+>> -		"movl 8(%%rax),%%ecx\n\t"
+>> -		"movl 12(%%rax),%%edx\n\t"
+>> -		"movl 16(%%rax),%%esi\n\t"
+>> -		"movl 20(%%rax),%%edi\n\t"
+>> -		"popq %%rax\n\t"
+>> -		"out %%al,$0xb2\n\t"
+>> -		"out %%al,$0x84\n\t"
+>> -		"xchgq %%rax,(%%rsp)\n\t"
+>> -		"movl %%ebx,4(%%rax)\n\t"
+>> -		"movl %%ecx,8(%%rax)\n\t"
+>> -		"movl %%edx,12(%%rax)\n\t"
+>> -		"movl %%esi,16(%%rax)\n\t"
+>> -		"movl %%edi,20(%%rax)\n\t"
+>> -		"popq %%rdx\n\t"
+>> -		"movl %%edx,0(%%rax)\n\t"
+>> -		"pushfq\n\t"
+>> -		"popq %%rax\n\t"
+>> -		"andl $1,%%eax\n"
+>> -		: "=a"(rc)
+>> -		:    "a"(regs)
+>> -		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
+>> -#else
+>> -	asm volatile("pushl %%eax\n\t"
+>> -	    "movl 0(%%eax),%%edx\n\t"
+>> -	    "push %%edx\n\t"
+>> -	    "movl 4(%%eax),%%ebx\n\t"
+>> -	    "movl 8(%%eax),%%ecx\n\t"
+>> -	    "movl 12(%%eax),%%edx\n\t"
+>> -	    "movl 16(%%eax),%%esi\n\t"
+>> -	    "movl 20(%%eax),%%edi\n\t"
+>> -	    "popl %%eax\n\t"
+>> -	    "out %%al,$0xb2\n\t"
+>> -	    "out %%al,$0x84\n\t"
+>> -	    "xchgl %%eax,(%%esp)\n\t"
+>> -	    "movl %%ebx,4(%%eax)\n\t"
+>> -	    "movl %%ecx,8(%%eax)\n\t"
+>> -	    "movl %%edx,12(%%eax)\n\t"
+>> -	    "movl %%esi,16(%%eax)\n\t"
+>> -	    "movl %%edi,20(%%eax)\n\t"
+>> -	    "popl %%edx\n\t"
+>> -	    "movl %%edx,0(%%eax)\n\t"
+>> -	    "lahf\n\t"
+>> -	    "shrl $8,%%eax\n\t"
+>> -	    "andl $1,%%eax\n"
+>> -	    : "=a"(rc)
+>> -	    :    "a"(regs)
+>> -	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
+>> -#endif
+>> -	if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
+>> -		rc = -EINVAL;
+>> +	asm volatile("out %%al,$0xb2\n\t"
+>> +		     "out %%al,$0x84\n\t"
+>> +		     "setc %0\n"
+>> +		     : "=mr" (carry),
+>> +		       "=a" (regs->eax),
+>> +		       "=b" (regs->ebx),
+>> +		       "=c" (regs->ecx),
+>> +		       "=d" (regs->edx),
+>> +		       "=S" (regs->esi),
+>> +		       "=D" (regs->edi)
+>> +		     : "a" (regs->eax),
+>> +		       "b" (regs->ebx),
+>> +		       "c" (regs->ecx),
+>> +		       "d" (regs->edx),
+>> +		       "S" (regs->esi),
+>> +		       "D" (regs->edi)
+> 
+> If you use "+a" (etc) for the output registers you don't
+> need to respecify them as input registers.
+> 
+>> +		     : "cc");
+> 
+> No need to specify "cc", it is always assumed clobbered.
+> 
+> 	David
+> 
+>>
+>>   	duration = ktime_us_delta(ktime_get(), calltime);
+>> -	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
+>> -		 (rc ? 0xffff : regs->eax & 0xffff), duration);
+>> +	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x carry: %d (took %7lld usecs)\n",
+>> +		 eax, ebx, regs->eax & 0xffff, carry, duration);
+>>
+>> -	return rc;
+>> +	if (carry || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
+>> +		return -EINVAL;
+>> +
+>> +	return 0;
+>>   }
+>>
+>>   /*
+>> --
+>> 2.30.2
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
 
-usb 1-1: config 0 interface 0 altsetting 0 endpoint 0x81 has invalid wMaxPacketSize 0
-usb 1-1: New USB device found, idVendor=044f, idProduct=b65d, bcdDevice= 0.40
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-hid-thrustmaster 0003:044F:B65D.0001: unknown main item tag 0x0
-hid-thrustmaster 0003:044F:B65D.0001: hidraw0: USB HID v0.00 Device [HID 044f:b65d] on usb-dummy_hcd.0-1/input0
-==================================================================
-BUG: KASAN: slab-out-of-bounds in thrustmaster_interrupts drivers/hid/hid-thrustmaster.c:162 [inline]
-BUG: KASAN: slab-out-of-bounds in thrustmaster_probe+0x8d5/0xb50 drivers/hid/hid-thrustmaster.c:330
-Read of size 1 at addr ffff88807f1a59d2 by task kworker/1:1/35
-
-CPU: 1 PID: 35 Comm: kworker/1:1 Not tainted 5.17.0-rc4-syzkaller-00051-gc5d9ae265b10 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- thrustmaster_interrupts drivers/hid/hid-thrustmaster.c:162 [inline]
- thrustmaster_probe+0x8d5/0xb50 drivers/hid/hid-thrustmaster.c:330
- hid_device_probe+0x2bd/0x3f0 drivers/hid/hid-core.c:2380
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:752
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:782
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:899
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:970
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xb83/0x1e20 drivers/base/core.c:3405
- hid_add_device+0x344/0x9d0 drivers/hid/hid-core.c:2530
- usbhid_probe+0xbf4/0x1070 drivers/hid/usbhid/hid-core.c:1424
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:752
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:782
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:899
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:970
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xb83/0x1e20 drivers/base/core.c:3405
- usb_set_configuration+0x101e/0x1900 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:752
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:782
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:899
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:970
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xb83/0x1e20 drivers/base/core.c:3405
- usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x2585/0x44d0 drivers/usb/core/hub.c:5742
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-Allocated by task 35:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
- kmalloc include/linux/slab.h:586 [inline]
- kzalloc include/linux/slab.h:715 [inline]
- usb_parse_interface drivers/usb/core/config.c:571 [inline]
- usb_parse_configuration drivers/usb/core/config.c:795 [inline]
- usb_get_configuration+0x1394/0x3b30 drivers/usb/core/config.c:944
- usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
- usb_new_device+0x583/0x7d0 drivers/usb/core/hub.c:2536
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x2585/0x44d0 drivers/usb/core/hub.c:5742
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-The buggy address belongs to the object at ffff88807f1a5980
- which belongs to the cache kmalloc-96 of size 96
-The buggy address is located 82 bytes inside of
- 96-byte region [ffff88807f1a5980, ffff88807f1a59e0)
-The buggy address belongs to the page:
-page:ffffea0001fc6940 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7f1a5
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea0000702fc0 dead000000000007 ffff888010c41780
-raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY), pid 2966, ts 25259400428, free_ts 25234590946
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x27f/0x3c0 mm/slub.c:1944
- new_slab mm/slub.c:2004 [inline]
- ___slab_alloc+0xbe1/0x12b0 mm/slub.c:3018
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
- slab_alloc_node mm/slub.c:3196 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- __kmalloc+0x372/0x450 mm/slub.c:4420
- kmalloc include/linux/slab.h:586 [inline]
- kzalloc include/linux/slab.h:715 [inline]
- tomoyo_encode2.part.0+0xe9/0x3a0 security/tomoyo/realpath.c:45
- tomoyo_encode2 security/tomoyo/realpath.c:31 [inline]
- tomoyo_encode+0x28/0x50 security/tomoyo/realpath.c:80
- tomoyo_realpath_from_path+0x186/0x620 security/tomoyo/realpath.c:288
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_check_open_permission+0x272/0x380 security/tomoyo/file.c:771
- tomoyo_file_open security/tomoyo/tomoyo.c:311 [inline]
- tomoyo_file_open+0xa3/0xd0 security/tomoyo/tomoyo.c:306
- security_file_open+0x45/0xb0 security/security.c:1638
- do_dentry_open+0x358/0x1250 fs/open.c:811
- do_open fs/namei.c:3476 [inline]
- path_openat+0x1c9e/0x2940 fs/namei.c:3609
- do_filp_open+0x1aa/0x400 fs/namei.c:3636
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3404
- qlink_free mm/kasan/quarantine.c:157 [inline]
- qlist_free_all+0x6d/0x160 mm/kasan/quarantine.c:176
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
- kasan_slab_alloc include/linux/kasan.h:260 [inline]
- slab_post_alloc_hook mm/slab.h:732 [inline]
- slab_alloc_node mm/slub.c:3230 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- kmem_cache_alloc+0x271/0x4b0 mm/slub.c:3243
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:138
- getname_flags include/linux/audit.h:323 [inline]
- getname+0x8e/0xd0 fs/namei.c:217
- do_sys_openat2+0xf5/0x4d0 fs/open.c:1208
- do_sys_open fs/open.c:1230 [inline]
- __do_sys_openat fs/open.c:1246 [inline]
- __se_sys_openat fs/open.c:1241 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1241
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Memory state around the buggy address:
- ffff88807f1a5880: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
- ffff88807f1a5900: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
->ffff88807f1a5980: 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc
-                                                 ^
- ffff88807f1a5a00: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff88807f1a5a80: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
-==================================================================
-Disabling 
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches

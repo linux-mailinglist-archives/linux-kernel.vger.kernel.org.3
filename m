@@ -2,42 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7C74BD23D
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD224BD23C
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 23:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242019AbiBTWZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 17:25:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44280 "EHLO
+        id S243402AbiBTWZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 17:25:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiBTWY7 (ORCPT
+        with ESMTP id S230124AbiBTWZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 17:24:59 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A11E4B420;
-        Sun, 20 Feb 2022 14:24:37 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 11D3A1C0B77; Sun, 20 Feb 2022 23:24:35 +0100 (CET)
-Date:   Sun, 20 Feb 2022 23:24:34 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: =?iso-8859-1?Q?Ad?=
- =?iso-8859-1?Q?d_Pali_Roh=E1r?= as mvebu-uart.c maintainer
-Message-ID: <20220220222434.GA18143@duo.ucw.cz>
-References: <20220214124808.31971-1-pali@kernel.org>
- <YgpVaR421wQYx9mt@kroah.com>
- <20220214140641.v2wlfr43lqgxvw7e@pali>
+        Sun, 20 Feb 2022 17:25:21 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB784B422
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 14:24:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645395898; x=1676931898;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8yVec26YHClupi0fsuGFWOpxfzI/CfAdr+fJvawyFx0=;
+  b=eu+WlwjoeHTMGSyGHxJvyn6ME6ZCLR+z/xRE6NhD/Zou0+qeCd8tZfdX
+   mHwzCmWJfyhDi/69G1nyFnrMYNGV94wZCoR6tUTT2niKMQTaDIFRChhqT
+   U/Nfb10BIOJoo6EHGCk3+APwz+iLBZ6CWskMOpF+lr/DxaXb0YJk/g2LK
+   YGPUiR/55o0M1BN+RReySaO8YOJqtkL5GqKaYVzWwX/FHCto1kGFZqfsi
+   E/Dz79wXr+Ai5/ErfvT1x9EpQsJVREirHCSYc4WwJ1XJzr2UrYzO07xyR
+   3Huc/xSJos4tNhwzFXVYlImaK7nA2BsmxPYWtzk5wld+/2yOfnfOcCbRx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="234946937"
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="234946937"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 14:24:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="547098710"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Feb 2022 14:24:55 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLudS-0000vp-Sv; Sun, 20 Feb 2022 22:24:54 +0000
+Date:   Mon, 21 Feb 2022 06:24:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/100-shutdown-notifier 20/20]
+ drivers/regulator/pfuze100-regulator.c:619:6: error: use of undeclared
+ identifier 'pm_power_off_prepare'; did you mean 'pfuze_power_off_prepare'?
+Message-ID: <202202210643.6maPZZt9-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="82I3+IH0IqGh5yIs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220214140641.v2wlfr43lqgxvw7e@pali>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,38 +63,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/AsahiLinux/linux bits/100-shutdown-notifier
+head:   cd8e473345d65a9162b255d1997fa89c86280cde
+commit: cd8e473345d65a9162b255d1997fa89c86280cde [20/20] reboot: Remove pm_power_off_prepare()
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220221/202202210643.6maPZZt9-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/cd8e473345d65a9162b255d1997fa89c86280cde
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/100-shutdown-notifier
+        git checkout cd8e473345d65a9162b255d1997fa89c86280cde
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/regulator/
 
---82I3+IH0IqGh5yIs
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Mon 2022-02-14 15:06:41, Pali Roh=E1r wrote:
-> On Monday 14 February 2022 14:13:13 Greg Kroah-Hartman wrote:
-> > On Mon, Feb 14, 2022 at 01:48:08PM +0100, Pali Roh=E1r wrote:
-> > > Signed-off-by: Pali Roh=E1r <pali@kernel.org>
-> >=20
-> > I can not take patches without any changelog text, sorry.
->=20
-> Well, I'm the only one who has been working on this driver recently and
-> I have development boards with this UART HW.
+All errors (new ones prefixed by >>):
 
-Greg wants to say that you need to copy subject into changelog body,
-so that it is non-empty.
+>> drivers/regulator/pfuze100-regulator.c:619:6: error: use of undeclared identifier 'pm_power_off_prepare'; did you mean 'pfuze_power_off_prepare'?
+           if (pm_power_off_prepare) {
+               ^~~~~~~~~~~~~~~~~~~~
+               pfuze_power_off_prepare
+   drivers/regulator/pfuze100-regulator.c:574:13: note: 'pfuze_power_off_prepare' declared here
+   static void pfuze_power_off_prepare(void)
+               ^
+   drivers/regulator/pfuze100-regulator.c:630:2: error: use of undeclared identifier 'pm_power_off_prepare'
+           pm_power_off_prepare = pfuze_power_off_prepare;
+           ^
+   drivers/regulator/pfuze100-regulator.c:844:3: error: use of undeclared identifier 'pm_power_off_prepare'
+                   pm_power_off_prepare = NULL;
+                   ^
+   3 errors generated.
 
-Best regards,
-								Pavel
---=20
-http://www.livejournal.com/~pavelmachek
 
---82I3+IH0IqGh5yIs
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +619 drivers/regulator/pfuze100-regulator.c
 
------BEGIN PGP SIGNATURE-----
+c29daffa322ad3 Oleksij Rempel 2018-08-02  611  
+c29daffa322ad3 Oleksij Rempel 2018-08-02  612  static int pfuze_power_off_prepare_init(struct pfuze_chip *pfuze_chip)
+c29daffa322ad3 Oleksij Rempel 2018-08-02  613  {
+c29daffa322ad3 Oleksij Rempel 2018-08-02  614  	if (pfuze_chip->chip_id != PFUZE100) {
+c29daffa322ad3 Oleksij Rempel 2018-08-02  615  		dev_warn(pfuze_chip->dev, "Requested pm_power_off_prepare handler for not supported chip\n");
+c29daffa322ad3 Oleksij Rempel 2018-08-02  616  		return -ENODEV;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  617  	}
+c29daffa322ad3 Oleksij Rempel 2018-08-02  618  
+c29daffa322ad3 Oleksij Rempel 2018-08-02 @619  	if (pm_power_off_prepare) {
+c29daffa322ad3 Oleksij Rempel 2018-08-02  620  		dev_warn(pfuze_chip->dev, "pm_power_off_prepare is already registered.\n");
+c29daffa322ad3 Oleksij Rempel 2018-08-02  621  		return -EBUSY;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  622  	}
+c29daffa322ad3 Oleksij Rempel 2018-08-02  623  
+c29daffa322ad3 Oleksij Rempel 2018-08-02  624  	if (syspm_pfuze_chip) {
+c29daffa322ad3 Oleksij Rempel 2018-08-02  625  		dev_warn(pfuze_chip->dev, "syspm_pfuze_chip is already set.\n");
+c29daffa322ad3 Oleksij Rempel 2018-08-02  626  		return -EBUSY;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  627  	}
+c29daffa322ad3 Oleksij Rempel 2018-08-02  628  
+c29daffa322ad3 Oleksij Rempel 2018-08-02  629  	syspm_pfuze_chip = pfuze_chip;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  630  	pm_power_off_prepare = pfuze_power_off_prepare;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  631  
+c29daffa322ad3 Oleksij Rempel 2018-08-02  632  	return 0;
+c29daffa322ad3 Oleksij Rempel 2018-08-02  633  }
+c29daffa322ad3 Oleksij Rempel 2018-08-02  634  
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYhK/ogAKCRAw5/Bqldv6
-8lBpAKCaKh1tBvFkqgS8PFmECs4rIaOEqgCguGaq8H88u5b8qqWuD1q8FIamUgU=
-=KTOC
------END PGP SIGNATURE-----
+:::::: The code at line 619 was first introduced by commit
+:::::: c29daffa322ad36978cbce487f8ebcd9c3c3f7c0 regulator: pfuze100-regulator: provide pm_power_off_prepare handler
 
---82I3+IH0IqGh5yIs--
+:::::: TO: Oleksij Rempel <o.rempel@pengutronix.de>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

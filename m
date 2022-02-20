@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9C94BD13B
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 21:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6DF4BD149
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 21:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244800AbiBTUPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 15:15:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35264 "EHLO
+        id S244816AbiBTUUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 15:20:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239546AbiBTUPh (ORCPT
+        with ESMTP id S236782AbiBTUUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 15:15:37 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3651E4C42E;
-        Sun, 20 Feb 2022 12:15:15 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id e17so11806497ljk.5;
-        Sun, 20 Feb 2022 12:15:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dXOCiPEEwmti8ibCuzkAcx2DIodwzBlROl4n6OrpWLA=;
-        b=IIfYoPI0PkCdIrxYAoTKVdxPxjqqtZnRFD3KW4M2hzPNVrrkOkledY7EUk+AgpSeET
-         Y3XF9jYzYVUfCUDZsJA/Dkg5g3AgnELSo+CtGyOFABRc4sJByu6Lnj867gC5OMWfL1ib
-         fhHE8SPIztfjWVnEapo+APWjKAL47C52/hDy2OKHAmX32PrVnSSVGo0S2FE6r//riTCb
-         TR09bmLRJhslXaJ+o1y5Hvn60x8Mduhj71wMOiGMTAGV6fEezAFUZJ6gjgkuZm0a80yt
-         Mi+ZyV9SOtC5A2VOCa1dxybQviIUbehx84kuDmw5DpWaGmy6jgYTID5onH4O4OvwFBWJ
-         a/bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dXOCiPEEwmti8ibCuzkAcx2DIodwzBlROl4n6OrpWLA=;
-        b=7BCSeLTrGmbdo1ZX70g384zFPdoPvBBx5cwRqTIk9CjISHyKu+Pk8MXINLUjwkyxLm
-         k2n4JErtCDeWXebl3pu0yF3/yf0yH20YWZn+OdD4e0YaIN1TWIpRxlTNio4GKRpdwslL
-         kzsS27OyPYZmCwWp9Rowsrl/B+VnBHeaiMpRhSHp/aZZqDXf38R2yKLnqA1+vmeNZRbe
-         3f/SOhTEBOcsjPghjCLaWYTxQ8nZOUynt12Wj3HgDi0wbBRo7JwUcjNMpKvAZcdU6CQP
-         r9fE94grUqZMYzFwAUQRXNLX7SrJetpilgOrVFAyrNJbZkf7a574nbp+VByeNaPnUhtJ
-         U+Jg==
-X-Gm-Message-State: AOAM532Gluij43LKl3vbWTFsTkG5K8Ez+hnG4xDTBq96q3ZV4gGLzcKT
-        5YNJGAz4qsgctc8L2SbPInU=
-X-Google-Smtp-Source: ABdhPJxXKceyNpOErYJDtGbFb4g2BM3td7Ivga45OGPy7O0fu/ejgZCYMzvN/GoS6Jvhp/C+t+TZHA==
-X-Received: by 2002:a2e:b533:0:b0:246:30e1:d6c9 with SMTP id z19-20020a2eb533000000b0024630e1d6c9mr5311007ljm.515.1645388113498;
-        Sun, 20 Feb 2022 12:15:13 -0800 (PST)
-Received: from [10.0.0.127] (91-153-170-164.elisa-laajakaista.fi. [91.153.170.164])
-        by smtp.gmail.com with ESMTPSA id c11sm904857lfm.32.2022.02.20.12.15.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Feb 2022 12:15:13 -0800 (PST)
-Message-ID: <5c4253a7-3e11-72cf-24e4-eb75512eaaa3@gmail.com>
-Date:   Sun, 20 Feb 2022 22:16:08 +0200
+        Sun, 20 Feb 2022 15:20:04 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADFC4C43C;
+        Sun, 20 Feb 2022 12:19:42 -0800 (PST)
+Received: from localhost.localdomain (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 0A706C6D5A;
+        Sun, 20 Feb 2022 20:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1645388380; bh=m6+0G7kMhIz7HsIPX/lDQc+bJdPk1YftvzsitotuDew=;
+        h=From:To:Cc:Subject:Date;
+        b=K+bXim3X2qVn78qrWNwVF9x83UOent1HzpLSuC/FDJoIX49K2/c5PhDo4MoB1TP8y
+         S7vJZBjFwYXS6DMDqnEX7HQJI6o5iBi+qD0z2XrABZ/6AH4dmnhDpZaNVs26MHuvod
+         CiZk15Ff0Lx4+HzTTqircIuMJ8xfHsdXtFRXRYZQ=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Amit Kucheria <amitk@kernel.org>,
+        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hector Martin <marcan@marcan.st>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2 00/10] Initial MSM8953 & Fairphone 3 support
+Date:   Sun, 20 Feb 2022 21:18:53 +0100
+Message-Id: <20220220201909.445468-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 0/2] dmaengine: ti: k3-udma: Add support for AM62x SoC
-Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
-References: <20220219083220.489420-1-vigneshr@ti.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20220219083220.489420-1-vigneshr@ti.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vignesh,
+This series adds initial support for MSM8953 (and SDM632 which is based
+on MSM8953) and the Fairphone 3 smartphone.
 
-On 19/02/2022 10:32, Vignesh Raghavendra wrote:
-> Add AM62x SoC specific data for k3-udma driver
-> 
-> TRM: https://www.ti.com/lit/pdf/spruiv7
+Only relatively basic functionality is supported like storage, volume
+keys and USB.
 
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+There is currently close-to-mainline support for other components for
+this SoC including GPU, WiFi and audio, this series adds only basic
+support so that the other components can start getting upstreamed
+easier.
 
-> 
-> Vignesh Raghavendra (2):
->   dmaengine: ti: k3-udma: Add AM62x DMSS support
->   dmaengine: ti: k3-psil: Add AM62x PSIL and PDMA data
-> 
->  drivers/dma/ti/Makefile       |   3 +-
->  drivers/dma/ti/k3-psil-am62.c | 186 ++++++++++++++++++++++++++++++++++
->  drivers/dma/ti/k3-psil-priv.h |   1 +
->  drivers/dma/ti/k3-psil.c      |   1 +
->  drivers/dma/ti/k3-udma.c      |   1 +
->  5 files changed, 191 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/dma/ti/k3-psil-am62.c
-> 
+Changes in v2:
+- rebase on linux-next and drop already applied patches
+- drop msm8953-pm8953.dtsi patch: integrate changes into FP3 patch
+- for individual patches for other changes
+
+Luca Weiss (7):
+  dt-bindings: mfd: qcom,tcsr: Document msm8953 compatible
+  dt-bindings: thermal: tsens: Add msm8953 compatible
+  dt-bindings: usb: qcom,dwc3: Add msm8953 compatible
+  dt-bindings: arm: cpus: Add Kryo 250 CPUs
+  rpmsg: smd: allow opening rpm_requests even if already opened
+  dt-bindings: arm: qcom: Document sdm632 and fairphone,fp3 board
+  arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
+
+Vladimir Lypak (3):
+  arm64: dts: qcom: Add MSM8953 device tree
+  arm64: dts: qcom: Add PM8953 PMIC
+  arm64: dts: qcom: Add SDM632 device tree
+
+ .../devicetree/bindings/arm/cpus.yaml         |    1 +
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ .../devicetree/bindings/mfd/qcom,tcsr.txt     |    1 +
+ .../bindings/thermal/qcom-tsens.yaml          |    1 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         | 1326 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |   90 ++
+ .../boot/dts/qcom/sdm632-fairphone-fp3.dts    |  183 +++
+ arch/arm64/boot/dts/qcom/sdm632.dtsi          |   81 +
+ drivers/rpmsg/qcom_smd.c                      |    5 +-
+ 11 files changed, 1695 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632.dtsi
 
 -- 
-Péter
+2.35.1
+

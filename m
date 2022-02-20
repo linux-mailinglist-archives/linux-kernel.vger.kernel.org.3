@@ -2,209 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A91C4BCBAE
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 03:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A414BCBBD
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 03:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbiBTCZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 21:25:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51850 "EHLO
+        id S238793AbiBTCrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 21:47:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiBTCZM (ORCPT
+        with ESMTP id S230431AbiBTCq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 21:25:12 -0500
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7E53982C;
-        Sat, 19 Feb 2022 18:24:51 -0800 (PST)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 21K2OYoS018707;
-        Sun, 20 Feb 2022 11:24:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 21K2OYoS018707
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1645323875;
-        bh=O34aX6v+SKBXjsgb5h1Ozq31/g4h4Tgi9RBNyvaw98E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RXxga2KOzm3r4xhrcXPo6WQHVRnq7i4PT7bm4MiWn4/nz17E9JHi5bfzce/yA9PRv
-         GWJcfiwEHloEt6kPMDjR4InJe/PFv00y0JFtxcPPL2GmlJ23hQd6kPojp0ehht/U/J
-         LYqgSyU+vrZx3OzuSvk1OWvdxQr9zK4Bw8yoOHXkrGu46YwEec2A5GWwLgc97pXiPt
-         niIk1YkpJwtFCFkD8P6RGzDg+rjWS/g2Yi/HXA18Gv/ytGG1pjbsvb8DxsO3x3igB8
-         6orv4Wt8aw4ONSsZ/YEe2mR9WQ+F1IMOK7q3EKXC5uVPKMKDnlc5BugeZNfbAkyixA
-         Mjr45NxSnE3yQ==
-X-Nifty-SrcIP: [209.85.214.171]
-Received: by mail-pl1-f171.google.com with SMTP id w20so10131433plq.12;
-        Sat, 19 Feb 2022 18:24:35 -0800 (PST)
-X-Gm-Message-State: AOAM532JXjgfAKWOV1j6TIj/aNsBfHaVVu3QfmvZvAvHPfUgsMivDyiY
-        I61TkJm3BLF/nxd4/7bdPNKkjfxRZKYFkM764bg=
-X-Google-Smtp-Source: ABdhPJw0wfu9KLEhzJIJyk0BbMkomyu4Z2OGapPuWgbFerBCzpcR7tJFuPaSxqyY4ATdUPXhuNyqTLVEHLWK6wDsdlw=
-X-Received: by 2002:a17:902:d2d1:b0:149:732e:d335 with SMTP id
- n17-20020a170902d2d100b00149732ed335mr13611492plc.136.1645323874224; Sat, 19
- Feb 2022 18:24:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20211213100043.45645-1-arielmarcovitch@gmail.com>
- <20211213100043.45645-2-arielmarcovitch@gmail.com> <CAK7LNAS+Df_V-B9Qy_39hgUZF1b6UeiHQ5m-25JekiVYSQ67dQ@mail.gmail.com>
- <26d74eaa-5c6a-4103-cf77-1356173a3978@gmail.com>
-In-Reply-To: <26d74eaa-5c6a-4103-cf77-1356173a3978@gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 20 Feb 2022 11:23:56 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARd8S9V07Z1kE5GtjoV=s2W8Of9=nX-tsAGe9BaxAf2FA@mail.gmail.com>
-Message-ID: <CAK7LNARd8S9V07Z1kE5GtjoV=s2W8Of9=nX-tsAGe9BaxAf2FA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kconfig: Show menuconfigs as menus in the .config file
-To:     Ariel Marcovitch <arielmarcovitch@gmail.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Sat, 19 Feb 2022 21:46:58 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FDD5FA0;
+        Sat, 19 Feb 2022 18:46:37 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 132so11233140pga.5;
+        Sat, 19 Feb 2022 18:46:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=j08tqWBEN8h5E9YAL/mlMShWRnLDdiaTyKWwQQyWLNc=;
+        b=Z+J/50E99oxKUrebYU0PNuHC3HioU3MRIqrj+OikTOW9pU+oNj5ela/0bX9ThlJShc
+         veMYhv75jt3ExqLWXWk/uFProit/bYozw9BRf0BUJBc7b+LP16OsAgH5HOYecki1uUZ5
+         3owG9UUQiO6d1XGIHzdhYwLTYWCqCr+ZckJpZ/yTeePkEtgeWr8rk5TToVZ94WAva7GD
+         lL+Sb1rwwJHH1Edb9plriXJRY/N38bWgPGQbWpUgvkpL6T3K8rhh891QCNnMnuPyeHy1
+         h1lI9tHYdkMtKFDbjmg/Hl2BOVFW5s3hAU3/8497n4MOdUdGzKJIHXx/ZjPIKTTplw9a
+         Y9xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=j08tqWBEN8h5E9YAL/mlMShWRnLDdiaTyKWwQQyWLNc=;
+        b=EsI25Hw5F635VKGe1eN8Lgmlm/L2ijHUO3Ruq2ivAn5dh6fG7HU+fKCrRCSTEsw2lj
+         IrviKIp0ird20asB/g5NTgizIoYA7iXZgJhgn6xgJAovlxV3To/HA3xnb9Bm9TWghkhf
+         vkaOKb0oD9awmp9tnFAP043Em/2ukUWD93a42PBqJnpfQGxcdNkrdQIbDuG6zduh89kv
+         MMibb9f5vtDeHjVSqJv369o1nq4esKYq+wxhbRUdktlTB+xeDkT83cTDUroC/TAtVAgc
+         e1ppajIvOMU/YUBaOpUl/Noc0QM0v7AHZS7HHwNF5wzYrGaO8aVoR4192rY8DfbSoh1f
+         tnpA==
+X-Gm-Message-State: AOAM531+H2GD/sstoNK6eovhUCk6UTmELIXFgkRxlZO9dsAT6ta2PWkI
+        olme/yDrzO/ns++N7QjHZl4=
+X-Google-Smtp-Source: ABdhPJzmdYqoxrt26EOLftsJtDYYhE+hpXj3Mr4y7RjSpQ+GD7UHbbl9qDx9WOz+A61he3D3gsGEsQ==
+X-Received: by 2002:a63:10c:0:b0:36c:6dd0:44af with SMTP id 12-20020a63010c000000b0036c6dd044afmr11571935pgb.41.1645325196978;
+        Sat, 19 Feb 2022 18:46:36 -0800 (PST)
+Received: from localhost.localdomain ([116.73.72.178])
+        by smtp.gmail.com with ESMTPSA id lw16sm3488761pjb.51.2022.02.19.18.46.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Feb 2022 18:46:36 -0800 (PST)
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     jic23@kernel.org, lars@metafoo.de, andy.shevchenko@gmail.com,
+        sst@poczta.fm, robh+dt@kernel.org
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/7] iio: potentiometer: Add support for DS3502
+Date:   Sun, 20 Feb 2022 08:16:25 +0530
+Message-Id: <20220220024632.4183-1-jagathjog1996@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 19, 2022 at 3:39 AM Ariel Marcovitch
-<arielmarcovitch@gmail.com> wrote:
->
-> Hello!
->
-> On 18/01/2022 20:20, Masahiro Yamada wrote:
-> > On Mon, Dec 13, 2021 at 7:01 PM Ariel Marcovitch
-> > <arielmarcovitch@gmail.com> wrote:
-> >> Until now, menuconfigs were considered configs because they had non-zero
-> >> sym attribute. This meant that instead of having the nice menu comment
-> >> block in the .config output file, they were merely shown as single
-> >> configs.
-> >>
-> >> For example:
-> >> ```Kconfig
-> >> menu "Foo"
-> >> endmenu
-> >>
-> >> menuconfig BAR
-> >>          bool "Bar"
-> >>
-> >> config OTHER
-> >>          bool "Other"
-> >>          depends on BAR
-> >> ```
-> >>
-> >> Will be shown as:
-> >> ```.config
-> >>   #
-> >>   # Foo
-> >>   #
-> >>   # end of Foo
-> >
-> > I am OK with this patch.
-> >
-> > Just a nit.
-> >
-> > As far as I tested your sample code (without applying this patch),
-> > I did not see the line "# end of Foo".
-> >
-> > The line "# end of ..." is printed when the last child gets back to
-> > its parent, but the "Foo" menu has no child menu here.
-> >
-> > This is out of scope of this patch, but can you update the
-> > commit log so it matches the current behavior?
->
-> I saw you added a patch to change that, so now the code sample here is
-> less of a lie :)
->
-> I learned my message of never adding code samples to commit messages
-> without testing these as well :)
->
-> So is it ready now to be applied on top of your change?
+Add dt-bindings and support for Maxim DS3502 into existing ds1803 driver.
+DS3502 is a 7 bit Nonvolatile Digital Potentiometer.
 
+Changes since v3:
+1. Dropped the chip type switch statement in read_raw function.
+2. Added device specific read function pointer in their structure.
+3. Added two separate functions to read values from two different types
+   of devices.
 
-Yes, v2 please.
+Changes since v2:
+1. Addressed Andy Shevchenko comments.
+2. Adding device name in Kconfig file.
+3. Spliting up of patch into 3 patches.
+4. Adding channel info into ds1803_cfg in separate patch.
+5. Dropping the use of enum in firmware data instead using previous
+   pointer method for accessing device specific data.
+6. Separate patch for using firmware provided data instead of 
+   id->driver_data.
+7. Adding DS3502 support in separate patch.
 
+Changes since v1:
+1. Fixes the alignment to match the open parenthesis in separate patch.
+2. Adding available functionality for ds1803 driver in separate patch.
+3. Moving maxim_potentiometer members into ds1803_cfg structure.
+4. Droping of the INFO_ENABLE channel type.
+5. Firmware entry with data is used instead of id->driver_data to
+   to retrieve the chip specific data.
 
+Jagath Jog J (7):
+  iio: potentiometer: Alignment to match the open parenthesis
+  iio: potentiometer: Add available functionality
+  iio: potentiometer: Add channel information in device data
+  iio: potentiometer: Change to firmware provided data
+  iio: potentiometer: Add device specific read_raw function
+  iio: potentiometer: Add support for Maxim DS3502
+  dt-bindings: iio: potentiometer: Add Maxim DS3502 in trivial-devices
 
-
-
-
-
-
-
-
-> > (or add one config into the "Foo" menu)
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >>   CONFIG_BAR=y
-> >>   CONFIG_OTHER=y
-> >> ```
-> >>
-> >> Instead of using the sym attribute to decide whether or not to print the
-> >> menu block comment, check menu->prompt->type explicitly (after checking
-> >> that menu_is_visible(menu) which means menu->prompt is not none). The
-> >> only prompt types we actually show as menus are P_MENU and P_COMMENT. At
-> >> the end of the menu we need to show the end of block only for P_MENU
-> >> (although P_COMMENT prompts will not get to this flow because they don't
-> >> have children).
-> >>
-> >> Signed-off-by: Ariel Marcovitch <arielmarcovitch@gmail.com>
-> >> ---
-> >>   scripts/kconfig/confdata.c | 28 +++++++++++++++++-----------
-> >>   1 file changed, 17 insertions(+), 11 deletions(-)
-> >>
-> >> diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
-> >> index 42bc56ee238c..9f2c22f46ee0 100644
-> >> --- a/scripts/kconfig/confdata.c
-> >> +++ b/scripts/kconfig/confdata.c
-> >> @@ -874,16 +874,21 @@ int conf_write(const char *name)
-> >>          menu = rootmenu.list;
-> >>          while (menu) {
-> >>                  sym = menu->sym;
-> >> -               if (!sym) {
-> >> -                       if (!menu_is_visible(menu))
-> >> -                               goto next;
-> >> -                       str = menu_get_prompt(menu);
-> >> -                       fprintf(out, "\n"
-> >> -                                    "#\n"
-> >> -                                    "# %s\n"
-> >> -                                    "#\n", str);
-> >> -                       need_newline = false;
-> >> -               } else if (!(sym->flags & SYMBOL_CHOICE) &&
-> >> +
-> >> +               if (menu_is_visible(menu)) {
-> >> +                       enum prop_type type = menu->prompt->type;
-> >> +
-> >> +                       if (type == P_MENU || type == P_COMMENT) {
-> >> +                               str = menu_get_prompt(menu);
-> >> +                               fprintf(out, "\n"
-> >> +                                       "#\n"
-> >> +                                       "# %s\n"
-> >> +                                       "#\n", str);
-> >> +                               need_newline = false;
-> >> +                       }
-> >> +               }
-> >> +
-> >> +               if (sym && !(sym->flags & SYMBOL_CHOICE) &&
-> >>                             !(sym->flags & SYMBOL_WRITTEN)) {
-> >>                          sym_calc_value(sym);
-> >>                          if (!(sym->flags & SYMBOL_WRITE))
-> >> @@ -904,7 +909,8 @@ int conf_write(const char *name)
-> >>                  if (menu->next)
-> >>                          menu = menu->next;
-> >>                  else while ((menu = menu->parent)) {
-> >> -                       if (!menu->sym && menu_is_visible(menu) &&
-> >> +                       if (menu_is_visible(menu) &&
-> >> +                           menu->prompt->type == P_MENU &&
-> >>                              menu != &rootmenu) {
-> >>                                  str = menu_get_prompt(menu);
-> >>                                  fprintf(out, "# end of %s\n", str);
-> >> --
-> >> 2.25.1
-> >>
-
-
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ drivers/iio/potentiometer/Kconfig             |   6 +-
+ drivers/iio/potentiometer/ds1803.c            | 153 +++++++++++++-----
+ 3 files changed, 121 insertions(+), 40 deletions(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.17.1
+

@@ -2,100 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D8B4BCEEE
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BC34BCF0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243971AbiBTOG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 09:06:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51240 "EHLO
+        id S243968AbiBTOKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 09:10:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243937AbiBTOGU (ORCPT
+        with ESMTP id S243167AbiBTOKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 09:06:20 -0500
-X-Greylist: delayed 933 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Feb 2022 06:05:54 PST
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F07145ADF;
-        Sun, 20 Feb 2022 06:05:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=MZoKb9hkNy/YztJH3jvZm9vX6HmaFd7kAfLYZurpauA=; b=a8zes3mxnr/TOyTPcpl0nLcQ6H
-        uv2+tS8gusHLD+d2ffEPstRMlA3g9WBeDnVDwJqY1JSOmzx4+e4FK/IMy6r9aDhzzamvpeoByiojl
-        bh3Ta4EPsHbsTqOEheeLYoZVQAWOukImlI3boNy2daoocd/ZcSZ6fzBY7a47nbImQIsk4oV3lgZGK
-        /eG4HqADjHCm20tmUkUK41FtUUHE5KKGTS04JM6TjxBhIUhzn+zghyVFKkF7VjCaJM+UHKt3v1+i2
-        1+MyM5aFpHSxey2JqZ4HmtcglLt8JfjwZ9rwuuzqbwk8W6Z1rrbi7cVTtviXHMSshcqr4M6Ppd4eE
-        tT4ZfVAA==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1nLmbS-000DRK-Gf; Sun, 20 Feb 2022 14:50:18 +0100
-Received: from [62.216.202.16] (helo=[192.168.178.36])
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1nLmbS-000C96-21; Sun, 20 Feb 2022 14:50:18 +0100
-Message-ID: <0a606181-b51b-526a-7166-2f2a362dc8d6@metafoo.de>
-Date:   Sun, 20 Feb 2022 14:50:17 +0100
+        Sun, 20 Feb 2022 09:10:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7F84B40F;
+        Sun, 20 Feb 2022 06:10:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EE6E61183;
+        Sun, 20 Feb 2022 14:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C805C340F1;
+        Sun, 20 Feb 2022 14:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645366222;
+        bh=x1e9WpSJg6pvlqSnU+CmONdE9nG45brjpDmAsA5OPIs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HSzc5C+f500FabQaLUIL9WfnxM/e0LIj8Xqt62uA8JPFLQJMO6550p9Qe8OZ0MawZ
+         bolGQTUNDSRhahq+7/rM6ZW59EZ0j7eBK5SABWUOfNoIM2+aNes+IDCg6QmvAtiPJ8
+         c4VFSrYTPZryXv9RfNsYMSb3d6WgohmspCG+W0O35+VKrTQUH68JOo7sqO/MLYNEsl
+         D8LG4oVc3G8B/Gwr6M3xJc4tQfhxgprQokGXIHwBbrq4g0mI2h9UTZ2iX2xHTuLAiw
+         EQXJsWeopiiku4YWGMeuVJCg9M5wikxBzNBYf21eflQn7MO3KzmvBmbsNvB+KYydbD
+         Q/ERIyK5QYMqw==
+Date:   Sun, 20 Feb 2022 19:40:17 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dma <dmaengine@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL]: dmaengine fixes for v5.17
+Message-ID: <YhJLyWF5PZvc242o@matsya>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH] iio: core: provide a default value `label` property
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Nandor Han <nandor.han@vaisala.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220216135604.3435769-1-nandor.han@vaisala.com>
- <20220220131809.1bc184e0@jic23-huawei>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <20220220131809.1bc184e0@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26459/Sun Feb 20 10:22:37 2022)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="z++uS9hCUogcDo3u"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/22 14:18, Jonathan Cameron wrote:
-> On Wed, 16 Feb 2022 15:56:04 +0200
-> Nandor Han <nandor.han@vaisala.com> wrote:
->
->> The label property is used to correctly identify the same IIO device
->> over reboots. The implementation requires that a value will be provided
->> through device-tree. This sometime could requires many changes to
->> device-trees when multiple devices want to use the label property.
->> In order to prevent this, we could use the device-tree node
->> name as default value. The device-tree node name is unique and
->> also reflects the device which makes it a good choice as default value.
->> This change is backward compatible since doesn't affect the users that
->> do configure a label using the device-tree or the ones that are not
->> using the labels at all.
->>
->> Use the device-tree node name as a default value for `label` property,
->> in case there isn't one configured through device-tree.
-> Interesting idea.  However a few concerns come to mind.
-> 1) If we start having a default for this, then it will get used as ABI
->     and if a label is applied later to the DT then we will end up breaking
->     userspace scripts.
-> 2) If we do this it should be firmware agnostics (we need to fix
->     the existing code to be such as well).
-> 3) Is the node name always unique (think multiple accelerometers on
->     different i2c masters)?
-> 3) I'm fairly sure this information is readily available anyway.
->     either via the of_node link for the iio\:deviceX
->     So why not have your usespace use that instead of label?
->     I'm not a fan of duplicating information that is readily available
->     anyway - be it as name and reg in the of_node directory.
 
-I'm not a big fan of this either for the above reasons.
+--z++uS9hCUogcDo3u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello Linus,
 
+Please pull to receive updates for v5.17.
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git tags/dm=
+aengine-fix-5.17
+
+for you to fetch changes up to 455896c53d5b803733ddd84e1bf8a430644439b6:
+
+  dmaengine: shdma: Fix runtime PM imbalance on error (2022-02-15 11:04:16 =
++0530)
+
+----------------------------------------------------------------
+dmaengine fixes for v5.17
+
+Bunch of driver fixes for:
+ - ptdma error handling in init
+ - lock fix in at_hdmac
+ - error path and error num fix for sh dma
+ - pm balance fix for stm32
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      dmaengine: ptdma: Fix the error handling path in pt_core_init()
+
+Jiasheng Jiang (2):
+      dmaengine: sh: rcar-dmac: Check for error num after setting mask
+      dmaengine: sh: rcar-dmac: Check for error num after dma_set_max_seg_s=
+ize
+
+Miaoqian Lin (1):
+      dmaengine: stm32-dmamux: Fix PM disable depth imbalance in stm32_dmam=
+ux_probe
+
+Yang Yingliang (1):
+      dmaengine: at_xdmac: Fix missing unlock in at_xdmac_tasklet()
+
+Yongzhi Liu (1):
+      dmaengine: shdma: Fix runtime PM imbalance on error
+
+ drivers/dma/at_xdmac.c        |  4 +++-
+ drivers/dma/ptdma/ptdma-dev.c | 17 +++++++++--------
+ drivers/dma/sh/rcar-dmac.c    |  9 +++++++--
+ drivers/dma/sh/shdma-base.c   |  4 +++-
+ drivers/dma/stm32-dmamux.c    |  4 +++-
+ 5 files changed, 25 insertions(+), 13 deletions(-)
+
+--=20
+~Vinod
+
+--z++uS9hCUogcDo3u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmISS8kACgkQfBQHDyUj
+g0fp3A/+PT/usHZaJ0/tT9uL4PpZnX75tDF6P/XlaGPpfN1L/EIqfQQI8+tYGHLf
+BtTsoXW1Bm1GfzMrsf4GLD+K/qk/KOsaF9qOobys0bLy6uJNnBgPSNBQDwkLgsQY
+82GO5z1rm1SQD+vHkPFStAQDIryUMFzgXcUQ3PjUnzpIk6zfvH82arReuGaSx18x
+RB87ZdeFzjv7V8QFQ7qxNRdJXbQ2oLB7skY78jvfPrBVA8w7JcRTu/eLu7UeUh7q
+THrdCYV/+a4gfYnWmW96H4j08sTgtnWiInPWWxnhAcg/2jDmgW7G9pcRXG1+gr4T
+9FYwf3BVxU9QzGBH6jr+LpVUXI2bqmQOBG589gGmMreM0i1lMNyFJ0wQCYrGwlB+
+F+t050oXaI/S+NkdVlxF+o4TeoLk6Q8e+3rSqzdfw/iUKwHtnytiN/+9Z5YvfMKL
+5nCFOYcT1qFAohJh1TLCCJpY0LTxfsUwD/6goQ9AZ9LHYW93EITKBM9emmhOkABN
+Ojb4VvY1ya+E3nae6Crhm33IrN2HidVTiuBSU29koj3s30cEyEEcNOyyaObPsAue
+gsope9rpmB4JJXALwmWddpNCWCLwRKGM9TW8+YMGNVcvpwNh4HeAZXUyBTtdDjpl
+jVNR5SDQU1MkRDjV46uGip6ZIbe/UbzkfssOi/dajhpn/hdA8JY=
+=WeYy
+-----END PGP SIGNATURE-----
+
+--z++uS9hCUogcDo3u--

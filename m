@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9B34BCF52
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D064BCF5F
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239447AbiBTPQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 10:16:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50690 "EHLO
+        id S244240AbiBTPQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 10:16:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244171AbiBTPQW (ORCPT
+        with ESMTP id S244126AbiBTPQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 10:16:22 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4993527E
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:16:01 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id k41so8152239wms.0
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:16:01 -0800 (PST)
+        Sun, 20 Feb 2022 10:16:23 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196F734BA7
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:16:02 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id u1so22822359wrg.11
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:16:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8kpOgd/mbbp4xC3u6NnhKQ40akLsMpySOQSsC87tSzg=;
-        b=z1TfAcl+EIvdi3a1jMqc2vwbel5X71Xp4Tz64WSWTGErR1jyE2S8868wdAD9KL4hCU
-         cJgEc9sOSoNC7/ildClbpOSqHnc1DVJAoO3G3rxU4zMlbas9VXpaRjOyJPKmr31cO94P
-         VV9S87DuZxXw/W/ZEk/LmRFZ/V4M8BbY8SXQBX2uv35smCC9AnNG+rIZXmkMSGCvQ3b8
-         X5P1T/DNsU20bJV+/9CGudjn8wTcq2alIjtrEzo+TPQawMbraH+/PQS2Bfj/x35svu5F
-         HHBCfmbpPqtCwPOKWxNszIkDT/Q48Saqv42aYuqrk4qL6MLFuNivN9LJFvJadaHapJkb
-         1TAA==
+        bh=s4avYTwyzOebeNnD3c9KYG3x29F/g/qJAaU+xvILJYI=;
+        b=CyvN1XIDtWg75xXtJrI6e/JFb+l8W5fc/x1tgXu/uo/QvyxASasB0e/Ucgk5cL22uq
+         J4iO65m4myKX0yElNJ1CjsjgFDOflMyuL3xmRq0LsqriZkfb/da21PMaxtEZP598xGUD
+         vjehGlzrausTrJIc7Ki6n/FkCN3GmOwxakwYrIilX+u+Ok4Nl+8DOTi+kzhpQrRHXzZ9
+         LNARSTjyeUMzFrd0JoInhyg1HaDShd4jxp4htwdBo3aOkNGXn/lwwqL2nlh/rOI9owMe
+         KQKIdqrp7q4qruOdpG6p9JT2ZZ08LLNrSHIZbofnparUcKl+Q14tWD/XQ/kRcEasl2GF
+         v5mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8kpOgd/mbbp4xC3u6NnhKQ40akLsMpySOQSsC87tSzg=;
-        b=J/5Fbu+3mc9AKdNVcLacPf2JNVgOLeIV/M7oCZ1Js2VdOqcm3+HPeA3NrIJK64CUsG
-         /L4q6EWr1n1+N4vmI+uFlTURLWr0cNlOu1F4d0BJEuGnMhuzapkmiYGQXbUP1s2b5Ir9
-         5CPNbmUXP9AukBDagymbeFVw5iMZMCSuNtpYzsWiWQh25OhKAU8ky7V2sSY26rINslzO
-         GgqXiWuJiHbH8tMBoZ/xD5KAnvkhEDxx+rFn88XZ2zIv68fObSnTcFy+R2IrjeBPG7ED
-         FUkyyonKSwahmFxMtP8f9rLGjaXVdLtctykEuAHFyrbArsF19HkLIia++d56upw+Tv+/
-         tMgw==
-X-Gm-Message-State: AOAM531Yqm8RpVRHlpaPUY20u6lZ8h0E05xJydH6Mh3kfIpxg2SsIOT7
-        yxi1LOi5bLJBsfQMMq+/0e9bxQ==
-X-Google-Smtp-Source: ABdhPJyAFGk0bZ3Gv4Nl5kc2QuloNxbKyqKiERG6K6djqIuRq8KFGEBdX7gRL5ripblYy/jmMKZ4MA==
-X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id l39-20020a05600c1d2700b0037c74bb2b4dmr18038411wms.82.1645370159634;
-        Sun, 20 Feb 2022 07:15:59 -0800 (PST)
+        bh=s4avYTwyzOebeNnD3c9KYG3x29F/g/qJAaU+xvILJYI=;
+        b=sRyTzag6N9a3x4utfyUY11UtaYr3solq9fI2c4ZXGtnef6RRRv0ihl9ZTJhkKt5HnW
+         kjNyyDC03f80okqpNMxT3jPIGUQNAz7PGwyc69+KxNy06q/Gjw7hOctXjN87tAlZtmlB
+         MbxZZscx8ncGSGt/K0IG7+SWFrtuBHoV8nATfxjT6pfV3ppVXcTPmK1gqy+HzMR+KsrH
+         aHsRnMSD0HggphUCdFB3S+av9fe0XEwOd9+iMieCknyYnXDt5HU913bS1yw3BN+sDnXD
+         c1iyt8objnBeSr8cXBZqsoGZN6xRuLkHmRrtX+DPhEMJmcC9ok3Y4FTiHqcSlZaUFSb0
+         MOWw==
+X-Gm-Message-State: AOAM530bbXEz3n3+Lj1ZoD3tw5+PkkkFL/uUB3VX3ZeUeD94R/We8oEj
+        Rdo2SQThG9QkXeEDl13snTkCYQ==
+X-Google-Smtp-Source: ABdhPJzruCjXO7Zg4NObI0xSV/ELqzdIvudg+xrfspTKPluY+yIrtpO5Xi22cw+86bnCaxdV3z9o1Q==
+X-Received: by 2002:adf:fb4e:0:b0:1e3:3e66:d5f6 with SMTP id c14-20020adffb4e000000b001e33e66d5f6mr13203959wrs.615.1645370160720;
+        Sun, 20 Feb 2022 07:16:00 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.58
+        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 07:15:59 -0800 (PST)
+        Sun, 20 Feb 2022 07:16:00 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
-        Sean Anderson <sean.anderson@seco.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 11/13] doc: nvmem: Update example
-Date:   Sun, 20 Feb 2022 15:15:25 +0000
-Message-Id: <20220220151527.17216-12-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 12/13] mtd: core: Drop duplicate NULL checks around nvmem_unregister()
+Date:   Sun, 20 Feb 2022 15:15:26 +0000
+Message-Id: <20220220151527.17216-13-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
 References: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
@@ -71,52 +72,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Anderson <sean.anderson@seco.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Update the example to reflect the new API. I have chosen the brcm-nvram
-driver since it seems to be simpler than the qfprom driver.
+Since nvmem_unregister() checks for NULL, no need to repeat in
+the caller. Drop duplicate NULL checks.
 
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- Documentation/driver-api/nvmem.rst | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ drivers/mtd/mtdcore.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
-index 56352ad1b1b0..e3366322d46c 100644
---- a/Documentation/driver-api/nvmem.rst
-+++ b/Documentation/driver-api/nvmem.rst
-@@ -43,19 +43,20 @@ nvmem_device pointer.
+diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+index eef87b28d6c8..fc6090366684 100644
+--- a/drivers/mtd/mtdcore.c
++++ b/drivers/mtd/mtdcore.c
+@@ -743,8 +743,7 @@ int del_mtd_device(struct mtd_info *mtd)
+ 		debugfs_remove_recursive(mtd->dbg.dfs_dir);
  
- nvmem_unregister(nvmem) is used to unregister a previously registered provider.
+ 		/* Try to remove the NVMEM provider */
+-		if (mtd->nvmem)
+-			nvmem_unregister(mtd->nvmem);
++		nvmem_unregister(mtd->nvmem);
  
--For example, a simple qfprom case::
-+For example, a simple nvram case::
+ 		device_unregister(&mtd->dev);
  
--  static struct nvmem_config econfig = {
--	.name = "qfprom",
--	.owner = THIS_MODULE,
--  };
+@@ -923,8 +922,7 @@ static int mtd_otp_nvmem_add(struct mtd_info *mtd)
+ 	return 0;
+ 
+ err:
+-	if (mtd->otp_user_nvmem)
+-		nvmem_unregister(mtd->otp_user_nvmem);
++	nvmem_unregister(mtd->otp_user_nvmem);
+ 	return err;
+ }
+ 
+@@ -1028,11 +1026,8 @@ int mtd_device_unregister(struct mtd_info *master)
+ 		memset(&master->reboot_notifier, 0, sizeof(master->reboot_notifier));
+ 	}
+ 
+-	if (master->otp_user_nvmem)
+-		nvmem_unregister(master->otp_user_nvmem);
 -
--  static int qfprom_probe(struct platform_device *pdev)
-+  static int brcm_nvram_probe(struct platform_device *pdev)
-   {
-+	struct nvmem_config config = {
-+		.name = "brcm-nvram",
-+		.reg_read = brcm_nvram_read,
-+	};
- 	...
--	econfig.dev = &pdev->dev;
--	nvmem = nvmem_register(&econfig);
--	...
-+	config.dev = &pdev->dev;
-+	config.priv = priv;
-+	config.size = resource_size(res);
-+
-+	devm_nvmem_register(&config);
-   }
+-	if (master->otp_factory_nvmem)
+-		nvmem_unregister(master->otp_factory_nvmem);
++	nvmem_unregister(master->otp_user_nvmem);
++	nvmem_unregister(master->otp_factory_nvmem);
  
- Users of board files can define and register nvmem cells using the
+ 	err = del_mtd_partitions(master);
+ 	if (err)
 -- 
 2.21.0
 

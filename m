@@ -2,139 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38AD4BD0A9
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6AA4BD0A7
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 19:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244501AbiBTS1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 13:27:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47982 "EHLO
+        id S244509AbiBTSft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 13:35:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiBTS1q (ORCPT
+        with ESMTP id S230370AbiBTSfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 13:27:46 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9C225C7C
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 10:27:23 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id o8-20020a056e0214c800b002bc2f9cffffso6421826ilk.8
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 10:27:23 -0800 (PST)
+        Sun, 20 Feb 2022 13:35:44 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873F13121C;
+        Sun, 20 Feb 2022 10:35:20 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id j9-20020a05600c190900b0037bff8a24ebso12102612wmq.4;
+        Sun, 20 Feb 2022 10:35:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NnMt7ACmIwbCITKBHIx728IGP7tFTxW81nBLhiLdafY=;
+        b=ZSgdFDnG1EhDI9IVxT/Ihal/WZcH2oo9jjBhbznKiIn/mHRnI1h37kVgeIN953NczE
+         17IdQ8lrv+GbVcIVwRQzGQvODzG7ac+7emnJX77A1FfzIzUXjgN9ilYE7BD8By2ZXDKH
+         S/3Lpn9LCbEDwn7ssWHuWcGKosEIaASasCmCenu1rm671ooK1R6WBW13QKKiiuZ9fQ9R
+         zPaBngfCigA4AN5DQdu6yu16xugtAzXkaMstMLM4dDfVvpc9E26TKcgSZwe5bRlAnQiv
+         UxFdpVdKqLrbIbuYdaktaolBLk+/roSfYCUvTo33lKq6P/se1VtaxYpkWB+V3jFOLcI5
+         X/lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=pSYYjv4i1WUh1iDAp2nfTxJwhP3uvRN5jOqDLwvohJk=;
-        b=fsAM4wodCS1WBIbxdNziVP84LpligIii3A68pWwgMF27SHWcvQqHsKtT/KI/bW2a/f
-         NoMyCEylkU1Zs5Swx5iMTjpO4T8uMs83nX0sZk4GgIO74JmzjIze5pa1YQNYFwpfaLa9
-         aM8wmrOfwHfuh8PvfU14tYOUGOFd3Xxe8C7aNO+vM0z6m2OHQ2MrquCoKVrpkj7JyRLw
-         vkJBBOi5ReeNeCt2jY+k0muOYx7izCV/de9FIXSa18twRmTC2cIAi5X3DAbp+AQoXx/n
-         kCPguDDuWncf7TTJKjmSEwRcOw/jnMTVG8g8A1ntJsMPaKS4uTLa8DH3HVmHLbw7zT8c
-         i5Ow==
-X-Gm-Message-State: AOAM530sebHVcN0DwluzeWJzrnuVCAUn2VOZeeSZjW9FAaCUW1h2UCKt
-        dUhvidOaUZ69sSz7I4h4QBpu5E28Wc1rWAVy/TXDy4p1L/Bu
-X-Google-Smtp-Source: ABdhPJxZQVGnvRHrpY23wkb0dEerpIGEGo9vmaKQQNULR0KelCo7/EZdOOvHDzW1z1BN+EUAuPT8rryPd7I3k//WZtBeDS28/LCJ
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NnMt7ACmIwbCITKBHIx728IGP7tFTxW81nBLhiLdafY=;
+        b=Ez+7uuKnb74F/5zw06rQnA0953ON7tLWua5JS0sBVB51IrQA8qnE9cNlfKd7xsup62
+         c45/R6jlShK6ydhHCPToZrK3F91pxhCrUgpbxf+4DoDRFzPVti5IJ7wnCrneDlVr9fBN
+         xLuubLSo71nmM1zzb7a9CUYPJ/m8XfAnJz5bW15VYxBkuowD3pDfWDV60ZJ8E0fi+6e2
+         mvwXZS4GyrNtJQAsnNdAska9uHBcVgNnwb/g7pmhTNMJaJ7ShFZBU6USur7nQZ6vy5oy
+         qIg5Bl9IHlPqg/arwpRQATuLkuqXJOZWBDRv0hdPbOJhw1cGvjiK9bkoWLjGS0yl3cIn
+         ASpg==
+X-Gm-Message-State: AOAM530H3+zqbDBDQYSdE/DNu+FZWN06vff4vfvDHdfmAUjXh8KHoLxl
+        MwKnHEVnSIwxcygktUv0NrU=
+X-Google-Smtp-Source: ABdhPJwvWzngda8NIX91RLBSpSpR9aJpsrnCjJNepX5BfBCIh/AKh6aL/gxI0V5q+dRKmQfQL6CaGw==
+X-Received: by 2002:a7b:c143:0:b0:37b:dacd:bf2f with SMTP id z3-20020a7bc143000000b0037bdacdbf2fmr14767371wmi.16.1645382118940;
+        Sun, 20 Feb 2022 10:35:18 -0800 (PST)
+Received: from pswork (mue-88-130-61-192.dsl.tropolys.de. [88.130.61.192])
+        by smtp.gmail.com with ESMTPSA id f14sm5942928wmq.3.2022.02.20.10.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 10:35:18 -0800 (PST)
+Date:   Sun, 20 Feb 2022 19:35:17 +0100
+From:   Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] rcu-tasks: Fix race in schedule and flush work
+Message-ID: <20220220183517.GA3164@pswork>
+References: <20220217152520.18972-1-treasure4paddy@gmail.com>
+ <20220217174330.GR4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-X-Received: by 2002:a02:69c2:0:b0:311:b65e:388b with SMTP id
- e185-20020a0269c2000000b00311b65e388bmr12501547jac.123.1645381643183; Sun, 20
- Feb 2022 10:27:23 -0800 (PST)
-Date:   Sun, 20 Feb 2022 10:27:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005ca92705d877448c@google.com>
-Subject: [syzbot] WARNING in kthread_bind_mask
-From:   syzbot <syzbot+087b7effddeec0697c66@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217174330.GR4285@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Feb 17, 2022 at 09:43:30AM -0800, Paul E. McKenney wrote:
+> On Thu, Feb 17, 2022 at 04:25:19PM +0100, Padmanabha Srinivasaiah wrote:
+> > While booting secondary CPUs, cpus_read_[lock/unlock] not keeping online
+> > cpumask stable. The transient online mask results in below calltrace.
+> > 
+> > [    0.324121] CPU1: Booted secondary processor 0x0000000001 [0x410fd083]
+> > [    0.346652] Detected PIPT I-cache on CPU2
+> > [    0.347212] CPU2: Booted secondary processor 0x0000000002 [0x410fd083]
+> > [    0.377255] Detected PIPT I-cache on CPU3
+> > [    0.377823] CPU3: Booted secondary processor 0x0000000003 [0x410fd083]
+> > [    0.379040] ------------[ cut here ]------------
+> > [    0.383662] WARNING: CPU: 0 PID: 10 at kernel/workqueue.c:3084 __flush_work+0x12c/0x138
+> > [    0.384850] Modules linked in:
+> > [    0.385403] CPU: 0 PID: 10 Comm: rcu_tasks_rude_ Not tainted 5.17.0-rc3-v8+ #13
+> > [    0.386473] Hardware name: Raspberry Pi 4 Model B Rev 1.4 (DT)
+> > [    0.387289] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > [    0.388308] pc : __flush_work+0x12c/0x138
+> > [    0.388970] lr : __flush_work+0x80/0x138
+> > [    0.389620] sp : ffffffc00aaf3c60
+> > [    0.390139] x29: ffffffc00aaf3d20 x28: ffffffc009c16af0 x27: ffffff80f761df48
+> > [    0.391316] x26: 0000000000000004 x25: 0000000000000003 x24: 0000000000000100
+> > [    0.392493] x23: ffffffffffffffff x22: ffffffc009c16b10 x21: ffffffc009c16b28
+> > [    0.393668] x20: ffffffc009e53861 x19: ffffff80f77fbf40 x18: 00000000d744fcc9
+> > [    0.394842] x17: 000000000000000b x16: 00000000000001c2 x15: ffffffc009e57550
+> > [    0.396016] x14: 0000000000000000 x13: ffffffffffffffff x12: 0000000100000000
+> > [    0.397190] x11: 0000000000000462 x10: ffffff8040258008 x9 : 0000000100000000
+> > [    0.398364] x8 : 0000000000000000 x7 : ffffffc0093c8bf4 x6 : 0000000000000000
+> > [    0.399538] x5 : 0000000000000000 x4 : ffffffc00a976e40 x3 : ffffffc00810444c
+> > [    0.400711] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
+> > [    0.401886] Call trace:
+> > [    0.402309]  __flush_work+0x12c/0x138
+> > [    0.402941]  schedule_on_each_cpu+0x228/0x278
+> > [    0.403693]  rcu_tasks_rude_wait_gp+0x130/0x144
+> > [    0.404502]  rcu_tasks_kthread+0x220/0x254
+> > [    0.405264]  kthread+0x174/0x1ac
+> > [    0.405837]  ret_from_fork+0x10/0x20
+> > [    0.406456] irq event stamp: 102
+> > [    0.406966] hardirqs last  enabled at (101): [<ffffffc0093c8468>] _raw_spin_unlock_irq+0x78/0xb4
+> > [    0.408304] hardirqs last disabled at (102): [<ffffffc0093b8270>] el1_dbg+0x24/0x5c
+> > [    0.409410] softirqs last  enabled at (54): [<ffffffc0081b80c8>] local_bh_enable+0xc/0x2c
+> > [    0.410645] softirqs last disabled at (50): [<ffffffc0081b809c>] local_bh_disable+0xc/0x2c
+> > [    0.411890] ---[ end trace 0000000000000000 ]---
+> > [    0.413000] smp: Brought up 1 node, 4 CPUs
+> > [    0.413762] SMP: Total of 4 processors activated.
+> > [    0.414566] CPU features: detected: 32-bit EL0 Support
+> > [    0.415414] CPU features: detected: 32-bit EL1 Support
+> > [    0.416278] CPU features: detected: CRC32 instructions
+> > [    0.447021] Callback from call_rcu_tasks_rude() invoked.
+> > [    0.506693] Callback from call_rcu_tasks() invoked.
+> > 
+> > Link: https://lore.kernel.org/lkml/20220210184319.25009-1-treasure4paddy@gmail.com/T/
+> > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > Signed-off-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+> 
+> Thank you, Padmanabha!  I have queued this with additional explanation
+> in the commit log as shown below.
 
-syzbot found the following issue on:
+Thanks paul.
+> 
+> If you have not already tested this by repeatedly rebooting, for
+> example continuously in an overnight test, could you please do so?
+> (I am assuming that your system can do an automated reboot loop, so no,
+> I am not asking you to stay up all night!)
+> 
+Yes, tested and issue doesn't appear.
 
-HEAD commit:    c5d9ae265b10 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11daf74a700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=da674567f7b6043d
-dashboard link: https://syzkaller.appspot.com/bug?extid=087b7effddeec0697c66
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> Should this somehow recur with larger systems, in which the call starts
+> with (say) five CPUs online but has trouble with the sixth CPU, there
+> are several ways to address it:
+> 
+> 1.	Make cpus_read_lock() act as expected.
+>
+> 2.	Make the first for_each_online_cpu() in schedule_on_each_cpu()
+> 	instead be for_each_possible_cpu(), always do the INIT_WORK(),
+> 	but invoke schedule_work_on() only if cpu_online(cpu).
+>
+Yes, agree and was also suggested by Tejun Heo. Will also submit same, in
+other thread.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+087b7effddeec0697c66@syzkaller.appspotmail.com
-
-BTRFS info (device loop3): disk space caching is enabled
-BTRFS info (device loop3): has skinny extents
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 10327 at kernel/kthread.c:525 __kthread_bind_mask kernel/kthread.c:525 [inline]
-WARNING: CPU: 0 PID: 10327 at kernel/kthread.c:525 kthread_bind_mask+0x35/0xc0 kernel/kthread.c:543
-Modules linked in:
-CPU: 1 PID: 10327 Comm: syz-executor.3 Not tainted 5.17.0-rc4-syzkaller-00051-gc5d9ae265b10 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__kthread_bind_mask kernel/kthread.c:525 [inline]
-RIP: 0010:kthread_bind_mask+0x35/0xc0 kernel/kthread.c:543
-Code: fb e8 df 36 2a 00 be 02 00 00 00 48 89 df e8 62 cb 03 00 31 ff 48 89 c5 48 89 c6 e8 d5 38 2a 00 48 85 ed 75 12 e8 bb 36 2a 00 <0f> 0b 5b 5d 41 5c 41 5d e9 ae 36 2a 00 e8 a9 36 2a 00 4c 8d ab 80
-RSP: 0018:ffffc90002ca7658 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: ffff88802e38e200 RCX: ffffc90004682000
-RDX: 0000000000040000 RSI: ffffffff814ddc65 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc6ab7
-R10: ffffffff814ddc5b R11: 0000000000000000 R12: ffffffff8d93cf18
-R13: ffff88807b643940 R14: ffff88807a0ea020 R15: ffff88807a0ea000
-FS:  00007f0f90de1700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2b555fb920 CR3: 0000000021192000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- init_rescuer kernel/workqueue.c:4291 [inline]
- init_rescuer+0x141/0x1d0 kernel/workqueue.c:4270
- alloc_workqueue+0xbf7/0xf00 kernel/workqueue.c:4358
- __btrfs_alloc_workqueue+0x3e9/0x660 fs/btrfs/async-thread.c:112
- btrfs_alloc_workqueue+0x7b/0x460 fs/btrfs/async-thread.c:140
- btrfs_init_workqueues fs/btrfs/disk-io.c:2401 [inline]
- open_ctree+0x196e/0x4817 fs/btrfs/disk-io.c:3574
- btrfs_fill_super fs/btrfs/super.c:1358 [inline]
- btrfs_mount_root.cold+0x15/0x162 fs/btrfs/super.c:1724
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- fc_mount fs/namespace.c:1000 [inline]
- vfs_kern_mount.part.0+0xd3/0x170 fs/namespace.c:1030
- vfs_kern_mount+0x3c/0x60 fs/namespace.c:1017
- btrfs_mount+0x234/0xa60 fs/btrfs/super.c:1784
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:2994 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3324
- do_mount fs/namespace.c:3337 [inline]
- __do_sys_mount fs/namespace.c:3545 [inline]
- __se_sys_mount fs/namespace.c:3522 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3522
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f0f9246d58a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0f90de0f88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f0f9246d58a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f0f90de0fe0
-RBP: 00007f0f90de1020 R08: 00007f0f90de1020 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f0f90de0fe0 R15: 0000000020016b00
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 3.	Other ideas here, when and if.
+> 
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> commit f6823834aa2e2e581ca627238fa3ad3e0a727c08
+> Author: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+> Date:   Thu Feb 17 16:25:19 2022 +0100
+> 
+>     rcu-tasks: Fix race in schedule and flush work
+>     
+>     While booting secondary CPUs, cpus_read_[lock/unlock] is not keeping
+>     online cpumask stable. The transient online mask results in below
+>     calltrace.
+>     
+>     [    0.324121] CPU1: Booted secondary processor 0x0000000001 [0x410fd083]
+>     [    0.346652] Detected PIPT I-cache on CPU2
+>     [    0.347212] CPU2: Booted secondary processor 0x0000000002 [0x410fd083]
+>     [    0.377255] Detected PIPT I-cache on CPU3
+>     [    0.377823] CPU3: Booted secondary processor 0x0000000003 [0x410fd083]
+>     [    0.379040] ------------[ cut here ]------------
+>     [    0.383662] WARNING: CPU: 0 PID: 10 at kernel/workqueue.c:3084 __flush_work+0x12c/0x138
+>     [    0.384850] Modules linked in:
+>     [    0.385403] CPU: 0 PID: 10 Comm: rcu_tasks_rude_ Not tainted 5.17.0-rc3-v8+ #13
+>     [    0.386473] Hardware name: Raspberry Pi 4 Model B Rev 1.4 (DT)
+>     [    0.387289] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>     [    0.388308] pc : __flush_work+0x12c/0x138
+>     [    0.388970] lr : __flush_work+0x80/0x138
+>     [    0.389620] sp : ffffffc00aaf3c60
+>     [    0.390139] x29: ffffffc00aaf3d20 x28: ffffffc009c16af0 x27: ffffff80f761df48
+>     [    0.391316] x26: 0000000000000004 x25: 0000000000000003 x24: 0000000000000100
+>     [    0.392493] x23: ffffffffffffffff x22: ffffffc009c16b10 x21: ffffffc009c16b28
+>     [    0.393668] x20: ffffffc009e53861 x19: ffffff80f77fbf40 x18: 00000000d744fcc9
+>     [    0.394842] x17: 000000000000000b x16: 00000000000001c2 x15: ffffffc009e57550
+>     [    0.396016] x14: 0000000000000000 x13: ffffffffffffffff x12: 0000000100000000
+>     [    0.397190] x11: 0000000000000462 x10: ffffff8040258008 x9 : 0000000100000000
+>     [    0.398364] x8 : 0000000000000000 x7 : ffffffc0093c8bf4 x6 : 0000000000000000
+>     [    0.399538] x5 : 0000000000000000 x4 : ffffffc00a976e40 x3 : ffffffc00810444c
+>     [    0.400711] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
+>     [    0.401886] Call trace:
+>     [    0.402309]  __flush_work+0x12c/0x138
+>     [    0.402941]  schedule_on_each_cpu+0x228/0x278
+>     [    0.403693]  rcu_tasks_rude_wait_gp+0x130/0x144
+>     [    0.404502]  rcu_tasks_kthread+0x220/0x254
+>     [    0.405264]  kthread+0x174/0x1ac
+>     [    0.405837]  ret_from_fork+0x10/0x20
+>     [    0.406456] irq event stamp: 102
+>     [    0.406966] hardirqs last  enabled at (101): [<ffffffc0093c8468>] _raw_spin_unlock_irq+0x78/0xb4
+>     [    0.408304] hardirqs last disabled at (102): [<ffffffc0093b8270>] el1_dbg+0x24/0x5c
+>     [    0.409410] softirqs last  enabled at (54): [<ffffffc0081b80c8>] local_bh_enable+0xc/0x2c
+>     [    0.410645] softirqs last disabled at (50): [<ffffffc0081b809c>] local_bh_disable+0xc/0x2c
+>     [    0.411890] ---[ end trace 0000000000000000 ]---
+>     [    0.413000] smp: Brought up 1 node, 4 CPUs
+>     [    0.413762] SMP: Total of 4 processors activated.
+>     [    0.414566] CPU features: detected: 32-bit EL0 Support
+>     [    0.415414] CPU features: detected: 32-bit EL1 Support
+>     [    0.416278] CPU features: detected: CRC32 instructions
+>     [    0.447021] Callback from call_rcu_tasks_rude() invoked.
+>     [    0.506693] Callback from call_rcu_tasks() invoked.
+>     
+>     This commit therefore fixes this issue by applying a single-CPU
+>     optimization to the RCU Tasks Rude grace-period process.  The key point
+>     here is that the purpose of this RCU flavor is to force a schedule on
+>     each online CPU since some past event.  But the rcu_tasks_rude_wait_gp()
+>     function runs in the context of the RCU Tasks Rude's grace-period kthread,
+>     so there must already have been a context switch on the current CPU since
+>     the call to either synchronize_rcu_tasks_rude() or call_rcu_tasks_rude().
+>     So if there is only a single CPU online, RCU Tasks Rude's grace-period
+>     kthread does not need to anything at all.
+>     
+>     It turns out that the rcu_tasks_rude_wait_gp() function's call to
+>     schedule_on_each_cpu() causes problems during early boot.  During that
+>     time, there is only one online CPU, namely the boot CPU.  Therefore,
+>     applying this single-CPU optimization fixes early-boot instances of
+>     this problem.
+>     
+>     Link: https://lore.kernel.org/lkml/20220210184319.25009-1-treasure4paddy@gmail.com/T/
+>     Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+>     Signed-off-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> index d73e32d803438..f7fdb349f8b8e 100644
+> --- a/kernel/rcu/tasks.h
+> +++ b/kernel/rcu/tasks.h
+> @@ -955,6 +955,9 @@ static void rcu_tasks_be_rude(struct work_struct *work)
+>  // Wait for one rude RCU-tasks grace period.
+>  static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
+>  {
+> +	if (num_online_cpus() <= 1)
+> +		return;	// Fastpath for only one CPU.
+> +
+>  	rtp->n_ipis += cpumask_weight(cpu_online_mask);
+>  	schedule_on_each_cpu(rcu_tasks_be_rude);
+>  }

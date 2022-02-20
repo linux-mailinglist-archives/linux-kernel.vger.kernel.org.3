@@ -2,184 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099DD4BD131
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 21:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48C94BD134
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 21:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244741AbiBTUJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 15:09:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50948 "EHLO
+        id S244770AbiBTULh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 15:11:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiBTUJy (ORCPT
+        with ESMTP id S230148AbiBTULg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 15:09:54 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5CF4C424
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:09:32 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2d6923bca1aso108519527b3.9
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:09:32 -0800 (PST)
+        Sun, 20 Feb 2022 15:11:36 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1E74C425;
+        Sun, 20 Feb 2022 12:11:14 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id bn33so11779302ljb.6;
+        Sun, 20 Feb 2022 12:11:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zI2d7Er8M7++1IKjscsscfEMnEx01mHbX//1FSVmoN4=;
-        b=KMgqAYs78rgaEyui2CLWsplK/5F7GwimlboPYrU5FTsn5KAZ1+LMDZU6rnv06/9jqo
-         omzb9zNELIAZjsUoncAMahC9evIeiwYEHu0p4YY1MbWKxTzoneVkK9kkfs35LeDeEPsQ
-         8bkVxpWJzyfVka8PQ1M6d9+1Kr7wXBEfntLm2/cabzXBddZLN3Y9SX2Z8W2cbsrmSStq
-         SxaEy3/HntdJgpKho6dv80dwxgE2gzzo1iUCGmAampV8aw40X6boPvKeZ3j0/rYWrllS
-         2X2mu72ySrcjdHOEHWAsagI21MrFWy7cv8b/kpq9QJ7aV8y6DT0J6T6QYG9Fv8IaVJK9
-         QOEw==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=SFq6sQc+iZKiiOta9mApqHGHWEVz2KerGFldHdpEI6o=;
+        b=fN038eN4MrR+vuieb+Y1FEexP3q89yhDkrsFtN12a5uGug6bGOfOaV1V5NammF5/+3
+         WbmbRp78wjefUNyg30SUIC0181u13mNzWEOzhAsBKvdrsfRKvWrbRNyNFGuqWPTu1lHN
+         3VKorRLxmey6/fdQoYowIJ33oTdbqdXxvuzGBrQ75vCD5smqPRdAVj6o+BCScodp7V+z
+         xACk2UYfjBXy3lgFnxEo1hZE0j/q/IfOiiRU91lofsBn/4rxVcLnfLaHXCfyZj9TLQdI
+         P+uNblKB3xapKT/36q3a/1/57WrT60Ol28a89WaAqIOD90GQSu8zOR6X75ND6CdOIrzX
+         N8Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zI2d7Er8M7++1IKjscsscfEMnEx01mHbX//1FSVmoN4=;
-        b=NicQksivpR2cIEFKNV/qE9yVRgqlgB+CSE43WdBsjLd+PLm7Jn3ILlhnHHG4potUR5
-         Tt/tsqOSowJvlYkmReOTtpG9K+QRgb1YBSnxa3fQS4YQuEcbmebdAQgUWza8zpBlUI86
-         i1XbDkfEIAQ9ZZ23J05zIXuvLH6oAcmp0jyS/y+EqxMX/zPtlWqtT23RZXcr2lCtxpcm
-         ntGISvLFTrV8DJdNBwdSNsNs4CiNBsB+fKQj9s58+EAPd2xUh3RhX+1qxu50TKc13pie
-         61lKzu/n69vY9SowMkGtNnxTtoTx+77gzcSBvqeQtbyJs4vuSURaQrmDZh9n9ukk9V49
-         OLCA==
-X-Gm-Message-State: AOAM532BUD4x+YkV6wLNyILUCXFGdizDbIPpJH/aVAZuNpOxQ59K7MA9
-        MtY1YrFk712PxeMnNNXIgN3z6MYpHD7i+wQHvVY=
-X-Google-Smtp-Source: ABdhPJy1q268yipr+5ZN6g4o6pAV8FN5g02LlSVgmJgPZU1lpRKWePrcHJ5TGha8dLuOxUMf+Ds1SDCv9AauxGAl3l4=
-X-Received: by 2002:a81:158:0:b0:2d0:8b7f:a539 with SMTP id
- 85-20020a810158000000b002d08b7fa539mr16985478ywb.233.1645387771287; Sun, 20
- Feb 2022 12:09:31 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=SFq6sQc+iZKiiOta9mApqHGHWEVz2KerGFldHdpEI6o=;
+        b=Pb3DejUnp9qtAY+WcY6j27YlXLOZF9dJJqZY5/9/Yv6MdMAZtf6FnqTo8dpKSIOpHc
+         fejrnaqZBhjAPSpykRIpfZsUssA2j98xCET0R/yd6Vk3oZtDl2bqkjgedgTzeh4iz7gj
+         7f3idVPdERKBp+4FrOT1APbvBoVd/k6Ldt0eaYeyiQWrmyqfOqDd21n26I+b7tZK1XMK
+         ZRWvM/ERVrosbQ7u77mkTXJ0ORG2ocLMQgfgW6RhbDKNoOMTuSh08tGABwsz2ZcEFNpT
+         bGKFJGHgmxHSRHkT/mweRRCM7p5uYgSmrEk08p/Hj0/XczKFwcsK7eYioGXlixmQdYf+
+         oLJQ==
+X-Gm-Message-State: AOAM532meIpZJYgwNKuG+oiOo81Xxjl4DZnbh0tSN7QoYSFTlO9NoGKU
+        X/qjRWZtA1vdktvAlsZD4H4=
+X-Google-Smtp-Source: ABdhPJyDbNP3CPD5oGdylk/QWbLZnR9foVWRyD8apAH6z7gychYoWJbyz+uwgpdMjfaNmltSrwNg9A==
+X-Received: by 2002:a2e:98cd:0:b0:244:d3b5:4d70 with SMTP id s13-20020a2e98cd000000b00244d3b54d70mr11953447ljj.399.1645387872693;
+        Sun, 20 Feb 2022 12:11:12 -0800 (PST)
+Received: from [10.0.0.127] (91-153-170-164.elisa-laajakaista.fi. [91.153.170.164])
+        by smtp.gmail.com with ESMTPSA id q4sm904278lfn.196.2022.02.20.12.11.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 12:11:12 -0800 (PST)
+Message-ID: <58fe0934-4853-714c-600d-9a2d86df5bc8@gmail.com>
+Date:   Sun, 20 Feb 2022 22:12:07 +0200
 MIME-Version: 1.0
-References: <20220218215549.4274-1-song.bao.hua@hisilicon.com>
- <6432e7e97b828d887da8794c150161c4@kernel.org> <CAMj1kXF14uEM=eTsqKR8MBWYS_yebMQF5kca86gGyuXkjs+GRg@mail.gmail.com>
- <YhJYu61HkL9Ywq0R@shell.armlinux.org.uk>
-In-Reply-To: <YhJYu61HkL9Ywq0R@shell.armlinux.org.uk>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Mon, 21 Feb 2022 09:09:20 +1300
-Message-ID: <CAGsJ_4yFbK5kf_9Z1hFeF2O0BpmXhFYSB7Pukn1JKGuqjXWTXQ@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/gic-v3: use dsb(ishst) to synchronize data to smp
- before issuing ipi
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        Barry Song <song.bao.hua@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
+References: <20220215044112.161634-1-vigneshr@ti.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+Subject: Re: [PATCH] dmaengine: ti: k3-udma: Avoid false error msg on chan
+ teardown
+In-Reply-To: <20220215044112.161634-1-vigneshr@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 4:05 AM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Sun, Feb 20, 2022 at 02:30:24PM +0100, Ard Biesheuvel wrote:
-> > On Sat, 19 Feb 2022 at 10:57, Marc Zyngier <maz@kernel.org> wrote:
-> > >
-> > > On 2022-02-18 21:55, Barry Song wrote:
-> > > > dsb(ishst) should be enough here as we only need to guarantee the
-> > > > visibility of data to other CPUs in smp inner domain before we
-> > > > send the ipi.
-> > > >
-> > > > Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-> > > > ---
-> > > >  drivers/irqchip/irq-gic-v3.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/irqchip/irq-gic-v3.c
-> > > > b/drivers/irqchip/irq-gic-v3.c
-> > > > index 5e935d97207d..0efe1a9a9f3b 100644
-> > > > --- a/drivers/irqchip/irq-gic-v3.c
-> > > > +++ b/drivers/irqchip/irq-gic-v3.c
-> > > > @@ -1211,7 +1211,7 @@ static void gic_ipi_send_mask(struct irq_data
-> > > > *d, const struct cpumask *mask)
-> > > >        * Ensure that stores to Normal memory are visible to the
-> > > >        * other CPUs before issuing the IPI.
-> > > >        */
-> > > > -     wmb();
-> > > > +     dsb(ishst);
-> > > >
-> > > >       for_each_cpu(cpu, mask) {
-> > > >               u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu));
-> > >
-> > > I'm not opposed to that change, but I'm pretty curious whether this
-> > > makes
-> > > any visible difference in practice. Could you measure the effect of this
-> > > change
-> > > for any sort of IPI heavy workload?
-> > >
-> >
-> > Does this have to be a DSB ?
->
-> Are you suggesting that smp_wmb() may suffice (which is a dmb(ishst)) ?
+Hi Vignesh,
 
-usually smp_wmb() is ok, for example drivers/irqchip/irq-bcm2836.c:
+On 15/02/2022 06:41, Vignesh Raghavendra wrote:
+> In cyclic mode, there is no additional descriptor pushed to collect
+> outstanding data on channel teardown. Therefore no need to wait for this
+> descriptor to come back.
+> 
+> Without this terminating aplay cmd outputs false error msg like:
+> [  116.402800] ti-bcdma 485c0100.dma-controller: chan1 teardown timeout!
 
-static void bcm2836_arm_irqchip_ipi_send_mask(struct irq_data *d,
-                                              const struct cpumask *mask)
-{
-        int cpu;
-        void __iomem *mailbox0_base = intc.base + LOCAL_MAILBOX0_SET0;
+are you sure it is aplay? It is MEM_TO_DEV, we only use the flush
+descriptor for DEV_TO_MEM. MEM_TO_DEV can 'disconnect' from the
+peripheral to flush out the FIFO.
 
-        /*
-         * Ensure that stores to normal memory are visible to the
-         * other CPUs before issuing the IPI.
-         */
-        smp_wmb();
+I have not seen this on am654, j721e. I can not recall seeing this on
+the capture side either.
 
-        for_each_cpu(cpu, mask)
-                writel_relaxed(BIT(d->hwirq), mailbox0_base + 16 * cpu);
-}
+The cyclic TR should be able to drain the DEV_TO_MEM by itself and the
+TR should terminate.
 
-but the instruction to send ipi for irq-gic-v3.c isn't a store, so
-this driver has been
-changed by this commit from dmb(ish) to dsb(sy):
 
-commit 21ec30c0ef5234fb1039cc7c7737d885bf875a9e
-Author: Shanker Donthineni <shankerd@codeaurora.org>
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>  drivers/dma/ti/k3-udma.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+> index 9abb08d353ca0..c9a1b2f312603 100644
+> --- a/drivers/dma/ti/k3-udma.c
+> +++ b/drivers/dma/ti/k3-udma.c
+> @@ -3924,7 +3924,7 @@ static void udma_synchronize(struct dma_chan *chan)
+>  
+>  	vchan_synchronize(&uc->vc);
+>  
+> -	if (uc->state == UDMA_CHAN_IS_TERMINATING) {
+> +	if (uc->state == UDMA_CHAN_IS_TERMINATING && !uc->cyclic) {
+>  		timeout = wait_for_completion_timeout(&uc->teardown_completed,
+>  						      timeout);
+>  		if (!timeout) {
 
-    irqchip/gic-v3: Use wmb() instead of smb_wmb() in gic_raise_softirq()
-
-    A DMB instruction can be used to ensure the relative order of only
-    memory accesses before and after the barrier. Since writes to system
-    registers are not memory operations, barrier DMB is not sufficient
-    for observability of memory accesses that occur before ICC_SGI1R_EL1
-    writes.
-
-    A DSB instruction ensures that no instructions that appear in program
-    order after the DSB instruction, can execute until the DSB instruction
-    has completed.
-
-    ...
-
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index d71be9a1f9d2..d99cc07903ec 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -688,7 +688,7 @@ static void gic_raise_softirq(const struct cpumask
-*mask, unsigned int irq)
-         * Ensure that stores to Normal memory are visible to the
-         * other CPUs before issuing the IPI.
-         */
--       smp_wmb();
-+       wmb();
-
-        for_each_cpu(cpu, mask) {
-                u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu));
-
-my understanding is that dtb(sy) is too strong as this case we are
-asking data to
-be observed by other CPUs in smp just as smp_wmb is doing that in other drivers
-by dmb(isb). we are not requiring data is observed by everyone in the system.
-
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
-
-Thanks
-Barry
+-- 
+Péter

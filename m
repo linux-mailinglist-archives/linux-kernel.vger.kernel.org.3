@@ -2,86 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E204BCE14
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 11:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9362C4BCE19
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 12:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiBTK6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 05:58:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45550 "EHLO
+        id S231904AbiBTLFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 06:05:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiBTK6k (ORCPT
+        with ESMTP id S229480AbiBTLFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 05:58:40 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769BA41313;
-        Sun, 20 Feb 2022 02:58:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645354699; x=1676890699;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=tRjRf7F5Xx8HrYICcY74K2PVjBqE611yRJQYJaE8Sj8=;
-  b=Eo7AfXLqctEA9hmXhZOcs42fGBapWMrxb0fKSZxxflaU0Wn+aSSY8vOc
-   8w9YN7kpijzoVinKV4caD98KWMMmmpbGqFXw7xbxh3I2v9qRF/dtgmY2p
-   xqxQJehIMeGo+387MSPWtau/47iWR2Ouz4hsGZ7AeNaikyHLKm3HrIL+q
-   FHWezVBvqwOpnqT3VAH2KTQdE623x3sNzmS9ZOz6ycIL6d+NhbMfMJRvq
-   yeQG5Ug2urXq2xRUPvPrSXP4kCwQYatuskXgxM8/gdVPV1ziCtqD00DYZ
-   yDFsH+fxjFEJl+NMc+BPatepBfxYBI+OVqCriSo9VbwFlNbYrlKNvRQ3Q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="238773982"
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="238773982"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 02:58:19 -0800
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="638240688"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 02:58:17 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nLju9-006UaA-El;
-        Sun, 20 Feb 2022 12:57:25 +0200
-Date:   Sun, 20 Feb 2022 12:57:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
-Subject: Re: [PATCH v1 1/1] i2c: robotfuzz-osif: Propagate parent device to
- I2C core
-Message-ID: <YhIelZFe/HtjVX/8@smile.fi.intel.com>
-References: <20220204151726.8924-1-andriy.shevchenko@linux.intel.com>
- <Yg+rm+ZjuhT4zPWB@ninjato>
+        Sun, 20 Feb 2022 06:05:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A5F43AC5;
+        Sun, 20 Feb 2022 03:05:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B686114C;
+        Sun, 20 Feb 2022 11:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D878C340E8;
+        Sun, 20 Feb 2022 11:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645355117;
+        bh=x9J+ZOe2edxPaBXq7MDasjcZNR3NhXOu1vA+wgVP93U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NYE1ADu8MGRD9Rpyc9dccMIA2QJqdOKiJc0511rAQeBxW0NhWeRdD+UJIWhwhpYeJ
+         57XcLgYRkxJyCDjeyycJzYl2gpY/gFDpZ23yhfgfIQb71r4Fd+lcyiSsE5DTsWNRuS
+         rZz0DR5zJ8dkdX0sCox4UejhTFVSCW+yrPmt/JvvJ7iZBEBiLkcBOmNG7YwPhfhK7V
+         rnxmSJz5wxje8fUq36yRLVjUPb10XAqTaFW0wmOrTRnKcyIFYqGRA2K7pbZpbwqAB/
+         pT0fEbFabrQM5GigdLgeSGP+aIjZINCogcliCt4G73ajobWvCqC7PeXaM7CXdUpJcw
+         ZoqSWaVOucVQw==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nLk1i-0093l2-OP; Sun, 20 Feb 2022 11:05:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg+rm+ZjuhT4zPWB@ninjato>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sun, 20 Feb 2022 11:05:14 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Gleixner <tglx@linutronix.de>, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 4.19 03/11] irqchip/sifive-plic: Add missing
+ thead,c900-plic match string
+In-Reply-To: <20220220095431.GA5251@amd>
+References: <20220215153104.581786-1-sashal@kernel.org>
+ <20220215153104.581786-3-sashal@kernel.org> <20220220095431.GA5251@amd>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d587e3c4e85b54e941be732aeff35125@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: pavel@ucw.cz, sashal@kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, guoren@linux.alibaba.com, anup@brainfault.org, palmer@dabbelt.com, samuel@sholland.org, tglx@linutronix.de, paul.walmsley@sifive.com, aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 03:22:19PM +0100, Wolfram Sang wrote:
+On 2022-02-20 09:54, Pavel Machek wrote:
+> Hi!
 > 
-> > +	struct device *dev = &interface->dev;
+>> [ Upstream commit 1d4df649cbb4b26d19bea38ecff4b65b10a1bbca ]
+>> 
+>> The thead,c900-plic has been used in opensbi to distinguish
+>> PLIC [1]. Although PLICs have the same behaviors in Linux,
+>> they are different hardware with some custom initializing in
+>> firmware(opensbi).
+>> 
+>> Qute opensbi patch commit-msg by Samuel:
+>> 
+>>   The T-HEAD PLIC implementation requires setting a delegation bit
+>>   to allow access from S-mode. Now that the T-HEAD PLIC has its own
+>>   compatible string, set this bit automatically from the PLIC driver,
+>>   instead of reaching into the PLIC's MMIO space from another driver.
+>> 
+>> [1]: 
+>> https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd62653b9fb31623a42ced45f38ea6
+>> 
 > 
-> This now creates a mixture of 'dev' and '&interface->dev'...
+> The "thead,c900-plic" string is added into single place in the
+> kernel. This means that a) it will probably not do anything useful in
+> -stable kernels and b) it is certainly missing documentation etc.
 > 
-> > +	priv->adapter.dev.parent = dev;
-> 
-> I propose to use &interface->dev here in this patch and convert to dev
-> in a later patch?
+> In mainline, string is documented in
+> Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
 
-Why not?
-Will do for next version (next week).
+(b) is certainly true. And to make the above comment useful, the missing
+patch is 321a8be37e1a ("dt-bindings: update riscv plic compatible
+string").
 
+Regarding (a), the DT is provided by the firmware (as it should
+be on any reasonable platform). As such, no need for this string to be
+mentioned anywhere else but in the documentation.
+
+Now, the real question is where there is any point in backporting
+this to such an old kernel, as this HW is unlikely to ever run it.
+
+         M.
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jazz is not dead. It just smells funny...

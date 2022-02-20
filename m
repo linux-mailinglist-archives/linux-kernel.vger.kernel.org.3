@@ -2,149 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263D44BD03A
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 18:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D42E64BD05A
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 18:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242110AbiBTR0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 12:26:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35092 "EHLO
+        id S244347AbiBTRc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 12:32:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiBTR0G (ORCPT
+        with ESMTP id S242967AbiBTRc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 12:26:06 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9667331340
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 09:25:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645377945; x=1676913945;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=k1Yut2+HbXB39rZ9IDOKTS+NYuYcy7hnF6NjUlm8Itg=;
-  b=DifsbeVX7qxs7lGkxwbLAr++AYpKiuiK6eWmhuQoqtZPM6CFywfXppfQ
-   o781mVkSAZGDjyIM802kfi6Bhlw+NC9v+UWsyGs50lfWQGAhtVzJBQISx
-   7Q2rXekAYkKaMx2FqNlZV2IEIMBO7e9JmHHsiNfBU/hzMF+JMlTBAmfJ7
-   C0xKXLAceACMzAQ7x70aB2xeLPoaJDNBCnLkaYSD/vWNd/iaH701no/UA
-   UAzkjWguZ5iKWCdpU6wsQBRAOI67nbsEVttF6qtGCSHwbS509loUumyIM
-   JMVdHBDCiQYW26eQqxGRWSyD2CjkUys56ugScVYA/cZ1kzql5VWPLMDq9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231359097"
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="231359097"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 09:25:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="490206421"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 20 Feb 2022 09:25:43 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLpxv-0000Vd-6D; Sun, 20 Feb 2022 17:25:43 +0000
-Date:   Mon, 21 Feb 2022 01:24:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:338:45: error: call to
- '__compiletime_assert_283' declared with attribute error: BUILD_BUG_ON
- failed: SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH +
- ilog2(roundup_pow_of_two(NR_CPUS)) > 32
-Message-ID: <202202210121.6qr9G658-lkp@intel.com>
+        Sun, 20 Feb 2022 12:32:27 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C88FC4;
+        Sun, 20 Feb 2022 09:32:05 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id d23so14457773lfv.13;
+        Sun, 20 Feb 2022 09:32:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+Q3n0Y+E0iTibxw2SrDvuKXdCqveJjmzvnX1uL9SsFk=;
+        b=cKMVnhdlUwCAtAKS5QVRJrtD4kMH3k8LViPPur+Ewnfz94uTlcu12C4nQR5YCCtw/O
+         aOcoKT43DUlCEthXvDSkg4K5tDIvFneswEn9i42xd82/iB4IgMHaT9uVfdd0zRAhEGLn
+         N7h4Y1a4CJnvVUxSdUL6ev2/EB8if9KoGEm046+AGj8rVf2nABLYFZcsZuk1VeQQfXUL
+         R8jHQxDM8JZKXsXMue09HzX5ojJbulLCpg+YEBJzNuBTwUXxInFDHN8NEla6YtISj+pX
+         MfFQ7/CLNvb2gVtHbHiAyL9c3FWEpM8rIZB0wejDHAbU/xmv1qlFK3MSSIt5/7mFA1U1
+         CJEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+Q3n0Y+E0iTibxw2SrDvuKXdCqveJjmzvnX1uL9SsFk=;
+        b=JbIYeukpS6vMXan8FVVioLS5GdFpeVASk2tjfEtG7kNoG41/Vh9CvVsCjG4qk7JKPA
+         1cphpOi0UMGp7Cw7pPO2hgCt1E2+uuMnTazusM2Wl1MCK8tI3D4QcKnSKA4xcS2WU3tl
+         0OC8AknXsCheCTsk0g5DNf6SHj1AeSN/AkW51LU11t/IYfhuWZ/PWW5Xx4Kjis5v/Qxj
+         FubazX7jHihxis8zOx0qseSP+Bj8MbjfufjsSYzGA+kOBTpLUm1BTOO2OQ/l1evYFfb/
+         S3E536tG/D2uSHpND6jXIJr9b0AMovI5tu7zaXdaLehlksdeTCo3zs8IiYnC3FNlb/nt
+         pV3A==
+X-Gm-Message-State: AOAM532HpAfC4Eth9UcXAK+3TyeEW1MMv23wI7U0hdPwkzhQ7aczgyjR
+        J6iI5k01m2RLworHCibJ0CE=
+X-Google-Smtp-Source: ABdhPJz4DtWFGHyllZUkWLV5wC0O4UDqNaJILkd8FJqwAd32gi5qrzWvQXMmgGn1W6Xkk1zyh7fYvw==
+X-Received: by 2002:a19:761a:0:b0:43c:79ae:6aef with SMTP id c26-20020a19761a000000b0043c79ae6aefmr11883967lff.630.1645378323194;
+        Sun, 20 Feb 2022 09:32:03 -0800 (PST)
+Received: from localhost.localdomain (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.gmail.com with ESMTPSA id f8sm880490ljk.97.2022.02.20.09.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 09:32:02 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/8] Add V4L stateless video decoder API support to NVIDIA Tegra driver
+Date:   Sun, 20 Feb 2022 20:29:42 +0300
+Message-Id: <20220220172950.3401-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+Support V4L stateless video decoder API by NVIDIA Tegra decoder driver.
+Tested using GStreamer [1] and libvdpau-tegra [2][8].
 
-FYI, the error/warning still remains.
+[1] https://github.com/grate-driver/gstreamer/commit/b8509bdbb69b534e61419ea1798f32f9ad2f3597
+[2] https://github.com/grate-driver/libvdpau-tegra/commit/f822e95911e5e0c39f8ba19f843ddc1e0138d5ce
+[8] https://github.com/grate-driver/libvdpau-tegra/commit/80db4d02369f2a984ce3173d6bc305f32e9fdb97
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4f12b742eb2b3a850ac8be7dc4ed52976fc6cb0b
-commit: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-date:   1 year, 7 months ago
-config: sparc64-randconfig-r021-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210121.6qr9G658-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/
+Changelog:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+v4: - Added r-b from Nicolas Dufresne to the
+      "V4L2_H264_DECODE_PARAM_FLAG_P/BFRAME flags" patch.
 
-All errors (new ones prefixed by >>):
+    - Added patches to de-stage driver, like was suggested by Hans Verkuil.
 
-   arch/sparc/mm/init_64.c: In function 'arch_hugetlb_valid_size':
-   arch/sparc/mm/init_64.c:354:24: error: variable 'hv_pgsz_idx' set but not used [-Werror=unused-but-set-variable]
-     354 |         unsigned short hv_pgsz_idx;
-         |                        ^~~~~~~~~~~
-   arch/sparc/mm/init_64.c: In function 'sun4v_linear_pte_xor_finalize':
-   arch/sparc/mm/init_64.c:2210:23: error: variable 'pagecv_flag' set but not used [-Werror=unused-but-set-variable]
-    2210 |         unsigned long pagecv_flag;
-         |                       ^~~~~~~~~~~
-   In file included from <command-line>:
-   arch/sparc/mm/init_64.c: In function 'paging_init':
->> include/linux/compiler_types.h:338:45: error: call to '__compiletime_assert_283' declared with attribute error: BUILD_BUG_ON failed: SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH + ilog2(roundup_pow_of_two(NR_CPUS)) > 32
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:319:25: note: in definition of macro '__compiletime_assert'
-     319 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:338:9: note: in expansion of macro '_compiletime_assert'
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/sparc/mm/init_64.c:2306:9: note: in expansion of macro 'BUILD_BUG_ON'
-    2306 |         BUILD_BUG_ON(SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH +
-         |         ^~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+    - Added patch to enable driver in ARM's multi-platform defconfig.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FRAME_POINTER
-   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS || MCOUNT
-   Selected by
-   - LOCKDEP && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
+v3: - Added new decode_params flags [7] instead of V4L2_BUF_FLAG_*FRAME flags,
+      as was suggested by Nicolas Dufresne.
 
+      [7] https://github.com/grate-driver/gstreamer/commit/c5cd847f9c26b7669720ae58f9058de2515f51a2
 
-vim +/__compiletime_assert_283 +338 include/linux/compiler_types.h
+    - Added new patch that removes legacy UAPI.
 
-   324	
-   325	#define _compiletime_assert(condition, msg, prefix, suffix) \
-   326		__compiletime_assert(condition, msg, prefix, suffix)
-   327	
-   328	/**
-   329	 * compiletime_assert - break build and emit msg if condition is false
-   330	 * @condition: a compile-time constant condition to check
-   331	 * @msg:       a message to emit if condition is false
-   332	 *
-   333	 * In tradition of POSIX assert, this macro will break the build if the
-   334	 * supplied condition is *false*, emitting the supplied error message if the
-   335	 * compiler has support to do so.
-   336	 */
-   337	#define compiletime_assert(condition, msg) \
- > 338		_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-   339	
+v2: - Made V4L2_BUF_FLAG_*FRAME flags mandatory [3] and dropped reading
+      of raw bitstream from the driver code, as was suggested by
+      Nicolas Dufresne.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+      [3] https://github.com/grate-driver/gstreamer/commit/aee292f0f2e84b7654a314dd7e63f916888ffaa5
+
+    - Ran v4l2-compliance [4] and fluster [5][6] tests, like was suggested by
+      Nicolas Dufresne. Fixed minor v4l2-compliance errors that were related
+      to a partial initialization of the coded format and were harmless in
+      practice, but made compliance checker unhappy.
+
+      [4] https://gist.github.com/digetx/5d6bcdab633488f1dcc7c141ab90d30e
+      [5] https://gist.github.com/digetx/b06c5d779e9d25afa41d9f46946fe399
+      [6] https://gist.github.com/digetx/ac4198bc340e5065aa8ec3288bb21356
+
+Dmitry Osipenko (8):
+  media: v4l2-ctrls: Add new V4L2_H264_DECODE_PARAM_FLAG_P/BFRAME flags
+  media: staging: tegra-vde: Factor out H.264 code
+  media: staging: tegra-vde: Support V4L stateless video decoder API
+  media: staging: tegra-vde: Remove legacy UAPI support
+  media: staging: tegra-vde: Bump BSEV DMA timeout
+  media: staging: tegra-vde: De-stage driver
+  ARM: tegra_defconfig: Update CONFIG_TEGRA_VDE option
+  ARM: config: multi v7: Enable NVIDIA Tegra video decoder driver
+
+ .../media/v4l/ext-ctrls-codec-stateless.rst   |    6 +
+ MAINTAINERS                                   |    2 +-
+ arch/arm/configs/multi_v7_defconfig           |    1 +
+ arch/arm/configs/tegra_defconfig              |    3 +-
+ drivers/media/platform/Kconfig                |   17 +
+ drivers/media/platform/Makefile               |    2 +
+ drivers/media/platform/tegra/vde/Makefile     |    3 +
+ .../platform/tegra/vde}/dmabuf-cache.c        |    2 +-
+ drivers/media/platform/tegra/vde/h264.c       |  946 ++++++++++++
+ .../platform/tegra/vde}/iommu.c               |    2 +-
+ .../platform/tegra/vde}/trace.h               |    2 +-
+ drivers/media/platform/tegra/vde/v4l2.c       | 1018 ++++++++++++
+ drivers/media/platform/tegra/vde/vde.c        |  551 +++++++
+ drivers/media/platform/tegra/vde/vde.h        |  242 +++
+ drivers/staging/media/Kconfig                 |    2 -
+ drivers/staging/media/Makefile                |    1 -
+ drivers/staging/media/tegra-vde/Kconfig       |   10 -
+ drivers/staging/media/tegra-vde/Makefile      |    3 -
+ drivers/staging/media/tegra-vde/TODO          |    4 -
+ drivers/staging/media/tegra-vde/uapi.h        |   73 -
+ drivers/staging/media/tegra-vde/vde.c         | 1358 -----------------
+ drivers/staging/media/tegra-vde/vde.h         |  125 --
+ include/uapi/linux/v4l2-controls.h            |    2 +
+ 23 files changed, 2794 insertions(+), 1581 deletions(-)
+ create mode 100644 drivers/media/platform/tegra/vde/Makefile
+ rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/dmabuf-cache.c (99%)
+ create mode 100644 drivers/media/platform/tegra/vde/h264.c
+ rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/iommu.c (98%)
+ rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/trace.h (97%)
+ create mode 100644 drivers/media/platform/tegra/vde/v4l2.c
+ create mode 100644 drivers/media/platform/tegra/vde/vde.c
+ create mode 100644 drivers/media/platform/tegra/vde/vde.h
+ delete mode 100644 drivers/staging/media/tegra-vde/Kconfig
+ delete mode 100644 drivers/staging/media/tegra-vde/Makefile
+ delete mode 100644 drivers/staging/media/tegra-vde/TODO
+ delete mode 100644 drivers/staging/media/tegra-vde/uapi.h
+ delete mode 100644 drivers/staging/media/tegra-vde/vde.c
+ delete mode 100644 drivers/staging/media/tegra-vde/vde.h
+
+-- 
+2.34.1
+

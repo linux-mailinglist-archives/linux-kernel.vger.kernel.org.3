@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0574BCD3F
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 09:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD884BCD46
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 09:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbiBTIbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 03:31:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57056 "EHLO
+        id S234119AbiBTIlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 03:41:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiBTIbK (ORCPT
+        with ESMTP id S234169AbiBTIlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 03:31:10 -0500
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718EC50B17
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 00:30:46 -0800 (PST)
-X-QQ-mid: bizesmtp66t1645345832taerfzir
-Received: from localhost.localdomain (unknown [202.96.137.248])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 20 Feb 2022 16:29:33 +0800 (CST)
-X-QQ-SSF: 01400000002000D0N000000A0000000
-X-QQ-FEAT: pqOtrSRu7rg5ACz2c+gPpZlgAFM7xN0sDWeZTFZT/eyjqGE+KF9Yd47IqfiLL
-        5OmQB4GQpeoTHRPQCDUQLPFDmhJiCs9H0ot8T4/FFY0Z7C+wC/58MMbKGyVTF4mYghb0dbW
-        u9yriejklXLciYCcTNriqWlveaMq9qX1JilHE3qb9kEx+9kPkcrkWsmFc/0sVoDSwjdLnjQ
-        ocRWtFwqpff5hYgLercPVeaWNd4Spwv413rO6mbLrCPIXsbb9tJXE2USokVub62mNHJwXOF
-        IYz7pi8HYSa+dB5MlVHRkVLhbk22U9vzS8HB6Lck6Uhjl6Gf2h6f5XaPzsKIZNEIbYP21ds
-        FjFbHBX/JgScBr3SHutDjSkO7tVYjrMQ8FK5ng3
-X-QQ-GoodBg: 2
-From:   Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
-To:     corbet@lwn.net
-Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au,
-        hanshenghong2019@email.szu.edu.cn, vbabka@suse.cz,
-        skhan@linuxfoundation.org, georgi.djakov@linaro.org,
-        weizhenliang@huawei.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
-Subject: [PATCH 2/2] Documentation/vm/page_owner.rst: fix a phrase
-Date:   Sun, 20 Feb 2022 16:29:32 +0800
-Message-Id: <20220220082932.2808-1-caoyixuan2019@email.szu.edu.cn>
-X-Mailer: git-send-email 2.31.1
+        Sun, 20 Feb 2022 03:41:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3FFA41621
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 00:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645346482;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rtANzgbU227sGJWD6YEoeMtzkQAILI2Pi3z0wKXXOmY=;
+        b=TBoflWKhUY+Qmdawo/Zf+wl6uRYo9UQ94paniA3Cgu1QFOcwFAjMonz6ZeTN0Mf0ASWPMF
+        dnNIqzMM8qcFVYmPRLk7PRU0psQ4EHO38ZdWNLM0lPvIVEVJnMXG/a1WxuShMSpVc6sSU5
+        Znm4d7FTGzSbHEjUw0bpDe6meS+dPoA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-328-gop_Iyv3PYiVdI3VtWtraA-1; Sun, 20 Feb 2022 03:41:21 -0500
+X-MC-Unique: gop_Iyv3PYiVdI3VtWtraA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B0861091DA1;
+        Sun, 20 Feb 2022 08:41:14 +0000 (UTC)
+Received: from localhost (ovpn-12-31.pek2.redhat.com [10.72.12.31])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EC885418E;
+        Sun, 20 Feb 2022 08:40:49 +0000 (UTC)
+Date:   Sun, 20 Feb 2022 16:40:44 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, cl@linux.com, 42.hyeyoo@gmail.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        vbabka@suse.cz, David.Laight@aculab.com, david@redhat.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
+        netdev@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, linux-s390@vger.kernel.org, michael@walle.cc,
+        linux-i2c@vger.kernel.org, wsa@kernel.org
+Subject: Re: [PATCH 21/22] mmc: wbsd: Use dma_alloc_noncoherent() for dma
+ buffer
+Message-ID: <20220220084044.GC93179@MiWiFi-R3L-srv>
+References: <20220219005221.634-1-bhe@redhat.com>
+ <20220219005221.634-22-bhe@redhat.com>
+ <20220219071730.GG26711@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign6
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220219071730.GG26711@lst.de>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,28 +71,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think that using "by default" will be better.
+On 02/19/22 at 08:17am, Christoph Hellwig wrote:
+> On Sat, Feb 19, 2022 at 08:52:20AM +0800, Baoquan He wrote:
+> >  	if (request_dma(dma, DRIVER_NAME))
+> >  		goto err;
+> >  
+> > +	dma_set_mask_and_coherent(mmc_dev(host->mmc), DMA_BIT_MASK(24));
+> 
+> This also sets the streaming mask, but the driver doesn't seem to make
+> use of that.  Please document it in the commit log.
 
-Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
----
- Documentation/vm/page_owner.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for reviewing. I will change it to dma_set_mask(), and describe
+this change in patch log.
 
-diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
-index 2b54e82b9fe1..5ac1c12fcfc2 100644
---- a/Documentation/vm/page_owner.rst
-+++ b/Documentation/vm/page_owner.rst
-@@ -26,7 +26,7 @@ fragmentation statistics can be obtained through gfp flag information of
- each page. It is already implemented and activated if page owner is
- enabled. Other usages are more than welcome.
- 
--page owner is disabled in default. So, if you'd like to use it, you need
-+page owner is disabled by default. So, if you'd like to use it, you need
- to add "page_owner=on" into your boot cmdline. If the kernel is built
- with page owner and page owner is disabled in runtime due to no enabling
- boot option, runtime overhead is marginal. If disabled in runtime, it
--- 
-2.31.1
+> 
+> Also setting smaller than 32 bit masks can fail, so this should have
+> error handling.
 
-
+OK, will check and add error handling.
 

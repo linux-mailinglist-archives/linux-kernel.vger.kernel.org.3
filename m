@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6164BCFE0
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 17:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283824BCFE1
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 17:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243243AbiBTQbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 11:31:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34130 "EHLO
+        id S244260AbiBTQco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 11:32:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234610AbiBTQbO (ORCPT
+        with ESMTP id S234610AbiBTQck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 11:31:14 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FAD4AE05
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:30:52 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id vz16so27221938ejb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:30:52 -0800 (PST)
+        Sun, 20 Feb 2022 11:32:40 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AFAE6B
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:32:19 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id w4so15195813vsq.1
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:32:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p2G6HGRIzCEmE89H5wDpfU+oum09SC6vpI/xczji82A=;
-        b=AkbjzHgV9zAu+zUIS1gUtT7UUoz24Rd+RulaxnOYTnhuVhMv8ciKvmOXKJ9MNH5Ufo
-         cMl5bT4W2+I41xgKLzdLdrzVgCz+Kd5CqxrWIRrBaolVDmmtB8SygNkmKQzz1TngbIr3
-         IhZibbm91cW81DxNmoVgm6U/IF3pe9cyH8UDL0TWqZgZUGJZceDvfcIvSKfbi2CSobRP
-         U2M8Jh2NbaYxT82AkpiybWMHoKp1HKFHaCWrYnPkr0C56kG8/oTfnzq/bkm4F6pqe/hj
-         pOtK6rFoGu3FcEvmLjDJhkQHymdgVVW04snF79Uoqzydd3/JBqwP9O3FFnrt+JCwmeBE
-         NL3Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JYnP3q7TXlLUy1XLn2m5CwnhR2OGlO525rdZ+tITisc=;
+        b=Rw9l43W0JdjL2vZDCqx1F2qjFrPh47g8mOhG3tGA5e1RK+tcalXRWqm+PTqL2/AIO2
+         BhwbQpf7T1ZW6RqmPlmJ67BrMaxq/r2qD/ngnHgmeYlcOkMIwYgAqJrJuduKI3eDE6x3
+         JLhwo9gNsZDZ6p12l5sDYPcggA1un2YorDmxyd7GGTGWF3B6RWvXzc5A1Y4Vfhx5jOIX
+         G4fKtya8iHPmIrIthhnYUo1eeq+2djuAdxzXyJdmeEuXf21UylC0aDu8NGWwvqkQjF1s
+         SGdiW+zt0A+MHJhLgxU+hHGt8WWKY6jxYPgzz0VLJaDOEP6n1IFykDR1u7x+NH9Q2pNQ
+         BMtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p2G6HGRIzCEmE89H5wDpfU+oum09SC6vpI/xczji82A=;
-        b=AnGtNT2V/Wq+bZzXpmGxv8x8NMT4r7oR3ht31JIbkUpMlzUvE3bxRUM1KVSXl+TBj3
-         fzt9rMf7qc857BZWEPywCZfRJqg4oDspqcvHvw2rJQJjWdg44F+g5SNBBeVRtrlEA/Vj
-         MmwotqCRo4e0MGVgJKKso+izet4XfITYUbpibEEWyN0Unk5OFiY3tljLAetlevrBlFAJ
-         9E2yYQZgENVezMSHriyTPIMBIUUOCt6Z9TFglaLLQm4ZkXUogJv2PH0VeZG/lSVtbBLP
-         X/gJIV61J+xqpOdOCPDRtZaZ6dRcj0xw+xi1W2SN2Sw2GuuowkBGK0luPIdD5s5miB3/
-         PnpQ==
-X-Gm-Message-State: AOAM531U40Jg+uvSPrnfVeFrGE7kGx7I+6UX+g0SfmsA7o17oha1iNr3
-        eS8UWBKanpMd7GcI93sWmQT+69SJGHQkLzoioIhgNw==
-X-Google-Smtp-Source: ABdhPJyWuK3ZtXL+Ui7a8rINYgV8rUuNpF0LH8+fcBRpHY21q6RQ8yfGkcO163Rza0GTKh6g9JyLlg==
-X-Received: by 2002:a17:906:d9c4:b0:6cc:ecbd:3667 with SMTP id qk4-20020a170906d9c400b006ccecbd3667mr12915863ejb.645.1645374650685;
-        Sun, 20 Feb 2022 08:30:50 -0800 (PST)
-Received: from localhost.localdomain ([217.61.0.106])
-        by smtp.gmail.com with ESMTPSA id j19sm4277072ejm.111.2022.02.20.08.30.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 08:30:50 -0800 (PST)
-From:   Hans Weber <hwe.kernel@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Hans Weber <hwe.kernel@gmail.com>
-Subject: [PATCH 3/3] patch : first example not showing umask field from Table 1-2
-Date:   Sun, 20 Feb 2022 17:30:47 +0100
-Message-Id: <20220220163047.117864-1-hwe.kernel@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JYnP3q7TXlLUy1XLn2m5CwnhR2OGlO525rdZ+tITisc=;
+        b=RwMBlP3L6EJtK2k7m6nzn8OkinZyiLG9tPaV7ezeJTsfQX6OMMf8d/fGEFG+HudrLa
+         H2K+bWgMq+ezqrPYXiNE4om5ZQ+tfuM3XMaUgoidhn984z+8CCOeswvgb+ER04f+87JR
+         qpOmZ8o32vG0viMus3t4/K2JikQSel/6AN30xGCJweBTAcB81aq+WYyuu5hVI8zBtILZ
+         r88UOk8kjyC/dcHtm9wtdydiqLwlYGMno8ZJBn4Ytp8vViJkyediqr05EerKCsR+y+/8
+         pA/e/3/zpkxGd786sLAOGa4D/oSAY9joZ9w8xEChgx9GgdDfl7kgTPAm2me9iN9Eq5ma
+         T7Ew==
+X-Gm-Message-State: AOAM533dUwBbA5/6yrq1furotTOUqEPipF1b12cOzx4QmP32Z7PesGIc
+        my8LG1IsWOsVyZFfvqs10LcdbN8mOO4=
+X-Google-Smtp-Source: ABdhPJy1TvDVMuAigaiQJaI3oYQ/ohTtgCLH5OyOxeHGNoFInycdKn1G84yc8LAi6JM6u85aUg5CkA==
+X-Received: by 2002:a67:ecc6:0:b0:31c:33d2:8f6b with SMTP id i6-20020a67ecc6000000b0031c33d28f6bmr1576707vsp.46.1645374738459;
+        Sun, 20 Feb 2022 08:32:18 -0800 (PST)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id k5sm84720vkb.23.2022.02.20.08.32.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 08:32:17 -0800 (PST)
+Received: by mail-vs1-f48.google.com with SMTP id e26so15191468vso.3
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:32:17 -0800 (PST)
+X-Received: by 2002:a67:c384:0:b0:31b:6b52:33c7 with SMTP id
+ s4-20020a67c384000000b0031b6b5233c7mr6847946vsj.74.1645374737046; Sun, 20 Feb
+ 2022 08:32:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220218143524.61642-1-thomas.liu@ucloud.cn>
+In-Reply-To: <20220218143524.61642-1-thomas.liu@ucloud.cn>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sun, 20 Feb 2022 08:31:41 -0800
+X-Gmail-Original-Message-ID: <CA+FuTScWvCUH3-fyMNeO5KS7FQ0QBmhfLuGAybiV0rhM1q2b0Q@mail.gmail.com>
+Message-ID: <CA+FuTScWvCUH3-fyMNeO5KS7FQ0QBmhfLuGAybiV0rhM1q2b0Q@mail.gmail.com>
+Subject: Re: [PATCH net v3] gso: do not skip outer ip header in case of ipip
+ and net_failover
+To:     Tao Liu <thomas.liu@ucloud.cn>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, edumazet@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -67,134 +78,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signe-off-by: Hans Weber <hwe.kernel@gmail.com>
----
- Documentation/filesystems/proc.rst | 105 ++++++++++++++++-------------
- 1 file changed, 58 insertions(+), 47 deletions(-)
+On Fri, Feb 18, 2022 at 6:36 AM Tao Liu <thomas.liu@ucloud.cn> wrote:
+>
+> We encounter a tcp drop issue in our cloud environment. Packet GROed in
+> host forwards to a VM virtio_net nic with net_failover enabled. VM acts
+> as a IPVS LB with ipip encapsulation. The full path like:
+> host gro -> vm virtio_net rx -> net_failover rx -> ipvs fullnat
+>  -> ipip encap -> net_failover tx -> virtio_net tx
+>
+> When net_failover transmits a ipip pkt (gso_type = 0x0103, which means
+> SKB_GSO_TCPV4, SKB_GSO_DODGY and SKB_GSO_IPXIP4), there is no gso
+> did because it supports TSO and GSO_IPXIP4. But network_header points to
+> inner ip header.
+>
+> Call Trace:
+>  tcp4_gso_segment        ------> return NULL
+>  inet_gso_segment        ------> inner iph, network_header points to
+>  ipip_gso_segment
+>  inet_gso_segment        ------> outer iph
+>  skb_mac_gso_segment
+>
+> Afterwards virtio_net transmits the pkt, only inner ip header is modified.
+> And the outer one just keeps unchanged. The pkt will be dropped in remote
+> host.
+>
+> Call Trace:
+>  inet_gso_segment        ------> inner iph, outer iph is skipped
+>  skb_mac_gso_segment
+>  __skb_gso_segment
+>  validate_xmit_skb
+>  validate_xmit_skb_list
+>  sch_direct_xmit
+>  __qdisc_run
+>  __dev_queue_xmit        ------> virtio_net
+>  dev_hard_start_xmit
+>  __dev_queue_xmit        ------> net_failover
+>  ip_finish_output2
+>  ip_output
+>  iptunnel_xmit
+>  ip_tunnel_xmit
+>  ipip_tunnel_xmit        ------> ipip
+>  dev_hard_start_xmit
+>  __dev_queue_xmit
+>  ip_finish_output2
+>  ip_output
+>  ip_forward
+>  ip_rcv
+>  __netif_receive_skb_one_core
+>  netif_receive_skb_internal
+>  napi_gro_receive
+>  receive_buf
+>  virtnet_poll
+>  net_rx_action
+>
+> The root cause of this issue is specific with the rare combination of
+> SKB_GSO_DODGY and a tunnel device that adds an SKB_GSO_ tunnel option.
+> SKB_GSO_DODGY is set from external virtio_net. We need to reset network
+> header when callbacks.gso_segment() returns NULL.
+>
+> This patch also includes ipv6_gso_segment(), considering SIT, etc.
+>
+> Fixes: cb32f511a70b ("ipip: add GSO/TSO support")
+> Signed-off-by: Tao Liu <thomas.liu@ucloud.cn>
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index b9d1c6764266..40ca0f9087db 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -138,7 +138,7 @@ usually fail with ESRCH.
-            /proc (as of 5.10.0) 
- 
-  ======================================================================================
-- Name   	      T  Content
-+ Name		      T  Content
-  ======================================================================================
-  arch_status          f Task architecture specific information
-  attr                 d API for security modules
-@@ -213,52 +213,63 @@ usually fail with ESRCH.
- For example, to get the status information of a process, all you have to do is
- read the file /proc/PID/status::
- 
--  >cat /proc/self/status
--  Name:   cat
--  State:  R (running)
--  Tgid:   5452
--  Pid:    5452
--  PPid:   743
--  TracerPid:      0						(2.4)
--  Uid:    501     501     501     501
--  Gid:    100     100     100     100
--  FDSize: 256
--  Groups: 100 14 16
--  VmPeak:     5004 kB
--  VmSize:     5004 kB
--  VmLck:         0 kB
--  VmHWM:       476 kB
--  VmRSS:       476 kB
--  RssAnon:             352 kB
--  RssFile:             120 kB
--  RssShmem:              4 kB
--  VmData:      156 kB
--  VmStk:        88 kB
--  VmExe:        68 kB
--  VmLib:      1412 kB
--  VmPTE:        20 kb
--  VmSwap:        0 kB
--  HugetlbPages:          0 kB
--  CoreDumping:    0
--  THP_enabled:	  1
--  Threads:        1
--  SigQ:   0/28578
--  SigPnd: 0000000000000000
--  ShdPnd: 0000000000000000
--  SigBlk: 0000000000000000
--  SigIgn: 0000000000000000
--  SigCgt: 0000000000000000
--  CapInh: 00000000fffffeff
--  CapPrm: 0000000000000000
--  CapEff: 0000000000000000
--  CapBnd: ffffffffffffffff
--  CapAmb: 0000000000000000
--  NoNewPrivs:     0
--  Seccomp:        0
--  Speculation_Store_Bypass:       thread vulnerable
--  SpeculationIndirectBranch:      conditional enabled
--  voluntary_ctxt_switches:        0
--  nonvoluntary_ctxt_switches:     1
-+>cat /proc/self/status
-+Name:	cat
-+Umask:	0022
-+State:	R (running)
-+Tgid:	19633
-+Ngid:	0
-+Pid:	19633
-+PPid:	13898
-+TracerPid:	0
-+Uid:	1000	1000	1000	1000
-+Gid:	1000	1000	1000	1000
-+FDSize:	256
-+Groups:	24 25 27 29 30 44 46 108 113 114 119 1000 
-+NStgid:	19633
-+NSpid:	19633
-+NSpgid:	19633
-+NSsid:	13898
-+VmPeak:	    5440 kB
-+VmSize:	    5440 kB
-+VmLck:	       0 kB
-+VmPin:	       0 kB
-+VmHWM:	     520 kB
-+VmRSS:	     520 kB
-+RssAnon:	      68 kB
-+RssFile:	     452 kB
-+RssShmem:	       0 kB
-+VmData:	     316 kB
-+VmStk:	     132 kB
-+VmExe:	      20 kB
-+VmLib:	    1460 kB
-+VmPTE:	      44 kB
-+VmSwap:	       0 kB
-+HugetlbPages:	       0 kB
-+CoreDumping:	0
-+THP_enabled:	1
-+Threads:	1
-+SigQ:	0/47433
-+SigPnd:	0000000000000000
-+ShdPnd:	0000000000000000
-+SigBlk:	0000000000000000
-+SigIgn:	0000000000000000
-+SigCgt:	0000000000000000
-+CapInh:	0000000000000000
-+CapPrm:	0000000000000000
-+CapEff:	0000000000000000
-+CapBnd:	000001ffffffffff
-+CapAmb:	0000000000000000
-+NoNewPrivs:	0
-+Seccomp:	0
-+Seccomp_filters:	0
-+Speculation_Store_Bypass:	vulnerable
-+Cpus_allowed:	ff
-+Cpus_allowed_list:	0-7
-+Mems_allowed:	00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001
-+Mems_allowed_list:	0
-+voluntary_ctxt_switches:	0
-+nonvoluntary_ctxt_switches:	0
- 
- This shows you nearly the same information you would get if you viewed it with
- the ps  command.  In  fact,  ps  uses  the  proc  file  system  to  obtain its
--- 
-2.30.2
-
+Reviewed-by: Willem de Bruijn <willemb@google.com>

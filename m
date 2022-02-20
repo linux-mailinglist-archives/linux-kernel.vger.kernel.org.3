@@ -2,200 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC6F4BD2AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 00:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B714BD2AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 00:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245291AbiBTXiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 18:38:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49608 "EHLO
+        id S245285AbiBTXhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 18:37:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242396AbiBTXiV (ORCPT
+        with ESMTP id S230463AbiBTXhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 18:38:21 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D6F6179
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 15:37:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645400279; x=1676936279;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0J1qnhL2r06oFihAUWB0V490m2FyYiNzPm2bPGFwsQw=;
-  b=Q04BDtHBsvUcEK0fyVmTD2DvzSNiBnQp164dqgxnnO7p2vSgdCz+b6Lm
-   ERAIYrLRxTEN62vQC40HJyyJ6Zj+LKVSpdipm0X15kHO4nkQj/G7yrCip
-   hheRoG8z33IE1DN3rFz1KK6CMWCAOKIAQ6dzhC9L3eLfhWuYr4MyLnLgM
-   JZKLApf2RmH8pFxMPXe5FP9WzopDPlcmvI7Ql1zt2cIJbnOHFy8At7IMD
-   L6UIkAu7blENF0PNZfQC0F1dM9S+z4TahG/tN6oOfDFtSg7N2iC6FJmeA
-   6EpzXCnPM4MG2rdNqKGyfo8kAXK89zKEkVofhA8Ps1/26nsYL6mcyj39x
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="248990259"
-X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="248990259"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 15:37:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="638364122"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 20 Feb 2022 15:37:57 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLvm9-00011M-4G; Sun, 20 Feb 2022 23:37:57 +0000
-Date:   Mon, 21 Feb 2022 07:37:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1782/2574] kernel/sched/core.c:9009:6:
- warning: no previous prototype for function 'idle_task_exit'
-Message-ID: <202202210715.pKdyhau2-lkp@intel.com>
+        Sun, 20 Feb 2022 18:37:47 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8C026D1
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 15:37:25 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id ci24-20020a17090afc9800b001bc3071f921so1402978pjb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 15:37:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=PfnPViFi5jg7IRyMxQ3OaQXKIHWgtsoMjGOlXD3zJQM=;
+        b=iRob2c+2Fra2zwal5sxhXh70bO5WigxgAUdN1dsAHPlzA+Chs964jL5I+Xa5jG+zpJ
+         gMIRcE5UBh2Bs5k5+IbI8WsNKt5rf1RTuIJfgzCSRmX/3hO1uEBPnkJZOMdARpiynuIe
+         sZ5vQqFMj7B1O4oIqmecMQrN3x95NLx61I4iThqIv2R6+HvhYyEKg7P688rptpQ6gjwE
+         IyLWu45YshhfjR2YcNBtrMQM5tiPvB5usbh+m4nay4dKLFGiXtOv0Gqt57Qu6p5pymSP
+         gamGFz6gguwmSVtvFCGP06emerWfp95vch1guKiSftIitgRnOyFzEVvcPZA6DScbH9sr
+         h3zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PfnPViFi5jg7IRyMxQ3OaQXKIHWgtsoMjGOlXD3zJQM=;
+        b=MaI+YDHKwqRr+6bnD1MbKphA8hVy4muwVauGEMGjW4JcpuGDgw4F7DQub2KzBhZGeX
+         7oeURXK0r7+1x3f9csoZNuAlpSWRUu3MI78tejCEhxrKRWBigX1Tws0HG4jaEj4KY1XV
+         2axuIu20+rKrgU1VWNdlLJSkmdYhaxjNnGK4G4yyJ7K64PNGj25las7QQxIQL0SVgmdm
+         A7Reda5bw4NvBmkIhTncbEZbMa6xJ1jCdmSYPJm9RcTFaRqaPA2Gm7szy6ii8N05tVDp
+         4UXTIAQ6+ez11Lfnrqn5E2NCLN++2vvRfG3CUmGm+dX2LrgmwwJ8jORZ3ERtf/5OOCXR
+         XVMg==
+X-Gm-Message-State: AOAM530onbMJpjCKeiPt9/MT2fg59w6cJzz1Y0BDf/fOCxqXqjuAVKqk
+        4ho6tFpHpOUfKkaWPo8x2QCqvzw6sM6N2Q==
+X-Google-Smtp-Source: ABdhPJwJZcBh1EKHqiF2w9O4ZrJ1IYsxxMAFqgoYGFudkI4Sp3rvs4qiYXDdGu4DqAapa2ePGodlig==
+X-Received: by 2002:a17:902:e889:b0:14f:c4bc:677b with SMTP id w9-20020a170902e88900b0014fc4bc677bmr965728plg.68.1645400244621;
+        Sun, 20 Feb 2022 15:37:24 -0800 (PST)
+Received: from [192.168.0.2] (c-73-158-10-71.hsd1.ca.comcast.net. [73.158.10.71])
+        by smtp.googlemail.com with ESMTPSA id 13sm5560588pje.50.2022.02.20.15.37.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 15:37:24 -0800 (PST)
+Message-ID: <2d30205a-fc22-02e1-5c4b-99b91493580c@gmail.com>
+Date:   Sun, 20 Feb 2022 15:37:22 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Linux 5.17-rc5
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHk-=wgsMMuMP9_dWps7f25e6G628Hf7-B3hvSDvjhRXqVQvpg@mail.gmail.com>
+From:   Robert Gadsdon <rhgadsdon@gmail.com>
+In-Reply-To: <CAHk-=wgsMMuMP9_dWps7f25e6G628Hf7-B3hvSDvjhRXqVQvpg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   39e8a0edc8fae20758051dadf7846849edc18b88
-commit: b6902652b0ca92c05ba2a78dafaa1db83f232fe4 [1782/2574] headers/deps: Reorganize, clean up and optimize kernel/sched/sched.h dependencies
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220221/202202210715.pKdyhau2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=b6902652b0ca92c05ba2a78dafaa1db83f232fe4
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout b6902652b0ca92c05ba2a78dafaa1db83f232fe4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/sched/
+Compile fail.   Fedora 35, GCC 11.2.1, x86_64..
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/sched/core.c:3645:6: warning: no previous prototype for function 'sched_set_stop_task' [-Wmissing-prototypes]
-   void sched_set_stop_task(int cpu, struct task_struct *stop)
-        ^
-   kernel/sched/core.c:3645:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sched_set_stop_task(int cpu, struct task_struct *stop)
-   ^
-   static 
-   kernel/sched/core.c:5345:20: warning: no previous prototype for function 'task_sched_runtime' [-Wmissing-prototypes]
-   unsigned long long task_sched_runtime(struct task_struct *p)
-                      ^
-   kernel/sched/core.c:5345:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long long task_sched_runtime(struct task_struct *p)
-   ^
-   static 
->> kernel/sched/core.c:9009:6: warning: no previous prototype for function 'idle_task_exit' [-Wmissing-prototypes]
-   void idle_task_exit(void)
-        ^
-   kernel/sched/core.c:9009:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void idle_task_exit(void)
-   ^
-   static 
->> kernel/sched/core.c:9242:5: warning: no previous prototype for function 'sched_cpu_activate' [-Wmissing-prototypes]
-   int sched_cpu_activate(unsigned int cpu)
-       ^
-   kernel/sched/core.c:9242:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_cpu_activate(unsigned int cpu)
-   ^
-   static 
->> kernel/sched/core.c:9286:5: warning: no previous prototype for function 'sched_cpu_deactivate' [-Wmissing-prototypes]
-   int sched_cpu_deactivate(unsigned int cpu)
-       ^
-   kernel/sched/core.c:9286:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_cpu_deactivate(unsigned int cpu)
-   ^
-   static 
->> kernel/sched/core.c:9359:5: warning: no previous prototype for function 'sched_cpu_starting' [-Wmissing-prototypes]
-   int sched_cpu_starting(unsigned int cpu)
-       ^
-   kernel/sched/core.c:9359:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_cpu_starting(unsigned int cpu)
-   ^
-   static 
->> kernel/sched/core.c:9380:5: warning: no previous prototype for function 'sched_cpu_wait_empty' [-Wmissing-prototypes]
-   int sched_cpu_wait_empty(unsigned int cpu)
-       ^
-   kernel/sched/core.c:9380:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_cpu_wait_empty(unsigned int cpu)
-   ^
-   static 
->> kernel/sched/core.c:9422:5: warning: no previous prototype for function 'sched_cpu_dying' [-Wmissing-prototypes]
-   int sched_cpu_dying(unsigned int cpu)
-       ^
-   kernel/sched/core.c:9422:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_cpu_dying(unsigned int cpu)
-   ^
-   static 
-   kernel/sched/core.c:9445:13: warning: no previous prototype for function 'sched_init_smp' [-Wmissing-prototypes]
-   void __init sched_init_smp(void)
-               ^
-   kernel/sched/core.c:9445:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init sched_init_smp(void)
-   ^
-   static 
-   kernel/sched/core.c:9508:13: warning: no previous prototype for function 'per_task_init' [-Wmissing-prototypes]
-   void __init per_task_init(void)
-               ^
-   kernel/sched/core.c:9508:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init per_task_init(void)
-   ^
-   static 
-   kernel/sched/core.c:9517:13: warning: no previous prototype for function 'sched_init' [-Wmissing-prototypes]
-   void __init sched_init(void)
-               ^
-   kernel/sched/core.c:9517:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init sched_init(void)
-   ^
-   static 
-   kernel/sched/core.c:1852:1: warning: unused function 'uclamp_update_active' [-Wunused-function]
-   uclamp_update_active(struct task_struct *p)
-   ^
-   12 warnings generated.
+....................
+   AR      net/netfilter/built-in.a
+   LD [M]  net/netfilter/nf_conntrack.o
+   CC [M]  net/netfilter/xt_socket.o
+net/netfilter/xt_socket.c: In function ‘socket_mt_destroy’:
+net/netfilter/xt_socket.c:224:17: error: implicit declaration of 
+function ‘nf_defrag_ipv6_disable’; did you mean 
+‘nf_defrag_ipv4_disable’? [-Werror=implicit-function-declaration]
+   224 |                 nf_defrag_ipv6_disable(par->net);
+       |                 ^~~~~~~~~~~~~~~~~~~~~~
+       |                 nf_defrag_ipv4_disable
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:288: net/netfilter/xt_socket.o] Error 1
+make[1]: *** [scripts/Makefile.build:550: net/netfilter] Error 2
+make: *** [Makefile:1831: net] Error 2
 
 
-vim +/idle_task_exit +9009 kernel/sched/core.c
+- already reported on Feb 11th, at:
+http://lkml.iu.edu/hypermail/linux/kernel/2202.1/05890.html
 
-^1da177e4c3f41 kernel/sched.c      Linus Torvalds     2005-04-16  9003  
-^1da177e4c3f41 kernel/sched.c      Linus Torvalds     2005-04-16  9004  #ifdef CONFIG_HOTPLUG_CPU
-054b9108e01ef2 kernel/sched.c      Kirill Korotaev    2006-12-10  9005  /*
-d1ccc66df8bfe3 kernel/sched/core.c Ingo Molnar        2017-02-01  9006   * Ensure that the idle task is using init_mm right before its CPU goes
-48c5ccae88dcd9 kernel/sched.c      Peter Zijlstra     2010-11-13  9007   * offline.
-054b9108e01ef2 kernel/sched.c      Kirill Korotaev    2006-12-10  9008   */
-48c5ccae88dcd9 kernel/sched.c      Peter Zijlstra     2010-11-13 @9009  void idle_task_exit(void)
-^1da177e4c3f41 kernel/sched.c      Linus Torvalds     2005-04-16  9010  {
-48c5ccae88dcd9 kernel/sched.c      Peter Zijlstra     2010-11-13  9011  	struct mm_struct *mm = current->active_mm;
-^1da177e4c3f41 kernel/sched.c      Linus Torvalds     2005-04-16  9012  
-48c5ccae88dcd9 kernel/sched.c      Peter Zijlstra     2010-11-13  9013  	BUG_ON(cpu_online(smp_processor_id()));
-bf2c59fce4074e kernel/sched/core.c Peter Zijlstra     2020-04-01  9014  	BUG_ON(current != this_rq()->idle);
-e76bd8d9850c22 kernel/sched.c      Rusty Russell      2008-11-25  9015  
-a53efe5ff88d02 kernel/sched/core.c Martin Schwidefsky 2012-10-26  9016  	if (mm != &init_mm) {
-252d2a4117bc18 kernel/sched/core.c Andy Lutomirski    2017-06-09  9017  		switch_mm(mm, &init_mm, current);
-a53efe5ff88d02 kernel/sched/core.c Martin Schwidefsky 2012-10-26  9018  		finish_arch_post_lock_switch();
-a53efe5ff88d02 kernel/sched/core.c Martin Schwidefsky 2012-10-26  9019  	}
-bf2c59fce4074e kernel/sched/core.c Peter Zijlstra     2020-04-01  9020  
-bf2c59fce4074e kernel/sched/core.c Peter Zijlstra     2020-04-01  9021  	/* finish_cpu(), as ran on the BP, will clean up the active_mm state */
-^1da177e4c3f41 kernel/sched.c      Linus Torvalds     2005-04-16  9022  }
-^1da177e4c3f41 kernel/sched.c      Linus Torvalds     2005-04-16  9023  
+Robert Gadsdon
+February 20th 2022.
 
-:::::: The code at line 9009 was first introduced by commit
-:::::: 48c5ccae88dcd989d9de507e8510313c6cbd352b sched: Simplify cpu-hot-unplug task migration
-
-:::::: TO: Peter Zijlstra <a.p.zijlstra@chello.nl>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

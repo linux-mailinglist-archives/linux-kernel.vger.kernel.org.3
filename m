@@ -2,113 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEED4BCF09
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 996D34BCEF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243946AbiBTOZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 09:25:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58876 "EHLO
+        id S243981AbiBTOai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 09:30:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbiBTOZM (ORCPT
+        with ESMTP id S229549AbiBTOaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 09:25:12 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911BE4E3B4
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 06:24:50 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        Sun, 20 Feb 2022 09:30:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B94240E41;
+        Sun, 20 Feb 2022 06:30:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 18E811EC0354;
-        Sun, 20 Feb 2022 15:24:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645367085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Glb9ViJyXJzoR1vrz+e9rIQwwG8Jrqc/CbHBsUwkNCM=;
-        b=KRskHcjwiOo4Qy7jReW7J5ls9yYPCxAzbZnpvFDkaI4BNMz1mSL4MjxSoZBRkVRqjimPRw
-        YCb/ph5CGlI73X/ABryJwc4rt1dP+jXqihOhGn/3fsqoUAX1Q10Ys5Dp8VduninNU7cKza
-        RsckCq9B+mY5woEm4ntaDMyDEqcyp7o=
-Date:   Sun, 20 Feb 2022 15:24:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     William Kucharski <william.kucharski@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] Correct documentation comments for x86
- csum_and_copy_...user()
-Message-ID: <YhJPMFz7jEA9Lbe6@zn.tnic>
-References: <20220205121456.478180-1-william.kucharski@oracle.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id EED69B80D44;
+        Sun, 20 Feb 2022 14:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1704C340F0;
+        Sun, 20 Feb 2022 14:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645367411;
+        bh=HeZrcKR/lgSNS+/4ZyVGZPY0lkICBDxbcqGF2W7KZyo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RiQABvqen/itqZyLL/Pj80FCA5Rxm1u4oh2Fym1aq79VNsSKT+iyWhhOQvnmCIsrG
+         MBOPtN+PT85nVeb+iTULnZpS4e/xIfJx7vtBkOaaC1xAAxXTb/Q5SMHdxZXahq1HPu
+         vlAdWSiVUrF7vPRHMIGUZe1RDiixqxym25761SVkHetcKdKDwUiIXNeNqITRsVxTMZ
+         W1ds95++hNzMNk5DnP2Uk5LFxHzsx9g6WheEIA41IDe+Ul1C8dCLblbMkt48M0V33H
+         xZenHTYFXK9ZhmIcqXa0vayn+c2D+SPht13/3ZLEZGj2AG7r2Sp8VA2ID13nX5AJp+
+         vF11qOuCDlBNQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 910A3E7BB19;
+        Sun, 20 Feb 2022 14:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220205121456.478180-1-william.kucharski@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/9] net: add skb drop reasons to TCP packet
+ receive
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164536741158.13103.3993205016299229625.git-patchwork-notify@kernel.org>
+Date:   Sun, 20 Feb 2022 14:30:11 +0000
+References: <20220220070637.162720-1-imagedong@tencent.com>
+In-Reply-To: <20220220070637.162720-1-imagedong@tencent.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     dsahern@kernel.org, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, rostedt@goodmis.org, mingo@redhat.com,
+        yoshfuji@linux-ipv6.org, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, imagedong@tencent.com,
+        talalahmad@google.com, keescook@chromium.org,
+        ilias.apalodimas@linaro.org, alobakin@pm.me, memxor@gmail.com,
+        atenart@kernel.org, bigeasy@linutronix.de, pabeni@redhat.com,
+        linyunsheng@huawei.com, arnd@arndb.de, yajun.deng@linux.dev,
+        roopa@nvidia.com, willemb@google.com, vvs@virtuozzo.com,
+        cong.wang@bytedance.com, luiz.von.dentz@intel.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, flyingpeng@tencent.com, mengensun@tencent.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 05:14:56AM -0700, William Kucharski wrote:
-> Clean up of calling conventions for csum_and_copy_..._user() did not update
-> associated documentation comments to account for the removal of additional
-> parameters.
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Sun, 20 Feb 2022 15:06:28 +0800 you wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> Fixes: c693cc4676a0 ("saner calling conventions for csum_and_copy_..._user()")
-> Signed-off-by: William Kucharski <william.kucharski@oracle.com>
-> ---
->  arch/x86/lib/csum-wrappers_64.c | 5 -----
->  1 file changed, 5 deletions(-)
+> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()"),
+> we added the support of reporting the reasons of skb drops to kfree_skb
+> tracepoint. And in this series patches, reasons for skb drops are added
+> to TCP layer (both TCPv4 and TCPv6 are considered).
+> Following functions are processed:
 > 
-> diff --git a/arch/x86/lib/csum-wrappers_64.c b/arch/x86/lib/csum-wrappers_64.c
-> index 189344924a2b..25d533502693 100644
-> --- a/arch/x86/lib/csum-wrappers_64.c
-> +++ b/arch/x86/lib/csum-wrappers_64.c
-> @@ -14,8 +14,6 @@
->   * @src: source address (user space)
->   * @dst: destination address
->   * @len: number of bytes to be copied.
-> - * @isum: initial sum that is added into the result (32bit unfolded)
-> - * @errp: set to -EFAULT for an bad source address.
->   *
->   * Returns an 32bit unfolded checksum of the buffer.
->   * src and dst are best aligned to 64bits.
-> @@ -39,8 +37,6 @@ EXPORT_SYMBOL(csum_and_copy_from_user);
->   * @src: source address
->   * @dst: destination address (user space)
->   * @len: number of bytes to be copied.
-> - * @isum: initial sum that is added into the result (32bit unfolded)
-> - * @errp: set to -EFAULT for an bad destination address.
->   *
->   * Returns an 32bit unfolded checksum of the buffer.
->   * src and dst are best aligned to 64bits.
-> @@ -64,7 +60,6 @@ EXPORT_SYMBOL(csum_and_copy_to_user);
->   * @src: source address
->   * @dst: destination address
->   * @len: number of bytes to be copied.
-> - * @sum: initial sum that is added into the result (32bit unfolded)
->   *
->   * Returns an 32bit unfolded checksum of the buffer.
->   */
-> -- 
+> [...]
 
-Wanna fix the rest of kernel-doc formatting issues while at it?
+Here is the summary with links:
+  - [net-next,v3,1/9] net: tcp: introduce tcp_drop_reason()
+    https://git.kernel.org/netdev/net-next/c/082116ffcb74
+  - [net-next,v3,2/9] net: tcp: add skb drop reasons to tcp_v4_rcv()
+    https://git.kernel.org/netdev/net-next/c/255f9034d305
+  - [net-next,v3,3/9] net: tcp: use kfree_skb_reason() for tcp_v6_rcv()
+    https://git.kernel.org/netdev/net-next/c/c0e3154d9c88
+  - [net-next,v3,4/9] net: tcp: add skb drop reasons to tcp_v{4,6}_inbound_md5_hash()
+    https://git.kernel.org/netdev/net-next/c/643b622b51f1
+  - [net-next,v3,5/9] net: tcp: add skb drop reasons to tcp_add_backlog()
+    https://git.kernel.org/netdev/net-next/c/7a26dc9e7b43
+  - [net-next,v3,6/9] net: tcp: use kfree_skb_reason() for tcp_v{4,6}_do_rcv()
+    https://git.kernel.org/netdev/net-next/c/8eba65fa5f06
+  - [net-next,v3,7/9] net: tcp: use tcp_drop_reason() for tcp_rcv_established()
+    https://git.kernel.org/netdev/net-next/c/2a968ef60e1f
+  - [net-next,v3,8/9] net: tcp: use tcp_drop_reason() for tcp_data_queue()
+    https://git.kernel.org/netdev/net-next/c/a7ec381049c0
+  - [net-next,v3,9/9] net: tcp: use tcp_drop_reason() for tcp_data_queue_ofo()
+    https://git.kernel.org/netdev/net-next/c/d25e481be0c5
 
-$ ./scripts/kernel-doc -v -none arch/x86/lib/csum-wrappers_64.c
-arch/x86/lib/csum-wrappers_64.c:13: info: Scanning doc for function csum_and_copy_from_user
-arch/x86/lib/csum-wrappers_64.c:23: warning: No description found for return value of 'csum_and_copy_from_user'
-arch/x86/lib/csum-wrappers_64.c:36: info: Scanning doc for function csum_and_copy_to_user
-arch/x86/lib/csum-wrappers_64.c:46: warning: No description found for return value of 'csum_and_copy_to_user'
-arch/x86/lib/csum-wrappers_64.c:59: info: Scanning doc for function csum_partial_copy_nocheck
-arch/x86/lib/csum-wrappers_64.c:68: warning: No description found for return value of 'csum_partial_copy_nocheck'
-
+You are awesome, thank you!
 -- 
-Regards/Gruss,
-    Boris.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-https://people.kernel.org/tglx/notes-about-netiquette
+

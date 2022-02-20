@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234914BD178
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 21:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DD24BD180
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 21:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244946AbiBTUbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 15:31:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43894 "EHLO
+        id S240359AbiBTUjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 15:39:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243959AbiBTUbH (ORCPT
+        with ESMTP id S229870AbiBTUjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 15:31:07 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C838522D7
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:30:45 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id a23so27908791eju.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:30:45 -0800 (PST)
+        Sun, 20 Feb 2022 15:39:52 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6142C4504B
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:39:30 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b9so15011529lfv.7
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:39:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=duxIQa38l5Vx3zHZUfG7pCHqZ11ClbH921hoe86DwF4=;
-        b=nFgg1jcLmoGkjXe/yOB2v3smQ01rvtMIvZJssfGp537oqtgrI2qeupJqHr++hHinPf
-         uzA4DQ5tXoN4PLkRRvYH5Kj1xa6f9uWRY02L66BSGxRysSE2m8r3GYBx0AnUffg6SV3I
-         A7lrnSZQSuQ9NP59c5tZNfLx7ZAoSclot7i8jf31LlLvHf44rm4sw1C/0snqwrGvHBHv
-         Q+rvSvwSFpq49rqhMvfuuGIb/xwinrY3Q8FQSCIR8ZzGUyTCLYFBHNwyo1vJ8afYWzyM
-         +ptGIL85FFls03r75ByEQt4h4Q+vhH0KKTqT5HSfwid2NT4XQO1n1XmA9B9xX4XvG5NB
-         RvLA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kKRB2WaBF2GQiP6qlxkilcBwOuI+2IkPQKIJsc3NqsQ=;
+        b=SX6+NI65ZhEZjT0l+lz22ObM1ZRomNOXQVzcDjpB5YASTsnX4Uuq5t6Cet7vkOLXks
+         aj3JuAWymCoQm7vmt2bwsxBatEGXFUsDHCXTKhDi7v5ho/LHIdE9nnZMOMw8fli5iDMi
+         6FKTFvq4sD7aOtt89az18DgLMAcPVrsdyNxh0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=duxIQa38l5Vx3zHZUfG7pCHqZ11ClbH921hoe86DwF4=;
-        b=6ZHHDaIFSS2PfI2u/T4sHdNEimqfLUUWXkVowqJgW08Q2q0VxTCckCRx+ntIXIH2Bo
-         C6xUmHK10MeTjvKBOKf+xRNXrv3gNQD56+YTdc74GB7HMWu4husY1x+CCME7LSfNUQZt
-         ropUweQzpZtJFMpq6AddeDMLkQg50+xIs9W77tmWjF2vMvoH8PEaxFimII9fGr3kDOzL
-         CqgxdcIlSXCiyPPYJqGvHeGyZMek5Qjn54KAAjw7ziSqBlZLJK+P7qFZWbZpdeF8Cm1E
-         CIND2yXb0lVKSnlURQLnllbF0VZcuzfAnZpQqjJ1mTglZ+27JLTd7m4hyyvqn8g6MMWi
-         BTGw==
-X-Gm-Message-State: AOAM532ER0emkIapcZb44Iw4ZbviGJiU+tgTzr4HaU7kW5v2Rq977EFj
-        NgXc4SJzMZkGsSjnuFTqfac=
-X-Google-Smtp-Source: ABdhPJxD4menECLdNo3bqpMdiBcTjMPRE/sq2Rb0w0RTZm6w9cKCyMknqWyWde40kCYB+YiV1QW3kA==
-X-Received: by 2002:a17:907:788c:b0:6ce:29d5:c075 with SMTP id ku12-20020a170907788c00b006ce29d5c075mr14028590ejc.407.1645389044574;
-        Sun, 20 Feb 2022 12:30:44 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p57935aa6.dip0.t-ipconnect.de. [87.147.90.166])
-        by smtp.gmail.com with ESMTPSA id r3sm4493631ejd.129.2022.02.20.12.30.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 12:30:44 -0800 (PST)
-Date:   Sun, 20 Feb 2022 21:30:42 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] staging: vt6656: Remove ftrace-like logging and
- unnecessary line breaks
-Message-ID: <44f469737b788d1012943eb4e95997d40a947f04.1645386791.git.philipp.g.hortmann@gmail.com>
-References: <cover.1645386791.git.philipp.g.hortmann@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kKRB2WaBF2GQiP6qlxkilcBwOuI+2IkPQKIJsc3NqsQ=;
+        b=bY0jabPM7XGoIgf21jhiIKT/RiA7J6ttLzUwKXUarL3zmjDx9RKTOtER2EL2jWXjgF
+         ByC5TEfvluitzoyec46VKQIrmciMdN4wG7T2N3Y9ONlyqYNLqMpt3bKXwuDaOyGNgtEB
+         aRHNqhXmZk4C/nAVS6sztPqUabs2pgLWdRlP3rxzr//b6BZ7enOYtbo44+bmBpTBNdrG
+         DJwsPLKLfdY7KExWcwGxaj9ttSdkMMq+c2pppOKBZwFlqvxzBJ40761/ODwmUgcKin4g
+         h2bHFcqeqVdkx1xnUYtUc+8a/kf4B7v07o8AHbebMGnB+8ZALHw0PkZ03TMDNkFPGL/H
+         WLTg==
+X-Gm-Message-State: AOAM533sMYbmwqHYJPvUJo/773Juf9UjLdWViUk0abLvhjbgtClQa/Qw
+        SDnFOmUGVR6uUHLq313GBVKmxp6PbzZXuYos
+X-Google-Smtp-Source: ABdhPJyL1jrlNohak0kjM5ixte7RCBPyeT2spdN7/GiuSeDMNchNpHvnrW75vzrY/1hPuy6hPVs5lQ==
+X-Received: by 2002:ac2:4146:0:b0:441:efd2:365d with SMTP id c6-20020ac24146000000b00441efd2365dmr12267151lfi.100.1645389568487;
+        Sun, 20 Feb 2022 12:39:28 -0800 (PST)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
+        by smtp.gmail.com with ESMTPSA id u7sm907512lfr.282.2022.02.20.12.39.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 12:39:27 -0800 (PST)
+Received: by mail-lf1-f48.google.com with SMTP id b11so14962940lfb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:39:27 -0800 (PST)
+X-Received: by 2002:ac2:4211:0:b0:438:2f1:83c4 with SMTP id
+ y17-20020ac24211000000b0043802f183c4mr12074683lfh.435.1645389567567; Sun, 20
+ Feb 2022 12:39:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1645386791.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <YhIq94B0MpYGrEm2@zn.tnic> <CAHk-=whi4n6xvy99U-q_GrR_hHk8es4GtDKtywiL5nRFUWroAQ@mail.gmail.com>
+ <YhKj08BBnevqtbch@zn.tnic>
+In-Reply-To: <YhKj08BBnevqtbch@zn.tnic>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 20 Feb 2022 12:39:11 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whvy0h0WfT8g=6rfws75xB94+yuALtSY1Gpx0bvnOqTFg@mail.gmail.com>
+Message-ID: <CAHk-=whvy0h0WfT8g=6rfws75xB94+yuALtSY1Gpx0bvnOqTFg@mail.gmail.com>
+Subject: Re: [GIT PULL] EDAC fix for 5.17
+To:     Borislav Petkov <bp@suse.de>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the checkpatch.pl warnings like:
-WARNING: Unnecessary ftrace-like logging - prefer using ftrace
-CHECK: Lines should not end with a '('
+On Sun, Feb 20, 2022 at 12:25 PM Borislav Petkov <bp@suse.de> wrote:
+>
+> Yah, where do I start... so, about this, I think I can simplify it by
+> simply unconditionally aligning to 8.
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/vt6656/rxtx.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+Sounds good.
 
-diff --git a/drivers/staging/vt6656/rxtx.c b/drivers/staging/vt6656/rxtx.c
-index a31947f2620d..4d29f8ebb393 100644
---- a/drivers/staging/vt6656/rxtx.c
-+++ b/drivers/staging/vt6656/rxtx.c
-@@ -58,8 +58,6 @@ static struct vnt_usb_send_context
- 	struct vnt_usb_send_context *context = NULL;
- 	int ii;
- 
--	dev_dbg(&priv->usb->dev, "%s\n", __func__);
--
- 	for (ii = 0; ii < priv->num_tx_context; ii++) {
- 		if (!priv->tx_context[ii])
- 			return NULL;
-@@ -355,10 +353,8 @@ static bool vnt_fill_txkey(struct vnt_tx_buffer *tx_buffer, struct sk_buff *skb)
- 		ether_addr_copy(mic_hdr->addr2, hdr->addr2);
- 		ether_addr_copy(mic_hdr->addr3, hdr->addr3);
- 
--		mic_hdr->frame_control = cpu_to_le16(
--			le16_to_cpu(hdr->frame_control) & 0xc78f);
--		mic_hdr->seq_ctrl = cpu_to_le16(
--				le16_to_cpu(hdr->seq_ctrl) & 0xf);
-+		mic_hdr->frame_control = cpu_to_le16(le16_to_cpu(hdr->frame_control) & 0xc78f);
-+		mic_hdr->seq_ctrl = cpu_to_le16(le16_to_cpu(hdr->seq_ctrl) & 0xf);
- 
- 		if (ieee80211_has_a4(hdr->frame_control))
- 			ether_addr_copy(mic_hdr->addr4, hdr->addr4);
--- 
-2.25.1
+Then you could just do something like
 
+        void *ptr = (void *)ALIGN_UP((unsigned long)*p, 8);
+        *p = ptr + size*n_memb;
+        return ptr;
+
+and that would be a lot simpler.
+
+> My gut feeling is telling me
+> 8-bytes alignment should simply work on everything. Because if it does,
+> all that crap becomes a lot simpler. But maybe I'm being too simplistic
+> here and there might be a corner-case where 8-bytes alignment just
+> doesn't work...
+
+Well, if 8-byte alignment doesn't work, then the existing code (with
+the fix) doesn't work either, so..
+
+                 Linus

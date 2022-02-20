@@ -2,116 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38FA4BCE36
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 12:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE1C4BCE37
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 12:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbiBTLkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 06:40:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43680 "EHLO
+        id S242757AbiBTLky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 06:40:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237173AbiBTLkU (ORCPT
+        with ESMTP id S240599AbiBTLkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 06:40:20 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5127D33A30;
-        Sun, 20 Feb 2022 03:40:00 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id o24so22234755wro.3;
-        Sun, 20 Feb 2022 03:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RaEs/jN71hZeYll+tur9U96Q+2NTXlCVlLMiaYYUO5s=;
-        b=MAqdQ6GhQ5ZjaCPXJmxowMvhLL6QITmXxHGes/K5j6RVUA6gnvvR9eUr8Md2zpP2/B
-         +ulUv4TM9MyVDIbw/wfYkG0GS7ZNj86jxcwIO63BpGO/vwd66I7ONnGeRbqH59Phd2Dx
-         dddXSwr5qmYN6s2zx/V+2CMVDa+Ctway3nsWEyWT50LK0+yeBA5SGSqnari7G8jcfzhr
-         s3DA4l/gjj+30vCfDd22yC0m6VlSR4q9oHdIVI4zVrA0muDiNSAdlfYf3N4YU6GoBzk3
-         xdilTeQUygq95V17kLYPWkt+awNe8tMnUzC9UYwKhz81wUTyzoa6xag5qEywyfcqvUpb
-         uMZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RaEs/jN71hZeYll+tur9U96Q+2NTXlCVlLMiaYYUO5s=;
-        b=ae0SPzQqwEHW1CTgJdyW6Sy7trZfdLSAsnPlCJ75PgsKR1dQSyiofaNJ2EMfRJGFki
-         VrLe0o8yUbHEaaJYaq3hLc9iRcMHaF182g1NXW83v1CckNjgYcXuUhI9tCwQGel/c/Xc
-         OBayfmyFMviquTk2b9isl9xcIK5oczCyf0KQJd0dwSvzPa/tNE8GbgQFi0SPotn5kcVf
-         Lh0yWFf5QOXTWciANKqUq9ML17OsyRONvuCXMW4qud5Bf3vs3avZhBqBk68lut4hXD8l
-         QwxT1GWJBdC0NY87sDO0GkbWCYyzGTkruVbqgLcK+hCMoBqWkcvdU2B4XFShRvATFOOk
-         17OA==
-X-Gm-Message-State: AOAM533YdrsjyAamAHy4PODVBINZJd56OjvNIGHQ2bC7o7y5LNYSQ484
-        Fl4n8Pehe2q5o8tNL5xJ0Ow=
-X-Google-Smtp-Source: ABdhPJwnLKujPPig2pre5dfFjnty70YOd2VPGaKifekwphhI0DwyZJd2VkaxNaOOR/OCbmh20al6VA==
-X-Received: by 2002:adf:8296:0:b0:1e3:24d8:ce8b with SMTP id 22-20020adf8296000000b001e324d8ce8bmr12349614wrc.544.1645357198740;
-        Sun, 20 Feb 2022 03:39:58 -0800 (PST)
-Received: from nil-pc.. ([102.41.165.254])
-        by smtp.gmail.com with ESMTPSA id o35-20020a05600c512300b0037df3512e9dsm4810757wms.3.2022.02.20.03.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 03:39:58 -0800 (PST)
-From:   Mahmoud Abumandour <ma.mandourr@gmail.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mahmoud Mandour <ma.mandourr@gmail.com>
-Subject: [PATCH] perf data: don't mention --to-ctf if it's not supported
-Date:   Sun, 20 Feb 2022 13:39:52 +0200
-Message-Id: <20220220113952.138280-1-ma.mandourr@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 20 Feb 2022 06:40:42 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8595032052;
+        Sun, 20 Feb 2022 03:40:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rVtuU6Hrq8wCtIw10ZxltjmyN+GjMD3/PKda00/vg6g=; b=QyunQTIbhs6QyM/MNE8tIOZ8NR
+        8J9x7GNbtnqtEjiwN8tVwwtFQuoCUzqM472l1PRDW2oAUV3vngMml03D9suwj/LOHiOH9x7puHW0x
+        EJdvx2+H+CG6jDZkS9WYca4c6rqDypdYOzq9g5a1MYxB9N4dDROK5iaFBrJz3RzZve2U2x+KD9RzH
+        ezIIkD+cpqa1dd+A1vpj6a4Bxd8+XkzbaPQh37kW0OliuSDj/2wJ4M0+zNm+ECzZaMX53qu8JPMh7
+        J1jP5PRzIxb9WgDWq1jybO4BqplW8EHCi53BvpNeTjvmE/HXr5HKMXyiT8GFppa4U1LvZ5lt1esGP
+        chMITAWw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nLkZN-000oj8-5z; Sun, 20 Feb 2022 11:40:01 +0000
+Date:   Sun, 20 Feb 2022 11:40:01 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     tangmeng <tangmeng@uniontech.com>
+Cc:     viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, nizhen@uniontech.com,
+        zhanglianjie@uniontech.com, nixiaoming@huawei.com
+Subject: Re: [PATCH 10/11] fs/drop_caches: move drop_caches sysctls to its
+ own file
+Message-ID: <YhIokWPShGOYh9LK@casper.infradead.org>
+References: <20220220060626.15885-1-tangmeng@uniontech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220220060626.15885-1-tangmeng@uniontech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mahmoud Mandour <ma.mandourr@gmail.com>
+On Sun, Feb 20, 2022 at 02:06:26PM +0800, tangmeng wrote:
+> diff --git a/fs/drop_caches.c b/fs/drop_caches.c
+> @@ -75,3 +75,25 @@ int drop_caches_sysctl_handler(struct ctl_table *table, int write,
+>  	}
+>  	return 0;
+>  }
+> +
+> +#ifdef CONFIG_SYSCTL
 
-The option `--to-ctf` is only available when perf has libbabeltrace
-support. Hence, on error, we shouldn't state that user must include
-`--to-ctf` unless it's supported.
+fs/Makefile has:
+obj-$(CONFIG_SYSCTL)            += drop_caches.o
 
-The only user-visible change for this commit is that when `perf` is not
-configured to support libbabeltrace, the user is only prompted to
-provide the `--to-json` option instead of bothe `--to-json` and
-`--to-ctf`.
+so we don't need this ifdef.
 
-Signed-off-by: Mahmoud Mandour <ma.mandourr@gmail.com>
----
- tools/perf/builtin-data.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> +static struct ctl_table vm_drop_caches_table[] = {
+> +	{
+> +		.procname       = "drop_caches",
+> +		.data           = &sysctl_drop_caches,
+> +		.maxlen         = sizeof(int),
+> +		.mode           = 0200,
+> +		.proc_handler   = drop_caches_sysctl_handler,
+> +		.extra1         = SYSCTL_ONE,
+> +		.extra2         = SYSCTL_FOUR,
+> +	},
+> +	{ }
+> +};
 
-diff --git a/tools/perf/builtin-data.c b/tools/perf/builtin-data.c
-index b7f9dc85a407..c22d82d2a73c 100644
---- a/tools/perf/builtin-data.c
-+++ b/tools/perf/builtin-data.c
-@@ -62,10 +62,17 @@ static int cmd_data_convert(int argc, const char **argv)
- 		pr_err("You cannot specify both --to-ctf and --to-json.\n");
- 		return -1;
- 	}
-+#ifdef HAVE_LIBBABELTRACE_SUPPORT
- 	if (!to_json && !to_ctf) {
- 		pr_err("You must specify one of --to-ctf or --to-json.\n");
- 		return -1;
- 	}
-+#else
-+	if (!to_json) {
-+		pr_err("You must specify --to-json.\n");
-+	return -1;
-+}
-+#endif
- 
- 	if (to_json)
- 		return bt_convert__perf2json(input_name, to_json, &opts);
--- 
-2.30.2
+Something which slightly concerns me about this sysctl splitup (which
+is obviously the right thing to do) is that ctl_table is quite large
+(64 bytes per entry) and every array is terminated with an empty one.
+In this example, we've gone from 64 bytes to 128 bytes.
 
+Would we be better off having a register_sysctl_one() which
+registers exactly one ctl_table, rather than an array?  And/or a
+register_sysctl_array() which takes an ARRAY_SIZE() of its argument
+instead of looking for the NULL terminator?

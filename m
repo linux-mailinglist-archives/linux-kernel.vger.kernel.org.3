@@ -2,119 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF72F4BD07F
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 19:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD24F4BD09A
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 19:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238909AbiBTR5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 12:57:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37636 "EHLO
+        id S242265AbiBTSDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 13:03:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiBTR5O (ORCPT
+        with ESMTP id S234727AbiBTSDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 12:57:14 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F4819292
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 09:56:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645379809; x=1676915809;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=di0yTkPPGf0lg8Z1HNTy1Ro4KtR4fZtl+kW8meoe/go=;
-  b=gsB0Q7yzgONN54qKRYdTCivoVwGs/3jDltLdinpUN1+p5oSg+Z7kDRzE
-   iaklaoG96IdC8k5tgruY91XKE/SnyLxPXOljJ3m7Y/tr1wx4eDjwYKJTr
-   rKv3rNhp5aEs3jOLjxyZ6YB+0jIqcOzdBer6z8D8fcxKDcFyOLW+v4XnF
-   MXe2/KLTj+GVc3L3pf32+LUgHmn03JWUD30LavwbTnsVeWIbiwJ5EFPGe
-   4F6UVjzKtZWIxUdNQ/irEWJnrBmFzcITnXQIkjO33LXJa4uJhb8z6SJpr
-   fipfKRMQlPRWB+qyJyDszC4Luj8bOv/YvkYqf0BZSvbPiDipKVwx/dClz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251573666"
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="251573666"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 09:56:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="504565884"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 09:56:45 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLqRx-0000Y4-6C; Sun, 20 Feb 2022 17:56:45 +0000
-Date:   Mon, 21 Feb 2022 01:55:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ardb:arm64-ro-page-tables-pkvm-v5.17 15/28]
- include/linux/pgtable.h:84:29: error: redefinition of 'p4d_index'
-Message-ID: <202202210124.8WuKWr52-lkp@intel.com>
+        Sun, 20 Feb 2022 13:03:43 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0725341636
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 10:03:20 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-17-xCk5Y2ofP4uDn5acdcKC0A-1; Sun, 20 Feb 2022 18:03:17 +0000
+X-MC-Unique: xCk5Y2ofP4uDn5acdcKC0A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Sun, 20 Feb 2022 18:03:15 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Sun, 20 Feb 2022 18:03:15 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guenter Roeck' <linux@roeck-us.net>,
+        'Armin Wolf' <W_Armin@gmx.de>,
+        "pali@kernel.org" <pali@kernel.org>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] hwmon: (dell-smm) Improve assembly code
+Thread-Topic: [PATCH v2] hwmon: (dell-smm) Improve assembly code
+Thread-Index: AQHYJdVCkKl8QQjZ0kWJRwIdNPLg26ycWRjggAA4sICAACqL4A==
+Date:   Sun, 20 Feb 2022 18:03:15 +0000
+Message-ID: <075c56861e1e454188db1088b78d3ee2@AcuMS.aculab.com>
+References: <20220219211011.16600-1-W_Armin@gmx.de>
+ <d66ab183f32c49b2b901b432d284edc5@AcuMS.aculab.com>
+ <7d387f96-1561-2eec-43e2-b971ff79d734@roeck-us.net>
+In-Reply-To: <7d387f96-1561-2eec-43e2-b971ff79d734@roeck-us.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-ro-page-tables-pkvm-v5.17
-head:   1faeabde0ba3c81ad666ab924ab79ef64843d40d
-commit: 8009c0d425d69c34521e0f8123ff62786f1ac8fa [15/28] mm: add default definition of p4d_index()
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220221/202202210124.8WuKWr52-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=8009c0d425d69c34521e0f8123ff62786f1ac8fa
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb arm64-ro-page-tables-pkvm-v5.17
-        git checkout 8009c0d425d69c34521e0f8123ff62786f1ac8fa
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAyMCBGZWJydWFyeSAyMDIyIDE1OjMwDQo+IA0K
+PiBPbiAyLzIwLzIyIDA0OjIwLCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4gRnJvbTogQXJtaW4g
+V29sZg0KPiA+PiBTZW50OiAxOSBGZWJydWFyeSAyMDIyIDIxOjEwDQo+ID4+DQo+ID4+IFRoZSBu
+ZXcgYXNzZW1ibHkgY29kZSB3b3JrcyBvbiBib3RoIDMyIGJpdCBhbmQgNjQgYml0DQo+ID4+IGNw
+dXMgYW5kIGFsbG93cyBmb3IgbW9yZSBjb21waWxlciBvcHRpbWlzYXRpb25zIGJ5IG5vdA0KPiA+
+PiByZXF1aXJpbmcgc21tX3JlZ3MgdG8gYmUgcGFja2VkLiBBbHNvIHNpbmNlIHRoZQ0KPiA+PiBT
+TU0gaGFuZGxlciBzZWVtcyB0byBtb2RpZnkgdGhlIGNhcnJ5IGZsYWcsIHRoZSBuZXcNCj4gPj4g
+Y29kZSBpbmZvcm1zIHRoZSBjb21waWxlciB0aGF0IHRoZSBmbGFncyByZWdpc3Rlcg0KPiA+PiBu
+ZWVkcyB0byBiZSBzYXZlZC9yZXN0b3JlZC4gU2luY2UgY2xhbmcgcnVucyBvdXQgb2YNCj4gPj4g
+cmVnaXN0ZXJzIG9uIDMyIGJpdCB4ODYgd2hlbiB1c2luZyBDQ19PVVQsIHdlIG5lZWQNCj4gPj4g
+dG8gZXhlY3V0ZSAic2V0YyIgb3Vyc2VsZi4NCj4gPg0KPiA+IFlvdSBhbHdheXMgbmVlZCB0byBz
+YXZlIGFueXRoaW5nIGZyb20gdGhlIGZsYWdzIHJlZ2lzdGVyDQo+ID4gaW5zaWRlIHRoZSBhc20g
+YmxvY2sgLSBpdCBpcyBuZXZlciB2YWxpdCBhZnRlcndhcmRzLg0KPiA+DQo+IA0KPiBEb2VzIHRo
+YXQgbWF0dGVyIGhlcmUgPyBJIHRob3VnaHQgc2V0Y2MgaXMgdXNlZCB0byBnZXQgdGhlIGNhcnJ5
+IGZsYWcuDQoNClRoZSBjb2RlIGlzIG9rLCBqdXN0IHRoZSBjb21tZW50IGlzIG5vdCByZWFsbHkg
+cmlnaHQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1s
+ZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJh
+dGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/asm-offsets.c:13:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:20:
-   In file included from include/linux/mm.h:33:
->> include/linux/pgtable.h:84:29: error: redefinition of 'p4d_index'
-   static inline unsigned long p4d_index(unsigned long address)
-                               ^
-   arch/x86/include/asm/pgtable.h:904:29: note: previous definition is here
-   static inline unsigned long p4d_index(unsigned long address)
-                               ^
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/p4d_index +84 include/linux/pgtable.h
-
-    82	
-    83	#ifndef p4d_index
-  > 84	static inline unsigned long p4d_index(unsigned long address)
-    85	{
-    86		return (address >> P4D_SHIFT) & (PTRS_PER_P4D - 1);
-    87	}
-    88	#define p4d_index p4d_index
-    89	#endif
-    90	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,110 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581C04BCFAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 17:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A4D4BCFB9
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 17:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240742AbiBTQBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 11:01:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35910 "EHLO
+        id S241100AbiBTQDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 11:03:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiBTQBr (ORCPT
+        with ESMTP id S240876AbiBTQDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 11:01:47 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893F9443C7;
-        Sun, 20 Feb 2022 08:01:24 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id e5so14248462lfr.9;
-        Sun, 20 Feb 2022 08:01:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kiCO7Y3o/yfvY4Cex2AEsXYa2jd9fcUopAAuMMIl7X8=;
-        b=UYW3P4C6klhBelzEbt4knsukbmG/vQrDalHcSOV/oA0N9z7KGI32MOaQM9QMiZ0y0b
-         0qeYVp/Jk640kEgKGDf+ig/zbygc7XKgV9roR+KLswYEb/5tsvPinZmZfipxppUr4WC5
-         LR4nrrxzta8WA2/vlM6MEgD5QSFH7uEf7/B8tlAh1IrBxvHQ2UdJ8AxGFv4utxkmJUOH
-         istYxxlm1f/h+v24iKa6hGkxxBteB1jMZTr8ZRRc28MitrNyMSza35qZ/XUDNMto4FvY
-         NyB7ioIyHTBNIjMZj1qjBF+br9vOdBhSxmG9wXurDHoqJ8o+biWqifbgDGHok/dKvKjv
-         wLUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kiCO7Y3o/yfvY4Cex2AEsXYa2jd9fcUopAAuMMIl7X8=;
-        b=PEcsgbxc1eEKSOgpOPpaNbbeHkAWh2fBpfpALlHOnM/cG4hGTQ7oZ3Gmv697cl2rfC
-         n40hlpDHq15v7wnTlUnkAkuZX9a4K4ypayrQ2N+yfI6HXBxhP4apxwr+gQzbOG79SV4Y
-         ADDcLbUVfVWbj3D7YXtNaxV5hydQoDRfgZIeuIxgBFsz0tpd2vPEQpeQzMK/GAhobpkx
-         HTb71lwTR1GeloHmVZ7tCYqdh4VvhdHJEQWbmPmi0VbZzDGrL6xKHF2f4G66s8NF6xmI
-         r06mFs5zYAKD/6RyotdjOB8x5/U9nda3HhiYaufPkIgZMuT8MVpbX+e8M4Bzholsepvr
-         19Yw==
-X-Gm-Message-State: AOAM531hV0wuZ4TB3C/aAKayxfi0+4/mNTM8CIZSxCm4O6Bh2OGsmM/d
-        i4g3fWlBtA4CL1jWwZSdb4I=
-X-Google-Smtp-Source: ABdhPJwv9apys1DY/TwkeoLaXGUaOOzCI3U7YhVsxCvO6NPyAfRSsL06C6Isxw3fVxrX6fos67Xeyw==
-X-Received: by 2002:a05:6512:390a:b0:43f:62f8:efd5 with SMTP id a10-20020a056512390a00b0043f62f8efd5mr11391942lfu.0.1645372882809;
-        Sun, 20 Feb 2022 08:01:22 -0800 (PST)
-Received: from localhost.localdomain ([94.103.229.64])
-        by smtp.gmail.com with ESMTPSA id y11sm1018835ljj.122.2022.02.20.08.01.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 08:01:22 -0800 (PST)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        kimi.h.kuparinen@gmail.com
-Cc:     linux-input@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+35eebd505e97d315d01c@syzkaller.appspotmail.com
-Subject: [PATCH] HID: hid-thrustmaster: fix OOB read in thrustmaster_interrupts
-Date:   Sun, 20 Feb 2022 19:01:14 +0300
-Message-Id: <20220220160114.26882-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 20 Feb 2022 11:03:05 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9834B21E12
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645372963; x=1676908963;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9NwTRpNDu/tHD2XIwBr3TAhromGmgxkpOIaxlQGO8Cw=;
+  b=f/gikxoaoIZnK4FT/hm41pRFB+Ia5B0LlmYyBoOucrxpk7BmqEtkOAbh
+   Rf1BH4/elvdtX/LCVCMRUR1HlsKsqPnEye3qp0Yv7/9WB1F1fVMpi53Up
+   yFrLSY9tEepPR4Y8ySoIKhQd27KAHo061c94LtrCn/hRrJjZqTiefI+Q4
+   Jdl39RMt2uugWSe/zbgogrQT8vBSXNiFBC6Xdj6vYQggXc7Ws6CygfeSh
+   FMZ3l7MQPwAfZnbQ0ZV4axCWT/nr4JxoOCqJJabDdNHVDA19kdZ/vO7Ko
+   nd6QwYG0j8S/KVBCn7sPgYIk9Ww5pUFs00IlXH6vg2SBeIFhWRc2hcJCP
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231353985"
+X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
+   d="scan'208";a="231353985"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 08:02:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
+   d="scan'208";a="682973476"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Feb 2022 08:02:42 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLofZ-0000RQ-GN; Sun, 20 Feb 2022 16:02:41 +0000
+Date:   Mon, 21 Feb 2022 00:02:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [peterz-queue:x86/wip.ibt 19/31]
+ arch/x86/kernel/alternative.c:761:16: error: expected string literal in
+ 'asm'
+Message-ID: <202202202357.ldfBr75W-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported an slab-out-of-bounds Read in thrustmaster_probe() bug.
-The root case is in missing validation check of actual number of endpoints.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   fecdb8a84191710ffe01c9492fceb34a15f1576a
+commit: 97e04204b3c4f0515f956be22a19229878b9253e [19/31] x86/ibt: Annotate text references
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220220/202202202357.ldfBr75W-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=97e04204b3c4f0515f956be22a19229878b9253e
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout 97e04204b3c4f0515f956be22a19229878b9253e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Code should not blindly access usb_host_interface::endpoint array, since
-it may contain less endpoints than code expects.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fix it by adding missing validaion check and print an error if
-number of endpoints do not match expected number
+All errors (new ones prefixed by >>):
 
-Fixes: c49c33637802 ("HID: support for initialization of some Thrustmaster wheels")
-Reported-and-tested-by: syzbot+35eebd505e97d315d01c@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+   arch/x86/kernel/alternative.c:716:2: error: expected ')'
+           ANNOTATE_NOENDBR
+           ^
+   arch/x86/kernel/alternative.c:712:5: note: to match this '('
+   asm (
+       ^
+>> arch/x86/kernel/alternative.c:761:16: error: expected string literal in 'asm'
+           asm volatile (ANNOTATE_NOENDBR
+                         ^
+   2 errors generated.
+
+
+vim +/asm +761 arch/x86/kernel/alternative.c
+
+   743	
+   744	static void __init int3_selftest(void)
+   745	{
+   746		static __initdata struct notifier_block int3_exception_nb = {
+   747			.notifier_call	= int3_exception_notify,
+   748			.priority	= INT_MAX-1, /* last */
+   749		};
+   750		unsigned int val = 0;
+   751	
+   752		BUG_ON(register_die_notifier(&int3_exception_nb));
+   753	
+   754		/*
+   755		 * Basically: int3_magic(&val); but really complicated :-)
+   756		 *
+   757		 * Stick the address of the INT3 instruction into int3_selftest_ip,
+   758		 * then trigger the INT3, padded with NOPs to match a CALL instruction
+   759		 * length.
+   760		 */
+ > 761		asm volatile (ANNOTATE_NOENDBR
+   762			      "1: int3; nop; nop; nop; nop\n\t"
+   763			      ".pushsection .init.data,\"aw\"\n\t"
+   764			      ".align " __ASM_SEL(4, 8) "\n\t"
+   765			      ".type int3_selftest_ip, @object\n\t"
+   766			      ".size int3_selftest_ip, " __ASM_SEL(4, 8) "\n\t"
+   767			      "int3_selftest_ip:\n\t"
+   768			      __ASM_SEL(.long, .quad) " 1b\n\t"
+   769			      ".popsection\n\t"
+   770			      : ASM_CALL_CONSTRAINT
+   771			      : __ASM_SEL_RAW(a, D) (&val)
+   772			      : "memory");
+   773	
+   774		BUG_ON(val != 1);
+   775	
+   776		unregister_die_notifier(&int3_exception_nb);
+   777	}
+   778	
+
 ---
- drivers/hid/hid-thrustmaster.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/hid/hid-thrustmaster.c b/drivers/hid/hid-thrustmaster.c
-index 03b935ff02d5..9da4240530dd 100644
---- a/drivers/hid/hid-thrustmaster.c
-+++ b/drivers/hid/hid-thrustmaster.c
-@@ -158,6 +158,12 @@ static void thrustmaster_interrupts(struct hid_device *hdev)
- 		return;
- 	}
- 
-+	if (usbif->cur_altsetting->desc.bNumEndpoints < 2) {
-+		kfree(send_buf);
-+		hid_err(hdev, "Wrong number of endpoints?\n");
-+		return;
-+	}
-+
- 	ep = &usbif->cur_altsetting->endpoint[1];
- 	b_ep = ep->desc.bEndpointAddress;
- 
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

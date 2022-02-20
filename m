@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D57E4BCFDC
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 17:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6164BCFE0
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 17:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241313AbiBTQae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 11:30:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33784 "EHLO
+        id S243243AbiBTQbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 11:31:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbiBTQac (ORCPT
+        with ESMTP id S234610AbiBTQbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 11:30:32 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE204A93B
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:30:11 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id p14so27014943ejf.11
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:30:11 -0800 (PST)
+        Sun, 20 Feb 2022 11:31:14 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FAD4AE05
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:30:52 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id vz16so27221938ejb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:30:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OWLpcBVa2M4tskUxAekykJf3XE4zqcHsbnkNsOcSIRk=;
-        b=OExUL0nKv5AWNW77ihPgtZ0duZyFBCSH7B0XGHkXHeRORnzb5LfNn1CBEX3OMY08vb
-         mtEdoxwa8GxbLD+QjdcavbJ24ggBqFpQnJVR081KF6hK8A3+cLe+ARKl2Mk2XX2azVeB
-         Ite7Nt5XXgTANrkk+cmarOTwAGId4tsprSx0+yNqQXwoDxfAffi/tS1ojzzaImtUx+iG
-         jgTAg2NylQ3+yEJj3hVXM9qfap6S+T5Yccfa+JLlsEhoBalqLJdn13jLxhitd3KzFEFA
-         IpkwADNrtm37awybkEyKuRQp/yS6OyLWUoTAU4dH7rm0AC+6k9CH26tK3vlZhSWg5eKr
-         9v0A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p2G6HGRIzCEmE89H5wDpfU+oum09SC6vpI/xczji82A=;
+        b=AkbjzHgV9zAu+zUIS1gUtT7UUoz24Rd+RulaxnOYTnhuVhMv8ciKvmOXKJ9MNH5Ufo
+         cMl5bT4W2+I41xgKLzdLdrzVgCz+Kd5CqxrWIRrBaolVDmmtB8SygNkmKQzz1TngbIr3
+         IhZibbm91cW81DxNmoVgm6U/IF3pe9cyH8UDL0TWqZgZUGJZceDvfcIvSKfbi2CSobRP
+         U2M8Jh2NbaYxT82AkpiybWMHoKp1HKFHaCWrYnPkr0C56kG8/oTfnzq/bkm4F6pqe/hj
+         pOtK6rFoGu3FcEvmLjDJhkQHymdgVVW04snF79Uoqzydd3/JBqwP9O3FFnrt+JCwmeBE
+         NL3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OWLpcBVa2M4tskUxAekykJf3XE4zqcHsbnkNsOcSIRk=;
-        b=MWktqdGhWV4qbJgOlvl3/hNW2enjeeTMbn+kLl+Jbi9eyYHvGLmS1Clj0pqSu5qgtN
-         +BGrgH9NTXdkzQHYTaE8wUrcEUMcV/T11PTGkyPKfG37zYlphuiteygqWGFUmLj/XpqK
-         ce0u3QpZye/nB2ww8plV+Pxl1upLBxhJSNJm6uqpdlSJ5o/Y+rTOhJYIrAkqnpREQ1As
-         ME6B4RA+E4UdbSZCDBd2IUIaSoGXYsfeeUtVpYXXY8jJwpkVyH3zp+kQ/5BMJ+jK8nfa
-         fAot/1umIk7zeYjBxqZ/JthIHALrzr5L60IQlV3VYGUe6avk8dtGtpwL3GfJJjEj3Yae
-         AMSw==
-X-Gm-Message-State: AOAM531/kQfSrwX2bTKIzFXvhMik/RmwahQAQWshLwO/OhQOC/iYCkpE
-        VSN4h0vAJM9TrJjTNIFhXPRF2oHdLfM=
-X-Google-Smtp-Source: ABdhPJyd2RU/junM5/4SP6yca5whc9aoFfekgEyHnrTAndRTVOAuYulMS96VkhBSpJH9QAWYDA21sg==
-X-Received: by 2002:a17:906:4ad9:b0:6cf:93f:f77e with SMTP id u25-20020a1709064ad900b006cf093ff77emr13244335ejt.558.1645374609631;
-        Sun, 20 Feb 2022 08:30:09 -0800 (PST)
-Received: from [192.168.0.151] (ip5f5abb8f.dynamic.kabel-deutschland.de. [95.90.187.143])
-        by smtp.gmail.com with ESMTPSA id l24sm7606251edv.88.2022.02.20.08.30.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Feb 2022 08:30:09 -0800 (PST)
-Message-ID: <94160654-ec16-cad2-3cc2-46628caaa17e@gmail.com>
-Date:   Sun, 20 Feb 2022 17:30:08 +0100
+        bh=p2G6HGRIzCEmE89H5wDpfU+oum09SC6vpI/xczji82A=;
+        b=AnGtNT2V/Wq+bZzXpmGxv8x8NMT4r7oR3ht31JIbkUpMlzUvE3bxRUM1KVSXl+TBj3
+         fzt9rMf7qc857BZWEPywCZfRJqg4oDspqcvHvw2rJQJjWdg44F+g5SNBBeVRtrlEA/Vj
+         MmwotqCRo4e0MGVgJKKso+izet4XfITYUbpibEEWyN0Unk5OFiY3tljLAetlevrBlFAJ
+         9E2yYQZgENVezMSHriyTPIMBIUUOCt6Z9TFglaLLQm4ZkXUogJv2PH0VeZG/lSVtbBLP
+         X/gJIV61J+xqpOdOCPDRtZaZ6dRcj0xw+xi1W2SN2Sw2GuuowkBGK0luPIdD5s5miB3/
+         PnpQ==
+X-Gm-Message-State: AOAM531U40Jg+uvSPrnfVeFrGE7kGx7I+6UX+g0SfmsA7o17oha1iNr3
+        eS8UWBKanpMd7GcI93sWmQT+69SJGHQkLzoioIhgNw==
+X-Google-Smtp-Source: ABdhPJyWuK3ZtXL+Ui7a8rINYgV8rUuNpF0LH8+fcBRpHY21q6RQ8yfGkcO163Rza0GTKh6g9JyLlg==
+X-Received: by 2002:a17:906:d9c4:b0:6cc:ecbd:3667 with SMTP id qk4-20020a170906d9c400b006ccecbd3667mr12915863ejb.645.1645374650685;
+        Sun, 20 Feb 2022 08:30:50 -0800 (PST)
+Received: from localhost.localdomain ([217.61.0.106])
+        by smtp.gmail.com with ESMTPSA id j19sm4277072ejm.111.2022.02.20.08.30.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 08:30:50 -0800 (PST)
+From:   Hans Weber <hwe.kernel@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Hans Weber <hwe.kernel@gmail.com>
+Subject: [PATCH 3/3] patch : first example not showing umask field from Table 1-2
+Date:   Sun, 20 Feb 2022 17:30:47 +0100
+Message-Id: <20220220163047.117864-1-hwe.kernel@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 2/3] staging: r8188eu: refactor rtw_ch2freq()
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>, gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220220154847.7521-1-straube.linux@gmail.com>
- <20220220154847.7521-3-straube.linux@gmail.com>
- <cb7db1ac-8e7e-d549-a5c0-fcd072ae815e@gmail.com>
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <cb7db1ac-8e7e-d549-a5c0-fcd072ae815e@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,42 +67,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/22 17:20, Pavel Skripkin wrote:
-> Hi Michael,
-> 
-> On 2/20/22 18:48, Michael Straube wrote:
->> -static int ch_freq_map_num = ARRAY_SIZE(ch_freq_map);
->> -
->>   u32 rtw_ch2freq(u32 channel)
->>   {
->> -    u8    i;
->> -    u32    freq = 0;
->> -
->> -    for (i = 0; i < ch_freq_map_num; i++) {
->> -        if (channel == ch_freq_map[i].channel) {
->> -            freq = ch_freq_map[i].frequency;
->> -                break;
->> -        }
->> -    }
->> -    if (i == ch_freq_map_num)
->> -        freq = 2412;
->> -
->> -    return freq;
->> +    return ch_freq_map[channel - 1];
->>   }
-> 
-> What if channel has wrong value? The old code returned some default 
-> value, but with new one we will hit OOB.
-> 
+Signe-off-by: Hans Weber <hwe.kernel@gmail.com>
+---
+ Documentation/filesystems/proc.rst | 105 ++++++++++++++++-------------
+ 1 file changed, 58 insertions(+), 47 deletions(-)
 
-Hi Pavel,
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index b9d1c6764266..40ca0f9087db 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -138,7 +138,7 @@ usually fail with ESRCH.
+            /proc (as of 5.10.0) 
+ 
+  ======================================================================================
+- Name   	      T  Content
++ Name		      T  Content
+  ======================================================================================
+  arch_status          f Task architecture specific information
+  attr                 d API for security modules
+@@ -213,52 +213,63 @@ usually fail with ESRCH.
+ For example, to get the status information of a process, all you have to do is
+ read the file /proc/PID/status::
+ 
+-  >cat /proc/self/status
+-  Name:   cat
+-  State:  R (running)
+-  Tgid:   5452
+-  Pid:    5452
+-  PPid:   743
+-  TracerPid:      0						(2.4)
+-  Uid:    501     501     501     501
+-  Gid:    100     100     100     100
+-  FDSize: 256
+-  Groups: 100 14 16
+-  VmPeak:     5004 kB
+-  VmSize:     5004 kB
+-  VmLck:         0 kB
+-  VmHWM:       476 kB
+-  VmRSS:       476 kB
+-  RssAnon:             352 kB
+-  RssFile:             120 kB
+-  RssShmem:              4 kB
+-  VmData:      156 kB
+-  VmStk:        88 kB
+-  VmExe:        68 kB
+-  VmLib:      1412 kB
+-  VmPTE:        20 kb
+-  VmSwap:        0 kB
+-  HugetlbPages:          0 kB
+-  CoreDumping:    0
+-  THP_enabled:	  1
+-  Threads:        1
+-  SigQ:   0/28578
+-  SigPnd: 0000000000000000
+-  ShdPnd: 0000000000000000
+-  SigBlk: 0000000000000000
+-  SigIgn: 0000000000000000
+-  SigCgt: 0000000000000000
+-  CapInh: 00000000fffffeff
+-  CapPrm: 0000000000000000
+-  CapEff: 0000000000000000
+-  CapBnd: ffffffffffffffff
+-  CapAmb: 0000000000000000
+-  NoNewPrivs:     0
+-  Seccomp:        0
+-  Speculation_Store_Bypass:       thread vulnerable
+-  SpeculationIndirectBranch:      conditional enabled
+-  voluntary_ctxt_switches:        0
+-  nonvoluntary_ctxt_switches:     1
++>cat /proc/self/status
++Name:	cat
++Umask:	0022
++State:	R (running)
++Tgid:	19633
++Ngid:	0
++Pid:	19633
++PPid:	13898
++TracerPid:	0
++Uid:	1000	1000	1000	1000
++Gid:	1000	1000	1000	1000
++FDSize:	256
++Groups:	24 25 27 29 30 44 46 108 113 114 119 1000 
++NStgid:	19633
++NSpid:	19633
++NSpgid:	19633
++NSsid:	13898
++VmPeak:	    5440 kB
++VmSize:	    5440 kB
++VmLck:	       0 kB
++VmPin:	       0 kB
++VmHWM:	     520 kB
++VmRSS:	     520 kB
++RssAnon:	      68 kB
++RssFile:	     452 kB
++RssShmem:	       0 kB
++VmData:	     316 kB
++VmStk:	     132 kB
++VmExe:	      20 kB
++VmLib:	    1460 kB
++VmPTE:	      44 kB
++VmSwap:	       0 kB
++HugetlbPages:	       0 kB
++CoreDumping:	0
++THP_enabled:	1
++Threads:	1
++SigQ:	0/47433
++SigPnd:	0000000000000000
++ShdPnd:	0000000000000000
++SigBlk:	0000000000000000
++SigIgn:	0000000000000000
++SigCgt:	0000000000000000
++CapInh:	0000000000000000
++CapPrm:	0000000000000000
++CapEff:	0000000000000000
++CapBnd:	000001ffffffffff
++CapAmb:	0000000000000000
++NoNewPrivs:	0
++Seccomp:	0
++Seccomp_filters:	0
++Speculation_Store_Bypass:	vulnerable
++Cpus_allowed:	ff
++Cpus_allowed_list:	0-7
++Mems_allowed:	00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001
++Mems_allowed_list:	0
++voluntary_ctxt_switches:	0
++nonvoluntary_ctxt_switches:	0
+ 
+ This shows you nearly the same information you would get if you viewed it with
+ the ps  command.  In  fact,  ps  uses  the  proc  file  system  to  obtain its
+-- 
+2.30.2
 
-thanks for reviewing. Yeah, I thought about adding a check for channel
-value between 1 and 14. But I did not add it because I think if this
-function will ever be called with channel < 1 or channel > 14, then the
-calling code must be wrong.
-
-Would be nice to see what others think about this.
-
-Thanks,
-Michael

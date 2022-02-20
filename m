@@ -2,233 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB7A4BCE72
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 13:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918E24BCE73
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 13:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243764AbiBTMX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 07:23:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50142 "EHLO
+        id S243771AbiBTM0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 07:26:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243081AbiBTMXz (ORCPT
+        with ESMTP id S231558AbiBTM0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 07:23:55 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F77753B77
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 04:23:32 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220220122323epoutp0381182055536e67137d45755225d97d48~VfgYpSP-I2992329923epoutp03y
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:23:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220220122323epoutp0381182055536e67137d45755225d97d48~VfgYpSP-I2992329923epoutp03y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1645359803;
-        bh=xsUVQh3weFbhZe5BBUOwKpwtKfhT0PfFLVuSXIs/6OA=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=HCoIjOwbTuNLQ7AhKjzVG/H24NIauOOSMQVOk2tMgGozXA/u4yUk0KUOVipDy7+EP
-         s0SPdTng6qhCk3Z42+Br3TMyrh6T2IKIb/jBqjM5CzaG0WSXrEXije37ZtOOo7oz+T
-         FjeYCK36loA1UwnNrUo0Ki961IXkzIGaT4B2KdA8=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220220122322epcas5p34a431fce6a717223949300ea6ebb33e1~VfgXaocZw1315013150epcas5p3p;
-        Sun, 20 Feb 2022 12:23:22 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4K1l2Z2d1Lz4x9Pq; Sun, 20 Feb
-        2022 12:23:18 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E4.FB.05590.6B232126; Sun, 20 Feb 2022 21:23:18 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220220122317epcas5p3ff8910d18d8f6aa924f3b6130f869c77~VfgSi_HNa1315013150epcas5p3o;
-        Sun, 20 Feb 2022 12:23:17 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220220122317epsmtrp128e0cdd103bcc6c0f6d5b5c993e06548~VfgSiJ_nl0066700667epsmtrp1s;
-        Sun, 20 Feb 2022 12:23:17 +0000 (GMT)
-X-AuditID: b6c32a4b-723ff700000015d6-0c-621232b67697
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0F.10.08738.5B232126; Sun, 20 Feb 2022 21:23:17 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220220122315epsmtip139d1b9cd8e6fce2f64244607542ded0c~VfgRUVtuB1849018490epsmtip1W;
-        Sun, 20 Feb 2022 12:23:15 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     <linux-samsung-soc@vger.kernel.org>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <pankaj.dubey@samsung.com>,
-        <m.szyprowski@samsung.com>
-In-Reply-To: <72848f6c-adc7-2d36-edcd-9a5fac655bbc@canonical.com>
-Subject: RE: [PATCH] clocksource/drivers/exynos_mct: Remove mct interrupt
- index enum
-Date:   Sun, 20 Feb 2022 17:53:20 +0530
-Message-ID: <0a0201d82654$a6eae570$f4c0b050$@samsung.com>
+        Sun, 20 Feb 2022 07:26:43 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F28753B77;
+        Sun, 20 Feb 2022 04:26:21 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V4xWhn-_1645359978;
+Received: from 30.47.199.196(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V4xWhn-_1645359978)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 20 Feb 2022 20:26:19 +0800
+Message-ID: <1a7e74b4-8827-c14b-7371-9656a643d03c@linux.alibaba.com>
+Date:   Sun, 20 Feb 2022 20:26:18 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQEXBP1woSFOUEXaM7x+Nv8ayDIoJwJcL7PpAlCY7tit+TN4gA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmhu42I6EkgydNvBbzPstabHz7g8li
-        0+NrrBaXd81hs5hxfh+Txdojd9ktFm39wm6xedNUZgcOj1kNvWwed67tYfN4d+4cu8fmJfUe
-        fVtWMXp83iQXwBaVbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+Ti
-        E6DrlpkDdI6SQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1
-        xMrQwMDIFKgwITvjwLLzjAX90hU7H/1gamCcI9bFyMkhIWAise/hNKYuRi4OIYHdjBKnfq9i
-        gXA+MUrM2feWHcL5zChx8e0+ZpiWjTMOs0EkdjFKrNs+gxXCeckosbi/jQmkik1AV2LH4jaw
-        KhGBTkaJ1d9/gm1hFpjCKHF2wjOwKk4BR4mJxw+AzRUWCJPYMH0rkM3BwSKgKnHzvAtImFfA
-        UmLz+y1sELagxMmZT1hAbGYBbYllC19DnaQg8fPpMlaQVhEBJ4k5Ey0gSsQlXh49AvaChMBS
-        DokTR3ug6l0kbkxqZ4OwhSVeHd/CDmFLSbzsb2MHmSMhkC3Rs8sYIlwjsXTeMRYI217iwJU5
-        LCAlzAKaEut36UOs4pPo/f2ECaKTV6KjTQiiWlWi+d1VqE5piYnd3awQtofE3Q032CYwKs5C
-        8tcsJH/NQvLALIRlCxhZVjFKphYU56anFpsWGOellsPjOzk/dxMjOLFqee9gfPTgg94hRiYO
-        xkOMEhzMSiK8Hw7yJgnxpiRWVqUW5ccXleakFh9iNAWG9URmKdHkfGBqzyuJNzSxNDAxMzMz
-        sTQ2M1QS5z2VviFRSCA9sSQ1OzW1ILUIpo+Jg1OqgWmS8x+9Nzx3EoMWrzN12jMnYNcrD+cp
-        y6z/+lm3vpjdu+L3Y3m5b0X3xDR69kW4CLulp+6ZZ7PipouXyWNhnkr+B4HmqekLhIOZJL4X
-        H8o2ueUtYmfvEerm+3SWLW/AnIYJy8yuvn7lvuhiQ8yLnMKW4nmfuiz6sr5lZnjETdy76rLO
-        cbX8vMMXtd+12Wpe/3Nl4VTV8u5TF8uiblsUmh3IP2z/cckGySZG+UMrzXPsKwI0p3Gc71sQ
-        8Djk77HX7Ne6HJp5ruxmXB712VAihudGS0j+dfazb4wXcLpaXEmOzPugbvX98hvGXQxLTNfc
-        8uZ675r8crKW6SL1QztDDtqY7o66nsT8JW6WpKvfAyWW4oxEQy3mouJEAHccbbg1BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42LZdlhJTnerkVCSwaIeIYt5n2UtNr79wWSx
-        6fE1VovLu+awWcw4v4/JYu2Ru+wWi7Z+YbfYvGkqswOHx6yGXjaPO9f2sHm8O3eO3WPzknqP
-        vi2rGD0+b5ILYIvisklJzcksSy3St0vgytj6dQFzwVapigtfXrM3MB4S7WLk5JAQMJHYOOMw
-        WxcjF4eQwA5GiU3fVrNDJKQlrm+cAGULS6z895wdoug5o8S6ntdsIAk2AV2JHYvbwLpFBLoZ
-        Ja70zGQEcZgFZjFKLG7ZBDX3MKPE09P9TCAtnAKOEhOPH2AGsYUFQiTu9F0Gsjk4WARUJW6e
-        dwEJ8wpYSmx+v4UNwhaUODnzCQuIzSygLdH7sJURxl628DUzxHkKEj+fLmMFGSMi4CQxZ6IF
-        RIm4xMujR9gnMArPQjJpFpJJs5BMmoWkZQEjyypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k
-        /NxNjOAI09Lawbhn1Qe9Q4xMHIyHGCU4mJVEeD8c5E0S4k1JrKxKLcqPLyrNSS0+xCjNwaIk
-        znuh62S8kEB6YklqdmpqQWoRTJaJg1Oqgam3pvFMx9abGeHfHR75bf1escjp40vd5rIbN06f
-        2riy1PflS/a1bkxTNpYtmPfjSABD6uMzV27Eck6b0bH8zN1nS7ki2H0Yzt37teBn1LnD63oe
-        zK4TvfnKKJqn4/CnCMMJnAd5bht/evJKZt6dq1V/qtdPLXXPZ7Vljxc2je9R+VZtWf7rZPQk
-        kaQ1DzIW3Mh6vH196ttfP3+cu31QWKjC9XjqO2nuul8ZFt8+LT1dMndGz2zlrsUtGYdehTWk
-        BX2sT8mPtt49w61zXUeLY3VinEL4xLyZEuUV7lN09c/kGTXemjfV69wC7QybhUuO5y/mWKx4
-        bHeVZ069xOMC/naPP28PM/Uk5an1CZoqXa1QYinOSDTUYi4qTgQASfPumh8DAAA=
-X-CMS-MailID: 20220220122317epcas5p3ff8910d18d8f6aa924f3b6130f869c77
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220219175832epcas5p399b652e6da610ada233376651694b42c
-References: <CGME20220219175832epcas5p399b652e6da610ada233376651694b42c@epcas5p3.samsung.com>
-        <20220219181003.12739-1-alim.akhtar@samsung.com>
-        <72848f6c-adc7-2d36-edcd-9a5fac655bbc@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [Issue report] drivers/ftgmac100: DHCP occasionally fails during
+ boot up or link down/up
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Dylan Hung <dylan_hung@aspeedtech.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <0e456c4d-aa22-4e7f-9b2c-3059fe840cb9@linux.alibaba.com>
+ <YgwSAjGN2eWUpamo@lunn.ch>
+ <4964f8c3-8349-4fad-e176-8c26840d1a08@linux.alibaba.com>
+ <YhE2wl7XcTUQvEd4@lunn.ch>
+From:   Heyi Guo <guoheyi@linux.alibaba.com>
+In-Reply-To: <YhE2wl7XcTUQvEd4@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrew,
+
+There is indeed a dead lock warning after enabling prove_locking:
 
 
->-----Original Message-----
->From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=5D
->Sent: Sunday, February 20, 2022 3:32 PM
->To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
->kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
->Cc: linux-samsung-soc=40vger.kernel.org; daniel.lezcano=40linaro.org;
->tglx=40linutronix.de; pankaj.dubey=40samsung.com;
->m.szyprowski=40samsung.com
->Subject: Re: =5BPATCH=5D clocksource/drivers/exynos_mct: Remove mct interr=
-upt
->index enum
->
->On 19/02/2022 19:10, Alim Akhtar wrote:
->> MCT driver define an enum which list global and local timer's irq
->> index. Most of them are not used but MCT_G0_IRQ and MCT_L0_IRQ and
->> these two are at a fixed offset/index.
->> Get rid of this enum and use a =23define for the used irq index.
->>
->> While at it, bump-up maximum number of MCT IRQ to match the binding
->> documentation. And also change the name variable to be more generic.
->>
->> No functional changes expected.
->
->There is a functional change - you increase MCT_NR_IRQS from 12 to 20 whic=
-h
->affects size of mct_irqs. Can you increase it in separate commit?
->
-Yes, my thought was it is going to increase the mct_irqs array size and it =
-will not affect any=20
-of the current SoC's mct functionality.
-Anyway, I will separate it out as you suggested.
+[   16.852199] ======================================================
+[   16.859102] WARNING: possible circular locking dependency detected
+[   16.866012] 5.10.36-60b3c9d-dirty-15f4fba #1 Not tainted
+[   16.871976] ------------------------------------------------------
+[   16.871991] kworker/1:1/23 is trying to acquire lock:
+[   16.872000] 80fa0920 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock+0x24/0x28
+[   16.872047]
+[   16.872047] but task is already holding lock:
+[   16.872051] 821d44c0 (&dev->lock){+.+.}-{3:3}, at: 
+phy_state_machine+0x50/0x290
+[   16.872076]
+[   16.872076] which lock already depends on the new lock.
+[   16.872076]
+[   16.872080]
+[   16.872080] the existing dependency chain (in reverse order) is:
+[   16.872083]
+[   16.872083] -> #1 (&dev->lock){+.+.}-{3:3}:
+[   16.872106]        lock_acquire+0x6c/0x74
+[   16.872117]        __mutex_lock+0xb4/0xa48
+[   16.872132]        mutex_lock_nested+0x2c/0x34
+[   16.872141]        phy_start+0x30/0xc4
+[   16.872155]        ftgmac100_open+0x1a0/0x254
+[   16.872168]        __dev_open+0x110/0x1d0
+[   16.872180]        __dev_change_flags+0x1d0/0x258
+[   16.872192]        dev_change_flags+0x28/0x58
+[   16.872204]        do_setlink+0x258/0xc60
+[   16.872212]        rtnl_setlink+0x110/0x18c
+[   16.872219]        rtnetlink_rcv_msg+0x1d0/0x53c
+[   16.872226]        netlink_rcv_skb+0xd0/0x128
+[   16.872233]        rtnetlink_rcv+0x20/0x24
+[   16.872244]        netlink_unicast+0x1a8/0x26c
+[   16.872254]        netlink_sendmsg+0x220/0x464
+[   16.872265]        __sys_sendto+0xe4/0x134
+[   16.872276]        sys_sendto+0x24/0x2c
+[   16.872288]        ret_fast_syscall+0x0/0x28
+[   16.872297]        0x7ed9e928
+[   16.872301]
+[   16.872301] -> #0 (rtnl_mutex){+.+.}-{3:3}:
+[   16.872325]        __lock_acquire+0x17e8/0x3268
+[   16.872331]        lock_acquire.part.0+0xcc/0x394
+[   16.872341]        lock_acquire+0x6c/0x74
+[   16.872354]        __mutex_lock+0xb4/0xa48
+[   16.872365]        mutex_lock_nested+0x2c/0x34
+[   16.872377]        rtnl_lock+0x24/0x28
+[   16.872389]        ftgmac100_adjust_link+0xc0/0x144
+[   16.872401]        phy_link_change+0x38/0x64
+[   16.872411]        phy_check_link_status+0xa8/0xfc
+[   16.872422]        phy_state_machine+0x80/0x290
+[   16.872435]        process_one_work+0x294/0x7d8
+[   16.872447]        worker_thread+0x6c/0x548
+[   16.872456]        kthread+0x170/0x178
+[   16.872462]        ret_from_fork+0x14/0x20
+[   16.872467]        0x0
+[   16.872471]
+[   16.872471] other info that might help us debug this:
+[   16.872471]
+[   16.872475]  Possible unsafe locking scenario:
+[   16.872475]
+[   16.872478]        CPU0                    CPU1
+[   16.872482]        ----                    ----
+[   16.872485]   lock(&dev->lock);
+[   16.872495]                                lock(rtnl_mutex);
+[   16.872505] lock(&dev->lock);
+[   16.872513]   lock(rtnl_mutex);
+[   16.872522]
+[   16.872522]  *** DEADLOCK ***
+[   16.872522]
+[   16.872528] 3 locks held by kworker/1:1/23:
+[   16.872532]  #0: 818472a8 
+((wq_completion)events_power_efficient){+.+.}-{0:0}, at: 
+process_one_work+0x1e8/0x7d8
+[   16.872558]  #1: 819fbef8 
+((work_completion)(&(&dev->state_queue)->work)){+.+.}-{0:0}, at: 
+process_one_work+0x1e8/0x7d8
+[   16.872582]  #2: 821d44c0 (&dev->lock){+.+.}-{3:3}, at: 
+phy_state_machine+0x50/0x290
 
->>
->> Signed-off-by: Alim Akhtar <alim.akhtar=40samsung.com>
->> ---
->>  drivers/clocksource/exynos_mct.c =7C 25 ++++++++-----------------
->>  1 file changed, 8 insertions(+), 17 deletions(-)
->>
->> - currently tested on exynos7 platform, appreciate testing on
->> exynos-=7B3,4,5=7D platforms
->>
->> diff --git a/drivers/clocksource/exynos_mct.c
->> b/drivers/clocksource/exynos_mct.c
->> index 6db3d5511b0f..4aea9cd3f7ba 100644
->> --- a/drivers/clocksource/exynos_mct.c
->> +++ b/drivers/clocksource/exynos_mct.c
->> =40=40 -60,27 +60,18 =40=40
->>  =23define MCT_CLKEVENTS_RATING		350
->>  =23endif
->>
->> +/* There are four Global timers starting with 0 offset */
->> +=23define MCT_G0_IRQ	0
->> +/* Local timers count starts after global timer count */
->> +=23define MCT_L0_IRQ	4
->> +/* Max number of MCT IRQ as per binding document */
->> +=23define MCT_NR_IRQS	20
->> +
->>  enum =7B
->>  	MCT_INT_SPI,
->>  	MCT_INT_PPI
->>  =7D;
->>
->> -enum =7B
->> -	MCT_G0_IRQ,
->> -	MCT_G1_IRQ,
->> -	MCT_G2_IRQ,
->> -	MCT_G3_IRQ,
->> -	MCT_L0_IRQ,
->> -	MCT_L1_IRQ,
->> -	MCT_L2_IRQ,
->> -	MCT_L3_IRQ,
->> -	MCT_L4_IRQ,
->> -	MCT_L5_IRQ,
->> -	MCT_L6_IRQ,
->> -	MCT_L7_IRQ,
->> -	MCT_NR_IRQS,
->> -=7D;
->> -
->>  static void __iomem *reg_base;
->>  static unsigned long clk_rate;
->>  static unsigned int mct_int_type;
->> =40=40 -89,7 +80,7 =40=40 static int mct_irqs=5BMCT_NR_IRQS=5D;  struct
->> mct_clock_event_device =7B
->>  	struct clock_event_device evt;
->>  	unsigned long base;
->> -	char name=5B10=5D;
->> +	char name=5BMCT_NR_IRQS - 1=5D;
->
->This does not look related MCT_NR_IRQS and using here MCT_NR_IRQS
->confuses. This is a =22mct_tick%d=22 with number of local timers, so maybe=
- make
->it just 11?
->
-Yes, it is for local timer, let me add separate macro for this, which match=
-es the current dt binding.
-As per binding max 16 local timers can be supported.=20
-And it will make code scalable, which is the positive side effect of this c=
-hange.
+Any advice to get around of it?
 
->>  =7D;
->>
->>  static void exynos4_mct_write(unsigned int value, unsigned long
->> offset)
->
->
->Best regards,
->Krzysztof
+Thanks,
 
+Heyi
+
+在 2022/2/20 上午2:28, Andrew Lunn 写道:
+> On Sat, Feb 19, 2022 at 06:08:35PM +0800, Heyi Guo wrote:
+>> Hi Andrew,
+>>
+>> The DHCP issue is gone after applying below patch. I put the lock statements
+>> outside of the pure reset function, for the phydev lock has been acquired
+>> before calling adjust_link. The lock order in ftgmac100_reset_task() was
+>> also changed, to make it the same as the lock procedure in adjust_link, in
+>> which the phydev is locked first and then rtnl_lock. I'm not quite sure
+>> whether it will bring in any potential dead lock. Any advice?
+> Did you run the code with CONFIG_PROVE_LOCKING enabled. That will help
+> detect possible deadlock situations.
+>
+>         Andrew

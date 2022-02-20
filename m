@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05754BCF18
+	by mail.lfdr.de (Postfix) with ESMTP id 828474BCF17
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241679AbiBTOpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 09:45:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46794 "EHLO
+        id S244022AbiBTOqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 09:46:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbiBTOpa (ORCPT
+        with ESMTP id S229549AbiBTOqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 09:45:30 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E3153701;
-        Sun, 20 Feb 2022 06:45:08 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id s24so17897601edr.5;
-        Sun, 20 Feb 2022 06:45:08 -0800 (PST)
+        Sun, 20 Feb 2022 09:46:36 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237F853702;
+        Sun, 20 Feb 2022 06:46:16 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id m1-20020a17090a668100b001bc023c6f34so2737692pjj.3;
+        Sun, 20 Feb 2022 06:46:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9WBIrLV7a7ITqe2gJcFg0OaqJzdOIMlPPMgtT7XmAPU=;
-        b=H0+WHetxE3GHBnp1GDl3r6+qGiyJk3Rrd5db2S2XBkX0f4gUOf9+dOiE601TZBMNvK
-         IL47+O1eoRDnhJpw/ehMBCkw7lIM6BGDwr94NnWAZ89hl/ck/F1mSmYZuxRmlMmoc8zH
-         +w1NtPAN0whbKWUXSxHj+eoScSeggIAeE3ZunxCAfhqJlAEedXnP9Q2gNsiu/MmRGALz
-         8F07UMSrKtY4BzuqnPlOpklayIVU8RXWXJXuChOj1r0kvVSraITTXGjBQaqu13C4o5kl
-         BLexyC20HFa5vKBuWmmJ+OuOgMEJse7DLQQBR2n6vSPp3oMAGkuG+isfsE+cuDJFpfhX
-         o6Ug==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qgS6kerTVTZEPFtaozzEk5NaV1/XOee+v1wXFW66chg=;
+        b=MkLnXQKr78XNHNQr64gTtkQWR05yMzArP/ZN4yRNkp/aCkE6XAIaQ0et4cpTSRNlQm
+         G3meRKU7vxGidfyORZ0zXyGeR+yPAaUhmpiCj3StrD6EWFsweXF05woJTogMJjJx2AoM
+         A5VkNbKigWVQbCv2+yCMgEhJB+bW4n8vocbmbf9hOuM+/tageUMWyRnpRAMrYH+aGegH
+         ax3f/OLftPdoaD1YsFdM/5SqbgZHU/g2264Hy9PaYGf20kZdi6NY97lXhOkC3ypNoXyt
+         7Ji3F3sOXK1Xv6ZKXUlVQreDVG5fqImLkvtWWoc08X0o0so2aILqOHgFhsiyXl7A4MnG
+         VuNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9WBIrLV7a7ITqe2gJcFg0OaqJzdOIMlPPMgtT7XmAPU=;
-        b=pcQlYFnj2X5brC9pmpM2/hANfGEgqQ4g+zhDqdhgN8kgmGtWk0Ps7ORs5zXaLHiGPU
-         j/ud9OjZwpvLEJMAJHeFp3PxFDO0rpWYbv0vJosxZQYQjUnfFfA/PMhq8UqdFiPVh5SI
-         QQSXVc4yZW32KjWrbCToVYQQVj90j7XRRBQHX0HbdDVS8t76LPvnSbmPl/fSceXtWVE6
-         t99og57lKCtNdt2hTeZymHfQh8n68dpwuFnwA0CB3Hp8NT30Gh4WFbBGX4PUMX1cpyck
-         2+kD/O8/uC7XaCkc0ULIrXKYgs3sYbSJ5WXwLbe5MMGsV1QFDEUZ/6sk32AR6+ZTOgx6
-         gxCQ==
-X-Gm-Message-State: AOAM531ZD61RLHCvW3h+V8KbuKGzQYp/Mt1dAtzhTddsaJXIyHKSfWKJ
-        W2indIBXK35VSh3On/YDvpG8Eprhh5Q=
-X-Google-Smtp-Source: ABdhPJw69n/kzMU1yI5alkes24zOZOzztseCW0XJxNuMy+DzX+BR7QzCWzxYjqZgd7jVRDahFEO0BA==
-X-Received: by 2002:a50:aa9d:0:b0:40f:d653:ff0f with SMTP id q29-20020a50aa9d000000b0040fd653ff0fmr17436302edc.114.1645368307039;
-        Sun, 20 Feb 2022 06:45:07 -0800 (PST)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id x12sm7133581edv.57.2022.02.20.06.45.06
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qgS6kerTVTZEPFtaozzEk5NaV1/XOee+v1wXFW66chg=;
+        b=RN7oQkyTfHX1Osl/e5vDt6KPFKqx+ifw/CaC0OWluXaoLELfJPXiFTllR1D2j879+3
+         wDgfDYCNwdQu13Hiz5rlUmuOJMv20N7+29ugK3VwzzXwLt1nCJ373s1fQEzdO8LrRZK4
+         TL41fccOJN5R8NcJMP3OtlQtj4VyssIEgVzr7e+5ebyhCHOLS6RRE860C0Pu/7yd75UT
+         QBQc0Ajvf7yrtjWTNOXpOhdt+fPJgGjJFwSo6/uFSjaYXPyXlLoSmZasBq3Dhec/x680
+         vIfNXVFZRGxRdHAbFOFxKEUXwNhifHJHx4kv5VJdx5jlMnOgaLeyIyrrSzt7HM1yDEBR
+         /28w==
+X-Gm-Message-State: AOAM5334/Qzyx/OdR2B5LsCXMF2gjdSwIyx0rf0xoEVSYWO1lLnO3NVK
+        5ZLuuKJh30sAggne95etvzA=
+X-Google-Smtp-Source: ABdhPJzVc7ivye/E72EOMqhrW2buJQ81swrxWqxFysdx9zCsNin/OGuT/XqyKOiY6AbOgVYofqHtFA==
+X-Received: by 2002:a17:903:11cf:b0:14d:654b:b559 with SMTP id q15-20020a17090311cf00b0014d654bb559mr15382653plh.164.1645368375559;
+        Sun, 20 Feb 2022 06:46:15 -0800 (PST)
+Received: from localhost.localdomain ([2405:201:9005:88cd:8c59:45e5:31c:c418])
+        by smtp.gmail.com with ESMTPSA id i17sm15079540pgn.82.2022.02.20.06.46.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 06:45:06 -0800 (PST)
-Date:   Sun, 20 Feb 2022 15:44:54 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 16/18] ARM: dts: qcom: remove redundant binding from
- ipq8064 rb3011 dts
-Message-ID: <YhJT5gD2TuwucnQX@Ansuel-xps.localdomain>
-References: <20220218002956.6590-1-ansuelsmth@gmail.com>
- <20220218002956.6590-17-ansuelsmth@gmail.com>
- <Yg+pL44ogVscn9Kw@earth.li>
+        Sun, 20 Feb 2022 06:46:15 -0800 (PST)
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev,
+        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] btrfs: Initialize ret to 0 in scrub_simple_mirror()
+Date:   Sun, 20 Feb 2022 20:16:06 +0530
+Message-Id: <20220220144606.5695-1-jrdr.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yg+pL44ogVscn9Kw@earth.li>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,79 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 02:11:59PM +0000, Jonathan McDowell wrote:
-> On Fri, Feb 18, 2022 at 01:29:54AM +0100, Ansuel Smith wrote:
-> > Mdio0_pins are now declared in ipq8064 dtsi. Usb phy are enabled by
-> > default.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts | 17 -----------------
-> >  1 file changed, 17 deletions(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> > index 0982b6214fb7..ddc9cc49ab60 100644
-> > --- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> > +++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-> > @@ -259,10 +259,6 @@ &gsbi7_serial {
-> >  	status = "okay";
-> >  };
-> >  
-> > -&hs_phy_1 {
-> > -	status = "okay";
-> > -};
-> > -
-> >  &nand {
-> >  	status = "okay";
-> >  
-> > @@ -309,15 +305,6 @@ mux {
-> >  		};
-> >  	};
-> >  
-> > -	mdio0_pins: mdio0_pins {
-> > -		mux {
-> > -			pins = "gpio0", "gpio1";
-> > -			function = "gpio";
-> > -			drive-strength = <8>;
-> > -			bias-disable;
-> > -		};
-> > -	};
-> > -
-> 
-> This sets the pins to "gpio". Your earlier patch sets them to "mdio", so
-> removing this will break MDIO0 on the RB3011. It's likely that your
-> fixes for MDIO/QCA8K mean that the RB3011 can be switch to use the MDIO
-> driver rather than mdio-gpio, but that will need tested and this change
-> alone will definitely break things.
-> 
+From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
 
-I could be wrong but I remember that before the mdio driver we used the
-mdio-gpio driver with the pins set to mdio function without problems.
+Kernel test robot reported below warning ->
+fs/btrfs/scrub.c:3439:2: warning: Undefined or garbage value
+returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
 
-> >  	mdio1_pins: mdio1_pins {
-> >  		mux {
-> >  			pins = "gpio10", "gpio11";
-> > @@ -358,10 +345,6 @@ mux {
-> >  	};
-> >  };
-> >  
-> > -&ss_phy_1 {
-> > -	status = "okay";
-> > -};
-> > -
-> >  &usb3_1 {
-> >  	pinctrl-0 = <&usb1_pwr_en_pins>;
-> >  	pinctrl-names = "default";
-> > -- 
-> > 2.34.1
-> > 
-> 
-> J.
-> 
-> -- 
-> /-\                             |  Even the Evening Herald slags me
-> |@/  Debian GNU/Linux Developer |                off.
-> \-                              |
+Initialize ret to 0.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+---
+ fs/btrfs/scrub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+index 4baa8e43d585..5ca7e5ffbc96 100644
+--- a/fs/btrfs/scrub.c
++++ b/fs/btrfs/scrub.c
+@@ -3325,7 +3325,7 @@ static int scrub_simple_mirror(struct scrub_ctx *sctx,
+ 	const u32 max_length = SZ_64K;
+ 	struct btrfs_path path = {};
+ 	u64 cur_logical = logical_start;
+-	int ret;
++	int ret = 0;
+ 
+ 	/* The range must be inside the bg */
+ 	ASSERT(logical_start >= bg->start &&
 -- 
-	Ansuel
+2.25.1
+

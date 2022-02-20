@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5007D4BCF58
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0A24BCF60
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244196AbiBTPQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 10:16:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50636 "EHLO
+        id S244211AbiBTPQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 10:16:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244144AbiBTPQR (ORCPT
+        with ESMTP id S244162AbiBTPQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 10:16:17 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71B234BB3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:55 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id o24so22874445wro.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:55 -0800 (PST)
+        Sun, 20 Feb 2022 10:16:22 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3185834BBA
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:57 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id p9so22804741wra.12
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BNiRHWO4HLFv+UVov8z2shlE8WSMm7D0PfvatmCO+8U=;
-        b=N7V/I4j8PzHey8p1AFUCuSEr7LELjsKsOjoLstg9JmC3mbmQZBvRF2HsdcsZ44Uk28
-         PiWJ1AT3fVDAzuZQDGRHBM6Ygya52JFzQTgts4HiXfkOYd0Rh29bYWOESrgFeAv5Lwqq
-         KyZ2WYfkZrcbjSVyCeXeCPSAHL7XpukcGr8r/MsB6lGelZ19Ff3OE8/LokJ1xlwwNzGL
-         tbOQtM1WMusfMwgleCOG6gEwcpFTJcI9brqYbHknliwvuus1kvY6sQ8kJZjkd/JEMRkV
-         TDi+6leGWaWkSdimIsx+ko5oF7R0k6FzRvcxsPhDSshJql+am3HBoevr4aqgNBCVjTdb
-         CRkw==
+        bh=CoWqM2l43A/te3Ur17qgQhFWUP8Vq6EXRZYnZTGBH/g=;
+        b=SPvPyJ3sGYx36ctC/gjYjNfy5zsbC6v5XjQQZOE+TRYSIEZO8jaASlc0SrpqB9zEUe
+         6JWanLcklXJV8BcF4eOSjz9e2tW5OLebkQ4qoyxBUj9ZWk35mwKbSctcFyuKZvn2ro75
+         Tn7QrYmz5MNW+m00iUKPHz3NfRtdjnaO9n2gHTbh0962pxwPptJY0tOhn/vxj6FlsjLQ
+         cUi3qjENX4CVrGB8B9UjNJ+eMFZbScpEPapvlNEPURSZxEH1D7TBdZM9tWyMBhXgjF35
+         /UliI1CLraylFz2h7MHcLSJVpgvbZkYC5v5Ti7oYotxaI0EMJQckVCyTcbp3CuVl9rDF
+         fCWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BNiRHWO4HLFv+UVov8z2shlE8WSMm7D0PfvatmCO+8U=;
-        b=22y9lE0zI8DKNUh3FhnsgRnuBA71G188bHDvftutd7vPQLH+5oo33ORF91kp7KaLLS
-         C0I25BlQRn4RWn6OtBZySqyhK6v+RAhqXQLcJjOaE+WepwrbrfslaB4+YmE1TMnoLtjg
-         +C5LqoztmWrozMVdbeVxIKIK80308S5iwv233Ch1riDqnTPcujvzTaqwfPQllhexRERd
-         DgT716bGHp6D3KhI4k9eSmVGiHOyYgLzrkL1DpMyuAfzjGmFGOUiXCvted5BvTthZNks
-         S2LWG2QQxUHRPPc7H8Cg39ABUZCtski+92Q1q+P0vfp/IrwqhZwf9HFwiD08Pa7M2M7L
-         elOQ==
-X-Gm-Message-State: AOAM533c6L634JIUTH7aYGunbTMmc4KhigHiNkhJ71g+NbAR+NKI63/h
-        DmJLcoKQqXDP0LNhRQMyXYFCjtkg7XSVPw==
-X-Google-Smtp-Source: ABdhPJyakR4a/iE02zTmqIAPt2wTWDG+ZbxmeT8aPIAwTrqaIBHT0QewXJ0HBLy6kQ7DYlM0sbtgqg==
-X-Received: by 2002:adf:eace:0:b0:1e7:6884:45a5 with SMTP id o14-20020adfeace000000b001e7688445a5mr12733333wrn.197.1645370154500;
-        Sun, 20 Feb 2022 07:15:54 -0800 (PST)
+        bh=CoWqM2l43A/te3Ur17qgQhFWUP8Vq6EXRZYnZTGBH/g=;
+        b=ef0IvHZo046GdYp0v0dg5bv3M8ZgENudN/VBd/wA4yJfKO1ZaJemEAOiUo4kkyQXqh
+         SbT6xbWzle5rAIs4mnAcNlOKpQQhkEbSwvjOFqI4fnHHJn1JYXMJInBrA0gHW12S81bw
+         g7wY/WPboPu3JhnsBMAQ9nFqwkUkUN1jZDyyQpZedFV7XVEitRsayrfGoTOL0HA3wDJ4
+         LI/yDTZS2tq4sg0na/VNqdqvwuOiOE82nLfj+Y2sQoOoRIXsHG439X4UJClUWnIGWQFn
+         OvzdoGC6rWkM2N55jmxOmU4n9KekIO+8sVa25XmYQ3dW/wtKhXPGIxImX0v35zXJCHIa
+         OKkw==
+X-Gm-Message-State: AOAM532kP5RqANcClDAuWwMFi9gUsck3J5Z+scdkNO0zk5IyM9Und9zy
+        +OYNRyDw+CFNKgJRb9qA8Dvk7g==
+X-Google-Smtp-Source: ABdhPJxX/7lBlES0VDcR5um2H0CrrDMY/XCV+ngbPFAqPEGvYRF82EU1+uBVBsUjGiVKU9sxYma1wg==
+X-Received: by 2002:a5d:6dab:0:b0:1ea:1c5d:904d with SMTP id u11-20020a5d6dab000000b001ea1c5d904dmr1815499wrs.51.1645370155769;
+        Sun, 20 Feb 2022 07:15:55 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.53
+        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 20 Feb 2022 07:15:54 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+Cc:     linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 06/13] nvmem: sunxi_sid: Add support for D1 variant
-Date:   Sun, 20 Feb 2022 15:15:20 +0000
-Message-Id: <20220220151527.17216-7-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 07/13] nvmem: meson-mx-efuse: replace unnecessary devm_kstrdup()
+Date:   Sun, 20 Feb 2022 15:15:21 +0000
+Message-Id: <20220220151527.17216-8-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
 References: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
@@ -70,41 +72,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-D1 has a smaller eFuse block than some other recent SoCs, and it no
-longer requires a workaround to read the eFuse data.
+Replace unnecessary devm_kstrdup() so to avoid redundant memory allocation.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+Suggested-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/sunxi_sid.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/nvmem/meson-mx-efuse.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/nvmem/sunxi_sid.c b/drivers/nvmem/sunxi_sid.c
-index 275b9155e473..5750e1f4bcdb 100644
---- a/drivers/nvmem/sunxi_sid.c
-+++ b/drivers/nvmem/sunxi_sid.c
-@@ -184,6 +184,11 @@ static const struct sunxi_sid_cfg sun8i_h3_cfg = {
- 	.need_register_readout = true,
- };
+diff --git a/drivers/nvmem/meson-mx-efuse.c b/drivers/nvmem/meson-mx-efuse.c
+index 07c9f38c1c60..13eb14316f46 100644
+--- a/drivers/nvmem/meson-mx-efuse.c
++++ b/drivers/nvmem/meson-mx-efuse.c
+@@ -209,8 +209,7 @@ static int meson_mx_efuse_probe(struct platform_device *pdev)
+ 	if (IS_ERR(efuse->base))
+ 		return PTR_ERR(efuse->base);
  
-+static const struct sunxi_sid_cfg sun20i_d1_cfg = {
-+	.value_offset = 0x200,
-+	.size = 0x100,
-+};
-+
- static const struct sunxi_sid_cfg sun50i_a64_cfg = {
- 	.value_offset = 0x200,
- 	.size = 0x100,
-@@ -200,6 +205,7 @@ static const struct of_device_id sunxi_sid_of_match[] = {
- 	{ .compatible = "allwinner,sun7i-a20-sid", .data = &sun7i_a20_cfg },
- 	{ .compatible = "allwinner,sun8i-a83t-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun8i-h3-sid", .data = &sun8i_h3_cfg },
-+	{ .compatible = "allwinner,sun20i-d1-sid", .data = &sun20i_d1_cfg },
- 	{ .compatible = "allwinner,sun50i-a64-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h5-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h6-sid", .data = &sun50i_h6_cfg },
+-	efuse->config.name = devm_kstrdup(&pdev->dev, drvdata->name,
+-					  GFP_KERNEL);
++	efuse->config.name = drvdata->name;
+ 	efuse->config.owner = THIS_MODULE;
+ 	efuse->config.dev = &pdev->dev;
+ 	efuse->config.priv = efuse;
 -- 
 2.21.0
 

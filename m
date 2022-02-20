@@ -2,119 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA70F4BD25A
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 23:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418C44BD25B
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 23:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245173AbiBTWbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 17:31:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52898 "EHLO
+        id S245194AbiBTWoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 17:44:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244739AbiBTWbG (ORCPT
+        with ESMTP id S245188AbiBTWoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 17:31:06 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5734B874;
-        Sun, 20 Feb 2022 14:30:44 -0800 (PST)
-Received: from localhost.localdomain (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 052BEC83D6;
-        Sun, 20 Feb 2022 22:30:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1645396243; bh=V2nhvOAtYi4w252RToFuWOCUJqBe5w1V1/MDMkrhuKI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=JAj3RFFH5XFLE8i4H2+ea/NsgZUV+nQ7+/kyGJgwjhIfpWX/Ps2+k3ckg12Al7gwY
-         t7cTeT1x1+mhaKjtEATEY3ij1d46G/XZ7CIFgbnS4nF5bNE5Dxqac39AwJG+PwGai4
-         vOSndS6s71jbtS8cQi+m7vk/QysCVzDxc1GQoZ0k=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ARM: dts: qcom: msm8226: add power domains
-Date:   Sun, 20 Feb 2022 23:30:03 +0100
-Message-Id: <20220220223004.507739-3-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220220223004.507739-1-luca@z3ntu.xyz>
-References: <20220220223004.507739-1-luca@z3ntu.xyz>
+        Sun, 20 Feb 2022 17:44:06 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD70338B7
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 14:43:44 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id vz16so28500953ejb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 14:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=n9crBYb57d1azHAL1ikRm0A47D2RTNJcSC8BWr8rPVU=;
+        b=YryqbrIZeQR7sxpZ5Euib3gH348PG0wFjSba/saHS87EN0nkRmZcnHxP/QR6x6H2UG
+         Z4J2vOctcwyGd9GqDM3BFwSpm3S2x8ayBOEIwRVeaIN/6mb2/bX20Xdi6geyavvDSoLp
+         hZqe8TOCL3zjeQzKkt9fzwLD1RB39DIGxN503+9xjOMRgnyFXI5W3QAQXMxFQWOVQ5Rv
+         1wpG2Ld94Z96fyJzNiyeULxFmMnleaA2qy41ot9ch7uH1ZFKDaMHIUddpGx8mHfFPccu
+         501buL6VxuX82Xin35TYVj1WENnMUifODuvHVHDy9xAeirgACTewahcW2wjze56s0d5p
+         pYPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=n9crBYb57d1azHAL1ikRm0A47D2RTNJcSC8BWr8rPVU=;
+        b=eVfXyBKIWt9PWEjqggnjhzXcscQJITo6x7UP8k/J50hnCUPBVT5KbkOelbWwPaarbS
+         z6I6/B3ufRjfLP+kpbwDMvxdFmLIMN8z93cooUzX95ztDm+Sdl9gFIPHAL1qFF9iZmlY
+         Iz6s8iWeu4dz1GkuGD0vWAcw8M0vLe7/iSWp5+BulAJyqGKDJfFKRLLbhP4GVkhUWMK+
+         ixy0UPeV+3QVcrm2f+XL+FkAG2q8wSYnHODKIb33yaDhwZOhP9pxkStDQYBq4KpNQpim
+         MNMNsNPxBd/OVsXlb/LxRdcnt8ywCG6IoJIt8FL4tnKymZew6EVgvE8du8ALfzNNL+We
+         w9LA==
+X-Gm-Message-State: AOAM533I4sMXMQEQZ7JmWQ1R6tgFyQ1UQuJkxhj2ZdiS8aHMvDhbVHAw
+        +blzfW4sbGFS8k6/0XlXRcM=
+X-Google-Smtp-Source: ABdhPJzbcePFSreGjkEwbaHDexFK/22DSAuYcSJUygQzWFXE4V6XBhOrsnLWrUmCsZvI/Sd5zROwJw==
+X-Received: by 2002:a17:906:af68:b0:6cd:7896:15e with SMTP id os8-20020a170906af6800b006cd7896015emr13960547ejb.420.1645397022789;
+        Sun, 20 Feb 2022 14:43:42 -0800 (PST)
+Received: from krava ([83.240.63.12])
+        by smtp.gmail.com with ESMTPSA id gq1sm4558283ejb.58.2022.02.20.14.43.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 14:43:42 -0800 (PST)
+Date:   Sun, 20 Feb 2022 23:43:40 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        Alexei Budankov <abudankov@huawei.com>
+Subject: Re: [PATCH core] perf data: Adding error message if
+ perf_data__create_dir fails
+Message-ID: <YhLEHCttvXmRu78G@krava>
+References: <20220218152341.5197-1-alexey.v.bayduraev@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218152341.5197-1-alexey.v.bayduraev@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node for the power domain controller found in MSM8226.
+On Fri, Feb 18, 2022 at 06:23:40PM +0300, Alexey Bayduraev wrote:
+> There is no notification about data directory creation failure. Add it.
+> 
+> Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+> ---
+>  tools/perf/builtin-record.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 0bc6529814b2..0306d5911de2 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -1186,8 +1186,10 @@ static int record__mmap_evlist(struct record *rec,
+>  
+>  	if (record__threads_enabled(rec)) {
+>  		ret = perf_data__create_dir(&rec->data, evlist->core.nr_mmaps);
+> -		if (ret)
+> +		if (ret) {
+> +			pr_err("Failed to create data directory: %s\n", strerror(errno));
 
-At the same time remove any existing usages of pm8226_s1 as this
-regulator is now handled by power domains.
+errno will be misleading in here, because perf_data__create_dir
+calls other syscalls on error path
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts |  4 ---
- arch/arm/boot/dts/qcom-msm8226.dtsi         | 29 +++++++++++++++++++++
- 2 files changed, 29 insertions(+), 4 deletions(-)
+jirka
 
-diff --git a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-index 42467f705b26..2b7e52fda6a7 100644
---- a/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-+++ b/arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-@@ -105,10 +105,6 @@ &rpm_requests {
- 	pm8226-regulators {
- 		compatible = "qcom,rpm-pm8226-regulators";
- 
--		pm8226_s1: s1 {
--			regulator-min-microvolt = <500000>;
--			regulator-max-microvolt = <1275000>;
--		};
- 		pm8226_s3: s3 {
- 			regulator-min-microvolt = <1200000>;
- 			regulator-max-microvolt = <1350000>;
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index e24e53438b4d..28eca15b5712 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -73,6 +73,35 @@ rpm {
- 			rpm_requests: rpm-requests {
- 				compatible = "qcom,rpm-msm8226";
- 				qcom,smd-channels = "rpm_requests";
-+
-+				rpmpd: power-controller {
-+					compatible = "qcom,msm8226-rpmpd";
-+					#power-domain-cells = <1>;
-+					operating-points-v2 = <&rpmpd_opp_table>;
-+
-+					rpmpd_opp_table: opp-table {
-+						compatible = "operating-points-v2";
-+
-+						rpmpd_opp_ret: opp1 {
-+							opp-level = <1>;
-+						};
-+						rpmpd_opp_svs_krait: opp2 {
-+							opp-level = <2>;
-+						};
-+						rpmpd_opp_svs_soc: opp3 {
-+							opp-level = <3>;
-+						};
-+						rpmpd_opp_nom: opp4 {
-+							opp-level = <4>;
-+						};
-+						rpmpd_opp_turbo: opp5 {
-+							opp-level = <5>;
-+						};
-+						rpmpd_opp_super_turbo: opp6 {
-+							opp-level = <6>;
-+						};
-+					};
-+				};
- 			};
- 		};
- 	};
--- 
-2.35.1
-
+>  			return ret;
+> +		}
+>  		for (i = 0; i < evlist->core.nr_mmaps; i++) {
+>  			if (evlist->mmap)
+>  				evlist->mmap[i].file = &rec->data.dir.files[i];
+> -- 
+> 2.19.0
+> 

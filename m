@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48AFB4BD1CD
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 22:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0E84BD1CC
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 22:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245075AbiBTVNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 16:13:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44050 "EHLO
+        id S245081AbiBTVNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 16:13:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242699AbiBTVNP (ORCPT
+        with ESMTP id S234315AbiBTVNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 16:13:15 -0500
+        Sun, 20 Feb 2022 16:13:16 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE125E48
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 13:12:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E21AE40
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 13:12:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645391573; x=1676927573;
+  t=1645391575; x=1676927575;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kDvBkajyuI0yMdhFNn9L6trMYaOtPexxgVyu4XYgKR0=;
-  b=AAz78Mvt7KWByf9zz7Krex+sXk1n9ZD1ydRyQ21BnGF87ba6uOng11xa
-   48yxT4kCC0RmB5NuzERgw/APYIRjNe6A8DC9p1NUO09A3fB7nuRC/0pjY
-   jCqFg7jnakDDVFrQ9qhI7GUHbHXznvoG9UabWRMs4uzo/apHZ44tv5uUj
-   zxbrCE8hOsZhCOUPV1REy8hsEm97rxobdiNZPcMnSSrFGJs0QA4bRKYeb
-   wAvTV3i8WwW9llHUg5FSpadFbKYV8hFzjDjw9FHZuyhbVuMfHOFm5fZMg
-   zSOI2AdeXq0Tzx1dM2ndIZ+xy5qynJG0q+6lBlDbSUCtUV2VcmI2sV6wX
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="250221609"
+  bh=A8Be8zoAitCOSMHxdF3P1kQVo47VQ49SA2+u7yWVuwE=;
+  b=gJsLrcqZ41S3JlL9vVWLoArSdFkDyg6gSDl60x3BBdsI6R/oT5LiLbiC
+   g5KAiuvDuU+DWUkzEEOebPXhhvh/lXa9OIYO8TQQ+yCf6mB62SQSzOk69
+   Y1RtxiV47GpdY6v3FZ1HO2iEMaqB3OQljMtuStSo5bmTv7ZWj9ZCy1ezC
+   /75xeeurpE2The1E/HjM/t/HxtsDwU+lfzHKQwRPy7UGptYiGC+NobeBK
+   1/lFnjHg5kKlHLLNQKfCEl1AIQqmVpAraQ5qbNhXurOtfXeOUxvvp+1lT
+   LWsfUz803OHs3c9h7Vm2NqmMlVjoQVT8bG7TnhnyjVXJiBLWNXcnGWC8T
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="250221610"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="250221609"
+   d="scan'208";a="250221610"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:12:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="504639535"
+   d="scan'208";a="504639536"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 13:12:51 -0800
+  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 13:12:52 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nLtVj-0000lz-5N; Sun, 20 Feb 2022 21:12:51 +0000
-Date:   Mon, 21 Feb 2022 05:12:04 +0800
+        id 1nLtVj-0000mD-WF; Sun, 20 Feb 2022 21:12:52 +0000
+Date:   Mon, 21 Feb 2022 05:12:08 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
 Subject: [mingo-tip:sched/headers 643/2574]
- include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h'
- file not found
-Message-ID: <202202210526.ll6ZQU7s-lkp@intel.com>
+ include/asm-generic/barrier.h:16:10: fatal error: asm/vdso/processor.h: No
+ such file or directory
+Message-ID: <202202210526.OLt1B9yn-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,8 +65,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   39e8a0edc8fae20758051dadf7846849edc18b88
 commit: 121f4f0dd58c5fa0666a732d13b7ad770af3559b [643/2574] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
-config: hexagon-randconfig-r045-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210526.ll6ZQU7s-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+config: arc-randconfig-r043-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210526.OLt1B9yn-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -77,23 +76,26 @@ reproduce (this is a W=1 build):
         git checkout 121f4f0dd58c5fa0666a732d13b7ad770af3559b
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:28:
-   In file included from arch/hexagon/include/asm/bitops.h:13:
-   In file included from arch/hexagon/include/asm/atomic.h:13:
-   In file included from ./arch/hexagon/include/generated/asm/barrier.h:1:
->> include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h' file not found
-   #include <asm/vdso/processor.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   In file included from arch/arc/include/asm/barrier.h:42,
+                    from arch/arc/include/asm/cmpxchg.h:12,
+                    from arch/arc/include/asm/atomic.h:13,
+                    from include/linux/atomic.h:7,
+                    from include/asm-generic/bitops/lock.h:5,
+                    from arch/arc/include/asm/bitops.h:188,
+                    from include/linux/bitops.h:28,
+                    from include/linux/log2.h:12,
+                    from kernel/bounds.c:13:
+>> include/asm-generic/barrier.h:16:10: fatal error: asm/vdso/processor.h: No such file or directory
+      16 | #include <asm/vdso/processor.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
    make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
    make[2]: Target '__build' not remade because of errors.
    make[1]: *** [Makefile:1191: prepare0] Error 2

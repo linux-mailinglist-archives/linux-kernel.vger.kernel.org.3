@@ -2,178 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038E54BD2E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 01:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DDA4BD2DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 01:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240013AbiBTXzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 18:55:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59192 "EHLO
+        id S245341AbiBTX7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 18:59:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbiBTXzJ (ORCPT
+        with ESMTP id S244582AbiBTX7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 18:55:09 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4246037002
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 15:54:46 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id fh9so27620429qvb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 15:54:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metztli-com.20210112.gappssmtp.com; s=20210112;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yBtrNN4uwfJ+1WgOoVnh2SfdtEspt8o9QO0g209UjmY=;
-        b=VF9laxAtGRyFoFwElqZsKNI1hF59lCPOR/3Ikf7qnGihPh3gyq1ouqU/6Fh0b6polE
-         nUH1c2BSVfvugzv7y+5Wfo1aop+s9TfUcrWaRlqDBCH4Q16WmaTHMNVlcqOJGwrTBKxo
-         gsGhiErk0k/0PIWqs4/wUVUWclA0k8y67f4KQTyei9Rolp522u2a44A9EJa2uVUveE9X
-         dJuotIyy/CZAOAHKLWyXiOazGwJ0+/1KVE+eSZLGk9ztB0x8AOZHuOUWv4H/dKra7hF7
-         NJYHMj2M9kzzKLiW01ZtcVfk0Y9TlXRYSU5SYhzqgiWgjuBetE9JryBUe3M2ldn2jFVZ
-         55zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yBtrNN4uwfJ+1WgOoVnh2SfdtEspt8o9QO0g209UjmY=;
-        b=Yp/cmPKJj+jWjPX4WWhxMYfzxnBQJhfy75246hzvXs3+EsFyr9thSTF0aQv7ZZHg/0
-         cs1kEXzf4JJg0Jsmh+gykoL/dR5AEllEInTSjg8+im32wdjeJz1CBl3j58fjkat2MkJg
-         uOF3wwz9Zq1QY2S3cz8BQy1yUxKuqT5Gq83Tz/PzHqjSC73QYR63DKg+HtWGJ3sWwxGI
-         s7VFoViazWujvFn1faEUgnDrBbZxmiwuRcRUtJ8tzrvkXe5UjqQ44mFJF8C2Zppm6//k
-         WtLkCe3TGoMhcCvLpYVqPISz7bPednJvpPHEoNgWxV97oAqFoOyFU411loCRJuHx//Uo
-         TYqA==
-X-Gm-Message-State: AOAM532IRh3VS2YaCTha/f1FvJb6QtLM7/SJ7Uvg9SnV7wPO0BdK3avL
-        VAKmx8t5j1T8HEg2Ts7FkuclCw==
-X-Google-Smtp-Source: ABdhPJwH1S4G3mxDPEpKrEN9Ap/+mHmV/xA7ngfiUYeJjX9kzArkAPAp6pHfrf28w+oViIWZE9C35w==
-X-Received: by 2002:a05:622a:174b:b0:2de:23d5:4d15 with SMTP id l11-20020a05622a174b00b002de23d54d15mr2636602qtk.475.1645401285288;
-        Sun, 20 Feb 2022 15:54:45 -0800 (PST)
-Received: from ?IPv6:2600:1700:6470:27a0:4e80:93ff:fe00:3ff7? ([2600:1700:6470:27a0:4e80:93ff:fe00:3ff7])
-        by smtp.gmail.com with ESMTPSA id z17sm29443385qta.11.2022.02.20.15.54.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Feb 2022 15:54:44 -0800 (PST)
-From:   Metztli Information Technology <jose.r.r@metztli.com>
-Subject: Re: Unsubscription Incident
-To:     Slade Watkins <slade@sladewatkins.com>
-Cc:     Shannon Nelson <snelson@pensando.io>,
-        Benjamin Poirier <benjamin.poirier@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lijun Pan <lijunp213@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Edward Shishkin <edward.shishkin@gmail.com>,
-        ReiserFS Development List <reiserfs-devel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        vbox-dev@virtualbox.org
-References: <CAOhMmr7bWv_UgdkFZz89O4=WRfUFhXHH5hHEOBBfBaAR8f4Ygw@mail.gmail.com>
- <CA+h21hqrX32qBmmdcNiNkp6_QvzsX61msyJ5_g+-FFJazxLgDw@mail.gmail.com>
- <YXY15jCBCAgB88uT@d3>
- <CA+pv=HPyCEXvLbqpAgWutmxTmZ8TzHyxf3U3UK_KQ=ePXSigBQ@mail.gmail.com>
- <61f29617-1334-ea71-bc35-0541b0104607@pensando.io>
- <CA+pv=HOTQUzd0EYCuunC9AUPOVLEu6htyhNwiUB1fTjhUHsN5Q@mail.gmail.com>
-Message-ID: <61892434-1007-1aa0-f686-d66409550c84@metztli.com>
-Date:   Sun, 20 Feb 2022 15:54:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 20 Feb 2022 18:59:22 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ED3517D5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 15:58:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645401540; x=1676937540;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aed045LtP8u/cW97/6g9NjDiOQa4JuZHiem6NPMOURQ=;
+  b=LgRH5yw9NvE+V061FG+A98KrhAgLgl0jlS9O3cTmhxVSNKVwbVbiR7Xt
+   5MUlTgj6SCUtm3pG5AZ2qmczXyLkt45Lr/zp49c2Z0AkrcJ9Z3Drljxrd
+   KCiN/b+PpsMOzXmNqlfGFJBgErBrjNZ6C6+AzQ8gSoWvy1VjfR+Y+uQaY
+   dF6CU0M0t2OB1ZndTCpM91vcYE9xyyeTfaLUqitbkZ7HiVObyZyYlf2Mp
+   +ajfz8NuJoefHLVrZItORs5FPR8YBcxtzv69etKgoDy4hwhgF3Cwl52oK
+   641+tqAMLar9jV9hJg2+Lw7xu3eQkn7J7ZsKoVfZWnVYgj8YUZiXHi1NI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="276000457"
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="276000457"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 15:58:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="572924607"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Feb 2022 15:58:58 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLw6T-00012t-Pb; Sun, 20 Feb 2022 23:58:57 +0000
+Date:   Mon, 21 Feb 2022 07:57:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 80/2574]
+ include/linux/sched/per_task.h:48:11: fatal error: generated/asm-offsets.h:
+ No such file or directory
+Message-ID: <202202210712.NtyTe69D-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CA+pv=HOTQUzd0EYCuunC9AUPOVLEu6htyhNwiUB1fTjhUHsN5Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   39e8a0edc8fae20758051dadf7846849edc18b88
+commit: dae7a695f3f100fcb540047389fba6f9d80a6fb2 [80/2574] headers/deps: per_task: Add the per_task infrastructure for x86, arm64, sparc and MIPS
+config: csky-buildonly-randconfig-r001-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210712.NtyTe69D-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=dae7a695f3f100fcb540047389fba6f9d80a6fb2
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout dae7a695f3f100fcb540047389fba6f9d80a6fb2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/sched.h:12,
+                    from arch/csky/kernel/asm-offsets.c:4:
+>> include/linux/sched/per_task.h:48:11: fatal error: generated/asm-offsets.h: No such file or directory
+      48 | # include <generated/asm-offsets.h>
+         |           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+   make[2]: *** [scripts/Makefile.build:121: arch/csky/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-On Mon, Oct 25, 2021 at 1:14 PM Slade Watkins <slade@sladewatkins.com> 
-wrote:
->
-> On Mon, Oct 25, 2021 at 2:34 PM Shannon Nelson <snelson@pensando.io> wrote:
-> >
-> > On 10/25/21 10:04 AM, Slade Watkins wrote:
-> > > On Mon, Oct 25, 2021 at 12:43 AM Benjamin Poirier
-> > > <benjamin.poirier@gmail.com> wrote:
-> > >> On 2021-10-22 18:54 +0300, Vladimir Oltean wrote:
-> > >>> On Fri, 22 Oct 2021 at 18:53, Lijun Pan <lijunp213@gmail.com> wrote:
-> > >>>> Hi,
-> > >>>>
-> > >>>>  From Oct 11, I did not receive any emails from both linux-kernel and
-> > >>>> netdev mailing list. Did anyone encounter the same issue? I subscribed
-> > >>>> again and I can receive incoming emails now. However, I figured out
-> > >>>> that anyone can unsubscribe your email without authentication. Maybe
-> > >>>> it is just a one-time issue that someone accidentally unsubscribed my
-> > >>>> email. But I would recommend that our admin can add one more
-> > >>>> authentication step before unsubscription to make the process more
-> > >>>> secure.
-> > >>>>
-> > >>>> Thanks,
-> > >>>> Lijun
-> > >>> Yes, the exact same thing happened to me. I got unsubscribed from all
-> > >>> vger mailing lists.
-> > >> It happened to a bunch of people on gmail:
-> > >> https://lore.kernel.org/netdev/1fd8d0ac-ba8a-4836-59ab-0ed3b0321775@mojatatu.com/t/#u
-> > > I can at least confirm that this didn't happen to me on my hosted
-> > > Gmail through Google Workspace. Could be wrong, but it seems isolated
-> > > to normal @gmail.com accounts.
-> > >
-> > > Best,
-> > >               -slade
-> >
-> > Alternatively, I can confirm that my pensando.io address through gmail
-> > was affected until I re-subscribed.
->
-> Hm. Must be a hit or miss thing, then.
->
-> > sln
-> >
-> >
-> >
->
->              -slade
+vim +48 include/linux/sched/per_task.h
 
-Well, it seems it is making the rounds in 2022. I have not received an 
-email from Linux Kernel Mailing List <linux-kernel@vger.kernel.org> (and 
-neither the Virtual Box developers mailing list
-< 
-https://www.virtualbox.org/pipermail/vbox-dev/2022-February/015710.html 
- > ) since sometime within Jan. 26, 2022, to the present; hence, I 
-assume somebody (or some skiddie) unsubscribed me.
+    42	
+    43	#ifndef __PER_TASK_GEN
+    44	/*
+    45	 * These offsets get generated via the scripts/gen-pertask.sh script,
+    46	 * and the pertask rules in the top level Kbuild file:
+    47	 */
+  > 48	# include <generated/asm-offsets.h>
+    49	#endif
+    50	
 
-  The last Jan. 26, 2022, email I sent to the list also included the 
-reiser4 developer as an addressee -- as I have experienced some issues 
-with newer kernels (and thought someone else might even provide a hint).
-< https://lkml.org/lkml/2022/1/26/204 >
-
-Apropos (off-topic, sorry, yet if this email makes it to the Linux 
-kernel mailing list and other developers know him), I am somewhat 
-concerned about Mr. Shiskin's well being  -- as his continued Reiser4 
-work for the Linux kernel is appreciated by at least those of us who -- 
-in stark contrast to 'the chosen ones' -- we do not pretend to be 
-morally superior to judge and pontificate to others.
-
-Last reiser4 patch (hack) that is working decently for me:
-< https://metztli.it/bullseye/reiser4-ryzen.png >
-
-I will resubscribe to Linux Kernel Mailing List 
-<linux-kernel@vger.kernel.org>; unless, of course, I have been placed on 
-a black list by the Penguins and/or their 'morally virtuous' 
-govt/corporate overlords ;-)
-
-
-Best Professional Regards.
-
--- 
-Jose R R
-http://metztli.it
----------------------------------------------------------------------------------------------
-Download Metztli Reiser4: Debian Bullseye w/ Linux 5.14.21 AMD64
----------------------------------------------------------------------------------------------
-feats ZSTD compression https://sf.net/projects/metztli-reiser4/
----------------------------------------------------------------------------------------------
-or SFRN 5.1.3, Metztli Reiser5 https://sf.net/projects/debian-reiser4/
--------------------------------------------------------------------------------------------
-Official current Reiser4 resources: https://reiser4.wiki.kernel.org/
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

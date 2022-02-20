@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570C44BD0B7
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 19:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDFB4BD0BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 19:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244536AbiBTSkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 13:40:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44428 "EHLO
+        id S244543AbiBTSlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 13:41:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244523AbiBTSkj (ORCPT
+        with ESMTP id S244523AbiBTSlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 13:40:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4668131346;
-        Sun, 20 Feb 2022 10:40:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBC7660EB7;
-        Sun, 20 Feb 2022 18:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D0D2C340E8;
-        Sun, 20 Feb 2022 18:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645382416;
-        bh=By3t4hVxl9V9/CzFx272qP30b3Uik7LMrgNkninW/+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mUKdJS20S0C6IVochHpu840VFai2KHcVjp0lNVV4BINmH/ctW2/LubOCscpYPbG34
-         61OCl6IRM8RVKxSsv1eB9Dm8LPCQJ2BSoZd5bC6zV9I6UICZQsnY7FBZ+pyn8U+mkz
-         MO/nZuyRvzfWbxb7pkEXNC0naMIyDztG/ixFMtk7xXECKDKZIyiIiq1n0gNb6lDfQk
-         c27xCBGlXs3y7umH31WSE878uf5nwMt4aGkGdjotbL7jNDqzxk5We1t0IK8SlQ0d8R
-         DuUfku3lxbGJvbsNqVkIjQm7xpyQAY6rlkhKpvssSHPbKGWsGfwGKvfoiZzfWimGul
-         7oKadQ37BU9Kg==
-Date:   Sun, 20 Feb 2022 19:40:54 +0100
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 19/32] x86/sgx: Support adding of pages to an
- initialized enclave
-Message-ID: <YhKLNqgPNNLS7JyN@iki.fi>
-References: <cover.1644274683.git.reinette.chatre@intel.com>
- <fcbde9c3e67289eaff9cd8b34989919629fe823c.1644274683.git.reinette.chatre@intel.com>
- <YhDbGfzGWQ5RtwTU@iki.fi>
- <YhDb/QRYMa4+xsyv@iki.fi>
+        Sun, 20 Feb 2022 13:41:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13C964550B
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 10:41:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645382470;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u9wFN1OhvJJ9qPyhnyKnWvWSIZB4hNTwLidVvqGcOC4=;
+        b=Ml0qqkXpBMRnnRvPXOYqcc+f4ev+8k2OsnfQByU4Hj61VsEWlUSLblywE39qPDeVv59dj6
+        z9QJwEiWwjOrKAPokk8JiAsDICYe+kkioaoLtlqFRkfXacX0qZbTMdt2ESukMGlsM4+mPi
+        bRvOBrZyONOJIEzbdRvlzCXfRj/3n6Y=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-554-TZkJXAHCPFeQRioum0Bfjg-1; Sun, 20 Feb 2022 13:41:09 -0500
+X-MC-Unique: TZkJXAHCPFeQRioum0Bfjg-1
+Received: by mail-qk1-f198.google.com with SMTP id p67-20020a378d46000000b0062adb7627edso7192909qkd.8
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 10:41:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u9wFN1OhvJJ9qPyhnyKnWvWSIZB4hNTwLidVvqGcOC4=;
+        b=ZVmZVkP/VDulG7bXznwK9lZqfsci+ILHQDOySUibxNzebMepgwSzkZkCw6GzcxVOyc
+         K4cLwWBEhjQusZ6tHh+Vih8c1rpve2DpsjWXbT5v8qxm48x2bMg1Cl4ACgEtllItr0Zy
+         LnymRktm05od542nyN1xuBQ8cyfSDLAqarwT4596cO+inThju+PRZeMbkQb18YZOhwA3
+         W4SgfkDdgtFfNqLFdDEHdwta9YGp91EXPUEgbRe86iP0mHXvwYXnhbYohI9RkHe/rUOk
+         Ziqk0qp+kRHKJsHqwZ/mVjoMuQPfb1pnsmb4g8M2uQ7QnFZQ4HCteSQfjFBE6va16ap/
+         IPxw==
+X-Gm-Message-State: AOAM5318GKppZjwHNI7IMMszxZX4tq34ziYyXvmpOvTAkQL6UKyDA5fo
+        oMep3o8sNHk4vzqg2un9dcqOwvtgLCYAed+ceGPds2pBAGVJYGSiW4h3ZVC+b+D0fONT80WxgKs
+        gMoUOo6b2grEvNFzb0U85o0MQ
+X-Received: by 2002:a05:6214:9c1:b0:42d:b2b8:f760 with SMTP id dp1-20020a05621409c100b0042db2b8f760mr12658525qvb.123.1645382467162;
+        Sun, 20 Feb 2022 10:41:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyfFh4O9qEGBB5lVN/I3Jx8V98UFE5oOeE2pUaPVreaUf4ZjLEZzVAcJak7tC+yUs4w/JErdg==
+X-Received: by 2002:a05:6214:9c1:b0:42d:b2b8:f760 with SMTP id dp1-20020a05621409c100b0042db2b8f760mr12658513qvb.123.1645382466857;
+        Sun, 20 Feb 2022 10:41:06 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id 16sm29631702qty.86.2022.02.20.10.41.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 10:41:06 -0800 (PST)
+From:   trix@redhat.com
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] bpf: cleanup comments
+Date:   Sun, 20 Feb 2022 10:40:55 -0800
+Message-Id: <20220220184055.3608317-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhDb/QRYMa4+xsyv@iki.fi>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,292 +76,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 19, 2022 at 01:01:08PM +0100, Jarkko Sakkinen wrote:
-> On Sat, Feb 19, 2022 at 12:57:21PM +0100, Jarkko Sakkinen wrote:
-> > On Mon, Feb 07, 2022 at 04:45:41PM -0800, Reinette Chatre wrote:
-> > > With SGX1 an enclave needs to be created with its maximum memory demands
-> > > allocated. Pages cannot be added to an enclave after it is initialized.
-> > > SGX2 introduces a new function, ENCLS[EAUG], that can be used to add
-> > > pages to an initialized enclave. With SGX2 the enclave still needs to
-> > > set aside address space for its maximum memory demands during enclave
-> > > creation, but all pages need not be added before enclave initialization.
-> > > Pages can be added during enclave runtime.
-> > > 
-> > > Add support for dynamically adding pages to an initialized enclave,
-> > > architecturally limited to RW permission. Add pages via the page fault
-> > > handler at the time an enclave address without a backing enclave page
-> > > is accessed, potentially directly reclaiming pages if no free pages
-> > > are available.
-> > > 
-> > > The enclave is still required to run ENCLU[EACCEPT] on the page before
-> > > it can be used. A useful flow is for the enclave to run ENCLU[EACCEPT]
-> > > on an uninitialized address. This will trigger the page fault handler
-> > > that will add the enclave page and return execution to the enclave to
-> > > repeat the ENCLU[EACCEPT] instruction, this time successful.
-> > > 
-> > > If the enclave accesses an uninitialized address in another way, for
-> > > example by expanding the enclave stack to a page that has not yet been
-> > > added, then the page fault handler would add the page on the first
-> > > write but upon returning to the enclave the instruction that triggered
-> > > the page fault would be repeated and since ENCLU[EACCEPT] was not run
-> > > yet it would trigger a second page fault, this time with the SGX flag
-> > > set in the page fault error code. This can only be recovered by entering
-> > > the enclave again and directly running the ENCLU[EACCEPT] instruction on
-> > > the now initialized address.
-> > > 
-> > > Accessing an uninitialized address from outside the enclave also
-> > > triggers this flow but the page will remain inaccessible (access will
-> > > result in #PF) until accepted from within the enclave via
-> > > ENCLU[EACCEPT].
-> > > 
-> > > The page is added with the architecturally constrained RW permissions
-> > > as runtime as well as maximum allowed permissions. It is understood that
-> > > there are some use cases, for example code relocation, that requires RWX
-> > > maximum permissions. Supporting these use cases require guidance from
-> > > user space policy before such maximum permissions can be allowed.
-> > > Integration with user policy is deferred.
-> > > 
-> > > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> > > ---
-> > > Changes since V1:
-> > > - Fix subject line "to initialized" -> "to an initialized" (Jarkko).
-> > > - Move text about hardware's PENDING state to the patch that introduces
-> > >   the ENCLS[EAUG] wrapper (Jarkko).
-> > > - Ensure kernel-doc uses brackets when referring to function.
-> > > 
-> > >  arch/x86/kernel/cpu/sgx/encl.c  | 133 ++++++++++++++++++++++++++++++++
-> > >  arch/x86/kernel/cpu/sgx/encl.h  |   2 +
-> > >  arch/x86/kernel/cpu/sgx/ioctl.c |   4 +-
-> > >  3 files changed, 137 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> > > index a5d4a7efb986..d1e3ea86b902 100644
-> > > --- a/arch/x86/kernel/cpu/sgx/encl.c
-> > > +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> > > @@ -124,6 +124,128 @@ struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
-> > >  	return entry;
-> > >  }
-> > >  
-> > > +/**
-> > > + * sgx_encl_eaug_page() - Dynamically add page to initialized enclave
-> > > + * @vma:	VMA obtained from fault info from where page is accessed
-> > > + * @encl:	enclave accessing the page
-> > > + * @addr:	address that triggered the page fault
-> > > + *
-> > > + * When an initialized enclave accesses a page with no backing EPC page
-> > > + * on a SGX2 system then the EPC can be added dynamically via the SGX2
-> > > + * ENCLS[EAUG] instruction.
-> > > + *
-> > > + * Returns: Appropriate vm_fault_t: VM_FAULT_NOPAGE when PTE was installed
-> > > + * successfully, VM_FAULT_SIGBUS or VM_FAULT_OOM as error otherwise.
-> > > + */
-> > > +static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
-> > > +				     struct sgx_encl *encl, unsigned long addr)
-> > > +{
-> > > +	struct sgx_pageinfo pginfo = {0};
-> > > +	struct sgx_encl_page *encl_page;
-> > > +	struct sgx_epc_page *epc_page;
-> > > +	struct sgx_va_page *va_page;
-> > > +	unsigned long phys_addr;
-> > > +	unsigned long prot;
-> > > +	vm_fault_t vmret;
-> > > +	int ret;
-> > > +
-> > > +	if (!test_bit(SGX_ENCL_INITIALIZED, &encl->flags))
-> > > +		return VM_FAULT_SIGBUS;
-> > > +
-> > > +	encl_page = kzalloc(sizeof(*encl_page), GFP_KERNEL);
-> > > +	if (!encl_page)
-> > > +		return VM_FAULT_OOM;
-> > > +
-> > > +	encl_page->desc = addr;
-> > > +	encl_page->encl = encl;
-> > > +
-> > > +	/*
-> > > +	 * Adding a regular page that is architecturally allowed to only
-> > > +	 * be created with RW permissions.
-> > > +	 * TBD: Interface with user space policy to support max permissions
-> > > +	 * of RWX.
-> > > +	 */
-> > > +	prot = PROT_READ | PROT_WRITE;
-> > > +	encl_page->vm_run_prot_bits = calc_vm_prot_bits(prot, 0);
-> > > +	encl_page->vm_max_prot_bits = encl_page->vm_run_prot_bits;
-> > > +
-> > > +	epc_page = sgx_alloc_epc_page(encl_page, true);
-> > > +	if (IS_ERR(epc_page)) {
-> > > +		kfree(encl_page);
-> > > +		return VM_FAULT_SIGBUS;
-> > > +	}
-> > > +
-> > > +	va_page = sgx_encl_grow(encl);
-> > > +	if (IS_ERR(va_page)) {
-> > > +		ret = PTR_ERR(va_page);
-> > > +		goto err_out_free;
-> > > +	}
-> > > +
-> > > +	mutex_lock(&encl->lock);
-> > > +
-> > > +	/*
-> > > +	 * Copy comment from sgx_encl_add_page() to maintain guidance in
-> > > +	 * this similar flow:
-> > > +	 * Adding to encl->va_pages must be done under encl->lock.  Ditto for
-> > > +	 * deleting (via sgx_encl_shrink()) in the error path.
-> > > +	 */
-> > > +	if (va_page)
-> > > +		list_add(&va_page->list, &encl->va_pages);
-> > > +
-> > > +	ret = xa_insert(&encl->page_array, PFN_DOWN(encl_page->desc),
-> > > +			encl_page, GFP_KERNEL);
-> > > +	/*
-> > > +	 * If ret == -EBUSY then page was created in another flow while
-> > > +	 * running without encl->lock
-> > > +	 */
-> > > +	if (ret)
-> > > +		goto err_out_unlock;
-> > > +
-> > > +	pginfo.secs = (unsigned long)sgx_get_epc_virt_addr(encl->secs.epc_page);
-> > > +	pginfo.addr = encl_page->desc & PAGE_MASK;
-> > > +	pginfo.metadata = 0;
-> > > +
-> > > +	ret = __eaug(&pginfo, sgx_get_epc_virt_addr(epc_page));
-> > > +	if (ret)
-> > > +		goto err_out;
-> > > +
-> > > +	encl_page->encl = encl;
-> > > +	encl_page->epc_page = epc_page;
-> > > +	encl_page->type = SGX_PAGE_TYPE_REG;
-> > > +	encl->secs_child_cnt++;
-> > > +
-> > > +	sgx_mark_page_reclaimable(encl_page->epc_page);
-> > > +
-> > > +	phys_addr = sgx_get_epc_phys_addr(epc_page);
-> > > +	/*
-> > > +	 * Do not undo everything when creating PTE entry fails - next #PF
-> > > +	 * would find page ready for a PTE.
-> > > +	 * PAGE_SHARED because protection is forced to be RW above and COW
-> > > +	 * is not supported.
-> > > +	 */
-> > > +	vmret = vmf_insert_pfn_prot(vma, addr, PFN_DOWN(phys_addr),
-> > > +				    PAGE_SHARED);
-> > > +	if (vmret != VM_FAULT_NOPAGE) {
-> > > +		mutex_unlock(&encl->lock);
-> > > +		return VM_FAULT_SIGBUS;
-> > > +	}
-> > > +	mutex_unlock(&encl->lock);
-> > > +	return VM_FAULT_NOPAGE;
-> > > +
-> > > +err_out:
-> > > +	xa_erase(&encl->page_array, PFN_DOWN(encl_page->desc));
-> > > +
-> > > +err_out_unlock:
-> > > +	sgx_encl_shrink(encl, va_page);
-> > > +	mutex_unlock(&encl->lock);
-> > > +
-> > > +err_out_free:
-> > > +	sgx_encl_free_epc_page(epc_page);
-> > > +	kfree(encl_page);
-> > > +
-> > > +	return VM_FAULT_SIGBUS;
-> > > +}
-> > > +
-> > >  static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
-> > >  {
-> > >  	unsigned long addr = (unsigned long)vmf->address;
-> > > @@ -145,6 +267,17 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
-> > >  	if (unlikely(!encl))
-> > >  		return VM_FAULT_SIGBUS;
-> > >  
-> > > +	/*
-> > > +	 * The page_array keeps track of all enclave pages, whether they
-> > > +	 * are swapped out or not. If there is no entry for this page and
-> > > +	 * the system supports SGX2 then it is possible to dynamically add
-> > > +	 * a new enclave page. This is only possible for an initialized
-> > > +	 * enclave that will be checked for right away.
-> > > +	 */
-> > > +	if (cpu_feature_enabled(X86_FEATURE_SGX2) &&
-> > > +	    (!xa_load(&encl->page_array, PFN_DOWN(addr))))
-> > > +		return sgx_encl_eaug_page(vma, encl, addr);
-> > > +
-> > >  	mutex_lock(&encl->lock);
-> > >  
-> > >  	entry = sgx_encl_load_page(encl, addr);
-> > > diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-> > > index 848a28d28d3d..1b6ce1da7c92 100644
-> > > --- a/arch/x86/kernel/cpu/sgx/encl.h
-> > > +++ b/arch/x86/kernel/cpu/sgx/encl.h
-> > > @@ -123,4 +123,6 @@ void sgx_encl_free_epc_page(struct sgx_epc_page *page);
-> > >  struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
-> > >  					 unsigned long addr);
-> > >  
-> > > +struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl);
-> > > +void sgx_encl_shrink(struct sgx_encl *encl, struct sgx_va_page *va_page);
-> > >  #endif /* _X86_ENCL_H */
-> > > diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-> > > index 23bdf558b231..58ff62a1fb00 100644
-> > > --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> > > +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> > > @@ -17,7 +17,7 @@
-> > >  #include "encl.h"
-> > >  #include "encls.h"
-> > >  
-> > > -static struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl)
-> > > +struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl)
-> > >  {
-> > >  	struct sgx_va_page *va_page = NULL;
-> > >  	void *err;
-> > > @@ -43,7 +43,7 @@ static struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl)
-> > >  	return va_page;
-> > >  }
-> > >  
-> > > -static void sgx_encl_shrink(struct sgx_encl *encl, struct sgx_va_page *va_page)
-> > > +void sgx_encl_shrink(struct sgx_encl *encl, struct sgx_va_page *va_page)
-> > >  {
-> > >  	encl->page_cnt--;
-> > >  
-> > > -- 
-> > > 2.25.1
-> > > 
-> > 
-> > Quickly looking through also this sequence is possible:
-> > 
-> > 1. Enclave's run-time flow ignores the whole EACCEPT but instead a memory
-> >    dereference will initialize the sequence.
-> > 2. This causes #PF handler to do EAUG and after the enclave is re-entered
-> >    the vDSO exists because the page is not EACCEPT'd.
-> > 2. Enclave host enter in-enclave exception handler, which does EACCEPT.
-> > 
-> > Can you confirm this? I'm planning to test this patch by implementing EAUG
-> > support in Rust for Enarx. At this point I'm not yet sure whether I choose
-> > EACCEPT initiated or memory deference initiated code path but I think it is
-> > good if the kernel implementation is good enough to support both.
-> > 
-> > Other than that, this looks super solid!
-> 
-> I got my answer:
-> 
-> https://lore.kernel.org/linux-sgx/32c1116934a588bd3e6c174684e3e36a05c0a4d4.1644274683.git.reinette.chatre@intel.com/
-> 
-> I could almost give reviewed-by but I need to write the user space
-> implementation first to check that this works for Enarx.
+From: Tom Rix <trix@redhat.com>
 
-Do you know if it is possible to do EAUG, EMODPR and the do a single
-EACCEPT for both? Just looking at pseudo-code, it looked doable but
-I need to check this.
+Add leading space to spdx tag
+Use // for spdx c file comment
 
-I.e. EAUG has this
+Replacements
+resereved to reserved
+inbetween to in between
+everytime to every time
+intutivie to intuitive
+currenct to current
+encontered to encountered
+referenceing to referencing
+upto to up to
+exectuted to executed
 
-EPCM(DS:RCX).BLOCKED := 0;
-EPCM(DS:RCX).PENDING := 1;
-EPCM(DS:RCX).MODIFIED := 0;
-EPCM(DS:RCX).PR := 0;
-(* associate the EPCPAGE with the SECS by storing the SECS identifier of DS:TMP_SECS *)
-Update EPCM(DS:RCX) SECS identifier to reference DS:TMP_SECS identifier;
-(* Set EPCM valid fields *)
-EPCM(DS:RCX).VALID := 1;
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ kernel/bpf/bpf_local_storage.c | 2 +-
+ kernel/bpf/btf.c               | 6 +++---
+ kernel/bpf/cgroup.c            | 8 ++++----
+ kernel/bpf/hashtab.c           | 2 +-
+ kernel/bpf/helpers.c           | 2 +-
+ kernel/bpf/local_storage.c     | 2 +-
+ kernel/bpf/reuseport_array.c   | 2 +-
+ kernel/bpf/syscall.c           | 2 +-
+ kernel/bpf/trampoline.c        | 2 +-
+ 9 files changed, 14 insertions(+), 14 deletions(-)
 
-And EMODPR only checks .VALID.
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index 71de2a89869c..092a1ac772d7 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -136,7 +136,7 @@ bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_storage,
+ 		 * will be done by the caller.
+ 		 *
+ 		 * Although the unlock will be done under
+-		 * rcu_read_lock(),  it is more intutivie to
++		 * rcu_read_lock(),  it is more intuitive to
+ 		 * read if the freeing of the storage is done
+ 		 * after the raw_spin_unlock_bh(&local_storage->lock).
+ 		 *
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 02d7014417a0..8b11d1a9bee1 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1,4 +1,4 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
++// SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2018 Facebook */
+ 
+ #include <uapi/linux/btf.h>
+@@ -2547,7 +2547,7 @@ static int btf_ptr_resolve(struct btf_verifier_env *env,
+ 	 *
+ 	 * We now need to continue from the last-resolved-ptr to
+ 	 * ensure the last-resolved-ptr will not referring back to
+-	 * the currenct ptr (t).
++	 * the current ptr (t).
+ 	 */
+ 	if (btf_type_is_modifier(next_type)) {
+ 		const struct btf_type *resolved_type;
+@@ -6148,7 +6148,7 @@ int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,
+ 
+ 	btf_type_show(btf, type_id, obj, (struct btf_show *)&ssnprintf);
+ 
+-	/* If we encontered an error, return it. */
++	/* If we encountered an error, return it. */
+ 	if (ssnprintf.show.state.status)
+ 		return ssnprintf.show.state.status;
+ 
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 098632fdbc45..128028efda64 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1031,7 +1031,7 @@ int cgroup_bpf_prog_query(const union bpf_attr *attr,
+  * __cgroup_bpf_run_filter_skb() - Run a program for packet filtering
+  * @sk: The socket sending or receiving traffic
+  * @skb: The skb that is being sent or received
+- * @type: The type of program to be exectuted
++ * @type: The type of program to be executed
+  *
+  * If no socket is passed, or the socket is not of type INET or INET6,
+  * this function does nothing and returns 0.
+@@ -1094,7 +1094,7 @@ EXPORT_SYMBOL(__cgroup_bpf_run_filter_skb);
+ /**
+  * __cgroup_bpf_run_filter_sk() - Run a program on a sock
+  * @sk: sock structure to manipulate
+- * @type: The type of program to be exectuted
++ * @type: The type of program to be executed
+  *
+  * socket is passed is expected to be of type INET or INET6.
+  *
+@@ -1119,7 +1119,7 @@ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sk);
+  *                                       provided by user sockaddr
+  * @sk: sock struct that will use sockaddr
+  * @uaddr: sockaddr struct provided by user
+- * @type: The type of program to be exectuted
++ * @type: The type of program to be executed
+  * @t_ctx: Pointer to attach type specific context
+  * @flags: Pointer to u32 which contains higher bits of BPF program
+  *         return value (OR'ed together).
+@@ -1166,7 +1166,7 @@ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sock_addr);
+  * @sock_ops: bpf_sock_ops_kern struct to pass to program. Contains
+  * sk with connection information (IP addresses, etc.) May not contain
+  * cgroup info if it is a req sock.
+- * @type: The type of program to be exectuted
++ * @type: The type of program to be executed
+  *
+  * socket passed is expected to be of type INET or INET6.
+  *
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index d29af9988f37..65877967f414 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1636,7 +1636,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 		value_size = size * num_possible_cpus();
+ 	total = 0;
+ 	/* while experimenting with hash tables with sizes ranging from 10 to
+-	 * 1000, it was observed that a bucket can have upto 5 entries.
++	 * 1000, it was observed that a bucket can have up to 5 entries.
+ 	 */
+ 	bucket_size = 5;
+ 
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 49817755b8c3..ae64110a98b5 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1093,7 +1093,7 @@ struct bpf_hrtimer {
+ struct bpf_timer_kern {
+ 	struct bpf_hrtimer *timer;
+ 	/* bpf_spin_lock is used here instead of spinlock_t to make
+-	 * sure that it always fits into space resereved by struct bpf_timer
++	 * sure that it always fits into space reserved by struct bpf_timer
+ 	 * regardless of LOCKDEP and spinlock debug flags.
+ 	 */
+ 	struct bpf_spin_lock lock;
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 23f7f9d08a62..497916060ac7 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -1,4 +1,4 @@
+-//SPDX-License-Identifier: GPL-2.0
++// SPDX-License-Identifier: GPL-2.0
+ #include <linux/bpf-cgroup.h>
+ #include <linux/bpf.h>
+ #include <linux/bpf_local_storage.h>
+diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
+index 556a769b5b80..962556917c4d 100644
+--- a/kernel/bpf/reuseport_array.c
++++ b/kernel/bpf/reuseport_array.c
+@@ -143,7 +143,7 @@ static void reuseport_array_free(struct bpf_map *map)
+ 
+ 	/*
+ 	 * Once reaching here, all sk->sk_user_data is not
+-	 * referenceing this "array".  "array" can be freed now.
++	 * referencing this "array".  "array" can be freed now.
+ 	 */
+ 	bpf_map_area_free(array);
+ }
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 35646db3d950..ce4657a00dae 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2562,7 +2562,7 @@ static int bpf_link_alloc_id(struct bpf_link *link)
+  * pre-allocated resources are to be freed with bpf_cleanup() call. All the
+  * transient state is passed around in struct bpf_link_primer.
+  * This is preferred way to create and initialize bpf_link, especially when
+- * there are complicated and expensive operations inbetween creating bpf_link
++ * there are complicated and expensive operations in between creating bpf_link
+  * itself and attaching it to BPF hook. By using bpf_link_prime() and
+  * bpf_link_settle() kernel code using bpf_link doesn't have to perform
+  * expensive (and potentially failing) roll back operations in a rare case
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 7224691df2ec..0b41fa993825 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -45,7 +45,7 @@ void *bpf_jit_alloc_exec_page(void)
+ 
+ 	set_vm_flush_reset_perms(image);
+ 	/* Keep image as writeable. The alternative is to keep flipping ro/rw
+-	 * everytime new program is attached or detached.
++	 * every time new program is attached or detached.
+ 	 */
+ 	set_memory_x((long)image, 1);
+ 	return image;
+-- 
+2.26.3
 
-Doing two EACCEPT rounds is a bit rough as you have the page available in a
-kind of "stalled' state.
-
-/Jarkko

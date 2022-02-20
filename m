@@ -2,99 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E29F4BD1CA
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 22:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AFB4BD1CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 22:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243108AbiBTVHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 16:07:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35062 "EHLO
+        id S245075AbiBTVNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 16:13:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234315AbiBTVHs (ORCPT
+        with ESMTP id S242699AbiBTVNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 16:07:48 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC86647547
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 13:07:26 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id qx21so27978727ejb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 13:07:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uOmlFrZp7vrKUK5Y6WvCp/ko6OikJNfPxlEXm5n9vhs=;
-        b=lrFAbfCiFLIXi0LAKP1ZAq+lBoLcQ6stIxid43XCseni3F7GbnDlpbBpaePMPeT9hm
-         E+ONQcfSghrEP1qf+qDGGdzIM41VHTCc7vN9dYcJ8AF52N2kfEsbGATNidU2ZG5Zgklu
-         YXrPye0Nx3hQ32dqyaOjW2XzuHKWW+MQIIflqHYXPs5DAmBSLDpHaC5kGrdOMDxxePhX
-         vww4Xz+fE5Qg6rNZb5DKj3CQOfZPh+YPMw0VFg+QdmIVIbxsDJdcOy1Badjsxydgj01Y
-         4faDeRSEgD5qqNReV3tUNgdaaAJf+jVzcSKY8ZeJjXVKZt4yY78nQaTl4eHo+ALFxGQu
-         jcmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uOmlFrZp7vrKUK5Y6WvCp/ko6OikJNfPxlEXm5n9vhs=;
-        b=SQqwhLPoUSoW7oMLU6BB5gTw7IBOnJM6W/O+tN2ig9BTlJ1IBM+h6xXMl7TPIseUHR
-         /m/RKyOyA27vgeD58DNDwMEOb6PqmeHbmVVPUPXZyCNfmQ1zlnv1raT4DQy38GPPMdAQ
-         d+n8NLnXpnaBMhB6aFtfRbR8m644rEUpcKm9lXH38xetjZGbmfGSEs2xcjpG4MafWbYV
-         cVfOiDXAnB30265/XWmYa5EfGVCJiBKfVBQU+B3dU9oxDf4fLJFVlrEV+q8lGTFzXsJt
-         iXn+u29TyuP6N8qq/DddcQjlxt9RX+RhaLruV2AC9pYt6Ox56EbXpOtL6cLPIYS9gAVk
-         7lwg==
-X-Gm-Message-State: AOAM533IbCOdDCLjGT7rFyBxcS8snqXiWHOsL1hadws0K2YPfrEld2fS
-        4PUE4c5gnS+QR7vdyyJmRzI=
-X-Google-Smtp-Source: ABdhPJyVabZx90O0oSxOrNaoDJGq9IKMVzfV8b/yQIMLwfip+pmFLLRmQZduqDULvxRnK9muJbuKaQ==
-X-Received: by 2002:a17:906:14db:b0:6cd:e55:6605 with SMTP id y27-20020a17090614db00b006cd0e556605mr13571909ejc.31.1645391245320;
-        Sun, 20 Feb 2022 13:07:25 -0800 (PST)
-Received: from localhost.localdomain (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id y29sm4508705ejk.199.2022.02.20.13.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 13:07:24 -0800 (PST)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mripard@kernel.org, wens@csie.org, samuel@sholland.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH] MAINTAINERS: Update Allwinner SoCs maintainers
-Date:   Sun, 20 Feb 2022 22:07:14 +0100
-Message-Id: <20220220210714.2484019-1-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 20 Feb 2022 16:13:15 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE125E48
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 13:12:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645391573; x=1676927573;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kDvBkajyuI0yMdhFNn9L6trMYaOtPexxgVyu4XYgKR0=;
+  b=AAz78Mvt7KWByf9zz7Krex+sXk1n9ZD1ydRyQ21BnGF87ba6uOng11xa
+   48yxT4kCC0RmB5NuzERgw/APYIRjNe6A8DC9p1NUO09A3fB7nuRC/0pjY
+   jCqFg7jnakDDVFrQ9qhI7GUHbHXznvoG9UabWRMs4uzo/apHZ44tv5uUj
+   zxbrCE8hOsZhCOUPV1REy8hsEm97rxobdiNZPcMnSSrFGJs0QA4bRKYeb
+   wAvTV3i8WwW9llHUg5FSpadFbKYV8hFzjDjw9FHZuyhbVuMfHOFm5fZMg
+   zSOI2AdeXq0Tzx1dM2ndIZ+xy5qynJG0q+6lBlDbSUCtUV2VcmI2sV6wX
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="250221609"
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="250221609"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:12:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="504639535"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 13:12:51 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLtVj-0000lz-5N; Sun, 20 Feb 2022 21:12:51 +0000
+Date:   Mon, 21 Feb 2022 05:12:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 643/2574]
+ include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h'
+ file not found
+Message-ID: <202202210526.ll6ZQU7s-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxime is stepping down as a maintainer, I'll take more active role and
-Samuel joined the team.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   39e8a0edc8fae20758051dadf7846849edc18b88
+commit: 121f4f0dd58c5fa0666a732d13b7ad770af3559b [643/2574] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
+config: hexagon-randconfig-r045-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210526.ll6ZQU7s-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=121f4f0dd58c5fa0666a732d13b7ad770af3559b
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 121f4f0dd58c5fa0666a732d13b7ad770af3559b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
 
-Maxime, thank you for your effort! Samuel, welcome!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/bounds.c:13:
+   In file included from include/linux/log2.h:12:
+   In file included from include/linux/bitops.h:28:
+   In file included from arch/hexagon/include/asm/bitops.h:13:
+   In file included from arch/hexagon/include/asm/atomic.h:13:
+   In file included from ./arch/hexagon/include/generated/asm/barrier.h:1:
+>> include/asm-generic/barrier.h:16:10: fatal error: 'asm/vdso/processor.h' file not found
+   #include <asm/vdso/processor.h>
+            ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +16 include/asm-generic/barrier.h
+
+    15	
+  > 16	#include <asm/vdso/processor.h>
+    17	#include <linux/compiler.h>
+    18	#include <linux/kcsan-checks.h>
+    19	#include <asm/rwonce.h>
+    20	
+
 ---
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aa0f6cbb634e..c41979623f82 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1724,9 +1724,9 @@ S:	Maintained
- F:	drivers/clk/sunxi/
- 
- ARM/Allwinner sunXi SoC support
--M:	Maxime Ripard <mripard@kernel.org>
- M:	Chen-Yu Tsai <wens@csie.org>
--R:	Jernej Skrabec <jernej.skrabec@gmail.com>
-+M:	Jernej Skrabec <jernej.skrabec@gmail.com>
-+M:	Samuel Holland <samuel@sholland.org>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,115 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB6D4BCB63
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 01:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99A24BCB65
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 01:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243216AbiBTAme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 19:42:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47348 "EHLO
+        id S243242AbiBTAoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 19:44:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241815AbiBTAmc (ORCPT
+        with ESMTP id S234989AbiBTAoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 19:42:32 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912373B2A7;
-        Sat, 19 Feb 2022 16:42:12 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id q11so227229pln.11;
-        Sat, 19 Feb 2022 16:42:12 -0800 (PST)
+        Sat, 19 Feb 2022 19:44:38 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C2E56217
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 16:44:18 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id d7so22744647qvk.2
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 16:44:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5OtJ38Qj62RwZLCcGiYfWZ1y0rTNTwoMvTBrQ3Gxr5w=;
-        b=XxS8lrMoDbChrYMWm3EAZFCFYdrM3sNVQ44m49zvmn24lK8yNLzK9y9ZGo6KDvRVno
-         wCULMmJoGKnd/XYAfDcK/srCGHtQS8Ohfz2OBnNnPtMify0v1NknHO/hCW+FrvMGm/4Y
-         wgPGWP6ZM+B9zbr49Yj47v9AtfSTbDH7y59SJwFl4hPECJJYVmwySze4ajUeZ+jlCdsE
-         f2TOlV3zvbgda6/8cqp89vrSTGrD7kn5iFuWTX6jWFyOY37mwYxbP1DBypx0tpqxkFy0
-         f1QJeywHpJWnFS8u+xMHvC8I3ySdGTAHo3PjNlvuyEMbFo/I2xfe7aFC2/oTaVIVWlup
-         5g+g==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=OLv9zpb4hkkm//e/REiX7j2WaQAi/SIf23HMsMGfwOc=;
+        b=DSht2VgXCT3sdm8B33mAvPHKmVYArHC63d/Ou2vgaom/pQoq9qLlwtVN2McWJ8FrBd
+         5AVaoqerOtmQQ7brCB0RHK3QmS1iMe3/N6D13z3BZjtYnebHNEISUikDuFfiLltk/mv9
+         qxDTiKW8hdAE/y1YlFTY6z6AT5nfdqaeP4zEl/z82cgdqBcJ4a3V8kmjs/KeP0QIT2tw
+         VsmayvLvuVbmtt4da4EItnCkG6eEXKeBQnbc+mzxMHfDmmsJtFit9XvniAE55JbWi6U8
+         X8zTvOjC5ND1GI+xDe0zPFAq0UnLtGkqdQXsncK5fbUJkWdWODzFOMyfioQnKLJc8SXh
+         TyCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5OtJ38Qj62RwZLCcGiYfWZ1y0rTNTwoMvTBrQ3Gxr5w=;
-        b=vNLC1o4iyiyI3BUz5JfgvLC8O0cZu/rcMp2En+C8K00CuuOmhQV8y7YAejJvSbPXiW
-         /mqOCShnITV0zFcW9b4by3dq79auyb9khVmjL96M0f0SzCqiYIl4Svnr+tVMsfyK57a6
-         pzbEJ+kKeP9mJ741P4NVixCD5nYezubYpTRfGOD5rlW8KuYfuFoohKcGiyCsrRoAwXhf
-         J8K7mHuvwSHY1P33wU2yuNncqKXZDd1u9HaU0D7O4SodEOldvBJ5VbhJH1kWBSpr03iv
-         x7li2wh8Aekvejgc+FmAT0IoMGLQSuRITCJENH+bPwWyWV9W6Eyg57eTRU5KtQFt4POw
-         GF6g==
-X-Gm-Message-State: AOAM530KBgVK+2MswxVeZy0dwSYspcwW2cR1ejAG0JXoW0WbXRxhAYda
-        fuebPKKI4J0JZbbMD/3/Tb1HUonJ18c=
-X-Google-Smtp-Source: ABdhPJzcTkPAEsmyCfmVu0d+bTdOpxR0Mbo+4BDPq2xo/VhJD95gzBlDVCMgBTwIauaYsCzYYHnQTw==
-X-Received: by 2002:a17:902:bf06:b0:14d:8c72:96c6 with SMTP id bi6-20020a170902bf0600b0014d8c7296c6mr13521454plb.156.1645317732034;
-        Sat, 19 Feb 2022 16:42:12 -0800 (PST)
-Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
-        by smtp.gmail.com with ESMTPSA id y20sm7468979pfi.155.2022.02.19.16.42.11
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=OLv9zpb4hkkm//e/REiX7j2WaQAi/SIf23HMsMGfwOc=;
+        b=BOXHHDRajuNQoLfbgeQw5kaCe5E0X/h/utp4ZyGURi7fVTx6y+Ij5Tis3mMcDWNpTO
+         +wudx1la6waqDr9fayjcyOUTueaYaDIo58KauV+rLxldCp/KXpk4Rut0l17E0Ov7BUI0
+         yW38z/mHdVJwX0IdsW7Fdt5PmTJ8xMsZH8RyUMs9T7vDlJhR/sVWldgPR8n68FAk3FIx
+         NM2ePlbEHvcEkyYu3PK6e8aLlcZmDXF7dbtcrG4a0Q84h59C5G90Ks3ev2A5GtjKgJJS
+         VH04/w3Qecfneyot8Mdc/v/l5Mw7OJvuFi6UYjrm0L0E8UT0QjB6Uje3XPmoJSd32XKC
+         VVWA==
+X-Gm-Message-State: AOAM530CbLopzU375BQDm8ynwpdDzuvz+knkZO+KnDuONJdcGTpUH/Mv
+        jm31rPgn90ljxO9TuOOmNq8=
+X-Google-Smtp-Source: ABdhPJxJ1ud/CYhPuDu+yj0IN6tIwNznRf9KmN7VuVXUAHThPFJvPfdGvTmjXsAermWACf4LAEXrOg==
+X-Received: by 2002:ac8:7c4b:0:b0:2d1:bff6:e9ef with SMTP id o11-20020ac87c4b000000b002d1bff6e9efmr12635861qtv.22.1645317857986;
+        Sat, 19 Feb 2022 16:44:17 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c14sm28038977qtc.31.2022.02.19.16.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 16:42:11 -0800 (PST)
-Date:   Sun, 20 Feb 2022 06:12:09 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Souptick Joarder <jrdr.linux@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] bpf: Initialize ret to 0 inside btf_populate_kfunc_set()
-Message-ID: <20220220004209.hlutexplxhvrmpi6@apollo.legion>
-References: <20220219163915.125770-1-jrdr.linux@gmail.com>
+        Sat, 19 Feb 2022 16:44:17 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 19 Feb 2022 16:44:15 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     miquel.raynal@bootlin.com, krzysztof.kozlowski@canonical.com,
+        vigneshr@ti.com, nm@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: omap2: Actually prevent invalid
+ configuration and build error
+Message-ID: <20220220004415.GA1519274@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220219163915.125770-1-jrdr.linux@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 19, 2022 at 10:09:15PM IST, Souptick Joarder wrote:
-> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
->
-> Kernel test robot reported below error ->
->
-> kernel/bpf/btf.c:6718 btf_populate_kfunc_set()
-> error: uninitialized symbol 'ret'.
->
-> Initialize ret to 0.
->
-> Fixes: 	dee872e124e8 ("bpf: Populate kfunc BTF ID sets in struct btf")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+On Sat, Feb 19, 2022 at 09:36:00PM +0200, Roger Quadros wrote:
+> The root of the problem is that we are selecting symbols that have
+> dependencies. This can cause random configurations that can fail.
+> The cleanest solution is to avoid using select.
+> 
+> This driver uses interfaces from the OMAP_GPMC driver so we have to
+> depend on it instead.
+> 
+> Fixes: 4cd335dae3cf ("mtd: rawnand: omap2: Prevent invalid configuration and build error")
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
-
-Thanks for the fix.
-
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
->  kernel/bpf/btf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 02d7014417a0..2c4c5dbe2abe 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -6706,7 +6706,7 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
->  				  const struct btf_kfunc_id_set *kset)
->  {
->  	bool vmlinux_set = !btf_is_module(btf);
-> -	int type, ret;
-> +	int type, ret = 0;
->
->  	for (type = 0; type < ARRAY_SIZE(kset->sets); type++) {
->  		if (!kset->sets[type])
-> --
-> 2.25.1
->
-
---
-Kartikeya
+>  drivers/mtd/nand/raw/Kconfig | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+> index 36e697456ec4..9b078e78f3fa 100644
+> --- a/drivers/mtd/nand/raw/Kconfig
+> +++ b/drivers/mtd/nand/raw/Kconfig
+> @@ -42,8 +42,7 @@ config MTD_NAND_OMAP2
+>  	tristate "OMAP2, OMAP3, OMAP4 and Keystone NAND controller"
+>  	depends on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
+>  	depends on HAS_IOMEM
+> -	select MEMORY
+> -	select OMAP_GPMC
+> +	depends on OMAP_GPMC
+>  	help
+>  	  Support for NAND flash on Texas Instruments OMAP2, OMAP3, OMAP4
+>  	  and Keystone platforms.
+> -- 
+> 2.17.1
+> 

@@ -2,181 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869004BCC23
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 05:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E64C34BCC2B
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 05:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240754AbiBTETF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 23:19:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49652 "EHLO
+        id S242842AbiBTE2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 23:28:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiBTETC (ORCPT
+        with ESMTP id S229600AbiBTE2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 23:19:02 -0500
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97453443D4;
-        Sat, 19 Feb 2022 20:18:40 -0800 (PST)
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 21K4IRDj025223;
-        Sun, 20 Feb 2022 13:18:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 21K4IRDj025223
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1645330707;
-        bh=wG0O3SlyDxFXA1cB3yTIbsokoTOWhWvZ7Qm9Ehucurc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=a5MEDLU707F40ZiQ1VxjZ6hfWzGhsY5i31KtvvZekVA4qlP/Wkz35ZuD2urj56JaH
-         LjdQwQ5+25MZzni82ixTfzhmwGmVdb48R7uYXk5+JrkrfH3eU//4E0clZckR3zSy0L
-         zNYCcFvQ9J528jZSCAjRirl7FcNgPObuKGa9ngLiFmxq9DlDvLukQL2gjVS5/nU7a9
-         QRKALUprTtDKkUkrpKg2GGMCc5QYCCzjLcIkE/2RXhtk7xMUkLksi/yJ9Fu6Av1iP0
-         2hyvstpznpfdqqVqwpF4mwRSvvJ/D53hUNKT4aWvHpp6z9KpgS46zT3msOcEnKxyWV
-         CoceVlF3Mkc3Q==
-X-Nifty-SrcIP: [209.85.214.172]
-Received: by mail-pl1-f172.google.com with SMTP id 4so1651635pll.6;
-        Sat, 19 Feb 2022 20:18:27 -0800 (PST)
-X-Gm-Message-State: AOAM532E17NgsJW3PBj0v65jBomFavyDn1chWckaUOSCdml2Rpf5BfKa
-        7vZFXAl3zdYbPEuMYhWW9OFRSUf7rkIJssiKvi8=
-X-Google-Smtp-Source: ABdhPJwfmvP4hkfyE4UoQgIqRjlWMHvhTop4ht9wvPWNIjpJ86GWgr3ApEP3tRI/TT57kEWgxtEUc9KpzvBTy85Tsj4=
-X-Received: by 2002:a17:902:d2d1:b0:149:732e:d335 with SMTP id
- n17-20020a170902d2d100b00149732ed335mr13871010plc.136.1645330706567; Sat, 19
- Feb 2022 20:18:26 -0800 (PST)
+        Sat, 19 Feb 2022 23:28:44 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B53733A3A
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 20:28:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645331304; x=1676867304;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=l+EmiiMIOR0USYv8YGyxgTzcWOgHATrl7GtHHEr4F50=;
+  b=cd9JYNwgnXv0KrhfplSGjChQcE+yq9r2cykn1isSU9h9EuzSQ3w8m/4Y
+   /fOMSiHanzdECedoCnoAIeO0+q/9ZcDqxLoxy/zYZmiZcfilQ0NmL+JDJ
+   5XGONsyAjh2LVnpa6JvXNTnngQ5ma7fzx+i4TOP4egAAbSFCb6TXwT2qm
+   T9c2aRjwb1Y3wg2t92tuePI/yVC8cndY/Jwvf42gq7Niip8W4RjnYFgEM
+   PDQFw31yByjWlrhpCDJxowEp4osvle6I1nDqvXLgg6Kgep3Yog5RyTL+o
+   pNNBf9Lcqj9j52riGitHiHGa8apvy+45TGazRncukQCXcZQsb2DgXJzkI
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="231966339"
+X-IronPort-AV: E=Sophos;i="5.88,382,1635231600"; 
+   d="scan'208";a="231966339"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 20:28:23 -0800
+X-IronPort-AV: E=Sophos;i="5.88,382,1635231600"; 
+   d="scan'208";a="490081953"
+Received: from penglin1-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.88.150])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 20:28:22 -0800
+Date:   Sat, 19 Feb 2022 20:28:26 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Matthew Brost <matthew.brost@intel.com>,
+        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Matt Atwood <matthew.s.atwood@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        John Harrison <John.C.Harrison@intel.com>
+Subject: Re: [PATCH v3 02/16] iosys-map: Add a few more helpers
+Message-ID: <20220220042826.ftqf2l7tuegoktoc@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220216174147.3073235-1-lucas.demarchi@intel.com>
+ <20220216174147.3073235-3-lucas.demarchi@intel.com>
+ <06e6035e-bbba-f158-63b7-7d10327b7a80@suse.de>
 MIME-Version: 1.0
-References: <20211213100043.45645-1-arielmarcovitch@gmail.com>
- <20211213100043.45645-3-arielmarcovitch@gmail.com> <CAK7LNAQb8ivsQX-0YDNx6B_ZTBUq9v7SSG+m8=e1GsGL-DuBsg@mail.gmail.com>
- <8043765d-2aa5-16ad-cc03-127398451e93@gmail.com>
-In-Reply-To: <8043765d-2aa5-16ad-cc03-127398451e93@gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 20 Feb 2022 13:17:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATFiTyRP3xe_U=kHeDN6ZUNQzXhHTJQysa4szschvS-PA@mail.gmail.com>
-Message-ID: <CAK7LNATFiTyRP3xe_U=kHeDN6ZUNQzXhHTJQysa4szschvS-PA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kconfig: Make comments look different than menus in .config
-To:     Ariel Marcovitch <arielmarcovitch@gmail.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <06e6035e-bbba-f158-63b7-7d10327b7a80@suse.de>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 19, 2022 at 3:55 AM Ariel Marcovitch
-<arielmarcovitch@gmail.com> wrote:
+On Thu, Feb 17, 2022 at 09:42:08AM +0100, Thomas Zimmermann wrote:
+>Hi
 >
-> On 18/01/2022 20:25, Masahiro Yamada wrote:
-> > On Mon, Dec 13, 2021 at 7:01 PM Ariel Marcovitch
-> > <arielmarcovitch@gmail.com> wrote:
-> >> Currently, the same code that handles menus in the write to .config
-> >> handles comments as well. That's why comments look exactly like menus in
-> >> the .config except for the 'end of menu' comments that appear only for
-> >> menus. This makes sense because sometimes comments are used as sort of
-> >> submenus. However for the other cases, it looks kinda weird because one
-> >> might attempt to look for the 'end of menu' for comments as well and be
-> >> very confused.
-> >>
-> >> Make comments look different than menus. For the following:
-> >> ```kconfig
-> >> menu "Stuff"
-> >>
-> >> config FOO
-> >>          def_bool y
-> >>
-> >> comment "Some comment"
-> >>
-> >> config BAR
-> >>          def_bool n
-> >>
-> >> endmenu
-> >> ```
-> >>
-> >> The .config will look like this:
-> >> ```
-> >>   #
-> >>   # Stuff
-> >>   #
-> >>   CONFIG_FOO=y
-> >>
-> >>   ### Some comment
-> >>   # CONFIG_BAR is not defined
-> >>   # end of Stuff
-> >>
-> >> ```
-> >>
-> >> Signed-off-by: Ariel Marcovitch <arielmarcovitch@gmail.com>
-> >> ---
-> >>   scripts/kconfig/confdata.c | 14 ++++++++++----
-> >>   1 file changed, 10 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
-> >> index 9f2c22f46ee0..d3ec1ad67d92 100644
-> >> --- a/scripts/kconfig/confdata.c
-> >> +++ b/scripts/kconfig/confdata.c
-> >> @@ -880,10 +880,16 @@ int conf_write(const char *name)
-> >>
-> >>                          if (type == P_MENU || type == P_COMMENT) {
-> >>                                  str = menu_get_prompt(menu);
-> >> -                               fprintf(out, "\n"
-> >> -                                       "#\n"
-> >> -                                       "# %s\n"
-> >> -                                       "#\n", str);
-> >> +
-> >> +                               if (type == P_MENU)
-> >> +                                       fprintf(out, "\n"
-> >> +                                               "#\n"
-> >> +                                               "# %s\n"
-> >> +                                               "#\n", str);
-> >> +                               else
-> >> +                                       fprintf(out, "\n"
-> >> +                                               "### %s\n", str);
-> >> +
-> >>                                  need_newline = false;
-> >>                          }
-> >>                  }
-> >> --
-> >> 2.25.1
-> >>
-> >
-> > Since "# CONFIG... is not set" looks like a comment,
-> > I am not sure if this improves the visibility.
+>Am 16.02.22 um 18:41 schrieb Lucas De Marchi:
+>>First the simplest ones:
+>>
+>>	- iosys_map_memset(): when abstracting system and I/O memory,
+>>	  just like the memcpy() use case, memset() also has dedicated
+>>	  functions to be called for using IO memory.
+>>	- iosys_map_memcpy_from(): we may need to copy data from I/O
+>>	  memory, not only to.
+>>
+>>In certain situations it's useful to be able to read or write to an
+>>offset that is calculated by having the memory layout given by a struct
+>>declaration. Usually we are going to read/write a u8, u16, u32 or u64.
+>>
+>>As a pre-requisite for the implementation, add iosys_map_memcpy_from()
+>>to be the equivalent of iosys_map_memcpy_to(), but in the other
+>>direction. Then add 2 pairs of macros:
+>>
+>>	- iosys_map_rd() / iosys_map_wr()
+>>	- iosys_map_rd_field() / iosys_map_wr_field()
+>>
+>>The first pair takes the C-type and offset to read/write. The second
+>>pair uses a struct describing the layout of the mapping in order to
+>>calculate the offset and size being read/written.
+>>
+>>We could use readb, readw, readl, readq and the write* counterparts,
+>>however due to alignment issues this may not work on all architectures.
+>>If alignment needs to be checked to call the right function, it's not
+>>possible to decide at compile-time which function to call: so just leave
+>>the decision to the memcpy function that will do exactly that.
+>>
+>>Finally, in order to use the above macros with a map derived from
+>>another, add another initializer: IOSYS_MAP_INIT_OFFSET().
+>>
+>>v2:
+>>   - Rework IOSYS_MAP_INIT_OFFSET() so it doesn't rely on aliasing rules
+>>     within the union
+>>   - Add offset to both iosys_map_rd_field() and iosys_map_wr_field() to
+>>     allow the struct itself to be at an offset from the mapping
+>>   - Add documentation to iosys_map_rd_field() with example and expected
+>>     memory layout
+>>v3:
+>>   - Drop kernel.h include as it's not needed anymore
+>>
+>>Cc: Sumit Semwal <sumit.semwal@linaro.org>
+>>Cc: Christian König <christian.koenig@amd.com>
+>>Cc: Thomas Zimmermann <tzimmermann@suse.de>
+>>Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>>Cc: dri-devel@lists.freedesktop.org
+>>Cc: linux-kernel@vger.kernel.org
+>>Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+>>Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>>Reviewed-by: Matt Atwood <matthew.s.atwood@intel.com>
 >
-> I agree that adding another '#' signs to the real comments doesn't solve
-> the real
-> problem here, being that kconfig uses comments to save actual information
->
-> I guess this is for being able to check for a config in shell script
-> with [[ -n $CONFIG_FOO ]]?
+>Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-Maybe.
-Also   "ifdef CONFIG_FOO" in Makefile.
+Thanks. I applied the first 2 patches to drm-intel-next.
 
-In the old days, the .config was directly included.
-
-These days, the .config is used for the purpose of
-saving the configuration, and include/config/auto.conf
+The rest can't be applied as there are conflicts between drm-intel-next
+and drm-intel-gt-next. I should have merged the rename to
+drm-intel-gt-next since the guc patches need to be applied there.
+I guess the rest will have to wait some tree propagation.
 
 
-
->
-> Although if that's the case, leaving the config empty has the same
-> effect, no? And then
-> we can add a comment to the end of the definition stating that the
-> config is unset.
-> Something like this:
->
-> CONFIG_FOO=y
-> CONFIG_BAR= # is not set
-
-The most natural expression is:
-
-    CONFIG_BAR=n
-
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Lucas De Marchi

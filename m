@@ -2,182 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260644BD222
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 22:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91874BD22C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 23:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245148AbiBTVya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 16:54:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48272 "EHLO
+        id S239862AbiBTWFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 17:05:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239908AbiBTVyT (ORCPT
+        with ESMTP id S230124AbiBTWFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 16:54:19 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B32945041;
-        Sun, 20 Feb 2022 13:53:57 -0800 (PST)
+        Sun, 20 Feb 2022 17:05:18 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8D22DA86
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 14:04:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645394037; x=1676930037;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iuiiWenYt67holwnVQv8zJaXPdKgdUwKtgkBSh02yFM=;
-  b=U5eTcsXc8BCNhC6w/bMD7EjW6IxVJaBUZ3agc1T/2dJTmjzejCCA4g4r
-   EDgYmJ84pcLySeztrR/ib+a5hlPTseWkU0l1uAYD3a+VMIa9HEfz524LN
-   Q4X6IxBUv++SPfkE+GsgOXt0/qEpm+aUhLIJTWWQbh4hguLlrYsqrW7Az
-   fXOuXSgIiyB2CNf/v4ozoHqa17R6MsxZIqio7T+JaX/qFqYqtR3uu8x7b
-   0edENUb91rxuhVI1gkHgnoowGiDDY5pjG0/xtYhxjqBgXakqchg/pFT9P
-   jXDpq4NMmkAHHp1KYeVrY1XdybxWDfjs9Y0kYqCSxAorFP45MqutGNzsH
+  t=1645394696; x=1676930696;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RI/NMBBHuecMHPiz+yMjnwUai41Dse4trg9ZoOraha8=;
+  b=PJTqtLibS2kdp12BcR1D+XRLuUMTFX24h/wb+PK9hsvWuuPqfD3KBXbe
+   l+5Eqsgp5glloaPTj3ta5sVEBr5bOClB+CFOs9KiFKWBBWbJnSA/ctbWK
+   m8+ZSm9tSb8YGQe0qtuQ1fiDPtjr3jnhdVdlvhG6LOneQHdAhxhyLNuI/
+   n86gpuiQonsMvLvNGTZWCzTEgbNqdSSQZuTjffXorzwKi84qF7cuv2zAC
+   aYB2LxHJtAwIF2A5TraU+72xx440viD+ONDxDFxvbcDElV1M1PaLEemaE
+   YiNSw0mo/vxHfXNr4SrYJb0YpyVPdYQ6b3VpQZd7tAMQo80QjzF3UgZoY
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251587441"
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="275995341"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="251587441"
+   d="scan'208";a="275995341"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:53:57 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 14:04:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="507416709"
+   d="scan'208";a="507418150"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2022 13:53:54 -0800
+  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2022 14:04:54 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nLu9R-0000tb-VA; Sun, 20 Feb 2022 21:53:53 +0000
-Date:   Mon, 21 Feb 2022 05:53:47 +0800
+        id 1nLuK6-0000uf-87; Sun, 20 Feb 2022 22:04:54 +0000
+Date:   Mon, 21 Feb 2022 06:04:10 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Olivier Langlois <olivier@trillion01.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     kbuild-all@lists.01.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Hao Xu <haoxu@linux.alibaba.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
-Message-ID: <202202210559.9VjKAZdv-lkp@intel.com>
-References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [ak-misc:lto-5.17-1-wip 51/52] drivers/cpufreq/amd-pstate.c:108:15:
+ warning: no previous prototype for function 'do_amd_pstate_enable'
+Message-ID: <202202210648.Go90eR5C-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olivier,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc4]
-[cannot apply to next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Olivier-Langlois/io_uring-Add-support-for-napi_busy_poll/20220220-190634
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4f12b742eb2b3a850ac8be7dc4ed52976fc6cb0b
-config: nds32-allnoconfig (https://download.01.org/0day-ci/archive/20220221/202202210559.9VjKAZdv-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ak/linux-misc.git lto-5.17-1-wip
+head:   e3a498b1f0eadc0a91ae725fd924588fd660a9af
+commit: a06b63a434e176a8ece9d057b89c4bd08a3f32c7 [51/52] cpufreq, amd-pstate, lto: Fix for gcc LTO
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220221/202202210648.Go90eR5C-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ad36ae938f354b0cd3b38716572385f710accdb0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Olivier-Langlois/io_uring-Add-support-for-napi_busy_poll/20220220-190634
-        git checkout ad36ae938f354b0cd3b38716572385f710accdb0
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ak/linux-misc.git/commit/?id=a06b63a434e176a8ece9d057b89c4bd08a3f32c7
+        git remote add ak-misc https://git.kernel.org/pub/scm/linux/kernel/git/ak/linux-misc.git
+        git fetch --no-tags ak-misc lto-5.17-1-wip
+        git checkout a06b63a434e176a8ece9d057b89c4bd08a3f32c7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   fs/io_uring.c: In function 'io_ring_ctx_alloc':
->> fs/io_uring.c:1472:28: error: 'struct io_ring_ctx' has no member named 'napi_list'
-    1472 |         INIT_LIST_HEAD(&ctx->napi_list);
-         |                            ^~
-   fs/io_uring.c: In function '__io_submit_flush_completions':
-   fs/io_uring.c:2529:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    2529 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
+>> drivers/cpufreq/amd-pstate.c:108:15: warning: no previous prototype for function 'do_amd_pstate_enable' [-Wmissing-prototypes]
+   __visible int do_amd_pstate_enable(bool enable)
+                 ^
+   drivers/cpufreq/amd-pstate.c:108:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible int do_amd_pstate_enable(bool enable)
+             ^
+             static 
+>> drivers/cpufreq/amd-pstate.c:133:15: warning: no previous prototype for function 'do_amd_pstate_init_perf' [-Wmissing-prototypes]
+   __visible int do_amd_pstate_init_perf(struct amd_cpudata *cpudata)
+                 ^
+   drivers/cpufreq/amd-pstate.c:133:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible int do_amd_pstate_init_perf(struct amd_cpudata *cpudata)
+             ^
+             static 
+>> drivers/cpufreq/amd-pstate.c:181:16: warning: no previous prototype for function 'do_amd_pstate_update_perf' [-Wmissing-prototypes]
+   __visible void do_amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+                  ^
+   drivers/cpufreq/amd-pstate.c:181:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible void do_amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+             ^
+             static 
+   3 warnings generated.
 
 
-vim +1472 fs/io_uring.c
+vim +/do_amd_pstate_enable +108 drivers/cpufreq/amd-pstate.c
 
-  1413	
-  1414	static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
-  1415	{
-  1416		struct io_ring_ctx *ctx;
-  1417		int hash_bits;
-  1418	
-  1419		ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-  1420		if (!ctx)
-  1421			return NULL;
-  1422	
-  1423		/*
-  1424		 * Use 5 bits less than the max cq entries, that should give us around
-  1425		 * 32 entries per hash list if totally full and uniformly spread.
-  1426		 */
-  1427		hash_bits = ilog2(p->cq_entries);
-  1428		hash_bits -= 5;
-  1429		if (hash_bits <= 0)
-  1430			hash_bits = 1;
-  1431		ctx->cancel_hash_bits = hash_bits;
-  1432		ctx->cancel_hash = kmalloc((1U << hash_bits) * sizeof(struct hlist_head),
-  1433						GFP_KERNEL);
-  1434		if (!ctx->cancel_hash)
-  1435			goto err;
-  1436		__hash_init(ctx->cancel_hash, 1U << hash_bits);
-  1437	
-  1438		ctx->dummy_ubuf = kzalloc(sizeof(*ctx->dummy_ubuf), GFP_KERNEL);
-  1439		if (!ctx->dummy_ubuf)
-  1440			goto err;
-  1441		/* set invalid range, so io_import_fixed() fails meeting it */
-  1442		ctx->dummy_ubuf->ubuf = -1UL;
-  1443	
-  1444		if (percpu_ref_init(&ctx->refs, io_ring_ctx_ref_free,
-  1445				    PERCPU_REF_ALLOW_REINIT, GFP_KERNEL))
-  1446			goto err;
-  1447	
-  1448		ctx->flags = p->flags;
-  1449		init_waitqueue_head(&ctx->sqo_sq_wait);
-  1450		INIT_LIST_HEAD(&ctx->sqd_list);
-  1451		INIT_LIST_HEAD(&ctx->cq_overflow_list);
-  1452		init_completion(&ctx->ref_comp);
-  1453		xa_init_flags(&ctx->io_buffers, XA_FLAGS_ALLOC1);
-  1454		xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1);
-  1455		mutex_init(&ctx->uring_lock);
-  1456		init_waitqueue_head(&ctx->cq_wait);
-  1457		spin_lock_init(&ctx->completion_lock);
-  1458		spin_lock_init(&ctx->timeout_lock);
-  1459		INIT_WQ_LIST(&ctx->iopoll_list);
-  1460		INIT_LIST_HEAD(&ctx->defer_list);
-  1461		INIT_LIST_HEAD(&ctx->timeout_list);
-  1462		INIT_LIST_HEAD(&ctx->ltimeout_list);
-  1463		spin_lock_init(&ctx->rsrc_ref_lock);
-  1464		INIT_LIST_HEAD(&ctx->rsrc_ref_list);
-  1465		INIT_DELAYED_WORK(&ctx->rsrc_put_work, io_rsrc_put_work);
-  1466		init_llist_head(&ctx->rsrc_put_llist);
-  1467		INIT_LIST_HEAD(&ctx->tctx_list);
-  1468		ctx->submit_state.free_list.next = NULL;
-  1469		INIT_WQ_LIST(&ctx->locked_free_list);
-  1470		INIT_DELAYED_WORK(&ctx->fallback_work, io_fallback_req_func);
-  1471		INIT_WQ_LIST(&ctx->submit_state.compl_reqs);
-> 1472		INIT_LIST_HEAD(&ctx->napi_list);
-  1473		return ctx;
-  1474	err:
-  1475		kfree(ctx->dummy_ubuf);
-  1476		kfree(ctx->cancel_hash);
-  1477		kfree(ctx);
-  1478		return NULL;
-  1479	}
-  1480	
+   107	
+ > 108	__visible int do_amd_pstate_enable(bool enable)
+   109	{
+   110		return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
+   111	}
+   112	
+   113	static int cppc_enable(bool enable)
+   114	{
+   115		int cpu, ret = 0;
+   116	
+   117		for_each_present_cpu(cpu) {
+   118			ret = cppc_set_enable(cpu, enable);
+   119			if (ret)
+   120				return ret;
+   121		}
+   122	
+   123		return ret;
+   124	}
+   125	
+   126	DEFINE_STATIC_CALL(amd_pstate_enable, do_amd_pstate_enable);
+   127	
+   128	static inline int amd_pstate_enable(bool enable)
+   129	{
+   130		return static_call(amd_pstate_enable)(enable);
+   131	}
+   132	
+ > 133	__visible int do_amd_pstate_init_perf(struct amd_cpudata *cpudata)
+   134	{
+   135		u64 cap1;
+   136	
+   137		int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+   138					     &cap1);
+   139		if (ret)
+   140			return ret;
+   141	
+   142		/*
+   143		 * TODO: Introduce AMD specific power feature.
+   144		 *
+   145		 * CPPC entry doesn't indicate the highest performance in some ASICs.
+   146		 */
+   147		WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+   148	
+   149		WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
+   150		WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
+   151		WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
+   152	
+   153		return 0;
+   154	}
+   155	
+   156	static int cppc_init_perf(struct amd_cpudata *cpudata)
+   157	{
+   158		struct cppc_perf_caps cppc_perf;
+   159	
+   160		int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+   161		if (ret)
+   162			return ret;
+   163	
+   164		WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
+   165	
+   166		WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+   167		WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+   168			   cppc_perf.lowest_nonlinear_perf);
+   169		WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
+   170	
+   171		return 0;
+   172	}
+   173	
+   174	DEFINE_STATIC_CALL(amd_pstate_init_perf, do_amd_pstate_init_perf);
+   175	
+   176	static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
+   177	{
+   178		return static_call(amd_pstate_init_perf)(cpudata);
+   179	}
+   180	
+ > 181	__visible void do_amd_pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+   182				       u32 des_perf, u32 max_perf, bool fast_switch)
+   183	{
+   184		if (fast_switch)
+   185			wrmsrl(MSR_AMD_CPPC_REQ, READ_ONCE(cpudata->cppc_req_cached));
+   186		else
+   187			wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
+   188				      READ_ONCE(cpudata->cppc_req_cached));
+   189	}
+   190	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

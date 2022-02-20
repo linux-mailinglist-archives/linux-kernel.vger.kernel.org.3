@@ -2,91 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD884BCD46
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 09:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE1D4BCD63
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 09:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbiBTIlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 03:41:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52904 "EHLO
+        id S242598AbiBTItU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 03:49:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbiBTIlt (ORCPT
+        with ESMTP id S241083AbiBTItR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 03:41:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3FFA41621
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 00:41:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645346482;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rtANzgbU227sGJWD6YEoeMtzkQAILI2Pi3z0wKXXOmY=;
-        b=TBoflWKhUY+Qmdawo/Zf+wl6uRYo9UQ94paniA3Cgu1QFOcwFAjMonz6ZeTN0Mf0ASWPMF
-        dnNIqzMM8qcFVYmPRLk7PRU0psQ4EHO38ZdWNLM0lPvIVEVJnMXG/a1WxuShMSpVc6sSU5
-        Znm4d7FTGzSbHEjUw0bpDe6meS+dPoA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-gop_Iyv3PYiVdI3VtWtraA-1; Sun, 20 Feb 2022 03:41:21 -0500
-X-MC-Unique: gop_Iyv3PYiVdI3VtWtraA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B0861091DA1;
-        Sun, 20 Feb 2022 08:41:14 +0000 (UTC)
-Received: from localhost (ovpn-12-31.pek2.redhat.com [10.72.12.31])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EC885418E;
-        Sun, 20 Feb 2022 08:40:49 +0000 (UTC)
-Date:   Sun, 20 Feb 2022 16:40:44 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, cl@linux.com, 42.hyeyoo@gmail.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        vbabka@suse.cz, David.Laight@aculab.com, david@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
-        netdev@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, linux-s390@vger.kernel.org, michael@walle.cc,
-        linux-i2c@vger.kernel.org, wsa@kernel.org
-Subject: Re: [PATCH 21/22] mmc: wbsd: Use dma_alloc_noncoherent() for dma
- buffer
-Message-ID: <20220220084044.GC93179@MiWiFi-R3L-srv>
-References: <20220219005221.634-1-bhe@redhat.com>
- <20220219005221.634-22-bhe@redhat.com>
- <20220219071730.GG26711@lst.de>
+        Sun, 20 Feb 2022 03:49:17 -0500
+Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C0D54BCD
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 00:48:56 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id LhtknwpeDuCn2Lhtlnufcr; Sun, 20 Feb 2022 09:48:54 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 20 Feb 2022 09:48:54 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <a4006848-3dfe-8511-5010-37daa31df464@wanadoo.fr>
+Date:   Sun, 20 Feb 2022 09:48:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220219071730.GG26711@lst.de>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ravb: Use GFP_KERNEL instead of GFP_ATOMIC when possible
+Content-Language: en-US
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+References: <3d67f0369909010d620bd413c41d11b302eb0ff8.1645342015.git.christophe.jaillet@wanadoo.fr>
+ <OS0PR01MB5922D806D40856485CDD612086399@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <OS0PR01MB5922D806D40856485CDD612086399@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/19/22 at 08:17am, Christoph Hellwig wrote:
-> On Sat, Feb 19, 2022 at 08:52:20AM +0800, Baoquan He wrote:
-> >  	if (request_dma(dma, DRIVER_NAME))
-> >  		goto err;
-> >  
-> > +	dma_set_mask_and_coherent(mmc_dev(host->mmc), DMA_BIT_MASK(24));
+Le 20/02/2022 à 08:53, Biju Das a écrit :
+> Hi Christophe,
 > 
-> This also sets the streaming mask, but the driver doesn't seem to make
-> use of that.  Please document it in the commit log.
+> Thanks for the patch.
+> 
+> Just a  question, As per [1], former can be allocated from interrupt context.
+> But nothing mentioned for the allocation using the patch you mentioned[2]. I agree GFP_KERNEL
+> gives more opportunities of successful allocation.
 
-Thanks for reviewing. I will change it to dma_set_mask(), and describe
-this change in patch log.
+Hi,
+
+netdev_alloc_skb() uses an implicit GFP_ATOMIC, that is why it can be 
+safely called from an interrupt context.
+__netdev_alloc_skb() is the same as netdev_alloc_skb(), except that you 
+can choose the GFP flag you want to use. ([1])
+
+Here, the netdev_alloc_skb() is called just after some 
+"kcalloc(GFP_KERNEL);"
+
+So this function can already NOT be called from interrupt context.
+
+So if GFP_KERNEL is fine here for kcalloc(), it is fine also for 
+netdev_alloc_skb(), hence __netdev_alloc_skb(GFP_KERNEL).
 
 > 
-> Also setting smaller than 32 bit masks can fail, so this should have
-> error handling.
+> Q1) Here it allocates 8K instead of 1K on each loop, Is there any limitation for netdev_alloc_skb for allocating 8K size?
 
-OK, will check and add error handling.
+Not sure to understand.
+My patch does NOT change anything on the amount of memory allocated. it 
+only changes a GFP_ATOMIC into a GFP_KERNEL.
+
+I'm not aware of specific limitation for netdev_alloc_skb().
+My understanding is that in the worst case, it will behave just like 
+malloc() ([3])
+
+So, if it was an issue before, it is still an issue after my patch.
+
+> Q2) In terms of allocation performance which is better netdev_alloc_skb or __netdev_alloc_skb?
+
+AFAIK, there should be no difference, but __netdev_alloc_skb(GFP_KERNEL) 
+can succeed where netdev_alloc_skb() can fail. In such a case, it would 
+be slower but most importantly, it would succeed.
+
+
+CJ
+
+[1]: 
+https://elixir.bootlin.com/linux/v5.17-rc4/source/include/linux/skbuff.h#L2945
+
+[2]: 
+https://elixir.bootlin.com/linux/v5.17-rc4/source/drivers/net/ethernet/renesas/ravb_main.c#L470
+
+[3]: 
+https://elixir.bootlin.com/linux/v5.17-rc3/source/net/core/skbuff.c#L488
+
+
+> 
+> [1] https://www.kernel.org/doc/htmldocs/networking/API-netdev-alloc-skb.html
+> [2] https://www.kernel.org/doc/htmldocs/networking/API---netdev-alloc-skb.html
+> 
+> Regards,
+> Biju
+> 
+>> Subject: [PATCH] ravb: Use GFP_KERNEL instead of GFP_ATOMIC when possible
+>>
+>> 'max_rx_len' can be up to GBETH_RX_BUFF_MAX (i.e. 8192) (see
+>> 'gbeth_hw_info').
+>> The default value of 'num_rx_ring' can be BE_RX_RING_SIZE (i.e. 1024).
+>>
+>> So this loop can allocate 8 Mo of memory.
+>>
+>> Previous memory allocations in this function already use GFP_KERNEL, so
+>> use __netdev_alloc_skb() and an explicit GFP_KERNEL instead of a implicit
+>> GFP_ATOMIC.
+>>
+>> This gives more opportunities of successful allocation.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>>   drivers/net/ethernet/renesas/ravb_main.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/ethernet/renesas/ravb_main.c
+>> b/drivers/net/ethernet/renesas/ravb_main.c
+>> index 24e2635c4c80..525d66f71f02 100644
+>> --- a/drivers/net/ethernet/renesas/ravb_main.c
+>> +++ b/drivers/net/ethernet/renesas/ravb_main.c
+>> @@ -475,7 +475,7 @@ static int ravb_ring_init(struct net_device *ndev, int
+>> q)
+>>   		goto error;
+>>
+>>   	for (i = 0; i < priv->num_rx_ring[q]; i++) {
+>> -		skb = netdev_alloc_skb(ndev, info->max_rx_len);
+>> +		skb = __netdev_alloc_skb(ndev, info->max_rx_len, GFP_KERNEL);
+>>   		if (!skb)
+>>   			goto error;
+>>   		ravb_set_buffer_align(skb);
+>> --
+>> 2.32.0
+> 
+> 
 

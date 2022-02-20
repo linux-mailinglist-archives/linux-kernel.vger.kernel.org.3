@@ -2,81 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC324BD28C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 00:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD1F4BD28E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 00:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244708AbiBTXJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 18:09:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55490 "EHLO
+        id S245236AbiBTXLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 18:11:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbiBTXJw (ORCPT
+        with ESMTP id S245232AbiBTXLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 18:09:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A3A24085;
-        Sun, 20 Feb 2022 15:09:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9122C60FA9;
-        Sun, 20 Feb 2022 23:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4565AC340E8;
-        Sun, 20 Feb 2022 23:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645398568;
-        bh=TwVKR8OMjO5PwA68ho99LIr7K9ut7SglljH+FBRtHrA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VhbFS/ZCJRjl5TmE3eTb4bEW78UgvKLQDi23tkjhzZLkHvdaEKmHqtrJenot5epsi
-         0HPm1CaAhr60VVMShR1qtOppNNjPMLIVS7V0V6d+FCoU5ohYR7CXG8/LqSzXR7Mt3+
-         PiPgbsZseyKQeN1tjbi2/jsWRu3bqB7/u/Z3HtQtDvaQmJeMKLWQjzuuO8SHu8ro5B
-         A2DkGzIRAPMfKkuEe4mZMe5soli9aOx4NHPbd7YXJKrH7H8+vr+BuPs+hyqCS0Uf0O
-         idgsfL5N2Va833j/RJg3CdtksNhrVBiHFet/qD/uyXvlltzHSNY43oPGZFihiWUP0R
-         qolmW+9IpRFaQ==
-Date:   Mon, 21 Feb 2022 00:10:06 +0100
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Tong Zhang <ztong0001@gmail.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andreas Rammhold <andreas@rammhold.de>
-Subject: Re: [PATCH] KEYS: trusted: fix crash when TPM/TEE are built as module
-Message-ID: <YhLKTjuGnIIA8FAd@iki.fi>
-References: <20220204200342.48665-1-ztong0001@gmail.com>
- <a45010a4-2b86-aa22-d7bd-3c4839356cf1@pengutronix.de>
+        Sun, 20 Feb 2022 18:11:15 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373A02409C;
+        Sun, 20 Feb 2022 15:10:53 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id gb39so28521274ejc.1;
+        Sun, 20 Feb 2022 15:10:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6j1RUXCva8ZMkW9Fdwk3mt0oyRudrNViKQtoLjRiuNs=;
+        b=JBCLX+ryGqJtx2u95SQwxAfg8uApYZOaR9h/mYgi040iUWnPaHOZcM36OumDtdKhA9
+         3W395NNjNlpvR8WXby49I7imT5pXluLDMkk0a9yU5P+QnKthIikDmw+2xKtFbwXyhECw
+         2vIWu6DAg5IDmCguUxvEF3BXwTPIWN92ebPOXqxL6YqmEC2hWVzHX1S4KSVCwnro5NeR
+         zgdwGf1ZGivAxiE31fqVNpxAUi85D9myYKKr4D5fW3I1gGzoB6W4W4sTOI9SrMjBqUe1
+         /Ih3BHsCYavq+jA4/lDL9IMEnXPHP/G1tw4Ido0LCKbx6DQYD+F3+HZx7O/KlDvMNXQO
+         OOFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6j1RUXCva8ZMkW9Fdwk3mt0oyRudrNViKQtoLjRiuNs=;
+        b=d9qqzsjTyupga7+xwTvaU+oEMn0IshvHHVS9kmosSg/yk7QhzGowwSgaHtyGAOwmpE
+         d3eSsYr6wTsCBLnKVLMBvOREsUBFYCJ9gkvSgrRG2sfgpFTN1W+3oxDdT5rQoQIyrHp7
+         feH6lGEzN22yduRgNtTqRwmUre5HqF1WzZ7ldw3rA0OOQjZIazyiUTPaII/H0JFzxThU
+         znjK+L8C0+3M4tpOX8qjjp6ovNyfP/3U49VRxkn7/HOPzXVCkp6ILmxX3/QwFIz/h59w
+         CmFqVc7tK2+iXvx2dCHCN4dlHwD37NobfvAGfr0xJIvnwKcGZSotGGEztEt7KHlEi/D4
+         HcmQ==
+X-Gm-Message-State: AOAM533WCEdQ4gVLDnihy7M2CFuO7FUZP24kDV9psZ0c5S2ZagCdS+ge
+        /fJtUDKwluyYajP/l1RioeE=
+X-Google-Smtp-Source: ABdhPJwxNHuwFil8ZwBsmFK+FAE8xpK8vqVvnhFZ7KWoXhFwQLEZu5sWPcJNn8z0wfCxjS7excxu3Q==
+X-Received: by 2002:a17:907:9870:b0:6d0:ebb7:d4e1 with SMTP id ko16-20020a170907987000b006d0ebb7d4e1mr6929193ejc.471.1645398651540;
+        Sun, 20 Feb 2022 15:10:51 -0800 (PST)
+Received: from krava ([83.240.63.12])
+        by smtp.gmail.com with ESMTPSA id r22sm7542513edt.51.2022.02.20.15.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 15:10:51 -0800 (PST)
+Date:   Mon, 21 Feb 2022 00:10:48 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH 3/3] perf tools: Rework prologue generation code
+Message-ID: <YhLKeAShYUtELvTJ@krava>
+References: <20220217131916.50615-1-jolsa@kernel.org>
+ <20220217131916.50615-4-jolsa@kernel.org>
+ <CAEf4BzYP7=JuyuY=xZe71urpxat4ba-JnqeSTcHF=CYmsQbofQ@mail.gmail.com>
+ <Yg9geQ0LJjhnrc7j@krava>
+ <CAEf4BzZaFWhWf73JbfO7gLi82Nn4ma-qmaZBPij=giNzzoSCTQ@mail.gmail.com>
+ <YhJF00d9baPtXjzH@krava>
+ <aa29a73b-b40d-6adf-2252-308917603f05@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a45010a4-2b86-aa22-d7bd-3c4839356cf1@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <aa29a73b-b40d-6adf-2252-308917603f05@fb.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 06, 2022 at 11:36:48AM +0100, Ahmad Fatoum wrote:
-> Hello Tong,
+On Sun, Feb 20, 2022 at 10:43:42AM -0800, Yonghong Song wrote:
 > 
-> On 04.02.22 21:03, Tong Zhang wrote:
-> > when TCG_TPM and TEE are built as module, trusted_key_sources will be an
-> > empty array, loading it won't do what it is supposed to do and unloading
-> > it will cause kernel crash.
 > 
-> Jarkko reported picking up an equivalent fix two months ago:
-> https://lkml.kernel.org/keyrings/YadRAWbl2aiapf8l@iki.fi/
+> On 2/20/22 5:44 AM, Jiri Olsa wrote:
+> > On Fri, Feb 18, 2022 at 11:55:16AM -0800, Andrii Nakryiko wrote:
+> > > On Fri, Feb 18, 2022 at 1:01 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > 
+> > > > On Thu, Feb 17, 2022 at 01:53:16PM -0800, Andrii Nakryiko wrote:
+> > > > > On Thu, Feb 17, 2022 at 5:19 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > > > > > 
+> > > > > > Some functions we use now for bpf prologue generation are
+> > > > > > going to be deprecated, so reworking the current code not
+> > > > > > to use them.
+> > > > > > 
+> > > > > > We need to replace following functions/struct:
+> > > > > >     bpf_program__set_prep
+> > > > > >     bpf_program__nth_fd
+> > > > > >     struct bpf_prog_prep_result
+> > > > > > 
+> > > > > > Current code uses bpf_program__set_prep to hook perf callback
+> > > > > > before the program is loaded and provide new instructions with
+> > > > > > the prologue.
+> > > > > > 
+> > > > > > We workaround this by using objects's 'unloaded' programs instructions
+> > > > > > for that specific program and load new ebpf programs with prologue
+> > > > > > using separate bpf_prog_load calls.
+> > > > > > 
+> > > > > > We keep new ebpf program instances descriptors in bpf programs
+> > > > > > private struct.
+> > > > > > 
+> > > > > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > > > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > > > ---
+> > > > > >   tools/perf/util/bpf-loader.c | 122 +++++++++++++++++++++++++++++------
+> > > > > >   1 file changed, 104 insertions(+), 18 deletions(-)
+> > > > > > 
+> > > > > 
+> > > > > [...]
+> > > > > 
+> > > > > >   errout:
+> > > > > > @@ -696,7 +718,7 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+> > > > > >          struct bpf_prog_priv *priv = program_priv(prog);
+> > > > > >          struct perf_probe_event *pev;
+> > > > > >          bool need_prologue = false;
+> > > > > > -       int err, i;
+> > > > > > +       int i;
+> > > > > > 
+> > > > > >          if (IS_ERR_OR_NULL(priv)) {
+> > > > > >                  pr_debug("Internal error when hook preprocessor\n");
+> > > > > > @@ -727,6 +749,12 @@ static int hook_load_preprocessor(struct bpf_program *prog)
+> > > > > >                  return 0;
+> > > > > >          }
+> > > > > > 
+> > > > > > +       /*
+> > > > > > +        * Do not load programs that need prologue, because we need
+> > > > > > +        * to add prologue first, check bpf_object__load_prologue.
+> > > > > > +        */
+> > > > > > +       bpf_program__set_autoload(prog, false);
+> > > > > 
+> > > > > if you set autoload to false, program instructions might be invalid in
+> > > > > the end. Libbpf doesn't apply some (all?) relocations to such
+> > > > > programs, doesn't resolve CO-RE, etc, etc. You have to let
+> > > > > "prototypal" BPF program to be loaded before you can grab final
+> > > > > instructions. It's not great, but in your case it should work, right?
+> > > > 
+> > > > hum, do we care? it should all be done when the 'new' program with
+> > > > the prologue is loaded, right?
+> > > 
+> > > yeah, you should care. If there is any BPF map involved, it is
+> > > properly resolved to correct FD (which is put into ldimm64 instruction
+> > > in BPF program code) during the load. If program is not autoloaded,
+> > > this is skipped. Same for any global variable or subprog call (if it's
+> > > not always inlined). So you very much should care for any non-trivial
+> > > program.
+> > 
+> > ah too bad.. all that is in the load path, ok
+> > 
+> > > 
+> > > > 
+> > > > I switched it off because the verifier failed to load the program
+> > > > without the prologue.. because in the original program there's no
+> > > > code to grab the arguments that the rest of the code depends on,
+> > > > so the verifier sees invalid access
+> > > 
+> > > Do you have an example of C code and corresponding BPF instructions
+> > > before/after prologue generation? Just curious to see in details how
+> > > this is done.
+> > 
+> > so with following example:
+> > 
+> > 	SEC("func=do_sched_setscheduler param->sched_priority@user")
+> > 	int bpf_func__setscheduler(void *ctx, int err, int param)
+> > 	{
+> > 		char fmt[] = "prio: %ld";
+> > 		bpf_trace_printk(fmt, sizeof(fmt), param);
+> > 		return 1;
+> > 	}
+> > 
+> > perf will attach the code to do_sched_setscheduler function,
+> > and read 'param->sched_priority' into 'param' argument
+> > 
+> > so the resulting clang object expects 'param' to be in R3
+> > 
+> > 	0000000000000000 <bpf_func__setscheduler>:
+> > 	       0:       b7 01 00 00 64 00 00 00 r1 = 100
+> > 	       1:       6b 1a f8 ff 00 00 00 00 *(u16 *)(r10 - 8) = r1
+> > 	       2:       18 01 00 00 70 72 69 6f 00 00 00 00 3a 20 25 6c r1 = 77926701655
+> > 	       4:       7b 1a f0 ff 00 00 00 00 *(u64 *)(r10 - 16) = r1
+> > 	       5:       bf a1 00 00 00 00 00 00 r1 = r10
+> > 	       6:       07 01 00 00 f0 ff ff ff r1 += -16
+> > 	       7:       b7 02 00 00 0a 00 00 00 r2 = 10
+> > 	       8:       85 00 00 00 06 00 00 00 call 6
+> > 	       9:       b7 00 00 00 01 00 00 00 r0 = 1
+> > 	      10:       95 00 00 00 00 00 00 00 exit
+> > 
+> > and R3 is loaded in the prologue code (first 15 instructions)
+> > and it also sets 'err' (R2) with the result of the reading:
+> > 
+> > 	   0: (bf) r6 = r1
+> > 	   1: (79) r3 = *(u64 *)(r6 +96)
+> > 	   2: (bf) r7 = r10
+> > 	   3: (07) r7 += -8
+> > 	   4: (7b) *(u64 *)(r10 -8) = r3
+> > 	   5: (b7) r2 = 8
+> > 	   6: (bf) r1 = r7
+> > 	   7: (85) call bpf_probe_read_user#-60848
+> > 	   8: (55) if r0 != 0x0 goto pc+2
+> > 	   9: (61) r3 = *(u32 *)(r10 -8)
+> > 	  10: (05) goto pc+3
+> > 	  11: (b7) r2 = 1
+> > 	  12: (b7) r3 = 0
+> > 	  13: (05) goto pc+1
+> > 	  14: (b7) r2 = 0
+> > 	  15: (bf) r1 = r6
+> > 
+> > 	  16: (b7) r1 = 100
+> > 	  17: (6b) *(u16 *)(r10 -8) = r1
+> > 	  18: (18) r1 = 0x6c25203a6f697270
+> > 	  20: (7b) *(u64 *)(r10 -16) = r1
+> > 	  21: (bf) r1 = r10
+> > 	  22: (07) r1 += -16
+> > 	  23: (b7) r2 = 10
+> > 	  24: (85) call bpf_trace_printk#-54848
+> > 	  25: (b7) r0 = 1
+> > 	  26: (95) exit
 > 
-> But it seems to have never made it to Linus.
+> Just curious. Is the prologue code generated through C code or through
+> asm code? Is it possible prologue code can be generated through C
 
-Sorry, was not done purposely. I pushed the original fix.
+it's C code in perf generating bpf instructions:
+  https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/bpf-prologue.c?h=perf/core
 
-BR, Jarkko
+> code with similar mechanism like BPF_PROG macro? Or this is already
+> an API which cannot be changed?
+
+do you mean to have some stub like:
+
+  int bpf_func__setscheduler_stub(void *ctx)
+  {
+          return bpf_func__setscheduler(ctx, 0, 0)
+  }
+
+  int bpf_func__setscheduler(void *ctx, int err, int param)
+  {
+          char fmt[] = "prio: %ld";
+          bpf_trace_printk(fmt, sizeof(fmt), param);
+          return 1;
+  }
+
+to make verifier happy
+
+then we'd need instructions for bpf_func__setscheduler
+
+it looks like subprogram instructions are appended and we should
+be able to locate bpf_func__setscheduler start in instructions
+returned in bpf_program__insns ? anyway does not look nice ;-)
+
+jirka

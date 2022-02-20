@@ -2,268 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09C54BD163
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 21:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0705A4BD161
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 21:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244905AbiBTUUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 15:20:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48154 "EHLO
+        id S244902AbiBTUUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 15:20:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244841AbiBTUUN (ORCPT
+        with ESMTP id S237192AbiBTUUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 15:20:13 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03A14C781;
-        Sun, 20 Feb 2022 12:19:51 -0800 (PST)
-Received: from localhost.localdomain (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C9ADBC83DA;
-        Sun, 20 Feb 2022 20:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1645388390; bh=CbA6DVdWqZm5Wo8SIEQaLKpVWa7Jf08sFkfHRu2Cgz0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=wtlYfW9r4VABCJ2DHAb2Ae4bIh5S1RZZgewxXkt3PLtYFK1TDxf+LzcUqly4oDNt7
-         ixAxtSiNEWXxb4i3nZDXm2j6JBkW9ZnqxMbyjBZ3JMxkMwNGF2qWbmPvF//iTyxmdZ
-         1nspnfoj6Lyst/ui77411Q0bJ1GspDgiON8lZJhE=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/10] arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
-Date:   Sun, 20 Feb 2022 21:19:03 +0100
-Message-Id: <20220220201909.445468-11-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220220201909.445468-1-luca@z3ntu.xyz>
-References: <20220220201909.445468-1-luca@z3ntu.xyz>
+        Sun, 20 Feb 2022 15:20:20 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8264C783
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:19:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645388392; x=1676924392;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3PqThoQs7A3jRhv9b5IrLNFPWKtT2W4Mm8oW2k1KaJA=;
+  b=AtQ1+D9TVCl49EANde+SqHxUcw+kFjbJdsibHZGAS8XlFtbJ0nRoO/3A
+   Wo5owehucH9x4bo6ktgq5ZJJ93MbT1Ps/FyrYwNdAvoGXvaiLHbANTcNk
+   ahB78zZ7TaobpcTGaAUCtEnxu+uJe2IJLO40sk+mA7Bqo+swhG6i+2J24
+   aDdQoQLyYmcG/NPbvl4VRzTGafqZlN4Z3V7m9JEdKrIVlSZkhltSINkMr
+   k798sU0YvS8ixJFCLDnLmm9J0lp3RbWFKN9co5CWzUwYByEICUPBlioUU
+   O12YzyGzrjQMo/HW/fQjlVvK+RKMdhOGQ5w3W65SKNBAJeUN2wk367/CG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="275989826"
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="275989826"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 12:19:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="504624690"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 20 Feb 2022 12:19:50 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLsgP-0000iA-QZ; Sun, 20 Feb 2022 20:19:49 +0000
+Date:   Mon, 21 Feb 2022 04:19:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [mcgrof:modules-next 6/10] kernel/module/strict_rwx.c:16:10: error:
+ implicit declaration of function 'PAGE_ALIGNED'
+Message-ID: <202202210447.UvDGgsQA-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree for the Fairphone 3 smartphone which is based on
-Snapdragon 632 (sdm632).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+head:   c55dc78176e6fe97a9e92d24a7ff3015b14ac858
+commit: e5973a14d18785b893d383fbd9dc2f98edc16f1b [6/10] module: Move strict rwx support to a separate file
+config: arm64-randconfig-r005-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210447.UvDGgsQA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=e5973a14d18785b893d383fbd9dc2f98edc16f1b
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof modules-next
+        git checkout e5973a14d18785b893d383fbd9dc2f98edc16f1b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/module/strict_rwx.c:16:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->base));
+                   ^
+   kernel/module/strict_rwx.c:17:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->text_size));
+                   ^
+   kernel/module/strict_rwx.c:18:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->ro_size));
+                   ^
+   kernel/module/strict_rwx.c:26:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->base));
+                   ^
+   kernel/module/strict_rwx.c:27:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->ro_size));
+                   ^
+   kernel/module/strict_rwx.c:28:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
+                   ^
+   kernel/module/strict_rwx.c:36:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->base));
+                   ^
+   kernel/module/strict_rwx.c:37:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
+                   ^
+   kernel/module/strict_rwx.c:38:10: error: implicit declaration of function 'PAGE_ALIGNED' [-Werror,-Wimplicit-function-declaration]
+           BUG_ON(!PAGE_ALIGNED(layout->size));
+                   ^
+   9 errors generated.
+
+
+vim +/PAGE_ALIGNED +16 kernel/module/strict_rwx.c
+
+    12	
+    13	void frob_rodata(const struct module_layout *layout,
+    14			 int (*set_memory)(unsigned long start, int num_pages))
+    15	{
+  > 16		BUG_ON(!PAGE_ALIGNED(layout->base));
+    17		BUG_ON(!PAGE_ALIGNED(layout->text_size));
+    18		BUG_ON(!PAGE_ALIGNED(layout->ro_size));
+    19		set_memory((unsigned long)layout->base + layout->text_size,
+    20			   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
+    21	}
+    22	
+
 ---
-Changes in v2:
-- drop msm8953-pm8953.dtsi -> move config from that into this patch
-
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/sdm632-fairphone-fp3.dts    | 183 ++++++++++++++++++
- 2 files changed, 184 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index bcdc9abf0c42..0d9388a3686b 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -92,6 +92,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-voyager.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sdm632-fairphone-fp3.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm636-sony-xperia-ganges-mermaid.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm660-xiaomi-lavender.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r1.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-new file mode 100644
-index 000000000000..8b815b2a60a7
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-@@ -0,0 +1,183 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022, Luca Weiss <luca@z3ntu.xyz>
-+ */
-+/dts-v1/;
-+
-+#include "sdm632.dtsi"
-+#include "pm8953.dtsi"
-+
-+/ {
-+	model = "Fairphone 3";
-+	compatible = "fairphone,fp3", "qcom,sdm632";
-+	chassis-type = "handset";
-+	qcom,msm-id = <349 0>;
-+	qcom,board-id = <8 0x10000>;
-+
-+	aliases {
-+		mmc0 = &sdhc_1;
-+		mmc1 = &sdhc_2;
-+		serial0 = &uart_0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		volume-up {
-+			label = "volume_up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&tlmm 85 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&hsusb_phy {
-+	status = "okay";
-+	vdd-supply = <&pm8953_l3>;
-+	vdda-pll-supply = <&pm8953_l7>;
-+	vdda-phy-dpdm-supply = <&pm8953_l13>;
-+};
-+
-+&pm8953_resin {
-+	status = "okay";
-+	linux,code = <KEY_VOLUMEDOWN>;
-+};
-+
-+&sdhc_1 {
-+	status = "okay";
-+	vmmc-supply = <&pm8953_l8>;
-+	vqmmc-supply = <&pm8953_l5>;
-+};
-+
-+&sdhc_2 {
-+	status = "okay";
-+	vmmc-supply = <&pm8953_l11>;
-+	vqmmc-supply = <&pm8953_l12>;
-+
-+	cd-gpios = <&tlmm 133 GPIO_ACTIVE_LOW>;
-+};
-+
-+&rpm_requests {
-+	pm8953-regulators {
-+		compatible = "qcom,rpm-pm8953-regulators";
-+
-+		vdd_l1-supply = <&pm8953_s3>;
-+		vdd_l2_l3-supply = <&pm8953_s3>;
-+		vdd_l4_l5_l6_l7_l16_l19-supply = <&pm8953_s4>;
-+		vdd_l8_l11_l12_l13_l14_l15-supply = <&vph_pwr>;
-+		vdd_l9_l10_l17_l18_l22-supply = <&vph_pwr>;
-+
-+		pm8953_s3: s3 {
-+			regulator-min-microvolt = <984000>;
-+			regulator-max-microvolt = <1240000>;
-+		};
-+		pm8953_s4: s4 {
-+			regulator-min-microvolt = <1036000>;
-+			regulator-max-microvolt = <2040000>;
-+		};
-+		pm8953_s5: s5 {
-+			regulator-min-microvolt = <1036000>;
-+			regulator-max-microvolt = <2040000>;
-+		};
-+
-+		pm8953_l1: l1 {
-+			regulator-min-microvolt = <975000>;
-+			regulator-max-microvolt = <1050000>;
-+		};
-+		pm8953_l2: l2 {
-+			regulator-min-microvolt = <975000>;
-+			regulator-max-microvolt = <1175000>;
-+		};
-+		pm8953_l3: l3 {
-+			regulator-min-microvolt = <925000>;
-+			regulator-max-microvolt = <925000>;
-+		};
-+		pm8953_l5: l5 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8953_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8953_l7: l7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1900000>;
-+		};
-+		pm8953_l8: l8 {
-+			regulator-min-microvolt = <2900000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+		pm8953_l9: l9 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+		pm8953_l10: l10 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+		pm8953_l11: l11 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+		pm8953_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+		pm8953_l13: l13 {
-+			regulator-min-microvolt = <3125000>;
-+			regulator-max-microvolt = <3125000>;
-+		};
-+		pm8953_l16: l16 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+		pm8953_l17: l17 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2850000>;
-+		};
-+		pm8953_l19: l19 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+		pm8953_l22: l22 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+		};
-+		pm8953_l23: l23 {
-+			regulator-min-microvolt = <975000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+	};
-+};
-+
-+&tlmm {
-+	/*
-+	 * 0-3: unused but protected by TZ
-+	 * 135-138: fingerprint reader (SPI)
-+	 */
-+	gpio-reserved-ranges = <0 4>, <135 4>;
-+};
-+
-+&uart_0 {
-+	status = "okay";
-+};
-+
-+&usb3 {
-+	status = "okay";
-+};
-+
-+&usb3_dwc3 {
-+	dr_mode = "peripheral";
-+};
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

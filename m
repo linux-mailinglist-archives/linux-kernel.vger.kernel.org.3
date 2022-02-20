@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064404BCF54
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2004BCF53
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbiBTPQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 10:16:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50700 "EHLO
+        id S244210AbiBTPQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 10:16:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244133AbiBTPQW (ORCPT
+        with ESMTP id S244163AbiBTPQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 20 Feb 2022 10:16:22 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E33834BBE
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:58 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id d3so7198198wrf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:58 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F6334BBF
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:59 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id d27so22869294wrb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=y9birgiS9Q1LdTibjI1qpS+INxYgCkhdm/5O40p8Ub8=;
-        b=FGBW9qbGDlq6nxvPRK/HUbQ5I8vPFFMIt5zeUvx+pbnwmJrseZRG6W8Gs/hOfk86Xj
-         mBlFn5pusTk67QxaaetMyGemCImqfFJBThhEHToSwuoGQIGvv+H/9hwp92AbctKRUgNx
-         ZPCIIGtGZcKMUZ6hOotftwXRLJb9nkkZRNrpn/5o7zcl9AXD8WVAir0avqdV6Hju64hi
-         cABuODa7KLHyCNjyGfeP6ybVKUAwCu2jzGZvXXk4seuRevdO4nMABA/C6ZsHJgkpnY9d
-         4B477obfb+Qy4SLCvljH+p1d5XvyfMZLDQ8xKnQD79GAzvzNeTaRzD0RG6Ua9GvJDd+x
-         rtJA==
+        bh=/KX5uTkgk9W92gKlHSkFsOzce2NpLBrMlSSVzMx4nOs=;
+        b=cRGwU1BsgWpldoqsENJ9J08eoraP2joeWa2nNnkg/CeTi1kuXAAI0sDTeUhfUxhge1
+         OBEKe8d4FuRAuJlbN1SNz59A8J6UjBaCAQi6PjAwgf/68Ayg8oO2DsUSsUT++CH1mmCc
+         x8hnGsljSOmJjyUM7VWVpspnEb4qQAxjzb3HXHi8PCYceXCUvB1HM3aaU8eWxFyjGJr7
+         lkH6OYtrnKDbCkPn8kyr2QXDQ8LnTcve1BGi8ihpQqV3W5gXU386re5mVxFRH2h2yUl6
+         SkMZ1D5TmxeyoqS9vUNuVvmiTMqpzl7tc1M8qCrC4axvO5318bUwLeiUOjk3E5t1VLHl
+         GREg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=y9birgiS9Q1LdTibjI1qpS+INxYgCkhdm/5O40p8Ub8=;
-        b=NdIuXg/PI9uErERyJY2pLt4aLmLZ9Y9SNVLO+2yT6MivbKGj0uJ5BObKsubOCgkIys
-         uXt2IUVaetIQ09GpYMXpaQzExOfU6Gmjgw2ioUnznXA0lbJv+xnHu4CS9R5rzYGKz7Ls
-         LXe7f90eZFzCagd0TL56Glew08T8MWPlKrDEX6ZjBP7pUo3RAE3rsrgmiUTHKfdZjUKb
-         /OnF+CokJsLUxIsHegW9QKpgkncBkJu9aJjQThKEiUyb8Y/Z2dqCL3gP01XibK5TC1ZU
-         qQEfcEM3GcmMZEhEr2cYd+kBMLV8cZ59OWihtQbZoFju7qggr/8gliwc/e+GigkR5vBY
-         xmSQ==
-X-Gm-Message-State: AOAM530GoDUaglNKCTubxHPOZEnxENvqmxgkveGt1NvbZsUW6lPUiggI
-        Johm1l7bQgD8F/EstzXNsj975A==
-X-Google-Smtp-Source: ABdhPJz4wOMRsj8Zdwrw44uV2D14PB78jcXKSQf1Girb0abQRhKGiEDFC6UTMpJHOMLCM3MrVkc51Q==
-X-Received: by 2002:a5d:6b4c:0:b0:1e6:8ece:62e8 with SMTP id x12-20020a5d6b4c000000b001e68ece62e8mr12856136wrw.201.1645370156776;
-        Sun, 20 Feb 2022 07:15:56 -0800 (PST)
+        bh=/KX5uTkgk9W92gKlHSkFsOzce2NpLBrMlSSVzMx4nOs=;
+        b=Zm/2XIFGA3gZ6/CI3KN9x5IFQArfCJssgn/qy7OANfIFGvBvWW106M5Epv8TVR72vd
+         AGMw01Pvs9bAr/2CwrODNEhM9VbNmg+Z0HrYc3Tvvlh72FYKlzfgHJSmFU6T1jY5Z5ln
+         f2oDlhifd5MlN3xJpqmGcQiHaMA68k+5UKW4VK8hCKO3UBO/BePGVxGcQKHrk5ZQ1mvT
+         o/foS6AmPfBh55KRTHW2sGOePuW/rATI+7M8fU5B2QRBnQYdcrGCGjGdw8ZUbkXUvYXg
+         6gXWZMcS0waVxLeX0uv18lOmjURYgseJ87FXgxo0QMbthwBbJsgIt0a6zwGBy/qxQHGc
+         0Pvg==
+X-Gm-Message-State: AOAM532wqb2yg/rloQE2HfwS+LPoRKTe7nqlyqzpTgpdt8cXiC7Qbily
+        rMdqLjTLeGDjU6ysWRa3GoIfxBG5X6wgCw==
+X-Google-Smtp-Source: ABdhPJz9JJZGINe7AA5kaxjB2L/8l4FKTcx8dZqJ0mTmsf0v4Aqq0RKR/e3smplf8gUjJMEEinjzlg==
+X-Received: by 2002:adf:fd4b:0:b0:1e4:9a8a:2ef7 with SMTP id h11-20020adffd4b000000b001e49a8a2ef7mr12874497wrs.659.1645370157784;
+        Sun, 20 Feb 2022 07:15:57 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.55
+        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 07:15:56 -0800 (PST)
+        Sun, 20 Feb 2022 07:15:57 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Rob Herring <robh@kernel.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 08/13] dt-bindings: nvmem: add fsl,layerscape-sfp binding
-Date:   Sun, 20 Feb 2022 15:15:22 +0000
-Message-Id: <20220220151527.17216-9-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 09/13] nvmem: add driver for Layerscape SFP (Security Fuse Processor)
+Date:   Sun, 20 Feb 2022 15:15:23 +0000
+Message-Id: <20220220151527.17216-10-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
 References: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
@@ -73,61 +72,144 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-The Security Fuse Processor provides efuses and is responsible for
-reading it at SoC startup and configuring it accordingly.
+Add support for the Security Fuse Processor found on Layerscape SoCs.
+This driver implements basic read access.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- .../bindings/nvmem/fsl,layerscape-sfp.yaml    | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+ drivers/nvmem/Kconfig          | 12 +++++
+ drivers/nvmem/Makefile         |  2 +
+ drivers/nvmem/layerscape-sfp.c | 89 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 103 insertions(+)
+ create mode 100644 drivers/nvmem/layerscape-sfp.c
 
-diff --git a/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml b/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
+diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+index da414617a54d..4063ea15f7d2 100644
+--- a/drivers/nvmem/Kconfig
++++ b/drivers/nvmem/Kconfig
+@@ -300,4 +300,16 @@ config NVMEM_BRCM_NVRAM
+ 	  This driver provides support for Broadcom's NVRAM that can be accessed
+ 	  using I/O mapping.
+ 
++config NVMEM_LAYERSCAPE_SFP
++	tristate "Layerscape SFP (Security Fuse Processor) support"
++	depends on ARCH_LAYERSCAPE || COMPILE_TEST
++	depends on HAS_IOMEM
++	help
++	  This driver provides support to read the eFuses on Freescale
++	  Layerscape SoC's. For example, the vendor provides a per part
++	  unique ID there.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called layerscape-sfp.
++
+ endif
+diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+index dcbbde35b6a8..d4e1052d2b95 100644
+--- a/drivers/nvmem/Makefile
++++ b/drivers/nvmem/Makefile
+@@ -61,3 +61,5 @@ obj-$(CONFIG_NVMEM_RMEM) 	+= nvmem-rmem.o
+ nvmem-rmem-y			:= rmem.o
+ obj-$(CONFIG_NVMEM_BRCM_NVRAM)	+= nvmem_brcm_nvram.o
+ nvmem_brcm_nvram-y		:= brcm_nvram.o
++obj-$(CONFIG_NVMEM_LAYERSCAPE_SFP)	+= nvmem-layerscape-sfp.o
++nvmem-layerscape-sfp-y		:= layerscape-sfp.o
+diff --git a/drivers/nvmem/layerscape-sfp.c b/drivers/nvmem/layerscape-sfp.c
 new file mode 100644
-index 000000000000..80914b93638e
+index 000000000000..e591c1511e33
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/fsl,layerscape-sfp.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/fsl,layerscape-sfp.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/nvmem/layerscape-sfp.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Layerscape SFP driver
++ *
++ * Copyright (c) 2022 Michael Walle <michael@walle.cc>
++ *
++ */
 +
-+title: Freescale Layerscape Security Fuse Processor
++#include <linux/device.h>
++#include <linux/io.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/nvmem-provider.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
 +
-+maintainers:
-+  - Michael Walle <michael@walle.cc>
++#define LAYERSCAPE_SFP_OTP_OFFSET	0x0200
 +
-+description: |
-+  SFP is the security fuse processor which among other things provide a
-+  unique identifier per part.
++struct layerscape_sfp_priv {
++	void __iomem *base;
++};
 +
-+allOf:
-+  - $ref: "nvmem.yaml#"
++struct layerscape_sfp_data {
++	int size;
++};
 +
-+properties:
-+  compatible:
-+    enum:
-+      - fsl,ls1028a-sfp
++static int layerscape_sfp_read(void *context, unsigned int offset, void *val,
++			       size_t bytes)
++{
++	struct layerscape_sfp_priv *priv = context;
 +
-+  reg:
-+    maxItems: 1
++	memcpy_fromio(val, priv->base + LAYERSCAPE_SFP_OTP_OFFSET + offset,
++		      bytes);
 +
-+required:
-+  - compatible
-+  - reg
++	return 0;
++}
 +
-+unevaluatedProperties: false
++static struct nvmem_config layerscape_sfp_nvmem_config = {
++	.name = "fsl-sfp",
++	.reg_read = layerscape_sfp_read,
++};
 +
-+examples:
-+  - |
-+    efuse@1e80000 {
-+        compatible = "fsl,ls1028a-sfp";
-+        reg = <0x1e80000 0x8000>;
-+    };
++static int layerscape_sfp_probe(struct platform_device *pdev)
++{
++	const struct layerscape_sfp_data *data;
++	struct layerscape_sfp_priv *priv;
++	struct nvmem_device *nvmem;
++
++	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(priv->base))
++		return PTR_ERR(priv->base);
++
++	data = device_get_match_data(&pdev->dev);
++
++	layerscape_sfp_nvmem_config.size = data->size;
++	layerscape_sfp_nvmem_config.dev = &pdev->dev;
++	layerscape_sfp_nvmem_config.priv = priv;
++
++	nvmem = devm_nvmem_register(&pdev->dev, &layerscape_sfp_nvmem_config);
++
++	return PTR_ERR_OR_ZERO(nvmem);
++}
++
++static const struct layerscape_sfp_data ls1028a_data = {
++	.size = 0x88,
++};
++
++static const struct of_device_id layerscape_sfp_dt_ids[] = {
++	{ .compatible = "fsl,ls1028a-sfp", .data = &ls1028a_data },
++	{},
++};
++MODULE_DEVICE_TABLE(of, layerscape_sfp_dt_ids);
++
++static struct platform_driver layerscape_sfp_driver = {
++	.probe	= layerscape_sfp_probe,
++	.driver = {
++		.name	= "layerscape_sfp",
++		.of_match_table = layerscape_sfp_dt_ids,
++	},
++};
++module_platform_driver(layerscape_sfp_driver);
++
++MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
++MODULE_DESCRIPTION("Layerscape Security Fuse Processor driver");
++MODULE_LICENSE("GPL");
 -- 
 2.21.0
 

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06DA4BCF50
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9B34BCF52
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244171AbiBTPQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 10:16:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50708 "EHLO
+        id S239447AbiBTPQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 10:16:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244174AbiBTPQW (ORCPT
+        with ESMTP id S244171AbiBTPQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 20 Feb 2022 10:16:22 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A2D3524F
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:16:00 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id x5so17986950wrg.13
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:16:00 -0800 (PST)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4993527E
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:16:01 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id k41so8152239wms.0
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:16:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=O/VvSdH35ggdYDcqIG7rPDjoDjcMStnpl398SZrCoVM=;
-        b=sBv2S4ThUynti8f6Ov4KGbgmJQjGpaq9nYPYhwFS75TV/dPTMnhi1ZJ9GL7qtg9i71
-         /IzIX+JjfmIGvHuIY3al4rQl2j2KrcUEnG6Q2C9SkgUqce86+HexGgfMqDgxQ5BYSe7B
-         1yhwkUuQeEMRUsDKlh27VcRBRuSKTqrxS8G4h2dYRHBuNV9D2WWnAE09zmPEVrW+JlhO
-         s3ws94MUSonz9tcsdblgew6ofU8wdeUzw/prDMvNvFOl5dyX9evv17iHtwOU3NcY3DIS
-         gpv+pMDo4hOhxefJOyuhmTQuPtjBHeRZeDHh5ET8SiSLRH0jPqLrIzhk1CvmFRMioam8
-         4yAQ==
+        bh=8kpOgd/mbbp4xC3u6NnhKQ40akLsMpySOQSsC87tSzg=;
+        b=z1TfAcl+EIvdi3a1jMqc2vwbel5X71Xp4Tz64WSWTGErR1jyE2S8868wdAD9KL4hCU
+         cJgEc9sOSoNC7/ildClbpOSqHnc1DVJAoO3G3rxU4zMlbas9VXpaRjOyJPKmr31cO94P
+         VV9S87DuZxXw/W/ZEk/LmRFZ/V4M8BbY8SXQBX2uv35smCC9AnNG+rIZXmkMSGCvQ3b8
+         X5P1T/DNsU20bJV+/9CGudjn8wTcq2alIjtrEzo+TPQawMbraH+/PQS2Bfj/x35svu5F
+         HHBCfmbpPqtCwPOKWxNszIkDT/Q48Saqv42aYuqrk4qL6MLFuNivN9LJFvJadaHapJkb
+         1TAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=O/VvSdH35ggdYDcqIG7rPDjoDjcMStnpl398SZrCoVM=;
-        b=Vb9+nQQlgxmOc5BNTsruMijUB9cQ8PfRqaTBxvUWwnnzEvvvpEW2VPgFFKZobwykNT
-         L0UPfVAT1J+gdLxcbMYeDe/NlwIktQPGJ+dm1xbPUig+vJsD602lBIg0pcZqZkYP067R
-         rKFQ3RK4dsZpyvxChQ4o9FjycDbmqIDITwMeJHp8Bk4M5RCKY3amZl8NS6q9kZxbDfOM
-         KyQsbjGL4JpwFqFK8pH1PxbgYh0Jo1o/6qSYF+xRzjK7smsY5VWs0AjWWYl0xAfGzRPI
-         aY+Z8Jwa+OP6EM2Y1q04gMQnCdcoN96FL1MNyycd1LSZNN/p1sOf7gLhHgimVbUEnrEd
-         V/SA==
-X-Gm-Message-State: AOAM531yEjIhK9MYpFuNtkDIYpvzvr6EfDHUeq8kBrzJD7zncT0tmAGI
-        D7/tjXdN9mIXyfmCcn+Lg5T3aQzFtAtNPA==
-X-Google-Smtp-Source: ABdhPJxTxkdJtYzYi5GuA97M550o0mpl5acA+YAXlVRU0AFRSd7fEnOiP4Ql+bz6fUmKYaYeUaxRVw==
-X-Received: by 2002:adf:face:0:b0:1e3:260c:f824 with SMTP id a14-20020adfface000000b001e3260cf824mr12570884wrs.181.1645370158718;
-        Sun, 20 Feb 2022 07:15:58 -0800 (PST)
+        bh=8kpOgd/mbbp4xC3u6NnhKQ40akLsMpySOQSsC87tSzg=;
+        b=J/5Fbu+3mc9AKdNVcLacPf2JNVgOLeIV/M7oCZ1Js2VdOqcm3+HPeA3NrIJK64CUsG
+         /L4q6EWr1n1+N4vmI+uFlTURLWr0cNlOu1F4d0BJEuGnMhuzapkmiYGQXbUP1s2b5Ir9
+         5CPNbmUXP9AukBDagymbeFVw5iMZMCSuNtpYzsWiWQh25OhKAU8ky7V2sSY26rINslzO
+         GgqXiWuJiHbH8tMBoZ/xD5KAnvkhEDxx+rFn88XZ2zIv68fObSnTcFy+R2IrjeBPG7ED
+         FUkyyonKSwahmFxMtP8f9rLGjaXVdLtctykEuAHFyrbArsF19HkLIia++d56upw+Tv+/
+         tMgw==
+X-Gm-Message-State: AOAM531Yqm8RpVRHlpaPUY20u6lZ8h0E05xJydH6Mh3kfIpxg2SsIOT7
+        yxi1LOi5bLJBsfQMMq+/0e9bxQ==
+X-Google-Smtp-Source: ABdhPJyAFGk0bZ3Gv4Nl5kc2QuloNxbKyqKiERG6K6djqIuRq8KFGEBdX7gRL5ripblYy/jmMKZ4MA==
+X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id l39-20020a05600c1d2700b0037c74bb2b4dmr18038411wms.82.1645370159634;
+        Sun, 20 Feb 2022 07:15:59 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.57
+        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 07:15:58 -0800 (PST)
+        Sun, 20 Feb 2022 07:15:59 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Sean Anderson <sean.anderson@seco.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 10/13] doc: nvmem: Remove references to regmap
-Date:   Sun, 20 Feb 2022 15:15:24 +0000
-Message-Id: <20220220151527.17216-11-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 11/13] doc: nvmem: Update example
+Date:   Sun, 20 Feb 2022 15:15:25 +0000
+Message-Id: <20220220151527.17216-12-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
 References: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
@@ -73,41 +73,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sean Anderson <sean.anderson@seco.com>
 
-Since commit 795ddd18d38f ("nvmem: core: remove regmap dependency"),
-nvmem devices do not use the regmap API. Remove references to it from
-the documentation.
+Update the example to reflect the new API. I have chosen the brcm-nvram
+driver since it seems to be simpler than the qfprom driver.
 
 Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- Documentation/driver-api/nvmem.rst | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ Documentation/driver-api/nvmem.rst | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
 diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
-index 287e86819640..56352ad1b1b0 100644
+index 56352ad1b1b0..e3366322d46c 100644
 --- a/Documentation/driver-api/nvmem.rst
 +++ b/Documentation/driver-api/nvmem.rst
-@@ -26,9 +26,7 @@ was a rather big abstraction leak.
+@@ -43,19 +43,20 @@ nvmem_device pointer.
  
- This framework aims at solve these problems. It also introduces DT
- representation for consumer devices to go get the data they require (MAC
--Addresses, SoC/Revision ID, part numbers, and so on) from the NVMEMs. This
--framework is based on regmap, so that most of the abstraction available in
--regmap can be reused, across multiple types of buses.
-+Addresses, SoC/Revision ID, part numbers, and so on) from the NVMEMs.
+ nvmem_unregister(nvmem) is used to unregister a previously registered provider.
  
- NVMEM Providers
- +++++++++++++++
-@@ -60,9 +58,6 @@ For example, a simple qfprom case::
+-For example, a simple qfprom case::
++For example, a simple nvram case::
+ 
+-  static struct nvmem_config econfig = {
+-	.name = "qfprom",
+-	.owner = THIS_MODULE,
+-  };
+-
+-  static int qfprom_probe(struct platform_device *pdev)
++  static int brcm_nvram_probe(struct platform_device *pdev)
+   {
++	struct nvmem_config config = {
++		.name = "brcm-nvram",
++		.reg_read = brcm_nvram_read,
++	};
  	...
+-	econfig.dev = &pdev->dev;
+-	nvmem = nvmem_register(&econfig);
+-	...
++	config.dev = &pdev->dev;
++	config.priv = priv;
++	config.size = resource_size(res);
++
++	devm_nvmem_register(&config);
    }
  
--It is mandatory that the NVMEM provider has a regmap associated with its
--struct device. Failure to do would return error code from nvmem_register().
--
  Users of board files can define and register nvmem cells using the
- nvmem_cell_table struct::
- 
 -- 
 2.21.0
 

@@ -2,257 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60DF4BCE6F
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 13:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB7A4BCE72
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 13:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243746AbiBTMXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 07:23:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46086 "EHLO
+        id S243764AbiBTMX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 07:23:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbiBTMXE (ORCPT
+        with ESMTP id S243081AbiBTMXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 07:23:04 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC0E3CA66
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 04:22:43 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id h125so11912918pgc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 04:22:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to;
-        bh=R/byEbuYodbqN/dTPHwwxQlwg4dzRor/JniFcuJDSKE=;
-        b=S1UgBHs1HP7eKCMW/3QD9FOXwFcbC2X8M+6jGH5BpE2tl5oEkOohLpbsE3faKMi9FV
-         FfheFJ0MoF3ltIqOXbGlhXGu7KI3QkPfD9m7qo/DKLKoS5SPLW4IJFLvXRP+U4FuzFer
-         Dwj6iKG1o2au70Ew1XB9fU+VrCp98pxpBrXAGJzSF+xoDAazkA25F77T09dKp5B1ebdo
-         UTyZTFnpgJzd3kij+TX0UgPF2otbyVyglKvN75R4/BVadTYSeSEXWb2njc57i+FHND8O
-         IyglnN3Xot3sbKFpGkPvnBrff3t/usJxQzGt533x+xRILuaw8pJ3yPCoQj5g5lLs/f3g
-         61wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to;
-        bh=R/byEbuYodbqN/dTPHwwxQlwg4dzRor/JniFcuJDSKE=;
-        b=U5khb0FBhBXrxqFVhbJG+aPFyNxTD6leM2SqV6tBT3/MWE12C4skEigF89tZoNTWrv
-         fCybed24XMqPssqiz1qG++/eo8aazuFjeS5GOEQiQZnVUh8Nf6I2hMe2CR2MsGDf+JAb
-         0DH6E7iamwamaiF2hPVgXyyxOXjU9RrRxdGFEaWaxpvlSoDmZ6T91gwfvM4aAszacvQn
-         KLAwg08BTnYeE5JQxYxkGnnHRu9wb0zk6FvvsNg6KRzbGPeHIFun1JVSoQejj1/DdRn+
-         atwjz5vf0fg4+bXieriVYGyS2AvZJTfUCozDHVReX9QU3yGfUJ9yw8AaegNOoE5AocFP
-         kryA==
-X-Gm-Message-State: AOAM531da+h2uguFGKfu9K9XqpYOS+ZIC4VAdqKvj+NxbDGgoADU/ghx
-        cOe+5o349O+b7jSyBnNcCl0=
-X-Google-Smtp-Source: ABdhPJw/4Aaa7RtOHrKYtjwy7+QQw4VGAuHEaCrTJCc44sCDXC002+58LkOyBdvEfa8p3Gj3lKtPcw==
-X-Received: by 2002:a63:b50b:0:b0:373:9242:6b98 with SMTP id y11-20020a63b50b000000b0037392426b98mr12466709pge.553.1645359762402;
-        Sun, 20 Feb 2022 04:22:42 -0800 (PST)
-Received: from ?IPV6:240b:10:2720:5500:2f07:a2ba:6742:b651? ([240b:10:2720:5500:2f07:a2ba:6742:b651])
-        by smtp.gmail.com with ESMTPSA id 8sm9163488pfl.164.2022.02.20.04.22.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Feb 2022 04:22:40 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------400X6pDu0Eno4T3y93R0zub0"
-Message-ID: <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
-Date:   Sun, 20 Feb 2022 21:22:35 +0900
+        Sun, 20 Feb 2022 07:23:55 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F77753B77
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 04:23:32 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220220122323epoutp0381182055536e67137d45755225d97d48~VfgYpSP-I2992329923epoutp03y
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 12:23:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220220122323epoutp0381182055536e67137d45755225d97d48~VfgYpSP-I2992329923epoutp03y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1645359803;
+        bh=xsUVQh3weFbhZe5BBUOwKpwtKfhT0PfFLVuSXIs/6OA=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=HCoIjOwbTuNLQ7AhKjzVG/H24NIauOOSMQVOk2tMgGozXA/u4yUk0KUOVipDy7+EP
+         s0SPdTng6qhCk3Z42+Br3TMyrh6T2IKIb/jBqjM5CzaG0WSXrEXije37ZtOOo7oz+T
+         FjeYCK36loA1UwnNrUo0Ki961IXkzIGaT4B2KdA8=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220220122322epcas5p34a431fce6a717223949300ea6ebb33e1~VfgXaocZw1315013150epcas5p3p;
+        Sun, 20 Feb 2022 12:23:22 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4K1l2Z2d1Lz4x9Pq; Sun, 20 Feb
+        2022 12:23:18 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E4.FB.05590.6B232126; Sun, 20 Feb 2022 21:23:18 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220220122317epcas5p3ff8910d18d8f6aa924f3b6130f869c77~VfgSi_HNa1315013150epcas5p3o;
+        Sun, 20 Feb 2022 12:23:17 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220220122317epsmtrp128e0cdd103bcc6c0f6d5b5c993e06548~VfgSiJ_nl0066700667epsmtrp1s;
+        Sun, 20 Feb 2022 12:23:17 +0000 (GMT)
+X-AuditID: b6c32a4b-723ff700000015d6-0c-621232b67697
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0F.10.08738.5B232126; Sun, 20 Feb 2022 21:23:17 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220220122315epsmtip139d1b9cd8e6fce2f64244607542ded0c~VfgRUVtuB1849018490epsmtip1W;
+        Sun, 20 Feb 2022 12:23:15 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Cc:     <linux-samsung-soc@vger.kernel.org>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <pankaj.dubey@samsung.com>,
+        <m.szyprowski@samsung.com>
+In-Reply-To: <72848f6c-adc7-2d36-edcd-9a5fac655bbc@canonical.com>
+Subject: RE: [PATCH] clocksource/drivers/exynos_mct: Remove mct interrupt
+ index enum
+Date:   Sun, 20 Feb 2022 17:53:20 +0530
+Message-ID: <0a0201d82654$a6eae570$f4c0b050$@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
-Content-Language: en-US
-From:   Tokunori Ikegami <ikegami.t@gmail.com>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
-        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Brian Norris <computersforpeace@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
-        cyrille.pitchen@wedev4u.fr,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linuxppc-dev@lists.ozlabs.org
-References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
- <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
- <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
- <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
- <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
- <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
- <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
- <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
- <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
-In-Reply-To: <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQEXBP1woSFOUEXaM7x+Nv8ayDIoJwJcL7PpAlCY7tit+TN4gA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmhu42I6EkgydNvBbzPstabHz7g8li
+        0+NrrBaXd81hs5hxfh+Txdojd9ktFm39wm6xedNUZgcOj1kNvWwed67tYfN4d+4cu8fmJfUe
+        fVtWMXp83iQXwBaVbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+Ti
+        E6DrlpkDdI6SQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1
+        xMrQwMDIFKgwITvjwLLzjAX90hU7H/1gamCcI9bFyMkhIWAise/hNKYuRi4OIYHdjBKnfq9i
+        gXA+MUrM2feWHcL5zChx8e0+ZpiWjTMOs0EkdjFKrNs+gxXCeckosbi/jQmkik1AV2LH4jaw
+        KhGBTkaJ1d9/gm1hFpjCKHF2wjOwKk4BR4mJxw+AzRUWCJPYMH0rkM3BwSKgKnHzvAtImFfA
+        UmLz+y1sELagxMmZT1hAbGYBbYllC19DnaQg8fPpMlaQVhEBJ4k5Ey0gSsQlXh49AvaChMBS
+        DokTR3ug6l0kbkxqZ4OwhSVeHd/CDmFLSbzsb2MHmSMhkC3Rs8sYIlwjsXTeMRYI217iwJU5
+        LCAlzAKaEut36UOs4pPo/f2ECaKTV6KjTQiiWlWi+d1VqE5piYnd3awQtofE3Q032CYwKs5C
+        8tcsJH/NQvLALIRlCxhZVjFKphYU56anFpsWGOellsPjOzk/dxMjOLFqee9gfPTgg94hRiYO
+        xkOMEhzMSiK8Hw7yJgnxpiRWVqUW5ccXleakFh9iNAWG9URmKdHkfGBqzyuJNzSxNDAxMzMz
+        sTQ2M1QS5z2VviFRSCA9sSQ1OzW1ILUIpo+Jg1OqgWmS8x+9Nzx3EoMWrzN12jMnYNcrD+cp
+        y6z/+lm3vpjdu+L3Y3m5b0X3xDR69kW4CLulp+6ZZ7PipouXyWNhnkr+B4HmqekLhIOZJL4X
+        H8o2ueUtYmfvEerm+3SWLW/AnIYJy8yuvn7lvuhiQ8yLnMKW4nmfuiz6sr5lZnjETdy76rLO
+        cbX8vMMXtd+12Wpe/3Nl4VTV8u5TF8uiblsUmh3IP2z/cckGySZG+UMrzXPsKwI0p3Gc71sQ
+        8Djk77HX7Ne6HJp5ruxmXB712VAihudGS0j+dfazb4wXcLpaXEmOzPugbvX98hvGXQxLTNfc
+        8uZ675r8crKW6SL1QztDDtqY7o66nsT8JW6WpKvfAyWW4oxEQy3mouJEAHccbbg1BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42LZdlhJTnerkVCSwaIeIYt5n2UtNr79wWSx
+        6fE1VovLu+awWcw4v4/JYu2Ru+wWi7Z+YbfYvGkqswOHx6yGXjaPO9f2sHm8O3eO3WPzknqP
+        vi2rGD0+b5ILYIvisklJzcksSy3St0vgytj6dQFzwVapigtfXrM3MB4S7WLk5JAQMJHYOOMw
+        WxcjF4eQwA5GiU3fVrNDJKQlrm+cAGULS6z895wdoug5o8S6ntdsIAk2AV2JHYvbwLpFBLoZ
+        Ja70zGQEcZgFZjFKLG7ZBDX3MKPE09P9TCAtnAKOEhOPH2AGsYUFQiTu9F0Gsjk4WARUJW6e
+        dwEJ8wpYSmx+v4UNwhaUODnzCQuIzSygLdH7sJURxl628DUzxHkKEj+fLmMFGSMi4CQxZ6IF
+        RIm4xMujR9gnMArPQjJpFpJJs5BMmoWkZQEjyypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k
+        /NxNjOAI09Lawbhn1Qe9Q4xMHIyHGCU4mJVEeD8c5E0S4k1JrKxKLcqPLyrNSS0+xCjNwaIk
+        znuh62S8kEB6YklqdmpqQWoRTJaJg1Oqgam3pvFMx9abGeHfHR75bf1escjp40vd5rIbN06f
+        2riy1PflS/a1bkxTNpYtmPfjSABD6uMzV27Eck6b0bH8zN1nS7ki2H0Yzt37teBn1LnD63oe
+        zK4TvfnKKJqn4/CnCMMJnAd5bht/evJKZt6dq1V/qtdPLXXPZ7Vljxc2je9R+VZtWf7rZPQk
+        kaQ1DzIW3Mh6vH196ttfP3+cu31QWKjC9XjqO2nuul8ZFt8+LT1dMndGz2zlrsUtGYdehTWk
+        BX2sT8mPtt49w61zXUeLY3VinEL4xLyZEuUV7lN09c/kGTXemjfV69wC7QybhUuO5y/mWKx4
+        bHeVZ069xOMC/naPP28PM/Uk5an1CZoqXa1QYinOSDTUYi4qTgQASfPumh8DAAA=
+X-CMS-MailID: 20220220122317epcas5p3ff8910d18d8f6aa924f3b6130f869c77
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220219175832epcas5p399b652e6da610ada233376651694b42c
+References: <CGME20220219175832epcas5p399b652e6da610ada233376651694b42c@epcas5p3.samsung.com>
+        <20220219181003.12739-1-alim.akhtar@samsung.com>
+        <72848f6c-adc7-2d36-edcd-9a5fac655bbc@canonical.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------400X6pDu0Eno4T3y93R0zub0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Ahmad-san,
 
-Could you please try the version 2 patch attached for the error case?
-This version is to check the DQ true data 0xFF by chip_good().
-But I am not sure if this works or not since the error is possible to be 
-caused by Hi-Z 0xff on floating bus or etc.
-
-On 2022/02/15 3:46, Tokunori Ikegami wrote:
-> Hi Ahmad-san,
+>-----Original Message-----
+>From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40canonical.com=5D
+>Sent: Sunday, February 20, 2022 3:32 PM
+>To: Alim Akhtar <alim.akhtar=40samsung.com>; linux-arm-
+>kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
+>Cc: linux-samsung-soc=40vger.kernel.org; daniel.lezcano=40linaro.org;
+>tglx=40linutronix.de; pankaj.dubey=40samsung.com;
+>m.szyprowski=40samsung.com
+>Subject: Re: =5BPATCH=5D clocksource/drivers/exynos_mct: Remove mct interr=
+upt
+>index enum
 >
-> On 2022/02/15 1:22, Ahmad Fatoum wrote:
->> Hello Tokunori-san,
+>On 19/02/2022 19:10, Alim Akhtar wrote:
+>> MCT driver define an enum which list global and local timer's irq
+>> index. Most of them are not used but MCT_G0_IRQ and MCT_L0_IRQ and
+>> these two are at a fixed offset/index.
+>> Get rid of this enum and use a =23define for the used irq index.
 >>
->> On 13.02.22 17:47, Tokunori Ikegami wrote:
->>> Hi Ahmad-san,
->>>
->>> Thanks for your confirmations. Sorry for late to reply.
->> No worries. I appreciate you taking the time.
+>> While at it, bump-up maximum number of MCT IRQ to match the binding
+>> documentation. And also change the name variable to be more generic.
 >>
->>> Could you please try the patch attached to disable the chip_good() 
->>> change as before?
->>> I think this should work for S29GL964N since the chip_ready() is 
->>> used and works as mentioned.
->> yes, this resolves my issue:
->> Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> Thanks for your testing. I have just sent the patch to review.
->>
->>>>>> Doesn't seem to be a buffered write issue here though as the writes
->>>>>> did work fine before dfeae1073583. Any other ideas?
->>>>> At first I thought the issue is possible to be resolved by using 
->>>>> the word write instead of the buffered writes.
->>>>> Now I am thinking to disable the changes dfeae1073583 partially 
->>>>> with any condition if possible.
->>>> What seems to work for me is checking if chip_good or chip_ready
->>>> and map_word is equal to 0xFF. I can't justify why this is ok though.
->>>> (Worst case bus is floating at this point of time and Hi-Z is read
->>>> as 0xff on CPU data lines...)
->>> Sorry I am not sure about this.
->>> I thought the chip_ready() itself is correct as implemented as the 
->>> data sheet in the past.
->>> But it did not work correctly so changed to use chip_good() instead 
->>> as it is also correct.
->> What exactly in the datasheet makes you believe chip_good is not 
->> appropriate?
-> I just mentioned about the actual issue behaviors as not worked 
-> chip_good() on S29GL964N and not worked chip_ready() on 
-> MX29GL512FHT2I-11G before etc.
-> Anyway let me recheck the data sheet details as just checked it again 
-> quickly but needed more investigation to understand.
-
-As far as I checked still both chip_good() and chip_ready() seem correct 
-but still the root cause is unknown.
-If as you mentioned the issue was cased by the DQ true data 0xFF I am 
-not sure why the read work without any error after the write operation.
-Also if the error was caused by the Hi-Z 0xff on floating bus as 
-mentioned I am not sure why the read work without any error after the 
-write operation with chip_ready().
-Sorry anyway the root cause is also unknown when the write operation was 
-changed to use chip_good() instead of chip_ready().
-
-Regards,
-Ikegami
-
+>> No functional changes expected.
 >
-> Regards,
-> Ikegami
+>There is a functional change - you increase MCT_NR_IRQS from 12 to 20 whic=
+h
+>affects size of mct_irqs. Can you increase it in separate commit?
 >
->>
->> Cheers,
->> Ahmad
->>
->>
---------------400X6pDu0Eno4T3y93R0zub0
-Content-Type: text/x-patch; charset=UTF-8;
- name="v2-0001-mtd-cfi_cmdset_0002-Change-chip_good-to-check-DQ-.patch"
-Content-Disposition: attachment;
- filename*0="v2-0001-mtd-cfi_cmdset_0002-Change-chip_good-to-check-DQ-.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
+Yes, my thought was it is going to increase the mct_irqs array size and it =
+will not affect any=20
+of the current SoC's mct functionality.
+Anyway, I will separate it out as you suggested.
 
-RnJvbSAyYmVmMDJiZWU4ZmE3NDI3M2NmYzc2NGUyODhiNmY5MmI4NjQ2YmI3IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBUb2t1bm9yaSBJa2VnYW1pIDxpa2VnYW1pLnRAZ21h
-aWwuY29tPgpEYXRlOiBTYXQsIDE5IEZlYiAyMDIyIDE5OjM5OjMyICswOTAwClN1YmplY3Q6
-IFtQQVRDSCB2Ml0gbXRkOiBjZmlfY21kc2V0XzAwMDI6IENoYW5nZSBjaGlwX2dvb2QoKSB0
-byBjaGVjayBEUSB0cnVlCiBkYXRhIDB4RkYKClRoZSByZWdyZXNzaW9uIGlzc3VlIGhhcyBi
-ZWVuIGNhdXNlZCBvbiBTMjlHTDA2NE4gYW5kIHJlcG9ydGVkIGl0LgpUaGUgY2hhbmdlIG1l
-bnRpb25lZCBmb3IgcmVncmVzc2lvbiBpcyB0byB1c2UgY2hpcF9nb29kKCkgZm9yIGJ1ZmZl
-cmVkIHdyaXRlLgpBbHNvIGl0IHNlZW1zIHRoYXQgdGhlIDB4RkYgdmFsdWUgaXMgcmVhZCBv
-biB0aGUgZXJyb3IgY2FzZS4KSXQgaXMgcG9zc2libGUgdG8gYmUgY2F1c2VkIGJ5IERRIHRy
-dWUgZGF0YSBkZXNjcmliZWQgYnkgUzI5R0wwNjROIGRhdGFzaGVldC4KU28gY2hhbmdlIGNo
-aXBfZ29vZCgpIHRvIGNoZWNrIERRIHRydWUgZGF0YSAweEZGIGFkZGl0aW9uYWxseSBmb3Ig
-dGhlIGVycm9yLgoKRml4ZXM6IGRmZWFlMTA3MzU4MygibXRkOiBjZmlfY21kc2V0XzAwMDI6
-IENoYW5nZSB3cml0ZSBidWZmZXIgdG8gY2hlY2sgY29ycmVjdCB2YWx1ZSIpClNpZ25lZC1v
-ZmYtYnk6IFRva3Vub3JpIElrZWdhbWkgPGlrZWdhbWkudEBnbWFpbC5jb20+CkNjOiBsaW51
-eC1tdGRAbGlzdHMuaW5mcmFkZWFkLm9yZwpDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwpM
-aW5rOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1tdGQvY2VkYjE2MDQtZTAyNC0y
-NzM4LTViMzMtMTU3MDNhNjUzODAzQGdtYWlsLmNvbS8KLS0tCiBkcml2ZXJzL210ZC9jaGlw
-cy9jZmlfY21kc2V0XzAwMDIuYyB8IDI1ICsrKysrKysrKysrKysrKy0tLS0tLS0tLS0KIDEg
-ZmlsZSBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkKCmRpZmYg
-LS1naXQgYS9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0XzAwMDIuYyBiL2RyaXZlcnMv
-bXRkL2NoaXBzL2NmaV9jbWRzZXRfMDAwMi5jCmluZGV4IGE3NjExMzRmZDNiZS4uMDc5ZjY5
-ZTU0MDBkIDEwMDY0NAotLS0gYS9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0XzAwMDIu
-YworKysgYi9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0XzAwMDIuYwpAQCAtODUzLDcg
-Kzg1Myw3IEBAIHN0YXRpYyBpbnQgX194aXByYW0gY2hpcF9yZWFkeShzdHJ1Y3QgbWFwX2lu
-Zm8gKm1hcCwgc3RydWN0IGZsY2hpcCAqY2hpcCwKICAqCiAgKi8KIHN0YXRpYyBpbnQgX194
-aXByYW0gY2hpcF9nb29kKHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpj
-aGlwLAotCQkJICAgICAgdW5zaWduZWQgbG9uZyBhZGRyLCBtYXBfd29yZCBleHBlY3RlZCkK
-KwkJCSAgICAgIHVuc2lnbmVkIGxvbmcgYWRkciwgbWFwX3dvcmQgKmV4cGVjdGVkKQogewog
-CXN0cnVjdCBjZmlfcHJpdmF0ZSAqY2ZpID0gbWFwLT5mbGRydl9wcml2OwogCW1hcF93b3Jk
-IG9sZGQsIGN1cmQ7CkBAIC04NzUsOCArODc1LDEzIEBAIHN0YXRpYyBpbnQgX194aXByYW0g
-Y2hpcF9nb29kKHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpjaGlwLAog
-CW9sZGQgPSBtYXBfcmVhZChtYXAsIGFkZHIpOwogCWN1cmQgPSBtYXBfcmVhZChtYXAsIGFk
-ZHIpOwogCi0JcmV0dXJuCW1hcF93b3JkX2VxdWFsKG1hcCwgb2xkZCwgY3VyZCkgJiYKLQkJ
-bWFwX3dvcmRfZXF1YWwobWFwLCBjdXJkLCBleHBlY3RlZCk7CisJaWYgKCFtYXBfd29yZF9l
-cXVhbChtYXAsIG9sZGQsIGN1cmQpKQorCQlyZXR1cm4gMDsKKworCWlmIChleHBlY3RlZCAm
-JiBtYXBfd29yZF9lcXVhbChtYXAsIGN1cmQsICpleHBlY3RlZCkpCisJCXJldHVybiAxOwor
-CisJcmV0dXJuIG1hcF93b3JkX2VxdWFsKG1hcCwgb2xkZCwgbWFwX3dvcmRfZmYobWFwKSk7
-CiB9CiAKIHN0YXRpYyBpbnQgZ2V0X2NoaXAoc3RydWN0IG1hcF9pbmZvICptYXAsIHN0cnVj
-dCBmbGNoaXAgKmNoaXAsIHVuc2lnbmVkIGxvbmcgYWRyLCBpbnQgbW9kZSkKQEAgLTE2OTks
-NyArMTcwNCw3IEBAIHN0YXRpYyBpbnQgX194aXByYW0gZG9fd3JpdGVfb25ld29yZF9vbmNl
-KHN0cnVjdCBtYXBfaW5mbyAqbWFwLAogCQkgKiAiY2hpcF9nb29kIiB0byBhdm9pZCB0aGUg
-ZmFpbHVyZSBkdWUgdG8gc2NoZWR1bGluZy4KIAkJICovCiAJCWlmICh0aW1lX2FmdGVyKGpp
-ZmZpZXMsIHRpbWVvKSAmJgotCQkgICAgIWNoaXBfZ29vZChtYXAsIGNoaXAsIGFkciwgZGF0
-dW0pKSB7CisJCSAgICAhY2hpcF9nb29kKG1hcCwgY2hpcCwgYWRyLCAmZGF0dW0pKSB7CiAJ
-CQl4aXBfZW5hYmxlKG1hcCwgY2hpcCwgYWRyKTsKIAkJCXByaW50ayhLRVJOX1dBUk5JTkcg
-Ik1URCAlcygpOiBzb2Z0d2FyZSB0aW1lb3V0XG4iLCBfX2Z1bmNfXyk7CiAJCQl4aXBfZGlz
-YWJsZShtYXAsIGNoaXAsIGFkcik7CkBAIC0xNzA3LDcgKzE3MTIsNyBAQCBzdGF0aWMgaW50
-IF9feGlwcmFtIGRvX3dyaXRlX29uZXdvcmRfb25jZShzdHJ1Y3QgbWFwX2luZm8gKm1hcCwK
-IAkJCWJyZWFrOwogCQl9CiAKLQkJaWYgKGNoaXBfZ29vZChtYXAsIGNoaXAsIGFkciwgZGF0
-dW0pKSB7CisJCWlmIChjaGlwX2dvb2QobWFwLCBjaGlwLCBhZHIsICZkYXR1bSkpIHsKIAkJ
-CWlmIChjZmlfY2hlY2tfZXJyX3N0YXR1cyhtYXAsIGNoaXAsIGFkcikpCiAJCQkJcmV0ID0g
-LUVJTzsKIAkJCWJyZWFrOwpAQCAtMTk3OSwxNCArMTk4NCwxNCBAQCBzdGF0aWMgaW50IF9f
-eGlwcmFtIGRvX3dyaXRlX2J1ZmZlcl93YWl0KHN0cnVjdCBtYXBfaW5mbyAqbWFwLAogCQkg
-KiAiY2hpcF9nb29kIiB0byBhdm9pZCB0aGUgZmFpbHVyZSBkdWUgdG8gc2NoZWR1bGluZy4K
-IAkJICovCiAJCWlmICh0aW1lX2FmdGVyKGppZmZpZXMsIHRpbWVvKSAmJgotCQkgICAgIWNo
-aXBfZ29vZChtYXAsIGNoaXAsIGFkciwgZGF0dW0pKSB7CisJCSAgICAhY2hpcF9nb29kKG1h
-cCwgY2hpcCwgYWRyLCAmZGF0dW0pKSB7CiAJCQlwcl9lcnIoIk1URCAlcygpOiBzb2Z0d2Fy
-ZSB0aW1lb3V0LCBhZGRyZXNzOjB4JS44bHguXG4iLAogCQkJICAgICAgIF9fZnVuY19fLCBh
-ZHIpOwogCQkJcmV0ID0gLUVJTzsKIAkJCWJyZWFrOwogCQl9CiAKLQkJaWYgKGNoaXBfZ29v
-ZChtYXAsIGNoaXAsIGFkciwgZGF0dW0pKSB7CisJCWlmIChjaGlwX2dvb2QobWFwLCBjaGlw
-LCBhZHIsICZkYXR1bSkpIHsKIAkJCWlmIChjZmlfY2hlY2tfZXJyX3N0YXR1cyhtYXAsIGNo
-aXAsIGFkcikpCiAJCQkJcmV0ID0gLUVJTzsKIAkJCWJyZWFrOwpAQCAtMjI4Miw3ICsyMjg3
-LDcgQEAgc3RhdGljIGludCBkb19wYW5pY193cml0ZV9vbmV3b3JkKHN0cnVjdCBtYXBfaW5m
-byAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpjaGlwLAogCQl1ZGVsYXkoMSk7CiAJfQogCi0JaWYg
-KCFjaGlwX2dvb2QobWFwLCBjaGlwLCBhZHIsIGRhdHVtKSB8fAorCWlmICghY2hpcF9nb29k
-KG1hcCwgY2hpcCwgYWRyLCAmZGF0dW0pIHx8CiAJICAgIGNmaV9jaGVja19lcnJfc3RhdHVz
-KG1hcCwgY2hpcCwgYWRyKSkgewogCQkvKiByZXNldCBvbiBhbGwgZmFpbHVyZXMuICovCiAJ
-CW1hcF93cml0ZShtYXAsIENNRCgweEYwKSwgY2hpcC0+c3RhcnQpOwpAQCAtMjQ3OCw3ICsy
-NDgzLDcgQEAgc3RhdGljIGludCBfX3hpcHJhbSBkb19lcmFzZV9jaGlwKHN0cnVjdCBtYXBf
-aW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpjaGlwKQogCQkJY2hpcC0+ZXJhc2Vfc3VzcGVu
-ZGVkID0gMDsKIAkJfQogCi0JCWlmIChjaGlwX2dvb2QobWFwLCBjaGlwLCBhZHIsIG1hcF93
-b3JkX2ZmKG1hcCkpKSB7CisJCWlmIChjaGlwX2dvb2QobWFwLCBjaGlwLCBhZHIsIE5VTEwp
-KSB7CiAJCQlpZiAoY2ZpX2NoZWNrX2Vycl9zdGF0dXMobWFwLCBjaGlwLCBhZHIpKQogCQkJ
-CXJldCA9IC1FSU87CiAJCQlicmVhazsKQEAgLTI1NzcsNyArMjU4Miw3IEBAIHN0YXRpYyBp
-bnQgX194aXByYW0gZG9fZXJhc2Vfb25lYmxvY2soc3RydWN0IG1hcF9pbmZvICptYXAsIHN0
-cnVjdCBmbGNoaXAgKmNoaXAsCiAJCQljaGlwLT5lcmFzZV9zdXNwZW5kZWQgPSAwOwogCQl9
-CiAKLQkJaWYgKGNoaXBfZ29vZChtYXAsIGNoaXAsIGFkciwgbWFwX3dvcmRfZmYobWFwKSkp
-IHsKKwkJaWYgKGNoaXBfZ29vZChtYXAsIGNoaXAsIGFkciwgTlVMTCkpIHsKIAkJCWlmIChj
-ZmlfY2hlY2tfZXJyX3N0YXR1cyhtYXAsIGNoaXAsIGFkcikpCiAJCQkJcmV0ID0gLUVJTzsK
-IAkJCWJyZWFrOwotLSAKMi4zMi4wCgo=
+>>
+>> Signed-off-by: Alim Akhtar <alim.akhtar=40samsung.com>
+>> ---
+>>  drivers/clocksource/exynos_mct.c =7C 25 ++++++++-----------------
+>>  1 file changed, 8 insertions(+), 17 deletions(-)
+>>
+>> - currently tested on exynos7 platform, appreciate testing on
+>> exynos-=7B3,4,5=7D platforms
+>>
+>> diff --git a/drivers/clocksource/exynos_mct.c
+>> b/drivers/clocksource/exynos_mct.c
+>> index 6db3d5511b0f..4aea9cd3f7ba 100644
+>> --- a/drivers/clocksource/exynos_mct.c
+>> +++ b/drivers/clocksource/exynos_mct.c
+>> =40=40 -60,27 +60,18 =40=40
+>>  =23define MCT_CLKEVENTS_RATING		350
+>>  =23endif
+>>
+>> +/* There are four Global timers starting with 0 offset */
+>> +=23define MCT_G0_IRQ	0
+>> +/* Local timers count starts after global timer count */
+>> +=23define MCT_L0_IRQ	4
+>> +/* Max number of MCT IRQ as per binding document */
+>> +=23define MCT_NR_IRQS	20
+>> +
+>>  enum =7B
+>>  	MCT_INT_SPI,
+>>  	MCT_INT_PPI
+>>  =7D;
+>>
+>> -enum =7B
+>> -	MCT_G0_IRQ,
+>> -	MCT_G1_IRQ,
+>> -	MCT_G2_IRQ,
+>> -	MCT_G3_IRQ,
+>> -	MCT_L0_IRQ,
+>> -	MCT_L1_IRQ,
+>> -	MCT_L2_IRQ,
+>> -	MCT_L3_IRQ,
+>> -	MCT_L4_IRQ,
+>> -	MCT_L5_IRQ,
+>> -	MCT_L6_IRQ,
+>> -	MCT_L7_IRQ,
+>> -	MCT_NR_IRQS,
+>> -=7D;
+>> -
+>>  static void __iomem *reg_base;
+>>  static unsigned long clk_rate;
+>>  static unsigned int mct_int_type;
+>> =40=40 -89,7 +80,7 =40=40 static int mct_irqs=5BMCT_NR_IRQS=5D;  struct
+>> mct_clock_event_device =7B
+>>  	struct clock_event_device evt;
+>>  	unsigned long base;
+>> -	char name=5B10=5D;
+>> +	char name=5BMCT_NR_IRQS - 1=5D;
+>
+>This does not look related MCT_NR_IRQS and using here MCT_NR_IRQS
+>confuses. This is a =22mct_tick%d=22 with number of local timers, so maybe=
+ make
+>it just 11?
+>
+Yes, it is for local timer, let me add separate macro for this, which match=
+es the current dt binding.
+As per binding max 16 local timers can be supported.=20
+And it will make code scalable, which is the positive side effect of this c=
+hange.
 
---------------400X6pDu0Eno4T3y93R0zub0--
+>>  =7D;
+>>
+>>  static void exynos4_mct_write(unsigned int value, unsigned long
+>> offset)
+>
+>
+>Best regards,
+>Krzysztof
+

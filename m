@@ -2,118 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8828C4BD0D4
+	by mail.lfdr.de (Postfix) with ESMTP id 37E994BD0D3
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 20:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244578AbiBTTGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 14:06:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34248 "EHLO
+        id S244601AbiBTTGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 14:06:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237468AbiBTTGD (ORCPT
+        with ESMTP id S244586AbiBTTGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 14:06:03 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AEF4C7B0;
-        Sun, 20 Feb 2022 11:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645383920;
-        bh=6KNpyc0ZW7k54/xmz9GluUG6R/Rcoqer5CR8Xt+p03g=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=gcsDqFRvghF/nV5U7WrtjeBCt9E9BnAx7jpWah7N1dQJH7AhpruPDtVJEiZpJWaJ8
-         nV47flPc2mS6ZNYVMU7+ITwYbC0BFXPQqMcCP4kzsr1vEbu+4RN9s7M0j40vQ91l7Y
-         joWLjbIRBk8swaJY0OQT6843u5vEOcutrhMxy6BM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N8GMq-1oH0Qy243s-014GKV; Sun, 20
- Feb 2022 20:05:20 +0100
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Improve assembly code
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "pali@kernel.org" <pali@kernel.org>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220219211011.16600-1-W_Armin@gmx.de>
- <6f4c21b5e1cb4fa38a5e0c1716658329@AcuMS.aculab.com>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <77eeca08-e970-84df-6490-36e330ce91ca@gmx.de>
-Date:   Sun, 20 Feb 2022 20:05:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <6f4c21b5e1cb4fa38a5e0c1716658329@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:CP19/Q2N1lpZ0Mfk8s8lmQfk+E3TuQKYsTQR3rNDSbjop2IP5zl
- NRSDyx9Dz1A+mYyGXBMjYveHMeY+RXMRQGq69ubLFDTBMB3tESHHguBeJWBCFgHksnTbR8j
- VOOPrVt7JGwaWKjz9JQv1i2fuFjL4A0CE3qguAVqyCSpPOyrG0QWYwEv2S8OWjAZJJrRnzG
- vqmx2zg90apFtAYJxt/0w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qwydroLaiYw=:oVQub30VXGCLLmcsMtJ0Nx
- Vacr4Amkgg0xP49SrNhYgAr+95dCiZB5EmWzlL9worOYJ2V32BM5NKQCl1gJNtvju3zK20k/o
- VdNIyVFpj0LDx2Ry+Fwgv1i6ewdtwl2BMMof/dMNfo+gridt1skZ/NqYqN24+ZMljTGXxX+FG
- ZRuI/cfy3X8z9EklNGWWev1NadKnZLfLAiNy9JW3BRKOvPNQdfAF1JVAy6yU9Zldi3PTIkTCI
- 8OaUvJRL1lR8dIUOOtgIFPS5y4oeTczqFB8Dnmw9S1ded3KJeaITNePpFyWoQy1vRierVrEl2
- jFXXPL3E1epCU0nVOvtuEidgzJgjzqt/Oqg4uZws9uEDER1eFogEIocI0hJRN6Su22ZuIGgnx
- jC3Y1fHIG1BYmp8y2uKiyNCKjCqP2nsXryjmvzh0ezDmXHIeHUxJciq6U2DVWUcV/6MLZiK30
- D294kuMDBfshdxHfwDc8EOEAS080bfquK/f7azxJuvICFxxa53aq5hwHo0Ag9TapputLZ5YxB
- a1ncf0GFy77EnTutN2ILfJAn2UCp6BWg7GFyrhxldQ69LnAVLGw9K8LZzsGaYsX9+Yu254UYG
- d0SAmDnxQsaVl9E04s4c4NDcBCOjpaF4YI3xkOjn9088I1QQS5v4pFwNIPKAmfOPNVFAPFaUi
- EGmp3b9WztoID4iVeFjw4ESlJOzwRjAZx2elebAGm2NyPK5dGqaU0U7T8SbyTLuClMcmnslxh
- q/Gsep48XvgJDArtwMdbzepj1uV9T+35VoNLYdzshSlzXa0CiPPLV/t2JO1t1yZrW21DbLfnH
- Q4PrwPaDTz0TbLPmmPhHiRjWKXSGboKYTeMznRzMb4NoQx+gnW99voXN9RULOD6WvNN4/il6d
- Yp0tfGWSvjxAvBb83pjsaccuspJAcKRzboXHJadD2sFUXypQ6ZR1R47ymDrWXZGbc3BgdIwsr
- 9P6NdxYEkeamREsMZ82FrdLQ0s1GF0ckPqW8KisGDTSM4DhlnQ+YZdVDxrerfGRbbVh2brpft
- Fs8tpeQuAPeVEF/fdZ2O/rL24B7oDG+QLtMvj4Ff5fPILxTczNt4se2HACEpmdOiIQDrOKSn3
- yhsVDjbinVO/zM=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 20 Feb 2022 14:06:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7724C7B0;
+        Sun, 20 Feb 2022 11:06:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E4E160EC8;
+        Sun, 20 Feb 2022 19:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AD1CC340E8;
+        Sun, 20 Feb 2022 19:05:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645383959;
+        bh=sRnjFkhnYGjiXWOFuHa+scp8WHfJPy4P4V92MMpuk2E=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=h3cbxM7zEARDLCHydJfHKXzpW2cXeltiQnk2i3CT9UhluTmdWlR69tP8T30E/Bbi+
+         VKA4mYpKRLd7f96wmDTyMAxlxr9gP31yZUk/myjq44ODQUbSGtGTcPSHP364oLDR+j
+         B7w13BM3Ip8RAO2dh289Nu3EnmMzbWDB/p1pU2jih99vsFaXF5F0GwoS9UqU9gEV0O
+         OBkeTCb+uMjxJgY3udfqvRzmjwhiTYpVMt+ucmD2eSPIeWMrSBGWYbm9W1pQnplCWO
+         rBqgKLH0JvJ5XjuKfR3F3o+nv2DqyvqtF8sKr9iTU3FhyXZfuMDUeAennLEkgeoaa6
+         +l57ZM33yafJA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ED1BFE6D447;
+        Sun, 20 Feb 2022 19:05:58 +0000 (UTC)
+Subject: Re: [GIT PULL] ucounts: RLIMIT_NPROC fixes for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <87wnhsfatb.fsf_-_@email.froward.int.ebiederm.org>
+References: <20220207121800.5079-1-mkoutny@suse.com>
+        <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
+        <87ilteiz4a.fsf_-_@email.froward.int.ebiederm.org> <87wnhsfatb.fsf_-_@email.froward.int.ebiederm.org>
+X-PR-Tracked-List-Id: <linux-api.vger.kernel.org>
+X-PR-Tracked-Message-Id: <87wnhsfatb.fsf_-_@email.froward.int.ebiederm.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-fixes-for-v5.17
+X-PR-Tracked-Commit-Id: 0cbae9e24fa7d6c6e9f828562f084da82217a0c5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2d3409ebc87f4bc4ed23bd39e78db9ffc29eec44
+Message-Id: <164538395896.24844.842779137638491894.pr-tracker-bot@kernel.org>
+Date:   Sun, 20 Feb 2022 19:05:58 +0000
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Michal =?utf-8?Q?Kou?= =?utf-8?Q?tn=C3=BD?= <mkoutny@suse.com>,
+        linux-api@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 20.02.22 um 19:48 schrieb David Laight:
+The pull request you sent on Fri, 18 Feb 2022 09:34:24 -0600:
 
-> From: Armin Wolf
->> Sent: 19 February 2022 21:10
->>
->> The new assembly code works on both 32 bit and 64 bit
->> cpus and allows for more compiler optimisations by not
->> requiring smm_regs to be packed
-> I'm intrigued about the __packed..
->
-> Prior to 5.17-rc1 __packed was only applied to the fields after 'eax'.
-> This actually has no effect (on any architecture) because there is
-> no padding to remove - so all the later fields are still assumed to
-> be 32bit aligned.
->
-> 5.17-rc1 (565210c781201) moved the __packed to the end of the
-> structure.
-> AFAICT this structure is only ever used in one file and for on-stack
-> items. It will always actually be aligned and is only read by the
-> code in the file - so why was it ever marked __packed at all!
-> On x86 it would make no difference anyway.
->
-> I can only guess it was to ensure that the asm code didn't go
-> 'wrong' because of the compiler adding 'random' padding.
-> That isn't what __packed is for at all.
-> The linux kernel requires that the compiler doesn't add 'random'
-> padding - even if the C standard might allow it.
->
-> 	David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
->
-Your right, after looking at the assembly output, i can confirm that
-the removal of __packed changed nothing.
-Maybe i should update this part of the commit message as well.
+> git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ucount-rlimit-fixes-for-v5.17
 
-Armin Wolf
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2d3409ebc87f4bc4ed23bd39e78db9ffc29eec44
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

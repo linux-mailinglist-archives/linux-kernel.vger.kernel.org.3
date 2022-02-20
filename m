@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A4D4BCFB9
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 17:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C6F4BCFC0
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 17:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241100AbiBTQDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 11:03:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40608 "EHLO
+        id S233954AbiBTQVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 11:21:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiBTQDF (ORCPT
+        with ESMTP id S229828AbiBTQVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 11:03:05 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9834B21E12
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:02:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645372963; x=1676908963;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9NwTRpNDu/tHD2XIwBr3TAhromGmgxkpOIaxlQGO8Cw=;
-  b=f/gikxoaoIZnK4FT/hm41pRFB+Ia5B0LlmYyBoOucrxpk7BmqEtkOAbh
-   Rf1BH4/elvdtX/LCVCMRUR1HlsKsqPnEye3qp0Yv7/9WB1F1fVMpi53Up
-   yFrLSY9tEepPR4Y8ySoIKhQd27KAHo061c94LtrCn/hRrJjZqTiefI+Q4
-   Jdl39RMt2uugWSe/zbgogrQT8vBSXNiFBC6Xdj6vYQggXc7Ws6CygfeSh
-   FMZ3l7MQPwAfZnbQ0ZV4axCWT/nr4JxoOCqJJabDdNHVDA19kdZ/vO7Ko
-   nd6QwYG0j8S/KVBCn7sPgYIk9Ww5pUFs00IlXH6vg2SBeIFhWRc2hcJCP
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231353985"
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="231353985"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 08:02:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="682973476"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Feb 2022 08:02:42 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLofZ-0000RQ-GN; Sun, 20 Feb 2022 16:02:41 +0000
-Date:   Mon, 21 Feb 2022 00:02:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [peterz-queue:x86/wip.ibt 19/31]
- arch/x86/kernel/alternative.c:761:16: error: expected string literal in
- 'asm'
-Message-ID: <202202202357.ldfBr75W-lkp@intel.com>
+        Sun, 20 Feb 2022 11:21:05 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B03286F9
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:20:44 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id u7so3789184ljk.13
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 08:20:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sd+XJEjoSk98m94XHap1yquvW+LhGst3/uvY4pex7eY=;
+        b=CUU6jJZ59N80XBO9QMe3zzHcDlslYWwHcHUQuhy1naHQ6ceuEyX6viGzkhGwANpZO1
+         Cx/Jzb6uiVaqcl8PE1MYieWd0r49rQVXrmISXDm+5SJuYZcagzlerPTBNn4hz0nuXJ7O
+         g9X4ZKdRCgzYWaSKIk2dx3We4FEhvRZihEqfXPgr5YYKLwdepw8ijcfnS+ZBrXzYxeiq
+         VLaSQ/Bsmq450iA1E/NBFBaCijTgMgJMhOhgijuHY3w2GMkEy4kip8kduTuh8Lv8+x+M
+         r9n4Ts1Yljzx1IDk9hLt3zV/YLYXyy2qC/wuZwFylnpAmk5UMCEaURHMEjPeeJhq6Q+t
+         sNdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sd+XJEjoSk98m94XHap1yquvW+LhGst3/uvY4pex7eY=;
+        b=pOcwqAlVTqmNgU3CWkKHj5AyrNvvvui/A0FLXCO0n0tUsixxciUYsDIfmuksksxz1Z
+         6XkGpvahDT6LAWHvdzGUXnqAre6OGmdSwfsg6RthYu0xVQ5UQLFtydNBCbGVmVW4TSqC
+         xOphcQwQvZ0KEBFkluwKhv863lyATu7Z8QnylDVD+S7QyXQTqeviqX3UGo0gg40YeYBX
+         nRlBsiPwMuPwuteDrmVg+uJVBDDswha2UEz4qH8+nvlrtod6MFwBn8zoKJbWAc3KCIvX
+         /1BEou/6oLAnkjYECjA77gm7qQTWUvXK9v9ppM1N4rSarCRNFnWKxnwxYklxxEIO7BEV
+         8PXA==
+X-Gm-Message-State: AOAM532iQ6h7Nj5noamURpbgpYAX0Jv2SaPYx1lRiDsLLWbw5TkLsoN1
+        fv+FM2adXxpdZ0CmcqGjv6z3qiTfryk=
+X-Google-Smtp-Source: ABdhPJxsetL+pqqLUYYVdIzCRdgBnVRU8O+CpeOX+YgF2EGcqlIfAmc7XTewMg9KJdrBuDQYtlRHyQ==
+X-Received: by 2002:a2e:8890:0:b0:23d:1f76:aa with SMTP id k16-20020a2e8890000000b0023d1f7600aamr11835511lji.222.1645374042225;
+        Sun, 20 Feb 2022 08:20:42 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.64])
+        by smtp.gmail.com with ESMTPSA id m8sm1040813ljb.131.2022.02.20.08.20.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 08:20:41 -0800 (PST)
+Message-ID: <cb7db1ac-8e7e-d549-a5c0-fcd072ae815e@gmail.com>
+Date:   Sun, 20 Feb 2022 19:20:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 2/3] staging: r8188eu: refactor rtw_ch2freq()
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220220154847.7521-1-straube.linux@gmail.com>
+ <20220220154847.7521-3-straube.linux@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220220154847.7521-3-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
-head:   fecdb8a84191710ffe01c9492fceb34a15f1576a
-commit: 97e04204b3c4f0515f956be22a19229878b9253e [19/31] x86/ibt: Annotate text references
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220220/202202202357.ldfBr75W-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=97e04204b3c4f0515f956be22a19229878b9253e
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue x86/wip.ibt
-        git checkout 97e04204b3c4f0515f956be22a19229878b9253e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi Michael,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 2/20/22 18:48, Michael Straube wrote:
+> -static int ch_freq_map_num = ARRAY_SIZE(ch_freq_map);
+> -
+>   u32 rtw_ch2freq(u32 channel)
+>   {
+> -	u8	i;
+> -	u32	freq = 0;
+> -
+> -	for (i = 0; i < ch_freq_map_num; i++) {
+> -		if (channel == ch_freq_map[i].channel) {
+> -			freq = ch_freq_map[i].frequency;
+> -				break;
+> -		}
+> -	}
+> -	if (i == ch_freq_map_num)
+> -		freq = 2412;
+> -
+> -	return freq;
+> +	return ch_freq_map[channel - 1];
+>   }
 
-All errors (new ones prefixed by >>):
-
-   arch/x86/kernel/alternative.c:716:2: error: expected ')'
-           ANNOTATE_NOENDBR
-           ^
-   arch/x86/kernel/alternative.c:712:5: note: to match this '('
-   asm (
-       ^
->> arch/x86/kernel/alternative.c:761:16: error: expected string literal in 'asm'
-           asm volatile (ANNOTATE_NOENDBR
-                         ^
-   2 errors generated.
+What if channel has wrong value? The old code returned some default 
+value, but with new one we will hit OOB.
 
 
-vim +/asm +761 arch/x86/kernel/alternative.c
 
-   743	
-   744	static void __init int3_selftest(void)
-   745	{
-   746		static __initdata struct notifier_block int3_exception_nb = {
-   747			.notifier_call	= int3_exception_notify,
-   748			.priority	= INT_MAX-1, /* last */
-   749		};
-   750		unsigned int val = 0;
-   751	
-   752		BUG_ON(register_die_notifier(&int3_exception_nb));
-   753	
-   754		/*
-   755		 * Basically: int3_magic(&val); but really complicated :-)
-   756		 *
-   757		 * Stick the address of the INT3 instruction into int3_selftest_ip,
-   758		 * then trigger the INT3, padded with NOPs to match a CALL instruction
-   759		 * length.
-   760		 */
- > 761		asm volatile (ANNOTATE_NOENDBR
-   762			      "1: int3; nop; nop; nop; nop\n\t"
-   763			      ".pushsection .init.data,\"aw\"\n\t"
-   764			      ".align " __ASM_SEL(4, 8) "\n\t"
-   765			      ".type int3_selftest_ip, @object\n\t"
-   766			      ".size int3_selftest_ip, " __ASM_SEL(4, 8) "\n\t"
-   767			      "int3_selftest_ip:\n\t"
-   768			      __ASM_SEL(.long, .quad) " 1b\n\t"
-   769			      ".popsection\n\t"
-   770			      : ASM_CALL_CONSTRAINT
-   771			      : __ASM_SEL_RAW(a, D) (&val)
-   772			      : "memory");
-   773	
-   774		BUG_ON(val != 1);
-   775	
-   776		unregister_die_notifier(&int3_exception_nb);
-   777	}
-   778	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+With regards,
+Pavel Skripkin

@@ -2,164 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76CD4BCB7C
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 02:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBF64BCB7E
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 02:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243266AbiBTBdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 20:33:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57702 "EHLO
+        id S243279AbiBTBeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 20:34:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbiBTBdR (ORCPT
+        with ESMTP id S233344AbiBTBeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 20:33:17 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F417638BF3;
-        Sat, 19 Feb 2022 17:32:56 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21JJIVMv023158;
-        Sun, 20 Feb 2022 01:31:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=0SXVgGffFWaf12dlEqhDHiAK54iEarAc3GoIwHvHYrc=;
- b=bVWYrc8W4O8G0+sLxbl2U34tnXpepH1sYyi9UwTbKxdsnC7PxFScaHXDNbMbq+sM8+Ob
- pv+kmkvM/170WqZUOWYUxAgkptKDI5qYGucNQrhfDn6wnxmZ2hcS3cTrGf1vByvRFism
- UU3EIKK0qJ2SE0VNabd9Lm620xmiMOQZdb5HOzBXhURbNa/YmUK4qXdKinSpjRxe4sSv
- MCbMGml9PJDoKbsecHDYkk8/5OlYAp6p6JqpX5b8oTztLoRJaku79+lQs4Jp3Hw6aFVW
- kZo0cU1afegTAAl07Fj/FIX6ZakuTe/aPaqY0FXyll3cBi70kaj9OTfzxfhCnnHLqqXh yw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eaqb398fn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 20 Feb 2022 01:31:25 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21K1GQQA165504;
-        Sun, 20 Feb 2022 01:31:24 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
-        by aserp3020.oracle.com with ESMTP id 3eb47x7fw1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 20 Feb 2022 01:31:24 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bmMpqYgkjbqPnxwCLsy5z6/HhpIvS+owSuFX1F2uVB8vX9OzOdr70N/cn4rcKzG2DNBUKRIjJNrB2175RctW3yRihIwGHOLJt7Cq/tdXr1YDXdwRcsM5WpeBV3NPR4MPyPqJjyWuvxlfXf8aHu0b9E3x7Sv7BI1jB+YttHgcFeViCDTPgCMq8dprkzKALN33GbXb81DIJ2ULLpe6dimECYw9otWEmXEmn/y2YPW/DdlGghf5C3Au3P0u9zwzT6SW8g6BBNW9pZDfminhrk9v7LA2n+rjrppRD2Zrf1uaKn8YwewiShB+i5OjRYCAKdw6mQ2LO7m+cBD45oWtRJ5irQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0SXVgGffFWaf12dlEqhDHiAK54iEarAc3GoIwHvHYrc=;
- b=mCSd21P6wJxb9ANi03Pk1fnj97AUBIdcaJz4DYOgv1puos7B37B+pG7wcBnqy6uouzyL+QEJIluIIRLH+62p0qSIeL7Xosu3SBSHCgzk+Qffih7Y/s8xX6oF+wu3JYF3hXlUIUdZKMD74Wa5LxnFq0mCIwNwSsHvjXWHm9e4SELZUJ2yo5JoGOgYqmY0xX9pycIKmDzZ2f6siQ6aL00XYe2ugwVhyby3+IvPNN/I4EV9z0NBt89nqmszk10n719y49GXXmg/9GXxIB82QO87mMYXSgfhJwGYyJZoK83NX2Ij5py8wyJlO0DPpJAciFBB5XzI+53mJ7gKFU23T0x9LA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Sat, 19 Feb 2022 20:34:23 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76973CA62
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 17:34:03 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id l8so10100439pls.7
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 17:34:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0SXVgGffFWaf12dlEqhDHiAK54iEarAc3GoIwHvHYrc=;
- b=wE8dHcTlf0S07d/MAYgsTBhlZM5ijwcAzyaztn6gpG2q77iK+cDczDKTMhm1VvGf0IqvxzYIZOkXKfa2VvtpS5Y/yqjbvY0C48/iR1bgEBOgW6JxPgZxwrLYTMj1ElPnzQccDdU1ge51ouVjAAMRoOf04vndOD2TLZrx/NexOkw=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by BYAPR10MB2965.namprd10.prod.outlook.com (2603:10b6:a03:90::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Sun, 20 Feb
- 2022 01:31:22 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::c9f0:b3fb:25a6:3593]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::c9f0:b3fb:25a6:3593%5]) with mapi id 15.20.4995.026; Sun, 20 Feb 2022
- 01:31:22 +0000
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        artur.paszkiewicz@intel.com, jinpu.wang@cloud.ionos.com,
-        chenxiang66@hisilicon.com, hch@lst.de, Ajish.Koshy@microchip.com,
-        yanaijie@huawei.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com, liuqi115@huawei.com, Viswas.G@microchip.com
-Subject: Re: [PATCH v2 00/18] scsi: libsas and users: Factor out LLDD TMF code
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1ee3yfhnj.fsf@ca-mkp.ca.oracle.com>
-References: <1645112566-115804-1-git-send-email-john.garry@huawei.com>
-        <yq1zgmmh675.fsf@ca-mkp.ca.oracle.com>
-        <b9aea895-4b24-4529-0d87-5148e6990c95@opensource.wdc.com>
-Date:   Sat, 19 Feb 2022 20:31:20 -0500
-In-Reply-To: <b9aea895-4b24-4529-0d87-5148e6990c95@opensource.wdc.com> (Damien
-        Le Moal's message of "Sun, 20 Feb 2022 09:38:01 +0900")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0140.namprd05.prod.outlook.com
- (2603:10b6:a03:33d::25) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RZ8NsrnVmX9Djw5GkQPupP2noNGOaBfYcmgSSWfjjeQ=;
+        b=R01TB2pwygCdRmhZKRnaNEJbTch3/f5nd07G5a1BoctSRMpsh1BaWPG76MuftxbzMd
+         g6CtH/0L1EvT8pB6LdMQmOrRY5Z5gEu/Hro73yo3g02AKErUxiIt2ewEkK0mZojSBg1X
+         CBK/Bpd250kLkN8HavvvNPZBQv0SGq5r4FXeFcXaMngiGbqxW2KVVdbg9vcWCv48ljUe
+         24JO9/bPFDkkYLQqu2ZsKwYgZAY0g7LQH/Nc2Ac6pkc63vo92NS2ZPPPyMLcDriqNTiE
+         /jvXhU/WGju0G1hO5NvP7f1ADMrBVit8/35z43AdsXsSF63GkiUF1qYvut15+enXTwdw
+         qyJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RZ8NsrnVmX9Djw5GkQPupP2noNGOaBfYcmgSSWfjjeQ=;
+        b=0p/Zt9SEo0VPq3h4XN8eBH/OGqo8aIsBcy3rvE+Q9+ubKKdxI6pOQMQlyvAZDY8NLU
+         f2xUzWlGw4NOX7VOPJaexqPOy7ItAXTZx1cTp7EF/PX6j2XsEtPkOxt3T6gg5Zto5Wrc
+         ZLABoY/r6r4aUdAfG+OgOge9cPb7skD+TWtooW2SqQueEOsJsIc1TjCT3tZW5Q9wb9Gy
+         x1lQ6IO1Z4F6T/UjdaMx4vGK3NCpFH6vZWTOLe9j1r0gJM0sxXZV2cw9lhaGioFxKsef
+         H8gTIm5WvH9dO/h7l1un+q/4qFPsEBo195qlZ7SDfkV4+dFXPWEtqA4WxMvUGW40NHkI
+         lpBQ==
+X-Gm-Message-State: AOAM532UkPVYACXiuR+kIXpz21IohYBTASGKXYSdCiwhWGh7+hVOd/AB
+        OWLI+ykGexNMoteZzpOguxWK5DOwv30=
+X-Google-Smtp-Source: ABdhPJy1C8ZC960D/LpXzxtCBcQMKWgwka+NtoZaoMeJ95FnT0xeE56zywnGSLagHXQi+DjWMnq5vA==
+X-Received: by 2002:a17:902:e5c4:b0:14f:ab63:482d with SMTP id u4-20020a170902e5c400b0014fab63482dmr1267478plf.126.1645320843200;
+        Sat, 19 Feb 2022 17:34:03 -0800 (PST)
+Received: from barry-desktop.hub ([2407:7000:8942:5500:9903:f314:b63c:83a0])
+        by smtp.gmail.com with ESMTPSA id e4sm13431706pgr.35.2022.02.19.17.33.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Feb 2022 17:34:02 -0800 (PST)
+From:   Barry Song <21cnbao@gmail.com>
+To:     21cnbao@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, maz@kernel.org, song.bao.hua@hisilicon.com,
+        tglx@linutronix.de, will@kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3: use dsb(ishst) to synchronize data to smp before issuing ipi
+Date:   Sun, 20 Feb 2022 14:33:51 +1300
+Message-Id: <20220220013351.311430-1-21cnbao@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220219234600.304774-1-21cnbao@gmail.com>
+References: <20220219234600.304774-1-21cnbao@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7bcdfb47-c37d-41f9-526d-08d9f410b3cd
-X-MS-TrafficTypeDiagnostic: BYAPR10MB2965:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR10MB2965DB28EF638D57CFEB865F8E399@BYAPR10MB2965.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: buwFdlwIxMvLwx89+B7C7D3TEs0sK2Q8XLvR5PGBThYVhbnnKCSssb38VkV0IaI0qfdrnLcCplFsAQjdnjqThdkylKVTLMh7U1eFFniKu9hqg88+/K9bGD4j/FVxr3tTRw8KP/SCQxJ1vIiadV3i1Gw1Ywbwy+ic0pwt2WcAdbSfPg5v2TYsDxtClf1rbLh0K0fRS5aV10IRl1MoUUI+6bWHjS/1xziVsyFB5k2t7WjE04fkk/2XBrc+Mlnt38Ghq9L00TIG7uf/ik/XxbpHYhSZIA7zSWhmG74aS3OY04MpwAByRl4B8b0XOH/RpHy88WQtPum3rVV7w/KhoUfpS8ubUYJg7Y9NjG+SAW1ZX/ZD7a5qB4QigepJsI63UV2cJ64j8KePQHyPJ4F8b452D/WQhGEBpF7WGL7IIT/h0XRWCiBB/eV1alN8VFf7TsKBUzBN4CtnJbIulahNcsAtUeF2aOJeIkcMNPZXLT0kA4+MyWuI6Oka5YDYdy4REsKaCBUG7iw+DPfHFOE4EjKaoWrtQKTczpxZQRlYdU3WVLp8yeV3tAwX6emMIbtVK+ZDKTnDQU0jrOkuWjaHpXAZosz+SzYYXjzyVz/BsL0QEY2MvNuLt+lyRncdOtppUChNwcUK9y2/q9NO3nefmTZZyoIzyfytcReHg4MbRKIMmGo9pRXoUNGGPqqLDfGZEqg9I4O+XttG84EAlApixGpcAA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(86362001)(66476007)(36916002)(6916009)(66556008)(66946007)(508600001)(316002)(54906003)(558084003)(6486002)(186003)(6512007)(6506007)(26005)(5660300002)(7416002)(8936002)(2906002)(38350700002)(38100700002)(4326008)(52116002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h7GUZ218GLc0AN6tTUrWsclT6O3anQM/TYXAosJITIkydPENN7S0U30hwvm9?=
- =?us-ascii?Q?Z/vnVe8yoimcvfHQyRxkTRVLpNqXESBuE2gsA5MjBC5WPjX1ZpzMvSX+1EZW?=
- =?us-ascii?Q?Z5yrT+M95IXUjx1Avo8oHUZ64f7rl4Khc4H7MTf+Yyh272730gzO1OURdV48?=
- =?us-ascii?Q?CQJTEQqSwUcFfchnIBJIKn3H1SPu+T7pDREPFNhdXO4AaJMxtNcK6AeCoTIX?=
- =?us-ascii?Q?DfBbDKY91sJ2MmXRp3vy2I4ZltZul54WTf+Xs36ySTUyzd/X92oGQupZOtQK?=
- =?us-ascii?Q?1DnAAPX/LEnCQDqRJlhD1cWiH1UR40RZQXMh8tGh5PPqBq+kTpKRPlNZJSjP?=
- =?us-ascii?Q?wqwxvSyhtLms7SVjHk2y9+i627NbtTKORohTykzgstyNk99+vi3dpLAU/2XU?=
- =?us-ascii?Q?PSCKKnh9Zexw9AgQX8+Jaiq4NrCj38w5zulwFW2uS538s1yshxmFvaYu+U5x?=
- =?us-ascii?Q?kuZ8tt+pfUXXs9Z9c9exELmORIX/OOPCla4+/bp6CwSbDQoTdUOm/sMgGBgP?=
- =?us-ascii?Q?vyJvPqO8MYQwvWvJXLWwRvcclQLkTqPbY6CwlvbU5VIFWF0+2EoU5N5FUhhG?=
- =?us-ascii?Q?N2T1exbsXxaGDGGKGDb0uKF3TgbE7GdKM2tjTEYrVswlfkY2zvPnyj7Ehd4e?=
- =?us-ascii?Q?Tz99YSd56KK7vTVfGVDO+GfaRqV0OVppUKFBotHyFiKDE98bc52DJPTa1GJI?=
- =?us-ascii?Q?YjFxBaOJEO1lH7DmmXkBhEwS59XzPz/Nq0ndYikRytphgHcgEVA8hMPGCpup?=
- =?us-ascii?Q?t+45HQ3Igjfh8Ofs2qu2uhlMhyMt7e/nwIADxioXgE6UKr4HpIUYoR2VYuYX?=
- =?us-ascii?Q?Vuk1LwkkzcyesTG413mzxEOjo0S95MFqfLbuxh1xpR06ApsgEMSyI+OLBUFh?=
- =?us-ascii?Q?yyoYOtdWbvW5vbKnKYxMZLiWnlJvX18RlWxh0VSbWYRSs3DJg+wBFXxTZPQj?=
- =?us-ascii?Q?OdL5ZeyVYIBds8GuoamtJXhzTrl61LIXMN72h3i15VBoczNP7rnEiis2IhuD?=
- =?us-ascii?Q?Xjy49aW4zTsWnxpxTKKDAfHUcH+hTW464labecaGRUWVVD3mGjpnFLVz3esK?=
- =?us-ascii?Q?WiaE3QMVGCheQT1sVwL4bA0sA3Y9qBRrXEP5PRdmM8DuU71zkWEhg4R0TO16?=
- =?us-ascii?Q?qD8HgWTJ4y/NpHLENnhHIukbdnmFxaN9ZJA6Oi16DcTPZErqseKXBVG6TMOH?=
- =?us-ascii?Q?60JpmHg/nQHTfEQfmKyeeivpLAPciR6JCHsiDOIyALqG7l4ZLRANON1+It/Z?=
- =?us-ascii?Q?7yvdbJGX+pzn2tHiT6xrTuJdtrBd2zMwlGGGy8pcEQK/AdwlZK4Av+AD+xKo?=
- =?us-ascii?Q?uu5p89AIN8FRJ3lRq9T/4RiWAyp6Atna+ItcQFrg46VJ6mkEW3asAVnBVXQ3?=
- =?us-ascii?Q?QbH/9TjNQvCsBUQkiFflzYHqkZRpaZvpsSR23R3kXVBBh0+6/bB7VQwSELXq?=
- =?us-ascii?Q?EjGn7oSQ5U2AHOAvAiqqdsOppFZVByyZdeNAYI7D0nVTusrCfBA7xbUcblAd?=
- =?us-ascii?Q?H8kFt9mexu4r/EmeUrKsoLwne7iS73Rcy+6maNEJXKP9PGyIPQNlR/RKMNJT?=
- =?us-ascii?Q?28h7X+RJ5yqBglzmmVQs6PqSDndrW51P16GYq08FYgsnCn+gR2aN3zWtyugu?=
- =?us-ascii?Q?Ekyaz6zEbPwGqVGLjRijBs3LxTbeUlYLd2SPP/hd3KNrf7uJUAEk5oQFyQDw?=
- =?us-ascii?Q?8b1FnA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bcdfb47-c37d-41f9-526d-08d9f410b3cd
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2022 01:31:22.4585
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SXbYlqLGVfQgbh5z6Pd6BvFR+WnDtVnZaEQAid8Tcf+j5iomIa50XUFzqVVVPbIg16UjD9xCpwtATFaZpJuC7YienyswbkV3phcRFV/WE18=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2965
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10263 signatures=677614
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 phishscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202200007
-X-Proofpoint-ORIG-GUID: K9UynKx64K3V7LWjrMjbthnRKO_0jQ2r
-X-Proofpoint-GUID: K9UynKx64K3V7LWjrMjbthnRKO_0jQ2r
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> So there is no much difference between vanilla and patched kernel.
 
-Damien,
+Sorry, let me correct it.
 
->> Applied to 5.18/scsi-staging, thanks!
->
-> Did you push this ? I do not see John series in the branch...
+I realize I should write some data before sending IPI. So I have changed the module
+to be as below:
 
-It's there now.
+#include <linux/module.h>
+#include <linux/timekeeping.h>
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+volatile int data0 ____cacheline_aligned;
+volatile int data1 ____cacheline_aligned;
+volatile int data2 ____cacheline_aligned;
+volatile int data3 ____cacheline_aligned;
+volatile int data4 ____cacheline_aligned;
+volatile int data5 ____cacheline_aligned;
+volatile int data6 ____cacheline_aligned;
+
+static void ipi_latency_func(void *val)
+{
+}
+
+static int __init ipi_latency_init(void)
+{
+
+        ktime_t stime, etime, delta;
+        int cpu, i;
+        int start = smp_processor_id();
+
+        stime = ktime_get();
+        for ( i = 0; i < 1000; i++)
+                for (cpu = 0; cpu < 96; cpu++) {
+                        data0 = data1 = data2 = data3 = data4 = data5 = data6 = cpu;
+                        smp_call_function_single(cpu, ipi_latency_func, NULL, 1); 
+                }   
+        etime = ktime_get();
+
+        delta = ktime_sub(etime, stime);
+
+        printk("%s ipi from cpu%d to cpu0-95 delta of 1000times:%lld\n",
+                        __func__, start, delta);
+
+        return 0;
+}
+module_init(ipi_latency_init);
+
+static void ipi_latency_exit(void)
+{
+}
+module_exit(ipi_latency_exit);
+
+MODULE_DESCRIPTION("IPI benchmark");
+MODULE_LICENSE("GPL");
+
+after that, I can see ~1% difference between patched kernel and vanilla:
+
+vanilla:
+[  375.220131] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:126757449
+[  375.382596] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:126784249
+[  375.537975] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:126177703
+[  375.686823] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:127022281
+[  375.849967] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:126184883
+[  375.999173] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:127374585
+[  376.149565] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:125778089
+[  376.298743] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:126974441
+[  376.451125] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:127357625
+[  376.606006] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:126228184
+
+[  371.405378] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:151851181
+[  371.591642] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:151568608
+[  371.767906] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:151853441
+[  371.944031] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:152065453
+[  372.114085] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:146122093
+[  372.291345] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:151379636
+[  372.459812] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:151854411
+[  372.629708] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:145750720
+[  372.807574] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:151629448
+[  372.994979] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:151050253
+
+patched kernel:
+[  105.598815] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:124467401
+[  105.748368] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:123474209
+[  105.900400] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:123558497
+[  106.043890] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:122993951
+[  106.191845] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:122984223
+[  106.348215] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:123323609
+[  106.501448] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:124507583
+[  106.656358] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:123386963
+[  106.804367] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:123340664
+[  106.956331] ipi_latency_init ipi from cpu0 to cpu0-95 delta of 1000times:123285324
+
+[  108.930802] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:143616067
+[  109.094750] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:148969821
+[  109.267428] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:149648418
+[  109.443274] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:149448903
+[  109.621760] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:147882917
+[  109.794611] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:148700282
+[  109.975197] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:149050595
+[  110.141543] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:143566604
+[  110.315213] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:149202898
+[  110.491008] ipi_latency_init ipi from cpu48 to cpu0-95 delta of 1000times:148958261
+
+as you can see, while cpu0 is the source, vanilla takes 125xxxxxx-127xxxxxx ns, patched
+kernel takes 122xxxxxx-124xxxxxx ns.
+
+Thanks
+Barry

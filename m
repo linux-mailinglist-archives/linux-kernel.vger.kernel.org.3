@@ -2,147 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AD54BCF35
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4794BCF26
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 15:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244023AbiBTO4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 09:56:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40734 "EHLO
+        id S244040AbiBTO42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 09:56:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243938AbiBTO4L (ORCPT
+        with ESMTP id S239021AbiBTO40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 09:56:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC4745AD8;
-        Sun, 20 Feb 2022 06:55:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC1DF6117F;
-        Sun, 20 Feb 2022 14:55:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CD83C340F0;
-        Sun, 20 Feb 2022 14:55:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645368949;
-        bh=PlKZZcyXW93zu8PpshDlXr62B25AQPU+/7tw4jS8Zt4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QLsRPyAHbo4YrWfSOtGW4HWu2oJWTyFFmNzzs7sB4HT7a0bjWRsTUIMQS6TIhHENW
-         i1aW4GzMAujVD/t3w5lSCJ1JEILcnxHdvYm24nJ1x5/VRrdtxq6OjnIzbAF6HR4a2+
-         qBFwNj1KdJAp+5jkzZxbhtaObdDT5grGwLCKg4TMlzXjYGBlaoutV+dtDjkOpqXDbf
-         ZD3O0PEkO67ZZfmJ1u13JfctPFr3TcCw5NkICtUPbfn46nvmOABFAjxGTmdc4FotQ3
-         b4HRbn66DVHjuJSYUVg+xfO1EV4ybqXuijOpdGyKAGZgMTwfIt2XsiZNMgN5sMws0k
-         wQBUi/fLQGdvA==
-Date:   Sun, 20 Feb 2022 15:53:31 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c for v5.17
-Message-ID: <YhJV69ApxgrGGBP6@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        Sun, 20 Feb 2022 09:56:26 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 468CF45AD8;
+        Sun, 20 Feb 2022 06:56:01 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.41:45934.2136022094
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id EB34A100294;
+        Sun, 20 Feb 2022 22:55:55 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id a74a3e6ba36d472c8c6f76fc73a8ac17 for mripard@kernel.org;
+        Sun, 20 Feb 2022 22:55:59 CST
+X-Transaction-ID: a74a3e6ba36d472c8c6f76fc73a8ac17
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v10 0/4] drm/lsdc: add drm driver for loongson display controller
+Date:   Sun, 20 Feb 2022 22:55:50 +0800
+Message-Id: <20220220145554.117854-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+xb9S8kNlQ3lH1JX"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+bridge chip, the display controller is a PCI device in those chips. It
+has two display pipes but with only one hardware cursor. Each way has
+a DVO interface which provide RGB888 signals, vertical & horizontal
+synchronisations, data enable and the pixel clock. Each CRTC is able to
+scanout from 1920x1080 resolution at 60Hz, the maxmium resolution is
+2048x2048 according to the hardware spec. Loongson display controllers
+are simple which require scanout buffers to be physically contiguous.
 
---+xb9S8kNlQ3lH1JX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For LS7A1000 bridge chip, the DC is equipped with a dedicated video RAM
+which is typically 64MB or more. In this case, VRAM helper based driver
+is intend to be used. While LS2K1000 is a SoC, only system memory is
+available. Therefore CMA helper based driver is intend to be used. It is
+possible to use VRAM helper based solution by carving out part of system
+memory as VRAM though.
 
-Linus,
+For LS7A1000, there are 4 dedicated GPIOs whose control register is
+located at the DC register space, They are used to emulate two way i2c.
+One for DVO0, another for DVO1. LS2K1000 and LS2K0500 SoC don't have such
+GPIO hardwared, they grab i2c adapter from other module, either general
+purpose GPIO emulated i2c or hardware i2c adapter.
 
-I2C has some driver updates, a MAINTAINERS fix, and additions to
-COMPILE_TEST for you (so we won't miss build problems again).
+    +------+            +-----------------------------------+
+    | DDR4 |            |  +-------------------+            |
+    +------+            |  | PCIe Root complex |   LS7A1000 |
+       || MC0           |  +--++---------++----+            |
+  +----------+  HT 3.0  |     ||         ||                 |
+  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+       || MC1           +---------------|--|----------------+
+    +------+                            |  |
+    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+                      +-------+                      +------+
 
-Thanks,
+The above picture give a simple usage of LS7A1000, note that the encoder
+is not necessary adv7125 or tfp410, other candicates can be ch7034b,
+sil9022 ite66121 and lt8618 etc.
 
-   Wolfram
+v2: Fixup warnings reported by kernel test robot
 
+v3: Fix more grammar mistakes in Kconfig reported by Randy Dunlap and give
+    more details about lsdc.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+v4:
+   1) Add dts required and explain why device tree is required.
+   2) Give more description about lsdc and VRAM helper based driver.
+   3) Fix warnings reported by kernel test robot.
+   4) Introduce stride_alignment member into struct lsdc_chip_desc, the
+      stride alignment is 256 bytes for ls7a1000, ls2k1000 and ls2k0500.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+v5:
+   1) Using writel and readl replace writeq and readq, to fix kernel test
+      robot report build error on other archtecture.
+   2) Set default fb format to XRGB8888 at crtc reset time.
+   3) Fix typos.
 
-are available in the Git repository at:
+v6:
+   1) Explain why we are not switch to drm dridge subsystem on ls2k1000.
+   2) Explain why tiny drm driver is not suitable for us.
+   3) Give a short description of the trival dirty uppdate implement based
+      on CMA helper.
+   4) Code clean up
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-curre=
-nt
+v7:
+   1) Remove select I2C_GPIO and I2C_LS2X in Kconfig, it is not ready now
+   2) Licensing issues are fixed suggested by Krzysztof Kozlowski.
+   3) Remove lsdc_pixpll_print(), part of it move to debugfs.
+   4) Set prefer_shadow to true if vram based driver is in using.
+   5) Replace double blank lines with single line in all files.
+   6) Verbose cmd line parameter is replaced with drm_dbg()
+   7) All warnnings reported by ./scripts/checkpatch.pl --strict are fixed
+   8) Get edid from dtb support is removed as suggested by Maxime Ripard
+   9) Fix typos and various improvement
 
-for you to fetch changes up to 2428766e201565a5fa964d7461d9f6608eb04d7d:
+v8:
+   1) Drop damage update implement and its command line.
+   2) Drop DRM_LSDC_VRAM_DRIVER config option as suggested by Maxime.
+   3) Deduce DC's identification from its compatible property.
+   4) Drop the board specific dts patch.
+   5) Add documention about the display controller device node.
 
-  MAINTAINERS: remove duplicate entry for i2c-qcom-geni (2022-02-19 12:45:4=
-1 +0100)
+v9:
+   1) Fix the warnings reported by checkpatch script and fix typos
 
-----------------------------------------------------------------
-Eric Anholt (1):
-      i2c: bcm2835: Avoid clock stretching timeouts
+v10:
+   1) Pass `make dt_binding_check` validation
+   2) Fix typos
+   3) Fix warnings reported by kernel test robot
 
-Rafa=C5=82 Mi=C5=82ecki (1):
-      i2c: brcmstb: fix support for DSL and CM variants
+suijingfeng (4):
+  MIPS: Loongson64: dts: update the display controller device node
+  Documentation/dt: Add descriptions for loongson display controller
+  drm/lsdc: add drm driver for loongson display controller
+  MAINTAINERS: add maintainers for DRM LSDC driver
 
-Vladimir Zapolskiy (2):
-      i2c: qcom-cci: don't delete an unregistered adapter
-      i2c: qcom-cci: don't put a device tree node before i2c_add_adapter()
+ .../loongson/loongson,display-controller.yaml | 122 ++++
+ MAINTAINERS                                   |   9 +
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +-
+ drivers/gpu/drm/Kconfig                       |   2 +
+ drivers/gpu/drm/Makefile                      |   1 +
+ drivers/gpu/drm/lsdc/Kconfig                  |  21 +
+ drivers/gpu/drm/lsdc/Makefile                 |  13 +
+ drivers/gpu/drm/lsdc/lsdc_connector.c         | 331 +++++++++
+ drivers/gpu/drm/lsdc/lsdc_connector.h         |  35 +
+ drivers/gpu/drm/lsdc/lsdc_crtc.c              | 338 +++++++++
+ drivers/gpu/drm/lsdc/lsdc_drv.c               | 672 ++++++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_drv.h               | 205 ++++++
+ drivers/gpu/drm/lsdc/lsdc_encoder.c           |  51 ++
+ drivers/gpu/drm/lsdc/lsdc_i2c.c               | 195 +++++
+ drivers/gpu/drm/lsdc/lsdc_i2c.h               |  37 +
+ drivers/gpu/drm/lsdc/lsdc_irq.c               |  57 ++
+ drivers/gpu/drm/lsdc/lsdc_irq.h               |  17 +
+ drivers/gpu/drm/lsdc/lsdc_plane.c             | 517 ++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_pll.c               | 573 +++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_pll.h               |  87 +++
+ drivers/gpu/drm/lsdc/lsdc_regs.h              | 199 ++++++
+ 22 files changed, 3492 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+ create mode 100644 drivers/gpu/drm/lsdc/Kconfig
+ create mode 100644 drivers/gpu/drm/lsdc/Makefile
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_encoder.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_regs.h
 
-Wolfram Sang (4):
-      i2c: cadence: allow COMPILE_TEST
-      i2c: imx: allow COMPILE_TEST
-      i2c: qup: allow COMPILE_TEST
-      MAINTAINERS: remove duplicate entry for i2c-qcom-geni
+-- 
+2.25.1
 
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Bjorn Andersson (2):
-      (Rev.) i2c: qcom-cci: don't put a device tree node before i2c_add_ada=
-pter()
-      (Rev.) i2c: qcom-cci: don't delete an unregistered adapter
-
-Robert Foss (2):
-      (Rev.) i2c: qcom-cci: don't put a device tree node before i2c_add_ada=
-pter()
-      (Rev.) i2c: qcom-cci: don't delete an unregistered adapter
-
- MAINTAINERS                       |  8 --------
- drivers/i2c/busses/Kconfig        |  6 +++---
- drivers/i2c/busses/i2c-bcm2835.c  | 11 +++++++++++
- drivers/i2c/busses/i2c-brcmstb.c  |  2 +-
- drivers/i2c/busses/i2c-qcom-cci.c | 16 +++++++++++-----
- 5 files changed, 26 insertions(+), 17 deletions(-)
-
---+xb9S8kNlQ3lH1JX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmISVecACgkQFA3kzBSg
-Kba6CA//RQB8XLEIAA8RagZyPHBxz8tg7mqu4d7sD0NpHtOl6JfxsK/IYv7agqWv
-5yaAlEnKK52OUJ5d7QEogNT4MDGinTbp22TQVsE4Ax/Z8uNh7kjswhKS1h1va3Z4
-xRioITNAq1LmkntxsqTFDqP5+TLzq5thifgd5GoviklRaep6yXgg8FadiqSG5Ujv
-Ae86DGpYBy+owpFrTQw4Nx73NsOCbNaaeVUIIlHX64EM17QjcUttAZCvhaymZHVw
-m6v5zIIQUMt2df/Bnx/RPM+vV1ukyOSv6RJy5catcdrEJr+/1v/Ee4TIAJ1g0Onv
-/YLmOYaKWVgIQv6l7tc+WqQ7n3OvJt/SPOrn920hVWbXRmImq0wZV45CQdlSiE0B
-kDG8ll2Un5pX4ySQb/MmaXd8hXzZVpCRN44wUFVfcj1XXTuLtoZDYGqR08DdE+f5
-v89MpxLzYZEvB/ts3PnTz+8M/5JYagCUzxD99kWex0xuebqVp6EvKRP6QpHE6J1G
-EnVvIEQx/8YClTWa9Z6R4Ght/r+NfI31qtIKWp7gYp33M0CByKaysneQapVyy9vv
-A87cMiMJo+Gb6sjTEhxnQyHEGl0E1/p2OhsQnOzOuoeUpiA4eLQ1WsHs+DpGPj3r
-u/Ra5t6BPnGCf5Rvduj+O53kzdrI5UX3QwlY7IIRpT7s7D/O6jc=
-=kd4U
------END PGP SIGNATURE-----
-
---+xb9S8kNlQ3lH1JX--

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3324BCF4F
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941884BCF5E
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244136AbiBTPQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 10:16:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50570 "EHLO
+        id S244148AbiBTPQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 10:16:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244057AbiBTPQM (ORCPT
+        with ESMTP id S244119AbiBTPQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 10:16:12 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5382434BA8
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:51 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id n8so8119623wms.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:51 -0800 (PST)
+        Sun, 20 Feb 2022 10:16:13 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2957034BAA
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:52 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id f3so22705519wrh.7
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:15:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PTxil4tJAf7UWV/C+fdAyAmzi/s2rC1+JHkkEn5O+kc=;
-        b=W6jE4/hlEtzS/97aFCDxz1egBSagCoiMlFBkAw2mMapYpV/64jueKf+g2IXT0dq0oU
-         o+seqx2E98v25O3UpymfVb0sAgYFKD1QOcVW5fc6qRbIYDaN4W5y2u6bHr61bcBjF8Ow
-         DyUvoFSnah5ig8CNQEkccmSA7p9e7Ks566Gv/+aeepskukN+FepVgVZwyOxnjvhftW46
-         TfjSFqND32K6J8e/+emj4jqct/ZPJcDayv1zTyhC5Ay6V9HBphWnE6SNKHgGR2UHcBlU
-         KUeTQp5VfD3H/Q+e+A+Bit+PvOJigv9+HeFz5/ZUpobFeq7fypqL9uhQlgQ9n77DqvyS
-         UoLQ==
+        bh=mKYmgngOL/OskIpQJEL8+lpXd5cce8putN6D5KkxR1I=;
+        b=XmEOTetEPq+ebguMkv5DCUekep7Ry8fBV+KVFTEx0YqVaaE09HLIEkimDlqeRwcQ3K
+         xIyt9M6DOVhFR4sb3XWJWvzkm75+w82tfavjCjbAFHW1kLBN7/Idy1YnacNC/jsZds1G
+         5x2r5KF5ECu4cAOTyDtKLm9fstLjtEc4gUD2Yx1mcJhztjq1qmxz5WZK0X8o57cf0+Jd
+         AaLsHn/FatiTnsETIArlKDc6e0i+zDsjZQBJ6GBVo4IUi33Dy24KfdIC6GPLN1IzBW9p
+         qzDG0BUqv6xRzhm6rRUFr3/DvqFFc0ehjxlttw8eB6KoAYiniGGlw9JePLU/9eXGxegl
+         5mZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PTxil4tJAf7UWV/C+fdAyAmzi/s2rC1+JHkkEn5O+kc=;
-        b=5VXuEuz5vJioMkhVPUBX6fLu/4O6MNNnmRDfh7AZai2GSh1Y5q4Xk50/nJb3N/FSb4
-         llA+Ikyk5BqHA3qKo4DNSeiqNGILKVHmyzCkwjBmk5qeFFZhyhb//Bxvsmo5+52CAUet
-         ar4y9k/WUAZrZ37wulCrdkqFN2+WUj2uANQbgHXCj52eWd4LMJP4i36xtv20KY386Uqo
-         e+atKp4Mbgzuq2k4B/OClRhMiCuWcOhrTi9FcdvJTgE/felofs4ILskoFE3c3MQV1SdW
-         EYAXaIn/TRykVPlZbWr6h1iiMptd3Pu+ElbK4VxhfHJItNtekeFlopCxOIy7asyA+QCz
-         tXGA==
-X-Gm-Message-State: AOAM533A9QMpG27efFMSnYehQQI1xgjOta6O6YYZj7kF5FfJbpWglD/q
-        MHLVVfuMZwXm0m/Tu6T921K0lA==
-X-Google-Smtp-Source: ABdhPJxodz3Wa8AyRRUgIvZmgYEH8Ien0j7scKm5f9ldW92NAk//RZkYT9xo6oUiayXz8T6X7H/OjQ==
-X-Received: by 2002:a05:600c:2f01:b0:37b:aa49:3864 with SMTP id r1-20020a05600c2f0100b0037baa493864mr14495015wmn.74.1645370149750;
-        Sun, 20 Feb 2022 07:15:49 -0800 (PST)
+        bh=mKYmgngOL/OskIpQJEL8+lpXd5cce8putN6D5KkxR1I=;
+        b=2GEh2rCpBcN+XaKsGJtdvO6LzJYe4abysRlko8582m7RbVFuomG4fSp1IPoGvyWGmu
+         Jy+raz362GV0OiI9wffdjiB3Zf6s3Hmm0QhH5LQvMs5sRLS4fr85CacRi0AZ1Lt/0gr+
+         GriuqCguVXUgprbx3YRJvs6ANPfJmqkq9NGbccZ5dYlczWHKH519MsS2N9JhLpZkFmTV
+         VuWKblX0HLUX/DRJPOZf57leUrz9AFrPf+uIfXwloJXkljZuGfL8f79Y3hEBXNRKw/Y9
+         3RbJhrc6wbdtj5ljxwrTUqpFiVBv3CGZTxpZnsBCWfkBA/yyFfStLIDPODCQQunrwxwC
+         kJnA==
+X-Gm-Message-State: AOAM530CXEHZOBgAFdEDqVV10eLgwUZ3JwvVUUxEkpiTODPNKui8MVMY
+        I+Q3ug5x0xU7b8n3p049m3SKlW8ozCPz2A==
+X-Google-Smtp-Source: ABdhPJyApZq+MHcbJ0UlvMxzfuc+zyXoO8IQ2MemQaQYnY2bbCTg1zOX7dGEckQgfYvtdYf0hG/Dlw==
+X-Received: by 2002:adf:e98d:0:b0:1e7:5ea6:7222 with SMTP id h13-20020adfe98d000000b001e75ea67222mr12537933wrm.579.1645370150766;
+        Sun, 20 Feb 2022 07:15:50 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.48
+        by smtp.gmail.com with ESMTPSA id h7sm28687749wru.41.2022.02.20.07.15.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 07:15:49 -0800 (PST)
+        Sun, 20 Feb 2022 07:15:50 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 01/13] nvmem: core: Remove unused devm_nvmem_unregister()
-Date:   Sun, 20 Feb 2022 15:15:15 +0000
-Message-Id: <20220220151527.17216-2-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 02/13] nvmem: core: Use devm_add_action_or_reset()
+Date:   Sun, 20 Feb 2022 15:15:16 +0000
+Message-Id: <20220220151527.17216-3-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
 References: <20220220151527.17216-1-srinivas.kandagatla@linaro.org>
@@ -73,75 +73,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-There are no users and seems no will come of the devm_nvmem_unregister().
-Remove the function and remove the unused devm_nvmem_match() along with it.
+Slightly simplify the devm_nvmem_register() by using the
+devm_add_action_or_reset().
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/core.c           | 22 ----------------------
- include/linux/nvmem-provider.h |  8 --------
- 2 files changed, 30 deletions(-)
+ drivers/nvmem/core.c | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 9fd1602b539d..39cb659ea580 100644
+index 39cb659ea580..327c88c432f0 100644
 --- a/drivers/nvmem/core.c
 +++ b/drivers/nvmem/core.c
-@@ -945,28 +945,6 @@ struct nvmem_device *devm_nvmem_register(struct device *dev,
+@@ -907,9 +907,9 @@ void nvmem_unregister(struct nvmem_device *nvmem)
  }
- EXPORT_SYMBOL_GPL(devm_nvmem_register);
+ EXPORT_SYMBOL_GPL(nvmem_unregister);
  
--static int devm_nvmem_match(struct device *dev, void *res, void *data)
--{
--	struct nvmem_device **r = res;
--
--	return *r == data;
--}
--
--/**
-- * devm_nvmem_unregister() - Unregister previously registered managed nvmem
-- * device.
-- *
-- * @dev: Device that uses the nvmem device.
-- * @nvmem: Pointer to previously registered nvmem device.
-- *
-- * Return: Will be negative on error or zero on success.
-- */
--int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
--{
--	return devres_release(dev, devm_nvmem_release, devm_nvmem_match, nvmem);
--}
--EXPORT_SYMBOL(devm_nvmem_unregister);
--
- static struct nvmem_device *__nvmem_device_get(void *data,
- 			int (*match)(struct device *dev, const void *data))
+-static void devm_nvmem_release(struct device *dev, void *res)
++static void devm_nvmem_unregister(void *nvmem)
  {
-diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-index c9a3ac9efeaa..50caa117cb62 100644
---- a/include/linux/nvmem-provider.h
-+++ b/include/linux/nvmem-provider.h
-@@ -135,8 +135,6 @@ void nvmem_unregister(struct nvmem_device *nvmem);
- struct nvmem_device *devm_nvmem_register(struct device *dev,
- 					 const struct nvmem_config *cfg);
- 
--int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem);
--
- void nvmem_add_cell_table(struct nvmem_cell_table *table);
- void nvmem_del_cell_table(struct nvmem_cell_table *table);
- 
-@@ -155,12 +153,6 @@ devm_nvmem_register(struct device *dev, const struct nvmem_config *c)
- 	return nvmem_register(c);
+-	nvmem_unregister(*(struct nvmem_device **)res);
++	nvmem_unregister(nvmem);
  }
  
--static inline int
--devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
--{
--	return -EOPNOTSUPP;
--}
+ /**
+@@ -926,20 +926,16 @@ static void devm_nvmem_release(struct device *dev, void *res)
+ struct nvmem_device *devm_nvmem_register(struct device *dev,
+ 					 const struct nvmem_config *config)
+ {
+-	struct nvmem_device **ptr, *nvmem;
 -
- static inline void nvmem_add_cell_table(struct nvmem_cell_table *table) {}
- static inline void nvmem_del_cell_table(struct nvmem_cell_table *table) {}
+-	ptr = devres_alloc(devm_nvmem_release, sizeof(*ptr), GFP_KERNEL);
+-	if (!ptr)
+-		return ERR_PTR(-ENOMEM);
++	struct nvmem_device *nvmem;
++	int ret;
  
+ 	nvmem = nvmem_register(config);
++	if (IS_ERR(nvmem))
++		return nvmem;
+ 
+-	if (!IS_ERR(nvmem)) {
+-		*ptr = nvmem;
+-		devres_add(dev, ptr);
+-	} else {
+-		devres_free(ptr);
+-	}
++	ret = devm_add_action_or_reset(dev, devm_nvmem_unregister, nvmem);
++	if (ret)
++		return ERR_PTR(ret);
+ 
+ 	return nvmem;
+ }
 -- 
 2.21.0
 

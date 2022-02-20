@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552104BCCEF
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 08:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B764BCCF4
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 08:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243503AbiBTHJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 02:09:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44034 "EHLO
+        id S235425AbiBTHR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 02:17:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243443AbiBTHJH (ORCPT
+        with ESMTP id S229705AbiBTHR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 02:09:07 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B843A4D9EB;
-        Sat, 19 Feb 2022 23:08:46 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id 12so7978775pgd.0;
-        Sat, 19 Feb 2022 23:08:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XJ39oTdHw30Rs1eV+6bRzBftzJyi2esQlImZGRiJ6OY=;
-        b=ger11xmyvB1IycXNx0x2jaxHbAZdUN5ZIuftitPOlIt/gNqHcMCh3/8477+tRltGMy
-         Njr+CyRG6cAMiCydj26116yp0/l56bkrujMGlqz+egRxjJv033T5Jek8GKGiKZdrip+B
-         pPJf0xrxL4zFpo1GVTFYzq9aHOe6ghE/T4zcdXXW40hzD0jaCD2azw7W45Ibb9+WuAAX
-         39fBHAyKbp+mUhOCRCSyA5uWvwT14dgau1fE8Ng8ouAaK9jd2p9ffDlkyuaOM4y4f3P9
-         p74+ftajA5pRYNdN00DZdUew7CwtJsCOCckiKxWj9jyHIKt4ECn2etnuq/dQEAUimBJl
-         pjtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XJ39oTdHw30Rs1eV+6bRzBftzJyi2esQlImZGRiJ6OY=;
-        b=SMvilKhV6wpYKbgrz44rx01ms/xpDYqLrl7OqvoOdSoi0i2hnumwFCViXGeuRnkxMD
-         Zcg27u+oYuHM9g3dO1j+TBnbJMWHedY6IeMex6NfKM/0ZpKn9DEtIMHhcqPfOegyj1bp
-         liCbCcDTa4EphR76dlI0wpuHUrpewWmYOqR0WXCAMUBQs4/HUjFw2CjAoTM/PHlpqwJJ
-         ZfWEwL8Y1XlfJNAyC7aDg5u5edN+0p9xJvT0Z+Ib1Jq19oEx27E3H6hCi2l1E2obsMNv
-         wucS/jWIdSfe+Bzhc+2tojBLqjBJzC1XjH5X2eGcBDVAsvWITTVDNvlZu1fMYxYiksxE
-         2ZBQ==
-X-Gm-Message-State: AOAM533RNQaz17CbaE3JYWnK91vsRNXcsOtC8pC8rReVb1qOXB79Qnnk
-        4KgWF7RSFjWI/HrIk0+TCmc=
-X-Google-Smtp-Source: ABdhPJyPSa2up5yX8s7plzb+RE2ck9N9uBEzzJ53XXLH1HkzixnoSE1/4CpZiBlNEThszSJOC7bO8A==
-X-Received: by 2002:a65:52cc:0:b0:374:3ee6:c632 with SMTP id z12-20020a6552cc000000b003743ee6c632mr373131pgp.91.1645340926221;
-        Sat, 19 Feb 2022 23:08:46 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.114])
-        by smtp.gmail.com with ESMTPSA id p1sm8351326pfo.212.2022.02.19.23.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 23:08:45 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     dsahern@kernel.org, kuba@kernel.org
-Cc:     edumazet@google.com, davem@davemloft.net, rostedt@goodmis.org,
-        mingo@redhat.com, yoshfuji@linux-ipv6.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        imagedong@tencent.com, talalahmad@google.com,
-        keescook@chromium.org, ilias.apalodimas@linaro.org, alobakin@pm.me,
-        memxor@gmail.com, atenart@kernel.org, bigeasy@linutronix.de,
-        pabeni@redhat.com, linyunsheng@huawei.com, arnd@arndb.de,
-        yajun.deng@linux.dev, roopa@nvidia.com, willemb@google.com,
-        vvs@virtuozzo.com, cong.wang@bytedance.com,
-        luiz.von.dentz@intel.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        flyingpeng@tencent.com, mengensun@tencent.com
-Subject: [PATCH net-next v3 9/9] net: tcp: use tcp_drop_reason() for tcp_data_queue_ofo()
-Date:   Sun, 20 Feb 2022 15:06:37 +0800
-Message-Id: <20220220070637.162720-10-imagedong@tencent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220220070637.162720-1-imagedong@tencent.com>
-References: <20220220070637.162720-1-imagedong@tencent.com>
+        Sun, 20 Feb 2022 02:17:56 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F39112A
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 23:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645341456; x=1676877456;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=T12FtAVmruRZaWPKWh0V6W8D3yBBDwGkjS2Sf6u43EU=;
+  b=Q/cub1uMwL8G5vdnNLdF9XcstSpZwX6DrKCtwmx7goB8nRubPcDevKig
+   9+tE5w5yYf0t1KUabwaRE/jWeEX5hSrq6VZcXVzAgknvCvrqWRSS8sMTo
+   g44JrKogcnrxtBmMnxrvfsZELbgq/Y2cah69scDPR0HrfQ9Oj4dTW1s7M
+   BrMtbPJN0lfSr6urbvFeB+5/tCMaXHrCsqShM9m9m8d08dd+rXmkxuDvg
+   AhDXJ9LiwbVVA7AR2MZ4OI+o6AHfOiloR+oBN0zDhoDwC09nqhkY5rS/B
+   Fpn5ZJkjtEgukwA4zfbTJezg9sXEuHS6QHMZBlVyCJx6cblK3W9PIr/AT
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="337782338"
+X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
+   d="scan'208";a="337782338"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 23:17:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
+   d="scan'208";a="627042879"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Feb 2022 23:17:34 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLgTO-00004x-3o; Sun, 20 Feb 2022 07:17:34 +0000
+Date:   Sun, 20 Feb 2022 15:16:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/sgx] BUILD SUCCESS
+ 6170abb21e2380477080b25145da9747ad467d3d
+Message-ID: <6211eae9.WhxZaGeHnQjxHtBz%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,93 +62,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sgx
+branch HEAD: 6170abb21e2380477080b25145da9747ad467d3d  selftests/sgx: Treat CC as one argument
 
-Replace tcp_drop() used in tcp_data_queue_ofo with tcp_drop_reason().
-Following drop reasons are introduced:
+elapsed time: 3507m
 
-SKB_DROP_REASON_TCP_OFOMERGE
+configs tested: 135
+configs skipped: 3
 
-Reviewed-by: Mengen Sun <mengensun@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+arm                       omap2plus_defconfig
+nios2                         3c120_defconfig
+arm                            xcep_defconfig
+mips                         mpc30x_defconfig
+powerpc                       maple_defconfig
+arc                                 defconfig
+sh                         microdev_defconfig
+mips                  decstation_64_defconfig
+parisc                generic-32bit_defconfig
+m68k                            mac_defconfig
+ia64                         bigsur_defconfig
+powerpc                        cell_defconfig
+arc                          axs101_defconfig
+arc                        vdk_hs38_defconfig
+arc                    vdk_hs38_smp_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                       eiger_defconfig
+h8300                               defconfig
+microblaze                      mmu_defconfig
+m68k                       m5475evb_defconfig
+arm                        spear6xx_defconfig
+arm                            lart_defconfig
+sh                            titan_defconfig
+h8300                            alldefconfig
+powerpc                      pasemi_defconfig
+x86_64                           alldefconfig
+alpha                               defconfig
+arc                         haps_hs_defconfig
+xtensa                           alldefconfig
+powerpc                 mpc8540_ads_defconfig
+sh                     sh7710voipgw_defconfig
+arm                           corgi_defconfig
+sh                          sdk7780_defconfig
+m68k                        m5272c3_defconfig
+arm                           h5000_defconfig
+m68k                       m5208evb_defconfig
+arm                             ezx_defconfig
+sparc                       sparc32_defconfig
+parisc64                            defconfig
+microblaze                          defconfig
+arm                  randconfig-c002-20220217
+arm                  randconfig-c002-20220218
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220218
+arc                  randconfig-r043-20220217
+s390                 randconfig-r044-20220218
+arc                  randconfig-r043-20220218
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+riscv                randconfig-c006-20220217
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220217
+arm                  randconfig-c002-20220217
+i386                          randconfig-c001
+mips                 randconfig-c004-20220217
+mips                          ath79_defconfig
+mips                           ip22_defconfig
+arm                     davinci_all_defconfig
+arm                      tct_hammer_defconfig
+riscv                            alldefconfig
+mips                         tb0287_defconfig
+arm                        spear3xx_defconfig
+arm                     am200epdkit_defconfig
+powerpc                     tqm5200_defconfig
+arm                        magician_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220217
+hexagon              randconfig-r041-20220217
+riscv                randconfig-r042-20220217
+
 ---
- include/linux/skbuff.h     |  4 ++++
- include/trace/events/skb.h |  1 +
- net/ipv4/tcp_input.c       | 10 ++++++----
- 3 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 554ef2c848ee..a3e90efe6586 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -376,6 +376,10 @@ enum skb_drop_reason {
- 					 * the right edges of receive
- 					 * window
- 					 */
-+	SKB_DROP_REASON_TCP_OFOMERGE,	/* the data of skb is already in
-+					 * the ofo queue, corresponding to
-+					 * LINUX_MIB_TCPOFOMERGE
-+					 */
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index cc1c8f7eaf72..2ab7193313aa 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -36,6 +36,7 @@
- 	EM(SKB_DROP_REASON_TCP_ZEROWINDOW, TCP_ZEROWINDOW)	\
- 	EM(SKB_DROP_REASON_TCP_OLD_DATA, TCP_OLD_DATA)		\
- 	EM(SKB_DROP_REASON_TCP_OVERWINDOW, TCP_OVERWINDOW)	\
-+	EM(SKB_DROP_REASON_TCP_OFOMERGE, TCP_OFOMERGE)		\
- 	EMe(SKB_DROP_REASON_MAX, MAX)
- 
- #undef EM
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 4da636aa9282..d3d7a7bef463 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -4779,7 +4779,7 @@ static void tcp_data_queue_ofo(struct sock *sk, struct sk_buff *skb)
- 	if (unlikely(tcp_try_rmem_schedule(sk, skb, skb->truesize))) {
- 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPOFODROP);
- 		sk->sk_data_ready(sk);
--		tcp_drop(sk, skb);
-+		tcp_drop_reason(sk, skb, SKB_DROP_REASON_PROTO_MEM);
- 		return;
- 	}
- 
-@@ -4842,7 +4842,8 @@ static void tcp_data_queue_ofo(struct sock *sk, struct sk_buff *skb)
- 				/* All the bits are present. Drop. */
- 				NET_INC_STATS(sock_net(sk),
- 					      LINUX_MIB_TCPOFOMERGE);
--				tcp_drop(sk, skb);
-+				tcp_drop_reason(sk, skb,
-+						SKB_DROP_REASON_TCP_OFOMERGE);
- 				skb = NULL;
- 				tcp_dsack_set(sk, seq, end_seq);
- 				goto add_sack;
-@@ -4861,7 +4862,8 @@ static void tcp_data_queue_ofo(struct sock *sk, struct sk_buff *skb)
- 						 TCP_SKB_CB(skb1)->end_seq);
- 				NET_INC_STATS(sock_net(sk),
- 					      LINUX_MIB_TCPOFOMERGE);
--				tcp_drop(sk, skb1);
-+				tcp_drop_reason(sk, skb1,
-+						SKB_DROP_REASON_TCP_OFOMERGE);
- 				goto merge_right;
- 			}
- 		} else if (tcp_ooo_try_coalesce(sk, skb1,
-@@ -4889,7 +4891,7 @@ static void tcp_data_queue_ofo(struct sock *sk, struct sk_buff *skb)
- 		tcp_dsack_extend(sk, TCP_SKB_CB(skb1)->seq,
- 				 TCP_SKB_CB(skb1)->end_seq);
- 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPOFOMERGE);
--		tcp_drop(sk, skb1);
-+		tcp_drop_reason(sk, skb1, SKB_DROP_REASON_TCP_OFOMERGE);
- 	}
- 	/* If there is no skb after us, we are the last_skb ! */
- 	if (!skb1)
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

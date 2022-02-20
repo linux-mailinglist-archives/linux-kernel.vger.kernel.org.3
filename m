@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD464BCF47
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD094BCF48
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238794AbiBTPPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 10:15:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50034 "EHLO
+        id S239438AbiBTPPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 10:15:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiBTPO6 (ORCPT
+        with ESMTP id S233743AbiBTPPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 10:14:58 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2191934B97
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:14:37 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so591591wmp.5
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:14:37 -0800 (PST)
+        Sun, 20 Feb 2022 10:15:00 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5581434B98
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:14:38 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id k3-20020a1ca103000000b0037bdea84f9cso9676932wme.1
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:14:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kEg7796s41BOvVJTI30ouqjHQa66o1APfohzN4o1DME=;
-        b=Z8jB1dmvFHH/f36ZFz17cPTwZJs/tNyCJi7akDgv8kA54oXAqO9mqRnkAiH2lFpvsX
-         bqdE861AD/jnb5V78SvHX3qtNN0RdHy7RpzOS8a47g87nNkaONh/Ykwd6WFOwEfkWRFZ
-         kAFRa9UwetcCMuFPFOVLz7dB42sn/C+8rmCaZkrK8vIny2iHFoEBmY+t9i3FE4f5xT3j
-         HVXboKoOfFt3nMopz0Y5aRd7zAcmRbDCTarMIDWJepOxyWiSkuXfaF9ynaNFS35Yv6Qz
-         wNfSFJg2wVWnFf6SHKPxg2dyAkHGmnxUr+7IoE5LFN3KmcJYFKZhnQKg071ndT7RmWjo
-         REJA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wotUyCfca8/zG519U5/af89Me2Zg5VHivde488B+0/k=;
+        b=kSIafJLo1kafBS98UX2zOOmFNXbp+gOAaMPuWX6B30F/0hHFxHx+b6mirLbuWdyPlH
+         trcwVN8Z3gMmNmVFUzBPKfU5dWuJdZblIph9vV4xJPOoDTE3Y3wKmZGCsOk0wXEFe2P4
+         Ivsu9vqCY1/LvdAjI6vcRirHUMP0PQ01K0tWgyHBb6uGLoXg3FDPuLB39VT5jqgxnJ+r
+         98/iPJq51Ec4kmj3ifyljDIP8HfTjnIxL6sRv8MlHoIrxjC4KY5Z0JekZOMshFWmX+HM
+         DP8iM/kIOakA5k/dor02gPX6VMvJXy9mk2/44Mpo96ctVORDKBZOtfRiV23f3/XXVA+a
+         FqsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kEg7796s41BOvVJTI30ouqjHQa66o1APfohzN4o1DME=;
-        b=0Bv+i/PCil7uWabAzalDe0momvLl1SWfq0Vo6+06y7+pi6JIrjNhTNcTU0ODopP5dK
-         bv066aD/Dl6pr/xeC6OihS/0YIF7GvqVkbhZEQlUij3fO3R5mlDX2qwYYfBexcCXqrQ2
-         baEhLsbKlblFIFmLAyGv1c2y40kXMkGiUn5SFeoEL5aIdKxfQc7JyalY1PMx8obvxfeJ
-         zNue9hDm/nnJ/WW+UWGVShZRzisqwwJGMxC4iFdVfNdbbonrTb25Dp54P2fkqZvxFvmU
-         3ucYpGYFrL/FAWhR9ULWeAfCIBffTYV5fYTVq97YSLKfDPswd4W0ecrQQJzMORnfg7Oy
-         YUZg==
-X-Gm-Message-State: AOAM533ZCI+EbXqx0hEottiD+xS2y+kv66eQoNDwV2OePNn1est8IbEe
-        eFxtMQwvnPzGoClL51B0FfdO0W2y5KRTKQ==
-X-Google-Smtp-Source: ABdhPJwcJU6pC2psWZ0x3ljFbqCdYvJuf2F1Ho4Qja1/3fATEwoJRwQxODu+I5NtMuH9PY+FBmd9Vg==
-X-Received: by 2002:a05:600c:3b06:b0:37c:3ce4:9a31 with SMTP id m6-20020a05600c3b0600b0037c3ce49a31mr14707721wms.192.1645370075635;
-        Sun, 20 Feb 2022 07:14:35 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wotUyCfca8/zG519U5/af89Me2Zg5VHivde488B+0/k=;
+        b=xLWryxPE9BhO6dM0dhYxqrVCs3pCGhMKWPulpKUISKoJkVB1E+E/BJE9igqntJvOX7
+         q4D9jEzu6BZQ1hMETVK0fB0VzEODjXA3QT+EkD6NWazPXiYh39wGpMvS/ljXvpIbu0Ft
+         B+uqfn3F0GsYuY99HPQgmqiqeK0FYJr2osZaY4o0muawAS3hgMM14avdWuTBubY1hpsj
+         LEEneQSbRYQvvjd7RDKx124qd7etlxlBaSLCPVENIvnRGXoS+njfneZEOF6gz6wVR0kX
+         CrFbWynO/nGaTeWyj+nsPCUhEqZVJtF2pp+8IPsNw+LCB2GbE2nrd7mnZimO1erjX63w
+         jMbg==
+X-Gm-Message-State: AOAM533COayQiMZ3Pmj/wIdPLr4VUpd47PIXYqw4isJ6rCwPjb4cq6SU
+        RDoIOhaG6G9LIrbUr1LXjjrvsotC399Yvw==
+X-Google-Smtp-Source: ABdhPJz3XibEQYrsDmXIkvjitdL5RVZsTy7QaoAA+NYJQ1et19WIrkgJjyTtw9bxRpJxOJugiR6DvA==
+X-Received: by 2002:a7b:cb44:0:b0:37c:4e2d:3bb2 with SMTP id v4-20020a7bcb44000000b0037c4e2d3bb2mr17926595wmj.96.1645370076845;
+        Sun, 20 Feb 2022 07:14:36 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id d6sm46703322wrs.85.2022.02.20.07.14.34
+        by smtp.gmail.com with ESMTPSA id d6sm46703322wrs.85.2022.02.20.07.14.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 07:14:34 -0800 (PST)
+        Sun, 20 Feb 2022 07:14:36 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        stable@vger.kernel.org,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 0/2] nvmem: fixes for 5.17
-Date:   Sun, 20 Feb 2022 15:14:30 +0000
-Message-Id: <20220220151432.16605-1-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 1/2] nvmem: core: Fix a conflict between MTD and NVMEM on wp-gpios property
+Date:   Sun, 20 Feb 2022 15:14:31 +0000
+Message-Id: <20220220151432.16605-2-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20220220151432.16605-1-srinivas.kandagatla@linaro.org>
+References: <20220220151432.16605-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,26 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: Christophe Kerello <christophe.kerello@foss.st.com>
 
-Here is a nvmem fix for write-protection gpio handling conflict between nvmem and mtd core.
-This bug went un-noticed when write-protection handling support was added to nvmem core.
+Wp-gpios property can be used on NVMEM nodes and the same property can
+be also used on MTD NAND nodes. In case of the wp-gpios property is
+defined at NAND level node, the GPIO management is done at NAND driver
+level. Write protect is disabled when the driver is probed or resumed
+and is enabled when the driver is released or suspended.
 
-If its not too late, can you take them for 5.17.
+When no partitions are defined in the NAND DT node, then the NAND DT node
+will be passed to NVMEM framework. If wp-gpios property is defined in
+this node, the GPIO resource is taken twice and the NAND controller
+driver fails to probe.
 
-Many thanks,
-Srini
+It would be possible to set config->wp_gpio at MTD level before calling
+nvmem_register function but NVMEM framework will toggle this GPIO on
+each write when this GPIO should only be controlled at NAND level driver
+to ensure that the Write Protect has not been enabled.
 
+A way to fix this conflict is to add a new boolean flag in nvmem_config
+named ignore_wp. In case ignore_wp is set, the GPIO resource will
+be managed by the provider.
 
-Christophe Kerello (2):
-  nvmem: core: Fix a conflict between MTD and NVMEM on wp-gpios property
-  mtd: core: Fix a conflict between MTD and NVMEM on wp-gpios property
-
- drivers/mtd/mtdcore.c          | 2 ++
+Fixes: 2a127da461a9 ("nvmem: add support for the write-protect pin")
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
  drivers/nvmem/core.c           | 2 +-
  include/linux/nvmem-provider.h | 4 +++-
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 23a38dcf0fc4..9fd1602b539d 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -771,7 +771,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 
+ 	if (config->wp_gpio)
+ 		nvmem->wp_gpio = config->wp_gpio;
+-	else
++	else if (!config->ignore_wp)
+ 		nvmem->wp_gpio = gpiod_get_optional(config->dev, "wp",
+ 						    GPIOD_OUT_HIGH);
+ 	if (IS_ERR(nvmem->wp_gpio)) {
+diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+index 98efb7b5660d..c9a3ac9efeaa 100644
+--- a/include/linux/nvmem-provider.h
++++ b/include/linux/nvmem-provider.h
+@@ -70,7 +70,8 @@ struct nvmem_keepout {
+  * @word_size:	Minimum read/write access granularity.
+  * @stride:	Minimum read/write access stride.
+  * @priv:	User context passed to read/write callbacks.
+- * @wp-gpio:   Write protect pin
++ * @wp-gpio:	Write protect pin
++ * @ignore_wp:  Write Protect pin is managed by the provider.
+  *
+  * Note: A default "nvmem<id>" name will be assigned to the device if
+  * no name is specified in its configuration. In such case "<id>" is
+@@ -92,6 +93,7 @@ struct nvmem_config {
+ 	enum nvmem_type		type;
+ 	bool			read_only;
+ 	bool			root_only;
++	bool			ignore_wp;
+ 	struct device_node	*of_node;
+ 	bool			no_of_node;
+ 	nvmem_reg_read_t	reg_read;
 -- 
 2.21.0
 

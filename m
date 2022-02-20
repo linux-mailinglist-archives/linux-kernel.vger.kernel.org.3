@@ -2,149 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00454BCE5A
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 13:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B181F4BCE52
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 12:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbiBTMAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 07:00:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51212 "EHLO
+        id S241207AbiBTL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 06:57:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237539AbiBTMAB (ORCPT
+        with ESMTP id S237539AbiBTL5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 07:00:01 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2514F46E
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 03:59:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645358380; x=1676894380;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=V6t1s+N4Qo02wBaYneDR8yb6gI7yY2iEv7Z2/hqvKfo=;
-  b=cBJlThkY2k/pAnWfMPayMR3svlt8P3lyfWMqnUyIzCBls6pkW0OHdQi+
-   01iMeslE1kw+jhG7gZ5ZDVOVPdpPvLYJwHnFqvFe53v1Lvob1iqChIYho
-   5RLldu9+oDK2/nEuqarRG/Gu4wv9IUyl1S9AwCpGcVPaapyO5K3nwP5pu
-   wCN2MiKb4Y7eAji+6A7Zqj9i0DzeVrP7HLuFpjYjM6sCnIiIbQNq7V918
-   1Te9TwgwU9uvMz6FShaRe656g9kLpVxp0XOFf/lQzpK/+T/03a/BQFr6Q
-   Pzo9yOB6YvESdwnUUBmWCOCqpCFTjCvGvbtsjG3y1pR8cWqKAK28zVNpg
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10263"; a="275955628"
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="275955628"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 03:59:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,383,1635231600"; 
-   d="scan'208";a="605967502"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Feb 2022 03:59:38 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLksL-0000JR-HN; Sun, 20 Feb 2022 11:59:37 +0000
-Date:   Sun, 20 Feb 2022 19:58:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Janne Grunau <j@jannau.net>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/11]
- drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
- prototype for function 'spihid_get_data'
-Message-ID: <202202201900.zV3sUGeO-lkp@intel.com>
+        Sun, 20 Feb 2022 06:57:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBFF2DD4;
+        Sun, 20 Feb 2022 03:57:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A4276116C;
+        Sun, 20 Feb 2022 11:57:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46655C340E8;
+        Sun, 20 Feb 2022 11:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645358234;
+        bh=q/QZ+77EAZGS4K6gv46acDRSLF/0acLiMNlTnPSfmOo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IF12N46lgFOz1wG31rlO/0+lZT5Z0/qHI6hmiU36007UG9IokrwC6X2DS/Oq6hTLa
+         xbdkHIEsQ0wIxFv+nH3VCKtoRi9fx0Nr+gwA9GQVLcFQMH1dspavZNb0JS5POHe7Ly
+         U4tBB5gx+aKM0e0OyZ1p2ifu1oat0O8Kl2hjEbDCUtkAmCnRDu5iVB1nXw1bABcJWj
+         ysZlesMqS/2e59wOPkMUJsr0QAUWLTU09EMVE4+O1hZgjEH2dhKMIwKyFFByarGFC+
+         u+Db66tOFVdigxvylkRcFPS2WXbi4ZEZbCq5XRVx2hsb+rZJuXQD5oafMUy6SRc3lW
+         iHuOwtNqNkstQ==
+Date:   Sun, 20 Feb 2022 12:04:03 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] Add ADXL367 driver
+Message-ID: <20220220120336.193d17b0@jic23-huawei>
+In-Reply-To: <20220214073810.781016-1-cosmin.tanislav@analog.com>
+References: <20220214073810.781016-1-cosmin.tanislav@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   6503ad96bc85209be90119188ff30d21612bbbf8
-commit: 6503ad96bc85209be90119188ff30d21612bbbf8 [11/11] WIP: HID: transport: spi: add Apple SPI transport
-config: arm64-randconfig-r005-20220220 (https://download.01.org/0day-ci/archive/20220220/202202201900.zV3sUGeO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/6503ad96bc85209be90119188ff30d21612bbbf8
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 6503ad96bc85209be90119188ff30d21612bbbf8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hid/spi-hid/
+On Mon, 14 Feb 2022 09:38:05 +0200
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> The ADXL367 is an ultralow power, 3-axis MEMS accelerometer.
+> 
+> The ADXL367 does not alias input signals to achieve ultralow power
+> consumption, it samples the full bandwidth of the sensor at all
+> data rates. Measurement ranges of +-2g, +-4g, and +-8g are available,
+> with a resolution of 0.25mg/LSB on the +-2 g range.
+> 
+> In addition to its ultralow power consumption, the ADXL367
+> has many features to enable true system level power reduction.
+> It includes a deep multimode output FIFO, a built-in micropower
+> temperature sensor, and an internal ADC for synchronous conversion
+> of an additional analog input.
 
-All warnings (new ones prefixed by >>):
+Looks good to me.
 
->> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for function 'spihid_get_data' [-Wmissing-prototypes]
-   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-                        ^
-   drivers/hid/spi-hid/spi-hid-apple-core.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   ^
-   static 
-   drivers/hid/spi-hid/spi-hid-apple-core.c:56:17: warning: variable 'spi_hid_apple_status_ok' is not needed and will not be emitted [-Wunneeded-internal-declaration]
-   static const u8 spi_hid_apple_status_ok[4] = { 0xac, 0x27, 0x68, 0xd5 };
-                   ^
-   2 warnings generated.
---
->> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for function 'spihid_apple_of_power_on' [-Wmissing-prototypes]
-   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for function 'spihid_apple_of_power_off' [-Wmissing-prototypes]
-   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for function 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
-   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-   ^
-   static 
->> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for function 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
-   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-       ^
-   drivers/hid/spi-hid/spi-hid-apple-of.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-   ^
-   static 
-   4 warnings generated.
+Series applied to the togreg branch of iio.git and pushed out as testing
+to let the autobuilders see if they can find anything we missed.
 
+Thanks,
 
-vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+Jonathan
 
-   258	
- > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   260	{
-   261		switch (idev->id) {
-   262		case SPIHID_DEVICE_ID_KBD:
-   263			return container_of(idev, struct spihid_apple, kbd);
-   264		case SPIHID_DEVICE_ID_TP:
-   265			return container_of(idev, struct spihid_apple, tp);
-   266		default:
-   267			return NULL;
-   268		}
-   269	}
-   270	
+> 
+> V1 -> V2
+>  * add support for vdd and vddio supplies
+>  * lock fifo_watermark retrieval
+>  * fix indentation of sysfs_emit for fifo_mode
+>  * dt-bindings: add spi-max-frequency: true
+>  * dt-bindings: remove cs-gpios property
+>  * dt-bindings: remove status property
+>  * dt-bindings: add support for vdd
+> 
+> V2 -> V3
+>  * MAINTAINERS: use wildcard for adxl367
+>  * dt-bindings: adxl367@addr -> accelerometer@addr
+>  * put asm include after linux includes
+>  * drop registers accessed implicitly
+>  * fifo_full -> fifo_watermark
+>  * print expected device id
+>  * remove INDIO_BUFFER_HARDWARE
+>  * inline ADXL367_EVENT macro
+>  * inline ADXL367_14BIT_SCAN_INFO
+>  * inline regulator enum
+>  * remove of.h in spi driver
+>  * cast const void * to const u8 * in spi read
+>  * switch to trigger-less buffer
+>  * increase reset time as advised by hardware team
+>  * let iio framework validate available channel masks
+>  * enable adc or temp channel automatically on single read
+>  * wait for 100ms after enabling adc or temp for output
+>    to settle on single read (waiting on hardware team input)
+>  * enable adc or temp channel automatically on buffered read
+>  * claim direct mode when setting range
+>  * claim direct mode when setting odr
+>  * claim direct mode when setting event config
+>  * sort status masks in descending bit order
+>  * hardcode indio_dev name
+>  * add some comments regarding spi message layout
+>  * use bulk_write for activity and inactivity threshold
+>  * use bulk_write for inactivity time
+>  * use bool as return type of fifo format finding function
+>  * remove shift from channels scan type
+> 
+> V3 -> V4
+>  * add a patch that introduces mag_referenced event type
+>  * add a patch that documents mag_referenced event type
+>  * add a patch that adds a note to the buffer/enable documentation
+>    regarding configuration of other attributes during buffer capture
+>  * remove unused adxl367_time_scale_tbl
+>  * add static attribute to adxl367_write_raw_get_fmt
+>  * return IRQ_HANDLED when FIFO read fails and print error message
+>  * scale temperature value by 1000 to reach milli degrees C
+>  * merge dev_to_iio_dev into useplace when indio_dev is not needed
+>  * merge preenable into postenable and postdisable into predisable
+>  * fix default inactivity threshold
+>  * export probe symbol to namespace
+>  * IIO_EV_TYPE_THRESH -> IIO_EV_TYPE_MAG_REFERENCED
+>  * reset device and then verify dev id for 10ms
+>  * share events by type so that they show up with iio_accel prefix in the
+>    events subdirectory
+>  * use a separate mask for extracting data
+>    I previously removed the shift fron scan_type since the FIFO data does
+>    not contain a shift but that broke single channel reads. Add it back
+>    just for single channel reads.
+> 
+> V4 -> V5
+>  * linux/module.h -> linux/mod_devicetable.h
+>  * extract fifo_formats into separate array to allow arbitrary scan mask
+>    order
+>  * reorder channel_masks and fifo_formats
+>  * prepend IIO_ to ADXL367 namespace
+>  * use adxl367_fifo_formats array size to iterate over channel_masks table
+> 
+> Cosmin Tanislav (5):
+>   iio: introduce mag_referenced
+>   iio: ABI: document mag_referenced
+>   iio: ABI: add note about configuring other attributes during buffer
+>     capture
+>   dt-bindings: iio: accel: add ADXL367
+>   iio: accel: add ADXL367 driver
+> 
+>  Documentation/ABI/testing/sysfs-bus-iio       |   30 +
+>  .../bindings/iio/accel/adi,adxl367.yaml       |   79 +
+>  MAINTAINERS                                   |    8 +
+>  drivers/iio/accel/Kconfig                     |   27 +
+>  drivers/iio/accel/Makefile                    |    3 +
+>  drivers/iio/accel/adxl367.c                   | 1588 +++++++++++++++++
+>  drivers/iio/accel/adxl367.h                   |   23 +
+>  drivers/iio/accel/adxl367_i2c.c               |   90 +
+>  drivers/iio/accel/adxl367_spi.c               |  164 ++
+>  drivers/iio/industrialio-event.c              |    1 +
+>  include/uapi/linux/iio/types.h                |    1 +
+>  tools/iio/iio_event_monitor.c                 |    1 +
+>  12 files changed, 2015 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/accel/adi,adxl367.yaml
+>  create mode 100644 drivers/iio/accel/adxl367.c
+>  create mode 100644 drivers/iio/accel/adxl367.h
+>  create mode 100644 drivers/iio/accel/adxl367_i2c.c
+>  create mode 100644 drivers/iio/accel/adxl367_spi.c
+> 
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

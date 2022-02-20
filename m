@@ -2,110 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B8E4BCE6E
+	by mail.lfdr.de (Postfix) with ESMTP id E60DF4BCE6F
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 13:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243742AbiBTMWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 07:22:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43836 "EHLO
+        id S243746AbiBTMXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 07:23:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234315AbiBTMWh (ORCPT
+        with ESMTP id S231558AbiBTMXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 07:22:37 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5993BBE2
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 04:22:15 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 500981F384;
-        Sun, 20 Feb 2022 12:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645359734; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WHh5bhUmbAtH0FtEZ+18Ex0QzFzQh85hJHXiLLwjy6k=;
-        b=NyPRKBasTyLm4SbcV3Uf9s8Bkr24O//8v7NIjmjG2c7DlBSjJ5IO8T0PwEmaLpOq6wZrue
-        EkW3rzNPiGwKpgmASWQuUeJqPtk5XMKxEnMgW0l+brzm5M/EHDo9XtfZlOw0iCs9+4sMta
-        5esOeFylkczCi1JSX7fbr67Vp0v5jQA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645359734;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WHh5bhUmbAtH0FtEZ+18Ex0QzFzQh85hJHXiLLwjy6k=;
-        b=8Ypr47QFKg/oaUyqx1stbRddiumq/Ye0/Ea00LWlCiEpqlOrTz3JgghFVaCGGEzo02uIq/
-        srHMZC5dXpuRX6AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 339CF13398;
-        Sun, 20 Feb 2022 12:22:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5PQNDHYyEmIHJwAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 20 Feb 2022 12:22:14 +0000
-Date:   Sun, 20 Feb 2022 13:22:17 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/urgent for 5.17
-Message-ID: <YhIyee8tl5YatX36@zn.tnic>
+        Sun, 20 Feb 2022 07:23:04 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC0E3CA66
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 04:22:43 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id h125so11912918pgc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 04:22:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to;
+        bh=R/byEbuYodbqN/dTPHwwxQlwg4dzRor/JniFcuJDSKE=;
+        b=S1UgBHs1HP7eKCMW/3QD9FOXwFcbC2X8M+6jGH5BpE2tl5oEkOohLpbsE3faKMi9FV
+         FfheFJ0MoF3ltIqOXbGlhXGu7KI3QkPfD9m7qo/DKLKoS5SPLW4IJFLvXRP+U4FuzFer
+         Dwj6iKG1o2au70Ew1XB9fU+VrCp98pxpBrXAGJzSF+xoDAazkA25F77T09dKp5B1ebdo
+         UTyZTFnpgJzd3kij+TX0UgPF2otbyVyglKvN75R4/BVadTYSeSEXWb2njc57i+FHND8O
+         IyglnN3Xot3sbKFpGkPvnBrff3t/usJxQzGt533x+xRILuaw8pJ3yPCoQj5g5lLs/f3g
+         61wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to;
+        bh=R/byEbuYodbqN/dTPHwwxQlwg4dzRor/JniFcuJDSKE=;
+        b=U5khb0FBhBXrxqFVhbJG+aPFyNxTD6leM2SqV6tBT3/MWE12C4skEigF89tZoNTWrv
+         fCybed24XMqPssqiz1qG++/eo8aazuFjeS5GOEQiQZnVUh8Nf6I2hMe2CR2MsGDf+JAb
+         0DH6E7iamwamaiF2hPVgXyyxOXjU9RrRxdGFEaWaxpvlSoDmZ6T91gwfvM4aAszacvQn
+         KLAwg08BTnYeE5JQxYxkGnnHRu9wb0zk6FvvsNg6KRzbGPeHIFun1JVSoQejj1/DdRn+
+         atwjz5vf0fg4+bXieriVYGyS2AvZJTfUCozDHVReX9QU3yGfUJ9yw8AaegNOoE5AocFP
+         kryA==
+X-Gm-Message-State: AOAM531da+h2uguFGKfu9K9XqpYOS+ZIC4VAdqKvj+NxbDGgoADU/ghx
+        cOe+5o349O+b7jSyBnNcCl0=
+X-Google-Smtp-Source: ABdhPJw/4Aaa7RtOHrKYtjwy7+QQw4VGAuHEaCrTJCc44sCDXC002+58LkOyBdvEfa8p3Gj3lKtPcw==
+X-Received: by 2002:a63:b50b:0:b0:373:9242:6b98 with SMTP id y11-20020a63b50b000000b0037392426b98mr12466709pge.553.1645359762402;
+        Sun, 20 Feb 2022 04:22:42 -0800 (PST)
+Received: from ?IPV6:240b:10:2720:5500:2f07:a2ba:6742:b651? ([240b:10:2720:5500:2f07:a2ba:6742:b651])
+        by smtp.gmail.com with ESMTPSA id 8sm9163488pfl.164.2022.02.20.04.22.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 04:22:40 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------400X6pDu0Eno4T3y93R0zub0"
+Message-ID: <117facba-ba33-349d-1085-25315cc1ae92@gmail.com>
+Date:   Sun, 20 Feb 2022 21:22:35 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
+Content-Language: en-US
+From:   Tokunori Ikegami <ikegami.t@gmail.com>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
+        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Brian Norris <computersforpeace@gmail.com>,
+        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
+        cyrille.pitchen@wedev4u.fr,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linuxppc-dev@lists.ozlabs.org
+References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
+ <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
+ <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
+ <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
+ <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
+ <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
+ <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
+ <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
+ <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
+In-Reply-To: <cedb1604-e024-2738-5b33-15703a653803@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This is a multi-part message in MIME format.
+--------------400X6pDu0Eno4T3y93R0zub0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-please pull two urgent x86 fixes for 5.17.
+Hi Ahmad-san,
 
-Thx.
+Could you please try the version 2 patch attached for the error case?
+This version is to check the DQ true data 0xFF by chip_good().
+But I am not sure if this works or not since the error is possible to be 
+caused by Hi-Z 0xff on floating bus or etc.
 
----
+On 2022/02/15 3:46, Tokunori Ikegami wrote:
+> Hi Ahmad-san,
+>
+> On 2022/02/15 1:22, Ahmad Fatoum wrote:
+>> Hello Tokunori-san,
+>>
+>> On 13.02.22 17:47, Tokunori Ikegami wrote:
+>>> Hi Ahmad-san,
+>>>
+>>> Thanks for your confirmations. Sorry for late to reply.
+>> No worries. I appreciate you taking the time.
+>>
+>>> Could you please try the patch attached to disable the chip_good() 
+>>> change as before?
+>>> I think this should work for S29GL964N since the chip_ready() is 
+>>> used and works as mentioned.
+>> yes, this resolves my issue:
+>> Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> Thanks for your testing. I have just sent the patch to review.
+>>
+>>>>>> Doesn't seem to be a buffered write issue here though as the writes
+>>>>>> did work fine before dfeae1073583. Any other ideas?
+>>>>> At first I thought the issue is possible to be resolved by using 
+>>>>> the word write instead of the buffered writes.
+>>>>> Now I am thinking to disable the changes dfeae1073583 partially 
+>>>>> with any condition if possible.
+>>>> What seems to work for me is checking if chip_good or chip_ready
+>>>> and map_word is equal to 0xFF. I can't justify why this is ok though.
+>>>> (Worst case bus is floating at this point of time and Hi-Z is read
+>>>> as 0xff on CPU data lines...)
+>>> Sorry I am not sure about this.
+>>> I thought the chip_ready() itself is correct as implemented as the 
+>>> data sheet in the past.
+>>> But it did not work correctly so changed to use chip_good() instead 
+>>> as it is also correct.
+>> What exactly in the datasheet makes you believe chip_good is not 
+>> appropriate?
+> I just mentioned about the actual issue behaviors as not worked 
+> chip_good() on S29GL964N and not worked chip_ready() on 
+> MX29GL512FHT2I-11G before etc.
+> Anyway let me recheck the data sheet details as just checked it again 
+> quickly but needed more investigation to understand.
 
-The following changes since commit 8795359e35bc33bf86b6d0765aa7f37431db3b9c:
+As far as I checked still both chip_good() and chip_ready() seem correct 
+but still the root cause is unknown.
+If as you mentioned the issue was cased by the DQ true data 0xFF I am 
+not sure why the read work without any error after the write operation.
+Also if the error was caused by the Hi-Z 0xff on floating bus as 
+mentioned I am not sure why the read work without any error after the 
+write operation with chip_ready().
+Sorry anyway the root cause is also unknown when the write operation was 
+changed to use chip_good() instead of chip_ready().
 
-  x86/sgx: Silence softlockup detection when releasing large enclaves (2022-02-10 15:58:14 -0800)
+Regards,
+Ikegami
 
-are available in the Git repository at:
+>
+> Regards,
+> Ikegami
+>
+>>
+>> Cheers,
+>> Ahmad
+>>
+>>
+--------------400X6pDu0Eno4T3y93R0zub0
+Content-Type: text/x-patch; charset=UTF-8;
+ name="v2-0001-mtd-cfi_cmdset_0002-Change-chip_good-to-check-DQ-.patch"
+Content-Disposition: attachment;
+ filename*0="v2-0001-mtd-cfi_cmdset_0002-Change-chip_good-to-check-DQ-.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.17_rc5
+RnJvbSAyYmVmMDJiZWU4ZmE3NDI3M2NmYzc2NGUyODhiNmY5MmI4NjQ2YmI3IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBUb2t1bm9yaSBJa2VnYW1pIDxpa2VnYW1pLnRAZ21h
+aWwuY29tPgpEYXRlOiBTYXQsIDE5IEZlYiAyMDIyIDE5OjM5OjMyICswOTAwClN1YmplY3Q6
+IFtQQVRDSCB2Ml0gbXRkOiBjZmlfY21kc2V0XzAwMDI6IENoYW5nZSBjaGlwX2dvb2QoKSB0
+byBjaGVjayBEUSB0cnVlCiBkYXRhIDB4RkYKClRoZSByZWdyZXNzaW9uIGlzc3VlIGhhcyBi
+ZWVuIGNhdXNlZCBvbiBTMjlHTDA2NE4gYW5kIHJlcG9ydGVkIGl0LgpUaGUgY2hhbmdlIG1l
+bnRpb25lZCBmb3IgcmVncmVzc2lvbiBpcyB0byB1c2UgY2hpcF9nb29kKCkgZm9yIGJ1ZmZl
+cmVkIHdyaXRlLgpBbHNvIGl0IHNlZW1zIHRoYXQgdGhlIDB4RkYgdmFsdWUgaXMgcmVhZCBv
+biB0aGUgZXJyb3IgY2FzZS4KSXQgaXMgcG9zc2libGUgdG8gYmUgY2F1c2VkIGJ5IERRIHRy
+dWUgZGF0YSBkZXNjcmliZWQgYnkgUzI5R0wwNjROIGRhdGFzaGVldC4KU28gY2hhbmdlIGNo
+aXBfZ29vZCgpIHRvIGNoZWNrIERRIHRydWUgZGF0YSAweEZGIGFkZGl0aW9uYWxseSBmb3Ig
+dGhlIGVycm9yLgoKRml4ZXM6IGRmZWFlMTA3MzU4MygibXRkOiBjZmlfY21kc2V0XzAwMDI6
+IENoYW5nZSB3cml0ZSBidWZmZXIgdG8gY2hlY2sgY29ycmVjdCB2YWx1ZSIpClNpZ25lZC1v
+ZmYtYnk6IFRva3Vub3JpIElrZWdhbWkgPGlrZWdhbWkudEBnbWFpbC5jb20+CkNjOiBsaW51
+eC1tdGRAbGlzdHMuaW5mcmFkZWFkLm9yZwpDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwpM
+aW5rOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1tdGQvY2VkYjE2MDQtZTAyNC0y
+NzM4LTViMzMtMTU3MDNhNjUzODAzQGdtYWlsLmNvbS8KLS0tCiBkcml2ZXJzL210ZC9jaGlw
+cy9jZmlfY21kc2V0XzAwMDIuYyB8IDI1ICsrKysrKysrKysrKysrKy0tLS0tLS0tLS0KIDEg
+ZmlsZSBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkKCmRpZmYg
+LS1naXQgYS9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0XzAwMDIuYyBiL2RyaXZlcnMv
+bXRkL2NoaXBzL2NmaV9jbWRzZXRfMDAwMi5jCmluZGV4IGE3NjExMzRmZDNiZS4uMDc5ZjY5
+ZTU0MDBkIDEwMDY0NAotLS0gYS9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0XzAwMDIu
+YworKysgYi9kcml2ZXJzL210ZC9jaGlwcy9jZmlfY21kc2V0XzAwMDIuYwpAQCAtODUzLDcg
+Kzg1Myw3IEBAIHN0YXRpYyBpbnQgX194aXByYW0gY2hpcF9yZWFkeShzdHJ1Y3QgbWFwX2lu
+Zm8gKm1hcCwgc3RydWN0IGZsY2hpcCAqY2hpcCwKICAqCiAgKi8KIHN0YXRpYyBpbnQgX194
+aXByYW0gY2hpcF9nb29kKHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpj
+aGlwLAotCQkJICAgICAgdW5zaWduZWQgbG9uZyBhZGRyLCBtYXBfd29yZCBleHBlY3RlZCkK
+KwkJCSAgICAgIHVuc2lnbmVkIGxvbmcgYWRkciwgbWFwX3dvcmQgKmV4cGVjdGVkKQogewog
+CXN0cnVjdCBjZmlfcHJpdmF0ZSAqY2ZpID0gbWFwLT5mbGRydl9wcml2OwogCW1hcF93b3Jk
+IG9sZGQsIGN1cmQ7CkBAIC04NzUsOCArODc1LDEzIEBAIHN0YXRpYyBpbnQgX194aXByYW0g
+Y2hpcF9nb29kKHN0cnVjdCBtYXBfaW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpjaGlwLAog
+CW9sZGQgPSBtYXBfcmVhZChtYXAsIGFkZHIpOwogCWN1cmQgPSBtYXBfcmVhZChtYXAsIGFk
+ZHIpOwogCi0JcmV0dXJuCW1hcF93b3JkX2VxdWFsKG1hcCwgb2xkZCwgY3VyZCkgJiYKLQkJ
+bWFwX3dvcmRfZXF1YWwobWFwLCBjdXJkLCBleHBlY3RlZCk7CisJaWYgKCFtYXBfd29yZF9l
+cXVhbChtYXAsIG9sZGQsIGN1cmQpKQorCQlyZXR1cm4gMDsKKworCWlmIChleHBlY3RlZCAm
+JiBtYXBfd29yZF9lcXVhbChtYXAsIGN1cmQsICpleHBlY3RlZCkpCisJCXJldHVybiAxOwor
+CisJcmV0dXJuIG1hcF93b3JkX2VxdWFsKG1hcCwgb2xkZCwgbWFwX3dvcmRfZmYobWFwKSk7
+CiB9CiAKIHN0YXRpYyBpbnQgZ2V0X2NoaXAoc3RydWN0IG1hcF9pbmZvICptYXAsIHN0cnVj
+dCBmbGNoaXAgKmNoaXAsIHVuc2lnbmVkIGxvbmcgYWRyLCBpbnQgbW9kZSkKQEAgLTE2OTks
+NyArMTcwNCw3IEBAIHN0YXRpYyBpbnQgX194aXByYW0gZG9fd3JpdGVfb25ld29yZF9vbmNl
+KHN0cnVjdCBtYXBfaW5mbyAqbWFwLAogCQkgKiAiY2hpcF9nb29kIiB0byBhdm9pZCB0aGUg
+ZmFpbHVyZSBkdWUgdG8gc2NoZWR1bGluZy4KIAkJICovCiAJCWlmICh0aW1lX2FmdGVyKGpp
+ZmZpZXMsIHRpbWVvKSAmJgotCQkgICAgIWNoaXBfZ29vZChtYXAsIGNoaXAsIGFkciwgZGF0
+dW0pKSB7CisJCSAgICAhY2hpcF9nb29kKG1hcCwgY2hpcCwgYWRyLCAmZGF0dW0pKSB7CiAJ
+CQl4aXBfZW5hYmxlKG1hcCwgY2hpcCwgYWRyKTsKIAkJCXByaW50ayhLRVJOX1dBUk5JTkcg
+Ik1URCAlcygpOiBzb2Z0d2FyZSB0aW1lb3V0XG4iLCBfX2Z1bmNfXyk7CiAJCQl4aXBfZGlz
+YWJsZShtYXAsIGNoaXAsIGFkcik7CkBAIC0xNzA3LDcgKzE3MTIsNyBAQCBzdGF0aWMgaW50
+IF9feGlwcmFtIGRvX3dyaXRlX29uZXdvcmRfb25jZShzdHJ1Y3QgbWFwX2luZm8gKm1hcCwK
+IAkJCWJyZWFrOwogCQl9CiAKLQkJaWYgKGNoaXBfZ29vZChtYXAsIGNoaXAsIGFkciwgZGF0
+dW0pKSB7CisJCWlmIChjaGlwX2dvb2QobWFwLCBjaGlwLCBhZHIsICZkYXR1bSkpIHsKIAkJ
+CWlmIChjZmlfY2hlY2tfZXJyX3N0YXR1cyhtYXAsIGNoaXAsIGFkcikpCiAJCQkJcmV0ID0g
+LUVJTzsKIAkJCWJyZWFrOwpAQCAtMTk3OSwxNCArMTk4NCwxNCBAQCBzdGF0aWMgaW50IF9f
+eGlwcmFtIGRvX3dyaXRlX2J1ZmZlcl93YWl0KHN0cnVjdCBtYXBfaW5mbyAqbWFwLAogCQkg
+KiAiY2hpcF9nb29kIiB0byBhdm9pZCB0aGUgZmFpbHVyZSBkdWUgdG8gc2NoZWR1bGluZy4K
+IAkJICovCiAJCWlmICh0aW1lX2FmdGVyKGppZmZpZXMsIHRpbWVvKSAmJgotCQkgICAgIWNo
+aXBfZ29vZChtYXAsIGNoaXAsIGFkciwgZGF0dW0pKSB7CisJCSAgICAhY2hpcF9nb29kKG1h
+cCwgY2hpcCwgYWRyLCAmZGF0dW0pKSB7CiAJCQlwcl9lcnIoIk1URCAlcygpOiBzb2Z0d2Fy
+ZSB0aW1lb3V0LCBhZGRyZXNzOjB4JS44bHguXG4iLAogCQkJICAgICAgIF9fZnVuY19fLCBh
+ZHIpOwogCQkJcmV0ID0gLUVJTzsKIAkJCWJyZWFrOwogCQl9CiAKLQkJaWYgKGNoaXBfZ29v
+ZChtYXAsIGNoaXAsIGFkciwgZGF0dW0pKSB7CisJCWlmIChjaGlwX2dvb2QobWFwLCBjaGlw
+LCBhZHIsICZkYXR1bSkpIHsKIAkJCWlmIChjZmlfY2hlY2tfZXJyX3N0YXR1cyhtYXAsIGNo
+aXAsIGFkcikpCiAJCQkJcmV0ID0gLUVJTzsKIAkJCWJyZWFrOwpAQCAtMjI4Miw3ICsyMjg3
+LDcgQEAgc3RhdGljIGludCBkb19wYW5pY193cml0ZV9vbmV3b3JkKHN0cnVjdCBtYXBfaW5m
+byAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpjaGlwLAogCQl1ZGVsYXkoMSk7CiAJfQogCi0JaWYg
+KCFjaGlwX2dvb2QobWFwLCBjaGlwLCBhZHIsIGRhdHVtKSB8fAorCWlmICghY2hpcF9nb29k
+KG1hcCwgY2hpcCwgYWRyLCAmZGF0dW0pIHx8CiAJICAgIGNmaV9jaGVja19lcnJfc3RhdHVz
+KG1hcCwgY2hpcCwgYWRyKSkgewogCQkvKiByZXNldCBvbiBhbGwgZmFpbHVyZXMuICovCiAJ
+CW1hcF93cml0ZShtYXAsIENNRCgweEYwKSwgY2hpcC0+c3RhcnQpOwpAQCAtMjQ3OCw3ICsy
+NDgzLDcgQEAgc3RhdGljIGludCBfX3hpcHJhbSBkb19lcmFzZV9jaGlwKHN0cnVjdCBtYXBf
+aW5mbyAqbWFwLCBzdHJ1Y3QgZmxjaGlwICpjaGlwKQogCQkJY2hpcC0+ZXJhc2Vfc3VzcGVu
+ZGVkID0gMDsKIAkJfQogCi0JCWlmIChjaGlwX2dvb2QobWFwLCBjaGlwLCBhZHIsIG1hcF93
+b3JkX2ZmKG1hcCkpKSB7CisJCWlmIChjaGlwX2dvb2QobWFwLCBjaGlwLCBhZHIsIE5VTEwp
+KSB7CiAJCQlpZiAoY2ZpX2NoZWNrX2Vycl9zdGF0dXMobWFwLCBjaGlwLCBhZHIpKQogCQkJ
+CXJldCA9IC1FSU87CiAJCQlicmVhazsKQEAgLTI1NzcsNyArMjU4Miw3IEBAIHN0YXRpYyBp
+bnQgX194aXByYW0gZG9fZXJhc2Vfb25lYmxvY2soc3RydWN0IG1hcF9pbmZvICptYXAsIHN0
+cnVjdCBmbGNoaXAgKmNoaXAsCiAJCQljaGlwLT5lcmFzZV9zdXNwZW5kZWQgPSAwOwogCQl9
+CiAKLQkJaWYgKGNoaXBfZ29vZChtYXAsIGNoaXAsIGFkciwgbWFwX3dvcmRfZmYobWFwKSkp
+IHsKKwkJaWYgKGNoaXBfZ29vZChtYXAsIGNoaXAsIGFkciwgTlVMTCkpIHsKIAkJCWlmIChj
+ZmlfY2hlY2tfZXJyX3N0YXR1cyhtYXAsIGNoaXAsIGFkcikpCiAJCQkJcmV0ID0gLUVJTzsK
+IAkJCWJyZWFrOwotLSAKMi4zMi4wCgo=
 
-for you to fetch changes up to 44cad52cc14ae10062f142ec16ede489bccf4469:
-
-  x86/ptrace: Fix xfpregs_set()'s incorrect xmm clearing (2022-02-18 11:23:21 +0100)
-
-----------------------------------------------------------------
-- Fix the ptrace regset xfpregs_set() callback to behave according to the ABI
-
-- Handle poisoned pages properly in the SGX reclaimer code
-
-----------------------------------------------------------------
-Andy Lutomirski (1):
-      x86/ptrace: Fix xfpregs_set()'s incorrect xmm clearing
-
-Reinette Chatre (1):
-      x86/sgx: Fix missing poison handling in reclaimer
-
- arch/x86/kernel/cpu/sgx/main.c | 10 +---------
- arch/x86/kernel/fpu/regset.c   |  9 ++++-----
- arch/x86/kernel/ptrace.c       |  4 ++--
- 3 files changed, 7 insertions(+), 16 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+--------------400X6pDu0Eno4T3y93R0zub0--

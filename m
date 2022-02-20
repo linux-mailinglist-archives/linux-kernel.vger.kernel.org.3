@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220BD4BD11B
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 20:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7044BD11D
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 20:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244729AbiBTTub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 14:50:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43094 "EHLO
+        id S244740AbiBTTug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 14:50:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244707AbiBTTuX (ORCPT
+        with ESMTP id S244705AbiBTTuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 20 Feb 2022 14:50:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56C130F4D;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D99A30F74;
         Sun, 20 Feb 2022 11:50:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A92DB80DB6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EBE660EF5;
         Sun, 20 Feb 2022 19:50:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 488CFC340E8;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A206BC340F3;
         Sun, 20 Feb 2022 19:50:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1645386601;
-        bh=PsAplnaNwzySEhEIH9e6D7kchFuwpIx6ni46zFee3wg=;
+        bh=ijCBOgMyfQavgxxWgULZqJ8TvKpR3ECAnBLirSQBA0c=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dn4hSLJF+muNO4QexHewjFbtoYuSuFUlJM9iW+aQeX5B74y736rdWyJ/v6vDuDx/K
-         O+bX5OZH70Q52uuZsXumej93II92EBErzxMtpqD/04uDKKxIf84e6F2Si4PaRDK+oG
-         9UgagrHFD1Z2cOnqcAeis4QVTnIjXZgdd5SKKEVe92an75peJUGDSyBYTwkagcYOcm
-         b3Ep1yiGJ7h6nVIn57o3AB1ni0z7SffnOHp7iFW9J0TrdYZO1UJtv06MK4DaYlQkg4
-         6h3iVpiBu0agtg/djSotQ0Chb3qfIIUY4r0YJ/6CtuSNa2EXYSWgJj+fvDKRLvGiiO
-         38Uk5KPTUh1DQ==
+        b=C4uc6/kAIN/2KxCk/U6CD6e2+RrvjQdwm0udLVMfzoEJRyo2MTvnvvFIceK6EccR+
+         XMeM0m+lkAYL5AjJFm0OCZ4uGxyOVteZ+oT7vjlQ42haEZEJA/OJoumQAWwVL86xRe
+         NgaBn0O6f9mFzA6cg7nBnAeqESA4vcWpmTjIrSvm/jaLy3xEz/cw/OR9xCs4ChzBpq
+         qEKBUVDjdb6eClRcPsrXrx65heXb/YEtYEjGshihCT2RL86fAvSpqeZ2CyxP1rW9X1
+         DITzUPzdZ6Rx00jriNrg4/AaIyltT3dzJZ28h8UDbCM5SDWvpNK7AJJAIJEwlJFswo
+         bMPY4JYrCQvoQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 37C58E5D07D;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8D246E6D447;
         Sun, 20 Feb 2022 19:50:01 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c for v5.17
+Subject: Re: [git pull] Input updates for v5.17-rc4
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YhJV69ApxgrGGBP6@ninjato>
-References: <YhJV69ApxgrGGBP6@ninjato>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YhJV69ApxgrGGBP6@ninjato>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
-X-PR-Tracked-Commit-Id: 2428766e201565a5fa964d7461d9f6608eb04d7d
+In-Reply-To: <YhFw3yaB6CCihNEN@google.com>
+References: <YhFw3yaB6CCihNEN@google.com>
+X-PR-Tracked-List-Id: <linux-input.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YhFw3yaB6CCihNEN@google.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git for-linus
+X-PR-Tracked-Commit-Id: 7b1f781f2d2460693f43d5f764198df558e3494b
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: dacec3e7b9bc59275b4c41319a9a52b0a1cacfa9
-Message-Id: <164538660122.12071.7431399351915448531.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 961af9dbe5d0d0f58aac989bac17279c17a43663
+Message-Id: <164538660157.12071.324986509729735497.pr-tracker-bot@kernel.org>
 Date:   Sun, 20 Feb 2022 19:50:01 +0000
-To:     Wolfram Sang <wsa@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 20 Feb 2022 15:53:31 +0100:
+The pull request you sent on Sat, 19 Feb 2022 14:36:15 -0800:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+> git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git for-linus
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/dacec3e7b9bc59275b4c41319a9a52b0a1cacfa9
+https://git.kernel.org/torvalds/c/961af9dbe5d0d0f58aac989bac17279c17a43663
 
 Thank you!
 

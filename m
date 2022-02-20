@@ -2,85 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD6E4BD013
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 18:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A88244BD02C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 18:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244287AbiBTRIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 12:08:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57656 "EHLO
+        id S242125AbiBTRMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 12:12:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiBTRIk (ORCPT
+        with ESMTP id S229545AbiBTRMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 12:08:40 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECA9433AF;
-        Sun, 20 Feb 2022 09:08:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9F89CE0BAA;
-        Sun, 20 Feb 2022 17:08:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D1DC340E8;
-        Sun, 20 Feb 2022 17:08:15 +0000 (UTC)
-Date:   Sun, 20 Feb 2022 12:08:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Oscar Shiang <oscar0225@livemail.tw>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: Remove duplicated words in trace/osnoise-tracer
-Message-ID: <20220220120814.4f593555@gandalf.local.home>
-In-Reply-To: <TYCP286MB1913117487F390E3BCE38B15A1399@TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM>
-References: <TYCP286MB1913117487F390E3BCE38B15A1399@TYCP286MB1913.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 20 Feb 2022 12:12:32 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB3D2B182;
+        Sun, 20 Feb 2022 09:12:09 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nLpkk-000503-PB; Sun, 20 Feb 2022 18:12:06 +0100
+Message-ID: <a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info>
+Date:   Sun, 20 Feb 2022 18:12:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-BS
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: regression: Bug 215601 - gcc segv at startup on ia64
+To:     "Anthony Yznaga <anthony.yznaga"@oracle.com,
+        Kees Cook <keescook@chromium.org>
+Cc:     matoro_bugzilla_kernel@matoro.tk,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        linux-ia64@vger.kernel.org,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1645377130;9576e647;
+X-HE-SMSGID: 1nLpkk-000503-PB
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 20 Feb 2022 20:12:00 +0800
-Oscar Shiang <oscar0225@livemail.tw> wrote:
+Hi, this is your Linux kernel regression tracker.
 
-> There are 2 duplicated words found in osnoise tracer documentation.
-> This patch removes them.
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported about a week ago, that's why I'm hereby
+forwarding it to the lists and the relevant people. To quote
+https://bugzilla.kernel.org/show_bug.cgi?id=215601 :
+
+> On ia64, after 5f501d555653f8968011a1e65ebb121c8b43c144, the gcc
+> binary crashes with SIGSEGV at startup (i.e., during ELF loading).
+> Only gcc exhibits the crash (including g++, etc), other toolchain
+> components (such as ld, ldd, etc) do not, and neither does any other
+> binary from what I can tell.  I also haven't observed the issue on
+> any other architecture.
 > 
-> Signed-off-by: Oscar Shiang <oscar0225@livemail.tw>
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
-> ---
->  Documentation/trace/osnoise-tracer.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Reverting this commit resolves the issue up to and including git tip,
+> with no (visible) issues.
 > 
-> diff --git a/Documentation/trace/osnoise-tracer.rst b/Documentation/trace/osnoise-tracer.rst
-> index b648cb9bf..963def9f9 100644
-> --- a/Documentation/trace/osnoise-tracer.rst
-> +++ b/Documentation/trace/osnoise-tracer.rst
-> @@ -51,7 +51,7 @@ For example::
->          [root@f32 ~]# cd /sys/kernel/tracing/
->          [root@f32 tracing]# echo osnoise > current_tracer
->  
-> -It is possible to follow the trace by reading the trace trace file::
-> +It is possible to follow the trace by reading the trace file::
->  
->          [root@f32 tracing]# cat trace
->          # tracer: osnoise
-> @@ -108,7 +108,7 @@ The tracer has a set of options inside the osnoise directory, they are:
->     option.
->   - tracing_threshold: the minimum delta between two time() reads to be
->     considered as noise, in us. When set to 0, the default value will
-> -   will be used, which is currently 5 us.
-> +   be used, which is currently 5 us.
->  
->  Additional Tracing
->  ------------------
+> Hardware:  HP Integrity rx2800 i2 Kernel config attached.
 
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
+
+Anyway, to get this tracked:
+
+#regzbot introduced: 5f501d555653f8968011a1e65ebb121c8b43c144
+#regzbot from: matoro <matoro_bugzilla_kernel@matoro.tk>
+#regzbot title: gcc segv at startup on ia64
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215601
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+-- 
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

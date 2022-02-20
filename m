@@ -2,201 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D862F4BCF65
+	by mail.lfdr.de (Postfix) with ESMTP id 391D04BCF63
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 16:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244242AbiBTPUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 10:20:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59110 "EHLO
+        id S242401AbiBTPUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 10:20:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244217AbiBTPUZ (ORCPT
+        with ESMTP id S229574AbiBTPUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 10:20:25 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DC449FB5;
-        Sun, 20 Feb 2022 07:20:04 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21KF7x2o007882;
-        Sun, 20 Feb 2022 15:19:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=xWeX0f27hFbj6hWO1Xf04esKZvilAf89jzBgjnNLI4k=;
- b=sqL0BLRzSezQ0pdyfLeHV1nKVxQWdurEJY9W/c8Zbd86fUa+5z0S94X+Niq+syYVyzRs
- rqVowd/kStPV73t7tcWyADKPJcgJ83d+i8zpyR69UYUcFLBrSJVkdu4gGzunET0uvxeG
- fjfyfOR3UYfkrYpcVGkKwjOExWwP6K3KbDpPmqVZ3lioDXINz0vypcEqdwLG5nUiQybp
- sHscwldTft+1skWjzLs8Bn5wrojPYFgAstzVhsptCEkUxmji5OVPOVqhZUK4ZpeoI9Jz
- TsmED9HxKv1mpaGNLvUOvJiDfAWDShlwyyUFb/8Mgm2H+MXyOYpkuqmTGkt+TdGTkLzL 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ebpd2h9c0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 20 Feb 2022 15:19:43 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21KFFL4G029654;
-        Sun, 20 Feb 2022 15:19:43 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ebpd2h9bp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 20 Feb 2022 15:19:43 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21KFBeDl005876;
-        Sun, 20 Feb 2022 15:19:41 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ear68n94m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 20 Feb 2022 15:19:41 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21KFJdKx31195540
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 20 Feb 2022 15:19:39 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2DA8352050;
-        Sun, 20 Feb 2022 15:19:39 +0000 (GMT)
-Received: from sig-9-65-76-76.ibm.com (unknown [9.65.76.76])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 14C7C5204F;
-        Sun, 20 Feb 2022 15:19:37 +0000 (GMT)
-Message-ID: <7d84425f36e3b04ab1adabed23f98b478b53b770.camel@linux.ibm.com>
-Subject: Re: init_ima() adds 8 % to boot time
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, Petr Vorel <pvorel@suse.cz>
-Date:   Sun, 20 Feb 2022 10:19:37 -0500
-In-Reply-To: <32f90c33-eeb9-64a0-b2e2-9258ba2e1820@molgen.mpg.de>
-References: <32f90c33-eeb9-64a0-b2e2-9258ba2e1820@molgen.mpg.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1dPQYEvnMYQZjOLePHPBzvz4-I6RQEZp
-X-Proofpoint-ORIG-GUID: g3EkaVL9_-6QUV02iYGLRJpgHDACVfCf
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 20 Feb 2022 10:20:18 -0500
+Received: from forward103o.mail.yandex.net (forward103o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::606])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C678649FB1
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 07:19:55 -0800 (PST)
+Received: from myt6-640abdf8240b.qloud-c.yandex.net (myt6-640abdf8240b.qloud-c.yandex.net [IPv6:2a02:6b8:c12:238c:0:640:640a:bdf8])
+        by forward103o.mail.yandex.net (Yandex) with ESMTP id 337BD10A8B42;
+        Sun, 20 Feb 2022 18:19:50 +0300 (MSK)
+Received: from myt5-aad1beefab42.qloud-c.yandex.net (myt5-aad1beefab42.qloud-c.yandex.net [2a02:6b8:c12:128:0:640:aad1:beef])
+        by myt6-640abdf8240b.qloud-c.yandex.net (mxback/Yandex) with ESMTP id ULTItrHxDE-JmdWIfit;
+        Sun, 20 Feb 2022 18:19:50 +0300
+X-Yandex-Fwd: 2
+Authentication-Results: myt6-640abdf8240b.qloud-c.yandex.net; dkim=pass
+Received: by myt5-aad1beefab42.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id M6K5BEkQDc-JkH89QTQ;
+        Sun, 20 Feb 2022 18:19:47 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Yaroslav Bolyukin <iam@lach.pw>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        "Lin, Wayne" <Wayne.Lin@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Yaroslav Bolyukin <iam@lach.pw>
+Subject: [PATCH v2 1/2] drm/edid: parse DRM VESA dsc bpp target
+Date:   Sun, 20 Feb 2022 18:19:39 +0300
+Message-Id: <20220220151940.58327-1-iam@lach.pw>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220213133128.5833-1-iam@lach.pw>
+References: <20220213133128.5833-1-iam@lach.pw>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-20_06,2022-02-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 clxscore=1015 lowpriorityscore=0 spamscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 phishscore=0 mlxscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202200098
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc'ing Jarkko, Petr Vorel]
+As per DisplayID v2.0 Errata E9 spec "DSC pass-through timing support"
+VESA vendor-specific data block may contain target DSC bits per pixel
+fields
 
-Hi Paul,
+Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+---
+ drivers/gpu/drm/drm_edid.c  | 33 ++++++++++++++++++++++-----------
+ include/drm/drm_connector.h |  6 ++++++
+ include/drm/drm_displayid.h |  4 ++++
+ 3 files changed, 32 insertions(+), 11 deletions(-)
 
-On Sat, 2022-02-19 at 10:44 +0100, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> Debian builds its Linux kernel image with `CONFIG_IMA=y` since version 
-> 5.13.9 [1]. Unfortunately, on the Dell Latitude E7250 `init_ima` takes 
-> around 33 ms, adding 8 % to the boot time up to loading the initrd.
-> 
->      [    0.000000] Linux version 5.17.0-rc4-amd64 
-> (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-16) 11.2.0, GNU 
-> ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.17~rc4-1~exp1 
-> (2022-02-18)
->      […]
->      [    0.238520] calling  init_tis+0x0/0xde @ 1
->      [    0.254749] tpm_tis 00:08: 1.2 TPM (device-id 0x3205, rev-id 80)
->      [    0.285665] initcall init_tis+0x0/0xde returned 0 after 46038 usecs
->      […]
->      [    0.301327] calling  init_ima+0x0/0xb5 @ 1
->      [    0.301332] ima: Allocated hash algorithm: sha256
->      [    0.335502] ima: No architecture policies found
->      [    0.335520] initcall init_ima+0x0/0xb5 returned 0 after 33389 usecs
->      […]
->      [    0.447312] Run /init as init process
-> 
-> Tracing `init_ima` with a depth of 5 shows 
-> `ima_calc_boot_aggregate_tfm()` takes 24 ms, and 
-> `ima_add_template_entry()` takes 10 ms.
-> 
->          1.282630 |   1)   swapper-1    |               | 
-> ima_add_boot_aggregate() {
->          1.282631 |   1)   swapper-1    |               | 
-> ima_calc_boot_agg:0regate() {
->          1.282631 |   1)   swapper-1    |   0.153 us    | 
-> ima_alloc_tfm();
->          1.282631 |   1)   swapper-1    | * 24404.59 us | 
-> ima_calc_boot_aggregate_tfm();
->          1.307037 |   1)   swapper-1    |   0.482 us    | 
-> ima_free_tfm.part.0();
->          1.307038 |   1)   swapper-1    | * 24407.06 us |        } /* 
-> ima_calc_boot_aggregate */
->          1.307038 |   1)   swapper-1    |               | 
-> ima_alloc_init_template() {
->          1.307038 |   1)   swapper-1    |   0.173 us    | 
-> ima_template_desc_current();
->          1.307039 |   1)   swapper-1    |   0.836 us    | 
-> __kmalloc();
->          1.307040 |   1)   swapper-1    |   0.580 us    | 
-> __kmalloc();
->          1.307041 |   1)   swapper-1    |   1.555 us    | 
-> ima_eventdigest_ng_init();
->          1.307043 |   1)   swapper-1    |   1.275 us    | 
-> ima_eventname_ng_init();
->          1.307044 |   1)   swapper-1    |   0.256 us    | 
-> ima_eventsig_init();
->          1.307045 |   1)   swapper-1    |   6.618 us    |        } /* 
-> ima_alloc_init_template */
->          1.307045 |   1)   swapper-1    |               | 
-> ima_store_template() {
->          1.307045 |   1)   swapper-1    |   5.049 us    | 
-> ima_calc_field_array_hash();
->          1.307051 |   1)   swapper-1    | # 9316.953 us | 
-> ima_add_template_entry();
->          1.316369 |   1)   swapper-1    | # 9323.728 us |        } /* 
-> ima_store_template */
->          1.316369 |   1)   swapper-1    | * 33738.54 us |      } /* 
-> ima_add_boot_aggregate */
-> 
-> Tracing `ima_calc_boot_aggregate_tfm()` (attached) shows that the first 
-> `tpm1_pcr_read()` takes 16 ms in `tpm_transmit()`. Is communicating with 
-> the TPM supposed to be that slow?
-> 
-> In the last years, Linux decreased it’s boot time a lot, so do you see a 
-> way to move things out of the hot path and get `init_ima` well below 10 
-> ms? (As systems get faster and faster, having systems with standard 
-> distributions to be up below two seconds after pressing the power button 
-> should be a reasonable goal (500 ms firmware (like coreboot) + 500 ms 
-> Linux kernel + 1 s user space).
-> 
-> 
-> [1]: 
-> https://salsa.debian.org/kernel-team/linux/-/commit/6e679322d7d98d30b4a8a3d1b659c899a6e9d4df
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index a7663f9a1..ee8c2b911 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -5270,7 +5270,7 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+ 	if (oui(vesa->oui[0], vesa->oui[1], vesa->oui[2]) != VESA_IEEE_OUI)
+ 		return;
+ 
+-	if (sizeof(*vesa) != sizeof(*block) + block->num_bytes) {
++	if (block->num_bytes < 5) {
+ 		drm_dbg_kms(connector->dev, "Unexpected VESA vendor block size\n");
+ 		return;
+ 	}
+@@ -5290,20 +5290,29 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+ 		break;
+ 	}
+ 
+-	if (!info->mso_stream_count) {
+-		info->mso_pixel_overlap = 0;
+-		return;
++	info->mso_pixel_overlap = 0;
++
++	if (info->mso_stream_count) {
++		info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
++		if (info->mso_pixel_overlap > 8) {
++			drm_dbg_kms(connector->dev, "Reserved MSO pixel overlap value %u\n",
++				info->mso_pixel_overlap);
++			info->mso_pixel_overlap = 8;
++		}
++
++		drm_dbg_kms(connector->dev, "MSO stream count %u, pixel overlap %u\n",
++			info->mso_stream_count, info->mso_pixel_overlap);
+ 	}
+ 
+-	info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
+-	if (info->mso_pixel_overlap > 8) {
+-		drm_dbg_kms(connector->dev, "Reserved MSO pixel overlap value %u\n",
+-			    info->mso_pixel_overlap);
+-		info->mso_pixel_overlap = 8;
++	if (block->num_bytes < 7) {
++		/* DSC bpp is optional */
++		return;
+ 	}
+ 
+-	drm_dbg_kms(connector->dev, "MSO stream count %u, pixel overlap %u\n",
+-		    info->mso_stream_count, info->mso_pixel_overlap);
++	info->dp_dsc_bpp = FIELD_GET(DISPLAYID_VESA_DSC_BPP_INT, vesa->dsc_bpp_int) * 16 +
++		FIELD_GET(DISPLAYID_VESA_DSC_BPP_FRACT, vesa->dsc_bpp_fract);
++
++	drm_dbg_kms(connector->dev, "DSC bits per pixel %u\n", info->dp_dsc_bpp);
+ }
+ 
+ static void drm_update_mso(struct drm_connector *connector, const struct edid *edid)
+@@ -5348,6 +5357,8 @@ drm_reset_display_info(struct drm_connector *connector)
+ 
+ 	info->mso_stream_count = 0;
+ 	info->mso_pixel_overlap = 0;
++
++	info->dp_dsc_bpp = 0;
+ }
+ 
+ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edid)
+diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+index 5e36eb3df..04ef0e995 100644
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -634,6 +634,12 @@ struct drm_display_info {
+ 	 * @mso_pixel_overlap: eDP MSO segment pixel overlap, 0-8 pixels.
+ 	 */
+ 	u8 mso_pixel_overlap;
++
++	/**
++	 * @dp_dsc_bpp: DP Display-Stream-Compression (DSC) timing's target
++	 * DST bits per pixel in 6.4 fixed point format. 0 means undefined
++	 */
++	u16 dp_dsc_bpp;
+ };
+ 
+ int drm_display_info_set_bus_formats(struct drm_display_info *info,
+diff --git a/include/drm/drm_displayid.h b/include/drm/drm_displayid.h
+index 7ffbd9f7b..1be6deddc 100644
+--- a/include/drm/drm_displayid.h
++++ b/include/drm/drm_displayid.h
+@@ -131,12 +131,16 @@ struct displayid_detailed_timing_block {
+ 
+ #define DISPLAYID_VESA_MSO_OVERLAP	GENMASK(3, 0)
+ #define DISPLAYID_VESA_MSO_MODE		GENMASK(6, 5)
++#define DISPLAYID_VESA_DSC_BPP_INT	GENMASK(5, 0)
++#define DISPLAYID_VESA_DSC_BPP_FRACT GENMASK(3, 0)
+ 
+ struct displayid_vesa_vendor_specific_block {
+ 	struct displayid_block base;
+ 	u8 oui[3];
+ 	u8 data_structure_type;
+ 	u8 mso;
++	u8 dsc_bpp_int;
++	u8 dsc_bpp_fract;
+ } __packed;
+ 
+ /* DisplayID iteration */
 
-Thank you including the initial and other TPM delays.  The main reason
-for the "boot_aggregate" is to tie the pre-OS measurements to the post
-OS measurement list.  Without the TPM based 'boot_aggregate', any IMA
-measurement list could be used to verify a TPM quote.  The
-'boot_aggregate' is calculated, originally, based on PCRs 0 - 7 and
-more recently may include PCRs 8 & 9 as well.  The 'boot_aggregate' is
-the first record in the IMA measurement list and the first record after
-a soft reboot (kexec).  It is the one and only IMA measurement record
-not dependent on policy.
-
-There are TPM 1.2 & 2.0 standards' requirements, but there are also
-buggy TPMs which don't adhere to them to such an extent that IMA goes
-into 'TPM-bypass' mode. Perhaps for those not interested in extending
-the concepts of trusted boot to the running OS, defining a new boot
-command line option to force IMA into this 'TPM-bypass' mode would be
-an acceptable alternative to the delay.  The IMA measurement list would
-still include a 'boot_aggregate' record, but one containing 0's.
-
-thanks,
-
-Mimi
+base-commit: 1528038385c0a706aac9ac165eeb24044fef6825
+-- 
+2.35.1
 

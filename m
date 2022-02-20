@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E264BCB60
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 01:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB6D4BCB63
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 01:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243103AbiBTAkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Feb 2022 19:40:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44334 "EHLO
+        id S243216AbiBTAme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Feb 2022 19:42:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiBTAkh (ORCPT
+        with ESMTP id S241815AbiBTAmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Feb 2022 19:40:37 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151D155BD2
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 16:40:18 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id cp23-20020a17090afb9700b001bbfe0fbe94so1875270pjb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Feb 2022 16:40:18 -0800 (PST)
+        Sat, 19 Feb 2022 19:42:32 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912373B2A7;
+        Sat, 19 Feb 2022 16:42:12 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id q11so227229pln.11;
+        Sat, 19 Feb 2022 16:42:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=tw8RZzbeX9t9efzXQPIpRkW11f9vjCrn+5xc7rNgm3I=;
-        b=jcy+QNQ+y3GSI5OS6OAdyoGiwSBaSk8A0F/5b4kP86a31nh3X9W0ynEVYnMLFq32jN
-         jeXsxHLMnPmdZyc6eiudjOq/4s+5BVK7qRgw5secQmayB02ERmKLPkJCTDcRaK7SjYP1
-         gaqlTgzliin8LjfyccQVYLv/03CMTpE8Uh3Vgwoc7mxWFBHxoX3TB+dB4ZJPMsnOKohd
-         tJcr4XpXd3m1JdeTkMLpNLQnbg0PFeQz+tOTM6hRkRuW1JQYzvs0uP2Yc7HVNs9Qt5tb
-         HPeq61244eZB384qEv5GDPNHDhdE9R05c6+qb05hX9rH/lFRVwgA//Xs+p31trMYCGPV
-         p3GQ==
+        bh=5OtJ38Qj62RwZLCcGiYfWZ1y0rTNTwoMvTBrQ3Gxr5w=;
+        b=XxS8lrMoDbChrYMWm3EAZFCFYdrM3sNVQ44m49zvmn24lK8yNLzK9y9ZGo6KDvRVno
+         wCULMmJoGKnd/XYAfDcK/srCGHtQS8Ohfz2OBnNnPtMify0v1NknHO/hCW+FrvMGm/4Y
+         wgPGWP6ZM+B9zbr49Yj47v9AtfSTbDH7y59SJwFl4hPECJJYVmwySze4ajUeZ+jlCdsE
+         f2TOlV3zvbgda6/8cqp89vrSTGrD7kn5iFuWTX6jWFyOY37mwYxbP1DBypx0tpqxkFy0
+         f1QJeywHpJWnFS8u+xMHvC8I3ySdGTAHo3PjNlvuyEMbFo/I2xfe7aFC2/oTaVIVWlup
+         5g+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=tw8RZzbeX9t9efzXQPIpRkW11f9vjCrn+5xc7rNgm3I=;
-        b=zm208B+zAdggBZnjO4X6f04rPkzSTPyUXPTEdjQgP6fOUHj9tYPab4hqVZMfWSGoms
-         EbVZadWm8Oel9/Wn6V1aHKkOIYBQnBMXbOB7LTwCNAYNGAIdJU91ml7TwAClBFpbINA1
-         kMzlVWGhSaR93YoMDzWfVzPpA3YvL/UbidnWJFyZXpKjQs2oBZWShXkulkXyCCFMBymQ
-         a1kbRspPn9Cb5Rgo/aiKX9j3DyWX0ZnkxQF1xBzC4+Is5UcnrdBMC+E+EQIAHarLtbIx
-         ZSsM3ESPxFe6ue0sISjmFz62b5WOqpJVDRmPBI2HwrDrVm4MVbO9GWKgoideLbIhrlmw
-         +XAQ==
-X-Gm-Message-State: AOAM5325h+ccUD1VQlyjVvgnHg58ex9vFARDCyqO2uahp0c8ozN4E6/9
-        NrR1fLWVvrCJbBKRsGL/X5Y=
-X-Google-Smtp-Source: ABdhPJwakSOU376iWNt62bLbZa4QyGu3LCtLZAGqtP7NNP7JpLC55aLyTAEFmhqSQArxLqD1BvU5bg==
-X-Received: by 2002:a17:902:ea0a:b0:14f:206c:e3df with SMTP id s10-20020a170902ea0a00b0014f206ce3dfmr13265550plg.145.1645317617494;
-        Sat, 19 Feb 2022 16:40:17 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:a108:7030:d9de:a46b])
-        by smtp.gmail.com with ESMTPSA id e15sm7654954pfv.104.2022.02.19.16.40.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5OtJ38Qj62RwZLCcGiYfWZ1y0rTNTwoMvTBrQ3Gxr5w=;
+        b=vNLC1o4iyiyI3BUz5JfgvLC8O0cZu/rcMp2En+C8K00CuuOmhQV8y7YAejJvSbPXiW
+         /mqOCShnITV0zFcW9b4by3dq79auyb9khVmjL96M0f0SzCqiYIl4Svnr+tVMsfyK57a6
+         pzbEJ+kKeP9mJ741P4NVixCD5nYezubYpTRfGOD5rlW8KuYfuFoohKcGiyCsrRoAwXhf
+         J8K7mHuvwSHY1P33wU2yuNncqKXZDd1u9HaU0D7O4SodEOldvBJ5VbhJH1kWBSpr03iv
+         x7li2wh8Aekvejgc+FmAT0IoMGLQSuRITCJENH+bPwWyWV9W6Eyg57eTRU5KtQFt4POw
+         GF6g==
+X-Gm-Message-State: AOAM530KBgVK+2MswxVeZy0dwSYspcwW2cR1ejAG0JXoW0WbXRxhAYda
+        fuebPKKI4J0JZbbMD/3/Tb1HUonJ18c=
+X-Google-Smtp-Source: ABdhPJzcTkPAEsmyCfmVu0d+bTdOpxR0Mbo+4BDPq2xo/VhJD95gzBlDVCMgBTwIauaYsCzYYHnQTw==
+X-Received: by 2002:a17:902:bf06:b0:14d:8c72:96c6 with SMTP id bi6-20020a170902bf0600b0014d8c7296c6mr13521454plb.156.1645317732034;
+        Sat, 19 Feb 2022 16:42:12 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id y20sm7468979pfi.155.2022.02.19.16.42.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 16:40:16 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Sat, 19 Feb 2022 16:40:14 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
-        peterz@infradead.org, guro@fb.com, shakeelb@google.com,
-        timmurray@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 1/1] mm: count time in drain_all_pages during direct
- reclaim as memory pressure
-Message-ID: <YhGN7nhqRMuEC5Rg@google.com>
-References: <20220219174940.2570901-1-surenb@google.com>
+        Sat, 19 Feb 2022 16:42:11 -0800 (PST)
+Date:   Sun, 20 Feb 2022 06:12:09 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Souptick Joarder <jrdr.linux@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] bpf: Initialize ret to 0 inside btf_populate_kfunc_set()
+Message-ID: <20220220004209.hlutexplxhvrmpi6@apollo.legion>
+References: <20220219163915.125770-1-jrdr.linux@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220219174940.2570901-1-surenb@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220219163915.125770-1-jrdr.linux@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 19, 2022 at 09:49:40AM -0800, Suren Baghdasaryan wrote:
-> When page allocation in direct reclaim path fails, the system will
-> make one attempt to shrink per-cpu page lists and free pages from
-> high alloc reserves. Draining per-cpu pages into buddy allocator can
-> be a very slow operation because it's done using workqueues and the
-> task in direct reclaim waits for all of them to finish before
-
-Yes, drain_all_pages is serious slow(100ms - 150ms on Android)
-especially when CPUs are fully packed. It was also spotted in CMA
-allocation even when there was on no memory pressure.
-
-> proceeding. Currently this time is not accounted as psi memory stall.
-
-Good spot.
-
-> 
-> While testing mobile devices under extreme memory pressure, when
-> allocations are failing during direct reclaim, we notices that psi
-> events which would be expected in such conditions were not triggered.
-> After profiling these cases it was determined that the reason for
-> missing psi events was that a big chunk of time spent in direct
-> reclaim is not accounted as memory stall, therefore psi would not
-> reach the levels at which an event is generated. Further investigation
-> revealed that the bulk of that unaccounted time was spent inside
-> drain_all_pages call.
-> 
-> Annotate drain_all_pages and unreserve_highatomic_pageblock during
-> page allocation failure in the direct reclaim path so that delays
-> caused by these calls are accounted as memory stall.
-> 
-> Reported-by: Tim Murray <timmurray@google.com>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+On Sat, Feb 19, 2022 at 10:09:15PM IST, Souptick Joarder wrote:
+> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+>
+> Kernel test robot reported below error ->
+>
+> kernel/bpf/btf.c:6718 btf_populate_kfunc_set()
+> error: uninitialized symbol 'ret'.
+>
+> Initialize ret to 0.
+>
+> Fixes: 	dee872e124e8 ("bpf: Populate kfunc BTF ID sets in struct btf")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
 > ---
->  mm/page_alloc.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 3589febc6d31..7fd0d392b39b 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -4639,8 +4639,12 @@ __alloc_pages_direct_reclaim(gfp_t gfp_mask, unsigned int order,
->  	 * Shrink them and try again
->  	 */
->  	if (!page && !drained) {
-> +		unsigned long pflags;
-> +
-> +		psi_memstall_enter(&pflags);
->  		unreserve_highatomic_pageblock(ac, false);
->  		drain_all_pages(NULL);
-> +		psi_memstall_leave(&pflags);
 
-Instead of annotating the specific drain_all_pages, how about
-moving the annotation from __perform_reclaim to
-__alloc_pages_direct_reclaim?
+Thanks for the fix.
+
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+
+>  kernel/bpf/btf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 02d7014417a0..2c4c5dbe2abe 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6706,7 +6706,7 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
+>  				  const struct btf_kfunc_id_set *kset)
+>  {
+>  	bool vmlinux_set = !btf_is_module(btf);
+> -	int type, ret;
+> +	int type, ret = 0;
+>
+>  	for (type = 0; type < ARRAY_SIZE(kset->sets); type++) {
+>  		if (!kset->sets[type])
+> --
+> 2.25.1
+>
+
+--
+Kartikeya

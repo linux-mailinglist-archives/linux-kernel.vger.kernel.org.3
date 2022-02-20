@@ -2,178 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33AF4BD1FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 22:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3832A4BD1E2
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Feb 2022 22:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245120AbiBTVXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 16:23:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33982 "EHLO
+        id S244225AbiBTVXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 16:23:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243763AbiBTVXQ (ORCPT
+        with ESMTP id S244035AbiBTVXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 20 Feb 2022 16:23:16 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851FE377F9
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A2C377D0
         for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 13:22:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1645392174; x=1676928174;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yMQm7X3xbWnPxH1XMxtH/wE0KZA9uJTNRSCSjDU0dXQ=;
-  b=VqmlpXgY6QJY4MTT/SReCI9AlArwynp/vyh/UYYZi2P8Y/1dZkUObaRQ
-   HZKNApglZsBR4yF7hgwM6FFIulJiuaoCUCmfSIlswDSVW0yqeM0FZ0SNW
-   SC76ydUQptCrh1tF3WTbRHm7WvmFVZiXNh2nUOsTQCO8PA5JmB6KBrdpe
-   NkRljDGT9t/6tXGweMHF8QAjd0hW0TBUIqy20oS/B3WaUrXt9vBVpfOUf
-   TZI5Xwhwbl1MnTpZCsHONG0eT0IloX7CeXwIErhl+pxuaLpaTuRPOZG4t
-   cvBenIqKNzPVWLnVRK9xn6Qdj7+fW8NpEsHyRMbnq//+Ib26AgfLf+Q10
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="250222433"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yoEzQt8cKhPyMjQZPNtUsTOxhaZ/yE5I6z999NWYwWM=;
+  b=iIny0Qk+5gdrdTDAR9MuV4yhxXp/PSNrNHqz5v9csup/6168F44wB4wX
+   Xv+CDFaCMdRmPqW2qDndQz0On2Smlq5/Cy4Gjpca30zUXqIXeT9D+pkpF
+   9ZIg5avZ3kdlE+uoygS0SxDVpgJ3x6xKM+FBsNFxiQAeEDO2mYAP7mZ4z
+   gsbf7mj7IEIqC0HDV4d905+q61NUbOqaeFwjBjZBwOll5rWchFAIhbGSX
+   QpHcxvWlOS2m1CHZ1OO8NSYEcXqaSZDnUVhTdCSU/xixqQz1cjiXRp2dS
+   AM7yzP702Z4ojloTyjVKxeVnbMgprtj8eYdgC+kIWpsGPBnYr83gr9ioo
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="314667096"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="250222433"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:22:54 -0800
+   d="scan'208";a="314667096"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:22:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="590763645"
+   d="scan'208";a="706024764"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Feb 2022 13:22:53 -0800
+  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2022 13:22:53 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nLtfQ-0000pH-M8; Sun, 20 Feb 2022 21:22:52 +0000
-Date:   Mon, 21 Feb 2022 05:22:19 +0800
+        id 1nLtfQ-0000p9-KU; Sun, 20 Feb 2022 21:22:52 +0000
+Date:   Mon, 21 Feb 2022 05:22:40 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- 1b2d3451ee50a0968cb9933f726e50b368ba5073
-Message-ID: <6212b10b.aA8m89JDfbWEfOWb%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:iommufd 4/11] drivers/iommu/iommufd/pages.c:472:35:
+ error: passing argument 1 of 'atomic64_read' from incompatible pointer type
+Message-ID: <202202210555.Jl3so3EM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: 1b2d3451ee50a0968cb9933f726e50b368ba5073  arm64: Support PREEMPT_DYNAMIC
+tree:   https://github.com/jgunthorpe/linux iommufd
+head:   eb047b2ba449f66ffc3f427bb50c9ca60f6c9b95
+commit: 72a206491bb65ff62cca14b086edd5ff35625873 [4/11] iommufd: Data structure for PFN storage
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220221/202202210555.Jl3so3EM-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jgunthorpe/linux/commit/72a206491bb65ff62cca14b086edd5ff35625873
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd
+        git checkout 72a206491bb65ff62cca14b086edd5ff35625873
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-elapsed time: 732m
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-configs tested: 96
-configs skipped: 3
+All errors (new ones prefixed by >>):
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+   In file included from arch/arc/include/asm/bug.h:30,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/gfp.h:5,
+                    from include/linux/slab.h:15,
+                    from drivers/iommu/iommufd/pages.c:45:
+   drivers/iommu/iommufd/pages.c: In function 'update_unpinned':
+>> drivers/iommu/iommufd/pages.c:472:35: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     472 |             WARN_ON(atomic64_read(&pages->source_user->locked_vm) < npages))
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                   |
+         |                                   atomic_long_t * {aka atomic_t *}
+   include/asm-generic/bug.h:121:32: note: in definition of macro 'WARN_ON'
+     121 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   In file included from include/linux/atomic.h:82,
+                    from include/asm-generic/bitops/lock.h:5,
+                    from arch/arc/include/asm/bitops.h:188,
+                    from include/linux/bitops.h:33,
+                    from include/linux/log2.h:12,
+                    from include/asm-generic/div64.h:55,
+                    from ./arch/arc/include/generated/asm/div64.h:1,
+                    from include/linux/math.h:5,
+                    from include/linux/math64.h:6,
+                    from include/linux/time64.h:5,
+                    from include/linux/restart_block.h:10,
+                    from include/linux/thread_info.h:14,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/arc/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from drivers/iommu/iommufd/pages.c:45:
+   include/linux/atomic/atomic-instrumented.h:644:33: note: expected 'const atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
+     644 | atomic64_read(const atomic64_t *v)
+         |               ~~~~~~~~~~~~~~~~~~^
+>> drivers/iommu/iommufd/pages.c:474:30: error: passing argument 2 of 'atomic64_sub' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     474 |         atomic64_sub(npages, &pages->source_user->locked_vm);
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                              |
+         |                              atomic_long_t * {aka atomic_t *}
+   In file included from include/linux/atomic.h:82,
+                    from include/asm-generic/bitops/lock.h:5,
+                    from arch/arc/include/asm/bitops.h:188,
+                    from include/linux/bitops.h:33,
+                    from include/linux/log2.h:12,
+                    from include/asm-generic/div64.h:55,
+                    from ./arch/arc/include/generated/asm/div64.h:1,
+                    from include/linux/math.h:5,
+                    from include/linux/math64.h:6,
+                    from include/linux/time64.h:5,
+                    from include/linux/restart_block.h:10,
+                    from include/linux/thread_info.h:14,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/arc/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from drivers/iommu/iommufd/pages.c:45:
+   include/linux/atomic/atomic-instrumented.h:740:33: note: expected 'atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
+     740 | atomic64_sub(s64 i, atomic64_t *v)
+         |                     ~~~~~~~~~~~~^
+   cc1: some warnings being treated as errors
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-powerpc                      pcm030_defconfig
-mips                       bmips_be_defconfig
-h8300                            alldefconfig
-arm                            zeus_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                      bamboo_defconfig
-nds32                               defconfig
-sh                          landisk_defconfig
-powerpc                      ppc6xx_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220220
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-nds32                             allnoconfig
-arc                              allyesconfig
-nios2                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-arc                  randconfig-r043-20220220
-s390                 randconfig-r044-20220220
-riscv                randconfig-r042-20220220
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
 
-clang tested configs:
-powerpc              randconfig-c003-20220220
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220220
-mips                 randconfig-c004-20220220
-i386                          randconfig-c001
-riscv                randconfig-c006-20220220
-powerpc                    mvme5100_defconfig
-powerpc                        fsp2_defconfig
-powerpc                 mpc836x_mds_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220220
-hexagon              randconfig-r041-20220220
+vim +/atomic64_read +472 drivers/iommu/iommufd/pages.c
+
+   461	
+   462	static void update_unpinned(struct iopt_pages *pages)
+   463	{
+   464		unsigned long npages = pages->last_npinned - pages->npinned;
+   465	
+   466		lockdep_assert_held(&pages->mutex);
+   467	
+   468		if (pages->has_cap_ipc_lock)
+   469			return;
+   470	
+   471		if (WARN_ON(pages->npinned > pages->last_npinned) ||
+ > 472		    WARN_ON(atomic64_read(&pages->source_user->locked_vm) < npages))
+   473			return;
+ > 474		atomic64_sub(npages, &pages->source_user->locked_vm);
+   475		atomic64_sub(npages, &pages->source_mm->pinned_vm);
+   476		pages->last_npinned = pages->npinned;
+   477	}
+   478	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

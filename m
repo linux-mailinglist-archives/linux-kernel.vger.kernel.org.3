@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4035C4BE5FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1B44BDF3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347809AbiBUJJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:09:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48422 "EHLO
+        id S1345190AbiBUIwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:52:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347026AbiBUJEp (ORCPT
+        with ESMTP id S1345117AbiBUIv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:04:45 -0500
+        Mon, 21 Feb 2022 03:51:58 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B05F2DD6A;
-        Mon, 21 Feb 2022 00:58:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B474027D;
+        Mon, 21 Feb 2022 00:51:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC1D3B80EC0;
-        Mon, 21 Feb 2022 08:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3392C340E9;
-        Mon, 21 Feb 2022 08:58:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BAF7B80EAB;
+        Mon, 21 Feb 2022 08:51:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A858DC340E9;
+        Mon, 21 Feb 2022 08:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433921;
-        bh=/qkCfwpbbo+NcTqTpe8lchEZWjXUEYoPs8CNx3cbU3Y=;
+        s=korg; t=1645433491;
+        bh=O+sY+LfRJbQKaEA7wqHvgzawuelz+mmhjbQAWSz1BlA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xxNrjbUV+uVav7QK5kCaSu4/Y0wujxtXGg2QoDRP/cR6DfQeTJiGpDeXEInyGCt0F
-         sAA0oWjxlg9QUehJCn6mGPNVbt5nqyu+zHELe0UARLlsMqb42kjKEM01N+iKlngURb
-         wDUD+0wYNOSPVbq8y35BcQqCtwyXQd0z2mcs/rF0=
+        b=A4oBg0yM38dt4lbyAsWNp6WxvuDyUjSAwP5kT74aNW+7ueRsh0J4AyTsdDNZFsV4c
+         nyXVppXQnBVSI9jTfCAOUZtAkuAy5FgjOmulcGDGIAxo8ipfwAUQlY5bF8CAtTCY70
+         mpUIv00/Il7x1ZVQTmFnpfPhyY2r/CrpdDmLj0UA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
-        Theodore Tso <tytso@mit.edu>,
-        Leah Rumancik <leah.rumancik@gmail.com>
-Subject: [PATCH 5.4 31/80] ext4: prevent partial update of the extent blocks
+        stable@vger.kernel.org, Seth Forshee <sforshee@digitalocean.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 18/33] vsock: remove vsock from connected table when connect is interrupted by a signal
 Date:   Mon, 21 Feb 2022 09:49:11 +0100
-Message-Id: <20220221084916.598342313@linuxfoundation.org>
+Message-Id: <20220221084909.365239841@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+References: <20220221084908.568970525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,70 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Yi <yi.zhang@huawei.com>
+From: Seth Forshee <sforshee@digitalocean.com>
 
-commit 0f2f87d51aebcf71a709b52f661d681594c7dffa upstream.
+commit b9208492fcaecff8f43915529ae34b3bcb03877c upstream.
 
-In the most error path of current extents updating operations are not
-roll back partial updates properly when some bad things happens(.e.g in
-ext4_ext_insert_extent()). So we may get an inconsistent extents tree
-if journal has been aborted due to IO error, which may probability lead
-to BUGON later when we accessing these extent entries in errors=continue
-mode. This patch drop extent buffer's verify flag before updatng the
-contents in ext4_ext_get_access(), and reset it after updating in
-__ext4_ext_dirty(). After this patch we could force to check the extent
-buffer if extents tree updating was break off, make sure the extents are
-consistent.
+vsock_connect() expects that the socket could already be in the
+TCP_ESTABLISHED state when the connecting task wakes up with a signal
+pending. If this happens the socket will be in the connected table, and
+it is not removed when the socket state is reset. In this situation it's
+common for the process to retry connect(), and if the connection is
+successful the socket will be added to the connected table a second
+time, corrupting the list.
 
-Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
-Link: https://lore.kernel.org/r/20210908120850.4012324-4-yi.zhang@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
+Prevent this by calling vsock_remove_connected() if a signal is received
+while waiting for a connection. This is harmless if the socket is not in
+the connected table, and if it is in the table then removing it will
+prevent list corruption from a double add.
+
+Note for backporting: this patch requires d5afa82c977e ("vsock: correct
+removal of socket from the list"), which is in all current stable trees
+except 4.9.y.
+
+Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
+Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Link: https://lore.kernel.org/r/20220217141312.2297547-1-sforshee@digitalocean.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/extents.c |   18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ net/vmw_vsock/af_vsock.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -133,14 +133,25 @@ static int ext4_ext_truncate_extend_rest
- static int ext4_ext_get_access(handle_t *handle, struct inode *inode,
- 				struct ext4_ext_path *path)
- {
-+	int err = 0;
-+
- 	if (path->p_bh) {
- 		/* path points to block */
- 		BUFFER_TRACE(path->p_bh, "get_write_access");
--		return ext4_journal_get_write_access(handle, path->p_bh);
-+		err = ext4_journal_get_write_access(handle, path->p_bh);
-+
-+		/*
-+		 * The extent buffer's verified bit will be set again in
-+		 * __ext4_ext_dirty(). We could leave an inconsistent
-+		 * buffer if the extents updating procudure break off du
-+		 * to some error happens, force to check it again.
-+		 */
-+		if (!err)
-+			clear_buffer_verified(path->p_bh);
- 	}
- 	/* path points to leaf/index in inode body */
- 	/* we use in-core data, no need to protect them */
--	return 0;
-+	return err;
- }
- 
- /*
-@@ -160,6 +171,9 @@ int __ext4_ext_dirty(const char *where,
- 		/* path points to block */
- 		err = __ext4_handle_dirty_metadata(where, line, handle,
- 						   inode, path->p_bh);
-+		/* Extents updating done, re-set verified flag */
-+		if (!err)
-+			set_buffer_verified(path->p_bh);
- 	} else {
- 		/* path points to leaf/index in inode body */
- 		err = ext4_mark_inode_dirty(handle, inode);
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1220,6 +1220,7 @@ static int vsock_stream_connect(struct s
+ 			sk->sk_state = SS_UNCONNECTED;
+ 			sock->state = SS_UNCONNECTED;
+ 			vsock_transport_cancel_pkt(vsk);
++			vsock_remove_connected(vsk);
+ 			goto out_wait;
+ 		} else if (timeout == 0) {
+ 			err = -ETIMEDOUT;
 
 

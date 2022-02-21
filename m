@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1684BE118
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DB44BE7DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244668AbiBUIw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:52:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41878 "EHLO
+        id S1348336AbiBUJSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:18:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345487AbiBUIw1 (ORCPT
+        with ESMTP id S1348464AbiBUJLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:52:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C65E23;
-        Mon, 21 Feb 2022 00:52:01 -0800 (PST)
+        Mon, 21 Feb 2022 04:11:19 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502C424F35;
+        Mon, 21 Feb 2022 01:03:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98E7BB80E9E;
-        Mon, 21 Feb 2022 08:52:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6A8C340E9;
-        Mon, 21 Feb 2022 08:51:58 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 96307CE0E76;
+        Mon, 21 Feb 2022 09:03:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C89C340E9;
+        Mon, 21 Feb 2022 09:03:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433519;
-        bh=Ha5FXiN5IM6Ijp+HmsPrFdAwbwKjQeirEg0DSequ2Zk=;
+        s=korg; t=1645434202;
+        bh=kg07GBpJKjU+4cm72S1zfVejqNzWrEUGduEQ37klR6Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k0esbSUgTSOIYMZx4fDWjENlSW1Vyb5VI5OXo7aje0FnGNoFn9eCoIJ4c0WJ9Cs15
-         o/KVG1nP5ettTeWvJG6pxnuYAT0nUJXeAc8vJ6dwZnmWOmDyjMbT3rQMaE6R0wYglV
-         g12IMe1cqaBMcBSbTt+KiTAWAFDNFUCNiQHWsENA=
+        b=SEpRxFOi7TSc9v7A9NQc08TIZLFIf/sUI1hUNaUIeQ02gpglL5hfJAYUHbjoQ2r/x
+         og4308nz0ClUDXHac8ffvcWxujsELyuaBJXpn5T+VTrFw5gdsPlhNftDqk3YY4zJEI
+         I/zi/EetF+9xwZ/dbTFSSe96FCil5ju27VnhZltY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 4.9 06/33] btrfs: send: in case of IO error log it
+        stable@vger.kernel.org, Stefan Agner <stefan@agner.ch>,
+        Wolfgang Walter <linux@stwm.de>,
+        Jason Self <jason@bluehome.net>,
+        Dominik Behr <dominik@dominikbehr.com>,
+        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH 5.10 047/121] iwlwifi: fix use-after-free
 Date:   Mon, 21 Feb 2022 09:48:59 +0100
-Message-Id: <20220221084908.769515115@linuxfoundation.org>
+Message-Id: <20220221084922.799822158@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
-References: <20220221084908.568970525@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +60,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dāvis Mosāns <davispuh@gmail.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit 2e7be9db125a0bf940c5d65eb5c40d8700f738b5 upstream.
+commit bea2662e7818e15d7607d17d57912ac984275d94 upstream.
 
-Currently if we get IO error while doing send then we abort without
-logging information about which file caused issue.  So log it to help
-with debugging.
+If no firmware was present at all (or, presumably, all of the
+firmware files failed to parse), we end up unbinding by calling
+device_release_driver(), which calls remove(), which then in
+iwlwifi calls iwl_drv_stop(), freeing the 'drv' struct. However
+the new code I added will still erroneously access it after it
+was freed.
 
-CC: stable@vger.kernel.org # 4.9+
-Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Set 'failure=false' in this case to avoid the access, all data
+was already freed anyway.
+
+Cc: stable@vger.kernel.org
+Reported-by: Stefan Agner <stefan@agner.ch>
+Reported-by: Wolfgang Walter <linux@stwm.de>
+Reported-by: Jason Self <jason@bluehome.net>
+Reported-by: Dominik Behr <dominik@dominikbehr.com>
+Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Fixes: ab07506b0454 ("iwlwifi: fix leaks/bad data after failed firmware load")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220208114728.e6b514cf4c85.Iffb575ca2a623d7859b542c33b2a507d01554251@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/send.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/btrfs/send.c
-+++ b/fs/btrfs/send.c
-@@ -4675,6 +4675,10 @@ static ssize_t fill_read_buf(struct send
- 			lock_page(page);
- 			if (!PageUptodate(page)) {
- 				unlock_page(page);
-+				btrfs_err(fs_info,
-+			"send: IO error at offset %llu for inode %llu root %llu",
-+					page_offset(page), sctx->cur_ino,
-+					sctx->send_root->root_key.objectid);
- 				put_page(page);
- 				ret = -EIO;
- 				break;
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -1646,6 +1646,8 @@ static void iwl_req_fw_callback(const st
+  out_unbind:
+ 	complete(&drv->request_firmware_complete);
+ 	device_release_driver(drv->trans->dev);
++	/* drv has just been freed by the release */
++	failure = false;
+  free:
+ 	if (failure)
+ 		iwl_dealloc_ucode(drv);
 
 

@@ -2,187 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7034BD392
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CA34BD39C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245741AbiBUCOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 21:14:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56490 "EHLO
+        id S1343495AbiBUCP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 21:15:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241988AbiBUCOl (ORCPT
+        with ESMTP id S233743AbiBUCP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 21:14:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441BD3204F;
-        Sun, 20 Feb 2022 18:14:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E230FB80E3B;
-        Mon, 21 Feb 2022 02:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8978EC340F0;
-        Mon, 21 Feb 2022 02:14:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645409656;
-        bh=pV8SFKuHUgpAlxXGX/qRMPIw+Kd4bEx8SviHAJcdS/Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YiyRpZrPApxVaNDYIvavOjHmK/p4DUAeK7+Tqr9SzP0O7Yfgnjvuyw8qO1REi2RDD
-         Phy4Kuly9XfumICficyiVzBcfe/DaRvSiBTX5u/ENtDXdOdFwDWa5ljj6iof4IHs9j
-         PwvNupG/A7W8SaN6+pszjxxkNm8ps6klra5cJ94zW1ndONy6OZGOcI6eRR5GkCd54r
-         TBwzSdQ+0+zHV/LZEIDpRdVda2/o8kkRB4Cb6OrQhSlr/rV2QP+6PSS21vq1KntrxN
-         8YPmtWnLOQQeZjWZ9WtmB9BjdwBDBZ2IFScLqyyer+sDrFL3TwFAkQb64Wcof6TbnV
-         Xijrjmx0NtcSg==
-Received: by mail-ej1-f48.google.com with SMTP id p14so29128045ejf.11;
-        Sun, 20 Feb 2022 18:14:16 -0800 (PST)
-X-Gm-Message-State: AOAM533XQAkVLQq7L1VT+Sky+M7B2QsBTKdDDYKVOsMTZI6sn2qDYI39
-        PSeCyC+QeRazSfk5u5G5TtAHwVbwnuQ1NAqQMQ==
-X-Google-Smtp-Source: ABdhPJzuzbcKzGVGYsB6r6h/Y3EsbKgrTgOGjhQohSFx5+ar+PHYzw42VipVTgZDJCfjawuEm8YsH/Nvkb+0+E4tzns=
-X-Received: by 2002:a17:906:a20c:b0:6ce:a87e:5013 with SMTP id
- r12-20020a170906a20c00b006cea87e5013mr13673365ejy.379.1645409654814; Sun, 20
- Feb 2022 18:14:14 -0800 (PST)
+        Sun, 20 Feb 2022 21:15:57 -0500
+Received: from spam.unicloud.com (smgmail.unigroup.com.cn [220.194.70.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734B03205E;
+        Sun, 20 Feb 2022 18:15:34 -0800 (PST)
+Received: from eage.unicloud.com ([220.194.70.35])
+        by spam.unicloud.com with ESMTP id 21L2EUVI091183;
+        Mon, 21 Feb 2022 10:14:30 +0800 (GMT-8)
+        (envelope-from luofei@unicloud.com)
+Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
+ (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Mon, 21
+ Feb 2022 10:14:29 +0800
+From:   luofei <luofei@unicloud.com>
+To:     <tony.luck@intel.com>, <bp@alien8.de>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>, <akpm@linux-foundation.org>,
+        <naoya.horiguchi@nec.com>
+CC:     <hpa@zytor.com>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        luofei <luofei@unicloud.com>
+Subject: [PATCH v4 1/2] mm/hwpoison: Avoid the impact of hwpoison_filter() return value on mce handler
+Date:   Sun, 20 Feb 2022 21:14:15 -0500
+Message-ID: <20220221021415.2328992-1-luofei@unicloud.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220218145437.18563-1-granquet@baylibre.com> <20220218145437.18563-7-granquet@baylibre.com>
-In-Reply-To: <20220218145437.18563-7-granquet@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 21 Feb 2022 10:14:02 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__AgD_Rc_5TS4v+sBDeN-nd0DbwuERhW=OsvsbMWSsxsA@mail.gmail.com>
-Message-ID: <CAAOTY__AgD_Rc_5TS4v+sBDeN-nd0DbwuERhW=OsvsbMWSsxsA@mail.gmail.com>
-Subject: Re: [PATCH v8 06/19] drm/mediatek: dpi: implement a CK/DE pol toggle
- in board config
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, deller@gmx.de,
-        CK Hu <ck.hu@mediatek.com>, Jitao Shi <jitao.shi@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.10.1.7]
+X-ClientProxiedBy: zgys-ex-mb09.Unicloud.com (10.10.0.24) To
+ zgys-ex-mb09.Unicloud.com (10.10.0.24)
+X-DNSRBL: 
+X-MAIL: spam.unicloud.com 21L2EUVI091183
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI, Guillaume:
+When the hwpoison page meets the filter conditions, it should
+not be regarded as successful memory_failure() processing for
+mce handler, but should return a value(-EHWPOISON), otherwise
+mce handler regards the error page has been identified and
+isolated, which may lead to calling set_mce_nospec() to change
+page attribute, etc.
 
-Guillaume Ranquet <granquet@baylibre.com> =E6=96=BC 2022=E5=B9=B42=E6=9C=88=
-18=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:56=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Adds a bit of flexibility to support boards without CK/DE pol support
+Here a new MF_MCE_HANDLE flag is introduced to identify the
+call from the mce handler and instruct hwpoison_filter() to
+return -EHWPOISON, otherwise return 0 for compatibility with
+the hwpoison injector.
 
-I'm not sure what the term 'board' mean. Do you mean different board
-with different panel but all with mt8195-dpintf? If so, you should get
-CK/DE support from panel driver not fix this information in dpi
-driver.
+Signed-off-by: luofei <luofei@unicloud.com>
+---
+ arch/x86/kernel/cpu/mce/core.c | 15 +++++++++------
+ include/linux/mm.h             |  1 +
+ mm/memory-failure.c            | 14 ++++++++++++--
+ 3 files changed, 22 insertions(+), 8 deletions(-)
 
-Regards,
-Chun-Kuang.
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 5818b837fd4d..de29165c65b6 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -612,7 +612,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
+ 		return NOTIFY_DONE;
+ 
+ 	pfn = mce->addr >> PAGE_SHIFT;
+-	if (!memory_failure(pfn, 0)) {
++	if (!memory_failure(pfn, MF_MCE_HANDLE)) {
+ 		set_mce_nospec(pfn, whole_page(mce));
+ 		mce->kflags |= MCE_HANDLED_UC;
+ 	}
+@@ -1286,7 +1286,7 @@ static void kill_me_now(struct callback_head *ch)
+ static void kill_me_maybe(struct callback_head *cb)
+ {
+ 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
+-	int flags = MF_ACTION_REQUIRED;
++	int flags = MF_ACTION_REQUIRED | MF_MCE_HANDLE;
+ 	int ret;
+ 
+ 	p->mce_count = 0;
+@@ -1303,9 +1303,12 @@ static void kill_me_maybe(struct callback_head *cb)
+ 	}
+ 
+ 	/*
+-	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
+-	 * to the current process with the proper error info, so no need to
+-	 * send SIGBUS here again.
++	 * -EHWPOISON from memory_failure() means that memory_failure() did
++	 * not handle the error event for the following reason:
++	 *  - SIGBUS has already been sent to the current process with the
++	 *    proper error info, or
++	 *  - hwpoison_filter() filtered the event,
++	 * so no need to deal with it more.
+ 	 */
+ 	if (ret == -EHWPOISON)
+ 		return;
+@@ -1320,7 +1323,7 @@ static void kill_me_never(struct callback_head *cb)
+ 
+ 	p->mce_count = 0;
+ 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
+-	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
++	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, MF_MCE_HANDLE))
+ 		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
+ }
+ 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 213cc569b192..f4703f948e9a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3188,6 +3188,7 @@ enum mf_flags {
+ 	MF_MUST_KILL = 1 << 2,
+ 	MF_SOFT_OFFLINE = 1 << 3,
+ 	MF_UNPOISON = 1 << 4,
++	MF_MCE_HANDLE = 1 << 5,
+ };
+ extern int memory_failure(unsigned long pfn, int flags);
+ extern void memory_failure_queue(unsigned long pfn, int flags);
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 97a9ed8f87a9..59d6d939a752 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1526,7 +1526,10 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+ 				if (TestClearPageHWPoison(head))
+ 					num_poisoned_pages_dec();
+ 				unlock_page(head);
+-				return 0;
++				if (flags & MF_MCE_HANDLE)
++					return -EHWPOISON;
++				else
++					return 0;
+ 			}
+ 			unlock_page(head);
+ 			res = MF_FAILED;
+@@ -1613,7 +1616,10 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
+ 		goto out;
+ 
+ 	if (hwpoison_filter(page)) {
+-		rc = 0;
++		if (flags & MF_MCE_HANDLE)
++			rc = -EHWPOISON;
++		else
++			rc = 0;
+ 		goto unlock;
+ 	}
+ 
+@@ -1837,6 +1843,10 @@ int memory_failure(unsigned long pfn, int flags)
+ 			num_poisoned_pages_dec();
+ 		unlock_page(p);
+ 		put_page(p);
++		if (flags & MF_MCE_HANDLE)
++			res = -EHWPOISON;
++		else
++			res = 0;
+ 		goto unlock_mutex;
+ 	}
+ 
+-- 
+2.27.0
 
->
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 22 +++++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediate=
-k/mtk_dpi.c
-> index 4746eb3425674..545a1337cc899 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -125,6 +125,7 @@ struct mtk_dpi_conf {
->         bool edge_sel_en;
->         const u32 *output_fmts;
->         u32 num_output_fmts;
-> +       bool is_ck_de_pol;
->         const struct mtk_dpi_yc_limit *limit;
->  };
->
-> @@ -211,13 +212,20 @@ static void mtk_dpi_config_pol(struct mtk_dpi *dpi,
->                                struct mtk_dpi_polarities *dpi_pol)
->  {
->         unsigned int pol;
-> +       unsigned int mask;
->
-> -       pol =3D (dpi_pol->ck_pol =3D=3D MTK_DPI_POLARITY_RISING ? 0 : CK_=
-POL) |
-> -             (dpi_pol->de_pol =3D=3D MTK_DPI_POLARITY_RISING ? 0 : DE_PO=
-L) |
-> -             (dpi_pol->hsync_pol =3D=3D MTK_DPI_POLARITY_RISING ? 0 : HS=
-YNC_POL) |
-> +       mask =3D HSYNC_POL | VSYNC_POL;
-> +       pol =3D (dpi_pol->hsync_pol =3D=3D MTK_DPI_POLARITY_RISING ? 0 : =
-HSYNC_POL) |
->               (dpi_pol->vsync_pol =3D=3D MTK_DPI_POLARITY_RISING ? 0 : VS=
-YNC_POL);
-> -       mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, pol,
-> -                    CK_POL | DE_POL | HSYNC_POL | VSYNC_POL);
-> +       if (dpi->conf->is_ck_de_pol) {
-> +               mask |=3D CK_POL | DE_POL;
-> +               pol |=3D (dpi_pol->ck_pol =3D=3D MTK_DPI_POLARITY_RISING =
-?
-> +                       0 : CK_POL) |
-> +                      (dpi_pol->de_pol =3D=3D MTK_DPI_POLARITY_RISING ?
-> +                       0 : DE_POL);
-> +       }
-> +
-> +       mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, pol, mask);
->  }
->
->  static void mtk_dpi_config_3d(struct mtk_dpi *dpi, bool en_3d)
-> @@ -799,6 +807,7 @@ static const struct mtk_dpi_conf mt8173_conf =3D {
->         .max_clock_khz =3D 300000,
->         .output_fmts =3D mt8173_output_fmts,
->         .num_output_fmts =3D ARRAY_SIZE(mt8173_output_fmts),
-> +       .is_ck_de_pol =3D true,
->         .limit =3D &mtk_dpi_limit,
->  };
->
-> @@ -809,6 +818,7 @@ static const struct mtk_dpi_conf mt2701_conf =3D {
->         .max_clock_khz =3D 150000,
->         .output_fmts =3D mt8173_output_fmts,
->         .num_output_fmts =3D ARRAY_SIZE(mt8173_output_fmts),
-> +       .is_ck_de_pol =3D true,
->         .limit =3D &mtk_dpi_limit,
->  };
->
-> @@ -818,6 +828,7 @@ static const struct mtk_dpi_conf mt8183_conf =3D {
->         .max_clock_khz =3D 100000,
->         .output_fmts =3D mt8183_output_fmts,
->         .num_output_fmts =3D ARRAY_SIZE(mt8183_output_fmts),
-> +       .is_ck_de_pol =3D true,
->         .limit =3D &mtk_dpi_limit,
->  };
->
-> @@ -827,6 +838,7 @@ static const struct mtk_dpi_conf mt8192_conf =3D {
->         .max_clock_khz =3D 150000,
->         .output_fmts =3D mt8173_output_fmts,
->         .num_output_fmts =3D ARRAY_SIZE(mt8173_output_fmts),
-> +       .is_ck_de_pol =3D true,
->         .limit =3D &mtk_dpi_limit,
->  };
->
-> --
-> 2.34.1
->

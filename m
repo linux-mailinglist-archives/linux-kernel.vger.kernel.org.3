@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE834BE1BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDDB4BDFB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349109AbiBUJ20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:28:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35902 "EHLO
+        id S240272AbiBUJ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:28:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349555AbiBUJVd (ORCPT
+        with ESMTP id S1349596AbiBUJVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:21:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDDE3669F;
-        Mon, 21 Feb 2022 01:08:27 -0800 (PST)
+        Mon, 21 Feb 2022 04:21:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E16032051;
+        Mon, 21 Feb 2022 01:08:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47CF3608C1;
-        Mon, 21 Feb 2022 09:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3187BC340EB;
-        Mon, 21 Feb 2022 09:08:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0F1FECE0E8C;
+        Mon, 21 Feb 2022 09:08:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA7F4C340EB;
+        Mon, 21 Feb 2022 09:08:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434506;
-        bh=LbpS3Y/VfwBZOHuEtHeMd4iAvaPoeairLJWLJwAYa1A=;
+        s=korg; t=1645434509;
+        bh=oHwyv9i4nomRFDXyb1ov4PujWD+EPAnMLWxspRvR/Dw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KU8drZIfE71SpVpN0RyZf4HL3F3vDPbN1Ix9+uXi5voXTGBbW2FskDUGKHTCX95EY
-         q6hzi1tTbTKDXfjn2eDI0t11tjRsAM+e2BaQlQ16D2Jd6x9uYEv/DEcDSjUH/INMkO
-         fcA31ygnmlit0JJNnF66juo8sFjRuVg0Z5mPYjPM=
+        b=LwSZTPXYy7xn4Sq70AHwe9wZcA3qm02wUS95Gph6qylr/HW5uvrTQjned64BND15/
+         H/vTIY5hkZ09w6lDFIdX1r4AOh0x6hjoaN1brHzAUJzlOkYpjoA192MPS/uvbFJG+J
+         9bzBWeJRRHdcdioWCiOP5yaPX03jmyqk8p4oHRCg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Cristian Marussi <cristian.marussi@arm.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 031/196] selftests: openat2: Add missing dependency in Makefile
-Date:   Mon, 21 Feb 2022 09:47:43 +0100
-Message-Id: <20220221084931.974100891@linuxfoundation.org>
+Subject: [PATCH 5.15 032/196] selftests: openat2: Skip testcases that fail with EOPNOTSUPP
+Date:   Mon, 21 Feb 2022 09:47:44 +0100
+Message-Id: <20220221084932.010338765@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
 References: <20220221084930.872957717@linuxfoundation.org>
@@ -58,42 +58,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cristian Marussi <cristian.marussi@arm.com>
 
-[ Upstream commit ea3396725aa143dd42fe388cb67e44c90d2fb719 ]
+[ Upstream commit ac9e0a250bb155078601a5b999aab05f2a04d1ab ]
 
-Add a dependency on header helpers.h to the main target; while at that add
-to helpers.h also a missing include for bool types.
+Skip testcases that fail since the requested valid flags combination is not
+supported by the underlying filesystem.
 
 Cc: Aleksa Sarai <cyphar@cyphar.com>
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/openat2/Makefile  | 2 +-
- tools/testing/selftests/openat2/helpers.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/openat2/openat2_test.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-index 4b93b1417b862..843ba56d8e49e 100644
---- a/tools/testing/selftests/openat2/Makefile
-+++ b/tools/testing/selftests/openat2/Makefile
-@@ -5,4 +5,4 @@ TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
+diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
+index 1bddbe934204c..7fb902099de45 100644
+--- a/tools/testing/selftests/openat2/openat2_test.c
++++ b/tools/testing/selftests/openat2/openat2_test.c
+@@ -259,6 +259,16 @@ void test_openat2_flags(void)
+ 		unlink(path);
  
- include ../lib.mk
- 
--$(TEST_GEN_PROGS): helpers.c
-+$(TEST_GEN_PROGS): helpers.c helpers.h
-diff --git a/tools/testing/selftests/openat2/helpers.h b/tools/testing/selftests/openat2/helpers.h
-index ad5d0ba5b6ce9..7056340b9339e 100644
---- a/tools/testing/selftests/openat2/helpers.h
-+++ b/tools/testing/selftests/openat2/helpers.h
-@@ -9,6 +9,7 @@
- 
- #define _GNU_SOURCE
- #include <stdint.h>
-+#include <stdbool.h>
- #include <errno.h>
- #include <linux/types.h>
- #include "../kselftest.h"
+ 		fd = sys_openat2(AT_FDCWD, path, &test->how);
++		if (fd < 0 && fd == -EOPNOTSUPP) {
++			/*
++			 * Skip the testcase if it failed because not supported
++			 * by FS. (e.g. a valid O_TMPFILE combination on NFS)
++			 */
++			ksft_test_result_skip("openat2 with %s fails with %d (%s)\n",
++					      test->name, fd, strerror(-fd));
++			goto next;
++		}
++
+ 		if (test->err >= 0)
+ 			failed = (fd < 0);
+ 		else
+@@ -303,7 +313,7 @@ void test_openat2_flags(void)
+ 		else
+ 			resultfn("openat2 with %s fails with %d (%s)\n",
+ 				 test->name, test->err, strerror(-test->err));
+-
++next:
+ 		free(fdpath);
+ 		fflush(stdout);
+ 	}
 -- 
 2.34.1
 

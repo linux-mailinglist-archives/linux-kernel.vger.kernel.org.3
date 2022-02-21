@@ -2,509 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0734BDF72
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CE34BE88C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355583AbiBUK62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:58:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55164 "EHLO
+        id S1348797AbiBULEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:04:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356031AbiBUK5L (ORCPT
+        with ESMTP id S1355565AbiBULE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:57:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04C72FFF0;
-        Mon, 21 Feb 2022 02:27:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 518B160FF0;
-        Mon, 21 Feb 2022 10:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B514C340E9;
-        Mon, 21 Feb 2022 10:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645439252;
-        bh=a6ASU2O48d40j6M61B3Cb87FPq9gMZ+3ryBwDH0SqbE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KWhZbwlesp/STR2Klni2iUXNS+ap1rtn2kjgGad3VGtxPKw8Bu6KbhJYDFwALyPV1
-         fT4CI8Huxt6omkxoCFdy5kh/+MxFC+W7YiGhbvozvbiq0TBz0pJJ97nu+PxfSQkz2w
-         x5sQ7+/zIIXzUir5ATGqtSzCVPpeKes/tGqrpwbggYPpsh0+ANdRQ+jJ7Qgg/k2K0A
-         Jm/UfZI625Q+5pQO5O5E39h1pgtBsnVj12rWbvReCqZgrF1nxP/ZaLsZY19xucxS7+
-         GmbkN85c+b4wNDGh2wRnAjFtcO/iI63Lcea71gNMLMQ4KlFvbOtG1V0Q3XC1TPFQi7
-         ZKvMKqFmZzENg==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Minnekhanov <alexeymin@postmarketos.org>,
-        jorcrous@amazon.com, dmitry.baryshkov@linaro.org
-Subject: [PATCH v7] i2c: qcom-geni: Add support for GPI DMA
-Date:   Mon, 21 Feb 2022 15:57:16 +0530
-Message-Id: <20220221102716.1167987-1-vkoul@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Mon, 21 Feb 2022 06:04:29 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE333E5CE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:32:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XI2CeO5fpm0S+n39ytoxRzbGoXriNykxZlC2N0s/u3N8zalOjh3KbRneoh3kpq+ndNFKDfUfuZ/G8o2Ro12PskWL5MmPyM3wrH7EsD+EQI22OD154oNfaz24Y62wACJvbwoZ6u+m4en/V7ztbA/4hn4sTr6jMi4F0gyLLEbAoGWo30byFDJWMmb4omWs2NiZhMkvvGtYryknO68eyNwBcjeHzscOfBhp0yXakqHOUk5zFHxfKnOunzQX+jJzhiSyrcn4ObLIeEeMM7vS9xd2gkEHzyQa5OTcu9/m7gL91/9QIHZMX3MWh/NhffkPoFi3T9284J+glirB2T4EbtHZfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8clvoOxm7+7c4D3BTExzoWieZO0+85MDo0X8K3ZTpQU=;
+ b=hBoOX0Fgt8vCz4qU2fE2wXOCD8sG6oYmQVp1vHIpTX66kjJHHf2+3RTiQZB0UjZf6wSb9Ng4HAPfqzesqJxXeMebcvKyLQhbYNG3d5cNWq61jrWzcKEbVeNeAreltooznDHHRXHBJav41SK9mf2YXNESPRkFc3bx5qtkjdysFz8NNB05atL7wlbwGVDcFEGKXluzJVcpD0bbYaicAzwwotCiq3dSFBA87VzMgr6vTCFdoDxagKxK0PNu+dmkysl992rwq35aq2BuLf4MmGedCBge4nafImnHLtHJ6blm43DuiXwodI+UeBvhmV1Fiog0DRTCxCc2jDC1PesGTT3u0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8clvoOxm7+7c4D3BTExzoWieZO0+85MDo0X8K3ZTpQU=;
+ b=n7s6/xC9A4cxE56plItJVZN4f65cFr5gyMDonlpWcPLSDLexY6rLV191bi4Old7KWf9W8EGhpsD0gaQY310hGpT4Hjs0hidACKaZugDn+r4Clk5bPG2nWbqcpoTrOt+IdBzcy5h4WjCy8hMiEcqimFroJhgQ0a9UcakRFRD72RE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by CO6PR12MB5475.namprd12.prod.outlook.com (2603:10b6:5:354::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Mon, 21 Feb
+ 2022 10:32:16 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
+ 10:32:16 +0000
+Message-ID: <6e0ebf4b-ffd7-df55-8ae9-472878f22605@amd.com>
+Date:   Mon, 21 Feb 2022 11:32:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/amdgpu: check vm ready by evicting
+Content-Language: en-US
+To:     Qiang Yu <qiang.yu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220221101239.2863-1-qiang.yu@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220221101239.2863-1-qiang.yu@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AS8PR05CA0003.eurprd05.prod.outlook.com
+ (2603:10a6:20b:311::8) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9353dc55-295c-4a2b-7277-08d9f5256e19
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5475:EE_
+X-Microsoft-Antispam-PRVS: <CO6PR12MB5475325AC0A88F62DE191309833A9@CO6PR12MB5475.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WDjcX13Ims5hef8r+rjd7fgrcenwO1VvyhUE/q1nJDIGTZdxKCltD68dzhJ3yrFnKVP26mUWtiv4SIiy0xdViQZusCgrL/8YS43Oe5KgBqaLANPqzSprLtuFeIKFEdd8NfLbvUNavRmJFIAuP+N8gmle6ODFghWHy9sS+MY6D9YXDISmWYdYXmFm1psrq9e5IguWvlCJzJDBZhQAOYa8QgWCVB3lkslWv1cktNzRJq2iO/Vr48efL9MuIn/fz4lNSM1n0IiMohy4xEz+jSJpo96ihmk0Z/OdHv9+oO/qEfWtVHg475p3h9tAcwPCR0Pho9cpUPYaaGxgHPk9N5Y1S4u67pAd2qcg0adCfAFyNs7f7y7/g5p5L0XAIGi5iSeX7iX75IFbSd5wf9iObvYRWRTYF5pqtbjSo9Sl3ik6FtqqeYGaOMj+pPgF5Erd6p8FpkfUaSTVTSwgi1qq+WpcovZkhHtbpzjdBIq5jtREc2Ouua8eqENxuRwrGefNYGGzS9DAJRKn5Y3KQDLvejboBPNgPtr3xtOyakMNxNiPHIUQL4Tfjgwh0jlwIFe+5peR2MD5F7mNkx2o8Yq4VCIOX+vojl6i+NM44fpIS2A5eI/x2ivZJxlC5Y0few5FyuBzL7ZQbdYbT5JPodmXAh2aFKcfnCu4aLJ5FcJk70zmblRiRNouMA0IpplvPItUAnkHYixE0CwpptWALC/oxG1thNPM/rrYYzGZHfawzPyJKtXtn5n3yXJdDyUdvC6+JG8r
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(31696002)(2906002)(2616005)(8936002)(38100700002)(186003)(26005)(86362001)(6512007)(316002)(66476007)(31686004)(66556008)(6666004)(83380400001)(110136005)(66574015)(6506007)(6486002)(8676002)(508600001)(4326008)(36756003)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TmNKOW03cThGSkJBS1ZueGJzaFlZeStQNmtmNlB1azBubGdocmgrNTJ4Yzd3?=
+ =?utf-8?B?L05DSHFYblpiMVdFK0VXc1hDTis0Q0hPOFRBWm10bm9taW5hMS94S2Y1akJF?=
+ =?utf-8?B?bUxGSy9WRUxpQUFnZi9nTm5IWmNjZnNQUi85emQzQWdTQnpwZjVzcmF1dUFR?=
+ =?utf-8?B?Nm9ZY2VVZWNVaE4xRkpCQXF4RjJCdmF1NVJPdm15T0ZuSWZMN051NVozZkdp?=
+ =?utf-8?B?OWc2S2x2d3d1dGhBdkV2OHBhRUEzdFIweHpTaTFLbFJlM0t6Q1FyNlQzVVh0?=
+ =?utf-8?B?cW0wMDVuek9WQmwvK0h2TWJDTTF1NjhoVWtJeEZkWXBVZnk2c2NWR0lPQk1U?=
+ =?utf-8?B?NHlRN0xYNHh4TWJTdS92Z2N2WVEyUkIyNzNxc1Q2UEpVUjhhTUQ0YlI2L1NI?=
+ =?utf-8?B?M3RNTm1QQ3ByRkNWYWtuR3IyTEFkZGZVVGlDSUdPcWNXTVV5VURTaHgyYUxX?=
+ =?utf-8?B?cnFEK0w0d1NTa1RjdWl5a0phaUhpdzJPRlo4eWZkOWVwS003U0o3UWkxUHUz?=
+ =?utf-8?B?WjZINDllZndSNGZ6dTlRdk05NDNUMUZvSTUzSkVidXhPaURjcnM5dE5WdlFy?=
+ =?utf-8?B?d2tiMGI2VGRhb1VDRWNKOUk4Q09rTDYwYWtIaVVPQVdRTjAvNXVkdERybmpU?=
+ =?utf-8?B?ZEd6UlhpeW0zc1ovR080UCtZNXFJZm1VeGJQampnSEpkM1NtVS9VR2hBc1Y5?=
+ =?utf-8?B?TzI3RC9TTlRxMGpLT0owc2V1QXd0T2NyL0FvYndQaTJodFdMZEVyMXdVS0dv?=
+ =?utf-8?B?L01GdXVEZGRpUm1TdXdsaXUweHorSHNMZUhQdkZsSXljOEFaTWwyK0J0V0Jl?=
+ =?utf-8?B?MHpKOVVXeWZQRnhPOEVPNXh1bXVZSGJ0VTd1MWZhMndhYnBXMzhyYzM2K2tu?=
+ =?utf-8?B?MnpYUUxOTUhqQ3RWZWNkdWxFWHN0SzJpSVhRd014MWdUakpaSHVwd1hmcXZ6?=
+ =?utf-8?B?cGdVK2JFeDdFUjZPU2JWMDliRERHVmcxZ2ZyditxaGxZMGlseUxKYWpNRG8w?=
+ =?utf-8?B?UkJUNFZ0d1JTdWU1NW1vczdKNjdOeVB4bGozUWJKcTc3Q1dROW1aajBMQTcv?=
+ =?utf-8?B?T3lWemhwR1REUW9qdy93MmhrWE90dWIxNENORU5vSWtPU0J5SThqSlhHMlNi?=
+ =?utf-8?B?ek1PQndtekFyMkZtcFAwOFp0VFFzRU1GMlgyL0haTXpaMmlFcFpsYjdsdHNL?=
+ =?utf-8?B?VWp3SXFqMFpGWGh2emJkWFVERCtPUU14TG8zWnYxNDdsbWIwRURjbzAwWEp3?=
+ =?utf-8?B?T3U0eTBkaEFyVWVCcGZvUVFOQWF4YkQ3YXFxSWlwZm1CNW9BTENWemFoTWph?=
+ =?utf-8?B?NUVhcTlqQmhiWWtFU09GRGsya3Q0VTBCRExtbXpIRVJIaVZ6Q0FCZTliWElh?=
+ =?utf-8?B?Rmo3UGNwOFBZZzU0aTNPWDBRaFVQbkRMY3FTdkJObm5xRGpYV2o5ajRHclN0?=
+ =?utf-8?B?aUNwcG5jVkx3K3hNVkQ2OEdEQ2VjTjI1TDZlMjlMNXZpQVMyWEMxY01nTEEz?=
+ =?utf-8?B?R1pmb1lIejJWN1dmemJGaFAxMHh1QnhVMmQzNklLclFybWZ2RU8wU1NaL05v?=
+ =?utf-8?B?VFpXT0psekhFU3dwRmlkc1prT3FjUDlsUHJyUTVhbFliaVZYOGFlMTJFT1F2?=
+ =?utf-8?B?RUI4eE1EUHh2d3RvUDhRQTZ2bC9PSlNIdmMxYmdwdERCeU8yRUhIUVNjeHp2?=
+ =?utf-8?B?elFROUNva0RRUDRjbkpSdjJjVFNvcklDKzVLK01tSkxENFBBTlR1bGppMCtv?=
+ =?utf-8?B?dDhqcCttcm94R1Y1VmxCYWw0VHYweHRjdzBlREFUa05ZUHR2UWxlbHFhSEVR?=
+ =?utf-8?B?SHQ1YTBEVFdXdzczTnVPemU4RXB0dHRLa2JDUFA2UmFtZkE2Wm5ZRi9IOW5T?=
+ =?utf-8?B?Rk9YRWN0TnpCaU5mUU03VDBJcTFjS3hlS2dlaTdURHIxTGtnZllGUkhjTGht?=
+ =?utf-8?B?OWh3WmVoYTdHT3NURXJLQ1NRUi9NRVNYSUEvVUNuaE9JQUQycWgyN3dGaTVx?=
+ =?utf-8?B?b3hncFE1RHVWS2VJNU5RTVJZaWcvSGYvTVlueDd2OTlkQkJTZzJoVUVQVTRw?=
+ =?utf-8?B?TTF4ZTNBQVUvYXNzcVhVc3YwYjg2cHNWSUR2ZFFmVmJVUVdDdUpaWnVPbGk3?=
+ =?utf-8?Q?OI8o=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9353dc55-295c-4a2b-7277-08d9f5256e19
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 10:32:16.0642
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Tlt1Aufo+vZlj0sno3JcJPl0o4VNqymRGIfTeX0lT4WaSCEuWGu4mWinpKvtTvOS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5475
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QUP Serial engines supports data transfers thru FIFO mode, SE DMA mode
-and lastly GPI DMA mode. Former two are already supported and this adds
-supports for the last mode.
-
-In GPI DMA mode, the firmware is issued commands by driver to perform
-DMA and setup the serial port.
-
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
-
-Changes since v6:
- - Fix comments by Bjorn
- - Use existing gi2c->err to pass status from callback
- - rework callback flow to avoid goto
-
-Changes since v5:
- - Fix comments by Bjorn, Dmitry and Jordan
- - Fix the order of remove
- - make sure completion is called when status is !NOERROR
- - dont reset dma channel on exit
- - Make sure to return num on scucess for i2c xfer for both fifo and gpi
-   mode
 
 
-Changes since v4:
- - Fix buildbot warn
- - Fix flase warn reported by Alexey
- - Fix feedback from Bjorn and cleanup the probe code and add more details
-   in changelog
+Am 21.02.22 um 11:12 schrieb Qiang Yu:
+> Workstation application ANSA/META get this error dmesg:
+> [drm:amdgpu_gem_va_ioctl [amdgpu]] *ERROR* Couldn't update BO_VA (-16)
+>
+> This is caused by:
+> 1. create a 256MB buffer in invisible VRAM
+> 2. CPU map the buffer and access it causes vm_fault and try to move
+>     it to visible VRAM
+> 3. force visible VRAM space and traverse all VRAM bos to check if
+>     evicting this bo is valuable
+> 4. when checking a VM bo (in invisible VRAM), amdgpu_vm_evictable()
+>     will set amdgpu_vm->evicting, but latter due to not in visible
+>     VRAM, won't really evict it so not add it to amdgpu_vm->evicted
+> 5. before next CS to clear the amdgpu_vm->evicting, user VM ops
+>     ioctl will pass amdgpu_vm_ready() (check amdgpu_vm->evicted)
+>     but fail in amdgpu_vm_bo_update_mapping() (check
+>     amdgpu_vm->evicting) and get this error log
+>
+> This error won't affect functionality as next CS will finish the
+> waiting VM ops. But we'd better clear the error log by check the
+> evicting flag which really stop VM ops latter.
+>
+> Signed-off-by: Qiang Yu <qiang.yu@amd.com>
 
-Changes since v3:
- - remove separate tx and rx function for gsi dma and make a common one
- - remove global structs and use local variables instead
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
+Good work.
 
-
- drivers/i2c/busses/i2c-qcom-geni.c | 308 ++++++++++++++++++++++++++---
- 1 file changed, 280 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 6d635a7c104c..fc1dcc19f2a1 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -3,7 +3,9 @@
- 
- #include <linux/acpi.h>
- #include <linux/clk.h>
-+#include <linux/dmaengine.h>
- #include <linux/dma-mapping.h>
-+#include <linux/dma/qcom-gpi-dma.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -48,6 +50,9 @@
- #define LOW_COUNTER_SHFT	10
- #define CYCLE_COUNTER_MSK	GENMASK(9, 0)
- 
-+#define I2C_PACK_TX		BIT(0)
-+#define I2C_PACK_RX		BIT(1)
-+
- enum geni_i2c_err_code {
- 	GP_IRQ0,
- 	NACK,
-@@ -89,6 +94,9 @@ struct geni_i2c_dev {
- 	void *dma_buf;
- 	size_t xfer_len;
- 	dma_addr_t dma_addr;
-+	struct dma_chan *tx_c;
-+	struct dma_chan *rx_c;
-+	bool gpi_mode;
- };
- 
- struct geni_i2c_err_log {
-@@ -456,12 +464,207 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	return gi2c->err;
- }
- 
-+static void i2c_gpi_cb_result(void *cb, const struct dmaengine_result *result)
-+{
-+	struct geni_i2c_dev *gi2c = cb;
-+
-+	if (result->result != DMA_TRANS_NOERROR) {
-+		dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
-+		gi2c->err = -EIO;
-+	} else if (result->residue) {
-+		dev_dbg(gi2c->se.dev, "DMA xfer has pending: %d\n", result->residue);
-+	}
-+
-+	complete(&gi2c->done);
-+}
-+
-+static void geni_i2c_gpi_unmap(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
-+			       void *tx_buf, dma_addr_t tx_addr,
-+			       void *rx_buf, dma_addr_t rx_addr)
-+{
-+	if (tx_buf) {
-+		dma_unmap_single(gi2c->se.dev->parent, tx_addr, msg->len, DMA_TO_DEVICE);
-+		i2c_put_dma_safe_msg_buf(tx_buf, msg, false);
-+	}
-+
-+	if (rx_buf) {
-+		dma_unmap_single(gi2c->se.dev->parent, rx_addr, msg->len, DMA_FROM_DEVICE);
-+		i2c_put_dma_safe_msg_buf(rx_buf, msg, false);
-+	}
-+}
-+
-+static int geni_i2c_gpi(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
-+			struct dma_slave_config *config, dma_addr_t *dma_addr_p,
-+			void **buf, unsigned int op, struct dma_chan *dma_chan)
-+{
-+	struct gpi_i2c_config *peripheral;
-+	unsigned int flags;
-+	void *dma_buf;
-+	dma_addr_t addr;
-+	enum dma_data_direction map_dirn;
-+	enum dma_transfer_direction dma_dirn;
-+	struct dma_async_tx_descriptor *desc;
-+	int ret;
-+
-+	peripheral = config->peripheral_config;
-+
-+	dma_buf = i2c_get_dma_safe_msg_buf(msg, 1);
-+	if (!dma_buf)
-+		return -ENOMEM;
-+
-+	if (op == I2C_WRITE)
-+		map_dirn = DMA_TO_DEVICE;
-+	else
-+		map_dirn = DMA_FROM_DEVICE;
-+
-+	addr = dma_map_single(gi2c->se.dev->parent, dma_buf, msg->len, map_dirn);
-+	if (dma_mapping_error(gi2c->se.dev->parent, addr)) {
-+		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
-+		return -ENOMEM;
-+	}
-+
-+	/* set the length as message for rx txn */
-+	peripheral->rx_len = msg->len;
-+	peripheral->op = op;
-+
-+	ret = dmaengine_slave_config(dma_chan, config);
-+	if (ret) {
-+		dev_err(gi2c->se.dev, "dma config error: %d for op:%d\n", ret, op);
-+		goto err_config;
-+	}
-+
-+	peripheral->set_config = 0;
-+	peripheral->multi_msg = true;
-+	flags = DMA_PREP_INTERRUPT | DMA_CTRL_ACK;
-+
-+	if (op == I2C_WRITE)
-+		dma_dirn = DMA_MEM_TO_DEV;
-+	else
-+		dma_dirn = DMA_DEV_TO_MEM;
-+
-+	desc = dmaengine_prep_slave_single(dma_chan, addr, msg->len, dma_dirn, flags);
-+	if (!desc) {
-+		dev_err(gi2c->se.dev, "prep_slave_sg failed\n");
-+		ret = -EIO;
-+		goto err_config;
-+	}
-+
-+	desc->callback_result = i2c_gpi_cb_result;
-+	desc->callback_param = gi2c;
-+
-+	dmaengine_submit(desc);
-+	*dma_addr_p = addr;
-+
-+	return 0;
-+
-+err_config:
-+	dma_unmap_single(gi2c->se.dev->parent, addr, msg->len, map_dirn);
-+	i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
-+	return ret;
-+}
-+
-+static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], int num)
-+{
-+	struct dma_slave_config config = {};
-+	struct gpi_i2c_config peripheral = {};
-+	int i, ret = 0, timeout;
-+	dma_addr_t tx_addr, rx_addr;
-+	void *tx_buf = NULL, *rx_buf = NULL;
-+	const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
-+
-+	config.peripheral_config = &peripheral;
-+	config.peripheral_size = sizeof(peripheral);
-+
-+	peripheral.pack_enable = I2C_PACK_TX | I2C_PACK_RX;
-+	peripheral.cycle_count = itr->t_cycle_cnt;
-+	peripheral.high_count = itr->t_high_cnt;
-+	peripheral.low_count = itr->t_low_cnt;
-+	peripheral.clk_div = itr->clk_div;
-+	peripheral.set_config = 1;
-+	peripheral.multi_msg = false;
-+
-+	for (i = 0; i < num; i++) {
-+		gi2c->cur = &msgs[i];
-+		gi2c->err = 0;
-+		dev_dbg(gi2c->se.dev, "msg[%d].len:%d\n", i, gi2c->cur->len);
-+
-+		peripheral.stretch = 0;
-+		if (i < num - 1)
-+			peripheral.stretch = 1;
-+
-+		peripheral.addr = msgs[i].addr;
-+
-+		if (msgs[i].flags & I2C_M_RD) {
-+			ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
-+					    &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
-+			if (ret)
-+				goto err;
-+		}
-+
-+		ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
-+				    &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
-+		if (ret)
-+			goto err;
-+
-+		if (msgs[i].flags & I2C_M_RD)
-+			dma_async_issue_pending(gi2c->rx_c);
-+		dma_async_issue_pending(gi2c->tx_c);
-+
-+		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
-+		if (!timeout) {
-+			dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d addr:0x%x\n",
-+				gi2c->cur->flags, gi2c->cur->addr);
-+			gi2c->err = -ETIMEDOUT;
-+			goto err;
-+		}
-+
-+		if (gi2c->err) {
-+			ret = gi2c->err;
-+			goto err;
-+		}
-+
-+		geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
-+	}
-+
-+	return num;
-+
-+err:
-+	dev_err(gi2c->se.dev, "GPI transfer failed: %d\n", ret);
-+	dmaengine_terminate_sync(gi2c->rx_c);
-+	dmaengine_terminate_sync(gi2c->tx_c);
-+	geni_i2c_gpi_unmap(gi2c, &msgs[i], tx_buf, tx_addr, rx_buf, rx_addr);
-+	return ret;
-+}
-+
-+static int geni_i2c_fifo_xfer(struct geni_i2c_dev *gi2c,
-+			      struct i2c_msg msgs[], int num)
-+{
-+	int i, ret = 0;
-+
-+	for (i = 0; i < num; i++) {
-+		u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
-+
-+		m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
-+
-+		gi2c->cur = &msgs[i];
-+		if (msgs[i].flags & I2C_M_RD)
-+			ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
-+		else
-+			ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
-+
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return num;
-+}
-+
- static int geni_i2c_xfer(struct i2c_adapter *adap,
- 			 struct i2c_msg msgs[],
- 			 int num)
- {
- 	struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
--	int i, ret;
-+	int ret;
- 
- 	gi2c->err = 0;
- 	reinit_completion(&gi2c->done);
-@@ -475,28 +678,17 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 	}
- 
- 	qcom_geni_i2c_conf(gi2c);
--	for (i = 0; i < num; i++) {
--		u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
--
--		m_param |= ((msgs[i].addr << SLV_ADDR_SHFT) & SLV_ADDR_MSK);
--
--		gi2c->cur = &msgs[i];
--		if (msgs[i].flags & I2C_M_RD)
--			ret = geni_i2c_rx_one_msg(gi2c, &msgs[i], m_param);
--		else
--			ret = geni_i2c_tx_one_msg(gi2c, &msgs[i], m_param);
- 
--		if (ret)
--			break;
--	}
--	if (ret == 0)
--		ret = num;
-+	if (gi2c->gpi_mode)
-+		ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
-+	else
-+		ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
- 
- 	pm_runtime_mark_last_busy(gi2c->se.dev);
- 	pm_runtime_put_autosuspend(gi2c->se.dev);
- 	gi2c->cur = NULL;
- 	gi2c->err = 0;
--	return ret;
-+	return num;
- }
- 
- static u32 geni_i2c_func(struct i2c_adapter *adap)
-@@ -517,11 +709,50 @@ static const struct acpi_device_id geni_i2c_acpi_match[] = {
- MODULE_DEVICE_TABLE(acpi, geni_i2c_acpi_match);
- #endif
- 
-+static void release_gpi_dma(struct geni_i2c_dev *gi2c)
-+{
-+	if (gi2c->rx_c)
-+		dma_release_channel(gi2c->rx_c);
-+
-+	if (gi2c->tx_c)
-+		dma_release_channel(gi2c->tx_c);
-+}
-+
-+static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
-+{
-+	int ret;
-+
-+	geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
-+	gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
-+	if (IS_ERR(gi2c->tx_c)) {
-+		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->tx_c),
-+				    "Failed to get tx DMA ch\n");
-+		if (ret < 0)
-+			goto err_tx;
-+	}
-+
-+	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
-+	if (IS_ERR(gi2c->rx_c)) {
-+		ret = dev_err_probe(gi2c->se.dev, PTR_ERR(gi2c->rx_c),
-+				    "Failed to get rx DMA ch\n");
-+		if (ret < 0)
-+			goto err_rx;
-+	}
-+
-+	dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
-+	return 0;
-+
-+err_rx:
-+	dma_release_channel(gi2c->tx_c);
-+err_tx:
-+	return ret;
-+}
-+
- static int geni_i2c_probe(struct platform_device *pdev)
- {
- 	struct geni_i2c_dev *gi2c;
- 	struct resource *res;
--	u32 proto, tx_depth;
-+	u32 proto, tx_depth, fifo_disable;
- 	int ret;
- 	struct device *dev = &pdev->dev;
- 
-@@ -601,27 +832,43 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 	proto = geni_se_read_proto(&gi2c->se);
--	tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
- 	if (proto != GENI_SE_I2C) {
- 		dev_err(dev, "Invalid proto %d\n", proto);
- 		geni_se_resources_off(&gi2c->se);
- 		return -ENXIO;
- 	}
--	gi2c->tx_wm = tx_depth - 1;
--	geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
--	geni_se_config_packing(&gi2c->se, BITS_PER_BYTE, PACKING_BYTES_PW,
--							true, true, true);
-+
-+	fifo_disable = readl_relaxed(gi2c->se.base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
-+	if (fifo_disable) {
-+		/* FIFO is disabled, so we can only use GPI DMA */
-+		gi2c->gpi_mode = true;
-+		ret = setup_gpi_dma(gi2c);
-+		if (ret) {
-+			dev_err(dev, "Failed to setup GPI DMA mode:%d ret\n", ret);
-+			return ret;
-+		}
-+
-+		dev_dbg(dev, "Using GPI DMA mode for I2C\n");
-+	} else {
-+		gi2c->gpi_mode = false;
-+		tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
-+		gi2c->tx_wm = tx_depth - 1;
-+		geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
-+		geni_se_config_packing(&gi2c->se, BITS_PER_BYTE,
-+				       PACKING_BYTES_PW, true, true, true);
-+
-+		dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
-+	}
-+
- 	ret = geni_se_resources_off(&gi2c->se);
- 	if (ret) {
- 		dev_err(dev, "Error turning off resources %d\n", ret);
--		return ret;
-+		goto err_dma;
- 	}
- 
- 	ret = geni_icc_disable(&gi2c->se);
- 	if (ret)
--		return ret;
--
--	dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
-+		goto err_dma;
- 
- 	gi2c->suspended = 1;
- 	pm_runtime_set_suspended(gi2c->se.dev);
-@@ -633,12 +880,16 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(dev, "Error adding i2c adapter %d\n", ret);
- 		pm_runtime_disable(gi2c->se.dev);
--		return ret;
-+		goto err_dma;
- 	}
- 
- 	dev_dbg(dev, "Geni-I2C adaptor successfully added\n");
- 
- 	return 0;
-+
-+err_dma:
-+	release_gpi_dma(gi2c);
-+	return ret;
- }
- 
- static int geni_i2c_remove(struct platform_device *pdev)
-@@ -646,6 +897,7 @@ static int geni_i2c_remove(struct platform_device *pdev)
- 	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
- 
- 	i2c_del_adapter(&gi2c->adap);
-+	release_gpi_dma(gi2c);
- 	pm_runtime_disable(gi2c->se.dev);
- 	return 0;
- }
--- 
-2.34.1
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c | 9 +++++++--
+>   1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> index 37acd8911168..2cd9f1a2e5fa 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> @@ -770,11 +770,16 @@ int amdgpu_vm_validate_pt_bos(struct amdgpu_device *adev, struct amdgpu_vm *vm,
+>    * Check if all VM PDs/PTs are ready for updates
+>    *
+>    * Returns:
+> - * True if eviction list is empty.
+> + * True if VM is not evicting.
+>    */
+>   bool amdgpu_vm_ready(struct amdgpu_vm *vm)
+>   {
+> -	return list_empty(&vm->evicted);
+> +	bool ret;
+> +
+> +	amdgpu_vm_eviction_lock(vm);
+> +	ret = !vm->evicting;
+> +	amdgpu_vm_eviction_unlock(vm);
+> +	return ret;
+>   }
+>   
+>   /**
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEF24BDD21
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455EF4BE38F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352506AbiBUJrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:47:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48738 "EHLO
+        id S1346121AbiBUJ3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:29:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350634AbiBUJkM (ORCPT
+        with ESMTP id S1349710AbiBUJVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:40:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D323C4A3;
-        Mon, 21 Feb 2022 01:17:22 -0800 (PST)
+        Mon, 21 Feb 2022 04:21:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F526AEA;
+        Mon, 21 Feb 2022 01:08:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF2EB608C1;
-        Mon, 21 Feb 2022 09:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69B7C340E9;
-        Mon, 21 Feb 2022 09:17:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6FD860B1E;
+        Mon, 21 Feb 2022 09:08:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA21CC340E9;
+        Mon, 21 Feb 2022 09:08:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435041;
-        bh=mYHp2j2kVIa5fz2wvM3QZPJjPf4jO/gaOjFC/WzNFx4=;
+        s=korg; t=1645434529;
+        bh=CYOTbDCLUGrJotI7Jyz4UqYmv4jCCN8nYYgwmy1/Vig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fh4v/DDvXlVr6hkhZqzkU2gAzzat5qz6Eo8Lkdt6iMrrIfmc35pHZP58ZQ1qgqKXF
-         dlVExVAYCYzWruoWqC153jJ3ftgb4FkFTA4RYxqJ2b5CjNjmPcpnGn2u3Yp+XBY+M1
-         rkOUXwSmELiJxptedHXGyRdoylZsBQGnGvZ3KxOE=
+        b=rfzqWMmm9gfGUpWeeVZEiTataryaVO98kJctfqvy15ak70Nwr49qHRUj48cSJ0ehd
+         tLX9WOd7pvBvz/7XkxFiha+sXFtuLDH0Ht3c08d5jF2usqVnqJ0lwNt/V2s3oZnEwC
+         zmINUjIKxW95WwNfr1Q3Gl68seMIJ0Xic7k57wL8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.16 024/227] HID: amd_sfh: Correct the structure field name
-Date:   Mon, 21 Feb 2022 09:47:23 +0100
-Message-Id: <20220221084935.645213897@linuxfoundation.org>
+        stable@vger.kernel.org, Christian Loehle <cloehle@hyperstone.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.15 012/196] mmc: block: fix read single on recovery logic
+Date:   Mon, 21 Feb 2022 09:47:24 +0100
+Message-Id: <20220221084931.301444682@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,31 +55,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+From: Christian Löhle <CLoehle@hyperstone.com>
 
-commit aa0b724a2bf041036e56cbb3b4b3afde7c5e7c9e upstream.
+commit 54309fde1a352ad2674ebba004a79f7d20b9f037 upstream.
 
-Misinterpreted intr_enable field name. Hence correct the structure
-field name accordingly to reflect the functionality.
+On reads with MMC_READ_MULTIPLE_BLOCK that fail,
+the recovery handler will use MMC_READ_SINGLE_BLOCK for
+each of the blocks, up to MMC_READ_SINGLE_RETRIES times each.
+The logic for this is fixed to never report unsuccessful reads
+as success to the block layer.
 
-Fixes: f264481ad614 ("HID: amd_sfh: Extend driver capabilities for multi-generation support")
-Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+On command error with retries remaining, blk_update_request was
+called with whatever value error was set last to.
+In case it was last set to BLK_STS_OK (default), the read will be
+reported as success, even though there was no data read from the device.
+This could happen on a CRC mismatch for the response,
+a card rejecting the command (e.g. again due to a CRC mismatch).
+In case it was last set to BLK_STS_IOERR, the error is reported correctly,
+but no retries will be attempted.
+
+Fixes: 81196976ed946c ("mmc: block: Add blk-mq support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Link: https://lore.kernel.org/r/bc706a6ab08c4fe2834ba0c05a804672@hyperstone.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/core/block.c |   28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
---- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-@@ -49,7 +49,7 @@ union sfh_cmd_base {
- 	} s;
- 	struct {
- 		u32 cmd_id : 4;
--		u32 intr_enable : 1;
-+		u32 intr_disable : 1;
- 		u32 rsvd1 : 3;
- 		u32 length : 7;
- 		u32 mem_type : 1;
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1682,31 +1682,31 @@ static void mmc_blk_read_single(struct m
+ 	struct mmc_card *card = mq->card;
+ 	struct mmc_host *host = card->host;
+ 	blk_status_t error = BLK_STS_OK;
+-	int retries = 0;
+ 
+ 	do {
+ 		u32 status;
+ 		int err;
++		int retries = 0;
+ 
+-		mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
++		while (retries++ <= MMC_READ_SINGLE_RETRIES) {
++			mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
+ 
+-		mmc_wait_for_req(host, mrq);
++			mmc_wait_for_req(host, mrq);
+ 
+-		err = mmc_send_status(card, &status);
+-		if (err)
+-			goto error_exit;
+-
+-		if (!mmc_host_is_spi(host) &&
+-		    !mmc_ready_for_data(status)) {
+-			err = mmc_blk_fix_state(card, req);
++			err = mmc_send_status(card, &status);
+ 			if (err)
+ 				goto error_exit;
+-		}
+ 
+-		if (mrq->cmd->error && retries++ < MMC_READ_SINGLE_RETRIES)
+-			continue;
++			if (!mmc_host_is_spi(host) &&
++			    !mmc_ready_for_data(status)) {
++				err = mmc_blk_fix_state(card, req);
++				if (err)
++					goto error_exit;
++			}
+ 
+-		retries = 0;
++			if (!mrq->cmd->error)
++				break;
++		}
+ 
+ 		if (mrq->cmd->error ||
+ 		    mrq->data->error ||
 
 

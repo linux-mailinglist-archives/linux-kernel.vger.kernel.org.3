@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4659B4BEBE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FFD4BEBE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbiBUUdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 15:33:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51130 "EHLO
+        id S233057AbiBUUgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 15:36:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbiBUUdO (ORCPT
+        with ESMTP id S231697AbiBUUgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:33:14 -0500
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D44237CD;
-        Mon, 21 Feb 2022 12:32:49 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 9FDC25801C5;
-        Mon, 21 Feb 2022 15:32:48 -0500 (EST)
-Received: from imap49 ([10.202.2.99])
-  by compute2.internal (MEProxy); Mon, 21 Feb 2022 15:32:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=NED4cOpv9ehxeL
-        floDZ2z4NkG7N66dYY5ssaAAMsdKA=; b=du7kcJj9nxtlaZuO7iaB4rOfCnMlvn
-        2z8yhwdWkrI3UDNhxbg2Y67c89zEnXz4vKszlMNjO2yBgo84Yus9H7Q6dWB2P0i5
-        y/SA4Xc939Tu8QidxqZwBSZ029WXIZO+lpv0QwpE/LkbINS5V6r8opEaqWPGkTj3
-        ggoS0bhGvHtFdFDOrP3A99DuHvDUhGfoMkYKaeoZiVIlEQzPp7JAb6oWAte0VjiT
-        z/19S9UabJn5bsks05U9+lyiFsZr+lVHWBOIS0AiL/3SOT0B6XFmEhGgL4KPyFUF
-        EucQf8jhSIsfeiKUACgGzL4o0oeKye0X5z7ZTgq5X84guGMtjZIau90A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=NED4cOpv9ehxeLflo
-        DZ2z4NkG7N66dYY5ssaAAMsdKA=; b=QYNfdCGSAw+/5+GgD0r1NXvE4k/m0XCI4
-        mbv0P17Yx35W/tArs1ROndkBq7TjwEdZ9PR+4ZMVPtowI214iTOSPMFR8SuNCA9N
-        Hj2E2yMBiIrtKQk/Xp6h45Y8C971XKt2Lotf3ghr1n9dKid3OuQR8f6z/NiLbZok
-        4CwcEp8jQ6/2J7BqsZdLt4xfx5zQAP4cswfB3N3h24CyIGUKPoI8sQhsf/YTNDMC
-        w/0XVZCVW0G/uXGL4Y65k84izNJamBKBhHfBLBiM3QMZv5f07VGfeLvftl69kZqO
-        h1H7CXSSHV/hxXVXwHC5fEY4/pZxtZQWJpTMdwLgoWnbBi8o97ROA==
-X-ME-Sender: <xms:7_YTYrZhQ2Vcxy6ouE0t8V5Zu1ElEUbxSFWGTxA1RuMi-Jwar99Vqw>
-    <xme:7_YTYqY6ONfAv4Taf4WNsdCVd00NSXfe5gIsNqkueShFmL-PF2dGaWRXKD8nSE06-
-    l_AwPJgcQhsGWqB9AI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeigddufeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfulhgr
-    uggvucghrghtkhhinhhsfdcuoehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
-    eqnecuggftrfgrthhtvghrnhepueeiffetjeeitefgveetleehveduheetiefhhfethedt
-    teelgeettddvvedvudegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhm
-X-ME-Proxy: <xmx:7_YTYt90CiRlz2kjTJRYRJoIbgZNixuGOZhRu8Wfl5hNUZr7rW2mNw>
-    <xmx:7_YTYhqJ6yH7jQS7z-X3YdY2cJfMJrlvzkqwSgWuJsuYLYb-CFPlBA>
-    <xmx:7_YTYmqAsjoaC22sscS81Wo92L_J_y5E9-oZX9WGfHWMgadpyLLKEw>
-    <xmx:8PYTYjgBwsxvY6UKBj1Rg-A2gDofx2h9Y2nEuwgElUthlU3eFo1m_4vH-f8>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BB2C3F60083; Mon, 21 Feb 2022 15:32:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
-Mime-Version: 1.0
-Message-Id: <6d7d7dfa-69a0-436e-bc2e-75ca1279fd4d@www.fastmail.com>
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
-Date:   Mon, 21 Feb 2022 15:32:47 -0500
-From:   "Slade Watkins" <slade@sladewatkins.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Mon, 21 Feb 2022 15:36:08 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90A8237CD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:35:44 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id o24so29072383wro.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:35:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XlzX9gDy4XjD1q8Bv6zI2a9b8+oDi1jGLfGPO3lK4QA=;
+        b=ErgE3hl6pB2qeUes/BQtqtdPE+0OgQ2ciDaS+K+37IX27VhVWyVl5wQ+sNp2uFtdSI
+         VEsmonrdZ4WskwvCNc5yHAQeBgJbZAiISxYS1Ol272lQpg7zGwhcsG0HuQfBEneMkJet
+         JMpdP0lPmjSPszfRjtGf6011po1WcyvCyNu0s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XlzX9gDy4XjD1q8Bv6zI2a9b8+oDi1jGLfGPO3lK4QA=;
+        b=JvFx6vvfqOLTWOtJOgpa2Etgmq8jagru4XXOCV0CoyxOMxMz996FiCsHupotWIVAPD
+         /Hk8R9h6+ez0tLbm+PkhyeZFRY05qNiBGVYEGSXSkZk5EMQNrUoSOVPP2imwtVYszbo2
+         wwdWtld6LO8hxWJ/5I7pZXt9EHBtBrjlhzX3Z72iR/Bdt7qm4MEKpMPBVb91H2jFGZB6
+         4G/E3Fa/vsr4pLYyXR+25/G3xCcd1our0S5rx9cGt6DpJgzlW6xg+UwxHoSql6/qimZC
+         BJXnnP+UTqyJOqU0vMpEMnDtuyNxT+NDeGeJVlvLBHZpeyehsJ2XIW+CIyhmnj7n2p/3
+         fmIw==
+X-Gm-Message-State: AOAM532qw8aaztL3UQdhHq/LngEpW8MhXfvkUkai/PLNTxpwPzcPppF/
+        GrzDjs6fGQGpYnnS9rVZT9AdUw==
+X-Google-Smtp-Source: ABdhPJzvvmtJ+9B1GaTk+STcgmWeNruO76Gbv8vjsh/To+Ojd0Y/wS1prszpFloSPh7yaI8DmfoQIA==
+X-Received: by 2002:a05:6000:15cb:b0:1ea:7db2:f5bb with SMTP id y11-20020a05600015cb00b001ea7db2f5bbmr1382967wry.709.1645475743321;
+        Mon, 21 Feb 2022 12:35:43 -0800 (PST)
+Received: from capella.. (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id z24-20020a1c4c18000000b0037bd7f40771sm340380wmf.30.2022.02.21.12.35.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 12:35:42 -0800 (PST)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        "Pavel Machek" <pavel@denx.de>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
-Subject: Re: [PATCH 4.19 00/58] 4.19.231-rc1 review
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v2 net] net: dsa: fix panic when removing unoffloaded port from bridge
+Date:   Mon, 21 Feb 2022 21:35:38 +0100
+Message-Id: <20220221203539.310690-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022, at 3:48 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.231 release.
-> There are 58 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-4.19.231-rc1 compiled and booted with no errors or regressions on my x86_64 test system.
+If a bridged port is not offloaded to the hardware - either because the
+underlying driver does not implement the port_bridge_{join,leave} ops,
+or because the operation failed - then its dp->bridge pointer will be
+NULL when dsa_port_bridge_leave() is called. Avoid dereferncing NULL.
 
-Tested-by: Slade Watkins <slade@sladewatkins.com>
+This fixes the following splat when removing a port from a bridge:
 
-Cheers, 
-Slade
+ Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000000
+ Internal error: Oops: 96000004 [#1] PREEMPT_RT SMP
+ CPU: 3 PID: 1119 Comm: brctl Tainted: G           O      5.17.0-rc4-rt4 #1
+ Call trace:
+  dsa_port_bridge_leave+0x8c/0x1e4
+  dsa_slave_changeupper+0x40/0x170
+  dsa_slave_netdevice_event+0x494/0x4d4
+  notifier_call_chain+0x80/0xe0
+  raw_notifier_call_chain+0x1c/0x24
+  call_netdevice_notifiers_info+0x5c/0xac
+  __netdev_upper_dev_unlink+0xa4/0x200
+  netdev_upper_dev_unlink+0x38/0x60
+  del_nbp+0x1b0/0x300
+  br_del_if+0x38/0x114
+  add_del_if+0x60/0xa0
+  br_ioctl_stub+0x128/0x2dc
+  br_ioctl_call+0x68/0xb0
+  dev_ifsioc+0x390/0x554
+  dev_ioctl+0x128/0x400
+  sock_do_ioctl+0xb4/0xf4
+  sock_ioctl+0x12c/0x4e0
+  __arm64_sys_ioctl+0xa8/0xf0
+  invoke_syscall+0x4c/0x110
+  el0_svc_common.constprop.0+0x48/0xf0
+  do_el0_svc+0x28/0x84
+  el0_svc+0x1c/0x50
+  el0t_64_sync_handler+0xa8/0xb0
+  el0t_64_sync+0x17c/0x180
+ Code: f9402f00 f0002261 f9401302 913cc021 (a9401404)
+ ---[ end trace 0000000000000000 ]---
+
+Fixes: d3eed0e57d5d ("net: dsa: keep the bridge_dev and bridge_num as part of the same structure")
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+v1 -> v2:
+- replace trailing comma with semicolon *facepalm*
+---
+ net/dsa/port.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/net/dsa/port.c b/net/dsa/port.c
+index eef4a98f2628..1a40c52f5a42 100644
+--- a/net/dsa/port.c
++++ b/net/dsa/port.c
+@@ -395,10 +395,17 @@ void dsa_port_bridge_leave(struct dsa_port *dp, struct net_device *br)
+ 		.tree_index = dp->ds->dst->index,
+ 		.sw_index = dp->ds->index,
+ 		.port = dp->index,
+-		.bridge = *dp->bridge,
+ 	};
+ 	int err;
+ 
++	/* If the port could not be offloaded to begin with, then
++	 * there is nothing to do.
++	 */
++	if (!dp->bridge)
++		return;
++
++	info.bridge = *dp->bridge;
++
+ 	/* Here the port is already unbridged. Reflect the current configuration
+ 	 * so that drivers can program their chips accordingly.
+ 	 */
+-- 
+2.35.1
+

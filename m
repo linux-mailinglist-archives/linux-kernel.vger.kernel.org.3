@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61644BE7F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E6D4BDE09
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351093AbiBUJln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:41:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36342 "EHLO
+        id S1347348AbiBUJFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:05:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350672AbiBUJel (ORCPT
+        with ESMTP id S1347767AbiBUJBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:34:41 -0500
+        Mon, 21 Feb 2022 04:01:45 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C6D2AC73;
-        Mon, 21 Feb 2022 01:14:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF282980C;
+        Mon, 21 Feb 2022 00:57:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E02660E9F;
-        Mon, 21 Feb 2022 09:13:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA36C340F6;
-        Mon, 21 Feb 2022 09:13:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0053D61140;
+        Mon, 21 Feb 2022 08:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCAD5C340E9;
+        Mon, 21 Feb 2022 08:56:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434831;
-        bh=ZpfoQcnTmVqebXfBI40itLAdUgbRn0FhwDiHLlfqpqI=;
+        s=korg; t=1645433797;
+        bh=yYV72LLm4rWP4TZMDH94vDkyz3GDLcEC49kBuewSJl8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uswXPEhonJQ3tk+tXRvX9I06jBqehnlUtj/KONkaC9iqyI4EWgiZ9+HICqSbBrFPT
-         RgxOvJLOhqquVFBZ8sw9FJ6C1E8wfGVOcfofELNUdUrnxPMJ6CZ1IPO611RBiNYueq
-         MdngXMaCIfx0yvj1abWgN1PSrWQU1wrZ1MomJ9p8=
+        b=eRR2RqEvPoGRdt0OXSwUxefd4aGTfRYc87XdMLB4xcENuU+wltgDi/sk50f9L19fM
+         mYj531qWvrCqszuB/TEUEH2hHW1dpy4ujuNhHkQFjL7l7QyC1YrZ6uWk1qbWThidaw
+         cTCxStc190ya4K+yyTvJtl4bTh+bZ8oVr/dGnvkU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephane Eranian <eranian@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 145/196] KVM: x86/pmu: Dont truncate the PerfEvtSeln MSR when creating a perf event
-Date:   Mon, 21 Feb 2022 09:49:37 +0100
-Message-Id: <20220221084935.775021299@linuxfoundation.org>
+Subject: [PATCH 4.19 45/58] mtd: rawnand: brcmnand: Refactored code to introduce helper functions
+Date:   Mon, 21 Feb 2022 09:49:38 +0100
+Message-Id: <20220221084913.333269706@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +55,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jim Mattson <jmattson@google.com>
+From: Kamal Dasu <kdasu.kdev@gmail.com>
 
-[ Upstream commit b8bfee85f1307426e0242d654f3a14c06ef639c5 ]
+[ Upstream commit 3c7c1e4594efd57b98ae6f7298f40cff4f4fb47b ]
 
-AMD's event select is 3 nybbles, with the high nybble in bits 35:32 of
-a PerfEvtSeln MSR. Don't drop the high nybble when setting up the
-config field of a perf_event_attr structure for a call to
-perf_event_create_kernel_counter().
+Refactored NAND ECC and CMD address configuration code to use helper
+functions.
 
-Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
-Reported-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Jim Mattson <jmattson@google.com>
-Message-Id: <20220203014813.2130559-1-jmattson@google.com>
-Reviewed-by: David Dunn <daviddunn@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/pmu.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 100 ++++++++++++++---------
+ 1 file changed, 62 insertions(+), 38 deletions(-)
 
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index eec614de9af30..bfef0c658730e 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -95,7 +95,7 @@ static void kvm_perf_overflow_intr(struct perf_event *perf_event,
+diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+index 774ffa9e23f38..db18198f2834f 100644
+--- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
++++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+@@ -589,6 +589,54 @@ static inline void brcmnand_write_fc(struct brcmnand_controller *ctrl,
+ 	__raw_writel(val, ctrl->nand_fc + word * 4);
  }
  
- static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
--				  unsigned config, bool exclude_user,
-+				  u64 config, bool exclude_user,
- 				  bool exclude_kernel, bool intr,
- 				  bool in_tx, bool in_tx_cp)
++static void brcmnand_clear_ecc_addr(struct brcmnand_controller *ctrl)
++{
++
++	/* Clear error addresses */
++	brcmnand_write_reg(ctrl, BRCMNAND_UNCORR_ADDR, 0);
++	brcmnand_write_reg(ctrl, BRCMNAND_CORR_ADDR, 0);
++	brcmnand_write_reg(ctrl, BRCMNAND_UNCORR_EXT_ADDR, 0);
++	brcmnand_write_reg(ctrl, BRCMNAND_CORR_EXT_ADDR, 0);
++}
++
++static u64 brcmnand_get_uncorrecc_addr(struct brcmnand_controller *ctrl)
++{
++	u64 err_addr;
++
++	err_addr = brcmnand_read_reg(ctrl, BRCMNAND_UNCORR_ADDR);
++	err_addr |= ((u64)(brcmnand_read_reg(ctrl,
++					     BRCMNAND_UNCORR_EXT_ADDR)
++					     & 0xffff) << 32);
++
++	return err_addr;
++}
++
++static u64 brcmnand_get_correcc_addr(struct brcmnand_controller *ctrl)
++{
++	u64 err_addr;
++
++	err_addr = brcmnand_read_reg(ctrl, BRCMNAND_CORR_ADDR);
++	err_addr |= ((u64)(brcmnand_read_reg(ctrl,
++					     BRCMNAND_CORR_EXT_ADDR)
++					     & 0xffff) << 32);
++
++	return err_addr;
++}
++
++static void brcmnand_set_cmd_addr(struct mtd_info *mtd, u64 addr)
++{
++	struct nand_chip *chip =  mtd_to_nand(mtd);
++	struct brcmnand_host *host = nand_get_controller_data(chip);
++	struct brcmnand_controller *ctrl = host->ctrl;
++
++	brcmnand_write_reg(ctrl, BRCMNAND_CMD_EXT_ADDRESS,
++			   (host->cs << 16) | ((addr >> 32) & 0xffff));
++	(void)brcmnand_read_reg(ctrl, BRCMNAND_CMD_EXT_ADDRESS);
++	brcmnand_write_reg(ctrl, BRCMNAND_CMD_ADDRESS,
++			   lower_32_bits(addr));
++	(void)brcmnand_read_reg(ctrl, BRCMNAND_CMD_ADDRESS);
++}
++
+ static inline u16 brcmnand_cs_offset(struct brcmnand_controller *ctrl, int cs,
+ 				     enum brcmnand_cs_reg reg)
  {
-@@ -173,7 +173,8 @@ static bool pmc_resume_counter(struct kvm_pmc *pmc)
+@@ -1217,9 +1265,12 @@ static void brcmnand_send_cmd(struct brcmnand_host *host, int cmd)
+ {
+ 	struct brcmnand_controller *ctrl = host->ctrl;
+ 	int ret;
++	u64 cmd_addr;
++
++	cmd_addr = brcmnand_read_reg(ctrl, BRCMNAND_CMD_ADDRESS);
++
++	dev_dbg(ctrl->dev, "send native cmd %d addr 0x%llx\n", cmd, cmd_addr);
  
- void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
- {
--	unsigned config, type = PERF_TYPE_RAW;
-+	u64 config;
-+	u32 type = PERF_TYPE_RAW;
- 	struct kvm *kvm = pmc->vcpu->kvm;
- 	struct kvm_pmu_event_filter *filter;
- 	int i;
+-	dev_dbg(ctrl->dev, "send native cmd %d addr_lo 0x%x\n", cmd,
+-		brcmnand_read_reg(ctrl, BRCMNAND_CMD_ADDRESS));
+ 	BUG_ON(ctrl->cmd_pending != 0);
+ 	ctrl->cmd_pending = cmd;
+ 
+@@ -1380,12 +1431,7 @@ static void brcmnand_cmdfunc(struct mtd_info *mtd, unsigned command,
+ 	if (!native_cmd)
+ 		return;
+ 
+-	brcmnand_write_reg(ctrl, BRCMNAND_CMD_EXT_ADDRESS,
+-		(host->cs << 16) | ((addr >> 32) & 0xffff));
+-	(void)brcmnand_read_reg(ctrl, BRCMNAND_CMD_EXT_ADDRESS);
+-	brcmnand_write_reg(ctrl, BRCMNAND_CMD_ADDRESS, lower_32_bits(addr));
+-	(void)brcmnand_read_reg(ctrl, BRCMNAND_CMD_ADDRESS);
+-
++	brcmnand_set_cmd_addr(mtd, addr);
+ 	brcmnand_send_cmd(host, native_cmd);
+ 	brcmnand_waitfunc(mtd, chip);
+ 
+@@ -1605,20 +1651,10 @@ static int brcmnand_read_by_pio(struct mtd_info *mtd, struct nand_chip *chip,
+ 	struct brcmnand_controller *ctrl = host->ctrl;
+ 	int i, j, ret = 0;
+ 
+-	/* Clear error addresses */
+-	brcmnand_write_reg(ctrl, BRCMNAND_UNCORR_ADDR, 0);
+-	brcmnand_write_reg(ctrl, BRCMNAND_CORR_ADDR, 0);
+-	brcmnand_write_reg(ctrl, BRCMNAND_UNCORR_EXT_ADDR, 0);
+-	brcmnand_write_reg(ctrl, BRCMNAND_CORR_EXT_ADDR, 0);
+-
+-	brcmnand_write_reg(ctrl, BRCMNAND_CMD_EXT_ADDRESS,
+-			(host->cs << 16) | ((addr >> 32) & 0xffff));
+-	(void)brcmnand_read_reg(ctrl, BRCMNAND_CMD_EXT_ADDRESS);
++	brcmnand_clear_ecc_addr(ctrl);
+ 
+ 	for (i = 0; i < trans; i++, addr += FC_BYTES) {
+-		brcmnand_write_reg(ctrl, BRCMNAND_CMD_ADDRESS,
+-				   lower_32_bits(addr));
+-		(void)brcmnand_read_reg(ctrl, BRCMNAND_CMD_ADDRESS);
++		brcmnand_set_cmd_addr(mtd, addr);
+ 		/* SPARE_AREA_READ does not use ECC, so just use PAGE_READ */
+ 		brcmnand_send_cmd(host, CMD_PAGE_READ);
+ 		brcmnand_waitfunc(mtd, chip);
+@@ -1638,21 +1674,15 @@ static int brcmnand_read_by_pio(struct mtd_info *mtd, struct nand_chip *chip,
+ 					host->hwcfg.sector_size_1k);
+ 
+ 		if (!ret) {
+-			*err_addr = brcmnand_read_reg(ctrl,
+-					BRCMNAND_UNCORR_ADDR) |
+-				((u64)(brcmnand_read_reg(ctrl,
+-						BRCMNAND_UNCORR_EXT_ADDR)
+-					& 0xffff) << 32);
++			*err_addr = brcmnand_get_uncorrecc_addr(ctrl);
++
+ 			if (*err_addr)
+ 				ret = -EBADMSG;
+ 		}
+ 
+ 		if (!ret) {
+-			*err_addr = brcmnand_read_reg(ctrl,
+-					BRCMNAND_CORR_ADDR) |
+-				((u64)(brcmnand_read_reg(ctrl,
+-						BRCMNAND_CORR_EXT_ADDR)
+-					& 0xffff) << 32);
++			*err_addr = brcmnand_get_correcc_addr(ctrl);
++
+ 			if (*err_addr)
+ 				ret = -EUCLEAN;
+ 		}
+@@ -1722,7 +1752,7 @@ static int brcmnand_read(struct mtd_info *mtd, struct nand_chip *chip,
+ 	dev_dbg(ctrl->dev, "read %llx -> %p\n", (unsigned long long)addr, buf);
+ 
+ try_dmaread:
+-	brcmnand_write_reg(ctrl, BRCMNAND_UNCORR_COUNT, 0);
++	brcmnand_clear_ecc_addr(ctrl);
+ 
+ 	if (has_flash_dma(ctrl) && !oob && flash_dma_buf_ok(buf)) {
+ 		err = brcmnand_dma_trans(host, addr, buf, trans * FC_BYTES,
+@@ -1866,15 +1896,9 @@ static int brcmnand_write(struct mtd_info *mtd, struct nand_chip *chip,
+ 		goto out;
+ 	}
+ 
+-	brcmnand_write_reg(ctrl, BRCMNAND_CMD_EXT_ADDRESS,
+-			(host->cs << 16) | ((addr >> 32) & 0xffff));
+-	(void)brcmnand_read_reg(ctrl, BRCMNAND_CMD_EXT_ADDRESS);
+-
+ 	for (i = 0; i < trans; i++, addr += FC_BYTES) {
+ 		/* full address MUST be set before populating FC */
+-		brcmnand_write_reg(ctrl, BRCMNAND_CMD_ADDRESS,
+-				   lower_32_bits(addr));
+-		(void)brcmnand_read_reg(ctrl, BRCMNAND_CMD_ADDRESS);
++		brcmnand_set_cmd_addr(mtd, addr);
+ 
+ 		if (buf) {
+ 			brcmnand_soc_data_bus_prepare(ctrl->soc, false);
 -- 
 2.34.1
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2B24BDF2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB904BE64A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345919AbiBUIyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:54:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43116 "EHLO
+        id S1352262AbiBUJzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:55:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345668AbiBUIxT (ORCPT
+        with ESMTP id S1352971AbiBUJsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:53:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DE517A9F;
-        Mon, 21 Feb 2022 00:52:52 -0800 (PST)
+        Mon, 21 Feb 2022 04:48:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FA4DB;
+        Mon, 21 Feb 2022 01:22:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9DC5CB80EAA;
-        Mon, 21 Feb 2022 08:52:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE66FC340E9;
-        Mon, 21 Feb 2022 08:52:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5DAA608C4;
+        Mon, 21 Feb 2022 09:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBA0FC340E9;
+        Mon, 21 Feb 2022 09:22:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433570;
-        bh=LX4/1hs1SFohhphc14r6GvrG4GtlOhrrIKgHhAeELbM=;
+        s=korg; t=1645435323;
+        bh=FP0noNME49WxSoqRCZ0EQn1amRs1cgcJIiNqgWL8IT8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PizHHQzcXIhxDglnONON5J5szozpc2mXAdUQnAbkUvUxA9bNTzGPtGunkeHmltuC+
-         bENB8bXXqRQWkYuo4Y2rCPrz+DvydsaMIU9tuIuxowBY1pgctTtxQ6+74sORUNjQ5R
-         /donjcZ6VcyOyk7DJROb/pl/NXtK79PCUO14oEuU=
+        b=p9XoP/xwn4MFr1K2C67Io2ZQbc/oTKLbobyw+ldgALPMfXzTgq8dSOz/OdCu4wnpV
+         HbBBSgLehzliWVeuAsey826N1bMwnWU9IVrQg+uaE96tJeTidSgIX1dimXWlpiGc/9
+         tINpAAT8VHh2yD0QkHAwkOkll/Ja5RK6SV0QTiMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 12/45] vfs: make freeze_super abort when sync_filesystem returns error
+        stable@vger.kernel.org,
+        syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com,
+        Wen Gu <guwen@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 124/227] net/smc: Avoid overwriting the copies of clcsock callback functions
 Date:   Mon, 21 Feb 2022 09:49:03 +0100
-Message-Id: <20220221084910.865394502@linuxfoundation.org>
+Message-Id: <20220221084938.974189993@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
-References: <20220221084910.454824160@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Darrick J. Wong <djwong@kernel.org>
+From: Wen Gu <guwen@linux.alibaba.com>
 
-[ Upstream commit 2719c7160dcfaae1f73a1c0c210ad3281c19022e ]
+commit 1de9770d121ee9294794cca0e0be8fbfa0134ee8 upstream.
 
-If we fail to synchronize the filesystem while preparing to freeze the
-fs, abort the freeze.
+The callback functions of clcsock will be saved and replaced during
+the fallback. But if the fallback happens more than once, then the
+copies of these callback functions will be overwritten incorrectly,
+resulting in a loop call issue:
 
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+clcsk->sk_error_report
+ |- smc_fback_error_report() <------------------------------|
+     |- smc_fback_forward_wakeup()                          | (loop)
+         |- clcsock_callback()  (incorrectly overwritten)   |
+             |- smc->clcsk_error_report() ------------------|
+
+So this patch fixes the issue by saving these function pointers only
+once in the fallback and avoiding overwriting.
+
+Reported-by: syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com
+Fixes: 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback")
+Link: https://lore.kernel.org/r/0000000000006d045e05d78776f6@google.com
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/super.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ net/smc/af_smc.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/fs/super.c b/fs/super.c
-index 1d7461bca1600..819a33e79a011 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -1380,11 +1380,9 @@ static void lockdep_sb_freeze_acquire(struct super_block *sb)
- 		percpu_rwsem_acquire(sb->s_writers.rw_sem + level, 0, _THIS_IP_);
- }
- 
--static void sb_freeze_unlock(struct super_block *sb)
-+static void sb_freeze_unlock(struct super_block *sb, int level)
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -667,14 +667,17 @@ static void smc_fback_error_report(struc
+ static int smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
  {
--	int level;
--
--	for (level = SB_FREEZE_LEVELS - 1; level >= 0; level--)
-+	for (level--; level >= 0; level--)
- 		percpu_up_write(sb->s_writers.rw_sem + level);
+ 	struct sock *clcsk;
++	int rc = 0;
+ 
+ 	mutex_lock(&smc->clcsock_release_lock);
+ 	if (!smc->clcsock) {
+-		mutex_unlock(&smc->clcsock_release_lock);
+-		return -EBADF;
++		rc = -EBADF;
++		goto out;
+ 	}
+ 	clcsk = smc->clcsock->sk;
+ 
++	if (smc->use_fallback)
++		goto out;
+ 	smc->use_fallback = true;
+ 	smc->fallback_rsn = reason_code;
+ 	smc_stat_fallback(smc);
+@@ -702,8 +705,9 @@ static int smc_switch_to_fallback(struct
+ 		smc->clcsock->sk->sk_user_data =
+ 			(void *)((uintptr_t)smc | SK_USER_DATA_NOCOPY);
+ 	}
++out:
+ 	mutex_unlock(&smc->clcsock_release_lock);
+-	return 0;
++	return rc;
  }
  
-@@ -1455,7 +1453,14 @@ int freeze_super(struct super_block *sb)
- 	sb_wait_write(sb, SB_FREEZE_PAGEFAULT);
- 
- 	/* All writers are done so after syncing there won't be dirty data */
--	sync_filesystem(sb);
-+	ret = sync_filesystem(sb);
-+	if (ret) {
-+		sb->s_writers.frozen = SB_UNFROZEN;
-+		sb_freeze_unlock(sb, SB_FREEZE_PAGEFAULT);
-+		wake_up(&sb->s_writers.wait_unfrozen);
-+		deactivate_locked_super(sb);
-+		return ret;
-+	}
- 
- 	/* Now wait for internal filesystem counter */
- 	sb->s_writers.frozen = SB_FREEZE_FS;
-@@ -1467,7 +1472,7 @@ int freeze_super(struct super_block *sb)
- 			printk(KERN_ERR
- 				"VFS:Filesystem freeze failed\n");
- 			sb->s_writers.frozen = SB_UNFROZEN;
--			sb_freeze_unlock(sb);
-+			sb_freeze_unlock(sb, SB_FREEZE_FS);
- 			wake_up(&sb->s_writers.wait_unfrozen);
- 			deactivate_locked_super(sb);
- 			return ret;
-@@ -1519,7 +1524,7 @@ int thaw_super(struct super_block *sb)
- 	}
- 
- 	sb->s_writers.frozen = SB_UNFROZEN;
--	sb_freeze_unlock(sb);
-+	sb_freeze_unlock(sb, SB_FREEZE_FS);
- out:
- 	wake_up(&sb->s_writers.wait_unfrozen);
- 	deactivate_locked_super(sb);
--- 
-2.34.1
-
+ /* fall back during connect */
 
 

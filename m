@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4204BE5E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9484BE84D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351717AbiBUJqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:46:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48576 "EHLO
+        id S232964AbiBUKE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:04:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351325AbiBUJg7 (ORCPT
+        with ESMTP id S1353519AbiBUJ5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:36:59 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F22D2DD6F;
-        Mon, 21 Feb 2022 01:15:38 -0800 (PST)
+        Mon, 21 Feb 2022 04:57:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1228FDF89;
+        Mon, 21 Feb 2022 01:26:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3BE91CE0E76;
-        Mon, 21 Feb 2022 09:15:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219D3C340E9;
-        Mon, 21 Feb 2022 09:15:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A177C61016;
+        Mon, 21 Feb 2022 09:26:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86E15C340E9;
+        Mon, 21 Feb 2022 09:26:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434910;
-        bh=QX9P9b6jKNwVb+IFyUDJF/Xx6Le72wsrSkqWivmyQJE=;
+        s=korg; t=1645435597;
+        bh=gTQ04QDOxJ+4r8PsB+BEiOsQwripN+5lfxt370p67Sg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YOtjTu0GBqz8E6z3CMPIxagdVAZYkY7kdkFcCePrqllwy0RPiGNNfygpwWhC3H+yu
-         AgGeRPaFGVGFaizm46t2alCJbHGciG5QbVLofNky7qCBjh0qQPHsGVped96pepLnq5
-         QcwtUcnGfzKFXMvrmiyMaCd7azn3pmzLNBmGxaEc=
+        b=F0Q8o8uCGoK4yancxqRc3jeOLuOf+FRTf6Q1N9xIRHtZX11tJF9nz0hCYNjN033PO
+         dYSrnccdk4SXwBNeZ1vvHz3glRjlx0E+8Zh94u4KW4YuyOQH0xw5RPJKamLbXj1RkA
+         UYV33TuKt6zUtq6TRuYfFiSeSBdmIyV+vBtehCJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc St-Amand <mstamand@ciena.com>,
-        Harini Katakam <harini.katakam@xilinx.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 174/196] net: macb: Align the dma and coherent dma masks
+        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.16 187/227] scsi: qedi: Fix ABBA deadlock in qedi_process_tmf_resp() and qedi_process_cmd_cleanup_resp()
 Date:   Mon, 21 Feb 2022 09:50:06 +0100
-Message-Id: <20220221084936.779910220@linuxfoundation.org>
+Message-Id: <20220221084941.030096409@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,51 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc St-Amand <mstamand@ciena.com>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit 37f7860602b5b2d99fc7465f6407f403f5941988 ]
+commit f10f582d28220f50099d3f561116256267821429 upstream.
 
-Single page and coherent memory blocks can use different DMA masks
-when the macb accesses physical memory directly. The kernel is clever
-enough to allocate pages that fit into the requested address width.
+This fixes a deadlock added with commit b40f3894e39e ("scsi: qedi: Complete
+TMF works before disconnect")
 
-When using the ARM SMMU, the DMA mask must be the same for single
-pages and big coherent memory blocks. Otherwise the translation
-tables turn into one big mess.
+Bug description from Jia-Ju Bai:
 
-  [   74.959909] macb ff0e0000.ethernet eth0: DMA bus error: HRESP not OK
-  [   74.959989] arm-smmu fd800000.smmu: Unhandled context fault: fsr=0x402, iova=0x3165687460, fsynr=0x20001, cbfrsynra=0x877, cb=1
-  [   75.173939] macb ff0e0000.ethernet eth0: DMA bus error: HRESP not OK
-  [   75.173955] arm-smmu fd800000.smmu: Unhandled context fault: fsr=0x402, iova=0x3165687460, fsynr=0x20001, cbfrsynra=0x877, cb=1
+qedi_process_tmf_resp()
+  spin_lock(&session->back_lock); --> Line 201 (Lock A)
+  spin_lock(&qedi_conn->tmf_work_lock); --> Line 230 (Lock B)
 
-Since using the same DMA mask does not hurt direct 1:1 physical
-memory mappings, this commit always aligns DMA and coherent masks.
+qedi_process_cmd_cleanup_resp()
+  spin_lock_bh(&qedi_conn->tmf_work_lock); --> Line 752 (Lock B)
+  spin_lock_bh(&conn->session->back_lock); --> Line 784 (Lock A)
 
-Signed-off-by: Marc St-Amand <mstamand@ciena.com>
-Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+When qedi_process_tmf_resp() and qedi_process_cmd_cleanup_resp() are
+concurrently executed, the deadlock can occur.
+
+This patch fixes the deadlock by not holding the tmf_work_lock in
+qedi_process_cmd_cleanup_resp while holding the back_lock. The
+tmf_work_lock is only needed while we remove the tmf_work from the
+work_list.
+
+Link: https://lore.kernel.org/r/20220208185448.6206-1-michael.christie@oracle.com
+Fixes: b40f3894e39e ("scsi: qedi: Complete TMF works before disconnect")
+Cc: Manish Rangankar <mrangankar@marvell.com>
+Cc: Nilesh Javali <njavali@marvell.com>
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Reported-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/cadence/macb_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qedi/qedi_fw.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index d13fb1d318215..d71c11a6282ec 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -4739,7 +4739,7 @@ static int macb_probe(struct platform_device *pdev)
- 
- #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
- 	if (GEM_BFEXT(DAW64, gem_readl(bp, DCFG6))) {
--		dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
-+		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(44));
- 		bp->hw_dma_cap |= HW_DMA_CAP_64B;
+--- a/drivers/scsi/qedi/qedi_fw.c
++++ b/drivers/scsi/qedi/qedi_fw.c
+@@ -771,11 +771,10 @@ static void qedi_process_cmd_cleanup_res
+ 			qedi_cmd->list_tmf_work = NULL;
+ 		}
  	}
- #endif
--- 
-2.34.1
-
++	spin_unlock_bh(&qedi_conn->tmf_work_lock);
+ 
+-	if (!found) {
+-		spin_unlock_bh(&qedi_conn->tmf_work_lock);
++	if (!found)
+ 		goto check_cleanup_reqs;
+-	}
+ 
+ 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
+ 		  "TMF work, cqe->tid=0x%x, tmf flags=0x%x, cid=0x%x\n",
+@@ -806,7 +805,6 @@ static void qedi_process_cmd_cleanup_res
+ 	qedi_cmd->state = CLEANUP_RECV;
+ unlock:
+ 	spin_unlock_bh(&conn->session->back_lock);
+-	spin_unlock_bh(&qedi_conn->tmf_work_lock);
+ 	wake_up_interruptible(&qedi_conn->wait_queue);
+ 	return;
+ 
 
 

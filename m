@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B73F4BD753
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 681274BD713
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346147AbiBUH3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:29:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47960 "EHLO
+        id S1346166AbiBUHaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:30:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiBUH3s (ORCPT
+        with ESMTP id S231397AbiBUHaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:29:48 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D3C2E7;
-        Sun, 20 Feb 2022 23:29:24 -0800 (PST)
-X-UUID: 2e011d40a02843e2b7e6398bc6902036-20220221
-X-UUID: 2e011d40a02843e2b7e6398bc6902036-20220221
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 499028823; Mon, 21 Feb 2022 15:29:22 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 21 Feb 2022 15:29:21 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Feb
- 2022 15:29:21 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 21 Feb 2022 15:29:20 +0800
-Message-ID: <4be20cf9fd351c17414945a2fa199c490a0ff8d6.camel@mediatek.com>
-Subject: Re: [PATCH v5 2/3] mmc: core: Add support for SDIO async interrupt
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        "Eric Biggers" <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Mon, 21 Feb 2022 15:29:19 +0800
-In-Reply-To: <CAPDyKFqd+H6F4+gBd4CEigaOTC5TtjtT75B3G0B6qexFi6XqKw@mail.gmail.com>
-References: <20220121071942.11601-1-axe.yang@mediatek.com>
-         <20220121071942.11601-3-axe.yang@mediatek.com>
-         <CAPDyKFqd+H6F4+gBd4CEigaOTC5TtjtT75B3G0B6qexFi6XqKw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 21 Feb 2022 02:30:12 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E633D2E7;
+        Sun, 20 Feb 2022 23:29:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645428589; x=1676964589;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6D4yV8bDeMxm5+FUJ/FpEuulvTmINQkkeXa+l9x7HIE=;
+  b=AABymVGNKr2E3P14+5d5gEFIQJLd2utnI84hSHH6adTREjOyzEYoKpUi
+   a3ODLMiO8mhoOUK4d4bJE+6vR8IzSYnesNeFWe108wwwdl7fxrIs9CIME
+   J0damegyWna03ypJoak0MHDtzhRXxHp+sfEqlDUKRwTJ2kkuplgFsImvV
+   o=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Feb 2022 23:29:49 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 23:29:49 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Sun, 20 Feb 2022 23:29:49 -0800
+Received: from [10.216.3.188] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Sun, 20 Feb
+ 2022 23:29:45 -0800
+Message-ID: <c1d80103-168a-b9eb-938b-4351115a0e08@quicinc.com>
+Date:   Mon, 21 Feb 2022 12:59:41 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v3 2/7] mailbox: qcom: Add support for SDX65 APCS IPC
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1645420953-21176-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1645420953-21176-3-git-send-email-quic_rohiagar@quicinc.com>
+ <20220221053514.GA15108@thinkpad>
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <20220221053514.GA15108@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,145 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-02-14 at 16:34 +0100, Ulf Hansson wrote:
-> On Fri, 21 Jan 2022 at 08:19, Axe Yang <axe.yang@mediatek.com> wrote:
-> > 
-> > If cap-sdio-async-irq flag is set in host dts node, parse EAI
-> > information from SDIO CCCR interrupt externsion segment. If async
-> > interrupt is supported by SDIO card then send command to card to
-> > enable it and set enable_async_irq flag in sdio_cccr structure to
-> > 1.
-> > The parse flow is implemented in sdio_read_cccr().
-> > 
-> > Acked-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> > ---
-> >  drivers/mmc/core/host.c  |  2 ++
-> >  drivers/mmc/core/sdio.c  | 17 +++++++++++++++++
-> >  include/linux/mmc/card.h |  3 ++-
-> >  include/linux/mmc/host.h |  1 +
-> >  include/linux/mmc/sdio.h |  5 +++++
-> >  5 files changed, 27 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-> > index cf140f4ec864..a972241548b4 100644
-> > --- a/drivers/mmc/core/host.c
-> > +++ b/drivers/mmc/core/host.c
-> > @@ -410,6 +410,8 @@ int mmc_of_parse(struct mmc_host *host)
-> >         if (device_property_read_bool(dev, "no-mmc-hs400"))
-> >                 host->caps2 &= ~(MMC_CAP2_HS400_1_8V |
-> > MMC_CAP2_HS400_1_2V |
-> >                                  MMC_CAP2_HS400_ES);
-> > +       if (device_property_read_bool(dev, "cap-sdio-async-irq"))
-> > +               host->caps2 |= MMC_CAP2_SDIO_ASYNC_IRQ;
-> > 
-> >         /* Must be after "non-removable" check */
-> >         if (device_property_read_u32(dev, "fixed-emmc-driver-type", 
-> > &drv_type) == 0) {
-> > diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
-> > index 41164748723d..771fb5d18585 100644
-> > --- a/drivers/mmc/core/sdio.c
-> > +++ b/drivers/mmc/core/sdio.c
-> > @@ -225,6 +225,23 @@ static int sdio_read_cccr(struct mmc_card
-> > *card, u32 ocr)
-> >                                 card->sw_caps.sd3_drv_type |=
-> > SD_DRIVER_TYPE_C;
-> >                         if (data & SDIO_DRIVE_SDTD)
-> >                                 card->sw_caps.sd3_drv_type |=
-> > SD_DRIVER_TYPE_D;
-> > +
-> > +                       if (card->host->caps2 &
-> > MMC_CAP2_SDIO_ASYNC_IRQ) {
-> 
-> We can probably check host->pm_caps & MMC_PM_WAKE_SDIO_IRQ here,
-> instead of MMC_CAP2_SDIO_ASYNC_IRQ.
 
-Will update this part in next version.
-
-> 
-> > +                               ret = mmc_io_rw_direct(card, 0, 0,
-> > SDIO_CCCR_INTERRUPT_EXT, 0,
-> > +                                                      &data);
-> > +                               if (ret)
-> > +                                       goto out;
-> > +
-> > +                               if (data & SDIO_INTERRUPT_EXT_SAI)
-> > {
-> > +                                       data |=
-> > SDIO_INTERRUPT_EXT_EAI;
-> > +                                       ret =
-> > mmc_io_rw_direct(card, 1, 0, SDIO_CCCR_INTERRUPT_EXT,
-> > +                                                              data
-> > , NULL);
-> > +                                       if (ret)
-> > +                                               goto out;
-> > +
-> > +                                       card->cccr.enable_async_irq 
-> > = 1;
-> 
-> As you show in the next patch(3), this flag is useful to read for the
-> host driver.
-> 
-> However, rather than accessing this flag directly in the host driver,
-> can you please add a helper function that takes a struct mmc_card* as
-> in-parameter instead?
-
-OK. I will do that in next version.
-
-> 
-> > +                               }
-> > +                       }
-> >                 }
-> > 
-> >                 /* if no uhs mode ensure we check for high speed */
-> > diff --git a/include/linux/mmc/card.h b/include/linux/mmc/card.h
-> > index 37f975875102..4df9182bc0e6 100644
-> > --- a/include/linux/mmc/card.h
-> > +++ b/include/linux/mmc/card.h
-> > @@ -219,7 +219,8 @@ struct sdio_cccr {
-> >                                 wide_bus:1,
-> >                                 high_power:1,
-> >                                 high_speed:1,
-> > -                               disable_cd:1;
-> > +                               disable_cd:1,
-> > +                               enable_async_irq:1;
-> >  };
-> > 
-> >  struct sdio_cis {
-> > diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-> > index 7afb57cab00b..502a5418264c 100644
-> > --- a/include/linux/mmc/host.h
-> > +++ b/include/linux/mmc/host.h
-> > @@ -402,6 +402,7 @@ struct mmc_host {
-> >  #define MMC_CAP2_CRYPTO                0
-> >  #endif
-> >  #define MMC_CAP2_ALT_GPT_TEGRA (1 << 28)       /* Host with eMMC
-> > that has GPT entry at a non-standard location */
-> > +#define MMC_CAP2_SDIO_ASYNC_IRQ        (1 << 29)       /* SDIO
-> > host supports asynchronous interrupt */
-> > 
-> >         int                     fixed_drv_type; /* fixed driver
-> > type for non-removable media */
-> > 
-> > diff --git a/include/linux/mmc/sdio.h b/include/linux/mmc/sdio.h
-> > index 2a05d1ac4f0e..1ef400f28642 100644
-> > --- a/include/linux/mmc/sdio.h
-> > +++ b/include/linux/mmc/sdio.h
-> > @@ -159,6 +159,11 @@
-> >  #define  SDIO_DTSx_SET_TYPE_A  (1 << SDIO_DRIVE_DTSx_SHIFT)
-> >  #define  SDIO_DTSx_SET_TYPE_C  (2 << SDIO_DRIVE_DTSx_SHIFT)
-> >  #define  SDIO_DTSx_SET_TYPE_D  (3 << SDIO_DRIVE_DTSx_SHIFT)
-> > +
-> > +#define SDIO_CCCR_INTERRUPT_EXT        0x16
-> > +#define SDIO_INTERRUPT_EXT_SAI (1 << 0)
-> > +#define SDIO_INTERRUPT_EXT_EAI (1 << 1)
-> > +
-> >  /*
-> >   * Function Basic Registers (FBR)
-> >   */
-> 
-Regards,
-Axe Yang
-
-
+On 2/21/2022 11:05 AM, Manivannan Sadhasivam wrote:
+> On Mon, Feb 21, 2022 at 10:52:28AM +0530, Rohit Agarwal wrote:
+>> In SDX65, the IPC bits are located in the APCS GCC block. Also, this block
+>> can provide clock functionality. Hence, add support for IPC with correct
+>> offset and name of the clock provider.
+>>
+>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>> ---
+>>   drivers/mailbox/qcom-apcs-ipc-mailbox.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+>> index 9325d2a..54d7659 100644
+>> --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+>> +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+>> @@ -53,6 +53,10 @@ static const struct qcom_apcs_ipc_data sdx55_apcs_data = {
+>>   	.offset = 0x1008, .clk_name = "qcom-sdx55-acps-clk"
+>>   };
+>>   
+>> +static const struct qcom_apcs_ipc_data sdx65_apcs_data = {
+>> +	.offset = 0x1008, .clk_name = "qcom-sdx55-acps-clk"
+>> +};
+> What I suggested was reusing the "qcom,sdx55-apcs-gcc" compatible in devicetree.
+> So with that, you won't need this specific compatible for SDX65 that essentially
+> duplicates SDX55.
+Clear. Will update. Thanks!
+> Thanks,
+> Mani
+>
+>> +
+>>   static const struct regmap_config apcs_regmap_config = {
+>>   	.reg_bits = 32,
+>>   	.reg_stride = 4,
+>> @@ -159,6 +163,7 @@ static const struct of_device_id qcom_apcs_ipc_of_match[] = {
+>>   	{ .compatible = "qcom,sm8150-apss-shared", .data = &apps_shared_apcs_data },
+>>   	{ .compatible = "qcom,sm6115-apcs-hmss-global", .data = &msm8994_apcs_data },
+>>   	{ .compatible = "qcom,sdx55-apcs-gcc", .data = &sdx55_apcs_data },
+>> +	{ .compatible = "qcom,sdx65-apcs-gcc", .data = &sdx65_apcs_data },
+>>   	{}
+>>   };
+>>   MODULE_DEVICE_TABLE(of, qcom_apcs_ipc_of_match);
+>> -- 
+>> 2.7.4
+>>

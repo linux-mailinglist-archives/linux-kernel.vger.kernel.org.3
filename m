@@ -2,106 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21604BDED6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825334BE287
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381199AbiBUQrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:47:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34860 "EHLO
+        id S1381213AbiBUQsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:48:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245115AbiBUQrl (ORCPT
+        with ESMTP id S1381204AbiBUQsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:47:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24C01EAD4;
-        Mon, 21 Feb 2022 08:47:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 621B06135D;
-        Mon, 21 Feb 2022 16:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E7DC340E9;
-        Mon, 21 Feb 2022 16:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645462036;
-        bh=AKWS2/X5VCCVXLw6Gqauj6ebOImrQ8nyklKgb7ms/BI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jrEafFtRqa2vcSWXzwuY2at2+LbMEdHx+ixkaIVJU9zH8JAYY2YoMFCIZPkzPgBjs
-         rJB8/MMfWmi0awr8EKZUvqN6u+agFKl4PtvLZyJ3CEbePJPQs1ShDxTwPkId8ghLum
-         +0GCiy6cR76rSBuiMApMuVz0b6ayp9l/T+jNenU94EKHPgJL9P9tOIKtsrC+tIC5vt
-         6fco/2XXMo3Xv0/8ej/dhJAKppcbZSDQhRD3RothUC+oHFvIvBNvuMvToRrIWjL+vR
-         W4MfDYhkQZmYfWtaFtVUxkwUi00uT8gxxQCZPgjtXhA+NlN0hrBpqWq6CLLLZNwrdu
-         ivb6mMTdaYDOA==
-From:   broonie@kernel.org
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>, Eric Biggers <ebiggers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Satya Tangirala <satyat@google.com>
-Subject: linux-next: manual merge of the block tree with the fscrypt tree
-Date:   Mon, 21 Feb 2022 16:47:13 +0000
-Message-Id: <20220221164713.2475459-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 21 Feb 2022 11:48:01 -0500
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4266122BEF;
+        Mon, 21 Feb 2022 08:47:38 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id s14so13239510edw.0;
+        Mon, 21 Feb 2022 08:47:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6uoQveL+AD9RUCzosFzI8fgp4aGHk8q16xyazzg5bDY=;
+        b=CCgED8i18vq6cbHpVRExlsxnVU5/6OmxFJvjA2ZgmIb9BRhEy9tewKTbQO5BTFrDEZ
+         wCKhZaLptVJrepeai8WbSp7fx2wphXSFk+oABigmcnbOAf3vTUssIIsYQlrlPPakbjYs
+         VX4BrbonSxY3a/bq623BHi3PxgYBF1bDl/jrpXQA6nwMyb6dqpSR004xRKYY9/k+vpP4
+         +j8gr7eRvPkB4whXgXy6IzvJsubh3vIT30xi/uRMoNRbVKIK/jTume8hFjhwc3LJ6GGQ
+         x3nh2W3S0SYuKjx14v0c8KlcgZsW2r0xX9aLDo01UYDnnikQtSy+2gMxvqXdpykZ9LGb
+         +YCQ==
+X-Gm-Message-State: AOAM5320fgUtqGFkthFWvfbXF0KfEOvtqTG89ZbEXEadz+zAxe1D+oCb
+        JGPIEFdyN33r/LyRtwK4Yfc=
+X-Google-Smtp-Source: ABdhPJwLiISVhc2YR4ZxaIDiGLJ7BTzOKu2ot3AVX6stdd3PHhVYLTNRJ/enKvUfksmKQHriNQlsUg==
+X-Received: by 2002:a05:6402:4245:b0:410:ee7d:8f0b with SMTP id g5-20020a056402424500b00410ee7d8f0bmr22300690edb.295.1645462056810;
+        Mon, 21 Feb 2022 08:47:36 -0800 (PST)
+Received: from [192.168.0.122] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id v12sm8942549edr.8.2022.02.21.08.47.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 08:47:35 -0800 (PST)
+Message-ID: <3e1ee336-1c78-7719-826c-2a093a20ee8e@kernel.org>
+Date:   Mon, 21 Feb 2022 17:47:34 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] dt-bindings: remoteproc: Add AVM WASP
+Content-Language: en-US
+To:     Daniel Kestrel <kestrelseventyfour@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220221135351.GA7342@ubuntu>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220221135351.GA7342@ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 21/02/2022 14:53, Daniel Kestrel wrote:
+> AVM Fritzbox router boards may contain an additional ATH79
+> based SoC that has the wifi cards connected.
+> This patch adds bindings for this remote processor.
+> 
+> Signed-off-by: Daniel Kestrel <kestrelseventyfour@gmail.com>
+> ---
+>  .../bindings/remoteproc/avm,wasp-rproc.yaml   | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
+> new file mode 100644
+> index 000000000000..21f3bbcc4202
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
+> @@ -0,0 +1,93 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/avm,wasp-rproc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AVM WASP processor controller bindings
+> +
+> +maintainers:
+> +  - Daniel Kestrel <kestrelseventyfour@gmail.com>
+> +
+> +description: |
+> +  This document defines the bindings for the remoteproc component that loads and
+> +  boots firmwares on the AVM Wireless Assistent Support Processor (WASP) SoC
+> +  that is attached to some AVM Fritzbox devices (3390, 3490, 5490, 5491, 7490).
+> +
+> +properties:
+> +  compatible:
+> +    const: avm,wasp
+> +
+> +  ath9k-firmware:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: |
+> +      Should contain the name of the ath9k eeprom that is to be loaded from
+> +      the lantiq host flash. Wifi on the WASP SoC does not work without it.
+> +      The file should be located on the firmware search path.
 
-Today's linux-next merge of the block tree got a conflict in:
+Are you sure this is a property of hardware? It looks like runtime
+configuration parameter.
 
-  fs/iomap/direct-io.c
+> +
+> +  ath10k-caldata:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: |
+> +      Should contain the name of the ath10k caldata that is to be loaded from
+> +      the lantiq host flash. Wifi on the WASP SoC does not work without it.
+> +      The file should be located on the firmware search path.
 
-between commit:
+Same.
 
-  489734ef94f4f ("iomap: support direct I/O with fscrypt using blk-crypto")
+> +
+> +  wasp-netboot-firmware:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: |
+> +      Should contain the name of the netboot firmware that is to be loaded
+> +      and started on the WASP SoC using mdio in order to be able to load
+> +      the initramfs image as a second stage.
+> +      The file should be located on the firmware search path.
 
-from the fscrypt tree and commit:
+Same.
 
-  07888c665b405 ("block: pass a block_device and opf to bio_alloc")
+> +
+> +  wasp-netboot-mdio:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Reference to the Lantiq GSWIP switch mdio.
 
-from the block tree.
+Vendor prefix.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+> +
+> +  wasp-initramfs-port:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Reference to the network port, where the WASP SoC is connected to.
 
-diff --cc fs/iomap/direct-io.c
-index 20325b3926fa3,e2ba13645ef28..0000000000000
---- a/fs/iomap/direct-io.c
-+++ b/fs/iomap/direct-io.c
-@@@ -185,10 -183,7 +185,9 @@@ static void iomap_dio_zero(const struc
-  	int flags = REQ_SYNC | REQ_IDLE;
-  	struct bio *bio;
-  
-- 	bio = bio_alloc(GFP_KERNEL, 1);
-+ 	bio = bio_alloc(iter->iomap.bdev, 1, REQ_OP_WRITE | flags, GFP_KERNEL);
- +	fscrypt_set_bio_crypt_ctx(bio, inode, pos >> inode->i_blkbits,
- +				  GFP_KERNEL);
-- 	bio_set_dev(bio, iter->iomap.bdev);
-  	bio->bi_iter.bi_sector = iomap_sector(&iter->iomap, pos);
-  	bio->bi_private = dio;
-  	bio->bi_end_io = iomap_dio_bio_end_io;
-@@@ -313,10 -307,7 +311,9 @@@ static loff_t iomap_dio_bio_iter(const 
-  			goto out;
-  		}
-  
-- 		bio = bio_alloc(GFP_KERNEL, nr_pages);
-+ 		bio = bio_alloc(iomap->bdev, nr_pages, bio_opf, GFP_KERNEL);
- +		fscrypt_set_bio_crypt_ctx(bio, inode, pos >> inode->i_blkbits,
- +					  GFP_KERNEL);
-- 		bio_set_dev(bio, iomap->bdev);
-  		bio->bi_iter.bi_sector = iomap_sector(iomap, pos);
-  		bio->bi_write_hint = dio->iocb->ki_hint;
-  		bio->bi_ioprio = dio->iocb->ki_ioprio;
+Vendor prefix.
+
+> +
+> +  wasp-initramfs-image:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: |
+> +      Should contain the name of the initramfs linux image that is to be loaded
+> +      and started on the WASP SoC.
+> +      The file should be located on the firmware search path.
+
+initramfs path looks even less like a property of hardware... If you
+change initramfs from CPIO to initrd or GZ, hardware changes as well?
+
+> +  reset-gpio:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: Reference and parameters for the reset gpio of the WASP SoC.
+
+Wrong suffix, unneeded type. Did you run dt_binding_check?
+
+"Reference and parameters" are obvious, so they should be skipped.
+
+> +
+> +  startup-gpio:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: Reference and parameters for the power switch gpio of the WASP SoC.
+
+Same.
+
+> +
+> +required:
+> +  - compatible
+> +  - ath9k-firmware
+> +  - ath10k-caldata
+> +  - wasp-netboot-firmware
+> +  - wasp-netboot-mdio
+> +  - wasp-initramfs-port
+> +  - wasp-initramfs-image
+> +  - reset-gpio
+> +  - startup-gpio
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    avm-wasp {
+
+Generic node name describing class of a device. AVM is company, WASP is
+product, so neither of them are generic.
+
+
+Best regards,
+Krzysztof

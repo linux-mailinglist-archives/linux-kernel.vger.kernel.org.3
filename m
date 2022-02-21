@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3974BD581
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 06:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97AF4BD587
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 06:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344646AbiBUFpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 00:45:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41956 "EHLO
+        id S1344685AbiBUFp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 00:45:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344626AbiBUFpM (ORCPT
+        with ESMTP id S1344730AbiBUFpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 00:45:12 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6F731930
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 21:44:50 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id qe15so14120725pjb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 21:44:50 -0800 (PST)
+        Mon, 21 Feb 2022 00:45:51 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170AC31930;
+        Sun, 20 Feb 2022 21:45:29 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id n6so29327854qvk.13;
+        Sun, 20 Feb 2022 21:45:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NzWld38SFAn0hncCzudzmSq8RQy5woIo/8NaM7ZRlas=;
-        b=Cuwl6GcKQBZCFXxjfMHDQtmUYutqxwKOoNgd+YJ0Crd99cWuxr7geM3pGJEYiAXi7p
-         BzonzPkIAXeCkxsilBTqgjbs2Thbw3zh6zyeFxSqvBKla0rJd8s3xZKAvXPYzUyXqz22
-         cDiiHR+oc7BSDYW7ZE2a7fe26yXEsCLQpOHi57DnqTdrAFbCaiztVpgh6TPT6636tEnJ
-         epphhWJ9sHnmUOo38BOF8NLz5+WSJJces3coennEUFQk8GwhVM2bhtZ7Mte/I1t1IaPZ
-         PP1hYg1gQ+5HbWP7QMusHWZV5rgTiDQhts1DFDJfzx/Bsscm4tWzQwC9uHlaoUbIQKU/
-         JrHg==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7iWv0TIz5zfKcN40ggMRpAwMAzLJY7hcWbLoCDV8jBE=;
+        b=RZY5wviDdsYmF6+0n46ur2sAoi5BDlJ652riNsbryFTtB2XRo3b4XN0FA4XmzJqwiV
+         Zx8HNdM77a1FGgP9MTDh6hZZwcXdD0pfvaEx+IMv/kJSH5mYToWhl/LI5pv3Q17sgUI0
+         Uwq+uJShduNM1Yl4kRfpaGGM1ZdxMdiTS6ALQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NzWld38SFAn0hncCzudzmSq8RQy5woIo/8NaM7ZRlas=;
-        b=Djj8KgIb60fe/bQUxM+xl56mzc1n5nIPkPpwuRzpog+oSktegzYxo0FUo9VuHC4RQa
-         tF4EEc7i166Umd//s8i/ZixExU/PcopwrGaI5yfwu+Yig4zu4V06xGsJqt1Znfxh74/9
-         vhRGKhrbpFMQJZJgZQoEpjx/v+K+L9CXyzDOl+0bvUnd4xRM1wLosG3v0yEyMvdVYui6
-         cEYFn/Kla1osMvA7EHZE8/MUCnWhy3a99JW3mtH+fglSdij+EPlJkXcL5LMD9W4XET9P
-         Vu1CXzzrAbaPep27TM0FQOcq/hvilBTcEUsyUzZKd01hVigcKC4ugA1mn+iuTLJ5b3Lb
-         9F6A==
-X-Gm-Message-State: AOAM531O6HK7cckyLqVH8FfLP4S1jbUDKZ3OsLebYTfG797M+/Tcs75P
-        nHGO843lGo9BW4aKofqhyo3M
-X-Google-Smtp-Source: ABdhPJybyjPoU57s6j8heaGBbT/bkCBRzKHxWrNmILlk0vP/V+o4r/o0qoyk/eurYtpWcxOGMQ0asQ==
-X-Received: by 2002:a17:902:eb85:b0:14d:b906:cbd3 with SMTP id q5-20020a170902eb8500b0014db906cbd3mr17207331plg.122.1645422289873;
-        Sun, 20 Feb 2022 21:44:49 -0800 (PST)
-Received: from thinkpad ([220.158.158.223])
-        by smtp.gmail.com with ESMTPSA id t7sm10941987pfj.138.2022.02.20.21.44.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 21:44:49 -0800 (PST)
-Date:   Mon, 21 Feb 2022 11:14:45 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/7] Add APCS support for SDX65
-Message-ID: <20220221054445.GD15108@thinkpad>
-References: <1645420953-21176-1-git-send-email-quic_rohiagar@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7iWv0TIz5zfKcN40ggMRpAwMAzLJY7hcWbLoCDV8jBE=;
+        b=pmBWctTWow+DAdrMzre+F/MUqBpyRgsmXjyC4ndfSDTYz1JLfzlhNRXMhxN827ypVz
+         L3dg6vTqgZF2YpZ3inkGqUyvbJPmbgdkAvhAJJ9tZweZW8R/KfMcIbFMmAjk18ontxW7
+         /8VmfiS7ov4gA4/LlPRMKmWo4E/ilpCR+a4Oufe2qUlIA2oKmYQxX5HPJqMysBpL7dvE
+         i3aMxoNNht41lLyNo26vB4iTsOONruD1TuJXq8wZdgBBqI6FNgGVMgEqTe3JL+kejNaI
+         9+JpUJ1JhxsgbJckceRkRjOFBug6n8/HgXluNk3LRFuArPIXr6byIM1jKBMZmpkL04zp
+         iIDA==
+X-Gm-Message-State: AOAM532Tpwj4yq2jgvh7JvHOemMgP44u4mXshHnhMJ34jxFp7KV31saz
+        5SvNsg3zRtqo/7sFaNG5xnVvgN1UDZAlKQH7k+Y=
+X-Google-Smtp-Source: ABdhPJwZ3cez5RRZ8JANQhauH1ZC98MKYhcjjQCwKLDq49sTcKbnNdbemiCR1mN2fgoBnk06bhQx9ruHolhircEkRbk=
+X-Received: by 2002:a05:622a:1b8d:b0:2c6:59a9:360e with SMTP id
+ bp13-20020a05622a1b8d00b002c659a9360emr16137525qtb.678.1645422328203; Sun, 20
+ Feb 2022 21:45:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1645420953-21176-1-git-send-email-quic_rohiagar@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220221012705.22008-1-billy_tsai@aspeedtech.com>
+In-Reply-To: <20220221012705.22008-1-billy_tsai@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 21 Feb 2022 05:45:16 +0000
+Message-ID: <CACPK8XdsRorJvMjUMNYGAYNLGLzhYJEZSQMTk1ZywwY+SyqDbQ@mail.gmail.com>
+Subject: Re: [PATCH v2] iio: adc: aspeed: Add divider flag to fix incorrect
+ voltage reading.
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Colin King <colin.king@canonical.com>,
+        linux-iio@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Konstantin Klubnichkin <kitsok@yandex-team.ru>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 10:52:26AM +0530, Rohit Agarwal wrote:
-> Hello,
-> 
-> Changes from v2:
->  - Addressed Stephen's comments and made necessary changes.
->  - Rebased on top
-> 
-> Changes from v1:
->  - Addressed Mani's comments and made necessary changes.
->  - Removed the last patch from the series as it became redundant after making changes.
-> 
-> This series adds APCS mailbox and clock support for SDX65. The APCS IP
-> in SDX65 provides IPC and clock functionalities. Hence, mailbox support
-> is added to the "qcom-apcs-ipc-mailbox" driver and a dedicated clock
-> driver "apcs-sdx65" is added.
+On Mon, 21 Feb 2022 at 01:26, Billy Tsai <billy_tsai@aspeedtech.com> wrote:
+>
+> The formula for the ADC sampling period in ast2400/ast2500 is:
+> ADC clock period = PCLK * 2 * (ADC0C[31:17] + 1) * (ADC0C[9:0])
+> When ADC0C[9:0] is set to 0 the sampling voltage will be lower than
+> expected, because the hardware may not have enough time to
+> charge/discharge to a stable voltage. This patch use the flag
+> CLK_DIVIDER_ONE_BASED which will use the raw value read from the
+> register, with the value of zero considered invalid to conform to the
+> corrected formula.
 
-You seem to have missed adding r-o-b tags.
+(to answer my own question)
 
-Thanks,
-Mani
+..and this is okay on the 2600, because we do not set need_prescaler =
+true on that platform.
 
-> 
-> Thanks,
-> Rohit
-> 
-> Rohit Agarwal (7):
->   dt-bindings: mailbox: Add binding for SDX65 APCS
->   mailbox: qcom: Add support for SDX65 APCS IPC
->   dt-bindings: clock: Add A7 PLL binding for SDX65
->   clk: qcom: Add A7 PLL support for SDX65
->   ARM: dts: qcom: sdx65: Add support for A7 PLL clock
->   ARM: dts: qcom: sdx65: Add support for APCS block
->   clk: qcom: Add SDX65 APCS clock controller support
-> 
->  Documentation/devicetree/bindings/clock/qcom,a7pll.yaml |  3 ++-
->  .../bindings/mailbox/qcom,apcs-kpss-global.yaml         |  1 +
->  arch/arm/boot/dts/qcom-sdx65.dtsi                       | 17 +++++++++++++++++
->  drivers/clk/qcom/Kconfig                                | 12 ++++++------
->  drivers/clk/qcom/a7-pll.c                               |  1 +
->  drivers/mailbox/qcom-apcs-ipc-mailbox.c                 |  5 +++++
->  6 files changed, 32 insertions(+), 7 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+
+>
+> Fixes: 573803234e72 ("iio: Aspeed ADC")
+> Reported-by: Konstantin Klubnichkin <kitsok@yandex-team.ru>
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  drivers/iio/adc/aspeed_adc.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/iio/adc/aspeed_adc.c b/drivers/iio/adc/aspeed_adc.c
+> index a957cad1bfab..ffae64f39221 100644
+> --- a/drivers/iio/adc/aspeed_adc.c
+> +++ b/drivers/iio/adc/aspeed_adc.c
+> @@ -539,7 +539,9 @@ static int aspeed_adc_probe(struct platform_device *pdev)
+>         data->clk_scaler = devm_clk_hw_register_divider(
+>                 &pdev->dev, clk_name, clk_parent_name, scaler_flags,
+>                 data->base + ASPEED_REG_CLOCK_CONTROL, 0,
+> -               data->model_data->scaler_bit_width, 0, &data->clk_lock);
+> +               data->model_data->scaler_bit_width,
+> +               data->model_data->need_prescaler ? CLK_DIVIDER_ONE_BASED : 0,
+> +               &data->clk_lock);
+>         if (IS_ERR(data->clk_scaler))
+>                 return PTR_ERR(data->clk_scaler);
+>
+> --
+> 2.25.1
+>

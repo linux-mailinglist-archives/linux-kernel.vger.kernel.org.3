@@ -2,184 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E243C4BD746
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3184BD74E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346173AbiBUHbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:31:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48760 "EHLO
+        id S238522AbiBUHdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:33:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiBUHbn (ORCPT
+        with ESMTP id S229899AbiBUHcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:31:43 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A162E7;
-        Sun, 20 Feb 2022 23:31:20 -0800 (PST)
-Date:   Mon, 21 Feb 2022 07:31:16 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645428677;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VPeVFRqXyH/qkyeIFa43p7nhy+n8Zng6FJUz7oizMQI=;
-        b=tK4RiO/ufs+nV/sBz4B0MjsW2UxZlm7O8bYpMrA9mczisjRaGkQNbnyyLvq+xzdxkjTklT
-        ipaP9pOiYksBMvXTymfR2m/W0aCA6UbpZIPDVx5Uc96AbOZHeti7MAZ8gRCLlJL15FEeOv
-        ZqnnonXJDH9lnQhGD/vyG6jv4F84MAWe++UhF2xPaaBurP7y0ZgspPTjFG0oikchSBIXmk
-        iSXeab3S6Uk+EAgTZjLawu/ylgwTe/opYHjRlqlj4f8262b9BoXToSC5p+vjbx2HL/nhvD
-        rH/5MdJ7M/8dgcKkkqHY07wHFD/fbqfRX9/UqyrwRzHPvJlFrD/aXTYyxcqRQQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645428677;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VPeVFRqXyH/qkyeIFa43p7nhy+n8Zng6FJUz7oizMQI=;
-        b=I11DarCzKKF4kFbIfwPnRaNMk42oeJlTjQTniqkBdH01dZVuYbcefrBSeXQj3DHWTLRQyQ
-        uImY5VgPS3eCeOCw==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/urgent] PCI: vmd: Prevent recursive locking on interrupt allocation
-Cc:     "Surendrakumar Upadhyay, TejaskumarX" 
-        <tejaskumarx.surendrakumar.upadhyay@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <87a6euub2a.ffs@tglx>
-References: <87a6euub2a.ffs@tglx>
+        Mon, 21 Feb 2022 02:32:54 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2064.outbound.protection.outlook.com [40.107.237.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A256355;
+        Sun, 20 Feb 2022 23:32:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N8TbJqweJVJ0ucyHplQSY3BNsj5puk4UEsVbgWAHoHPSYF0dzOZBOOwJDvkcNrbM6TIyqL8Gdbb4oZSE1OMyRbfkuZuRU6Oo1IFs3buEXreTkXuJv5kOHwqHaGiaLaKWThWro/Casd6eiGcOZFmz36JfSBhAZO5y4nD/dsnccrBeqKRhfKDcViSygH+9+ukkCcx+0YzCwx7kgPMuqOJ0q5SYeaNvzA1wwpsLK20pyOHgZw05Vv/WLLoClCOl0JwipAXIxSTpkkED1M0b/XGHhPJJ/zaA3Z/I5C/45MU62vKxobSjcL/sEJleUD4HfsWDhCkBzSiF80SjVU0PrA3hKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dDWkpUfOgcVfm+d1/wNA4li7MRwaQAYXle7vejBKoIU=;
+ b=NTlBoVOqXHZVBelfGJicnLxir1/UW8ugrVeQWBvvRsiNLy8Fp6/3nfSO5EDL401L9HUyVnyOYofaTg8sB9w1qx+/6cOsks0lgO2zcB92mrpi/MZlfUHttN0EWLZ/PgQEnszy5+GqCBt/peVZbFr+EnLGBhEh3LmHWMnSItJqHH6talVcihEpoumYQXkES+E0P0J5OGdiqxtLBprlyI318860QvwtrvZgfN3cvzqwPouSvQRePw4/pogT0whPeL3zlqKY1y/X4OYXXL5LUw4GpQ7qIbU7W8vAOifNC86px0dC6tSVofLhKK2kKcghJ1ZxTyuAD0nEJSHDh1B7tNa/Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dDWkpUfOgcVfm+d1/wNA4li7MRwaQAYXle7vejBKoIU=;
+ b=CmBcRL5eVJ9vV9BlGX31ianoREOpocKV8Kcv6pToHxtwPtSyLs50k9YJxovo5+j7HWcXvR5JRpdcmDU0X3XA+KnpXbn6JkOQIrq6hWkycyvnMF/+qV2uxFZiuKABGOjHfSaIDBqbrzBqsp33hqXyh1M4zKKxx8aW+4kW819QPI4=
+Received: from DM5PR2201CA0010.namprd22.prod.outlook.com (2603:10b6:4:14::20)
+ by BYAPR12MB2933.namprd12.prod.outlook.com (2603:10b6:a03:138::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Mon, 21 Feb
+ 2022 07:32:28 +0000
+Received: from DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:14:cafe::d1) by DM5PR2201CA0010.outlook.office365.com
+ (2603:10b6:4:14::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18 via Frontend
+ Transport; Mon, 21 Feb 2022 07:32:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT023.mail.protection.outlook.com (10.13.173.96) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.15 via Frontend Transport; Mon, 21 Feb 2022 07:32:28 +0000
+Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 21 Feb
+ 2022 01:32:11 -0600
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+To:     <pbonzini@redhat.com>
+CC:     <ravi.bangoria@amd.com>, <seanjc@google.com>,
+        <jmattson@google.com>, <dave.hansen@linux.intel.com>,
+        <peterz@infradead.org>, <alexander.shishkin@linux.intel.com>,
+        <eranian@google.com>, <daviddunn@google.com>, <ak@linux.intel.com>,
+        <kan.liang@linux.intel.com>, <like.xu.linux@gmail.com>,
+        <x86@kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kim.phillips@amd.com>,
+        <santosh.shukla@amd.com>
+Subject: [PATCH 0/3] KVM: x86/pmu: Segregate Intel and AMD specific logic
+Date:   Mon, 21 Feb 2022 13:01:37 +0530
+Message-ID: <20220221073140.10618-1-ravi.bangoria@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <164542867635.16921.13795049956787158926.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4f487d10-c364-452b-7e4a-08d9f50c503e
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2933:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB2933DE0D57C55E1DA0B33D94E03A9@BYAPR12MB2933.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VKt+/IyFdHqUMP3FKD1dXOM/xGwDPiOCRnnNgAFE6uMiaDanNHF+AAvOc4ZrjF8wBSPHF7GF7EJvfsWStqWLFrLOR+4TYak0EcZXJQSH2ml7HEVsMlCEkQp4WrT9dXA3eg4vkY3YTfFgswmcWP4C4iIvixFMaIY7OnMkOPqOe5c9IEHirR8PFrgUTOnjdc03fcQTpq7MW2b78w08boWwTjd3SpZsubo5ZSARz60jLJ8Vf82ZQn6FpHnIpe2nPzL7AFBIzeghPMVFmcgUh0GW0h5jVqp68mIOWr5D6N4TCQxAYOHqE/rNHHcHbAWGd4TCYcJ3IjhqlyA6WbUdTi0NghIlAV+uy0KzfDatnFwycGqj4i3sHXp4jBKbqnLMTsxP0UIYiqRONxMTQ/4lcSVeyrdYnDCmzHYvjKarcwKj0QZtn6oet3TZnMpfZLcmDkhVqZ3zVLla+makq7JEjyT9qMCpvLTkDXIjfvn4sAMx4VzDSv/DKOkv5SoAj93ZZG6Tplclp75H+yfgQOv7GpFyXYHiIqcv6J5IAvOYH3hZB7SyqEU9B2WHlcT1qFRzFUcNn73HYBvB8f31urvQTJ+CStLO5ybsy0X4lwqiM8j/JrwHQqDM/T86uBtSnXZG3PfPYdBDt6wYd4FilwfBsn9e5nUh9a8N8tcZwLEVIMYN20ilK87ZZXsinBYRvhS1StbrpFlm7Vn5LFkUIefE4JSL2A==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(7416002)(83380400001)(36860700001)(54906003)(47076005)(40460700003)(6916009)(316002)(336012)(81166007)(44832011)(426003)(2616005)(1076003)(2906002)(4326008)(36756003)(7696005)(508600001)(70206006)(356005)(5660300002)(8936002)(4744005)(186003)(82310400004)(86362001)(26005)(16526019)(70586007)(8676002)(6666004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 07:32:28.3383
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f487d10-c364-452b-7e4a-08d9f50c503e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2933
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/urgent branch of tip:
+Use INTEL_ prefix for some Intel specific macros. Plus segregate
+Intel and AMD specific logic in kvm code.
 
-Commit-ID:     ba1366f3d039e7c3ca1fc29ed00ce3ed2b8fd32f
-Gitweb:        https://git.kernel.org/tip/ba1366f3d039e7c3ca1fc29ed00ce3ed2b8fd32f
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Sun, 13 Feb 2022 14:54:05 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 21 Feb 2022 08:26:53 +01:00
+Patches prepared on top of kvm/master (710c476514313)
 
-PCI: vmd: Prevent recursive locking on interrupt allocation
+Ravi Bangoria (3):
+  x86/pmu: Add INTEL_ prefix in some Intel specific macros
+  x86/pmu: Replace X86_ALL_EVENT_FLAGS with INTEL_ALL_EVENT_FLAGS
+  KVM: x86/pmu: Segregate Intel and AMD specific logic
 
-Tejas reported the following recursive locking issue:
+ arch/x86/events/intel/core.c      | 14 +++----
+ arch/x86/events/intel/ds.c        |  2 +-
+ arch/x86/events/perf_event.h      | 34 ++++++++--------
+ arch/x86/include/asm/perf_event.h | 14 +++----
+ arch/x86/kvm/pmu.c                | 68 +++++++++++++++++++------------
+ arch/x86/kvm/pmu.h                |  4 +-
+ arch/x86/kvm/svm/pmu.c            |  6 ++-
+ arch/x86/kvm/vmx/pmu_intel.c      |  6 +--
+ 8 files changed, 85 insertions(+), 63 deletions(-)
 
- swapper/0/1 is trying to acquire lock:
- ffff8881074fd0a0 (&md->mutex){+.+.}-{3:3}, at: msi_get_virq+0x30/0xc0
- 
- but task is already holding lock:
- ffff8881017cd6a0 (&md->mutex){+.+.}-{3:3}, at: __pci_enable_msi_range+0xf2/0x290
- 
- stack backtrace:
-  __mutex_lock+0x9d/0x920
-  msi_get_virq+0x30/0xc0
-  pci_irq_vector+0x26/0x30
-  vmd_msi_init+0xcc/0x210
-  msi_domain_alloc+0xbf/0x150
-  msi_domain_alloc_irqs_descs_locked+0x3e/0xb0
-  __pci_enable_msi_range+0x155/0x290
-  pci_alloc_irq_vectors_affinity+0xba/0x100
-  pcie_port_device_register+0x307/0x550
-  pcie_portdrv_probe+0x3c/0xd0
-  pci_device_probe+0x95/0x110
+-- 
+2.27.0
 
-This is caused by the VMD MSI code which does a lookup of the Linux
-interrupt number for an VMD managed MSI[X] vector. The lookup function
-tries to acquire the already held mutex.
-
-Avoid that by caching the Linux interrupt number at initialization time
-instead of looking it up over and over.
-
-Fixes: 82ff8e6b78fc ("PCI/MSI: Use msi_get_virq() in pci_get_vector()")
-Reported-by: "Surendrakumar Upadhyay, TejaskumarX" <tejaskumarx.surendrakumar.upadhyay@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: "Surendrakumar Upadhyay, TejaskumarX" <tejaskumarx.surendrakumar.upadhyay@intel.com>
-Cc: linux-pci@vger.kernel.org
-Link: https://lore.kernel.org/r/87a6euub2a.ffs@tglx
-
----
- drivers/pci/controller/vmd.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index cc166c6..eb05cce 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -99,11 +99,13 @@ struct vmd_irq {
-  * @srcu:	SRCU struct for local synchronization.
-  * @count:	number of child IRQs assigned to this vector; used to track
-  *		sharing.
-+ * @virq:	The underlying VMD Linux interrupt number
-  */
- struct vmd_irq_list {
- 	struct list_head	irq_list;
- 	struct srcu_struct	srcu;
- 	unsigned int		count;
-+	unsigned int		virq;
- };
- 
- struct vmd_dev {
-@@ -253,7 +255,6 @@ static int vmd_msi_init(struct irq_domain *domain, struct msi_domain_info *info,
- 	struct msi_desc *desc = arg->desc;
- 	struct vmd_dev *vmd = vmd_from_bus(msi_desc_to_pci_dev(desc)->bus);
- 	struct vmd_irq *vmdirq = kzalloc(sizeof(*vmdirq), GFP_KERNEL);
--	unsigned int index, vector;
- 
- 	if (!vmdirq)
- 		return -ENOMEM;
-@@ -261,10 +262,8 @@ static int vmd_msi_init(struct irq_domain *domain, struct msi_domain_info *info,
- 	INIT_LIST_HEAD(&vmdirq->node);
- 	vmdirq->irq = vmd_next_irq(vmd, desc);
- 	vmdirq->virq = virq;
--	index = index_from_irqs(vmd, vmdirq->irq);
--	vector = pci_irq_vector(vmd->dev, index);
- 
--	irq_domain_set_info(domain, virq, vector, info->chip, vmdirq,
-+	irq_domain_set_info(domain, virq, vmdirq->irq->virq, info->chip, vmdirq,
- 			    handle_untracked_irq, vmd, NULL);
- 	return 0;
- }
-@@ -685,7 +684,8 @@ static int vmd_alloc_irqs(struct vmd_dev *vmd)
- 			return err;
- 
- 		INIT_LIST_HEAD(&vmd->irqs[i].irq_list);
--		err = devm_request_irq(&dev->dev, pci_irq_vector(dev, i),
-+		vmd->irqs[i].virq = pci_irq_vector(dev, i);
-+		err = devm_request_irq(&dev->dev, vmd->irqs[i].virq,
- 				       vmd_irq, IRQF_NO_THREAD,
- 				       vmd->name, &vmd->irqs[i]);
- 		if (err)
-@@ -969,7 +969,7 @@ static int vmd_suspend(struct device *dev)
- 	int i;
- 
- 	for (i = 0; i < vmd->msix_count; i++)
--		devm_free_irq(dev, pci_irq_vector(pdev, i), &vmd->irqs[i]);
-+		devm_free_irq(dev, vmd->irqs[i].virq, &vmd->irqs[i]);
- 
- 	return 0;
- }
-@@ -981,7 +981,7 @@ static int vmd_resume(struct device *dev)
- 	int err, i;
- 
- 	for (i = 0; i < vmd->msix_count; i++) {
--		err = devm_request_irq(dev, pci_irq_vector(pdev, i),
-+		err = devm_request_irq(dev, vmd->irqs[i].virq,
- 				       vmd_irq, IRQF_NO_THREAD,
- 				       vmd->name, &vmd->irqs[i]);
- 		if (err)

@@ -2,96 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EB04BD7D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 09:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C418A4BD79E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 09:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238938AbiBUIVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:21:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59472 "EHLO
+        id S1346819AbiBUIGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:06:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiBUIV1 (ORCPT
+        with ESMTP id S1346808AbiBUIGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:21:27 -0500
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1625B1DA58
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:21:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=7QBc0WEBLu2ln1764MB4fDjlliPNaheIMyMLRttnsXw=;
-        b=FfsFM+55j6jE1hipisrdQZk81jVsUXPCd2hotITo6/IfA3lBXSD4SM/94U5nGmi2hjZ36yJM4g7Y9
-         UOsBHbvzr3LLlXpurcQRFkbwpUux24x0Sv1S0iD8PEpjmRyYfe0g+16EXno8nawr8TnYnpAE5ZNumU
-         Kr2+gpTKAaO+GeFAQz1JFzumkbllfJs/rc+a66tU2eRHUjJJIF/IN+UHSZFMZetjNUfUgKfdH1V9cR
-         4d+eB/Yu2jcuVJaC7hvuOsiagOkM6nMziV/NWp9Xf+1H5BYmQksNkDgwKaIJIxXAW2Efam/XsXnqbB
-         keUJeRh9dF9c4V1wc8jeil0GQF2aRGg==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1403, Stamp: 3], Multi: [Enabled, t: (0.000008,0.005762)], BW: [Enabled, t: (0.000022,0.000001)], RTDA: [Enabled, t: (0.062456), Hit: No, Details: v2.25.0; Id: 15.52k7rm.1fsdlslmm.1bdlg; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from x260 ([178.70.66.234])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Mon, 21 Feb 2022 11:20:40 +0300
-Date:   Mon, 21 Feb 2022 11:02:44 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH] bus: imx-weim: add DT overlay support for WEIM bus
-Message-ID: <20220221080244.bd7wankcdsiwzum4@x260>
-References: <20220205055006.23447-1-i.bornyakov@metrotek.ru>
- <20220205055006.23447-2-i.bornyakov@metrotek.ru>
- <20220221072529.GP2249@dragon>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221072529.GP2249@dragon>
+        Mon, 21 Feb 2022 03:06:19 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0262AC67;
+        Mon, 21 Feb 2022 00:05:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645430757; x=1676966757;
+  h=from:to:cc:subject:date:message-id;
+  bh=GkbqwLH63vmJ3yZDmeVUzOLZbboEsgFRLd+XjuJr6vU=;
+  b=hrF++hOtsBT8KsQbooaiJeiQ+owH3jQTvhiUDf7iQhPerVqIEWKcB7qh
+   kKwAxJSIGqyC7eM9X4aZLugkLETVmzGWET5ZcDKyVpj3718F54m5I+RdW
+   HjbvSrzZpA3Lf4dy9LvBcwgm3xilQVpifei+QVjUUxOqDkhql0J6dZbA0
+   H00g1KF8+lIbelHhvmou0vFUVjA8XXTbXu16kZFtQxqQx9MigdOPMKVwg
+   ewgmTzippUBolcYNYScgWkQ48cIAMEe1y43XMm+1KkQtvUfV9hdwF41OM
+   T9pI7MDlHV3gj8MYgBvwxg/trOTcZvOk7yCtYk4zyMj12lkCkRjFqwrLs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="250277836"
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="250277836"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 00:05:38 -0800
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="638472221"
+Received: from unknown (HELO chenyi-pc.sh.intel.com) ([10.239.159.73])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 00:05:35 -0800
+From:   Chenyi Qiang <chenyi.qiang@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Chenyi Qiang <chenyi.qiang@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/7] KVM: PKS Virtualization support
+Date:   Mon, 21 Feb 2022 16:08:33 +0800
+Message-Id: <20220221080840.7369-1-chenyi.qiang@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 03:25:29PM +0800, Shawn Guo wrote:
-> On Sat, Feb 05, 2022 at 08:50:06AM +0300, Ivan Bornyakov wrote:
-> > Add OF reconfiguration notifier handler for WEIM bus to setup Chip
-> > Select timings on runtime creation of child devices.
-> > 
-> > However, it is not possible to load another DT overlay with conflicting
-> > CS timings with previously loaded overlay, even if the first one is
-> > unloaded.
-> 
-> Are we doing anything if that happens?
-> 
+This patch series is based on top of v8 PKS core support kernel patchset:
+https://lore.kernel.org/lkml/20220127175505.851391-1-ira.weiny@intel.com/
 
-On device removal there is no access to device node properties, thus it
-is not possible to find out which of CS timings was configured for this
-device to clear theirs 'is_applied'.
+Note: If you read the SDM section 4.6.1 and has some confusion about the
+statement of Data writes to supervisor-mode address:
 
-So, if we apply one DT overlay, configure some CS timings, remove this
-overlay, apply another with conflicting timings, we will fail here
+  If CR0.WP = 0, data may be written to any supervisor-mode address with
+  a protection key for which write access is permitted.
 
-static int weim_timing_setup(...)
-{
-	...
+Which may seems a little conflict with 4.6.2:
 
-	for (reg_idx = 0; reg_idx < num_regs; reg_idx++) {
-		...
+  if WDi = 1, write accesses are not permitted if CR0.WP = 1. (If CR0.WP
+  = 0, IA32_PKRS.WDi does not affect write accesses to supervisor-mode
+  address with protection key i.)
 
-		/* prevent re-configuring a CS that's already been configured */
-		cst = &ts->cs[cs_idx];
-		if (cst->is_applied && memcmp(value, cst->regs,
-					devtype->cs_regs_count * sizeof(u32))) {
-			dev_err(dev, "fsl,weim-cs-timing conflict on %pOF", np);
-			return -EINVAL;
-		}
-		...
-	}
-	...
-}
+In fact, the statement in 4.6.1 doesn't say "a protection key with the
+appropriate WDi bit set." The reader should instead refer to Section
+4.6.2 to find the definition of what that means. We will follow up
+this with someone internally to make it more clear in SDM.
+
+---
+
+Protection Keys for Supervisor Pages(PKS) is a feature that extends the
+Protection Keys architecture to support thread-specific permission
+restrictions on supervisor pages.
+
+PKS works similar to an existing feature named PKU(protecting user pages).
+They both perform an additional check after normal paging permission
+checks are done. Access or Writes can be disabled via a MSR update
+without TLB flushes when permissions changes. If violating this
+addional check, #PF occurs and PFEC.PK bit will be set.
+
+PKS introduces MSR IA32_PKRS to manage supervisor protection key
+rights. The MSR contains 16 pairs of ADi and WDi bits. Each pair
+advertises on a group of pages with the same key which is set in the
+leaf paging-structure entries(bits[62:59]). Currently, IA32_PKRS is not
+supported by XSAVES architecture.
+
+This patchset aims to add the virtualization of PKS in KVM. It
+implemented PKS CPUID enumeration, vmentry/vmexit configuration, MSR
+exposure, nested supported etc. Currently, PKS is not yet supported for
+shadow paging. 
+
+Detailed information about PKS can be found in the latest Intel 64 and
+IA-32 Architectures Software Developer's Manual.
+
+---
+
+Changelogs:
+
+v5->v6
+- PKRS is preserved on INIT. Add the PKRS reset operation in kvm_vcpu_reset.
+  (Sean)
+- Track the pkrs as u32. Add the code WARN on bits 64:32 being set in VMCS field.
+  (Sean)
+- Adjust the MSR intercept and entry/exit control in VMCS according to
+  guest CPUID. This resolve the issue when userspace re-enable this feature.
+  (Sean)
+- Split VMX restriction on PKS support(entry/exit load controls) out of
+  common x86. And put tdp restriction together with PKU in common x86.
+  (Sean)
+- Thanks for Sean to revise the comments in mmu.c related to
+  update_pkr_bitmap, which make it more clear for pkr bitmask cache usage.
+- v5: https://lore.kernel.org/lkml/20210811101126.8973-1-chenyi.qiang@intel.com/
+
+v4->v5
+- Make setting of MSR intercept/vmcs control bits not dependent on guest.CR4.PKS.
+  And set them if PKS is exposed to guest. (Suggested by Sean)
+- Add pkrs to standard register caching mechanism to help update
+  vcpu->arch.pkrs on demand. Add related helper functions. (Suggested by Sean)
+- Do the real pkrs update in VMCS field in vmx_vcpu_reset and
+  vmx_sync_vmcs_host_state(). (Sean)
+- Add a new mmu_role cr4_pks instead of smushing PKU and PKS together.
+  (Sean & Paolo)
+- v4: https://lore.kernel.org/lkml/20210205083706.14146-1-chenyi.qiang@intel.com/
+
+v3->v4
+- Make the MSR intercept and load-controls setting depend on CR4.PKS value
+- shadow the guest pkrs and make it usable in PKS emultion
+- add the cr4_pke and cr4_pks check in pkr_mask update
+- squash PATCH 2 and PATCH 5 to make the dependencies read more clear
+- v3: https://lore.kernel.org/lkml/20201105081805.5674-1-chenyi.qiang@intel.com/
+
+v2->v3:
+- No function changes since last submit
+- rebase on the latest PKS kernel support:
+  https://lore.kernel.org/lkml/20201102205320.1458656-1-ira.weiny@intel.com/
+- add MSR_IA32_PKRS to the vmx_possible_passthrough_msrs[]
+- RFC v2: https://lore.kernel.org/lkml/20201014021157.18022-1-chenyi.qiang@intel.com/
+
+v1->v2:
+- rebase on the latest PKS kernel support:
+  https://github.com/weiny2/linux-kernel/tree/pks-rfc-v3
+- add a kvm-unit-tests for PKS
+- add the check in kvm_init_msr_list for PKRS
+- place the X86_CR4_PKS in mmu_role_bits in kvm_set_cr4
+- add the support to expose VM_{ENTRY, EXIT}_LOAD_IA32_PKRS in nested
+  VMX MSR
+- RFC v1: https://lore.kernel.org/lkml/20200807084841.7112-1-chenyi.qiang@intel.com/
+
+---
+
+Chenyi Qiang (7):
+  KVM: VMX: Introduce PKS VMCS fields
+  KVM: VMX: Add proper cache tracking for PKRS
+  KVM: X86: Expose IA32_PKRS MSR
+  KVM: MMU: Rename the pkru to pkr
+  KVM: MMU: Add support for PKS emulation
+  KVM: VMX: Expose PKS to guest
+  KVM: VMX: Enable PKS for nested VM
+
+ arch/x86/include/asm/kvm_host.h |  17 ++++--
+ arch/x86/include/asm/vmx.h      |   6 ++
+ arch/x86/kvm/cpuid.c            |  13 ++--
+ arch/x86/kvm/kvm_cache_regs.h   |   7 +++
+ arch/x86/kvm/mmu.h              |  27 +++++----
+ arch/x86/kvm/mmu/mmu.c          | 101 ++++++++++++++++++++------------
+ arch/x86/kvm/vmx/capabilities.h |   6 ++
+ arch/x86/kvm/vmx/nested.c       |  38 +++++++++++-
+ arch/x86/kvm/vmx/vmcs.h         |   1 +
+ arch/x86/kvm/vmx/vmcs12.c       |   2 +
+ arch/x86/kvm/vmx/vmcs12.h       |   4 ++
+ arch/x86/kvm/vmx/vmx.c          |  92 ++++++++++++++++++++++++++---
+ arch/x86/kvm/vmx/vmx.h          |   7 ++-
+ arch/x86/kvm/x86.c              |  10 +++-
+ arch/x86/kvm/x86.h              |   8 +++
+ arch/x86/mm/pkeys.c             |   6 ++
+ include/linux/pkeys.h           |   6 ++
+ 17 files changed, 280 insertions(+), 71 deletions(-)
+
+-- 
+2.17.1
 

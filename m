@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9CB4BE022
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097B24BE773
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiBUJEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:04:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58392 "EHLO
+        id S1347096AbiBUJEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:04:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347297AbiBUJBN (ORCPT
+        with ESMTP id S1347280AbiBUJBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:13 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DE627CD6;
-        Mon, 21 Feb 2022 00:56:15 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 870DC580229;
-        Mon, 21 Feb 2022 03:55:36 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 21 Feb 2022 03:55:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=zcdXYKD7AIGXfsVFdjjk2+yAJ6zsZ8B0f4omWG
-        U4udk=; b=LVxkjzRmQ4i/fCDy8Ek6wbLyQWNE22E401IzR2k13N3Ew037DuZLmi
-        90/AdOlQQhkoKP0QzB4gbeJGr18LbcLmBzV8ka9qsNurIaBsjLYunuxvmyZG8Xi2
-        hLcPwTKTqhs5iEj1cbAVJhKsmISL69uUAPmvZnzjLsfXCwUTHeJOaNyswUWg6WJ+
-        miYx1ovsB7VqI0r55amRpSaRiZL0Ak7+bHM/EtrmlX+kUJi9Jkyj/DC+hxwrjDuV
-        7myTB+f8OwKY8/BErNQMSfa2Kuc2iJ4o5mLqbiQHcliVzv64PfEWmE5hrnhfaH0m
-        zs0da30wSrcgNKNjdJvOW/JA8pFGRJJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=zcdXYKD7AIGXfsVFd
-        jjk2+yAJ6zsZ8B0f4omWGU4udk=; b=Q26jmJCQeassQD8bDmdKizI0QTqNcla26
-        Z/sXnrDLuGaL9HqS/i8YzFk2xmSMg5qT/kGsVZyoLqSTwsIyBqXyq8RkY1BwuSFt
-        QliDhtgjgX+f//x2hHtBd0x9iJ/e9wbClQ53Vq8ySt2L5I5z1MsYD9spxcgoRscu
-        QaDu5sly+LhYn7wj37qZFFT4P56NisZ7DFvxHeADJ2Yo3eCcecgr07VYmoM8WjSm
-        ivXsSrxXOySf62FF2HZLDdgb+1ARoSIGDx5b2+B8HLOZurpInf8VZT3E4HoqDgSz
-        I5T2YtcS/CmqQ8PBVPs8UiGfEjktjTOzHthV6fN+nwMwzPlzufzyw==
-X-ME-Sender: <xms:iFMTYkhhyhwq3q1gNDcLdP3q8C2Gcn0xGoGTIFTl5cf-mLt7sYkBUw>
-    <xme:iFMTYtA36Hu-MfKjDgBkfzvgPIo3849S-J6pti4CJExQLCHTJVSCWNEU_UEJ7qt-V
-    q_DIkav7joDmQTtBy4>
-X-ME-Received: <xmr:iFMTYsH7JC_CWS-AKr917Bjxwqh6SbbwsRdMCucyfFiuWAetY7p88YlWByv5qdFb009yJNgva4gF729RxR0r-7ZfzvNueqUeOdzPO1o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeehgdduvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
-    gfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:iFMTYlQDvgXohLsYkaWvn1BTfIex5vySL60NfMqFYxzkcJyz8UNl_Q>
-    <xmx:iFMTYhynmE5168aSv0qT-xR_Dqtkvj78qdTou6E4xuMW1lj21zzrFg>
-    <xmx:iFMTYj7r2HOg3-c1NHjZOOf6MpAPn-q2NINtiX1xYM_81dmCIx7vEA>
-    <xmx:iFMTYmo4J-9O2AlAD-UW1T9vmr3i44wDDqBByzDzzOKwQaNNj9QSMg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Feb 2022 03:55:35 -0500 (EST)
-Date:   Mon, 21 Feb 2022 09:55:34 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, swboyd@chromium.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/dp: switch to devm_drm_of_get_bridge
-Message-ID: <20220221085534.qw2x6mge42uo4fl6@houat>
-References: <20220221073339.10742-1-jose.exposito89@gmail.com>
+        Mon, 21 Feb 2022 04:01:08 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADCB1B797;
+        Mon, 21 Feb 2022 00:56:13 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id u16so8185270pfg.12;
+        Mon, 21 Feb 2022 00:56:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WZXrnKErNeL5lMaOc5mdXm+VKeICKiYhtwQ5xG170Xw=;
+        b=jU/OVWCH/lwwVb3C6Bp5ADGr8MXWoiP7i+0Kij0V0hacdaZZ8tK00cVt6iZ/1oDgSf
+         zLCNBR+499VDg1KPetHCo+UMwdstxG/Wtb/cojSBn4CxSEJ6+B6Kn2sSEKMLa1FhpnkO
+         gOfg/cTYpGSln1Uw29rXocHi3cBKSe7DPv5ozIhOeUHwEN6CIvYt5Ra3Si/aWrc6nHOh
+         7aJAYpciUQhPZ4GngXgspMO/udtUSVPy9FfWweOkXFjyWaxJte3XNAcV5wQbDu9Bgw6B
+         LWwBJa1AeaH1H8LyWa/xijViaL4QCRQOZGKSBn+6X/iN/DMs7UCUWh/T95iDkQZ2eXiU
+         6NYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WZXrnKErNeL5lMaOc5mdXm+VKeICKiYhtwQ5xG170Xw=;
+        b=8Ao2QHzkLB5cunQm+LHWy3/XEJ1+a9KDh/tknUv2DG3Xsx58pPfKJVaInlL/5YZroY
+         YyOjGs77n6kXHxknE4fcO1nOYX2WneXBfHLDyBKgFJrFgdp4qohK5KkI7I02Hh4jqqxk
+         JUZeMJLhnUnVC285PBNsl5DrJjS9gCztPgxlOuRXjcHyRxK3K0anni7LfPGZUTiQoEzo
+         mC9d4GlcexgL+dtd4+10/+VsTWj7rwcUw+YFDYSIeUj7xBB5oOhC94T9nj8m67hg2lVH
+         emCWsFPm2gHnfKNjvlBO8qCItWAGR93PPT7gCQqGzkfGGuZ67PY3Ompsh0jz51jlXtZi
+         ldvw==
+X-Gm-Message-State: AOAM533B1FrBjBGEobli9PWN3ICsQi54WRofdz+M7FwoVoZQtattK8lq
+        ZIWrVdk3j0XLoCP46i6irK8JoGuCEIvePqg7
+X-Google-Smtp-Source: ABdhPJxQFKuAvx0FRc1MFgpz68m7KDduM6CKW3pDZQEtnNhhGZJ/kLVbzQcknaO+Ju1xitzuqiXzYg==
+X-Received: by 2002:aa7:8d54:0:b0:4e0:bd6:cfb9 with SMTP id s20-20020aa78d54000000b004e00bd6cfb9mr19221126pfe.60.1645433768449;
+        Mon, 21 Feb 2022 00:56:08 -0800 (PST)
+Received: from slim.das-security.cn ([103.84.139.54])
+        by smtp.gmail.com with ESMTPSA id h5sm11488325pfc.118.2022.02.21.00.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 00:56:08 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     manishc@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        coiby.xu@gmail.com, gregkh@linuxfoundation.org,
+        dan.carpenter@oracle.com
+Cc:     netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v3] staging: qlge: add unregister_netdev in qlge_probe
+Date:   Mon, 21 Feb 2022 16:55:52 +0800
+Message-Id: <20220221085552.93561-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kcae224eyodkfp6e"
-Content-Disposition: inline
-In-Reply-To: <20220221073339.10742-1-jose.exposito89@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,33 +70,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+unregister_netdev need to be called when register_netdev succeeds
+qlge_health_create_reporters fails.
 
---kcae224eyodkfp6e
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: d8827ae8e22b ("staging: qlge: deal with the case that devlink_health_reporter_create fails")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
 
-On Mon, Feb 21, 2022 at 08:33:39AM +0100, Jos=E9 Exp=F3sito wrote:
-> The function "drm_of_find_panel_or_bridge" has been deprecated in
-> favor of "devm_drm_of_get_bridge".
->=20
-> Switch to the new function and reduce boilerplate.
->=20
-> Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
+v3: add a Fixed tag
 
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+v2: use goto to fix this bug
 
-Maxime
+ drivers/staging/qlge/qlge_main.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---kcae224eyodkfp6e
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
+index 9873bb2a9ee4..113a3efd12e9 100644
+--- a/drivers/staging/qlge/qlge_main.c
++++ b/drivers/staging/qlge/qlge_main.c
+@@ -4605,14 +4605,12 @@ static int qlge_probe(struct pci_dev *pdev,
+ 	err = register_netdev(ndev);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "net device registration failed.\n");
+-		qlge_release_all(pdev);
+-		pci_disable_device(pdev);
+-		goto netdev_free;
++		goto cleanup_pdev;
+ 	}
+ 
+ 	err = qlge_health_create_reporters(qdev);
+ 	if (err)
+-		goto netdev_free;
++		goto unregister_netdev;
+ 
+ 	/* Start up the timer to trigger EEH if
+ 	 * the bus goes dead
+@@ -4626,6 +4624,11 @@ static int qlge_probe(struct pci_dev *pdev,
+ 	devlink_register(devlink);
+ 	return 0;
+ 
++unregister_netdev:
++	unregister_netdev(ndev);
++cleanup_pdev:
++	qlge_release_all(pdev);
++	pci_disable_device(pdev);
+ netdev_free:
+ 	free_netdev(ndev);
+ devlink_free:
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYhNThgAKCRDj7w1vZxhR
-xQ/3AQDoqp/3uuiqU47wvaKsMT4OkQ8oU6uBZBmILyZXiEmPlAD8C7QMIh6RfG/2
-cMb7pXNT5FUCHu/NDIb0I9E7Cig+gw4=
-=WH80
------END PGP SIGNATURE-----
-
---kcae224eyodkfp6e--

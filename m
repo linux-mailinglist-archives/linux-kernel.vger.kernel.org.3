@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1FB4BE18E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE47E4BDC82
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351144AbiBUJmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:42:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47638 "EHLO
+        id S1349000AbiBUJXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:23:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351010AbiBUJgh (ORCPT
+        with ESMTP id S1347594AbiBUJNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:36:37 -0500
+        Mon, 21 Feb 2022 04:13:13 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805A962C4;
-        Mon, 21 Feb 2022 01:15:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D2FB39;
+        Mon, 21 Feb 2022 01:06:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B18FBCE0E95;
-        Mon, 21 Feb 2022 09:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 986F7C36AE7;
-        Mon, 21 Feb 2022 09:15:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2FDB7CE0E7C;
+        Mon, 21 Feb 2022 09:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6D1C340E9;
+        Mon, 21 Feb 2022 09:06:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434902;
-        bh=Oi/z8FXJe7HaSYVUhQ0ZeCMIKUhAiYSLwLD4ZSc+Jec=;
+        s=korg; t=1645434386;
+        bh=RlIJkqhJeywI1Lv4jsN4NDzXdBOtJClYZToweQ8aOgQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ahNQU9da+jun1EcKscnu+ju/anAPpxjSFruHeq8/UJU2mmUvA5/XAKS3jJCKYxERN
-         YcDyvskaDqfEiUF/NRYTH9gwDb4LxqxIByeZPY8Y39pBgBqFStyk2zRqFZpNifYcRt
-         lOIUu4JHxIp/FrHaXMuzoWbb0XhZAIFDTcMJT1bs=
+        b=yGclNhWZa/J0/B1ofOkGoDRWD5dyI/kOq3M1TuTUA6RJLiVOnDuxROwm+011HkQIe
+         taztgOef4gVnTn9ITAnwWJ03apo2LYg6aJYEbtajoUO3mPTSbm317eX0grgMwLdTu0
+         gC/FoVpRDGBN6gsQ68yRPtHZCiMXIB4T2yFAlCAA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Roman Li <Roman.Li@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 171/196] drm/amd/display: Cap pflip irqs per max otg number
+        stable@vger.kernel.org, "Ewan D. Milne" <emilne@redhat.com>,
+        James Smart <jsmart2021@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.10 111/121] scsi: lpfc: Fix pt2pt NVMe PRLI reject LOGO loop
 Date:   Mon, 21 Feb 2022 09:50:03 +0100
-Message-Id: <20220221084936.666545339@linuxfoundation.org>
+Message-Id: <20220221084924.951071389@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +55,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roman Li <Roman.Li@amd.com>
+From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit 328e34a5ad227399391891d454043e5d73e598d2 ]
+commit 7f4c5a26f735dea4bbc0eb8eb9da99cda95a8563 upstream.
 
-[Why]
-pflip interrupt order are mapped 1 to 1 to otg id.
-e.g. if irq_src=26 corresponds to otg0 then 27->otg1, 28->otg2...
+When connected point to point, the driver does not know the FC4's supported
+by the other end. In Fabrics, it can query the nameserver.  Thus the driver
+must send PRLIs for the FC4s it supports and enable support based on the
+acc(ept) or rej(ect) of the respective FC4 PRLI.  Currently the driver
+supports SCSI and NVMe PRLIs.
 
-Linux DM registers pflip interrupts per number of crtcs.
-In fused pipe case crtc numbers can be less than otg id.
+Unfortunately, although the behavior is per standard, many devices have
+come to expect only SCSI PRLIs. In this particular example, the NVMe PRLI
+is properly RJT'd but the target decided that it must LOGO after seeing the
+unexpected NVMe PRLI. The LOGO causes the sequence to restart and login is
+now in an infinite failure loop.
 
-e.g. if one pipe out of 3(otg#0-2) is fused adev->mode_info.num_crtc=2
-so DM only registers irq_src 26,27.
-This is a bug since if pipe#2 remains unfused DM never gets
-otg2 pflip interrupt (irq_src=28)
-That may results in gfx failure due to pflip timeout.
+Fix the problem by having the driver, on a pt2pt link, remember NVMe PRLI
+accept or reject status across logout as long as the link stays "up".  When
+retrying login, if the prior NVMe PRLI was rejected, it will not be sent on
+the next login.
 
-[How]
-Register pflip interrupts per max num of otg instead of num_crtc
-
-Signed-off-by: Roman Li <Roman.Li@amd.com>
-Reviewed-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220212163120.15385-1-jsmart2021@gmail.com
+Cc: <stable@vger.kernel.org> # v5.4+
+Reviewed-by: Ewan D. Milne <emilne@redhat.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 +-
- drivers/gpu/drm/amd/display/dc/core/dc.c          | 2 ++
- drivers/gpu/drm/amd/display/dc/dc.h               | 1 +
- 3 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc.h           |    1 +
+ drivers/scsi/lpfc/lpfc_attr.c      |    3 +++
+ drivers/scsi/lpfc/lpfc_els.c       |   20 +++++++++++++++++++-
+ drivers/scsi/lpfc/lpfc_nportdisc.c |    5 +++--
+ 4 files changed, 26 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 16556ae892d4a..5ae9b8133d6da 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -3230,7 +3230,7 @@ static int dcn10_register_irq_handlers(struct amdgpu_device *adev)
+--- a/drivers/scsi/lpfc/lpfc.h
++++ b/drivers/scsi/lpfc/lpfc.h
+@@ -374,6 +374,7 @@ struct lpfc_vport {
+ #define FC_VPORT_LOGO_RCVD      0x200    /* LOGO received on vport */
+ #define FC_RSCN_DISCOVERY       0x400	 /* Auth all devices after RSCN */
+ #define FC_LOGO_RCVD_DID_CHNG   0x800    /* FDISC on phys port detect DID chng*/
++#define FC_PT2PT_NO_NVME        0x1000   /* Don't send NVME PRLI */
+ #define FC_SCSI_SCAN_TMO        0x4000	 /* scsi scan timer running */
+ #define FC_ABORT_DISCOVERY      0x8000	 /* we want to abort discovery */
+ #define FC_NDISC_ACTIVE         0x10000	 /* NPort discovery active */
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -1142,6 +1142,9 @@ lpfc_issue_lip(struct Scsi_Host *shost)
+ 	pmboxq->u.mb.mbxCommand = MBX_DOWN_LINK;
+ 	pmboxq->u.mb.mbxOwner = OWN_HOST;
  
- 	/* Use GRPH_PFLIP interrupt */
- 	for (i = DCN_1_0__SRCID__HUBP0_FLIP_INTERRUPT;
--			i <= DCN_1_0__SRCID__HUBP0_FLIP_INTERRUPT + adev->mode_info.num_crtc - 1;
-+			i <= DCN_1_0__SRCID__HUBP0_FLIP_INTERRUPT + dc->caps.max_otg_num - 1;
- 			i++) {
- 		r = amdgpu_irq_add_id(adev, SOC15_IH_CLIENTID_DCE, i, &adev->pageflip_irq);
- 		if (r) {
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-index 1860ccc3f4f2c..4fae73478840c 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -1118,6 +1118,8 @@ struct dc *dc_create(const struct dc_init_data *init_params)
- 
- 		dc->caps.max_dp_protocol_version = DP_VERSION_1_4;
- 
-+		dc->caps.max_otg_num = dc->res_pool->res_cap->num_timing_generator;
++	if ((vport->fc_flag & FC_PT2PT) && (vport->fc_flag & FC_PT2PT_NO_NVME))
++		vport->fc_flag &= ~FC_PT2PT_NO_NVME;
 +
- 		if (dc->res_pool->dmcu != NULL)
- 			dc->versions.dmcu_version = dc->res_pool->dmcu->dmcu_version;
- 	}
-diff --git a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/display/dc/dc.h
-index 3ab52d9a82cf6..e0f58fab5e8ed 100644
---- a/drivers/gpu/drm/amd/display/dc/dc.h
-+++ b/drivers/gpu/drm/amd/display/dc/dc.h
-@@ -185,6 +185,7 @@ struct dc_caps {
- 	struct dc_color_caps color;
- 	bool vbios_lttpr_aware;
- 	bool vbios_lttpr_enable;
-+	uint32_t max_otg_num;
- };
+ 	mbxstatus = lpfc_sli_issue_mbox_wait(phba, pmboxq, LPFC_MBOX_TMO * 2);
  
- struct dc_bug_wa {
--- 
-2.34.1
-
+ 	if ((mbxstatus == MBX_SUCCESS) &&
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -1067,7 +1067,8 @@ stop_rr_fcf_flogi:
+ 
+ 		/* FLOGI failed, so there is no fabric */
+ 		spin_lock_irq(shost->host_lock);
+-		vport->fc_flag &= ~(FC_FABRIC | FC_PUBLIC_LOOP);
++		vport->fc_flag &= ~(FC_FABRIC | FC_PUBLIC_LOOP |
++				    FC_PT2PT_NO_NVME);
+ 		spin_unlock_irq(shost->host_lock);
+ 
+ 		/* If private loop, then allow max outstanding els to be
+@@ -3945,6 +3946,23 @@ lpfc_els_retry(struct lpfc_hba *phba, st
+ 		/* Added for Vendor specifc support
+ 		 * Just keep retrying for these Rsn / Exp codes
+ 		 */
++		if ((vport->fc_flag & FC_PT2PT) &&
++		    cmd == ELS_CMD_NVMEPRLI) {
++			switch (stat.un.b.lsRjtRsnCode) {
++			case LSRJT_UNABLE_TPC:
++			case LSRJT_INVALID_CMD:
++			case LSRJT_LOGICAL_ERR:
++			case LSRJT_CMD_UNSUPPORTED:
++				lpfc_printf_vlog(vport, KERN_WARNING, LOG_ELS,
++						 "0168 NVME PRLI LS_RJT "
++						 "reason %x port doesn't "
++						 "support NVME, disabling NVME\n",
++						 stat.un.b.lsRjtRsnCode);
++				retry = 0;
++				vport->fc_flag |= FC_PT2PT_NO_NVME;
++				goto out_retry;
++			}
++		}
+ 		switch (stat.un.b.lsRjtRsnCode) {
+ 		case LSRJT_UNABLE_TPC:
+ 			/* The driver has a VALID PLOGI but the rport has
+--- a/drivers/scsi/lpfc/lpfc_nportdisc.c
++++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
+@@ -2010,8 +2010,9 @@ lpfc_cmpl_reglogin_reglogin_issue(struct
+ 			 * is configured try it.
+ 			 */
+ 			ndlp->nlp_fc4_type |= NLP_FC4_FCP;
+-			if ((vport->cfg_enable_fc4_type == LPFC_ENABLE_BOTH) ||
+-			    (vport->cfg_enable_fc4_type == LPFC_ENABLE_NVME)) {
++			if ((!(vport->fc_flag & FC_PT2PT_NO_NVME)) &&
++			    (vport->cfg_enable_fc4_type == LPFC_ENABLE_BOTH ||
++			    vport->cfg_enable_fc4_type == LPFC_ENABLE_NVME)) {
+ 				ndlp->nlp_fc4_type |= NLP_FC4_NVME;
+ 				/* We need to update the localport also */
+ 				lpfc_nvme_update_localport(vport);
 
 

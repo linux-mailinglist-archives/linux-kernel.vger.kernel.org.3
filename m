@@ -2,335 +2,510 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF294BDE0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE86D4BDBF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358279AbiBUMqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 07:46:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39898 "EHLO
+        id S1358264AbiBUMpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 07:45:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358258AbiBUMpy (ORCPT
+        with ESMTP id S1358258AbiBUMpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 07:45:54 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B290DDE88;
-        Mon, 21 Feb 2022 04:45:30 -0800 (PST)
-Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N49xZ-1oLPnX3WhF-0107OZ; Mon, 21 Feb 2022 13:45:14 +0100
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Subject: Re: [PATCH v5 03/11] dt-bindings: media: Add bindings for
- bcm2835-unicam
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
-        dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
-        tomi.valkeinen@ideasonboard.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>
-References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
- <20220208155027.891055-4-jeanmichel.hautbois@ideasonboard.com>
- <f58bf6a9-c63f-19ab-36c8-a9a7b9182859@i2se.com>
- <20220214093954.5y4jbqcddmwhgxr5@houat>
- <YgomyazKaV2QnfYQ@pendragon.ideasonboard.com>
- <7ba0d8e7-72b9-d139-f29f-45a803ca2fdb@i2se.com>
- <YhM6474MwSh6bjUe@pendragon.ideasonboard.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <4f809de2-24ee-dd9f-6354-2ce770a3ff4d@i2se.com>
-Date:   Mon, 21 Feb 2022 13:45:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 21 Feb 2022 07:45:49 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2040.outbound.protection.outlook.com [40.107.21.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72AFDE88;
+        Mon, 21 Feb 2022 04:45:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y0ZrYB0vpKO51PlaVjBckjssfleL6WKTX5XIFFk7iJmkOjCD1E2gXIkMDvsUV7G0jOJokdOOT+q/9+IoEVY8lZhc9zzagb3ldBdcXStKBOybmaJ4g+HmY7x7eehoh6BTm9/D9d/0/EWwslBYGYLFHSxVeQ53hI0pJjHML9JUHFmQ+NmQU2b2XnButzuGoQUQc5lCcyw7zNknmds2e+ebFQphHjN3JytdRjg4uLLOq8g5mCDBYFZwlfDU5AG+1CwsuxHePFgq7QEO9r6BfvAwqSINr34sS5QGelunNxDh0IF+XFWzu/29aOpwo7z+wqv40CgKY1EhVWhGavUvdbgcew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gFd0Zaxl6qIqsVamP1Go+0BQZrONORXxi6rKR42a26A=;
+ b=gslPb6DzBuAUjeLBbvqyTWvCBIXQ24C1NmoFVxZgAyB5D2FdbZd3A2VT/goxs3tMYKrw4XvFRMILpCnXrz67nKRi3hmhDHdz4R7WpIZTfBBe3dIoOh7IWpCbPUwA1jytvZ9fmWC8sLhVOqhl5+PtvIDwhfgWonxd0cpsZ/VnKL5Nixbh9McpgqNWXBJQqk7p4udvX7tBcShLktB5EAfgKd6Vb8HuVVRJiWbNBZxOuMjc89JT1i1DR6cPAxLR/HPUc9tS9zUgBvTEkRqDhANp/oTIZL2RCdijoJ6k1i+BUGKtVOUAIo1UwTku+4qrFUOIty7/L0NkeiNOhuHakZ9RsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gFd0Zaxl6qIqsVamP1Go+0BQZrONORXxi6rKR42a26A=;
+ b=mtH15qSXvA51fdOp0MGait+bvU06D1w7XKq9m8wO7L1TtRXSkmJC9/t+8YcotsuNnI33d2OUi0wmEJBVgT1abOImwifCMsehpO5R1JWWSb1CTTnaW0D+x7qQmGQtwEXScgqVvbKYW+DKrPVE1/X5rBbi0TurrpQGnCqqaHWeO9U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by VI1PR04MB4863.eurprd04.prod.outlook.com (2603:10a6:803:56::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.27; Mon, 21 Feb
+ 2022 12:45:20 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::2936:6a6f:6e6f:161f]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::2936:6a6f:6e6f:161f%6]) with mapi id 15.20.4995.026; Mon, 21 Feb 2022
+ 12:45:20 +0000
+Date:   Mon, 21 Feb 2022 14:45:18 +0200
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 4/4] clk: imx: add i.MX93 clk
+Message-ID: <YhOJXoyM/8dGYaV3@abelvesa>
+References: <20220215081835.790311-1-peng.fan@oss.nxp.com>
+ <20220215081835.790311-5-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220215081835.790311-5-peng.fan@oss.nxp.com>
+X-ClientProxiedBy: VI1PR07CA0176.eurprd07.prod.outlook.com
+ (2603:10a6:802:3e::24) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
 MIME-Version: 1.0
-In-Reply-To: <YhM6474MwSh6bjUe@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:5i5hJGNCAi0RHpgQ/oDgG+YJPW2gBg7F88TYBOw6Ku7UjFI29UG
- scr8mTcmPpYFJ+huaQD/YndlBk0TMm8Ux57M1ZiyTKSYtJWfGYUgUS4Ge9DAT3IiPBq/29h
- E+3Qewt7BTAruBDZbQDAzPMSNd9oz53NYcGo4ddUqMaZngxeYRRlXK4pinI/QiJONpwaVGv
- S4gxKmDlJ3lXCeqjyOUBg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mRQMaee9rLQ=:YTGugKhZdOT3CPOM8cEOB+
- PDtIxgx45bjEMtUthkC+gs0Gl4Ww0F8GEGt247WpZpvvlQbiBpKknT97sE+CnU8JqgwkwjCjC
- jS3D2hdjI2wS8o1WHCgdRuVVfuHp+3mheOdlTp5zac2fcgr29DVL+THRp/D7Rz7af1HwQLFSH
- /IrRSNRUEJw5ub6+I6hWoUXnuZu4mefPrDJW7w+TPAcvtpc9PKF+06uUBEtfw8kQKvVZnu5Q3
- wY5ertlMHIB9V6YuOXToA8YMpaYFCITbW1bMX8TWNL7dF/T2hn88zDOVvMQwKnYwjpfTipmPJ
- qZ1fu6VOcu2kx4yjgJaJif2ACrQ1SJKsXnZGi7UMlkAhTVtq0n1gmORfC0VJpScya06aLuIHJ
- 2AytGfRhJ0SqJMMrBtfkfog5OHuo4RAoH9SQsg0bsMeiaKEl15hBo8xQe9dJS8AvdxGV+ftRu
- oK4fFJmvR8j/oePhp0f3gyynjKmgxFAcN457md+pzgX+GXYysx+dSwYX1l+eYR/xXWHt3IcsA
- GJUWGL2ILLtyijhEI/nSjLEpGKmzbBwhP2bLyB8XIm3YjJclr5JcNAGPx/LMREiCHBGp0Qxcj
- ExaUi6RCX/FxVa5tNPtWcx6mmeV6lc/LRatSPBmv7k7GhdBViV6FPqxsWP3kJJuaVFwiAB7HC
- Z1lr/xa5ze6VggbFeP/uvLwsa8SFPhDZHsJQqk0oEcJVF+jTVMbYuP4R1xWojOv4XBkDaY6XI
- y3HZyKOE53bU/SXH
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 816e6e64-f4e2-458c-dd71-08d9f538052c
+X-MS-TrafficTypeDiagnostic: VI1PR04MB4863:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR04MB48634451CFC7253B255F0314F63A9@VI1PR04MB4863.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Zsc/U98Nmdstxa4ZVBIwuaycurcbmfGZq7Vccza6gSzqN4oaxSrgTLPmILkqL/Blh8hVSglBFLdsUcBIpP+vFBhnP01r5zOJggLb9iFjgf5jWDTFJKHyeHX5+eRdWJNyoJg/DEpTA6HGirexNuOBWSvV2/qx0slqP6wINskX8Rr1oROpcte3W4RxSr33IsgisNlifTRNiA4TA08zMs42NOBWLCkcgu1x3hXzhf5C8E4MWJgBYPgeu9N/LSBQ4WvbEmItJO6ah7UMRHvNdMxsxccAHQo6CVOneegY5fxf9bVSSAXweU2nXCBmn/KvR7+NL4Lxs4aKoKcCEfOTe8SGbWbh4RPJWaW8Wko1sYumz01Guihq9TkpVtXxpeUJIUBDeOaLYOLVyEXsH/Pp81ilTYNX/QG5XcJtkh9722n/KIvdkP1nU2QQRw9kNR5KzKO+eUUnWk4oZI32l96rNVVjRkFGS/AWLg0G7qz6jCtjWAUoVcgS+zTbjgrqmWhbijwtjY/2MOl5Tk11NmtMwc9DiR3ZYyZAxutj8+PbPS1wdx4kISrQHhYs9QnWP3J7HUSTRBOH3jy4OR0qPil5XtvmYXrcT++w24EE0D7l4bmmpVeJjXTWu4NXFPKQz47Znf+XDKwIODbwWaPqdraZkDHrn2Zmyg5JqUtlJOI81UiK5KqdtDHfgqwVK6Lr7GQQJBfXPJHAjVHnf/AEABj3OXHv9Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(33716001)(508600001)(316002)(66476007)(66556008)(66946007)(4326008)(6862004)(8676002)(6512007)(30864003)(44832011)(53546011)(6486002)(52116002)(7416002)(5660300002)(6506007)(9686003)(2906002)(38100700002)(38350700002)(26005)(186003)(86362001)(8936002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cu4NKfo5tjBJQqjslTA3hV9ygWj21lpgj9DSnFPHcIIEiMrnAvZYZKgK3FQS?=
+ =?us-ascii?Q?0ILlElBmB+9cksDqdaOsndPoodyDT09Aktg5tFuHkApW9Wrk3nKqxDlo3VvO?=
+ =?us-ascii?Q?snKl9PHry//6KxBgFJDvxtiLXvKyjMzf4Q1DA1F2eL8zcoNyt6yIJRRZanHS?=
+ =?us-ascii?Q?UBIkQ5ULiDHPkrqNLJF1/H8pQwuuPUV/TK99N8+8J51QDGOzoM9Ccz5kwjR7?=
+ =?us-ascii?Q?00fiJoGVoKkvYVQLDX1huVG5P8YUurWRFr3vJ7a774d4qjUgwbdwbDjGygY2?=
+ =?us-ascii?Q?3OMwPSARt8peE4A9rpbIk7kCUdP3OtTEkv3HgRVVBGQ51kWbj4g+lEHcBLyy?=
+ =?us-ascii?Q?w3v1rHdKvKOAJfJsYKkZLuCiiAB/x15PVvtfRlovnFU3cxg6GluSOZcHPe8Z?=
+ =?us-ascii?Q?lV0bxL5dtCnT7SUMP4AN1W5BJt1J+eZMUPS3+joB9Atc6EFLdgnZSAv1WwVZ?=
+ =?us-ascii?Q?8RNqPMpt0QEz6eKexAXB16ezJbc1ZDY67md861xYfTZJ+4nGMZBeUOGLek7z?=
+ =?us-ascii?Q?DsntQSdKMmhXG8RK23gIP5bV/b62kNBtVBoS6UOLTq+gGlXb4XUN5usUKqwD?=
+ =?us-ascii?Q?dXfD5LJjdJtKeAMfsIAv4rq6aa3satrhhbrxFK7Y7y12QnSKeII0TYdNCfXA?=
+ =?us-ascii?Q?p87TsJUViuFV+7lbd4JgB4Wqh52ecggV9o2kL2KQJWelLytFdFSuq/mzbYBK?=
+ =?us-ascii?Q?8oxyG0u7Cd/luXlYu4OSyXnucbvnVBoDGJt5GaP/AcxSg1ROGSGBxQODTqTn?=
+ =?us-ascii?Q?sWc/5/GWkoXc0nLSHF64MDgQmcTESdQIpUrsgnM98Vjmh7dDD8IVTIsW+t4x?=
+ =?us-ascii?Q?LoFXXbiy2+3GX8116O/lb9V3QjCDLWPpRJEeo6YMP9ljE4/AErOLKqU+JP0I?=
+ =?us-ascii?Q?sYwp090W2k2IY5zJAjhBsGteDy6tN5ejk1ejKnLT8X5//NBVUDWI4NunX2L+?=
+ =?us-ascii?Q?7iLthQXU4pHBuu3fN3dlwPGXg8wv9DxFVS/1SWRI5GpQb0+xaR4GQLWjdWzg?=
+ =?us-ascii?Q?hfmT7D7NYw5UoEjU/IivnqSqnTvDBRRRFuEVlJTrUwo9V35hQoGcLlqK1ida?=
+ =?us-ascii?Q?OMwKO4xinog3hsuJ7aPd+lDe0YcDde0OIzNrL95PF6jNExDjcWB2c+yJpsYX?=
+ =?us-ascii?Q?3hEkFZ93jYvlWGsE2jOLVI4AYPuLhXksOnNdmyQeB0znX0Is2s+dRPQTdK5g?=
+ =?us-ascii?Q?8hjBGH0EFCMg9UMiHRlWS6XgXZxRv/qbcmaDr1bmfJAxjORGoA99ydKZ39PP?=
+ =?us-ascii?Q?5G4AtHePojCI3nv6TX7O1YVZQI7vXxQlljASZK64mIGmh2ZPXveY+FlkMG6l?=
+ =?us-ascii?Q?NB6l4+Grqr9E3RIW9pQQic0S88SDWAWrFLK1m+rn0ng/NHUSYWf6VgP+BRu8?=
+ =?us-ascii?Q?OYaXlsOe0j8iwyuoGIV71X87lGxtJwUfBsFgT8Yl4P3WA4KnNNyhoWyy4c3r?=
+ =?us-ascii?Q?mz1eEzLIMZVKPOUVeDva9+feRrL0m9aZQoI/Zh81s7rYsIgmXPzwsdfReLOK?=
+ =?us-ascii?Q?stF997H5YdJ4eI5xasZNn9pbRIffFyQ+SGEf5d1C7haAqEneuMQ428mKNX41?=
+ =?us-ascii?Q?A5QZwMEOSUcZhoOWUtDrUHMhD/2IE99zHt2gAwRpQtDnyp4WTdr4scmfnPXy?=
+ =?us-ascii?Q?Bb1qLVJ9CgcYSRcw1k5OKdE=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 816e6e64-f4e2-458c-dd71-08d9f538052c
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 12:45:20.5310
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h8XYxyY3xHM0jxlPnlWDLAhbnOH9NqCUv2/ZKQUx1YfbPuT0BCLGxlNLR9LVyAY2zzsQ3UkXsqS/hIE6ibbzmQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4863
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On 22-02-15 16:18:35, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Note: This is based on uncompleted information including the composite
+> clk. Just build pass, not verified.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-Am 21.02.22 um 08:10 schrieb Laurent Pinchart:
-> Hi Stefan,
->
-> On Mon, Feb 14, 2022 at 12:32:59PM +0100, Stefan Wahren wrote:
->> Am 14.02.22 um 10:54 schrieb Laurent Pinchart:
->>> On Mon, Feb 14, 2022 at 10:39:54AM +0100, Maxime Ripard wrote:
->>>> On Sun, Feb 13, 2022 at 04:48:45PM +0100, Stefan Wahren wrote:
->>>>> as someone with a little more insight to the clocks, i like to know your
->>>>> opinion about the bcm2835-unicam binding.
->>>>>
->>>>> Am 08.02.22 um 16:50 schrieb Jean-Michel Hautbois:
->>>>>> Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
->>>>>> camera interface.
->>>>>>
->>>>>> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
->>>>>> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
->>>>>> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
->>>>>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>>>>>
->>>>>> ---
->>>>>> v4:
->>>>>> - make MAINTAINERS its own patch
->>>>>> - describe the reg and clocks correctly
->>>>>> - use a vendor entry for the number of data lanes
->>>>>> ---
->>>>>>  .../bindings/media/brcm,bcm2835-unicam.yaml   | 117 ++++++++++++++++++
->>>>>>  1 file changed, 117 insertions(+)
->>>>>>  create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..1938ace23b3d
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->>>>>> @@ -0,0 +1,117 @@
->>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: Broadcom BCM283x Camera Interface (Unicam)
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
->>>>>> +
->>>>>> +description: |-
->>>>>> +  The Unicam block on BCM283x SoCs is the receiver for either
->>>>>> +  CSI-2 or CCP2 data from image sensors or similar devices.
->>>>>> +
->>>>>> +  The main platform using this SoC is the Raspberry Pi family of boards.  On
->>>>>> +  the Pi the VideoCore firmware can also control this hardware block, and
->>>>>> +  driving it from two different processors will cause issues.  To avoid this,
->>>>>> +  the firmware checks the device tree configuration during boot. If it finds
->>>>>> +  device tree nodes whose name starts with 'csi' then it will stop the firmware
->>>>>> +  accessing the block, and it can then safely be used via the device tree
->>>>>> +  binding.
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    const: brcm,bcm2835-unicam
->>>>>> +
->>>>>> +  reg:
->>>>>> +    items:
->>>>>> +      - description: Unicam block.
->>>>>> +      - description: Clock Manager Image (CMI) block.
->>>>>> +
->>>>>> +  reg-names:
->>>>>> +    items:
->>>>>> +      - const: unicam
->>>>>> +      - const: cmi
->>>>>> +
->>>>>> +  interrupts:
->>>>>> +    maxItems: 1
->>>>>> +
->>>>>> +  clocks:
->>>>>> +    items:
->>>>>> +      - description: Clock to drive the LP state machine of Unicam.
->>>>>> +      - description: Clock for the VPU (core clock).
->>>>>> +
->>>>>> +  clock-names:
->>>>>> +    items:
->>>>>> +      - const: lp
->>>>>> +      - const: vpu
->>>>>> +
->>>>> according to this patch [1], the unicam driver only needs the VPU clock
->>>>> reference just to enforce a minimum of 250 MHz. The firmware clock
->>>>> binding and its driver is specific to the bcm2711, but the Unicam IP
->>>>> exists since bcm2835.
->>>>>
->>>>> So do you think the clock part is correct or should be the VPU clock
->>>>> optional?
->>>> I think we should keep it mandatory. Indeed, that clock is shared with
->>>> the HVS that will change its rate on a regular basis, so even just
->>>> enforcing that 250MHz while it's on without a clock handle will be
->>>> fairly hard.
->>>>
->>>> Also, those are the constraints we have now, but having the clock handle
->>>> all the time will allow us to add any constraint we might need in the
->>>> future.
->>>>
->>>> And BCM2711 or not, the clock has probably always been there.
->>> Furthermore, regardless of what the driver needs, Unicam operates with
->>> the VPU clock, so I think it makes sense to reference it in the device
->>> tree.
->> okay, as a result we need a DTS patch for bcm2835-rpi.dtsi to enable the
->> firmware clocks and its driver in this series.
-> Can't we do that on top, enabling Unicam support for bcm2711 only first
-> ? I have no idea how to deal with firmware clocks on bcm2825, and I'm
-> not sure Jean-Michel even has a hardware platform to test it.
+This doesn't apply. What tree was this done against?
 
-sorry as being a bcm2835 maintainer so long, i'm not always aware of the
-ambiguous meaning of bcm2835. The bcm2835-rpi.dtsi is used by all
-Raspberry Pi generations. So it's sufficient to test it with a Raspberry
-Pi 4, but we would gain support for all generations.
-
-So my request is to move the changes from bcm2711 specific dtsi to the
-general dtsi. There is no need to touch any driver, please have a look
-at this patch [1] to see what i had in my mind. Just compile tested.
-
-I hope you understand, i want to have it for all generations in one step.
-
-[1] -
-https://github.com/lategoodbye/rpi-zero/commit/67897cc22c03204e6464d00ff4ddac6bf5dc65dc
-
-> If you want to send a patch series to enable firmware clocks on bcm2835,
-> we'll be happy to rebase on top.
+> ---
+>  drivers/clk/imx/Kconfig     |   6 +
+>  drivers/clk/imx/Makefile    |   2 +
+>  drivers/clk/imx/clk-imx93.c | 338 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 346 insertions(+)
+>  create mode 100644 drivers/clk/imx/clk-imx93.c
+> 
+> diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
+> index c08edbd04d22..80a16c60b68f 100644
+> --- a/drivers/clk/imx/Kconfig
+> +++ b/drivers/clk/imx/Kconfig
+> @@ -105,3 +105,9 @@ config CLK_IMX8ULP
+>  	select MXC_CLK
+>  	help
+>  	    Build the driver for i.MX8ULP CCM Clock Driver
+> +
+> +config CLK_IMX93
+> +	tristate "IMX93 CCM Clock Driver"
+> +	depends on ARCH_MXC || COMPILE_TEST
+> +	help
+> +	    Build the driver for i.MX93 CCM Clock Driver
+> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
+> index 717a33c7ed50..66914437813e 100644
+> --- a/drivers/clk/imx/Makefile
+> +++ b/drivers/clk/imx/Makefile
+> @@ -28,6 +28,8 @@ obj-$(CONFIG_CLK_IMX8MN) += clk-imx8mn.o
+>  obj-$(CONFIG_CLK_IMX8MP) += clk-imx8mp.o
+>  obj-$(CONFIG_CLK_IMX8MQ) += clk-imx8mq.o
+>  
+> +obj-$(CONFIG_CLK_IMX93) += clk-imx93.o
+> +
+>  obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
+>  clk-imx-scu-$(CONFIG_CLK_IMX8QXP) += clk-scu.o clk-imx8qxp.o \
+>  				     clk-imx8qxp-rsrc.o clk-imx8qm-rsrc.o
+> diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
+> new file mode 100644
+> index 000000000000..7cd5e7fb0c8b
+> --- /dev/null
+> +++ b/drivers/clk/imx/clk-imx93.c
+> @@ -0,0 +1,338 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2021 NXP.
+> + */
+> +
+> +#include <dt-bindings/clock/imx93-clock.h>
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/types.h>
+> +
+> +#include "clk.h"
+> +
+> +enum clk_sel {
+> +	LOW_SPEED_IO_SEL,
+> +	NON_IO_SEL,
+> +	FAST_SEL,
+> +	AUDIO_SEL,
+> +	VIDEO_SEL,
+> +	TPM_SEL,
+> +	CKO1_SEL,
+> +	CKO2_SEL,
+> +	MISC_SEL,
+> +	MAX_SEL
+> +};
+> +
+> +static const char *parent_names[MAX_SEL][4] = {
+> +	{"osc_24m", "sys_pll_pfd0_div2", "sys_pll_pfd1_div2", "video_pll"},
+> +	{"osc_24m", "sys_pll_pfd0_div2", "sys_pll_pfd1_div2", "sys_pll_pfd2_div2"},
+> +	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "sys_pll_pfd2"},
+> +	{"osc_24m", "audio_pll", "video_pll", "clk_ext1"},
+> +	{"osc_24m", "audio_pll", "video_pll", "sys_pll_pfd0"},
+> +	{"osc_24m", "sys_pll_pfd0", "audio_pll", "clk_ext1"},
+> +	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "audio_pll"},
+> +	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "video_pll"},
+> +	{"osc_24m", "audio_pll", "video_pll", "sys_pll_pfd2"},
+> +};
+> +
+> +struct imx93_clk_root {
+> +	u32 clk;
+> +	char *name;
+> +	u32 off;
+> +	enum clk_sel sel;
+> +	unsigned long flags;
+> +} root_array[] = {
+> +	{ IMX93_CLK_A55_PERIPH,		"a55_periph_root",	0x0000,	FAST_SEL, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_A55_MTR_BUS,	"a55_mtr_bus_root",	0x0080,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_A55,		"a55_root",		0x0100,	FAST_SEL, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_M33,		"m33_root",		0x0180,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_BUS_WAKEUP,		"bus_wakeup_root",	0x0280,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_BUS_AON,		"bus_aon_root",		0x0300,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_WAKEUP_AXI,		"wakeup_axi_root",	0x0380,	FAST_SEL, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_SWO_TRACE,		"swo_trace_root",	0x0400,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_M33_SYSTICK,	"m33_systick_root",	0x0480,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_FLEXIO1,		"flexio1_root",		0x0500,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_FLEXIO2,		"flexio2_root",		0x0580,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPIT1,		"lpit1_root",		0x0600,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPIT2,		"lpit2_root",		0x0680,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPTMR1,		"lptmr1_root",		0x0700,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPTMR2,		"lptmr2_root",		0x0780,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_TPM1,		"tpm1_root",		0x0800,	TPM_SEL, },
+> +	{ IMX93_CLK_TPM2,		"tpm2_root",		0x0880,	TPM_SEL, },
+> +	{ IMX93_CLK_TPM3,		"tpm3_root",		0x0900,	TPM_SEL, },
+> +	{ IMX93_CLK_TPM4,		"tpm4_root",		0x0980,	TPM_SEL, },
+> +	{ IMX93_CLK_TPM5,		"tpm5_root",		0x0a00,	TPM_SEL, },
+> +	{ IMX93_CLK_TPM6,		"tpm6_root",		0x0a80,	TPM_SEL, },
+> +	{ IMX93_CLK_FLEXSPI1,		"flexspi1_root",	0x0b00,	FAST_SEL, },
+> +	{ IMX93_CLK_CAN1,		"can1_root",		0x0b80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_CAN2,		"can2_root",		0x0c00,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPUART1,		"lpuart1_root",		0x0c80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPUART2,		"lpuart2_root",		0x0d00,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPUART3,		"lpuart3_root",		0x0d80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPUART4,		"lpuart4_root",		0x0e00,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPUART5,		"lpuart5_root",		0x0e80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPUART6,		"lpuart6_root",		0x0f00,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPUART7,		"lpuart7_root",		0x0f80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPUART8,		"lpuart8_root",		0x1000,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPI2C1,		"lpi2c1_root",		0x1080,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPI2C2,		"lpi2c2_root",		0x1100,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPI2C3,		"lpi2c3_root",		0x1180,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPI2C4,		"lpi2c4_root",		0x1200,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPI2C5,		"lpi2c5_root",		0x1280,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPI2C6,		"lpi2c6_root",		0x1300,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPI2C7,		"lpi2c7_root",		0x1380,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPI2C8,		"lpi2c8_root",		0x1400,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPSPI1,		"lpspi1_root",		0x1480,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPSPI2,		"lpspi2_root",		0x1500,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPSPI3,		"lpspi3_root",		0x1580,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPSPI4,		"lpspi4_root",		0x1600,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPSPI5,		"lpspi5_root",		0x1680,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPSPI6,		"lpspi6_root",		0x1700,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPSPI7,		"lpspi7_root",		0x1780,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_LPSPI8,		"lpspi8_root",		0x1800,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_I3C1,		"i3c1_root",		0x1880,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_I3C2,		"i3c2_root",		0x1900,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_USDHC1,		"usdhc1_root",		0x1980,	FAST_SEL, },
+> +	{ IMX93_CLK_USDHC2,		"usdhc2_root",		0x1a00,	FAST_SEL, },
+> +	{ IMX93_CLK_USDHC3,		"usdhc3_root",		0x1a80,	FAST_SEL, },
+> +	{ IMX93_CLK_SAI1,		"sai1_root",		0x1b00,	AUDIO_SEL, },
+> +	{ IMX93_CLK_SAI2,		"sai2_root",		0x1b80,	AUDIO_SEL, },
+> +	{ IMX93_CLK_SAI3,		"sai3_root",		0x1c00,	AUDIO_SEL, },
+> +	{ IMX93_CLK_CCM_CKO1,		"ccm_cko1_root",	0x1c80,	CKO1_SEL, },
+> +	{ IMX93_CLK_CCM_CKO2,		"ccm_cko2_root",	0x1d00,	CKO2_SEL, },
+> +	{ IMX93_CLK_CCM_CKO3,		"ccm_cko3_root",	0x1d80,	CKO1_SEL, },
+> +	{ IMX93_CLK_CCM_CKO4,		"ccm_cko4_root",	0x1e00,	CKO2_SEL, },
+> +	{ IMX93_CLK_HSIO,		"hsio_root",		0x1e80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_HSIO_USB_TEST_60M,	"hsio_usb_test_60m_root", 0x1f00, LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_HSIO_ACSCAN_80M,	"hsio_acscan_80m_root",	0x1f80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_HSIO_ACSCAN_480M,	"hsio_acscan_480m_root", 0x2000, MISC_SEL, },
+> +	{ IMX93_CLK_ML_APB,		"ml_apb_root",		0x2180,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_ML,			"ml_root",		0x2200,	FAST_SEL, },
+> +	{ IMX93_CLK_MEDIA_AXI,		"media_axi_root",	0x2280,	FAST_SEL, },
+> +	{ IMX93_CLK_MEDIA_APB,		"media_apb_root",	0x2300,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_MEDIA_LDB,		"media_ldb_root",	0x2380,	VIDEO_SEL, },
+> +	{ IMX93_CLK_MEDIA_DISP_PIX,	"media_disp_pix_root",	0x2400,	VIDEO_SEL, },
+> +	{ IMX93_CLK_CAM_PIX,		"cam_pix_root",		0x2480,	VIDEO_SEL, },
+> +	{ IMX93_CLK_MIPI_TEST_BYTE,	"mipi_test_byte_root",	0x2500,	VIDEO_SEL, },
+> +	{ IMX93_CLK_MIPI_PHY_CFG,	"mipi_phy_cfg_root",	0x2580,	VIDEO_SEL, },
+> +	{ IMX93_CLK_ADC,		"adc_root",		0x2700,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_PDM,		"pdm_root",		0x2780,	AUDIO_SEL, },
+> +	{ IMX93_CLK_TSTMR1,		"tstmr1_root",		0x2800,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_TSTMR2,		"tstmr2_root",		0x2880,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_MQS1,		"mqs1_root",		0x2900,	AUDIO_SEL, },
+> +	{ IMX93_CLK_MQS2,		"mqs2_root",		0x2980,	AUDIO_SEL, },
+> +	{ IMX93_CLK_AUDIO_XCVR,		"audio_xcvr_root",	0x2a00,	NON_IO_SEL, },
+> +	{ IMX93_CLK_SPDIF,		"spdif_root",		0x2a80,	AUDIO_SEL, },
+> +	{ IMX93_CLK_ENET,		"enet_root",		0x2b00,	NON_IO_SEL, },
+> +	{ IMX93_CLK_ENET_TIMER1,	"enet_timer1_root",	0x2b80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_ENET_TIMER2,	"enet_timer2_root",	0x2c00,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_ENET_REF,		"enet_ref_root",	0x2c80,	NON_IO_SEL, },
+> +	{ IMX93_CLK_ENET_REF_PHY,	"enet_ref_phy_root",	0x2d00,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_I3C1_SLOW,		"i3c1_slow_root",	0x2d80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_I3C2_SLOW,		"i3c2_slow_root",	0x2e00,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_USB_PHY_BURUNIN,	"usb_phy_root",		0x2e80,	LOW_SPEED_IO_SEL, },
+> +	{ IMX93_CLK_PAL_CAME_SCAN,	"pal_came_scan_root",	0x2f00,	MISC_SEL, }
+> +};
+> +
+> +struct imx93_clk_ccgr {
+> +	u32 clk;
+> +	char *name;
+> +	char *parent_name;
+> +	u32 off;
+> +	unsigned long flags;
+> +} ccgr_array[] = {
+> +	{ IMX93_CLK_A55_GATE,		"a55",		"a55_root",		0x8000, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_CM33_GATE,		"cm33",		"m33_root",		0x8040, CLK_IS_CRITICAL },
+> +	{ IMX93_CLK_ADC1_GATE,		"adc1",		"osc_24m",		0x82c0, },
+> +	{ IMX93_CLK_WDOG1_GATE,		"wdog1",	"osc_24m",		0x8300, },
+> +	{ IMX93_CLK_WDOG2_GATE,		"wdog2",	"osc_24m",		0x8340, },
+> +	{ IMX93_CLK_WDOG3_GATE,		"wdog3",	"osc_24m",		0x8380, },
+> +	{ IMX93_CLK_WDOG4_GATE,		"wdog4",	"osc_24m",		0x83c0, },
+> +	{ IMX93_CLK_WDOG5_GATE,		"wdog5",	"osc_24m",		0x8400, },
+> +	{ IMX93_CLK_SEMA1_GATE,		"sema1",	"bus_aon_root",		0x8440, },
+> +	{ IMX93_CLK_SEMA2_GATE,		"sema2",	"bus_wakeup_root",	0x8480, },
+> +	{ IMX93_CLK_MU_A_GATE,		"mu_a",		"bus_aon_root",		0x84c0, },
+> +	{ IMX93_CLK_MU_B_GATE,		"mu_b",		"bus_aon_root",		0x8500, },
+> +	{ IMX93_CLK_EDMA1_GATE,		"edma1",	"wakeup_axi_root",	0x8540, },
+> +	{ IMX93_CLK_EDMA2_GATE,		"edma2",	"wakeup_axi_root",	0x8580, },
+> +	{ IMX93_CLK_FLEXSPI1_GATE,	"flexspi",	"flexspi_root",		0x8640, },
+> +	{ IMX93_CLK_GPIO1_GATE,		"gpio1",	"m33_root",		0x8880, },
+> +	{ IMX93_CLK_GPIO2_GATE,		"gpio2",	"bus_wakeup_root",	0x88c0, },
+> +	{ IMX93_CLK_GPIO3_GATE,		"gpio3",	"bus_wakeup_root",	0x8900, },
+> +	{ IMX93_CLK_GPIO4_GATE,		"gpio4",	"bus_wakeup_root",	0x8940, },
+> +	{ IMX93_CLK_FLEXIO1_GATE,	"flexio1",	"flexio1_root",		0x8980, },
+> +	{ IMX93_CLK_FLEXIO2_GATE,	"flexio2",	"flexio2_root",		0x89c0, },
+> +	{ IMX93_CLK_LPIT1_GATE,		"lpit1",	"lpit1_root",		0x8a00, },
+> +	{ IMX93_CLK_LPIT2_GATE,		"lpit2",	"lpit2_root",		0x8a40, },
+> +	{ IMX93_CLK_LPTMR1_GATE,	"lptmr1",	"lptmr1_root",		0x8a80, },
+> +	{ IMX93_CLK_LPTMR2_GATE,	"lptmr2",	"lptmr2_root",		0x8ac0, },
+> +	{ IMX93_CLK_TPM1_GATE,		"tpm1",		"tpm1_root",		0x8b00, },
+> +	{ IMX93_CLK_TPM2_GATE,		"tpm2",		"tpm2_root",		0x8b40, },
+> +	{ IMX93_CLK_TPM3_GATE,		"tpm3",		"tpm3_root",		0x8b80, },
+> +	{ IMX93_CLK_TPM4_GATE,		"tpm4",		"tpm4_root",		0x8bc0, },
+> +	{ IMX93_CLK_TPM5_GATE,		"tpm5",		"tpm5_root",		0x8c00, },
+> +	{ IMX93_CLK_TPM6_GATE,		"tpm6",		"tpm6_root",		0x8c40, },
+> +	{ IMX93_CLK_CAN1_GATE,		"can1",		"can1_root",		0x8c80, },
+> +	{ IMX93_CLK_CAN2_GATE,		"can2",		"can2_root",		0x8cc0, },
+> +	{ IMX93_CLK_LPUART1_GATE,	"lpuart1",	"lpuart1_root",		0x8d00, },
+> +	{ IMX93_CLK_LPUART2_GATE,	"lpuart2",	"lpuart2_root",		0x8d40, },
+> +	{ IMX93_CLK_LPUART3_GATE,	"lpuart3",	"lpuart3_root",		0x8d80, },
+> +	{ IMX93_CLK_LPUART4_GATE,	"lpuart4",	"lpuart4_root",		0x8dc0, },
+> +	{ IMX93_CLK_LPUART5_GATE,	"lpuart5",	"lpuart5_root",		0x8e00, },
+> +	{ IMX93_CLK_LPUART6_GATE,	"lpuart6",	"lpuart6_root",		0x8e40, },
+> +	{ IMX93_CLK_LPUART7_GATE,	"lpuart7",	"lpuart7_root",		0x8e80, },
+> +	{ IMX93_CLK_LPUART8_GATE,	"lpuart8",	"lpuart8_root",		0x8ec0, },
+> +	{ IMX93_CLK_LPI2C1_GATE,	"lpi2c1",	"lpi2c1_root",		0x8f00, },
+> +	{ IMX93_CLK_LPI2C2_GATE,	"lpi2c2",	"lpi2c2_root",		0x8f40, },
+> +	{ IMX93_CLK_LPI2C3_GATE,	"lpi2c3",	"lpi2c3_root",		0x8f80, },
+> +	{ IMX93_CLK_LPI2C4_GATE,	"lpi2c4",	"lpi2c4_root",		0x8fc0, },
+> +	{ IMX93_CLK_LPI2C5_GATE,	"lpi2c5",	"lpi2c5_root",		0x9000, },
+> +	{ IMX93_CLK_LPI2C6_GATE,	"lpi2c6",	"lpi2c6_root",		0x9040, },
+> +	{ IMX93_CLK_LPI2C7_GATE,	"lpi2c7",	"lpi2c7_root",		0x9080, },
+> +	{ IMX93_CLK_LPI2C8_GATE,	"lpi2c8",	"lpi2c8_root",		0x90c0, },
+> +	{ IMX93_CLK_LPSPI1_GATE,	"lpspi1",	"lpspi1_root",		0x9100, },
+> +	{ IMX93_CLK_LPSPI2_GATE,	"lpspi2",	"lpspi2_root",		0x9140, },
+> +	{ IMX93_CLK_LPSPI3_GATE,	"lpspi3",	"lpspi3_root",		0x9180, },
+> +	{ IMX93_CLK_LPSPI4_GATE,	"lpspi4",	"lpspi4_root",		0x91c0, },
+> +	{ IMX93_CLK_LPSPI5_GATE,	"lpspi5",	"lpspi5_root",		0x9200, },
+> +	{ IMX93_CLK_LPSPI6_GATE,	"lpspi6",	"lpspi6_root",		0x9240, },
+> +	{ IMX93_CLK_LPSPI7_GATE,	"lpspi7",	"lpspi7_root",		0x9280, },
+> +	{ IMX93_CLK_LPSPI8_GATE,	"lpspi8",	"lpspi8_root",		0x92c0, },
+> +	{ IMX93_CLK_I3C1_GATE,		"i3c1",		"i3c1_root",		0x9300, },
+> +	{ IMX93_CLK_I3C2_GATE,		"i3c2",		"i3c2_root",		0x9340, },
+> +	{ IMX93_CLK_USDHC1_GATE,	"usdhc1",	"usdhc1_root",		0x9380, },
+> +	{ IMX93_CLK_USDHC2_GATE,	"usdhc2",	"usdhc2_root",		0x93c0, },
+> +	{ IMX93_CLK_USDHC3_GATE,	"usdhc3",	"usdhc3_root",		0x9400, },
+> +	{ IMX93_CLK_SAI1_GATE,		"sai1",		"sai1_root",		0x9440, },
+> +	{ IMX93_CLK_SAI2_GATE,		"sai2",		"sai2_root",		0x9480, },
+> +	{ IMX93_CLK_SAI3_GATE,		"sai3",		"sai3_root",		0x94c0, },
+> +	{ IMX93_CLK_MIPI_CSI_GATE,	"mipi_csi",	"media_apb_root",	0x9580, },
+> +	{ IMX93_CLK_MIPI_DSI_GATE,	"mipi_dsi",	"media_apb_root",	0x95c0, },
+> +	{ IMX93_CLK_LVDS_GATE,		"lvds",		"media_ldb_root",	0x9600, },
+> +	{ IMX93_CLK_LCDIF_GATE,		"lcdif",	"media_apb_root",	0x9640, },
+> +	{ IMX93_CLK_PXP_GATE,		"pxp",		"media_apb_root",	0x9680, },
+> +	{ IMX93_CLK_ISI_GATE,		"isi",		"media_apb_root",	0x96c0, },
+> +	{ IMX93_CLK_NIC_MEDIA_GATE,	"nic_media",	"media_apb_root",	0x9700, },
+> +	{ IMX93_CLK_USB_CONTROLLER_GATE, "usb_controller", "hsio_root",		0x9a00, },
+> +	{ IMX93_CLK_USB_TEST_60M_GATE,	"usb_test_60m",	"hsio_usb_test_60m_root", 0x9a40, },
+> +	{ IMX93_CLK_HSIO_TROUT_24M_GATE, "hsio_trout_24m", "osc_24m",		0x9a80, },
+> +	{ IMX93_CLK_PDM_GATE,		"pdm",		"pdm_root",		0x9ac0, },
+> +	{ IMX93_CLK_MQS1_GATE,		"mqs1",		"sai1_root",		0x9b00, },
+> +	{ IMX93_CLK_MQS2_GATE,		"mqs2",		"sai3_root",		0x9b40, },
+> +	{ IMX93_CLK_AUD_XCVR_GATE,	"aud_xcvr",	"audio_xcvr_root",	0x9b80, },
+> +	{ IMX93_CLK_SPDIF_GATE,		"spdif",	"spdif_root",		0x9c00, },
+> +	{ IMX93_CLK_HSIO_32K_GATE,	"hsio_32k",	"osc_32k",		0x9dc0, },
+> +	{ IMX93_CLK_ENET1_GATE,		"enet1",	"enet_root",		0x9e00, },
+> +	{ IMX93_CLK_ENET_QOS_GATE,	"enet_qos",	"wakeup_axi_root",	0x9e40, },
+> +	{ IMX93_CLK_SYS_CNT_GATE,	"sys_cnt",	"osc_24m",		0x9e80, },
+> +	{ IMX93_CLK_TSTMR1_GATE,	"tstmr1",	"bus_aon_root",		0x9ec0, },
+> +	{ IMX93_CLK_TSTMR2_GATE,	"tstmr2",	"bus_wakeup_root",	0x9f00, },
+> +	{ IMX93_CLK_TMC_GATE,		"tmc",		"osc_24m",		0x9f40, },
+> +	{ IMX93_CLK_PMRO_GATE,		"pmro",		"osc_24m",		0x9f80, }
+> +};
+> +
+> +static struct clk_hw_onecell_data *clk_hw_data;
+> +static struct clk_hw **clks;
+> +
+> +static int imx93_clocks_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct imx93_clk_root *root;
+> +	struct imx93_clk_ccgr *ccgr;
+> +	void __iomem *base = NULL;
+> +	int i, ret;
+> +
+> +	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
+> +					  IMX93_CLK_END), GFP_KERNEL);
+> +	if (WARN_ON(!clk_hw_data))
+> +		return -ENOMEM;
+> +
+> +	clk_hw_data->num = IMX93_CLK_END;
+> +	clks = clk_hw_data->hws;
+> +
+> +	clks[IMX93_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0);
+> +	clks[IMX93_CLK_24M] = imx_obtain_fixed_clk_hw(np, "osc_24m");
+> +	clks[IMX93_CLK_32K] = imx_obtain_fixed_clk_hw(np, "osc_32k");
+> +	clks[IMX93_CLK_EXT1] = imx_obtain_fixed_clk_hw(np, "clk_ext1");
+> +
+> +	clks[IMX93_CLK_SYS_PLL_PFD0] = imx_clk_hw_fixed("sys_pll_pfd0", 1000000000);
+> +	clks[IMX93_CLK_SYS_PLL_PFD0_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd0_div2",
+> +								    "sys_pll_pfd0", 1, 2);
+> +	clks[IMX93_CLK_SYS_PLL_PFD1] = imx_clk_hw_fixed("sys_pll_pfd1", 800000000);
+> +	clks[IMX93_CLK_SYS_PLL_PFD1_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd1_div2",
+> +								    "sys_pll_pfd1", 1, 2);
+> +	clks[IMX93_CLK_SYS_PLL_PFD2] = imx_clk_hw_fixed("sys_pll_pfd2", 625000000);
+> +	clks[IMX93_CLK_SYS_PLL_PFD2_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd2_div2",
+> +								    "sys_pll_pfd2", 1, 2);
+> +
+> +	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-anatop");
+> +	base = of_iomap(np, 0);
+> +	of_node_put(np);
+> +	if (WARN_ON(!base))
+> +		return -ENOMEM;
+> +
+> +	clks[IMX93_CLK_AUDIO_PLL] = imx_clk_fracn_gppll("audio_pll", "osc_24m", base + 0x1200,
+> +							&imx_fracn_gppll);
+> +	clks[IMX93_CLK_VIDEO_PLL] = imx_clk_fracn_gppll("video_pll", "osc_24m", base + 0x1400,
+> +							&imx_fracn_gppll);
+> +
+> +	np = dev->of_node;
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (WARN_ON(IS_ERR(base)))
+> +		return PTR_ERR(base);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(root_array); i++) {
+> +		root = &root_array[i];
+> +		clks[root->clk] = imx93_clk_composite_flags(root->name,
+> +							    parent_names[root->sel],
+> +							    4, base + root->off,
+> +							    root->flags);
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ccgr_array); i++) {
+> +		ccgr = &ccgr_array[i];
+> +		clks[ccgr->clk] = imx_clk_hw_gate4_flags(ccgr->name,
+> +							 ccgr->parent_name,
+> +							 base + ccgr->off, 0,
+> +							 ccgr->flags);
+> +	}
+> +
+> +	imx_check_clk_hws(clks, IMX93_CLK_END);
+> +
+> +	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to register clks for i.MX93\n");
+> +		goto unregister_hws;
+> +	}
+> +
+> +	return 0;
+> +
+> +unregister_hws:
+> +	imx_unregister_hw_clocks(clks, IMX93_CLK_END);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id imx93_clk_of_match[] = {
+> +	{ .compatible = "fsl,imx93-ccm" },
+> +	{ /* Sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
+> +
+> +static struct platform_driver imx93_clk_driver = {
+> +	.probe = imx93_clocks_probe,
+> +	.driver = {
+> +		.name = "imx93-ccm",
+> +		.suppress_bind_attrs = true,
+> +		.of_match_table = of_match_ptr(imx93_clk_of_match),
+> +	},
+> +};
+> +module_platform_driver(imx93_clk_driver);
+> -- 
+> 2.25.1
 >

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304484BE8B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC904BE8BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353323AbiBUKKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:10:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56926 "EHLO
+        id S1351405AbiBUJpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:45:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353447AbiBUJ51 (ORCPT
+        with ESMTP id S1351692AbiBUJhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:57:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F543917A;
-        Mon, 21 Feb 2022 01:25:51 -0800 (PST)
+        Mon, 21 Feb 2022 04:37:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19E43A734;
+        Mon, 21 Feb 2022 01:16:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04AD6B80EBB;
-        Mon, 21 Feb 2022 09:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F94C340E9;
-        Mon, 21 Feb 2022 09:25:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5FE7FCE0E76;
+        Mon, 21 Feb 2022 09:16:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53124C340E9;
+        Mon, 21 Feb 2022 09:16:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435548;
-        bh=v4dDXwJubReDk2vJzh2yaDD2XZ0dk6Hd1kxbXVwlOPg=;
+        s=korg; t=1645434984;
+        bh=42zi/zigIyIUQ1oqsPKN7CLx5IlCRHcYsWZ5A3UZKvg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BU4T3HYZwuumgnQIu4A6AXhm5TP2cbWqci8MZeWq7OjLXR4EPsJp6ZWdu1TQiBN/X
-         DZzHIxWuM+Scb/ADkMWMUFE7l8zB6659S37LeL3KtSLOOcSbdDtTx+9/vXZQ+TZZII
-         RvMWQWt5ujY1nMjYGtrhDBVxEZP5fOrnBFC8jQjk=
+        b=FtkXPy7HQsjoUMPobw2h5NjM7vG6Xg4adOsU+C4ZwXupoqa8024OzgwHaxry/y8ud
+         XuYL74Dfzvw2xAP+SmRtdoYtfM0Uv8zpg2gc/Kr8lWxTVSjGhyEIl5JDABfSRDGQMg
+         giB7799whFklCY8BuWk0LxUk6Ei8bhlJBIM5sT5Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wan Jiabing <wanjiabing@vivo.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 202/227] phy: phy-mtk-tphy: Fix duplicated argument in phy-mtk-tphy
-Date:   Mon, 21 Feb 2022 09:50:21 +0100
-Message-Id: <20220221084941.531213102@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.15 190/196] i2c: qcom-cci: dont put a device tree node before i2c_add_adapter()
+Date:   Mon, 21 Feb 2022 09:50:22 +0100
+Message-Id: <20220221084937.298792081@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wan Jiabing <wanjiabing@vivo.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-[ Upstream commit 46e994717807f4b935c44d81dde9dd8bcd9a4f5d ]
+commit 02a4a69667a2ad32f3b52ca906f19628fbdd8a01 upstream.
 
-Fix following coccicheck warning:
-./drivers/phy/mediatek/phy-mtk-tphy.c:994:6-29: duplicated argument
-to && or ||
+There is a minor chance for a race, if a pointer to an i2c-bus subnode
+is stored and then reused after releasing its reference, and it would
+be sufficient to get one more reference under a loop over children
+subnodes.
 
-The efuse_rx_imp is duplicate. Here should be efuse_tx_imp.
-
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-Acked-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Link: https://lore.kernel.org/r/20220107025050.787720-1-wanjiabing@vivo.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
+Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/phy/mediatek/phy-mtk-tphy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-qcom-cci.c |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
-index 98a942c607a67..db39b0c4649a2 100644
---- a/drivers/phy/mediatek/phy-mtk-tphy.c
-+++ b/drivers/phy/mediatek/phy-mtk-tphy.c
-@@ -1125,7 +1125,7 @@ static int phy_efuse_get(struct mtk_tphy *tphy, struct mtk_phy_instance *instanc
- 		/* no efuse, ignore it */
- 		if (!instance->efuse_intr &&
- 		    !instance->efuse_rx_imp &&
--		    !instance->efuse_rx_imp) {
-+		    !instance->efuse_tx_imp) {
- 			dev_warn(dev, "no u3 intr efuse, but dts enable it\n");
- 			instance->efuse_sw_en = 0;
- 			break;
--- 
-2.34.1
-
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -558,7 +558,7 @@ static int cci_probe(struct platform_dev
+ 		cci->master[idx].adap.quirks = &cci->data->quirks;
+ 		cci->master[idx].adap.algo = &cci_algo;
+ 		cci->master[idx].adap.dev.parent = dev;
+-		cci->master[idx].adap.dev.of_node = child;
++		cci->master[idx].adap.dev.of_node = of_node_get(child);
+ 		cci->master[idx].master = idx;
+ 		cci->master[idx].cci = cci;
+ 
+@@ -643,8 +643,10 @@ static int cci_probe(struct platform_dev
+ 			continue;
+ 
+ 		ret = i2c_add_adapter(&cci->master[i].adap);
+-		if (ret < 0)
++		if (ret < 0) {
++			of_node_put(cci->master[i].adap.dev.of_node);
+ 			goto error_i2c;
++		}
+ 	}
+ 
+ 	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+@@ -656,8 +658,10 @@ static int cci_probe(struct platform_dev
+ 
+ error_i2c:
+ 	for (--i ; i >= 0; i--) {
+-		if (cci->master[i].cci)
++		if (cci->master[i].cci) {
+ 			i2c_del_adapter(&cci->master[i].adap);
++			of_node_put(cci->master[i].adap.dev.of_node);
++		}
+ 	}
+ error:
+ 	disable_irq(cci->irq);
+@@ -673,8 +677,10 @@ static int cci_remove(struct platform_de
+ 	int i;
+ 
+ 	for (i = 0; i < cci->data->num_masters; i++) {
+-		if (cci->master[i].cci)
++		if (cci->master[i].cci) {
+ 			i2c_del_adapter(&cci->master[i].adap);
++			of_node_put(cci->master[i].adap.dev.of_node);
++		}
+ 		cci_halt(cci, i);
+ 	}
+ 
 
 

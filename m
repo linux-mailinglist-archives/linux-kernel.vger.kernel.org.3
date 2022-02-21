@@ -2,198 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535A94BEC52
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 22:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B72A84BEC9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 22:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234458AbiBUVQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 16:16:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41096 "EHLO
+        id S234886AbiBUVZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 16:25:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbiBUVPn (ORCPT
+        with ESMTP id S234869AbiBUVZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 16:15:43 -0500
-X-Greylist: delayed 19914 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Feb 2022 13:15:15 PST
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A8524092
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 13:15:15 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K2Znt0nkfzMqK3X;
-        Mon, 21 Feb 2022 22:15:14 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K2Zns65J9zljTgK;
-        Mon, 21 Feb 2022 22:15:13 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v1 05/11] landlock: Move filesystem helpers and add a new one
+        Mon, 21 Feb 2022 16:25:44 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B39C12AE8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 13:25:20 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id w3so32034858edu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 13:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hRNEJYkXr+PwSGSW5oI3rp0CXIsPeHFtIOlhCAUsWYo=;
+        b=Og3vrovv6LTZwDBZk1v459NGVWUMEHl6mUBfs/6JKezdMuBldc2tHbo614J6H/39ec
+         m8W+9YGfXZnCZ9xoYRGIBDqEBeJ8q90A8Vzgtxq2nqLgDwrBaitIZboNLsV9ks8mpR3z
+         lfxw5Q3lJHJboK8Eu8qQC/G6BnSkJeWDayF3anq2zCAcDW2Gyv72QW+tAurVtle++97c
+         4q98CoxPo2dW6A9FHJSJqmDCVGO3K/A4tBsnjElGHbeK3kTBn41nhOc4pe6zDz4MIMk8
+         hV00lF7vi5VupVJYx5NUJzZpqjhydSagD1oCi8l/9ItkcEywO5SoibblZaL6GOJCwUDU
+         dcfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hRNEJYkXr+PwSGSW5oI3rp0CXIsPeHFtIOlhCAUsWYo=;
+        b=WzN2w0N3juN+9PcztBTPFprJFM56mA3w/oJGQZqubynHKOQgZkLGBMBkfuktSlaXv5
+         X58rL91YIXayCGVZ2c5vYLPiRohkajdV3oAzbsaXs+bz6hTEvJVxjrv4UJrOiBc8jkgv
+         c5jCAjzKsoQIa2+Z6pVSyt2dZoSZCAcn9IxxbPzrmhLOzFX0B6BPRZ0UMLV+pyiaq7kp
+         YeT2SbX5v60MQOavN0yc/WNbiBdPsdQrPChMwd93dU8qCXmHf/gSfLJrjH1igqawYTLc
+         DeO3t2dX+sFkY4eQ9j6luxQix8aWkET8ANuOAOPP2bGsuFcASqd8bQTiXJVwfbpvnCzp
+         G11w==
+X-Gm-Message-State: AOAM532H+NOk0+pMzMkdKakmzRgisLjUwbaixTo3PoCLgXTWuN6wWyOx
+        AEUqjuP3q+Mg9KCo+BBSm9o=
+X-Google-Smtp-Source: ABdhPJzmtpRHxuS6X84WUIbiaEuDt83WewKyJDe0iPuKShXYAJZWJN9IGS53x868g7pBjR4OsBHlkw==
+X-Received: by 2002:a05:6402:5209:b0:412:7cd8:a8fc with SMTP id s9-20020a056402520900b004127cd8a8fcmr23392496edd.51.1645478718822;
+        Mon, 21 Feb 2022 13:25:18 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p57935aa6.dip0.t-ipconnect.de. [87.147.90.166])
+        by smtp.gmail.com with ESMTPSA id ho34sm1660725ejc.122.2022.02.21.13.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 13:25:18 -0800 (PST)
 Date:   Mon, 21 Feb 2022 22:25:16 +0100
-Message-Id: <20220221212522.320243-6-mic@digikod.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221212522.320243-1-mic@digikod.net>
-References: <20220221212522.320243-1-mic@digikod.net>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 4/6] staging: vt6656: Change macro to function and moved
+ to better file
+Message-ID: <fa37dde640cfe5093ff23ca0881aba4673751a49.1645477326.git.philipp.g.hortmann@gmail.com>
+References: <cover.1645477326.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1645477326.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+This patch fixes the checkpatch.pl warning like:
+- CHECK: Macro argument reuse 'uVar' - possible side-effects?
+Moved the only twice used function to the file where it is used.
 
-Move the SB_NOUSER and IS_PRIVATE dentry check to a standalone
-is_nouser_or_private() helper.  This will be useful for a following
-commit.
-
-Move get_mode_access() and maybe_remove() to make them usable by new
-code provided by a following commit.
-
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20220221212522.320243-6-mic@digikod.net
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- security/landlock/fs.c | 87 ++++++++++++++++++++++--------------------
- 1 file changed, 46 insertions(+), 41 deletions(-)
+V1 -> V2: Devided patch into three
+---
+ drivers/staging/vt6656/device.h |  7 -------
+ drivers/staging/vt6656/wcmd.c   | 13 +++++++++++--
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 9662f9fb3cd0..3886f9ad1a60 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -257,6 +257,18 @@ static inline bool unmask_layers(const struct landlock_rule *const rule,
- 	return false;
- }
+diff --git a/drivers/staging/vt6656/device.h b/drivers/staging/vt6656/device.h
+index 0ab2d60204e8..ca974d61d3f4 100644
+--- a/drivers/staging/vt6656/device.h
++++ b/drivers/staging/vt6656/device.h
+@@ -381,13 +381,6 @@ struct vnt_private {
+ 	struct ieee80211_low_level_stats low_stats;
+ };
  
-+static inline bool is_nouser_or_private(const struct dentry *dentry)
-+{
-+	/*
-+	 * Allows access to pseudo filesystems that will never be mountable
-+	 * (e.g. sockfs, pipefs), but can still be reachable through
-+	 * /proc/<pid>/fd/<file-descriptor> .
-+	 */
-+	return (dentry->d_sb->s_flags & SB_NOUSER) ||
-+			(d_is_positive(dentry) &&
-+			 unlikely(IS_PRIVATE(d_backing_inode(dentry))));
-+}
-+
- static int check_access_path(const struct landlock_ruleset *const domain,
- 		const struct path *const path,
- 		const access_mask_t access_request)
-@@ -270,14 +282,7 @@ static int check_access_path(const struct landlock_ruleset *const domain,
- 		return 0;
- 	if (WARN_ON_ONCE(!domain || !path))
- 		return 0;
--	/*
--	 * Allows access to pseudo filesystems that will never be mountable
--	 * (e.g. sockfs, pipefs), but can still be reachable through
--	 * /proc/<pid>/fd/<file-descriptor> .
--	 */
--	if ((path->dentry->d_sb->s_flags & SB_NOUSER) ||
--			(d_is_positive(path->dentry) &&
--			 unlikely(IS_PRIVATE(d_backing_inode(path->dentry)))))
-+	if (is_nouser_or_private(path->dentry))
- 		return 0;
- 	if (WARN_ON_ONCE(domain->num_layers < 1))
- 		return -EACCES;
-@@ -356,6 +361,39 @@ static inline int current_check_access_path(const struct path *const path,
- 	return check_access_path(dom, path, access_request);
- }
- 
-+static inline access_mask_t get_mode_access(const umode_t mode)
-+{
-+	switch (mode & S_IFMT) {
-+	case S_IFLNK:
-+		return LANDLOCK_ACCESS_FS_MAKE_SYM;
-+	case 0:
-+		/* A zero mode translates to S_IFREG. */
-+	case S_IFREG:
-+		return LANDLOCK_ACCESS_FS_MAKE_REG;
-+	case S_IFDIR:
-+		return LANDLOCK_ACCESS_FS_MAKE_DIR;
-+	case S_IFCHR:
-+		return LANDLOCK_ACCESS_FS_MAKE_CHAR;
-+	case S_IFBLK:
-+		return LANDLOCK_ACCESS_FS_MAKE_BLOCK;
-+	case S_IFIFO:
-+		return LANDLOCK_ACCESS_FS_MAKE_FIFO;
-+	case S_IFSOCK:
-+		return LANDLOCK_ACCESS_FS_MAKE_SOCK;
-+	default:
-+		WARN_ON_ONCE(1);
-+		return 0;
-+	}
-+}
-+
-+static inline access_mask_t maybe_remove(const struct dentry *const dentry)
-+{
-+	if (d_is_negative(dentry))
-+		return 0;
-+	return d_is_dir(dentry) ? LANDLOCK_ACCESS_FS_REMOVE_DIR :
-+		LANDLOCK_ACCESS_FS_REMOVE_FILE;
-+}
-+
- /* Inode hooks */
- 
- static void hook_inode_free_security(struct inode *const inode)
-@@ -549,31 +587,6 @@ static int hook_sb_pivotroot(const struct path *const old_path,
- 
- /* Path hooks */
- 
--static inline access_mask_t get_mode_access(const umode_t mode)
--{
--	switch (mode & S_IFMT) {
--	case S_IFLNK:
--		return LANDLOCK_ACCESS_FS_MAKE_SYM;
--	case 0:
--		/* A zero mode translates to S_IFREG. */
--	case S_IFREG:
--		return LANDLOCK_ACCESS_FS_MAKE_REG;
--	case S_IFDIR:
--		return LANDLOCK_ACCESS_FS_MAKE_DIR;
--	case S_IFCHR:
--		return LANDLOCK_ACCESS_FS_MAKE_CHAR;
--	case S_IFBLK:
--		return LANDLOCK_ACCESS_FS_MAKE_BLOCK;
--	case S_IFIFO:
--		return LANDLOCK_ACCESS_FS_MAKE_FIFO;
--	case S_IFSOCK:
--		return LANDLOCK_ACCESS_FS_MAKE_SOCK;
--	default:
--		WARN_ON_ONCE(1);
--		return 0;
--	}
+-#define ADD_ONE_WITH_WRAP_AROUND(var, modulo) {	\
+-	if ((var) >= ((modulo) - 1))			\
+-		(var) = 0;				\
+-	else						\
+-		(var)++;				\
 -}
 -
- /*
-  * Creating multiple links or renaming may lead to privilege escalations if not
-  * handled properly.  Indeed, we must be sure that the source doesn't gain more
-@@ -601,14 +614,6 @@ static int hook_path_link(struct dentry *const old_dentry,
- 			get_mode_access(d_backing_inode(old_dentry)->i_mode));
+ int vnt_init(struct vnt_private *priv);
+ 
+ #endif
+diff --git a/drivers/staging/vt6656/wcmd.c b/drivers/staging/vt6656/wcmd.c
+index e8ee2fbee76c..14b8aa587119 100644
+--- a/drivers/staging/vt6656/wcmd.c
++++ b/drivers/staging/vt6656/wcmd.c
+@@ -31,6 +31,15 @@ static void vnt_cmd_timer_wait(struct vnt_private *priv, unsigned long msecs)
+ 	schedule_delayed_work(&priv->run_command_work, msecs_to_jiffies(msecs));
  }
  
--static inline access_mask_t maybe_remove(const struct dentry *const dentry)
--{
--	if (d_is_negative(dentry))
--		return 0;
--	return d_is_dir(dentry) ? LANDLOCK_ACCESS_FS_REMOVE_DIR :
--		LANDLOCK_ACCESS_FS_REMOVE_FILE;
--}
--
- static int hook_path_rename(const struct path *const old_dir,
- 		struct dentry *const old_dentry,
- 		const struct path *const new_dir,
++static u32 add_one_with_wrap_around(u32 var, u8 modulo)
++{
++	if (var >= (modulo - 1))
++		var = 0;
++	else
++		var++;
++	return var;
++}
++
+ static int vnt_cmd_complete(struct vnt_private *priv)
+ {
+ 	priv->command_state = WLAN_CMD_IDLE;
+@@ -42,7 +51,7 @@ static int vnt_cmd_complete(struct vnt_private *priv)
+ 
+ 	priv->command = priv->cmd_queue[priv->cmd_dequeue_idx];
+ 
+-	ADD_ONE_WITH_WRAP_AROUND(priv->cmd_dequeue_idx, CMD_Q_SIZE);
++	priv->cmd_dequeue_idx = add_one_with_wrap_around(priv->cmd_dequeue_idx, CMD_Q_SIZE);
+ 	priv->free_cmd_queue++;
+ 	priv->cmd_running = true;
+ 
+@@ -157,7 +166,7 @@ int vnt_schedule_command(struct vnt_private *priv, enum vnt_cmd command)
+ 
+ 	priv->cmd_queue[priv->cmd_enqueue_idx] = command;
+ 
+-	ADD_ONE_WITH_WRAP_AROUND(priv->cmd_enqueue_idx, CMD_Q_SIZE);
++	priv->cmd_enqueue_idx = add_one_with_wrap_around(priv->cmd_enqueue_idx, CMD_Q_SIZE);
+ 	priv->free_cmd_queue--;
+ 
+ 	if (!priv->cmd_running)
 -- 
-2.35.1
+2.25.1
 

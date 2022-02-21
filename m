@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBD64BE8BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8A24BE001
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348747AbiBUJLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:11:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48254 "EHLO
+        id S1345481AbiBUIxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:53:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347523AbiBUJGr (ORCPT
+        with ESMTP id S1345564AbiBUIwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:06:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6B31234;
-        Mon, 21 Feb 2022 00:59:48 -0800 (PST)
+        Mon, 21 Feb 2022 03:52:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BC52A3;
+        Mon, 21 Feb 2022 00:52:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1AB461132;
-        Mon, 21 Feb 2022 08:59:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9839C340E9;
-        Mon, 21 Feb 2022 08:59:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 862A960FB6;
+        Mon, 21 Feb 2022 08:52:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7160BC340E9;
+        Mon, 21 Feb 2022 08:52:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433987;
-        bh=68TEqlEr7oRnJi0vtYWnGuAH20gM7jHIJnUnx/9lt/Y=;
+        s=korg; t=1645433525;
+        bh=0x8uk8ogZkTiQRkXjDuzshmOMcA8a04iiSihN0Uu/A4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XkPUP21T1ls3EqkntP6J4VMC3kja1GSsmV6/fH5hMGU83jOkARl6VsR8+y9zTG2nL
-         xjYssCn5XXvvQkfOcohSJehZhuc1/83E5WtbN8UH4hXmL7PWVeETSDRJvR+y6A/x9k
-         kMuTPM0kJX4KUURLIDPF0thk1LLNcdWJw/Zd+9c4=
+        b=rYK2BW2NFwuMvEKPpVQfzkG9Q+BpnSvYtqK56jS8cYWMmEafeiBiVurJEdUO/jhzq
+         V98hoKWpyjRdglavTGxG7g76Kub2AYlocN3HzDc1lAZ/81PlWG67iGqYw5Ez/PCyTd
+         PqtYIyvy810JVLXZtXgY4BNHuNCa5rG+NP+qQuQ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Yang Xu <xuyang2018.jy@fujitsu.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 21/80] drm/amdgpu: fix logic inversion in check
+Subject: [PATCH 4.9 08/33] selftests/zram: Skip max_comp_streams interface on newer kernel
 Date:   Mon, 21 Feb 2022 09:49:01 +0100
-Message-Id: <20220221084916.278671251@linuxfoundation.org>
+Message-Id: <20220221084908.832464802@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+References: <20220221084908.568970525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,34 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian König <christian.koenig@amd.com>
+From: Yang Xu <xuyang2018.jy@fujitsu.com>
 
-[ Upstream commit e8ae38720e1a685fd98cfa5ae118c9d07b45ca79 ]
+[ Upstream commit fc4eb486a59d70bd35cf1209f0e68c2d8b979193 ]
 
-We probably never trigger this, but the logic inside the check is
-inverted.
+Since commit 43209ea2d17a ("zram: remove max_comp_streams internals"), zram
+has switched to per-cpu streams. Even kernel still keep this interface for
+some reasons, but writing to max_comp_stream doesn't take any effect. So
+skip it on newer kernel ie 4.7.
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+The code that comparing kernel version is from xfstests testsuite ext4/053.
+
+Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/zram/zram_lib.sh | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 58e14d3040f03..870dd78d5a21a 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -1976,7 +1976,7 @@ int amdgpu_copy_buffer(struct amdgpu_ring *ring, uint64_t src_offset,
- 	unsigned i;
- 	int r;
+diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
+index 9e73a4fb9b0aa..2c1d1c567f854 100755
+--- a/tools/testing/selftests/zram/zram_lib.sh
++++ b/tools/testing/selftests/zram/zram_lib.sh
+@@ -20,6 +20,9 @@ dev_mounted=-1
  
--	if (direct_submit && !ring->sched.ready) {
-+	if (!direct_submit && !ring->sched.ready) {
- 		DRM_ERROR("Trying to move memory with ring turned off.\n");
- 		return -EINVAL;
- 	}
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
++kernel_version=`uname -r | cut -d'.' -f1,2`
++kernel_major=${kernel_version%.*}
++kernel_minor=${kernel_version#*.}
+ 
+ trap INT
+ 
+@@ -34,6 +37,20 @@ check_prereqs()
+ 	fi
+ }
+ 
++kernel_gte()
++{
++	major=${1%.*}
++	minor=${1#*.}
++
++	if [ $kernel_major -gt $major ]; then
++		return 0
++	elif [[ $kernel_major -eq $major && $kernel_minor -ge $minor ]]; then
++		return 0
++	fi
++
++	return 1
++}
++
+ zram_cleanup()
+ {
+ 	echo "zram cleanup"
+@@ -95,6 +112,13 @@ zram_max_streams()
+ {
+ 	echo "set max_comp_streams to zram device(s)"
+ 
++	kernel_gte 4.7
++	if [ $? -eq 0 ]; then
++		echo "The device attribute max_comp_streams was"\
++		               "deprecated in 4.7"
++		return 0
++	fi
++
+ 	local i=0
+ 	for max_s in $zram_max_streams; do
+ 		local sys_path="/sys/block/zram${i}/max_comp_streams"
 -- 
 2.34.1
 

@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36324BE798
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F1D4BDDA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354996AbiBUKdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:33:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51328 "EHLO
+        id S1354891AbiBUKde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:33:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354665AbiBUKdK (ORCPT
+        with ESMTP id S1354956AbiBUKdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:33:10 -0500
+        Mon, 21 Feb 2022 05:33:09 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77169369E8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DC3369E7
         for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:53:30 -0800 (PST)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1nM5Nb-0007AY-9w; Mon, 21 Feb 2022 10:53:15 +0100
+        id 1nM5Nb-0007AZ-9w; Mon, 21 Feb 2022 10:53:15 +0100
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1nM5NZ-00FUes-NP; Mon, 21 Feb 2022 10:53:13 +0100
+        id 1nM5NZ-00FUf2-Og; Mon, 21 Feb 2022 10:53:13 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -40,9 +40,9 @@ Cc:     Robin van der Gracht <robin@protonic.nl>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         David Jander <david@protonic.nl>,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH v1 6/8] ARM: dts: imx6dl-victgo: Add interrupt-counter nodes
-Date:   Mon, 21 Feb 2022 10:53:10 +0100
-Message-Id: <20220221095312.3692669-6-o.rempel@pengutronix.de>
+Subject: [PATCH v1 7/8] ARM: dts: imx6dl-victgo: The TGO uses a lg,lb070wv8 compatible 7" display
+Date:   Mon, 21 Feb 2022 10:53:11 +0100
+Message-Id: <20220221095312.3692669-7-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220221095312.3692669-1-o.rempel@pengutronix.de>
 References: <20220221095312.3692669-1-o.rempel@pengutronix.de>
@@ -63,80 +63,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Robin van der Gracht <robin@protonic.nl>
 
-Interrupt counter is mainlined, now we can add missing counter nodes.
+This series of devices is using lg,lb070wv8 instead of kyo,tcg121xglp.
 
 Signed-off-by: Robin van der Gracht <robin@protonic.nl>
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- arch/arm/boot/dts/imx6dl-victgo.dts | 41 ++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6dl-victgo.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6dl-victgo.dts b/arch/arm/boot/dts/imx6dl-victgo.dts
-index 20c7f80e5ec9..907682248aa7 100644
+index 907682248aa7..7839021bc3eb 100644
 --- a/arch/arm/boot/dts/imx6dl-victgo.dts
 +++ b/arch/arm/boot/dts/imx6dl-victgo.dts
-@@ -54,6 +54,27 @@ comp0_out: endpoint {
- 		};
+@@ -129,7 +129,7 @@ led-2 {
  	};
  
-+	counter-0 {
-+		compatible = "interrupt-counter";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_counter0>;
-+		gpios = <&gpio2 0 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	counter-1 {
-+		compatible = "interrupt-counter";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_counter1>;
-+		gpios = <&gpio2 1 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	counter-2 {
-+		compatible = "interrupt-counter";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_counter2>;
-+		gpios = <&gpio2 2 GPIO_ACTIVE_LOW>;
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 		pinctrl-names = "default";
-@@ -400,7 +421,7 @@ &gpio1 {
+ 	panel {
+-		compatible = "kyo,tcg121xglp";
++		compatible = "lg,lb070wv8";
+ 		backlight = <&backlight_lcd>;
+ 		power-supply = <&reg_3v3>;
  
- &gpio2 {
- 	gpio-line-names =
--		"", "", "", "", "", "", "", "",
-+		"YACO_WHEEL", "YACO_RADAR", "YACO_PTO", "", "", "", "", "",
- 		"", "LED_PWM", "", "", "",
- 			"", "", "",
- 		"", "", "", "", "", "", "ISB_IN1", "ON_SWITCH",
-@@ -706,6 +727,24 @@ MX6QDL_PAD_KEY_ROW3__GPIO4_IO13			0x13008
- 		>;
- 	};
- 
-+	pinctrl_counter0: counter0grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_NANDF_D0__GPIO2_IO00			0x1b000
-+		>;
-+	};
-+
-+	pinctrl_counter1: counter1grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_NANDF_D1__GPIO2_IO01			0x1b000
-+		>;
-+	};
-+
-+	pinctrl_counter2: counter2grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_NANDF_D2__GPIO2_IO02			0x1b000
-+		>;
-+	};
-+
- 	pinctrl_ecspi1: ecspi1grp {
- 		fsl,pins = <
- 			MX6QDL_PAD_EIM_D17__ECSPI1_MISO			0x100b1
 -- 
 2.30.2
 

@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B744BDFF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5964BE031
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350575AbiBUJeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:34:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48110 "EHLO
+        id S1348153AbiBUJRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:17:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350050AbiBUJ1I (ORCPT
+        with ESMTP id S1347944AbiBUJKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6D822524;
-        Mon, 21 Feb 2022 01:11:28 -0800 (PST)
+        Mon, 21 Feb 2022 04:10:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232F61EC70;
+        Mon, 21 Feb 2022 01:02:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17B7D60B1B;
-        Mon, 21 Feb 2022 09:11:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2947BC340E9;
-        Mon, 21 Feb 2022 09:11:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD8A6B80EB8;
+        Mon, 21 Feb 2022 09:02:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B85C340E9;
+        Mon, 21 Feb 2022 09:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434687;
-        bh=w5JvrDHpQHi9hP3iLoc3bRhVvq0c0cSFfbvoy6Wvri0=;
+        s=korg; t=1645434166;
+        bh=pjlyT+vcizqttRwAGXl5Y1ZgpaCZGgVjty5mxEhx0pI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0Dhxv1wyvBK9JTVovZUClwclMhRt50QLyTgXcgz5dKYuwW41R+RJP0+TKcv3sg5Wb
-         pzTWzplXa7b049wVsUw+L6XIvaQlrh+hm2QdN5N0H/7Ber1wZ+MB063srkcUwHGODa
-         uH5hl44kqZ74xzyx0AQCqEq7Qn4OaWq1i3F6bZxI=
+        b=xn6bSeEJNg3mvXvyIIHdK+8Nt5HI5QlUWhro+XnSAvNa8KjuMD9QtENrczwaOCtwe
+         seT56FnJD4+b61RORXv5OFDiZyMNpDhh64EFq83pExNJrkSwijYtDmoM1hDjZWs9hV
+         3fTyfF9NM/a61cAZ47t8fHwhhrtQ+5cLGbepggzs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 096/196] bonding: force carrier update when releasing slave
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        John Garry <john.garry@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 036/121] scsi: pm8001: Fix use-after-free for aborted SSP/STP sas_task
 Date:   Mon, 21 Feb 2022 09:48:48 +0100
-Message-Id: <20220221084934.152447024@linuxfoundation.org>
+Message-Id: <20220221084922.414124913@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Changzhong <zhangchangzhong@huawei.com>
+From: John Garry <john.garry@huawei.com>
 
-commit a6ab75cec1e461f8a35559054c146c21428430b8 upstream.
+[ Upstream commit df7abcaa1246e2537ab4016077b5443bb3c09378 ]
 
-In __bond_release_one(), bond_set_carrier() is only called when bond
-device has no slave. Therefore, if we remove the up slave from a master
-with two slaves and keep the down slave, the master will remain up.
+Currently a use-after-free may occur if a sas_task is aborted by the upper
+layer before we handle the I/O completion in mpi_ssp_completion() or
+mpi_sata_completion().
 
-Fix this by moving bond_set_carrier() out of if (!bond_has_slaves(bond))
-statement.
+In this case, the following are the two steps in handling those I/O
+completions:
 
-Reproducer:
-$ insmod bonding.ko mode=0 miimon=100 max_bonds=2
-$ ifconfig bond0 up
-$ ifenslave bond0 eth0 eth1
-$ ifconfig eth0 down
-$ ifenslave -d bond0 eth1
-$ cat /proc/net/bonding/bond0
+ - Call complete() to inform the upper layer handler of completion of
+   the I/O.
 
-Fixes: ff59c4563a8d ("[PATCH] bonding: support carrier state for master")
-Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/1645021088-38370-1-git-send-email-zhangchangzhong@huawei.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ - Release driver resources associated with the sas_task in
+   pm8001_ccb_task_free() call.
+
+When complete() is called, the upper layer may free the sas_task. As such,
+we should not touch the associated sas_task afterwards, but we do so in the
+pm8001_ccb_task_free() call.
+
+Fix by swapping the complete() and pm8001_ccb_task_free() calls ordering.
+
+Link: https://lore.kernel.org/r/1643289172-165636-4-git-send-email-john.garry@huawei.com
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_main.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -2377,10 +2377,9 @@ static int __bond_release_one(struct net
- 		bond_select_active_slave(bond);
- 	}
- 
--	if (!bond_has_slaves(bond)) {
--		bond_set_carrier(bond);
-+	bond_set_carrier(bond);
-+	if (!bond_has_slaves(bond))
- 		eth_hw_addr_random(bond_dev);
--	}
- 
- 	unblock_netpoll_tx();
- 	synchronize_rcu();
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index b22a8ab754faa..2a3ce4680734b 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -2133,9 +2133,9 @@ mpi_ssp_completion(struct pm8001_hba_info *pm8001_ha , void *piomb)
+ 		pm8001_dbg(pm8001_ha, FAIL,
+ 			   "task 0x%p done with io_status 0x%x resp 0x%x stat 0x%x but aborted by upper layer!\n",
+ 			   t, status, ts->resp, ts->stat);
++		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
+ 		if (t->slow_task)
+ 			complete(&t->slow_task->completion);
+-		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
+ 	} else {
+ 		spin_unlock_irqrestore(&t->task_state_lock, flags);
+ 		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
+@@ -2726,9 +2726,9 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 		pm8001_dbg(pm8001_ha, FAIL,
+ 			   "task 0x%p done with io_status 0x%x resp 0x%x stat 0x%x but aborted by upper layer!\n",
+ 			   t, status, ts->resp, ts->stat);
++		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
+ 		if (t->slow_task)
+ 			complete(&t->slow_task->completion);
+-		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
+ 	} else {
+ 		spin_unlock_irqrestore(&t->task_state_lock, flags);
+ 		pm8001_ccb_task_free_done(pm8001_ha, t, ccb, tag);
+-- 
+2.34.1
+
 
 

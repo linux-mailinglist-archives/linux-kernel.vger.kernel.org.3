@@ -2,212 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8FC4BD33E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 02:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D2F4BD342
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 02:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245478AbiBUBq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 20:46:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50394 "EHLO
+        id S245486AbiBUBrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 20:47:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245458AbiBUBqx (ORCPT
+        with ESMTP id S245458AbiBUBrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 20:46:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EC23A1AB;
-        Sun, 20 Feb 2022 17:46:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B9B06101A;
-        Mon, 21 Feb 2022 01:46:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3600C36AE2;
-        Mon, 21 Feb 2022 01:46:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645407989;
-        bh=4qgWKGsTwLoKg719UeLRaB5xjFNi6yHpYigKnDRlLFk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cIpg7hWw619i1bNWsfqhIAudwb9q8gBVD/5k1jA+qknLVsNIYcWosvE4S7bItkcmV
-         afuTap6aE+Y2DBCxndC3DH37OGkjjBOyrZPFi6vU1FrijikCsW6KX8Oy5ZedFJyKVQ
-         cBY8KP262S1QiZQLcENg7FczMuwbFpw65fXkZSTsSu3LVf8BscH+rlQX3i4+M7DkIx
-         6r9gdbIbFMCvsq8MmB8KvbZeHkGLya/iDwlfHEtqu7si38hatWU+27W9d2XzCTCT6b
-         1mhxbvs84QNpZpFZ1Z/2v660ZSCTBkLy1BCUUcXOBcxbVH4dgQbWN2U9526vSsrwqs
-         hq3I5C3GBQq1g==
-Received: by mail-ej1-f46.google.com with SMTP id r13so6046665ejd.5;
-        Sun, 20 Feb 2022 17:46:29 -0800 (PST)
-X-Gm-Message-State: AOAM530jRCZapuln8+oK+o9sCuUnr8yBnLy9e2Zwr2i4LXzS2r1uXQQL
-        7jdc3EuCZfzETrf42X6k2lNb3uRyOa5xShgf+Q==
-X-Google-Smtp-Source: ABdhPJwuTQy36EkhUNRD6M2+IcyGr33kZ+4z7L5xdpFKroaHetdf6U/UnYEQCCEMkMZsPcTHm7dMj6912ba9+VrWsIg=
-X-Received: by 2002:a17:906:b348:b0:6cf:5b66:2f80 with SMTP id
- cd8-20020a170906b34800b006cf5b662f80mr13799127ejb.638.1645407988130; Sun, 20
- Feb 2022 17:46:28 -0800 (PST)
+        Sun, 20 Feb 2022 20:47:37 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E48443C9;
+        Sun, 20 Feb 2022 17:47:15 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id iq13-20020a17090afb4d00b001bc4437df2cso919014pjb.2;
+        Sun, 20 Feb 2022 17:47:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YhojBWVK4UiEqGQSq9xm7bnPmCBpgHMKvLchmEMssxs=;
+        b=GlK21yrXja4jNo1iNtBTRnPdeFQI5GpeylgO4iDFg+CzXF41SDjFSj8xiPCGjoIYGt
+         8GsdIrxUZLSUp895Aek9lp3KaiKcnx+8FG/dZ1Z/bSCNS9TKJMpgrTIU71kbmxNE5GPJ
+         d2hFqUN93utB3CZO92u+RdM136S1a9RKYnx9mm2RPtLgHaFWy4WDf6/EuIpk04lnzXa9
+         R3SZxb9eK4ZJVuFwuZPYRIBSROenJv2ywEYhuS4Ym8WqDFZTUPlbX1YJ1C9wbLIBgGpv
+         RNEKatUz1IqL9dvwziyhI6d8zo+asOlyWCuWEF5OQIPFKBJZShhhy+KZNPkeHambjgWo
+         3F/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YhojBWVK4UiEqGQSq9xm7bnPmCBpgHMKvLchmEMssxs=;
+        b=YwGCigK2ikxMi+yMipxztbXUsZ2o3o7F40L0sO16ohaNscdy+FWHbQKmzwrUY+iwwG
+         p97ZMqem13EXgAqxj1DphsoFTmG+8U/8c512gtpdNeorGlZWp+JmEkVZitUO1ydOeoHt
+         Ud8L36vH9d/lJXO1zjJSwQwXpbWMcC5Cu76fCJEUXAP71CpP7dTv65jzUqb5egUg7+cU
+         klbo4FdRn4dC30gPmm3Wnxf8nvu1DmAmcakaqy5aijK3FaM6q13oE5LkPzotI4FRfRLx
+         WlcGov/jk62RPj1+7Ejh95RqbhI9w7Q6nd8XFR6aPucUFPScNL3zE/pWffOb2r5CfNkZ
+         TD6Q==
+X-Gm-Message-State: AOAM530bQAv5Gcz+vCzzKqTC7ZomhCxBHtx0jNNjT6PkM9nDRzZuW/Gb
+        cjvuUb65ScqjBCtZjow+6wHbHfuwNp/dQFa2
+X-Google-Smtp-Source: ABdhPJwRp23Tcp7DStqEeIUVQutOLb2WR5T9Q1KrYs773Q5FFnrNasoaeqQiUzVYjBNvgbqvFOfAsg==
+X-Received: by 2002:a17:90a:1656:b0:1bb:f715:5606 with SMTP id x22-20020a17090a165600b001bbf7155606mr8998633pje.221.1645408035199;
+        Sun, 20 Feb 2022 17:47:15 -0800 (PST)
+Received: from [10.11.37.162] ([103.84.139.53])
+        by smtp.gmail.com with ESMTPSA id c14sm10171380pfv.126.2022.02.20.17.47.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 17:47:14 -0800 (PST)
+Message-ID: <a8d5b618-f5ee-686e-d614-dd038004d488@gmail.com>
+Date:   Mon, 21 Feb 2022 09:47:09 +0800
 MIME-Version: 1.0
-References: <20220218145437.18563-1-granquet@baylibre.com> <20220218145437.18563-6-granquet@baylibre.com>
-In-Reply-To: <20220218145437.18563-6-granquet@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 21 Feb 2022 09:46:15 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__u8R-WkTmnKkey5p7_fVuy2mgoRY4Fx_kqb5kb4hnqmQ@mail.gmail.com>
-Message-ID: <CAAOTY__u8R-WkTmnKkey5p7_fVuy2mgoRY4Fx_kqb5kb4hnqmQ@mail.gmail.com>
-Subject: Re: [PATCH v8 05/19] drm/mediatek: dpi: move dpi limits to board config
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, deller@gmx.de,
-        CK Hu <ck.hu@mediatek.com>, Jitao Shi <jitao.shi@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] staging: qlge: add unregister_netdev in qlge_probe
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     manishc@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        coiby.xu@gmail.com, gregkh@linuxfoundation.org,
+        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220218081130.45670-1-hbh25y@gmail.com>
+ <20220218120344.GH2407@kadam>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <20220218120344.GH2407@kadam>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Guillaume:
+Thanks for your suggesion. I will resubmit later.
 
-Guillaume Ranquet <granquet@baylibre.com> =E6=96=BC 2022=E5=B9=B42=E6=9C=88=
-18=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:56=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Add flexibility by moving the dpi limits to the board config
-
-This patch looks good to me. But I would like to know what's this
-limit and why it vary in different SoC. If possible, would you please
-provide more description for this?
-
-Regards,
-Chun-Kuang.
-
->
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 25 ++++++++++++++++---------
->  1 file changed, 16 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediate=
-k/mtk_dpi.c
-> index 4554e2de14309..4746eb3425674 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -125,6 +125,7 @@ struct mtk_dpi_conf {
->         bool edge_sel_en;
->         const u32 *output_fmts;
->         u32 num_output_fmts;
-> +       const struct mtk_dpi_yc_limit *limit;
->  };
->
->  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val, u32 m=
-ask)
-> @@ -235,9 +236,10 @@ static void mtk_dpi_config_fb_size(struct mtk_dpi *d=
-pi, u32 width, u32 height)
->         mtk_dpi_mask(dpi, DPI_SIZE, height << VSIZE, VSIZE_MASK);
->  }
->
-> -static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi,
-> -                                        struct mtk_dpi_yc_limit *limit)
-> +static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi)
->  {
-> +       const struct mtk_dpi_yc_limit *limit =3D dpi->conf->limit;
-> +
->         mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_bottom << Y_LIMINT_BOT,
->                      Y_LIMINT_BOT_MASK);
->         mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_top << Y_LIMINT_TOP,
-> @@ -449,7 +451,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
->  static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
->                                     struct drm_display_mode *mode)
->  {
-> -       struct mtk_dpi_yc_limit limit;
->         struct mtk_dpi_polarities dpi_pol;
->         struct mtk_dpi_sync_param hsync;
->         struct mtk_dpi_sync_param vsync_lodd =3D { 0 };
-> @@ -484,11 +485,6 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *=
-dpi,
->         dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
->                 pll_rate, vm.pixelclock);
->
-> -       limit.c_bottom =3D 0x0010;
-> -       limit.c_top =3D 0x0FE0;
-> -       limit.y_bottom =3D 0x0010;
-> -       limit.y_top =3D 0x0FE0;
-> -
->         dpi_pol.ck_pol =3D MTK_DPI_POLARITY_FALLING;
->         dpi_pol.de_pol =3D MTK_DPI_POLARITY_RISING;
->         dpi_pol.hsync_pol =3D vm.flags & DISPLAY_FLAGS_HSYNC_HIGH ?
-> @@ -536,7 +532,7 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *d=
-pi,
->         else
->                 mtk_dpi_config_fb_size(dpi, vm.hactive, vm.vactive);
->
-> -       mtk_dpi_config_channel_limit(dpi, &limit);
-> +       mtk_dpi_config_channel_limit(dpi);
->         mtk_dpi_config_bit_num(dpi, dpi->bit_num);
->         mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
->         mtk_dpi_config_yc_map(dpi, dpi->yc_map);
-> @@ -790,12 +786,20 @@ static const u32 mt8183_output_fmts[] =3D {
->         MEDIA_BUS_FMT_RGB888_2X12_BE,
->  };
->
-> +static const struct mtk_dpi_yc_limit mtk_dpi_limit =3D {
-> +       .c_bottom =3D 0x0010,
-> +       .c_top =3D 0x0FE0,
-> +       .y_bottom =3D 0x0010,
-> +       .y_top =3D 0x0FE0,
-> +};
-> +
->  static const struct mtk_dpi_conf mt8173_conf =3D {
->         .cal_factor =3D mt8173_calculate_factor,
->         .reg_h_fre_con =3D 0xe0,
->         .max_clock_khz =3D 300000,
->         .output_fmts =3D mt8173_output_fmts,
->         .num_output_fmts =3D ARRAY_SIZE(mt8173_output_fmts),
-> +       .limit =3D &mtk_dpi_limit,
->  };
->
->  static const struct mtk_dpi_conf mt2701_conf =3D {
-> @@ -805,6 +809,7 @@ static const struct mtk_dpi_conf mt2701_conf =3D {
->         .max_clock_khz =3D 150000,
->         .output_fmts =3D mt8173_output_fmts,
->         .num_output_fmts =3D ARRAY_SIZE(mt8173_output_fmts),
-> +       .limit =3D &mtk_dpi_limit,
->  };
->
->  static const struct mtk_dpi_conf mt8183_conf =3D {
-> @@ -813,6 +818,7 @@ static const struct mtk_dpi_conf mt8183_conf =3D {
->         .max_clock_khz =3D 100000,
->         .output_fmts =3D mt8183_output_fmts,
->         .num_output_fmts =3D ARRAY_SIZE(mt8183_output_fmts),
-> +       .limit =3D &mtk_dpi_limit,
->  };
->
->  static const struct mtk_dpi_conf mt8192_conf =3D {
-> @@ -821,6 +827,7 @@ static const struct mtk_dpi_conf mt8192_conf =3D {
->         .max_clock_khz =3D 150000,
->         .output_fmts =3D mt8173_output_fmts,
->         .num_output_fmts =3D ARRAY_SIZE(mt8173_output_fmts),
-> +       .limit =3D &mtk_dpi_limit,
->  };
->
->  static int mtk_dpi_probe(struct platform_device *pdev)
-> --
-> 2.34.1
->
+On 2022/2/18 20:03, Dan Carpenter wrote:
+> On Fri, Feb 18, 2022 at 04:11:30PM +0800, Hangyu Hua wrote:
+>> unregister_netdev need to be called when register_netdev succeeds
+>> qlge_health_create_reporters fails.
+>>
+> 
+> 1) Add a Fixes tag:
+> 
+> Fixes: d8827ae8e22b ("staging: qlge: deal with the case that devlink_health_reporter_create fails")
+> 
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>> ---
+>>   drivers/staging/qlge/qlge_main.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
+>> index 9873bb2a9ee4..0a199c6d77a1 100644
+>> --- a/drivers/staging/qlge/qlge_main.c
+>> +++ b/drivers/staging/qlge/qlge_main.c
+>> @@ -4611,8 +4611,10 @@ static int qlge_probe(struct pci_dev *pdev,
+>>   	}
+>>   
+>>   	err = qlge_health_create_reporters(qdev);
+>> -	if (err)
+>> +	if (err) {
+>> +		unregister_netdev(ndev);
+>>   		goto netdev_free;
+>> +	}
+> 
+> 2) Use a goto to unwind.  3) Release the other pdev stuff as well.
+> 4)  Clean up the error handling for register_netdev() by using a goto
+> as well.
+> 
+> 	err = register_netdev(ndev);
+> 	if (err) {
+> 		dev_err(&pdev->dev, "net device registration failed.\n");
+> 		goto cleanup_pdev;
+> 	}
+> 
+> 	err = qlge_health_create_reporters(qdev);
+> 	if (err)
+> 		goto unregister_netdev;
+> 
+> 	...
+> 
+> 	return 0;
+> 
+> unregister_netdev:
+> 	unregister_netdev(ndev);
+> cleanup_pdev:
+> 	qlge_release_all(pdev);
+> 	pci_disable_device(pdev);
+> netdev_free:
+> 	free_netdev(ndev);
+> devlink_free:
+> 	devlink_free(devlink);
+> 
+> 	return ret;
+> 
+> regards,
+> dan carpenter
+> 

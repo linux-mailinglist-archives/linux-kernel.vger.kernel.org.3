@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D514BE1A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B24354BE0FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbiBUJfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:35:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48064 "EHLO
+        id S1345716AbiBUJbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:31:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349964AbiBUJ06 (ORCPT
+        with ESMTP id S1350118AbiBUJWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:26:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBA51EED8;
-        Mon, 21 Feb 2022 01:11:01 -0800 (PST)
+        Mon, 21 Feb 2022 04:22:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9ECE6E;
+        Mon, 21 Feb 2022 01:09:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C020660018;
-        Mon, 21 Feb 2022 09:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D5AC340E9;
-        Mon, 21 Feb 2022 09:10:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1753960B24;
+        Mon, 21 Feb 2022 09:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBEBC340E9;
+        Mon, 21 Feb 2022 09:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434660;
-        bh=gBR3Ce/pJ47IRQg4FP9Z/vuY4SpFZJm7Vp0omlNnSeg=;
+        s=korg; t=1645434569;
+        bh=tn9KiBfIResCyFFjyiBMQXV3QP7d83OBpO7pCS0v74M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bBAAG7NvTqQe5lHU6fEt5T/I9z9OwHIIAZvaR1GODr6OgOAqZhaif1yHDnTvFZBNP
-         b126JllnvrhmFiUbNoTSGV+ybMzXo2sJLERlISvUAPfLwgrf2H3e641qgu5wXalcA0
-         unEiRhYj+5WZAVzm47ErMI1fGsOoyvvd4gTrgN4M=
+        b=ZfuPtJCRCzSfILH8hW0ZNkjYPqc0VgLZn0sCJKP9T32K3RuPuV5A1JUCA3FJie3mW
+         cVlI4fXCKAkPaLEnzqmRd/9skhFcl5ZYHCY41y5s4K1HhETSCmMGVTIN6M4GRAjA4V
+         +eRCxNXti3ew17vzv316B8eOyw3IQGKA+zyzIQNs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Popov <alex.popov@linux.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 053/196] gcc-plugins/stackleak: Use noinstr in favor of notrace
-Date:   Mon, 21 Feb 2022 09:48:05 +0100
-Message-Id: <20220221084932.715637288@linuxfoundation.org>
+Subject: [PATCH 5.15 054/196] random: wake up /dev/random writers after zap
+Date:   Mon, 21 Feb 2022 09:48:06 +0100
+Message-Id: <20220221084932.745428996@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
 References: <20220221084930.872957717@linuxfoundation.org>
@@ -57,66 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit dcb85f85fa6f142aae1fe86f399d4503d49f2b60 ]
+[ Upstream commit 042e293e16e3aa9794ce60c29f5b7b0c8170f933 ]
 
-While the stackleak plugin was already using notrace, objtool is now a
-bit more picky.  Update the notrace uses to noinstr.  Silences the
-following objtool warnings when building with:
+When account() is called, and the amount of entropy dips below
+random_write_wakeup_bits, we wake up the random writers, so that they
+can write some more in. However, the RNDZAPENTCNT/RNDCLEARPOOL ioctl
+sets the entropy count to zero -- a potential reduction just like
+account() -- but does not unblock writers. This commit adds the missing
+logic to that ioctl to unblock waiting writers.
 
-CONFIG_DEBUG_ENTRY=y
-CONFIG_STACK_VALIDATION=y
-CONFIG_VMLINUX_VALIDATION=y
-CONFIG_GCC_PLUGIN_STACKLEAK=y
-
-  vmlinux.o: warning: objtool: do_syscall_64()+0x9: call to stackleak_track_stack() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: do_int80_syscall_32()+0x9: call to stackleak_track_stack() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: exc_general_protection()+0x22: call to stackleak_track_stack() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: fixup_bad_iret()+0x20: call to stackleak_track_stack() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: do_machine_check()+0x27: call to stackleak_track_stack() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: .text+0x5346e: call to stackleak_erase() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: .entry.text+0x143: call to stackleak_erase() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: .entry.text+0x10eb: call to stackleak_erase() leaves .noinstr.text section
-  vmlinux.o: warning: objtool: .entry.text+0x17f9: call to stackleak_erase() leaves .noinstr.text section
-
-Note that the plugin's addition of calls to stackleak_track_stack() from
-noinstr functions is expected to be safe, as it isn't runtime
-instrumentation and is self-contained.
-
-Cc: Alexander Popov <alex.popov@linux.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/stackleak.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/char/random.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/stackleak.c b/kernel/stackleak.c
-index ce161a8e8d975..dd07239ddff9f 100644
---- a/kernel/stackleak.c
-+++ b/kernel/stackleak.c
-@@ -48,7 +48,7 @@ int stack_erasing_sysctl(struct ctl_table *table, int write,
- #define skip_erasing()	false
- #endif /* CONFIG_STACKLEAK_RUNTIME_DISABLE */
- 
--asmlinkage void notrace stackleak_erase(void)
-+asmlinkage void noinstr stackleak_erase(void)
- {
- 	/* It would be nice not to have 'kstack_ptr' and 'boundary' on stack */
- 	unsigned long kstack_ptr = current->lowest_stack;
-@@ -102,9 +102,8 @@ asmlinkage void notrace stackleak_erase(void)
- 	/* Reset the 'lowest_stack' value for the next syscall */
- 	current->lowest_stack = current_top_of_stack() - THREAD_SIZE/64;
- }
--NOKPROBE_SYMBOL(stackleak_erase);
- 
--void __used __no_caller_saved_registers notrace stackleak_track_stack(void)
-+void __used __no_caller_saved_registers noinstr stackleak_track_stack(void)
- {
- 	unsigned long sp = current_stack_pointer;
- 
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index a27ae3999ff32..ebe86de9d0acc 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1963,7 +1963,10 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+ 		 */
+ 		if (!capable(CAP_SYS_ADMIN))
+ 			return -EPERM;
+-		input_pool.entropy_count = 0;
++		if (xchg(&input_pool.entropy_count, 0) && random_write_wakeup_bits) {
++			wake_up_interruptible(&random_write_wait);
++			kill_fasync(&fasync, SIGIO, POLL_OUT);
++		}
+ 		return 0;
+ 	case RNDRESEEDCRNG:
+ 		if (!capable(CAP_SYS_ADMIN))
 -- 
 2.34.1
 

@@ -2,197 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2748E4BE57D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC94F4BDCE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356730AbiBULsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:48:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44216 "EHLO
+        id S1356756AbiBULuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:50:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242753AbiBULs2 (ORCPT
+        with ESMTP id S1356751AbiBULuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:48:28 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D1B1EEE6;
-        Mon, 21 Feb 2022 03:48:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645444085; x=1676980085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d2nxSyxlFXj9Y46HQxQTGJPE6uNfiwCTcyQito04juU=;
-  b=QUP9c7FgSwFWB3m3foNATrhxlm4uPApRpjjSwzLS+Vu9ixzbnVkW616j
-   GLAz7Y1f5QmRNECLSAg6E7QOhQXns0Jgg+BsRDVVbbSSWH/9f+5qiRYY5
-   iaEd3O0HgVQNjYZO5b2Itveq33xbTN2vRt1xxraWRdPbb9RuAm2e1pC71
-   gzlYpgzoWlTv2jLt2RgbQ78obi/9YRIwmafzQLriBod8Z0Zsh6p9GVNXo
-   sVWjvynrV3XqMPWtn70EaW//pX1m5XjzMlJn5TSuIG+pSoaqWG4ak6Sjn
-   RMHPrSDXjKDYWTbiGUs98Svmo4PeDG329E8ZTdab1u4avDLr8ALuXz2r4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231463399"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="231463399"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:48:05 -0800
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="547305643"
-Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:48:02 -0800
-Date:   Mon, 21 Feb 2022 11:47:55 +0000
-From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-To:     Kyle Sanderson <kyle.leet@gmail.com>, herbert@gondor.apana.org.au
-Cc:     Dave Chinner <david@fromorbit.com>, qat-linux@intel.com,
-        Linux-Kernal <linux-kernel@vger.kernel.org>,
-        linux-xfs@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dm-devel@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
- dm-crypt + xfs
-Message-ID: <YhN76/ONC9qgIKQc@silpixa00400314>
-References: <CACsaVZ+mt3CfdXV0_yJh7d50tRcGcRZ12j3n6-hoX2cz3+njsg@mail.gmail.com>
- <20220219210354.GF59715@dread.disaster.area>
- <CACsaVZ+LZUebtsGuiKhNV_No8fNLTv5kJywFKOigieB1cZcKUw@mail.gmail.com>
+        Mon, 21 Feb 2022 06:50:15 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5121EEE6;
+        Mon, 21 Feb 2022 03:49:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645444156;
+        bh=9wq7WtAJcIzsC43pheO+mOf/CLyOnMHoPtsnM+1Q4JQ=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=lcLAC3LbLAG4Z2MM6AZap1Y4EopsKgoYLOWADpRmeKpKNujSHq9sqWNknKBUBEBKN
+         6UW31xIWfs5PtluSWpa+P1AdlXLqfddnor/Hx+PWfh2k9ODg4cXmHb9/BdeC/1dHe5
+         rjnYkLVSmhfiHpRgWMDTo4nDAd42tXXnuN2+t0wg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mf0BG-1nsg341v34-00gV35; Mon, 21
+ Feb 2022 12:49:16 +0100
+Date:   Mon, 21 Feb 2022 12:49:12 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, christophe.leroy@csgroup.eu,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        digetx@gmail.com, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/11] i2c: npcm: Remove unused clock node
+Message-ID: <YhN8OGIR9eSCus8E@latitude>
+References: <20220220035321.3870-1-warp5tw@gmail.com>
+ <20220220035321.3870-6-warp5tw@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5bsHzk28K+QW/lWF"
 Content-Disposition: inline
-In-Reply-To: <CACsaVZ+LZUebtsGuiKhNV_No8fNLTv5kJywFKOigieB1cZcKUw@mail.gmail.com>
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
- Collinstown Industrial Park, Leixlip, County Kildare - Ireland
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220220035321.3870-6-warp5tw@gmail.com>
+X-Provags-ID: V03:K1:A3A94t6ywOBQp5e/eufvWk1pKc7j11XIziyDptaPzqcGk5A/uoU
+ 5IgYxy5UOPRt+qY3IdhUe8KMsnxkzYgiFigoezPYO3GN4dcVkF2d1Mi7shfsaOJcDG7kCKL
+ UDTQsUlEcQJoHW+4esUkzbXX43lJRUomqY1/ivWGA+l20tMn5mpnwBFLxf23AQg7lh1hts3
+ cDzjDFB6kb4oNPQ/RDb4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0xJ5SR0QHkc=:StKWUAaEns4yWxlxobvPjI
+ 4uhT+HjljB966gTpr4qY4/5jxRKlSQYSEHMqqwX6Pv1g5nSMDlAI8OfmA0hqXHw+IjdyeYISE
+ kz4gtIJ+etuIEjUhg9O0sOTMRkVEnx0rYpIH/4yscpSZd57hAYZhkVqo9O4I0YOmLyTzM+28h
+ +ZiZy1yecl5AHAMotCzuFcmpFetxoDQUDlIqv3GH+iLxRZSb9UcMjo6dd0p6snUCN8H5PHaGp
+ FCgq5rsBsLqFOxmRS61xvVPc5Ev5rixfzj4Nkr9Up8ZX7anZc/peRhSh4yecv4yunifqZnmN/
+ BbWavMTNtWrTnU3DlrjHsd2T20+lnU1kFi7utDaX//O4xHO32+s4sQmG2hZ9kcfiguJ1ub6GI
+ gNDoneXTvGtWtzxnhirIkeC9x1WMBaWv30rnhedpfliOnY3WTimTi8hq2FEA2xYLY9mog3RfG
+ s07UB80OS7raI1XX5IAfpX8r2jK/ycsBYXzkKkbBv81i5iU9lUbWoHfs1/vdGPGDzP7b7u7tx
+ ePfvpz84bdLlZLgU/fvxVkgfwc8Y4C/DA/RrEw5bgK1MS1M6DHeT+UtoZGeLb03dZAb1veRr7
+ C3t6YitwBi4vhEi8pEan4GommmKR1zDyf6zNTCmbRc4DyepPg2rD15VIfhfqKACtFZ0PbRusk
+ 7Iu2YC3iZJypvp0EaZkr6YHnqvomFuCUe0E4CTSE5R7Pa7qX9AYfCk1MUidDTL090V+zdXd/D
+ RQ+27I74IP7jmFQ3bDqyT1lGHDufBa2dp4yuIfCxEqUYwAQ0EpEzbsVFmy2vjC6s1P5i9HgOU
+ Dx/BLhHqnaBS9L0fniab51eWzwOapNW2r7UOma3HC9ANP+R5SwXYRU61c1QfbOXS5Oe4YmCZJ
+ YN0N4lzGvDtiWxIvolKTVlp01TG68azWZcaywM2p9M1Oc/32AYQkwO+HbqoDT5LMiTWVOpg3R
+ DTEZNFNkxNtfYH8wXnxJKh3UELU/a1au+sMVbRTcwL+SWDr3gT7UqN5zi5hK7UdphgseuqwEd
+ Dw3J2jVlbki8SYp0pMbg/c6WRsci0lhziUv9b6Q/wBnUUqsATaLs7WuPFH/rgz3/JwXZLPK14
+ 0qX3Y1HZI7eIxE=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kyle,
 
-The issue is that the implementations of aead and skcipher in the QAT
-driver are not properly supporting requests with the
-CRYPTO_TFM_REQ_MAY_BACKLOG flag set.
-If the HW queue is full, the driver returns -EBUSY [1] but does not
-enqueues the request as dm-crypt expects [2]. Dm-crypt ends up waiting
-indefinitely for a completion to a request that was never submitted,
-therefore the stall.
-This is not related to QATE-7495 'An incorrectly formatted request to
-QAT can hang the entire QAT endpoint' [3], which occurs when a malformed
-request is sent to the device.
+--5bsHzk28K+QW/lWF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm working at patch that resolves this problem. In the meanwhile a
-workaround is to blacklist the qat_c3xxx.ko driver.
+On Sun, Feb 20, 2022 at 11:53:15AM +0800, Tyrone Ting wrote:
+> From: Tali Perry <tali.perry1@gmail.com>
+>=20
+> Remove unused npcm750-clk node.
 
-Regarding avoiding this issue on stable kernels. The usage of QAT with
-dm-crypt was already disabled in kernel 5.10 for a different issue
-(the driver allocates memory in the datapath).
-The following patches implement the change:
-    7bcb2c99f8ed crypto: algapi - use common mechanism for inheriting flags
-    2eb27c11937e crypto: algapi - add NEED_FALLBACK to INHERITED_FLAGS
-    fbb6cda44190 crypto: algapi - introduce the flag CRYPTO_ALG_ALLOCATES_MEMORY
-    b8aa7dc5c753 crypto: drivers - set the flag CRYPTO_ALG_ALLOCATES_MEMORY
-    cd74693870fb dm crypt: don't use drivers that have CRYPTO_ALG_ALLOCATES_MEMORY
-An option would be to send the patches above to stable, another is to wait
-for a patch that fixes the problems in the QAT driver and send that to
-stable.
-@Herbert, what is the preferred approach here?
+You're not actually removing a node, for example in the sense of removing a
+devicetree node from a devicetree.
+
+So, I think "Remove unused variable clk_regmap." would be a better
+description.
+
+>=20
+> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
+r")
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> ---
+>  drivers/i2c/busses/i2c-npcm7xx.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-np=
+cm7xx.c
+> index a51db3f50274..9ccb9958945e 100644
+> --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> @@ -2233,7 +2233,6 @@ static int npcm_i2c_probe_bus(struct platform_devic=
+e *pdev)
+>  	struct i2c_adapter *adap;
+>  	struct clk *i2c_clk;
+>  	static struct regmap *gcr_regmap;
+> -	static struct regmap *clk_regmap;
+>  	int irq;
+>  	int ret;
+>  	struct device_node *np =3D pdev->dev.of_node;
+> @@ -2256,10 +2255,6 @@ static int npcm_i2c_probe_bus(struct platform_devi=
+ce *pdev)
+>  		return PTR_ERR(gcr_regmap);
+>  	regmap_write(gcr_regmap, NPCM_I2CSEGCTL, NPCM_I2CSEGCTL_INIT_VAL);
+> =20
+> -	clk_regmap =3D syscon_regmap_lookup_by_compatible("nuvoton,npcm750-clk"=
+);
+> -	if (IS_ERR(clk_regmap))
+> -		return PTR_ERR(clk_regmap);
+> -
+
+The change itself looks good to me,
+
+Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+
+>  	bus->reg =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(bus->reg))
+>  		return PTR_ERR(bus->reg);
+> --=20
+> 2.17.1
+>=20
+
 
 Thanks,
+Jonathan
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/crypto/qat/qat_common/qat_algs.c#L1022
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/md/dm-crypt.c#L1584
-[3] https://01.org/sites/default/files/downloads//336211qatsoftwareforlinux-rn-hwversion1.7021.pdf - page 25
+--5bsHzk28K+QW/lWF
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Giovanni
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmITfBYACgkQCDBEmo7z
+X9u67A/8DITpR6PwEHyOhlZUQgCqO7IkhgngdjLbfGYcdhSAtq69YPAq+CNYRPUh
+QqSLYsT1ZFHfNEBUgotfG9UcBLQvJexV4usHwRR3s443Fikou8a+J1HDNvwOOKeO
+ygPaffGiYEtNtZn+CXhkOCpJ05R5gmMZP3CK/HXF+AM2EDKsO0OtsgOlJWpczyqj
+Jw8IAtnN08SNM7BH8uoNkZfSTWaPoS4Muyvp7+OX+y24rht7BO5nmofDhRsNKZ7Y
+dfUQRa44Z/7J/wN7TcW7eoYAn0cw9K8UUZWu94w++eqSJsRbUPcXjskESgooFMyw
+IoHxHhOuvN4kBLCx/62qeIaait5lcWqUWFXxRe08EjhR4AQJpmWy/3F21mRiw8R3
+uF3gP6iZuUToM1JyHqcXq2RaF3O63y7s6rVJLcpi3yJqpDCZUxvbrqb3kzPFURAM
+nNW1uJemP43tNEeNcQw4doc5yKh1FqE9XEFctqkvdXRnJYdnj5TuG3gu/FQzKjPN
+p75J9u7doqvA/n3OI0jT3ByJkW2mZK3F3k4rEgfKU7zmxEKhDlqlTcqFwh7bjPrO
+fAtN0CiZh9PCPt4CubsFBW1AbCAuHV3J6buMi+/QZPGRz9aw3gP7Jwnddl5BH4EJ
+yiyyA2QC5RnVqB9AENHP8EhFEhgMDSvCgMiRMatAF3/uZ6I7LIU=
+=P2fi
+-----END PGP SIGNATURE-----
 
-On Sat, Feb 19, 2022 at 03:00:51PM -0800, Kyle Sanderson wrote:
-> hi Dave,
-> 
-> > This really sounds like broken hardware, not a kernel problem.
-> 
-> It is indeed a hardware issue, specifically the intel qat crypto
-> driver that's in-tree - the hardware is fine (see below). The IQAT
-> eratta documentation states that if a request is not submitted
-> properly it can stall the entire device. The remediation guidance from
-> 2020 was "don't do that" and "don't allow unprivileged users access to
-> the device". The in-tree driver is not implemented properly either for
-> this SoC or board - I'm thinking it's related to QATE-7495.
-> 
-> https://01.org/sites/default/files/downloads//336211qatsoftwareforlinux-rn-hwversion1.7021.pdf
-> 
-> > This implies a dmcrypt level problem - XFS can't make progress is dmcrypt is not completing IOs.
-> 
-> That's the weird part about it. Some bio's are completing, others are
-> completely dropped, with some stalling forever. I had to use
-> xfs_repair to get the volumes operational again. I lost a good deal of
-> files and had to recover from backup after toggling the device back on
-> on a production system (silly, I know).
-> 
-> > Where are the XFS corruption reports that the subject implies is occurring?
-> 
-> I think you're right, it's dm-crypt that's broken here, with
-> ultimately the crypto driver causing this corruption. XFS being the
-> edge to the end-user is taking the brunt of it. There's reports going
-> back to late 2017 of significant issues with this mainlined stable
-> driver.
-> 
-> https://bugzilla.redhat.com/show_bug.cgi?id=1522962
-> https://serverfault.com/questions/1010108/luks-hangs-on-centos-running-on-atom-c3758-cpu
-> https://www.phoronix.com/forums/forum/software/distributions/1172231-fedora-33-s-enterprise-linux-next-effort-approved-testbed-for-raising-cpu-requirements-etc?p=1174560#post1174560
-> 
-> Any guidance would be appreciated.
-> Kyle.
-> On Sat, Feb 19, 2022 at 1:03 PM Dave Chinner <david@fromorbit.com> wrote:
-> >
-> > On Fri, Feb 18, 2022 at 09:02:28PM -0800, Kyle Sanderson wrote:
-> > > A2SDi-8C-HLN4F has IQAT enabled by default, when this device is
-> > > attempted to be used by xfs (through dm-crypt) the entire kernel
-> > > thread stalls forever. Multiple users have hit this over the years
-> > > (through sporadic reporting) - I ended up trying ZFS and encryption
-> > > wasn't an issue there at all because I guess they don't use this
-> > > device. Returning to sanity (xfs), I was able to provision a dm-crypt
-> > > volume no problem on the disk, however when running mkfs.xfs on the
-> > > volume is what triggers the cascading failure (each request kills a
-> > > kthread).
-> >
-> > Can you provide the full stack traces for these errors so we can see
-> > exactly what this cascading failure looks like, please? In reality,
-> > the stall messages some time after this are not interesting - it's
-> > the first errors that cause the stall that need to be investigated.
-> >
-> > A good idea would be to provide the full storage stack decription
-> > and hardware in use, as per:
-> >
-> > https://xfs.org/index.php/XFS_FAQ#Q:_What_information_should_I_include_when_reporting_a_problem.3F
-> >
-> > > Disabling IQAT on the south bridge results in a working
-> > > system, however this is not the default configuration for the
-> > > distribution of choice (Ubuntu 20.04.3 LTS), nor the motherboard. I'm
-> > > convinced this never worked properly based on the lack of popularity
-> > > for kernel encryption (crypto), and the embedded nature that
-> > > SuperMicro has integrated this device in collaboration with intel as
-> > > it looks like the primary usage is through external accelerator cards.
-> >
-> > This really sounds like broken hardware, not a kernel problem.
-> >
-> > > Kernels tried were from RHEL8 over a year ago, and this impacts the
-> > > entirety of the 5.4 series on Ubuntu.
-> > > Please CC me on replies as I'm not subscribed to all lists. CPU is C3758.
-> >
-> > [snip stalled kcryptd worker threads]
-> >
-> > This implies a dmcrypt level problem - XFS can't make progress is
-> > dmcrypt is not completing IOs.
-> >
-> > Where are the XFS corruption reports that the subject implies is
-> > occurring?
-> >
-> > Cheers,
-> >
-> > Dave.
-> > --
-> > Dave Chinner
-> > david@fromorbit.com
+--5bsHzk28K+QW/lWF--

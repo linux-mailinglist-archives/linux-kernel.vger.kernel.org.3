@@ -2,94 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196BA4BD7DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 09:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B73F4BD753
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346487AbiBUHpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:45:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49246 "EHLO
+        id S1346147AbiBUH3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:29:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344588AbiBUHp3 (ORCPT
+        with ESMTP id S231397AbiBUH3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:45:29 -0500
-X-Greylist: delayed 909 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Feb 2022 23:45:07 PST
-Received: from sender4-of-o53.zoho.com (sender4-of-o53.zoho.com [136.143.188.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E772196
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 23:45:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1645428593; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=cSUHjQiTcSwtx64/5MvdEDCDfwEdsQ8DnI4eT/Ru73rZFhj3B8bRQokV/eO156GLXUpY14xz7kFur4N+P+ilLAwJb1VsPjUiaIq9D9w4U5vLP1RqwgxanPWuOplwqWUNW2i6vMly2q/cf/i9sa8uqBluQ4YWDN2ykCO4+mGnxy0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1645428593; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=WpclscLdg4+WAoyb8IIA896IqzboZChEQYLndl0uwSU=; 
-        b=X6IdzbtzjnkrYMOjOHip8uOnSZEvNfYbyEVRH9Y1xSEcWUxHa3R/RJDZrDl3VWLWpi+XJ0zXL2+ceHLFStjXPU88IPV9Oei6m7sHDmmQ8Z21FMYIIPra4Lu5xMXondzfQhToaV/Wr2+zsuYMKa0K/PxOTr1rrjZcm36wvXkbADI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=anirudhrb.com;
-        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
-        dmarc=pass header.from=<mail@anirudhrb.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1645428593;
-        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
-        bh=WpclscLdg4+WAoyb8IIA896IqzboZChEQYLndl0uwSU=;
-        b=ytBYL2yKVzoUkxXCq42rN3Pi+CaM1wgx9quhTwRDHdR+QpSx0iQTzyT53JNfZPHS
-        +9tDH2tUZL9myKReTohQmKN46nUe4Lf2R57pNiQu7P5lKzLh8oIBMf1TCuDjYCdcXAe
-        bXfdS77iT8fKTdV8imIgYJt9ZOl7VJLAH1u8FfoM=
-Received: from localhost.localdomain (49.207.207.8 [49.207.207.8]) by mx.zohomail.com
-        with SMTPS id 1645428590793991.2120447421995; Sun, 20 Feb 2022 23:29:50 -0800 (PST)
-From:   Anirudh Rayabharam <mail@anirudhrb.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     mail@anirudhrb.com,
-        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] vhost: handle zero regions in vhost_set_memory
-Date:   Mon, 21 Feb 2022 12:58:51 +0530
-Message-Id: <20220221072852.31820-1-mail@anirudhrb.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 21 Feb 2022 02:29:48 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D3C2E7;
+        Sun, 20 Feb 2022 23:29:24 -0800 (PST)
+X-UUID: 2e011d40a02843e2b7e6398bc6902036-20220221
+X-UUID: 2e011d40a02843e2b7e6398bc6902036-20220221
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 499028823; Mon, 21 Feb 2022 15:29:22 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 21 Feb 2022 15:29:21 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Feb
+ 2022 15:29:21 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Feb 2022 15:29:20 +0800
+Message-ID: <4be20cf9fd351c17414945a2fa199c490a0ff8d6.camel@mediatek.com>
+Subject: Re: [PATCH v5 2/3] mmc: core: Add support for SDIO async interrupt
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        "Eric Biggers" <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Mon, 21 Feb 2022 15:29:19 +0800
+In-Reply-To: <CAPDyKFqd+H6F4+gBd4CEigaOTC5TtjtT75B3G0B6qexFi6XqKw@mail.gmail.com>
+References: <20220121071942.11601-1-axe.yang@mediatek.com>
+         <20220121071942.11601-3-axe.yang@mediatek.com>
+         <CAPDyKFqd+H6F4+gBd4CEigaOTC5TtjtT75B3G0B6qexFi6XqKw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return early when userspace sends zero regions in the VHOST_SET_MEM_TABLE
-ioctl.
+On Mon, 2022-02-14 at 16:34 +0100, Ulf Hansson wrote:
+> On Fri, 21 Jan 2022 at 08:19, Axe Yang <axe.yang@mediatek.com> wrote:
+> > 
+> > If cap-sdio-async-irq flag is set in host dts node, parse EAI
+> > information from SDIO CCCR interrupt externsion segment. If async
+> > interrupt is supported by SDIO card then send command to card to
+> > enable it and set enable_async_irq flag in sdio_cccr structure to
+> > 1.
+> > The parse flow is implemented in sdio_read_cccr().
+> > 
+> > Acked-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> > ---
+> >  drivers/mmc/core/host.c  |  2 ++
+> >  drivers/mmc/core/sdio.c  | 17 +++++++++++++++++
+> >  include/linux/mmc/card.h |  3 ++-
+> >  include/linux/mmc/host.h |  1 +
+> >  include/linux/mmc/sdio.h |  5 +++++
+> >  5 files changed, 27 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+> > index cf140f4ec864..a972241548b4 100644
+> > --- a/drivers/mmc/core/host.c
+> > +++ b/drivers/mmc/core/host.c
+> > @@ -410,6 +410,8 @@ int mmc_of_parse(struct mmc_host *host)
+> >         if (device_property_read_bool(dev, "no-mmc-hs400"))
+> >                 host->caps2 &= ~(MMC_CAP2_HS400_1_8V |
+> > MMC_CAP2_HS400_1_2V |
+> >                                  MMC_CAP2_HS400_ES);
+> > +       if (device_property_read_bool(dev, "cap-sdio-async-irq"))
+> > +               host->caps2 |= MMC_CAP2_SDIO_ASYNC_IRQ;
+> > 
+> >         /* Must be after "non-removable" check */
+> >         if (device_property_read_u32(dev, "fixed-emmc-driver-type", 
+> > &drv_type) == 0) {
+> > diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
+> > index 41164748723d..771fb5d18585 100644
+> > --- a/drivers/mmc/core/sdio.c
+> > +++ b/drivers/mmc/core/sdio.c
+> > @@ -225,6 +225,23 @@ static int sdio_read_cccr(struct mmc_card
+> > *card, u32 ocr)
+> >                                 card->sw_caps.sd3_drv_type |=
+> > SD_DRIVER_TYPE_C;
+> >                         if (data & SDIO_DRIVE_SDTD)
+> >                                 card->sw_caps.sd3_drv_type |=
+> > SD_DRIVER_TYPE_D;
+> > +
+> > +                       if (card->host->caps2 &
+> > MMC_CAP2_SDIO_ASYNC_IRQ) {
+> 
+> We can probably check host->pm_caps & MMC_PM_WAKE_SDIO_IRQ here,
+> instead of MMC_CAP2_SDIO_ASYNC_IRQ.
 
-Otherwise, this causes an erroneous entry to be added to the iotlb. This
-entry has a range size of 0 (due to u64 overflow). This then causes
-iotlb_access_ok() to loop indefinitely resulting in a hung thread.
-Syzbot has reported this here:
+Will update this part in next version.
 
-https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
+> 
+> > +                               ret = mmc_io_rw_direct(card, 0, 0,
+> > SDIO_CCCR_INTERRUPT_EXT, 0,
+> > +                                                      &data);
+> > +                               if (ret)
+> > +                                       goto out;
+> > +
+> > +                               if (data & SDIO_INTERRUPT_EXT_SAI)
+> > {
+> > +                                       data |=
+> > SDIO_INTERRUPT_EXT_EAI;
+> > +                                       ret =
+> > mmc_io_rw_direct(card, 1, 0, SDIO_CCCR_INTERRUPT_EXT,
+> > +                                                              data
+> > , NULL);
+> > +                                       if (ret)
+> > +                                               goto out;
+> > +
+> > +                                       card->cccr.enable_async_irq 
+> > = 1;
+> 
+> As you show in the next patch(3), this flag is useful to read for the
+> host driver.
+> 
+> However, rather than accessing this flag directly in the host driver,
+> can you please add a helper function that takes a struct mmc_card* as
+> in-parameter instead?
 
-Reported-and-tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
----
- drivers/vhost/vhost.c | 2 ++
- 1 file changed, 2 insertions(+)
+OK. I will do that in next version.
 
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 59edb5a1ffe2..821aba60eac2 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -1428,6 +1428,8 @@ static long vhost_set_memory(struct vhost_dev *d, struct vhost_memory __user *m)
- 		return -EFAULT;
- 	if (mem.padding)
- 		return -EOPNOTSUPP;
-+	if (mem.nregions == 0)
-+		return 0;
- 	if (mem.nregions > max_mem_regions)
- 		return -E2BIG;
- 	newmem = kvzalloc(struct_size(newmem, regions, mem.nregions),
--- 
-2.35.1
+> 
+> > +                               }
+> > +                       }
+> >                 }
+> > 
+> >                 /* if no uhs mode ensure we check for high speed */
+> > diff --git a/include/linux/mmc/card.h b/include/linux/mmc/card.h
+> > index 37f975875102..4df9182bc0e6 100644
+> > --- a/include/linux/mmc/card.h
+> > +++ b/include/linux/mmc/card.h
+> > @@ -219,7 +219,8 @@ struct sdio_cccr {
+> >                                 wide_bus:1,
+> >                                 high_power:1,
+> >                                 high_speed:1,
+> > -                               disable_cd:1;
+> > +                               disable_cd:1,
+> > +                               enable_async_irq:1;
+> >  };
+> > 
+> >  struct sdio_cis {
+> > diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
+> > index 7afb57cab00b..502a5418264c 100644
+> > --- a/include/linux/mmc/host.h
+> > +++ b/include/linux/mmc/host.h
+> > @@ -402,6 +402,7 @@ struct mmc_host {
+> >  #define MMC_CAP2_CRYPTO                0
+> >  #endif
+> >  #define MMC_CAP2_ALT_GPT_TEGRA (1 << 28)       /* Host with eMMC
+> > that has GPT entry at a non-standard location */
+> > +#define MMC_CAP2_SDIO_ASYNC_IRQ        (1 << 29)       /* SDIO
+> > host supports asynchronous interrupt */
+> > 
+> >         int                     fixed_drv_type; /* fixed driver
+> > type for non-removable media */
+> > 
+> > diff --git a/include/linux/mmc/sdio.h b/include/linux/mmc/sdio.h
+> > index 2a05d1ac4f0e..1ef400f28642 100644
+> > --- a/include/linux/mmc/sdio.h
+> > +++ b/include/linux/mmc/sdio.h
+> > @@ -159,6 +159,11 @@
+> >  #define  SDIO_DTSx_SET_TYPE_A  (1 << SDIO_DRIVE_DTSx_SHIFT)
+> >  #define  SDIO_DTSx_SET_TYPE_C  (2 << SDIO_DRIVE_DTSx_SHIFT)
+> >  #define  SDIO_DTSx_SET_TYPE_D  (3 << SDIO_DRIVE_DTSx_SHIFT)
+> > +
+> > +#define SDIO_CCCR_INTERRUPT_EXT        0x16
+> > +#define SDIO_INTERRUPT_EXT_SAI (1 << 0)
+> > +#define SDIO_INTERRUPT_EXT_EAI (1 << 1)
+> > +
+> >  /*
+> >   * Function Basic Registers (FBR)
+> >   */
+> 
+Regards,
+Axe Yang
+
 

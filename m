@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C87C4BDDEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B864BDCB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352909AbiBUKBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:01:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50464 "EHLO
+        id S1353563AbiBUKB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:01:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352333AbiBUJxx (ORCPT
+        with ESMTP id S1352349AbiBUJxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:53:53 -0500
+        Mon, 21 Feb 2022 04:53:54 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8E337006;
-        Mon, 21 Feb 2022 01:23:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3017637019;
+        Mon, 21 Feb 2022 01:23:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF2CA60FBA;
-        Mon, 21 Feb 2022 09:23:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8FBAC340E9;
-        Mon, 21 Feb 2022 09:23:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C136E60FCC;
+        Mon, 21 Feb 2022 09:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9455C340E9;
+        Mon, 21 Feb 2022 09:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435423;
-        bh=w+UicoM5DkkuhGVLBhKd8GylSa81D5HTmjneWjIRTwc=;
+        s=korg; t=1645435426;
+        bh=uLIjypjoYN0GySrz3pbbzUIqlZoebQ0xIGjvV4tfMyQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O/qWeRmjDSJI2U1r4/Mf2tGMbu6vbsfxDk4HNvDgnVYK4VBzbsu8ZdqYgCH97whVT
-         vNPZuZSipgNZhv2C2Pn30ZIZIyjr1JJGuM5Oci4QaK/ljsjbRnfroNP13hFIYAyoS0
-         THCCsMccVZRTNdZyzKNFVt5TaRCOkBsPg7onZd7k=
+        b=Keqc9CW8FV7ieQx6iOzQ8pp9C+Vld67q8q/OSTTgkJ7OTc2mBweVP/8s7GPAN14td
+         6hvnubf9xWKW0KKdjPeU2O1gZV1Sw66Ax7MVFIBKQa+ne5VQ+4igwiRJ/887EWyp6x
+         7WEltP95hBW5Ssp3lYwN2lV89E1HLSFUzIjESaMo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ming Lei <ming.lei@rehdat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Laibin Qiu <qiulaibin@huawei.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 159/227] block/wbt: fix negative inflight counter when remove scsi device
-Date:   Mon, 21 Feb 2022 09:49:38 +0100
-Message-Id: <20220221084940.107272851@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [PATCH 5.16 160/227] NFS: Remove an incorrect revalidation in nfs4_update_changeattr_locked()
+Date:   Mon, 21 Feb 2022 09:49:39 +0100
+Message-Id: <20220221084940.144222029@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
 References: <20220221084934.836145070@linuxfoundation.org>
@@ -55,78 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laibin Qiu <qiulaibin@huawei.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit e92bc4cd34de2ce454bdea8cd198b8067ee4e123 upstream.
+commit 9d047bf68fe8cdb4086deaf4edd119731a9481ed upstream.
 
-Now that we disable wbt by set WBT_STATE_OFF_DEFAULT in
-wbt_disable_default() when switch elevator to bfq. And when
-we remove scsi device, wbt will be enabled by wbt_enable_default.
-If it become false positive between wbt_wait() and wbt_track()
-when submit write request.
+In nfs4_update_changeattr_locked(), we don't need to set the
+NFS_INO_REVAL_PAGECACHE flag, because we already know the value of the
+change attribute, and we're already flagging the size. In fact, this
+forces us to revalidate the change attribute a second time for no good
+reason.
+This extra flag appears to have been introduced as part of the xattr
+feature, when update_changeattr_locked() was converted for use by the
+xattr code.
 
-The following is the scenario that triggered the problem.
-
-T1                          T2                           T3
-                            elevator_switch_mq
-                            bfq_init_queue
-                            wbt_disable_default <= Set
-                            rwb->enable_state (OFF)
-Submit_bio
-blk_mq_make_request
-rq_qos_throttle
-<= rwb->enable_state (OFF)
-                                                         scsi_remove_device
-                                                         sd_remove
-                                                         del_gendisk
-                                                         blk_unregister_queue
-                                                         elv_unregister_queue
-                                                         wbt_enable_default
-                                                         <= Set rwb->enable_state (ON)
-q_qos_track
-<= rwb->enable_state (ON)
-^^^^^^ this request will mark WBT_TRACKED without inflight add and will
-lead to drop rqw->inflight to -1 in wbt_done() which will trigger IO hung.
-
-Fix this by move wbt_enable_default() from elv_unregister to
-bfq_exit_queue(). Only re-enable wbt when bfq exit.
-
-Fixes: 76a8040817b4b ("blk-wbt: make sure throttle is enabled properly")
-
-Remove oneline stale comment, and kill one oneshot local variable.
-
-Signed-off-by: Ming Lei <ming.lei@rehdat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/linux-block/20211214133103.551813-1-qiulaibin@huawei.com/
-Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 1b523ca972ed ("nfs: modify update_changeattr to deal with regular files")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-iosched.c |    2 ++
- block/elevator.c    |    2 --
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ fs/nfs/nfs4proc.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -6878,6 +6878,8 @@ static void bfq_exit_queue(struct elevat
- 	spin_unlock_irq(&bfqd->lock);
- #endif
- 
-+	wbt_enable_default(bfqd->queue);
-+
- 	kfree(bfqd);
- }
- 
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -523,8 +523,6 @@ void elv_unregister_queue(struct request
- 		kobject_del(&e->kobj);
- 
- 		e->registered = 0;
--		/* Re-enable throttling in case elevator disabled it */
--		wbt_enable_default(q);
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -1233,8 +1233,7 @@ nfs4_update_changeattr_locked(struct ino
+ 				NFS_INO_INVALID_ACCESS | NFS_INO_INVALID_ACL |
+ 				NFS_INO_INVALID_SIZE | NFS_INO_INVALID_OTHER |
+ 				NFS_INO_INVALID_BLOCKS | NFS_INO_INVALID_NLINK |
+-				NFS_INO_INVALID_MODE | NFS_INO_INVALID_XATTR |
+-				NFS_INO_REVAL_PAGECACHE;
++				NFS_INO_INVALID_MODE | NFS_INO_INVALID_XATTR;
+ 		nfsi->attrtimeo = NFS_MINATTRTIMEO(inode);
  	}
- }
- 
+ 	nfsi->attrtimeo_timestamp = jiffies;
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CF64BE472
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACBD64BE8BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349098AbiBUJZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:25:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33974 "EHLO
+        id S1348747AbiBUJLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:11:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348466AbiBUJLT (ORCPT
+        with ESMTP id S1347523AbiBUJGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:11:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E24205D7;
-        Mon, 21 Feb 2022 01:03:27 -0800 (PST)
+        Mon, 21 Feb 2022 04:06:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6B31234;
+        Mon, 21 Feb 2022 00:59:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 59C0DCE0E6D;
-        Mon, 21 Feb 2022 09:03:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC03C340F3;
-        Mon, 21 Feb 2022 09:03:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1AB461132;
+        Mon, 21 Feb 2022 08:59:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9839C340E9;
+        Mon, 21 Feb 2022 08:59:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434204;
-        bh=CMmA/IivKrWnzV7tqHqyjVNnVmgLacPECP9NWZX5YPM=;
+        s=korg; t=1645433987;
+        bh=68TEqlEr7oRnJi0vtYWnGuAH20gM7jHIJnUnx/9lt/Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FcimDmGgHfUcKA2pTKyG67D8wPY7VQWA1NLz6WTrAtfK9p2g9ZrLFprgOoZxaHWzO
-         EYlVIPfz9koavYIPSxwXqryK7osSuQ7i5oeROf6wCT4DKRpYFfWJ6AN4q5tv1tPJ1E
-         EwvzFRndaCL1PgoUmxvG4PZp0K2lJZGqFF3g7EwM=
+        b=XkPUP21T1ls3EqkntP6J4VMC3kja1GSsmV6/fH5hMGU83jOkARl6VsR8+y9zTG2nL
+         xjYssCn5XXvvQkfOcohSJehZhuc1/83E5WtbN8UH4hXmL7PWVeETSDRJvR+y6A/x9k
+         kMuTPM0kJX4KUURLIDPF0thk1LLNcdWJw/Zd+9c4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Nicholas Bishop <nicholasbishop@google.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.10 048/121] drm/radeon: Fix backlight control on iMac 12,1
-Date:   Mon, 21 Feb 2022 09:49:00 +0100
-Message-Id: <20220221084922.835388437@linuxfoundation.org>
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 21/80] drm/amdgpu: fix logic inversion in check
+Date:   Mon, 21 Feb 2022 09:49:01 +0100
+Message-Id: <20220221084916.278671251@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Bishop <nicholasbishop@google.com>
+From: Christian König <christian.koenig@amd.com>
 
-commit 364438fd629f7611a84c8e6d7de91659300f1502 upstream.
+[ Upstream commit e8ae38720e1a685fd98cfa5ae118c9d07b45ca79 ]
 
-The iMac 12,1 does not use the gmux driver for backlight, so the radeon
-backlight device is needed to set the brightness.
+We probably never trigger this, but the logic inside the check is
+inverted.
 
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1838
-Signed-off-by: Nicholas Bishop <nicholasbishop@google.com>
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/radeon/atombios_encoders.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/radeon/atombios_encoders.c
-+++ b/drivers/gpu/drm/radeon/atombios_encoders.c
-@@ -197,7 +197,8 @@ void radeon_atom_backlight_init(struct r
- 	 * so don't register a backlight device
- 	 */
- 	if ((rdev->pdev->subsystem_vendor == PCI_VENDOR_ID_APPLE) &&
--	    (rdev->pdev->device == 0x6741))
-+	    (rdev->pdev->device == 0x6741) &&
-+	    !dmi_match(DMI_PRODUCT_NAME, "iMac12,1"))
- 		return;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index 58e14d3040f03..870dd78d5a21a 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -1976,7 +1976,7 @@ int amdgpu_copy_buffer(struct amdgpu_ring *ring, uint64_t src_offset,
+ 	unsigned i;
+ 	int r;
  
- 	if (!radeon_encoder->enc_priv)
+-	if (direct_submit && !ring->sched.ready) {
++	if (!direct_submit && !ring->sched.ready) {
+ 		DRM_ERROR("Trying to move memory with ring turned off.\n");
+ 		return -EINVAL;
+ 	}
+-- 
+2.34.1
+
 
 

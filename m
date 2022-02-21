@@ -2,140 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C8A4BD5DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 07:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B48374BD602
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 07:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345076AbiBUGTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 01:19:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59812 "EHLO
+        id S1345086AbiBUGUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 01:20:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239052AbiBUGTr (ORCPT
+        with ESMTP id S239448AbiBUGUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 01:19:47 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFF210C1;
-        Sun, 20 Feb 2022 22:19:23 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K2BtB2dDnz9sp9;
-        Mon, 21 Feb 2022 14:17:38 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Feb 2022 14:19:20 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Feb 2022 14:19:18 +0800
-Subject: Re: [PATCH v20 2/5] arm64: kdump: introduce some macros for crash
- kernel reservation
-To:     Baoquan He <bhe@redhat.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        "John Donnelly" <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-References: <20220124084708.683-1-thunder.leizhen@huawei.com>
- <20220124084708.683-3-thunder.leizhen@huawei.com>
- <YgY89RxkAl12n/dd@MiWiFi-R3L-srv>
- <69da7ed5-4ef4-3655-8965-4181c7d7bf0b@huawei.com>
- <YhMFkgkqnZ4A3ysK@MiWiFi-R3L-srv>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <d6ef5ad2-13c1-ecac-e8d4-70b48561f249@huawei.com>
-Date:   Mon, 21 Feb 2022 14:19:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 21 Feb 2022 01:20:37 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CD610C1
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 22:20:14 -0800 (PST)
+X-QQ-mid: bizesmtp79t1645424404te6fwesw
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 21 Feb 2022 14:19:58 +0800 (CST)
+X-QQ-SSF: 01400000002000B0F000000A0000000
+X-QQ-FEAT: hR9GyqeohSjJ8b/qPk34ny37FDJWImGPRvOx7CiNu3SDi/J1JEglKreV1giAO
+        DO8xtgMRmohoyPBF3C537Ys3WEBfk6oA6v29etPGuRLwNbEXuajJpL4VS4I63kXOXMehMs7
+        vQ8TUXh4vYgwsoz75bgK+Jurhfwwp4nlYZBv23LwBYxaMKqzzV30e6PHk2Op2N4pW6mJ2Wz
+        hfr2eBOq8dWMr1+WoY1W7HheQvSKwCcHLqfnKYcp+XM1h9wiwGVOjshARnkFiO4R0P36NkF
+        5aOs9K+IiByovORfSgURAaNuFtplWzRjOS0hHCjanRqtqB9feuqrqeUCigEzNRt4MlN2+Yf
+        k1NoiHJrCIR3qw52txtSJknNkO3zECzpYjCp4+M
+X-QQ-GoodBg: 1
+From:   tangmeng <tangmeng@uniontech.com>
+To:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        dianders@chromium.org
+Cc:     kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>
+Subject: [PATCH] kernel/debug: remove unnecessary CONFIG options
+Date:   Mon, 21 Feb 2022 14:19:54 +0800
+Message-Id: <20220221061954.4822-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <YhMFkgkqnZ4A3ysK@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In kernel/Makefile has:
+obj-$(CONFIG_KGDB) += debug/
 
+so kernel/debug/Makefile don't need this 'obj-$(CONFIG_KGDB) +=',
+delete it from kernel/debug/Makefile.
 
-On 2022/2/21 11:22, Baoquan He wrote:
-> On 02/14/22 at 02:22pm, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/2/11 18:39, Baoquan He wrote:
->>> On 01/24/22 at 04:47pm, Zhen Lei wrote:
->>>> From: Chen Zhou <chenzhou10@huawei.com>
->>>>
->>>> Introduce macro CRASH_ALIGN for alignment, macro CRASH_ADDR_LOW_MAX
->>>> for upper bound of low crash memory, macro CRASH_ADDR_HIGH_MAX for
->>>> upper bound of high crash memory, use macros instead.
->>>>
->>>> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
->>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>> Tested-by: John Donnelly <John.p.donnelly@oracle.com>
->>>> Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
->>>> ---
->>>>  arch/arm64/mm/init.c | 11 ++++++++---
->>>>  1 file changed, 8 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
->>>> index 90f276d46b93bc6..6c653a2c7cff052 100644
->>>> --- a/arch/arm64/mm/init.c
->>>> +++ b/arch/arm64/mm/init.c
->>>> @@ -65,6 +65,12 @@ EXPORT_SYMBOL(memstart_addr);
->>>>  phys_addr_t arm64_dma_phys_limit __ro_after_init;
->>>>  
->>>>  #ifdef CONFIG_KEXEC_CORE
->>>> +/* Current arm64 boot protocol requires 2MB alignment */
->>>> +#define CRASH_ALIGN		SZ_2M
->>>> +
->>>> +#define CRASH_ADDR_LOW_MAX	arm64_dma_phys_limit
->>>> +#define CRASH_ADDR_HIGH_MAX	MEMBLOCK_ALLOC_ACCESSIBLE
->>>
->>> MEMBLOCK_ALLOC_ACCESSIBLE is obvoiously a alloc flag for memblock
->>> allocator, I don't think it's appropriate to make HIGH_MAX get its value.
->>
->> Right, thanks.
->>
->>> You can make it as memblock.current_limit, or do not define it, but using
->>> MEMBLOCK_ALLOC_ACCESSIBLE direclty in memblock_phys_alloc_range() with
->>> a code comment. 
->>
->> This patch is not required at present. These macros are added to eliminate
->> differences to share code with x86.
-> 
-> So this patch may not be needed in this series. It can be added in
-> another post when you start to do the clean up and code unification
-> among ARCHes, with my udnerstanding. At that time you can consider how
-> to abstract the common code to handle the difference.
+Signed-off-by: tangmeng <tangmeng@uniontech.com>
+---
+ kernel/debug/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, it should be merged with the v20 3/5.
-
-> 
-> .
-> 
-
+diff --git a/kernel/debug/Makefile b/kernel/debug/Makefile
+index 332ee6c6ec2c..9c49ff7c75f4 100644
+--- a/kernel/debug/Makefile
++++ b/kernel/debug/Makefile
+@@ -3,5 +3,5 @@
+ # Makefile for the linux kernel debugger
+ #
+ 
+-obj-$(CONFIG_KGDB) += debug_core.o gdbstub.o
++obj-y += debug_core.o gdbstub.o
+ obj-$(CONFIG_KGDB_KDB) += kdb/
 -- 
-Regards,
-  Zhen Lei
+2.20.1
+
+
+

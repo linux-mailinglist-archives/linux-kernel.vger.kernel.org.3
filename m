@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1424BE373
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC884BDFCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347341AbiBUJF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:05:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58050 "EHLO
+        id S231975AbiBUJW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:22:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347736AbiBUJBn (ORCPT
+        with ESMTP id S1350060AbiBUJNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3B828E24;
-        Mon, 21 Feb 2022 00:57:01 -0800 (PST)
+        Mon, 21 Feb 2022 04:13:11 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC462E0A8;
+        Mon, 21 Feb 2022 01:06:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05174B80EA5;
-        Mon, 21 Feb 2022 08:56:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23D8DC340E9;
-        Mon, 21 Feb 2022 08:56:55 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56B92CE0E8B;
+        Mon, 21 Feb 2022 09:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED4EC340E9;
+        Mon, 21 Feb 2022 09:06:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433816;
-        bh=mkpPlGw8hV9sNXnauUZO4avIHLUkgLetqvwpAsmGNJQ=;
+        s=korg; t=1645434380;
+        bh=In4AzKn1wxAe9eTmNKIelQ3WOTNBZ/W4/QZ6HsBrqyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AUibHjWZsuzCtODo9bvmtGq2Yiu4xhnJ/DPGBoe3zyOezH3+Is1n3sglC6GKK3NeQ
-         AqsZy59sm52aU26nqf4PVP5s7+PXMZEIGQFWdJCXFCBtZc4z2EH1U09ZLwy5wHVxqX
-         IsARzNtmumCv4twjcqAasiff0w4krHpXnBKd9lW4=
+        b=YrLu5cBEwqoiG+zB4Fsq40faOx1PAXDAHSCTULj1c5RTqdL/6Cedb/XcxBOD9SEt8
+         uN448QJmb/yDsH2CCsNAqnUFsN+9gCAZkKRVEk5B33R++laXAUO4NBTxQw8CB/zTX3
+         uaJXWXspkJsxY7kAkc1og/D8nULDBuOLfIE8vwQQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <anup@brainfault.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        stable@vger.kernel.org, Wan Jiabing <wanjiabing@vivo.com>,
+        Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 51/58] irqchip/sifive-plic: Add missing thead,c900-plic match string
+Subject: [PATCH 5.10 092/121] ARM: OMAP2+: hwmod: Add of_node_put() before break
 Date:   Mon, 21 Feb 2022 09:49:44 +0100
-Message-Id: <20220221084913.518994113@linuxfoundation.org>
+Message-Id: <20220221084924.307292118@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,47 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Wan Jiabing <wanjiabing@vivo.com>
 
-[ Upstream commit 1d4df649cbb4b26d19bea38ecff4b65b10a1bbca ]
+[ Upstream commit 80c469a0a03763f814715f3d12b6f3964c7423e8 ]
 
-The thead,c900-plic has been used in opensbi to distinguish
-PLIC [1]. Although PLICs have the same behaviors in Linux,
-they are different hardware with some custom initializing in
-firmware(opensbi).
+Fix following coccicheck warning:
+./arch/arm/mach-omap2/omap_hwmod.c:753:1-23: WARNING: Function
+for_each_matching_node should have of_node_put() before break
 
-Qute opensbi patch commit-msg by Samuel:
+Early exits from for_each_matching_node should decrement the
+node reference counter.
 
-  The T-HEAD PLIC implementation requires setting a delegation bit
-  to allow access from S-mode. Now that the T-HEAD PLIC has its own
-  compatible string, set this bit automatically from the PLIC driver,
-  instead of reaching into the PLIC's MMIO space from another driver.
-
-[1]: https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd62653b9fb31623a42ced45f38ea6
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Anup Patel <anup@brainfault.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Samuel Holland <samuel@sholland.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220130135634.1213301-3-guoren@kernel.org
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-sifive-plic.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/mach-omap2/omap_hwmod.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-index 532e9d68c7042..767cdd3f773bb 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -258,3 +258,4 @@ static int __init plic_init(struct device_node *node,
+diff --git a/arch/arm/mach-omap2/omap_hwmod.c b/arch/arm/mach-omap2/omap_hwmod.c
+index 9443f129859b2..1fd67abca055b 100644
+--- a/arch/arm/mach-omap2/omap_hwmod.c
++++ b/arch/arm/mach-omap2/omap_hwmod.c
+@@ -749,8 +749,10 @@ static int __init _init_clkctrl_providers(void)
  
- IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
- IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
-+IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init); /* for firmware driver */
+ 	for_each_matching_node(np, ti_clkctrl_match_table) {
+ 		ret = _setup_clkctrl_provider(np);
+-		if (ret)
++		if (ret) {
++			of_node_put(np);
+ 			break;
++		}
+ 	}
+ 
+ 	return ret;
 -- 
 2.34.1
 

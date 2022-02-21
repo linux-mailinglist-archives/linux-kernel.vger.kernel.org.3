@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044DC4BE3E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D574BE249
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348675AbiBUJQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:16:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38024 "EHLO
+        id S1352494AbiBUJzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:55:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347917AbiBUJJv (ORCPT
+        with ESMTP id S1352948AbiBUJsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:09:51 -0500
+        Mon, 21 Feb 2022 04:48:03 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74A1D0F7;
-        Mon, 21 Feb 2022 01:02:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B4E5F80;
+        Mon, 21 Feb 2022 01:21:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A1C360FB6;
-        Mon, 21 Feb 2022 09:02:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5803EC340E9;
-        Mon, 21 Feb 2022 09:02:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 329E960F3C;
+        Mon, 21 Feb 2022 09:21:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47EE5C340E9;
+        Mon, 21 Feb 2022 09:21:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434140;
-        bh=ZH6TUb22N9Jtt2uKbR9l2Y8/rMT1ydmLe5n2WQEZP6s=;
+        s=korg; t=1645435300;
+        bh=y0Tx4Ij1gHeXKe15K/HgbNer42IaWDRrzCvEiQYmuhc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1UfJ7hghkEVC0XT04n3n0wtTizzOsl7JLfQoZvQAHH422FrU3QJfIRzEdYH2qtkjd
-         k0BPDsPNGFlEJk8/xRngOYklEPt3EH9ZannTvKdYDJW8iRoyJhwjhmmu6f/4NousGD
-         fYkWPQTkrKMXYEB+kolTyKw0cRL0tsxDqCPPin5g=
+        b=acllwBgKDZ1Dmih6icYd2jICGEc1fHGirv5z7779Lk0q0dfsuNdVvK+2kZk35gwmw
+         F452AfHXgqykqfsEYtkXbKmKKoYCXEqnE7GsT8nq1Nn/J/UdigZaFlxdtMxZivUN9Z
+         NSHBr8vTycHTo1i5LTlY1y8yYNbqOeCLEkqFfg1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergio Costas <rastersoft@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 5.10 009/121] HID:Add support for UGTABLET WP5540
-Date:   Mon, 21 Feb 2022 09:48:21 +0100
-Message-Id: <20220221084921.468890515@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.16 083/227] drm/i915/opregion: check port number bounds for SWSCI display power state
+Date:   Mon, 21 Feb 2022 09:48:22 +0100
+Message-Id: <20220221084937.629373006@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergio Costas <rastersoft@gmail.com>
+From: Jani Nikula <jani.nikula@intel.com>
 
-commit fd5dd6acd8f823ea804f76d3af64fa1be9d5fb78 upstream.
+commit ea958422291de248b9e2eaaeea36004e84b64043 upstream.
 
-This patch adds support for the UGTABLET WP5540 digitizer tablet
-devices. Without it, the pen moves the cursor, but neither the
-buttons nor the tap sensor in the tip do work.
+The mapping from enum port to whatever port numbering scheme is used by
+the SWSCI Display Power State Notification is odd, and the memory of it
+has faded. In any case, the parameter only has space for ports numbered
+[0..4], and UBSAN reports bit shift beyond it when the platform has port
+F or more.
 
-Signed-off-by: Sergio Costas <rastersoft@gmail.com>
-Link: https://lore.kernel.org/r/63dece1d-91ca-1b1b-d90d-335be66896be@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Since the SWSCI functionality is supposed to be obsolete for new
+platforms (i.e. ones that might have port F or more), just bail out
+early if the mapped and mangled port number is beyond what the Display
+Power State Notification can support.
+
+Fixes: 9c4b0a683193 ("drm/i915: add opregion function to notify bios of encoder enable/disable")
+Cc: <stable@vger.kernel.org> # v3.13+
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4800
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/cc363f42d6b5a5932b6d218fefcc8bdfb15dbbe5.1644489329.git.jani.nikula@intel.com
+(cherry picked from commit 24a644ebbfd3b13cda702f98907f9dd123e34bf9)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-ids.h    |    1 +
- drivers/hid/hid-quirks.c |    1 +
- 2 files changed, 2 insertions(+)
+ drivers/gpu/drm/i915/display/intel_opregion.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1318,6 +1318,7 @@
- #define USB_VENDOR_ID_UGTIZER			0x2179
- #define USB_DEVICE_ID_UGTIZER_TABLET_GP0610	0x0053
- #define USB_DEVICE_ID_UGTIZER_TABLET_GT5040	0x0077
-+#define USB_DEVICE_ID_UGTIZER_TABLET_WP5540	0x0004
+--- a/drivers/gpu/drm/i915/display/intel_opregion.c
++++ b/drivers/gpu/drm/i915/display/intel_opregion.c
+@@ -360,6 +360,21 @@ int intel_opregion_notify_encoder(struct
+ 		port++;
+ 	}
  
- #define USB_VENDOR_ID_VIEWSONIC			0x0543
- #define USB_DEVICE_ID_VIEWSONIC_PD1011		0xe621
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -187,6 +187,7 @@ static const struct hid_device_id hid_qu
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_TURBOX, USB_DEVICE_ID_TURBOX_KEYBOARD), HID_QUIRK_NOGET },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_KNA5), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_TWA60), HID_QUIRK_MULTI_INPUT },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_UGTIZER, USB_DEVICE_ID_UGTIZER_TABLET_WP5540), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_MEDIA_TABLET_10_6_INCH), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_MEDIA_TABLET_14_1_INCH), HID_QUIRK_MULTI_INPUT },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_SIRIUS_BATTERY_FREE_TABLET), HID_QUIRK_MULTI_INPUT },
++	/*
++	 * The port numbering and mapping here is bizarre. The now-obsolete
++	 * swsci spec supports ports numbered [0..4]. Port E is handled as a
++	 * special case, but port F and beyond are not. The functionality is
++	 * supposed to be obsolete for new platforms. Just bail out if the port
++	 * number is out of bounds after mapping.
++	 */
++	if (port > 4) {
++		drm_dbg_kms(&dev_priv->drm,
++			    "[ENCODER:%d:%s] port %c (index %u) out of bounds for display power state notification\n",
++			    intel_encoder->base.base.id, intel_encoder->base.name,
++			    port_name(intel_encoder->port), port);
++		return -EINVAL;
++	}
++
+ 	if (!enable)
+ 		parm |= 4 << 8;
+ 
 
 

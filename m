@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1B04BE679
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126444BE33B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379547AbiBUPtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:49:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46458 "EHLO
+        id S1379421AbiBUPn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:43:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379526AbiBUPtm (ORCPT
+        with ESMTP id S1379402AbiBUPnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:49:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B7F2458C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:49:17 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A1B9D21129;
-        Mon, 21 Feb 2022 15:49:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645458556; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iAqz2GmqnpNP4dAnFjtbOp+KfoSTEli02wVy6WIU/sY=;
-        b=bGHFABVNObcxZuIpeS/MkEkEKjLs4+FDmQEX/eZIGet7JNcND34wTM20p8UXfCSEMgbqaK
-        3UDaIdtTsAjvkHeCxZkMrCuNEfZJT5p7icOEoT9zh+2+gu5iEm5paHphUiVxITqB6Zu5GX
-        /3w5i5TXlqdJE2m6LjSZ4DtmSiDalAY=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4943EA3B84;
-        Mon, 21 Feb 2022 15:49:16 +0000 (UTC)
-Date:   Mon, 21 Feb 2022 16:49:16 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andre Kalb <andre.kalb@sma.de>
-Cc:     senozhatsky@chromium.org, john.ogness@linutronix.de,
-        linux-kernel@vger.kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v3] printk: Set console_set_on_cmdline=1 when
- __add_preferred_console() is called with user_specified == true
-Message-ID: <YhO0fBJLn4hW2LyC@alley>
-References: <YgxtGWh0b9NXTyu8@google.com>
- <YgzU4ho8l6XapyG2@pc6682>
+        Mon, 21 Feb 2022 10:43:47 -0500
+Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5482253A;
+        Mon, 21 Feb 2022 07:43:20 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K2RQs5CPKzMptjp;
+        Mon, 21 Feb 2022 16:43:17 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4K2RQr4xqLzlhMBl;
+        Mon, 21 Feb 2022 16:43:16 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Shuah Khan <shuah@kernel.org>, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v1 0/7] Minor Landlock fixes and new tests
+Date:   Mon, 21 Feb 2022 16:53:04 +0100
+Message-Id: <20220221155311.166278-1-mic@digikod.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgzU4ho8l6XapyG2@pc6682>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-02-16 11:41:38, Andre Kalb wrote:
-> From: Andre Kalb <andre.kalb@sma.de>
-> 
-> In case of using console="" or console=null
-> set console_set_on_cmdline=1 to disable "stdout-path" node from DT.
-> 
-> We basically need to set it every time when __add_preferred_console()
-> is called with parameter 'user_specified' set.
-> Therefore we can move setting it into a helper function that is
-> called from __add_preferred_console().
-> 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Andre Kalb <andre.kalb@sma.de>
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Hi,
 
-The patch is comitted in printk/linux.git, branch for-5.18.
+This series contains landlock_add_rule(2) (cosmetic) signature and
+documentation fixes.  There is also some miscellaneous new tests to
+improve coverage and that may help for future access types (e.g.
+networking).
 
-Best Regards,
-Petr
+Regards,
+
+Mickaël Salaün (7):
+  landlock: Fix landlock_add_rule(2) documentation
+  landlock: Fix landlock_add_rule(2) signature
+  selftest/landlock: Make tests build with old libc
+  selftest/landlock: Extend tests for minimal valid attribute size
+  selftest/landlock: Add tests for unknown access rights
+  selftest/landlock: Extend access right tests to directories
+  selftest/landlock: Fully test file rename with "remove" access
+
+ include/linux/syscalls.h                     |  3 +-
+ include/uapi/linux/landlock.h                |  5 +-
+ security/landlock/syscalls.c                 | 14 ++--
+ tools/testing/selftests/landlock/base_test.c |  5 ++
+ tools/testing/selftests/landlock/fs_test.c   | 84 ++++++++++++++++----
+ 5 files changed, 86 insertions(+), 25 deletions(-)
+
+
+base-commit: cfb92440ee71adcc2105b0890bb01ac3cddb8507
+-- 
+2.35.1
+

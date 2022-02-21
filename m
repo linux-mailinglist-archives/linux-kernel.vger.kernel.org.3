@@ -2,163 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF9A4BD71C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F11C4BD73B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346110AbiBUH2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:28:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45566 "EHLO
+        id S244585AbiBUH3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:29:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346195AbiBUH2f (ORCPT
+        with ESMTP id S231397AbiBUH3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:28:35 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8241655E;
-        Sun, 20 Feb 2022 23:28:10 -0800 (PST)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id A20DA2223A;
-        Mon, 21 Feb 2022 08:28:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645428488;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VPDNd8ZGaYr6EuNj8Vq7XPMc5Y8ydaZmaBuwz3fu05k=;
-        b=Bz3JOih8aagS5xYhpXGfMg/U0AF67+eE/wQZVOlzOf3PO1yxDzqloVpN1H1g6jccjfJqxh
-        pGrLeQAocT6ZOTagme52OZ55YgOkUnX7cqu/Z5dCO8uaZRN3bhaXRbtqGUqmcb/IdL/tls
-        T4eY3v6QJSW2HmXjtrp2n5kv2C2CZxE=
+        Mon, 21 Feb 2022 02:29:16 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCCE2E7
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 23:28:53 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id p9so25360062wra.12
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 23:28:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e3PLukBtwfovlwrmcqI4UjQoWYEr1ObJtYBgUzUoDAs=;
+        b=Bu/jNlb3lvECwKGFKqpGdOKDkX/dwpq3DeeCBPL4qdZRs+20A7yQ1DHVXTHQ3m6LvJ
+         AnEGmKipFWYIFviPjHqCywEnmWtZ8AwdteBwMKrBHolRiZPXhCB50x/yhvEbAdH2UODJ
+         fCdqIHyTsoNPtNXLRpS1jnWpUTga6MLuq/u/vGN/YkPaZ/27WjEQIDJNuIL2l8LPvGC2
+         7b+jwdzaIHoNHPVkbK2YpJ46aFRqlzwZz0VwVzRzFMMCEb4igsiWCW2FeBDm4DQIJxXr
+         KEToa5m5bIR6JmObEkr98YCR6TrfHD0voUNSh64nEGdSwCQoLM0AjLH2P7x9h/4FO1No
+         bCBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e3PLukBtwfovlwrmcqI4UjQoWYEr1ObJtYBgUzUoDAs=;
+        b=HqPCGry95LC082blssOS5fqxr/vHezNsG9z3y7JQT4s1D2R17CDP8gmKxNHdOJV6pz
+         DWslbfQO2qMFYpBQJCemawOeaMqTg6uVdwF9jhUfP6zECGrylYhNA8mB90dK4CNNC4Fg
+         DNAfwTR8a3hTvGYc8UfQf4XQd3bMm9c90ZAATvqf3KjiJYgBmaPj1WFIGK9qL1XALVud
+         5BypyyOTktAMuqGpfEDxbNpMarYEplvsdlQWd0LtVt9d6gWx6cB7RkVGZevg93hpiwFS
+         KAQkvYs5UC1arRAZ5fRrxrRjfO2Z37VfohhVuEmHoel5kH+JeLJ/zdyiX2cUC8J+07bi
+         tDmw==
+X-Gm-Message-State: AOAM533ifvwPrAgq/rshN13PZTs4OxgpYLxdFqWCkV9ZCQL3m+VhtEJI
+        TFDDQ9mS+KvceNcs4BW4mMk=
+X-Google-Smtp-Source: ABdhPJycx/kO9uFt2e1KqYq1bD0y+GYGwvsUObhfNQ/vM2YEzor8nrTr9ioB0mbALGJZknXhs5T8Dg==
+X-Received: by 2002:a5d:4e03:0:b0:1e3:3a59:48ae with SMTP id p3-20020a5d4e03000000b001e33a5948aemr14430468wrt.634.1645428532396;
+        Sun, 20 Feb 2022 23:28:52 -0800 (PST)
+Received: from localhost.localdomain ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id a1sm51008492wrf.42.2022.02.20.23.28.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Feb 2022 23:28:52 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     andrzej.hajda@intel.com
+Cc:     narmstrong@baylibre.com, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        maxime@cerno.tech, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH] drm/bridge: anx7625: switch to devm_drm_of_get_bridge
+Date:   Mon, 21 Feb 2022 08:28:35 +0100
+Message-Id: <20220221072835.10032-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 21 Feb 2022 08:28:06 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Kavyasree.Kotagiri@microchip.com
-Cc:     Manohar.Puri@microchip.com, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, arnd@arndb.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com,
-        olof@lixom.net, robh+dt@kernel.org, soc@kernel.org
-Subject: Re: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board
- pcb8291
-In-Reply-To: <CO1PR11MB4865E667CB963C8B5DE5000B923A9@CO1PR11MB4865.namprd11.prod.outlook.com>
-References: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
- <20220209184600.1230365-1-michael@walle.cc>
- <CO1PR11MB486534A2987684CC7402CE06922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
- <97bcfa4417d5f8c41cc6aa1e411c8747@walle.cc>
- <CO1PR11MB4865E913D083C1D80D4E1F80922F9@CO1PR11MB4865.namprd11.prod.outlook.com>
- <b98f40575f88a0bbf205d628f73cccac@walle.cc>
- <CO1PR11MB4865B205DF4490D37E96524792379@CO1PR11MB4865.namprd11.prod.outlook.com>
- <426e31325066cfa9f0ab50860289e12a@walle.cc>
- <CO1PR11MB4865E667CB963C8B5DE5000B923A9@CO1PR11MB4865.namprd11.prod.outlook.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <ee1e083c29359f2afb21d0b1457cdce0@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-02-21 06:44, schrieb Kavyasree.Kotagiri@microchip.com:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the
->> content is safe
->> 
->> Am 2022-02-18 13:28, schrieb Kavyasree.Kotagiri@microchip.com:
->> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know
->> >> the
->> >> content is safe
->> >>
->> >> Am 2022-02-10 12:52, schrieb Kavyasree.Kotagiri@microchip.com:
->> >> >> EXTERNAL EMAIL: Do not click links or open attachments unless you
->> know
->> >> >> the
->> >> >> content is safe
->> >> >>
->> >> >> Am 2022-02-10 10:40, schrieb Kavyasree.Kotagiri@microchip.com:
->> >> >> >> EXTERNAL EMAIL: Do not click links or open attachments unless you
->> >> know
->> >> >> >> the
->> >> >> >> content is safe
->> >> >>
->> >> >> >> > +     clocks {
->> >> >> >> [..]
->> >> >> >> > +
->> >> >> >> > +             nic_clk: nic_clk {
->> >> >> >>
->> >> >> >> What does nic_clk stand for? If I had to guess, it
->> >> >> >> has something to do with network. But..
->> >> >> >>
->> >> >> > NIC clock is the clock used by AXI, AHB fabric and APB bridges which
->> >> >> > connects all the peripherals.
->> >> >> > It is named so because the AXI fabric is based on NIC400 IP from ARM
->> >> >>
->> >> >> Ok, thanks for clarification.
->> >> >>
->> >> >>
->> >> >> >> > +             watchdog: watchdog@e0090000 {
->> >> >> >> > +                     compatible = "snps,dw-wdt";
->> >> >> >> > +                     reg = <0xe0090000 0x1000>;
->> >> >> >> > +                     interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
->> >> >> >> > +                     clocks = <&nic_clk>;
->> >> >> >>
->> >> >> >> Btw. can we disable all nodes by default and enable them
->> >> >> >> in the board dts files?
->> >> >> > I would like to have only board specific nodes enabled in dts files
->> >> >> > and rest of them in dtsi file
->> >> >>
->> >> >> And how do you know which ones are board specific? E.g. I would like
->> >> >> to add our board which is also based on the lan9668. Maybe I don't
->> >> >> want a watchdog (or whatever node). Of course I could use
->> >> >>
->> >> >> &watchdog {
->> >> >>    status = "disabled";
->> >> >> };
->> >> >>
->> >> >> But IMHO opt-in is better. At least thats what we are doing for
->> >> >> the layerscape over on arm64.
->> >> >>
->> >> > Basically, I am disabling only the nodes which have pinctrl settings
->> >> > in dtsi file
->> >> > and enable in dts to make sure there are no conflicts on pins on the
->> >> > board.
->> >>
->> >> Thats not what I'm asking. I would like to see *optional* nodes
->> >> disabled by default. Whether the watchdog is optional might be
->> >> debatable, but what about the usb controller and the qspi
->> >> controller? They don't have shared pins AFAIK, so according
->> >> to your rule, they will be enabled by default and each board
->> >> which doesn't have anything connected on these pins would have
->> >> to disabled it.
->> >>
->> >> Please keep in mind that this .dtsi will also be used by boards
->> >> not manufactured by microchip.
->> >>
->> > I agree with you - "disabling optional nodes in dtsi"
->> > I have gone through all the nodes.
->> > Confirmed and moved enabling optional node watchdog
->> > to dts file.
->> 
->> Great, I just wanted to get to an agreement how the optional nodes
->> should be handled. If it turns out, some are still optional or
->> some aren't. It is easy to just mark them disabled and enable them
->> in the board dts files in a later patch.
->> 
-> Sorry, I didn't get you. Do you still see optional nodes in my dtsi?
-> I think GPIO controller, Interrupt controller, XDMA, timers, AES, SHA, 
-> TRNG are
-> not optional. So, I keep them enabled in dtsi.
+The function "drm_of_find_panel_or_bridge" has been deprecated in
+favor of "devm_drm_of_get_bridge".
 
-Agreed. Once you posted a new version, I'll post an RFC (or a regular
-patch depending how fast this is picked up) for our board based on the
-LAN966x.
+Switch to the new function and reduce boilerplate.
 
--michael
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+---
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 2346dbcc505f..dfeb800751d5 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -1333,8 +1333,6 @@ static int anx7625_parse_dt(struct device *dev,
+ 			    struct anx7625_platform_data *pdata)
+ {
+ 	struct device_node *np = dev->of_node, *ep0;
+-	struct drm_panel *panel;
+-	int ret;
+ 	int bus_type, mipi_lanes;
+ 
+ 	anx7625_get_swing_setting(dev, pdata);
+@@ -1371,18 +1369,14 @@ static int anx7625_parse_dt(struct device *dev,
+ 	if (of_property_read_bool(np, "analogix,audio-enable"))
+ 		pdata->audio_en = 1;
+ 
+-	ret = drm_of_find_panel_or_bridge(np, 1, 0, &panel, NULL);
+-	if (ret < 0) {
+-		if (ret == -ENODEV)
++	pdata->panel_bridge = devm_drm_of_get_bridge(dev, np, 1, 0);
++	if (IS_ERR(pdata->panel_bridge)) {
++		if (PTR_ERR(pdata->panel_bridge) == -ENODEV)
+ 			return 0;
+-		return ret;
+-	}
+-	if (!panel)
+-		return -ENODEV;
+ 
+-	pdata->panel_bridge = devm_drm_panel_bridge_add(dev, panel);
+-	if (IS_ERR(pdata->panel_bridge))
+ 		return PTR_ERR(pdata->panel_bridge);
++	}
++
+ 	DRM_DEV_DEBUG_DRIVER(dev, "get panel node.\n");
+ 
+ 	return 0;
+-- 
+2.25.1
+

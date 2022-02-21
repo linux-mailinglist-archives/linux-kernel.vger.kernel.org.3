@@ -2,95 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C184BE9E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9FB4BE9F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiBURmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 12:42:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50138 "EHLO
+        id S229770AbiBURp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 12:45:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiBURlU (ORCPT
+        with ESMTP id S229880AbiBURnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 12:41:20 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0415326AF5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:40:27 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id e2so12328109ljq.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:40:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xEuyjFrM9XwMrClBWbdS/xCWNoJfoXGzRHNpn8EHVe8=;
-        b=EvNZ4JN1PESakWqiNhVErkDTF8azxH7NkFupvW940zHErR8fbltkz8fMM3erSSAkua
-         SVbCJAx5x99BdcVvfCbuOi6eihjGnlTLy32uvWD8S02HQh5C6ntMJgadw9JJD95XWSe6
-         FYzVQ3ZEYFWfNS89g5hsLbaL7gMl81XsfzVoLPHnM9uLGNjC7SYyyUsU2Qwm8B1zZjsQ
-         opiHv5yc1+vfHrioBcT0Su4bI0Uo1cnoWi2VTaIof4su3DEprcGE3luxKhgjxtku3cgW
-         c2nbRU/0MTpXeAhcfUwbGoQnEXkyZAFRlK6RJqkkSBHexXVWxzj39goDYznkCJbICaie
-         0Eeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xEuyjFrM9XwMrClBWbdS/xCWNoJfoXGzRHNpn8EHVe8=;
-        b=h5XNiAI4C3571zeotAvBPsG71HFnZVDXhwL0BJ7dgJqhXOdq2yrJ8zUSZIFfYJEnqz
-         55U9RN+mBvVNzEElKKkbY/GLMqklsZZktT/ZSzg8xUqjFNeydaMcqUQSdeMwxRPk6/sr
-         Qine4EC05Xgzt0KGykVDJj7pBxI+HBE0dGXzcBfjQbndTvM1p0VdOiVUUiYf5yO3x3Qs
-         cWdP/WU6tO8c3ONLrATIYVA7WgpNBwz7YkSgRPU1RYBrd2CT78cgjSSGbuEKTrnN2uCp
-         0XbQI3cMk/ie23tCPKLIwjRS8/72eZds3lYl08E4nFHf1RRx1o5LGAxPESa0SiGQRtnA
-         p3pw==
-X-Gm-Message-State: AOAM530sTGXOxmX8McXDeyC+VB0RrXBOjlsANwLZ5KbrzRKIKFMFYWa3
-        TgA4uyu7ftWTAtnwtzWAnJqVSw==
-X-Google-Smtp-Source: ABdhPJyMpVcgpGjVDM1tE/A1ztFlJLD5B8plNpKCAvS4oAZ2w0SyAG5LTlNyt81HXrIEaGhcKYOhLA==
-X-Received: by 2002:a2e:a4ae:0:b0:244:dac8:4590 with SMTP id g14-20020a2ea4ae000000b00244dac84590mr8981123ljm.231.1645465224829;
-        Mon, 21 Feb 2022 09:40:24 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id v18sm1417023ljb.98.2022.02.21.09.40.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 09:40:24 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 748CC1039EE; Mon, 21 Feb 2022 20:41:21 +0300 (+03)
-Date:   Mon, 21 Feb 2022 20:41:21 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v10 21/45] x86/mm: Add support to validate memory when
- changing C-bit
-Message-ID: <20220221174121.ceeplpoaz63q72kv@box>
-References: <Ygz88uacbwuTTNat@zn.tnic.mbx>
- <20220216160457.1748381-1-brijesh.singh@amd.com>
+        Mon, 21 Feb 2022 12:43:12 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B87275D1;
+        Mon, 21 Feb 2022 09:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645465351; x=1677001351;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=cXvdgGsEYjDDo8W85DMQeWzgALSB8YnpM/5dMY4R+Us=;
+  b=M+tfwcTH1EBdhD28eiZzvkhzQJgZDilhw3zu6VAFp6vG7sidCSEfX+os
+   9hgjkkDA1aLXqkqlf3MNMIhLBcj+h9Iy+l3fUg25bDo5MVGF++BHLxFhX
+   XrmBSeq1HjhL7bb11wzSav0iL4o+3lpXvWXGXdRJwLiEa8hJF71KLEI8q
+   EbrdAQfrFsXVsT2pp6r66lkTti8SVHDRqBT6roF9QkkT+cHGnAalpxxxG
+   HwS/eL3oeP3IT42tFEUMpzhc7ReE3hJMuZp/1P6QpeJwWTVgpDnP/chuc
+   Zw3nevysfGIq+427NzdQWmbEtcAw8jkexX9AAXnaJ22b4uiFX5Jw9Q500
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251732018"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="251732018"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 09:42:21 -0800
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="638624692"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 09:42:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nMCgf-006rvG-59;
+        Mon, 21 Feb 2022 19:41:25 +0200
+Date:   Mon, 21 Feb 2022 19:41:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
+Message-ID: <YhPOxL++yhNHh+xH@smile.fi.intel.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220216160457.1748381-1-brijesh.singh@amd.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220221162652.103834-1-clement.leger@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,63 +78,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 10:04:57AM -0600, Brijesh Singh wrote:
-> @@ -287,6 +301,7 @@ struct x86_platform_ops {
->  	struct x86_legacy_features legacy;
->  	void (*set_legacy_features)(void);
->  	struct x86_hyper_runtime hyper;
-> +	struct x86_guest guest;
->  };
+On Mon, Feb 21, 2022 at 05:26:42PM +0100, Clément Léger wrote:
+> The purpose of this work is to allow i2c muxes and adapters to be
+> usable with devices that are described with software_node. A solution
+> for this is to use the fwnode API which works with both device-tree,
+> ACPI and software node. In this series, functions are added to retrieve
+> i2c_adapter from fwnode and to create new mux adapters from fwnode.
+> 
+> This series is part of a larger changeset that touches multiple
+> subsystems. series will be sent separately for each subsystems since
+> the amount of modified file is quite large. The following cover letter
+> gives an overview of this work:
+> 
+> ---
+> 
+> The LAN966X SoC can either run it's own Linux system or be plugged in
+> a PCIe slot as a PCIe switch. When running with a Linux system, a
+> device-tree description is used to describe the system. However, when
+> plugged in a PCIe slot (on a x86), there is no device-tree support and
+> the peripherals that are present must be described in some other way.
+> 
+> Reusing the existing drivers is of course mandatory and they should
+> also be able to work without device-tree description. We decided to
+> describe this card using software nodes and a MFD device. Indeed, the
+> MFD subsystem allows to describe such systems using struct mfd_cells
+> and mfd_add_devices(). This support also allows to attach a
+> software_node description which might be used by fwnode API in drivers
+> and subsystems.
+> 
+> We thought about adding CONFIG_OF to x86 and potentially describe this
+> card using device-tree overlays but it introduce other problems that
+> also seems difficult to solve (overlay loading without base
+> device-tree, fixup of IRQs, adresses, and so on) and CONFIG_OF is not
+> often enabled on x86 to say the least.
 
-I used 'cc' instead of 'guest'. 'guest' looks too generic.
+Why it can't be described by SSDT overlay (if the x86 platform in question is
+ACPI based)?
 
-Also, I'm not sure why not to use pointer to ops struct instead of stroing
-them directly in x86_platform. Yes, it is consistent with 'hyper', but I
-don't see it as a strong argument.
+> TLDR: I know the series touches a lot of different files and has big
+> implications, but it turns out software_nodes looks the "best" way of
+> achieving this goal and has the advantage of converting some subsystems
+> to be node agnostics, also allowing some ACPI factorization. Criticism
+> is of course welcome as I might have overlooked something way simpler !
+> 
+> ---
+> 
+> This series introduce a number of changes in multiple subsystems to
+> allow registering and using devices that are described with a
+> software_node description attached to a mfd_cell, making them usable
+> with the fwnode API. It was needed to modify many subsystem where
+> CONFIG_OF was tightly integrated through the use of of_xlate()
+> functions and other of_* calls. New calls have been added to use fwnode
+> API and thus be usable with a wider range of nodes. Functions that are
+> used to get the devices (pinctrl_get, clk_get and so on) also needed
+> to be changed to use the fwnode API internally.
+> 
+> For instance, the clk framework has been modified to add a
+> fwnode_xlate() callback and a new named fwnode_clk_add_hw_provider()
+> has been added. This function will register a clock using
+> fwnode_xlate() callback. Note that since the fwnode API is compatible
+> with devices that have a of_node member set, it will still be possible
+> to use the driver and get the clocks with CONFIG_OF enabled
+> configurations.
 
->  
-> index b4072115c8ef..a55477a6e578 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -2012,8 +2012,15 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
->  	 */
->  	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
->  
-> +	/* Notify HV that we are about to set/clr encryption attribute. */
-> +	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
-> +
->  	ret = __change_page_attr_set_clr(&cpa, 1);
+How does this all is compatible with ACPI approaches?
+I mean we usually do not reintroduce 1:1 DT schemas in ACPI.
 
-This doesn't cover difference in flushing requirements. Can we get it too?
+I think the CCF should be converted to use fwnode APIs and meanwhile
+we may discuss how to deal with clocks on ACPI platforms, because
+it may be a part of the power management methods.
 
->  
-> +	/* Notify HV that we have succesfully set/clr encryption attribute. */
-> +	if (!ret)
-> +		x86_platform.guest.enc_status_change_finish(addr, numpages, enc);
-> +
+> In some subsystems, it was possible to keep OF related function by
+> wrapping the fwnode ones. It is not yet sure if both support
+> (device-tree and fwnode) should still continue to coexists. For instance
+> if fwnode_xlate() and of_xlate() should remain since the fwnode version
+> also supports device-tree. Removing of_xlate() would of course require
+> to modify all drivers that uses it.
+> 
+> Here is an excerpt of the lan966x description when used as a PCIe card.
+> The complete description is visible at [2]. This part only describe the
+> flexcom controller and the fixed-clock that is used as an input clock.
+> 
+> static const struct property_entry ddr_clk_props[] = {
+>         PROPERTY_ENTRY_U32("clock-frequency", 30000000),
 
-Any particular reason you moved it above cpa_flush()? I don't think it
-makes a difference for TDX, but still.
+>         PROPERTY_ENTRY_U32("#clock-cells", 0),
 
->  	/*
->  	 * After changing the encryption attribute, we need to flush TLBs again
->  	 * in case any speculative TLB caching occurred (but no need to flush
-> @@ -2023,12 +2030,6 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
->  	 */
->  	cpa_flush(&cpa, 0);
->  
-> -	/*
-> -	 * Notify hypervisor that a given memory range is mapped encrypted
-> -	 * or decrypted.
-> -	 */
-> -	notify_range_enc_status_changed(addr, numpages, enc);
-> -
->  	return ret;
->  }
->  
+Why this is used?
+
+>         {}
+> };
+> 
+> static const struct software_node ddr_clk_node = {
+>         .name = "ddr_clk",
+>         .properties = ddr_clk_props,
+> };
+> 
+> static const struct property_entry lan966x_flexcom_props[] = {
+>         PROPERTY_ENTRY_U32("atmel,flexcom-mode", ATMEL_FLEXCOM_MODE_TWI),
+>         PROPERTY_ENTRY_REF("clocks", &ddr_clk_node),
+>         {}
+> };
+> 
+> static const struct software_node lan966x_flexcom_node = {
+>         .name = "lan966x-flexcom",
+>         .properties = lan966x_flexcom_props,
+> };
+> 
+> ...
+> 
+> static struct resource lan966x_flexcom_res[] = {
+>         [0] = {
+>                 .flags = IORESOURCE_MEM,
+>                 .start = LAN966X_DEV_ADDR(FLEXCOM_0_FLEXCOM_REG),
+>                 .end = LAN966X_DEV_ADDR(FLEXCOM_0_FLEXCOM_REG),
+>         },
+> };
+> 
+> ...
+> 
+> static struct mfd_cell lan966x_pci_mfd_cells[] = {
+>         ...
+>         [LAN966X_DEV_DDR_CLK] = {
+>                 .name = "of_fixed_clk",
+>                 .swnode = &ddr_clk_node,
+>         },
+>         [LAN966X_DEV_FLEXCOM] = {
+>                 .name = "atmel_flexcom",
+>                 .num_resources = ARRAY_SIZE(lan966x_flexcom_res),
+>                 .resources = lan966x_flexcom_res,
+>                 .swnode = &lan966x_flexcom_node,
+>         },
+>         ...
+> },
+> 
+> And finally registered using:
+> 
+> ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+>                            lan966x_pci_mfd_cells,
+>                            ARRAY_SIZE(lan966x_pci_mfd_cells), pci_base, irq_base,
+>                            irq_domain);
+> 
+> With the modifications that have been made on this tree, it is now
+> possible to probe such description using existing platform drivers,
+> providing that they have been modified a bit to retrieve properties
+> using fwnode API and using the fwnode_xlate() callback instead of
+> of_xlate().
+> 
+> This series has been tested on a x86 kernel build without CONFIG_OF.
+> Another kernel was also built with COMPILE_TEST and CONFIG_OF support
+> to build as most drivers as possible. It was also tested on a sparx5
+> arm64 with CONFIG_OF. However, it was not tested with an ACPI
+> description evolved enough to validate all the changes.
+> 
+> A branch containing all theses modifications can be seen at [1] along
+> with a PCIe driver [2] which describes the card using software nodes.
+> Modifications that are on this branch are not completely finished (ie,
+> subsystems modifications for fwnode have not been factorized with OF
+> for all of them) in absence of feedback on the beginning of this work
+> from the community.
+> 
+> [1] https://github.com/clementleger/linux/tree/fwnode_support
+> [2] https://github.com/clementleger/linux/blob/fwnode_support/drivers/mfd/lan966x_pci_mfd.c
+> 
+> Clément Léger (10):
+>   property: add fwnode_match_node()
+>   property: add fwnode_get_match_data()
+>   base: swnode: use fwnode_get_match_data()
+>   property: add a callback parameter to fwnode_property_match_string()
+>   property: add fwnode_property_read_string_index()
+>   i2c: fwnode: add fwnode_find_i2c_adapter_by_node()
+>   i2c: of: use fwnode_get_i2c_adapter_by_node()
+>   i2c: mux: pinctrl: remove CONFIG_OF dependency and use fwnode API
+>   i2c: mux: add support for fwnode
+>   net: sfp: add support for fwnode
+> 
+>  drivers/base/property.c             | 133 ++++++++++++++++++++++++++--
+>  drivers/base/swnode.c               |   1 +
+>  drivers/i2c/Makefile                |   1 +
+>  drivers/i2c/i2c-core-fwnode.c       |  40 +++++++++
+>  drivers/i2c/i2c-core-of.c           |  30 -------
+>  drivers/i2c/i2c-mux.c               |  39 ++++----
+>  drivers/i2c/muxes/Kconfig           |   1 -
+>  drivers/i2c/muxes/i2c-mux-pinctrl.c |  21 ++---
+>  drivers/net/phy/sfp.c               |  44 +++------
+>  include/linux/i2c.h                 |   7 +-
+>  include/linux/property.h            |   9 ++
+>  11 files changed, 225 insertions(+), 101 deletions(-)
+>  create mode 100644 drivers/i2c/i2c-core-fwnode.c
+> 
 > -- 
-> 2.25.1
+> 2.34.1
 > 
 
 -- 
- Kirill A. Shutemov
+With Best Regards,
+Andy Shevchenko
+
+

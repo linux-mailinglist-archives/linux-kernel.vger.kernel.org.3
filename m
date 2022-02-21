@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9344BE68E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832114BE06F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351602AbiBUJqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:46:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47998 "EHLO
+        id S1349681AbiBUJ02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:26:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351455AbiBUJhP (ORCPT
+        with ESMTP id S1348931AbiBUJQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:37:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB03539838;
-        Mon, 21 Feb 2022 01:15:52 -0800 (PST)
+        Mon, 21 Feb 2022 04:16:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F153207D;
+        Mon, 21 Feb 2022 01:07:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2B5C2CE0E8B;
-        Mon, 21 Feb 2022 09:15:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11116C340E9;
-        Mon, 21 Feb 2022 09:15:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A0FB6112F;
+        Mon, 21 Feb 2022 09:07:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E77C340E9;
+        Mon, 21 Feb 2022 09:07:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434947;
-        bh=jtUIix8YE2fPyTynYc8qgmVp0lmvN90YoZI+APmQjhk=;
+        s=korg; t=1645434423;
+        bh=IN67m1B3ZHGoI5hJjuFTOuQe6kviWvaaiA1kqxlzm1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dakPIsi5v9Fpt19+V776r3v5s6HWvvrABY6SmV/x1FFfmEY9xwCetAmNCEjHj291e
-         oSZHy0uuRDIH4nG3njpl8xBCnbXZyrxMNxacm+SyJIFDibt6RJuBqcX48UjUZHL9Cp
-         +uatGR9L8VQXVKm9cGWGh811ebw4tWkx4zBAaTf0=
+        b=FAzui8dcCvl9O26SaZyfTqct0WTDyRUzMv2pdRBfjMxf8nKJjg7idm0Y0bt3X/U8q
+         2fP4H5/FaqJSRLZF/Or6TpA8aNRgBTPkTT5ZBweIogdAlUVUmXtwh0vxW9/fxJsG/D
+         I9cl+xQ+VRBS5odSBVnSBeddwTOdGg0ImJE4VGhw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <anup@brainfault.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 155/196] ksmbd: fix same UniqueId for dot and dotdot entries
+Subject: [PATCH 5.10 095/121] irqchip/sifive-plic: Add missing thead,c900-plic match string
 Date:   Mon, 21 Feb 2022 09:49:47 +0100
-Message-Id: <20220221084936.120538087@linuxfoundation.org>
+Message-Id: <20220221084924.402858559@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +59,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-[ Upstream commit 97550c7478a2da93e348d8c3075d92cddd473a78 ]
+[ Upstream commit 1d4df649cbb4b26d19bea38ecff4b65b10a1bbca ]
 
-ksmbd sets the inode number to UniqueId. However, the same UniqueId for
-dot and dotdot entry is set to the inode number of the parent inode.
-This patch set them using the current inode and parent inode.
+The thead,c900-plic has been used in opensbi to distinguish
+PLIC [1]. Although PLICs have the same behaviors in Linux,
+they are different hardware with some custom initializing in
+firmware(opensbi).
 
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Qute opensbi patch commit-msg by Samuel:
+
+  The T-HEAD PLIC implementation requires setting a delegation bit
+  to allow access from S-mode. Now that the T-HEAD PLIC has its own
+  compatible string, set this bit automatically from the PLIC driver,
+  instead of reaching into the PLIC's MMIO space from another driver.
+
+[1]: https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd62653b9fb31623a42ced45f38ea6
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Samuel Holland <samuel@sholland.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220130135634.1213301-3-guoren@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ksmbd/smb_common.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-sifive-plic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/ksmbd/smb_common.c b/fs/ksmbd/smb_common.c
-index 707490ab1f4c4..f2e7e3a654b34 100644
---- a/fs/ksmbd/smb_common.c
-+++ b/fs/ksmbd/smb_common.c
-@@ -308,14 +308,17 @@ int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
- 	for (i = 0; i < 2; i++) {
- 		struct kstat kstat;
- 		struct ksmbd_kstat ksmbd_kstat;
-+		struct dentry *dentry;
+diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+index 926e55d838cb1..bd99ee0ae433d 100644
+--- a/drivers/irqchip/irq-sifive-plic.c
++++ b/drivers/irqchip/irq-sifive-plic.c
+@@ -400,3 +400,4 @@ static int __init plic_init(struct device_node *node,
  
- 		if (!dir->dot_dotdot[i]) { /* fill dot entry info */
- 			if (i == 0) {
- 				d_info->name = ".";
- 				d_info->name_len = 1;
-+				dentry = dir->filp->f_path.dentry;
- 			} else {
- 				d_info->name = "..";
- 				d_info->name_len = 2;
-+				dentry = dir->filp->f_path.dentry->d_parent;
- 			}
- 
- 			if (!match_pattern(d_info->name, d_info->name_len,
-@@ -327,7 +330,7 @@ int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
- 			ksmbd_kstat.kstat = &kstat;
- 			ksmbd_vfs_fill_dentry_attrs(work,
- 						    user_ns,
--						    dir->filp->f_path.dentry->d_parent,
-+						    dentry,
- 						    &ksmbd_kstat);
- 			rc = fn(conn, info_level, d_info, &ksmbd_kstat);
- 			if (rc)
+ IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
+ IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
++IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init); /* for firmware driver */
 -- 
 2.34.1
 

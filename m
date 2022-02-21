@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9874BE01D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FBA4BE4BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242702AbiBUJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:13:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36352 "EHLO
+        id S1351005AbiBUJkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:40:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347840AbiBUJI7 (ORCPT
+        with ESMTP id S1350409AbiBUJeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:08:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E983C121;
-        Mon, 21 Feb 2022 01:01:10 -0800 (PST)
+        Mon, 21 Feb 2022 04:34:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E70A29826;
+        Mon, 21 Feb 2022 01:14:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47BCA611D0;
-        Mon, 21 Feb 2022 09:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24555C340E9;
-        Mon, 21 Feb 2022 09:01:08 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6CB8ACE0E93;
+        Mon, 21 Feb 2022 09:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDC1C340EB;
+        Mon, 21 Feb 2022 09:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434069;
-        bh=FHa1Kgt/KDt63TTXl8ZR/xZPmr5N3APcqR18hi6Jeh0=;
+        s=korg; t=1645434811;
+        bh=BNVmtUYVnmuinax3C7ACSj9zjInJX74bgTglaPhnYKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eclIVfU4ogweqn84ufAspcUZQMmaQF0AGEFVMtXa+Tj57xgckf6ms3Ydiuuy0SzZG
-         lSLhUF3uUrtPQ9DhTQkdriv1W2D8diuOcRrI1mVl9ylnNlriZpWShdef4JlltMQpnk
-         i0yveGiNLKNaRbO3nKHr7sQZLHBHKN2QDg4Hs58Y=
+        b=uMadomUPY9+dE4GKOaPpqoKdxd/5dRu3Y37rV06kW3u0ySZluQyGNB3v9OxJYX0Un
+         x0ISlwB9Lt7YCyyOaNHETtgvLe04gTG/gLS4w636P8bIkcyvACdpm4RM30ftcA3LU3
+         Ob9BVZu5vyYxHSh6O5uVBFyl4LXLQ6wyhUbTAQ1A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        Christian Eggers <ceggers@arri.de>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.4 51/80] mtd: rawnand: gpmi: dont leak PM reference in error path
+Subject: [PATCH 5.15 139/196] mtd: phram: Prevent divide by zero bug in phram_setup()
 Date:   Mon, 21 Feb 2022 09:49:31 +0100
-Message-Id: <20220221084917.251541092@linuxfoundation.org>
+Message-Id: <20220221084935.577841576@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Eggers <ceggers@arri.de>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 9161f365c91614e5a3f5c6dcc44c3b1b33bc59c0 upstream.
+commit 3e3765875b1b8864898603768fd5c93eeb552211 upstream.
 
-If gpmi_nfc_apply_timings() fails, the PM runtime usage counter must be
-dropped.
+The problem is that "erasesize" is a uint64_t type so it might be
+non-zero but the lower 32 bits are zero so when it's truncated,
+"(uint32_t)erasesize", then that value is zero. This leads to a
+divide by zero bug.
 
-Reported-by: Pavel Machek <pavel@denx.de>
-Fixes: f53d4c109a66 ("mtd: rawnand: gpmi: Add ERR007117 protection for nfc_apply_timings")
-Signed-off-by: Christian Eggers <ceggers@arri.de>
-Cc: stable@vger.kernel.org
+Avoid the bug by delaying the divide until after we have validated
+that "erasesize" is non-zero and within the uint32_t range.
+
+Fixes: dc2b3e5cbc80 ("mtd: phram: use div_u64_rem to stop overwrite len in phram_setup")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220125081619.6286-1-ceggers@arri.de
+Link: https://lore.kernel.org/linux-mtd/20220121115505.GI1978@kadam
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/mtd/devices/phram.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -2442,7 +2442,7 @@ static int gpmi_nfc_exec_op(struct nand_
- 		this->hw.must_apply_timings = false;
- 		ret = gpmi_nfc_apply_timings(this);
- 		if (ret)
--			return ret;
-+			goto out_pm;
+--- a/drivers/mtd/devices/phram.c
++++ b/drivers/mtd/devices/phram.c
+@@ -264,15 +264,19 @@ static int phram_setup(const char *val)
+ 		}
  	}
  
- 	dev_dbg(this->dev, "%s: %d instructions\n", __func__, op->ninstrs);
-@@ -2571,6 +2571,7 @@ unmap:
+-	if (erasesize)
+-		div_u64_rem(len, (uint32_t)erasesize, &rem);
+-
+ 	if (len == 0 || erasesize == 0 || erasesize > len
+-	    || erasesize > UINT_MAX || rem) {
++	    || erasesize > UINT_MAX) {
+ 		parse_err("illegal erasesize or len\n");
+ 		ret = -EINVAL;
+ 		goto error;
+ 	}
++
++	div_u64_rem(len, (uint32_t)erasesize, &rem);
++	if (rem) {
++		parse_err("len is not multiple of erasesize\n");
++		ret = -EINVAL;
++		goto error;
++	}
  
- 	this->bch = false;
- 
-+out_pm:
- 	pm_runtime_mark_last_busy(this->dev);
- 	pm_runtime_put_autosuspend(this->dev);
- 
+ 	ret = register_device(name, start, len, (uint32_t)erasesize);
+ 	if (ret)
 
 

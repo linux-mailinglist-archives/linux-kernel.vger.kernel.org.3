@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6584BE6B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708E24BE4B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351433AbiBUJhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:37:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48110 "EHLO
+        id S1349278AbiBUJZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:25:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349149AbiBUJ1g (ORCPT
+        with ESMTP id S1348681AbiBUJLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:36 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82923237D0;
-        Mon, 21 Feb 2022 01:12:35 -0800 (PST)
+        Mon, 21 Feb 2022 04:11:35 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CCE27CE1;
+        Mon, 21 Feb 2022 01:03:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ED383CE0E86;
-        Mon, 21 Feb 2022 09:12:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56BEC340E9;
-        Mon, 21 Feb 2022 09:12:31 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A80DECE0E8C;
+        Mon, 21 Feb 2022 09:03:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3FAC340F3;
+        Mon, 21 Feb 2022 09:03:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434752;
-        bh=l6glye0ey3HnMvkVgZkD6bH+w42s+t5NCkMcO4e/d2U=;
+        s=korg; t=1645434234;
+        bh=G/siQvji3HalXvhT5qhWku0cnOVs8mMRnHkwATbA3bA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UTlZxY2zE44Hbpu3G7aYotFEc6V9WbPbjzxqW9gjossv71dX4OCNcORyPKeuH+eRs
-         9LSY94clqa+IFki4OGD6mBlzhu82MOH7km2l5CPmgOQlEF/F5fRcEzooFSem9fL8UL
-         fROtoiaZUKmGn9cOmPLjeti7t506PDOihtO+XIk4=
+        b=y9Ujw6nYkvF6rmQWIeR9zF/UbKajR9yFw4zyZRNUoA/4Fc0QdRsSbXa0Ej5g+gxBu
+         B6bN7saOi+kZTkUpwQbKR/H8bnTpBrrCeiNu24mHftdi7j1jp+QlUSop1pZb2MeDXb
+         yiDeTFVP+VVl1cKYEHoSoaswmxE0A/M/1szOzFdU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.15 086/196] mac80211: mlme: check for null after calling kmemdup
+        stable@vger.kernel.org, Yang Xu <xuyang2018.jy@fujitsu.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 026/121] selftests/zram01.sh: Fix compression ratio calculation
 Date:   Mon, 21 Feb 2022 09:48:38 +0100
-Message-Id: <20220221084933.803648563@linuxfoundation.org>
+Message-Id: <20220221084922.051259795@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,118 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Yang Xu <xuyang2018.jy@fujitsu.com>
 
-commit a72c01a94f1d285a274219d36e2a17b4846c0615 upstream.
+[ Upstream commit d18da7ec3719559d6e74937266d0416e6c7e0b31 ]
 
-As the possible failure of the alloc, the ifmgd->assoc_req_ies might be
-NULL pointer returned from kmemdup().
-Therefore it might be better to free the skb and return error in order
-to fail the association, like ieee80211_assoc_success().
-Also, the caller, ieee80211_do_assoc(), needs to deal with the return
-value from ieee80211_send_assoc().
+zram01 uses `free -m` to measure zram memory usage. The results are no
+sense because they are polluted by all running processes on the system.
 
-Fixes: 4d9ec73d2b78 ("cfg80211: Report Association Request frame IEs in association events")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220105081559.2387083-1-jiasheng@iscas.ac.cn
-[fix some paths to be errors, not success]
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+We Should only calculate the free memory delta for the current process.
+So use the third field of /sys/block/zram<id>/mm_stat to measure memory
+usage instead. The file is available since kernel 4.1.
+
+orig_data_size(first): uncompressed size of data stored in this disk.
+compr_data_size(second): compressed size of data stored in this disk
+mem_used_total(third): the amount of memory allocated for this disk
+
+Also remove useless zram cleanup call in zram_fill_fs and so we don't
+need to cleanup zram twice if fails.
+
+Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/mlme.c |   29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+ tools/testing/selftests/zram/zram01.sh | 30 +++++++-------------------
+ 1 file changed, 8 insertions(+), 22 deletions(-)
 
---- a/net/mac80211/mlme.c
-+++ b/net/mac80211/mlme.c
-@@ -664,7 +664,7 @@ static void ieee80211_add_he_ie(struct i
- 	ieee80211_ie_build_he_6ghz_cap(sdata, skb);
+diff --git a/tools/testing/selftests/zram/zram01.sh b/tools/testing/selftests/zram/zram01.sh
+index 114863d9fb876..e9e9eb777e2c7 100755
+--- a/tools/testing/selftests/zram/zram01.sh
++++ b/tools/testing/selftests/zram/zram01.sh
+@@ -33,8 +33,6 @@ zram_algs="lzo"
+ 
+ zram_fill_fs()
+ {
+-	local mem_free0=$(free -m | awk 'NR==2 {print $4}')
+-
+ 	for i in $(seq 0 $(($dev_num - 1))); do
+ 		echo "fill zram$i..."
+ 		local b=0
+@@ -45,29 +43,17 @@ zram_fill_fs()
+ 			b=$(($b + 1))
+ 		done
+ 		echo "zram$i can be filled with '$b' KB"
+-	done
+ 
+-	local mem_free1=$(free -m | awk 'NR==2 {print $4}')
+-	local used_mem=$(($mem_free0 - $mem_free1))
++		local mem_used_total=`awk '{print $3}' "/sys/block/zram$i/mm_stat"`
++		local v=$((100 * 1024 * $b / $mem_used_total))
++		if [ "$v" -lt 100 ]; then
++			 echo "FAIL compression ratio: 0.$v:1"
++			 ERR_CODE=-1
++			 return
++		fi
+ 
+-	local total_size=0
+-	for sm in $zram_sizes; do
+-		local s=$(echo $sm | sed 's/M//')
+-		total_size=$(($total_size + $s))
++		echo "zram compression ratio: $(echo "scale=2; $v / 100 " | bc):1: OK"
+ 	done
+-
+-	echo "zram used ${used_mem}M, zram disk sizes ${total_size}M"
+-
+-	local v=$((100 * $total_size / $used_mem))
+-
+-	if [ "$v" -lt 100 ]; then
+-		echo "FAIL compression ratio: 0.$v:1"
+-		ERR_CODE=-1
+-		zram_cleanup
+-		return
+-	fi
+-
+-	echo "zram compression ratio: $(echo "scale=2; $v / 100 " | bc):1: OK"
  }
  
--static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
-+static int ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
- {
- 	struct ieee80211_local *local = sdata->local;
- 	struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;
-@@ -684,6 +684,7 @@ static void ieee80211_send_assoc(struct
- 	enum nl80211_iftype iftype = ieee80211_vif_type_p2p(&sdata->vif);
- 	const struct ieee80211_sband_iftype_data *iftd;
- 	struct ieee80211_prep_tx_info info = {};
-+	int ret;
- 
- 	/* we know it's writable, cast away the const */
- 	if (assoc_data->ie_len)
-@@ -697,7 +698,7 @@ static void ieee80211_send_assoc(struct
- 	chanctx_conf = rcu_dereference(sdata->vif.chanctx_conf);
- 	if (WARN_ON(!chanctx_conf)) {
- 		rcu_read_unlock();
--		return;
-+		return -EINVAL;
- 	}
- 	chan = chanctx_conf->def.chan;
- 	rcu_read_unlock();
-@@ -748,7 +749,7 @@ static void ieee80211_send_assoc(struct
- 			(iftd ? iftd->vendor_elems.len : 0),
- 			GFP_KERNEL);
- 	if (!skb)
--		return;
-+		return -ENOMEM;
- 
- 	skb_reserve(skb, local->hw.extra_tx_headroom);
- 
-@@ -1029,15 +1030,22 @@ skip_rates:
- 		skb_put_data(skb, assoc_data->ie + offset, noffset - offset);
- 	}
- 
--	if (assoc_data->fils_kek_len &&
--	    fils_encrypt_assoc_req(skb, assoc_data) < 0) {
--		dev_kfree_skb(skb);
--		return;
-+	if (assoc_data->fils_kek_len) {
-+		ret = fils_encrypt_assoc_req(skb, assoc_data);
-+		if (ret < 0) {
-+			dev_kfree_skb(skb);
-+			return ret;
-+		}
- 	}
- 
- 	pos = skb_tail_pointer(skb);
- 	kfree(ifmgd->assoc_req_ies);
- 	ifmgd->assoc_req_ies = kmemdup(ie_start, pos - ie_start, GFP_ATOMIC);
-+	if (!ifmgd->assoc_req_ies) {
-+		dev_kfree_skb(skb);
-+		return -ENOMEM;
-+	}
-+
- 	ifmgd->assoc_req_ies_len = pos - ie_start;
- 
- 	drv_mgd_prepare_tx(local, sdata, &info);
-@@ -1047,6 +1055,8 @@ skip_rates:
- 		IEEE80211_SKB_CB(skb)->flags |= IEEE80211_TX_CTL_REQ_TX_STATUS |
- 						IEEE80211_TX_INTFL_MLME_CONN_TX;
- 	ieee80211_tx_skb(sdata, skb);
-+
-+	return 0;
- }
- 
- void ieee80211_send_pspoll(struct ieee80211_local *local,
-@@ -4451,6 +4461,7 @@ static int ieee80211_do_assoc(struct iee
- {
- 	struct ieee80211_mgd_assoc_data *assoc_data = sdata->u.mgd.assoc_data;
- 	struct ieee80211_local *local = sdata->local;
-+	int ret;
- 
- 	sdata_assert_lock(sdata);
- 
-@@ -4471,7 +4482,9 @@ static int ieee80211_do_assoc(struct iee
- 	sdata_info(sdata, "associate with %pM (try %d/%d)\n",
- 		   assoc_data->bss->bssid, assoc_data->tries,
- 		   IEEE80211_ASSOC_MAX_TRIES);
--	ieee80211_send_assoc(sdata);
-+	ret = ieee80211_send_assoc(sdata);
-+	if (ret)
-+		return ret;
- 
- 	if (!ieee80211_hw_check(&local->hw, REPORTS_TX_ACK_STATUS)) {
- 		assoc_data->timeout = jiffies + IEEE80211_ASSOC_TIMEOUT;
+ check_prereqs
+-- 
+2.34.1
+
 
 

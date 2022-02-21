@@ -2,203 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3C94BEACF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C85B4BEB45
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbiBUSPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:15:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41728 "EHLO
+        id S232256AbiBUSNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:13:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbiBUSMe (ORCPT
+        with ESMTP id S232231AbiBUSL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:12:34 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3B2215;
-        Mon, 21 Feb 2022 10:03:36 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id s14so13658950edw.0;
-        Mon, 21 Feb 2022 10:03:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JSzbeyJ3wmi72yBQpp06Oo4N3LKGxxejN6QrBogGfGY=;
-        b=ImHynHr4TWu/Jy3NY3KN2p5AbC6LhDNHrAmrMj7BkA8vKIuHo+2S3dB7i1FcXXu6xT
-         Aw9mYdUevGkiHxzsqJpQzsOa6VkXKDSRN2d+pUvSj/xSdO9NRZlYRdRokOH3uYu8++8S
-         5SCfSWWB0EJc854KDzKK2iFAF2GSLXVkmybj6xQ2DjB1S+SKB+PfBLjVmePk4EUgIQ8U
-         SjKX2rB2nrNULYbIXBg6zlWB+tEelS3RtuXdkrIpEkBkbnlkWKaEmLse7xjaEE4ET57G
-         fnjczkAFH8kjtR2qjQuokfibC3+s0gk7Kn3zwutU9Lpwrgv/jMTwJ4OgXyumcIrhF+TZ
-         Xctg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JSzbeyJ3wmi72yBQpp06Oo4N3LKGxxejN6QrBogGfGY=;
-        b=RkcurywT6jXQXQIcEbLUmbKLlCCW0/R9HKr35URmRAALOJf/tKqe3+2HqbbjPC6dwh
-         dNY87OPu+hAFFhp8AAYNz+5mAc0cEW4nw4z6NDEDGKtoj9oSSUO//egTHnkWDQ+MR0tx
-         GzgDngzEUulNcQ7RpkkdfppRZfe92Ld76/XryFkc/A0kpaXQgIRQn29SihUiqGnzSYS1
-         IUt/dVsgx8mfRFvHPeUbG7GEhz6GMAue8eNHJr9eXLWEbTRlNGvvPjIHuCbiJsK/UdfO
-         JuHC5heKW60Z0JdLE/AYmPlzdzZjjDFBNmYYL091LX5PrMg6Q+KOQOpZ/30FC21jrCt8
-         q3Iw==
-X-Gm-Message-State: AOAM531635p+Ncj1WMn7Nyo1a11lAELUPTrJrt6q4OflqjO2CBO10yMY
-        DTDXVk/LsvUKWqIZoTRL3QySMYbB8oM=
-X-Google-Smtp-Source: ABdhPJyRHVKif8YwOMbAOuZy8/YcSv7z4RmtG1Sdw/znjf5FGmjpGfTCWwd3HIqBOrfosroOHlBazg==
-X-Received: by 2002:a05:6402:350e:b0:412:d02f:9004 with SMTP id b14-20020a056402350e00b00412d02f9004mr16805706edd.59.1645466615399;
-        Mon, 21 Feb 2022 10:03:35 -0800 (PST)
-Received: from [192.168.8.198] ([85.255.234.184])
-        by smtp.gmail.com with ESMTPSA id nc40sm3123736ejc.127.2022.02.21.10.03.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 10:03:35 -0800 (PST)
-Message-ID: <ec1647f3-2c37-04be-bdbd-ab78b9f07a03@gmail.com>
-Date:   Mon, 21 Feb 2022 18:00:17 +0000
+        Mon, 21 Feb 2022 13:11:26 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C274113D23;
+        Mon, 21 Feb 2022 10:01:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645466509; x=1677002509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=sPqVwHORdIP+AJZPTEY+6JZ34Z1q+gC7lEhyccc3C9s=;
+  b=idiQfNBX1z29w3l1eyKvEtrDaFm7KOkZ0BPo/FaXf6XKNp0vkKs+6DOS
+   WT5qgwJQrulGfijUv+ibkRnn6g6wjAWUJvwtfYt+mpiEKl+GyDx5SlkzU
+   /wUR2kTusnsI/5jvxRVJdSPcNvfPcIhjYaLap6wCAwHoAkDUH5+jX/eyT
+   uyzgpsGfPqAo5q4eKKxH29mqe4Sih0U3MU4JKwdGK79o1bdsP+vwhlF7F
+   9fteBMvTIotyu/6GHCdT8jqJUxDDP0/ZolDlUeVnOudd6NONpZBWjjHxp
+   uyDM6pJhpGUXmRv+opFdcISA5lAwHZ0/2u5fjCTfQCq3ztt+Nw8elIV6s
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="235091315"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="235091315"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:01:49 -0800
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="547418308"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:01:44 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nMCzU-006sBe-2m;
+        Mon, 21 Feb 2022 20:00:52 +0200
+Date:   Mon, 21 Feb 2022 20:00:51 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 06/10] i2c: fwnode: add fwnode_find_i2c_adapter_by_node()
+Message-ID: <YhPTUxvaqd+1/23a@smile.fi.intel.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+ <20220221162652.103834-7-clement.leger@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 4/4] io_uring: pre-increment f_pos on rw
-Content-Language: en-US
-To:     Dylan Yudaken <dylany@fb.com>, Jens Axboe <axboe@kernel.dk>,
-        io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com
-References: <20220221141649.624233-1-dylany@fb.com>
- <20220221141649.624233-5-dylany@fb.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20220221141649.624233-5-dylany@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220221162652.103834-7-clement.leger@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 14:16, Dylan Yudaken wrote:
-> In read/write ops, preincrement f_pos when no offset is specified, and
-> then attempt fix up the position after IO completes if it completed less
-> than expected. This fixes the problem where multiple queued up IO will all
-> obtain the same f_pos, and so perform the same read/write.
-> 
-> This is still not as consistent as sync r/w, as it is able to advance the
-> file offset past the end of the file. It seems it would be quite a
-> performance hit to work around this limitation - such as by keeping track
-> of concurrent operations - and the downside does not seem to be too
-> problematic.
-> 
-> The attempt to fix up the f_pos after will at least mean that in situations
-> where a single operation is run, then the position will be consistent.
-> 
-> Co-developed-by: Jens Axboe <axboe@kernel.dk>
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> Signed-off-by: Dylan Yudaken <dylany@fb.com>
-> ---
->   fs/io_uring.c | 81 ++++++++++++++++++++++++++++++++++++++++++---------
->   1 file changed, 68 insertions(+), 13 deletions(-)
-> 
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index abd8c739988e..a951d0754899 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -3066,21 +3066,71 @@ static inline void io_rw_done(struct kiocb *kiocb, ssize_t ret)
+On Mon, Feb 21, 2022 at 05:26:48PM +0100, Clément Léger wrote:
+> Add fwnode_find_i2c_adapter_by_node() which allows to retrieve a i2c
+> adapter using a fwnode. Since dev_fwnode() uses the fwnode provided by
+> the of_node member of the device, this will also work for devices were
+> the of_node has been set and not the fwnode field.
 
-[...]
+...
 
-> +			return false;
->   		}
->   	}
-> -	return is_stream ? NULL : &kiocb->ki_pos;
-> +	*ppos = is_stream ? NULL : &kiocb->ki_pos;
-> +	return false;
-> +}
-> +
-> +static inline void
-> +io_kiocb_done_pos(struct io_kiocb *req, struct kiocb *kiocb, u64 actual)
-
-That's a lot of inlining, I wouldn't be surprised if the compiler
-will even refuse to do that.
-
-io_kiocb_done_pos() {
-	// rest of it
-}
-
-inline io_kiocb_done_pos() {
-	if (!(flags & CUR_POS));
-		return;
-	__io_kiocb_done_pos();
-}
-
-io_kiocb_update_pos() is huge as well
-
+> +static int fwnode_dev_or_parent_node_match(struct device *dev, const void *data)
 > +{
-> +	u64 expected;
+
+> +	if (dev_fwnode(dev) == data)
+> +		return 1;
+
+This can use corresponding match function from bus.h.
+
+> +	if (dev->parent)
+> +		return dev_fwnode(dev->parent) == data;
 > +
-> +	if (likely(!(req->flags & REQ_F_CUR_POS)))
-> +		return;
-> +
-> +	expected = req->rw.len;
-> +	if (actual >= expected)
-> +		return;
-> +
-> +	/*
-> +	 * It's not definitely safe to lock here, and the assumption is,
-> +	 * that if we cannot lock the position that it will be changing,
-> +	 * and if it will be changing - then we can't update it anyway
-> +	 */
-> +	if (req->file->f_mode & FMODE_ATOMIC_POS
-> +		&& !mutex_trylock(&req->file->f_pos_lock))
-> +		return;
-> +
-> +	/*
-> +	 * now we want to move the pointer, but only if everything is consistent
-> +	 * with how we left it originally
-> +	 */
-> +	if (req->file->f_pos == kiocb->ki_pos + (expected - actual))
-> +		req->file->f_pos = kiocb->ki_pos;
+> +	return 0;
 
-I wonder, is it good enough / safe to just assign it considering that
-the request was executed outside of locks? vfs_seek()?
+The same.
 
-> +
-> +	/* else something else messed with f_pos and we can't do anything */
-> +
-> +	if (req->file->f_mode & FMODE_ATOMIC_POS)
-> +		mutex_unlock(&req->file->f_pos_lock);
->   }
-
-Do we even care about races while reading it? E.g.
-pos = READ_ONCE();
-
->   
-> -	ppos = io_kiocb_update_pos(req, kiocb);
-> -
->   	ret = rw_verify_area(READ, req->file, ppos, req->result);
->   	if (unlikely(ret)) {
->   		kfree(iovec);
-> +		io_kiocb_done_pos(req, kiocb, 0);
-
-Why do we update it on failure?
-
-[...]
-
-> -	ppos = io_kiocb_update_pos(req, kiocb);
-> -
->   	ret = rw_verify_area(WRITE, req->file, ppos, req->result);
->   	if (unlikely(ret))
->   		goto out_free;
-> @@ -3858,6 +3912,7 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
->   		return ret ?: -EAGAIN;
->   	}
->   out_free:
-> +	io_kiocb_done_pos(req, kiocb, 0);
-
-Looks weird. It appears we don't need it on failure and
-successes are covered by kiocb_done() / ->ki_complete
-
->   	/* it's reportedly faster than delegating the null check to kfree() */
->   	if (iovec)
->   		kfree(iovec);
+> +}
 
 -- 
-Pavel Begunkov
+With Best Regards,
+Andy Shevchenko
+
+

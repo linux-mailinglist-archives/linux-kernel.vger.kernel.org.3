@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1719A4BDC6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF114BE098
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbiBUI6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:58:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57860 "EHLO
+        id S1347699AbiBUJIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:08:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345762AbiBUI5f (ORCPT
+        with ESMTP id S1347433AbiBUJBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:57:35 -0500
+        Mon, 21 Feb 2022 04:01:23 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD8C25581;
-        Mon, 21 Feb 2022 00:54:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F95286CB;
+        Mon, 21 Feb 2022 00:56:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC99FB80E9E;
-        Mon, 21 Feb 2022 08:54:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 060BDC340E9;
-        Mon, 21 Feb 2022 08:54:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 150E9B80EB6;
+        Mon, 21 Feb 2022 08:56:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192D5C340EB;
+        Mon, 21 Feb 2022 08:56:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433649;
-        bh=ZXfptfbfLIGaA/F3dGQ/v7yrP0LfyyOjTDxTY7A/FtM=;
+        s=korg; t=1645433777;
+        bh=HCtdl9fNMs3hqVtvX/xSaIwtj1S6Z3+sdQrickaFRmg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tGp8OWfdLhMonySNvzQHKMwZoMoLDolzgCxPG/kk985EYy2Uv1D5D+aHpsK5XFAPA
-         thKb7fl/qSP4mUjsk8yJLaziQjMkpVYf/6PeUFcjPv1S6qdGGVchIukXoE0Bs33u1u
-         sm/aTorqURyQu/iJDLlXSNuE+1nFDQg/H6AVV+Cs=
+        b=oQeuXXD3kfXEHX6VK0O/SmepuJ/342m5CM5EEK3CIS2Hy3esZMnp3F6RCS0/YkDsh
+         N913XETRTZZpSxVi5Bkb/lZdbt/A6SgttZ75wy1s7nPoMr0LU0gTHIZaf+cWNeeTXl
+         myhGzByenaGJuMkogq3v+kSa6j3ubuu6RrL1VQ24=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
         Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 40/45] NFS: Do not report writeback errors in nfs_getattr()
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [PATCH 4.19 38/58] NFS: LOOKUP_DIRECTORY is also ok with symlinks
 Date:   Mon, 21 Feb 2022 09:49:31 +0100
-Message-Id: <20220221084911.757205547@linuxfoundation.org>
+Message-Id: <20220221084913.105252338@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
-References: <20220221084910.454824160@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,40 +58,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit d19e0183a88306acda07f4a01fedeeffe2a2a06b ]
+commit e0caaf75d443e02e55e146fd75fe2efc8aed5540 upstream.
 
-The result of the writeback, whether it is an ENOSPC or an EIO, or
-anything else, does not inhibit the NFS client from reporting the
-correct file timestamps.
+Commit ac795161c936 (NFSv4: Handle case where the lookup of a directory
+fails) [1], part of Linux since 5.17-rc2, introduced a regression, where
+a symbolic link on an NFS mount to a directory on another NFS does not
+resolve(?) the first time it is accessed:
 
-Fixes: 79566ef018f5 ("NFS: Getattr doesn't require data sync semantics")
+Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Fixes: ac795161c936 ("NFSv4: Handle case where the lookup of a directory fails")
 Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Tested-by: Donald Buczek <buczek@molgen.mpg.de>
 Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/inode.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ fs/nfs/dir.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
-index ad01d4fb795ee..5774dc2c5c2bf 100644
---- a/fs/nfs/inode.c
-+++ b/fs/nfs/inode.c
-@@ -740,11 +740,8 @@ int nfs_getattr(const struct path *path, struct kstat *stat,
- 
- 	trace_nfs_getattr_enter(inode);
- 	/* Flush out writes to the server in order to update c/mtime.  */
--	if (S_ISREG(inode->i_mode)) {
--		err = filemap_write_and_wait(inode->i_mapping);
--		if (err)
--			goto out;
--	}
-+	if (S_ISREG(inode->i_mode))
-+		filemap_write_and_wait(inode->i_mapping);
- 
- 	/*
- 	 * We may force a getattr if the user cares about atime.
--- 
-2.34.1
-
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -1629,14 +1629,14 @@ no_open:
+ 	if (!res) {
+ 		inode = d_inode(dentry);
+ 		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
+-		    !S_ISDIR(inode->i_mode))
++		    !(S_ISDIR(inode->i_mode) || S_ISLNK(inode->i_mode)))
+ 			res = ERR_PTR(-ENOTDIR);
+ 		else if (inode && S_ISREG(inode->i_mode))
+ 			res = ERR_PTR(-EOPENSTALE);
+ 	} else if (!IS_ERR(res)) {
+ 		inode = d_inode(res);
+ 		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
+-		    !S_ISDIR(inode->i_mode)) {
++		    !(S_ISDIR(inode->i_mode) || S_ISLNK(inode->i_mode))) {
+ 			dput(res);
+ 			res = ERR_PTR(-ENOTDIR);
+ 		} else if (inode && S_ISREG(inode->i_mode)) {
 
 

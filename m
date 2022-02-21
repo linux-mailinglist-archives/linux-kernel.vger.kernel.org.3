@@ -2,152 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318794BDC8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA67E4BE436
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357012AbiBULzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:55:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54238 "EHLO
+        id S1357025AbiBUL4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:56:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356977AbiBULzi (ORCPT
+        with ESMTP id S241057AbiBUL4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:55:38 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B082F14092
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:55:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645444515; x=1676980515;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xtEvAXlznXfq+n86L7vUawxXnTP/M/7+XuTruWUM/Fk=;
-  b=HX9mP2ZMcDZu54XNGf0dCIjOo65vA/Q6+ehQe6dmHMbI6V9EP4eEGvIP
-   HXB1RUFcldlkqWQZ2E40rZV9/fv/IzXSMY865bSj/jThSi2FwvBEb8j8A
-   K+FgJRjO59mUbdZMzIXUrRZur1mHFt9h+Z04QWDrxSkCCdj8vWEDXkvX/
-   yHGM+1ahgBIIIrwwsflykZcACdH6KMoOUFWYpdVIIJeyS7epQy2RhpBCT
-   i3LQxxWikLkL6OC/HRBJXyD1iD3HLOrgW5pa37l5DfQNmNUz+VA35pM2u
-   sR2TKXkTkiX+k9t0HzwB4xL1iFt6tquhmsFlyZwGJMObp2Y9t0LJ7+G4v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="232115671"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="232115671"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:55:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="507612280"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 03:55:14 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nM7Hd-0001Yc-HZ; Mon, 21 Feb 2022 11:55:13 +0000
-Date:   Mon, 21 Feb 2022 19:54:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arnd-playground:generic-get_user-prototype 3/3]
- include/linux/uaccess.h:546:4: warning: variable 'v' set but not used
-Message-ID: <202202211934.btUGYgRN-lkp@intel.com>
+        Mon, 21 Feb 2022 06:56:18 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB461EEE8;
+        Mon, 21 Feb 2022 03:55:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645444519;
+        bh=vB9e0s/XLYK57e1m4pHossv3dKKvG9cVckBgccyxB/4=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Z3vaRQu6Yete4we3x+kcNxmQdKplN8XwYcCaQzAqcj4X53OHCv9jQ+utUrhUj5wDR
+         d66uuI6zlW7tx74gCqPpAk3pbQjRwqaflIbDC7BwVEMz/xE5OoikYALNZSidaJmsJx
+         zxdrhDcD7HO24pJLR+3zbHnfpIQnUU7T2nGyh1Ag=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRmfo-1no3US3ydW-00TCnw; Mon, 21
+ Feb 2022 12:55:19 +0100
+Date:   Mon, 21 Feb 2022 12:55:15 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, christophe.leroy@csgroup.eu,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        digetx@gmail.com, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 08/11] i2c: npcm: Correct register access width
+Message-ID: <YhN9o7IKl7M974Db@latitude>
+References: <20220220035321.3870-1-warp5tw@gmail.com>
+ <20220220035321.3870-9-warp5tw@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="atvLe0wtstfQwleA"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220220035321.3870-9-warp5tw@gmail.com>
+X-Provags-ID: V03:K1:3zCblU8IFjRoGL3Lqw6q+AUxItgEZUawI+DgaSGPnD+rb191X8q
+ 7XgtAPeYJttwuVdwgIrVeNNQjN4kPGVP3f1+9lj3dWZo8KMYgyY4oGbZHJ+9Zr85mED7XPk
+ je3/BQn6jgwnL9dm03xyxyNGocjmwC8+1MwJahQ9RiggSMRws2e0XXibcMr/4JlmtO1coem
+ SP2mASSZkA5Vhp0uUjZXw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dEnf+Vyi2s4=:xZBSf2e4fR3ckdR3q+Tqzc
+ G3vBuBeZvqIOK7xA3gEWg14IO22q732Wk8656RU8ElYK5qVYuiHSDsaDh6rjI6DrponbcT5sQ
+ kOGyNIdOwFtyplEBuR7lYwhZgmKfDkM6FQAnZNhAJPgTaAsdn7iq0RNvDXocEn2Je+CFmXZPg
+ P9Aa/svea1DUHf7pOXweBQK03O5EePIZfyYct5e47n0WxJBFt5wlU+HzIXFScykqJlc3B1t7E
+ 9b2SI6Uv9/o5Yb8jieO3NaYU4rfdqvLrcZxpWxretuKfR9Z3bmV5COW5wlWDKdiQXGlptoN5V
+ RDUHv6A6dLQLXLJqtLoveidWFJbiPFu4+8cLYBJbOYuhNlbo+dSyl5Y4uBoeaP83M5mxvI4VS
+ UVxVkx8bWQo8DiteowWVjst0C7J3TRvMml0UhCUevfgKLe3od1dxrBuS1xS6HMcXEF56dsF6E
+ ei/NenKMQhnuCaRU4MPFBsNg28kr+4ACDMkND/2lk6TKIauSRvWS0CQeAMOnvtptsTtb2jQc5
+ 280AilNBRFDnBbhtipkFzsMXanPZwnILqhyUX6H6qasGGRm3na6WEb/BRULsrRYAI2IOGmbTK
+ xb0V8gGUqsDCsbuUZkxJv5osne2jneR20vZjp9iGf+MyaABavxamI8PZrgh2cbrcgak8d/iSQ
+ Zbt2x4XvY2rRf1OjeOq4gMDgYyXvR0diJhH8HTz+F+ylGrusiGaQq7OGVjRSqRipi5AELArgl
+ e3WA4RpQm0Gn8RQQZq8Ss54UYhXiIwEGE2881sFXnCAkkbxFZVZP65+FXlbCMqt8tOUzM7P0Q
+ XsvmcnI/IB+s/StbVqZBj1HHQU0Zh1LnZ0t8zFeEuhUd5KxD5aF/JDF583NCwRQtsgL/G6LeO
+ IQrqT4w6FEOtWxw81hsPLtRVlHlfbsZ8rWAUSgnTwztZIRDrSLMXG1beDXyLluDqUgcdEofC8
+ 7jzs2c2/AyIfJynX9O9HDCP4oQueUFtAg1b7ppkb8meUzWCGxlejxcCutC8nztEsmUKO2mQGF
+ ASTdJY9ST6Pa85EyXZ8IZahb2nZzMoJ03/qCS1A+ie2uMk0H+9UmYW7E1a+z5tYPiNZyau/mr
+ lNZTC0d1DKdlUc=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git generic-get_user-prototype
-head:   23cc2497095e8c0820d042f28c507aded31674c1
-commit: 23cc2497095e8c0820d042f28c507aded31674c1 [3/3] uaccess: add new generic get_user/put_user
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220221/202202211934.btUGYgRN-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?id=23cc2497095e8c0820d042f28c507aded31674c1
-        git remote add arnd-playground https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git
-        git fetch --no-tags arnd-playground generic-get_user-prototype
-        git checkout 23cc2497095e8c0820d042f28c507aded31674c1
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vdso/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--atvLe0wtstfQwleA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All warnings (new ones prefixed by >>):
+On Sun, Feb 20, 2022 at 11:53:18AM +0800, Tyrone Ting wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
+>=20
+> Use ioread8 instead of ioread32 to access the SMBnCTL3 register since
+> the register is only 8-bit wide.
+>=20
+> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
+r")
+> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-npcm7xx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-np=
+cm7xx.c
+> index ee4757eff4b3..4715afcf9ac4 100644
+> --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> @@ -360,14 +360,14 @@ static int npcm_i2c_get_SCL(struct i2c_adapter *_ad=
+ap)
+>  {
+>  	struct npcm_i2c *bus =3D container_of(_adap, struct npcm_i2c, adap);
+> =20
+> -	return !!(I2CCTL3_SCL_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
+> +	return !!(I2CCTL3_SCL_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+>  }
+> =20
+>  static int npcm_i2c_get_SDA(struct i2c_adapter *_adap)
+>  {
+>  	struct npcm_i2c *bus =3D container_of(_adap, struct npcm_i2c, adap);
+> =20
+> -	return !!(I2CCTL3_SDA_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
+> +	return !!(I2CCTL3_SDA_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+>  }
+> =20
+>  static inline u16 npcm_i2c_get_index(struct npcm_i2c *bus)
 
-   In file included from include/linux/sched/task.h:11,
-                    from include/linux/sched/signal.h:9,
-                    from include/linux/rcuwait.h:6,
-                    from include/linux/irq_work.h:6,
-                    from arch/x86/include/asm/nmi.h:5,
-                    from include/linux/nmi.h:212,
-                    from arch/x86/include/asm/mshyperv.h:6,
-                    from include/clocksource/hyperv_timer.h:18,
-                    from arch/x86/include/asm/vdso/gettimeofday.h:21,
-                    from include/vdso/datapage.h:137,
-                    from arch/x86/entry/vdso/vdso32/../../../../../lib/vdso/gettimeofday.c:5,
-                    from arch/x86/entry/vdso/vdso32/../vclock_gettime.c:15,
-                    from arch/x86/entry/vdso/vdso32/vclock_gettime.c:29:
-   include/linux/uaccess.h: In function 'raw_put_user_u64':
->> include/linux/uaccess.h:546:4: warning: variable 'v' set but not used [-Wunused-but-set-variable]
-     546 |  } v;
-         |    ^
-   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:29:
-   arch/x86/entry/vdso/vdso32/../vclock_gettime.c: At top level:
-   arch/x86/entry/vdso/vdso32/../vclock_gettime.c:70:5: warning: no previous prototype for '__vdso_clock_gettime64' [-Wmissing-prototypes]
-      70 | int __vdso_clock_gettime64(clockid_t clock, struct __kernel_timespec *ts)
-         |     ^~~~~~~~~~~~~~~~~~~~~~
+
+Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 
 
-vim +/v +546 include/linux/uaccess.h
+Thanks,
+Jonathan
 
-   538	
-   539	#ifndef CONFIG_64BIT
-   540	static __always_inline int
-   541	raw_put_user_u64(u64 __user *to, u64 val, size_t size, bool check)
-   542	{
-   543		union {
-   544			u64 v64;
-   545			u32 v32[2];
- > 546		} v;
-   547		int err;
-   548	
-   549		if (check) {
-   550			if (!access_ok(to, size))
-   551				return -EFAULT;
-   552			might_fault();
-   553		}
-   554		if (0)
-   555			goto out;
-   556	
-   557		__uaccess_begin_nospec();
-   558	
-   559		v.v64 = val;
-   560		err = 0;
-   561	#ifdef __put_user_asm_8
-   562		__put_user_asm_8(val, to, err, out);
-   563	#else
-   564		__put_user_asm_4(v.v32[0], (u32 __user*)to, err, out);
-   565		if (!err)
-   566			__put_user_asm_4(v.v32[1], (u32 __user*)to + 1, err, out);
-   567	#endif
-   568		__uaccess_end();
-   569		return err;
-   570	out:
-   571		__uaccess_end();
-   572		return -EFAULT;
-   573	}
-   574	#define raw_put_user_word(to, val, err, out)				\
-   575		__builtin_choose_expr(sizeof(*to) == 8,				\
-   576			raw_put_user_u64, raw_put_user_word)(to, val, err, out)
-   577	#endif
-   578	
+--atvLe0wtstfQwleA
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmITfaMACgkQCDBEmo7z
+X9u9dg//QF1S0S3Sayv/Y5POeRg7pV8i8t2OEfH9zCVaR+vr1PoolReqj3k2Ej9d
+gYEjSbp+xbmuChkgWTj06BPc0LR319rmq26SUjHUNJJEEKFjFSzzMzPkNNau3+/O
+47dyiOmGPMAlGDBM7JQwbk5Iry+rAiSSO+C0B4KDCkLitGsYXWzEIzyKQiAAwnpp
+E5VX32do5W2wj0gUGQE2ccvPMf4bxFOmrRDgZ5TaVD9W+FSnZOX2aks9RNCub/FA
+mucJMKSuTeC7TWQZplf3OitMVV/mcc14vZEq8gz8V+oR9LC+Z6jqyR7VTnvYao6S
+Umc4BO0hNVt4otrcUfMfpveIUn7Hl9rCOzu3TkGH347urAX06UqLvPrGR/OZ+eN9
+OLL6/idFdnpjZGeJuZKhF1cpOg3EXBtKLJLVIH0Q2S01Xime8JE/7tsfjDbTgEi0
+e9A0lQgsr+gH5Fg1ch0/HSvB9JQkMJLPX9IRZmnzLBDTR/wgpk9wj+xHQ4eu+DaI
+i45J9mdU5SpKJUenOxUT6OEqMLo7BZYNC0TiNJAj9Z9o80+0D+grf3PQGAbkRrXd
+ANHC36MNKQoaVL9UepM/MApMjCbdGexFolHO+x1OAj+wc5ByBEx02761DbY3tGTy
++uoLcZbn3xZJBgEh9ItMeq6thuErcvsUgTKtiCYMSJcYu+whDLU=
+=4Mfv
+-----END PGP SIGNATURE-----
+
+--atvLe0wtstfQwleA--

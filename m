@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708E24BE4B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 942114BDEAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349278AbiBUJZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:25:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34776 "EHLO
+        id S1352801AbiBUJ4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:56:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348681AbiBUJLf (ORCPT
+        with ESMTP id S1352887AbiBUJsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:11:35 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CCE27CE1;
-        Mon, 21 Feb 2022 01:03:57 -0800 (PST)
+        Mon, 21 Feb 2022 04:48:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CE6193EC;
+        Mon, 21 Feb 2022 01:20:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A80DECE0E8C;
-        Mon, 21 Feb 2022 09:03:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3FAC340F3;
-        Mon, 21 Feb 2022 09:03:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4659608C4;
+        Mon, 21 Feb 2022 09:20:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8152C340E9;
+        Mon, 21 Feb 2022 09:20:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434234;
-        bh=G/siQvji3HalXvhT5qhWku0cnOVs8mMRnHkwATbA3bA=;
+        s=korg; t=1645435258;
+        bh=bN043WedEhBYdSu+Ret7cNF7R/i2stufqlZsoE2K6Es=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y9Ujw6nYkvF6rmQWIeR9zF/UbKajR9yFw4zyZRNUoA/4Fc0QdRsSbXa0Ej5g+gxBu
-         B6bN7saOi+kZTkUpwQbKR/H8bnTpBrrCeiNu24mHftdi7j1jp+QlUSop1pZb2MeDXb
-         yiDeTFVP+VVl1cKYEHoSoaswmxE0A/M/1szOzFdU=
+        b=teak/tgj4gnJFFmOuILb/GUQNQXIw0/Ealqsu06K4E6zZgE2juWcJqnW16nIgtkGA
+         K2hn5DmHQNNTTyh9VjWj89iGMX2tI/L43I9xPWzkt32zchSvapHCklUA5bYwZffJBu
+         NIoJ4leV38dQSCyXPpU7fRpCtz0y+eAop2ksECjg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Xu <xuyang2018.jy@fujitsu.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 026/121] selftests/zram01.sh: Fix compression ratio calculation
-Date:   Mon, 21 Feb 2022 09:48:38 +0100
-Message-Id: <20220221084922.051259795@linuxfoundation.org>
+        stable@vger.kernel.org, Yi Chen <yiche@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.16 100/227] selftests: netfilter: disable rp_filter on router
+Date:   Mon, 21 Feb 2022 09:48:39 +0100
+Message-Id: <20220221084938.206979851@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,84 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Xu <xuyang2018.jy@fujitsu.com>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit d18da7ec3719559d6e74937266d0416e6c7e0b31 ]
+commit bbe4c0896d25009a7c86285d2ab024eed4374eea upstream.
 
-zram01 uses `free -m` to measure zram memory usage. The results are no
-sense because they are polluted by all running processes on the system.
+Some distros may enable rp_filter by default. After ns1 change addr to
+10.0.2.99 and set default router to 10.0.2.1, while the connected router
+address is still 10.0.1.1. The router will not reply the arp request
+from ns1. Fix it by setting the router's veth0 rp_filter to 0.
 
-We Should only calculate the free memory delta for the current process.
-So use the third field of /sys/block/zram<id>/mm_stat to measure memory
-usage instead. The file is available since kernel 4.1.
+Before the fix:
+  # ./nft_fib.sh
+  PASS: fib expression did not cause unwanted packet drops
+  Netns nsrouter-HQkDORO2 fib counter doesn't match expected packet count of 1 for 1.1.1.1
+  table inet filter {
+          chain prerouting {
+                  type filter hook prerouting priority filter; policy accept;
+                  ip daddr 1.1.1.1 fib saddr . iif oif missing counter packets 0 bytes 0 drop
+                  ip6 daddr 1c3::c01d fib saddr . iif oif missing counter packets 0 bytes 0 drop
+          }
+  }
 
-orig_data_size(first): uncompressed size of data stored in this disk.
-compr_data_size(second): compressed size of data stored in this disk
-mem_used_total(third): the amount of memory allocated for this disk
+After the fix:
+  # ./nft_fib.sh
+  PASS: fib expression did not cause unwanted packet drops
+  PASS: fib expression did drop packets for 1.1.1.1
+  PASS: fib expression did drop packets for 1c3::c01d
 
-Also remove useless zram cleanup call in zram_fill_fs and so we don't
-need to cleanup zram twice if fails.
-
-Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 82944421243e ("selftests: netfilter: add fib test case")
+Signed-off-by: Yi Chen <yiche@redhat.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/zram/zram01.sh | 30 +++++++-------------------
- 1 file changed, 8 insertions(+), 22 deletions(-)
+ tools/testing/selftests/netfilter/nft_fib.sh |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/zram/zram01.sh b/tools/testing/selftests/zram/zram01.sh
-index 114863d9fb876..e9e9eb777e2c7 100755
---- a/tools/testing/selftests/zram/zram01.sh
-+++ b/tools/testing/selftests/zram/zram01.sh
-@@ -33,8 +33,6 @@ zram_algs="lzo"
+--- a/tools/testing/selftests/netfilter/nft_fib.sh
++++ b/tools/testing/selftests/netfilter/nft_fib.sh
+@@ -174,6 +174,7 @@ test_ping() {
+ ip netns exec ${nsrouter} sysctl net.ipv6.conf.all.forwarding=1 > /dev/null
+ ip netns exec ${nsrouter} sysctl net.ipv4.conf.veth0.forwarding=1 > /dev/null
+ ip netns exec ${nsrouter} sysctl net.ipv4.conf.veth1.forwarding=1 > /dev/null
++ip netns exec ${nsrouter} sysctl net.ipv4.conf.veth0.rp_filter=0 > /dev/null
  
- zram_fill_fs()
- {
--	local mem_free0=$(free -m | awk 'NR==2 {print $4}')
--
- 	for i in $(seq 0 $(($dev_num - 1))); do
- 		echo "fill zram$i..."
- 		local b=0
-@@ -45,29 +43,17 @@ zram_fill_fs()
- 			b=$(($b + 1))
- 		done
- 		echo "zram$i can be filled with '$b' KB"
--	done
+ sleep 3
  
--	local mem_free1=$(free -m | awk 'NR==2 {print $4}')
--	local used_mem=$(($mem_free0 - $mem_free1))
-+		local mem_used_total=`awk '{print $3}' "/sys/block/zram$i/mm_stat"`
-+		local v=$((100 * 1024 * $b / $mem_used_total))
-+		if [ "$v" -lt 100 ]; then
-+			 echo "FAIL compression ratio: 0.$v:1"
-+			 ERR_CODE=-1
-+			 return
-+		fi
- 
--	local total_size=0
--	for sm in $zram_sizes; do
--		local s=$(echo $sm | sed 's/M//')
--		total_size=$(($total_size + $s))
-+		echo "zram compression ratio: $(echo "scale=2; $v / 100 " | bc):1: OK"
- 	done
--
--	echo "zram used ${used_mem}M, zram disk sizes ${total_size}M"
--
--	local v=$((100 * $total_size / $used_mem))
--
--	if [ "$v" -lt 100 ]; then
--		echo "FAIL compression ratio: 0.$v:1"
--		ERR_CODE=-1
--		zram_cleanup
--		return
--	fi
--
--	echo "zram compression ratio: $(echo "scale=2; $v / 100 " | bc):1: OK"
- }
- 
- check_prereqs
--- 
-2.34.1
-
 
 

@@ -2,62 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCA04BDC05
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C66D64BE106
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357286AbiBUMHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 07:07:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39180 "EHLO
+        id S1357328AbiBUMIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 07:08:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345377AbiBUMHS (ORCPT
+        with ESMTP id S1357308AbiBUMIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 07:07:18 -0500
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677856457;
-        Mon, 21 Feb 2022 04:06:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=X9BeRJcZSSZze7JRyDJH3PybPrLEA2YnLuJEnI8H+Ro=; b=FUtxbuhW1rqJy9qhbUuNnzjwac
-        rnwAmWQoTeFq7x/FZCBG9IBUIOf6yTDLaVhvHTocrJRibQKfdal8Fiw9T+v4RVtEuug0rNi1rbRAv
-        Dl8wHNERdybmv2HkyO+q7NcIpJJjI+HJqn1g+m4Yzw9unJ7f2SlRK0hW9JgYw1B/DKnHLsX0OYSEM
-        KCBnPuGjZ2QW6IhMAwGIQ0XqzDL+BdsSgzpadj/CPaN6dsZf/hgAOL5iZSzym8/Z4CXcSgjI+akI1
-        TFBukz+TD0093D2MSqqDgp0HJpSNMp7dxY7SBWH9hsYELN36Jj8lzAM94nvIzOoB2vsBDNVR23B/i
-        RbLMduVg==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1nM7Sl-0001x6-KF; Mon, 21 Feb 2022 14:06:43 +0200
-Message-ID: <ea65fcd6-9451-7f5b-f4a9-57b8575f09ff@kapsi.fi>
-Date:   Mon, 21 Feb 2022 14:06:43 +0200
+        Mon, 21 Feb 2022 07:08:49 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608F6201BE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 04:08:22 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 0E84622175;
+        Mon, 21 Feb 2022 13:08:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1645445300;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kDZecnFpvJUn7GdYa3/jLktDDxiEIEndxgKV+PElY/A=;
+        b=MHLP8OP2TVJh871sv3ypV0XbQIdY7v8cN9VvvDUWi4uXmoZ1DNnPgMwyHtCzE3HE9AlDiY
+        f438QK7zkwEuOBdgwe1HRVLfUrc8SzG56t/JyTcG6QXIBLQKYYgPLkrDj8F4NeJVU3wPvV
+        HAUGQfKPH/2My8J/AIdmn1SLm4ZnE58=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
+Subject: [PATCH v4 00/32] mtd: spi-nor: move vendor specific code into vendor modules
+Date:   Mon, 21 Feb 2022 13:07:37 +0100
+Message-Id: <20220221120809.1531502-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 9/9] drm/tegra: Support context isolation
-Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
-        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com
-Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220218113952.3077606-1-mperttunen@nvidia.com>
- <20220218113952.3077606-10-mperttunen@nvidia.com>
- <2b4dd244-f918-4d26-2322-00a0bb226ccf@gmail.com>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <2b4dd244-f918-4d26-2322-00a0bb226ccf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,50 +54,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/19/22 20:35, Dmitry Osipenko wrote:
-> 18.02.2022 14:39, Mikko Perttunen пишет:
->> +	if (context->memory_context && context->client->ops->get_streamid_offset) {
->              ^^^
->> +		int offset = context->client->ops->get_streamid_offset(context->client);
->> +
->> +		if (offset >= 0) {
->> +			job->context = context->memory_context;
->> +			job->engine_streamid_offset = offset;
->> +			host1x_context_get(job->context);
->> +		}
-> 
-> You should bump refcount unconditionally or you'll get refcnt underflow
-> on put, when offset < 0.
+It turns out that most of the special status register handling is
+specific for a particular vendor. I.e. Xilinx has some different
+opcodes for the status register read, Micron has an additional FSR
+register and Spansion has these flags integrated into the SR.
 
-This refcount is intended to be dropped from 'release_job', where it's 
-dropped if job->context is set, which it is from this path.
+Create a callback to ready() where a flash chip can register its
+own function. This will let us move all the vendor specific stuff
+out of the core into the vendor modules.
 
-> 
->> +	}
->> +
->>   	/*
->>   	 * job_data is now part of job reference counting, so don't release
->>   	 * it from here.
->> diff --git a/drivers/gpu/drm/tegra/uapi.c b/drivers/gpu/drm/tegra/uapi.c
->> index 9ab9179d2026..be33da54d12c 100644
->> --- a/drivers/gpu/drm/tegra/uapi.c
->> +++ b/drivers/gpu/drm/tegra/uapi.c
->> @@ -33,6 +33,9 @@ static void tegra_drm_channel_context_close(struct tegra_drm_context *context)
->>   	struct tegra_drm_mapping *mapping;
->>   	unsigned long id;
->>   
->> +	if (context->memory_context)
->> +		host1x_context_put(context->memory_context);
-> 
-> The "if (context->memory_context &&
-> context->client->ops->get_streamid_offset)" above doesn't match the "if
-> (context->memory_context)". You'll get refcount underflow.
+As a preparation step, unify all function and object names in the
+vendor modules. For the sake of consistency and better readability
+of the code flow, I also converted the setup() callback to be
+optional.
 
-And this drop is for the refcount implicitly added when allocating the 
-memory context through host1x_context_alloc; so these two places should 
-be independent.
+Please note that this is only compile-time tested.
 
-Please elaborate if I missed something.
+Changes since v3:
+ - fix spansion.c compilation, messed up the patch export. Sorry
+   for the noise
 
-Thanks,
-Mikko
+Changes since v2:
+ - use family_nor_ instead of just family_ prefix
+ - fix function doc
+
+Changes since v1:
+ - rename/unify function names inside the vendor modules.
+ - make local functions static
+ - fix function doc typo
+ - use late_init hook to set fsr_ready op
+ - Use uppercase and period in comments
+ - Add comments for the vendor flags
+ - move coding style change in spi_nor_sr_ready() into own patch
+ - new patch to add missing parenthesis in S3AN_INFO()
+ - add missing function prefix rename patch for the spansion module
+
+Michael Walle (32):
+  mtd: spi-nor: atmel: unify function names
+  mtd: spi-nor: catalyst: unify function names
+  mtd: spi-nor: eon: unify function names
+  mtd: spi-nor: esmt: unify function names
+  mtd: spi-nor: everspin: unify function names
+  mtd: spi-nor: fujitsu: unify function names
+  mtd: spi-nor: gigadevice: unify function names
+  mtd: spi-nor: intel: unify function names
+  mtd: spi-nor: issi: unify function names
+  mtd: spi-nor: macronix: unify function names
+  mtd: spi-nor: micron-st: unify function names
+  mtd: spi-nor: spansion: unify function names
+  mtd: spi-nor: sst: unify function names
+  mtd: spi-nor: winbond: unify function names
+  mtd: spi-nor: xilinx: unify function names
+  mtd: spi-nor: xmc: unify function names
+  mtd: spi-nor: slightly refactor the spi_nor_setup()
+  mtd: spi-nor: allow a flash to define its own ready() function
+  mtd: spi-nor: export more function to be used in vendor modules
+  mtd: spi-nor: guard _page_size parameter in S3AN_INFO()
+  mtd: spi-nor: move all xilinx specifics into xilinx.c
+  mtd: spi-nor: xilinx: rename vendor specific functions and defines
+  mtd: spi-nor: xilinx: correct the debug message
+  mtd: spi-nor: move all micron-st specifics into micron-st.c
+  mtd: spi-nor: micron-st: convert USE_FSR to a manufacturer flag
+  mtd: spi-nor: micron-st: rename vendor specific functions and defines
+  mtd: spi-nor: spansion: slightly rework control flow in late_init()
+  mtd: spi-nor: move all spansion specifics into spansion.c
+  mtd: spi-nor: spansion: convert USE_CLSR to a manufacturer flag
+  mtd: spi-nor: spansion: rename vendor specific functions and defines
+  mtd: spi-nor: slightly change code style in spi_nor_sr_ready()
+  mtd: spi-nor: renumber flags
+
+ drivers/mtd/spi-nor/atmel.c      |  81 +++++-----
+ drivers/mtd/spi-nor/catalyst.c   |   6 +-
+ drivers/mtd/spi-nor/core.c       | 265 ++-----------------------------
+ drivers/mtd/spi-nor/core.h       |  70 ++++----
+ drivers/mtd/spi-nor/eon.c        |   6 +-
+ drivers/mtd/spi-nor/esmt.c       |   6 +-
+ drivers/mtd/spi-nor/everspin.c   |   6 +-
+ drivers/mtd/spi-nor/fujitsu.c    |   6 +-
+ drivers/mtd/spi-nor/gigadevice.c |   6 +-
+ drivers/mtd/spi-nor/intel.c      |   6 +-
+ drivers/mtd/spi-nor/issi.c       |  10 +-
+ drivers/mtd/spi-nor/macronix.c   |  14 +-
+ drivers/mtd/spi-nor/micron-st.c  | 258 ++++++++++++++++++++++++------
+ drivers/mtd/spi-nor/spansion.c   | 168 +++++++++++++++-----
+ drivers/mtd/spi-nor/sst.c        |  44 ++---
+ drivers/mtd/spi-nor/winbond.c    |  29 ++--
+ drivers/mtd/spi-nor/xilinx.c     |  97 +++++++++--
+ drivers/mtd/spi-nor/xmc.c        |   6 +-
+ include/linux/mtd/spi-nor.h      |  18 ---
+ 19 files changed, 578 insertions(+), 524 deletions(-)
+
+-- 
+2.30.2
+

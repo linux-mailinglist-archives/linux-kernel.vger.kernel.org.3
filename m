@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B8E4BDD7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4319B4BE09A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350408AbiBUJev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:34:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48098 "EHLO
+        id S1347483AbiBUJGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:06:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350036AbiBUJ1H (ORCPT
+        with ESMTP id S1348312AbiBUJCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1084220F3;
-        Mon, 21 Feb 2022 01:11:19 -0800 (PST)
+        Mon, 21 Feb 2022 04:02:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1862B2C106;
+        Mon, 21 Feb 2022 00:57:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2FF3ECE0E76;
-        Mon, 21 Feb 2022 09:11:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABA4C340E9;
-        Mon, 21 Feb 2022 09:11:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC9D061152;
+        Mon, 21 Feb 2022 08:57:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E60C340EB;
+        Mon, 21 Feb 2022 08:57:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434676;
-        bh=Qtr7JHf3mAjs2WT0nfBTCq+aPz6bs4dbO5nGkwPHaEA=;
+        s=korg; t=1645433873;
+        bh=HKrIBi5m5CFXzZ+6/xBVUfB/8hJp8GunVilEDIKwwTQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g9dDQEtItXvD+BNmbzS+H5mprT85rfsdsOAmkUymveVcpEAfED4BUaAMJhmuGdVJx
-         wQ75HlHnaXw8tLVmYZhWvurAa3VcFHnksf7YNslkcUJtFUguRTfmaODwKerAxe/9mp
-         WsTIi8FVKkhs8tkFYCrwKjhQqp3zvKz7izLx8xtE=
+        b=tR0Ia0+XftoxZ2Nev8SPakCUk9LBtiQ2LkYGqgxi+G2dWHO9sIMj18JWG8NZsid41
+         4r2j4YnL1SOsGWRRpf4som3kDMZvRVgBNyhHqCir3JCAoVw/ZpNhbq9jJlSyeplN0m
+         ibv3Ukrf0sRmFyOkIHScgwc1FxziZg6Y5+OqqDl8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mans Rullgard <mans@mansr.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 092/196] net: dsa: lan9303: handle hwaccel VLAN tags
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.4 04/80] serial: parisc: GSC: fix build when IOSAPIC is not set
 Date:   Mon, 21 Feb 2022 09:48:44 +0100
-Message-Id: <20220221084934.025351849@linuxfoundation.org>
+Message-Id: <20220221084915.714278330@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +58,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mans Rullgard <mans@mansr.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 017b355bbdc6620fd8fe05fe297f553ce9d855ee upstream.
+commit 6e8793674bb0d1135ca0e5c9f7e16fecbf815926 upstream.
 
-Check for a hwaccel VLAN tag on rx and use it if present.  Otherwise,
-use __skb_vlan_pop() like the other tag parsers do.  This fixes the case
-where the VLAN tag has already been consumed by the master.
+There is a build error when using a kernel .config file from
+'kernel test robot' for a different build problem:
 
-Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
-Signed-off-by: Mans Rullgard <mans@mansr.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-Link: https://lore.kernel.org/r/20220216124634.23123-1-mans@mansr.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3':
+(.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
+
+when:
+  CONFIG_GSC=y
+  CONFIG_SERIO_GSCPS2=y
+  CONFIG_SERIAL_8250_GSC=y
+  CONFIG_PCI is not set
+    and hence PCI_LBA is not set.
+  IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
+
+Make the use of iosapic_serial_irq() conditional to fix the build error.
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-serial@vger.kernel.org
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>
+Suggested-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/dsa/tag_lan9303.c |   21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+ drivers/tty/serial/8250/8250_gsc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/dsa/tag_lan9303.c
-+++ b/net/dsa/tag_lan9303.c
-@@ -77,7 +77,6 @@ static struct sk_buff *lan9303_xmit(stru
+--- a/drivers/tty/serial/8250/8250_gsc.c
++++ b/drivers/tty/serial/8250/8250_gsc.c
+@@ -26,7 +26,7 @@ static int __init serial_init_chip(struc
+ 	unsigned long address;
+ 	int err;
  
- static struct sk_buff *lan9303_rcv(struct sk_buff *skb, struct net_device *dev)
- {
--	__be16 *lan9303_tag;
- 	u16 lan9303_tag1;
- 	unsigned int source_port;
- 
-@@ -87,14 +86,15 @@ static struct sk_buff *lan9303_rcv(struc
- 		return NULL;
- 	}
- 
--	lan9303_tag = dsa_etype_header_pos_rx(skb);
--
--	if (lan9303_tag[0] != htons(ETH_P_8021Q)) {
--		dev_warn_ratelimited(&dev->dev, "Dropping packet due to invalid VLAN marker\n");
--		return NULL;
-+	if (skb_vlan_tag_present(skb)) {
-+		lan9303_tag1 = skb_vlan_tag_get(skb);
-+		__vlan_hwaccel_clear_tag(skb);
-+	} else {
-+		skb_push_rcsum(skb, ETH_HLEN);
-+		__skb_vlan_pop(skb, &lan9303_tag1);
-+		skb_pull_rcsum(skb, ETH_HLEN);
- 	}
- 
--	lan9303_tag1 = ntohs(lan9303_tag[1]);
- 	source_port = lan9303_tag1 & 0x3;
- 
- 	skb->dev = dsa_master_find_slave(dev, 0, source_port);
-@@ -103,13 +103,6 @@ static struct sk_buff *lan9303_rcv(struc
- 		return NULL;
- 	}
- 
--	/* remove the special VLAN tag between the MAC addresses
--	 * and the current ethertype field.
--	 */
--	skb_pull_rcsum(skb, 2 + 2);
--
--	dsa_strip_etype_header(skb, LAN9303_TAG_LEN);
--
- 	if (!(lan9303_tag1 & LAN9303_TAG_RX_TRAPPED_TO_CPU))
- 		dsa_default_offload_fwd_mark(skb);
- 
+-#ifdef CONFIG_64BIT
++#if defined(CONFIG_64BIT) && defined(CONFIG_IOSAPIC)
+ 	if (!dev->irq && (dev->id.sversion == 0xad))
+ 		dev->irq = iosapic_serial_irq(dev);
+ #endif
 
 

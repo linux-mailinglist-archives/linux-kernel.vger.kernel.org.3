@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310F64BDDC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C914BE3DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346286AbiBUI5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:57:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44708 "EHLO
+        id S1347034AbiBUJED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:04:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345176AbiBUIyR (ORCPT
+        with ESMTP id S1346533AbiBUJAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:54:17 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D458237DA
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:53:06 -0800 (PST)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id D92182244E;
-        Mon, 21 Feb 2022 09:53:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645433585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BUHjRq3B/3JjsHlcHc+UiOV+3YaaqpA1vvTF3QO9238=;
-        b=vdfH/OvhQyTtwC7He9ScJnyd+hVKg502zpZwWK34kxIcgMP0SxIGP8BhTIgvCVWWLJCHHe
-        oQUV7aizVde26VPe6G697TxbT5s7W70idQTy+ege+PTyAYPzNPiobRAUdNvLGnVgqp1cV1
-        1rbI8OCpMMoPn1Y5g62uo7PChgcULbg=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 32/32] mtd: spi-nor: renumber flags
-Date:   Mon, 21 Feb 2022 09:52:36 +0100
-Message-Id: <20220221085236.1452024-33-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220221085236.1452024-1-michael@walle.cc>
-References: <20220221085236.1452024-1-michael@walle.cc>
+        Mon, 21 Feb 2022 04:00:30 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1306024BD7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:55:35 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 17ED258022A;
+        Mon, 21 Feb 2022 03:55:13 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 21 Feb 2022 03:55:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=GMXE2sOdp9mirDDscRSA6iT0q+mcvYgiAP/MCQ
+        w0gSk=; b=OyEA6VSKzAB8kbjOXZuVGfXflhCuB1nEz8NzhYpFJmpYRiIZDfrYs7
+        RE4051i4UhZqQ3caHxhNnwcxHnnuNEsmH8XlHZSsZ76ca7kqv8LOqBbMMHxid0Uc
+        Jxg/lM2uU/ax+ONRSYy9I04N8eJDFHp4AuAW2ciyr76Igbfonk3btAEJdfzEbChK
+        3XhI2qhRbR7AlfSrSIBEH9Rl4iHAOlCgSijxf7NcgalYYOXgK4VgeUJ6Vo1LsJK9
+        Xi+EP7uzW+MVZfRhxFUJGd+JdVeAK8hnND051cFPLo+jCcg3A7y5TkL/jA70CD6x
+        VRViWQcEOpSt3KmTLTjgNN0YwcyNJigw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=GMXE2sOdp9mirDDsc
+        RSA6iT0q+mcvYgiAP/MCQw0gSk=; b=KoRxtDnWOu6I2QOzhYV04HNHVUcIksNu0
+        tHHrhtdVaNCK243mA4zcryn1ws0vFm5M7EyK27U7rjX/AahX+UoBd3Xiy1IP3uX0
+        iOFmXiAH0MG+YK91x+FylW6DuSjHl8wbAo+Bm1B91eR3qMjzus+0BvMwQuTgx5K0
+        qchyM6Ks/zCaPd40acH8bsS4C4d3wP6fcpOYNl4jMtkURbYHzW3JozSzHo4qtCnq
+        +71MotZGlGSUSK2xDcA3SJLSc/X3GmC0Ro+t3d7lq1GTqK04TkMD7eZGYzMS83QH
+        POBXU61hWihZ1zlQSOaqZFMTL+pp8h/di/hKhATusF+ODjC1+/Vhw==
+X-ME-Sender: <xms:cFMTYpbVznqmUzC-jtsHRrpOC-Z2ZjvVZPF8Zsx1VRgePzN3eqsq7A>
+    <xme:cFMTYgbRM2BAqM22XxM9h2J8qpVkFeRfmjT6tvEuuGOiOT_llYuXC94uPjnITCX-u
+    d4F9hcSVVGGW0Bao4M>
+X-ME-Received: <xmr:cFMTYr-7w2DIovNNtFqlFxgmVfzDwF24sSEbfTCey-I_W8VEN9kfAC1qcbFAkgwk_Tk2Rxg6z4irXVK4-B0XNx5kd0xQhg0xjWOdJ4k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeehgdduvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
+    gfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:cFMTYnr2-wh0GFZI7A8qnNZAwaRYbGwkeGA2qhrwNPxUSUv52YS0RA>
+    <xmx:cFMTYkpSdXNXs2ts9xUEYHIEObzSkNnBCb1q0r2XbXA2F9mW3BM6qg>
+    <xmx:cFMTYtQhARpK8Yy7yQc5F0XHZ2WYjBVuWE82GeddXXyizgArjfRSSQ>
+    <xmx:cVMTYr2pQ8xzASEU977j_2k-2uaOcl8oo2odB_Qq9a6ROq0Ff791rg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Feb 2022 03:55:11 -0500 (EST)
+Date:   Mon, 21 Feb 2022 09:55:09 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/bridge: anx7625: switch to devm_drm_of_get_bridge
+Message-ID: <20220221085509.fies6j3hjsiz55rz@houat>
+References: <20220221072835.10032-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eczutt6qtkbsvjzt"
+Content-Disposition: inline
+In-Reply-To: <20220221072835.10032-1-jose.exposito89@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we have deleted some flag, lets renumber them so there are no holes.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
----
- drivers/mtd/spi-nor/core.h | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+--eczutt6qtkbsvjzt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 2130a96e2044..b7fd760e3b47 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -12,20 +12,20 @@
- #define SPI_NOR_MAX_ID_LEN	6
- 
- enum spi_nor_option_flags {
--	SNOR_F_HAS_SR_TB	= BIT(1),
--	SNOR_F_NO_OP_CHIP_ERASE	= BIT(2),
--	SNOR_F_BROKEN_RESET	= BIT(5),
--	SNOR_F_4B_OPCODES	= BIT(6),
--	SNOR_F_HAS_4BAIT	= BIT(7),
--	SNOR_F_HAS_LOCK		= BIT(8),
--	SNOR_F_HAS_16BIT_SR	= BIT(9),
--	SNOR_F_NO_READ_CR	= BIT(10),
--	SNOR_F_HAS_SR_TB_BIT6	= BIT(11),
--	SNOR_F_HAS_4BIT_BP      = BIT(12),
--	SNOR_F_HAS_SR_BP3_BIT6  = BIT(13),
--	SNOR_F_IO_MODE_EN_VOLATILE = BIT(14),
--	SNOR_F_SOFT_RESET	= BIT(15),
--	SNOR_F_SWP_IS_VOLATILE	= BIT(16),
-+	SNOR_F_HAS_SR_TB	= BIT(0),
-+	SNOR_F_NO_OP_CHIP_ERASE	= BIT(1),
-+	SNOR_F_BROKEN_RESET	= BIT(2),
-+	SNOR_F_4B_OPCODES	= BIT(3),
-+	SNOR_F_HAS_4BAIT	= BIT(4),
-+	SNOR_F_HAS_LOCK		= BIT(5),
-+	SNOR_F_HAS_16BIT_SR	= BIT(6),
-+	SNOR_F_NO_READ_CR	= BIT(7),
-+	SNOR_F_HAS_SR_TB_BIT6	= BIT(8),
-+	SNOR_F_HAS_4BIT_BP      = BIT(9),
-+	SNOR_F_HAS_SR_BP3_BIT6  = BIT(10),
-+	SNOR_F_IO_MODE_EN_VOLATILE = BIT(11),
-+	SNOR_F_SOFT_RESET	= BIT(12),
-+	SNOR_F_SWP_IS_VOLATILE	= BIT(13),
- };
- 
- struct spi_nor_read_command {
--- 
-2.30.2
+On Mon, Feb 21, 2022 at 08:28:35AM +0100, Jos=E9 Exp=F3sito wrote:
+> The function "drm_of_find_panel_or_bridge" has been deprecated in
+> favor of "devm_drm_of_get_bridge".
+>=20
+> Switch to the new function and reduce boilerplate.
+>=20
+> Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
 
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+
+Maxime
+
+--eczutt6qtkbsvjzt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYhNTbQAKCRDj7w1vZxhR
+xWSrAQCMUGagQwycqchROA9zu7E7WHhKxOpwfyKGy48CobttowEAuAOfimTfYbXE
+HWzmftcO4nNlobY2CTkFaY2vwbiLGQ0=
+=7bLY
+-----END PGP SIGNATURE-----
+
+--eczutt6qtkbsvjzt--

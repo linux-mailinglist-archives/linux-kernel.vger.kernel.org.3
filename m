@@ -2,173 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CA34BD39C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B412D4BD397
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343495AbiBUCP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 21:15:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57456 "EHLO
+        id S245753AbiBUCPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 21:15:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233743AbiBUCP5 (ORCPT
+        with ESMTP id S241988AbiBUCPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 21:15:57 -0500
-Received: from spam.unicloud.com (smgmail.unigroup.com.cn [220.194.70.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734B03205E;
-        Sun, 20 Feb 2022 18:15:34 -0800 (PST)
-Received: from eage.unicloud.com ([220.194.70.35])
-        by spam.unicloud.com with ESMTP id 21L2EUVI091183;
-        Mon, 21 Feb 2022 10:14:30 +0800 (GMT-8)
-        (envelope-from luofei@unicloud.com)
-Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
- (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Mon, 21
- Feb 2022 10:14:29 +0800
-From:   luofei <luofei@unicloud.com>
-To:     <tony.luck@intel.com>, <bp@alien8.de>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <akpm@linux-foundation.org>,
-        <naoya.horiguchi@nec.com>
-CC:     <hpa@zytor.com>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        luofei <luofei@unicloud.com>
-Subject: [PATCH v4 1/2] mm/hwpoison: Avoid the impact of hwpoison_filter() return value on mce handler
-Date:   Sun, 20 Feb 2022 21:14:15 -0500
-Message-ID: <20220221021415.2328992-1-luofei@unicloud.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.10.1.7]
-X-ClientProxiedBy: zgys-ex-mb09.Unicloud.com (10.10.0.24) To
- zgys-ex-mb09.Unicloud.com (10.10.0.24)
-X-DNSRBL: 
-X-MAIL: spam.unicloud.com 21L2EUVI091183
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 20 Feb 2022 21:15:05 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020AE3206F;
+        Sun, 20 Feb 2022 18:14:44 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id i21so7396765pfd.13;
+        Sun, 20 Feb 2022 18:14:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=tlAeQm/WbGm0MvCoueMwGsS7nGW/+yZmIDXYYZmGKuU=;
+        b=XhhOuCg7SDkrV4zeXdMttervjTANmm6oVGFmSmzFRFQ8uj+gZd3cAB9Tz/yZSph5pe
+         fnbQnSxr5TTmJKPKwzTCatSOzHKaWOwqAZXIDFbM4dTz8FFljvZJKvqHyO0wei8fgGad
+         pJq9DSbUpqHITE6uQXPqBYwEUH8H9NiXEBXiPLdEIaroU5dE3iO73ZMnPhi2Qc4VbTn6
+         DMuj21m6Sw7OKdig6xVHQwTmrqlljXlyDPMIA6KHeuyDPvFZ5x6wQLEjTVVKUyHoMaBr
+         9TUCaEYqCEmkX4huwiPYD433cVxzK0eR8uBfseSnT0CbQ71Dq2ZthsTVYk7mfq7I84UI
+         cetA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=tlAeQm/WbGm0MvCoueMwGsS7nGW/+yZmIDXYYZmGKuU=;
+        b=U5OHpyX/R4aan43Nwj07oEkDZrO7KL6QSyOaPhW8glC/ZUp5f9QaH2yUsbOuUfudyO
+         uMUBKTLJ/7Ia0pEhRiNx/tVwCLIvJ9WQib3Mmm2v+qY1jL+oMh1upGP8HzNtrya1VxVB
+         oCw5U4LCVold/UjmdB6BXZoqCRUhN7wIW00WLT7vogMppnoTVwiIuBusM9GSBTKLIpHz
+         JMFmMfrEfWhmGFCZM4habhTpC5N8id+25UUemmnRX3WdhwYkM1XwqDegH3O1V+Z8tGaF
+         DYmPf3o+PHvm9hfrgDBSh5xX+k2UrAoknltnEm8Ke77lv9RDD/cFsJlLsZxFaZv2U7Vb
+         37vA==
+X-Gm-Message-State: AOAM531QnTkxF440L8Z/JA8AwEwKCWMiksmBq2VAI1q/MeZph5G+VbTY
+        bLxOvPqoC+R+wJ7Y1hcRx4E=
+X-Google-Smtp-Source: ABdhPJzsu+/9VkB+rWdznY4nQOp6DmMVYjCjIg72sNslDOj/PISdom4+Mnozn6YUFVfJuE38ibwk2w==
+X-Received: by 2002:a05:6a00:1312:b0:4e1:58c4:ddfd with SMTP id j18-20020a056a00131200b004e158c4ddfdmr17995733pfu.65.1645409683535;
+        Sun, 20 Feb 2022 18:14:43 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id s48sm10022908pfw.111.2022.02.20.18.14.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 20 Feb 2022 18:14:42 -0800 (PST)
+From:   Tony Huang <tonyhuang.sunplus@gmail.com>
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, derek.kiernan@xilinx.com,
+        dragan.cvetic@xilinx.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, wells.lu@sunplus.com,
+        tony.huang@sunplus.com
+Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>
+Subject: [PATCH v9 0/2] Add iop driver for Sunplus SP7021
+Date:   Mon, 21 Feb 2022 10:14:53 +0800
+Message-Id: <cover.1645407997.git.tonyhuang.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the hwpoison page meets the filter conditions, it should
-not be regarded as successful memory_failure() processing for
-mce handler, but should return a value(-EHWPOISON), otherwise
-mce handler regards the error page has been identified and
-isolated, which may lead to calling set_mce_nospec() to change
-page attribute, etc.
+Add iop driver for Sunplus SP7021 SOC
 
-Here a new MF_MCE_HANDLE flag is introduced to identify the
-call from the mce handler and instruct hwpoison_filter() to
-return -EHWPOISON, otherwise return 0 for compatibility with
-the hwpoison injector.
+This is a patch series for iop driver for Sunplus SP7021 SOC.
 
-Signed-off-by: luofei <luofei@unicloud.com>
----
- arch/x86/kernel/cpu/mce/core.c | 15 +++++++++------
- include/linux/mm.h             |  1 +
- mm/memory-failure.c            | 14 ++++++++++++--
- 3 files changed, 22 insertions(+), 8 deletions(-)
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 5818b837fd4d..de29165c65b6 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -612,7 +612,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
- 		return NOTIFY_DONE;
- 
- 	pfn = mce->addr >> PAGE_SHIFT;
--	if (!memory_failure(pfn, 0)) {
-+	if (!memory_failure(pfn, MF_MCE_HANDLE)) {
- 		set_mce_nospec(pfn, whole_page(mce));
- 		mce->kflags |= MCE_HANDLED_UC;
- 	}
-@@ -1286,7 +1286,7 @@ static void kill_me_now(struct callback_head *ch)
- static void kill_me_maybe(struct callback_head *cb)
- {
- 	struct task_struct *p = container_of(cb, struct task_struct, mce_kill_me);
--	int flags = MF_ACTION_REQUIRED;
-+	int flags = MF_ACTION_REQUIRED | MF_MCE_HANDLE;
- 	int ret;
- 
- 	p->mce_count = 0;
-@@ -1303,9 +1303,12 @@ static void kill_me_maybe(struct callback_head *cb)
- 	}
- 
- 	/*
--	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
--	 * to the current process with the proper error info, so no need to
--	 * send SIGBUS here again.
-+	 * -EHWPOISON from memory_failure() means that memory_failure() did
-+	 * not handle the error event for the following reason:
-+	 *  - SIGBUS has already been sent to the current process with the
-+	 *    proper error info, or
-+	 *  - hwpoison_filter() filtered the event,
-+	 * so no need to deal with it more.
- 	 */
- 	if (ret == -EHWPOISON)
- 		return;
-@@ -1320,7 +1323,7 @@ static void kill_me_never(struct callback_head *cb)
- 
- 	p->mce_count = 0;
- 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
--	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
-+	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, MF_MCE_HANDLE))
- 		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
- }
- 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 213cc569b192..f4703f948e9a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3188,6 +3188,7 @@ enum mf_flags {
- 	MF_MUST_KILL = 1 << 2,
- 	MF_SOFT_OFFLINE = 1 << 3,
- 	MF_UNPOISON = 1 << 4,
-+	MF_MCE_HANDLE = 1 << 5,
- };
- extern int memory_failure(unsigned long pfn, int flags);
- extern void memory_failure_queue(unsigned long pfn, int flags);
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 97a9ed8f87a9..59d6d939a752 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1526,7 +1526,10 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
- 				if (TestClearPageHWPoison(head))
- 					num_poisoned_pages_dec();
- 				unlock_page(head);
--				return 0;
-+				if (flags & MF_MCE_HANDLE)
-+					return -EHWPOISON;
-+				else
-+					return 0;
- 			}
- 			unlock_page(head);
- 			res = MF_FAILED;
-@@ -1613,7 +1616,10 @@ static int memory_failure_dev_pagemap(unsigned long pfn, int flags,
- 		goto out;
- 
- 	if (hwpoison_filter(page)) {
--		rc = 0;
-+		if (flags & MF_MCE_HANDLE)
-+			rc = -EHWPOISON;
-+		else
-+			rc = 0;
- 		goto unlock;
- 	}
- 
-@@ -1837,6 +1843,10 @@ int memory_failure(unsigned long pfn, int flags)
- 			num_poisoned_pages_dec();
- 		unlock_page(p);
- 		put_page(p);
-+		if (flags & MF_MCE_HANDLE)
-+			res = -EHWPOISON;
-+		else
-+			res = 0;
- 		goto unlock_mutex;
- 	}
- 
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
+
+Tony Huang (2):
+  dt-binding: misc: Add iop yaml file for Sunplus SP7021
+  misc: Add iop driver for Sunplus SP7021
+
+ .../devicetree/bindings/misc/sunplus-iop.yaml      |  76 ++++
+ MAINTAINERS                                        |   6 +
+ drivers/misc/Kconfig                               |  20 +
+ drivers/misc/Makefile                              |   1 +
+ drivers/misc/sunplus_iop.c                         | 420 +++++++++++++++++++++
+ 5 files changed, 523 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/sunplus-iop.yaml
+ create mode 100644 drivers/misc/sunplus_iop.c
+
 -- 
-2.27.0
+2.7.4
 

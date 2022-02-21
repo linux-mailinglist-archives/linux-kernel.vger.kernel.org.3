@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7797D4BE839
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D74D4BE18D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347326AbiBUJFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:05:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54510 "EHLO
+        id S1353602AbiBUKCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:02:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347692AbiBUJBk (ORCPT
+        with ESMTP id S1352201AbiBUJxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BCD289BC;
-        Mon, 21 Feb 2022 00:56:57 -0800 (PST)
+        Mon, 21 Feb 2022 04:53:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A75036E22;
+        Mon, 21 Feb 2022 01:23:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADDD7611E9;
-        Mon, 21 Feb 2022 08:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96979C340EB;
-        Mon, 21 Feb 2022 08:56:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A76E608C4;
+        Mon, 21 Feb 2022 09:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75564C340E9;
+        Mon, 21 Feb 2022 09:23:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433786;
-        bh=NRCPCKCJdTDy5kEECWVvGM5CbdqXXjskW/KnRRKYGMw=;
+        s=korg; t=1645435412;
+        bh=8zpKje5IYFHCszmh7tFQ0f69g0A/tpI2GZ5tmB/KPWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XkFvxyNgCRJZYpoePLa3iUpXf88RvSlcXuSudulQc+uDPwqDiGcfnr+LiNMpr10fM
-         aqPvFMIJcAlZTNNvsPOPq3617GXV9hHouGY7S5QDZrtfbVjkKzAkTo7wp0Gr4ky9kq
-         W0VjHDngRBXcFpAkMs4Cr+tr3OoDlhyLWcrm8Y3c=
+        b=tnsGo8DaY+4amii9lapt6wJPLtU3ANrIZw9fbI4txZHznuXECRzRpI2H/OYyif3qd
+         3qdDuDoJhLYaNr5kXWJQos7pCIxVz93uKzwTP6SVRa6FZcP4pPsKxgzOkwp1BAE0H4
+         TAn46SrC69aFtFI11mfcOVg3+4Ge9FBjuXlT5XzY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eliav Farber <farbere@amazon.com>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 4.19 41/58] EDAC: Fix calculation of returned address and next offset in edac_align_ptr()
+        stable@vger.kernel.org, Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.16 155/227] scsi: ufs: Remove dead code
 Date:   Mon, 21 Feb 2022 09:49:34 +0100
-Message-Id: <20220221084913.205914156@linuxfoundation.org>
+Message-Id: <20220221084939.979308283@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eliav Farber <farbere@amazon.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-commit f8efca92ae509c25e0a4bd5d0a86decea4f0c41e upstream.
+commit d77ea8226b3be23b0b45aa42851243b62a27bda1 upstream.
 
-Do alignment logic properly and use the "ptr" local variable for
-calculating the remainder of the alignment.
+Commit 7252a3603015 ("scsi: ufs: Avoid busy-waiting by eliminating tag
+conflicts") guarantees that 'tag' is not in use by any SCSI command.
+Remove the check that returns early if a conflict occurs.
 
-This became an issue because struct edac_mc_layer has a size that is not
-zero modulo eight, and the next offset that was prepared for the private
-data was unaligned, causing an alignment exception.
-
-The patch in Fixes: which broke this actually wanted to "what we
-actually care about is the alignment of the actual pointer that's about
-to be returned." But it didn't check that alignment.
-
-Use the correct variable "ptr" for that.
-
-  [ bp: Massage commit message. ]
-
-Fixes: 8447c4d15e35 ("edac: Do alignment logic properly in edac_align_ptr()")
-Signed-off-by: Eliav Farber <farbere@amazon.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220113100622.12783-2-farbere@amazon.com
+Link: https://lore.kernel.org/r/20211203231950.193369-6-bvanassche@acm.org
+Tested-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Acked-by: Avri Altman <avri.altman@wdc.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/edac/edac_mc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/ufs/ufshcd.c |    7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
---- a/drivers/edac/edac_mc.c
-+++ b/drivers/edac/edac_mc.c
-@@ -265,7 +265,7 @@ void *edac_align_ptr(void **p, unsigned
- 	else
- 		return (char *)ptr;
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6734,11 +6734,6 @@ static int ufshcd_issue_devman_upiu_cmd(
+ 	tag = req->tag;
+ 	WARN_ONCE(tag < 0, "Invalid tag %d\n", tag);
  
--	r = (unsigned long)p % align;
-+	r = (unsigned long)ptr % align;
+-	if (unlikely(test_bit(tag, &hba->outstanding_reqs))) {
+-		err = -EBUSY;
+-		goto out;
+-	}
+-
+ 	lrbp = &hba->lrb[tag];
+ 	WARN_ON(lrbp->cmd);
+ 	lrbp->cmd = NULL;
+@@ -6806,8 +6801,8 @@ static int ufshcd_issue_devman_upiu_cmd(
+ 	ufshcd_add_query_upiu_trace(hba, err ? UFS_QUERY_ERR : UFS_QUERY_COMP,
+ 				    (struct utp_upiu_req *)lrbp->ucd_rsp_ptr);
  
- 	if (r == 0)
- 		return (char *)ptr;
+-out:
+ 	blk_mq_free_request(req);
++
+ out_unlock:
+ 	up_read(&hba->clk_scaling_lock);
+ 	return err;
 
 

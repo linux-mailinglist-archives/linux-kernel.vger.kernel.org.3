@@ -2,154 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E4C4BDEB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F7E4BDCF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355275AbiBUKma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:42:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59728 "EHLO
+        id S1356078AbiBUKmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:42:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355276AbiBUKkM (ORCPT
+        with ESMTP id S1355175AbiBUKkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:40:12 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93761027;
-        Mon, 21 Feb 2022 02:02:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=evBQi/e4SgIDMf7Sap2/1PGseafIXtgjsnbfAIfddoEqZtHqcVJTp7ZxAsANqDwIki8zXhmcL0hGSWiRUw7euE7KYhF85bXWPZx+Ty3EzQ1qdKzM5ehgBDLDGc2ykkrImBCB2PkfPEHJEzgNOLo80e4GrcivdxNsliHOaQ71jloeVvMptRZx4ApTbLLeRP8CJ9NBBt9Y+unh0gID2g5oPbl+jeWBCmAlOLVXrSg7qZX/mQIbqZZz/SOgTUkkXuaAVF2fV57yykwI5fnrOe7woQix9zcnSnrnpms8lDpK5JjhO/18nyCKPssnnnlqc9i5TOxmmLLO+LakftR3ixo78Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X8fDrWoLKcLYbCJkPPLWWhj0PpvXc0NNRdd51yUypoU=;
- b=oQeRv2eoTp55QLFHZMRUcp+CuBrUOw5zgRBvrOiKDGBKnh8KZ8Q4XUevk5Cwx85eobDvnaR/VZjnPK2qk3A9rVcm8CCmJPIVTyITVd11ikF9fNluW4YhpIm0sc3bo6uYTkdF3sLPaf0qeXEjhtOG4MAPKb92Yfwja1sht9rRgMjdy0qA30qlHdzANsPGtr49k9LnNZ/avOrQmEWWeHmg4Pl75sKC453YOswYp5pEx/hPKpMZPJW2Mm8ANyH5CRU8NeDYfH0Rd0fkbfp509DXhBteDlT1k8WNxvj4AhxqWJIFpNYQpFOm8Xc3fVlv+II+lt9zSzXuHR/UVFv1/RJ1FA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X8fDrWoLKcLYbCJkPPLWWhj0PpvXc0NNRdd51yUypoU=;
- b=XYvZvTdd931oFAowclmkZc8ipa54VuD8TVZyT90bb6cacxJLKPyF+918tssveCxwthJoo6IToY/yliGIFQ6+PAJzHbOhjFs2LMHIAhD1qHwPWxudFe6AEO66DlSiKDbRmKXpzHE2HLau/NU17nWTdaS1ejj3InZiemE7QXlAwUI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3053.namprd12.prod.outlook.com (2603:10b6:208:c7::24)
- by BN9PR12MB5196.namprd12.prod.outlook.com (2603:10b6:408:11d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15; Mon, 21 Feb
- 2022 10:02:09 +0000
-Received: from MN2PR12MB3053.namprd12.prod.outlook.com
- ([fe80::9117:ca88:805a:6d5b]) by MN2PR12MB3053.namprd12.prod.outlook.com
- ([fe80::9117:ca88:805a:6d5b%4]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
- 10:02:09 +0000
-Message-ID: <80fce7df-d387-773d-ad7d-3540c2d411d1@amd.com>
-Date:   Mon, 21 Feb 2022 15:31:49 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 3/3] KVM: x86/pmu: Segregate Intel and AMD specific logic
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     seanjc@google.com, jmattson@google.com,
-        dave.hansen@linux.intel.com, peterz@infradead.org,
-        alexander.shishkin@linux.intel.com, eranian@google.com,
-        daviddunn@google.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, x86@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kim.phillips@amd.com,
-        santosh.shukla@amd.com,
-        "Paolo Bonzini - Distinguished Engineer (kernel-recipes.org) (KVM HoF)" 
-        <pbonzini@redhat.com>, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220221073140.10618-1-ravi.bangoria@amd.com>
- <20220221073140.10618-4-ravi.bangoria@amd.com>
- <1e0fc70a-1135-1845-b534-79f409e0c29d@gmail.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <1e0fc70a-1135-1845-b534-79f409e0c29d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN3PR01CA0080.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9a::22) To MN2PR12MB3053.namprd12.prod.outlook.com
- (2603:10b6:208:c7::24)
+        Mon, 21 Feb 2022 05:40:01 -0500
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24C2E9B;
+        Mon, 21 Feb 2022 02:01:53 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id m27so14267219wrb.4;
+        Mon, 21 Feb 2022 02:01:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YZ+si3odyYtBfKCwmZtlljyYoUebhhvf4uslsh/s+F4=;
+        b=7j90WRpima8SkDjbxZ99PgrwljlxTuf3uJ0AEu8yOKNK0T8/TrPJBEKduV1EssbyI5
+         HnQO4t0f03epmXHqXpZE4j4+gQkH/cPMXLSF4ewvft/IG6mY+eDjOMGPdt9/BJ01T+Dm
+         o/mBlqmwuXn78aIZzzDSMcqwXMEQ7X2CMwXdxqpAQwTx4ZjAAHnVlNwlggvNcpaRvFPA
+         VgikTqi1Hbg1jKVQago4AbxrcOVhu2M7ZbQYgEo9d3RBhxJ1WINAOSFkO3BNpizkfVBb
+         gjIGMqA/1lwArnLlBmJfY6gkcN8zIzBaJ0vNY7I9JYlfaW8pEp65NcRbpwBeeSqOTDK2
+         hOSg==
+X-Gm-Message-State: AOAM533huutrR9fSqTSiT3QCh69Z9QXiz2Sgh2t7zzNyVxD6pYDuInOG
+        7H8GCRuzyCdvxct8r8eENYTeUl/SEt0=
+X-Google-Smtp-Source: ABdhPJxiSwRwEHfd8Q+eqMRaMd1mC5EXxdtAwlKOfu4jlIozdrPKqmXsyZiymQ3sUemzBc2KSw7yWQ==
+X-Received: by 2002:adf:fb8e:0:b0:1e3:241b:218c with SMTP id a14-20020adffb8e000000b001e3241b218cmr15194533wrr.359.1645437712057;
+        Mon, 21 Feb 2022 02:01:52 -0800 (PST)
+Received: from [192.168.0.120] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id q76sm7668095wme.1.2022.02.21.02.01.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 02:01:51 -0800 (PST)
+Message-ID: <acf6d02d-0e17-b84a-5bd8-9f5165f73915@kernel.org>
+Date:   Mon, 21 Feb 2022 11:01:49 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 263ddc83-cb52-421c-d54d-08d9f5213927
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5196:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB5196E2AB958B3E60D31DB2F8E03A9@BN9PR12MB5196.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JrEvX2msA/iN2yJwOmM1GD/NENm6tySyM0h2RqKaX0wumCBtMWFys9BHl4/oQMf/vX+N/Z5v0eITXzfREy4c0F/HJsf3AvW1dDitVKoHYzstelv/kxgtmCegI/jxlfr8acemqlSytt3yFPuKKuEINyzywrbFKBoSaQnhX4YpmvjuPJBoXqgCqKjjDlpCejX227oLgmaxdpoeq8qMIAVlma2ldNHu13usDr4hdBz72IO+dScjfaozGMo++XFlwoBpZyV1pw+8r3hsjZFNRXSFXdI8rxtc28ov5TryxaPpLF3auH4VeGntxO1OtV0wIjj+nA0aTOFF8SHeKyEa9JmcXeI7o8OzBHe9CuJUSyVWwcIakE7BcULCi4MJC/lgaFFLi0+6kjbqT3+1XIOl5gHmXxfETjjbAF4tK23w8ecqYdYmm38xaUEGJHj2VYaNBIWefRykFjSPjr0WvKuyWs9y9tS6QeNyhl2c+M7PEkIWPh1tIwhn1oA3iurBsBjTD7CIT4Vy5mALtVd0mctotMLWaRgoLxo0c/Gid4MZAiTwiMEbUlx0Z1zezrwbgQGfb4tPF5cGsBARlKB+aJSCrbudwpZ87sZHzfGRSdHHZGr+w4f8SGMj9wSFo48xeyB9MynDyDsGq5cRfGosewmycN3EsTHt0ZUxFvKUA0SDO5jcd0PbVYp+ind6X6DI8uCR+aMADmmVgOWS+E4fOKlBrW2VYSjNYOnU8PDCZSLje+HDSH8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3053.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(54906003)(6916009)(316002)(508600001)(6666004)(6506007)(53546011)(31686004)(36756003)(44832011)(66556008)(4744005)(38100700002)(8676002)(4326008)(66476007)(6486002)(31696002)(26005)(186003)(2616005)(8936002)(86362001)(7416002)(5660300002)(66946007)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGUvZlZ5aW56M3VvenpDWDF6bFI5dmVCT2tNQ3lEOWlOUWh1ZlRBYTVmOXZq?=
- =?utf-8?B?TTlTYThyNUZWQzlmcEx0bGp3V29ycjh4Wk54S3NzcG9FRThkQUVWbDhSdVFH?=
- =?utf-8?B?d0Ntb2ZUVFFaUmNYSHFXdG8vZW44OE9VYm9mdVQ4THNSM0JuVFpmcitwMmJw?=
- =?utf-8?B?OXYvOGlJQzRSRHdiWWVOVEZubWc2WW9TOGlnTXFJcHZxeUVFbUttMmtkOWhM?=
- =?utf-8?B?c1JTaU5sV003NUZ3dzJtOE9pck52VDQxK2hHNkFySk5mR0FNNjZnZXV3NkVy?=
- =?utf-8?B?YTZnL2l2VEQ5MUtZUWMwNjh2QjUrTEhEckVWeFdHdXNwZnlWdzlVOU44Y2xT?=
- =?utf-8?B?VjZpTmVvU0pLT1JoY2pWVFZLYzhGcjBjbUVwSTdFRTEvbThpNFZEenhpeGdQ?=
- =?utf-8?B?SWROZ21yNjE4U0dRVFByQjFyRjcyazFTY29IeGRGcmlqbVFPYXdvWlIwejJp?=
- =?utf-8?B?TUZNZlRvRFVqNncyVGhyRlZzTmNIZmJ5Nlg4Z1J5YStzcWlRTWZpb09qd3R3?=
- =?utf-8?B?K2xQdllhUXFCeG1SNG5YVzZOeG5nN3ZTekZEMyt3eVFvU001YW5KTHZEOFFL?=
- =?utf-8?B?UWJTRERGenlYaVZsWVYvcmZKSmxlZVJ3WTdveDJpOFVVdnZLRUJaYUhwaVNJ?=
- =?utf-8?B?YjZUL09jeHFPQVdvUE1CeVlFRHVKT0NKcEJZVkdDTmQrbkYvY2o2aEppNTNW?=
- =?utf-8?B?YTh6R2N1MEZ4NitGRWt0aHhjd2lhczB0WU9OaHNGZFVyeGx5b0JELzJsVzB5?=
- =?utf-8?B?Z1ZmL2xiQ2FZenU0Qmx4dlJZM04zd0RXUmUrYUVtTjRSanc3NjZsQm9mMCs0?=
- =?utf-8?B?REh3M0oxUnZOVS9UazlRbnlVUW85NXBVNCsxSUdhRlM0aUNHL0E4UjdxSldD?=
- =?utf-8?B?NElhM3JMZDJ1dnArTm5VblZQS1dDNTRmR0s5NDF1UzhlME84NWNXMjhnKzBN?=
- =?utf-8?B?aFRzWEg3RjREbnorTHlNMFpmOGpqY0hTU3VpdWZuNWdpN3ZjVUdmbWxlczdh?=
- =?utf-8?B?aUp5RDhER3UxMU5qWlJIYUppdUUrRzM2VVczQkpZZ0hxVFZSQlZyK2pmRHkr?=
- =?utf-8?B?ekRwTkhIVXZZUXVOTkJGQWp4dGJTdnQ1WVd0dXU3ejRWYlJESzJQaDhxWkZ0?=
- =?utf-8?B?SFMzUGNGbTZBRUVlWUdDcGVOY0FrY2kxc091L3VVazk2SkhPUndrUytMcWJh?=
- =?utf-8?B?Q3FwU2tCZU5HY044aDlIZzVOKzJJUjluUDA2M0RmNm1yeFFzOVN3aHRsZW5U?=
- =?utf-8?B?UHlvSnd0SFhsTllPblpzekllSk8wVHRBd00rRGJnaXVVbCswc1JyN0hpZU56?=
- =?utf-8?B?cHYva2E2cUdFbFpnMFRDWjQyRDNKbDV4YnNYSmV2aTdvb2lDNFovc0hxWWZp?=
- =?utf-8?B?WHhvUkRTMWRGeUZtQ1VUYTdPdW5tTjE0bW1JYnF0NXFIUjAxTnJ0eUoxYmZZ?=
- =?utf-8?B?T050ZjQ1TGE5VS8wWDJzMHlHa0xJWFB0TDMzZXpnRFNCRHVNaTNKYlVxUmpX?=
- =?utf-8?B?VWZ3S3ZNMmdBbjBYMmM2eitWVzB5V1hSRlkxbGJ1cm9QOHVqUFdIelZCU1FC?=
- =?utf-8?B?U1RlOXVRSWV0c2M1eEZoRllSbTB4NmRZNnF4eERhNEIydndxNnlNVVkrTU93?=
- =?utf-8?B?YVAyZG1iTm5sUnFKT21CNGQ0anRIRGtrdy9zczBSMVZ6ZDBoL0Nsam5VMVJ1?=
- =?utf-8?B?TTZhb25RRlEzcmEzRVFCTlB2clJjN1NteHQ3aWRDakRLWG9HRVM5L3BLalE3?=
- =?utf-8?B?NHJKTFpsVHlJSG1rS25yakh5UFdxdmVnM3FZdXdkNUhjdEdNbkVIbE1HWFZM?=
- =?utf-8?B?SmwvK1gvZS9CV3Q5azVKYmtwa2JrS3l3YWhDUm91MWNwaFhvazN5SFp0cEZ2?=
- =?utf-8?B?MHp5ckIxOVZxTUJxbmZHR3pNSGd3OFVFTFBERGlnRWEvcEswQ3A4TlU4S3NR?=
- =?utf-8?B?QlhjcUlwU3hUTSt2T3RQeFdVb0Z6ODJOdXlibDVqbVZ0Yncwbmh3T2NEZ21G?=
- =?utf-8?B?TFlQRjFHdWJMMURCZG93UXhwTXdNYmF6aFB5UVpmN2hMYnQvQWV4VC90Z0J1?=
- =?utf-8?B?UjFEalJyS1djR21MekJrcG50T2pVNXlUdysrS2VhNGtQdGN3MHZkNkoyU3dO?=
- =?utf-8?B?QlFRZ24rUDJreGRlR1I1SEhRaGZYRHVudzVNdGtwMnB5TnpZQmI2TW10K2p6?=
- =?utf-8?Q?IzyZbcVtQRfX29eXj2aIjs0=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 263ddc83-cb52-421c-d54d-08d9f5213927
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3053.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 10:02:09.5492
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6jBGEljQY1/b7VZT847plKicw8ah9PtL5f+0dpurSEkrsm+UFWWR+obTell/AATzyVmNL6WaHVPR0+O8+bo3xg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5196
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 1/4] MIPS: Loongson64: dts: update the display
+ controller device node
+Content-Language: en-US
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220220145554.117854-1-15330273260@189.cn>
+ <20220220145554.117854-2-15330273260@189.cn>
+ <08abcb14-f1f6-8be5-6309-cd16e0578c05@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <08abcb14-f1f6-8be5-6309-cd16e0578c05@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 21-Feb-22 1:27 PM, Like Xu wrote:
-> On 21/2/2022 3:31 pm, Ravi Bangoria wrote:
->>   void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx)
->>   {
->>       struct kvm_pmc *pmc = kvm_x86_ops.pmu_ops->pmc_idx_to_pmc(pmu, pmc_idx);
->> +    bool is_intel = !strncmp(kvm_x86_ops.name, "kvm_intel", 9);
+On 21/02/2022 10:19, Sergei Shtylyov wrote:
+> On 2/20/22 5:55 PM, Sui Jingfeng wrote:
 > 
-> How about using guest_cpuid_is_intel(vcpu)
+>> From: suijingfeng <suijingfeng@loongson.cn>
+>>
+>> The display controller is a pci device, its PCI vendor id is 0x0014
+>> its PCI device id is 0x7a06.
+>>
+>> 1) In order to let the driver to know which chip the DC is contained
+>>    in, the compatible string of the display controller is updated
+>>    according to the chip's name.
+>>
+>> 2) Add display controller device node for ls2k1000 SoC
+>>
+>> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>> ---
+>>  arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 8 ++++++++
+>>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi          | 7 ++-----
+>>  2 files changed, 10 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> index 768cf2abcea3..af9cda540f9e 100644
+>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> @@ -209,6 +209,14 @@ gpu@5,0 {
+>>  				interrupt-parent = <&liointc0>;
+>>  			};
+>>  
+>> +			lsdc: display-controller@6,0 {
+> 
+>    Shouldn't the node name just be "display", according to the section 2.2.2
+> of the DT spec?
 
-Yeah, that's better then strncmp().
+lcd-controller, led-controller. As I understood from the bindings, this
+is not physical device displaying something (like a panel) but rather a
+device controlling such panel. Therefore display-controller feels
+appropriate.
 
-> directly in the reprogram_gp_counter() ?
 
-We need this flag in reprogram_fixed_counter() as well.
-
-- Ravi
+Best regards,
+Krzysztof

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5964BE031
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A11ED4BDCA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348153AbiBUJRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:17:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33882 "EHLO
+        id S1352567AbiBUJ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:56:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347944AbiBUJKf (ORCPT
+        with ESMTP id S1352951AbiBUJsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:10:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232F61EC70;
-        Mon, 21 Feb 2022 01:02:49 -0800 (PST)
+        Mon, 21 Feb 2022 04:48:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B96C12ADB;
+        Mon, 21 Feb 2022 01:21:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD8A6B80EB8;
-        Mon, 21 Feb 2022 09:02:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B85C340E9;
-        Mon, 21 Feb 2022 09:02:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED5FB608C4;
+        Mon, 21 Feb 2022 09:21:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE41AC340E9;
+        Mon, 21 Feb 2022 09:21:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434166;
-        bh=pjlyT+vcizqttRwAGXl5Y1ZgpaCZGgVjty5mxEhx0pI=;
+        s=korg; t=1645435306;
+        bh=cNKbHEAwNRiOzp4mcFCpsdlbV3sVT1yjGvzETBBzb9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xn6bSeEJNg3mvXvyIIHdK+8Nt5HI5QlUWhro+XnSAvNa8KjuMD9QtENrczwaOCtwe
-         seT56FnJD4+b61RORXv5OFDiZyMNpDhh64EFq83pExNJrkSwijYtDmoM1hDjZWs9hV
-         3fTyfF9NM/a61cAZ47t8fHwhhrtQ+5cLGbepggzs=
+        b=gCT40HzufNtAs9H7ZNi9zBzkzvPS79AYOHFQreSlXhSvmy29AGhCogJFlPsEXk77b
+         Z1GfcvBanyQpcgPeQcGAM8jyIorX6Xa4MkPxcEjUeMe5qWY6uZTitAsI2//D0NIXvg
+         wzxM0lGVG0tcCI1PCQLXsa45gVQ2+cLYITNg2t0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        John Garry <john.garry@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 036/121] scsi: pm8001: Fix use-after-free for aborted SSP/STP sas_task
-Date:   Mon, 21 Feb 2022 09:48:48 +0100
-Message-Id: <20220221084922.414124913@linuxfoundation.org>
+        stable@vger.kernel.org, Rafael Richter <rafael.richter@gin.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 110/227] net: dsa: mv88e6xxx: flush switchdev FDB workqueue before removing VLAN
+Date:   Mon, 21 Feb 2022 09:48:49 +0100
+Message-Id: <20220221084938.519965985@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,67 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Garry <john.garry@huawei.com>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit df7abcaa1246e2537ab4016077b5443bb3c09378 ]
+commit a2614140dc0f467a83aa3bb4b6ee2d6480a76202 upstream.
 
-Currently a use-after-free may occur if a sas_task is aborted by the upper
-layer before we handle the I/O completion in mpi_ssp_completion() or
-mpi_sata_completion().
+mv88e6xxx is special among DSA drivers in that it requires the VTU to
+contain the VID of the FDB entry it modifies in
+mv88e6xxx_port_db_load_purge(), otherwise it will return -EOPNOTSUPP.
 
-In this case, the following are the two steps in handling those I/O
-completions:
+Sometimes due to races this is not always satisfied even if external
+code does everything right (first deletes the FDB entries, then the
+VLAN), because DSA commits to hardware FDB entries asynchronously since
+commit c9eb3e0f8701 ("net: dsa: Add support for learning FDB through
+notification").
 
- - Call complete() to inform the upper layer handler of completion of
-   the I/O.
+Therefore, the mv88e6xxx driver must close this race condition by
+itself, by asking DSA to flush the switchdev workqueue of any FDB
+deletions in progress, prior to exiting a VLAN.
 
- - Release driver resources associated with the sas_task in
-   pm8001_ccb_task_free() call.
-
-When complete() is called, the upper layer may free the sas_task. As such,
-we should not touch the associated sas_task afterwards, but we do so in the
-pm8001_ccb_task_free() call.
-
-Fix by swapping the complete() and pm8001_ccb_task_free() calls ordering.
-
-Link: https://lore.kernel.org/r/1643289172-165636-4-git-send-email-john.garry@huawei.com
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: c9eb3e0f8701 ("net: dsa: Add support for learning FDB through notification")
+Reported-by: Rafael Richter <rafael.richter@gin.de>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/dsa/mv88e6xxx/chip.c |    7 +++++++
+ include/net/dsa.h                |    1 +
+ net/dsa/dsa.c                    |    1 +
+ net/dsa/dsa_priv.h               |    1 -
+ 4 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index b22a8ab754faa..2a3ce4680734b 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -2133,9 +2133,9 @@ mpi_ssp_completion(struct pm8001_hba_info *pm8001_ha , void *piomb)
- 		pm8001_dbg(pm8001_ha, FAIL,
- 			   "task 0x%p done with io_status 0x%x resp 0x%x stat 0x%x but aborted by upper layer!\n",
- 			   t, status, ts->resp, ts->stat);
-+		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
- 		if (t->slow_task)
- 			complete(&t->slow_task->completion);
--		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
- 	} else {
- 		spin_unlock_irqrestore(&t->task_state_lock, flags);
- 		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
-@@ -2726,9 +2726,9 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 		pm8001_dbg(pm8001_ha, FAIL,
- 			   "task 0x%p done with io_status 0x%x resp 0x%x stat 0x%x but aborted by upper layer!\n",
- 			   t, status, ts->resp, ts->stat);
-+		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
- 		if (t->slow_task)
- 			complete(&t->slow_task->completion);
--		pm8001_ccb_task_free(pm8001_ha, t, ccb, tag);
- 	} else {
- 		spin_unlock_irqrestore(&t->task_state_lock, flags);
- 		pm8001_ccb_task_free_done(pm8001_ha, t, ccb, tag);
--- 
-2.34.1
-
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -2290,6 +2290,13 @@ static int mv88e6xxx_port_vlan_del(struc
+ 	if (!mv88e6xxx_max_vid(chip))
+ 		return -EOPNOTSUPP;
+ 
++	/* The ATU removal procedure needs the FID to be mapped in the VTU,
++	 * but FDB deletion runs concurrently with VLAN deletion. Flush the DSA
++	 * switchdev workqueue to ensure that all FDB entries are deleted
++	 * before we remove the VLAN.
++	 */
++	dsa_flush_workqueue();
++
+ 	mv88e6xxx_reg_lock(chip);
+ 
+ 	err = mv88e6xxx_port_get_pvid(chip, port, &pvid);
+--- a/include/net/dsa.h
++++ b/include/net/dsa.h
+@@ -1094,6 +1094,7 @@ void dsa_unregister_switch(struct dsa_sw
+ int dsa_register_switch(struct dsa_switch *ds);
+ void dsa_switch_shutdown(struct dsa_switch *ds);
+ struct dsa_switch *dsa_switch_find(int tree_index, int sw_index);
++void dsa_flush_workqueue(void);
+ #ifdef CONFIG_PM_SLEEP
+ int dsa_switch_suspend(struct dsa_switch *ds);
+ int dsa_switch_resume(struct dsa_switch *ds);
+--- a/net/dsa/dsa.c
++++ b/net/dsa/dsa.c
+@@ -349,6 +349,7 @@ void dsa_flush_workqueue(void)
+ {
+ 	flush_workqueue(dsa_owq);
+ }
++EXPORT_SYMBOL_GPL(dsa_flush_workqueue);
+ 
+ int dsa_devlink_param_get(struct devlink *dl, u32 id,
+ 			  struct devlink_param_gset_ctx *ctx)
+--- a/net/dsa/dsa_priv.h
++++ b/net/dsa/dsa_priv.h
+@@ -170,7 +170,6 @@ void dsa_tag_driver_put(const struct dsa
+ const struct dsa_device_ops *dsa_find_tagger_by_name(const char *buf);
+ 
+ bool dsa_schedule_work(struct work_struct *work);
+-void dsa_flush_workqueue(void);
+ const char *dsa_tag_protocol_to_str(const struct dsa_device_ops *ops);
+ 
+ static inline int dsa_tag_protocol_overhead(const struct dsa_device_ops *ops)
 
 

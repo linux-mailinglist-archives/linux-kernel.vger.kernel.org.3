@@ -2,203 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF04E4BEDF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 00:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DA14BEE4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 00:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiBUX0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 18:26:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40808 "EHLO
+        id S235191AbiBUXZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 18:25:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236767AbiBUX0i (ORCPT
+        with ESMTP id S231261AbiBUXZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 18:26:38 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B7424F1F;
-        Mon, 21 Feb 2022 15:26:14 -0800 (PST)
+        Mon, 21 Feb 2022 18:25:52 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02E52458B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:25:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645485974; x=1677021974;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yBcBvjJ/VepSDsCpwUwjixNuXeR4oixpM4h2duuH8BA=;
-  b=mEgn5RAbU1BhEtElJQZndjMDXJiCZMfitSUyHvqWolN3w7OLSUwuQ2Lf
-   GBLOE/+o/tKAGzL5nVZlvwYNF+tz6/QPu0EktnsIQCiDBONykpP1tLzCB
-   39Xcviwvy2tRBofY/LQfb6oDeUcupHHrqzUTXz+I6pCSB5BZH5iyZ6Rd3
-   OcV9GauKnVs//NUpsU9Ey7iwoq5aNedXKf4jCi3IL7RWLNdC7CAqXR+TA
-   nQqo8fXxVIA63OJl0sK9Nm0lgbHNjYURD89WLp984zyPtVQvF4sRCGEi2
-   BhtgmnNTaDM2urCgk+fyarx+XUNm9Y/eFoGrIgWix9iagxliglQU63PEY
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="338011900"
+  t=1645485928; x=1677021928;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2Gv3hpY5QZY53Ir15UzbMUvC3S5cQYGic9ErfjLXk7c=;
+  b=MS1izsLQsG52k5GYDKKkwSrmQ/5ujH9yLNtcsmgnLLjM1Oi3AWlIHioQ
+   IUnDfKgU6edy/vljBdH393TZAx6P1Isg9DSt7HJbBk720PgzjCKuuGU10
+   Cwn7B1UqzN3S+OyLJ7dQc3g6C3ZxnIwv0FdewL9ilbckNQzg3kdjuGScT
+   S+4snctdD8eVZLV+jaCbJUdwsILcPhAbMxk8USI7dVTVHXy/L26YoYit6
+   NGMktnVUQm7evJq+YgFqnfj6XpFC8OwppLbdyNlBDlIWrdvGTYFMR5sYJ
+   ZZTemYxldlWRng8sdT5fnxoXPFcJhpJJKAaEQdJxEHqHxTm4CQAmYODYh
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250400864"
 X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="338011900"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 15:26:13 -0800
+   d="scan'208";a="250400864"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 15:25:28 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="706397026"
-Received: from lab-ah.igk.intel.com ([10.91.215.196])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 15:26:11 -0800
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-To:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, netdev <netdev@vger.kernel.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v3 06/11] lib/ref_tracker: add printing to memory buffer
-Date:   Tue, 22 Feb 2022 00:25:37 +0100
-Message-Id: <20220221232542.1481315-7-andrzej.hajda@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220221232542.1481315-1-andrzej.hajda@intel.com>
-References: <20220221232542.1481315-1-andrzej.hajda@intel.com>
+   d="scan'208";a="638695715"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2022 15:25:22 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 8923A12C; Tue, 22 Feb 2022 01:25:38 +0200 (EET)
+Date:   Tue, 22 Feb 2022 02:25:38 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, knsathya@kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [PATCHv3.1 2.1/2] x86/coco: Add API to handle encryption mask
+Message-ID: <20220221232538.3pd3w63s5v3us5xt@black.fi.intel.com>
+References: <YhAWcPbzgUGcJZjI@zn.tnic>
+ <20220219001305.22883-1-kirill.shutemov@linux.intel.com>
+ <20220219001305.22883-2-kirill.shutemov@linux.intel.com>
+ <YhP+kES/UVx7RwYz@zn.tnic>
+ <20220221221049.p5zvappg4s2mjem7@black.fi.intel.com>
+ <YhQUB2dIQJ/Ov3zp@zn.tnic>
 MIME-Version: 1.0
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhQUB2dIQJ/Ov3zp@zn.tnic>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case one wants to show stats via debugfs.
+On Mon, Feb 21, 2022 at 11:36:55PM +0100, Borislav Petkov wrote:
+> On Tue, Feb 22, 2022 at 01:10:49AM +0300, Kirill A. Shutemov wrote:
+> > I'm not sure it is a good idea. It leaves room for code between these two
+> > calls. I believe they conceptually has to initialized in one shot. That's
+> > the only way we get consistent state.
+> 
+> Really, where?
 
-Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-Reviewed-by: Chris Wilson <chris.p.wilson@intel.com>
----
- include/linux/ref_tracker.h |  8 ++++++
- lib/ref_tracker.c           | 56 +++++++++++++++++++++++++++++++------
- 2 files changed, 56 insertions(+), 8 deletions(-)
+I'm talking about potential issue if cc_set_vendor() and cc_set_mask()
+would drift apart.
 
-diff --git a/include/linux/ref_tracker.h b/include/linux/ref_tracker.h
-index a2cf1f6309adb..2fdbfd2e14797 100644
---- a/include/linux/ref_tracker.h
-+++ b/include/linux/ref_tracker.h
-@@ -50,6 +50,8 @@ void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
- void ref_tracker_dir_print(struct ref_tracker_dir *dir,
- 			   unsigned int display_limit);
- 
-+int ref_tracker_dir_snprint(struct ref_tracker_dir *dir, char *buf, size_t size);
-+
- int ref_tracker_alloc(struct ref_tracker_dir *dir,
- 		      struct ref_tracker **trackerp, gfp_t gfp);
- 
-@@ -78,6 +80,12 @@ static inline void ref_tracker_dir_print(struct ref_tracker_dir *dir,
- {
- }
- 
-+static inline int ref_tracker_dir_snprint(struct ref_tracker_dir *dir,
-+					  char *buf, size_t size)
-+{
-+	return 0;
-+}
-+
- static inline int ref_tracker_alloc(struct ref_tracker_dir *dir,
- 				    struct ref_tracker **trackerp,
- 				    gfp_t gfp)
-diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
-index ab1253fde244e..2ef4596b6b36f 100644
---- a/lib/ref_tracker.c
-+++ b/lib/ref_tracker.c
-@@ -62,8 +62,27 @@ ref_tracker_get_stats(struct ref_tracker_dir *dir, unsigned int limit)
- 	return stats;
- }
- 
--void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
--			   unsigned int display_limit)
-+struct ostream {
-+	char *buf;
-+	int size, used;
-+};
-+
-+#define pr_ostream(stream, fmt, args...) \
-+({ \
-+	struct ostream *_s = (stream); \
-+\
-+	if (!_s->buf) { \
-+		pr_err(fmt, ##args); \
-+	} else { \
-+		int ret, len = _s->size - _s->used; \
-+		ret = snprintf(_s->buf + _s->used, len, pr_fmt(fmt), ##args); \
-+		_s->used += min(ret, len); \
-+	} \
-+})
-+
-+static void
-+__ref_tracker_dir_pr_ostream(struct ref_tracker_dir *dir,
-+			     unsigned int display_limit, struct ostream *s)
- {
- 	struct ref_tracker_dir_stats *stats;
- 	unsigned int i = 0, skipped;
-@@ -77,8 +96,8 @@ void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
- 
- 	stats = ref_tracker_get_stats(dir, display_limit);
- 	if (IS_ERR(stats)) {
--		pr_err("%s@%pK: couldn't get stats, error %pe\n",
--		       dir->name, dir, stats);
-+		pr_ostream(s, "%s@%pK: couldn't get stats, error %pe\n",
-+			   dir->name, dir, stats);
- 		return;
- 	}
- 
-@@ -88,19 +107,27 @@ void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
- 		stack = stats->stacks[i].stack_handle;
- 		if (sbuf && !stack_depot_snprint(stack, sbuf, STACK_BUF_SIZE, 4))
- 			sbuf[0] = 0;
--		pr_err("%s@%pK has %d/%d users at\n%s\n", dir->name, dir,
--		       stats->stacks[i].count, stats->total, sbuf);
-+		pr_ostream(s, "%s@%pK has %d/%d users at\n%s\n", dir->name, dir,
-+			   stats->stacks[i].count, stats->total, sbuf);
- 		skipped -= stats->stacks[i].count;
- 	}
- 
- 	if (skipped)
--		pr_err("%s@%pK skipped reports about %d/%d users.\n",
--		       dir->name, dir, skipped, stats->total);
-+		pr_ostream(s, "%s@%pK skipped reports about %d/%d users.\n",
-+			   dir->name, dir, skipped, stats->total);
- 
- 	kfree(sbuf);
- 
- 	kfree(stats);
- }
-+
-+void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
-+			   unsigned int display_limit)
-+{
-+	struct ostream os = {};
-+
-+	__ref_tracker_dir_pr_ostream(dir, display_limit, &os);
-+}
- EXPORT_SYMBOL(__ref_tracker_dir_print);
- 
- void ref_tracker_dir_print(struct ref_tracker_dir *dir,
-@@ -114,6 +141,19 @@ void ref_tracker_dir_print(struct ref_tracker_dir *dir,
- }
- EXPORT_SYMBOL(ref_tracker_dir_print);
- 
-+int ref_tracker_dir_snprint(struct ref_tracker_dir *dir, char *buf, size_t size)
-+{
-+	struct ostream os = { .buf = buf, .size = size };
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&dir->lock, flags);
-+	__ref_tracker_dir_pr_ostream(dir, 16, &os);
-+	spin_unlock_irqrestore(&dir->lock, flags);
-+
-+	return os.used;
-+}
-+EXPORT_SYMBOL(ref_tracker_dir_snprint);
-+
- void ref_tracker_dir_exit(struct ref_tracker_dir *dir)
- {
- 	struct ref_tracker *tracker, *n;
+But, okay, I see that you don't feel it an issue. Will do your way.
+
 -- 
-2.25.1
-
+ Kirill A. Shutemov

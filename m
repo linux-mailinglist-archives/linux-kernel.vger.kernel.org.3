@@ -2,118 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044014BDE51
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35154BE267
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358852AbiBUNTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:19:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53754 "EHLO
+        id S1358873AbiBUNT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:19:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbiBUNTP (ORCPT
+        with ESMTP id S1358867AbiBUNT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:19:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982C1EEF7;
-        Mon, 21 Feb 2022 05:18:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91E5D6137C;
-        Mon, 21 Feb 2022 13:18:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE45C340E9;
-        Mon, 21 Feb 2022 13:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645449530;
-        bh=zZBPLOwN6VC415V5nh8joz0veP6og+pbcOBCbahM5NY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tII7+LMLdbC5SVB2FtWb7FEzAeHIwAAc7hck7Mk5k7BIJa5ZC+l5QzIHp0AGiq0X2
-         UR80X/ciAYECVR636j0ilnAmXMdL2J+P21y9xkwTnjAKd+yVPiDKfUtgqqPewazSl+
-         WX7Lo+qrwPdXkRF48WdblnbBPHYqYB9U6l3HREEmvkInODlHDJ3MHC43sIXxtV6Jpq
-         7Uz3S64nVyhSZOtRLoKFXK72a7+q9wo6upqb/OLFv8kjDQBlQO3PhzzNxiLWaqW0/Z
-         oUf/Xudcffgr4uj9hBRtO5kuwJ6Th8voIrviv0OwXKFDWkIJ7TWzdT4dqkMIFQEyYA
-         2serFy4vZWSPA==
-From:   broonie@kernel.org
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Geliang Tang <geliang.tang@suse.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Date:   Mon, 21 Feb 2022 13:18:42 +0000
-Message-Id: <20220221131842.468893-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 21 Feb 2022 08:19:56 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D831EEDA
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:19:32 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K2NCc5QY4zdZPp;
+        Mon, 21 Feb 2022 21:18:20 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 21 Feb 2022 21:19:30 +0800
+Subject: Re: [PATCH v2] mm: clean up hwpoison page cache page in fault path
+To:     Oscar Salvador <osalvador@suse.de>
+CC:     Rik van Riel <riel@surriel.com>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>, <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20220212213740.423efcea@imladris.surriel.com>
+ <Yguh5JUGHln/iRJ8@localhost.localdomain>
+ <e6eeb84f-cf1d-493e-ce8e-fea6f3679a9e@huawei.com>
+ <YhOLmvLKOCO0qDIe@localhost.localdomain>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <80df0575-6f61-ccad-833a-b4f5b3d42628@huawei.com>
+Date:   Mon, 21 Feb 2022 21:19:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YhOLmvLKOCO0qDIe@localhost.localdomain>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 2022/2/21 20:54, Oscar Salvador wrote:
+> On Wed, Feb 16, 2022 at 10:13:14AM +0800, Miaohe Lin wrote:
+>> IIUC, this could not happen when soft-offlining a pagecache page. They're either
+>> invalidated or migrated away and then we set PageHWPoison.
+>> I think this may happen on a clean pagecache page when it's isolated. So it's !PageLRU.
+>> And identify_page_state treats it as me_unknown because it's non reserved, slab, swapcache
+>> and so on ...(see error_states for details). Or am I miss anything?
+> 
+> But the path you are talking about is when we do have a non-recoverable
+> error, so memory_failure() path.
+> AFAIU, Rik talks about pages with corrected errors, and that is
+> soft_offline().
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Oh, yes, Rik talks about pages with corrected errors. My mistake. Then I really
+want to understand how we got there too. :)
 
-  tools/testing/selftests/net/mptcp/mptcp_join.sh
+Thanks.
 
-between commit:
+> 
 
-  6ef84b1517e08 ("selftests: mptcp: more robust signal race test")
-
-from the net tree and commit:
-
-  34aa6e3bccd86 ("selftests: mptcp: add ip mptcp wrappers")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 0c8a2a20b96cf,725924012b412..0000000000000
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@@ -1163,20 -1287,17 +1302,21 @@@ signal_address_tests(
-  
-  	# signal addresses race test
-  	reset
-- 	ip netns exec $ns1 ./pm_nl_ctl limits 4 4
-- 	ip netns exec $ns2 ./pm_nl_ctl limits 4 4
-- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.1.1 flags signal
-- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.2.1 flags signal
-- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.3.1 flags signal
-- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.4.1 flags signal
-- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.1.2 flags signal
-- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.2.2 flags signal
-- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.3.2 flags signal
-- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.4.2 flags signal
-++
-+ 	pm_nl_set_limits $ns1 4 4
-+ 	pm_nl_set_limits $ns2 4 4
-+ 	pm_nl_add_endpoint $ns1 10.0.1.1 flags signal
-+ 	pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
-+ 	pm_nl_add_endpoint $ns1 10.0.3.1 flags signal
-+ 	pm_nl_add_endpoint $ns1 10.0.4.1 flags signal
-+ 	pm_nl_add_endpoint $ns2 10.0.1.2 flags signal
-+ 	pm_nl_add_endpoint $ns2 10.0.2.2 flags signal
-+ 	pm_nl_add_endpoint $ns2 10.0.3.2 flags signal
-+ 	pm_nl_add_endpoint $ns2 10.0.4.2 flags signal
- -	run_tests $ns1 $ns2 10.0.1.1
- +
- +	# the peer could possibly miss some addr notification, allow retransmission
- +	ip netns exec $ns1 sysctl -q net.mptcp.add_addr_timeout=1
- +	run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow
-  	chk_join_nr "signal addresses race test" 3 3 3
-  
-  	# the server will not signal the address terminating

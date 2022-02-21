@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4C44BE594
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8304BE4DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238218AbiBUJm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:42:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48214 "EHLO
+        id S1348472AbiBUJUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:20:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350790AbiBUJfy (ORCPT
+        with ESMTP id S1349600AbiBUJMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:35:54 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DE02BB1E;
-        Mon, 21 Feb 2022 01:14:56 -0800 (PST)
+        Mon, 21 Feb 2022 04:12:37 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024D6240B1;
+        Mon, 21 Feb 2022 01:05:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4A3FCCE0E76;
-        Mon, 21 Feb 2022 09:14:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F36EC340E9;
-        Mon, 21 Feb 2022 09:14:10 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 72FE3CE0E93;
+        Mon, 21 Feb 2022 09:05:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5637CC340E9;
+        Mon, 21 Feb 2022 09:05:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434851;
-        bh=n1f98Y30u1MRoTvXq5oADRdUKbZtJKh6KWD/vuLlgzY=;
+        s=korg; t=1645434334;
+        bh=jv+AVOl/lBgMwyLrAswELFvOAFp14rzSsl/8i6LyfMw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iuMMx18d59/3xmBIivhvlkVxg3/WVlIc20dZ6ug5WGyhQBauvuqtSzsl3w8bG8gm+
-         0r6IIvNBcPCFZGLnS61KgTMOG4C/d2C9BJs13yit623FN3JgxcZ84jHwhTsSdFYHPG
-         ayL6ehvAAe8KszhMZBTmVtun6hCW6GfNkKoAihIo=
+        b=QvIv2tAmGEPkzy82gmIKnKsYONwzLGPyOHJ13zdZw7jGPPznKdZF2YVxH2Y8IPCHd
+         4OXehJzqKzZuJ63SLmWFC63IeNr00ZHXx5JOiHNBP/dTBpk867X/dnTrxQTJnnRhYA
+         VpQox7mo9SkSUcs5thzCMaVFN6i8vGvm/vOG8E3k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.15 121/196] powerpc/603: Fix boot failure with DEBUG_PAGEALLOC and KFENCE
+        stable@vger.kernel.org,
+        Zhang Changzhong <zhangchangzhong@huawei.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 061/121] bonding: force carrier update when releasing slave
 Date:   Mon, 21 Feb 2022 09:49:13 +0100
-Message-Id: <20220221084934.988246553@linuxfoundation.org>
+Message-Id: <20220221084923.279700717@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Zhang Changzhong <zhangchangzhong@huawei.com>
 
-commit 9bb162fa26ed76031ed0e7dbc77ccea0bf977758 upstream.
+commit a6ab75cec1e461f8a35559054c146c21428430b8 upstream.
 
-Allthough kernel text is always mapped with BATs, we still have
-inittext mapped with pages, so TLB miss handling is required
-when CONFIG_DEBUG_PAGEALLOC or CONFIG_KFENCE is set.
+In __bond_release_one(), bond_set_carrier() is only called when bond
+device has no slave. Therefore, if we remove the up slave from a master
+with two slaves and keep the down slave, the master will remain up.
 
-The final solution should be to set a BAT that also maps inittext
-but that BAT then needs to be cleared at end of init, and it will
-require more changes to be able to do it properly.
+Fix this by moving bond_set_carrier() out of if (!bond_has_slaves(bond))
+statement.
 
-As DEBUG_PAGEALLOC or KFENCE are debugging, performance is not a big
-deal so let's fix it simply for now to enable easy stable application.
+Reproducer:
+$ insmod bonding.ko mode=0 miimon=100 max_bonds=2
+$ ifconfig bond0 up
+$ ifenslave bond0 eth0 eth1
+$ ifconfig eth0 down
+$ ifenslave -d bond0 eth1
+$ cat /proc/net/bonding/bond0
 
-Fixes: 035b19a15a98 ("powerpc/32s: Always map kernel text and rodata with BATs")
-Cc: stable@vger.kernel.org # v5.11+
-Reported-by: Maxime Bizon <mbizon@freebox.fr>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/aea33b4813a26bdb9378b5f273f00bd5d4abe240.1638857364.git.christophe.leroy@csgroup.eu
+Fixes: ff59c4563a8d ("[PATCH] bonding: support carrier state for master")
+Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Link: https://lore.kernel.org/r/1645021088-38370-1-git-send-email-zhangchangzhong@huawei.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/head_book3s_32.S |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/bonding/bond_main.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
---- a/arch/powerpc/kernel/head_book3s_32.S
-+++ b/arch/powerpc/kernel/head_book3s_32.S
-@@ -421,14 +421,14 @@ InstructionTLBMiss:
-  */
- 	/* Get PTE (linux-style) and check access */
- 	mfspr	r3,SPRN_IMISS
--#ifdef CONFIG_MODULES
-+#if defined(CONFIG_MODULES) || defined(CONFIG_DEBUG_PAGEALLOC) || defined(CONFIG_KFENCE)
- 	lis	r1, TASK_SIZE@h		/* check if kernel address */
- 	cmplw	0,r1,r3
- #endif
- 	mfspr	r2, SPRN_SDR1
- 	li	r1,_PAGE_PRESENT | _PAGE_ACCESSED | _PAGE_EXEC | _PAGE_USER
- 	rlwinm	r2, r2, 28, 0xfffff000
--#ifdef CONFIG_MODULES
-+#if defined(CONFIG_MODULES) || defined(CONFIG_DEBUG_PAGEALLOC) || defined(CONFIG_KFENCE)
- 	bgt-	112f
- 	lis	r2, (swapper_pg_dir - PAGE_OFFSET)@ha	/* if kernel address, use */
- 	li	r1,_PAGE_PRESENT | _PAGE_ACCESSED | _PAGE_EXEC
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -2272,10 +2272,9 @@ static int __bond_release_one(struct net
+ 		bond_select_active_slave(bond);
+ 	}
+ 
+-	if (!bond_has_slaves(bond)) {
+-		bond_set_carrier(bond);
++	bond_set_carrier(bond);
++	if (!bond_has_slaves(bond))
+ 		eth_hw_addr_random(bond_dev);
+-	}
+ 
+ 	unblock_netpoll_tx();
+ 	synchronize_rcu();
 
 

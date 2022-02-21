@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FF24BE779
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D014BE9D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348982AbiBUJb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:31:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35888 "EHLO
+        id S1352604AbiBUJrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:47:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348920AbiBUJUz (ORCPT
+        with ESMTP id S1350932AbiBUJkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:20:55 -0500
+        Mon, 21 Feb 2022 04:40:40 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E7334661;
-        Mon, 21 Feb 2022 01:07:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9853C72B;
+        Mon, 21 Feb 2022 01:17:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DF88FCE0E88;
-        Mon, 21 Feb 2022 09:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D391CC340E9;
-        Mon, 21 Feb 2022 09:07:39 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2D1DDCE0E80;
+        Mon, 21 Feb 2022 09:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17864C340E9;
+        Mon, 21 Feb 2022 09:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434460;
-        bh=HKrIBi5m5CFXzZ+6/xBVUfB/8hJp8GunVilEDIKwwTQ=;
+        s=korg; t=1645435035;
+        bh=Sb1/oLxtF230QlfTreXW7Wx98AaF9vDhD7/AD7g450I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JEIebeZA7vLIgvYaZibUDWnjiNGWBmsC+l7xGj2YSYGPBWfuhjjID/0zTaoPSre0d
-         Fi8+LKMWWXMrTI4WF502K2u1SQnG+TKC8QdM72MbR/583abZywebsy/6MoQyolJFBG
-         xSRhSW3NR6xjNW8GAwJpoMZHOoO0OpfPXb34dbjQ=
+        b=CpFcnG+0t4Jvp36KFhtTQMczibNXXEbf99QqZ1OYF0939RjRAB8EQskdlXaSVFt8M
+         oLvgJAfNoCvmByfmAhZ0M8vJgj6lcyo9SQlXCLJ0Rw1FzvdKLe6IrAFy/CiwCBDUmB
+         I34xeu5LB0S+0g0tp9lEZAV9MpzGL+utSuR8IO+I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.15 008/196] serial: parisc: GSC: fix build when IOSAPIC is not set
-Date:   Mon, 21 Feb 2022 09:47:20 +0100
-Message-Id: <20220221084931.173905801@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.16 022/227] HID: amd_sfh: Increase sensor command timeout
+Date:   Mon, 21 Feb 2022 09:47:21 +0100
+Message-Id: <20220221084935.584019784@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,54 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 
-commit 6e8793674bb0d1135ca0e5c9f7e16fecbf815926 upstream.
+commit a7072c01c3ac3ae6ecd08fa7b43431cfc8ed331f upstream.
 
-There is a build error when using a kernel .config file from
-'kernel test robot' for a different build problem:
+HPD sensors take more time to initialize. Hence increasing sensor
+command timeout to get response with status within a max timeout.
 
-hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3':
-(.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
-
-when:
-  CONFIG_GSC=y
-  CONFIG_SERIO_GSCPS2=y
-  CONFIG_SERIAL_8250_GSC=y
-  CONFIG_PCI is not set
-    and hence PCI_LBA is not set.
-  IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
-
-Make the use of iosapic_serial_irq() conditional to fix the build error.
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-parisc@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-serial@vger.kernel.org
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>
-Suggested-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: 173709f50e98 ("HID: amd_sfh: Add command response to check command status")
+Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/8250/8250_gsc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/serial/8250/8250_gsc.c
-+++ b/drivers/tty/serial/8250/8250_gsc.c
-@@ -26,7 +26,7 @@ static int __init serial_init_chip(struc
- 	unsigned long address;
- 	int err;
+--- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
++++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
+@@ -37,11 +37,11 @@ static int amd_sfh_wait_response_v2(stru
+ {
+ 	union cmd_response cmd_resp;
  
--#ifdef CONFIG_64BIT
-+#if defined(CONFIG_64BIT) && defined(CONFIG_IOSAPIC)
- 	if (!dev->irq && (dev->id.sversion == 0xad))
- 		dev->irq = iosapic_serial_irq(dev);
- #endif
+-	/* Get response with status within a max of 800 ms timeout */
++	/* Get response with status within a max of 1600 ms timeout */
+ 	if (!readl_poll_timeout(mp2->mmio + AMD_P2C_MSG(0), cmd_resp.resp,
+ 				(cmd_resp.response_v2.response == sensor_sts &&
+ 				cmd_resp.response_v2.status == 0 && (sid == 0xff ||
+-				cmd_resp.response_v2.sensor_id == sid)), 500, 800000))
++				cmd_resp.response_v2.sensor_id == sid)), 500, 1600000))
+ 		return cmd_resp.response_v2.response;
+ 
+ 	return SENSOR_DISABLED;
 
 

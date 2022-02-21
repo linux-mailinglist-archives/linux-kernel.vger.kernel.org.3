@@ -2,186 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAF94BEBFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3593A4BEBFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbiBUUnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 15:43:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56118 "EHLO
+        id S233849AbiBUUku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 15:40:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiBUUm7 (ORCPT
+        with ESMTP id S233829AbiBUUks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:42:59 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4330E237DC;
-        Mon, 21 Feb 2022 12:42:35 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E74821063;
-        Mon, 21 Feb 2022 12:42:34 -0800 (PST)
-Received: from [10.1.39.143] (e127744.cambridge.arm.com [10.1.39.143])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 864133F66F;
-        Mon, 21 Feb 2022 12:42:31 -0800 (PST)
-Subject: Re: [PATCH 2/2] perf arm-spe: Parse more SPE fields and store source
-To:     Leo Yan <leo.yan@linaro.org>, Ali Saidi <alisaidi@amazon.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        andrew.kilroy@arm.com, benh@kernel.crashing.org,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@redhat.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-References: <b1b3697d-4a0a-d041-5cbd-e08fec9e658c@arm.com>
- <20220128210245.4628-1-alisaidi@amazon.com>
- <7eca7a1d-a5a2-2aab-b3cf-5d83cb8ccf4f@arm.com>
- <20220212041927.GA763461@leoy-ThinkPad-X240s>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <9266bfb6-341c-1d9c-e96f-c9f856a5ffb6@arm.com>
-Date:   Mon, 21 Feb 2022 20:41:43 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 21 Feb 2022 15:40:48 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE92237EB
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:40:24 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id k2so8426962oia.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:40:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4MPeEss/eyhujmZHQpuKuJo+y/GBuhmITtjH3kw5oTo=;
+        b=qgQx96VIAfwy5gqV9T15CfmdVz/V1iKi8abJIMxo7iAA6RDlvo448KNRKokm0iaUpX
+         c55+5OBvtWmId6TT6BV/pSg2WCNswNG2kZwIy5UJM08PGCqub9c8ehMLkBuTl9tVWzUx
+         SoflnUz35O2LmWGvKiFLnZL+jCe+RH38O+2NT4uzuHpbGBzVh3Bh3dOOkqPNhptUDIqg
+         SwGW3BTckAfW5kLHtnRIklY2qp4vBYXyfOm3HsyFpjnAKvR59EhdNAyIe98o0LVqQvl5
+         8MCIbNn6yXRwYq9Wzvkn/Sv7YB0/3GTK6GAA4VwubEzJ87Ek6m4079ylj6sW4pKI2BHE
+         UtQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4MPeEss/eyhujmZHQpuKuJo+y/GBuhmITtjH3kw5oTo=;
+        b=H0iZW5JTWSFow2aH/k0Ahk2ULmJPWJMKQ9IKbxWKjYf4I8CsXKtxCyb0sepH93ZXwv
+         fQ/b8aPbHvXpdlVKV9yzJAKtr0EZEH++Q3pCAmZKk6Mt4xFzc2V78B4HIDGjPfTiWH6e
+         0J82X2toGi/5ZuqMeOGFSXAhZlm/QlMJVUL2s7HDCsWxOTgiXGbeJEe1r1YXTiNJgKz/
+         +nAEVi9chwes9wmjzurm0jnUXCiW/YN6v4Tk7CyuzvUrDXr7fczBuaMTDUuPAO3PR1U1
+         cNiUlQQPsq7vcmQuoJI7TNQiu5cpEon6h4TYxj83H+x4PwS0PPX5RDFX613/oDMlNoMG
+         Tndw==
+X-Gm-Message-State: AOAM532zynrexgbnsdMsbwT53fNgM4+OB9JuovMQyLGZsNYHbOtL4EBt
+        uLCEmCBpdY9pwGIWW2TtsxSDqw==
+X-Google-Smtp-Source: ABdhPJzj03s5eDaxuXX9ylEOu3voMTeqNd5F3Ulcr3RvfVPBKrBwXvw95jjeqihlpKTVd6iXxZgwTw==
+X-Received: by 2002:a05:6808:3006:b0:2d1:b44c:5549 with SMTP id ay6-20020a056808300600b002d1b44c5549mr389253oib.318.1645476024112;
+        Mon, 21 Feb 2022 12:40:24 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id j2sm5479493ooj.2.2022.02.21.12.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 12:40:23 -0800 (PST)
+Date:   Mon, 21 Feb 2022 12:42:24 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Taniya Das <tdas@codeaurora.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [v1 1/2] clk: qcom: gdsc: Use the default transition delay for
+ GDSCs
+Message-ID: <YhP5MD+d8btWBUl8@ripper>
+References: <20220209172513.17873-1-tdas@codeaurora.org>
+ <YgRBnExwlzI+lPlR@builder.lan>
+ <20220210072842.3E796C004E1@smtp.kernel.org>
+ <9f343332-9a0e-cbf9-9fb1-17127036b0b6@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <20220212041927.GA763461@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f343332-9a0e-cbf9-9fb1-17127036b0b6@codeaurora.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo, Ali,
+On Mon 21 Feb 08:55 PST 2022, Taniya Das wrote:
 
-On 12/02/2022 04:19, Leo Yan wrote:
-> Hi German, Ali,
->
-> On Fri, Feb 11, 2022 at 04:31:40PM +0000, German Gomez wrote:
->> Hi Ali,
->>
->> [...]
-> Let's step back a bit and divide the decoding flow into two parts:
-> backend and frontend.
+> Hi Stephen, Bjorn,
+> 
+> Thanks for your comments.
+> 
+> On 2/10/2022 12:58 PM, Stephen Boyd wrote:
+> > Quoting Bjorn Andersson (2022-02-09 14:35:08)
+> > > On Wed 09 Feb 11:25 CST 2022, Taniya Das wrote:
+> > > 
+> > > > Do not update the transition delay and use the default reset values.
+> > > > 
+> > > > Fixes: 45dd0e55317cc ("clk: qcom: Add support for GDSCs)
+> > > > Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> > > > ---
+> > > >   drivers/clk/qcom/gdsc.c | 6 +++++-
+> > > >   drivers/clk/qcom/gdsc.h | 1 +
+> > > >   2 files changed, 6 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> > > > index 7e1dd8ccfa38..e7b213450640 100644
+> > > > --- a/drivers/clk/qcom/gdsc.c
+> > > > +++ b/drivers/clk/qcom/gdsc.c
+> > > > @@ -380,7 +380,11 @@ static int gdsc_init(struct gdsc *sc)
+> > > >         */
+> > > >        mask = HW_CONTROL_MASK | SW_OVERRIDE_MASK |
+> > > >               EN_REST_WAIT_MASK | EN_FEW_WAIT_MASK | CLK_DIS_WAIT_MASK;
+> > > > -     val = EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
+> > > > +
+> > > > +     regmap_read(sc->regmap, sc->gdscr, &val);
+> > > > +
+> > > > +     if (!(sc->flags & DEFAULT_TRANSITION_DELAY))
+> > > 
+> > > I dug a little bit more into this and noticed that on various platforms
+> > > CLK_DIS_WAIT_VAL for the GPU_CX GDSC is supposed to be 8 (whereas both
+> > > hw default and CLK_DIS_WAIT_VAL is 2).
+> > > 
+> 
+> Yes, only for certain GPU_CC these would be updated and that too in case the
+> design team suggests. Downstream we would set the value from probe itself,
+> or we can pick these from device tree as required and suggested.
+> 
 
-Sorry for derailing the conversation.
+I don't expect that value to be "configurable", so pushing it to DT
+doesn't seem like the proper solution.
 
-(I made some additional comments on the generation of samples below)
+> > > I'm not able to find anything helpful in the git log describing what the
+> > > value does, but it seems that a "just use hw default" flag won't cut it
+> > > for this scenario.
+> > > 
+> 
+> This value is used for the number of clock cycles it would wait before the
+> GDSCR ACK signals/halting the clock.
+> 
 
-> enum arm_spe_op_type {
->         /* First level operation type */
-> 	ARM_SPE_OP_OTHER        = 1 << 0,
-> 	ARM_SPE_OP_LDST		= 1 << 1,
-> 	ARM_SPE_OP_BRANCH_ERET  = 1 << 2,
->
->         /* Second level operation type for OTHER */
->         ARM_SPE_OP_SVE_OTHER    = 1 << 16,
->         ARM_SPE_OP_SVE_FP       = 1 << 17,
->         ARM_SPE_OP_SVE_PRED     = 1 << 18,
->
->         /* Second level operation type for LDST */
->         ARM_SPE_OP_LD           = 1 << 16,
->         ARM_SPE_OP_ST           = 1 << 17,
->         ARM_SPE_OP_ATOMIC       = 1 << 18,
->         ARM_SPE_OP_EXCL         = 1 << 19,
->         ARM_SPE_OP_AR           = 1 << 20,
->         ARM_SPE_OP_SIMD_FP      = 1 << 21,
->         ARM_SPE_OP_GP_REG       = 1 << 22,
->         ARM_SPE_OP_UNSPEC_REG   = 1 << 23,
->         ARM_SPE_OP_NV_SYSREG    = 1 << 24,
->         ARM_SPE_OP_SVE_PRED     = 1 << 25,
->         ARM_SPE_OP_SVE_SG       = 1 << 26,
->
->         /* Second level operation type for BRANCH_ERET */
->         ARM_SPE_OP_BR_COND      = 1 << 16,
->         ARM_SPE_OP_BR_INDIRECT  = 1 << 17,
-> };
->
-> IIUC, Ali suggested to directly reuse packet format to express
-> operation type and don't need to redefine the operation types like
-> above structure arm_spe_op_type.  I personally bias to convert the raw
-> packet format to more readable format, a benefit is this would give
-> us more readable code.
+That makes sense.
 
-I personally like this method as well
+> > 
+> > I'd prefer we invert the logic so that we don't need to litter this flag
+> > all over the place. I recall that the wait values were incorrect a long
+> > time ago on early gdsc using designs but hopefully they've been fixed
+> > now and we can simply use the default power on reset (POR) values.
+> 
+> I am okay to invert the logic, but I am not sure if they could cause any
+> issues to the older targets. They were broken in HW design long back, but
+> got fixed in most families of target and most GDSCs.
+> 
 
->
-> For the frontend, we need to convert Arm SPE record to samples.
-> We can explore two fields: sample::flags and sample::data_src, for
-> load/store related operations, I perfer we can fill more complete
-> info in field sample::data_src and extend the definitions for
-> perf_mem_data_src; for branch operations, we can fill sample::flags.
->
-> So I am just wandering if we can set the field
-> sample::data_src::mem_lock for atomic operations, like:
->
->     data_src.mem_op   = PERF_MEM_OP_LOAD;
->     data_src.mem_lock = PERF_MEM_LOCK_ATOMIC;
->
-> The field "mem_lock" is only two bits, we can consider to extend the
-> structure with an extra filed "mem_lock_ext" if it cannot meet our
-> requirement.
+I don't fancy us having a flag with the purpose of "don't set the
+timings to 2, 8 and 2" and then rely on open coded writes in probe to
+set it to something else where needed.
 
-Indeed it makes more sense to use data_src as much as possible. Thanks
-for pointing that out.
+So I definitely would prefer to flip this around, to make the cases
+where we want to write different values explicit.
 
-Some comments:
+But as you say, unless we make sure that all existing platforms do write
+2, 8 and 2 we risk introducing regressions from the current behavior.
 
-# ARM_SPE_OP_ATOMIC
+> As mentioned if explicitly they need to be updated, it is best to do from
+> the probe.
+> This was done in SC7180 GPUCC driver.
+>         /* Configure clk_dis_wait for gpu_cx_gdsc */
+>         regmap_update_bits(regmap, 0x106c, CLK_DIS_WAIT_MASK,
+>                                         8 << CLK_DIS_WAIT_SHIFT);
 
-  This might be a hack, but can we not represent it as both LD&SR as the
-  atomic op would combine both?
+But we call regmap_update_bits() from probe, which sets the CLK_DIS_WAIT
+to 8, then we call qcom_cc_really_probe() which will end up in
+gdsc_init() which replaces that with a 2.
 
-  data_src.mem_op = PERF_MEM_OP_LOAD | PERF_MEM_OP_STORE;
+Perhaps I'm missing something?
 
-# ARM_SPE_OP_EXCL (instructions ldxr/stxr)
+> 
+> 
+> Please let me know if we are okay to add the invert logic.
+> 
 
-  x86 doesn't seem to have similar instructions with similar semantics
-  (please correct me if I'm wrong). For this arch, PERF_MEM_LOCK_LOCK
-  probably suffices.
+I'm still favoring a scheme where we add 3 integers to struct gdsc and
+in gdsc_init() we check if they are non-zero we write the value to the
+register.
 
-  PPC seems to have similar instructions to arm64 (lwarx/stwcx). I don't
-  know if they also have instructions with same semantics as x86.
+Although being a big patch, we could maintain the existing behaviour by
+giving all existing struct gdsc definitions the values 2, 8 and 2 to
+avoid regressions and we (everyone) can then go through the platforms
+one by one and remove the unnecessary assignments - but more
+importantly, double check with downstream if they need a different
+value.
 
-  I think it makes sense to have a PERF_MEM_LOCK_EXCL. If not, reusing
-  PERF_MEM_LOCK_LOCK is the quicker alternative.
+This will also have the side effect going forward that it will be more
+explicit and people writing gdsc definitions should double check these
+values.
 
-# ARM_SPE_OP_SVE_SG
-
-  (I'm sorry if this is too far out of scope of the original patch. Let
-  me know if you would prefer to discuss it on a separate channel)
-
-  On a separate note, I'm also looking at incorporating some of the SVE
-  bits in the perf samples.
- 
-  For this, do you think it makes sense to have two mem_* categories in
-  perf_mem_data_src:
-
-  mem_vector (2 bits)
-    - simd
-    - other (SVE in arm64)
-
-  mem_src (1 bit)
-    - sparse (scatter/gather loads/stores in SVE, as well as simd)
-
----
-Thanks,
-German
-
->>>>> +	ARM_SPE_BR		= 1 << 5,
->>>>> +	ARM_SPE_BR_COND		= 1 << 6,
->>>>> +	ARM_SPE_BR_IND		= 1 << 7,
->> Seems like we can store BR_COND in the existing "branch-miss" event
->> (--itrace=b) with:
->>
->> sample->flags = PERF_IP_FLAG_BRANCH;
->> sample->flags |= PERF_IP_FLAG_CONDITIONAL;
->> and/or
->> sample->flags |= PERF_IP_FLAG_INDIRECT;
->>
->> PERF_IP_FLAG_INDIRECT doesn't exist yet but we can probably add it.
-> Yes, for branch samples, this makes sense for me.
->
-> Thanks,
-> Leo
+Regards,
+Bjorn

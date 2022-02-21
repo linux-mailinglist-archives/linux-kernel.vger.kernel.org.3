@@ -2,55 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C0E4BDBE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405F74BDFDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378891AbiBUPOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:14:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57960 "EHLO
+        id S1378916AbiBUPPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:15:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235276AbiBUPOg (ORCPT
+        with ESMTP id S235311AbiBUPPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:14:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8FE21817
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:14:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 847D861050
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61EC6C340E9;
-        Mon, 21 Feb 2022 15:14:11 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TRWH/JTr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645456449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JYkab++RQAgY2Oxu5GMeiLtAuitDVSBWd0tHvPRhEb4=;
-        b=TRWH/JTr1JVx8O94ZEl7DWa71mRdhcp+hTIqV8PFPuxQd3QdahEbn7r4GUKAyHg2saErcj
-        XLcE/FoRYcbvFB0rIobHYKTfQV+UZiFAyvxW5XgjMDRdDs/4yxVGVZ/n8NNgy/yq8iZVfH
-        ahmBEnKxBNMkqfdxS4BsKaD8C8iLLos=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 09c47107 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 21 Feb 2022 15:14:09 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     ebiggers@kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH v3] random: group initialization wait functions
-Date:   Mon, 21 Feb 2022 16:14:05 +0100
-Message-Id: <20220221151405.2287328-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9r5+9JLN8KjDwmuc1+p1O7THPmzW3sz0jMKKf9k6gCDtQ@mail.gmail.com>
-References: <CAHmME9r5+9JLN8KjDwmuc1+p1O7THPmzW3sz0jMKKf9k6gCDtQ@mail.gmail.com>
+        Mon, 21 Feb 2022 10:15:31 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978B01B792;
+        Mon, 21 Feb 2022 07:15:07 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id i21so9120192pfd.13;
+        Mon, 21 Feb 2022 07:15:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=rQjzrJUBJUG4lrXY3qHLoN254Z+Hvh/Va/Cpr5SArPA=;
+        b=YB37ZflfT9ggqvpHpDLeP8hKKD9vSOva3ZaRBtd3tgoeYOYCGS/+oOCm9dvs5+8Wr3
+         9m9VOC1yL/2ha0cc8D9+MLPdWVL5Y0UtghNB+2KfdcOAl7UfAZ8JSEDIDQBuBUpsSd05
+         YfAu3GG7/z4rqLLCa7Ur4F0fYf79Ri2KUmBE/N+KsRRrqtnuzULfCX1i78dghi1zf+0V
+         qqA4m2PtIrmFeaTmVPH+e1otxTv9qMz0z/PuOXXfneytP+fflzqJ+CmI32BrqCWU5OSE
+         gO9FLaK9LU2vQkti/b7TlzQvzfLpeNUkv9G8DzVCo2XbOtXOO6yJyP7LVqqCye+nyFjk
+         aOvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=rQjzrJUBJUG4lrXY3qHLoN254Z+Hvh/Va/Cpr5SArPA=;
+        b=EFK/rFEd9gikuyKiWbUGzHEGnOmAWkAiEEZs80wrvdsewoDm/fFALgu4oPhl8qE+4U
+         UAA0q+YnHuPr3MAGzO5sWOm48ov3eDfqAzSxUE2KEH6N5kfl1pca+ZrwnC0Zc5JfgMEH
+         Xf6GNceec4IUnAKVL4TLXhd58PFW8OPNK9AymlG8j6iqS4D8FDaYjwNiZAToBHzP2jyk
+         Rd/jo8paskmL5yRl2e9FdbYmPRlyfo5fYqG9dL0xmD/BxsRVz9ZfJpz3xppXh6ADvi1H
+         Bgme72af55TFUDFX5JNSx71FzG5oADak5uiW7apTlLHSz+PUaosYyBQkUdaz91DhJLA0
+         2v1w==
+X-Gm-Message-State: AOAM533cy5au6LDYRJCaDxjse2oEwJLk7ja3LWLE+3K1avJ/h7JzUu3l
+        vn9TGiMzFZiDpuwZ0cARxRU=
+X-Google-Smtp-Source: ABdhPJylmsV+h5d8jn8qiDmtwnHSxu0TXVS9IMCo+KFkNe8tAnqXy4KJ+vAfQkmA12bMTt5jor+fkw==
+X-Received: by 2002:a05:6a02:182:b0:374:5a57:cbf9 with SMTP id bj2-20020a056a02018200b003745a57cbf9mr2835424pgb.616.1645456506920;
+        Mon, 21 Feb 2022 07:15:06 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::754? ([2404:f801:9000:1a:efea::754])
+        by smtp.gmail.com with ESMTPSA id s2sm13819900pfk.3.2022.02.21.07.15.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 07:15:06 -0800 (PST)
+Message-ID: <23f4a64d-5977-1816-8faa-fe7691ace2ff@gmail.com>
+Date:   Mon, 21 Feb 2022 23:14:58 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH V2 1/2] Swiotlb: Add swiotlb_alloc_from_low_pages switch
+Content-Language: en-US
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, hch@infradead.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        michael.h.kelley@microsoft.com,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
+        brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        parri.andrea@gmail.com, thomas.lendacky@amd.com
+References: <20220209122302.213882-1-ltykernel@gmail.com>
+ <20220209122302.213882-2-ltykernel@gmail.com> <20220214081919.GA18337@lst.de>
+ <4f433f07-05be-f81f-43e8-55c3f1af23b3@gmail.com>
+ <20220214135834.GA30150@lst.de>
+ <8d052867-ccff-f00f-7c89-cc26a4bfa347@gmail.com>
+In-Reply-To: <8d052867-ccff-f00f-7c89-cc26a4bfa347@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,411 +87,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This pulls all of the readiness waiting-focused functions into the first
-labeled section.
+On 2/15/2022 11:32 PM, Tianyu Lan wrote:
+> On 2/14/2022 9:58 PM, Christoph Hellwig wrote:
+>> On Mon, Feb 14, 2022 at 07:28:40PM +0800, Tianyu Lan wrote:
+>>> On 2/14/2022 4:19 PM, Christoph Hellwig wrote:
+>>>> Adding a function to set the flag doesn't really change much.  As Robin
+>>>> pointed out last time you should fine a way to just call
+>>>> swiotlb_init_with_tbl directly with the memory allocated the way you
+>>>> like it.  Or given that we have quite a few of these trusted hypervisor
+>>>> schemes maybe add an argument to swiotlb_init that specifies how to
+>>>> allocate the memory.
+>>>
+>>> Thanks for your suggestion. I will try the first approach first 
+>>> approach.
+>>
+>> Take a look at the SWIOTLB_ANY flag in this WIP branch:
+>>
+>>     
+>> http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/swiotlb-init-cleanup 
+>>
+>>
+>> That being said I'm not sure that either this flag or the existing 
+>> powerpc
+>> code iѕ actually the right thing to do.  We still need the 4G limited
+>> buffer to support devices with addressing limitations.  So I think we 
+>> need
+>> an additional io_tlb_mem instance for the devices without addressing
+>> limitations instead.
+>>
+> 
+> Hi Christoph:
+>       Thanks for your patches. I tested these patches in Hyper-V trusted 
+> VM and system can't boot up. I am debugging and will report back.
 
-No functional changes.
+Sorry. The boot failure is not related with these patches and the issue
+has been fixed in the latest upstream code.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-v3 removes the duplicate declarations for _get_random_bytes() and fasync.
+There is a performance bottleneck due to io tlb mem's spin lock during
+performance test. All devices'io queues uses same io tlb mem entry
+and the spin lock of io tlb mem introduce overheads. There is a fix 
+patch from Andi Kleen in the github. Could you have a look?
 
- drivers/char/random.c | 333 ++++++++++++++++++++++--------------------
- 1 file changed, 172 insertions(+), 161 deletions(-)
+https://github.com/intel/tdx/commit/4529b5784c141782c72ec9bd9a92df2b68cb7d45
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index ad112f928182..dd2da0b12350 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -201,44 +201,197 @@
- #include <asm/irq_regs.h>
- #include <asm/io.h>
- 
--enum {
--	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
--	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
--};
--
--/*
-- * Static global variables
-- */
--static DECLARE_WAIT_QUEUE_HEAD(random_write_wait);
--static struct fasync_struct *fasync;
--
--static DEFINE_SPINLOCK(random_ready_list_lock);
--static LIST_HEAD(random_ready_list);
-+/*********************************************************************
-+ *
-+ * Initialization and readiness waiting.
-+ *
-+ * Much of the RNG infrastructure is devoted to various dependencies
-+ * being able to wait until the RNG has collected enough entropy and
-+ * is ready for safe consumption.
-+ *
-+ *********************************************************************/
- 
- /*
-  * crng_init =  0 --> Uninitialized
-  *		1 --> Initialized
-  *		2 --> Initialized from input_pool
-  *
-- * crng_init is protected by primary_crng->lock, and only increases
-+ * crng_init is protected by base_crng->lock, and only increases
-  * its value (from 0->1->2).
-  */
- static int crng_init = 0;
- #define crng_ready() (likely(crng_init > 1))
--static int crng_init_cnt = 0;
--static void process_random_ready_list(void);
--static void _get_random_bytes(void *buf, size_t nbytes);
-+/* Various types of waiters for crng_init->2 transition. */
-+static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
-+static struct fasync_struct *fasync;
-+static DEFINE_SPINLOCK(random_ready_list_lock);
-+static LIST_HEAD(random_ready_list);
- 
-+/* Control how we warn userspace. */
- static struct ratelimit_state unseeded_warning =
- 	RATELIMIT_STATE_INIT("warn_unseeded_randomness", HZ, 3);
- static struct ratelimit_state urandom_warning =
- 	RATELIMIT_STATE_INIT("warn_urandom_randomness", HZ, 3);
--
- static int ratelimit_disable __read_mostly;
--
- module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
- MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
- 
-+/*
-+ * Returns whether or not the input pool has been seeded and thus guaranteed
-+ * to supply cryptographically secure random numbers. This applies to: the
-+ * /dev/urandom device, the get_random_bytes function, and the get_random_{u32,
-+ * ,u64,int,long} family of functions.
-+ *
-+ * Returns: true if the input pool has been seeded.
-+ *          false if the input pool has not been seeded.
-+ */
-+bool rng_is_initialized(void)
-+{
-+	return crng_ready();
-+}
-+EXPORT_SYMBOL(rng_is_initialized);
-+
-+/* Used by wait_for_random_bytes(), and considered an entropy collector, below. */
-+static void try_to_generate_entropy(void);
-+
-+/*
-+ * Wait for the input pool to be seeded and thus guaranteed to supply
-+ * cryptographically secure random numbers. This applies to: the /dev/urandom
-+ * device, the get_random_bytes function, and the get_random_{u32,u64,int,long}
-+ * family of functions. Using any of these functions without first calling
-+ * this function forfeits the guarantee of security.
-+ *
-+ * Returns: 0 if the input pool has been seeded.
-+ *          -ERESTARTSYS if the function was interrupted by a signal.
-+ */
-+int wait_for_random_bytes(void)
-+{
-+	if (likely(crng_ready()))
-+		return 0;
-+
-+	do {
-+		int ret;
-+		ret = wait_event_interruptible_timeout(crng_init_wait, crng_ready(), HZ);
-+		if (ret)
-+			return ret > 0 ? 0 : ret;
-+
-+		try_to_generate_entropy();
-+	} while (!crng_ready());
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(wait_for_random_bytes);
-+
-+/*
-+ * Add a callback function that will be invoked when the input
-+ * pool is initialised.
-+ *
-+ * returns: 0 if callback is successfully added
-+ *	    -EALREADY if pool is already initialised (callback not called)
-+ *	    -ENOENT if module for callback is not alive
-+ */
-+int add_random_ready_callback(struct random_ready_callback *rdy)
-+{
-+	struct module *owner;
-+	unsigned long flags;
-+	int err = -EALREADY;
-+
-+	if (crng_ready())
-+		return err;
-+
-+	owner = rdy->owner;
-+	if (!try_module_get(owner))
-+		return -ENOENT;
-+
-+	spin_lock_irqsave(&random_ready_list_lock, flags);
-+	if (crng_ready())
-+		goto out;
-+
-+	owner = NULL;
-+
-+	list_add(&rdy->list, &random_ready_list);
-+	err = 0;
-+
-+out:
-+	spin_unlock_irqrestore(&random_ready_list_lock, flags);
-+
-+	module_put(owner);
-+
-+	return err;
-+}
-+EXPORT_SYMBOL(add_random_ready_callback);
-+
-+/*
-+ * Delete a previously registered readiness callback function.
-+ */
-+void del_random_ready_callback(struct random_ready_callback *rdy)
-+{
-+	unsigned long flags;
-+	struct module *owner = NULL;
-+
-+	spin_lock_irqsave(&random_ready_list_lock, flags);
-+	if (!list_empty(&rdy->list)) {
-+		list_del_init(&rdy->list);
-+		owner = rdy->owner;
-+	}
-+	spin_unlock_irqrestore(&random_ready_list_lock, flags);
-+
-+	module_put(owner);
-+}
-+EXPORT_SYMBOL(del_random_ready_callback);
-+
-+static void process_random_ready_list(void)
-+{
-+	unsigned long flags;
-+	struct random_ready_callback *rdy, *tmp;
-+
-+	spin_lock_irqsave(&random_ready_list_lock, flags);
-+	list_for_each_entry_safe(rdy, tmp, &random_ready_list, list) {
-+		struct module *owner = rdy->owner;
-+
-+		list_del_init(&rdy->list);
-+		rdy->func(rdy);
-+		module_put(owner);
-+	}
-+	spin_unlock_irqrestore(&random_ready_list_lock, flags);
-+}
-+
-+#define warn_unseeded_randomness(previous) \
-+	_warn_unseeded_randomness(__func__, (void *)_RET_IP_, (previous))
-+
-+static void _warn_unseeded_randomness(const char *func_name, void *caller, void **previous)
-+{
-+#ifdef CONFIG_WARN_ALL_UNSEEDED_RANDOM
-+	const bool print_once = false;
-+#else
-+	static bool print_once __read_mostly;
-+#endif
-+
-+	if (print_once || crng_ready() ||
-+	    (previous && (caller == READ_ONCE(*previous))))
-+		return;
-+	WRITE_ONCE(*previous, caller);
-+#ifndef CONFIG_WARN_ALL_UNSEEDED_RANDOM
-+	print_once = true;
-+#endif
-+	if (__ratelimit(&unseeded_warning))
-+		printk_deferred(KERN_NOTICE "random: %s called from %pS with crng_init=%d\n",
-+				func_name, caller, crng_init);
-+}
-+
-+
-+enum {
-+	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
-+	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
-+};
-+
-+/*
-+ * Static global variables
-+ */
-+static DECLARE_WAIT_QUEUE_HEAD(random_write_wait);
-+
-+static int crng_init_cnt = 0;
-+
- /**********************************************************************
-  *
-  * OS independent entropy store.   Here are the functions which handle
-@@ -322,22 +475,6 @@ static void fast_mix(u32 pool[4])
- 	pool[2] = c;  pool[3] = d;
- }
- 
--static void process_random_ready_list(void)
--{
--	unsigned long flags;
--	struct random_ready_callback *rdy, *tmp;
--
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	list_for_each_entry_safe(rdy, tmp, &random_ready_list, list) {
--		struct module *owner = rdy->owner;
--
--		list_del_init(&rdy->list);
--		rdy->func(rdy);
--		module_put(owner);
--	}
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
--}
--
- static void credit_entropy_bits(size_t nbits)
- {
- 	unsigned int entropy_count, orig, add;
-@@ -387,8 +524,6 @@ static DEFINE_PER_CPU(struct crng, crngs) = {
- 	.lock = INIT_LOCAL_LOCK(crngs.lock),
- };
- 
--static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
--
- /*
-  * crng_fast_load() can be called by code in the interrupt service
-  * path.  So we can't afford to dilly-dally. Returns the number of
-@@ -909,29 +1044,6 @@ static bool drain_entropy(void *buf, size_t nbytes)
- 	return true;
- }
- 
--#define warn_unseeded_randomness(previous) \
--	_warn_unseeded_randomness(__func__, (void *)_RET_IP_, (previous))
--
--static void _warn_unseeded_randomness(const char *func_name, void *caller, void **previous)
--{
--#ifdef CONFIG_WARN_ALL_UNSEEDED_RANDOM
--	const bool print_once = false;
--#else
--	static bool print_once __read_mostly;
--#endif
--
--	if (print_once || crng_ready() ||
--	    (previous && (caller == READ_ONCE(*previous))))
--		return;
--	WRITE_ONCE(*previous, caller);
--#ifndef CONFIG_WARN_ALL_UNSEEDED_RANDOM
--	print_once = true;
--#endif
--	if (__ratelimit(&unseeded_warning))
--		printk_deferred(KERN_NOTICE "random: %s called from %pS with crng_init=%d\n",
--				func_name, caller, crng_init);
--}
--
- /*
-  * This function is the exported kernel interface.  It returns some
-  * number of good random numbers, suitable for key generation, seeding
-@@ -1032,107 +1144,6 @@ static void try_to_generate_entropy(void)
- 	mix_pool_bytes(&stack.now, sizeof(stack.now));
- }
- 
--/*
-- * Wait for the urandom pool to be seeded and thus guaranteed to supply
-- * cryptographically secure random numbers. This applies to: the /dev/urandom
-- * device, the get_random_bytes function, and the get_random_{u32,u64,int,long}
-- * family of functions. Using any of these functions without first calling
-- * this function forfeits the guarantee of security.
-- *
-- * Returns: 0 if the urandom pool has been seeded.
-- *          -ERESTARTSYS if the function was interrupted by a signal.
-- */
--int wait_for_random_bytes(void)
--{
--	if (likely(crng_ready()))
--		return 0;
--
--	do {
--		int ret;
--		ret = wait_event_interruptible_timeout(crng_init_wait, crng_ready(), HZ);
--		if (ret)
--			return ret > 0 ? 0 : ret;
--
--		try_to_generate_entropy();
--	} while (!crng_ready());
--
--	return 0;
--}
--EXPORT_SYMBOL(wait_for_random_bytes);
--
--/*
-- * Returns whether or not the urandom pool has been seeded and thus guaranteed
-- * to supply cryptographically secure random numbers. This applies to: the
-- * /dev/urandom device, the get_random_bytes function, and the get_random_{u32,
-- * ,u64,int,long} family of functions.
-- *
-- * Returns: true if the urandom pool has been seeded.
-- *          false if the urandom pool has not been seeded.
-- */
--bool rng_is_initialized(void)
--{
--	return crng_ready();
--}
--EXPORT_SYMBOL(rng_is_initialized);
--
--/*
-- * Add a callback function that will be invoked when the nonblocking
-- * pool is initialised.
-- *
-- * returns: 0 if callback is successfully added
-- *	    -EALREADY if pool is already initialised (callback not called)
-- *	    -ENOENT if module for callback is not alive
-- */
--int add_random_ready_callback(struct random_ready_callback *rdy)
--{
--	struct module *owner;
--	unsigned long flags;
--	int err = -EALREADY;
--
--	if (crng_ready())
--		return err;
--
--	owner = rdy->owner;
--	if (!try_module_get(owner))
--		return -ENOENT;
--
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	if (crng_ready())
--		goto out;
--
--	owner = NULL;
--
--	list_add(&rdy->list, &random_ready_list);
--	err = 0;
--
--out:
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
--
--	module_put(owner);
--
--	return err;
--}
--EXPORT_SYMBOL(add_random_ready_callback);
--
--/*
-- * Delete a previously registered readiness callback function.
-- */
--void del_random_ready_callback(struct random_ready_callback *rdy)
--{
--	unsigned long flags;
--	struct module *owner = NULL;
--
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	if (!list_empty(&rdy->list)) {
--		list_del_init(&rdy->list);
--		owner = rdy->owner;
--	}
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
--
--	module_put(owner);
--}
--EXPORT_SYMBOL(del_random_ready_callback);
--
- /*
-  * This function will use the architecture-specific hardware random
-  * number generator if it is available. It is not recommended for
--- 
-2.35.1
+Thanks.
 

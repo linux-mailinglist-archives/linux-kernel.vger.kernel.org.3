@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8304BE4DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5129D4BDDF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348472AbiBUJUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:20:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33878 "EHLO
+        id S1347503AbiBUJHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:07:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349600AbiBUJMh (ORCPT
+        with ESMTP id S1347956AbiBUJCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:12:37 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024D6240B1;
-        Mon, 21 Feb 2022 01:05:38 -0800 (PST)
+        Mon, 21 Feb 2022 04:02:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529A02A269;
+        Mon, 21 Feb 2022 00:57:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 72FE3CE0E93;
-        Mon, 21 Feb 2022 09:05:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5637CC340E9;
-        Mon, 21 Feb 2022 09:05:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C71A0B80EBF;
+        Mon, 21 Feb 2022 08:57:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89F4C340E9;
+        Mon, 21 Feb 2022 08:56:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434334;
-        bh=jv+AVOl/lBgMwyLrAswELFvOAFp14rzSsl/8i6LyfMw=;
+        s=korg; t=1645433819;
+        bh=7IndvWW4knO7Gv/XnMSiVo1b4ySFdFkngxlqkb3PxxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QvIv2tAmGEPkzy82gmIKnKsYONwzLGPyOHJ13zdZw7jGPPznKdZF2YVxH2Y8IPCHd
-         4OXehJzqKzZuJ63SLmWFC63IeNr00ZHXx5JOiHNBP/dTBpk867X/dnTrxQTJnnRhYA
-         VpQox7mo9SkSUcs5thzCMaVFN6i8vGvm/vOG8E3k=
+        b=PGI5X1nsE4VYXenumFdFKsrdLLblBsVWtLTJMLlXMB9ZBsLNIW21lZm5DS299crBg
+         6mdRXAYZFI0hLVVtqkAc+xQKm9nOBR0ve9GrEBWsynOAn6dbKc9ZuTW4WGzErRqiGG
+         gNB/O8op02VtMifeWjZqgBEfUJz24JC5S69L8rSw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 061/121] bonding: force carrier update when releasing slave
-Date:   Mon, 21 Feb 2022 09:49:13 +0100
-Message-Id: <20220221084923.279700717@linuxfoundation.org>
+        stable@vger.kernel.org, Christian Loehle <cloehle@hyperstone.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 4.19 21/58] mmc: block: fix read single on recovery logic
+Date:   Mon, 21 Feb 2022 09:49:14 +0100
+Message-Id: <20220221084912.568235816@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Changzhong <zhangchangzhong@huawei.com>
+From: Christian Löhle <CLoehle@hyperstone.com>
 
-commit a6ab75cec1e461f8a35559054c146c21428430b8 upstream.
+commit 54309fde1a352ad2674ebba004a79f7d20b9f037 upstream.
 
-In __bond_release_one(), bond_set_carrier() is only called when bond
-device has no slave. Therefore, if we remove the up slave from a master
-with two slaves and keep the down slave, the master will remain up.
+On reads with MMC_READ_MULTIPLE_BLOCK that fail,
+the recovery handler will use MMC_READ_SINGLE_BLOCK for
+each of the blocks, up to MMC_READ_SINGLE_RETRIES times each.
+The logic for this is fixed to never report unsuccessful reads
+as success to the block layer.
 
-Fix this by moving bond_set_carrier() out of if (!bond_has_slaves(bond))
-statement.
+On command error with retries remaining, blk_update_request was
+called with whatever value error was set last to.
+In case it was last set to BLK_STS_OK (default), the read will be
+reported as success, even though there was no data read from the device.
+This could happen on a CRC mismatch for the response,
+a card rejecting the command (e.g. again due to a CRC mismatch).
+In case it was last set to BLK_STS_IOERR, the error is reported correctly,
+but no retries will be attempted.
 
-Reproducer:
-$ insmod bonding.ko mode=0 miimon=100 max_bonds=2
-$ ifconfig bond0 up
-$ ifenslave bond0 eth0 eth1
-$ ifconfig eth0 down
-$ ifenslave -d bond0 eth1
-$ cat /proc/net/bonding/bond0
-
-Fixes: ff59c4563a8d ("[PATCH] bonding: support carrier state for master")
-Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/1645021088-38370-1-git-send-email-zhangchangzhong@huawei.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 81196976ed946c ("mmc: block: Add blk-mq support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Link: https://lore.kernel.org/r/bc706a6ab08c4fe2834ba0c05a804672@hyperstone.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_main.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/mmc/core/block.c |   28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -2272,10 +2272,9 @@ static int __bond_release_one(struct net
- 		bond_select_active_slave(bond);
- 	}
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1678,31 +1678,31 @@ static void mmc_blk_read_single(struct m
+ 	struct mmc_card *card = mq->card;
+ 	struct mmc_host *host = card->host;
+ 	blk_status_t error = BLK_STS_OK;
+-	int retries = 0;
  
--	if (!bond_has_slaves(bond)) {
--		bond_set_carrier(bond);
-+	bond_set_carrier(bond);
-+	if (!bond_has_slaves(bond))
- 		eth_hw_addr_random(bond_dev);
--	}
+ 	do {
+ 		u32 status;
+ 		int err;
++		int retries = 0;
  
- 	unblock_netpoll_tx();
- 	synchronize_rcu();
+-		mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
++		while (retries++ <= MMC_READ_SINGLE_RETRIES) {
++			mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
+ 
+-		mmc_wait_for_req(host, mrq);
++			mmc_wait_for_req(host, mrq);
+ 
+-		err = mmc_send_status(card, &status);
+-		if (err)
+-			goto error_exit;
+-
+-		if (!mmc_host_is_spi(host) &&
+-		    !mmc_blk_in_tran_state(status)) {
+-			err = mmc_blk_fix_state(card, req);
++			err = mmc_send_status(card, &status);
+ 			if (err)
+ 				goto error_exit;
+-		}
+ 
+-		if (mrq->cmd->error && retries++ < MMC_READ_SINGLE_RETRIES)
+-			continue;
++			if (!mmc_host_is_spi(host) &&
++			    !mmc_blk_in_tran_state(status)) {
++				err = mmc_blk_fix_state(card, req);
++				if (err)
++					goto error_exit;
++			}
+ 
+-		retries = 0;
++			if (!mrq->cmd->error)
++				break;
++		}
+ 
+ 		if (mrq->cmd->error ||
+ 		    mrq->data->error ||
 
 

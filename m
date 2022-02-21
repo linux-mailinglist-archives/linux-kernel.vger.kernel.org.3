@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30FA4BE4BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80FA4BE348
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353889AbiBUKC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:02:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49824 "EHLO
+        id S1353987AbiBUKCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:02:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352070AbiBUJyW (ORCPT
+        with ESMTP id S1352139AbiBUJzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:54:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B213A37BC0;
-        Mon, 21 Feb 2022 01:24:01 -0800 (PST)
+        Mon, 21 Feb 2022 04:55:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C208381A3;
+        Mon, 21 Feb 2022 01:24:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45C56608C4;
-        Mon, 21 Feb 2022 09:24:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2760AC340E9;
-        Mon, 21 Feb 2022 09:23:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A7EEB80ED2;
+        Mon, 21 Feb 2022 09:24:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18AEFC340E9;
+        Mon, 21 Feb 2022 09:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435440;
-        bh=PZ4zbWHG6FHr4c5kMC4jycMZlER2SHA6mGK3PahdE2c=;
+        s=korg; t=1645435443;
+        bh=/NW4lK+cwpAZ+jx+0oSMQYbrYONrpg8H23rLb64Kxbk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zFWNgB5UiEKQuMzACl88vYmkxpqpJTSbxZS1Sl4JMLWshLwzD6kkaqmfjUiue6qLn
-         KCO2W178uvXymlmNYlIN6mJK4RyR3oZmRUE3hJyxu/B9/Vhaa/wOglOkMgApp15Ywm
-         t0gT756+eOvcfWFv7u5MjJZLE2wX8EYsuOvxVd9Q=
+        b=0IvtL5SZs9QbnRqWhy4eOqA20hvI/pEdMXFwKir2ESJIN6C1/80PzTuO/cm/4QlfK
+         ZjDQJh4UDpdo3+RuCYKuyHUFJNSWKJFjKjBf3adBsl2PVqzKwDOSl5UH7vHeHwiyRr
+         ynjPNOotqgQIHkG0Smkgny+wnZhCi2sIFZV/GMgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Markus=20Bl=C3=B6chl?= <markus.bloechl@ipetronik.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 164/227] block: fix surprise removal for drivers calling blk_set_queue_dying
-Date:   Mon, 21 Feb 2022 09:49:43 +0100
-Message-Id: <20220221084940.279885173@linuxfoundation.org>
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.16 165/227] mtd: rawnand: qcom: Fix clock sequencing in qcom_nandc_probe()
+Date:   Mon, 21 Feb 2022 09:49:44 +0100
+Message-Id: <20220221084940.312532056@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
 References: <20220221084934.836145070@linuxfoundation.org>
@@ -56,163 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-commit 7a5428dcb7902700b830e912feee4e845df7c019 upstream.
+commit 5c23b3f965bc9ee696bf2ed4bdc54d339dd9a455 upstream.
 
-Various block drivers call blk_set_queue_dying to mark a disk as dead due
-to surprise removal events, but since commit 8e141f9eb803 that doesn't
-work given that the GD_DEAD flag needs to be set to stop I/O.
+Interacting with a NAND chip on an IPQ6018 I found that the qcomsmem NAND
+partition parser was returning -EPROBE_DEFER waiting for the main smem
+driver to load.
 
-Replace the driver calls to blk_set_queue_dying with a new (and properly
-documented) blk_mark_disk_dead API, and fold blk_set_queue_dying into the
-only remaining caller.
+This caused the board to reset. Playing about with the probe() function
+shows that the problem lies in the core clock being switched off before the
+nandc_unalloc() routine has completed.
 
-Fixes: 8e141f9eb803 ("block: drain file system I/O on del_gendisk")
-Reported-by: Markus Blöchl <markus.bloechl@ipetronik.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Link: https://lore.kernel.org/r/20220217075231.1140-1-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+If we look at how qcom_nandc_remove() tears down allocated resources we see
+the expected order is
+
+qcom_nandc_unalloc(nandc);
+
+clk_disable_unprepare(nandc->aon_clk);
+clk_disable_unprepare(nandc->core_clk);
+
+dma_unmap_resource(&pdev->dev, nandc->base_dma, resource_size(res),
+		   DMA_BIDIRECTIONAL, 0);
+
+Tweaking probe() to both bring up and tear-down in that order removes the
+reset if we end up deferring elsewhere.
+
+Fixes: c76b78d8ec05 ("mtd: nand: Qualcomm NAND controller driver")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220103030316.58301-2-bryan.odonoghue@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-core.c                  |   10 ++--------
- block/genhd.c                     |   14 ++++++++++++++
- drivers/block/mtip32xx/mtip32xx.c |    2 +-
- drivers/block/rbd.c               |    2 +-
- drivers/block/xen-blkfront.c      |    2 +-
- drivers/md/dm.c                   |    2 +-
- drivers/nvme/host/core.c          |    2 +-
- drivers/nvme/host/multipath.c     |    2 +-
- include/linux/blkdev.h            |    3 ++-
- 9 files changed, 24 insertions(+), 15 deletions(-)
+ drivers/mtd/nand/raw/qcom_nandc.c |   14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -324,13 +324,6 @@ void blk_queue_start_drain(struct reques
- 	wake_up_all(&q->mq_freeze_wq);
+--- a/drivers/mtd/nand/raw/qcom_nandc.c
++++ b/drivers/mtd/nand/raw/qcom_nandc.c
+@@ -2,7 +2,6 @@
+ /*
+  * Copyright (c) 2016, The Linux Foundation. All rights reserved.
+  */
+-
+ #include <linux/clk.h>
+ #include <linux/slab.h>
+ #include <linux/bitops.h>
+@@ -3063,10 +3062,6 @@ static int qcom_nandc_probe(struct platf
+ 	if (dma_mapping_error(dev, nandc->base_dma))
+ 		return -ENXIO;
+ 
+-	ret = qcom_nandc_alloc(nandc);
+-	if (ret)
+-		goto err_nandc_alloc;
+-
+ 	ret = clk_prepare_enable(nandc->core_clk);
+ 	if (ret)
+ 		goto err_core_clk;
+@@ -3075,6 +3070,10 @@ static int qcom_nandc_probe(struct platf
+ 	if (ret)
+ 		goto err_aon_clk;
+ 
++	ret = qcom_nandc_alloc(nandc);
++	if (ret)
++		goto err_nandc_alloc;
++
+ 	ret = qcom_nandc_setup(nandc);
+ 	if (ret)
+ 		goto err_setup;
+@@ -3086,15 +3085,14 @@ static int qcom_nandc_probe(struct platf
+ 	return 0;
+ 
+ err_setup:
++	qcom_nandc_unalloc(nandc);
++err_nandc_alloc:
+ 	clk_disable_unprepare(nandc->aon_clk);
+ err_aon_clk:
+ 	clk_disable_unprepare(nandc->core_clk);
+ err_core_clk:
+-	qcom_nandc_unalloc(nandc);
+-err_nandc_alloc:
+ 	dma_unmap_resource(dev, res->start, resource_size(res),
+ 			   DMA_BIDIRECTIONAL, 0);
+-
+ 	return ret;
  }
  
--void blk_set_queue_dying(struct request_queue *q)
--{
--	blk_queue_flag_set(QUEUE_FLAG_DYING, q);
--	blk_queue_start_drain(q);
--}
--EXPORT_SYMBOL_GPL(blk_set_queue_dying);
--
- /**
-  * blk_cleanup_queue - shutdown a request queue
-  * @q: request queue to shutdown
-@@ -348,7 +341,8 @@ void blk_cleanup_queue(struct request_qu
- 	WARN_ON_ONCE(blk_queue_registered(q));
- 
- 	/* mark @q DYING, no new request or merges will be allowed afterwards */
--	blk_set_queue_dying(q);
-+	blk_queue_flag_set(QUEUE_FLAG_DYING, q);
-+	blk_queue_start_drain(q);
- 
- 	blk_queue_flag_set(QUEUE_FLAG_NOMERGES, q);
- 	blk_queue_flag_set(QUEUE_FLAG_NOXMERGES, q);
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -550,6 +550,20 @@ out_free_ext_minor:
- EXPORT_SYMBOL(device_add_disk);
- 
- /**
-+ * blk_mark_disk_dead - mark a disk as dead
-+ * @disk: disk to mark as dead
-+ *
-+ * Mark as disk as dead (e.g. surprise removed) and don't accept any new I/O
-+ * to this disk.
-+ */
-+void blk_mark_disk_dead(struct gendisk *disk)
-+{
-+	set_bit(GD_DEAD, &disk->state);
-+	blk_queue_start_drain(disk->queue);
-+}
-+EXPORT_SYMBOL_GPL(blk_mark_disk_dead);
-+
-+/**
-  * del_gendisk - remove the gendisk
-  * @disk: the struct gendisk to remove
-  *
---- a/drivers/block/mtip32xx/mtip32xx.c
-+++ b/drivers/block/mtip32xx/mtip32xx.c
-@@ -4113,7 +4113,7 @@ static void mtip_pci_remove(struct pci_d
- 			"Completion workers still active!\n");
- 	}
- 
--	blk_set_queue_dying(dd->queue);
-+	blk_mark_disk_dead(dd->disk);
- 	set_bit(MTIP_DDF_REMOVE_PENDING_BIT, &dd->dd_flag);
- 
- 	/* Clean up the block layer. */
---- a/drivers/block/rbd.c
-+++ b/drivers/block/rbd.c
-@@ -7186,7 +7186,7 @@ static ssize_t do_rbd_remove(struct bus_
- 		 * IO to complete/fail.
- 		 */
- 		blk_mq_freeze_queue(rbd_dev->disk->queue);
--		blk_set_queue_dying(rbd_dev->disk->queue);
-+		blk_mark_disk_dead(rbd_dev->disk);
- 	}
- 
- 	del_gendisk(rbd_dev->disk);
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -2129,7 +2129,7 @@ static void blkfront_closing(struct blkf
- 
- 	/* No more blkif_request(). */
- 	blk_mq_stop_hw_queues(info->rq);
--	blk_set_queue_dying(info->rq);
-+	blk_mark_disk_dead(info->gd);
- 	set_capacity(info->gd, 0);
- 
- 	for_each_rinfo(info, rinfo, i) {
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -2140,7 +2140,7 @@ static void __dm_destroy(struct mapped_d
- 	set_bit(DMF_FREEING, &md->flags);
- 	spin_unlock(&_minor_lock);
- 
--	blk_set_queue_dying(md->queue);
-+	blk_mark_disk_dead(md->disk);
- 
- 	/*
- 	 * Take suspend_lock so that presuspend and postsuspend methods
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -4578,7 +4578,7 @@ static void nvme_set_queue_dying(struct
- 	if (test_and_set_bit(NVME_NS_DEAD, &ns->flags))
- 		return;
- 
--	blk_set_queue_dying(ns->queue);
-+	blk_mark_disk_dead(ns->disk);
- 	nvme_start_ns_queue(ns);
- 
- 	set_capacity_and_notify(ns->disk, 0);
---- a/drivers/nvme/host/multipath.c
-+++ b/drivers/nvme/host/multipath.c
-@@ -817,7 +817,7 @@ void nvme_mpath_remove_disk(struct nvme_
- {
- 	if (!head->disk)
- 		return;
--	blk_set_queue_dying(head->disk->queue);
-+	blk_mark_disk_dead(head->disk);
- 	/* make sure all pending bios are cleaned up */
- 	kblockd_schedule_work(&head->requeue_work);
- 	flush_work(&head->requeue_work);
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -740,7 +740,8 @@ extern bool blk_queue_can_use_dma_map_me
- 
- bool __must_check blk_get_queue(struct request_queue *);
- extern void blk_put_queue(struct request_queue *);
--extern void blk_set_queue_dying(struct request_queue *);
-+
-+void blk_mark_disk_dead(struct gendisk *disk);
- 
- #ifdef CONFIG_BLOCK
- /*
 
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539264BDFE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABD14BDF6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356002AbiBULSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:18:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47968 "EHLO
+        id S1356026AbiBULSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:18:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345915AbiBULPU (ORCPT
+        with ESMTP id S1355776AbiBULPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:15:20 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FB0D57
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:06 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id i10so12612857plr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:06 -0800 (PST)
+        Mon, 21 Feb 2022 06:15:22 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D992CDC0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:08 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id z2so3934611plg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2UEo/Stc+iYNXbwbi51AqwpgyfC/DeYqJj3Sep1UETg=;
-        b=TQt9smYJlqZvzDOc9o4bZM6zroYbhcyVxV0DCbsexdb+fnHDrG3ZNC1Q19EAk0Ao63
-         62jNfhPKSpSYPZTo+tuDPbrYVI4z300rrE2lkOz0yuGIFjjjg2R8aSc/LGuUyT6n3/wa
-         tEWUlZkuCKsHGUD7VwVlHgOJDLPU97mLW2j0c0+kdZeCY5TJr7TPVUi0+R1hqlrfuTmd
-         h/X2ZsALJKksPfhJw9pnNn3+Er5/IYKz2nhA93DkEGGq3O1L+pd5bROH6NkpKr2NIVif
-         ch3qRTEBpyHSOR5lP5Kk1eLqF5vseOBeoEP2WSgyUfOIDrJDCoGFqzsdpLf2IkArULuB
-         cEIQ==
+        bh=mNqSGZPctSWXqZ6gYN0FXGhiJj1MEcwtFP+jmJt2lAM=;
+        b=RFTPXk5DrwGPw8J5yfqw2l+chmPeFSAdBQcKMCI2hS+QHbqTp47fbGdwOgCxkQjL/5
+         s4KOqNYdUwQnAXGGSon/S4gwtsNgaUQm+hPClmpa6dsyOiUsk4bIbjjXDMN/Mr2LxJbF
+         8iglITyjVsZYvBOGkg8UpLRM/fXaOMnQJleiLza6uMPjkMb/zZEeyzuW3RjXegMQEwQW
+         5MfkgPkZqcSZ8OXKsXauuKkYUDFECPq7K/51WtVTzGXzDDDE5FHKMFo7H6Q04KmMXAxr
+         TmgkL1ED1/zGJod/kfDAgFV7FFH/oMNp1EaundBNuAFgPhyWacQ4ZfNwxfK6yHdTy9nY
+         vRxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2UEo/Stc+iYNXbwbi51AqwpgyfC/DeYqJj3Sep1UETg=;
-        b=KM4dxW/Hw3V/dQnx665FCV/+96jZqmooRnofV3YAPrqldvU6kMyL5s/CSqUcxfTN5C
-         N7qdojZOvshU/W3YIVLVP5q2gLy3tMcoRFa5cE0w6tZBnBgek0+7vDL19ieHUHtF9/Ee
-         /CMKGqPwXsjnpJagnU350EC0R1r7QxSTwsyY/ex8h82rcYssaKEeJFDuwsfuw33u1/KX
-         lEaBzf4Yyu2YbgV1q5SEpVrtVlDUwsPb7GVn8HhVL723lD20gnzF95EF3CNNHum5tcLx
-         TfUJJHQoZACMnPmqQ9VYlqllrKWb3RRw7GveH/QdzXqTJr4OT2PBIvRz9imN7vLKZfUK
-         XD6g==
-X-Gm-Message-State: AOAM532vW3Z3wdJt3rTI9qU7uf2HeW7yKsYZhUJYLUA6vHY3fN/LdSy7
-        mwh5dhjCuEd5mtZniipLUMM=
-X-Google-Smtp-Source: ABdhPJyoPW7XVnrEz+Uimph+0Op7tRbd6nES2sCgwyi1ygR/jFYNy8MlQDyqUcT1S8O4S6ye7lb0dQ==
-X-Received: by 2002:a17:90b:2390:b0:1b9:c392:ab8d with SMTP id mr16-20020a17090b239000b001b9c392ab8dmr20876794pjb.30.1645440845915;
-        Mon, 21 Feb 2022 02:54:05 -0800 (PST)
+        bh=mNqSGZPctSWXqZ6gYN0FXGhiJj1MEcwtFP+jmJt2lAM=;
+        b=LMswQwoPlgv9XX47tbaBVlQkjqT6Q+yHKs8mZvK2QdKSd2aAJecqUK1BCNlaNEje9C
+         he860hvRcKx/tw3Y+yKYlD2AggXayIKtuozmWzisf0tNdT36499d5R7S3D8Boeg0aQmD
+         MDkY7UBKK3WuT8NRIrd9maYGRfdnUl9vQvqiqNrm7gJBk1oPjK0KkF5roAcTWWu/H6Tq
+         I/hNgmS6+/9l/Gq2Ato1yPI+m3TwBr9PQidB0VNV5+PcAWlkSZ/BTzvvWS85hl0Yre4V
+         Slm2/k1eSBHEZbfW1LUkMkvk94pXUl6qX3MprbbZt99u1fiVAG6eFTik8go0HhgpECgB
+         J5Yg==
+X-Gm-Message-State: AOAM533FhmiK8Q6p7y8JNVZHAvSTas7FukXjL/t0DSWMagB8BN01aEe8
+        EsIC4L2pmVvo/jt7Wu3cRxs=
+X-Google-Smtp-Source: ABdhPJywNTHU63XkzHt51xLMmCuOt0KCbfUmRMm0QdINnoAQ9l+TE+h6FliiSaxwldW7bQVaCkRlDQ==
+X-Received: by 2002:a17:90a:8048:b0:1b9:55dd:b72d with SMTP id e8-20020a17090a804800b001b955ddb72dmr20733044pjw.90.1645440848421;
+        Mon, 21 Feb 2022 02:54:08 -0800 (PST)
 Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id u6sm2214725pfk.203.2022.02.21.02.54.03
+        by smtp.gmail.com with ESMTPSA id u6sm2214725pfk.203.2022.02.21.02.54.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 02:54:05 -0800 (PST)
+        Mon, 21 Feb 2022 02:54:08 -0800 (PST)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     Roman Gushchin <guro@fb.com>,
@@ -58,9 +58,9 @@ Cc:     Roman Gushchin <guro@fb.com>,
         Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
         Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH 4/5] mm/slub: Limit min_partial only in cache creation
-Date:   Mon, 21 Feb 2022 10:53:35 +0000
-Message-Id: <20220221105336.522086-5-42.hyeyoo@gmail.com>
+Subject: [PATCH 5/5] mm/slub: Refactor deactivate_slab()
+Date:   Mon, 21 Feb 2022 10:53:36 +0000
+Message-Id: <20220221105336.522086-6-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220221105336.522086-1-42.hyeyoo@gmail.com>
 References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
@@ -76,56 +76,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SLUB sets number of minimum partial slabs for node (min_partial) using
-set_min_partial(). SLUB holds at least min_partial slabs even if they're empty
-to avoid excessive use of page allocator.
+Simply deactivate_slab() by removing variable 'lock' and replacing
+'l' and 'm' with 'mode'. Instead, remove slab from list and unlock
+n->list_lock when cmpxchg_double() fails, and then retry.
 
-set_min_partial() limits value of min_partial between MIN_PARTIAL and
-MAX_PARTIAL. As set_min_partial() can be called by min_partial_store()
-too, Only limit value of min_partial in kmem_cache_open() so that it
-can be changed to value that a user wants.
+One slight functional change is releasing and taking n->list_lock again
+when cmpxchg_double() fails. This is not harmful because SLUB avoids
+deactivating slabs as much as possible.
 
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- mm/slub.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ mm/slub.c | 74 +++++++++++++++++++++++++------------------------------
+ 1 file changed, 33 insertions(+), 41 deletions(-)
 
 diff --git a/mm/slub.c b/mm/slub.c
-index 3a4458976ab7..a4964deccb61 100644
+index a4964deccb61..2d0663befb9e 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -4002,10 +4002,6 @@ static int init_kmem_cache_nodes(struct kmem_cache *s)
- 
- static void set_min_partial(struct kmem_cache *s, unsigned long min)
+@@ -2350,8 +2350,8 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
  {
--	if (min < MIN_PARTIAL)
--		min = MIN_PARTIAL;
--	else if (min > MAX_PARTIAL)
--		min = MAX_PARTIAL;
- 	s->min_partial = min;
- }
+ 	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE };
+ 	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+-	int lock = 0, free_delta = 0;
+-	enum slab_modes l = M_NONE, m = M_NONE;
++	int free_delta = 0;
++	enum slab_modes mode = M_NONE;
+ 	void *nextfree, *freelist_iter, *freelist_tail;
+ 	int tail = DEACTIVATE_TO_HEAD;
+ 	unsigned long flags = 0;
+@@ -2420,57 +2420,49 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+ 	new.frozen = 0;
  
-@@ -4184,6 +4180,8 @@ static int calculate_sizes(struct kmem_cache *s, int forced_order)
+ 	if (!new.inuse && n->nr_partial >= s->min_partial)
+-		m = M_FREE;
++		mode = M_FREE;
+ 	else if (new.freelist) {
+-		m = M_PARTIAL;
+-		if (!lock) {
+-			lock = 1;
+-			/*
+-			 * Taking the spinlock removes the possibility that
+-			 * acquire_slab() will see a slab that is frozen
+-			 */
+-			spin_lock_irqsave(&n->list_lock, flags);
+-		}
+-	} else {
+-		m = M_FULL;
+-		if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
+-			lock = 1;
+-			/*
+-			 * This also ensures that the scanning of full
+-			 * slabs from diagnostic functions will not see
+-			 * any frozen slabs.
+-			 */
+-			spin_lock_irqsave(&n->list_lock, flags);
+-		}
++		mode = M_PARTIAL;
++		/*
++		 * Taking the spinlock removes the possibility that
++		 * acquire_slab() will see a slab that is frozen
++		 */
++		spin_lock_irqsave(&n->list_lock, flags);
++		add_partial(n, slab, tail);
++	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
++		mode = M_FULL;
++		/*
++		 * This also ensures that the scanning of full
++		 * slabs from diagnostic functions will not see
++		 * any frozen slabs.
++		 */
++		spin_lock_irqsave(&n->list_lock, flags);
++		add_full(s, n, slab);
+ 	}
  
- static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
- {
-+	int min_partial;
-+
- 	s->flags = kmem_cache_flags(s->size, flags, s->name);
- #ifdef CONFIG_SLAB_FREELIST_HARDENED
- 	s->random = get_random_long();
-@@ -4215,7 +4213,10 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
- 	 * The larger the object size is, the more slabs we want on the partial
- 	 * list to avoid pounding the page allocator excessively.
- 	 */
--	set_min_partial(s, ilog2(s->size) / 2);
-+	min_partial = min(MAX_PARTIAL, ilog2(s->size) / 2);
-+	min_partial = max(MIN_PARTIAL, min_partial);
-+
-+	set_min_partial(s, min_partial);
+-	if (l != m) {
+-		if (l == M_PARTIAL)
+-			remove_partial(n, slab);
+-		else if (l == M_FULL)
+-			remove_full(s, n, slab);
  
- 	set_cpu_partial(s);
+-		if (m == M_PARTIAL)
+-			add_partial(n, slab, tail);
+-		else if (m == M_FULL)
+-			add_full(s, n, slab);
+-	}
+-
+-	l = m;
+ 	if (!cmpxchg_double_slab(s, slab,
+ 				old.freelist, old.counters,
+ 				new.freelist, new.counters,
+-				"unfreezing slab"))
++				"unfreezing slab")) {
++		if (mode == M_PARTIAL) {
++			remove_partial(n, slab);
++			spin_unlock_irqrestore(&n->list_lock, flags);
++		} else if (mode == M_FULL) {
++			remove_full(s, n, slab);
++			spin_unlock_irqrestore(&n->list_lock, flags);
++		}
+ 		goto redo;
++	}
  
+-	if (lock)
+-		spin_unlock_irqrestore(&n->list_lock, flags);
+ 
+-	if (m == M_PARTIAL)
++	if (mode == M_PARTIAL) {
++		spin_unlock_irqrestore(&n->list_lock, flags);
+ 		stat(s, tail);
+-	else if (m == M_FULL)
++	} else if (mode == M_FULL) {
++		spin_unlock_irqrestore(&n->list_lock, flags);
+ 		stat(s, DEACTIVATE_FULL);
+-	else if (m == M_FREE) {
++	} else if (mode == M_FREE) {
+ 		stat(s, DEACTIVATE_EMPTY);
+ 		discard_slab(s, slab);
+ 		stat(s, FREE_SLAB);
 -- 
 2.33.1
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502CE4BE351
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 475D74BDDAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbiBUKEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:04:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57112 "EHLO
+        id S1353391AbiBUKKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:10:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353296AbiBUJ5W (ORCPT
+        with ESMTP id S1353333AbiBUJ5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 04:57:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA5046B0C;
-        Mon, 21 Feb 2022 01:25:18 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A4047043;
+        Mon, 21 Feb 2022 01:25:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45DE160F97;
-        Mon, 21 Feb 2022 09:25:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21034C340EB;
-        Mon, 21 Feb 2022 09:25:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B09B60FE0;
+        Mon, 21 Feb 2022 09:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E904AC340F3;
+        Mon, 21 Feb 2022 09:25:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435517;
-        bh=7eP9GV9smWbWM1dmSH/hpT0rJMPPs4tjxlSzxYHcRbg=;
+        s=korg; t=1645435520;
+        bh=MpEIPhkzQOZpoFUN2LKDl0Xl8eV+Srl14bKJWpvSQxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wHuRUGxCnnWQ0787tMaEFcXw0Ogx5ZJcb0wp5NPm8EqnfbGI/erbouVQSrtO7o6rA
-         vk3SywSAuIelWW4xxAI+v73NmyAZjs2yPFw8g8ARVlU8MdRo/LQuPWlNSgDsJH4U5q
-         iWebgKZMgK58qiRM6y/b//GJb3yUyCFcFnyJdXls=
+        b=2M60zFv0Iw07WenHzxFt4OseJUQY4wRLOHteXPWai4AjFy1p2MYAA82soXbLMbIht
+         MdoKuTVCxBl8GqAyVRdO6+WdQyXAM99UBMXODglW7plfCDOT13+8QfQfU/+V/r2dAH
+         +tiqNUR/sq9TMPHDpyKvFO8sFmMtf5vcPBEFRQz8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 192/227] HID: elo: fix memory leak in elo_probe
-Date:   Mon, 21 Feb 2022 09:50:11 +0100
-Message-Id: <20220221084941.199949623@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 193/227] mtd: rawnand: ingenic: Fix missing put_device in ingenic_ecc_get
+Date:   Mon, 21 Feb 2022 09:50:12 +0100
+Message-Id: <20220221084941.231450046@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
 References: <20220221084934.836145070@linuxfoundation.org>
@@ -55,36 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 817b8b9c5396d2b2d92311b46719aad5d3339dbe ]
+[ Upstream commit ba1b71b008e97fd747845ff3a818420b11bbe830 ]
 
-When hid_parse() in elo_probe() fails, it forgets to call usb_put_dev to
-decrease the refcount.
+If of_find_device_by_node() succeeds, ingenic_ecc_get() doesn't have
+a corresponding put_device(). Thus add put_device() to fix the exception
+handling.
 
-Fix this by adding usb_put_dev() in the error handling code of elo_probe().
-
-Fixes: fbf42729d0e9 ("HID: elo: update the reference count of the usb device structure")
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: 15de8c6efd0e ("mtd: rawnand: ingenic: Separate top-level and SoC specific code")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20211230072751.21622-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-elo.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mtd/nand/raw/ingenic/ingenic_ecc.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hid/hid-elo.c b/drivers/hid/hid-elo.c
-index 8e960d7b233b3..9b42b0cdeef06 100644
---- a/drivers/hid/hid-elo.c
-+++ b/drivers/hid/hid-elo.c
-@@ -262,6 +262,7 @@ static int elo_probe(struct hid_device *hdev, const struct hid_device_id *id)
+diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
+index efe0ffe4f1abc..9054559e52dda 100644
+--- a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
++++ b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
+@@ -68,9 +68,14 @@ static struct ingenic_ecc *ingenic_ecc_get(struct device_node *np)
+ 	struct ingenic_ecc *ecc;
  
- 	return 0;
- err_free:
-+	usb_put_dev(udev);
- 	kfree(priv);
- 	return ret;
- }
+ 	pdev = of_find_device_by_node(np);
+-	if (!pdev || !platform_get_drvdata(pdev))
++	if (!pdev)
+ 		return ERR_PTR(-EPROBE_DEFER);
+ 
++	if (!platform_get_drvdata(pdev)) {
++		put_device(&pdev->dev);
++		return ERR_PTR(-EPROBE_DEFER);
++	}
++
+ 	ecc = platform_get_drvdata(pdev);
+ 	clk_prepare_enable(ecc->clk);
+ 
 -- 
 2.34.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA73A4BDCE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1CA4BDBA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347471AbiBUJGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:06:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58048 "EHLO
+        id S1352042AbiBUJxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:53:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348285AbiBUJCh (ORCPT
+        with ESMTP id S1352902AbiBUJsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:02:37 -0500
+        Mon, 21 Feb 2022 04:48:01 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC2A2BB2A;
-        Mon, 21 Feb 2022 00:57:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6841193E7;
+        Mon, 21 Feb 2022 01:21:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 325F761222;
-        Mon, 21 Feb 2022 08:57:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15890C340E9;
-        Mon, 21 Feb 2022 08:57:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 567A060F4E;
+        Mon, 21 Feb 2022 09:21:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C462C340E9;
+        Mon, 21 Feb 2022 09:21:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433870;
-        bh=ASK1MwfeL/CNuiui8+LcMzQGd1hoU+FW4p1Qlh7aswc=;
+        s=korg; t=1645435272;
+        bh=lO9+SfRYxZy7LfpZ9kZoV+XdWXmb8YWDq3BsOi5WrkQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=khI57OgDHUSYCpZK8cXxjvGmWjeDmdWfU5S0KlFfuEkUQv8eZQ7A5wwVyqIlmVenH
-         lBqZaVFa9QowWrh5LeX6X8ueq9aUOADPBJzqAjjdY+t3AMKf/uI9pQgpFzUXFyPEgd
-         nzDpyQEWqMtQuchqsr01NPfU8Hc/mAHfVcyVWO5c=
+        b=ciS78LNanpAgj67Efyw40P9mmncYXwYAYeVs3+iOmgGjy8VQyvJsh1KQaUVYw3BpB
+         SRJ7YVR/GUE/3swUHIe3RNKiQuWa1tT8xr4vp9aPeLJxN1s3vq7xYFU5TiuciND/nJ
+         hR6DHVyrQfkU6K4+RZpBmsPE0uZNx+8G3b7DL8IE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.4 03/80] Revert "svm: Add warning message for AVIC IPI invalid target"
+        stable@vger.kernel.org, Congyu Liu <liu3101@purdue.edu>,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 104/227] ipv6: per-netns exclusive flowlabel checks
 Date:   Mon, 21 Feb 2022 09:48:43 +0100
-Message-Id: <20220221084915.677311913@linuxfoundation.org>
+Message-Id: <20220221084938.336077170@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +55,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Willem de Bruijn <willemb@google.com>
 
-commit dd4589eee99db8f61f7b8f7df1531cad3f74a64d upstream.
+commit 0b0dff5b3b98c5c7ce848151df9da0b3cdf0cc8b upstream.
 
-Remove a WARN on an "AVIC IPI invalid target" exit, the WARN is trivial
-to trigger from guest as it will fail on any destination APIC ID that
-doesn't exist from the guest's perspective.
+Ipv6 flowlabels historically require a reservation before use.
+Optionally in exclusive mode (e.g., user-private).
 
-Don't bother recording anything in the kernel log, the common tracepoint
-for kvm_avic_incomplete_ipi() is sufficient for debugging.
+Commit 59c820b2317f ("ipv6: elide flowlabel check if no exclusive
+leases exist") introduced a fastpath that avoids this check when no
+exclusive leases exist in the system, and thus any flowlabel use
+will be granted.
 
-This reverts commit 37ef0c4414c9743ba7f1af4392f0a27a99649f2a.
+That allows skipping the control operation to reserve a flowlabel
+entirely. Though with a warning if the fast path fails:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220204214205.3306634-2-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+  This is an optimization. Robust applications still have to revert to
+  requesting leases if the fast path fails due to an exclusive lease.
+
+Still, this is subtle. Better isolate network namespaces from each
+other. Flowlabels are per-netns. Also record per-netns whether
+exclusive leases are in use. Then behavior does not change based on
+activity in other netns.
+
+Changes
+  v2
+    - wrap in IS_ENABLED(CONFIG_IPV6) to avoid breakage if disabled
+
+Fixes: 59c820b2317f ("ipv6: elide flowlabel check if no exclusive leases exist")
+Link: https://lore.kernel.org/netdev/MWHPR2201MB1072BCCCFCE779E4094837ACD0329@MWHPR2201MB1072.namprd22.prod.outlook.com/
+Reported-by: Congyu Liu <liu3101@purdue.edu>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Tested-by: Congyu Liu <liu3101@purdue.edu>
+Link: https://lore.kernel.org/r/20220215160037.1976072-1-willemdebruijn.kernel@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/svm.c |    2 --
- 1 file changed, 2 deletions(-)
+ include/net/ipv6.h       |    5 ++++-
+ include/net/netns/ipv6.h |    3 ++-
+ net/ipv6/ip6_flowlabel.c |    4 +++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
---- a/arch/x86/kvm/svm.c
-+++ b/arch/x86/kvm/svm.c
-@@ -4585,8 +4585,6 @@ static int avic_incomplete_ipi_intercept
- 		break;
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -391,17 +391,20 @@ static inline void txopt_put(struct ipv6
+ 		kfree_rcu(opt, rcu);
+ }
+ 
++#if IS_ENABLED(CONFIG_IPV6)
+ struct ip6_flowlabel *__fl6_sock_lookup(struct sock *sk, __be32 label);
+ 
+ extern struct static_key_false_deferred ipv6_flowlabel_exclusive;
+ static inline struct ip6_flowlabel *fl6_sock_lookup(struct sock *sk,
+ 						    __be32 label)
+ {
+-	if (static_branch_unlikely(&ipv6_flowlabel_exclusive.key))
++	if (static_branch_unlikely(&ipv6_flowlabel_exclusive.key) &&
++	    READ_ONCE(sock_net(sk)->ipv6.flowlabel_has_excl))
+ 		return __fl6_sock_lookup(sk, label) ? : ERR_PTR(-ENOENT);
+ 
+ 	return NULL;
+ }
++#endif
+ 
+ struct ipv6_txoptions *fl6_merge_options(struct ipv6_txoptions *opt_space,
+ 					 struct ip6_flowlabel *fl,
+--- a/include/net/netns/ipv6.h
++++ b/include/net/netns/ipv6.h
+@@ -77,9 +77,10 @@ struct netns_ipv6 {
+ 	spinlock_t		fib6_gc_lock;
+ 	unsigned int		 ip6_rt_gc_expire;
+ 	unsigned long		 ip6_rt_last_gc;
++	unsigned char		flowlabel_has_excl;
+ #ifdef CONFIG_IPV6_MULTIPLE_TABLES
+-	unsigned int		fib6_rules_require_fldissect;
+ 	bool			fib6_has_custom_rules;
++	unsigned int		fib6_rules_require_fldissect;
+ #ifdef CONFIG_IPV6_SUBTREES
+ 	unsigned int		fib6_routes_require_src;
+ #endif
+--- a/net/ipv6/ip6_flowlabel.c
++++ b/net/ipv6/ip6_flowlabel.c
+@@ -450,8 +450,10 @@ fl_create(struct net *net, struct sock *
+ 		err = -EINVAL;
+ 		goto done;
  	}
- 	case AVIC_IPI_FAILURE_INVALID_TARGET:
--		WARN_ONCE(1, "Invalid IPI target: index=%u, vcpu=%d, icr=%#0x:%#0x\n",
--			  index, svm->vcpu.vcpu_id, icrh, icrl);
- 		break;
- 	case AVIC_IPI_FAILURE_INVALID_BACKING_PAGE:
- 		WARN_ONCE(1, "Invalid backing page\n");
+-	if (fl_shared_exclusive(fl) || fl->opt)
++	if (fl_shared_exclusive(fl) || fl->opt) {
++		WRITE_ONCE(sock_net(sk)->ipv6.flowlabel_has_excl, 1);
+ 		static_branch_deferred_inc(&ipv6_flowlabel_exclusive);
++	}
+ 	return fl;
+ 
+ done:
 
 

@@ -2,143 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4412F4BE6D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6DE4BE1D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376728AbiBUNxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:53:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48984 "EHLO
+        id S1376748AbiBUNxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:53:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376929AbiBUNwk (ORCPT
+        with ESMTP id S1377097AbiBUNx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:52:40 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62A59FE2;
-        Mon, 21 Feb 2022 05:52:15 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id p15so33383231ejc.7;
-        Mon, 21 Feb 2022 05:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=0jY72INQ+Kfy8mY8YvrubiEx7D1Fcsl6Uov11Zh6YiI=;
-        b=g94bR3IUa/Sz6N2lLkK+W14JjY/Btaxaboed/zL+wYivm8kvaxmhWznwk8/UYc6898
-         JHW33UhKXpjVA1aWQuQa0+GE0saEure8olWa1Im97HL6BV1iFix+lMLzeg8/I8mXYHl5
-         GI7B9+BafVrzV7397Fzjo3jppxC/I/zLdnYzQmzaapAGbzgwH+ShEEqaON4PBxt1Be6Y
-         OxC7bw7Rg+Y0q8FN4CCqtcX8BonFjdxDBxmUZfqWbfp6lozZn7jB/xc/KjOgyoshu7xu
-         8XNrnQbnrQii3KG4ilqoJOmKn9MCHkIqGojiD4SGfsRUoOYUaHxivhM/0FqpPW8e4Jl3
-         NDjA==
+        Mon, 21 Feb 2022 08:53:29 -0500
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B4DBF73;
+        Mon, 21 Feb 2022 05:53:01 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso13599373wme.5;
+        Mon, 21 Feb 2022 05:53:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=0jY72INQ+Kfy8mY8YvrubiEx7D1Fcsl6Uov11Zh6YiI=;
-        b=e8IaX/n/oBQ2eBakBH6mBZx6jInDN849TKK8Ql1uYc/rQ1qxoh8Rv614Etum6lk5D6
-         vjwlUcQyAMLGSi/lwOfZhUme/YcGKTt9AJNcF6f2OLAXLI8696DpkslskQ0suO7zCnk7
-         WmffaBOIDdvbxpKgKZCtlRlKF8t61PQRzbZECylivJQBCxpFBbtNg214YjAnEJoZulUy
-         4t8nPcyYJJwHytUeYPlVqk86QFZ9bewQBOVvZB/wZEKTh6fTQZKqEMLAZxUjAZwNMT0r
-         XxwBJTlwZvKf/aB+OfpaUUOWta95QKh7NzS0X9M9HFOZ+IVxd8c7zcsQz5msqdYyKc5d
-         U1tw==
-X-Gm-Message-State: AOAM533EANB+H0KOActQW1UiMrpCh/ZF6GL7DuAWT6wS58NuE8wqVxUQ
-        qIXEWz/xdaTwxdMwc4DVk2pPIPY6rMtDhA==
-X-Google-Smtp-Source: ABdhPJxdWvEQ1IuXHxmlfTB7XK4BITCX2Ck5UcH3i+QD3QSD/7jvpwzt82YhNtCQS/328ucrWRANpw==
-X-Received: by 2002:a17:907:2711:b0:6cf:350:81c3 with SMTP id w17-20020a170907271100b006cf035081c3mr15679810ejk.712.1645451534338;
-        Mon, 21 Feb 2022 05:52:14 -0800 (PST)
-Received: from ubuntu ([155.133.219.250])
-        by smtp.gmail.com with ESMTPSA id 23sm5107799ejg.209.2022.02.21.05.52.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FVZxpUvN+zstZFcKDqV/8zmg5Gk1qj5hbIIYrPrX9Ls=;
+        b=kMwnYDDdmuiMBqOOuLMuOOk7Xj4jMoxY6TOtyv9H8GQv3AKqwLHyJXeb9b7zbx4Dem
+         ViIGex0cpSZ1qtitJuHECvJUWMgC9Fu/ZDm4T6XCDinxEs1S8vYv4Feb1mlOvmQZ7dc4
+         +ug0+B9qiYCIOemXLCz6NECYKhviksnLW+TvM7plElyhH7u805qokUQAX17TgWs+78qO
+         6kZyRZg2sIjB6D7qtA0YgNiWxHK79hfZlVrk3LBrImsrX/dKw0K5XCUcE7FX1NjVTEgC
+         rQ+r4JvsMKXSRUvMR2olp9efx+qrE8+54k1Hqae8bTBrWXQupghJlXRtu8ywRS/HmfYi
+         unNQ==
+X-Gm-Message-State: AOAM533WuUpkp3lGCT74WM3KbRWLO5k5CYuH0oNPbU5BfpyOnw6cU7CV
+        QZFPjDI47A/JibXVXXSos+s=
+X-Google-Smtp-Source: ABdhPJzLOEYRW5GD8yq3kxkuqYJ3JVjEJVI3qB1VJlyRSXhVBfP0Bsz3YLK51THp24/oSndCDkeemQ==
+X-Received: by 2002:a7b:c19a:0:b0:37b:c68c:7162 with SMTP id y26-20020a7bc19a000000b0037bc68c7162mr20931277wmi.7.1645451580286;
+        Mon, 21 Feb 2022 05:53:00 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id c9sm30128821wrn.51.2022.02.21.05.52.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 05:52:14 -0800 (PST)
-Date:   Mon, 21 Feb 2022 14:52:13 +0100
-From:   Daniel Kestrel <kestrelseventyfour@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Kestrel <kestrelseventyfour@gmail.com>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] Add support for WASP SoC on AVM router boards
-Message-ID: <20220221135213.GA7264@ubuntu>
+        Mon, 21 Feb 2022 05:52:59 -0800 (PST)
+Date:   Mon, 21 Feb 2022 13:52:58 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
+        linux-hyperv@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCHv3.1 2/32] x86/coco: Explicitly declare type of
+ confidential computing platform
+Message-ID: <20220221135258.4qcpt6i2zaou7ygm@liuwe-devbox-debian-v2>
+References: <YhAWcPbzgUGcJZjI@zn.tnic>
+ <20220219001305.22883-1-kirill.shutemov@linux.intel.com>
+ <YhNyY5ErqQHZ961+@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YhNyY5ErqQHZ961+@zn.tnic>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a popular set of Lantiq xrx200 router boards by AVM in
-Germany (AVM Fritzbox 3390, 3490, 5490, 5491 and 7490) which
-have the strange implementation of having the wifi cards
-connected to a separate memory only ATH79 based SoC. It has no
-persistent storage and no access to any resource on the Lantiq
-host, but is connect to the Lantiq GSWIP switch on an additional
-fixed internal network port.
-This kernel module is to support booting the secondary SoC called
-Wireless Assistant Support Processor (WASP).
-After turning it on, a small network boot firmware is sent to
-the SoC by using mdio and when it is started, an initramfs
-linux image is sent to the SoC using raw ethernet frames.
+On Mon, Feb 21, 2022 at 12:07:15PM +0100, Borislav Petkov wrote:
+> On Sat, Feb 19, 2022 at 03:13:04AM +0300, Kirill A. Shutemov wrote:
+[...]
+> > diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> > index 5a99f993e639..d77cf3a31f07 100644
+> > --- a/arch/x86/kernel/cpu/mshyperv.c
+> > +++ b/arch/x86/kernel/cpu/mshyperv.c
+> > @@ -33,6 +33,7 @@
+> >  #include <asm/nmi.h>
+> >  #include <clocksource/hyperv_timer.h>
+> >  #include <asm/numa.h>
+> > +#include <asm/coco.h>
+> >  
+> >  /* Is Linux running as the root partition? */
+> >  bool hv_root_partition;
+> > @@ -344,6 +345,8 @@ static void __init ms_hyperv_init_platform(void)
+> >  		 */
+> >  		swiotlb_force = SWIOTLB_FORCE;
+> >  #endif
+> > +		if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
+> > +			cc_init(CC_VENDOR_HYPERV);
+> 
+> Isn't that supposed to test HV_ISOLATION_TYPE_SNP instead?
+> 
+> I mean, I have no clue what HV_ISOLATION_TYPE_VBS is. It is not used
+> anywhere in the tree either.
+> 
+> a6c76bb08dc7 ("x86/hyperv: Load/save the Isolation Configuration leaf")
+> calls it "'VBS' (software-based isolation)" - whatever that means - so
+> I'm not sure that is going to need the cc-facilities.
+> 
 
-The whole procedure takes about 6 seconds, if there is no error.
-So far tested on 3490, 5490 and 7490 devices based on OpenWrt.
+Hi Boris and Kirill, I only see VBS mentioned here so I don't have much
+context, but VBS likely means virtualization-based security. There is a
+public document for it.
 
-Patch 1/3 adds the vendor name
-Patch 2/3 adds the dt-bindings
-Patch 3/3 adds the remoteproc driver
+https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-vbs
 
-To build and run, there is OpenWrt PR 5075.
+Whether it needs a new isolation type or not, I am not sure. Perhaps
+Tianyu can provide more context.
 
-I have read a couple of responses on other submitted patches and
-after that I did the following changes to my code:
-- Check for c style comments
-- Remove all dev_info output
-- Did run checkpatch.pl before, but double check and run again
-- Add timeout for send and receive socket in order to not stall
-  the kernel module in case of blocking tcpip calls
-- Add a timeout to while loop in avm_wasp_load_initramfs_image
-  to make sure the loop is not infinite
-- Add put_device after using (of_)mdio_find_bus
-- Use devm_gpio_free instead of gpio_free
-- Check for all of_... calls if they increase ref count and
-  add of_put_node if required
-- Replace all return -1 with return -<some errno>
-- Check if the os methods return error and/or NULL and look up
-  how other callers in the kernel sources check for errors
-  after calling those methods
-- Try to find any pointer references that were not checked in
-  code running before accessing them
-- Rename all methods to start with avm_wasp_
-- Restructure code to aquire mdio bus just before using it and
-  free it right after avm_wasp_netboot_load_firmware
-- Replace rproc_add and rproc_alloc with devm_ methods and
-  remove rproc_del and rproc_free
-- make dt_binding_check and fix missing gpio include
-
-I likely still have missed things.
-
-Daniel Kestrel (3):
-  dt-bindings: vendor-prefixes: Add AVM
-  dt-bindings: remoteproc: Add AVM WASP
-  remoteproc: Add AVM WASP driver
-
- .../bindings/remoteproc/avm,wasp-rproc.yaml   |   93 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
- drivers/remoteproc/Kconfig                    |   10 +
- drivers/remoteproc/Makefile                   |    1 +
- drivers/remoteproc/avm_wasp.c                 | 1251 +++++++++++++++++
- drivers/remoteproc/avm_wasp.h                 |   95 ++
- 6 files changed, 1452 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
- create mode 100644 drivers/remoteproc/avm_wasp.c
- create mode 100644 drivers/remoteproc/avm_wasp.h
-
--- 
-2.17.1
-
+Thanks,
+Wei.

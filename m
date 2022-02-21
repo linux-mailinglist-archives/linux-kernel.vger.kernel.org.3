@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B694BE85F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF6A4BDC81
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352722AbiBUJ41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:56:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41672 "EHLO
+        id S1350543AbiBUJeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:34:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352919AbiBUJsC (ORCPT
+        with ESMTP id S1350046AbiBUJ1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:48:02 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260C419C02;
-        Mon, 21 Feb 2022 01:21:27 -0800 (PST)
+        Mon, 21 Feb 2022 04:27:08 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9AF2251C;
+        Mon, 21 Feb 2022 01:11:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9538ACE0E89;
-        Mon, 21 Feb 2022 09:21:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7622CC340E9;
-        Mon, 21 Feb 2022 09:21:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 64A0FCE0E76;
+        Mon, 21 Feb 2022 09:11:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56874C340E9;
+        Mon, 21 Feb 2022 09:11:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435284;
-        bh=lIrrySYVtcncVdCuEiZ4YiYeeNz35RMRuhzq2z1xfFE=;
+        s=korg; t=1645434684;
+        bh=8E9nmzjr+oVBPaIx2NahacyRPguKBnPNkSFQybHOK2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MVgLvreSF++hSu3wdPZT9TpuVkBItMnVMUFsoxi1zwG3QCL8CojULlv4p/O5+OOJS
-         TAR/eTpFeSzcwaVNJCKNfCwe2Bn0pdIe0OTtiSPRx1hQv7bfsGVLue/sPw+tHKHOB6
-         IQq6lzGx65Pr6nTIU59CIGvZbs1LoBB0Dpd+e0kU=
+        b=C88S3M3lXAu07a/AVpVXAigcSICe+2sgDDDLumCV4mkLDtrvwJrthW1mMOAOrBs8X
+         ehyleLp5Zwmi8UkGc5eXvpEtxTmcgNRBu7/jaWm6+M6V71lhwlHsVGpUJzxbRiiWxv
+         lluBPiUTEyh2owq/9x2oKD870tXLwY5nf83rLWR4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.16 108/227] cfg80211: fix race in netlink owner interface destruction
+        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 095/196] ping: fix the dif and sdif check in ping_lookup
 Date:   Mon, 21 Feb 2022 09:48:47 +0100
-Message-Id: <20220221084938.458981899@linuxfoundation.org>
+Message-Id: <20220221084934.115451407@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit f0a6fd1527067da537e9c48390237488719948ed upstream.
+commit 35a79e64de29e8d57a5989aac57611c0cd29e13e upstream.
 
-My previous fix here to fix the deadlock left a race where
-the exact same deadlock (see the original commit referenced
-below) can still happen if cfg80211_destroy_ifaces() already
-runs while nl80211_netlink_notify() is still marking some
-interfaces as nl_owner_dead.
+When 'ping' changes to use PING socket instead of RAW socket by:
 
-The race happens because we have two loops here - first we
-dev_close() all the netdevs, and then we destroy them. If we
-also have two netdevs (first one need only be a wdev though)
-then we can find one during the first iteration, close it,
-and go to the second iteration -- but then find two, and try
-to destroy also the one we didn't close yet.
+   # sysctl -w net.ipv4.ping_group_range="0 100"
 
-Fix this by only iterating once.
+There is another regression caused when matching sk_bound_dev_if
+and dif, RAW socket is using inet_iif() while PING socket lookup
+is using skb->dev->ifindex, the cmd below fails due to this:
 
-Reported-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Fixes: ea6b2098dd02 ("cfg80211: fix locking in netlink owner interface destruction")
-Tested-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Link: https://lore.kernel.org/r/20220201130951.22093-1-johannes@sipsolutions.net
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+  # ip link add dummy0 type dummy
+  # ip link set dummy0 up
+  # ip addr add 192.168.111.1/24 dev dummy0
+  # ping -I dummy0 192.168.111.1 -c1
+
+The issue was also reported on:
+
+  https://github.com/iputils/iputils/issues/104
+
+But fixed in iputils in a wrong way by not binding to device when
+destination IP is on device, and it will cause some of kselftests
+to fail, as Jianlin noticed.
+
+This patch is to use inet(6)_iif and inet(6)_sdif to get dif and
+sdif for PING socket, and keep consistent with RAW socket.
+
+Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
+Reported-by: Jianlin Shi <jishi@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/wireless/core.c |   17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+ net/ipv4/ping.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/net/wireless/core.c
-+++ b/net/wireless/core.c
-@@ -5,7 +5,7 @@
-  * Copyright 2006-2010		Johannes Berg <johannes@sipsolutions.net>
-  * Copyright 2013-2014  Intel Mobile Communications GmbH
-  * Copyright 2015-2017	Intel Deutschland GmbH
-- * Copyright (C) 2018-2021 Intel Corporation
-+ * Copyright (C) 2018-2022 Intel Corporation
-  */
+--- a/net/ipv4/ping.c
++++ b/net/ipv4/ping.c
+@@ -172,16 +172,23 @@ static struct sock *ping_lookup(struct n
+ 	struct sock *sk = NULL;
+ 	struct inet_sock *isk;
+ 	struct hlist_nulls_node *hnode;
+-	int dif = skb->dev->ifindex;
++	int dif, sdif;
  
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-@@ -332,29 +332,20 @@ static void cfg80211_event_work(struct w
- void cfg80211_destroy_ifaces(struct cfg80211_registered_device *rdev)
- {
- 	struct wireless_dev *wdev, *tmp;
--	bool found = false;
- 
- 	ASSERT_RTNL();
- 
--	list_for_each_entry(wdev, &rdev->wiphy.wdev_list, list) {
-+	list_for_each_entry_safe(wdev, tmp, &rdev->wiphy.wdev_list, list) {
- 		if (wdev->nl_owner_dead) {
- 			if (wdev->netdev)
- 				dev_close(wdev->netdev);
--			found = true;
--		}
--	}
--
--	if (!found)
--		return;
- 
--	wiphy_lock(&rdev->wiphy);
--	list_for_each_entry_safe(wdev, tmp, &rdev->wiphy.wdev_list, list) {
--		if (wdev->nl_owner_dead) {
-+			wiphy_lock(&rdev->wiphy);
- 			cfg80211_leave(rdev, wdev);
- 			rdev_del_virtual_intf(rdev, wdev);
-+			wiphy_unlock(&rdev->wiphy);
- 		}
+ 	if (skb->protocol == htons(ETH_P_IP)) {
++		dif = inet_iif(skb);
++		sdif = inet_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI4, dif = %d\n",
+ 			 (int)ident, &ip_hdr(skb)->daddr, dif);
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
++		dif = inet6_iif(skb);
++		sdif = inet6_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI6c, dif = %d\n",
+ 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
+ #endif
++	} else {
++		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
++		return NULL;
  	}
--	wiphy_unlock(&rdev->wiphy);
- }
  
- static void cfg80211_destroy_iface_wk(struct work_struct *work)
+ 	read_lock_bh(&ping_table.lock);
+@@ -221,7 +228,7 @@ static struct sock *ping_lookup(struct n
+ 		}
+ 
+ 		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
+-		    sk->sk_bound_dev_if != inet_sdif(skb))
++		    sk->sk_bound_dev_if != sdif)
+ 			continue;
+ 
+ 		sock_hold(sk);
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C293F4BE821
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB42E4BDC55
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350865AbiBUJgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:36:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48062 "EHLO
+        id S245076AbiBUJJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:09:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345134AbiBUJ1X (ORCPT
+        with ESMTP id S1347550AbiBUJFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:23 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8776344;
-        Mon, 21 Feb 2022 01:11:52 -0800 (PST)
+        Mon, 21 Feb 2022 04:05:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B922C2FFD3;
+        Mon, 21 Feb 2022 00:59:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 56CBECE0E79;
-        Mon, 21 Feb 2022 09:11:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B83C340E9;
-        Mon, 21 Feb 2022 09:11:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5690D61202;
+        Mon, 21 Feb 2022 08:59:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DD2FC340E9;
+        Mon, 21 Feb 2022 08:59:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434709;
-        bh=mc0aKOxSsDuTXpmJoC/IG9w3zf1N4r0QHjUEA7j//a4=;
+        s=korg; t=1645433955;
+        bh=gD0Sn3OaPOUOkHnhQNdnZwVetF5O3MEMg+qMvhTqXvI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EAQbweblt57duCKMUIgnBPpaCUpksBKhzn/jvBZDRjdZnHdLptyMrqWWxXqokdYP+
-         ZMzYA+b2dKMsJq8BgKtRsju2Zs4NdIZ18TjigdBnnz18x92UKC2nT97mp0/hq4yQti
-         6nUVYZg6pDkFB0X5Vxx95/zq0bGMc5WHLy9dnoYs=
+        b=ylf/YSytXVi270jdFDnsmE0ryIq/lHKonO2qSbF9tmi/MC3rTHkO17CS1iBBm8Eqn
+         58+wlZu+8WQTZrN0ZIYI8eeWdYMNl55X8t5yIBavvORWIPZuiWSBAdEmUdVpPEYZNn
+         W54Yu6yp+Mykortwszs8BdfVQpArlxK2WViXFoqQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gatis Peisenieks <gatis@mikrotik.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 103/196] atl1c: fix tx timeout after link flap on Mikrotik 10/25G NIC
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 15/80] ax25: improve the incomplete fix to avoid UAF and NPD bugs
 Date:   Mon, 21 Feb 2022 09:48:55 +0100
-Message-Id: <20220221084934.382608307@linuxfoundation.org>
+Message-Id: <20220221084916.086495968@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gatis Peisenieks <gatis@mikrotik.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit bf8e59fd315f304eb538546e35de6dc603e4709f upstream.
+[ Upstream commit 4e0f718daf97d47cf7dec122da1be970f145c809 ]
 
-If NIC had packets in tx queue at the moment link down event
-happened, it could result in tx timeout when link got back up.
+The previous commit 1ade48d0c27d ("ax25: NPD bug when detaching
+AX25 device") introduce lock_sock() into ax25_kill_by_device to
+prevent NPD bug. But the concurrency NPD or UAF bug will occur,
+when lock_sock() or release_sock() dereferences the ax25_cb->sock.
 
-Since device has more than one tx queue we need to reset them
-accordingly.
+The NULL pointer dereference bug can be shown as below:
 
-Fixes: 057f4af2b171 ("atl1c: add 4 RX/TX queue support for Mikrotik 10/25G NIC")
-Signed-off-by: Gatis Peisenieks <gatis@mikrotik.com>
-Link: https://lore.kernel.org/r/20220211065123.4187615-1-gatis@mikrotik.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ax25_kill_by_device()        | ax25_release()
+                             |   ax25_destroy_socket()
+                             |     ax25_cb_del()
+  ...                        |     ...
+                             |     ax25->sk=NULL;
+  lock_sock(s->sk); //(1)    |
+  s->ax25_dev = NULL;        |     ...
+  release_sock(s->sk); //(2) |
+  ...                        |
+
+The root cause is that the sock is set to null before dereference
+site (1) or (2). Therefore, this patch extracts the ax25_cb->sock
+in advance, and uses ax25_list_lock to protect it, which can synchronize
+with ax25_cb_del() and ensure the value of sock is not null before
+dereference sites.
+
+The concurrency UAF bug can be shown as below:
+
+ax25_kill_by_device()        | ax25_release()
+                             |   ax25_destroy_socket()
+  ...                        |   ...
+                             |   sock_put(sk); //FREE
+  lock_sock(s->sk); //(1)    |
+  s->ax25_dev = NULL;        |   ...
+  release_sock(s->sk); //(2) |
+  ...                        |
+
+The root cause is that the sock is released before dereference
+site (1) or (2). Therefore, this patch uses sock_hold() to increase
+the refcount of sock and uses ax25_list_lock to protect it, which
+can synchronize with ax25_cb_del() in ax25_destroy_socket() and
+ensure the sock wil not be released before dereference sites.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/atheros/atl1c/atl1c_main.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ax25/af_ax25.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-+++ b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-@@ -900,7 +900,7 @@ static void atl1c_clean_tx_ring(struct a
- 		atl1c_clean_buffer(pdev, buffer_info);
- 	}
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index 1f84d41e22c36..184af6da0defc 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -77,6 +77,7 @@ static void ax25_kill_by_device(struct net_device *dev)
+ {
+ 	ax25_dev *ax25_dev;
+ 	ax25_cb *s;
++	struct sock *sk;
  
--	netdev_reset_queue(adapter->netdev);
-+	netdev_tx_reset_queue(netdev_get_tx_queue(adapter->netdev, queue));
- 
- 	/* Zero out Tx-buffers */
- 	memset(tpd_ring->desc, 0, sizeof(struct atl1c_tpd_desc) *
+ 	if ((ax25_dev = ax25_dev_ax25dev(dev)) == NULL)
+ 		return;
+@@ -85,13 +86,15 @@ static void ax25_kill_by_device(struct net_device *dev)
+ again:
+ 	ax25_for_each(s, &ax25_list) {
+ 		if (s->ax25_dev == ax25_dev) {
++			sk = s->sk;
++			sock_hold(sk);
+ 			spin_unlock_bh(&ax25_list_lock);
+-			lock_sock(s->sk);
++			lock_sock(sk);
+ 			s->ax25_dev = NULL;
+-			release_sock(s->sk);
++			release_sock(sk);
+ 			ax25_disconnect(s, ENETUNREACH);
+ 			spin_lock_bh(&ax25_list_lock);
+-
++			sock_put(sk);
+ 			/* The entry could have been deleted from the
+ 			 * list meanwhile and thus the next pointer is
+ 			 * no longer valid.  Play it safe and restart
+-- 
+2.34.1
+
 
 

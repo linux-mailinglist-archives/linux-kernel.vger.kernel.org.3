@@ -2,148 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBA14BE18C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D16444BE29F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355701AbiBULRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:17:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48076 "EHLO
+        id S1355793AbiBULRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:17:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355585AbiBULPN (ORCPT
+        with ESMTP id S1355928AbiBULPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:15:13 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F27A42DD1;
-        Mon, 21 Feb 2022 02:52:42 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88698150C;
-        Mon, 21 Feb 2022 02:52:42 -0800 (PST)
-Received: from bogus (unknown [10.57.3.200])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52D83F66F;
-        Mon, 21 Feb 2022 02:52:40 -0800 (PST)
-Date:   Mon, 21 Feb 2022 10:51:51 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Edwin Chiu <edwinchiu0505tw@gmail.com>
-Cc:     edwin.chiu@sunplus.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Message-ID: <20220221105151.6rvyoqyvj6ehhtnj@bogus>
-References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
- <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
+        Mon, 21 Feb 2022 06:15:18 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A524F203
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:53:56 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id y11so8453583pfi.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:53:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YTRDHofTdwvUN9zQVLPcmnC4B3N1IwwGzil1DZn2MNI=;
+        b=bRYbJHdnzUV20447VYiF1k5Sw/qcQcjBivjcQlGrEo94ptSXAqYCjqYLASx2RXXns3
+         y3GUiq3IiatAn5p/dngQk7o6MuV0lF+mfBqwbh354gpU+6K1Hc90MZJRHb8RQuRZMfCh
+         GDhV3H36Kk4qJknPHX8IODppZ3imiwYdOSFICVBQkXFI2imypb5c8WP9v9M4+Bb+Gaae
+         T3ZVRowvS3ew4oJKJCvhSIOd66LDw7rFfMSqOOp4UOZ6XVboK5EHiCMTGuScaUlagmdY
+         ps3M9UH0AHGJYutmQPq//AQX8yWKQXdHN5GOxnW/MxnRTO3bERRBmMIW9w+1gSsEgQ0F
+         SQxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YTRDHofTdwvUN9zQVLPcmnC4B3N1IwwGzil1DZn2MNI=;
+        b=xsKA1cu9d4q7ZzWo1+Wsnv/Q7pZOarUH7Qdsu+eteu/QHnUq4o2m2omvoMLM1G4RBV
+         BJb7b0p7FJhYDet1hCVgl4/fFTIs6ZXZgkTqihaOThOT5zJFang9QX/JfGiDTgwDwpYX
+         NsJuUTYU1grjr5ct0z6jPhxBhQ9uGyPG1dDldX4LdN828h9ukEpa3McA/89ST/HAuOVd
+         motRsVXnYbdzMXOrJ5/+QMNoyRwm4nG8iZwyNwAcbWBSaKxa5poWP7isUlFz8p5uPJaX
+         qm6HDB9ObW4clgy7+iYfmPkLJF27+yNXCBS3/fxSuyeXP0ZTt7eZsc0NoKzyneOFUrbj
+         qczQ==
+X-Gm-Message-State: AOAM532DbkKbz1KGb9/1CBLbcArQf5HBvp+1a1Rh3rqliGeRlf6xqX09
+        +6HywX6mnHCmgu2YWzYiPJZA8xi0uHlKPA==
+X-Google-Smtp-Source: ABdhPJzo4VPD1mPjBCuDtv/jkPosY4cRii2Au2fYlSlF4qUX8rgY0oOqjASCIIYfCloE6AGV8Y2H9A==
+X-Received: by 2002:a63:e747:0:b0:372:c757:c569 with SMTP id j7-20020a63e747000000b00372c757c569mr15625292pgk.516.1645440836142;
+        Mon, 21 Feb 2022 02:53:56 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id u6sm2214725pfk.203.2022.02.21.02.53.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 02:53:55 -0800 (PST)
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: [PATCH 0/5] slab cleanups
+Date:   Mon, 21 Feb 2022 10:53:31 +0000
+Message-Id: <20220221105336.522086-1-42.hyeyoo@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 03:26:18PM +0800, Edwin Chiu wrote:
-> Create cpuidle driver for sunplus sp7021 chip
-> 
-> Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
-> ---
-> Changes in v3
->  - Rearrangement #include sequence
->  - Change remark style to /*~*/
->  - Align author email address to same as sob
->  - Optimal code
-> Changes in v4
->  - According Rob Herringrobh's comment
->    There is no need for this binding.
->    Just wanting a different driver is not a reason
->    for a duplicate schema.
->    So remove yaml file and submit driver again.
-> Changes in v5
->  - According Krzysztof's comment
->    You either use appropriate compatible in DT
->    or add your compatible to cpuidle-arm.
->    Even if this did not work, then the solution is to
->    use common parts, not to duplicate entire driver.
->    According Sudeep's comment
->    In short NACK for any dedicated driver for this platform,
->    use the generic cpuidle-arm driver with appropriate platform hooks
->    Create cpuidle-sunplus.c in arch/arm/mach-sunplus/
->    for hook generic cpuidle-arm driver
-> 
->  MAINTAINERS                                   |  6 ++
->  arch/arm/mach-sunplus/cpuidle-sunplus.c       | 88 +++++++++++++++++
->  include/linux/platform_data/cpuidle-sunplus.h | 12 ++++
->  3 files changed, 106 insertions(+)
->  create mode 100644 arch/arm/mach-sunplus/cpuidle-sunplus.c
->  create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e0dca8f..5c96428 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18252,6 +18252,12 @@ L:	netdev@vger.kernel.org
->  S:	Maintained
->  F:	drivers/net/ethernet/dlink/sundance.c
->  
-> +SUNPLUS CPUIDLE DRIVER
-> +M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
-> +S:	Maintained
-> +F:	arch/arm/mach-sunplus/cpuidle-sunplus.c
-> +F:	include/linux/platform_data/cpuidle-sunplus.h
-> +
->  SUPERH
->  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->  M:	Rich Felker <dalias@libc.org>
-> diff --git a/arch/arm/mach-sunplus/cpuidle-sunplus.c b/arch/arm/mach-sunplus/cpuidle-sunplus.c
-> new file mode 100644
-> index 0000000..e9d9738
-> --- /dev/null
-> +++ b/arch/arm/mach-sunplus/cpuidle-sunplus.c
-> @@ -0,0 +1,88 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * SP7021 cpu idle Driver.
-> + * Copyright (C) Sunplus Tech / Tibbo Tech.
-> + */
-> +#define pr_fmt(fmt) "CPUidle arm: " fmt
-> +
-> +#include <linux/cpuidle.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_data/cpuidle-sunplus.h>
-> +
-> +#include <asm/cpuidle.h>
-> +
-> +typedef int (*idle_fn)(void);
-> +
-> +static DEFINE_PER_CPU(idle_fn*, sp7021_idle_ops);
-> +
-> +static int sp7021_cpuidle_enter(unsigned long index)
-> +{
-> +	return __this_cpu_read(sp7021_idle_ops)[index]();
-> +}
-> +static int sp7021_cpu_spc(void)
-> +{
-> +	cpu_v7_do_idle();   /* idle to WFI */
-> +	return 0;
-> +}
+Hi. These are cleanup patches of slab. Please consider them for slab-next :)
+Correctness of locking for patch 5 is checked using lockdep.
 
-You really don't need a cpuidle driver to just WFI for any states.
-Add the driver when you have something non WFI in the suspend function.
+Hyeonggon Yoo (5):
+  mm/sl[au]b: Unify __ksize()
+  mm/sl[auo]b: Do not export __ksize()
+  mm/slab: Do not call kmalloc_large() for unsupported size
+  mm/slub: Limit min_partial only in cache creation
+  mm/slub: Refactor deactivate_slab()
 
-> +static const struct of_device_id sp7021_idle_state_match[] = {
-> +	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
-> +	{ },
-> +};
-
-This is better than adding new driver like you did in previous version.
-
-I did a quick check but couldn't figure out. How do cpus get switched
-ON or OFF on this platform(for example during CPU hotplug) ?
+ include/linux/slab.h |  23 +++++++---
+ mm/slab.c            |  23 ----------
+ mm/slab_common.c     |  28 ++++++++++++
+ mm/slob.c            |   1 -
+ mm/slub.c            | 101 +++++++++++++++++--------------------------
+ 5 files changed, 84 insertions(+), 92 deletions(-)
 
 -- 
-Regards,
-Sudeep
+2.33.1
+

@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6CB4BE7C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9864BDEA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347632AbiBUJIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:08:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42848 "EHLO
+        id S1351762AbiBUJyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:54:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346895AbiBUJDi (ORCPT
+        with ESMTP id S1352977AbiBUJsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:03:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5B72DA85;
-        Mon, 21 Feb 2022 00:58:34 -0800 (PST)
+        Mon, 21 Feb 2022 04:48:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4747FD6D;
+        Mon, 21 Feb 2022 01:22:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6623461206;
-        Mon, 21 Feb 2022 08:58:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EAE6C340E9;
-        Mon, 21 Feb 2022 08:58:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B7906CE0E90;
+        Mon, 21 Feb 2022 09:22:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F4BC340E9;
+        Mon, 21 Feb 2022 09:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433898;
-        bh=OOrcJLBMRnTKw4MRosAxas59uUfWSypDD+WFBvZegyQ=;
+        s=korg; t=1645435326;
+        bh=gWrhBUVDvQ6S4mikWmV2cQBDKkGwyarz86IOQR8HysI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=diDoW3abBYu4M6Ds/jscgADtme5qcfrk+JHozIIefvJ70i8lNex9RRLYWTC7JhAPn
-         NEr8csxVi02KGmAvEUPoicwTewHdm2mA3eqoUoAXkbPD3mvYJhWJYjoiSPBf6TlQ3Q
-         InVIKpRhGWmK0DFxaWgTU0aE8iSpnF7nNV/tvxDM=
+        b=KhOZ+7H8lldPYeS1qrfLaiqkrhBxq/ZHlX//CsvqK21ClAGaxv11DeUjjF9VgrMVN
+         obeGjGWYJLGpiVe3gtWxC+02oDhLBWGiCDGZ1EyiS1X3WNdMbwmKLZlFP1ojqJuDeU
+         t9trafOeTrmh/bY6mIyY7s4KQxInOAG00JCT5Gh8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Torsten Duwe <duwe@suse.de>,
-        Sven Schnelle <svens@stackframe.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH 5.4 23/80] ftrace: add ftrace_init_nop()
-Date:   Mon, 21 Feb 2022 09:49:03 +0100
-Message-Id: <20220221084916.342830178@linuxfoundation.org>
+        stable@vger.kernel.org, Hauke Mehrtens <hauke@hauke-m.de>,
+        DENG Qingfang <dqfext@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 125/227] net: phy: mediatek: remove PHY mode check on MT7531
+Date:   Mon, 21 Feb 2022 09:49:04 +0100
+Message-Id: <20220221084939.004206929@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,136 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: DENG Qingfang <dqfext@gmail.com>
 
-commit fbf6c73c5b264c25484fa9f449b5546569fe11f0 upstream.
+commit 525b108e6d95b643eccbd84fb10aa9aa101b18dd upstream.
 
-Architectures may need to perform special initialization of ftrace
-callsites, and today they do so by special-casing ftrace_make_nop() when
-the expected branch address is MCOUNT_ADDR. In some cases (e.g. for
-patchable-function-entry), we don't have an mcount-like symbol and don't
-want a synthetic MCOUNT_ADDR, but we may need to perform some
-initialization of callsites.
+The function mt7531_phy_mode_supported in the DSA driver set supported
+mode to PHY_INTERFACE_MODE_GMII instead of PHY_INTERFACE_MODE_INTERNAL
+for the internal PHY, so this check breaks the PHY initialization:
 
-To make it possible to separate initialization from runtime
-modification, and to handle cases without an mcount-like symbol, this
-patch adds an optional ftrace_init_nop() function that architectures can
-implement, which does not pass a branch address.
+mt7530 mdio-bus:00 wan (uninitialized): failed to connect to PHY: -EINVAL
 
-Where an architecture does not provide ftrace_init_nop(), we will fall
-back to the existing behaviour of calling ftrace_make_nop() with
-MCOUNT_ADDR.
+Remove the check to make it work again.
 
-At the same time, ftrace_code_disable() is renamed to
-ftrace_nop_initialize() to make it clearer that it is intended to
-intialize a callsite into a disabled state, and is not for disabling a
-callsite that has been runtime enabled. The kerneldoc description of rec
-arguments is updated to cover non-mcount callsites.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
-Reviewed-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Reviewed-by: Torsten Duwe <duwe@suse.de>
-Tested-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
-Tested-by: Sven Schnelle <svens@stackframe.org>
-Tested-by: Torsten Duwe <duwe@suse.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Stephen Boyd <swboyd@chromium.org>
+Reported-by: Hauke Mehrtens <hauke@hauke-m.de>
+Fixes: e40d2cca0189 ("net: phy: add MediaTek Gigabit Ethernet PHY driver")
+Signed-off-by: DENG Qingfang <dqfext@gmail.com>
+Acked-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Tested-by: Hauke Mehrtens <hauke@hauke-m.de>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/ftrace.h |   35 ++++++++++++++++++++++++++++++++---
- kernel/trace/ftrace.c  |    6 +++---
- 2 files changed, 35 insertions(+), 6 deletions(-)
+ drivers/net/phy/mediatek-ge.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -499,7 +499,7 @@ static inline int ftrace_disable_ftrace_
- /**
-  * ftrace_make_nop - convert code into nop
-  * @mod: module structure if called by module load initialization
-- * @rec: the mcount call site record
-+ * @rec: the call site record (e.g. mcount/fentry)
-  * @addr: the address that the call site should be calling
-  *
-  * This is a very sensitive operation and great care needs
-@@ -520,9 +520,38 @@ static inline int ftrace_disable_ftrace_
- extern int ftrace_make_nop(struct module *mod,
- 			   struct dyn_ftrace *rec, unsigned long addr);
+--- a/drivers/net/phy/mediatek-ge.c
++++ b/drivers/net/phy/mediatek-ge.c
+@@ -55,9 +55,6 @@ static int mt7530_phy_config_init(struct
  
-+
-+/**
-+ * ftrace_init_nop - initialize a nop call site
-+ * @mod: module structure if called by module load initialization
-+ * @rec: the call site record (e.g. mcount/fentry)
-+ *
-+ * This is a very sensitive operation and great care needs
-+ * to be taken by the arch.  The operation should carefully
-+ * read the location, check to see if what is read is indeed
-+ * what we expect it to be, and then on success of the compare,
-+ * it should write to the location.
-+ *
-+ * The code segment at @rec->ip should contain the contents created by
-+ * the compiler
-+ *
-+ * Return must be:
-+ *  0 on success
-+ *  -EFAULT on error reading the location
-+ *  -EINVAL on a failed compare of the contents
-+ *  -EPERM  on error writing to the location
-+ * Any other value will be considered a failure.
-+ */
-+#ifndef ftrace_init_nop
-+static inline int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
-+{
-+	return ftrace_make_nop(mod, rec, MCOUNT_ADDR);
-+}
-+#endif
-+
- /**
-  * ftrace_make_call - convert a nop call site into a call to addr
-- * @rec: the mcount call site record
-+ * @rec: the call site record (e.g. mcount/fentry)
-  * @addr: the address that the call site should call
-  *
-  * This is a very sensitive operation and great care needs
-@@ -545,7 +574,7 @@ extern int ftrace_make_call(struct dyn_f
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- /**
-  * ftrace_modify_call - convert from one addr to another (no nop)
-- * @rec: the mcount call site record
-+ * @rec: the call site record (e.g. mcount/fentry)
-  * @old_addr: the address expected to be currently called to
-  * @addr: the address to change to
-  *
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2520,14 +2520,14 @@ struct dyn_ftrace *ftrace_rec_iter_recor
- }
- 
- static int
--ftrace_code_disable(struct module *mod, struct dyn_ftrace *rec)
-+ftrace_nop_initialize(struct module *mod, struct dyn_ftrace *rec)
+ static int mt7531_phy_config_init(struct phy_device *phydev)
  {
- 	int ret;
+-	if (phydev->interface != PHY_INTERFACE_MODE_INTERNAL)
+-		return -EINVAL;
+-
+ 	mtk_gephy_config_init(phydev);
  
- 	if (unlikely(ftrace_disabled))
- 		return 0;
- 
--	ret = ftrace_make_nop(mod, rec, MCOUNT_ADDR);
-+	ret = ftrace_init_nop(mod, rec);
- 	if (ret) {
- 		ftrace_bug_type = FTRACE_BUG_INIT;
- 		ftrace_bug(ret, rec);
-@@ -2969,7 +2969,7 @@ static int ftrace_update_code(struct mod
- 			 * to the NOP instructions.
- 			 */
- 			if (!__is_defined(CC_USING_NOP_MCOUNT) &&
--			    !ftrace_code_disable(mod, p))
-+			    !ftrace_nop_initialize(mod, p))
- 				break;
- 
- 			update_cnt++;
+ 	/* PHY link down power saving enable */
 
 

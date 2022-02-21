@@ -2,231 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84094BDCFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAEE4BDC7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350870AbiBUJkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:40:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37490 "EHLO
+        id S1351277AbiBUJo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:44:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236978AbiBUJdP (ORCPT
+        with ESMTP id S1351553AbiBUJhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:33:15 -0500
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F13F28997;
-        Mon, 21 Feb 2022 01:13:54 -0800 (PST)
-Received: from pro2.mail.ovh.net (unknown [10.109.138.12])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id C3F61E720712;
-        Mon, 21 Feb 2022 10:13:23 +0100 (CET)
-Received: from [192.168.1.103] (88.125.132.78) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 21 Feb
- 2022 10:13:22 +0100
-Message-ID: <e4b4fbc7-53ee-987b-7849-bf625fc2155e@traphandler.com>
-Date:   Mon, 21 Feb 2022 10:13:21 +0100
+        Mon, 21 Feb 2022 04:37:25 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA09F3A1B9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:16:00 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM4nN-00037y-8Y; Mon, 21 Feb 2022 10:15:49 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM4nM-000OTG-MK; Mon, 21 Feb 2022 10:15:47 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nM4nL-004ZU9-65; Mon, 21 Feb 2022 10:15:47 +0100
+Date:   Mon, 21 Feb 2022 10:15:47 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
+        matthias.bgg@gmail.com, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pwm: pwm-mtk-disp: Switch to regmap for mmio access
+Message-ID: <20220221091547.wxmz7fqicyhjc5rc@pengutronix.de>
+References: <20220103153506.50896-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 6/6] clk: renesas: r9a06g032: Disable the watchdog
- reset sources when halting
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     <linux-renesas-soc@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20220208183511.2925304-1-jjhiblot@traphandler.com>
- <20220208183511.2925304-7-jjhiblot@traphandler.com>
- <CAMuHMdUCT-qwhN53mRnAUox2pqw+Y5-7Gw5EbC+-HCF054kkgQ@mail.gmail.com>
- <4595fbfe-da0b-1b1a-2478-6d537012a2bf@roeck-us.net>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <4595fbfe-da0b-1b1a-2478-6d537012a2bf@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [88.125.132.78]
-X-ClientProxiedBy: CAS4.emp2.local (172.16.1.4) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 6319676177827838292
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeeufeeggeevkefguedtheeufefftdehkeegkeetudetjeehjedtudeuveffkeehteenucfkpheptddrtddrtddrtddpkeekrdduvdehrddufedvrdejkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqfigrthgthhguohhgsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="the5o73wncrjkh3c"
+Content-Disposition: inline
+In-Reply-To: <20220103153506.50896-1-angelogioacchino.delregno@collabora.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 14/02/2022 16:34, Guenter Roeck wrote:
-> On 2/14/22 02:45, Geert Uytterhoeven wrote:
->> Hi Jean-Jacques,
->>
->> CC watchdog people, who only received some patches.
->>
->> On Tue, Feb 8, 2022 at 7:35 PM Jean-Jacques Hiblot
->> <jjhiblot@traphandler.com> wrote:
->>> The watchdog reset sources must be disabled when the system is halted.
->>> Otherwise the watchdogs will trigger a reset if they have been armed.
->>>
->>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
->>
->> Thanks for your patch!
->>
->> [inserting changelog]
->>
->> | Changes v1 -> v2:
->> | * Modified the clock driver to not enable the watchdog reset sources.
->> |   On other renesas platforms, those bits are by the bootloader. The
->> |   watchdog reset sources are still disabled when the platform is 
->> halted
->> |   to prevent a watchdog reset.
->>
->> I still have my doubts about this part. So on halt, you override the
->> policy configured by the boot loader, which means the watchdog is no
->> longer triggered on halt.
->>
->>> From a system perspective, the system can be in five states:
->>    1. Running,
->>    2. Crashed/lock-ed up,
->>    3. Halt,
->>    4. Reboot,
->>    5. Poweroff.
->>
->> Now, from a policy perspective, what is the difference between a
->> system that crashes or locks up, and a system that halts?
->> I.e. should the system reboot on halt, or not?
->>
->> I think halting a system where the watchdog has been activated makes
->> no sense, and the user either wants to explicitly reboot the system, or
->> power it off, but never halt it.  So I think this patch is not needed.
+--the5o73wncrjkh3c
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I don't see halting the machine as a must-have feature either, but it 
-seemed to me
+On Mon, Jan 03, 2022 at 04:35:06PM +0100, AngeloGioacchino Del Regno wrote:
+> Switch to using the generic regmap API instead of calls to readl/writel
+> for MMIO register access, allowing us to reduce code size.
+>=20
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> ---
+>  drivers/pwm/pwm-mtk-disp.c | 77 ++++++++++++++++----------------------
+>  1 file changed, 32 insertions(+), 45 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+> index c605013e4114..4a6fab144cee 100644
+> --- a/drivers/pwm/pwm-mtk-disp.c
+> +++ b/drivers/pwm/pwm-mtk-disp.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pwm.h>
+> +#include <linux/regmap.h>
+>  #include <linux/slab.h>
+> =20
+>  #define DISP_PWM_EN		0x00
+> @@ -47,7 +48,7 @@ struct mtk_disp_pwm {
+>  	const struct mtk_pwm_data *data;
+>  	struct clk *clk_main;
+>  	struct clk *clk_mm;
+> -	void __iomem *base;
+> +	struct regmap *regmap;
+>  	bool enabled;
+>  };
+> =20
+> @@ -56,22 +57,11 @@ static inline struct mtk_disp_pwm *to_mtk_disp_pwm(st=
+ruct pwm_chip *chip)
+>  	return container_of(chip, struct mtk_disp_pwm, chip);
+>  }
+> =20
+> -static void mtk_disp_pwm_update_bits(struct mtk_disp_pwm *mdp, u32 offse=
+t,
+> -				     u32 mask, u32 data)
+> -{
+> -	void __iomem *address =3D mdp->base + offset;
+> -	u32 value;
+> -
+> -	value =3D readl(address);
+> -	value &=3D ~mask;
+> -	value |=3D data;
+> -	writel(value, address);
+> -}
+> -
+>  static int mtk_disp_pwm_apply(struct pwm_chip *chip, struct pwm_device *=
+pwm,
+>  			      const struct pwm_state *state)
+>  {
+>  	struct mtk_disp_pwm *mdp =3D to_mtk_disp_pwm(chip);
+> +	const struct mtk_pwm_data *pdata =3D mdp->data;
+>  	u32 clk_div, period, high_width, value;
+>  	u64 div, rate;
+>  	int err;
+> @@ -80,8 +70,7 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip, st=
+ruct pwm_device *pwm,
+>  		return -EINVAL;
+> =20
+>  	if (!state->enabled) {
+> -		mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
+> -					 0x0);
+> +		regmap_clear_bits(mdp->regmap, DISP_PWM_EN, pdata->enable_mask);
+> =20
+>  		if (mdp->enabled) {
+>  			clk_disable_unprepare(mdp->clk_mm);
+> @@ -138,37 +127,25 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip=
+, struct pwm_device *pwm,
+>  	high_width =3D mul_u64_u64_div_u64(state->duty_cycle, rate, div);
+>  	value =3D period | (high_width << PWM_HIGH_WIDTH_SHIFT);
+> =20
+> -	mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
+> -				 PWM_CLKDIV_MASK,
+> -				 clk_div << PWM_CLKDIV_SHIFT);
+> -	mtk_disp_pwm_update_bits(mdp, mdp->data->con1,
+> -				 PWM_PERIOD_MASK | PWM_HIGH_WIDTH_MASK,
+> -				 value);
+> +	regmap_update_bits(mdp->regmap, pdata->con0, PWM_CLKDIV_MASK,
+> +			   clk_div << PWM_CLKDIV_SHIFT);
+> +	regmap_update_bits(mdp->regmap, pdata->con1,
+> +			   PWM_PERIOD_MASK | PWM_HIGH_WIDTH_MASK, value);
+> =20
+>  	if (mdp->data->has_commit) {
+> -		mtk_disp_pwm_update_bits(mdp, mdp->data->commit,
+> -					 mdp->data->commit_mask,
+> -					 mdp->data->commit_mask);
+> -		mtk_disp_pwm_update_bits(mdp, mdp->data->commit,
+> -					 mdp->data->commit_mask,
+> -					 0x0);
+> +		regmap_set_bits(mdp->regmap, pdata->commit, pdata->commit_mask);
+> +		regmap_clear_bits(mdp->regmap, pdata->commit, pdata->commit_mask);
+>  	} else {
+>  		/*
+>  		 * For MT2701, disable double buffer before writing register
+>  		 * and select manual mode and use PWM_PERIOD/PWM_HIGH_WIDTH.
+>  		 */
+> -		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
+> -					 mdp->data->bls_debug_mask,
+> -					 mdp->data->bls_debug_mask);
+> -		mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
+> -					 mdp->data->con0_sel,
+> -					 mdp->data->con0_sel);
+> +		regmap_set_bits(mdp->regmap, pdata->bls_debug, pdata->bls_debug_mask);
+> +		regmap_set_bits(mdp->regmap, pdata->con0, pdata->con0_sel);
+>  	}
+> =20
+> -	mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
+> -				 mdp->data->enable_mask);
+> +	regmap_set_bits(mdp->regmap, DISP_PWM_EN, pdata->enable_mask);
+>  	mdp->enabled =3D true;
+> -
 
-that there could be other people relying on it. I'll remove this patch 
-from the series.
+Was the empty line here removed on purpose? I would have kept it.
 
->>
->> Watchdog people: what is your opinion?
->
-> In my understanding the shutdown code is always executed, ie also for
-> restarts and poweroff. Disabling the watchdog in that situation is not
-> always desirable, though sometimes necessary depending on the hardware.
-> Disabling it through the backdoor (instead of calling 
-> watchdog_stop_on_reboot)
-> seems odd, though.
+>  	return 0;
+>  }
+> =20
+> @@ -195,8 +172,8 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *c=
+hip,
+>  	}
+> =20
+>  	rate =3D clk_get_rate(mdp->clk_main);
+> -	con0 =3D readl(mdp->base + mdp->data->con0);
+> -	con1 =3D readl(mdp->base + mdp->data->con1);
+> +	regmap_read(mdp->regmap, mdp->data->con0, &con0);
+> +	regmap_read(mdp->regmap, mdp->data->con1, &con1);
+>  	state->enabled =3D !!(con0 & BIT(0));
+>  	clk_div =3D FIELD_GET(PWM_CLKDIV_MASK, con0);
+>  	period =3D FIELD_GET(PWM_PERIOD_MASK, con1);
+> @@ -219,9 +196,17 @@ static const struct pwm_ops mtk_disp_pwm_ops =3D {
+>  	.owner =3D THIS_MODULE,
+>  };
+> =20
+> +static const struct regmap_config mtk_disp_pwm_regmap_config =3D {
+> +	.reg_bits =3D 32,
+> +	.reg_stride =3D 4,
+> +	.val_bits =3D 32,
+> +	.disable_locking =3D true,
+> +};
+> +
+>  static int mtk_disp_pwm_probe(struct platform_device *pdev)
+>  {
+>  	struct mtk_disp_pwm *mdp;
+> +	void __iomem *base;
+>  	int ret;
+> =20
+>  	mdp =3D devm_kzalloc(&pdev->dev, sizeof(*mdp), GFP_KERNEL);
+> @@ -230,9 +215,13 @@ static int mtk_disp_pwm_probe(struct platform_device=
+ *pdev)
+> =20
+>  	mdp->data =3D of_device_get_match_data(&pdev->dev);
+> =20
+> -	mdp->base =3D devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(mdp->base))
+> -		return PTR_ERR(mdp->base);
+> +	base =3D devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	mdp->regmap =3D devm_regmap_init_mmio(&pdev->dev, base, &mtk_disp_pwm_r=
+egmap_config);
+> +	if (IS_ERR(mdp->regmap))
+> +		return PTR_ERR(mdp->regmap);
+> =20
+>  	mdp->clk_main =3D devm_clk_get(&pdev->dev, "main");
+>  	if (IS_ERR(mdp->clk_main))
+> @@ -247,10 +236,8 @@ static int mtk_disp_pwm_probe(struct platform_device=
+ *pdev)
+>  	mdp->chip.npwm =3D 1;
+> =20
+>  	ret =3D pwmchip_add(&mdp->chip);
+> -	if (ret < 0) {
+> -		dev_err(&pdev->dev, "pwmchip_add() failed: %pe\n", ERR_PTR(ret));
+> -		return ret;
+> -	}
+> +	if (ret < 0)
+> +		return dev_err_probe(&pdev->dev, ret, "pwmchip_add() failed\n");
 
+I wonder that you convert this to dev_err_probe, but don't use it in the
+hunk above. If I'm not mistaken devm_regmap_init_mmio doesn't emit an
+error message, so an error message would be appropriate there.
 
-Unfortunately, in this case it is not possible to stop the watchdog once 
-started.
+Best regards
+Uwe
 
-The only way to halt the machine is to disable the watchdog reset source.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--the5o73wncrjkh3c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-JJ
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmITWD8ACgkQwfwUeK3K
+7AnVTwf/d/6wF7mTZFktUIW8C0OeHQOFn6f8+btJwknUOXbY5NZGoj7keHwdxpqr
+BjmdmMkwoprwKqC3d3hnukM12YHbDxHnW+6FUHqMPua4W/xTAlnUuHJAnrEwSraf
+Tzux+dHfvW9LGrLbCc6quGZIILEarDFgCVVDcPlTTmmu8QYHeXHNGCWxT/BP0MjQ
+bI6pRO36mkuXWJq3cumhfFs2/lr4GXoOPARwXbanOAbvAo/Ekp9YNMi6LKDeZd7+
+DHb4fDXcOUD9a57TrYToPbxIR2im1bTA81XTEyu3B51mZMDELZe173jRKgUC7uBu
+fG0ep5/fNclvtAcbPIZBfWfmFkIItw==
+=LNMU
+-----END PGP SIGNATURE-----
 
->
-> Guenter
->
->> Thanks!
->>
->>> --- a/drivers/clk/renesas/r9a06g032-clocks.c
->>> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
->>> @@ -129,6 +129,11 @@ enum { K_GATE = 0, K_FFC, K_DIV, K_BITSEL, 
->>> K_DUALGATE };
->>>
->>>   #define R9A06G032_CLOCK_COUNT (R9A06G032_UART_GROUP_34567 + 1)
->>>
->>> +#define R9A06G032_SYSCTRL_REG_RSTEN            0x120
->>> +#define WDA7RST1       BIT(2)
->>> +#define WDA7RST0       BIT(1)
->>> +#define MRESET         BIT(0)
->>> +
->>>   static const struct r9a06g032_clkdesc r9a06g032_clocks[] = {
->>>          D_ROOT(CLKOUT, "clkout", 25, 1),
->>>          D_ROOT(CLK_PLL_USB, "clk_pll_usb", 12, 10),
->>> @@ -893,6 +898,19 @@ static void 
->>> r9a06g032_clocks_del_clk_provider(void *data)
->>>          of_clk_del_provider(data);
->>>   }
->>>
->>> +static void r9a06g032_reset_sources(struct r9a06g032_priv *clocks,
->>> +                       uint32_t mask, uint32_t value)
->>> +{
->>> +       uint32_t rsten;
->>> +       unsigned long flags;
->>> +
->>> +       spin_lock_irqsave(&clocks->lock, flags);
->>> +       rsten = readl(clocks->reg);
->>> +       rsten = (rsten & ~mask) | (value & mask);
->>> +       writel(rsten, clocks->reg + R9A06G032_SYSCTRL_REG_RSTEN);
->>> +       spin_unlock_irqrestore(&clocks->lock, flags);
->>> +}
->>> +
->>>   static int __init r9a06g032_clocks_probe(struct platform_device 
->>> *pdev)
->>>   {
->>>          struct device *dev = &pdev->dev;
->>> @@ -910,6 +928,8 @@ static int __init r9a06g032_clocks_probe(struct 
->>> platform_device *pdev)
->>>          if (!clocks || !clks)
->>>                  return -ENOMEM;
->>>
->>> +       platform_set_drvdata(pdev, clocks);
->>> +
->>>          spin_lock_init(&clocks->lock);
->>>
->>>          clocks->data.clks = clks;
->>> @@ -963,9 +983,18 @@ static int __init r9a06g032_clocks_probe(struct 
->>> platform_device *pdev)
->>>          if (error)
->>>                  return error;
->>>
->>> +
->>>          return r9a06g032_add_clk_domain(dev);
->>>   }
->>>
->>> +static void r9a06g032_clocks_shutdown(struct platform_device *pdev)
->>> +{
->>> +       struct r9a06g032_priv *clocks = platform_get_drvdata(pdev);
->>> +
->>> +       /* Disable the watchdog reset sources */
->>> +       r9a06g032_reset_sources(clocks, WDA7RST0 | WDA7RST1, 0);
->>> +}
->>> +
->>>   static const struct of_device_id r9a06g032_match[] = {
->>>          { .compatible = "renesas,r9a06g032-sysctrl" },
->>>          { }
->>> @@ -976,6 +1005,7 @@ static struct platform_driver 
->>> r9a06g032_clock_driver = {
->>>                  .name   = "renesas,r9a06g032-sysctrl",
->>>                  .of_match_table = r9a06g032_match,
->>>          },
->>> +       .shutdown = r9a06g032_clocks_shutdown,
->>>   };
->>>
->>>   static int __init r9a06g032_clocks_init(void)
->>
->> Gr{oetje,eeting}s,
->>
->>                          Geert
->>
->> -- 
->> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- 
->> geert@linux-m68k.org
->>
->> In personal conversations with technical people, I call myself a 
->> hacker. But
->> when I'm talking to journalists I just say "programmer" or something 
->> like that.
->>                                  -- Linus Torvalds
->
+--the5o73wncrjkh3c--

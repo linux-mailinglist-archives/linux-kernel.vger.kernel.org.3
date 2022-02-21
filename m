@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281984BDC9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119134BE97E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351573AbiBUJqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:46:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48738 "EHLO
+        id S1347595AbiBUJHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:07:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351465AbiBUJhQ (ORCPT
+        with ESMTP id S1348198AbiBUJCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:37:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF91C39B8F;
-        Mon, 21 Feb 2022 01:15:52 -0800 (PST)
+        Mon, 21 Feb 2022 04:02:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036322B25E;
+        Mon, 21 Feb 2022 00:57:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F0DD60E05;
-        Mon, 21 Feb 2022 09:15:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9FBC340E9;
-        Mon, 21 Feb 2022 09:15:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71CE660FB6;
+        Mon, 21 Feb 2022 08:57:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D6DC36AE2;
+        Mon, 21 Feb 2022 08:57:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434950;
-        bh=fT0XueLlcxFSWwJyaEOVlF8xILi9wRrnuH8+ypbp0ck=;
+        s=korg; t=1645433844;
+        bh=fkywtcnuRfM9nJSw5O0w6qFGqmj7tRXqEy/urhu+8K0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J2Nmwz7MW0bRv3KE7puJ0GxNbKHRaFvyTufSTcHXigq/dr4hSprT6FnjcQovHfohu
-         DqR+1enXcHSGsBN1DuolqD1azQcXkCthaxqXzYJkD66dP0WQ7BoMT7IQF4IbCPUPeB
-         uMXXCkzybEOUa4lpPOpxkjvgFlLtc9QjCwrStnho=
+        b=mXXTtRL63d++7xbsOA9dSlmO3DwTCp5ugXj+MBaDpsFmWjFQUaBZKZqUbZiYjXZnz
+         kVkzNrING6jmO+lYdP09w9j5HLNkbBAJbYECGHeD3YBDD7TTHKdwGmhTtS/fUjSM7Z
+         UbVQ/bLeuJYo05TXbfb7UZD5vr4ky1MbBYG20mD8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Zolt=C3=A1n=20B=C3=B6sz=C3=B6rm=C3=A9nyi?= 
+        <zboszor@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 156/196] ksmbd: dont align last entry offset in smb2 query directory
+Subject: [PATCH 4.19 55/58] ata: libata-core: Disable TRIM on M88V29
 Date:   Mon, 21 Feb 2022 09:49:48 +0100
-Message-Id: <20220221084936.161922677@linuxfoundation.org>
+Message-Id: <20220221084913.646608512@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Zoltán Böszörményi <zboszor@gmail.com>
 
-[ Upstream commit 04e260948a160d3b7d622bf4c8a96fa4577c09bd ]
+[ Upstream commit c8ea23d5fa59f28302d4e3370c75d9c308e64410 ]
 
-When checking smb2 query directory packets from other servers,
-OutputBufferLength is different with ksmbd. Other servers add an unaligned
-next offset to OutputBufferLength for the last entry.
+This device is a CF card, or possibly an SSD in CF form factor.
+It supports NCQ and high speed DMA.
 
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+While it also advertises TRIM support, I/O errors are reported
+when the discard mount option fstrim is used. TRIM also fails
+when disabling NCQ and not just as an NCQ command.
+
+TRIM must be disabled for this device.
+
+Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ksmbd/smb2pdu.c | 7 ++++---
- fs/ksmbd/vfs.h     | 1 +
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/ata/libata-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 70685cbbec8c0..192d8308afc27 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -3422,9 +3422,9 @@ static int smb2_populate_readdir_entry(struct ksmbd_conn *conn, int info_level,
- 		goto free_conv_name;
- 	}
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 46eacba2613b8..33d3728f36222 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -4613,6 +4613,7 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
  
--	struct_sz = readdir_info_level_struct_sz(info_level);
--	next_entry_offset = ALIGN(struct_sz - 1 + conv_len,
--				  KSMBD_DIR_INFO_ALIGNMENT);
-+	struct_sz = readdir_info_level_struct_sz(info_level) - 1 + conv_len;
-+	next_entry_offset = ALIGN(struct_sz, KSMBD_DIR_INFO_ALIGNMENT);
-+	d_info->last_entry_off_align = next_entry_offset - struct_sz;
+ 	/* devices that don't properly handle TRIM commands */
+ 	{ "SuperSSpeed S238*",		NULL,	ATA_HORKAGE_NOTRIM, },
++	{ "M88V29*",			NULL,	ATA_HORKAGE_NOTRIM, },
  
- 	if (next_entry_offset > d_info->out_buf_len) {
- 		d_info->out_buf_len = 0;
-@@ -3976,6 +3976,7 @@ int smb2_query_dir(struct ksmbd_work *work)
- 		((struct file_directory_info *)
- 		((char *)rsp->Buffer + d_info.last_entry_offset))
- 		->NextEntryOffset = 0;
-+		d_info.data_count -= d_info.last_entry_off_align;
- 
- 		rsp->StructureSize = cpu_to_le16(9);
- 		rsp->OutputBufferOffset = cpu_to_le16(72);
-diff --git a/fs/ksmbd/vfs.h b/fs/ksmbd/vfs.h
-index b0d5b8feb4a36..432c947731779 100644
---- a/fs/ksmbd/vfs.h
-+++ b/fs/ksmbd/vfs.h
-@@ -86,6 +86,7 @@ struct ksmbd_dir_info {
- 	int		last_entry_offset;
- 	bool		hide_dot_file;
- 	int		flags;
-+	int		last_entry_off_align;
- };
- 
- struct ksmbd_readdir_data {
+ 	/*
+ 	 * As defined, the DRAT (Deterministic Read After Trim) and RZAT
 -- 
 2.34.1
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95304BE084
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF7E4BE387
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344412AbiBUJz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:55:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41616 "EHLO
+        id S1350698AbiBUJk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:40:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353187AbiBUJsP (ORCPT
+        with ESMTP id S1350229AbiBUJc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:48:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AEA25E85;
-        Mon, 21 Feb 2022 01:22:24 -0800 (PST)
+        Mon, 21 Feb 2022 04:32:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC14F286F3;
+        Mon, 21 Feb 2022 01:13:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7FBA60F93;
-        Mon, 21 Feb 2022 09:22:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB90AC340EB;
-        Mon, 21 Feb 2022 09:22:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 84F0ECE0E8B;
+        Mon, 21 Feb 2022 09:13:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EFDC340E9;
+        Mon, 21 Feb 2022 09:13:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435343;
-        bh=UgqOh3DNQl0jLTXWGK/2TY830ollRlfmr4U5TQRvB2s=;
+        s=korg; t=1645434826;
+        bh=/rVQc5X3gc9hZxDfwiYO+NWPlyKyUVGzQf69JUU2P68=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=znMkkFBWh8+isaPbL990A+y2o8w4jdC5OCeg9lV8Z7T8Wq9fwSJLvbygheCWGH9un
-         IcMUXQCoksvAzVpKhVNISE1J9hKDk3Sc3bHqWh0SZQfKZ8DyNWvGmL4DnlO5KsIgJX
-         ChMyKcjWjhqF4ANBmqy2+IhaCA6N13sVb04hQMro=
+        b=oKbsLJZEot4Qxy6pFrfg0nFnhsvMf2I1A0Pk4RhQ9aIycFvruKFq1urhFtvtDg2gV
+         kWFjOJrfX2LM+IFQ8V2NRmZP8nV8kSrVV7Sf9KjC4b5JoiDJO9PmxonN6pBqwSuyKb
+         xTItXDw4sikxzpV65vDrnl8Gts7RsShCRirL4eug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 130/227] net: mscc: ocelot: fix use-after-free in ocelot_vlan_del()
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 117/196] ASoC: ops: Fix stereo change notifications in snd_soc_put_volsw_range()
 Date:   Mon, 21 Feb 2022 09:49:09 +0100
-Message-Id: <20220221084939.177603703@linuxfoundation.org>
+Message-Id: <20220221084934.858819708@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +53,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit ef57640575406f57f5b3393cf57f457b0ace837e upstream.
+commit 650204ded3703b5817bd4b6a77fa47d333c4f902 upstream.
 
-ocelot_vlan_member_del() will free the struct ocelot_bridge_vlan, so if
-this is the same as the port's pvid_vlan which we access afterwards,
-what we're accessing is freed memory.
+When writing out a stereo control we discard the change notification from
+the first channel, meaning that events are only generated based on changes
+to the second channel. Ensure that we report a change if either channel
+has changed.
 
-Fix the bug by determining whether to clear ocelot_port->pvid_vlan prior
-to calling ocelot_vlan_member_del().
-
-Fixes: d4004422f6f9 ("net: mscc: ocelot: track the port pvid using a pointer")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220201155629.120510-4-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mscc/ocelot.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ sound/soc/soc-ops.c |   15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
---- a/drivers/net/ethernet/mscc/ocelot.c
-+++ b/drivers/net/ethernet/mscc/ocelot.c
-@@ -480,14 +480,18 @@ EXPORT_SYMBOL(ocelot_vlan_add);
- int ocelot_vlan_del(struct ocelot *ocelot, int port, u16 vid)
- {
- 	struct ocelot_port *ocelot_port = ocelot->ports[port];
-+	bool del_pvid = false;
- 	int err;
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -512,7 +512,7 @@ int snd_soc_put_volsw_range(struct snd_k
+ 	unsigned int mask = (1 << fls(max)) - 1;
+ 	unsigned int invert = mc->invert;
+ 	unsigned int val, val_mask;
+-	int ret;
++	int err, ret;
  
-+	if (ocelot_port->pvid_vlan && ocelot_port->pvid_vlan->vid == vid)
-+		del_pvid = true;
-+
- 	err = ocelot_vlan_member_del(ocelot, port, vid);
- 	if (err)
- 		return err;
+ 	if (invert)
+ 		val = (max - ucontrol->value.integer.value[0]) & mask;
+@@ -521,9 +521,10 @@ int snd_soc_put_volsw_range(struct snd_k
+ 	val_mask = mask << shift;
+ 	val = val << shift;
  
- 	/* Ingress */
--	if (ocelot_port->pvid_vlan && ocelot_port->pvid_vlan->vid == vid)
-+	if (del_pvid)
- 		ocelot_port_set_pvid(ocelot, port, NULL);
+-	ret = snd_soc_component_update_bits(component, reg, val_mask, val);
+-	if (ret < 0)
+-		return ret;
++	err = snd_soc_component_update_bits(component, reg, val_mask, val);
++	if (err < 0)
++		return err;
++	ret = err;
  
- 	/* Egress */
+ 	if (snd_soc_volsw_is_stereo(mc)) {
+ 		if (invert)
+@@ -533,8 +534,12 @@ int snd_soc_put_volsw_range(struct snd_k
+ 		val_mask = mask << shift;
+ 		val = val << shift;
+ 
+-		ret = snd_soc_component_update_bits(component, rreg, val_mask,
++		err = snd_soc_component_update_bits(component, rreg, val_mask,
+ 			val);
++		/* Don't discard any error code or drop change flag */
++		if (ret == 0 || err < 0) {
++			ret = err;
++		}
+ 	}
+ 
+ 	return ret;
 
 

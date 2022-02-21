@@ -2,133 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F264BEB39
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F53F4BEAB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbiBUSlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:41:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56860 "EHLO
+        id S232338AbiBUSmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:42:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbiBUSk0 (ORCPT
+        with ESMTP id S232321AbiBUSlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:40:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14610195;
-        Mon, 21 Feb 2022 10:40:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2AFAB811F3;
-        Mon, 21 Feb 2022 18:40:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C894DC340E9;
-        Mon, 21 Feb 2022 18:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645468799;
-        bh=TIouyKTrY9MePsjLZLYLg6ZFF8gkEtGp45zObJ6uN5o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pYW+0/BuOS+GOb9Lnz6lRJxJbKBzTzErbZuoZTtdX60lLN5pXWz2LyTqoNiYFJbFi
-         prkXb8WGTQftUX43eBZGEvDvSXLrRWCOGZ/HWyQVhAoYAC9rM2T+D19S5UAUFeWVds
-         KgVRbxksEU8RkGyNbgxBbmK1COFq6zRa+WnmaKFQ=
-Date:   Mon, 21 Feb 2022 19:39:56 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     jirislaby@kernel.org, u.kleine-koenig@pengutronix.de,
-        linux@armlinux.org.uk, richard.genoud@gmail.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, lukas@wunner.de
-Subject: Re: [PATCH 2 1/9] serial: core: move RS485 configuration tasks from
- drivers into core
-Message-ID: <YhPcfMtE7xhykgcI@kroah.com>
-References: <20220216001803.637-1-LinoSanfilippo@gmx.de>
- <20220216001803.637-2-LinoSanfilippo@gmx.de>
+        Mon, 21 Feb 2022 13:41:52 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1103062CF;
+        Mon, 21 Feb 2022 10:40:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645468855; x=1677004855;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uQrV/nhZGmqBQaK5yJ+b1uhayz6zJFbAKucjtUG4ATU=;
+  b=Ssci7z2FR5RGOqHXuDCSvpUsPn2hKa6QirU8cY3kJmGUZ7rxicJ1v7H7
+   BKLcPC1U8sV9XwNe+NpStA8EPDXyfYk8CWPt7vrnIpCzTr1Y3u1qlXe2r
+   LtYF/HoRAlbI/HlzlajK2T20eNIkLAS3XS28Aq/0BNBWfzphyWeheSc49
+   aEdqlyjO7caf/WHSggnzYTphEhtwRM0omV8Gk9UhHthxzYaqjfkpY30uX
+   FmA0Ec5NRmz4caCqN3u+LiPSYEj1LHEbfaree+8oHFdx0LGuA8RZQNpgO
+   IlSTEYBFO8pqgtrQIrPmcwMMWKkHDk9kq9wxti+L+pERuXpoje9ptZ0aU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251739157"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="251739157"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:40:54 -0800
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="490519800"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:40:53 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nMDbN-006siK-Ra;
+        Mon, 21 Feb 2022 20:40:01 +0200
+Date:   Mon, 21 Feb 2022 20:40:01 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>,
+        syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
+Subject: Re: [PATCH v1 1/1] i2c: robotfuzz-osif: Propagate parent device to
+ I2C core
+Message-ID: <YhPcgTNmAN0uICJx@smile.fi.intel.com>
+References: <20220204151726.8924-1-andriy.shevchenko@linux.intel.com>
+ <YhNhxPEt6kZ2xzMJ@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216001803.637-2-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YhNhxPEt6kZ2xzMJ@hovoldconsulting.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 01:17:55AM +0100, Lino Sanfilippo wrote:
-> Several drivers that support setting the RS485 configuration via userspace
-> implement one or more of the following tasks:
+On Mon, Feb 21, 2022 at 10:56:20AM +0100, Johan Hovold wrote:
+> On Fri, Feb 04, 2022 at 05:17:26PM +0200, Andy Shevchenko wrote:
+> > I2C core might use parent device to retrieve properties of
+> > the controller. Propagate parent device for that.
 > 
-> - in case of an invalid RTS configuration (both RTS after send and RTS on
->   send set or both unset) fall back to enable RTS on send and disable RTS
->   after send
-> 
-> - nullify the padding field of the returned serial_rs485 struct
-> 
-> - copy the configuration into the uart port struct
-> 
-> - limit RTS delays to 100 ms
-> 
-> Move these tasks into the serial core to make them generic and to provide
-> a consistent behaviour among all drivers.
-> 
-> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-> ---
->  drivers/tty/serial/serial_core.c | 18 ++++++++++++++++++
->  include/uapi/linux/serial.h      |  3 +++
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 846192a7b4bf..a4f7e847d414 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -1282,8 +1282,26 @@ static int uart_set_rs485_config(struct uart_port *port,
->  	if (copy_from_user(&rs485, rs485_user, sizeof(*rs485_user)))
->  		return -EFAULT;
->  
-> +	/* pick sane settings if the user hasn't */
-> +	if (!(rs485.flags & SER_RS485_RTS_ON_SEND) ==
-> +	    !(rs485.flags & SER_RS485_RTS_AFTER_SEND)) {
-> +		rs485.flags |= SER_RS485_RTS_ON_SEND;
-> +		rs485.flags &= ~SER_RS485_RTS_AFTER_SEND;
-> +	}
-> +
-> +	rs485.delay_rts_before_send = min_t(unsigned int,
-> +					    rs485.delay_rts_before_send,
-> +					    SER_RS485_MAX_RTS_DELAY);
-> +	rs485.delay_rts_after_send = min_t(unsigned int,
-> +					   rs485.delay_rts_after_send,
-> +					   SER_RS485_MAX_RTS_DELAY);
-> +	/* Return clean padding area to userspace */
-> +	memset(rs485.padding, 0, sizeof(rs485.padding));
-> +
->  	spin_lock_irqsave(&port->lock, flags);
->  	ret = port->rs485_config(port, &rs485);
-> +	if (!ret)
-> +		port->rs485 = rs485;
->  	spin_unlock_irqrestore(&port->lock, flags);
->  	if (ret)
->  		return ret;
-> diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
-> index fa6b16e5fdd8..859045a53231 100644
-> --- a/include/uapi/linux/serial.h
-> +++ b/include/uapi/linux/serial.h
-> @@ -128,6 +128,9 @@ struct serial_rs485 {
->  							   (if supported) */
->  	__u32	delay_rts_before_send;	/* Delay before send (milliseconds) */
->  	__u32	delay_rts_after_send;	/* Delay after send (milliseconds) */
-> +#define SER_RS485_MAX_RTS_DELAY		100		/* Max time with active
-> +							   RTS before/after
-> +							   data sent (msecs) */
+> What is the problem you're trying to solve here?
 
-Why is this a userspace value now?  What can userspace do with this
-number?  Once we add this, it's fixed for forever.
+Okay, let's drop the patch.
 
-thanks,
+-- 
+With Best Regards,
+Andy Shevchenko
 
-greg k-h
+

@@ -2,134 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D1D4BE30E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FE54BDC93
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379497AbiBUPrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:47:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40510 "EHLO
+        id S1379471AbiBUPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:47:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379487AbiBUPqv (ORCPT
+        with ESMTP id S234370AbiBUPrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:46:51 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2065.outbound.protection.outlook.com [40.107.236.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A98E22B0A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:46:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fLQ8elH67pLzkonL/HxW/KMbtZaPfhaAlEHSlRlP7oOdaRMz2+P4gbQwjLxNAmqqZkGsZZmP7ZhrnCb1VL9Mcs/4KZLDdKZcLnuBj3PUTPHcbZ0Ys8rPQUHjOdJb3xQzAEMCGZLx2a1dD8BbFUYNdpqQWYWd0Jz3seI4UTkgKqj4wDdYZBGf6UjM/6z8ZVHbojZXfTbbn6ecwP4PrNQw9BtzEzokg2DTiJg0C+NPtD66oNmEajLD5GG2ndiArtBa3o454c7LYU8ViJZysf8TAGm+jaPPF/a7rqDqiZWKj71UdvS9asl88U8PRuueHO+XVkPYFHNHWk7rNcsA8Y4Abw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EMl2HzDVHCFcTqGtphdpOrR47p6Se1SWJm3pb7um/Sw=;
- b=E/yJSnr6K7AJJCympSYNhrL9OyK7dJp3vWgLDSEHS24kOAVcygPDh2rlAr5VC6YEUA9ifrMncZ1POMCuEQeOplWbdwmlxXjki61WR9QjuushRqIf4Cn3yL72ycUiQ1+XwKRH1AEiaXLqRRtP9ukbzQwofe2qEewvWzPJP3K1GbrPlN7LCgJfmDkh3RHp8+da2C+/oNl6YStAPzW5b5QJFzxPmydKfbg/WlU8e+2/lHIqMHaUDpydFxqskCaEwM1W0A6XLGXZeTCR6H8iKwidO7dUn4Bs8GLEuZ6v4YH2ZxDi182jGSpQ0QfrJ06HZudL3zqwFOF1kJEZ3K3GE/cNWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EMl2HzDVHCFcTqGtphdpOrR47p6Se1SWJm3pb7um/Sw=;
- b=Ys9VOcUz81cscBTZr3T7AQXn5q34J9tXQADym2GwCuGwS8mL2/x5xZDsQT6/e151JmqkB8Lm10AV1dIRH437ZrRICUb9fDN3cU7eHSVFBR3Xb4GDdT+AkKQBNHO4Y7Co+eW3ggLpUk04yG/eX66QZ0RJbIVVTF0aI8RKtSDBy20=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
- by BYAPR12MB4631.namprd12.prod.outlook.com (2603:10b6:a03:10d::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Mon, 21 Feb
- 2022 15:46:23 +0000
-Received: from SN6PR12MB2718.namprd12.prod.outlook.com
- ([fe80::500e:b264:8e8c:1817]) by SN6PR12MB2718.namprd12.prod.outlook.com
- ([fe80::500e:b264:8e8c:1817%5]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
- 15:46:23 +0000
-Message-ID: <3cd0fd16-2d59-d3ac-7a73-4209311b2b97@amd.com>
-Date:   Mon, 21 Feb 2022 09:46:18 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     brijesh.singh@amd.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, pbonzini@redhat.com, sdeep@vmware.com,
-        seanjc@google.com, tony.luck@intel.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCHv3 27/32] x86/mm/cpa: Generailize
- __set_memory_enc_pgtable()
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
-References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
- <20220218161718.67148-28-kirill.shutemov@linux.intel.com>
-From:   Brijesh Singh <brijesh.singh@amd.com>
-In-Reply-To: <20220218161718.67148-28-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0341.namprd03.prod.outlook.com
- (2603:10b6:610:11a::18) To SN6PR12MB2718.namprd12.prod.outlook.com
- (2603:10b6:805:6f::22)
+        Mon, 21 Feb 2022 10:47:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469CC22BC5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:47:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB8AF6120F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:47:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C8C2C340E9;
+        Mon, 21 Feb 2022 15:47:27 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jKYr5cIO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645458446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SBYkKyKNPkdz2kvGFW609VIaQtBA6vJAm5BIip1HHmo=;
+        b=jKYr5cIOzzJ/FFJs/BX/lSydIpnJVHGexwNCNmAblhnlMEmGDFyzKNeolb3i/6XlDHdfoC
+        z85AqBdJoAgYZrboRkHsU3Uln+Wqt7/O/aQ6UpYNem7/Djukuv5sc/A1GVqzTpQfy5Z0BF
+        ivtcg3uiKPa2PHhQfBoVlcWAaqvqjeA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e28c4740 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 21 Feb 2022 15:47:25 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH v4] random: always wake up entropy writers after extraction
+Date:   Mon, 21 Feb 2022 16:47:21 +0100
+Message-Id: <20220221154721.2292443-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9rNtcZfj5CmRarX3-MKBYVG0tTzu80Jmm=2peWp0zy2UA@mail.gmail.com>
+References: <CAHmME9rNtcZfj5CmRarX3-MKBYVG0tTzu80Jmm=2peWp0zy2UA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bd97a944-b9f1-443a-6201-08d9f5515030
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4631:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB46318588B1F10FAC3700DD36E53A9@BYAPR12MB4631.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8Fne4eLr/QuyN7hken2Jnop1naBBB/qVnpc5lpMhaW+4jHEZ0PNhKbInSsTqgTnRL6/+KQa2MMcqi8WXC8Xo3/ZniGrobgPuTjjOjHE1OHVXhHHAJT8y7vFSzbP1ttthXnEQJFxsoYG6jT/n07053CSc91R/sPaKx1pWjKYkeYN6v06SHXBPd9GI+jo9LlxduU5NnElRAmWdKV9pcq351Vr45nfUC5mHMVv0fvIoo4Qi4U8bdlg+1qT0dbBcvvJ+Xv2jD4DX3GZuOP7dzarNplzCDAewV67z0RHwJ0KktKDxjqH3ilY6hWh3aAI00HhFvTSSW4gCKY8h++jJisWFcZVQPcqnD4TwQP+CwGK8fvnrLCSGyZnoQqN/IcEzpmU4Re2XY4FZN6G24BtYRjXv/DMqHypiqcUcVlS+t0AEHdLn2WPGwJHd0PS86NBEAS1QGiq3VE8ZYUq9eFxhMatEu5kuXqlASwMwXULVsVdmuNOednUgdx6KiSDImKd6f3bo1nosIDBxk7gTAS1k8O+y1S0VDf+fjLGAvuYOw0FSuTo463GMX5S2NNUWk+SqQ42TRAtmzryWlqXqviyyorfxYG0MuWHeOrMFb55XEoJb32fJKhKPmCWA85ZqgqLgmV7wcOFZCafoZHGK/yeqOujYmIs13DSnlwxU78wkKdXpiD3WjGFFMZrM65W3vC27+/6J8oRA9FOlO98N8XpEc9kmGGz2OZO/Z+ZuQ283vVueBodcHa/40pvfRhPznoTFbfabzGcnQaQ/XhvM4In+4Wu+vzRFMV1KU756VpTtvhcK4t6xxau1XR26droMDw7K/2w6IhOA8o3PMlINNxfJhP0WYpSClvKrczvqjE8Y69zGkqs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(38100700002)(44832011)(36756003)(7416002)(5660300002)(31686004)(2906002)(8936002)(6506007)(26005)(2616005)(966005)(6486002)(53546011)(186003)(6512007)(66946007)(66556008)(6666004)(508600001)(316002)(8676002)(31696002)(66476007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WVpjcjBwampQOWcxMVhCWjJEcnZLWitna2g5djBNQ1V1WmNEWXFrUzlLMm56?=
- =?utf-8?B?aU10RTV6OUpjV0d4eW5naDJOb2l2ZUptYmt0UW9FUmtmT3RoOUNUNGczNTJU?=
- =?utf-8?B?ekxlRzhHOHM1QkdyRlh5bWM1T2o2dnM0dDJyazFqMFBzb2ZpMnhpZ2dyWnBa?=
- =?utf-8?B?aG9HUmRQSzJzcmtlNFo0bis0aThnSWxKZGtHZ1JzaW9yVFh6dy9Tbmp6bktF?=
- =?utf-8?B?Vk96ckNmTkdxTy9nZkRYcUxSUUFEZGJLMDdVdk9Zc2xYc2g1MGFqbElhWWtX?=
- =?utf-8?B?c0ZVeHZqUTJPcE0vR1lzRGc3UVdqNU1aZFJUMzNuQXJxalZxRUpXZjR6bmJ6?=
- =?utf-8?B?TVJuZ3Z4aityRUU0WVExd2pRaUN0NXk1WFM0UmhGaWZaUHptTE0vdGJFa3ZP?=
- =?utf-8?B?ODNRNk9BSFNRc3BmVGRLdjRza2ZoVVNQMnVacWY2VzdNNG1JWWxBVDd1VFln?=
- =?utf-8?B?TW9EMm1wdVorcFdvRlZtYk4rVHhxYWFYWXFWbmRrSVZKSElNT05rNWx4SU03?=
- =?utf-8?B?TXViRXA5RElqeXNlVVcxNmJpWWxRV1NvampsT3hNTGpDUVlCbHd6YkVnbGdv?=
- =?utf-8?B?aXJCYjJqQmF2TS9uU01EZHVEMHhRNE5zSXc4bkwraHRoOXJhRzlmcVRXazQ0?=
- =?utf-8?B?OXd3dVBuQmErOWlCTThnQ1QzMWVNNzVpekl6TXZ6clRtdjZPcXpvcXdNcytB?=
- =?utf-8?B?TEp5Ty9IemRoMWRhVDNybzhWTDBrb3dYVnNXSTNVU2tNNjZMbFRlRWRZN2xE?=
- =?utf-8?B?WjFLUmxybVBVbjdiclhzeXZsUFFyamp4SFc1WVNjV0ZSQWFKMTZGeUFnTDV4?=
- =?utf-8?B?OSsrMEVSazI1VnUvc3ViaU5nSkkxL2RRV3o5NlN1c044V21oTFdHUDlmaXhD?=
- =?utf-8?B?ZnNLZDhSMmdiMmRmaUJNQzk4WHUyR0FVTEZTbmN0NW03U0NySHB1VlgvN3lP?=
- =?utf-8?B?U2JzUCthUlREdy9RbkRZVFNmbnNPQVBHenMxcHhwWjVJa2Myd2p1T29BQ3E3?=
- =?utf-8?B?NzlHWFkrYmk5YnBuVUhLNEpJSUxkUW1IcDM5Q25GVFQ3WHhRaHRLeVVPZkda?=
- =?utf-8?B?RlpnR0V1VjA3UWV5VGZHTS8wZ1ZibHpVN1pGVHQ0c0xtT2xhZmNVTVRtdlRy?=
- =?utf-8?B?TEtLUCtjZTNWZ2w4QnRmbXpuWGErRU1nS1hHN3NQaCttL2YxTURvZmdzdmJs?=
- =?utf-8?B?djdUOU51TW5pMUhzZDc4VldxVnRFUEdzazlrc05qTHFIQmhjelZHQTdram9j?=
- =?utf-8?B?bWhrRlRVbzN2eWZnbzNJSGVMUFk5cFN0TkdTanNKdkN3cDdhNXNwVW85TFpt?=
- =?utf-8?B?MlVjaW11bFAvVkQ4ZHFLNGpFZnFCUk9XU05DcTIzN09XaVI5MGROeHJhanZq?=
- =?utf-8?B?eUxXejNlWEY0YncyelZCbGo0cEFzRmUxaHRVTXBlSU9xVDR2clQwRVh6TFpO?=
- =?utf-8?B?bW1USXZ1UFAzdVRMYkQwNDVWRHFLN0hvSVFxaE0zak5COCtRMXFPalpoWlpY?=
- =?utf-8?B?Y1V5LzlvbFMrQUY1SGVmblVFVTJwcHZnZDRjRVlQME50V2Z1U0pVeGZoK0x0?=
- =?utf-8?B?Z1MzdzdMQkFTdlBzV3ZvZG1wNy9FUUhCU3B6STdPMStZM2tKbnNRd3puSnNv?=
- =?utf-8?B?MjlCRk9UZnY3V2xqbytrMGlHNTFJSkFjdTRmOEl3Y3g4aFhydkFQQnEzVVl1?=
- =?utf-8?B?UWJjeFlyaVdPM3F5ZngzUldFL3p4cWNvVWU2VlpEODJQaVRQV25GT3lKSm85?=
- =?utf-8?B?dnUzenNJSjA4N2FJMmhOQTJIYVRMcUlRWW5ybzlabXgyeGdyWm9qR01NQzFI?=
- =?utf-8?B?cnQ5NmhHVUVpOEM4N05zazgzb2F1d2tzUnMvY3I0aENCdndvNVdmT3FxNGFU?=
- =?utf-8?B?WDFJUktEMFhPcktidC9QOEFzbW9EK0lsNU0yZVhYemt6NGVLeVZFRUpva0hp?=
- =?utf-8?B?Q1paM3ZWMWNNTDV0RGE4UURNUHFwZVRBUmYvcGVPU3FxNzVsMkJsek1teWF1?=
- =?utf-8?B?YW1xZ2NmWUd3VHgyUDV3NmtiZ0ZEQlFFVUcrVFpXbVYrdHR5Z2UyUHVnVHQr?=
- =?utf-8?B?UmM3dGZVR3luaWcxeVF4eHNxd01IY0NrQ08va3k1Q294bVp0bjFUS0tXR25Q?=
- =?utf-8?B?KzFUU0JlY1U1NFREdkU4WldaazlseUkwSUNkTjZjM3YrNUpwRlN2N1VKelFX?=
- =?utf-8?Q?lToeoUCyeY6Cpw6U4urdVpA=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd97a944-b9f1-443a-6201-08d9f5515030
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 15:46:23.8483
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1Q8T7zvkFkQEm0hSW1sXRg6yN2F8YeogxcwF3TYy27yt9hmRCBKyg8780OmWRokkNmCaFrSLSafmwOGyIFSGvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4631
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,37 +60,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Now that POOL_BITS == POOL_MIN_BITS, we must unconditionally wake up
+entropy writers after every extraction. Therefore there's no point of
+write_wakeup_threshold, so we can move it to the dustbin of unused
+compatibility sysctls. While we're at it, we can fix a small comparison
+where we were waking up after <= min rather than < min.
 
+Cc: Theodore Ts'o <tytso@mit.edu>
+Suggested-by: Eric Biggers <ebiggers@kernel.org>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+v4 keeps the file writable to avoid breaking userspace and updates
+kernel.rst.
 
-On 2/18/22 10:17, Kirill A. Shutemov wrote:
-...
->   
-> -	/*
-> -	 * Before changing the encryption attribute, we need to flush caches.
-> -	 */
-> -	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
-> +	/* Flush caches as needed before changing the encryption attribute. */
-> +	if (x86_platform.cc->enc_tlb_flush_required(enc))
-> +		cpa_flush(&cpa, x86_platform.cc->enc_cache_flush_required());
->   
->   	ret = __change_page_attr_set_clr(&cpa, 1);
->   
-> @@ -2027,7 +2026,8 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
->   	 * Notify hypervisor that a given memory range is mapped encrypted
->   	 * or decrypted.
->   	 */
-> -	notify_range_enc_status_changed(addr, numpages, enc);
-> +	if (!ret)
-> +		ret = x86_platform.cc->enc_status_changed(addr, numpages, enc);
->   
+ Documentation/admin-guide/sysctl/kernel.rst |  7 +++--
+ drivers/char/random.c                       | 33 +++++++--------------
+ 2 files changed, 16 insertions(+), 24 deletions(-)
 
-Boris has given similar comment on SNP series. This area of code have a 
-very similar requirement. Boris proposed it here [1] and I followed up 
-[2] with SNP specific comment. It will be good to get your feedback and 
-do a generic implementation outside of the SNP/TDX series.
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index d359bcfadd39..d3c6d9a501a9 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -1029,14 +1029,17 @@ This is a directory, with the following entries:
+ * ``poolsize``: the entropy pool size, in bits;
+ 
+ * ``urandom_min_reseed_secs``: obsolete (used to determine the minimum
+-  number of seconds between urandom pool reseeding).
++  number of seconds between urandom pool reseeding). This file is
++  writable for compatibility purposes, but writing to it has no effect
++  on any RNG behavior.
+ 
+ * ``uuid``: a UUID generated every time this is retrieved (this can
+   thus be used to generate UUIDs at will);
+ 
+ * ``write_wakeup_threshold``: when the entropy count drops below this
+   (as a number of bits), processes waiting to write to ``/dev/random``
+-  are woken up.
++  are woken up. This file is writable for compatibility purposes, but
++  writing to it has no effect on any RNG behavior.
+ 
+ If ``drivers/char/random.c`` is built with ``ADD_INTERRUPT_BENCH``
+ defined, these additional entries are present:
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 20538e9b1a2c..3b30e764eeef 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -296,12 +296,6 @@ enum {
+  */
+ static DECLARE_WAIT_QUEUE_HEAD(random_write_wait);
+ static struct fasync_struct *fasync;
+-/*
+- * If the entropy count falls under this number of bits, then we
+- * should wake up processes which are selecting or polling on write
+- * access to /dev/random.
+- */
+-static int random_write_wakeup_bits = POOL_MIN_BITS;
+ 
+ static DEFINE_SPINLOCK(random_ready_list_lock);
+ static LIST_HEAD(random_ready_list);
+@@ -739,10 +733,8 @@ static void crng_reseed(struct crng_state *crng, bool use_input_pool)
+ 				return;
+ 		} while (cmpxchg(&input_pool.entropy_count, entropy_count, 0) != entropy_count);
+ 		extract_entropy(buf.key, sizeof(buf.key));
+-		if (random_write_wakeup_bits) {
+-			wake_up_interruptible(&random_write_wait);
+-			kill_fasync(&fasync, SIGIO, POLL_OUT);
+-		}
++		wake_up_interruptible(&random_write_wait);
++		kill_fasync(&fasync, SIGIO, POLL_OUT);
+ 	} else {
+ 		_extract_crng(&primary_crng, buf.block);
+ 		_crng_backtrack_protect(&primary_crng, buf.block,
+@@ -1471,7 +1463,7 @@ static __poll_t random_poll(struct file *file, poll_table *wait)
+ 	mask = 0;
+ 	if (crng_ready())
+ 		mask |= EPOLLIN | EPOLLRDNORM;
+-	if (input_pool.entropy_count < random_write_wakeup_bits)
++	if (input_pool.entropy_count < POOL_MIN_BITS)
+ 		mask |= EPOLLOUT | EPOLLWRNORM;
+ 	return mask;
+ }
+@@ -1556,7 +1548,7 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+ 		 */
+ 		if (!capable(CAP_SYS_ADMIN))
+ 			return -EPERM;
+-		if (xchg(&input_pool.entropy_count, 0) && random_write_wakeup_bits) {
++		if (xchg(&input_pool.entropy_count, 0)) {
+ 			wake_up_interruptible(&random_write_wait);
+ 			kill_fasync(&fasync, SIGIO, POLL_OUT);
+ 		}
+@@ -1636,9 +1628,9 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count, unsigned int,
+ 
+ #include <linux/sysctl.h>
+ 
+-static int min_write_thresh;
+-static int max_write_thresh = POOL_BITS;
+ static int random_min_urandom_seed = 60;
++static int random_write_wakeup_bits = POOL_MIN_BITS;
++static int sysctl_poolsize = POOL_BITS;
+ static char sysctl_bootid[16];
+ 
+ /*
+@@ -1677,7 +1669,6 @@ static int proc_do_uuid(struct ctl_table *table, int write, void *buffer,
+ 	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
+ }
+ 
+-static int sysctl_poolsize = POOL_BITS;
+ static struct ctl_table random_table[] = {
+ 	{
+ 		.procname	= "poolsize",
+@@ -1698,9 +1689,7 @@ static struct ctl_table random_table[] = {
+ 		.data		= &random_write_wakeup_bits,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &min_write_thresh,
+-		.extra2		= &max_write_thresh,
++		.proc_handler	= proc_dointvec,
+ 	},
+ 	{
+ 		.procname	= "urandom_min_reseed_secs",
+@@ -1892,13 +1881,13 @@ void add_hwgenerator_randomness(const char *buffer, size_t count,
+ 	}
+ 
+ 	/* Throttle writing if we're above the trickle threshold.
+-	 * We'll be woken up again once below random_write_wakeup_thresh,
+-	 * when the calling thread is about to terminate, or once
+-	 * CRNG_RESEED_INTERVAL has lapsed.
++	 * We'll be woken up again once below POOL_MIN_BITS, when
++	 * the calling thread is about to terminate, or once
++	 * CRNG_RESEED_INTERVAL has elapsed.
+ 	 */
+ 	wait_event_interruptible_timeout(random_write_wait,
+ 			!system_wq || kthread_should_stop() ||
+-			input_pool.entropy_count <= random_write_wakeup_bits,
++			input_pool.entropy_count < POOL_MIN_BITS,
+ 			CRNG_RESEED_INTERVAL);
+ 	mix_pool_bytes(buffer, count);
+ 	credit_entropy_bits(entropy);
+-- 
+2.35.1
 
-[1] https://lore.kernel.org/linux-mm/Ygz88uacbwuTTNat@zn.tnic/
-[2] 
-https://lore.kernel.org/linux-mm/20220216160457.1748381-1-brijesh.singh@amd.com/T/
-
-thanks

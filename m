@@ -2,142 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D2F4BD342
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 02:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 948C84BD366
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245486AbiBUBrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 20:47:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53426 "EHLO
+        id S245562AbiBUB7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 20:59:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245458AbiBUBrh (ORCPT
+        with ESMTP id S232564AbiBUB7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 20:47:37 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E48443C9;
-        Sun, 20 Feb 2022 17:47:15 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id iq13-20020a17090afb4d00b001bc4437df2cso919014pjb.2;
-        Sun, 20 Feb 2022 17:47:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YhojBWVK4UiEqGQSq9xm7bnPmCBpgHMKvLchmEMssxs=;
-        b=GlK21yrXja4jNo1iNtBTRnPdeFQI5GpeylgO4iDFg+CzXF41SDjFSj8xiPCGjoIYGt
-         8GsdIrxUZLSUp895Aek9lp3KaiKcnx+8FG/dZ1Z/bSCNS9TKJMpgrTIU71kbmxNE5GPJ
-         d2hFqUN93utB3CZO92u+RdM136S1a9RKYnx9mm2RPtLgHaFWy4WDf6/EuIpk04lnzXa9
-         R3SZxb9eK4ZJVuFwuZPYRIBSROenJv2ywEYhuS4Ym8WqDFZTUPlbX1YJ1C9wbLIBgGpv
-         RNEKatUz1IqL9dvwziyhI6d8zo+asOlyWCuWEF5OQIPFKBJZShhhy+KZNPkeHambjgWo
-         3F/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YhojBWVK4UiEqGQSq9xm7bnPmCBpgHMKvLchmEMssxs=;
-        b=YwGCigK2ikxMi+yMipxztbXUsZ2o3o7F40L0sO16ohaNscdy+FWHbQKmzwrUY+iwwG
-         p97ZMqem13EXgAqxj1DphsoFTmG+8U/8c512gtpdNeorGlZWp+JmEkVZitUO1ydOeoHt
-         Ud8L36vH9d/lJXO1zjJSwQwXpbWMcC5Cu76fCJEUXAP71CpP7dTv65jzUqb5egUg7+cU
-         klbo4FdRn4dC30gPmm3Wnxf8nvu1DmAmcakaqy5aijK3FaM6q13oE5LkPzotI4FRfRLx
-         WlcGov/jk62RPj1+7Ejh95RqbhI9w7Q6nd8XFR6aPucUFPScNL3zE/pWffOb2r5CfNkZ
-         TD6Q==
-X-Gm-Message-State: AOAM530bQAv5Gcz+vCzzKqTC7ZomhCxBHtx0jNNjT6PkM9nDRzZuW/Gb
-        cjvuUb65ScqjBCtZjow+6wHbHfuwNp/dQFa2
-X-Google-Smtp-Source: ABdhPJwRp23Tcp7DStqEeIUVQutOLb2WR5T9Q1KrYs773Q5FFnrNasoaeqQiUzVYjBNvgbqvFOfAsg==
-X-Received: by 2002:a17:90a:1656:b0:1bb:f715:5606 with SMTP id x22-20020a17090a165600b001bbf7155606mr8998633pje.221.1645408035199;
-        Sun, 20 Feb 2022 17:47:15 -0800 (PST)
-Received: from [10.11.37.162] ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id c14sm10171380pfv.126.2022.02.20.17.47.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Feb 2022 17:47:14 -0800 (PST)
-Message-ID: <a8d5b618-f5ee-686e-d614-dd038004d488@gmail.com>
-Date:   Mon, 21 Feb 2022 09:47:09 +0800
+        Sun, 20 Feb 2022 20:59:19 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3253A517D3;
+        Sun, 20 Feb 2022 17:58:56 -0800 (PST)
+X-UUID: dbe1d2847c304ffcbcd8cc4eb1e2eaa5-20220221
+X-UUID: dbe1d2847c304ffcbcd8cc4eb1e2eaa5-20220221
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 368339440; Mon, 21 Feb 2022 09:58:53 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 21 Feb 2022 09:58:51 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Feb 2022 09:58:51 +0800
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2 00/15] Mediatek MT8186 clock support
+Date:   Mon, 21 Feb 2022 09:52:43 +0800
+Message-ID: <20220221015258.913-1-chun-jie.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] staging: qlge: add unregister_netdev in qlge_probe
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     manishc@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        coiby.xu@gmail.com, gregkh@linuxfoundation.org,
-        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220218081130.45670-1-hbh25y@gmail.com>
- <20220218120344.GH2407@kadam>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <20220218120344.GH2407@kadam>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your suggesion. I will resubmit later.
+this patch series is based on 5.17-rc1 and depends on
+[1]"clk: mediatek: Cleanups and Improvements - Part 1"
 
-On 2022/2/18 20:03, Dan Carpenter wrote:
-> On Fri, Feb 18, 2022 at 04:11:30PM +0800, Hangyu Hua wrote:
->> unregister_netdev need to be called when register_netdev succeeds
->> qlge_health_create_reporters fails.
->>
-> 
-> 1) Add a Fixes tag:
-> 
-> Fixes: d8827ae8e22b ("staging: qlge: deal with the case that devlink_health_reporter_create fails")
-> 
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->> ---
->>   drivers/staging/qlge/qlge_main.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
->> index 9873bb2a9ee4..0a199c6d77a1 100644
->> --- a/drivers/staging/qlge/qlge_main.c
->> +++ b/drivers/staging/qlge/qlge_main.c
->> @@ -4611,8 +4611,10 @@ static int qlge_probe(struct pci_dev *pdev,
->>   	}
->>   
->>   	err = qlge_health_create_reporters(qdev);
->> -	if (err)
->> +	if (err) {
->> +		unregister_netdev(ndev);
->>   		goto netdev_free;
->> +	}
-> 
-> 2) Use a goto to unwind.  3) Release the other pdev stuff as well.
-> 4)  Clean up the error handling for register_netdev() by using a goto
-> as well.
-> 
-> 	err = register_netdev(ndev);
-> 	if (err) {
-> 		dev_err(&pdev->dev, "net device registration failed.\n");
-> 		goto cleanup_pdev;
-> 	}
-> 
-> 	err = qlge_health_create_reporters(qdev);
-> 	if (err)
-> 		goto unregister_netdev;
-> 
-> 	...
-> 
-> 	return 0;
-> 
-> unregister_netdev:
-> 	unregister_netdev(ndev);
-> cleanup_pdev:
-> 	qlge_release_all(pdev);
-> 	pci_disable_device(pdev);
-> netdev_free:
-> 	free_netdev(ndev);
-> devlink_free:
-> 	devlink_free(devlink);
-> 
-> 	return ret;
-> 
-> regards,
-> dan carpenter
-> 
+changes since v1:
+- combine dt-binding documents as a single patch
+- remove redundant example in binding document
+- change to dual license in binding document
+- add more clock error handle based on interface provided in [1]
+
+[1]https://patchwork.kernel.org/project/linux-mediatek/list/?series=612171
+
+Chun-Jie Chen (15):
+  dt-bindings: ARM: Mediatek: Add new document bindings of MT8186 clock
+  clk: mediatek: Add MT8186 mcusys clock support
+  clk: mediatek: Add MT8186 topckgen clock support
+  clk: mediatek: Add MT8186 infrastructure clock support
+  clk: mediatek: Add MT8186 apmixedsys clock support
+  clk: mediatek: Add MT8186 imp i2c wrapper clock support
+  clk: mediatek: Add MT8186 mfgsys clock support
+  clk: mediatek: Add MT8186 mmsys clock support
+  clk: mediatek: Add MT8186 wpesys clock support
+  clk: mediatek: Add MT8186 imgsys clock support
+  clk: mediatek: Add MT8186 vdecsys clock support
+  clk: mediatek: Add MT8186 vencsys clock support
+  clk: mediatek: Add MT8186 camsys clock support
+  clk: mediatek: Add MT8186 mdpsys clock support
+  clk: mediatek: Add MT8186 ipesys clock support
+
+ .../arm/mediatek/mediatek,mt8186-clock.yaml   |  56 ++
+ .../mediatek/mediatek,mt8186-sys-clock.yaml   |  54 ++
+ drivers/clk/mediatek/Kconfig                  |   8 +
+ drivers/clk/mediatek/Makefile                 |   5 +
+ drivers/clk/mediatek/clk-mt8186-apmixedsys.c  | 133 +++
+ drivers/clk/mediatek/clk-mt8186-cam.c         |  90 ++
+ drivers/clk/mediatek/clk-mt8186-img.c         |  68 ++
+ .../clk/mediatek/clk-mt8186-imp_iic_wrap.c    |  67 ++
+ drivers/clk/mediatek/clk-mt8186-infra_ao.c    | 216 +++++
+ drivers/clk/mediatek/clk-mt8186-ipe.c         |  55 ++
+ drivers/clk/mediatek/clk-mt8186-mcu.c         | 106 +++
+ drivers/clk/mediatek/clk-mt8186-mdp.c         |  80 ++
+ drivers/clk/mediatek/clk-mt8186-mfg.c         |  48 ++
+ drivers/clk/mediatek/clk-mt8186-mm.c          | 111 +++
+ drivers/clk/mediatek/clk-mt8186-topckgen.c    | 780 ++++++++++++++++++
+ drivers/clk/mediatek/clk-mt8186-vdec.c        |  88 ++
+ drivers/clk/mediatek/clk-mt8186-venc.c        |  51 ++
+ drivers/clk/mediatek/clk-mt8186-wpe.c         |  51 ++
+ include/dt-bindings/clock/mt8186-clk.h        | 445 ++++++++++
+ 19 files changed, 2512 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-cam.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-img.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-imp_iic_wrap.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-infra_ao.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-ipe.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-mcu.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-mdp.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-mfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-mm.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-topckgen.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-vdec.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-venc.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-wpe.c
+ create mode 100644 include/dt-bindings/clock/mt8186-clk.h
+
+-- 
+2.18.0
+

@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796BD4BDEF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92434BE799
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348107AbiBUJUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:20:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33972 "EHLO
+        id S1344758AbiBUIts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:49:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349612AbiBUJMh (ORCPT
+        with ESMTP id S1344731AbiBUItp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:12:37 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76CA15A12;
-        Mon, 21 Feb 2022 01:05:40 -0800 (PST)
+        Mon, 21 Feb 2022 03:49:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3FA2BCB
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:49:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 55D41CE0E77;
-        Mon, 21 Feb 2022 09:05:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3DFC340E9;
-        Mon, 21 Feb 2022 09:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434337;
-        bh=mEfrm3NcANQlRavIrBSqOE/EMhzoeV2WVA1AIkd0MSM=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B4CD61133
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:49:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C895BC340EB;
+        Mon, 21 Feb 2022 08:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645433361;
+        bh=61m5opydu6oIZ50muRjad8uTMbMvpXyXDzNMREOXZpk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NHlVh2GZuorri/ocil943rqpjIfPh1Qoz/+4u1qTkYQfg6tY8WaNjmtUT4CHyifOB
-         nRDl2Qs6DcSPNIFbcgKs8F0ukXaYOca4rFqR2YSrWrDdO1qtaR7TjzzDym2cEmXjcm
-         BzcElzWhgJc2Sd/VxqBlIOneXztDhHdba5xZ1bMY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        b=kZu35ojSxp2XkQAhJTMWouvu1Uk6mWhfomIyuXqZX8yosG8tbK8TQlKlcYyftaNyY
+         FiO9jE76oa2m37dqchSGdw83dKSfJq8zaoyyl3MU6Itxfg5+z7Ial026O3CnM34zrN
+         d2wjqdA9rLQWqEkzaaINMAQcQuBwYPxwDs2hyEnQfD1AGZgAsZjcKo71Q0MJz+DxKv
+         bqPHgij4ZI9K2cFLAuYnDsboTaXuwUlN7/7HaahHAebHizENw9SONlJOhvrkCKvOOc
+         IMl38juleaIj4XWZUdTKt2URkYQr+Bzx//eys0uKaIW5jEolZjOYudFGGbQ2QZu+lj
+         GfWhGMtiWvcdQ==
+From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 062/121] drop_monitor: fix data-race in dropmon_net_event / trace_napi_poll_hit
-Date:   Mon, 21 Feb 2022 09:49:14 +0100
-Message-Id: <20220221084923.309518724@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
-User-Agent: quilt/0.66
+Cc:     farah kassabri <fkassabri@habana.ai>
+Subject: [PATCH 2/2] habanalabs: Fix reset upon device release bug
+Date:   Mon, 21 Feb 2022 10:49:14 +0200
+Message-Id: <20220221084914.493784-2-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220221084914.493784-1-ogabbay@kernel.org>
+References: <20220221084914.493784-1-ogabbay@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -56,103 +53,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: farah kassabri <fkassabri@habana.ai>
 
-commit dcd54265c8bc14bd023815e36e2d5f9d66ee1fee upstream.
+In case user application was interrupted while some cs still in-flight
+or in the middle of completion handling in driver, the
+last refcount of the kernel private data for the user process
+will not be put in the fd close flow, but in the cs completion
+workqueue context.
 
-trace_napi_poll_hit() is reading stat->dev while another thread can write
-on it from dropmon_net_event()
+This means that the device reset-upon-device-release will be called
+from that context. During the reset flow, the driver flushes all the cs
+workqueue to ensure that any scheduled work has run to completion,
+and since we are running from the completion context we will
+have deadlock.
 
-Use READ_ONCE()/WRITE_ONCE() here, RCU rules are properly enforced already,
-we only have to take care of load/store tearing.
+Therefore, we need to skip flushing the workqueue in those cases.
+It is safe to do it because the user won't be able to release the device
+unless the workqueues are already empty.
 
-BUG: KCSAN: data-race in dropmon_net_event / trace_napi_poll_hit
-
-write to 0xffff88816f3ab9c0 of 8 bytes by task 20260 on cpu 1:
- dropmon_net_event+0xb8/0x2b0 net/core/drop_monitor.c:1579
- notifier_call_chain kernel/notifier.c:84 [inline]
- raw_notifier_call_chain+0x53/0xb0 kernel/notifier.c:392
- call_netdevice_notifiers_info net/core/dev.c:1919 [inline]
- call_netdevice_notifiers_extack net/core/dev.c:1931 [inline]
- call_netdevice_notifiers net/core/dev.c:1945 [inline]
- unregister_netdevice_many+0x867/0xfb0 net/core/dev.c:10415
- ip_tunnel_delete_nets+0x24a/0x280 net/ipv4/ip_tunnel.c:1123
- vti_exit_batch_net+0x2a/0x30 net/ipv4/ip_vti.c:515
- ops_exit_list net/core/net_namespace.c:173 [inline]
- cleanup_net+0x4dc/0x8d0 net/core/net_namespace.c:597
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x1bf/0x1e0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-read to 0xffff88816f3ab9c0 of 8 bytes by interrupt on cpu 0:
- trace_napi_poll_hit+0x89/0x1c0 net/core/drop_monitor.c:292
- trace_napi_poll include/trace/events/napi.h:14 [inline]
- __napi_poll+0x36b/0x3f0 net/core/dev.c:6366
- napi_poll net/core/dev.c:6432 [inline]
- net_rx_action+0x29e/0x650 net/core/dev.c:6519
- __do_softirq+0x158/0x2de kernel/softirq.c:558
- do_softirq+0xb1/0xf0 kernel/softirq.c:459
- __local_bh_enable_ip+0x68/0x70 kernel/softirq.c:383
- __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
- _raw_spin_unlock_bh+0x33/0x40 kernel/locking/spinlock.c:210
- spin_unlock_bh include/linux/spinlock.h:394 [inline]
- ptr_ring_consume_bh include/linux/ptr_ring.h:367 [inline]
- wg_packet_decrypt_worker+0x73c/0x780 drivers/net/wireguard/receive.c:506
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x1bf/0x1e0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-value changed: 0xffff88815883e000 -> 0x0000000000000000
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 26435 Comm: kworker/0:1 Not tainted 5.17.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: wg-crypt-wg2 wg_packet_decrypt_worker
-
-Fixes: 4ea7e38696c7 ("dropmon: add ability to detect when hardware dropsrxpackets")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: farah kassabri <fkassabri@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- net/core/drop_monitor.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ .../misc/habanalabs/common/command_submission.c | 17 ++++++++++-------
+ drivers/misc/habanalabs/common/device.c         | 13 ++++++++-----
+ drivers/misc/habanalabs/common/habanalabs.h     |  2 +-
+ 3 files changed, 19 insertions(+), 13 deletions(-)
 
---- a/net/core/drop_monitor.c
-+++ b/net/core/drop_monitor.c
-@@ -280,13 +280,17 @@ static void trace_napi_poll_hit(void *ig
+diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
+index c7757c78d0b1..d93ef9f1c45c 100644
+--- a/drivers/misc/habanalabs/common/command_submission.c
++++ b/drivers/misc/habanalabs/common/command_submission.c
+@@ -921,18 +921,21 @@ static void cs_rollback(struct hl_device *hdev, struct hl_cs *cs)
+ 		complete_job(hdev, job);
+ }
  
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(new_stat, &hw_stats_list, list) {
-+		struct net_device *dev;
+-void hl_cs_rollback_all(struct hl_device *hdev)
++void hl_cs_rollback_all(struct hl_device *hdev, bool skip_wq_flush)
+ {
+ 	int i;
+ 	struct hl_cs *cs, *tmp;
+ 
+-	flush_workqueue(hdev->ts_free_obj_wq);
++	if (!skip_wq_flush) {
++		flush_workqueue(hdev->ts_free_obj_wq);
+ 
+-	/* flush all completions before iterating over the CS mirror list in
+-	 * order to avoid a race with the release functions
+-	 */
+-	for (i = 0 ; i < hdev->asic_prop.completion_queues_count ; i++)
+-		flush_workqueue(hdev->cq_wq[i]);
++		/* flush all completions before iterating over the CS mirror list in
++		 * order to avoid a race with the release functions
++		 */
++		for (i = 0 ; i < hdev->asic_prop.completion_queues_count ; i++)
++			flush_workqueue(hdev->cq_wq[i]);
 +
- 		/*
- 		 * only add a note to our monitor buffer if:
- 		 * 1) this is the dev we received on
- 		 * 2) its after the last_rx delta
- 		 * 3) our rx_dropped count has gone up
- 		 */
--		if ((new_stat->dev == napi->dev)  &&
-+		/* Paired with WRITE_ONCE() in dropmon_net_event() */
-+		dev = READ_ONCE(new_stat->dev);
-+		if ((dev == napi->dev)  &&
- 		    (time_after(jiffies, new_stat->last_rx + dm_hw_check_delta)) &&
- 		    (napi->dev->stats.rx_dropped != new_stat->last_drop_val)) {
- 			trace_drop_common(NULL, NULL);
-@@ -1574,7 +1578,10 @@ static int dropmon_net_event(struct noti
- 		mutex_lock(&net_dm_mutex);
- 		list_for_each_entry_safe(new_stat, tmp, &hw_stats_list, list) {
- 			if (new_stat->dev == dev) {
--				new_stat->dev = NULL;
-+
-+				/* Paired with READ_ONCE() in trace_napi_poll_hit() */
-+				WRITE_ONCE(new_stat->dev, NULL);
-+
- 				if (trace_state == TRACE_OFF) {
- 					list_del_rcu(&new_stat->list);
- 					kfree_rcu(new_stat, rcu);
-
++	}
+ 
+ 	/* Make sure we don't have leftovers in the CS mirror list */
+ 	list_for_each_entry_safe(cs, tmp, &hdev->cs_mirror_list, mirror_node) {
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 8ea9dfe3f79b..d52381d1fbd2 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -685,7 +685,8 @@ static void take_release_locks(struct hl_device *hdev)
+ 	mutex_unlock(&hdev->fpriv_ctrl_list_lock);
+ }
+ 
+-static void cleanup_resources(struct hl_device *hdev, bool hard_reset, bool fw_reset)
++static void cleanup_resources(struct hl_device *hdev, bool hard_reset, bool fw_reset,
++				bool skip_wq_flush)
+ {
+ 	if (hard_reset)
+ 		device_late_fini(hdev);
+@@ -698,7 +699,7 @@ static void cleanup_resources(struct hl_device *hdev, bool hard_reset, bool fw_r
+ 	hdev->asic_funcs->halt_engines(hdev, hard_reset, fw_reset);
+ 
+ 	/* Go over all the queues, release all CS and their jobs */
+-	hl_cs_rollback_all(hdev);
++	hl_cs_rollback_all(hdev, skip_wq_flush);
+ 
+ 	/* Release all pending user interrupts, each pending user interrupt
+ 	 * holds a reference to user context
+@@ -978,7 +979,8 @@ static void handle_reset_trigger(struct hl_device *hdev, u32 flags)
+ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ {
+ 	bool hard_reset, from_hard_reset_thread, fw_reset, hard_instead_soft = false,
+-			reset_upon_device_release = false, schedule_hard_reset = false;
++			reset_upon_device_release = false, schedule_hard_reset = false,
++			skip_wq_flush = false;
+ 	u64 idle_mask[HL_BUSY_ENGINES_MASK_EXT_SIZE] = {0};
+ 	struct hl_ctx *ctx;
+ 	int i, rc;
+@@ -991,6 +993,7 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 	hard_reset = !!(flags & HL_DRV_RESET_HARD);
+ 	from_hard_reset_thread = !!(flags & HL_DRV_RESET_FROM_RESET_THR);
+ 	fw_reset = !!(flags & HL_DRV_RESET_BYPASS_REQ_TO_FW);
++	skip_wq_flush = !!(flags & HL_DRV_RESET_DEV_RELEASE);
+ 
+ 	if (!hard_reset && !hdev->asic_prop.supports_soft_reset) {
+ 		hard_instead_soft = true;
+@@ -1076,7 +1079,7 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 		return 0;
+ 	}
+ 
+-	cleanup_resources(hdev, hard_reset, fw_reset);
++	cleanup_resources(hdev, hard_reset, fw_reset, skip_wq_flush);
+ 
+ kill_processes:
+ 	if (hard_reset) {
+@@ -1686,7 +1689,7 @@ void hl_device_fini(struct hl_device *hdev)
+ 
+ 	hl_hwmon_fini(hdev);
+ 
+-	cleanup_resources(hdev, true, false);
++	cleanup_resources(hdev, true, false, false);
+ 
+ 	/* Kill processes here after CS rollback. This is because the process
+ 	 * can't really exit until all its CSs are done, which is what we
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 677ae4ff922c..cef4717d0916 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -3054,7 +3054,7 @@ int hl_cb_pool_fini(struct hl_device *hdev);
+ int hl_cb_va_pool_init(struct hl_ctx *ctx);
+ void hl_cb_va_pool_fini(struct hl_ctx *ctx);
+ 
+-void hl_cs_rollback_all(struct hl_device *hdev);
++void hl_cs_rollback_all(struct hl_device *hdev, bool skip_wq_flush);
+ struct hl_cs_job *hl_cs_allocate_job(struct hl_device *hdev,
+ 		enum hl_queue_type queue_type, bool is_kernel_allocated_cb);
+ void hl_sob_reset_error(struct kref *ref);
+-- 
+2.25.1
 

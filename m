@@ -2,160 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114984BDCBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E894BE109
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358037AbiBUMgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 07:36:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51908 "EHLO
+        id S1358055AbiBUMhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 07:37:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358028AbiBUMgT (ORCPT
+        with ESMTP id S1348022AbiBUMhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 07:36:19 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8129119280
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 04:35:55 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21L9YBb5002314;
-        Mon, 21 Feb 2022 12:35:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=cIfRRmiSWsKOWk96RMPK212phKWfRyP3Q2Yj/SIHYxQ=;
- b=R1DwZ4QOVoxnahy+pUjjZ/WFFg+jU39RXW5ZBksAKG/Zh91TKmbsnv6sSmWOQnKMSnV/
- N68C9QcvnualJaO3LkIsegxU6nfzCawm9l7YH1OW9/9uhoZUZiiInvgqRJ6miZDCXj7A
- 08IbKEY1X67T6EkDhgPerzmDoU7YsA33HdN/GXS+jTJfNtRmyDqPfF98hncXUfmIv3/c
- vKKhfBM+cZiBDJDx5VQ+oUBLNb8r+J/Cb2NR+0q0iUnIi76GjpN3YZLHItL3ok7IGZ6I
- VqBsX7UOQM47ElSf90CDXVgEGrD7iogRXWSpYhjkTUGx+5CHtJyBJM0eYgkZVWRO1ice /w== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ear5t40t1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Feb 2022 12:35:51 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21LCGmhn031975;
-        Mon, 21 Feb 2022 12:35:50 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
-        by aserp3030.oracle.com with ESMTP id 3eapkenexr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Feb 2022 12:35:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oWIIGKE7F/TkPDhj5k1soyT0jzDC9SO21OAIyaiijkuOXG1sS10qURJznFIkmhrhn2+F87cudn1898drlcPxBK6YrLrzoCJOWF39MwxvVFqYnY3yvQGx84Kn9ToJKvgQNHCu7fWw911fiNYt+2KG58w6lDRH15UYxgyDa8Wh5a3pVYDKgb1PZVpxu+8rqivFBj6aGgquL6NWBdMac8OHnaWkRUYkEjz5fw9Tcug+MGjuXWSN5rnCex0K26/yfrzrKvDWRwoV0YqNczff3qSZCbXPPp4ng2XTOMzZkQUwCnZejg74iCRmLo1hmiUt6KHZHeSbX5nJHLkvOeLm3DM3AQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cIfRRmiSWsKOWk96RMPK212phKWfRyP3Q2Yj/SIHYxQ=;
- b=TWTY7YDfM/l1WfQIFvGuqx2u2tdsIYaeGkyhbhld0jAe4a06EKTp5U66ZJ5kXp/vGMKolJFO0qyDaLODiyEZO5zuv5Xb9HBVuI5CCnORySPhXQxuF5wulZDP3bjqUQBS8lSF+zxy5OPyzjsYjzupTQdx138Qzc80FbazqX3vCSczwtYQi+EMlBnOEnetW7djJbMLoJnmnI17QezngD+mJikfBUoQWbHD7s4y8qqexwQnpCZSRWgfFwUES6rdknDMP5lpDdi2hhDkkQdFOpuIyBM0O7XVk1howIRMrSy5Nqv8w1BzYFzo9L0ywYdOLSE0fFeWW5JBwCWyUlsFJiO4AA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 21 Feb 2022 07:37:16 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D3DE63;
+        Mon, 21 Feb 2022 04:36:53 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id o6so14405588ljp.3;
+        Mon, 21 Feb 2022 04:36:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cIfRRmiSWsKOWk96RMPK212phKWfRyP3Q2Yj/SIHYxQ=;
- b=pMz0Gf0JK/CM9kEvotjoeICqah9KEJd9PKNYfxi5/hlSi6gNtJB0wud0BXg4SJ9voOOy+OuOv691bnU9YLLQ5dZBlCh2R6xdvDdCHmubOkX0g4hCWCMz6HLMhFSjNpieK6kExjt6sBxmrrq9v697Bx76vkbjANh5lybnZeqsUb8=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CY4PR10MB1655.namprd10.prod.outlook.com
- (2603:10b6:910:7::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Mon, 21 Feb
- 2022 12:35:48 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
- 12:35:48 +0000
-Date:   Mon, 21 Feb 2022 15:35:36 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] staging: vt6656: Remove ftrace-like logging and
- unnecessary line breaks
-Message-ID: <20220221123536.GI3965@kadam>
-References: <cover.1645386791.git.philipp.g.hortmann@gmail.com>
- <44f469737b788d1012943eb4e95997d40a947f04.1645386791.git.philipp.g.hortmann@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <44f469737b788d1012943eb4e95997d40a947f04.1645386791.git.philipp.g.hortmann@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR2P264CA0069.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:31::33) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mEernK9EmKj7bI8X1Jd6lo2HouXSyKPu6/emVUbRPRc=;
+        b=av1lhYgsNUd7hm9q4wRn3Ags/yGBsnkT9e/GTSzGAskHpNx78RYq3cQxHbsdh4Ma2H
+         Me6tCEjgKzMt2gu73QPu4DFSF96O9yhfMgDjREanAEVEPwIBymgxnVAx9+EEPsIWdrPK
+         /WZfIaLGl4RHZtZ1pw+ZKgTTOn3+JZwKdqJTm494NETYx4hzeXdM8pKzZVZkNWB/MN9c
+         zv/T2VC1cyScSYFHB8yC0ynvsjxtNEd/QWCd0enZtegrf7KMzFP8/H9oeQaIPo2uR6Hj
+         Nfac196cYvY+U9spmlXfH0t9OlxzaVZDFjXUvZYr3z5MtPOKoJQJOZ+tRun+NtScQGcO
+         fUSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mEernK9EmKj7bI8X1Jd6lo2HouXSyKPu6/emVUbRPRc=;
+        b=NJf/gE5W04vI/Ua73RUSX+VRINDRWuzgs5VCYV/8Tld3k4UWNieFGzWg6a/IYeFnIo
+         U36OHdaAX9qKCK2QlNcg7ez+nURUs5odpStYHNEpff7ZViNlv3I9kDLOAtZsT/WfvnBB
+         L1PkMHDG0ps+jUALhoEBgmekp3UCWK+Lpuj/gDXFOAx3utQdGKZ79G0WYLK4tfgohcD2
+         hmixhI9qc1e6IY7WTXcMWcDjrW6+36xVZ4/m+psKs7bjtCpFWaMlTpKYKb4x19YlaHQd
+         mubKdhxcstEOOor55S0vXoB01xIQG1NL3dnWwddIyDVbMBjxtE4cugg/OhfPfJjh/2sz
+         neNg==
+X-Gm-Message-State: AOAM530C6bsxpwNTx+HqZyJyvnm/A9FouPMeBUNHW6rhK7qBbTM2KoNi
+        TatTFX/O6btg8Vymy9Nujrw=
+X-Google-Smtp-Source: ABdhPJwwu7gPAthFqypL6MPtpCZMVcSXzW7wobVDtXZFxJoCOcaaB05GK4ZdvxWKKHA4YhvL30K20w==
+X-Received: by 2002:a2e:9693:0:b0:239:3f32:671f with SMTP id q19-20020a2e9693000000b002393f32671fmr14613668lji.42.1645447011403;
+        Mon, 21 Feb 2022 04:36:51 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id f2sm1316874ljn.11.2022.02.21.04.36.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 04:36:50 -0800 (PST)
+Message-ID: <8d0c818a-d714-d8ab-f825-073cf549b959@gmail.com>
+Date:   Mon, 21 Feb 2022 15:36:50 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f3f9635b-1dd0-4d7e-7f20-08d9f536afee
-X-MS-TrafficTypeDiagnostic: CY4PR10MB1655:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR10MB165532C8AEDF6B47946B70048E3A9@CY4PR10MB1655.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cdrDxRIPkI2Cq0uaWVssBj8PFNiiWQ+K9QNpvEuCQd8oQrnMLv4IvyPQLMQewmvL2D8LLjGSq/NpNB5p9Wqxky+23mfuAI5YeXv1S2wD7ufNXGgxdQkN51pO778g2+YpoD4HJiV/g2LkdIvynyEEEZI5CqAKyUfo90a0CF4Abaoq17CY+JVWWK+xDKbQGirQFB4lgCPuKot2nB79L6ZeI/mqZ/NfhqR8V+BmTD+bPbdIVvjfyPlLkeRssNMZaeMmTz93isVlE62G+xFPVF8X6zom17flIahB/HwlkWtoJWS901YazyPNFt25poDGVzM/bC6JkYI8I5Imyo+wcOj8mFZNneLXVvBoJduJqTQvNuL4MUzoPM9iD6meVyaS/8xD/OCF4IGke7z6dVmYgp5Kr6UTIpnVrH01++zCMV/nqe66krX/qjx+wvv/YLDYTvnjr1Jsjsm+eoGAG20to3VoyeGauMjBMLX0dgIpPFPgbQIppgzqu4P0Cumpte3JFR2a0AScYX8KrlZL2tMP4g24mzS6jmsGv8sgwzT0025A95xjolYM0Jl1VgWJzxvbXGDnhaun3487UHLXQskb3yeuFeDimJzwqC8m5FD/WwSsBwwYpTukmv5H4fojN2x1fpd10lRmyW7Z58n+o5q5T0NTAP3U+Vs5wEpS+vMP3fZwVrZeK/WHxgZHhN6QlcsX1au5OG07wgcZiFG2AWZEZWF6AQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(52116002)(186003)(26005)(6506007)(66556008)(6512007)(9686003)(66946007)(8676002)(6916009)(54906003)(1076003)(6486002)(66476007)(6666004)(33716001)(86362001)(316002)(508600001)(83380400001)(38350700002)(4326008)(38100700002)(5660300002)(8936002)(33656002)(2906002)(44832011)(4744005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J+1lfcrlB9uMDqfSXZ2R/fE9S+uHDw8ihr6bm1cJO19wKsP+YjXYpdXw4ZqK?=
- =?us-ascii?Q?Z+1SBSUIlrqJCO+vN2USkWMFjfCIKJKrHum4MaKqBTAeHD+4HIg4GJXK8JQb?=
- =?us-ascii?Q?RMhy6ME4LPswTy0vKHpT4JMvX7LEGU1IMrUh8ogoF3vhGKTCn3bB+pEv/8tN?=
- =?us-ascii?Q?HmiOSDxjhuoJ373SUNQwg+DZxgGkd6K/wjtfyW/0INVpHwcmHHKBxXmQ99kA?=
- =?us-ascii?Q?HG1xsm//qTqxzOLRlkgdiBi4maGNaxLIPtqUj7B8hNDtwlW10/C618W0ifRm?=
- =?us-ascii?Q?++QDtnykqke2SVxAvOj0vxvrQRiRfGzuldJlWui7u9iR1MaQy7KaD5LH7mf6?=
- =?us-ascii?Q?rJ8wUHTc/LDF2i18DyRugA3QaDJgXLe6ijzomcd6cRb0Tz3leP9F7vcnDFDF?=
- =?us-ascii?Q?+6QPwxIH/rHI8NmnXf+NL2Yn5SqDvULicZw2qlRVH/fw+/PF9ZuhNO0SxS//?=
- =?us-ascii?Q?eobDarXM1c7aJl1O6aoARgqxNjln+HidX9PuatwqvgSJx95v4XgfHoQTXseL?=
- =?us-ascii?Q?S16b3ltTvTdFcQTPy+CKBJXise6lt/gn0N23ItesbsBxSthgGIDsjMcSZa2k?=
- =?us-ascii?Q?mltMdJ2PQWpeCErfFvhWIe/RErft/HezNtdedFOuzKUO4wcLKLskpH4rAitW?=
- =?us-ascii?Q?B3h/f4gsZQ5ktB4LPlKWO2LsZ7Naz2zQ/NkMNcFV3CpyLjZ63KgVJaBsUzmv?=
- =?us-ascii?Q?PzfBXyTIhZOZkhkoERVu4J6wWIJH78/aIMW6kTxdsCDCteV8aRzAWy8+8Dc5?=
- =?us-ascii?Q?xKCwm1PpsrQR2fmbGU31wIt42vI9EDnGEGIGirqQ+jsOKeYn1O7l0wnUKdxL?=
- =?us-ascii?Q?faMS/zfaosr8CqRziief3k2rtuyJoErSFZuxAfnfxZf4PKSkabnPgOIjipni?=
- =?us-ascii?Q?j7+PlCWK9VI0XUOxO6qbzs4fW1dpEeduDbg8j1Ey/dQXU2lCNejjjw+J7gVV?=
- =?us-ascii?Q?18ODAOG/MYjMwiqhIs/gZaiE6BqdDGeobmoO93zPYyBWb57mgvatFlboQbUo?=
- =?us-ascii?Q?xWXE/J05oaBPv8BnFgq1aXULf9OUf42bA2Sm0NzoOOraTfTgOQ/kSpJaox0b?=
- =?us-ascii?Q?FJdxRohxdCiZITwK0yBa4CkKcbal2ASSxs57JaIzIhYbUDjqaumPWKdGtWoH?=
- =?us-ascii?Q?jzQz5qSdoX8sIIOae9VejjWx6xBcGixVkrfHsJs4wnLMjl2OMt2ITSRMJ9un?=
- =?us-ascii?Q?AvSBnUu2OVJX6KgrEPUpsts/ah3pDTe5EAU0qcq75e93LyUdpuU3Qk91+Z2V?=
- =?us-ascii?Q?m51OscPFLEGj6i5kHgYapAy+cosiiMmTPIvQOkZVk0unSRQVQ5aur1LDv3zf?=
- =?us-ascii?Q?gzjPVOK7vmsYMYSAHKBo+DyIqrp/7r5hMtWKfNwLO6jaQ3IgDufR2C27ZpQw?=
- =?us-ascii?Q?jMx0cslvIMjJjhd+qo97ObNL4E5njxiIYFa20Gsp5+p0LmlPnxnYIvJjqO0w?=
- =?us-ascii?Q?UCfmypSlHadmfouDgUCqCY6v9rwZjAVSk3r2KIRPv9ogUrht2b8uOGwI2GS5?=
- =?us-ascii?Q?ccEfm5AYV+Ey1Vq20wf1b+v19uT+eVM9DSv19N/JLNbw+8x2NsmPvWgP2pDc?=
- =?us-ascii?Q?Fze4ZIfFf0Oevrqg3zIU7qrC3hYk5XPtMlcNaoWOC4XWA/CYwUup/yq/qZ5p?=
- =?us-ascii?Q?AMonAJhrO6CVpfiSO1z6WnFYvVgfkr5qrdWmHDW3XtZZfTWHsYKjSWgZIgBO?=
- =?us-ascii?Q?3XO1jg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3f9635b-1dd0-4d7e-7f20-08d9f536afee
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 12:35:48.1130
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UT8I2LUwycGaz8bgr3kmQGJbmrdFi98Xfqi1FyoEK3u303HCJIFw8SqJACgLCixNJEMxvbydU7iUxLcn7277KZH5QIII1UthHStWzJda4KQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1655
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10264 signatures=677614
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
- spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202210074
-X-Proofpoint-GUID: g8CFdZfPxJ8zk_Ytuzc5p7-XkRT2tSuC
-X-Proofpoint-ORIG-GUID: g8CFdZfPxJ8zk_Ytuzc5p7-XkRT2tSuC
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/4] hwmon: (lm90) Use hwmon_notify_event()
+Content-Language: en-US
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Matt Merhar <mattmerhar@protonmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20210618215455.19986-1-digetx@gmail.com>
+ <20210618215455.19986-3-digetx@gmail.com>
+ <9580f660-2a11-40e4-2986-f05703822d72@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <9580f660-2a11-40e4-2986-f05703822d72@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 20, 2022 at 09:30:42PM +0100, Philipp Hortmann wrote:
-> This patch fixes the checkpatch.pl warnings like:
-> WARNING: Unnecessary ftrace-like logging - prefer using ftrace
-> CHECK: Lines should not end with a '('
+21.02.2022 15:01, Jon Hunter пишет:
+> Hi Dmitry,
 > 
+> On 18/06/2021 22:54, Dmitry Osipenko wrote:
+>> Use hwmon_notify_event() to notify userspace and thermal core about
+>> temperature changes.
+>>
+>> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>   drivers/hwmon/lm90.c | 44 +++++++++++++++++++++++++++++++++-----------
+>>   1 file changed, 33 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+>> index 2e057fad05b4..e7b678a40b39 100644
+>> --- a/drivers/hwmon/lm90.c
+>> +++ b/drivers/hwmon/lm90.c
+>> @@ -465,6 +465,7 @@ enum lm90_temp11_reg_index {
+>>     struct lm90_data {
+>>       struct i2c_client *client;
+>> +    struct device *hwmon_dev;
+>>       u32 channel_config[4];
+>>       struct hwmon_channel_info temp_info;
+>>       const struct hwmon_channel_info *info[3];
+>> @@ -1731,22 +1732,41 @@ static bool lm90_is_tripped(struct i2c_client
+>> *client, u16 *status)
+>>         if ((st & (LM90_STATUS_LLOW | LM90_STATUS_LHIGH |
+>> LM90_STATUS_LTHRM)) ||
+>>           (st2 & MAX6696_STATUS2_LOT2))
+>> -        dev_warn(&client->dev,
+>> -             "temp%d out of range, please check!\n", 1);
+>> +        dev_dbg(&client->dev,
+>> +            "temp%d out of range, please check!\n", 1);
+>>       if ((st & (LM90_STATUS_RLOW | LM90_STATUS_RHIGH |
+>> LM90_STATUS_RTHRM)) ||
+>>           (st2 & MAX6696_STATUS2_ROT2))
+>> -        dev_warn(&client->dev,
+>> -             "temp%d out of range, please check!\n", 2);
+>> +        dev_dbg(&client->dev,
+>> +            "temp%d out of range, please check!\n", 2);
+>>       if (st & LM90_STATUS_ROPEN)
+>> -        dev_warn(&client->dev,
+>> -             "temp%d diode open, please check!\n", 2);
+>> +        dev_dbg(&client->dev,
+>> +            "temp%d diode open, please check!\n", 2);
+>>       if (st2 & (MAX6696_STATUS2_R2LOW | MAX6696_STATUS2_R2HIGH |
+>>              MAX6696_STATUS2_R2THRM | MAX6696_STATUS2_R2OT2))
+>> -        dev_warn(&client->dev,
+>> -             "temp%d out of range, please check!\n", 3);
+>> +        dev_dbg(&client->dev,
+>> +            "temp%d out of range, please check!\n", 3);
+>>       if (st2 & MAX6696_STATUS2_R2OPEN)
+>> -        dev_warn(&client->dev,
+>> -             "temp%d diode open, please check!\n", 3);
+>> +        dev_dbg(&client->dev,
+>> +            "temp%d diode open, please check!\n", 3);
+>> +
+>> +    if (st & LM90_STATUS_LLOW)
+>> +        hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+>> +                   hwmon_temp_min, 0);
+>> +    if (st & LM90_STATUS_RLOW)
+>> +        hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+>> +                   hwmon_temp_min, 1);
+>> +    if (st2 & MAX6696_STATUS2_R2LOW)
+>> +        hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+>> +                   hwmon_temp_min, 2);
+>> +    if (st & LM90_STATUS_LHIGH)
+>> +        hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+>> +                   hwmon_temp_max, 0);
+>> +    if (st & LM90_STATUS_RHIGH)
+>> +        hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+>> +                   hwmon_temp_max, 1);
+>> +    if (st2 & MAX6696_STATUS2_R2HIGH)
+>> +        hwmon_notify_event(data->hwmon_dev, hwmon_temp,
+>> +                   hwmon_temp_max, 2);
+> 
+> 
+> We observed a random null pointer deference crash somewhere in the
+> thermal core (crash log below is not very helpful) when calling
+> mutex_lock(). It looks like we get an interrupt when this crash
+> happens.
+> 
+> Looking at the lm90 driver, per the above, I now see we are calling
+> hwmon_notify_event() from the lm90 interrupt handler. Looking at
+> hwmon_notify_event() I see that ...
+> 
+> hwmon_notify_event()
+>   --> hwmon_thermal_notify()
+>     --> thermal_zone_device_update()
+>       --> update_temperature()
+>         --> mutex_lock()
+> 
+> So although I don't completely understand the crash, it does seem
+> that we should not be calling hwmon_notify_event() from the
+> interrupt handler.
+> 
+> BTW I have not reproduced this myself yet, so I have just been
+> reviewing the code to try and understand this.
 
-You're going to need to send these as two separate patches.
+Matt Merhar was experiencing a similar issue on T30 Ouya, but I never
+managed to reproduce it on Nexus 7 and Acer A500 tablets, and couldn't
+spot any problem in the code. IIRC, it was a NULL dereference of another
+pointer within that code.
 
-regards,
-dan carpenter
+We tried to add couple debug printks and the problem disappears when you
+try to look at it, which is very suspicious.
+
+> 
+> [ 7465.595066] Unable to handle kernel NULL pointer dereference at
+> virtual address 00000000000003cd
+> [ 7465.596619] Mem abort info:
+> [ 7465.597854]   ESR = 0x96000021
+> [ 7465.599097]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [ 7465.600338]   SET = 0, FnV = 0
+> [ 7465.601526]   EA = 0, S1PTW = 0
+> [ 7465.602705]   FSC = 0x21: alignment fault
+> [ 7465.603885] Data abort info:
+> [ 7465.605017]   ISV = 0, ISS = 0x00000021
+> [ 7465.606171]   CM = 0, WnR = 0
+> [ 7465.607301] user pgtable: 64k pages, 48-bit VAs, pgdp=00000001041f1800
+> [ 7465.608490] [00000000000003cd] pgd=0000000000000000,
+> p4d=0000000000000000, pud=0000000000000000
+> [ 7465.609814] Internal error: Oops: 96000021 [#1] PREEMPT SMP
+> [ 7465.610991] Modules linked in: bridge stp llc snd_soc_tegra210_admaif
+> snd_soc_tegra_pcm snd_soc_tegra210_mixer snd_soc_tegra210_mvc
+> snd_soc_tegra210_i2s snd_soc_tegra210_dmic sn
+> d_soc_tegra210_adx snd_soc_tegra210_sfc snd_soc_tegra210_amx
+> snd_soc_tegra210_ahub tegra210_adma snd_soc_rt5659 snd_soc_rl6231
+> pwm_tegra tegra_aconnect snd_hda_codec_hdmi rfkill snd_hda_tegra
+> snd_hda_codec at24 phy_tegra194_p2u snd_hda_core lm90
+> snd_soc_tegra_audio_graph_card tegra_bpmp_thermal
+> snd_soc_audio_graph_card snd_soc_simple_card_utils pwm_fan crct10dif_ce
+> pcie_tegra194 cec drm_kms_helper drm ip_tables x_tables ipv6
+> [ 7465.632232] CPU: 2 PID: 433 Comm: irq/140-lm90 Tainted: G          
+> O      5.16.0-tegra-g9d109504d83a #1
+> [ 7465.636285] Hardware name: Unknown NVIDIA Jetson AGX Xavier Developer
+> Kit/NVIDIA Jetson AGX Xavier Developer Kit, BIOS v1.1.2-901d3c52 02/07/2022
+> [ 7465.650457] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS
+> BTYPE=--)
+> [ 7465.656210] pc : mutex_lock+0x18/0x60
+> [ 7465.660134] lr : thermal_zone_device_update+0x40/0x2e0
+> [ 7465.665117] sp : ffff800014c4fc60
+> [ 7465.668781] x29: ffff800014c4fc60 x28: ffff365ee3f6e000 x27:
+> ffffdde218426790
+> [ 7465.675882] x26: ffff365ee3f6e000 x25: 0000000000000000 x24:
+> ffff365ee3f6e000
+> [ 7465.683485] x23: ffffdde218426870 x22: ffff365ee3f6e000 x21:
+> 00000000000003cd
+> [ 7465.690816] x20: ffff365ee8bf3308 x19: ffffffffffffffed x18:
+> 0000000000000000
+> [ 7465.697982] x17: ffffdde21842689c x16: ffffdde1cb7a0b7c x15:
+> 0000000000000040
+> [ 7465.705320] x14: ffffdde21a4889a0 x13: 0000000000000228 x12:
+> 0000000000000000
+> [ 7465.712493] x11: 0000000000000000 x10: 0000000000000000 x9 :
+> 0000000000000000
+> [ 7465.719580] x8 : 0000000001120000 x7 : 0000000000000001 x6 :
+> 0000000000000000
+> [ 7465.727099] x5 : 0068000878e20f07 x4 : 0000000000000000 x3 :
+> 00000000000003cd
+> [ 7465.734348] x2 : ffff365ee3f6e000 x1 : 0000000000000000 x0 :
+> 00000000000003cd
+> [ 7465.741347] Call trace:
+> [ 7465.744207]  mutex_lock+0x18/0x60
+> [ 7465.747427]  hwmon_notify_event+0xfc/0x110
+> [ 7465.751358]  0xffffdde1cb7a0a90
+> [ 7465.754574]  0xffffdde1cb7a0b7c
+> [ 7465.757705]  irq_thread_fn+0x2c/0xa0
+> [ 7465.760937]  irq_thread+0x134/0x240
+> [ 7465.764850]  kthread+0x178/0x190
+> [ 7465.768083]  ret_from_fork+0x10/0x20
+> [ 7465.771748] Code: d503201f d503201f d2800001 aa0103e4 (c8e47c02)
+> [ 7465.777865] ---[ end trace f0b3723991411538 ]---
+> 
 

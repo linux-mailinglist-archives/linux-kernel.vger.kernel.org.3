@@ -2,206 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5055E4BD473
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 05:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668EC4BD482
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 05:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236396AbiBUDzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 22:55:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42990 "EHLO
+        id S238160AbiBUDzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 22:55:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiBUDzb (ORCPT
+        with ESMTP id S235136AbiBUDzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 20 Feb 2022 22:55:31 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8384751E5E
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 19:55:07 -0800 (PST)
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C71C51E64
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 19:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645415707; x=1676951707;
+  t=1645415708; x=1676951708;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BuWchOjFDc1+IKvlJHfhZN7vIAOMQ/w7DiUcMnOe6M0=;
-  b=erjPjZQwBsPu3SEhzlrV9cKxMyJNnFXxBG4O/qypsefd9LSMkthy2+R8
-   QKUOD2yFUXO7dVLevj8Gf9FYhRHhs+dCChNfBwCrUKNZTLRGvYgO8V3ee
-   osU4ZvHX1BwYHxMO+ThfE8C6Pq/kjOAeDPx1PEP9fQ8w2OUU9TMXQalPm
-   6nOWuSFu1CguMQHn7ChFmn3Hx7qwN0TXWWobapVmhDefOHg4rm2FlsBmJ
-   OPax280aglhl2sYVPHWWpb6ixtOsVoEwIROw2KHKZmWBYXb4w3uHSQVkB
-   hT8BK/kBDfBasvIcWivBwwMxusGiLMJ+cYxGKvFoEo6zCAvQk/g/lZZ5Y
+  bh=KFTnwmE//SWa+5V6IXwfZJO4sLv6cRluYfF3TUfQllM=;
+  b=Uj4tvH8aFchPXr3+2FqDcrPF5I/ufjbYpZzg6q2nlgFxqyOk7RXptWc6
+   IyoV/7V4NaAV9VeJbUlbxfSWWIisM1+/N1j7YA6Trl7wx847/xENpg/X4
+   /L6Z2wwoDuKcXYCjXyW2OrDLMuh/yElg/O4lgBfwujmeEeML+2Jqm3Pmm
+   2xRo6/S8uCZUi3m5/IEXVpTZu+cu+hGnBk2hzwGjNAtIwnq3m8mBcBHql
+   AN0/g/0jcx/MYZjRE29HqOvTHkgmswlbSO9DonF0ugC1/899eRp+qgfRy
+   P7AGfi5H89WOS4LyG//A0aPjoQshNnZjPFjcaRzUz3xXtsGK2tV/m+BX+
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="312172619"
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="276020161"
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="312172619"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 19:55:07 -0800
+   d="scan'208";a="276020161"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 19:55:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="507486914"
+   d="scan'208";a="706103179"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Feb 2022 19:55:05 -0800
+  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2022 19:55:05 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nLzmz-0001Hw-6w; Mon, 21 Feb 2022 03:55:05 +0000
-Date:   Mon, 21 Feb 2022 11:54:38 +0800
+        id 1nLzmz-0001Hu-6U; Mon, 21 Feb 2022 03:55:05 +0000
+Date:   Mon, 21 Feb 2022 11:54:43 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Qingqing Zhuo <qingqing.zhuo@amd.com>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [agd5f:drm-next 100/114]
- drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_smu.c:126:5:
- warning: no previous prototype for 'dcn315_smu_send_msg_with_param'
-Message-ID: <202202211133.HYWcMRIV-lkp@intel.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: arch/arm64/include/asm/kvm_emulate.h:439:32: sparse: sparse:
+ incorrect type in return expression (different base types)
+Message-ID: <202202211117.LxmkwF42-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   ad72a74cfe7edab15aef40519727a388285e7510
-commit: f9490399614050a47472ff127c67830cb4e311f4 [100/114] drm/amd/display: Add DCN315 CLK_MGR
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220221/202202211133.HYWcMRIV-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout f9490399614050a47472ff127c67830cb4e311f4
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+commit: 63b3f96e1a989846a5a521d4fbef4bc86406929d kvm: Select SCHED_INFO instead of TASK_DELAY_ACCT
+date:   10 months ago
+config: arm64-randconfig-s032-20220220 (https://download.01.org/0day-ci/archive/20220221/202202211117.LxmkwF42-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=63b3f96e1a989846a5a521d4fbef4bc86406929d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 63b3f96e1a989846a5a521d4fbef4bc86406929d
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ drivers/soc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_smu.c:126:5: warning: no previous prototype for 'dcn315_smu_send_msg_with_param' [-Wmissing-prototypes]
-     126 | int dcn315_smu_send_msg_with_param(
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_smu.c:184:5: warning: no previous prototype for 'dcn315_smu_set_voltage_via_phyclk' [-Wmissing-prototypes]
-     184 | int dcn315_smu_set_voltage_via_phyclk(struct clk_mgr_internal *clk_mgr, int requested_phyclk_khz)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_smu.c:26:
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:127:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
-     127 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
-         |                      ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:124:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
-     124 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:123:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
-     123 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+sparse warnings: (new ones prefixed by >>)
+   arch/arm64/kvm/mmio.c: note: in included file:
+>> arch/arm64/include/asm/kvm_emulate.h:439:32: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long @@     got restricted __be16 [usertype] @@
+   arch/arm64/include/asm/kvm_emulate.h:439:32: sparse:     expected unsigned long
+   arch/arm64/include/asm/kvm_emulate.h:439:32: sparse:     got restricted __be16 [usertype]
+>> arch/arm64/include/asm/kvm_emulate.h:441:32: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long @@     got restricted __be32 [usertype] @@
+   arch/arm64/include/asm/kvm_emulate.h:441:32: sparse:     expected unsigned long
+   arch/arm64/include/asm/kvm_emulate.h:441:32: sparse:     got restricted __be32 [usertype]
+>> arch/arm64/include/asm/kvm_emulate.h:443:32: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long @@     got restricted __be64 [usertype] @@
+   arch/arm64/include/asm/kvm_emulate.h:443:32: sparse:     expected unsigned long
+   arch/arm64/include/asm/kvm_emulate.h:443:32: sparse:     got restricted __be64 [usertype]
+>> arch/arm64/include/asm/kvm_emulate.h:450:32: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long @@     got restricted __le16 [usertype] @@
+   arch/arm64/include/asm/kvm_emulate.h:450:32: sparse:     expected unsigned long
+   arch/arm64/include/asm/kvm_emulate.h:450:32: sparse:     got restricted __le16 [usertype]
+>> arch/arm64/include/asm/kvm_emulate.h:452:32: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long @@     got restricted __le32 [usertype] @@
+   arch/arm64/include/asm/kvm_emulate.h:452:32: sparse:     expected unsigned long
+   arch/arm64/include/asm/kvm_emulate.h:452:32: sparse:     got restricted __le32 [usertype]
+>> arch/arm64/include/asm/kvm_emulate.h:454:32: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long @@     got restricted __le64 [usertype] @@
+   arch/arm64/include/asm/kvm_emulate.h:454:32: sparse:     expected unsigned long
+   arch/arm64/include/asm/kvm_emulate.h:454:32: sparse:     got restricted __le64 [usertype]
+>> arch/arm64/include/asm/kvm_emulate.h:408:32: sparse: sparse: cast to restricted __be16
+>> arch/arm64/include/asm/kvm_emulate.h:410:32: sparse: sparse: cast to restricted __be32
+>> arch/arm64/include/asm/kvm_emulate.h:412:32: sparse: sparse: cast to restricted __be64
+>> arch/arm64/include/asm/kvm_emulate.h:419:32: sparse: sparse: cast to restricted __le16
+>> arch/arm64/include/asm/kvm_emulate.h:419:32: sparse: sparse: cast to restricted __le16
+>> arch/arm64/include/asm/kvm_emulate.h:419:32: sparse: sparse: cast to restricted __le16
+>> arch/arm64/include/asm/kvm_emulate.h:419:32: sparse: sparse: cast to restricted __le16
+>> arch/arm64/include/asm/kvm_emulate.h:421:32: sparse: sparse: cast to restricted __le32
+>> arch/arm64/include/asm/kvm_emulate.h:421:32: sparse: sparse: cast to restricted __le32
+>> arch/arm64/include/asm/kvm_emulate.h:421:32: sparse: sparse: cast to restricted __le32
+>> arch/arm64/include/asm/kvm_emulate.h:421:32: sparse: sparse: cast to restricted __le32
+>> arch/arm64/include/asm/kvm_emulate.h:421:32: sparse: sparse: cast to restricted __le32
+>> arch/arm64/include/asm/kvm_emulate.h:421:32: sparse: sparse: cast to restricted __le32
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
+>> arch/arm64/include/asm/kvm_emulate.h:423:32: sparse: sparse: cast to restricted __le64
 --
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dmub/dmub_srv.h:67,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.h:30,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c:42:
-   drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h: In function 'dmub_rb_flush_pending':
-   drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2921:12: warning: variable 'temp' set but not used [-Wunused-but-set-variable]
-    2921 |   uint64_t temp;
-         |            ^~~~
-   drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c: At top level:
->> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c:436:6: warning: no previous prototype for 'dcn315_clk_mgr_helper_populate_bw_params' [-Wmissing-prototypes]
-     436 | void dcn315_clk_mgr_helper_populate_bw_params(
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/resource.h:28,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/hw/clk_mgr_internal.h:36,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c:29:
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:127:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
-     127 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
-         |                      ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:124:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
-     124 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:123:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
-     123 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/pvtime.c:27:25: sparse: sparse: cast to restricted __le64
+--
+>> arch/arm64/kvm/arch_timer.c:1016:66: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *vcpu_info @@     got struct kvm_vcpu *[noderef] __percpu * @@
+   arch/arm64/kvm/arch_timer.c:1016:66: sparse:     expected void *vcpu_info
+   arch/arm64/kvm/arch_timer.c:1016:66: sparse:     got struct kvm_vcpu *[noderef] __percpu *
+   arch/arm64/kvm/arch_timer.c:1049:74: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *vcpu_info @@     got struct kvm_vcpu *[noderef] __percpu * @@
+   arch/arm64/kvm/arch_timer.c:1049:74: sparse:     expected void *vcpu_info
+   arch/arm64/kvm/arch_timer.c:1049:74: sparse:     got struct kvm_vcpu *[noderef] __percpu *
+--
+>> arch/arm64/kvm/vgic/vgic-mmio.c:854:24: sparse: sparse: cast to restricted __le16
+>> arch/arm64/kvm/vgic/vgic-mmio.c:854:24: sparse: sparse: cast to restricted __le16
+>> arch/arm64/kvm/vgic/vgic-mmio.c:854:24: sparse: sparse: cast to restricted __le16
+>> arch/arm64/kvm/vgic/vgic-mmio.c:854:24: sparse: sparse: cast to restricted __le16
+>> arch/arm64/kvm/vgic/vgic-mmio.c:856:24: sparse: sparse: cast to restricted __le32
+>> arch/arm64/kvm/vgic/vgic-mmio.c:856:24: sparse: sparse: cast to restricted __le32
+>> arch/arm64/kvm/vgic/vgic-mmio.c:856:24: sparse: sparse: cast to restricted __le32
+>> arch/arm64/kvm/vgic/vgic-mmio.c:856:24: sparse: sparse: cast to restricted __le32
+>> arch/arm64/kvm/vgic/vgic-mmio.c:856:24: sparse: sparse: cast to restricted __le32
+>> arch/arm64/kvm/vgic/vgic-mmio.c:856:24: sparse: sparse: cast to restricted __le32
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:858:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-mmio.c:878:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long data @@     got restricted __le16 [usertype] @@
+   arch/arm64/kvm/vgic/vgic-mmio.c:878:22: sparse:     expected unsigned long data
+   arch/arm64/kvm/vgic/vgic-mmio.c:878:22: sparse:     got restricted __le16 [usertype]
+>> arch/arm64/kvm/vgic/vgic-mmio.c:881:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long data @@     got restricted __le32 [usertype] @@
+   arch/arm64/kvm/vgic/vgic-mmio.c:881:22: sparse:     expected unsigned long data
+   arch/arm64/kvm/vgic/vgic-mmio.c:881:22: sparse:     got restricted __le32 [usertype]
+>> arch/arm64/kvm/vgic/vgic-mmio.c:884:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long data @@     got restricted __le64 [usertype] @@
+   arch/arm64/kvm/vgic/vgic-mmio.c:884:22: sparse:     expected unsigned long data
+   arch/arm64/kvm/vgic/vgic-mmio.c:884:22: sparse:     got restricted __le64 [usertype]
+   arch/arm64/kvm/vgic/vgic-mmio.c:88:17: sparse: sparse: context imbalance in 'vgic_mmio_write_group' - different lock contexts for basic block
+   arch/arm64/kvm/vgic/vgic-mmio.c:124:9: sparse: sparse: context imbalance in 'vgic_mmio_write_senable' - different lock contexts for basic block
+   arch/arm64/kvm/vgic/vgic-mmio.c:195:9: sparse: sparse: context imbalance in 'vgic_uaccess_write_senable' - different lock contexts for basic block
+   arch/arm64/kvm/vgic/vgic-mmio.c:278:9: sparse: sparse: context imbalance in 'vgic_mmio_write_spending' - different lock contexts for basic block
+   arch/arm64/kvm/vgic/vgic-mmio.c:320:9: sparse: sparse: context imbalance in 'vgic_uaccess_write_spending' - different lock contexts for basic block
+   arch/arm64/kvm/vgic/vgic-mmio.c:565:9: sparse: sparse: context imbalance in 'vgic_mmio_change_active' - wrong count at exit
+   arch/arm64/kvm/vgic/vgic-mmio.c:773:30: sparse: sparse: context imbalance in 'vgic_write_irq_line_level_info' - different lock contexts for basic block
+--
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:824:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:955:24: sparse: sparse: cast to restricted __le64
+>> arch/arm64/kvm/vgic/vgic-its.c:2133:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [assigned] [usertype] val @@     got restricted __le64 [usertype] @@
+   arch/arm64/kvm/vgic/vgic-its.c:2133:13: sparse:     expected unsigned long long [assigned] [usertype] val
+   arch/arm64/kvm/vgic/vgic-its.c:2133:13: sparse:     got restricted __le64 [usertype]
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2159:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2280:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [assigned] [usertype] val @@     got restricted __le64 [usertype] @@
+   arch/arm64/kvm/vgic/vgic-its.c:2280:13: sparse:     expected unsigned long long [assigned] [usertype] val
+   arch/arm64/kvm/vgic/vgic-its.c:2280:13: sparse:     got restricted __le64 [usertype]
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2306:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2404:17: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2460:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [assigned] [usertype] val @@     got restricted __le64 [usertype] @@
+   arch/arm64/kvm/vgic/vgic-its.c:2460:13: sparse:     expected unsigned long long [assigned] [usertype] val
+   arch/arm64/kvm/vgic/vgic-its.c:2460:13: sparse:     got restricted __le64 [usertype]
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:2476:15: sparse: sparse: cast to restricted __le64
+   arch/arm64/kvm/vgic/vgic-its.c:280:12: sparse: sparse: context imbalance in 'update_lpi_config' - different lock contexts for basic block
+   arch/arm64/kvm/vgic/vgic-its.c:443:9: sparse: sparse: context imbalance in 'its_sync_lpi_pending_table' - different lock contexts for basic block
+   arch/arm64/kvm/vgic/vgic-its.c:730:12: sparse: sparse: context imbalance in 'vgic_its_trigger_msi' - different lock contexts for basic block
+   arch/arm64/kvm/vgic/vgic-its.c:752:5: sparse: sparse: context imbalance in 'vgic_its_inject_cached_translation' - wrong count at exit
 
+vim +439 arch/arm64/include/asm/kvm_emulate.h
 
-vim +/dcn315_smu_send_msg_with_param +126 drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn315/dcn315_smu.c
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  398  
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  399  static inline unsigned long vcpu_data_guest_to_host(struct kvm_vcpu *vcpu,
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  400  						    unsigned long data,
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  401  						    unsigned int len)
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  402  {
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  403  	if (kvm_vcpu_is_be(vcpu)) {
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  404  		switch (len) {
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  405  		case 1:
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  406  			return data & 0xff;
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  407  		case 2:
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12 @408  			return be16_to_cpu(data & 0xffff);
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  409  		case 4:
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12 @410  			return be32_to_cpu(data & 0xffffffff);
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  411  		default:
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12 @412  			return be64_to_cpu(data);
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  413  		}
+b30070862edbdb Victor Kamensky 2014-06-12  414  	} else {
+b30070862edbdb Victor Kamensky 2014-06-12  415  		switch (len) {
+b30070862edbdb Victor Kamensky 2014-06-12  416  		case 1:
+b30070862edbdb Victor Kamensky 2014-06-12  417  			return data & 0xff;
+b30070862edbdb Victor Kamensky 2014-06-12  418  		case 2:
+b30070862edbdb Victor Kamensky 2014-06-12 @419  			return le16_to_cpu(data & 0xffff);
+b30070862edbdb Victor Kamensky 2014-06-12  420  		case 4:
+b30070862edbdb Victor Kamensky 2014-06-12 @421  			return le32_to_cpu(data & 0xffffffff);
+b30070862edbdb Victor Kamensky 2014-06-12  422  		default:
+b30070862edbdb Victor Kamensky 2014-06-12 @423  			return le64_to_cpu(data);
+b30070862edbdb Victor Kamensky 2014-06-12  424  		}
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  425  	}
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  426  
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  427  	return data;		/* Leave LE untouched */
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  428  }
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  429  
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  430  static inline unsigned long vcpu_data_host_to_guest(struct kvm_vcpu *vcpu,
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  431  						    unsigned long data,
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  432  						    unsigned int len)
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  433  {
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  434  	if (kvm_vcpu_is_be(vcpu)) {
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  435  		switch (len) {
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  436  		case 1:
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  437  			return data & 0xff;
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  438  		case 2:
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12 @439  			return cpu_to_be16(data & 0xffff);
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  440  		case 4:
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12 @441  			return cpu_to_be32(data & 0xffffffff);
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  442  		default:
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12 @443  			return cpu_to_be64(data);
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  444  		}
+b30070862edbdb Victor Kamensky 2014-06-12  445  	} else {
+b30070862edbdb Victor Kamensky 2014-06-12  446  		switch (len) {
+b30070862edbdb Victor Kamensky 2014-06-12  447  		case 1:
+b30070862edbdb Victor Kamensky 2014-06-12  448  			return data & 0xff;
+b30070862edbdb Victor Kamensky 2014-06-12  449  		case 2:
+b30070862edbdb Victor Kamensky 2014-06-12 @450  			return cpu_to_le16(data & 0xffff);
+b30070862edbdb Victor Kamensky 2014-06-12  451  		case 4:
+b30070862edbdb Victor Kamensky 2014-06-12 @452  			return cpu_to_le32(data & 0xffffffff);
+b30070862edbdb Victor Kamensky 2014-06-12  453  		default:
+b30070862edbdb Victor Kamensky 2014-06-12 @454  			return cpu_to_le64(data);
+b30070862edbdb Victor Kamensky 2014-06-12  455  		}
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  456  	}
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  457  
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  458  	return data;		/* Leave LE untouched */
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  459  }
+6d89d2d9b5bac9 Marc Zyngier    2013-02-12  460  
 
-   125	
- > 126	int dcn315_smu_send_msg_with_param(
-   127			struct clk_mgr_internal *clk_mgr,
-   128			unsigned int msg_id, unsigned int param)
-   129	{
-   130		uint32_t result;
-   131	
-   132		result = dcn315_smu_wait_for_response(clk_mgr, 10, 200000);
-   133		ASSERT(result == VBIOSSMC_Result_OK);
-   134	
-   135		if (result == VBIOSSMC_Status_BUSY) {
-   136			return -1;
-   137		}
-   138	
-   139		/* First clear response register */
-   140		REG_WRITE(MP1_SMN_C2PMSG_38, VBIOSSMC_Status_BUSY);
-   141	
-   142		/* Set the parameter register for the SMU message, unit is Mhz */
-   143		REG_WRITE(MP1_SMN_C2PMSG_37, param);
-   144	
-   145		/* Trigger the message transaction by writing the message ID */
-   146		generic_write_indirect_reg(CTX,
-   147			REG_NBIO(RSMU_INDEX), REG_NBIO(RSMU_DATA),
-   148			mmMP1_C2PMSG_3, msg_id);
-   149	
-   150		result = dcn315_smu_wait_for_response(clk_mgr, 10, 200000);
-   151	
-   152		if (result == VBIOSSMC_Status_BUSY) {
-   153			ASSERT(0);
-   154			dm_helpers_smu_timeout(CTX, msg_id, param, 10 * 200000);
-   155		}
-   156	
-   157		return REG_READ(MP1_SMN_C2PMSG_37);
-   158	}
-   159	
-   160	int dcn315_smu_get_smu_version(struct clk_mgr_internal *clk_mgr)
-   161	{
-   162		return dcn315_smu_send_msg_with_param(
-   163				clk_mgr,
-   164				VBIOSSMC_MSG_GetPmfwVersion,
-   165				0);
-   166	}
-   167	
-   168	
-   169	int dcn315_smu_set_dispclk(struct clk_mgr_internal *clk_mgr, int requested_dispclk_khz)
-   170	{
-   171		int actual_dispclk_set_mhz = -1;
-   172	
-   173		if (!clk_mgr->smu_present)
-   174			return requested_dispclk_khz;
-   175	
-   176		/*  Unit of SMU msg parameter is Mhz */
-   177		actual_dispclk_set_mhz = dcn315_smu_send_msg_with_param(
-   178				clk_mgr,
-   179				VBIOSSMC_MSG_SetDispclkFreq,
-   180				khz_to_mhz_ceil(requested_dispclk_khz));
-   181	
-   182		return actual_dispclk_set_mhz * 1000;
-   183	}
- > 184	int dcn315_smu_set_voltage_via_phyclk(struct clk_mgr_internal *clk_mgr, int requested_phyclk_khz)
-   185	{
-   186		int actual_phypclk_set_mhz = -1;
-   187	
-   188		if (!clk_mgr->smu_present && requested_phyclk_khz)
-   189			return requested_phyclk_khz;
-   190	
-   191		/*  Unit of SMU msg parameter is Mhz */
-   192		actual_phypclk_set_mhz = dcn315_smu_send_msg_with_param(
-   193				clk_mgr,
-   194				VBIOSSMC_MSG_SetPhyclkVoltageByFreq,
-   195				khz_to_mhz_ceil(requested_phyclk_khz));
-   196	
-   197		return actual_phypclk_set_mhz * 1000;
-   198	}
-   199	
+:::::: The code at line 439 was first introduced by commit
+:::::: 6d89d2d9b5bac9dbe40ee106ceda9307b6265234 arm/arm64: KVM: MMIO support for BE guest
+
+:::::: TO: Marc Zyngier <marc.zyngier@arm.com>
+:::::: CC: Marc Zyngier <marc.zyngier@arm.com>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

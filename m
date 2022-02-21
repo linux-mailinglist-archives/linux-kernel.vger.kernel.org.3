@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843BA4BE4F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539264BDFE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355901AbiBULRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:17:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47738 "EHLO
+        id S1356002AbiBULSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:18:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355873AbiBULPU (ORCPT
+        with ESMTP id S1345915AbiBULPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 06:15:20 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1434CF6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:03 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id u5so12596509ple.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:03 -0800 (PST)
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FB0D57
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:06 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id i10so12612857plr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ehNQdlI9mPXdldG87wHGJGXW6GsgTB2HkJJp4vDiMvs=;
-        b=qlaVWsO4wSTU3J0DH2Hpj3dMsi97mWHbdhECMnS3joUeasrk2uCdT2Jsmn+qIr9fLe
-         rViNtkASpFYzpkolR6zh0SSWu6KdwdyStVhbZtvJPmsetjJYkEodcgwRZToKocOqYzXp
-         2aONPUD1l/wjsooqbu2AT9/xm2Es0hJdg6t1ldwpTs1qoGcNK3P0NOimVfqpqulx8+jY
-         A9E6Y7dM5wGAqY3f7dDQHAVGyZZ2KSNUulpKOWtTqp5ppCG94DDmaysD/n5TwvITPAj3
-         wRKyP8MX8+1pwmDbCM0zemfWRrbDL5678sUQC/T8/T70yB9PPlieHMoRTd3hFflEyvqy
-         ROkA==
+        bh=2UEo/Stc+iYNXbwbi51AqwpgyfC/DeYqJj3Sep1UETg=;
+        b=TQt9smYJlqZvzDOc9o4bZM6zroYbhcyVxV0DCbsexdb+fnHDrG3ZNC1Q19EAk0Ao63
+         62jNfhPKSpSYPZTo+tuDPbrYVI4z300rrE2lkOz0yuGIFjjjg2R8aSc/LGuUyT6n3/wa
+         tEWUlZkuCKsHGUD7VwVlHgOJDLPU97mLW2j0c0+kdZeCY5TJr7TPVUi0+R1hqlrfuTmd
+         h/X2ZsALJKksPfhJw9pnNn3+Er5/IYKz2nhA93DkEGGq3O1L+pd5bROH6NkpKr2NIVif
+         ch3qRTEBpyHSOR5lP5Kk1eLqF5vseOBeoEP2WSgyUfOIDrJDCoGFqzsdpLf2IkArULuB
+         cEIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ehNQdlI9mPXdldG87wHGJGXW6GsgTB2HkJJp4vDiMvs=;
-        b=uU/PIAqo8WRfgragZny2QrXCxc9VBdTFP4jCBEqpmsXq9CTvqZS5Ur9PPVnM5+DVED
-         o3hFZWCju9BhoJ7SYa52GxKETkyV7mf/cn/LqYWsBSToEMWzaIlpYNgriXT86l/WT8v2
-         hdwcHrcHnmDqr2tsagB85o23MJObyNxArlu0+oN1SgrdCMgFi9C28U6QKoi0Tis2HNkG
-         3LoR0XFIL7Bm/o4nCC6nT+xpe2DlWOhMTRihlOT43OoiT5RdFhTI06aLlvetGYxYAxY5
-         6xMgXnBsNOv0/yD7PpHXBoCDnhlm6ATqGAbNM0ewx/oYjW2O1FPQw9PmtlLTNITblTWT
-         7cYw==
-X-Gm-Message-State: AOAM533Ej8GdTlNSPOP1BEX2C6ejwXJb7iGIQSppVCW8owx0rOYGLkL+
-        q419r2z+rCAoVmqy9cfgqLo=
-X-Google-Smtp-Source: ABdhPJxy1hS2KmSmwp4qNm1k1FKMOHVd+tQ3HzzZmVsC3p1rRBWwpEZvPh4IIAH8r4LS58T0mexUGQ==
-X-Received: by 2002:a17:902:b091:b0:14b:4b27:48d1 with SMTP id p17-20020a170902b09100b0014b4b2748d1mr18959339plr.52.1645440843472;
-        Mon, 21 Feb 2022 02:54:03 -0800 (PST)
+        bh=2UEo/Stc+iYNXbwbi51AqwpgyfC/DeYqJj3Sep1UETg=;
+        b=KM4dxW/Hw3V/dQnx665FCV/+96jZqmooRnofV3YAPrqldvU6kMyL5s/CSqUcxfTN5C
+         N7qdojZOvshU/W3YIVLVP5q2gLy3tMcoRFa5cE0w6tZBnBgek0+7vDL19ieHUHtF9/Ee
+         /CMKGqPwXsjnpJagnU350EC0R1r7QxSTwsyY/ex8h82rcYssaKEeJFDuwsfuw33u1/KX
+         lEaBzf4Yyu2YbgV1q5SEpVrtVlDUwsPb7GVn8HhVL723lD20gnzF95EF3CNNHum5tcLx
+         TfUJJHQoZACMnPmqQ9VYlqllrKWb3RRw7GveH/QdzXqTJr4OT2PBIvRz9imN7vLKZfUK
+         XD6g==
+X-Gm-Message-State: AOAM532vW3Z3wdJt3rTI9qU7uf2HeW7yKsYZhUJYLUA6vHY3fN/LdSy7
+        mwh5dhjCuEd5mtZniipLUMM=
+X-Google-Smtp-Source: ABdhPJyoPW7XVnrEz+Uimph+0Op7tRbd6nES2sCgwyi1ygR/jFYNy8MlQDyqUcT1S8O4S6ye7lb0dQ==
+X-Received: by 2002:a17:90b:2390:b0:1b9:c392:ab8d with SMTP id mr16-20020a17090b239000b001b9c392ab8dmr20876794pjb.30.1645440845915;
+        Mon, 21 Feb 2022 02:54:05 -0800 (PST)
 Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id u6sm2214725pfk.203.2022.02.21.02.54.01
+        by smtp.gmail.com with ESMTPSA id u6sm2214725pfk.203.2022.02.21.02.54.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 02:54:03 -0800 (PST)
+        Mon, 21 Feb 2022 02:54:05 -0800 (PST)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     Roman Gushchin <guro@fb.com>,
@@ -58,9 +58,9 @@ Cc:     Roman Gushchin <guro@fb.com>,
         Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
         Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH 3/5] mm/slab: Do not call kmalloc_large() for unsupported size
-Date:   Mon, 21 Feb 2022 10:53:34 +0000
-Message-Id: <20220221105336.522086-4-42.hyeyoo@gmail.com>
+Subject: [PATCH 4/5] mm/slub: Limit min_partial only in cache creation
+Date:   Mon, 21 Feb 2022 10:53:35 +0000
+Message-Id: <20220221105336.522086-5-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220221105336.522086-1-42.hyeyoo@gmail.com>
 References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
@@ -76,63 +76,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SLAB's kfree() does not support freeing an object that is allocated from
-kmalloc_large(). Fix this as SLAB do not pass requests larger than
-KMALLOC_MAX_CACHE_SIZE directly to page allocator.
+SLUB sets number of minimum partial slabs for node (min_partial) using
+set_min_partial(). SLUB holds at least min_partial slabs even if they're empty
+to avoid excessive use of page allocator.
+
+set_min_partial() limits value of min_partial between MIN_PARTIAL and
+MAX_PARTIAL. As set_min_partial() can be called by min_partial_store()
+too, Only limit value of min_partial in kmem_cache_open() so that it
+can be changed to value that a user wants.
 
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- include/linux/slab.h | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ mm/slub.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 37bde99b74af..aeda3e863f2b 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -564,15 +564,19 @@ static __always_inline __alloc_size(1) void *kmalloc_large(size_t size, gfp_t fl
-  *	Try really hard to succeed the allocation but fail
-  *	eventually.
-  */
-+#ifndef CONFIG_SLOB
- static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
- {
- 	if (__builtin_constant_p(size)) {
--#ifndef CONFIG_SLOB
- 		unsigned int index;
--#endif
--		if (size > KMALLOC_MAX_CACHE_SIZE)
--			return kmalloc_large(size, flags);
--#ifndef CONFIG_SLOB
-+
-+		if (size > KMALLOC_MAX_CACHE_SIZE) {
-+			if (IS_ENABLED(CONFIG_SLUB))
-+				return kmalloc_large(size, flags);
-+			else
-+				return NULL;
-+		}
-+
- 		index = kmalloc_index(size);
+diff --git a/mm/slub.c b/mm/slub.c
+index 3a4458976ab7..a4964deccb61 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4002,10 +4002,6 @@ static int init_kmem_cache_nodes(struct kmem_cache *s)
  
- 		if (!index)
-@@ -581,10 +585,17 @@ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
- 		return kmem_cache_alloc_trace(
- 				kmalloc_caches[kmalloc_type(flags)][index],
- 				flags, size);
--#endif
- 	}
- 	return __kmalloc(size, flags);
+ static void set_min_partial(struct kmem_cache *s, unsigned long min)
+ {
+-	if (min < MIN_PARTIAL)
+-		min = MIN_PARTIAL;
+-	else if (min > MAX_PARTIAL)
+-		min = MAX_PARTIAL;
+ 	s->min_partial = min;
  }
-+#else
-+static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
-+{
-+	if (__builtin_constant_p(size) && size > KMALLOC_MAX_CACHE_SIZE)
-+		return kmalloc_large(size, flags);
-+	return __kmalloc(size, flags);
-+}
-+#endif
  
- static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
+@@ -4184,6 +4180,8 @@ static int calculate_sizes(struct kmem_cache *s, int forced_order)
+ 
+ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
  {
++	int min_partial;
++
+ 	s->flags = kmem_cache_flags(s->size, flags, s->name);
+ #ifdef CONFIG_SLAB_FREELIST_HARDENED
+ 	s->random = get_random_long();
+@@ -4215,7 +4213,10 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
+ 	 * The larger the object size is, the more slabs we want on the partial
+ 	 * list to avoid pounding the page allocator excessively.
+ 	 */
+-	set_min_partial(s, ilog2(s->size) / 2);
++	min_partial = min(MAX_PARTIAL, ilog2(s->size) / 2);
++	min_partial = max(MIN_PARTIAL, min_partial);
++
++	set_min_partial(s, min_partial);
+ 
+ 	set_cpu_partial(s);
+ 
 -- 
 2.33.1
 

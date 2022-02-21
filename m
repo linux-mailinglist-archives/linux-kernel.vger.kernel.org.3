@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFF24BE1ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 638DF4BE87B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351977AbiBUJvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:51:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41662 "EHLO
+        id S1350435AbiBUJbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:31:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351775AbiBUJqh (ORCPT
+        with ESMTP id S1349739AbiBUJVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:46:37 -0500
+        Mon, 21 Feb 2022 04:21:41 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A64403DA;
-        Mon, 21 Feb 2022 01:18:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1BC26AF4;
+        Mon, 21 Feb 2022 01:08:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA4560F4E;
-        Mon, 21 Feb 2022 09:18:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6ABC340E9;
-        Mon, 21 Feb 2022 09:18:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F13B6077B;
+        Mon, 21 Feb 2022 09:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7682EC340F4;
+        Mon, 21 Feb 2022 09:08:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435120;
-        bh=NDFlc56uHX1BFyYLnXWX3MmsbvH/DYsnbkI3mGhD8kQ=;
+        s=korg; t=1645434535;
+        bh=lBS1PiFdP3yxD/PYLR6hsDp3zi/r/zvvJWP4zHDftYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Iq3ex4Lcyw20jaIEYUsjyH1oqOTcRoHKXl4wV6tspHijXpifRQd1Laz+miVxYfSso
-         BKBwlTZ3o+kEWmLN/1SPsifn5N58GL0v9Y7xft46/5kMcXR1bqnmBVrJfhAo2WdTW6
-         s61JHrkIx/XYZ7ObOyrs52HJwZaBOjuyODYjTc8o=
+        b=MXoKhJIt3wBv1QTlYPgWYiNeihTS5lsnlDNPaAcFLkePzOB+5QtiXJGQiIKoQx+9B
+         SdaeO2j7IamZyoNFEW8ho70WZbkgJDjwsxY9JfWDtfndag7Z2++IcXFGopcdTgeZQP
+         T78nmhJYQc96+M1iyl/PsiY9RDcx0xeubEusZOHw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
+        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Martin Wilck <martin.wilck@suse.com>,
+        Martin Wilck <mwilck@suse.com>, Ming Lei <ming.lei@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 052/227] quota: make dquot_quota_sync return errors from ->sync_fs
-Date:   Mon, 21 Feb 2022 09:47:51 +0100
-Message-Id: <20220221084936.604447793@linuxfoundation.org>
+Subject: [PATCH 5.15 040/196] scsi: core: Reallocate devices budget map on queue depth change
+Date:   Mon, 21 Feb 2022 09:47:52 +0100
+Message-Id: <20220221084932.279177221@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +57,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Darrick J. Wong <djwong@kernel.org>
+From: Ming Lei <ming.lei@redhat.com>
 
-[ Upstream commit dd5532a4994bfda0386eb2286ec00758cee08444 ]
+[ Upstream commit edb854a3680bacc9ef9b91ec0c5ff6105886f6f3 ]
 
-Strangely, dquot_quota_sync ignores the return code from the ->sync_fs
-call, which means that quotacalls like Q_SYNC never see the error.  This
-doesn't seem right, so fix that.
+We currently use ->cmd_per_lun as initial queue depth for setting up the
+budget_map. Martin Wilck reported that it is common for the queue_depth to
+be subsequently updated in slave_configure() based on detected hardware
+characteristics.
 
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Christian Brauner <brauner@kernel.org>
+As a result, for some drivers, the static host template settings for
+cmd_per_lun and can_queue won't actually get used in practice. And if the
+default values are used to allocate the budget_map, memory may be consumed
+unnecessarily.
+
+Fix the issue by reallocating the budget_map after ->slave_configure()
+returns. At that time the device queue_depth should accurately reflect what
+the hardware needs.
+
+Link: https://lore.kernel.org/r/20220127153733.409132-1-ming.lei@redhat.com
+Cc: Bart Van Assche <bvanassche@acm.org>
+Reported-by: Martin Wilck <martin.wilck@suse.com>
+Suggested-by: Martin Wilck <martin.wilck@suse.com>
+Tested-by: Martin Wilck <mwilck@suse.com>
+Reviewed-by: Martin Wilck <mwilck@suse.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/quota/dquot.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/scsi/scsi_scan.c | 55 ++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 50 insertions(+), 5 deletions(-)
 
-diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-index 22d904bde6ab9..a74aef99bd3d6 100644
---- a/fs/quota/dquot.c
-+++ b/fs/quota/dquot.c
-@@ -690,9 +690,14 @@ int dquot_quota_sync(struct super_block *sb, int type)
- 	/* This is not very clever (and fast) but currently I don't know about
- 	 * any other simple way of getting quota data to disk and we must get
- 	 * them there for userspace to be visible... */
--	if (sb->s_op->sync_fs)
--		sb->s_op->sync_fs(sb, 1);
--	sync_blockdev(sb->s_bdev);
-+	if (sb->s_op->sync_fs) {
-+		ret = sb->s_op->sync_fs(sb, 1);
-+		if (ret)
-+			return ret;
-+	}
-+	ret = sync_blockdev(sb->s_bdev);
-+	if (ret)
-+		return ret;
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index fe22191522a3b..7266880c70c21 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -198,6 +198,48 @@ static void scsi_unlock_floptical(struct scsi_device *sdev,
+ 			 SCSI_TIMEOUT, 3, NULL);
+ }
  
- 	/*
- 	 * Now when everything is written we can discard the pagecache so
++static int scsi_realloc_sdev_budget_map(struct scsi_device *sdev,
++					unsigned int depth)
++{
++	int new_shift = sbitmap_calculate_shift(depth);
++	bool need_alloc = !sdev->budget_map.map;
++	bool need_free = false;
++	int ret;
++	struct sbitmap sb_backup;
++
++	/*
++	 * realloc if new shift is calculated, which is caused by setting
++	 * up one new default queue depth after calling ->slave_configure
++	 */
++	if (!need_alloc && new_shift != sdev->budget_map.shift)
++		need_alloc = need_free = true;
++
++	if (!need_alloc)
++		return 0;
++
++	/*
++	 * Request queue has to be frozen for reallocating budget map,
++	 * and here disk isn't added yet, so freezing is pretty fast
++	 */
++	if (need_free) {
++		blk_mq_freeze_queue(sdev->request_queue);
++		sb_backup = sdev->budget_map;
++	}
++	ret = sbitmap_init_node(&sdev->budget_map,
++				scsi_device_max_queue_depth(sdev),
++				new_shift, GFP_KERNEL,
++				sdev->request_queue->node, false, true);
++	if (need_free) {
++		if (ret)
++			sdev->budget_map = sb_backup;
++		else
++			sbitmap_free(&sb_backup);
++		ret = 0;
++		blk_mq_unfreeze_queue(sdev->request_queue);
++	}
++	return ret;
++}
++
+ /**
+  * scsi_alloc_sdev - allocate and setup a scsi_Device
+  * @starget: which target to allocate a &scsi_device for
+@@ -291,11 +333,7 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
+ 	 * default device queue depth to figure out sbitmap shift
+ 	 * since we use this queue depth most of times.
+ 	 */
+-	if (sbitmap_init_node(&sdev->budget_map,
+-				scsi_device_max_queue_depth(sdev),
+-				sbitmap_calculate_shift(depth),
+-				GFP_KERNEL, sdev->request_queue->node,
+-				false, true)) {
++	if (scsi_realloc_sdev_budget_map(sdev, depth)) {
+ 		put_device(&starget->dev);
+ 		kfree(sdev);
+ 		goto out;
+@@ -1001,6 +1039,13 @@ static int scsi_add_lun(struct scsi_device *sdev, unsigned char *inq_result,
+ 			}
+ 			return SCSI_SCAN_NO_RESPONSE;
+ 		}
++
++		/*
++		 * The queue_depth is often changed in ->slave_configure.
++		 * Set up budget map again since memory consumption of
++		 * the map depends on actual queue depth.
++		 */
++		scsi_realloc_sdev_budget_map(sdev, sdev->queue_depth);
+ 	}
+ 
+ 	if (sdev->scsi_level >= SCSI_3)
 -- 
 2.34.1
 

@@ -2,43 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E5D4BE075
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6641F4BDE8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345832AbiBUIx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:53:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46994 "EHLO
+        id S1346435AbiBUI5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:57:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345599AbiBUIxC (ORCPT
+        with ESMTP id S1346093AbiBUIzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:53:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63A417069;
-        Mon, 21 Feb 2022 00:52:39 -0800 (PST)
+        Mon, 21 Feb 2022 03:55:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B4624BC4;
+        Mon, 21 Feb 2022 00:53:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8202361133;
-        Mon, 21 Feb 2022 08:52:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBC2C340E9;
-        Mon, 21 Feb 2022 08:52:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 462D761155;
+        Mon, 21 Feb 2022 08:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A56CC340E9;
+        Mon, 21 Feb 2022 08:53:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433558;
-        bh=lxCchzryuMtVgvfH1Q92K/i4dkv4KmcSp/CCgAaGACQ=;
+        s=korg; t=1645433612;
+        bh=8IUsyVO3CUV/NHmrn9iyf0MiQePqG+1lN0ZMxV/tScY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JHFdu6wg1JLU9HX3PMOXhQxwKkY0MtCQAvTd1P+J0ZyFz8uC88yqQZO6R2Q73ynaa
-         VCdJmuizK/AJDPsU9Zg9WINH3aoGykHFhFHveocR7I/UGv9v80s+MmaHltEw2hxjsT
-         VpKgBhuhbOsuOVRiaEdayketu5hFLRJOqIbtu3zA=
+        b=mF8DOiCxxuD4Ol1jw/V0X7PMTOFQfZeKLK4+dui0R/Qvk9ASptOYqMNXFGwmQvNrX
+         OsQ3HdIYzaID4k9Bt/x1pYJ1MR21HeD4spoYI7w8f0vzNotInhl3G3j1NLnWZ+Rv6E
+         wIpzSeO3vl1wKlb4l8VEe+6EmVOXWAjGXXvysO7k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.9 24/33] ASoC: ops: Fix stereo change notifications in snd_soc_put_volsw()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
+        Kees Kook <keescook@chromium.org>,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-hardening@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 4.14 26/45] libsubcmd: Fix use-after-free for realloc(..., 0)
 Date:   Mon, 21 Feb 2022 09:49:17 +0100
-Message-Id: <20220221084909.552259686@linuxfoundation.org>
+Message-Id: <20220221084911.300384687@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
-References: <20220221084908.568970525@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,56 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Kees Cook <keescook@chromium.org>
 
-commit 564778d7b1ea465f9487eedeece7527a033549c5 upstream.
+commit 52a9dab6d892763b2a8334a568bd4e2c1a6fde66 upstream.
 
-When writing out a stereo control we discard the change notification from
-the first channel, meaning that events are only generated based on changes
-to the second channel. Ensure that we report a change if either channel
-has changed.
+GCC 12 correctly reports a potential use-after-free condition in the
+xrealloc helper. Fix the warning by avoiding an implicit "free(ptr)"
+when size == 0:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220201155629.120510-2-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+In file included from help.c:12:
+In function 'xrealloc',
+    inlined from 'add_cmdname' at help.c:24:2: subcmd-util.h:56:23: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+   56 |                 ret = realloc(ptr, size);
+      |                       ^~~~~~~~~~~~~~~~~~
+subcmd-util.h:52:21: note: call to 'realloc' here
+   52 |         void *ret = realloc(ptr, size);
+      |                     ^~~~~~~~~~~~~~~~~~
+subcmd-util.h:58:31: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+   58 |                         ret = realloc(ptr, 1);
+      |                               ^~~~~~~~~~~~~~~
+subcmd-util.h:52:21: note: call to 'realloc' here
+   52 |         void *ret = realloc(ptr, size);
+      |                     ^~~~~~~~~~~~~~~~~~
+
+Fixes: 2f4ce5ec1d447beb ("perf tools: Finalize subcmd independence")
+Reported-by: Valdis Klētnieks <valdis.kletnieks@vt.edu>
+Signed-off-by: Kees Kook <keescook@chromium.org>
+Tested-by: Valdis Klētnieks <valdis.kletnieks@vt.edu>
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: linux-hardening@vger.kernel.org
+Cc: Valdis Klētnieks <valdis.kletnieks@vt.edu>
+Link: http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-ops.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ tools/lib/subcmd/subcmd-util.h |   11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -319,7 +319,7 @@ int snd_soc_put_volsw(struct snd_kcontro
- 	unsigned int sign_bit = mc->sign_bit;
- 	unsigned int mask = (1 << fls(max)) - 1;
- 	unsigned int invert = mc->invert;
--	int err;
-+	int err, ret;
- 	bool type_2r = false;
- 	unsigned int val2 = 0;
- 	unsigned int val, val_mask;
-@@ -361,12 +361,18 @@ int snd_soc_put_volsw(struct snd_kcontro
- 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
- 	if (err < 0)
- 		return err;
-+	ret = err;
- 
--	if (type_2r)
-+	if (type_2r) {
- 		err = snd_soc_component_update_bits(component, reg2, val_mask,
--			val2);
-+						    val2);
-+		/* Don't discard any error code or drop change flag */
-+		if (ret == 0 || err < 0) {
-+			ret = err;
-+		}
-+	}
- 
--	return err;
-+	return ret;
+--- a/tools/lib/subcmd/subcmd-util.h
++++ b/tools/lib/subcmd/subcmd-util.h
+@@ -50,15 +50,8 @@ static NORETURN inline void die(const ch
+ static inline void *xrealloc(void *ptr, size_t size)
+ {
+ 	void *ret = realloc(ptr, size);
+-	if (!ret && !size)
+-		ret = realloc(ptr, 1);
+-	if (!ret) {
+-		ret = realloc(ptr, size);
+-		if (!ret && !size)
+-			ret = realloc(ptr, 1);
+-		if (!ret)
+-			die("Out of memory, realloc failed");
+-	}
++	if (!ret)
++		die("Out of memory, realloc failed");
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(snd_soc_put_volsw);
  
 
 

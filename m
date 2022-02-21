@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF1F4BDCB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CAE4BE5DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348016AbiBUJPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:15:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34776 "EHLO
+        id S1353697AbiBUJ5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:57:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347777AbiBUJJO (ORCPT
+        with ESMTP id S1352624AbiBUJri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:09:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D4E60E0;
-        Mon, 21 Feb 2022 01:01:40 -0800 (PST)
+        Mon, 21 Feb 2022 04:47:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF1C43493;
+        Mon, 21 Feb 2022 01:20:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59EB9B80EB3;
-        Mon, 21 Feb 2022 09:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91ADFC340E9;
-        Mon, 21 Feb 2022 09:01:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8579360EB3;
+        Mon, 21 Feb 2022 09:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65FCEC340EB;
+        Mon, 21 Feb 2022 09:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434098;
-        bh=D5BeF7ORIpjrg18ZTSztcItjTnnVDILUKmtchbDAmlo=;
+        s=korg; t=1645435213;
+        bh=MG0LT0WpiF9RrSxHDVMgtYZYTt4Y0WHzXS5mZYOvIYI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rxU0CEFMa+A9ernkeyRCMm68r0kBAoIurTnGsFRMgzohv/pkvTVNthJb3jEyXae9z
-         DWYamrwWX+79GA/AB9RZO2dFKRDjTu7l1m8NFb0Myk3eGh0YtljBfirsgMpMO0ZG7m
-         7EqdE3tvstdMnF/o55mRnBJ6B4rQK39rk3g19TmU=
+        b=W5ACgQ2oD/xH3169Lc0d5P3WGA+AfujknAJI66njCk0kOL2DwF1XpnOn6eGQRg0ut
+         jImrk+dA2cXqKP+gs8myrwIZqOT+Hbhbnp47Dx1Tj4nGF5Ggr2D+DMvM3BK+u1dHt1
+         b4vNYTWuXYjzGbn4EHbyip0cb/9RTGlmhWQF/ito=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.10 012/121] parisc: Drop __init from map_pages declaration
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.16 085/227] drm/i915: Fix mbus join config lookup
 Date:   Mon, 21 Feb 2022 09:48:24 +0100
-Message-Id: <20220221084921.559838914@linuxfoundation.org>
+Message-Id: <20220221084937.698308163@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit 9129886b88185962538180625ca8051362b01327 upstream.
+commit 8d9d2a723d64b650f2e6423024ccb4a33f0cdc40 upstream.
 
-With huge kernel pages, we randomly eat a SPARC in map_pages(). This
-is fixed by dropping __init from the declaration.
+The bogus loop from compute_dbuf_slices() was copied into
+check_mbus_joined() as well. So this lookup is wrong as well.
+Fix it.
 
-However, map_pages references the __init routine memblock_alloc_try_nid
-via memblock_alloc.  Thus, it needs to be marked with __ref.
-
-memblock_alloc is only called before the kernel text is set to readonly.
-
-The __ref on free_initmem is no longer needed.
-
-Comment regarding map_pages being in the init section is removed.
-
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org # v5.4+
-Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: stable@vger.kernel.org
+Fixes: f4dc00863226 ("drm/i915/adl_p: MBUS programming")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220207132700.481-2-ville.syrjala@linux.intel.com
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+(cherry picked from commit 053f2b85631316a9226f6340c1c0fd95634f7a5b)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/mm/init.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/i915/intel_pm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/parisc/mm/init.c
-+++ b/arch/parisc/mm/init.c
-@@ -346,9 +346,9 @@ static void __init setup_bootmem(void)
- 
- static bool kernel_set_to_readonly;
- 
--static void __init map_pages(unsigned long start_vaddr,
--			     unsigned long start_paddr, unsigned long size,
--			     pgprot_t pgprot, int force)
-+static void __ref map_pages(unsigned long start_vaddr,
-+			    unsigned long start_paddr, unsigned long size,
-+			    pgprot_t pgprot, int force)
+--- a/drivers/gpu/drm/i915/intel_pm.c
++++ b/drivers/gpu/drm/i915/intel_pm.c
+@@ -4843,7 +4843,7 @@ static bool check_mbus_joined(u8 active_
  {
- 	pmd_t *pmd;
- 	pte_t *pg_table;
-@@ -458,7 +458,7 @@ void __init set_kernel_text_rw(int enabl
- 	flush_tlb_all();
- }
+ 	int i;
  
--void __ref free_initmem(void)
-+void free_initmem(void)
- {
- 	unsigned long init_begin = (unsigned long)__init_begin;
- 	unsigned long init_end = (unsigned long)__init_end;
-@@ -472,7 +472,6 @@ void __ref free_initmem(void)
- 	/* The init text pages are marked R-X.  We have to
- 	 * flush the icache and mark them RW-
- 	 *
--	 * This is tricky, because map_pages is in the init section.
- 	 * Do a dummy remap of the data section first (the data
- 	 * section is already PAGE_KERNEL) to pull in the TLB entries
- 	 * for map_kernel */
+-	for (i = 0; i < dbuf_slices[i].active_pipes; i++) {
++	for (i = 0; dbuf_slices[i].active_pipes != 0; i++) {
+ 		if (dbuf_slices[i].active_pipes == active_pipes)
+ 			return dbuf_slices[i].join_mbus;
+ 	}
 
 

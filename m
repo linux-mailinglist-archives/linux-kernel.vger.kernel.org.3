@@ -2,211 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE5C4BE48C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC834BDEF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240644AbiBULZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:25:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34504 "EHLO
+        id S1356196AbiBULZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:25:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356176AbiBULYv (ORCPT
+        with ESMTP id S1356102AbiBULYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:24:51 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D61C0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:20:43 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 21LBKUTc8022194, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 21LBKUTc8022194
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 21 Feb 2022 19:20:30 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 21 Feb 2022 19:20:30 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 21 Feb 2022 19:20:29 +0800
-Received: from RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026]) by
- RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026%5]) with mapi id
- 15.01.2308.021; Mon, 21 Feb 2022 19:20:29 +0800
-From:   Ricky WU <ricky_wu@realtek.com>
-To:     "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ricky WU <ricky_wu@realtek.com>
-Subject: [PATCH] misc: rtsx: rts522a rts5228 rts5261 support Runtime PM
-Thread-Topic: [PATCH] misc: rtsx: rts522a rts5228 rts5261 support Runtime PM
-Thread-Index: AQHYJxRl7osD91UJlUmI6/y1W+wpVg==
-Date:   Mon, 21 Feb 2022 11:20:29 +0000
-Message-ID: <dace32f573a445908fec0a10482c394c@realtek.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.81.102]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzIvMjEgpFekyCAxMDoyMDowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Mon, 21 Feb 2022 06:24:52 -0500
+Received: from outbound-smtp18.blacknight.com (outbound-smtp18.blacknight.com [46.22.139.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD65224
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:20:44 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp18.blacknight.com (Postfix) with ESMTPS id 7FBB51C39B7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 11:20:43 +0000 (GMT)
+Received: (qmail 15512 invoked from network); 21 Feb 2022 11:20:43 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Feb 2022 11:20:43 -0000
+Date:   Mon, 21 Feb 2022 11:20:37 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     akpm@linux-foundation.org, jhubbard@nvidia.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ziy@nvidia.com,
+        Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH] mm/pages_alloc.c: Don't create ZONE_MOVABLE beyond the
+ end of a node
+Message-ID: <20220221112037.GA4423@techsingularity.net>
+References: <20220215025831.2113067-1-apopple@nvidia.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20220215025831.2113067-1-apopple@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cnRzNTIyYSwgcnRzNTIyOCwgcnRzNTI2MQ0KYWRkIGV4dHJhIGluaXQgZmxvdyBmb3IgcnRkMw0K
-YWRkIG1vcmUgcG93ZXJfZG93biBzZXR0aW5nIGZvciBhdm9pZCBiZWluZyB3b2tlbiB1cA0KYnkg
-cGx1Z2dpbmcgb3IgdW5wbHVnZ2luZyBjYXJkIHdoZW4gc3lzdGVtIGluIFMzDQoNClNpZ25lZC1v
-ZmYtYnk6IFJpY2t5IFd1IDxyaWNreV93dUByZWFsdGVrLmNvbT4NCi0tLQ0KIGRyaXZlcnMvbWlz
-Yy9jYXJkcmVhZGVyL3J0czUyMjcuYyAgfCA0NyArKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysNCiBkcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1MjI4LmMgIHwgMjEgKysrKysrKysrKyst
-LQ0KIGRyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNjEuYyAgfCAzMyArKysrKysrKysrKysr
-KysrKysrLS0NCiBkcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bjci5oIHwgIDIgKysNCiA0
-IGZpbGVzIGNoYW5nZWQsIDk4IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pDQoNCmRpZmYg
-LS1naXQgYS9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1MjI3LmMgYi9kcml2ZXJzL21pc2Mv
-Y2FyZHJlYWRlci9ydHM1MjI3LmMNCmluZGV4IDRiY2ZiYzlhZmJhYy4uZDY3NmNmNjNhOTY2IDEw
-MDY0NA0KLS0tIGEvZHJpdmVycy9taXNjL2NhcmRyZWFkZXIvcnRzNTIyNy5jDQorKysgYi9kcml2
-ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1MjI3LmMNCkBAIC03Miw2ICs3Miw4IEBAIHN0YXRpYyB2
-b2lkIHJ0czUyMjdfZmV0Y2hfdmVuZG9yX3NldHRpbmdzKHN0cnVjdCBydHN4X3BjciAqcGNyKQ0K
-IA0KIAlwY2lfcmVhZF9jb25maWdfZHdvcmQocGRldiwgUENSX1NFVFRJTkdfUkVHMiwgJnJlZyk7
-DQogCXBjcl9kYmcocGNyLCAiQ2ZnIDB4JXg6IDB4JXhcbiIsIFBDUl9TRVRUSU5HX1JFRzIsIHJl
-Zyk7DQorCWlmIChDSEtfUENJX1BJRChwY3IsIDB4NTIyQSkpDQorCQlwY3ItPnJ0ZDNfZW4gPSBy
-dHN4X3JlZ190b19ydGQzKHJlZyk7DQogCWlmIChydHN4X2NoZWNrX21tY19zdXBwb3J0KHJlZykp
-DQogCQlwY3ItPmV4dHJhX2NhcHMgfD0gRVhUUkFfQ0FQU19OT19NTUM7DQogCXBjci0+c2QzMF9k
-cml2ZV9zZWxfM3YzID0gcnRzeF9yZWdfdG9fc2QzMF9kcml2ZV9zZWxfM3YzKHJlZyk7DQpAQCAt
-MTcxLDYgKzE3MywyOCBAQCBzdGF0aWMgaW50IHJ0czUyMjdfZXh0cmFfaW5pdF9odyhzdHJ1Y3Qg
-cnRzeF9wY3IgKnBjcikNCiAJZWxzZQ0KIAkJcnRzeF9wY2lfYWRkX2NtZChwY3IsIFdSSVRFX1JF
-R19DTUQsIFBFVFhDRkcsIDB4MzAsIDB4MDApOw0KIA0KKwlpZiAoQ0hLX1BDSV9QSUQocGNyLCAw
-eDUyMkEpKQ0KKwkJcnRzeF9wY2lfYWRkX2NtZChwY3IsIFdSSVRFX1JFR19DTUQsIFJUUzUyMkFf
-QVVUT0xPQURfQ0ZHMSwNCisJCQlDRF9SRVNVTUVfRU5fTUFTSywgQ0RfUkVTVU1FX0VOX01BU0sp
-Ow0KKw0KKwlpZiAocGNyLT5ydGQzX2VuKSB7DQorCQlpZiAoQ0hLX1BDSV9QSUQocGNyLCAweDUy
-MkEpKSB7DQorCQkJcnRzeF9wY2lfYWRkX2NtZChwY3IsIFdSSVRFX1JFR19DTUQsIFJUUzUyMkFf
-UE1fQ1RSTDMsIDB4MDEsIDB4MDEpOw0KKwkJCXJ0c3hfcGNpX2FkZF9jbWQocGNyLCBXUklURV9S
-RUdfQ01ELCBSVFM1MjJBX1BNRV9GT1JDRV9DVEwsIDB4MzAsIDB4MzApOw0KKwkJfSBlbHNlIHsN
-CisJCQlydHN4X3BjaV9hZGRfY21kKHBjciwgV1JJVEVfUkVHX0NNRCwgUE1fQ1RSTDMsIDB4MDEs
-IDB4MDEpOw0KKwkJCXJ0c3hfcGNpX2FkZF9jbWQocGNyLCBXUklURV9SRUdfQ01ELCBQTUVfRk9S
-Q0VfQ1RMLCAweEZGLCAweDMzKTsNCisJCX0NCisJfSBlbHNlIHsNCisJCWlmIChDSEtfUENJX1BJ
-RChwY3IsIDB4NTIyQSkpIHsNCisJCQlydHN4X3BjaV9hZGRfY21kKHBjciwgV1JJVEVfUkVHX0NN
-RCwgUlRTNTIyQV9QTV9DVFJMMywgMHgwMSwgMHgwMCk7DQorCQkJcnRzeF9wY2lfYWRkX2NtZChw
-Y3IsIFdSSVRFX1JFR19DTUQsIFJUUzUyMkFfUE1FX0ZPUkNFX0NUTCwgMHgzMCwgMHgyMCk7DQor
-CQl9IGVsc2Ugew0KKwkJCXJ0c3hfcGNpX2FkZF9jbWQocGNyLCBXUklURV9SRUdfQ01ELCBQTUVf
-Rk9SQ0VfQ1RMLCAweEZGLCAweDMwKTsNCisJCQlydHN4X3BjaV9hZGRfY21kKHBjciwgV1JJVEVf
-UkVHX0NNRCwgUE1fQ1RSTDMsIDB4MDEsIDB4MDApOw0KKwkJfQ0KKwl9DQorDQogCWlmIChvcHRp
-b24tPmZvcmNlX2Nsa3JlcV8wKQ0KIAkJcnRzeF9wY2lfYWRkX2NtZChwY3IsIFdSSVRFX1JFR19D
-TUQsIFBFVFhDRkcsDQogCQkJCUZPUkNFX0NMS1JFUV9ERUxJTktfTUFTSywgRk9SQ0VfQ0xLUkVR
-X0xPVyk7DQpAQCAtNDM4LDYgKzQ2MiwyOCBAQCBzdGF0aWMgaW50IHJ0czUyMmFfc3dpdGNoX291
-dHB1dF92b2x0YWdlKHN0cnVjdCBydHN4X3BjciAqcGNyLCB1OCB2b2x0YWdlKQ0KIAlyZXR1cm4g
-cnRzeF9wY2lfc2VuZF9jbWQocGNyLCAxMDApOw0KIH0NCiANCitzdGF0aWMgdm9pZCBydHM1MjJh
-X2ZvcmNlX3Bvd2VyX2Rvd24oc3RydWN0IHJ0c3hfcGNyICpwY3IsIHU4IHBtX3N0YXRlLCBib29s
-IHJ1bnRpbWUpDQorew0KKwkvKiBTZXQgcmVsaW5rX3RpbWUgdG8gMCAqLw0KKwlydHN4X3BjaV93
-cml0ZV9yZWdpc3RlcihwY3IsIEFVVE9MT0FEX0NGR19CQVNFICsgMSwgTUFTS184X0JJVF9ERUYs
-IDApOw0KKwlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIEFVVE9MT0FEX0NGR19CQVNFICsg
-MiwgTUFTS184X0JJVF9ERUYsIDApOw0KKwlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIEFV
-VE9MT0FEX0NGR19CQVNFICsgMywNCisJCQkJUkVMSU5LX1RJTUVfTUFTSywgMCk7DQorDQorCXJ0
-c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgUlRTNTIyQV9QTV9DVFJMMywNCisJCQlEM19ERUxJ
-TktfTU9ERV9FTiwgRDNfREVMSU5LX01PREVfRU4pOw0KKw0KKwlpZiAoIXJ1bnRpbWUpIHsNCisJ
-CXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgUlRTNTIyQV9BVVRPTE9BRF9DRkcxLA0KKwkJ
-CQlDRF9SRVNVTUVfRU5fTUFTSywgMCk7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3Is
-IFJUUzUyMkFfUE1fQ1RSTDMsIDB4MDEsIDB4MDApOw0KKwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0
-ZXIocGNyLCBSVFM1MjJBX1BNRV9GT1JDRV9DVEwsIDB4MzAsIDB4MjApOw0KKwl9DQorDQorCXJ0
-c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgRlBEQ1RMLCBBTExfUE9XRVJfRE9XTiwgQUxMX1BP
-V0VSX0RPV04pOw0KK30NCisNCisNCiBzdGF0aWMgdm9pZCBydHM1MjJhX3NldF9sMW9mZl9jZmdf
-c3ViX2QwKHN0cnVjdCBydHN4X3BjciAqcGNyLCBpbnQgYWN0aXZlKQ0KIHsNCiAJc3RydWN0IHJ0
-c3hfY3Jfb3B0aW9uICpvcHRpb24gPSAmcGNyLT5vcHRpb247DQpAQCAtNDczLDYgKzUxOSw3IEBA
-IHN0YXRpYyBjb25zdCBzdHJ1Y3QgcGNyX29wcyBydHM1MjJhX3Bjcl9vcHMgPSB7DQogCS5jYXJk
-X3Bvd2VyX29uID0gcnRzNTIyN19jYXJkX3Bvd2VyX29uLA0KIAkuY2FyZF9wb3dlcl9vZmYgPSBy
-dHM1MjI3X2NhcmRfcG93ZXJfb2ZmLA0KIAkuc3dpdGNoX291dHB1dF92b2x0YWdlID0gcnRzNTIy
-YV9zd2l0Y2hfb3V0cHV0X3ZvbHRhZ2UsDQorCS5mb3JjZV9wb3dlcl9kb3duID0gcnRzNTIyYV9m
-b3JjZV9wb3dlcl9kb3duLA0KIAkuY2RfZGVnbGl0Y2ggPSBOVUxMLA0KIAkuY29udl9jbGtfYW5k
-X2Rpdl9uID0gTlVMTCwNCiAJLnNldF9sMW9mZl9jZmdfc3ViX2QwID0gcnRzNTIyYV9zZXRfbDFv
-ZmZfY2ZnX3N1Yl9kMCwNCmRpZmYgLS1naXQgYS9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1
-MjI4LmMgYi9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1MjI4LmMNCmluZGV4IGZmZTNhZmJm
-OGJmZS4uYWY1ODFmNGY3NGQxIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9taXNjL2NhcmRyZWFkZXIv
-cnRzNTIyOC5jDQorKysgYi9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1MjI4LmMNCkBAIC0x
-MDIsNiArMTAyLDE0IEBAIHN0YXRpYyB2b2lkIHJ0czUyMjhfZm9yY2VfcG93ZXJfZG93bihzdHJ1
-Y3QgcnRzeF9wY3IgKnBjciwgdTggcG1fc3RhdGUsIGJvb2wgcnVuDQogCXJ0c3hfcGNpX3dyaXRl
-X3JlZ2lzdGVyKHBjciwgcGNyLT5yZWdfcG1fY3RybDMsDQogCQkJRDNfREVMSU5LX01PREVfRU4s
-IEQzX0RFTElOS19NT0RFX0VOKTsNCiANCisJaWYgKCFydW50aW1lKSB7DQorCQlydHN4X3BjaV93
-cml0ZV9yZWdpc3RlcihwY3IsIFJUUzUyMjhfQVVUT0xPQURfQ0ZHMSwNCisJCQkJQ0RfUkVTVU1F
-X0VOX01BU0ssIDApOw0KKwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBwY3ItPnJlZ19w
-bV9jdHJsMywgMHgwMSwgMHgwMCk7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIFJU
-UzUyMjhfUkVHX1BNRV9GT1JDRV9DVEwsDQorCQkJCUZPUkNFX1BNX0NPTlRST0wgfCBGT1JDRV9Q
-TV9WQUxVRSwgRk9SQ0VfUE1fQ09OVFJPTCk7DQorCX0NCisNCiAJcnRzeF9wY2lfd3JpdGVfcmVn
-aXN0ZXIocGNyLCBGUERDVEwsDQogCQlTU0NfUE9XRVJfRE9XTiwgU1NDX1BPV0VSX0RPV04pOw0K
-IH0NCkBAIC00ODAsOSArNDg4LDE4IEBAIHN0YXRpYyBpbnQgcnRzNTIyOF9leHRyYV9pbml0X2h3
-KHN0cnVjdCBydHN4X3BjciAqcGNyKQ0KIAkJCQkgRk9SQ0VfQ0xLUkVRX0RFTElOS19NQVNLLCBG
-T1JDRV9DTEtSRVFfSElHSCk7DQogDQogCXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgUFdE
-X1NVU1BFTkRfRU4sIDB4RkYsIDB4RkIpOw0KLQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3Is
-IHBjci0+cmVnX3BtX2N0cmwzLCAweDEwLCAweDAwKTsNCisNCisJaWYgKHBjci0+cnRkM19lbikg
-ew0KKwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBwY3ItPnJlZ19wbV9jdHJsMywgMHgw
-MSwgMHgwMSk7DQogCXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgUlRTNTIyOF9SRUdfUE1F
-X0ZPUkNFX0NUTCwNCi0JCQlGT1JDRV9QTV9DT05UUk9MIHwgRk9SQ0VfUE1fVkFMVUUsIEZPUkNF
-X1BNX0NPTlRST0wpOw0KKwkJCQlGT1JDRV9QTV9DT05UUk9MIHwgRk9SQ0VfUE1fVkFMVUUsDQor
-CQkJCUZPUkNFX1BNX0NPTlRST0wgfCBGT1JDRV9QTV9WQUxVRSk7DQorCX0gZWxzZSB7DQorCQly
-dHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIHBjci0+cmVnX3BtX2N0cmwzLCAweDAxLCAweDAw
-KTsNCisJCXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgUlRTNTIyOF9SRUdfUE1FX0ZPUkNF
-X0NUTCwNCisJCQkJRk9SQ0VfUE1fQ09OVFJPTCB8IEZPUkNFX1BNX1ZBTFVFLCBGT1JDRV9QTV9D
-T05UUk9MKTsNCisJfQ0KKwlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIHBjci0+cmVnX3Bt
-X2N0cmwzLCBEM19ERUxJTktfTU9ERV9FTiwgMHgwMCk7DQogDQogCXJldHVybiAwOw0KIH0NCmRp
-ZmYgLS1naXQgYS9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1MjYxLmMgYi9kcml2ZXJzL21p
-c2MvY2FyZHJlYWRlci9ydHM1MjYxLmMNCmluZGV4IDY0MzMzMzQ3YzE0YS4uYTc3NTg1YWIwZjMw
-IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9taXNjL2NhcmRyZWFkZXIvcnRzNTI2MS5jDQorKysgYi9k
-cml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1MjYxLmMNCkBAIC0xMDMsNiArMTAzLDI0IEBAIHN0
-YXRpYyB2b2lkIHJ0czUyNjFfZm9yY2VfcG93ZXJfZG93bihzdHJ1Y3QgcnRzeF9wY3IgKnBjciwg
-dTggcG1fc3RhdGUsIGJvb2wgcnVuDQogCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIHBj
-ci0+cmVnX3BtX2N0cmwzLA0KIAkJCQkJRDNfREVMSU5LX01PREVfRU4sIEQzX0RFTElOS19NT0RF
-X0VOKTsNCiANCisJaWYgKCFydW50aW1lKSB7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3Rlcihw
-Y3IsIFJUUzUyNjFfQVVUT0xPQURfQ0ZHMSwNCisJCQkJQ0RfUkVTVU1FX0VOX01BU0ssIDApOw0K
-KwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBwY3ItPnJlZ19wbV9jdHJsMywgMHgwMSwg
-MHgwMCk7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIFJUUzUyNjFfUkVHX1BNRV9G
-T1JDRV9DVEwsDQorCQkJCUZPUkNFX1BNX0NPTlRST0wgfCBGT1JDRV9QTV9WQUxVRSwgRk9SQ0Vf
-UE1fQ09OVFJPTCk7DQorDQorCX0gZWxzZSB7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3Rlcihw
-Y3IsIFJUUzUyNjFfUkVHX1BNRV9GT1JDRV9DVEwsDQorCQkJCUZPUkNFX1BNX0NPTlRST0wgfCBG
-T1JDRV9QTV9WQUxVRSwgMCk7DQorDQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIFJU
-UzUyNjFfRldfQ1RMLA0KKwkJCQlSVFM1MjYxX0lORk9STV9SVEQzX0NPTEQsIFJUUzUyNjFfSU5G
-T1JNX1JURDNfQ09MRCk7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIFJUUzUyNjFf
-QVVUT0xPQURfQ0ZHNCwNCisJCQkJUlRTNTI2MV9GT1JDRV9QUlNOVF9MT1csIFJUUzUyNjFfRk9S
-Q0VfUFJTTlRfTE9XKTsNCisNCisJfQ0KKw0KIAlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3Is
-IFJUUzUyNjFfUkVHX0ZQRENUTCwNCiAJCVNTQ19QT1dFUl9ET1dOLCBTU0NfUE9XRVJfRE9XTik7
-DQogfQ0KQEAgLTUzNiw5ICs1NTQsMTggQEAgc3RhdGljIGludCBydHM1MjYxX2V4dHJhX2luaXRf
-aHcoc3RydWN0IHJ0c3hfcGNyICpwY3IpDQogCQkJCSBGT1JDRV9DTEtSRVFfREVMSU5LX01BU0ss
-IEZPUkNFX0NMS1JFUV9ISUdIKTsNCiANCiAJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBQ
-V0RfU1VTUEVORF9FTiwgMHhGRiwgMHhGQik7DQotCXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBj
-ciwgcGNyLT5yZWdfcG1fY3RybDMsIDB4MTAsIDB4MDApOw0KLQlydHN4X3BjaV93cml0ZV9yZWdp
-c3RlcihwY3IsIFJUUzUyNjFfUkVHX1BNRV9GT1JDRV9DVEwsDQotCQkJRk9SQ0VfUE1fQ09OVFJP
-TCB8IEZPUkNFX1BNX1ZBTFVFLCBGT1JDRV9QTV9DT05UUk9MKTsNCisNCisJaWYgKHBjci0+cnRk
-M19lbikgew0KKwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBwY3ItPnJlZ19wbV9jdHJs
-MywgMHgwMSwgMHgwMSk7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIFJUUzUyNjFf
-UkVHX1BNRV9GT1JDRV9DVEwsDQorCQkJCUZPUkNFX1BNX0NPTlRST0wgfCBGT1JDRV9QTV9WQUxV
-RSwNCisJCQkJRk9SQ0VfUE1fQ09OVFJPTCB8IEZPUkNFX1BNX1ZBTFVFKTsNCisJfSBlbHNlIHsN
-CisJCXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgcGNyLT5yZWdfcG1fY3RybDMsIDB4MDEs
-IDB4MDApOw0KKwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBSVFM1MjYxX1JFR19QTUVf
-Rk9SQ0VfQ1RMLA0KKwkJCQlGT1JDRV9QTV9DT05UUk9MIHwgRk9SQ0VfUE1fVkFMVUUsIEZPUkNF
-X1BNX0NPTlRST0wpOw0KKwl9DQorCXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgcGNyLT5y
-ZWdfcG1fY3RybDMsIEQzX0RFTElOS19NT0RFX0VOLCAweDAwKTsNCiANCiAJLyogQ2xlYXIgRW50
-ZXIgUlREM19jb2xkIEluZm9ybWF0aW9uKi8NCiAJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNy
-LCBSVFM1MjYxX0ZXX0NUTCwNCmRpZmYgLS1naXQgYS9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9y
-dHN4X3Bjci5oIGIvZHJpdmVycy9taXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuaA0KaW5kZXggYWEw
-ZWJkNjY3MjI3Li4zN2QxZjMxNmFlMTcgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL21pc2MvY2FyZHJl
-YWRlci9ydHN4X3Bjci5oDQorKysgYi9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bjci5o
-DQpAQCAtMTUsNiArMTUsOCBAQA0KICNkZWZpbmUgTUlOX0RJVl9OX1BDUgkJODANCiAjZGVmaW5l
-IE1BWF9ESVZfTl9QQ1IJCTIwOA0KIA0KKyNkZWZpbmUgUlRTNTIyQV9QTUVfRk9SQ0VfQ1RMCTB4
-RkY3OA0KKyNkZWZpbmUgUlRTNTIyQV9BVVRPTE9BRF9DRkcxCTB4RkY3Qw0KICNkZWZpbmUgUlRT
-NTIyQV9QTV9DVFJMMwkJMHhGRjdFDQogDQogI2RlZmluZSBSVFM1MjRBX1BNRV9GT1JDRV9DVEwJ
-CTB4RkY3OA0KLS0gDQoyLjI1LjENCg==
+On Tue, Feb 15, 2022 at 01:58:31PM +1100, Alistair Popple wrote:
+> ZONE_MOVABLE uses the remaining memory in each node. It's starting pfn
+> is also aligned to MAX_ORDER_NR_PAGES. It is possible for the remaining
+> memory in a node to be less than MAX_ORDER_NR_PAGES, meaning there is
+> not enough room for ZONE_MOVABLE on that node.
+> 
+> Unfortunately this condition is not checked for. This leads to
+> zone_movable_pfn[] getting set to a pfn greater than the last pfn in a
+> node.
+> 
+> calculate_node_totalpages() then sets zone->present_pages to be greater
+> than zone->spanned_pages which is invalid, as spanned_pages represents
+> the maximum number of pages in a zone assuming no holes.
+> 
+> Subsequently it is possible free_area_init_core() will observe a zone of
+> size zero with present pages. In this case it will skip setting up the
+> zone, including the initialisation of free_lists[].
+> 
+> However populated_zone() checks zone->present_pages to see if a zone has
+> memory available. This is used by iterators such as
+> walk_zones_in_node(). pagetypeinfo_showfree() uses this to walk the
+> free_list of each zone in each node, which are assumed to be initialised
+> due to the zone not being empty. As free_area_init_core() never
+> initialised the free_lists[] this results in the following kernel crash
+> when trying to read /proc/pagetypeinfo:
+> 
+> [   67.534914] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [   67.535429] #PF: supervisor read access in kernel mode
+> [   67.535789] #PF: error_code(0x0000) - not-present page
+> [   67.536128] PGD 0 P4D 0
+> [   67.536305] Oops: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
+> [   67.536696] CPU: 0 PID: 456 Comm: cat Not tainted 5.16.0 #461
+> [   67.537096] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+> [   67.537638] RIP: 0010:pagetypeinfo_show+0x163/0x460
+> [   67.537992] Code: 9e 82 e8 80 57 0e 00 49 8b 06 b9 01 00 00 00 4c 39 f0 75 16 e9 65 02 00 00 48 83 c1 01 48 81 f9 a0 86 01 00 0f 84 48 02 00 00 <48> 8b 00 4c 39 f0 75 e7 48 c7 c2 80 a2 e2 82 48 c7 c6 79 ef e3 82
+> [   67.538259] RSP: 0018:ffffc90001c4bd10 EFLAGS: 00010003
+> [   67.538259] RAX: 0000000000000000 RBX: ffff88801105f638 RCX: 0000000000000001
+> [   67.538259] RDX: 0000000000000001 RSI: 000000000000068b RDI: ffff8880163dc68b
+> [   67.538259] RBP: ffffc90001c4bd90 R08: 0000000000000001 R09: ffff8880163dc67e
+> [   67.538259] R10: 656c6261766f6d6e R11: 6c6261766f6d6e55 R12: ffff88807ffb4a00
+> [   67.538259] R13: ffff88807ffb49f8 R14: ffff88807ffb4580 R15: ffff88807ffb3000
+> [   67.538259] FS:  00007f9c83eff5c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+> [   67.538259] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   67.538259] CR2: 0000000000000000 CR3: 0000000013c8e000 CR4: 0000000000350ef0
+> [   67.538259] Call Trace:
+> [   67.538259]  <TASK>
+> [   67.538259]  seq_read_iter+0x128/0x460
+> [   67.538259]  ? aa_file_perm+0x1af/0x5f0
+> [   67.538259]  proc_reg_read_iter+0x51/0x80
+> [   67.538259]  ? lock_is_held_type+0xea/0x140
+> [   67.538259]  new_sync_read+0x113/0x1a0
+> [   67.538259]  vfs_read+0x136/0x1d0
+> [   67.538259]  ksys_read+0x70/0xf0
+> [   67.538259]  __x64_sys_read+0x1a/0x20
+> [   67.538259]  do_syscall_64+0x3b/0xc0
+> [   67.538259]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [   67.538259] RIP: 0033:0x7f9c83e23cce
+> [   67.538259] Code: c0 e9 b6 fe ff ff 50 48 8d 3d 6e 13 0a 00 e8 c9 e3 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+> [   67.538259] RSP: 002b:00007fff116e1a08 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> [   67.538259] RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007f9c83e23cce
+> [   67.538259] RDX: 0000000000020000 RSI: 00007f9c83a2c000 RDI: 0000000000000003
+> [   67.538259] RBP: 00007f9c83a2c000 R08: 00007f9c83a2b010 R09: 0000000000000000
+> [   67.538259] R10: 00007f9c83f2d7d0 R11: 0000000000000246 R12: 0000000000000000
+> [   67.538259] R13: 0000000000000003 R14: 0000000000020000 R15: 0000000000020000
+> [   67.538259]  </TASK>
+> 
+> Fix this by checking that the aligned zone_movable_pfn[] does not exceed
+> the end of the node, and if it does skip creating a movable zone on this
+> node.
+> 
+> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+> Fixes: 2a1e274acf0b ("Create the ZONE_MOVABLE zone")
+
+Seems reasonable;
+
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+
+-- 
+Mel Gorman
+SUSE Labs

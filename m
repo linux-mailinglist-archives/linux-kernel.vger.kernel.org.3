@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F89D4BE5B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A054BDE44
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354411AbiBUJ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:58:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41668 "EHLO
+        id S1344921AbiBUJmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:42:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351632AbiBUJtz (ORCPT
+        with ESMTP id S1350390AbiBUJfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:49:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5AB34B8B;
-        Mon, 21 Feb 2022 01:22:39 -0800 (PST)
+        Mon, 21 Feb 2022 04:35:30 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831632B268;
+        Mon, 21 Feb 2022 01:14:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C915160F3C;
-        Mon, 21 Feb 2022 09:22:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC204C340EB;
-        Mon, 21 Feb 2022 09:22:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 143D8CE0E8C;
+        Mon, 21 Feb 2022 09:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00C1C340E9;
+        Mon, 21 Feb 2022 09:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435357;
-        bh=4/IQDapPhOfUHZ8I/bXCAqRqXgprEmYdeOsY8JUFMrw=;
+        s=korg; t=1645434854;
+        bh=UDbRe6SGnnIy1uHh+lYT6drs/fy3wFOcDJ5jmYqvJfw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nemIO3vDO6nbq3rN5HagG0zNwCMK9Cd3sJrcTn4GppDJ6DqNwHBaFySmBU6Swi9rF
-         oi81m0RG2L5gHQ9ZMX39Kid+cjVW1AVYIV8/tSv76ruorQ9/ZGIumh6qrxjy/sW72W
-         xmy0fQaazfpRW5XQxYbNbSCHkSz3fHQCQ5lhJU94=
+        b=P2YrgEsXs5YbdtvCy1Z0/xJenmBt3Lol++4xIz9hCbgRmSUKuh3VICrulwLQoMWtl
+         8/YQUs5rNa6Qegn51EccZt0ubrc8EA6fqfnF60nKaFfwBbQPHDv+wSmYy5p34/fdV/
+         wgXJZfGlx/4TCNgYWLXEsC1H3mq0YtrfXYG1W8e4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.16 135/227] ALSA: usb-audio: Dont abort resume upon errors
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.15 122/196] powerpc/lib/sstep: fix ptesync build error
 Date:   Mon, 21 Feb 2022 09:49:14 +0100
-Message-Id: <20220221084939.341918784@linuxfoundation.org>
+Message-Id: <20220221084935.020048805@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,57 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-commit 9a5adeb28b77416446658e75bdef3bbe5fb92a83 upstream.
+commit fe663df7825811358531dc2e8a52d9eaa5e3515e upstream.
 
-The default mixer resume code treats the errors at restoring the
-modified mixer items as a fatal error, and it returns back to the
-caller.  This ends up in the resume failure, and the device will be
-come unavailable, although basically those errors are intermittent and
-can be safely ignored.
+Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
+2.37.90.20220207) the following build error shows up:
 
-The problem itself has been present from the beginning, but it didn't
-hit usually because the code tries to resume only the modified items.
-But now with the recent commit to forcibly initialize each item at the
-probe time, the problem surfaced more often, hence it appears as a
-regression.
+  {standard input}: Assembler messages:
+  {standard input}:2088: Error: unrecognized opcode: `ptesync'
+  make[3]: *** [/builds/linux/scripts/Makefile.build:287: arch/powerpc/lib/sstep.o] Error 1
 
-This patch fixes the regression simply by ignoring the errors at
-resume.
+Add the 'ifdef CONFIG_PPC64' around the 'ptesync' in function
+'emulate_update_regs()' to like it is in 'analyse_instr()'. Since it looks like
+it got dropped inadvertently by commit 3cdfcbfd32b9 ("powerpc: Change
+analyse_instr so it doesn't modify *regs").
 
-Fixes: b96681bd5827 ("ALSA: usb-audio: Initialize every feature unit once at probe time")
-Cc: <stable@vger.kernel.org>
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215561
-Link: https://lore.kernel.org/r/20220214125711.20531-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+A key detail is that analyse_instr() will never recognise lwsync or
+ptesync on 32-bit (because of the existing ifdef), and as a result
+emulate_update_regs() should never be called with an op specifying
+either of those on 32-bit. So removing them from emulate_update_regs()
+should be a nop in terms of runtime behaviour.
+
+Fixes: 3cdfcbfd32b9 ("powerpc: Change analyse_instr so it doesn't modify *regs")
+Cc: stable@vger.kernel.org # v4.14+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+[mpe: Add last paragraph of change log mentioning analyse_instr() details]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220211005113.1361436-1-anders.roxell@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/mixer.c |    9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ arch/powerpc/lib/sstep.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/sound/usb/mixer.c
-+++ b/sound/usb/mixer.c
-@@ -3678,17 +3678,14 @@ static int restore_mixer_value(struct us
- 				err = snd_usb_set_cur_mix_value(cval, c + 1, idx,
- 							cval->cache_val[idx]);
- 				if (err < 0)
--					return err;
-+					break;
- 			}
- 			idx++;
+--- a/arch/powerpc/lib/sstep.c
++++ b/arch/powerpc/lib/sstep.c
+@@ -3181,12 +3181,14 @@ void emulate_update_regs(struct pt_regs
+ 		case BARRIER_EIEIO:
+ 			eieio();
+ 			break;
++#ifdef CONFIG_PPC64
+ 		case BARRIER_LWSYNC:
+ 			asm volatile("lwsync" : : : "memory");
+ 			break;
+ 		case BARRIER_PTESYNC:
+ 			asm volatile("ptesync" : : : "memory");
+ 			break;
++#endif
  		}
- 	} else {
- 		/* master */
--		if (cval->cached) {
--			err = snd_usb_set_cur_mix_value(cval, 0, 0, *cval->cache_val);
--			if (err < 0)
--				return err;
--		}
-+		if (cval->cached)
-+			snd_usb_set_cur_mix_value(cval, 0, 0, *cval->cache_val);
- 	}
+ 		break;
  
- 	return 0;
 
 

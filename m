@@ -2,77 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C014BECCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 22:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E817A4BECD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 22:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235034AbiBUVxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 16:53:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58636 "EHLO
+        id S235067AbiBUV5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 16:57:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbiBUVxB (ORCPT
+        with ESMTP id S229743AbiBUV5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 16:53:01 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F08622BD3;
-        Mon, 21 Feb 2022 13:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=RTi6LH7ru8wXWXIcwXIKmvFznUB5QZjmZSaLCHDFKXI=; b=lPeEODzSNa7Id/B/Ga35RJtUVA
-        qY8KmZc1rQO4mBxy8m1bJLjsqHt0c0Lg8Vtql3smYmmQ2ys5AnvLRoNqaW8BH4R+ORr3OSHWY4ppe
-        lqwpKH6ekkP4ocm05cvu8/WdXa/eUyk9JMxi72xe+mmpwX9kvAaKy2gv1HMnY0k82OZM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nMGbX-007R6S-5r; Mon, 21 Feb 2022 22:52:23 +0100
-Date:   Mon, 21 Feb 2022 22:52:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Cc:     devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: dsa: add new mdio property
-Message-ID: <YhQJlyfdM8KQZE/P@lunn.ch>
-References: <20220221200102.6290-1-luizluca@gmail.com>
+        Mon, 21 Feb 2022 16:57:33 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2723522BD7;
+        Mon, 21 Feb 2022 13:57:09 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.94)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1nMGg2-001WCq-2J; Mon, 21 Feb 2022 22:57:02 +0100
+Received: from p57ae5149.dip0.t-ipconnect.de ([87.174.81.73] helo=[192.168.178.35])
+          by inpost2.zedat.fu-berlin.de (Exim 4.94)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1nMGg1-003rZT-Ra; Mon, 21 Feb 2022 22:57:02 +0100
+Message-ID: <4e42e754-d87e-5f6b-90db-39b4700ee0f1@physik.fu-berlin.de>
+Date:   Mon, 21 Feb 2022 22:57:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221200102.6290-1-luizluca@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: regression: Bug 215601 - gcc segv at startup on ia64
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>
+Cc:     matoro_bugzilla_kernel@matoro.tk,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        linux-ia64@vger.kernel.org,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+References: <a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info>
+ <823f70be-7661-0195-7c97-65673dc7c12a@leemhuis.info>
+ <03497313-A472-4152-BD28-41C35E4E824E@chromium.org>
+ <94c3be49-0262-c613-e5f5-49b536985dde@physik.fu-berlin.de>
+ <9A1F30F8-3DE2-4075-B103-81D891773246@chromium.org>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <9A1F30F8-3DE2-4075-B103-81D891773246@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.174.81.73
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 05:01:02PM -0300, Luiz Angelo Daros de Luca wrote:
-> The optional mdio property will be used by dsa switch to configure
-> slave_mii_bus when the driver does not allocate it during setup.
+Hi Kees!
+
+On 2/21/22 21:58, Kees Cook wrote:
+>> I have applied this patch on top of 038101e6b2cd5c55f888f85db42ea2ad3aecb4b6 and it doesn't
+>> fix the problem for me. Reverting 5f501d555653f8968011a1e65ebb121c8b43c144, however, fixes
+>> the problem.
+>>
+>> FWIW, this problem doesn't just affect GCC but systemd keeps segfaulting with this change as well.
 > 
-> Some drivers already offer/require a similar property but, in some
-> cases, they rely on a compatible string to identify the mdio bus node.
-> Each subdriver might decide to keep existing approach or migrate to this
-> new common property.
+> Very weird! Can you attached either of those binaries to bugzilla (or a URL I can fetch it from)? I can try to figure out where it is going weird...
 
-Your threading of these two patches is broken. The usual way to do this is
+Here's the initrd of that particular machine:
 
-git format-patch HEAD~2
-git send-email *.patch
+> https://people.debian.org/~glaubitz/initrd.img-5.17.0-rc5+
 
-You will then get uniform subject lines and the two emails threaded
-together.
+You should be able to extract the binaries from this initrd image and the "mount" command,
+for example, should be one of the affected binaries.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Adrian
 
-    Andrew
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+

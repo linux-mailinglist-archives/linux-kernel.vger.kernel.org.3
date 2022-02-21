@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40E84BDC9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7F24BE07F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346070AbiBUI5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:57:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44728 "EHLO
+        id S1351041AbiBUJlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:41:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345903AbiBUIzW (ORCPT
+        with ESMTP id S1350521AbiBUJeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:55:22 -0500
+        Mon, 21 Feb 2022 04:34:07 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3B0245AF;
-        Mon, 21 Feb 2022 00:53:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5C029C89;
+        Mon, 21 Feb 2022 01:14:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 839196112B;
-        Mon, 21 Feb 2022 08:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC40C340EB;
-        Mon, 21 Feb 2022 08:53:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE01460018;
+        Mon, 21 Feb 2022 09:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9324C340E9;
+        Mon, 21 Feb 2022 09:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433606;
-        bh=L0t5YggnSs2Fv0Sq5c+rxg4RYmPux4JjVL50pIWCAGY=;
+        s=korg; t=1645434857;
+        bh=Y+8wWX/+BHdYHM4G0Ut01oY1twruDTgP/fIUZ6UlneE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jgD0ZRBtLkwSGnAyhAExcEduNYgIp1LdiUDSX4XJY3LJbkMT8GsmTHfXoBDlL/dOo
-         vpBGC638++meNhvQK2gSeovW7pUHiXz4AeTOACszHN/PYSS6dGaL368R+Gu6N5w1QZ
-         m0u5FDg7LC+dSk7f3AovcZ+q9giGasPZV4OWNadk=
+        b=ULpM8Q4s6JRFhiazIiLzI4eLiNGz9HxxnkZWu27EhL8hp9jAQ11eiAmlJWfeW7a6C
+         48lketTq2i7/6fseeNl5y4r6vzl4aFLpLPyp7DXEY8W2LXXNDIiGuSHllvlSXlhJR5
+         2zb4Ln97HIAhic5jOqAphmRUt/pNe0iTm1YHimx8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 24/45] drop_monitor: fix data-race in dropmon_net_event / trace_napi_poll_hit
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Christian Eggers <ceggers@arri.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.15 123/196] mtd: rawnand: gpmi: dont leak PM reference in error path
 Date:   Mon, 21 Feb 2022 09:49:15 +0100
-Message-Id: <20220221084911.239012656@linuxfoundation.org>
+Message-Id: <20220221084935.052504671@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
-References: <20220221084910.454824160@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,103 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Christian Eggers <ceggers@arri.de>
 
-commit dcd54265c8bc14bd023815e36e2d5f9d66ee1fee upstream.
+commit 9161f365c91614e5a3f5c6dcc44c3b1b33bc59c0 upstream.
 
-trace_napi_poll_hit() is reading stat->dev while another thread can write
-on it from dropmon_net_event()
+If gpmi_nfc_apply_timings() fails, the PM runtime usage counter must be
+dropped.
 
-Use READ_ONCE()/WRITE_ONCE() here, RCU rules are properly enforced already,
-we only have to take care of load/store tearing.
-
-BUG: KCSAN: data-race in dropmon_net_event / trace_napi_poll_hit
-
-write to 0xffff88816f3ab9c0 of 8 bytes by task 20260 on cpu 1:
- dropmon_net_event+0xb8/0x2b0 net/core/drop_monitor.c:1579
- notifier_call_chain kernel/notifier.c:84 [inline]
- raw_notifier_call_chain+0x53/0xb0 kernel/notifier.c:392
- call_netdevice_notifiers_info net/core/dev.c:1919 [inline]
- call_netdevice_notifiers_extack net/core/dev.c:1931 [inline]
- call_netdevice_notifiers net/core/dev.c:1945 [inline]
- unregister_netdevice_many+0x867/0xfb0 net/core/dev.c:10415
- ip_tunnel_delete_nets+0x24a/0x280 net/ipv4/ip_tunnel.c:1123
- vti_exit_batch_net+0x2a/0x30 net/ipv4/ip_vti.c:515
- ops_exit_list net/core/net_namespace.c:173 [inline]
- cleanup_net+0x4dc/0x8d0 net/core/net_namespace.c:597
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x1bf/0x1e0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-read to 0xffff88816f3ab9c0 of 8 bytes by interrupt on cpu 0:
- trace_napi_poll_hit+0x89/0x1c0 net/core/drop_monitor.c:292
- trace_napi_poll include/trace/events/napi.h:14 [inline]
- __napi_poll+0x36b/0x3f0 net/core/dev.c:6366
- napi_poll net/core/dev.c:6432 [inline]
- net_rx_action+0x29e/0x650 net/core/dev.c:6519
- __do_softirq+0x158/0x2de kernel/softirq.c:558
- do_softirq+0xb1/0xf0 kernel/softirq.c:459
- __local_bh_enable_ip+0x68/0x70 kernel/softirq.c:383
- __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:167 [inline]
- _raw_spin_unlock_bh+0x33/0x40 kernel/locking/spinlock.c:210
- spin_unlock_bh include/linux/spinlock.h:394 [inline]
- ptr_ring_consume_bh include/linux/ptr_ring.h:367 [inline]
- wg_packet_decrypt_worker+0x73c/0x780 drivers/net/wireguard/receive.c:506
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x1bf/0x1e0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-value changed: 0xffff88815883e000 -> 0x0000000000000000
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 26435 Comm: kworker/0:1 Not tainted 5.17.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: wg-crypt-wg2 wg_packet_decrypt_worker
-
-Fixes: 4ea7e38696c7 ("dropmon: add ability to detect when hardware dropsrxpackets")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: Pavel Machek <pavel@denx.de>
+Fixes: f53d4c109a66 ("mtd: rawnand: gpmi: Add ERR007117 protection for nfc_apply_timings")
+Signed-off-by: Christian Eggers <ceggers@arri.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220125081619.6286-1-ceggers@arri.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/drop_monitor.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/net/core/drop_monitor.c
-+++ b/net/core/drop_monitor.c
-@@ -219,13 +219,17 @@ static void trace_napi_poll_hit(void *ig
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -2293,7 +2293,7 @@ static int gpmi_nfc_exec_op(struct nand_
+ 		this->hw.must_apply_timings = false;
+ 		ret = gpmi_nfc_apply_timings(this);
+ 		if (ret)
+-			return ret;
++			goto out_pm;
+ 	}
  
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(new_stat, &hw_stats_list, list) {
-+		struct net_device *dev;
-+
- 		/*
- 		 * only add a note to our monitor buffer if:
- 		 * 1) this is the dev we received on
- 		 * 2) its after the last_rx delta
- 		 * 3) our rx_dropped count has gone up
- 		 */
--		if ((new_stat->dev == napi->dev)  &&
-+		/* Paired with WRITE_ONCE() in dropmon_net_event() */
-+		dev = READ_ONCE(new_stat->dev);
-+		if ((dev == napi->dev)  &&
- 		    (time_after(jiffies, new_stat->last_rx + dm_hw_check_delta)) &&
- 		    (napi->dev->stats.rx_dropped != new_stat->last_drop_val)) {
- 			trace_drop_common(NULL, NULL);
-@@ -340,7 +344,10 @@ static int dropmon_net_event(struct noti
- 		mutex_lock(&trace_state_mutex);
- 		list_for_each_entry_safe(new_stat, tmp, &hw_stats_list, list) {
- 			if (new_stat->dev == dev) {
--				new_stat->dev = NULL;
-+
-+				/* Paired with READ_ONCE() in trace_napi_poll_hit() */
-+				WRITE_ONCE(new_stat->dev, NULL);
-+
- 				if (trace_state == TRACE_OFF) {
- 					list_del_rcu(&new_stat->list);
- 					kfree_rcu(new_stat, rcu);
+ 	dev_dbg(this->dev, "%s: %d instructions\n", __func__, op->ninstrs);
+@@ -2422,6 +2422,7 @@ unmap:
+ 
+ 	this->bch = false;
+ 
++out_pm:
+ 	pm_runtime_mark_last_busy(this->dev);
+ 	pm_runtime_put_autosuspend(this->dev);
+ 
 
 

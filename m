@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89554BE27C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 874E34BE939
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379060AbiBUPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:24:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42502 "EHLO
+        id S1379057AbiBUPYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:24:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236633AbiBUPYm (ORCPT
+        with ESMTP id S236633AbiBUPYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:24:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C421DA7B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:24:19 -0800 (PST)
+        Mon, 21 Feb 2022 10:24:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CED91DA7B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:24:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 011B661050
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DEDEC340E9;
-        Mon, 21 Feb 2022 15:24:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA3D7B80E9B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:24:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3748C340EC;
+        Mon, 21 Feb 2022 15:24:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645457058;
-        bh=61j2DG9XsjT6XMPvA8okjWZ5trrMT2Q8ZLz9fkWalkI=;
+        s=k20201202; t=1645457061;
+        bh=MW2Yg1Kfyp2Pc04JtrMTt1mmSjFcqsfeEWHrq1tp5ZI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rPXIGliSXsd2BgfOyQQQhlXqEN46OgFAjIs5HNM3FQl44c+7IB5PJdBOX2+a1rF51
-         547imM4xzdjobpmrsTtqnaDe5Hrm0OPoKbQWjFqTfED9FRnLSVPaHzYEw9vH4f6hsr
-         enFX7ObBCDsUdKY9OwEnsyl57Tdsp/iOmX7UlpCNaZYnhPgP9jGn97TVIfrKxtyEe3
-         9w2IV1AdL8dL/7C5nfSjyTJaajh+6J5jznpUTT39IjOE03MmrscguWA6fH/HVRML9S
-         HPlszUDLDPADY6PSOEz4K5gRcWRJf/NjQVQhPKBi8TwMM+yln/6K1pqY00wqMKc8kP
-         gGXJgfPSjazjg==
+        b=MvuEPI44YNV4uqrNek4yRX2u1HAYJGNNWEu43R2dUulIfG5gN1QZHBsP6WqsvHAFT
+         8Ae6IJu1Um68cL+p+W3fum2eTncELXcdvLN8/3sr0i2etvMD2EZ3nUMPgzfbUbGSpt
+         gbDmLBI/LdEXPECp06YZqtHhaba3kvvc8wssvL30qVZGCow+zUFl3WjTY9qJFX0kT9
+         CMjrBKeEc9MFXwOmCUA6fUpmXMbxcQqLqfzjBuGkCEvYsSO2mavrPu2hGDhQeVpVm0
+         iYZunii92i7zNygEvuFNPbBEYtLL4Lyl+LhQthU3KHDHQmFbRoSPEASU/xcTLtJRfO
+         3cvw6U0n1hzBQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     alsa-devel@alsa-project.org, Brent Lu <brent.lu@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
+Cc:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
         Kai Vehmanen <kai.vehmanen@linux.intel.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        Curtis Malainey <cujomalainey@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
         Takashi Iwai <tiwai@suse.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Daniel Baluta <daniel.baluta@nxp.com>,
         sound-open-firmware@alsa-project.org
-In-Reply-To: <20220218082741.1707209-1-brent.lu@intel.com>
-References: <20220218082741.1707209-1-brent.lu@intel.com>
-Subject: Re: [PATCH] ASoC: SOF: Intel: Add topology overwrite for Felwinter
-Message-Id: <164545705583.730905.504549990237487794.b4-ty@kernel.org>
-Date:   Mon, 21 Feb 2022 15:24:15 +0000
+In-Reply-To: <20220221064005.1752500-1-brent.lu@intel.com>
+References: <20220221064005.1752500-1-brent.lu@intel.com>
+Subject: Re: [PATCH v2] ASoC: SOF: Intel: Add topology overwrite for Felwinter
+Message-Id: <164545705858.730905.4275248547658138991.b4-ty@kernel.org>
+Date:   Mon, 21 Feb 2022 15:24:18 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,7 +64,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 16:27:41 +0800, Brent Lu wrote:
+On Mon, 21 Feb 2022 14:40:05 +0800, Brent Lu wrote:
 > From: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
 > 
 > The Felwinter uses four max98360a amplifiers on corresponding CH0~CH3.

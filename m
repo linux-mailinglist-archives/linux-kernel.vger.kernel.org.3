@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C834BE83B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9224BDCD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353126AbiBUJsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:48:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34304 "EHLO
+        id S1349329AbiBUJ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:27:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351186AbiBUJmN (ORCPT
+        with ESMTP id S1349062AbiBUJU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:42:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F1B3E0EF;
-        Mon, 21 Feb 2022 01:17:46 -0800 (PST)
+        Mon, 21 Feb 2022 04:20:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F9731536;
+        Mon, 21 Feb 2022 01:07:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 93D93CE0E90;
-        Mon, 21 Feb 2022 09:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82FD9C340EB;
-        Mon, 21 Feb 2022 09:17:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C88D9608C1;
+        Mon, 21 Feb 2022 09:07:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C79C340E9;
+        Mon, 21 Feb 2022 09:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435064;
-        bh=bFy7XXY2ACITulTCUKRC7dk/O8gBIpyeMZ3F7CKr/7s=;
+        s=korg; t=1645434469;
+        bh=QVHi1Fo2w+5SF4nm3Aba/ncolOFBS7ktXZEtqMSRG1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L2sbK57hD1MNKO96n15UxRyR1WhJHbHaNxUOXFqeT4Os2ni6F7GaDDvl+pRPX+rCW
-         CTeoVZ2MB88d0UpTf++XX4j0aHWTT/4GM3wCTOYdKorlQu5ABox0AOrgIvIHoGCpOc
-         z4Se9oKHcUFqVMKda3PiQs0Xe/MTBqmk8EJcTzS4=
+        b=Je/OBJ4bkjTBP54eVGFhMVz+f34G2cZ7DVrPbLHfRlS8xWm0ORDJDTuUTnzLtmSoQ
+         VDdFTiEF2qPH6GJWKzTo2Mn5rQ5u0ttqlYbHLRg/uqnu+MM4lWxtxA5d/qg8H2O4Dd
+         otXyzWaym3Qca+8cmvU53+LkMwSkQb/ZagN5FF2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Julian Braha <julianbraha@gmail.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 031/227] ASoC: mediatek: fix unmet dependency on GPIOLIB for SND_SOC_DMIC
-Date:   Mon, 21 Feb 2022 09:47:30 +0100
-Message-Id: <20220221084935.883998737@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.15 019/196] parisc: Add ioread64_lo_hi() and iowrite64_lo_hi()
+Date:   Mon, 21 Feb 2022 09:47:31 +0100
+Message-Id: <20220221084931.536620132@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Julian Braha <julianbraha@gmail.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 579b2c8f72d974f27d85bbd53846f34675ee3b01 ]
+commit 18a1d5e1945385d9b5adc3fe11427ce4a9d2826e upstream.
 
-When SND_SOC_MT8195_MT6359_RT1011_RT5682 is selected,
-and GPIOLIB is not selected,
-Kbuild gives the following warning:
+It's a followup to the previous commit f15309d7ad5d ("parisc: Add
+ioread64_hi_lo() and iowrite64_hi_lo()") which does only half of
+the job. Add the rest, so we won't get a new kernel test robot
+reports.
 
-WARNING: unmet direct dependencies detected for SND_SOC_DMIC
-  Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && GPIOLIB [=n]
-  Selected by [y]:
-  - SND_SOC_MT8195_MT6359_RT1011_RT5682 [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && I2C [=y] && SND_SOC_MT8195 [=y] && MTK_PMIC_WRAP [=y]
-
-This is because SND_SOC_MT8195_MT6359_RT1011_RT5682
-selects SND_SOC_DMIC without selecting or depending on
-GPIOLIB, depsite SND_SOC_DMIC depending on GPIOLIB.
-
-This unmet dependency bug was detected by Kismet,
-a static analysis tool for Kconfig. Please advise
-if this is not the appropriate solution.
-
-Signed-off-by: Julian Braha <julianbraha@gmail.com>
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-Link: https://lore.kernel.org/r/20220117050324.68371-1-julianbraha@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: f15309d7ad5d ("parisc: Add ioread64_hi_lo() and iowrite64_hi_lo()")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/mediatek/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/parisc/lib/iomap.c |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/sound/soc/mediatek/Kconfig b/sound/soc/mediatek/Kconfig
-index 3b1ddea26a9ef..76f191ec7bf84 100644
---- a/sound/soc/mediatek/Kconfig
-+++ b/sound/soc/mediatek/Kconfig
-@@ -215,7 +215,7 @@ config SND_SOC_MT8195_MT6359_RT1019_RT5682
+--- a/arch/parisc/lib/iomap.c
++++ b/arch/parisc/lib/iomap.c
+@@ -346,6 +346,16 @@ u64 ioread64be(const void __iomem *addr)
+ 	return *((u64 *)addr);
+ }
  
- config SND_SOC_MT8195_MT6359_RT1011_RT5682
- 	tristate "ASoC Audio driver for MT8195 with MT6359 RT1011 RT5682 codec"
--	depends on I2C
-+	depends on I2C && GPIOLIB
- 	depends on SND_SOC_MT8195 && MTK_PMIC_WRAP
- 	select SND_SOC_MT6359
- 	select SND_SOC_RT1011
--- 
-2.34.1
-
++u64 ioread64_lo_hi(const void __iomem *addr)
++{
++	u32 low, high;
++
++	low = ioread32(addr);
++	high = ioread32(addr + sizeof(u32));
++
++	return low + ((u64)high << 32);
++}
++
+ u64 ioread64_hi_lo(const void __iomem *addr)
+ {
+ 	u32 low, high;
+@@ -419,6 +429,12 @@ void iowrite64be(u64 datum, void __iomem
+ 	}
+ }
+ 
++void iowrite64_lo_hi(u64 val, void __iomem *addr)
++{
++	iowrite32(val, addr);
++	iowrite32(val >> 32, addr + sizeof(u32));
++}
++
+ void iowrite64_hi_lo(u64 val, void __iomem *addr)
+ {
+ 	iowrite32(val >> 32, addr + sizeof(u32));
+@@ -530,6 +546,7 @@ EXPORT_SYMBOL(ioread32);
+ EXPORT_SYMBOL(ioread32be);
+ EXPORT_SYMBOL(ioread64);
+ EXPORT_SYMBOL(ioread64be);
++EXPORT_SYMBOL(ioread64_lo_hi);
+ EXPORT_SYMBOL(ioread64_hi_lo);
+ EXPORT_SYMBOL(iowrite8);
+ EXPORT_SYMBOL(iowrite16);
+@@ -538,6 +555,7 @@ EXPORT_SYMBOL(iowrite32);
+ EXPORT_SYMBOL(iowrite32be);
+ EXPORT_SYMBOL(iowrite64);
+ EXPORT_SYMBOL(iowrite64be);
++EXPORT_SYMBOL(iowrite64_lo_hi);
+ EXPORT_SYMBOL(iowrite64_hi_lo);
+ EXPORT_SYMBOL(ioread8_rep);
+ EXPORT_SYMBOL(ioread16_rep);
 
 

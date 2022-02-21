@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0554BE59A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4C84BE7E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346909AbiBUJDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:03:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58078 "EHLO
+        id S1345751AbiBUIxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:53:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347094AbiBUJAu (ORCPT
+        with ESMTP id S1345557AbiBUIwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:00:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114272717D;
-        Mon, 21 Feb 2022 00:55:51 -0800 (PST)
+        Mon, 21 Feb 2022 03:52:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B31B25E7;
+        Mon, 21 Feb 2022 00:52:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AACF0B80EA5;
-        Mon, 21 Feb 2022 08:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E48C340E9;
-        Mon, 21 Feb 2022 08:55:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0131BB80EB0;
+        Mon, 21 Feb 2022 08:52:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E24EC340F1;
+        Mon, 21 Feb 2022 08:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433749;
-        bh=pn7u/oGbP5SpBeqFKRsJCeQbPdo5FoZfq9rzWVoZZR4=;
+        s=korg; t=1645433544;
+        bh=zZv4cf1Gxrqszl+G8uumJj1fJSQk+9B7NQtkVLy42R0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lgbkM9Ubjt5ZXmVkmnDxrvBmUsXn9PBBKWfgAraDd7zUJ2tY8HJSLfW6RTsOj9RaW
-         ADvzqSlVjHNov2SDXPPzAgEa8rOMOefzQpTAdxIX/nFImm1JKj8TEF+dEIsoLnukTq
-         s9j18226FxNbT0wmqCx8dsgcW+Y1WSwN/rb7mNrc=
+        b=vZCyja1wFogUluo2T4uALMZeA5F6apJRd0RnCQjBMXF6UibuVSHe6RSY28c9rTRtC
+         W63IF4K2XTihxZvQGoPVWkH2B+dSsw550N+zdwyVL9waipf1PXUwLRJ7gIlR7V12et
+         8V2dn/O+qdkBCDePl+4DrEzmNeldJY2lZUQqCmMc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 29/58] bonding: fix data-races around agg_select_timer
+        stable@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 29/33] KVM: x86/pmu: Use AMD64_RAW_EVENT_MASK for PERF_TYPE_RAW
 Date:   Mon, 21 Feb 2022 09:49:22 +0100
-Message-Id: <20220221084912.825972694@linuxfoundation.org>
+Message-Id: <20220221084909.706175553@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+References: <20220221084908.568970525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,138 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Jim Mattson <jmattson@google.com>
 
-commit 9ceaf6f76b203682bb6100e14b3d7da4c0bedde8 upstream.
+[ Upstream commit 710c476514313c74045c41c0571bb5178fd16e3d ]
 
-syzbot reported that two threads might write over agg_select_timer
-at the same time. Make agg_select_timer atomic to fix the races.
+AMD's event select is 3 nybbles, with the high nybble in bits 35:32 of
+a PerfEvtSeln MSR. Don't mask off the high nybble when configuring a
+RAW perf event.
 
-BUG: KCSAN: data-race in bond_3ad_initiate_agg_selection / bond_3ad_state_machine_handler
-
-read to 0xffff8881242aea90 of 4 bytes by task 1846 on cpu 1:
- bond_3ad_state_machine_handler+0x99/0x2810 drivers/net/bonding/bond_3ad.c:2317
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x1bf/0x1e0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-write to 0xffff8881242aea90 of 4 bytes by task 25910 on cpu 0:
- bond_3ad_initiate_agg_selection+0x18/0x30 drivers/net/bonding/bond_3ad.c:1998
- bond_open+0x658/0x6f0 drivers/net/bonding/bond_main.c:3967
- __dev_open+0x274/0x3a0 net/core/dev.c:1407
- dev_open+0x54/0x190 net/core/dev.c:1443
- bond_enslave+0xcef/0x3000 drivers/net/bonding/bond_main.c:1937
- do_set_master net/core/rtnetlink.c:2532 [inline]
- do_setlink+0x94f/0x2500 net/core/rtnetlink.c:2736
- __rtnl_newlink net/core/rtnetlink.c:3414 [inline]
- rtnl_newlink+0xfeb/0x13e0 net/core/rtnetlink.c:3529
- rtnetlink_rcv_msg+0x745/0x7e0 net/core/rtnetlink.c:5594
- netlink_rcv_skb+0x14e/0x250 net/netlink/af_netlink.c:2494
- rtnetlink_rcv+0x18/0x20 net/core/rtnetlink.c:5612
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x602/0x6d0 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x728/0x850 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0x39a/0x510 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmsg+0x195/0x230 net/socket.c:2496
- __do_sys_sendmsg net/socket.c:2505 [inline]
- __se_sys_sendmsg net/socket.c:2503 [inline]
- __x64_sys_sendmsg+0x42/0x50 net/socket.c:2503
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0x00000050 -> 0x0000004f
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 25910 Comm: syz-executor.1 Tainted: G        W         5.17.0-rc4-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Cc: Jay Vosburgh <j.vosburgh@gmail.com>
-Cc: Veaceslav Falico <vfalico@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Message-Id: <20220203014813.2130559-2-jmattson@google.com>
+Reviewed-by: David Dunn <daviddunn@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_3ad.c |   30 +++++++++++++++++++++++++-----
- include/net/bond_3ad.h         |    2 +-
- 2 files changed, 26 insertions(+), 6 deletions(-)
+ arch/x86/kvm/pmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -249,7 +249,7 @@ static inline int __check_agg_selection_
- 	if (bond == NULL)
- 		return 0;
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 0827ee7d0e9b6..f1aa0b932c547 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -164,7 +164,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 	}
  
--	return BOND_AD_INFO(bond).agg_select_timer ? 1 : 0;
-+	return atomic_read(&BOND_AD_INFO(bond).agg_select_timer) ? 1 : 0;
- }
+ 	if (type == PERF_TYPE_RAW)
+-		config = eventsel & X86_RAW_EVENT_MASK;
++		config = eventsel & AMD64_RAW_EVENT_MASK;
  
- /**
-@@ -1965,7 +1965,7 @@ static void ad_marker_response_received(
-  */
- void bond_3ad_initiate_agg_selection(struct bonding *bond, int timeout)
- {
--	BOND_AD_INFO(bond).agg_select_timer = timeout;
-+	atomic_set(&BOND_AD_INFO(bond).agg_select_timer, timeout);
- }
- 
- /**
-@@ -2250,6 +2250,28 @@ void bond_3ad_update_ad_actor_settings(s
- }
- 
- /**
-+ * bond_agg_timer_advance - advance agg_select_timer
-+ * @bond:  bonding structure
-+ *
-+ * Return true when agg_select_timer reaches 0.
-+ */
-+static bool bond_agg_timer_advance(struct bonding *bond)
-+{
-+	int val, nval;
-+
-+	while (1) {
-+		val = atomic_read(&BOND_AD_INFO(bond).agg_select_timer);
-+		if (!val)
-+			return false;
-+		nval = val - 1;
-+		if (atomic_cmpxchg(&BOND_AD_INFO(bond).agg_select_timer,
-+				   val, nval) == val)
-+			break;
-+	}
-+	return nval == 0;
-+}
-+
-+/**
-  * bond_3ad_state_machine_handler - handle state machines timeout
-  * @bond: bonding struct to work on
-  *
-@@ -2284,9 +2306,7 @@ void bond_3ad_state_machine_handler(stru
- 	if (!bond_has_slaves(bond))
- 		goto re_arm;
- 
--	/* check if agg_select_timer timer after initialize is timed out */
--	if (BOND_AD_INFO(bond).agg_select_timer &&
--	    !(--BOND_AD_INFO(bond).agg_select_timer)) {
-+	if (bond_agg_timer_advance(bond)) {
- 		slave = bond_first_slave_rcu(bond);
- 		port = slave ? &(SLAVE_AD_INFO(slave)->port) : NULL;
- 
---- a/include/net/bond_3ad.h
-+++ b/include/net/bond_3ad.h
-@@ -265,7 +265,7 @@ struct ad_system {
- 
- struct ad_bond_info {
- 	struct ad_system system;	/* 802.3ad system structure */
--	u32 agg_select_timer;		/* Timer to select aggregator after all adapter's hand shakes */
-+	atomic_t agg_select_timer;	/* Timer to select aggregator after all adapter's hand shakes */
- 	u16 aggregator_identifier;
- };
- 
+ 	pmc_reprogram_counter(pmc, type, config,
+ 			      !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
+-- 
+2.34.1
+
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619A44BDF79
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1504BE458
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349525AbiBUJ0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:26:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36374 "EHLO
+        id S1350252AbiBUJe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:34:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348007AbiBUJK0 (ORCPT
+        with ESMTP id S1350043AbiBUJ1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:10:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BD91DA7E;
-        Mon, 21 Feb 2022 01:02:43 -0800 (PST)
+        Mon, 21 Feb 2022 04:27:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DEC22512;
+        Mon, 21 Feb 2022 01:11:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40632B80EAC;
-        Mon, 21 Feb 2022 09:02:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CEFFC340E9;
-        Mon, 21 Feb 2022 09:02:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A98AE60018;
+        Mon, 21 Feb 2022 09:11:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFA4C340E9;
+        Mon, 21 Feb 2022 09:11:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434160;
-        bh=JNoR1dBtACClSBXxV0FH73AMGx14ZhyytNu9vXoNPt8=;
+        s=korg; t=1645434682;
+        bh=ZS1TD7nsvGNTR1DMMV/5tMV8xT5RFlc/uTU2g8Au49o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KveYsZEKBg3mz+gpIrTyi8ITRSOOc+VkWeunXHhyRSFfUcNjiDUqO45CQDf2qJqAo
-         fHQrlWljr47tPNKwiu8MZOBlI6u/wei9l8h2FhSVjoQSaAJc7UqE6YIoVLlyDNRLgz
-         AAgxMEMUxiJT5n7EN42tW0dk1U+jZRJF2JFA9Fqk=
+        b=H0NjI0TlqWQagWqxtmpGvKO6j5poU5YQFvbk6eD8VhVolsEXj19jXQ4ngMtE77MN0
+         5PUX5ZwBVPQXLE4d7/u3jNHOs1YVPCRsVYijHY9MbaqXKObNY8liIC1Fzsx1cnEplx
+         E5XIqyTg5vo5UQuhUrYjDZ0SK3tkltP2NPze4zvM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 034/121] quota: make dquot_quota_sync return errors from ->sync_fs
+        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>
+Subject: [PATCH 5.15 094/196] net: ieee802154: ca8210: Fix lifs/sifs periods
 Date:   Mon, 21 Feb 2022 09:48:46 +0100
-Message-Id: <20220221084922.337947397@linuxfoundation.org>
+Message-Id: <20220221084934.085475240@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Darrick J. Wong <djwong@kernel.org>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-[ Upstream commit dd5532a4994bfda0386eb2286ec00758cee08444 ]
+commit bdc120a2bcd834e571ce4115aaddf71ab34495de upstream.
 
-Strangely, dquot_quota_sync ignores the return code from the ->sync_fs
-call, which means that quotacalls like Q_SYNC never see the error.  This
-doesn't seem right, so fix that.
+These periods are expressed in time units (microseconds) while 40 and 12
+are the number of symbol durations these periods will last. We need to
+multiply them both with the symbol_duration in order to get these
+values in microseconds.
 
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/r/20220201180629.93410-2-miquel.raynal@bootlin.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/quota/dquot.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/net/ieee802154/ca8210.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-index 4f13734637660..09fb8459bb5ce 100644
---- a/fs/quota/dquot.c
-+++ b/fs/quota/dquot.c
-@@ -692,9 +692,14 @@ int dquot_quota_sync(struct super_block *sb, int type)
- 	/* This is not very clever (and fast) but currently I don't know about
- 	 * any other simple way of getting quota data to disk and we must get
- 	 * them there for userspace to be visible... */
--	if (sb->s_op->sync_fs)
--		sb->s_op->sync_fs(sb, 1);
--	sync_blockdev(sb->s_bdev);
-+	if (sb->s_op->sync_fs) {
-+		ret = sb->s_op->sync_fs(sb, 1);
-+		if (ret)
-+			return ret;
-+	}
-+	ret = sync_blockdev(sb->s_bdev);
-+	if (ret)
-+		return ret;
- 
- 	/*
- 	 * Now when everything is written we can discard the pagecache so
--- 
-2.34.1
-
+--- a/drivers/net/ieee802154/ca8210.c
++++ b/drivers/net/ieee802154/ca8210.c
+@@ -2977,8 +2977,8 @@ static void ca8210_hw_setup(struct ieee8
+ 	ca8210_hw->phy->cca.opt = NL802154_CCA_OPT_ENERGY_CARRIER_AND;
+ 	ca8210_hw->phy->cca_ed_level = -9800;
+ 	ca8210_hw->phy->symbol_duration = 16;
+-	ca8210_hw->phy->lifs_period = 40;
+-	ca8210_hw->phy->sifs_period = 12;
++	ca8210_hw->phy->lifs_period = 40 * ca8210_hw->phy->symbol_duration;
++	ca8210_hw->phy->sifs_period = 12 * ca8210_hw->phy->symbol_duration;
+ 	ca8210_hw->flags =
+ 		IEEE802154_HW_AFILT |
+ 		IEEE802154_HW_OMIT_CKSUM |
 
 

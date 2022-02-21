@@ -2,108 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B554BE9EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C184BE9E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiBURmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 12:42:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49586 "EHLO
+        id S229638AbiBURmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 12:42:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiBURl0 (ORCPT
+        with ESMTP id S229723AbiBURlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 12:41:26 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E9E26AF9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:40:32 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C0BC53F33A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 17:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645465230;
-        bh=LpXc1xYis15tzZuBaX7CvS9s8Rflb3ZQ3aLFG0/YcJA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=FU0iDj/NLtFSFs7+KGn6wQno8TgVaM2AgpOHn0c74upm1Fgpm1kTpq7iT8OeLUUuD
-         fFnAfRRHbsRWVpQ0EGWlzmwpwLOxTwzbvgmF9rxEvB7iejuV0IfXkAVcNfV74eUnnE
-         Hulu205dtMhTXnDYxDvDiQvcBxgAB1623a7bI2KO1nZj/wd6kJBMhdOsFsc+7sAF4r
-         ncHdIMiZgY/Pba6B8gfiW8Fj95sjFkWzddIeM5mq4Eoqgg0C6wa4+DJ/pKsK2YW3me
-         PjjvuxG1K7W24ULolQXjGR+yHoZqZqF/vQxYhQW0fprQuz22HBqru+yyKB0WtgtBR0
-         gH3aeO1TbG3CQ==
-Received: by mail-ej1-f72.google.com with SMTP id kw5-20020a170907770500b006ba314a753eso4864529ejc.21
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:40:30 -0800 (PST)
+        Mon, 21 Feb 2022 12:41:20 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0415326AF5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:40:27 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id e2so12328109ljq.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:40:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xEuyjFrM9XwMrClBWbdS/xCWNoJfoXGzRHNpn8EHVe8=;
+        b=EvNZ4JN1PESakWqiNhVErkDTF8azxH7NkFupvW940zHErR8fbltkz8fMM3erSSAkua
+         SVbCJAx5x99BdcVvfCbuOi6eihjGnlTLy32uvWD8S02HQh5C6ntMJgadw9JJD95XWSe6
+         FYzVQ3ZEYFWfNS89g5hsLbaL7gMl81XsfzVoLPHnM9uLGNjC7SYyyUsU2Qwm8B1zZjsQ
+         opiHv5yc1+vfHrioBcT0Su4bI0Uo1cnoWi2VTaIof4su3DEprcGE3luxKhgjxtku3cgW
+         c2nbRU/0MTpXeAhcfUwbGoQnEXkyZAFRlK6RJqkkSBHexXVWxzj39goDYznkCJbICaie
+         0Eeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LpXc1xYis15tzZuBaX7CvS9s8Rflb3ZQ3aLFG0/YcJA=;
-        b=SPnqX0y1rlEb/khoPRNJKYdfYVbXb1hedYU2yucNn5zMXAwuAzP8nWC0dAuDHSo7F7
-         FC9ErALeE1WEsqHhjtLOJ2/9U4dAoZYVfTuuOkrQy7M9Ua2nDuujnvok+N7LBGpOsTJ9
-         V6zOB/2qQWvDTCHibxa3TFikQtD91RMdG/nwgLzyJRRqvgNmNGMNy8+J56bhuDmPytGE
-         2BojgWqoOqLqRIptiAY7v81divJ3913eIyjkjoPtbz6+Z9C4372Hh/WkvavI+hzM2SXV
-         Aqff6Od7Jf7JmN3/j5wYKDfrMs9fsy24G+X8G/HoA1o/QGQfMG+23RZBHxLWILDJjMat
-         9jbw==
-X-Gm-Message-State: AOAM531kS89P41vObwje/2ouKdSRZulepcoZBBHekIyCQoOqwUv14vwy
-        Nsiyl8NRidVIyk4BRC9kEcnY+ydGNnc1dooef3qNzA58+weZMJ6ykG02QMUxAEZ7S+ml2KY4Lch
-        RAA8hyJwQGMk3KoitE9VnIzKDAAvNQLQx/Z4Eg7zyiw==
-X-Received: by 2002:a50:fc05:0:b0:408:4d18:5070 with SMTP id i5-20020a50fc05000000b004084d185070mr22842613edr.365.1645465230439;
-        Mon, 21 Feb 2022 09:40:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxMxvJLsv/ZkxbFBnRkJZaiCErCEJ36+3HERlONGEdDrjbZqffp0RJNO7yqStYkMMNu0XCjfQ==
-X-Received: by 2002:a50:fc05:0:b0:408:4d18:5070 with SMTP id i5-20020a50fc05000000b004084d185070mr22842598edr.365.1645465230312;
-        Mon, 21 Feb 2022 09:40:30 -0800 (PST)
-Received: from [192.168.0.122] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id hp7sm259204ejc.144.2022.02.21.09.40.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 09:40:29 -0800 (PST)
-Message-ID: <bf907500-fbf4-dae9-2e7a-e14d61a85b87@canonical.com>
-Date:   Mon, 21 Feb 2022 18:40:29 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xEuyjFrM9XwMrClBWbdS/xCWNoJfoXGzRHNpn8EHVe8=;
+        b=h5XNiAI4C3571zeotAvBPsG71HFnZVDXhwL0BJ7dgJqhXOdq2yrJ8zUSZIFfYJEnqz
+         55U9RN+mBvVNzEElKKkbY/GLMqklsZZktT/ZSzg8xUqjFNeydaMcqUQSdeMwxRPk6/sr
+         Qine4EC05Xgzt0KGykVDJj7pBxI+HBE0dGXzcBfjQbndTvM1p0VdOiVUUiYf5yO3x3Qs
+         cWdP/WU6tO8c3ONLrATIYVA7WgpNBwz7YkSgRPU1RYBrd2CT78cgjSSGbuEKTrnN2uCp
+         0XbQI3cMk/ie23tCPKLIwjRS8/72eZds3lYl08E4nFHf1RRx1o5LGAxPESa0SiGQRtnA
+         p3pw==
+X-Gm-Message-State: AOAM530sTGXOxmX8McXDeyC+VB0RrXBOjlsANwLZ5KbrzRKIKFMFYWa3
+        TgA4uyu7ftWTAtnwtzWAnJqVSw==
+X-Google-Smtp-Source: ABdhPJyMpVcgpGjVDM1tE/A1ztFlJLD5B8plNpKCAvS4oAZ2w0SyAG5LTlNyt81HXrIEaGhcKYOhLA==
+X-Received: by 2002:a2e:a4ae:0:b0:244:dac8:4590 with SMTP id g14-20020a2ea4ae000000b00244dac84590mr8981123ljm.231.1645465224829;
+        Mon, 21 Feb 2022 09:40:24 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id v18sm1417023ljb.98.2022.02.21.09.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 09:40:24 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 748CC1039EE; Mon, 21 Feb 2022 20:41:21 +0300 (+03)
+Date:   Mon, 21 Feb 2022 20:41:21 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v10 21/45] x86/mm: Add support to validate memory when
+ changing C-bit
+Message-ID: <20220221174121.ceeplpoaz63q72kv@box>
+References: <Ygz88uacbwuTTNat@zn.tnic.mbx>
+ <20220216160457.1748381-1-brijesh.singh@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/3] clocksource/drivers/exynos_mct: increase the size
- of name array
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linux-samsung-soc@vger.kernel.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, pankaj.dubey@samsung.com,
-        m.szyprowski@samsung.com
-References: <20220221174547.26176-1-alim.akhtar@samsung.com>
- <CGME20220221173407epcas5p117620b55b5f5a94d6a525342374efa51@epcas5p1.samsung.com>
- <20220221174547.26176-3-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220221174547.26176-3-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216160457.1748381-1-brijesh.singh@amd.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2022 18:45, Alim Akhtar wrote:
-> Variable _name_ hold mct_tick number per cpu and it is currently
-> limited to 10. Which restrict the scalability of the MCT driver for
-> the SoC which has more local timers interrupts (>= 12).
-> Increase the length of it to make mct_tick printed correctly for
-> each local timer interrupts per CPU.
+On Wed, Feb 16, 2022 at 10:04:57AM -0600, Brijesh Singh wrote:
+> @@ -287,6 +301,7 @@ struct x86_platform_ops {
+>  	struct x86_legacy_features legacy;
+>  	void (*set_legacy_features)(void);
+>  	struct x86_hyper_runtime hyper;
+> +	struct x86_guest guest;
+>  };
+
+I used 'cc' instead of 'guest'. 'guest' looks too generic.
+
+Also, I'm not sure why not to use pointer to ops struct instead of stroing
+them directly in x86_platform. Yes, it is consistent with 'hyper', but I
+don't see it as a strong argument.
+
+>  
+> index b4072115c8ef..a55477a6e578 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -2012,8 +2012,15 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+>  	 */
+>  	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
+>  
+> +	/* Notify HV that we are about to set/clr encryption attribute. */
+> +	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
+> +
+>  	ret = __change_page_attr_set_clr(&cpa, 1);
+
+This doesn't cover difference in flushing requirements. Can we get it too?
+
+>  
+> +	/* Notify HV that we have succesfully set/clr encryption attribute. */
+> +	if (!ret)
+> +		x86_platform.guest.enc_status_change_finish(addr, numpages, enc);
+> +
+
+Any particular reason you moved it above cpa_flush()? I don't think it
+makes a difference for TDX, but still.
+
+>  	/*
+>  	 * After changing the encryption attribute, we need to flush TLBs again
+>  	 * in case any speculative TLB caching occurred (but no need to flush
+> @@ -2023,12 +2030,6 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+>  	 */
+>  	cpa_flush(&cpa, 0);
+>  
+> -	/*
+> -	 * Notify hypervisor that a given memory range is mapped encrypted
+> -	 * or decrypted.
+> -	 */
+> -	notify_range_enc_status_changed(addr, numpages, enc);
+> -
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.25.1
 > 
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  drivers/clocksource/exynos_mct.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+-- 
+ Kirill A. Shutemov

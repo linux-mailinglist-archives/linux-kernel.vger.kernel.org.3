@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27B24BDFC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9874BE01D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347029AbiBUJEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:04:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33072 "EHLO
+        id S242702AbiBUJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:13:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347410AbiBUJBV (ORCPT
+        with ESMTP id S1347840AbiBUJI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:21 -0500
+        Mon, 21 Feb 2022 04:08:59 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB14127FFD;
-        Mon, 21 Feb 2022 00:56:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E983C121;
+        Mon, 21 Feb 2022 01:01:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D5A061132;
-        Mon, 21 Feb 2022 08:56:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C94C340E9;
-        Mon, 21 Feb 2022 08:56:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47BCA611D0;
+        Mon, 21 Feb 2022 09:01:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24555C340E9;
+        Mon, 21 Feb 2022 09:01:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433774;
-        bh=Fx69TGtCU+DC6D/k/su0vz+KUpPNih+GxX4SBwdw02A=;
+        s=korg; t=1645434069;
+        bh=FHa1Kgt/KDt63TTXl8ZR/xZPmr5N3APcqR18hi6Jeh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NPAMku/hOewOw1ayIE02iToFCS8ppjT10M9tkE0Pmm/phRyMffjnPTruZMu2ElW71
-         SdPJ0zAHit6cQZU8sq74Yz4Ycs3UG3/TlU4WGvNQWvVtRLReXcIKMvz3WSw2gZgKox
-         uT/ByyG5rwNQ1DjHPCEerDey5bDyqeLchCkNtJt0=
+        b=eclIVfU4ogweqn84ufAspcUZQMmaQF0AGEFVMtXa+Tj57xgckf6ms3Ydiuuy0SzZG
+         lSLhUF3uUrtPQ9DhTQkdriv1W2D8diuOcRrI1mVl9ylnNlriZpWShdef4JlltMQpnk
+         i0yveGiNLKNaRbO3nKHr7sQZLHBHKN2QDg4Hs58Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ming Lei <ming.lei@rehdat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Laibin Qiu <qiulaibin@huawei.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4.19 37/58] block/wbt: fix negative inflight counter when remove scsi device
-Date:   Mon, 21 Feb 2022 09:49:30 +0100
-Message-Id: <20220221084913.075259372@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Christian Eggers <ceggers@arri.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.4 51/80] mtd: rawnand: gpmi: dont leak PM reference in error path
+Date:   Mon, 21 Feb 2022 09:49:31 +0100
+Message-Id: <20220221084917.251541092@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laibin Qiu <qiulaibin@huawei.com>
+From: Christian Eggers <ceggers@arri.de>
 
-commit e92bc4cd34de2ce454bdea8cd198b8067ee4e123 upstream.
+commit 9161f365c91614e5a3f5c6dcc44c3b1b33bc59c0 upstream.
 
-Now that we disable wbt by set WBT_STATE_OFF_DEFAULT in
-wbt_disable_default() when switch elevator to bfq. And when
-we remove scsi device, wbt will be enabled by wbt_enable_default.
-If it become false positive between wbt_wait() and wbt_track()
-when submit write request.
+If gpmi_nfc_apply_timings() fails, the PM runtime usage counter must be
+dropped.
 
-The following is the scenario that triggered the problem.
-
-T1                          T2                           T3
-                            elevator_switch_mq
-                            bfq_init_queue
-                            wbt_disable_default <= Set
-                            rwb->enable_state (OFF)
-Submit_bio
-blk_mq_make_request
-rq_qos_throttle
-<= rwb->enable_state (OFF)
-                                                         scsi_remove_device
-                                                         sd_remove
-                                                         del_gendisk
-                                                         blk_unregister_queue
-                                                         elv_unregister_queue
-                                                         wbt_enable_default
-                                                         <= Set rwb->enable_state (ON)
-q_qos_track
-<= rwb->enable_state (ON)
-^^^^^^ this request will mark WBT_TRACKED without inflight add and will
-lead to drop rqw->inflight to -1 in wbt_done() which will trigger IO hung.
-
-Fix this by move wbt_enable_default() from elv_unregister to
-bfq_exit_queue(). Only re-enable wbt when bfq exit.
-
-Fixes: 76a8040817b4b ("blk-wbt: make sure throttle is enabled properly")
-
-Remove oneline stale comment, and kill one oneshot local variable.
-
-Signed-off-by: Ming Lei <ming.lei@rehdat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/linux-block/20211214133103.551813-1-qiulaibin@huawei.com/
-Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Reported-by: Pavel Machek <pavel@denx.de>
+Fixes: f53d4c109a66 ("mtd: rawnand: gpmi: Add ERR007117 protection for nfc_apply_timings")
+Signed-off-by: Christian Eggers <ceggers@arri.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220125081619.6286-1-ceggers@arri.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-iosched.c |    2 ++
- block/elevator.c    |    2 --
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -5417,6 +5417,8 @@ static void bfq_exit_queue(struct elevat
- 	spin_unlock_irq(&bfqd->lock);
- #endif
- 
-+	wbt_enable_default(bfqd->queue);
-+
- 	kfree(bfqd);
- }
- 
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -877,8 +877,6 @@ void elv_unregister_queue(struct request
- 		kobject_del(&e->kobj);
- 
- 		e->registered = 0;
--		/* Re-enable throttling in case elevator disabled it */
--		wbt_enable_default(q);
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -2442,7 +2442,7 @@ static int gpmi_nfc_exec_op(struct nand_
+ 		this->hw.must_apply_timings = false;
+ 		ret = gpmi_nfc_apply_timings(this);
+ 		if (ret)
+-			return ret;
++			goto out_pm;
  	}
- }
+ 
+ 	dev_dbg(this->dev, "%s: %d instructions\n", __func__, op->ninstrs);
+@@ -2571,6 +2571,7 @@ unmap:
+ 
+ 	this->bch = false;
+ 
++out_pm:
+ 	pm_runtime_mark_last_busy(this->dev);
+ 	pm_runtime_put_autosuspend(this->dev);
  
 
 

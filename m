@@ -2,265 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FE24BEA9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5213A4BEB0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbiBUS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:56:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37702 "EHLO
+        id S232599AbiBUTCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 14:02:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiBUS4D (ORCPT
+        with ESMTP id S232550AbiBUTCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:56:03 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26368111
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:55:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645469740; x=1677005740;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jkRLGIfqXS24d0An72RVRQY19IUIuY+vYtpRSavSads=;
-  b=g9NvtysNZQ/eTROrtSqR+TsfT2tdNaiF2N60tMt+5N7VHr7992PhC9K6
-   E0hDLG7VSeMs6eC/hJz71o99qUqSbNY3CIOQIbPrVfRByx1kCVPqh1f9i
-   sSQ4Ug4oIE2ZV1utalv/zLagKgPHToFDOYxjT0LiihRi/dHfkwB8MHm/m
-   8JTx5bTovjZn13rDFp+ZiXJWU4bKjxlRDtox2AvcDR40kBm9jnVpcKdA7
-   EPgN/GB2dJ6Xe41x333qt95fnoKeYnR1FlQM5muyo3HMQiJkOrXjK6ObU
-   VS96L5JdPczMsEXyGHlGwxwHaCZCKHv9CCduXAvdW70A3eVLJ2Dw8ToIn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251314242"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="251314242"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:55:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="776071957"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2022 10:55:38 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMDqT-0001tr-Fx; Mon, 21 Feb 2022 18:55:37 +0000
-Date:   Tue, 22 Feb 2022 02:55:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ohad Sharabi <osharabi@habana.ai>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Oded Gabbay <ogabbay@kernel.org>
-Subject: [ogabbay:habanalabs-next 46/47]
- drivers/misc/habanalabs/common/memory.c:114:33: warning: cast from pointer
- to integer of different size
-Message-ID: <202202220233.tn8HeY3b-lkp@intel.com>
+        Mon, 21 Feb 2022 14:02:34 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DECC112C;
+        Mon, 21 Feb 2022 11:02:08 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7EC482177B;
+        Mon, 21 Feb 2022 19:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645470127; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rGS7emIYcDxDgOJyZ+rBEW67UPdh+wrEdoTChEeCNv4=;
+        b=Vj+OXMS+SJccpZY5Bf96vVzWjddMLkC6iLfkEunnxlpjt16rEos9z841zzPPm8mzvHxLsA
+        ozOvUHdzAUPkWcFSnD9slKcIpt//LNPPNhRyrioOMTaD3Jb5Odyc7bB3XM+xgpVlClS4ct
+        ZRnetDRM+GMVs1XhDDpM8GRKueKfuC4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645470127;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rGS7emIYcDxDgOJyZ+rBEW67UPdh+wrEdoTChEeCNv4=;
+        b=J277EJPXSFQ+DPeVRg1DstLSiBxp1AIZinNluA7cy1Q4VS4dRCM/0YY/slbaWMJcInvVcK
+        WF5/heZjoNpwLyAA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4FEBDA3B81;
+        Mon, 21 Feb 2022 19:02:07 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 74CE2A0606; Mon, 21 Feb 2022 20:02:04 +0100 (CET)
+Date:   Mon, 21 Feb 2022 20:02:04 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <20220221190204.q675gtsb6qhylywa@quack3.lan>
+References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-2-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1645096204-31670-2-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
-head:   8cdf815f29cb63929861473c69d7f969291452a4
-commit: 6049dde7033922e889e7decf18fbc2863f8b16f9 [46/47] habanalabs: make sure device mem alloc is page aligned
-config: m68k-randconfig-r035-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220233.tn8HeY3b-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=6049dde7033922e889e7decf18fbc2863f8b16f9
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay habanalabs-next
-        git checkout 6049dde7033922e889e7decf18fbc2863f8b16f9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash drivers/misc/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+So I was trying to understand what this report is about for some time but
+honestly I have failed...
 
-All warnings (new ones prefixed by >>):
+On Thu 17-02-22 20:10:04, Byungchul Park wrote:
+> [    9.008161] ===================================================
+> [    9.008163] DEPT: Circular dependency has been detected.
+> [    9.008164] 5.17.0-rc1-00015-gb94f67143867-dirty #2 Tainted: G        W
+> [    9.008166] ---------------------------------------------------
+> [    9.008167] summary
+> [    9.008167] ---------------------------------------------------
+> [    9.008168] *** DEADLOCK ***
+> [    9.008168]
+> [    9.008168] context A
+> [    9.008169]     [S] (unknown)(&(&journal->j_wait_transaction_locked)->dmap:0)
+> [    9.008171]     [W] wait(&(&journal->j_wait_commit)->dmap:0)
+> [    9.008172]     [E] event(&(&journal->j_wait_transaction_locked)->dmap:0)
+> [    9.008173]
+> [    9.008173] context B
+> [    9.008174]     [S] down_write(mapping.invalidate_lock:0)
+> [    9.008175]     [W] wait(&(&journal->j_wait_transaction_locked)->dmap:0)
+> [    9.008176]     [E] up_write(mapping.invalidate_lock:0)
+> [    9.008177]
+> [    9.008178] context C
+> [    9.008179]     [S] (unknown)(&(&journal->j_wait_commit)->dmap:0)
+> [    9.008180]     [W] down_write(mapping.invalidate_lock:0)
+> [    9.008181]     [E] event(&(&journal->j_wait_commit)->dmap:0)
+> [    9.008181]
+> [    9.008182] [S]: start of the event context
+> [    9.008183] [W]: the wait blocked
+> [    9.008183] [E]: the event not reachable
 
-   drivers/misc/habanalabs/common/memory.c: In function 'alloc_device_memory':
->> drivers/misc/habanalabs/common/memory.c:114:33: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-     114 |                         paddr = (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool, total_size, NULL,
-         |                                 ^
-   drivers/misc/habanalabs/common/memory.c:153:49: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-     153 |                                                 (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-         |                                                 ^
+So what situation is your tool complaining about here? Can you perhaps show
+it here in more common visualization like:
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_ISA
-   Depends on SOUND && !UML && SND && (ISA || COMPILE_TEST && ISA_DMA_API && !M68K
-   Selected by
-   - RADIO_MIROPCM20 && MEDIA_SUPPORT && RADIO_ADAPTERS && V4L_RADIO_ISA_DRIVERS && (ISA || COMPILE_TEST && ISA_DMA_API && VIDEO_V4L2 && SND
+TASK1				TASK2
+				does foo, grabs Z
+does X, grabs lock Y
+blocks on Z
+				blocks on Y
 
+or something like that? Because I was not able to decipher this from the
+report even after trying for some time...
 
-vim +114 drivers/misc/habanalabs/common/memory.c
+								Honza
 
-    51	
-    52	/*
-    53	 * The va ranges in context object contain a list with the available chunks of
-    54	 * device virtual memory.
-    55	 * There is one range for host allocations and one for DRAM allocations.
-    56	 *
-    57	 * On initialization each range contains one chunk of all of its available
-    58	 * virtual range which is a half of the total device virtual range.
-    59	 *
-    60	 * On each mapping of physical pages, a suitable virtual range chunk (with a
-    61	 * minimum size) is selected from the list. If the chunk size equals the
-    62	 * requested size, the chunk is returned. Otherwise, the chunk is split into
-    63	 * two chunks - one to return as result and a remainder to stay in the list.
-    64	 *
-    65	 * On each Unmapping of a virtual address, the relevant virtual chunk is
-    66	 * returned to the list. The chunk is added to the list and if its edges match
-    67	 * the edges of the adjacent chunks (means a contiguous chunk can be created),
-    68	 * the chunks are merged.
-    69	 *
-    70	 * On finish, the list is checked to have only one chunk of all the relevant
-    71	 * virtual range (which is a half of the device total virtual range).
-    72	 * If not (means not all mappings were unmapped), a warning is printed.
-    73	 */
-    74	
-    75	/*
-    76	 * alloc_device_memory() - allocate device memory.
-    77	 * @ctx: pointer to the context structure.
-    78	 * @args: host parameters containing the requested size.
-    79	 * @ret_handle: result handle.
-    80	 *
-    81	 * This function does the following:
-    82	 * - Allocate the requested size rounded up to 'dram_page_size' pages.
-    83	 * - Return unique handle for later map/unmap/free.
-    84	 */
-    85	static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
-    86					u32 *ret_handle)
-    87	{
-    88		struct hl_device *hdev = ctx->hdev;
-    89		struct hl_vm *vm = &hdev->vm;
-    90		struct hl_vm_phys_pg_pack *phys_pg_pack;
-    91		u64 paddr = 0, total_size, num_pgs, i;
-    92		u32 num_curr_pgs, page_size;
-    93		bool contiguous;
-    94		int handle, rc;
-    95	
-    96		num_curr_pgs = 0;
-    97	
-    98		rc = set_alloc_page_size(hdev, args, &page_size);
-    99		if (rc)
-   100			return rc;
-   101	
-   102		num_pgs = DIV_ROUND_UP_ULL(args->alloc.mem_size, page_size);
-   103		total_size = num_pgs * page_size;
-   104	
-   105		if (!total_size) {
-   106			dev_err(hdev->dev, "Cannot allocate 0 bytes\n");
-   107			return -EINVAL;
-   108		}
-   109	
-   110		contiguous = args->flags & HL_MEM_CONTIGUOUS;
-   111	
-   112		if (contiguous) {
-   113			if (is_power_of_2(page_size))
- > 114				paddr = (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool, total_size, NULL,
-   115								page_size);
-   116			else
-   117				paddr = (u64) gen_pool_alloc(vm->dram_pg_pool, total_size);
-   118			if (!paddr) {
-   119				dev_err(hdev->dev,
-   120					"failed to allocate %llu contiguous pages with total size of %llu\n",
-   121					num_pgs, total_size);
-   122				return -ENOMEM;
-   123			}
-   124		}
-   125	
-   126		phys_pg_pack = kzalloc(sizeof(*phys_pg_pack), GFP_KERNEL);
-   127		if (!phys_pg_pack) {
-   128			rc = -ENOMEM;
-   129			goto pages_pack_err;
-   130		}
-   131	
-   132		phys_pg_pack->vm_type = VM_TYPE_PHYS_PACK;
-   133		phys_pg_pack->asid = ctx->asid;
-   134		phys_pg_pack->npages = num_pgs;
-   135		phys_pg_pack->page_size = page_size;
-   136		phys_pg_pack->total_size = total_size;
-   137		phys_pg_pack->flags = args->flags;
-   138		phys_pg_pack->contiguous = contiguous;
-   139	
-   140		phys_pg_pack->pages = kvmalloc_array(num_pgs, sizeof(u64), GFP_KERNEL);
-   141		if (ZERO_OR_NULL_PTR(phys_pg_pack->pages)) {
-   142			rc = -ENOMEM;
-   143			goto pages_arr_err;
-   144		}
-   145	
-   146		if (phys_pg_pack->contiguous) {
-   147			for (i = 0 ; i < num_pgs ; i++)
-   148				phys_pg_pack->pages[i] = paddr + i * page_size;
-   149		} else {
-   150			for (i = 0 ; i < num_pgs ; i++) {
-   151				if (is_power_of_2(page_size))
-   152					phys_pg_pack->pages[i] =
-   153							(u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-   154											page_size, NULL,
-   155											page_size);
-   156				else
-   157					phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
-   158											page_size);
-   159				if (!phys_pg_pack->pages[i]) {
-   160					dev_err(hdev->dev,
-   161						"Failed to allocate device memory (out of memory)\n");
-   162					rc = -ENOMEM;
-   163					goto page_err;
-   164				}
-   165	
-   166				num_curr_pgs++;
-   167			}
-   168		}
-   169	
-   170		spin_lock(&vm->idr_lock);
-   171		handle = idr_alloc(&vm->phys_pg_pack_handles, phys_pg_pack, 1, 0,
-   172					GFP_ATOMIC);
-   173		spin_unlock(&vm->idr_lock);
-   174	
-   175		if (handle < 0) {
-   176			dev_err(hdev->dev, "Failed to get handle for page\n");
-   177			rc = -EFAULT;
-   178			goto idr_err;
-   179		}
-   180	
-   181		for (i = 0 ; i < num_pgs ; i++)
-   182			kref_get(&vm->dram_pg_pool_refcount);
-   183	
-   184		phys_pg_pack->handle = handle;
-   185	
-   186		atomic64_add(phys_pg_pack->total_size, &ctx->dram_phys_mem);
-   187		atomic64_add(phys_pg_pack->total_size, &hdev->dram_used_mem);
-   188	
-   189		*ret_handle = handle;
-   190	
-   191		return 0;
-   192	
-   193	idr_err:
-   194	page_err:
-   195		if (!phys_pg_pack->contiguous)
-   196			for (i = 0 ; i < num_curr_pgs ; i++)
-   197				gen_pool_free(vm->dram_pg_pool, phys_pg_pack->pages[i],
-   198						page_size);
-   199	
-   200		kvfree(phys_pg_pack->pages);
-   201	pages_arr_err:
-   202		kfree(phys_pg_pack);
-   203	pages_pack_err:
-   204		if (contiguous)
-   205			gen_pool_free(vm->dram_pg_pool, paddr, total_size);
-   206	
-   207		return rc;
-   208	}
-   209	
+				
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> [    9.008184] ---------------------------------------------------
+> [    9.008184] context A's detail
+> [    9.008185] ---------------------------------------------------
+> [    9.008186] context A
+> [    9.008186]     [S] (unknown)(&(&journal->j_wait_transaction_locked)->dmap:0)
+> [    9.008187]     [W] wait(&(&journal->j_wait_commit)->dmap:0)
+> [    9.008188]     [E] event(&(&journal->j_wait_transaction_locked)->dmap:0)
+> [    9.008189]
+> [    9.008190] [S] (unknown)(&(&journal->j_wait_transaction_locked)->dmap:0):
+> [    9.008191] (N/A)
+> [    9.008191]
+> [    9.008192] [W] wait(&(&journal->j_wait_commit)->dmap:0):
+> [    9.008193] prepare_to_wait (kernel/sched/wait.c:275) 
+> [    9.008197] stacktrace:
+> [    9.008198] __schedule (kernel/sched/sched.h:1318 kernel/sched/sched.h:1616 kernel/sched/core.c:6213) 
+> [    9.008200] schedule (kernel/sched/core.c:6373 (discriminator 1)) 
+> [    9.008201] kjournald2 (fs/jbd2/journal.c:250) 
+> [    9.008203] kthread (kernel/kthread.c:377) 
+> [    9.008206] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> [    9.008209]
+> [    9.008209] [E] event(&(&journal->j_wait_transaction_locked)->dmap:0):
+> [    9.008210] __wake_up_common (kernel/sched/wait.c:108) 
+> [    9.008212] stacktrace:
+> [    9.008213] dept_event (kernel/dependency/dept.c:2337) 
+> [    9.008215] __wake_up_common (kernel/sched/wait.c:109) 
+> [    9.008217] __wake_up_common_lock (./include/linux/spinlock.h:428 (discriminator 1) kernel/sched/wait.c:141 (discriminator 1)) 
+> [    9.008218] jbd2_journal_commit_transaction (fs/jbd2/commit.c:583) 
+> [    9.008221] kjournald2 (fs/jbd2/journal.c:214 (discriminator 3)) 
+> [    9.008223] kthread (kernel/kthread.c:377) 
+> [    9.008224] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> [    9.008226] ---------------------------------------------------
+> [    9.008226] context B's detail
+> [    9.008227] ---------------------------------------------------
+> [    9.008228] context B
+> [    9.008228]     [S] down_write(mapping.invalidate_lock:0)
+> [    9.008229]     [W] wait(&(&journal->j_wait_transaction_locked)->dmap:0)
+> [    9.008230]     [E] up_write(mapping.invalidate_lock:0)
+> [    9.008231]
+> [    9.008232] [S] down_write(mapping.invalidate_lock:0):
+> [    9.008233] ext4_da_write_begin (fs/ext4/truncate.h:21 fs/ext4/inode.c:2963) 
+> [    9.008237] stacktrace:
+> [    9.008237] down_write (kernel/locking/rwsem.c:1514) 
+> [    9.008239] ext4_da_write_begin (fs/ext4/truncate.h:21 fs/ext4/inode.c:2963) 
+> [    9.008241] generic_perform_write (mm/filemap.c:3784) 
+> [    9.008243] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> [    9.008245] ext4_file_write_iter (fs/ext4/file.c:677) 
+> [    9.008247] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> [    9.008250] vfs_write (fs/read_write.c:590) 
+> [    9.008251] ksys_write (fs/read_write.c:644) 
+> [    9.008253] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    9.008255] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> [    9.008258]
+> [    9.008258] [W] wait(&(&journal->j_wait_transaction_locked)->dmap:0):
+> [    9.008259] prepare_to_wait (kernel/sched/wait.c:275) 
+> [    9.008261] stacktrace:
+> [    9.008261] __schedule (kernel/sched/sched.h:1318 kernel/sched/sched.h:1616 kernel/sched/core.c:6213) 
+> [    9.008263] schedule (kernel/sched/core.c:6373 (discriminator 1)) 
+> [    9.008264] wait_transaction_locked (fs/jbd2/transaction.c:184) 
+> [    9.008266] add_transaction_credits (fs/jbd2/transaction.c:248 (discriminator 3)) 
+> [    9.008267] start_this_handle (fs/jbd2/transaction.c:427) 
+> [    9.008269] jbd2__journal_start (fs/jbd2/transaction.c:526) 
+> [    9.008271] __ext4_journal_start_sb (fs/ext4/ext4_jbd2.c:105) 
+> [    9.008273] ext4_truncate (fs/ext4/inode.c:4164) 
+> [    9.008274] ext4_da_write_begin (./include/linux/fs.h:827 fs/ext4/truncate.h:23 fs/ext4/inode.c:2963) 
+> [    9.008276] generic_perform_write (mm/filemap.c:3784) 
+> [    9.008277] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> [    9.008279] ext4_file_write_iter (fs/ext4/file.c:677) 
+> [    9.008281] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> [    9.008283] vfs_write (fs/read_write.c:590) 
+> [    9.008284] ksys_write (fs/read_write.c:644) 
+> [    9.008285] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    9.008287]
+> [    9.008288] [E] up_write(mapping.invalidate_lock:0):
+> [    9.008288] ext4_da_get_block_prep (fs/ext4/inode.c:1795 fs/ext4/inode.c:1829) 
+> [    9.008291] ---------------------------------------------------
+> [    9.008291] context C's detail
+> [    9.008292] ---------------------------------------------------
+> [    9.008292] context C
+> [    9.008293]     [S] (unknown)(&(&journal->j_wait_commit)->dmap:0)
+> [    9.008294]     [W] down_write(mapping.invalidate_lock:0)
+> [    9.008295]     [E] event(&(&journal->j_wait_commit)->dmap:0)
+> [    9.008296]
+> [    9.008297] [S] (unknown)(&(&journal->j_wait_commit)->dmap:0):
+> [    9.008298] (N/A)
+> [    9.008298]
+> [    9.008299] [W] down_write(mapping.invalidate_lock:0):
+> [    9.008299] ext4_da_write_begin (fs/ext4/truncate.h:21 fs/ext4/inode.c:2963) 
+> [    9.008302] stacktrace:
+> [    9.008302] down_write (kernel/locking/rwsem.c:1514) 
+> [    9.008304] ext4_da_write_begin (fs/ext4/truncate.h:21 fs/ext4/inode.c:2963) 
+> [    9.008305] generic_perform_write (mm/filemap.c:3784) 
+> [    9.008307] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> [    9.008309] ext4_file_write_iter (fs/ext4/file.c:677) 
+> [    9.008311] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> [    9.008312] vfs_write (fs/read_write.c:590) 
+> [    9.008314] ksys_write (fs/read_write.c:644) 
+> [    9.008315] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    9.008316] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> [    9.008318]
+> [    9.008319] [E] event(&(&journal->j_wait_commit)->dmap:0):
+> [    9.008320] __wake_up_common (kernel/sched/wait.c:108) 
+> [    9.008321] stacktrace:
+> [    9.008322] __wake_up_common (kernel/sched/wait.c:109) 
+> [    9.008323] __wake_up_common_lock (./include/linux/spinlock.h:428 (discriminator 1) kernel/sched/wait.c:141 (discriminator 1)) 
+> [    9.008324] __jbd2_log_start_commit (fs/jbd2/journal.c:508) 
+> [    9.008326] jbd2_log_start_commit (fs/jbd2/journal.c:527) 
+> [    9.008327] __jbd2_journal_force_commit (fs/jbd2/journal.c:560) 
+> [    9.008329] jbd2_journal_force_commit_nested (fs/jbd2/journal.c:583) 
+> [    9.008331] ext4_should_retry_alloc (fs/ext4/balloc.c:670 (discriminator 3)) 
+> [    9.008332] ext4_da_write_begin (fs/ext4/inode.c:2965 (discriminator 1)) 
+> [    9.008334] generic_perform_write (mm/filemap.c:3784) 
+> [    9.008335] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> [    9.008337] ext4_file_write_iter (fs/ext4/file.c:677) 
+> [    9.008339] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> [    9.008341] vfs_write (fs/read_write.c:590) 
+> [    9.008342] ksys_write (fs/read_write.c:644) 
+> [    9.008343] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> [    9.008345] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> [    9.008347] ---------------------------------------------------
+> [    9.008348] information that might be helpful
+> [    9.008348] ---------------------------------------------------
+> [    9.008349] CPU: 0 PID: 89 Comm: jbd2/sda1-8 Tainted: G        W         5.17.0-rc1-00015-gb94f67143867-dirty #2
+> [    9.008352] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+> [    9.008353] Call Trace:
+> [    9.008354]  <TASK>
+> [    9.008355] dump_stack_lvl (lib/dump_stack.c:107) 
+> [    9.008358] print_circle (./arch/x86/include/asm/atomic.h:108 ./include/linux/atomic/atomic-instrumented.h:258 kernel/dependency/dept.c:157 kernel/dependency/dept.c:762) 
+> [    9.008360] ? print_circle (kernel/dependency/dept.c:1086) 
+> [    9.008362] cb_check_dl (kernel/dependency/dept.c:1104) 
+> [    9.008364] bfs (kernel/dependency/dept.c:860) 
+> [    9.008366] add_dep (kernel/dependency/dept.c:1423) 
+> [    9.008368] do_event.isra.25 (kernel/dependency/dept.c:1651) 
+> [    9.008370] ? __wake_up_common (kernel/sched/wait.c:108) 
+> [    9.008372] dept_event (kernel/dependency/dept.c:2337) 
+> [    9.008374] __wake_up_common (kernel/sched/wait.c:109) 
+> [    9.008376] __wake_up_common_lock (./include/linux/spinlock.h:428 (discriminator 1) kernel/sched/wait.c:141 (discriminator 1)) 
+> [    9.008379] jbd2_journal_commit_transaction (fs/jbd2/commit.c:583) 
+> [    9.008381] ? arch_stack_walk (arch/x86/kernel/stacktrace.c:24) 
+> [    9.008385] ? ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> [    9.008387] ? dept_enable_hardirq (./arch/x86/include/asm/current.h:15 kernel/dependency/dept.c:241 kernel/dependency/dept.c:999 kernel/dependency/dept.c:1043 kernel/dependency/dept.c:1843) 
+> [    9.008389] ? _raw_spin_unlock_irqrestore (./arch/x86/include/asm/irqflags.h:45 ./arch/x86/include/asm/irqflags.h:80 ./arch/x86/include/asm/irqflags.h:138 ./include/linux/spinlock_api_smp.h:151 kernel/locking/spinlock.c:194) 
+> [    9.008392] ? _raw_spin_unlock_irqrestore (./arch/x86/include/asm/preempt.h:103 ./include/linux/spinlock_api_smp.h:152 kernel/locking/spinlock.c:194) 
+> [    9.008394] ? try_to_del_timer_sync (kernel/time/timer.c:1239) 
+> [    9.008396] kjournald2 (fs/jbd2/journal.c:214 (discriminator 3)) 
+> [    9.008398] ? prepare_to_wait_exclusive (kernel/sched/wait.c:431) 
+> [    9.008400] ? commit_timeout (fs/jbd2/journal.c:173) 
+> [    9.008402] kthread (kernel/kthread.c:377) 
+> [    9.008404] ? kthread_complete_and_exit (kernel/kthread.c:332) 
+> [    9.008407] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> [    9.008410]  </TASK>
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

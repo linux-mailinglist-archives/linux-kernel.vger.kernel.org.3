@@ -2,347 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD83B4BD72A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6964BD722
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346113AbiBUH0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:26:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39148 "EHLO
+        id S1346123AbiBUH0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:26:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345979AbiBUHZt (ORCPT
+        with ESMTP id S1346002AbiBUH0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:25:49 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDFBB0;
-        Sun, 20 Feb 2022 23:25:14 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 959B8482;
-        Mon, 21 Feb 2022 08:25:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645428311;
-        bh=QzrKYMGmSk41w9hmcPhoY/HYYkB0EivAExnARRS54CQ=;
+        Mon, 21 Feb 2022 02:26:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C23F10E
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 23:25:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCD67B80E7F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:25:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6717C340E9;
+        Mon, 21 Feb 2022 07:25:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645428335;
+        bh=7/NC1xoSn2cRSrz7qbAfefLKb8z7Tnor6hUpbas1J3M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dy5yOrtuU2YAsiAuof4cmstmqwW8UJUidYNzgO2kWw0cHDhU9d+f1RPEaGKT3LaDf
-         j1gByIsVX3HSTi12/WvNCyeChC6fdmLUzIztzsi9CyIRQa4skZgdeuO5wjn6WfV2wL
-         V6/h7pTFsoHtfzN+z+SDwgNLSYFTrtDct/PJ1Q7M=
-Date:   Mon, 21 Feb 2022 09:25:02 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
-        tomi.valkeinen@ideasonboard.com,
-        bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
-Subject: Re: [PATCH v5 11/11] media: imx219: Add support for the V4L2 subdev
- active state
-Message-ID: <YhM+TgcOgbyXgs/x@pendragon.ideasonboard.com>
-References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
- <20220208155027.891055-12-jeanmichel.hautbois@ideasonboard.com>
+        b=jwkcXeqwol4SIfZZqF4IRPm8BVQKP21boQ5Fs9waybCA8zRWepcm05u1HISpJrO/5
+         mfV+L84aFwN8Fi/zGDBOE4HC8wg5Cg/chiAAzlLJP8QFbg5PY4VI67FSQbPt6B5/0N
+         BtYYJN63WzgGZr3mD6tCid2wR0GlGcnSAR3B/EP+4t/VQFr8dd0pHx2g7bWqlufcws
+         8R//icZzI4mnz+Bjhq5e9Lnntfo8yyzZMY7om7dcpWhusOdFLVPUxPxXJ9PG6ZWsGQ
+         izBiYnYh3nwhPXu/9+0REDkuhA3ACVsoJiGxUwzbByhweApLDAR8Qbevw536KOXr1Z
+         yiZLPpEVqzyug==
+Date:   Mon, 21 Feb 2022 15:25:29 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH] bus: imx-weim: add DT overlay support for WEIM bus
+Message-ID: <20220221072529.GP2249@dragon>
+References: <20220205055006.23447-1-i.bornyakov@metrotek.ru>
+ <20220205055006.23447-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220208155027.891055-12-jeanmichel.hautbois@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220205055006.23447-2-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Michel,
+On Sat, Feb 05, 2022 at 08:50:06AM +0300, Ivan Bornyakov wrote:
+> Add OF reconfiguration notifier handler for WEIM bus to setup Chip
+> Select timings on runtime creation of child devices.
+> 
+> However, it is not possible to load another DT overlay with conflicting
+> CS timings with previously loaded overlay, even if the first one is
+> unloaded.
 
-Thank you for the patch.
+Are we doing anything if that happens?
 
-On Tue, Feb 08, 2022 at 04:50:27PM +0100, Jean-Michel Hautbois wrote:
-> Now that we have multiplexed streams support in the V4L2 API, add
-> support for the subdev active state in the sensor.
+> The reason is that there is no acces to CS timing property of
+> a device node being removed, thus we can't track which of configured CS
+> are available for re-configuration.
 > 
-> In order to use state to manage the active configuration, we need to
-> initialize the subdevice state with a call to
-> v4l2_subdev_init_finalize() before registering it. The call to
-> v4l2_subdev_cleanup() is also required to release the resources before
-> unregistering.
-> 
-> Accessing the configuration is then done after a call to
-> v4l2_subdev_lock_state() and the set_fmt operation can then call
-> v4l2_state_get_stream_format() directly.
-> 
-> The get_fmt operation does not need to be complex, and a simple call to
-> v4l2_subdev_get_fmt will do the trick, as it will grab the configured
-> format based on the state.
-> 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
 > ---
->  drivers/media/i2c/imx219.c | 151 +++++++++++++++++++------------------
->  1 file changed, 77 insertions(+), 74 deletions(-)
+>  drivers/bus/imx-weim.c | 136 ++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 127 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index f005ad8d2124..f6322f39c3f1 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -887,78 +887,43 @@ static int imx219_enum_frame_size(struct v4l2_subdev *sd,
->  				  struct v4l2_subdev_state *sd_state,
->  				  struct v4l2_subdev_frame_size_enum *fse)
->  {
-> -	struct imx219 *imx219 = to_imx219(sd);
-> -	u32 code;
-> -
-> -	if (fse->index >= ARRAY_SIZE(supported_modes))
-> -		return -EINVAL;
-> -
-> -	mutex_lock(&imx219->mutex);
-> -	code = imx219_get_format_code(imx219, fse->code);
-> -	mutex_unlock(&imx219->mutex);
-> -	if (fse->code != code)
-> -		return -EINVAL;
-> -
-> -	fse->min_width = supported_modes[fse->index].width;
-> -	fse->max_width = fse->min_width;
-> -	fse->min_height = supported_modes[fse->index].height;
-> -	fse->max_height = fse->min_height;
-> +	unsigned int i;
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index bccb275b65ba..a09e1d33a554 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -64,6 +64,11 @@ struct cs_timing_state {
+>  	struct cs_timing cs[MAX_CS_COUNT];
+>  };
 >  
-> -	return 0;
-> -}
-> +	if (fse->stream == 0) {
-> +		for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); ++i) {
-> +			if (imx219_mbus_formats[i] == fse->code)
-> +				break;
+> +struct weim_data {
+> +	void __iomem *base;
+> +	struct cs_timing_state timing_state;
+> +};
+> +
+>  static const struct of_device_id weim_id_table[] = {
+>  	/* i.MX1/21 */
+>  	{ .compatible = "fsl,imx1-weim", .data = &imx1_weim_devtype, },
+> @@ -128,21 +133,26 @@ static int imx_weim_gpr_setup(struct platform_device *pdev)
+>  }
+>  
+>  /* Parse and set the timing for this device. */
+> -static int weim_timing_setup(struct device *dev,
+> -			     struct device_node *np, void __iomem *base,
+> -			     const struct imx_weim_devtype *devtype,
+> -			     struct cs_timing_state *ts)
+> +static int weim_timing_setup(struct device *dev, struct device_node *np,
+> +			     const struct imx_weim_devtype *devtype)
+>  {
+>  	u32 cs_idx, value[MAX_CS_REGS_COUNT];
+>  	int i, ret;
+>  	int reg_idx, num_regs;
+>  	struct cs_timing *cst;
+> +	struct weim_data *priv;
+
+Maybe we should name the struct weim_priv?
+
+> +	struct cs_timing_state *ts;
+> +	void __iomem *base;
+>  
+>  	if (WARN_ON(devtype->cs_regs_count > MAX_CS_REGS_COUNT))
+>  		return -EINVAL;
+>  	if (WARN_ON(devtype->cs_count > MAX_CS_COUNT))
+>  		return -EINVAL;
+>  
+> +	priv = dev_get_drvdata(dev);
+> +	base = priv->base;
+> +	ts = &priv->timing_state;
+> +
+>  	ret = of_property_read_u32_array(np, "fsl,weim-cs-timing",
+>  					 value, devtype->cs_regs_count);
+>  	if (ret)
+> @@ -189,14 +199,15 @@ static int weim_timing_setup(struct device *dev,
+>  	return 0;
+>  }
+>  
+> -static int weim_parse_dt(struct platform_device *pdev, void __iomem *base)
+> +static int weim_parse_dt(struct platform_device *pdev)
+>  {
+>  	const struct of_device_id *of_id = of_match_device(weim_id_table,
+>  							   &pdev->dev);
+>  	const struct imx_weim_devtype *devtype = of_id->data;
+>  	struct device_node *child;
+>  	int ret, have_child = 0;
+> -	struct cs_timing_state ts = {};
+> +	struct weim_data *priv;
+> +	void __iomem *base;
+>  	u32 reg;
+>  
+>  	if (devtype == &imx50_weim_devtype) {
+> @@ -205,6 +216,9 @@ static int weim_parse_dt(struct platform_device *pdev, void __iomem *base)
+>  			return ret;
+>  	}
+>  
+> +	priv = dev_get_drvdata(&pdev->dev);
+> +	base = priv->base;
+> +
+>  	if (of_property_read_bool(pdev->dev.of_node, "fsl,burst-clk-enable")) {
+>  		if (devtype->wcr_bcm) {
+>  			reg = readl(base + devtype->wcr_offset);
+> @@ -229,7 +243,7 @@ static int weim_parse_dt(struct platform_device *pdev, void __iomem *base)
+>  	}
+>  
+>  	for_each_available_child_of_node(pdev->dev.of_node, child) {
+> -		ret = weim_timing_setup(&pdev->dev, child, base, devtype, &ts);
+> +		ret = weim_timing_setup(&pdev->dev, child, devtype);
+>  		if (ret)
+>  			dev_warn(&pdev->dev, "%pOF set timing failed.\n",
+>  				child);
+> @@ -248,17 +262,25 @@ static int weim_parse_dt(struct platform_device *pdev, void __iomem *base)
+>  
+>  static int weim_probe(struct platform_device *pdev)
+>  {
+> +	struct weim_data *priv;
+>  	struct resource *res;
+>  	struct clk *clk;
+>  	void __iomem *base;
+>  	int ret;
+>  
+> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+>  	/* get the resource */
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	base = devm_ioremap_resource(&pdev->dev, res);
+>  	if (IS_ERR(base))
+>  		return PTR_ERR(base);
+>  
+> +	priv->base = base;
+> +	dev_set_drvdata(&pdev->dev, priv);
+> +
+>  	/* get the clock */
+>  	clk = devm_clk_get(&pdev->dev, NULL);
+>  	if (IS_ERR(clk))
+> @@ -269,7 +291,7 @@ static int weim_probe(struct platform_device *pdev)
+>  		return ret;
+>  
+>  	/* parse the device node */
+> -	ret = weim_parse_dt(pdev, base);
+> +	ret = weim_parse_dt(pdev);
+>  	if (ret)
+>  		clk_disable_unprepare(clk);
+>  	else
+> @@ -278,6 +300,82 @@ static int weim_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_OF_DYNAMIC)
+> +static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+> +			  void *arg)
+> +{
+> +	const struct imx_weim_devtype *devtype;
+> +	struct of_reconfig_data *rd = arg;
+> +	const struct of_device_id *of_id;
+> +	struct platform_device *pdev;
+> +	int ret = NOTIFY_OK;
+> +
+> +	switch (of_reconfig_get_state_change(action, rd)) {
+> +	case OF_RECONFIG_CHANGE_ADD:
+> +		of_id = of_match_node(weim_id_table, rd->dn->parent);
+> +		if (!of_id)
+> +			return NOTIFY_OK; /* not for us */
+> +
+> +		devtype = of_id->data;
+> +
+> +		pdev = of_find_device_by_node(rd->dn->parent);
+> +		if (!pdev) {
+> +			pr_err("%s: could not find platform device for '%pOF'\n",
+> +				__func__, rd->dn->parent);
+> +
+> +			return notifier_from_errno(-EINVAL);
 > +		}
->  
-> -static void imx219_reset_colorspace(struct v4l2_mbus_framefmt *fmt)
-> -{
-> -	fmt->colorspace = V4L2_COLORSPACE_SRGB;
-> -	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
-> -	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
-> -							  fmt->colorspace,
-> -							  fmt->ycbcr_enc);
-> -	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
-> -}
-> +		if (i == ARRAY_SIZE(imx219_mbus_formats))
-> +			return -EINVAL;
->  
-> -static void imx219_update_pad_format(struct imx219 *imx219,
-> -				     const struct imx219_mode *mode,
-> -				     struct v4l2_subdev_format *fmt)
-> -{
-> -	fmt->format.width = mode->width;
-> -	fmt->format.height = mode->height;
-> -	fmt->format.field = V4L2_FIELD_NONE;
-> -	imx219_reset_colorspace(&fmt->format);
-> -}
-> +		if (fse->index >= ARRAY_SIZE(supported_modes))
-> +			return -EINVAL;
->  
-> -static int __imx219_get_pad_format(struct imx219 *imx219,
-> -				   struct v4l2_subdev_state *sd_state,
-> -				   struct v4l2_subdev_format *fmt)
-> -{
-> -	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> -		struct v4l2_mbus_framefmt *try_fmt =
-> -			v4l2_subdev_get_try_format(&imx219->sd, sd_state,
-> -						   fmt->pad);
-> -		/* update the code which could change due to vflip or hflip: */
-> -		try_fmt->code = imx219_get_format_code(imx219, try_fmt->code);
-> -		fmt->format = *try_fmt;
-> +		fse->min_width  = supported_modes[fse->index].width;
-> +		fse->max_width  = fse->min_width;
-> +		fse->max_height = supported_modes[fse->index].height;
-> +		fse->min_height = fse->max_height;
->  	} else {
-> -		imx219_update_pad_format(imx219, imx219->mode, fmt);
-> -		fmt->format.code = imx219_get_format_code(imx219,
-> -							  imx219->fmt.code);
-> +		if (fse->code != MEDIA_BUS_FMT_METADATA_8)
-> +			return -EINVAL;
 > +
-> +		fse->min_width = IMX219_EMBEDDED_LINE_WIDTH;
-> +		fse->max_width = fse->min_width;
-> +		fse->min_height = IMX219_NUM_EMBEDDED_LINES;
-> +		fse->max_height = fse->min_height;
->  	}
->  
->  	return 0;
->  }
->  
-> -static int imx219_get_pad_format(struct v4l2_subdev *sd,
-> -				 struct v4l2_subdev_state *sd_state,
-> -				 struct v4l2_subdev_format *fmt)
-> +static void imx219_update_metadata_pad_format(struct v4l2_subdev_format *fmt)
->  {
-> -	struct imx219 *imx219 = to_imx219(sd);
-> -	int ret;
-> -
-> -	mutex_lock(&imx219->mutex);
-> -	ret = __imx219_get_pad_format(imx219, sd_state, fmt);
-> -	mutex_unlock(&imx219->mutex);
-> -
-> -	return ret;
-> +	fmt->format.width = IMX219_EMBEDDED_LINE_WIDTH;
-> +	fmt->format.height = IMX219_NUM_EMBEDDED_LINES;
-> +	fmt->format.code = MEDIA_BUS_FMT_METADATA_8;
-> +	fmt->format.field = V4L2_FIELD_NONE;
->  }
->  
->  static int imx219_set_pad_format(struct v4l2_subdev *sd,
-> @@ -966,32 +931,58 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
->  				 struct v4l2_subdev_format *fmt)
->  {
->  	struct imx219 *imx219 = to_imx219(sd);
-> +	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
->  	const struct imx219_mode *mode;
-> -	struct v4l2_mbus_framefmt *framefmt;
-> +	struct v4l2_mbus_framefmt *format;
->  	int exposure_max, exposure_def, hblank;
->  	unsigned int i;
-> +	int ret = 0;
->  
->  	mutex_lock(&imx219->mutex);
->  
-> +	if (fmt->pad != 0) {
-> +		dev_err(&client->dev, "%s Could not get pad %d\n", __func__,
-> +			fmt->pad);
-
-Drop this message.
-
-> +		ret = -EINVAL;
-> +		goto done;
+> +		if (weim_timing_setup(&pdev->dev, rd->dn, devtype))
+> +			dev_warn(&pdev->dev,
+> +				 "Failed to setup timing for '%pOF'\n", rd->dn);
+> +
+> +		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> +			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+> +				dev_err(&pdev->dev,
+> +					"Failed to create child device '%pOF'\n",
+> +					rd->dn);
+> +				ret = notifier_from_errno(-EINVAL);
+> +			}
+> +		}
+> +
+> +		platform_device_put(pdev);
+> +
+> +		break;
+> +	case OF_RECONFIG_CHANGE_REMOVE:
+> +		if (!of_node_check_flag(rd->dn, OF_POPULATED))
+> +			return NOTIFY_OK; /* device already destroyed */
+> +
+> +		of_id = of_match_node(weim_id_table, rd->dn->parent);
+> +		if (!of_id)
+> +			return NOTIFY_OK; /* not for us */
+> +
+> +		pdev = of_find_device_by_node(rd->dn);
+> +		if (!pdev) {
+> +			dev_err(&pdev->dev,
+> +				"Could not find platform device for '%pOF'\n",
+> +				rd->dn);
+> +
+> +			ret = notifier_from_errno(-EINVAL);
+> +		} else {
+> +			of_platform_device_destroy(&pdev->dev, NULL);
+> +			platform_device_put(pdev);
+> +		}
+> +
+> +		break;
+> +	default:
+> +		break;
 > +	}
 > +
-> +	if (fmt->stream == 1) {
-> +		/* Only one embedded data mode is supported */
-> +		imx219_update_metadata_pad_format(fmt);
-
-		return v4l2_subdev_get_fmt(sd, sd_state, fmt);
-
-will be simpler. You can drop the imx219_update_metadata_pad_format()
-function. And move the mutex_lock() lower, after all the code that
-doesn't touch fields of the imx219 structure.
-
-> +		ret = 0;
-
-Not needed.
-
-> +		goto done;
-> +	}
-> +
->  	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
->  		if (imx219_mbus_formats[i] == fmt->format.code)
->  			break;
->  	if (i >= ARRAY_SIZE(imx219_mbus_formats))
->  		i = 0;
->  
-> -	/* Bayer order varies with flips */
-> -	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
-> -
->  	mode = v4l2_find_nearest_size(supported_modes,
->  				      ARRAY_SIZE(supported_modes),
->  				      width, height,
->  				      fmt->format.width, fmt->format.height);
-> -	imx219_update_pad_format(imx219, mode, fmt);
-> -	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> -		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
-> -		*framefmt = fmt->format;
-> -	} else if (imx219->mode != mode ||
-> -		   imx219->fmt.code != fmt->format.code) {
-> +
-> +	v4l2_subdev_lock_state(sd_state);
-> +
-> +	/* Update the stored format and return it. */
-> +	format = v4l2_state_get_stream_format(sd_state, fmt->pad, fmt->stream);
-> +
-> +	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE && imx219->streaming) {
-> +		ret = -EBUSY;
-> +		goto err_state;
-> +	}
-> +
-> +	/* Bayer order varies with flips */
-> +	format->code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
-> +	format->width = mode->width;
-> +	format->height = mode->height;
-> +	/* Bayer order varies with flips */
-> +	fmt->format = *format;
-> +
-> +	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
->  		imx219->fmt = fmt->format;
-
-The whole point of using the active state is that you don't need to
-store the format in the imx219 structure anymore.
-
-This patch does too much. I'm tempted to ask you to first switch to
-usage of the active state, even before adding routing support, then add
-routing support without the embedded data stream, and finally add
-embedded data support.
-
->  		imx219->mode = mode;
->  		/* Update limits and set FPS to default */
-> @@ -1018,9 +1009,12 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
->  					 hblank);
->  	}
->  
-> +err_state:
-> +	v4l2_subdev_unlock_state(sd_state);
-> +done:
->  	mutex_unlock(&imx219->mutex);
->  
-> -	return 0;
 > +	return ret;
->  }
->  
->  static int imx219_set_framefmt(struct imx219 *imx219)
-> @@ -1322,7 +1316,7 @@ static const struct v4l2_subdev_video_ops imx219_video_ops = {
->  static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
->  	.init_cfg		= imx219_init_cfg,
->  	.enum_mbus_code		= imx219_enum_mbus_code,
-> -	.get_fmt		= imx219_get_pad_format,
-> +	.get_fmt		= v4l2_subdev_get_fmt,
->  	.set_fmt		= imx219_set_pad_format,
->  	.get_selection		= imx219_get_selection,
->  	.set_routing		= imx219_set_routing,
-> @@ -1602,10 +1596,16 @@ static int imx219_probe(struct i2c_client *client)
->  		goto error_handler_free;
->  	}
->  
-> +	ret = v4l2_subdev_init_finalize(sd);
-> +	if (ret) {
-> +		dev_err(dev, "failed to finalize sensor init: %d\n", ret);
-> +		goto error_media_entity;
-> +	}
+> +}
 > +
->  	ret = v4l2_async_register_subdev_sensor(sd);
->  	if (ret < 0) {
->  		dev_err(dev, "failed to register sensor sub-device: %d\n", ret);
-> -		goto error_media_entity;
-> +		goto error_free_state;
->  	}
->  
->  	/* Enable runtime PM and turn off the device */
-> @@ -1615,6 +1615,8 @@ static int imx219_probe(struct i2c_client *client)
->  
->  	return 0;
->  
-> +error_free_state:
+> +struct notifier_block weim_of_notifier = {
+> +	.notifier_call = of_weim_notify,
+> +};
+> +#endif /* IS_ENABLED(CONFIG_OF_DYNAMIC) */
+> +
+> +
 
-error_subdev_cleanup:
+One newline is good enough.
 
-> +	v4l2_subdev_cleanup(sd);
->  error_media_entity:
->  	media_entity_cleanup(&sd->entity);
->  
-> @@ -1633,6 +1635,7 @@ static int imx219_remove(struct i2c_client *client)
->  	struct imx219 *imx219 = to_imx219(sd);
->  
->  	v4l2_async_unregister_subdev(sd);
-> +	v4l2_subdev_cleanup(sd);
->  	media_entity_cleanup(&sd->entity);
->  	imx219_free_controls(imx219);
->  
+Shawn
 
--- 
-Regards,
-
-Laurent Pinchart
+>  static struct platform_driver weim_driver = {
+>  	.driver = {
+>  		.name		= "imx-weim",
+> @@ -285,7 +383,27 @@ static struct platform_driver weim_driver = {
+>  	},
+>  	.probe = weim_probe,
+>  };
+> -module_platform_driver(weim_driver);
+> +
+> +static int __init weim_init(void)
+> +{
+> +#if IS_ENABLED(CONFIG_OF_DYNAMIC)
+> +	WARN_ON(of_reconfig_notifier_register(&weim_of_notifier));
+> +#endif /* IS_ENABLED(CONFIG_OF_DYNAMIC) */
+> +
+> +	return platform_driver_register(&weim_driver);
+> +}
+> +module_init(weim_init);
+> +
+> +static void __exit weim_exit(void)
+> +{
+> +#if IS_ENABLED(CONFIG_OF_DYNAMIC)
+> +	of_reconfig_notifier_unregister(&weim_of_notifier);
+> +#endif /* IS_ENABLED(CONFIG_OF_DYNAMIC) */
+> +
+> +	return platform_driver_unregister(&weim_driver);
+> +
+> +}
+> +module_exit(weim_exit);
+>  
+>  MODULE_AUTHOR("Freescale Semiconductor Inc.");
+>  MODULE_DESCRIPTION("i.MX EIM Controller Driver");
+> -- 
+> 2.34.1
+> 
+> 

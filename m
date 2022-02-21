@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024044BE868
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9684BE790
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352301AbiBUKDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:03:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55896 "EHLO
+        id S1350711AbiBUJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:39:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353022AbiBUJ5C (ORCPT
+        with ESMTP id S1350183AbiBUJbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:57:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659EF45790;
-        Mon, 21 Feb 2022 01:24:54 -0800 (PST)
+        Mon, 21 Feb 2022 04:31:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDDD27CF1;
+        Mon, 21 Feb 2022 01:13:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26C5BB80ECB;
-        Mon, 21 Feb 2022 09:24:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46CA3C340E9;
-        Mon, 21 Feb 2022 09:24:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE5D2608C1;
+        Mon, 21 Feb 2022 09:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8CD7C340E9;
+        Mon, 21 Feb 2022 09:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435491;
-        bh=n1f98Y30u1MRoTvXq5oADRdUKbZtJKh6KWD/vuLlgzY=;
+        s=korg; t=1645434806;
+        bh=kPsipjtm5BFbOtdKq1wVwjsC6HImBrZUVW4TMQmoygI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZZVACbFM/ca8sUwtvgst5CeDNdlR9xGCMD9mZ+c8xYZDUNiPe98G6ogAQeMiCM9LB
-         1M3Z8Ne/ywmKTAMU2PqCgsd+VXGnmJc/SItKGiEXdWY/jmfwzAcCGRWpCdgV9/Tgct
-         U/ulLGUO21PeoQQiJfM29fNulIcVS+2EXmdf5HKA=
+        b=ztN97UbMiiNtu0HdB+SQNdd5PGE9DQQLZPYHio+J0dBAKTI0x9qpS0udHzxVT0rNR
+         K2HkVfRl3jno/7b695XaN2ojzUG1JjdbawQAzpuKiiIVATtWBQBygEUijBfB2HHds1
+         d2Tg+gFm8RPH0y9KTM+uHGMtXpaFqxTxwCgK02AQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.16 150/227] powerpc/603: Fix boot failure with DEBUG_PAGEALLOC and KFENCE
+        stable@vger.kernel.org, Ansuel Smith <ansuelsmth@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.15 137/196] mtd: parsers: qcom: Fix kernel panic on skipped partition
 Date:   Mon, 21 Feb 2022 09:49:29 +0100
-Message-Id: <20220221084939.819973632@linuxfoundation.org>
+Message-Id: <20220221084935.502531213@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +54,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Ansuel Smith <ansuelsmth@gmail.com>
 
-commit 9bb162fa26ed76031ed0e7dbc77ccea0bf977758 upstream.
+commit 65d003cca335cabc0160d3cd7daa689eaa9dd3cd upstream.
 
-Allthough kernel text is always mapped with BATs, we still have
-inittext mapped with pages, so TLB miss handling is required
-when CONFIG_DEBUG_PAGEALLOC or CONFIG_KFENCE is set.
+In the event of a skipped partition (case when the entry name is empty)
+the kernel panics in the cleanup function as the name entry is NULL.
+Rework the parser logic by first checking the real partition number and
+then allocate the space and set the data for the valid partitions.
 
-The final solution should be to set a BAT that also maps inittext
-but that BAT then needs to be cleared at end of init, and it will
-require more changes to be able to do it properly.
+The logic was also fundamentally wrong as with a skipped partition, the
+parts number returned was incorrect by not decreasing it for the skipped
+partitions.
 
-As DEBUG_PAGEALLOC or KFENCE are debugging, performance is not a big
-deal so let's fix it simply for now to enable easy stable application.
-
-Fixes: 035b19a15a98 ("powerpc/32s: Always map kernel text and rodata with BATs")
-Cc: stable@vger.kernel.org # v5.11+
-Reported-by: Maxime Bizon <mbizon@freebox.fr>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/aea33b4813a26bdb9378b5f273f00bd5d4abe240.1638857364.git.christophe.leroy@csgroup.eu
+Fixes: 803eb124e1a6 ("mtd: parsers: Add Qcom SMEM parser")
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220116032211.9728-1-ansuelsmth@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/head_book3s_32.S |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/parsers/qcomsmempart.c |   31 +++++++++++++++++++------------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
 
---- a/arch/powerpc/kernel/head_book3s_32.S
-+++ b/arch/powerpc/kernel/head_book3s_32.S
-@@ -421,14 +421,14 @@ InstructionTLBMiss:
-  */
- 	/* Get PTE (linux-style) and check access */
- 	mfspr	r3,SPRN_IMISS
--#ifdef CONFIG_MODULES
-+#if defined(CONFIG_MODULES) || defined(CONFIG_DEBUG_PAGEALLOC) || defined(CONFIG_KFENCE)
- 	lis	r1, TASK_SIZE@h		/* check if kernel address */
- 	cmplw	0,r1,r3
- #endif
- 	mfspr	r2, SPRN_SDR1
- 	li	r1,_PAGE_PRESENT | _PAGE_ACCESSED | _PAGE_EXEC | _PAGE_USER
- 	rlwinm	r2, r2, 28, 0xfffff000
--#ifdef CONFIG_MODULES
-+#if defined(CONFIG_MODULES) || defined(CONFIG_DEBUG_PAGEALLOC) || defined(CONFIG_KFENCE)
- 	bgt-	112f
- 	lis	r2, (swapper_pg_dir - PAGE_OFFSET)@ha	/* if kernel address, use */
- 	li	r1,_PAGE_PRESENT | _PAGE_ACCESSED | _PAGE_EXEC
+--- a/drivers/mtd/parsers/qcomsmempart.c
++++ b/drivers/mtd/parsers/qcomsmempart.c
+@@ -58,11 +58,11 @@ static int parse_qcomsmem_part(struct mt
+ 			       const struct mtd_partition **pparts,
+ 			       struct mtd_part_parser_data *data)
+ {
++	size_t len = SMEM_FLASH_PTABLE_HDR_LEN;
++	int ret, i, j, tmpparts, numparts = 0;
+ 	struct smem_flash_pentry *pentry;
+ 	struct smem_flash_ptable *ptable;
+-	size_t len = SMEM_FLASH_PTABLE_HDR_LEN;
+ 	struct mtd_partition *parts;
+-	int ret, i, numparts;
+ 	char *name, *c;
+ 
+ 	if (IS_ENABLED(CONFIG_MTD_SPI_NOR_USE_4K_SECTORS)
+@@ -87,8 +87,8 @@ static int parse_qcomsmem_part(struct mt
+ 	}
+ 
+ 	/* Ensure that # of partitions is less than the max we have allocated */
+-	numparts = le32_to_cpu(ptable->numparts);
+-	if (numparts > SMEM_FLASH_PTABLE_MAX_PARTS_V4) {
++	tmpparts = le32_to_cpu(ptable->numparts);
++	if (tmpparts > SMEM_FLASH_PTABLE_MAX_PARTS_V4) {
+ 		pr_err("Partition numbers exceed the max limit\n");
+ 		return -EINVAL;
+ 	}
+@@ -116,11 +116,17 @@ static int parse_qcomsmem_part(struct mt
+ 		return PTR_ERR(ptable);
+ 	}
+ 
++	for (i = 0; i < tmpparts; i++) {
++		pentry = &ptable->pentry[i];
++		if (pentry->name[0] != '\0')
++			numparts++;
++	}
++
+ 	parts = kcalloc(numparts, sizeof(*parts), GFP_KERNEL);
+ 	if (!parts)
+ 		return -ENOMEM;
+ 
+-	for (i = 0; i < numparts; i++) {
++	for (i = 0, j = 0; i < tmpparts; i++) {
+ 		pentry = &ptable->pentry[i];
+ 		if (pentry->name[0] == '\0')
+ 			continue;
+@@ -135,24 +141,25 @@ static int parse_qcomsmem_part(struct mt
+ 		for (c = name; *c != '\0'; c++)
+ 			*c = tolower(*c);
+ 
+-		parts[i].name = name;
+-		parts[i].offset = le32_to_cpu(pentry->offset) * mtd->erasesize;
+-		parts[i].mask_flags = pentry->attr;
+-		parts[i].size = le32_to_cpu(pentry->length) * mtd->erasesize;
++		parts[j].name = name;
++		parts[j].offset = le32_to_cpu(pentry->offset) * mtd->erasesize;
++		parts[j].mask_flags = pentry->attr;
++		parts[j].size = le32_to_cpu(pentry->length) * mtd->erasesize;
+ 		pr_debug("%d: %s offs=0x%08x size=0x%08x attr:0x%08x\n",
+ 			 i, pentry->name, le32_to_cpu(pentry->offset),
+ 			 le32_to_cpu(pentry->length), pentry->attr);
++		j++;
+ 	}
+ 
+ 	pr_debug("SMEM partition table found: ver: %d len: %d\n",
+-		 le32_to_cpu(ptable->version), numparts);
++		 le32_to_cpu(ptable->version), tmpparts);
+ 	*pparts = parts;
+ 
+ 	return numparts;
+ 
+ out_free_parts:
+-	while (--i >= 0)
+-		kfree(parts[i].name);
++	while (--j >= 0)
++		kfree(parts[j].name);
+ 	kfree(parts);
+ 	*pparts = NULL;
+ 
 
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE594BDD0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7831C4BE598
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346793AbiBUI7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:59:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54332 "EHLO
+        id S1347146AbiBUJDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:03:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346677AbiBUI6i (ORCPT
+        with ESMTP id S1347126AbiBUJAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:58:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552B225C5C;
-        Mon, 21 Feb 2022 00:54:46 -0800 (PST)
+        Mon, 21 Feb 2022 04:00:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE416275E4;
+        Mon, 21 Feb 2022 00:55:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FC1AB80EBD;
-        Mon, 21 Feb 2022 08:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87EDDC340E9;
-        Mon, 21 Feb 2022 08:54:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A174611DB;
+        Mon, 21 Feb 2022 08:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FAC4C340E9;
+        Mon, 21 Feb 2022 08:55:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433641;
-        bh=lxCchzryuMtVgvfH1Q92K/i4dkv4KmcSp/CCgAaGACQ=;
+        s=korg; t=1645433743;
+        bh=Sho+2EN2OREeQ4S2SFRqB7ZQHvCM/jTHANkhtSh03Gk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wJzQXQd82jaS5lKVdWwNFvQY+J0eV6HXMzPQloyIi5IYxhItfdvD1ysJv/vdxGf+F
-         9DAavWNcuntpAzRPtTDEmJjKGe5LLUln49ZJhCrOaZr+Ezo0NQtZ3XfkUJsI9EQwLY
-         oEvkDARyoCxfK1+B1S9l8qhvZpws4+DBgO1VP2zU=
+        b=zg9I5Epw7VjzStqqgH5Y4xXTT6EhKsYaZBff/2MUY2PaMgMzH8e7fhQ3Yzc/su1zs
+         T/aErMMsz67FAuD5ohA9dI4tPfWLhW0tGRRoD62jWVdVRoPNlpTtCVyJ+WzgGKi/LK
+         C8I71zXXunCay277/hjDYinF4FsxTh8JN8NKzuLE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.14 29/45] ASoC: ops: Fix stereo change notifications in snd_soc_put_volsw()
+        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.19 27/58] ping: fix the dif and sdif check in ping_lookup
 Date:   Mon, 21 Feb 2022 09:49:20 +0100
-Message-Id: <20220221084911.392544956@linuxfoundation.org>
+Message-Id: <20220221084912.763102666@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
-References: <20220221084910.454824160@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,56 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit 564778d7b1ea465f9487eedeece7527a033549c5 upstream.
+commit 35a79e64de29e8d57a5989aac57611c0cd29e13e upstream.
 
-When writing out a stereo control we discard the change notification from
-the first channel, meaning that events are only generated based on changes
-to the second channel. Ensure that we report a change if either channel
-has changed.
+When 'ping' changes to use PING socket instead of RAW socket by:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220201155629.120510-2-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+   # sysctl -w net.ipv4.ping_group_range="0 100"
+
+There is another regression caused when matching sk_bound_dev_if
+and dif, RAW socket is using inet_iif() while PING socket lookup
+is using skb->dev->ifindex, the cmd below fails due to this:
+
+  # ip link add dummy0 type dummy
+  # ip link set dummy0 up
+  # ip addr add 192.168.111.1/24 dev dummy0
+  # ping -I dummy0 192.168.111.1 -c1
+
+The issue was also reported on:
+
+  https://github.com/iputils/iputils/issues/104
+
+But fixed in iputils in a wrong way by not binding to device when
+destination IP is on device, and it will cause some of kselftests
+to fail, as Jianlin noticed.
+
+This patch is to use inet(6)_iif and inet(6)_sdif to get dif and
+sdif for PING socket, and keep consistent with RAW socket.
+
+Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
+Reported-by: Jianlin Shi <jishi@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-ops.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ net/ipv4/ping.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -319,7 +319,7 @@ int snd_soc_put_volsw(struct snd_kcontro
- 	unsigned int sign_bit = mc->sign_bit;
- 	unsigned int mask = (1 << fls(max)) - 1;
- 	unsigned int invert = mc->invert;
--	int err;
-+	int err, ret;
- 	bool type_2r = false;
- 	unsigned int val2 = 0;
- 	unsigned int val, val_mask;
-@@ -361,12 +361,18 @@ int snd_soc_put_volsw(struct snd_kcontro
- 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
- 	if (err < 0)
- 		return err;
-+	ret = err;
+--- a/net/ipv4/ping.c
++++ b/net/ipv4/ping.c
+@@ -177,16 +177,23 @@ static struct sock *ping_lookup(struct n
+ 	struct sock *sk = NULL;
+ 	struct inet_sock *isk;
+ 	struct hlist_nulls_node *hnode;
+-	int dif = skb->dev->ifindex;
++	int dif, sdif;
  
--	if (type_2r)
-+	if (type_2r) {
- 		err = snd_soc_component_update_bits(component, reg2, val_mask,
--			val2);
-+						    val2);
-+		/* Don't discard any error code or drop change flag */
-+		if (ret == 0 || err < 0) {
-+			ret = err;
-+		}
-+	}
+ 	if (skb->protocol == htons(ETH_P_IP)) {
++		dif = inet_iif(skb);
++		sdif = inet_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI4, dif = %d\n",
+ 			 (int)ident, &ip_hdr(skb)->daddr, dif);
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
++		dif = inet6_iif(skb);
++		sdif = inet6_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI6c, dif = %d\n",
+ 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
+ #endif
++	} else {
++		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
++		return NULL;
+ 	}
  
--	return err;
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(snd_soc_put_volsw);
+ 	read_lock_bh(&ping_table.lock);
+@@ -226,7 +233,7 @@ static struct sock *ping_lookup(struct n
+ 		}
  
+ 		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
+-		    sk->sk_bound_dev_if != inet_sdif(skb))
++		    sk->sk_bound_dev_if != sdif)
+ 			continue;
+ 
+ 		sock_hold(sk);
 
 

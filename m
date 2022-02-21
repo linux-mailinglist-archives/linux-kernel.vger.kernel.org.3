@@ -2,159 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4734BD73C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677C04BD6DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345945AbiBUHSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:18:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51616 "EHLO
+        id S1345963AbiBUHVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:21:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345941AbiBUHSh (ORCPT
+        with ESMTP id S1343584AbiBUHVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:18:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0282631;
-        Sun, 20 Feb 2022 23:18:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE81860F31;
-        Mon, 21 Feb 2022 07:18:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93AEC340E9;
-        Mon, 21 Feb 2022 07:18:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645427894;
-        bh=LgQjXd4WN0kF4H55no28FnkGWNbYSD9+uIC761PMlbc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=e4uPllXxesVF8kZU6rixAvWBH7hkw5/x6qSlo1CxnP0B9Zt+wA+DFDrSlh2/9Zv57
-         BZrYiJZqlvm/yMNGLPYK4k2Wi0g4HcR3osWJn16gkcbc9Ra2xWgIG0xNIK1M2Ya04O
-         Tv2BwVvv6XH+Azr/T2tlXdCsOnya7t5wpfpZlbR4LOqUDRAGWkCCB/qwji/0fzFz/n
-         nFC6RKpk/LenLzQyx7jQWiK/kxIoAq6sftOzrzp9wZoYzKaoNOLQe38awRe4/87Z6l
-         XJTXJwUAC/aWwrCVuKW5yiBf+iW6AszicZMXw58qW5+V01h2Msbi2hOJ2Sjs3OCyGk
-         wssEgTVrgaMUw==
-Date:   Mon, 21 Feb 2022 16:18:08 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH 0/8] bpf: Add fprobe link
-Message-Id: <20220221161808.46d9809fed5be7be8e16e47d@kernel.org>
-In-Reply-To: <CAADnVQ+eojJ8KMwbieJrtOf7oWPqw7VDYV9EAAWpx3UoFHZFDQ@mail.gmail.com>
-References: <Yfq+PJljylbwJ3Bf@krava>
-        <CAADnVQKeTB=UgY4Gf-46EBa8rwWTu2wvi7hEj2sdVTALGJ0JEg@mail.gmail.com>
-        <YfvvfLlM1FOTgvDm@krava>
-        <20220204094619.2784e00c0b7359356458ca57@kernel.org>
-        <CAADnVQJYY0Xm6M9O02E5rOkdQPX39NOOS4tM2jpwRLQvP-qDBg@mail.gmail.com>
-        <20220204110704.7c6eaf43ff9c8f5fe9bf3179@kernel.org>
-        <CAADnVQJfq_10H0V+u0w0rzyZ9uy7vq=T-3BMDANjEN8A3-prsQ@mail.gmail.com>
-        <20220203211954.67c20cd3@gandalf.local.home>
-        <CAADnVQKjNJjZDs+ZV7vcusEkKuDq+sWhSD3M5GtvNeZMx3Fcmg@mail.gmail.com>
-        <20220204125942.a4bda408f536c2e3248955e1@kernel.org>
-        <Yguo4v7c+3A0oW/h@krava>
-        <CAEf4BzYO_B51TPgUnDXUPUsK55RSczwcnhuLz9DMbfO5JCj=Cw@mail.gmail.com>
-        <20220217230357.67d09baa261346a985b029b6@kernel.org>
-        <CAEf4BzYxcSCae=sF3EKNUtLDCZhkhHkd88CEBt4bffzN_AZrDw@mail.gmail.com>
-        <20220218130727.51db96861c3e1c79b45daafb@kernel.org>
-        <CAADnVQ+eojJ8KMwbieJrtOf7oWPqw7VDYV9EAAWpx3UoFHZFDQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Feb 2022 02:21:06 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2522B2E5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 23:20:42 -0800 (PST)
+Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M5PRT-1nMroS1cpR-001PqP; Mon, 21 Feb 2022 08:20:41 +0100
+Received: by mail-wm1-f41.google.com with SMTP id i19so8925180wmq.5;
+        Sun, 20 Feb 2022 23:20:41 -0800 (PST)
+X-Gm-Message-State: AOAM533s+vhVgNtdN36REaLllpR6oEFpZfwle7ZIrCluLfHAFZdbJzl6
+        A0+PKUj+/UdmnX+6119Tb4iI2YrkZkeyZLE33W4=
+X-Google-Smtp-Source: ABdhPJwkhO738p7jfkIcVIpJAGPCBMxEsq4hdKYoj5i8JrWItb1GWjA9adOa10AzpY4ehuGHPz73wdTTBSk9y82K1Yw=
+X-Received: by 2002:a05:600c:4ecb:b0:37c:9125:ac03 with SMTP id
+ g11-20020a05600c4ecb00b0037c9125ac03mr16542202wmq.98.1645428041077; Sun, 20
+ Feb 2022 23:20:41 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1645407997.git.tonyhuang.sunplus@gmail.com> <20f858dfe999816cb05dfde5f89db48f3416358e.1645407997.git.tonyhuang.sunplus@gmail.com>
+In-Reply-To: <20f858dfe999816cb05dfde5f89db48f3416358e.1645407997.git.tonyhuang.sunplus@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 21 Feb 2022 08:20:25 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1FZQ2LQco8D263+YXjcSQvzU6RHAL8SKcKy8hiLnHY8g@mail.gmail.com>
+Message-ID: <CAK8P3a1FZQ2LQco8D263+YXjcSQvzU6RHAL8SKcKy8hiLnHY8g@mail.gmail.com>
+Subject: Re: [PATCH v9 2/2] misc: Add iop driver for Sunplus SP7021
+To:     Tony Huang <tonyhuang.sunplus@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        gregkh <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        Tony Huang <tony.huang@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:+flWuxabUjXSN9IPizb45Hbk5k0zd9jBEveS/y5AS5pVfLTOGNR
+ vlhOk0HWrBtIcDO4ph7hzHmNg6LBPJr6ruYlFKAwqPPHgVwiXS3o3aeqWLgFch1dmkBMKww
+ muWSaOlvimKggChUOBBODGKA6uEpkpRSw408xD9YxemE+ld+7eSzd7kWX+HygDLpYAseKQH
+ vnmowe2F+ssGrkD6+n0dQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DJ7ZBQi7pDc=:+bkThK+4f7Zz3hMeUdom9J
+ rBPJth0FagVycH8i0TPuB8R1AgpASaMoz1PI1K7TBYghuabS1sXaXttReqMEqF5uVrrmAshbg
+ fFnDtmEvdQibGiR3/DH4ILLlCwaZ3tAvOxjbVH5t26vwR2E+z/t2FaZ96HxM5C7jySNk8Emo7
+ DtW9gbAkqsPc22hAjsSDiCoqSx2aoAuuE7COEQvG8J8qqyvmck2Jsh7FT97UWrpRIIoDv/iK8
+ MVnlJ2OwkniWGnDWXu6bKSTte3F0dffy8DMEQM0AD43vDx9ZrJ20z7bImga0A0M4p+P/di79B
+ gqr1QVsNAONbnfE6i2h5boqloccX/Pzv8I7uYmciabsrhokTfuhtfSllcSeIOjjkte8BlYNRM
+ 94W+DpXvhZG4sP7Zutq+N7SubTZP+jE+4wfb1Tiw/FM4A4tFb66P62dEzFmmWzST6aXW/DpeB
+ oZEx9GYakHRuwXbe8LMjFeXRQh1b0L0yO5tE0SP6N/fJgCb34wTJALKYa/3IcxyOFPj981qE5
+ dTZrS3unAgBipH0w/XuHbyQ1LXMIsL9+hs8r4GWjiLMue3ss9EbMWisqjWBYk9XdsPpIJ2asq
+ yJPmy+RBwHzEEwqPjMlrL6XLmOKS7ML+W8T5P0tZseO8MPvZy9TXr1k4sAAyqvIx1LUe3vmtt
+ 5UtQtjCx3CDih/0EEFZ3LdXREB+3u0fj1e8v8UTlfOTAeMGqAPYvm2zezFwEGcdo9/iU=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 18:10:08 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On Mon, Feb 21, 2022 at 3:14 AM Tony Huang <tonyhuang.sunplus@gmail.com> wrote:
+>
+> IOP(8051) embedded inside SP7021 which is used as
+> Processor for I/O control, monitor RTC interrupt and
+> cooperation with CPU & PMC in power management purpose.
+> The IOP core is DQ8051, so also named IOP8051,
+> it supports dedicated JTAG debug pins which share with SP7021.
+> In standby mode operation, the power spec reach 400uA.
+>
+> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
+> ---
+> Changes in v9:
+>  - Remove custom attributes sysfs.
 
-> On Thu, Feb 17, 2022 at 8:07 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Thu, 17 Feb 2022 14:01:30 -0800
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> >
-> > > > > Is there any chance to support this fast multi-attach for uprobe? If
-> > > > > yes, we might want to reuse the same link for both (so should we name
-> > > > > it more generically?
-> > > >
-> > > > There is no interface to do that but also there is no limitation to
-> > > > expand uprobes. For the kprobes, there are some limitations for the
-> > > > function entry because it needs to share the space with ftrace. So
-> > > > I introduced fprobe for easier to use.
-> > > >
-> > > > > on the other hand BPF program type for uprobe is
-> > > > > BPF_PROG_TYPE_KPROBE anyway, so keeping it as "kprobe" also would be
-> > > > > consistent with what we have today).
-> > > >
-> > > > Hmm, I'm not sure why BPF made such design choice... (Uprobe needs
-> > > > the target program.)
-> > > >
-> > >
-> > > We've been talking about sleepable uprobe programs, so we might need
-> > > to add uprobe-specific program type, probably. But historically, from
-> > > BPF point of view there was no difference between kprobe and uprobe
-> > > programs (in terms of how they are run and what's available to them).
-> > > From BPF point of view, it was just attaching BPF program to a
-> > > perf_event.
-> >
-> > Got it, so that will reuse the uprobe_events in ftrace. But I think
-> > the uprobe requires a "path" to the attached binary, how is it
-> > specified?
-> >
-> > > > > But yeah, the main question is whether there is something preventing
-> > > > > us from supporting multi-attach uprobe as well? It would be really
-> > > > > great for USDT use case.
-> > > >
-> > > > Ah, for the USDT, it will be useful. But since now we will have "user-event"
-> > > > which is faster than uprobes, we may be better to consider to use it.
-> > >
-> > > Any pointers? I'm not sure what "user-event" refers to.
-> >
-> > Here is the user-events series, which allows user program to define
-> > raw dynamic events and it can write raw event data directly from
-> > user space.
-> >
-> > https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
-> 
-> Is this a way for user space to inject user bytes into kernel events?
+You are now back to a driver that does nothing at all, please make it
+use at least one kernel subsystem that it can hook up to before
+you send it again.
 
-Yes, it is.
+Also, when listing the functionality above, describe which subsystems
+you want to use for those in the long run, this would make it clearer
+to see which direction you want to take this driver when you add
+back the features.
 
-> What is the use case?
-
-This is like trace_marker but more ftrace/perf friendly version. The trace_marker
-can only send a user string, and the kernel can not parse it. Thus, the traced
-data will be shown in the trace buffer, but the event filter, event trigger,
-histogram etc didn't work with trace_marker.
-
-On the other hand, the user-events allows user-space defines new events with
-various arguments with types, and the application can send the formatted raw
-data to the kernel. Thus the kernel can apply event filter, event trigger and
-histograms on those events as same as other kernel defined events.
-
-This will be helpful for users to push their own data as events of ftrace
-and perf (and eBPF I think) so that they can use those tracing tools to analyze
-both of their events and kernel events. :-)
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+         Arnd

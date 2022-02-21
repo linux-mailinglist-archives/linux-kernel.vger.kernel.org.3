@@ -2,326 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1131E4BE131
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F494BDE3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350192AbiBUJaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:30:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35898 "EHLO
+        id S1349586AbiBUJaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:30:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348400AbiBUJUQ (ORCPT
+        with ESMTP id S1349309AbiBUJVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:20:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E035E340D5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:07:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DFD261252
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:07:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CFAC340EB;
-        Mon, 21 Feb 2022 09:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645434454;
-        bh=0UtvbGc/28PIsgWHpVNayzBPg+Fg8BoIZ349umoEGrE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IGPF/Xa/4lkRb9hv9Jvcw6kOSnf02B2YCTN2wI0GEnX6vHAd4nWtIhh1ANCsmLq32
-         7EjWjxA+daoQUyKEJQMjjwiyTXmDkAtCt8rYcjzeWMd5L4LO48ezdgpJkTsJIDPgkF
-         EUCaBx6p03UZu4AFDqTMVKRrr1eSCco8KcB4Iw9KEuEaUXwVyb+6uR4FwYNrScVMHi
-         SQNEziEbfLSkLHa2xipkKcf+Yefagx1ZIWHB/gdhchTeKWErMaSEwweqIyy7WpJV3e
-         aelCE/RxjsKR1yAaD+WY+cPi3T8iglzUM4JMb7NDLoALTydU6z1WgQngigp3N19+c7
-         mRqaQBA5iNv1w==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nM4fM-009E1h-Bo; Mon, 21 Feb 2022 09:07:32 +0000
+        Mon, 21 Feb 2022 04:21:13 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150125.outbound.protection.outlook.com [40.107.15.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782B436156;
+        Mon, 21 Feb 2022 01:08:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CepL/Oluyk2X8DYdXihYiMZ6niAtIcs4Tpn9N/nN2m2tVTyf3xOiLgwK1pFdQPq+WE5LDsEY3STkbmQAt4MZ4HA2d9zGM75KxpWTttzOsMwiEJGNXoccGi/n+kOOraFBq28L0K4OzJKjv5WimLwMVIEJIw7Jp0Qc/NP6yESjKlmv0vwzPLmCsZBcLPiC5p4cdk45XLx9wzXw9W8Spay3/TM9+pHmRu0miWi3EcCbWKAVmT7KBkYEju+L6CqbpmD6hIEZO+ZYzlpm1ScizHrXQHa/kB/jgKBWyD4+p/nVayvXHuejZ8GunUkCJA297bgpyU7g7rOlkXUz51EBge3Gqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Dw0vsA8BDgjDXLZ07tLY6bwFEg8/PQbyB4cD62Njg2U=;
+ b=fhEjeCAwosBFiZdGgsz2tQ9LqWdlvVGtN/i3fqntIl1BJ1jGrRWUSIzEu2vJMZwH5jELqYQj2hVZx6VT+kx2ihL9HQuQv8ZuVbZKZe0p0Y7exWvsp4cCeTj8SqcYIpo5qrUMELhTha7Kml142s8jNv0ZdGYN0nRLuxGAaKxQJOc5dmDCBkeSBMg+U2458NdrQQLuSHcL6dlgV65dk08s/rfhTaD2u3lWdADBiygO/1tUlPXHc283OWJU83s2PzBhFlLX2tfkCwKqRcbiC5VktZ1qCOdYrpwoFJxIxWy4gZeiEe9RNJKnZOn6gq8jaTaCBuVCnb0HJLAslTeUSavF3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dw0vsA8BDgjDXLZ07tLY6bwFEg8/PQbyB4cD62Njg2U=;
+ b=GVFkixZummEl0010T/0amOhOYTFxDk1/LZjfHmY3E7VWlIh+OJ7NpZJlX+S+H2Rdu2K9UgY/s34zIdgCcmH9HvNPUx/oNIWP/bJD9wXKfMgnY0P1hfxWGcbQKzctLSHO3sy0d9HpBsevJmT20BaR6dJYpauSQHHrUq3qYDQrjp8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by HE1PR07MB4201.eurprd07.prod.outlook.com (2603:10a6:7:98::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.19; Mon, 21 Feb
+ 2022 09:07:57 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::99a2:6f44:700b:b796]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::99a2:6f44:700b:b796%3]) with mapi id 15.20.5017.021; Mon, 21 Feb 2022
+ 09:07:57 +0000
+Date:   Mon, 21 Feb 2022 10:07:32 +0100
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Agathe Porte <agathe.porte@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: add tmp464.yaml
+Message-ID: <YhNWVLHYVtCvdGhi@localhost.localdomain>
+References: <20220218150908.1947772-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220218150908.1947772-1-linux@roeck-us.net>
+X-ClientProxiedBy: MA0PR01CA0001.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:80::14) To DU2PR07MB8110.eurprd07.prod.outlook.com
+ (2603:10a6:10:239::15)
 MIME-Version: 1.0
-Date:   Mon, 21 Feb 2022 09:07:31 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] irqchip/riscv-intc: Create domain using named
- fwnode
-In-Reply-To: <CAAhSdy0jTTDzoc+3T_8uLiWfBN3AFCWj99Ayc-Yh8FBfzUY2sQ@mail.gmail.com>
-References: <20220128052505.859518-1-apatel@ventanamicro.com>
- <20220128052505.859518-3-apatel@ventanamicro.com>
- <063b8a5636d6372f37029946b2c3e0f4@kernel.org>
- <CAAhSdy387r314f=YjvXJCxqxkvjm5q-EBOVu420giFzaVr_NYw@mail.gmail.com>
- <31fea18e51a5021b79adb17973f9528e@kernel.org>
- <CAAhSdy0jTTDzoc+3T_8uLiWfBN3AFCWj99Ayc-Yh8FBfzUY2sQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <023bd1b9eaad001fca53f714920280aa@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: anup@brainfault.org, apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b18c3831-a318-4bba-7fdd-08d9f519a6f3
+X-MS-TrafficTypeDiagnostic: HE1PR07MB4201:EE_
+X-Microsoft-Antispam-PRVS: <HE1PR07MB4201AB2E8D5E7C2CA8A49E94EF3A9@HE1PR07MB4201.eurprd07.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HUQXYZ5B9etPj3qK/EcwvvgqNJtWLpXklyjkGwCVnCJb3XN8+FajHscqtDfnbHTEwGWqUTHhjaqSv4T9h4gJec7nDRM0czTfzExOH3WN9I4uQjuWTnZWo62O+whQT0i8eRThylfJl10cgyFDJd/dPey4mqu7aMQn2n/kcUiJOr1yrhwpvZ8Y0OxvbaerX0Hi3Uc2jn2e54yXn+mW4SlsbiosHDi77i3/GwlHc8ObaHZUz1OGbolrxKrJLQ0AFkM/aBfT1KXxBiSh59BjbyAu2UG8JT/KVranL4E+lDNPtlKTNLtfSU8v2D8RCxKLpsieZaQOfcDM/YvUWB66gdNYGqlffa6aNlvXBIuttDXLCtwJlX0YhPkPxovp2Hgh554scFLkDvm9DsuU7xhXXrT/IhAGIdWTseqqjdw/Pd0rHesLZ2NzGH/dCjCnqT1WAJrW2DnqyXGdLWgiuoeVkRqtWhoOGjLOi0Yce+AXmjWvsUVDBVG5G6q8HLAuW43LZGAtrdQX5SZHVhb1O7cTDQAxVe+JN9LoGovC/wY1gUz9TFcFaRRNgmIFNNPxXgpwqozdlbQqPbqISTeEgloxbzdv0b+LXNFCE+Ob95+XxZmJipc079re8/Ut50/rWhakpnQmBIsly7BpwbrqU8LNJTAnElBA6xBIgGZfsqeQL7yi8ZdKeUhOlL7w6KqYQWtgaFwiPUWr/vJ/mJvsSQ4QEGJ3o7iFIcmLujn0pqQ5L0TZwuONO2nO8OtYHXwTC3dnaDXpXKbgowoqXa/pncCp4txV6Cp2blwTHcUZ8sYAKx59I7A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(316002)(83380400001)(6512007)(86362001)(8936002)(6506007)(52116002)(66556008)(66946007)(66476007)(4326008)(8676002)(5660300002)(9686003)(6666004)(26005)(38350700002)(38100700002)(966005)(6486002)(2906002)(508600001)(82960400001)(6916009)(186003)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eGV2aGdkYW9wTXovaUtvL1I5eW5nSWpaUkRaMU1xWlhMTVBDNHNrWlp6RE1o?=
+ =?utf-8?B?YnFSMDdqY205S05QcEx5QmJsSHVjd00rSitEWmRnZnJNN2RWei9HT1JTTVVF?=
+ =?utf-8?B?ZXZxOURjZGdiQytkM1B0U0JLcGhxcytnNm1NT2dDZ2E0K1JTU1hCVHNYM2s3?=
+ =?utf-8?B?SithNlJhRnhCdUUwUkJUNTJ5elh6NDJwdWc3dGZoNHMrcDZ6djVzQ2FXMzN5?=
+ =?utf-8?B?enJtTmltQ3ZTSnV1SDFJVkExbi9STzJzMy9NeStsRUpXK09WNjBTS2t6RUpN?=
+ =?utf-8?B?U1ZNRjRVSEwzVDl3TEUvN0xFMTVhUGtRNG82RGV0cUtBQnZyOTVWUDdML2xi?=
+ =?utf-8?B?ZXdkTGpaTlU0Z1NBWHBLQmtlcEQvYkNNM0g0RTdueDBXYkVPanAvTE9DeHNW?=
+ =?utf-8?B?clk3bHRLSmdkajh2RWZVWVl4V2JhVWtUbS9taDdvV1ozZFRJSXBPWjJ3bC9j?=
+ =?utf-8?B?SlZyTUVtNmg2OUFocS9sS3ZxUnZPdUpoRVlqc2RQT0ZZMDFEWWF1TnFvSzN5?=
+ =?utf-8?B?UVcySTIvQzhwME95b2lIVjVVb1RqTkRjdXhXQ09ldE9oRUJ0RlpMWkF3K1ls?=
+ =?utf-8?B?cEg2SlhqUFZIL1p5TzJ0WFpObytjZ3pnMFE0RGtDdFMxN0ZqZzVvMk5iU04w?=
+ =?utf-8?B?MVVqYldVclorNk91L2ZCV2NNazA0ZE1iUWxYZnZ3NUZIcnoyZ3QzTFJ3a094?=
+ =?utf-8?B?ZkRlbjdiOUROeW5zQm5mNnFIU0VUeHkyK2NGN050UEtaZk5IU2JEQ3J3TjFB?=
+ =?utf-8?B?NWI1cERKMVVuVmthZUxqTDZuNGc5OGNYMjIyc2lKS053NEdWa0tuZENKRmJt?=
+ =?utf-8?B?Ukw1UzJ5UWxhYkxhUVFsaEpnU0U3OUd3RWgxZFdPcUhGNi9DaFFCQVRVbEtF?=
+ =?utf-8?B?SEQyMlhBbE95em5IV01vbjh3dlgvTUdYdUlWRzRJK0lnUWJEZFB6VkFiRVVL?=
+ =?utf-8?B?cFVvdlNCQ24wK3c2NW5tV1VXWEdsM2V5aDdXcDVlVmsvcUQrNkZGSm9JbWho?=
+ =?utf-8?B?N3Fmem8ranlDbFA1L2xvOVZxT2d0czB4c09CNFBUMUFLMG9qTEFIN3c2cXVj?=
+ =?utf-8?B?Ni93MmhSRFpVVCsyMTQyaGJMUTFjMk5lWmdSMDRXRE1CckU3cFRqc3Q1eENs?=
+ =?utf-8?B?cldjYnd6RXdoQ2ZiQ0Jod2FIM3ovTTE4UHkyL3kzZXlDT3BCM1lLeGwwbER1?=
+ =?utf-8?B?UkFtOHRNcHVvSjB5am1sTHdYUnZ1L20vYzF5RWxGWEUyTUVSK3NIOS9jODVG?=
+ =?utf-8?B?T0N4N3hPU0Z4TVpaWVpmTS9ML0FFanJvaTZ4S3B1aW52eFJsKzdCMzhqTzNE?=
+ =?utf-8?B?WmMwbGdleS8yd3d6N3RVSXlPZzlnSmd5bCtZQ09oNmlJc3VWb3JLb1pGSk9Q?=
+ =?utf-8?B?K05TdTg4S0hKVGIxcjVJck42UUVYNTUzbVVPTGRXWEpucmdWa0pON296OENY?=
+ =?utf-8?B?WVlTc1E0dnJUekwvckFkTzRiV3ZRNTBEYjhvVUQ0NC85ek1nZTIyd2owQTNY?=
+ =?utf-8?B?T1FGbVRCdEtidlNGTlJ6d2pOMDZydmNrMDQyN1ZQYWhqUjB4cHFMTldRNTFY?=
+ =?utf-8?B?eHUyQTJtSmhwSGRTQlAwWHFFTGZweWxkN2NPQnVMZ3FrcmxUZFZnajlqeGF2?=
+ =?utf-8?B?eVlvaG5uRytYOEVlS2FZVWNPazAvOWZJakg4K3JhMDNLbDlnbU9oaXg3czht?=
+ =?utf-8?B?SkZnMzg1ZTE2K2M4dWd0WU5QNUNQcXZlS2h1QnBYMlZWbzRBU2dnV2s0TGp3?=
+ =?utf-8?B?Z3dNcFJuS042NUt4SXhBQU11TFY4N2tOTHdtcG5YM0FjNHV2NEM3NU1vcXpz?=
+ =?utf-8?B?R243blBLQkpLYmdCb1FmMW5JME9IWnR6MFQ3dzl1SDUrMnBGWEdkNndkcmN5?=
+ =?utf-8?B?R2pnRGZMTXQxRytJemVHVXZtZXRoSTdaQUtRNWkzU2w0TVZEY1d1MVlBMFdK?=
+ =?utf-8?B?T1FNcWxTS25jd042cnNnQnJlMnJJQXh5a242SjgweTNuUzUvd2VRNHJ3S3gx?=
+ =?utf-8?B?VEFEbVVSdE1RR0puamFtbGNpVmFES0NsUU9TU1B2a2tMd1BNT2ZFa3JJUnRx?=
+ =?utf-8?B?NHpQSDhSUmhYTXlFWkh1aG4yVWs1V3U1VFJ2MnBjQWRJelFreHNUWDVNb3I0?=
+ =?utf-8?B?anI3MTVqRE9KNjZyRnBSRDdkM0hORXg2cm1zcHlQYUgzTWFkS1p5QUFwMCs1?=
+ =?utf-8?B?MlRkTks2T0dsczVLRVE4ZnExQkYxWWVlMkYzZUNQVnAzUFRPV28zUXhJTm9r?=
+ =?utf-8?B?WnNPS1U3LzlpSWJ1QWE5UHV0VG1BPT0=?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b18c3831-a318-4bba-7fdd-08d9f519a6f3
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 09:07:57.5648
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fp305uiDTMInUJNGCP7Ev9KWB7Jdm0s4VexqqT168M9Sq/ayyqrRgB0Uj8oMlrOg2QpHwshcDsqLapVJ3bpn+maVZjzA1o93AV79VhDFYGQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR07MB4201
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-19 13:03, Anup Patel wrote:
-> On Sat, Feb 19, 2022 at 3:02 PM Marc Zyngier <maz@kernel.org> wrote:
->> 
->> On 2022-02-19 03:38, Anup Patel wrote:
->> > On Thu, Feb 17, 2022 at 8:42 PM Marc Zyngier <maz@kernel.org> wrote:
->> >>
->> >> On 2022-01-28 05:25, Anup Patel wrote:
->> >> > We should create INTC domain using a synthetic fwnode which will allow
->> >> > drivers (such as RISC-V SBI IPI driver, RISC-V timer driver, RISC-V
->> >> > PMU driver, etc) not having dedicated DT/ACPI node to directly create
->> >> > interrupt mapping for standard local interrupt numbers defined by the
->> >> > RISC-V privileged specification.
->> >> >
->> >> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
->> >> > ---
->> >> >  arch/riscv/include/asm/irq.h      |  2 ++
->> >> >  arch/riscv/kernel/irq.c           | 13 +++++++++++++
->> >> >  drivers/clocksource/timer-clint.c | 13 +++++++------
->> >> >  drivers/clocksource/timer-riscv.c | 11 ++---------
->> >> >  drivers/irqchip/irq-riscv-intc.c  | 12 ++++++++++--
->> >> >  drivers/irqchip/irq-sifive-plic.c | 19 +++++++++++--------
->> >> >  6 files changed, 45 insertions(+), 25 deletions(-)
->> >> >
->> >> > diff --git a/arch/riscv/include/asm/irq.h
->> >> > b/arch/riscv/include/asm/irq.h
->> >> > index e4c435509983..f85ebaf07505 100644
->> >> > --- a/arch/riscv/include/asm/irq.h
->> >> > +++ b/arch/riscv/include/asm/irq.h
->> >> > @@ -12,6 +12,8 @@
->> >> >
->> >> >  #include <asm-generic/irq.h>
->> >> >
->> >> > +extern struct fwnode_handle *riscv_intc_fwnode(void);
->> >> > +
->> >> >  extern void __init init_IRQ(void);
->> >> >
->> >> >  #endif /* _ASM_RISCV_IRQ_H */
->> >> > diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
->> >> > index 7207fa08d78f..f2fed78ab659 100644
->> >> > --- a/arch/riscv/kernel/irq.c
->> >> > +++ b/arch/riscv/kernel/irq.c
->> >> > @@ -7,9 +7,22 @@
->> >> >
->> >> >  #include <linux/interrupt.h>
->> >> >  #include <linux/irqchip.h>
->> >> > +#include <linux/irqdomain.h>
->> >> > +#include <linux/module.h>
->> >> >  #include <linux/seq_file.h>
->> >> >  #include <asm/smp.h>
->> >> >
->> >> > +static struct fwnode_handle *intc_fwnode;
->> >> > +
->> >> > +struct fwnode_handle *riscv_intc_fwnode(void)
->> >> > +{
->> >> > +     if (!intc_fwnode)
->> >> > +             intc_fwnode = irq_domain_alloc_named_fwnode("RISCV-INTC");
->> >> > +
->> >> > +     return intc_fwnode;
->> >> > +}
->> >> > +EXPORT_SYMBOL_GPL(riscv_intc_fwnode);
->> >>
->> >> Why is this created outside of the root interrupt controller driver?
->> >> Furthermore, why do you need to create a new fwnode the first place?
->> >> As far as I can tell, the INTC does have a node, and what you don't
->> >> have is the firmware linkage between PMU (an others) and the INTC.
->> >
->> > Fair enough, I will update this patch to not create a synthetic fwnode.
->> >
->> > The issue is not with INTC driver. We have other drivers and places
->> > (such as SBI IPI driver, SBI PMU driver, and KVM RISC-V AIA support)
->> > where we don't have a way to locate INTC fwnode.
->> 
->> And that's exactly what I am talking about: The INTC is OK (sort of),
->> but the firmware is too crap for words, and isn't even able to expose
->> where the various endpoints route their interrupts to.
-> 
-> The firmware is always present at a higher privilege-level hence there
-> is no DT node to discover the presence of firmware. The local 
-> interrupts
-> used by the firmware for IPI, Timer and PMU are defined by the RISC-V
-> ISA specification.
-> 
->> 
->> Yes, this is probably fine today because you can describe the topology
->> of RISC-V systems on the surface of a post stamp. Once you get to the
->> complexity of a server-grade SoC (or worse, a mobile phone style SoC),
->> this *implicit topology* stuff doesn't fly, because there is no
->> guarantee
->> that all endpoints will always all point to the same controller.
-> 
-> The local interrupts (per-CPU) are always managed by the INTC. The
-> interrupt controllers to manage device interrupts (such as PLIC) can
-> vary from platform to platform and have INTC as the parent domain.
+Dnia Fri, Feb 18, 2022 at 07:09:07AM -0800, Guenter Roeck napisał(a):
+>From: Agathe Porte <agathe.porte@nokia.com>
+>
+>Add basic description of the tmp464 driver DT bindings.
+>
+>Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
+>Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+>Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>---
+>v5:
+>- Dropped ti,n-factor from channel@0 example. Added additional
+>  channel to examples to show positive ti,n-factor property.
+>
+>v4:
+>- No changes
+>
+>v3:
+>- Addedd support for TMP468.
+>- Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
+>- Changed value range for ti,n-factor to int8, with an example for
+>  a negative value.
+>- Added myself as driver maintainer.
+>
+> .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
+> MAINTAINERS                                   |   7 ++
+> 2 files changed, 121 insertions(+)
+> create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>
+>diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>new file mode 100644
+>index 000000000000..14f6a3412b8c
+>--- /dev/null
+>+++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+>@@ -0,0 +1,114 @@
+>+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>+%YAML 1.2
+>+---
+>+$id: http://devicetree.org/schemas/hwmon/ti,tmp464.yaml#
+>+$schema: http://devicetree.org/meta-schemas/core.yaml#
+>+
+>+title: TMP464 and TMP468 temperature sensors
+>+
+>+maintainers:
+>+  - Agathe Porte <agathe.porte@nokia.com>
+>+
+>+description: |
+>+  ±0.0625°C Remote and Local temperature sensor
+>+  https://www.ti.com/lit/ds/symlink/tmp464.pdf
+>+  https://www.ti.com/lit/ds/symlink/tmp468.pdf
+>+
+>+properties:
+>+  compatible:
+>+    enum:
+>+      - ti,tmp464
+>+      - ti,tmp468
+>+
+>+  reg:
+>+    maxItems: 1
+>+
+>+  '#address-cells':
+>+    const: 1
+>+
+>+  '#size-cells':
+>+    const: 0
+>+
+>+required:
+>+  - compatible
+>+  - reg
+>+
+>+additionalProperties: false
+>+
+>+patternProperties:
+>+  "^channel@([0-8])$":
+>+    type: object
+>+    description: |
+>+      Represents channels of the device and their specific configuration.
+>+
+>+    properties:
+>+      reg:
+>+        description: |
+>+          The channel number. 0 is local channel, 1-8 are remote channels.
+>+        items:
+>+          minimum: 0
+>+          maximum: 8
+>+
+>+      label:
+>+        description: |
+>+          A descriptive name for this channel, like "ambient" or "psu".
+>+
+>+      ti,n-factor:
+>+        description: |
+>+          The value (two's complement) to be programmed in the channel specific N correction register.
+>+          For remote channels only.
+>+        $ref: /schemas/types.yaml#/definitions/int8
+>+        items:
+>+          minimum: -128
+>+          maximum: 127
 
-I don't know how to make it clearer: this isn't about the situation
-*today*. It is about what you will have two or five years from now.
+I still thing we should have the same format here and in tmp421, for
+consistency. If use the same property name, "ti,n-factor" but on tmp421
+you have use 32bit value while here you have to use 8bit (which is weird
+in DT, BTW), it might be confusing.
+Back when we did this for TMP421, there was some discussion and we
+settled on this approach, why do it differently now?
 
-Relying on a default topology is stupidly bad, and you will end-up
-in a terrible corner eventually, because you can't have *two*
-defaults.
-
-> 
-> We already have high-end interrupt controllers (such as AIA) under
-> development which are scalable for server-grade SoC, mobile SoC
-> and various other types of SoCs.
-> 
-> We are able to describe the topology of different types of interrupt
-> controllers (PLIC as well as AIA) in DT.
-> 
-> The only issue is for drivers which do not have dedicated DT node
-> (such as SBI IPI, SBI Timer, SBI PMU, or KVM RISC-V) but the
-> upside is that local interrupt numbers used by these drivers is
-> clearly defined by the RISC-V ISA specification:
-> 
-> Here are the local interrupts defined by the RISC-V ISA spec:
-> IRQ13 => PMU overflow interrupt (used by SBI PMU driver)
-> IRQ12 => S-mode guest external interrupt (to be used by KVM RISC-V)
-> IRQ11 => M-mode external interrupt (used by firmware)
-> IRQ9  => S-mode external interrupt (used by PLIC driver)
-> IRQ7  => M-mode timer interrupt
-> IRQ5  => S-mode timer interrupt (used by SBI Timer driver)
-> IRQ3  => M-mode software interrupt (used by firmware)
-> IRQ1 =>  S-mode software interrupt (used by SBI IPI driver)
-
-Again, you are missing the point. It isn't about the interrupt
-number (nobody gives a crap about them). It is about the entity
-the device is connected to. No amount of copy pasting of the
-spec changes that.
-
->> 
->> >> what you should have instead is something like:
->> >>
->> >> static struct fwnode_handle *(*__get_root_intc_node)(void);
->> >> struct fwnode_handle *riscv_get_root_intc_hwnode(void)
->> >> {
->> >>          if (__get_root_intc_node)
->> >>                  return __get_root_intc_node();
->> >>
->> >>          return NULL;
->> >> }
->> >>
->> >> and the corresponding registration interface.
->> >
->> > Thanks, I will follow this suggestion. This is a much better approach
->> > and it will avoid touching existing drivers.
->> >
->> >>
->> >> But either way, something breaks: the INTC has one node per CPU, and
->> >> expect one irqdomain per CPU. Having a single fwnode completely breaks
->> >> the INTC driver (and probably the irqdomain list, as we don't check
->> >> for
->> >> duplicate entries).
->> >>
->> >> > diff --git a/drivers/irqchip/irq-riscv-intc.c
->> >> > b/drivers/irqchip/irq-riscv-intc.c
->> >> > index b65bd8878d4f..26ed62c11768 100644
->> >> > --- a/drivers/irqchip/irq-riscv-intc.c
->> >> > +++ b/drivers/irqchip/irq-riscv-intc.c
->> >> > @@ -112,8 +112,16 @@ static int __init riscv_intc_init(struct
->> >> > device_node *node,
->> >> >       if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
->> >> >               return 0;
->> >> >
->> >> > -     intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
->> >> > -                                         &riscv_intc_domain_ops, NULL);
->> >> > +     /*
->> >> > +      * Create INTC domain using a synthetic fwnode which will allow
->> >> > +      * drivers (such as RISC-V SBI IPI driver, RISC-V timer driver,
->> >> > +      * RISC-V PMU driver, etc) not having dedicated DT/ACPI node to
->> >> > +      * directly create interrupt mapping for standard local interrupt
->> >> > +      * numbers defined by the RISC-V privileged specification.
->> >> > +      */
->> >> > +     intc_domain = irq_domain_create_linear(riscv_intc_fwnode(),
->> >> > +                                            BITS_PER_LONG,
->> >> > +                                            &riscv_intc_domain_ops, NULL);
->> >>
->> >> This is what I'm talking about. It is simply broken. So either you
->> >> don't
->> >> need a per-CPU node (and the DT was bad the first place), or you
->> >> absolutely need
->> >> one (and the whole 'well-known/default domain' doesn't work at all).
->> >>
->> >> Either way, this patch is plain wrong.
->> >
->> > Okay, I will update this patch with the new approach which you
->> > suggested.
->> 
->> But how do you plan to work around the fact that everything is 
->> currently
->> build around having a node (and an irqdomain) per CPU? The PLIC, for
->> example,
->> clearly has one parent per CPU, not one global parent.
->> 
->> I'm sure there was a good reason for this, and I suspect merging the
->> domains
->> will simply end up breaking things.
-> 
-> We can have multiple PLIC instances in a platform and each PLIC
-> instance targets a subset of CPUs. Further, each PLIC instance has
-> multiple PLIC contexts for associated CPUs.
-> 
-> The per-CPU INTC DT nodes and the "interrupts-extended" DT
-> property of PLIC DT node helps us describe the association
-> between various PLIC contexts and CPUs.
-> 
-> Here's an example PLIC DT node:
-> 
->     plic: interrupt-controller@c000000 {
->       #address-cells = <0>;
->       #interrupt-cells = <1>;
->       compatible = "sifive,fu540-c000-plic", "sifive,plic-1.0.0";
->       interrupt-controller;
->       interrupts-extended = <&cpu0_intc 11>,
->                             <&cpu1_intc 11>, <&cpu1_intc 9>,
->                             <&cpu2_intc 11>, <&cpu2_intc 9>,
->                             <&cpu3_intc 11>, <&cpu3_intc 9>,
->                             <&cpu4_intc 11>, <&cpu4_intc 9>;
->       reg = <0xc000000 0x4000000>;
->       riscv,ndev = <10>;
->     };
-> 
-> In above above example, PLIC has 9 contexts and context
-> to CPU connections are as follows:
-> PLIC context0 => CPU0 M-mode external interrupt
-> PLIC context1 => CPU1 M-mode external interrupt
-> PLIC context2 => CPU1 S-mode external interrupt
-> PLIC context3 => CPU2 M-mode external interrupt
-> PLIC context4 => CPU2 S-mode external interrupt
-> ....
-
-Asymmetric interrupt routing. How lovely. How broken.
-
-> 
-> This is just one example and we can describe any kind of
-> PLIC context to CPU connections using "interrupts-extended"
-> DT property.
-> 
-> The same level of flexibility is provided by AIA interrupt
-> controllers which are under development.
-
-How promising. I really hope someone will eventually barge in
-and clean this mess.
-
-           M.
--- 
-Jazz is not dead. It just smells funny...
+Krzysztof

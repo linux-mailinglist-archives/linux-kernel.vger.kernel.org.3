@@ -2,107 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6614BD370
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A424BD375
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240010AbiBUCBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 21:01:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49272 "EHLO
+        id S240133AbiBUCCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 21:02:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234114AbiBUCBg (ORCPT
+        with ESMTP id S243822AbiBUCCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 21:01:36 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9531517D3;
-        Sun, 20 Feb 2022 18:01:14 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id x3so28177102qvd.8;
-        Sun, 20 Feb 2022 18:01:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L6UJ01aO6yqMFyXgXVkysCIqiLsld/b/1p7hzthZA8U=;
-        b=FV9H/c+eRAbiraRlbbFVbiUpp+PdGevLPwWpXp5zDNgnKnVqO4+fED7zaFyE9HDmpN
-         sH9fo9LkiNQvf+JSp7FIt0dXcZrM8SpUS6013DfVUatIToW0uNqgotay7nH5s+QmgHtf
-         ZKJQl2sitkYGDNKctwH+fS3sNIx+DMsWOmYxst2OBZQGO2S/lpY89MHoOlMDIocPv4vz
-         43t8PxlZR8lDUGouHja3QhGoAHmWXsI2nQOJ5GA4wvEFsLmqsiKV1A/rSCmsmh/i8v3G
-         NUYVz3L7reQ+1IppHRMjhh7Rer6gPXkQsSj7HuZ4zvmJkOkb8gPYF43v98Aket1bna5L
-         CgvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L6UJ01aO6yqMFyXgXVkysCIqiLsld/b/1p7hzthZA8U=;
-        b=24qBptNL3RcZ9Q4yjJtMY2xB4SGjqK3Ip6KbZChUpXxTR0jopuwOwPpOzDn85MPCeq
-         te8VuP95+2wkYZmZyQH3/kGCFCG7V1aAZ3N4pBGNZPBEAXZfq0/1crUcqsKo95ZXzU9r
-         HLeF7nJoDiiW3LBokaka3niHAkQV+27gF4jGmDbb2pf03ZSv99lu9NhJuoQ70Ip+cRcf
-         ocwwPFdIpLvwe6jUCtupgf874Slhy7XNlyGuYtW3QPTRlovirzniiKsgtPH5H5dIUK/X
-         oDcPGm9PWNcxRT+RrmVUvBvcO6j+HErkKvsfmxaSlTszRzyJiBrZDUCCS+ZwTnpOd4v0
-         A8Eg==
-X-Gm-Message-State: AOAM533ri6EMx6Y5GEE8GvBEyvaPHHiqVKnF+y9HtpAaLRBDmGB3AIeE
-        MhMwNa7ApjO/bhgbC4xphTY=
-X-Google-Smtp-Source: ABdhPJyti2fe/0D7jey1jMV+CH6mSxJq2zIFxoITidmlU76ohHSP58kKVGfznBiNbihuemWWiby6Ww==
-X-Received: by 2002:a05:6214:e6f:b0:431:46cd:dd9a with SMTP id jz15-20020a0562140e6f00b0043146cddd9amr6013348qvb.125.1645408874012;
-        Sun, 20 Feb 2022 18:01:14 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id n19sm19160708qtk.66.2022.02.20.18.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 18:01:13 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, heiko@sntech.de, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] clk/rockchip: Use of_device_get_match_data()
-Date:   Mon, 21 Feb 2022 02:01:03 +0000
-Message-Id: <20220221020103.1925026-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 20 Feb 2022 21:02:30 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF382FFD3
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 18:02:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645408928; x=1676944928;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ANe90PhVs2NvQulYttBv9SXSMOH6MXgAMcwZn2L7kYA=;
+  b=Dc8R8DdnZdYwZE4ABa9C+CPgEqjBz8uBpdBbJCEmtl3/y+Gvc0vsT9QE
+   IICDNAfdBBpg3qQzY7Iu/XCycm+rPRYuUCTRPwMLR7Dj23aqiW2zYQ9QY
+   jbV+XaafUbhcki0q/dgp75A6fzwinVevb20UVNiWjuFNaLRoFnTLXuRjt
+   PcIYyJviB3/WpaLhqUW1V6+OMbRSF0Bgbi+UbcebO4K2OVlGPZl1G9vjy
+   D7BVQVzlM8L7hbgJ6ZZ3IsbGPrj/+N5Qsev1Iahkx47kStt1bBiuM7aKX
+   2PVyWot8ri0JU1EES0Zyl/MXEg034iFBAeb12Iptb6C/4JApX+Uq6h7Da
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="238833095"
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="238833095"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 18:02:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="590803938"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 20 Feb 2022 18:02:02 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLy1Z-0001AK-OW; Mon, 21 Feb 2022 02:02:01 +0000
+Date:   Mon, 21 Feb 2022 10:01:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        tomba@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, airlied@linux.ie,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        maxime@cerno.tech,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH] drm/omap: switch to drm_of_find_panel_or_bridge
+Message-ID: <202202210942.gGqf3SNb-lkp@intel.com>
+References: <20220220195212.1129437-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220220195212.1129437-1-jose.exposito89@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+Hi "José,
 
-Use of_device_get_match_data() to simplify the code.
+Thank you for the patch! Yet something to improve:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on v5.17-rc5 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jos-Exp-sito/drm-omap-switch-to-drm_of_find_panel_or_bridge/20220221-035403
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: arm-randconfig-r022-20220220 (https://download.01.org/0day-ci/archive/20220221/202202210942.gGqf3SNb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/9a465e2c1dba123efe08cf2f4a5ae11b07be4142
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jos-Exp-sito/drm-omap-switch-to-drm_of_find_panel_or_bridge/20220221-035403
+        git checkout 9a465e2c1dba123efe08cf2f4a5ae11b07be4142
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/omapdrm/dss/output.c:25:8: error: implicit declaration of function 'drm_of_find_panel_or_bridge' [-Werror,-Wimplicit-function-declaration]
+           ret = drm_of_find_panel_or_bridge(out->dev->of_node, out->of_port, 0,
+                 ^
+   1 error generated.
+
+
+vim +/drm_of_find_panel_or_bridge +25 drivers/gpu/drm/omapdrm/dss/output.c
+
+    19	
+    20	int omapdss_device_init_output(struct omap_dss_device *out,
+    21				       struct drm_bridge *local_bridge)
+    22	{
+    23		int ret;
+    24	
+  > 25		ret = drm_of_find_panel_or_bridge(out->dev->of_node, out->of_port, 0,
+    26						  &out->panel, &out->bridge);
+    27		if (ret) {
+    28			if (ret == -ENODEV) {
+    29				dev_dbg(out->dev, "failed to find video sink\n");
+    30				return 0;
+    31			}
+    32			goto error;
+    33		}
+    34	
+    35		if (out->panel) {
+    36			struct drm_bridge *bridge;
+    37	
+    38			bridge = drm_panel_bridge_add(out->panel);
+    39			if (IS_ERR(bridge)) {
+    40				dev_err(out->dev,
+    41					"unable to create panel bridge (%ld)\n",
+    42					PTR_ERR(bridge));
+    43				ret = PTR_ERR(bridge);
+    44				goto error;
+    45			}
+    46	
+    47			out->bridge = bridge;
+    48		}
+    49	
+    50		if (local_bridge) {
+    51			if (!out->bridge) {
+    52				ret = -EPROBE_DEFER;
+    53				goto error;
+    54			}
+    55	
+    56			out->next_bridge = out->bridge;
+    57			out->bridge = local_bridge;
+    58		}
+    59	
+    60		if (!out->bridge) {
+    61			ret = -EPROBE_DEFER;
+    62			goto error;
+    63		}
+    64	
+    65		return 0;
+    66	
+    67	error:
+    68		omapdss_device_cleanup_output(out);
+    69		return ret;
+    70	}
+    71	
+
 ---
- drivers/clk/rockchip/clk-rk3568.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/clk/rockchip/clk-rk3568.c b/drivers/clk/rockchip/clk-rk3568.c
-index 69a9e8069a48..9ca1a26a2533 100644
---- a/drivers/clk/rockchip/clk-rk3568.c
-+++ b/drivers/clk/rockchip/clk-rk3568.c
-@@ -1697,14 +1697,12 @@ static const struct of_device_id clk_rk3568_match_table[] = {
- static int __init clk_rk3568_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
--	const struct of_device_id *match;
- 	const struct clk_rk3568_inits *init_data;
- 
--	match = of_match_device(clk_rk3568_match_table, &pdev->dev);
--	if (!match || !match->data)
-+	init_data = (struct clk_rk3568_inits *)of_device_get_match_data(&pdev->dev);
-+	if (!init_data)
- 		return -EINVAL;
- 
--	init_data = match->data;
- 	if (init_data->inits)
- 		init_data->inits(np);
- 
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE854BE6F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C8A4BDCDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348895AbiBUJYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:24:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49282 "EHLO
+        id S239684AbiBUKFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:05:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348028AbiBUJNh (ORCPT
+        with ESMTP id S1353531AbiBUJ5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:13:37 -0500
+        Mon, 21 Feb 2022 04:57:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5DABE7;
-        Mon, 21 Feb 2022 01:06:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECA913D02;
+        Mon, 21 Feb 2022 01:26:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 073CC6128D;
-        Mon, 21 Feb 2022 09:06:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F7AC340E9;
-        Mon, 21 Feb 2022 09:06:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79A8860F8C;
+        Mon, 21 Feb 2022 09:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F3D3C340E9;
+        Mon, 21 Feb 2022 09:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434395;
-        bh=YjtDjPFwIur/j4/JR3JIG1Cf8opy/OuXbnP9cBm5Tvo=;
+        s=korg; t=1645435599;
+        bh=s2FmeLYg45s5fZKmyXXZ8eeWA2DUYJTfH1h+F9G1sIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=arLAFjddSqJhWAF1OyBYsF1RlP0eHD2jsWcVI96lVVNhyQZWpjqNi9UXQ3hnhrnfO
-         X6w1HKKFefK+g6xyd869FmV8OdLkents3q2lSi4AwlLmWCeDY+eZ2o0IYAuLB9xCC5
-         kaRkwop56wR7gTo+4W01vjQc39XbiJ/CX8SdBXIM=
+        b=hBY1ZGrXmknCi4OcgzU5P8dQemFGSLCXoRnUlVxk7yQz8VwcoNF3/4Fmpeu7BSLFo
+         QIYaHeFlMPP6BNI85oMuwym9SZm0KYSFar8h0L5x4Pdug5efVi6Sf4IDASF410NpYo
+         N5nm4n17H0EYs/R3mYBQcU6RzSqSbZqZBR2IAxVM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.10 114/121] dmaengine: sh: rcar-dmac: Check for error num after setting mask
-Date:   Mon, 21 Feb 2022 09:50:06 +0100
-Message-Id: <20220221084925.046231994@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.16 188/227] ASoC: wm_adsp: Correct control read size when parsing compressed buffer
+Date:   Mon, 21 Feb 2022 09:50:07 +0100
+Message-Id: <20220221084941.068129878@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-commit 2d21543efe332cd8c8f212fb7d365bc8b0690bfa upstream.
+commit a887f9c7a4d37a8e874ba8415a42a92a1b5139fc upstream.
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
+When parsing the compressed stream the whole buffer descriptor is
+now read in a single cs_dsp_coeff_read_ctrl; on older firmwares
+this descriptor is just 4 bytes but on more modern firmwares it is
+24 bytes. The current code reads the full 24 bytes regardless, this
+was working but reading junk for the last 20 bytes. However commit
+f444da38ac92 ("firmware: cs_dsp: Add offset to cs_dsp read/write")
+added a size check into cs_dsp_coeff_read_ctrl, causing the older
+firmwares to now return an error.
 
-Fixes: dc312349e875 ("dmaengine: rcar-dmac: Widen DMA mask to 40 bits")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220106030939.2644320-1-jiasheng@iscas.ac.cn
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Update the code to only read the amount of data appropriate for
+the firmware loaded.
+
+Fixes: 04ae08596737 ("ASoC: wm_adsp: Switch to using wm_coeff_read_ctrl for compressed buffers")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220210172053.22782-1-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/sh/rcar-dmac.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ sound/soc/codecs/wm_adsp.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/dma/sh/rcar-dmac.c
-+++ b/drivers/dma/sh/rcar-dmac.c
-@@ -1845,7 +1845,9 @@ static int rcar_dmac_probe(struct platfo
- 	dmac->dev = &pdev->dev;
- 	platform_set_drvdata(pdev, dmac);
- 	dma_set_max_seg_size(dmac->dev, RCAR_DMATCR_MASK);
--	dma_set_mask_and_coherent(dmac->dev, DMA_BIT_MASK(40));
-+	ret = dma_set_mask_and_coherent(dmac->dev, DMA_BIT_MASK(40));
-+	if (ret)
-+		return ret;
+--- a/sound/soc/codecs/wm_adsp.c
++++ b/sound/soc/codecs/wm_adsp.c
+@@ -1448,7 +1448,8 @@ static int wm_adsp_buffer_parse_coeff(st
+ 	int ret, i;
  
- 	ret = rcar_dmac_parse_of(&pdev->dev, dmac);
- 	if (ret < 0)
+ 	for (i = 0; i < 5; ++i) {
+-		ret = cs_dsp_coeff_read_ctrl(cs_ctl, &coeff_v1, sizeof(coeff_v1));
++		ret = cs_dsp_coeff_read_ctrl(cs_ctl, &coeff_v1,
++					     min(cs_ctl->len, sizeof(coeff_v1)));
+ 		if (ret < 0)
+ 			return ret;
+ 
 
 

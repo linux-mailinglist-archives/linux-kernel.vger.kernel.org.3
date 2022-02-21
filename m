@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB974BE9C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CEFF4BE543
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347993AbiBUJRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:17:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36066 "EHLO
+        id S1347839AbiBUJQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:16:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347862AbiBUJJe (ORCPT
+        with ESMTP id S1347869AbiBUJJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:09:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD810BCB6;
-        Mon, 21 Feb 2022 01:01:50 -0800 (PST)
+        Mon, 21 Feb 2022 04:09:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B290DFF3;
+        Mon, 21 Feb 2022 01:01:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40F8D6112B;
-        Mon, 21 Feb 2022 09:01:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275E5C340E9;
-        Mon, 21 Feb 2022 09:01:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBA85B80EB3;
+        Mon, 21 Feb 2022 09:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA257C340E9;
+        Mon, 21 Feb 2022 09:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434109;
-        bh=jpZH6xrh9hccXtiZXWyWHqnt+rfjkT9gFkXP6XsvMPw=;
+        s=korg; t=1645434112;
+        bh=ZuE/Z/bq3S+9y920nyWf42fUMdYekNAaXDde+xO2nPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=agi0BXEy6NlT8XYmL8wETOH7xpSsoQazZ4zTgYwXV1AqcwxYXzz7lyInjXkmIPBOC
-         I4TNr0Ti5sNuxPgkJfICg5U+yQMz/8+jdg9OzR0PT9MoOyzZQY6qD8DKzh28z4gkEB
-         u8omsYIJydnyfpooHt1QLJ0f+LCnT2dU9nn7CnZU=
+        b=WD4tuGIOEPkD7Ubw5hVU24o8Sn+kKOLVSjviY1+vKC/4gXccvH0DOI6MyR1yeZFX0
+         aTcxZt1nxWtHc4b6xkG4w7KGNfIPcs3I6Rxw+UmZE8FrTTWQVB8tmsqVVWMxsEw9F/
+         PeXgmFVoMfYcW6VG9waC1aZXPIckeJDrrXvCt3Ik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oded Gabbay <oded.gabbay@gmail.com>
-Subject: [PATCH 5.10 016/121] mm: dont try to NUMA-migrate COW pages that have other uses
-Date:   Mon, 21 Feb 2022 09:48:28 +0100
-Message-Id: <20220221084921.697909406@linuxfoundation.org>
+        stable@vger.kernel.org, Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: [PATCH 5.10 017/121] PCI: hv: Fix NUMA node assignment when kernel boots with custom NUMA topology
+Date:   Mon, 21 Feb 2022 09:48:29 +0100
+Message-Id: <20220221084921.732987240@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
 References: <20220221084921.147454846@linuxfoundation.org>
@@ -56,75 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Long Li <longli@microsoft.com>
 
-commit 80d47f5de5e311cbc0d01ebb6ee684e8f4c196c6 upstream.
+commit 3149efcdf2c6314420c418dfc94de53bfd076b1f upstream.
 
-Oded Gabbay reports that enabling NUMA balancing causes corruption with
-his Gaudi accelerator test load:
+When kernel boots with a NUMA topology with some NUMA nodes offline, the PCI
+driver should only set an online NUMA node on the device. This can happen
+during KDUMP where some NUMA nodes are not made online by the KDUMP kernel.
 
- "All the details are in the bug, but the bottom line is that somehow,
-  this patch causes corruption when the numa balancing feature is
-  enabled AND we don't use process affinity AND we use GUP to pin pages
-  so our accelerator can DMA to/from system memory.
+This patch also fixes the case where kernel is booting with "numa=off".
 
-  Either disabling numa balancing, using process affinity to bind to
-  specific numa-node or reverting this patch causes the bug to
-  disappear"
-
-and Oded bisected the issue to commit 09854ba94c6a ("mm: do_wp_page()
-simplification").
-
-Now, the NUMA balancing shouldn't actually be changing the writability
-of a page, and as such shouldn't matter for COW.  But it appears it
-does.  Suspicious.
-
-However, regardless of that, the condition for enabling NUMA faults in
-change_pte_range() is nonsensical.  It uses "page_mapcount(page)" to
-decide if a COW page should be NUMA-protected or not, and that makes
-absolutely no sense.
-
-The number of mappings a page has is irrelevant: not only does GUP get a
-reference to a page as in Oded's case, but the other mappings migth be
-paged out and the only reference to them would be in the page count.
-
-Since we should never try to NUMA-balance a page that we can't move
-anyway due to other references, just fix the code to use 'page_count()'.
-Oded confirms that that fixes his issue.
-
-Now, this does imply that something in NUMA balancing ends up changing
-page protections (other than the obvious one of making the page
-inaccessible to get the NUMA faulting information).  Otherwise the COW
-simplification wouldn't matter - since doing the GUP on the page would
-make sure it's writable.
-
-The cause of that permission change would be good to figure out too,
-since it clearly results in spurious COW events - but fixing the
-nonsensical test that just happened to work before is obviously the
-CorrectThing(tm) to do regardless.
-
-Fixes: 09854ba94c6a ("mm: do_wp_page() simplification")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215616
-Link: https://lore.kernel.org/all/CAFCwf10eNmwq2wD71xjUhqkvv5+_pJMR1nPug2RqNDcFT4H86Q@mail.gmail.com/
-Reported-and-tested-by: Oded Gabbay <oded.gabbay@gmail.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Peter Xu <peterx@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 999dd956d838 ("PCI: hv: Add support for protocol 1.3 and support PCI_BUS_RELATIONS2")
+Signed-off-by: Long Li <longli@microsoft.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Tested-by: Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>
+Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Link: https://lore.kernel.org/r/1643247814-15184-1-git-send-email-longli@linuxonhyperv.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mprotect.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/pci-hyperv.c |   13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -94,7 +94,7 @@ static unsigned long change_pte_range(st
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -1841,8 +1841,17 @@ static void hv_pci_assign_numa_node(stru
+ 		if (!hv_dev)
+ 			continue;
  
- 				/* Also skip shared copy-on-write pages */
- 				if (is_cow_mapping(vma->vm_flags) &&
--				    page_mapcount(page) != 1)
-+				    page_count(page) != 1)
- 					continue;
+-		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
+-			set_dev_node(&dev->dev, hv_dev->desc.virtual_numa_node);
++		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY &&
++		    hv_dev->desc.virtual_numa_node < num_possible_nodes())
++			/*
++			 * The kernel may boot with some NUMA nodes offline
++			 * (e.g. in a KDUMP kernel) or with NUMA disabled via
++			 * "numa=off". In those cases, adjust the host provided
++			 * NUMA node to a valid NUMA node used by the kernel.
++			 */
++			set_dev_node(&dev->dev,
++				     numa_map_to_online_node(
++					     hv_dev->desc.virtual_numa_node));
  
- 				/*
+ 		put_pcichild(hv_dev);
+ 	}
 
 

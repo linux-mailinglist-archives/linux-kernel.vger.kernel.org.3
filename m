@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5C54BDC08
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E22B4BE3CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351261AbiBUJpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:45:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48214 "EHLO
+        id S1352445AbiBUKEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:04:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351585AbiBUJh2 (ORCPT
+        with ESMTP id S1353402AbiBUJ5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:37:28 -0500
+        Mon, 21 Feb 2022 04:57:25 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE093A5E1;
-        Mon, 21 Feb 2022 01:16:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBB247568;
+        Mon, 21 Feb 2022 01:25:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7412A60C1D;
-        Mon, 21 Feb 2022 09:16:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C61C340E9;
-        Mon, 21 Feb 2022 09:16:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 584CE608C4;
+        Mon, 21 Feb 2022 09:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C76C340E9;
+        Mon, 21 Feb 2022 09:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434961;
-        bh=iL+rlQ5kuc2Mat8DU3mcVFaTxdmYQC76utMHrm2gPHM=;
+        s=korg; t=1645435534;
+        bh=KRBk8usKmGeZ1GUK1kBqF1ohJl+84gnwg7OyWcxSc50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=adSllQ0PMtX4X0ASmout0mKAES/Nw+tsTsCZYeobMhzV6pUIqpuaXe2AtEBGtiWAV
-         eOLC3J3ZfsuF5wOxCQm/gGZyNdgrkICrBK3RRuD42IaPJtEG8LcplGBclom7Z9qwcY
-         3zwjqx5jnIja5rq7fj2oMvCpjwbaV2YRl62oDpWQ=
+        b=tLa+T1On29iFiYUH//zRBcaG7triTIlw31AE699DDrV2uQHDtUgh1PxCsy/yUGmNb
+         dMHmXo8tcxa3p7fDtP8I++O+fZQQJEcn6kqiYDMXkci/mzbv5qpd8iAGC0s8nMQIhY
+         qOUEo+aFsfwZL+VvBkfYGeVC3cnFlLYpHJ99PWoY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.15 185/196] dmaengine: sh: rcar-dmac: Check for error num after setting mask
+        stable@vger.kernel.org, Wan Jiabing <wanjiabing@vivo.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 198/227] ARM: OMAP2+: hwmod: Add of_node_put() before break
 Date:   Mon, 21 Feb 2022 09:50:17 +0100
-Message-Id: <20220221084937.125928023@linuxfoundation.org>
+Message-Id: <20220221084941.398493015@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Wan Jiabing <wanjiabing@vivo.com>
 
-commit 2d21543efe332cd8c8f212fb7d365bc8b0690bfa upstream.
+[ Upstream commit 80c469a0a03763f814715f3d12b6f3964c7423e8 ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
+Fix following coccicheck warning:
+./arch/arm/mach-omap2/omap_hwmod.c:753:1-23: WARNING: Function
+for_each_matching_node should have of_node_put() before break
 
-Fixes: dc312349e875 ("dmaengine: rcar-dmac: Widen DMA mask to 40 bits")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220106030939.2644320-1-jiasheng@iscas.ac.cn
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Early exits from for_each_matching_node should decrement the
+node reference counter.
+
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/sh/rcar-dmac.c |    4 +++-
+ arch/arm/mach-omap2/omap_hwmod.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/dma/sh/rcar-dmac.c
-+++ b/drivers/dma/sh/rcar-dmac.c
-@@ -1869,7 +1869,9 @@ static int rcar_dmac_probe(struct platfo
- 	dmac->dev = &pdev->dev;
- 	platform_set_drvdata(pdev, dmac);
- 	dma_set_max_seg_size(dmac->dev, RCAR_DMATCR_MASK);
--	dma_set_mask_and_coherent(dmac->dev, DMA_BIT_MASK(40));
-+	ret = dma_set_mask_and_coherent(dmac->dev, DMA_BIT_MASK(40));
-+	if (ret)
-+		return ret;
+diff --git a/arch/arm/mach-omap2/omap_hwmod.c b/arch/arm/mach-omap2/omap_hwmod.c
+index ccb0e3732c0dc..31d1a21f60416 100644
+--- a/arch/arm/mach-omap2/omap_hwmod.c
++++ b/arch/arm/mach-omap2/omap_hwmod.c
+@@ -752,8 +752,10 @@ static int __init _init_clkctrl_providers(void)
  
- 	ret = rcar_dmac_parse_of(&pdev->dev, dmac);
- 	if (ret < 0)
+ 	for_each_matching_node(np, ti_clkctrl_match_table) {
+ 		ret = _setup_clkctrl_provider(np);
+-		if (ret)
++		if (ret) {
++			of_node_put(np);
+ 			break;
++		}
+ 	}
+ 
+ 	return ret;
+-- 
+2.34.1
+
 
 

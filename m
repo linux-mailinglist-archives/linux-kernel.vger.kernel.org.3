@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0534BED71
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 23:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E38B4BED6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 23:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235838AbiBUWwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 17:52:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52618 "EHLO
+        id S235858AbiBUWwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 17:52:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiBUWwI (ORCPT
+        with ESMTP id S235816AbiBUWwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 17:52:08 -0500
+        Mon, 21 Feb 2022 17:52:10 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AF34DEEB;
-        Mon, 21 Feb 2022 14:51:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D41092458C;
+        Mon, 21 Feb 2022 14:51:46 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2965F139F;
-        Mon, 21 Feb 2022 14:51:44 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3CCC106F;
+        Mon, 21 Feb 2022 14:51:46 -0800 (PST)
 Received: from e123648.arm.com (unknown [10.57.9.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E7E8C3F66F;
-        Mon, 21 Feb 2022 14:51:41 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6E6623F66F;
+        Mon, 21 Feb 2022 14:51:44 -0800 (PST)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
@@ -28,9 +28,9 @@ Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
         daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
         mka@chromium.org, dianders@chromium.org, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [RFC][PATCH 1/2] dt-bindings: power: add Energy Model bindings
-Date:   Mon, 21 Feb 2022 22:51:30 +0000
-Message-Id: <20220221225131.15836-2-lukasz.luba@arm.com>
+Subject: [RFC][PATCH 2/2] opp: Add support for 'advanced' Energy Model in DT
+Date:   Mon, 21 Feb 2022 22:51:31 +0000
+Message-Id: <20220221225131.15836-3-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220221225131.15836-1-lukasz.luba@arm.com>
 References: <20220221225131.15836-1-lukasz.luba@arm.com>
@@ -43,71 +43,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT bindings for the Energy Model information.
+The Energy Model (EM) can be created based on DT entry:
+'dynamic-power-coefficient'. It's a 'simple' EM which is limited to the
+dynamic power. It has to fit into the math formula which requires also
+information about voltage. Some of the platforms don't expose voltage
+information, thus it's not possible to use EM registration using DT.
+
+This patch aims to fix it. It introduces new implementation of the EM
+registration callback. The new mechanism parses EM array specified in DT
+which contains a set of tuples: frequency (in kHz) and power (uW).
+It also allows to register 'advanced' EM, which models total power
+(static + dynamic), so better reflects real HW.
 
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- .../bindings/power/energy-model.yaml          | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/energy-model.yaml
+ drivers/opp/of.c | 95 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 94 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/power/energy-model.yaml b/Documentation/devicetree/bindings/power/energy-model.yaml
-new file mode 100644
-index 000000000000..804a9b324925
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/energy-model.yaml
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/energy-model.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 2f40afa4e65c..af879c798934 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -1395,6 +1395,85 @@ struct device_node *dev_pm_opp_get_of_node(struct dev_pm_opp *opp)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_get_of_node);
+ 
++/*
++ * Callback function provided to the Energy Model framework upon registration.
++ * It provides the power based on DT by @dev at @kHz if it is the frequency
++ * of an existing OPP, or at the frequency of the first OPP above @kHz otherwise
++ * (see dev_pm_opp_find_freq_ceil()). This function updates @kHz to the ceiled
++ * frequency and @mW to the associated power. The power is a value specified
++ * in DT for a given frequency. It's a total power (static + dynamic), so
++ * better reflects the real HW characteristics.
++ *
++ * Returns 0 on success or a proper -E* value in case of error.
++ */
++static int __maybe_unused
++_get_dt_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
++{
++	struct device_node *np, *em_node;
++	const struct property *prop;
++	struct dev_pm_opp *opp;
++	unsigned long opp_freq;
++	const __be32 *val;
++	int nr;
 +
-+title: Energy Model Bindings
++	np = of_node_get(dev->of_node);
++	if (!np)
++		return -EINVAL;
 +
-+maintainers:
-+  - Lukasz Luba <lukasz.luba@arm.com>
++	/* Find the right frequency and convert it to kHz */
++	opp_freq = *kHz * 1000;
++	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
++	if (IS_ERR(opp))
++		return -EINVAL;
 +
-+description: |+
-+  Devices work at specific performance states (frequencies). The power which
-+  is used at a given performance state is an important information. A framework
-+  which maintains this information is Energy Model. This document defines
-+  bindings for these Energy Model performance states applicable across wide
-+  range of devices. For illustration purpose, this document uses GPU as a device.
++	opp_freq /= 1000;
 +
-+  This binding only supports frequency-power pairs.
++	em_node = of_parse_phandle(np, "energy-model", 0);
++	of_node_put(np);
++	if (!em_node) {
++		dev_warn(dev, "%s: No EM phandle found\n", __func__);
++		return -EINVAL;
++	}
 +
-+select: true
++	prop = of_find_property(em_node, "energy-model-entries", NULL);
++	of_node_put(em_node);
++	if (!prop) {
++		dev_warn(dev, "%s: No EM entries found\n", __func__);
++		return -ENODEV;
++	}
 +
-+properties:
-+  operating-points:
-+    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-+    items:
-+      items:
-+        - description: Frequency in kHz
-+        - description: Power in uW
++	if (!prop->value) {
++		dev_warn(dev, "%s: No EM entries value found\n", __func__);
++		return -ENODATA;
++	}
 +
++	/*
++	 * Each EM entry is a set of tuples consisting of Frequency and
++	 * Power like <freq-kHz power-uW>.
++	 */
++	nr = prop->length / sizeof(u32);
++	if (nr % 2) {
++		dev_warn(dev, "%s: Invalid EM DT table\n", __func__);
++		return -EINVAL;
++	}
 +
-+additionalProperties: true
-+examples:
-+    {
-+       gpu_energy_model: energy-model {
-+               compatible = "energy-model";
-+               energy-model-entries = <
-+                               200000 300000
-+                               297000 500000
-+                               400000 800000
-+                               500000 1400000
-+                               600000 2000000
-+                               800000 2800000
-+                               >;
-+       };
-+    };
++	val = prop->value;
++	while (nr) {
++		unsigned long freq = be32_to_cpup(val++);
++		unsigned long power = be32_to_cpup(val++);
 +
-+    &gpu {
-+       energy-model = <&gpu_energy_model>;
-+    };
-+...
++		if (opp_freq == freq) {
++			*kHz = opp_freq;
++			*mW = power / 1000;
++			return 0;
++		}
++
++		nr -= 2;
++	}
++
++	return -EINVAL;
++}
++
+ /*
+  * Callback function provided to the Energy Model framework upon registration.
+  * This computes the power estimated by @dev at @kHz if it is the frequency
+@@ -1459,7 +1538,7 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
+ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+ {
+ 	struct em_data_callback em_cb = EM_DATA_CB(_get_power);
+-	struct device_node *np;
++	struct device_node *np, *em_node;
+ 	int ret, nr_opp;
+ 	u32 cap;
+ 
+@@ -1480,6 +1559,20 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+ 		goto failed;
+ 	}
+ 
++	/* First, try to find more precised Energy Model array in DT */
++	em_node = of_parse_phandle(np, "energy-model", 0);
++	of_node_put(np);
++	if (em_node) {
++		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_dt_power);
++
++		pr_info("EM: found energy-model phandle node\n");
++		of_node_put(em_node);
++		ret = em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb, cpus, true);
++		if (ret)
++			goto failed;
++		return 0;
++	}
++
+ 	/*
+ 	 * Register an EM only if the 'dynamic-power-coefficient' property is
+ 	 * set in devicetree. It is assumed the voltage values are known if that
 -- 
 2.17.1
 

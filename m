@@ -2,126 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC834BDEF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459A84BE44E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356196AbiBULZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:25:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36506 "EHLO
+        id S1356318AbiBUL1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:27:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356102AbiBULYw (ORCPT
+        with ESMTP id S1356308AbiBUL0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:24:52 -0500
-Received: from outbound-smtp18.blacknight.com (outbound-smtp18.blacknight.com [46.22.139.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD65224
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:20:44 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp18.blacknight.com (Postfix) with ESMTPS id 7FBB51C39B7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 11:20:43 +0000 (GMT)
-Received: (qmail 15512 invoked from network); 21 Feb 2022 11:20:43 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Feb 2022 11:20:43 -0000
-Date:   Mon, 21 Feb 2022 11:20:37 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     akpm@linux-foundation.org, jhubbard@nvidia.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ziy@nvidia.com,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH] mm/pages_alloc.c: Don't create ZONE_MOVABLE beyond the
- end of a node
-Message-ID: <20220221112037.GA4423@techsingularity.net>
-References: <20220215025831.2113067-1-apopple@nvidia.com>
+        Mon, 21 Feb 2022 06:26:40 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAE92712
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:24:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645442658; x=1676978658;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4lDTi0Ymb7VmmGXBYtiWCetSs8DKqsvQl3orMu6vIQ4=;
+  b=kLZURpOv2K6V6WyM7huCFU3ZnLHuDEba1xNzsRVNAoVGuS+YB/3u+zro
+   2DD7evIxITw+1fnWKiMcamqAl0dPIHTCEvbs7xV1/mjhNeHPllzCjldnf
+   yoAiJ0Tp81wYu5WGCeJlRFQIhYzucNB12u9Fufi78XXXgC6SpYF1S2Mgz
+   czOCH1SXh1aajowwqrybTWr7IJ7x3CY0FuEBV9DiP8j2UQUF17zr4QskO
+   fiHPouiJUwjuZAKIxLQvMYX4kiHqBCYNJWXLwveA+1qeF9s1glgUpxrE3
+   P4CFr9K4qy/lA+nUa0Hc7w6JyJMXq8uQS1nATqOCUuiRNDtLwvH4A6JRz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="249070825"
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="249070825"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:24:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="547297985"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Feb 2022 03:24:13 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nM6nd-0001Xg-54; Mon, 21 Feb 2022 11:24:13 +0000
+Date:   Mon, 21 Feb 2022 19:24:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [ammarfaizi2-block:rostedt/linux-trace/for-next 22/32]
+ kernel/trace/trace_events_user.c:392:38: sparse: sparse: Using plain integer
+ as NULL pointer
+Message-ID: <202202211917.j3vO1UWa-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220215025831.2113067-1-apopple@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 01:58:31PM +1100, Alistair Popple wrote:
-> ZONE_MOVABLE uses the remaining memory in each node. It's starting pfn
-> is also aligned to MAX_ORDER_NR_PAGES. It is possible for the remaining
-> memory in a node to be less than MAX_ORDER_NR_PAGES, meaning there is
-> not enough room for ZONE_MOVABLE on that node.
-> 
-> Unfortunately this condition is not checked for. This leads to
-> zone_movable_pfn[] getting set to a pfn greater than the last pfn in a
-> node.
-> 
-> calculate_node_totalpages() then sets zone->present_pages to be greater
-> than zone->spanned_pages which is invalid, as spanned_pages represents
-> the maximum number of pages in a zone assuming no holes.
-> 
-> Subsequently it is possible free_area_init_core() will observe a zone of
-> size zero with present pages. In this case it will skip setting up the
-> zone, including the initialisation of free_lists[].
-> 
-> However populated_zone() checks zone->present_pages to see if a zone has
-> memory available. This is used by iterators such as
-> walk_zones_in_node(). pagetypeinfo_showfree() uses this to walk the
-> free_list of each zone in each node, which are assumed to be initialised
-> due to the zone not being empty. As free_area_init_core() never
-> initialised the free_lists[] this results in the following kernel crash
-> when trying to read /proc/pagetypeinfo:
-> 
-> [   67.534914] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> [   67.535429] #PF: supervisor read access in kernel mode
-> [   67.535789] #PF: error_code(0x0000) - not-present page
-> [   67.536128] PGD 0 P4D 0
-> [   67.536305] Oops: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
-> [   67.536696] CPU: 0 PID: 456 Comm: cat Not tainted 5.16.0 #461
-> [   67.537096] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-> [   67.537638] RIP: 0010:pagetypeinfo_show+0x163/0x460
-> [   67.537992] Code: 9e 82 e8 80 57 0e 00 49 8b 06 b9 01 00 00 00 4c 39 f0 75 16 e9 65 02 00 00 48 83 c1 01 48 81 f9 a0 86 01 00 0f 84 48 02 00 00 <48> 8b 00 4c 39 f0 75 e7 48 c7 c2 80 a2 e2 82 48 c7 c6 79 ef e3 82
-> [   67.538259] RSP: 0018:ffffc90001c4bd10 EFLAGS: 00010003
-> [   67.538259] RAX: 0000000000000000 RBX: ffff88801105f638 RCX: 0000000000000001
-> [   67.538259] RDX: 0000000000000001 RSI: 000000000000068b RDI: ffff8880163dc68b
-> [   67.538259] RBP: ffffc90001c4bd90 R08: 0000000000000001 R09: ffff8880163dc67e
-> [   67.538259] R10: 656c6261766f6d6e R11: 6c6261766f6d6e55 R12: ffff88807ffb4a00
-> [   67.538259] R13: ffff88807ffb49f8 R14: ffff88807ffb4580 R15: ffff88807ffb3000
-> [   67.538259] FS:  00007f9c83eff5c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-> [   67.538259] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   67.538259] CR2: 0000000000000000 CR3: 0000000013c8e000 CR4: 0000000000350ef0
-> [   67.538259] Call Trace:
-> [   67.538259]  <TASK>
-> [   67.538259]  seq_read_iter+0x128/0x460
-> [   67.538259]  ? aa_file_perm+0x1af/0x5f0
-> [   67.538259]  proc_reg_read_iter+0x51/0x80
-> [   67.538259]  ? lock_is_held_type+0xea/0x140
-> [   67.538259]  new_sync_read+0x113/0x1a0
-> [   67.538259]  vfs_read+0x136/0x1d0
-> [   67.538259]  ksys_read+0x70/0xf0
-> [   67.538259]  __x64_sys_read+0x1a/0x20
-> [   67.538259]  do_syscall_64+0x3b/0xc0
-> [   67.538259]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [   67.538259] RIP: 0033:0x7f9c83e23cce
-> [   67.538259] Code: c0 e9 b6 fe ff ff 50 48 8d 3d 6e 13 0a 00 e8 c9 e3 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
-> [   67.538259] RSP: 002b:00007fff116e1a08 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> [   67.538259] RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007f9c83e23cce
-> [   67.538259] RDX: 0000000000020000 RSI: 00007f9c83a2c000 RDI: 0000000000000003
-> [   67.538259] RBP: 00007f9c83a2c000 R08: 00007f9c83a2b010 R09: 0000000000000000
-> [   67.538259] R10: 00007f9c83f2d7d0 R11: 0000000000000246 R12: 0000000000000000
-> [   67.538259] R13: 0000000000000003 R14: 0000000000020000 R15: 0000000000020000
-> [   67.538259]  </TASK>
-> 
-> Fix this by checking that the aligned zone_movable_pfn[] does not exceed
-> the end of the node, and if it does skip creating a movable zone on this
-> node.
-> 
-> Signed-off-by: Alistair Popple <apopple@nvidia.com>
-> Fixes: 2a1e274acf0b ("Create the ZONE_MOVABLE zone")
+tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/for-next
+head:   864ea0e10cc90416a01b46f0d47a6f26dc020820
+commit: aa3b2b4c669205200615dd8a2cc4af4f81fd0335 [22/32] user_events: Add print_fmt generation support for basic types
+config: x86_64-randconfig-s032-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211917.j3vO1UWa-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/aa3b2b4c669205200615dd8a2cc4af4f81fd0335
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/for-next
+        git checkout aa3b2b4c669205200615dd8a2cc4af4f81fd0335
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
 
-Seems reasonable;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
 
--- 
-Mel Gorman
-SUSE Labs
+sparse warnings: (new ones prefixed by >>)
+>> kernel/trace/trace_events_user.c:392:38: sparse: sparse: Using plain integer as NULL pointer
+   kernel/trace/trace_events_user.c:413:40: sparse: sparse: Using plain integer as NULL pointer
+   kernel/trace/trace_events_user.c:858:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/trace/trace_events_user.c:858:16: sparse:    void [noderef] __rcu *
+   kernel/trace/trace_events_user.c:858:16: sparse:    void *
+   kernel/trace/trace_events_user.c:922:13: sparse: sparse: cast removes address space '__user' of expression
+   kernel/trace/trace_events_user.c:922:13: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __user *buf @@     got char * @@
+   kernel/trace/trace_events_user.c:922:13: sparse:     expected void [noderef] __user *buf
+   kernel/trace/trace_events_user.c:922:13: sparse:     got char *
+   kernel/trace/trace_events_user.c:938:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/trace/trace_events_user.c:938:16: sparse:    void [noderef] __rcu *
+   kernel/trace/trace_events_user.c:938:16: sparse:    void *
+   kernel/trace/trace_events_user.c:965:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/trace/trace_events_user.c:965:9: sparse:    void [noderef] __rcu *
+   kernel/trace/trace_events_user.c:965:9: sparse:    void *
+
+vim +392 kernel/trace/trace_events_user.c
+
+   361	
+   362	static const char *user_field_format(const char *type)
+   363	{
+   364		if (strcmp(type, "s64") == 0)
+   365			return "%lld";
+   366		if (strcmp(type, "u64") == 0)
+   367			return "%llu";
+   368		if (strcmp(type, "s32") == 0)
+   369			return "%d";
+   370		if (strcmp(type, "u32") == 0)
+   371			return "%u";
+   372		if (strcmp(type, "int") == 0)
+   373			return "%d";
+   374		if (strcmp(type, "unsigned int") == 0)
+   375			return "%u";
+   376		if (strcmp(type, "s16") == 0)
+   377			return "%d";
+   378		if (strcmp(type, "u16") == 0)
+   379			return "%u";
+   380		if (strcmp(type, "short") == 0)
+   381			return "%d";
+   382		if (strcmp(type, "unsigned short") == 0)
+   383			return "%u";
+   384		if (strcmp(type, "s8") == 0)
+   385			return "%d";
+   386		if (strcmp(type, "u8") == 0)
+   387			return "%u";
+   388		if (strcmp(type, "char") == 0)
+   389			return "%d";
+   390		if (strcmp(type, "unsigned char") == 0)
+   391			return "%u";
+ > 392		if (strstr(type, "char[") != 0)
+   393			return "%s";
+   394	
+   395		/* Unknown, likely struct, allowed treat as 64-bit */
+   396		return "%llu";
+   397	}
+   398	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

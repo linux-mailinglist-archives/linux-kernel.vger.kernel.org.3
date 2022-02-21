@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4A54BDB77
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0A84BE12D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344751AbiBUJYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:24:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33914 "EHLO
+        id S1350738AbiBUJj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:39:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349197AbiBUJMJ (ORCPT
+        with ESMTP id S1350364AbiBUJcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:12:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8BC2AC74;
-        Mon, 21 Feb 2022 01:05:01 -0800 (PST)
+        Mon, 21 Feb 2022 04:32:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BD027FF6;
+        Mon, 21 Feb 2022 01:13:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1441D6114D;
-        Mon, 21 Feb 2022 09:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A19C36AE2;
-        Mon, 21 Feb 2022 09:04:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11F4C60DDD;
+        Mon, 21 Feb 2022 09:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4EEC340F1;
+        Mon, 21 Feb 2022 09:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434300;
-        bh=0E/SeavlfFJPRCXvDa8gF2rgjtqzO+JBB0+eJp6JAvk=;
+        s=korg; t=1645434820;
+        bh=MpEIPhkzQOZpoFUN2LKDl0Xl8eV+Srl14bKJWpvSQxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wrRmVFNiK9Toxn690rJmbyF+RXIcktvWGr1XzvzHuRpm4DUFENjeB7oPVuzGzkS91
-         YZQ+wqETELvQrw4eCNXxPxcsLMKJohluGrjSV2wZIcBMEeB2YIXJkOaj67vUQf2Kej
-         S2HjAEpavUWumpi97Y9V+DFV3j4bNQmiGsgLqK20=
+        b=A9GPAnxlWk8dIljNTw9WmmnuYFU2iCEp0fWJmzJ4S5oCEvQhovNlJySm5qWJH/0bk
+         RH4CSGhUbVS7hPiWxP+HVdMw4OgqyEfIbp3sw26LjJakBdwgQ6fSV1vodhSMBoJtuy
+         mATKV1hjai1vBtZ1GN733iKZE+3Xf3f6d6sAvepY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ming Lei <ming.lei@rehdat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Laibin Qiu <qiulaibin@huawei.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 081/121] block/wbt: fix negative inflight counter when remove scsi device
-Date:   Mon, 21 Feb 2022 09:49:33 +0100
-Message-Id: <20220221084923.945989057@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 142/196] mtd: rawnand: ingenic: Fix missing put_device in ingenic_ecc_get
+Date:   Mon, 21 Feb 2022 09:49:34 +0100
+Message-Id: <20220221084935.670823690@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laibin Qiu <qiulaibin@huawei.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit e92bc4cd34de2ce454bdea8cd198b8067ee4e123 upstream.
+[ Upstream commit ba1b71b008e97fd747845ff3a818420b11bbe830 ]
 
-Now that we disable wbt by set WBT_STATE_OFF_DEFAULT in
-wbt_disable_default() when switch elevator to bfq. And when
-we remove scsi device, wbt will be enabled by wbt_enable_default.
-If it become false positive between wbt_wait() and wbt_track()
-when submit write request.
+If of_find_device_by_node() succeeds, ingenic_ecc_get() doesn't have
+a corresponding put_device(). Thus add put_device() to fix the exception
+handling.
 
-The following is the scenario that triggered the problem.
-
-T1                          T2                           T3
-                            elevator_switch_mq
-                            bfq_init_queue
-                            wbt_disable_default <= Set
-                            rwb->enable_state (OFF)
-Submit_bio
-blk_mq_make_request
-rq_qos_throttle
-<= rwb->enable_state (OFF)
-                                                         scsi_remove_device
-                                                         sd_remove
-                                                         del_gendisk
-                                                         blk_unregister_queue
-                                                         elv_unregister_queue
-                                                         wbt_enable_default
-                                                         <= Set rwb->enable_state (ON)
-q_qos_track
-<= rwb->enable_state (ON)
-^^^^^^ this request will mark WBT_TRACKED without inflight add and will
-lead to drop rqw->inflight to -1 in wbt_done() which will trigger IO hung.
-
-Fix this by move wbt_enable_default() from elv_unregister to
-bfq_exit_queue(). Only re-enable wbt when bfq exit.
-
-Fixes: 76a8040817b4b ("blk-wbt: make sure throttle is enabled properly")
-
-Remove oneline stale comment, and kill one oneshot local variable.
-
-Signed-off-by: Ming Lei <ming.lei@rehdat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/linux-block/20211214133103.551813-1-qiulaibin@huawei.com/
-Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 15de8c6efd0e ("mtd: rawnand: ingenic: Separate top-level and SoC specific code")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20211230072751.21622-1-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c |    2 ++
- block/elevator.c    |    2 --
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/raw/ingenic/ingenic_ecc.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -6404,6 +6404,8 @@ static void bfq_exit_queue(struct elevat
- 	spin_unlock_irq(&bfqd->lock);
- #endif
+diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
+index efe0ffe4f1abc..9054559e52dda 100644
+--- a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
++++ b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
+@@ -68,9 +68,14 @@ static struct ingenic_ecc *ingenic_ecc_get(struct device_node *np)
+ 	struct ingenic_ecc *ecc;
  
-+	wbt_enable_default(bfqd->queue);
+ 	pdev = of_find_device_by_node(np);
+-	if (!pdev || !platform_get_drvdata(pdev))
++	if (!pdev)
+ 		return ERR_PTR(-EPROBE_DEFER);
+ 
++	if (!platform_get_drvdata(pdev)) {
++		put_device(&pdev->dev);
++		return ERR_PTR(-EPROBE_DEFER);
++	}
 +
- 	kfree(bfqd);
- }
+ 	ecc = platform_get_drvdata(pdev);
+ 	clk_prepare_enable(ecc->clk);
  
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -518,8 +518,6 @@ void elv_unregister_queue(struct request
- 		kobject_del(&e->kobj);
- 
- 		e->registered = 0;
--		/* Re-enable throttling in case elevator disabled it */
--		wbt_enable_default(q);
- 	}
- }
- 
+-- 
+2.34.1
+
 
 

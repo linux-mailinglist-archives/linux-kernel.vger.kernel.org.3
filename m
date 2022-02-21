@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05984BE370
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 462124BDFCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345134AbiBUJiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:38:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60886 "EHLO
+        id S1349221AbiBUJZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:25:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350047AbiBUJ3F (ORCPT
+        with ESMTP id S1348906AbiBUJLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:29:05 -0500
+        Mon, 21 Feb 2022 04:11:49 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4D7240BE;
-        Mon, 21 Feb 2022 01:13:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2AC289B6;
+        Mon, 21 Feb 2022 01:04:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 89FC7CE0E88;
-        Mon, 21 Feb 2022 09:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C320C340E9;
-        Mon, 21 Feb 2022 09:12:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 43729CE0E85;
+        Mon, 21 Feb 2022 09:04:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26321C340E9;
+        Mon, 21 Feb 2022 09:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434778;
-        bh=E6A2kwIv4UUnoTr2Zs/vVy+OJVA/kcWOfEpF7UolTxw=;
+        s=korg; t=1645434262;
+        bh=qaRvoCYE7nQqXFaHyTkUVm02t8lUFcpW7qmIJoRN/vw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tnAMl4drPcNIAhoAVaWo8K1LGMkMaqS1PT5iuumU1ALGudFjEEX9Eg0ew/GX3A8b7
-         CLQJuq1KsRm0i0YD2p4/wa3Uk8QDm1/bnG/UInAGCYDVFneNCL+oQef2jIDV9SqEuI
-         jiRuHG/76++JSy4fY/CGnW4uZrKEjbzL38EGgmfs=
+        b=IlhHrXrILKl1UQYfNO5MbzvRdMNpnd8vbFdmVnpSI38xD+Dr1WpHLLVRaGxj231Rv
+         AeGSFwS4bS4JbiWQfRQ0513bwGqwA6xdGEmzDdCyD920Z7DdVwKnsartYdGhX2SXKl
+         1GRM2n7rnxP5hyDweAnk5GP7qQpA+73+FURNj/Fg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 128/196] ASoC: tas2770: Insert post reset delay
-Date:   Mon, 21 Feb 2022 09:49:20 +0100
-Message-Id: <20220221084935.222292473@linuxfoundation.org>
+        stable@vger.kernel.org, Yu Huang <diwang90@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 069/121] ALSA: hda/realtek: Add quirk for Legion Y9000X 2019
+Date:   Mon, 21 Feb 2022 09:49:21 +0100
+Message-Id: <20220221084923.538399666@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Yu Huang <diwang90@gmail.com>
 
-commit 307f31452078792aab94a729fce33200c6e42dc4 upstream.
+commit c07f2c7b45413a9e50ba78630fda04ecfa17b4f2 upstream.
 
-Per TAS2770 datasheet there must be a 1 ms delay from reset to first
-command. So insert delays into the driver where appropriate.
+Legion Y9000X 2019 has the same speaker with Y9000X 2020,
+but with a different quirk address. Add one quirk entry
+to make the speaker work on Y9000X 2019 too.
 
-Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220204095301.5554-1-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Yu Huang <diwang90@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220212160835.165065-1-diwang90@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/tas2770.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/soc/codecs/tas2770.c
-+++ b/sound/soc/codecs/tas2770.c
-@@ -38,10 +38,12 @@ static void tas2770_reset(struct tas2770
- 		gpiod_set_value_cansleep(tas2770->reset_gpio, 0);
- 		msleep(20);
- 		gpiod_set_value_cansleep(tas2770->reset_gpio, 1);
-+		usleep_range(1000, 2000);
- 	}
- 
- 	snd_soc_component_write(tas2770->component, TAS2770_SW_RST,
- 		TAS2770_RST);
-+	usleep_range(1000, 2000);
- }
- 
- static int tas2770_set_bias_level(struct snd_soc_component *component,
-@@ -110,6 +112,7 @@ static int tas2770_codec_resume(struct s
- 
- 	if (tas2770->sdz_gpio) {
- 		gpiod_set_value_cansleep(tas2770->sdz_gpio, 1);
-+		usleep_range(1000, 2000);
- 	} else {
- 		ret = snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
- 						    TAS2770_PWR_CTRL_MASK,
-@@ -510,8 +513,10 @@ static int tas2770_codec_probe(struct sn
- 
- 	tas2770->component = component;
- 
--	if (tas2770->sdz_gpio)
-+	if (tas2770->sdz_gpio) {
- 		gpiod_set_value_cansleep(tas2770->sdz_gpio, 1);
-+		usleep_range(1000, 2000);
-+	}
- 
- 	tas2770_reset(tas2770);
- 
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8948,6 +8948,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x17aa, 0x3824, "Legion Y9000X 2020", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
+ 	SND_PCI_QUIRK(0x17aa, 0x3834, "Lenovo IdeaPad Slim 9i 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
++	SND_PCI_QUIRK(0x17aa, 0x383d, "Legion Y9000X 2019", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3843, "Yoga 9i", ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP),
+ 	SND_PCI_QUIRK(0x17aa, 0x384a, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3852, "Lenovo Yoga 7 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
 
 

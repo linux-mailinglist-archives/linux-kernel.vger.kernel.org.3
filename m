@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA4E4BE0A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843BA4BE4F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356035AbiBULSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:18:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48142 "EHLO
+        id S1355901AbiBULRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:17:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355944AbiBULPS (ORCPT
+        with ESMTP id S1355873AbiBULPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:15:18 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCFBB29
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:01 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id x11so12577214pll.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:01 -0800 (PST)
+        Mon, 21 Feb 2022 06:15:20 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1434CF6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:03 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id u5so12596509ple.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=a0dsHEkkjYMDgDk/stCFwxaKiFUsmcZuEuqNP0XmmQ4=;
-        b=KQWzIh6iHJeXbHTKWVjQ9D41ZTsqUYpa1zh7KmZnFyY8LTHgMsfbPldAhLtHRazhbF
-         iyJ2tHidCoinbQysLDxGZ/K9/DSJmfxe+VR28huzDlGIgyZNW+M5fJNFDxTodOZuIoA7
-         o7F6WpsjI5aJlu4Ixla5LTpCWx4oKE+SVEbaMjEJ5oCbRqmSAMywCddBpedDxZMcmznC
-         SVjT2Eo3CdxQkHjEG5HCPm/iUKUF3BBORX0eRVMh+8DzOq+ZkzsconTuqcuubqDFfL+/
-         jZ0iM1Zi/NHOm+Fds1x1RfGt0SNXPgriZU6gQGSCT6GfnJbKY/HC8BJLP00wkdC/Rl0g
-         uHOw==
+        bh=ehNQdlI9mPXdldG87wHGJGXW6GsgTB2HkJJp4vDiMvs=;
+        b=qlaVWsO4wSTU3J0DH2Hpj3dMsi97mWHbdhECMnS3joUeasrk2uCdT2Jsmn+qIr9fLe
+         rViNtkASpFYzpkolR6zh0SSWu6KdwdyStVhbZtvJPmsetjJYkEodcgwRZToKocOqYzXp
+         2aONPUD1l/wjsooqbu2AT9/xm2Es0hJdg6t1ldwpTs1qoGcNK3P0NOimVfqpqulx8+jY
+         A9E6Y7dM5wGAqY3f7dDQHAVGyZZ2KSNUulpKOWtTqp5ppCG94DDmaysD/n5TwvITPAj3
+         wRKyP8MX8+1pwmDbCM0zemfWRrbDL5678sUQC/T8/T70yB9PPlieHMoRTd3hFflEyvqy
+         ROkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=a0dsHEkkjYMDgDk/stCFwxaKiFUsmcZuEuqNP0XmmQ4=;
-        b=IQH/uI2Zr4b2PSa/D23QtNSG321LHfEhp40CV+XjRYKgD+bRF7viI/2m+xPsg21WDY
-         LPtrKl1zBHpbCMDsC/g6eVUYKmDhfTunu20CryUUkSvgxJJuB6482bV5puLnz0BB8aj/
-         WSxffEBF4zExp29vnbkx6dzjPfpxypIWHUjGYgJjrEsQlaXLP3VqYoJHSZ533F1iUHb1
-         GFhUjteH66pPe/ynf1LhnrfLvIfTd++B2Wqw5+8W9lNKDLrp5pBvTJZewqRQLSklo7Yp
-         j0CkutvGxkgdTcKg48fjz71ZleDqc1Vyvx+T6BfoS+XpsFrtzs14UpJ31VOx8iNxbtzA
-         FA/w==
-X-Gm-Message-State: AOAM532JWxYDUWaxlmgvOqqLFKNMQSO84ngdyeNaTwN3jJJ5IL5x5OEQ
-        XxNRsZVRBVfAtvdkjYwH05Q=
-X-Google-Smtp-Source: ABdhPJykGrMP/3jkaSti52P2kS6FzFtdySBLx2jd5Kbdy9BLiESNB++I0iuWS6uFkrxzJj+Drnww5g==
-X-Received: by 2002:a17:90b:1c83:b0:1b9:caa:8230 with SMTP id oo3-20020a17090b1c8300b001b90caa8230mr25247369pjb.26.1645440841051;
-        Mon, 21 Feb 2022 02:54:01 -0800 (PST)
+        bh=ehNQdlI9mPXdldG87wHGJGXW6GsgTB2HkJJp4vDiMvs=;
+        b=uU/PIAqo8WRfgragZny2QrXCxc9VBdTFP4jCBEqpmsXq9CTvqZS5Ur9PPVnM5+DVED
+         o3hFZWCju9BhoJ7SYa52GxKETkyV7mf/cn/LqYWsBSToEMWzaIlpYNgriXT86l/WT8v2
+         hdwcHrcHnmDqr2tsagB85o23MJObyNxArlu0+oN1SgrdCMgFi9C28U6QKoi0Tis2HNkG
+         3LoR0XFIL7Bm/o4nCC6nT+xpe2DlWOhMTRihlOT43OoiT5RdFhTI06aLlvetGYxYAxY5
+         6xMgXnBsNOv0/yD7PpHXBoCDnhlm6ATqGAbNM0ewx/oYjW2O1FPQw9PmtlLTNITblTWT
+         7cYw==
+X-Gm-Message-State: AOAM533Ej8GdTlNSPOP1BEX2C6ejwXJb7iGIQSppVCW8owx0rOYGLkL+
+        q419r2z+rCAoVmqy9cfgqLo=
+X-Google-Smtp-Source: ABdhPJxy1hS2KmSmwp4qNm1k1FKMOHVd+tQ3HzzZmVsC3p1rRBWwpEZvPh4IIAH8r4LS58T0mexUGQ==
+X-Received: by 2002:a17:902:b091:b0:14b:4b27:48d1 with SMTP id p17-20020a170902b09100b0014b4b2748d1mr18959339plr.52.1645440843472;
+        Mon, 21 Feb 2022 02:54:03 -0800 (PST)
 Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id u6sm2214725pfk.203.2022.02.21.02.53.58
+        by smtp.gmail.com with ESMTPSA id u6sm2214725pfk.203.2022.02.21.02.54.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 02:54:00 -0800 (PST)
+        Mon, 21 Feb 2022 02:54:03 -0800 (PST)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     Roman Gushchin <guro@fb.com>,
@@ -58,9 +58,9 @@ Cc:     Roman Gushchin <guro@fb.com>,
         Christoph Lameter <cl@linux.com>,
         Pekka Enberg <penberg@kernel.org>,
         Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH 2/5] mm/sl[auo]b: Do not export __ksize()
-Date:   Mon, 21 Feb 2022 10:53:33 +0000
-Message-Id: <20220221105336.522086-3-42.hyeyoo@gmail.com>
+Subject: [PATCH 3/5] mm/slab: Do not call kmalloc_large() for unsupported size
+Date:   Mon, 21 Feb 2022 10:53:34 +0000
+Message-Id: <20220221105336.522086-4-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220221105336.522086-1-42.hyeyoo@gmail.com>
 References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
@@ -76,37 +76,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not export __ksize(). Only kasan calls __ksize() directly.
+SLAB's kfree() does not support freeing an object that is allocated from
+kmalloc_large(). Fix this as SLAB do not pass requests larger than
+KMALLOC_MAX_CACHE_SIZE directly to page allocator.
 
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- mm/slab_common.c | 1 -
- mm/slob.c        | 1 -
- 2 files changed, 2 deletions(-)
+ include/linux/slab.h | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 488997db0d97..f2c021b57579 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1271,7 +1271,6 @@ size_t __ksize(const void *object)
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 37bde99b74af..aeda3e863f2b 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -564,15 +564,19 @@ static __always_inline __alloc_size(1) void *kmalloc_large(size_t size, gfp_t fl
+  *	Try really hard to succeed the allocation but fail
+  *	eventually.
+  */
++#ifndef CONFIG_SLOB
+ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
+ {
+ 	if (__builtin_constant_p(size)) {
+-#ifndef CONFIG_SLOB
+ 		unsigned int index;
+-#endif
+-		if (size > KMALLOC_MAX_CACHE_SIZE)
+-			return kmalloc_large(size, flags);
+-#ifndef CONFIG_SLOB
++
++		if (size > KMALLOC_MAX_CACHE_SIZE) {
++			if (IS_ENABLED(CONFIG_SLUB))
++				return kmalloc_large(size, flags);
++			else
++				return NULL;
++		}
++
+ 		index = kmalloc_index(size);
  
- 	return slab_ksize(folio_slab(folio)->slab_cache);
+ 		if (!index)
+@@ -581,10 +585,17 @@ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
+ 		return kmem_cache_alloc_trace(
+ 				kmalloc_caches[kmalloc_type(flags)][index],
+ 				flags, size);
+-#endif
+ 	}
+ 	return __kmalloc(size, flags);
  }
--EXPORT_SYMBOL(__ksize);
- #endif
++#else
++static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
++{
++	if (__builtin_constant_p(size) && size > KMALLOC_MAX_CACHE_SIZE)
++		return kmalloc_large(size, flags);
++	return __kmalloc(size, flags);
++}
++#endif
  
- /**
-diff --git a/mm/slob.c b/mm/slob.c
-index 60c5842215f1..d8af6c54f133 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -588,7 +588,6 @@ size_t __ksize(const void *block)
- 	m = (unsigned int *)(block - align);
- 	return SLOB_UNITS(*m) * SLOB_UNIT;
- }
--EXPORT_SYMBOL(__ksize);
- 
- int __kmem_cache_create(struct kmem_cache *c, slab_flags_t flags)
+ static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
  {
 -- 
 2.33.1

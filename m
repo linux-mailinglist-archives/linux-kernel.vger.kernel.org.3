@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966324BE4DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E0D4BDECF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346653AbiBUI6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:58:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44676 "EHLO
+        id S1346686AbiBUI6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:58:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346329AbiBUIzo (ORCPT
+        with ESMTP id S1345763AbiBUIzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:55:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9065C1AD9A;
-        Mon, 21 Feb 2022 00:53:45 -0800 (PST)
+        Mon, 21 Feb 2022 03:55:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2851DA58;
+        Mon, 21 Feb 2022 00:53:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D988B61140;
-        Mon, 21 Feb 2022 08:53:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD422C340EB;
-        Mon, 21 Feb 2022 08:53:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A2B5B80EB3;
+        Mon, 21 Feb 2022 08:53:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EEA2C340E9;
+        Mon, 21 Feb 2022 08:53:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433624;
-        bh=jq0IZZMNLqbynoTr7qWYEP7/cjlKhs6FfrgJYs/FnmA=;
+        s=korg; t=1645433627;
+        bh=F7oy1PKhRI9HjHdGhkNh1hbZnO5CUUdpmCLUcr1xt90=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p8XccNOFHGEhcp8b332PRbhDMT649eBW+Cry7k4STyUks7EftoGd7zy6wnPeooSeL
-         t8dw0KQB1vu4FdOkjtOItM8TcpUTM6KWWqddwkbI3FUGjgDTy1zodnMu+FVr+7z9Sy
-         ZumISMs1kyM1PV0gaT+MivbUT+QFTBx+zR/mTp2M=
+        b=P91W+eAkcCHUIdav1RuOG9l94yYkpG4xrIxfB57T7eQPcsK2+QGRyELIQtRfCjXcU
+         eajLRIfEqpBfy0JgiF7LYg0tGMVvCdUeerUxHsZdm84E8DCg2b88ujhsui2wWK/lmp
+         S+N7uzkDYANkZlE4OkPtF8kZGGTA/k0wooeRE1pk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.14 05/45] parisc: Fix sglist access in ccio-dma.c
-Date:   Mon, 21 Feb 2022 09:48:56 +0100
-Message-Id: <20220221084910.637678831@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 4.14 06/45] btrfs: send: in case of IO error log it
+Date:   Mon, 21 Feb 2022 09:48:57 +0100
+Message-Id: <20220221084910.669782398@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
 References: <20220221084910.454824160@linuxfoundation.org>
@@ -54,39 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Dāvis Mosāns <davispuh@gmail.com>
 
-commit d7da660cab47183cded65e11b64497d0f56c6edf upstream.
+commit 2e7be9db125a0bf940c5d65eb5c40d8700f738b5 upstream.
 
-This patch implements the same bug fix to ccio-dma.c as to sba_iommu.c.
-It ensures that only the allocated entries of the sglist are accessed.
+Currently if we get IO error while doing send then we abort without
+logging information about which file caused issue.  So log it to help
+with debugging.
 
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org
-Signed-off-by: Helge Deller <deller@gmx.de>
+CC: stable@vger.kernel.org # 4.9+
+Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/parisc/ccio-dma.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/btrfs/send.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/parisc/ccio-dma.c
-+++ b/drivers/parisc/ccio-dma.c
-@@ -1010,7 +1010,7 @@ ccio_unmap_sg(struct device *dev, struct
- 	ioc->usg_calls++;
- #endif
- 
--	while(sg_dma_len(sglist) && nents--) {
-+	while (nents && sg_dma_len(sglist)) {
- 
- #ifdef CCIO_COLLECT_STATS
- 		ioc->usg_pages += sg_dma_len(sglist) >> PAGE_SHIFT;
-@@ -1018,6 +1018,7 @@ ccio_unmap_sg(struct device *dev, struct
- 		ccio_unmap_page(dev, sg_dma_address(sglist),
- 				  sg_dma_len(sglist), direction, 0);
- 		++sglist;
-+		nents--;
- 	}
- 
- 	DBG_RUN_SG("%s() DONE (nents %d)\n", __func__, nents);
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -4944,6 +4944,10 @@ static ssize_t fill_read_buf(struct send
+ 			lock_page(page);
+ 			if (!PageUptodate(page)) {
+ 				unlock_page(page);
++				btrfs_err(fs_info,
++			"send: IO error at offset %llu for inode %llu root %llu",
++					page_offset(page), sctx->cur_ino,
++					sctx->send_root->root_key.objectid);
+ 				put_page(page);
+ 				ret = -EIO;
+ 				break;
 
 

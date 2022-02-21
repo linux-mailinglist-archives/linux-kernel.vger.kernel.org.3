@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA8B4BE60D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7637E4BE89A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348280AbiBUJLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:11:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42848 "EHLO
+        id S1346806AbiBUJDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:03:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347432AbiBUJGZ (ORCPT
+        with ESMTP id S1346682AbiBUJA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:06:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A2231205;
-        Mon, 21 Feb 2022 00:59:46 -0800 (PST)
+        Mon, 21 Feb 2022 04:00:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C0226AEB;
+        Mon, 21 Feb 2022 00:55:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8E01B80EA1;
-        Mon, 21 Feb 2022 08:59:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A583C340E9;
-        Mon, 21 Feb 2022 08:59:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4419FB80EA5;
+        Mon, 21 Feb 2022 08:55:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E3BC340E9;
+        Mon, 21 Feb 2022 08:55:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433984;
-        bh=xbseft0bFThlkg8lFzuN/SR2wFUAQLzKHqgJRlH3A6E=;
+        s=korg; t=1645433730;
+        bh=K3QGi21JyiylmC9O+Ts03GWV8vWnzVXFL9nRfTBRNLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zrCcEp3rLBjL+P3IL8biltaDjTd1Gs7Ix/sZnvKug1x2SXJuvaw2pmHVUjHevccKl
-         H0nji1Zyir1OzVviLbyvWUHz5HvNokBPj790bFG1O61hmuRcF+RnQ8uiIJeg4hLFCo
-         pz2MLQSBSxO0jmj8n1oQWonE0kOqsdmTXAMP3SA8=
+        b=FAAm6kkjHiroBsZbcm8hyKbZvN1Cc02J2tqdwZkfLwo6hxW9+/NykSl1uZUzzgAij
+         mctWeWTOKmMB0Y/2MbeyzEvULbpHAROmpIoaUpxNyXTU6XWjszgyuONAbu49Zw22mI
+         ZvY6Z6taqzC1wlvtPQty30N5LupL8GoynqIIsPsc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
+        stable@vger.kernel.org, Alexander Aring <alex.aring@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 20/80] nvme-rdma: fix possible use-after-free in transport error_recovery work
+Subject: [PATCH 4.19 07/58] net: ieee802154: at86rf230: Stop leaking skbs
 Date:   Mon, 21 Feb 2022 09:49:00 +0100
-Message-Id: <20220221084916.247334386@linuxfoundation.org>
+Message-Id: <20220221084912.124144679@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,36 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sagi Grimberg <sagi@grimberg.me>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-[ Upstream commit b6bb1722f34bbdbabed27acdceaf585d300c5fd2 ]
+[ Upstream commit e5ce576d45bf72fd0e3dc37eff897bfcc488f6a9 ]
 
-While nvme_rdma_submit_async_event_work is checking the ctrl and queue
-state before preparing the AER command and scheduling io_work, in order
-to fully prevent a race where this check is not reliable the error
-recovery work must flush async_event_work before continuing to destroy
-the admin queue after setting the ctrl state to RESETTING such that
-there is no race .submit_async_event and the error recovery handler
-itself changing the ctrl state.
+Upon error the ieee802154_xmit_complete() helper is not called. Only
+ieee802154_wake_queue() is called manually. In the Tx case we then leak
+the skb structure.
 
-Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+Free the skb structure upon error before returning when appropriate.
+
+As the 'is_tx = 0' cannot be moved in the complete handler because of a
+possible race between the delay in switching to STATE_RX_AACK_ON and a
+new interrupt, we introduce an intermediate 'was_tx' boolean just for
+this purpose.
+
+There is no Fixes tag applying here, many changes have been made on this
+area and the issue kind of always existed.
+
+Suggested-by: Alexander Aring <alex.aring@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Alexander Aring <aahringo@redhat.com>
+Link: https://lore.kernel.org/r/20220125121426.848337-4-miquel.raynal@bootlin.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/rdma.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ieee802154/at86rf230.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
-index 08a23bb4b8b57..4213c71b02a4b 100644
---- a/drivers/nvme/host/rdma.c
-+++ b/drivers/nvme/host/rdma.c
-@@ -1110,6 +1110,7 @@ static void nvme_rdma_error_recovery_work(struct work_struct *work)
- 			struct nvme_rdma_ctrl, err_work);
+diff --git a/drivers/net/ieee802154/at86rf230.c b/drivers/net/ieee802154/at86rf230.c
+index 3d9e915798668..1bc09b6c308f8 100644
+--- a/drivers/net/ieee802154/at86rf230.c
++++ b/drivers/net/ieee802154/at86rf230.c
+@@ -108,6 +108,7 @@ struct at86rf230_local {
+ 	unsigned long cal_timeout;
+ 	bool is_tx;
+ 	bool is_tx_from_off;
++	bool was_tx;
+ 	u8 tx_retry;
+ 	struct sk_buff *tx_skb;
+ 	struct at86rf230_state_change tx;
+@@ -351,7 +352,11 @@ at86rf230_async_error_recover_complete(void *context)
+ 	if (ctx->free)
+ 		kfree(ctx);
  
- 	nvme_stop_keep_alive(&ctrl->ctrl);
-+	flush_work(&ctrl->ctrl.async_event_work);
- 	nvme_rdma_teardown_io_queues(ctrl, false);
- 	nvme_start_queues(&ctrl->ctrl);
- 	nvme_rdma_teardown_admin_queue(ctrl, false);
+-	ieee802154_wake_queue(lp->hw);
++	if (lp->was_tx) {
++		lp->was_tx = 0;
++		dev_kfree_skb_any(lp->tx_skb);
++		ieee802154_wake_queue(lp->hw);
++	}
+ }
+ 
+ static void
+@@ -360,7 +365,11 @@ at86rf230_async_error_recover(void *context)
+ 	struct at86rf230_state_change *ctx = context;
+ 	struct at86rf230_local *lp = ctx->lp;
+ 
+-	lp->is_tx = 0;
++	if (lp->is_tx) {
++		lp->was_tx = 1;
++		lp->is_tx = 0;
++	}
++
+ 	at86rf230_async_state_change(lp, ctx, STATE_RX_AACK_ON,
+ 				     at86rf230_async_error_recover_complete);
+ }
 -- 
 2.34.1
 

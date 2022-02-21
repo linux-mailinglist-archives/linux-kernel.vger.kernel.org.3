@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BB74BE025
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF534BE903
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353584AbiBUJ5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:57:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43810 "EHLO
+        id S1353506AbiBUJ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:57:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350932AbiBUJsf (ORCPT
+        with ESMTP id S1351314AbiBUJss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:48:35 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3FD31903;
-        Mon, 21 Feb 2022 01:22:29 -0800 (PST)
+        Mon, 21 Feb 2022 04:48:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C013732046;
+        Mon, 21 Feb 2022 01:22:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9574CE0E9F;
-        Mon, 21 Feb 2022 09:22:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF8D5C340EB;
-        Mon, 21 Feb 2022 09:22:25 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AB6C4CE0E8B;
+        Mon, 21 Feb 2022 09:22:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90422C340E9;
+        Mon, 21 Feb 2022 09:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435346;
-        bh=VLLiuLRtlIOdNKwOXTrIBHRlol07DVdf54qswhdIWCI=;
+        s=korg; t=1645435349;
+        bh=08eY0msXADLduerMwecp2drQdDRqyeIrBiLp/rfWPzA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0/JB8SDqupbHfWr1PgwXJVaAfOYLJ4CY5NghQwn6pFdBoTi9XmlenN52XvMIBRCYX
-         cTu4k4FOAgZbWXSwlu+/I5vSUyvO6hw29f/bD4gECGIVwkax6S97x8sYtbMftf85X/
-         nhhzc/7n2NF0b2cXZoAzV/c0HigjCdrhg1rJr9Z0=
+        b=kGwe1pok6DOzsV7cSuKJKg6RAPkPk3IfMjXydpYlwZxNSbBp2H39b3xaNSFogokGD
+         Xq3NL2vLP9ECl72Nrb5WIcEzhrO81ycnpnMC8MroQCXUZMPVxIGt3EIlcyiabdDzAe
+         DKv+wQut285bQJRSwPxKjCC3Hr6BQql0lK2abRdw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 131/227] net: bridge: multicast: notify switchdev driver whenever MC processing gets disabled
-Date:   Mon, 21 Feb 2022 09:49:10 +0100
-Message-Id: <20220221084939.208173805@linuxfoundation.org>
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.16 132/227] perf bpf: Defer freeing string after possible strlen() on it
+Date:   Mon, 21 Feb 2022 09:49:11 +0100
+Message-Id: <20220221084939.247694791@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
 References: <20220221084934.836145070@linuxfoundation.org>
@@ -56,49 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit c832962ac972082b3a1f89775c9d4274c8cb5670 upstream.
+commit 31ded1535e3182778a1d0e5c32711f55da3bc512 upstream.
 
-Whenever bridge driver hits the max capacity of MDBs, it disables
-the MC processing (by setting corresponding bridge option), but never
-notifies switchdev about such change (the notifiers are called only upon
-explicit setting of this option, through the registered netlink interface).
+This was detected by the gcc in Fedora Rawhide's gcc:
 
-This could lead to situation when Software MDB processing gets disabled,
-but this event never gets offloaded to the underlying Hardware.
+  50    11.01 fedora:rawhide                : FAIL gcc version 12.0.1 20220205 (Red Hat 12.0.1-0) (GCC)
+        inlined from 'bpf__config_obj' at util/bpf-loader.c:1242:9:
+    util/bpf-loader.c:1225:34: error: pointer 'map_opt' may be used after 'free' [-Werror=use-after-free]
+     1225 |                 *key_scan_pos += strlen(map_opt);
+          |                                  ^~~~~~~~~~~~~~~
+    util/bpf-loader.c:1223:9: note: call to 'free' here
+     1223 |         free(map_name);
+          |         ^~~~~~~~~~~~~~
+    cc1: all warnings being treated as errors
 
-Fix this by adding a notify message in such case.
+So do the calculations on the pointer before freeing it.
 
-Fixes: 147c1e9b902c ("switchdev: bridge: Offload multicast disabled")
-Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Acked-by: Nikolay Aleksandrov <nikolay@nvidia.com>
-Link: https://lore.kernel.org/r/20220215165303.31908-1-oleksandr.mazur@plvision.eu
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 04f9bf2bac72480c ("perf bpf-loader: Add missing '*' for key_scan_pos")
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
+Link: https://lore.kernel.org/lkml/Yg1VtQxKrPpS3uNA@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bridge/br_multicast.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ tools/perf/util/bpf-loader.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/net/bridge/br_multicast.c
-+++ b/net/bridge/br_multicast.c
-@@ -82,6 +82,9 @@ static void br_multicast_find_del_pg(str
- 				     struct net_bridge_port_group *pg);
- static void __br_multicast_stop(struct net_bridge_mcast *brmctx);
- 
-+static int br_mc_disabled_update(struct net_device *dev, bool value,
-+				 struct netlink_ext_ack *extack);
+--- a/tools/perf/util/bpf-loader.c
++++ b/tools/perf/util/bpf-loader.c
+@@ -1214,9 +1214,10 @@ bpf__obj_config_map(struct bpf_object *o
+ 	pr_debug("ERROR: Invalid map config option '%s'\n", map_opt);
+ 	err = -BPF_LOADER_ERRNO__OBJCONF_MAP_OPT;
+ out:
+-	free(map_name);
+ 	if (!err)
+ 		*key_scan_pos += strlen(map_opt);
 +
- static struct net_bridge_port_group *
- br_sg_port_find(struct net_bridge *br,
- 		struct net_bridge_port_group_sg_key *sg_p)
-@@ -1156,6 +1159,7 @@ struct net_bridge_mdb_entry *br_multicas
- 		return mp;
++	free(map_name);
+ 	return err;
+ }
  
- 	if (atomic_read(&br->mdb_hash_tbl.nelems) >= br->hash_max) {
-+		br_mc_disabled_update(br->dev, false, NULL);
- 		br_opt_toggle(br, BROPT_MULTICAST_ENABLED, false);
- 		return ERR_PTR(-E2BIG);
- 	}
 
 

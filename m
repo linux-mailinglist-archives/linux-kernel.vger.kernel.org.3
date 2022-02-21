@@ -2,188 +2,472 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688CC4BDF0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BB44BE8BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354962AbiBUKyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:54:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55148 "EHLO
+        id S1355456AbiBUKzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:55:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346305AbiBUKyE (ORCPT
+        with ESMTP id S1355422AbiBUKyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:54:04 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BFD5FD3;
-        Mon, 21 Feb 2022 02:21:41 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id k3-20020a1ca103000000b0037bdea84f9cso10847624wme.1;
-        Mon, 21 Feb 2022 02:21:41 -0800 (PST)
+        Mon, 21 Feb 2022 05:54:52 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC4C13F3F;
+        Mon, 21 Feb 2022 02:22:41 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id i11so26622577eda.9;
+        Mon, 21 Feb 2022 02:22:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZuFZI0/cIi+w8vK1Gcle4BDyNdUZ1tRStanU+6X4KcI=;
-        b=NN6XtIHyVtNOb73dLjbdxFwNKpWIjjSOcnu9VRvCAWBjuO8XQl5P3YG886WO9AQyP9
-         QiK+2Cyy+u3snb1kKphOHafTp3I41HJfzj1QIDKhqYgIM7Xnz0dAfapMobvZc8ZorUuN
-         vJHkaFuPraS5ygvDAhbYdqhE9J3EWrv8mfDRF0tei92ke6GDpO2KywoMFSFDctBTW0Jd
-         kstpF52zR3ohrjVz8bEWm5cjRkdyzzSPZKwDXsQGO/byM+drAm9iHNvSGymFSa/UPXUt
-         A7MpxVVsktaJ3eUU9reyL65piCuUNKqeEFojIGRrjyVfA+egYPT6/zjoNrlYEyk/qeOd
-         BROA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1IdDsi7bAzVPDw8e8R0uRnir6IEqLal7Ly77jps2REs=;
+        b=JGqcHY+JqZlgVJKA68fJXqfJsTstLCh3U9du5pc0QMkXk75a/1RHmFZP6iCwkwjnvg
+         w34Tyl3Iz6h43Oo4fTzrqjSHFlFFukhW07t5ixNG9kN+LUJ3dwGNLFIMd1Xauf1vNNES
+         srNGeCYUVeGKjMdkg3QkwjumfazTaA4YqXyKx6qlWVTjNVloRhLkpa03Z8XoVLENhFeH
+         2aY4g+/1Ggn3C/41geLugp4sEWgXJe9XtgmFaDs0wuUF2uUXkZxB4tlSzohVmVV8rrVN
+         frFciNm51V4qkpo9bKrNbhTRLeYqlcx7F1tz3Ez0uQnO1fx4ppXnRpT0bQORp83IZCjw
+         2Nwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZuFZI0/cIi+w8vK1Gcle4BDyNdUZ1tRStanU+6X4KcI=;
-        b=ET3vAfrbQYKtHTuFZHNj11ZqPLXCqE0jZ8lwaFE85YLfByBTqbaOyS7F3OjAFqMv6s
-         fkKofmkE5LaZiyY7QZd3rb/wJ/tIShQJ2fMTpl5mkSYEFH4nravAjfIbveTQ0EepgSTF
-         ikJxQSmxTKvwo7OIRlilDaMrN82Ejp11zQjjComAWG4frS1V5dlaC5vggbC1023YmAAP
-         IaDNnIMSc2D0WkHTMzKyCXoLsVIVOwra/fJypvk1Fi1tOq+hrrZi6ZERMVKRAok4fs4l
-         CTQjtJiT42nUm9VcbyONZ4RiaRzAJtm37kLdI+I8QtlFDpwAmhEy2BmqJyHN49cQH4Lb
-         dqvQ==
-X-Gm-Message-State: AOAM532ooiM2rgp0C+nPKN2pqxDZiUkd1jKgdrzoP2QddY1o8VEFFJdM
-        jS3eupjWi0pJ/t273aNi8t8=
-X-Google-Smtp-Source: ABdhPJzqhTtl8HBmTE9pWXThiz2vnnAa+XQ9B4E9/E04tPZI39oSpfDUrLce9YbNfS7Y0oLdoEjMpw==
-X-Received: by 2002:a7b:c192:0:b0:37b:c6f5:4df0 with SMTP id y18-20020a7bc192000000b0037bc6f54df0mr17220897wmi.79.1645438899695;
-        Mon, 21 Feb 2022 02:21:39 -0800 (PST)
-Received: from leap.localnet (host-79-27-0-81.retail.telecomitalia.it. [79.27.0.81])
-        by smtp.gmail.com with ESMTPSA id y10sm6988272wmi.47.2022.02.21.02.21.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 02:21:39 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     syzkaller-bugs@googlegroups.com, Tony Lu <tonylu@linux.alibaba.com>
-Cc:     jgg@ziepe.ca, liangwenpeng@huawei.com,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        liweihang@huawei.com, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in smc_pnet_apply_ib
-Date:   Mon, 21 Feb 2022 11:21:29 +0100
-Message-ID: <21388493.EfDdHjke4D@leap>
-In-Reply-To: <YhNZAyoqSzIAfF9Y@TonyMac-Alibaba>
-References: <000000000000b772b805d8396f14@google.com> <2691692.BEx9A2HvPv@leap> <YhNZAyoqSzIAfF9Y@TonyMac-Alibaba>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1IdDsi7bAzVPDw8e8R0uRnir6IEqLal7Ly77jps2REs=;
+        b=cbMG4myzmpbDiR5BWdCCZaLIHAfvuhywTFjxxzL9m/EfFubRipoucmoXWPnvIe60kE
+         l1C+511nhxFCSydRk26dMUqktcdN083f8NdQM16eYExsog7foiHIWZO+iIYKo4hRYbLN
+         OGrxyHZjHyAZTDlcOlOvxdqHbvXiFt7GUBMilwUERBdYUUeasrvAaxAiDxpGxry8Gn3J
+         XaGa0qIGSe6GT/BLEYmgGWkfvHglvXZt/7/OKrmxa6CWgVuigiHvYiZ67+VsA2X02aA2
+         wOTAaM8B++rocicEk34BjZ+YeFMrMCCQhvmQzd0hMcJE7DgLxND+bIPcGvOq0vhDNqf8
+         NC8g==
+X-Gm-Message-State: AOAM532UagFz1rFCecsQmCcDoNiU49m3BowKhub4qw+EzWLJAxfUIlv+
+        BkvmIam0VOmX71Sg+h73a7pLthN+rO0mfw==
+X-Google-Smtp-Source: ABdhPJy3hYLLmuoyBoTLxm2D7uXF18FexGffphxCykbcaECjqeeWfOlIy9j2gkRXcB8fv3B09Et/+w==
+X-Received: by 2002:a05:6402:2074:b0:410:81bf:ff3b with SMTP id bd20-20020a056402207400b0041081bfff3bmr20649969edb.326.1645438959478;
+        Mon, 21 Feb 2022 02:22:39 -0800 (PST)
+Received: from localhost ([95.180.24.23])
+        by smtp.gmail.com with UTF8SMTPSA id v23sm5098597ejy.178.2022.02.21.02.22.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 02:22:39 -0800 (PST)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     savicaleksa83@gmail.com, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: add driver for Aquacomputer Farbwerk 360
+Date:   Mon, 21 Feb 2022 11:21:56 +0100
+Message-Id: <20220221102157.13574-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=C3=AC 21 febbraio 2022 10:18:59 CET Tony Lu wrote:
-> On Thu, Feb 17, 2022 at 07:05:31PM +0100, Fabio M. De Francesco wrote:
-> > On gioved=C3=AC 17 febbraio 2022 17:41:22 CET syzbot wrote:
-> > > Hello,
-> > >=20
-> > > syzbot found the following issue on:
-> > >=20
-> > > HEAD commit:    c832962ac972 net: bridge: multicast: notify switchdev=
- driv..
-> > > git tree:       net
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D16b157bc7=
-00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D266de9da7=
-5c71a45
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D4f322a6d84e=
-991c38775
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Bi=
-nutils for Debian) 2.35.2
-> > >=20
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > >=20
-> > > IMPORTANT: if you fix the issue, please add the following tag to the =
-commit:
-> > > Reported-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
-> > >=20
-> > > infiniband syz1: set down
-> > > infiniband syz1: added lo
-> > > RDS/IB: syz1: added
-> > > smc: adding ib device syz1 with port count 1
-> > > BUG: sleeping function called from invalid context at kernel/locking/=
-mutex.c:577
-> > > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 17974, name: s=
-yz-executor.3
-> > > preempt_count: 1, expected: 0
-> > > RCU nest depth: 0, expected: 0
-> > > 6 locks held by syz-executor.3/17974:
-> > >  #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma=
-_nl_rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
-> > >  #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink=
-+0x25d/0x560 drivers/infiniband/core/nldev.c:1707
-> > >  #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_=
-and_get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
-> > >  #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_=
-and_get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
-> > >  #4: ffff8880482c85c0 (&device->client_data_rwsem){++++}-{3:3}, at: a=
-dd_client_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
-> > >  #5: ffff8880230a4118 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_=
-by_table_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
-> > > Preemption disabled at:
-> > > [<0000000000000000>] 0x0
-> > > CPU: 1 PID: 17974 Comm: syz-executor.3 Not tainted 5.17.0-rc3-syzkall=
-er-00170-gc832962ac972 #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
-OS Google 01/01/2011
-> > > Call Trace:
-> > >  <TASK>
-> > >  __dump_stack lib/dump_stack.c:88 [inline]
-> > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> > >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9576
-> > >  __mutex_lock_common kernel/locking/mutex.c:577 [inline]
-> > >  __mutex_lock+0x9f/0x12f0 kernel/locking/mutex.c:733
-> > >  smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
-> > >  smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
-> >=20
-> > If I recall it well, read_lock() disables preemption.=20
-> >=20
-> > smc_pnetid_by_table_ib() uses read_lock() and then it calls smc_pnet_ap=
-ply_ib()=20
-> > which, in turn, calls mutex_lock(&smc_ib_devices.mutex). Therefore the =
-code=20
-> > acquires a mutex while in atomic and we get a SAC bug.
-> >=20
-> > Actually, even if my argument is correct(?), I don't know if the read_l=
-ock()=20
-> > in smc_pnetid_by_table_ib() can be converted to a sleeping lock like a =
-mutex or=20
-> > a semaphore.
-> =20
-> Take the email above. I think it is safe to convert read_lock() to
-> mutex, which is already used by smc_ib_devices.mutex.
+This driver exposes hardware temperature sensors of the Aquacomputer
+Farbwerk 360 RGB controller, which communicates through a proprietary
+USB HID protocol.
 
-Thanks for your reply.
+Four temperature sensors are available. If a sensor is not connected,
+it will report zeroes. Additionally, serial number and firmware version
+are exposed through debugfs.
 
-I have noticed that the "pnettable->lock" rwlock is acquired several times
-in different functions of net/smc/smc_pnet.c. smc_pnetid_by_table_ib() is j=
-ust one
-of many functions that acquire that rwlock.
+This driver has been tested on x86_64.
 
-Therefore, my question is... are you _really_ sure that "pnettable->lock" c=
-an be=20
-safely converted to a mutex everywhere in net/smc?
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+ .../hwmon/aquacomputer_farbwerk360.rst        |  40 +++
+ Documentation/hwmon/index.rst                 |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/aquacomputer_farbwerk360.c      | 261 ++++++++++++++++++
+ 6 files changed, 320 insertions(+)
+ create mode 100644 Documentation/hwmon/aquacomputer_farbwerk360.rst
+ create mode 100644 drivers/hwmon/aquacomputer_farbwerk360.c
 
-I haven't read _all_ the path that lead to {write,read}_lock(&pnettable->lo=
-ck) in=20
-the net/smc code.
-
-I think that before submitting that patch I should carefully read the code =
-and check
-_all_ the paths, unless you can confirm that the conversion is safe everywh=
-ere. If=20
-you can answer my question, I can work on a patch by this evening (CET time=
- zone)=20
-and, obviously, give you proper credit.
-
-Thank you,
-
-=46abio M. De Francesco
-
->=20
-> Thank you,
-> Tony Lu
-
-
+diff --git a/Documentation/hwmon/aquacomputer_farbwerk360.rst b/Documentation/hwmon/aquacomputer_farbwerk360.rst
+new file mode 100644
+index 000000000000..cebaffccd818
+--- /dev/null
++++ b/Documentation/hwmon/aquacomputer_farbwerk360.rst
+@@ -0,0 +1,40 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver aquacomputer_farbwerk360
++======================================
++
++Supported devices:
++
++* Aquacomputer Farbwerk 360 RGB controller
++
++Author: Aleksa Savic
++
++Description
++-----------
++
++This driver exposes hardware temperature sensors of the Aquacomputer Farbwerk 360
++RGB controller, which communicates through a proprietary USB HID protocol.
++
++Four temperature sensors are available. If a sensor is not connected, it will report
++zeroes. Additionally, serial number and firmware version are exposed through debugfs.
++
++Usage notes
++-----------
++
++Farbwerk 360 communicates via HID reports. The driver is loaded automatically by
++the kernel and supports hotswapping.
++
++Sysfs entries
++-------------
++
++=============== ==============================================
++temp[1-4]_input Measured temperature (in millidegrees Celsius)
++=============== ==============================================
++
++Debugfs entries
++---------------
++
++================ ===============================================
++serial_number    Serial number of the pump
++firmware_version Version of installed firmware
++================ ===============================================
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index df20022c741f..42b7369340ba 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -40,6 +40,7 @@ Hardware Monitoring Kernel Drivers
+    aht10
+    amc6821
+    aquacomputer_d5next
++   aquacomputer_farbwerk360
+    asb100
+    asc7621
+    aspeed-pwm-tacho
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bd86ed9fbc79..fb8b8d7aebbc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1386,6 +1386,13 @@ S:	Maintained
+ F:	Documentation/hwmon/aquacomputer_d5next.rst
+ F:	drivers/hwmon/aquacomputer_d5next.c
+ 
++AQUACOMPUTER FARBWERK 360 RGB CONTROLLER SENSOR DRIVER
++M:	Aleksa Savic <savicaleksa83@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/aquacomputer_farbwerk360.rst
++F:	drivers/hwmon/aquacomputer_farbwerk360.c
++
+ AQUANTIA ETHERNET DRIVER (atlantic)
+ M:	Igor Russkikh <irusskikh@marvell.com>
+ L:	netdev@vger.kernel.org
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 8df25f1079ba..e1ca5e1e6ab0 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -264,6 +264,16 @@ config SENSORS_AQUACOMPUTER_D5NEXT
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called aquacomputer_d5next.
+ 
++config SENSORS_AQUACOMPUTER_FARBWERK360
++	tristate "Aquacomputer Farbwerk 360 RGB controller"
++	depends on USB_HID
++	help
++	  If you say yes here you get support for temperature sensors provided by
++	  the Aquacomputer Farbwerk 360 RGB controller.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called aquacomputer_farbwerk360.
++
+ config SENSORS_AS370
+ 	tristate "Synaptics AS370 SoC hardware monitoring driver"
+ 	help
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 185f946d698b..1c1556a53f6d 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -49,6 +49,7 @@ obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
+ obj-$(CONFIG_SENSORS_AHT10)	+= aht10.o
+ obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
+ obj-$(CONFIG_SENSORS_AQUACOMPUTER_D5NEXT) += aquacomputer_d5next.o
++obj-$(CONFIG_SENSORS_AQUACOMPUTER_FARBWERK360) += aquacomputer_farbwerk360.o
+ obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
+ obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
+ obj-$(CONFIG_SENSORS_AS370)	+= as370-hwmon.o
+diff --git a/drivers/hwmon/aquacomputer_farbwerk360.c b/drivers/hwmon/aquacomputer_farbwerk360.c
+new file mode 100644
+index 000000000000..14b760a2c8a8
+--- /dev/null
++++ b/drivers/hwmon/aquacomputer_farbwerk360.c
+@@ -0,0 +1,261 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * hwmon driver for Aquacomputer Farbwerk 360 (RGB controller)
++ *
++ * The Farbwerk 360 sends HID reports (with ID 0x01) every second to report sensor values
++ * of up to four connected temperature sensors.
++ *
++ * Copyright 2022 Aleksa Savic <savicaleksa83@gmail.com>
++ */
++
++#include <asm/unaligned.h>
++#include <linux/debugfs.h>
++#include <linux/hid.h>
++#include <linux/hwmon.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
++#include <linux/seq_file.h>
++
++#define DRIVER_NAME		"aquacomputer_farbwerk360"
++
++#define STATUS_REPORT_ID	0x01
++#define STATUS_UPDATE_INTERVAL	(2 * HZ) /* In seconds */
++
++/* Register offsets */
++#define SERIAL_FIRST_PART	0x03
++#define SERIAL_SECOND_PART	0x05
++#define FIRMWARE_VERSION	0x0D
++
++#define NUM_SENSORS		4
++#define SENSOR_START		0x32
++#define SENSOR_SIZE		0x02
++#define SENSOR_DISCONNECTED	0x7FFF
++
++static const char *const label_temps[] = { "Sensor 1", "Sensor 2", "Sensor 3", "Sensor 4" };
++
++struct farbwerk360_data {
++	struct hid_device *hdev;
++	struct device *hwmon_dev;
++	struct dentry *debugfs;
++	s32 temp_input[4];
++	u32 serial_number[2];
++	u16 firmware_version;
++	unsigned long updated;
++};
++
++static umode_t farbwerk360_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
++				      int channel)
++{
++	return 0444;
++}
++
++static int farbwerk360_read(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
++			    long *val)
++{
++	struct farbwerk360_data *priv = dev_get_drvdata(dev);
++
++	if (time_after(jiffies, priv->updated + STATUS_UPDATE_INTERVAL))
++		return -ENODATA;
++
++	switch (type) {
++	case hwmon_temp:
++		*val = priv->temp_input[channel];
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static int farbwerk360_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
++				   int channel, const char **str)
++{
++	switch (type) {
++	case hwmon_temp:
++		*str = label_temps[channel];
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static const struct hwmon_ops farbwerk360_hwmon_ops = {
++	.is_visible = farbwerk360_is_visible,
++	.read = farbwerk360_read,
++	.read_string = farbwerk360_read_string,
++};
++
++static const struct hwmon_channel_info *farbwerk360_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL, HWMON_T_INPUT | HWMON_T_LABEL),
++	NULL
++};
++
++static const struct hwmon_chip_info farbwerk360_chip_info = {
++	.ops = &farbwerk360_hwmon_ops,
++	.info = farbwerk360_info,
++};
++
++static int farbwerk360_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data,
++				 int size)
++{
++	int i, sensor_value;
++	struct farbwerk360_data *priv;
++
++	if (report->id != STATUS_REPORT_ID)
++		return 0;
++
++	priv = hid_get_drvdata(hdev);
++
++	/* Info provided with every report */
++	priv->serial_number[0] = get_unaligned_be16(data + SERIAL_FIRST_PART);
++	priv->serial_number[1] = get_unaligned_be16(data + SERIAL_SECOND_PART);
++
++	priv->firmware_version = get_unaligned_be16(data + FIRMWARE_VERSION);
++
++	/* Temperature sensor readings */
++	for (i = 0; i < NUM_SENSORS; i++) {
++		sensor_value = get_unaligned_be16(data + SENSOR_START + i * SENSOR_SIZE);
++		if (sensor_value == SENSOR_DISCONNECTED)
++			sensor_value = 0;
++
++		priv->temp_input[i] = sensor_value * 10;
++	}
++
++	priv->updated = jiffies;
++
++	return 0;
++}
++
++#ifdef CONFIG_DEBUG_FS
++
++static int serial_number_show(struct seq_file *seqf, void *unused)
++{
++	struct farbwerk360_data *priv = seqf->private;
++
++	seq_printf(seqf, "%05u-%05u\n", priv->serial_number[0], priv->serial_number[1]);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(serial_number);
++
++static int firmware_version_show(struct seq_file *seqf, void *unused)
++{
++	struct farbwerk360_data *priv = seqf->private;
++
++	seq_printf(seqf, "%u\n", priv->firmware_version);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(firmware_version);
++
++static void farbwerk360_debugfs_init(struct farbwerk360_data *priv)
++{
++	char name[32];
++
++	scnprintf(name, sizeof(name), "%s-%s", DRIVER_NAME, dev_name(&priv->hdev->dev));
++
++	priv->debugfs = debugfs_create_dir(name, NULL);
++	debugfs_create_file("serial_number", 0444, priv->debugfs, priv, &serial_number_fops);
++	debugfs_create_file("firmware_version", 0444, priv->debugfs, priv, &firmware_version_fops);
++}
++
++#else
++
++static void farbwerk360_debugfs_init(struct farbwerk360_data *priv)
++{
++}
++
++#endif
++
++static int farbwerk360_probe(struct hid_device *hdev, const struct hid_device_id *id)
++{
++	int ret;
++	struct farbwerk360_data *priv;
++
++	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->hdev = hdev;
++	hid_set_drvdata(hdev, priv);
++
++	priv->updated = jiffies - STATUS_UPDATE_INTERVAL;
++
++	ret = hid_parse(hdev);
++	if (ret)
++		return ret;
++
++	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
++	if (ret)
++		return ret;
++
++	ret = hid_hw_open(hdev);
++	if (ret)
++		goto fail_and_stop;
++
++	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "farbwerk360", priv,
++							  &farbwerk360_chip_info, NULL);
++
++	if (IS_ERR(priv->hwmon_dev)) {
++		ret = PTR_ERR(priv->hwmon_dev);
++		goto fail_and_close;
++	}
++
++	farbwerk360_debugfs_init(priv);
++
++	return 0;
++
++fail_and_close:
++	hid_hw_close(hdev);
++fail_and_stop:
++	hid_hw_stop(hdev);
++	return ret;
++}
++
++static void farbwerk360_remove(struct hid_device *hdev)
++{
++	struct farbwerk360_data *priv = hid_get_drvdata(hdev);
++
++	debugfs_remove_recursive(priv->debugfs);
++	hwmon_device_unregister(priv->hwmon_dev);
++
++	hid_hw_close(hdev);
++	hid_hw_stop(hdev);
++}
++
++static const struct hid_device_id farbwerk360_table[] = {
++	{ HID_USB_DEVICE(0x0c70, 0xf010) }, /* Aquacomputer Farbwerk 360 */
++	{},
++};
++
++MODULE_DEVICE_TABLE(hid, farbwerk360_table);
++
++static struct hid_driver farbwerk360_driver = {
++	.name = DRIVER_NAME,
++	.id_table = farbwerk360_table,
++	.probe = farbwerk360_probe,
++	.remove = farbwerk360_remove,
++	.raw_event = farbwerk360_raw_event,
++};
++
++static int __init farbwerk360_init(void)
++{
++	return hid_register_driver(&farbwerk360_driver);
++}
++
++static void __exit farbwerk360_exit(void)
++{
++	hid_unregister_driver(&farbwerk360_driver);
++}
++
++/* Request to initialize after the HID bus to ensure it's not being loaded before */
++late_initcall(farbwerk360_init);
++module_exit(farbwerk360_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Aleksa Savic <savicaleksa83@gmail.com>");
++MODULE_DESCRIPTION("Hwmon driver for Aquacomputer Farbwerk 360");
+-- 
+2.35.1
 

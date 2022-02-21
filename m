@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3963D4BE9AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79AA34BE500
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346521AbiBUI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:58:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44340 "EHLO
+        id S1347877AbiBUJJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:09:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346302AbiBUIzo (ORCPT
+        with ESMTP id S1347315AbiBUJFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:55:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5341024BEC;
-        Mon, 21 Feb 2022 00:53:43 -0800 (PST)
+        Mon, 21 Feb 2022 04:05:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160A825C5C;
+        Mon, 21 Feb 2022 00:58:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D58F6118D;
-        Mon, 21 Feb 2022 08:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B96C340F1;
-        Mon, 21 Feb 2022 08:53:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E7DDB80EAC;
+        Mon, 21 Feb 2022 08:58:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81AB6C340EB;
+        Mon, 21 Feb 2022 08:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433604;
-        bh=Sho+2EN2OREeQ4S2SFRqB7ZQHvCM/jTHANkhtSh03Gk=;
+        s=korg; t=1645433933;
+        bh=os7+BbduWHsodAPKLMmu7l+9ODhuHdAKJZMGcsnJXmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h91WGHZc7U5KR0B+QkzlF2nx3DfDFy9SCMomuvnnJ4D/N+5e6H02+3g3k6GKHdsMD
-         VjZTFWkvEW08J+yGY1PzpqzABRgaMziAy7WBlB7WpgxZzOO8gQySyVj2ZyBmtYyzWw
-         acojSZHGnHPB90LSy5fZmxk/2tx4eAgQOFVgRNc8=
+        b=sKdP8wC2jHSeSkuxQUSGiB7u1IpNomttBI3r3LEOmVji8hnZaglew6NUAEWnsJqUQ
+         ps0zPODRCnBOnI/QueZobkiUGSjwvx52f+EvUO1avZ3cPeFLojWR/8eItdobKIUfrp
+         tEjdfFJ6W1m3S8aZQtqVVFkCi6AtKe8PqP5sJvNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 23/45] ping: fix the dif and sdif check in ping_lookup
+        stable@vger.kernel.org, Seth Forshee <sforshee@digitalocean.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 34/80] vsock: remove vsock from connected table when connect is interrupted by a signal
 Date:   Mon, 21 Feb 2022 09:49:14 +0100
-Message-Id: <20220221084911.208158188@linuxfoundation.org>
+Message-Id: <20220221084916.690373564@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
-References: <20220221084910.454824160@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Seth Forshee <sforshee@digitalocean.com>
 
-commit 35a79e64de29e8d57a5989aac57611c0cd29e13e upstream.
+commit b9208492fcaecff8f43915529ae34b3bcb03877c upstream.
 
-When 'ping' changes to use PING socket instead of RAW socket by:
+vsock_connect() expects that the socket could already be in the
+TCP_ESTABLISHED state when the connecting task wakes up with a signal
+pending. If this happens the socket will be in the connected table, and
+it is not removed when the socket state is reset. In this situation it's
+common for the process to retry connect(), and if the connection is
+successful the socket will be added to the connected table a second
+time, corrupting the list.
 
-   # sysctl -w net.ipv4.ping_group_range="0 100"
+Prevent this by calling vsock_remove_connected() if a signal is received
+while waiting for a connection. This is harmless if the socket is not in
+the connected table, and if it is in the table then removing it will
+prevent list corruption from a double add.
 
-There is another regression caused when matching sk_bound_dev_if
-and dif, RAW socket is using inet_iif() while PING socket lookup
-is using skb->dev->ifindex, the cmd below fails due to this:
+Note for backporting: this patch requires d5afa82c977e ("vsock: correct
+removal of socket from the list"), which is in all current stable trees
+except 4.9.y.
 
-  # ip link add dummy0 type dummy
-  # ip link set dummy0 up
-  # ip addr add 192.168.111.1/24 dev dummy0
-  # ping -I dummy0 192.168.111.1 -c1
-
-The issue was also reported on:
-
-  https://github.com/iputils/iputils/issues/104
-
-But fixed in iputils in a wrong way by not binding to device when
-destination IP is on device, and it will cause some of kselftests
-to fail, as Jianlin noticed.
-
-This patch is to use inet(6)_iif and inet(6)_sdif to get dif and
-sdif for PING socket, and keep consistent with RAW socket.
-
-Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
-Reported-by: Jianlin Shi <jishi@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
+Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Link: https://lore.kernel.org/r/20220217141312.2297547-1-sforshee@digitalocean.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ping.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ net/vmw_vsock/af_vsock.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -177,16 +177,23 @@ static struct sock *ping_lookup(struct n
- 	struct sock *sk = NULL;
- 	struct inet_sock *isk;
- 	struct hlist_nulls_node *hnode;
--	int dif = skb->dev->ifindex;
-+	int dif, sdif;
- 
- 	if (skb->protocol == htons(ETH_P_IP)) {
-+		dif = inet_iif(skb);
-+		sdif = inet_sdif(skb);
- 		pr_debug("try to find: num = %d, daddr = %pI4, dif = %d\n",
- 			 (int)ident, &ip_hdr(skb)->daddr, dif);
- #if IS_ENABLED(CONFIG_IPV6)
- 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
-+		dif = inet6_iif(skb);
-+		sdif = inet6_sdif(skb);
- 		pr_debug("try to find: num = %d, daddr = %pI6c, dif = %d\n",
- 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
- #endif
-+	} else {
-+		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
-+		return NULL;
- 	}
- 
- 	read_lock_bh(&ping_table.lock);
-@@ -226,7 +233,7 @@ static struct sock *ping_lookup(struct n
- 		}
- 
- 		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
--		    sk->sk_bound_dev_if != inet_sdif(skb))
-+		    sk->sk_bound_dev_if != sdif)
- 			continue;
- 
- 		sock_hold(sk);
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1222,6 +1222,7 @@ static int vsock_stream_connect(struct s
+ 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+ 			sock->state = SS_UNCONNECTED;
+ 			vsock_transport_cancel_pkt(vsk);
++			vsock_remove_connected(vsk);
+ 			goto out_wait;
+ 		} else if (timeout == 0) {
+ 			err = -ETIMEDOUT;
 
 

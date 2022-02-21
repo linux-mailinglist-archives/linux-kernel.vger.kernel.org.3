@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA424BD402
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B9F4BD3F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343912AbiBUCgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 21:36:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48494 "EHLO
+        id S1343918AbiBUCgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 21:36:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343899AbiBUCgj (ORCPT
+        with ESMTP id S1343905AbiBUCgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 21:36:39 -0500
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8123DDE0;
-        Sun, 20 Feb 2022 18:36:17 -0800 (PST)
-Received: by mail-il1-f180.google.com with SMTP id v3so3705222ilc.7;
-        Sun, 20 Feb 2022 18:36:17 -0800 (PST)
+        Sun, 20 Feb 2022 21:36:42 -0500
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6023DDE0;
+        Sun, 20 Feb 2022 18:36:20 -0800 (PST)
+Received: by mail-il1-f173.google.com with SMTP id d7so8971257ilf.8;
+        Sun, 20 Feb 2022 18:36:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=wRFWj5y7LotFUBPpzxeU6otCQ7nXTU9SS+1E8PK2qJM=;
-        b=mzZ7iR4UMsXBYtdmauaqH3R33lIfa/yioCpz1b3BljoMYTkMbTea45XlxBVGbPzbyb
-         EKlLfM+KkWXgaZUw7TUsWhiqASS+E25PKIZP3jgfPhxg5byt46eBUQgT0XgfKnEb8eKM
-         sOfM1+34y9LBBP9IslYGaBfBJKv6R5iatLY90vVTXEBDKveVIVi3XnbhHvVCNZnCHj7i
-         g7e7nb2S7NofOyWUAAhHH3f+mRvq3sLjob0+2jSC26hXyqKc587zBmCIdNiQ+ny6C16W
-         GZE9A4zpwwtXybHZjoJIBGKbIWFPdSQYVE+7vYBpSOENcPAu2kKBjj4QTNKhkwSxHyKN
-         f3Qg==
-X-Gm-Message-State: AOAM533peMlbzxmNMNaNwCPun4IOmJ7zFVrOEbVuyY9kCMdX/m41diEp
-        2u1sI4aBdC5/kOolg52KjQ==
-X-Google-Smtp-Source: ABdhPJygy6KKg5suAr0e2xSLMVxXh3lQT8BgBETmXxuwuEoAWuxc8fjfq5Z3jV+QHiMRkztWvbEg3A==
-X-Received: by 2002:a05:6e02:1d0d:b0:2c2:1d2c:5b2d with SMTP id i13-20020a056e021d0d00b002c21d2c5b2dmr5666690ila.168.1645410977178;
-        Sun, 20 Feb 2022 18:36:17 -0800 (PST)
+        bh=uAgMNJsD7INE5dFmY8Xlz21D6qpjVxGcjpghogIYeNY=;
+        b=sOpYOQyHf7d0eMc1NkGUQPVFs1kcE58fYg77G4AUz2TC/opa23FMEnjdLWSIYcYnlk
+         nlcgNpJmDyGBhKltoPZy3ggzyggXMtFAzDO4O3zwh1jQRnV3gdZnZsETa0iWUtT6uEwt
+         IkPyICIcFjV0V3LxXGB0koFMClhKqO5IWVEhd6AHCp8OFwlPtye56+990I2A7rsqGJwV
+         91A7gKB4oicIrcyMrl3WS6s/qtS+7L7wNw5C3VjaPJ8xw0bm3b5xGZ1jC8YSYqiqi2zM
+         dJDsp2iyW0Td85p6AGsQrpcjgXYUq6GsluPahUqzdwaRkQ1Tkf3jxXdagmE5ogcGlar4
+         AMUA==
+X-Gm-Message-State: AOAM532bf00PPNkIyrbgZ7l1GgQjmRzZxY4VQ3vkevEMlHcuImagbXY/
+        tODgpMZMrdVPuVB2ncg/KQ==
+X-Google-Smtp-Source: ABdhPJz2DfaQWNzJPUw3IqWnC9QhQKn66unhRPcWMPIvrixApoeelkVT8Tp/miCfwnh3IxQWexkAKA==
+X-Received: by 2002:a92:ca0a:0:b0:2b7:bca5:63df with SMTP id j10-20020a92ca0a000000b002b7bca563dfmr14222447ils.232.1645410979730;
+        Sun, 20 Feb 2022 18:36:19 -0800 (PST)
 Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id c21sm4035829ioh.35.2022.02.20.18.36.15
+        by smtp.gmail.com with ESMTPSA id e5sm7232198ilq.9.2022.02.20.18.36.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 18:36:16 -0800 (PST)
-Received: (nullmailer pid 2041537 invoked by uid 1000);
+        Sun, 20 Feb 2022 18:36:19 -0800 (PST)
+Received: (nullmailer pid 2041551 invoked by uid 1000);
         Mon, 21 Feb 2022 02:36:09 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Max Buchholz <max.buchholz@gmx.de>
-Cc:     devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        David Heidelberg <david@ixit.cz>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-input@vger.kernel.org, Max Buchholz <Max.Buchholz@gmx.de>
-In-Reply-To: <20220218101011.22988-1-max.buchholz@gmx.de>
-References: <20220218101011.22988-1-max.buchholz@gmx.de>
-Subject: Re: [PATCH] dt-bindings: nvidia,tegra20-kbc: Convert to json-schema
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+In-Reply-To: <20220220173905.14165-2-ansuelsmth@gmail.com>
+References: <20220220173905.14165-1-ansuelsmth@gmail.com> <20220220173905.14165-2-ansuelsmth@gmail.com>
+Subject: Re: [RFC RFT PATCH v2 1/2] dt-bindings: mtd: partitions: Document new partition-dynamic nodes
 Date:   Sun, 20 Feb 2022 20:36:09 -0600
-Message-Id: <1645410969.330994.2041536.nullmailer@robh.at.kernel.org>
+Message-Id: <1645410969.414517.2041550.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -65,20 +62,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 11:10:10 +0100, Max Buchholz wrote:
-> From: Max Buchholz <Max.Buchholz@gmx.de>
+On Sun, 20 Feb 2022 18:39:04 +0100, Ansuel Smith wrote:
+> Document new partition-dynamic nodes used to provide an OF node for
+> partition registred at runtime by parsers. This is required for nvmem
+> system to declare and detect nvmem-cells.
 > 
-> This converts the Nvidia Tegra keyboard controller bindings to YAML
-> and fix them up a bit.
+> With these special partitions, only the label is required as the parser
+> will provide reg and offset of the mtd. NVMEM will use the data from the
+> parser and provide the NVMEM cells declared in the DTS, "connecting" the
+> dynamic partition with a static declaration of cells in them.
 > 
-> Acked-by: David Heidelberg <david@ixit.cz>
-> Signed-off-by: Max Buchholz <max.buchholz@gmx.de>
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > ---
->  .../bindings/input/nvidia,tegra20-kbc.txt     |  55 ---------
->  .../bindings/input/nvidia,tegra20-kbc.yaml    | 114 ++++++++++++++++++
->  2 files changed, 114 insertions(+), 55 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
->  create mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
+>  .../mtd/partitions/partition-dynamic.yaml     | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -87,32 +85,12 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml: properties:nvidia,wakeup-source: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml: properties:nvidia,wakeup-source: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml: properties:nvidia,wakeup-source: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml: ignoring, error in schema: properties: nvidia,wakeup-source
-Error: Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.example.dts:19.19-20 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1398: dt_binding_check] Error 2
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.example.dt.yaml: partitions: '#address-cells', '#size-cells', 'art' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/partitions/qcom,smem-part.yaml
 
 doc reference errors (make refcheckdocs):
-Documentation/devicetree/bindings/power/wakeup-source.txt: Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
 
-See https://patchwork.ozlabs.org/patch/1594620
+See https://patchwork.ozlabs.org/patch/1595230
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F7E4BE536
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE374BDBE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349436AbiBUJVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:21:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36208 "EHLO
+        id S1350996AbiBUJmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:42:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350004AbiBUJNH (ORCPT
+        with ESMTP id S1350684AbiBUJf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:13:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AD72DD6A;
-        Mon, 21 Feb 2022 01:06:17 -0800 (PST)
+        Mon, 21 Feb 2022 04:35:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634B1659B;
+        Mon, 21 Feb 2022 01:14:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A4BA0CE0E88;
-        Mon, 21 Feb 2022 09:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C5AFC340E9;
-        Mon, 21 Feb 2022 09:06:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E43960EA3;
+        Mon, 21 Feb 2022 09:14:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C71EC340E9;
+        Mon, 21 Feb 2022 09:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434375;
-        bh=PpJMoP/AvxA2ya/EU1jNkVp0NRXKahVKOUJ2AY+EMzg=;
+        s=korg; t=1645434890;
+        bh=BOnIhtOxhnn7VldcjnILH2G5d8hO49/zPZe3pqe3v6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KDw/GuqKc+8TwV2SHCSWv/qBRFqhS72275Tb9jBZj1coyb5he1QPV7HoVa29AQbUU
-         ze2FBHvwanmomcLjPvKnXyizv79X8RdP70NdbOVdTt2ywKXerJhMtMh77cQQBAu3V5
-         yyrP3L0HQB1CyNo32C3gGWYhgmvBRBdBggn/oAIk=
+        b=KH2NUv00GD51kFNW4EDROIjIuouumc94QrX/XXCdRbpjbNZ/FV0735org6eBuLOQT
+         prq+D8aWHyZg4jl4tAcQaCPuIiqD7pB25hd5plEsXBzFDWpq0wSghbslxTPYMziAV8
+         Poww9BGMwYBTQyYgdIzznF61AJIcAwNdsQdjWl94=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 108/121] net: usb: qmi_wwan: Add support for Dell DW5829e
+Subject: [PATCH 5.15 168/196] drm/rockchip: dw_hdmi: Do not leave clock enabled in error case
 Date:   Mon, 21 Feb 2022 09:50:00 +0100
-Message-Id: <20220221084924.847493886@linuxfoundation.org>
+Message-Id: <20220221084936.570013696@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slark Xiao <slark_xiao@163.com>
+From: Sascha Hauer <s.hauer@pengutronix.de>
 
-[ Upstream commit 8ecbb179286cbc91810c16caeb3396e06305cd0c ]
+[ Upstream commit c0cfbb122275da1b726481de5a8cffeb24e6322b ]
 
-Dell DW5829e same as DW5821e except the CAT level.
-DW5821e supports CAT16 but DW5829e supports CAT9.
-Also, DW5829e includes normal and eSIM type.
-Please see below test evidence:
+The driver returns an error when devm_phy_optional_get() fails leaving
+the previously enabled clock turned on. Change order and enable the
+clock only after the phy has been acquired.
 
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e6 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e4 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/20220209024717.8564-1-slark_xiao@163.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220126145549.617165-3-s.hauer@pengutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 6e033ba717030..597766d14563e 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1333,6 +1333,8 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
- 	{QMI_FIXED_INTF(0x413c, 0x81e0, 0)},	/* Dell Wireless 5821e with eSIM support*/
-+	{QMI_FIXED_INTF(0x413c, 0x81e4, 0)},	/* Dell Wireless 5829e with eSIM support*/
-+	{QMI_FIXED_INTF(0x413c, 0x81e6, 0)},	/* Dell Wireless 5829e */
- 	{QMI_FIXED_INTF(0x03f0, 0x4e1d, 8)},	/* HP lt4111 LTE/EV-DO/HSPA+ Gobi 4G Module */
- 	{QMI_FIXED_INTF(0x03f0, 0x9d1d, 1)},	/* HP lt4120 Snapdragon X5 LTE */
- 	{QMI_FIXED_INTF(0x22de, 0x9061, 3)},	/* WeTelecom WPD-600N */
+diff --git a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
+index 830bdd5e9b7ce..8677c82716784 100644
+--- a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
++++ b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
+@@ -529,13 +529,6 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
+ 		return ret;
+ 	}
+ 
+-	ret = clk_prepare_enable(hdmi->vpll_clk);
+-	if (ret) {
+-		DRM_DEV_ERROR(hdmi->dev, "Failed to enable HDMI vpll: %d\n",
+-			      ret);
+-		return ret;
+-	}
+-
+ 	hdmi->phy = devm_phy_optional_get(dev, "hdmi");
+ 	if (IS_ERR(hdmi->phy)) {
+ 		ret = PTR_ERR(hdmi->phy);
+@@ -544,6 +537,13 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
+ 		return ret;
+ 	}
+ 
++	ret = clk_prepare_enable(hdmi->vpll_clk);
++	if (ret) {
++		DRM_DEV_ERROR(hdmi->dev, "Failed to enable HDMI vpll: %d\n",
++			      ret);
++		return ret;
++	}
++
+ 	drm_encoder_helper_add(encoder, &dw_hdmi_rockchip_encoder_helper_funcs);
+ 	drm_simple_encoder_init(drm, encoder, DRM_MODE_ENCODER_TMDS);
+ 
 -- 
 2.34.1
 

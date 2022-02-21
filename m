@@ -2,375 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162904BD43F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 04:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178324BD481
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 05:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344243AbiBUD24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 22:28:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42982 "EHLO
+        id S1344437AbiBUDqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 22:46:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236398AbiBUD2z (ORCPT
+        with ESMTP id S1344393AbiBUDqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 22:28:55 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFBA5132B;
-        Sun, 20 Feb 2022 19:28:32 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so11539911oos.9;
-        Sun, 20 Feb 2022 19:28:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=evzbx3hFkrG4LEm3hNJUfV0Qe4cnm6Z7bXfWh+oqgHA=;
-        b=q1zGywxqEbABgk5qGo/5ZgnOjAUyxdDin3JN4tmRVsT/QUo5H2mlPReuWGyQPa6Pkq
-         kIeqcgDUIuCKhgDSRwp3JN8vVyzGKfD6+Tqtn++FHpZow3PJkgW4RAbKPYF8eDlKWMMI
-         eRForIbQFRMd6yIZ5rA8/5eCajF4y411hFjVKwxS9yLjPhsD5doEQiKqgdt6GdKmRycz
-         mDRrhYjSCfzJe0AsySBagpk3OCmMOp7OzGFtL/K++ppJTfCIGYRAnyWAOpm7jDohJ2HH
-         4UnEmlGfThpXRTUjH1xPKj0SxwWtaarM957Vm23s1Vji0E3QzSuA4lW83aB/CpcBj9qz
-         my/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=evzbx3hFkrG4LEm3hNJUfV0Qe4cnm6Z7bXfWh+oqgHA=;
-        b=JLaMZePv6KLudNNlRY4xeC4IQjlyOfQV1GWM7j1IMFDmDg8YjRN3u/BFBz4Zr1V59Q
-         Mz3TcZW4nfavDBcyLrDN2EWkXqHFDxFyw9Q0KOs3IR4ZsbtCr9IF48g7xPrYVmE6abzO
-         jeHFzDo8gcWPbolP1S5mkYr4AJIINKBFJZMl/tijRfEx5v8szuNhzwy/FVZOA/VIjMQA
-         +/niJvFIWwa+cUJvmLfRnW55s8yjHbOTzMPhvokL2cS7p0S2Gps1KkLBM9rDCFuxbG/2
-         Z2zrl1qpKJoNVgyuAhYMQGBKV5GRQmQGlbldOgRXA+sQZrVt7//ztLfxb68zu7gzX1ch
-         kWUg==
-X-Gm-Message-State: AOAM533NkcRAcUxClokv2+FBWe3QtENY8usXcmKS/DGUPfBADDinqIBn
-        +Pxl1OwHVzYbkptDF8zfET1/VCPaE+BTqk8aweU=
-X-Google-Smtp-Source: ABdhPJze/QDI5+XORX3C0oWeqbkGGqE1CNJ0uMuUTZ6HYLNRuKfPlfE4AmCZlgdh7rwc5tf4xgO0Asq3+la9pXqOY7g=
-X-Received: by 2002:a05:6870:148a:b0:d3:b909:926c with SMTP id
- k10-20020a056870148a00b000d3b909926cmr6698908oab.129.1645414111191; Sun, 20
- Feb 2022 19:28:31 -0800 (PST)
+        Sun, 20 Feb 2022 22:46:38 -0500
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A31F51E50
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 19:46:07 -0800 (PST)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26028:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Mon, 21 Feb 2022 11:29:22 +0800 (CST)
+From:   Qin Jian <qinjian@cqplus1.com>
+To:     robh+dt@kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+        broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        wells.lu@sunplus.com, Qin Jian <qinjian@cqplus1.com>
+Subject: [PATCH v9 00/10] Add Sunplus SP7021 SoC Support
+Date:   Mon, 21 Feb 2022 11:29:11 +0800
+Message-Id: <cover.1645413746.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220217090440.4468-1-qiang.yu@amd.com> <5d3fdd2c-e74a-49f4-2b28-32c06483236f@amd.com>
- <CAKGbVbtLTBJPF5eTu4rABUTBa8eqjQvqjo1AEUrzgPgYgCREuA@mail.gmail.com>
- <dac70c05-e712-d2e3-2267-278380895f1e@amd.com> <CAKGbVbvtLbDiKrX80-dMnipdLkTE+FP=g_mx37e12fuMtA1Y4Q@mail.gmail.com>
- <ca27a9c6-f390-a938-dd66-ac23f3b44dc4@amd.com> <CAKGbVbv4UFCybS_OFj5UkDgevbrB5qe3pv+0nHv9WdefYhy6Ww@mail.gmail.com>
- <6711073b-8771-5750-33f7-b72333b411c6@amd.com> <CAKGbVbvR+msXjrsXmDM8QTmsCP03hL5-q5CTJBYu4mm=NQd01A@mail.gmail.com>
- <a11b7073-6597-8e87-b724-33acab32e791@gmail.com> <CAKGbVbuJ-QdeoMTg=_O=1x5A5tbqZftsjt8aCCoVkAekci0USA@mail.gmail.com>
- <d830bb82-63ea-2de6-6d10-3a401ac0dcf0@amd.com> <CAKGbVbtorRius+Sq1_3SPUF3JzA00U747noSGhx7eP8Vn1rSDg@mail.gmail.com>
- <47c3a681-379e-18d4-86da-c48721081911@gmail.com>
-In-Reply-To: <47c3a681-379e-18d4-86da-c48721081911@gmail.com>
-From:   Qiang Yu <yuq825@gmail.com>
-Date:   Mon, 21 Feb 2022 11:28:20 +0800
-Message-ID: <CAKGbVbvmxOCZWYvB+ZSL7oHJmbm8vPgM-NJzadrEG1E=2c2Eyg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: check vm bo eviction valuable at last
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org, Qiang Yu <qiang.yu@amd.com>,
-        amd-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 6:24 PM Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> Am 18.02.22 um 11:16 schrieb Qiang Yu:
-> > [SNIP]
-> >>> If amdgpu_vm_ready() use evicting flag, it's still not equivalent to =
-check
-> >>> vm idle: true -> vm idle, false -> vm may be idle or busy.
-> >> Yeah, but why should that be relevant?
-> >>
-> >> The amdgpu_vm_ready() return if we can do page table updates or not. I=
-f
-> >> the VM is idle or not is only relevant for eviction.
-> >>
-> >> In other words any CS or page table update makes the VM busy, but that
-> >> only affects if the VM can be evicted or not.
-> >>
-> > My point is: we can't use amdgpu_vm_ready() to replace vm_is_busy(), so
-> > currently we update vm even when vm is busy. So why not use:
-Sorry, should be "vm is idle".
+This patch series add Sunplus SP7021 SoC support.
 
-> > if (!amdgpu_vm_ready() || vm_is_busy()) return;
-> > in amdgpu_gem_va_update_vm(), as you mentioned we prefer to not
-> > update vm when it's idle.
->
-> Because updating the VM while it is busy is perfectly fine, we do it all
-> the time.
->
-Yeah, as above, my typo.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+single chip. It is designed for industrial control.
 
-> We should just not update it when it is already idle and was considered
-> for eviction.
-"and", not "or"?
+SP7021 consists of two chips (dies) in a package. One is called C-chip
+(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+process (22 nm) for high performance computing. The other is called P-
+chip (peripheral chip). It has many peripherals and an ARM A926 added
+especially for real-time control. P-chip is made for customers. It adopts
+low-level process (ex: 0.11 um) to reduce cost.
 
-> In this situation it makes most of the time sense to keep
-> it idle and postpone the update till the next command submission.
->
-> >>>>> Then we can keep the evicting flag accurate (after solving your
-> >>>>> concern for this patch that eviction may fail latter by further del=
-ay
-> >>>>> the flag update after eviction success).
-> >>>> That won't work. See we need to mark the VM as evicted before we
-> >>>> actually evict them because otherwise somebody could use the VM in
-> >>>> parallel and add another fence to it.
-> >>>>
-> >>> I see, make this too accurate should cost too much like holding the
-> >>> eviction_lock when eviction. But just delay it in
-> >>> amdgpu_ttm_bo_eviction_valuable()
-> >>> could avoid most false positive case.
-> >> Partially correct. Another fundamental problem is that we can't hold t=
-he
-> >> eviction lock because that would result in lock inversion and potentia=
-l
-> >> deadlock.
-> >>
-> >> We could set the flag later on, but as I said before that when we set
-> >> the evicted flag when the VM is already idle is a desired effect.
-> >>
-> > As above, this confuse me as we can explicitly check vm idle when
-> > user update vm, why bother to embed it in evicting flag implicitly?
->
-> Well as I said it's irrelevant for the update if the VM is idle or not.
->
-> To summarize the rules once more:
-> 1. When VM page tables are used by CS or page tables updates it is
-> considered busy, e.g. not idle.
->
-> 2. When we want to evict a VM it must be idle. As soon as we considered
-> this we should set the evicted flag to make sure to keep it idle as much
-> as possible.
->
-> 3. When we want to update the page tables we just need to check if the
-> VM is idle or not.
->
-But now we does not check vm idle directly in amdgpu_gem_va_update_vm().
-If VM bo has not been considered for eviction, it could be either idle or b=
-usy.
+Refer to (for documentations):
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
 
-Just want to confirm if the fix should be only change amdgpu_vm_ready()
-to use evicting flag or besides using evicting flag, also check vm_idle() i=
-n
-amdgpu_gem_va_update_vm().
+Refer to (applications):
+https://tibbo.com/store/plus1.html
 
-Regards,
-Qiang
+Refer to (applications):
+http://www.sinovoip.com.cn/ecp_view.asp?id=586
 
-> 4. When a CS happens we don't have another chance and make the VM busy
-> again. And do all postponed page table updates.
->
-Anyway,
+Changes in v9:
+- clk/Kconfig: fix the comments form Stephen Boyd
+- clk-sp7021.c: fix the comments form Stephen Boyd
 
-> Regards,
-> Christian.
->
-> >
-> > Check vm idle need to hold resv lock. Read your patch for adding
-> > evicting flag is to update vm without resv lock. But user vm ops in
-> > amdgpu_gem_va_update_vm() do hold the resv lock, so the difference
-> > happens when calling amdgpu_vm_bo_update_mapping() from
-> > svm_range_(un)map_to_gpu(). So embed vm idle in evicting flag
-> > is for svm_range_(un)map_to_gpu() also do nothing when vm idle?
->
->
->
-> >
-> > Regards,
-> > Qiang
-> >
-> >> Regards,
-> >> Christian.
-> >>
-> >>> Regards,
-> >>> Qiang
-> >>>
-> >>>> Regards,
-> >>>> Christian.
-> >>>>
-> >>>>> Regards,
-> >>>>> Qiang
-> >>>>>
-> >>>>>
-> >>>>>> Regards,
-> >>>>>> Christian.
-> >>>>>>
-> >>>>>>> Regards,
-> >>>>>>> Qiang
-> >>>>>>>
-> >>>>>>>> Regards,
-> >>>>>>>> Christian.
-> >>>>>>>>
-> >>>>>>>>> Regards,
-> >>>>>>>>> Qiang
-> >>>>>>>>>
-> >>>>>>>>>> Regards,
-> >>>>>>>>>> Christian.
-> >>>>>>>>>>
-> >>>>>>>>>>> Regards,
-> >>>>>>>>>>> Qiang
-> >>>>>>>>>>>
-> >>>>>>>>>>>> What we should rather do is to fix amdgpu_vm_ready() to take=
- a look at
-> >>>>>>>>>>>> the flag instead of the linked list.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Regards,
-> >>>>>>>>>>>> Christian.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>>> Signed-off-by: Qiang Yu <qiang.yu@amd.com>
-> >>>>>>>>>>>>> ---
-> >>>>>>>>>>>>>         drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 85 ++++++=
-++++++++-----------
-> >>>>>>>>>>>>>         1 file changed, 47 insertions(+), 38 deletions(-)
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/driv=
-ers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> >>>>>>>>>>>>> index 5a32ee66d8c8..88a27911054f 100644
-> >>>>>>>>>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> >>>>>>>>>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> >>>>>>>>>>>>> @@ -1306,45 +1306,11 @@ uint64_t amdgpu_ttm_tt_pte_flags(st=
-ruct amdgpu_device *adev, struct ttm_tt *ttm,
-> >>>>>>>>>>>>>             return flags;
-> >>>>>>>>>>>>>         }
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> -/*
-> >>>>>>>>>>>>> - * amdgpu_ttm_bo_eviction_valuable - Check to see if we ca=
-n evict a buffer
-> >>>>>>>>>>>>> - * object.
-> >>>>>>>>>>>>> - *
-> >>>>>>>>>>>>> - * Return true if eviction is sensible. Called by ttm_mem_=
-evict_first() on
-> >>>>>>>>>>>>> - * behalf of ttm_bo_mem_force_space() which tries to evict=
- buffer objects until
-> >>>>>>>>>>>>> - * it can find space for a new object and by ttm_bo_force_=
-list_clean() which is
-> >>>>>>>>>>>>> - * used to clean out a memory space.
-> >>>>>>>>>>>>> - */
-> >>>>>>>>>>>>> -static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buf=
-fer_object *bo,
-> >>>>>>>>>>>>> -                                         const struct ttm_=
-place *place)
-> >>>>>>>>>>>>> +static bool amdgpu_ttm_mem_eviction_valuable(struct ttm_bu=
-ffer_object *bo,
-> >>>>>>>>>>>>> +                                          const struct ttm=
-_place *place)
-> >>>>>>>>>>>>>         {
-> >>>>>>>>>>>>>             unsigned long num_pages =3D bo->resource->num_p=
-ages;
-> >>>>>>>>>>>>>             struct amdgpu_res_cursor cursor;
-> >>>>>>>>>>>>> -     struct dma_resv_list *flist;
-> >>>>>>>>>>>>> -     struct dma_fence *f;
-> >>>>>>>>>>>>> -     int i;
-> >>>>>>>>>>>>> -
-> >>>>>>>>>>>>> -     /* Swapout? */
-> >>>>>>>>>>>>> -     if (bo->resource->mem_type =3D=3D TTM_PL_SYSTEM)
-> >>>>>>>>>>>>> -             return true;
-> >>>>>>>>>>>>> -
-> >>>>>>>>>>>>> -     if (bo->type =3D=3D ttm_bo_type_kernel &&
-> >>>>>>>>>>>>> -         !amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo)))
-> >>>>>>>>>>>>> -             return false;
-> >>>>>>>>>>>>> -
-> >>>>>>>>>>>>> -     /* If bo is a KFD BO, check if the bo belongs to the =
-current process.
-> >>>>>>>>>>>>> -      * If true, then return false as any KFD process need=
-s all its BOs to
-> >>>>>>>>>>>>> -      * be resident to run successfully
-> >>>>>>>>>>>>> -      */
-> >>>>>>>>>>>>> -     flist =3D dma_resv_shared_list(bo->base.resv);
-> >>>>>>>>>>>>> -     if (flist) {
-> >>>>>>>>>>>>> -             for (i =3D 0; i < flist->shared_count; ++i) {
-> >>>>>>>>>>>>> -                     f =3D rcu_dereference_protected(flist=
-->shared[i],
-> >>>>>>>>>>>>> -                             dma_resv_held(bo->base.resv))=
-;
-> >>>>>>>>>>>>> -                     if (amdkfd_fence_check_mm(f, current-=
->mm))
-> >>>>>>>>>>>>> -                             return false;
-> >>>>>>>>>>>>> -             }
-> >>>>>>>>>>>>> -     }
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>             switch (bo->resource->mem_type) {
-> >>>>>>>>>>>>>             case AMDGPU_PL_PREEMPT:
-> >>>>>>>>>>>>> @@ -1377,10 +1343,53 @@ static bool amdgpu_ttm_bo_eviction_=
-valuable(struct ttm_buffer_object *bo,
-> >>>>>>>>>>>>>                     return false;
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>             default:
-> >>>>>>>>>>>>> -             break;
-> >>>>>>>>>>>>> +             return ttm_bo_eviction_valuable(bo, place);
-> >>>>>>>>>>>>>             }
-> >>>>>>>>>>>>> +}
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> -     return ttm_bo_eviction_valuable(bo, place);
-> >>>>>>>>>>>>> +/*
-> >>>>>>>>>>>>> + * amdgpu_ttm_bo_eviction_valuable - Check to see if we ca=
-n evict a buffer
-> >>>>>>>>>>>>> + * object.
-> >>>>>>>>>>>>> + *
-> >>>>>>>>>>>>> + * Return true if eviction is sensible. Called by ttm_mem_=
-evict_first() on
-> >>>>>>>>>>>>> + * behalf of ttm_bo_mem_force_space() which tries to evict=
- buffer objects until
-> >>>>>>>>>>>>> + * it can find space for a new object and by ttm_bo_force_=
-list_clean() which is
-> >>>>>>>>>>>>> + * used to clean out a memory space.
-> >>>>>>>>>>>>> + */
-> >>>>>>>>>>>>> +static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buf=
-fer_object *bo,
-> >>>>>>>>>>>>> +                                         const struct ttm_=
-place *place)
-> >>>>>>>>>>>>> +{
-> >>>>>>>>>>>>> +     struct dma_resv_list *flist;
-> >>>>>>>>>>>>> +     struct dma_fence *f;
-> >>>>>>>>>>>>> +     int i;
-> >>>>>>>>>>>>> +
-> >>>>>>>>>>>>> +     /* Swapout? */
-> >>>>>>>>>>>>> +     if (bo->resource->mem_type =3D=3D TTM_PL_SYSTEM)
-> >>>>>>>>>>>>> +             return true;
-> >>>>>>>>>>>>> +
-> >>>>>>>>>>>>> +     /* If bo is a KFD BO, check if the bo belongs to the =
-current process.
-> >>>>>>>>>>>>> +      * If true, then return false as any KFD process need=
-s all its BOs to
-> >>>>>>>>>>>>> +      * be resident to run successfully
-> >>>>>>>>>>>>> +      */
-> >>>>>>>>>>>>> +     flist =3D dma_resv_shared_list(bo->base.resv);
-> >>>>>>>>>>>>> +     if (flist) {
-> >>>>>>>>>>>>> +             for (i =3D 0; i < flist->shared_count; ++i) {
-> >>>>>>>>>>>>> +                     f =3D rcu_dereference_protected(flist=
-->shared[i],
-> >>>>>>>>>>>>> +                             dma_resv_held(bo->base.resv))=
-;
-> >>>>>>>>>>>>> +                     if (amdkfd_fence_check_mm(f, current-=
->mm))
-> >>>>>>>>>>>>> +                             return false;
-> >>>>>>>>>>>>> +             }
-> >>>>>>>>>>>>> +     }
-> >>>>>>>>>>>>> +
-> >>>>>>>>>>>>> +     /* Check by different mem type. */
-> >>>>>>>>>>>>> +     if (!amdgpu_ttm_mem_eviction_valuable(bo, place))
-> >>>>>>>>>>>>> +             return false;
-> >>>>>>>>>>>>> +
-> >>>>>>>>>>>>> +     /* VM bo should be checked at last because it will ma=
-rk VM evicting. */
-> >>>>>>>>>>>>> +     if (bo->type =3D=3D ttm_bo_type_kernel)
-> >>>>>>>>>>>>> +             return amdgpu_vm_evictable(ttm_to_amdgpu_bo(b=
-o));
-> >>>>>>>>>>>>> +
-> >>>>>>>>>>>>> +     return true;
-> >>>>>>>>>>>>>         }
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>         static void amdgpu_ttm_vram_mm_access(struct amdgpu=
-_device *adev, loff_t pos,
->
+Changes in v8:
+- clk-sp7021.c: fix the comments form Stephen Boyd
+
+Changes in v7:
+- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
+- clk-sp7021.c: fix the comments form Stephen Boyd
+- irq-sp7021-intc.c: fix the comments from Marc
+
+Changes in v6:
+- reset-sunplus.c: fix the comments from Philipp
+- irq-sp7021-intc.c: fix the comments from Marc
+- mach-sunplus: fix the comments from Arnd
+
+Changes in v5:
+- reset-sunplus.c: fix strict checks
+- clk/Kconfig: fix spell
+- clk-sp7021.c: using bitfield ops, fix strict checks
+- irqchip/Kconfig: fix spell
+- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
+- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
+- mach-sunplus/Kconfig: fix typo
+- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
+
+Changes in v4:
+- mach-sunplus: add initial support for SP7021
+- sp7021_defconfig: add generic SP7021 defconfig
+- reset-sunplus: remove Q645 support
+- reset-sunplus.c: refine code based on Philipp's review
+- clk-sp7021: clock defines add prefix, more clean up
+
+Changes in v3:
+- sp7021-intc: remove primary controller mode due to P-chip running Linux
+  not supported any more.
+- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
+- sunplus,sp7021-intc.yaml: update descriptions for above changes
+- irq-sp7021-intc.c: more cleanup based on Marc's review
+- all driver's Kconfig removed default, it's selected by platform config
+
+Changes in v2:
+- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
+- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
+- sunplus,sp7021-intc.yaml: fix example.dt too long error
+- irq-sp7021-intc.c: major rewrite
+- all files with dual license
+
+Qin Jian (10):
+  dt-bindings: vendor-prefixes: Add Sunplus
+  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+  dt-bindings: reset: Add bindings for SP7021 reset driver
+  reset: Add Sunplus SP7021 reset driver
+  dt-bindings: clock: Add bindings for SP7021 clock driver
+  clk: Add Sunplus SP7021 clock driver
+  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
+    controller
+  irqchip: Add Sunplus SP7021 interrupt controller driver
+  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
+
+ .../bindings/arm/sunplus,sp7021.yaml          |  27 +
+ .../bindings/clock/sunplus,sp7021-clkc.yaml   |  52 ++
+ .../sunplus,sp7021-intc.yaml                  |  62 ++
+ .../bindings/reset/sunplus,reset.yaml         |  38 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |  17 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/sp7021_defconfig             |  61 ++
+ arch/arm/mach-sunplus/Kconfig                 |  26 +
+ arch/arm/mach-sunplus/Makefile                |   9 +
+ arch/arm/mach-sunplus/sp7021.c                |  16 +
+ drivers/clk/Kconfig                           |  10 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-sp7021.c                      | 741 ++++++++++++++++++
+ drivers/irqchip/Kconfig                       |   9 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-sp7021-intc.c             | 288 +++++++
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-sunplus.c                 | 130 +++
+ include/dt-bindings/clock/sp-sp7021.h         | 112 +++
+ include/dt-bindings/reset/sp-sp7021.h         |  97 +++
+ 24 files changed, 1713 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 arch/arm/configs/sp7021_defconfig
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
+ create mode 100644 drivers/clk/clk-sp7021.c
+ create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+ create mode 100644 drivers/reset/reset-sunplus.c
+ create mode 100644 include/dt-bindings/clock/sp-sp7021.h
+ create mode 100644 include/dt-bindings/reset/sp-sp7021.h
+
+-- 
+2.33.1
+

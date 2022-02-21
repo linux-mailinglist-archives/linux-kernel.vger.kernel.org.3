@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1074BE130
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9068E4BDC0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350997AbiBUJgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:36:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48084 "EHLO
+        id S1345008AbiBUIvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:51:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349119AbiBUJ1e (ORCPT
+        with ESMTP id S1344876AbiBUIve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6697413F42;
-        Mon, 21 Feb 2022 01:12:21 -0800 (PST)
+        Mon, 21 Feb 2022 03:51:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21DC2BCB;
+        Mon, 21 Feb 2022 00:51:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D1877CE0E7D;
-        Mon, 21 Feb 2022 09:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B70EFC340E9;
-        Mon, 21 Feb 2022 09:12:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FD4C61132;
+        Mon, 21 Feb 2022 08:51:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738DEC340E9;
+        Mon, 21 Feb 2022 08:51:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434738;
-        bh=XHeZTLhOEsGIZMErWZ33p31NioQ7wMoUH7X7H5dXHEE=;
+        s=korg; t=1645433471;
+        bh=/hVOJlsFWLKRbsZ0LCXQz1BHsIWJgYUIFS3HbLPfFkY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VPYBUEYV+jRPzcW+djSfzEA0wmHPuXhy+jVqSbrhG7FLondA/x7xqdkhCIxYADgpI
-         jz0rJMwgOBLVtuKQEx2syqtrtbizPPrMfcuC/9X97UnGEC+AmGY2YPNL8aYMJFr6ZE
-         QoywXgoC1o12GhBw0Em+V2xCcYriVVgDLXG2zjVo=
+        b=ExED1Hb3Ma2O8c8wBlaHVAWABDKAIQdkVll3OF21Emk4XZvHUC3rr8ZTl/GSLul7R
+         p+NyuYTu9u7Tgcx+FOqjdtcCjMpwq8NAB6GxT/VDYmzAcmP1Ut7ANaM+BbKP9SNK+I
+         14Oh/A5ws1v3eavRkQ4Ob0MYIt/xhJmIjo1NnOXA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Huang <diwang90@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 112/196] ALSA: hda/realtek: Add quirk for Legion Y9000X 2019
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 11/33] ax25: improve the incomplete fix to avoid UAF and NPD bugs
 Date:   Mon, 21 Feb 2022 09:49:04 +0100
-Message-Id: <20220221084934.688894156@linuxfoundation.org>
+Message-Id: <20220221084908.924052016@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+References: <20220221084908.568970525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Huang <diwang90@gmail.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit c07f2c7b45413a9e50ba78630fda04ecfa17b4f2 upstream.
+[ Upstream commit 4e0f718daf97d47cf7dec122da1be970f145c809 ]
 
-Legion Y9000X 2019 has the same speaker with Y9000X 2020,
-but with a different quirk address. Add one quirk entry
-to make the speaker work on Y9000X 2019 too.
+The previous commit 1ade48d0c27d ("ax25: NPD bug when detaching
+AX25 device") introduce lock_sock() into ax25_kill_by_device to
+prevent NPD bug. But the concurrency NPD or UAF bug will occur,
+when lock_sock() or release_sock() dereferences the ax25_cb->sock.
 
-Signed-off-by: Yu Huang <diwang90@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220212160835.165065-1-diwang90@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The NULL pointer dereference bug can be shown as below:
+
+ax25_kill_by_device()        | ax25_release()
+                             |   ax25_destroy_socket()
+                             |     ax25_cb_del()
+  ...                        |     ...
+                             |     ax25->sk=NULL;
+  lock_sock(s->sk); //(1)    |
+  s->ax25_dev = NULL;        |     ...
+  release_sock(s->sk); //(2) |
+  ...                        |
+
+The root cause is that the sock is set to null before dereference
+site (1) or (2). Therefore, this patch extracts the ax25_cb->sock
+in advance, and uses ax25_list_lock to protect it, which can synchronize
+with ax25_cb_del() and ensure the value of sock is not null before
+dereference sites.
+
+The concurrency UAF bug can be shown as below:
+
+ax25_kill_by_device()        | ax25_release()
+                             |   ax25_destroy_socket()
+  ...                        |   ...
+                             |   sock_put(sk); //FREE
+  lock_sock(s->sk); //(1)    |
+  s->ax25_dev = NULL;        |   ...
+  release_sock(s->sk); //(2) |
+  ...                        |
+
+The root cause is that the sock is released before dereference
+site (1) or (2). Therefore, this patch uses sock_hold() to increase
+the refcount of sock and uses ax25_list_lock to protect it, which
+can synchronize with ax25_cb_del() in ax25_destroy_socket() and
+ensure the sock wil not be released before dereference sites.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/ax25/af_ax25.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9013,6 +9013,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x3824, "Legion Y9000X 2020", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
- 	SND_PCI_QUIRK(0x17aa, 0x3834, "Lenovo IdeaPad Slim 9i 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
-+	SND_PCI_QUIRK(0x17aa, 0x383d, "Legion Y9000X 2019", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3843, "Yoga 9i", ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP),
- 	SND_PCI_QUIRK(0x17aa, 0x384a, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3852, "Lenovo Yoga 7 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index f4c8567e91b38..c4ef1be59cb19 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -80,6 +80,7 @@ static void ax25_kill_by_device(struct net_device *dev)
+ {
+ 	ax25_dev *ax25_dev;
+ 	ax25_cb *s;
++	struct sock *sk;
+ 
+ 	if ((ax25_dev = ax25_dev_ax25dev(dev)) == NULL)
+ 		return;
+@@ -88,13 +89,15 @@ static void ax25_kill_by_device(struct net_device *dev)
+ again:
+ 	ax25_for_each(s, &ax25_list) {
+ 		if (s->ax25_dev == ax25_dev) {
++			sk = s->sk;
++			sock_hold(sk);
+ 			spin_unlock_bh(&ax25_list_lock);
+-			lock_sock(s->sk);
++			lock_sock(sk);
+ 			s->ax25_dev = NULL;
+-			release_sock(s->sk);
++			release_sock(sk);
+ 			ax25_disconnect(s, ENETUNREACH);
+ 			spin_lock_bh(&ax25_list_lock);
+-
++			sock_put(sk);
+ 			/* The entry could have been deleted from the
+ 			 * list meanwhile and thus the next pointer is
+ 			 * no longer valid.  Play it safe and restart
+-- 
+2.34.1
+
 
 

@@ -2,147 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FFD4BEBE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C72754BEBEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233057AbiBUUgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 15:36:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52332 "EHLO
+        id S233768AbiBUUge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 15:36:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbiBUUgI (ORCPT
+        with ESMTP id S233425AbiBUUgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:36:08 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90A8237CD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:35:44 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id o24so29072383wro.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:35:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XlzX9gDy4XjD1q8Bv6zI2a9b8+oDi1jGLfGPO3lK4QA=;
-        b=ErgE3hl6pB2qeUes/BQtqtdPE+0OgQ2ciDaS+K+37IX27VhVWyVl5wQ+sNp2uFtdSI
-         VEsmonrdZ4WskwvCNc5yHAQeBgJbZAiISxYS1Ol272lQpg7zGwhcsG0HuQfBEneMkJet
-         JMpdP0lPmjSPszfRjtGf6011po1WcyvCyNu0s=
+        Mon, 21 Feb 2022 15:36:32 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A345237D8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:36:08 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5F21740041
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 20:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645475764;
+        bh=U1X8yA1Izrtu66/dEyXiQXCP/Yonm2UMSc/H4P/UzfQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=RgffgGfANB2Q5Y9AqrynMK7Sn7kFtHYKCLzl1PusPvRlWXm5M/DG4RYNW1RnaRk7R
+         m4nVh8UBdL+UzfvebqX/H18o+BdhbuqPwvM29/2857Q67tt+0zTggf1AdwR/0YUutT
+         e+RUCh2w1J8VrdP6hzTyqkg2ChY9SRwqzcvXlUSOnlds9x6XWmkfIhZjcW0NngijVi
+         5WWtEhtwptNwD80oxQUEk1jgvTVSha7KJ7PSXcg6vZ5tlFxqiPag4QCNZuD4PUTIES
+         BHsvmbpYS4X0rqKE6BOrdWxIB99I4Od5vMH4yUcQ+K9KHiRHNzGi3mmL17A7TKXjNy
+         a1HGb9QABzN+A==
+Received: by mail-ed1-f71.google.com with SMTP id j10-20020a05640211ca00b004090fd8a936so10726688edw.23
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:36:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=XlzX9gDy4XjD1q8Bv6zI2a9b8+oDi1jGLfGPO3lK4QA=;
-        b=JvFx6vvfqOLTWOtJOgpa2Etgmq8jagru4XXOCV0CoyxOMxMz996FiCsHupotWIVAPD
-         /Hk8R9h6+ez0tLbm+PkhyeZFRY05qNiBGVYEGSXSkZk5EMQNrUoSOVPP2imwtVYszbo2
-         wwdWtld6LO8hxWJ/5I7pZXt9EHBtBrjlhzX3Z72iR/Bdt7qm4MEKpMPBVb91H2jFGZB6
-         4G/E3Fa/vsr4pLYyXR+25/G3xCcd1our0S5rx9cGt6DpJgzlW6xg+UwxHoSql6/qimZC
-         BJXnnP+UTqyJOqU0vMpEMnDtuyNxT+NDeGeJVlvLBHZpeyehsJ2XIW+CIyhmnj7n2p/3
-         fmIw==
-X-Gm-Message-State: AOAM532qw8aaztL3UQdhHq/LngEpW8MhXfvkUkai/PLNTxpwPzcPppF/
-        GrzDjs6fGQGpYnnS9rVZT9AdUw==
-X-Google-Smtp-Source: ABdhPJzvvmtJ+9B1GaTk+STcgmWeNruO76Gbv8vjsh/To+Ojd0Y/wS1prszpFloSPh7yaI8DmfoQIA==
-X-Received: by 2002:a05:6000:15cb:b0:1ea:7db2:f5bb with SMTP id y11-20020a05600015cb00b001ea7db2f5bbmr1382967wry.709.1645475743321;
-        Mon, 21 Feb 2022 12:35:43 -0800 (PST)
-Received: from capella.. (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id z24-20020a1c4c18000000b0037bd7f40771sm340380wmf.30.2022.02.21.12.35.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 12:35:42 -0800 (PST)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net] net: dsa: fix panic when removing unoffloaded port from bridge
-Date:   Mon, 21 Feb 2022 21:35:38 +0100
-Message-Id: <20220221203539.310690-1-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.35.1
+        bh=U1X8yA1Izrtu66/dEyXiQXCP/Yonm2UMSc/H4P/UzfQ=;
+        b=L8ZcptFOSe5FN+6myF1in57D9QqQbu+V06woJAwtPNRK9kriG5bO/ysJgTri/Q9E4a
+         /o4mc/42MLaHKHnuKV7/GiIWKvzjzQ9ILlYUUn83/Qeei73wRihsxqjIzw5zXda4b6e0
+         koQjDVWy/d/ghkr48qXW9vHN7egmO55ULWmoEeCEkGUv0eI05ICHi/tHTDOQ12SAtdN0
+         nlkTIKN81qEGvZRYyzJrM1jHZPHLZ+jrj7rls2dg4YIWCALcgpeC0auMCKqpNKUD6GSZ
+         e4J1K0zs3edST+ZlYN51nsDpPu6gNEmSGGk/Oz1PYy/czSiRv+kf2A9AmgDwkdwfL455
+         jf+g==
+X-Gm-Message-State: AOAM530YEcsyHubQ9qGDy3elMolFwtBtQeP0oWsu6NmhiiyEhB/Bx+V2
+        dDAcptDULvWJd+f2rJTdpEUrZfpFNAB189e2VpXve/4XVLgAQwxOfybUeU5M7U+OmLmxSgf71Q1
+        Ql4xRtgJGk10EDir6gD5wTNCMwW7fArYqDgC0H06C8g==
+X-Received: by 2002:a17:907:2954:b0:6cf:7634:c6b7 with SMTP id et20-20020a170907295400b006cf7634c6b7mr16672981ejc.683.1645475764049;
+        Mon, 21 Feb 2022 12:36:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz7JyJzqH58SpigIPgDM+kaxx8HSCtkrYGrEFZflvAXrNDd7Y3eppYCEgvt5S9ho/TzPnIXtQ==
+X-Received: by 2002:a17:907:2954:b0:6cf:7634:c6b7 with SMTP id et20-20020a170907295400b006cf7634c6b7mr16672965ejc.683.1645475763784;
+        Mon, 21 Feb 2022 12:36:03 -0800 (PST)
+Received: from [192.168.0.122] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id ka26sm992729ejc.170.2022.02.21.12.36.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 12:36:03 -0800 (PST)
+Message-ID: <eb9d0fa9-78c7-30d9-b9d3-5ab9490cf38d@canonical.com>
+Date:   Mon, 21 Feb 2022 21:36:02 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 1/1] arm64: dts: exynos: Add initial device tree
+ support for Exynos7885 SoC
+Content-Language: en-US
+To:     David Virag <virag.david003@gmail.com>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        phone-devel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220221194958.117361-1-virag.david003@gmail.com>
+ <20220221194958.117361-2-virag.david003@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220221194958.117361-2-virag.david003@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 21/02/2022 20:49, David Virag wrote:
+> Add initial Exynos7885 device tree nodes with dts for the Samsung Galaxy
+> A8 (2018), a.k.a. "jackpotlte", with model number "SM-A530F".
+> Currently this includes some clock support, UART support, and I2C nodes.
+> 
+> Signed-off-by: David Virag <virag.david003@gmail.com>
 
-If a bridged port is not offloaded to the hardware - either because the
-underlying driver does not implement the port_bridge_{join,leave} ops,
-or because the operation failed - then its dp->bridge pointer will be
-NULL when dsa_port_bridge_leave() is called. Avoid dereferncing NULL.
+I guess this goes with (from v5):
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-This fixes the following splat when removing a port from a bridge:
-
- Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000000
- Internal error: Oops: 96000004 [#1] PREEMPT_RT SMP
- CPU: 3 PID: 1119 Comm: brctl Tainted: G           O      5.17.0-rc4-rt4 #1
- Call trace:
-  dsa_port_bridge_leave+0x8c/0x1e4
-  dsa_slave_changeupper+0x40/0x170
-  dsa_slave_netdevice_event+0x494/0x4d4
-  notifier_call_chain+0x80/0xe0
-  raw_notifier_call_chain+0x1c/0x24
-  call_netdevice_notifiers_info+0x5c/0xac
-  __netdev_upper_dev_unlink+0xa4/0x200
-  netdev_upper_dev_unlink+0x38/0x60
-  del_nbp+0x1b0/0x300
-  br_del_if+0x38/0x114
-  add_del_if+0x60/0xa0
-  br_ioctl_stub+0x128/0x2dc
-  br_ioctl_call+0x68/0xb0
-  dev_ifsioc+0x390/0x554
-  dev_ioctl+0x128/0x400
-  sock_do_ioctl+0xb4/0xf4
-  sock_ioctl+0x12c/0x4e0
-  __arm64_sys_ioctl+0xa8/0xf0
-  invoke_syscall+0x4c/0x110
-  el0_svc_common.constprop.0+0x48/0xf0
-  do_el0_svc+0x28/0x84
-  el0_svc+0x1c/0x50
-  el0t_64_sync_handler+0xa8/0xb0
-  el0t_64_sync+0x17c/0x180
- Code: f9402f00 f0002261 f9401302 913cc021 (a9401404)
- ---[ end trace 0000000000000000 ]---
-
-Fixes: d3eed0e57d5d ("net: dsa: keep the bridge_dev and bridge_num as part of the same structure")
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
-v1 -> v2:
-- replace trailing comma with semicolon *facepalm*
----
- net/dsa/port.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/net/dsa/port.c b/net/dsa/port.c
-index eef4a98f2628..1a40c52f5a42 100644
---- a/net/dsa/port.c
-+++ b/net/dsa/port.c
-@@ -395,10 +395,17 @@ void dsa_port_bridge_leave(struct dsa_port *dp, struct net_device *br)
- 		.tree_index = dp->ds->dst->index,
- 		.sw_index = dp->ds->index,
- 		.port = dp->index,
--		.bridge = *dp->bridge,
- 	};
- 	int err;
- 
-+	/* If the port could not be offloaded to begin with, then
-+	 * there is nothing to do.
-+	 */
-+	if (!dp->bridge)
-+		return;
-+
-+	info.bridge = *dp->bridge;
-+
- 	/* Here the port is already unbridged. Reflect the current configuration
- 	 * so that drivers can program their chips accordingly.
- 	 */
--- 
-2.35.1
-
+Best regards,
+Krzysztof

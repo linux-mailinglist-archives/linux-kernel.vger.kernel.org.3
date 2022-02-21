@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794274BE024
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF6B4BE848
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347287AbiBUJFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:05:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32958 "EHLO
+        id S1350925AbiBUJlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:41:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347485AbiBUJB0 (ORCPT
+        with ESMTP id S1350644AbiBUJf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD66360C0;
-        Mon, 21 Feb 2022 00:56:35 -0800 (PST)
+        Mon, 21 Feb 2022 04:35:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2AE2B1A5;
+        Mon, 21 Feb 2022 01:14:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F466B80EAF;
-        Mon, 21 Feb 2022 08:56:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556B6C340F1;
-        Mon, 21 Feb 2022 08:56:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AA0F608C1;
+        Mon, 21 Feb 2022 09:13:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C20C340E9;
+        Mon, 21 Feb 2022 09:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433791;
-        bh=kFWU/qVNY7RS+nn/qS0y7zGIjLNV/ntVRPEsieqg5lc=;
+        s=korg; t=1645434828;
+        bh=XmAhL0NxdzEjNI/nq6TPD1t4LhAtneSZm+R8udFq9Fo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qaBowNK4VPbo99PawXR3WkkRaHyu+zU/sWMr/gsGhDfPveb5GsBBAE1zIyL3cHMx3
-         bBAcbdKlcNYB1t+IdtDMEgJv8+z0A1x5AaLCpeltYl1G245Z1XcIyepMXM41ugsg6N
-         umBdXUo/u0xR4qUgqXAamYOwAYeH5PWk2n2f3Kvc=
+        b=GUt95btyn1rc/gcEW/buvGDCjh2c44zJJk592yHrmZIhMs9J8vip5delA0CxRD54q
+         C9c9KBzmpGzo/ugeNAnyfDKoeT3xMEmV4lXnprJwkoSs8yI4geMkQFqCB1UAkDTvJD
+         pwCM3LPoOlxpFHMgP1urQhzdFcJOF5PT/gXqUx6Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.19 43/58] dmaengine: sh: rcar-dmac: Check for error num after setting mask
+        stable@vger.kernel.org, Like Xu <likexu@tencent.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 144/196] KVM: x86/pmu: Refactoring find_arch_event() to pmc_perf_hw_id()
 Date:   Mon, 21 Feb 2022 09:49:36 +0100
-Message-Id: <20220221084913.271805148@linuxfoundation.org>
+Message-Id: <20220221084935.741289415@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Like Xu <likexu@tencent.com>
 
-commit 2d21543efe332cd8c8f212fb7d365bc8b0690bfa upstream.
+[ Upstream commit 7c174f305cbee6bdba5018aae02b84369e7ab995 ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
+The find_arch_event() returns a "unsigned int" value,
+which is used by the pmc_reprogram_counter() to
+program a PERF_TYPE_HARDWARE type perf_event.
 
-Fixes: dc312349e875 ("dmaengine: rcar-dmac: Widen DMA mask to 40 bits")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220106030939.2644320-1-jiasheng@iscas.ac.cn
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The returned value is actually the kernel defined generic
+perf_hw_id, let's rename it to pmc_perf_hw_id() with simpler
+incoming parameters for better self-explanation.
+
+Signed-off-by: Like Xu <likexu@tencent.com>
+Message-Id: <20211130074221.93635-3-likexu@tencent.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/sh/rcar-dmac.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/kvm/pmu.c           | 8 +-------
+ arch/x86/kvm/pmu.h           | 3 +--
+ arch/x86/kvm/svm/pmu.c       | 8 ++++----
+ arch/x86/kvm/vmx/pmu_intel.c | 9 +++++----
+ 4 files changed, 11 insertions(+), 17 deletions(-)
 
---- a/drivers/dma/sh/rcar-dmac.c
-+++ b/drivers/dma/sh/rcar-dmac.c
-@@ -1817,7 +1817,9 @@ static int rcar_dmac_probe(struct platfo
- 	platform_set_drvdata(pdev, dmac);
- 	dmac->dev->dma_parms = &dmac->parms;
- 	dma_set_max_seg_size(dmac->dev, RCAR_DMATCR_MASK);
--	dma_set_mask_and_coherent(dmac->dev, DMA_BIT_MASK(40));
-+	ret = dma_set_mask_and_coherent(dmac->dev, DMA_BIT_MASK(40));
-+	if (ret)
-+		return ret;
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 0772bad9165c5..eec614de9af30 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -174,7 +174,6 @@ static bool pmc_resume_counter(struct kvm_pmc *pmc)
+ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ {
+ 	unsigned config, type = PERF_TYPE_RAW;
+-	u8 event_select, unit_mask;
+ 	struct kvm *kvm = pmc->vcpu->kvm;
+ 	struct kvm_pmu_event_filter *filter;
+ 	int i;
+@@ -206,17 +205,12 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 	if (!allow_event)
+ 		return;
  
- 	ret = rcar_dmac_parse_of(&pdev->dev, dmac);
- 	if (ret < 0)
+-	event_select = eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
+-	unit_mask = (eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
+-
+ 	if (!(eventsel & (ARCH_PERFMON_EVENTSEL_EDGE |
+ 			  ARCH_PERFMON_EVENTSEL_INV |
+ 			  ARCH_PERFMON_EVENTSEL_CMASK |
+ 			  HSW_IN_TX |
+ 			  HSW_IN_TX_CHECKPOINTED))) {
+-		config = kvm_x86_ops.pmu_ops->find_arch_event(pmc_to_pmu(pmc),
+-						      event_select,
+-						      unit_mask);
++		config = kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc);
+ 		if (config != PERF_COUNT_HW_MAX)
+ 			type = PERF_TYPE_HARDWARE;
+ 	}
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 0e4f2b1fa9fbd..a06d95165ac7c 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -24,8 +24,7 @@ struct kvm_event_hw_type_mapping {
+ };
+ 
+ struct kvm_pmu_ops {
+-	unsigned (*find_arch_event)(struct kvm_pmu *pmu, u8 event_select,
+-				    u8 unit_mask);
++	unsigned int (*pmc_perf_hw_id)(struct kvm_pmc *pmc);
+ 	unsigned (*find_fixed_event)(int idx);
+ 	bool (*pmc_is_enabled)(struct kvm_pmc *pmc);
+ 	struct kvm_pmc *(*pmc_idx_to_pmc)(struct kvm_pmu *pmu, int pmc_idx);
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index e152241d1d709..06f8034f62e4f 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -134,10 +134,10 @@ static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
+ 	return &pmu->gp_counters[msr_to_index(msr)];
+ }
+ 
+-static unsigned amd_find_arch_event(struct kvm_pmu *pmu,
+-				    u8 event_select,
+-				    u8 unit_mask)
++static unsigned int amd_pmc_perf_hw_id(struct kvm_pmc *pmc)
+ {
++	u8 event_select = pmc->eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
++	u8 unit_mask = (pmc->eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(amd_event_mapping); i++)
+@@ -320,7 +320,7 @@ static void amd_pmu_reset(struct kvm_vcpu *vcpu)
+ }
+ 
+ struct kvm_pmu_ops amd_pmu_ops = {
+-	.find_arch_event = amd_find_arch_event,
++	.pmc_perf_hw_id = amd_pmc_perf_hw_id,
+ 	.find_fixed_event = amd_find_fixed_event,
+ 	.pmc_is_enabled = amd_pmc_is_enabled,
+ 	.pmc_idx_to_pmc = amd_pmc_idx_to_pmc,
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 10cc4f65c4efd..6427d95de01cf 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -68,10 +68,11 @@ static void global_ctrl_changed(struct kvm_pmu *pmu, u64 data)
+ 		reprogram_counter(pmu, bit);
+ }
+ 
+-static unsigned intel_find_arch_event(struct kvm_pmu *pmu,
+-				      u8 event_select,
+-				      u8 unit_mask)
++static unsigned int intel_pmc_perf_hw_id(struct kvm_pmc *pmc)
+ {
++	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
++	u8 event_select = pmc->eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
++	u8 unit_mask = (pmc->eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(intel_arch_events); i++)
+@@ -706,7 +707,7 @@ static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
+ }
+ 
+ struct kvm_pmu_ops intel_pmu_ops = {
+-	.find_arch_event = intel_find_arch_event,
++	.pmc_perf_hw_id = intel_pmc_perf_hw_id,
+ 	.find_fixed_event = intel_find_fixed_event,
+ 	.pmc_is_enabled = intel_pmc_is_enabled,
+ 	.pmc_idx_to_pmc = intel_pmc_idx_to_pmc,
+-- 
+2.34.1
+
 
 

@@ -2,101 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154DC4BDD5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD3C4BE990
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346212AbiBULh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:37:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57362 "EHLO
+        id S1356520AbiBULiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:38:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiBULh4 (ORCPT
+        with ESMTP id S231761AbiBULiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:37:56 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09651AD98
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:37:32 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id e8so6243374ljj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:37:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7bcBxxLvB8a1gVwhcGni5GvVkzOKi4tvu2bJMKdqE90=;
-        b=Q2SAOB0ZREJE0qo/SdMw4x0BGmiyIo4ZMbg7gVev3Jzn4Y+n9TNBaITUIGJzNzXosD
-         RoGnQkXHAIqji9mrejxuCSNksbV0OZuNlTHXPnn37NpXBHLPp9qiRktZt113kdbS49Z/
-         Aim0ieQHUnDmK/sCuOhHgKLkoL++tcbcsPobDEX8oUTe6LC1afmn13dzcSru+iapnk6h
-         9pYaud0gig8KmV+cLguuFvL8mAsdQejnrtWZkBX2gRBXuOYU3DF2JX1TNa/ujrXeCKRL
-         UImL6FybvrrFdeWztnwkthtQyqaaLOiD4H1zxk43gZo4mJ7VykDLTxo5LCs2EoMDvQV4
-         aZYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7bcBxxLvB8a1gVwhcGni5GvVkzOKi4tvu2bJMKdqE90=;
-        b=dtT/kQf1se1BLvUuDWXFk4J8O0em/R+2O0R01+s9c47FuH09oG7COFj+FS9wCGT4vS
-         VfHEZHuiGpjCGSYbrCBCQfu/2gclI2buJTDWknj0BwYzV/6uCiIjHqcF6+2AeKpDq0SA
-         NvzLCV1gOl2e8EEi5Yvicj99dveE4dwjhBnqCj+1DLMDdqhP9TL0K+M9Oz9tK+QrdRT7
-         eWQgaCgj5R3G9YUGEt+Ih6g5JMC0WylS1Or5kCUehopLbqXfFTgtfDsRKFTa1I+VFCSe
-         yBY7pqFmccsqCI5wNVrc6itc1MKHGvaUHGPk4Uio2WQICjjuSZVY2sixhZO3hpOsCuDC
-         DBsw==
-X-Gm-Message-State: AOAM530/I1gVk1mxHjZx0TUeXz+Ms10PZ0grD6+DDvX9LNfmDLXQ24zx
-        e23gyDMo6Tk84sFXuHQzo7Q=
-X-Google-Smtp-Source: ABdhPJx6QMCTVPlgNuDZunl1YOP2ccaC02UF2+Ahd7ddv93HdGlWRZ5YeCmdJr2YU6mRkRUXImcm2g==
-X-Received: by 2002:a2e:9c94:0:b0:244:4ec3:3313 with SMTP id x20-20020a2e9c94000000b002444ec33313mr14180060lji.281.1645443451135;
-        Mon, 21 Feb 2022 03:37:31 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id a22sm1092533lfr.24.2022.02.21.03.37.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 03:37:30 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 79E005A0020; Mon, 21 Feb 2022 14:37:29 +0300 (MSK)
-Date:   Mon, 21 Feb 2022 14:37:29 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 13/32] x86/tdx: Detect TDX at early kernel
- decompression time
-Message-ID: <YhN5edJQ+LkVc0us@grain>
-References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
- <20220218161718.67148-14-kirill.shutemov@linux.intel.com>
+        Mon, 21 Feb 2022 06:38:18 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D7E1AD98
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:37:52 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K2KtV4HH1zbbdV;
+        Mon, 21 Feb 2022 19:33:22 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 21 Feb 2022 19:37:50 +0800
+Subject: Re: [PATCH 6/9] mm/z3fold: move decrement of pool->pages_nr into
+ __release_z3fold_page()
+To:     David Laight <David.Laight@ACULAB.COM>
+CC:     "vitaly.wool@konsulko.com" <vitaly.wool@konsulko.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+References: <20220219092533.12596-1-linmiaohe@huawei.com>
+ <20220219092533.12596-7-linmiaohe@huawei.com>
+ <dba43259e1fe4e36a0bdbe97efaaca2f@AcuMS.aculab.com>
+ <baeab92c-d966-2dc2-d952-c7f3faf2a229@huawei.com>
+ <03647389a32045f38ec18b090548a26d@AcuMS.aculab.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <45b4d937-af08-536e-1a54-6fa367fc4753@huawei.com>
+Date:   Mon, 21 Feb 2022 19:37:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218161718.67148-14-kirill.shutemov@linux.intel.com>
-User-Agent: Mutt/2.1.5 (2021-12-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <03647389a32045f38ec18b090548a26d@AcuMS.aculab.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 07:16:59PM +0300, Kirill A. Shutemov wrote:
-...
+On 2022/2/21 13:17, David Laight wrote:
+> From: Miaohe Lin <linmiaohe@huawei.com>
+>> Sent: 21 February 2022 02:53
+>>
+>> On 2022/2/20 0:33, David Laight wrote:
+>>> From: Miaohe Lin
+>>>> Sent: 19 February 2022 09:26
+>>>>
+>>>> The z3fold will always do atomic64_dec(&pool->pages_nr) when the
+>>>> __release_z3fold_page() is called. Thus we can move decrement of
+>>>> pool->pages_nr into __release_z3fold_page() to simplify the code.
+>>>> Also we can reduce the size of z3fold.o ~1k.
+>>>> Without this patch:
+>>>>    text	   data	    bss	    dec	    hex	filename
+>>>>   15444	   1376	      8	  16828	   41bc	mm/z3fold.o
+>>>> With this patch:
+>>>>    text	   data	    bss	    dec	    hex	filename
+>>>>   15044	   1248	      8	  16300	   3fac	mm/z3fold.o
+>>>
+>>> I can't see anything obvious in this patch that would reduce the size much.
+>>> OTOH there are some large functions that are pointlessly marked 'inline'.
+>>> Maybe the compiler made a better choice?
+>>
+>> I think so too.
+>>
+>>> Although it isn't al all obvious why the 'data' size changes.
+>>
+>> I checked the header of z3fold.o. The size of .data is unchanged while
+>> align is changed from 00003818 to 00003688. Maybe this is the reason
+>> .data size changes.
 > 
-> +
-> +void early_tdx_detect(void)
-> +{
-> +	u32 eax, sig[3];
-> +
-> +	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
-> +
-> +	if (memcmp(TDX_IDENT, sig, 12))
-> +		return;
+> You are misreading the double line header.
+> If is Offset that is changing, Align in 8 (as expected).
+> 
 
-Maybe worth to guard ourself, like
+So embarrassing... I should have taken a coffee first. :(
 
-	BUILD_BUG_ON(sizeof(sig) != (sizeof(TDX_IDENT)-1));
-	if (memcmp(TDX_IDENT, sig, sizeof(sig))
-		return;
+> It will be another section that gets added to the 'data' size
+> reported by 'size'.
+
+I think you're right. It seems __jump_table changed from 3e0 -> 360 (0x80)
+which is the same value for data size (from 1376 -> 1248). __jump_table section
+might gets added to the .data section.
+
+with this patch:
+[11] __jump_table      PROGBITS         0000000000000000  00003870
+     0000000000000360  0000000000000000  WA       0     0     8
+
+without this patch:
+[11] __jump_table      PROGBITS         0000000000000000  00003a00
+     00000000000003e0  0000000000000000  WA       0     0     8
+> 
+>>
+>> Section Headers:
+>>   [Nr] Name              Type             Address           Offset
+>>        Size              EntSize          Flags  Link  Info  Align
+>>
+>> with this patch:
+>> [ 3] .data             PROGBITS         0000000000000000  00003688
+>>        00000000000000c0  0000000000000000  WA       0     0     8
+>>
+>> without this patch:
+>> [ 3] .data             PROGBITS         0000000000000000  00003818
+>>        00000000000000c0  0000000000000000  WA       0     0     8
+>>
+>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  mm/z3fold.c | 41 ++++++++++++-----------------------------
+>>>>  1 file changed, 12 insertions(+), 29 deletions(-)
+>>>>
+>>>> diff --git a/mm/z3fold.c b/mm/z3fold.c
+>>>> index adc0b3fa4906..18a697f6fe32 100644
+>>>> --- a/mm/z3fold.c
+>>>> +++ b/mm/z3fold.c
+>>>> @@ -520,6 +520,8 @@ static void __release_z3fold_page(struct z3fold_header *zhdr, bool locked)
+>>>>  	list_add(&zhdr->buddy, &pool->stale);
+>>>>  	queue_work(pool->release_wq, &pool->work);
+>>>>  	spin_unlock(&pool->stale_lock);
+>>>> +
+>>>> +	atomic64_dec(&pool->pages_nr);
+>>>
+>>> Looks like you can move the decrement inside the lock.
+>>> If you can do the same for the increment you can avoid the
+>>> expensive locked bus cycle.
+>>>
+>>
+>> atomic64_inc(&pool->pages_nr); is only done when init a new or reused z3fold_page.
+>> There is no lock around. If we hold pool->lock there, this potential gain might be
+>> nullified. Or am I miss something ?
+> 
+> Atomic operations aren't magic.
+> Atomic operations are (at best) one slow locked bus cycle.
+> Acquiring a lock is the same.
+> Releasing a lock might be cheaper, but is probably a locked bus cycle.
+> 
+> So if you use state_lock to protect pages_nr then you lose an atomic
+> operation for the decrement and gain one (for the unlock) in the increment.
+> That is even or maybe a slight gain.
+> OTOH a 64bit atomic is a PITA on some 32bit systems.
+> (In fact any atomic is a PITA on sparc32.)
+
+Do you mean something like below ?
+
+diff --git a/mm/z3fold.c b/mm/z3fold.c
+index db41b4227ec7..f30bff5e0092 100644
+--- a/mm/z3fold.c
++++ b/mm/z3fold.c
+@@ -161,7 +161,7 @@ struct z3fold_pool {
+        struct list_head *unbuddied;
+        struct list_head lru;
+        struct list_head stale;
+-       atomic64_t pages_nr;
++       long pages_nr;
+        struct kmem_cache *c_handle;
+        const struct z3fold_ops *ops;
+        struct zpool *zpool;
+@@ -516,9 +516,8 @@ static void __release_z3fold_page(struct z3fold_header *zhdr, bool locked)
+        spin_lock(&pool->stale_lock);
+        list_add(&zhdr->buddy, &pool->stale);
+        queue_work(pool->release_wq, &pool->work);
++       pool->pages_nr--;
+        spin_unlock(&pool->stale_lock);
+-
+-       atomic64_dec(&pool->pages_nr);
+ }
+
+ static void release_z3fold_page(struct kref *ref)
+@@ -983,7 +982,7 @@ static struct z3fold_pool *z3fold_create_pool(const char *name, gfp_t gfp,
+        }
+        INIT_LIST_HEAD(&pool->lru);
+        INIT_LIST_HEAD(&pool->stale);
+-       atomic64_set(&pool->pages_nr, 0);
++       pool->pages_nr = 0;
+        pool->name = name;
+        pool->compact_wq = create_singlethread_workqueue(pool->name);
+        if (!pool->compact_wq)
+@@ -1119,7 +1118,9 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
+                __free_page(page);
+                return -ENOMEM;
+        }
+-       atomic64_inc(&pool->pages_nr);
++       spin_lock(&pool->stale_lock);
++       pool->pages_nr++;
++       spin_unlock(&pool->stale_lock);
+
+        if (bud == HEADLESS) {
+                set_bit(PAGE_HEADLESS, &page->private);
+@@ -1197,7 +1198,7 @@ static void z3fold_free(struct z3fold_pool *pool, unsigned long handle)
+                        spin_unlock(&pool->lock);
+                        put_z3fold_header(zhdr);
+                        free_z3fold_page(page, true);
+-                       atomic64_dec(&pool->pages_nr);
++                       pool->pages_nr--;
+                }
+                return;
+        }
+@@ -1410,7 +1411,7 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
+                if (test_bit(PAGE_HEADLESS, &page->private)) {
+                        if (ret == 0) {
+                                free_z3fold_page(page, true);
+-                               atomic64_dec(&pool->pages_nr);
++                               pool->pages_nr--;
+                                return 0;
+                        }
+                        spin_lock(&pool->lock);
+@@ -1526,7 +1527,7 @@ static void z3fold_unmap(struct z3fold_pool *pool, unsigned long handle)
+  */
+ static u64 z3fold_get_pool_size(struct z3fold_pool *pool)
+ {
+-       return atomic64_read(&pool->pages_nr);
++       return pool->pages_nr;
+ }
+
+ static bool z3fold_page_isolate(struct page *page, isolate_mode_t mode)
+
+
+Are we expected to hold page->stale lock when we fetch pages_nr in the z3fold_get_pool_size?
+Anyway, I think this could be another separate patch. What do you think ?
+
+> 
+> Actually does this even need to be 64bit, should it just be 'long'.
+> That will mean that any 'read' just needs a simple single memory read.
+
+'long' should be enough. I think there can't be that many z3fold pages.
+
+> 
+> I've just looked at the code.
+> Some of the one line wrapper functions don't make the code any
+> easier to read.
+> There is no point having inline wrappers to acquire locks if you
+> only use them some of the time.
+> 
+> 	David
+
+Many thanks for your comment.
+
+> 
+> 
+>>
+>> Many thanks for your review and reply.
+>>
+>>> 	David
+>>>
+>>>>  }
+>>>>
+>>>>  static void release_z3fold_page(struct kref *ref)
+>>>> @@ -737,13 +739,9 @@ static struct z3fold_header *compact_single_buddy(struct z3fold_header *zhdr)
+>>>>  	return new_zhdr;
+>>>>
+>>>>  out_fail:
+>>>> -	if (new_zhdr) {
+>>>> -		if (kref_put(&new_zhdr->refcount, release_z3fold_page_locked))
+>>>> -			atomic64_dec(&pool->pages_nr);
+>>>> -		else {
+>>>> -			add_to_unbuddied(pool, new_zhdr);
+>>>> -			z3fold_page_unlock(new_zhdr);
+>>>> -		}
+>>>> +	if (new_zhdr && !kref_put(&new_zhdr->refcount, release_z3fold_page_locked)) {
+>>>> +		add_to_unbuddied(pool, new_zhdr);
+>>>> +		z3fold_page_unlock(new_zhdr);
+>>>>  	}
+>>>>  	return NULL;
+>>>>
+>>>> @@ -816,10 +814,8 @@ static void do_compact_page(struct z3fold_header *zhdr, bool locked)
+>>>>  	list_del_init(&zhdr->buddy);
+>>>>  	spin_unlock(&pool->lock);
+>>>>
+>>>> -	if (kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+>>>> -		atomic64_dec(&pool->pages_nr);
+>>>> +	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+>>>>  		return;
+>>>> -	}
+>>>>
+>>>>  	if (test_bit(PAGE_STALE, &page->private) ||
+>>>>  	    test_and_set_bit(PAGE_CLAIMED, &page->private)) {
+>>>> @@ -829,9 +825,7 @@ static void do_compact_page(struct z3fold_header *zhdr, bool locked)
+>>>>
+>>>>  	if (!zhdr->foreign_handles && buddy_single(zhdr) &&
+>>>>  	    zhdr->mapped_count == 0 && compact_single_buddy(zhdr)) {
+>>>> -		if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+>>>> -			atomic64_dec(&pool->pages_nr);
+>>>> -		else {
+>>>> +		if (!kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+>>>>  			clear_bit(PAGE_CLAIMED, &page->private);
+>>>>  			z3fold_page_unlock(zhdr);
+>>>>  		}
+>>>> @@ -1089,10 +1083,8 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
+>>>>  		if (zhdr) {
+>>>>  			bud = get_free_buddy(zhdr, chunks);
+>>>>  			if (bud == HEADLESS) {
+>>>> -				if (kref_put(&zhdr->refcount,
+>>>> +				if (!kref_put(&zhdr->refcount,
+>>>>  					     release_z3fold_page_locked))
+>>>> -					atomic64_dec(&pool->pages_nr);
+>>>> -				else
+>>>>  					z3fold_page_unlock(zhdr);
+>>>>  				pr_err("No free chunks in unbuddied\n");
+>>>>  				WARN_ON(1);
+>>>> @@ -1239,10 +1231,8 @@ static void z3fold_free(struct z3fold_pool *pool, unsigned long handle)
+>>>>
+>>>>  	if (!page_claimed)
+>>>>  		free_handle(handle, zhdr);
+>>>> -	if (kref_put(&zhdr->refcount, release_z3fold_page_locked_list)) {
+>>>> -		atomic64_dec(&pool->pages_nr);
+>>>> +	if (kref_put(&zhdr->refcount, release_z3fold_page_locked_list))
+>>>>  		return;
+>>>> -	}
+>>>>  	if (page_claimed) {
+>>>>  		/* the page has not been claimed by us */
+>>>>  		put_z3fold_header(zhdr);
+>>>> @@ -1353,9 +1343,7 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int
+>> retries)
+>>>>  				break;
+>>>>  			}
+>>>>  			if (!z3fold_page_trylock(zhdr)) {
+>>>> -				if (kref_put(&zhdr->refcount,
+>>>> -						release_z3fold_page))
+>>>> -					atomic64_dec(&pool->pages_nr);
+>>>> +				kref_put(&zhdr->refcount, release_z3fold_page);
+>>>>  				zhdr = NULL;
+>>>>  				continue; /* can't evict at this point */
+>>>>  			}
+>>>> @@ -1366,10 +1354,8 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int
+>> retries)
+>>>>  			 */
+>>>>  			if (zhdr->foreign_handles ||
+>>>>  			    test_and_set_bit(PAGE_CLAIMED, &page->private)) {
+>>>> -				if (kref_put(&zhdr->refcount,
+>>>> +				if (!kref_put(&zhdr->refcount,
+>>>>  						release_z3fold_page_locked))
+>>>> -					atomic64_dec(&pool->pages_nr);
+>>>> -				else
+>>>>  					z3fold_page_unlock(zhdr);
+>>>>  				zhdr = NULL;
+>>>>  				continue; /* can't evict such page */
+>>>> @@ -1447,7 +1433,6 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int
+>> retries)
+>>>>  			if (kref_put(&zhdr->refcount,
+>>>>  					release_z3fold_page_locked)) {
+>>>>  				kmem_cache_free(pool->c_handle, slots);
+>>>> -				atomic64_dec(&pool->pages_nr);
+>>>>  				return 0;
+>>>>  			}
+>>>>  			/*
+>>>> @@ -1669,10 +1654,8 @@ static void z3fold_page_putback(struct page *page)
+>>>>  	if (!list_empty(&zhdr->buddy))
+>>>>  		list_del_init(&zhdr->buddy);
+>>>>  	INIT_LIST_HEAD(&page->lru);
+>>>> -	if (kref_put(&zhdr->refcount, release_z3fold_page_locked)) {
+>>>> -		atomic64_dec(&pool->pages_nr);
+>>>> +	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+>>>>  		return;
+>>>> -	}
+>>>>  	spin_lock(&pool->lock);
+>>>>  	list_add(&page->lru, &pool->lru);
+>>>>  	spin_unlock(&pool->lock);
+>>>> --
+>>>> 2.23.0
+>>>
+>>> -
+>>> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+>>> Registration No: 1397386 (Wales)
+>>>
+>>> .
+>>>
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+

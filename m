@@ -2,53 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440FD4BD3B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2464BD3BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237740AbiBUC0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 21:26:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53430 "EHLO
+        id S1343745AbiBUCbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 21:31:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbiBUC03 (ORCPT
+        with ESMTP id S245416AbiBUCbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 21:26:29 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530CE3C704
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 18:26:07 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id r16-20020a92ac10000000b002c1ec9fa8edso2637940ilh.23
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 18:26:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=FLwQOddtIlWkGpBYYANzUNIF6D9LoZwdhUWtL7kN+6U=;
-        b=6ZFAkgwG49SIE96npzeTaoyY/Wx5/god9mt/eUvHKzAndkOv8AOUwY/PYjiUQECZ46
-         qz7ZNk6NdpY7Mvy+EyZmG+KwI0xRQmuPGVqK2UCNpI5t6NKTbfAE+BQB6cdKAbqgC5r+
-         usuui9iJJIzu7b8xqbeuqnkJaaa+X1AOTJsNR3T7mBDOdPWxx5Z4n1NlXdoFtwYumLFy
-         kq3wzE6JYwpE/nPbVoigR2oUl6Thrm0p8hqRRH57OPWgJqpkBJ9GIToIoDDtUVlZ3noo
-         mlHkvzGF433qgOZ6NVkJAHrWIi6LV4pAPp3gZIMZYFGIA5Dblo8ULdg6ou+xdt8Bg5Tn
-         wn6Q==
-X-Gm-Message-State: AOAM530U+noP9QPDS/f61C51nssx+b00QuvL66pIE16EzLTyg9Nndyrz
-        LsEnyNB6aNPpdMgfcWk9p5wiDcueOP4IK2fRbJyDGxLKMFwa
-X-Google-Smtp-Source: ABdhPJx2sJsvNh0IU/Yj/qLg77hai0/BvG9yvXt2L5DGOLEonC0cQH6P/Ea7+FEL9Jzk63OL4UojEY7PPa1e0Yfm6RqYI9akS3Eq
+        Sun, 20 Feb 2022 21:31:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671B0443D9;
+        Sun, 20 Feb 2022 18:30:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30D99B80DAA;
+        Mon, 21 Feb 2022 02:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B475C340E8;
+        Mon, 21 Feb 2022 02:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645410643;
+        bh=2uZ8sUorAwc5X3MugMskJmqF4rEOcD2jddBSqZuXQ94=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a4p4Olw7vCl4s6q6MSZpDlvKV/OoTwTavJHkHfDKou9FFFeX4dwMnS68tB/2h0TPM
+         eQLy4baewlJdqhFvQxmmpRnVqrIFSLlOG7ap4E+wwlGs9IXSkWAy0j7LUDApSP61k4
+         qB7BzfIPtLdWa7QqnKuTEeFTyVmRtKfLJ+jzOq6Vx3xX+v33aShYjsQP42Q2IlR6/s
+         JRCe3aKugs6BxFTzdyzKkxfe/sNK1qVoo2jnrlMpSskaZhMG5hJi5bhnSHxKgzJEJ/
+         rXgwpbDNJ6JgM0dlKfNayyGmJcg5krpGZyr4OCzcgrHSqHyg2yzwC134TX2aAtXw1w
+         YM31HHbU1No9A==
+Date:   Sun, 20 Feb 2022 18:30:42 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v4 1/2] random: remove batched entropy locking
+Message-ID: <YhL5Ur59uC+HQOY+@sol.localdomain>
+References: <20220209125644.533876-1-Jason@zx2c4.com>
+ <20220209125644.533876-2-Jason@zx2c4.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3711:b0:30d:6027:b980 with SMTP id
- k17-20020a056638371100b0030d6027b980mr13981620jav.87.1645410366709; Sun, 20
- Feb 2022 18:26:06 -0800 (PST)
-Date:   Sun, 20 Feb 2022 18:26:06 -0800
-In-Reply-To: <20220221021208.1109-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006ae0e505d87df42c@google.com>
-Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
-From:   syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, jasowang@redhat.com,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220209125644.533876-2-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,60 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Feb 09, 2022 at 01:56:43PM +0100, Jason A. Donenfeld wrote:
+> Rather than use spinlocks to protect batched entropy, we can instead
+> disable interrupts locally, since we're dealing with per-cpu data, and
+> manage resets with a basic generation counter. At the same time, we
+> can't quite do this on PREEMPT_RT, where we still want spinlocks-as-
+> mutexes semantics. So we use a local_lock_t, which provides the right
+> behavior for each. Because this is a per-cpu lock, that generation
+> counter is still doing the necessary CPU-to-CPU communication.
+> 
+> This should improve performance a bit. It will also fix the linked splat
+> that Jonathan received with a PROVE_RAW_LOCK_NESTING=y.
+> 
+> Suggested-by: Andy Lutomirski <luto@kernel.org>
+> Reported-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> Tested-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> Link: https://lore.kernel.org/lkml/YfMa0QgsjCVdRAvJ@latitude/
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  drivers/char/random.c | 55 ++++++++++++++++++++++---------------------
+>  1 file changed, 28 insertions(+), 27 deletions(-)
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-kernel BUG in vhost_get_vq_desc
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 
-------------[ cut here ]------------
-kernel BUG at drivers/vhost/vhost.c:2337!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 4061 Comm: vhost-4060 Not tainted 5.17.0-rc4-syzkaller-00054-gf71077a4d84b-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2337
-Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 57 59 28 fd e9 74 ff ff ff e8 fd c7 a1 fa <0f> 0b e8 f6 c7 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
-RSP: 0018:ffffc9000204fb88 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff888077138000 RSI: ffffffff86d71623 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff86d7071c R11: 0000000000000000 R12: ffff888079664d68
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888079664bb0
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fcc525c41d0 CR3: 000000001816c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
- vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2337
-Code: 00 00 00 48 c7 c6 20 2c 9d 8a 48 c7 c7 98 a6 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 57 59 28 fd e9 74 ff ff ff e8 fd c7 a1 fa <0f> 0b e8 f6 c7 a1 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
-RSP: 0018:ffffc9000204fb88 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff888077138000 RSI: ffffffff86d71623 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff86d7071c R11: 0000000000000000 R12: ffff888079664d68
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888079664bb0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000002 CR3: 000000001816c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
-Tested on:
-
-commit:         f71077a4 Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=128be8ea700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
-dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1651c3d2700000
-
+- Eric

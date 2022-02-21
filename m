@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8164BDD67
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D2B4BE227
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351785AbiBUJhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:37:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52004 "EHLO
+        id S1348020AbiBUJSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:18:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349326AbiBUJ1i (ORCPT
+        with ESMTP id S1348842AbiBUJLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645EC237F0;
-        Mon, 21 Feb 2022 01:12:50 -0800 (PST)
+        Mon, 21 Feb 2022 04:11:45 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F8C286F3;
+        Mon, 21 Feb 2022 01:04:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0144760B1B;
-        Mon, 21 Feb 2022 09:12:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D468CC340E9;
-        Mon, 21 Feb 2022 09:12:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C50ECCE0E86;
+        Mon, 21 Feb 2022 09:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A67F0C340E9;
+        Mon, 21 Feb 2022 09:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434769;
-        bh=wJmGrICC3wKZT0xL+U7a9yjc8m1LvWGA1Zirvk0fbuw=;
+        s=korg; t=1645434251;
+        bh=8IUsyVO3CUV/NHmrn9iyf0MiQePqG+1lN0ZMxV/tScY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=msVXOE8KdJwljaJ14036ZTbGmjsmD0KDHY4Rm0fH7edVIPCEjQcGgyhX4iajjPls+
-         1fJlepknmNayRFuyEk0d0vwn33mt07x9e6RywJC3cvBs0MpKzeqUq0LlbHC9VvMN9m
-         MrNAeMDG8heTPuTID4y8DVc3EFGbk/XndPytiUGE=
+        b=IMQx8vNcAyqO6dEGdkYG0o2lOJ238ZXCmzWgva6us1T2ykTOOZhkWTlVfE8t36RLt
+         D/u8KlIK+mu4KNXFWtaWoFBKSoW0huw2UL3vB7uD5sWEOQ7IOyIXaXbUA32G3FpxP0
+         g9+1au6YlkklOU+ZVb5vjBKds5NKfv3Q2RZmPAMU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 125/196] tipc: fix wrong notification node addresses
+        stable@vger.kernel.org,
+        =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
+        Kees Kook <keescook@chromium.org>,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-hardening@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 065/121] libsubcmd: Fix use-after-free for realloc(..., 0)
 Date:   Mon, 21 Feb 2022 09:49:17 +0100
-Message-Id: <20220221084935.121036020@linuxfoundation.org>
+Message-Id: <20220221084923.404143613@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,64 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jon Maloy <jmaloy@redhat.com>
+From: Kees Cook <keescook@chromium.org>
 
-commit c08e58438d4a709fb451b6d7d33432cc9907a2a8 upstream.
+commit 52a9dab6d892763b2a8334a568bd4e2c1a6fde66 upstream.
 
-The previous bug fix had an unfortunate side effect that broke
-distribution of binding table entries between nodes. The updated
-tipc_sock_addr struct is also used further down in the same
-function, and there the old value is still the correct one.
+GCC 12 correctly reports a potential use-after-free condition in the
+xrealloc helper. Fix the warning by avoiding an implicit "free(ptr)"
+when size == 0:
 
-Fixes: 032062f363b4 ("tipc: fix wrong publisher node address in link publications")
-Signed-off-by: Jon Maloy <jmaloy@redhat.com>
-Link: https://lore.kernel.org/r/20220216020009.3404578-1-jmaloy@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+In file included from help.c:12:
+In function 'xrealloc',
+    inlined from 'add_cmdname' at help.c:24:2: subcmd-util.h:56:23: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+   56 |                 ret = realloc(ptr, size);
+      |                       ^~~~~~~~~~~~~~~~~~
+subcmd-util.h:52:21: note: call to 'realloc' here
+   52 |         void *ret = realloc(ptr, size);
+      |                     ^~~~~~~~~~~~~~~~~~
+subcmd-util.h:58:31: error: pointer may be used after 'realloc' [-Werror=use-after-free]
+   58 |                         ret = realloc(ptr, 1);
+      |                               ^~~~~~~~~~~~~~~
+subcmd-util.h:52:21: note: call to 'realloc' here
+   52 |         void *ret = realloc(ptr, size);
+      |                     ^~~~~~~~~~~~~~~~~~
+
+Fixes: 2f4ce5ec1d447beb ("perf tools: Finalize subcmd independence")
+Reported-by: Valdis Klētnieks <valdis.kletnieks@vt.edu>
+Signed-off-by: Kees Kook <keescook@chromium.org>
+Tested-by: Valdis Klētnieks <valdis.kletnieks@vt.edu>
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: linux-hardening@vger.kernel.org
+Cc: Valdis Klētnieks <valdis.kletnieks@vt.edu>
+Link: http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/tipc/node.c |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ tools/lib/subcmd/subcmd-util.h |   11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
---- a/net/tipc/node.c
-+++ b/net/tipc/node.c
-@@ -403,7 +403,7 @@ static void tipc_node_write_unlock(struc
- 	u32 flags = n->action_flags;
- 	struct list_head *publ_list;
- 	struct tipc_uaddr ua;
--	u32 bearer_id;
-+	u32 bearer_id, node;
- 
- 	if (likely(!flags)) {
- 		write_unlock_bh(&n->lock);
-@@ -414,6 +414,7 @@ static void tipc_node_write_unlock(struc
- 		   TIPC_LINK_STATE, n->addr, n->addr);
- 	sk.ref = n->link_id;
- 	sk.node = tipc_own_addr(net);
-+	node = n->addr;
- 	bearer_id = n->link_id & 0xffff;
- 	publ_list = &n->publ_list;
- 
-@@ -423,17 +424,17 @@ static void tipc_node_write_unlock(struc
- 	write_unlock_bh(&n->lock);
- 
- 	if (flags & TIPC_NOTIFY_NODE_DOWN)
--		tipc_publ_notify(net, publ_list, sk.node, n->capabilities);
-+		tipc_publ_notify(net, publ_list, node, n->capabilities);
- 
- 	if (flags & TIPC_NOTIFY_NODE_UP)
--		tipc_named_node_up(net, sk.node, n->capabilities);
-+		tipc_named_node_up(net, node, n->capabilities);
- 
- 	if (flags & TIPC_NOTIFY_LINK_UP) {
--		tipc_mon_peer_up(net, sk.node, bearer_id);
-+		tipc_mon_peer_up(net, node, bearer_id);
- 		tipc_nametbl_publish(net, &ua, &sk, sk.ref);
- 	}
- 	if (flags & TIPC_NOTIFY_LINK_DOWN) {
--		tipc_mon_peer_down(net, sk.node, bearer_id);
-+		tipc_mon_peer_down(net, node, bearer_id);
- 		tipc_nametbl_withdraw(net, &ua, &sk, sk.ref);
- 	}
+--- a/tools/lib/subcmd/subcmd-util.h
++++ b/tools/lib/subcmd/subcmd-util.h
+@@ -50,15 +50,8 @@ static NORETURN inline void die(const ch
+ static inline void *xrealloc(void *ptr, size_t size)
+ {
+ 	void *ret = realloc(ptr, size);
+-	if (!ret && !size)
+-		ret = realloc(ptr, 1);
+-	if (!ret) {
+-		ret = realloc(ptr, size);
+-		if (!ret && !size)
+-			ret = realloc(ptr, 1);
+-		if (!ret)
+-			die("Out of memory, realloc failed");
+-	}
++	if (!ret)
++		die("Out of memory, realloc failed");
+ 	return ret;
  }
+ 
 
 

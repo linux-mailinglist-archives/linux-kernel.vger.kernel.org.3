@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE17E4BEC5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 22:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F05E24BEC9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 22:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234575AbiBUVQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 16:16:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41202 "EHLO
+        id S234898AbiBUVZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 16:25:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234390AbiBUVPs (ORCPT
+        with ESMTP id S234869AbiBUVZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 16:15:48 -0500
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E72023BF9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 13:15:18 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4K2Znx4FH4zMqHRq;
-        Mon, 21 Feb 2022 22:15:17 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4K2Znx2S0HzljTgH;
-        Mon, 21 Feb 2022 22:15:17 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v1 11/11] landlock: Add design choices documentation for filesystem access rights
-Date:   Mon, 21 Feb 2022 22:25:22 +0100
-Message-Id: <20220221212522.320243-12-mic@digikod.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221212522.320243-1-mic@digikod.net>
-References: <20220221212522.320243-1-mic@digikod.net>
+        Mon, 21 Feb 2022 16:25:50 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B5C12763
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 13:25:26 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id r13so13415827ejd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 13:25:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nVDTTWQgHFeL3Z4LBBVvYUyauggJWpdgcasV3J7UgOs=;
+        b=KBwq2co572wFjFwOjkiuBKxrbk513P2a3q1cyMsPdcrqS6PsiDNt+uVR6I+wUY9hot
+         hWnDpvPCMasCAnC/C4Sn7dkUE8h/3WeAxvW66DdxZxW3hJf1xeI/Yf3hECujD/yzPf/y
+         jYzr1kIwUpD0qWMJIz55divIHmfuFW8CjoRtFoXoeP/aNIxFxRwezEbTqAyKquTw7XSi
+         mOQ9EkWbyqjyGGDv/+QKz55Lr883LLq07zPnR8bKTRy7atB67i40hThv+LPMZQkOU14i
+         +J6nQwXaJ0S+FXuAgYO0BMCnzP3roxImoFzPlAfDchd4JI73KUn4hFwqaHU0ZRJCSKnp
+         i/qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nVDTTWQgHFeL3Z4LBBVvYUyauggJWpdgcasV3J7UgOs=;
+        b=Rw9IY2n9L6yEOVNteFUglvzYrWirNb9emrSEMJUG5wsAqYiFYbGr2yPyzfU4Csd94T
+         0edAXYJQDCWi1AoAEkr01ZNb5opqUaUDD6ACIsgXZibrs6GIM8j49fPSO3p/dqq75P4Q
+         N+QJh4yiUgpy8TPPwoQ1Y4KgI+3Joib3fyuw8A9ZjHNGHwKwWvrKj/hAMEi+4qepWFLi
+         r4CAzvsy25l5sLpq672XmVb4IHBD9lqb/tHFCKnd17hkpuL+LF6QJ68SOotXdC1s2T9z
+         Seg4CdVpjK/ld4pYZpha942F4fDU1D4/xdopIwBP1MfqwA5W6z6B1JGkrjCsVfib+MXb
+         lEFw==
+X-Gm-Message-State: AOAM531WwyReRxWB5b7He74cw0v1ent8VCVnfjrKl/yItoYM1uCHDJIw
+        w3QvvhX/HRqNVYF9Grl41f4=
+X-Google-Smtp-Source: ABdhPJzD96yGsJKvfZ8rYVMlWsj0ov6XbqTZOXDzvInq0ZEs5lzhYB+XiB5nQQDuhVo+vKa/sQhAJw==
+X-Received: by 2002:a17:907:205a:b0:6cf:ced7:4e73 with SMTP id pg26-20020a170907205a00b006cfced74e73mr17397238ejb.536.1645478725413;
+        Mon, 21 Feb 2022 13:25:25 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p57935aa6.dip0.t-ipconnect.de. [87.147.90.166])
+        by smtp.gmail.com with ESMTPSA id 2sm5631226ejl.2.2022.02.21.13.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 13:25:25 -0800 (PST)
+Date:   Mon, 21 Feb 2022 22:25:23 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 5/6] staging: vt6656: Remove ftrace-like logging
+Message-ID: <084064a5c94aad940600ae62d6c21bb26629cb2c.1645477326.git.philipp.g.hortmann@gmail.com>
+References: <cover.1645477326.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1645477326.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+This patch fixes the checkpatch.pl warning like:
+WARNING: Unnecessary ftrace-like logging - prefer using ftrace
 
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20220221212522.320243-12-mic@digikod.net
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- Documentation/security/landlock.rst | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+V1 -> V2: Devided patch into two
+---
+ drivers/staging/vt6656/rxtx.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
-index 3df68cb1d10f..621b2c1ac514 100644
---- a/Documentation/security/landlock.rst
-+++ b/Documentation/security/landlock.rst
-@@ -7,7 +7,7 @@ Landlock LSM: kernel documentation
- ==================================
+diff --git a/drivers/staging/vt6656/rxtx.c b/drivers/staging/vt6656/rxtx.c
+index a31947f2620d..5839b34b2e93 100644
+--- a/drivers/staging/vt6656/rxtx.c
++++ b/drivers/staging/vt6656/rxtx.c
+@@ -58,8 +58,6 @@ static struct vnt_usb_send_context
+ 	struct vnt_usb_send_context *context = NULL;
+ 	int ii;
  
- :Author: Mickaël Salaün
--:Date: March 2021
-+:Date: February 2022
- 
- Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
- harden a whole system, this feature should be available to any process,
-@@ -42,6 +42,21 @@ Guiding principles for safe access controls
- * Computation related to Landlock operations (e.g. enforcing a ruleset) shall
-   only impact the processes requesting them.
- 
-+Design choices
-+==============
-+
-+Filesystem access rights
-+------------------------
-+
-+All access rights are tied to an inode and what can be accessed through it.
-+Reading the content of a directory doesn't imply to be allowed to read the
-+content of a listed inode.  Indeed, a file name is local to its parent
-+directory, and an inode can be referenced by multiple file names thanks to
-+(hard) links.  Being able to unlink a file only has a direct impact on the
-+directory, not the unlinked inode.  This is the reason why
-+`LANDLOCK_ACCESS_FS_REMOVE_FILE` or `LANDLOCK_ACCESS_FS_REFER` are not allowed
-+to be tied to files but only to directories.
-+
- Tests
- =====
- 
+-	dev_dbg(&priv->usb->dev, "%s\n", __func__);
+-
+ 	for (ii = 0; ii < priv->num_tx_context; ii++) {
+ 		if (!priv->tx_context[ii])
+ 			return NULL;
 -- 
-2.35.1
+2.25.1
 

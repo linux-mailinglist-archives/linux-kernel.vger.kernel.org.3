@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89594BE448
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502CE4BE351
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351267AbiBUJo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:44:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48742 "EHLO
+        id S233230AbiBUKEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:04:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351261AbiBUJgz (ORCPT
+        with ESMTP id S1353296AbiBUJ5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:36:55 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FF62DD40;
-        Mon, 21 Feb 2022 01:15:32 -0800 (PST)
+        Mon, 21 Feb 2022 04:57:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA5046B0C;
+        Mon, 21 Feb 2022 01:25:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 40C58CE0E86;
-        Mon, 21 Feb 2022 09:15:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27308C340E9;
-        Mon, 21 Feb 2022 09:15:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45DE160F97;
+        Mon, 21 Feb 2022 09:25:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21034C340EB;
+        Mon, 21 Feb 2022 09:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434927;
-        bh=mzGSdJmD5/dnOJXtGDmHaV67N64Mrzt+4+mNCYQzK/k=;
+        s=korg; t=1645435517;
+        bh=7eP9GV9smWbWM1dmSH/hpT0rJMPPs4tjxlSzxYHcRbg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qQ5rGSFDhkmGYv6ycbe3nglgJyQS5u7F+uOweZqOhiVriEb7Hc4TMGhkgktg7LCGo
-         EkQyqZjIe1GzrNiNCnzFBNLU4OKybKFQKcel/yMrbWnsppHKPZEbPXav1i3fVCLCo3
-         RrSOxBNqrMREX4CnZOcyFlJEDbU1/WxVrkApMP7g=
+        b=wHuRUGxCnnWQ0787tMaEFcXw0Ogx5ZJcb0wp5NPm8EqnfbGI/erbouVQSrtO7o6rA
+         vk3SywSAuIelWW4xxAI+v73NmyAZjs2yPFw8g8ARVlU8MdRo/LQuPWlNSgDsJH4U5q
+         iWebgKZMgK58qiRM6y/b//GJb3yUyCFcFnyJdXls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Zhao <yuzhao@google.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.15 179/196] ucounts: In set_cred_ucounts assume new->ucounts is non-NULL
+        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 192/227] HID: elo: fix memory leak in elo_probe
 Date:   Mon, 21 Feb 2022 09:50:11 +0100
-Message-Id: <20220221084936.939443320@linuxfoundation.org>
+Message-Id: <20220221084941.199949623@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-commit 99c31f9feda41d0f10d030dc04ba106c93295aa2 upstream.
+[ Upstream commit 817b8b9c5396d2b2d92311b46719aad5d3339dbe ]
 
-Any cred that is destined for use by commit_creds must have a non-NULL
-cred->ucounts field.  Only curing credential construction is a NULL
-cred->ucounts valid.  Only abort_creds, put_cred, and put_cred_rcu
-needs to deal with a cred with a NULL ucount.  As set_cred_ucounts is
-non of those case don't confuse people by handling something that can
-not happen.
+When hid_parse() in elo_probe() fails, it forgets to call usb_put_dev to
+decrease the refcount.
 
-Link: https://lkml.kernel.org/r/871r4irzds.fsf_-_@disp2133
-Tested-by: Yu Zhao <yuzhao@google.com>
-Reviewed-by: Alexey Gladkov <legion@kernel.org>
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix this by adding usb_put_dev() in the error handling code of elo_probe().
+
+Fixes: fbf42729d0e9 ("HID: elo: update the reference count of the usb device structure")
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cred.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/hid/hid-elo.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/kernel/cred.c
-+++ b/kernel/cred.c
-@@ -676,15 +676,14 @@ int set_cred_ucounts(struct cred *new)
- 	 * This optimization is needed because alloc_ucounts() uses locks
- 	 * for table lookups.
- 	 */
--	if (old_ucounts && old_ucounts->ns == new->user_ns && uid_eq(old_ucounts->uid, new->euid))
-+	if (old_ucounts->ns == new->user_ns && uid_eq(old_ucounts->uid, new->euid))
- 		return 0;
- 
- 	if (!(new_ucounts = alloc_ucounts(new->user_ns, new->euid)))
- 		return -EAGAIN;
- 
- 	new->ucounts = new_ucounts;
--	if (old_ucounts)
--		put_ucounts(old_ucounts);
-+	put_ucounts(old_ucounts);
+diff --git a/drivers/hid/hid-elo.c b/drivers/hid/hid-elo.c
+index 8e960d7b233b3..9b42b0cdeef06 100644
+--- a/drivers/hid/hid-elo.c
++++ b/drivers/hid/hid-elo.c
+@@ -262,6 +262,7 @@ static int elo_probe(struct hid_device *hdev, const struct hid_device_id *id)
  
  	return 0;
+ err_free:
++	usb_put_dev(udev);
+ 	kfree(priv);
+ 	return ret;
  }
+-- 
+2.34.1
+
 
 

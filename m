@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5764BE482
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B25B4BE8D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353913AbiBUKCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:02:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57250 "EHLO
+        id S1349298AbiBUJZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:25:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352328AbiBUJzK (ORCPT
+        with ESMTP id S1348531AbiBUJPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:55:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EF538792;
-        Mon, 21 Feb 2022 01:24:09 -0800 (PST)
+        Mon, 21 Feb 2022 04:15:54 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6538220F6B;
+        Mon, 21 Feb 2022 01:06:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C600AB80EB9;
-        Mon, 21 Feb 2022 09:24:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8830C340E9;
-        Mon, 21 Feb 2022 09:24:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B1F98CE0E8C;
+        Mon, 21 Feb 2022 09:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B31CC340E9;
+        Mon, 21 Feb 2022 09:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435446;
-        bh=kPsipjtm5BFbOtdKq1wVwjsC6HImBrZUVW4TMQmoygI=;
+        s=korg; t=1645434412;
+        bh=C9+r6K9CKqbLGqkt3mB9J/OJvtR9LupLVAs5w8dtfXM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=av8480uENwpCN3B6p0CT0l9pk8bEliQvLFtrJz3JpQMoPtgCCx8gef4t3OTbsRJX6
-         PQtM1i5yuGRL0fLQ474LPdS9hmkk7Mcmbh+kSwAQ8aDcsGGBYINf99JdkCf32DnH13
-         BRAUnp0y+0KYP4Qc8WM83KI1cNXk9Ch0duTzkse8=
+        b=jXvvXAa8rTQvFgS5cuBEsnJSSg+Qo+xhRIZLnZmR23STC/MjmUh51XmiLIB4ZEpzP
+         mdm2ix4r7ZVO8DRJEiSuKx/BAXDUSEHlZ9+33Zy184ufQcfpkKWj42M0yVhfWcf66l
+         G4W/p4dqGgkHceXesvU71+IykvcMEmC0KddZBPGk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ansuel Smith <ansuelsmth@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.16 166/227] mtd: parsers: qcom: Fix kernel panic on skipped partition
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Ye Guojin <ye.guojin@zte.com.cn>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 093/121] ARM: OMAP2+: adjust the location of put_device() call in omapdss_init_of
 Date:   Mon, 21 Feb 2022 09:49:45 +0100
-Message-Id: <20220221084940.343157397@linuxfoundation.org>
+Message-Id: <20220221084924.338847741@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,106 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ansuel Smith <ansuelsmth@gmail.com>
+From: Ye Guojin <ye.guojin@zte.com.cn>
 
-commit 65d003cca335cabc0160d3cd7daa689eaa9dd3cd upstream.
+[ Upstream commit 34596ba380b03d181e24efd50e2f21045bde3696 ]
 
-In the event of a skipped partition (case when the entry name is empty)
-the kernel panics in the cleanup function as the name entry is NULL.
-Rework the parser logic by first checking the real partition number and
-then allocate the space and set the data for the valid partitions.
+This was found by coccicheck:
+./arch/arm/mach-omap2/display.c, 272, 1-7, ERROR missing put_device;
+call of_find_device_by_node on line 258, but without a corresponding
+object release within this function.
 
-The logic was also fundamentally wrong as with a skipped partition, the
-parts number returned was incorrect by not decreasing it for the skipped
-partitions.
+Move the put_device() call before the if judgment.
 
-Fixes: 803eb124e1a6 ("mtd: parsers: Add Qcom SMEM parser")
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220116032211.9728-1-ansuelsmth@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/parsers/qcomsmempart.c |   31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
+ arch/arm/mach-omap2/display.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/mtd/parsers/qcomsmempart.c
-+++ b/drivers/mtd/parsers/qcomsmempart.c
-@@ -58,11 +58,11 @@ static int parse_qcomsmem_part(struct mt
- 			       const struct mtd_partition **pparts,
- 			       struct mtd_part_parser_data *data)
- {
-+	size_t len = SMEM_FLASH_PTABLE_HDR_LEN;
-+	int ret, i, j, tmpparts, numparts = 0;
- 	struct smem_flash_pentry *pentry;
- 	struct smem_flash_ptable *ptable;
--	size_t len = SMEM_FLASH_PTABLE_HDR_LEN;
- 	struct mtd_partition *parts;
--	int ret, i, numparts;
- 	char *name, *c;
- 
- 	if (IS_ENABLED(CONFIG_MTD_SPI_NOR_USE_4K_SECTORS)
-@@ -87,8 +87,8 @@ static int parse_qcomsmem_part(struct mt
+diff --git a/arch/arm/mach-omap2/display.c b/arch/arm/mach-omap2/display.c
+index 2000fca6bd4e6..6098666e928d0 100644
+--- a/arch/arm/mach-omap2/display.c
++++ b/arch/arm/mach-omap2/display.c
+@@ -263,9 +263,9 @@ static int __init omapdss_init_of(void)
  	}
  
- 	/* Ensure that # of partitions is less than the max we have allocated */
--	numparts = le32_to_cpu(ptable->numparts);
--	if (numparts > SMEM_FLASH_PTABLE_MAX_PARTS_V4) {
-+	tmpparts = le32_to_cpu(ptable->numparts);
-+	if (tmpparts > SMEM_FLASH_PTABLE_MAX_PARTS_V4) {
- 		pr_err("Partition numbers exceed the max limit\n");
- 		return -EINVAL;
- 	}
-@@ -116,11 +116,17 @@ static int parse_qcomsmem_part(struct mt
- 		return PTR_ERR(ptable);
+ 	r = of_platform_populate(node, NULL, NULL, &pdev->dev);
++	put_device(&pdev->dev);
+ 	if (r) {
+ 		pr_err("Unable to populate DSS submodule devices\n");
+-		put_device(&pdev->dev);
+ 		return r;
  	}
  
-+	for (i = 0; i < tmpparts; i++) {
-+		pentry = &ptable->pentry[i];
-+		if (pentry->name[0] != '\0')
-+			numparts++;
-+	}
-+
- 	parts = kcalloc(numparts, sizeof(*parts), GFP_KERNEL);
- 	if (!parts)
- 		return -ENOMEM;
- 
--	for (i = 0; i < numparts; i++) {
-+	for (i = 0, j = 0; i < tmpparts; i++) {
- 		pentry = &ptable->pentry[i];
- 		if (pentry->name[0] == '\0')
- 			continue;
-@@ -135,24 +141,25 @@ static int parse_qcomsmem_part(struct mt
- 		for (c = name; *c != '\0'; c++)
- 			*c = tolower(*c);
- 
--		parts[i].name = name;
--		parts[i].offset = le32_to_cpu(pentry->offset) * mtd->erasesize;
--		parts[i].mask_flags = pentry->attr;
--		parts[i].size = le32_to_cpu(pentry->length) * mtd->erasesize;
-+		parts[j].name = name;
-+		parts[j].offset = le32_to_cpu(pentry->offset) * mtd->erasesize;
-+		parts[j].mask_flags = pentry->attr;
-+		parts[j].size = le32_to_cpu(pentry->length) * mtd->erasesize;
- 		pr_debug("%d: %s offs=0x%08x size=0x%08x attr:0x%08x\n",
- 			 i, pentry->name, le32_to_cpu(pentry->offset),
- 			 le32_to_cpu(pentry->length), pentry->attr);
-+		j++;
- 	}
- 
- 	pr_debug("SMEM partition table found: ver: %d len: %d\n",
--		 le32_to_cpu(ptable->version), numparts);
-+		 le32_to_cpu(ptable->version), tmpparts);
- 	*pparts = parts;
- 
- 	return numparts;
- 
- out_free_parts:
--	while (--i >= 0)
--		kfree(parts[i].name);
-+	while (--j >= 0)
-+		kfree(parts[j].name);
- 	kfree(parts);
- 	*pparts = NULL;
- 
+-- 
+2.34.1
+
 
 

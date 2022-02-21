@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770D94BE838
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E154BDF95
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351352AbiBUJhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:37:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48082 "EHLO
+        id S1351406AbiBUJhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:37:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349141AbiBUJ1f (ORCPT
+        with ESMTP id S1348809AbiBUJ1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 04:27:35 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C909913F12;
-        Mon, 21 Feb 2022 01:12:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDDD15A12;
+        Mon, 21 Feb 2022 01:12:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6638560018;
-        Mon, 21 Feb 2022 09:12:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C370C340E9;
-        Mon, 21 Feb 2022 09:12:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BF9160B1B;
+        Mon, 21 Feb 2022 09:12:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378E8C340E9;
+        Mon, 21 Feb 2022 09:12:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434746;
-        bh=lO9+SfRYxZy7LfpZ9kZoV+XdWXmb8YWDq3BsOi5WrkQ=;
+        s=korg; t=1645434749;
+        bh=OXvfCS9PD0SNk8WUZWIhK1lM9qzjLIKjwNP/Cekcf6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GInGNqsRouSkb4v2u6VrWdpcTGEqSQCBKIBReyktHbfl+ALi8P4NbzspzWo0DEhwW
-         s77tDg9ln3KgcpafrIQY3WmzVESqM0JrHHiy7fjPwktGrFigCZWQ2TXcUH+jID7/2n
-         0rrcvZv4QABtoZoQc5at7TM9jyZeYWKwr2QZcqdo=
+        b=mNIERjcIQSDImQB7EpVEQGea6FJxb/92JyiP1YO27pHzNe/QBARR1IOR6m/JkJsdX
+         jr0Jyvrh9SdI5GBXxpbzVK3t5Hcb3T7+3LxiHit8DzmE5S3XU9eqOy9engqxFnlFZv
+         sUWnkopwDdwOLw48ebWpSZ2OFa3Y7G3h5Su5yIB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Congyu Liu <liu3101@purdue.edu>,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 084/196] ipv6: per-netns exclusive flowlabel checks
-Date:   Mon, 21 Feb 2022 09:48:36 +0100
-Message-Id: <20220221084933.742361302@linuxfoundation.org>
+        stable@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 085/196] Revert "net: ethernet: bgmac: Use devm_platform_ioremap_resource_byname"
+Date:   Mon, 21 Feb 2022 09:48:37 +0100
+Message-Id: <20220221084933.774206153@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
 References: <20220221084930.872957717@linuxfoundation.org>
@@ -55,98 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+From: Jonas Gorski <jonas.gorski@gmail.com>
 
-commit 0b0dff5b3b98c5c7ce848151df9da0b3cdf0cc8b upstream.
+commit 6aba04ee3263669b335458c4cf4c7d97d6940229 upstream.
 
-Ipv6 flowlabels historically require a reservation before use.
-Optionally in exclusive mode (e.g., user-private).
+This reverts commit 3710e80952cf2dc48257ac9f145b117b5f74e0a5.
 
-Commit 59c820b2317f ("ipv6: elide flowlabel check if no exclusive
-leases exist") introduced a fastpath that avoids this check when no
-exclusive leases exist in the system, and thus any flowlabel use
-will be granted.
+Since idm_base and nicpm_base are still optional resources not present
+on all platforms, this breaks the driver for everything except Northstar
+2 (which has both).
 
-That allows skipping the control operation to reserve a flowlabel
-entirely. Though with a warning if the fast path fails:
+The same change was already reverted once with 755f5738ff98 ("net:
+broadcom: fix a mistake about ioremap resource").
 
-  This is an optimization. Robust applications still have to revert to
-  requesting leases if the fast path fails due to an exclusive lease.
+So let's do it again.
 
-Still, this is subtle. Better isolate network namespaces from each
-other. Flowlabels are per-netns. Also record per-netns whether
-exclusive leases are in use. Then behavior does not change based on
-activity in other netns.
-
-Changes
-  v2
-    - wrap in IS_ENABLED(CONFIG_IPV6) to avoid breakage if disabled
-
-Fixes: 59c820b2317f ("ipv6: elide flowlabel check if no exclusive leases exist")
-Link: https://lore.kernel.org/netdev/MWHPR2201MB1072BCCCFCE779E4094837ACD0329@MWHPR2201MB1072.namprd22.prod.outlook.com/
-Reported-by: Congyu Liu <liu3101@purdue.edu>
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Tested-by: Congyu Liu <liu3101@purdue.edu>
-Link: https://lore.kernel.org/r/20220215160037.1976072-1-willemdebruijn.kernel@gmail.com
+Fixes: 3710e80952cf ("net: ethernet: bgmac: Use devm_platform_ioremap_resource_byname")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+[florian: Added comments to explain the resources are optional]
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220216184634.2032460-1-f.fainelli@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/ipv6.h       |    5 ++++-
- include/net/netns/ipv6.h |    3 ++-
- net/ipv6/ip6_flowlabel.c |    4 +++-
- 3 files changed, 9 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/broadcom/bgmac-platform.c |   23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -391,17 +391,20 @@ static inline void txopt_put(struct ipv6
- 		kfree_rcu(opt, rcu);
- }
- 
-+#if IS_ENABLED(CONFIG_IPV6)
- struct ip6_flowlabel *__fl6_sock_lookup(struct sock *sk, __be32 label);
- 
- extern struct static_key_false_deferred ipv6_flowlabel_exclusive;
- static inline struct ip6_flowlabel *fl6_sock_lookup(struct sock *sk,
- 						    __be32 label)
+--- a/drivers/net/ethernet/broadcom/bgmac-platform.c
++++ b/drivers/net/ethernet/broadcom/bgmac-platform.c
+@@ -172,6 +172,7 @@ static int bgmac_probe(struct platform_d
  {
--	if (static_branch_unlikely(&ipv6_flowlabel_exclusive.key))
-+	if (static_branch_unlikely(&ipv6_flowlabel_exclusive.key) &&
-+	    READ_ONCE(sock_net(sk)->ipv6.flowlabel_has_excl))
- 		return __fl6_sock_lookup(sk, label) ? : ERR_PTR(-ENOENT);
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct bgmac *bgmac;
++	struct resource *regs;
+ 	int ret;
  
- 	return NULL;
- }
-+#endif
+ 	bgmac = bgmac_alloc(&pdev->dev);
+@@ -208,15 +209,23 @@ static int bgmac_probe(struct platform_d
+ 	if (IS_ERR(bgmac->plat.base))
+ 		return PTR_ERR(bgmac->plat.base);
  
- struct ipv6_txoptions *fl6_merge_options(struct ipv6_txoptions *opt_space,
- 					 struct ip6_flowlabel *fl,
---- a/include/net/netns/ipv6.h
-+++ b/include/net/netns/ipv6.h
-@@ -77,9 +77,10 @@ struct netns_ipv6 {
- 	spinlock_t		fib6_gc_lock;
- 	unsigned int		 ip6_rt_gc_expire;
- 	unsigned long		 ip6_rt_last_gc;
-+	unsigned char		flowlabel_has_excl;
- #ifdef CONFIG_IPV6_MULTIPLE_TABLES
--	unsigned int		fib6_rules_require_fldissect;
- 	bool			fib6_has_custom_rules;
-+	unsigned int		fib6_rules_require_fldissect;
- #ifdef CONFIG_IPV6_SUBTREES
- 	unsigned int		fib6_routes_require_src;
- #endif
---- a/net/ipv6/ip6_flowlabel.c
-+++ b/net/ipv6/ip6_flowlabel.c
-@@ -450,8 +450,10 @@ fl_create(struct net *net, struct sock *
- 		err = -EINVAL;
- 		goto done;
- 	}
--	if (fl_shared_exclusive(fl) || fl->opt)
-+	if (fl_shared_exclusive(fl) || fl->opt) {
-+		WRITE_ONCE(sock_net(sk)->ipv6.flowlabel_has_excl, 1);
- 		static_branch_deferred_inc(&ipv6_flowlabel_exclusive);
+-	bgmac->plat.idm_base = devm_platform_ioremap_resource_byname(pdev, "idm_base");
+-	if (IS_ERR(bgmac->plat.idm_base))
+-		return PTR_ERR(bgmac->plat.idm_base);
+-	else
++	/* The idm_base resource is optional for some platforms */
++	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "idm_base");
++	if (regs) {
++		bgmac->plat.idm_base = devm_ioremap_resource(&pdev->dev, regs);
++		if (IS_ERR(bgmac->plat.idm_base))
++			return PTR_ERR(bgmac->plat.idm_base);
+ 		bgmac->feature_flags &= ~BGMAC_FEAT_IDM_MASK;
 +	}
- 	return fl;
  
- done:
+-	bgmac->plat.nicpm_base = devm_platform_ioremap_resource_byname(pdev, "nicpm_base");
+-	if (IS_ERR(bgmac->plat.nicpm_base))
+-		return PTR_ERR(bgmac->plat.nicpm_base);
++	/* The nicpm_base resource is optional for some platforms */
++	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "nicpm_base");
++	if (regs) {
++		bgmac->plat.nicpm_base = devm_ioremap_resource(&pdev->dev,
++							       regs);
++		if (IS_ERR(bgmac->plat.nicpm_base))
++			return PTR_ERR(bgmac->plat.nicpm_base);
++	}
+ 
+ 	bgmac->read = platform_bgmac_read;
+ 	bgmac->write = platform_bgmac_write;
 
 

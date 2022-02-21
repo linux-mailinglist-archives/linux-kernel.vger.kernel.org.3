@@ -2,145 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4644BE2B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2524BE787
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353225AbiBUKWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:22:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54288 "EHLO
+        id S1354760AbiBUKXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:23:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353322AbiBUKWD (ORCPT
+        with ESMTP id S242237AbiBUKW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:22:03 -0500
-Received: from outbound-smtp28.blacknight.com (outbound-smtp28.blacknight.com [81.17.249.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A0A11C0C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:41:42 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
-        by outbound-smtp28.blacknight.com (Postfix) with ESMTPS id A9844CCE2F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:41:41 +0000 (GMT)
-Received: (qmail 32136 invoked from network); 21 Feb 2022 09:41:41 -0000
-Received: from unknown (HELO stampy.112glenside.lan) (mgorman@techsingularity.net@[84.203.17.223])
-  by 81.17.254.9 with ESMTPA; 21 Feb 2022 09:41:41 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Aaron Lu <aaron.lu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 1/1] mm/page_alloc: Do not prefetch buddies during bulk free
-Date:   Mon, 21 Feb 2022 09:41:19 +0000
-Message-Id: <20220221094119.15282-2-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220221094119.15282-1-mgorman@techsingularity.net>
-References: <20220221094119.15282-1-mgorman@techsingularity.net>
+        Mon, 21 Feb 2022 05:22:57 -0500
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2094A60052;
+        Mon, 21 Feb 2022 01:42:40 -0800 (PST)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K2HQl0QQPz9sJ6;
+        Mon, 21 Feb 2022 10:42:39 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1645436556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=O0vim5dUjqbxE12jR8gxo6NSfechSEkOIcqQEt0TBqo=;
+        b=LnBXweTsIRrvzQ3Wm779e/V01xHJIN1UepyeKNH/p2MLBfqjz0AoIzQ4e5Ytl9L4oeA/7q
+        aAwtzfkBsCthBRAxfWgCQ8QOLarumJXm7QZiGlghqCIi97RduserQ9cnv8Ky0L+fHyJ5UP
+        WHp6Ck2O0Io49jTy+RtOgxB6QzQ1B+vilZP0tjnl01kRBMSj8GzAMafaNvVxeDqvuV/CbZ
+        Ce2B2UZ5pz1k4V0z7X7RW4h/eu2j/7LxOAxAqjB+9IBk+Dbxsa64q2zq0i4gy3CtSUmjQh
+        AKxi0ZnXYa1aiFr+0/jQdSzISa5MUPINIF6zDuZkBrkiP9y6g/yTx4mieam7gg==
+From:   Marcello Sylvester Bauer <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: [PATCH v4 0/4] Support pli1209bc Digital Supervisor
+Date:   Mon, 21 Feb 2022 10:42:03 +0100
+Message-Id: <cover.1645435888.git.sylv@sylv.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-free_pcppages_bulk() has taken two passes through the pcp lists since
-commit 0a5f4e5b4562 ("mm/free_pcppages_bulk: do not hold lock when picking
-pages to free") due to deferring the cost of selecting PCP lists until
-the zone lock is held.
+Hi,
 
-As the list processing now takes place under the zone lock, it's less
-clear that this will always benefit for two reasons.
+This patch set adds support for PLI1209BC Digital Supervisor from Vicor
+Corporation. It replaces the previous submitted driver "bcm6123" [1],
+since there are multiple digital supervisors, which uses BCMs in different
+configurations [2].
 
-1. There is a guaranteed cost to calculating the buddy which definitely
-   has to be calculated again. However, as the zone lock is held and
-   there is no deferring of buddy merging, there is no guarantee that the
-   prefetch will have completed when the second buddy calculation takes
-   place and buddies are being merged.  With or without the prefetch, there
-   may be further stalls depending on how many pages get merged. In other
-   words, a stall due to merging is inevitable and at best only one stall
-   might be avoided at the cost of calculating the buddy location twice.
+Change in v4:
+- Add Documetation to index.rst
+- Add missing license identifier
+- Fix typo and Makefile obj order
 
-2. As the zone lock is held, prefetch_nr makes less sense as once
-   prefetch_nr expires, the cache lines of interest have already been
-   merged.
+Change in v3:
+- prevent potential over- or underflow of PMBUS_READ_POUT
 
-The main concern is that there is a definite cost to calculating the
-buddy location early for the prefetch and it is a "maybe win" depending
-on whether the CPU prefetch logic and memory is fast enough. Remove the
-prefetch logic on the basis that reduced instructions in a path is always
-a saving where as the prefetch might save one memory stall depending on
-the CPU and memory.
+Changes in v2:
+- Multiply PMBUS_READ_POUT with 10 (R=1)
+  instead of dividing PMBUS_READ_PIN by 10.
+- Set all pmbus formats to direct.
+- Comment reason why page 0 is redundant.
+- Import pmbus namespace.
 
-In most cases, this has marginal benefit as the calculations are a small
-part of the overall freeing of pages. However, it was detectable on at
-least one machine.
+[1]: https://www.spinics.net/lists/linux-hwmon/msg14097.html
+[2]: https://www.spinics.net/lists/linux-hwmon/msg14123.html
 
-                              5.17.0-rc3             5.17.0-rc3
-                    mm-highpcplimit-v2r1     mm-noprefetch-v1r1
-Min       elapsed      630.00 (   0.00%)      610.00 (   3.17%)
-Amean     elapsed      639.00 (   0.00%)      623.00 *   2.50%*
-Max       elapsed      660.00 (   0.00%)      660.00 (   0.00%)
+Marcello Sylvester Bauer (4):
+  dt-bindings: vendor-prefixes: add Vicor Corporation
+  dt-bindings:trivial-devices: Add pli1209bc
+  pmbus: Add support for pli1209bc
+  pmbus (pli1209bc): Add regulator support
 
-Suggested-by: Aaron Lu <aaron.lu@intel.com>
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- mm/page_alloc.c | 24 ------------------------
- 1 file changed, 24 deletions(-)
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/pli1209bc.rst             |  75 +++++++++
+ drivers/hwmon/pmbus/Kconfig                   |  16 ++
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/pli1209bc.c               | 146 ++++++++++++++++++
+ 7 files changed, 243 insertions(+)
+ create mode 100644 Documentation/hwmon/pli1209bc.rst
+ create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index de9f072d23bd..2d5cc098136d 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1432,15 +1432,6 @@ static bool bulkfree_pcp_prepare(struct page *page)
- }
- #endif /* CONFIG_DEBUG_VM */
- 
--static inline void prefetch_buddy(struct page *page, unsigned int order)
--{
--	unsigned long pfn = page_to_pfn(page);
--	unsigned long buddy_pfn = __find_buddy_pfn(pfn, order);
--	struct page *buddy = page + (buddy_pfn - pfn);
--
--	prefetch(buddy);
--}
--
- /*
-  * Frees a number of pages from the PCP lists
-  * Assumes all pages on list are in same zone.
-@@ -1453,7 +1444,6 @@ static void free_pcppages_bulk(struct zone *zone, int count,
- 	int min_pindex = 0;
- 	int max_pindex = NR_PCP_LISTS - 1;
- 	unsigned int order;
--	int prefetch_nr = READ_ONCE(pcp->batch);
- 	bool isolated_pageblocks;
- 	struct page *page;
- 
-@@ -1508,20 +1498,6 @@ static void free_pcppages_bulk(struct zone *zone, int count,
- 			if (bulkfree_pcp_prepare(page))
- 				continue;
- 
--			/*
--			 * We are going to put the page back to the global
--			 * pool, prefetch its buddy to speed up later access
--			 * under zone->lock. It is believed the overhead of
--			 * an additional test and calculating buddy_pfn here
--			 * can be offset by reduced memory latency later. To
--			 * avoid excessive prefetching due to large count, only
--			 * prefetch buddy for the first pcp->batch nr of pages.
--			 */
--			if (prefetch_nr) {
--				prefetch_buddy(page, order);
--				prefetch_nr--;
--			}
--
- 			/* MIGRATE_ISOLATE page should not go to pcplists */
- 			VM_BUG_ON_PAGE(is_migrate_isolate(mt), page);
- 			/* Pageblock could have been isolated meanwhile */
 -- 
-2.26.2
+2.34.1
 

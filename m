@@ -2,118 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8C84BD316
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 02:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024C54BD32A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 02:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236729AbiBUBL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 20:11:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37698 "EHLO
+        id S245118AbiBUB3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 20:29:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiBUBL0 (ORCPT
+        with ESMTP id S233987AbiBUB3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 20:11:26 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F14517C0
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 17:11:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645405863; x=1676941863;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Gu0KB9VXRNHDXPVaDd+q1xpKvG0dhmPbYusUW/kdCj0=;
-  b=RAGqEEI5Ip8fUxw+IXTkV+MZvKIJ3PiqT4b83yyptLVBOczR25Kc3T2g
-   U31NQPfKbNgFpSaf3aRrr576uXo8C/uvCHatsa+caA/lZxCJa2mAyyTnz
-   /a777rnbualbWjjSSR4WR5mDNAGGK9wr3YJdzmWbX4z+eEH1vjVYBMx27
-   wu3mkTgvHcjTRPAbDhcTDJxVO4FcoxQZAt48wJoH3qNFVBzHprRIAOhjp
-   JLMENYrZK0h1hMP8AbIQzUaZt3vVesX+oXPyPzDS3CAxAakle8fnfBaKL
-   czQKW9F9QAZ/T9Hxkb11MjgYmz46o0lg2+3QshSLRUDZ4hnj6ZHI2h77c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="238828137"
-X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="238828137"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 17:11:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="572937588"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 20 Feb 2022 17:11:01 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLxEC-000184-Mh; Mon, 21 Feb 2022 01:11:00 +0000
-Date:   Mon, 21 Feb 2022 09:10:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 413/2574] kernel/bpf/core.c:62:6: warning:
- no previous prototype for function 'bpf_jit_dump'
-Message-ID: <202202210906.6oI53C71-lkp@intel.com>
+        Sun, 20 Feb 2022 20:29:01 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8D3517C0;
+        Sun, 20 Feb 2022 17:28:38 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 21L1HQCl026167;
+        Mon, 21 Feb 2022 09:17:26 +0800 (GMT-8)
+        (envelope-from billy_tsai@aspeedtech.com)
+Received: from BillyTsai-pc.aspeed.com (192.168.2.149) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Feb
+ 2022 09:26:16 +0800
+From:   Billy Tsai <billy_tsai@aspeedtech.com>
+To:     <jic23@kernel.org>, <lars@metafoo.de>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <billy_tsai@aspeedtech.com>,
+        <colin.king@canonical.com>, <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+CC:     Konstantin Klubnichkin <kitsok@yandex-team.ru>
+Subject: [PATCH v2] iio: adc: aspeed: Add divider flag to fix incorrect voltage reading.
+Date:   Mon, 21 Feb 2022 09:27:05 +0800
+Message-ID: <20220221012705.22008-1-billy_tsai@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.149]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 21L1HQCl026167
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   39e8a0edc8fae20758051dadf7846849edc18b88
-commit: 693153354d8d8df0fd4fd0d81ca659ca9c96d2e9 [413/2574] headers/uninline: Uninline multi-use function: bpf_jit_dump()
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220221/202202210906.6oI53C71-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=693153354d8d8df0fd4fd0d81ca659ca9c96d2e9
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 693153354d8d8df0fd4fd0d81ca659ca9c96d2e9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vsyscall/ arch/x86/pci/ kernel/bpf/ kernel/sched/ kernel/trace/ lib/ net/ipv6/
+The formula for the ADC sampling period in ast2400/ast2500 is:
+ADC clock period = PCLK * 2 * (ADC0C[31:17] + 1) * (ADC0C[9:0])
+When ADC0C[9:0] is set to 0 the sampling voltage will be lower than
+expected, because the hardware may not have enough time to
+charge/discharge to a stable voltage. This patch use the flag
+CLK_DIVIDER_ONE_BASED which will use the raw value read from the
+register, with the value of zero considered invalid to conform to the
+corrected formula.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/core.c:62:6: warning: no previous prototype for function 'bpf_jit_dump' [-Wmissing-prototypes]
-   void bpf_jit_dump(unsigned int flen, unsigned int proglen, u32 pass, void *image)
-        ^
-   kernel/bpf/core.c:62:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_jit_dump(unsigned int flen, unsigned int proglen, u32 pass, void *image)
-   ^
-   static 
-   kernel/bpf/core.c:1378:12: warning: no previous prototype for function 'bpf_probe_read_kernel' [-Wmissing-prototypes]
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-              ^
-   kernel/bpf/core.c:1378:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/bpf_jit_dump +62 kernel/bpf/core.c
-
-    61	
-  > 62	void bpf_jit_dump(unsigned int flen, unsigned int proglen, u32 pass, void *image)
-    63	{
-    64		pr_err("flen=%u proglen=%u pass=%u image=%pK from=%s pid=%d\n", flen,
-    65		       proglen, pass, image, current->comm, task_pid_nr(current));
-    66	
-    67		if (image)
-    68			print_hex_dump(KERN_ERR, "JIT code: ", DUMP_PREFIX_OFFSET,
-    69				       16, 1, image, proglen, false);
-    70	}
-    71	
-
+Fixes: 573803234e72 ("iio: Aspeed ADC")
+Reported-by: Konstantin Klubnichkin <kitsok@yandex-team.ru>
+Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/iio/adc/aspeed_adc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/adc/aspeed_adc.c b/drivers/iio/adc/aspeed_adc.c
+index a957cad1bfab..ffae64f39221 100644
+--- a/drivers/iio/adc/aspeed_adc.c
++++ b/drivers/iio/adc/aspeed_adc.c
+@@ -539,7 +539,9 @@ static int aspeed_adc_probe(struct platform_device *pdev)
+ 	data->clk_scaler = devm_clk_hw_register_divider(
+ 		&pdev->dev, clk_name, clk_parent_name, scaler_flags,
+ 		data->base + ASPEED_REG_CLOCK_CONTROL, 0,
+-		data->model_data->scaler_bit_width, 0, &data->clk_lock);
++		data->model_data->scaler_bit_width,
++		data->model_data->need_prescaler ? CLK_DIVIDER_ONE_BASED : 0,
++		&data->clk_lock);
+ 	if (IS_ERR(data->clk_scaler))
+ 		return PTR_ERR(data->clk_scaler);
+ 
+-- 
+2.25.1
+

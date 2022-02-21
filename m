@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024574BE34E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E9F4BDDE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346509AbiBUI55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:57:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44708 "EHLO
+        id S1349728AbiBUJ0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:26:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346184AbiBUIzl (ORCPT
+        with ESMTP id S1348860AbiBUJLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:55:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B14324BD0;
-        Mon, 21 Feb 2022 00:53:39 -0800 (PST)
+        Mon, 21 Feb 2022 04:11:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAD828985;
+        Mon, 21 Feb 2022 01:04:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEA18B80EB5;
-        Mon, 21 Feb 2022 08:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 114DCC340E9;
-        Mon, 21 Feb 2022 08:53:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9926DCE0E7C;
+        Mon, 21 Feb 2022 09:04:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 813CCC340EB;
+        Mon, 21 Feb 2022 09:04:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433615;
-        bh=7olKYaqtu+BxZjg1A+48Fj6BNudVjfaeR4CAz1kvzAY=;
+        s=korg; t=1645434254;
+        bh=w9ICo0eUuFq9Mff2xQ1Px7fiTbmfJPGbT2iyXlS0BsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vqAHCmnN9n3A5BK3GfOpLMPEzyM4YU/hBDHfilTn+Ys45MfH9Sa3FHfU+Fos5EpTS
-         +kLfUN41hVT9O5A0FGS6q5zG0rThBRorWupZn+DW8Cg+RZ7qufcUaeAMkr19RTOqNm
-         Z1Fmv4rzl1U/jnq4V2D/mxzueKijkYgMkyRdmPc0=
+        b=TLkz5UU3nGy4LKkleQM1VXYVp4UiDbWzGIUw3ImAAEVGIZuu/gIhPMlTRMSJ89Cxw
+         iynnpvhfWLGDOrcodbmPKt1BLv7PcJ+o3Rbz/6vxC/XbJ9mA+zQx2NtcqRAkC18aEP
+         ipnHhz8O0wjzuOD9sX0yJb/sNmfK8H78MFOA1qDc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, dmummenschanz@web.de,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 27/45] ALSA: hda: Fix regression on forced probe mask option
+        stable@vger.kernel.org, Radu Bulie <radu-andrei.bulie@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 066/121] dpaa2-eth: Initialize mutex used in one step timestamping path
 Date:   Mon, 21 Feb 2022 09:49:18 +0100
-Message-Id: <20220221084911.332791452@linuxfoundation.org>
+Message-Id: <20220221084923.435265799@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
-References: <20220221084910.454824160@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Radu Bulie <radu-andrei.bulie@nxp.com>
 
-commit 6317f7449348a897483a2b4841f7a9190745c81b upstream.
+commit 07dd44852be89386ab12210df90a2d78779f3bff upstream.
 
-The forced probe mask via probe_mask 0x100 bit doesn't work any longer
-as expected since the bus init code was moved and it's clearing the
-codec_mask value that was set beforehand.  This patch fixes the
-long-time regression by moving the check_probe_mask() call.
+1588 Single Step Timestamping code path uses a mutex to
+enforce atomicity for two events:
+- update of ptp single step register
+- transmit ptp event packet
 
-Fixes: a41d122449be ("ALSA: hda - Embed bus into controller object")
-Reported-by: dmummenschanz@web.de
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/trinity-f018660b-95c9-442b-a2a8-c92a56eb07ed-1644345967148@3c-app-webde-bap22
-Link: https://lore.kernel.org/r/20220214100020.8870-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Before this patch the mutex was not initialized. This
+caused unexpected crashes in the Tx function.
+
+Fixes: c55211892f463 ("dpaa2-eth: support PTP Sync packet one-step timestamping")
+Signed-off-by: Radu Bulie <radu-andrei.bulie@nxp.com>
+Reviewed-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/hda_intel.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -1821,8 +1821,6 @@ static int azx_create(struct snd_card *c
- 
- 	assign_position_fix(chip, check_position_fix(chip, position_fix[dev]));
- 
--	check_probe_mask(chip, dev);
--
- 	if (single_cmd < 0) /* allow fallback to single_cmd at errors */
- 		chip->fallback_to_single_cmd = 1;
- 	else /* explicitly set to single_cmd or not */
-@@ -1851,6 +1849,8 @@ static int azx_create(struct snd_card *c
- 		chip->bus.needs_damn_long_delay = 1;
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -4225,7 +4225,7 @@ static int dpaa2_eth_probe(struct fsl_mc
  	}
  
-+	check_probe_mask(chip, dev);
-+
- 	err = snd_device_new(card, SNDRV_DEV_LOWLEVEL, chip, &ops);
- 	if (err < 0) {
- 		dev_err(card->dev, "Error creating device [card]!\n");
+ 	INIT_WORK(&priv->tx_onestep_tstamp, dpaa2_eth_tx_onestep_tstamp);
+-
++	mutex_init(&priv->onestep_tstamp_lock);
+ 	skb_queue_head_init(&priv->tx_skbs);
+ 
+ 	/* Obtain a MC portal */
 
 

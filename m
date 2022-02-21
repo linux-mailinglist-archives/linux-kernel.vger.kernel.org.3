@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E4D4BDDD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BC24BE007
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353492AbiBUKBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:01:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52084 "EHLO
+        id S239836AbiBUI7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:59:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352312AbiBUJxz (ORCPT
+        with ESMTP id S1346751AbiBUI6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:53:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C847A1D325;
-        Mon, 21 Feb 2022 01:23:38 -0800 (PST)
+        Mon, 21 Feb 2022 03:58:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E364723BED;
+        Mon, 21 Feb 2022 00:54:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64E7E60FCC;
-        Mon, 21 Feb 2022 09:23:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477DDC340E9;
-        Mon, 21 Feb 2022 09:23:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17914B80EB6;
+        Mon, 21 Feb 2022 08:54:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CAE8C340E9;
+        Mon, 21 Feb 2022 08:54:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435417;
-        bh=E6A2kwIv4UUnoTr2Zs/vVy+OJVA/kcWOfEpF7UolTxw=;
+        s=korg; t=1645433663;
+        bh=bJzk+MFGzdcR9CO+eXnU6w55eP9b3igNabas5tmvae0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iFwEnnZNxfQAdGhcd6RqaDZy+hLyOHjCmBJJJCFQbZSS39XHwECQdzb/+sBDqq2YG
-         8DdtXlpJSXIk1D9xEonYSFIyY3dzY22LpU27zkQxWBGEiwoFBRkD8rNlrBa+RpAEYn
-         CyhiCp9ZZ4FaeFH1XVplv0Qx2SP04QlDfyl7TfTE=
+        b=iLYQ61Ep9uojqROjgCeyeIfhekto8bef3Abkr5PdihS5Hek+Fdf5SDa0OeLPlNbDy
+         txA0rMRtxF66Hoa2RysZG6C6gGNn3MtHNu/uSfr6PkXijD67yRHqBjazF5ozd5whXP
+         c+erT5kJnbCpz1vbEktXqBL+d6OcsBA+1MzLPRhA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.16 157/227] ASoC: tas2770: Insert post reset delay
+        stable@vger.kernel.org, Marc St-Amand <mstamand@ciena.com>,
+        Harini Katakam <harini.katakam@xilinx.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 45/45] net: macb: Align the dma and coherent dma masks
 Date:   Mon, 21 Feb 2022 09:49:36 +0100
-Message-Id: <20220221084940.041806186@linuxfoundation.org>
+Message-Id: <20220221084911.916299159@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Marc St-Amand <mstamand@ciena.com>
 
-commit 307f31452078792aab94a729fce33200c6e42dc4 upstream.
+[ Upstream commit 37f7860602b5b2d99fc7465f6407f403f5941988 ]
 
-Per TAS2770 datasheet there must be a 1 ms delay from reset to first
-command. So insert delays into the driver where appropriate.
+Single page and coherent memory blocks can use different DMA masks
+when the macb accesses physical memory directly. The kernel is clever
+enough to allocate pages that fit into the requested address width.
 
-Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220204095301.5554-1-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+When using the ARM SMMU, the DMA mask must be the same for single
+pages and big coherent memory blocks. Otherwise the translation
+tables turn into one big mess.
+
+  [   74.959909] macb ff0e0000.ethernet eth0: DMA bus error: HRESP not OK
+  [   74.959989] arm-smmu fd800000.smmu: Unhandled context fault: fsr=0x402, iova=0x3165687460, fsynr=0x20001, cbfrsynra=0x877, cb=1
+  [   75.173939] macb ff0e0000.ethernet eth0: DMA bus error: HRESP not OK
+  [   75.173955] arm-smmu fd800000.smmu: Unhandled context fault: fsr=0x402, iova=0x3165687460, fsynr=0x20001, cbfrsynra=0x877, cb=1
+
+Since using the same DMA mask does not hurt direct 1:1 physical
+memory mappings, this commit always aligns DMA and coherent masks.
+
+Signed-off-by: Marc St-Amand <mstamand@ciena.com>
+Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/tas2770.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/cadence/macb_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/soc/codecs/tas2770.c
-+++ b/sound/soc/codecs/tas2770.c
-@@ -38,10 +38,12 @@ static void tas2770_reset(struct tas2770
- 		gpiod_set_value_cansleep(tas2770->reset_gpio, 0);
- 		msleep(20);
- 		gpiod_set_value_cansleep(tas2770->reset_gpio, 1);
-+		usleep_range(1000, 2000);
+diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+index b07ea8a26c20a..045ab0ec5ca25 100644
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -3528,7 +3528,7 @@ static int macb_probe(struct platform_device *pdev)
+ 
+ #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+ 	if (GEM_BFEXT(DAW64, gem_readl(bp, DCFG6))) {
+-		dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
++		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(44));
+ 		bp->hw_dma_cap |= HW_DMA_CAP_64B;
  	}
- 
- 	snd_soc_component_write(tas2770->component, TAS2770_SW_RST,
- 		TAS2770_RST);
-+	usleep_range(1000, 2000);
- }
- 
- static int tas2770_set_bias_level(struct snd_soc_component *component,
-@@ -110,6 +112,7 @@ static int tas2770_codec_resume(struct s
- 
- 	if (tas2770->sdz_gpio) {
- 		gpiod_set_value_cansleep(tas2770->sdz_gpio, 1);
-+		usleep_range(1000, 2000);
- 	} else {
- 		ret = snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
- 						    TAS2770_PWR_CTRL_MASK,
-@@ -510,8 +513,10 @@ static int tas2770_codec_probe(struct sn
- 
- 	tas2770->component = component;
- 
--	if (tas2770->sdz_gpio)
-+	if (tas2770->sdz_gpio) {
- 		gpiod_set_value_cansleep(tas2770->sdz_gpio, 1);
-+		usleep_range(1000, 2000);
-+	}
- 
- 	tas2770_reset(tas2770);
- 
+ #endif
+-- 
+2.34.1
+
 
 

@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECD74BE6B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E36324BE798
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354831AbiBUKda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:33:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44348 "EHLO
+        id S1354996AbiBUKdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:33:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354962AbiBUKdK (ORCPT
+        with ESMTP id S1354665AbiBUKdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 05:33:10 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346AB369E5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77169369E8
         for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:53:30 -0800 (PST)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1nM5Nb-0007AX-9t; Mon, 21 Feb 2022 10:53:15 +0100
+        id 1nM5Nb-0007AY-9w; Mon, 21 Feb 2022 10:53:15 +0100
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1nM5NZ-00FUej-MK; Mon, 21 Feb 2022 10:53:13 +0100
+        id 1nM5NZ-00FUes-NP; Mon, 21 Feb 2022 10:53:13 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -40,9 +40,9 @@ Cc:     Robin van der Gracht <robin@protonic.nl>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         David Jander <david@protonic.nl>,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH v1 5/8] ARM: dts: imx6qdl-vicut1/vicutgo: The sgtl5000 uses i2s not ac97
-Date:   Mon, 21 Feb 2022 10:53:09 +0100
-Message-Id: <20220221095312.3692669-5-o.rempel@pengutronix.de>
+Subject: [PATCH v1 6/8] ARM: dts: imx6dl-victgo: Add interrupt-counter nodes
+Date:   Mon, 21 Feb 2022 10:53:10 +0100
+Message-Id: <20220221095312.3692669-6-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220221095312.3692669-1-o.rempel@pengutronix.de>
 References: <20220221095312.3692669-1-o.rempel@pengutronix.de>
@@ -63,45 +63,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Robin van der Gracht <robin@protonic.nl>
 
-According to Documentation/devicetree/bindings/sound/fsl,ssi.txt
-'fsl,mode' should be specified for AC97 mode only.
-
-The 'fsl,ssi' documentation doesn't say anything about specifying
-'sound-dai-cells' so we'll remove that as well.
+Interrupt counter is mainlined, now we can add missing counter nodes.
 
 Signed-off-by: Robin van der Gracht <robin@protonic.nl>
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- arch/arm/boot/dts/imx6dl-victgo.dts   | 2 --
- arch/arm/boot/dts/imx6qdl-vicut1.dtsi | 2 --
- 2 files changed, 4 deletions(-)
+ arch/arm/boot/dts/imx6dl-victgo.dts | 41 ++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6dl-victgo.dts b/arch/arm/boot/dts/imx6dl-victgo.dts
-index d542ddad4e32..20c7f80e5ec9 100644
+index 20c7f80e5ec9..907682248aa7 100644
 --- a/arch/arm/boot/dts/imx6dl-victgo.dts
 +++ b/arch/arm/boot/dts/imx6dl-victgo.dts
-@@ -591,8 +591,6 @@ &pwm3 {
- };
+@@ -54,6 +54,27 @@ comp0_out: endpoint {
+ 		};
+ 	};
  
- &ssi1 {
--	#sound-dai-cells = <0>;
--	fsl,mode = "ac97-slave";
- 	status = "okay";
- };
++	counter-0 {
++		compatible = "interrupt-counter";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_counter0>;
++		gpios = <&gpio2 0 GPIO_ACTIVE_LOW>;
++	};
++
++	counter-1 {
++		compatible = "interrupt-counter";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_counter1>;
++		gpios = <&gpio2 1 GPIO_ACTIVE_LOW>;
++	};
++
++	counter-2 {
++		compatible = "interrupt-counter";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_counter2>;
++		gpios = <&gpio2 2 GPIO_ACTIVE_LOW>;
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
+@@ -400,7 +421,7 @@ &gpio1 {
  
-diff --git a/arch/arm/boot/dts/imx6qdl-vicut1.dtsi b/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
-index ec39008c0950..97ef8264947a 100644
---- a/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
-@@ -466,8 +466,6 @@ &pwm3 {
- };
+ &gpio2 {
+ 	gpio-line-names =
+-		"", "", "", "", "", "", "", "",
++		"YACO_WHEEL", "YACO_RADAR", "YACO_PTO", "", "", "", "", "",
+ 		"", "LED_PWM", "", "", "",
+ 			"", "", "",
+ 		"", "", "", "", "", "", "ISB_IN1", "ON_SWITCH",
+@@ -706,6 +727,24 @@ MX6QDL_PAD_KEY_ROW3__GPIO4_IO13			0x13008
+ 		>;
+ 	};
  
- &ssi1 {
--	#sound-dai-cells = <0>;
--	fsl,mode = "ac97-slave";
- 	status = "okay";
- };
- 
++	pinctrl_counter0: counter0grp {
++		fsl,pins = <
++			MX6QDL_PAD_NANDF_D0__GPIO2_IO00			0x1b000
++		>;
++	};
++
++	pinctrl_counter1: counter1grp {
++		fsl,pins = <
++			MX6QDL_PAD_NANDF_D1__GPIO2_IO01			0x1b000
++		>;
++	};
++
++	pinctrl_counter2: counter2grp {
++		fsl,pins = <
++			MX6QDL_PAD_NANDF_D2__GPIO2_IO02			0x1b000
++		>;
++	};
++
+ 	pinctrl_ecspi1: ecspi1grp {
+ 		fsl,pins = <
+ 			MX6QDL_PAD_EIM_D17__ECSPI1_MISO			0x100b1
 -- 
 2.30.2
 

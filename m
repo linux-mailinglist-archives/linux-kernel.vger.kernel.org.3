@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820364BE6CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AF54BE7CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245084AbiBUJEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:04:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59924 "EHLO
+        id S1354048AbiBUKL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:11:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347249AbiBUJBG (ORCPT
+        with ESMTP id S1352990AbiBUJ5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061E91ADBF;
-        Mon, 21 Feb 2022 00:56:07 -0800 (PST)
+        Mon, 21 Feb 2022 04:57:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C3B45530;
+        Mon, 21 Feb 2022 01:24:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC38F6112B;
-        Mon, 21 Feb 2022 08:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD10C340E9;
-        Mon, 21 Feb 2022 08:56:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E753B80EB1;
+        Mon, 21 Feb 2022 09:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBF1C340E9;
+        Mon, 21 Feb 2022 09:24:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433766;
-        bh=1ebs+CBuFtYrHR0bOOevaCvXQHzUX28Wzi6kVnMTHAw=;
+        s=korg; t=1645435489;
+        bh=yZXY8AcCl5920w1ObP5o3jbBfBFqVp7ha7l5VdB4S+o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oTc8sHQt9L664B9DSH1wqCjYj/AhBr5+f507Ehori/qWuJMIJAZjpQAlCmj/J7dlP
-         PJ+lFvM0YN2wilAd58GQPf+OLB21RZ1RlqRaw8dceHVV0BU7ZxfL/myVUT6axN+niq
-         8Ejhc2enAYFgaZRxZCp+da8WkfF3Aj6pqrsr5pYg=
+        b=jxrmUK7U45Tt1b3cVEeECAMObbtsizKGwJ+Uk7cwp1mfo0Tz5VynRcaCu0A/h46sx
+         gTXtGwMVMbArR9bBTezdekLHb2Dg21cJ3pfuhF4ZRs5Scia+5zKKYC3YV5iNOlnSFw
+         AoIjH7XY+j0nLTRo5gbobOYFWPJpaeM8CKEoIf/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.19 35/58] powerpc/lib/sstep: fix ptesync build error
+        stable@vger.kernel.org, Woody Suwalski <wsuwalski@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.16 149/227] ACPI: processor: idle: fix lockup regression on 32-bit ThinkPad T40
 Date:   Mon, 21 Feb 2022 09:49:28 +0100
-Message-Id: <20220221084913.013621444@linuxfoundation.org>
+Message-Id: <20220221084939.789054473@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anders Roxell <anders.roxell@linaro.org>
+From: Woody Suwalski <wsuwalski@gmail.com>
 
-commit fe663df7825811358531dc2e8a52d9eaa5e3515e upstream.
+commit bfe55a1f7fd6bfede16078bf04c6250fbca11588 upstream.
 
-Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
-2.37.90.20220207) the following build error shows up:
+Add and ACPI idle power level limit for 32-bit ThinkPad T40.
 
-  {standard input}: Assembler messages:
-  {standard input}:2088: Error: unrecognized opcode: `ptesync'
-  make[3]: *** [/builds/linux/scripts/Makefile.build:287: arch/powerpc/lib/sstep.o] Error 1
+There is a regression on T40 introduced by commit d6b88ce2, starting
+with kernel 5.16:
 
-Add the 'ifdef CONFIG_PPC64' around the 'ptesync' in function
-'emulate_update_regs()' to like it is in 'analyse_instr()'. Since it looks like
-it got dropped inadvertently by commit 3cdfcbfd32b9 ("powerpc: Change
-analyse_instr so it doesn't modify *regs").
+commit d6b88ce2eb9d2698eb24451eb92c0a1649b17bb1
+Author: Richard Gong <richard.gong@amd.com>
+Date:   Wed Sep 22 08:31:16 2021 -0500
 
-A key detail is that analyse_instr() will never recognise lwsync or
-ptesync on 32-bit (because of the existing ifdef), and as a result
-emulate_update_regs() should never be called with an op specifying
-either of those on 32-bit. So removing them from emulate_update_regs()
-should be a nop in terms of runtime behaviour.
+  ACPI: processor idle: Allow playing dead in C3 state
 
-Fixes: 3cdfcbfd32b9 ("powerpc: Change analyse_instr so it doesn't modify *regs")
-Cc: stable@vger.kernel.org # v4.14+
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-[mpe: Add last paragraph of change log mentioning analyse_instr() details]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220211005113.1361436-1-anders.roxell@linaro.org
+The above patch is trying to enter C3 state during init, what is causing
+a T40 system freeze. I have not found a similar issue on any other of my
+32-bit machines.
+
+The fix is to add another exception to the processor_power_dmi_table[] list.
+As a result the dmesg shows as expected:
+
+[2.155398] ACPI: IBM ThinkPad T40 detected - limiting to C2 max_cstate. Override with "processor.max_cstate=9"
+[2.155404] ACPI: processor limited to max C-state 2
+
+The fix is trivial and affects only vintage T40 systems.
+
+Fixes: d6b88ce2eb9d ("CPI: processor idle: Allow playing dead in C3 state")
+Signed-off-by: Woody Suwalski <wsuwalski@gmail.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
+[ rjw: New subject ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/lib/sstep.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/acpi/processor_idle.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/arch/powerpc/lib/sstep.c
-+++ b/arch/powerpc/lib/sstep.c
-@@ -2681,12 +2681,14 @@ void emulate_update_regs(struct pt_regs
- 		case BARRIER_EIEIO:
- 			eieio();
- 			break;
-+#ifdef CONFIG_PPC64
- 		case BARRIER_LWSYNC:
- 			asm volatile("lwsync" : : : "memory");
- 			break;
- 		case BARRIER_PTESYNC:
- 			asm volatile("ptesync" : : : "memory");
- 			break;
-+#endif
- 		}
- 		break;
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -95,6 +95,11 @@ static const struct dmi_system_id proces
+ 	  DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
+ 	  DMI_MATCH(DMI_PRODUCT_NAME,"L8400B series Notebook PC")},
+ 	 (void *)1},
++	/* T40 can not handle C3 idle state */
++	{ set_max_cstate, "IBM ThinkPad T40", {
++	  DMI_MATCH(DMI_SYS_VENDOR, "IBM"),
++	  DMI_MATCH(DMI_PRODUCT_NAME, "23737CU")},
++	 (void *)2},
+ 	{},
+ };
  
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD02B4BDE7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54324BE7D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349272AbiBUJMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:12:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36068 "EHLO
+        id S1354034AbiBUKCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:02:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347797AbiBUJIk (ORCPT
+        with ESMTP id S1352073AbiBUJzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:08:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BC226576;
-        Mon, 21 Feb 2022 01:00:27 -0800 (PST)
+        Mon, 21 Feb 2022 04:55:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6D0387BB;
+        Mon, 21 Feb 2022 01:24:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FA5D61202;
-        Mon, 21 Feb 2022 09:00:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B61C340E9;
-        Mon, 21 Feb 2022 09:00:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A125C60FCC;
+        Mon, 21 Feb 2022 09:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897EEC340E9;
+        Mon, 21 Feb 2022 09:24:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434027;
-        bh=0ajMXluSAqvhHBE5hWclvfBMFrRyAUrOhetBDh6ThaM=;
+        s=korg; t=1645435452;
+        bh=BNVmtUYVnmuinax3C7ACSj9zjInJX74bgTglaPhnYKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YQcZrTqWRmNqglp5RY08vyEUwKCk81SB76XfOcdQ/IiWHU7RInTcrSwT34GX8kk+o
-         Gzi8L9VHL43//uOQmAZK7X6yM0EnemMd8CSg4s4ru9+RwHMj9qUg8Ud8zL5VSiF/Hv
-         fog2Oj1COB/vDrL0Z++GZ8CJhZkwwNGXlqMJcidc=
+        b=XkreUG9hhBsPiQP7hCson7YUjdeIGX85lm8LXW+4hCpN3n+RHJnC26lLKARhrUTwc
+         wpqTZyg56+prnsVSUY1Iu7yecZ6IISatNeHf5IPZou2E51ycyyly3X/L/LwtaZq3B/
+         J0JxBAdiMLl4UBIxiYTKLJkCJ7X6kkYm0m1uU1ug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wan Jiabing <wanjiabing@vivo.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 67/80] ARM: OMAP2+: hwmod: Add of_node_put() before break
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.16 168/227] mtd: phram: Prevent divide by zero bug in phram_setup()
 Date:   Mon, 21 Feb 2022 09:49:47 +0100
-Message-Id: <20220221084917.783210821@linuxfoundation.org>
+Message-Id: <20220221084940.406240823@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wan Jiabing <wanjiabing@vivo.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 80c469a0a03763f814715f3d12b6f3964c7423e8 ]
+commit 3e3765875b1b8864898603768fd5c93eeb552211 upstream.
 
-Fix following coccicheck warning:
-./arch/arm/mach-omap2/omap_hwmod.c:753:1-23: WARNING: Function
-for_each_matching_node should have of_node_put() before break
+The problem is that "erasesize" is a uint64_t type so it might be
+non-zero but the lower 32 bits are zero so when it's truncated,
+"(uint32_t)erasesize", then that value is zero. This leads to a
+divide by zero bug.
 
-Early exits from for_each_matching_node should decrement the
-node reference counter.
+Avoid the bug by delaying the divide until after we have validated
+that "erasesize" is non-zero and within the uint32_t range.
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: dc2b3e5cbc80 ("mtd: phram: use div_u64_rem to stop overwrite len in phram_setup")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220121115505.GI1978@kadam
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-omap2/omap_hwmod.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/mtd/devices/phram.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/mach-omap2/omap_hwmod.c b/arch/arm/mach-omap2/omap_hwmod.c
-index 6289b288d60a6..202b740adee0e 100644
---- a/arch/arm/mach-omap2/omap_hwmod.c
-+++ b/arch/arm/mach-omap2/omap_hwmod.c
-@@ -782,8 +782,10 @@ static int __init _init_clkctrl_providers(void)
- 
- 	for_each_matching_node(np, ti_clkctrl_match_table) {
- 		ret = _setup_clkctrl_provider(np);
--		if (ret)
-+		if (ret) {
-+			of_node_put(np);
- 			break;
-+		}
+--- a/drivers/mtd/devices/phram.c
++++ b/drivers/mtd/devices/phram.c
+@@ -264,15 +264,19 @@ static int phram_setup(const char *val)
+ 		}
  	}
  
- 	return ret;
--- 
-2.34.1
-
+-	if (erasesize)
+-		div_u64_rem(len, (uint32_t)erasesize, &rem);
+-
+ 	if (len == 0 || erasesize == 0 || erasesize > len
+-	    || erasesize > UINT_MAX || rem) {
++	    || erasesize > UINT_MAX) {
+ 		parse_err("illegal erasesize or len\n");
+ 		ret = -EINVAL;
+ 		goto error;
+ 	}
++
++	div_u64_rem(len, (uint32_t)erasesize, &rem);
++	if (rem) {
++		parse_err("len is not multiple of erasesize\n");
++		ret = -EINVAL;
++		goto error;
++	}
+ 
+ 	ret = register_device(name, start, len, (uint32_t)erasesize);
+ 	if (ret)
 
 

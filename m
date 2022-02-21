@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745634BE4C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473734BDD42
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377134AbiBUN4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:56:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53384 "EHLO
+        id S1377142AbiBUN5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:57:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240657AbiBUN4X (ORCPT
+        with ESMTP id S240657AbiBUN53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:56:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79237BF73;
-        Mon, 21 Feb 2022 05:55:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2812AB81188;
-        Mon, 21 Feb 2022 13:55:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921FDC340E9;
-        Mon, 21 Feb 2022 13:55:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645451756;
-        bh=J/e+1VPpw4RIUwxGwSRWfpseVM4XoBE0hkJ8DH/QOys=;
-        h=From:To:Cc:Subject:Date:From;
-        b=k/960sBhEX2zv1wWstCL1hxofDD0DlV6ErBmh+tTz/cnlE5B+Lw8BbNbhS6wy0PQf
-         ig488E8B48wJbIzA3D7zdlQ7TQliGObDZwnGCFUf+AnnbhOWXyJq45e2JAUsuGkUz7
-         Sif8G3fIVMiH/bQObraAsGqjRd0ia5O/r34fOPCBB//VojSuTgAzbrN+4ICntvTwMP
-         KIjJaGz2jdcgz2dfa8jm+7fON32FlXxelmoaSP3k2d0MFFPoxjbMvhgbqAyzBjOo7B
-         D+9tZpcIvbV94xY+VWP0QZrOHSO7Cu+vzgq+eq4/xaZZSypoSakC4/jwXULFrdXwzg
-         9WDsx8Ovn3sfw==
-From:   broonie@kernel.org
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Christophe Kerello <christophe.kerello@foss.st.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the nand tree with the mtd tree
-Date:   Mon, 21 Feb 2022 13:55:52 +0000
-Message-Id: <20220221135552.2196160-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 21 Feb 2022 08:57:29 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E7B12AD2;
+        Mon, 21 Feb 2022 05:57:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=J/vlaobnOU3Y8GOboBhNkbHOyX0LyfcK1Yn+Xny/caU=; b=JacIcYdjZ8Px8qAYVx2kmrmMmt
+        B+WLwEgOpCYgSEVX9km+Xw3/f/yLlJch96SDmAig6bz9z03l2PL29wWkmrTA0GoQrwCv1izH4mtRa
+        uhAjiu5Vg/x9HPxacefvG+qITJOMn41OPu/j3Otl+sJ7ohykfHCJuBrGwo8Dd7kfdcDfhUFOE8Sez
+        HzvPei/pJOTlXUV+Uk4PlQHfdAHUmguYwd3RUUoC6l0TzRBd4Xz4UTKoTF9WnX0pmt6U1EjkqbPGb
+        iNSRvRQx2AhuIrnrnVYuKwt8SZx7ZubxI9jjegE9gIXm6YCIkO2n2CMAAbuksfIFClqSK4NW2Hfd2
+        2X/0FnrQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nM9BP-001stF-Jr; Mon, 21 Feb 2022 13:56:55 +0000
+Date:   Mon, 21 Feb 2022 13:56:55 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     lkp@lists.01.org, lkp@intel.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-xfs@vger.kernel.org, Christoph Hellwig <hch@infradead.org>
+Subject: Re: [mm/readahead]  a0b99df1aa: xfstests.xfs.421.fail
+Message-ID: <YhOaJ4cZU/1MiNI2@casper.infradead.org>
+References: <20220221080217.GB835@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221080217.GB835@xsang-OptiPlex-9020>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Mon, Feb 21, 2022 at 04:02:18PM +0800, kernel test robot wrote:
+> commit: a0b99df1aa37d714eb80be5fb54efd56c88a3336 ("mm/readahead: Add large folio readahead")
 
-Today's linux-next merge of the nand tree got a conflict in:
+> xfs/420	- output mismatch (see /lkp/benchmarks/xfstests/results//xfs/420.out.bad)
+>     --- tests/xfs/420.out	2022-02-17 11:55:00.000000000 +0000
+>     +++ /lkp/benchmarks/xfstests/results//xfs/420.out.bad	2022-02-20 20:34:22.430378506 +0000
+>     @@ -13,9 +13,7 @@
+>      Seek holes and data in file2
+>      Whence	Result
+>      DATA	0
+>     -HOLE	131072
+>     -DATA	196608
+>     -HOLE	262144
+>     +HOLE	524288
 
-  Documentation/devicetree/bindings/mtd/nand-controller.yaml
+Confirm this test now fails.  I don't think it's actually a bug,
+though.  I think the test is now using larger pages to cache the
+file, and it fails to report that there's a hole in the file.
+Maybe there actually isn't a hole in the file any more; using
+larger pages to cache the file means we'll now write more data
+than we used to.
 
-between commit:
+Adding XFS people for their thoughts.
 
-  751f204a6fe6f ("dt-bindings: mtd: nand-chip: Create a NAND chip description")
+Complete output:
 
-from the mtd tree and commit:
+$ diff -u ../ktest/tests/xfstests/tests/xfs/420.out ktest-out/xfstests/xfs/420.out.bad
+--- ../ktest/tests/xfstests/tests/xfs/420.out	2021-07-05 15:49:45.539887305 -0400
++++ ktest-out/xfstests/xfs/420.out.bad	2022-02-21 08:14:40.000000000 -0500
+@@ -13,9 +13,7 @@
+ Seek holes and data in file2
+ Whence	Result
+ DATA	0
+-HOLE	131072
+-DATA	196608
+-HOLE	262144
++HOLE	524288
+ Compare files
+ c2803804acc9936eef8aab42c119bfac  SCRATCH_MNT/test-420/file1
+ 017c08a9320aad844ce86aa9631afb98  SCRATCH_MNT/test-420/file2
+@@ -28,9 +26,7 @@
+ Seek holes and data in file2
+ Whence	Result
+ DATA	0
+-HOLE	131072
+-DATA	196608
+-HOLE	262144
++HOLE	524288
+ Compare files
+ c2803804acc9936eef8aab42c119bfac  SCRATCH_MNT/test-420/file1
+ 017c08a9320aad844ce86aa9631afb98  SCRATCH_MNT/test-420/file2
 
-  cb57fae479be4 ("dt-binding: mtd: nand: Document the wp-gpios property")
-
-from the nand tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc Documentation/devicetree/bindings/mtd/nand-controller.yaml
-index 33855eb48a795,53b21aed0ac5f..0000000000000
---- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-+++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-@@@ -116,6 -154,20 +116,13 @@@ patternProperties
-            Ready/Busy pins. Active state refers to the NAND ready state and
-            should be set to GPIOD_ACTIVE_HIGH unless the signal is inverted.
-  
-+       wp-gpios:
-+         description:
-+           Contains one GPIO descriptor for the Write Protect pin.
-+           Active state refers to the NAND Write Protect state and should be
-+           set to GPIOD_ACTIVE_LOW unless the signal is inverted.
-+         maxItems: 1
-+ 
- -      secure-regions:
- -        $ref: /schemas/types.yaml#/definitions/uint64-matrix
- -        description:
- -          Regions in the NAND chip which are protected using a secure element
- -          like Trustzone. This property contains the start address and size of
- -          the secure regions present.
- -
-      required:
-        - reg
-  
+So the file checksums are right, which means I didn't break the COW
+functionality.  But we're no longer reporting a hole at 128k.

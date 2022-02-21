@@ -2,72 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BEA4BE3A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDFA4BDF00
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380569AbiBUQeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:34:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43852 "EHLO
+        id S235564AbiBUQfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:35:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380552AbiBUQeC (ORCPT
+        with ESMTP id S229477AbiBUQfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:34:02 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20882220D4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:33:38 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id l19so9357245pfu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:33:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1hCTFpnCzLuUDmQAPaFu3Al0s869BISW6EAQBZ7qqBQ=;
-        b=ZHQBO7YRd+MwRstOGyPLZqm0n0FbXbOkUaPY4bB86b9QTu3EA2Ll+4jcO31UKwiWxR
-         hCR9nr1ZMxHFrcLXqh0Wg9j5yKwccuFw4/MBPYbhESiQnW9VPoY3Rv78CYqgmgSDQc8+
-         dpmInxs3O1Mo2iLLGUnJpDXOQw7ZMA6oKc4wJIupYYoheFkV2XXCZdglUKyQCyDROS5G
-         8lNZEbg1rjd5HegyJ3J2CcP33AzMyzXY6Cm82ULQY/b6UPylHTLsOQTfNYv29RcLJgxH
-         htJ/Zs5l7I0yF5VlvjEM3d/r62t/bdoaEHp4lBcTtThTaa2lZZvEkb+EtEXXXlrjmcKE
-         Sd1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1hCTFpnCzLuUDmQAPaFu3Al0s869BISW6EAQBZ7qqBQ=;
-        b=crMx9d3ellaM8QCmwiBn2kn2FFGX3OM6zef82njCkitYymbY2wzpDYD1WGk6qPKcnn
-         cTf5xMAiGJoXSKZpgX0YiJb6jB5St6TiTYAHjFKzhjJtKyKHFAQMWO5mvo4DO5PQI/gz
-         ySXpWEH8+VdI7BYdhtovlxBsY9DNcwFm80SsMgX3msxoXA+FOx1NDrRERtFgPwcChyD7
-         fnDIXbiHxeXzLdsmJBNFvxIkjgQANpf29XfU4h/tadVd41L4cCmG4zxjALuqUGyVA0PE
-         iouPS0If7UVc9Uzq+ySSFbtKWNXHIEZZxjHJShaEVDE8BuzNtVFv/7xvr7YNhWSkg2vW
-         NU+g==
-X-Gm-Message-State: AOAM530uCo54XzPnfP1tCbqcH5SKNFvJdnxBXLJQnNYzgytDileiPfS2
-        lco8Wbpd8dVWqOlRRCooY4RI+A==
-X-Google-Smtp-Source: ABdhPJzp9N1FQggNes9vJSVICTbf/PbgO4928ZkIXYTXVCSkurWSwOBFEmdqwABEWlnOll4YOrbqiQ==
-X-Received: by 2002:a65:6255:0:b0:364:4513:67bf with SMTP id q21-20020a656255000000b00364451367bfmr16699877pgv.64.1645461217587;
-        Mon, 21 Feb 2022 08:33:37 -0800 (PST)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id v3-20020a17090abb8300b001bc0740c35dsm7192931pjr.18.2022.02.21.08.33.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 08:33:37 -0800 (PST)
-Message-ID: <f8f591d7-09c8-c537-ea41-30e0b33e29a3@kernel.dk>
-Date:   Mon, 21 Feb 2022 09:33:35 -0700
+        Mon, 21 Feb 2022 11:35:12 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ACA1DA6E;
+        Mon, 21 Feb 2022 08:34:48 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFB9F482;
+        Mon, 21 Feb 2022 17:34:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1645461287;
+        bh=pH812wBkwmwahgNdQmrpdAadbxYpF5mQrxwGyx+vH/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=toOsy0irqhmaBh+Ui4+gshtDANbR/YDMwYwNqtKwkNEh3bGgXZ7Zbc7Bjx+kW4xNK
+         2P5/6AOh0FHBCojRddxB6vgl7kusGmiRk0IgxLCJzPvLcO31gpJqC5OmTZAKL9WDbX
+         q5WVCex9dfOVsGJwHfXWc9xIQ4G4HAxo9SMraR9Y=
+Date:   Mon, 21 Feb 2022 18:34:37 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Rodin <mrodin@de.adit-jv.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, michael@rodin.online,
+        efriedrich@de.adit-jv.com, erosca@de.adit-jv.com,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Subject: Re: [PATCH] drm: rcar-du: do not restart rcar-du groups on gen3
+Message-ID: <YhO/HVluRy5g0i4q@pendragon.ideasonboard.com>
+References: <1637680811-90510-1-git-send-email-mrodin@de.adit-jv.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 0/4] io_uring: consistent behaviour with linked
- read/write
-Content-Language: en-US
-To:     Dylan Yudaken <dylany@fb.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com
-References: <20220221141649.624233-1-dylany@fb.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220221141649.624233-1-dylany@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1637680811-90510-1-git-send-email-mrodin@de.adit-jv.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,28 +51,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 7:16 AM, Dylan Yudaken wrote:
-> Currently submitting multiple read/write for one file with offset = -1 will
-> not behave as if calling read(2)/write(2) multiple times. The offset may be
-> pinned to the same value for each submission (for example if they are
-> punted to the async worker) and so each read/write will have the same
-> offset.
-> 
-> This patch series fixes this.
-> 
-> Patch 1,3 cleans up the code a bit
-> 
-> Patch 2 grabs the file position at execution time, rather than when the job
-> is queued to be run which fixes inconsistincies when jobs are run asynchronously.
-> 
-> Patch 4 increments the file's f_pos when reading it, which fixes
-> inconsistincies with concurrent runs. 
-> 
-> A test for this will be submitted to liburing separately.
+Hi Michael,
 
-Looks good to me, but the patch 2 change will bubble through to patch 3
-and 4 as well. Care to respin a v3?
+Sorry for getting back to you so late, your patch got burried in my
+inbox.
+
+On Tue, Nov 23, 2021 at 04:20:11PM +0100, Michael Rodin wrote:
+> Restarting a display unit group can cause a visible flicker on the display.
+> Particularly when a LVDS display is connected to a Salvator board and an
+> HDMI display is (re)connected, then there will be 2 visible flickers on the
+> LVDS display:
+
+I can confirm the symptoms.
+
+>  1. during atomic_flush (The need_restart flag is set in this case by
+>     rcar_du_vsp_enable.):
+>   rcar_du_crtc_atomic_flush
+>     rcar_du_crtc_update_planes
+>       ...
+>       ...
+>       /* Restart the group if plane sources have changed. */
+>       if (rcrtc->group->need_restart)
+>               rcar_du_group_restart(rcrtc->group);
+>  2. during atomic_enable:
+>   rcar_du_crtc_atomic_enable
+>     rcar_du_crtc_start
+>       rcar_du_group_start_stop(rcrtc->group, true);
+> 
+> To avoid flickers in all use cases, do not restart DU groups on the Gen3
+> SoCs at all, since it is not required any more.
+
+I've tested this patch, and it breaks the HDMI output on my Salvator-XS
+M3N board. My test setup has a panel connected to LVDS0 and an HDMI
+monitor connected to HDMI0. The kernel is configured with fbdev
+emulation enabled. When the system boots, I get two penguins on the LVDS
+panel and the HDMI monitor. I then run
+
+$ modetest -M rcar-du -s HDMI-A-1@60:1024x768@XR24
+
+(you may need to change the CRTC number depending on your setup)
+
+Without this patch, I see a brief flicker on the LVDS panel, and a test
+pattern on the HDMI monitor. With this patch, the flicker is gone, but
+my HDMI monitor show an error message that complains about unsupported
+timings.
+
+The Gen3 documentation still documents many register bits as being
+updated on DRES. I don't think we can get rid of group restart like
+this.
+
+> Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
+> ---
+>  drivers/gpu/drm/rcar-du/rcar_du_group.c | 5 ++++-
+>  drivers/gpu/drm/rcar-du/rcar_du_vsp.c   | 2 --
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_group.c b/drivers/gpu/drm/rcar-du/rcar_du_group.c
+> index 8665a1d..ff0a1c8 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_group.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_group.c
+> @@ -250,7 +250,7 @@ void rcar_du_group_start_stop(struct rcar_du_group *rgrp, bool start)
+>  	 * when the display controller will have to be restarted.
+>  	 */
+>  	if (start) {
+> -		if (rgrp->used_crtcs++ != 0)
+> +		if (rgrp->used_crtcs++ != 0 && rgrp->dev->info->gen != 3)
+>  			__rcar_du_group_start_stop(rgrp, false);
+>  		__rcar_du_group_start_stop(rgrp, true);
+>  	} else {
+> @@ -263,6 +263,9 @@ void rcar_du_group_restart(struct rcar_du_group *rgrp)
+>  {
+>  	rgrp->need_restart = false;
+>  
+> +	if (rgrp->dev->info->gen == 3)
+> +		return;
+> +
+>  	__rcar_du_group_start_stop(rgrp, false);
+>  	__rcar_du_group_start_stop(rgrp, true);
+>  }
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
+> index b7fc5b0..a652c06 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
+> @@ -88,8 +88,6 @@ void rcar_du_vsp_enable(struct rcar_du_crtc *crtc)
+>  	 * Ensure that the plane source configuration takes effect by requesting
+>  	 * a restart of the group. See rcar_du_plane_atomic_update() for a more
+>  	 * detailed explanation.
+> -	 *
+> -	 * TODO: Check whether this is still needed on Gen3.
+>  	 */
+>  	crtc->group->need_restart = true;
+>  
 
 -- 
-Jens Axboe
+Regards,
 
+Laurent Pinchart

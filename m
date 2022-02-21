@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7925E4BE8CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F2D4BE0CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350828AbiBUJgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:36:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47556 "EHLO
+        id S1345610AbiBUIwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:52:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348513AbiBUJ1c (ORCPT
+        with ESMTP id S1345227AbiBUIwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8783E634A;
-        Mon, 21 Feb 2022 01:11:53 -0800 (PST)
+        Mon, 21 Feb 2022 03:52:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3E6CE6;
+        Mon, 21 Feb 2022 00:51:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22BE260C1D;
-        Mon, 21 Feb 2022 09:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0952DC340E9;
-        Mon, 21 Feb 2022 09:11:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 552FBB80EB4;
+        Mon, 21 Feb 2022 08:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CA4C340EB;
+        Mon, 21 Feb 2022 08:51:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434712;
-        bh=2EEr04gVgGbLsytWBTlmHhQnd4tyf8xiRRSDPKxgK2U=;
+        s=korg; t=1645433510;
+        bh=UaSgY94cpIw3Kq+VL3L3kwDcvctXgZSVInyJ4w1tZ9A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XMdbMN6swEgqA3GjWGypsKzGtQbgMTAIGhCOg5D1as5fFFwcf/NyxCCNU295XN8ei
-         iVhP/Ve6NS0d7hFtmGRFdSg9F9BGKCqTmImULrtGuXTkpfkx5fwfguxEhT11Za8wn5
-         ogA2fELxXf3VFovAYFZwujhiZzjlI+ib/bOaC09o=
+        b=TG7LpX/y1CKLtQaiDnZJ8xyp5jHbHsK3JCx8Ras9Y6WRdgxyXo+3x8w8T9mQbos+X
+         qQPF63t+02BTA1CwXvFxG0J8R82yMSOD480vSHMCQtY8gp8Hq5LGugZ/yBJcHPNY9L
+         aw8o0hOKAORJwfe9nB5FxWVO9Ez2EZz12tV2MoCA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 104/196] tipc: fix wrong publisher node address in link publications
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.9 03/33] serial: parisc: GSC: fix build when IOSAPIC is not set
 Date:   Mon, 21 Feb 2022 09:48:56 +0100
-Message-Id: <20220221084934.413078038@linuxfoundation.org>
+Message-Id: <20220221084908.679203081@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+References: <20220221084908.568970525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +58,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jon Maloy <jmaloy@redhat.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 032062f363b4bf02b1d547f329aa5d97b6a17410 upstream.
+commit 6e8793674bb0d1135ca0e5c9f7e16fecbf815926 upstream.
 
-When a link comes up we add its presence to the name table to make it
-possible for users to subscribe for link up/down events. However, after
-a previous call signature change the binding is wrongly published with
-the peer node as publishing node, instead of the own node as it should
-be. This has the effect that the command 'tipc name table show' will
-list the link binding (service type 2) with node scope and a peer node
-as originator, something that obviously is impossible.
+There is a build error when using a kernel .config file from
+'kernel test robot' for a different build problem:
 
-We correct this bug here.
+hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3':
+(.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
 
-Fixes: 50a3499ab853 ("tipc: simplify signature of tipc_namtbl_publish()")
-Signed-off-by: Jon Maloy <jmaloy@redhat.com>
-Link: https://lore.kernel.org/r/20220214013852.2803940-1-jmaloy@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+when:
+  CONFIG_GSC=y
+  CONFIG_SERIO_GSCPS2=y
+  CONFIG_SERIAL_8250_GSC=y
+  CONFIG_PCI is not set
+    and hence PCI_LBA is not set.
+  IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
+
+Make the use of iosapic_serial_irq() conditional to fix the build error.
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-serial@vger.kernel.org
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>
+Suggested-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/tipc/node.c |    2 +-
+ drivers/tty/serial/8250/8250_gsc.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/tipc/node.c
-+++ b/net/tipc/node.c
-@@ -413,7 +413,7 @@ static void tipc_node_write_unlock(struc
- 	tipc_uaddr(&ua, TIPC_SERVICE_RANGE, TIPC_NODE_SCOPE,
- 		   TIPC_LINK_STATE, n->addr, n->addr);
- 	sk.ref = n->link_id;
--	sk.node = n->addr;
-+	sk.node = tipc_own_addr(net);
- 	bearer_id = n->link_id & 0xffff;
- 	publ_list = &n->publ_list;
+--- a/drivers/tty/serial/8250/8250_gsc.c
++++ b/drivers/tty/serial/8250/8250_gsc.c
+@@ -30,7 +30,7 @@ static int __init serial_init_chip(struc
+ 	unsigned long address;
+ 	int err;
  
+-#ifdef CONFIG_64BIT
++#if defined(CONFIG_64BIT) && defined(CONFIG_IOSAPIC)
+ 	if (!dev->irq && (dev->id.sversion == 0xad))
+ 		dev->irq = iosapic_serial_irq(dev);
+ #endif
 
 

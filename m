@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580B24BEC2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 22:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E1C4BEC2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 22:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234130AbiBUVCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 16:02:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35546 "EHLO
+        id S234156AbiBUVC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 16:02:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232555AbiBUVCL (ORCPT
+        with ESMTP id S232555AbiBUVC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 16:02:11 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A2DDA5;
-        Mon, 21 Feb 2022 13:01:47 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id qk11so36386581ejb.2;
-        Mon, 21 Feb 2022 13:01:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2974eKi5BdNp35gKs82/fhm6RumNbC6dF3NV48ttMrc=;
-        b=1eqzCAudxjM9+/gdX6Jkrrb47saHKR/G8cMmnpDSSGRsltcbboNsnFGFNubNEHqI9x
-         SyC902PaTUis3Vg2RQ0b7JKkYKoyiG/HL4WJwcon8g/P51E6immNKDB24ieBC3D7vo99
-         BWbW3oFOmwKG/G1AX/qYNCgbZViQ2gX0J3H4ImiwoVfXhIbY2jEK3kRBcZI7QLmk0xt0
-         87sPrgC/Bo69ztbKoSRvou4672H2gopBSXnkELT2AJPA/MpCZ6Z/fwL/9hNpkHch+sj/
-         0pl++ZaPy/eZI/F0cAZ38/pGzsCehVNO2fHL38+d0ow8rCX14rbta75v5cFreS2fl69o
-         a4wQ==
-X-Gm-Message-State: AOAM531JrT61ywkzyNBn085gjyS6fq/lPJt4/S+Mz4PLIMK8Jk1bJN5H
-        4x9N231HhYvrDthBHxdeBHsl3KIqrf4=
-X-Google-Smtp-Source: ABdhPJzztwOaZSVTcKC2G5n99pioUT5+4mVtbjxwfaAkvFPqFPoLnSzgiO6qRNho1HaBDipNXAVWwA==
-X-Received: by 2002:a17:906:3588:b0:6a7:7ac1:cac8 with SMTP id o8-20020a170906358800b006a77ac1cac8mr16443120ejb.342.1645477305493;
-        Mon, 21 Feb 2022 13:01:45 -0800 (PST)
-Received: from [192.168.0.122] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id m7sm4115951eds.104.2022.02.21.13.01.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 13:01:44 -0800 (PST)
-Message-ID: <2546477f-4190-e838-3095-f47b31802445@kernel.org>
-Date:   Mon, 21 Feb 2022 22:01:43 +0100
+        Mon, 21 Feb 2022 16:02:26 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55A312A95;
+        Mon, 21 Feb 2022 13:02:02 -0800 (PST)
+Received: from g550jk.localnet (ip-213-127-118-180.ip.prioritytelecom.net [213.127.118.180])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C60EDC83FC;
+        Mon, 21 Feb 2022 21:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1645477320; bh=vTYTx2kZKL4SDNQhmOyoW1PmbnmhmCHsmJ/aMNA2yhY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=LxIj9DM7hxfCALbL8mfAmxoatI7QL3B9dmIMd85IyiH21dwg0OycyTpw000IV19vS
+         bSEvookwcBwB8gW5q40t74V5wS1quP0oqx1bBuhXGZxgqwdJJ6Agxxo0itOVkj3E/B
+         KmaD4LBd8WSjJAkQBBE5LW93rlmvemGtG0xWdpUw=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] dt-bindings: mfd: qcom,tcsr: Document msm8953 compatible
+Date:   Mon, 21 Feb 2022 22:01:59 +0100
+Message-ID: <11925600.O9o76ZdvQC@g550jk>
+In-Reply-To: <YhNRweYMmkaSKJX7@google.com>
+References: <20220220201909.445468-1-luca@z3ntu.xyz> <20220220201909.445468-2-luca@z3ntu.xyz> <YhNRweYMmkaSKJX7@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH 0/1] dt-bindings: arm: Add scmi_devid paramter for
-Content-Language: en-US
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1645460043.git.oleksii_moisieiev@epam.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <cover.1645460043.git.oleksii_moisieiev@epam.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2022 18:26, Oleksii Moisieiev wrote:
-> Introducing new parameter called scmi_devid to the device-tree bindings.
-> This parameter should be set for the device nodes, which has
-> clocks/power-domains/resets working through SCMI.
-> Given parameter should set the device_id, needed to set device
-> permissions in the Firmware. This feature will be extremely useful for
-> the virtualized systems, which has more that one Guests running on the
-> system at the same time or for the syestems, which require several
-> agents with different permissions. Trusted agent will use scmi_devid to
-> set the Device permissions for the Firmware (See Section 4.2.2.10 [0]
-> for details).
-> Agents concept is described in Section 4.2.1 [0].
+Hi Lee,
+
+On Montag, 21. Februar 2022 09:48:01 CET Lee Jones wrote:
+> On Sun, 20 Feb 2022, Luca Weiss wrote:
+> > Document the compatible for tcsr found in msm8953.
+> > 
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > Acked-by: Rob Herring <robh@kernel.org>
+> > ---
+> > Changes in v2:
+> > - no changes
+> > 
+> >  Documentation/devicetree/bindings/mfd/qcom,tcsr.txt | 1 +
+> >  1 file changed, 1 insertion(+)
 > 
-> scmi_devid in Device-tree node example:
-> usb@e6590000
-> {
->     scmi_devid = <19>;
->     clocks = <&scmi_clock 3>, <&scmi_clock 2>;
->     resets = <&scmi_reset 10>, <&scmi_reset 9>;
->     power-domains = <&scmi_power 0>;
-> };
+> This is already applied.
 
-And how do you prevent DT overlay adding such devid to any other node
-thus allowing any other device to send requests with given devid?
+Sorry, last week you wrote[0]
 
-Plus few technicalities:
-1. Hyphen, not underscore in property name, so scmi-devid.
-2. Your schema does is not selected by anything. How is it intended to
-be used? Nothing is including it, either...
+> Doesn't seem to apply.
+>
+> Could you please rebase.
 
-Best regards,
-Krzysztof
+and it wasn't part of linux-next as of yesterday.
+
+I'll remember to drop it if I have to send a v3.
+
+Regards
+Luca
+
+[0] https://lore.kernel.org/linux-arm-msm/YgujkzAezfFBNRDP@google.com/
+
+

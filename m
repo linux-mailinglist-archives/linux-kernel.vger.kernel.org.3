@@ -2,155 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E864BDFBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 688CC4BDF0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350341AbiBUKwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:52:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49596 "EHLO
+        id S1354962AbiBUKyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:54:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355865AbiBUKvW (ORCPT
+        with ESMTP id S1346305AbiBUKyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:51:22 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2040.outbound.protection.outlook.com [40.107.243.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C257D7086E
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:13:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YF2lamQPWaYpuewhY2laRfsa49ZZ+FxgCvdbqtkNY8cfuqpwtUpOIGLYfYCXabX6q9OsVbpkpFOVPJAu32U8P+HWFeV0ba+noRyrBfUndSu3nmMxWDQppQhk+s5h3FomSsjcVWXd5E46DXJXy1FV5xDCtQ46m+GE7EZQVo823xk272TPkMaFKd0sdudcUCSw2D1Wyj7co3qBZtidTwlsVrL5dE5TzGOnbuHgFYPKtP/pOZ/hgqcio7IFWT7QN+icI4tcbfNpkIq9ruK8ynwTLImamxTuz1qd+sKP9NkuA8TqWWcZ3rvxasO0XdxPfPeITgAC7MUyKZtm58OhHWq9Cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mFvjvBPo0KeGxdb3dtgdf2/eI01KkNsEtmpJlQ59fPI=;
- b=DILEPKcBKv4tKpSPKa612I/0aBMDsXRZ/NBVVPRekRTlTDWwBGSfKhtjmxV9qvslIRWVbF5T//SANp8HXflkjD1p/6aF/vK3Acwj9enp/AgqOs6LBsZfhVBwegk22ArLf8K6eyuyjHzlMImfmZUEJK6ZH2I1F9OxmpnXXMpbU3YxDMiXhSiPvfL5Zm2AUpMqKHctH/avXVOV/h0NPoRQRS7LLXhXHWfb8YHqzDrkWI7g0VEsUNOXc04/1n+9pjSAW7X+3eUW097cUlpzWxVtHzyNMyNnQQgFJJrY0xzkh2/3qPyWFlS//3uk87gQ6lyKZx20+Z2IMSZlDDHBH24QWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mFvjvBPo0KeGxdb3dtgdf2/eI01KkNsEtmpJlQ59fPI=;
- b=kuhaXe7oxsiFxbfnsL2QrAwj2dl8nVbYEP6CxPrIsr1qfnUTEFnToYGsmGEjWI6KxK8Doovsx2+VNn4jn4z9mmtLQBu2dOU2UWLUgKs112m9UVUNngAMaVmIP/fVWlc8JzEfskuvmf0fktHEtq5EsZerSQHD2IyNY+AAgwwX4EA=
-Received: from CO1PR15CA0055.namprd15.prod.outlook.com (2603:10b6:101:1f::23)
- by MWHPR1201MB0111.namprd12.prod.outlook.com (2603:10b6:301:55::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Mon, 21 Feb
- 2022 10:13:17 +0000
-Received: from CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:101:1f:cafe::a9) by CO1PR15CA0055.outlook.office365.com
- (2603:10b6:101:1f::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11 via Frontend
- Transport; Mon, 21 Feb 2022 10:13:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT053.mail.protection.outlook.com (10.13.175.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4995.15 via Frontend Transport; Mon, 21 Feb 2022 10:13:16 +0000
-Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 21 Feb
- 2022 04:13:13 -0600
-From:   Qiang Yu <qiang.yu@amd.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Qiang Yu <qiang.yu@amd.com>, <amd-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/amdgpu: check vm ready by evicting
-Date:   Mon, 21 Feb 2022 18:12:35 +0800
-Message-ID: <20220221101239.2863-1-qiang.yu@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 21 Feb 2022 05:54:04 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BFD5FD3;
+        Mon, 21 Feb 2022 02:21:41 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id k3-20020a1ca103000000b0037bdea84f9cso10847624wme.1;
+        Mon, 21 Feb 2022 02:21:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZuFZI0/cIi+w8vK1Gcle4BDyNdUZ1tRStanU+6X4KcI=;
+        b=NN6XtIHyVtNOb73dLjbdxFwNKpWIjjSOcnu9VRvCAWBjuO8XQl5P3YG886WO9AQyP9
+         QiK+2Cyy+u3snb1kKphOHafTp3I41HJfzj1QIDKhqYgIM7Xnz0dAfapMobvZc8ZorUuN
+         vJHkaFuPraS5ygvDAhbYdqhE9J3EWrv8mfDRF0tei92ke6GDpO2KywoMFSFDctBTW0Jd
+         kstpF52zR3ohrjVz8bEWm5cjRkdyzzSPZKwDXsQGO/byM+drAm9iHNvSGymFSa/UPXUt
+         A7MpxVVsktaJ3eUU9reyL65piCuUNKqeEFojIGRrjyVfA+egYPT6/zjoNrlYEyk/qeOd
+         BROA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZuFZI0/cIi+w8vK1Gcle4BDyNdUZ1tRStanU+6X4KcI=;
+        b=ET3vAfrbQYKtHTuFZHNj11ZqPLXCqE0jZ8lwaFE85YLfByBTqbaOyS7F3OjAFqMv6s
+         fkKofmkE5LaZiyY7QZd3rb/wJ/tIShQJ2fMTpl5mkSYEFH4nravAjfIbveTQ0EepgSTF
+         ikJxQSmxTKvwo7OIRlilDaMrN82Ejp11zQjjComAWG4frS1V5dlaC5vggbC1023YmAAP
+         IaDNnIMSc2D0WkHTMzKyCXoLsVIVOwra/fJypvk1Fi1tOq+hrrZi6ZERMVKRAok4fs4l
+         CTQjtJiT42nUm9VcbyONZ4RiaRzAJtm37kLdI+I8QtlFDpwAmhEy2BmqJyHN49cQH4Lb
+         dqvQ==
+X-Gm-Message-State: AOAM532ooiM2rgp0C+nPKN2pqxDZiUkd1jKgdrzoP2QddY1o8VEFFJdM
+        jS3eupjWi0pJ/t273aNi8t8=
+X-Google-Smtp-Source: ABdhPJzqhTtl8HBmTE9pWXThiz2vnnAa+XQ9B4E9/E04tPZI39oSpfDUrLce9YbNfS7Y0oLdoEjMpw==
+X-Received: by 2002:a7b:c192:0:b0:37b:c6f5:4df0 with SMTP id y18-20020a7bc192000000b0037bc6f54df0mr17220897wmi.79.1645438899695;
+        Mon, 21 Feb 2022 02:21:39 -0800 (PST)
+Received: from leap.localnet (host-79-27-0-81.retail.telecomitalia.it. [79.27.0.81])
+        by smtp.gmail.com with ESMTPSA id y10sm6988272wmi.47.2022.02.21.02.21.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 02:21:39 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     syzkaller-bugs@googlegroups.com, Tony Lu <tonylu@linux.alibaba.com>
+Cc:     jgg@ziepe.ca, liangwenpeng@huawei.com,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        liweihang@huawei.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in smc_pnet_apply_ib
+Date:   Mon, 21 Feb 2022 11:21:29 +0100
+Message-ID: <21388493.EfDdHjke4D@leap>
+In-Reply-To: <YhNZAyoqSzIAfF9Y@TonyMac-Alibaba>
+References: <000000000000b772b805d8396f14@google.com> <2691692.BEx9A2HvPv@leap> <YhNZAyoqSzIAfF9Y@TonyMac-Alibaba>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4750c9a3-e121-4e88-a6c8-08d9f522c72d
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0111:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB011145A5444FF9A0C0BCA26D8F3A9@MWHPR1201MB0111.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: abT/Yf2+1eCZcvLUVhc8ozKefnp6n8Xw0jbqtewzL7ROqbeCp0dRz+BJ9AP9yGyCOBOfMYrR4IEG/s7TC/nTNrQcBSCTEcSIhoY+KF/RlDgDLVX13xwqsUOdFOp0kJl7/9uiLCp8uPhAzZ+igLNrC/pfb+GWVXyaWbIzX0FX3+2173GP7q+3sOW+v4T2wST1MUPgReKyEq3O0PPvpKImhTzwODFKdcwSDIRlrBxmUfpPQQp///cNJJrYp7IIfwtix6LuQ9tNTlJ4VsjoecQoVswiSAnZxX3AHwWXPpLaHNawdXv2oAXOxs+yC8568G3jkBHtZC+XlnlTcYFR/+TYbarG3Td3rvF9lBAtTr7saE2VttdAlc6Md8AXk1X0WxG48W2mUuOJDcTV+PGGK4m7QvI2Ssjl2GOyGJ7M9bROAWdLScSOWubzAae3w3oLSOpoQ2KmatWnFnf58nGFj1hwxV3cj1yV6rFr2SR/4XGp2sV4Yizwk1OZxE53hEYChXQ0q2L9y6dlU2JETtdxVRxC1QIXNTHE1INLEw0sJg8NdyBAZgfECinNcgoy3G3N+PQMddhwtjCUVbO6+/ecZ/2P9UZ9aak7biNInSHSn3NNH6WnaAOlA1kWeVESOLiN0vHNLPYNDc9h8TUs181xl1pZr5ATNshDZ+H94e1dT9AUGjpHoqN5oT1ZEXGrm9ZH83xh8RpMmoSebBepuD+IwGqlfg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(8936002)(6666004)(336012)(26005)(40460700003)(508600001)(186003)(81166007)(5660300002)(2616005)(86362001)(1076003)(70586007)(70206006)(8676002)(4326008)(16526019)(82310400004)(356005)(2906002)(110136005)(54906003)(47076005)(36860700001)(83380400001)(316002)(44832011)(36756003)(426003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 10:13:16.7111
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4750c9a3-e121-4e88-a6c8-08d9f522c72d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0111
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Workstation application ANSA/META get this error dmesg:
-[drm:amdgpu_gem_va_ioctl [amdgpu]] *ERROR* Couldn't update BO_VA (-16)
+On luned=C3=AC 21 febbraio 2022 10:18:59 CET Tony Lu wrote:
+> On Thu, Feb 17, 2022 at 07:05:31PM +0100, Fabio M. De Francesco wrote:
+> > On gioved=C3=AC 17 febbraio 2022 17:41:22 CET syzbot wrote:
+> > > Hello,
+> > >=20
+> > > syzbot found the following issue on:
+> > >=20
+> > > HEAD commit:    c832962ac972 net: bridge: multicast: notify switchdev=
+ driv..
+> > > git tree:       net
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D16b157bc7=
+00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D266de9da7=
+5c71a45
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D4f322a6d84e=
+991c38775
+> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Bi=
+nutils for Debian) 2.35.2
+> > >=20
+> > > Unfortunately, I don't have any reproducer for this issue yet.
+> > >=20
+> > > IMPORTANT: if you fix the issue, please add the following tag to the =
+commit:
+> > > Reported-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
+> > >=20
+> > > infiniband syz1: set down
+> > > infiniband syz1: added lo
+> > > RDS/IB: syz1: added
+> > > smc: adding ib device syz1 with port count 1
+> > > BUG: sleeping function called from invalid context at kernel/locking/=
+mutex.c:577
+> > > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 17974, name: s=
+yz-executor.3
+> > > preempt_count: 1, expected: 0
+> > > RCU nest depth: 0, expected: 0
+> > > 6 locks held by syz-executor.3/17974:
+> > >  #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma=
+_nl_rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
+> > >  #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink=
++0x25d/0x560 drivers/infiniband/core/nldev.c:1707
+> > >  #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_=
+and_get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
+> > >  #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_=
+and_get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
+> > >  #4: ffff8880482c85c0 (&device->client_data_rwsem){++++}-{3:3}, at: a=
+dd_client_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
+> > >  #5: ffff8880230a4118 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_=
+by_table_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
+> > > Preemption disabled at:
+> > > [<0000000000000000>] 0x0
+> > > CPU: 1 PID: 17974 Comm: syz-executor.3 Not tainted 5.17.0-rc3-syzkall=
+er-00170-gc832962ac972 #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
+OS Google 01/01/2011
+> > > Call Trace:
+> > >  <TASK>
+> > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9576
+> > >  __mutex_lock_common kernel/locking/mutex.c:577 [inline]
+> > >  __mutex_lock+0x9f/0x12f0 kernel/locking/mutex.c:733
+> > >  smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
+> > >  smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
+> >=20
+> > If I recall it well, read_lock() disables preemption.=20
+> >=20
+> > smc_pnetid_by_table_ib() uses read_lock() and then it calls smc_pnet_ap=
+ply_ib()=20
+> > which, in turn, calls mutex_lock(&smc_ib_devices.mutex). Therefore the =
+code=20
+> > acquires a mutex while in atomic and we get a SAC bug.
+> >=20
+> > Actually, even if my argument is correct(?), I don't know if the read_l=
+ock()=20
+> > in smc_pnetid_by_table_ib() can be converted to a sleeping lock like a =
+mutex or=20
+> > a semaphore.
+> =20
+> Take the email above. I think it is safe to convert read_lock() to
+> mutex, which is already used by smc_ib_devices.mutex.
 
-This is caused by:
-1. create a 256MB buffer in invisible VRAM
-2. CPU map the buffer and access it causes vm_fault and try to move
-   it to visible VRAM
-3. force visible VRAM space and traverse all VRAM bos to check if
-   evicting this bo is valuable
-4. when checking a VM bo (in invisible VRAM), amdgpu_vm_evictable()
-   will set amdgpu_vm->evicting, but latter due to not in visible
-   VRAM, won't really evict it so not add it to amdgpu_vm->evicted
-5. before next CS to clear the amdgpu_vm->evicting, user VM ops
-   ioctl will pass amdgpu_vm_ready() (check amdgpu_vm->evicted)
-   but fail in amdgpu_vm_bo_update_mapping() (check
-   amdgpu_vm->evicting) and get this error log
+Thanks for your reply.
 
-This error won't affect functionality as next CS will finish the
-waiting VM ops. But we'd better clear the error log by check the
-evicting flag which really stop VM ops latter.
+I have noticed that the "pnettable->lock" rwlock is acquired several times
+in different functions of net/smc/smc_pnet.c. smc_pnetid_by_table_ib() is j=
+ust one
+of many functions that acquire that rwlock.
 
-Signed-off-by: Qiang Yu <qiang.yu@amd.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Therefore, my question is... are you _really_ sure that "pnettable->lock" c=
+an be=20
+safely converted to a mutex everywhere in net/smc?
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-index 37acd8911168..2cd9f1a2e5fa 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-@@ -770,11 +770,16 @@ int amdgpu_vm_validate_pt_bos(struct amdgpu_device *adev, struct amdgpu_vm *vm,
-  * Check if all VM PDs/PTs are ready for updates
-  *
-  * Returns:
-- * True if eviction list is empty.
-+ * True if VM is not evicting.
-  */
- bool amdgpu_vm_ready(struct amdgpu_vm *vm)
- {
--	return list_empty(&vm->evicted);
-+	bool ret;
-+
-+	amdgpu_vm_eviction_lock(vm);
-+	ret = !vm->evicting;
-+	amdgpu_vm_eviction_unlock(vm);
-+	return ret;
- }
- 
- /**
--- 
-2.25.1
+I haven't read _all_ the path that lead to {write,read}_lock(&pnettable->lo=
+ck) in=20
+the net/smc code.
+
+I think that before submitting that patch I should carefully read the code =
+and check
+_all_ the paths, unless you can confirm that the conversion is safe everywh=
+ere. If=20
+you can answer my question, I can work on a patch by this evening (CET time=
+ zone)=20
+and, obviously, give you proper credit.
+
+Thank you,
+
+=46abio M. De Francesco
+
+>=20
+> Thank you,
+> Tony Lu
+
+
 

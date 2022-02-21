@@ -2,132 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997A04BE204
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51E44BE824
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354835AbiBUKb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:31:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44740 "EHLO
+        id S1354882AbiBUKdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:33:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355057AbiBUKav (ORCPT
+        with ESMTP id S1354809AbiBUKc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:30:51 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908FF6A04A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:52:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645437132; x=1676973132;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C7P41dHaDHZTC6Y6Q9L7XgLflEr6ye2MKtW+2lEOfUI=;
-  b=FbtyvSww806OfGO7zOc6eRbBRQ9Zpi6FlxoR3LUMI6TE28E7nUi8IQ9z
-   gSCM8F9LWcauAsBiOOQHFqs1kca454YyMA/wIAHQqUdGNEuV62XpBYfbZ
-   m4CQLD1/mxy3RDvnRJtmg7+Q6fonEEJDRUIgqpG/Tn2G8P0dtzQZe+XDz
-   OIEZ1630QhWRMoUMlHVnUjm5PVTS79+A5qIrS3kyAaY3iRFYhZUO2CFVL
-   18G0uXPnXCoPI2wilkN1Ouj/gHLLyMA0AjNFIkzuNaGFceslx5IX0z2yD
-   qzMWJgLER7QSHqEM65pM0krJ5jPQtDYyuQkeafD+1M0n79QRyYp2dnzL/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231445714"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="231445714"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 01:52:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="638501931"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2022 01:52:11 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nM5MY-0001Tq-ER; Mon, 21 Feb 2022 09:52:10 +0000
-Date:   Mon, 21 Feb 2022 17:51:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 400/2574] net/ipv4/nexthop.c:3686:32:
- sparse: sparse: dereference of noderef expression
-Message-ID: <202202211705.vXSB551U-lkp@intel.com>
+        Mon, 21 Feb 2022 05:32:58 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9782B6D1AB;
+        Mon, 21 Feb 2022 01:53:15 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21L8bgMm007312;
+        Mon, 21 Feb 2022 09:52:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Husi8wtRKofd8szTIt2dJMfs1/XgcfBR5L2eNXWgu18=;
+ b=DGZISxB+NeF5OICy1PbldWQxrg38gZDCRSmhAGygHhgQxd1WH1IVbIvakUSTNPefzKJe
+ s6XLNE5tfu9NbJIV4Oe6o0AyBXm5cEgKv7yByNIJa8r23ptKUiwS1vOCErVDJTjkSUri
+ 0oc4zLE10fd+KdNbQnnCyGxdtqqh3eiWMFkPugJkIofkpGYLrh1KJJLyJsM1ZVDDQilh
+ 9Re7U986gj6tnTDZc3CIH3RGDbvpyP9t1DmyZrGjEP+K05D6xgT6D9NYOSIFdhC9YCaa
+ kRE0c2vwzwmyt/iCDpPYLNTIeMs1Z8a47gcVU7x4s4UlGSTxeaY/Ryzg70cEH7ikuQY8 4Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ec73b9xns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 09:52:43 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21L95ijf022196;
+        Mon, 21 Feb 2022 09:52:43 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ec73b9xn7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 09:52:43 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21L9gt00005389;
+        Mon, 21 Feb 2022 09:52:41 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3eaqthscn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 09:52:41 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21L9g4co51904786
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Feb 2022 09:42:04 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A18FA4040;
+        Mon, 21 Feb 2022 09:52:39 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B31EA4057;
+        Mon, 21 Feb 2022 09:52:34 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com (unknown [9.43.47.34])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Feb 2022 09:52:33 +0000 (GMT)
+Subject: Re: [PATCH v2] perf test: Skip Sigtrap test for arm+aarch64
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>
+Cc:     John Garry <john.garry@huawei.com>, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, jolsa@kernel.org,
+        namhyung@kernel.org, elver@google.com, dvyukov@google.com,
+        will@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux@armlinux.org.uk, tmricht@linux.ibm.com, irogers@google.com
+References: <1645176813-202756-1-git-send-email-john.garry@huawei.com>
+ <20220218104611.GD56419@leoy-ThinkPad-X240s> <Yg+Xmt27POS2y2LI@kernel.org>
+From:   kajoljain <kjain@linux.ibm.com>
+Message-ID: <447ebda7-eaff-f765-d6ec-66ad0fc957a0@linux.ibm.com>
+Date:   Mon, 21 Feb 2022 15:22:32 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <Yg+Xmt27POS2y2LI@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ibLGMgGsf-sQWJrRFeaJVvLEIjmQN1JX
+X-Proofpoint-ORIG-GUID: 928iv4aMq9dObk-QFqjwDZBoNkzfkhiu
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-21_03,2022-02-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ adultscore=0 suspectscore=0 phishscore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 mlxlogscore=999 clxscore=1011 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202210056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   39e8a0edc8fae20758051dadf7846849edc18b88
-commit: 1458e29daa7f391e80f5d3f837586c6df551c740 [400/2574] headers/uninline: Uninline multi-use function: rb_link_node() and rb_link_node_rcu()
-config: x86_64-randconfig-s022-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211705.vXSB551U-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=1458e29daa7f391e80f5d3f837586c6df551c740
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 1458e29daa7f391e80f5d3f837586c6df551c740
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vsyscall/ drivers/hwspinlock/ net/ipv4/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
->> net/ipv4/nexthop.c:3686:32: sparse: sparse: dereference of noderef expression
+On 2/18/22 6:26 PM, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Feb 18, 2022 at 06:46:11PM +0800, Leo Yan escreveu:
+>> On Fri, Feb 18, 2022 at 05:33:33PM +0800, John Garry wrote:
+>>> Skip the Sigtrap test for arm + arm64, same as was done for s390 in
+>>> commit a840974e96fd ("perf test: Test 73 Sig_trap fails on s390"). For
+>>> this, reuse BP_SIGNAL_IS_SUPPORTED - meaning that the arch can use BP to
+>>> generate signals - instead of BP_ACCOUNT_IS_SUPPORTED, which is
+>>> appropriate.
+>>>
+>>> As described by Will at [0], in the test we get stuck in a loop of handling
+>>> the HW breakpoint exception and never making progress. GDB handles this
+>>> by stepping over the faulting instruction, but with perf the kernel is
+>>> expected to handle the step (which it doesn't for arm).
+>>>
+>>> Dmitry made an attempt to get this work, also mentioned in the same thread
+>>> as [0], which was appreciated. But the best thing to do is skip the test
+>>> for now.
+>>>
+>>> [0] https://lore.kernel.org/linux-perf-users/20220118124343.GC98966@leoy-ThinkPad-X240s/T/#m13b06c39d2a5100d340f009435df6f4d8ee57b5a
+>>>
+>>> Fixes: Fixes: 5504f67944484 ("perf test sigtrap: Add basic stress test for sigtrap handling")
+>>> Signed-off-by: John Garry <john.garry@huawei.com>
+>>
+>> I tested this patch on my Juno board:
+>>
+>> root@Juno:# ./perf test 73
+>>  73: Sigtrap                                                         : Skip
+>>
+>> Tested-by: Leo Yan <leo.yan@linaro.org>
 
-vim +3686 net/ipv4/nexthop.c
+Sorry for late update.
 
-e95f2592f633a3 Ido Schimmel 2020-11-04  3667  
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3668  void nexthop_bucket_set_hw_flags(struct net *net, u32 id, u16 bucket_index,
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3669  				 bool offload, bool trap)
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3670  {
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3671  	struct nh_res_table *res_table;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3672  	struct nh_res_bucket *bucket;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3673  	struct nexthop *nexthop;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3674  	struct nh_group *nhg;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3675  
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3676  	rcu_read_lock();
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3677  
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3678  	nexthop = nexthop_find_by_id(net, id);
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3679  	if (!nexthop || !nexthop->is_group)
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3680  		goto out;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3681  
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3682  	nhg = rcu_dereference(nexthop->nh_grp);
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3683  	if (!nhg->resilient)
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3684  		goto out;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3685  
-56ad5ba344dea9 Ido Schimmel 2021-03-11 @3686  	if (bucket_index >= nhg->res_table->num_nh_buckets)
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3687  		goto out;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3688  
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3689  	res_table = rcu_dereference(nhg->res_table);
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3690  	bucket = &res_table->nh_buckets[bucket_index];
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3691  	bucket->nh_flags &= ~(RTNH_F_OFFLOAD | RTNH_F_TRAP);
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3692  	if (offload)
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3693  		bucket->nh_flags |= RTNH_F_OFFLOAD;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3694  	if (trap)
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3695  		bucket->nh_flags |= RTNH_F_TRAP;
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3696  
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3697  out:
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3698  	rcu_read_unlock();
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3699  }
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3700  EXPORT_SYMBOL(nexthop_bucket_set_hw_flags);
-56ad5ba344dea9 Ido Schimmel 2021-03-11  3701  
+Patch looks good to me. I tested it on powerpc.
 
-:::::: The code at line 3686 was first introduced by commit
-:::::: 56ad5ba344dea9c914331da8754f5ba7cede9941 nexthop: Allow setting "offload" and "trap" indication of nexthop buckets
+Tested-by: Kajol Jain<kjain@linux.ibm.com>
 
-:::::: TO: Ido Schimmel <idosch@nvidia.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Kajol Jain
+> 
+> Thanks, applied.
+> 
+> - Arnaldo
+> 

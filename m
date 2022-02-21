@@ -2,317 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA264BE74E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA33C4BE50E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354669AbiBUKbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:31:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41284 "EHLO
+        id S1354409AbiBUKa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:30:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiBUKaf (ORCPT
+        with ESMTP id S1354769AbiBUKaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:30:35 -0500
-Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C114312745;
-        Mon, 21 Feb 2022 01:51:44 -0800 (PST)
-Received: from pro2.mail.ovh.net (unknown [10.109.156.177])
-        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id AF31023F5F6;
-        Mon, 21 Feb 2022 09:51:14 +0000 (UTC)
-Received: from localhost.localdomain (88.125.132.78) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 21 Feb
- 2022 10:51:13 +0100
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-To:     <linux-renesas-soc@vger.kernel.org>, <geert+renesas@glider.be>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-Subject: [PATCH v3 5/5] watchdog: Add Renesas RZ/N1 Watchdog driver
-Date:   Mon, 21 Feb 2022 10:50:31 +0100
-Message-ID: <20220221095032.95054-6-jjhiblot@traphandler.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220221095032.95054-1-jjhiblot@traphandler.com>
-References: <20220221095032.95054-1-jjhiblot@traphandler.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [88.125.132.78]
-X-ClientProxiedBy: CAS3.emp2.local (172.16.1.3) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 6958905852988111188
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeigddtkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgjfhgggfgtihesthekredtredttdenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepfeeugefgieeutdfhvdegveetvdeuvefgveegleeileevveehfeejjeffgfduudeknecukfhppedtrddtrddtrddtpdekkedruddvhedrudefvddrjeeknecuvehluhhsthgvrhfuihiivgepgeenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdifrghttghhughoghesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Feb 2022 05:30:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8567388A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:51:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F9661287
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:51:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF43AC340E9;
+        Mon, 21 Feb 2022 09:51:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645437089;
+        bh=jSVcifAMDPVThIKGzy0uf6Y6fAYbzhFp8WjCr7BfUzw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Sxxu7mfdBf0kvpnjbd2MnvMv/koS9mwya2dPlPOAbhwpd1dByF2wuTpK1jjGXXbRh
+         t3mcp6HP/v34YzkV7raSU/pNTgXXUF+kOFviP5AyJfpkuF58fUqoKG1yfve5Al0vZz
+         HpcVbAB+YuqRoFMVuY1pdYCPjc/njROVf+SLXRCbQciAUkNIcMQtg7tVt785TG1Ckx
+         olIsUTnBRDe4oJaJhQ8oV0ZD2p+E+rQkQupJSmdESdfSiVB7Xlm2pUqPRU2qinID18
+         UAqDfq1yTNGVMZgWLEAwNcw82JdogidZO7ZKvqNElEeDbffKXmdYYtH2MSM6RlZraW
+         mX2EtbJjjPqng==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nM5Lr-009FfY-M0; Mon, 21 Feb 2022 09:51:27 +0000
+Date:   Mon, 21 Feb 2022 09:51:27 +0000
+Message-ID: <87czjg4kf4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] irqchip/riscv-intc: Allow drivers to directly discover INTC hwnode
+In-Reply-To: <20220220050854.743420-3-apatel@ventanamicro.com>
+References: <20220220050854.743420-1-apatel@ventanamicro.com>
+        <20220220050854.743420-3-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Edworthy <phil.edworthy@renesas.com>
+On Sun, 20 Feb 2022 05:08:50 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> Various RISC-V drivers (such as SBI IPI, SBI Timer, SBI PMU, and
+> KVM RISC-V) don't have associated DT node but these drivers need
+> standard per-CPU (local) interrupts defined by the RISC-V privileged
+> specification.
+> 
+> We add riscv_get_intc_hwnode() in arch/riscv which allows RISC-V
+> drivers not having DT node to discover INTC hwnode which in-turn
+> helps these drivers to map per-CPU (local) interrupts provided
+> by the INTC driver.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/include/asm/irq.h     |  4 ++++
+>  arch/riscv/kernel/irq.c          | 19 +++++++++++++++++++
+>  drivers/irqchip/irq-riscv-intc.c |  7 +++++++
+>  3 files changed, 30 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/irq.h b/arch/riscv/include/asm/irq.h
+> index e4c435509983..43b9ebfbd943 100644
+> --- a/arch/riscv/include/asm/irq.h
+> +++ b/arch/riscv/include/asm/irq.h
+> @@ -12,6 +12,10 @@
+>  
+>  #include <asm-generic/irq.h>
+>  
+> +void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void));
+> +
+> +struct fwnode_handle *riscv_get_intc_hwnode(void);
+> +
+>  extern void __init init_IRQ(void);
+>  
+>  #endif /* _ASM_RISCV_IRQ_H */
+> diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+> index 7207fa08d78f..ead92432df8c 100644
+> --- a/arch/riscv/kernel/irq.c
+> +++ b/arch/riscv/kernel/irq.c
+> @@ -7,9 +7,28 @@
+>  
+>  #include <linux/interrupt.h>
+>  #include <linux/irqchip.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/module.h>
+>  #include <linux/seq_file.h>
+>  #include <asm/smp.h>
+>  
+> +static struct fwnode_handle *(*__get_intc_node)(void);
+> +
+> +void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void))
+> +{
+> +	__get_intc_node = fn;
+> +}
+> +EXPORT_SYMBOL_GPL(riscv_set_intc_hwnode_fn);
 
-This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
-very limited timeout capabilities. However, it can reset the device.
-To do so, the corresponding bits in the SysCtrl RSTEN register need to
-be enabled. This is not done by this driver.
+We're talking about the root interrupt controller here. How can this
+ever be implemented as a module?
 
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
----
- drivers/watchdog/Kconfig    |   8 ++
- drivers/watchdog/Makefile   |   1 +
- drivers/watchdog/rzn1_wdt.c | 206 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 215 insertions(+)
- create mode 100644 drivers/watchdog/rzn1_wdt.c
+> +
+> +struct fwnode_handle *riscv_get_intc_hwnode(void)
+> +{
+> +	if (__get_intc_node)
+> +		return __get_intc_node();
+> +
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(riscv_get_intc_hwnode);
+> +
+>  int arch_show_interrupts(struct seq_file *p, int prec)
+>  {
+>  	show_ipi_stats(p, prec);
+> diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> index b65bd8878d4f..fa24ecd01d39 100644
+> --- a/drivers/irqchip/irq-riscv-intc.c
+> +++ b/drivers/irqchip/irq-riscv-intc.c
+> @@ -92,6 +92,11 @@ static const struct irq_domain_ops riscv_intc_domain_ops = {
+>  	.xlate	= irq_domain_xlate_onecell,
+>  };
+>  
+> +static struct fwnode_handle *riscv_intc_hwnode(void)
+> +{
+> +	return (intc_domain) ? intc_domain->fwnode : NULL;
+> +}
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index c8fa79da23b3..ba6e4ebef404 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -883,6 +883,14 @@ config RENESAS_RZAWDT
- 	  This driver adds watchdog support for the integrated watchdogs in the
- 	  Renesas RZ/A SoCs. These watchdogs can be used to reset a system.
- 
-+config RENESAS_RZN1WDT
-+	tristate "Renesas RZ/N1 watchdog"
-+	depends on ARCH_RENESAS || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  This driver adds watchdog support for the integrated watchdogs in the
-+	  Renesas RZ/N1 SoCs. These watchdogs can be used to reset a system.
-+
- config RENESAS_RZG2LWDT
- 	tristate "Renesas RZ/G2L WDT Watchdog"
- 	depends on ARCH_RENESAS || COMPILE_TEST
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index f7da867e8782..38d38564f47b 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -84,6 +84,7 @@ obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
- obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
- obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
- obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
-+obj-$(CONFIG_RENESAS_RZN1WDT) += rzn1_wdt.o
- obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
- obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
- obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
-diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
-new file mode 100644
-index 000000000000..7f5884e5d460
---- /dev/null
-+++ b/drivers/watchdog/rzn1_wdt.c
-@@ -0,0 +1,206 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Renesas RZ/N1 Watchdog timer.
-+ * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
-+ * cope with 2 seconds.
-+ *
-+ * Copyright 2018 Renesas Electronics Europe Ltd.
-+ *
-+ * Derived from Ralink RT288x watchdog timer.
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_irq.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
-+
-+#define DEFAULT_TIMEOUT		60
-+
-+#define RZN1_WDT_RETRIGGER			0x0
-+#define RZN1_WDT_RETRIGGER_RELOAD_VAL		0
-+#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK	0xfff
-+#define RZN1_WDT_RETRIGGER_PRESCALE		BIT(12)
-+#define RZN1_WDT_RETRIGGER_ENABLE		BIT(13)
-+#define RZN1_WDT_RETRIGGER_WDSI			(0x2 << 14)
-+
-+#define RZN1_WDT_PRESCALER			16384
-+#define RZN1_WDT_MAX				4095
-+
-+struct rzn1_watchdog {
-+	struct watchdog_device		wdt;
-+	void __iomem			*base;
-+	unsigned long			clk_rate;
-+};
-+
-+#define to_rzn1_watchdog(_ptr) \
-+	container_of(_ptr, struct rzn1_watchdog, wdt)
-+
-+static inline uint32_t get_max_heart_beat(unsigned long clk_rate)
-+{
-+	return (RZN1_WDT_MAX * RZN1_WDT_PRESCALER) / (clk_rate / 1000);
-+}
-+
-+static inline uint32_t compute_reload_value(uint32_t tick_ms,
-+					    unsigned long clk_rate)
-+{
-+	return (tick_ms * (clk_rate / 1000)) / RZN1_WDT_PRESCALER;
-+}
-+
-+static int rzn1_wdt_ping(struct watchdog_device *w)
-+{
-+	struct rzn1_watchdog *wdt = to_rzn1_watchdog(w);
-+
-+	/* Any value retrigggers the watchdog */
-+	writel(0, wdt->base + RZN1_WDT_RETRIGGER);
-+
-+	return 0;
-+}
-+
-+static int rzn1_wdt_start(struct watchdog_device *w)
-+{
-+	struct rzn1_watchdog *wdt = to_rzn1_watchdog(w);
-+	u32 val;
-+
-+	/*
-+	 * The hardware allows you to write to this reg only once.
-+	 * Since this includes the reload value, there is no way to change the
-+	 * timeout once started. Also note that the WDT clock is half the bus
-+	 * fabric clock rate, so if the bus fabric clock rate is changed after
-+	 * the WDT is started, the WDT interval will be wrong.
-+	 */
-+	val = RZN1_WDT_RETRIGGER_WDSI;
-+	val |= RZN1_WDT_RETRIGGER_ENABLE;
-+	val |= RZN1_WDT_RETRIGGER_PRESCALE;
-+	val |= compute_reload_value(w->max_hw_heartbeat_ms, wdt->clk_rate);
-+	writel(val, wdt->base + RZN1_WDT_RETRIGGER);
-+
-+	return 0;
-+}
-+
-+static irqreturn_t rzn1_wdt_irq(int irq, void *_wdt)
-+{
-+	struct rzn1_watchdog *wdt = (struct rzn1_watchdog *)_wdt;
-+
-+	dev_info(wdt->wdt.parent, "%s triggered\n", __func__);
-+	return IRQ_HANDLED;
-+}
-+
-+static struct watchdog_info rzn1_wdt_info = {
-+	.identity = "RZ/N1 Watchdog",
-+	.options = WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-+};
-+
-+static const struct watchdog_ops rzn1_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = rzn1_wdt_start,
-+	.ping = rzn1_wdt_ping,
-+};
-+
-+static const struct watchdog_device rzn1_wdt = {
-+	.info = &rzn1_wdt_info,
-+	.ops = &rzn1_wdt_ops,
-+	.status = WATCHDOG_NOWAYOUT_INIT_STATUS,
-+};
-+
-+static void rzn1_wdt_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static int rzn1_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct rzn1_watchdog *wdt;
-+	struct device_node *np = dev->of_node;
-+	struct clk *clk;
-+	int ret;
-+	int irq;
-+
-+	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-+	if (!wdt)
-+		return -ENOMEM;
-+
-+	wdt->wdt = rzn1_wdt;
-+	wdt->wdt.parent = dev;
-+
-+	wdt->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(wdt->base))
-+		return PTR_ERR(wdt->base);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_irq(dev, irq, rzn1_wdt_irq, 0,
-+			       np->name, wdt);
-+	if (ret) {
-+		dev_err(dev, "failed to request irq %d\n", irq);
-+		return ret;
-+	}
-+
-+	clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(clk)) {
-+		dev_err(dev, "failed to get the clock\n");
-+		return PTR_ERR(clk);
-+	}
-+
-+	ret = clk_prepare_enable(clk);
-+	if (ret) {
-+		dev_err(dev, "failed to prepare/enable the clock\n");
-+		return ret;
-+	}
-+
-+	ret = devm_add_action_or_reset(dev, rzn1_wdt_clk_disable_unprepare,
-+				       clk);
-+	if (ret) {
-+		dev_err(dev, "failed to register clock unprepare callback\n");
-+		return ret;
-+	}
-+
-+	wdt->clk_rate = clk_get_rate(clk);
-+	if (!wdt->clk_rate) {
-+		dev_err(dev, "failed to get the clock rate\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * The period of the watchdog cannot be changed once set
-+	 * and is limited to a very short period.
-+	 * Configure it for a 1s period once and for all, and
-+	 * rely on the heart-beat provided by the watchdog core
-+	 * to make this usable by the user-space.
-+	 */
-+	wdt->wdt.max_hw_heartbeat_ms = get_max_heart_beat(wdt->clk_rate);
-+	if (wdt->wdt.max_hw_heartbeat_ms > 1000)
-+		wdt->wdt.max_hw_heartbeat_ms = 1000;
-+
-+	wdt->wdt.timeout = DEFAULT_TIMEOUT;
-+	ret = watchdog_init_timeout(&wdt->wdt, 0, dev);
-+
-+	return devm_watchdog_register_device(dev, &wdt->wdt);
-+}
-+
-+
-+static const struct of_device_id rzn1_wdt_match[] = {
-+	{ .compatible = "renesas,rzn1-wdt" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, rzn1_wdt_match);
-+
-+static struct platform_driver rzn1_wdt_driver = {
-+	.probe		= rzn1_wdt_probe,
-+	.driver		= {
-+		.name		= KBUILD_MODNAME,
-+		.of_match_table	= rzn1_wdt_match,
-+	},
-+};
-+
-+module_platform_driver(rzn1_wdt_driver);
-+
-+MODULE_DESCRIPTION("Renesas RZ/N1 hardware watchdog");
-+MODULE_AUTHOR("Phil Edworthy <phil.edworthy@renesas.com>");
-+MODULE_LICENSE("GPL v2");
+This makes no sense. Either you have found the interrupt controller
+and allocated the domain, or you haven't. But you don't register a
+callback without having found it.
+
+And you have totally ignored my previous comments about the multitude
+of irq domains for the INTC. Either you get rid of all but one and you
+can register a single fwnode, or you stay with what you have today,
+
+You can't have it both ways.
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.

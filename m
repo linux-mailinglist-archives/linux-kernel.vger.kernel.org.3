@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12B84BE35B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C293F4BE821
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353807AbiBUKCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:02:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50492 "EHLO
+        id S1350865AbiBUJgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:36:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352103AbiBUJwv (ORCPT
+        with ESMTP id S1345134AbiBUJ1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:52:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD76366BB;
-        Mon, 21 Feb 2022 01:23:17 -0800 (PST)
+        Mon, 21 Feb 2022 04:27:23 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8776344;
+        Mon, 21 Feb 2022 01:11:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C3BCB80EB6;
-        Mon, 21 Feb 2022 09:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61129C340F0;
-        Mon, 21 Feb 2022 09:23:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56CBECE0E79;
+        Mon, 21 Feb 2022 09:11:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B83C340E9;
+        Mon, 21 Feb 2022 09:11:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435395;
-        bh=w5JvrDHpQHi9hP3iLoc3bRhVvq0c0cSFfbvoy6Wvri0=;
+        s=korg; t=1645434709;
+        bh=mc0aKOxSsDuTXpmJoC/IG9w3zf1N4r0QHjUEA7j//a4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xSjEvJmdH2TjCO8WM5rqgaz/aWYAkT8teXzFUK2HLnZkcbne4U9CN8NYN2MpqM1bI
-         AC9h+tDtISf2wI5zqzmjf11FE/Z3o/svvDBFxiGYg9NCla/pzBShb415fVyMWKw+am
-         GWl1NGPHgw7LRP+9x8CCGavil0P9dSJ3fmSptNqc=
+        b=EAQbweblt57duCKMUIgnBPpaCUpksBKhzn/jvBZDRjdZnHdLptyMrqWWxXqokdYP+
+         ZMzYA+b2dKMsJq8BgKtRsju2Zs4NdIZ18TjigdBnnz18x92UKC2nT97mp0/hq4yQti
+         6nUVYZg6pDkFB0X5Vxx95/zq0bGMc5WHLy9dnoYs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        stable@vger.kernel.org, Gatis Peisenieks <gatis@mikrotik.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 116/227] bonding: force carrier update when releasing slave
+Subject: [PATCH 5.15 103/196] atl1c: fix tx timeout after link flap on Mikrotik 10/25G NIC
 Date:   Mon, 21 Feb 2022 09:48:55 +0100
-Message-Id: <20220221084938.721469800@linuxfoundation.org>
+Message-Id: <20220221084934.382608307@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Changzhong <zhangchangzhong@huawei.com>
+From: Gatis Peisenieks <gatis@mikrotik.com>
 
-commit a6ab75cec1e461f8a35559054c146c21428430b8 upstream.
+commit bf8e59fd315f304eb538546e35de6dc603e4709f upstream.
 
-In __bond_release_one(), bond_set_carrier() is only called when bond
-device has no slave. Therefore, if we remove the up slave from a master
-with two slaves and keep the down slave, the master will remain up.
+If NIC had packets in tx queue at the moment link down event
+happened, it could result in tx timeout when link got back up.
 
-Fix this by moving bond_set_carrier() out of if (!bond_has_slaves(bond))
-statement.
+Since device has more than one tx queue we need to reset them
+accordingly.
 
-Reproducer:
-$ insmod bonding.ko mode=0 miimon=100 max_bonds=2
-$ ifconfig bond0 up
-$ ifenslave bond0 eth0 eth1
-$ ifconfig eth0 down
-$ ifenslave -d bond0 eth1
-$ cat /proc/net/bonding/bond0
-
-Fixes: ff59c4563a8d ("[PATCH] bonding: support carrier state for master")
-Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/1645021088-38370-1-git-send-email-zhangchangzhong@huawei.com
+Fixes: 057f4af2b171 ("atl1c: add 4 RX/TX queue support for Mikrotik 10/25G NIC")
+Signed-off-by: Gatis Peisenieks <gatis@mikrotik.com>
+Link: https://lore.kernel.org/r/20220211065123.4187615-1-gatis@mikrotik.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_main.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/atheros/atl1c/atl1c_main.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -2377,10 +2377,9 @@ static int __bond_release_one(struct net
- 		bond_select_active_slave(bond);
+--- a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
++++ b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
+@@ -900,7 +900,7 @@ static void atl1c_clean_tx_ring(struct a
+ 		atl1c_clean_buffer(pdev, buffer_info);
  	}
  
--	if (!bond_has_slaves(bond)) {
--		bond_set_carrier(bond);
-+	bond_set_carrier(bond);
-+	if (!bond_has_slaves(bond))
- 		eth_hw_addr_random(bond_dev);
--	}
+-	netdev_reset_queue(adapter->netdev);
++	netdev_tx_reset_queue(netdev_get_tx_queue(adapter->netdev, queue));
  
- 	unblock_netpoll_tx();
- 	synchronize_rcu();
+ 	/* Zero out Tx-buffers */
+ 	memset(tpd_ring->desc, 0, sizeof(struct atl1c_tpd_desc) *
 
 

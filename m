@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF614BE4E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1334BE12A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348068AbiBUJKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:10:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43678 "EHLO
+        id S1353758AbiBUKCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:02:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347707AbiBUJGB (ORCPT
+        with ESMTP id S1352013AbiBUJxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:06:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792E126128;
-        Mon, 21 Feb 2022 00:59:35 -0800 (PST)
+        Mon, 21 Feb 2022 04:53:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669981D317;
+        Mon, 21 Feb 2022 01:23:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BF09B80EAC;
-        Mon, 21 Feb 2022 08:59:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA92C340E9;
-        Mon, 21 Feb 2022 08:59:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19146B80EAF;
+        Mon, 21 Feb 2022 09:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFACC340E9;
+        Mon, 21 Feb 2022 09:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433972;
-        bh=bNuYXFbCZ5mrCCRAjSQ6gMyKhbK+/OC4G2sR7LxHKw4=;
+        s=korg; t=1645435397;
+        bh=SH5kv4+d2g9ytmY1kPDcn0mQvYvUQiU/BXUGy5MogX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zm091h0C30A+Q6nEt9MmXGpzpwmQwb8KQbH3VuqhPnBwhjSc9WZnqkED+KDN+m2MZ
-         Hsg3z99OKxcyfc47y6BA6Zjpo+stXIrVPOc5OLyepxiA2KmK46liaKRsaSAb883KpL
-         zdsLy2X0YUL7vfZktNpoOQvSMd+ZrSmS400EYtkM=
+        b=lLall1nHhA8Xk+mWFHTLsBqhGTflRMRNa8/6or2CFMOVJJuOkE0V58KoRac46C71u
+         vDKgfQSCjrfZ+vudBgPaAS3B+9PdzzKP/LaD0tUl0g4bw+7ytqU9WoUXHBK3ZSmqMb
+         D9ym82nU50ETN/iWmSFg2dD7ZuayU6d1fN925RsE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 16/80] vfs: make freeze_super abort when sync_filesystem returns error
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 117/227] mctp: fix use after free
 Date:   Mon, 21 Feb 2022 09:48:56 +0100
-Message-Id: <20220221084916.116545193@linuxfoundation.org>
+Message-Id: <20220221084938.753002243@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Darrick J. Wong <djwong@kernel.org>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit 2719c7160dcfaae1f73a1c0c210ad3281c19022e ]
+commit 7e5b6a5c8c44310784c88c1c198dde79f6402f7b upstream.
 
-If we fail to synchronize the filesystem while preparing to freeze the
-fs, abort the freeze.
+Clang static analysis reports this problem
+route.c:425:4: warning: Use of memory after it is freed
+  trace_mctp_key_acquire(key);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+When mctp_key_add() fails, key is freed but then is later
+used in trace_mctp_key_acquire().  Add an else statement
+to use the key only when mctp_key_add() is successful.
 
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 4f9e1ba6de45 ("mctp: Add tracepoints for tag/key handling")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/super.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ net/mctp/route.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/fs/super.c b/fs/super.c
-index b289356f302fc..e255c18fa2c88 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -1691,11 +1691,9 @@ static void lockdep_sb_freeze_acquire(struct super_block *sb)
- 		percpu_rwsem_acquire(sb->s_writers.rw_sem + level, 0, _THIS_IP_);
- }
+--- a/net/mctp/route.c
++++ b/net/mctp/route.c
+@@ -414,13 +414,14 @@ static int mctp_route_input(struct mctp_
+ 			 * this function.
+ 			 */
+ 			rc = mctp_key_add(key, msk);
+-			if (rc)
++			if (rc) {
+ 				kfree(key);
++			} else {
++				trace_mctp_key_acquire(key);
  
--static void sb_freeze_unlock(struct super_block *sb)
-+static void sb_freeze_unlock(struct super_block *sb, int level)
- {
--	int level;
+-			trace_mctp_key_acquire(key);
 -
--	for (level = SB_FREEZE_LEVELS - 1; level >= 0; level--)
-+	for (level--; level >= 0; level--)
- 		percpu_up_write(sb->s_writers.rw_sem + level);
- }
+-			/* we don't need to release key->lock on exit */
+-			mctp_key_unref(key);
++				/* we don't need to release key->lock on exit */
++				mctp_key_unref(key);
++			}
+ 			key = NULL;
  
-@@ -1766,7 +1764,14 @@ int freeze_super(struct super_block *sb)
- 	sb_wait_write(sb, SB_FREEZE_PAGEFAULT);
- 
- 	/* All writers are done so after syncing there won't be dirty data */
--	sync_filesystem(sb);
-+	ret = sync_filesystem(sb);
-+	if (ret) {
-+		sb->s_writers.frozen = SB_UNFROZEN;
-+		sb_freeze_unlock(sb, SB_FREEZE_PAGEFAULT);
-+		wake_up(&sb->s_writers.wait_unfrozen);
-+		deactivate_locked_super(sb);
-+		return ret;
-+	}
- 
- 	/* Now wait for internal filesystem counter */
- 	sb->s_writers.frozen = SB_FREEZE_FS;
-@@ -1778,7 +1783,7 @@ int freeze_super(struct super_block *sb)
- 			printk(KERN_ERR
- 				"VFS:Filesystem freeze failed\n");
- 			sb->s_writers.frozen = SB_UNFROZEN;
--			sb_freeze_unlock(sb);
-+			sb_freeze_unlock(sb, SB_FREEZE_FS);
- 			wake_up(&sb->s_writers.wait_unfrozen);
- 			deactivate_locked_super(sb);
- 			return ret;
-@@ -1829,7 +1834,7 @@ static int thaw_super_locked(struct super_block *sb)
- 	}
- 
- 	sb->s_writers.frozen = SB_UNFROZEN;
--	sb_freeze_unlock(sb);
-+	sb_freeze_unlock(sb, SB_FREEZE_FS);
- out:
- 	wake_up(&sb->s_writers.wait_unfrozen);
- 	deactivate_locked_super(sb);
--- 
-2.34.1
-
+ 		} else {
 
 

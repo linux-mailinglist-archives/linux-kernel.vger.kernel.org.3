@@ -2,84 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480FC4BE683
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82444BE58E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351885AbiBUKIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:08:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35532 "EHLO
+        id S1353434AbiBUKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:10:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353325AbiBUJ5W (ORCPT
+        with ESMTP id S1353295AbiBUJ5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 04:57:22 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDAA47042
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:25:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sWzl2v9v4HujX86aJfCOVrh1k6oCTv+xUn/76FQ75FM=; b=LZ6EwgV7EF75a3KISk36Gc2ZRH
-        O02ROAuni+7t1lYSu4iSkXJSsm9LKxVh6mbLsiZ/TSksq0H5yo8fA9t7t29+lJiylcd5RR+l8g4Ou
-        a/VuJU9/DJjFuSFAFIBtWhQP5aFl0gpYQUuqhXX/bwO5+X9knRreKYcdIwIhrSbAYJ3jzxYGnmDSd
-        DCeWqZ6huOtgmDzWvOP+Z9W5BjsOx1wc9/i6nNbOlOSNJX8OXflVbi/J6CismkoaeDHlfIvHC2xf/
-        LE6ERqYgfXP6rno0hu66kiZ8MjBoNzbqsC1Bs88eeSQFFofdiAnDPVOIrSsbIkxvXb/M7lmSLnOcI
-        W+9dBmrA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nM4wJ-001esK-0l; Mon, 21 Feb 2022 09:25:03 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 65C59988B05; Mon, 21 Feb 2022 10:24:56 +0100 (CET)
-Date:   Mon, 21 Feb 2022 10:24:56 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "Milburn, Alyssa" <alyssa.milburn@intel.com>
-Subject: Re: [PATCH 00/29] x86: Kernel IBT
-Message-ID: <20220221092456.GJ23216@worktop.programming.kicks-ass.net>
-References: <20220218164902.008644515@infradead.org>
- <7a241b81ccd21da02bc27379b0a837c09fe4f135.camel@intel.com>
- <20220219095827.GI23216@worktop.programming.kicks-ass.net>
- <1C202B85-FCB1-4282-9CA6-ED9115F203BB@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1C202B85-FCB1-4282-9CA6-ED9115F203BB@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1328046B0A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:25:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FDB260FC1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136E4C340E9;
+        Mon, 21 Feb 2022 09:25:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645435517;
+        bh=+SlfpSN+7ew6DB983/BTiQCl7198EcRJ395ZNwoOy+A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lkWHHoOvawbH/Hr2DYFB47QtHxA3yAW/LXkzX6tCj1PBsJWYPH43PCinbvwGBEvaS
+         BkOYaQ2CNPXUQY1qrQhXv0KtmP13Wbqbn9e5rqjaC02ljG3j0lyh48mzm8I+HmFuLc
+         InbrGR2/nDJ+XLh82OxhUBvGYbgKe1uhd14JoFEXlufOKlx1q0IGys8AcWma1rOrJp
+         nUXg0VmPNxXpi4dMPNCNueZK/FmJTVwYMisQsaK2TVb42gOhBjVtvvbgJ7+P3Lv3tk
+         qpr75TUTD2rGo+NCPBrNTvjyegNo81a5SIYxz93GiE9Sa3Vby6ir9+ESdEzVB9B4GL
+         ZPKqfq+T+eCLw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nM4wU-009Ecl-Pq; Mon, 21 Feb 2022 09:25:14 +0000
+Date:   Mon, 21 Feb 2022 09:25:08 +0000
+Message-ID: <87ee3w4lmz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Anup Patel <anup@brainfault.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] irqchip/riscv-intc: Create domain using named fwnode
+In-Reply-To: <4A07582C-80BD-41F8-AEF5-EE48EB7D2D15@jrtc27.com>
+References: <20220128052505.859518-1-apatel@ventanamicro.com>
+        <20220128052505.859518-3-apatel@ventanamicro.com>
+        <063b8a5636d6372f37029946b2c3e0f4@kernel.org>
+        <CAAhSdy387r314f=YjvXJCxqxkvjm5q-EBOVu420giFzaVr_NYw@mail.gmail.com>
+        <31fea18e51a5021b79adb17973f9528e@kernel.org>
+        <4A07582C-80BD-41F8-AEF5-EE48EB7D2D15@jrtc27.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jrtc27@jrtc27.com, anup@brainfault.org, apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 12:42:25AM -0800, Kees Cook wrote:
+On Sat, 19 Feb 2022 14:51:22 +0000,
+Jessica Clarke <jrtc27@jrtc27.com> wrote:
+>=20
+> On 19 Feb 2022, at 09:32, Marc Zyngier <maz@kernel.org> wrote:
+> >=20
+> > But how do you plan to work around the fact that everything is currently
+> > build around having a node (and an irqdomain) per CPU? The PLIC, for ex=
+ample,
+> > clearly has one parent per CPU, not one global parent.
+> >=20
+> > I'm sure there was a good reason for this, and I suspect merging the do=
+mains
+> > will simply end up breaking things.
+>=20
+> On the contrary, the drivers rely on the controller being the same
+> across all harts, with riscv_intc_init skipping initialisation for all
+> but the boot hart=E2=80=99s controller. The bindings are a complete pain =
+to
+> deal with as a result, what you *want* is like you have in the Arm
+> world where there is just one interrupt controller in the device tree
+> with some of the interrupts per-processor, but instead we have this
+> overengineered nuisance. The only reason there are per-hart interrupt
+> controllers is because that=E2=80=99s how the contexts for the CLINT/PLIC=
+ are
+> specified, but that really should have been done another way rather
+> than abusing the interrupts-extended property for that. In the FreeBSD
+> world we=E2=80=99ve been totally ignoring the device tree nodes for the l=
+ocal
+> interrupt controllers but for my AIA and ACLINT branch I started a few
+> months ago (though ACLINT's now been completely screwed up by RVI
+> politics, things have been renamed and split up differently in the past
+> few days and software interrupts de-prioritised with no current path to
+> ratification, so that was a waste of my time) I just hang the driver
+> off the boot hart=E2=80=99s node and leave all the others as totally igno=
+red
+> and a waste of space other than to figure out the contexts for the PLIC
+> etc.
+>=20
+> TL;DR yes the bindings are awful, no there=E2=80=99s no issue with mergin=
+g the
+> domains.
 
-> >+void cet_disable(void)
-> >+{
-> >+	cr4_clear_bits(X86_CR4_CET);
-> 
-> I'd rather keep the pinning...
+I don't know how that flies with something like[1], where CPU0 only
+gets interrupts in M-Mode and not S-Mode. Maybe it doesn't really
+matter, but this sort of asymmetric routing is totally backward.
 
-Uff. is that still enforced at this point?
+It sometime feels like the RV folks are actively trying to make this
+architecture a mess... :-/
 
-> >+	wrmsrl(MSR_IA32_S_CET, 0);
-> >+}
-> 
-> Eh, why not just require kexec to be IBT safe? That seems a reasonable
-> exercise if we ever expect UEFI to enforce IBT when starting the
-> kernel on a normal boot...
+	M.
 
-Well, it makes it impossible to kexec into an 'old' kernel. That might
-not be very nice.
+[1] CAAhSdy0jTTDzoc+3T_8uLiWfBN3AFCWj99Ayc-Yh8FBfzUY2sQ@mail.gmail.com
+
+--=20
+Without deviation from the norm, progress is not possible.

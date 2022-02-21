@@ -2,101 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442FB4BDD62
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCBC4BE695
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354324AbiBUP1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:27:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47296 "EHLO
+        id S1351276AbiBUP2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:28:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344601AbiBUP1q (ORCPT
+        with ESMTP id S238567AbiBUP2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:27:46 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EDB13CCE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:27:22 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id d27so27737841wrc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:27:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nv0eH0e7g8WkSmFjX1RSL2aoVO4qfLGoWioqkn/s04Q=;
-        b=SzS1kQVd6eOQ9thb7s9wnyOfj+bo8Cb2YS9H0qwQdPX3eig4P5HbhTJXadTFfDrSnc
-         rIw83tT/y9NpvKfF8HkB6sK4JmCyfx6o7kATb07icgBJgg5YnzJXcwD+R2LSG9BSTWfw
-         Zup8VT41n/kkT1p7TjAEb+/S1tmSbCThdsixos3JQzV1o+gGpTOTU3SVQ2HEkvp7aPGa
-         VkOtxTLPiPu0eZwVigSaHuBWUkOyXTIByg8gzvyROYxOBSlWeQvSSMYXJQwIGTuzcd3M
-         M35d6FXlR7GyaX+0JM2VsQ5PQ5f9wvWoba5QIwADbVBlknqbjKYeL+v/xn81WxQDorWc
-         6dAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nv0eH0e7g8WkSmFjX1RSL2aoVO4qfLGoWioqkn/s04Q=;
-        b=jH1he1oXOMUh4Bpj/5a/ex3qQ0Q6huVXwq5BmnhWYKI3xjgvAx0pOZL1vryHBai9nO
-         D8Os5ewdMpXN3GXBlvOK+1GXWuRdYlqRdGrDk+4kuP+6WXtugoKbKve3/BTc+bxyI3Jk
-         n2zXKCke6wMVZkNBaW3FSaF0jNHbZmBXRZlx2E4MQ6C2RtGk83FTmtxUkSKVfr/Mm6rf
-         GE+qTd1OT3hT/xHfIQn5hS/IyWPV99KcxRfsg2QjAWaxGBiwE9FksYH2JMSvHnEo9Z1r
-         D3xZ6cYL4CQ5uQSdrjgy2JRSTvIIyBb5rfOmhGXK67Y8wfEC5Bo97H6OsRbapx/Dbd94
-         9dfA==
-X-Gm-Message-State: AOAM532xmXpUuEI+5TiTLtgtRJqYv/83S47ky77egccjK3u4JE1fePg8
-        NOuMmsP0PtPpJ1G6B87exB5IGg==
-X-Google-Smtp-Source: ABdhPJwmIdJCjnM9fEqF+TMGGejDU8cw2ZcMVWpRXEWassnpvKyeS//y4XQ3Oo4skLwgTVH/2L/vTg==
-X-Received: by 2002:a05:6000:1b04:b0:1e7:3a09:6468 with SMTP id f4-20020a0560001b0400b001e73a096468mr15812862wrz.383.1645457241137;
-        Mon, 21 Feb 2022 07:27:21 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id m8sm8545039wms.4.2022.02.21.07.27.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 07:27:20 -0800 (PST)
-Message-ID: <d1d55fd2-68a8-9271-00c5-b395b085b50c@linaro.org>
-Date:   Mon, 21 Feb 2022 15:27:19 +0000
+        Mon, 21 Feb 2022 10:28:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26931EADE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:28:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74FE6B811CE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDDF2C340EC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:28:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ajJHS1y6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645457285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QbEz44XlEfPnVHEvqWZajF6RzTw22XSS4LtufiFeTR0=;
+        b=ajJHS1y67cVDje/kc3hhHED9KzTaHY4UEms5UrwJsRE2j6TG2m0ofUMOYgwWeABM4HUeIo
+        muyAtrHgzw1FNHJZGIsz0Sj0PwrlVG/xsQrA/YDdaEyG1friARywMs+YakcymxNEX2GSyp
+        thRa4vpRkrbVcojgvfbmlbXsECQJPUU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b8e59d90 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 21 Feb 2022 15:28:05 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id j2so35267425ybu.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:28:04 -0800 (PST)
+X-Gm-Message-State: AOAM531DVcB7moz+3YB/AoE6iLn76r5ufJfJ6Jjvk27v2kMMQV6rBiBw
+        P/GzAo4EzMnmc/j0JhAA4ypV+PRrcyO0+uUfl3E=
+X-Google-Smtp-Source: ABdhPJyOrrgfbQ25/W2+G0xGlbb/vKCaGhRs+k2hufz4YThTwJHcoSqNxpKARUmaKFZot9vO4jCpZpOfNVrfO6/fBEM=
+X-Received: by 2002:a25:d116:0:b0:61d:e8c9:531e with SMTP id
+ i22-20020a25d116000000b0061de8c9531emr19227765ybg.637.1645457284110; Mon, 21
+ Feb 2022 07:28:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 01/10] ASoC: codecs: va-macro: add runtime pm support
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
-References: <20220221131037.8809-1-srinivas.kandagatla@linaro.org>
- <20220221131037.8809-2-srinivas.kandagatla@linaro.org>
- <YhOuvdsKu6zOg2p/@sirena.org.uk>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <YhOuvdsKu6zOg2p/@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220212122318.623435-1-Jason@zx2c4.com> <20220212122318.623435-10-Jason@zx2c4.com>
+ <YhMhbKdIH2wwEDxc@sol.localdomain>
+In-Reply-To: <YhMhbKdIH2wwEDxc@sol.localdomain>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 21 Feb 2022 16:27:53 +0100
+X-Gmail-Original-Message-ID: <CAHmME9o5FhAWYS7bfnXzNzLBtCadAYWXHjmE2tZNMG3C64NeKw@mail.gmail.com>
+Message-ID: <CAHmME9o5FhAWYS7bfnXzNzLBtCadAYWXHjmE2tZNMG3C64NeKw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/10] random: group sysctl functions
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Mark,
+On Mon, Feb 21, 2022 at 6:21 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> This is a nice explanation, but shouldn't
+> Documentation/admin-guide/sysctl/kernel.rst be updated instead, and this comment
+> point to there?
 
-On 21/02/2022 15:24, Mark Brown wrote:
-> On Mon, Feb 21, 2022 at 01:10:28PM +0000, Srinivas Kandagatla wrote:
-> 
->> +static int __maybe_unused va_macro_runtime_resume(struct device *dev)
->> +{
->> +	struct va_macro *va = dev_get_drvdata(dev);
->> +
->> +	clk_prepare_enable(va->clks[2].clk);
-> 
-> This magic number stuff is going to be excessively fragile, and the fact
-
-I agree, will try to clean this up properly in next spin.
-
-> that this is sometimes managed via the bulk APIs and sometimes not isn't
-> going to help either.  Either all the clocks should be managed here or
-> this should be pulled out of the array.
-> 
-> Also consider error checking.
-will do,
-
---srin
+I'll update kernel.rst for this and for the other thing in a separate
+commit to make merge conflicts less annoying.

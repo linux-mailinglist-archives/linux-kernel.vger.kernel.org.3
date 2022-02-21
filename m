@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1614BDCD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB554BE2B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244925AbiBUKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:04:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35726 "EHLO
+        id S1350854AbiBUJoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:44:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353456AbiBUJ51 (ORCPT
+        with ESMTP id S1351766AbiBUJhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:57:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C3F39683;
-        Mon, 21 Feb 2022 01:25:56 -0800 (PST)
+        Mon, 21 Feb 2022 04:37:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664E0BF7F;
+        Mon, 21 Feb 2022 01:16:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87F74B80EB9;
-        Mon, 21 Feb 2022 09:25:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3F5C340E9;
-        Mon, 21 Feb 2022 09:25:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03B1560018;
+        Mon, 21 Feb 2022 09:16:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1907C340E9;
+        Mon, 21 Feb 2022 09:16:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435554;
-        bh=4evH3cNV/TecPqqgb9DUIrLL/d4lvxxzjc2yTb+ALNM=;
+        s=korg; t=1645434990;
+        bh=fLBEvwjZl6oETJmxyI/GIW74xpXaTgB4d7oxT5SetqM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DuYYFbZvQelSXAH+RWaiyJqMrMXogWTqwCmk8PkY58rrS0glH2056fhD/ebHy0jdf
-         5Pgf7f9DUyfVmtWl13Z56v5VeyhtCtzyGk2CN/WtEHIwzdqmOMoQMTG/WsWcThPy5T
-         XlzlrL0WxqtNpIU3eGcoBDLr7r0xhS5xCjaYWtps=
+        b=yfBHbeCPzTLulUaeTcvjSwSvHfKCxkHj2YISFsm7JWXhnKbM9JBuy9IKrIBEAjosC
+         NIZ7jtgXtQs/Zb8zg72e5DxBo8Br9Gt6pO0eiP8i1Jt0msoKKOHsOGdHIWqaKaEVAo
+         gLUcxnOBuDZ4cbbHxkEfZqMxdcsAvvyF9JPqxA5Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 204/227] x86/bug: Merge annotate_reachable() into _BUG_FLAGS() asm
-Date:   Mon, 21 Feb 2022 09:50:23 +0100
-Message-Id: <20220221084941.599932591@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Waiman Long <longman@redhat.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 5.15 192/196] copy_process(): Move fd_install() out of sighand->siglock critical section
+Date:   Mon, 21 Feb 2022 09:50:24 +0100
+Message-Id: <20220221084937.363586904@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,181 +56,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Desaulniers <ndesaulniers@google.com>
+From: Waiman Long <longman@redhat.com>
 
-[ Upstream commit bfb1a7c91fb7758273b4a8d735313d9cc388b502 ]
+commit ddc204b517e60ae64db34f9832dc41dafa77c751 upstream.
 
-In __WARN_FLAGS(), we had two asm statements (abbreviated):
+I was made aware of the following lockdep splat:
 
-  asm volatile("ud2");
-  asm volatile(".pushsection .discard.reachable");
+[ 2516.308763] =====================================================
+[ 2516.309085] WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
+[ 2516.309433] 5.14.0-51.el9.aarch64+debug #1 Not tainted
+[ 2516.309703] -----------------------------------------------------
+[ 2516.310149] stress-ng/153663 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
+[ 2516.310512] ffff0000e422b198 (&newf->file_lock){+.+.}-{2:2}, at: fd_install+0x368/0x4f0
+[ 2516.310944]
+               and this task is already holding:
+[ 2516.311248] ffff0000c08140d8 (&sighand->siglock){-.-.}-{2:2}, at: copy_process+0x1e2c/0x3e80
+[ 2516.311804] which would create a new lock dependency:
+[ 2516.312066]  (&sighand->siglock){-.-.}-{2:2} -> (&newf->file_lock){+.+.}-{2:2}
+[ 2516.312446]
+               but this new dependency connects a HARDIRQ-irq-safe lock:
+[ 2516.312983]  (&sighand->siglock){-.-.}-{2:2}
+   :
+[ 2516.330700]  Possible interrupt unsafe locking scenario:
 
-These pair of statements are used to trigger an exception, but then help
-objtool understand that for warnings, control flow will be restored
-immediately afterwards.
+[ 2516.331075]        CPU0                    CPU1
+[ 2516.331328]        ----                    ----
+[ 2516.331580]   lock(&newf->file_lock);
+[ 2516.331790]                                local_irq_disable();
+[ 2516.332231]                                lock(&sighand->siglock);
+[ 2516.332579]                                lock(&newf->file_lock);
+[ 2516.332922]   <Interrupt>
+[ 2516.333069]     lock(&sighand->siglock);
+[ 2516.333291]
+                *** DEADLOCK ***
+[ 2516.389845]
+               stack backtrace:
+[ 2516.390101] CPU: 3 PID: 153663 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-51.el9.aarch64+debug #1
+[ 2516.390756] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+[ 2516.391155] Call trace:
+[ 2516.391302]  dump_backtrace+0x0/0x3e0
+[ 2516.391518]  show_stack+0x24/0x30
+[ 2516.391717]  dump_stack_lvl+0x9c/0xd8
+[ 2516.391938]  dump_stack+0x1c/0x38
+[ 2516.392247]  print_bad_irq_dependency+0x620/0x710
+[ 2516.392525]  check_irq_usage+0x4fc/0x86c
+[ 2516.392756]  check_prev_add+0x180/0x1d90
+[ 2516.392988]  validate_chain+0x8e0/0xee0
+[ 2516.393215]  __lock_acquire+0x97c/0x1e40
+[ 2516.393449]  lock_acquire.part.0+0x240/0x570
+[ 2516.393814]  lock_acquire+0x90/0xb4
+[ 2516.394021]  _raw_spin_lock+0xe8/0x154
+[ 2516.394244]  fd_install+0x368/0x4f0
+[ 2516.394451]  copy_process+0x1f5c/0x3e80
+[ 2516.394678]  kernel_clone+0x134/0x660
+[ 2516.394895]  __do_sys_clone3+0x130/0x1f4
+[ 2516.395128]  __arm64_sys_clone3+0x5c/0x7c
+[ 2516.395478]  invoke_syscall.constprop.0+0x78/0x1f0
+[ 2516.395762]  el0_svc_common.constprop.0+0x22c/0x2c4
+[ 2516.396050]  do_el0_svc+0xb0/0x10c
+[ 2516.396252]  el0_svc+0x24/0x34
+[ 2516.396436]  el0t_64_sync_handler+0xa4/0x12c
+[ 2516.396688]  el0t_64_sync+0x198/0x19c
+[ 2517.491197] NET: Registered PF_ATMPVC protocol family
+[ 2517.491524] NET: Registered PF_ATMSVC protocol family
+[ 2591.991877] sched: RT throttling activated
 
-The problem is that volatile is not a compiler barrier. GCC explicitly
-documents this:
+One way to solve this problem is to move the fd_install() call out of
+the sighand->siglock critical section.
 
-> Note that the compiler can move even volatile asm instructions
-> relative to other code, including across jump instructions.
+Before commit 6fd2fe494b17 ("copy_process(): don't use ksys_close()
+on cleanups"), the pidfd installation was done without holding both
+the task_list lock and the sighand->siglock. Obviously, holding these
+two locks are not really needed to protect the fd_install() call.
+So move the fd_install() call down to after the releases of both locks.
 
-Also, no clobbers are specified to prevent instructions from subsequent
-statements from being scheduled by compiler before the second asm
-statement. This can lead to instructions from subsequent statements
-being emitted by the compiler before the second asm statement.
-
-Providing a scheduling model such as via -march= options enables the
-compiler to better schedule instructions with known latencies to hide
-latencies from data hazards compared to inline asm statements in which
-latencies are not estimated.
-
-If an instruction gets scheduled by the compiler between the two asm
-statements, then objtool will think that it is not reachable, producing
-a warning.
-
-To prevent instructions from being scheduled in between the two asm
-statements, merge them.
-
-Also remove an unnecessary unreachable() asm annotation from BUG() in
-favor of __builtin_unreachable(). objtool is able to track that the ud2
-from BUG() terminates control flow within the function.
-
-Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
-Link: https://github.com/ClangBuiltLinux/linux/issues/1483
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220202205557.2260694-1-ndesaulniers@google.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220208163912.1084752-1-longman@redhat.com
+Fixes: 6fd2fe494b17 ("copy_process(): don't use ksys_close() on cleanups")
+Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/bug.h | 20 +++++++++++---------
- include/linux/compiler.h   | 21 +++++----------------
- 2 files changed, 16 insertions(+), 25 deletions(-)
+ kernel/fork.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-index 84b87538a15de..bab883c0b6fee 100644
---- a/arch/x86/include/asm/bug.h
-+++ b/arch/x86/include/asm/bug.h
-@@ -22,7 +22,7 @@
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2353,10 +2353,6 @@ static __latent_entropy struct task_stru
+ 		goto bad_fork_cancel_cgroup;
+ 	}
  
- #ifdef CONFIG_DEBUG_BUGVERBOSE
- 
--#define _BUG_FLAGS(ins, flags)						\
-+#define _BUG_FLAGS(ins, flags, extra)					\
- do {									\
- 	asm_inline volatile("1:\t" ins "\n"				\
- 		     ".pushsection __bug_table,\"aw\"\n"		\
-@@ -31,7 +31,8 @@ do {									\
- 		     "\t.word %c1"        "\t# bug_entry::line\n"	\
- 		     "\t.word %c2"        "\t# bug_entry::flags\n"	\
- 		     "\t.org 2b+%c3\n"					\
--		     ".popsection"					\
-+		     ".popsection\n"					\
-+		     extra						\
- 		     : : "i" (__FILE__), "i" (__LINE__),		\
- 			 "i" (flags),					\
- 			 "i" (sizeof(struct bug_entry)));		\
-@@ -39,14 +40,15 @@ do {									\
- 
- #else /* !CONFIG_DEBUG_BUGVERBOSE */
- 
--#define _BUG_FLAGS(ins, flags)						\
-+#define _BUG_FLAGS(ins, flags, extra)					\
- do {									\
- 	asm_inline volatile("1:\t" ins "\n"				\
- 		     ".pushsection __bug_table,\"aw\"\n"		\
- 		     "2:\t" __BUG_REL(1b) "\t# bug_entry::bug_addr\n"	\
- 		     "\t.word %c0"        "\t# bug_entry::flags\n"	\
- 		     "\t.org 2b+%c1\n"					\
--		     ".popsection"					\
-+		     ".popsection\n"					\
-+		     extra						\
- 		     : : "i" (flags),					\
- 			 "i" (sizeof(struct bug_entry)));		\
- } while (0)
-@@ -55,7 +57,7 @@ do {									\
- 
- #else
- 
--#define _BUG_FLAGS(ins, flags)  asm volatile(ins)
-+#define _BUG_FLAGS(ins, flags, extra)  asm volatile(ins)
- 
- #endif /* CONFIG_GENERIC_BUG */
- 
-@@ -63,8 +65,8 @@ do {									\
- #define BUG()							\
- do {								\
- 	instrumentation_begin();				\
--	_BUG_FLAGS(ASM_UD2, 0);					\
--	unreachable();						\
-+	_BUG_FLAGS(ASM_UD2, 0, "");				\
-+	__builtin_unreachable();				\
- } while (0)
- 
- /*
-@@ -75,9 +77,9 @@ do {								\
-  */
- #define __WARN_FLAGS(flags)					\
- do {								\
-+	__auto_type f = BUGFLAG_WARNING|(flags);		\
- 	instrumentation_begin();				\
--	_BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));		\
--	annotate_reachable();					\
-+	_BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);			\
- 	instrumentation_end();					\
- } while (0)
- 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 429dcebe2b992..0f7fd205ab7ea 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -117,14 +117,6 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
-  */
- #define __stringify_label(n) #n
- 
--#define __annotate_reachable(c) ({					\
--	asm volatile(__stringify_label(c) ":\n\t"			\
--		     ".pushsection .discard.reachable\n\t"		\
--		     ".long " __stringify_label(c) "b - .\n\t"		\
--		     ".popsection\n\t" : : "i" (c));			\
--})
--#define annotate_reachable() __annotate_reachable(__COUNTER__)
+-	/* past the last point of failure */
+-	if (pidfile)
+-		fd_install(pidfd, pidfile);
 -
- #define __annotate_unreachable(c) ({					\
- 	asm volatile(__stringify_label(c) ":\n\t"			\
- 		     ".pushsection .discard.unreachable\n\t"		\
-@@ -133,24 +125,21 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- })
- #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
+ 	init_task_pid_links(p);
+ 	if (likely(p->pid)) {
+ 		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
+@@ -2405,6 +2401,9 @@ static __latent_entropy struct task_stru
+ 	syscall_tracepoint_update(p);
+ 	write_unlock_irq(&tasklist_lock);
  
--#define ASM_UNREACHABLE							\
--	"999:\n\t"							\
--	".pushsection .discard.unreachable\n\t"				\
--	".long 999b - .\n\t"						\
-+#define ASM_REACHABLE							\
-+	"998:\n\t"							\
-+	".pushsection .discard.reachable\n\t"				\
-+	".long 998b - .\n\t"						\
- 	".popsection\n\t"
- 
- /* Annotate a C jump table to allow objtool to follow the code flow */
- #define __annotate_jump_table __section(".rodata..c_jump_table")
- 
- #else
--#define annotate_reachable()
- #define annotate_unreachable()
-+# define ASM_REACHABLE
- #define __annotate_jump_table
- #endif
- 
--#ifndef ASM_UNREACHABLE
--# define ASM_UNREACHABLE
--#endif
- #ifndef unreachable
- # define unreachable() do {		\
- 	annotate_unreachable();		\
--- 
-2.34.1
-
++	if (pidfile)
++		fd_install(pidfd, pidfile);
++
+ 	proc_fork_connector(p);
+ 	sched_post_fork(p, args);
+ 	cgroup_post_fork(p, args);
 
 

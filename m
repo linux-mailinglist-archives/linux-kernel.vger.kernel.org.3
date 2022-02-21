@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEAFE4BDBF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFF34BDD8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351848AbiBUJhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:37:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47556 "EHLO
+        id S1347960AbiBUJKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:10:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349552AbiBUJ2B (ORCPT
+        with ESMTP id S1347446AbiBUJFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:28:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ECF23BC8;
-        Mon, 21 Feb 2022 01:12:53 -0800 (PST)
+        Mon, 21 Feb 2022 04:05:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B23024095;
+        Mon, 21 Feb 2022 00:59:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F22DC60F03;
-        Mon, 21 Feb 2022 09:12:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0234C340F6;
-        Mon, 21 Feb 2022 09:12:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2174B80EA1;
+        Mon, 21 Feb 2022 08:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC06C340EB;
+        Mon, 21 Feb 2022 08:59:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434772;
-        bh=kV6xglYVzvEJRVFFxgMI+g9s28ikqyFntAQqvUpyTfQ=;
+        s=korg; t=1645433944;
+        bh=uCDU3Iu8HRlLzNeHWBl0YvfMWpvWbc7yd8s/av4iXHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U/WULOFWvVACD42jztr2kj5167CRQZvo/XDxlcRZLrBvau/X59Ba5hzbP3tFYO/72
-         9d6cbpbbV9fPZRamGg4L4D6LLxc/al5Ol5qKgT7kLkQ0CUEzKJnngidb3aXxSUvyMV
-         30z+sE7Z9tAp5I0myvmVFWPc0hcuquPTpK1N+MlE=
+        b=o2n60tDoDWXEE+L8ufpkYZ9NqzM0nsUP61Qux2EELqPKXfSp7VnL+0g/O/MkOvjjK
+         xBabQyw5UnpMoh8AczP+atUjr8kGRMzTNZfJYX79wMg/n/4y0G6rS3cupZw91Jppl/
+         dvGJ2bgRRLvHlVICCgcBmJp/9RGZcO4i1APTYIqY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bean Huo <beanhuo@micron.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 126/196] scsi: ufs: Remove dead code
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.4 38/80] netfilter: nft_synproxy: unregister hooks on init error path
 Date:   Mon, 21 Feb 2022 09:49:18 +0100
-Message-Id: <20220221084935.150484212@linuxfoundation.org>
+Message-Id: <20220221084916.817774605@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit d77ea8226b3be23b0b45aa42851243b62a27bda1 upstream.
+commit 2b4e5fb4d3776c391e40fb33673ba946dd96012d upstream.
 
-Commit 7252a3603015 ("scsi: ufs: Avoid busy-waiting by eliminating tag
-conflicts") guarantees that 'tag' is not in use by any SCSI command.
-Remove the check that returns early if a conflict occurs.
+Disable the IPv4 hooks if the IPv6 hooks fail to be registered.
 
-Link: https://lore.kernel.org/r/20211203231950.193369-6-bvanassche@acm.org
-Tested-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Acked-by: Avri Altman <avri.altman@wdc.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: ad49d86e07a4 ("netfilter: nf_tables: Add synproxy support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ufs/ufshcd.c |    7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ net/netfilter/nft_synproxy.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -6658,11 +6658,6 @@ static int ufshcd_issue_devman_upiu_cmd(
- 	tag = req->tag;
- 	WARN_ONCE(tag < 0, "Invalid tag %d\n", tag);
+--- a/net/netfilter/nft_synproxy.c
++++ b/net/netfilter/nft_synproxy.c
+@@ -191,8 +191,10 @@ static int nft_synproxy_do_init(const st
+ 		if (err)
+ 			goto nf_ct_failure;
+ 		err = nf_synproxy_ipv6_init(snet, ctx->net);
+-		if (err)
++		if (err) {
++			nf_synproxy_ipv4_fini(snet, ctx->net);
+ 			goto nf_ct_failure;
++		}
+ 		break;
+ 	}
  
--	if (unlikely(test_bit(tag, &hba->outstanding_reqs))) {
--		err = -EBUSY;
--		goto out;
--	}
--
- 	lrbp = &hba->lrb[tag];
- 	WARN_ON(lrbp->cmd);
- 	lrbp->cmd = NULL;
-@@ -6730,8 +6725,8 @@ static int ufshcd_issue_devman_upiu_cmd(
- 	ufshcd_add_query_upiu_trace(hba, err ? UFS_QUERY_ERR : UFS_QUERY_COMP,
- 				    (struct utp_upiu_req *)lrbp->ucd_rsp_ptr);
- 
--out:
- 	blk_put_request(req);
-+
- out_unlock:
- 	up_read(&hba->clk_scaling_lock);
- 	return err;
 
 

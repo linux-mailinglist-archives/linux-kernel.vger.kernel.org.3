@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BF04BE3B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5246E4BE7EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346729AbiBUI7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:59:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59276 "EHLO
+        id S1344946AbiBUIvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:51:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346903AbiBUI7T (ORCPT
+        with ESMTP id S1344871AbiBUIve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:59:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBDE25E9A;
-        Mon, 21 Feb 2022 00:54:59 -0800 (PST)
+        Mon, 21 Feb 2022 03:51:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60E22BC6;
+        Mon, 21 Feb 2022 00:51:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0456E611D0;
-        Mon, 21 Feb 2022 08:54:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7617C36AE2;
-        Mon, 21 Feb 2022 08:54:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F5FAB80EA4;
+        Mon, 21 Feb 2022 08:51:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6ACBC340E9;
+        Mon, 21 Feb 2022 08:51:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433695;
-        bh=lWQyRUsHNeogGgSlwf5ifeyPlKhUtf9p/geX3mGnQv8=;
+        s=korg; t=1645433468;
+        bh=okCagNw6vmwShPkrE2a1CdLnrg8TCiVrhIFRvrreXHA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pvgLYn3zjrzbY6rohhBTt/HthXLXXN6Q1EVMzexJIwIlVdLIMPw7Lym2KgkxNjh01
-         3K8XeGY6izXagUMZvsVtieEVXEyM/oa0jQzleAjLJpjJh8fvDAbt3nh7JAa55GO6n0
-         NkPH7pivfRimTf8TtJjHmeyZNMHzyDGjAClUYWNw=
+        b=SiTo8svNiQ7wZBeuIcYaPdZkN5gIzikLAv2m8pJmTHF/y+jGo9C7yMGRg6JRl2PmM
+         d7GTQzfCkKxS5bp3YFyyQ8Hnvn5oVQQN+uiDiOiko/L0dZO7tsoVvmu7l7rPkV2XXZ
+         1Q1tMAUPALCFNv03/4eLhVMrj8GOnzeybyDZtuLM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Yang Xu <xuyang2018.jy@fujitsu.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 10/58] selftests/zram: Adapt the situation that /dev/zram0 is being used
+Subject: [PATCH 4.9 10/33] selftests/zram: Adapt the situation that /dev/zram0 is being used
 Date:   Mon, 21 Feb 2022 09:49:03 +0100
-Message-Id: <20220221084912.219024165@linuxfoundation.org>
+Message-Id: <20220221084908.893349417@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+References: <20220221084908.568970525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,11 +82,11 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  4 files changed, 66 insertions(+), 63 deletions(-)
 
 diff --git a/tools/testing/selftests/zram/zram.sh b/tools/testing/selftests/zram/zram.sh
-index 232e958ec4547..b0b91d9b0dc21 100755
+index 9399c4aeaa265..d4652e295ff8a 100755
 --- a/tools/testing/selftests/zram/zram.sh
 +++ b/tools/testing/selftests/zram/zram.sh
-@@ -2,9 +2,6 @@
- # SPDX-License-Identifier: GPL-2.0
+@@ -1,9 +1,6 @@
+ #!/bin/bash
  TCID="zram.sh"
  
 -# Kselftest framework requirement - SKIP code is 4.
@@ -95,7 +95,7 @@ index 232e958ec4547..b0b91d9b0dc21 100755
  . ./zram_lib.sh
  
  run_zram () {
-@@ -18,14 +15,4 @@ echo ""
+@@ -17,14 +14,4 @@ echo ""
  
  check_prereqs
  

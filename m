@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFF34BDD8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D2A4BE42E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347960AbiBUJKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:10:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347446AbiBUJFs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1347430AbiBUJFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 21 Feb 2022 04:05:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B23024095;
-        Mon, 21 Feb 2022 00:59:07 -0800 (PST)
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347878AbiBUJCB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 21 Feb 2022 04:02:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFF829CB6;
+        Mon, 21 Feb 2022 00:57:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2174B80EA1;
-        Mon, 21 Feb 2022 08:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC06C340EB;
-        Mon, 21 Feb 2022 08:59:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14387B80EAA;
+        Mon, 21 Feb 2022 08:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA16C340E9;
+        Mon, 21 Feb 2022 08:57:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433944;
-        bh=uCDU3Iu8HRlLzNeHWBl0YvfMWpvWbc7yd8s/av4iXHI=;
+        s=korg; t=1645433830;
+        bh=MEFTC5FcKMnjdyhYIKnb/Xreiz4e59Hn0kyWFSiiYoI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o2n60tDoDWXEE+L8ufpkYZ9NqzM0nsUP61Qux2EELqPKXfSp7VnL+0g/O/MkOvjjK
-         xBabQyw5UnpMoh8AczP+atUjr8kGRMzTNZfJYX79wMg/n/4y0G6rS3cupZw91Jppl/
-         dvGJ2bgRRLvHlVICCgcBmJp/9RGZcO4i1APTYIqY=
+        b=UJvIo0BcFEawudPapShFD7PuxlfD6GvYta3m9EYPxfHuzmcyCG57iqwnykTNc0pDf
+         1Cui7Q9EUJx6ZYVw0AWoBPM4U8JvDvgvm7Cyn3LQ8jDX6z5zjtHIu2GNFYJAGTngi4
+         JXt1DJ7Zl9klE5gXH9V7/M2jKCr0n6gWQu2hBbiE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.4 38/80] netfilter: nft_synproxy: unregister hooks on init error path
+        stable@vger.kernel.org, Mans Rullgard <mans@mansr.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fianelil <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 25/58] net: dsa: lan9303: fix reset on probe
 Date:   Mon, 21 Feb 2022 09:49:18 +0100
-Message-Id: <20220221084916.817774605@linuxfoundation.org>
+Message-Id: <20220221084912.693218858@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Mans Rullgard <mans@mansr.com>
 
-commit 2b4e5fb4d3776c391e40fb33673ba946dd96012d upstream.
+commit 6bb9681a43f34f2cab4aad6e2a02da4ce54d13c5 upstream.
 
-Disable the IPv4 hooks if the IPv6 hooks fail to be registered.
+The reset input to the LAN9303 chip is active low, and devicetree
+gpio handles reflect this.  Therefore, the gpio should be requested
+with an initial state of high in order for the reset signal to be
+asserted.  Other uses of the gpio already use the correct polarity.
 
-Fixes: ad49d86e07a4 ("netfilter: nf_tables: Add synproxy support")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Florian Fianelil <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220209145454.19749-1-mans@mansr.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_synproxy.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/dsa/lan9303-core.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/netfilter/nft_synproxy.c
-+++ b/net/netfilter/nft_synproxy.c
-@@ -191,8 +191,10 @@ static int nft_synproxy_do_init(const st
- 		if (err)
- 			goto nf_ct_failure;
- 		err = nf_synproxy_ipv6_init(snet, ctx->net);
--		if (err)
-+		if (err) {
-+			nf_synproxy_ipv4_fini(snet, ctx->net);
- 			goto nf_ct_failure;
-+		}
- 		break;
- 	}
+--- a/drivers/net/dsa/lan9303-core.c
++++ b/drivers/net/dsa/lan9303-core.c
+@@ -1307,7 +1307,7 @@ static int lan9303_probe_reset_gpio(stru
+ 				     struct device_node *np)
+ {
+ 	chip->reset_gpio = devm_gpiod_get_optional(chip->dev, "reset",
+-						   GPIOD_OUT_LOW);
++						   GPIOD_OUT_HIGH);
+ 	if (IS_ERR(chip->reset_gpio))
+ 		return PTR_ERR(chip->reset_gpio);
  
 
 

@@ -2,53 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAEE4BDC7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56E34BE056
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351277AbiBUJo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:44:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48740 "EHLO
+        id S1352644AbiBUJrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:47:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351553AbiBUJhZ (ORCPT
+        with ESMTP id S1350943AbiBUJkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:37:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA09F3A1B9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:16:00 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nM4nN-00037y-8Y; Mon, 21 Feb 2022 10:15:49 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nM4nM-000OTG-MK; Mon, 21 Feb 2022 10:15:47 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nM4nL-004ZU9-65; Mon, 21 Feb 2022 10:15:47 +0100
-Date:   Mon, 21 Feb 2022 10:15:47 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
-        matthias.bgg@gmail.com, linux-pwm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: pwm-mtk-disp: Switch to regmap for mmio access
-Message-ID: <20220221091547.wxmz7fqicyhjc5rc@pengutronix.de>
-References: <20220103153506.50896-1-angelogioacchino.delregno@collabora.com>
+        Mon, 21 Feb 2022 04:40:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FF123CA55
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:17:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645435028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4uMmEYUHbmX6rXgTsQ+VTDhgS4w4FUz1dvxMDB4NcL4=;
+        b=bwiUSjS5Zx+VGAAfYH2G/S0bATuthWZq1rXuATKU7mhhnPRNo1UJtaT5cLufyoKtdqBldp
+        ZeumfIoQyKnssYtuxUYlIqKtBCki1+yIpMZ2H45m1yf69H8vchjS5x+PCRre+/fjl7hBFk
+        sU/5GEZUOmANx+gy3dxnHW+/K2YYgLI=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-492-9uqGIGHHPvqPUMe9CnyZZQ-1; Mon, 21 Feb 2022 04:17:07 -0500
+X-MC-Unique: 9uqGIGHHPvqPUMe9CnyZZQ-1
+Received: by mail-ed1-f70.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so9813643edb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:17:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4uMmEYUHbmX6rXgTsQ+VTDhgS4w4FUz1dvxMDB4NcL4=;
+        b=EZQ3UWw9WVZs6khpZn0LdgZ/njD3ZK8NSxjr6H+bWQb+VNlNlEQweFokmyriYFVx3U
+         ewx5wQn0azKaRxP/xUn7GRKw9f8tKPBNrMMGXNPV3o93fFL9XL0Jpd1rqZuIkjCQWcaW
+         hkFzx7DBbeLZBPpDDMnA20oH7XgAa8usRjo2RZG4zcv31InVG+nYFHax051aHxpEDLmi
+         yZNbToVMlA/DXyYkgghwNZ8tIJICDpqW7cM6SRE5yGcgXLBof74Ea9kDoMNhAq5zoGTz
+         YSawsZXMFVRm3yx7dIGIyGiSfKIkmeXDKgMEfcKDH5lDWp3v3zmhxHmxodPLtsHV6eXZ
+         gqmQ==
+X-Gm-Message-State: AOAM532yIWs9uFwvmXOB5NdcpmrSkR8Z0u7Q8SctG0gNGRniDS3pWXud
+        UQmFXJO+gtPWwPOKMs1RGrNk58OPObSqzCkEevUw5SSelsUlfF3K2MUxSVNe651yJv2YhNpTs2G
+        oZoPsvTwPeJ2If1Q3OpA6XwRt
+X-Received: by 2002:a50:aac8:0:b0:410:ae77:c484 with SMTP id r8-20020a50aac8000000b00410ae77c484mr19984678edc.431.1645435025887;
+        Mon, 21 Feb 2022 01:17:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyBpEa0p3HrEYx+GIqbhwJ9nin5147rOk0KhJ0pTriV1JShySKOfRZ5XC7JzVwzygFMagfvqw==
+X-Received: by 2002:a50:aac8:0:b0:410:ae77:c484 with SMTP id r8-20020a50aac8000000b00410ae77c484mr19984657edc.431.1645435025651;
+        Mon, 21 Feb 2022 01:17:05 -0800 (PST)
+Received: from redhat.com ([2.52.4.205])
+        by smtp.gmail.com with ESMTPSA id v23sm5048559ejy.177.2022.02.21.01.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 01:17:05 -0800 (PST)
+Date:   Mon, 21 Feb 2022 04:17:02 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>,
+        jasowang@redhat.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] kernel BUG in vhost_get_vq_desc
+Message-ID: <20220221041626-mutt-send-email-mst@kernel.org>
+References: <20220221040745.1177-1-hdanton@sina.com>
+ <20220221085227.1356-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="the5o73wncrjkh3c"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220103153506.50896-1-angelogioacchino.delregno@collabora.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220221085227.1356-1-hdanton@sina.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,217 +78,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 21, 2022 at 04:52:27PM +0800, Hillf Danton wrote:
+> Another round of attempts to quiesce the
+> WARNING: CPU: 1 PID: 4069 at drivers/vhost/vhost.c:715 after the
+> BUG at drivers/vhost/vhost.c:2337 went home.
 
---the5o73wncrjkh3c
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Could you pls clarify what do you mean by "went home" here?
 
-On Mon, Jan 03, 2022 at 04:35:06PM +0100, AngeloGioacchino Del Regno wrote:
-> Switch to using the generic regmap API instead of calls to readl/writel
-> for MMIO register access, allowing us to reduce code size.
->=20
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
->  drivers/pwm/pwm-mtk-disp.c | 77 ++++++++++++++++----------------------
->  1 file changed, 32 insertions(+), 45 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-> index c605013e4114..4a6fab144cee 100644
-> --- a/drivers/pwm/pwm-mtk-disp.c
-> +++ b/drivers/pwm/pwm-mtk-disp.c
-> @@ -14,6 +14,7 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/pwm.h>
-> +#include <linux/regmap.h>
->  #include <linux/slab.h>
-> =20
->  #define DISP_PWM_EN		0x00
-> @@ -47,7 +48,7 @@ struct mtk_disp_pwm {
->  	const struct mtk_pwm_data *data;
->  	struct clk *clk_main;
->  	struct clk *clk_mm;
-> -	void __iomem *base;
-> +	struct regmap *regmap;
->  	bool enabled;
->  };
-> =20
-> @@ -56,22 +57,11 @@ static inline struct mtk_disp_pwm *to_mtk_disp_pwm(st=
-ruct pwm_chip *chip)
->  	return container_of(chip, struct mtk_disp_pwm, chip);
->  }
-> =20
-> -static void mtk_disp_pwm_update_bits(struct mtk_disp_pwm *mdp, u32 offse=
-t,
-> -				     u32 mask, u32 data)
-> -{
-> -	void __iomem *address =3D mdp->base + offset;
-> -	u32 value;
-> -
-> -	value =3D readl(address);
-> -	value &=3D ~mask;
-> -	value |=3D data;
-> -	writel(value, address);
-> -}
-> -
->  static int mtk_disp_pwm_apply(struct pwm_chip *chip, struct pwm_device *=
-pwm,
->  			      const struct pwm_state *state)
->  {
->  	struct mtk_disp_pwm *mdp =3D to_mtk_disp_pwm(chip);
-> +	const struct mtk_pwm_data *pdata =3D mdp->data;
->  	u32 clk_div, period, high_width, value;
->  	u64 div, rate;
->  	int err;
-> @@ -80,8 +70,7 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip, st=
-ruct pwm_device *pwm,
->  		return -EINVAL;
-> =20
->  	if (!state->enabled) {
-> -		mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
-> -					 0x0);
-> +		regmap_clear_bits(mdp->regmap, DISP_PWM_EN, pdata->enable_mask);
-> =20
->  		if (mdp->enabled) {
->  			clk_disable_unprepare(mdp->clk_mm);
-> @@ -138,37 +127,25 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip=
-, struct pwm_device *pwm,
->  	high_width =3D mul_u64_u64_div_u64(state->duty_cycle, rate, div);
->  	value =3D period | (high_width << PWM_HIGH_WIDTH_SHIFT);
-> =20
-> -	mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
-> -				 PWM_CLKDIV_MASK,
-> -				 clk_div << PWM_CLKDIV_SHIFT);
-> -	mtk_disp_pwm_update_bits(mdp, mdp->data->con1,
-> -				 PWM_PERIOD_MASK | PWM_HIGH_WIDTH_MASK,
-> -				 value);
-> +	regmap_update_bits(mdp->regmap, pdata->con0, PWM_CLKDIV_MASK,
-> +			   clk_div << PWM_CLKDIV_SHIFT);
-> +	regmap_update_bits(mdp->regmap, pdata->con1,
-> +			   PWM_PERIOD_MASK | PWM_HIGH_WIDTH_MASK, value);
-> =20
->  	if (mdp->data->has_commit) {
-> -		mtk_disp_pwm_update_bits(mdp, mdp->data->commit,
-> -					 mdp->data->commit_mask,
-> -					 mdp->data->commit_mask);
-> -		mtk_disp_pwm_update_bits(mdp, mdp->data->commit,
-> -					 mdp->data->commit_mask,
-> -					 0x0);
-> +		regmap_set_bits(mdp->regmap, pdata->commit, pdata->commit_mask);
-> +		regmap_clear_bits(mdp->regmap, pdata->commit, pdata->commit_mask);
->  	} else {
->  		/*
->  		 * For MT2701, disable double buffer before writing register
->  		 * and select manual mode and use PWM_PERIOD/PWM_HIGH_WIDTH.
->  		 */
-> -		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
-> -					 mdp->data->bls_debug_mask,
-> -					 mdp->data->bls_debug_mask);
-> -		mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
-> -					 mdp->data->con0_sel,
-> -					 mdp->data->con0_sel);
-> +		regmap_set_bits(mdp->regmap, pdata->bls_debug, pdata->bls_debug_mask);
-> +		regmap_set_bits(mdp->regmap, pdata->con0, pdata->con0_sel);
->  	}
-> =20
-> -	mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
-> -				 mdp->data->enable_mask);
-> +	regmap_set_bits(mdp->regmap, DISP_PWM_EN, pdata->enable_mask);
->  	mdp->enabled =3D true;
-> -
+Thanks,
 
-Was the empty line here removed on purpose? I would have kept it.
+-- 
+MST
 
->  	return 0;
->  }
-> =20
-> @@ -195,8 +172,8 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *c=
-hip,
->  	}
-> =20
->  	rate =3D clk_get_rate(mdp->clk_main);
-> -	con0 =3D readl(mdp->base + mdp->data->con0);
-> -	con1 =3D readl(mdp->base + mdp->data->con1);
-> +	regmap_read(mdp->regmap, mdp->data->con0, &con0);
-> +	regmap_read(mdp->regmap, mdp->data->con1, &con1);
->  	state->enabled =3D !!(con0 & BIT(0));
->  	clk_div =3D FIELD_GET(PWM_CLKDIV_MASK, con0);
->  	period =3D FIELD_GET(PWM_PERIOD_MASK, con1);
-> @@ -219,9 +196,17 @@ static const struct pwm_ops mtk_disp_pwm_ops =3D {
->  	.owner =3D THIS_MODULE,
->  };
-> =20
-> +static const struct regmap_config mtk_disp_pwm_regmap_config =3D {
-> +	.reg_bits =3D 32,
-> +	.reg_stride =3D 4,
-> +	.val_bits =3D 32,
-> +	.disable_locking =3D true,
-> +};
-> +
->  static int mtk_disp_pwm_probe(struct platform_device *pdev)
->  {
->  	struct mtk_disp_pwm *mdp;
-> +	void __iomem *base;
->  	int ret;
-> =20
->  	mdp =3D devm_kzalloc(&pdev->dev, sizeof(*mdp), GFP_KERNEL);
-> @@ -230,9 +215,13 @@ static int mtk_disp_pwm_probe(struct platform_device=
- *pdev)
-> =20
->  	mdp->data =3D of_device_get_match_data(&pdev->dev);
-> =20
-> -	mdp->base =3D devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(mdp->base))
-> -		return PTR_ERR(mdp->base);
-> +	base =3D devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	mdp->regmap =3D devm_regmap_init_mmio(&pdev->dev, base, &mtk_disp_pwm_r=
-egmap_config);
-> +	if (IS_ERR(mdp->regmap))
-> +		return PTR_ERR(mdp->regmap);
-> =20
->  	mdp->clk_main =3D devm_clk_get(&pdev->dev, "main");
->  	if (IS_ERR(mdp->clk_main))
-> @@ -247,10 +236,8 @@ static int mtk_disp_pwm_probe(struct platform_device=
- *pdev)
->  	mdp->chip.npwm =3D 1;
-> =20
->  	ret =3D pwmchip_add(&mdp->chip);
-> -	if (ret < 0) {
-> -		dev_err(&pdev->dev, "pwmchip_add() failed: %pe\n", ERR_PTR(ret));
-> -		return ret;
-> -	}
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret, "pwmchip_add() failed\n");
-
-I wonder that you convert this to dev_err_probe, but don't use it in the
-hunk above. If I'm not mistaken devm_regmap_init_mmio doesn't emit an
-error message, so an error message would be appropriate there.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---the5o73wncrjkh3c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmITWD8ACgkQwfwUeK3K
-7AnVTwf/d/6wF7mTZFktUIW8C0OeHQOFn6f8+btJwknUOXbY5NZGoj7keHwdxpqr
-BjmdmMkwoprwKqC3d3hnukM12YHbDxHnW+6FUHqMPua4W/xTAlnUuHJAnrEwSraf
-Tzux+dHfvW9LGrLbCc6quGZIILEarDFgCVVDcPlTTmmu8QYHeXHNGCWxT/BP0MjQ
-bI6pRO36mkuXWJq3cumhfFs2/lr4GXoOPARwXbanOAbvAo/Ekp9YNMi6LKDeZd7+
-DHb4fDXcOUD9a57TrYToPbxIR2im1bTA81XTEyu3B51mZMDELZe173jRKgUC7uBu
-fG0ep5/fNclvtAcbPIZBfWfmFkIItw==
-=LNMU
------END PGP SIGNATURE-----
-
---the5o73wncrjkh3c--

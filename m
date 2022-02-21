@@ -2,162 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB234BD5AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 07:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B3F4BD604
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 07:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344823AbiBUGAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 01:00:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47176 "EHLO
+        id S1344849AbiBUGD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 01:03:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234157AbiBUGAC (ORCPT
+        with ESMTP id S231797AbiBUGD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 01:00:02 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33D850E36
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 21:59:39 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id e5so16554243lfr.9
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 21:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z3epHuUYfz+WUAI/LAxK3vgXKIpB82CcxkhBmhauKLc=;
-        b=Gdf1eQMxTIf+KJfkNJ1tawz7LJdaENEUBQlsbA/YqS9D0+LexQ4E3qAbP22oj7o1a7
-         Bn9pw+0SyArLWzePBxy8J7t3vndI82jDKSB+9zgjVcRM7l9rFyTbtg02NZvNjuDEMffP
-         TQ4XjNbgD80wurfeSqpb3VSbVSg7DKeWhYSeKD/6mXqz8s5zOvg7wwA1BgvgHBAOw6wt
-         1dFpug5qRLI+Qis6eEyR6bMEKckuXTQTkF4TQ4VsZlmxHzVYkfVXNzo8Oav0ehsOgfyL
-         oE436/LNzxVnicfKH9NhedWD8HAJWAFQ1O/7xUfQZjgU8ayLgQH7QZ9YTkUXzzHruFjy
-         o8aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z3epHuUYfz+WUAI/LAxK3vgXKIpB82CcxkhBmhauKLc=;
-        b=dgE43GaDUH/i5l3ml/aC0EWwIHziR4ronejT4CI4mb75X5ajT2jJcbBc14SoI+hKDR
-         eXO5UqxFAM0mLHwxizkrrPaGfTWELRvukgvVHOn378pA070YU126x6kSniOsLI8aG/Hj
-         DvhRUP8GLGxTrsA3h2xGZ/DbhBn3xr+HvGZyYpYlwhSBcFoLxaI+ZMFH7puSdYUAGCUG
-         irBGcLH5OG1fy9q4W7E0IlQ2f1Xr3hWZf9EJ7jfZZeFYSbJQOh8nDLWJljD3XKGZnneS
-         0xzLEwT5zHQhU0jXY+H85lvrgEd63zoqMLUubHrAj9gcKIEudjYi9lcMHav+16AzD6ev
-         s8jQ==
-X-Gm-Message-State: AOAM531gGyh0HLj1gshmaVvimyDPgcVZ+F8utd4Peyn0OPUJJNRuFH4M
-        bm6E7q7W8vblqEM/Sov43QSbB6mxtHZ9lDJXUFKygQ==
-X-Google-Smtp-Source: ABdhPJxCztzqv2Asz9YqnW6boj0syKAMz2iapKRHDJ0jArJ/slDF0+6ARy1ddqQXcPuEgOEASBxgAWy7OunXAyvqZ1w=
-X-Received: by 2002:a05:6512:965:b0:443:7340:9893 with SMTP id
- v5-20020a056512096500b0044373409893mr13045429lft.119.1645423178084; Sun, 20
- Feb 2022 21:59:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20220218141004.16912-1-phil.chang@mediatek.com>
-In-Reply-To: <20220218141004.16912-1-phil.chang@mediatek.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Mon, 21 Feb 2022 11:29:26 +0530
-Message-ID: <CAFA6WYMtxbJXh=WHLPg5gg7JMKUGy+NdKTh9Jb3RbNO97kjoDg@mail.gmail.com>
-Subject: Re: [PATCH v3] tee: make tee_shm_register_kernel_buf vmalloc supported
-To:     Phil Chang <phil.chang@mediatek.com>
-Cc:     jens.wiklander@linaro.org, matthias.bgg@gmail.com,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Feb 2022 01:03:26 -0500
+Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 2E2F26302
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 22:03:03 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1645423383; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=+AazQjQeDgQpPnJ/pXKd7WBiIS1jXxFHsSWffVy37C8=;
+ b=PTYEMF7nSqPFS/ylxjGjuhcJcrBnbCN+gYp4bEmIqA4WPwBK6YfGkdGG+f5Ujg/EV1xNkN+s
+ pTQjd4lxneTgvWLIJuBhv20+r+iqM16TWwzAYuy9iJHeDMnF5hsRCo6FG41aGYX2qEpj8M+W
+ YZxa8T8rQ1jlOZLu2ETcauIgnVU=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 62132b14403a075b97a4b442 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Feb 2022 06:03:00
+ GMT
+Sender: dikshita=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 643AEC43618; Mon, 21 Feb 2022 06:02:59 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: dikshita)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3151BC4338F;
+        Mon, 21 Feb 2022 06:02:58 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 21 Feb 2022 11:32:58 +0530
+From:   dikshita@codeaurora.org
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
+        vgarodia@codeaurora.org, stanimir.varbanov@linaro.org,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: Re: [PATCH v1 1/2] media: v4l2-ctrls: Add intra-refresh type control
+In-Reply-To: <20ace4b3-5002-4edb-642b-bbb1952f3591@xs4all.nl>
+References: <1643019119-8309-1-git-send-email-dikshita@qti.qualcomm.com>
+ <1643019119-8309-2-git-send-email-dikshita@qti.qualcomm.com>
+ <20ace4b3-5002-4edb-642b-bbb1952f3591@xs4all.nl>
+Message-ID: <39d1418cec305e59d798242b34d62e90@codeaurora.org>
+X-Sender: dikshita@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022 at 19:40, Phil Chang <phil.chang@mediatek.com> wrote:
->
-> In some low-memory devices, it's hard to aquire large-orders pages,
-> this patch allowed user using scatter pages to register shm.
->
-> Signed-off-by: Phil Chang <phil.chang@mediatek.com>
-> ---
->
-> Changelog
->         v2 -> v3: use the "n" variable to walk through "page_count"
->
->  drivers/tee/optee/call.c |  2 +-
->  drivers/tee/tee_shm.c    | 37 ++++++++++++++++++++++++++-----------
->  2 files changed, 27 insertions(+), 12 deletions(-)
->
+On 2022-02-15 13:51, Hans Verkuil wrote:
+> Hi Dikshita,
+> 
+> Some comments below:
+> 
+> On 1/24/22 11:11, Dikshita Agarwal wrote:
+>> From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+>> 
+>> Add a control to set intra-refresh type.
+>> 
+>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+>> ---
+>>  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 23 
+>> ++++++++++++++++++++++
+>>  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  9 +++++++++
+>>  include/uapi/linux/v4l2-controls.h                 |  5 +++++
+>>  3 files changed, 37 insertions(+)
+>> 
+>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst 
+>> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> index e141f0e..54b42e1 100644
+>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> @@ -1180,6 +1180,29 @@ enum v4l2_mpeg_video_h264_entropy_mode -
+>>      is set to non zero value.
+>>      Applicable to H264, H263 and MPEG4 encoder.
+>> 
+>> +``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE (enum)``
+>> +
+>> +enum v4l2_mpeg_video_intra_refresh_type -
+>> +    Sets the type of intra refresh. The period to refresh
+>> +    the whole frame is specified by 
+>> V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD.
+>> +    Note if the client sets this control to either 
+>> ``V4L2_MPEG_VIDEO_INTRA_REFRESH_RANDOM``
+>> +    or ``V4L2_MPEG_VIDEO_INTRA_REFRESH_CYCLIC`` the 
+>> ``V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB``
+>> +    control shall be ignored.
+> 
+> Since this control has only two possible values, that would mean that,
+> if this control
+> is present, then REFRESH_MB is always ignored.
+> 
+> It seems to me that you need a third option here that specifically
+> selects the REFRESH_MB
+> method.
+> 
+> Also, this needs to be documented as well in REFRESH_MB (i.e. it is
+> ignored if this TYPE
+> control is present and is set to something other than REFRESH_MB).
+> 
 
-Apart from minor nit below, feel free to add:
+Hi Hans,
 
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+I don't think we need to add that as the third option in this control.
 
-> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> index bd49ec934060..2082e632adff 100644
-> --- a/drivers/tee/optee/call.c
-> +++ b/drivers/tee/optee/call.c
-> @@ -362,7 +362,7 @@ int optee_check_mem_type(unsigned long start, size_t num_pages)
->          * Allow kernel address to register with OP-TEE as kernel
->          * pages are configured as normal memory only.
->          */
-> -       if (virt_addr_valid(start))
-> +       if (virt_addr_valid(start) || is_vmalloc_addr((void *)start))
->                 return 0;
->
->         mmap_read_lock(mm);
-> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> index f31e29e8f1ca..1412adad9397 100644
-> --- a/drivers/tee/tee_shm.c
-> +++ b/drivers/tee/tee_shm.c
-> @@ -23,21 +23,36 @@ static void shm_put_kernel_pages(struct page **pages, size_t page_count)
->  static int shm_get_kernel_pages(unsigned long start, size_t page_count,
->                                 struct page **pages)
->  {
-> -       struct kvec *kiov;
+So, there are two ways to set intra refresh to driver, it can be either 
+MB based or Frame-based.
+Currently, we have two v4l2 controls in place
+1. V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB -> this is MB based and 
+only applicable for cyclic
+2. V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD -> this is frame based and 
+has no type associated to it
+    and it is up to the driver to decide the type i.e Random or Cyclic.
 
-> -       size_t n;
->         int rc;
-> +       size_t n;
+with this new control V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE, we are 
+introducing
+a way for the client to set the type of intra refresh, either cyclic or 
+random.
 
-nit: this redundant change can be removed.
+Thanks,
+Dikshita
 
--Sumit
-
->
-> -       kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
-> -       if (!kiov)
-> -               return -ENOMEM;
-> +       if (is_vmalloc_addr((void *)start)) {
-> +               struct page *page;
->
-> -       for (n = 0; n < page_count; n++) {
-> -               kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
-> -               kiov[n].iov_len = PAGE_SIZE;
-> -       }
-> +               for (n = 0; n < page_count; n++) {
-> +                       page = vmalloc_to_page((void *)(start + PAGE_SIZE * n));
-> +                       if (!page)
-> +                               return -ENOMEM;
-> +
-> +                       get_page(page);
-> +                       pages[n] = page;
-> +               }
-> +               rc = page_count;
-> +       } else {
-> +               struct kvec *kiov;
->
-> -       rc = get_kernel_pages(kiov, page_count, 0, pages);
-> -       kfree(kiov);
-> +               kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
-> +               if (!kiov)
-> +                       return -ENOMEM;
-> +
-> +               for (n = 0; n < page_count; n++) {
-> +                       kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
-> +                       kiov[n].iov_len = PAGE_SIZE;
-> +               }
-> +
-> +               rc = get_kernel_pages(kiov, page_count, 0, pages);
-> +               kfree(kiov);
-> +       }
->
->         return rc;
->  }
-> --
-> 2.25.1
+>> +    Applicable to H264, H263 and MPEG4 encoder. Possible values are:
+>> +
+>> +.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
+>> +
+>> +.. flat-table::
+>> +    :header-rows:  0
+>> +    :stub-columns: 0
+>> +
+>> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_RANDOM``
+> 
+> I think you should add _TYPE after REFRESH in these names to clearly 
+> specify
+> that this is setting the refresh *type*.
+> 
+>> +      - The whole frame is completely refreshed randomly
+>> +      after the specified period.
+>> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_CYCLIC``
+>> +      - The whole frame MBs are completely refreshed in cyclic order
+>> +      after the specified period.
+>> +
+>>  ``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
+>>      Intra macroblock refresh period. This sets the period to refresh
+>>      the whole frame. In other words, this defines the number of 
+>> frames
+>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c 
+>> b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> index 54ca4e6..f13f587 100644
+>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>> @@ -572,6 +572,11 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+>>  		"VBV/CPB Limit",
+>>  		NULL,
+>>  	};
+>> +	static const char * const intra_refresh_type[] = {
+>> +		"Random",
+>> +		"Cyclic",
+>> +		NULL,
+>> +	};
+>> 
+>>  	switch (id) {
+>>  	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
+>> @@ -705,6 +710,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+>>  		return hevc_start_code;
+>>  	case V4L2_CID_CAMERA_ORIENTATION:
+>>  		return camera_orientation;
+>> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
+>> +		return intra_refresh_type;
+>>  	default:
+>>  		return NULL;
+>>  	}
+>> @@ -834,6 +841,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>>  	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder 
+>> Slice Interface";
+>>  	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 
+>> Loop Filter Enable";
+>>  	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of 
+>> Intra Refresh MBs";
+>> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:		return "Intra Refresh 
+>> Type";
+>>  	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra 
+>> Refresh Period";
+>>  	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate 
+>> Control Enable";
+>>  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate 
+>> Control";
+>> @@ -1360,6 +1368,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, 
+>> enum v4l2_ctrl_type *type,
+>>  	case V4L2_CID_STATELESS_H264_DECODE_MODE:
+>>  	case V4L2_CID_STATELESS_H264_START_CODE:
+>>  	case V4L2_CID_CAMERA_ORIENTATION:
+>> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
+>>  		*type = V4L2_CTRL_TYPE_MENU;
+>>  		break;
+>>  	case V4L2_CID_LINK_FREQ:
+>> diff --git a/include/uapi/linux/v4l2-controls.h 
+>> b/include/uapi/linux/v4l2-controls.h
+>> index c8e0f84..9650b71 100644
+>> --- a/include/uapi/linux/v4l2-controls.h
+>> +++ b/include/uapi/linux/v4l2-controls.h
+>> @@ -443,6 +443,11 @@ enum v4l2_mpeg_video_multi_slice_mode {
+>>  #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+234)
+>>  #define 
+>> V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+235)
+>>  #define 
+>> V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+236)
+>> +#define 
+>> V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE		(V4L2_CID_CODEC_BASE+237)
+>> +enum v4l2_mpeg_video_intra_refresh_type {
+>> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_RANDOM	= 0,
+>> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_CYCLIC	= 1,
+>> +};
+>> 
+>>  /* CIDs for the MPEG-2 Part 2 (H.262) codec */
+>>  #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
+> 
+> Regards,
+> 
+> 	Hans

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54324BE7D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 062554BE765
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354034AbiBUKCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:02:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57300 "EHLO
+        id S1347592AbiBUJFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:05:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352073AbiBUJzO (ORCPT
+        with ESMTP id S1348005AbiBUJCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:55:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6D0387BB;
-        Mon, 21 Feb 2022 01:24:13 -0800 (PST)
+        Mon, 21 Feb 2022 04:02:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E0A2A71D;
+        Mon, 21 Feb 2022 00:57:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A125C60FCC;
-        Mon, 21 Feb 2022 09:24:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897EEC340E9;
-        Mon, 21 Feb 2022 09:24:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ED60B80EB9;
+        Mon, 21 Feb 2022 08:57:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04C3C340F1;
+        Mon, 21 Feb 2022 08:57:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435452;
-        bh=BNVmtUYVnmuinax3C7ACSj9zjInJX74bgTglaPhnYKw=;
+        s=korg; t=1645433842;
+        bh=Nx8I+gibSos3xMV/GicdB2i4/EZI7310QJI1YsXKSUg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XkreUG9hhBsPiQP7hCson7YUjdeIGX85lm8LXW+4hCpN3n+RHJnC26lLKARhrUTwc
-         wpqTZyg56+prnsVSUY1Iu7yecZ6IISatNeHf5IPZou2E51ycyyly3X/L/LwtaZq3B/
-         J0JxBAdiMLl4UBIxiYTKLJkCJ7X6kkYm0m1uU1ug=
+        b=qSCiQ151mv+28XZwbPuI5wKS1t4ddmbqzD1v25tO1RWsbcWMG1YmFiL9V6955LfOW
+         F2D9i3Lwgwv9czQLaZdkoi3YOze7dA5y1CwkNWsAL1ETmTf/RdQFRsRfVts0G1veUg
+         B0iq+qiwBlS+k3hFLSRZM1bOae1zr5pVXNBoBfqA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.16 168/227] mtd: phram: Prevent divide by zero bug in phram_setup()
+        stable@vger.kernel.org, Brenda Streiff <brenda.streiff@ni.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 54/58] kconfig: let shell return enough output for deep path names
 Date:   Mon, 21 Feb 2022 09:49:47 +0100
-Message-Id: <20220221084940.406240823@linuxfoundation.org>
+Message-Id: <20220221084913.610052972@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Brenda Streiff <brenda.streiff@ni.com>
 
-commit 3e3765875b1b8864898603768fd5c93eeb552211 upstream.
+[ Upstream commit 8a4c5b2a6d8ea079fa36034e8167de87ab6f8880 ]
 
-The problem is that "erasesize" is a uint64_t type so it might be
-non-zero but the lower 32 bits are zero so when it's truncated,
-"(uint32_t)erasesize", then that value is zero. This leads to a
-divide by zero bug.
+The 'shell' built-in only returns the first 256 bytes of the command's
+output. In some cases, 'shell' is used to return a path; by bumping up
+the buffer size to 4096 this lets us capture up to PATH_MAX.
 
-Avoid the bug by delaying the divide until after we have validated
-that "erasesize" is non-zero and within the uint32_t range.
+The specific case where I ran into this was due to commit 1e860048c53e
+("gcc-plugins: simplify GCC plugin-dev capability test"). After this
+change, we now use `$(shell,$(CC) -print-file-name=plugin)` to return
+a path; if the gcc path is particularly long, then the path ends up
+truncated at the 256 byte mark, which makes the HAVE_GCC_PLUGINS
+depends test always fail.
 
-Fixes: dc2b3e5cbc80 ("mtd: phram: use div_u64_rem to stop overwrite len in phram_setup")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220121115505.GI1978@kadam
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Brenda Streiff <brenda.streiff@ni.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/devices/phram.c |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ scripts/kconfig/preprocess.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/mtd/devices/phram.c
-+++ b/drivers/mtd/devices/phram.c
-@@ -264,15 +264,19 @@ static int phram_setup(const char *val)
- 		}
- 	}
- 
--	if (erasesize)
--		div_u64_rem(len, (uint32_t)erasesize, &rem);
--
- 	if (len == 0 || erasesize == 0 || erasesize > len
--	    || erasesize > UINT_MAX || rem) {
-+	    || erasesize > UINT_MAX) {
- 		parse_err("illegal erasesize or len\n");
- 		ret = -EINVAL;
- 		goto error;
- 	}
-+
-+	div_u64_rem(len, (uint32_t)erasesize, &rem);
-+	if (rem) {
-+		parse_err("len is not multiple of erasesize\n");
-+		ret = -EINVAL;
-+		goto error;
-+	}
- 
- 	ret = register_device(name, start, len, (uint32_t)erasesize);
- 	if (ret)
+diff --git a/scripts/kconfig/preprocess.c b/scripts/kconfig/preprocess.c
+index 389814b02d06b..8c7e51a6273cc 100644
+--- a/scripts/kconfig/preprocess.c
++++ b/scripts/kconfig/preprocess.c
+@@ -138,7 +138,7 @@ static char *do_lineno(int argc, char *argv[])
+ static char *do_shell(int argc, char *argv[])
+ {
+ 	FILE *p;
+-	char buf[256];
++	char buf[4096];
+ 	char *cmd;
+ 	size_t nread;
+ 	int i;
+-- 
+2.34.1
+
 
 

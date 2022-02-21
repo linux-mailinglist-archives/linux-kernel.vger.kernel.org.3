@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4B94BE636
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3963D4BE9AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345107AbiBUIw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:52:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42582 "EHLO
+        id S1346521AbiBUI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:58:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345106AbiBUIwI (ORCPT
+        with ESMTP id S1346302AbiBUIzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:52:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F70713B;
-        Mon, 21 Feb 2022 00:51:45 -0800 (PST)
+        Mon, 21 Feb 2022 03:55:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5341024BEC;
+        Mon, 21 Feb 2022 00:53:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D10B7B80EAF;
-        Mon, 21 Feb 2022 08:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C860C340E9;
-        Mon, 21 Feb 2022 08:51:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D58F6118D;
+        Mon, 21 Feb 2022 08:53:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B96C340F1;
+        Mon, 21 Feb 2022 08:53:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433502;
-        bh=nJe6J7dX+m0rnm2nKvchv1+6052pMV1S6eHy69tQasE=;
+        s=korg; t=1645433604;
+        bh=Sho+2EN2OREeQ4S2SFRqB7ZQHvCM/jTHANkhtSh03Gk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NHwY47/Mn30UXTsLSqI2gZiRPK079JNPsclSW/Ovm4ryNKKqF+AnyortDHOfwkDX+
-         MYcE39DFgZKCKn68Q7Od+co2VGMFFiXfg2PQvqlesZO8Dy65LXQCiPIuVeuaMGs6B5
-         uQaLcVayCvH7pjdQS0V9ZT0OAPEEOYp3/ck2IICk=
+        b=h91WGHZc7U5KR0B+QkzlF2nx3DfDFy9SCMomuvnnJ4D/N+5e6H02+3g3k6GKHdsMD
+         VjZTFWkvEW08J+yGY1PzpqzABRgaMziAy7WBlB7WpgxZzOO8gQySyVj2ZyBmtYyzWw
+         acojSZHGnHPB90LSy5fZmxk/2tx4eAgQOFVgRNc8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
-        Kees Kook <keescook@chromium.org>,
-        "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-hardening@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 4.9 21/33] libsubcmd: Fix use-after-free for realloc(..., 0)
+        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 23/45] ping: fix the dif and sdif check in ping_lookup
 Date:   Mon, 21 Feb 2022 09:49:14 +0100
-Message-Id: <20220221084909.463671717@linuxfoundation.org>
+Message-Id: <20220221084911.208158188@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
-References: <20220221084908.568970525@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,63 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit 52a9dab6d892763b2a8334a568bd4e2c1a6fde66 upstream.
+commit 35a79e64de29e8d57a5989aac57611c0cd29e13e upstream.
 
-GCC 12 correctly reports a potential use-after-free condition in the
-xrealloc helper. Fix the warning by avoiding an implicit "free(ptr)"
-when size == 0:
+When 'ping' changes to use PING socket instead of RAW socket by:
 
-In file included from help.c:12:
-In function 'xrealloc',
-    inlined from 'add_cmdname' at help.c:24:2: subcmd-util.h:56:23: error: pointer may be used after 'realloc' [-Werror=use-after-free]
-   56 |                 ret = realloc(ptr, size);
-      |                       ^~~~~~~~~~~~~~~~~~
-subcmd-util.h:52:21: note: call to 'realloc' here
-   52 |         void *ret = realloc(ptr, size);
-      |                     ^~~~~~~~~~~~~~~~~~
-subcmd-util.h:58:31: error: pointer may be used after 'realloc' [-Werror=use-after-free]
-   58 |                         ret = realloc(ptr, 1);
-      |                               ^~~~~~~~~~~~~~~
-subcmd-util.h:52:21: note: call to 'realloc' here
-   52 |         void *ret = realloc(ptr, size);
-      |                     ^~~~~~~~~~~~~~~~~~
+   # sysctl -w net.ipv4.ping_group_range="0 100"
 
-Fixes: 2f4ce5ec1d447beb ("perf tools: Finalize subcmd independence")
-Reported-by: Valdis Klētnieks <valdis.kletnieks@vt.edu>
-Signed-off-by: Kees Kook <keescook@chromium.org>
-Tested-by: Valdis Klētnieks <valdis.kletnieks@vt.edu>
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: linux-hardening@vger.kernel.org
-Cc: Valdis Klētnieks <valdis.kletnieks@vt.edu>
-Link: http://lore.kernel.org/lkml/20220213182443.4037039-1-keescook@chromium.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+There is another regression caused when matching sk_bound_dev_if
+and dif, RAW socket is using inet_iif() while PING socket lookup
+is using skb->dev->ifindex, the cmd below fails due to this:
+
+  # ip link add dummy0 type dummy
+  # ip link set dummy0 up
+  # ip addr add 192.168.111.1/24 dev dummy0
+  # ping -I dummy0 192.168.111.1 -c1
+
+The issue was also reported on:
+
+  https://github.com/iputils/iputils/issues/104
+
+But fixed in iputils in a wrong way by not binding to device when
+destination IP is on device, and it will cause some of kselftests
+to fail, as Jianlin noticed.
+
+This patch is to use inet(6)_iif and inet(6)_sdif to get dif and
+sdif for PING socket, and keep consistent with RAW socket.
+
+Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
+Reported-by: Jianlin Shi <jishi@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/lib/subcmd/subcmd-util.h |   11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ net/ipv4/ping.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/tools/lib/subcmd/subcmd-util.h
-+++ b/tools/lib/subcmd/subcmd-util.h
-@@ -49,15 +49,8 @@ static NORETURN inline void die(const ch
- static inline void *xrealloc(void *ptr, size_t size)
- {
- 	void *ret = realloc(ptr, size);
--	if (!ret && !size)
--		ret = realloc(ptr, 1);
--	if (!ret) {
--		ret = realloc(ptr, size);
--		if (!ret && !size)
--			ret = realloc(ptr, 1);
--		if (!ret)
--			die("Out of memory, realloc failed");
--	}
-+	if (!ret)
-+		die("Out of memory, realloc failed");
- 	return ret;
- }
+--- a/net/ipv4/ping.c
++++ b/net/ipv4/ping.c
+@@ -177,16 +177,23 @@ static struct sock *ping_lookup(struct n
+ 	struct sock *sk = NULL;
+ 	struct inet_sock *isk;
+ 	struct hlist_nulls_node *hnode;
+-	int dif = skb->dev->ifindex;
++	int dif, sdif;
  
+ 	if (skb->protocol == htons(ETH_P_IP)) {
++		dif = inet_iif(skb);
++		sdif = inet_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI4, dif = %d\n",
+ 			 (int)ident, &ip_hdr(skb)->daddr, dif);
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
++		dif = inet6_iif(skb);
++		sdif = inet6_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI6c, dif = %d\n",
+ 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
+ #endif
++	} else {
++		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
++		return NULL;
+ 	}
+ 
+ 	read_lock_bh(&ping_table.lock);
+@@ -226,7 +233,7 @@ static struct sock *ping_lookup(struct n
+ 		}
+ 
+ 		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
+-		    sk->sk_bound_dev_if != inet_sdif(skb))
++		    sk->sk_bound_dev_if != sdif)
+ 			continue;
+ 
+ 		sock_hold(sk);
 
 

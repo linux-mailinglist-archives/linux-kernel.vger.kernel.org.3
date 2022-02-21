@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549FE4BE6C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3344BE1A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381578AbiBURQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 12:16:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41264 "EHLO
+        id S1381583AbiBURQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 12:16:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381547AbiBURQW (ORCPT
+        with ESMTP id S1381581AbiBURQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 12:16:22 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3390C2611C;
-        Mon, 21 Feb 2022 09:15:56 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id h9so33673592qvm.0;
-        Mon, 21 Feb 2022 09:15:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mPnjdyNON3aH29N07yqnS0p2tUTlWMjKBlxLndY90Uw=;
-        b=pnubFZhWYa+7pa/CD1MCaaFadpQ9qJ1esPvEyYSfrMFOP4bAAyX4jq5ivI70LjyL+K
-         1F2HP2VUyuL4pvcU19cJXh0Xy4SMDREYyveCjoPz/MAUyQyNnCBw2LegFGAIT1aA7Sbd
-         /VwiwQ0wT1K0J6nHAgo/5S7e1GIVjlUnrTgqf91LXsng9FTvLoFs9RfdZesWdBLcPBoJ
-         ngVc5ZMd1/wEZHdny0LpRXX8ll5JoAfjyDtQAMyHqX/AIr3k6qKTLhTHO5n5MkocCiYm
-         e02xHjdRUXh3XAbcgt+NSdQGVWBKG12bN6lPCnQkuir5W0WSXxKE34l3A6E6LrXjZER/
-         EDkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mPnjdyNON3aH29N07yqnS0p2tUTlWMjKBlxLndY90Uw=;
-        b=2QvxewRLE/ZIBBJwrSykQeNHgecN4aMvY2vuFQu+iRx+ldyqCgF3wAmZDvL5lQHpFK
-         2hvZ2v5QZJ3Z0pr6PycwmlE9fGNpfkjSuak/uJZHuEDgDX86/5HgA7proiCvFUgxowWq
-         UuSbWtONgfPV71piR40QdN2bcA8B0nVjUkNstUaItB9rjvE00V/bTlgVXO9G2Z4uTQja
-         ba2PokMUysY6KQSc+92dFSyxtciEU+IxAC8rBAPI+YEe6keLkKofK+GJ90hbRcNmHs3r
-         SKi2bmGXOY84ekaB+QfPdwyKO+rIQLofh+VJ7e654E/CUwHaylnZW9yujSlG7LbIuc7z
-         2/rQ==
-X-Gm-Message-State: AOAM533hoa9VSPoyrNO6wZaXoXAa+Xh3Wb+4TLkR3lHOYF2KJrWnWBwU
-        Qb1UP7ak9169ZP0Cawy0Xz+A5shbR/tmQQ==
-X-Google-Smtp-Source: ABdhPJxp8xSKsm1MOriQlH3tNMN0ToGRMd/UQq7FwVhY02J7fGvlM1U3ZrmqOFQVbegJbTrVv7omHw==
-X-Received: by 2002:a05:622a:308:b0:2dc:8b37:5dda with SMTP id q8-20020a05622a030800b002dc8b375ddamr18158512qtw.492.1645463755364;
-        Mon, 21 Feb 2022 09:15:55 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9sm4230294qta.83.2022.02.21.09.15.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 09:15:54 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d72c8af1-e93d-44ae-15e0-737302523961@roeck-us.net>
-Date:   Mon, 21 Feb 2022 09:15:52 -0800
+        Mon, 21 Feb 2022 12:16:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A9426122
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:16:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 640216144F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 17:16:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49E2DC340E9;
+        Mon, 21 Feb 2022 17:16:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645463784;
+        bh=hOo8EVPxASwZeK28tfDq8KEHLaCOknGxUF68Yqnl/sg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1HX/pX2MsbcEs6iGjOcwfoko6GxCKx9gkE8DhyVnQx7swBLTeHG6rBzf9cYvWhVUq
+         JBXQ19OlMZuHftENRuUMMgbotQk9eSaLETWRXD+mDhfQBqSVNtac6FTVJRaihDu0tX
+         Wwh4SvzmLzNKaQhJShwW+r4lhS2fc8FrKT2AZKwA=
+Date:   Mon, 21 Feb 2022 18:16:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tong Zhang <ztong0001@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        Colin Ian King <colin.i.king@googlemail.com>,
+        Saurav Girepunje <saurav.girepunje@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        =?iso-8859-1?Q?Cl=E1udio?= Maia <clrrm@isep.ipp.pt>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8192u: cleanup proc fs entries upon exit
+Message-ID: <YhPI5iDRUpzYWDyY@kroah.com>
+References: <20220220231554.2510567-1-ztong0001@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 000/196] 5.15.25-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220221084930.872957717@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220220231554.2510567-1-ztong0001@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 00:47, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.25 release.
-> There are 196 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, Feb 20, 2022 at 03:15:53PM -0800, Tong Zhang wrote:
+> proc fs entries need to be removed when module is removed, otherwise
+> when we try to insert the module again, kernel will complain
 > 
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
+> [  493.068012] proc_dir_entry 'net/ieee80211' already registered
+> [  493.271973]  proc_mkdir+0x18/0x20
+> [  493.272136]  ieee80211_debug_init+0x28/0xde8 [r8192u_usb]
+> [  493.272404]  rtl8192_usb_module_init+0x10/0x161 [r8192u_usb]
 > 
+> [   13.910616] proc_dir_entry 'net/rtl819xU' already registered
+> [   13.918931]  proc_mkdir+0x18/0x20
+> [   13.919098]  rtl8192_usb_module_init+0x142/0x16d [r8192u_usb]
+> 
+> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+> ---
+>  drivers/staging/rtl8192u/r8192U_core.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/staging/rtl8192u/r8192U_core.c b/drivers/staging/rtl8192u/r8192U_core.c
+> index 364e1ca94f70..683afdc667bc 100644
+> --- a/drivers/staging/rtl8192u/r8192U_core.c
+> +++ b/drivers/staging/rtl8192u/r8192U_core.c
+> @@ -4825,6 +4825,11 @@ static int __init rtl8192_usb_module_init(void)
+>  static void __exit rtl8192_usb_module_exit(void)
+>  {
+>  	usb_deregister(&rtl8192_usb_driver);
+> +	remove_proc_entry(RTL819XU_MODULE_NAME, init_net.proc_net);
+> +
+> +#ifdef CONFIG_IEEE80211_DEBUG
+> +	ieee80211_debug_exit();
+> +#endif
 
+Please do not put #ifdef in .c files.  They should be in a .h file
+instead.
 
-Building arm:allmodconfig ... failed
-Building arm64:allmodconfig ... failed
---------------
-Error log:
-drivers/tee/optee/core.c: In function 'optee_probe':
-drivers/tee/optee/core.c:726:20: error: operation on 'rc' may be undefined
+thanks,
 
-Building mips:nlm_xlp_defconfig ... failed
---------------
-Error log:
-net/netfilter/xt_socket.c: In function 'socket_mt_destroy':
-net/netfilter/xt_socket.c:224:17: error: implicit declaration of function 'nf_defrag_ipv6_disable'; did you mean 'nf_defrag_ipv4_disable'?
-
+greg k-h
